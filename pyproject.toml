@@ -1,0 +1,36 @@
+[build-system]
+requires = ["hatchling>=1.25", "hatch-vcs>=0.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "Game on, Yasuki!"
+dynamic = ["version"]
+description = "Online client for playing classic L5R"
+authors = [{ name = "Jesse Grabowski" , email = "jessegrabowski@gmail.com"}]
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "pydantic>=2.7",
+  "PyYAML>=6.0",
+  "Pillow>=10.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/jessegrabowski/game-on-yasuki"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["game_on_yasuki"]
+
+[tool.hatch.build.targets.sdist]
+include = ["game_on_yasuki", "README.md", "tests", "pyproject.toml"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+addopts = "-q"
