@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import tkinter as tk
 
 
 class Visual(ABC):
@@ -17,6 +18,18 @@ class Visual(ABC):
         ax0, ay0, ax1, ay1 = self.bbox
         bx0, by0, bx1, by1 = other.bbox
         return not (ax1 < bx0 or ax0 > bx1 or ay1 < by0 or ay0 > by1)
+
+    def update_selection(self, canvas: tk.Canvas, selected: bool) -> None:
+        canvas.delete(getattr(self, "tag", ""))
+        self.draw(canvas)
+
+    def move_to(self, canvas: tk.Canvas, x: int, y: int) -> None:
+        canvas.delete(getattr(self, "tag", ""))
+
+        setattr(self, "x", x)
+        setattr(self, "y", y)
+
+        self.draw(canvas)
 
 
 class MarqueeBoxVisual(Visual):

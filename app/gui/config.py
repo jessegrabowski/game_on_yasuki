@@ -13,6 +13,11 @@ class Hotkeys:
     fill: str = "l"
     destroy: str = "c"
 
+    # Deck actions
+    draw: str = "r"
+    shuffle: str = "s"
+    inspect: str = "i"
+
 
 DEFAULT_HOTKEYS = Hotkeys()
 
@@ -29,10 +34,17 @@ def load_hotkeys(config_path: str | Path | None = None) -> Hotkeys:
     gui_cfg = data.get("gui", {}) if isinstance(data, dict) else {}
     keys = gui_cfg.get("hotkeys", {}) if isinstance(gui_cfg, dict) else {}
 
-    bow = str(keys.get("bow", DEFAULT_HOTKEYS.bow)).strip() or DEFAULT_HOTKEYS.bow
-    flip = str(keys.get("flip", DEFAULT_HOTKEYS.flip)).strip() or DEFAULT_HOTKEYS.flip
-    invert = str(keys.get("invert", DEFAULT_HOTKEYS.invert)).strip() or DEFAULT_HOTKEYS.invert
-    fill = str(keys.get("fill", DEFAULT_HOTKEYS.fill)).strip() or DEFAULT_HOTKEYS.fill
-    destroy = str(keys.get("destroy", DEFAULT_HOTKEYS.destroy)).strip() or DEFAULT_HOTKEYS.destroy
+    def _get(name: str, default: str) -> str:
+        val = str(keys.get(name, default)).strip()
+        return val or default
 
-    return Hotkeys(bow=bow, flip=flip, invert=invert, fill=fill, destroy=destroy)
+    return Hotkeys(
+        bow=_get("bow", DEFAULT_HOTKEYS.bow),
+        flip=_get("flip", DEFAULT_HOTKEYS.flip),
+        invert=_get("invert", DEFAULT_HOTKEYS.invert),
+        fill=_get("fill", DEFAULT_HOTKEYS.fill),
+        destroy=_get("destroy", DEFAULT_HOTKEYS.destroy),
+        draw=_get("draw", DEFAULT_HOTKEYS.draw),
+        shuffle=_get("shuffle", DEFAULT_HOTKEYS.shuffle),
+        inspect=_get("inspect", DEFAULT_HOTKEYS.inspect),
+    )

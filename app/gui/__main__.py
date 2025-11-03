@@ -5,7 +5,7 @@ from app.game_pieces.constants import Side
 from app.game_pieces.fate import FateCard
 from app.game_pieces.dynasty import DynastyCard
 from app.game_pieces.deck import Deck
-from app.gui.field import GameField
+from app.gui.field_view import GameField
 from app.gui.config import load_hotkeys
 from app.gui.constants import CARD_W, CARD_H
 from app.engine.zones import (
