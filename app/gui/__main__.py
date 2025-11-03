@@ -24,7 +24,7 @@ except Exception:  # pragma: no cover
     Image = None  # type: ignore
     ImageTk = None  # type: ignore
 
-LOCAL_DEBUG_OVERRIDE = True
+LOCAL_DEBUG_OVERRIDE = False
 # Choose which player is local on startup; if P2, rotate board 180° before showing
 STARTING_PLAYER: PlayerId = PlayerId.P1
 
