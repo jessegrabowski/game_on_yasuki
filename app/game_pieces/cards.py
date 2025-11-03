@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 from app.game_pieces.constants import Side
+from app.engine.players import PlayerId
 
 
 @dataclass(frozen=True, slots=True)
@@ -17,6 +18,8 @@ class L5RCard:
     inverted: bool = False
     image_front: Path | None = None
     image_back: Path | None = None
+    owner: PlayerId | None = None
+    revealed: bool = False
 
     def __post_init__(self):
         # Normalize collections to tuples for consistent immutability

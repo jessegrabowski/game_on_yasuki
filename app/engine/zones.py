@@ -4,6 +4,7 @@ import math
 
 from app.game_pieces.cards import L5RCard
 from app.game_pieces.constants import Side
+from app.engine.players import PlayerId
 
 
 @dataclass(slots=True)
@@ -12,6 +13,7 @@ class Zone:
     allowed_side: Side | None = None  # None = any
     cards: list[L5RCard] = field(default_factory=list)
     max_capacity: float = math.inf
+    owner: PlayerId | None = None
 
     def __len__(self) -> int:
         return len(self.cards)

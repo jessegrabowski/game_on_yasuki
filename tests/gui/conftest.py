@@ -1,7 +1,7 @@
 import pytest
 import tkinter as tk
 
-from app.gui.field_view import GameField
+from app.gui.field_view import FieldView
 from app.gui.config import Hotkeys
 
 
@@ -17,7 +17,7 @@ def root():
 
 @pytest.fixture
 def field(root):
-    f = GameField(root, width=600, height=400)
+    f = FieldView(root, width=600, height=400)
     f.pack()
     root.update_idletasks()
     root.update()

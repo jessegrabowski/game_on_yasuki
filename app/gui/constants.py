@@ -30,3 +30,7 @@ ART_TAG = "art"
 BORDER_TAG = "border"
 SELECT_TAG = "select"
 LABEL_TAG = "label"
+
+# Honor counter limits
+MIN_HONOR = -20
+MAX_HONOR = 100

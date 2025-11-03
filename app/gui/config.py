@@ -4,6 +4,9 @@ from typing import Any
 
 import yaml
 
+# Global debug flag
+DEBUG_MODE: bool = False
+
 
 @dataclass(frozen=True)
 class Hotkeys:

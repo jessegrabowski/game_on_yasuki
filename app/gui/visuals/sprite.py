@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from app.game_pieces.cards import L5RCard
 from app.game_pieces.constants import Side
 from app.gui.constants import CARD_W, CARD_H, CARD_TAG, ART_TAG, BORDER_TAG, SELECT_TAG, LABEL_TAG
-from app.gui.images import load_image, load_back_image, ImageProvider
+from app.gui.ui.images import load_image, load_back_image, ImageProvider
 from app.gui.visuals.visual import Visual
 import tkinter as tk
 
@@ -15,6 +15,8 @@ class CardSpriteVisual(Visual):
     y: int
     tag: str
     images: ImageProvider | None = None
+    # Keep a strong reference to the last PhotoImage used when drawing art
+    _last_image: object | None = None
 
     @property
     def size(self) -> tuple[int, int]:
@@ -43,23 +45,28 @@ class CardSpriteVisual(Visual):
         x, y = self.x, self.y
         w, h = self.size
         bowed = self.card.bowed
+        inverted = self.card.inverted
         face_up = self.card.face_up
 
         img = None
         if self.images is not None:
             if face_up:
-                img = self.images.front(self.card.image_front, bowed)
+                img = self.images.front(self.card.image_front, bowed, inverted)
             else:
-                img = self.images.back(self.card.side, bowed, self.card.image_back)
+                img = self.images.back(self.card.side, bowed, inverted, self.card.image_back)
         else:
             # fallback no-cache path
             img = (
-                load_image(self.card.image_front, bowed, master=canvas)
+                load_image(self.card.image_front, bowed, inverted, master=canvas)
                 if face_up
-                else load_back_image(self.card.side, bowed, self.card.image_back, master=canvas)
+                else load_back_image(
+                    self.card.side, bowed, inverted, self.card.image_back, master=canvas
+                )
             )
 
         if img is not None:
+            # retain reference to prevent Tk image GC
+            self._last_image = img
             canvas.create_image(
                 x,
                 y,
@@ -69,6 +76,7 @@ class CardSpriteVisual(Visual):
             return True
 
         # fallback rectangle + label
+        self._last_image = None
         fill = "#fafafa" if face_up else "#6b6b6b"
         canvas.create_rectangle(
             x - w // 2,
@@ -144,10 +152,18 @@ class CardSpriteVisual(Visual):
         canvas.move(self.tag, 0, 0)  # no-op but keeps tag grouping predictable
 
     def refresh_face_state(self, canvas: tk.Canvas) -> None:
-        # Called after flip/bow/invert changes; redraw art+border only
+        # Called after flip/bow/invert changes; redraw art+border and keep selection overlay in sync
+        # Detect if selection overlay currently exists so we can re-draw it with new geometry
+        had_selection = bool(canvas.find_withtag(self._subtag(SELECT_TAG)))
+        # Clear layers
         canvas.delete(self._subtag(ART_TAG))
         canvas.delete(self._subtag(BORDER_TAG))
         canvas.delete(self._subtag(LABEL_TAG))
+        canvas.delete(self._subtag(SELECT_TAG))
+        # Redraw art and border
         self._draw_art(canvas)
         self._draw_border(canvas)
+        # Recreate selection overlay if it was present
+        if had_selection:
+            self._draw_selection(canvas, True)
         canvas.tag_raise(self._subtag(SELECT_TAG))

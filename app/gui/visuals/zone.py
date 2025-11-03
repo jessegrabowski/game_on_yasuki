@@ -1,19 +1,29 @@
 import tkinter as tk
-from app.engine.zones import Zone
+from app.engine.zones import Zone, ProvinceZone
 from app.game_pieces.constants import Side
-from app.gui.images import load_image, load_back_image
+from app.gui.ui.images import ImageProvider, load_image as _li, load_back_image as _lbi
 from app.gui.constants import CARD_W, CARD_H
 from app.gui.visuals.visual import Visual
 
 
 class ZoneVisual(Visual):
-    def __init__(self, zone: Zone, x: int, y: int, w: int, h: int, tag: str):
+    def __init__(
+        self,
+        zone: Zone,
+        x: int,
+        y: int,
+        w: int,
+        h: int,
+        tag: str,
+        images: ImageProvider | None = None,
+    ):
         self.zone = zone
         self.x = x
         self.y = y
         self.w = w
         self.h = h
         self.tag = tag
+        self.images = images
 
     @property
     def size(self) -> tuple[int, int]:
@@ -31,12 +41,25 @@ class ZoneVisual(Visual):
         top = zone.cards[-1] if zone.cards else None
         if top is not None:
             bowed = top.bowed
+            inverted = top.inverted
+            # Province cards should never display bowed
+            if isinstance(zone, ProvinceZone):
+                bowed = False
+                inverted = False
             face_up = top.face_up
-            photo = (
-                load_image(top.image_front, bowed, master=canvas)
-                if face_up
-                else load_back_image(top.side, bowed, top.image_back, master=canvas)
-            )
+            if self.images is not None:
+                photo = (
+                    self.images.front(top.image_front, bowed, inverted)
+                    if face_up
+                    else self.images.back(top.side, bowed, inverted, top.image_back)
+                )
+            else:
+                # Fallback for safety: use module loaders
+                photo = (
+                    _li(top.image_front, bowed, inverted, master=canvas)
+                    if face_up
+                    else _lbi(top.side, bowed, inverted, top.image_back, master=canvas)
+                )
             if photo is not None:
                 canvas.create_image(x, y, image=photo, tags=(self.tag, "zone"))
                 outline = "#007acc" if top.side is Side.FATE else "#b58900"

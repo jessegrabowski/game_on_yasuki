@@ -1,6 +1,6 @@
 import pytest
 
-from app.gui.field_view import GameField
+from app.gui.field_view import FieldView
 from app.gui.config import Hotkeys
 from app.game_pieces.cards import L5RCard
 from app.game_pieces.constants import Side
@@ -27,7 +27,7 @@ class DummyEventNamespace(Event):
 
 @pytest.fixture
 def field(root):
-    f = GameField(root, width=600, height=400)
+    f = FieldView(root, width=600, height=400)
     f.pack()
     # ensure canvas is realized before drawing/asserting
     root.update_idletasks()
@@ -85,7 +85,7 @@ class TestDeckInteractions:
         assert after >= 1
 
     def test_press_on_fate_deck_starts_drag_and_creates_face_down_card(self, root, monkeypatch):
-        field = GameField(root, width=600, height=400)
+        field = FieldView(root, width=600, height=400)
         field.pack()
         root.update_idletasks()
         root.update()
@@ -111,7 +111,7 @@ class TestDeckInteractions:
         assert (sprite.x, sprite.y) == (400, 200)
 
     def test_drag_motion_moves_new_card_sprite_after_deck_press(self, root, monkeypatch):
-        field = GameField(root, width=600, height=400)
+        field = FieldView(root, width=600, height=400)
         field.pack()
         root.update_idletasks()
         root.update()
@@ -239,6 +239,7 @@ class TestDeckHoverHotkeys:
 
 class TestContextMenuAndHotkeys:
     def test_context_menu_labels_and_actions(self, field, root, monkeypatch):
+        monkeypatch.setattr(tk.Menu, "tk_popup", lambda self, x, y: None)
         hk = Hotkeys(bow="b", flip="f", invert="d")
         field.configure_hotkeys(hk)
 
@@ -368,7 +369,7 @@ class TestZoneInteractions:
         assert field.find_withtag(prov_tag)
 
     def test_drag_drop_into_hand_zone_adds_and_removes_sprite(self, root, monkeypatch):
-        field = GameField(root, width=600, height=400)
+        field = FieldView(root, width=600, height=400)
         field.pack()
         root.update_idletasks()
         root.update()
@@ -386,7 +387,7 @@ class TestZoneInteractions:
         assert len(hand) == 1
 
     def test_drag_drop_into_fate_discard_zone(self, root, monkeypatch):
-        field = GameField(root, width=600, height=400)
+        field = FieldView(root, width=600, height=400)
         field.pack()
         root.update_idletasks()
         root.update()
@@ -404,7 +405,7 @@ class TestZoneInteractions:
         assert len(fate_disc) == 1
 
     def test_invalid_drop_fate_into_province_is_ignored(self, root, monkeypatch):
-        field = GameField(root, width=600, height=400)
+        field = FieldView(root, width=600, height=400)
         field.pack()
         root.update_idletasks()
         root.update()
@@ -422,7 +423,7 @@ class TestZoneInteractions:
         assert len(prov) == 0
 
     def test_invalid_drop_dynasty_into_hand_is_ignored(self, root, monkeypatch):
-        field = GameField(root, width=600, height=400)
+        field = FieldView(root, width=600, height=400)
         field.pack()
         root.update_idletasks()
         root.update()
@@ -440,7 +441,7 @@ class TestZoneInteractions:
         assert len(hand) == 0
 
     def test_clear_selection_after_drop_does_not_error(self, root, monkeypatch):
-        field = GameField(root, width=600, height=400)
+        field = FieldView(root, width=600, height=400)
         field.pack()
         root.update_idletasks()
         root.update()
@@ -461,7 +462,7 @@ class TestZoneInteractions:
         assert field._selected == set()
 
     def test_hover_province_press_c_destroys_and_moves_to_discard(self, root, monkeypatch):
-        field = GameField(root, width=600, height=400)
+        field = FieldView(root, width=600, height=400)
         field.pack()
         root.update_idletasks()
         root.update()
@@ -482,7 +483,7 @@ class TestZoneInteractions:
         assert discard.cards[-1].face_up is True
 
     def test_hover_province_press_l_fills_from_dynasty_deck(self, root, monkeypatch):
-        field = GameField(root, width=600, height=400)
+        field = FieldView(root, width=600, height=400)
         field.pack()
         root.update_idletasks()
         root.update()
@@ -503,7 +504,7 @@ class TestZoneInteractions:
 
 class TestBattlefieldTracking:
     def test_battlefield_tracks_added_cards(self, root):
-        field = GameField(root, width=400, height=300)
+        field = FieldView(root, width=400, height=300)
         field.pack()
         root.update_idletasks()
         root.update()
@@ -615,3 +616,35 @@ class TestHandMovement:
         assert after_sprite_tags == before_sprite_tags
         # Order should now be R2, R1, R3 (moved first card to position 1)
         assert [c.id for c in hand.cards] == ["r2", "r1", "r3"]
+
+
+class TestDynastyProvinceFill:
+    def test_dynasty_draw_fills_empty_province(self, field, root, monkeypatch):
+        # Setup a dynasty deck and an empty province; draw should fill the province
+        from app.game_pieces.dynasty import DynastyCard
+        from app.engine.zones import ProvinceZone
+        from app.gui.config import Hotkeys
+
+        cards = [DynastyCard(id=f"dd{i}", name=f"D{i}", side=Side.DYNASTY) for i in range(2)]
+        deck = Deck.build(cards)
+        deck_tag = field.add_deck(deck, x=260, y=200, label="Dynasty Deck")
+        prov = ProvinceZone()
+        field.add_zone(prov, x=200, y=160, w=120, h=160)
+        root.update_idletasks()
+        root.update()
+
+        # Hover deck and trigger draw hotkey
+        hk = Hotkeys()
+        before_deck = len(deck.cards)
+        before_zone = len(prov.cards)
+        before_sprites = set(field._sprites.keys())
+        monkeypatch.setattr(field, "resolve_tag_at", lambda e: deck_tag)
+        field._controller.on_move(DummyEventNamespace(x=260, y=200))
+        field._controller.on_key(DummyEventNamespace(keysym=hk.draw))
+
+        # Province should have received one face-down card, no sprite created
+        after_sprites = set(field._sprites.keys())
+        assert len(deck.cards) == before_deck - 1
+        assert len(prov.cards) == before_zone + 1
+        assert prov.cards[-1].face_up is False
+        assert after_sprites == before_sprites
