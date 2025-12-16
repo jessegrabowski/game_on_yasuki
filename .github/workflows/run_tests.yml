@@ -1,0 +1,139 @@
+name: run_tests
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+
+# Cancels all previous workflow runs for pull requests that have not completed.
+concurrency:
+  # The concurrency group contains the workflow name and the branch name for pull requests
+  # or the commit hash for any other events.
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - subset-name: "Game Engine Tests"
+            os: ubuntu-latest
+            python-version: "3.12"
+            test-subset: "tests/engine/"
+
+          - subset-name: "Game Pieces Tests"
+            os: ubuntu-latest
+            python-version: "3.12"
+            test-subset: "tests/game_pieces/"
+
+          - subset-name: "GUI Tests"
+            os: ubuntu-latest
+            python-version: "3.12"
+            test-subset: "tests/gui/"
+
+          - subset-name: "Scripts Tests"
+            os: ubuntu-latest
+            python-version: "3.12"
+            test-subset: "tests/scripts/"
+
+          - subset-name: "All Tests (Windows)"
+            os: windows-latest
+            python-version: "3.12"
+            test-subset: "tests/"
+
+    name: ${{ matrix.subset-name }} (${{ matrix.os }} Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+
+    env:
+      TEST_SUBSET: ${{ matrix.test-subset }}
+
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - uses: mamba-org/setup-micromamba@v2
+      with:
+        environment-file: environment.yaml
+        create-args: >-
+          python=${{matrix.python-version}}
+        environment-name: game-on-yasuki-test
+        init-shell: bash
+        cache-environment: true
+
+    - name: Install current branch
+      run: |
+        pip install -e .
+        python --version
+
+    - name: Create matrix id
+      id: matrix-id
+      env:
+        MATRIX_CONTEXT: ${{ toJson(matrix) }}
+      run: |
+        echo $MATRIX_CONTEXT
+        export MATRIX_ID=`echo $MATRIX_CONTEXT | sha256sum | cut -c 1-32`
+        echo $MATRIX_ID
+        echo "id=$MATRIX_ID" >> $GITHUB_OUTPUT
+
+    - name: Run tests
+      run: |
+        python -m pytest -vv --cache-clear --cov=app --cov-report=xml:coverage/coverage-${MATRIX_ID}.xml --no-cov-on-fail --cov-report term $TEST_SUBSET --durations=50
+      env:
+        MATRIX_ID: ${{ steps.matrix-id.outputs.id }}
+
+    - name: Upload coverage file
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-${{ steps.matrix-id.outputs.id }}
+        path: coverage/coverage-${{ steps.matrix-id.outputs.id }}.xml
+
+
+  all-checks:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: "All tests"
+    needs: [test]
+    steps:
+      - name: Check build matrix status
+        if: ${{ needs.test.result != 'success' }}
+        run: exit 1
+
+  upload-coverage:
+    runs-on: ubuntu-latest
+    name: "Upload coverage"
+    needs: [all-checks]
+    if: ${{ needs.all-checks.result == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U coverage>=5.1 coveralls
+
+      - name: Download coverage file
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-*
+          path: coverage
+          merge-multiple: true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          directory: ./coverage/
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}

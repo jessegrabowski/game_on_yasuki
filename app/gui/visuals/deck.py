@@ -1,7 +1,7 @@
 import tkinter as tk
 
 from app.gui.ui.images import ImageProvider
-from app.assets.paths import FATE_BACK, DYNASTY_BACK
+from app.paths import FATE_BACK, DYNASTY_BACK
 from app.game_pieces.cards import L5RCard
 from app.game_pieces.constants import Side
 from app.game_pieces.deck import Deck

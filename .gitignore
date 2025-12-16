@@ -1,6 +1,6 @@
 app/assets/database/*
 app/assets/images/cards/*
-!app/assets/images/cards/defaults/
-!app/assets/images/cards/defaults/**
+!app/assets/images/defaults/
+!app/assets/images/defaults/**
 
 .idea/

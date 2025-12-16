@@ -29,7 +29,6 @@ def test_generic_deck_draw_peek_add_and_len():
     assert deck.draw_one().id == "f99"
 
     deck.add_to_bottom([mk_fate(100)])
-    # Draw remaining to get to bottom
     _ = deck.draw(10)
     assert deck.draw_one() is None
 
@@ -47,8 +46,8 @@ def test_fate_and_dynasty_deck_build_validate_types():
     f_cards = [mk_fate(i) for i in range(3)]
     d_cards = [mk_dyn(i) for i in range(3)]
 
-    FateDeck.build(f_cards)  # should not raise
-    DynastyDeck.build(d_cards)  # should not raise
+    FateDeck.build(f_cards)
+    DynastyDeck.build(d_cards)
 
     try:
         FateDeck.build([mk_fate(1), mk_dyn(1)])

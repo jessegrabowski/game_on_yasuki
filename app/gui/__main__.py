@@ -1,3 +1,4 @@
+import logging
 import tkinter as tk
 from collections.abc import Callable
 from app.game_pieces.constants import Side
@@ -16,6 +17,8 @@ from app.engine.zones import (
 )
 from app.gui.ui.menus import build_menubar
 from app.engine.players import PlayerId
+
+logger = logging.getLogger(__name__)
 
 # Optional PIL import for avatar images
 try:

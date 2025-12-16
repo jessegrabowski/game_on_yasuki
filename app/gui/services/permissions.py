@@ -1,5 +1,8 @@
+from typing import TYPE_CHECKING
 from app.engine.players import PlayerId
-from app.gui.field_view import FieldView
+
+if TYPE_CHECKING:
+    from app.gui.field_view import FieldView
 
 
 def tag_owner(tag: str) -> PlayerId | None:
@@ -11,7 +14,7 @@ def tag_owner(tag: str) -> PlayerId | None:
     return None
 
 
-def can_interact(view: FieldView, owner: PlayerId | None) -> bool:
+def can_interact(view: "FieldView", owner: PlayerId | None) -> bool:
     # Unowned tags are unrestricted; else only the controller of the target may act on it
     return owner is None or owner == view.local_player
 

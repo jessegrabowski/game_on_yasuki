@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 from app.game_pieces.cards import L5RCard
-from app.assets.paths import (
+from app.paths import (
     DYNASTY_BACK,
     DEFAULT_PERSONALITY,
     DEFAULT_HOLDING,

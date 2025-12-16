@@ -4,7 +4,7 @@ import tkinter as tk
 
 from PIL import Image, ImageTk
 
-from app.assets.paths import FATE_BACK, DYNASTY_BACK
+from app.paths import FATE_BACK, DYNASTY_BACK
 from app.game_pieces.constants import Side
 from app.gui.constants import CARD_W, CARD_H
 from functools import lru_cache

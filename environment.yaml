@@ -5,6 +5,7 @@ channels:
 dependencies:
   - python=3.12
   - pytest
+  - pytest-cov
   - pydantic
   - pre-commit
   - Pillow

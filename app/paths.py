@@ -1,8 +1,9 @@
 from pathlib import Path
 
 # Base assets dirs
-ASSETS_DIR = Path(__file__).resolve().parent / "images"
-DEFAULTS_DIR = ASSETS_DIR / "cards" / "defaults"
+ASSETS_DIR = Path(__file__).resolve().parent / "assets" / "images"
+SETS_DIR = ASSETS_DIR / "sets"
+DEFAULTS_DIR = ASSETS_DIR / "defaults"
 
 # Card backs
 FATE_BACK: Path = ASSETS_DIR / "fate_back_new.jpg"

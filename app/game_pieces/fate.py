@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from app.game_pieces.cards import L5RCard
 from app.game_pieces.constants import AttachmentType, Element, Timing
-from app.assets.paths import (
+from app.paths import (
     FATE_BACK,
     DEFAULT_STRATEGY,
     DEFAULT_ITEM,
