@@ -832,9 +832,9 @@ def query_cards_filtered(
 
     # Apply text search
     if text_query:
-        conditions.append("(c.name ILIKE %s OR c.id ILIKE %s)")
+        conditions.append("(c.name ILIKE %s OR c.id ILIKE %s OR c.rules_text ILIKE %s)")
         search_pattern = f"%{text_query}%"
-        params.extend([search_pattern, search_pattern])
+        params.extend([search_pattern, search_pattern, search_pattern])
 
     # Apply property filters
     if filter_options:
@@ -939,6 +939,24 @@ def query_cards_filtered(
                         )
                         """
                     )
+            elif property_name == "keywords":
+                # Special handling for keyword filter (multi-select)
+                # Cards must have ALL specified keywords (AND logic)
+                keyword_list = value
+                if keyword_list:
+                    # For each keyword, require it exists
+                    # Using AND logic: card must have all keywords
+                    for keyword in keyword_list:
+                        conditions.append(
+                            """
+                            c.id IN (
+                                SELECT card_id
+                                FROM card_keywords
+                                WHERE keyword ILIKE %s
+                            )
+                            """
+                        )
+                        params.append(keyword)
             elif property_name in (
                 "force",
                 "chi",

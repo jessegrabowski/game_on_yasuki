@@ -6,6 +6,7 @@ from app.gui.ui.deck_builder.card_preview import CardPreviewController
 from app.gui.ui.deck_builder.deck_data import DeckBuilderRepository, DeckState
 from app.gui.ui.deck_builder.deck_components import FilteredCardList, DeckCardList
 from app.gui.ui.deck_builder.filter_dialog import FilterDialog, FilterOptions
+from app.gui.ui.deck_builder.search_help import show_search_help
 import logging
 
 logger = logging.getLogger(__name__)
@@ -36,6 +37,7 @@ class DeckBuilderWindow:
         self._deck_state = DeckState()
         self._updating_lists = False  # Flag to prevent event handlers during refresh
         self._filter_options = FilterOptions()
+        self._search_debounce_id = None  # For debouncing search input
 
         self._setup_layout()
         self._setup_event_bindings()
@@ -68,8 +70,10 @@ class DeckBuilderWindow:
         tk.Label(search_frame, text="Search:").pack(side="left")
         self.search_var = tk.StringVar()
         search_entry = tk.Entry(search_frame, textvariable=self.search_var)
-        search_entry.pack(side="left", fill="x", expand=True, padx=(6, 0))
+        search_entry.pack(side="left", fill="x", expand=True, padx=(6, 4))
         search_entry.bind("<KeyRelease>", lambda e: self._on_search_changed())
+
+        tk.Button(search_frame, text="?", width=2, command=self._show_search_help).pack(side="left")
 
         self.card_list = FilteredCardList(col, self._repository)
         self.card_list.pack(fill="both", expand=True, pady=(8, 0))
@@ -203,8 +207,23 @@ class DeckBuilderWindow:
             pass
 
     def _on_search_changed(self) -> None:
+        """Handle search box changes with debouncing to improve performance."""
+        # Cancel any pending search
+        if self._search_debounce_id is not None:
+            self.win.after_cancel(self._search_debounce_id)
+
+        # Schedule new search after delay (150ms is responsive but reduces queries)
+        self._search_debounce_id = self.win.after(150, self._execute_search)
+
+    def _execute_search(self) -> None:
+        """Execute the actual search (called after debounce delay)."""
+        self._search_debounce_id = None
         query = self.search_var.get()
         self.card_list.set_filter(query)
+
+    def _show_search_help(self) -> None:
+        """Show search syntax help dialog."""
+        show_search_help(self.win)
 
     def _open_filter_dialog(self) -> None:
         """Open the filter dialog and apply selected filters."""

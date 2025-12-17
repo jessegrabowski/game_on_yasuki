@@ -311,7 +311,7 @@ class DeckBuilderRepository:
     def filter_cards(
         self,
         query: str,
-        filter_options: "FilterOptions | None" = None,
+        filter_options: "FilterOptions | dict | None" = None,
     ) -> list[dict]:
         """
         Filter cards by search query and optional property filters.
@@ -323,8 +323,9 @@ class DeckBuilderRepository:
         ----------
         query : str
             Search query (case-insensitive)
-        filter_options : FilterOptions, optional
-            Filter options containing property constraints
+        filter_options : FilterOptions, dict, or None
+            Filter options containing property constraints.
+            Can be FilterOptions object or dict of filters.
 
         Returns
         -------
@@ -333,8 +334,17 @@ class DeckBuilderRepository:
         """
         # Convert FilterOptions to dict for database query
         filter_dict = None
-        if filter_options and filter_options.has_filters():
-            filter_dict = filter_options.filters
+        if filter_options:
+            if isinstance(filter_options, dict):
+                filter_dict = filter_options
+            elif hasattr(filter_options, "has_filters") and filter_options.has_filters():
+                filter_dict = filter_options.filters
+
+        # Performance optimization: use cached cards when no query and no filters
+        # This avoids expensive database query when showing all cards
+        if not query and not filter_dict:
+            # Return cached cards sorted by name and experience
+            return sorted(self._all_cards, key=_card_sort_key)
 
         cards = query_cards_filtered(text_query=query, filter_options=filter_dict)
 

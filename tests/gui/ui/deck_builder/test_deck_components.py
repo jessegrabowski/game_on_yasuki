@@ -78,7 +78,7 @@ def test_filtered_card_list_set_filter_options(root, mock_repository):
     card_list.set_filter_options(filter_opts)
 
     assert card_list._filter_options == filter_opts
-    mock_repository.filter_cards.assert_called_with("", filter_opts)
+    mock_repository.filter_cards.assert_called_with("", {"legality": ("Ivory Edition", ["legal"])})
 
 
 def test_filtered_card_list_refresh(root, mock_repository):

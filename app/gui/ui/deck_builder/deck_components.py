@@ -4,6 +4,7 @@ import logging
 
 from app.gui.ui.deck_builder.components import ScrollableListBox
 from app.gui.ui.deck_builder.card_preview import format_card_display_name
+from app.gui.ui.deck_builder.parse_search import parse_and_build_query
 
 if TYPE_CHECKING:
     from app.gui.ui.deck_builder.filter_dialog import FilterOptions
@@ -98,12 +99,14 @@ class FilteredCardList(ScrollableListBox):
         """
         Set filter query and refresh display.
 
+        Uses Scryfall-style query language to parse search terms.
+
         Parameters
         ----------
         query : str
-            Search query string
+            Search query string (supports field:value, comparisons, etc.)
         """
-        self._filter_query = query.strip().lower()
+        self._filter_query = query.strip()
         self.refresh()
 
     def set_filter_options(self, filter_options: "FilterOptions | None") -> None:
@@ -121,7 +124,19 @@ class FilteredCardList(ScrollableListBox):
     def refresh(self) -> None:
         self.clear()
         self._card_ids = []
-        filtered = self._repository.filter_cards(self._filter_query, self._filter_options)
+
+        # Parse the search query using the query language
+        text_query, parsed_filters = parse_and_build_query(self._filter_query)
+
+        # Merge with dialog filters (dialog filters take precedence)
+        combined_filters = dict(parsed_filters)
+        if self._filter_options and self._filter_options.has_filters():
+            combined_filters.update(self._filter_options.filters)
+
+        # Convert combined filters back to FilterOptions-like dict, or None if empty
+        filter_dict = combined_filters if combined_filters else None
+
+        filtered = self._repository.filter_cards(text_query, filter_dict)
         for card in filtered:
             display_name = format_card_display_name(card)
             self.insert(tk.END, display_name)
