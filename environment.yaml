@@ -9,3 +9,4 @@ dependencies:
   - pydantic
   - pre-commit
   - Pillow
+  - psycopg2
