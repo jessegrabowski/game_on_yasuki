@@ -6,11 +6,7 @@ from pathlib import Path
 from collections.abc import Iterable
 import shutil
 
-try:
-    import psycopg2
-except ImportError:
-    print("ERROR: psycopg2 is not installed. Install it with: pip install psycopg2-binary")
-    sys.exit(1)
+import psycopg2
 
 from app import DATABASE_DIR
 from app.install import sets_to_sql, json_to_sql
