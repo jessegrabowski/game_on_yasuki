@@ -51,6 +51,7 @@ pillow = ">=10.0"
 pydantic = ">=2.7"
 pyyaml = ">=6.0"
 tk = "*"
+unidecode = ">=1.4.0,<2"
 
 [tool.pixi.pypi-dependencies]
 game-on-yasuki = { path = ".", editable = true }
