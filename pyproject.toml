@@ -3,7 +3,7 @@ requires = ["hatchling>=1.25", "hatch-vcs>=0.4"]
 build-backend = "hatchling.build"
 
 [project]
-name = "Game on, Yasuki!"
+name = "game-on-yasuki"
 dynamic = ["version"]
 description = "Online client for playing classic L5R"
 authors = [{ name = "Jesse Grabowski" , email = "jessegrabowski@gmail.com"}]
@@ -14,7 +14,7 @@ dependencies = [
   "pydantic>=2.7",
   "PyYAML>=6.0",
   "Pillow>=10.0",
-  "psycopg2-binary>=2.9",
+  "psycopg2>=2.9",
 ]
 
 [project.urls]
@@ -22,12 +22,16 @@ Homepage = "https://github.com/jessegrabowski/game-on-yasuki"
 
 [tool.hatch.version]
 source = "vcs"
+fallback-version = "0.0.0+unknown"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "app/_version.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["game_on_yasuki"]
+packages = ["app"]
 
 [tool.hatch.build.targets.sdist]
-include = ["game_on_yasuki", "README.md", "tests", "pyproject.toml"]
+include = ["app", "README.md", "tests", "pyproject.toml"]
 
 [tool.ruff]
 line-length = 100
@@ -35,3 +39,35 @@ line-length = 100
 [tool.pytest.ini_options]
 pythonpath = ["."]
 addopts = "-q"
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["osx-arm64", "osx-64", "linux-64", "win-64"]
+
+[tool.pixi.dependencies]
+python = ">=3.12"
+psycopg2 = ">=2.9"
+pillow = ">=10.0"
+pydantic = ">=2.7"
+pyyaml = ">=6.0"
+tk = "*"
+
+[tool.pixi.pypi-dependencies]
+game-on-yasuki = { path = ".", editable = true }
+fastapi = ">=0.115"
+uvicorn = { version = ">=0.30", extras = ["standard"] }
+
+[tool.pixi.feature.dev.dependencies]
+pytest = "*"
+pytest-cov = "*"
+pre-commit = "*"
+ruff = "*"
+
+[tool.pixi.environments]
+default = { features = ["dev"], solve-group = "default" }
+
+[tool.pixi.tasks]
+play = "python play.py"
+test = "pytest tests/"
+install-db = "python -m app.install.install_db"
+api = "uvicorn app.api.main:app --host 0.0.0.0 --port 8000"

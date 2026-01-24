@@ -77,25 +77,25 @@ CREATE DATABASE l5r;
 
 ### Step 3: Install Python Dependencies
 
-This project uses conda for environment management. If you don't have conda installed, download Miniconda from:
-https://docs.conda.io/en/latest/miniconda.html
+This project uses [Pixi](https://pixi.sh) for environment management. Pixi handles both conda and PyPI dependencies seamlessly.
 
-Alternatively, use Mamba for faster dependency resolution:
-https://mamba.readthedocs.io/
-
-**Create and activate the environment:**
+**Install Pixi:**
 
 ```bash
-# Using conda
-conda env create -f environment.yaml
-conda activate game-on-yasuki-dev
+# macOS/Linux
+curl -fsSL https://pixi.sh/install.sh | bash
 
-# Or using mamba (faster)
-mamba env create -f environment.yaml
-mamba activate game-on-yasuki-dev
+# Windows (PowerShell)
+iwr -useb https://pixi.sh/install.ps1 | iex
 ```
 
-The `environment.yaml` file includes all required dependencies: Python 3.12, pytest, pydantic, Pillow, psycopg2, and pre-commit hooks.
+**Install dependencies:**
+
+```bash
+pixi install
+```
+
+This installs all required dependencies from conda-forge (Python 3.12, psycopg2, Pillow, tk) and PyPI (FastAPI, uvicorn).
 
 **Alternative: pip installation**
 
@@ -114,7 +114,7 @@ Game data is stored under `app/assets/database/`. The installation script will a
 **Basic installation:**
 
 ```bash
-python -m app.install.install_db
+pixi run install-db
 ```
 
 This assumes PostgreSQL is running on localhost with a database named `l5r` that your current user can access without a password.
@@ -125,14 +125,14 @@ If your PostgreSQL setup differs, specify a connection string:
 
 ```bash
 # Using DSN format
-python -m app.install.install_db --dsn "postgresql://localhost/l5r"
+pixi run install-db -- --dsn "postgresql://localhost/l5r"
 
 # With authentication
-python -m app.install.install_db --dsn "postgresql://username:password@localhost:5432/l5r"
+pixi run install-db -- --dsn "postgresql://username:password@localhost:5432/l5r"
 
 # Or set an environment variable
 export L5R_DATABASE_URL="postgresql://localhost/l5r"
-python -m app.install.install_db
+pixi run install-db
 ```
 
 **Installation flags:**
@@ -151,18 +151,67 @@ The installer will validate that PostgreSQL is installed, the database exists, a
 Once dependencies are installed and the database is initialized, launch the game client:
 
 ```bash
-# Python launcher
-python play.py
+# Using Pixi
+pixi run play
 
 # With debug logging
-python play.py --debug
+pixi run play -- --debug
 
-# Shell launcher (Unix/macOS)
-./play.sh
-
-# Or as a module
-python -m app.gui
+# Or directly with Python (if in pixi shell)
+pixi shell
+python play.py
 ```
+
+## Docker Installation (Alternative)
+
+For a simplified setup, you can use Docker to run the application with all dependencies pre-configured.
+
+### Using Docker Compose (Recommended)
+
+```bash
+# Build and start the application with PostgreSQL
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop the application
+docker compose down
+```
+
+### Using Pre-built Image
+
+```bash
+# Pull the latest image from GitHub Container Registry
+docker pull ghcr.io/jessegrabowski/game-on-yasuki:latest
+
+# Run with Docker Compose
+docker compose up -d
+```
+
+### Running the API Server
+
+```bash
+# Start the FastAPI server instead of the GUI
+docker compose --profile api up -d api db
+```
+
+### GUI with Docker (Linux/X11 only)
+
+Running the GUI from Docker requires X11 forwarding:
+
+```bash
+# Allow Docker to connect to X server
+xhost +local:docker
+
+# Start the GUI
+docker compose up app
+
+# Revoke access when done
+xhost -local:docker
+```
+
+**Note:** GUI support in Docker is limited to Linux with X11. For macOS and Windows, use the native installation method.
 
 ## Development
 
@@ -171,13 +220,13 @@ python -m app.gui
 Execute the test suite with pytest:
 
 ```bash
-pytest tests/
+pixi run test
 ```
 
 For coverage reporting:
 
 ```bash
-pytest tests/ --cov=app --cov-report=html
+pixi run test -- --cov=app --cov-report=html
 ```
 
 ### Code Quality
@@ -186,10 +235,10 @@ This project uses pre-commit hooks with ruff for linting and formatting:
 
 ```bash
 # Install pre-commit hooks
-pre-commit install
+pixi run pre-commit install
 
 # Run manually on all files
-pre-commit run --all-files
+pixi run pre-commit --all
 ```
 
 ### Debugging
@@ -197,7 +246,7 @@ pre-commit run --all-files
 Enable debug logging to see detailed information about database queries, GUI initialization, card loading, and error tracebacks:
 
 ```bash
-python play.py --debug
+pixi run play --debug
 ```
 
 Debug output includes:
