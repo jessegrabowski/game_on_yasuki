@@ -3,6 +3,9 @@ app/assets/images/cards/*
 !app/assets/images/defaults/
 !app/assets/images/defaults/**
 
+app/install/
+tests/install/
+
 .pixi/
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,intellij+all,windows,macos,vim,jupyternotebooks,visualstudiocode
