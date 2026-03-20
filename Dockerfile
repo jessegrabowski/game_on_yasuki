@@ -9,7 +9,6 @@ LABEL description="Game on, Yasuki! - Online client for playing classic L5R"
 
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
-ENV L5R_DATABASE_URL=postgresql://l5r:l5r@db:5432/l5r
 
 WORKDIR /app
 
