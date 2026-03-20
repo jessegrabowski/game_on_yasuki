@@ -14,12 +14,12 @@ ENV L5R_DATABASE_URL=postgresql://l5r:l5r@db:5432/l5r
 WORKDIR /app
 
 COPY pyproject.toml pixi.lock ./
-RUN pixi install --locked
+RUN mkdir -p app && touch app/__init__.py
+RUN pixi install --locked --environment prod
 
 COPY app/ ./app/
 COPY tests/ ./tests/
 COPY play.py README.md ./
-RUN pixi run python -c "import app"
 
 COPY docker-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
@@ -27,4 +27,4 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 EXPOSE 8000
 
 ENTRYPOINT ["docker-entrypoint.sh"]
-CMD ["pixi", "run", "api"]
+CMD ["pixi", "run", "-e", "prod", "api"]

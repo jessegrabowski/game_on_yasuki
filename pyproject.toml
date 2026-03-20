@@ -42,7 +42,7 @@ addopts = "-q"
 
 [tool.pixi.workspace]
 channels = ["conda-forge"]
-platforms = ["osx-arm64", "osx-64", "linux-64", "win-64"]
+platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
 
 [tool.pixi.dependencies]
 python = ">=3.12"
@@ -66,9 +66,23 @@ ruff = "*"
 
 [tool.pixi.environments]
 default = { features = ["dev"], solve-group = "default" }
+prod = { solve-group = "default" }
 
 [tool.pixi.tasks]
 play = "python play.py"
 test = "pytest tests/"
 install-db = "python -m app.install.install_db"
-api = "uvicorn app.api.main:app --host 0.0.0.0 --port 8000"
+api = "python -c \"import os; os.execvp('uvicorn', ['uvicorn', 'app.api.main:app', '--host', '0.0.0.0', '--port', os.environ.get('PORT', '8000')])\""
+docker-build = "docker-compose build"
+docker-up = "docker-compose up db db-init"
+docker-api = "docker-compose --profile api up db db-init api"
+docker-down = "docker-compose down"
+docker-nuke = "docker-compose down -v"
+docker-test = """docker-compose --profile api up -d db db-init api \
+  && echo 'Waiting for API...' \
+  && sleep 10 \
+  && curl -sf http://localhost:8000/health \
+  && echo '' && echo '✓ API is healthy' \
+  && curl -sf 'http://localhost:8000/api/cards?limit=1' \
+  && echo '' && echo '✓ Card query works' \
+  || echo '✗ Something failed'"""

@@ -78,11 +78,9 @@ class Installer:
     def _validate_prerequisites(self) -> None:
         """Check if PostgreSQL tools are available on the system."""
         if not shutil.which("psql"):
-            raise InstallerError(
-                "PostgreSQL client tools not found. Please install PostgreSQL:\n"
-                "  - macOS: brew install postgresql\n"
-                "  - Ubuntu/Debian: sudo apt-get install postgresql-client\n"
-                "  - Windows: Download from https://www.postgresql.org/download/"
+            logger.warning(
+                "PostgreSQL client tools (psql) not found on PATH. "
+                "This is fine for Docker/cloud deployments, but local users may need to install PostgreSQL."
             )
 
         if not shutil.which("createdb"):

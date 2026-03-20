@@ -167,17 +167,21 @@ python play.py
 Docker lets you run PostgreSQL without installing it natively. The GUI still runs
 on your host machine — only the database lives in a container.
 
+**Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+must be installed and running (look for the whale icon in your menu bar / system tray).
+
 ### Quick Start: Database Only
 
 ```bash
-# Start PostgreSQL and seed the card database (first run takes a moment)
-docker-compose up db db-init
+# Build the image and start PostgreSQL + seed the card database
+pixi run docker-up
 
-# Once "l5r-db-init exited with code 0" appears, the database is ready.
-# Leave this terminal running (or add -d to run in background).
+# Or equivalently:
+docker-compose up db db-init
 ```
 
-Then launch the GUI normally, pointing at the containerized database:
+Once `l5r-db-init exited with code 0` appears, the database is ready. Then launch
+the GUI in a second terminal:
 
 ```bash
 L5R_DATABASE_URL=postgresql://l5r:l5r@localhost:5432/l5r pixi run play
@@ -185,24 +189,37 @@ L5R_DATABASE_URL=postgresql://l5r:l5r@localhost:5432/l5r pixi run play
 
 ### API Server (Multiplayer)
 
-To run the FastAPI backend for multiplayer:
-
 ```bash
-docker-compose --profile api up -d db db-init api
+# Start the full stack: database + card seeding + FastAPI server
+pixi run docker-api
+
+# Or equivalently:
+docker-compose --profile api up db db-init api
 ```
 
 The API will be available at `http://localhost:8000`. Interactive docs at
 `http://localhost:8000/docs`.
 
-### Managing the Database
+### Testing the Docker Setup
 
 ```bash
-# Stop everything
-docker-compose down
+# Automated smoke test: builds, starts everything, hits the API, reports status
+pixi run docker-test
 
-# Stop and delete all card data (fresh start)
-docker-compose down -v
+# When done, tear it all down
+pixi run docker-down
 ```
+
+### All Docker Commands
+
+| Command | What it does |
+|---------|-------------|
+| `pixi run docker-build` | Build the Docker image |
+| `pixi run docker-up` | Start database + seed cards |
+| `pixi run docker-api` | Start database + API server |
+| `pixi run docker-down` | Stop all containers |
+| `pixi run docker-nuke` | Stop all containers and **delete all data** |
+| `pixi run docker-test` | Build, start, smoke-test, report |
 
 ## Development
 

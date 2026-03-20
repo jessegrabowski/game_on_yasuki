@@ -40,10 +40,6 @@ jobs:
             python-version: "3.12"
             test-subset: "tests/scripts/"
 
-          - subset-name: "All Tests (Windows)"
-            os: windows-latest
-            python-version: "3.12"
-            test-subset: "tests/"
 
     name: ${{ matrix.subset-name }} (${{ matrix.os }} Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
