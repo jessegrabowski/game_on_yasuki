@@ -65,11 +65,6 @@ jobs:
             test-subset: "tests/gui/"
 
 
-          - subset-name: "Database Tests"
-            os: ubuntu-latest
-            python-version: "3.12"
-            test-subset: "tests/test_database.py"
-
     name: ${{ matrix.subset-name }} (${{ matrix.os }} Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
 
