@@ -64,7 +64,6 @@ jobs:
             python-version: "3.12"
             test-subset: "tests/gui/"
 
-
     name: ${{ matrix.subset-name }} (${{ matrix.os }} Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
 
@@ -204,7 +203,13 @@ jobs:
 
       - name: Get version from git
         id: version
-        run: echo "VERSION=$(git describe --tags --always --dirty)" >> $GITHUB_OUTPUT
+        run: |
+          if git describe --tags --match 'v*' > /dev/null 2>&1; then
+            VERSION=$(git describe --tags --match 'v*' --dirty | sed 's/^v//')
+          else
+            VERSION="0.0.0+g$(git rev-parse --short HEAD)"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
