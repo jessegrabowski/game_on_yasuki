@@ -10,6 +10,8 @@ from app.database import (
     query_all_sets,
     query_all_formats,
     query_all_decks,
+    query_all_clans,
+    query_all_types,
 )
 
 logger = logging.getLogger(__name__)
@@ -32,10 +34,7 @@ async def list_cards(
     Use search parameter for fuzzy text matching on name and rules text.
     """
     try:
-        if search:
-            results = search_cards(query=search, deck_filter=deck)
-        else:
-            results = query_all_cards()
+        results = search_cards(query=search or "", deck_filter=deck)
 
         if clan:
             results = [c for c in results if c.get("clan") == clan]
@@ -137,6 +136,28 @@ async def list_deck_types():
     except Exception as e:
         logger.error(f"Error listing deck types: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve deck types")
+
+
+@router.get("/clans")
+async def list_clans():
+    """List all clans available in the card database."""
+    try:
+        clans = query_all_clans()
+        return {"clans": clans, "count": len(clans)}
+    except Exception as e:
+        logger.error(f"Error listing clans: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve clans")
+
+
+@router.get("/card-types")
+async def list_card_types():
+    """List all card types (Personality, Holding, Event, etc.)."""
+    try:
+        types = query_all_types()
+        return {"card_types": types, "count": len(types)}
+    except Exception as e:
+        logger.error(f"Error listing card types: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve card types")
 
 
 @router.get("/cards/random/{count}")

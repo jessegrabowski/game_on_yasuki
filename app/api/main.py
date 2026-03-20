@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import logging
@@ -32,6 +33,7 @@ app.add_middleware(
 
 ASSETS_DIR = Path(__file__).parent.parent / "assets"
 IMAGES_DIR = ASSETS_DIR / "images"
+DECK_BUILDER_HTML = ASSETS_DIR / "deck_builder" / "index.html"
 
 if IMAGES_DIR.exists():
     app.mount("/images", StaticFiles(directory=IMAGES_DIR), name="images")
@@ -50,12 +52,18 @@ async def root():
         "message": "Game on, Yasuki! API Server",
         "version": "1.0.0",
         "docs": "/docs",
+        "deck_builder": "/deck-builder",
         "endpoints": {
             "cards": "/api/cards",
             "rooms": "/api/rooms",
             "websocket": "/ws/{room_id}",
         },
     }
+
+
+@app.get("/deck-builder")
+async def deck_builder():
+    return FileResponse(DECK_BUILDER_HTML, media_type="text/html")
 
 
 @app.get("/health")

@@ -3,8 +3,6 @@ app/assets/images/cards/*
 !app/assets/images/defaults/
 !app/assets/images/defaults/**
 
-app/install/
-tests/install/
 
 .pixi/
 
