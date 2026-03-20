@@ -162,56 +162,47 @@ pixi shell
 python play.py
 ```
 
-## Docker Installation (Alternative)
+## Docker (Skip PostgreSQL Installation)
 
-For a simplified setup, you can use Docker to run the application with all dependencies pre-configured.
+Docker lets you run PostgreSQL without installing it natively. The GUI still runs
+on your host machine — only the database lives in a container.
 
-### Using Docker Compose (Recommended)
-
-```bash
-# Build and start the application with PostgreSQL
-docker compose up -d
-
-# View logs
-docker compose logs -f
-
-# Stop the application
-docker compose down
-```
-
-### Using Pre-built Image
+### Quick Start: Database Only
 
 ```bash
-# Pull the latest image from GitHub Container Registry
-docker pull ghcr.io/jessegrabowski/game-on-yasuki:latest
+# Start PostgreSQL and seed the card database (first run takes a moment)
+docker-compose up db db-init
 
-# Run with Docker Compose
-docker compose up -d
+# Once "l5r-db-init exited with code 0" appears, the database is ready.
+# Leave this terminal running (or add -d to run in background).
 ```
 
-### Running the API Server
+Then launch the GUI normally, pointing at the containerized database:
 
 ```bash
-# Start the FastAPI server instead of the GUI
-docker compose --profile api up -d api db
+L5R_DATABASE_URL=postgresql://l5r:l5r@localhost:5432/l5r pixi run play
 ```
 
-### GUI with Docker (Linux/X11 only)
+### API Server (Multiplayer)
 
-Running the GUI from Docker requires X11 forwarding:
+To run the FastAPI backend for multiplayer:
 
 ```bash
-# Allow Docker to connect to X server
-xhost +local:docker
-
-# Start the GUI
-docker compose up app
-
-# Revoke access when done
-xhost -local:docker
+docker-compose --profile api up -d db db-init api
 ```
 
-**Note:** GUI support in Docker is limited to Linux with X11. For macOS and Windows, use the native installation method.
+The API will be available at `http://localhost:8000`. Interactive docs at
+`http://localhost:8000/docs`.
+
+### Managing the Database
+
+```bash
+# Stop everything
+docker-compose down
+
+# Stop and delete all card data (fresh start)
+docker-compose down -v
+```
 
 ## Development
 
@@ -238,7 +229,7 @@ This project uses pre-commit hooks with ruff for linting and formatting:
 pixi run pre-commit install
 
 # Run manually on all files
-pixi run pre-commit --all
+pixi run lint
 ```
 
 ### Debugging
@@ -246,7 +237,7 @@ pixi run pre-commit --all
 Enable debug logging to see detailed information about database queries, GUI initialization, card loading, and error tracebacks:
 
 ```bash
-pixi run play --debug
+pixi run play -- --debug
 ```
 
 Debug output includes:

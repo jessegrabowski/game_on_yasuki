@@ -1,6 +1,7 @@
 app/assets/images/sets
 
 *.zip
+.git
 .github
 .gitignore
 *.pyc
@@ -11,7 +12,6 @@ __pycache__
 env
 venv
 .venv
-.pixi
 pip-log.txt
 pip-delete-this-directory.txt
 .tox
