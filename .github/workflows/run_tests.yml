@@ -54,6 +54,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Install xvfb for GUI tests
+      if: contains(matrix.test-subset, 'gui')
+      run: sudo apt-get update && sudo apt-get install -y xvfb
+
     - uses: prefix-dev/setup-pixi@v0.8.1
       with:
         cache: true
@@ -71,11 +75,18 @@ jobs:
         echo $MATRIX_ID
         echo "id=$MATRIX_ID" >> $GITHUB_OUTPUT
 
+    - name: Start xvfb
+      if: contains(matrix.test-subset, 'gui')
+      run: |
+        Xvfb :99 -screen 0 1024x768x24 &
+        sleep 1
+
     - name: Run tests
       run: |
         pixi run pytest -vv --cache-clear --cov=app --cov-report=xml:coverage/coverage-${MATRIX_ID}.xml --no-cov-on-fail --cov-report term $TEST_SUBSET --durations=50
       env:
         MATRIX_ID: ${{ steps.matrix-id.outputs.id }}
+        DISPLAY: ":99"
 
     - name: Upload coverage file
       uses: actions/upload-artifact@v4
