@@ -2,31 +2,31 @@ import tkinter as tk
 from typing import Protocol, Any
 from collections.abc import Mapping
 
-from app.game_pieces.cards import L5RCard
-from app.engine.zones import HandZone
-from app.gui.constants import CARD_W, CARD_H
-from app.gui.services.drag import DragKind, Drag
-from app.gui.services.hittest import (
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.engine.zones import HandZone
+from yasuki_gui.constants import CARD_W, CARD_H
+from yasuki_gui.services.drag import DragKind, Drag
+from yasuki_gui.services.hittest import (
     resolve_drop_target as hittest_resolve_drop_target,
     bounds_contains as hittest_bounds_contains,
 )
-from app.gui.services.permissions import tag_owner, can_interact
-from app.gui.visuals import MarqueeBoxVisual
-from app.gui.config import Hotkeys, DEFAULT_HOTKEYS
-import app.gui.config as gui_config
-from app.gui.ui.images import load_image as _li, load_back_image as _lbi
-from app.gui.services.actions import (
+from yasuki_gui.services.permissions import tag_owner, can_interact
+from yasuki_gui.visuals import MarqueeBoxVisual
+from yasuki_gui.config import Hotkeys, DEFAULT_HOTKEYS
+import yasuki_gui.config as gui_config
+from yasuki_gui.ui.images import load_image as _li, load_back_image as _lbi
+from yasuki_gui.services.actions import (
     build_menu as build_actions_menu,
     REGISTRY as ACTIONS,
     ActionContext,
     HasView,
     FieldActions,
 )
-from app.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId
 
 
 def _card_in_any_province(view, card) -> bool:
-    from app.engine.zones import ProvinceZone
+    from yasuki_core.engine.zones import ProvinceZone
 
     for _, zv in view.zones.items():
         try:

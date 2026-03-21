@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from dataclasses import dataclass, field
 from typing import Any
-from app.database import (
+from yasuki_core.database import (
     query_all_formats,
     query_all_sets,
     query_sets_by_format,

@@ -1,10 +1,18 @@
 from dataclasses import dataclass
 
-from app.game_pieces.cards import L5RCard
-from app.game_pieces.constants import Side
-from app.gui.constants import CARD_W, CARD_H, CARD_TAG, ART_TAG, BORDER_TAG, SELECT_TAG, LABEL_TAG
-from app.gui.ui.images import load_image, load_back_image, ImageProvider
-from app.gui.visuals.visual import Visual
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
+from yasuki_gui.constants import (
+    CARD_W,
+    CARD_H,
+    CARD_TAG,
+    ART_TAG,
+    BORDER_TAG,
+    SELECT_TAG,
+    LABEL_TAG,
+)
+from yasuki_gui.ui.images import load_image, load_back_image, ImageProvider
+from yasuki_gui.visuals.visual import Visual
 import tkinter as tk
 
 

@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field, replace
 from typing import TYPE_CHECKING
 
-from app.database import query_all_cards, get_prints_by_card_id, query_cards_filtered
+from yasuki_core.database import query_all_cards, get_prints_by_card_id, query_cards_filtered
 
 if TYPE_CHECKING:
-    from app.gui.ui.deck_builder.filter_dialog import FilterOptions
+    from yasuki_gui.ui.deck_builder.filter_dialog import FilterOptions
 
 _CARDS_CACHE: list[dict] | None = None
 

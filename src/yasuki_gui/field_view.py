@@ -1,20 +1,20 @@
 import tkinter as tk
 from types import MappingProxyType
 
-from app.game_pieces.cards import L5RCard
-from app.game_pieces.deck import Deck
-from app.gui.constants import (
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.deck import Deck
+from yasuki_gui.constants import (
     CANVAS_BG,
     CARD_W,
 )
-from app.gui.config import Hotkeys, DEFAULT_HOTKEYS
-from app.engine.zones import Zone, HandZone, ProvinceZone
-from app.gui.visuals import DeckVisual, ZoneVisual, CardSpriteVisual, HandVisual
-from app.gui.controller import FieldController
-from app.gui.services.hittest import resolve_tag_at as hittest_resolve_tag_at
-from app.gui.services.actions import Redraw
-from app.gui.ui.images import ImageProvider
-from app.engine.players import PlayerId
+from yasuki_gui.config import Hotkeys, DEFAULT_HOTKEYS
+from yasuki_core.engine.zones import Zone, HandZone, ProvinceZone
+from yasuki_gui.visuals import DeckVisual, ZoneVisual, CardSpriteVisual, HandVisual
+from yasuki_gui.controller import FieldController
+from yasuki_gui.services.hittest import resolve_tag_at as hittest_resolve_tag_at
+from yasuki_gui.services.actions import Redraw
+from yasuki_gui.ui.images import ImageProvider
+from yasuki_core.engine.players import PlayerId
 
 
 class FieldView(tk.Canvas):

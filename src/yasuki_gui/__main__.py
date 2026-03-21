@@ -1,22 +1,27 @@
 import logging
 import tkinter as tk
 from collections.abc import Callable
-from app.game_pieces.constants import Side
-from app.game_pieces.fate import FateCard, FateAction, FateAttachment, FateRing
-from app.game_pieces.dynasty import DynastyCard, DynastyPersonality, DynastyHolding, DynastyEvent
-from app.game_pieces.deck import Deck
-from app.gui.field_view import FieldView
-from app.gui.config import load_hotkeys, DEBUG_MODE as GUI_DEBUG_MODE
-from app.gui.constants import CARD_W, CARD_H, MIN_HONOR, MAX_HONOR
-from app.engine.zones import (
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.fate import FateCard, FateAction, FateAttachment, FateRing
+from yasuki_core.game_pieces.dynasty import (
+    DynastyCard,
+    DynastyPersonality,
+    DynastyHolding,
+    DynastyEvent,
+)
+from yasuki_core.game_pieces.deck import Deck
+from yasuki_gui.field_view import FieldView
+from yasuki_gui.config import load_hotkeys, DEBUG_MODE as GUI_DEBUG_MODE
+from yasuki_gui.constants import CARD_W, CARD_H, MIN_HONOR, MAX_HONOR
+from yasuki_core.engine.zones import (
     HandZone,
     ProvinceZone,
     FateDiscardZone,
     DynastyDiscardZone,
     BattlefieldZone,
 )
-from app.gui.ui.menus import build_menubar
-from app.engine.players import PlayerId
+from yasuki_gui.ui.menus import build_menubar
+from yasuki_core.engine.players import PlayerId
 
 logger = logging.getLogger(__name__)
 
@@ -185,7 +190,7 @@ def main() -> None:
     # If debug is enabled, ensure controller will bind Ctrl+T
     if debug_enabled:
         try:
-            import app.gui.config as gui_config
+            import yasuki_gui.config as gui_config
 
             gui_config.DEBUG_MODE = True  # type: ignore[attr-defined]
         except Exception:
@@ -336,8 +341,8 @@ def main() -> None:
 
     # Demo cards (tracked on battlefield, shared) placed relative to content width/height
     # Use concrete subtypes so default fronts are available
-    from app.game_pieces.fate import FateAction as _DemoFate
-    from app.game_pieces.dynasty import DynastyPersonality as _DemoDyn
+    from yasuki_core.game_pieces.fate import FateAction as _DemoFate
+    from yasuki_core.game_pieces.dynasty import DynastyPersonality as _DemoDyn
 
     field.add_card(
         _DemoFate(id="demo-1", name="Sample Fate", side=Side.FATE), x=CW // 2 - 100, y=CH // 2 - 50

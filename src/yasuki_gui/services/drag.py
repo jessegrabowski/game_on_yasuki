@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum, auto
 from collections.abc import Iterable
 
-from app.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.cards import L5RCard
 
 
 class DragKind(Enum):

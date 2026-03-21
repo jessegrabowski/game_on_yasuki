@@ -2,12 +2,12 @@ import tkinter as tk
 from typing import TYPE_CHECKING
 import logging
 
-from app.gui.ui.deck_builder.components import ScrollableListBox
-from app.gui.ui.deck_builder.card_preview import format_card_display_name
-from app.search import parse_and_build_query
+from yasuki_gui.ui.deck_builder.components import ScrollableListBox
+from yasuki_gui.ui.deck_builder.card_preview import format_card_display_name
+from yasuki_core.search import parse_and_build_query
 
 if TYPE_CHECKING:
-    from app.gui.ui.deck_builder.filter_dialog import FilterOptions
+    from yasuki_gui.ui.deck_builder.filter_dialog import FilterOptions
 
 logger = logging.getLogger(__name__)
 

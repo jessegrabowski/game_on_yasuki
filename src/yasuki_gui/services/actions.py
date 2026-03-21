@@ -4,15 +4,21 @@ from collections.abc import Callable, Mapping
 from collections.abc import Iterable
 
 import tkinter as tk
-from app.game_pieces.cards import L5RCard
-from app.game_pieces.constants import Side
-from app.gui.constants import CARD_W, CARD_H, DRAW_OFFSET
-from app.gui.config import DEFAULT_HOTKEYS as HK
-from app.engine.zones import DynastyDiscardZone, ProvinceZone, HandZone, Zone, FateDiscardZone
-from app.gui.services.hittest import deck_expected_side
-from app.gui.ui.images import ImageProvider
-from app.gui.ui.dialogs import Dialogs
-from app.engine.players import PlayerId
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
+from yasuki_gui.constants import CARD_W, CARD_H, DRAW_OFFSET
+from yasuki_gui.config import DEFAULT_HOTKEYS as HK
+from yasuki_core.engine.zones import (
+    DynastyDiscardZone,
+    ProvinceZone,
+    HandZone,
+    Zone,
+    FateDiscardZone,
+)
+from yasuki_gui.services.hittest import deck_expected_side
+from yasuki_gui.ui.images import ImageProvider
+from yasuki_gui.ui.dialogs import Dialogs
+from yasuki_core.engine.players import PlayerId
 
 
 class HasView(Protocol):

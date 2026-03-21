@@ -1,8 +1,8 @@
 import tkinter as tk
 
-from app.game_pieces.constants import Side
-from app.gui.visuals import DeckVisual, CardSpriteVisual
-from app.gui.services.drag import BBox
+from yasuki_core.game_pieces.constants import Side
+from yasuki_gui.visuals import DeckVisual, CardSpriteVisual
+from yasuki_gui.services.drag import BBox
 
 
 def bounds_contains(bbox: BBox, x: int, y: int) -> bool:

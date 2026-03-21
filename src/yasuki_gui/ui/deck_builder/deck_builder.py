@@ -1,12 +1,12 @@
 import tkinter as tk
 from collections.abc import Callable
 
-from app.gui.ui.deck_builder.components import CardStatsPanel, PrintSelector
-from app.gui.ui.deck_builder.card_preview import CardPreviewController
-from app.gui.ui.deck_builder.deck_data import DeckBuilderRepository, DeckState
-from app.gui.ui.deck_builder.deck_components import FilteredCardList, DeckCardList
-from app.gui.ui.deck_builder.filter_dialog import FilterDialog, FilterOptions
-from app.gui.ui.deck_builder.search_help import show_search_help
+from yasuki_gui.ui.deck_builder.components import CardStatsPanel, PrintSelector
+from yasuki_gui.ui.deck_builder.card_preview import CardPreviewController
+from yasuki_gui.ui.deck_builder.deck_data import DeckBuilderRepository, DeckState
+from yasuki_gui.ui.deck_builder.deck_components import FilteredCardList, DeckCardList
+from yasuki_gui.ui.deck_builder.filter_dialog import FilterDialog, FilterOptions
+from yasuki_gui.ui.deck_builder.search_help import show_search_help
 import logging
 
 logger = logging.getLogger(__name__)

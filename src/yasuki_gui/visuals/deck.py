@@ -1,13 +1,13 @@
 import tkinter as tk
 
-from app.gui.ui.images import ImageProvider
-from app.paths import FATE_BACK, DYNASTY_BACK
-from app.game_pieces.cards import L5RCard
-from app.game_pieces.constants import Side
-from app.game_pieces.deck import Deck
-from app.gui.constants import CARD_W, CARD_H
-from app.gui.visuals.visual import Visual
-from app.engine.players import PlayerId
+from yasuki_gui.ui.images import ImageProvider
+from yasuki_core.paths import FATE_BACK, DYNASTY_BACK
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.deck import Deck
+from yasuki_gui.constants import CARD_W, CARD_H
+from yasuki_gui.visuals.visual import Visual
+from yasuki_core.engine.players import PlayerId
 
 
 class DeckVisual(Visual):
@@ -54,7 +54,7 @@ class DeckVisual(Visual):
                 path = top_card.image_back or (
                     FATE_BACK if top_card.side is Side.FATE else DYNASTY_BACK
                 )
-                from app.gui.ui.images import load_image as _li
+                from yasuki_gui.ui.images import load_image as _li
 
                 photo = _li(path, bowed=False, inverted=False, master=canvas)
             if photo is not None:

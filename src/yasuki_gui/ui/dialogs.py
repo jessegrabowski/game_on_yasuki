@@ -2,9 +2,9 @@ import tkinter as tk
 from tkinter import filedialog
 from collections.abc import Callable
 
-from app.gui.ui.images import ImageProvider
-from app.gui.visuals import DeckVisual
-from app.gui.constants import CARD_W, CARD_H
+from yasuki_gui.ui.images import ImageProvider
+from yasuki_gui.visuals import DeckVisual
+from yasuki_gui.constants import CARD_W, CARD_H
 
 
 class Dialogs:

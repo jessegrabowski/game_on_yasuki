@@ -4,9 +4,9 @@ import tkinter as tk
 
 from PIL import Image, ImageTk
 
-from app.paths import FATE_BACK, DYNASTY_BACK
-from app.game_pieces.constants import Side
-from app.gui.constants import CARD_W, CARD_H
+from yasuki_core.paths import FATE_BACK, DYNASTY_BACK
+from yasuki_core.game_pieces.constants import Side
+from yasuki_gui.constants import CARD_W, CARD_H
 from functools import lru_cache
 
 

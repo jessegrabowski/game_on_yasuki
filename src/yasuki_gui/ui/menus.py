@@ -1,9 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog, messagebox
 
-from app.gui.ui.dialogs import Dialogs
-from app.gui.ui.images import ImageProvider
-from app.gui.ui.deck_builder import open_deck_builder as _open_deck_builder
+from yasuki_gui.ui.dialogs import Dialogs
+from yasuki_gui.ui.images import ImageProvider
+from yasuki_gui.ui.deck_builder import open_deck_builder as _open_deck_builder
 
 
 def build_menubar(root: tk.Misc, field_view) -> tk.Menu:

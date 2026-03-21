@@ -5,7 +5,7 @@ from typing import Any
 
 import yaml
 
-from app import DEFAULT_DSN
+from yasuki_core import DEFAULT_DSN
 
 # Global debug flag
 DEBUG_MODE: bool = False

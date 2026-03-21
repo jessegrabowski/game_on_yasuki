@@ -1,9 +1,9 @@
 import tkinter as tk
 
-from app.engine.zones import HandZone
-from app.gui.constants import CARD_W, CARD_H, HAND_GAP, HAND_PADDING
-from app.gui.ui.images import ImageProvider, load_image as _li, load_back_image as _lbi
-from app.gui.visuals.visual import Visual
+from yasuki_core.engine.zones import HandZone
+from yasuki_gui.constants import CARD_W, CARD_H, HAND_GAP, HAND_PADDING
+from yasuki_gui.ui.images import ImageProvider, load_image as _li, load_back_image as _lbi
+from yasuki_gui.visuals.visual import Visual
 
 
 class HandVisual(Visual):

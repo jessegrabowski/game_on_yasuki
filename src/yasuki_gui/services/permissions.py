@@ -1,8 +1,8 @@
 from typing import TYPE_CHECKING
-from app.engine.players import PlayerId
+from yasuki_core.engine.players import PlayerId
 
 if TYPE_CHECKING:
-    from app.gui.field_view import FieldView
+    from yasuki_gui.field_view import FieldView
 
 
 def tag_owner(tag: str) -> PlayerId | None:

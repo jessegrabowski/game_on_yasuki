@@ -4,9 +4,9 @@ from pathlib import Path
 
 from PIL import Image, ImageTk
 
-from app import paths as asset_paths
-from app.paths import ASSETS_DIR
-from app.gui.constants import CARD_W, CARD_H
+from yasuki_core import paths as asset_paths
+from yasuki_core.paths import resolve_set_image_path
+from yasuki_gui.constants import CARD_W, CARD_H
 
 logger = logging.getLogger(__name__)
 
@@ -352,8 +352,9 @@ class CardPreviewController:
     def _resolve_image_path(self, card: dict, print_info: dict) -> Path | None:
         """Resolve image path from print info or card type default."""
         img_path_str = print_info.get("image_path")
-        if img_path_str and (ASSETS_DIR / img_path_str).exists():
-            return ASSETS_DIR / img_path_str
+        resolved = resolve_set_image_path(img_path_str) if img_path_str else None
+        if resolved and resolved.exists():
+            return resolved
 
         ctype = card.get("type", "").lower()
         return DEFAULT_BY_TYPE.get(ctype)
