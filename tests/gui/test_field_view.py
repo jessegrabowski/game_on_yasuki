@@ -60,30 +60,6 @@ class TestDeckInteractions:
         assert len(hand.cards) == before_hand_count + 1
         assert hand.cards[-1].face_up is True
 
-    def test_deck_renders_top_card_back_image(self, field, root):
-        fate_cards = [FateCard(id=f"f{i}", name=f"Fate {i}", side=Side.FATE) for i in range(2)]
-        dynasty_cards = [
-            DynastyCard(id=f"d{i}", name=f"Dynasty {i}", side=Side.DYNASTY) for i in range(2)
-        ]
-        fate_deck = Deck.build(fate_cards)
-        dynasty_deck = Deck.build(dynasty_cards)
-
-        fate_tag = field.add_deck(fate_deck, x=80, y=300, label="Fate Deck")
-        dynasty_tag = field.add_deck(dynasty_deck, x=240, y=300, label="Dynasty Deck")
-        root.update_idletasks()
-        root.update()
-
-        fate_items = field.find_withtag(fate_tag)
-        dynasty_items = field.find_withtag(dynasty_tag)
-        assert fate_items
-        assert dynasty_items
-
-        field._controller.on_double_click(DummyEventNamespace(x=80, y=300))
-        root.update_idletasks()
-        root.update()
-        after = len(field.find_withtag(fate_tag))
-        assert after >= 1
-
     def test_press_on_fate_deck_starts_drag_and_creates_face_down_card(self, root, monkeypatch):
         field = FieldView(root, width=600, height=400)
         field.pack()

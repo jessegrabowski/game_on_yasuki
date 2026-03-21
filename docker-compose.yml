@@ -48,6 +48,7 @@ services:
     container_name: l5r-api
     environment:
       - L5R_DATABASE_URL=postgresql://l5r:l5r@db:5432/l5r
+      - IMAGE_BASE_URL=${IMAGE_BASE_URL:-/images}
     depends_on:
       db:
         condition: service_healthy

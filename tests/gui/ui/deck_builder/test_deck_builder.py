@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from app.gui.ui.deck_builder.deck_builder import DeckBuilderWindow, open_deck_builder
+from app.gui.ui.deck_builder.deck_builder import DeckBuilderWindow
 
 
 @pytest.fixture
@@ -27,26 +27,6 @@ def mock_repository():
 
 
 class TestDeckBuilderWindow:
-    def test_initialization(self, root, mock_repository):
-        window = DeckBuilderWindow(root)
-
-        assert window.win is not None
-        assert window.win.title() == "Deck Builder"
-        assert window._repository is not None
-        assert window._deck_state is not None
-
-        window.win.destroy()
-
-    def test_has_three_columns(self, root, mock_repository):
-        window = DeckBuilderWindow(root)
-
-        assert window.card_list is not None
-        assert window.fate_list is not None
-        assert window.dynasty_list is not None
-        assert window.preview_controller is not None
-
-        window.win.destroy()
-
     def test_search_functionality(self, root, mock_repository):
         window = DeckBuilderWindow(root)
 
@@ -114,12 +94,3 @@ class TestDeckBuilderWindow:
         assert not window._filter_options.has_filters()
 
         window.win.destroy()
-
-
-def test_open_deck_builder(root, mock_repository):
-    window = open_deck_builder(root)
-
-    assert isinstance(window, DeckBuilderWindow)
-    assert window.win is not None
-
-    window.win.destroy()

@@ -5,6 +5,7 @@ import logging
 from app.database import (
     query_all_cards,
     search_cards,
+    query_cards_filtered,
     get_card_by_id,
     get_prints_by_card_id,
     query_all_sets,
@@ -13,6 +14,7 @@ from app.database import (
     query_all_clans,
     query_all_types,
 )
+from app.search import parse_and_build_query
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -20,26 +22,57 @@ router = APIRouter()
 
 @router.get("/cards")
 async def list_cards(
-    search: Annotated[str | None, Query(description="Search query for card name or text")] = None,
+    search: Annotated[
+        str | None,
+        Query(
+            description="Search query (supports Scryfall-style syntax: clan:Crane type:personality force>3)"
+        ),
+    ] = None,
     deck: Annotated[str | None, Query(description="Filter by deck type: dynasty or fate")] = None,
     clan: Annotated[str | None, Query(description="Filter by specific clan")] = None,
     card_type: Annotated[str | None, Query(description="Filter by card type")] = None,
+    format: Annotated[
+        str | None, Query(description="Filter by format legality (e.g., Ivory Edition)")
+    ] = None,
     limit: Annotated[int, Query(ge=1, le=1000, description="Maximum number of results")] = 100,
     offset: Annotated[int, Query(ge=0, description="Offset for pagination")] = 0,
 ):
     """
     List cards with optional filtering and pagination.
 
-    Returns card data including the first print's image path.
-    Use search parameter for fuzzy text matching on name and rules text.
+    The search parameter supports Scryfall-style query syntax:
+    - Plain text searches name and rules text
+    - clan:Crane, c:Crane — filter by clan
+    - type:personality, t:personality — filter by type
+    - force>3, chi>=2, gold<=3 — numeric comparisons
+    - is:unique, is:cavalry, is:shadowlands — keyword/trait filters
+    - "exact phrase" — exact match
+    - -type:event — negation
+    - term1 OR term2 — OR logic
+
+    The deck, clan, and card_type query params still work for backwards compatibility
+    and are merged with parsed search filters.
     """
     try:
-        results = search_cards(query=search or "", deck_filter=deck)
+        text_query = ""
+        filter_options = {}
 
+        if search:
+            text_query, filter_options = parse_and_build_query(search)
+
+        if deck:
+            filter_options.setdefault("decks", []).append(deck.upper())
         if clan:
-            results = [c for c in results if c.get("clan") == clan]
+            filter_options.setdefault("clans", []).append(clan)
         if card_type:
-            results = [c for c in results if c.get("type") == card_type]
+            filter_options.setdefault("types", []).append(card_type.lower())
+        if format:
+            filter_options["legality"] = (format, ["legal"])
+
+        results = query_cards_filtered(
+            text_query=text_query,
+            filter_options=filter_options if filter_options else None,
+        )
 
         total = len(results)
         paginated_results = results[offset : offset + limit]
@@ -102,18 +135,40 @@ async def list_sets():
         raise HTTPException(status_code=500, detail="Failed to retrieve sets")
 
 
+ARC_ORDER = [
+    "Clan Wars (Imperial)",
+    "Hidden Emperor (Jade)",
+    "Four Winds (Gold)",
+    "Rain of Blood (Diamond)",
+    "Age of Enlightenment (Lotus)",
+    "Race for the Throne (Samurai)",
+    "Destroyer War (Celestial)",
+    "Age of Conquest (Emperor)",
+    "A Brother's Destiny (Twenty Festivals)",
+    "War of the Seals (Onyx Edition)",
+    "Shattered Empire",
+]
+
+OTHER_ORDER = ["Modern", "Legacy", "Not Legal (Proxy)", "Unreleased"]
+
+
 @router.get("/formats")
 async def list_formats():
     """
-    List all game formats (e.g., Standard, Extended, Emperor).
+    List all game formats in chronological order.
 
-    Formats define which cards are legal in different play modes.
+    Returns arc formats (story arcs by release date) followed by
+    cross-arc formats like Modern and Legacy.
     """
     try:
-        formats = query_all_formats()
+        all_formats = set(query_all_formats())
+        arcs = [f for f in ARC_ORDER if f in all_formats]
+        other = [f for f in OTHER_ORDER if f in all_formats]
         return {
-            "formats": formats,
-            "count": len(formats),
+            "formats": arcs + other,
+            "arcs": arcs,
+            "other": other,
+            "count": len(arcs) + len(other),
         }
     except Exception as e:
         logger.error(f"Error listing formats: {e}")

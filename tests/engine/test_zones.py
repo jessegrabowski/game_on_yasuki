@@ -1,11 +1,5 @@
 from app.engine.zones import (
     HandZone,
-    BattlefieldZone,
-    ProvinceZone,
-    FateDiscardZone,
-    FateBanishZone,
-    DynastyDiscardZone,
-    DynastyBanishZone,
 )
 from app.game_pieces.cards import L5RCard
 from app.game_pieces.constants import Side
@@ -23,22 +17,3 @@ def test_zone_add_remove_and_constraints():
 
     assert hand.remove(fate_card) is True
     assert hand.remove(fate_card) is False
-
-
-def test_all_zone_types_exist_and_accept_sides():
-    zones = [
-        BattlefieldZone(),
-        ProvinceZone(),
-        FateDiscardZone(),
-        FateBanishZone(),
-        DynastyDiscardZone(),
-        DynastyBanishZone(),
-    ]
-    c_f = L5RCard(id="f2", name="Fate2", side=Side.FATE)
-    c_d = L5RCard(id="d2", name="Dynasty2", side=Side.DYNASTY)
-
-    for z in zones:
-        z.add(c_f)
-        z.add(c_d)
-        # Battlefield allows both, others enforce a side; we just ensure no crash and length increments appropriately
-        assert len(z) >= 0

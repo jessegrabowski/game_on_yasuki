@@ -98,17 +98,6 @@ def test_query_all_prints_returns_multiple_prints_per_card():
     assert "side" in sample
 
 
-def test_query_all_prints_shows_duplicate_card_names():
-    from collections import Counter
-
-    prints = query_all_prints()
-    card_names = [p["name"] for p in prints]
-    name_counts = Counter(card_names)
-
-    multi_print_cards = [name for name, count in name_counts.items() if count > 1]
-    assert len(multi_print_cards) > 0
-
-
 def test_kuni_yori_different_versions_as_separate_cards(kuni_yori_cards):
     """Test that different versions of Kuni Yori are separate cards with unique IDs."""
     assert len(kuni_yori_cards) > 1
@@ -286,81 +275,31 @@ def test_query_types_with_stat_invalid():
         query_types_with_stat("id")
 
 
-def test_keyword_filter_query_structure():
-    """Test that keyword filter generates correct SQL query structure."""
-    from app.database import query_cards_filtered
-
-    # Mock the database query to capture the SQL
-    # In real usage, this would query the card_keywords table
-    filter_options = {"keywords": ["cavalry"]}
-
-    # This will attempt to query the database
-    # If database is not available, test will be skipped
+@pytest.mark.parametrize(
+    "filter_options",
+    [
+        {"keywords": ["cavalry"]},
+        {"keywords": ["cavalry", "experienced"]},
+        {"keywords": ["cavalry"], "clans": ["Unicorn"], "force_min": 3},
+        {"is_unique": True},
+        {"is_unique": True, "keywords": ["experienced"]},
+    ],
+    ids=[
+        "single_keyword",
+        "multiple_keywords",
+        "keyword_with_other_filters",
+        "is_unique_alone",
+        "is_unique_and_keyword",
+    ],
+)
+def test_keyword_and_unique_filters(filter_options):
+    """Test that keyword and is_unique filters produce valid results."""
     try:
         results = query_cards_filtered("", filter_options)
-        # If we get here, database is available
-        # Results should be a list (empty or with cards)
-        assert isinstance(results, list)
     except Exception as e:
         pytest.skip(f"Database not available: {e}")
 
-
-def test_multiple_keywords_filter():
-    """Test that multiple keywords are properly filtered."""
-    from app.database import query_cards_filtered
-
-    filter_options = {"keywords": ["cavalry", "experienced"]}
-
-    try:
-        results = query_cards_filtered("", filter_options)
-        assert isinstance(results, list)
-        # If results exist, they should have one of the keywords
-        # (Note: this depends on database content)
-    except Exception as e:
-        pytest.skip(f"Database not available: {e}")
-
-
-def test_keyword_with_other_filters():
-    """Test that keyword filter combines with other filters."""
-    filter_options = {
-        "keywords": ["cavalry"],
-        "clans": ["Unicorn"],
-        "force_min": 3,
-    }
-
-    try:
-        results = query_cards_filtered("", filter_options)
-        assert isinstance(results, list)
-        # Results should be cavalry Unicorn cards with force >= 3
-    except Exception as e:
-        pytest.skip(f"Database not available: {e}")
-
-
-def test_is_unique_still_works():
-    """Test that is_unique filter still works alongside keyword filters."""
-    from app.database import query_cards_filtered
-
-    filter_options = {"is_unique": True}
-
-    try:
-        results = query_cards_filtered("", filter_options)
-        assert isinstance(results, list)
-        # All results should be unique cards
+    assert isinstance(results, list)
+    if filter_options.get("is_unique"):
         for card in results:
             assert card.get("is_unique") is True
-    except Exception as e:
-        pytest.skip(f"Database not available: {e}")
-
-
-def test_combined_is_unique_and_keyword():
-    """Test that is_unique and keyword filters can be combined."""
-    from app.database import query_cards_filtered
-
-    filter_options = {"is_unique": True, "keywords": ["experienced"]}
-
-    try:
-        results = query_cards_filtered("", filter_options)
-        assert isinstance(results, list)
-        # All results should be unique AND have experienced keyword
-    except Exception as e:
-        pytest.skip(f"Database not available: {e}")

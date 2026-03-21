@@ -4,7 +4,7 @@ import logging
 
 from app.gui.ui.deck_builder.components import ScrollableListBox
 from app.gui.ui.deck_builder.card_preview import format_card_display_name
-from app.gui.ui.deck_builder.parse_search import parse_and_build_query
+from app.search import parse_and_build_query
 
 if TYPE_CHECKING:
     from app.gui.ui.deck_builder.filter_dialog import FilterOptions

@@ -2,7 +2,7 @@ import re
 import unicodedata
 from unidecode import unidecode_expect_ascii
 
-from app.paths import ASSETS_DIR, SETS_DIR
+from app.paths import ASSETS_DIR
 
 SUFFIX_MAP = {
     "experienced": "exp",
@@ -148,22 +148,40 @@ def find_card_image(extended_title: str, set_name: str) -> str | None:
     image_path : str or None
         Relative path from ASSETS_DIR, or None if not found
     """
-    if not SETS_DIR.exists():
+    path = expected_card_image_path(extended_title, set_name)
+    if path is None:
+        return None
+
+    card_path = ASSETS_DIR / path
+    if card_path.exists():
+        return path
+
+    return None
+
+
+def expected_card_image_path(extended_title: str, set_name: str) -> str | None:
+    """
+    Compute the expected image path for a card without checking the filesystem.
+
+    Parameters
+    ----------
+    extended_title : str
+        Extended Title field (e.g., "Bayushi Kachiko • Experienced")
+    set_name : str
+        Set name
+
+    Returns
+    -------
+    image_path : str or None
+        Relative path like "sets/celestial_edition/a_legion_of_one.png",
+        or None if inputs are empty
+    """
+    if not extended_title or not set_name:
         return None
 
     set_dir_name = normalize_for_filesystem(set_name)
-    set_dir = SETS_DIR / set_dir_name
-
-    if not set_dir.exists():
-        return None
-
     card_file_name = strip_title(extended_title) + ".png"
-    card_path = set_dir / card_file_name
-
-    if card_path.exists():
-        return str(card_path.relative_to(ASSETS_DIR))
-
-    return None
+    return f"sets/{set_dir_name}/{card_file_name}"
 
 
 def process_string(s: str) -> str:

@@ -73,6 +73,7 @@ prod = { solve-group = "default" }
 [tool.pixi.tasks]
 play = "python play.py"
 test = "pytest tests/"
+test-js = "node --test tests/deck_builder/*.test.js"
 install-db = "python -m app.install.install_db"
 api = "python -c \"import os; os.execvp('uvicorn', ['uvicorn', 'app.api.main:app', '--host', '0.0.0.0', '--port', os.environ.get('PORT', '8000')])\""
 docker-build = "docker-compose build"

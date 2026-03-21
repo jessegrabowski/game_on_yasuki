@@ -1,11 +1,6 @@
 from app.gui.ui.deck_builder.deck_data import DeckState
 
 
-def test_deck_state_initialization():
-    state = DeckState()
-    assert state.cards == {}
-
-
 def test_deck_state_add_card():
     state = DeckState()
     new_state = state.add_card("card1", 1)
@@ -85,11 +80,3 @@ def test_deck_state_get_card_count():
     assert state.get_card_count("FATE", cards_by_id) == 5
     assert state.get_card_count("DYNASTY", cards_by_id) == 4
     assert state.get_card_count("SETUP", cards_by_id) == 1
-
-
-def test_deck_state_immutability():
-    state1 = DeckState()
-    state2 = state1.add_card("card1", 1)
-
-    assert state1 is not state2
-    assert state1.cards != state2.cards

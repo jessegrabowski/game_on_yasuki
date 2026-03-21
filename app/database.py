@@ -407,7 +407,10 @@ def query_all_decks() -> list[str]:
 
 def query_all_clans() -> list[str]:
     """
-    Fetch all unique clans from cards.
+    Fetch all unique individual clans from cards.
+
+    Cards may have multiple clans stored as comma-separated values.
+    This splits them and returns each unique clan individually.
 
     Returns
     -------
@@ -418,7 +421,7 @@ def query_all_clans() -> list[str]:
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT DISTINCT clan
+                SELECT DISTINCT trim(unnest(string_to_array(clan, ','))) AS clan
                 FROM cards
                 WHERE clan IS NOT NULL AND clan != ''
                 ORDER BY clan
@@ -909,11 +912,11 @@ def query_cards_filtered(
                     conditions.append("c.deck::text = ANY(%s)")
                     params.append(deck_list)
             elif property_name == "types":
-                # Special handling for type filter (multi-select)
+                # Special handling for type filter (multi-select, case-insensitive)
                 type_list = value
                 if type_list:
-                    conditions.append("c.type::text = ANY(%s)")
-                    params.append(type_list)
+                    conditions.append("LOWER(c.type::text) = ANY(%s)")
+                    params.append([t.lower() for t in type_list])
             elif property_name == "clans":
                 # Special handling for clan filter (multi-select)
                 # Clans can be comma-separated in the database, so we need to check if any selected clan appears in the field

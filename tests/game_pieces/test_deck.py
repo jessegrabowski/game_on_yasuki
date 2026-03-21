@@ -1,3 +1,5 @@
+import pytest
+
 from app.game_pieces.deck import Deck, FateDeck, DynastyDeck
 from app.game_pieces.fate import FateCard
 from app.game_pieces.dynasty import DynastyCard
@@ -49,16 +51,8 @@ def test_fate_and_dynasty_deck_build_validate_types():
     FateDeck.build(f_cards)
     DynastyDeck.build(d_cards)
 
-    try:
+    with pytest.raises(ValueError):
         FateDeck.build([mk_fate(1), mk_dyn(1)])
-    except ValueError:
-        pass
-    else:
-        raise AssertionError("FateDeck.build should reject non-FateCard instances")
 
-    try:
+    with pytest.raises(ValueError):
         DynastyDeck.build([mk_dyn(1), mk_fate(1)])
-    except ValueError:
-        pass
-    else:
-        raise AssertionError("DynastyDeck.build should reject non-DynastyCard instances")
