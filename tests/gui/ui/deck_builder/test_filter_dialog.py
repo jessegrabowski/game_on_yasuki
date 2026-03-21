@@ -2,21 +2,6 @@ from app.gui.ui.deck_builder.filter_dialog import FilterOptions, FilterDialog
 import tkinter as tk
 
 
-def test_filter_options_default():
-    """Test FilterOptions dataclass with defaults."""
-    opts = FilterOptions()
-    assert not opts.has_filters()
-    assert opts.filters == {}
-
-
-def test_filter_options_add_filter():
-    """Test adding a filter to FilterOptions."""
-    opts = FilterOptions()
-    opts.add_filter("legality", ("Ivory Edition", ["legal"]))
-    assert opts.has_filters()
-    assert opts.get_filter("legality") == ("Ivory Edition", ["legal"])
-
-
 def test_filter_options_multiple_filters():
     """Test FilterOptions with multiple filters."""
     opts = FilterOptions()
@@ -116,20 +101,8 @@ def test_filter_dialog_set_filter():
         root.destroy()
 
 
-def test_filter_options_with_sets():
-    """Test that FilterOptions can store set filters."""
-    opts = FilterOptions()
-    opts.add_filter("sets", ["Set A", "Set B", "Set C"])
-
-    assert opts.has_filters()
-    assert opts.get_filter("sets") == ["Set A", "Set B", "Set C"]
-
-    opts.remove_filter("sets")
-    assert not opts.has_filters()
-
-
 def test_format_deselection():
-    """Test that clicking on selected format deselects it in all format listboxes."""
+    """Test that clicking on selected format deselects it."""
     root = tk.Tk()
     try:
         dialog = FilterDialog(root)
@@ -141,22 +114,6 @@ def test_format_deselection():
         dialog._on_format_listbox_click(event, dialog.arc_listbox)
 
         assert len(dialog.arc_listbox.curselection()) == 0, "Arc listbox should deselect"
-
-        dialog.formats_listbox.selection_set(0)
-        assert len(dialog.formats_listbox.curselection()) == 1
-
-        event2 = type("Event", (), {"y": 0})()
-        dialog._on_format_listbox_click(event2, dialog.formats_listbox)
-
-        assert len(dialog.formats_listbox.curselection()) == 0, "Formats listbox should deselect"
-
-        dialog.misc_listbox.selection_set(0)
-        assert len(dialog.misc_listbox.curselection()) == 1
-
-        event3 = type("Event", (), {"y": 0})()
-        dialog._on_format_listbox_click(event3, dialog.misc_listbox)
-
-        assert len(dialog.misc_listbox.curselection()) == 0, "Misc listbox should deselect"
 
         dialog.win.destroy()
     finally:

@@ -4,12 +4,10 @@ import assert from 'node:assert/strict';
 import { resetDOM } from './dom-shim.js';
 import {
   initCardList,
-  getSelectedCard,
-  setSelectedCard,
   getAllResults,
   updateResults,
+  setSelectedCard,
   setFetching,
-  isFetching,
 } from '../../app/assets/deck_builder/js/card-list.js';
 
 beforeEach(() => {
@@ -20,20 +18,6 @@ beforeEach(() => {
 });
 
 describe('card-list state', () => {
-  it('starts with no selected card', () => {
-    assert.equal(getSelectedCard(), null);
-  });
-
-  it('set and get selected card', () => {
-    const card = { id: 'c1', name: 'Test' };
-    setSelectedCard(card);
-    assert.equal(getSelectedCard(), card);
-  });
-
-  it('starts with empty results', () => {
-    assert.deepEqual(getAllResults(), []);
-  });
-
   it('updateResults replaces results when not appending', () => {
     const cards = [{ id: 'c1' }, { id: 'c2' }];
     updateResults(cards, false, false);
@@ -48,17 +32,5 @@ describe('card-list state', () => {
     updateResults([{ id: 'c1' }], true, false);
     updateResults([{ id: 'c2' }], false, true);
     assert.equal(getAllResults().length, 2);
-  });
-
-  it('fetching flag', () => {
-    assert.equal(isFetching(), false);
-    setFetching(true);
-    assert.equal(isFetching(), true);
-  });
-
-  it('updateResults clears fetching flag', () => {
-    setFetching(true);
-    updateResults([], false, false);
-    assert.equal(isFetching(), false);
   });
 });

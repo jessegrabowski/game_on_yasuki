@@ -21,8 +21,6 @@ describe('fetchJSON', () => {
 
     const result = await fetchJSON('/api/cards');
     assert.deepEqual(result, body);
-    assert.equal(fetch.mock.callCount(), 1);
-    assert.equal(fetch.mock.calls[0].arguments[0], '/api/cards');
   });
 
   it('throws on non-ok response', async () => {

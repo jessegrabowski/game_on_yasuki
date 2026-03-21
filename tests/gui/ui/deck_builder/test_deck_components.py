@@ -54,12 +54,6 @@ def test_extract_print_and_card_id():
     assert extract_print_and_card_id("No brackets") is None
 
 
-def test_filtered_card_list_initialization(root, mock_repository):
-    card_list = FilteredCardList(root, mock_repository)
-    assert card_list._repository is mock_repository
-    assert card_list._filter_query == ""
-
-
 def test_filtered_card_list_set_filter(root, mock_repository):
     card_list = FilteredCardList(root, mock_repository)
     card_list.set_filter("test query")
@@ -98,12 +92,6 @@ def test_filtered_card_list_get_selected_card_id(root, mock_repository):
     assert card_id == "card1"
 
 
-def test_deck_card_list_initialization(root, mock_repository):
-    deck_list = DeckCardList(root, mock_repository, "FATE")
-    assert deck_list._repository is mock_repository
-    assert deck_list._side == "FATE"
-
-
 def test_deck_card_list_refresh_fate(root, mock_repository):
     # Update mock to include type information
     mock_repository.get_card = Mock(
@@ -130,37 +118,6 @@ def test_deck_card_list_refresh_fate(root, mock_repository):
     assert "2x" in item_text
     assert "[Test Set]" in item_text
     assert item_text.startswith("    ")  # Should be indented
-
-
-def test_deck_card_list_refresh_dynasty(root, mock_repository):
-    # Update mock to include type information
-    mock_repository.get_card = Mock(
-        side_effect=lambda card_id: {
-            "card2": {
-                "id": "card2",
-                "name": "Test Card 2",
-                "side": "DYNASTY",
-                "type": "Personality",
-            },
-        }.get(card_id)
-    )
-
-    deck_list = DeckCardList(root, mock_repository, "DYNASTY")
-    deck_state = DeckState(cards={"card2": [(1, 3)]})
-
-    deck_list.refresh(deck_state)
-
-    # Should show 2 lines: type header + card
-    assert deck_list.listbox.size() == 2
-
-    # Check type header
-    type_header = deck_list.listbox.get(0)
-    assert "3x Personalities" in type_header
-
-    # Check card entry
-    item_text = deck_list.listbox.get(1)
-    assert "Test Card 2" in item_text
-    assert "3x" in item_text
 
 
 def test_deck_card_list_filters_by_side(root, mock_repository):

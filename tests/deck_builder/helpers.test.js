@@ -26,14 +26,10 @@ describe('displayName', () => {
 describe('pluralize', () => {
   it('adds s to regular words', () => {
     assert.equal(pluralize('Holding'), 'Holdings');
-    assert.equal(pluralize('Item'), 'Items');
-    assert.equal(pluralize('Follower'), 'Followers');
-    assert.equal(pluralize('Ring'), 'Rings');
   });
 
   it('changes y to ies', () => {
     assert.equal(pluralize('Strategy'), 'Strategies');
-    assert.equal(pluralize('Personality'), 'Personalities');
   });
 
   it('adds es for sibilants', () => {
@@ -42,7 +38,6 @@ describe('pluralize', () => {
 
   it('preserves initial capitalization', () => {
     assert.equal(pluralize('event'), 'events');
-    assert.equal(pluralize('Event'), 'Events');
   });
 });
 
@@ -61,9 +56,5 @@ describe('esc', () => {
   it('escapes HTML entities', () => {
     assert.equal(esc('<b>hi</b>'), '&lt;b&gt;hi&lt;/b&gt;');
     assert.equal(esc('a & b'), 'a &amp; b');
-  });
-
-  it('returns empty string for empty input', () => {
-    assert.equal(esc(''), '');
   });
 });

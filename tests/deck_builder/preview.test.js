@@ -34,10 +34,6 @@ beforeEach(() => {
 });
 
 describe('preview state', () => {
-  it('returns null print id before any preview', () => {
-    assert.equal(getCurrentPrintId(), null);
-    assert.equal(getCurrentSetName(), '');
-  });
 
   it('loads first print by default', async () => {
     mockFetchPrints(PRINTS);

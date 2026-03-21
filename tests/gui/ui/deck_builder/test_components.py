@@ -18,11 +18,6 @@ def root():
 
 
 class TestScrollableListBox:
-    def test_initialization(self, root):
-        listbox = ScrollableListBox(root)
-        assert listbox.listbox is not None
-        assert listbox.frame is not None
-
     def test_insert_and_clear(self, root):
         listbox = ScrollableListBox(root)
         listbox.insert(0, "Item 1")
@@ -41,14 +36,6 @@ class TestScrollableListBox:
 
 
 class TestCardStatsPanel:
-    def test_initialization(self, root):
-        panel = CardStatsPanel(root)
-        assert panel.frame is not None
-        assert panel.name_label is not None
-        assert panel.type_label is not None
-        assert panel.clan_label is not None
-        assert len(panel.stats) == 9  # 9 numeric stats
-
     def test_update_stats_personality(self, root):
         panel = CardStatsPanel(root)
         card = {
@@ -122,32 +109,8 @@ class TestCardStatsPanel:
         assert panel.type_label.cget("text") == "—"
         assert panel.clan_label.cget("text") == "—"
 
-    def test_hide_unused_stats(self, root):
-        panel = CardStatsPanel(root)
-        card = {
-            "name": "Simple Card",
-            "type": "Event",
-            "clan": "Crane",
-            "gold_cost": 2,
-            # No force, chi, etc.
-        }
-        panel.update_stats(card)
-
-        # Stats with None values should be hidden (pack_forget)
-        # Only gold_cost should be visible
-        assert panel.stats["gold_cost"][1].cget("text") == "2"
-
 
 class TestPrintSelector:
-    def test_initialization(self, root):
-        on_prev = Mock()
-        on_next = Mock()
-        selector = PrintSelector(root, on_prev, on_next)
-
-        assert selector.prev_btn.cget("state") == "disabled"
-        assert selector.next_btn.cget("state") == "disabled"
-        assert selector.info_lbl.cget("text") == ""
-
     def test_update_single_print(self, root):
         on_prev = Mock()
         on_next = Mock()

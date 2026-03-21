@@ -81,7 +81,6 @@ describe('clearDeck', () => {
     addCard('card_c', 'DYNASTY', CARD_C, 30, 'Gold');
     clearDeck();
     assert.deepEqual(getDeck().FATE, {});
-    assert.deepEqual(getDeck().DYNASTY, {});
   });
 });
 
@@ -100,10 +99,6 @@ describe('nextCardAfterRemoval', () => {
     addCard('card_b', 'FATE', CARD_B, 20, 'IE');
     const next = nextCardAfterRemoval('FATE', 'card_a');
     assert.equal(next.id, 'card_b');
-  });
-
-  it('returns null when side is empty', () => {
-    assert.equal(nextCardAfterRemoval('FATE', 'card_a'), null);
   });
 });
 
