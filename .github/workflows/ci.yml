@@ -119,14 +119,29 @@ jobs:
           name: coverage-${{ steps.matrix-id.outputs.id }}
           path: coverage/coverage-${{ steps.matrix-id.outputs.id }}.xml
 
+  js-test:
+    name: "Deck Builder JS Tests"
+    needs: [pre-commit]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Run JS tests
+        run: node --test tests/deck_builder/*.test.js
+
   all-checks:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: "All tests"
-    needs: [test]
+    needs: [test, js-test]
     steps:
       - name: Check build matrix status
-        if: ${{ needs.test.result != 'success' }}
+        if: ${{ needs.test.result != 'success' || needs.js-test.result != 'success' }}
         run: exit 1
 
   upload-coverage:
