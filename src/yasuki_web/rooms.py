@@ -1,8 +1,10 @@
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 import secrets
 import logging
 from datetime import datetime, timezone
+
+from yasuki_web.rate_limit import limiter
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -24,7 +26,8 @@ class JoinRoomRequest(BaseModel):
 
 
 @router.post("/rooms", status_code=201)
-async def create_room(request: CreateRoomRequest):
+@limiter.limit("10/minute")
+async def create_room(request: Request, body: CreateRoomRequest):
     """
     Create a new game room.
 
@@ -36,8 +39,8 @@ async def create_room(request: CreateRoomRequest):
 
     rooms[room_id] = {
         "id": room_id,
-        "name": request.room_name or f"Room {room_id}",
-        "max_players": request.max_players,
+        "name": body.room_name or f"Room {room_id}",
+        "max_players": body.max_players,
         "players": [],
         "state": "waiting",
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -55,7 +58,8 @@ async def create_room(request: CreateRoomRequest):
 
 
 @router.get("/rooms")
-async def list_rooms():
+@limiter.limit("30/minute")
+async def list_rooms(request: Request):
     """
     List all available game rooms.
 
@@ -92,7 +96,8 @@ async def get_room(room_id: str):
 
 
 @router.delete("/rooms/{room_id}")
-async def delete_room(room_id: str, token: str = Query(...)):
+@limiter.limit("10/minute")
+async def delete_room(request: Request, room_id: str, token: str = Query(...)):
     """
     Delete a room.
 

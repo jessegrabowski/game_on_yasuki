@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-web = ["fastapi>=0.115", "uvicorn>=0.30"]
+web = ["fastapi>=0.115", "uvicorn>=0.30", "slowapi>=0.1.9"]
 gui = []
 all = ["game-on-yasuki[web]"]
 
@@ -63,6 +63,7 @@ fastapi = ">=0.135.1,<0.136"
 game-on-yasuki = { path = ".", editable = true }
 fastapi = ">=0.115"
 uvicorn = ">=0.30"
+slowapi = ">=0.1.9"
 
 [tool.pixi.feature.dev.dependencies]
 pytest = "*"

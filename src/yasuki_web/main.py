@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
@@ -8,6 +10,7 @@ from pathlib import Path
 import logging
 import os
 from yasuki_web import cards, rooms, websocket
+from yasuki_web.rate_limit import limiter
 from yasuki_core.paths import BUNDLED_IMAGES_DIR, SETS_DIR
 
 
@@ -24,6 +27,9 @@ app = FastAPI(
     docs_url=None if _is_production else "/docs",
     redoc_url=None if _is_production else "/redoc",
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 _default_origins = ["http://localhost:5173", "http://localhost:3000", "http://localhost:8080"]
 _cors_origins = (

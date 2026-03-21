@@ -9,6 +9,8 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 connections: dict[str, set[WebSocket]] = {}
+ip_connections: dict[str, int] = {}
+MAX_CONNECTIONS_PER_IP = 5
 
 
 class GameRoom:
@@ -157,7 +159,13 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
         await websocket.close(code=4003, reason="Room full")
         return
 
+    client_ip = websocket.client.host if websocket.client else "unknown"
+    if ip_connections.get(client_ip, 0) >= MAX_CONNECTIONS_PER_IP:
+        await websocket.close(code=4029, reason="Too many connections")
+        return
+
     await websocket.accept()
+    ip_connections[client_ip] = ip_connections.get(client_ip, 0) + 1
 
     if room_id not in active_game_rooms:
         active_game_rooms[room_id] = GameRoom(room_id)
@@ -204,5 +212,6 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
             pass
 
     finally:
+        ip_connections[client_ip] = max(0, ip_connections.get(client_ip, 1) - 1)
         if websocket in game_room.players:
             await game_room.remove_player(websocket)

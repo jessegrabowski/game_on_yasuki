@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Path, Query
+from fastapi import APIRouter, HTTPException, Path, Query, Request
 from typing import Annotated
 import logging
 
@@ -15,13 +15,16 @@ from yasuki_core.database import (
     query_all_types,
 )
 from yasuki_core.search import parse_and_build_query
+from yasuki_web.rate_limit import limiter
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
 @router.get("/cards")
+@limiter.limit("60/minute")
 async def list_cards(
+    request: Request,
     search: Annotated[
         str | None,
         Query(
