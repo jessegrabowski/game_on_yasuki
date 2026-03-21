@@ -362,4 +362,62 @@ function navigateDeckList(listId, dir) {
   });
 })();
 
+(function () {
+  const sections = [
+    $('dynastySection'),
+    $('fateSection'),
+    $('preGameSection'),
+  ];
+  const gutters = document.querySelectorAll('.deck-gutter');
+  const MIN_SECTION_PX = 40;
+
+  function getSectionHeights() {
+    return sections.map((s) => s.getBoundingClientRect().height);
+  }
+
+  function applySectionHeights(heights) {
+    sections.forEach((s, i) => {
+      s.style.flex = 'none';
+      s.style.height = heights[i] + 'px';
+    });
+  }
+
+  gutters.forEach((gutter) => {
+    gutter.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      const idx = parseInt(gutter.dataset.deckGutter);
+      let heights = getSectionHeights();
+      gutter.classList.add('dragging');
+      document.body.style.cursor = 'row-resize';
+      document.body.style.userSelect = 'none';
+
+      const startY = e.clientY;
+      const startTop = heights[idx];
+      const startBottom = heights[idx + 1];
+
+      function onMove(ev) {
+        const dy = ev.clientY - startY;
+        const newTop = Math.max(MIN_SECTION_PX, startTop + dy);
+        const newBottom = Math.max(MIN_SECTION_PX, startBottom - dy);
+        if (newTop >= MIN_SECTION_PX && newBottom >= MIN_SECTION_PX) {
+          heights[idx] = newTop;
+          heights[idx + 1] = newBottom;
+          applySectionHeights(heights);
+        }
+      }
+
+      function onUp() {
+        gutter.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+})();
+
 init();

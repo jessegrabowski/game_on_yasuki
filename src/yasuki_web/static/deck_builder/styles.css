@@ -201,6 +201,19 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   overflow: hidden;
   min-height: 0;
 }
+#dynastySection { flex: 5; }
+#fateSection { flex: 5; }
+#preGameSection { flex: 2; }
+.deck-gutter {
+  height: 4px;
+  background: var(--border);
+  cursor: row-resize;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.deck-gutter:hover, .deck-gutter.dragging {
+  background: var(--accent-dark);
+}
 .deck-section-header {
   padding: 7px 12px;
   font-weight: 700;
