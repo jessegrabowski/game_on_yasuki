@@ -148,18 +148,15 @@ MAX_WS_MESSAGE_SIZE = 4096
 
 @router.websocket("/{room_id}")
 async def websocket_endpoint(websocket: WebSocket, room_id: str):
-    """
-    WebSocket endpoint for real-time game communication.
+    if room_id not in rooms:
+        await websocket.close(code=4004, reason="Room not found")
+        return
 
-    Protocol:
-    1. Client connects to /ws/{room_id}
-    2. Client sends JOIN message with player name
-    3. Server sends HELLO with room info
-    4. Clients exchange ACTION messages
-    5. Server broadcasts STATE updates to all players
+    room = rooms[room_id]
+    if len(room["players"]) >= room["max_players"]:
+        await websocket.close(code=4003, reason="Room full")
+        return
 
-    See app/schemas.py for message formats.
-    """
     await websocket.accept()
 
     if room_id not in active_game_rooms:
