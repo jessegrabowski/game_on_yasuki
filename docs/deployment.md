@@ -65,6 +65,7 @@ rclone copy sets/ r2:l5r-images/sets/ \
    | `DATABASE_URL` | `${{Postgres.DATABASE_URL}}` (auto-linked) |
    | `IMAGE_BASE_URL` | `https://pub-<hash>.r2.dev` |
    | `CORS_ORIGINS` | `https://<app>.up.railway.app` |
+   | `ENVIRONMENT` | `production` |
    | `SETUPTOOLS_SCM_PRETEND_VERSION` | `0.1.0` |
 
 5. Railway builds the Dockerfile and starts the API. The entrypoint seeds the
