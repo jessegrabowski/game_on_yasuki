@@ -25,6 +25,7 @@ const API = '/api';
 let IMG = '/images';
 const LIMIT = 100;
 let offset = 0;
+let totalDbCards = 0;
 
 async function init() {
   try {
@@ -32,6 +33,14 @@ async function init() {
     IMG = cfg.image_base_url || IMG;
   } catch (_) {
     /* fall back to /images */
+  }
+
+  try {
+    const data = await fetchJSON(`${API}/cards?limit=1&offset=0`);
+    totalDbCards = data.total;
+    $('totalDbCount').textContent = totalDbCards;
+  } catch (_) {
+    $('totalDbCount').textContent = '?';
   }
 
   initPreview(IMG);
@@ -184,7 +193,7 @@ async function fetchCards() {
   try {
     const data = await fetchJSON(`${API}/cards?${params}`);
     updateResults(data.cards, data.has_more, offset > 0);
-    $('totalCards').textContent = `${data.total} cards`;
+    $('filteredCount').textContent = data.total;
     renderCardList();
   } catch (e) {
     console.error('Failed to fetch cards:', e);
