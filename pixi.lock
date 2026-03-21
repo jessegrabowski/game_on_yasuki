@@ -1125,15 +1125,18 @@ packages:
   timestamp: 1773314012590
 - pypi: ./
   name: game-on-yasuki
-  version: 0.0.1.dev15+unknown.g7aeb26423
-  sha256: 432f25aa483c3f6d9296be8637ee11e466ebcb8d0cd676cd50a250167d79bbab
+  version: 0.0.1.dev15+unknown.g7aeb26423.d20260321
+  sha256: d51f6b6ffc05218175c0084864ec7d7708c13c26600b3b792db5b373e01da39a
   requires_dist:
-  - fastapi>=0.115
   - pillow>=10.0
   - psycopg2>=2.9
   - pydantic>=2.7
   - pyyaml>=6.0
-  - uvicorn>=0.30
+  - unidecode>=1.4
+  - fastapi>=0.115 ; extra == 'all'
+  - uvicorn>=0.30 ; extra == 'all'
+  - fastapi>=0.115 ; extra == 'web'
+  - uvicorn>=0.30 ; extra == 'web'
   requires_python: '>=3.12'
 - conda: https://conda.anaconda.org/conda-forge/noarch/h11-0.16.0-pyhcf101f3_1.conda
   sha256: 96cac6573fd35ae151f4d6979bab6fbc90cb6b1fb99054ba19eb075da9822fcb

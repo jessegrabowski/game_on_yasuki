@@ -13,10 +13,10 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY pyproject.toml pixi.lock ./
-RUN mkdir -p app && touch app/__init__.py
+RUN mkdir -p src/yasuki_core && touch src/yasuki_core/__init__.py
 RUN pixi install --locked --environment prod
 
-COPY app/ ./app/
+COPY src/ ./src/
 COPY tests/ ./tests/
 COPY play.py README.md ./
 

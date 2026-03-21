@@ -9,13 +9,17 @@ description = "Online client for playing classic L5R"
 authors = [{ name = "Jesse Grabowski" , email = "jessegrabowski@gmail.com"}]
 requires-python = ">=3.12"
 dependencies = [
-  "fastapi>=0.115",
-  "uvicorn>=0.30",
+  "psycopg2>=2.9",
   "pydantic>=2.7",
   "PyYAML>=6.0",
   "Pillow>=10.0",
-  "psycopg2>=2.9",
+  "unidecode>=1.4",
 ]
+
+[project.optional-dependencies]
+web = ["fastapi>=0.115", "uvicorn>=0.30"]
+gui = []
+all = ["game-on-yasuki[web]"]
 
 [project.urls]
 Homepage = "https://github.com/jessegrabowski/game-on-yasuki"
@@ -25,19 +29,19 @@ source = "vcs"
 fallback-version = "0.0.0+unknown"
 
 [tool.hatch.build.hooks.vcs]
-version-file = "app/_version.py"
+version-file = "src/yasuki_core/_version.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["app"]
+packages = ["src/yasuki_core", "src/yasuki_web", "src/yasuki_gui"]
 
 [tool.hatch.build.targets.sdist]
-include = ["app", "README.md", "tests", "pyproject.toml"]
+include = ["src", "README.md", "tests", "pyproject.toml"]
 
 [tool.ruff]
 line-length = 100
 
 [tool.pytest.ini_options]
-pythonpath = ["."]
+pythonpath = ["src"]
 addopts = "-q"
 
 [tool.pixi.workspace]
@@ -73,9 +77,9 @@ prod = { solve-group = "default" }
 [tool.pixi.tasks]
 play = "python play.py"
 test = "pytest tests/"
-test-js = "node --test tests/deck_builder/*.test.js"
-install-db = "python -m app.install.install_db"
-api = "python -c \"import os; os.execvp('uvicorn', ['uvicorn', 'app.api.main:app', '--host', '0.0.0.0', '--port', os.environ.get('PORT', '8000')])\""
+test-js = "node --test tests/yasuki_web/deck_builder/*.test.js"
+install-db = "python -m yasuki_core.install.install_db"
+api = "python -c \"import os; os.execvp('uvicorn', ['uvicorn', 'yasuki_web.main:app', '--host', '0.0.0.0', '--port', os.environ.get('PORT', '8000')])\""
 docker-build = "docker-compose build"
 docker-up = "docker-compose up db db-init"
 docker-api = "docker-compose --profile api up db db-init api"

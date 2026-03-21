@@ -2,11 +2,13 @@
 
 ## Overview
 
-**Game on, Yasuki!**: Online client for playing classic Legend of the Five Rings (L5R) card game. Python 3.12+, uses Tkinter (GUI), FastAPI (future multiplayer), PostgreSQL (card database), Pydantic (schemas), PIL/Pillow (image handling), pytest.
+**Game on, Yasuki!**: Online client for playing classic Legend of the Five Rings (L5R) card game. Python 3.12+, uses Tkinter (GUI), FastAPI (multiplayer), PostgreSQL (card database), Pydantic (schemas), PIL/Pillow (image handling), pytest.
+
+For setup, running, Docker, and contribution workflows see `docs/`.
 
 ## Design Principles
 
-- **Game Engine**: Core game logic separated from GUI (in `app/engine/` and `app/game_pieces/`)
+- **Three-package architecture**: `yasuki_core` (engine + data), `yasuki_web` (FastAPI API), `yasuki_gui` (Tkinter desktop client)
 - **Immutable game pieces**: Cards use frozen dataclasses with explicit state transition methods
 - **Zone-based architecture**: Game areas (hand, battlefield, provinces, discard) managed by specialized Zone classes
 - **Object-oriented with functional patterns**: Core objects with clean interfaces; avoid deep inheritance hierarchies
@@ -20,6 +22,8 @@
 - **Zones enforce capacity rules**: Each Zone type has specific capacity constraints (e.g., ProvinceZone holds exactly 1 card)
 - **GUI separation**: Field view (`FieldView`) manages visual representation; controller handles user interactions
 - **Database as card repository**: PostgreSQL stores card definitions loaded from JSON/XML; game state lives in memory
+- **Dependency direction**: `yasuki_core ← yasuki_web`, `yasuki_core ← yasuki_gui`. No dependency between web and gui.
+- **Assets split**: Bundled images (defaults, card backs) live in `yasuki_core/assets/images/`. Card set images (~8 GB) live outside the package in `sets/` (override with `YASUKI_SETS_DIR` env var).
 
 ## Code Style
 
@@ -41,75 +45,27 @@
  - Integrate with similar existing tests
  - GUI tests use mocking to avoid Tkinter main loop issues
 
-## Repository Structure
+## Repository Layout
 
-### Root
-- `.github/` (workflows, instructions),
-- `pyproject.toml` (config using hatch),
-- `environment.yaml` (conda environment),
-- `README.md` (setup instructions),
-- `play.py`, `play.sh` (launcher scripts)
+```
+pyproject.toml              # Build config (hatch + pixi)
+play.py                     # GUI launcher
+sets/                       # Card set images (gitignored, ~8 GB)
+docs/                       # All documentation
+audits/                     # Architecture decision records
 
-### Source (`app/`)
-- `schemas.py`: Pydantic schemas for API/database models
-- `database.py`: PostgreSQL connection and query utilities for card data
-- `assets/`: Database files (JSON/XML card data, SQL schema, images)
-  - `json_to_sql.py`, `xml_to_sql.py`, `sets_to_sql.py`: Data import utilities
-  - `paths.py`: Path configuration for assets
-- `engine/`: Core game engine
-  - `players.py`: Player identification and state
-  - `zones.py`: Game zones (Hand, Battlefield, Provinces, Discard)
-- `game_pieces/`: Card and deck representations
-  - `cards.py`: Base L5RCard class
-  - `fate.py`, `dynasty.py`: Specific card types for each deck
-  - `deck.py`: Deck construction and shuffling
-  - `constants.py`, `types.py`: Enums and type definitions
-- `gui/`: Tkinter-based visual client
-  - `__main__.py`: Application entry point and PlayerPanel
-  - `field_view.py`: Main game board visualization
-  - `controller.py`: User interaction handling
-  - `config.py`: Configuration and hotkey loading
-  - `services/`: Drag-drop, hit-testing, permissions, card actions
-  - `ui/`: Dialogs, deck builder, menus, image handling
+src/
+├── yasuki_core/            # Engine, cards, DB, search, install, assets
+├── yasuki_web/             # FastAPI API, schemas, deck builder SPA
+└── yasuki_gui/             # Tkinter GUI, controller, services, visuals
 
-### Scripts (`scripts/`)
-- `install_db.py`: CLI tool to bootstrap PostgreSQL database from asset files
-
-### Tests (`tests/`)
-Mirrors source structure.
-
-```bash
-pytest tests/
+tests/
+├── yasuki_core/
+├── yasuki_web/
+└── yasuki_gui/
 ```
 
-### Pre-commit
-
-```bash
-pre-commit run --all
-```
-
-### Database Setup
-
-```bash
-# Create database
-createdb l5r
-
-# Install schema and seed data
-python -m scripts.install_db --dsn "postgresql://localhost/l5r"
-```
-
-### Running the Application
-
-```bash
-# Simple launcher
-python play.py
-
-# With debug logging
-python play.py --debug
-
-# Or as a module
-python -m app.gui
-```
+Full structure details: `docs/development.md`
 
 ## L5R-Specific Context
 
@@ -118,10 +74,21 @@ python -m app.gui
 - **Provinces**: Each player has multiple provinces holding dynasty cards
 - **Honor**: Victory condition tracked per player (min: 0, max: 40)
 
+## Quick Reference
+
+```bash
+pixi run play              # Launch GUI
+pixi run api               # Start API server
+pixi run test              # Python tests
+pixi run test-js           # JS deck builder tests
+pixi run install-db        # Seed database
+pre-commit run --all       # Lint
+```
+
 ## Trust These Instructions
 These instructions are comprehensive and tested. Only search for additional information if:
 1. Instructions are incomplete for your specific task
 2. Instructions are found to be incorrect
 3. You need deeper understanding of L5R game rules or implementation details
 
-For most coding tasks, these instructions provide everything needed to build, test, and validate changes efficiently.
+For operational details (setup, Docker, contributing), see `docs/`.

@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-DB_URL="${L5R_DATABASE_URL:-${DATABASE_URL:-postgresql://l5r:l5r@db:5432/l5r}}"
+DB_URL="${YASUKI_DATABASE_URL:-${DATABASE_URL:-postgresql://yasuki:yasuki@db:5432/yasuki}}"
 
 wait_for_db() {
     local attempt=1

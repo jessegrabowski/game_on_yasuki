@@ -1,4 +1,4 @@
-name: game-on-yasuki-dev
+name: yasuki-dev
 channels:
   - conda-forge
   - nodefaults
@@ -10,3 +10,7 @@ dependencies:
   - pre-commit
   - Pillow
   - psycopg2
+  - fastapi
+  - pip
+  - pip:
+      - -e .
