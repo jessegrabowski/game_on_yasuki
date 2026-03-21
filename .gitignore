@@ -1,14 +1,10 @@
-app/assets/database/*
-!app/assets/database/cards.json
-!app/assets/database/set_info.json
-!app/assets/database/schema.sql
-app/assets/images/sets/
-app/assets/images/cards/
-!app/assets/images/defaults/
-!app/assets/images/defaults/**
-
+# Card set images (8GB+, local only, not checked in)
+/sets/
 
 .pixi/
+
+# Auto-generated version file (hatch-vcs)
+src/yasuki_core/_version.py
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,intellij+all,windows,macos,vim,jupyternotebooks,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,intellij+all,windows,macos,vim,jupyternotebooks,visualstudiocode

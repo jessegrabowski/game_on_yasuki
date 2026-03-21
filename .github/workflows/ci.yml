@@ -50,20 +50,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - subset-name: "Game Engine Tests"
+          - subset-name: "Core Tests"
             os: ubuntu-latest
             python-version: "3.12"
-            test-subset: "tests/engine/"
-
-          - subset-name: "Game Pieces Tests"
-            os: ubuntu-latest
-            python-version: "3.12"
-            test-subset: "tests/game_pieces/"
+            test-subset: "tests/yasuki_core/"
 
           - subset-name: "GUI Tests"
             os: ubuntu-latest
             python-version: "3.12"
-            test-subset: "tests/gui/"
+            test-subset: "tests/yasuki_gui/"
 
     name: ${{ matrix.subset-name }} (${{ matrix.os }} Python ${{ matrix.python-version }})
     runs-on: ${{ matrix.os }}
@@ -108,7 +103,7 @@ jobs:
 
       - name: Run tests
         run: |
-          pixi run pytest -vv --cache-clear --cov=app --cov-report=xml:coverage/coverage-${MATRIX_ID}.xml --no-cov-on-fail --cov-report term $TEST_SUBSET --durations=50
+          pixi run pytest -vv --cache-clear --cov=yasuki_core --cov=yasuki_web --cov=yasuki_gui --cov-report=xml:coverage/coverage-${MATRIX_ID}.xml --no-cov-on-fail --cov-report term $TEST_SUBSET --durations=50
         env:
           MATRIX_ID: ${{ steps.matrix-id.outputs.id }}
           DISPLAY: ":99"
@@ -132,7 +127,7 @@ jobs:
           node-version: "22"
 
       - name: Run JS tests
-        run: node --test tests/deck_builder/*.test.js
+        run: node --test tests/yasuki_web/deck_builder/*.test.js
 
   all-checks:
     if: ${{ always() }}
@@ -278,4 +273,4 @@ jobs:
       - name: Run tests
         env:
           L5R_DATABASE_URL: postgresql://l5r:l5r@localhost:5432/l5r
-        run: pixi run pytest tests/ --ignore=tests/gui/
+        run: pixi run pytest tests/ --ignore=tests/yasuki_gui/
