@@ -16,10 +16,12 @@ const scrollObserver = new IntersectionObserver(
 let _fetching = false;
 let _onLoadMore = () => {};
 let _onSelect = () => {};
+let _onDblClick = () => {};
 
-export function initCardList({ onSelect, onLoadMore }) {
+export function initCardList({ onSelect, onLoadMore, onDblClick }) {
   _onSelect = onSelect;
   _onLoadMore = onLoadMore;
+  if (onDblClick) _onDblClick = onDblClick;
 }
 
 export function getSelectedCard() {
@@ -67,7 +69,7 @@ export function renderCardList() {
     div.addEventListener('click', () => selectCard(card));
     div.addEventListener('dblclick', () => {
       selectCard(card);
-      _onSelect(card);
+      _onDblClick(card);
     });
     el.appendChild(div);
   });

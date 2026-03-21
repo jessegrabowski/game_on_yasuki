@@ -47,6 +47,7 @@ async function init() {
 
   initCardList({
     onSelect: (card) => showPreview(card, null, API),
+    onDblClick: () => doAddSelectedToDeck(),
     onLoadMore: () => {
       offset += LIMIT;
       fetchCards();
