@@ -235,7 +235,7 @@ function doClearDeck() {
 // Keyboard navigation
 let focusedList = 'cardList';
 
-['cardList', 'dynastyList', 'fateList'].forEach((id) => {
+['cardList', 'dynastyList', 'fateList', 'preGameList'].forEach((id) => {
   $(id).addEventListener('mousedown', () => {
     focusedList = id;
   });
@@ -280,8 +280,10 @@ function navigateCardList(dir) {
   scrollToSelected('cardList', '.card-list-item.selected');
 }
 
+const DECK_LIST_SIDES = { dynastyList: 'DYNASTY', fateList: 'FATE', preGameList: 'PRE_GAME' };
+
 function navigateDeckList(listId, dir) {
-  const side = listId === 'dynastyList' ? 'DYNASTY' : 'FATE';
+  const side = DECK_LIST_SIDES[listId] || 'FATE';
   const items = getDeckNavItems(side);
   if (items.length === 0) return;
 

@@ -21,6 +21,7 @@ export function setSelectedDeckCard(val) {
 export function renderDeckLists() {
   renderDeckSide('DYNASTY', 'dynastyList', 'dynastyCount');
   renderDeckSide('FATE', 'fateList', 'fateCount');
+  renderDeckSide('PRE_GAME', 'preGameList', 'preGameCount');
 }
 
 function renderDeckSide(side, listId, countId) {
