@@ -1,5 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import logging
@@ -11,6 +14,8 @@ from yasuki_core.paths import BUNDLED_IMAGES_DIR, SETS_DIR
 logger = logging.getLogger(__name__)
 
 IMAGE_BASE_URL = os.environ.get("IMAGE_BASE_URL", "/images")
+
+_is_production = os.environ.get("ENVIRONMENT") == "production"
 
 app = FastAPI(
     title="Game on, Yasuki! API",
@@ -32,6 +37,23 @@ app.add_middleware(
     allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization"],
 )
+
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response: Response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        if request.url.scheme == "https":
+            response.headers["Strict-Transport-Security"] = (
+                "max-age=63072000; includeSubDomains; preload"
+            )
+        return response
+
+
+app.add_middleware(SecurityHeadersMiddleware)
 
 DECK_BUILDER_DIR = Path(__file__).parent / "static" / "deck_builder"
 
