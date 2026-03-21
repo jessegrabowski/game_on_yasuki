@@ -3,15 +3,15 @@ services:
     image: postgres:16-alpine
     container_name: yasuki-db
     environment:
-      - POSTGRES_USER=yasuki
-      - POSTGRES_PASSWORD=yasuki
-      - POSTGRES_DB=yasuki
+      - POSTGRES_USER=${POSTGRES_USER:-yasuki}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-yasuki}
+      - POSTGRES_DB=${POSTGRES_DB:-yasuki}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U yasuki -d yasuki"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-yasuki} -d ${POSTGRES_DB:-yasuki}"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -21,7 +21,7 @@ services:
     image: yasuki-app:latest
     container_name: yasuki-db-init
     environment:
-      - YASUKI_DATABASE_URL=postgresql://yasuki:yasuki@db:5432/yasuki
+      - YASUKI_DATABASE_URL=postgresql://${POSTGRES_USER:-yasuki}:${POSTGRES_PASSWORD:-yasuki}@db:5432/${POSTGRES_DB:-yasuki}
     depends_on:
       db:
         condition: service_healthy
@@ -47,8 +47,9 @@ services:
     image: yasuki-app:latest
     container_name: yasuki-api
     environment:
-      - YASUKI_DATABASE_URL=postgresql://yasuki:yasuki@db:5432/yasuki
+      - YASUKI_DATABASE_URL=postgresql://${POSTGRES_USER:-yasuki}:${POSTGRES_PASSWORD:-yasuki}@db:5432/${POSTGRES_DB:-yasuki}
       - IMAGE_BASE_URL=${IMAGE_BASE_URL:-/images}
+      - ENVIRONMENT=${ENVIRONMENT:-development}
     depends_on:
       db:
         condition: service_healthy

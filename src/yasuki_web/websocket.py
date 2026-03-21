@@ -1,6 +1,8 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+import asyncio
 import json
 import logging
+from datetime import datetime, timezone, timedelta
 
 from yasuki_web.schemas import ServerHello, ServerState, ServerError
 from yasuki_web.rooms import rooms
@@ -9,6 +11,8 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 connections: dict[str, set[WebSocket]] = {}
+ip_connections: dict[str, int] = {}
+MAX_CONNECTIONS_PER_IP = 5
 
 
 class GameRoom:
@@ -142,22 +146,46 @@ class GameRoom:
 
 active_game_rooms: dict[str, GameRoom] = {}
 
+ROOM_TTL = timedelta(hours=2)
+EVICTION_INTERVAL = 300
+
+
+async def evict_stale_rooms():
+    while True:
+        await asyncio.sleep(EVICTION_INTERVAL)
+        now = datetime.now(timezone.utc)
+        stale = [
+            rid
+            for rid, r in rooms.items()
+            if not r["players"] and (now - datetime.fromisoformat(r["created_at"])) > ROOM_TTL
+        ]
+        for rid in stale:
+            del rooms[rid]
+            active_game_rooms.pop(rid, None)
+            logger.info(f"Evicted stale room {rid}")
+
+
+MAX_WS_MESSAGE_SIZE = 4096
+
 
 @router.websocket("/{room_id}")
 async def websocket_endpoint(websocket: WebSocket, room_id: str):
-    """
-    WebSocket endpoint for real-time game communication.
+    if room_id not in rooms:
+        await websocket.close(code=4004, reason="Room not found")
+        return
 
-    Protocol:
-    1. Client connects to /ws/{room_id}
-    2. Client sends JOIN message with player name
-    3. Server sends HELLO with room info
-    4. Clients exchange ACTION messages
-    5. Server broadcasts STATE updates to all players
+    room = rooms[room_id]
+    if len(room["players"]) >= room["max_players"]:
+        await websocket.close(code=4003, reason="Room full")
+        return
 
-    See app/schemas.py for message formats.
-    """
+    client_ip = websocket.client.host if websocket.client else "unknown"
+    if ip_connections.get(client_ip, 0) >= MAX_CONNECTIONS_PER_IP:
+        await websocket.close(code=4029, reason="Too many connections")
+        return
+
     await websocket.accept()
+    ip_connections[client_ip] = ip_connections.get(client_ip, 0) + 1
 
     if room_id not in active_game_rooms:
         active_game_rooms[room_id] = GameRoom(room_id)
@@ -168,6 +196,9 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
     try:
         while True:
             data = await websocket.receive_text()
+            if len(data) > MAX_WS_MESSAGE_SIZE:
+                await websocket.close(code=1009, reason="Message too large")
+                return
             message = json.loads(data)
 
             msg_type = message.get("type")
@@ -190,10 +221,10 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
             await game_room.remove_player(websocket)
 
     except Exception as e:
-        logger.error(f"WebSocket error in room {room_id}: {e}")
+        logger.error(f"WebSocket error in room {room_id}: {e}", exc_info=True)
         error = ServerError(
             room=room_id,
-            message=str(e),
+            message="An internal error occurred",
         )
         try:
             await websocket.send_json(error.model_dump())
@@ -201,5 +232,6 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
             pass
 
     finally:
+        ip_connections[client_ip] = max(0, ip_connections.get(client_ip, 1) - 1)
         if websocket in game_room.players:
             await game_room.remove_player(websocket)

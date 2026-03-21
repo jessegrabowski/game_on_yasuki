@@ -1,10 +1,18 @@
 from fastapi import FastAPI
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from starlette.responses import Response
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+import asyncio
 import logging
 import os
 from yasuki_web import cards, rooms, websocket
+from yasuki_web.rate_limit import limiter
+from yasuki_web.websocket import evict_stale_rooms
 from yasuki_core.paths import BUNDLED_IMAGES_DIR, SETS_DIR
 
 
@@ -12,11 +20,18 @@ logger = logging.getLogger(__name__)
 
 IMAGE_BASE_URL = os.environ.get("IMAGE_BASE_URL", "/images")
 
+_is_production = os.environ.get("ENVIRONMENT") == "production"
+
 app = FastAPI(
     title="Game on, Yasuki! API",
     description="Online L5R card game server with WebSocket support for real-time multiplayer",
     version="1.0.0",
+    docs_url=None if _is_production else "/docs",
+    redoc_url=None if _is_production else "/redoc",
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 _default_origins = ["http://localhost:5173", "http://localhost:3000", "http://localhost:8080"]
 _cors_origins = (
@@ -29,9 +44,26 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_headers=["Content-Type", "Authorization"],
 )
+
+
+class SecurityHeadersMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        response: Response = await call_next(request)
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        if request.url.scheme == "https":
+            response.headers["Strict-Transport-Security"] = (
+                "max-age=63072000; includeSubDomains; preload"
+            )
+        return response
+
+
+app.add_middleware(SecurityHeadersMiddleware)
 
 DECK_BUILDER_DIR = Path(__file__).parent / "static" / "deck_builder"
 
@@ -85,6 +117,7 @@ async def health():
 
 @app.on_event("startup")
 async def startup_event():
+    asyncio.create_task(evict_stale_rooms())
     logger.info("Game on, Yasuki! API starting up...")
     logger.info("API Documentation available at: /docs")
 

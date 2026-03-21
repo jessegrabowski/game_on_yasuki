@@ -30,6 +30,19 @@ pixi run docker-api
 - Docs: `http://localhost:8000/docs`
 - Deck builder: `http://localhost:8000/deck-builder`
 
+## Environment Variables
+
+All Docker services read their configuration from environment variables with
+sensible defaults. To override them, copy `.env.example` to `.env`:
+
+```bash
+cp .env.example .env
+# edit .env with your values
+```
+
+Docker Compose automatically loads `.env` from the project root. See
+`.env.example` for the full list of available variables.
+
 ## Smoke Test
 
 ```bash
