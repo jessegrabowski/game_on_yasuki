@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Path, Query
 from typing import Annotated
 import logging
 
-from app.database import (
+from yasuki_core.database import (
     query_all_cards,
     search_cards,
     query_cards_filtered,
@@ -14,7 +14,7 @@ from app.database import (
     query_all_clans,
     query_all_types,
 )
-from app.search import parse_and_build_query
+from yasuki_core.search import parse_and_build_query
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

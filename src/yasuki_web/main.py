@@ -4,7 +4,9 @@ from fastapi.staticfiles import StaticFiles
 from pathlib import Path
 import logging
 import os
-from app.api import cards, rooms, websocket
+from yasuki_web import cards, rooms, websocket
+from yasuki_core.paths import BUNDLED_IMAGES_DIR, SETS_DIR
+
 
 logger = logging.getLogger(__name__)
 
@@ -31,15 +33,19 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-ASSETS_DIR = Path(__file__).parent.parent / "assets"
-IMAGES_DIR = ASSETS_DIR / "images"
-DECK_BUILDER_DIR = ASSETS_DIR / "deck_builder"
+DECK_BUILDER_DIR = Path(__file__).parent / "static" / "deck_builder"
 
-if IMAGES_DIR.exists():
-    app.mount("/images", StaticFiles(directory=IMAGES_DIR), name="images")
-    logger.info(f"Serving card images from {IMAGES_DIR}")
+if SETS_DIR.exists():
+    app.mount("/images/sets", StaticFiles(directory=SETS_DIR), name="sets")
+    logger.info(f"Serving set images from {SETS_DIR}")
 else:
-    logger.warning(f"Images directory not found at {IMAGES_DIR}")
+    logger.warning(f"Sets directory not found at {SETS_DIR}")
+
+if BUNDLED_IMAGES_DIR.exists():
+    app.mount("/images", StaticFiles(directory=BUNDLED_IMAGES_DIR), name="images")
+    logger.info(f"Serving bundled images from {BUNDLED_IMAGES_DIR}")
+else:
+    logger.warning(f"Bundled images directory not found at {BUNDLED_IMAGES_DIR}")
 
 app.include_router(cards.router, prefix="/api", tags=["cards"])
 app.include_router(rooms.router, prefix="/api", tags=["rooms"])

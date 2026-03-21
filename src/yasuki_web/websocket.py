@@ -2,8 +2,8 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import json
 import logging
 
-from app.schemas import ServerHello, ServerState, ServerError
-from app.api.rooms import rooms
+from yasuki_web.schemas import ServerHello, ServerState, ServerError
+from yasuki_web.rooms import rooms
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
