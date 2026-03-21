@@ -87,8 +87,8 @@ function renderSinglePrintItem(el, side, id, entry, cardQty, printEntry) {
   const qtySpan = document.createElement('span');
   qtySpan.className = 'qty';
   qtySpan.textContent = '\u00D7' + cardQty;
-  div.appendChild(nameSpan);
   div.appendChild(qtySpan);
+  div.appendChild(nameSpan);
 
   div._deckSide = side;
   div._deckId = id;
@@ -118,8 +118,8 @@ function renderMultiPrintItem(el, side, id, entry, cardQty, printEntries) {
   const cQtySpan = document.createElement('span');
   cQtySpan.className = 'qty';
   cQtySpan.textContent = '\u00D7' + cardQty;
-  cardDiv.appendChild(cNameSpan);
   cardDiv.appendChild(cQtySpan);
+  cardDiv.appendChild(cNameSpan);
 
   cardDiv._deckSide = side;
   cardDiv._deckId = id;
@@ -151,8 +151,8 @@ function renderMultiPrintItem(el, side, id, entry, cardQty, printEntries) {
       const subQty = document.createElement('span');
       subQty.className = 'qty';
       subQty.textContent = '\u00D7' + pData.qty;
-      subDiv.appendChild(subName);
       subDiv.appendChild(subQty);
+      subDiv.appendChild(subName);
 
       subDiv._deckSide = side;
       subDiv._deckId = id;

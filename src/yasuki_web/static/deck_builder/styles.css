@@ -236,7 +236,7 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   border-radius: 3px;
   font-size: 0.83rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   border-left: 2px solid transparent;
   transition: background 0.15s, border-color 0.15s;
@@ -259,6 +259,8 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   text-align: center;
   font-weight: 700;
   font-family: system-ui, sans-serif;
+  margin-right: 8px;
+  flex-shrink: 0;
 }
 .deck-type-header {
   padding: 4px 10px;
@@ -277,7 +279,7 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   cursor: pointer;
   border-radius: 3px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   border-left: 2px solid transparent;
   transition: background 0.15s, border-color 0.15s;
@@ -301,6 +303,8 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   text-align: center;
   font-weight: 700;
   font-family: system-ui, sans-serif;
+  margin-right: 8px;
+  flex-shrink: 0;
 }
 .print-nav {
   display: flex;
