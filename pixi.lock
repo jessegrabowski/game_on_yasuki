@@ -1125,8 +1125,8 @@ packages:
   timestamp: 1773314012590
 - pypi: ./
   name: game-on-yasuki
-  version: 0.0.1.dev26+unknown.gb12740f58.d20260320
-  sha256: d008131899f80280a336a9a7b3da77dd61b207d516318082cb159b53a6a5924b
+  version: 0.0.1.dev15+unknown.g7aeb26423
+  sha256: 432f25aa483c3f6d9296be8637ee11e466ebcb8d0cd676cd50a250167d79bbab
   requires_dist:
   - fastapi>=0.115
   - pillow>=10.0
