@@ -8,7 +8,7 @@ from typing import NamedTuple
 import psycopg2
 import psycopg2.extras
 
-from app.install.utils import (
+from yasuki_core.install.utils import (
     DECK_MAP,
     expected_card_image_path,
     normalize_name,

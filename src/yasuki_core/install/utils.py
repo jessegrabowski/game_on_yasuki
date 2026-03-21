@@ -2,7 +2,7 @@ import re
 import unicodedata
 from unidecode import unidecode_expect_ascii
 
-from app.paths import ASSETS_DIR
+from yasuki_core.paths import resolve_set_image_path
 
 SUFFIX_MAP = {
     "experienced": "exp",
@@ -134,7 +134,7 @@ def find_card_image(extended_title: str, set_name: str) -> str | None:
     """
     Find image file for a card using Extended Title.
 
-    Images are stored in: app/assets/images/sets/<set_name>/<card_id>.png
+    Images are stored in: <SETS_DIR>/<set_name>/<card_id>.png
 
     Parameters
     ----------
@@ -146,14 +146,14 @@ def find_card_image(extended_title: str, set_name: str) -> str | None:
     Returns
     -------
     image_path : str or None
-        Relative path from ASSETS_DIR, or None if not found
+        Relative path like "sets/celestial_edition/card.png", or None if not found
     """
     path = expected_card_image_path(extended_title, set_name)
     if path is None:
         return None
 
-    card_path = ASSETS_DIR / path
-    if card_path.exists():
+    card_path = resolve_set_image_path(path)
+    if card_path is not None and card_path.exists():
         return path
 
     return None

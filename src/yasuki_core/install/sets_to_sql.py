@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 import psycopg2
-from app.install.utils import normalize_empty
+from yasuki_core.install.utils import normalize_empty
 import logging
 
 

@@ -1,12 +1,12 @@
 from typing import TypeVar, Generic
 from collections.abc import Iterable, Callable
 
-from app.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.cards import L5RCard
 from dataclasses import dataclass
 import random
 
-from app.game_pieces.dynasty import DynastyCard
-from app.game_pieces.fate import FateCard
+from yasuki_core.game_pieces.dynasty import DynastyCard
+from yasuki_core.game_pieces.fate import FateCard
 
 CardT = TypeVar("CardT", bound=L5RCard)
 

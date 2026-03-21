@@ -1,9 +1,9 @@
 import logging
 import os
 import sys
-from pathlib import Path
 
-DATABASE_DIR = Path(__file__).resolve().parent / "assets" / "database"
+from yasuki_core.paths import DATABASE_DIR
+
 DEFAULT_DSN = os.environ.get(
     "L5R_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/l5r")
 )

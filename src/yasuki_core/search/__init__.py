@@ -1,4 +1,4 @@
-from app.search.parse_search import (
+from yasuki_core.search.parse_search import (
     SearchTerm,
     ParsedQuery,
     FIELD_ALIASES,

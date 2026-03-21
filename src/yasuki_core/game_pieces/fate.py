@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from pathlib import Path
-from app.game_pieces.cards import L5RCard
-from app.game_pieces.constants import AttachmentType, Element, Timing
-from app.paths import (
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import AttachmentType, Element, Timing
+from yasuki_core.paths import (
     FATE_BACK,
     DEFAULT_STRATEGY,
     DEFAULT_ITEM,

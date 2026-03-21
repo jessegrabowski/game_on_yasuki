@@ -8,8 +8,8 @@ import shutil
 
 import psycopg2
 
-from app import DATABASE_DIR
-from app.install import sets_to_sql, json_to_sql
+from yasuki_core import DATABASE_DIR
+from yasuki_core.install import sets_to_sql, json_to_sql
 import logging
 
 

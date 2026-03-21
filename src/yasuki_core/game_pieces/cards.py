@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
-from app.game_pieces.constants import Side
-from app.engine.players import PlayerId
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.engine.players import PlayerId
 
 
 @dataclass(frozen=True, slots=True)
