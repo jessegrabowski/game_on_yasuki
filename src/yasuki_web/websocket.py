@@ -1,6 +1,8 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+import asyncio
 import json
 import logging
+from datetime import datetime, timezone, timedelta
 
 from yasuki_web.schemas import ServerHello, ServerState, ServerError
 from yasuki_web.rooms import rooms
@@ -143,6 +145,24 @@ class GameRoom:
 
 
 active_game_rooms: dict[str, GameRoom] = {}
+
+ROOM_TTL = timedelta(hours=2)
+EVICTION_INTERVAL = 300
+
+
+async def evict_stale_rooms():
+    while True:
+        await asyncio.sleep(EVICTION_INTERVAL)
+        now = datetime.now(timezone.utc)
+        stale = [
+            rid
+            for rid, r in rooms.items()
+            if not r["players"] and (now - datetime.fromisoformat(r["created_at"])) > ROOM_TTL
+        ]
+        for rid in stale:
+            del rooms[rid]
+            active_game_rooms.pop(rid, None)
+            logger.info(f"Evicted stale room {rid}")
 
 
 MAX_WS_MESSAGE_SIZE = 4096

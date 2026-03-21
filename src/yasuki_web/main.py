@@ -7,10 +7,12 @@ from starlette.requests import Request
 from starlette.responses import Response
 from fastapi.staticfiles import StaticFiles
 from pathlib import Path
+import asyncio
 import logging
 import os
 from yasuki_web import cards, rooms, websocket
 from yasuki_web.rate_limit import limiter
+from yasuki_web.websocket import evict_stale_rooms
 from yasuki_core.paths import BUNDLED_IMAGES_DIR, SETS_DIR
 
 
@@ -115,6 +117,7 @@ async def health():
 
 @app.on_event("startup")
 async def startup_event():
+    asyncio.create_task(evict_stale_rooms())
     logger.info("Game on, Yasuki! API starting up...")
     logger.info("API Documentation available at: /docs")
 
