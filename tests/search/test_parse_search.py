@@ -1,4 +1,4 @@
-from app.gui.ui.deck_builder.parse_search import (
+from app.search import (
     tokenize_query,
     parse_token,
     parse_search_query,

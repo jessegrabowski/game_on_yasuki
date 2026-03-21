@@ -10,7 +10,7 @@ import psycopg2.extras
 
 from app.install.utils import (
     DECK_MAP,
-    find_card_image,
+    expected_card_image_path,
     normalize_name,
     strip_title,
 )
@@ -534,8 +534,8 @@ def upsert_prints(
 
         set_code = set_code_map.get(set_name)
 
-        # Find image path using Extended Title
-        image_path = find_card_image(extended_title, set_name) if set_name else None
+        # Compute expected image path from card title and set name
+        image_path = expected_card_image_path(extended_title, set_name) if set_name else None
 
         # 1) Insert into prints
         cur.execute(
