@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 import secrets
 import logging
@@ -8,6 +8,10 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 rooms: dict[str, dict] = {}
+
+
+def public_room(room: dict) -> dict:
+    return {k: v for k, v in room.items() if k != "delete_token"}
 
 
 class CreateRoomRequest(BaseModel):
@@ -28,6 +32,7 @@ async def create_room(request: CreateRoomRequest):
     Room remains active until all players disconnect or it's explicitly deleted.
     """
     room_id = secrets.token_urlsafe(8)
+    delete_token = secrets.token_urlsafe(16)
 
     rooms[room_id] = {
         "id": room_id,
@@ -36,13 +41,15 @@ async def create_room(request: CreateRoomRequest):
         "players": [],
         "state": "waiting",
         "created_at": datetime.now(timezone.utc).isoformat(),
+        "delete_token": delete_token,
     }
 
     logger.info(f"Created room {room_id}: {rooms[room_id]['name']}")
 
     return {
         "room_id": room_id,
-        "room": rooms[room_id],
+        "room": public_room(rooms[room_id]),
+        "delete_token": delete_token,
         "websocket_url": f"/ws/{room_id}",
     }
 
@@ -56,7 +63,7 @@ async def list_rooms():
     Use this for matchmaking or lobby browsing.
     """
     available_rooms = [
-        room
+        public_room(room)
         for room in rooms.values()
         if room["state"] == "waiting" and len(room["players"]) < room["max_players"]
     ]
@@ -79,13 +86,13 @@ async def get_room(room_id: str):
         raise HTTPException(status_code=404, detail=f"Room '{room_id}' not found")
 
     return {
-        "room": rooms[room_id],
+        "room": public_room(rooms[room_id]),
         "websocket_url": f"/ws/{room_id}",
     }
 
 
 @router.delete("/rooms/{room_id}")
-async def delete_room(room_id: str):
+async def delete_room(room_id: str, token: str = Query(...)):
     """
     Delete a room.
 
@@ -94,6 +101,8 @@ async def delete_room(room_id: str):
     """
     if room_id not in rooms:
         raise HTTPException(status_code=404, detail=f"Room '{room_id}' not found")
+    if rooms[room_id].get("delete_token") != token:
+        raise HTTPException(status_code=403, detail="Forbidden")
 
     room_name = rooms[room_id]["name"]
     del rooms[room_id]
