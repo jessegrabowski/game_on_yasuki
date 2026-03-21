@@ -21,6 +21,8 @@ app = FastAPI(
     title="Game on, Yasuki! API",
     description="Online L5R card game server with WebSocket support for real-time multiplayer",
     version="1.0.0",
+    docs_url=None if _is_production else "/docs",
+    redoc_url=None if _is_production else "/redoc",
 )
 
 _default_origins = ["http://localhost:5173", "http://localhost:3000", "http://localhost:8080"]
