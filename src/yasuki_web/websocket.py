@@ -143,6 +143,9 @@ class GameRoom:
 active_game_rooms: dict[str, GameRoom] = {}
 
 
+MAX_WS_MESSAGE_SIZE = 4096
+
+
 @router.websocket("/{room_id}")
 async def websocket_endpoint(websocket: WebSocket, room_id: str):
     """
@@ -168,6 +171,9 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
     try:
         while True:
             data = await websocket.receive_text()
+            if len(data) > MAX_WS_MESSAGE_SIZE:
+                await websocket.close(code=1009, reason="Message too large")
+                return
             message = json.loads(data)
 
             msg_type = message.get("type")

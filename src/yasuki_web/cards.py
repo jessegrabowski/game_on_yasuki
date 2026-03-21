@@ -91,7 +91,9 @@ async def list_cards(
 
 
 @router.get("/cards/{card_id}")
-async def get_card(card_id: str):
+async def get_card(
+    card_id: Annotated[str, Path(max_length=200, pattern=r"^[\w\s\-\.\,\'\!\(\)]+$")],
+):
     """
     Get detailed information about a specific card.
 
