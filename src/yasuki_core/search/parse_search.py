@@ -438,7 +438,7 @@ def parse_and_build_query(query_string: str) -> tuple[str, dict]:
     >>> text
     'Doji'
     >>> filters
-    {'force_min': 4}
+    {'force': (4, None)}
     """
     parsed = parse_search_query(query_string)
     return build_filter_options(parsed)

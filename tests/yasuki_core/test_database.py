@@ -293,7 +293,7 @@ def test_query_types_with_stat_invalid():
     [
         {"keywords": ["cavalry"]},
         {"keywords": ["cavalry", "experienced"]},
-        {"keywords": ["cavalry"], "clans": ["Unicorn"], "force_min": 3},
+        {"keywords": ["cavalry"], "clans": ["Unicorn"], "force": (3, None)},
         {"is_unique": True},
         {"is_unique": True, "keywords": ["experienced"]},
     ],
