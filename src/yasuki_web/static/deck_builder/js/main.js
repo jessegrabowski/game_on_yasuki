@@ -62,7 +62,10 @@ async function init() {
   });
 
   $('formatFilter').addEventListener('change', searchCards);
-  $('deckFilter').addEventListener('change', searchCards);
+  $('deckFilter').addEventListener('change', () => {
+    updateTypeFilterForDeck();
+    searchCards();
+  });
   $('typeFilter').addEventListener('change', searchCards);
 
   $('helpBtn').addEventListener('click', toggleHelp);
@@ -78,6 +81,8 @@ function toggleHelp() {
   const el = $('searchHelp');
   el.style.display = el.style.display === 'none' ? '' : 'none';
 }
+
+let allTypes = [];
 
 async function populateFilters() {
   const fill = (selectEl, items, labelFn) => {
@@ -112,9 +117,45 @@ async function populateFilters() {
       (decks.deck_types || []).map((d) => d.toUpperCase()),
       (d) => titleCase(d),
     );
-    fill($('typeFilter'), types.card_types || []);
+    allTypes = types.card_types || [];
+    fill($('typeFilter'), allTypes);
   } catch (e) {
     console.error('Failed to populate filters:', e);
+  }
+}
+
+function repopulateTypeFilter(types) {
+  const typeEl = $('typeFilter');
+  const current = typeEl.value;
+  typeEl.innerHTML = '';
+  const allOpt = document.createElement('option');
+  allOpt.value = '';
+  allOpt.textContent = 'All Types';
+  typeEl.appendChild(allOpt);
+  types.forEach((t) => {
+    const opt = document.createElement('option');
+    opt.value = t;
+    opt.textContent = t;
+    typeEl.appendChild(opt);
+  });
+  if (types.includes(current)) {
+    typeEl.value = current;
+  } else {
+    typeEl.value = '';
+  }
+}
+
+async function updateTypeFilterForDeck() {
+  const deckVal = $('deckFilter').value;
+  if (!deckVal) {
+    repopulateTypeFilter(allTypes);
+    return;
+  }
+  try {
+    const data = await fetchJSON(`${API}/card-types-by-deck?deck=${encodeURIComponent(deckVal)}`);
+    repopulateTypeFilter(data.card_types || []);
+  } catch (_) {
+    repopulateTypeFilter(allTypes);
   }
 }
 

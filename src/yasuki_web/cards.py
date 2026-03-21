@@ -13,6 +13,7 @@ from yasuki_core.database import (
     query_all_decks,
     query_all_clans,
     query_all_types,
+    query_types_by_deck,
 )
 from yasuki_core.search import parse_and_build_query
 from yasuki_web.rate_limit import limiter
@@ -217,6 +218,21 @@ async def list_card_types():
         return {"card_types": types, "count": len(types)}
     except Exception as e:
         logger.error(f"Error listing card types: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve card types")
+
+
+@router.get("/card-types-by-deck")
+async def list_card_types_by_deck(
+    deck: Annotated[
+        str, Query(description="Deck type to filter card types by (e.g. DYNASTY, FATE)")
+    ],
+):
+    """List card types available for a specific deck type."""
+    try:
+        types = query_types_by_deck([deck.upper()])
+        return {"card_types": types, "deck": deck.upper(), "count": len(types)}
+    except Exception as e:
+        logger.error(f"Error listing card types by deck: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve card types")
 
 
