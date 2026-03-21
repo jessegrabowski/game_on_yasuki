@@ -7,8 +7,9 @@ import logging
 import os
 from app.api import cards, rooms, websocket
 
-
 logger = logging.getLogger(__name__)
+
+IMAGE_BASE_URL = os.environ.get("IMAGE_BASE_URL", "/images")
 
 app = FastAPI(
     title="Game on, Yasuki! API",
@@ -64,6 +65,11 @@ async def root():
 @app.get("/deck-builder")
 async def deck_builder():
     return FileResponse(DECK_BUILDER_HTML, media_type="text/html")
+
+
+@app.get("/api/config")
+async def config():
+    return {"image_base_url": IMAGE_BASE_URL}
 
 
 @app.get("/health")

@@ -317,7 +317,7 @@
 
 <script>
 const API = '/api';
-const IMG = '/images';
+let IMG = '/images';
 
 let allResults = [];
 let offset = 0;
@@ -331,6 +331,11 @@ const $ = id => document.getElementById(id);
 
 // ── Bootstrap ──────────────────────────────────────────────────────
 async function init() {
+  try {
+    const cfg = await fetchJSON(`${API}/config`);
+    IMG = cfg.image_base_url || IMG;
+  } catch (e) { /* fall back to /images for local dev */ }
+
   const [decks, clans, types] = await Promise.all([
     fetchJSON(`${API}/decks`),
     fetchJSON(`${API}/clans`),

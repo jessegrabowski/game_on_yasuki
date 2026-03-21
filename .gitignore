@@ -1,5 +1,9 @@
 app/assets/database/*
-app/assets/images/cards/*
+!app/assets/database/cards.json
+!app/assets/database/set_info.json
+!app/assets/database/schema.sql
+app/assets/images/sets/
+app/assets/images/cards/
 !app/assets/images/defaults/
 !app/assets/images/defaults/**
 
