@@ -20,7 +20,9 @@ logger = logging.getLogger(__name__)
 DEFAULT_CARDS_PATH = DATABASE_DIR / "cards.json"
 DEFAULT_SETS_PATH = DATABASE_DIR / "set_info.json"
 DEFAULT_SCHEMA_PATH = DATABASE_DIR / "schema.sql"
-DEFAULT_DSN = os.environ.get("L5R_DATABASE_URL", "postgresql://localhost/l5r")
+DEFAULT_DSN = os.environ.get(
+    "L5R_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/l5r")
+)
 
 
 @dataclass
@@ -78,11 +80,9 @@ class Installer:
     def _validate_prerequisites(self) -> None:
         """Check if PostgreSQL tools are available on the system."""
         if not shutil.which("psql"):
-            raise InstallerError(
-                "PostgreSQL client tools not found. Please install PostgreSQL:\n"
-                "  - macOS: brew install postgresql\n"
-                "  - Ubuntu/Debian: sudo apt-get install postgresql-client\n"
-                "  - Windows: Download from https://www.postgresql.org/download/"
+            logger.warning(
+                "PostgreSQL client tools (psql) not found on PATH. "
+                "This is fine for Docker/cloud deployments, but local users may need to install PostgreSQL."
             )
 
         if not shutil.which("createdb"):

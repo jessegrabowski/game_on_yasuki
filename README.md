@@ -77,25 +77,25 @@ CREATE DATABASE l5r;
 
 ### Step 3: Install Python Dependencies
 
-This project uses conda for environment management. If you don't have conda installed, download Miniconda from:
-https://docs.conda.io/en/latest/miniconda.html
+This project uses [Pixi](https://pixi.sh) for environment management. Pixi handles both conda and PyPI dependencies seamlessly.
 
-Alternatively, use Mamba for faster dependency resolution:
-https://mamba.readthedocs.io/
-
-**Create and activate the environment:**
+**Install Pixi:**
 
 ```bash
-# Using conda
-conda env create -f environment.yaml
-conda activate game-on-yasuki-dev
+# macOS/Linux
+curl -fsSL https://pixi.sh/install.sh | bash
 
-# Or using mamba (faster)
-mamba env create -f environment.yaml
-mamba activate game-on-yasuki-dev
+# Windows (PowerShell)
+iwr -useb https://pixi.sh/install.ps1 | iex
 ```
 
-The `environment.yaml` file includes all required dependencies: Python 3.12, pytest, pydantic, Pillow, psycopg2, and pre-commit hooks.
+**Install dependencies:**
+
+```bash
+pixi install
+```
+
+This installs all required dependencies from conda-forge (Python 3.12, psycopg2, Pillow, tk) and PyPI (FastAPI, uvicorn).
 
 **Alternative: pip installation**
 
@@ -114,7 +114,7 @@ Game data is stored under `app/assets/database/`. The installation script will a
 **Basic installation:**
 
 ```bash
-python -m app.install.install_db
+pixi run install-db
 ```
 
 This assumes PostgreSQL is running on localhost with a database named `l5r` that your current user can access without a password.
@@ -125,14 +125,14 @@ If your PostgreSQL setup differs, specify a connection string:
 
 ```bash
 # Using DSN format
-python -m app.install.install_db --dsn "postgresql://localhost/l5r"
+pixi run install-db -- --dsn "postgresql://localhost/l5r"
 
 # With authentication
-python -m app.install.install_db --dsn "postgresql://username:password@localhost:5432/l5r"
+pixi run install-db -- --dsn "postgresql://username:password@localhost:5432/l5r"
 
 # Or set an environment variable
 export L5R_DATABASE_URL="postgresql://localhost/l5r"
-python -m app.install.install_db
+pixi run install-db
 ```
 
 **Installation flags:**
@@ -151,18 +151,75 @@ The installer will validate that PostgreSQL is installed, the database exists, a
 Once dependencies are installed and the database is initialized, launch the game client:
 
 ```bash
-# Python launcher
-python play.py
+# Using Pixi
+pixi run play
 
 # With debug logging
-python play.py --debug
+pixi run play -- --debug
 
-# Shell launcher (Unix/macOS)
-./play.sh
-
-# Or as a module
-python -m app.gui
+# Or directly with Python (if in pixi shell)
+pixi shell
+python play.py
 ```
+
+## Docker (Skip PostgreSQL Installation)
+
+Docker lets you run PostgreSQL without installing it natively. The GUI still runs
+on your host machine — only the database lives in a container.
+
+**Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+must be installed and running (look for the whale icon in your menu bar / system tray).
+
+### Quick Start: Database Only
+
+```bash
+# Build the image and start PostgreSQL + seed the card database
+pixi run docker-up
+
+# Or equivalently:
+docker-compose up db db-init
+```
+
+Once `l5r-db-init exited with code 0` appears, the database is ready. Then launch
+the GUI in a second terminal:
+
+```bash
+L5R_DATABASE_URL=postgresql://l5r:l5r@localhost:5432/l5r pixi run play
+```
+
+### API Server (Multiplayer)
+
+```bash
+# Start the full stack: database + card seeding + FastAPI server
+pixi run docker-api
+
+# Or equivalently:
+docker-compose --profile api up db db-init api
+```
+
+The API will be available at `http://localhost:8000`. Interactive docs at
+`http://localhost:8000/docs`.
+
+### Testing the Docker Setup
+
+```bash
+# Automated smoke test: builds, starts everything, hits the API, reports status
+pixi run docker-test
+
+# When done, tear it all down
+pixi run docker-down
+```
+
+### All Docker Commands
+
+| Command | What it does |
+|---------|-------------|
+| `pixi run docker-build` | Build the Docker image |
+| `pixi run docker-up` | Start database + seed cards |
+| `pixi run docker-api` | Start database + API server |
+| `pixi run docker-down` | Stop all containers |
+| `pixi run docker-nuke` | Stop all containers and **delete all data** |
+| `pixi run docker-test` | Build, start, smoke-test, report |
 
 ## Development
 
@@ -171,13 +228,13 @@ python -m app.gui
 Execute the test suite with pytest:
 
 ```bash
-pytest tests/
+pixi run test
 ```
 
 For coverage reporting:
 
 ```bash
-pytest tests/ --cov=app --cov-report=html
+pixi run test -- --cov=app --cov-report=html
 ```
 
 ### Code Quality
@@ -186,10 +243,10 @@ This project uses pre-commit hooks with ruff for linting and formatting:
 
 ```bash
 # Install pre-commit hooks
-pre-commit install
+pixi run pre-commit install
 
 # Run manually on all files
-pre-commit run --all-files
+pixi run lint
 ```
 
 ### Debugging
@@ -197,7 +254,7 @@ pre-commit run --all-files
 Enable debug logging to see detailed information about database queries, GUI initialization, card loading, and error tracebacks:
 
 ```bash
-python play.py --debug
+pixi run play -- --debug
 ```
 
 Debug output includes:

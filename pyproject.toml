@@ -3,18 +3,18 @@ requires = ["hatchling>=1.25", "hatch-vcs>=0.4"]
 build-backend = "hatchling.build"
 
 [project]
-name = "Game on, Yasuki!"
+name = "game-on-yasuki"
 dynamic = ["version"]
 description = "Online client for playing classic L5R"
 authors = [{ name = "Jesse Grabowski" , email = "jessegrabowski@gmail.com"}]
 requires-python = ">=3.12"
 dependencies = [
   "fastapi>=0.115",
-  "uvicorn[standard]>=0.30",
+  "uvicorn>=0.30",
   "pydantic>=2.7",
   "PyYAML>=6.0",
   "Pillow>=10.0",
-  "psycopg2-binary>=2.9",
+  "psycopg2>=2.9",
 ]
 
 [project.urls]
@@ -22,12 +22,16 @@ Homepage = "https://github.com/jessegrabowski/game-on-yasuki"
 
 [tool.hatch.version]
 source = "vcs"
+fallback-version = "0.0.0+unknown"
+
+[tool.hatch.build.hooks.vcs]
+version-file = "app/_version.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["game_on_yasuki"]
+packages = ["app"]
 
 [tool.hatch.build.targets.sdist]
-include = ["game_on_yasuki", "README.md", "tests", "pyproject.toml"]
+include = ["app", "README.md", "tests", "pyproject.toml"]
 
 [tool.ruff]
 line-length = 100
@@ -35,3 +39,52 @@ line-length = 100
 [tool.pytest.ini_options]
 pythonpath = ["."]
 addopts = "-q"
+
+[tool.pixi.workspace]
+channels = ["conda-forge"]
+platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
+requires-pixi = ">=0.63.2"
+
+[tool.pixi.dependencies]
+python = ">=3.12"
+psycopg2 = ">=2.9"
+pillow = ">=10.0"
+pydantic = ">=2.7"
+pyyaml = ">=6.0"
+tk = "*"
+unidecode = ">=1.4.0,<2"
+fastapi = ">=0.135.1,<0.136"
+
+[tool.pixi.pypi-dependencies]
+game-on-yasuki = { path = ".", editable = true }
+fastapi = ">=0.115"
+uvicorn = ">=0.30"
+
+[tool.pixi.feature.dev.dependencies]
+pytest = "*"
+pytest-cov = "*"
+pre-commit = "*"
+ruff = "*"
+
+[tool.pixi.environments]
+default = { features = ["dev"], solve-group = "default" }
+prod = { solve-group = "default" }
+
+[tool.pixi.tasks]
+play = "python play.py"
+test = "pytest tests/"
+install-db = "python -m app.install.install_db"
+api = "python -c \"import os; os.execvp('uvicorn', ['uvicorn', 'app.api.main:app', '--host', '0.0.0.0', '--port', os.environ.get('PORT', '8000')])\""
+docker-build = "docker-compose build"
+docker-up = "docker-compose up db db-init"
+docker-api = "docker-compose --profile api up db db-init api"
+docker-down = "docker-compose down"
+docker-nuke = "docker-compose down -v"
+docker-test = """docker-compose --profile api up -d db db-init api \
+  && echo 'Waiting for API...' \
+  && sleep 10 \
+  && curl -sf http://localhost:8000/health \
+  && echo '' && echo '✓ API is healthy' \
+  && curl -sf 'http://localhost:8000/api/cards?limit=1' \
+  && echo '' && echo '✓ Card query works' \
+  || echo '✗ Something failed'"""

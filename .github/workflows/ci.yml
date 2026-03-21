@@ -1,0 +1,266 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  check-lockfile:
+    name: "Check lockfile"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pixi
+        uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          pixi-version: v0.63.2
+          run-install: false
+
+      - name: Check lockfile is up to date
+        run: |
+          pixi install --locked
+          if ! git diff --exit-code pixi.lock; then
+            echo "::error::pixi.lock is out of date. Run 'pixi install' locally and commit the updated lockfile."
+            exit 1
+          fi
+
+  pre-commit:
+    name: "Pre-commit"
+    needs: [check-lockfile]
+    runs-on: ubuntu-latest
+    env:
+      SKIP: no-commit-to-branch
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - uses: pre-commit/action@v3.0.1
+
+  test:
+    needs: [pre-commit]
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - subset-name: "Game Engine Tests"
+            os: ubuntu-latest
+            python-version: "3.12"
+            test-subset: "tests/engine/"
+
+          - subset-name: "Game Pieces Tests"
+            os: ubuntu-latest
+            python-version: "3.12"
+            test-subset: "tests/game_pieces/"
+
+          - subset-name: "GUI Tests"
+            os: ubuntu-latest
+            python-version: "3.12"
+            test-subset: "tests/gui/"
+
+    name: ${{ matrix.subset-name }} (${{ matrix.os }} Python ${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+
+    env:
+      TEST_SUBSET: ${{ matrix.test-subset }}
+
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install xvfb for GUI tests
+        if: contains(matrix.test-subset, 'gui')
+        run: sudo apt-get update && sudo apt-get install -y xvfb
+
+      - uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          pixi-version: v0.63.2
+          cache: true
+
+      - name: Show Python version
+        run: pixi run python --version
+
+      - name: Create matrix id
+        id: matrix-id
+        env:
+          MATRIX_CONTEXT: ${{ toJson(matrix) }}
+        run: |
+          echo $MATRIX_CONTEXT
+          export MATRIX_ID=`echo $MATRIX_CONTEXT | sha256sum | cut -c 1-32`
+          echo $MATRIX_ID
+          echo "id=$MATRIX_ID" >> $GITHUB_OUTPUT
+
+      - name: Start xvfb
+        if: contains(matrix.test-subset, 'gui')
+        run: |
+          Xvfb :99 -screen 0 1024x768x24 &
+          sleep 1
+
+      - name: Run tests
+        run: |
+          pixi run pytest -vv --cache-clear --cov=app --cov-report=xml:coverage/coverage-${MATRIX_ID}.xml --no-cov-on-fail --cov-report term $TEST_SUBSET --durations=50
+        env:
+          MATRIX_ID: ${{ steps.matrix-id.outputs.id }}
+          DISPLAY: ":99"
+
+      - name: Upload coverage file
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-${{ steps.matrix-id.outputs.id }}
+          path: coverage/coverage-${{ steps.matrix-id.outputs.id }}.xml
+
+  all-checks:
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    name: "All tests"
+    needs: [test]
+    steps:
+      - name: Check build matrix status
+        if: ${{ needs.test.result != 'success' }}
+        run: exit 1
+
+  upload-coverage:
+    runs-on: ubuntu-latest
+    name: "Upload coverage"
+    needs: [all-checks]
+    if: ${{ needs.all-checks.result == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install -U coverage>=5.1 coveralls
+
+      - name: Download coverage file
+        uses: actions/download-artifact@v4
+        with:
+          pattern: coverage-*
+          path: coverage
+          merge-multiple: true
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: jessegrabowski/game_on_yasuki
+
+  docker:
+    name: "Docker build"
+    needs: [all-checks]
+    if: ${{ needs.all-checks.result == 'success' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    env:
+      REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.repository }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,prefix=
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Get version from git
+        id: version
+        run: |
+          if git describe --tags --match 'v*' > /dev/null 2>&1; then
+            VERSION=$(git describe --tags --match 'v*' --dirty | sed 's/^v//')
+          else
+            VERSION="0.0.0+g$(git rev-parse --short HEAD)"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            VERSION=${{ steps.version.outputs.VERSION }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  docker-test:
+    name: "Docker integration test"
+    needs: [all-checks]
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: l5r
+          POSTGRES_PASSWORD: l5r
+          POSTGRES_DB: l5r
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Pixi
+        uses: prefix-dev/setup-pixi@v0.8.1
+        with:
+          pixi-version: v0.63.2
+          cache: true
+
+      - name: Initialize database
+        env:
+          L5R_DATABASE_URL: postgresql://l5r:l5r@localhost:5432/l5r
+        run: pixi run install-db
+
+      - name: Run tests
+        env:
+          L5R_DATABASE_URL: postgresql://l5r:l5r@localhost:5432/l5r
+        run: pixi run pytest tests/ --ignore=tests/gui/

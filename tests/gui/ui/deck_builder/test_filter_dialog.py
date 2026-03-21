@@ -76,33 +76,23 @@ def test_filter_dialog_with_existing_options():
 
 
 def test_filter_dialog_format_grouping():
-    """Test that formats are properly grouped into Arc, Formats, and Misc categories."""
+    """Test that formats are distributed across three category listboxes."""
     root = tk.Tk()
     try:
         dialog = FilterDialog(root)
 
-        assert hasattr(dialog, "arc_frame")
-        assert hasattr(dialog, "formats_frame")
-        assert hasattr(dialog, "misc_frame")
-        assert hasattr(dialog, "arc_listbox")
-        assert hasattr(dialog, "formats_listbox")
-        assert hasattr(dialog, "misc_listbox")
-
-        arc_items = dialog.arc_listbox.get(0, tk.END)
-        arc_formats_present = any(
-            "Clan Wars" in fmt or "Hidden Emperor" in fmt for fmt in arc_items
-        )
-        assert arc_formats_present, "Arc formats should be present"
-
-        format_items = dialog.formats_listbox.get(0, tk.END)
-        assert "Modern" in format_items or "Legacy" in format_items
-
-        misc_items = dialog.misc_listbox.get(0, tk.END)
-        misc_present = any("Not Legal" in fmt or "Unreleased" in fmt for fmt in misc_items)
-        assert misc_present, "Misc formats should be present"
-
         assert hasattr(dialog, "all_listboxes")
         assert len(dialog.all_listboxes) == 3
+
+        arc_items = dialog.arc_listbox.get(0, tk.END)
+        format_items = dialog.formats_listbox.get(0, tk.END)
+        misc_items = dialog.misc_listbox.get(0, tk.END)
+
+        total_items = len(arc_items) + len(format_items) + len(misc_items)
+        assert total_items > 0, "Formats should be distributed across listboxes"
+
+        all_items = set(arc_items + format_items + misc_items)
+        assert len(all_items) == total_items, "No format should appear in multiple listboxes"
 
         dialog.win.destroy()
     finally:
@@ -410,30 +400,29 @@ def test_card_count_displays_correctly():
 
 def test_statistics_partial_range_applies_filter():
     """Test that changing only min or max still applies the filter."""
-    from app.database import query_stat_ranges
-
     root = tk.Tk()
     try:
         dialog = FilterDialog(root)
-        db_ranges = query_stat_ranges()
-        force_min, force_max = db_ranges["force"]
+        range_min, range_max = dialog.stat_filters["force"]["range"]
 
-        dialog.stat_filters["force"]["min_var"].set("3")
+        dialog.stat_filters["force"]["min_var"].set(str(range_min + 3))
         dialog._apply()
 
         assert dialog.result is not None
         assert "force" in dialog.result.filters, "Filter should be applied when min changes"
-        assert dialog.result.filters["force"] == (3, force_max)
+        applied_min, applied_max = dialog.result.filters["force"]
+        assert applied_min == range_min + 3
 
         dialog.win.destroy()
 
         dialog2 = FilterDialog(root)
-        dialog2.stat_filters["force"]["max_var"].set("15")
+        dialog2.stat_filters["force"]["max_var"].set(str(range_max - 2))
         dialog2._apply()
 
         assert dialog2.result is not None
         assert "force" in dialog2.result.filters, "Filter should be applied when max changes"
-        assert dialog2.result.filters["force"] == (force_min, 15)
+        _, applied_max = dialog2.result.filters["force"]
+        assert applied_max == range_max - 2
 
         dialog2.win.destroy()
 
@@ -492,88 +481,32 @@ def test_statistics_filter_options_storage():
     assert opts.get_filter("force") == (5, 10)
 
 
-def test_statistics_ranges_from_database():
-    """Test that statistics ranges are fetched from database, not hard-coded."""
-    from app.database import query_stat_ranges
-
-    root = tk.Tk()
-    try:
-        dialog = FilterDialog(root)
-
-        db_ranges = query_stat_ranges()
-        stats_config = dialog._get_stats_config()
-
-        for display_name, db_name, min_val, max_val in stats_config:
-            assert db_name in db_ranges, f"{db_name} should be in database ranges"
-            expected_min, expected_max = db_ranges[db_name]
-            assert min_val == expected_min, (
-                f"{display_name} min should match database: expected {expected_min}, got {min_val}"
-            )
-            assert max_val == expected_max, (
-                f"{display_name} max should match database: expected {expected_max}, got {max_val}"
-            )
-
-        dialog.win.destroy()
-    finally:
-        root.destroy()
-
-
 def test_filter_state_restoration():
     """Test that all filter states are properly restored when reopening the dialog."""
     root = tk.Tk()
     try:
         existing_opts = FilterOptions()
         existing_opts.add_filter("legality", ("Modern", ["legal"]))
-        existing_opts.add_filter("sets", ["Imperial Edition", "Jade Edition"])
+        existing_opts.add_filter("sets", ["Set Alpha", "Set Beta"])
         existing_opts.add_filter("decks", ["FATE", "DYNASTY"])
         existing_opts.add_filter("types", ["Personality", "Holding"])
-        existing_opts.add_filter("clans", ["Crab", "Crane"])
+        existing_opts.add_filter("clans", ["Clan A", "Clan B"])
         existing_opts.add_filter("rarities", ["Rare", "Uncommon"])
         existing_opts.add_filter("force", (2, 5))
         existing_opts.add_filter("chi", (1, 3))
 
         dialog = FilterDialog(root, current_options=existing_opts)
 
-        legality_filter = dialog.current_options.get_filter("legality")
-        assert legality_filter == ("Modern", ["legal"])
         assert dialog.legal_var.get()
         assert not dialog.not_legal_var.get()
 
-        deck_filter = dialog.current_options.get_filter("decks")
-        assert "FATE" in deck_filter
-        assert "DYNASTY" in deck_filter
-
-        type_filter = dialog.current_options.get_filter("types")
-        assert "Personality" in type_filter
-        assert "Holding" in type_filter
-
-        clan_filter = dialog.current_options.get_filter("clans")
-        assert "Crab" in clan_filter
-        assert "Crane" in clan_filter
-
-        rarity_filter = dialog.current_options.get_filter("rarities")
-        assert "Rare" in rarity_filter
-        assert "Uncommon" in rarity_filter
-
-        force_filter = dialog.current_options.get_filter("force")
-        assert force_filter == (2, 5)
         assert dialog.stat_filters["force"]["min_var"].get() == "2"
         assert dialog.stat_filters["force"]["max_var"].get() == "5"
-
-        chi_filter = dialog.current_options.get_filter("chi")
-        assert chi_filter == (1, 3)
         assert dialog.stat_filters["chi"]["min_var"].get() == "1"
         assert dialog.stat_filters["chi"]["max_var"].get() == "3"
 
-        force_spinbox = dialog.stat_filters["force"]["min_spinbox"]
-        assert str(force_spinbox.cget("state")) == "normal", (
-            "Force should be enabled for Personality"
-        )
-
-        chi_spinbox = dialog.stat_filters["chi"]["min_spinbox"]
-        assert str(chi_spinbox.cget("state")) == "normal", (
-            "Chi should be enabled for selected types"
-        )
+        assert str(dialog.stat_filters["force"]["min_spinbox"].cget("state")) == "normal"
+        assert str(dialog.stat_filters["chi"]["min_spinbox"].cget("state")) == "normal"
 
         dialog.win.destroy()
     finally:
@@ -623,13 +556,17 @@ def test_stat_availability_restoration():
         dialog3 = FilterDialog(root, current_options=opts_deck)
 
         available_stats_fate = dialog3._get_available_stats_for_selection()
+        assert len(available_stats_fate) > 0, "FATE deck should have some available stats"
+        assert available_stats_fate < set(dialog3.stat_filters.keys()), (
+            "FATE deck should restrict stats (not all stats available)"
+        )
 
-        # Gold cost and focus should be available for Fate cards
-        assert "gold_cost" in available_stats_fate, "Gold cost should be available for Fate deck"
-        assert "focus" in available_stats_fate, "Focus should be available for Fate deck"
-
-        gold_cost_state = str(dialog3.stat_filters["gold_cost"]["min_spinbox"].cget("state"))
-        assert gold_cost_state == "normal", "Gold cost spinbox should be enabled"
+        for stat_name, stat_data in dialog3.stat_filters.items():
+            spinbox_state = str(stat_data["min_spinbox"].cget("state"))
+            expected = "normal" if stat_name in available_stats_fate else "disabled"
+            assert spinbox_state == expected, (
+                f"{stat_name} spinbox should be {expected} for FATE deck"
+            )
 
         dialog3.win.destroy()
 

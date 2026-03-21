@@ -4,7 +4,9 @@ import sys
 from pathlib import Path
 
 DATABASE_DIR = Path(__file__).resolve().parent / "assets" / "database"
-DEFAULT_DSN = os.environ.get("L5R_DATABASE_URL", "postgresql://localhost/l5r")
+DEFAULT_DSN = os.environ.get(
+    "L5R_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/l5r")
+)
 
 __all__ = ["DEFAULT_DSN", "DATABASE_DIR", "setup_logging"]
 
