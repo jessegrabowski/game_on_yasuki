@@ -190,10 +190,10 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
             await game_room.remove_player(websocket)
 
     except Exception as e:
-        logger.error(f"WebSocket error in room {room_id}: {e}")
+        logger.error(f"WebSocket error in room {room_id}: {e}", exc_info=True)
         error = ServerError(
             room=room_id,
-            message=str(e),
+            message="An internal error occurred",
         )
         try:
             await websocket.send_json(error.model_dump())
