@@ -65,7 +65,7 @@ def load_hotkeys(config_path: str | Path | None = None) -> Hotkeys:
 
 
 def load_database_dsn(config_path: str | Path | None = None) -> str:
-    env_dsn = os.getenv("L5R_DATABASE_URL")
+    env_dsn = os.getenv("YASUKI_DATABASE_URL")
     if env_dsn:
         env_dsn = env_dsn.strip()
         if env_dsn:

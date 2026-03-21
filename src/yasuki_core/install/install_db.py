@@ -21,7 +21,7 @@ DEFAULT_CARDS_PATH = DATABASE_DIR / "cards.json"
 DEFAULT_SETS_PATH = DATABASE_DIR / "set_info.json"
 DEFAULT_SCHEMA_PATH = DATABASE_DIR / "schema.sql"
 DEFAULT_DSN = os.environ.get(
-    "L5R_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/l5r")
+    "YASUKI_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/yasuki")
 )
 
 
@@ -174,7 +174,7 @@ def parse_args(argv: list[str]) -> InstallerConfig:
     parser.add_argument(
         "--dsn",
         default=DEFAULT_DSN,
-        help="PostgreSQL DSN, defaults to %(default)s or $L5R_DATABASE_URL",
+        help="PostgreSQL DSN, defaults to %(default)s or $YASUKI_DATABASE_URL",
     )
     parser.add_argument(
         "--cards",

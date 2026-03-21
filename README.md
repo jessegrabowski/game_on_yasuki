@@ -11,7 +11,7 @@ server.
 pixi install
 
 # Create and seed the card database
-createdb l5r
+createdb yasuki
 pixi run install-db
 
 # Play
@@ -22,7 +22,7 @@ No PostgreSQL? Use Docker instead:
 
 ```bash
 pixi run docker-up                                                    # start DB
-L5R_DATABASE_URL=postgresql://l5r:l5r@localhost:5432/l5r pixi run play  # play
+YASUKI_DATABASE_URL=postgresql://yasuki:yasuki@localhost:5432/yasuki pixi run play  # play
 ```
 
 ## What's in the Box

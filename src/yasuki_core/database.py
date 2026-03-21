@@ -13,7 +13,7 @@ def get_connection_string() -> str:
     """
     Get PostgreSQL connection string from environment or use default.
 
-    Checks L5R_DATABASE_URL first, then DATABASE_URL (used by Railway and
+    Checks YASUKI_DATABASE_URL first, then DATABASE_URL (used by Railway and
     other PaaS providers), then falls back to localhost.
 
     Returns
@@ -22,7 +22,7 @@ def get_connection_string() -> str:
         PostgreSQL connection string
     """
     return os.environ.get(
-        "L5R_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/l5r")
+        "YASUKI_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/yasuki")
     )
 
 

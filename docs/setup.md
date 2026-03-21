@@ -65,7 +65,7 @@ psql --version
 ## Create and Seed the Database
 
 ```bash
-createdb l5r
+createdb yasuki
 pixi run install-db
 ```
 
@@ -74,10 +74,10 @@ a password. For custom setups:
 
 ```bash
 # Explicit DSN
-pixi run install-db -- --dsn "postgresql://user:pass@host:5432/l5r"
+pixi run install-db -- --dsn "postgresql://user:pass@host:5432/yasuki"
 
 # Or via environment variable
-export L5R_DATABASE_URL="postgresql://user:pass@host:5432/l5r"
+export YASUKI_DATABASE_URL="postgresql://user:pass@host:5432/yasuki"
 pixi run install-db
 ```
 

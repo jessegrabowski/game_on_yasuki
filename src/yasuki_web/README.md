@@ -230,7 +230,7 @@ docker run -p 8000:8000 game-yasuki-api
 
 ## Environment Variables
 
-- `L5R_DATABASE_URL` - PostgreSQL connection string
+- `YASUKI_DATABASE_URL` - PostgreSQL connection string
 - `PORT` - Server port (default: 8000)
 
 ## CORS Configuration
@@ -254,7 +254,7 @@ Update `app/api/main.py` to add production domain when deploying.
 
 **Database connection errors:**
 - Ensure PostgreSQL is running
-- Check `L5R_DATABASE_URL` environment variable
+- Check `YASUKI_DATABASE_URL` environment variable
 - Run database initialization: `python -m app.install.install_db`
 
 **CORS errors in browser:**

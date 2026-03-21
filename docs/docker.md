@@ -14,10 +14,10 @@ Start PostgreSQL and seed the card database:
 pixi run docker-up
 ```
 
-Wait for `l5r-db-init exited with code 0`, then launch the GUI:
+Wait for `yasuki-db-init exited with code 0`, then launch the GUI:
 
 ```bash
-L5R_DATABASE_URL=postgresql://l5r:l5r@localhost:5432/l5r pixi run play
+YASUKI_DATABASE_URL=postgresql://yasuki:yasuki@localhost:5432/yasuki pixi run play
 ```
 
 ## Database + API Server

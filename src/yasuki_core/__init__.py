@@ -5,7 +5,7 @@ import sys
 from yasuki_core.paths import DATABASE_DIR
 
 DEFAULT_DSN = os.environ.get(
-    "L5R_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/l5r")
+    "YASUKI_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/yasuki")
 )
 
 __all__ = ["DEFAULT_DSN", "DATABASE_DIR", "setup_logging"]

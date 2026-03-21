@@ -244,9 +244,9 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_USER: l5r
-          POSTGRES_PASSWORD: l5r
-          POSTGRES_DB: l5r
+          POSTGRES_USER: yasuki
+          POSTGRES_PASSWORD: yasuki
+          POSTGRES_DB: yasuki
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -267,10 +267,10 @@ jobs:
 
       - name: Initialize database
         env:
-          L5R_DATABASE_URL: postgresql://l5r:l5r@localhost:5432/l5r
+          YASUKI_DATABASE_URL: postgresql://yasuki:yasuki@localhost:5432/yasuki
         run: pixi run install-db
 
       - name: Run tests
         env:
-          L5R_DATABASE_URL: postgresql://l5r:l5r@localhost:5432/l5r
+          YASUKI_DATABASE_URL: postgresql://yasuki:yasuki@localhost:5432/yasuki
         run: pixi run pytest tests/ --ignore=tests/yasuki_gui/

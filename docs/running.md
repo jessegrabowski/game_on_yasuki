@@ -36,10 +36,10 @@ This starts the FastAPI server on `http://localhost:8000`.
 
 The application checks these sources in order:
 
-1. `L5R_DATABASE_URL` environment variable
+1. `YASUKI_DATABASE_URL` environment variable
 2. `DATABASE_URL` environment variable (PaaS convention)
 3. `database.dsn` in `config.yaml` (GUI only)
-4. Default: `postgresql://localhost/l5r`
+4. Default: `postgresql://localhost/yasuki`
 
 ### Card Images
 
