@@ -100,8 +100,7 @@ async function init() {
 }
 
 function toggleHelp() {
-  const el = $('searchHelp');
-  el.style.display = el.style.display === 'none' ? '' : 'none';
+  $('searchHelp').classList.toggle('hidden');
 }
 
 let allTypes = [];

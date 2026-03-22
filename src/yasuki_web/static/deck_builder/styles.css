@@ -16,6 +16,7 @@
   --ink: #0d0a07;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+.hidden { display: none; }
 body {
   font-family: 'Noto Serif', 'Georgia', serif;
   background: var(--bg);
