@@ -85,6 +85,9 @@ async function init() {
   $('clearBtn').addEventListener('click', doClearDeck);
   $('exportBtn').addEventListener('click', doExportDeck);
   $('importBtn').addEventListener('click', () => $('importFileInput').click());
+  $('deckNameInput').addEventListener('input', () => {
+    $('deckNameInput').closest('.deck-name-row').classList.remove('shake');
+  });
   $('importFileInput').addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -252,7 +255,16 @@ function doClearDeck() {
 }
 
 function doExportDeck() {
-  const name = $('deckNameInput').value.trim() || 'My Deck';
+  const input = $('deckNameInput');
+  const name = input.value.trim();
+  if (!name) {
+    input.focus();
+    const row = input.closest('.deck-name-row');
+    row.classList.remove('shake');
+    void row.offsetWidth;
+    row.classList.add('shake');
+    return;
+  }
   setDeckName(name);
   const yaml = serializeDeck(getDeck());
   const filename = name.toLowerCase().replace(/[^a-z0-9]+/g, '_') + '.yaml';

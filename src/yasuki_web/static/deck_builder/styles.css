@@ -124,6 +124,20 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   border-color: var(--accent-dark);
   box-shadow: 0 0 0 1px var(--accent-dark);
 }
+.deck-name-row.shake input {
+  border-color: #c55;
+  box-shadow: 0 0 0 1px #c55;
+}
+.deck-name-row.shake {
+  animation: shake 0.4s ease-in-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
 
 /* Search & Filters */
 .filters {

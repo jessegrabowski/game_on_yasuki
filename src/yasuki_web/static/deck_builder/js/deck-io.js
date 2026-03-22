@@ -1,4 +1,4 @@
-let _deckName = 'My Deck';
+let _deckName = '';
 
 export function getDeckName() {
   return _deckName;

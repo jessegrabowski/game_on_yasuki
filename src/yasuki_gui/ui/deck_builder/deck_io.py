@@ -14,7 +14,7 @@ _SET_SUFFIX = re.compile(r"^(.*?)\s+\[([^\]]+)\]\s*$")
 def serialize_deck(
     deck_state,
     repository,
-    deck_name: str = "My Deck",
+    deck_name: str = "",
 ) -> str:
     """
     Serialize a DeckState to the portable YAML decklist format.

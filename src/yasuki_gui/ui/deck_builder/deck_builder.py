@@ -37,7 +37,7 @@ class DeckBuilderWindow:
 
         self._repository = DeckBuilderRepository()
         self._deck_state = DeckState()
-        self._deck_name = tk.StringVar(value="My Deck")
+        self._deck_name = tk.StringVar(value="")
         self._updating_lists = False
         self._filter_options = FilterOptions()
         self._search_debounce_id = None
@@ -97,9 +97,8 @@ class DeckBuilderWindow:
         name_frame = tk.Frame(col)
         name_frame.pack(fill="x", pady=(0, 8))
         tk.Label(name_frame, text="Deck:").pack(side="left")
-        tk.Entry(name_frame, textvariable=self._deck_name).pack(
-            side="left", fill="x", expand=True, padx=(6, 4)
-        )
+        self._name_entry = tk.Entry(name_frame, textvariable=self._deck_name)
+        self._name_entry.pack(side="left", fill="x", expand=True, padx=(6, 4))
         tk.Button(name_frame, text="Import", command=self._import_deck).pack(side="left", padx=2)
         tk.Button(name_frame, text="Export", command=self._export_deck).pack(side="left")
 
@@ -258,7 +257,10 @@ class DeckBuilderWindow:
         self._refresh_deck_lists()
 
     def _export_deck(self) -> None:
-        name = self._deck_name.get().strip() or "My Deck"
+        name = self._deck_name.get().strip()
+        if not name:
+            self._flash_name_entry()
+            return
         yaml = serialize_deck(self._deck_state, self._repository, deck_name=name)
         default_filename = name.lower()
         default_filename = "".join(c if c.isalnum() else "_" for c in default_filename)
@@ -273,6 +275,20 @@ class DeckBuilderWindow:
             return
         with open(path, "w", encoding="utf-8") as f:
             f.write(yaml)
+
+    def _flash_name_entry(self) -> None:
+        entry = self._name_entry
+        entry.focus_set()
+        original_bg = entry.cget("background")
+        entry.configure(background="#ffcccc")
+
+        def restore():
+            try:
+                entry.configure(background=original_bg)
+            except tk.TclError:
+                pass
+
+        self.win.after(800, restore)
 
     def _import_deck(self) -> None:
         path = filedialog.askopenfilename(

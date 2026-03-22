@@ -150,6 +150,10 @@ class TestSerializeDeck:
         yaml = serialize_deck(DeckState(), repo, deck_name="Empty")
         assert yaml == "name: Empty\n"
 
+    def test_empty_name_still_serializes(self, repo):
+        yaml = serialize_deck(DeckState(), repo)
+        assert yaml.startswith("name:")
+
     def test_omits_empty_sections(self, repo):
         state = DeckState().add_card("ambush", 10)
         yaml = serialize_deck(state, repo)

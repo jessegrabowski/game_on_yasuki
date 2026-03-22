@@ -5,7 +5,7 @@ import { addCard, clearDeck, getDeck } from '../../../src/yasuki_web/static/deck
 const CARD_PERS = { id: 'doji_hoturi', name: 'Doji Hoturi', extended_title: 'Doji Hoturi', type: 'Personality', side: 'DYNASTY' };
 const CARD_STR  = { id: 'ambush',      name: 'Ambush',      extended_title: 'Ambush',      type: 'Strategy',   side: 'FATE' };
 const CARD_SH   = { id: 'kyuden_doji', name: 'Kyuden Doji', extended_title: 'Kyuden Doji', type: 'Stronghold', side: 'PRE_GAME' };
-beforeEach(() => { clearDeck(); setDeckName('My Deck'); });
+beforeEach(() => { clearDeck(); setDeckName(''); });
 describe('parseDeckYaml', () => {
   it('parses deck name', () => {
     assert.equal(parseDeckYaml('name: My Crane Deck').name, 'My Crane Deck');
@@ -245,8 +245,8 @@ describe('confusing deck round-trip', () => {
   });
 });
 describe('getDeckName / setDeckName', () => {
-  it('defaults to My Deck', () => {
-    assert.equal(getDeckName(), 'My Deck');
+  it('defaults to empty string', () => {
+    assert.equal(getDeckName(), '');
   });
   it('stores and retrieves name', () => {
     setDeckName('Test');
