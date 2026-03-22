@@ -1,0 +1,488 @@
+set: Promotional–Imperial
+cards:
+  - title: A Time of Legends
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      your turn two turns from now begins, after each time a Shadowlands card is destroyed by an action or battle resolution,
+      the player who took the action or whose army opposed the card during resolution gains 2 Honor.
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Promo
+    artist: Eric David Anderson
+    number: 1
+
+  - title: Annexation
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, you may
+      discard the Imperial Favor and pay 15 Gold to gain an additional Province to the left of your leftmost Province.
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Promo
+    artist: Bryon Wackwitz
+    number: 2
+
+  - title: Designer Wins
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, if your
+      face appears on this card, then you win the game.
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    errata_text: Cris Dornaus took this picture, and her face should also appear on this card.
+    rarity: Promo
+    artist: Photo
+    flavor: Lump it, Fanboy!
+    number: 3
+
+  - title: Doom of the Dark Lord
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'Each player draws an additional card at the end of his turn. After each time a player must draw a card but cannot
+      because his deck is empty, destroy his rightmost Province.Open: Put this Event into play.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Clan Wars (Imperial)
+    - Legacy
+    - Rain of Blood (Diamond)
+    - War of the Seals (Onyx Edition)
+    rarity: Promo
+    artist: Ron Spencer
+    number: 4
+
+  - title: Kachiko's Kiss
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, resolve
+      the following effects: If this is the first time this game any copy of this trait has resolved without having its effects
+      negated, lose 10 Honor, remove the Imperial Favor from the game, shuffle this Event into your deck instead of discarding
+      it, and until the game ends, Dark Lord''s Favor may not be played. Otherwise, return the Imperial Favor to the game and
+      end the ongoing effect restricting the playing of Dark Lord''s Favor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Promo
+    artist: KC Lancaster
+    number: 5
+
+  - title: The Farther You Fall
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, the player
+      who controls the Imperial Favor loses 7 Honor, which will not be negated by Favor actions.
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    card_notes: Art forms a diptych with The False Hoturi.
+    rarity: Promo
+    artist: Matt Wilson
+    flavor: '"The higher you fly, my Lord, the farther you have to fall." - Bayushi Kachiko'
+    number: 6
+
+  - title: Time of the Void
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the game ends, players with 11 or more Family Honor may not Proclaim.
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Promo
+    artist: Heather Bruton
+    number: 7
+
+  - title: Seer
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Retainer
+    gold_cost: 4
+    text: 'Repeatable Reaction, w: Once per Event by title, before an Event in a Province''s trait resolves, it does not resolve
+      this turn; turn it face-down.'
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Promo
+    artist: Douglas Shuler
+    number: 8
+
+  - title: Seikua
+    type: Personality
+    clan: Brotherhood of Shinsei
+    deck: Dynasty
+    keywords:
+    - Monk
+    force: 1
+    chi: 2
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 1
+    text: Will not attach Followers or ItemsSeikua has +1F/+1C for each Ring you control.
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    errata_text: Was errata'd in the Obsidian Edition Rulebook
+    rarity: Promo
+    artist: Randy Gallegos
+    flavor: The Tao of Shinsei is more than clever sayings and trite wisdom; the wisdom of Shinsei contains the secrets of the
+      Universe.
+    number: 9
+
+  - title: Hida Sukune
+    extended_title: Hida Sukune • Experienced
+    type: Personality
+    clan: Crab,Toturi's Army
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Crab Clan
+    - Experienced
+    - Samurai
+    - Shadow
+    - Toturi's Army
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Will not join a player that controls any Shadowlands cards.May not be targeted by the Terrible Standard of Fu Leng''s
+      ability.After your turn begins, if Sukune is honorably dead, you may shuffle him into your Dynasty deck.Battle: Target
+      an enemy Shadowlands card. Remove it and Sukune from the game.'
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Promo
+    artist: Craig Maher
+    number: 10
+
+  - title: The False Hoturi
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Deceiver
+    - Samurai
+    - Scorpion Clan
+    force: 3
+    chi: 5
+    gold_cost: 9
+    personal_honor: 0
+    text: 'This card is considered The Egg of P''an Ku for deck construction and checking the Unique restriction.Will not join
+      a Crane Clan player.Repeatable Limited, w: All Crane Clan players lose 2 Honor.'
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    card_notes: Art forms a diptych with The Farther You Fall.
+    rarity: Promo
+    artist: Matt Wilson
+    flavor: '"He is not you, my dearest Hoturi, he is better than you. But the others will believe he is you, and while I hold
+      you here, he will be the doom of your Clan."'
+    number: 11
+
+  - title: Otomo Sorai
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Guest
+    - Imperial
+    force: 0
+    chi: 1
+    gold_cost: 5
+    honor_requirement: 8
+    personal_honor: 4
+    text: 'When your Honor-producing Holding bows as a cost to produce Honor: It produces 1 additional Honor.After Sorai is
+      destroyed, if your Family Honor is 2 or higher: Lose half your current Family Honor, rounded down.'
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Promo
+    artist: Bonnie Hill
+    number: 12
+
+  - title: Seppun Baka
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Sycophant
+    force: 0
+    chi: 1
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 1
+    text: When bowed during a lobbying attempt, Baka is considered to have a Personal Honor of seven.
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Promo
+    artist: Ron Spenser
+    flavor: '"You look upon me with disgust, but I assure you that my whispers are far more potent than your swords and spears."'
+    number: 13
+
+  - title: Prophecies of Uikku
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 2
+    focus: 3
+    text: 'You and your cards will not be affected by Doom Events (this does not negate previous ongoing effects.)Reaction:
+      After a Doom Event resolves: Give this Personality +2F/+3C until the end of your next turn.'
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Promo
+    artist: Ellym Sirac
+    number: 14
+
+  - title: Tao of Shinsei
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 1
+    focus: 3
+    text: 'Attaches to a Monk ignoring Gold cost.Reaction: Any number of times per turn, but only once per entering play, after
+      a Ring enters play: Straighten this Personality.Battle/Open: Any number of times per turn, discard one of your Rings from
+      play: Straighten this Personality.'
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Promo
+    artist: KC Lancaster
+    number: 15
+
+  - title: Exile
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 3
+    text: 'Reaction: After a player targets, or chooses as the performer, one of his Personalities with or for an action that
+      causes an Honor loss or causes the Personality to be dishonored: He may face exile. That player must discard the top card
+      of his Fate deck. If its Focus Value is less than or equal to the Personality''s base Personal Honor, the Personality
+      is removed from the game. That player loses Honor equal to the Personality''s base Personal Honor.'
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Promo
+    artist: William O'Connor
+    number: 16
+
+  - title: The Brotherhood of Shinsei
+    type: Stronghold
+    clan: Brotherhood of Shinsei
+    deck: Pre-Game
+    province_strength: 6
+    gold_production: 3
+    starting_honor: 4
+    text: 'Repeatable Reaction, w: Before you would trigger a Ring''s printed trait that would put it into play, or if you ever
+      meet the conditions for a Ring''s printed action which would put it into play, search your Fate deck for that Ring, show
+      it, and put it into your hand. (If Reacting to meeting a trait''s trigger, you then have a chance to trigger that trait
+      after taking this action.)'
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes.
+    rarity: Promo
+    artist: Eric David Anderson
+    number: 17
+
+  - title: The War Fortress of the Crab
+    type: Stronghold
+    clan: Crab
+    deck: Pre-Game
+    province_strength: 8
+    gold_production: 4
+    starting_honor: 3
+    text: 'Absent Battle/Open, w: Give the current battlefield''s Province +3 strength.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition border.
+    rarity: Promo
+    artist: Matt Wilson
+    number: 18
+
+  - title: The Esteemed House of the Crane
+    type: Stronghold
+    clan: Crane
+    deck: Pre-Game
+    province_strength: 5
+    gold_production: 4
+    starting_honor: 5
+    text: 'Repeatable Limited, w: Gain 2 Honor.'
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition border.
+    rarity: Promo
+    artist: Randy Gallegos
+    number: 19
+
+  - title: The Mountain Keep of the Dragon
+    type: Stronghold
+    clan: Dragon
+    deck: Pre-Game
+    province_strength: 5
+    gold_production: 4
+    starting_honor: 4
+    text: After one of your Provinces is destroyed, permanently give each of your remaining Provinces +2 strength.
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition border.
+    rarity: Promo
+    artist: Mike Raabe
+    number: 20
+
+  - title: The Yoritomo Alliance
+    type: Stronghold
+    clan: Mantis
+    deck: Pre-Game
+    province_strength: 6
+    gold_production: 4
+    starting_honor: 2
+    text: 'Repeatable Reaction: Before bowing this Stronghold to produce Gold, if your Family Honor is 0 or higher, lose any
+      amount of Honor from 0 up to your current Family Honor total to have this Stronghold produce additional Gold equal to
+      the amount of Honor you lost which may only pay for one cost; you cannot give to another player, negate, substitute, increase,
+      or decrease this Honor loss.'
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes.
+    rarity: Promo
+    artist: Tom Biondolillo
+    number: 21
+
+  - title: The Sacred Temple of the Phoenix
+    type: Stronghold
+    clan: Phoenix
+    deck: Pre-Game
+    keywords:
+    - Temple
+    province_strength: 5
+    gold_production: 3
+    starting_honor: 6
+    text: 'w: When paying for a Spell or Shugenja, produce 5 Gold which may only pay for that card. w: When paying for a Spell
+      or Shugenja, produce 7 Gold which may only pay for that card and if the latter, you may not Proclaim him; after the Shugenja
+      attaches the Spell or enters play, permanently give him Shadowlands.'
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition border.
+    rarity: Promo
+    artist: Aaron Boyd,Mike Raabe
+    number: 22
+
+  - title: The Ruined Fortress of the Scorpion
+    type: Stronghold
+    clan: Scorpion
+    deck: Pre-Game
+    province_strength: 11
+    gold_production: 2
+    starting_honor: 0
+    text: You will not lose, or be eliminated, by Dishonor.You will not win an Honor Victory.Once per game, if your Family Honor
+      is ever -20 or below, permanently give your Provinces -11 strength.
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes.
+    rarity: Promo
+    artist: Eric David Anderson
+    number: 23
+
+  - title: The Shadowlands Horde
+    type: Stronghold
+    clan: Shadowlands
+    deck: Pre-Game
+    province_strength: 5
+    gold_production: 0
+    starting_honor: -19
+    text: 'You do not gain or lose Honor; this is not negation.You may not take Political actions or actions that cause other
+      players unconditional Honor losses.You may not be invited as an ally, or invite allies.Negate all Fear effects upon your
+      cards.Repeatable Reaction, w: When paying for a Shadowlands card, lower the card''s Gold Cost by 4 until it is paid.'
+    legality:
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes.
+    rarity: Promo
+    artist: Matt Wilson
+    number: 24
+
+  - title: Toturi's Army
+    type: Stronghold
+    clan: Toturi's Army
+    deck: Pre-Game
+    province_strength: 6
+    gold_production: 3
+    starting_honor: 2
+    text: You may ignore Honor Requirements when bringing Unaligned Human Personalities or Toturi's Army Personalities into
+      play.Your deck is not legal if it includes three or more Shadowlands cards.
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes.,The Imperial promo version of this Stronghold was misprinted with the Gold Production and Starting
+      Family Honor
+    rarity: Promo
+    artist: Randy Gallegos
+    number: 25
+
+  - title: The Provincial Estate of the Unicorn
+    type: Stronghold
+    clan: Unicorn
+    deck: Pre-Game
+    province_strength: 6
+    gold_production: 5
+    starting_honor: 4
+    text: 'Repeatable Battle/Open, w: Give one of your target cards Cavalry.'
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition border.
+    rarity: Promo
+    artist: Eric David Anderson
+    number: 26

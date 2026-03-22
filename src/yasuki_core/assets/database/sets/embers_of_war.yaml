@@ -1,0 +1,3389 @@
+set: Embers of War
+cards:
+  - title: Hotei's Contentment
+    type: Celestial
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Fortune
+    text: 'Before you gain Honor from the Proclaim action, if the Personality''s base PH is 3 or lower: Increase the Honor gain
+      by 1.Open: Discard this card and target a Personality: He may not assign to, and will not move into, an attacking army.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Edwin David
+    flavor: The moments of peace are few, and thus must be savored all the more.
+    number: 1
+
+  - title: Lion Ancestor
+    type: Proxy
+    deck: Other
+    keywords:
+    - Ancestor
+    - Lion Clan
+    - Samurai
+    - Spirit
+    force: 2
+    chi: 2
+    gold_cost: 0
+    personal_honor: 3
+    text: May not be included in decks.
+    legality:
+    - Not Legal (Proxy)
+    rarity: Common
+    artist: Matt Zeilinger
+    flavor: '"If you face a single Lion, he is never alone. The strength of ten thousand ancestors fills him from the fields
+      of Yomi. We are, each of us, an army." - Kitsu Tamasine'
+    number: 1
+
+  - title: Lady Matsu's Rage
+    type: Celestial
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'After your action resolves that destroyed any Personalities: Remove them from the game.Battle: Choose your performing
+      unbowed attacking Personality, target an enemy card, and discard this card: Bow the target. After the next time (this
+      turn) it straightens, destroy it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2010 Name a Card - Diego Lastorta
+    rarity: Rare
+    artist: Edwin David
+    flavor: Let the Akodo plan. The Matsu will destroy.
+    number: 2
+
+  - title: Haruki's Deer
+    type: Proxy
+    clan: Mantis
+    deck: Other
+    keywords:
+    - Deer
+    - Mantis Clan
+    - Nonhuman
+    - Spirit
+    force: 2
+    chi: 2
+    gold_cost: 0
+    personal_honor: 3
+    text: 'May not be included in decks.Limited: If another player has higher Family Honor than you: Gain 2 Honor.'
+    legality:
+    - Not Legal (Proxy)
+    rarity: Common
+    artist: Heather V. Kreiter
+    flavor: '"The spirits of Chikushudo are rarely as innocuousas their mortal counterparts. You see a deer, butI see a deadly
+      warrior." - Kitsune Haruki'
+    number: 2
+
+  - title: Gaining Advantage
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Political
+    - Winter
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, you may
+      search your Fate deck for a non-Unique Strategy with a Political ability, show it, put it in your hand, and discard a
+      card.
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Sam Kennedy
+    flavor: The Crane sought clear dominance with every small victory.
+    number: 3
+
+  - title: Assassin
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Duelist
+    - Assassin
+    force: 0
+    chi: 3
+    gold_cost: 0
+    personal_honor: 0
+    text: May not be included in decks.
+    legality:
+    - Not Legal (Proxy)
+    rarity: Common
+    artist: Chris Pritchard
+    flavor: The most perfect implement of vengeanceis one that is never suspected.
+    number: 3
+
+  - title: Growing Hostility
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, destroy
+      all non-Unique Holdings with a printed Gold Cost of 0 and, until the game ends, Holdings in and out of play have a minimum
+      Gold Cost of 1.
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: John Moriarty
+    flavor: The Spider were the victims, but they were not the only ones to suffer.
+    number: 4
+
+  - title: Emerald Magistrate
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Duelist
+    - Imperial
+    - Magistrate
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 0
+    personal_honor: 3
+    text: May not be included in decks.
+    legality:
+    - Not Legal (Proxy)
+    rarity: Common
+    artist: Andy Hepworth
+    flavor: '"They travel from city to city, never tiring intheir search for justice. They are the purestexpression of the Empress''s
+      will in the mortalrealm." - The Journal of Seppun Tashime'
+    number: 4
+
+  - title: Fresh Recruit
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Ronin
+    - Samurai
+    force: 2
+    chi: 2
+    gold_cost: 0
+    personal_honor: 2
+    text: May not be included in decks.
+    legality:
+    - Not Legal (Proxy)
+    rarity: Common
+    artist: David Horne
+    flavor: Trained over the course of months ratherthan years, they have value on the battlefieldto be sure. Their greatest
+      strength, however,is that they are utterly expendable.
+    number: 5
+
+  - title: The Scorpion Wall is Finished
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the game ends, other players' actions will not discard cards from your hand, and if a player has resolved two actions
+      that put cards in his hand in one phase, no more cards will be put into his hand that phase.
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    errata_text: The word "after" changed to "if" via technical erratum.
+    rarity: Uncommon
+    artist: J. Edwin Stevens
+    flavor: The Scorpion readily accepted the aid of the Crab - together they held a dark secret.
+    number: 6
+
+  - title: Guest
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Monk
+    force: 1
+    chi: 1
+    gold_cost: 0
+    personal_honor: 1
+    text: May not be included in decks.
+    legality:
+    - Not Legal (Proxy)
+    rarity: Common
+    artist: Florian Stitz
+    flavor: '"What better opportunity to teach others tostretch the boundaries of their perceptionsthan that of a lengthy visit
+      in another''s court.What a wonderful teaching opportunity!"'
+    number: 6
+
+  - title: Shrine to Nimuro
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Temple
+    gold_cost: 3
+    text: 'w: Produce 2 Gold, or 3 Gold if you control a Tactician.Limited, w: Bow your performing Lion Clan Tactician to lower
+      a target a Province''s strength to 0.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 Make a Card - Albert Mialet
+    rarity: Uncommon
+    artist: Drew Baker
+    flavor: Lion's roar, Lion's courage, Lion's soul.
+    number: 7
+
+  - title: Staging Grounds
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Castle
+    gold_cost: 4
+    text: 'w: Produce 3 Gold, or 4 Gold if paying for a card with a printed Gold Cost of 9 or more which may only pay for that
+      card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2008 Masterpiece - Jeff Williamson
+    rarity: Common
+    artist: Charles Urbach
+    flavor: With the threat of the Taint gone, the Crab began making regular forays into the Shadowlands in hopes of reclaiming
+      land for purification.
+    number: 8
+
+  - title: Surveillance Outpost
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Castle
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Limited: If you have fewer Provinces than each other player, or exactly one Province, give your
+      performing Siege Personality Conqueror.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Gong Studios
+    flavor: We saw the glint of steel, like teeth, from a long way off.
+    number: 9
+
+  - title: Temple Fortress
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Castle
+    - Temple
+    gold_cost: 4
+    text: After the first time each turn you bow this Holding, gain 1 Honor.
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: Albert Tavira
+    flavor: '"I mourn their deaths, for I know their actions are not their own. They are compelled by a force they cannot resist,
+      but we cannot spare their lives despite the fact." - Yung'
+    number: 10
+
+  - title: Terraced Farm
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Farm
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Battle, w: Give each of your Ashigaru cards at the current battlefield +1F.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Luis NCT
+    flavor: There are many roads to prosperity.
+    number: 12
+
+  - title: Hida Bakishi
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Crab Clan
+    - Friend of Thunder
+    force: 7
+    chi: 2
+    gold_cost: 9
+    personal_honor: 0
+    text: 'Reaction: After an action resolves that Bakishi performed and that destroyed a card at the current battlefield: The
+      next time (this turn) another player''s action targets Bakishi, negate its effects on him.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2010 Winner's Choice - Josh Griffis
+    rarity: Common
+    artist: Cos Koniotis
+    flavor: All berserkers throw themselves off the cliffs of sanity. Some never climb their way back.
+    number: 13
+
+  - title: Hida Osote
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Crab Clan
+    - Samurai
+    - Sensei
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: After Osote enters play, discard all your other Sensei Personalities.After the first time each turn another player's
+      action targets your Crab Clan Personality at Osote's location, the player discards a card after the action ends.
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Ben Peck
+    flavor: '"Practice the basics."'
+    number: 14
+
+  - title: Hiruma Moritoki
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Samurai
+    - Scholar
+    - Scout
+    force: 4
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 2
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Diego Gisbert Llorens
+    flavor: '"Observing the enemy is only half the task of a well-trained scout. The other half is knowing him."'
+    number: 15
+
+  - title: Kaiu Onizuka
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Unique
+    - Crab Clan
+    - Samurai
+    - Siege
+    - Topaz Champion
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Battle: Ranged Attack with strength equal to the current battlefield''s province''s strength.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2010 Topaz Championship - Dan Jacobson
+    rarity: Rare
+    artist: William O'Connor
+    flavor: As the Empire continued to rebuild and expand, the value of the Kaiu's insights increased tenfold. Some became more
+      important than the average.
+    number: 16
+
+  - title: Kaiu Tojikana
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Crab Clan
+    - Samurai
+    - Siege
+    force: 5
+    chi: 3
+    gold_cost: 9
+    honor_requirement: 3
+    personal_honor: 3
+    text: 'Limited: If none of your provinces have been destroyed since your last turn began, or you are a Scorpion Clan player:
+      Gain 2 Honor.Battle: Target an enemy card without attachments: Bow it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Erich Schreiner
+    flavor: Thanks to the aid of the Kaiu, the castles of the Scorpion were never more resilient, if a little less menacing.
+    number: 17
+
+  - title: Yasuki Makoto
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crab Clan
+    - Kolat
+    - Merchant
+    force: 2
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Your Holdings enter play for 1 less Gold. Economic Home Battle, w: Target an enemy Personality. His controller may
+      pay 4 Gold. If he does, he loses 1 Honor. If he does not, dishonor the target and move him home.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Mario Wibisono
+    flavor: Few know the irony of her name.
+    number: 18
+
+  - title: Asahina Konomi
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Air
+    - Artisan
+    - Crane Clan
+    - Shugenja
+    force: 2
+    chi: 5
+    gold_cost: 7
+    honor_requirement: 2
+    personal_honor: 4
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Anna Christenson
+    flavor: '"The breath of the world is my brush. The smallest hopes can fly when you paint them wings."'
+    number: 19
+
+  - title: Daidoji Akeha
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Unique
+    - Crane Clan
+    - Daimyo
+    - Iron Crane
+    - Samurai
+    - Scout
+    force: 5
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Reaction: After your Recon action from a Strategy resolves: Draw a card.Recon Limited: Discard a card: Search your
+      Fate deck for a non-Unique card with a Recon ability, show it, and put it in your hand.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Mario Wibisono
+    flavor: '"Surely Kikaze''s daughter will improve the luck of the Crane." - Doji Takara'
+    number: 20
+
+  - title: Daidoji Narizane
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Imperial
+    - Iron Crane
+    - Samurai
+    - Scout
+    - Yojimbo
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Battle: Target an enemy Personality: Bow zero or more different cards in his unit up to the number of Recon actions
+      you have taken this turn.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Sergio Camarena
+    flavor: '"You only get one try, and one is not enough."'
+    number: 21
+
+  - title: Kakita Gonji
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Loyal
+    - Crane Clan
+    - Samurai
+    - Sensei
+    force: 2
+    chi: 5
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'After Gonji enters play: Discard all your other Sensei Personalities.Before you focus: Once per duel, instead of
+      focusing that time, you may give your Crane Clan Personality in the duel +4 to his duel stat until the duel ends.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: April Lee
+    flavor: '"Watch again, and perfect your form."'
+    number: 22
+
+  - title: Kakita Kae
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crane Clan
+    - Storyteller
+    force: 2
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'After a Battle action targets Kae, you may discard the Imperial Favor to negate Kae''s destruction, bowing, and movement
+      from the action''s effects.Battle: Move Kae home.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 MageCon Charity Auction - Giovanni Aviles
+    rarity: Rare
+    artist: Mario Wibisono
+    flavor: Even the Scorpion are wary of her sweet words.
+    number: 23
+
+  - title: Kakita Kenta
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Crane Clan
+    - Magistrate
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 3
+    personal_honor: 3
+    text: 'Iaijutsu Reaction: After an action resolves during which Kenta won a duel, target a dishonorable enemy Personality
+      at the current battlefield: Move him home.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Veronica V. Jones
+    flavor: '"His technique is overshadowed by the uses he puts it to." - Kakita Gonji'
+    number: 24
+
+  - title: Kitsuki Daisuke
+    extended_title: Kitsuki Daisuke • Experienced
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Unique
+    - Courtier
+    - Dragon Clan
+    - Experienced
+    - Magistrate
+    force: 4
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 10
+    personal_honor: 4
+    text: 'Iaijutsu Reaction: After an action resolves during which Daisuke won a duel: Draw a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Aaron Miller
+    flavor: '"I am just as mistaken about the evidence as you are mistaken about fashion trends at Winter Court. Tell me about
+      your meeting with the silk merchant, or name your champion."'
+    number: 25
+
+  - title: Kitsuki Jakuei
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Courtier
+    - Dragon Clan
+    - Imperial
+    - Magistrate
+    force: 3
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Political Reaction: After an action resolves during which Jakuei won a duel, take the Imperial Favor.Favor Political
+      Battle: Bow a target enemy Personality. You may discard the Imperial Favor to move him home.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Tony Foti
+    flavor: '"Are you certain this is not a counterfeit?"'
+    number: 26
+
+  - title: Mirumoto Hikaro
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Loyal
+    - Dragon Clan
+    - Samurai
+    - Sensei
+    force: 2
+    chi: 5
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'After Hikaro enters play: Discard all your other Sensei Personalities.Before you focus in a duel involving your Dragon
+      Clan Personality: Once per duel, you may focus from your discard pile instead. Remove that card from the game after the
+      duel ends.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Drew Baker
+    flavor: 'Sun and Moon: two swords, two strikes.'
+    number: 27
+
+  - title: Mirumoto Kouzei
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Dragon Clan
+    - Samurai
+    force: 5
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Battle: Target an enemy card with equal or lower Force: Bow it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Mario Wibisono
+    flavor: '"No matter how benign the Naga were once, if they are eager to leap onto my swords, I am happy to oblige them."'
+    number: 28
+
+  - title: Tamori Seiken
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Dragon Clan
+    - Earth
+    - Mountaineer
+    - Shugenja
+    force: 2
+    chi: 3
+    gold_cost: 4
+    honor_requirement: 8
+    personal_honor: 3
+    text: (Once per turn, as an Absent Engage, move your unbowed Personality in a Cavalry unit to this battle. Shugenja may
+      attach and cast Spells.)
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Aurelien Hubert
+    flavor: '"Master the earth, and you will have the most faithful of mounts. It does not tire, needs no food or water, and
+      will never flee in fear. What more do I need?"'
+    number: 29
+
+  - title: Togashi Rikyou
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Monk
+    - Tattooed
+    - Water
+    force: 5
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 3
+    personal_honor: 1
+    text: 'Battle: Even if Rikyou is bowed, if any enemy units are at the current battlefield: Move him there. Straighten his
+      unit if he moved.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Heather V. Kreiter
+    flavor: '"On the contrary," he called as he made his leap, "this is exactly what rooftops were made for."'
+    number: 30
+
+  - title: Akodo Tamisu
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Tactician
+    - Lion Clan
+    - Samurai
+    - Sensei
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 2
+    text: 'After Tamisu enters play: Discard all your other Sensei Personalities.After your Tactical, Bushido Virtue, or Terrain
+      action resolves: Give a Lion Clan Personality +1F.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Drew Baker
+    flavor: '"There is no greater virtue than to teach. There is no greater service to the future."'
+    number: 31
+
+  - title: Akodo Uehara
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Lion Clan
+    - Samurai
+    force: 1
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 6
+    personal_honor: 2
+    text: 'Uehara has +1F while he opposes a Phoenix Clan Personality.Limited: Look at the top card of your Fate deck. You may
+      leave it there, discard it, or put it at the bottom of the deck.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Carlos NCT
+    flavor: He unfurled the scrolls on the table and frowned. The strategies used by the Unicorn's unknown attackers somehow
+      felt familiar…
+    number: 32
+
+  - title: Ikoma Hakige
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Loyal
+    - Unique
+    - Daimyo
+    - Lion Clan
+    - Paragon
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 12
+    personal_honor: 4
+    text: 'Battle: Target another Personality: Move him home or give him a Force bonus equal to his Personal Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Paul (Prof.) Herbert
+    flavor: '"He is gruff and unpleasant, and often mistaken for a Matsu. But his skill and his honor are without reproach,
+      and so we forgive him his eccentricities." - Akodo Dairuko'
+    number: 33
+
+  - title: Ikoma Shika
+    extended_title: Ikoma Shika • Experienced
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Experienced
+    - Lion Clan
+    - Samurai
+    - Scout
+    force: 5
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Battle: You may discard a card: Ranged 4 Attack, with +2 strength if you discarded a card; if that card was a Terrain,
+      draw a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Sergio Camarena
+    flavor: She was the first to uncover the devastated remnants of the Unicorn caravan. Her expert eyes immediately scanned
+      the battlefield for any signs of the departed attackers.
+    number: 34
+
+  - title: Ikoma Sido
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Lion Clan
+    - Paragon
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 7
+    personal_honor: 3
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Glen Osterberger
+    flavor: '"Some of my brothers have found it difficult to adapt to life in the Colonies. There are treasures to find in these
+      strange lands if one is brave enough to search for them."'
+    number: 35
+
+  - title: Ikoma Yamahatsu
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Elite
+    - Imperial
+    - Lion Clan
+    - Samurai
+    - Scout
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'While you control a Terrain, your Ranged Attacks have +1 strength.Battle: Ranged 4 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Stu Barnes
+    flavor: His father had the fortune to marry a Seppun wife. He gratefully accepted every opportunity his heritage opened
+      to him and quickly rose in rank.
+    number: 36
+
+  - title: Kitsu Miro
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Lion Clan
+    - Shugenja
+    - Sodan Senzo
+    - Water
+    force: 3
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Home Battle, w: Create a 2F/2C/3PH Lion Clan • Ancestor • Samurai • Spirit Personality at the current battlefield.
+      Remove him from the game after the battle ends. (Home actions can be taken from home.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    mrp: Costs 2 less Gold; ability now has Home.
+    rarity: Rare
+    artist: Charles Urbach
+    flavor: '"My brother taught me the ways of warfare, and a thousand ancestors bolster my weaknesses."'
+    number: 37
+
+  - title: Kitsune Haruki
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Mantis Clan
+    - Shugenja
+    force: 0
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Reaction: After Haruki enters play: Create a 2F/2C/3PH Mantis Clan • Nonhuman • Deer • Spirit Personality with the
+      ability, "Limited: If another player has higher Family Honor than you: Gain 2 Honor."'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Heather V. Kreiter
+    flavor: '"Let others worry about the Empress and her promises."'
+    number: 38
+
+  - title: Moshi Tomiko
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Mantis Clan
+    - Shugenja
+    - Thunder
+    force: 4
+    chi: 4
+    gold_cost: 9
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Battle: Bow Tomiko or one of her Spells: Ranged 6 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Tony Foti
+    flavor: '"These lands belong to the Mantis, and the interlopers sent by Iweko are not needed or wanted."'
+    number: 39
+
+  - title: Tsuruchi Shichiro
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Naval
+    - Mantis Clan
+    - Samurai
+    - Sensei
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: 'After Shichiro enters play: Discard all your other Sensei Personalities.After a Ranged Attack action resolves that
+      your Mantis Clan Personality performed: Once per battle, you may move him home.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Drew Baker
+    flavor: '"He does not rely on just words to inspire." - Yoritomo Hiromi'
+    number: 40
+
+  - title: Tsuruchi Shigekazu
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Mantis Clan
+    - Samurai
+    - Scout
+    force: 6
+    chi: 3
+    gold_cost: 8
+    personal_honor: 2
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Albert Tavira
+    flavor: '"The Spider were not welcomed openly, but at least they had a purpose. The other clans that are arriving, one by
+      one, serve no purpose other than to take what belongs to us."'
+    number: 41
+
+  - title: Tsuruchi Tomaru
+    extended_title: Tsuruchi Tomaru • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Unique
+    - Experienced
+    - Mantis Clan
+    - Samurai
+    - Scout
+    force: 4
+    chi: 4
+    gold_cost: 9
+    personal_honor: 2
+    text: 'Battle: Twice per turn: Ranged 4 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Andy Hepworth
+    flavor: '"With each mile we find wonders unimagined. The other clans sully this land as they scramble to place their claims.
+      This place is to be unfolded, not torn open through petty squabbles."'
+    number: 42
+
+  - title: Yoritomo Kanaye
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Brute
+    - Extortionist
+    - Magistrate
+    - Mantis Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Battle: Target an enemy card without attachments, and you may pay Gold equal to its Gold Cost: Bow it. If you paid
+      the Gold, destroy it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Jason Behnke
+    flavor: '"My loyalty lies with no governor."'
+    number: 43
+
+  - title: Asako Kikugoro
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Henshin
+    - Monk
+    - Phoenix Clan
+    - Void
+    force: 4
+    chi: 1
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Reaction: After your Ring or Henshin (including Kikugoro) enters play or overlays: Look at the top two cards of your
+      Dynasty deck. You may put one of them at the bottom of the deck.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Heather V. Kreiter
+    flavor: '"Each step along the Path brings more of the world into view."'
+    number: 44
+
+  - title: Asako Megu
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Inquisitor
+    - Magistrate
+    - Phoenix Clan
+    - Shugenja
+    force: 3
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Battle: Target an enemy Personality: Bow him. You may target and straighten a Personality. If the enemy Personality
+      is Kolat, Ninja, or Shadowlands, gain 2 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Greg Lambrakis
+    flavor: '"I am not satisfied by your answers, Matsu-san. Let us begin again."'
+    number: 45
+
+  - title: Isawa Koiso
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Unique
+    - Elemental Master
+    - Fire
+    - Phoenix Clan
+    - Shugenja
+    force: 5
+    chi: 4
+    gold_cost: 11
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Limited: Bow Koiso, destroy your Shugenja with the base Fire keyword, discard a card, and target a non-Unique card
+      without attachments in a unit: Destroy it.Battle: Target a card without attachments in a unit: Destroy it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Mario Wibisono
+    flavor: '"Fire speaks to me. What will it say to you?"'
+    number: 46
+
+  - title: Isawa Mina
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Fire
+    - Phoenix Clan
+    - Shugenja
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Battle: Target an attachment or token at the current battlefield: Destroy it. If this destroyed a card or token,
+      give Mina two +1F Fire tokens.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Alayna Lemmer
+    flavor: '"The Second City is the gate to many mysteries. The Lion err in thinking that we should be kept from them. And
+      we do not need them to protect us from any dangers that lurk there."'
+    number: 47
+
+  - title: Isawa Sanetomo
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Air
+    - Phoenix Clan
+    - Sensei
+    - Shugenja
+    force: 3
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'After Sanetomo enters play: Discard all your other Sensei Personalities.Once per battle, one of your Phoenix Clan
+      Shugenja may perform the Equip Battle action even if bowed and even if unopposed.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: April Lee
+    flavor: '"The elements support and nurture us. Why should I worry when they are with me always?"'
+    number: 48
+
+  - title: Shiba Toshisugo
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Phoenix Clan
+    - Samurai
+    - Yojimbo
+    force: 5
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 2
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Glen Osterberger
+    flavor: '"Earth is strong in him and keeps his Fire steady," Sanetomo said. "He will serve the clan well in our unfortunate
+      disagreements with the Lion Clan."'
+    number: 49
+
+  - title: Bayushi Kazutoshi
+    extended_title: Bayushi Kazutoshi • Experienced
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Experienced The Student
+    - Loyal
+    - Courtier
+    - Samurai
+    - Scorpion Clan
+    - Sensei
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: After Kazutoshi enters play or overlays, discard all your other Sensei Personalities.Other players' Personalities
+      in and out of play have their Honor Requirements increased by 10, and they may pay 2 additional Gold when paying for Personalities
+      with their Clan Alignment to ignore their Honor Requirements.
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Charles Urbach
+    flavor: '"I honor my sensei in all ways."'
+    number: 50
+
+  - title: Bayushi Nomen
+    extended_title: Bayushi Nomen • Experienced 2
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Experienced 2
+    - Courtier
+    - Scorpion Clan
+    force: 2
+    chi: 4
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Political Battle: Even if Nomen is not at the current battlefield, bow her and target a Personality: Move him home.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: Sam Kennedy
+    flavor: '"It is a proud name, though I cannot exactly claim it is my own. But with it I will defend our clan against all
+      who would harm it."'
+    number: 51
+
+  - title: Bayushi Tenzan
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Magistrate
+    - Paragon
+    - Samurai
+    - Scorpion Clan
+    - Tasu's Sorrow
+    - Yojimbo
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Battle/Limited: Target a Personality, or one or two Personalities if you control a Courtier: You may target a Shadowlands
+      Personality. Give each target -3F. If this is the Combat Segment, dishonor them.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 Amber Blackburn BGG Charity Auction - Seth Abraham
+    rarity: Uncommon
+    artist: Steve Argyle
+    flavor: '"Tasu helped stop Shoju when he rose. His grandson Tenzan hopes to do the same with Paneki." - Bayushi Keirei'
+    number: 52
+
+  - title: Shosuro Ryoichi
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Magistrate
+    - Samurai
+    - Scorpion Clan
+    force: 3
+    chi: 1
+    gold_cost: 4
+    personal_honor: 0
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Chris Pritchard
+    flavor: '"With the wealth from the Colonies come those who wish to grow rich off of it. Which is fine, until one seeks to
+      do it at the clan''s expense. Then I must intervene and correct the wise or dispose of the foolish. Were you still alive,
+      you could figure out which you were."'
+    number: 53
+
+  - title: Shosuro Ietsuno
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Assassin
+    - Ninja
+    - Scorpion Clan
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 0
+    text: 'After a card from a deck refills Ietsuno''s battlefield''s province: Look at it. You may switch it with a card owned
+      by the same player in another province.Battle: Target an enemy card without attachments: Bow it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Paul (Prof.) Herbert
+    flavor: '"I am always watching."'
+    number: 54
+
+  - title: Soshi Yoshihara
+    extended_title: Soshi Yoshihara • Experienced
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Advisor to the Jade Champion
+    - Air
+    - Courtier
+    - Experienced
+    - Magistrate
+    - Scorpion Clan
+    - Shugenja
+    force: 2
+    chi: 5
+    gold_cost: 8
+    personal_honor: 1
+    text: 'Political Open: Target a Holding or Personality: Its base abilities may not be used.Political Open: Bow Yoshihara
+      and target a Personality: Dishonor him. If you are a Scorpion Clan or Crab Clan player, his controller loses 1 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2010 Jade Championship - Ferran Villegas
+    rarity: Rare
+    artist: Matt Zeilinger
+    flavor: '"They make it too easy, but I do not complain."'
+    number: 55
+
+  - title: Daigotsu Kazuko
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Commander
+    - Samurai
+    - Shadowlands
+    - Spider Clan
+    force: 4
+    chi: 2
+    gold_cost: 7
+    personal_honor: 0
+    text: 'After Kazuko enters play: Lose 1 Honor.Fear Battle: You may destroy one of Kazuko''s Followers: Melee 3 Attack, or
+      Melee 6 Attack if you destroyed a Follower.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Lee Smith
+    flavor: '"The new governor''s orders tie our hands. We are unable to follow the mandate and continue our plans."'
+    number: 56
+
+  - title: Daigotsu Susaiken
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Loyal
+    - Samurai
+    - Sensei
+    - Shadowlands
+    - Spider Clan
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 0
+    text: 'After Susaiken enters play: Discard all your other Sensei Personalities.Once per turn, you may refill one of your
+      provinces face-up.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Drew Baker
+    flavor: '"The other clans embrace the importance of teaching. What they fail to understand is the content of the lessons
+      that must be learned."'
+    number: 57
+
+  - title: Daigotsu Takayasu
+    extended_title: Daigotsu Takayasu • Experienced
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Unique
+    - Commander
+    - Experienced
+    - Samurai
+    - Shadowlands
+    - Spider Clan
+    force: 5
+    chi: 4
+    gold_cost: 9
+    personal_honor: 0
+    text: 'After Takayasu enters play: Lose 1 Honor.Maho Battle: Melee 6 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Andy Hepworth
+    flavor: He was once a young man, struggling to utilize his inhuman powers. His mastery is now complete, and he leads the
+      Spider into the face of death without hesitation.
+    number: 58
+
+  - title: Daigotsu Tenbatsu
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Dark Prophet
+    - Paragon
+    - Samurai
+    - Spider Clan
+    force: 3
+    chi: 2
+    gold_cost: 6
+    personal_honor: 0
+    text: 'Reaction: After engaging at Tenbatsu''s battlefield: Look at the top three cards of your Fate deck. Put them back
+      in any order. You may discard a Dark Virtue; if you did, draw a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Franz Vohwinkel
+    flavor: '"There is no point in holding back our potential. Give us freedom to run rampant upon our enemies!"'
+    number: 59
+
+  - title: Goju Gochiso
+    type: Personality
+    clan: Ninja,Spider
+    deck: Dynasty
+    keywords:
+    - Ninja
+    - Shadowlands
+    - Shugenja
+    - Spider Clan
+    force: 6
+    chi: 3
+    gold_cost: 8
+    personal_honor: 0
+    text: 'After Gochiso enters play: Lose 2 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Troy Graham
+    flavor: He could meld into every shadow with ease, and his powers have only grown stronger of late.
+    number: 60
+
+  - title: Shadow Dragon
+    extended_title: Shadow Dragon • Experienced 2
+    type: Personality
+    clan: Ninja,Spider
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Conqueror
+    - Experienced 2
+    - Unique
+    - Dragon
+    - Ninja
+    - Nonhuman
+    - Shadowlands
+    - Shugenja
+    - Spider Clan
+    force: 10
+    chi: 5
+    gold_cost: 20
+    personal_honor: 0
+    text: 'After Shadow Dragon enters play: Lose 5 Honor.Shadow Dragon''s abilities will not be copied.Battle: Target an enemy
+      Personality: Permanently give him Ninja and Shadowlands. Take control of him. Return control of him to his owner after
+      the next time this game this ability is announced.Open: If Shadow Dragon is dead: Bring it into play, paying all costs.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Genzoman
+    number: 61
+
+  - title: Sugihara
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Monk
+    - Order of the Spider
+    - Spider Clan
+    force: 6
+    chi: 3
+    gold_cost: 9
+    personal_honor: 0
+    text: 'Battle: Target an enemy Personality: Give him -4F. If his Force is now 0, you may take an additional Battle action
+      which Sugihara must perform.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: John Donahue
+    flavor: '"There is tranquility in the heart of the battlefield, and true knowledge in the arterial spray of my enemy as
+      it splashes upon my mask."'
+    number: 62
+
+  - title: Gozaru no Oni
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 15
+    chi: 5
+    gold_cost: 15
+    personal_honor: 0
+    text: 'After Gozaru enters play: Lose 5 Honor.After Gozaru is destroyed: It becomes discarded (not dead).Battle: Target
+      one or two enemy cards: Bow them. If you only targeted one card, destroy it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Engle
+    flavor: '"There is no peace in Jigoku. Many powerful demons reject the very concept." - Isawa Kimi'
+    number: 63
+
+  - title: Itoku
+    extended_title: Itoku • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Experienced Akodo Itoku
+    - Tactician
+    - Unique
+    - Monk
+    - Order of Strength
+    - Paragon
+    force: 3
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 4
+    text: 'Itoku has +1F while a Lion Clan player controls him.Reaction: After an action resolves which bowed your non-Void
+      Ring: Straighten it. You may use each of its abilities an additional time this turn.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 The Seven Sohei - David Attali
+    rarity: Rare
+    artist: Carlos Cardenas
+    flavor: The legend of the Seven Sohei from the Destroyer War continues to inspire, even decades later.
+    number: 64
+
+  - title: Makito
+    extended_title: Makito • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Experienced Asako Makito
+    - Unique
+    - Bloodspeaker
+    - Monk
+    - Order of Death
+    - Shadowlands
+    - Student of Kinuye
+    force: 4
+    chi: 4
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Makito has +1F while a Phoenix Clan player controls him.After a card is destroyed: Give Makito +1F.Maho Battle: Target
+      an enemy Personality with equal or lower Chi: Destroy a card without attachments in his unit; this destruction will not
+      be negated or delayed.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2010 The Seven Sohei - John Dibattista
+    rarity: Rare
+    artist: Manuel Calderon
+    number: 65
+
+  - title: Rata
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Cultist
+    - Gaijin
+    force: 3
+    chi: 3
+    gold_cost: 4
+    personal_honor: 0
+    text: 'Reaction: After an action resolves that Rata performed and that destroyed a Personality: Rata sacrifices his victim''s
+      corpse. Draw a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Troy Graham
+    flavor: '"I know your words of power. Goju, Ninube, Shadow Dragon. They are words, nothing more. I will drink your shadows
+      and spit on your corpses."'
+    number: 66
+
+  - title: Rokku
+    extended_title: Rokku • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Experienced Akodo Rokku
+    - Tactician
+    - Unique
+    - Monk
+    - Order of Strength
+    - Zealot
+    force: 4
+    chi: 3
+    gold_cost: 6
+    personal_honor: 3
+    text: 'Rokku has +1F while a Lion Clan player controls him.Reaction: Even if Rokku is bowed, after engaging, if any enemy
+      units are at the current battlefield: Move Rokku there. Straighten his unit if he moved.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2010 The Seven Sohei - Sebastian Neuefeind
+    rarity: Rare
+    artist: Carlos Cardenas
+    flavor: First among the Seven Sohei, his path was ever true.
+    number: 67
+
+  - title: Sakti
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Gaijin
+    force: 8
+    chi: 1
+    gold_cost: 9
+    personal_honor: 0
+    text: 'Battle: Target an enemy card with lower Force: Bow it. If it is a Personality, you may move it home.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Lake Hurwitz
+    flavor: '"Do you think you know the darkness within, Spider? You know nothing. I will show you horrors you cannot imagine."'
+    number: 68
+
+  - title: Iuchi Yuri
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Master of the Swift Waves
+    - Shugenja
+    - Unicorn Clan
+    - Water
+    force: 6
+    chi: 5
+    gold_cost: 10
+    personal_honor: 1
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: MuYoung Kim
+    flavor: '"We control land access to the Colonies. What do the Mantis control? The seas are too vast for any to claim dominion."'
+    number: 70
+
+  - title: Moto Isul
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Samurai
+    - Unicorn Clan
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Battle: Even if Isul is at home, target a Personality: Bow or straighten him.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Aurelien Hubert
+    flavor: After the Unicorn caravan from the Colonies was attacked, Naleesh's distrust cast a wide net.
+    number: 71
+
+  - title: Moto Rani
+    extended_title: Moto Rani • Experienced
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Death Priest
+    - Experienced
+    - Shugenja
+    - Unicorn Clan
+    - Water
+    force: 4
+    chi: 4
+    gold_cost: 8
+    personal_honor: 1
+    text: 'Water Reaction: When paying for a Spell Equipping to Rani, remove a dead Personality in your discard pile from the
+      game to reduce the Spell''s Gold Cost by the Personality''s Chi.Water Tireless Battle: Straighten Rani. You may move her
+      home.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Jason Engle
+    flavor: '"Life is weak."'
+    number: 72
+
+  - title: Shinjo Hayan
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Loyal
+    - Samurai
+    - Sensei
+    - Unicorn Clan
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'After Hayan enters play: Discard all your other Sensei Personalities.After engaging: Once per turn, you may assign
+      your (unbowed) Unicorn Clan Personality in your home to the current battlefield.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Drew Baker
+    flavor: '"First observe, and then act. First move, and then strike."'
+    number: 73
+
+  - title: Shinjo Junpei
+    extended_title: Shinjo Junpei • Experienced
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Unique
+    - Experienced
+    - Samurai
+    - Unicorn Clan
+    force: 4
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Tactical Battle: Even if Junpei is at home, choose your performing unbowed Personality: Melee 4 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Wen Juinn
+    flavor: '"Was it the Ruhmal? Bandits? Maybe, but I cannot rule out any save the Spider. We will uncover this treachery together."'
+    number: 74
+
+  - title: Shinjo Sarang
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Commander
+    - Samurai
+    - Unicorn Clan
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Battle: Choose your performing Personality, and target your Follower at any location: Transfer it to the Personality.
+      Straighten the Follower if the Personality is opposed or Spider Clan.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Ed Cox
+    flavor: '"Let others distrust the Spider. That will only make their support of the Unicorn all the stronger."'
+    number: 75
+
+  - title: Utaku Lishan
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Battle Maiden
+    - Paragon
+    - Samurai
+    - Unicorn Clan
+    force: 4
+    chi: 3
+    gold_cost: 9
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'While Lishan is attacking, she has +1F and +1PH.Reaction: After you announce a Battle action, if Lishan is at the
+      current battlefield, target a Personality or Follower opposing her: Give it a Force penalty equal to Lishan''s Personal
+      Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Ben Peck
+    flavor: '"Rokugan is ignorant of what we have accomplished. They sleep while we serve."'
+    number: 76
+
+  - title: Low Market
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Market
+    text: 'Open: Bow this card, choose your performing Personality and target an attachment in your hand: Attach it to him,
+      paying 2 less Gold, to a minimum of 1.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    card_notes: Erratum effective October 11th.
+    rarity: Uncommon
+    artist: Alex Drummond
+    flavor: Even in the new kingdom, there are places that the samurai choose not to acknowledge.
+    number: 77
+
+  - title: The Distant Reaches
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Forest
+    text: 'Open, w: Bow one or two target attachments.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Alex Drummond
+    flavor: The light places had fallen to darkness. The dark places had become something much worse.
+    number: 78
+
+  - title: Ashigaru Guards
+    type: Follower
+    deck: Fate
+    keywords:
+    - Ashigaru
+    force: 0
+    chi: 0
+    gold_cost: 0
+    honor_requirement: 0
+    focus: 1
+    text: This Follower has +1F for every two Farms you control.
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Aurelien Hubert
+    flavor: '"The attacks make the overland route even more perilous. We have increased the guards at the waystations, but that
+      is a temporary solution. We must find and destroy those responsible for these raids." - Shinjo Min-Hee'
+    number: 79
+
+  - title: Field Messenger
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    force: 2
+    chi: 0
+    gold_cost: 2
+    honor_requirement: 0
+    focus: 3
+    text: 'Battle/Open: Transfer this Follower to your target Personality.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Asier Martinez Lopez
+    flavor: '"The winter is harsh, but not so much as to stop our messengers. We must speak to the Unicorn about these raids."
+      - Akodo Dairuko'
+    number: 80
+
+  - title: Flanking Unit
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    force: 4
+    chi: 0
+    gold_cost: 7
+    honor_requirement: 1
+    focus: 1
+    text: 'As a Focus Effect, you may transfer a Follower from your Personality in this duel to another of your Personalities.Battle:
+      Move a target Personality at the current battlefield home or to an adjacent battlefield.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Brandon Leach
+    flavor: They can turn a battle's course.
+    number: 81
+
+  - title: Hiromi's Vassals
+    type: Follower
+    deck: Fate
+    keywords:
+    - Thunder
+    force: 3
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 0
+    focus: 2
+    text: 'As a Focus Effect: After this duel ends, you may attach this card to one of your Personalities, ignoring Gold cost.Battle:
+      Bow this card: Ranged 6 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Lake Hurwitz
+    flavor: '"The seas grow strangely hostile, but the Mantis do not flinch." - Moshi Tomeno'
+    number: 82
+
+  - title: Home Guard
+    type: Follower
+    deck: Fate
+    force: 1
+    chi: 0
+    gold_cost: 2
+    honor_requirement: 3
+    focus: 4
+    text: 'As a Focus Effect: After this duel ends, give your Personality in it +3F.This card has +3F while defending.Battle:
+      Target an enemy card without attachments: Bow it. Gain 2 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Shawn Lindow
+    flavor: '"Even an indifferent soldier can become fearsome when he stands with is back towards his home. Never forget this,
+      my father told me." - Kaiu Onizuka'
+    number: 83
+
+  - title: Murderous Thieves
+    type: Follower
+    deck: Fate
+    keywords:
+    - Bandit
+    force: 0
+    chi: 0
+    gold_cost: 0
+    honor_requirement: 0
+    focus: 3
+    text: 'Battle: Bow this card: Melee 3 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Patrick McEvoy
+    flavor: '"The Second City is safe to all, but the lands around it are dangerous for those who do not understand them. It
+      is foolish of the new governor to permit other clans to intrude in places we have been exploring." - Yoritomo Emoto'
+    number: 84
+
+  - title: Ninja Guards
+    type: Follower
+    deck: Fate
+    keywords:
+    - Guard
+    - Ninja
+    force: 0
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 0
+    focus: 1
+    text: Will only attach to a Ninja.This Follower has a Force bonus equal to its Personality's printed Force.
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Uncommon
+    artist: Felipe Gaona
+    flavor: '"The Crane are growing bold in their quest for power, but we have resources they cannot dream of." - Shosuro Hawado'
+    number: 85
+
+  - title: Village Raiders
+    type: Follower
+    deck: Fate
+    keywords:
+    - Shadowlands
+    force: 4
+    chi: 0
+    gold_cost: 6
+    honor_requirement: 0
+    focus: 2
+    text: 'After this card enters play: Lose 1 Honor.This Personality has Conqueror.Battle: Melee 4 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Behnke
+    flavor: '"The Ruhmal erred when they did this. Before, we killed for duty. Now it''s for vengeance." - Daigotsu Negishi'
+    number: 86
+
+  - title: Armor of the Uruwashii
+    type: Item
+    deck: Fate
+    keywords:
+    - Armor
+    - Imperial
+    force: 3
+    chi: 0
+    gold_cost: 4
+    focus: 2
+    text: 'Melee Attacks targeting cards in this unit have -2 strength.Reaction: Before another player''s action resolves, negate
+      this Personality''s movement from the action''s effects.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Aurelien Hubert
+    flavor: '"One of the Tsi''s latest creations, its craft is as legendary as its bearer." - Kaiu Tojikana'
+    number: 87
+
+  - title: Celestial Sword of the Lion
+    extended_title: Celestial Sword of the Lion • Experienced
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Weapon
+    - Experienced
+    - Shinrai
+    force: 1
+    chi: 1
+    gold_cost: 8
+    focus: 4
+    text: 'Will only attach to a Lion Clan Personality.This card has +1F for each Lion Clan Personality you control.After this
+      card enters play: Gain 2 Honor.Battle: Create a 2F/2C/3PH Lion Clan • Samurai • Ancestor • Spirit Personality at the current
+      battlefield.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Steve Argyle
+    number: 88
+
+  - title: Celestial Sword of the Unicorn
+    extended_title: Celestial Sword of the Unicorn • Experienced
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Weapon
+    - Enginoshi
+    - Experienced
+    force: 1
+    chi: 1
+    gold_cost: 8
+    focus: 4
+    text: 'Will only attach to a Unicorn Clan Personality.This card has +1F for each Unicorn Clan Personality you control.After
+      this card enters play: Gain 2 Honor.Battle: Target an enemy card: Bow it. Destroy it if it is not Cavalry and has no attachments.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Steve Argyle
+    number: 89
+
+  - title: Dazzling Attire
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 0
+    focus: 3
+    text: 'Political Open, w: Take the Imperial Favor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Heather V. Kreiter
+    flavor: Some spend their entire lives avoiding the collective eyes of the court. Meanwhile, the bold are forever seeking
+      its attentions.
+    number: 90
+
+  - title: Pillowbook
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 0
+    focus: 2
+    text: Other players' cards' effects will not discard cards from your hand.Your maximum hand size is increased by 1.Other
+      players' maximum hand sizes are reduced by 1, to a minimum of 7.
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Anna Christenson
+    flavor: '"It is impossible to know exactly how popular pillowbooks are throughout the Empire. Most who read them would never
+      confess to it." - Doji Tatsuki'
+    number: 91
+
+  - title: Sankaku-Yari
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    force: 5
+    chi: 0
+    gold_cost: 6
+    focus: 1
+    text: 'Battle: Melee 4 Attack, or Melee 5 Attack if the target is Cavalry.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Brent Chumley
+    flavor: '"With this in your hands, even the boldest of their mounted warriors will think twice." - Daidoji Tametaka'
+    number: 92
+
+  - title: Splintered Weapon
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    force: 3
+    chi: 0
+    gold_cost: 4
+    focus: 1
+    text: 'As a Focus Effect: You may transfer an attachment from your Personality in this duel to another of your Personalities.Battle:
+      Target an enemy card without attachments: Bow it. Destroy it if this Personality is a Berserker.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Max Degen
+    flavor: Anything one can find can be a weapon...
+    number: 94
+
+  - title: The Ancestral Sword of Hantei
+    extended_title: The Ancestral Sword of Hantei • Experienced
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Weapon
+    - Akkuai-uo
+    - Experienced
+    force: 1
+    chi: 1
+    gold_cost: 8
+    focus: 4
+    text: 'Will only attach to a Spider Clan Personality.This card has +1F for each Spider Clan Personality you control.After
+      this card enters play: Gain 2 Honor.Battle: Target a card in a unit: You may destroy it if it is bowed or an attachment.
+      Bow it. Straighten this Personality.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Steve Argyle
+    number: 95
+
+  - title: Centering the Soul
+    type: Spell
+    deck: Fate
+    keywords:
+    - Void
+    gold_cost: 0
+    focus: 1
+    text: 'Reaction: After an action resolves, bow this card and target one of your Rings the action bowed: Straighten the Ring.
+      If this Shugenja is Void, you may destroy this card; if you did, you may use the Ring''s base abilities an additional
+      time this turn.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Miss Tak
+    flavor: '"Listen to the candle''s flame as it flickers in the wind."'
+    number: 96
+
+  - title: Damning Ceremony
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    gold_cost: 4
+    focus: 1
+    text: 'Limited: Once per game: Give this Personality a permanent Force bonus raising his Force to equal his base Gold Cost.
+      Permanently give him Shadowlands • Nonhuman • Oni. Lose 2 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: John Donahue
+    flavor: There is never a shortage of men willing to trade their souls for power.
+    number: 97
+
+  - title: Delving into History
+    type: Spell
+    deck: Fate
+    keywords:
+    - Void
+    gold_cost: 0
+    focus: 1
+    text: 'Limited: Bow this Shugenja and destroy this card: Search your Fate deck for a non-Unique Spell that must share a
+      keyword with the performer unless he is Void, show it, and put it in your hand.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Jorge Matar
+    flavor: The Asako and Ikoma know the strength of tradition and written history. All answers lie within their ancestors'
+      actions.
+    number: 98
+
+  - title: Extending Influence
+    type: Spell
+    deck: Fate
+    keywords:
+    - Air
+    gold_cost: 2
+    focus: 1
+    text: 'After this card enters play, if this Shugenja is Air: Each other player loses 1 Honor.Open: Destroy this card and
+      target a Personality: The performing Shugenja copies one of the target''s abilities which does not copy abilities.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Veronica V. Jones
+    flavor: The subtlest effects can have powerful repercussions.
+    number: 99
+
+  - title: Illusory Defense
+    type: Spell
+    deck: Fate
+    keywords:
+    - Air
+    - Ritual
+    gold_cost: 8
+    focus: 2
+    text: 'Your Air Shugenja have +1C.Limited: Bow one or more of your performing Shugenja with 10 or greater total Chi, and
+      remove this card from the game: Create a province to the left of your leftmost province which permanently does not hold
+      Dynasty cards.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Manuel Calderon
+    flavor: He wove his magic and felt the land change around him.
+    number: 100
+
+  - title: Incite the Phantoms
+    type: Spell
+    deck: Fate
+    keywords:
+    - Earth
+    - Forest
+    gold_cost: 0
+    focus: 2
+    text: 'While this Shugenja is Earth, your Spirits contribute Force to their army even while bowed.Battle: Even if this unit
+      is not at the current battlefield, bow your performing Spirit and target an enemy card: Bow it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Felipe Gaona
+    flavor: He stopped laughing as the twentieth creature appeared.
+    number: 101
+
+  - title: Inescapable Snare
+    type: Spell
+    deck: Fate
+    keywords:
+    - Earth
+    gold_cost: 0
+    focus: 4
+    text: 'Battle: Bow this card and target an enemy card: Bow it. If this Shugenja is Earth, gain 2 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Patrick McEvoy
+    flavor: '"Struggle more, foolish creature. You only ensure your doom."'
+    number: 102
+
+  - title: Mara's Touch
+    type: Spell
+    deck: Fate
+    keywords:
+    - Pearl
+    gold_cost: 2
+    focus: 3
+    text: 'While this Shugenja is Nonhuman, he has +2F.Open: Give this Shugenja -2F: He changes shape. Give him Cavalry.Battle:
+      Give this Shugenja -2F: Ranged 6 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Randy Elliott
+    flavor: '"I know you must still be alive, grandmother."'
+    number: 103
+
+  - title: Ochiai's Bravery
+    type: Spell
+    deck: Fate
+    keywords:
+    - Fire
+    gold_cost: 3
+    focus: 4
+    text: 'While this Shugenja is Fire, he has Duelist.Battle: If this Shugenja is unbowed, bow this card and target an enemy
+      Personality: This Shugenja duels him. Destroy a card without attachments in the unit of the duel''s loser.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Wen Juinn
+    flavor: The Inquisitor temple brought forth a host of Phoenix magical might into the Colonies. The Lion fumed at its presence.
+    number: 104
+
+  - title: Sudden Guardian
+    type: Spell
+    deck: Fate
+    keywords:
+    - Water
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Even if this unit is not at the current battlefield, bow this Shugenja, choose your performing Spirit, and
+      target an enemy Personality: Move him home. If this Shugenja is Water, gain 1 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Eddie Sharam
+    flavor: '"Borrow my strength, scion. I shall protect you."'
+    number: 105
+
+  - title: The Menacing Sky
+    type: Spell
+    deck: Fate
+    keywords:
+    - Thunder
+    gold_cost: 2
+    focus: 2
+    text: 'Limited: Bow this Shugenja unless he is Thunder, and target a Personality: After the next time (this turn) he assigns
+      or an action resolves which moved him to a battlefield, bow him.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Héctor Herrera
+    flavor: The skies opened up with furious vengeance, and the defenders wondered if foul play was at work.
+    number: 106
+
+  - title: The Swell of Strength
+    type: Spell
+    deck: Fate
+    keywords:
+    - Water
+    gold_cost: 3
+    focus: 3
+    text: 'As a Focus Effect: After this duel ends, you may attach this card to one of your Water Shugenja, ignoring Gold cost.This
+      Shugenja has +2F.Battle: Bow this card and target an enemy Personality or Follower: Reduce its Force to 0.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Stu Barnes
+    flavor: '"Lend your strength to me, oh water kami."'
+    number: 107
+
+  - title: A Weak Poison
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kolat
+    gold_cost: 2
+    focus: 2
+    text: 'Open: Target a Personality: Reduce his Force to 0. Lose 2 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Lee Smith
+    flavor: '"If I wished him dead, he would be dead. I only wish him to be indisposed." - Yasuki Makoto'
+    number: 108
+
+  - title: Astonishing Accusation
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Political Reaction: After another player''s Political action targets your Personality, negate its effects.Political
+      Limited: Target a Kolat, Ninja, Shadowlands, or dishonorable Personality. His controller loses Honor equal to his printed
+      Personal Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Jason Engle
+    flavor: '"You are mixed up in something horrible, I know it!"'
+    number: 109
+
+  - title: Broken Cipher
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'As a Focus Effect: You may transfer a Spell from your Personality in this duel to another of your Shugenja at the
+      same location.Battle: If you have not put cards into your hand this phase and you have attached a Spell this turn: Draw
+      two cards.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Felipe Gaona
+    flavor: The ciphers used by shugenja families to protect their secrets are closely guarded. Those who betray the secrets
+      are often short-lived.
+    number: 110
+
+  - title: Deadly Discipline
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Fire
+    - Kiho
+    gold_cost: 0
+    focus: 2
+    text: 'Fire Kiho Limited: Target your performing unbowed Monk to give him two +1F Fire tokens. Fire Kiho Battle: Target
+      your performing unbowed Monk to bow a target enemy card without attachments. Destroy it if your Monk has any Fire tokens.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Alex Drummond
+    flavor: It purifies, it strengthens, it destroys.
+    number: 111
+
+  - title: Deep Snows
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    - Winter
+    gold_cost: 0
+    focus: 1
+    text: 'After an action resolves: Bow any Personalities it moved. (Reactions trigger after traits.)Reaction: After a Battle
+      action resolves, if there are no Terrains in play at the current battlefield: Put this card into play there.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Arkady Roytman
+    flavor: '"The raiders are not troubled by winter, so we must not be." - Moto Naleesh'
+    number: 112
+
+  - title: Exploited Advantage
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Choose your performing unbowed Paragon and target an enemy Personality: Move him home. If he moved, bow him
+      and negate his (future) movement. Lose 2 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Cos Koniotis
+    flavor: '"What is the point of being better if you do not exploit it?" - Daigotsu Gyoken'
+    number: 113
+
+  - title: Games of Will
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Choose your performing unbowed Personality and target an enemy card with lower Gold Cost: Bow it. Battle:
+      Choose your performing Personality: Negate all current and new Force penalties to him from actions. Negate all current
+      and new effects from other players'' cards that prevent him from contributing Force to his army.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Albert Tavira
+    flavor: '"Ah, politics." - Shiba Tsukimi'
+    number: 114
+
+  - title: Greasing the Wheels
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'As a Focus Effect: After this duel ends, lower the Gold Cost of its winner to 0.Battle: Choose your performing unbowed
+      Courtier or Magistrate and target a Personality: You may pay Gold equal to his unit''s total Gold Cost minus 6. If you
+      did, move him home. Otherwise, straighten his unit.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Veronica V. Jones
+    flavor: '"Everyone has a price. The trouble lies only in finding it."'
+    number: 115
+
+  - title: Help from the Shadows
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Ninja
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Choose your performing Personality in a Ninja unit: Move him to the current battlefield. Straighten his unit
+      if he moved.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Luis NCT
+    flavor: '"There is no such thing as a lone assassin." - Little Truths'
+    number: 116
+
+  - title: Honest Assessment
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Bushido Virtue
+    - Honesty
+    gold_cost: 0
+    focus: 4
+    text: 'Battle: Choose your performing unbowed Samurai and target an enemy Personality with equal or lower Personal Honor:
+      Bow him. Gain 1 Honor, or 3 Honor if your Family Honor is 9 or less.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Brent Chumley
+    flavor: There are moments when honesty is more appreciated than it would be otherwise.
+    number: 117
+
+  - title: Inciting Mistrust
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Ninja
+    gold_cost: 0
+    focus: 3
+    text: 'Reaction: After another player''s Melee or Ranged Attack targets your Ninja: Show the card in the current battlefield''s
+      province. If it is a Personality, negate the Melee or Ranged Attack''s effects. Battle: Discard a card in the current
+      battlefield''s province. Draw a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Brent Chumley
+    number: 118
+
+  - title: Indecision
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Reaction: After an action resolves, if its player has resolved two or more actions which put cards into his hand
+      this phase: He discards two cards. Battle: If any enemy units are at the current battlefield, choose your performing Personality:
+      Move him there. Straighten him if he moved.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Chris Pritchard
+    flavor: '"Why do you hesitate? It is a simple matter, boy. Denounce our Yoritomo host for his smuggling ties, and everything
+      will fall into place."'
+    number: 119
+
+  - title: Inexorable
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Reaction: After another player announces a Reaction during the Combat Segment: Its effects will not negate other
+      effects.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: William O'Connor
+    flavor: The only thing more terrifying than one thousand horsemen charging is two thousand horsemen charging.
+    number: 120
+
+  - title: Killing Intent
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'As a Focus Effect: You may choose (now) to use the base Force of your Personality in this duel as his duel stat if
+      he is at a battlefield.Battle: Choose your performing Personality: Straighten him. You may move him home.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: John Donahue
+    flavor: His enemy's ferocity froze Hiro in place. The truth dawned upon him as he met the Crab's gaze. He would die if he
+      made any movement.
+    number: 121
+
+  - title: Moving and Unmoving
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: If any enemy units are at the current battlefield, choose your performing Kensai: Move him there. Straighten
+      his unit if he moved.Battle: Choose your performing unbowed Kensai and target an enemy Personality with lower Force: Move
+      him home.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Manuel Calderon
+    flavor: '"When you have the sword in your heart, all manner of marvels will bloom." - Mirumoto Reiyu'
+    number: 122
+
+  - title: Perfect Sacrifice
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Dark Virtue
+    - Perfection
+    gold_cost: 0
+    focus: 2
+    text: 'Battle/Limited: Choose your performing Samurai: Give each Personality and Follower in his unit a Force bonus equal
+      to its current Force. Before this turn ends, destroy his unit.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Héctor Herrera
+    flavor: '"Katsutoshi-sensei would have known how to deal with these beasts, and so do I!"'
+    number: 123
+
+  - title: Perplexing Guests
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Reaction: After another player''s action targets your Personality: Discard him.Battle: If there are any enemy units
+      at the current battlefield: Create a 1F/1C/1PH Monk Personality on your side there. Remove him from the game when the
+      turn ends.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    errata_text: Eratta'd via the internet on 7/17/2012, effective 8/14/2012
+    rarity: Uncommon
+    artist: Florian Stitz
+    flavor: '"He has not moved in three days! I hope our northern guests will not make our home familiar grounds."'
+    number: 124
+
+  - title: Phantom Visage
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Fear
+    - Ninja
+    gold_cost: 0
+    focus: 1
+    text: 'Battle/Open: Bow your performing Ninja Personality and target a Personality: Bow him.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Héctor Herrera
+    flavor: Only a select few ever obtain the privilege to glimpse a Goju's true face.
+    number: 125
+
+  - title: Pillar Tattoo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Earth
+    - Tattoo
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Give your target performing unbowed Tattooed Monk +3F. If he is Earth, you may target and bow an enemy card
+      without attachments.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Tony Foti
+    flavor: The budoka watched the Dragon monk feel the power of his kami's blood. "Is he strong?"The poet smiled. "Listen..."
+    number: 126
+
+  - title: Preceding Reputation
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Choose your performing unbowed Personality and target an enemy Personality with fewer keywords, ignoring
+      "Soul of" keywords: Bow all cards without attachments in his unit.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Ed Cox
+    flavor: '"Back! Back! Out of the way! Heimin fools, don''t you know who I am!?"'
+    number: 128
+
+  - title: Precision
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Reaction: After a Melee or Ranged Attack is targeted: Give it +2 or -2 strength.Battle: Ranged 3 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Sergio Camarena
+    flavor: '"The dead serve no one. The injured serve their enemy." - Ikoma Shika'
+    number: 129
+
+  - title: Preserving Forces
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'As a Focus Effect, before your Personality in this duel is destroyed for losing it, you may destroy one of his Followers
+      to negate his destruction.Open: Put one or two target Followers in your discard pile into your hand.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: David Horne
+    flavor: '"I will say this for the Scorpion," Hida Horu said, "they know how to hold on in a fight. Almost like fighting
+      alongside a Crab."'
+    number: 130
+
+  - title: Pronouncement of Guilt
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Choose your performing unbowed Magistrate and target an enemy Personality: Move him to the current battlefield.
+      Straighten his unit unless he is dishonorable, Kolat, Ninja, or Shadowlands.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Eric Lofgren
+    flavor: '"Bring the guilty party. I would have him made an example to all." - Moto Rani'
+    number: 131
+
+  - title: Reckless Duel
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Iaijutsu
+    gold_cost: 0
+    focus: 4
+    text: 'Battle: Choose your performing unbowed Personality and target an enemy Personality: Your Personality duels the target.
+      Bow the duel''s loser. Move him home.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Greg Lambrakis
+    flavor: The Dragon would not rest until the Dark Naga revealed their secrets.
+    number: 132
+
+  - title: Riddle of Rebirth
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Unique
+    - Kiho
+    - Riddle
+    - Void
+    gold_cost: 0
+    focus: 0
+    text: 'Limited: Bow your performing Henshin, remove this card from the game, and target a Personality that shares a keyword
+      with your Henshin: Put all cards in the target''s unit at the bottom of his owner''s appropriate decks in any order.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Carlos Cardenas
+    flavor: '"Who have I been? Who shall I yet be? The very question thrills the soul!"'
+    number: 134
+
+  - title: Ride the Breeze
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Air
+    - Kiho
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Choose your performing unbowed Monk and target an enemy Personality: Move him home. If he moved and your
+      Monk is Air, negate the Personality''s (future) movement.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Storn A. Cook
+    flavor: '"Surrender yourself to the winds, my friend! I assure you, the experience is highly enlightening!"'
+    number: 135
+
+  - title: Searching for Answers
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'As a Focus Effect, after this duel ends, if your Personality won it, gain 1 Honor.Absent Battle: If you are the Defender,
+      look at the top four cards of your Dynasty deck. If one of them is a Personality, you may Recruit him, ignoring Gold cost.
+      Put the remaining cards back in any order. Discard him after the battle ends.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: J. Edwin Stevens
+    flavor: '"Tell me what you know. Now."'
+    number: 137
+
+  - title: Secret Reserve
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'As a Focus Effect: Until this duel ends, give +1C to each Weapon attached to your Personality in this duel.Battle/Open:
+      Target one or more of your Items: Straighten them. You may transfer them to other Personalities you control.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Brent Chumley
+    flavor: The Yasuki merchants always seem to have the item you need before you realize you need it.
+    number: 138
+
+  - title: Seeking the Question
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kata
+    - Void
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: If this card is in play: Look at the top card of any deck. You may put it at the bottom of that deck.Limited:
+      Put this card into play. Discard all your other Kata (in play).'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Mario Wibisono
+    flavor: '"I can give you the answer, but it will not help." - Isawa Kimi'
+    number: 139
+
+  - title: Sheathing the Sword
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Choose your performing unbowed Courtier at any location and target an enemy Personality: Move him home. Gain
+      1 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Richard Garcia
+    flavor: One samurai could defeat a hundred ashigaru, but one Imperial decree could silence ten thousand samurai.
+    number: 140
+
+  - title: Stand as the Mountain
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Choose one or two of your performing Personalities with 7 or higher base Force: Straighten them.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Steve Argyle
+    flavor: '"These paltry things?" Osote roared with laughter. "These are nothing. A moment''s diversion before the day''s
+      true work begins. Enjoy!"'
+    number: 141
+
+  - title: Stuck in Rokugan
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Winter
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Target a Holding: Straighten it.Limited: Target a Celestial: Discard it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Greg Lambrakis
+    flavor: There are few in the Empire who wish to travel to the Colonies, but during the long winter months, that number can
+      temporarily grow quite high indeed.
+    number: 142
+
+  - title: Surrounded!
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Recon
+    gold_cost: 0
+    focus: 2
+    text: 'Reaction: After engaging, choose your performing unbowed Scout at the current battlefield: You have Reconnaissance
+      there. Ranged Attacks from your card effects during this battle have +2 strength.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Franz Vohwinkel
+    flavor: '"End their suffering. They do not deserve this terrible fate."'
+    number: 143
+
+  - title: Tactical Trap
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Tactical
+    gold_cost: 0
+    focus: 4
+    text: 'Battle: Choose your performing unbowed Tactician at any location and target an enemy Personality: Move him home.
+      Bow him if he moved.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Carlos NCT
+    flavor: Never count on overwhelming odds.
+    number: 144
+
+  - title: The Bite of Winter
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Winter
+    gold_cost: 0
+    focus: 4
+    text: 'Personalities and Followers have -1F. All players have the ability, "Open: Bow your Stronghold: Discard a card titled
+      The Bite of Winter from play."Limited: Put this card into play.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Erich Schreiner
+    flavor: '"Even my sword feels the cold," she complained.'
+    number: 145
+
+  - title: The Cycle of Vengeance
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'As a Focus Effect: After this duel ends, if your Personality lost it, give one of your Personalities two +1F Revenge
+      tokens.Battle/Open: Choose your performing Personality: Straighten his unit.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Héctor Herrera
+    flavor: '"Brother!"'
+    number: 146
+
+  - title: The Heir's Wrath
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Unique
+    - Favor
+    - Imperial
+    - Political
+    gold_cost: 0
+    focus: 4
+    text: 'Favor Imperial Political Limited, : Discard the Imperial Favor or bow a Personality with 5 or more Force to lose
+      2 Honor and destroy another player''s target Personality whose unit has a total Gold Cost equal to or less than what you
+      paid for this action; these effects will not be negated.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Richard Garcia
+    flavor: The condemned man's protests faded all too quickly.
+    number: 147
+
+  - title: The Host's Advantage
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Favor
+    - Political
+    - Winter
+    gold_cost: 0
+    focus: 3
+    text: 'Favor Political Winter Limited: Discard the Imperial Favor to destroy a target attachment.Favor Political Winter
+      Battle: Choose your performing Courtier at any location and bow him or discard the Imperial Favor to bow a target enemy
+      Personality. His controller loses 2 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Anna Christenson
+    flavor: '"Unfortunately, my friends, there are liars standing among us."'
+    number: 148
+
+  - title: The Snow Has Teeth
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Winter
+    gold_cost: 0
+    focus: 1
+    text: 'Reaction: After engaging: The current battlefield''s province has a maximum strength equal to its base strength until
+      the end of the battle. Negate the next effect that would move one of your Personalities from its battlefield. After the
+      next time this battle a Terrain enters play, destroy it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Patrick McEvoy
+    flavor: Winter is a cruel ally.
+    number: 149
+
+  - title: Thick Marsh
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Swamp
+    - Terrain
+    gold_cost: 0
+    focus: 2
+    text: 'After this card enters play: Choose and bow an enemy card at the current battlefield.Battle: If there is no Terrain
+      in play at the current battlefield: Put this card into play there.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Gong Studios
+    flavor: The commander's secret weapon. The commander's tactical nightmare.
+    number: 150
+
+  - title: Too Much for Mortals
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Choose your performing unbowed Spirit and target an enemy Personality: Bow him or destroy one of his attachments.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: John Moriarty
+    flavor: For the first time, he saw clearly how little he had lived up to his ancestors' valor.
+    number: 151
+
+  - title: Two Fronts
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Target a province whose player has two or more provinces: During your next normal Attack Phase (this turn),
+      create two battlefields associated with it instead of one.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Ancor Gil Hernandez
+    flavor: '"There is always a way to surround them," he said with a ferocious grin.'
+    number: 152
+
+  - title: Unsafe Passage
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Interrupt: Negate your target Commander''s movement from the action''s effects.Battle: Take an additional action
+      to use a printed ability on your target Follower, even if it is bowed or the ability has been used the maximum number
+      of times this turn.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Uncommon
+    artist: Gong Studios
+    flavor: '"Fall back!" the Moto shouted. "Tell the wagons to travel the secondary route! We will hold these gaijin devils!"'
+    number: 153
+
+  - title: Unstoppable Strike
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Choose your performing Personality: Give him the ability, "Battle: Target an enemy Personality: Destroy him."'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Ancor Gil Hernandez
+    flavor: He was still expounding on the virtues of different alloys long after the corpse had stopped moving.
+    number: 154
+
+  - title: Yojimbo Assemble
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Choose your performing unbowed Yojimbo, and target an enemy card with Force lower than your Yojimbo''s Force
+      plus the highest Chi among all Shugenja and Courtiers you control: Bow the target. Destroy it if it has no attachments.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Glen Osterberger
+    flavor: Swords are not the only threats.
+    number: 155
+
+  - title: You Are Unworthy
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Choose your performing unbowed Paragon and target an attachment with Force equal to or lower than your Paragon''s
+      Personal Honor: Destroy it.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Juta
+    flavor: '"Not only does that sword have a better lineage than you do, even the tea we drank this morning has a better lineage
+      than you do. Do not disgrace either again."'
+    number: 156
+
+  - title: The Marshalling Fields
+    type: Stronghold
+    clan: Lion
+    deck: Pre-Game
+    province_strength: 7
+    gold_production: 3
+    starting_honor: 7
+    text: 'After you announce a Terrain action: Once per battle, you may ignore any of its restrictions that are based on another
+      Terrain being in play. After the first time each turn one of your Terrain actions resolves: Draw a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Noah Bradley
+    flavor: '"Here we enact the largest-scale maneuvers learned from the gaijin book. For such to be needed, we would be indeed
+      threatened." - Ikoma Shika'
+    number: 157
+
+  - title: The Plain of Glass
+    type: Stronghold
+    clan: Spider
+    deck: Pre-Game
+    province_strength: 7
+    gold_production: 4
+    starting_honor: 0
+    text: You do not lose Honor from Spider Clan and Fate cards you own.You may use the rulebook Conquest ability twice per
+      turn during the same battle.Equipping Followers is a Battle/Limited ability for you.
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Noah Bradley
+    flavor: Far to the west, on the desolate plains plagued by storms, the Spider held dominion of the ruined lands.
+    number: 158
+
+  - title: The Ki-Rin's Path
+    type: Stronghold
+    clan: Unicorn
+    deck: Pre-Game
+    province_strength: 7
+    gold_production: 5
+    starting_honor: 4
+    text: 'Your Tacticians have the ability, "Tactical Open: Give this Personality +1F and Cavalry."'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Noah Bradley
+    flavor: '"The sea routes of the Mantis took less time, but the distance between the Colonies'' ports and the Second City
+      made the overland route more practical. Thus the Unicorn maintained their prestige in the Colonies." - The Ikoma Records'
+    number: 159

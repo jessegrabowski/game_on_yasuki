@@ -9,7 +9,7 @@ import shutil
 import psycopg2
 
 from yasuki_core import DATABASE_DIR
-from yasuki_core.install import sets_to_sql, json_to_sql
+from yasuki_core.install import sets_to_sql, yaml_to_sql
 import logging
 
 
@@ -17,8 +17,8 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
 
-DEFAULT_CARDS_PATH = DATABASE_DIR / "cards.json"
-DEFAULT_SETS_PATH = DATABASE_DIR / "set_info.json"
+DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
+DEFAULT_SETS_PATH = DATABASE_DIR / "set_info.yaml"
 DEFAULT_SCHEMA_PATH = DATABASE_DIR / "schema.sql"
 DEFAULT_DSN = os.environ.get(
     "YASUKI_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/yasuki")
@@ -71,7 +71,7 @@ class Installer:
         if not self.cfg.skip_cards:
             logger.info("Loading cards (this will take a while)")
             logger.info("Image paths are automatically populated during card import")
-            json_to_sql.load_cards(self.cfg.cards_path, self.cfg.dsn)
+            yaml_to_sql.load_cards(self.cfg.cards_path, self.cfg.dsn)
         else:
             logger.info("Skipping card import")
 
@@ -101,7 +101,7 @@ class Installer:
             missing.append(f"Sets file: {self.cfg.sets_path}")
 
         if not self.cfg.skip_cards and not self.cfg.cards_path.exists():
-            missing.append(f"Cards file: {self.cfg.cards_path}")
+            missing.append(f"Cards directory: {self.cfg.cards_path}")
 
         if missing:
             raise InstallerError("Missing required files:\n  " + "\n  ".join(missing))
@@ -180,13 +180,13 @@ def parse_args(argv: list[str]) -> InstallerConfig:
         "--cards",
         type=Path,
         default=DEFAULT_CARDS_PATH,
-        help="Path to cards JSON (default: %(default)s)",
+        help="Path to per-set YAML directory (default: %(default)s)",
     )
     parser.add_argument(
         "--sets",
         type=Path,
         default=DEFAULT_SETS_PATH,
-        help="Path to set info JSON (default: %(default)s)",
+        help="Path to set info YAML (default: %(default)s)",
     )
     parser.add_argument(
         "--schema",

@@ -1,0 +1,53 @@
+set: Hidden Forest War
+cards:
+  - title: Naga Shugenja
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Naga
+    - Nonhuman
+    - Shugenja
+    force: 1
+    chi: 1
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Repeatable Battle/Open, w: Give all Naga cards +1F.'
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Charles Joseph Slucher
+    flavor: Although called shugenja by samurai, the spellcasters of the Naga call themselves jakla. Contrary to the shugenja,
+      a jakla has no religious duties, but can call upon the power of the elements with great skill.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 25
+
+  - title: Naga Warlord
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Naga
+    - Nonhuman
+    - Samurai
+    force: 3
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 2
+    text: All other Naga cards in the Naga Warlord's unit have +1F.
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Subroto Bhaumik
+    flavor: In battle, Naga will naturally follow the instructions of the highest ranked warrior, as guided by the Akasha. More
+      often than not, that role falls to an Asp.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 26

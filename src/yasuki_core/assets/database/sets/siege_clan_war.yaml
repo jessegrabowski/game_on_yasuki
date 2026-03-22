@@ -1,0 +1,1427 @@
+set: 'Siege: Clan War'
+cards:
+  - title: The Wasting Disease
+    type: Clock
+    deck: Other
+    text: 1- Each Rokugani player may Cycle once more per game, even if it is not Turn 1.5- Rokugani players may refill their
+      Provinces from their discard pile, face-down.9- Ignore Tiers 1 and 2. After revealing cards at the start of the turn,
+      each Rokugani player discards all his or her face-up Personalities, refilling their Provinces face-up.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Yogo Junzo opened the first scroll, spreading a foul plague across the Empire. Thousands died, wiping out the Hantei
+      heirs and sickening the Emperor himself. Thus the Clan War became inevitable.
+    number: 1
+
+  - title: Scorpion Clan Coup
+    type: Territory
+    deck: Other
+    text: 'Rokugani players cannot control the Imperial Favor or take Favor actions.Favor Political Battle: Move home a target
+      Personality.'
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: As his clan fell, Bayushi Shoju awaited his destiny, seated upon the Emerald Throne. No man could escape his fate.
+      So how could an Empire?
+    number: 1
+
+  - title: The Iron Citadel
+    type: Clock
+    deck: Other
+    text: 1- Once each, a number of Rokugani players equal to the number of opened Black Scrolls (including this one) may give
+      their Stronghold +2GP before it bows.4- Rokugani players may each use their Strongholds' abilities an additional time
+      per turn.9- All Rokugani Strongholds lose all text and their stats are set to 0.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Born of the second scroll's dark power, this fortress became the gathering place for Junzo's army, an unspeakable
+      horde of walking dead, monstrous oni, and hopelessly Tainted mortals.
+    number: 2
+
+  - title: Beiden Pass
+    type: Territory
+    deck: Other
+    text: '(Cannot be conquered.) The Yogo Junzo player has the following abilities which may be used c times per turn total
+      (but still only once per turn each):Interrupt: Negate a Fear effect.Interrupt: Negate a Melee or Ranged Attack.Absent
+      Interrupt: Negate an Engage action or one of the action''s movements.Absent Battle: Move your target Shadowlands Personality
+      at any location home or to the current battlefield.Battle/Open: Straighten your target Shadowlands Personality.'
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: It was in Beiden Pass that the armies of Sukune and the disgraced Toturi encountered each other.
+    number: 2
+
+  - title: Black Wind from the Soul
+    type: Clock
+    deck: Other
+    text: 1- Each Rokugani player refills their rightmost Province face-up, once per turn.4- Cards from their rightmost Provinces
+      enter play for 2 less Gold.8- Ignore Tiers 1 and 2. Destroy each Rokugani player's rightmost Province.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: The Phoenix opened four scrolls, seeking forbidden knowledge that might aid them against Fu Leng. Their souls were
+      the price for their discovery. Isawa Tadaka was the first to pay, summoning an oni and torturing it with the power granted
+      by the third scroll.
+    number: 3
+
+  - title: Isawa Palace
+    type: Territory
+    deck: Other
+    text: '(Cannot be conquered.) The Yogo Junzo player has the ability, "Absent Unstoppable Battle, : For each Gold spent,
+      give a non-Throne Room Territory a c Province Strength bonus or Fu Leng a c Force bonus, up to 5 Gold spent."'
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: To understand the threat to the Empire, the Phoenix sacrificed their very souls, unfurling black scrolls. Yet their
+      good intentions could not spare them the dire consequences.
+    number: 3
+
+  - title: The Walking Horror of Fu Leng
+    type: Clock
+    deck: Other
+    text: 1- Once each, a number of Rokugani players equal to the number of opened Black Scrolls (including this one) may Recruit
+      their first Holding this turn for 2 less Gold.6- Each Rokugani player's first Recruited Holding enters play unbowed.8-
+      Destroy Holdings before Rokugani players Recruit them. Their Holdings have -1GP.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Before the Clan War even began, the Fox lord Kitsune Gohei opened the fourth scroll in search of immortality. It
+      did make him immortal, but the price was his humanity. His daughter Ryosei would hunt him for years, trying to purge the
+      shame of his existence.
+    number: 4
+
+  - title: Dark Divination
+    type: Clock
+    deck: Other
+    text: 1- Each Rokugani player draws a card.6- Each Rokugani player draws a card.9- Each Rokugani player discards four cards.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Isawa Uona, the Master of Air, opened the fifth scroll to learn what the future held. The scroll's Taint turned
+      her face into an unmoving mask whose eyes wept tears of blood.
+    number: 5
+
+  - title: Otosan Uchi
+    type: Territory
+    deck: Other
+    text: '(Cannot be conquered.) You may use abilities on this Territory c times total (usable only here).Repeatable Battle:
+      Put a target attachment into its owner''s hand.Repeatable Interrupt: The action''s first Fear effect destroys Shadowlands
+      cards it bows.Repeatable Unstoppable Battle: Fear 3.Repeatable Battle: Straighten your target Shadowlands Personality.'
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: A poisonous weed had grown in the heart of Rokugan. The time had come to cut it out.
+    number: 5
+
+  - title: Shapeshifting
+    type: Clock
+    deck: Other
+    text: 1- The Rokugani players choose an opened Black Scroll; Shapeshifting copies its traits. (Resolve effects and add Corruption
+      tokens based on the copied Black Scroll.)8- When Tier 1 is resolving, the Yogo Junzo player chooses the Scroll instead.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Isawa Tomo, the Master of Water, sought to master the potential of the sixth scroll. Its grotesque power was beyond
+      his comprehension or control.
+    number: 6
+
+  - title: Throne Room
+    type: Territory
+    deck: Other
+    province_strength: 0
+    text: (Cannot be conquered.) Rokugani players ignore Honor Requirements. After a Black Scroll is opened, give all non-Shadowlands
+      Personalities a number of Corruption tokens equal to the Threat Tier currently being resolved (1, 2, or 3). If a Personality
+      ever has more Corruption tokens than printed Chi plus attachments, remove their Corruption tokens and give them Shadowlands
+      until they leave play. After armies assign to attack the Throne Room, put the Throne Room Terrain into play and discard
+      without effect all unopened Black Scrolls except The 12th Black Scroll. For each card this discarded, each Rokugani player
+      draws a card. Then, open The 12th Black Scroll.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: As thunder echoes through an endless valley, so too will the past become the present. Every man is but a bolt of
+      lightning. Mortals can kill gods.
+    number: 6
+
+  - title: Touch of Despair
+    type: Clock
+    deck: Other
+    text: 1- Rokugani players look at the top five cards of their Dynasty decks and put any of those cards at the bottom.5-
+      Corruption tokens are not added.10- Ignore Tiers 1 and 2. c is increased by 1.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: The spell Isawa had once devised to purge the Taint now bestowed it instead. Isawa Tsuke, proudest and most powerful
+      of the Elemental Masters, was consumed by the seventh's scroll's madness.
+    number: 7
+
+  - title: Touch of Fu Leng
+    type: Clock
+    deck: Other
+    text: 1- Each Rokugani player Recruits his or her first Personality each turn for 2 less Gold.5- After they enter play,
+      the player may Equip an attachment to them for 4 less Gold.8- Destroy each Rokugani player's first Recruited Personality
+      before entering play.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Kuni Yori used the eighth scroll to raise an army of undead for the Crab warrior Hida Amoro. The Kuni believed his
+      knowledge of the Shadowlands would let him use the scroll safely. The Taint soon proved him wrong.
+    number: 8
+
+  - title: Return of the Fallen Lord
+    type: Clock
+    deck: Other
+    text: '1- Rokugani players'' cards out of play have Kharmic. Their first Kharmic action costs .6- Rokugani players have,
+      "Dynasty/Open, :g*:: Recruit a target card from your discard pile."10- Ignore Tiers 1 and 2. The Yogo Junzo player gains,
+      "Open, :g*:: For each Rokugani player, you may target and Recruit a Personality from that player''s discard pile; the
+      player pays the Gold costs."'
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Driven by grief and rage, Soshi Bantaro used the ninth scroll to bring his lord, Bayushi Shoju, back from the dead.
+      What arose was not Shoju, but an abomination that wore his rotting corpse like a garment.
+    number: 9
+
+  - title: A Terrible Oath
+    type: Clock
+    deck: Other
+    text: 1- Rokugani players each give one of their Holdings +2GP.4- Rokugani Personalities have +1F/+1C.10- Ignore Tiers 1
+      and 2. c is increased by 1.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Kuni Yori completed his betrayal by using the tenth scroll to sacrifice Hida Sukune, younger son of the Great Bear.
+      The atrocity granted his soldiers great power, but the cost was irredeemable corruption.
+    number: 10
+
+  - title: Doom of Fu Leng
+    type: Clock
+    deck: Other
+    text: 1- The Yogo Junzo player discards a card.6- The Yogo Junzo player discards a card.9- The Yogo Junzo player draws four
+      cards.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Kuni Yori's servant Wazinu sought to use the eleventh scroll against the Chimes of Purity in Kyuden Seppun. The
+      scheme failed, and Wazinu's scroll was cast into Jigoku.
+    number: 11
+
+  - title: The 12th Black Scroll
+    type: Clock
+    deck: Other
+    text: 12- This can only be opened at the start of a turn or by the Throne Room. Its Threat is Tier 3. Fu Leng has been restored
+      to his full power in the mortal realm. The Yogo Junzo player Recruits Fu Leng from outside the game, ignoring costs. After
+      this turn ends, Yogo Junzo wins. 1,000 Years of Darkness have begun...
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: '"You see, now that your soul is fully released, it is also fully bonded into the body of the last Hantei. That''s
+      right, Fu Leng… you are mortal." - The Hooded Ronin'
+    number: 12
+
+  - title: Corrupt Geisha House
+    extended_title: Corrupt Geisha House • Experienced
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Experienced
+    - Geisha House
+    - Shadowlands
+    gold_cost: 2
+    gold_production: 2
+    text: Other players cannot target your Holdings. Other players' cards cannot discard, play, or remove from the game your
+      cards out of play. Negate other players' card effects that remove abilities from your Personalities, or prevent their
+      abilities being used. Focusing is always optional for you. You have no maximum hand size.
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Jason Behnke
+    flavor: Those who believed the influence of the Scorpion Clan truly gone were fools.
+    number: 13
+
+  - title: Corrupt Gold Mines
+    extended_title: Corrupt Gold Mines • Experienced
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Experienced
+    - Mine
+    - Shadowlands
+    gold_cost: 2
+    gold_production: 3
+    text: After Fu Leng enters play, straighten this Holding.
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Damien Mammoliti
+    flavor: Mirumoto Hitomi's obsession with vengeance, and Togashi's secrecy, left even the reclusive Dragon Clan vulnerable
+      to corruption.
+    number: 14
+
+  - title: Corrupt Stables
+    extended_title: Corrupt Stables • Experienced
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Experienced
+    - Shadowlands
+    - Stables
+    gold_cost: 2
+    gold_production: 2
+    text: After this Holding enters play, refill the Province face-up.
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: J. Edwin Stevens
+    flavor: The Shadowlands hordes marched across the face of the Empire. Even the Unicorn, the most compassionate of all Great
+      Clans, were not immune to the seduction of their dark promises.
+    number: 15
+
+  - title: Corrupted Copper Mine
+    extended_title: Corrupted Copper Mine • Experienced
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Experienced
+    - Mine
+    - Shadowlands
+    gold_cost: 2
+    gold_production: 2
+    text: After each player's turn begins, if the Territory Scorpion Clan Coup has been conquered, straighten this Holding.
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: J. Edwin Stevens
+    flavor: With their Champion cast out and the Akodo family dissolved, the Lion fell under the rulership of the Matsu family.
+      With Matsu Tsuko at the helm, they became increasingly violent and unreasonable, setting the stage for terrible events
+      to follow.
+    number: 16
+
+  - title: Corrupted Iron Mine
+    extended_title: Corrupted Iron Mine • Experienced
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Experienced
+    - Mine
+    - Shadowlands
+    gold_cost: 2
+    gold_production: 2
+    text: 'Battle, w: Give a target enemy Follower or Personality -3F. If the Personality in that unit is Shadowlands, you may
+      take an additional action which must target the same card.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Damien Mammoliti
+    flavor: Kuni Yori knelt before the Throne. "The strength of Earth is at the command of the Crab Clan. It shall be at your
+      command as well, my lord."
+    number: 17
+
+  - title: Corrupted Silver Mine
+    extended_title: Corrupted Silver Mine • Experienced
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Experienced
+    - Mine
+    - Shadowlands
+    gold_cost: 2
+    gold_production: 2
+    text: 'After you Recruit this Holding, you may discard a Personality from your Province to refill it face-up.Dynasty, w:
+      Put your target discarded (not dead) Personality into your Province, face-up, discarding any card currently there.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Damien Mammoliti
+    flavor: The experiments of the Elemental Masters had dire consequences throughout their clan.
+    number: 18
+
+  - title: Kuni Yori, the Corruptor
+    extended_title: Kuni Yori, the Corruptor • Inexperienced
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Inexperienced
+    - Shadowlands
+    - Shugenja
+    force: 2
+    chi: 4
+    gold_cost: 8
+    personal_honor: 0
+    text: 'Dynasty, w: Yori may remain bowed. Recruit your target dead Personality, ignoring costs. Remove the target from the
+      game after the next time Yori straightens or leaves play.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Luis NCT
+    flavor: '"A leader should be strong. Even the Great Bear was not his equal."'
+    number: 19
+
+  - title: Isawa Tsuke, Master of Fire
+    extended_title: Isawa Tsuke, Master of Fire • ExperiencedCW
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Unique
+    - Elemental Master
+    - ExperiencedCW
+    - Fire
+    - Insane
+    - Shadowlands
+    - Shugenja
+    force: 4
+    chi: 4
+    gold_cost: 12
+    personal_honor: 0
+    text: 'Fire Maho Unstoppable Battle, w: Make four simultaneous Ranged Attacks with a total strength of 8 that may target
+      Items and may not be combined or increased.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Jason Engle
+    flavor: '"The guilty shall burn, and I have yet to see one who is without failing."'
+    number: 20
+
+  - title: Dark Daughter of Fu Leng
+    extended_title: Dark Daughter of Fu Leng • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Experienced
+    - Nonhuman
+    - Shadowlands
+    - Shugenja
+    force: 0
+    chi: 3
+    gold_cost: 5
+    personal_honor: 0
+    text: 'Home Interrupt, w: Reduce a target card''s Gold Cost (in play) by 1.Home Interrupt, w: The action''s first Fear effect
+      may target Items and Spells and destroys attachments and Shadowlands Personalities after bowing them.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Alberto Tavira Espinar
+    flavor: '"Filial piety is a virtue, no? All this for the head of my household."'
+    number: 21
+
+  - title: Doji Nashiko, the Demon Bride of Fu Leng
+    extended_title: Doji Nashiko, the Demon Bride of Fu Leng • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Experienced
+    - Nonhuman
+    - Shadowlands
+    force: 1
+    chi: 2
+    gold_cost: 4
+    personal_honor: 0
+    text: 'Home Interrupt, w: Until the Battle action resolves, c is increased by 1.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Alberto Tavira Espinar
+    flavor: '"I turned the blades of hundreds of men against one another and delivered their souls into his grace. I did this
+      gladly, because beauty such as mine can only be appreciated by a God."'
+    number: 22
+
+  - title: Isawa Tanayama, the Necromancer
+    extended_title: Isawa Tanayama, the Necromancer • ExperiencedCW
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - ExperiencedCW
+    - Shadowlands
+    - Shugenja
+    force: 1
+    chi: 4
+    gold_cost: 4
+    personal_honor: 0
+    text: 'After you Recruit Tanayama, search your deck, then discard pile, for a Follower, show it, and put it in your hand.Home
+      Battle, b: Remove a target dead non-Seven Thunder Personality from the game. Give a target enemy Follower or Personality
+      a Force penalty equal to the dead Personality''s printed Force.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Sam Flegal
+    flavor: '"What secrets are more precious than those of life beyond death?"'
+    number: 23
+
+  - title: Kyojin
+    extended_title: Kyojin • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Expendable
+    - Experienced
+    - Nonhuman
+    - Samurai
+    - Shadowlands
+    - Yojimbo
+    force: 4
+    chi: 5
+    gold_cost: 7
+    personal_honor: 0
+    text: '(Duelists win tied duels versus non-Duelists. Draw a card after your Expendable card dies.) Interrupt: If the action
+      targets your Shadowlands Personality, it targets Kyojin instead, if legal.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Kez Laczin
+    flavor: '"I serve. I protect. My masters oppose yours. The outcome is clear."'
+    number: 24
+
+  - title: Kyoso no Oni
+    extended_title: Kyoso no Oni • ExperiencedCW
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - ExperiencedCW
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 4
+    chi: 4
+    gold_cost: 8
+    personal_honor: 0
+    text: 'Battle, w: Destroy one or two target enemy attachments, each with lower Force than Kyoso; if you target two, one
+      must be attached to a Shadowlands Personality.Battle, w: Ranged 5 Attack.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Kez Laczin
+    flavor: '"Betrayed. Any empire that permits love as pure as mine to be denied does not deserve to exist."'
+    number: 25
+
+  - title: Moto Tsume
+    extended_title: Moto Tsume • ExperiencedCW
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Commander
+    - ExperiencedCW
+    - Samurai
+    - Shadowlands
+    force: 3
+    chi: 3
+    gold_cost: 3
+    personal_honor: 0
+    text: 'Interrupt: Negate Tsume''s destruction from another player''s action.Battle: Fear 4.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Sam Flegal
+    flavor: '"You call us the Dark Moto. You are wrong. We are the true Moto."'
+    number: 26
+
+  - title: Tsukuro
+    extended_title: Tsukuro • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Experienced
+    - Nonhuman
+    - Shadowlands
+    - Undead
+    force: 4
+    chi: 3
+    gold_cost: 6
+    personal_honor: 0
+    text: 'You may Recruit Tsukuro even if he is dead.Tireless Battle: If Tsukuro is unbowed, Fear 3. You may target and move
+      home another of your Shadowlands Personalities.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: David Horne
+    flavor: '"You are a slave to hope. No matter our struggles, we will be what we were always meant to be. I came to accept
+      this, and it has made me free."'
+    number: 27
+
+  - title: Yogo Junzo, The Betrayer
+    extended_title: Yogo Junzo, The Betrayer • Experienced 2CW
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Experienced 2CW
+    - Unique
+    - Nonhuman
+    - Shadowlands
+    - Shugenja
+    - Undead
+    force: 4
+    chi: 5
+    gold_cost: 14
+    personal_honor: 0
+    text: 'After Junzo enters play from your Province, open a Black Scroll. If this opens The Wasting Disease, you may target
+      and destroy a card without attachments.Battle: Fear 5 that destroys any attachment or Shadowlands Personality after bowing
+      it. You may move Junzo home.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Sam Flegal
+    flavor: '"I sought to serve, loyally. I have found one worthy of that loyalty."'
+    number: 28
+
+  - title: Line-Breaker
+    type: Follower
+    deck: Fate
+    keywords:
+    - Expendable
+    - Reserve
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 3
+    chi: 0
+    gold_cost: 2
+    focus: 1
+    text: '(Draw a card after your Expendable card dies.) Battle, w: Fear 3, Melee 3 Attack, or Ranged 3 Attack, that can target
+      Items and Spells.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Luis NCT
+    flavor: '"We could expend forces to break their lines, yes, but why bother?" - Hida Kisada'
+    number: 29
+
+  - title: Parasite
+    type: Item
+    deck: Fate
+    keywords:
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 0
+    chi: 0
+    gold_cost: 0
+    focus: 4
+    text: 'Invest : You may Equip this Item as a Battle.You may Equip this Item to any player''s non-Seven Thunder Personality.
+      This Item cannot be transferred. After this Item attaches, give this Personality a Corruption token. Actions taken by
+      this Item''s owner that target a card in this unit have Absent and Home. After this Item is destroyed, its owner draws
+      a card.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Patrick McEvoy
+    flavor: '"Fortunes! Get it off! Get it off of me before it… ARRRRGH!"'
+    number: 30
+
+  - title: The Hidden Heart of Iuchiban
+    extended_title: The Hidden Heart of Iuchiban • ExperiencedCW
+    type: Ring
+    deck: Fate
+    keywords:
+    - Unique
+    - ExperiencedCW
+    - Shadowlands
+    focus: 3
+    text: 'The :Rank3: in your Stronghold''s ability is :Rank4: instead.Unstoppable Dynasty: Destroy a target Shadowlands Personality
+      you control but do not own to put this Ring into play and draw a card.Unstoppable Interrupt, w: Give the action Unstoppable.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Shen Fei
+    flavor: Some weapons were too terrible for either side.
+    number: 31
+
+  - title: Rite of Binding
+    type: Spell
+    deck: Fate
+    keywords:
+    - Destined
+    - Reserve
+    - Maho
+    gold_cost: 2
+    focus: 4
+    text: After this Spell enters play, Recruit your target dead Personality, ignoring costs. Remove the target and this Spell
+      from the game before this turn ends.
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Alberto Tavira Espinar
+    flavor: '"Ah ah ah, my burly friend, not so quickly. I have need of you yet, and then you can perish if you wish. In fact,
+      I can guarantee that much."'
+    number: 32
+
+  - title: The Blood Awakens
+    type: Spell
+    deck: Fate
+    keywords:
+    - Expendable
+    - Reserve
+    gold_cost: 2
+    focus: 1
+    text: 'Maho Battle, w: Melee Attack equal to this Shugenja''s Chi or 6, whichever is lower. Before the next time this battle
+      this Shugenja would be destroyed, negate the destruction and then move him or her home.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Patrick McEvoy
+    flavor: '"How dare you?" Tsuke demanded. "How dare you question an Elemental Master?"'
+    number: 33
+
+  - title: The Searing Touch of Jigoku
+    type: Spell
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Invest : Draw a card and you may Equip this Spell as an Interrupt. Maho Home Unstoppable Interrupt: Negate an Event
+      action or negate your Personality''s destruction during the Action Phase.Maho Absent Home Unstoppable Battle, w: Remove
+      all traits from a Terrain or straighten a card in a unit.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Luis NCT
+    flavor: '"You will make good use of this, I am sure, my lord."'
+    number: 34
+
+  - title: Compromised Supply Lines
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Unstoppable Battle: Target (up to) f enemy units; if you targeted more than one unit, they must have a combined Gold
+      Cost of i (or less). Move them home. You then may target and move home a Shadowlands Personality.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Jason Behnke
+    flavor: Monstrosities haunted the whole of Rokugan, greatly complicating travel and the resupply of armies.
+    number: 35
+
+  - title: Darkness is Inevitable
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'Unstoppable Battle: Destroy e target enemy attachments. You then may target your Shadowlands card to make a Melee
+      Attack equal to its Force which may only target a Shadowlands card. Destroy your targeted card.Unstoppable Interrupt:
+      If the action has any Melee or Ranged Attack, give it Unstoppable and its first such attack +2 strength. Draw a card.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Damien Mammoliti
+    flavor: Good men and women hurled themselves into impossible battles, knowing full well the outcome would be their deaths.
+    number: 36
+
+  - title: Fallen in Battle
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Unstoppable Engage: Target f Personalities. Their controllers may move them home. Then permanently give Shadowlands
+      to any at the current battlefield. Draw a card.Unstoppable Interrupt: Negate an action from another player''s card.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Jason Behnke
+    flavor: Many lives were lost on the battlefield. Even worse, many who fell survived, darkness forever staining their souls.
+    number: 37
+
+  - title: Hunting in the Shadows
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Unstoppable Dynasty, : Put one or two Fate cards in your discard pile with different titles into your hand. Remove
+      this Strategy from the game.Unstoppable Battle: Put one or two Fate cards in your hand at the bottom of your deck. Draw
+      an equal number of cards, plus one.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Kez Laczin
+    flavor: '"Look, Papa! Is it a good omen?" The old man felt eyes in the woods and said nothing.'
+    number: 38
+
+  - title: Insidious Influence
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Unstoppable Dynasty: Target a Personality. You may give him or her a Corruption token. You may destroy one of his
+      or her attachments.Unstoppable Battle: Give e target Followers or Personalities -4F each. You then may make a Fear 2 effect
+      against one of the targets if it is Shadowlands (if legal).'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Jason Behnke
+    flavor: '"The other Kami may hear your prayers, but do they answer? Lord Fu Leng answers prayers in terrible and majestic
+      ways."'
+    number: 39
+
+  - title: Tactical Retreat
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Unstoppable Battle: Give c target enemy Followers or Personalities -2F each. Draw a card.Unstoppable Battle: Move
+      e of your target Personalities home. Draw a card.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Shen Fei
+    flavor: '"Son," Kisada rasped. "What have we done?" "Nothing we cannot undo, father," Yakamo replied.'
+    number: 40
+
+  - title: Terrifying Presence
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Unstoppable Battle: e Fear 3 effects. You then may make another Fear 3 which destroys any Shadowlands Personality
+      it bows.Unstoppable Interrupt: If the action has any Fear effects, give it Unstoppable and its first such effect +3 strength.
+      Draw a card.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Damien Mammoliti
+    flavor: The Shadowlands forces appeared like a blight upon the battlefield, the very sky darkening at their approach.
+    number: 41
+
+  - title: Unholy Power
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'As a Focus Effect, if this is the third or later duel this phase, end the duel without resolution.Unstoppable Battle:
+      Target (up to) f enemy units; if you targeted more than one unit, they must have a combined Gold Cost of i (or less).
+      Bow them. You then may target and bow or straighten a Shadowlands Personality.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Damien Mammoliti
+    flavor: '"Your Empire has grown lazy! You have forgotten the power of the darkness that you turned your back on! It is not
+      a mistake you will live to regret, fools!"'
+    number: 42
+
+  - title: Junzo's Dark Citadel
+    type: Stronghold
+    deck: Pre-Game
+    province_strength: 10
+    gold_production: 4
+    starting_honor: -20
+    text: 'Your Unstoppable effects cannot be negated by other players'' cards. Your Personalities have Shadowlands. Once per
+      game, you may Recruit a Holding from your Dynasty deck.Dynasty: You may Recruit a Shadowlands Holding ignoring costs,
+      refilling the Province face-up. You may target and take control of f Shadowlands Personalities with combined unit Gold
+      Cost of i (or less). Straighten their units.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Chris Ostrowski
+    flavor: '"You took my lord from me," Junzo whispered. "I will take all you have in repayment."'
+    number: 43
+
+  - title: The Brotherhood's Abbey
+    type: Stronghold
+    clan: Brotherhood of Shinsei
+    deck: Pre-Game
+    province_strength: 6
+    gold_production: 4
+    starting_honor: 4
+    text: 'Your Monk and Seven Thunder Personalities in and out of play have your Clan Alignment. You may put Rings into play
+      from your discard pile.Tireless Battle/Interrupt: Take an additional Battle or Interrupt, whichever this was taken as,
+      from your target Ring in play or your discard pile, ignoring bow costs.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Chris Ostrowski
+    flavor: '"The days we have feared have come to pass. Now it is time to see if our alleged wisdom is sufficient to save an
+      Empire." - Tetsuya'
+    number: 44
+
+  - title: House of the Black Lion
+    type: Stronghold
+    clan: Toturi's Army
+    deck: Pre-Game
+    province_strength: 7
+    gold_production: 4
+    starting_honor: 4
+    text: 'Your Commander, Ronin, and Seven Thunder Personalities in and out of play have your Clan Alignment. You Equip and
+      Recruit Ronin cards for 1 less Gold.Battle: Give your target Follower +2F.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Chris Ostrowski
+    flavor: The ronin Toturi, formerly Akodo Toturi, called by some the Black Lion, rallied all who would follow him. He turned
+      a force of misfits and ronin into an army that might well save the Empire from utter destruction.
+    number: 45
+
+  - title: The Alliance
+    type: Stronghold
+    clan: Mantis
+    deck: Pre-Game
+    keywords:
+    - Port
+    province_strength: 6
+    gold_production: 4
+    starting_honor: 2
+    text: 'Your Seven Thunder Personalities in and out of play have your Clan Alignment.Battle: Straighten your target Personality
+      with a Ranged Attack ability.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Chris Ostrowski
+    flavor: '"We will stand among them as equals, or they will prove we are not by killing us." - Yoritomo, Son of Storms'
+    number: 46
+
+  - title: Fu Leng, the Ninth Kami
+    extended_title: Fu Leng, the Ninth Kami • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Unique
+    - Emperor
+    - Experienced
+    - Kami
+    - Nonhuman
+    - Samurai
+    - Shadowlands
+    - Shugenja
+    chi: 15
+    gold_cost: 20
+    personal_honor: 0
+    text: 'Your Fear actions may target Items and Spells and destroy cards after bowing them. Other players'' cards lose Resilient.
+      Their actions lose Unstoppable and their effects can be negated regardless of card effects.Repeatable Interrupt: Negate,
+      or choose new targets for, an action targeting a card in Fu Leng''s unit. Give Fu Leng -3F.Unstoppable Battle: Fu Leng''s
+      grandeur overwhelms mortal men. Make (up to) c Fear effects with a total strength of :Rank•5:.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"My siblings competed for the Throne. I only seek the conclusion of that contest."'
+    number: 47
+
+  - title: Hida Yakamo, Seven Thunder
+    extended_title: Hida Yakamo, Seven Thunder • Experienced 2CW
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Experienced 2CW
+    - Loyal
+    - Resilient
+    - Tactician
+    - Unique
+    - Clan Champion
+    - Commander
+    - Hero
+    - Jade
+    - Samurai
+    force: 6
+    chi: 4
+    gold_cost: 14
+    honor_requirement: 6
+    personal_honor: 4
+    text: 'Cannot gain Corruption tokens or Shadowlands. After Yakamo enters play, you may create and Equip to him (paying all
+      costs) a +2C/4GC Hand • Jade Item with the traits, "Cannot be transferred or destroyed. Has +2F while opposing an Obsidian
+      card, a Shadowlands card, or an army with more units."Jade Battle: Melee 4 Attack.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Ben Peck
+    flavor: '"For fallen family."'
+    number: 48
+
+  - title: Doji Hoturi, Seven Thunder
+    extended_title: Doji Hoturi, Seven Thunder • Experienced 2CW
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Experienced 2CW
+    - Loyal
+    - Unique
+    - Clan Champion
+    - Samurai
+    force: 5
+    chi: 6
+    gold_cost: 15
+    honor_requirement: 10
+    personal_honor: 4
+    text: 'Cannot gain Corruption tokens or Shadowlands. Favor actions may not target Hoturi. Add Hoturi''s PH to the FV of
+      his first focused card per duel. After Hoturi is destroyed, gain Honor equal to his Personal Honor.Iaijutsu Battle: Hoturi
+      challenges a target enemy Personality. Destroy the loser. If the loser did not focus from his or her hand, the winner
+      draws a card.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Jason Engle
+    flavor: '"For she who holds my heart."'
+    number: 49
+
+  - title: Mirumoto Hitomi, Seven Thunder
+    extended_title: Mirumoto Hitomi, Seven Thunder • Experienced 2CW
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Experienced 2CW
+    - Loyal
+    - Unique
+    - Samurai
+    force: 5
+    chi: 4
+    gold_cost: 10
+    personal_honor: 1
+    text: 'Cannot gain Corruption tokens or Shadowlands. After Hitomi enters play, you may create and Equip to her (paying all
+      costs) a +2F/4GC Hand • Obsidian Item with the traits, "Cannot be transferred or destroyed. Hitomi has Shugenja. Has +2C
+      while opposing a Jade card or a Personality with higher Personal Honor."Unstoppable Engage: Target one to three cards
+      in the hand of a player with a unit at this battlefield. He or she shuffles them into their deck and draws that many cards.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Wenjuinn
+    flavor: '"For revenge."'
+    number: 50
+
+  - title: Togashi Yokuni, Kami
+    extended_title: Togashi Yokuni, Kami • Experienced 2CW
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Experienced 2CW
+    - Unique
+    - Clan Champion
+    - Dragon
+    - Nonhuman
+    - Samurai
+    - Shugenja
+    force: 6
+    chi: 6
+    gold_cost: 15
+    honor_requirement: 10
+    personal_honor: 4
+    text: 'Cannot gain Corruption tokens or Shadowlands. Yokuni and your Seven Thunder cards in and out of play cannot be controlled
+      by other players and lose Loyal.Open, : If it is your turn, even if Yokuni is face-up in your Province, look at the top
+      card of your Fate deck. You may put it at the bottom. Draw a card.Battle: Melee 4 Attack.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Adam Schumpert
+    flavor: '"For my plans."'
+    number: 51
+
+  - title: Toturi, Seven Thunder
+    extended_title: Toturi, Seven Thunder • Experienced 2CW
+    type: Personality
+    clan: Toturi's Army,Unaligned
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Experienced 2CW
+    - Tactician
+    - Unique
+    - Commander
+    - Ronin
+    - Samurai
+    force: 6
+    chi: 5
+    gold_cost: 15
+    honor_requirement: 10
+    personal_honor: 5
+    text: 'Cannot gain Corruption tokens or Shadowlands. Can only be controlled by his owner. Lion Clan players may Proclaim
+      Toturi. Other players'' Fear effects targeting cards in Toturi''s army have -1 strength.Tireless Battle: Toturi unites
+      the Lion Clan. Another target Personality''s printed abilities may be used an additional time this turn. Straighten them
+      or take an additional action.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Sergio Camarena
+    flavor: '"For Rokugan."'
+    number: 52
+
+  - title: Yoritomo, Son of Storms
+    extended_title: Yoritomo, Son of Storms • ExperiencedCW
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Duelist
+    - Kensai
+    - Naval
+    - Unique
+    - Clan Champion
+    - Commander
+    - ExperiencedCW
+    - Samurai
+    - Thunder
+    force: 5
+    chi: 4
+    gold_cost: 14
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Yoritomo can only be controlled by his owner and has +1F/+1C for each of his Weapons. Followers and other Mantis
+      Clan Personalities in Yoritomo''s army have +1F while opposing a Shadowlands card.Battle, : Draw a card. Discard a card
+      unless you (now) have fewer cards in your hand or fewer Provinces than any other player.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Jason Behnke
+    flavor: '"For greatness."'
+    number: 53
+
+  - title: Isawa Tadaka, Seven Thunder
+    extended_title: Isawa Tadaka, Seven Thunder • Experienced 2CW
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Experienced 2CW
+    - Loyal
+    - Resilient
+    - Unique
+    - Earth
+    - Elemental Master
+    - Jade
+    - Magistrate
+    - Shugenja
+    force: 4
+    chi: 5
+    gold_cost: 12
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Tadaka need not bow for your Kiho or Spell actions.Interrupt: Negate an action from another Shugenja or Spell.Earth
+      Jade Unstoppable Battle: Tadaka casts Jade Strike. Bow a target enemy card. Destroy it if it is Shadowlands or has no
+      attachments.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    errata_text: The word "enemy" added to second ability by Designer, 2024.
+    rarity: Fixed
+    artist: Diego Gisbert Llorens
+    flavor: '"For a brighter future."'
+    number: 54
+
+  - title: Bayushi Kachiko, Seven Thunder
+    extended_title: Bayushi Kachiko, Seven Thunder • Experienced 2CW
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Experienced 2CW
+    - Loyal
+    - Unique
+    - Courtier
+    - Empress
+    - Imperial
+    - Seductress
+    force: 1
+    chi: 3
+    gold_cost: 6
+    personal_honor: 1
+    text: 'Cannot gain Corruption tokens or Shadowlands.Dynasty/Open, w: Kachiko may remain bowed. Target a Personality. While
+      Kachiko remains bowed, after each time the target assigns, the target''s controller''s turn begins, and your turn begins
+      if the target is Shadowlands, give the target a -1F/-1C Poison token. Remove these tokens if Kachiko straightens or leaves
+      play.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Mario Wibisono
+    flavor: '"For redemption."'
+    number: 55
+
+  - title: The Hooded Ronin, Descendant of Shinsei
+    extended_title: The Hooded Ronin, Descendant of Shinsei • ExperiencedCW
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Unique
+    - Ashigaru
+    - ExperiencedCW
+    - Monk
+    - Ronin
+    - Samurai
+    force: 2
+    chi: 5
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Cannot gain Corruption tokens or Shadowlands. Can only be controlled by his owner. Need not bow for your Kiho actions.Open,
+      w, : Give Destined to a target face-up Personality in a Province and ignore their Honor Requirement. If they are a Seven
+      Thunder, you may Recruit them. One or more target players may each straighten a Ring they control.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"For destiny."'
+    number: 56
+
+  - title: Otaku Kamoko, Seven Thunder
+    extended_title: Otaku Kamoko, Seven Thunder • Experienced 2CW
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Conqueror
+    - Duelist
+    - Experienced 2CW
+    - Loyal
+    - Unique
+    - Commander
+    - Samurai
+    force: 5
+    chi: 4
+    gold_cost: 16
+    honor_requirement: 8
+    personal_honor: 3
+    text: 'Cannot gain Corruption tokens or Shadowlands. Kamoko''s Followers must be Cavalry. After Kamoko enters play, create
+      and attach to her a 1F Cavalry Follower with the trait, "After Kamoko''s Battle action targets Yogo Junzo, destroy him."
+      Battle: If they would be opposed, move a target Personality at any location to the current battlefield. If Kamoko is attacking,
+      you may target and destroy a card without attachments in the Personality''s unit.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Charles Urbach
+    flavor: '"For the promises we have made to each other."'
+    number: 57
+
+  - title: The First Legion
+    type: Proxy
+    deck: Other
+    keywords:
+    - Legion
+    - Samurai
+    force: 3
+    chi: 4
+    gold_cost: 9
+    personal_honor: 4
+    text: This Personality has +2F while attacking.After this Personality is destroyed, remove it from the game; it may not
+      be Recruited again.
+    rarity: Fixed
+    artist: Britt Martin
+    flavor: The Imperial Legions are among the most prestigious military units in Rokugan. Among them, none stands taller than
+      the sacred First Legion.
+    number: 58
+
+  - title: The Second Legion
+    type: Proxy
+    deck: Other
+    keywords:
+    - Legion
+    - Samurai
+    force: 3
+    chi: 4
+    gold_cost: 7
+    personal_honor: 2
+    text: 'After this Personality is destroyed, remove it from the game; it may not be Recruited again.Battle, w: Ranged 4 Attack.'
+    rarity: Fixed
+    artist: Thomas Denmark
+    flavor: The Second Legion contains vastly more archery units than the other legions and often lends its support to others
+      during wartime.
+    number: 59
+
+  - title: The Third Legion
+    type: Proxy
+    deck: Other
+    keywords:
+    - Duelist
+    - Legion
+    - Samurai
+    force: 4
+    chi: 5
+    gold_cost: 6
+    personal_honor: 3
+    text: After this Personality is destroyed, remove it from the game; it may not be Recruited again.
+    rarity: Fixed
+    artist: IFS
+    flavor: Steeped in the traditions of dueling, the Third Legion emphasizes a strategy of eliminating an opposing force's
+      leaders as the quickest path to victory.
+    number: 60
+
+  - title: The Fifth Legion
+    type: Proxy
+    deck: Other
+    keywords:
+    - Legion
+    - Shugenja
+    force: 4
+    chi: 5
+    gold_cost: 7
+    personal_honor: 2
+    text: After this Personality is destroyed, remove it from the game; it may not be Recruited again.
+    rarity: Fixed
+    artist: Lee Moyer
+    flavor: The smallest of the ten great legions, the Fifth Legion is well known for its high number of shugenja, and thus
+      its versatility.
+    number: 62
+
+  - title: The Sixth Legion
+    type: Proxy
+    deck: Other
+    keywords:
+    - Legion
+    - Samurai
+    - Scout
+    force: 4
+    chi: 4
+    gold_cost: 5
+    personal_honor: 2
+    text: After this Personality is destroyed, remove it from the game; it may not be Recruited again.
+    rarity: Fixed
+    artist: Malcolm McClinton
+    flavor: Emphasizing scouts and light infantry, the Sixth Legion is ever among the first of the legions to be deployed in
+      the name of their Emperor.
+    number: 63
+
+  - title: The Seventh Legion
+    type: Proxy
+    deck: Other
+    keywords:
+    - Commander
+    - Legion
+    - Samurai
+    force: 5
+    chi: 4
+    gold_cost: 7
+    personal_honor: 3
+    text: After this Personality is destroyed, remove it from the game; it may not be Recruited again.
+    rarity: Fixed
+    artist: Rhonda Libbey
+    flavor: Resolute and honorable to the last, the officers and warriors of the Seventh Legion often find themselves promoted
+      to join the First Legion.
+    number: 64
+
+  - title: The Eighth Legion
+    type: Proxy
+    deck: Other
+    keywords:
+    - Cavalry
+    - Legion
+    - Shugenja
+    force: 4
+    chi: 5
+    gold_cost: 9
+    personal_honor: 2
+    text: 'After this Personality is destroyed, remove it from the game; it may not be Recruited again.Home Battle: If it would
+      be opposed, move this Personality to the current battlefield.'
+    rarity: Fixed
+    artist: William O'Connor
+    flavor: The Eighth Legion blends cavalry and shugenja perfectly, and is easily the fastest of the ten great legions.
+    number: 65
+
+  - title: The Ninth Legion
+    type: Proxy
+    deck: Other
+    keywords:
+    - Naval
+    - Legion
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 2
+    text: After this Personality is destroyed, remove it from the game; it may not be Recruited again.
+    rarity: Fixed
+    artist: Malcolm McClinton
+    flavor: Alone among the great legions, the Ninth Legion employs significant naval forces as well as its normal infantry
+      make-up.
+    number: 66
+
+  - title: The Tenth Legion
+    type: Proxy
+    deck: Other
+    keywords:
+    - Legion
+    - Monk
+    force: 5
+    chi: 4
+    gold_cost: 7
+    personal_honor: 2
+    text: After this Personality is destroyed, remove it from the game; it may not be Recruited again.
+    rarity: Fixed
+    artist: Joachim Gmoser
+    flavor: Drawing heavily from the Dragon, the Tenth Legion makes great use of various monastic and unarmed combat styles
+      to confound their foes.
+    number: 67
+
+  - title: Hachiman
+    type: Proxy
+    deck: Other
+    keywords:
+    - Cavalry
+    force: 1
+    chi: 0
+    gold_cost: 0
+    text: After Kamoko's Battle action targets Yogo Junzo, destroy him.
+    rarity: Fixed
+    artist: Charles Urbach
+    flavor: For every great act the legendary Otaku Kamoko performed, her beloved steed was there to support her, aiding her,
+      lending her strength. Far more than a simple animal, Hachiman was a great hero of the Clan War, the slayer of Yogo Junzo,
+      and now sits among the stars with Kamoko. It is an honor justly deserved.
+    number: 68
+
+  - title: The Jade Hand
+    type: Proxy
+    deck: Other
+    keywords:
+    - Hand
+    - Jade
+    force: 0
+    chi: 2
+    gold_cost: 4
+    text: Cannot be transferred or destroyed. Has +2F while opposing an Obsidian card, a Shadowlands card, or an army with more
+      units.
+    rarity: Fixed
+    artist: Ben Peck
+    flavor: Forged by a Fortune from the scale of a Dragon, the full history and power of the Jade Hand are unknown. What is
+      known is that whoever bears it shall be a hero of legend.
+    number: 69
+
+  - title: The Obsidian Hand
+    type: Proxy
+    deck: Other
+    keywords:
+    - Hand
+    - Obsidian
+    force: 2
+    chi: 0
+    gold_cost: 4
+    text: Cannot be transferred or destroyed. Hitomi has Shugenja. Has +2C while opposing a Jade card or a Personality with
+      higher Personal Honor.
+    rarity: Fixed
+    artist: Wenjuinn
+    flavor: Severed from Lord Moon in ancient times, the Obsidian Hand is both a gift and a curse. Its power is great, but its
+      darkness also grows within the mortal soul.
+    number: 70
+
+  - title: The Throne Room
+    type: Proxy
+    deck: Other
+    keywords:
+    - Terrain
+    text: This Terrain may not be destroyed or have its traits removed and other Terrains will not enter play. This Terrain's
+      effects happen regardless of effects that prevent them. Seven Thunder Personalities have +3F/+3C and cannot move from
+      this battlefield.
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: A thousand years led to this moment.The next thousand rest on its outcome.Seven souls oppose a living god.And an
+      entire realm rests in the balance.
+    number: 71

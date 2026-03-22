@@ -1,0 +1,3362 @@
+set: Rise of Jigoku
+cards:
+  - title: Confront Your Truth
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Singular
+    text: 'This Event has Renew while you have Honesty. The first time each turn you turn a card in your hand face-up, you may
+      draw, then discard, a card.Open: Put this Event into play.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: (PD) Stock Art
+    flavor: Some paths are better left untraveled.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 1
+
+  - title: Impressment
+    type: Event
+    deck: Dynasty
+    text: 'You have the ability, "Response: If the action Equipped a Follower from your hand, draw a card and then, unless the
+      Follower was Ronin, discard a card."Dynasty: Put this Event into play.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: The Dragon saw Nanashi Mura as their responsibility. The Phoenix saw opportunity.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 2
+
+  - title: The Realms Merge
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Shadowlands
+    text: 'Even if this Event is in a Province, after a Personality assigns or moves to its battlefield, give them .Open, :
+      Banish a Personality in your discard pile to create a 2F/2C/0PH Nonhuman • Undead • or Nonhuman • Oni • Personality and
+      lose 3 Honor. You may choose to not discard this Event after using this ability.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 3
+
+  - title: Abandoned Farm
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Farm
+    - Expendable
+    gold_cost: 2
+    gold_production: 2
+    text: 'Battle, w: Give a target enemy Follower or Personality -2F. If you targeted a Personality, their controller may bow
+      one of the target''s attachments to destroy this Holding.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Many would fall to ruin or remain empty for a generation.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 4
+
+  - title: Elder Veteran
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Retainer
+    gold_cost: 2
+    gold_production: 2
+    text: 'Battle, w: Give your target Personality Elite (Elite cards contribute Force during resolution even if bowed). After
+      the target is moved or destroyed by another player''s action during this Combat Segment, destroy this Holding.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"I have seen too much of war and death, and hate it as only a warrior can."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 5
+
+  - title: Forgotten Mine
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Forest
+    - Mine
+    gold_cost: 2
+    gold_production: 2
+    text: 'Open: Transfer your target attachment from your target Personality to your other target Personality.Tireless Battle,
+      : Destroy this Holding to Equip a target attachment from your discard pile to your target Personality, paying less if
+      it is an Item.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: (PD) Stock Art
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 6
+
+  - title: Harvested Land
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Farm
+    gold_cost: 2
+    gold_production: 2
+    text: 'Open, w: Destroy this Holding to give your other Farm Holdings +1GP (this turn).'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Harvest does not wait simply because the world is ending.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 7
+
+  - title: Hayameru Ruins
+    type: Holding
+    deck: Dynasty
+    gold_cost: 1
+    gold_production: 1
+    text: 'Battle, w: Target your Personality at any location who was moved from the current battlefield (this turn). Move them
+      there. If they are now opposed, give them a Force bonus equal to their Personal Honor. Destroy this Holding.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"We may stand against a common foe, but we do not forget." - Bayushi Noritoshi'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 8
+
+  - title: Hiruma Redoubt
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Expendable
+    - Fortification
+    gold_cost: 1
+    gold_production: 1
+    text: 'Battle, w: You may destroy this Holding to use this ability even if it is not at the current battlefield. Target
+      your Personality at home. If they would be opposed, move them to the current battlefield. If they are a Berserker, negate
+      their current and new Force penalties.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 9
+
+  - title: Kolat Oyabun
+    extended_title: Kolat Oyabun • Experienced
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Kolat
+    - Retainer
+    - Experienced
+    gold_cost: 2
+    gold_production: 2
+    text: 'Economic Open, w: Target a Holding. Its controller may choose to lose 3 Honor; if they did not choose this, remove
+      the target''s abilities (this turn; Gold Production is not an ability).'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: There are always those eager to impose their own kind of order on a land in chaos.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 10
+
+  - title: Makeshift Fortifications
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Fortification
+    gold_cost: 6
+    gold_production: 6
+    text: This Province has +3PS. Before this Province is destroyed, banish this card to distribute three +1PS tokens among
+      your other Provinces.
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Every resource would be used in defense against the rising darkness. Not one scrap would go to waste.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 11
+
+  - title: Modest Farm
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Farm
+    gold_cost: 1
+    gold_production: 1
+    text: 'Open, w, : Target a Holding in your Province and give it Renew if it is a Farm. Recruit the target. You may destroy
+      this Holding to straighten the target.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: The backbone of any great Empire.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 12
+
+  - title: Resplendent Pearl Cache
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Forest
+    - Pearl
+    gold_cost: 1
+    gold_production: 1
+    text: 'You may bow your target Naga Personality to pay this Holding''s Invest cost.Invest : Create a Strategy.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: With human refugees flooding into the Shinomen, the Naga were even more careful to guard their sacred sites.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 13
+
+  - title: Rustic Estate
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Farm
+    gold_cost: 6
+    gold_production: 5
+    text: 'Open: If it is your turn, bow your target unbowed Personality and destroy your target Farm. Draw a card. If the total
+      Gold cost of your targeted cards was 7 or lower, discard a card.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: The great wealth of the nobility proved useless against the onslaught of the Shadowlands.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 15
+
+  - title: Sapphire Mine
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Mine
+    - Sincerity
+    gold_cost: 2
+    gold_production: 2
+    text: 'This Holding has Renew while it has any Sincerity tokens.Sincerity: If you removed two or more tokens, give this
+      Holding a +1GP Wealth token.When paying for a single Item only, this Holding has +1GP, and an additional +1GP if the Item
+      costs 6 or more.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 16
+
+  - title: Shinjo Fields
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Farm
+    - Stables
+    gold_cost: 3
+    gold_production: 3
+    text: 'Open, w: Give your target Personality Cavalry. You may destroy this Holding to create and Equip a 1F Cavalry Follower
+      to the target.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Every Shinjo would die before letting one blade of grass be corrupted." - Shinjo Saeki'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 17
+
+  - title: Temple of the Endless Sky
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Temple
+    - Kharmic
+    gold_cost: 3
+    gold_production: 3
+    text: After this Holding is discarded from a Kharmic action, you may refill this Province with your target discarded (not
+      dead) Personality.
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: The mountains are as clouds in the presence of eternity.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 18
+
+  - title: Withered Soils
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Farm
+    - Shadowlands
+    gold_cost: 2
+    gold_production: 2
+    text: 'After you Recruit this Holding, lose 2 Honor.Interrupt, w: If the action is yours, before it destroys your target
+      Holding or Personality, it destroys this Holding instead. Discard a card unless the target is a Farm.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: The touch of Jigoku blighted the land for years to come.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 19
+
+  - title: Ahuja
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Greensnake
+    - Naga
+    - Nonhuman
+    - Shugenja
+    - Pearl
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Invest : Create a Strategy and put it into play.Battle/Open, w: 1 plus the number of Strategies you control, to a
+      maximum of 4, that may target Items and Spells and, if taken as an Open, may target an attachment or Personality without
+      Followers in another player''s home. If this was taken as a Battle, you may straighten Ahuja.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 20
+
+  - title: Khurana
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Cobra
+    - Naga
+    - Nonhuman
+    - Shugenja
+    - Pearl
+    force: 2
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'After Khurana copies an ability from a card, give her +1F/+1C.Engage: Bow your Strategy to choose abilities or abilites
+      copied to the card they are from. Your from abilities of the chosen type at this battlefield have +1 strength and move
+      Personalities home instead of destroying them, bowing them as they move.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 21
+
+  - title: Radakast
+    extended_title: Radakast • Experienced 3
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Constrictor
+    - Naga
+    - Nonhuman
+    - Experienced 3
+    - Sincerity
+    force: 3
+    chi: 2
+    gold_cost: 7
+    personal_honor: 2
+    text: 'Sincerity: Give Radakast a +1F token for each token removed.Radakast has Conqueror while he has any +1F tokens.Battle,
+      w: equal to Radakast''s Force. If this bowed a card with lower Force than Radakast, straighten him and give him a +1F
+      token.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Jay Longfellow
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 22
+
+  - title: Soban
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Asp
+    - Commander
+    - Naga
+    - Nonhuman
+    - Renew
+    force: 2
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Response: After the action Recruits Soban, discard the top four cards of your Fate deck. You may put any Strategies
+      discarded this way on the bottom of your deck. You may put a Naga Follower in your discard pile into your hand.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"More eggs than the last three generations combined. I fear the Akasha is preparing us for dark days to come."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 23
+
+  - title: Vayla
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Asp
+    - Naga
+    - Nonhuman
+    - Shugenja
+    - Pearl
+    force: 3
+    chi: 3
+    gold_cost: 5
+    personal_honor: 2
+    text: 'have +1 strength, and Force penalties are increased by 1, from abilities copied to Vayla.Battle, w: 3. You may bow
+      your target unbowed Strategy to straighten Vayla.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"You draw on the Foul because you are weak and need it to carry you. We do not call upon the Akasha. We are the
+      Akasha."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 24
+
+  - title: Yoritomo Minoko
+    extended_title: Yoritomo Minoko • Experienced
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Naga
+    - Samurai
+    - Experienced
+    - Kensai
+    force: 3
+    chi: 2
+    gold_cost: 6
+    personal_honor: 2
+    text: 'Minoko Equips Peasant or Naga Weapons for less.Engage: Target your attacking Personality. You have the first opportunity
+      to take a Battle action, which must come from a card in the target''s unit. If that action is a or , give it +1 strength.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Loss and change, there is no difference."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 25
+
+  - title: Hida Izo
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Elite
+    - Sincerity
+    force: 3
+    chi: 1
+    gold_cost: 4
+    personal_honor: 0
+    text: 'Sincerity: Give Izo a +1F token for each token removed.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"This is good practice. Stand there and I will throw a few at you. Wait, where are you going?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 26
+
+  - title: Hida Zaiberu
+    extended_title: Hida Zaiberu • Experienced
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Brawler
+    - Drunkard
+    - Samurai
+    - Experienced
+    - Unique
+    force: 6
+    chi: 3
+    gold_cost: 10
+    personal_honor: 1
+    text: 'Will not attach Followers.Open, w: Bow one or two target Personalities with total Force less than Zaiberu''s. If
+      you targeted only one Personality, and their Force is less than half of Zaiberu''s, rounded up, straighten Zaiberu.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Why not die tomorrow feeling good? Or, even better, feeling nothing at all? Hah hah!"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 27
+
+  - title: Hiruma Tetsuya, Secret Heart
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Yojimbo
+    - Duelist
+    - Renew
+    force: 3
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 3
+    personal_honor: 3
+    text: 'Tetsuya has +2F while defending.Interrupt: Tetsuya is the action''s challenged target instead. If Tetsuya''s unit
+      has higher Force than the challenger''s unit, after Tetsuya enters the duel, give his duel stat +2 until it ends.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"There are many things worth dying for. I choose to focus on some worth living for."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 28
+
+  - title: Hiruma Tomoe
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Daimyo
+    - Samurai
+    - Scout
+    - Unique
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 3
+    text: 'Your Followers have +1F while opposed by any cards.Engage: Give your target opposed Follower +2F, or, if it is Courage,
+      a Force bonus equal to its current Force.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Aneko''s obsession with me is annoying, but will hopefully provide me with an opportunity to put a jade blade
+      into the side of her pretty face."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 29
+
+  - title: Kuni Seifukusha
+    extended_title: Kuni Seifukusha • Experienced
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Cruel
+    - Magistrate
+    - Shugenja
+    - Witch Hunter
+    - Experienced
+    - Earth
+    - Jade
+    force: 3
+    chi: 4
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Battle: 3 that destroys Followers or cards after it bows them. If you increased this with a Courage action, you may
+      straighten your target Follower. Destroy it after this battle''s resolution unless it is Courage.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Die on your own time. There is too much left to do."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 30
+
+  - title: Yasuki Umi-Ushi, First Magistrate
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Imperial
+    - Kolat
+    - Magistrate
+    force: 2
+    chi: 3
+    gold_cost: 8
+    personal_honor: 0
+    text: 'Response: After the action Recruits Umi-Ushi, if you have Honesty, a target player loses 1 Honor.Economic Battle/Open,
+      w or : Target another player''s Follower or Personality. Their controller may pay . If they do not, remove the target''s
+      abilities.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: The Emerald Championship 2014 - Chris Martin
+    rarity: Fixed
+    flavor: '"Something can be arranged."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 31
+
+  - title: Daidoji Akeha
+    extended_title: Daidoji Akeha • Experienced
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Daimyo
+    - Harrier
+    - Iron Crane
+    - Samurai
+    - Scout
+    - Experienced
+    - Loyal
+    - Unique
+    force: 5
+    chi: 4
+    gold_cost: 10
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Compassion: Your opposed Personalities have "Tireless Battle: Move this Personality home" while you are the Defender.Battle:
+      Destroy your target unbowed Personality to make a equal to their Force plus Personal Honor. If this destroyed an enemy
+      Personality, gain 2 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 32
+
+  - title: Daidoji Nerishma, Topaz Champion
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Imperial
+    - Samurai
+    - Yojimbo
+    - Destined
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 3
+    text: 'Interrupt: If the action has any Honor gains, choose one of those gains; reduce it by 1 if the action is not Proclaim,
+      and if the gain is yours or from a face-up card in a player''s hand, give Nerishma +2F.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: The Topaz Championship 2014 - Paul Ashman
+    rarity: Fixed
+    artist: (FFG) Polar Engine - Fantasy Flight Games
+    flavor: '"If I am to be the last, I will bear this title with honor and dignity."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 33
+
+  - title: Daidoji Sakuzou
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Harrier
+    - Iron Crane
+    - Saboteur
+    - Samurai
+    - Yojimbo
+    - Reserve
+    force: 2
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'After you Recruit Sakuzou, you may take an additional action.Battle, w: Give a target enemy Follower or Personality
+      -2F and gain 1 Honor. You may move Sakuzou home.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"We gave all to the battle for the Second Seal, and gained nothing but grief."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 34
+
+  - title: Doji Saomi
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Renew
+    force: 0
+    chi: 2
+    gold_cost: 3
+    honor_requirement: 6
+    personal_honor: 2
+    text: '(When a card with Renew enters play from a Province, refill its Province face-up.)Political Response: After the action
+      Recruits Saomi, if you Proclaimed her, draw a card.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Makoto ordered Natsuyo to gather all members of her court that she believed worthy, and make sail for the Colonies
+      immediately.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 35
+
+  - title: Kakita Haturo
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Poet
+    - Samurai
+    - Duelist
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 6
+    personal_honor: 3
+    text: While you have Honesty and Haturo is the challenger in a duel, if he does not have a higher duel stat, you have the
+      first option to focus or strike and must focus (if able).You may focus face-down Honesty cards in your hand face-up during
+      Haturo's duels. After you focus an Honesty card face-up in a duel involving Hatsuro, the other player must focus at their
+      next opportunity (if able).
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"The great art of life is sensation, to feel that we exist, even in pain."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 36
+
+  - title: Kakita Takara
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Kenshinzen
+    - Samurai
+    - Duelist
+    force: 2
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Iaijutsu Battle: Takara challenges an enemy Personality. The winner may turn a random face-down card in the loser''s
+      hand face-up and may take an additional action to use a Battle ability from any face-up Strategy in the loser''s hand
+      as if it were their own. If the loser has no face-up Battle Strategies in their hand, the winner gains 1 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"One cannot walk a path their heart is not in accord with." - Kakita''s The Sword'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 37
+
+  - title: Mirumoto Harada
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Kensai
+    - Renew
+    force: 2
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 5
+    personal_honor: 2
+    text: 'Open: Straighten a target bowed Personality. Draw a card if you do not control the target. You may remove a token
+      from them.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Kanpeki has betrayed us, and thus sealed his fate."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 38
+
+  - title: Mirumoto Himeka
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Yojimbo
+    - Reserve
+    force: 2
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Response, w: After the action Recruits Himeka from a Province, search your Dynasty deck for a non-Unique Shugenja
+      and refill the Province with them, face-up and, before they enter play this turn, give them Destined. If Himeka is at
+      a battlefield, straighten her.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"My ill-tempered brother still speaks the truth. There can be no mercy for Kanpeki and those that still follow
+      him."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 39
+
+  - title: Mirumoto Utzuki
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Scout
+    - Yojimbo
+    - Cavalry
+    force: 3
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Battle: Bow Utzuki or one of your Spells to move your target Shugenja Personality at home to this battlefield, or
+      destroy a Terrain.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Every day more come seeking sanctuary, and Shikei will not turn them away. What of the future of our own people?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 40
+
+  - title: Tamori Reisa
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Shugenja
+    - Yamabushi
+    - Destined
+    - Earth
+    - Fire
+    force: 4
+    chi: 3
+    gold_cost: 9
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Reisa has Conqueror while she has any Spells, and Elite while she has any Spells.Battle: Bow a Spell attached to
+      Reisa to make a 2 or give this Province -2PS.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Those who decry violence as unnatural have never witnessed the beauty of a volcano."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 41
+
+  - title: Togashi Shao
+    extended_title: Togashi Shao • Experienced
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Monk
+    - Tattooed
+    - Destined
+    - Duelist
+    - Experienced
+    - Void
+    force: 3
+    chi: 4
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Shao''s ability will not be copied.Open: Target a non-Shao Personality. Shao forms a spiritual bond with them. Give
+      Shao Force and Chi bonuses equal to the target''s current bonuses to those stats and, after each time (this turn) the
+      target gains a new Force or Chi bonus, give Shao an equal bonus to the same stat for the same duration or until the turn
+      ends, whichever is shorter.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Milivoj Ceran
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 42
+
+  - title: Togashi Uki
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Monk
+    - Tattooed
+    - Duelist
+    - Elite
+    - Earth
+    force: 5
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 1
+    text: Uki will not attack unless you control an Ring.Before battle resolution would destroy Uki, you may reshuffle an Ring
+      you control into your Fate deck to negate her destruction.
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"If not for the stones, the stream would have no song."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 43
+
+  - title: Akodo Atsutane
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Samurai
+    - Kensai
+    - Tactician
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 7
+    personal_honor: 3
+    text: 'While Atsutane has two Weapons, Personalities must bow to challenge him.Interrupt: If the action was Atsutane''s
+      Tactical Advantage, after you discard a card for it, if it was face-up in your hand, equal to the discard''s Focus Value.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"He says little and expects much, perfect traits for the commander of my forces." - Otomo Suikihime'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 44
+
+  - title: Akodo Sojuro
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Deathseeker
+    - Samurai
+    - Expendable
+    force: 4
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Response: Even if Sojuro is in the discard pile, if the Battle action destroyed him, search your Provinces, then
+      Dynasty Deck, for another Akodo Sojuro, and Recruit him (paying all costs).'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"For death and glory! For honor! For the Lion!"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 45
+
+  - title: Ikoma Masaru
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Scout
+    - Renew
+    force: 2
+    chi: 1
+    gold_cost: 3
+    honor_requirement: 6
+    personal_honor: 2
+    text: '(When a card with Renew enters play from a Province, refill its Province face-up.)If you have Honesty, Masaru has
+      +1F and his printed has +1 strength. (You have Honesty if any Honesty cards are face-up in your hand.)Battle, w: 2.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 46
+
+  - title: Kitsu Miro
+    extended_title: Kitsu Miro • Experienced
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Daimyo
+    - Shugenja
+    - Sodan-Senzo
+    - Experienced
+    - Unique
+    - Water
+    force: 3
+    chi: 4
+    gold_cost: 9
+    honor_requirement: 10
+    personal_honor: 3
+    text: 'Engage: If Miro is opposed, create a 2F/2C/3PH Lion Clan Ancestor • Samurai • Spirit Personality. Banish this Ancestor
+      after this battle ends.Battle: Bow your target Samurai to make with strength equal to their Personal Honor. Straighten
+      them if they are an Ancestor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: Fall Kotei 2015 - Brandon Synder
+    rarity: Fixed
+    flavor: '"Show them the Lion''s claws."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 47
+
+  - title: Kitsu Nishi
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Shugenja
+    - Water
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 7
+    personal_honor: 3
+    text: 'Battle: Give a target enemy Personality a Force penalty equal to your target Personality''s Personal Honor. If your
+      Personality is an Ancestor, gain 1 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Friends, you are most welcome."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 48
+
+  - title: Wasureta
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Deathseeker
+    - Samurai
+    - Sincerity
+    - Shadowlands
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 3
+    text: 'Sincerity: Straighten your target Personality for each token removed, to a maximum of 2.Battle: 3. If this targeted
+      a Personality and they did not bow from the , move them home.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"She has abandoned her name to spare her family the shame of her dishonor."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 49
+
+  - title: Agasha Seiji
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Alchemist
+    - Shugenja
+    - Air
+    - Earth
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'and targeting Seiji have -2 strength while he has an Spell.Battle: Give a target enemy Personality -2F. Gain 1 Honor
+      if Seiji has an Spell.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Forced from my home... assaulted by foreigners... now I must travel with the Unicorn through a wasteland. Will
+      my trials never end?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 50
+
+  - title: Isawa Hyosuke
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Shugenja
+    - Kharmic
+    - Void
+    force: 2
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Your Spells in and out of play have Kharmic.Open, w: Discard a card with a Focus Value higher than Hyosuke''s Chi
+      to draw a card.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"What do the Dragon, in their high fortresses, need with these ronin? Can they not see our plight?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 51
+
+  - title: Isawa Kioko
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Shugenja
+    - Renew
+    - Void
+    force: 2
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 5
+    personal_honor: 2
+    text: 'Home Battle, w: Give +2F/+1C to your target Yojimbo Personality not targeted by any copy of this ability this turn.
+      Straighten Kioko if the target is Kharmic.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"This place is no longer safe for the young ones," Orinoko said. "We must leave."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 52
+
+  - title: Isawa Nomura
+    extended_title: Isawa Nomura • Experienced
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Shugenja
+    - Experienced
+    - Fire
+    force: 3
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 4
+    personal_honor: 1
+    text: 'Battle, w: 3, or you may bow one of Nomura''s Spells to make three consecutive 2 that may not be combined, be increased,
+      or target Personalities.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Daiishu-sama, I advise you to leave. Your presence here is neither wanted nor required."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 53
+
+  - title: Isawa Taisho
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Shugenja
+    - Kharmic
+    - Fire
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Taisho has +2F when opposed while he has any Spells.Interrupt: Destroy one of Taisho''s Spells to negate one of your
+      target Personality''s movement or bowing from the action.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"I have never met a man seemingly less concerned about the end of the world." - Isawa Koiso'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 54
+
+  - title: Shiba Etsuya
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Yojimbo
+    - Kharmic
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Battle, w: Banish a target card from your discard pile to make equal to Etsuya''s Chi, with +1 strength if the banished
+      card was Kharmic, and if it was a Spell, gain 1 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Lord Kanpeki decreed anyone traveling through the mountains be executed," the Yobanjin sneered. "Oh, someone will
+      die." Etsuya replied.'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 55
+
+  - title: Bayushi Geboku
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Ink Master
+    - Samurai
+    - Expendable
+    force: 3
+    chi: 4
+    gold_cost: 5
+    personal_honor: 0
+    text: 'Open: Name a Strategy. Abilities on all copies of that card in and out of play cost an additional , even if they
+      have no Gold cost.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Someone must actually write all those clever messages Lord Nitoshi wishes to spread across the Empire, after all."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 56
+
+  - title: Bayushi Norimasa, Blade of the Black Cabal
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Yojimbo
+    - Expendable
+    force: 3
+    chi: 1
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Battle, w: Bow a target enemy card without attachments. Straighten Norimasa if he, or the target, is dishonorable.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Some know too much, some too little. Both pay the same price."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 57
+
+  - title: Shosuro Miiko
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Kuroiban
+    - Ninja
+    - Shugenja
+    - Air
+    force: 1
+    chi: 3
+    gold_cost: 4
+    personal_honor: 0
+    text: 'Miiko''s printed has +1 strength for each face-up card in your hand.Battle, w: equal to Miiko'' Chi which puts the
+      target on top of its owner''s deck instead of destroying it.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Our pre-gempukku names? It''s an amusing story. Ask my sister, it''s one of her favorite topics."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 58
+
+  - title: Shosuro Riiko
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Kuroiban
+    - Ninja
+    - Shugenja
+    - Air
+    force: 3
+    chi: 4
+    gold_cost: 6
+    personal_honor: 1
+    text: 'and targeting cards in this unit have -1 strength, or -2 strength while Riiko has any Ward Spells.Open: Target a
+      Personality. After each time an action resolves that targeted them (including this one), give them -1F.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"I do not wish to discuss it."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 59
+
+  - title: Soshi Kitaiko
+    extended_title: Soshi Kitaiko • Experienced
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Daimyo
+    - Shugenja
+    - Experienced
+    - Loyal
+    - Unique
+    - Air
+    force: 1
+    chi: 4
+    gold_cost: 8
+    personal_honor: 1
+    text: 'After another player draws a card from their Expendable card being destroyed, they must discard a card.Political
+      Interrupt: If the action is targeting your Personality and is from another player''s Personality, bow the other player''s
+      and, if they are dishonorable or Expendable, their controller loses 2 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Should I be intimidated? How charming."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 60
+
+  - title: Yogo Ayuri
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Shugenja
+    - Renew
+    force: 0
+    chi: 2
+    gold_cost: 4
+    personal_honor: 0
+    text: 'Political Open, w: Target a Personality. After the next time (this turn) the target assigns or moves into an army,
+      give them Expendable and you may choose to have their controller lose 1 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"You know you are very special to me, my lord."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 61
+
+  - title: Chuda Kuri
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Cultist
+    - Shugenja
+    - Expendable
+    - Maho
+    - Shadowlands
+    force: 0
+    chi: 3
+    gold_cost: 3
+    personal_honor: 0
+    text: 'Response: Even if Kuri is in the discard pile, if the action destroyed him, give to a number of Personalities equal
+      to his Chi before he left play.Battle, w: Destroy Kuri to bow or move home a target Personality or, if they are , 3 targeting
+      them.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"His gift is inside me. Let me share it with you."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 62
+
+  - title: Daigotsu Aneko
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Paragon
+    - Samurai
+    - Shadowlands
+    force: 4
+    chi: 2
+    gold_cost: 6
+    personal_honor: 0
+    text: 'Battle: 2. You may discard a Dark Virtue or face-up card from your hand to give this +1 strength and have it destroy
+      any card it bows.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Care to join me, Lady Tomoe? You are more than welcome..."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 63
+
+  - title: Daigotsu Hashibei
+    extended_title: Daigotsu Hashibei • Experienced
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Nonhuman
+    - Samurai
+    - Undead
+    - Experienced
+    - Shadowlands
+    force: 3
+    chi: 2
+    gold_cost: 4
+    personal_honor: 0
+    text: 'Battle: equal to your target Follower''s Force plus 1. Destroy your Follower.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Those that swore to follow me still do, even beyond death. Can your men claim such loyalty?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 64
+
+  - title: Daigotsu Shion
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Nonhuman
+    - Samurai
+    - Undead
+    - Conqueror
+    - Shadowlands
+    force: 4
+    chi: 2
+    gold_cost: 8
+    personal_honor: 0
+    text: 'After you Equip an Undead Follower to Shion, give it +1F and give its printed +1 strength.Shion''s Undead Followers
+      that do not have a printed have, "Battle: 2."'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Leave only ashes and flayed skin."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 65
+
+  - title: Ninube Kaede
+    type: Personality
+    clan: Ninja,Spider
+    deck: Dynasty
+    keywords:
+    - Daimyo
+    - Ninja
+    - Shugenja
+    - Shadowlands
+    - Void
+    force: 3
+    chi: 3
+    gold_cost: 8
+    personal_honor: 0
+    text: 'Will not attach Items.Open: Take control of another player''s target Personality with lower Chi and whose unit''s
+      total Gold Cost is less than or equal to Kaede''s unit''s, then give control of Kaede to that other player. When the turn
+      ends, give control of each to their previous controller.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"The matter will be handled, Lord Kanpeki."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 66
+
+  - title: Shokansuru
+    extended_title: Shokansuru • Experienced
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Oni
+    - Shugenja
+    - Experienced
+    - Unique
+    - Maho
+    - Shadowlands
+    force: 4
+    chi: 4
+    gold_cost: 9
+    personal_honor: 0
+    text: 'Response, : If the action destroyed a Human Personality, Recruit them, ignoring Honor Requirement. Permanently give
+      them +2F/-1C and Nonhuman • Oni • and lose 4 Honor. Bow Shokansuru if you do not own the Personality.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"So much to do."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 67
+
+  - title: Moto Khasar
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Cavalry
+    - Expendable
+    force: 4
+    chi: 2
+    gold_cost: 9
+    honor_requirement: 0
+    personal_honor: 0
+    text: 'Repeatable Battle: Lower Khasar''s Force by one or more, up to his current Force. Give a target enemy card a Force
+      penalty of the same amount. If the target''s Force is now 0, bow it. If Khasar''s Force is now 0, destroy him.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"I will ride where the wind wills and fight until I breathe no more."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 68
+
+  - title: Moto Khedai
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Artisan
+    - Death Priest
+    - Philosopher
+    - Shugenja
+    - Earth
+    force: 4
+    chi: 3
+    gold_cost: 8
+    personal_honor: 2
+    text: 'After a card turns face-up while in your hand, give a target Personality a -1F token.Battle: Banish a dead Personality
+      to straighten your target opposed card. If the banished card was yours, target a Personality with a -1F token and move
+      them home.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"The Shi-Tien Yen-Wang exult in these times. We must ensure their blessings are not wasted on us."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 69
+
+  - title: Moto Maral
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Death Priest
+    - Shugenja
+    - Expendable
+    - Earth
+    force: 2
+    chi: 2
+    gold_cost: 4
+    personal_honor: 1
+    text: Maral has Cavalry while she has an Spell.After Maral enters or leaves play, banish a card in a discard pile to give
+      a target Personality a -1F token. If the banished card was dead, give a target Personality +2F.
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"It is the fear of mortality that drives men to madness. The embrace of it brings only peace and strength."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 70
+
+  - title: Moto Qatun
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Cavalry
+    - Renew
+    force: 3
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 0
+    text: 'Compassion: After you resolve a Battle action from a card that was face-up in your hand when you played it, give
+      Qatun +1F.Qatun has +2F while opposed if you have Honesty. (You have Honesty if any Honesty cards are face-up in your
+      hand.)'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Why must we flee to the Colonies when the glory of war calls to us?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 71
+
+  - title: Shinjo Nobunaga
+    extended_title: Shinjo Nobunaga • Experienced
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Cavalry
+    - Experienced
+    - Reserve
+    - Unique
+    force: 4
+    chi: 3
+    gold_cost: 9
+    personal_honor: 1
+    text: 'Remote Battle: If Nobunaga is not at home, 3 with +2 strength if Nobunaga entered play this battle or is not at the
+      current battlefield; if this increased its strength, bow him.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Saeki, what will we do if we cannot find her?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 72
+
+  - title: Utaku Yukino
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Archer
+    - Battle Maiden
+    - Samurai
+    - Cavalry
+    force: 2
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Battle, w: 2. Give the target -2F if it is still in play. You may move Yukino home, or to another battlefield where
+      she would be opposed. Straighten her if you have Honesty. (You have Honesty if any Honesty cards are face-up in your hand.)'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Chinua returned from the capital with a grave expression, even for him."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 73
+
+  - title: Heichi Tochiko
+    extended_title: Heichi Tochiko • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Boar Clan
+    - Daimyo
+    - Samurai
+    - Experienced Tochiko
+    - Unique
+    force: 5
+    chi: 2
+    gold_cost: 9
+    honor_requirement: 1
+    personal_honor: 1
+    text: 'Tochiko has +1F while another player controls any cards.Battle: One or two, or three if Tochiko is attacking, consecutive
+      with total strength equal to Tochiko''s Force.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: With a husband from the Crab and a restored clan, the Boar's future is secured, yet her heart remembers.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 74
+
+  - title: Moshi Durucho
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Centipede Clan
+    - Samurai
+    - Spirit
+    - Yojimbo
+    - Fire
+    force: 3
+    chi: 3
+    gold_cost: 5
+    personal_honor: 1
+    text: 'Your Shugenja at Durucho''s battlefield have +1F while they have any Spells.Interrupt: If the action is a challenge
+      that targets another of your Personalities at Durucho''s location, it targets Durucho instead, if legal.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"You are never alone."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 75
+
+  - title: The Crimson Mountain Oni
+    extended_title: The Crimson Mountain Oni • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Oni
+    - Experienced
+    - Unique
+    - Shadowlands
+    force: 8
+    chi: 7
+    gold_cost: 15
+    personal_honor: 0
+    text: 'After The Crimson Mountain Oni enters play, lose 7 Honor. Will not attach cards or issue challenges.Battle: Target
+      one or two enemy Personalities with lower total Force than this card. Bow the targets, and give them each three -1F tokens.
+      Crab Clan targets will not straighten (this turn).'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Little Bear, I am stronger! Are you?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 76
+
+  - title: Tsuruchi Kinuyo
+    extended_title: Tsuruchi Kinuyo • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Magistrate
+    - Samurai
+    - Scout
+    - Wasp Clan
+    - Destined
+    - Experienced
+    - Unique
+    force: 3
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'If Kinuyo is unbowed and has less than five Arrow tokens, after a player passes or resolves an action at this battlefield,
+      give Kinuyo an Arrow token.Battle, w: Destroy zero or more of Kinuyo''s Arrow tokens. 2 with +1 strength for each Arrow
+      token destroyed. You may move Kinuyo home.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Fate is neither cruel nor kind. It simply is."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 77
+
+  - title: Tsuruchi Yurio
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Bounty Hunter
+    - Scout
+    - Wasp Clan
+    force: 2
+    chi: 3
+    gold_cost: 5
+    personal_honor: 1
+    text: 'Compassion: After Yurio''s printed destroys a card, when your next Dynasty Phase begins, produce 1 Gold.Battle, w:
+      3.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"The Scouring was a sign to return to the old ways. Many swords were broken in those early days." - Tsuruchi Fusako'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 78
+
+  - title: Daidoji Harrier
+    type: Follower
+    deck: Fate
+    keywords:
+    - Harrier
+    - Iron Crane
+    - Honor
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 2
+    text: '(Repeatable Interrupt: Once per action, discard an Honor card to increase or reduce an Honor gain or loss by 1.)Battle:
+      Give a target enemy Personality -2F. You may bow this Follower if it is defending to make 3 against the target, if legal.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: It became necessary in some desperate situations to fall back on old familiar tactics.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 79
+
+  - title: Gusai Mercenary
+    type: Follower
+    deck: Fate
+    keywords:
+    - Mercenary
+    - Ronin
+    force: 3
+    chi: 0
+    gold_cost: 4
+    focus: 0
+    text: 'Response, : After the action Equips this Follower from your hand, if the amount paid for this action was greater
+      than or equal to twice the number of players who have lost Provinces, draw a card for each such player.Battle, : 3.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Who says the Mantis are gone?'''
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 80
+
+  - title: Hawk Riders
+    extended_title: Hawk Riders • Experienced
+    type: Follower
+    deck: Fate
+    keywords:
+    - Bandit
+    - Yobanjin
+    - Cavalry
+    - Experienced
+    force: 5
+    chi: 0
+    gold_cost: 9
+    focus: 1
+    text: 'After this Follower enters play, lose 2 Honor.Battle: If this Follower is opposed, the yobanjin pillage the countryside.
+      Discard the card in this Province. If the discarded card was a Holding, give this Follower +2F.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Kanpeki forged alliances with any who were willing to follow him.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 81
+
+  - title: Hida Elite Guard
+    type: Follower
+    deck: Fate
+    keywords:
+    - Courage
+    - Elite
+    - Jade
+    force: 5
+    chi: 0
+    gold_cost: 8
+    focus: 2
+    text: 'Will not attach to a Personality. If this Personality is ever , transfer this Follower to another one of your Personalities,
+      or return it to your hand.Battle: If this Follower is opposed, bow it and, if it is now bowed, straighten this Personality.
+      If you used the rulebook Courage ability this battle, this ability is Tireless and also straightens this Follower.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 82
+
+  - title: Ijathilu Adherent
+    type: Follower
+    deck: Fate
+    keywords:
+    - Naga
+    - Nonhuman
+    force: 2
+    chi: 0
+    gold_cost: 2
+    focus: 1
+    text: 'Battle: Give a target enemy Human or Personality -2F, or -3F if this ability was copied to the card it is from.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Many Naga held the humans in nearly as low a regard as the tainted.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 83
+
+  - title: Jade Legion
+    type: Follower
+    deck: Fate
+    keywords:
+    - Jade
+    force: 3
+    chi: 0
+    gold_cost: 6
+    focus: 3
+    text: 'Battle, w: 3. If this destroyed any cards, straighten this Follower.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Some were born for these dark times.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 84
+
+  - title: Nanashi Defenders
+    type: Follower
+    deck: Fate
+    keywords:
+    - Ronin
+    - Courage
+    force: 2
+    chi: 0
+    gold_cost: 2
+    focus: 3
+    text: This Follower has +1F while defending for each other unit in your army, to a maximum of 3.
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Stand alone, die alone.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 85
+
+  - title: Outlaw Band
+    type: Follower
+    deck: Fate
+    keywords:
+    - Bandit
+    - Ronin
+    force: 3
+    chi: 0
+    gold_cost: 2
+    focus: 0
+    text: After this Follower's Personality assigns to a battlefield, banish a Fate card in your discard pile or hand; if you
+      did not banish a card, banish this Follower.
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"You don''t know what hard times are, samurai. When they''ve burned your fields and you have four children... when
+      you have to take up the blade to rob your neighbors so your family doesn''t starve... those are hard times."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 86
+
+  - title: Ronin Recruits
+    type: Follower
+    deck: Fate
+    keywords:
+    - Mercenary
+    - Ronin
+    force: 4
+    chi: 0
+    gold_cost: 7
+    focus: 3
+    text: 'Tireless Battle/Open, : Pay Gold equal to the number of cards in this unit, and less if another player controls any
+      cards. Straighten this unit.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"They are crude and honorless dogs, but they will fight. That is enough."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 87
+
+  - title: Shinjo Archers
+    extended_title: Shinjo Archers • Experienced
+    type: Follower
+    deck: Fate
+    keywords:
+    - Scout
+    - Cavalry
+    - Experienced
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 2
+    text: 'This Follower has +1F while you control a Terrain.Battle, w: 2, with +1 strength if this unit has moved this turn,
+      and +1 strength if you control a Terrain.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Swift as the wind, horse's hooves and feathered arrow's flight.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 88
+
+  - title: The Culled
+    type: Follower
+    deck: Fate
+    keywords:
+    - Nonhuman
+    - Undead
+    - Expendable
+    - Shadowlands
+    force: 4
+    chi: 0
+    gold_cost: 7
+    focus: 1
+    text: 'After this Follower enters play, lose 2 Honor.Repeatable Battle, w: Give a target enemy Follower or Personality a
+      Force penalty equal to this Follower''s Force. You may take an additional action which must target the same card.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Each battle only served to replenish their ranks.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 89
+
+  - title: The Last Sons of the Storm
+    type: Follower
+    deck: Fate
+    keywords:
+    - Courage
+    - Thunder
+    force: 2
+    chi: 0
+    gold_cost: 2
+    focus: 1
+    text: 'This Follower has +1F and its printed has +1 strength if you took the first Battle action this battle or it is opposing
+      any cards.Battle, w: 2.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 90
+
+  - title: Varajita
+    type: Follower
+    deck: Fate
+    keywords:
+    - Abomination
+    - Naga
+    - Nonhuman
+    - Courage
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 1
+    text: 'Open: Discard this card from your hand to reduce all Honor gains by 1, to a minimum of 1.Battle, w: Move home a target
+      Human Personality with 2 or higher Personal Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Human words are as empty as their hearts."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 91
+
+  - title: Wardog Trainee
+    type: Follower
+    deck: Fate
+    keywords:
+    - Dog
+    - Nonhuman
+    - Cavalry
+    - Courage
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 2
+    text: 'Interrupt: If a , , or from the action is targeting this Follower, give it -2 strength.Tireless Response: If your
+      bowed a card, give your target Follower +2F, or +3F if the bowed card was .'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Where is my helmet?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 92
+
+  - title: Zugaikotsu-ro
+    type: Follower
+    deck: Fate
+    keywords:
+    - Nonhuman
+    - Siege
+    - Undead
+    - Shadowlands
+    force: 3
+    chi: 0
+    gold_cost: 5
+    focus: 1
+    text: 'After this Follower enters play, lose 4 Honor.While this Follower is unbowed and this Personality is Undead, they
+      have Conqueror and may not be challenged.Siege Battle, w: 3.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"I don''t know what that thing is, but don''t let it get near the wall." - Kaiu Gorobei'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 93
+
+  - title: Blade of Truths
+    extended_title: Blade of Truths • Experienced
+    type: Item
+    deck: Fate
+    keywords:
+    - Sword
+    - Two-Handed
+    - Experienced
+    - Weapon
+    - Unique
+    force: 2
+    chi: 2
+    gold_cost: 6
+    focus: 3
+    text: 'Open: Target a card in your hand, and turn it face-up if it is not. Set this Weapon''s Force modifier to equal the
+      target''s Focus Value. Players may not focus cards from their hand with the same Focus Value as the target (this turn).'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: 'Truths bared, or left unspoken: which wound more?'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 94
+
+  - title: Jade Legion Ono
+    type: Item
+    deck: Fate
+    keywords:
+    - Axe
+    - One-Handed
+    - Courage
+    - Weapon
+    - Jade
+    force: 3
+    chi: 1
+    gold_cost: 5
+    focus: 2
+    text: After you discard this Item for the rulebook Courage ability, draw a card and, if the enemy leader controls any cards,
+      give your target Personality +2F.
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: The valor of the Jade Legion blazed so hot as if to burn away the Shadowlands itself.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 95
+
+  - title: Resilient Armor
+    type: Item
+    deck: Fate
+    keywords:
+    - Armor
+    - Honor
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 4
+    text: '(Repeatable Interrupt: Once per action, discard an Honor card to increase or reduce an Honor gain or loss by 1.)Battle,
+      : If this Item is in your discard pile, Equip it to your target opposed Personality, paying more.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Try again!"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 96
+
+  - title: Spear of the Shahadet
+    type: Item
+    deck: Fate
+    keywords:
+    - Naga
+    - One-Handed
+    - Spear
+    - Weapon
+    - Pearl
+    force: 2
+    chi: 1
+    gold_cost: 4
+    focus: 3
+    text: 'Equips to Shahadet for less.Battle, w: 2 or, if this Weapon is attached to a Naga, destroy it to make 4.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"We do not fetishize our weapons as humans do... but I still have my favorites."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 97
+
+  - title: Wall Armor
+    type: Item
+    deck: Fate
+    keywords:
+    - Armor
+    - Courage
+    - Honesty
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: 'Honesty: Interrupt, : If the action was not yours and this Item is in your hand, Equip it to your target Personality.Interrupt,
+      w: Give a or from the action targeting this Personality -2 strength.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Service on the Wall often requires one to quickly discard their armor, so several sets are stored in spots for easy
+      access.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 98
+
+  - title: Well-Forged Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - One-Handed
+    - Sword
+    - Weapon
+    force: 2
+    chi: 1
+    gold_cost: 4
+    focus: 2
+    text: 'Battle, w: 2, with +1 strength if this Personality has 5 or more Chi.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: A weaponsmith fights their own kind of battle.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 99
+
+  - title: Worn Jingasa
+    type: Item
+    deck: Fate
+    keywords:
+    - Jingasa
+    force: 1
+    chi: 1
+    gold_cost: 2
+    focus: 3
+    text: 'A Personality may only attach one Jingasa. After your Kiho resolves that targeted this Personality, give them +1F.Interrupt,
+      w: Give a from the action targeting this Personality -1 strength, or -2 strength if this is a Monk or Shugenja.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"I pity the man who does not know the joy of a good hat on a hot day."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 100
+
+  - title: Zaiberu's Trinket
+    type: Item
+    deck: Fate
+    keywords:
+    - Cursed
+    force: 1
+    chi: 0
+    gold_cost: 3
+    focus: 4
+    text: Equips to Hida Zaiberu for less. Will only attach to a Human Personality.After an action destroys a Follower or Personality
+      at this battlefield, banish the destroyed card, then give this Item a +1F token; if it now has a number of tokens equal
+      to or greater than this Personality's printed Force, destroy this Personality.
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: The Endless Hunger - Jacek Jachymowski
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 101
+
+  - title: Zansatsu
+    type: Item
+    deck: Fate
+    keywords:
+    - Cursed
+    - One-Handed
+    - Sword
+    - Weapon
+    - Unique
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 4
+    text: 'Equips to Kakita Takara for less.Open: Your other Personalities will not issue challenges this turn. After each time
+      this Personality wins a duel or their challenge is refused, give them +2F/+1C/-1PH and lose 1 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: The Maniacal Slaughter - Jon Palmer
+    rarity: Fixed
+    flavor: '"Such a simple thing to cause such misery."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 102
+
+  - title: Barrier of Purity
+    type: Spell
+    deck: Fate
+    keywords:
+    - Pearl
+    gold_cost: 0
+    focus: 2
+    text: 'Interrupt, w: If the action''s , , or is targeting this Shugenja, give it -2 strength or give your next this battle
+      +2 strength or you may bow your Strategy to resolve both effects.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"The light rejects you, pawn of the Foul."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 103
+
+  - title: Burn the Mind
+    type: Spell
+    deck: Fate
+    keywords:
+    - Fire
+    gold_cost: 1
+    focus: 3
+    text: 'Compassion: After the first time each turn this Spell bows, straighten it.Open, w: Give your target Spell Expendable.Battle,
+      w: 4 that bows its target instead of destroying it.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Some pain you can distance yourself from; this would not be it.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 104
+
+  - title: Earth's Yearning Clasp
+    type: Spell
+    deck: Fate
+    keywords:
+    - Earth
+    gold_cost: 3
+    focus: 3
+    text: 'Engage, w: Bow a target attachment. If this Shugenja is , give the target''s Personality a -1F token. You may banish
+      a dead Personality to destroy the target if its Focus Value is lower than the dead Personality''s Force or the dead Personality
+      was yours.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"What the earth cannot reclaim, it crushes."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 105
+
+  - title: Enervation
+    type: Spell
+    deck: Fate
+    keywords:
+    - Pearl
+    gold_cost: 2
+    focus: 2
+    text: 'Open: Give a target Personality -2F or give this Shugenja +2F. If this Shugenja is Naga and you control any Strategies,
+      give this Shugenja Conqueror.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: With a bit of effort, an enemy's energies need not go to waste.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 106
+
+  - title: Hold the Way
+    type: Spell
+    deck: Fate
+    keywords:
+    - Earth
+    gold_cost: 0
+    focus: 2
+    text: 'This Shugenja has +2F while this Spell is bowed.Interrupt, w: After the action moves a target Personality, bow them.
+      After they straighten this turn, destroy this Spell.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"No."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 107
+
+  - title: Rise, Air
+    type: Spell
+    deck: Fate
+    keywords:
+    - Air
+    gold_cost: 0
+    focus: 4
+    text: 'Interrupt, w: Give a from the action -2 strength. Straighten this Spell if this Shugenja is .Battle, w: Bow a target
+      enemy Follower or Personality with 2 or lower Force.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Even the strongest tree must bow or be broken.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 108
+
+  - title: Roll of the Waves
+    type: Spell
+    deck: Fate
+    keywords:
+    - Water
+    gold_cost: 0
+    focus: 4
+    text: 'This Shugenja has Tactician while they are .Battle, w: Straighten your target Samurai or card.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: The ocean's rhythms may turn the tide of battle.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 109
+
+  - title: Swallow the Soul
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    - Shadowlands
+    gold_cost: 3
+    focus: 1
+    text: 'Battle, w: Give this Shugenja a Chi penalty from zero up to their current Chi. equal to 2 plus the amount their Chi
+      was reduced. If this destroyed a Follower or a Personality, give your target Personality +2F. Lose 2 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Thank you, friend."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 110
+
+  - title: Symbol of Fire
+    type: Spell
+    deck: Fate
+    keywords:
+    - Earth
+    - Fire
+    gold_cost: 1
+    focus: 3
+    text: 'Battle, w: 3. If this Shugenja is and this destroyed a Follower, you may destroy this Spell to take an additional
+      action.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Some shugenja indulge their flair for the dramatic.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 111
+
+  - title: Take the Body
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    - Shadowlands
+    gold_cost: 4
+    focus: 3
+    text: 'Battle: Bow a target Personality without printed . After they are destroyed by an action this battle or by this battle''s
+      resolution, Recruit them into your home, bowed, ignoring costs and Honor Requirement and, after your next Action Phase
+      ends, banish them.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"This one will do nicely." - Chuda Ruri'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 112
+
+  - title: Tide from Beyond
+    type: Spell
+    deck: Fate
+    keywords:
+    - Water
+    gold_cost: 0
+    focus: 3
+    text: 'This Shugenja has +1F while and opposed.Interrupt, w: If it would be legal, the action targets one of your unbowed
+      Personalities of your choice instead of another card. If your Personality is an Ancestor, give them Expendable. Destroy
+      this Spell.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 113
+
+  - title: Transpose the Infinite
+    type: Spell
+    deck: Fate
+    keywords:
+    - Void
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: If this Shugenja is unbowed or , bow them if they are not and banish a target Personality with no attachments.
+      Its owner may search their Dynasty deck for a Personality with equal or lower Gold Cost and a different title and Recruit
+      them, ignoring costs. Banish this Spell.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 114
+
+  - title: Touch of Air's Grace
+    type: Spell
+    deck: Fate
+    keywords:
+    - Air
+    gold_cost: 2
+    focus: 4
+    text: 'Equips to an Shugenja for less.Open, w: Target your Yojimbo. After each time (this turn) they win a duel at a battlefield,
+      gain 1 Honor, and after each time your Battle action targeting them resolves, give them +1F. Destroy this Spell.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: There are many ways to take your opponent's breath away.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 115
+
+  - title: Ward of Shelter
+    type: Spell
+    deck: Fate
+    keywords:
+    - Ward
+    - Courage
+    - Air
+    gold_cost: 0
+    focus: 2
+    text: 'Interrupt: If the Battle action is targeting your Personality, negate its effects. They do not contribute Force during
+      battle resolution (this turn). Destroy this Spell unless this Shugenja is .'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"It is perilous to proceed unguarded. Accept this protection."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 116
+
+  - title: Ward of Supplication
+    type: Spell
+    deck: Fate
+    keywords:
+    - Ward
+    - Honor
+    - Air
+    gold_cost: 5
+    focus: 1
+    text: '(Repeatable Interrupt: Once per action, discard an Honor card to increase or reduce an Honor gain or loss by 1.)Equips
+      to an Shugenja for less.Open, w: Each other player must bow a Personality they control with less Chi than this Shugenja.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Loyalty must be earned, but obedience can be easily forced."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 117
+
+  - title: A Collision of Wills
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 3
+    text: 'Honesty: Destroy a card without attachments in the loser''s unit.Battle: Your target unbowed Personality challenges
+      a target enemy Personality. Kihos and Spells have +1FV during this duel. Bow the loser.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: What began as a disagreement at Nanashi Mura quickly escalated into conflict, then death.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 118
+
+  - title: A Terrible Glory
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Dark Virtue
+    - Strength
+    focus: 2
+    text: 'Battle: Give your target opposed Samurai +3F. If they are , 3.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Around her, the battlefield parted as the Dark Lord's gift washed over her body.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 119
+
+  - title: Absence of Authority
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    focus: 4
+    text: 'Political Open: Until you control another Clan Champion, give Clan Champion to your target Personality with your
+      Clan Alignment and, after an action resolves which targeted them because they were a Clan Champion, draw a card.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Naleesh''s disappearance would only cause a crisis at this critical time. We must proceed as though all is normal,
+      for now."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 120
+
+  - title: Blood of Fu Leng
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    - Maho
+    - Shadowlands
+    focus: 1
+    text: 'After you discard this Strategy from a Kharmic action, give a target Personality -1C.Kiho Battle: Bow your target
+      unbowed Monk or Shugenja. Target an enemy Personality with lower Chi. Bow a card in their unit. If your Personality is
+      , straighten them. Lose 3 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 122
+
+  - title: Bracing Ground
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 4
+    text: 'Honesty: Before battle resolution, if this card is in play, give your target opposed Follower +3F.Followers and Personalities
+      have minimum Force equal to their printed Force.Terrain Battle: Destroy a Terrain (if able). Put this Terrain into play.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Some places were less inclined to worry about an invasion from the Spider.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 123
+
+  - title: Break Ranks
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 2
+    text: 'Honesty: The action loses "Lose 3 Honor."Interrupt: If the action is another player''s, move home one of your Personalities
+      targeted by it. If they now are an illegal target for the action, negate it. Lose 3 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Large scale warfare against the Shadowlands was mostly unknown to this generation. Peasant levies quickly proved
+      to be a hindrance.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 124
+
+  - title: Brutal Lesson
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'As a Focus Effect, your Personality uses their printed Force as their duel stat for this duel, and all focused cards''
+      Focus Values this duel have a maximum equal to the Force of the Personality for whom they were focused.Open: Bow your
+      target unbowed Personality unless they are a Berserker. equal to their Force. You may not target your Personality with
+      actions. Lose 2 Honor'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"You are not water, or wind. You are a man, with bones that can break and muscle that can tear."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 125
+
+  - title: Combined Will
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'As a Focus Effect, put your target discarded Courtier or Shugenja Personality in your discard pile into your target
+      Province face-up, discarding any card currently there.Battle: Give a target enemy Follower or Personality -3F, or -5F
+      if you control a Yojimbo Personality and either a Courtier or Shugenja Personality.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 126
+
+  - title: Come, Then
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 3
+    text: 'Honesty: The winner gains 1 Honor and may draw a card.Iaijutsu Battle: Your target unbowed Personality challenges
+      a target enemy Personality. Move the loser home.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"I have come to see the vaunted skills of the Kakita masters. You''ll indulge me, won''t you?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 127
+
+  - title: Crippling Toll
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Courage
+    focus: 1
+    text: 'Battle: Give a target enemy Follower or Personality -3F. If its Force is now 0, its abilities may not be used, and
+      its controller may not target it with actions.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Many fleeing the merge were forced to abandon siblings, parents, or children, or remain and die with them.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 128
+
+  - title: Domination
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Control
+    focus: 3
+    text: 'As a Focus Effect, if the winner is , negate all other effects of losing except those from this effect; give the
+      winner''s player control of the loser, give the loser , and when the turn ends, give control of the loser back to their
+      previous controller.Dark Virtue Battle: equal to the Force of a target Samurai in your army. If this bows a non- Personality,
+      you may take an additional action.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 129
+
+  - title: Draw Strength from Your Oaths
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 2
+    text: 'Honesty: The may be equal to their Force instead.Battle: Bow your target unbowed Personality. equal to their Chi.
+      If they are a Yojimbo, this has a strength bonus equal to the number of Courtiers and Shugenja you control.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 130
+
+  - title: Embrace the Mountain
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    - Earth
+    focus: 4
+    text: 'Honesty: The action loses "if they are ."Kiho Battle: Bow your target unbowed Monk or Shugenja at any location. Give
+      a target enemy Follower or Personality a Force penalty equal to your target''s Force. Straighten your target and give
+      them +1F if they are .'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"What are men to rocks and mountains?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 131
+
+  - title: Face Your Destruction!
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 2
+    text: 'Honesty: Draw a card.Battle: Target your opposed Personality with Berserker or 5 or more Force. If they did not assign
+      to this battlefield or have Deathseeker, give them +1F. The next Battle action another player takes which may target any
+      of your cards must target a card in the unit of the Personality this action targeted, if possible.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Tell your masters in the pit: I am waiting for them."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 132
+
+  - title: Hard Choices
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'You may bow your target Personality when playing this Strategy to give it Discipline .Political Open: Dishonor a
+      target Personality. Each player loses 1 Honor, or 2 Honor if they control any cards.Political Interrupt: Negate the Honor
+      gain from Proclaiming the action.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"We cannot defeat Kanpeki. Not through traditional means..." - Bayushi Nitoshi'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 133
+
+  - title: Heart of Honor
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Courage
+    focus: 3
+    text: 'Bushido Virtue Battle/Open : Straighten your target Personality. If this was taken as a Battle action and the target
+      has 3 or more Personal Honor, give them +2F and gain 1 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: You are always stronger than you know.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 134
+
+  - title: I Do Not Forget
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honor
+    focus: 1
+    text: 'Political Open: Target a dishonorable Personality. You will not forget how they betrayed your clan! Their controller
+      loses Honor equal to their printed Personal Honor or 1, whichever is higher. You may discard a face-up card from their
+      hand and, until the game ends, you may not ally with them.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"Send a reply to Dairuko. Tell her we will resolve our... outstanding matter once the future of the Empire has
+      been secured."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 135
+
+  - title: Inner Spirit
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 3
+    text: '(Honesty traits are active when the card is face up. You may turn an Honesty card face-up as a Battle action.)Honesty:
+      After this card is focused, give it +1FV and the other player must focus at their next opportunity (if able).Iaijutsu
+      Battle: Give your target opposed Personality a Force bonus equal to their Chi.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 136
+
+  - title: Iron Foot Kata
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'Kata Open: Put this Kata into play. Discard your other Kata in play.Battle, w: Discard a card. equal to its Focus
+      Value that may target Items and destroys them after it bows them. If this destroyed an Item, target your Personality who
+      has not been targeted by any copy of this ability this game; before the next time this game battle resolution would destroy
+      them, negate their destruction.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"One cannot be expected to punch everything."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 137
+
+  - title: Kano's March
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 4
+    text: 'Honesty: Take an additional action after all targets move.Absent Battle: Target your unbowed Personality at any location.
+      If they are a Tactician, you may target an enemy Personality at any location. If they would be opposed (including by each
+      other), move all targets to the current battlefield, straightening the enemy target as they move.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Kano would take a detachment of his best men to give the appearance of reinforcing Lion defenses at home. Instead,
+      he would execute a forced march to meet up with Scorpion forces and trap the Spider in a pincer maneuver at Shamate.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 138
+
+  - title: Last Full Measure
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 2
+    text: '(Honesty traits are active when the card is face up. You may turn an Honesty card face-up as a Battle action.)Honesty:
+      Gain 2 Honor.Battle: Give your target unbowed Samurai a Force penalty up to his current Force to make a with equal strength.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: The Crane, Phoenix, and Scorpion forces stood valiantly at the Second Seal, but were no match for the hordes of
+      oni and undead the Chuda had been preparing.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 139
+
+  - title: Lay Siege
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    focus: 2
+    text: 'Abilities on Fortifications at this battlefield may not be used. This Province has a maximum strength equal its printed
+      starting strength.Terrain Battle/Engage: Destroy a Terrain (if able). Put this Terrain into play and, after another player
+      destroys it, draw a card.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: The collapse of the Scorpion Wall and the outpouring of horrors put many lands that had not seen conflict in decades
+      under attack from forces they could scarcely imagine.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 140
+
+  - title: Massacre Grounds
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Followers and Personalities whose units were moved to this battlefield by actions have -2F.Terrain Absent Response:
+      If the action moved a unit to this battlefield, destroy a Terrain (if able). Put this Terrain into play.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Kanpeki left some surprises for those seeking to cross to the Colonies by land.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 141
+
+  - title: Necessary Tactics
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'This action has Absent if another player destroyed or moved your Personality this battle or the target is Cavalry.Battle:
+      Give a target enemy Follower or Personality -2F, or -3F if they are . Before this turn ends, put this Strategy back into
+      your hand.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"We can fight and survive, or die with honor and spend eternity in shame as rotting puppets. The choice is clear."
+      - Daidoji Akeha'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 142
+
+  - title: Political Division
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honor
+    focus: 3
+    text: 'Political Open: Another target player must choose Personalities they control for this action to target until they
+      have chosen two or there are no more legal targets. For each target, they may choose to give them -2F and lose 1 Honor.
+      For each they did not choose this, you may draw a card, then discard a card.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Old grudges and shortsighted political ambitions kept the Great Clans divided at a time when unity was critical.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 143
+
+  - title: Push Through!
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 2
+    text: 'Honesty: After the first Follower straightens, straighten another Follower in the same unit.As a Focus Effect, the
+      duel does not destroy the loser if they have any Followers.Battle: Give each Follower in a target Personality''s unit
+      +1F. If the Personality is a Commander, straighten one of their Followers.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"They will need more men than that if they want to stop us."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 144
+
+  - title: Retreating Salvo
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Battle: Bow and move home your target Personality to make a 3.Interrupt: If the action is Battle or Engage, negate
+      an Honor gain from it and its player loses 2 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Knowing when and how to conserve an army's strength can mean the difference between victory and death.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 145
+
+  - title: Seven Heavens Strike
+    type: Strategy
+    deck: Fate
+    keywords:
+    - (FE)
+    focus: 3
+    text: 'As a Focus Effect, if your Personality wins this duel, give them +1F.Kiho Battle: Bow your target unbowed Personality
+      or Ring. equal to twice the number of Rings you control. If you control a Ring, give your target opposed Personality a
+      +1F Fire token.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 146
+
+  - title: Shadows of the Shinomen
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Forest
+    focus: 1
+    text: 'Players may not take actions during this battle unless they control a Naga card at this battlefield or the action
+      will destroy this Terrain. All players have the ability, "Battle: Bow any number of your Followers and/or Personalities
+      at the current battlefield with total Force of 4 or higher to destroy the Strategy granting this ability.".Terrain Battle:
+      Destroy a Terrain (if able). Put this Terrain into play.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 147
+
+  - title: Stand Up Eight
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honesty
+    focus: 2
+    text: 'Honesty: Straighten the target of this card''s action after the next time (this turn) they bow as a cost of their
+      ability.As a Focus Effect, if you lose this duel, put this card into your hand, face-down or face-up, instead of discarding
+      it.Bushido Virtue Battle: Straighten your target opposed Samurai. They may use their abilities with a bow cost an additional
+      time (this turn).'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Fall seven times...
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 148
+
+  - title: The Essence of Honor
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Honor
+    focus: 2
+    text: '(Repeatable Interrupt: Once per action, discard an Honor card to increase or reduce an Honor gain or loss by 1.)As
+      a Focus Effect, set this card''s Focus Value to equal your dueling Personality''s Personal Honor +1.Bushido Virtue Battle:
+      Give a target enemy Personality a Force penalty equal to your target Personality''s Personal Honor. Bow the target if
+      their Force is now 0.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 149
+
+  - title: The Western Wastes
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Shadowlands
+    focus: 1
+    text: 'You have the abilities, "Repeatable Response: If the action was from a non- Follower or Personality at this battlefield,
+      take an additional action to use the next granted ability, which must target them and may target a Personality with Followers."
+      and "Repeatable Battle: If this action is being granted by the previous ability, 2 which may not be increased."Terrain
+      Battle: Destroy a Terrain (if able). Put this Terrain into play. Lose 2 Honor.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 150
+
+  - title: Unbalanced by Nothingness
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    - Void
+    focus: 3
+    text: 'Battle: If you have more cards in your hand (not including this one) than another player, bow their target Personality.
+      If that player has no cards in their hand, dishonor and destroy the target.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: Some paths are more dangerous to stray from than others.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 151
+
+  - title: Versatile Commander
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Engage: Give +2F to your target opposed Follower attached to a Commander.Battle: with strength equal to your target
+      unbowed Follower''s Force that destroys Followers after it bows them.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: A good leader recognizes the talents of those under their command, and makes use of them accordingly.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 152
+
+  - title: Well-Tested Tactics
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Battle/Open, : Turn a target Strategy in your hand face-up (if able). Search your Fate deck for another copy of that
+      Strategy, show it, and put it in your hand, face-down or face-up.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: '"They are still used because they still work." - Akodo Kano'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 153
+
+  - title: Yobanjin Raids
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Absent Battle, : If they would be opposed, lose 3 Honor and create a 4F/2C Yobanjin • Cavalry Personality. Banish
+      them after the battle ends. Before the turn ends, if this Province was destroyed by your army while they were in it, put
+      this Strategy in your hand.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    flavor: They showed no restraint, and no mercy.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 154
+
+  - title: Fusako Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Akasha
+    - Crane
+    - Dragon
+    province_strength: 0
+    gold_production: 0
+    starting_honor: -1
+    text: 'Your Tsuruchi Personalities in and out of play have your Clan Alignment. Negate the effects of your .Engage, w: Target
+      your Personality. from cards in their unit have +1 strength and, while you control a Tsuruchi, have the additional final
+      effect, "you may move this unit home".'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Micheal Kaluta
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 155
+
+  - title: Hideyo Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Unicorn Clan
+    province_strength: 0
+    gold_production: 0
+    starting_honor: -2
+    text: 'After your Personality moves to or from the current battlefield, give a target Personality there -2F.Your Moto Personalities
+      have -5HR during turns in which you assigned any of your Personalities to attack.Response, w: If the action was yours
+      and moved your Berserker to the current battlefield, take an additional action; after it resolves, give the Berserker
+      -1F. .'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Drew Baker
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 156
+
+  - title: Hikarou Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Phoenix Clan
+    - Fire
+    province_strength: 1
+    gold_production: 0
+    starting_honor: -1
+    text: 'Battle, w: Target your opposed Shugenja Personality and one of their Spells. Give the Shugenja a Force bonus, or
+      you may give a target Follower or Personality a Force penalty, equal to the Spell''s Focus Value. You may take an additional
+      action to use one of the Spell''s abilities.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Jazzy Siy
+    flavor: It was a pleasure to burn.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 157
+
+  - title: Kagami Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Crane Clan
+    province_strength: 1
+    gold_production: -1
+    starting_honor: 0
+    text: 'While you have the lowest Family Honor (including ties), or if another player''s effect has caused you to lose Honor
+      this game, ignore restrictions preventing your Yojimbo from attacking.Engage, w: Give your target opposed Yojimbo +2F
+      and create a 0F/2C/3PH Crane Clan • Courtier Personality with the trait, "Before your turn ends, banish this Personality;
+      if you did, gain 2 Honor."'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: MuYoung Kim
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 158
+
+  - title: Kayo Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Scorpion Clan
+    province_strength: -1
+    gold_production: 0
+    starting_honor: 1
+    text: 'Tireless Response: If the action destroyed an Expendable Personality, dishonor a target Personality.Political Open,
+      w: Target your Yojimbo. Remove a target Personality''s abilities and, if they are dishonorable, their controller loses
+      Honor equal to their printed Personal Honor or 2, whichever is higher.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Hector Herrera
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 159
+
+  - title: Mishime Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Spider Clan
+    - Maho
+    - Shadowlands
+    province_strength: 1
+    gold_production: -1
+    starting_honor: -2
+    text: 'You do not lose Honor from your cards'' effects and may ignore Honor Requirements. You pay less for actions and Spells
+      for each player who controls any cards.Open, w, : Bow your target unbowed Personality, and you may destroy them. Create
+      a 2C/3GC/0PH • Nonhuman • Oni Personality with Force equal to the target''s Chi. Before the turn ends, banish it unless
+      you destroyed the target.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Ed Cox
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 160
+
+  - title: Olyah Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Akasha Clan
+    - Pearl
+    province_strength: 0
+    gold_production: 0
+    starting_honor: 1
+    text: 'If your Stronghold is The Eternal Well of the Akasha, its ability''s first target may be a Spell instead of a Naga
+      if its second target is a Shugenja. This Sensei counts as a Strategy.Battle, w: Straighten your target Naga Shugenja that
+      has copied an ability this turn.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Lissanne Lake
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 161
+
+  - title: Sugimoto Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Crab
+    - Lion
+    - Phoenix
+    - Scorpion
+    - Spider
+    - Unicorn
+    province_strength: 0
+    gold_production: 0
+    starting_honor: 0
+    text: 'Your Stronghold has no abilities.Battle, w: If you are the Attacker, move a target enemy Personality at home to the
+      current battlefield; straighten their unit as they move.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: William O'Conner
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 162
+
+  - title: The Deathseeker's Oath
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Lion Clan
+    province_strength: 0
+    gold_production: 1
+    starting_honor: -4
+    text: 'Your Deathseekers have Berserker, and you may ignore their Honor Requirements. You do not gain Honor from Proclaiming.
+      Your Stronghold has no abilities.Battle, w: equal to your target unbowed Deathseeker''s Force. If this destroyed any enemy
+      cards, gain 2 Honor, and you may destroy that Deathseeker to make another equal to their Force.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Steve Ellis
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 163
+
+  - title: Wataru Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Dragon Clan
+    province_strength: 0
+    gold_production: 0
+    starting_honor: 0
+    text: 'Your Shugenja may not attach Spells while they have a number greater than or equal to their Chi. Battle/Engage, w:
+      Target two of your opposed Personalities. Set the Force of one of them equal to that of the other. Give both targets +1F
+      if one is a Samurai and the other is a Shugenja.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Jonathan Moore
+    flavor: '"Truthfully? I did it for myself."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 164
+
+  - title: Yaheiko Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Crab Clan
+    province_strength: 0
+    gold_production: 0
+    starting_honor: -1
+    text: 'Your opposed Berserkers bowed by other players'' have -2F and Elite while bowed.Interrupt, w: Negate the Battle action''s
+      effects on your target Berserker. Give them -3F.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Steve Argyle
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 165
+
+  - title: Temples of Gisei Toshi
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Temple
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Limited, w: Name "Follower", "Item", or "Spell". Look at the top four cards of your Fate deck.
+      You may show one of those cards that is of the type you named, then put it in your hand.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: Spring Kotei 2015 - Merlin Floyd
+    rarity: Fixed
+    artist: Ilus Christopher Appel
+    flavor: Many Phoenix refugees chose to risk death rather than seek out Isawa's City, for fear of revealing its location
+      to the enemy.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 166

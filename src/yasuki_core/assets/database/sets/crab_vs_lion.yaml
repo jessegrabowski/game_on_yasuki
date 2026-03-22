@@ -1,0 +1,20 @@
+set: Crab vs. Lion
+cards:
+  - title: The War Fortress of the Crab
+    type: Stronghold
+    clan: Crab
+    deck: Pre-Game
+    province_strength: 8
+    gold_production: 4
+    starting_honor: 3
+    text: 'Absent Battle/Open, w: Give the current battlefield''s Province +3 strength.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Legacy
+    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
+      the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition border.
+    rarity: Fixed
+    artist: Randy Gallegos
+    number: 1
+    collector_number: Crab 0

@@ -1,0 +1,3157 @@
+set: Honor's Veil
+cards:
+  - title: A Common Goal
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, name
+      a Clan Alignment other than your own. Until the game ends, your Personalities have +1F while in an army where both yours
+      and the named Clan Alignment are present.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Manuel Calderon
+    flavor: '"We cannot do this alone," Taiko said. "Will you aid us, Saburo?"'
+    number: 1
+
+  - title: A Prophet Revealed
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'After your action resolves, if any targets of its Ranged Attacks are still in play, straighten any of your cards
+      that the action and combining abilities bowed.Open: Put this Event into play.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - War of the Seals (Onyx Edition)
+    rarity: Uncommon
+    artist: Jon Hodgson
+    flavor: '"You have come to take me to the islands, then?" "No my lady," Okame replied. "We have come to defend your home."'
+    number: 2
+
+  - title: Darling of the Season
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the game ends, after a player has lost 5 total points of Honor from other players' cards' effects in one turn, counting
+      incremental portions of losses, negate further points lost from such effects that turn, including partially negating portions
+      of losses before they would make a player lose more than 5 points.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: April Lee
+    flavor: '"In every court season, there is one who captures the hearts and minds of those attending. How unfortunate that
+      it would be one so immune to our machinations." - Bayushi Nomen'
+    number: 3
+
+  - title: Return to the Heavens
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, gain
+      two Provinces, which permanently do not hold Dynasty cards, to the left of your leftmost Province. Then, destroy the Province
+      this Event resolved from.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Britt Martin
+    flavor: '"If the clans are to learn true honor, it must be done by choice, not fear. Farewell, my friend. Thank you." -
+      Isawa Ochiai'
+    number: 4
+
+  - title: The Balance Shifts
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the game ands, you have the ability, "Limited: Bow one or more of your target performing Personalities with a total printed
+      Force of 6 or greater to take the Imperial Favor."'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Manuel Calderon
+    flavor: '"By what right do you do this?" Kyoko demanded. "By the sacred duty of the Lion, who have defended this city for
+      centuries," Shunori replied. "The palace shall be protected."'
+    number: 5
+
+  - title: The Spider's Shadow
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them and not
+      resolving by other means, choose one other Province, or two other Provinces if you have fewer Provinces than any other
+      player; permanently reduce the chosen Provinces' strengths to 0, then destroy the Province from which this Event resolved.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Jason Engle
+    flavor: '"So many disputes over inexplicable differences. What could be the cause of it all?" - Miya Anzai'
+    number: 6
+
+  - title: Famous Bazaar
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Market
+    gold_cost: 2
+    text: 'After you Recruit this Holding from a Province, refill the Province face-up.w: Produce 2 Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Iordanis Lazaridis
+    flavor: '"I hear the market next to the Shrine of Benten sells the strongest fabrics."'
+    number: 7
+
+  - title: Hidden Dragon Temple
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Temple
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Limited, w: Put a target dead Personality on the bottom of his owner''s Dynasty deck.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Charles Urbach
+    flavor: Mortals barely comprehend the cycle of rebirth.
+    number: 8
+
+  - title: High Temple of Toshi Ranbo
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Legacy
+    - Singular
+    - Temple
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Reaction: When an action would target one of your Elemental Masters, it targets another of your
+      Personalities of your choice with the same Clan Alignment at the Elemental Master''s location instead, if legal.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Winner - Brandon Smith
+    rarity: Common
+    artist: Veronica V. Jones
+    number: 9
+
+  - title: Kata Training Grounds
+    type: Holding
+    deck: Dynasty
+    gold_cost: 3
+    text: 'w: Produce 2 Gold, or 3 Gold when paying for a Hero or Tactician Personality with a printed Gold Cost of 8 or more
+      which may only pay for him.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Attila Adorjany
+    flavor: '"War cannot be mastered by unskilled barbarians. When the thaws come, you must be prepared for absolute victory
+      over the Moto." - Akodo Bakin'
+    number: 10
+
+  - title: Northern Hub Village Shipwrights
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Port
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Reaction, w: If you are a Mantis Clan player, after an action resolves that bowed one of your Magistrates
+      either as a cost or a condition upon one of the action''s further effects, straighten him.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Winner - Eric Morgan
+    rarity: Uncommon
+    artist: Andy Hepworth
+    number: 11
+
+  - title: Shattered Peaks
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Shadowlands
+    gold_cost: 2
+    text: 'After this Holding enters play, lose 3 Honor.w: Produce 2 Gold, or 3 Gold if paying for a Nonhuman Shadowlands Personality
+      which may only pay for him, and lose 3 Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Charles Urbach
+    flavor: There are places that even the Spider fear to tread.
+    number: 12
+
+  - title: Teardrop Island
+    type: Holding
+    deck: Dynasty
+    gold_cost: 4
+    text: 'w: Produce 2 gold, or 3 gold if you are a Mantis Clan player.Reaction, w: When paying a Gold cost, discard a card
+      to produce an amount of Gold equal to the Focus Value of the discarded card.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Winner - Josh Gaydos
+    rarity: Rare
+    artist: Charles Urbach
+    flavor: '"It is ours now." - Yoritomo Naizen'
+    number: 13
+
+  - title: Hiruma Aki
+    extended_title: Hiruma Aki • Experienced
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Berserker
+    - Crab Clan
+    - Experienced
+    - Samurai
+    force: 6
+    chi: 3
+    gold_cost: 9
+    personal_honor: 1
+    text: 'Battle: Destroy one or more target Followers with total Force lower than Aki''s Force, or total Gold Cost lower than
+      Aki''s Gold Cost.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Paul (Prof.) Herbert
+    flavor: '"I will join your quest. The prophet must be protected by those strong enough to perform the duty."'
+    number: 14
+
+  - title: Hiruma Ikage
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Samurai
+    - Scout
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Recon Open: Target a Province. You have Reconnaissance at its battlefields. Your Personalities and Followers have
+      +1F while there.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Mark Poole
+    flavor: '"Our enemies will use all our weaknesses against us. The only way to be prepared is to have none."'
+    number: 15
+
+  - title: Kaiu Genji
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Samurai
+    - Traveling Crab
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Battle: If Genji''s army does not have more units than the current enemy army, bow a target enemy Personality.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Furthest Traveled - Dan Jacobson
+    rarity: Uncommon
+    artist: Carl Frank
+    flavor: '"I will venture as far as I must to spread our influence upon the Empire. For Kuon! For the Crab!"'
+    number: 16
+
+  - title: Kaiu Taru
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Samurai
+    - Siege
+    - Siege Master
+    force: 5
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Enters play paying one less Gold for each province destroyed this game.Battle: Discard a card and target an enemy
+      Personality: His abilities may not be used during this battle. Draw a card.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Winner - Joshua Griffis
+    rarity: Rare
+    artist: Glen Osterberger
+    number: 17
+
+  - title: Kuni Bachida
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Scout
+    force: 3
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 2
+    text: Once per game, before Bachida enters play, he goes through his Gempukku; permanently give him Samurai or Shugenja.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Patrick McEvoy
+    flavor: Young Crab seeking their gempukku venture into the Shadowlands on a hunt. The Kuni rarely experience difficulty.
+    number: 18
+
+  - title: Yasuki Tenzo
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crab Clan
+    - Nokatsu's heir
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'After another player discards the Imperial Favor, if Tenzo is at the current battlefield: That player chooses and
+      bows one of his unbowed Personalities.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: '2007 Winner''s Choice: Argentina - Jose Munoz'
+    rarity: Uncommon
+    artist: Patrick McEvoy
+    flavor: '"Do not speak to me of my ancestors. Measure me on my own merit."'
+    number: 19
+
+  - title: Daidoji Takihiro
+    extended_title: Daidoji Takihiro • Experienced
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Loyal
+    - Unique
+    - Crane Clan
+    - Experienced
+    - Kolat
+    - Samurai
+    - Scout
+    force: 4
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Battle: Discard a Recon Strategy or discard a Follower, and target an enemy Personality: Takihiro duels him. Destroy
+      the duel''s loser.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Winner's Choice - Chris Nicoll/Scott Rixson
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: '"For the Crane. Always."'
+    number: 20
+
+  - title: Daidoji Zoushi
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Crane Clan
+    - Samurai
+    - Scout
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Battle: Move your target performing Personality home to give a target enemy Follower or Personality -4F.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Thomas Denmark
+    flavor: '"No, I am not worried about the right flank. Signal Yaichiro''s unit to the left flank - we will push the Crab
+      where they are weak."'
+    number: 21
+
+  - title: Doji Jorihime
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Artisan
+    - Courtier
+    - Crane Clan
+    force: 2
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Favor Political Open: Discard the Imperial Favor to straighten a target Personality.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 - 2008 Winter Court - John Pope
+    rarity: Uncommon
+    artist: Edwin David
+    flavor: '"Some think Nagori''s new bride a shugenja. The kami favor her, but she is no priestess." - Yoritomo Yoyonagi'
+    number: 22
+
+  - title: Doji Tsubakita
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Magistrate
+    force: 1
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 6
+    personal_honor: 3
+    text: Once per game, before Tsubakita enters play, he goes through his Gempukku; permanently give him Samurai or Courtier.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Llyn Hunter
+    flavor: '"We live in interesting times. I am ready to serve my Champion in any way she requires."'
+    number: 23
+
+  - title: Kakita Senko
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crane Clan
+    force: 1
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Political Limited: Target another player. He gains 2 Honor. If he gained any Honor from this, take the Imperial Favor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Kari Christensen
+    flavor: '"I am honored by your request, Setai-sama I will be happy to deal with this matter for you, for the benefit of
+      both our clans."'
+    number: 24
+
+  - title: Kakita Tsukao
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Artisan
+    - Crane Clan
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Limited: Pay 3 Gold, discard a card, and target a Personality: Create an Armor Item with a Force bonus equal to the
+      Focus Value of the discarded card, and attach it to the target.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Veronica V. Jones
+    flavor: In painting or in smithing, focus is what matters.
+    number: 25
+
+  - title: Kitsuki Kouri
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Magistrate
+    - Samurai
+    force: 3
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Favor Political Battle: Discard the Imperial Favor to move home a target enemy attacking Personality. If he is dishonorable,
+      take the Imperial Favor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Anthony Grabski
+    flavor: '"The Scorpion flourish amid the shadows. Would they sacrfice our alliance for the throne?"'
+    number: 26
+
+  - title: Kitsuki Taiko
+    extended_title: Kitsuki Taiko • Experienced
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Dragon Clan
+    - Experienced
+    - Magistrate
+    - Samurai
+    force: 3
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 10
+    personal_honor: 4
+    text: 'Battle: Target an enemy Personality with Personality Honor lower than Taiko''s Chi, and you may bow your performing
+      Scorpion Clan Personality; if you did not, discard a card: Move the target home. Gain 2 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: April Lee
+    number: 27
+
+  - title: Mirumoto Katsutoshi
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Master of Shourido
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 8
+    personal_honor: 1
+    text: 'After a Dark Virtue action resolves that Katsutoshi performed, give him a +1F Shourido token.Tireless Battle/Open:
+      Remove a Dark Virtue card in your discard pile from the game to straighten Katsutoshi.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Winner - Steven LaFollette
+    rarity: Uncommon
+    artist: Glen Osterberger
+    flavor: '"Judge me if you like. I do not care."'
+    number: 28
+
+  - title: Mirumoto Satobe
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Dragon Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Satobe has +1F while he has a Weapon attached. Battle: Bow or destroy a Weapon attached to Satobe to destroy a target
+      enemy attachment.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Carl Frank
+    flavor: '"Satobe is a fearsome warrior and a genius with the swords. He longs to find a challenge, but is constantly disappointed."
+      - Togashi Keitori'
+    number: 29
+
+  - title: Mirumoto Toraizo
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Mountaineer
+    - Samurai
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 8
+    personal_honor: 3
+    text: Toraizo has Tactician while there are any Mountain or Winter cards in play or in any discard pile.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Veronica V. Jones
+    flavor: '"The sons of man sitting on the throne have failed us. Call me a blasphemer, but I believe divine blood should
+      rule the Empire."'
+    number: 30
+
+  - title: Togashi Keitori
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Blessed by the Keepers
+    - Dragon Clan
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Once per game, before Keitori enters play: He goes through his Gempukku. Permanently give him Samurai or Monk.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: IFS
+    flavor: '"Some Togashi are warriors and others are philosophers. All of them are worthy of respect." - Mirumoto Satobe'
+    number: 31
+
+  - title: Akodo Bakin
+    extended_title: Akodo Bakin • Experienced 2
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Enlightened
+    - Experienced 2
+    - Tactician
+    - Unique
+    - Lion Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 7
+    personal_honor: 3
+    text: 'Battle: Straighten all attachments in Bakin''s army.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2005 European Championships Top of Clan - Owen Michaud
+    rarity: Rare
+    artist: John Donahue
+    flavor: '"Shigetoshi-sama, we have secured the border. Come spring we will be ready to fulfill Yoshino''s vow."'
+    number: 32
+
+  - title: Akodo Nakama
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Governor
+    - Lion Clan
+    - Paragon
+    - Samurai
+    force: 3
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 7
+    personal_honor: 3
+    text: Your Bushido Virtue Strategies in and out of play have +1 Focus Value, to a maximum of 4.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Magecon Charity Auction - Jed Carleton
+    rarity: Rare
+    artist: Steve Argyle
+    flavor: '"With Nakama and his lady Nariko in place, I can go to war with no fear for our home." - Akodo Shigetoshi'
+    number: 33
+
+  - title: Ikoma Hodota
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Lion Clan
+    - Poet
+    force: 2
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 7
+    personal_honor: 3
+    text: 'Favor Political Battle: Discard the Imperial Favor to move home a target defending Personality.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Corene Werhane
+    flavor: '"A well-crafted phrase or a well-crafted blade - wielded by a master, the results are alike."'
+    number: 34
+
+  - title: Kitsu Nariyumi
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Lion Clan
+    force: 1
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 3
+    personal_honor: 3
+    text: Once per game, before Nariyumi enters play, she goes through her Gempukku; permanently give her Samurai or Shugenja.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Eric Lofgren
+    flavor: '"Whatever path I take, I will bring honor to my clan and my ancestors."'
+    number: 35
+
+  - title: Matsu Fukiki
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Hero
+    - Lion Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 3
+    personal_honor: 3
+    text: 'Heroic Reaction: After Fukiki''s army destroys one or more Provinces or units by winning a battle, gain 2 honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Randy Elliott
+    flavor: '"This is the path to victory! This is the path to the Throne, which only a Lion is worthy of claiming!"'
+    number: 36
+
+  - title: Matsu Nao
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Hero
+    - Lion Clan
+    - Paragon
+    - Samurai
+    - Wandering Lion
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'RTireless Reaction: After a Bushido Virtue card enters a discard pile, straighten a target Personality at Nao''s
+      location.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Furthest Traveled - Noah Deter-Jackson
+    rarity: Common
+    artist: Glen Osterberger
+    flavor: '"Virtue is a compaion that never tires, never abandons you."'
+    number: 37
+
+  - title: Kitsune Mizuru
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Kitsune
+    - Mantis Clan
+    - Nonhuman
+    - Scout
+    - Shugenja
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Recon Open: Target a Province. You have Reconnaissance at its battlefields. Give it +2 strength or -2 strength.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Jaime Jones
+    flavor: '"The Fox are an ancient clan well accustomed to stalk the forest. They turn those talents to our aid." - Yoritomo
+      Sachina'
+    number: 38
+
+  - title: Kitsune Ryukan
+    extended_title: Kitsune Ryukan • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Unique
+    - Daimyo
+    - Experienced
+    - Mantis Clan
+    - Samurai
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Your Personalities with "Kitsune" in their title have +1F.Battle: Target a Follower and target a Mantis Clan Personality.
+      Give the Personality a Force bonus equal to the Follower''s Force.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Aaron Acevedo
+    number: 39
+
+  - title: Tsuruchi Takeba
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Budoka
+    - Mantis Clan
+    force: 4
+    chi: 3
+    gold_cost: 8
+    personal_honor: 1
+    text: 'Your attacking Mantis Clan Personalities have +1F while at Takeba''s location.Battle: Ranged 6 Attack that does not
+      destroy its target.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: John Donahue
+    flavor: '"The space of a single breath is all I need."'
+    number: 40
+
+  - title: Yoritomo Jera
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Commander
+    - Mantis Clan
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Human Followers and Spider Clan Personalities have +1F while in an army with Jera .Battle: Target your Human Follower:
+      Straighten it.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 The Spider's Shadow - Killian Downey
+    rarity: Uncommon
+    artist: IFS
+    flavor: She does not know who her allies are, but she accepts the aid of those who will combat injustice.
+    number: 41
+
+  - title: Yoritomo Yagami
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Budoka
+    - Mantis Clan
+    - Scout
+    force: 3
+    chi: 2
+    gold_cost: 6
+    personal_honor: 2
+    text: 'Once per game, before Yagami enters play: He goes through his Gempukku. Permanently give him Samurai or Shugenja.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Eric Lofgren
+    flavor: '"The Mantis of old have sacrificed much to defend the weak. I can do no less."'
+    number: 42
+
+  - title: Yoritomo Yoyonagi
+    extended_title: Yoritomo Yoyonagi • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Unique
+    - Amethyst Champion
+    - Courtier
+    - Experienced
+    - Mantis Clan
+    - Poet
+    - Shugenja
+    force: 2
+    chi: 4
+    gold_cost: 9
+    personal_honor: 2
+    text: 'Battle: Target an enemy Personality and move Yoyonagi home: Move the target home.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Test of the Amethyst Champion - Jon Palmer
+    rarity: Rare
+    artist: Amandine Labarre
+    flavor: '"Sachina believes her machinations have gone unnoticed. I will watch her closely."'
+    number: 43
+
+  - title: Asako Nagami
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Phoenix Clan
+    - Shugenja
+    - Void
+    force: 2
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Favor Political Void Limited: Discard the Imperial Favor to put a target Ring in your hand into play. While it remains
+      in play, it does not count towards an Enlightenment Victory.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Tiago da Silva
+    flavor: '"Understanding the dance of the elements is trivial to one who is immersed in the Void. Understanding the dance
+      of the Imperial Court - now there is the study of a lifetime."'
+    number: 44
+
+  - title: Isawa Mizuhiko
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Naval
+    - Phoenix Clan
+    - Shugenja
+    - Water
+    force: 1
+    chi: 2
+    gold_cost: 3
+    honor_requirement: 6
+    personal_honor: 2
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Jason Engle
+    flavor: '"All things change. To study the flow of water is to understand the flow of human events."'
+    number: 45
+
+  - title: Isawa Shokuta
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Mountaineer
+    - Phoenix Clan
+    - Shugenja
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'If you are the Defender, Shokuta may be targeted by the rulebook Cavalry player ability.Battle, w: Raise or lower
+      the current battlefield''s Province''s strength by an amount equal to Shokuta''s Force. You may bow one of his Spells
+      to ignore the cost of bowing him.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Adam Denton
+    flavor: '"The mountains sing to me. I will show you."'
+    number: 46
+
+  - title: Shiba Maroyo
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Phoenix Clan
+    - Yojimbo
+    force: 2
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 6
+    personal_honor: 2
+    text: 'Once per game, before Maroyo enters play: She goes through her Gempukku. Permanently give her Samurai or Shugenja.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Aaron Acevedo
+    flavor: '"When you act in accord with the elements all things are possible. Since no one understands this better than the
+      Phoenix, should not the Council claim the Throne?"'
+    number: 47
+
+  - title: Shiba Sakishi
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Phoenix Clan
+    - Samurai
+    - Yojimbo
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 12
+    personal_honor: 3
+    text: 'After the first time each turn Sakishi assigns to an army with a Shugenja: Gain 1 Honor.Battle: Choose your performing
+      Shugenja Personality: Move the target to Sakishi''s battlefield.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Slawomir Maniak
+    flavor: '"You''ll deal with me first!"'
+    number: 48
+
+  - title: Shiba Tsukimi
+    extended_title: Shiba Tsukimi • Experienced 2
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Experienced 2
+    - Loyal
+    - Unique
+    - Clan Champion
+    - Phoenix Clan
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 16
+    personal_honor: 4
+    text: 'Your Yojimbo and Phoenix Clan Personalities have +1F.Battle: Bow your performing Personality and target an enemy
+      Personality with lower Chi than your performer: Destroy him. Straighten your Personality if he is an Elemental Master.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: April Lee
+    flavor: '"Council, you may acknowledge me or not as you please - I am the Phoenix Champion regardless."'
+    number: 49
+
+  - title: Bayushi Eisaku
+    extended_title: Bayushi Eisaku • Experienced
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Unique
+    - Bitter Lies
+    - Experienced
+    - Samurai
+    - Scorpion Clan
+    force: 3
+    chi: 3
+    gold_cost: 6
+    personal_honor: 1
+    text: 'Reaction: After Eisaku enters play, target a Dynasty card in a province: Discard it.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Manuel Calderon
+    flavor: '"I am neither madman nor fool. If you dare to cross the Scorpion, I am the consequence you must face."'
+    number: 50
+
+  - title: Bayushi Kosugi
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Hero
+    - Master of Bushido
+    - Samurai
+    - Scorpion Clan
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 2
+    personal_honor: 3
+    text: 'Kosugi has +1F for each Bushido Virtue in all discard piles.Reaction: Even if Kosugi is bowed, after a Bushido Virtue
+      action that you took resolves: Straighten him.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Winner - Matthew Maddocks
+    rarity: Uncommon
+    artist: Veronica V. Jones
+    flavor: '"You believe that to know one Scorpion is to know us all. You see only what you wish, and that makes you weak."'
+    number: 51
+
+  - title: Bayushi Nomen
+    extended_title: Bayushi Nomen • Experienced
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Experienced
+    - Samurai
+    - Scorpion Clan
+    force: 3
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 5
+    personal_honor: 2
+    text: '(Bayushi Nomen is not Unique.)Battle: Reduce a target dishonorable enemy Personality''s Force to 0.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Drew Baker
+    flavor: '"Gather allies in every court. Spread rumors at every turn. Be the hidden blade within the silk glove." - Bayushi
+      Paneki'
+    number: 52
+
+  - title: Shosuro Masato
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Ninja
+    - Scorpion Clan
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Recon Open: Target a face-down Dynasty card in another player''s province: Turn it face-up. If it is a Personality,
+      give the province -2 strength.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Eric Lofgren
+    flavor: '"Otomo Hoketuhime cannot be bribed or blackmailed. There must be a means to discredit her. Find it." - Bayushi
+      Tsimaru'
+    number: 53
+
+  - title: Shosuro Mizuno
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Courtier
+    - Scorpion Clan
+    force: 3
+    chi: 4
+    gold_cost: 7
+    personal_honor: 2
+    text: 'Favor Political Open: Discard the Imperial Favor to bow a target Personality.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Leonardo Borazio
+    flavor: '"You must trust me, my friend. I have information that could be of great importance to your lord Satsu, if only
+      I could gain an audience with him."'
+    number: 54
+
+  - title: Shosuro Chihiro
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Actor
+    - Scorpion Clan
+    force: 2
+    chi: 3
+    gold_cost: 6
+    personal_honor: 1
+    text: 'Once per game, before Chihiro enters play: He goes through his Gempukku. Permanently give him Samurai, Ninja, or
+      Courtier.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: IFS
+    flavor: '"Call me whatever name you like. Study me for ten years. You still will know only that which I choose to reveal."'
+    number: 55
+
+  - title: Daigotsu Hirata
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Dark Power
+    - Paragon
+    - Samurai
+    - Shadowlands
+    - Spider Clan
+    - Undead
+    force: 5
+    chi: 3
+    gold_cost: 9
+    personal_honor: 0
+    text: 'After Hirata enters play: Lose 4 Honor. Battle: Discard a card and target an enemy card without attachments: Bow
+      it. If you discarded a Dark Virtue, destroy the enemy card.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Dennis Calero
+    flavor: '"You have ventured far too deep into the Spider''s web, ronin."'
+    number: 56
+
+  - title: Daigotsu Masahiko
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Shadowlands
+    - Spider Clan
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 0
+    text: 'After Masahiko enters play: Lose 4 honor.Reaction: After Masahiko enters play: Create a 1F Ashigaru Follower and
+      attach it to one of your Personalities.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Kevin Wasden
+    flavor: '"I am neither monster nor harlot, but I will end you all the same."'
+    number: 57
+
+  - title: Daigotsu Ryudo
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Dark Strength
+    - Paragon
+    - Samurai
+    - Spider Clan
+    force: 4
+    chi: 3
+    gold_cost: 8
+    personal_honor: 1
+    text: 'After Ryudo enters play, lose 3 Honor.Other players'' attachments at Ryudo''s battlefield cannot bow to pay costs.Battle:
+      Give Ryudo +1F for each Dark Virtue in all discard piles.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 Kotei Bounty - Steven LaFollette
+    rarity: Common
+    artist: Jason Engle
+    flavor: '"Victory means nothing, the fight is everything."'
+    number: 58
+
+  - title: Daigotsu Sahara
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Spider Clan
+    force: 5
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 1
+    text: After Sahara enters play, lose 2 Honor.Sahara uses his printed Force as his duel stat.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Jarreau Wimberly
+    flavor: In their false role as guardians of the people, the Spider drew to their banner many young and idealistic warriors
+      seeking a chance to prove themselves. The poor, doomed fools knew not what evil they had embraced.
+    number: 59
+
+  - title: Daigotsu Takayasu
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Shadowlands
+    - Spider Clan
+    force: 3
+    chi: 3
+    gold_cost: 6
+    personal_honor: 1
+    text: After Takayasu enters play, lose 2 Honor.Once per game, before Takayasu enters play, he goes through his Gempukku;
+      permanently give him Samurai, Shugenja, or Monk.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Anthony Francisco
+    flavor: '"The grace of Fu Leng makes all things possible. There is nothing I cannot accomplish, if I but accept his blessings."'
+    number: 60
+
+  - title: Daigotsu Usharo
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Spider Clan
+    force: 2
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Reaction: Even if Usharo is bowed, after a Political action resolves that he performed: Straighten him.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Magecon Charity Auction - Mason Crawford
+    rarity: Common
+    artist: Edwin David
+    flavor: '"Yes, I walk the halls of court. And yes, I once bore the name Otomo. Do not believe that I am weak for it, however."'
+    number: 61
+
+  - title: Kishida
+    type: Personality
+    clan: Brotherhood of Shinsei,Spider
+    deck: Dynasty
+    keywords:
+    - Dark Deeds
+    - Monk
+    - Paragon
+    - Spider Clan
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Reaction: After a Dark Virtue action on a Strategy resolves, you may increase or reduce the Force of one Personality
+      who performed the action by the Focus Value of the card. If this reduced his Force to zero, bow him.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Steve Argyle
+    flavor: '"It is time for your first lesson. It will also be your last."'
+    number: 62
+
+  - title: Yoritomo Hotako
+    extended_title: Yoritomo Hotako • Experienced
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Unique
+    - Experienced
+    - Obsidian Champion
+    - Samurai
+    - Spider Clan
+    force: 6
+    chi: 4
+    gold_cost: 9
+    personal_honor: 0
+    text: 'After Hotako enters play: Lose 6 Honor.Fear Battle: Give each Personality and Follower opposing Hotako -1F. Bow any
+      cards with zero Gold Cost in units opposing her.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Test of the Obsidian Champion - Chris Yau
+    rarity: Rare
+    artist: Steve Argyle
+    flavor: '"I do only what I must. For the Empire."'
+    number: 63
+
+  - title: Horiuchi Meimei
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Shugenja
+    - Unicorn Clan
+    - Water
+    force: 3
+    chi: 4
+    gold_cost: 9
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'While Meimei has any Spells, she has +1F, or +2F if the Focus Value of any of them is even.Battle: Even if Meimei
+      is bowed, destroy one of her Spells: Straighten her.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 MageCon Charity Auction - Ben Cummings
+    rarity: Common
+    artist: Randy Elliott
+    flavor: '"Gather around, little ones. Let me tell you of a story of heroes - heroes who began as children just like you."'
+    number: 64
+
+  - title: Ide Towako
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Courtier
+    - Unicorn Clan
+    force: 3
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Favor Political Reaction: After a player announces a Battle action, if it is being taken as an additional action,
+      discard the Imperial Favor or bow Towako to negate the action''s effects.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Paul (Prof.) Herbert
+    flavor: '"I bring news from the courts of Kyuden Otomo, as well as developments from the Imperial City!"'
+    number: 65
+
+  - title: Ide Yusuke
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Unicorn Clan
+    force: 0
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Yusuke will not attack or defend.Political Limited, w: Target a Personality. While he is at a battlefield, negate
+      his movement home from actions (this turn).'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Anthony Grabski
+    flavor: '"These weapons must reach the front lines by tomorrow morning, or the line will fall."'
+    number: 66
+
+  - title: Moto Choon-yei
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Tactician
+    - Unique
+    - Samurai
+    - Unicorn Clan
+    force: 5
+    chi: 3
+    gold_cost: 10
+    personal_honor: 1
+    text: 'Tactical Absent Remote Battle: If any enemy units are at the current battlefield, or if Choon-yei assigned there,
+      move Choon-yei there.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Slawomir Maniak
+    flavor: '"I offer my service to the Lords of Death."'
+    number: 67
+
+  - title: Moto Masakage
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Scout
+    - Unicorn Clan
+    force: 3
+    chi: 2
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: Once per game, before Masakage enters play, he goes through his Gempukku; permanently give him Samurai or Shugenja.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: IFS
+    flavor: '"He scours the Empire in search of knowledge, and to spread the glory of the Khan. He is all that is pure within
+      us." - Moto Chen'
+    number: 68
+
+  - title: Utaku Keiko
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Tactician
+    - Battle Maiden
+    - Samurai
+    - Unicorn Clan
+    force: 2
+    chi: 3
+    gold_cost: 9
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Battle: If any Infantry units are opposing Keiko: Give all Cavalry cards in her army +1F.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Carl Frank
+    flavor: In the wake of Kokujin's death, the Legion of Two Thousand continued to grow, bolstered by the Shinjo and Utaku
+      families.
+    number: 69
+
+  - title: Gaki of Desire
+    type: Personality
+    clan: Spirit,Unaligned
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Shadowlands
+    - Spirit
+    force: 1
+    chi: 3
+    gold_cost: 4
+    personal_honor: 0
+    text: 'After Gaki of Desire enters play, lose 3 Honor.Limited, : Equip a target Item in any player''s discard pile to this
+      Gaki. Lose 2 Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Amandine Labarre
+    flavor: '"Do not listen to their whispers. Do not dwell upon the indecent promises they speak of, or else your soul will
+      be lost." - Kuni Kiyoshi'
+    number: 70
+
+  - title: Kayomasa
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Bushi
+    - Nonhuman
+    - Ogre
+    - Shadowlands
+    - Yojimbo
+    force: 8
+    chi: 4
+    gold_cost: 8
+    personal_honor: 1
+    text: 'After Kayomasa enters play, lose 4 Honor. Enters play for 1 less Gold if you are a Spider Clan player. Battle: Move
+      Kayomasa to a battlefield where you control an opposed Unique Personality. This ability has Remote if you move him to
+      the current battlefield.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Drew Baker
+    number: 71
+
+  - title: Shikage no Oni
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 8
+    chi: 3
+    gold_cost: 10
+    personal_honor: 0
+    text: 'After Shikage enters play: Lose 5 Honor. Battle: Destroy your performing Personality and target an enemy unit with
+      lower total Force than your Personality''s Force: Destroy it.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Anthony Francisco
+    number: 72
+
+  - title: Hidekazu
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Disciple of P'an Ku
+    - Shugenja
+    force: 0
+    chi: 2
+    gold_cost: 6
+    personal_honor: 2
+    text: 'Battle/Open: Target a Personality. Set Hidekazu''s Force to equal the target''s printed Force, or set his Chi to
+      the equal target''s printed Chi.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Manuel Calderon
+    flavor: '"The other gods are too rigid! They do not understand! All is nothing and nothing is all!"'
+    number: 73
+
+  - title: Miya Anzai
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Imperial
+    - Magistrate
+    - Samurai
+    force: 1
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Open, w: Give a target Personality -2F. The target may only assign this turn if his controller is the Attacker or
+      Defender.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: April Lee
+    flavor: '"We must hurry. The clans must know of the shift at the capital. It could change the balance of power throughout
+      the Empire."'
+    number: 74
+
+  - title: Sun Doru
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Unique
+    - Disciple of Sun Tao
+    - Samurai
+    - Scorpion Clan
+    force: 3
+    chi: 3
+    gold_cost: 8
+    personal_honor: 2
+    text: 'Tactical Battle: Target a Terrain: Destroy it.Tactical Open: Target a Region: Destroy it.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Child of the Tao - Eric Hoath
+    rarity: Rare
+    artist: Manuel Calderon
+    flavor: '"I have studied the teachings of my ancestor. Fate prevented him from completing his work, but I shall begin it
+      anew."'
+    number: 75
+
+  - title: Desolate Plains
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    text: 'Reaction, w: When a Holding is producing Gold to pay for a Nonhuman Shadowlands Personality entering play from this
+      Province, the Holding produces 2 additional Gold which may only pay for that card.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Britt Martin
+    flavor: Whispers of what could so frighten the Jackals carry throughout the Shadowlands.
+    number: 76
+
+  - title: Kyuden Miya
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Castle
+    - Imperial
+    text: 'Absent Battle: Once per battle, negate all Force bonuses from actions on a target attacking Personality.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Charles Urbach
+    flavor: '"Even when there is no Emperor to issue descrees, we will continue to serve the land and its people. It is not
+      merely our duty, but the Will of Heaven." - Miya Shoin'
+    number: 77
+
+  - title: Oni Mura
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Forest
+    - Mountain
+    text: 'Your non-Shadowlands Nonhuman Personalities have +2F while defending this Province.Battle/Open, w: Straighten a target
+      non-Shadowlands Nonhuman Personality.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Village of Demons - Jason Aken
+    rarity: Uncommon
+    artist: Charles Urbach
+    number: 78
+
+  - title: A Generous Offer
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Political Open: Straighten another player''s target bowed honorable Personality. That player may choose to dishonor
+      him. If he did not choose this, you take the Imperial Favor and gain 2 Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Heather V. Kreiter
+    flavor: '"It is a simple offer, one your Khan will certainly appreciate."'
+    number: 79
+
+  - title: A Lord's Compassion
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Open: Each player may target one or two of his Personalities that have been targeted by, or chosen as the performer
+      of, a Political action this phase. After this phase ends, straighten all targets.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: David Horne
+    flavor: '"I am not a selfish man; I will share my good fortune with my neighbors."'
+    number: 80
+
+  - title: A Priest's Courtesy
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Bow your target performing Shugenja to allow each player to target one of his Personalities. Remove all tokens
+      from each of those targets. Negate all current ongoing effects on each Personality from actions taken by players other
+      than his controller. Take the Imperial Favor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Stephanie Pui-Mun Law
+    number: 81
+
+  - title: Advantageous Climate
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Winter
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Target one of your provinces: Heavy snow has fallen there. Give it +5 strength.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: David Horne
+    flavor: Though the harsh winter makes travel in the Dragon lands hard and unforgiving, it serves as a natural defense for
+      the clan.
+    number: 83
+
+  - title: Arranged Marriage
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 4
+    text: 'Limited: Target a Human Personality: Permanently give him your Clan alignment.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Joachim Gmoser
+    flavor: Marriages in Rokugan are rarely a matter of love, but a way to create new political and economocal ties. Part of
+      every samurai's duty is to marry, even if it means serving a new lord.
+    number: 84
+
+  - title: Brute Force
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Target your performing unbowed Personality with 5 or greater printed Force to bow a target enemy Personality
+      with lower current Force, and destroy the target if your Personality has more than twice his Force.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Paul (Prof.) Herbert
+    number: 85
+
+  - title: Clear Signals
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Battle: Target your performing Tactician without the printed Tactician keyword to straighten your target Personality
+      at any location and permanently give him Tactician. Move him to the current battlefield if any enemy units are there.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Kevin Wasden
+    number: 86
+
+  - title: Cornered Market
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 3
+    text: 'Political Limited: Bow your target performing Courtier to give a target Holding a Wealth token and permanently give
+      it +1GP.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Patrick McEvoy
+    flavor: The Yasuki and Ide occasionally find themselves at odds.
+    number: 87
+
+  - title: Duel to the Death
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Reaction: After you win a duel, target your winning Personality: Permanently give him +2F, +1PH, and a maximum Personal
+      Honor of 5.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Winner's Choice - Robert Almgren
+    rarity: Rare
+    artist: Paul (Prof.) Herbert
+    flavor: Tsuge flicked the blood from his blade. "No one speaks ill of my lady," he whispered to the dead man. "No one."
+    number: 88
+
+  - title: Elaborate Preparations
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Target a Personality: Before the next time this turn an action moves him, negate the movement.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Malcolm McClinton
+    flavor: '"The Crane approach from the north, commander." "Let them. Today, they will find something they do not expect."'
+    number: 89
+
+  - title: Exchange of Hostages
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 1
+    text: 'Limited: Target another player: He may turn all Dynasty cards in his provinces face-up. Starting with you, each of
+      you may put at the bottom of his Dynasty deck either all face-up Personalities in his provinces, or all face-up Holdings
+      in his provinces, then refill those provinces face-up.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Llyn Hunter
+    flavor: '"Welcome home, my son. You look... well."'
+    number: 90
+
+  - title: Exchanging Civilities
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Political Open: Target your performing Courtier to target another player. You speak well of him in court. After the
+      first time this turn the player gains Honor, draw a card and straighten the Courtier; the player may then gain 2 Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Malcolm McClinton
+    number: 91
+
+  - title: Gaining Momentum
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Target your Personality: Give him +2F. Bow all cards with zero Gold Cost at this battlefield. If your Personality
+      is not opposed when this battle''s resolution begins, destroy him after the battle ends.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Paul (Prof.) Herbert
+    flavor: The Moto charge is terrifying, as is the carnage it leaves.
+    number: 92
+
+  - title: Gempukku Ceremony
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Target your Personality without abilities: Permanently give him the ability, "Battle: Bow and move home
+      this Personality: The enemy leader may discard two cards. If he did not, he chooses and moves home a Personality in his
+      current army."'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Jason Engle
+    number: 93
+
+  - title: Hazardous Ford
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Recon
+    gold_cost: 0
+    focus: 3
+    text: 'Recon Limited: Target your performing Scout Personality and your performing Tactician Personality to target a Province.
+      You have Reconnaissance at its battlefields. Before the next time this turn another player''s action would move one or
+      more of his units to or from that Province''s battlefield, negate the movement.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: IFS
+    number: 94
+
+  - title: Hida Lineage
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Limited: Target a Crab Clan Personality in your discard pile and target your Human Personality: Permanently raise
+      the Human''s Force to 4 and give him the ability, "Battle: Target an enemy card with a Gold Cost of 4 or less: Destroy
+      it."'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Chris Seaman
+    number: 95
+
+  - title: Hidden Scandal
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 4
+    text: 'Open: From now until the turn ends, after a player gains 5 total Honor from his own card effects, negate his further
+      gains from such effects, and after he loses 5 total Honor from other players'' card effects, negate his further losses
+      from such effects.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Chris Seaman
+    flavor: '"You pretend to be so honorable, but you do not fool me."'
+    number: 96
+
+  - title: Hummingbird Wings
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Choose your performing unbowed Crab Clan Samurai or your unbowed Personality who performed a Wolf''s Little
+      Lesson this turn and and target an enemy card: Bow it.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Slawomir Maniak
+    flavor: The Hiruma know that the hummingbird can move in any direction instantly, without warning.
+    number: 97
+
+  - title: Impeccable Nobility
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Favor
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Political Limited: If you have higher Family Honor than each other player, target your performing honorable Personality.
+      Take the Imperial Favor. Favor Political Battle: Discard the Imperial Favor to bow a target Personality.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Malcolm McClinton
+    number: 98
+
+  - title: Inspecting the Charts
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Limited: Target your Personality: While he is in an army with at least one other unit, he has +3F (this turn).'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Chris Seaman
+    flavor: '"Shinjo Shono keeps his forces mobile, even in the bitter cold. We must find a way to corner his forces lest they
+      harass us all the way to Shiro Moto." - Ikoma Otemi'
+    number: 99
+
+  - title: Inspiring Speech
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Bow your performing Courtier Personality and target zero or more Samurai Personalities up to the Courtier''s
+      Chi: Give them a Force bonus equal to the Courtier''s Personal Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Heather V. Kreiter
+    flavor: '"Now is the time, my fellow Mantis. Our time." - Sachina'
+    number: 100
+
+  - title: Manipulation
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Choose your performing Courtier who is not at the current battlefield and target another player''s Personality
+      who is not at the current battlefield: Straighten him and move him there. His controller loses 1 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Steve Venters
+    flavor: A brash samurai is often a dead samurai.
+    number: 101
+
+  - title: Martyr and Pawn
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 3
+    focus: 1
+    text: 'Battle: Choose your performing unbowed Courtier and target an enemy Personality with higher Personal Honor than your
+      Courtier: Dishonor him. Before your next opportunity to take a Battle action in this battle, if your Courtier is in play,
+      the Personality''s controller loses 2 Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Joachim Gmoser
+    flavor: '"I am afraid the rumors are spreading, my lord."'
+    number: 102
+
+  - title: My Ancestor's Strength
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Reaction: After engaging, target your Personality at the current battlefield: Until the current Combat Segment ends,
+      he has +6F and will not bow to pay costs.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Leonardo Borazio
+    flavor: All samurai, not only the Lion, are guided by their ancestors.
+    number: 103
+
+  - title: Odori Dance
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Choose your performing honorable Artisan Personality and target an honorable Samurai Personality: Destroy all
+      tokens on the performer and the target.Open: Bow your performing honorable Artisan Personality and target a dishonorable
+      Samurai Personality: Rehonor him.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Stephanie Pui-Mun Law
+    number: 104
+
+  - title: Otomo Lineage
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Limited: Target an Unaligned Imperial Personality in your discard pile and target your Human Personality: Permanently
+      give him +1PH and the trait, "After this Personality lobbies: Straighten him." Gain 2 Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: April Lee
+    flavor: '"Lady Hoketuhime has the Crane''s support." - Doji Nagori'
+    number: 105
+
+  - title: Passing Judgement
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Choose your performing unbowed Magistrate: Straighten all your dishonorable Personalities. If you have taken
+      To Serve Justice''s action this turn, rehonor all Personalities this straightened.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: IFS
+    flavor: Once testimony is acquired, the penalty is clear.
+    number: 106
+
+  - title: Perilous Ground
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    - Winter
+    gold_cost: 0
+    focus: 1
+    text: 'Before this battle''s resolution: Choose a Personality at the current battlefield with the lowest Chi of all Personalities
+      there (including ties). He does not contribute Force until the battle ends.Battle: If there are no Terrains at the current
+      battlefield: Put this card into play there.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Jason Engle
+    flavor: Even with the coming of snow, war raged between Lion and the Unicorn.
+    number: 107
+
+  - title: Polite Discussion
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Bow your performing Courtier: Take the Imperial Favor. Starting with you, each player may target and straighten
+      one of his Personalities.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Mark Poole
+    flavor: The fractured Empire gave rise to no less than five major Winter Courts this year.
+    number: 108
+
+  - title: Respect Among Warriors
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Bushido Virtue
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Target your opposed Samurai: Give him a +3F Bushido token. The enemy leader may move home any of his units.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Malcolm McClinton
+    flavor: No matter how severe the conflict, captured soldiers are always treated with the respect due to their position.
+    number: 109
+
+  - title: Shosuro Lineage
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Limited: Target a Scorpion Clan Personality in your discard pile and target your Human Personality: Permanently give
+      him the ability, "Battle: This Personality copies the Force of another Personality at this battlefield."'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Janine Johnston
+    flavor: '"Does one ever truly know a Shosuro?" - Bayushi Muhito'
+    number: 110
+
+  - title: Skilled Quartermaster
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Bow your target attachment, which performs this action if it is a Follower, and target an enemy card with
+      lower Gold Cost: Destroy it.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Ed Cox
+    flavor: The strongest army will fall if its support is not prepared to keep it stocked and well fed.
+    number: 111
+
+  - title: Solid Defense
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Favor
+    - Political
+    gold_cost: 0
+    focus: 3
+    text: 'Favor Political Reaction: Before the resolution of another player''s action, you may discard the Imperial Favor.
+      If this discarded it or you control a Personality with 5 or higher Force, negate any Honor losses from the action''s effects.Battle:
+      Move home a target Personality without attachments.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    mrp: There is a slight difference in the timing of when you can use this card
+    rarity: Rare
+    artist: Ed Cox
+    number: 112
+
+  - title: Solving the Riddle
+    type: Strategy
+    deck: Fate
+    gold_cost: 3
+    focus: 3
+    text: 'This card''s action costs 2 less Gold if you are a Lion Clan player.Limited: Search your deck for a Ring, show it,
+      and put it in your hand. Before this turn ends, if the Ring you showed is not in play, discard either that Ring or your
+      entire hand.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 A Break from Tradition - Antonis Panagiotopoulos
+    rarity: Uncommon
+    artist: Steve Argyle
+    number: 113
+
+  - title: Swift Counterattack
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Target a Personality: Give him and each of his Followers +1F. Reaction: Before the resolution of a Battle action
+      that was taken as an additional action: Its effects do not happen.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Steve Argyle
+    flavor: '"You or I will fall today, Matsu!"'
+    number: 114
+
+  - title: The Champion's Guidance
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Open: If you control a Clan Champion or Unique Daimyo, target one to four of your Personalities with your Clan alignment:
+      Give each target +2F.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: April Lee
+    flavor: '"After much meditation, Tsukimi has assumed her rightful position. We pray she will find the right path for us
+      in this chaos." - Shiba Naoya'
+    number: 116
+
+  - title: The Strength of Allies
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Choose your performing Personality, target another player''s Personality in the same army, and target one
+      or more enemy Personalities, each controlled by a different player: Move all enemy targets home, then bow them.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Malcolm McClinton
+    number: 117
+
+  - title: To Serve Justice
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle/Open: Choose your performing unbowed Magistrate and target a Personality: Give him +1F. If he is dishonorable,
+      rehonor him.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: IFS
+    flavor: The magistrate is the servant of the law and the just arbiter.
+    number: 118
+
+  - title: Tonfajutsu
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Bow your target unbowed Weapon. Destroy a target enemy attachment. Battle: Give a target Personality with
+      a Weapon +2F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: IFS
+    flavor: '"I need no steel deal with the likes of you."'
+    number: 120
+
+  - title: Torch's Flame Flickers
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Recon
+    gold_cost: 0
+    focus: 1
+    text: 'Reaction: After engaging, choose your performing Scout at the current battlefield: You have Reconnaissance there.
+      Negate the next card effect that bows one or more of your Personalities who is there (at the time).'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    mrp: This card is now a Reaction
+    rarity: Common
+    artist: Slawomir Maniak
+    flavor: '"We have found the ancient techniques once more. We will honor our ancestors by mastering them." - Hiruma Todori'
+    number: 121
+
+  - title: Unbiased Advice
+    type: Strategy
+    deck: Fate
+    gold_cost: 2
+    focus: 2
+    text: 'Open: Choose your performing unbowed Monk and target another player: He may look at the top three cards of his Fate
+      deck and put them back in any order. You may look at the top three cards of your Fate deck and put them back in any order.
+      Then, draw a card.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Steve Venters
+    number: 122
+
+  - title: Under Suspicion
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political Winter
+    gold_cost: 0
+    focus: 3
+    text: 'Open: Bow your performing Courtier: Your Personalities contribute Force to their army even while bowed and have +2F
+      while defending (this turn).'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Ed Cox
+    flavor: '"I have heard odd rumors about this Bayushi Nomen. Who is he, truly?" -Doji Koin'
+    number: 123
+
+  - title: Ungrateful Host
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Choose your performing Courtier or Magistrate: After each time this turn another player''s card''s effect
+      destroys one of your cards, if your cards'' effects have not destroyed any of his cards this turn, he loses 3 honor and
+      dishonors one of his honorable Personalities.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Adam Denton
+    number: 124
+
+  - title: Versatile Army
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'This ability''s Gold cost is 0 if you control both a Cavalry unit and an Infantry unit at this battlefield.Battle,
+      : Straighten or bow a target Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Ed Cox
+    flavor: To combat the Unicorn's swift armies, the Lion moved their limited heavy calvary to the forefront of battle.
+    number: 125
+
+  - title: Wolf's Little Lesson
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Choose your performing unbowed Crab Clan Samurai or your performing unbowed Personality who performed Torch''s
+      Flame Flickers''s action this turn: Until this battle ends, negate the effects of other players'' Terrains on your Personalities
+      at the current battlefield.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Slawomir Maniak
+    number: 126
+
+  - title: Yarijutsu
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Bow a target Weapon attached to your performing Personality and target an enemy Personality with no Weapons,
+      no Armor, and Force lower than the Focus Value plus Force bonus of your Weapon: Destroy the enemy target.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: IFS
+    flavor: '"First may break stone, but steel always cuts flesh."'
+    number: 127
+
+  - title: Borrowed Advisors
+    type: Follower
+    deck: Fate
+    force: 2
+    chi: 0
+    gold_cost: 3
+    honor_requirement: 0
+    focus: 1
+    text: 'Tireless Battle/Open: Target three Personalities with different Clan Alignments, or target three different players.
+      Straighten this unit.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Carl Frank
+    flavor: With no Emperor on the Throne all the clans are eager to exhange favors, secure old alliances, and create new ones.
+    number: 129
+
+  - title: Gunso Kirita
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    - Gunso
+    force: 2
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 1
+    focus: 4
+    text: 'Will only attach to a Unicorn Clan Personality.Open: Straighten this Personality.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Steve Venters
+    flavor: '"The Lion call us barbarians and traitors, but we will show them that we are samurai with honor and strength."'
+    number: 130
+
+  - title: Gunso Tabarou
+    type: Follower
+    deck: Fate
+    keywords:
+    - Gunso
+    force: 3
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 0
+    focus: 4
+    text: 'Will only attach to a Crab Clan Personality.Battle: If this card is in your discard pile, destroy your performing
+      Follower and target your Personality: Attach this card to him, ignoring costs.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Ed Cox
+    flavor: '"Forward!"'
+    number: 132
+
+  - title: Hidden Sword Ronin
+    type: Follower
+    deck: Fate
+    keywords:
+    - Ronin
+    force: 3
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 1
+    focus: 3
+    text: 'Battle: Target a card in the unit of a Personality with 0 Personal Honor: Bow it.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Winner - John Ling
+    rarity: Uncommon
+    artist: Jarreau Wimberly
+    flavor: '"Clan samurai talk loudly about serving the Empire, but where are they when the bandits come? The Lion alone understand
+      that justice must be done."'
+    number: 133
+
+  - title: Pokku's Raiders
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    - Goblin
+    - Nonhuman
+    - Shadowlands
+    force: 2
+    chi: 0
+    gold_cost: 2
+    honor_requirement: 0
+    focus: 2
+    text: 'After this card enters play: Lose 3 Honor. Battle: Destroy this card: Ranged 3 Attack.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Winner - Jacek Jachymowski
+    rarity: Common
+    artist: Paul (Prof.) Herbert
+    flavor: '"They are not very fast," Daigotsu said. "No," Omoni agreed, "but they are utterly fearless."'
+    number: 134
+
+  - title: Snow Riders
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    - Scout
+    force: 4
+    chi: 0
+    gold_cost: 8
+    honor_requirement: 1
+    focus: 2
+    text: 'Reaction: Before an action''s resolution begins: Negate this Personality''s movement from the action''s effects.Battle:
+      Ranged 4 Attack.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Janine Johnston
+    flavor: '"Chagatai-sama, the Lion are settling in for winter. Yoshino cannot bring himself to match your daring."'
+    number: 135
+
+  - title: Sparrow Clan Aide
+    type: Follower
+    deck: Fate
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: 'After you Equip this Follower, gain 1 Honor. Political Battle: Bow or straighten a target Personality with lower
+      Personal Honor than this Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Winner - Jerred Moore
+    rarity: Common
+    artist: Mike Capprotti
+    flavor: '"Thank you for your most gracious invitation, Suzume-sama."'
+    number: 136
+
+  - title: Winter Ravager
+    type: Follower
+    deck: Fate
+    keywords:
+    - Nonhuman
+    - Winter
+    force: 2
+    chi: 0
+    gold_cost: 3
+    honor_requirement: 1
+    focus: 2
+    text: This card has +1F for each other Winter card in play and in discard piles.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Eric Lofgren
+    flavor: '"If you find its tracks in the summer, hunt it and kill it. If you find its tracks in the snow, pray it is not
+      tracking you." - Kitsune Ryukan'
+    number: 137
+
+  - title: Wolf Legion
+    type: Follower
+    deck: Fate
+    keywords:
+    - Ronin
+    force: 1
+    chi: 0
+    gold_cost: 3
+    honor_requirement: 1
+    focus: 4
+    text: 'This Follower has +3F while opposed by any Shadowlands cards.Battle, w: Target a Personality with an Ashigaru card
+      in his unit at the current battlefield. Move this Personality there.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Kotei Winner - David Reed
+    rarity: Uncommon
+    artist: Ed Cox
+    number: 138
+
+  - title: Ancestral Sword of the Ki-Rin
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Weapon
+    force: 2
+    chi: 1
+    gold_cost: 4
+    focus: 3
+    text: 'Your Cavalry Personalities and Followers in this army have +1F.Battle: If this Personality is honorable, move home
+      a target Personality with 0, 4, or 5 Personal Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2007 Winner's Choice - Andy Tate
+    rarity: Rare
+    artist: Cris Dornaus
+    flavor: Once lost to the Sands, it has finally returned home.
+    number: 139
+
+  - title: Binding Contract
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 2
+    focus: 3
+    text: 'This Personality has +1PH and a maximum Personal Honor of 5. After this card enters play: Target another player.
+      You offer him a treaty. He may choose for each of you to gain 3 Honor; if he did, while this card remains in play, after
+      the next time this game one of you assigns or moves any units to attack the other, the assigning or moving player loses
+      7 Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Heather V. Kreiter
+    number: 140
+
+  - title: Court Invitation
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 1
+    focus: 2
+    text: 'Political Open: Destroy this card and target an unbowed Personality: His controller may bow him. If this bowed him,
+      gain 2 Honor; otherwise, dishonor him.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Steve Venters
+    flavor: '"I think you should send Usharo." - Shahai'
+    number: 141
+
+  - title: Daimyo's Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Weapon
+    force: 3
+    chi: 1
+    gold_cost: 6
+    focus: 4
+    text: 'Attaches to a Clan Champion or Unique Daimyo for 3 less Gold.Battle, w: Destroy a target enemy Item.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Janine Johnston
+    flavor: '"A lord''s blade carries the honor and spirit of his clan, and is strengthened by them." - Doji Domotai'
+    number: 142
+
+  - title: Gempukku Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    force: 3
+    chi: 1
+    gold_cost: 5
+    focus: 3
+    text: Attaches to a Personality without abilities paying 3 less Gold.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Janine Johnston
+    flavor: '"The sword must live within you. The stances are its walk, and the rhythm of the swing the speech of the warrior."
+      - Kakita''s "The Sword"'
+    number: 143
+
+  - title: Gift Armor
+    type: Item
+    deck: Fate
+    keywords:
+    - Armor
+    force: 3
+    chi: 0
+    gold_cost: 4
+    focus: 2
+    text: Negate all current and new Chi penalties on this Personality. Negate any destruction of this card, except for its
+      Personality being destroyed.
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Michel Koch
+    flavor: '"There is no armor life that made by the Kaiu, and we give it only to those who have our respect." - Hida Kuon'
+    number: 144
+
+  - title: Luxurious Gift
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 2
+    focus: 3
+    text: 'Will only attach to a Courtier.Political Limited: Bow this Personality and target a Holding with Gold Cost lower
+      than his Personal Honor: Straighten it.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Janine Johnston
+    flavor: '"It is but a trifle, Bayushi-san, a sign that your noble family is always in our thoughts." - Ikoma Yasuko'
+    number: 145
+
+  - title: Muddy Sandals
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 2
+    focus: 2
+    text: 'Will only attach to a Courtier.Reaction: After this card enters play, target a dishonorable Personality: While this
+      card remains in play, the target has -4F.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Stephanie Pui-Mun Law
+    flavor: '"We have attempted to convince the Crab and Crane to negotiate, but with little success." - Miya Shoin'
+    number: 146
+
+  - title: Poisoned Gift
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 3
+    focus: 1
+    text: 'If this Personality is not a Ninja, you cannot use his printed abilities.Ninja Open, w: If this Personality is a
+      Ninja, transfer this Item to a target Personality.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Heather V. Kreiter
+    number: 147
+
+  - title: Resilient Naginata
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: 'Negate all current and new Chi penalties on this Personality.Battle: Give this Personality +1F for each Recon action
+      that has targeted the current battlefield''s province this turn.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Mike Capprotti
+    flavor: Fear the students of the reborn Hiruma school.
+    number: 148
+
+  - title: Blessings of the Death Lords
+    type: Spell
+    deck: Fate
+    gold_cost: 3
+    focus: 2
+    text: 'Battle: Bow this Shugenja, or bow this Spell if he is Cavalry, to move your target Personality at any location to
+      the current battlefield. This action has Absent and Remote if it targets this Shugenja.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Stephanie Pui-Mun Law
+    flavor: '"Horiuchi Rikako continues her work with our strange magic. The Lion will find her discoveries most disappointing."
+      - Moto Chen'
+    number: 149
+
+  - title: Consecrating the Temple
+    type: Spell
+    deck: Fate
+    gold_cost: 2
+    focus: 4
+    text: 'Limited, w: Straighten a target Holding that bowed this turn to pay a cost of an action whose effects produced an
+      Honor gain.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Tiago da Silva
+    flavor: '"Let the spirits seep into this land. Thus are the Dragon lands kept safe." - Tamori Shaitung'
+    number: 150
+
+  - title: Essence of Jade Dragon
+    type: Spell
+    deck: Fate
+    keywords:
+    - Jade
+    gold_cost: 3
+    focus: 3
+    text: 'Limited: If an Event has resolved this turn, bow and destroy this card: Create a 3F/3C/3PH Nonhuman • Dragon • Shugenja
+      • Cavalry • Spirit Personality in your home.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Common
+    artist: Jaime Jones
+    flavor: Its influence among the Heavens only grows stronger.
+    number: 151
+
+  - title: Puppet Master
+    type: Spell
+    deck: Fate
+    gold_cost: 3
+    focus: 2
+    text: 'Reaction: If this card is in your hand, after one of the enemy leader''s Battle actions resolves, target your Shugenja:
+      Attach it to him, paying all costs. Maho Battle: Bow this Shugenja and target an enemy Follower or Personality without
+      attachments: Destroy it. Lose 1 Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Anthony Francisco
+    flavor: '"Yes... I can certainly find a use for you."'
+    number: 152
+
+  - title: Tempest of Osano-Wo
+    type: Spell
+    deck: Fate
+    keywords:
+    - Fire
+    gold_cost: 2
+    focus: 1
+    text: 'Reaction: If this unit is at the current battlefield, after you announce an action with a Ranged Attack effect, bow
+      this card: One of the Ranged Attacks may target this battlefield''s province instead of an enemy card. If it did, give
+      the province a strength penalty equal to the Ranged Attack''s strength.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Uncommon
+    artist: Chris Seaman
+    number: 153
+
+  - title: Kyuden Kyotei
+    type: Stronghold
+    clan: Crane
+    deck: Pre-Game
+    province_strength: 6
+    gold_production: 4
+    starting_honor: 6
+    text: 'Your Market holdings in and out of play have Legacy.Political Tireless Reaction: If you control the Imperial Favor,
+      before a Fate card out of play turns face-up from an action, trait, duel, or from being discarded, give the card +1 Focus
+      Value when it turns face-up.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Charles Urbach
+    number: 154
+
+  - title: Morning Frost Castle
+    type: Stronghold
+    clan: Dragon
+    deck: Pre-Game
+    keywords:
+    - Mountain
+    province_strength: 7
+    gold_production: 4
+    starting_honor: 5
+    text: 'Battle/Open: Target two of your Personalities. Set the Force of one of them equal to that of the other.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Rob Alexander
+    flavor: On the lips and minds of the Dragon, the notion of Emperor Satsu I grew stronger, despite that their lord wished
+      nothing of it.
+    number: 155
+
+  - title: The House of False Hope
+    type: Stronghold
+    clan: Scorpion
+    deck: Pre-Game
+    province_strength: 7
+    gold_production: 4
+    starting_honor: 2
+    text: 'Your Ninja Personalities and Followers have +1F.Limited: Look at all face-down cards in another player''s Provinces.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Corene Werhane
+    flavor: There is rumored to be a Scorpion fortress that appears on no map, and that no outsider has ever seen. What could
+      be done in such a place?
+    number: 156

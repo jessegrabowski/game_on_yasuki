@@ -1,0 +1,2840 @@
+set: Reign of Blood
+cards:
+  - title: Purification (RoB)
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the game ends, Shugenja performing a Ritual action have a Chi bonus equal to their printed Chi until the action ends.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    card_notes: This is a distinct card from the Heaven and Earth card of the same name.
+    rarity: Rare
+    artist: Malcolm McClinton
+    flavor: The Dragon do as Temoru instructed before his departure, destroying all nemuranai - enchanted items - that might
+      bring their users to ruin.
+    number: 1
+
+  - title: Rain of Blood
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, starting
+      with the player to your left and proceeding in turn order, each player may permanently give one of his Personalities Shadowlands
+      and +1F/+2C.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Thomas Denmark
+    flavor: '"There is a place for you among us."'
+    number: 2
+
+  - title: Our Darkest Hour
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, starting
+      with you and proceeding in turn order, each player targets and destroys one attachment controlled by the player to his
+      left. This is a Maho card effect.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Bryan Heyboer
+    flavor: '"If you would serve the Bloodspeaker, my lord, then I can serve you no more."'
+    number: 3
+
+  - title: Harsh Crossing
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the next time this game a Province is destroyed, after each time a Personality assigns to an army, his controller must
+      choose one unbowed Follower in that Personality's unit, if any, and bow it.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Ed Cox
+    flavor: '"When the Lion lie defeated before us, all this shall be worthwhile."'
+    number: 4
+
+  - title: Hope in Shadows
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      your next turn begins, Bloodspeaker cards and cards with a Maho action enter play bowed, and after such a card bows, destroy
+      it.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Paul (Prof.) Herbert
+    flavor: '"This storm has taken your body, Scorpion, but I shall free your soul."'
+    number: 5
+
+  - title: Silence the Future
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      your next turn begins, Personalities and Followers have a maximum Force equal to their printed Force.
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Thomas Denmark
+    flavor: '"The monks in the Temple of Jurojin sensed the dark portents. Sadly, they delivered their warnings to Asako Kinuye..."'
+    number: 6
+
+  - title: Jade Shortage
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Jade
+    text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the game ends, each player must bow a Gold-producing Holding to Equip a Follower or Item, and all players have the ability,
+      "Limited: Bow your target Personality to end the effects upon you of the Event that granted this ability."'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Joachim Gmoser
+    flavor: '"Let us make this deal swiftly, gaijin."'
+    number: 7
+
+  - title: The Voice's Command
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the game ends, all players have the ability, "Battle/Open: Bow three of your target performing Shugenja to straighten
+      a target Shugenja."'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Joachim Gmoser
+    flavor: '"I wish you and the Phoenix to punish those responsible for this accursed storm, Sezaru," the Emperor hissed. "Let
+      all shugenja in the Empire aid you or be judged among the guilty."'
+    number: 8
+
+  - title: Birth and Death
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, target
+      a Personality. If he is not a Shugenja, permanently give him Shugenja and +1C; otherwise, until the game ends, Spells
+      attaching to that Personality enter play for 2 more Gold, and Kiho Strategy actions performed by him have +2 Gold Cost.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Beth Trott
+    flavor: '"Kenzo fights to make his father''s soul proud. He fights to leave a better world for his son." - Kitsuki Iweko'
+    number: 9
+
+  - title: Honor and Glory
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, if you
+      are not a Shadowlands Horde player, then until the game ends, after a Personality in an army issues a challenge, his controller
+      gains 2 Honor, and after a Personality not in an army issues a challenge, his controller loses 3 Honor.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Tony Moseley
+    flavor: '"For what your clan has done to Toshi Ranbo, you will die, Crane." "For you foolishness, Lion, you will suffer."'
+    number: 10
+
+  - title: Yasuki Trader
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Retainer
+    gold_cost: 2
+    text: 'w: Produce 2 Gold. Limited, w: Shuffle an Item in your discard pile into your deck.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    mrp: MRP to make its second trait an action.
+    rarity: Common
+    artist: Anthony Francisco
+    flavor: '"The Emperor commands no trade with gaijin." "He also commands that the Crab never fail," Jinn-Kuen replied. "That
+      takes priority over our honor."'
+    number: 11
+
+  - title: Shrine of Fu Leng
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Shadowlands
+    - Temple
+    gold_cost: 3
+    text: 'Repeatable Limited, w: Destroy your target performing Personality to search your Dynasty discard pile, target a dead
+      Oni Personality in it, and bring it into play, ignoring Gold cost.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Tony Moseley
+    flavor: There, far from the eyes of the Bloodspeakers, Daigotsu planned his revenge.
+    number: 12
+
+  - title: Corrupt Officials
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Retainer
+    gold_cost: 2
+    text: 'w: Produce 2 Gold. Open, w: Target a non-Unique Holding, or destroy this Holding to target any Holding. The target''s
+      abilities may not be used (until the turn ends).'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Malcolm McClinton
+    flavor: '"But sama, I paid my taxes on time." "Take it up with the Emperor, old man."'
+    number: 13
+
+  - title: Chuda Agent
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Retainer
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.w: Permanently give your target Personality -2C to produce 3 Gold.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: John Donahue
+    flavor: '"I am so sorry, my lord," Mishime prayed in silence.'
+    number: 14
+
+  - title: Vigilant Witch Hunter
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Retainer
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Repeatable Reaction, w: After a Bloodspeaker Personality bows, give him a Taint token.Repeatable
+      Limited, w: Target a Bloodspeaker Personality with a higher number of Taint tokens than his printed Personal Honor. His
+      controller chooses either for you to gain control of him, or for him to be destroyed.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Mike Raabe
+    number: 15
+
+  - title: Shrine of the Eternal
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Temple
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Limited: Destroy this Holding to search your Fate discard, target a Kiho Strategy in it, and put
+      it in your hand.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Storn A. Cook
+    flavor: The monks of the Eternal Dragon understand the flow of the elements in a way that not even shugenja can match.
+    number: 17
+
+  - title: Horsemaster
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Retainer
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Your Personalities have Cavalry while they have a Spell attached.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Steve Snyder
+    flavor: '"The men of the Utaku do not ride into battle, but they are the finest tamers of horses in the Empire."'
+    number: 18
+
+  - title: Inkyo Teacher
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Retainer
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Repeatable Reaction, w: After announcing a Kiho action, target your performing Daimyo, or Personality
+      with "Champion" as part of any of his keywords or subtitles, with your Clan Alignment. That Personality may be targeted
+      the Kiho as if he were a Shugenja and need not bow for its effects.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Jason Engle
+    number: 19
+
+  - title: Hero's Grave
+    type: Holding
+    deck: Dynasty
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Repeatable Reaction, w: After your Stronghold bows, if it was not producing Gold, straighten it.
+      If its bowing was a cost of one of its abilities, that ability may not be used (again this turn).'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Raven Mimura
+    flavor: '"Rest well, Masagaro," Todori said in a thick voice. "Your tale will be told in Koten."'
+    number: 20
+
+  - title: Tamori's Furnace
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.w: When paying for a Spell, destroy your Item to produce 8 Gold which may only pay for that Spell.Battle/Open,
+      w: Destroy your Item to straighten a target Shugenja.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Tony Moseley
+    number: 21
+
+  - title: Pit of Blood
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Shadowlands
+    gold_cost: 5
+    text: 'After this Holding enters play, lose 2 Honor.Maho Repeatable Reaction: After your Bloodspeaker Personality is destroyed,
+      put him under this Holding instead of into your discard pile.Maho Repeatable Limited, w: Bring a Personality under this
+      Holding into play, bowed, ignoring costs and restrictions.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Tony Moseley
+    flavor: '"Fill it," Iuchiban commanded. "Now."'
+    number: 22
+
+  - title: Crystal Mine
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Crystal
+    - Mine
+    gold_cost: 3
+    text: 'w: Bow another of your Gold-producing Holdings to produce 6 Gold.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    card_notes: The Lotus Edition version of this Holding was misprinted. The Gold Cost and Gold Production numbers were reversed.
+    rarity: Common
+    artist: Steven Belledin
+    flavor: '"Legend says the Ashalan can make wonderful things from such stone," the peasant said. "Is that so?" Hojyn replied
+      with a smile.'
+    number: 23
+
+  - title: Hidden Retreat
+    type: Holding
+    deck: Dynasty
+    gold_cost: 3
+    text: 'w: Produce 1 Gold.Repeatable Battle, w: Move a target Personality home. Destroy this Holding unless the target is
+      yours.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Joachim Gmoser
+    flavor: '"Father?" Miyako said to her brother in surprise. "Why would the Bloodspeakers be hunting Father?"'
+    number: 24
+
+  - title: Worthy Gift
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Singular
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Political Repeatable Reaction, w: After another player bows a Holding to produce Gold, that player
+      chooses whether that Holding will not straighten at the beginning of its controller''s next turn, or whether it straightens
+      now and you gain 2 Honor.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Marta Preta Mora
+    number: 25
+
+  - title: Hitomi Dojo
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Dojo
+    gold_cost: 3
+    text: 'Bow this card: Produce 2 Gold.Reaction: After you announce a Kiho action, bow this card and target your Personality:
+      He may perform action as if he had the Monk keyword.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Storn A. Cook
+    flavor: '"To fail to learn is the only failure." - Hitomi Vedau'
+    number: 27
+
+  - title: Talented Apprentice
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Retainer
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Reaction: After a Spell enters play from your hand, permanently give this Holding +1 Gold Production.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Luis Vazquez
+    number: 28
+
+  - title: Hida Katai
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Yu 2
+    - Crab Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: Once per turn, you may attach a Follower to Katai from your discard pile as if it were in your hand.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Anthony Grabski
+    flavor: '"I am almost pleased Iuchiban has returned. Now the Crab have someone to kill again."'
+    number: 29
+
+  - title: Kuni Jiyuna
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Earth
+    - Jade
+    - Magistrate
+    - Shugenja
+    force: 3
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 3
+    personal_honor: 2
+    text: 'Earth Repeatable Limited, w: Choose a random card from another target player''s hand and remove it from the game.
+      After the turn ends, return the card to the target''s hand.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Llyn Hunter
+    flavor: '"It has been a long time, Najmudin, but I have not forgotten the debt I owe you."'
+    number: 30
+
+  - title: Hida Soh
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Crab Clan
+    force: 5
+    chi: 3
+    gold_cost: 9
+    honor_requirement: 0
+    personal_honor: 1
+    text: When paying for Soh, you may reduce his Gold Cost by 2 until it is paid and permanently give him -2C.Spell and Kiho
+      actions may not target Soh while he is not in an army.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: William O'Connor
+    flavor: '"Daigotsu, Iuchiban, Fu Leng, it makes no difference. Let them all come to the Wall. We will crush them."'
+    number: 31
+
+  - title: Hiruma Rikiya
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Samurai
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Rikiya has +2F while opposing a Shugenja or Bloodspeaker.Absent Remote Battle: Once per battle, if you are the Defender
+      or if the current enemy army contains a Shugenja or Bloodspeaker, move Rikiya to the current battlefield.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Drew Baker
+    flavor: '"The Bloodsepakers overwhelemed us, slaying Masagaro. Now they march for Hiruma Castle. We must be strong, for
+      we stand alone."'
+    number: 32
+
+  - title: Omen
+    extended_title: Omen • Experienced
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Crab Clan
+    - Experienced
+    - Jade
+    - Oracle
+    - Shugenja
+    force: 4
+    chi: 5
+    gold_cost: 9
+    honor_requirement: 0
+    personal_honor: 4
+    text: 'Will not gain Shadowlands.Repeatable Limited, w: Bow a target Shadowlands card. It will not straighten at the start
+      of its controller''s next turn.Repeatable Battle/Open, w: Permanently remove the Shadowlands keyword from a target face-up
+      card in or out of play.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Carl Frank
+    number: 33
+
+  - title: Asahina Nahomi
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Bloodspeaker
+    - Crane Clan
+    - Shugenja
+    force: 2
+    chi: 4
+    gold_cost: 7
+    personal_honor: 2
+    text: 'Maho Battle, w: Give a target attacking Personality -3F/-1C.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: April Lee
+    flavor: '"The Rain of Blood was a tragedy for your family, Akodo-san. Rest assured that my brethren and I will use our magic
+      to purify the Empire of all such influences."'
+    number: 34
+
+  - title: Asahina Nizomi
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crane Clan
+    - Fire
+    - Jade
+    - Magistrate
+    - Shugenja
+    force: 0
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Reaction: Once per duel, after your Personality enters a duel: Give him +2 to his duel stat. If this duel destroys
+      the loser, it bows the loser instead.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    story: 2001 Blessing of the Grand Master - Kevin Walsh
+    rarity: Common
+    artist: Franz Vohwinkel
+    flavor: He came back with Master Tokei from his journey through the Spirit Realms. Now he serves beside Sekawa, showing
+      no mercy to the minions of darkness.
+    number: 35
+
+  - title: Daidoji Sabaru
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 2
+    text: Your Courtiers in and out of play have -1 Gold Cost, to a minimum of 1.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Drew Baker
+    flavor: '"The old yojimbo is too gruff to be a politician, but he has been around the courts long enough that you would
+      be wise to listen to his wisdom, Mai." - Doji Tanitsu'
+    number: 36
+
+  - title: Kakita Matabei
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Crane Clan
+    - Samurai
+    force: 2
+    chi: 5
+    gold_cost: 9
+    honor_requirement: 6
+    personal_honor: 2
+    text: After Matabei wins a duel, you may draw 2 cards.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Jason Engle
+    flavor: '"He has only been defeated once - by the beautiful and deadly Korihime. He strives constantly to better himself.
+      But is her defeat his true desire? I wonder." - Doji Nagori'
+    number: 37
+
+  - title: Kakita Nichira
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Samurai
+    force: 2
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Reaction: Any number of times per turn, before Nichira is destroyed during a duel, destroy one of his Weapons: Negate
+      his destruction.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Michael Kaluta
+    flavor: '"We Crane were not responsible for the fires in the capital. The Lion must be at fault. Who else could it be?"'
+    number: 38
+
+  - title: Tamori Nobuyoki
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Bloodspeaker
+    - Dragon Clan
+    - Fire
+    - Shugenja
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 2
+    text: 'Maho Battle/Open: Any number of times per turn, bow Nobuyoki and target an Item: Reduce its Force or Chi bonus to
+      0.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Anthony Francisco
+    flavor: '"Such a waste," Nobuyoki whispered, gazing into the depths of the volcano.'
+    number: 39
+
+  - title: Togashi Shozo
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Monk
+    - Tattooed
+    force: 2
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 1
+    text: Once per turn, before you draw a card, look at a number of cards from the top of your Fate deck equal to one plus
+      the number of Rings you control. Draw any one of those instead of only the top card.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Franz Vohwinkel
+    flavor: '"Put your mind at peace, and all else falls in place."'
+    number: 40
+
+  - title: Mirumoto Mareshi
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Dragon Clan
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 9
+    honor_requirement: 2
+    personal_honor: 1
+    text: 'Absent Remote Battle: If Mareshi is at a battlefield, move him to the current battlefield.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: April Lee
+    flavor: '"His father is Daini, one of the Dragon''s greatest samurai. His mother is Mara, a hero among the Naga. His very
+      existence is myth in the making. His will be a difficult road." - Togashi Satsu'
+    number: 41
+
+  - title: Mirumoto Kenzo
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Dragon Clan
+    - Samurai
+    force: 3
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 2
+    text: After the first duel Kenzo wins each turn ends, permanently give him +1PH and +2F.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: William O'Connor
+    flavor: '"Fear not, my enemies, for even in defeat you will know glory in that you have been defeated by a legend."'
+    number: 42
+
+  - title: Kitsu Tomoe
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Lion Clan
+    - Shugenja
+    - Water
+    force: 1
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 6
+    personal_honor: 2
+    text: 'Water Repeatable Battle, w: Give your target Lion Clan Personality +2F/+2C.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: John Donahue
+    flavor: Born of the Hare, trained by the Kitsu, her spirit is now that of a true Lion.
+    number: 44
+
+  - title: Akodo Ieshige
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Bloodspeaker
+    - Lion Clan
+    - Samurai
+    force: 3
+    chi: 4
+    gold_cost: 7
+    personal_honor: 2
+    text: Before an action resolves that was taken by a player who controls a unit opposing Ieshige, if Ieshige is at the current
+      battlefield, give him +1F.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Drew Baker
+    flavor: '"We will make our stand at the City of the Rich Frog," Ieshige roared. "There, let the Unicorn learn the strength
+      of the Lion!"'
+    number: 45
+
+  - title: Akodo Maiko
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Deathseeker
+    - Lion Clan
+    - Samurai
+    force: 4
+    chi: 1
+    gold_cost: 6
+    honor_requirement: 3
+    personal_honor: 2
+    text: After you assign Maiko to a defending army, lose 2 Honor.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Anthony Grabski
+    flavor: '"One day, Kurushimi. I will hunt you beyond the veil of death."'
+    number: 46
+
+  - title: Matsu Takenao
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Emerald Magistrate
+    - Lion Clan
+    - Magistrate
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 2
+    text: After Takenao enters play, you may permanently give him -2C to target another Personality and, until the game ends,
+      the target has +2F while attacking.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: William O'Connor
+    flavor: When the Rain of Blood ended, Takenao stood in a field of his fallen kinsmen. He was the only one not to succumb
+      to the Bloodspeakers' call.
+    number: 47
+
+  - title: Matsu Taniko
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Lion Clan
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 2
+    text: 'Reaction: Once per battle, after a Tactical action you took resolves, draw a card. (Taniko need not be at the current
+      battlefield.)'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Monte Moore
+    flavor: '"A merciful enemy is an enemy to be exploited."'
+    number: 48
+
+  - title: Yoritomo Utemaro
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Mantis Clan
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 7
+    personal_honor: 2
+    text: 'Battle/Open: Any number of times per turn, pay 1 Gold and target your Personality: Create a 1F Mercenary • Naval
+      Follower and attach it to him. Remove it from the game after the turn ends.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Chris Seaman
+    flavor: '"Rama Singh speaks only to the Crane, when it is the Mantis who saved his nation," Kumiko said. "Find out why,
+      Utemaro. We must gain his friendship back."'
+    number: 49
+
+  - title: Moshi Kekiesu
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Bloodspeaker
+    - Mantis Clan
+    - Shugenja
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Maho Battle, w: Ranged 2 Attack that is compared against Chi and that may target a Personality with attached Followers;
+      the strength of this Ranged Attack will not be increased.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Llyn Hunter
+    flavor: '"Naseru failed the save the Lady of the sun. Let his dynasty burn."'
+    number: 50
+
+  - title: Tsuruchi Amane
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Mantis Clan
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 2
+    personal_honor: 1
+    text: 'Ranged Attacks from cards in this army have +2 strength if their target is bowed.Battle: Any number of times per
+      turn, bow Amane: Ranged 3 Attack.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Malcolm McClinton
+    flavor: '"The Lion and Crane quarrell over who let the Imperial City burn. Let the Tsuruchi find the truth." - Tsuruchi
+      Nobumoto'
+    number: 51
+
+  - title: Tsuruchi Fusako
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Emerald Magistrate
+    - Magistrate
+    - Mantis Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Reaction: After a Personality challenges a Personality in Fusako''s army, bow Fusako: Ranged 3 Attack which must
+      target the challenger and may do so even if he has attached Followers. The strength of this Ranged Attack will not be
+      increased.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Michael Kaluta
+    flavor: '"Hiro!" Fusako screamed. The daimyo''s son fell to his knees in the rain of blood, laughing like a madman.'
+    number: 52
+
+  - title: Yoritomo Kitao
+    extended_title: Yoritomo Kitao • Experienced 2
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Experienced 2
+    - Naval
+    - Unique
+    - Mantis Clan
+    - Samurai
+    - Shadowlands
+    force: 5
+    chi: 3
+    gold_cost: 9
+    personal_honor: 1
+    text: 'Kitao has +3C and Double Chi while facing a Clan Champion in a duel.Limited: Target a Clan Champion Personality:
+      Kitao issues him a challenge. He may refused; if he did, give Kitao +3F/+3C.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: William O'Connor
+    number: 53
+
+  - title: Asako Genjo
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Air
+    - Phoenix Clan
+    - Scribe
+    - Shugenja
+    force: 1
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 6
+    personal_honor: 2
+    text: 'When bringing Genjo into play: You may ignore his Honor Requirement and permanently give him -2C.Reaction: Any number
+      of times per turn, but only once per destruction, after one of your Spells is destroyed, bow Genjo: Take it from your
+      discard pile and put it in your hand, face-up. After the next time this game it would go to your discard pile, remove
+      it from the game instead.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Chris Seaman
+    number: 55
+
+  - title: Asako Katsuhito
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Bloodspeaker
+    - Phoenix Clan
+    - Shugenja
+    force: 2
+    chi: 5
+    gold_cost: 8
+    personal_honor: 2
+    text: 'Repeatable Maho Battle, w: Destroy a target Follower with Force higher than its Personality''s Chi.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Thomas Denmark
+    flavor: '"I do not trust the Agasha''s silence, Lord Kaneka."'
+    number: 56
+
+  - title: Isawa Jun
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Phoenix Clan
+    - Shugenja
+    force: 2
+    chi: 5
+    gold_cost: 9
+    honor_requirement: 6
+    personal_honor: 2
+    text: When paying for Jun, you may reduce her Gold Cost by 2 until it is paid and permanently give her -2C.After Jun enters
+      play, you may choose one of your Personalities. Create a 1F Nonhuman • Spirit Follower, or a 2F Nonhuman • Spirit Follower
+      if he is a Samurai, and attach it to him.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Lisa Hunt
+    flavor: '"One thousand spirits protect her," Tokei said. "Even I cannot see them all."'
+    number: 57
+
+  - title: Tch'rikch
+    type: Personality
+    clan: Ratling
+    deck: Dynasty
+    keywords:
+    - Bushi
+    - Crooked Tail Tribe
+    - Nonhuman
+    - Ratling
+    force: 3
+    chi: 3
+    gold_cost: 6
+    personal_honor: 2
+    text: 'Reaction: Any number of times per turn, before a Maho action resolves, bow Tch''rikch: Negate its effects.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Storn A. Cook
+    flavor: '"City Rise from the Shadowlands, Bloodspeakers go there... not human city... not Naga city. Seen this place in
+      dreams. Look-look like... home?"'
+    number: 58
+
+  - title: Yogo Hiroji
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Kuroiban
+    - Scorpion Clan
+    - Shugenja
+    force: 3
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Battle/Open: Any number of times per turn, bow Hiroji and target a Spell: Destroy it. Hiroji permanently loses this
+      ability unless the Spell or one of its actions has the Shadowlands, Maho, or Black Scroll keyword.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Jonathan Hunt
+    flavor: '"Natsuo has shown his true colors. I will plant his heart in Traitor''s Grove."'
+    number: 59
+
+  - title: Soshi Uidori
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Air
+    - Daimyo
+    - Scorpion Clan
+    - Shugenja
+    force: 4
+    chi: 4
+    gold_cost: 9
+    personal_honor: 1
+    text: 'When paying for Uidori, you may reduce her Gold Cost by 2 until it is paid and permanently give her -2C.Air Remote
+      Tireless Battle: Target another copy of Soshi Uidori that you control, who may be at any location if this Uidori is at
+      the current battlefield. Switch this Uidori''s location with the target''s; this is not considered movement.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: William O'Connor
+    flavor: Three sisters, one soul, one destiny.
+    number: 60
+
+  - title: Shosuro Haru
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Bloodspeaker
+    - Ninja
+    - Scorpion Clan
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Maho Reaction: Any number of times per turn, but only once per trigger, after entering a duel or assigning or moving
+      to a battle, target the Personality facing Haru or a Personality opposing him: Give the target a -1F/-1C Poison token.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Anthony Grabski
+    flavor: '"Find these Ashalan, Haru," Juru said with a fond smile. "Our master would know more of them."'
+    number: 61
+
+  - title: Bayushi Atsuki
+    extended_title: Bayushi Atsuki • Experienced
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Experienced Shosuro Furuyari
+    - Unique
+    - Samurai
+    - Scorpion Clan
+    force: 4
+    chi: 5
+    gold_cost: 9
+    personal_honor: 0
+    text: 'Limited: Any number of times per turn, bow Atsuki and either discard or set aside any number of cards from your hand:
+      Draw an equal number of cards. Then, place all cards you set aside on top of your Fate deck in any order.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: William O'Connor
+    flavor: '"From this chaos, the Gozoku shall build order."'
+    number: 62
+
+  - title: Bayushi Shintaro
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Governor
+    - Samurai
+    - Scorpion Clan
+    force: 2
+    chi: 4
+    gold_cost: 7
+    personal_honor: 2
+    text: 'Political Battle/Open: Target a dishonorable Personality. Bow him.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Drew Baker
+    flavor: '"Do not fear the Scorpion knives that cut through shadows. Fear the voice that commands them." - Bayushi Kaukatsu'
+    number: 63
+
+  - title: Hakai
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Nonhuman
+    - Onisu
+    - Onisu of Death
+    - Shadowlands
+    force: 4
+    chi: 5
+    gold_cost: 10
+    personal_honor: 0
+    text: 'After Hakai enters play: Lose 5 Honor.Reaction: After a Spell, Kiho, or Shugenja ability resolves, target a Shugenja
+      who performed it: Permanently give him -2C.Reaction: Any number of times per turn, after a card enters a discard pile:
+      Remove that card from the game.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Jim Pavelec
+    number: 64
+
+  - title: Shukumei
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Bloodspeaker
+    - Shadowlands
+    - Shugenja
+    force: 4
+    chi: 4
+    gold_cost: 7
+    personal_honor: 0
+    text: 'After Shukumei enters play: Lose 5 Honor and target a Personality (Shukumei must target himself if there are no other
+      Personalities in play). Permanently give the target -1F/-1C; this is a Maho effect.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Jim Pavelec
+    number: 65
+
+  - title: Migawari
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Bloodspeaker
+    - Shadowlands
+    - Shugenja
+    force: 3
+    chi: 3
+    gold_cost: 6
+    personal_honor: 0
+    text: 'After Migawari enters play, lose 3 Honor.Maho Repeatable Limited, w: Transfer a target Follower on any player''s
+      target Personality with lower Chi to Migawari, ignoring restrictions.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Thomas Manning
+    flavor: '"What is that carved in your flesh?" Shahai asked."Truth," he replied.'
+    number: 66
+
+  - title: Yajinden
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Bloodspeaker
+    - Shadowlands
+    - Shugenja
+    force: 4
+    chi: 6
+    gold_cost: 12
+    personal_honor: 0
+    text: 'After Yajinden enters play: Lose 6 Honor.Maho Limited: Bow Yajinden and target another player''s Personality with
+      2 or lower Chi: Take control of the target. While Yajinden remains bowed, you may negate his straightening. After the
+      next time this game he straightens or leaves play, return control of the target to the player from whom this took him.Maho
+      Reaction: Even if Yajinden is bowed, before a Maho effect gives one of your Personalities a Chi penalty: Another Personality
+      of your choice receives it instead.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Ben Peck
+    number: 67
+
+  - title: Skub
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Goblin
+    - Nonhuman
+    - Shadowlands
+    force: 5
+    chi: 1
+    gold_cost: 6
+    personal_honor: 0
+    text: 'After Skub enters play: Lose 4 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Bryan Heyboer
+    flavor: The creature looked up in terror, but it did not back away for it its master. "Konnichiwa, little one." Daigotsu
+      said, resting one hand on the savage beast's forehead. "Now go, and bring the others."
+    number: 68
+
+  - title: Iuchi Katsumi
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Air
+    - Shugenja
+    - Unicorn Clan
+    force: 2
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 2
+    personal_honor: 1
+    text: 'Battle/Open: Bow one of Katsumi''s Items and target a Personality: Give him +2F or +2C.Battle: Any number of times
+      per turn, destroy one of Katsumi''s Items and target a unit at a battlefield: Move it to a different battlefield.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: April Lee
+    flavor: '"The Khan is dissappointed with your lack of progress, Shem-Zhe," she said. "The City of Night is ours now."'
+    number: 69
+
+  - title: Iuchi Tudev
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Bloodspeaker
+    - Shugenja
+    - Unicorn Clan
+    force: 3
+    chi: 3
+    gold_cost: 9
+    personal_honor: 2
+    text: 'Maho Battle: Any number of times per turn, bow Tudev, choose your performing Unicorn Clan Personality with an Item
+      and target an enemy Personality: Give him -3F or -2C.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Malcolm McClinton
+    flavor: '"Careful, child, draw the magic sparingly, lest it corrupt your flesh. We must remain pure, so that our master
+      can see the Empire through our eyes."'
+    number: 70
+
+  - title: Moto Najmudin
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Bushi
+    - Emerald Magistrate
+    - Magistrate
+    - Unicorn Clan
+    force: 4
+    chi: 4
+    gold_cost: 11
+    honor_requirement: 0
+    personal_honor: 1
+    text: When paying for Najmudin, you may reduce his Gold Cost by 2 until it is paid and permanently give him -2C.Najmudin
+      has +1F while attacking.After a unit moves into an army opposing Najmudin, give Najmudin +2F.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    story: 2002 Topaz Championships - Sonny MacNeal
+    rarity: Fixed
+    artist: William O'Connor
+    flavor: '"Now is a time for heroes. Let us ride forth togther, my friends."'
+    number: 71
+
+  - title: Ide Haichang
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Merchant
+    - Unicorn Clan
+    force: 3
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Battle/Open: Destroy one of Haichang''s Items and target a Unicorn Clan Personality: Straighten him.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Chris Seaman
+    flavor: '"I tell you, in all my travels, in all my adventures, I have heard no words sweeter than, ''How much does it cost?''"'
+    number: 72
+
+  - title: Utaku Xiulian
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Battle Maiden
+    - Samurai
+    - Unicorn Clan
+    force: 4
+    chi: 3
+    gold_cost: 9
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'You have the ability, "Reaction: Once per battle, after a Bloodspeaker or Maho action targets the card granting this
+      ability, bow your performing Shugenja in the card''s army: Negate action''s effects."'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: William O'Connor
+    flavor: The utaku where the first to reach the walls of the Rich Frog. They had waited decades to test their strength against
+      the Lion again. This was their moment.
+    number: 73
+
+  - title: Shrine of Humility
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Temple
+    text: 'Before a Personality enters play from this province: Gain 2 Honor and the Personality enters play bowed.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Chris Seaman
+    flavor: '"Ijiasu is dead, my lord, slain by the Moto." A scowl deepend Kaneka''s features. "Gather my army," he said in
+      a low voice. "We ride forth to meet with the Khan."'
+    number: 74
+
+  - title: Temples of the Snake
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Maho
+    - Temple
+    text: After a Personality enters play from any of your provinces, permanently give him +1F/-2C and Bloodspeaker.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Thomas Manning
+    flavor: '"Rejoice that you serve your true master, Mishime," Mohai said. "Daigotsu is gone now." Mishime only nodded silently,
+      and said nothing.'
+    number: 75
+
+  - title: Where the Kami Walk
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Kami
+    text: 'Before one of your Shugenja at this province''s battlefield bows to perform a Spell or Kiho action: You may ignore
+      the cost of bowing. During battles at this province, all Spell actions that may be used more than once per battle have
+      the restriction, "Once per battle".'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Ed Cox
+    flavor: '"The spirits fly to serve my whim here," Nizomi said with a laugh. "I feel as if I have come home."'
+    number: 77
+
+  - title: Steel on Steel
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Iaijutsu
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Choose your performing unbowed Personality and target an enemy Personality: Your performer duels the target.
+      Destroy the duel''s loser.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Thomas Denmark
+    flavor: The Brotherhood of the Tessen has always protected Toshi Ranbo, resenting the Lion and Crane's feuds. Now that the
+      Lion and Crane battle once more, what will the Tessen do?"
+    number: 78
+
+  - title: Taint the Land
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Maho
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Bow your performing attacking Bloodspeaker: If the current battlefield''s province is destroyed during this
+      battle then, until the game ends, after each time a Personality enters play from the provinces currently adjacent to it,
+      permanently give the Personality -2C, to a minimum of 1.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Tony Moseley
+    number: 80
+
+  - title: Search For Advantage
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Bow your performing Personality and target a dishonorable Personality: Rehonor him. Shuffle him and all
+      his attached cards into their owners'' decks.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Steven Belledin
+    flavor: '"The Scorpion have a way of finding truth, even if they must invent it." - Kakita Munemori'
+    number: 81
+
+  - title: Strange Alliance
+    type: Strategy
+    deck: Fate
+    gold_cost: 2
+    focus: 3
+    text: 'Limited: Target a dishonorable Personality: Until he leaves play, he will not be rehonored, and may not be targeted
+      by nor perform Political actions.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Paul (Prof.) Herbert
+    flavor: '"The Bloodspeaker lays siege to Kyuden Hiruma," Daigotsu said. "We shall allow them no victory."'
+    number: 82
+
+  - title: Blood Pact
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Maho
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Target your Personality and an enemy Personality: Give +1F to your target and -1F to the enemy target.Battle:
+      Target your Bloodpseaker and an enemy Personality: Give +2F to your target and -2F to the enemy target.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Veronica V. Jones
+    flavor: '"We ask so little, Mirumoto, and offer so much. Do not worry for the price."'
+    number: 83
+
+  - title: Political Interference
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 3
+    text: 'Reaction: After a player announces an action, bow your performing Courtier: The player may choose to raise the action''s
+      Gold cost by 2 (this will give a Gold cost to actions that have none). If he did not choose this, he loses 2 Honor.'
+    legality:
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Steve Snyder
+    flavor: '"I am the Jade Champion! I have no time for this!"'
+    number: 84
+
+  - title: Fires of Dishonor
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Fire
+    gold_cost: 1
+    focus: 1
+    text: 'Limited: Target an unbowed dishonorable Personality: Give him +3F until he bows. After he bows, destroy him.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Lisa Hunt
+    flavor: '"If I am doomed to Jigoku let my enemies be dragged along beside me." - The Writings of Kuni Yori'
+    number: 85
+
+  - title: Nemuranai Arms
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Target an Armor or Weapon: Permanently give it the ability, "Battle: Any number of times per turn, bow your
+      performing Shugenja: Give this card +3F/+3C."'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Carl Frank
+    flavor: '"Let the Crane''s gift be reinforced by my magic, Kuon. So long as you hold this hammer, you will never know defeat."'
+    number: 86
+
+  - title: The Death of Tadaji
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    focus: 4
+    text: 'Reaction: Before any player gains Honor, bow your performing Courtier and pay one or more Gold: Reduce the gain by
+      twice the amount of Gold paid. Gain 2 Honor if your Courtier is Unique.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Beth Trott
+    flavor: '"He died as he lived, in the court, surronded by the Emperor and his servants. He was no warrior, but he was a
+      hero, and we will miss him." - Miya Shoin'
+    number: 87
+
+  - title: Stymied
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Open: If you control no Personalities, target another player''s Personality: Bow him. Draw a card.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Malcolm McClinton
+    flavor: '"Why were you not on patrol?"'
+    number: 88
+
+  - title: Strength In Numbers
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Choose three of your performing Personalities, bow their units, and target an enemy unit: Destroy it.Battle:
+      If you control at least three cards with the same element keyword, choose your performing Samurai Personality, bow his
+      unit, and target an enemy unit: Destroy it.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Steven Belledin
+    number: 89
+
+  - title: Break the Line
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Target your performing unbowed Samurai or Bushi to bow a target enemy Shugenja or card with a Ranged Attack
+      action.Reaction: After an action on a Spell, Kiho, or Shugenja, or a Ranged Attack action, targets a card in your army,
+      bow your target performing Samurai or Bushi in that army to negate the action''s effects.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Michael Kaluta
+    number: 90
+
+  - title: Reinforcements
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Target your Personality and a Follower in your hand: Attach it to him, paying 2 less Gold.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Malcolm McClinton
+    flavor: Since the Rain of Blood, the Bitter Flower has become the scourge of the seas, and Kitao answers to no one.
+    number: 91
+
+  - title: Strategic Crossroad
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Other players'' Personalities who moved to the current battlefield with an action have +2F while there.All players
+      have the ability, "Battle: Any number of times per turn, target your unit: Move it to the current battlefield."Battle:
+      If there are no Terrains at the current battlefield: Put this card into play there.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Jim Pavelec
+    number: 92
+
+  - title: Inexorable March
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle/Open: Target a Yu Follower: Straighten it.Battle: Target a Yu card: Straighten it.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Ed Cox
+    flavor: '"Here they come," Todori whispered. "Be ready."'
+    number: 93
+
+  - title: Ciphered Scroll
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'This card''s action costs Gold equal to the cost of the attaching Spell minus the cost of the targeted Spell.Battle:
+      Target your Shugenja and one of his Spells: Attach a Spell from your hand to him, ignoring its Gold cost. Take the targeted
+      Spell into your hand. You may take an additional Battle action to use an action on the new Spell.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Thomas Denmark
+    flavor: Always read a Phoenix scroll carefully.
+    number: 94
+
+  - title: Quarantined
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 1
+    focus: 3
+    text: 'Limited: Bow your performing Courtier and target another player''s Gold-producing Holding: While your Courtier remains
+      bowed, you may negate his straightening, and the Holding will not straighten. Permanently give all players the ability,
+      "Open: Bow and dishonor your performing Personality: End all ongoing effects of the action that granted this ability."'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: David Horne
+    number: 96
+
+  - title: Swift as the Wind
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Wind
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Target your Cavalry unit: Move it from the current battlefield to another.Battle: Target an opposed Cavalry
+      Personality: Give him +2F.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Malcolm McClinton
+    flavor: The rain of blood fell, and the unquiet dead rose, but across the Empire heroes stood ready to destroy them.
+    number: 97
+
+  - title: Calculate Strength
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Reaction: After another player''s Personality wins a duel while facing one of yours, target the other player''s Personality:
+      Until the game ends, your Personalities have a +3 bonus to their duel stat while facing that Personality in a duel.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Storn A. Cook
+    flavor: '"Impressive, Matabei," the watchful Scorpion whispered. "But will you do so well next time?"'
+    number: 98
+
+  - title: From Every Side
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Increase the current battlefield''s province''s strength by twice the number of units on the defending side.Battle:
+      Reduce the current battlefield''s province''s strength by the number of units on the attacking side.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    rarity: Common
+    artist: Ed Cox
+    flavor: The outer watchtowers of the Hiruma were quick to fall.
+    number: 99
+
+  - title: Way of the Willow
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle/Open: Target one of your units and another player''s unit: Until your next turn begins, you must assign your
+      unit to a battlefield opposing the other unit each time it is possible, and each time the other unit moves to a battlefield,
+      your unit simultaneously moves to the same battlefield.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Ed Cox
+    number: 101
+
+  - title: Kuroiban Advisor
+    type: Follower
+    deck: Fate
+    force: 0
+    chi: 1
+    gold_cost: 2
+    honor_requirement: 1
+    focus: 4
+    text: 'If you ever control a Shadowlands card: Destroy this card.Reaction: Any number of times per turn, after this Personality
+      enters a battlefield opposing, or enters a duel facing, a Personality with the Bloodspeaker keyword or a Maho ability,
+      bow this card: Give the other Personality -2C.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Franz Vohwinkel
+    flavor: '"This way, Lord Sezaru, I can smell their Taint!"'
+    number: 103
+
+  - title: Bones of the Fallen
+    type: Follower
+    deck: Fate
+    keywords:
+    - Fallen
+    - Shadowlands
+    - Undead
+    force: 1
+    chi: 0
+    gold_cost: 2
+    honor_requirement: 0
+    focus: 2
+    text: After this Follower enters play, lose 4 Honor and name a non-Crab Clan family. While this card remains in play, Personalities
+      with that Family Name have -1F while opposing this card in a battle.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Paul (Prof.) Herbert
+    flavor: They may be only bones, but Iuchiban knows the power of turning an enemy's dead against them.
+    number: 104
+
+  - title: Bloodspeaker Students
+    type: Follower
+    deck: Fate
+    keywords:
+    - Bloodspeaker
+    force: 2
+    chi: 0
+    gold_cost: 2
+    honor_requirement: 0
+    focus: 1
+    text: 'After this Follower enters play, lose 1 Honor and you may target a Spell controlled by any player. If you do, destroy
+      it; otherwise, permanently give this Personality -2C.Maho Battle: Fear 2.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Jim Pavelec
+    flavor: Across the Empire, each hidden band of cultist swiftly came to realize that their ancient master had finally returned.
+    number: 105
+
+  - title: Eye of Iuchiban
+    type: Follower
+    deck: Fate
+    keywords:
+    - Unique
+    - Bloodspeaker
+    force: 1
+    chi: 0
+    gold_cost: 5
+    honor_requirement: 0
+    focus: 4
+    text: 'Afte this Follower enters play, lose 2 Honor.You may take actions on your Bloodspeaker Personalities as if they were
+      at the same battlefield as this Follower.Maho Repeatable Reaction, w: Before this Follower is destroyed, negate the destruction.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Mike Raabe
+    number: 106
+
+  - title: Reinforced Cavalry
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    force: 5
+    chi: 0
+    gold_cost: 9
+    honor_requirement: 1
+    focus: 2
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Ed Cox
+    flavor: '"Not even the Hiruma expected to see legions of goblins and dark tattooed men attack the Bloodspeakers from the
+      rear. The Crab only fought on, as they always do." - Kyofu'
+    number: 107
+
+  - title: Bloodstained Peasants
+    type: Follower
+    deck: Fate
+    keywords:
+    - Peasant
+    - Shadowlands
+    force: 2
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 0
+    focus: 1
+    text: After this Follower enters play from your hand, lose 2 Honor and you may draw an additional card before your next
+      turn ends.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: John Donahue
+    flavor: '"Many fortunate peasants lost their souls in the Rain of Blood. They serve Iuchiban now." - Jama Suru'
+    number: 108
+
+  - title: Reinforced Infantry
+    type: Follower
+    deck: Fate
+    force: 6
+    chi: 0
+    gold_cost: 10
+    honor_requirement: 1
+    focus: 2
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: David Horne
+    flavor: '"Fight on!" Todori roared, watching the new army with caution. "Attack only those who threaten you, and leave the
+      others to the Bloodspeakers!"'
+    number: 109
+
+  - title: Acolytes of Air
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    - Air
+    - Shugenja
+    force: 2
+    chi: 0
+    gold_cost: 6
+    honor_requirement: 1
+    focus: 3
+    text: 'This Follower has +1F, and its printed Ranged Attack has +1 strength, while attached to an Air Shugenja.Air Repeatable
+      Battle, w: Ranged 3 Attack. Air Repeatable Tireless Reaction: After a Ranged Attack action resolves that targeted a card
+      in this card''s army, straighten this card.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Jonathan Hunt
+    number: 110
+
+  - title: Blade of Penance
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Shamesword
+    force: 0
+    chi: 1
+    gold_cost: 2
+    focus: 3
+    text: 'After this card attaches: Dishonor this Personality. After this Personality wins a duel, if he has no Followers:
+      Gain 4 Honor.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Llyn Hunter
+    flavor: '"My gift to you, Hiruma," Kokujin said, laying the blade at Todori''s feet. "Keep it... or leave it for the Bloodspeakers!"'
+    number: 111
+
+  - title: Mark of the Ninth Kami
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Shadowlands
+    force: 0
+    chi: 0
+    gold_cost: 4
+    focus: 4
+    text: 'Maho Battle: Bow and destroy this card and this Personality: Take a Battle Strategy from your discard pile into your
+      hand. Take an additional action to play that card for one of its actions.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Luis Vazquez
+    flavor: Fu Leng never gives his gifts lightly.
+    number: 112
+
+  - title: Witch Hunter's Amulet
+    type: Item
+    deck: Fate
+    keywords:
+    - Jade
+    force: 1
+    chi: 1
+    gold_cost: 1
+    focus: 3
+    text: 'This Personality may not be targeted by Maho actions or effects.Reaction: Any number of times per turn, before comparing
+      totals in a duel involving this Personality and a Shadowlands Personality, bow this card: Reduce to 0 all Chi bonuses
+      on the Shadowlands Personality.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Luis Vazquez
+    number: 113
+
+  - title: Bloodspeaker's Tools
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Bloodspeaker
+    - Shadowlands
+    force: 1
+    chi: 1
+    gold_cost: 8
+    focus: 4
+    text: 'After this Item enters play, lose 4 Honor.Repeatable Maho Battle/Open, w: Abilities on a target Personality may not
+      be used.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Anthony Francisco
+    number: 114
+
+  - title: Blood Armor
+    type: Item
+    deck: Fate
+    keywords:
+    - Armor
+    - Shadowlands
+    force: 3
+    chi: -1
+    gold_cost: 1
+    focus: 1
+    text: 'Bringing this card into play has the additional cost, "Bow one of your Bloodspeakers."After this card enters play:
+      Lose 2 Honor.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Thomas Manning
+    flavor: Yajinden smiled as he lifted his hammer, as if greeting an old friend, and began his work.
+    number: 115
+
+  - title: Reichin's Helm
+    type: Item
+    deck: Fate
+    force: 1
+    chi: 1
+    gold_cost: 3
+    focus: 3
+    text: 'After a non-Maho Kiho or Spell action resolves, if this card is at the current battlefield and its current bonuses
+      are both +5 or below: Give it +1F/+1C. After a Maho Kiho or Spell action resolves, if this card is at the current battlefield:
+      Give it -1F/-1C.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: John Donahue
+    flavor: '"Suru still remembers his defeat by the Hare. As do we." - Usagi Ozaki'
+    number: 116
+
+  - title: Fan of the Grand Master
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 1
+    gold_cost: 1
+    focus: 3
+    text: 'Will only attach to a Shugenja.Battle: Any number of times per turn, bow this card unless the target shares an element
+      keyword with this Personality, and target one of your other Shugenja: Move him this card''s battlefield.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Jonathan Hunt
+    flavor: A gift from Naka Tokei, it carries a hint of magic from every Spirit Realm.
+    number: 117
+
+  - title: Spirit Drums
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Spirit
+    force: 1
+    chi: 0
+    gold_cost: 7
+    focus: 3
+    text: 'Attaches to a Shugenja for 3 less Gold.Repeatable Battle, w: Move a target Personality at another battlefield to
+      this Item''s battlefield.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Jason Engle
+    flavor: '"I thought the Lion were exhausted, beaten by the Unicorn''s mobility. Then the Kitsu drummers began, and the Lion
+      charged with new vigor." - Rezan'
+    number: 118
+
+  - title: Kouken Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    force: 2
+    chi: 2
+    gold_cost: 0
+    focus: 3
+    text: Bringing this card into play has the additional cost, "Bow your target Shugenja."
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Jason Engle
+    flavor: '"These swords bear no magic beyond the castle walls," the Phoenix said. "Then fix them," Kaneka replied.'
+    number: 119
+
+  - title: Inkyo's Jingasa
+    type: Item
+    deck: Fate
+    keywords:
+    - Jingasa
+    force: 1
+    chi: 1
+    gold_cost: 2
+    focus: 3
+    text: 'Will only attach to a Monk or Shugenja.Reaction: Any number of times per turn, but only once per bowing, if this
+      Personality is a Monk, after he bows to perform an Elemental Kiho action or a Kiho action with an element keyword, bow
+      this card: Straighten him.Battle/Open: Any number of times per turn, if this Personality is a Shugenja, bow this card:
+      Give him an element keyword.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Luis Vazquez
+    number: 120
+
+  - title: Suchiro no Oni
+    type: Item
+    deck: Fate
+    keywords:
+    - Armor
+    - Weapon
+    - Oni
+    - Shadowlands
+    force: 2
+    chi: 2
+    gold_cost: 2
+    focus: 1
+    text: 'After this card enters play: Lose 3 Honor. When attaching a Follower to this Personality: His Personal Honor is considered
+      0.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Jonathan Hunt
+    flavor: '"Even after his long imprisonment, Yajiden''s craftmenship has not diminished." - Jama Suru'
+    number: 121
+
+  - title: Shield of Blood
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Maho
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Bow your performing Monk or Shugenja, destroy your performing Personality, and target one of your other
+      Personalities: The next time this game the target is destroyed, bow him instead, move him to his controller''s home, and
+      lose 5 Honor.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Chris Seaman
+    flavor: '"Your death serves me well, my friend."'
+    number: 122
+
+  - title: Purity of the Heavens
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: If your Family Honor is 16 or higher, bow your performing Monk or Shugenja: Destroy all your Shadowlands
+      cards. You may target and destroy another Shadowlands card.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Malcolm McClinton
+    flavor: '"Let this temple be cleansed!"'
+    number: 123
+
+  - title: Cloud the Soul
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Maho
+    gold_cost: 0
+    focus: 2
+    text: 'Kiho Maho Reaction: After any player resolves an Event, bow your target performing Monk or Shugenja to target a Personality
+      controlled by the player. You may permanently give your performer -2C. Give the second target -3F/-2C, which will not
+      reduce his Chi below 1 if you did not give your performer the permanent Chi penalty.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Drew Baker
+    number: 125
+
+  - title: Tsuruchi's Flame
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 1
+    text: 'Reaction: After a card bows to pay the cost of a Ranged Attack action, bow your performing Monk or Shugenja: Increase
+      the strength of one of the action''s Ranged Attacks by its base strength. Negate the straightening of the card that bowed
+      to pay the cost until after its controller''s next Straighten Phase ends.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Steve Snyder
+    flavor: '"Temper power with patience." - Tanari'
+    number: 126
+
+  - title: Suitengu's Uncertainty
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Terrain
+    - Water
+    gold_cost: 0
+    focus: 3
+    text: 'Before a unit moves from this battlefield: You may target an adjacent battlefield and have it move there instead
+      of its original destination, if possible.Battle: If there are no Terrains at the current battlefield, choose your performing
+      Monk or Shugenja: Put this card into play there.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Ed Cox
+    number: 127
+
+  - title: Blessing of the Dragon
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Fire
+    - Kiho
+    gold_cost: 0
+    focus: 2
+    text: 'Fire Kiho Open: Bow your target performing Monk or Shugenja to give a target Personality +2F. If either target is
+      Dragon Clan or Fire, you may draw a card.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Steve Snyder
+    flavor: When one is properly prepared for one's enemy, the fight itself is merely a detail.
+    number: 128
+
+  - title: Test of Magic
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 3
+    text: 'Reaction: After a Shugenja pays the cost of a Spell or Kiho action, bow your performing Shugenja: Your Shugenja duels
+      the other Shugenja. If your Shugenja wins, negate the Spell or Kiho''s effects. Destroy the loser.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Britt Martin
+    number: 129
+
+  - title: Ride the Way
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Air
+    - Kiho
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Bow your performing Monk or Shugenja: Move him home. You may target and move home an enemy Personality.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: John Donahue
+    flavor: The Dragon remained at the City of the Rich Frog only long enough to confirm that this battle did not concern them.
+    number: 130
+
+  - title: Shadowed Terrain
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Earth
+    - Kiho
+    - Terrain
+    gold_cost: 0
+    focus: 2
+    text: 'Before this battle''s resolution: You may destroy this terrain; if you did, take an additional action to play a Terrain
+      from your hand that has a trait that triggers just before or sometime after this battle''s resolution, and draw a card.Battle:
+      If there are no Terrains at the current battlefield, bow your performing Monk or Shugenja: Put this card into play there.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Mike Raabe
+    number: 131
+
+  - title: Sezaru's Gift
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 4
+    text: 'Limited: Bow your performing Monk or Shugenja, remove this card from the game, and target a Holding: Permanently
+      increase or decrease one base numeral on it by 1, to a minimum of 1.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Franz Vohwinkel
+    flavor: Sezaru traveled the Empire after the rain of blood, his magic washing away the vestiges of corruption.
+    number: 132
+
+  - title: Honor's Gift
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Bow your performing Monk or Shugenja and target an opposed Personality: Give him a Force and Chi bonus equal
+      to his base Personal Honor or to your performer''s base Personal Honor, whichever is greater, until the battle ends.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Steve Snyder
+    flavor: '"Fear not that the flame will burn you. Fear that your coarse flesh will darken the fire''s brightness." - Togashi
+      Satsu'
+    number: 133
+
+  - title: Poison the Land
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    - Poison
+    - Shadowlands
+    gold_cost: 2
+    focus: 2
+    text: 'Limited: Bow this Shugenja and target a province that has no current ongoing effects from any copy of Poison the
+      Land: While this Shugenja remains bowed, you may negate his straightening, and Personalities have -1F/-1C while at the
+      target''s battlefields. Lose 2 Honor.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Luis Vazquez
+    flavor: '"Let their fields wither and fear gnaw at their empty bellies." - Iuchiban'
+    number: 134
+
+  - title: Curse
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    gold_cost: 4
+    focus: 3
+    text: 'Limited: Any number of times per turn, bow this Shugenja and target a Personality: While this Shugenja remains bowed,
+      you may negate his straightening and after each time the target bows, give him -2F/-1C until this Shugenja straightens
+      or leaves play. Lose 3 Honor.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Bryan Heyboer
+    number: 135
+
+  - title: Bleak Portents
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    - Ritual
+    - Shadowlands
+    gold_cost: 4
+    focus: 3
+    text: 'Maho Ritual Repeatable Limited: Bow this Shugenja and one of your other target performing Shugenja to give all Shadowlands
+      cards +2F.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: David Horne
+    flavor: '"The altar is prepared. Now bring forth the last Ki-Rin."'
+    number: 136
+
+  - title: Smite the Blood
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    gold_cost: 0
+    focus: 2
+    text: 'Reaction: After a Ranged Attack from your cards targets a card, bow this Shugenja: The Ranged Attack bows its target
+      after, and in addition to, any other effects.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: David Horne
+    flavor: '"You are not welcome here, Unicorn," the Chuda hissed. "Let me show you my displeasure."'
+    number: 137
+
+  - title: Death's Caress
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    gold_cost: 4
+    focus: 1
+    text: 'Battle/Open: Any number of times per turn, bow this Shugenja and target a Personality with less Chi than his own
+      base Chi: Bow him. Lose 2 Honor.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Veronica V. Jones
+    flavor: '"A moment''s weakness is all that is required." - Bayushi Atsuki'
+    number: 138
+
+  - title: Blood and Chaos
+    type: Spell
+    deck: Fate
+    gold_cost: 6
+    focus: 4
+    text: 'Repeatable Battle: If this Shugenja is unbowed, bow him and if this bowed him, until this battle ends, each player
+      must discard a card after any action he takes resolves, and each player has the ability, "Battle: Bow your target performing
+      Shugenja to end all ongoing effects on you from the Spell that granted this ability."'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Tony Moseley
+    number: 142
+
+  - title: Heaven's Wrath
+    type: Spell
+    deck: Fate
+    keywords:
+    - Fire
+    gold_cost: 4
+    focus: 2
+    text: 'Battle: Any number of times per turn, bow this Shugenja and target two attacking and two defending Personalities:
+      Move the targets home. If this Shugenja is Fire, you may choose to have any of these Personalities bow if they move.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: William O'Connor
+    flavor: In the Dragon mountains, those who succumbed to the rain fell to their stronger brethren.
+    number: 143
+
+  - title: Poisoned Kiss
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    - Poison
+    gold_cost: 4
+    focus: 2
+    text: 'Limited: Target a Personality controlled by a player who controls a Shadowlands card: Give him a -1C token.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Malcolm McClinton
+    flavor: '"I have seen things you cannot imagine, Najmudin," Jiyuna said darkly.'
+    number: 144
+
+  - title: Speed of the Plains
+    type: Spell
+    deck: Fate
+    keywords:
+    - Air
+    gold_cost: 2
+    focus: 3
+    text: 'Battle: If this Shugenja is Air, you may take this action even if this unit is not at the current battlefield: Take
+      two additional Battle actions.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Thomas Denmark
+    flavor: The Lion moved cautiously, knowing that the Unicorn could move an entire army in an instant.
+    number: 145
+
+  - title: Move the Earth
+    type: Spell
+    deck: Fate
+    keywords:
+    - Earth
+    gold_cost: 3
+    focus: 3
+    text: 'Limited: Any number of times per turn, bow this Shugenja and target a Region or Fortification: Transfer it to a province
+      owned by the same player, if legal. This effect may transfer it to a province that already has a Region if this Shugenja
+      is Earth.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Llyn Hunter
+    flavor: Even Crab shugenja know the value of honest work.
+    number: 146
+
+  - title: Inazuma Blade
+    type: Spell
+    deck: Fate
+    keywords:
+    - Unique
+    - Weapon
+    force: 3
+    chi: 3
+    gold_cost: 6
+    focus: 4
+    text: This card is both a Spell and an Item.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: John Donahue
+    flavor: '"The Dragon''s blade is truly a marvel, my lady Kinuye," the Bloodspeaker said breathlessly. "Where could he have
+      been taking it?"'
+    number: 147
+
+  - title: Renewed Energy
+    type: Spell
+    deck: Fate
+    keywords:
+    - Water
+    gold_cost: 6
+    focus: 3
+    text: 'Battle/Open: Bow this Shugenja: Beginning with the player to your left, and proceeding in turn order, each player
+      targets and straightens one of his bowed Personalities. This effect ends as soon as a player does not straighten a Personality,
+      or once each player has had the opportunity to do so if this Shugenja is Water.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Veronica V. Jones
+    flavor: '"Rest when you can. Remember why we fight." - Asahina Sekawa'
+    number: 148
+
+  - title: Harvest of Death
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    gold_cost: 4
+    focus: 2
+    text: 'Battle: Any number of times per turn, bow this Shugenja and target zero or more bowed enemy cards up to this Shugenja''s
+      Chi: Destroy them.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Malcolm McClinton
+    flavor: The Ghul Lord moved among the dead with a smile of deep satisfaction. Nothing would go to waste here...
+    number: 149
+
+  - title: Reflect the Spirit
+    type: Spell
+    deck: Fate
+    keywords:
+    - Spirit
+    gold_cost: 2
+    focus: 4
+    text: 'Limited: Any number of times per turn, bow this Shugenja: Set aside a number of cards from the top of your Fate deck
+      equal to the number in your hand, place your hand on top of your deck in any order, then take the set-aside cards into
+      your hand.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Steve Snyder
+    flavor: '"No, no," Bairei hissed. "This simply will not do."'
+    number: 150
+
+  - title: Two Souls, One Destiny
+    type: Spell
+    deck: Fate
+    gold_cost: 2
+    focus: 3
+    text: 'Battle: Bow this Shugenja and target another bowed Shugenja with a copy of Two Souls, One Destiny attached: Straighten
+      him.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Veronica V. Jones
+    flavor: Sekawa watches Nizomi and Tokei, always wondering which shall prove to be his ally and which his enemy.
+    number: 151
+
+  - title: Ebb and Flow
+    type: Spell
+    deck: Fate
+    gold_cost: 4
+    focus: 3
+    text: 'Battle/Open: Any number of times per turn, bow this Shugenja and target a bowed Holding: Straighten it. The next
+      time this turn it bows, destroy it.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Britt Martin
+    flavor: Jade, gold, steel... any can be summoned by magic. But the loss is always felt elsewhere.
+    number: 152
+
+  - title: Isawa Ochiai
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Elemental Master
+    - Fire
+    - Phoenix Clan
+    - Shugenja
+    force: 3
+    chi: 2
+    gold_cost: 10
+    honor_requirement: 5
+    personal_honor: 2
+    text: 'Fire Repeatable Limited, w: Set aside a card from your hand or the top of your Fate deck face-down to challenge another
+      player''s target Personality. His controller may bow him to refuse; if he does, discard the set-aside card. Otherwise,
+      that card acts as a focused card, and you may not otherwise focus, during the duel. Destroy the loser.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: John Donahue
+    flavor: Her vote sways the balance of power among the Council.
+    number: 153
+
+  - title: The Temple of Hoshi
+    type: Stronghold
+    clan: Dragon
+    deck: Pre-Game
+    keywords:
+    - Temple
+    province_strength: 7
+    gold_production: 4
+    starting_honor: 5
+    text: Your Dragon Clan Personalities may be targeted by or chosen as the performer of your Kiho actions as if they had the
+      Monk keyword.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Brad Williams
+    number: 154
+
+  - title: City of Remembrance
+    type: Stronghold
+    clan: Phoenix
+    deck: Pre-Game
+    province_strength: 6
+    gold_production: 4
+    starting_honor: 6
+    text: Your Unaligned Nonhuman and Phoenix Clan Nonhuman Shugenja in and out of play have -2 Gold Cost.Your Shugenja may
+      not perform Kiho actions.Once per turn, you may ignore the cost of bowing a Shugenja if it is the cost of one of his abilities,
+      and until the turn ends, his abilities may not be used.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Brad Williams
+    number: 155
+
+  - title: Shinden Horiuchi
+    type: Stronghold
+    clan: Unicorn
+    deck: Pre-Game
+    province_strength: 7
+    gold_production: 5
+    starting_honor: 4
+    text: 'Your Spells are considered to be both Spells and Items.Before bowing your Shugenja as a cost of performing one of
+      his Spells'' actions: Once per turn, you may bow an Item attached to him instead; if you did, this pays the cost and that
+      Shugenja may not perform Spell actions until the turn ends.Reaction: Any number of times per turn, but only once per trigger,
+      after attaching an Item from your hand to one of your Personalities: Create a 0F Cavalry Follower and attach it to him.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Brad Williams
+    number: 156
+
+  - title: Shirasu no Shiryo
+    type: Ancestor
+    clan: Unicorn
+    deck: Fate
+    keywords:
+    - Unique
+    - Unicorn Clan
+    force: 1
+    chi: 0
+    gold_cost: 0
+    honor_requirement: 1
+    focus: 3
+    text: While this card is opposed by any Human Personalities with 0 Personal Honor, this Personality and all Unicorn Clan
+      Magistrates in his army have +2F/+2C.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Lisa Hunt
+    number: 157
+
+  - title: Togashi Oki
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Monk
+    - Tattooed
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Oki has +2F while defending.After Oki enters play: You may bow her; if you did, draw a card.'
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    flavor: '"I would not say she defends the land so much as that she is the land. The wind, the rain, the earth are hers to
+      command." - Isawa Nakamuro'
+    number: 158
+
+  - title: Agasha Chieh
+    extended_title: Agasha Chieh • Experienced
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Experienced
+    - Fire
+    - Phoenix Clan
+    - Shugenja
+    force: 2
+    chi: 5
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 2
+    text: While you control any units at the current battlefield, you may use and resolve Chieh's Spells' abilities as if she
+      were in your current army, even if she is not there.
+    legality:
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    flavor: Hamanari saw the truth, but only Chieh believed his ravings. But that was enough, and her magic protected one family
+      from corruption.
+    number: 159

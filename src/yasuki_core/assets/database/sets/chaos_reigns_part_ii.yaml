@@ -1,0 +1,23 @@
+set: Chaos Reigns Part II
+cards:
+  - title: Brothers in Battle
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Bushido Virtue
+    - Duty
+    gold_cost: 0
+    focus: 3
+    text: 'Battle/Open: Target two or three of your performing Samurai. Each of them has +1F and the ability, "Battle: Ranged
+      4 Attack" while in an army with one or more of the others.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    rarity: Fixed
+    artist: Mark Smylie
+    flavor: The kinship only those who have faced death together may know.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 81

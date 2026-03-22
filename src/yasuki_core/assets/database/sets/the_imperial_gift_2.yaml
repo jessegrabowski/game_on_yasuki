@@ -1,0 +1,1724 @@
+set: The Imperial Gift 2
+cards:
+  - title: Delayed Arrival
+    type: Event
+    deck: Dynasty
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them,, choose
+      a Personality in play. He may not be assigned to attack you until your next turn begins.
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Jason Juta
+    flavor: '"It is unfortunate that you were delayed, my lord, but regrettably we cannot admit you until the Empress'' court
+      is concluded."'
+    number: 1
+    collector_number: '1'
+
+  - title: Espionage
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, look
+      at all face-down cards in one other player's provinces.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"All clans seek information on their enemies, even if they choose to believe otherwise. The Scorpion are far better
+      at it than most, but even they let their guard down eventually." - Kyogen'
+    number: 2
+    collector_number: '2'
+
+  - title: Midnight Assault
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      your next turn begins, negate all Honor gains during Attack Phases.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Troy Graham
+    flavor: The Spider Clan, commanded to dissolve and dispose of their banners on pain of death, still exist. They simply choose
+      their battles more carefully.
+    number: 3
+    collector_number: '3'
+
+  - title: Military Alliance
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'After each time an Attacker destroys a province by winning a battle, he gains 3 Honor. Open: Put this Event into
+      play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Raymond Gaustadnes
+    flavor: '"Your efforts are a great boon to the alliance, noble warrior. You honor us all with your prowess."'
+    number: 4
+    collector_number: '4'
+
+  - title: The Stone Discovered
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, you may
+      put an attachment from your discard pile into your hand.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Paul (Prof.) Herbert
+    flavor: '"There is a legend among the zokujin of an ancient power called the Blood-White Stone. If it were ever rediscovered,
+      it would change the destiny of their race forever." - Asako Bairei'
+    number: 5
+    collector_number: '5'
+
+  - title: Under Siege
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: Until your next turn begins, all provinces have -2 strength.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Erich Schreiner
+    flavor: '"There are precious few fortresses in the Empire that can withstand a true siege. This is a lesson the Crab must
+      not learn the hard way." - Kaiu Taru'
+    number: 6
+    collector_number: '6'
+
+  - title: Collapsing Bridge
+    type: Holding
+    deck: Dynasty
+    gold_cost: 2
+    text: 'w: Produce 2 Gold. Open: Give a Province +3 strength. Destroy this Holding.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Paul (Prof.) Herbert
+    flavor: '"Delicate and pleasing in appearance, but sturdy in construction. Yet in a single instant, it can be shattered,
+      leaving no means of entrance for one''s enemies." - Daidoji Kikaze'
+    number: 7
+    collector_number: '7'
+
+  - title: Family Histories
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    gold_cost: 4
+    text: 'w: Produce 2 Gold, plus 1 Gold for each of your Provinces destroyed this game.Limited, w: Gain 1 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Erich Schreiner
+    flavor: The tales of a thousand heroes are contained within, giving inspiration to generations of their descendants.
+    number: 8
+    collector_number: '8'
+
+  - title: My Father's Shrine
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Temple
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Limited: Bow your target performing Personality to gain 1 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Raymond Gaustadnes
+    flavor: '"My every victory is in his name, and I hope only that my efforts find favor with his spirit."'
+    number: 9
+    collector_number: '10'
+
+  - title: Simple Merchants
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    gold_cost: 7
+    text: 'w: Produce 4 Gold, plus 1 additional Gold for each Farm, Mine, and Port you control.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Rhonda Libbey
+    flavor: '"Common peasants, selling their excess in order to make a better life for their families. They serve their purpose."
+      - Yoritomo Utemaro, Imperial Treasurer'
+    number: 10
+    collector_number: '11'
+
+  - title: Smuggler's Port
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Port
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Reaction, w: When paying a Gold cost, if your Family Honor is 1 or higher, lose 2 Honor to produce
+      3 Gold.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Ed Cox
+    flavor: '"Isolate those ports the clan requires. Burn all the rest." - Yoritomo Naizen'
+    number: 11
+    collector_number: '12'
+
+  - title: Hida Rokurota
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Commander
+    - Crab Clan
+    - Samurai
+    force: 6
+    chi: 4
+    gold_cost: 9
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Battle, : Equip a target Follower in your hand or discard pile to your target Personality.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: David Horne
+    flavor: '"What are you waiting for? Will you let a few goblins and a volcano halt your progress?"'
+    number: 12
+    collector_number: '13'
+
+  - title: Hida Shinko
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Crab Clan
+    - Samurai
+    force: 5
+    chi: 1
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Battle: Destroy Shinko and target an enemy card without attachments: Destroy it.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Edwin David
+    flavor: '"Even the Damned fear her. Some believe her father was a demon. Personally, I doubt that. I have never seen a demon
+      as ferocious as her." - Hida Reiha'
+    number: 13
+    collector_number: '14'
+
+  - title: Hiruma Etsuro
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Crab Clan
+    - Samurai
+    - Scout
+    force: 4
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Recon Limited: Target a Province. You have Reconnaissance at its battlefields. Give it -2 strength.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Brandon Leach
+    flavor: '"There is nowhere he cannot go, nothing he cannot hunt. Were he a Scorpion, I would fear him above all others."
+      - Hiruma Todori'
+    number: 14
+    collector_number: '15'
+
+  - title: Daidoji Harada
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Samurai
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 3
+    text: Harada has +2F while opposed by a Personality whose controller has lower Family Honor than you.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"If the Army of Fire should return, the Crane will remain in place to defeat them. The glory must not go to the
+      Scorpion."'
+    number: 15
+    collector_number: '16'
+
+  - title: Doji Kato
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Courtier
+    - Crane Clan
+    force: 1
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 5
+    personal_honor: 4
+    text: 'Political Battle: Even if Kato is not at the current battlefield, target a bowed Personality: Move him home. If you
+      do not control him, gain 2 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"We have to find some way to overcome the alliance of Emerald Champion and Imperial Chancellor, Nagori-sama. Perhaps
+      we should consider how the Advisor might be of use to us."'
+    number: 16
+    collector_number: '17'
+
+  - title: Kakita Toshiro
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Unique
+    - Crane Clan
+    - Samurai
+    force: 2
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 6
+    personal_honor: 4
+    text: 'Iaijutsu Battle, w: Bow a target enemy card without attachments, and with lower Chi than Toshiro if the card is a
+      Personality.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Brandon Leach
+    flavor: '"You might have lived to see another dawn, had you not questioned my family''s honor."'
+    number: 17
+    collector_number: '18'
+
+  - title: Kitsuki Hanbei
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Dragon Clan
+    - Magistrate
+    - Samurai
+    force: 3
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Open: Give -3F to a target Personality with lower Personal Honor than Hanbei''s Chi.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Erich Schreiner
+    flavor: '"The Dragon and their tedious emphasis on ''evidence'' can be most troubling. If they were not the family of the
+      Empress, we would have to ensure they were no longer a concern." - Bayushi Sihaken'
+    number: 18
+    collector_number: '19'
+
+  - title: Mirumoto Ayabe
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Unique
+    - Commander
+    - Dragon Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Tireless Battle: Straighten a target Personality with one or more attachments. Then, bow all attachments in that
+      Personality''s unit.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Leonardo Borazio
+    flavor: '"Your legions have our thanks for your assistance, and you are free to remain as long as you like… but we have
+      nothing to feed you."'
+    number: 19
+    collector_number: '20'
+
+  - title: Tamori Masako
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Earth
+    - Shugenja
+    force: 3
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Reaction: After Masako assigns or moves to a battlefield: Give the battlefield''s province +3 or -3 strength.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Chris Pritchard
+    flavor: '"We must ensure that our lands can never be threatened again. His army is lost, but the Dark Oracle lives on."'
+    number: 20
+    collector_number: '21'
+
+  - title: Akodo Kurogane
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Unique
+    - Lion Clan
+    - Samurai
+    force: 3
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 7
+    personal_honor: 3
+    text: 'Battle: If there are more units on your side at the current battlefield than on the enemy side, bow all cards in
+      your target performing Personality''s unit to destroy a target non-Unique Personality.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Place the tenth through twentieth legions on review, and schedule additional maneuvers. Victory is no justification
+      for lack of discipline."'
+    number: 21
+    collector_number: '22'
+
+  - title: Ikoma Igawa
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Courtier
+    - Lion Clan
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Reaction: After engaging in a battle, if Igawa is in the current attacking army, discard a card: The Defender chooses
+      and discards a card from his hand.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Leonardo Borazio
+    flavor: '"The Crane and the Scorpion are so preoccupied with one another that little effort is expended against anyone else.
+      I never fail to recognize opportunity."'
+    number: 22
+    collector_number: '23'
+
+  - title: Matsu Mansaiko
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Lion Clan
+    - Paragon
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Battle: Discard a card: Give Mansaiko +2F. If Mansaiko is opposed and you discarded a Bushido Virtue card, gain 2
+      Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Edwin David
+    flavor: '"I have claimed my first victory for the Lion, but it will be far from my last."'
+    number: 23
+    collector_number: '24'
+
+  - title: Moshi Takako
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Unique
+    - Mantis Clan
+    - Shugenja
+    - Thunder
+    force: 3
+    chi: 5
+    gold_cost: 7
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Battle, w, : Choose a number from 1 to 10, less than or equal to the amount of Gold you paid. Ranged Attack with
+      strength equal to the number chosen.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Genzoman
+    flavor: '"Channeling the power of Thunder can have devastating effect, but the cost can be considerable."'
+    number: 24
+    collector_number: '25'
+
+  - title: Tsuruchi Oguri
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Mantis Clan
+    - Samurai
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Battle: Bow Oguri: Ranged 4 Attack. You may move Oguri home. If he moved, straighten him.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Genzoman
+    flavor: '"What use are the courts, with their stifling rules and mind-numbing conversation? Give me the open air and prey
+      to hunt."'
+    number: 25
+    collector_number: '26'
+
+  - title: Bayushi Tsubaki
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Ninja
+    - Scorpion Clan
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Limited, w: Bow a target Personality and give him a -1F Poison token.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Jason Juta
+    flavor: '"We were simply having a stroll by the lake when sensei-sama collapsed in mid-sentence! We all tried but there
+      was nothing we could do!" - A student of the late Sensei Togama'
+    number: 26
+    collector_number: '33'
+
+  - title: Isawa Reido
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Fire
+    - Phoenix Clan
+    - Shugenja
+    force: 2
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 3
+    text: 'Battle: Choose your performing Personality or Follower, target a Personality or Follower without attachments and
+      with equal or lower Force than your chosen performer, and destroy your chosen performer: Destroy the target.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Do you doubt the power of the elements? I will show you the truth found in fire!"'
+    number: 27
+    collector_number: '28'
+
+  - title: Isawa Tanaka (IG2)
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Phoenix Clan
+    - Shugenja
+    - Water
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 2
+    personal_honor: 3
+    text: 'Water Battle: Move your target Personality at any location to a battlefield where there are any enemy units. This
+      action has Absent and Remote if it targets Tanaka and the battlefield is the current battlefield.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    card_notes: This is a distinct card from the Path of Hope card of the same name.
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Why must there always be war? Why can man not turn away from conflict and embrace our place in the universe? So
+      long as war exists, the Phoenix must stand ready."'
+    number: 28
+    collector_number: '29'
+
+  - title: Shiba Nobuyuki
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Phoenix Clan
+    - Samurai
+    - Yojimbo
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Battle/Open: Target your Shugenja: Give Nobuyuki a Force bonus equal to the target''s Chi.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"It is my duty to stand at the side of the Isawa, no matter the danger. As long as I live, they need not fear for
+      their lives."'
+    number: 29
+    collector_number: '30'
+
+  - title: Bayushi Kayama
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Unique
+    - Bitter Lies
+    - Samurai
+    - Scorpion Clan
+    force: 4
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'While Kayama has a Weapon, he contributes Force during battle resolution even while bowed.Battle, w: Bow a target
+      enemy Follower or Personality without Followers.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I have no need of poison, stealth, or subtlety. Face me and understand why."'
+    number: 30
+    collector_number: '31'
+
+  - title: Bayushi Sihaken
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Magistrate
+    - Samurai
+    - Scorpion Clan
+    force: 3
+    chi: 4
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Reaction: After Sihaken''s army destroys one or more provinces or enemy units by winning a battle: The Defender loses
+      2 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Britt Martin
+    flavor: '"Scorpions make surprisingly effective magistrates. After all, who knows the law better than those who make a habit
+      of breaking it?" - Kitsuki Hanbei'
+    number: 31
+    collector_number: '32'
+
+  - title: Chuda Fukuzo
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Bog Hag
+    - Infiltrator
+    - Nonhuman
+    - Shadowlands
+    - Shugenja
+    - Spider Clan
+    force: 4
+    chi: 4
+    gold_cost: 8
+    personal_honor: 0
+    text: 'After Fukuzo enters play: Lose 2 Honor.Maho Reaction: After the resolution of an action that destroyed any Personalities
+      at Fukuzo''s battlefield: Give Fukuzo a Force bonus equal to one of the Personalities'' Force.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: '"I find the form of a human most useful for all manner of proper mischief."'
+    number: 32
+    collector_number: '34'
+
+  - title: Daigotsu Oki
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Courtier
+    - Infiltrator
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    - Spider Clan
+    force: 0
+    chi: 3
+    gold_cost: 5
+    personal_honor: 3
+    text: 'After Oki enters play: Gain 3 Honor.Political Open: Target a Personality with lower Personal Honor, and destroy Oki:
+      The target may not be assigned and will not move to battlefields this turn.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: April Lee
+    flavor: '"Oh, Fortunes, aren''t you a darling! Where is your mother, little one?"'
+    number: 33
+    collector_number: '35'
+
+  - title: Daigotsu Shinjitsu
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Dark Truth
+    - Paragon
+    - Samurai
+    - Shadowlands
+    - Spider Clan
+    force: 5
+    chi: 3
+    gold_cost: 8
+    personal_honor: 0
+    text: 'After Shinjitsu enters play: Lose 4 Honor.Battle: Discard a Dark Virtue card: Give Shinjitsu a Force bonus equal
+      to the discarded card''s Focus Value plus 1.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Troy Graham
+    flavor: '"My name means truth. Can you see the truth of the world in my face, fool?"'
+    number: 34
+    collector_number: '46'
+
+  - title: Arugai no Oni
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 14
+    chi: 5
+    gold_cost: 14
+    personal_honor: 0
+    text: 'After Arugai enters play: Lose 8 Honor.Reaction: After another player''s action targets an Oni at Arugai''s location:
+      Negate the Oni''s destruction from the action''s effects.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Eric Lofgren
+    flavor: '"It is not a complex opponent, but it can be very difficult to kill once and for all." - Hida Benjiro'
+    number: 35
+    collector_number: '40'
+
+  - title: Kyogen
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Actor
+    - Ronin
+    force: 3
+    chi: 2
+    gold_cost: 4
+    personal_honor: 1
+    text: 'Open: Kyogen copies one keyword from your target Personality.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Now I will perform for you the tragic tale of Matsu Itagi and Hida Tadaka, great men undone by pride despite all
+      their prowess."'
+    number: 36
+    collector_number: '42'
+
+  - title: Pokupo
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Goblin
+    - Nonhuman
+    - Scout
+    - Shadowlands
+    force: 2
+    chi: 1
+    gold_cost: 2
+    personal_honor: 0
+    text: 'After Pokupo enters play: Lose 2 Honor.Pokupo has +1F while you control Pokku.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Paul (Prof.) Herbert
+    flavor: '"The notion of that little wretch Pokku having spawned fills me with horror… and nausea." - Chuda Hiroe'
+    number: 37
+    collector_number: '41'
+
+  - title: Iuchi Kota
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Shugenja
+    - Unicorn Clan
+    force: 3
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 3
+    personal_honor: 3
+    text: 'Kota has +2F while he has a Spell attached.Battle, : Equip a target Spell in your hand to Kota.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Edwin David
+    flavor: '"His training with the Kuni family has left him with certain… social deficits." - Moto Akikazu'
+    number: 38
+    collector_number: '37'
+
+  - title: Shinjo Kodama
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Commander
+    - Samurai
+    - Unicorn Clan
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Open: Target a unit: Straighten all Cavalry cards in it.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Ed Cox
+    flavor: '"I have no agenda, no driving quest, no political aspirations. I am a soldier, nothing more. I hope only to serve
+      with distinction, that my sons will be proud of me."'
+    number: 39
+    collector_number: '38'
+
+  - title: Utaku Yanai
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Battle Maiden
+    - Samurai
+    - Unicorn Clan
+    force: 3
+    chi: 2
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Battle: Target an enemy Personality or Follower: Give it -2F. If its Force is now 0, bow it and gain 2 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"With respect, Ikoma-sama, your maps are woefully out of date. This village belongs to the Unicorn. I trust we
+      can resolve this matter without needless bloodshed?"'
+    number: 40
+    collector_number: '39'
+
+  - title: Undefended Border
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'Battle, w: Give your target Personality +1F and an additional +1F if he is a Scout or Tactician.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    card_notes: This card was misprinted as card 44.
+    rarity: Fixed
+    artist: Ed Cox
+    flavor: '"I know an inlet, one with no patrols or waystations. If you want to gain entrance to their lands, this is the
+      way to do it." - Yoritomo Han-ku'
+    number: 41
+    collector_number: '43'
+
+  - title: Well-Defended Border
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'Attacking Personalities and Followers have -1F while at this Province''s battlefield.Reaction: After another player''s
+      Dynasty Phase begins, if he controls any units and did not assign any to attack this Province this turn, gain 1 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Anthony Grabski
+    flavor: The invasion in the north has caused many clans to carefully re-evaluate their own defenses.
+    number: 42
+    collector_number: '44'
+
+  - title: Elite Archers
+    type: Follower
+    deck: Fate
+    force: 1
+    chi: 0
+    gold_cost: 2
+    honor_requirement: 1
+    focus: 3
+    text: 'Battle: Discard a card to make a Ranged Attack with strength equal to the discarded card''s Focus Value plus 1.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Troy Graham
+    flavor: '"Our units on the front line have mingled with the enemy. Choose your targets carefully. Officers are your priority.
+      Fire at will."'
+    number: 43
+    collector_number: '63'
+
+  - title: Heavy Regulars
+    type: Follower
+    deck: Fate
+    force: 3
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 2
+    focus: 2
+    text: 'Battle: Destroy this card: Ranged 5 Attack.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Genzoman
+    flavor: The backbone of any fighting force, the heavy regulars often follow the front line troops and seek to break the
+      formation of the enemy line.
+    number: 44
+    collector_number: '64'
+
+  - title: Seppun Heavy Infantry
+    type: Follower
+    deck: Fate
+    force: 4
+    chi: 0
+    gold_cost: 5
+    honor_requirement: 2
+    focus: 3
+    text: Battle resolution does not bow cards in this unit.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Erich Schreiner
+    flavor: '"They have sworn to die to a man before the Empress comes to any harm. I have seen them on maneuver, and I believe
+      their devotion is genuine." - Otomo Taneji'
+    number: 45
+    collector_number: '65'
+
+  - title: Spearmen Legion
+    type: Follower
+    deck: Fate
+    force: 4
+    chi: 0
+    gold_cost: 5
+    honor_requirement: 1
+    focus: 2
+    text: 'Battle, w: Ranged 4 Attack.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Rhonda Libbey
+    flavor: Quickly trained and eager for glory, they rarely survive more than a handful of battles. Those who do quickly become
+      the favored forces of their commander.
+    number: 46
+    collector_number: '66'
+
+  - title: Traveling Wardens
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    - Unique
+    force: 3
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 1
+    focus: 4
+    text: 'Battle: Target an enemy Follower or Personality without Followers: Give it -3F.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Ed Cox
+    flavor: '"It is the duty of the Lion Clan to secure all clan borders. I need to see your traveling papers immediately."'
+    number: 47
+    collector_number: '67'
+
+  - title: Village Guardian
+    type: Follower
+    deck: Fate
+    force: 3
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 0
+    focus: 1
+    text: 'Reaction: After this card enters play from your hand: Draw one card for each player who has had a province destroyed
+      this game.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Anthony Grabski
+    flavor: '"I have no need of glory or status. I have a home, and I will protect it. Nothing else matters."'
+    number: 48
+    collector_number: '68'
+
+  - title: A Samurai's Soul
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - One-Handed
+    - Sword
+    force: 2
+    chi: 1
+    gold_cost: 2
+    focus: 2
+    text: (A Personality can only have one Weapon.)
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Rhonda Libbey
+    flavor: The soul of a samurai is contained within his blade, and the eldest of each generation is blessed to carry the katana
+      of his grandfather. It is an honor, and a burden.
+    number: 49
+    collector_number: '69'
+
+  - title: Infamous Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Weapon
+    force: 3
+    chi: 1
+    gold_cost: 4
+    focus: 3
+    text: 'Battle, w: Destroy a target enemy Follower.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Paul (Prof.) Herbert
+    flavor: '"This blade was stained with the blood of forty-seven men, and none of them claimed in battle. Are you fit to wield
+      it and fulfill its legacy?" - Shosuro Toson'
+    number: 50
+    collector_number: '70'
+
+  - title: Iron Fan
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Tessen
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: 'Reaction: After another player''s Battle action targets this Personality, target an enemy Personality or Follower:
+      Give it -3F.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Raymond Gaustadnes
+    flavor: '"It serves for a commander to signal his forces, a courtier to conceal her intent, and a warrior to strike down
+      his enemies. How can one fail to appreciate its versatility?" - Ikoma Hagio'
+    number: 51
+    collector_number: '71'
+
+  - title: Straw Horse
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    force: 0
+    chi: 0
+    gold_cost: 1
+    focus: 4
+    text: This Personality has Cavalry.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Erich Schreiner
+    flavor: '"Some legends say they ferry the spirits of the dead between the realm of mortals and their final destination.
+      To me it is just a spectacularly ugly place to put my saddle." - Shinjo Kodama'
+    number: 52
+    collector_number: '72'
+
+  - title: Throwing Knives
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Knife
+    - One-Handed
+    force: 1
+    chi: 0
+    gold_cost: 3
+    focus: 1
+    text: '(A Personality can only have one Weapon.)Battle: Ranged Attack equal to this Personality''s Force. Destroy this Item.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Completely useless against armor, but at close range against an unarmored target? Useful enough." - Shosuro Miyoto'
+    number: 53
+    collector_number: '73'
+
+  - title: Token of Destiny
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    force: 0
+    chi: 0
+    gold_cost: 1
+    focus: 4
+    text: 'Reaction: After another player''s action targets this Personality, destroy this card: Negate the Personality''s destruction
+      from the action''s effects.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: April Lee
+    flavor: '"I felt light-headed for a moment, and then it simply broke. I wonder what could have happened?"'
+    number: 54
+    collector_number: '74'
+
+  - title: Yari
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    force: 2
+    chi: 1
+    gold_cost: 3
+    focus: 3
+    text: 'Reaction: After an action targets this Personality: Negate all Force penalties on this Personality from the action.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Useful and inexpensive to produce, the yari is a popular choice for forces that are not expected to survive on the
+      battlefield.
+    number: 55
+    collector_number: '75'
+
+  - title: Breath of the Dragon
+    type: Spell
+    deck: Fate
+    keywords:
+    - Unique
+    - Fire
+    gold_cost: 0
+    focus: 4
+    text: 'Fire Battle: Bow and destroy this Shugenja to destroy a target enemy Personality without attachments. You may target
+      an enemy Personality and destroy all his attachments.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Go now, and do not look back. I will deal with this rabble." - Isawa Reido'
+    number: 56
+    collector_number: '76'
+
+  - title: Rejuvenating Vapors
+    type: Spell
+    deck: Fate
+    keywords:
+    - Water
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Even if this unit is not at the current battlefield, bow this Shugenja: Target your Personality. Give him
+      +3F if he is unbowed. Straighten him.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Genzoman
+    flavor: '"Let the strength and clarity of water wash away your fatigue, my friend. Stand and fight once more."'
+    number: 57
+    collector_number: '78'
+
+  - title: Suitengu's Embrace
+    type: Spell
+    deck: Fate
+    keywords:
+    - Water
+    gold_cost: 0
+    focus: 3
+    text: 'Water Battle, w: Bow a target enemy card without attachments, or bow this Shugenja to bow a target enemy card with
+      attachments.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Edwin David
+    flavor: '"You may live, you may not. Regardless, you will never again dismiss the strength of the sea."'
+    number: 58
+    collector_number: '79'
+
+  - title: Thunderous Report
+    type: Spell
+    deck: Fate
+    keywords:
+    - Thunder
+    gold_cost: 2
+    focus: 3
+    text: 'Battle: Bow this Shugenja and destroy this card: Bow each Follower and Personality at this battlefield without attachments
+      and with lower Force than the performing Shugenja''s Chi.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Genzoman
+    flavor: '"None can stand against the fury of the thunder and live." - Moshi Takako'
+    number: 59
+    collector_number: '80'
+
+  - title: Back to the Front
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Absent Battle: Target your Personality at any location who assigned to this battlefield (this turn). Move him there
+      and straighten his unit as he moves. (You may take Absent actions without presence.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    mrp: This is now performed
+    rarity: Fixed
+    artist: Raymond Gaustadnes
+    flavor: '"This report is most troubling, as are your injuries. I shall have my finest shugenja attend to you." "Forgive
+      me, sama, but my lord has need of me at the front, and these scratches will not delay me."'
+    number: 60
+    collector_number: '45'
+
+  - title: Do Not Turn Your Back!
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Unique
+    gold_cost: 0
+    focus: 2
+    text: 'Battle/Open: Straighten your target Personality.Battle: Target your performing unbowed Commander Personality to straighten
+      one or two target Personalities'' units.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Edwin David
+    flavor: '"I am not finished yet! Draw your weapon and face me!"'
+    number: 61
+    collector_number: '46'
+
+  - title: Fields of Battle
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Personalities with 0 or 1 Personal Honor at this battlefield have -1F and their base abilities may not be used.Battle:
+      If there are no Terrains at the current battlefield: Put this card into play there.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: What begins as a relatively minor dispute may be settled with the blood of thousands. But honor will be assuaged.
+    number: 62
+    collector_number: '48'
+
+  - title: Forward Reconnaissance
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Recon
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Target a province: You have Reconnaissance at the its battlefields and, during battles there, Terrain actions
+      may only be taken by a player with a Scout Personality in his army.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Brandon Leach
+    flavor: '"Find out all you can. Leave signs for other scouts, in case you are killed." - Hiruma Todori'
+    number: 63
+    collector_number: '50'
+
+  - title: Mastery of the Blade
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Target your Personality with a Weapon: Straighten him. You may move him home.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Genzoman
+    flavor: The brutality of the so-called Spider monks is well known, even only a few years after they appeared. Their mastery
+      of the bisento is a thing of legend.
+    number: 64
+    collector_number: '52'
+
+  - title: Obfuscation
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Target your Personality and target your attachment in your hand or discard pile: Attach it to him, paying
+      all costs. You may take an additional action to use one of the attachment''s base Battle abilities.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Mask one thing with another, and even before a crowd, your actions will go unnoticed." - Kyogen'
+    number: 65
+    collector_number: '53'
+
+  - title: Outmatched
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Unique
+    gold_cost: 0
+    focus: 4
+    text: 'Battle: Bow your performing Personality and target one or two enemy Personalities, each with lower Chi and lower
+      Personal Honor than your Personality: Bow them.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Did you honestly think you could hide from me? And here, of all places!"'
+    number: 66
+    collector_number: '54'
+
+  - title: Prepared for Death
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Choose your performing Personality: Give him +2F.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    mrp: This card is now performed
+    rarity: Fixed
+    artist: Eric Lofgren
+    flavor: '"If I must die, at least it will be a glorious death."'
+    number: 67
+    collector_number: '56'
+
+  - title: Ruthless Determination
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Dark Virtue
+    - Determination
+    gold_cost: 0
+    focus: 3
+    text: 'Dark Virtue Battle: Target your unbowed Samurai Personality. Fear with strength equal to his Force minus 1 (minimum
+      zero).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I have pressing business, and no time to dawdle with the likes of you. In the next life, perhaps you will be more
+      cautious."'
+    number: 68
+    collector_number: '57'
+
+  - title: Timely Assistance
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Limited: Bow your performing Personality and target another Personality: Give him a Force bonus equal to your Personality''s
+      Force. Straighten the performer after your next End Phase begins.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Come along, brother. Things here are about to become a bit too interesting."'
+    number: 69
+    collector_number: '59'
+
+  - title: Under Cover of Night
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Before this battle''s resolution: You may target and bow a Personality with the highest Personal Honor at this battlefield
+      (including ties).Battle: If there are no Terrains at the current battlefield: Put this card into play there.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Britt Martin
+    flavor: '"Travel papers and magistrates'' stations would interfere with our work. This matter requires discretion."'
+    number: 70
+    collector_number: '60'
+
+  - title: Wrathful Defense
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Bow your performing Personality and target an enemy Personality: Move him home. Until the turn ends, negate
+      his movement from costs or effects of actions.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: IFS
+    flavor: '"They are miserable, cowardly creatures, unless you threaten something they consider theirs." - Kuni Kiyoshi'
+    number: 71
+    collector_number: '61'
+
+  - title: Lost Traveler Castle
+    type: Stronghold
+    clan: Unaligned
+    deck: Pre-Game
+    province_strength: 5
+    gold_production: 4
+    starting_honor: 5
+    text: After the first time each turn you choose a Personality to bring into play during your Dynasty Phase, you may pay
+      2 less Gold for him and, after he enters play, gain Honor equal to his Personal Honor.
+    legality:
+    - Legacy
+    - Modern
+    banned: Banned from Celestial Edition tournaments.
+    rarity: Fixed
+    artist: Charles Urbach
+    number: 72
+    collector_number: '81'
+
+  - title: Sunrise Keep
+    type: Stronghold
+    clan: Unaligned
+    deck: Pre-Game
+    province_strength: 6
+    gold_production: 4
+    starting_honor: 3
+    text: 'After the first time each turn you choose a Personality to bring into play during your Dynasty Phase, you may pay
+      2 less Gold for him and ignore his Honor Requirement.Tireless Battle: Give your target performing opposed Personality
+      +2F.'
+    legality:
+    - Legacy
+    - Modern
+    banned: Banned from Celestial Edition tournaments.
+    rarity: Fixed
+    artist: Charles Urbach
+    number: 73
+    collector_number: '82'
+
+  - title: Attacks & Battles Part 1
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 74
+
+  - title: Attacks & Battles Part 2
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 75
+
+  - title: Celestial Edition
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 76
+
+  - title: Celestial Edition Mega Game
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 77
+
+  - title: Death At Koten
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 78
+
+  - title: Fate Cards
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 79
+
+  - title: Glory of the Empire
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 80
+
+  - title: 'Imperial Gift 2: Glory'
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 81
+
+  - title: 'Imperial Gift 2: Honor'
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 82
+
+  - title: Path of the Destroyer
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 83
+
+  - title: Player Abilities Part 1
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 84
+
+  - title: Player Abilities Part 2
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 85
+
+  - title: Starting Setup
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 86
+
+  - title: Stronghold & Dynasty Cards
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 87
+
+  - title: Stronghold Store Program
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 88
+
+  - title: The Imperial Favor
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 89
+
+  - title: The Imperial Herald
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 90
+
+  - title: Third Edition Revised
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 91
+
+  - title: Turn Sequence
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 92
+
+  - title: Winter Court
+    type: Other
+    deck: Other
+    rarity: Fixed
+    number: 93

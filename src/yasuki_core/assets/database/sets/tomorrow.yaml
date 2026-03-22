@@ -1,0 +1,1059 @@
+set: Tomorrow
+cards:
+  - title: The Last Prophecy
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, name
+      a card. Search your Fate deck for that card, show it, and put it in your hand. Discard a number of cards equal to its
+      Focus Value or your entire hand, whichever amount of cards is lower.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Lisa Hunt
+    flavor: '"The future cannot be foretold," Masae said. "But there are patterns, and those can be anticipated if you know
+      what to seek."'
+    number: 1
+
+  - title: The Price of Power
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, this
+      card enters play in your home.Limited: Discard this card from your home to target your Personality and another player''s
+      Personality whose unit has a total Gold cost equal to or lower than your target''s. Destroy both units.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Thomas Denmark
+    flavor: '"Why could it not have been another?" Kurako asked. "Why did he have to go alone?"'
+    number: 2
+
+  - title: Tomorrow
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, then
+      after your next turn begins, starting with you and proceeding in turn order, each player may destroy two of their Ratling
+      Personalities. If no player does so, give all Ratling Personalities and Followers +4F, and at the end of that turn, each
+      card that gained this bonus is removed from the game.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Iordanis Lazaridis
+    flavor: They believe they have come to the Empire to assist against the Shadowlands, but it shall be this very action that
+      will be their doom. - Prophecies of Uikku
+    number: 3
+    collector_number: '13'
+
+  - title: Arms Smugglers
+    type: Holding
+    deck: Dynasty
+    gold_cost: 2
+    text: 'After an End Phase begins, if you have no Gold-producing Holdings in play: You may bow your Stronghold; if you did,
+      search your Dynasty deck, then face-down provinces, for a card titled "Arms Smugglers" and put it into play (bowed), ignoring
+      costs. If you find none, you are eliminated from the game.This card will not straighten before your third turn.When paying
+      a Gold cost, if you are not paying for a Holding, bow this card: Produce 3 Gold.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Chris Arneson
+    number: 4
+
+  - title: Forest Killer Cavern
+    type: Holding
+    deck: Dynasty
+    gold_cost: 2
+    text: 'w: Produce 2 Gold plus the number of Wealth tokens on this card.Limited: Dishonor your target performing Personality
+      and target another player''s Holding to add a Wealth token to this card. Remove a Wealth token from the target, if any.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Jeff Menges
+    flavor: '"Empty now. Good-good for hiding."'
+    number: 5
+
+  - title: Gifts and Favors
+    type: Holding
+    deck: Dynasty
+    gold_cost: 2
+    text: 'After your Dynasty Phase ends, if this copy of this Holding is not in play and you put no Gold-producing Holdings
+      into play this turn, you may bow your Stronghold to search your Dynasty deck, then face-down Provinces, for a card titled
+      "Gifts and Favors" and put the first one you find into play (bowed), ignoring costs. If you find none, you are eliminated
+      from the game.w: Produce 2 Gold.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Edward Fetterman
+    number: 6
+
+  - title: Yotsu Dojo
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Dojo
+    gold_cost: 3
+    text: 'This Holding enters play for 1 less Gold if you are a Crane Clan player.w: Produce 2 Gold.Tireless Reaction: After
+      an action on a non-Stronghold card destroys a Personality, gain 1 Honor, or 4 Honor if the action was performed by a dishonorable
+      Personality.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    story: 2005 The Unsheathed Sword - Francisco Ruiz
+    rarity: Fixed
+    artist: Charles Urbach
+    flavor: '"The Sword of Yotsu stands watch over Kyuden Otomo."'
+    number: 7
+
+  - title: Zamalash
+    type: Personality
+    clan: Naga,Ratling
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Naga
+    - Nonhuman
+    - Ratling
+    force: 3
+    chi: 3
+    gold_cost: 6
+    personal_honor: 2
+    text: 'Reaction: After a Battle, Limited, or Open action on a Personality with the base Ratling keyword resolves: Copy that
+      ability to Zamalash and take an additional action to take that action from Zamalash.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    story: 2004 The Resurrection Top of Clan - Peter Leiher
+    rarity: Fixed
+    artist: Anthony Grabski
+    flavor: '"You cannot help my people if your are in danger. Go, my friends. The Naga will endure regardless."'
+    number: 8
+
+  - title: Ku'chek
+    type: Personality
+    clan: Ratling
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Ratling
+    - Scout
+    - Tattered Ear Tribe
+    force: 2
+    chi: 2
+    gold_cost: 5
+    personal_honor: 1
+    text: 'Recon Battle/Open, w: Target a Province. You have Reconnaissance at its battlefields. Before each time a battle resolves
+      at that Province, reduce the Force of each card at it to 3.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: William O'Connor
+    flavor: '"Stay to fight purple ones, or abandon warrens forever to wage war in Dream? Hard-hard choice."'
+    number: 9
+    collector_number: '51'
+
+  - title: Mak'irtch
+    type: Personality
+    clan: Ratling
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Ratling
+    - Shugenja
+    - Stained Paw Tribe
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Limited: Target a number of Ratling Personalities up to the number of different Tribe keywords on cards in play.
+      Create an equal number of 1F Nonhuman • Ratling Followers and attach one to each target.Reaction: After Mak''irtch enters
+      your discard pile, create a 1F Nonhuman • Ratling Follower and attach it to your target Ratling Personality. Permanently
+      give him all Tribe keywords that Mak''irtch has.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    errata_text: Text omitted from the Tomorrow deck MRP restored, due to the MRP being removed from SE legality and allowed
+      to be sent back for Koku redemption.
+    story: 2006 World Champion - Faber Van Kraanen
+    rarity: Fixed
+    artist: John Donahue
+    number: 10
+
+  - title: Shinbone Pack
+    type: Personality
+    clan: Ratling
+    deck: Dynasty
+    keywords:
+    - Broken Shinbone Tribe
+    - Nonhuman
+    - Ratling
+    force: 9
+    chi: 2
+    gold_cost: 10
+    personal_honor: 1
+    text: 'Will not challenge or be challenged.Will not enter play as an effect of a Battle action other than Shinbone Warrior''s.Battle/Open:
+      Pay 2 Gold: Search your Dynasty deck, then discard pile, for a Shinbone Warrior. Bring it into play at this card''s location,
+      ignoring costs.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Paul (Prof.) Herbert
+    flavor: '"Tomorrow comes in the Dream!" the Truthseeker screamed.'
+    number: 11
+
+  - title: Shinbone Warrior
+    type: Personality
+    clan: Ratling
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Broken Shinbone Tribe
+    - Bushi
+    - Nonhuman
+    - Ratling
+    - Warrior
+    force: 2
+    chi: 2
+    gold_cost: 4
+    personal_honor: 2
+    text: 'You may include up to ten copies of Shinbone Warrior in your deck.Battle/Open: Destroy your three target performing
+      Broken Shinbone Tribe cards to search your Dynasty deck, then discard pile, for a Shinbone Pack. Bring it into play at
+      this card''s location when this action was announced, ignoring costs.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Paul (Prof.) Herbert
+    number: 12
+
+  - title: Z'chkir
+    type: Personality
+    clan: Ratling
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Ratling
+    - Shugenja
+    - Third Whisker Tribe
+    force: 2
+    chi: 3
+    gold_cost: 6
+    personal_honor: 2
+    text: 'Limited: Bow your two performing Ratling Personalities that each have a Tribe keyword the other does not: Create
+      two bowed 2F/2C Nonhuman • Ratling Personalities with all Tribe keywords of both performers.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: William O'Connor
+    number: 13
+
+  - title: Monkey Man
+    extended_title: Monkey Man • Experienced 2
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Experienced 2
+    - Unique
+    - Jackal
+    - Meddler
+    - Spider Clan
+    force: 2
+    chi: 4
+    gold_cost: 8
+    personal_honor: 0
+    text: 'Will only enter play if you are a Spider Clan or Shadowlands Horde player.Limited: Look at the top two cards of another
+      player''s Fate deck. Put one on the top of the deck and the other on the bottom.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Drew Baker
+    flavor: '"I bear dire news from across the sands, my lord," the old man said. "Your time is short. You must make haste to
+      secure your empire."'
+    number: 14
+    collector_number: '17'
+
+  - title: Kanashimi Toshi
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'Limited: Bow your Stronghold and destroy this Region to destroy a target Holding.Limited: Bow your Stronghold and
+      destroy this Region to bow a target Stronghold.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Thomas Denmark
+    flavor: '"Everything that was once theirs in this world is gone. They have only what remains in their realm of dreams. How
+      could they let that die without a struggle?" - Zamalash'
+    number: 15
+
+  - title: The Blasted Lands
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Wasteland
+    text: After this Region turns face-up in one of your Provinces, if you are a Scorpion Clan player, target another player's
+      Province. Destroy all cards attached to it and attach this Region to it.After a Personality enters play from this Province,
+      give him a -1F/-1C Corruption token.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: '"A powerful weapon, but the price is high."'
+    number: 16
+    collector_number: '15'
+
+  - title: Togashi's Devoted
+    type: Follower
+    deck: Fate
+    force: 3
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 1
+    focus: 3
+    text: 'Will only attach to a Dragon Clan Personality.Open: Name a Ring. Before this turn ends, if you have put that Ring
+      into play by its own text this turn, gain 1 Honor and give this card a +2F token.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 The Battle of the Tomb Top of Clan - Kostas Adamopoulos
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: The monk smiled atop the Wall. "What better place to see purity within ourselves?" he laughed.
+    number: 17
+    collector_number: '5'
+
+  - title: Ancestral Urn
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    force: 0
+    chi: 0
+    gold_cost: 3
+    focus: 4
+    text: 'Will only attach to a Lion Clan Personality.This Personality has +1PH.Battle, w: Copy a Battle ability from your
+      target dead Personality to this Personality. You may take an additional Battle action to use that ability; if you did
+      and it resolved, gain 1 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 The Battle of the Tomb Top of Clan - Owen Michaud
+    rarity: Fixed
+    artist: Steve Argyle
+    number: 18
+    collector_number: '8'
+
+  - title: Candle of Shadows
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    force: 0
+    chi: 0
+    gold_cost: 4
+    focus: 4
+    text: 'Will only attach to a Mantis Clan Personality.After this card enters play: Look at the top three cards of your Fate
+      deck. Put one in your hand, put one at the bottom of your deck, and remove one from the game.Reaction: After you draw
+      a card, target your Personality: Straighten him.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 The Battle of the Tomb Top of Clan - Francois Carriere
+    rarity: Fixed
+    artist: Britt Martin
+    number: 19
+    collector_number: '10'
+
+  - title: Egg of the Void
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Fire
+    - Void
+    force: 0
+    chi: 0
+    gold_cost: 3
+    focus: 4
+    text: 'Will only attach to a Phoenix Clan Personality.This Personality has Fire and Void.Limited: Destroy this card and
+      target your non-Unique dead Personality with an element keyword: Bring him into play, paying all costs.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 The Battle of the Tomb Top of Clan - Mariano Gallardo
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: '"You alone are not worthy," the dragon roared.'
+    number: 20
+    collector_number: '12'
+
+  - title: Emma-O's Amulet
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    force: 0
+    chi: 0
+    gold_cost: 6
+    focus: 4
+    text: 'Limited: Destroy this card and target a dead non-Unique Personality in any player''s discard pile: Its owner brings
+      it into play, ignoring costs.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    story: 2003 Divine Guidance Part 2 - Hendrik Bursee
+    rarity: Fixed
+    artist: Eliza Gauger
+    number: 21
+
+  - title: Golden Obi of the Sun Goddess
+    extended_title: Golden Obi of the Sun Goddess • Experienced
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Experienced
+    force: 1
+    chi: 0
+    gold_cost: 3
+    focus: 4
+    text: 'Reaction: Even if this card is bowed, before this Personality is destroyed, destroy this card: Negate this Personality''s
+      destruction.Battle: Bow this card and target one or two enemy Shadowlands cards: If this card is attached to Isawa Sezaru,
+      destroy them; otherwise, give them -4F.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    story: 2004 Chosen by the Sun - Jared Devlin-Scherer
+    rarity: Fixed
+    artist: April Lee
+    number: 22
+
+  - title: Heavenly Kobune of Suitengu
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    force: 1
+    chi: 0
+    gold_cost: 2
+    focus: 4
+    text: 'Will only attach to a Unicorn Clan or Mantis Clan Personality.If this Personality has the base Naval or Cavalry keyword,
+      he has both Naval and Cavalry.Battle: If this Personality is bowed and Unicorn Clan, move him to another location. Until
+      the turn ends, he will not straighten unless he is opposed.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 The Battle of the Tomb Top of Clan - Pablo Rojo
+    rarity: Fixed
+    artist: Steve Argyle
+    number: 23
+    collector_number: '20'
+
+  - title: Jade Mirror
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Jade
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 4
+    text: 'Will only attach to a Dragon Clan Personality.Battle: Target a unit opposing this card: Reduce the Force of each
+      Personality or Follower in it by an amount equal to this Personality''s Chi, or to 0 if the unit contains a Shadowlands
+      card. Gain 2 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 The Battle of the Tomb Top of Clan - Kostas Adamopoulos
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: Within it, see the truth.
+    number: 24
+    collector_number: '6'
+
+  - title: Kakita's First Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Weapon
+    force: 1
+    chi: 1
+    gold_cost: 3
+    focus: 4
+    text: Can only attach to a Crane Clan Personality.If scores are tied in a duel involving this Personality, he wins the duel.This
+      Personality has Duelist and Artisan.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 The Battle of the Tomb Top of Clan - Reda Lounis
+    rarity: Fixed
+    artist: Miguel Coimbra
+    flavor: Nagori is a storyteller, a courtier, and a magistrate. With this blade, young Crane look to him as an example.
+    number: 25
+    collector_number: '4'
+
+  - title: Mark of Oblivion
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 2
+    focus: 3
+    text: 'Limited: Discard three cards with either identical or all different Focus Values, and destroy this card: Draw four
+      cards. Discard down to your maximum hand size.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: John Hodgson
+    flavor: '"The Shadowlands shall never have their Tao, not while we live." - Hida Kuon'
+    number: 26
+
+  - title: Tao of Fu Leng
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Shadowlands
+    force: 1
+    chi: 0
+    gold_cost: 3
+    focus: 4
+    text: 'Will only attach to a Crab Clan Personality.If you control no other Shadowlands cards, your Crab Clan Personalities
+      each have +1F.Limited: Permanently give your target Personality Shadowlands.Open, w: Bow a target Shadowlands Personality
+      or give him +3F.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 The Battle of the Tomb Top of Clan - Salman Barakat
+    rarity: Fixed
+    artist: Drew Baker
+    number: 27
+    collector_number: '2'
+
+  - title: The Scarab Case
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    force: 1
+    chi: 0
+    gold_cost: 3
+    focus: 4
+    text: 'Will only attach to a Shadowlands or Nonhuman Personality.Limited: Destroy a Holding you own and control and target
+      your Personality: Create a 3F Ghul • Cavalry • Undead Follower and attach it him. Lose 3 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 The Battle of the Tomb Top of Clan - Tobias Vater
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: '"It reeks of power," the Ghul Lord said. "Why can we not unlock it?"'
+    number: 28
+    collector_number: '18'
+
+  - title: Tomorrow's Hourglass
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    force: 0
+    chi: 0
+    gold_cost: 7
+    focus: 4
+    text: 'Will only attach to a Ratling Personality.Limited: Search your Dynasty deck and provinces. You must remove from the
+      game all Ratling Personalities you find. If you removed three or more Ratlings from your deck, choose and remove a Personality
+      in play from the game.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 World Champion - Faber Can Kraanen
+    rarity: Fixed
+    artist: Britt Martin
+    number: 29
+    collector_number: '14'
+
+  - title: Ring of the Phoenix
+    type: Ring
+    deck: Fate
+    keywords:
+    - Unique
+    - Fire
+    focus: 3
+    text: 'After one of your actions resolves, if it was your third or later action this turn whose effects destroyed any of
+      your Phoenix Clan Personalities during a battle, you may put this card into play from your hand.You may discard this card
+      from your hand to use its ability ignoring the cost of bowing it.Fire Limited, , w: Destroy one of your Phoenix Clan Personalities
+      to Recruit a dead Phoenix Clan Personality you own with equal or lower Gold Cost.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Steve Argyle
+    number: 30
+    collector_number: '11'
+
+  - title: Essence of Jigoku
+    type: Spell
+    deck: Fate
+    keywords:
+    - Unique
+    - Black Scroll
+    gold_cost: 4
+    focus: 4
+    text: 'Will only attach to a Scorpion Clan Personality.Battle, w: Give each Personality at this battlefield a -1F/-1C Corruption
+      token. Reduce the strength of this battlefield''s Province to 0.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 The Battle of the Tomb Top of Clan - Javier Jimenez
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: '"Allow me this burden," Natsuo said. "Let me prove my loyalty."'
+    number: 31
+    collector_number: '16'
+
+  - title: All Things Have A Price
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Reaction: After another player reveals cards in their Provinces at the start of their turn, first you, then the current
+      player, may target either a card with zero Gold Cost in a unit, or a Region. Destroy all targets.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Heather V. Kreiter
+    flavor: '"If I stay, might die," Kan''okticheck said. "If I go, might die. But if I go, might defeat Tomorrow forever."'
+    number: 32
+
+  - title: Dark Lord's Favor
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Shadowlands
+    gold_cost: 0
+    focus: 1
+    text: 'You may only play one Dark Lord''s Favor per turn.You may not play this card if another player has lower Family Honor
+      than you.Battle/Open: Target a Personality: Dishonor him. Lose 7 Honor.Limited: Target a player: He discards a card. Lose
+      7 Honor.Battle: Target a card: Reduce its Force to 0. Lose 7 Honor.Reaction: Before a player gains Honor: Negate the gain.
+      Lose 7 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Legacy
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Drew Baker
+    number: 33
+
+  - title: Encircled Terrain
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Before this battle resolves, the Attacker and Defender, in the order of your choice, each choose one of their own
+      Personalities at its battlefield. Move all other Personalities there home. Battle: Destroy a Terrain (if able). Put this
+      Terrain into play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Paul (Prof.) Herbert
+    flavor: '"Without One Tribe, Transcendants fall before Tomorrow."'
+    number: 34
+
+  - title: Explosives
+    type: Strategy
+    deck: Fate
+    gold_cost: 6
+    focus: 2
+    text: 'Limited: Target a Holding: Destroy it.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Mike Raabe
+    number: 35
+
+  - title: Fields of Foolish Pride
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Before this battle''s resolution: Give each Personality at the current battlefield -2F and give each Follower there
+      -1F.Battle: Even if you control no units at the current battlefield, if there are no Terrains there: Put this card into
+      play there.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: John Donahue
+    number: 36
+
+  - title: Kakita's Edge
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'As a Focus Effect: Set the Focus Value of another card you focused in this duel equal to the base Personal Honor
+      of your Personality in the duel. Limited: Bow your performing Artisan and target a Weapon: Give it a +2F Edge token. Gain
+      1 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Miguel Coimbra
+    flavor: '"Lead as he led. With honor." - Doji Domotai'
+    number: 37
+    collector_number: '3'
+
+  - title: Kamoko's Avatar
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Unique
+    force: 6
+    chi: 5
+    gold_cost: 8
+    personal_honor: 5
+    focus: 3
+    text: 'This is a Strategy card.Battle: If you control an opposed Unicorn Clan Personality at the current battlefield: Create
+      a 6F/5C/5PH Unicorn Clan • Samurai • Cavalry • Spirit Personality in your army there. Give your other Cavalry cards there
+      +1F. Remove the created Personality from the game after the next Dynasty Phase begins.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Drew Baker
+    flavor: '"She rides the heavens, and the Unicorn bear her favor."'
+    number: 38
+    collector_number: '19'
+
+  - title: Naseru's Last Words
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Imperial
+    - Kiho
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Choose your performing Mantis Clan Shugenja and target one of your Unique Personalities: Permanently give
+      him the ability, "Political Limited: Take the Imperial Favor."'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: '"Virtue," he whispered. "Virtue is the key to the throne. Seek it out or we are lost."'
+    number: 39
+    collector_number: '9'
+
+  - title: Outer Walls
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Even if you control no units at the current battlefield: Give its province +3 strength. Reaction: After a
+      Ranged Attack is targeted: Give it -2 strength.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Paul (Prof.) Herbert
+    flavor: '"Tomorrow comes at last. It washes over Dream, eating everything in its path. Nothing left."'
+    number: 40
+
+  - title: Refugees
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Even, if you are the Defender, if you control no units at the current battlefield, target a Personality without
+      Followers: Move him home. Bow him if he moved. His controller may pay 1 Gold; if he did, create a 1F Ashigaru Follower
+      and attach it to the target.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: beet
+    number: 41
+
+  - title: Reinforce the Gates
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Reaction: After a player announces a Battle action before the Defender''s first normal opportunity to act or pass:
+      Its effects do not happen. Battle: Even if you control no units at the current battlefield, target an unopposed unit there:
+      Move it to a battlefield with one or more units on the side opposing its controller''s.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Britt Martin
+    number: 42
+
+  - title: Test of Honor
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 6
+    focus: 2
+    text: 'Limited: Target a Human Personality:. Discard the top card of his controller''s Fate deck. If that card''s Focus
+      value is greater than the target''s Personal Honor, dishonor and destroy the target.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Veronica V. Jones
+    flavor: '"I go to sail the seas of Heaven, Amika-sama. The Unicorn would be honored to have a Mantis on this voyage." -
+      Horiuchi Rikako'
+    number: 43
+
+  - title: Three-Stone River
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Before this battle''s resolution: Reduce the Force of each Personality at this battlefield to equal the Force of
+      his highest-Force Follower, or to 1 if he has no Followers.Battle: If there are no Terrains at the current battlefield:
+      Put this card into play there.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Paul (Prof.) Herbert
+    flavor: '"Transcendants try to fight Tomorrow, but too few of them. They strong, but not enough Name to win, and nowhere
+      to run."'
+    number: 44
+
+  - title: Timely Arrival
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Target one of your provinces and a discarded Personality in your discard pile: Discard a card from the province
+      if necessary and fill it with the Personality. Open: Remove all Personalities in discard piles from the game.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Janine Johnston
+    number: 45
+
+  - title: Whispered Rumors
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Political Reaction: When paying a cost of discarding the Imperial Favor, bow your performing Personality: This action
+      pays that cost instead. Reaction: Before an Event resolves: Negate its effects.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Veronica V. Jones
+    number: 46
+
+  - title: Shiryo no Matsu
+    extended_title: Shiryo no Matsu • Experienced
+    type: Ancestor
+    clan: Lion
+    deck: Fate
+    keywords:
+    - Unique
+    - Experienced
+    - Lion Clan
+    force: 0
+    chi: 0
+    gold_cost: 0
+    honor_requirement: 3
+    focus: 3
+    text: Before bowing the Personality to whom this card is attaching to attach it, you may bow another card in his unit instead.Battle
+      resolution does not bow this Personality.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Drew Baker
+    flavor: '"Her strength, her will, can never be equaled." - Matsu Kenji'
+    number: 47
+    collector_number: '7'
+
+  - title: Barracks of the Damned
+    type: Stronghold
+    clan: Crab
+    deck: Pre-Game
+    province_strength: 8
+    gold_production: 4
+    starting_honor: 0
+    text: 'Your Crab Clan Shadowlands Personalities have +1F.Battle: Target your performing Crab Clan Personality and target
+      an enemy card. Bow it if it has less Force. If both your performer and the second target are Shadowlands, destroy them.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2006 World Championships Top of Clan - Salman Barakat
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: A place of fallen men who shout their defiance at the Shadowlands. Wretched, yet inspiring.
+    number: 48
+    collector_number: '1'
+
+  - title: Warrens of the One Tribe
+    type: Stronghold
+    clan: Ratling
+    deck: Pre-Game
+    province_strength: 13
+    gold_production: 3
+    starting_honor: 1
+    text: 'You begin the game with three Provinces.Once per phase, you may play a Fate card in any player''s discard pile as
+      if it were in your hand.Fate cards you have played are removed from the game if they are ever in a discard pile.Limited:
+      Bow your target performing unbowed Ratling Personality. Lose 1 Honor. Discard the top card of each player''s Fate deck.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Chuck Lukacs
+    number: 49
+
+  - title: Black Heart of the Empire
+    type: Wind
+    deck: Pre-Game
+    text: 'For you, the Lobby ability is not Political, and it bows your target Shadowlands Personality instead (even if his
+      Personal Honor is 0).For the purposes of any player Lobbying, your Family Honor is considered, before bonuses or penalties,
+      to equal the total printed Force of all Personalities you control if it is higher than each other player''s. Favor Repeatable
+      Battle: Discard the Imperial Favor to target a Personality. Reduce the Force of each card in his unit to 0. Permanently
+      give him Shadowlands.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Ben Peck
+    number: 50
