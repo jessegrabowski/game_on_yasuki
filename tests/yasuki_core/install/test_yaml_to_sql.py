@@ -1,3 +1,5 @@
+from unittest.mock import MagicMock, patch
+
 from yasuki_core.install.yaml_to_sql import (
     extract_experience_level,
     parse_legalities,
@@ -7,6 +9,9 @@ from yasuki_core.install.yaml_to_sql import (
     parse_all_numbers,
     choose_primary,
     NumberEntry,
+    _batch_upsert_cards,
+    _batch_upsert_legalities,
+    _batch_upsert_prints,
 )
 
 
@@ -168,3 +173,129 @@ class TestChoosePrimary:
             NumberEntry("Lion", 10),
         ]
         assert choose_primary(entries) == (None, 5)
+
+
+class TestBatchDeduplication:
+    """Verify batch functions deduplicate before sending to Postgres.
+
+    PostgreSQL raises CardinalityViolation when ON CONFLICT DO UPDATE
+    encounters duplicate constrained values in the same statement.
+    Cards reprinted across sets produce duplicate card_ids.
+    """
+
+    @patch("yasuki_core.install.yaml_to_sql.execute_values")
+    def test_cards_deduplicates_by_id_last_wins(self, mock_ev):
+        cur = MagicMock()
+        row_v1 = (
+            "same_id",
+            "Name V1",
+            "name_v1",
+            "Name V1",
+            "FATE",
+            "Strategy",
+            None,
+            "",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            False,
+            False,
+            None,
+            None,
+        )
+        row_v2 = (
+            "same_id",
+            "Name V2",
+            "name_v2",
+            "Name V2",
+            "FATE",
+            "Strategy",
+            None,
+            "updated text",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            False,
+            False,
+            None,
+            None,
+        )
+        other = (
+            "other_id",
+            "Other",
+            "other",
+            "Other",
+            "DYNASTY",
+            "Holding",
+            None,
+            "",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            False,
+            False,
+            None,
+            None,
+        )
+
+        _batch_upsert_cards(cur, [row_v1, other, row_v2])
+
+        sent_rows = mock_ev.call_args[0][2]
+        sent_ids = [r[0] for r in sent_rows]
+        assert len(sent_rows) == 2
+        assert sent_ids.count("same_id") == 1
+        kept = next(r for r in sent_rows if r[0] == "same_id")
+        assert kept[1] == "Name V2"
+
+    @patch("yasuki_core.install.yaml_to_sql.execute_values")
+    def test_legalities_deduplicates_by_card_and_format(self, mock_ev):
+        cur = MagicMock()
+        legalities = [
+            ("card_a", "Imperial", "legal"),
+            ("card_a", "Imperial", "not_legal"),
+            ("card_b", "Jade", "legal"),
+        ]
+        _batch_upsert_legalities(cur, {"Imperial", "Jade"}, legalities)
+
+        legality_call = mock_ev.call_args_list[1]
+        sent_rows = legality_call[0][2]
+        assert len(sent_rows) == 2
+        kept = next(r for r in sent_rows if r[0] == "card_a")
+        assert kept[2] == "not_legal"
+
+    @patch("yasuki_core.install.yaml_to_sql.execute_values")
+    def test_prints_deduplicates_by_constraint_columns(self, mock_ev):
+        mock_ev.return_value = []
+        cur = MagicMock()
+        #                  0           1          2      3     4
+        #                  card_id     set_name   code   rar   flavor
+        #                  5        6              7           8
+        #                  artist   prim_subset    prim_int    cn_raw
+        #                  9      10
+        #                  notes  image_path
+        row_v1 = ("card_a", "Set X", "SX", "C", None, "Art1", None, 1, "1", None, "img1.jpg")
+        row_v2 = ("card_a", "Set X", "SX", "R", "flavor", "Art2", None, 1, "1", None, "img2.jpg")
+
+        _batch_upsert_prints(cur, [row_v1, row_v2], {})
+
+        sent_rows = mock_ev.call_args[0][2]
+        assert len(sent_rows) == 1
+        assert sent_rows[0][3] == "R"

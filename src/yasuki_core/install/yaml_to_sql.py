@@ -6,6 +6,7 @@ from typing import NamedTuple
 
 import psycopg2
 import psycopg2.extras
+from psycopg2.extras import execute_values
 import yaml
 
 from yasuki_core.install.utils import (
@@ -149,143 +150,6 @@ DECK_FROM_TYPE = {
 }
 
 
-def upsert_card(cur, record: dict) -> str:
-    title = record["title"]
-    extended_title = record.get("extended_title", title)
-
-    card_id = strip_title(extended_title)
-
-    deck = map_deck(record.get("deck", DECK_FROM_TYPE[record["type"]]))
-    ctype = map_card_type(record["type"])
-
-    clan = record.get("clan")
-    rules_text = record.get("text", "") or ""
-
-    gold_cost = record.get("gold_cost")
-    focus = record.get("focus")
-    force = record.get("force")
-    chi = record.get("chi")
-    honor_req = record.get("honor_requirement")
-    personal_honor = record.get("personal_honor")
-    province_strength = record.get("province_strength")
-    gold_production = record.get("gold_production")
-    starting_honor = record.get("starting_honor")
-
-    keyword_list = record.get("keywords", [])
-    is_unique = detect_is_unique(keyword_list)
-    is_proxy = detect_is_proxy(record)
-
-    errata_text = record.get("errata_text")
-    notes = record.get("card_notes")
-
-    name_normalized = normalize_name(title)
-
-    cur.execute(
-        """
-        INSERT INTO cards (
-          id, name, name_normalized, extended_title,
-          deck, type, clan,
-          rules_text,
-          gold_cost, focus,
-          force, chi,
-          honor_requirement, personal_honor,
-          gold_production,
-          province_strength, starting_honor,
-          is_unique, is_proxy,
-          errata_text, notes,
-          extra
-        ) VALUES (
-          %(id)s, %(name)s, %(name_normalized)s, %(extended_title)s,
-          %(deck)s, %(type)s, %(clan)s,
-          %(rules_text)s,
-          %(gold_cost)s, %(focus)s,
-          %(force)s, %(chi)s,
-          %(honor_requirement)s, %(personal_honor)s,
-          %(gold_production)s,
-          %(province_strength)s, %(starting_honor)s,
-          %(is_unique)s, %(is_proxy)s,
-          %(errata_text)s, %(notes)s,
-          '{}'::jsonb
-        )
-        ON CONFLICT (id) DO UPDATE SET
-          name = EXCLUDED.name,
-          name_normalized = EXCLUDED.name_normalized,
-          extended_title = EXCLUDED.extended_title,
-          deck = EXCLUDED.deck,
-          type = EXCLUDED.type,
-          clan = EXCLUDED.clan,
-          rules_text = EXCLUDED.rules_text,
-          gold_cost = EXCLUDED.gold_cost,
-          focus = EXCLUDED.focus,
-          force = EXCLUDED.force,
-          chi = EXCLUDED.chi,
-          honor_requirement = EXCLUDED.honor_requirement,
-          personal_honor = EXCLUDED.personal_honor,
-          gold_production = EXCLUDED.gold_production,
-          province_strength = EXCLUDED.province_strength,
-          starting_honor = EXCLUDED.starting_honor,
-          is_unique = EXCLUDED.is_unique,
-          is_proxy = EXCLUDED.is_proxy,
-          errata_text = EXCLUDED.errata_text,
-          notes = EXCLUDED.notes
-        """,
-        {
-            "id": card_id,
-            "name": title,
-            "name_normalized": name_normalized,
-            "extended_title": extended_title,
-            "deck": deck,
-            "type": ctype,
-            "clan": clan,
-            "rules_text": rules_text,
-            "gold_cost": gold_cost,
-            "focus": focus,
-            "force": force,
-            "chi": chi,
-            "honor_requirement": honor_req,
-            "personal_honor": personal_honor,
-            "gold_production": gold_production,
-            "province_strength": province_strength,
-            "starting_honor": starting_honor,
-            "is_unique": is_unique,
-            "is_proxy": is_proxy,
-            "errata_text": errata_text,
-            "notes": notes,
-        },
-    )
-
-    for kw in keyword_list:
-        cur.execute(
-            "INSERT INTO keywords (keyword) VALUES (%s) ON CONFLICT (keyword) DO NOTHING",
-            (kw,),
-        )
-        cur.execute(
-            """
-            INSERT INTO card_keywords (card_id, keyword)
-            VALUES (%s, %s)
-            ON CONFLICT (card_id, keyword) DO NOTHING
-            """,
-            (card_id, kw),
-        )
-
-    for fmt_name, status in parse_legalities(record.get("legality")):
-        cur.execute(
-            "INSERT INTO formats (name) VALUES (%s) ON CONFLICT (name) DO NOTHING",
-            (fmt_name,),
-        )
-        cur.execute(
-            """
-            INSERT INTO card_legalities (card_id, format_name, status)
-            VALUES (%s, %s, %s)
-            ON CONFLICT (card_id, format_name) DO UPDATE SET
-              status = EXCLUDED.status
-            """,
-            (card_id, fmt_name, status),
-        )
-
-    return card_id
-
-
 def parse_collector_number(number: str | None) -> tuple[str | None, int | None, str | None]:
     if number is None:
         return None, None, None
@@ -338,14 +202,69 @@ def choose_primary(entries: list[NumberEntry]) -> tuple[str | None, int | None]:
     return best.subset, best.number_int
 
 
-def upsert_print(
-    cur,
+def _prepare_card_row(record: dict) -> tuple[str, tuple, list[str], list[tuple[str, str]]]:
+    title = record["title"]
+    extended_title = record.get("extended_title", title)
+    card_id = strip_title(extended_title)
+
+    deck = map_deck(record.get("deck", DECK_FROM_TYPE[record["type"]]))
+    ctype = map_card_type(record["type"])
+    clan = record.get("clan")
+    rules_text = record.get("text", "") or ""
+
+    gold_cost = record.get("gold_cost")
+    focus = record.get("focus")
+    force = record.get("force")
+    chi = record.get("chi")
+    honor_req = record.get("honor_requirement")
+    personal_honor = record.get("personal_honor")
+    province_strength = record.get("province_strength")
+    gold_production = record.get("gold_production")
+    starting_honor = record.get("starting_honor")
+
+    keyword_list = record.get("keywords", [])
+    is_unique = detect_is_unique(keyword_list)
+    is_proxy = detect_is_proxy(record)
+
+    errata_text = record.get("errata_text")
+    notes = record.get("card_notes")
+    name_normalized = normalize_name(title)
+
+    card_values = (
+        card_id,
+        title,
+        name_normalized,
+        extended_title,
+        deck,
+        ctype,
+        clan,
+        rules_text,
+        gold_cost,
+        focus,
+        force,
+        chi,
+        honor_req,
+        personal_honor,
+        gold_production,
+        province_strength,
+        starting_honor,
+        is_unique,
+        is_proxy,
+        errata_text,
+        notes,
+    )
+
+    legalities = parse_legalities(record.get("legality"))
+    return card_id, card_values, keyword_list, legalities
+
+
+def _prepare_print_row(
     card_id: str,
     extended_title: str,
     set_name: str,
     record: dict,
     set_code_map: dict[str, str | None],
-):
+) -> tuple[tuple, list[NumberEntry]]:
     rarity = record.get("rarity")
     flavor = record.get("flavor")
     artist = record.get("artist")
@@ -363,40 +282,138 @@ def upsert_print(
         primary_int = number
 
     set_code = set_code_map.get(set_name)
-
     image_path = expected_card_image_path(extended_title, set_name) if set_name else None
 
-    cur.execute(
+    print_values = (
+        card_id,
+        set_name,
+        set_code,
+        rarity,
+        flavor,
+        artist,
+        primary_subset,
+        primary_int,
+        collector_number_raw,
+        notes,
+        image_path,
+    )
+    return print_values, entries
+
+
+_BATCH_PAGE_SIZE = 1000
+
+
+def _batch_upsert_cards(cur, card_rows: list[tuple]):
+    if not card_rows:
+        return
+    seen: dict[str, tuple] = {}
+    for row in card_rows:
+        seen[row[0]] = row
+    card_rows = list(seen.values())
+    execute_values(
+        cur,
+        """
+        INSERT INTO cards (
+          id, name, name_normalized, extended_title,
+          deck, type, clan, rules_text,
+          gold_cost, focus, force, chi,
+          honor_requirement, personal_honor, gold_production,
+          province_strength, starting_honor,
+          is_unique, is_proxy, errata_text, notes
+        ) VALUES %s
+        ON CONFLICT (id) DO UPDATE SET
+          name = EXCLUDED.name,
+          name_normalized = EXCLUDED.name_normalized,
+          extended_title = EXCLUDED.extended_title,
+          deck = EXCLUDED.deck,
+          type = EXCLUDED.type,
+          clan = EXCLUDED.clan,
+          rules_text = EXCLUDED.rules_text,
+          gold_cost = EXCLUDED.gold_cost,
+          focus = EXCLUDED.focus,
+          force = EXCLUDED.force,
+          chi = EXCLUDED.chi,
+          honor_requirement = EXCLUDED.honor_requirement,
+          personal_honor = EXCLUDED.personal_honor,
+          gold_production = EXCLUDED.gold_production,
+          province_strength = EXCLUDED.province_strength,
+          starting_honor = EXCLUDED.starting_honor,
+          is_unique = EXCLUDED.is_unique,
+          is_proxy = EXCLUDED.is_proxy,
+          errata_text = EXCLUDED.errata_text,
+          notes = EXCLUDED.notes
+        """,
+        card_rows,
+        page_size=_BATCH_PAGE_SIZE,
+    )
+
+
+def _batch_upsert_keywords(cur, keywords: set[str], card_keywords: list[tuple[str, str]]):
+    if keywords:
+        execute_values(
+            cur,
+            "INSERT INTO keywords (keyword) VALUES %s ON CONFLICT (keyword) DO NOTHING",
+            [(kw,) for kw in keywords],
+            page_size=_BATCH_PAGE_SIZE,
+        )
+    if card_keywords:
+        execute_values(
+            cur,
+            """
+            INSERT INTO card_keywords (card_id, keyword) VALUES %s
+            ON CONFLICT (card_id, keyword) DO NOTHING
+            """,
+            card_keywords,
+            page_size=_BATCH_PAGE_SIZE,
+        )
+
+
+def _batch_upsert_legalities(cur, formats: set[str], legalities: list[tuple[str, str, str]]):
+    if formats:
+        execute_values(
+            cur,
+            "INSERT INTO formats (name) VALUES %s ON CONFLICT (name) DO NOTHING",
+            [(f,) for f in formats],
+            page_size=_BATCH_PAGE_SIZE,
+        )
+    if legalities:
+        seen: dict[tuple, tuple] = {}
+        for row in legalities:
+            seen[(row[0], row[1])] = row
+        legalities = list(seen.values())
+        execute_values(
+            cur,
+            """
+            INSERT INTO card_legalities (card_id, format_name, status) VALUES %s
+            ON CONFLICT (card_id, format_name) DO UPDATE SET
+              status = EXCLUDED.status
+            """,
+            legalities,
+            page_size=_BATCH_PAGE_SIZE,
+        )
+
+
+def _batch_upsert_prints(
+    cur,
+    print_rows: list[tuple],
+    number_map: dict[tuple, list[NumberEntry]],
+):
+    if not print_rows:
+        return
+
+    seen: dict[tuple, tuple] = {}
+    for row in print_rows:
+        seen[(row[0], row[1], row[8])] = row
+    print_rows = list(seen.values())
+
+    results = execute_values(
+        cur,
         """
         INSERT INTO prints (
-          card_id,
-          set_name,
-          set_code,
-          rarity,
-          flavor_text,
-          artist,
-          primary_subset,
-          primary_number_int,
-          collector_number_raw,
-          notes,
-          image_path,
-          release_date,
-          extra
-        ) VALUES (
-          %(card_id)s,
-          %(set_name)s,
-          %(set_code)s,
-          %(rarity)s,
-          %(flavor_text)s,
-          %(artist)s,
-          %(primary_subset)s,
-          %(primary_number_int)s,
-          %(collector_number_raw)s,
-          %(notes)s,
-          %(image_path)s,
-          NULL,
-          '{}'::jsonb
-        )
+          card_id, set_name, set_code, rarity, flavor_text,
+          artist, primary_subset, primary_number_int, collector_number_raw,
+          notes, image_path
+        ) VALUES %s
         ON CONFLICT (card_id, set_name, collector_number_raw) DO UPDATE SET
           rarity = EXCLUDED.rarity,
           flavor_text = EXCLUDED.flavor_text,
@@ -405,39 +422,45 @@ def upsert_print(
           primary_number_int = EXCLUDED.primary_number_int,
           notes = EXCLUDED.notes,
           image_path = EXCLUDED.image_path
-        RETURNING print_id
+        RETURNING print_id, card_id, set_name, collector_number_raw
         """,
-        {
-            "card_id": card_id,
-            "set_name": set_name,
-            "set_code": set_code,
-            "rarity": rarity,
-            "flavor_text": flavor,
-            "artist": artist,
-            "primary_subset": primary_subset,
-            "primary_number_int": primary_int,
-            "collector_number_raw": collector_number_raw,
-            "notes": notes,
-            "image_path": image_path,
-        },
+        print_rows,
+        fetch=True,
+        page_size=_BATCH_PAGE_SIZE,
     )
 
-    (print_id,) = cur.fetchone()
+    print_number_rows: list[tuple] = []
+    print_ids_to_clear: list[int] = []
+    for print_id, card_id, set_name, cn_raw in results:
+        entries = number_map.get((card_id, set_name, cn_raw), [])
+        if entries:
+            print_ids_to_clear.append(print_id)
+            for pos, entry in enumerate(entries):
+                print_number_rows.append((print_id, entry.subset, entry.number_int, pos))
 
-    cur.execute("DELETE FROM print_numbers WHERE print_id = %s", (print_id,))
-    for pos, entry in enumerate(entries):
+    if print_ids_to_clear:
         cur.execute(
+            "DELETE FROM print_numbers WHERE print_id = ANY(%s)",
+            (print_ids_to_clear,),
+        )
+    if print_number_rows:
+        execute_values(
+            cur,
             """
             INSERT INTO print_numbers (print_id, subset, number_int, position)
-            VALUES (%s, %s, %s, %s)
+            VALUES %s
             """,
-            (print_id, entry.subset, entry.number_int, pos),
+            print_number_rows,
+            page_size=_BATCH_PAGE_SIZE,
         )
 
 
 def load_cards(cards_dir: Path, dsn: str):
     """
     Load card data from a directory of per-set YAML files.
+
+    Parses all YAML files into memory first, then batch-inserts into PostgreSQL
+    using execute_values for dramatically faster imports over network connections.
 
     Parameters
     ----------
@@ -461,20 +484,62 @@ def load_cards(cards_dir: Path, dsn: str):
                 conn.rollback()
                 set_code_map = {}
 
+            card_rows: list[tuple] = []
+            all_keywords: set[str] = set()
+            card_keyword_rows: list[tuple[str, str]] = []
+            all_formats: set[str] = set()
+            legality_rows: list[tuple[str, str, str]] = []
+            print_rows: list[tuple] = []
+            number_map: dict[tuple, list[NumberEntry]] = {}
+
             total_cards = 0
             for yaml_file in yaml_files:
                 data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
                 set_name = data["set"]
                 cards = data.get("cards", [])
-
-                logger.info(f"Loading {yaml_file.name}: {len(cards)} cards")
+                logger.info(f"Parsing {yaml_file.name}: {len(cards)} cards")
 
                 for record in cards:
-                    title = record.get("title", "<unknown>")
-                    extended_title = record.get("extended_title", title)
-                    card_id = upsert_card(cur, record)
-                    upsert_print(cur, card_id, extended_title, set_name, record, set_code_map)
+                    card_id, card_vals, keywords, legalities = _prepare_card_row(record)
+                    card_rows.append(card_vals)
+
+                    for kw in keywords:
+                        all_keywords.add(kw)
+                        card_keyword_rows.append((card_id, kw))
+
+                    for fmt_name, status in legalities:
+                        all_formats.add(fmt_name)
+                        legality_rows.append((card_id, fmt_name, status))
+
+                    extended_title = record.get("extended_title", record["title"])
+                    print_vals, number_entries = _prepare_print_row(
+                        card_id, extended_title, set_name, record, set_code_map
+                    )
+                    print_rows.append(print_vals)
+                    number_map[(card_id, set_name, print_vals[8])] = number_entries
+
                     total_cards += 1
+
+            logger.info(
+                f"Parsed {total_cards} cards from {len(yaml_files)} sets, batch inserting..."
+            )
+
+            _batch_upsert_cards(cur, card_rows)
+            logger.info(f"Upserted {len(card_rows)} cards")
+
+            _batch_upsert_keywords(cur, all_keywords, card_keyword_rows)
+            logger.info(
+                f"Upserted {len(all_keywords)} keywords, "
+                f"{len(card_keyword_rows)} card-keyword links"
+            )
+
+            _batch_upsert_legalities(cur, all_formats, legality_rows)
+            logger.info(
+                f"Upserted {len(all_formats)} formats, {len(legality_rows)} legality entries"
+            )
+
+            _batch_upsert_prints(cur, print_rows, number_map)
+            logger.info(f"Upserted {len(print_rows)} prints")
 
             logger.info(
                 f"Card import completed: {total_cards} card-prints from {len(yaml_files)} sets"
