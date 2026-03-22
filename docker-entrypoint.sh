@@ -3,42 +3,53 @@ set -e
 
 DB_URL="${YASUKI_DATABASE_URL:-${DATABASE_URL:-postgresql://yasuki:yasuki@db:5432/yasuki}}"
 
-wait_for_db() {
-    local attempt=1
-    local max=15
-    while [ $attempt -le $max ]; do
-        if pixi run -e prod python -c "import psycopg2; psycopg2.connect('$DB_URL')" 2>/dev/null; then
-            return 0
-        fi
-        echo "Waiting for database... ($attempt/$max)"
-        sleep 2
-        attempt=$((attempt + 1))
-    done
-    echo "ERROR: Database not reachable" >&2
-    exit 1
-}
+echo "Waiting for database and checking initialization..."
 
-initialize_database() {
-    echo "Checking if database needs initialization..."
-    if ! pixi run -e prod python -c "
+pixi run -e prod python -u -c "
+import time, sys, os
+
+os.environ.setdefault('YASUKI_DATABASE_URL', '$DB_URL')
 import psycopg2
-conn = psycopg2.connect('$DB_URL')
-cur = conn.cursor()
-cur.execute(\"SELECT 1 FROM information_schema.tables WHERE table_name = 'cards'\")
-if not cur.fetchone():
-    exit(1)
-cur.execute('SELECT COUNT(*) FROM cards')
-if cur.fetchone()[0] == 0:
-    exit(1)
-" 2>/dev/null; then
-        echo "Initializing application database..."
-        pixi run -e prod install-db --dsn "$DB_URL" || echo "Database init skipped (may already be initialized by another service)"
-    else
-        echo "Database already initialized"
-    fi
-}
 
-wait_for_db
-initialize_database
+# Wait for database to become reachable
+for attempt in range(1, 16):
+    try:
+        conn = psycopg2.connect('$DB_URL')
+        conn.close()
+        print(f'Database reachable (attempt {attempt})')
+        break
+    except psycopg2.OperationalError:
+        print(f'Waiting for database... ({attempt}/15)')
+        time.sleep(2)
+else:
+    print('ERROR: Database not reachable', file=sys.stderr)
+    sys.exit(1)
+
+# Check if database needs initialization
+try:
+    conn = psycopg2.connect('$DB_URL')
+    cur = conn.cursor()
+    cur.execute(\"SELECT 1 FROM information_schema.tables WHERE table_name = 'cards'\")
+    if cur.fetchone():
+        cur.execute('SELECT COUNT(*) FROM cards')
+        if cur.fetchone()[0] > 0:
+            print('Database already initialized')
+            conn.close()
+            sys.exit(0)
+    conn.close()
+except Exception:
+    pass
+
+# Database needs seeding
+print('Initializing application database...')
+from yasuki_core.install.install_db import main as install_main
+try:
+    install_main(['--dsn', '$DB_URL'])
+except SystemExit as e:
+    if e.code != 0:
+        print('Database init failed, may already be initialized by another service')
+except Exception as e:
+    print(f'Database init error: {e}')
+" || true
 
 exec "$@"

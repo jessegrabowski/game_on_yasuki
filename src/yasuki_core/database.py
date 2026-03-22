@@ -1055,8 +1055,25 @@ def query_cards_filtered(
                         conditions.append(f"c.{property_name} <= %s")
                         params.append(max_val)
             elif value is not None:
-                # Direct column comparison
-                # Cast enum types to text for comparison
+                _allowed_columns = {
+                    "deck",
+                    "type",
+                    "clan",
+                    "is_unique",
+                    "name",
+                    "force",
+                    "chi",
+                    "honor_requirement",
+                    "gold_cost",
+                    "personal_honor",
+                    "province_strength",
+                    "gold_production",
+                    "starting_honor",
+                    "focus",
+                }
+                if property_name not in _allowed_columns:
+                    logger.warning(f"Ignoring unknown filter column: {property_name}")
+                    continue
                 if property_name in ("deck", "type"):
                     conditions.append(f"c.{property_name}::text = %s")
                 else:
