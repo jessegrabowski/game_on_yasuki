@@ -1,10 +1,12 @@
 import tkinter as tk
+from tkinter import filedialog, messagebox
 from collections.abc import Callable
 
 from yasuki_gui.ui.deck_builder.components import CardStatsPanel, PrintSelector
 from yasuki_gui.ui.deck_builder.card_preview import CardPreviewController
 from yasuki_gui.ui.deck_builder.deck_data import DeckBuilderRepository, DeckState
 from yasuki_gui.ui.deck_builder.deck_components import FilteredCardList, DeckCardList
+from yasuki_gui.ui.deck_builder.deck_io import serialize_deck, import_deck_yaml
 from yasuki_gui.ui.deck_builder.filter_dialog import FilterDialog, FilterOptions
 from yasuki_gui.ui.deck_builder.search_help import show_search_help
 import logging
@@ -35,9 +37,10 @@ class DeckBuilderWindow:
 
         self._repository = DeckBuilderRepository()
         self._deck_state = DeckState()
-        self._updating_lists = False  # Flag to prevent event handlers during refresh
+        self._deck_name = tk.StringVar(value="My Deck")
+        self._updating_lists = False
         self._filter_options = FilterOptions()
-        self._search_debounce_id = None  # For debouncing search input
+        self._search_debounce_id = None
 
         self._setup_layout()
         self._setup_event_bindings()
@@ -90,6 +93,15 @@ class DeckBuilderWindow:
     def _create_deck_composition_column(self, parent: tk.Widget) -> tk.Frame:
         """Create middle column with Fate, Dynasty, and Setup deck lists."""
         col = tk.Frame(parent, padx=8, pady=8)
+
+        name_frame = tk.Frame(col)
+        name_frame.pack(fill="x", pady=(0, 8))
+        tk.Label(name_frame, text="Deck:").pack(side="left")
+        tk.Entry(name_frame, textvariable=self._deck_name).pack(
+            side="left", fill="x", expand=True, padx=(6, 4)
+        )
+        tk.Button(name_frame, text="Import", command=self._import_deck).pack(side="left", padx=2)
+        tk.Button(name_frame, text="Export", command=self._export_deck).pack(side="left")
 
         self.fate_label = tk.Label(col, text="Fate Deck (0)", font=("TkDefaultFont", 11, "bold"))
         self.fate_label.pack(anchor="w")
@@ -244,6 +256,48 @@ class DeckBuilderWindow:
     def _clear_deck(self) -> None:
         self._deck_state = self._deck_state.clear()
         self._refresh_deck_lists()
+
+    def _export_deck(self) -> None:
+        name = self._deck_name.get().strip() or "My Deck"
+        yaml = serialize_deck(self._deck_state, self._repository, deck_name=name)
+        default_filename = name.lower()
+        default_filename = "".join(c if c.isalnum() else "_" for c in default_filename)
+        path = filedialog.asksaveasfilename(
+            parent=self.win,
+            title="Export Deck",
+            defaultextension=".yaml",
+            initialfile=f"{default_filename}.yaml",
+            filetypes=[("YAML files", "*.yaml *.yml"), ("All files", "*.*")],
+        )
+        if not path:
+            return
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(yaml)
+
+    def _import_deck(self) -> None:
+        path = filedialog.askopenfilename(
+            parent=self.win,
+            title="Import Deck",
+            filetypes=[("YAML files", "*.yaml *.yml"), ("All files", "*.*")],
+        )
+        if not path:
+            return
+        with open(path, encoding="utf-8") as f:
+            text = f.read()
+
+        new_state, deck_name, unresolved = import_deck_yaml(text, self._repository)
+        self._deck_state = new_state
+        self._deck_name.set(deck_name)
+        self._refresh_deck_lists()
+
+        if unresolved:
+            messagebox.showwarning(
+                "Import Incomplete",
+                f"Could not find {len(unresolved)} card(s):\n\n"
+                + "\n".join(unresolved[:20])
+                + ("\n..." if len(unresolved) > 20 else ""),
+                parent=self.win,
+            )
 
     def _add_selected(self) -> None:
         card_id = self.card_list.get_selected_card_id()
