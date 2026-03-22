@@ -306,6 +306,10 @@ _BATCH_PAGE_SIZE = 1000
 def _batch_upsert_cards(cur, card_rows: list[tuple]):
     if not card_rows:
         return
+    seen: dict[str, tuple] = {}
+    for row in card_rows:
+        seen[row[0]] = row
+    card_rows = list(seen.values())
     execute_values(
         cur,
         """
@@ -373,6 +377,10 @@ def _batch_upsert_legalities(cur, formats: set[str], legalities: list[tuple[str,
             page_size=_BATCH_PAGE_SIZE,
         )
     if legalities:
+        seen: dict[tuple, tuple] = {}
+        for row in legalities:
+            seen[(row[0], row[1])] = row
+        legalities = list(seen.values())
         execute_values(
             cur,
             """
@@ -392,6 +400,11 @@ def _batch_upsert_prints(
 ):
     if not print_rows:
         return
+
+    seen: dict[tuple, tuple] = {}
+    for row in print_rows:
+        seen[(row[0], row[1], row[8])] = row
+    print_rows = list(seen.values())
 
     results = execute_values(
         cur,
