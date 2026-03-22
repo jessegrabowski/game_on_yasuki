@@ -82,6 +82,48 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   flex-shrink: 0;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
+.deck-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.deck-header-actions {
+  display: flex;
+  gap: 4px;
+}
+.btn-small {
+  background: var(--surface);
+  color: var(--accent);
+  border: 1px solid var(--accent-dark);
+  border-radius: 3px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-family: inherit;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-small:hover { background: var(--accent-dark); color: var(--text); }
+.deck-name-row {
+  padding: 6px 8px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.deck-name-row input {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 5px 8px;
+  font-size: 0.83rem;
+  font-family: inherit;
+}
+.deck-name-row input:focus {
+  outline: none;
+  border-color: var(--accent-dark);
+  box-shadow: 0 0 0 1px var(--accent-dark);
+}
 
 /* Search & Filters */
 .filters {

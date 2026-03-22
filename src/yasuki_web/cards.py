@@ -8,6 +8,7 @@ from yasuki_core.database import (
     query_cards_filtered,
     get_card_by_id,
     get_prints_by_card_id,
+    get_cards_by_names,
     query_all_sets,
     query_all_formats,
     query_all_decks,
@@ -92,6 +93,32 @@ async def list_cards(
     except Exception as e:
         logger.error(f"Error listing cards: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve cards")
+
+
+@router.get("/cards/lookup")
+async def lookup_cards_by_name(
+    name: Annotated[list[str], Query(description="Card names to look up (repeatable)")] = [],
+):
+    """
+    Look up cards by name for deck import.
+
+    Matches against both name and extended_title (case-insensitive) and returns
+    each card with its full list of prints for set-specific resolution.
+    """
+    try:
+        cards = get_cards_by_names(name)
+        by_name: dict[str, dict] = {}
+        for card in cards:
+            key = (card.get("extended_title") or card["name"]).lower()
+            by_name[key] = card
+        for card in cards:
+            name_key = card["name"].lower()
+            if name_key not in by_name:
+                by_name[name_key] = card
+        return {"cards": by_name, "found": len(cards)}
+    except Exception as e:
+        logger.error(f"Error looking up cards by name: {e}")
+        raise HTTPException(status_code=500, detail="Failed to look up cards")
 
 
 @router.get("/cards/{card_id}")

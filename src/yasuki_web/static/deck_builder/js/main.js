@@ -1,6 +1,7 @@
 import { $, debounce, titleCase, scrollToSelected } from './helpers.js';
 import { fetchJSON } from './api.js';
-import { addCard, removeCard, clearDeck, nextCardAfterRemoval, getDeckNavItems } from './deck-state.js';
+import { addCard, removeCard, clearDeck, getDeck, nextCardAfterRemoval, getDeckNavItems } from './deck-state.js';
+import { getDeckName, setDeckName, serializeDeck, parseDeckYaml } from './deck-io.js';
 import {
   initCardList,
   renderCardList,
@@ -82,6 +83,14 @@ async function init() {
   $('addBtn').addEventListener('click', doAddSelectedToDeck);
   $('removeBtn').addEventListener('click', doRemoveSelectedFromDeck);
   $('clearBtn').addEventListener('click', doClearDeck);
+  $('exportBtn').addEventListener('click', doExportDeck);
+  $('importBtn').addEventListener('click', () => $('importFileInput').click());
+  $('importFileInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    file.text().then((text) => doImportDeck(text));
+    e.target.value = '';
+  });
 
   await populateFilters();
   searchCards();
@@ -240,6 +249,80 @@ function doClearDeck() {
   clearDeck();
   setSelectedDeckCard(null);
   renderDeckLists();
+}
+
+function doExportDeck() {
+  const name = $('deckNameInput').value.trim() || 'My Deck';
+  setDeckName(name);
+  const yaml = serializeDeck(getDeck());
+  const filename = name.toLowerCase().replace(/[^a-z0-9]+/g, '_') + '.yaml';
+  const blob = new Blob([yaml], { type: 'text/yaml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function doImportDeck(text) {
+  const parsed = parseDeckYaml(text);
+
+  const allEntries = [...parsed.pre_game, ...parsed.dynasty, ...parsed.fate];
+  const uniqueNames = [...new Set(allEntries.map((e) => e.name))];
+  if (uniqueNames.length === 0) return;
+
+  const params = new URLSearchParams();
+  uniqueNames.forEach((n) => params.append('name', n));
+
+  let cardsByName = {};
+  try {
+    const data = await fetchJSON(`${API}/cards/lookup?${params}`);
+    cardsByName = data.cards || {};
+  } catch (e) {
+    console.error('Import lookup failed:', e);
+    alert('Import failed: could not reach the card database.');
+    return;
+  }
+
+  clearDeck();
+  setSelectedDeckCard(null);
+
+  const SIDE_MAP = { pre_game: 'PRE_GAME', dynasty: 'DYNASTY', fate: 'FATE' };
+  const unresolved = [];
+
+  for (const [section, entries] of Object.entries({
+    pre_game: parsed.pre_game,
+    dynasty: parsed.dynasty,
+    fate: parsed.fate,
+  })) {
+    const side = SIDE_MAP[section];
+    for (const entry of entries) {
+      const card = cardsByName[entry.name.toLowerCase()];
+      if (!card) {
+        unresolved.push(entry.name);
+        continue;
+      }
+      const prints = card.prints || [];
+      const matchedPrint = entry.setName
+        ? (prints.find((p) => p.set_name === entry.setName) ?? prints[0])
+        : prints[0];
+      const printId = matchedPrint ? matchedPrint.print_id : 0;
+      const setName = matchedPrint ? matchedPrint.set_name : '';
+      for (let i = 0; i < entry.count; i++) {
+        addCard(card.id, side, card, printId, setName);
+      }
+    }
+  }
+
+  setDeckName(parsed.name);
+  $('deckNameInput').value = parsed.name;
+  renderDeckLists();
+  renderCardList();
+
+  if (unresolved.length > 0) {
+    alert(`Import complete.\n\nCould not find ${unresolved.length} card(s):\n${unresolved.join('\n')}`);
+  }
 }
 
 // Keyboard navigation
