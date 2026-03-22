@@ -1,0 +1,645 @@
+set: 'Siege: Heart of Darkness'
+cards:
+  - title: Hour of the Boar
+    type: Clock
+    deck: Other
+    text: 1- Fear effects targeting Human cards have +2 strength. 6- Fear effects may target Human Personalities with Followers.10-
+      After any Fear effect bows a Human card, destroy it.
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"The boar was the last to finish the race. ''Where is Cat?'' he wondered. ''Surely I have not beaten him?'' Rat
+      laughed, ''I told him the race was tomorrow!''" - The Great Race XII'
+    number: 1
+
+  - title: Peasant District
+    type: Territory
+    deck: Other
+    province_strength: 0
+    text: 'Battle: Move your target Human Personality home. If he is unbowed, Melee 2 Attack. (Only one Rokugani player may
+      use this ability per turn.)(The Artisan, Merchant, and Temple Districts may now be destroyed.The Dark Naga player creates
+      a 2F/2C/0PH Naga • Nonhuman • Warrior Personality in his home.)'
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: The district of the bonge lay outside the city walls, far from districts frequented by the kuge. Here, heimin of
+      the Second City went about their daily lives in peace, unconcerned with the world of samurai…
+    number: 1
+
+  - title: Hour of the Dog
+    type: Clock
+    deck: Other
+    text: 1- The first Forest you bring into play enters play for 2 less Gold.4- Your Forests have +1GP.9- Your Forests have
+      Destined and after they enter play from a Province, it refills face-up.
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Dog nearly did not finish; he was distracted by the river and had paused to play in the waters." - The Great Race
+      XI'
+    number: 2
+
+  - title: Artisan District
+    type: Territory
+    deck: Other
+    province_strength: 10
+    text: '(Cannot be destroyed.) Political Open: Bow your target unbowed Personality. Gain Political Tokens equal to his Personal
+      Honor. (Only one Rokugani player may use this ability per turn.)(The Military District may now be destroyed. All Rokugani
+      players destroy their leftmost Province.)'
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: Adjacent to the Peasant District, the Artisan District was among the most vibrant in the city. During the prior
+      invasion, the people here were mostly relaxed. Every samurai valued artisans, after all…
+    number: 2
+
+  - title: Hour of the Dragon
+    type: Clock
+    deck: Other
+    text: '1- Repeatable Battle: Bow your target unbowed Naga. Melee Attack equal to his Force. 4- c is increased by 1.10- Your
+      Followers have +1F and your Personalities have +1F/+1C.'
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Dragon would have won the race, but he spotted a drought parching the lands and stopped partway to summon rain."
+      - The Great Race V'
+    number: 3
+
+  - title: Merchant District
+    type: Territory
+    deck: Other
+    province_strength: 10
+    text: '(Cannot be destroyed.) Each Rokugani player has the ability, "Absent Battle, [*]: Increase the current District''s
+      Province Strength by the amount paid, up to 10." (This is usable at any District.)(The Military District may now be destroyed.
+      All Rokugani players destroy their leftmost Province.)'
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: One of the busiest centers of trade throughout the Empire, rivaling even city squares within the mainland. It was
+      the beating heart through which all gold flowed.
+    number: 3
+
+  - title: Hour of the Goat
+    type: Clock
+    deck: Other
+    text: 1- Draw a card.4- Each Rokugani player discards a random card.9- Draw f cards.
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Goat arrived at the head of a raft, Monkey and Rooster beside him. They''d worked together to reach the other
+      side." - The Great Race VIII'
+    number: 4
+
+  - title: Hour of the Hare
+    type: Clock
+    deck: Other
+    text: '1- After your Stronghold creates Warriors, create one more.5- Your Warriors have +1F/+1C.10- Repeatable Battle: Bow
+      your target unbowed Warrior. Move your target Personality at any location to this battlefield.'
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Hare was the fourth to finish the great race. He arrived just in time to bow to Amaterasu, who smiled upon him
+      and brushed his fur dry." - The Great Race IV'
+    number: 5
+
+  - title: Military District
+    type: Territory
+    deck: Other
+    province_strength: 20
+    text: (Cannot be destroyed.) Rokugani players' Personalities have Conqueror. After battle resolution here destroys a Rokugani
+      army, the Dark Naga player chooses and destroys cards in his army equal to half, rounded down, the number of Rokugani
+      cards destroyed in battle resolution.(The Imperial District may now be destroyed.)
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: The most fortified section of the city, it was the gate that separated the outermost ring from the inner districts.
+    number: 5
+
+  - title: Imperial District
+    type: Territory
+    deck: Other
+    province_strength: 15
+    text: '(Cannot be destroyed.) Rokugani players ignore Honor Requirements. After a player Enlightens, discard a Clock Card.
+      Each Rokugani player has the abilities, "Battle: Move your target Personality at a District to the Imperial District"
+      and "Dynasty: Discard [Rank10] (10 per player) Political Tokens to discard the Clock Deck''s top card."(The Rokugani players
+      lose the game.)'
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: The highest seat of power in the untamed lands. A crucible of order and control.
+    number: 6
+
+  - title: Hour of the Monkey
+    type: Clock
+    deck: Other
+    text: 1- Choose a Clock card in the discard pile. This card copies all its traits and abilities (resolving each Threat Level
+      as appropriate).
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Monkey crossed after Goat, laughing as he did. One by one, he imitated all of the others for the goddess'' amusement.
+      ''How are you so sure I did not cross before now?'' he joked." - The Great Race IX'
+    number: 7
+
+  - title: Hour of the Ox
+    type: Clock
+    deck: Other
+    text: 1- Search your Fate deck for The Akasha. Show it and put it in your hand.5- Fear effects, Melee Attacks, and Ranged
+      Attacks targeting your Naga have -2 strength.9- Melee and Ranged attacks bow Naga instead of destroying them.
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Ox was next to reach the shore, for he was the strongest swimmer. He thought he''d won the race, until Rat leapt
+      off of his back." - The Great Race II'
+    number: 8
+
+  - title: Hour of the Rat
+    type: Clock
+    deck: Other
+    text: 1- Remove all text from intact, non-Imperial Districts.6- Remove all abilities from c target attachments.9- Remove
+      c abilities from cards until your next turn begins.
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"To gain the favor of heaven, the animals held a race across the river. Rat secretly rode on Ox''s back; he was
+      first to cross and bow to Onnotangu." - The Great Race I'
+    number: 9
+
+  - title: Hour of the Rooster
+    type: Clock
+    deck: Other
+    text: '1- You may use the Cycle ability an extra time, even if it is not the first turn. 4- Open, [*]: You may search through
+      your discard pile and Dynasty deck and Recruit a Unique Personality found there (triggering your Stronghold as usual).11-
+      You may Recruit as an Open action.'
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Rooster interrupted Monkey''s jests with a crow. Onnotangu blessed him, pleased by the silence that followed."
+      - The Great Race X'
+    number: 10
+
+  - title: Hour of the Tiger
+    type: Clock
+    deck: Other
+    text: 1- Each Rokugani player discards a card. 6- Each Rokugani player discards a card. 11- Each Rokugani player discards
+      a card.
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Tiger was the third to finish the great race. Neither Sun nor Moon witnessed his arrival." - The Great Race III'
+    number: 12
+
+  - title: Breeding Grounds
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Forest
+    gold_cost: 2
+    text: 'w: Produce 2 Gold; if this pays for a single Nonhuman Personality, refill the Province it comes from face-up.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: The Naga suddenly swarmed out from the heart of the forest, ready to destroy the Foul. They joined arms with the
+      samurai of Rokugan as they faced the ancient enemy.
+    number: 13
+
+  - title: Clutch of Eggs
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Forest
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.w: Produce 3 Gold which can only pay for a single Nonhuman.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Quick, Dairu-san! Down here!" "How remarkable, Toshimo. Your clumsiness has led us to another dank part of this
+      miserable forest."'
+    number: 14
+
+  - title: Pearl Cache
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Forest
+    - Pearl
+    gold_cost: 4
+    text: 'Cannot be destroyed. Other player''s effects will not discard cards from your hand, and focusing is always optional
+      for you. Negate all Force penalties that come from a single source and affect three or more Nonhuman Personalities.w:
+      Produce 4 Gold.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: Only a fool would attempt to steal from the Naga, yet their sanctuaries are littered with the bones of those who
+      tried.
+    number: 15
+
+  - title: Treacherous Growth
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Forest
+    gold_cost: 2
+    text: 'After you Recruit this Holding from a Province, refill the Province face-up.w: Produce 2 Gold.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"The Dark Naga are not finished, my lord. We must stand together and fight now, lest the threat grows beyond our
+      skill to defeat it." - misplaced scroll'
+    number: 16
+
+  - title: Askett
+    type: Personality
+    deck: Dynasty
+    keywords:
+    - Abomination
+    - Naga
+    - Nonhuman
+    force: 5
+    chi: 4
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Battle: Melee 3 Attack that may target Items and Spells; you may target and bow your unbowed Warrior to give the
+      attack +1 strength.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"My own race cast me aside, for I was imperfect. Shahismael asks only that I serve, and that I am of the serpent.
+      The latter I am thankfully, the former I shall do with relish."'
+    number: 17
+
+  - title: The Dark Naga, the Heart of Darkness
+    extended_title: The Dark Naga, the Heart of Darkness • Experienced 2
+    type: Personality
+    deck: Dynasty
+    keywords:
+    - Experienced 2
+    - Unique
+    - Champion
+    - Naga
+    - Nonhuman
+    - Pearl
+    - Shugenja
+    force: 12
+    chi: 7
+    gold_cost: 20
+    personal_honor: 0
+    text: 'Interrupt: c times per turn, destroy your target Warrior to negate the action''s effects.Battle: Bow c target cards
+      whose total Force is less than or equal to the Dark Naga''s; this may not be prevented.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"That which is not born of the serpent shall not be permitted to exist."'
+    number: 18
+
+  - title: The Niskara
+    type: Personality
+    deck: Dynasty
+    keywords:
+    - Asp
+    - Naga
+    - Nonhuman
+    force: 4
+    chi: 2
+    gold_cost: 4
+    personal_honor: 0
+    text: 'After Niskara enters play from a Province, refill it face-up.Battle: Give a target enemy Follower or Personality
+      a Force penalty equal to Niskara''s Force. You may target and bow your unbowed Warrior to take an additional action which
+      must target the same card.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"The humans will fall, great Shahismael."'
+    number: 19
+
+  - title: The Qeltash
+    type: Personality
+    deck: Dynasty
+    keywords:
+    - Asp
+    - Naga
+    - Nonhuman
+    force: 5
+    chi: 3
+    gold_cost: 5
+    personal_honor: 0
+    text: 'Battle: Fear 3; you may target and bow your unbowed Warrior to give the Fear +2 strength.Interrupt: Negate the action
+      if the target is your Unique.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: The Phoenix warrior slid from his blade and lay broken on the ground. "The blood of mammals reeks, but the sight
+      of it is beautiful."
+    number: 20
+
+  - title: The Quelsa, the Forbidden Jakla
+    extended_title: The Quelsa, the Forbidden Jakla • Experienced
+    type: Personality
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Cobra
+    - Experienced
+    - Naga
+    - Nonhuman
+    - Pearl
+    - Shugenja
+    force: 7
+    chi: 4
+    gold_cost: 11
+    personal_honor: 0
+    text: 'Pearl Battle: c times per turn, bow your target unbowed Warrior. Destroy a target enemy card without attachments.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Long have I remained hidden, learning of things dark and terrible. Now I must use those secrets against my own
+      people. What folly the humans have brought me to."'
+    number: 21
+
+  - title: The Riddiqesh
+    type: Personality
+    deck: Dynasty
+    keywords:
+    - Constrictor
+    - Naga
+    - Nonhuman
+    force: 6
+    chi: 3
+    gold_cost: 8
+    personal_honor: 0
+    text: 'Riddiqesh uses his Force as his duel stat.Repeatable Battle: Bow a target enemy Follower or Personality with lower
+      Force. Give Riddiqesh -1F.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: Only a handful of Constrictors survived the Great Sleep. Of those who survived, one fell under the sway of the Dark
+      Naga. It was an unparalleled tragedy.
+    number: 22
+
+  - title: The Shakash, the Will of the Knot
+    extended_title: The Shakash, the Will of the Knot • Experienced 2
+    type: Personality
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Experienced 2
+    - Unique
+    - Commander
+    - Naga
+    - Nonhuman
+    force: 8
+    chi: 3
+    gold_cost: 12
+    personal_honor: 0
+    text: 'The Shakash uses his Force as his duel stat. Your Warriors at this location have +1F/+1C. Battle: Straighten c target
+      Personalities at any location. You may move them to the current battlefield.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Such weak creatures. So fragile. So unworthy to hold dominion over the world."'
+    number: 23
+
+  - title: The Sleepless One, Keeper of the Pearl
+    extended_title: The Sleepless One, Keeper of the Pearl • Experienced
+    type: Personality
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Abomination
+    - Experienced
+    - Naga
+    - Nonhuman
+    - Pearl
+    - Shugenja
+    force: 5
+    chi: 5
+    gold_cost: 10
+    personal_honor: 0
+    text: 'Pearl Battle: If The Sleepless One is opposed, each Rokugani player discards a random card and you may target and
+      bow your Warrior to take e additional actions.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: Alone among the Dark Naga's forces, the Sleepless One possessed the will to shield his thoughts from the Shahismael.
+    number: 24
+
+  - title: The Teskath
+    type: Personality
+    deck: Dynasty
+    keywords:
+    - Asp
+    - Naga
+    - Nonhuman
+    force: 4
+    chi: 3
+    gold_cost: 6
+    personal_honor: 0
+    text: 'Your Stronghold creates an additional Warrior after you Recruit Teskath.Battle: Bow your target unbowed Warrior.
+      Ranged Attack equal to its Force plus one.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Find the fang and claim it for the Great One!" he bellowed. "Destroy anything that walks upon legs that stands
+      in your path!"'
+    number: 25
+
+  - title: Corrupted Wildlife
+    type: Follower
+    deck: Fate
+    keywords:
+    - Expendable
+    - Reserve
+    - Naga
+    - Nonhuman
+    force: 3
+    chi: 0
+    gold_cost: 4
+    focus: 2
+    text: 'Will only attach to a Naga.Battle: Melee 3 Attack.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"Such a glorious place," the Dark Naga gloated, "filled with all manner of horrors eager to bend to my most inevitable
+      will."'
+    number: 26
+
+  - title: Asp Spear
+    type: Item
+    deck: Fate
+    keywords:
+    - Reserve
+    - Weapon
+    - Naga
+    - Spear
+    - Two-Handed
+    force: 3
+    chi: 1
+    gold_cost: 4
+    focus: 3
+    text: 'Will only attach to a Naga. This Personality uses his Force as his duel stat.Battle, w: Melee 3 Attack.Tireless Battle:
+      Ranged 3 Attack. Discard this Item. Put it into your hand before the turn ends.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"A grand weapon. Grander still when tempered with the blood of mammals."'
+    number: 27
+
+  - title: The Akasha
+    type: Ring
+    deck: Fate
+    keywords:
+    - Unique
+    - Corrupted
+    - Naga
+    focus: 0
+    text: Play after a card enters your Fate discard pile if it now has more cards than your hand, then draw a card.Your Fear
+      effects, Melee Attacks, and Ranged Attacks have +1 strength.
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"The Shahismael is hunger and madness given form," the Siminoth said. "His ambition will see him victorious, or
+      utterly eradicated; nothing else."'
+    number: 28
+
+  - title: Baseless Rage
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Battle: Target a Personality. He flees in terror. Move him home.Unstoppable Battle: Destroy your target Warrior.
+      Move home one or two target Personalities.Battle: Melee c Attack.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    number: 29
+
+  - title: Brutal Strike
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Battle: Melee c Attack.Unstoppable Battle: Destroy your target Warrior. One or two Melee 3 Attacks.Interrupt: Give
+      each Melee or Ranged Attack +3 or -3 strength.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: His tail, he suddenly realized. It allowed the Naga to react unlike any human. The thought was no comfort to him
+      as he died.
+    number: 30
+
+  - title: Cursed Resolve
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Interrupt: Destroy your target unbowed Warrior. Negate the action''s effects.Unstoppable Battle: Bow one or more
+      of your target unbowed Warriors. Destroy a target enemy unit with a number of cards in it equal to the number of Warriors
+      you bowed. If you now have two or less cards in your hand, you may destroy the targeted Warriors.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: The Dark Naga leads an army. His determination would never allow anything less.
+    number: 31
+
+  - title: Gathering
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'Engage: You have the first opportunity to take a Battle action. Create a 2F/2C/0PH Naga • Nonhuman • Warrior Personality.Unstoppable
+      Battle: Destroy your target Warrior. Create two 2F/2C/0PH Naga • Nonhuman • Warrior Personalities.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"We need not be alone any longer, my brothers," he hissed. The shard floated in front of him, and suddenly he could
+      sense the minds of his brothers pushing into his thoughts.'
+    number: 32
+
+  - title: Inevitability
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'Interrupt: Negate an Event''s effects. Draw a card.Battle: Destroy a target attachment or Terrain.Unstoppable Battle:
+      Destroy your target Warrior. Give c target enemy Personalities or Followers -3F.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: It hurt to be in his presence. The Akasha wailed in pain.
+    number: 33
+
+  - title: Malevolence
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Battle: Fear g.Unstoppable Battle: Destroy your target Warrior. One or two Fear 4 effects.Interrupt: Give each Fear
+      effect +4 or -4 strength.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: Her eyes were glassy with pain. He watched, tears blurring his vision, as even the pain faded away."Why?" he screamed
+      angrily. The sadistic grin was the only answer he received.
+    number: 34
+
+  - title: Serpent Tunnels
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    focus: 2
+    text: 'The cards this ability targeted have +2F/+2C.Unstoppable Battle: Destroy a Terrain (if able). Put this Terrain into
+      play. Target your Personality at any location; you may destroy a Warrior at this battlefield to target two Personalities
+      at any location instead. Move the targets to this battlefield. Straighten their units as they move.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: '"I''m beginning to cultivate a complex," he muttered to himself, as the thoughts of reward urged him forward.'
+    number: 35
+
+  - title: Warlord's Command
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Battle: Give c target Naga Followers or Personalities +2F each.Unstoppable Battle: Destroy your target Warrior. Straighten
+      one or two target units at any location. You may move them to the current battlefield.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    flavor: The Naga adopt unorthodox tactics in combat that take full measure of their unique bodies. The second rank rises
+      on their tails, effectively striking the enemy line with double the power.
+    number: 36
+
+  - title: Knot of Serpents
+    type: Stronghold
+    deck: Pre-Game
+    gold_production: 4
+    starting_honor: -20
+    text: 'Your Province Strength cannot be reduced. After you Recruit a Naga Personality, create e, or f if he is Unique, 2F/2C/0PH
+      Naga • Nonhuman • Warrior Personalities. After your card destroys your Warrior, draw a card. Your Unstoppable effects
+      cannot be prevented.Dynasty, : Recruit a Forest for 2 less Gold and refill its Province face-up.'
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    number: 37
+
+  - title: Asp Warrior
+    type: Proxy
+    deck: Dynasty
+    keywords:
+    - Naga
+    - Nonhuman
+    - Warrior
+    force: 2
+    chi: 2
+    gold_cost: 0
+    personal_honor: 0
+    text: (If you destroy your Warrior, draw a card.) (This is a proxy for a created card. It cannot be included in decks.)
+    legality:
+    - Legacy
+    rarity: Fixed
+    artist: Conceptopolis
+    number: 38

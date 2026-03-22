@@ -1,0 +1,2221 @@
+set: Training Grounds 2
+cards:
+  - title: A Soul of Thunder
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Thunder
+    text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, target
+      your Personality. When your next turn begins, if you control him, gain 4 Honor. Until the game ends, other players have
+      the ability, "Repeatable Limited: Target your performing unbowed Personality. He challenges the target of the Event that
+      granted this ability. Destroy the loser."'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Fixed
+    artist: Nate Barnes
+    number: 1
+    collector_number: Crane 14
+
+  - title: Boastful Proclamation
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, if any
+      other player controls a Personality, then at the start of your next turn, if this Province still exists, permanently give
+      it +3 strength and gain 3 Honor, and until then, after battle resolution destroys this Province, give each Personality
+      in the attacking army a +1F token and the Attacker may draw a card.
+    legality:
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    rarity: Fixed
+    artist: Mark Smylie
+    number: 2
+    collector_number: Crane 35
+
+  - title: Regions of Rokugan
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, starting
+      with you and proceeding in turn order, each player may search his Dynasty deck for a Region and attach it to one of his
+      Provinces that does not have a Region.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Legacy
+    - Rain of Blood (Diamond)
+    card_notes: The Diamond Edition version was misprinted with the Uncommon symbol.
+    rarity: Fixed
+    artist: Joachim Gmoser
+    flavor: '"Rokugan is a proud land. A land of heroes, where gods have died and been born again." - Togashi Satsu'
+    number: 3
+    collector_number: Crane 30
+
+  - title: Second Doom of the Crane
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Doom
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, target
+      a Personality with 3 or higher Personal Honor. Permanently reduce his Personal Honor to 0. Bow him. He may remain bowed.
+      After the next time this game he straightens, dishonor him, and his controller loses 5 Honor.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Stephanie Pui-Mun Law
+    flavor: With a single blow, Kurohito silenced all enemies. With three cuts, he ended his clan's shame.
+    number: 4
+    collector_number: Dragon 31
+
+  - title: War of Silk and Steel
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: Until your next turn begins, Honor may only be gained, and Rings may only be played, during Battles.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    story: 2006 World Champion - Faber von Kraanen
+    rarity: Fixed
+    artist: Miguel Coimbra
+    number: 5
+    collector_number: Dragon 38
+
+  - title: Wisdom Gained
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'Open: Starting with you, each player may search his discard pile and Fate deck for a Ring, show it, and put it in
+      his hand.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Steve Snyder
+    flavor: It was the wisdom of a simple man that saved an Empire. The Keepers are sworn to uphold his legacy.
+    number: 6
+    collector_number: Dragon 17
+
+  - title: Wisdom of the Keepers
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: Each player who controls any Rings gains 5 Honor.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: April Lee
+    flavor: '"Shinsei was our teacher, but he is gone now. Now his students must accept the burden of the future." - Kakita
+      Tsuken'
+    number: 7
+    collector_number: Crane 23
+
+  - title: A Favor Returned
+    type: Holding
+    deck: Dynasty
+    gold_cost: 3
+    text: 'After determining the starting player but before shuffling, if you are not the starting player, you may search your
+      deck for this Holding and put it into play (bowed), ignoring costs. If you do, this Holding will not straighten before
+      your third Straighten Phase. After this trait resolves, remove all your Bamboo Harvesters and Legacy Holdings from the
+      game, and this trait on other copies of this Holding in your deck will not trigger.w: Produce 2 Gold, or 3 Gold if paying
+      for a Holding which may only pay for that card.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    errata_text: Errata'd via the Oracle.
+    rarity: Fixed
+    artist: John Donahue
+    number: 8
+    collector_number: Dragon 44
+
+  - title: Gifts and Favors
+    type: Holding
+    deck: Dynasty
+    gold_cost: 2
+    text: 'After your Dynasty Phase ends, if this copy of this Holding is not in play and you put no Gold-producing Holdings
+      into play this turn, you may bow your Stronghold to search your Dynasty deck, then face-down Provinces, for a card titled
+      "Gifts and Favors" and put the first one you find into play (bowed), ignoring costs. If you find none, you are eliminated
+      from the game.w: Produce 2 Gold.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Edward Fetterman
+    number: 9
+    collector_number: Crane 44,Dragon 07
+
+  - title: Gold Mine
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Mine
+    gold_cost: 2
+    text: 'w: Produce 2 Gold, or 3 Gold if you are a Dragon Clan player.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    card_notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+    rarity: Fixed
+    artist: Joseph Phillips
+    flavor: '"How ironic that such treasures lie buried in the land of the clan that values wealth the least." - Doji Tanitsu'
+    number: 10
+    collector_number: Dragon 35
+
+  - title: House of the Fallen Blossom
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Geisha House
+    gold_cost: 2
+    text: 'w: Produce 2 Gold, plus 1 Gold for every full 10 points of Family Honor you have.Limited, w: Target your Samurai
+      with a Personal Honor of 2 or higher. Raise his Force, Chi, or Personal Honor to 3.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Janine Johnston
+    number: 11
+    collector_number: Crane 32
+
+  - title: Kabuki Theater Troupe
+    type: Holding
+    deck: Dynasty
+    gold_cost: 3
+    text: 'w: Produce 2 Gold. Limited, w: Gain 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    mrp: Costs 1 less Gold than all other printings besides the last.
+    rarity: Fixed
+    artist: Janine Johnston
+    flavor: '"The play is my gift to you, sister," Nagori said. "You will anger the Emperor and Shogun both with this," she
+      said. Nagori grinned.'
+    number: 12
+    collector_number: Crane 09,Crane 37
+
+  - title: Marketplace
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Market
+    gold_cost: 2
+    text: 'w: Produce 2 Gold, or 3 Gold if you are a Crane Clan player.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: William O'Connor
+    flavor: '"The Crane are strongest when they stand with their allies. How strong will they be, I wonder, when they stand
+      alone?" - Bayushi Paneki'
+    number: 13
+    collector_number: Crane 07,Crane 28,Crane 41
+
+  - title: Mura Sabishii Toshi
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Port
+    gold_cost: 2
+    text: 'This card counts as a card with "Marketplace" in its title for effects.w: Produce 2 Gold, or 4 Gold if paying for
+      a Crane Clan Personality with a printed Gold Cost of 8 or higher which may only pay for him.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Joachim Gmoser
+    flavor: '"The seas may be yours, Mantis, but the ports are ours. Now pay the fee or begone."'
+    number: 14
+    collector_number: Crane 08,Crane 38
+
+  - title: Puppet Theater Troupe
+    type: Holding
+    deck: Dynasty
+    gold_cost: 2
+    text: 'Political Open, w: If the active player has 11 or more Family Honor, he loses 1 Honor.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Heather Bruton
+    flavor: '"If we cannot laugh at the world, we die." - Doji Nagori'
+    number: 15
+    collector_number: Dragon 15
+
+  - title: Quartermaster
+    type: Holding
+    deck: Dynasty
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.w: When paying for a Samurai or Bushi Personality, destroy this Holding to produce 2 Gold which
+      may only pay for him and create and attach a +2F/+1C Weapon Item to him after he enters play.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Paul (Prof.) Herbert
+    flavor: '"I am no solider," the farmer whispered. The samurai handed him a spear. "Now you are."'
+    number: 16
+    collector_number: Crane 05,Crane 15
+
+  - title: Secluded Village
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Village
+    gold_cost: 4
+    text: 'w: Produce 3 Gold.w: If you did not go first this game and are paying for a Personality, produce 4 Gold which may
+      only pay for him.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: beet
+    flavor: '"A samurai is a killer at heart. If he cannot find an enemy, he will create one." - Master Tiger'
+    number: 17
+    collector_number: Dragon 08,Dragon 16,Dragon 24
+
+  - title: Secluded Waystation
+    type: Holding
+    deck: Dynasty
+    gold_cost: 2
+    text: 'After the first time each turn this Holding produces Gold, put a Wealth token on it.w: Produce 2 Gold, plus 1 Gold
+      for each Wealth token on this Holding.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Brad Williams
+    flavor: '"If you pursue a secret, there is a Bayushi who knows it. If you desire an item, there is a Yasuki who can find
+      it. All these things - for a price." - Daidoji Uji'
+    number: 18
+    collector_number: Dragon 29,Dragon 43
+
+  - title: Shrine to Hotei
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Temple
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Limited, w: If you have six or more cards in your hand, gain 1 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Tony Moseley
+    flavor: '"Contentment is the simplest, yet most elusive of all blessings." - Hida Kisada'
+    number: 19
+    collector_number: Crane 29
+
+  - title: Swordmaster Dojo
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Dojo
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Reaction, w: After a duel involving your Personality ends, draw a card.Reaction: Before your Personality
+      enters a duel, if you are a Dragon Clan player, destroy this Holding to give your Fate cards in and out of play +1 Focus
+      Value until the duel ends.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Storn A. Cook
+    number: 20
+    collector_number: Dragon 27
+
+  - title: Temple to Shinsei
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Temple
+    gold_cost: 3
+    text: 'w: Produce 2 Gold. Limited, w: Bow your performing Monk or Shugenja Personality to gain 2 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: David Horne
+    number: 21
+    collector_number: Dragon 13
+
+  - title: Tower of the Ningyo
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Singular
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.This Holding''s ability costs 1 Gold instead if you are a Dragon Clan player.Limited, , w: Straighten
+      a target Personality.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    story: 2002 Tower of the Ningyo - Kevin Christopher
+    rarity: Fixed
+    artist: Tony Moseley
+    flavor: They dwell beneath the seas, awaiting the day their Naga allies return.
+    number: 22
+    collector_number: Dragon 37
+
+  - title: Tsuma Dojo
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Dojo
+    gold_cost: 2
+    text: 'w: Produce 2 Gold, or produce 3 Gold if paying for a Duelist Personality which may only pay for him.Reaction: Before
+      you focus, you may focus with a card in your Fate discard pile. Remove that card from the game after the duel ends.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Drew Baker
+    number: 23
+    collector_number: Dragon 39
+
+  - title: Venerable Master
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Retainer
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Open, w, : Destroy this Holding to create a 3F/3C/3PH Samurai Personality with your Clan Alignment.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Ed Cox
+    number: 24
+    collector_number: Crane 19,Dragon 21,Dragon 30
+
+  - title: Asahina Kasai
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crane Clan
+    - Fire
+    - Shugenja
+    force: 2
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Fire Political Limited, w: Look at the top four cards of your Fate deck. You may rearrange them. If any of them are
+      Strategies with any abilities that unconditionally create challenges, you may show one, then put it in your hand.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: John Donahue
+    number: 25
+    collector_number: Crane 18,Crane 31
+
+  - title: Asahina Yoshino
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Air
+    - Crane Clan
+    - Shugenja
+    - Soul of Asahina Sekawa
+    force: 1
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 3
+    personal_honor: 2
+    text: 'Reaction: When paying a Gold cost, bow Yoshino and discard a card: Produce Gold equal to its Focus Value.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: beet
+    flavor: '"The way of the Asahina is the way of peace. The wisdom of the Keepers will be our guide."'
+    number: 26
+    collector_number: Crane 04,Crane 12
+
+  - title: Daidoji Akagi
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Samurai
+    - Scout
+    force: 1
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Battle: Bow Akagi: Ranged 2 Attack.Reaction: Even if Akagi is bowed, after you target a Ranged Attack from an action
+      he performed, discard a card: Give the Ranged Attack a strength bonus equal to the discard''s Focus Value.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Christopher Appel
+    number: 27
+    collector_number: Crane 03,Crane 20,Crane 42
+
+  - title: Daidoji Nichiren
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Harrier
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Battle: Bow Nichiren and target an enemy Personality with 2 or lower Personal Honor: Bow him. Dishonor Nichiren.Reaction:
+      After Nichiren is destroyed, target a Harrier: Straighten it.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Craig Maher
+    flavor: '"I made Kurohito a promise long ago," Nakazo said to the Harrier. "Soon, we will fulfill it."'
+    number: 28
+    collector_number: Crane 21,Crane 40
+
+  - title: Daidoji Shihei
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Harrier
+    - Hatamoto
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'After the first time this game Shihei is destroyed: You may target and destroy another player''s Holding.Reaction:
+      After a Personality at Shihei''s battlefield receives a Force penalty, target your Harrier: Give the target a Force bonus
+      equal to the penalty.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: April Lee
+    number: 29
+    collector_number: Crane 01,Crane 26
+
+  - title: Daidoji Uji
+    extended_title: Daidoji Uji • Experienced 3
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Experienced 3
+    - Unique
+    - Crane Clan
+    - Harrier
+    - Samurai
+    force: 5
+    chi: 4
+    gold_cost: 10
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Before you destroy your Personality as a condition upon a further effect, if he is a Harrier, once per turn you may
+      move him home instead.Battle: Once per battle, destroy your target performing Harrier to target an enemy card. If it has
+      no cards attached, destroy it; otherwise, reduce its Force to 0.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    story: 2004 Flee the Darkness - James Lippens
+    rarity: Fixed
+    artist: Drew Baker
+    flavor: '"This is not the Empire I know. This is paradise. This is Jigoku."'
+    number: 30
+    collector_number: Crane 25
+
+  - title: Doji Domotai
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Samurai
+    - Soul of Doji Reju
+    force: 1
+    chi: 3
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 2
+    text: If scores are tied in a duel involving Domotai, she wins the duel.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Kari Christensen
+    flavor: '"She is the daughter of Akiko and Kurohito, a student of the Lion and Crane. The weight of the future lies heavily
+      upon her." - Naka Tokei'
+    number: 31
+    collector_number: Crane 11,Crane 16
+
+  - title: Doji Domotai
+    extended_title: Doji Domotai • Experienced
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Unique
+    - Clan Champion
+    - Crane Clan
+    - Experienced
+    - Samurai
+    force: 2
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Reaction: After Domotai wins a duel: Give her a Force bonus equal to the highest Focus Value focused for her in the
+      duel. You may target another Samurai and give him an equal Force bonus.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Miguel Coimbra
+    number: 32
+    collector_number: Crane 24
+
+  - title: Doji Midoru
+    extended_title: Doji Midoru • Experienced
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Crane Clan
+    - Experienced
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 12
+    honor_requirement: 5
+    personal_honor: 2
+    text: 'Battle: If Midoru is at the current battlefield, destroy him and discard three cards: Each player targets five cards
+      he controls at the current battlefield, or as many as possible if he cannot target enough. Destroy them.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Steve Ellis
+    flavor: '"Part of Midoru walks in the Gray Realm," Sekawa whispered. "Part of him wishes to return there."'
+    number: 33
+    collector_number: Crane 17
+
+  - title: Doji Nio
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crane Clan
+    force: 1
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 5
+    personal_honor: 2
+    text: 'Political Reaction: After a Personality is destroyed, bow Nio and discard a card: The player who controlled the Personality
+      when he was destroyed may gain 1 Honor. Gain 1 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Llyn Hunter
+    flavor: '"What arrogance, to name yourself for Doji''s son." "What stupidity," Nio sneered, "to think he would not wish
+      to be so honored."'
+    number: 34
+    collector_number: Crane 27,Crane 43
+
+  - title: Doji Seo
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Crane Clan
+    - Samurai
+    force: 2
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Challenges Seo issues while she is in an army will not be refused.Battle: If Seo is attacking and the Defender has
+      lower Family Honor than you, give Seo a Force bonus equal to her Personal Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Michael Komarck
+    number: 35
+    collector_number: Crane 06,Crane 13,Crane 33
+
+  - title: Hitomi Suguhara
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Dragon Clan
+    - Monk
+    - Tattooed
+    - Tenth Legion
+    force: 4
+    chi: 4
+    gold_cost: 8
+    personal_honor: 1
+    text: 'Battle: Once per battle, bow one of your Rings and target an enemy Personality: Suguhara duels him. Both Personalities
+      use their Force as their duel stat. Bow the duel''s loser.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    story: 2003 The Emperor's Eyes Top of Clan - Eljas Oksanen
+    rarity: Fixed
+    artist: Craig Maher
+    flavor: '"Pain is the fire that tempers wisdom."'
+    number: 36
+    collector_number: Dragon 02,Dragon 28
+
+  - title: Hoshi Kaelung
+    extended_title: Hoshi Kaelung • Experienced
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Experienced Kaelung
+    - Unique
+    - Dragon Clan
+    - Monk
+    force: 6
+    chi: 4
+    gold_cost: 11
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'While Kaelung is at the current battlefield, actions from a cards not at his battlefield may not target him unless
+      their player controls a Ring.Battle: Any number of times per turn, give Kaelung -1F and target an enemy card without unbowed
+      attached cards and lower Force than Kaelung: Bow it.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    story: 2004 The Broken Tiger - Greg Wong
+    rarity: Fixed
+    artist: William O'Connor
+    number: 37
+    collector_number: Dragon 34
+
+  - title: Kitsuki Hakihime
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Magistrate
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Battle/Open: Target a face-up card in a player''s hand, or randomly target a face-down card in a player''s hand.
+      Discard it. That player draws a card.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: April Lee
+    flavor: Lady Iweko's finest student, Hakihime possesses intuition that borders on mystical.
+    number: 38
+    collector_number: Dragon 05,Dragon 18
+
+  - title: Mirumoto Gonkuro
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Samurai
+    - Soul of Mirumoto Daini
+    force: 2
+    chi: 4
+    gold_cost: 5
+    personal_honor: 3
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Malcolm McClinton
+    flavor: He was one of Lord Rosanjin's finest students. Now he goes forth into the Empire to prove his master's technique.
+    number: 39
+    collector_number: Dragon 09,Dragon 10,Dragon 40
+
+  - title: Tamori Konoye
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Shugenja
+    - Void
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Limited: Look at the top 5 cards of your Fate deck. If one of them is a Ring, you may bow Konoye. If she bowed, show
+      the Ring, then put it in your hand.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: John Donahue
+    flavor: Her studies with Ningen have only made her stranger than before.
+    number: 40
+    collector_number: Dragon 11,Dragon 36
+
+  - title: Togashi Kazuki
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Monk
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Kazuki has +1F for each Ring you control.Open: Target another one of your Personalities: Set his Force equal to Kazuki''s
+      Force, or his Chi equal to Kazuki''s Chi.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Michael Kaluta
+    flavor: '"Find inspiration in every thing."'
+    number: 41
+    collector_number: Dragon 14,Dragon 42
+
+  - title: Togashi Masujiro
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Air
+    - Disciple
+    - Dragon Clan
+    - Monk
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 3
+    personal_honor: 4
+    text: 'Reaction: After one of your Rings bows: Gain 2 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Adam Denton
+    flavor: '"Bold claims amount to nothing, Crane."'
+    number: 42
+    collector_number: Dragon 20,Dragon 33
+
+  - title: Togashi Razan
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Monk
+    force: 3
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 3
+    text: Razan has +3F and +1PH for each Ring you control.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Anthony Grabski
+    flavor: '"If a man tells you he has found enlightenment, then that man is surely lying."'
+    number: 43
+    collector_number: Dragon 12,Dragon 41
+
+  - title: Togashi Satsu
+    extended_title: Togashi Satsu • Experienced 2
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Duelist
+    - Experienced 2
+    - Loyal
+    - Unique
+    - Clan Champion
+    - Dragon
+    - Dragon Clan
+    - Monk
+    - Samurai
+    - Scion of Togashi
+    - Shugenja
+    force: 7
+    chi: 6
+    gold_cost: 13
+    honor_requirement: 4
+    personal_honor: 4
+    text: 'You may ignore the cost of bowing Satsu for Kiho actions he performs.Reaction: Even if Satsu is bowed, after a Resolution
+      Segment begins, target a Personality: Give him a Force bonus equal to Satsu''s Force.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: April Lee
+    number: 44
+    collector_number: Dragon 26
+
+  - title: Mirumoto Mareshi
+    extended_title: Mirumoto Mareshi • Experienced
+    type: Personality
+    clan: Dragon,Naga
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Dragon Clan
+    - Experienced
+    - Hero
+    - Naga
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Battle: Bow your Ring or discard a Ring from your hand, and target your unit: Straighten it. Move it home or to a
+      battlefield where there are any enemy units.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    story: 2005 European Champion - Faber Van Kraanen
+    rarity: Fixed
+    artist: Miguel Coimbra
+    number: 45
+    collector_number: Dragon 03
+
+  - title: City of Gold
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    text: 'This Province has -1 strength while this Region is bowed.Reaction, w: After you bow a Holding to produce Gold, produce
+      1 Gold which must be used for the same payment.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Thomas Denmark
+    flavor: The Yobajin messenger offered the note with a shaking hand. "Temoru is dead," Rosanjin hissed, crumpling it in his
+      fist.
+    number: 46
+    collector_number: Dragon 22
+
+  - title: Temples of the New Tao
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Temple
+    text: Only Monk and Samurai Personalities may assign to defending armies at this Province's battlefield.Monks and Samurai
+      have +3F while defending at this Province's battlefield.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: David Deitrick
+    flavor: '"I am intrigued by the ways of your Tao," said Rama Singh. "Teach me more."'
+    number: 47
+    collector_number: Dragon 32
+
+  - title: Ten Thousand Temples
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Temple
+    text: 'Before you lose Honor, destroy this Region to negate the Honor loss.Limited, w: If your Family Honor is 9 or lower,
+      gain 1 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Stephanie Pui-Mun Law
+    number: 48
+    collector_number: Crane 02
+
+  - title: Tsuno Swamps
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Tsuno
+    text: 'Reaction, w: After a target Personality bows, while this card remains bowed, you may negate its and the target''s
+      straightening.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Thomas Manning
+    number: 49
+    collector_number: Crane 34
+
+  - title: Daidoji Gunso
+    type: Follower
+    deck: Fate
+    keywords:
+    - Scout
+    force: 1
+    chi: 0
+    gold_cost: 3
+    honor_requirement: 1
+    focus: 2
+    text: 'Battle: Give a target enemy card -2F. If it then has 0F, destroy it.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Michael Kaluta
+    number: 50
+    collector_number: Crane 05,Crane 29
+
+  - title: Doji House Guard
+    type: Follower
+    deck: Fate
+    keywords:
+    - Unique
+    chi: 1
+    gold_cost: 6
+    honor_requirement: 2
+    focus: 4
+    text: Can only attach to a Crane Clan Personality.This Follower's Force equals 1 plus this Personality's Personal Honor.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Legacy
+    rarity: Fixed
+    artist: Audrey Corman
+    number: 51
+    collector_number: Crane 07
+
+  - title: Hoshi House Guard
+    type: Follower
+    deck: Fate
+    keywords:
+    - Unique
+    force: 2
+    chi: 0
+    gold_cost: 6
+    honor_requirement: 2
+    focus: 4
+    text: 'Will only attach to a Dragon Clan Personality.This Personality has +1F/+2C for each Ring you control.Reaction: After
+      a Kiho action from a Strategy resolves that this Personality performed, if he is a Monk and this ability has not affected
+      any Strategy with the same title this game: Return the Strategy to your hand.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Drew Baker
+    number: 52
+    collector_number: Dragon 16
+
+  - title: Saboteur
+    type: Follower
+    deck: Fate
+    keywords:
+    - Harrier
+    force: 2
+    chi: 0
+    gold_cost: 3
+    honor_requirement: 2
+    focus: 3
+    text: 'Reaction: Before you announce an action on a Strategy, destroy this card: After the action resolves, gain 2 Honor
+      if its effects destroyed a card that opposed this card immediately before its destruction.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: William O'Connor
+    flavor: '"My honor for the Crane.'
+    number: 53
+    collector_number: Crane 23,Crane 37
+
+  - title: Silent Warriors
+    type: Follower
+    deck: Fate
+    keywords:
+    - Harrier
+    force: 1
+    chi: 0
+    gold_cost: 3
+    honor_requirement: 1
+    focus: 3
+    text: 'Battle: If you are the Defender and this Personality is Crane Clan, target a location and another unit you control
+      at this card''s location: Move these units to the target location. You may destroy this card as a cost; if you do, gain
+      2 Honor, draw a card, and take an additional Battle action.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: David Horne
+    number: 54
+    collector_number: Crane 15,Crane 19
+
+  - title: Spearmen
+    type: Follower
+    deck: Fate
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: 'Battle, w: Ranged 2 Attack (Destroy a target enemy Follower, or Personality without Followers, with 2 or lower Force).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    card_notes: Some variants of the Battle of Beiden Pass version of this card were printed with an alternate flavor text.
+    rarity: Fixed
+    artist: William O'Connor
+    flavor: '"Oppose him in court. Subvert his authority if you must. No harm must come to my brother. To do so would make a
+      mockery of Tsudao''s sacrifice."'
+    number: 55
+    collector_number: Dragon 09,Dragon 12
+
+  - title: Tattooed Acolytes
+    type: Follower
+    deck: Fate
+    keywords:
+    - Tattooed
+    force: 2
+    chi: 0
+    gold_cost: 2
+    honor_requirement: 2
+    focus: 2
+    text: 'Tireless Battle: If this Personality is a Monk and opposed, destroy this card: Draw 2 cards.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Christopher Appel
+    flavor: The rage of the Hitomi balances the calm of the Togashi.
+    number: 56
+    collector_number: Dragon 06,Dragon 26
+
+  - title: Mark of Oblivion
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 2
+    focus: 3
+    text: 'Limited: Discard three cards with either identical or all different Focus Values, and destroy this card: Draw four
+      cards. Discard down to your maximum hand size.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: John Hodgson
+    number: 57
+    collector_number: Dragon 07,Dragon 43
+
+  - title: Rosoku's Staff
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Weapon
+    force: 1
+    chi: 1
+    gold_cost: 4
+    focus: 4
+    text: 'Reaction: After you put a Ring into play from your hand by its own text, if you now control exactly one Ring, destroy
+      this to search your Fate deck and hand for a Ring. Put it into play. While it remains in play, it does not count towards
+      an Enlightenment Victory.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Heather V. Kreiter
+    number: 58
+    collector_number: Crane 03
+
+  - title: Yogen
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Weapon
+    force: 4
+    chi: 0
+    gold_cost: 6
+    focus: 4
+    text: 'This Personality has a minimum Chi of 5. If this Personality is ever not Dragon Clan: Destroy him. Before a turn
+      ends: Put all Rings in your discard pile into your hand.Battle/Open: Discard from play a target Ring you control and target
+      your Ring or Personality: Straighten it.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Thomas Denmark
+    number: 59
+    collector_number: Dragon 05
+
+  - title: Ring of Air
+    type: Ring
+    deck: Fate
+    keywords:
+    - Unique
+    - Air
+    focus: 4
+    text: 'Play after you resolve two or more Favor actions in one turn. You may discard this Ring from your hand to use its
+      ability without cost.Air Repeatable Battle/Open, w: Straighten your target Personality or attachment.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Nate Barnes
+    number: 60
+    collector_number: Dragon 25
+
+  - title: Ring of Earth
+    type: Ring
+    deck: Fate
+    keywords:
+    - Unique
+    - Earth
+    focus: 4
+    text: 'Play after a battle resolves at your Province, if it was not destroyed and any enemy units were ever at its battlefield.
+      You may discard this Ring from your hand to use its ability without cost.Earth Repeatable Interrupt, w: The Battle action
+      cannot move Personalities.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Nate Barnes
+    number: 61
+    collector_number: Crane 44,Dragon 08
+
+  - title: Ring of Fire
+    type: Ring
+    deck: Fate
+    keywords:
+    - Unique
+    - Fire
+    focus: 4
+    text: 'Play after you win a duel during a battle, if your Personality did not enter the duel with higher Chi than the other.
+      You may discard this Ring from your hand to use its ability without cost.Fire Battle, w: Target an enemy card without
+      attachments. After this battle resolves, if you lost the battle, destroy the target.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Nate Barnes
+    number: 62
+    collector_number: Crane 04
+
+  - title: Ring of the Void
+    type: Ring
+    deck: Fate
+    keywords:
+    - Unique
+    - Void
+    focus: 4
+    text: 'You may discard this Ring from your hand to use its Void ability without cost.Limited: Play if you have two or fewer
+      Rings in play. Discard your hand. Void Limited, w: Draw a card. If you now have more cards in your hand than any other
+      player, discard a card.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Nate Barnes
+    number: 63
+    collector_number: Crane 12,Dragon 23
+
+  - title: Ring of Water
+    type: Ring
+    deck: Fate
+    keywords:
+    - Unique
+    - Water
+    focus: 4
+    text: 'Play after a battle resolves in which you played a Terrain, destroyed a Terrain, and destroyed any cards or provinces
+      during resolution. You may discard this Ring from your hand to use its ability without cost.Water Absent Repeatable Battle,
+      w: Move your target Personality home or, if he would be opposed, move your target Personality at any location to the current
+      battlefield.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Nate Barnes
+    number: 64
+    collector_number: Crane 26,Dragon 44
+
+  - title: Companion Spirit
+    type: Spell
+    deck: Fate
+    gold_cost: 4
+    focus: 1
+    text: 'Limited: If this Shugenja is Human, bow him and destroy this card: Create a Samurai • Cavalry • Spirit Personality,
+      ignoring Gold cost, whose base Force, Chi, Gold Cost, and Personal Honor are those of this Shugenja.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Stephanie Pui-Mun Law
+    number: 65
+    collector_number: Dragon 32
+
+  - title: The Kami's Blessing
+    type: Spell
+    deck: Fate
+    keywords:
+    - Kami
+    gold_cost: 3
+    focus: 3
+    text: 'Battle/Open: Bow this card: Raise this Shugenja''s Force by his Chi.Battle: Bow this card and target one or two Samurai:
+      Raise each target''s Force by this Shugenja''s Chi.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Thomas Denmark
+    number: 66
+    collector_number: Dragon 01,Dragon 20
+
+  - title: Abandoned
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Target your performing Personality to move home a target enemy Personality with lower Personal Honor.Absent
+      Battle: Move all dishonorable Personalities at the current battlefield home.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Tyler Walpole
+    number: 67
+    collector_number: Dragon 04
+
+  - title: Ambush
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Target your unbowed Personality and another player''s Personality. Create a battlefield (not at any Province).
+      Assign your Personality to attack there. Assign the other Personality to defend there, even if he is bowed. Other Personalities
+      cannot move there. Fight a battle there (after this action resolves). After the battle ends, lose 5 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: beet
+    number: 68
+    collector_number: Crane 34
+
+  - title: Battlefield of Shallow Graves
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Before the enemy leader gains Honor: Double the gain.Before this battle''s resolution: Reduce the Force of each Personality
+      in the enemy army to half his Force at that time, rounded up.Battle: If there are no Terrains at the current battlefield:
+      Put this card into play there.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Al Eremin
+    number: 69
+    collector_number: Crane 28,Dragon 14
+
+  - title: Be Prepared to Dig Two Graves
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Reaction: After a Personality with your Clan alignment is destroyed while at a battlefield, target a Personality
+      who was opposing him immediately before his destruction: Until the game ends, Personalities with your Clan alignment have
+      +2F/+2C while opposing the target or facing him in a duel.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Miguel Coimbra
+    number: 70
+    collector_number: Dragon 29,Dragon 37
+
+  - title: Brutal Confrontation
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Until this battle ends, all players have the abilities, "Repeatable Battle: Bow your target performing Personality
+      to make a Ranged 3 Attack which may be combined as if it was from them" and "Repeatable Battle: Bow your target performing
+      Personality to have them challenge a target enemy Personality to a duel of Force or Chi. Destroy the loser". If your current
+      army has two or more units, you may take an additional action to use one of these.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Malcolm McClinton
+    number: 71
+    collector_number: Dragon 39
+
+  - title: Charge of the Baraunghar
+    type: Strategy
+    deck: Fate
+    gold_cost: 3
+    focus: 3
+    text: 'Battle: Target your unit: If it would be opposed, straighten it and move it to the current battlefield.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Malcolm McClinton
+    number: 72
+    collector_number: Dragon 03,Dragon 17
+
+  - title: Conserve Your Strength
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Open: Show one or more attachments from your hand: Shuffle them into your deck. Draw a number of cards equal to that
+      number plus one. Battle: Target a card attached to your Samurai, which performs this action if it is a Follower or Ancestor,
+      and target an enemy attachment: Destroy it.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    rarity: Fixed
+    artist: Britt Martin
+    number: 73
+    collector_number: Crane 11,Crane 41
+
+  - title: Courtesy
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Bushido Virtue
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Target your performing unbowed honorable Samurai Personality to target an enemy Personality. Move both Personalities
+      home. Each of their controllers gains Honor equal to the Personal Honor of the other Personality.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Chuck Lukacs
+    number: 74
+    collector_number: Crane 43
+
+  - title: Cunning of Daidoji
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Target your defending Personality and an enemy Personality: Give the enemy Personality -2F. If you are a
+      Crane Clan player and the enemy Personality has 0F, destroy him and gain 2 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Joachim Gmoser
+    number: 75
+    collector_number: Crane 06,Crane 22
+
+  - title: Disavowed
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Dishonor your target performing unbowed Harrier Personality to make either a Ranged 6 Attack, or two consecutive
+      Ranged 3 Attacks, which may be combined as if the Attack or Attacks were from them. You may then move them home.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Joachim Gmoser
+    number: 76
+    collector_number: Crane 24
+
+  - title: Duty
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Bushido Virtue Interrupt: If the action is another player''s, destroy your target honorable Samurai to negate your
+      target Personality''s destruction from it.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Chuck Lukacs
+    number: 77
+    collector_number: Dragon 35
+
+  - title: Explored Territory
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    focus: 1
+    text: 'Before the first time, while this card is in play, another player''s action destroys one of your cards at this battlefield,
+      other than this Terrain, negate the destruction and draw a card.Battle: Destroy a Terrain (if able). Put this Terrain
+      into play.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - War of the Seals (Onyx Edition)
+    errata_text: Technical erratum to correct game text misprinted as reminder text, effective immediately.
+    rarity: Fixed
+    artist: Brad Williams
+    number: 78
+    collector_number: Dragon 28
+
+  - title: Explosives
+    type: Strategy
+    deck: Fate
+    gold_cost: 6
+    focus: 2
+    text: 'Limited: Target a Holding: Destroy it.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Mike Raabe
+    number: 79
+    collector_number: Crane 30
+
+  - title: First and Final Strike
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Your target performing unbowed Personality challenges a target enemy Personality. Destroy the loser. The
+      winner gains 3 Honor if the winner had less Chi than the loser before the first opportunity to focus or strike.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Steve Ellis
+    number: 80
+    collector_number: Crane 10,Crane 20,Crane 27,Dragon 18,Dragon 22
+
+  - title: Heavily Engaged
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Even if you control no units at the current battlefield: Each player targets an unbowed Personality he controls
+      there, if possible. Bow all targets.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Anthony Francisco
+    number: 81
+    collector_number: Crane 21,Crane 36
+
+  - title: Honor's Cost
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    focus: 2
+    text: 'The Gold Cost of this card''s ability equals the target''s Chi plus Personal Honor.Open: Target a Personality: Bow
+      him.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Veronica V. Jones
+    flavor: '"If you are truly loyal to your master, then you will heed my warning," Chiang-Tsu said. Koshei listened patiently.'
+    number: 82
+    collector_number: Crane 16,Crane 38
+
+  - title: Impromptu Duel
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Iaijutsu
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Choose your performing unbowed Samurai or Duelist Personality and target another player''s Personality:
+      Your Personality challenges the target. The other player may refuse; if he did, dishonor his Personality and gain 4 Honor.
+      Destroy the duel''s loser. The winner gains 2 Honor.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Storn A. Cook
+    flavor: '"Stand down," Korihime said. "You need not die today."'
+    number: 83
+    collector_number: Crane 08,Crane 33
+
+  - title: Meeting the Keepers
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Void
+    gold_cost: 0
+    focus: 4
+    text: 'Reaction: After the resolution of an action from one of your Rings: Search your Dynasty deck for an Event. Remove
+      it, show it, and, after shuffling, put it on top of the deck.Open: Bow your target Ring: Draw two cards.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: William O'Connor
+    number: 84
+    collector_number: Dragon 24
+
+  - title: Mountains of the Phoenix
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Mountain
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Before this battle''s resolution: The Attacker and the Defender each choose a unit in their own army; the active
+      player decides who chooses first. Then, destroy the chosen units.Battle: If there are no Terrains at the current battlefield:
+      Put this card into play there.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Britt Martin
+    flavor: '"Atsuki is no more, and we have Kaneka to thank. He is Phoenix, and I stand with him." - Isawa Sachi'
+    number: 85
+    collector_number: Crane 01,Crane 39
+
+  - title: No Victory
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Iaijutsu
+    gold_cost: 3
+    focus: 4
+    text: 'You may only play one No Victory per duel.Reaction: After a duel ends that your Personality won while facing the
+      highest Gold Cost Personality another player controlled (including ties): Create a 5F/4C/3PH Samurai • Duelist Personality
+      in your home or at the current battlefield. Remove him from the game when your next turn ends.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Steve Ellis
+    number: 86
+    collector_number: Crane 13,Crane 32,Dragon 38
+
+  - title: Palm Strike
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 3
+    text: 'Kiho Battle: Target your unbowed Monk without a Weapon. Bow a target enemy Personality without a Weapon.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Eric Polak
+    flavor: '"Togashi Kaze developed the techniques that have laid low generations of arrogant samurai." - Hoshi Wayan'
+    number: 87
+    collector_number: Dragon 15,Dragon 30
+
+  - title: Refugees
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Even, if you are the Defender, if you control no units at the current battlefield, target a Personality without
+      Followers: Move him home. Bow him if he moved. His controller may pay 1 Gold; if he did, create a 1F Ashigaru Follower
+      and attach it to the target.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: beet
+    number: 88
+    collector_number: Dragon 02,Dragon 34
+
+  - title: Return For Training
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Target the Human Personality with the lowest Personal Honor, or who is tied for lowest, among all Human Personalities
+      there: Move him home.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: April Lee
+    flavor: '"This blade," Jotaro whispered, "it haunts my thoughts. It is destroying me, but I cannot part with it."'
+    number: 89
+    collector_number: Crane 09,Crane 40
+
+  - title: Sneak Attack
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Engage: The Attacker has the first opportunity to take a Battle action or pass in this battle.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    mrp: Is now an Engage action.
+    rarity: Fixed
+    artist: John Cadice
+    flavor: 'The Scorpion struck without warning in the dead of night. They asked only one question: "Where is Kisada?"'
+    number: 90
+    collector_number: Dragon 11,Dragon 21
+
+  - title: Stay Your Blade
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Bow and move home your performing opposed Samurai Personality: Draw three cards.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Mike Raabe
+    flavor: '"My brothers are too blinded by hatred and ambition to see the ties that bind them. If they were stronger, the
+      Empire would want for nothing." - Isawa Sezaru'
+    number: 91
+    collector_number: Dragon 33
+
+  - title: The Future is Unwritten
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Void
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Bow your performing Monk or Shugenja and target another player: Draw four cards. Discard three cards. The
+      player may name one of the discarded cards or may name The Future Is Unwritten. If he did, you may not play cards with
+      that title until the game ends.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Legacy
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Chris Seaman
+    number: 92
+    collector_number: Dragon 41
+
+  - title: The People's Champion
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Reaction: Before a player''s turn begins, if he may win an Honor Victory and his Family Honor is greater than or
+      equal to the amount required to do so: Any other player, starting with you and proceeding in turn order until a Personality
+      is chosen, may choose one of his unbowed Personalities to issue a challenge that the player whose turn is about to begin
+      may accept with any of his Personalities. If his Personality loses, or the challenge is not accepted, reduce his Family
+      Honor to 39. Destroy the duel''s loser.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Legacy
+    rarity: Fixed
+    artist: Bob Hobbs
+    number: 93
+    collector_number: Dragon 10
+
+  - title: To Do What We Must
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Destroy your target unit led by your performing unbowed Personality and target an enemy unit with total Force
+      less than or equal to your unit''s total Force, plus your Personality''s Personal Honor, plus 2 if your Personality is
+      Crane Clan: Destroy the enemy unit.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Malcolm McClinton
+    number: 94
+    collector_number: Crane 25,Crane 35
+
+  - title: Tsuruchi Technique
+    type: Strategy
+    deck: Fate
+    gold_cost: 1
+    focus: 2
+    text: 'This card''s abilities cost 1 less Gold if you are a Mantis Clan player.Battle: Ranged 3 Attack.Reaction: After a
+      Ranged Attack performed by a card in one of your units is targeted: Give it +3 strength.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Mike Raabe
+    number: 95
+    collector_number: Dragon 13,Dragon 42
+
+  - title: Weigh the Cost
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'As a Focus Effect: Add 1 to the Focus Values of this card and one other of your focused cards. Battle: Move your
+      performing Samurai Personality home: Bow him. Give the current battlefield''s province +2 or -2 strength. You may target
+      an enemy Personality and give him -3F.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    rarity: Fixed
+    artist: April Lee
+    number: 96
+    collector_number: Crane 17,Dragon 31
+
+  - title: Well-Laid Plans
+    type: Strategy
+    deck: Fate
+    gold_cost: 2
+    focus: 3
+    text: 'Limited: Bow your target performing Courtier Personality and discard three Political Strategies to draw 3 cards.
+      Limited: Bow your target performing Samurai Personality and discard three Battle Strategies to draw 3 cards. Limited:
+      Target your performing Courtier Personality and your performing Samurai Personality and discard two cards to draw 3 cards.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Beth Trott
+    number: 97
+    collector_number: Crane 02
+
+  - title: Will of the Elements
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Elemental
+    - Kiho
+    gold_cost: 0
+    focus: 4
+    text: 'Battle/Open: Bow your performing Monk, target and put an unbowed Ring you control in your hand, and target a Personality:
+      Until the next time this game a Ring enters play, the target does not contribute Force, his abilities may not be used,
+      and his controller may not target him with, or choose him to perform, actions.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Storn A. Cook
+    number: 98
+    collector_number: Dragon 36
+
+  - title: Prosperous Plains City
+    type: Stronghold
+    clan: Crane
+    deck: Pre-Game
+    province_strength: 6
+    gold_production: 4
+    starting_honor: 6
+    text: 'Once per game per card title, after you put a Ring into play by its own text, gain 3 Honor.Battle/Open: Bow your
+      target Ring to straighten a target Enlightened Personality.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    story: 2005 World Champion - Scott Rixson
+    rarity: Fixed
+    artist: Joachim Gmoser
+    number: 99
+    collector_number: Crane 00
+
+  - title: Dragon's Heart Dojo
+    type: Stronghold
+    clan: Dragon
+    deck: Pre-Game
+    keywords:
+    - Dojo
+    province_strength: 7
+    gold_production: 4
+    starting_honor: 5
+    text: 'You will not win an Enlightenment victory.Reaction: After you assign a Monk Personality, put a Ring into play from
+      your hand.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    story: 2006 European Champion - Faber van Kraanen
+    rarity: Fixed
+    artist: Slawomir Maniak
+    number: 100
+    collector_number: Dragon 00
+
+  - title: Left Hand of the Emperor
+    type: Wind
+    deck: Pre-Game
+    text: 'Favor Political Repeatable Battle: Discard the Imperial Favor to move home a target enemy attacking Personality.Political
+      Limited: Bow your target performing Courtier to rehonor a target dishonorable Personality.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Christopher Appel
+    number: 101
+    collector_number: Crane 00
+
+  - title: Voice of the Emperor
+    type: Wind
+    deck: Pre-Game
+    text: 'Favor Political Repeatable Reaction: After a target Personality bows for a condition upon an effect of a Spell or
+      Kiho action, discard the Imperial Favor to straighten him and draw a card.Political Limited: Bow your performing Monk
+      or Shugenja to put a Ring into play. While it remains in play, it does not count toward an Enlightenment Victory. If it
+      is still in play when the turn ends, put it in your hand.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Ramon Perez
+    number: 102
+    collector_number: Dragon 00

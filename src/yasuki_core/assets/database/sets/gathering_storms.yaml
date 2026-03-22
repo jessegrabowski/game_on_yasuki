@@ -1,0 +1,1049 @@
+set: Gathering Storms
+cards:
+  - title: Enlistment
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'Each player may draw an additional card before his turn ends if he Equipped any Followers from his hand since his
+      last turn ended.Open: Put this Event into play.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Mark Poole
+    flavor: '"Not an impressive lot," Waito grunted. "Only for now," Bunrakuken said.'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 1
+
+  - title: Harsh Choices
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, you may
+      destroy this Province to draw three cards.
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: Ichido's troops ignored samurai of other clans fleeing the city... provided they swore their allegiance to the Hantei.
+      The bodies of those who refused soon joined the burning rubble.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 2
+
+  - title: Ancestral Estate
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Castle
+    - Legacy
+    - Unique
+    gold_cost: 3
+    gold_production: 3
+    text: This Holding has +1GP while another player's Stronghold has higher Gold Production than yours.
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: (PD) Hiroshi Yoshida - "Osaka Castle"
+    flavor: Many samurai, even in the Mantis, secluded their family estates from cities to avoid public association with commercial
+      activities.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 3
+
+  - title: Dockside Market
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Market
+    gold_cost: 3
+    text: 'w: Produce 2 Gold, plus 1 Gold if you control one or more Ports, plus 1 Gold if you control one or more other Markets.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    rarity: Fixed
+    artist: Albert Tavira
+    flavor: '"Every fortune begins with a single coin." - Gusai Ichido'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 4
+
+  - title: House of High Waters
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Sake House
+    gold_cost: 3
+    gold_production: 3
+    text: After an Attack Phase is created, straighten this Holding and give it -1GP. Bow it after that phase ends.
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: (PD) Utagawa Hiroshige - "Tea House at Willow Bridge"
+    flavor: '"Business is picking up... Must be a war coming."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 5
+
+  - title: Ichiba District
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Market
+    gold_cost: 1
+    gold_production: 1
+    text: 'Economic Open: Banish a card from the top of your Fate deck to give your target Port Holding +1GP (this turn).'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: (PD) Utagawa Hiroshige - "No. 3, Suruga-machi"
+    flavor: Rumors of war did little to stymie trade. Reality, however, was another matter.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 6
+
+  - title: Otokoshi District
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Port
+    gold_cost: 2
+    gold_production: 2
+    text: 'Tireless Open: Destroy this Holding to draw a card and give your target Market Holding a +1GP Wealth token.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: (PD) Utagawa Hiroshige - Ejiri
+    flavor: The barrier islands of Broken Wave City were dotted with smaller ports. It was here where Ichido and Minoko's forces
+      first clashed.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 7
+
+  - title: Questionable Market
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Market
+    - Port
+    gold_cost: 1
+    gold_production: 1
+    text: 'Invest : Give this Holding two +1GP Wealth tokens. (Entering play, permanently increase the Gold Cost by the Invest
+      cost to get the effect.)'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: '"I use only the best fishermen."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 8
+
+  - title: Anahita
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Chameleon
+    - Naga
+    - Nonhuman
+    - Shugenja
+    - Naval
+    - Water
+    force: 2
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 2
+    personal_honor: 3
+    text: 'Response: If the action Recruited your Nonhuman Personality, give your target Holding +1GP (this turn).'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Not even the sea is spared from the humans and their wars."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 9
+
+  - title: Yasuki Hageshi
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    force: 1
+    chi: 3
+    gold_cost: 4
+    personal_honor: 1
+    text: 'Economic Open, : Target another player. After each time they Equip an attachment (this turn), they lose 1 Honor.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Jigoku''s so-called Emperor holds no sway here. May I interest you in a souvenir?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 10
+
+  - title: Daidoji Omezo
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'You have a Lobby bonus equal to the number of Holdings you control, up to 4 Holdings.Political Battle, : Move home
+      a target Personality.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: Chris Seaman
+    flavor: '"There is profit in peace, Lady Eiko."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 11
+
+  - title: Togashi Ogai
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Merchant
+    - Monk
+    - Tattooed
+    - Duelist
+    - Water
+    force: 3
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Economic Dynasty/Open, w: If you put a Ring into play this turn, give your target Temple a +1GP Wealth token and
+      a target Personality a +1C Flow token if they have no Flow tokens.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"You have the bone structure of Mizu-do genius. This technique was meant for you. Because it is fate, I will let
+      you have it for only 3 zeni."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 12
+
+  - title: Ikoma Kunisada
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    - Samurai
+    force: 3
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 7
+    personal_honor: 2
+    text: After Kunisada attacks, give your target Holding +1GP (this turn).
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Kensaku-san, let us focus instead on a topic of mutual interest: The wrongs done to our clans by the Dragon, and
+      how we might help each other to right them."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 13
+
+  - title: Gusai Kuniken
+    extended_title: Gusai Kuniken • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Pirate
+    - Samurai
+    - Experienced Yoritomo Kuniken
+    - Kensai
+    - Naval
+    - Unique
+    force: 4
+    chi: 2
+    gold_cost: 8
+    personal_honor: 0
+    text: 'Raid Battle: Give your other Pirate Personalities in this army +1F.Battle: Destroy your target Wealth token to make
+      3.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"My collection lies beneath the waves. Luckily for me, I have plenty of opportunities to rebuild it."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 14
+
+  - title: Gusai Mikka
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Pirate
+    - Samurai
+    - Scout
+    - Naval
+    force: 2
+    chi: 1
+    gold_cost: 4
+    personal_honor: 1
+    text: 'Raid Engage: Create a 2F/1C/1PH Pirate • Naval Mantis Clan Personality. At the end of this turn, banish them.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"They can''t build a defensive perimeter to save their lives. Follow me."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 15
+
+  - title: Gusai Natsuko
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Pirate
+    - Samurai
+    - Loyal
+    - Naval
+    force: 2
+    chi: 1
+    gold_cost: 3
+    personal_honor: 1
+    text: 'Invest , or if you won a Raid battle this turn: Create two 2F/1C/1PH Pirate • Naval Mantis Clan Personalities.Battle:
+      If this army has more units than the opposing army, bow one or more of your target Naval Personalities to bow a target
+      enemy Personality with Chi less than the total Force of your Personalities this bowed.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"I saw Yusako sent Runa to the bottom. No great loss."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 16
+
+  - title: Gusai Runa
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Pirate
+    - Samurai
+    - Naval
+    force: 2
+    chi: 2
+    gold_cost: 4
+    personal_honor: 0
+    text: 'Raid Engage: Give a target face-up card in your Province Renew.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Some, like Natsuko, prefer life as a servant to the ambitions of their betters. There is much to be had in this
+      world, though, for those of us with the will to take it."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 17
+
+  - title: Hoji Ejiro
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Infiltrator
+    - Kobun
+    - Merchant
+    force: 2
+    chi: 2
+    gold_cost: 3
+    personal_honor: 0
+    text: Before the cost of an action from a Strategy is paid, once per turn you may have it cost less; if you did, the player
+      who controls, or is, its target(s) loses 1 Honor after targets are chosen.
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Who am I? Nobody important."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 18
+
+  - title: Watanabe Maki, First Mate
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Pirate
+    - Samurai
+    - Naval
+    force: 2
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Maki has +1F while she has Followers and is opposed.Open: Give your target Follower +2F if it entered play this turn.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Crew''s ready to go, Captain Yusako."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 19
+
+  - title: Yoritomo Bunrakuken
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Samurai
+    - Conqueror
+    - Naval
+    force: 4
+    chi: 2
+    gold_cost: 8
+    personal_honor: 2
+    text: 'Battle: Destroy Bunrakuken''s target Follower to make 2.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"I am a warrior. Under my command, you will become one as well, or you will die."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 20
+
+  - title: Yoritomo Saika
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Mercenary
+    - Naval
+    - Renew
+    force: 1
+    chi: 1
+    gold_cost: 3
+    personal_honor: 0
+    text: (When a card with Renew enters play from a Province, refill its Province face-up.)Saika has a Force bonus equal to
+      the highest non-variable Gold Production among your Port Holdings, to a maximum of +3F.
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Just tell me where they are, and how much you can pay to make them gone."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 21
+
+  - title: Yoritomo Sumiteru
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Samurai
+    - Cavalry
+    force: 1
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Sumiteru has Naval and Tactician while he has any Followers.Tactical Battle: Move home a target enemy Personality
+      whose unit has lower total Force or fewer attachments.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"I have work, if you are willing to do it."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 22
+
+  - title: Yoritomo Tatsuki
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Mercenary
+    - Samurai
+    - Naval
+    force: 3
+    chi: 2
+    gold_cost: 7
+    personal_honor: 1
+    text: '(Once a turn, the Attacker gets the first Battle action, if it''s from a Naval Personality''s unit.)Battle: 3.Raid
+      Battle: 3.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"I might be willing, depending on what you mean by ''work''."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 23
+
+  - title: Yoritomo Waito, the Salty Dog
+    extended_title: Yoritomo Waito, the Salty Dog • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Samurai
+    - Conqueror
+    - Experienced
+    - Kensai
+    - Naval
+    - Unique
+    force: 4
+    chi: 4
+    gold_cost: 9
+    personal_honor: 2
+    text: 'Your Commanders at this battlefield have, "Battle: Bow a Follower attached to this Personality to make with strength
+      equal to this Personality''s Force."'
+    legality:
+    - Shattered Empire
+    story: 2014 Stronghold Store Events - Stasinos Karmpatsos
+    rarity: Fixed
+    flavor: '"Gusai? Don''t make me laugh."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 24
+
+  - title: Yoritomo Wakuni
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Magistrate
+    - Merchant
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 6
+    personal_honor: 2
+    text: 'Economic Open: Destroy your Wealth token to give a target Strategy in your discard pile Discipline . Banish the target
+      at the end of the turn.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"My father Ninsei is more of a leader than either of these so-called ''Champions''."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 25
+
+  - title: Yoritomo Yusako, Hiromi's Legacy Captain
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Pirate
+    - Samurai
+    - Naval
+    force: 3
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Raid Battle: Show the top card of your Fate deck. If it is a Follower, you may Equip it to Yusako (paying all costs).'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Ichido forgets he''s not the only one who was at the Scouring. I''m keen to remind him."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 26
+
+  - title: Asako Kensaku
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    - Shugenja
+    - Air
+    force: 1
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Open, w: Give your target Temple Holding +1GP. Before the turn ends, gain 1 Honor if you assigned no Personalities
+      to battlefields during it.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Why you wish to meet in such a wretched place is beyond me, Kunisada. It is as far removed from the mountains
+      as its ignorant people are from wisdom."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 27
+
+  - title: Shosuro Eiko
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    force: 0
+    chi: 2
+    gold_cost: 4
+    personal_honor: 1
+    text: 'Economic Open, : Target a Personality. The next time (this turn) an action targets them, the action''s player loses
+      1 Honor.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"There is also profit to be had in tragedy, Omezo-san, depending on whose it is."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 28
+
+  - title: Goju Takemi
+    type: Personality
+    clan: Ninja,Spider
+    deck: Dynasty
+    keywords:
+    - Infiltrator
+    - Merchant
+    - Ninja
+    - Shadowlands
+    force: 3
+    chi: 2
+    gold_cost: 4
+    personal_honor: 0
+    text: 'Open: Remove one of a target non- Stronghold card''s printed abilities (you choose) and lose 1 Honor.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Perhaps a sea bass, my lord?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 29
+
+  - title: Ide Hideshi
+    extended_title: Ide Hideshi • Experienced
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    - Cavalry
+    - Experienced
+    force: 3
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Dynasty/Open: Produce 1 Gold, which may only be used to pay for a single Economic action or Invest cost.Absent Home
+      Response, w: If the action was from a face-up Honesty card or brought a face-up Honesty card into play, draw a card.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    flavor: '"Many resources are needed to rebuild, and to defeat the traitor Naleesh. I am here to secure them."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 30
+
+  - title: Brotherhood of the Waves
+    type: Follower
+    deck: Fate
+    keywords:
+    - Courage
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: 'While there is another Follower in this unit, this Follower has +1F and its has +1 strength.Battle: 1.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: (PD) Utagawa Sadahide - "Ashikaga Takauji Sets Sail for Minatogawa"
+    flavor: Some had survived the Scouring together, only to die at each other's hands.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 31
+
+  - title: Incendiary Archers
+    type: Follower
+    deck: Fate
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 1
+    text: 'Battle, w: Ranged 2 Attack. Battle: Fear 2.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    rarity: Fixed
+    artist: Albert Tavira
+    flavor: '"These men are yours?" Ichido asked. Kunisada smiled. "A Lion is never without fangs. Are you able to negotiate
+      on your master''s behalf, dog? Or shall I bare my fangs against you?"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 32
+
+  - title: Kaizoku
+    type: Follower
+    deck: Fate
+    keywords:
+    - Pirate
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 2
+    text: 'Equips to a Naval Personality for less.Raid Engage, : Draw a card.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: (PD) Utagawa Kuniyoshi - "Kezori Kyuemon"
+    flavor: '"Lady Minoko may not like what we do, but she still wishes to win, after all."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 33
+
+  - title: Questionable Vassal
+    type: Follower
+    deck: Fate
+    keywords:
+    - Mercenary
+    - Ninja
+    - Ronin
+    force: 2
+    chi: 0
+    gold_cost: 2
+    focus: 3
+    text: 'After this Follower enters play, lose 1 Honor.Ninja Battle, : Ranged 3 Attack (Destroy a target enemy Follower or
+      Personality without Followers with 3 or lower Force).'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Isuardi Therianto
+    flavor: '"Governor Ninsei employs many ronin, Lord Seiki. Our man will be among them." - Hoji Eijiro'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 34
+
+  - title: Traveling Ronin
+    type: Follower
+    deck: Fate
+    keywords:
+    - Ronin
+    force: 4
+    chi: 0
+    gold_cost: 7
+    honor_requirement: 1
+    focus: 2
+    text: 'Battle/Open: If this card is in your hand, target your Personality: Attach this card to him, paying all costs. At
+      the end of this turn, if this card is in play, you may put it in your hand.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    rarity: Fixed
+    artist: Malcolm McClinton
+    flavor: '"Have you sailed before?" Sumiteru asked. The ronin smirked. "For the right price, it won''t matter."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 35
+
+  - title: Mantis Kama
+    type: Item
+    deck: Fate
+    keywords:
+    - One-Handed
+    - Peasant
+    - Weapon
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: 'Battle, w: Give -2F to a target Personality or to one or two target Followers.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: '(PD) Utagawa Kuniyoshi - "Unuma: Yoemon and His Wife Kasane"'
+    flavor: '"Simple tools can forge great destines." - Yoritomo Waito'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 36
+
+  - title: My Father's Weapon
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    force: 1
+    chi: 1
+    gold_cost: 3
+    focus: 3
+    text: 'At the end of the turn, if you brought this card into play this turn: Straighten this Personality.'
+    legality:
+    - Four Winds (Gold)
+    - Legacy
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    rarity: Fixed
+    artist: Ben Peck
+    flavor: '"I will use it when I find a foe worthy of it."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 37
+
+  - title: Arrows from the Woods
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Ranged 2 Attack.Reaction: After you target another player''s card with a Ranged Attack: Increase that Ranged
+      Attack''s strength by 2.'
+    legality:
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Shattered Empire
+    card_notes: The Pearl Edition version was misprinted with a 7 Gold Cost.
+    rarity: Fixed
+    artist: David Dietrick
+    flavor: '"If we''d burned the forest down, this wouldn''t be a problem!" - Yoritomo Tatsuki'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 38
+
+  - title: Defeat the Reserves
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Battle: Target a player: If he controls more units at the current battlefield than the highest Chi among all Personalities
+      he controls there, he repeatedly targets and moves home one unit he controls there until that is no longer true or until
+      he can no longer target or move units.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Shattered Empire
+    rarity: Fixed
+    artist: Storn A. Cook
+    flavor: '"One who seeks to win a fight over a battle will lose both." - Akodo''s Leadership'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 39
+
+  - title: From Every Side
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Increase the current battlefield''s province''s strength by twice the number of units on the defending side.Battle:
+      Reduce the current battlefield''s province''s strength by the number of units on the attacking side.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    rarity: Fixed
+    artist: Ed Cox
+    flavor: '"Come on, then!"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 40
+
+  - title: Ill-Gotten Gains
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Open: Destroy your Wealth token to straighten a target Follower or Personality.Raid Battle, : Bow a target Holding
+      or Personality at any location.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: (PD) Keisai Eisen - "Daikoku and Ebisu with Bales of Money"
+    flavor: '"We should thank our benefactors. Someone weigh down a bottle of sake and toss it overboard for them!"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 41
+
+  - title: Machinations
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Kolat Open, or : Discard a card from your hand to draw two cards. Lose 1 Honor, or bow your target Courtier or Merchant
+      to make a target player gain or lose 2 Honor.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: (PD) Utagawa Kunisada - "Secret Message Act. 7 - Chushingura"
+    flavor: The discovery of Governor Ninsei's body in the aftermath caused first grief, then unrest and anger when signs were
+      found pointing to Minoko's men as the culprits.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 42
+
+  - title: Overwhelming Numbers
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: If your current army has more units than the current enemy army: The enemy leader chooses and bows one of
+      his unbowed Personalities in his current army.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    rarity: Fixed
+    artist: John Donahue
+    flavor: '"We will lose many men driving those defenders from the woods," Kuniken said. Ichido waved dismissively. "So will
+      they," he replied, "and we have more."'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 44
+
+  - title: Rout
+    type: Strategy
+    deck: Fate
+    gold_cost: 1
+    focus: 3
+    text: 'Battle: Target a unit: Move it home. Destroy one of its attachments (if any).'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Shattered Empire
+    rarity: Fixed
+    artist: Molly Denmark
+    flavor: '"They may be better sailors, but wars must be won on land as well." - Yoritomo Sumiteru'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 45
+
+  - title: Stand Against the Waves
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: If each unit in your current army has at least one Follower: The enemy leader must target and bow a number
+      of Personalities without Followers in his current army equal to the number of units in your army. If he is unable do so,
+      this action bows all Personalities without Followers in his army.'
+    legality:
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Shattered Empire
+    rarity: Fixed
+    artist: Mike Raabe
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 46
+
+  - title: Superior Defense
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Battle: Give a target enemy Follower or Personality a Force penalty equal to your target unbowed Follower''s Force.
+      If that Follower is attached to a Commander, you may bow it to draw a card and take an additional action.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Robin Wouters
+    flavor: '"We must hold the enemy here, no matter the cost." - Yoritomo Bunrakuken'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 47
+
+  - title: The Height of Courage
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Reaction: Before the resolution of another player''s action, choose your performing Personality: Negate his movement
+      from the action''s effects.Battle: Choose your performing Personality: Give him and each of his Followers +1F.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    rarity: Fixed
+    artist: Lee Smith
+    flavor: '"Osano-Wo!" Bunrakuken shouted over the melee, "Watch me die well, and be proud!"'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 48
+
+  - title: Weigh the Cost
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'As a Focus Effect: Add 1 to the Focus Values of this card and one other of your focused cards. Battle: Move your
+      performing Samurai Personality home: Bow him. Give the current battlefield''s province +2 or -2 strength. You may target
+      an enemy Personality and give him -3F.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    rarity: Fixed
+    artist: Slawomir Maniak
+    flavor: '"I had to acknowledge the Hantei to spare my retinue, but Kunisada''s men were helping Ichido''s forces burn the
+      city. What deal was struck, I wonder?" - Daidoji Omezo'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 49
+
+  - title: Ichido Allegiance
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Mantis Clan
+    province_strength: 1
+    gold_production: 0
+    starting_honor: -1
+    text: 'Your Wind must be The Kanpeki Dynasty.Raid Engage, w: Create a 2F/1C/1PH Pirate • Naval Mantis Clan Personality.
+      At the end of this turn, banish them unless you destroy one of your Wealth tokens.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: Llyn Hunter
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 50
+
+  - title: Minoko Allegiance
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Mantis Clan
+    province_strength: -1
+    gold_production: 0
+    starting_honor: 1
+    text: 'Your Wind must be Kano''s Alliance. Resolution of your Raid battles does not bow your Naval Personalities'' Followers.Raid
+      Engage, w: Create and Equip a 1F Follower to each of your Commanders at this battlefield. At the end of this turn, banish
+      those Followers.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: Charles Urbach
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 51
+
+  - title: The Battle of Broken Wave City
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'Open: Create a Raid Attack whose resolution does not bow your Personalities. After the battle ends, if you won it,
+      target a player and discard all cards in (not attached to) their Provinces and refill them, face-up.'
+    legality:
+    - Shattered Empire
+    rarity: Fixed
+    artist: (PD) Utagawa Sadahide- "Genpei Dan-no-ura ôgassen no zu"
+    flavor: Minoko would not let Ichido's forces claim the last Mantis bastion in the Empire, no matter the cost.
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 53

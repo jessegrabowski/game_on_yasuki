@@ -1,0 +1,735 @@
+set: The Imperial Gift 1
+cards:
+  - title: Consecration of Steel
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      your second turn from now begins, all your Personalities with the Magistrate or Kensai keyword have +1F/+1C while they
+      are in play.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Ancor Gil Hernandez
+    flavor: '"The Heavens have blessed this steel. Now go forth and use it to slay your lord''s enemies."'
+    number: 1
+    collector_number: '1'
+
+  - title: Regional Treasurer
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Retainer
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Open, w: Straighten your target Samurai Personality. Until your next turn ends, he will not straighten.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Joe Wilson
+    flavor: '"The position of Imperial Treasurer shall be created, in order to supervise the security and distribution of the
+      throne''s wealth." - The New Emperor'
+    number: 2
+    collector_number: '2'
+
+  - title: Hida Manoru
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Jade Legion
+    - Samurai
+    - Scout
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 3
+    personal_honor: 2
+    text: 'Recon Open: Target a Province. You have Reconnaissance at its battlefields. Your Crab Clan Personalities have +1F,
+      and Shadowlands Personalities have -1F, while at that Province''s battlefields.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Adam Bray
+    flavor: '"I am no mindless brute. I am a Crab warrior, and you should fear me."'
+    number: 3
+    collector_number: '3'
+
+  - title: Kakita Taminoko
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crane Clan
+    force: 1
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Political Limited, w: Target another player''s honorable Personality. The player may choose to dishonor him. If he
+      does not choose this, gain 2 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Mario Wibisono
+    flavor: '"Samurai are made for more than war. If we cannot rise above simple violence, then how can we hope for a better
+      world for the future?"'
+    number: 4
+    collector_number: '4'
+
+  - title: Togashi Chunoken
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Monk
+    - Tattooed
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Reaction: Even if Chunoken is bowed, after a Combat Segment ends, if he is at the current battlefield: Straighten
+      him.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Anthony Grabski
+    flavor: '"Many mistake piety for passivity. No one repeats the mistake."'
+    number: 5
+    collector_number: '5'
+
+  - title: Matsu Notsuo
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Lion Clan
+    - Samurai
+    force: 4
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 7
+    personal_honor: 3
+    text: Notsuo does not bow from battle resolution.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Wen Juinn
+    flavor: '"I need steel and battle. Words mean nothing."'
+    number: 6
+    collector_number: '6'
+
+  - title: Tsuruchi Saya
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Mantis Clan
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Battle: Ranged 5 Attack.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Mario Wibisono
+    flavor: '"You are of no use to me dead. I do not care what condition you are in, however."'
+    number: 7
+    collector_number: '7'
+
+  - title: Shosuro Miyoto
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Ninja
+    - Scorpion Clan
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Battle: Target an enemy Personality with one or more Poison tokens: Bow him.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: '"I only kill the corrupt. It is a tragedy that so many are easily corrupted."'
+    number: 8
+    collector_number: '9'
+
+  - title: Isawa Itsuoko
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Phoenix Clan
+    - Shugenja
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 2
+    personal_honor: 3
+    text: 'Earth Battle, w: Bow a target enemy Personality. If he is an Oni, until the next turn ends, negate all effects that
+      straighten him. You may bow one of Itsuoto''s Spells to ignore the cost of bowing her.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Wen Juinn
+    flavor: '"Sometimes purification requires power, pure and simple."'
+    number: 9
+    collector_number: '8'
+
+  - title: Daigotsu Bundoru
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Paragon
+    - Samurai
+    - Shadowlands
+    - Spider Clan
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 0
+    text: 'After Bundoru enters play, lose 2 Honor.Fear Battle: Bow all Followers with 4 or lower Force in a target enemy Personality''s
+      unit.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Jarreau Wimberly
+    flavor: '"I need no eyes to see the truth. To me, all is darkness."'
+    number: 10
+    collector_number: '10'
+
+  - title: Daku no Oni
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 7
+    chi: 4
+    gold_cost: 8
+    personal_honor: 0
+    text: 'After Daku enters play, lose 6 Honor.Battle: Target a Personality opposing Daku, or a Holding controlled by the enemy
+      leader. Bow the targeted card. Destroy it if it is a Farm or Ashigaru.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Adam Bray
+    flavor: '"I do not care what it is called or what it can do. I will kill it, and then I will find another." - Hida Manoru'
+    number: 11
+    collector_number: '12'
+
+  - title: Hitofu
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Hero
+    - Ronin
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Battle: If there are fewer units on your side than on the enemy side at this battlefield, bow a target enemy Personality''s
+      unit.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I never know where my next meal will come from. What do I care who sits upon the throne?"'
+    number: 12
+    collector_number: '13'
+
+  - title: Utaku Kioko
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Battle Maiden
+    - Samurai
+    - Unicorn Clan
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Reaction: After an enemy Personality assigns or moves to Kioko''s battlefield: Gain 2 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Jarreau Wimberly
+    flavor: '"She fills her soul with duty and anger to fill the emptiness left there by war." - Utaku Kohana'
+    number: 13
+    collector_number: '11'
+
+  - title: Sacred Valley
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    text: 'Reaction: Before another player''s action resolves, bow this card: Reduce all Honor losses to you from the action''s
+      effects by 2.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: Such places are favored by those who have brought shame to their family name, that they might find atonement.
+    number: 14
+    collector_number: '14'
+
+  - title: Imperial Couriers
+    type: Follower
+    deck: Fate
+    keywords:
+    - Imperial
+    force: 2
+    chi: 0
+    gold_cost: 3
+    honor_requirement: 0
+    focus: 2
+    text: 'Reaction: After this card attaches from your hand: Straighten this Personality.Limited: After your next End Phase
+      ends, if this card is in play, return it to your hand.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: David Horne
+    flavor: The Miya heralds bring messages of hope for those who serve the Emperor's will.
+    number: 15
+    collector_number: '25'
+
+  - title: Scholarly Attendant
+    type: Follower
+    deck: Fate
+    force: 1
+    chi: 0
+    gold_cost: 2
+    honor_requirement: 1
+    focus: 3
+    text: 'Limited: Target your attachment and your Personality: Transfer the attachment to him.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Gong Studios
+    flavor: '"I think you might find your argument more effective if you remind the Lion ambassador of the writings of sensei
+      Akodo Tishikaru, my lord."'
+    number: 16
+    collector_number: '26'
+
+  - title: Fubatsu Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - One-Handed
+    - Sword
+    force: 3
+    chi: 1
+    gold_cost: 4
+    focus: 4
+    text: (A Personality can only have one Weapon.)
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Surely Hida Fubatsu is of Kaiu blood, to create so perfect a blade." - Hiruma Aki'
+    number: 17
+    collector_number: '27'
+
+  - title: Osano-Wo's Rebuke
+    type: Spell
+    deck: Fate
+    keywords:
+    - Thunder
+    gold_cost: 4
+    focus: 2
+    text: 'This Shugenja has +2F.Battle, w: Bow a target enemy card with fewer attachments than this Shugenja.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Genzoman
+    flavor: '"You will die. But first, you will suffer!"'
+    number: 18
+    collector_number: '28'
+
+  - title: As the Breakers
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Water
+    gold_cost: 0
+    focus: 2
+    text: 'Kiho Water Battle: Bow your target performing Monk or Shugenja to bow a target enemy Personality with lower Chi.
+      You may move your performer home.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Stephanie Pui-Mun Law
+    flavor: Be as the water, and your strength will ebb and flow. Be as the stone, and your perseverance knows no limit.
+    number: 19
+    collector_number: '15'
+
+  - title: Call Forth the Dead
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Maho
+    focus: 3
+    text: 'Kiho Maho Limited, : Target your performing Shugenja to create a 2F/2C Shadowlands • Undead Personality and lose
+      2 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Brandon Leach
+    flavor: '"What need have I for magistrates and soldiers? They follow my orders without question, and death is not a concern."
+      - The Onyx Champion'
+    number: 20
+    collector_number: '16'
+
+  - title: Dance of the Winds
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Air
+    - Kiho
+    gold_cost: 0
+    focus: 4
+    text: 'Air Kiho Battle: Target your performing unbowed Monk or Shugenja to move home a target enemy Personality. If this
+      is the first Battle action taken in this battle, negate the Personality''s (future) movement.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Stephanie Pui-Mun Law
+    flavor: '"Entreating the kami to destruction is a simpleton''s task. Creating beauty is far more difficult."'
+    number: 21
+    collector_number: '17'
+
+  - title: Discovering Lost Lore
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Limited, : Target your performing Artisan to Equip a target Item or Spell in your discard pile to your target Personality
+      and gain 1 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Wen Juinn
+    flavor: '"By the Fortunes! Could this really be the chop of Isawa Hochiu?"'
+    number: 22
+    collector_number: '18'
+
+  - title: Drinking One's Life
+    type: Strategy
+    deck: Fate
+    gold_cost: 3
+    focus: 3
+    text: 'Open, : Target your performing Oni Personality to target another Personality. Lose 3 Honor. While your Oni remains
+      in play, after each player''s turn starts, give the second target a +1F/-1C token.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Ancor Gil Hernandez
+    flavor: '"Even a samurai is good for something." - Omoni'
+    number: 23
+    collector_number: '19'
+
+  - title: Facilitation
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Unique
+    gold_cost: 4
+    focus: 2
+    text: 'Limited: If you have attached a Unique Spell this turn: Draw 2 cards.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Ancor Gil Hernandez
+    flavor: '"I asked for the firestorm spell! No, the other one!"'
+    number: 24
+    collector_number: '20'
+
+  - title: Game of Sincerity
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Dishonor your performing unbowed Personality and target a Personality: Dishonor him. His controller loses
+      2 Honor. Neither Personality contributes Force in this battle''s resolution.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Genzoman
+    flavor: Even in the midst of battle, words can cut as easily as steel, and the shame can linger far, far longer.
+    number: 25
+    collector_number: '21'
+
+  - title: Intercession
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 4
+    text: 'Open: Take the Imperial Favor. Lose 2 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Chris Seaman
+    flavor: '"If you please, this is a matter best left to Imperial discretion."'
+    number: 26
+    collector_number: '22'
+
+  - title: Military Assessment
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Recon
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Choose your performing Scout and target a province: You have Reconnaissance at its battlefields. After each
+      time a battle, trait, or action moves home or returns home one or more of your units from there, straighten those units,
+      and they straighten after bowing from that battle, trait, or action.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    errata_text: Errata'd via the internet.
+    rarity: Fixed
+    artist: David Horne
+    flavor: There are few generals who do not use scouts. Such an advantage is not quickly discarded.
+    number: 27
+    collector_number: '23'
+
+  - title: War-Torn Plains
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Before this battle''s resolution: If there are fewer units on your side than on the enemy side at this battlefield,
+      give each of your Personalities there +2F.Battle: If there are no Terrains at the current battlefield: Put this card into
+      play there.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: Joe Wilson
+    flavor: Once it had critical importance, but now it has been despoiled by too many battles.
+    number: 28
+    collector_number: '24'
+
+  - title: Blood War
+    type: Other
+    deck: Other
+    text: '2003The dreaded Bloodspeaker, the unholy sorcerer known as Iuchiban, rose from the grave for the second time to challenge
+      the sovereignty of the ruling Dynasty and plunged the Empire into darkness through the sinister workings of his cult,
+      the Bloodspeakers. His very existence was such a disruption to the natural order that the Spirit Realms opened up and
+      allowed one hero to return to the mortal realm to counter his darkness: Hida Kisada, the Great Bear of the Crab Clan.
+      Through the sheer force of will of Kisada and the raw power of Isawa Sezaru, brother to the Emperor, Iuchiban and his
+      cult were eventually undone.'
+    rarity: Fixed
+    number: 29
+
+  - title: Era of Enlightenment
+    type: Other
+    deck: Other
+    text: 2005Prompted by the arrival of a great prophet, the descendant of Shinsei, the Empire came under a fevered enthusiasm
+      for seeking enlightenment, the mythical state of absolute oneness with the universe. Even though the prophet was murdered
+      by the Shadowlands, some did find enlightenment through his teachings, and those of his vassals, the Keepers of the Elements.
+      Sadly, the quest for enlightenment leads to the death of Emperor Toturi III at the legendary Tomb of the Seven Thunders,
+      deep in the Shadowlands.
+    rarity: Fixed
+    number: 30
+
+  - title: One Thousand Years of Darkness
+    type: Other
+    deck: Other
+    text: 2002Somewhere in a distant realm the dreams of a thwarted god take shape, and a realm where Fu Leng was victorious
+      in the Clan War is born. Ruled by a corrupted god made flesh, this Rokugan is a tortured and miserable place, where the
+      people suffer for no reason other than that it amuses their malevolent masters. Only the aged ronin Toturi and a handful
+      of his allies, some quite unexpected, have any chance of overthrowing the Dark Emperor and restoring the world to its
+      natural state.
+    rarity: Fixed
+    number: 31
+
+  - title: Race for the Throne
+    type: Other
+    deck: Other
+    text: 2007With the Emperor dead, and his family lost in battle with no clear line of succession, the throne sits empty once
+      again. Rather than throw their armies into battle with one another, the Great Clans instead attempt to accrue sufficient
+      political, economic, and military might to claim the throne, securing their place as the ruling clan of Rokugan. Unknown
+      to mortals, however, the Celestial Heavens have grown tired of man's folly and plan to restore the proper Celestial Order.
+    rarity: Fixed
+    number: 32
+
+  - title: Saga of the Clan War
+    type: Other
+    deck: Other
+    text: 1995The dark god Fu Leng, unwittingly released from his prison, possessed the young Emperor, pitting the clans against
+      one another in a bid for the throne. The forces of the Shadowlands ravaged the Empire, keeping the clans on the defensive
+      until the Black Lion, a ronin warrior named Toturi, began uniting sympathetic forces under his banner. It was Toturi who
+      led the Seven Thunders to defeat Fu Leng and it was Toturi who sat upon the throne when the Clan War was at last ended.
+    rarity: Fixed
+    number: 33
+
+  - title: Saga of the Four Winds
+    type: Other
+    deck: Other
+    text: 2001The Emperor lay dead, murdered by the Shadowlands, having never declared his chosen successor. His four children,
+      known as the Sword, the Wolf, the Anvil, and the Bastard, each set their sights upon the throne, albeit for vastly different
+      reasons. The support of the clans was divided among them, and war, while tragic, was inevitable. The Dark Lord of the
+      Shadowlands, the man responsible for the Emperor's death, sought to exploit the situation, but the Sword sacrificed herself
+      to end his machinations. In the end, the Anvil sat upon the throne, served by his two surviving siblings.
+    rarity: Fixed
+    number: 34
+
+  - title: Scorpion Clan Coup
+    type: Other
+    deck: Other
+    text: 1997Driven by a prophecy of terrifying proportions, the Scorpion Clan Champion Bayushi Shoju enacts a bold and ultimately
+      tragic plan to save the Empire from certain doom. Shoju assassinates his greatest friend, the Emperor Hantei XXXVIII,
+      and seizes control of the Imperial City. The Great Clans band together against him, but Shoju's brilliant and unorthodox
+      tactics hold out until, he hopes, the Crab Clan will arrive and support his bid for the throne. Sadly for the Scorpion,
+      the Crab do not support Shoju's coup, and the Scorpion are undone by the arrival of the Lion Champion, previously thought
+      dead by Shoju's scheming.
+    rarity: Fixed
+    number: 35
+
+  - title: War Against the Darkness
+    type: Other
+    deck: Other
+    text: 1998An ancient, unknown force called the Lying Darkness abducted the Emperor Toturi I, leaving the Empire in chaos.
+      The clans blamed one another. Adding to the chaos, the clans each had conflicts among their own ranks. The faceless shadow
+      minions of the Darkness sowed discord even among the Heavens. When the conflict was at last at an end, the Lady Sun and
+      Lord Moon were dead, replaced by mortals, and the Spirit Realms had spilled forth a vast army into the mortal realm.
+    rarity: Fixed
+    number: 36
+
+  - title: War of Spirits
+    type: Other
+    deck: Other
+    text: 2000A vast army of spirits, the souls of samurai released from the Spirit Realms, united under the banner of the spirit
+      Hantei XVI, the despot also known as the Steel Chrysanthemum. The tyrant demanded that the current Emperor relinquish
+      his throne, but he refused, and war consumed the Empire as samurai took up arms against one another. Surely no other war
+      has so badly damaged the people of Rokugan, who were forced to take up arms against their own ancestors in defense of
+      their beloved Emperor.
+    rarity: Fixed
+    number: 37
+
+  - title: What Is Yet to Come
+    type: Other
+    deck: Other
+    text: 2009The false Sun and Moon have fallen from the sky, replaced by true children of the Heavens. A new Emperor sits
+      upon the throne, with the Voice of the Jade Sun at his right hand and the Voice of the Obsidian Moon at his left. The
+      clans have had no choice but to recognize the clear mandate of the Celestial Heavens, and all have knelt and renewed their
+      oaths of fealty to the new Dynasty. Yet shadows grow ever darker in the deepest forests, a clan of renegades hide in the
+      forgotten places, a brilliant flame burns brightly in the mountains, and somewhere in the Empire the treacherous Ebon
+      Daughter enacts the sinister plots of her master.
+    rarity: Fixed
+    number: 38

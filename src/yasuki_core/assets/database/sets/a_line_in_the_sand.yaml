@@ -1,0 +1,3968 @@
+set: A Line in the Sand
+cards:
+  - title: Abdication
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Kharmic
+    text: 'Reduce all Honor gains and losses from Holdings by 1 (minimum zero).Open: Put this Event into play. Discard it before
+      your next turn ends. You may target and dishonor a Crane Clan Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Danielle Storey
+    flavor: Though it has been long months since she stepped down, the abdication of the Jade Champion remains a matter of brisk
+      discussion.
+    number: 1
+
+  - title: The Samurai Caste Divides
+    type: Event
+    deck: Dynasty
+    text: 'Political Open: Search your Fate deck for an Allegiance card, show it, and put it in your hand.Political Open: Discard
+      a target Allegiance card in play. Refill this Province face-up.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: David Horne
+    flavor: Although the two sons of the Divine Empress did not sanction action against one another, their followers were happy
+      to take that initiative on their own.
+    number: 2
+
+  - title: The Serpent War
+    type: Event
+    deck: Dynasty
+    text: 'Open: Permanently give your target Personality Resilient. If you have fewer Provinces than each other player, permanently
+      give him Conqueror and refill this Province face-up.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Luis NCT
+    flavor: The forces of the Dark Naga, mistakenly believed dead, emerged from the wilderness to lay siege to the Second City.
+      The blood of man and Naga alike flooded the streets.
+    number: 3
+
+  - title: Coastal Lane
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Port
+    gold_cost: 4
+    text: 'Your minimum Dynasty deck size is increased by two.w: Produce 5 Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Stefano Baldo
+    flavor: Seafaring is dangerous, so seagoing vessels follow established routes. They hop island-to-island, minimizing the
+      risk.
+    number: 4
+
+  - title: Colonial Market
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Kharmic
+    - Market
+    gold_cost: 5
+    text: 'This Holding enters play for 2 less Gold if you control any Port Holdings.w: Produce 3 Gold.Once per turn, produce
+      1 Gold that can only pay for a single action from your card in play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Marcel Mercado
+    flavor: '"Wealth is the third battleground." - Master Coin'
+    number: 5
+
+  - title: Contested Market
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Market
+    - Port
+    gold_cost: 2
+    text: 'w: Produce 2 Gold. Economic Open, : Choose a player with three or more Holdings in play. Give his target Holding
+      -2GP (this turn).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Albert Tavira
+    flavor: '"I''ve seen fish more fit to eat in a koi pond, you fraud!"'
+    number: 6
+
+  - title: Hanamachi
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Kharmic
+    - Geisha House
+    gold_cost: 4
+    text: '(Repeatable Limited, : Discard a Kharmic card from your Province and refill it face-up.) This Holding enters play
+      for 1 less Gold for each Geisha (not Geisha House) you control.w: Produce 3 Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Stefano Baldo
+    flavor: Every city has a red-light district. Those worth visiting have a "flower street."
+    number: 7
+
+  - title: House of Floating Petals
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Geisha House
+    gold_cost: 3
+    text: 'w: Produce 3 Gold.Open, w: Create a 0F/1C/0PH Geisha Personality under another player''s control with the trait "You
+      have -1 maximum hand size." Destroy this Holding.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: John Donahue
+    flavor: '"The only good reason to visit Journey''s End City." - Akodo Daiken'
+    number: 8
+
+  - title: House of Loose Silk
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Geisha House
+    - Sake House
+    gold_cost: 6
+    text: 'w: Produce 5 Gold. After a Personality is Recruited, you may bow and destroy this Holding to bow him, and you gain
+      a Conspiracy token if his controller has no unbowed Personalities in play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Chris Ostrowski
+    flavor: '"Something warm, honored samurai?"'
+    number: 9
+
+  - title: Small Holding
+    type: Proxy
+    deck: Other
+    gold_cost: 0
+    text: 'w: Produce 1 Gold.(This is a proxy for a created card. It is not considered to have a title and cannot be included
+      in decks.)'
+    rarity: Premium
+    artist: Leonardo Borazio
+    number: 10
+
+  - title: House of the Floating Lotus
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Geisha House
+    gold_cost: 3
+    text: 'w: Produce 2 Gold, or 4 Gold if you control two or more other Geisha Houses.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Marcel Mercado
+    flavor: 'They come from all walks of life: bushi, courtiers, men, women, city dwellers, and country folk. They come from
+      across the Empire, to set aside their samurai faces and, for one night, exist as mere humans. They come to the world of
+      the willows as moths to flame.'
+    number: 10
+
+  - title: Kumite Grounds
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Kharmic
+    - Temple
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.w: Produce 2 Gold that can only pay for a single Kharmic action. Straighten this Holding after
+      your next Dynasty Phase begins.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Chris Ostrowski
+    flavor: Great temples are massive stone gardens to serenity, with fierce storms at their center.
+    number: 11
+
+  - title: Lonely Dojo
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Kharmic
+    - Dojo
+    gold_cost: 2
+    text: '(Repeatable Limited, : Discard a Kharmic card from your Province and refill it face-up.) After you Equip a Follower
+      paying 1 or more Gold, give this Holding +1GP (this turn).w: Produce 2 Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Juta
+    flavor: Some prefer to practice the killing arts in solitude.
+    number: 12
+
+  - title: Beiko's Bear
+    type: Proxy
+    clan: Mantis
+    deck: Other
+    keywords:
+    - Bear
+    - Mantis Clan
+    - Nonhuman
+    - Spirit
+    force: 5
+    chi: 2
+    gold_cost: 0
+    personal_honor: 3
+    text: 'Has -2F while attacking.Battle: Fear 4 (Bow a target enemy Follower, or Personality without Followers, with 4 or
+      lower Force).(This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)'
+    rarity: Premium
+    artist: Jeff Hill
+    number: 13
+
+  - title: Momiji's Chambers
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Geisha House
+    gold_cost: 1
+    text: 'w: Produce 1 Gold.Open, w: A target player shows a random card in his hand.Open, w: Turn a target card in another
+      player''s Province face-up.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Uncommon
+    artist: Asier Martinez Lopez
+    flavor: Samurai tell things to geisha that they wouldn't even whisper when alone.
+    number: 13
+
+  - title: Nakumi's Fox
+    type: Proxy
+    clan: Mantis
+    deck: Other
+    keywords:
+    - Resilient
+    - Fox
+    - Nonhuman
+    - Spirit
+    force: 1
+    chi: 2
+    gold_cost: 0
+    personal_honor: 3
+    text: (Once per game per card, a Resilient card does not die in battle resolution.)(This is a proxy for a created card.
+      It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Veronica V. Jones
+    number: 14
+
+  - title: Musha-Gaeshi
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Fortification
+    gold_cost: 3
+    text: 'This Fortification enters play bowed. This Province has +1 strength for each other Fortification attached to it,
+      up to 3.w: Produce 3 Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Gong Studios
+    flavor: The steep, curved stone walls of Rokugani castles are designed to repel invaders. It is said that even mice could
+      not scale them.
+    number: 14
+
+  - title: Parumba's Boar
+    type: Proxy
+    clan: Mantis
+    deck: Other
+    keywords:
+    - Boar
+    - Mantis Clan
+    - Nonhuman
+    - Spirit
+    force: 3
+    chi: 2
+    gold_cost: 0
+    personal_honor: 3
+    text: 'Battle: Melee 2 Attack.(This is a proxy for a created card. It is not considered to have a title and cannot be included
+      in decks.)'
+    rarity: Premium
+    artist: Veronica V. Jones
+    number: 15
+
+  - title: Second City Harbor
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Port
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.You may use this Holding''s printed ability one additional time per turn for each of your Markets
+      in play. Economic Battle, : Give a target enemy Personality -1F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Jason Juta
+    flavor: The Second City has three main docks, the control of which decides the flow of colonial wealth.
+    number: 15
+
+  - title: Yamazaru's Monkey
+    type: Proxy
+    clan: Mantis
+    deck: Other
+    keywords:
+    - Mantis Clan
+    - Monkey
+    - Nonhuman
+    - Spirit
+    force: 3
+    chi: 2
+    gold_cost: 0
+    personal_honor: 3
+    text: 'Battle: Discard a card to give a target enemy Personality or Follower a Force penalty equal to the card''s Focus
+      Value.(This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)'
+    rarity: Premium
+    artist: Shen Fei
+    number: 16
+
+  - title: Second City Market
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Market
+    gold_cost: 1
+    text: 'w: Produce 1 Gold.Open, w, : Search your Dynasty deck for a Market or Port. Recruit it (bowed). Destroy this Holding.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Albert Tavira
+    flavor: The colonial conflicts did nothing to slow trade. Indeed, wealth flowed from colonial markets like never before.
+    number: 16
+
+  - title: Asako Ontaiko
+    type: Proxy
+    clan: Phoenix
+    deck: Other
+    keywords:
+    - Shugenja
+    - Void
+    force: 0
+    chi: 2
+    gold_cost: 0
+    personal_honor: 2
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Kim Sokol
+    number: 17
+
+  - title: The Inner Ring
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Fortification
+    gold_cost: 2
+    text: 'This Fortification enters play bowed. Your Fear effects during battles at this Province have +1 strength.w: Produce
+      2 Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Jason Behnke
+    flavor: The Scorpion Wall is actually two rings encircling the second festering pit. To serve on the outmost ring is an
+      honor; the innermost, a punishment.
+    number: 17
+
+  - title: Ashalan
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Ashalan
+    - Nonhuman
+    - Shugenja
+    force: 4
+    chi: 4
+    gold_cost: 0
+    personal_honor: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Paul (Prof.) Herbert
+    number: 18
+
+  - title: Baraunghar Scout
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Cavalry
+    - Scout
+    force: 3
+    chi: 1
+    gold_cost: 0
+    personal_honor: 1
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: IFS
+    number: 19
+
+  - title: Hida Kozan, Voice of the Empress
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Earth
+    - Imperial
+    - Magistrate
+    - Shugenja
+    - Void
+    - Witch Hunter
+    force: 3
+    chi: 3
+    gold_cost: 10
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Kozan enters play for 1 less Gold if your Allegiance is Traditionalist. Kozan need not bow to Lobby. After you Recruit
+      Kozan, take the Imperial Favor. You have a Lobby Bonus of three times Kozan''s Personal Honor.Favor Political Battle/Open:
+      Discard the Imperial Favor to bow a target Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 A New Voice - Roy Esquivel
+    rarity: Rare
+    artist: Charles Urbach
+    flavor: '"It is time for mystery to give way to action."'
+    number: 19
+
+  - title: Hida Kurima
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Resilient
+    - Berserker
+    force: 5
+    chi: 2
+    gold_cost: 9
+    personal_honor: 0
+    text: (A Conqueror's unit doesn't bow after battle. Once per game per card, a Resilient card does not die in battle resolution.)Cannot
+      attach Items.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Immar Palomera
+    flavor: '"Come, my brothers! There is none who dare stand up to our might!"'
+    number: 20
+
+  - title: Champion
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Duelist
+    - Samurai
+    - Yojimbo
+    force: 2
+    chi: 3
+    gold_cost: 0
+    personal_honor: 2
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Jon Hodgson
+    number: 21
+
+  - title: Hiruma Daizen
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Resilient
+    - Samurai
+    - Scout
+    force: 3
+    chi: 1
+    gold_cost: 5
+    honor_requirement: 3
+    personal_honor: 3
+    text: (Once per game per card, a Resilient card does not die in battle resolution.)Daizen has Naval while you control a
+      Port.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: David Horne
+    flavor: The Hiruma will go where they must to prepare their armies for the fight ahead.
+    number: 21
+
+  - title: Kuni Araizen
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Jade
+    - Scout
+    - Shugenja
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Earth Battle: Bow Araizen''s target unbowed Follower or Spell to make a Melee Attack equal to Araizen''s Chi.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Jorge Matar
+    flavor: '"Do not fear," he stated calmly. "I will not let the creatures harm you. We must press forward."'
+    number: 22
+
+  - title: Yasuki Hora
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    force: 0
+    chi: 4
+    gold_cost: 5
+    personal_honor: 1
+    text: 'Invest : Put one or two target Economic Strategies in your discard pile into your hand, and bow Hora. This Invest
+      cost cannot be reduced.Economic Open, w: Increase or decrease a target Holding''s Gold Production (this turn) by half
+      Hora''s Chi, rounded up.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Albert Tavira
+    flavor: Few people like him, but no one can deny his results.
+    number: 23
+
+  - title: Kichi's Shadow Badger
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Badger
+    - Nonhuman
+    - Shadowlands
+    - Spirit
+    force: 4
+    chi: 2
+    gold_cost: 0
+    personal_honor: 0
+    text: 'Battle, w: Melee 4 Attack.(This is a proxy for a created card. It is not considered to have a title and cannot be
+      included in decks.)'
+    rarity: Premium
+    artist: Immar Palomera
+    number: 24
+
+  - title: Yasuki Nakura
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    force: 0
+    chi: 2
+    gold_cost: 3
+    personal_honor: 0
+    text: 'w: Produce Gold equal to Nakura''s Chi that can only pay for a single Economic action.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Veronica V. Jones
+    flavor: His charm is undeniable, and his winning smile has sealed more than a few deals.
+    number: 24
+
+  - title: Kikuchiyo
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Resilient
+    - Ronin
+    - Samurai
+    - Scout
+    - Yojimbo
+    force: 3
+    chi: 2
+    gold_cost: 0
+    personal_honor: 1
+    text: (Once per game per card, a Resilient card does not die in battle resolution.)(This is a proxy for a created card.
+      It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: David Horne
+    number: 25
+
+  - title: Daidoji Hirota
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 6
+    personal_honor: 2
+    text: 'Invest : You may target a Port, and you may target a different Market. Give each target a +1GP Wealth token.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Nathaniel Arches
+    flavor: '"Trade is a profession that is beneath every Crane family. Except for the Daidoji, who seem to actually enjoy it."
+      - Yasuki Jiro'
+    number: 25
+
+  - title: Major Illusion
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Illusion
+    - Samurai
+    - Spirit
+    chi: 2
+    gold_cost: 0
+    personal_honor: 0
+    text: This Personality's Force is equal to the Chi of the caster, plus 1 if he was Air.(This is a proxy for a created card.
+      It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: J. Edwin Stevens
+    number: 26
+
+  - title: Daidoji Natsuki
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Scout
+    force: 2
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Invest : Give Natsuki two +1F/+1C Training tokens, and permanently give her Cavalry. This Invest cost cannot be reduced.Battle:
+      Target a Personality at any location; if Natsuki has no Training tokens, the target must have assigned to this battlefield.
+      Move the target here. Straighten him if you do not control him.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: April Lee
+    flavor: '"Why seek, when you can draw him in?"'
+    number: 26
+
+  - title: Minor Illusion
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Cavalry
+    - Illusion
+    - Nonhuman
+    - Shugenja
+    force: 0
+    gold_cost: 0
+    text: This Personality's Chi and Personal Honor are equal to the Chi and Personal Honor of the caster, respectively.(This
+      is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Shen Fei
+    number: 27
+
+  - title: Daidoji Takeda
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Resilient
+    - Samurai
+    - Scout
+    force: 3
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 2
+    personal_honor: 1
+    text: (Once per game per card, a Resilient card does not die in battle resolution.)
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: John Donahue
+    flavor: '"There is no other escort, my lady. Just me. Lucky for you, eh?"'
+    number: 27
+
+  - title: Oni Hatchling
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 2
+    chi: 2
+    gold_cost: 0
+    personal_honor: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Jim Pavelec
+    number: 28
+
+  - title: Kakita Ariyoshi
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Artisan
+    - Courtier
+    force: 1
+    chi: 5
+    gold_cost: 8
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Ariyoshi enters play for 1 less Gold if your Allegiance is Progressive.Political Battle: Show the top card of your
+      Fate Deck. Target an enemy Personality with Chi less than or equal to the card''s Focus Value. His controller may choose
+      to move him home. If he doesn''t choose this, draw the top card and take an additional action.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Héctor Herrera
+    number: 28
+
+  - title: Onyx Oni
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 5
+    chi: 2
+    gold_cost: 0
+    personal_honor: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Jim Pavelec
+    number: 29
+
+  - title: Kakita Mariko
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 3
+    text: '(Duelists win tied duels versus non-Duelists.)Interrupt: After you Recruit Mariko, look at the top card of your Dynasty
+      deck. You may put it at the bottom.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Brent Chumley
+    flavor: '"The duel is a river, and we are stones in its current. We are shaped by the duel as we determine its course. Death
+      changes a person, don''t you think?"'
+    number: 29
+
+  - title: Tower Guard
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Guard
+    - Samurai
+    force: 0
+    chi: 2
+    gold_cost: 0
+    personal_honor: 2
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Matt Zeilinger
+    number: 30
+
+  - title: Kakita Shinichi
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Resilient
+    - Samurai
+    - Yojimbo
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 4
+    personal_honor: 3
+    text: '(Duelists win tied duels versus non-Duelists. Once per game per card, a Resilient card does not die in battle resolution.)Shinichi
+      has +1F while you control Kakita Daitsu.Battle: Fear 3.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Immar Palomera
+    flavor: '"Only two duels this season, Daitsu?" Shinichi chuckled. "I think you are losing a step, brother." "The season
+      isn''t over," Daitsu smiled.'
+    number: 30
+
+  - title: Tsumaro's Illusion
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Air
+    - Illusion
+    - Shugenja
+    force: 0
+    chi: 3
+    gold_cost: 0
+    personal_honor: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Diego Gisbert Llorens
+    number: 31
+
+  - title: Mirumoto Futoro
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Duelist
+    - Samurai
+    force: 2
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 4
+    personal_honor: 3
+    text: '(Once per turn, as an Absent Engage, move your unbowed Personality in a Cavalry unit to the battle.) Iaijutsu Battle,
+      w: Destroy a target enemy attachment with Force less than or equal to Futoro''s Chi (Spells have zero Force).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Albert Tavira
+    flavor: The rice bowl clattered to the table. "Fighting?" he demanded. "In the Ivory Court? Are you absolutely certain?"
+    number: 31
+
+  - title: Undead Champion
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Champion
+    - Shadowlands
+    - Undead
+    force: 5
+    chi: 2
+    gold_cost: 0
+    personal_honor: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Ted Pendergraft
+    number: 32
+
+  - title: Mirumoto Jaikei
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Reserve
+    - Resilient
+    - Samurai
+    force: 3
+    chi: 1
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 1
+    text: '(Once per game per card, a Resilient card does not die in battle resolution.)Jaikei does not gain Addiction tokens.Invest
+      , : Equip up to three Weapons to your Personalities, paying 4 less Gold each. You may target and bow a Shugenja. This
+      Invest cost cannot be reduced.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Jonathan Moore
+    flavor: '"You… ah… you have a little something… right there." - Tamori Wataru'
+    number: 32
+
+  - title: Zombie
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Nonhuman
+    - Shadowlands
+    - Undead
+    force: 2
+    chi: 2
+    gold_cost: 0
+    personal_honor: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Sam Flegal
+    number: 33
+
+  - title: Mirumoto Saiko
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 4
+    personal_honor: 2
+    text: '(Kensai may attach two Weapons, as long as neither is Two-Handed.)Battle, w: Melee Attack equal to Saiko''s Force.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jonathan Moore
+    flavor: She bowed sharply. "The Dragon Champion wishes you to know that he supports the Crane in their mediation efforts.
+      His aid is yours to call upon."
+    number: 33
+
+  - title: Clay Yojimbo
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Clay Soldier
+    - Nonhuman
+    - Yojimbo
+    force: 1
+    chi: 0
+    gold_cost: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Felipe Gaona
+    number: 34
+
+  - title: Tamori Ginrao
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Magistrate
+    - Shugenja
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 5
+    personal_honor: 3
+    text: Ginrao enters play for 1 less Gold if your Allegiance is Progressive or you are a Crane Clan player. Ginrao also enters
+      play for 2 less Gold if you do not control another Ginrao or you took a Kharmic action this turn.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Behnke
+    flavor: Shikei nodded. "The Crane seek peace, and we should foster that. Perhaps we can mend what we once had with the Scorpion
+      in the process."
+    number: 34
+
+  - title: Goblin Follower
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Goblin
+    - Nonhuman
+    - Pet
+    - Shadowlands
+    force: 1
+    chi: 0
+    gold_cost: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Paul (Prof.) Herbert
+    number: 35
+
+  - title: Tamori Wataru
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Alchemist
+    - Earth
+    - Shugenja
+    force: 1
+    chi: 5
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Open, w: Create a Potion Item with the ability, "Engage: Destroy this Item to give this Personality +2F, the ability,
+      ''Battle: Fear 3'', and a -1C Addiction token" and attach it to your target Personality without a Potion Item.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Jonathan Moore
+    flavor: '"I wonder what would happen if I changed the mixture slightly… hmm, yes. Yes, I think so."'
+    number: 35
+
+  - title: Kiba
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Dog
+    - Nonhuman
+    force: 1
+    chi: 0
+    gold_cost: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Jason Engle
+    number: 36
+
+  - title: Togashi Shao
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Resilient
+    - Monk
+    - Tattooed
+    - Void
+    force: 2
+    chi: 4
+    gold_cost: 6
+    personal_honor: 0
+    text: 'Void Engage: You may give Shao +1F, or you may target an enemy Personality with higher printed Force and give him
+      a Force penalty, and Shao a bonus, equal to the difference between their printed force.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Milivoj Ceran
+    flavor: '"If the foolishness of the court could drive even our lord to strike out, what hope is there for it?"'
+    number: 36
+
+  - title: Light Follower
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    force: 0
+    chi: 0
+    gold_cost: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Franz Vohwinkel
+    number: 37
+
+  - title: Akodo Niito
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Resilient
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 7
+    personal_honor: 3
+    text: 'Niito enters play for 1 less Gold if your Allegiance is Traditionalist.Battle, w: Target an enemy Personality with
+      lower Personal Honor. Bow a number of target cards in his unit up to the difference in Personal Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Jonathan Moore
+    flavor: '"Was there ever any doubt of our loyalty, Seiken-sama?"'
+    number: 37
+
+  - title: Lion Follower
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Cat
+    - Nonhuman
+    force: 1
+    chi: 0
+    gold_cost: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: David Horne
+    number: 38
+
+  - title: Ikoma Akinari
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Invest : Search your discard pile and Dynasty deck for one or two copies of Akinari. Recruit them, ignoring costs.
+      This Invest cost cannot be reduced.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Albert Tavira
+    flavor: '"The Imperial bureaucracy has approved our petition," Dairuko said to the fresh scouts. "Your training begins in
+      earnest now. No more skirmishes - we war with Bayushi''s clan, and they will pay for their pride."'
+    number: 38
+
+  - title: Little Elephant
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Cavalry
+    - Elephant
+    - Nonhuman
+    force: 1
+    chi: 0
+    gold_cost: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Aurelien Hubert
+    number: 39
+
+  - title: Ikoma Genichi
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Scout
+    force: 2
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 10
+    personal_honor: 3
+    text: 'Genichi has Resilient while he opposes a Scorpion Clan Personality or you control a Terrain. (Once per game per card,
+      a Resilient card does not die in battle resolution.)Battle, w: Ranged 3 Attack.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Sergio Camarena
+    flavor: '"They think they are faster. Smarter. This one was too stupid to stay out of harm''s way, and too slow to save
+      himself."'
+    number: 39
+
+  - title: Medium Cavalry Follower
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Cavalry
+    force: 1
+    chi: 0
+    gold_cost: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Mario Wibisono
+    number: 40
+
+  - title: Kitsu Junsuke
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Shugenja
+    - Water
+    force: 1
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Increase your Honor gain from Proclaiming Junsuke to equal the number of Ancestors, up to 5, you control.Home Battle,
+      w: Give your target defending Ancestor +2F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Brent Chumley
+    flavor: '"Gunjin-sama," the priest said in a whisper. "Your presence is strong. What message do you bear?"'
+    number: 40
+
+  - title: Medium Follower
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    force: 1
+    chi: 0
+    gold_cost: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Lee Smith
+    number: 41
+
+  - title: Kitsu Watanabe
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Shugenja
+    - Water
+    force: 1
+    chi: 3
+    gold_cost: 4
+    honor_requirement: 7
+    personal_honor: 3
+    text: 'Water Dynasty/Open, w: Straighten your target Fortification.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Carlos NCT
+    flavor: '"Unthinkable," the Kitsu''s voice shook with rage. "The Scorpion dare assault the sacred Tombs? The spirits of
+      this world and those beyond will not suffer such blasphemy!" The water seemed to swell and roll with the shugenja''s words,
+      reaching for the enemy.'
+    number: 41
+
+  - title: Peasant
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Ashigaru
+    force: 1
+    chi: 0
+    gold_cost: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Mark Smylie
+    number: 42
+
+  - title: Armor
+    type: Proxy
+    deck: Other
+    keywords:
+    - Armor
+    force: 2
+    chi: 0
+    gold_cost: 0
+    text: (This is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Gong Studios
+    number: 43
+
+  - title: Kitsune Nakumi
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Nonhuman
+    - Shugenja
+    force: 0
+    chi: 3
+    gold_cost: 4
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Interrupt: After you Recruit Nakumi, create a 1F/2C/3PH Mantis Clan • Fox • Nonhuman • Spirit • Resilient Personality.
+      (Once per game per card, a Resilient card does not die in battle resolution.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Veronica V. Jones
+    flavor: '"They say fox spirits have difficulty hiding their tails, even in the guise of humans." - Kitsune Yamazaru'
+    number: 43
+
+  - title: Unexpected Weapon
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Weapon
+    chi: 0
+    gold_cost: 0
+    text: This Item's Force Modifier is equal to the discarded card's Focus Value.(This is a proxy for a created card. It is
+      not considered to have a title and cannot be included in decks.)
+    rarity: Premium
+    artist: Gong Studios
+    number: 44
+
+  - title: Kitsune Satoko
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Shugenja
+    force: 0
+    chi: 4
+    gold_cost: 5
+    honor_requirement: 6
+    personal_honor: 4
+    text: 'Satoko enters play for 1 less Gold if your Allegiance is Progressive.Home Battle, w: Move your target Spirit Personality
+      home. You may rehonor it.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Amy Nagi
+    flavor: '"Satoko and her daughter Nakumi are among our finest spirit-tamers. She never speaks of Nakumi''s father. They
+      say he vanished, but I have my suspicions." - Kitsune Yamazaru'
+    number: 44
+
+  - title: Wataru's Potion
+    type: Proxy
+    clan: Unaligned
+    deck: Other
+    keywords:
+    - Weapon
+    force: 0
+    chi: 0
+    gold_cost: 0
+    text: 'Engage: Destroy this Item to give this Personality +2F, the ability, "Battle: Fear 3", and a -1C Addiction token.(This
+      is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)'
+    rarity: Premium
+    artist: Jonathan Moore
+    number: 45
+
+  - title: Tsuruchi Kaitaru
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Resilient
+    - Samurai
+    - Scout
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 2
+    personal_honor: 3
+    text: '(Once per game per card, a Resilient card does not die in battle resolution.)Invest : Produce 15 Gold. This Invest
+      cost cannot be reduced.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Jazz Siy
+    flavor: '"It is just as much a scout''s duty to uncover resources as it is to uncover enemies." - Yoritomo Hiromi'
+    number: 45
+
+  - title: Gates of the Second City
+    type: Stronghold
+    clan: Unaligned
+    deck: Pre-Game
+    province_strength: 7
+    gold_production: 8
+    starting_honor: 8
+    text: '(This card has +1PS and +2GP if you didn''t go first.)Limited, : Gain 2 Honor. Tireless Battle: Discard a card to
+      make a Fear effect with strength equal to the card''s Focus Value. (Tireless actions may be taken even while bowed.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: Chris Medico,New Hampshire Playtest Team
+    rarity: Premium
+    artist: Noah Bradley
+    flavor: Opportunity, and treachery, await within.
+    number: 46
+
+  - title: Tsuruchi Taito
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Samurai
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Battle, w: Ranged 3 Attack. If the Defender has not had an opportunity to take a Battle action or pass, discard a
+      card.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Sergio Camarena
+    flavor: '"If it is virtuous to end a fight quickly, as they say, then none should find fault with my methods."'
+    number: 46
+
+  - title: Yoritomo Dairu
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Naval
+    - Artisan
+    - Samurai
+    - Yojimbo
+    force: 3
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 3
+    text: '(Kensai may attach two Weapons, as long as neither is Two-Handed.)Battle: Bow a target enemy attachment with lower
+      Force. You may bow one of Dairu''s Weapons or one of your Ports to destroy the target.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Jazz Siy
+    flavor: '"He looks over our sister where I cannot. At least she welcomes the runt''s company." - Yoritomo Hiromi'
+    number: 47
+
+  - title: Yoritomo Haruna
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    force: 0
+    chi: 2
+    gold_cost: 2
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Economic Open, w: Target a Market or Port card in your Province. You may either take an additional action to use
+      one of its abilities ignoring bow costs, produce 2 Gold, or target your Personality and give him +2F, or +3F if he is
+      Spider Clan. Discard the card and refill the Province face-up.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    errata_text: Ignores only bow costs now; effective on release
+    rarity: Rare
+    artist: Marcel Mercado
+    flavor: '"She works long hours for Yashinko-sama''s convenience, affording no time for herself." - Yoritomo Dairu'
+    number: 48
+
+  - title: Agasha Beiru
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Shugenja
+    force: 1
+    chi: 3
+    gold_cost: 4
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Earth Open, w, : Recruit a target Fortification in your discard pile (attach it to any of your Provinces). Give its
+      Province a +1 strength Wall token.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: Immar Palomera
+    flavor: At his command, the earth tore free from its bindings. "Stand down," he ordered the enemy. "I will not say it again."
+    number: 49
+
+  - title: Isawa Kaisei
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Destined
+    - Air
+    - Shugenja
+    force: 0
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 4
+    text: 'Air Open, w: If it is not your turn, target one of your Provinces. It is consecrated. Before the turn ends, if it
+      hasn''t been destroyed, gain 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Lee Smith
+    flavor: The court was in an uproar. "It is a simple matter," he insisted. "There is ample research to corroborate the fact.
+      Gaijin blood renders one susceptible to spiritual corruption."
+    number: 50
+
+  - title: Isawa Orinoko
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Fire
+    - Shugenja
+    force: 2
+    chi: 2
+    gold_cost: 5
+    personal_honor: 3
+    text: 'Orinoko enters play for 1 less Gold if your Allegiance is Traditionalist.Invest : Give Orinoko three +1F/+1C tokens,
+      then permanently give her Conqueror and the ability, "Fire Battle: Fear 5." This Invest cost cannot be reduced.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Jazz Siy
+    flavor: Those students instructed by Isawa Koiso find the secret to incredible power, but nagging questions haunt their
+      conscience.
+    number: 51
+
+  - title: Isawa Waiko
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Resilient
+    - Fire
+    - Shugenja
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 1
+    text: '(Once per game per card, a Resilient card does not die in battle resolution.)Fire Battle: If Waiko has a Fire Spell,
+      Ranged 2 Attack.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Paul (Prof.) Herbert
+    flavor: '"Still your rage, friend Moto!" she cried, but her assailant would not hear her. Hoping for forgiveness, she drew
+      upon the power of fire to defend herself.'
+    number: 52
+
+  - title: Shiba Tuoko
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Resilient
+    - Samurai
+    - Yojimbo
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 2
+    text: '(Once per game per card, a Resilient card does not die in battle resolution.)Interrupt: After you Recruit Tuoko,
+      create a 0F/2C/2PH Phoenix Clan • Void • Shugenja Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Kim Sokol
+    flavor: '"My lady Ontaiko, give me leave to respond to these insults. The Unicorn must pay for their offense."'
+    number: 53
+
+  - title: Shiba Yinfuo
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Yojimbo
+    force: 2
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Battle, w: Melee 2 Attack, or 3 if you took a Kharmic action this turn.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Paul (Prof.) Herbert
+    flavor: '"You would strike down my charge now that she is weakened by defeating twenty of your men, sparing their lives?
+      You are unworthy of the title of samurai."'
+    number: 54
+
+  - title: Bayushi Atsuto
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Courtier
+    - Samurai
+    - Yojimbo
+    force: 3
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 1
+    text: Atsuto has Resilient while opposing a dishonorable Personality. (Once per game per card, a Resilient card does not
+      die in battle resolution.)
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Charles Urbach
+    flavor: '"My lady," Atsuto said quietly. "I believe the Crane''s attempt to prevent war was sincere. How... bizarre."'
+    number: 55
+
+  - title: Bayushi Yasunari
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Yojimbo
+    force: 3
+    chi: 1
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Home Battle: If he would be opposed, move Yasunari to the current battlefield.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Héctor Herrera
+    flavor: Yasunari watched the Dragon approach. "We know why you are here," he said irritably. "My mistress will not submit
+      to your questioning. Ask again, and you will not like the answer you get."
+    number: 56
+
+  - title: Shosuro Kiyofumi
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Resilient
+    - Ninja
+    - Scout
+    force: 2
+    chi: 2
+    gold_cost: 4
+    personal_honor: 0
+    text: (Once per game per card, a Resilient card does not die in battle resolution.)Kiyofumi has Destined while you control
+      a Geisha (Geisha Houses are not Geisha; Draw a card after you Recruit a Destined card).
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Conceptopolis
+    flavor: '"The Lion are notoriously disciplined. They hate drink, they hate gambling... but the honorable entertainer in
+      their home is distraction enough, I suppose."'
+    number: 57
+
+  - title: Shosuro Yasumasa
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Courtier
+    force: 1
+    chi: 4
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Interrupt: Increase each Honor loss from the Battle action by 1.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jorge Matar
+    flavor: '"It was no easy task, lord Nitoshi, but we were able to locate the man you sought in the Colonies. I present to
+      you the war fan of Akodo Uehara. I believe he will not have the chance to return from the jungles to assist his clan in
+      this war."'
+    number: 58
+
+  - title: Soshi Kitaiko
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Air
+    - Courtier
+    - Shugenja
+    force: 0
+    chi: 3
+    gold_cost: 5
+    personal_honor: 1
+    text: 'Interrupt, w: After the action Equips your Spell to Kitaiko, draw a card. Air Tireless Open: If Kitaiko has an Air
+      Spell, straighten her.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Nathaniel Arches
+    flavor: '"A kitsune? Do not be silly, sister. However, if they wish to think me one, so much the better."'
+    number: 59
+
+  - title: Yogo Gingo
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Reserve
+    - Samurai
+    force: 2
+    chi: 2
+    gold_cost: 5
+    personal_honor: 2
+    text: 'Gingo enters play for 1 less Gold if your Allegiance is Traditionalist.Invest : Give Gingo two +1F/+1C tokens, and
+      permanently give him Conqueror and the ability, "Battle: Move a target Personality home." This Invest cost cannot be reduced.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Jason Engle
+    flavor: '"I will prove our worth to you, Lord Seiken."'
+    number: 60
+
+  - title: Daigotsu Jemaru
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Reserve
+    - Resilient
+    - Samurai
+    - Shadowlands
+    force: 4
+    chi: 2
+    gold_cost: 7
+    personal_honor: 0
+    text: '(You may Recruit a Reserve Personality, if they would be opposed, as an Absent Battle action. Once per game per card,
+      a Resilient card does not die in battle resolution.)Absent Interrupt: After you Recruit Jemaru, take an additional action.Battle:
+      Fear 2.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: William O'Connor
+    flavor: '"The Daigotsu will destroy everything that stands against us!"'
+    number: 61
+
+  - title: Goju Saido
+    type: Personality
+    clan: Ninja,Spider
+    deck: Dynasty
+    keywords:
+    - Assassin
+    - Ninja
+    - Shadowlands
+    force: 3
+    chi: 2
+    gold_cost: 5
+    personal_honor: 0
+    text: 'Invest : Melee 5 Attack (this cannot be Interrupted) that may target a card in a player''s home (if otherwise legal).
+      This Invest cost cannot be reduced. Lose 2 Honor. After Saido enters play, lose 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: CalderonStudio
+    flavor: It hissed in delight as the Crab twitched, his chest impaled with the blade of another...
+    number: 62
+
+  - title: Marimako
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Kensai
+    - Naval
+    - Monk
+    force: 3
+    chi: 1
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 0
+    text: (A Conqueror's unit doesn't bow after battle. Kensai may attach two Weapons, as long as neither is Two-Handed. Once
+      a turn, the Attacker gets the first Battle action, if it's from a Naval Personality's unit.)
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Jason Behnke
+    flavor: She is both beautiful and deadly. Marimako's skills with weapons are unrivaled within the Clan.
+    number: 63
+
+  - title: Susumu Jaru
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Courtier
+    force: 1
+    chi: 1
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Increase your Honor gain from Proclaiming Jaru to equal the number of Clout tokens, up to 6, in play.Political Open,
+      w: Discard one or more Clout tokens on other players'' cards. Bow a target Personality with Chi equal to the number discarded,
+      and gain that amount of Honor. Give the target a Clout token if he is Crab Clan.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Hannah Böving
+    flavor: No one likes the old man, but his powerful words can bring a Court to a crashing stop. None can ignore him.
+    number: 64
+
+  - title: Susumu Tanjin
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Courtier
+    force: 0
+    chi: 2
+    gold_cost: 2
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Tanjin enters play for 1 less Gold if your Allegiance is Progressive.Invest : Give another player''s target card
+      a Clout token.Home Interrupt, w: Increase the strength of the action''s Fear effects by the number of Clout tokens in
+      play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Veronica V. Jones
+    flavor: '"It is truly a shame," he tutted.'
+    number: 65
+
+  - title: Yasi
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Resilient
+    - Monk
+    force: 4
+    chi: 2
+    gold_cost: 8
+    personal_honor: 0
+    text: '(Once per game per card, a Resilient card does not die in battle resolution.)Battle: Bow one or two of Yasi''s target
+      unbowed Weapons. Make a Ranged Attack equal to their total Force Modifiers.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Brent Chumley
+    flavor: His blade struck an unseen assassin. His companion gasped. "Never drop your guard," he warned.
+    number: 66
+
+  - title: Akenohoshi, the Dancer
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Artisan
+    - Geisha
+    - Mai Master
+    force: 0
+    chi: 2
+    gold_cost: 2
+    personal_honor: 2
+    text: 'Open, w: Give a target Human Personality +1F and Conqueror. (A Conqueror''s unit doesn''t bow after battle.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: Gemma Tegelaers
+    flavor: '"After an evening spent in her company, I feel as though I could fight to the setting sun." - Hida Kurima'
+    number: 67
+
+  - title: Harukaze, the Confidant
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Artisan
+    - Geisha
+    force: 1
+    chi: 3
+    gold_cost: 3
+    personal_honor: 2
+    text: 'Invest : Show one or two non-Unique cards from your hand and/or Fate discard pile. Put them face-down under Harukaze
+      and bow her.Open, w, : Put a card under Harukaze into your hand.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Gemma Tegelaers
+    flavor: '"One look into that journal would be quite a treasure indeed." - Rokkaku'
+    number: 68
+
+  - title: Momiji, the Madam
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Artisan
+    - Geisha
+    - Merchant
+    force: 1
+    chi: 4
+    gold_cost: 4
+    personal_honor: 2
+    text: 'Interrupt, w: After the action Recruits a Geisha (including Momiji) or a Geisha House from a Province, refill it
+      face-up.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    card_notes: This is a distinct card from Momiji from Death At Koten.
+    rarity: Uncommon
+    artist: Gemma Tegelaers
+    flavor: '"Sachina-sama, all is in readiness for the grand opening of the House of Floating Petals this evening."'
+    number: 69
+
+  - title: Natsumi, the Socialite
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Artisan
+    - Courtier
+    - Geisha
+    force: 0
+    chi: 3
+    gold_cost: 4
+    personal_honor: 3
+    text: 'Interrupt, w: After the action shows a Battle Strategy in another player''s hand, he may discard it. If he chooses
+      not to, a target player gains or loses 1 Honor (you must use this ability before the card is shown).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    card_notes: This is a distinct card from Natsumi from The Shadows Embrace, and is not a version of Natsumi Experienced from
+      Aftermath.
+    rarity: Uncommon
+    artist: Gemma Tegelaers
+    flavor: '"She is so popular that one must pay a fortune and wait three months just to have tea. No wonder the Crane favor
+      her so."'
+    number: 70
+
+  - title: Oboro, the Liar
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Artisan
+    - Geisha
+    - Kolat
+    - Silken Sect
+    force: 0
+    chi: 2
+    gold_cost: 3
+    personal_honor: 0
+    text: 'Invest : If you have not used the Invest trait of an Oboro this turn, shuffle all your other copies of Oboro in play
+      and in your discard pile into your Dynasty Deck. Gain a Conspiracy token for each Oboro shuffled.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    errata_text: Erratum effective September 10th, 2014
+    rarity: Rare
+    artist: Gemma Tegelaers
+    flavor: '"Take the dignitaries to the House of Loose Silk this evening. Keep them occupied for as long as possible." - Master
+      Roc'
+    number: 71
+
+  - title: Suzune, the Coy
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Artisan
+    - Geisha
+    force: 0
+    chi: 2
+    gold_cost: 1
+    personal_honor: 1
+    text: 'Invest : Create a 3F/2C/1PH Ronin • Samurai • Scout • Yojimbo • Resilient Personality (Once per game per card, a
+      Resilient card does not die in battle resolution).Open, w: Straighten your target Human Scout or Yojimbo.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Gemma Tegelaers
+    flavor: '"She is relatively plain, not impressive, and cannot play well. Why can I not keep my men away from her?" - Tamahime'
+    number: 72
+
+  - title: Ide Ryou
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    force: 0
+    chi: 4
+    gold_cost: 5
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Interrupt: After you Recruit Ryou, give a target Holding a +1GP Wealth token.Invest : Give (in total) three +1GP
+      Wealth tokens to one to three target Holdings. This Invest cost cannot be reduced.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Andy Hepworth
+    flavor: '"Trade is the basis for all diplomacy. Those who claim it is ''peace'' or ''politics'' are simply fooling themselves."'
+    number: 73
+
+  - title: Iuchi Kalsang
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Death Priest
+    - Shugenja
+    - Water
+    force: 3
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Water Battle: Discard a card from your hand to create Fear equal to the card''s Focus Value, +1 if its target is
+      Phoenix Clan.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: David Horne
+    flavor: '"Forgive the Phoenix? After what they cost my father? I would sooner forgive the Dragon Champion than forget the
+      Phoenix''s slight to my family!"'
+    number: 74
+
+  - title: Moto Alani
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Destined
+    - Resilient
+    - Death Priest
+    - Shugenja
+    - Water
+    force: 3
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 0
+    text: '(Once per game per card, a Resilient card does not die in battle resolution.)Water Interrupt: The action''s Fear
+      effects have +1 strength, may target Items, and destroy attachments after they bow.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Lee Smith
+    flavor: '"Those who say they do not fear death are either lying, or do not know death."'
+    number: 75
+
+  - title: Moto Kyouaku-Inu
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Kensai
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 4
+    personal_honor: 3
+    text: '(Kensai may attach two Weapons, as long as neither is Two-Handed.)Cannot attach Followers.Battle: Move your target
+      Infantry Personality at any location to Kyouaku-Inu''s battlefield.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Lee Smith
+    flavor: '"Every child her parents had before her died of illness. They named her ''vicious dog'' to keep bad spirits away."
+      - Moto Naleesh'
+    number: 76
+
+  - title: Shinjo Shimikoto
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Resilient
+    - Bully
+    - Samurai
+    force: 3
+    chi: 2
+    gold_cost: 8
+    personal_honor: 1
+    text: '(Once per game per card, a Resilient card does not die in battle resolution.)Battle: Melee 2 Attack. If this destroyed
+      a card, you may make a Fear 3 targeting a (legal) card in the same unit.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Jeff Hill
+    flavor: '"They say her father spoiled her, and it made her headstrong. What of it? She wishes to see the Empire and I think
+      she should be permitted." - Shinjo Min-Hee'
+    number: 77
+
+  - title: Utaku Kimiono
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Kimiono enters play for 1 less Gold if your Allegiance is Progressive.Political Battle: Fear equal to Kimiono''s
+      Personal Honor. If this bowed a card in a unit whose Personality has lower Personal Honor, gain 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Rebekah Norris
+    flavor: '"I only wanted peace. But not like this."'
+    number: 78
+
+  - title: Colonial Conscripts
+    type: Follower
+    deck: Fate
+    force: 2
+    chi: 0
+    gold_cost: 2
+    focus: 1
+    text: 'You may destroy any player''s Farm to ignore the Gold cost of Equipping this Follower.Battle: Give a target enemy
+      Samurai -3F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Behnke
+    flavor: Those in the Colonies have endured much, and their anger in battle shows it.
+    number: 79
+
+  - title: Dark Naga Ambusher
+    type: Follower
+    deck: Fate
+    keywords:
+    - Reserve
+    - Naga
+    - Nonhuman
+    - Scout
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 1
+    text: '(You may Equip a Reserve attachment, if it would be opposed, as a Battle action.)Interrupt: After you Equip this
+      Follower, take an additional action.Battle, w: Ranged 2 Attack.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: J. Edwin Stevens
+    flavor: They retreated, but punished their pursuers for each step.
+    number: 80
+
+  - title: Dragon Elite Inkyo
+    type: Follower
+    deck: Fate
+    keywords:
+    - Jade
+    - Monk
+    force: 3
+    chi: 0
+    gold_cost: 5
+    focus: 4
+    text: This Follower contributes Force even while bowed and it is considered to have 3 Chi when a Kiho checks a card's Chi.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Brandon Leach
+    flavor: The Dragon and Spider worked together to contain the fighting. Though it was not as destructive and chaotic as the
+      riots or the siege, Noburo and his monks had reached the limit of their patience with the squabbles of the other clans.
+    number: 81
+
+  - title: Front Line Fodder
+    type: Follower
+    deck: Fate
+    keywords:
+    - Expendable
+    - Ashigaru
+    force: 3
+    chi: 0
+    gold_cost: 3
+    focus: 1
+    text: (Draw a card after your Expendable card dies.)After a Fear effect bows this Follower, destroy it.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Albert Tavira
+    flavor: '"The preferred solution when you have more koku than bushi. The Lion will be too busy cutting through them to see
+      the true threat." - Bayushi Makubesu'
+    number: 82
+
+  - title: Ichigo's Guard
+    type: Follower
+    deck: Fate
+    keywords:
+    - Courage
+    force: 3
+    chi: 0
+    gold_cost: 4
+    focus: 3
+    text: '(Repeatable Interrupt: Discard a Courage card to give a Fear effect +2 or -2 strength.)Fear effects, Melee Attacks,
+      and Ranged Attacks targeting cards in this unit have -1 strength.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: 2013 Kotei Winner - Carlos Sáez
+    rarity: Common
+    artist: Joshua Pinkas
+    flavor: Neither Ichigo nor his men were moved by Irezu's insanity.
+    number: 83
+
+  - title: Legion of the Khan
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    - Destined
+    force: 3
+    chi: 0
+    gold_cost: 8
+    focus: 1
+    text: 'Fear effects, Melee Attacks, and Ranged Attacks targeting this Follower have -2 strength.Battle: Ranged 3 Attack.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Brandon Leach
+    flavor: '"Fearless as the Matsu, tenacious as the Hida. Their advance is a serious problem." - Isawa Norimichi'
+    number: 84
+
+  - title: Mercenary Guard
+    type: Follower
+    deck: Fate
+    keywords:
+    - Expendable
+    - Mercenary
+    - Ronin
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 3
+    text: This Personality has Resilient. (Once per game per card, a Resilient card does not die in battle resolution.)
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Behnke
+    flavor: '"Raise an army of peasants and ronin. While the Lion are busy watching us do that, unleash our advance riders and
+      scouts near the Kitsu Tombs." - Bayushi Nitoshi'
+    number: 85
+
+  - title: Mounted Skirmishers
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: '(Once per turn, as an Absent Engage, move your unbowed Personality in a Cavalry unit to the battle.) Battle: Give
+      a target enemy Follower or Personality -2F, or -3F if this Personality has moved this turn.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Matias Serpentegui
+    rarity: Common
+    artist: Joshua Pinkas
+    flavor: '"Your devotion to your ally is honorable," Sung-ki said quietly, "so I will spare you. However, your meddling in
+      this is over. Where is the thing called ''Kaiji''?"'
+    number: 86
+
+  - title: Pursuit Riders
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    - Courage
+    - Reserve
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 3
+    text: '(Repeatable Interrupt: Discard a Courage card to give a Fear effect +2 or -2 strength.)Battle: Move home this unit
+      and a target enemy unit with equal or lower total Force.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - AJ Valle
+    rarity: Uncommon
+    artist: Felipe Gaona
+    flavor: Yoritomo Hama looked up at Tae-hyun and his men. Their purpose there was unspoken but clear.
+    number: 87
+
+  - title: Sons of Gusai
+    type: Follower
+    deck: Fate
+    keywords:
+    - Mercenary
+    - Pirate
+    force: 1
+    chi: 0
+    gold_cost: 2
+    focus: 1
+    text: 'This Follower has +1F while you control a Port.Battle, w: Ranged 2 Attack.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Jan Penafuerte
+    rarity: Common
+    artist: Albert Tavira
+    flavor: '"My men may not be the most honorable sort, Esumi-san," Akuhiko said, "but then, I suppose neither are you."'
+    number: 88
+
+  - title: Spider Elite Sohei
+    type: Follower
+    deck: Fate
+    keywords:
+    - Reserve
+    - Monk
+    force: 4
+    chi: 0
+    gold_cost: 8
+    focus: 1
+    text: 'Invest : Search your deck for a Spider Elite Sohei, show it, and put it in your hand.Battle: Fear 3.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Brandon Leach
+    flavor: As the fighting in the streets intensified, a wave of black and white clad monks began to form. Ruthlessly, mercilessly,
+      those who broke the peace were put down.
+    number: 89
+
+  - title: Talented Maiko
+    type: Follower
+    deck: Fate
+    keywords:
+    - Geisha
+    - Maiko
+    force: 0
+    chi: 0
+    gold_cost: 1
+    focus: 3
+    text: 'Open, w: A target player shows a random card in his hand.Open, w: Turn a target card in another player''s Province
+      face-up.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Luis NCT
+    flavor: Peasants gifted in the arts rarely find their talents appreciated. They are fiercely loyal to who - or what - changes
+      that.
+    number: 90
+
+  - title: Aranai's Armor
+    type: Item
+    deck: Fate
+    keywords:
+    - Armor
+    - Destined
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 1
+    text: 'This Personality has Resilient.Interrupt: After you Equip this Item, rehonor this Personality, and you may target
+      and rehonor another Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Dennis Dreischmeyer
+    rarity: Uncommon
+    artist: Gong Studios
+    flavor: Yogo Katsuta stared as his blood-streaked hand. "I don't… don't understand." "Perhaps in the next life," Aranai
+      said softly.
+    number: 91
+
+  - title: Aranai's Kama
+    type: Item
+    deck: Fate
+    keywords:
+    - Courage
+    - Weapon
+    - One-Handed
+    - Peasant
+    force: 2
+    chi: 0
+    gold_cost: 2
+    focus: 2
+    text: '(Repeatable Interrupt: Discard a Courage card to give a Fear effect +2 or -2 strength.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Chris Medico
+    rarity: Common
+    artist: Gong Studios
+    flavor: '"Your life is mine now, little beast," Aranai said to the cowering goblin. "Yes, yes!" Keppo sobbed. "Keppo do
+      whatever warlord asks!"'
+    number: 92
+
+  - title: Crude Dai-kyu
+    type: Item
+    deck: Fate
+    keywords:
+    - Expendable
+    - Weapon
+    - Bow
+    - Two-Handed
+    force: 0
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: '(Draw a card after your Expendable card is destroyed.)Battle, w: Ranged 3 Attack.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Uncommon
+    artist: Gong Studios
+    flavor: '"True craftsmen are in rare supply in the Colonies. However, the archer''s skill is enough to compensate for poor
+      work in some cases." - Tsuruchi Taito'
+    number: 93
+
+  - title: Ensorcelled Longsword
+    type: Item
+    deck: Fate
+    keywords:
+    - Destined
+    - Weapon
+    - Gaijin
+    - One-Handed
+    - Sword
+    force: 2
+    chi: 1
+    gold_cost: 5
+    focus: 4
+    text: (Draw a card after you Equip a Destined card.)After this Weapon enters your discard pile from play, put it back into
+      your hand.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Joshua Pinkas
+    flavor: '"Of course I would never consider actually using a gaijin weapon, even if it was one that I could make appear whenever
+      I wished. However, contemplating the possible applications of such a thing is ... interesting." - Bayushi Makubesu'
+    number: 94
+
+  - title: Heirloom Tanto
+    type: Item
+    deck: Fate
+    keywords:
+    - Kharmic
+    - Weapon
+    - Knife
+    - One-Handed
+    force: 1
+    chi: 1
+    gold_cost: 2
+    focus: 4
+    text: '(Repeatable Limited, : Discard a Kharmic card to draw a card.) In a duel, you may focus this Item from your discard
+      pile and remove it from the game after the focused cards are discarded.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Gong Studios
+    flavor: '"My ancestors have passed this weapon down since before the Ki-Rin Clan left the Empire. And you dare call us gaijin,
+      Phoenix?" - Utaku Izimi'
+    number: 95
+
+  - title: Hidden Dagger
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Ninja
+    - One-Handed
+    force: 2
+    chi: 1
+    gold_cost: 3
+    focus: 1
+    text: 'After this Item enters play, lose 1 Honor.Ninja Interrupt, w: After each time your action targets an enemy Follower
+      or Personality, give it -2F until after the action resolves.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Dan Juleff
+    rarity: Uncommon
+    artist: Gong Studios
+    flavor: '"Ninja!" Isas hissed. "I''m not," said Makubesu, "but I think my dagger is. Never fear; you both are in the custody
+      of an Emerald Magistrate now."'
+    number: 96
+
+  - title: Official Sanction
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 0
+    focus: 3
+    text: 'Card effects will not straighten this Item.Political Open, w: Give this Item a number of Favor tokens equal to this
+      Personality''s Personal Honor.Political Open, w: Target a Personality. Discard two Favor tokens from this Item to negate
+      his next straightening this game or five Favor tokens from it to bow him.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    errata_text: Erratum effective September 10th, 2014
+    story: 2013 Kotei Winner - Pawel Janoszek
+    rarity: Uncommon
+    artist: Gong Studios
+    flavor: Masatsuko signed the writ with a heavy hand. There were times when even the Miya knew war was inevitable.
+    number: 97
+
+  - title: Opportune Weapon
+    type: Item
+    deck: Fate
+    keywords:
+    - Courage
+    - Weapon
+    - One-Handed
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 1
+    text: '(Repeatable Interrupt: Discard a Courage card to give a Fear effect +2 or -2 strength.)Battle, w: Melee 2 Attack.
+      Lose 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Gong Studios
+    flavor: True geisha do not consort with such low company that they would have to worry about defending themselves. Of course,
+      that doesn't stop all of them from learning how.
+    number: 98
+
+  - title: Shikomizue
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - One-Handed
+    - Staff
+    - Sword
+    force: 2
+    chi: 1
+    gold_cost: 3
+    focus: 2
+    text: 'You may Equip this Item as an Engage action.Battle: Fear 1, or Fear 2 if you Equipped this Item during this battle.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Gong Studios
+    flavor: The area around the Kitsu Tombs saw a surprisingly large amount of pilgrims as the Imperial bureaucracy debated
+      the Lion's petition for war. When it was granted, the Lion realized too late just what those visitors truly were.
+    number: 99
+
+  - title: Shinai
+    type: Item
+    deck: Fate
+    keywords:
+    - Courage
+    - Weapon
+    - Sword
+    - Two-Handed
+    force: 1
+    chi: 1
+    gold_cost: 4
+    focus: 2
+    text: '(Repeatable Interrupt: Discard a Courage card to give a Fear effect +2 or -2 strength.)Before this Personality wins
+      a duel, negate the loser''s destruction. After this Personality wins a duel, gain 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Gong Studios
+    flavor: To a true master, every opponent is but a student.
+    number: 100
+
+  - title: Staff of the Raja's Court
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Nemuranai
+    - Staff
+    - Two-Handed
+    force: 2
+    chi: 1
+    gold_cost: 5
+    focus: 4
+    text: 'Engage: Give a target enemy card -1F.Battle: Ranged 1 Attack.Battle: Fear 1.Battle, w: Straighten this Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Gong Studios
+    flavor: Above all others, the Unicorn embraced the magic of the Colonies... much to the Phoenix's concern.
+    number: 101
+
+  - title: Stockpiled Weapon
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - One-Handed
+    - Sword
+    force: 2
+    chi: 1
+    gold_cost: 3
+    focus: 4
+    text: 'Invest : Search your Fate deck for a Stockpiled Weapon, show it, and put it in your hand.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: Gong Studios
+    flavor: '"In the Colonies, the Spider were many, and the resources of the Crab were few," Renyu said to the Susumu. "Here,
+      however, it is much different. Speak again, and I will help you understand this."'
+    number: 102
+
+  - title: Toshigoku's Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Cursed
+    - Sword
+    - Two-Handed
+    force: 3
+    chi: -1
+    gold_cost: 7
+    focus: 1
+    text: 'On your turn, you must declare an Attack Phase and assign this Personality to attack, if able.Battle, w: Destroy
+      a target enemy card with Force less than or equal to this Item''s, and no attachments. Give this Item a +1F token.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Gong Studios
+    flavor: It steals the souls of those it touches. Even, eventually, the wielder.
+    number: 103
+
+  - title: Kobi Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - All Clans
+    province_strength: 0
+    gold_production: 0
+    starting_honor: -2
+    text: Your Kolat cards have Expendable. Before another player's turn ends, gain a Conspiracy token if he controls no unbowed
+      Personalities. You win the game if you ever have ten Conspiracy tokens.After a Personality is Recruited, you may bow this
+      Sensei to kidnap him; bow him and after the next turn begins, straighten him.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 A New Master - Aaron Barto
+    rarity: Uncommon
+    artist: Steve Argyle
+    flavor: '"There is much you must learn, if you survive."'
+    number: 104
+
+  - title: Sachina Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Crane
+    - Mantis
+    - Scorpion
+    province_strength: 1
+    gold_production: 0
+    starting_honor: 0
+    text: 'Your Stronghold has no abilities. Your Geisha enter play for 1 less Gold. Interrupt, w: After the action shows cards
+      in another player''s hand, choose one of them. He may discard it; if he doesn''t, he cannot play cards with that title
+      this turn.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Steve Argyle
+    flavor: '"Stand proud, my pretties. Tonight you serve the Mantis."'
+    number: 105
+
+  - title: Tanizaki Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Crab
+    - Lion
+    - Spider
+    - Unicorn
+    province_strength: -1
+    gold_production: 0
+    starting_honor: -1
+    text: 'Increase Fear strength bonuses and penalties from your Courage actions by 1.Battle, w: Fear 0.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Shen Fei
+    flavor: '"Certainty will always trump hesitation. Act instantly, before your opponent has the opportunity to do so, and
+      victory is assured."'
+    number: 106
+
+  - title: Yung Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Dragon
+    - Phoenix
+    province_strength: 0
+    gold_production: -1
+    starting_honor: 0
+    text: 'The rulebook Kharmic ability is Battle/Open for you, and you may put cards at the bottom of your deck instead of
+      discarding them from that ability. Your Personalities in and out of play have Kharmic.Open, w: Ignore the Gold cost of
+      your next Kharmic action.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Behnke
+    number: 107
+
+  - title: Burning Spirit
+    type: Spell
+    deck: Fate
+    keywords:
+    - Fire
+    gold_cost: 2
+    focus: 2
+    text: 'Attaches to a Fire Shugenja for 1 less Gold.Fire Battle/Engage, w: Target this Shugenja or your Samurai. Give him
+      +2F/+2C; he may not issue challenges this turn.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Tom Kirchgesner
+    rarity: Uncommon
+    artist: Joshua Pinkas
+    flavor: '"You think that the Mantis lay claim to every place in the Colonies, Aranai?" Hinata''s flames surrounded them
+      both as she spoke. "Such pride."'
+    number: 108
+
+  - title: Guidance in War
+    type: Spell
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'This Spell''s Invest effects last while it remains attached to the Shugenja.Invest : This Shugenja has Cavalry.Invest
+      : This Shugenja has Conqueror.Invest : This Shugenja has +2F.Invest : This Shugenja has the ability, "Battle: Ranged 3
+      Attack."'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Storn A. Cook
+    flavor: '"The spirits have many gifts to bestow. Let me show you."'
+    number: 109
+
+  - title: Impassable Waters
+    type: Spell
+    deck: Fate
+    keywords:
+    - Water
+    gold_cost: 1
+    focus: 2
+    text: 'Equips to a Water Shugenja for 1 less Gold.Water Battle, w: Move a target defending Personality home.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: 2013 Kotei Winner - Azrael Johnston
+    rarity: Uncommon
+    artist: Gong Studios
+    flavor: Aranai knocked Tamoko into the rolling water the shugenja herself had summoned. She could have let the Dragon die,
+      but in her heart, Aranai knew she had a great deal to atone for. There was no need to add one more thing.
+    number: 110
+
+  - title: Light of the Morning Sun
+    type: Spell
+    deck: Fate
+    keywords:
+    - Fire
+    gold_cost: 0
+    focus: 2
+    text: 'While this Shugenja is Fire, he has Resilient. (Once per game per card, a Resilient card does not die in battle resolution.)Fire
+      Battle: Fear equal to your target Personality''s Chi. Destroy this Spell.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Storn A. Cook
+    flavor: '"It is the nature of man to praise the sun''s light, even as he turns away from its brightness." - Asako, "The
+      Path of Man"'
+    number: 111
+
+  - title: Past and Future
+    type: Spell
+    deck: Fate
+    keywords:
+    - Kharmic
+    - Void
+    gold_cost: 0
+    focus: 4
+    text: 'After you Equip this Spell to a Void Shugenja, draw a card.Void Open, w: Bow or straighten a target Sensei.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Chris Ostrowski
+    flavor: '"Temper lessons with experience. The certainty of the past with the promise of the future." - Isawa Shunryu'
+    number: 112
+
+  - title: See the Soul's Past
+    type: Spell
+    deck: Fate
+    keywords:
+    - Void
+    gold_cost: 0
+    focus: 1
+    text: 'Invest : Draw a card.Void Open, w: Turn a target card in a Province face-up, or one to two such cards if this Shugenja
+      is Void. Give -3 strength to each Province in which the target is an Unaligned Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Felipe Gaona
+    flavor: '"It is a simple fact that corruption and madness afflicts those of weak honor and... mixed birth," the Phoenix
+      said. "It is an unfortunate truth that this includes the gaijin blood of some Unicorn, but it is a truth all the same."'
+    number: 113
+
+  - title: Stones of Purity
+    type: Spell
+    deck: Fate
+    keywords:
+    - Earth
+    - Jade
+    gold_cost: 5
+    focus: 3
+    text: 'After you Equip this Spell, give this Shugenja a number of +1F Rock tokens equal to his Chi.Earth Jade Repeatable
+      Battle, w: Fear 3. You may discard two Rock tokens from this Shugenja, or one if he is Earth, to straighten this Spell.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Daniel Nagy
+    rarity: Common
+    artist: Jorge Matar
+    flavor: Tamoko frowned at the thing that bore her face. "Did you expect to elicit fear? Surprise? You are a puzzle like
+      any other, and I will see you undone."
+    number: 114
+
+  - title: Suspending Wind
+    type: Spell
+    deck: Fate
+    keywords:
+    - Air
+    gold_cost: 1
+    focus: 3
+    text: 'This Shugenja may not Equip another copy of Suspending Wind unless he is Air.Air Open, w: Target a face-up Personality
+      in a Province. Increase his Gold Cost by half this Shugenja''s Chi, rounded up.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Hannah Böving
+    flavor: He froze, confusion locked upon his features. "Sometimes," the shugenja told him, "air can be like stone."
+    number: 115
+
+  - title: Thundering Waves
+    type: Spell
+    deck: Fate
+    keywords:
+    - Fire
+    - Thunder
+    gold_cost: 0
+    focus: 2
+    text: 'Fire Thunder Battle, w: Bow a target attachment, or a target Personality without attachments and with equal or lower
+      Chi than this Shugenja. Destroy the target if it is a Weapon and this Shugenja is Fire or Thunder.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Nick Moran
+    rarity: Common
+    artist: Lee Smith
+    flavor: '"Did you think your crimes against the Celestial Heavens would go unnoticed, Omigawa?" Umiko asked. "It is fitting
+      you will die here, among the waves, for what you did to the spirit Natsumi."'
+    number: 116
+
+  - title: A Kensai's Art
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Battle: Target your unbowed Personality. Remove an ability and a boldface keyword (if able) on a card in a target
+      enemy unit. If your Personality is a Kensai, you may bow one of his Weapons to either draw a card, or search your deck
+      for A Kensai''s Will, show it, and put it in your hand. You may take an additional action to play A Kensai''s Will.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Florian Stitz
+    flavor: When fighting against a crowd, two swords are the superior choice.
+    number: 117
+
+  - title: A Kensai's Victory
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Battle: Bow your target unbowed Personality. Melee Attack equal to his Force minus two. If your Personality was targeted
+      by your A Kensai''s Art and A Kensai''s Will this turn, you may discard a card to straighten his unit.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Florian Stitz
+    flavor: When you decide to attack, keep calm and move quickly, forestalling the enemy attack with a feeling of constant
+      attack from the first moment to the last.
+    number: 118
+
+  - title: A Kensai's Will
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Battle: Target your unbowed Personality. Give a target enemy Follower or Personality -3F. If your Personality was
+      targeted by your A Kensai''s Art this turn and he is a Kensai, you may bow his Weapon to either draw a card or search
+      your deck for A Kensai''s Victory, show it, and put it in your hand. You may take an additional action to play A Kensai''s
+      Victory.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Florian Stitz
+    flavor: When you take up the sword, you must feel intent upon cutting your enemy.
+    number: 119
+
+  - title: Banishing Breath
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Air
+    - Kiho
+    focus: 3
+    text: 'Air Kiho Battle: Target your unbowed Monk or Shugenja. You may bow him. Move home a target Personality with Force
+      less than or equal to your Monk or Shugenja''s Chi, or his Chi plus 3 if you bowed him.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Brian Stewart
+    rarity: Common
+    artist: Asier Martinez Lopez
+    flavor: '"You have caused great grief with your grasping and scheming, Saigo-san," Karachu said sadly. "It ends now."'
+    number: 120
+
+  - title: Benefits of Honor
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Battle: Bow your target unbowed Samurai. Melee Attack equal to his Chi, plus one if your Allegiance is Traditionalist.
+      Gain 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Nathaniel Arches
+    flavor: '"I understand these matters are very difficult, my friends, but I see no reason we cannot come to an agreement
+      that satisfies all parties."'
+    number: 121
+
+  - title: Beset from All Sides
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    focus: 3
+    text: 'Political Open, : Bow your target unbowed Courtier. Look at a number of cards on the top of your Fate deck equal
+      to his Chi. You may put one at the bottom of your deck. Put the rest back in any order. Draw a card.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Glen Osterberger
+    flavor: '"Let them think they have won. This game still has moves remaining." - Petals and Pincer, III'
+    number: 122
+
+  - title: Calculated Risk
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Battle: Fear 4, or Fear equal to the highest Force of any of your unbowed Oni at this battlefield. This may target
+      a Lion Clan Personality with Followers. Lose 2 Honor.Open, : Destroy a target Farm. Lose 2 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Carlos NCT
+    flavor: Nitoshi regarded the report of Lion attacking near the Scorpion Wall. After a moment, he looked up with cold eyes.
+      "Allow a lapse in the wall's defenses. We have guests, and it would be wrong of us to be poor hosts. Let the Lion charge
+      just as far as they wish."
+    number: 123
+
+  - title: Casting Aside Honor
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Interrupt, : Instead of gaining Honor when you Proclaim, draw cards equal to half the Honor you would have gained,
+      rounded up.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Ben Cumming
+    rarity: Rare
+    artist: Kez Laczin
+    flavor: '"You were a man, Kaiji, but now only a monster. Out of respect for what you once were, I will end this suffering."
+      - Utaku Sung-Ki'
+    number: 124
+
+  - title: Combat at Court
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    - Terrain
+    focus: 3
+    text: 'Samurai at this battlefield have -1F. You have the ability, "Repeatable Battle: Move your target defending Courtier
+      home."Political Battle: Destroy a Terrain (if able). Put this Terrain into play. You may take an additional action.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Héctor Herrera
+    flavor: '"You dare?" Noboru called above the melee. "To arms, my brothers! Contain and end this violence!"'
+    number: 125
+
+  - title: Diplomacy Breaks Down
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    focus: 4
+    text: 'Discipline (You may pay 4 Gold to play this Discipline from your discard pile, then remove it from the game after
+      its action resolves.)Political Open: Target another player''s Personality. After the next time this turn he attacks, his
+      controller discards a card (if able) and you draw a card.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Nathaniel Arches
+    flavor: '"I fear your efforts have been in vain," the Scorpion said. "The Lion do not truly wish peace, now or ever."'
+    number: 126
+
+  - title: Disappearing World Style
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    - Kata
+    focus: 2
+    text: 'Open: Put this Kata into play. Discard your other Kata in play.Battle, w: Move your target Personality home. Lose
+      1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2013 Kotei Winner - Aaron Barto
+    rarity: Uncommon
+    artist: Héctor Herrera
+    flavor: '"You stand charged for the death of Asako Karachu, Aranai," Yamahatsu said. "You will come with me or pay the price."'
+    number: 127
+
+  - title: Familiar Terrain
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    - Terrain
+    focus: 3
+    text: 'After your action resolves, if it bowed any enemy cards, gain 1 Honor.Battle/Engage: Destroy a Terrain (if able).
+      Put this Terrain into play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Chris Ostrowski
+    flavor: '"Be wary of Ryoko Owari. Samurai fight to protect their honor, but fight harder to protect their home."'
+    number: 128
+
+  - title: Fearless Devotion
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Courage
+    focus: 1
+    text: '(Repeatable Interrupt: Discard a Courage card to give a Fear effect +2 or -2 strength.)Battle: Straighten your target
+      opposed card. Gain 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Eric Welsh
+    rarity: Common
+    artist: Erich Schreiner
+    flavor: '"Karachu brought down the demon with his power and - more importantly, I think - his courage. Afterward, he demanded
+      to be left alone to purify the remains." - Kaiu Tojikana'
+    number: 129
+
+  - title: Flight of No Mind
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Courage
+    focus: 3
+    text: '(Repeatable Interrupt: Discard a Courage card to give a Fear effect +2 or -2 strength.)Absent Battle: If he would
+      be opposed, move your target unbowed Personality in your home to the current battlefield. (Absent actions may be taken
+      without presence.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Jeremy Spencer
+    rarity: Common
+    artist: Joshua Pinkas
+    flavor: Isas lowered his bow. "Now we shall see, 'Makoto,' who you might truly be."
+    number: 130
+
+  - title: Hidden Machinations
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    - Kata
+    - Political
+    focus: 4
+    text: 'Before the Action Phase ends, you may take an additional action.Political Open: Put this Kata into play. Discard
+      your other Kata in play.Open, w: Look at the top card of your Fate deck. You may put it at the bottom.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Stephen Vann
+    rarity: Uncommon
+    artist: Rebekah Norris
+    flavor: '"Karachu-san," Jiramu said with a slight smile. "It is a pleasure to see you again. How may I be of assistance?"'
+    number: 131
+
+  - title: Ideological Differences
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Discipline (You may to play this Discipline from your discard pile, then remove it from the game after its action
+      resolves.)Battle: Move home a target Personality with the highest Personal Honor at the current battlefield (you choose
+      in case of a tie).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Shen Fei
+    flavor: '"They have taken our lands and slandered Lord Shibatsu. Our patience has been exhausted."'
+    number: 132
+
+  - title: Long Term Fruition
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    focus: 1
+    text: '(Repeatable Limited, : Discard a Kharmic card to draw a card.) Open: Put a non-Fudo Ring into play from your hand.
+      While it remains in play, it does not count towards an Enlightenment Victory.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Jason Behnke
+    flavor: '"The most dangerous enemy is one you think no longer exists." - Grand Abbot of the Brotherhood'
+    number: 133
+
+  - title: Not Yet Finished
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Battle: You may use the Battle abilities of your target card in a unit one additional time this turn. If you targeted
+      a Yojimbo, you may target and bow your Courtier or Shugenja at any location to straighten the Yojimbo.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Héctor Herrera
+    flavor: '"How are you Dragon surprised by this?" Yasunari growled. "Two hands, two swords, yes?"'
+    number: 134
+
+  - title: Ornery
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'Invest : Draw a card. (After you play this card, you may also pay the Invest cost to get the effect, once.)Open:
+      Straighten your target Personality, or straighten his unit if he is a Duelist.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Wilfredo Rosaly
+    rarity: Uncommon
+    artist: Storn A. Cook
+    flavor: '"Shoo!" he yelled. "I have no time for tomfoolery, even with mythical spirits!"'
+    number: 135
+
+  - title: Planned Departure
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'Battle: Move your target Personality home and straighten his unit as he moves. You may target a Personality and give
+      him +2F or -2F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Jeff Hill
+    flavor: Renyu favored his loyal companion with a rare smile. "The food. The jungles. The heat. That damned monk. All of
+      it can stay in the Colonies and rot. I have nothing but pity for the one who will replace me here. I am eager to be home."
+    number: 136
+
+  - title: Press the Advantage
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Battle: Target a non-Ring card in another player''s discard pile. If the card was discarded by a Strike First this
+      turn, put it in your hand, and you may target your Scout and discard a card to search your deck for a Show No Mercy, show
+      it, and put it in your hand; otherwise, remove the first target from the game. You may take an additional action to play
+      Show No Mercy.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Sergio Camarena
+    flavor: Genichi did not know what was happening, but he did not hesitate. After he was safe, there would be time to discover
+      why someone would desire his death.
+    number: 137
+
+  - title: Redirecting Rage
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Fire
+    - Kiho
+    focus: 2
+    text: 'Fire Kiho Battle: Melee Attack equal to your target Monk or Shugenja''s Force or Chi. Destroy that Monk or Shugenja.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Dimitris Giannakis
+    rarity: Rare
+    artist: Erich Schreiner
+    flavor: '"Your greed and the suffering it has caused others does not simply vanish, Tarao-san," Karachu said. "It is here,
+      in the universe. And I will return it all to you now."'
+    number: 139
+
+  - title: Sanctioned Declaration
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Courage
+    focus: 2
+    text: '(Repeatable Interrupt: Discard a Courage card to give a Fear effect +2 or -2 strength.)Battle: Target a Personality.
+      Negate his (current) Force bonuses or penalties.Battle: Give Resilient to, or remove Resilient from, a target Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Lionel Jassionesse
+    rarity: Common
+    artist: Héctor Herrera
+    flavor: '"I am sorry Katsuta," Aranai said. "Sorry that you were not a better man."'
+    number: 140
+
+  - title: Show No Mercy
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Battle: Target your unbowed Personality, and bow him unless he was targeted by Strike First and Press the Advantage
+      this turn. Ranged 3 Attack. You may take an additional action to play or Equip a card from your hand that you do not own.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Sergio Camarena
+    flavor: As the fire engulfed the buildings around Taito and Genichi, neither man knew it would be seen as nothing more than
+      one of countless such skirmishes that day.
+    number: 141
+
+  - title: Spirited Dispute
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'As a Focus Effect, you may choose to lose this duel to negate its consequences for losing.Invest : Resolve this action''s
+      targeting and effects a second time.Political Open: Rehonor your target Personality.Open, : Put a target attachment in
+      your discard pile into your hand.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    errata_text: Clarification of Invest; effective upon release
+    rarity: Rare
+    artist: Glen Osterberger
+    flavor: '"If you will not listen, then we are done here!"'
+    number: 143
+
+  - title: Startling Lessons
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Iaijutsu Battle: Your target unbowed Personality challenges a target enemy Personality. Give the loser -3F. If the
+      winner is a Duelist, give him a +1F token.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Eric Gardiner
+    rarity: Common
+    artist: Brent Chumley
+    flavor: '"I do not understand why you are doing this, Aranai!" Karachu shouted "I know," she said, her tone sad. "If you
+      did, you would not struggle."'
+    number: 144
+
+  - title: Streets of the Second City
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    focus: 1
+    text: 'Your Fear effects have +1 strength and may target Personalities with Followers.Battle/Engage: Destroy a target Terrain
+      (if able). Put this Terrain into play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Chris Ostrowski
+    flavor: As the Dragon tried to restore order to the Ivory Court, the violence unleashed tensions throughout the city. It
+      was just a matter of time before the fighting renewed in the Second City streets.
+    number: 146
+
+  - title: Strike First
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Battle: Show two random cards in another player''s hand. You may discard one of them; if you do, he draws a card.
+      You may target your unbowed Scout to search your deck for Press the Advantage, show it, and put it in your hand. You may
+      take an additional action to play Press the Advantage.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Sergio Camarena
+    flavor: The Lion had already rallied to Seiken's banner. Yoritomo Hiromi had made it clear that an example should be made
+      early. And quickly.
+    number: 148
+
+  - title: Traditionalist
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Courage
+    - Allegiance
+    focus: 4
+    text: 'You may not play other Allegiance cards. Your Favor actions may target your Personalities as well as other players''.Political
+      Open: Put this Strategy into play.Political Interrupt, w: If the action is Favor and is targeting your Personality, its
+      player must choose a different target, if legal.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    errata_text: Errata effective 19th May 2015
+    rarity: Rare
+    artist: David Horne
+    flavor: '"Progressive thinking is hubris. Are we wiser than our ancestors? Their path should remain ours." - Iweko Seiken'
+    number: 150
+
+  - title: Uncovered Plans
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Political Open, : Target another player. You accuse him of covertly preparing for war. Choose one to three random
+      cards from his hand and show them. For each of these cards that is a Weapon or has a Battle or Engage ability, he loses
+      1 Honor, plus 1 additional Honor if your Allegiance is Progressive. For each other shown card, he gains 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Hannah Böving
+    flavor: '"Let me tell you of the Crab''s supposed ''honor''!"'
+    number: 151
+
+  - title: Unwavering Resolve
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Absent Battle: Target your Personality at any battlefield (not your home). Move him home or, if he would be opposed,
+      to the current battlefield. You may take an additional action to use an ability on a card in his unit. (Absent actions
+      may be taken without presence.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Patrick Gingrich
+    rarity: Uncommon
+    artist: Albert Tavira
+    flavor: '"I respect what you have done, Sung-Ki, but I will not stand aside. Matsu Yoshito stands aside for no one."'
+    number: 153
+
+  - title: Victory Through Deference
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'As a Focus Effect, after you win this duel, remove one to three non-Ring cards in discard piles from the game.Invest
+      : Draw a card.Battle/Open: Remove one to three non-Ring cards in discard piles from the game. You may target a Personality
+      and remove one of his abilities or boldface keywords (this turn). Take an additional action.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    story: 2013 World Champion - Tom Kirchgesner
+    rarity: Rare
+    artist: Carlos NCT
+    flavor: '"I faced P''an Ku, one intent on destroying Rokugan, and did not draw my steel," Seiken said quietly. "Must I treat
+      my own brother with less regard?"'
+    number: 154
+
+  - title: Your Past
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'As a Focus Effect, after you win this duel, draw a card.Invest : If the Sensei is yours, you may use its abilities
+      a second time this turn.Open: Bow or straighten a target Sensei.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    story: 2013 Kotei Winner - Eric Gardiner
+    rarity: Uncommon
+    artist: Llyn Hunter
+    flavor: The shapeshifter mocked Aranai, "Come now, 'warlord'. Do you think we had forgotten where you came from? Did you
+      think you had? What was it that carried you through all those battles, truly?"
+    number: 155
+
+  - title: Your True Nature
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Battle/Open, : Destroy a target attachment with Gold Cost less than or equal to the amount paid, or the amount paid
+      plus three if the target is an Item.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: 2013 Kotei Winner - Olaf Gietz
+    rarity: Uncommon
+    artist: Llyn Hunter
+    flavor: '"You were right," Aranai said to the still body. "But knowing that, you were simply stupid for threatening a Spider
+      - even a former one. Perhaps the next emissary will show proper respect and we will speak."'
+    number: 156
+
+  - title: Kagako Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Lion Clan
+    province_strength: -1
+    gold_production: 0
+    starting_honor: 0
+    text: 'Your Ancestors have -1F while attacking. Interrupt, w, : After the action Recruits your Lion Clan Shugenja, create
+      a 2F/2C/3PH Lion Clan • Ancestor • Samurai • Spirit Personality and gain 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Premium
+    artist: Jason Behnke
+    flavor: '"Draw back the veil between the worlds, cousins, and let our blessed ancestors walk forth."'
+    number: 157
+
+  - title: Koiso Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Phoenix Clan
+    province_strength: 0
+    gold_production: 0
+    starting_honor: 0
+    text: 'You may only Recruit Personalities and Equip Spells that are Fire.Battle, w: Destroy your target Fire card. Ranged
+      3 Attack.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Premium
+    artist: Sam Flegal
+    flavor: '"Only fools think they know the truth of fire. Fire is without limit, without consequence."'
+    number: 158
+
+  - title: Kuroko Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Spider Clan
+    province_strength: 0
+    gold_production: -1
+    starting_honor: 2
+    text: 'After a card attacks you or one of its actions resolves, you may discard a Clout token from it to gain 2 Honor.Political
+      Open, w: Bow your target unbowed Courtier. Give another player''s target card a Clout token.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Premium
+    artist: Glen Osterberger
+    flavor: '"What does history teach about underestimation?"'
+    number: 159
+
+  - title: Ohsuki Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Mantis Clan
+    province_strength: 0
+    gold_production: -1
+    starting_honor: 2
+    text: 'After your action creates a Spirit, once per turn you may target and bow your unbowed Shugenja to gain 1 Honor.Absent
+      Battle, w: If there are any attacking enemy units at the current battlefield, bow your target unbowed Shugenja at any
+      location to move your target Spirit Personality at any location there. Straighten him as he moves.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Premium
+    artist: CalderonStudio
+    number: 160
+
+  - title: Shibata Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Scorpion Clan
+    province_strength: 0
+    gold_production: 0
+    starting_honor: 0
+    text: Recruiting Personalities has a minimum Gold Cost of 5 for you. You may bow your target unbowed Courtier instead of
+      discarding the Imperial Favor for Favor actions.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Premium
+    artist: Sam Flegal
+    flavor: '"Know the secrets of the land and you shall prosper."'
+    number: 161
+
+  - title: Tadanobu Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Crane Clan
+    province_strength: 0
+    gold_production: 0
+    starting_honor: 0
+    text: 'You cannot gain Honor from Holdings. After another player refuses your challenge, gain 1 Honor.Interrupt, w: After
+      you win the action''s duel, draw a card.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Premium
+    artist: Mark Poole
+    flavor: '"The duel is the one truth of the universe. Nothing is as pure as steel."'
+    number: 162
+
+  - title: Tamoko Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Dragon Clan
+    province_strength: 2
+    gold_production: -1
+    starting_honor: 0
+    text: 'You may only Proclaim Shugenja. Your Earth Personalities have +1F while defending.Open, w: If it is another player''s
+      turn and he controls a Personality, gain 2 Honor before this turn ends if you did not lose any Provinces between now and
+      then.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    rarity: Premium
+    artist: Llyn Hunter
+    flavor: '"Let them misunderstand us. The earth knows."'
+    number: 164
+
+  - title: Tsujiken Sensei
+    type: Sensei
+    deck: Pre-Game
+    keywords:
+    - Crab Clan
+    province_strength: 0
+    gold_production: 1
+    starting_honor: 0
+    text: 'Your Stronghold has no abilities or traits. Your non-Courtier Personalities enter play for 1 more Gold. Your Political
+      abilities in and out of play have Economic. Your Iron Mines in and out of play have Market.Economic Open, w: Target a
+      Holding. After the next time this turn it bows, its controller loses 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Legacy
+    - Modern
+    errata_text: Erratum effective 1st October 2014
+    rarity: Premium
+    artist: Mark Poole
+    number: 165

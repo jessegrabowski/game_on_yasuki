@@ -1,0 +1,2686 @@
+set: The Dark Journey Home
+cards:
+  - title: A Kolat Revealed
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Kolat
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, bow the
+      Stronghold each of player who controls no Kolat cards.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Randy Gallegos
+    flavor: 'His blade sang through Osugi''s body, and all sound ceased. In that instant, Toturi spoke a word that had never
+      been heard before in all the courts of Rokugan: "Kolat."'
+    number: 1
+
+  - title: Blessings of Isawa
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, after
+      the next time this game a Kiho Strategy action that does not copy abilities resolves, if it was performed by a Personality,
+      attach the Strategy to them. If it attached, until it leaves play, copy the performed ability onto the Personality removing
+      any text allowing it to be taken more than once per turn, it is not considered an attachment, and its abilities cannot
+      be used.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Revised 2024 in an attempt to preserve all contemporary Rulings regarding its odd interactions, with the exception
+      of how it interacts with being canceled/unsuccessful as those are no longer Rules concepts.
+    rarity: Uncommon
+    artist: Bryon Wackwitz
+    flavor: '"Never doubt this: we are not the servants of destiny, but the makers of the future." - attributed to Isawa'
+    number: 2
+
+  - title: Creating the Monkey Clan
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, after
+      the next two times this game an Unaligned Personality is revealed in one of your Provinces, permanently give him your
+      Clan Alignment.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Lissanne Lake
+    flavor: '"It is time to make new the old and to destroy those who have been unfaithful. Take your men, and rise against
+      the Naga, for they are no longer our allies..." - The Return of Toturi the First'
+    number: 3
+
+  - title: Dragon's Tail Star
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, look
+      at the top card of any deck and, after this trait resolves, reshuffle this Event into your Dynasty deck instead of discarding
+      it normally.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: KC Lancaster
+    flavor: '"Old tales whisper that Hantei was not the last child of the Sun and Moon-but, after all, it is only legend..."
+      - Doji Shizue'
+    number: 4
+
+  - title: Rebuilding the Temples
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the game ends, players must bow their Monk or Stronghold to Recruit a Temple.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Ramon Perez
+    flavor: To shrink something, first expand it. To weaken something, first strengthen it. To rebuild something, first destroy
+      it. - The New Tao
+    number: 5
+
+  - title: Test of the Jade Champion
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, starting
+      with the player on your left and proceeding in turn order, each player may target one of his Shugenja Personalities and
+      discard a card. If one player's target's Chi plus the Focus Value of his discard has a higher total than all other players',
+      he gains 3 Honor. Permanently give his target Jade Champion and the trait, "Once per turn, this Personality need not bows
+      for your Kiho action."
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Bryon Wackwitz
+    number: 6
+
+  - title: The Agasha Join the Phoenix
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, choose
+      a Family Name. Permanently give your Clan Alignment to all your Personalities in and out of play with that Family Name.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    errata_text: Erratum via Oracle to slightly different effect than printed, for simplicity's sake.
+    rarity: Rare
+    artist: April Lee
+    flavor: In Gisei Toshi, the City of Sacrifice, the Agasha knelt before Tsukune. "Take our lives," Gennai said, "and let
+      us rebuild our futures together."
+    number: 7
+
+  - title: The Wave Men
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the game ends, Human Personalities in and out of play without a Clan Alignment have -2 Gold Cost.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Susan Van Camp
+    flavor: '"Tell me of my mother''s death!" Kamoko screamed. "Are you certain?" he replied. "For if I tell you the truth,
+      you can never return home again..."'
+    number: 8
+
+  - title: Toturi's Return
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, bow all
+      Kolat cards. They will not straighten until after your next turn begins.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Bryon Wackwitz
+    flavor: '"It will come. It is coming... and the moon will flee, and the stars will scream, and the world will brace for
+      another beginning..." - Isawa Norikazu'
+    number: 9
+
+  - title: Battlements
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Fortification
+    gold_cost: 1
+    text: Ranged Attacks performed by attacking cards at this Province's battlefield have -1 strength and Ranged Attacks performed
+      by defending cards at this Province's battlefield have +1 strength.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Thomas Manning
+    flavor: Tsukune stood firm and strong. "They will not pass this wall," she whispered.
+    number: 10
+
+  - title: Bonsai Garden
+    type: Holding
+    deck: Dynasty
+    gold_cost: 8
+    text: 'This Holding enters play for 2 less Gold if you are a Brotherhood of Shinsei player.Repeatable Limited, w: Gain 2
+      Honor.Repeatable Limited, w: Discard a card to put a target Ring from your discard pile into your hand that has not left
+      the discard pile already this game.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Heather Bruton
+    number: 11
+
+  - title: Kitsuki Iyekao
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Ninja
+    - Retainer
+    gold_cost: 5
+    text: 'Ninja Repeatable Limited: Bow your target unbowed Ninja card, which performs this action if it is a Personality or
+      Follower, to target a Ninja card in your discard pile. Shuffle both into their appropriate decks.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Ramon Perez
+    flavor: Return, my brother, to the darkness in your soul. You left us, but we have never left you.
+    number: 12
+
+  - title: Kolat Agent
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Kolat
+    gold_cost: 5
+    text: 'Kolat Limited: Target another player''s Gold- or Honor-producing Holding. This Holding copies all the target''s Gold-
+      and Honor-producing traits and abilities.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Susan Van Camp
+    flavor: The Daidoji and the Doji war for control of their clan. The Crane have little time for such pleasantries, but perhaps
+      we can gain from their distractions...
+    number: 13
+
+  - title: Retired Advisor
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    gold_cost: 3
+    text: 'Repeatable Limited, w: Discard a card to draw a card.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Monika Livingstone
+    flavor: One need not wield weapons to taste the majesty of battle.
+    number: 14
+
+  - title: River of the Dark Moon
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Shadowlands
+    gold_cost: 4
+    text: 'Battle/Open: Once per turn per Follower, transfer a target Shadowlands Follower attached to your unbowed Shadowlands
+      Personality to another of your target unbowed Shadowlands Personalities.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Ramon Perez
+    flavor: Those who seek the land of death have only to look at their reflection to find the way.
+    number: 15
+
+  - title: The Agasha Libraries
+    type: Holding
+    deck: Dynasty
+    gold_cost: 6
+    text: 'This Holding enters play for 4 less Gold if you are a Phoenix Clan player.w: Produce 2 gold.Repeatable Reaction,
+      w: Before an action performed by a Tattooed Personality resolves, negate its effects.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Christina Wald
+    flavor: '"Hitomi''s secrets are her own, but the libraries of the Dragon belong to us..." - Agasha Gennai'
+    number: 16
+
+  - title: The Edge of Shinomen Forest
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Fortification
+    - Forest
+    gold_cost: 1
+    text: 'Battle: Shuffle this Holding into your deck to choose a player other than the Defender who controls a unit at this
+      Province''s battlefield. That player targets one of those units'' Personalities and bows his unit.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Bryon Wackwitz
+    number: 17
+
+  - title: Dangai
+    type: Personality
+    clan: Brotherhood of Shinsei
+    deck: Dynasty
+    keywords:
+    - Monk
+    force: 1
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Battle: Once per battle, discard a Kiho Strategy: Give Dangai a Force bonus and a Chi bonus both equal to the Strategy''s
+      Focus Value.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Mike Raabe
+    flavor: Do not try to be something, but to be someone.
+    number: 18
+
+  - title: Hoshi Maseru
+    extended_title: Hoshi Maseru • Experienced
+    type: Personality
+    clan: Brotherhood of Shinsei
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Experienced
+    - Monk
+    - Tattooed
+    force: 1
+    chi: 1
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Maseru has +1F/+1C for each Ring you control.Repeatable Reaction, w: When a card''s Focus Value is being checked,
+      give its Focus Value a bonus equal to the number of Rings you control until the action or effect checking it ends.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Lissanne Lake
+    flavor: He crept into Kyuden Hitomi against his lord's wishes, but what he found there may have saved them all...
+    number: 19
+
+  - title: Hida Rohiteki
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Shugenja
+    force: 2
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 2
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Heather Bruton
+    flavor: '"Only twelve years old, she''s already surpassed her teachers and completed her gempukku. Now she hunts goblins
+      to avenge her fallen twin. By the Fortunes, now that''s a Crab!" - Hida Unari'
+    number: 20
+
+  - title: Hiruma Osuno
+    extended_title: Hiruma Osuno • Experienced
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Crab Clan
+    - Earth
+    - Experienced
+    - Oracle
+    - Samurai
+    force: 4
+    chi: 5
+    gold_cost: 10
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Battle: Twice per battle, destroy a Terrain at Osuno''s battlefield.Battle, w: Once per battle, search you deck for
+      a Terrain and, if there is no Terrain in play at the current battlefield, put it into play there.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    story: 1998 Creation of an Oracle - Ben Peck
+    rarity: Rare
+    artist: Eric David Anderson
+    number: 21
+
+  - title: Toritaka Genzo
+    extended_title: Toritaka Genzo • Experienced
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Experienced Genzo
+    - Unique
+    - Crab Clan
+    - Falcon Clan
+    - Hunter
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Enters play paying 2 less Gold if you are a Mantis Clan player.Battle: Any number of times per turn, if Genzo is
+      opposed by one or more Tattooed Personalities and his Chi is 2 or higher, give him a Chi penalty of any amount such that
+      his Chi does not fall below 1: Give him a Force bonus equal to the penalty.Battle: Any number of times per turn, bow Genzo
+      and target an enemy Tattooed Personality: Genzo duels the target. Destroy the duel''s loser.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    story: 1998 Annexation of a Minor Clan - Peale Chuang
+    rarity: Rare
+    artist: Anthony Grabski
+    number: 22
+
+  - title: Asahina Dorai
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Scholar
+    - Shugenja
+    force: 2
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 2
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Lissanne Lake
+    flavor: Standing above the burning ruin, Kage beside him, Dorai clutched his master's sword with a weary hand. "You have
+      done well, Crane," Kage whispered, "and my secrets shall be yours."
+    number: 23
+
+  - title: Daidoji Rekai
+    extended_title: Daidoji Rekai • Experienced
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Archer
+    - Crane Clan
+    - Experienced
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 9
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Repeatable Battle, w: Ranged 3 attack.Repeatable Battle, : Equip a target Follower in your hand to Rekai.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    errata_text: '"Samurai" keyword added via errata.'
+    rarity: Rare
+    artist: April Lee
+    flavor: '"Master, I must know. If you will not tell me, I will take the answer for my own." Toshimoko smiled. "Of course.
+      You are a Crane, after all."'
+    number: 24
+
+  - title: Hitomi Dajan
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Monk
+    - Tattooed
+    force: 3
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Will not join a Brotherhood of Shinsei player.Battle: Once per player per battle, target a player who controls a
+      unit at the current battlefield. Give Dajan +1F/+1C for each Ring that player controls until the battle ends.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: William O'Connor
+    flavor: '"The Celestial Heavens speak to him, and the lost Dragons are in his eyes. How can we be right to destroy the Dragon
+      if he stands at their side?" - Hoshi Maseru'
+    number: 25
+
+  - title: Hitomi Iyojin
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Tattooed
+    force: 2
+    chi: 3
+    gold_cost: 5
+    personal_honor: 1
+    text: Will not join a Crab Clan player.After one of your Provinces is destroyed, permanently give Iyojin +2F.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Matthew Cavotta
+    flavor: '"You say I am a traitor, but you do not know my duty. It is not to the Empire or the Crab I once served, but only
+      to the Lady and the defense of all life. Question me again, and pay the price."'
+    number: 26
+
+  - title: Hitomi Juppun
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Tattooed
+    force: 5
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 5
+    personal_honor: 2
+    text: 'Will not join a Mantis Clan player.Ranged Attacks targeting Juppun have +2 strength.Negate Force bonuses to Juppun
+      from actions.Battle: Once per battle, permanently remove Cavalry from a target enemy Cavalry card.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Jerry Tiritilli
+    number: 27
+
+  - title: Hitomi Nakuso
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Shugenja
+    - Tattooed
+    force: 1
+    chi: 3
+    gold_cost: 5
+    personal_honor: 1
+    text: 'Will not be controlled by a Lion Clan player.Battle: Bow and destroy Nakuso, and target an enemy Samurai with equal
+      or lower Chi: Destroy him.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Paul (Prof.) Herbert
+    flavor: Once a Kitsu, Okura, with black deeds, has driven Nakuso far from his homelands. Now Hitomi has given him a home,
+      a guide, and the means to fight back against the Dark Lion... but at what cost?
+    number: 28
+
+  - title: Ikoma Gunjin
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Campaigner
+    - Lion Clan
+    - Samurai
+    force: 0
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 4
+    personal_honor: 3
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Craig Maher
+    flavor: '"War comes like a thief, stealing men''s souls and trading them for empty gains. I have seen the face of battle,
+      and I have seen into the eyes of death. I will have no more of either."'
+    number: 29
+
+  - title: Kitsu Sanako
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Lion Clan
+    - Shugenja
+    force: 1
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 3
+    personal_honor: 2
+    text: 'Battle/Open: Give all Personalities +1F/+1C for each Ancestor they have attached.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Audrey Corman
+    flavor: '"Some assassins kill with knives or arrows, some with poison. She destroys you with rumor and politics-and of the
+      two, I would prefer the cleaner wound." - Ide Tadaji'
+    number: 30
+
+  - title: Tsuruchi
+    extended_title: Tsuruchi • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Experienced
+    - Mantis Clan
+    - Master Bowman
+    - Samurai
+    - Wasp Clan
+    - Yoritomo's Alliance
+    force: 3
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Followers with Ranged Attacks attached to Tsuruchi have their Ranged Attack strength increased by 2.Battle: Twice
+      per turn: Ranged 2 Attack. Battle: Any number of times per turn, bow Tsuruchi: Ranged 5 Attack.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Mike Raabe
+    number: 31
+
+  - title: Balash
+    extended_title: Balash • Experienced
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Archer
+    - Experienced
+    - Naga
+    - Nonhuman
+    force: 1
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Reaction: Any number of times per turn, after you announce a Ranged Attack action performed by a card in this unit:
+      Cards in this unit may combine their Ranged Attacks with one other unit in the same army.Battle: Any number of times per
+      turn, bow Balash: Ranged 3 Attack.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Mike Raabe
+    flavor: The taint of betrayal in human hearts is as dangerous as the Shadowlands, and twice as hard to fight. Their honor
+      hides their weakness, but we know the truth.
+    number: 32
+
+  - title: Tausha
+    type: Personality
+    clan: Naga
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Naga
+    - Nonhuman
+    force: 2
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 2
+    text: Attaches Naga Followers paying 2 less Gold.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Ben Peck
+    flavor: '"The humans are to easily deceived. They cannot see the darkness, even when it shrouds their eyes."'
+    number: 33
+
+  - title: Bayushi Areru
+    type: Personality
+    clan: Ninja
+    deck: Dynasty
+    keywords:
+    - Ninja
+    force: 1
+    chi: 2
+    gold_cost: 4
+    personal_honor: 1
+    text: 'Will not attach non-Ninja Followers.Battle/Open: Bow Areru and target a bowed Personality: While Areru remains bowed,
+      you may negate his straightening, the target will not straighten, and all players have the ability, "Open: Pay 6 Gold:
+      End the ongoing effects of the action granting this ability."'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Tom Baxa
+    flavor: Once only a kidnapper for the Scorpion, Areru now has found a new master and a new Way.
+    number: 34
+
+  - title: Chochu
+    type: Personality
+    clan: Ninja
+    deck: Dynasty
+    keywords:
+    - Ninja
+    force: 2
+    chi: 3
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Will not attach non-Ninja followers.Ranged Attacks may not target cards in this unit. Battle: Any number of times
+      per turn, even if Chochu is bowed: Move this unit home.Reaction: Any number of times per turn, before focusing in a duel
+      involving Chochu: The duel ends immediately without resolution.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Susan Van Camp
+    flavor: The children of Ninube know much of stealth, but more of hatred.
+    number: 35
+
+  - title: Goju Adorai
+    type: Personality
+    clan: Ninja
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Unique
+    - Ninja
+    - Shugenja
+    force: 4
+    chi: 4
+    gold_cost: 11
+    personal_honor: 1
+    text: Will not attach non-Ninja Followers.Other players may not target Adorai with actions unless an action Adorai has performed
+      targeted that player or his cards since his last End Phase.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Brian Snoddy
+    flavor: 'Fools fear what danger hides in the night, but I tell you this: it is not the servants of darkness you should fear,
+      but the Shadow itself...'
+    number: 36
+
+  - title: Mamoru
+    extended_title: Mamoru • Experienced
+    type: Personality
+    clan: Ninja
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Experienced
+    - Guard
+    - Ninja
+    force: 0
+    chi: 5
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Will not attach non-Ninja Followers.Repeatable Reaction, w: After an action moves a Personality into an attacking
+      army at one of your Provinces'' battlefields, Mamoru challenges the Personality. Destroy the loser.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Ben Peck
+    flavor: One day, Kage, your back will be turned... and we shall have your secrets for our own.
+    number: 37
+
+  - title: Ninja Infiltrator
+    extended_title: Ninja Infiltrator • Experienced
+    type: Personality
+    clan: Ninja
+    deck: Dynasty
+    keywords:
+    - Experienced Sanado
+    - Unique
+    - Ninja
+    force: 1
+    chi: 3
+    gold_cost: 5
+    personal_honor: 1
+    text: 'Limited: Bow Ninja Infiltrator and target a Personality with a lower Chi: While Ninja Infiltrator remains bowed,
+      you may negate his straightening, and the target may not assign, and will not move, into attacking armies.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Theodor Black
+    flavor: The safest place to hide an Emperor is in plain sight.
+    number: 38
+
+  - title: Ninja Questioner
+    type: Personality
+    clan: Ninja
+    deck: Dynasty
+    keywords:
+    - Ninja
+    force: 1
+    chi: 1
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Will not attach non-Ninja Followers.Ninja Repeatable Limited, w: Target a Personality who will not straighten due
+      to a card effect. Discard a number of cards from the top of your Fate deck equal to the target''s Personal Honor. If any
+      of those cards has a Focus Value greater than the target''s Personal Honor, the target is destroyed.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Anson Maddocks
+    number: 39
+
+  - title: Ninja Shadow-Walker
+    type: Personality
+    clan: Ninja
+    deck: Dynasty
+    keywords:
+    - Ninja
+    force: 2
+    chi: 1
+    gold_cost: 4
+    personal_honor: 1
+    text: 'Will not attach non-Ninja Followers.Ninja Remote Battle: Twice per turn, Ninja Shadow-Walker switches locations with
+      one of your other target Personalities, who may be at any location if Ninja Shadow-Walker is at the current battlefield.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Ramon Perez
+    flavor: If he ever had a name, it was long ago lost to the Shadow. Yet in times of weakness, he looks upon the Phoenix lands
+      as if they hold a long-lost memory.
+    number: 40
+
+  - title: Ninube Ogoku
+    type: Personality
+    clan: Ninja
+    deck: Dynasty
+    keywords:
+    - Ninja
+    force: 2
+    chi: 2
+    gold_cost: 5
+    personal_honor: 1
+    text: Will not attach non-Ninja Followers.Ogoku may assign to any army, including armies attacking your provinces, and regardless
+      of whether you have been invited to that battle. You never gain honor for Ogoku joining an army.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Theodor Black
+    flavor: '"They do not serve the shadow... we are the Shadow. Their goals is not to possess your Empire, but rather to unmake
+      it... forever." - Kage'
+    number: 41
+
+  - title: Shosuro
+    extended_title: Shosuro • Experienced
+    type: Personality
+    clan: Ninja
+    deck: Dynasty
+    keywords:
+    - Experienced Ninja Shapeshifter
+    - Unique
+    - Ninja
+    force: 2
+    chi: 3
+    gold_cost: 10
+    personal_honor: 0
+    text: 'Will not attach non-Ninja Followers.Enters play paying 2 less gold if you are a Scorpion Clan player.Reaction: After
+      a province is destroyed by battle resolution, if Shosuro is in the current attacking army: Bring any Personalities into
+      play that were in that province when it was destroyed, under your control, ignorning Gold cost. Permanently give such
+      Personalities Ninja and -1F/-1C. Lose 5 honor.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: William O'Connor
+    number: 42
+
+  - title: Toturi the First
+    extended_title: Toturi the First • Experienced 3
+    type: Personality
+    clan: Ninja,Toturi's Army
+    deck: Dynasty
+    keywords:
+    - Double Chi
+    - Experienced 3 Toturi
+    - Tactician
+    - Unique
+    - Emperor
+    - Ninja
+    - Samurai
+    - Toturi's Army
+    force: 7
+    chi: 6
+    gold_cost: 15
+    honor_requirement: 10
+    personal_honor: 3
+    text: 'Favor actions and actions from Dark Lord''s Favor may not target Toturi.Ninja Repeatable Battle/Open, w: Give a target
+      Personality and all his abilities Kolat.Ninja Repeatable Reaction, w: When paying for a Samurai, reduce the Gold Cost
+      of the Samurai to 0 until it enters play.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Randy Gallegos
+    number: 43
+
+  - title: Agasha Gennai
+    extended_title: Agasha Gennai • Experienced
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Air
+    - Elemental Master
+    - Experienced
+    - Phoenix Clan
+    - Shugenja
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Will not join a Dragon Clan player.Air Repeatable Battle/Open, w: Draw two cards. Discard two cards.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Ellym Sirac
+    flavor: Tamori did not understand, so he chose to stay. But the rest of us, the Agasha, we have left Hitomi. Whatever her
+      "new beginning" is, we will not be a part of it.
+    number: 44
+
+  - title: Agasha Kusabi
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Phoenix Clan
+    - Shugenja
+    - Spiritwalker
+    - Tattooed
+    force: 1
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 2
+    text: Will not join a Dragon Clan player.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Tom Baxa
+    flavor: You are wrong, my Lady. We have not come to join you, but to leave her...
+    number: 45
+
+  - title: Isawa Kaede
+    extended_title: Isawa Kaede • Experienced
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Double Chi
+    - Unique
+    - Experienced
+    - Oracle
+    - Phoenix Clan
+    - Shugenja
+    - Void
+    force: 3
+    chi: 5
+    gold_cost: 14
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'You may ignore the cost of bowing Shugenja in Kaede''s army for Kiho actions they perform.You may ignore the cost
+      of bowing Kaede for Kiho actions she performs.Limited: Any number of times per turn, bow Kaede, target a Ninja Personality,
+      and discard the top card of your Fate deck: If its Focus Value is lower than the Ninja''s Chi, permanently remove Ninja
+      from him. Otherwise, destroy him.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Audrey Corman
+    number: 46
+
+  - title: Isawa Taeruko
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Elemental Master
+    - Phoenix Clan
+    - Shugenja
+    force: 1
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Earth Battle/Open, , w: Target one of your Provinces. Search your Dynasty deck for a non-Unique Fortification and
+      Recruit it, attaching it to the target.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Randy Gallegos
+    flavor: She bears all the marks of her cousin's blood... save one.
+    number: 47
+
+  - title: Shiba Gensui
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Phoenix Clan
+    - Samurai
+    force: 2
+    chi: 2
+    gold_cost: 4
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Battle: Move Gensui into an army containing a Shugenja you control.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Susan Van Camp
+    flavor: Now he leads the Phoenxi armies, standing where Tsukune once raised her sword. Yet where she lef in peace, his cry
+      is of retribution and war.
+    number: 48
+
+  - title: Shiba Tetsu
+    extended_title: Shiba Tetsu • Experienced
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Experienced
+    - Phoenix Clan
+    - Samurai
+    force: 2
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Battle: Once per battle, choose your performing Shugenja: Give Tetsu a Force bonus equal to that Shugenja''s Chi.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Ben Peck
+    flavor: Dead? Me? My clan is in danger, and the Empire is falling! I don't have time to die!
+    number: 49
+
+  - title: Shiba Tsukune
+    extended_title: Shiba Tsukune • Experienced 2
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Double Chi
+    - Experienced 2
+    - Loyal
+    - Unique
+    - Clan Champion
+    - Phoenix Clan
+    - Samurai
+    force: 5
+    chi: 4
+    gold_cost: 10
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Battle/Open: Any number of times per turn, bow your performing Shugenja: Give Tsukune +2F/+2C.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: April Lee
+    flavor: If you are willing to sacrifice yourself for all things, then you can be trusted with the world.
+    number: 50
+
+  - title: Ropp'tch'tch
+    type: Personality
+    clan: Ratling
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Nonhuman
+    - Ratling
+    - Rememberer
+    force: 2
+    chi: 4
+    gold_cost: 6
+    personal_honor: 2
+    text: 'Reaction: After engaging at Ropp''tch''tch''s battlefield: Give her Tactician if all Personalities and Followers
+      in her army are Ratlings.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Ramon Perez
+    flavor: Clever and wily, she was the one whose interference united the Ratling tribes in the defense of Hiruma Castle.
+    number: 51
+
+  - title: Moshi Hito
+    type: Personality
+    clan: Toturi's Army
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Toturi's Army
+    force: 3
+    chi: 2
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 1
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Lissanne Lake
+    flavor: We found the Emperor in the ruins of Kyuden Isawa, where the shore was blackened by the great fires of the Clan
+      Wars. Though injured and weak, he lives on, and with him, the Empire shall rise again!
+    number: 52
+
+  - title: Seppun Toshiken
+    type: Personality
+    clan: Toturi's Army
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Emerald Champion
+    - Imperial
+    - Magistrate
+    - Samurai
+    - Toturi's Army
+    force: 1
+    chi: 6
+    gold_cost: 8
+    honor_requirement: 3
+    personal_honor: 3
+    text: Enters play paying 1 less Gold if you are a Crane Clan player.Toshiken will not refuse challenges.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Heather Bruton
+    flavor: An unwed daughter of the Imperial line was his mother; his father's name has never been known. He has no honor and
+      no family; his heritage is a mastery of the blade.
+    number: 53
+
+  - title: Shotai
+    type: Personality
+    clan: Toturi's Army
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Outcast
+    - Samurai
+    - Toturi's Army
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 4
+    text: 'Will not be controlled by a Lion Clan player.Battle: Once per battle: Give Shotai a Force bonus equal to the number
+      of units opposing him. After this battle ends, destroy this unit.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Anthony Grabski
+    flavor: '"Toturi kept him from harm during the Clan Wars, risking his own life. I asked the Emperor why, and all he said
+      was, ''I owe him more than he has become.''" - Hasame'
+    number: 54
+
+  - title: Toku
+    extended_title: Toku • Experienced 2
+    type: Personality
+    clan: Toturi's Army
+    deck: Dynasty
+    keywords:
+    - Experienced 2
+    - Unique
+    - Captain of the Imperial Guard
+    - Clan Champion
+    - Imperial
+    - Monkey Clan
+    - Samurai
+    - Toturi's Army
+    force: 1
+    chi: 3
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'After Toku straightens: Remove all Exhaustion tokens from him.Battle: Any number of times per turn, but only once
+      per turn per Follower, target a Follower in this unit: Straighten it or give it +1F. Give Toku a -1C Exhaustion token.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Lissanne Lake
+    number: 55
+
+  - title: Tzurui
+    type: Personality
+    clan: Toturi's Army
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Monkey Clan
+    - Samurai
+    - Toturi's Army
+    force: 2
+    chi: 4
+    gold_cost: 7
+    personal_honor: 2
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Val Mayerik
+    flavor: Toku was not born a samurai. He made himself one through effort and force of will. That alone makes him worth, and
+      I will follow him.
+    number: 56
+
+  - title: Yotsu Seou
+    type: Personality
+    clan: Toturi's Army
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Toturi's Army
+    force: 1
+    chi: 2
+    gold_cost: 5
+    personal_honor: 1
+    text: 'After your Straighten Phase ends: Remove all Shuriken tokens from Seou.Battle: Any number of times per turn, give
+      Seou 1 to 4 Shuriken tokens such that she will not have 5 or more after they are given: Ranged Attack with strength equal
+      to the number of Shuriken tokens given.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Craig Maher
+    number: 57
+
+  - title: Kage
+    extended_title: Kage • Experienced 3
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Experienced 3
+    - Tactician
+    - Unique
+    - Kolat
+    - Kolat Master
+    force: 2
+    chi: 4
+    gold_cost: 9
+    personal_honor: 2
+    text: 'Repeatable Limited, w: Target a Personality (in play) of whom you have a copy face-up in one of your Provinces. Remove
+      the target from the game. Bring your copy into play ignoring costs and requirements.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Anson Maddocks
+    number: 58
+
+  - title: Matsu Toki
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Shadowlands
+    force: 4
+    chi: 1
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 3
+    text: You may ignore Toki's Honor Requirement if you are a Shadowlands Horde player.After Toki enters play, lose 3 Honor.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Misprinted with a Lion Clan border.
+    rarity: Uncommon
+    artist: Anson Maddocks
+    flavor: I swore to serve Hantei, and I will prove my word is unfailing-through pain, through war, and through death. Pretty
+      words can't buy my honor. Nothing can sway my loyalty. Condemn me, but look to your own oaths first.
+    number: 59
+
+  - title: Shinko Kamiko
+    extended_title: Shinko Kamiko • Experienced
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Experienced Pennaggolan
+    - Unique
+    - Bloodspeaker
+    - Nonhuman
+    - Pennaggolan
+    - Shadowlands
+    force: 3
+    chi: 3
+    gold_cost: 8
+    personal_honor: 0
+    text: 'After Kamiko enters play: Lose 3 Honor.Maho Limited: Any number of times per turn, target another player''s Merchant
+      Caravan or Large Farm: Destroy it. Permanently give Kamiko +2F/+2C.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Brian Snoddy
+    flavor: '"Miss me?"'
+    number: 60
+
+  - title: Slidge
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Shadowlands
+    - Troll
+    force: 5
+    chi: 2
+    gold_cost: 7
+    personal_honor: 0
+    text: 'After Slidge enters play: Lose 4 Honor.Will not attach Armor.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Wackwitz & Daily
+    flavor: '"The oceans are boiling with them-more than I have ever seen. And they aren''t coming of their own will. Something''s
+      driving the trolls from their underwater caverns. Something they fear." - Yoritomo Nodoteki'
+    number: 61
+
+  - title: Moto Amadare
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Samurai
+    - Unicorn Clan
+    force: 1
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 5
+    personal_honor: 2
+    text: Amadare has +1F/+1C for each Bloodsword, Bloodspeaker, and card with "Iuchiban" in its title controlled by other players.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: William O'Connor
+    flavor: The purpose of life is to light a small candle in the darkness of being. If all of us could do that, the world would
+      be as bright as the sun.
+    number: 62
+
+  - title: Aka Mizu-umi
+    type: Region
+    deck: Dynasty
+    text: Before an Event's effect destroys this Province, negate the Event's effects.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: KC Lancaster
+    flavor: The bloodstained waters of this darkened lake still flow into Ryoko Owari, carrying the shadow with the sun.
+    number: 63
+
+  - title: Bells of the Dead
+    type: Region
+    deck: Dynasty
+    text: 'After a Shugenja enters play from this Province, permanently give him the ability, "Battle: Bow and destroy this
+      Shugenja to destroy a target enemy Oni."'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Heather Bruton
+    flavor: She lifted the copper bell and tied with white ribbon. "You were my enemy," Kamoko said, "but you have given me
+      the knowledge I must have to find peace. Rest well, honorable soul."
+    number: 64
+
+  - title: Black Finger River
+    type: Region
+    deck: Dynasty
+    text: After you reveal a Personality in this Province, permanently give him Shadowlands.
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Bryon Wackwitz
+    flavor: '"The Burning Words are more than a prophecy. They are a living thing, a sentient destiny, waiting only for someone
+      to accept their burden and sell his soul to their cause. And the prize they offer to their conqueror is immortality..."
+      - Kuni Yori'
+    number: 65
+
+  - title: Firebird Falls
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: This Region will not enter play if you control any Shadowlands cards.Personalities enter play for additional Gold
+      equal to their Personal Honor.After you bring a Shadowlands card into play, destroy this card.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Eric David Anderson
+    number: 66
+
+  - title: Golden Sun Plain
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'Reaction: When one of your Holdings bows to produce Gold, it produces 2 additional Gold.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: KC Lancaster
+    flavor: Few places in the Empire still shine with the light of hope.
+    number: 67
+
+  - title: Osari Plains
+    type: Region
+    deck: Dynasty
+    text: After a Terrain played by the Defender enters play at this Province's battlefield, if any of its traits trigger before
+      the battle's resolution, they trigger after the Terrain enters play instead.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Ellym Sirac
+    flavor: '"They are the richest fields in the Empire, and now they have been reclaimed by the Emperor. He says they are to
+      be a gift to his ''most loyal clan,'' and we must convince him that we are the one." - Kitsu Sanako'
+    number: 68
+
+  - title: Shadowlands Marsh
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Shadowlands
+    text: 'After this card enters play: Lose 10 Honor.Non-Shadowlands Personalities and Followers have -2F while at this province''s
+      battlefield.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Uncommon
+    artist: Bryon Wackwitz
+    flavor: '"I know where Yori hides, and I know what he is searching for. If I must walk each step alone, I will retrace my
+      journey of ten years ago. I will find him. And I will stop him." - Iuchi Karasu'
+    number: 69
+
+  - title: Treacherous Pass
+    type: Region
+    deck: Dynasty
+    text: 'Battle: Once per battle, discard the top card of your Fate deck for each Personality at this Province''s battlefield,
+      designating each time which discard corresponds to which Personality. If the Focus Value of a discard is greater than
+      its corresponding Personality''s Chi, move him home; bow him as he moves.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Some variants of The Dark Journey Home version of this card were printed with a different text alignment.
+    rarity: Common
+    artist: David Martin
+    flavor: '"Beware of dangerous ground. Beware moreso of men desperate enough to cross it." - Master Suana'
+    number: 70
+
+  - title: War-Stained Fields
+    type: Region
+    deck: Dynasty
+    text: 'Limited: Target two of your Personalities and target one or more of their Followers. Transfer the targeted Followers
+      from their current Personality to the other.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Eric David Anderson
+    flavor: '"The Crab have slain our emissaries, my Lady. There is no word from the Hida." Tsanuri''s eyes fell to the map
+      of the Kaiu Wall. "If they do not value our assistance," she said, "then let us answer their insults with steel."'
+    number: 71
+
+  - title: Ashigaru Archers
+    type: Follower
+    deck: Fate
+    keywords:
+    - Ashigaru
+    force: 0
+    chi: 0
+    gold_cost: 2
+    focus: 1
+    text: 'After this Follower enters play from your hand, you may draw an additional card when this turn ends.Battle, w: Ranged
+      2 Attack.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: Diana Vick
+    flavor: 'Seated upon the Jade Throne, Toturi called forth the Unicorn amassador. "You have served well in my absence," he
+      said, "so serve me again. Destroy the Lion who foul our land with black magics. Let all know: the Unicorn are my right
+      hand now." - The High Histories of the Lion'
+    number: 72
+
+  - title: Lion's Pride
+    type: Follower
+    deck: Fate
+    force: 4
+    chi: 0
+    gold_cost: 5
+    honor_requirement: 2
+    focus: 4
+    text: Will only attach to a Tactician.
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: David Martin
+    flavor: '"We women must face death for each now life we bear and suffer the pains of love and desire deeper than any man
+      can understand. That is why, amongst the fiercest beast, the female is always deadlier than the male." - Matsu Ketsui'
+    number: 73
+
+  - title: Maho-Tsukai
+    type: Follower
+    deck: Fate
+    chi: 0
+    honor_requirement: 0
+    focus: 3
+    text: The card's Gold Cost equals the number of Shadowlands cards in play.This card's Force equals half the number of Shadowlands
+      cards in play, rounded up.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Anthony Grabski
+    flavor: '"Forget imitation. Fear is the sincerest form of flattery." - Yoritomo'
+    number: 74
+
+  - title: Mantis House Guard
+    type: Follower
+    deck: Fate
+    chi: 1
+    gold_cost: 6
+    honor_requirement: 1
+    focus: 4
+    text: Will only attach to a non-Yoritomo's Alliance Mantis Clan Personality.This card's Force equals half this Personality's
+      Gold Cost, rounded up.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: William O'Connor
+    flavor: The essence of war is violence. Moderation in battle is cowardice. - from the war banner of the Yoritomo family
+    number: 75
+
+  - title: Moto Fanatics
+    type: Follower
+    deck: Fate
+    force: 3
+    chi: 0
+    honor_requirement: 1
+    focus: 1
+    text: 'Attaches to a Unicorn Clan Personality paying 2 less Gold.Battle: If there are any Shadowlands cards in the enemy
+      army: Give this card +3F. After the battle ends, destroy this card.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Bryon Wackwitz
+    flavor: '"Their eyes were filled with fear, but their hearts drive them onward to battle." - Kaiu Suman'
+    number: 76
+
+  - title: Ratling Scout
+    type: Follower
+    deck: Fate
+    keywords:
+    - Nonhuman
+    - Pack
+    - Ratling
+    - Scout
+    force: 1
+    chi: 0
+    honor_requirement: 0
+    focus: 2
+    text: 'Attaches to a Ratling Personality for 3 less Gold.Repeatable Battle, w: Destroy a target Terrain.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Paul (Prof.) Herbert
+    flavor: '"Humans think it bad-bad to sneak, but I watch them when they die and I say ''it not so bad, to sneak."'
+    number: 77
+
+  - title: Ambition
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Bloodsword
+    force: 0
+    chi: 0
+    gold_cost: 7
+    focus: 4
+    text: 'This Item is considered The Broken Sword of the Scorpion for deck construction and checking the Unique restriction.Battle:
+      Once per battle, raise this Personality''s Force to equal that of a target enemy Personality.Repeatable Reaction: After
+      this Personality enters a duel, raise his Chi to equal that of the other Personality in the duel.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Val Mayerik
+    number: 78
+
+  - title: Blood Arrows of Yajinden
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 4
+    focus: 2
+    text: 'Will not attach to a Shugenja.Reaction: Any number of times per turn, but only once per action, before this Personality
+      performs a Ranged Attack action, bow this card: The Ranged Attack is compared against the target''s base Force. Lose 3
+      Honor.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Bryon Wackwitz
+    flavor: They were relics of an ancient sorcerer, a power growing ready to awaken...
+    number: 79
+
+  - title: Clay Horse
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 2
+    focus: 2
+    text: 'Repeatable Reaction, w: Before this unit is bowed by battle resolution: Negate the bowing. Discard the top card of
+      your Fate deck; if its Focus Value is odd, destroy this card.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: KC Lancaster
+    flavor: '"A bit fragile, my dear Taeruko, but I think the Phoenix will find them quiete useful." - Naka Kuro'
+    number: 80
+
+  - title: Crystal Nagamaki
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Crystal
+    force: 1
+    chi: 2
+    gold_cost: 4
+    focus: 1
+    text: This card has an additional +1F/+1C while this Personality opposes a Ninja card in a battle or faces one in a duel.
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Ellym Sirac
+    flavor: Deep beneath the palace of the Mirumoto, there is a chamber of solid crystal. It has remained locked for a thousand
+      years, awaiting the Champion and the Key...
+    number: 81
+
+  - title: Kitsuki's Coin
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    force: 0
+    chi: 1
+    gold_cost: 5
+    focus: 2
+    text: 'Limited: Any number of times per turn, bow this Personality and target a Ninja or Kolat Personality: This Personality
+      duels the target. Destroy the duel''s loser.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Diana Vick
+    flavor: The first lie that must be destroyed is the one you tell to yourself...
+    number: 82
+
+  - title: Lord Moon's Blood
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    force: 2
+    chi: 2
+    gold_cost: 8
+    focus: 2
+    text: 'After focuses in a duel involving this Personality are revealed: Raise the Focus Value of each card focused for him
+      to equal the lowest Focus Value focused for the other Personality in the duel, if it is lower.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Matthew Cavotta
+    flavor: With a drop of blood and the caress of an obisidian hand, the crack healed as if it had never been.
+    number: 83
+
+  - title: Mantle of the Jade Champion
+    type: Item
+    deck: Fate
+    keywords:
+    - Unique
+    - Jade
+    force: 2
+    chi: 3
+    gold_cost: 8
+    focus: 4
+    text: 'Attaches to a Jade Champion ignoring Gold cost. When attaching a Spell to this Personality: Its Gold cost is halved
+      (rounded down) until it is paid.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Anthony Grabski
+    flavor: Okura's power grows stronger, but his eyes are haunted. At his side, the oni waits for his command, but who is the
+      master and who is the slave?
+    number: 84
+
+  - title: Poison Dartgun
+    type: Item
+    deck: Fate
+    keywords:
+    - Ninja
+    - Poison
+    force: 0
+    chi: 0
+    gold_cost: 4
+    focus: 4
+    text: 'Will only attach to a Ninja.Battle: Once per battle: Ranged 2 Attack that may target a Personality with attached
+      Followers.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Thomas Manning
+    flavor: '"Once, they scorned our tales of ninja. Now their armies fall and their men are sickened by poison. Where is their
+      laughter now?" - Bayushi Aramoro'
+    number: 85
+
+  - title: Emergence of the Masters
+    type: Spell
+    deck: Fate
+    keywords:
+    - Ritual
+    gold_cost: 3
+    focus: 3
+    text: 'Battle: Any number of times per turn, bow this Shugenja and zero or more of your other performing Shugenja and target
+      a Personality: Give him +1F. If you bowed at least two Shugenja, you may also target and give a Follower +3F. If you bowed
+      at least three Shugenja, you may also target and move an enemy Personality home. If you bowed at least five Shugenja,you
+      may also target and destroy an enemy unit.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Common
+    artist: Tommy Pons
+    number: 86
+
+  - title: Plain of Desperate Evil
+    type: Spell
+    deck: Fate
+    keywords:
+    - Elemental
+    gold_cost: 4
+    focus: 1
+    text: 'Battle: Any number of times per turn, if there are no Terrains at the current battlefield, bow this Shugenja: Create
+      a Terrain Strategy with the text, "All Shadowlands Personalities and Followers at this battlefield have the ability, "Battle:
+      Destroy this card: Ranged Attack with strength equal to half of its Force, rounded up." Before this battle''s resolution:
+      destroy all Shadowlands cards at this battlefield" and put it into play.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: KC Lancaster
+    number: 87
+
+  - title: Virtuous Heart
+    type: Spell
+    deck: Fate
+    gold_cost: 2
+    focus: 3
+    text: 'Battle: Once per battle, target an enemy Personality: His controller discards the top card of his Fate deck. If the
+      target''s Personal Honor plus the Focus Value of the discard is equal to or less than this Shugenja''s Personal Honor,
+      bow the target.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Frank Gembeck
+    flavor: '"Only a virtuous heart can withstand the touch of darkness." - Yoritomo Yukue'
+    number: 88
+
+  - title: A Glimpse Beyond
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle/Open: Target an Ancestor. Until the turn ends, it is affected by cards and rules as if it were a Follower.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Audrey Corman
+    flavor: '"When they speak, be silent, for their words sing of spheres we cannot know. Reach and find the darkness in all
+      of us. All the world is dark, and the spirits of the dead are coming to life..." - Isawa Norikazu'
+    number: 89
+
+  - title: Arrow of the Four Winds
+    type: Strategy
+    deck: Fate
+    gold_cost: 2
+    focus: 2
+    text: 'This card''s ability costs 0 Gold if you are a Unicorn Clan player.Limited, : Target a card with "Arrow" or "Arrows"
+      in its title in your Fate discard pile: Put it in your hand.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Scott Fischer
+    flavor: '"Three hundred battle-maidens dead on Lion fields. Kamoko, my daimyo, why have you left us, and when will you return?"
+      - Otaku Tetsuko'
+    number: 90
+
+  - title: Arrowroot Tattoo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Tattoo
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Target your performing unbowed Tattooed Personality who has not performed a copy of this action this game
+      to permanently give him the ability, "Reaction: Before one of your other Personalities is destroyed, bow and destroy this
+      Personality to negate the effect destroying the first."'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Craig Maher
+    number: 91
+
+  - title: Contemplation
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Battle/Open: Target a Monk: Bow him.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Christina Wald
+    flavor: Shinsei said, "Who binds you?" The Emperor said, "No one binds me-I am the Emperor." "A contradiction in itself,"
+      said the monk with a smile.
+    number: 92
+
+  - title: Contested Holding
+    type: Strategy
+    deck: Fate
+    gold_cost: 5
+    focus: 2
+    text: 'Limited, : Bow your target performing Personality to target a Holding controlled by another player who controls a
+      Personality. Your Personality issues a challenge that may be accepted by any Personality that player controls. If the
+      challenge is not accepted, or if the other player''s Personality loses, bow the Holding and take control of it. If your
+      Personality loses the duel, destroy him.'
+    legality:
+    - Age of Enlightenment (Lotus)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Ben Peck
+    number: 93
+
+  - title: Crane Tattoo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Tattoo
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Target your performing unbowed Tattooed Personality who has not performed a copy of this action this game.
+      Until the game ends, you may not target him with your actions, and permanently give him the ability, "Reaction: After
+      this Personality is destroyed during a battle or duel, Recruit him into play in your home, bowed, ignoring costs."'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Audrey Corman
+    number: 94
+
+  - title: Deeds, Not Words
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Target another player. You call their virtue into question. They gain 1 additional Honor for each duel one
+      of their Personalities wins, gain 1 additional Honor for each card destroyed during Resolution Segments where their army
+      won or tied, and sources besides these which would cause them to gain Honor cause them to lose an equal amount instead.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Bryon Wackwitz
+    number: 95
+
+  - title: Disgraced
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Reaction: Before a Personality commits seppuku: That Personality does not commit seppuku and is dishonored. Until
+      the game ends, the Personality will not be rehonored and will not commit seppuku unless the seppuku is a card''s effect.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Ramon Perez
+    number: 96
+
+  - title: Disobedience
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: If your Family Honor is 1 or higher and you control no units at the current battlefield, target an attacking
+      Personality: Discard the top of any player''s Fate deck. If that card''s Focus Value is less the Personality''s Personal
+      Honor, move him home.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Lissanne Lake
+    number: 97
+
+  - title: Dragon Tattoo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Tattoo
+    gold_cost: 0
+    focus: 3
+    text: 'Tattoo Limited: Target your performing unbowed Tattooed Personality who has not performed a copy of this action this
+      game. Permanently give them the ability, "Repeatable Battle/Open: If this Personality has less than three Fire tokens,
+      give them one to three +1F/+1C Fire tokens with the traits, "This Personality cannot straighten while they have any Fire
+      tokens" and "Before this Personality would straighten at the start of the turn, ignoring this token''s previous trait,
+      remove this token from them instead" such that the total number of Fire tokens on them does not exceed three."'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Ben Peck
+    number: 98
+
+  - title: Dragonfly Tattoo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Tattoo
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Target your performing unbowed Tattooed Personality who has not performed a copy of this action this game.
+      Until the game ends, he may not be targeted by Ranged Attacks and may not be targeted by actions that would unconditionally
+      move him home.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Monika Livingstone
+    number: 99
+
+  - title: Falling Star Strike
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Bow your performing Monk or Shugenja and target an enemy Personality: Reduce his Force by an amount equal
+      to your performer''s Chi.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: William O'Connor
+    number: 100
+
+  - title: Final Haiku
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Reaction: After your Personality is destroyed, if he was honorable when he was destroyed: Gain 2 Honor.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: KC Lancaster
+    flavor: Bright the full moon shines On the pale face of honor Shadows of the pines. - The Death Poem of Matsu Agetoki
+    number: 101
+
+  - title: Full Moon Tattoo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Tattoo
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Target your performing unbowed Tattooed Personality who has not performed a copy of this action this game:
+      Permanently give him the ability, "Reaction, w: Before an action from a Strategy resolves, if this Personality is at a
+      battlefield, discard a card with the same Focus Value as the Strategy to negate the action''s effects."'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Ron Chironna
+    number: 102
+
+  - title: Heavy Ground
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: The effects and bonuses of Fortifications and Regions attached to this battlefield''s province will not be
+      negated or reduced during this battle.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Christina Wald
+    flavor: '"Soldiers should not provoke their enemy. If you arouse a bee, it will come at you with all the force a Dragon."
+      - Master Suana'
+    number: 103
+
+  - title: Held Terrain
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Before this battlefield''s province is destroyed during this battle''s resolution: The Attacker may target and destroy
+      one of the Defender''s non-Fortification Holdings if the his army''s total Force is greater than the province''s strength
+      plus the Holding''s Gold Cost.Battle: If there are no Terrains at the current battlefield: Put this card into play there.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Diana Vick
+    flavor: '"Never count an enemy''s land as your own. It is only yours if you can hold it." - Master Suana'
+    number: 104
+
+  - title: Heroic Opportunities
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Heroic
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Before this battle''s resolution: The Attacker and Defender may target a number of Personalities in their current
+      armies up to the number of Personalities in the opposing army. Give each target a Force bonus equal to his Chi until the
+      battle ends.Battle: If there are no Terrains at the current battlefield: Put this card into play there.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Anthony Grabski
+    number: 105
+
+  - title: Kharma
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'You may only play one Kharma per trigger.Reaction: After one of your provinces is destroyed by an Event: Destroy
+      the rightmost province of the player who resolved the Event.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Bryon Wackwitz
+    flavor: Evil cannot be targeted like an arrow-sometimes it destroys its master as well as its victim.
+    number: 106
+
+  - title: Kolat Recruiter
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kolat
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Target a card in another player''s province: Turn it face-up. If it is a Personality, you may bring him
+      into play, paying all costs. If it is a Holding or Region, the other player may immediately bring it into play, ignoring
+      costs. Lose 2 Honor.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Ramon Perez
+    flavor: Each word he whispers is but a drop of water into an ocean, but one day, the tide will turn...
+    number: 107
+
+  - title: Let Him Escape
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Reaction: After another player''s action moves a unit from a battlefield: That player must discard a card at random
+      from his hand. You may draw an additional card during your next End Phase.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Bryon Wackwitz
+    flavor: '"NO!" shouted Ginawa, his sword roaring for blood and revenge. Hiroru leapt, holding Ginawa back. "Let him go,"
+      he hissed, "or it will be the death of us all!"'
+    number: 108
+
+  - title: Magic Mud
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Target a Goblin Personality or Follower: Give him +2F and the ability, "Fear Battle: Fear 2." After this
+      battle ends, destroy him.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Paul Carrick
+    flavor: We got magic mud! We got magic mud! We... argh! AAAAIEEEEE!!
+    number: 109
+
+  - title: Master of Destiny
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 2
+    text: 'Reaction: Before an Event resolves, bow your performing Monk or Shugenja: The Event does not resolve and is put face-up
+      in your rightmost province, discarding the Dynasty card there. If you do not have a Dynasty card in your rightmost province,
+      discard the Event instead of placing it there. The Event will resolve as if it was yours the next time you would resolve
+      an Event in that province.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Anson Maddocks
+    number: 110
+
+  - title: Mountain Tattoo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Mountain
+    - Tattoo
+    gold_cost: 0
+    focus: 3
+    text: 'Mountain Tattoo Limited: Target your performing unbowed Tattooed Personality who has not performed a copy of this
+      action this game. Permanently give them the ability, "Battle: Give this Personality +2F. After each time a Ranged Attack
+      targets them (this turn), double its strength."'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Jerry Tiritilli
+    number: 111
+
+  - title: Nightmares of Iuchiban
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Limited: Target a bowed Monk or Shugenja Personality: Until the game ends, give him a -1C Nightmare token after each
+      time he straightens and, when targeting, paying for, and resolving Kiho actions he performs, Nightmare tokens are considered
+      +1C instead of -1C. After your next turn begins, if the Personality ever loses all Nightmare tokens, the effects of this
+      action end.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Ramon Perez
+    number: 112
+
+  - title: Ninja Tricks
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Ninja
+    gold_cost: 1
+    focus: 1
+    text: 'Reaction: After an action on a Strategy is announced, bow your performing Ninja Personality at the current battlefield:
+      Negate the action''s effects. Lose 2 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Paul Carrick
+    flavor: The Grey Crane stood in the doorway, his father's sword in his hand. "At last, Kage..." The Kolat Master smiled
+      and reached for his saya. "We are two dead men, old friend, and nothing more..."
+    number: 113
+
+  - title: Phoenix Tattoo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Tattoo
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Choose your performing unbowed Tattooed Personality who has not performed a copy of this action this game:
+      Permanently give him Tactician and, until the game ends, he may not be assigned, and will not move, into attacking armies.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Val Mayerik
+    number: 114
+
+  - title: Pillaging
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Battle: If you are the Defender, destroy one of your Gold-producing Holdings and target a Personality whose Personal
+      Honor is less than the Holding''s Gold Cost: Bow all Followers in the target''s unit with Force less than the Gold production
+      of the Holding.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Chris Arneson
+    flavor: '"The Lion left their homelands, the Crab are too weak to care, and Crane armies war against each other. A smart
+      man can profit from these times." - Yoritomo Kanbe'
+    number: 115
+
+  - title: Pride
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 4
+    text: 'Reaction: After a Personality wins a duel that would result in an Honor gain for his controller: Negate the gain.
+      Permanently give the Personality +1PH.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Jerry Tiritilli
+    flavor: '"Speak again, little bird, and I will pluck the feathers from your head!" - Hitomi Juppun'
+    number: 116
+
+  - title: Purity of Spirit
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'Kiho Battle: Target your unbowed Monk or Shugenja and an enemy Personality with lower Chi. Bow the enemy Personality,
+      and bow your Personality unless the enemy is Shadowlands.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: Susan Van Camp
+    flavor: '"Hurt me? Oh, no, no. Not at all. He quite gentle, really, once you get past the teeth..." - Ikudaiu'
+    number: 117
+
+  - title: Shadow Brand
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Limited: Target your non-Shadowlands Personality: Bow him. Permanently give him +1F/+1C. Until the game ends, if
+      the number of times this Personality has been targeted by a card with the title "Shadow Brand" is ever equal to or greater
+      than his base Personal Honor, destroy him.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Paul Carrick
+    flavor: Their power is not in the mark upon the flesh, but the stain upon the soul.
+    number: 118
+
+  - title: Shadowlands Contagion
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Shadowlands
+    gold_cost: 0
+    focus: 3
+    text: 'Reaction: After a Shadowlands card is destroyed during a battle or duel, target a card in the army that opposed the
+      card immediately before its destruction or in the unit of the Personality who was facing the Personality with the Shadowlands
+      card in his unit: Permanently give the target Shadowlands.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Paul (Prof.) Herbert
+    flavor: '"Sometimes the contagion spreads so rapidly, you could swear it had a mind of its own." - Hida Tsuru'
+    number: 119
+
+  - title: Siege
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Siege
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Negate all current and new effects of Regions and Fortifications attached to this battlefield''s province.Battle:
+      If there are no Terrains at the current battlefield: Put this card into play there.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Paul (Prof.) Herbert
+    flavor: Outside Shiba Palace, thousands of Mantis stood ready. "We are here to assist the Phoenix," Yoritomo's voice boomed
+      out. "Open your gates and receive our mercy."
+    number: 120
+
+  - title: Smoke and Mirrors
+    type: Strategy
+    deck: Fate
+    focus: 0
+    text: You may focus this Strategy face-up to discard the last card the other player focused (if any), then draw a card.
+      Each player may focus one additional time this duel.
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    - War of the Seals (Onyx Edition)
+    rarity: Uncommon
+    artist: Anson Maddocks
+    flavor: '"If your opponent expects you to stand, move. If he believes you will move, stand very still. Do not allow your
+      enemy to rule your mind: rule his." - from Kakita''s The Sword'
+    number: 121
+
+  - title: Stagnation
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 4
+    text: 'Battle/Open: Choose your performing unbowed Monk or Shugenja and target a Personality: Remove his base abilities
+      (until the turn ends).'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Ellym Sirac
+    flavor: '"Sometimes the mind is blocked and the soul is emptied. Do not fear. Only from winter can again come the spring."
+      - Naka Kuro'
+    number: 122
+
+  - title: Stand Together
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Bow three of your performing Human or Naga Personalities: In turn order, each other player may choose to
+      lose 5 Honor until one does or each chooses not to do so. After a player does, you may target any player other than that
+      one or yourself, who loses 10 Honor. Neither Honor loss will be given to another player, negated, substituted, increased,
+      or decreased.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Ron Chironna
+    flavor: '"I am never alone; my people are with me." - Ralish'
+    number: 123
+
+  - title: Strike of Silent Waters
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Water
+    gold_cost: 0
+    focus: 3
+    text: 'Reaction: Before one of your Personalities focuses or you discard for the cost of the Tactical rulebook action, bow
+      your performing Monk or Shugenja: This card is considered to be the one focused or discarded with a Focus Value equal
+      to the Chi of your performer.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Bryon Wackwitz
+    flavor: '"Do not speak to your opponent. Speak only to your soul." - Seppun Toshiken'
+    number: 124
+
+  - title: Tattooed
+    type: Strategy
+    deck: Fate
+    gold_cost: 5
+    focus: 2
+    text: 'Limited: Bow your performing Personality: Permanently remove all his Clan alignments, permanently give him Tattooed
+      and, if you are a Dragon Clan or Brotherhood of Shinsei player, permanently give him your Clan alignment.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Cris Dornaus
+    flavor: Through pain nearly too great to bear, he looked into Hitomi's face and saw the truth of all things. "Your will,
+      my Lady," he cried, and then was silent.
+    number: 125
+
+  - title: The Daimyo's Command
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Limited: Until the game ends, Clan Champions have the ability, "Reaction: Any number of times per turn, but only
+      once per Personality, while bringing a Personality with your Clan alignment into play, bow this Personality: You may choose
+      to ignore the first Personality''s Honor Requirement; if you did not, pay less Gold for him equal to half his cost, rounded
+      down."'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Rare
+    artist: Diana Vick
+    flavor: '"We serve at the Emperor''s command. Now he commands that we make war upon the Mantis." - Doji Kuwanan'
+    number: 126
+
+  - title: The Path Not Taken
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 1
+    text: 'Reaction: After another player discards a Strategy from his hand without having used any of its abilities, bow your
+      performing Monk or Shugenja and shuffle this card into your deck: Until the game ends, all your copies of The Path Not
+      Taken in and out of play lose Kiho and have no abilities except one copied from the discarded card, that does not itself
+      copy abilities, with the additional text, "Bow your performing Monk or Shugenja" added to its constraints.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Rare
+    artist: Thomas Manning
+    number: 127
+
+  - title: Threat
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kolat
+    gold_cost: 1
+    focus: 2
+    text: 'Battle/Open: Target a player who controls any units currently in his home: He must bow one of his unbowed Personalities.
+      Lose Honor equal to the Force of the Personality that bowed.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: David Martin
+    number: 128
+
+  - title: Tiger Tattoo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Tattoo
+    gold_cost: 0
+    focus: 3
+    text: 'Limited: Choose your performing unbowed Tattooed Personality who has not performed a copy of this action this game:
+      Permanently give him the trait, "May not attach Weapons" and permanently give him the ability, "Reaction: Any number of
+      times per turn, but only once per duel, after you declare a strike in a duel involving this Personality: Give him +2F/+2C
+      until the duel ends."'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Matthew Cavotta
+    number: 129
+
+  - title: Twisting Ravine
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Cards may not bow to pay actions'' costs, unless it is the cost of an action that will destroy this Terrain.Before
+      an action''s effect bows a card: Negate the bowing.Battle: If there are no Terrains at the current battlefield: Put this
+      card into play there.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Common
+    artist: Chris Arneson
+    number: 130
+
+  - title: Winds and Fortunes
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Reaction: After one of your provinces is destroyed by an Event: The player who resolved the Event must discard his
+      hand.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Uncommon
+    artist: Scott Fischer
+    flavor: '"Bad luck and bad winds! Why do I play this game? ...Ah, hand me the dice, and let me roll again..." - Yoritomo
+      Nodoteki'
+    number: 131
+
+  - title: Shiryo no Kuni
+    type: Ancestor
+    clan: Crab
+    deck: Fate
+    keywords:
+    - Unique
+    - Crab Clan
+    force: 0
+    chi: 1
+    gold_cost: 0
+    honor_requirement: 1
+    focus: 3
+    text: 'Repeatable Reaction, w: After a unit with any Shadowlands cards moves to a battlefield, move this unit into the army
+      opposing it.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Frank Gembeck
+    flavor: He weeps in madness, and his eyes are wild and red. To some, it is a blessing to be granted the favor of an ancestor,
+      but to the Kuni, it is a curse.
+    number: 132
+
+  - title: Shiryo no Yurei
+    type: Ancestor
+    clan: Crane
+    deck: Fate
+    keywords:
+    - Unique
+    - Crane Clan
+    force: 1
+    chi: 0
+    gold_cost: 0
+    honor_requirement: 1
+    focus: 3
+    text: 'Repeatable Battle, w: This Personality challenges a target enemy Personality. His controller may choose to give him
+      a Force penalty equal to his own Personal Honor; if he lost that much Force, he may refuse. Destroy the loser.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Frank Gembeck
+    flavor: '"Kuwanan, I have not disobeyed you. I have only followed a greater call." - Daidoji Uji'
+    number: 133
+
+  - title: Shiryo no Goju
+    type: Ancestor
+    clan: Scorpion
+    deck: Fate
+    keywords:
+    - Unique
+    - Scorpion Clan
+    force: 0
+    chi: 1
+    gold_cost: 0
+    honor_requirement: 1
+    focus: 3
+    text: 'Repeatable Battle/Open: Give this Personality Ninja.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Rare
+    artist: Bryon Wackwitz
+    flavor: Once, long ago, we walked with Bayushi, but now our name has been erased from history and lost to time. Exactly
+      as we chose it to be.
+    number: 134
+
+  - title: The Dark Path of Shadow
+    type: Stronghold
+    clan: Ninja
+    deck: Pre-Game
+    province_strength: 0
+    gold_production: 3
+    starting_honor: 0
+    text: 'You pay 2 less Gold for your non-Personality Ninja cards and your Ninja Strategy actions.You do not lose Honor from
+      other players'' cards'' effects nor from your Ninja cards; this is not negation.Absent Repeatable Tireless Battle: Even
+      if you cannot take actions during the current battle, if the current army attacking your Province has 9 or less total
+      Chi, move all its units home, and bow them as they move.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Bryon Wackwitz
+    number: 135
+
+  - title: Eternal Halls of the Shiba
+    type: Stronghold
+    clan: Phoenix
+    deck: Pre-Game
+    province_strength: 5
+    gold_production: 4
+    starting_honor: 7
+    text: 'Reaction: Once per copy per Kiho per game, after your Kiho Strategy action resolves, put the Strategy in your hand
+      face-up and discard a card; you may use actions on the Strategy an additional time this turn.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Chris Arneson
+    number: 136
+
+  - title: The Palace of Otosan Uchi
+    type: Stronghold
+    clan: Toturi's Army
+    deck: Pre-Game
+    province_strength: 7
+    gold_production: 4
+    starting_honor: 4
+    text: 'If you are the only Toturi''s Army player, you begin the game with control of the Imperial Favor.Your Imperial cards
+      in and out of play have -2 Gold Cost.Reaction: When paying for a Follower attaching to one of your Personalities, reduce
+      its cost by an amount equal to the Personality''s Force until it is paid.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: The promo version of this Stronghold was misprinted with the wrong title
+    rarity: Fixed
+    artist: Eric David Anderson
+    number: 137

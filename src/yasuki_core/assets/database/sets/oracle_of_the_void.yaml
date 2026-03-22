@@ -1,0 +1,215 @@
+set: Oracle of the Void
+cards:
+  - title: Blessings of the Red Panda Spirit
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'Open: Each player gains 1 Honor and draws a card. You may reshuffle this Event into your Dynasty deck instead of
+      discarding it after using this ability.'
+    legality:
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: In Memory of Case Kiyonaga
+    rarity: Promo
+    artist: Jonathan Hill
+    flavor: A rare sight in troubled times, it nonetheless enriches the lives of all whom it touches.
+    pub: Mike Petke
+    print_notes: Released - Gencon 2025 tournaments
+    number: 1
+
+  - title: Inheritance
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      the turn ends, you have the trait, "When paying the cost of putting a card into play, once per game, produce 5 Gold which
+      may only pay for that card."
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Promo
+    artist: Jonathan Hill
+    flavor: In addition to their honor and teachings, sometimes the ancestors leave more practical gifts.
+    pub: Mike Petke
+    print_notes: Released - Gencon 2023 tournaments
+    number: 2
+
+  - title: The Egg of P'an Ku
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Unique
+    gold_cost: 9
+    focus: 4
+    text: 'Limited, : Target a Personality and put this Strategy into play in your home. After entering play and while it remains
+      in play, it becomes a copy of the target''s printed card with all permanent effects that are currently affecting the target
+      applied to it as well (the Personality''s costs need not be paid, play restrictions are not checked, and entering-play
+      effects are not produced).'
+    legality:
+    - Clan Wars (Imperial)
+    - Legacy
+    - Rain of Blood (Diamond)
+    card_notes: The Imperial Edition version was misprinted as an Item.
+    rarity: Promo
+    artist: Jonathan Hill
+    pub: Mike Petke
+    print_notes: Released - Gencon 2024 tournaments
+    number: 3
+
+  - title: Air Yari
+    type: Proxy
+    deck: Other
+    keywords:
+    - Weapon
+    - Air
+    force: 1
+    chi: 1
+    gold_cost: 0
+    focus: 0
+    text: 'May not be included in decks.Battle: Give each Personality and Follower in the enemy army -1F.'
+    legality:
+    - Unreleased
+    card_notes: This card was never actually printed, but only released on the Oracle.
+    rarity: None
+    artist: Dmitry Burmak
+    flavor: '"Many believe Air the softest of the elements, the one that men need fear the least. Many are fools." - The Teachings
+      of Isawa Mitsuko'
+    number: 4
+
+  - title: Aviary Falcon
+    type: Proxy
+    deck: Other
+    keywords:
+    - Cavalry
+    - Falcon
+    - Nonhuman
+    force: 1
+    chi: 0
+    gold_cost: 0
+    honor_requirement: 0
+    focus: 0
+    text: May not be included in decks.
+    legality:
+    - Unreleased
+    card_notes: This card was never actually printed, but only released on the Oracle.
+    rarity: None
+    artist: Gong Studios
+    flavor: '"Falconry is a sport for samurai, a skill cultivated by warriors and nobility. It is a thing of beauty, to command
+      such a strong spirit as a weapon." - Doji Makoto'
+    number: 5
+
+  - title: Humble Farmers
+    type: Proxy
+    deck: Other
+    keywords:
+    - Ashigaru
+    force: 2
+    chi: 0
+    gold_cost: 0
+    honor_requirement: 0
+    focus: 0
+    text: May not be included in decks.
+    legality:
+    - Unreleased
+    card_notes: This card was never actually printed, but only released on the Oracle.
+    rarity: None
+    artist: Aurelien Hubert
+    flavor: '"Destroying a farm in war is unfortunate. Destroying afarmer to make a soldier is a tragedy." - Shiba Tsukimi'
+    number: 6
+
+  - title: Kakita Armor
+    type: Proxy
+    deck: Other
+    keywords:
+    - Armor
+    force: 2
+    chi: 0
+    gold_cost: 0
+    focus: 0
+    text: May not be included in decks.Melee and Ranged Attacks targeting this Personality have -3 strength.
+    legality:
+    - Unreleased
+    card_notes: This card was never actually printed, but only released on the Oracle.
+    rarity: None
+    artist: Matt Zeilinger
+    flavor: '"It is the Crab who are best known for their armor, and rightly so. Those who believe that others cannot equal
+      their work are naÃ¯ve, and their opinions unimportant." - Kakita Saki'
+    number: 7
+
+  - title: Maimed Retainer
+    type: Proxy
+    deck: Other
+    keywords:
+    - Maimed
+    - Retainer
+    gold_cost: 0
+    text: 'May not be included in decks.Battle/Open: Destroy this card and target a Personality: Straighten him. Rehonor him.'
+    legality:
+    - Unreleased
+    card_notes: This card was never actually printed, but only released on the Oracle.
+    rarity: None
+    artist: Drew Baker
+    flavor: Many warriors lose their ability to serve their lord on the battlefield. Of those, some few still have great value
+      in other venues, although they are rarely as happy as on the field.
+    number: 8
+
+  - title: Kichi's Badger
+    type: Proxy
+    clan: Mantis
+    deck: Other
+    keywords:
+    - Badger
+    - Mantis Clan
+    - Nonhuman
+    - Spirit
+    force: 3
+    chi: 2
+    gold_cost: 0
+    personal_honor: 3
+    text: 'May not be included in decks.Battle: Target an enemy Personality: Reduce his Force to 0.'
+    legality:
+    - Unreleased
+    card_notes: This card was never actually printed, but only released on the Oracle.
+    rarity: None
+    artist: Alain Viesca
+    flavor: '"The badger spirit will attack any foe without regard for its own safety. It does not know fear or self-preservation."
+      - Kitsune Kichi'
+    number: 9
+
+  - title: Dynasty Card Back (New)
+    type: Other
+    deck: Other
+    card_notes: Dynasty back of cards after Spirit Wars (11/2000)
+    rarity: None
+    number: 10
+
+  - title: Dynasty Card Back (Old)
+    type: Other
+    deck: Other
+    card_notes: Dynasty back of cards before Spirit Wars (11/2000)
+    rarity: None
+    number: 11
+
+  - title: Dynasty Card Back (SotE)
+    type: Other
+    deck: Other
+    card_notes: Dynasty back of Soul of the Empire token cards
+    rarity: None
+    number: 12
+
+  - title: Fate Card Back (New)
+    type: Other
+    deck: Other
+    card_notes: Fate back of cards after Spirit Wars (11/2000)
+    rarity: None
+    number: 13
+
+  - title: Fate Card Back (Old)
+    type: Other
+    deck: Other
+    card_notes: Fate back of cards before Spirit Wars (11/2000)
+    rarity: None
+    number: 14

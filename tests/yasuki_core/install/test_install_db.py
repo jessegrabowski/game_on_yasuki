@@ -62,8 +62,8 @@ def test_schema_exists_without_force_raises(monkeypatch):
 
     cfg = install_db.InstallerConfig(
         dsn="fake",
-        cards_path=Path("cards.json"),
-        sets_path=Path("sets.json"),
+        cards_path=Path("sets"),
+        sets_path=Path("set_info.yaml"),
         schema_path=Path("schema.sql"),
         force=False,
         skip_sets=True,
@@ -98,8 +98,8 @@ def test_force_drop_calls_reset(monkeypatch):
 
     cfg = install_db.InstallerConfig(
         dsn="fake",
-        cards_path=Path("cards.json"),
-        sets_path=Path("sets.json"),
+        cards_path=Path("sets"),
+        sets_path=Path("set_info.yaml"),
         schema_path=Path("schema.sql"),
         force=True,
         skip_sets=True,

@@ -1,0 +1,3216 @@
+set: Gates of Chaos
+cards:
+  - title: Blood of Shahai
+    type: Celestial
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Dark Fortune
+    text: 'Maho Battle/Open: Give -1C to a target Personality with lower Chi than his printed Chi.Maho Battle: Discard this
+      Celestial. Give each Personality at this battlefield a -1C Blood token.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 GenCon AEG Game Night - Stephen Franklin
+    rarity: Uncommon
+    artist: Mario Wibisono
+    flavor: '"Learn this lesson well: Blood and power are the only truths. All else is illusion." - Shahai'
+    number: 1
+
+  - title: A Fever in the Blood
+    type: Event
+    deck: Dynasty
+    text: 'Personalities and Followers have -1F while attacking.Limited: Put this Event into play. Discard it after your next
+      turn begins.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Shen Fei
+    flavor: '"The land itself added to the conflict, as loyal samurai and Fallen alike found themselves beset with fever and
+      weakness. True-hearted samurai drew on the strength of honor and forged on. The Fallen had no such resources." - Chronicle
+      of the Heretic War, Part I'
+    number: 2
+
+  - title: Journey's End Siege
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: 'Limited: Defending players may not play Terrains (this turn). After the first time you destroy a Province in battle
+      this turn, if you do not have more Provinces than the Defender (at that time), gain a Province.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Lino Drieghe
+    flavor: '"This is a simple problem. We are going to take back Journey''s End City, and anyone who tries to stop us can die
+      beneath our charge." - Shinjo Tselu'
+    number: 3
+
+  - title: Riding to the Rescue
+    type: Event
+    deck: Dynasty
+    text: 'Limited: Your Cavalry Personalities and Followers have +1F while attacking and opposed (this turn).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: David Horne
+    flavor: '"Not content to let the honorless retain Journey''s End City, the children of Shinjo assembled their forces and
+      rode to battle. With bushido in their hearts and steel in their hands, they engaged the Fallen." - Chronicle of the Heretic
+      War, Part III'
+    number: 4
+
+  - title: Abundant Farmlands
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Farm
+    gold_cost: 1
+    text: 'After each player''s turn begins, straighten this Holding.w: Produce 1 Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Gordon Ho
+    rarity: Common
+    artist: Lino Drieghe
+    flavor: '"I find that personal oversight can greatly enhance the productivity of even minor holdings." -- Kaiu Esumi'
+    number: 5
+
+  - title: Coastal Pearl Bed
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Pearl
+    - Pearl Bed
+    gold_cost: 2
+    text: 'Open, w: A target Holding''s abilities may not be used.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Dan Chlebowczyk
+    rarity: Common
+    artist: Nikolay Stoyanov
+    flavor: '"These Naga have pearls much like those from our home, though they are far more savage than the Naga we know."
+      - Kuni Shinoda'
+    number: 6
+
+  - title: Exquisite Silk Works
+    type: Holding
+    deck: Dynasty
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Limited: Target a dishonorable Personality. His controller loses 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Christian HorstkÃ¶tter
+    rarity: Rare
+    artist: Gong Studios
+    flavor: '"By the Fortunes! Where in the world did you find so many cocoons?" - Moto Ming-Gwok'
+    number: 7
+
+  - title: Fudoist Temple
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Fudo
+    - Temple
+    gold_cost: 3
+    text: 'Open, w: Give a target Personality and each of his Followers Cavalry.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - John Merholtz
+    rarity: Common
+    artist: Jason Juta
+    flavor: '"A Shinseist temple, you say? Why don''t I recognize the statue, then?" -- Hida Watari'
+    number: 8
+
+  - title: Glassworks
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Singular
+    - Retainer
+    gold_cost: 2
+    text: 'Your Items have +1F.w: Produce 2 Gold.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Alexandre Baylot
+    rarity: Uncommon
+    artist: Gong Studios
+    flavor: '"The Unicorn have lauded the virtues of glass for many centuries. Only now do we appreciate their wisdom." - Isawa
+      Shunsuko'
+    number: 9
+
+  - title: Imperial Explorer's Dojo
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Dojo
+    - Imperial
+    gold_cost: 2
+    text: 'w: Produce 2 Gold.Limited, w: Put a target Terrain in your discard pile into your hand. Destroy this Holding.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - David Winner
+    rarity: Rare
+    artist: Gong Studios
+    flavor: '"Life in the deep jungle can be oddly tranquil, sometimes." - Doji Kazuo'
+    number: 10
+
+  - title: Jade Mine
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Jade
+    - Mine
+    gold_cost: 2
+    text: When this Holding produces Gold, you may give it +1GP (this turn); if you do, it will not straighten until after your
+      next Action Phase.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Anthony Calabrese
+    rarity: Rare
+    artist: Hannah Böving
+    flavor: '"It is valuable to us, yes, but I feel trading at a reasonable rate to the Crab is the only honorable thing to
+      do." - Asako Karachu'
+    number: 11
+
+  - title: Productive Mine
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Kharmic
+    - Mine
+    gold_cost: 4
+    text: '(Repeatable Limited, : Discard a Kharmic card from your Province and refill it face-up.)w: Produce 4 Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Juan Palomo
+    rarity: Rare
+    artist: Nikolay Stoyanov
+    flavor: '"Humans finally realize that working with mujina better than foolish attempt at slavery. They smarter than Kuni,
+      I think." - Nijugun'
+    number: 12
+
+  - title: Slave Pits
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Mine
+    gold_cost: 2
+    text: 'Courtesy: When this Holding produces Gold, you may give it +1GP (this turn) and lose 2 Honor. (Courtesy traits do
+      not take effect if you went first.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Artur Szymala
+    rarity: Rare
+    artist: Carlos NCT
+    flavor: '"It seems the Ivinda also discovered how to enslave the copper goblins for mining." - Kitsuki Yataku'
+    number: 13
+
+  - title: The Breeding Ground
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Stables
+    gold_cost: 1
+    text: 'Limited, w: Give your target Personality Conqueror.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Case Kiyonaga
+    rarity: Common
+    artist: Carlos NCT
+    flavor: '"The Spider have found new sources of strength in the Colonies. We should do the same. Perhaps these things that
+      Etsui discovered have some use, my lord?" - Tsuruchi Isas'
+    number: 14
+
+  - title: The Tower of Vigilance
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Fortification
+    gold_cost: 0
+    text: '(Fortifications attach, straightened, to the Province from which they entered play.)Engage, w: If you have any units
+      at this battlefield, create a 0F/2C/2PH Samurai • Guard Personality there. Remove him from the game after this battle
+      ends.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Owen Michaud
+    rarity: Uncommon
+    artist: Gong Studios
+    flavor: '"Almost as impressive as the Wall." - Kitsu Miro'
+    number: 15
+
+  - title: Hida Gojiro
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Crab Clan
+    - Fallen
+    force: 3
+    chi: 3
+    gold_cost: 5
+    personal_honor: 0
+    text: 'Invest : Give Gojiro two +1F tokens. (After this card enters play, you may also pay the Invest cost to get the effect,
+      once.)After Gojiro enters play, lose 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jonathan Moore
+    flavor: Not all Crab who fall are victims of the Taint.
+    number: 16
+
+  - title: Hida Tadama
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Berserker
+    - Commander
+    - Crab Clan
+    - Favored of the Celestial Dragon
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 2
+    text: After the first time each phase Tadama is destroyed, bring him into play in your home, ignoring costs, and bow him.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Favored of the Celestial Dragon - Dan Chlebowczyk
+    rarity: Uncommon
+    artist: Carlos NCT
+    flavor: '"I carry the Heavens'' power! Flee or die!"'
+    number: 17
+
+  - title: Toritaka Chokichi
+    extended_title: Toritaka Chokichi • Experienced
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Crab Clan
+    - Experienced
+    - Samurai
+    - Scout
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Battle: Bow a target Spider Clan Personality or, if Chokichi has a Follower, bow a target enemy card without attachments.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 A Return to Glory - Christopher Fuchs
+    rarity: Rare
+    artist: Wenjuinn
+    flavor: '"Serpents or Spider, it makes no difference. All enemies of the Crab will perish."'
+    number: 19
+
+  - title: Toritaka Iabuchi
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Destined
+    - Samurai
+    - Scout
+    force: 3
+    chi: 2
+    gold_cost: 7
+    honor_requirement: 3
+    personal_honor: 2
+    text: '(Draw a card after you Recruit a Destined card.)Battle, w: Ranged 2 Attack (Destroy a target enemy Follower or Personality
+      without Followers with 2 or lower Force).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: John Donahue
+    flavor: '"I have heard the voice of my ancestor, and I will obey… whatever the cost."'
+    number: 20
+
+  - title: Yasuki Daisuki
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Expendable
+    - Courtier
+    - Crab Clan
+    - Merchant
+    force: 0
+    chi: 1
+    gold_cost: 2
+    personal_honor: 1
+    text: (Draw a card after your Expendable card is destroyed.)
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Erich Schreiner
+    flavor: '"A dangerous assignment? Surely not. My lord loves me too much for that."'
+    number: 21
+
+  - title: Asahina Shigemitsu
+    extended_title: Asahina Shigemitsu • Experienced
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Air
+    - Crane Clan
+    - Experienced
+    - Favored of the Air Dragon
+    - Shugenja
+    force: 2
+    chi: 5
+    gold_cost: 8
+    honor_requirement: 10
+    personal_honor: 4
+    text: 'Open, w: Target one or two of your Provinces. After the first time this turn a Personality attacks one of those Provinces,
+      gain 2 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 Favored of the Air Dragon - Alain Hortillosa
+    rarity: Uncommon
+    artist: Matt Zeilinger
+    flavor: '"Peace, yes! But not at the cost of our honor! Never at the cost of honor!"'
+    number: 23
+
+  - title: Daidoji Soken
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crane Clan
+    - Merchant
+    force: 0
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'w: Produce 3 Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Wenjuinn
+    flavor: '"I am no warrior, and nothing I can do can stop the Fudoists or their incomprehensible enemies. But I can put tools
+      into the hands of those that can, and I will work night and day to see that this is done."'
+    number: 24
+
+  - title: Daidoji Tametaka
+    extended_title: Daidoji Tametaka • Experienced
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Commander
+    - Crane Clan
+    - Experienced
+    - Iron Crane
+    - Samurai
+    - Scout
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Tametaka loses any duel against Yoritomo Hiromi.Battle: Reduce the Force of a target enemy Personality or Follower
+      to 0.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Conceptopolis
+    flavor: '"Many Daidoji call themselves ''Iron Cranes''. Tametaka is one of the few who deserve the name. What a fight that
+      was!" - Yoritomo Hiromi'
+    number: 25
+
+  - title: Daidoji Tobei
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Destined
+    - Crane Clan
+    - Fallen
+    - Samurai
+    - Scout
+    force: 3
+    chi: 2
+    gold_cost: 7
+    personal_honor: 0
+    text: '(Draw a card after your Destined card enters play.)After Tobei enters play, lose 1 Honor.Battle, w: Ranged 2 Attack.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Mark Poole
+    flavor: '"No clan or family was left untouched by the madness; it struck whenever and wherever a weakness could be found."
+      - Chronicle of the Heretic War, Part II'
+    number: 26
+
+  - title: Doji Razan
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Courtier
+    - Crane Clan
+    - Magistrate
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 2
+    personal_honor: 3
+    text: 'Invest : Give Razan a +1C token. (After this card enters play, you may also pay the Invest cost to get the effect,
+      once.)Limited: Destroy a target Fudo card. Destroy Razan.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Mateusz Ozminski
+    flavor: '"Destroy this shrine! We shall have no more of this heresy!"'
+    number: 27
+
+  - title: Kitsuki Nakai
+    extended_title: Kitsuki Nakai • Experienced
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Unique
+    - Dragon Clan
+    - Experienced
+    - Magistrate
+    - Samurai
+    - Topaz Champion
+    force: 1
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 8
+    personal_honor: 3
+    text: 'Open: Give a target Personality -2F, or -3F if he is dishonorable.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 Topaz Championships - Josh Kolb
+    rarity: Uncommon
+    artist: Sergio Camarena
+    flavor: '"You are not the first Topaz Champion to find yourself in the Colonies, my friend," Kaiu Onizuka said with a smile.
+      "Let us see what grand work we can find you."'
+    number: 28
+
+  - title: Mirumoto Katagi
+    extended_title: Mirumoto Katagi • Experienced
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Unique
+    - Dragon Clan
+    - Experienced
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 7
+    personal_honor: 3
+    text: 'Battle, : Equip a target non-Unique Weapon in your discard pile to Katagi.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: J. Edwin Stevens
+    flavor: '"The Colonies have provided me with a multitude of new weapons to master. Shall I show you, Crab? Or you, Scorpion?
+      Who wants to be first?"'
+    number: 30
+
+  - title: Mirumoto Omero
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Kensai
+    - Dragon Clan
+    - Samurai
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 4
+    personal_honor: 2
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 Amethyst Champion Costume Contest - Guillermo Roji
+    rarity: Common
+    artist: Jonathan Moore
+    flavor: '"Given a choice, I would not call the Spider allies. My lord wishes it, however, so I will slay any Crab or Scorpion
+      who wishes them harm. That is the role of a samurai."'
+    number: 31
+
+  - title: Tamori Jinai
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Alchemist
+    - Earth
+    - Shugenja
+    force: 3
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 3
+    text: '(Shugenja may attach and cast Spells.)Earth Battle: Bow a target enemy card without attachments.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Rare
+    artist: Albert Tavira
+    flavor: '"All things are made of the elements. If you entreat them properly, they can take familiar, and useful, forms."'
+    number: 32
+
+  - title: Togashi Noritada
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Fire
+    - Monk
+    - Tattooed
+    force: 2
+    chi: 3
+    gold_cost: 4
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Invest : Give Noritada two +1F Fire tokens. (After this card enters play, you may also pay the Invest cost to get
+      the effect, once.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 Emerald Champion Costume Contest - Jim Chin
+    rarity: Uncommon
+    artist: Conceptopolis
+    flavor: '"Most believe the Fire Dragon to be the most devastating. Few consider the power of the Frost Dragon."'
+    number: 33
+
+  - title: Akodo Dairuko
+    extended_title: Akodo Dairuko • Experienced
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Loyal
+    - Tactician
+    - Unique
+    - Clan Champion
+    - Experienced
+    - Lion Clan
+    - Paragon
+    - Samurai
+    - Steel Lion
+    force: 5
+    chi: 5
+    gold_cost: 14
+    honor_requirement: 12
+    personal_honor: 5
+    text: 'Battle: Bow a target enemy Personality with lower Personal Honor. Destroy him if he is Unaligned.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Tony Foti
+    flavor: '"We shall wait no more! The Lion Clan marches today, and we shall not rest until Legulus is crushed beneath our
+      feet."'
+    number: 34
+
+  - title: Akodo Nojima
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Fallen
+    - Lion Clan
+    - Samurai
+    force: 3
+    chi: 2
+    gold_cost: 4
+    personal_honor: 0
+    text: After Nojima enters play, lose 1 Honor.Destroy Nojima if he is ever in an army with a Personality with 3 or more Personal
+      Honor.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Andrew Olson
+    flavor: His entire Clan had turned against him. No matter. He would keep moving and fight on for as long as he lived.
+    number: 36
+
+  - title: Ikoma Ayumu
+    extended_title: Ikoma Ayumu • Experienced
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Unique
+    - Experienced
+    - Hero
+    - Lion Clan
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 7
+    personal_honor: 3
+    text: Will not gain Fallen or Shadowlands.Ayumu's rulebook Tactical Advantage ability is a Battle/Open action for Ayumu.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    errata_text: Technical erratum via Oracle.
+    story: 2011 Obsidian Championships - Timothy Wells
+    rarity: Uncommon
+    artist: Diego Gisbert Llorens (Misprinted as Jason Engle)
+    flavor: '"Ayumu is a beacon of hope to us all. Despite temptation, he remained true to the Clan." - Akodo Dairuko'
+    number: 37
+
+  - title: Ikoma Jeiku
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Lion Clan
+    - Samurai
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Invest : Refill the Province Jeiku entered play from face-up. (After this card enters play, you may also pay the
+      Invest cost to get the effect, once.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Charity Auction - Jake Laird
+    rarity: Common
+    artist: Aurelien Hubert
+    flavor: He has taken to the customs of the outsiders with gusto, but the brothers of his legion still look upon him with
+      respect.
+    number: 38
+
+  - title: Kitsu Ririko
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Destined
+    - Lion Clan
+    - Shugenja
+    - Water
+    force: 1
+    chi: 4
+    gold_cost: 5
+    honor_requirement: 7
+    personal_honor: 3
+    text: (Draw a card after your Destined card enters play.)Ririko enters play ignoring Honor Requirement if you are a Unicorn
+      Clan player.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Matt Zeilinger
+    flavor: '"Relax, brother. This pain shall end soon."'
+    number: 39
+
+  - title: Kitsune Yuko
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Kitsune
+    - Mantis Clan
+    - Nonhuman
+    - Shugenja
+    - Spirit
+    force: 1
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 3
+    text: 'Invest : Gain 1 Honor. (After this card enters play, you may also pay the Invest cost to get the effect, once.)Limited,
+      w: Gain 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Charity Auction - Trevor Valentine
+    rarity: Common
+    artist: Alayna Lemmer
+    flavor: '"Don''t be so surprised, Doji-san. There is more to the Mantis than war."'
+    number: 40
+
+  - title: Moshi Rukia
+    extended_title: Moshi Rukia • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Unique
+    - Experienced
+    - Mantis Clan
+    - Shugenja
+    - Thunder
+    force: 3
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Battle: Bow a target enemy card without attachments. Destroy it if it is an attachment.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Fate of the Sparrow Clan - Tom Kirchgesner
+    rarity: Uncommon
+    artist: Sergio Camarena
+    flavor: '"Unfair? Blasphemous? The Crane are merely jealous. It is unfortunate for them that not one among the Asahina can
+      match my power or resolve."'
+    number: 41
+
+  - title: Moshi Sasako
+    extended_title: Moshi Sasako • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Naval
+    - Unique
+    - Experienced
+    - Mantis Clan
+    - Shugenja
+    - Thunder
+    force: 4
+    chi: 4
+    gold_cost: 10
+    personal_honor: 1
+    text: 'Tireless Battle: Straighten Sasako. (Tireless actions may be taken while bowed.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Engle
+    flavor: '"The suffering... the slaughter. This war has ended just as Master Chukage predicted before he gave me the texts
+      he had found and bid me to flee. I do not know what madness he has discovered, but it has wounded the Mantis deeply."'
+    number: 42
+
+  - title: Tsuruchi Gombei
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Fallen
+    - Mantis Clan
+    - Samurai
+    - Scout
+    force: 3
+    chi: 1
+    gold_cost: 4
+    personal_honor: 0
+    text: After Gombei enters play, lose 1 Honor.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Jazz Siy
+    flavor: '"No! This war is not over! It will not end until every mewling Crane and their peasant servitors have bled to death
+      before me!"'
+    number: 43
+
+  - title: Yoritomo Hiromi
+    extended_title: Yoritomo Hiromi • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Loyal
+    - Naval
+    - Unique
+    - Clan Champion
+    - Experienced
+    - Mantis Clan
+    - Samurai
+    - The Growing Storm
+    - Thunder
+    force: 5
+    chi: 5
+    gold_cost: 14
+    honor_requirement: 5
+    personal_honor: 3
+    text: 'Battle, : Ranged Attack with strength equal to the Gold paid.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Jorge Matar
+    flavor: '"The Crane are finished, and their general beaten. But we must not rest, my friends - we have been betrayed."'
+    number: 44
+
+  - title: Yoritomo Mikaru
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Destined
+    - Charitable
+    - Magistrate
+    - Mantis Clan
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 2
+    text: '(Draw a card after your Destined card enters play.)Limited, : Recruit a target Holding in your Province (entering
+      play bowed), for 1 less Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2010 Solving the Riddle - Trevor Valentine
+    rarity: Rare
+    artist: Mark Poole
+    flavor: '"Food, instead of spears. Clothing, instead of armor. My kin sometimes forget all the good koku can do."'
+    number: 45
+
+  - title: Asako Ifukube
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Destined
+    - Expendable
+    - Earth
+    - Inquisitor
+    - Phoenix Clan
+    - Shugenja
+    force: 0
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 12
+    personal_honor: 3
+    text: (Draw a card after your Destined card enters play.)(Draw a card after your Expendable card is destroyed.)
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Conceptopolis
+    flavor: '"The stories of this Blood must surely be exaggerated. Nothing could possess the power these rumors claim. Tell
+      me, my friend… what really happened?"'
+    number: 46
+
+  - title: Asako Karachu
+    extended_title: Asako Karachu • Experienced
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Air
+    - Experienced
+    - Golden Arm
+    - Henshin
+    - Monk
+    - Phoenix Clan
+    - Protector of the Second City
+    force: 4
+    chi: 3
+    gold_cost: 9
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Open: Give Karachu Cavalry, Conqueror, or Naval.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 A Line in the Sand, Part 2 - Mark Stevenson
+    rarity: Rare
+    artist: David Horne
+    flavor: '"Resisting temptation is not a difficult matter. It simply requires discipline and dedication."'
+    number: 47
+
+  - title: Isawa Hajime
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Fallen
+    - Fire
+    - Phoenix Clan
+    - Shugenja
+    force: 2
+    chi: 3
+    gold_cost: 5
+    personal_honor: 0
+    text: 'Invest : Give Hajime two +1F Fire tokens. (After this card enters play, you may also pay the Invest cost to get the
+      effect, once.)After Hajime enters play, lose 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Albert Tavira
+    flavor: '"Hahahaha! Pretty!"'
+    number: 48
+
+  - title: Isawa Koizumi
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Air
+    - Phoenix Clan
+    - Shugenja
+    force: 0
+    chi: 4
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 2
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Shen Fei
+    flavor: '"These lands are not beyond redemption. We must find the peace within ourselves and make it manifest here. The
+      Colonies can be tamed. This can become a land like unto the Empire, if we are but strong enough."'
+    number: 49
+
+  - title: Isawa Norimichi
+    extended_title: Isawa Norimichi • Experienced
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Unique
+    - Earth
+    - Elemental Master
+    - Experienced
+    - Phoenix Clan
+    - Shugenja
+    force: 4
+    chi: 5
+    gold_cost: 9
+    honor_requirement: 8
+    personal_honor: 3
+    text: 'Your other Earth Shugenja have +1F.Battle: Give this Province +2 or -2 strength.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Behnke
+    flavor: '"The earth can be loud, like the avalanche, or quiet, as the stone. The avalanche''s strength is fleeting, but
+      the stone''s strength can be eternal."'
+    number: 50
+
+  - title: Shiba Tsurao
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Expendable
+    - Phoenix Clan
+    - Samurai
+    - Yojimbo
+    force: 4
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 6
+    personal_honor: 3
+    text: '(Draw a card after your Expendable card is destroyed.)Battle: Give a target enemy Personality or Follower -2F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Shen Fei
+    flavor: '"What do you suppose this thing is?"'
+    number: 51
+
+  - title: Bayushi Amorie
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Ninja
+    - Scorpion Clan
+    force: 4
+    chi: 2
+    gold_cost: 6
+    personal_honor: 0
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Name a Personality - Paul Adams
+    rarity: Common
+    artist: Jason Behnke
+    flavor: The Scorpion Shinobi are trained to misdirect their opponents, obfuscate their attacks, conceal their objectives,
+      and cling to the shadows. But some occasions require more overt methods.
+    number: 52
+
+  - title: Bayushi Manami
+    extended_title: Bayushi Manami • Experienced
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Unique
+    - Experienced
+    - Paragon
+    - Samurai
+    - Scorpion Clan
+    - Yojimbo
+    force: 2
+    chi: 3
+    gold_cost: 6
+    personal_honor: 1
+    text: During battle resolution, Manami's army has +2F.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Conceptopolis
+    flavor: Against prepared assailants, most Scorpion Yojimbo only succeed in buying their charges a few moments of time. But
+      then, a few moments of time is all they need.
+    number: 53
+
+  - title: Shosuro Nigawa
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Magistrate
+    - Samurai
+    - Scorpion Clan
+    force: 2
+    chi: 3
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Invest : Give Nigawa two +1F tokens. (After this card enters play, you may also pay the Invest cost to get the effect,
+      once.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jorge Matar
+    flavor: '"I find that justice is like an arrow. Once its target is clear, its touch is unavoidable. Especially if the guilty
+      do not see it coming."'
+    number: 54
+
+  - title: Soshi Kodanshi
+    extended_title: Soshi Kodanshi • Experienced
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Experienced
+    - Ninja
+    - Scorpion Clan
+    force: 4
+    chi: 4
+    gold_cost: 8
+    personal_honor: 0
+    text: 'Limited: Bow your target unbowed Ninja Personality. Bow a target Personality; if he is Fudo or Fallen, he will not
+      straighten this turn.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Andy Hepworth
+    flavor: '"How do you tell the two cults apart?" Kodanshi blinked. "I don''t," he replied.'
+    number: 55
+
+  - title: Yogo Nobukai
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Scorpion Clan
+    - Yojimbo
+    force: 3
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Open: If it is your turn or you control a Courtier, give a target Personality -2F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: Shen Fei
+    flavor: Takashi's activities did not concern Nobukai. The yojimbo's mind was filled only with his duty; to protect his charge.
+      The cruelty of the Yogo Curse knew no limits.
+    number: 56
+
+  - title: Yogo Takashi
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Destined
+    - Expendable
+    - Courtier
+    - Fallen
+    - Scorpion Clan
+    force: 0
+    chi: 4
+    gold_cost: 5
+    personal_honor: 0
+    text: (Draw a card after your Destined card enters play.)(Draw a card after your Expendable card is destroyed.)After Takashi
+      enters play, lose 1 Honor.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 Jade Championship Costume Contest - Daniel Vidal
+    rarity: Rare
+    artist: Shen Fei
+    flavor: '"A city of fools. I expected no less from the backwash of the mainland."'
+    number: 57
+
+  - title: Daigotsu Kikumura
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Samurai
+    - Shadowlands
+    - Spider Clan
+    force: 2
+    chi: 3
+    gold_cost: 4
+    personal_honor: 0
+    text: 'If you are a Dragon Clan player, Kikumura''s Invest is .Invest : Create two 1F Followers attach them to Kikumura.
+      (After this card enters play, you may also pay the Invest cost to get the effect, once.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Matthew Armstrong
+    flavor: '"Tell me again, brother Dragon. Tell me how we must earn the respect of these savages."'
+    number: 58
+
+  - title: Lao-she
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Monk
+    force: 2
+    chi: 2
+    gold_cost: 4
+    personal_honor: 1
+    text: '(Kensai may attach two One-Handed Weapons.)Home Battle: If Lao-she would be opposed, move him to the current battlefield.
+      (Home actions may be taken from home.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: Shen Fei
+    flavor: '"I have seen the power of the Blood. I know what secrets it holds. The other clans… they know nothing."'
+    number: 60
+
+  - title: M'rika
+    extended_title: M'rika • Experienced
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Loyal
+    - Unique
+    - Artisan
+    - Bog Hag
+    - Experienced
+    - Nonhuman
+    - Shadowlands
+    - Shugenja
+    - Spider Clan
+    force: 1
+    chi: 4
+    gold_cost: 8
+    personal_honor: 3
+    text: 'Open, w: Bow a target Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 A Samurai of Distinction - John Liu
+    rarity: Uncommon
+    artist: Mario Wibisono
+    flavor: '"What a masterpiece my darling niece has created here. I have not felt such excitement in years. What meaning do
+      a few deaths possess when they serve to dispel my ennui?"'
+    number: 61
+
+  - title: Ninube Onchi
+    extended_title: Ninube Onchi • Experienced
+    type: Personality
+    clan: Ninja,Spider
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Experienced
+    - Imperial
+    - Imperial Explorer
+    - Ninja
+    - Scout
+    - Shadowlands
+    - Shugenja
+    - Spider Clan
+    force: 4
+    chi: 3
+    gold_cost: 9
+    personal_honor: 0
+    text: After Onchi enters play, lose 2 Honor.Actions from cards in other players' units may not target Onchi.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Imperial Explorers - Christian Reitberger
+    rarity: Rare
+    artist: Alayna Lemmer
+    flavor: '"Discover what Renyu is planning. If that kabuki-wearing fool wants a war, I shall gladly oblige." - Daigotsu Kanpeki'
+    number: 62
+
+  - title: Susumu Haikaro
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Spider Clan
+    force: 1
+    chi: 3
+    gold_cost: 5
+    personal_honor: 2
+    text: Negate Haikaro's destruction from battle resolution.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Britt Martin
+    flavor: '"I find that an occasional tour of the battlefield does wonders for improving my perspective in court. Would that
+      I could observe the battle at the Second City! How marvelous it must be!"'
+    number: 63
+
+  - title: Abdollah
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Gaijin
+    - Jackal
+    - Shugenja
+    force: 1
+    chi: 2
+    gold_cost: 6
+    personal_honor: 0
+    text: After Abdollah enters play, lose 2 Honor and create a 2F/2C/0PH Nonhuman • Shadowlands • Undead Personality.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Bob Martin
+    rarity: Uncommon
+    artist: Sam Flegal
+    flavor: '"I will gladly bargain with this demon Nitoshi if it allows me to avoid my enemies, friend Keirei. You think there
+      are not worse things in the world than a silly six-armed goddess?"'
+    number: 64
+
+  - title: Boyoh Mercenary
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Mercenary
+    force: 3
+    chi: 2
+    gold_cost: 5
+    personal_honor: 0
+    text: After Boyoh Mercenary enters play, discard a card.After Boyoh Mercenary's army destroys a Province, draw a card.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Michael Dickinson
+    rarity: Common
+    artist: Felipe Gaona
+    flavor: '"Men of war in service to some sort of ancient cult," Bayushi Kahoku mused. "What an interesting enigma. What manner
+      of secrets might they reveal?"'
+    number: 65
+
+  - title: Chuda Hikano
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Shadowlands
+    - Shugenja
+    force: 2
+    chi: 3
+    gold_cost: 5
+    personal_honor: 0
+    text: 'After Hikano enters play, lose 1 Honor.Home Battle, w: Straighten your target Oni. (Home actions may be taken from
+      home.)Maho Limited: Destroy a target Ikoma Ayumu. Destroy Hikano.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Erich Schreiner
+    flavor: '"Flee to the Colonies if you want, you armless old fool. It will not save you from my wrath."'
+    number: 66
+
+  - title: Hoshoku-sha
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Wani
+    force: 4
+    chi: 1
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Battle/Open: Destroy your target Personality. Give Hoshoku-sha +2F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: David Horne
+    flavor: '"The Wani are said to be ancient creatures, older than man, and failed rivals of the great Elemental Dragons. No
+      one has seen one in seven centuries. Why now?" - Kuni Kiyoshi'
+    number: 67
+
+  - title: Legulus
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Unique
+    - Commander
+    - Gaijin
+    - Yodotai
+    force: 4
+    chi: 4
+    gold_cost: 10
+    personal_honor: 0
+    text: 'After Legulus enters play, lose 2 Honor.Melee and Ranged Attacks targeting cards in this unit have -3 strength.Limited:
+      Search your deck for a Yodotai Legionnaire Follower. Show it. Put it in your hand.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Charles Urbach
+    flavor: '"You took my goddess, samurai. I will take everything from you in return."'
+    number: 68
+
+  - title: The Lost Colossus
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Golem
+    - Nonhuman
+    force: 6
+    chi: 5
+    gold_cost: 8
+    personal_honor: 0
+    text: After The Lost Colossus enters play, bow it.Will not attach cards. Will not challenge. You may not target The Lost
+      Colossus with Political actions.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Trevor Valentine
+    rarity: Common
+    artist: Chris Burdett
+    flavor: The earth shuddered, and ancient stone and soil shattered as it rose. "Well," Daizu said calmly, "that certainly
+      is impressive."
+    number: 69
+
+  - title: Ide Hinobu
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Merchant
+    - Unicorn Clan
+    force: 0
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'w: Produce 3 Gold.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Shen Fei
+    flavor: '"There is no shame in dealing with money to support your clan. I simply wage battle with our enemies on a different
+      plane."'
+    number: 70
+
+  - title: Moto Daiken
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Death Priest
+    - Shugenja
+    - Unicorn Clan
+    - Water
+    force: 3
+    chi: 4
+    gold_cost: 7
+    personal_honor: 1
+    text: While you control any Ancestor Personalities or have any dead Personalities in your discard pile, Daiken has +1F.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Sam Flegal
+    flavor: '"We have had troubles with the Lion Clan in the past, but that is no concern. We shall bring forth the might of
+      the Unicorn to their aid during this time of need."'
+    number: 71
+
+  - title: Shinjo Kinto
+    extended_title: Shinjo Kinto • Experienced
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Commander
+    - Commander of the 9th Legion
+    - Experienced
+    - Imperial
+    - Samurai
+    - Scout
+    - Unicorn Clan
+    force: 4
+    chi: 3
+    gold_cost: 9
+    personal_honor: 2
+    text: 'Home Battle: Move Kinto home or, if he would be opposed, to the current battlefield. (Home actions may be taken from
+      home.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 A Line in the Sand, Part 1 - John Seals
+    rarity: Uncommon
+    artist: Sergio Camarena
+    flavor: The rebellion would be stopped, he swore to his ancestors.
+    number: 72
+
+  - title: Shinjo Tselu
+    extended_title: Shinjo Tselu • Experienced 2
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Experienced 2
+    - Unique
+    - Commander
+    - Imperial
+    - Ivory Champion
+    - Magistrate
+    - Samurai
+    - Unicorn Clan
+    force: 5
+    chi: 5
+    gold_cost: 10
+    honor_requirement: 10
+    personal_honor: 3
+    text: 'Limited, : Create a 1F Cavalry Follower and attach it to your target Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: David Horne
+    flavor: '"No man can follow a commander if he does not draw respect. I shall lead the charge myself."'
+    number: 73
+
+  - title: Shinjo Yoshie
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Destined
+    - Commander
+    - Fallen
+    - Samurai
+    - Unicorn Clan
+    force: 3
+    chi: 1
+    gold_cost: 7
+    personal_honor: 0
+    text: '(Draw a card after your Destined card enters play.)After Yoshie enters play, lose 1 Honor.Battle: Give a target enemy
+      Infantry Personality or Follower -3F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Veronica V. Jones
+    flavor: '"They come for us now, but we are ready."'
+    number: 74
+
+  - title: Utaku Sayaka
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Battle Maiden
+    - Paragon
+    - Samurai
+    - Unicorn Clan
+    force: 2
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 4
+    personal_honor: 3
+    text: 'Invest : Give Sayaka two +1F tokens. (After this card enters play, you may also pay the Invest cost to get the effect,
+      once.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2011 Topaz Championship Costume Contest - Adrienne Payette
+    rarity: Uncommon
+    artist: Jazz Siy
+    flavor: She breathed in deep and waited for the serenity to pass over her. It was a brutal affair, killing those you had
+      once called family. Duty and honor, it seemed, weighed greatly.
+    number: 75
+
+  - title: Aulus
+    type: Follower
+    deck: Fate
+    keywords:
+    - Gaijin
+    - Yodotai
+    force: 3
+    chi: 0
+    gold_cost: 5
+    focus: 2
+    text: After this Follower enters play, lose 2 Honor.Legionnaires in this unit have +1F.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Charles Urbach
+    flavor: '"The men are ready, Praefectus. We will end these samurai."'
+    number: 76
+
+  - title: Camel Mounts
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    - Camel
+    - Nonhuman
+    force: 3
+    chi: 0
+    gold_cost: 6
+    focus: 2
+    text: 'Will only attach to a Human. This Personality has Cavalry.Home Battle: Move this unit to the current battlefield
+      if it would be opposed there.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Azrael Johnston
+    rarity: Rare
+    artist: Felipe Gaona
+    flavor: '"She is no artist, but one must respect the Imperial Governor for her skill at crafting lies. Perhaps one day she
+      will embrace a more… practical art." - Daigotsu Yajinden'
+    number: 77
+
+  - title: Clay Kshatriya
+    type: Follower
+    deck: Fate
+    keywords:
+    - Clay Soldier
+    - Nonhuman
+    force: 2
+    chi: 0
+    gold_cost: 2
+    focus: 2
+    text: 'Invest : Give this Follower two +1F tokens. (After this card enters play, you may also pay the Invest cost to get
+      the effect, once.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Sebastian Neuefeind
+    rarity: Rare
+    artist: Gong Studios
+    flavor: '"I have heard of their like before. The Four Winds used them to advance upon the City of the Lost. Interesting."
+      - Kitsu Fukui'
+    number: 78
+
+  - title: Elephant Cavalry
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    - Elephant
+    - Nonhuman
+    force: 4
+    chi: 0
+    gold_cost: 8
+    focus: 2
+    text: Will only attach to a Human. Cards in this unit have Cavalry.Melee and Ranged Attacks targeting cards in this unit
+      have -2 strength.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Adrian Chan
+    rarity: Rare
+    artist: Hannah Böving
+    flavor: '"All things considered, I prefer a horse. But they have their uses." - Utaku Lishan'
+    number: 79
+
+  - title: Enslaved Djinn
+    type: Follower
+    deck: Fate
+    keywords:
+    - Djinn
+    - Fire
+    - Nonhuman
+    - Spirit
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 1
+    text: After this Follower enters play, search your discard pile, then deck, for another Enslaved Djinn. Show it. Put it
+      into your hand.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Jorge GarcÃ­a
+    rarity: Rare
+    artist: Gong Studios
+    flavor: '"My service comes at a price, little priestess." "You will serve, spirit," Sorano smirked. "You will serve, and
+      I will hear no complaint."'
+    number: 80
+
+  - title: Frontier Farmer
+    type: Follower
+    deck: Fate
+    keywords:
+    - Ashigaru
+    force: 2
+    chi: 0
+    gold_cost: 3
+    focus: 1
+    text: You may Equip this Follower from your discard pile.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Lawrence Alejandre
+    rarity: Common
+    artist: Brent Chumley
+    flavor: '"This is a place of peace and serenity. We will preserve it always, that there might be a calm in the eye of whatever
+      storm may arise." - Iuchi Yupadi'
+    number: 81
+
+  - title: Kamalakar's Harem
+    type: Follower
+    deck: Fate
+    keywords:
+    - Gaijin
+    force: 0
+    chi: 0
+    gold_cost: 0
+    focus: 2
+    text: 'This Personality may not attack.Limited, w: Dishonor a target Human Personality. Destroy this Follower.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Name a Follower - Ryan O'Leary
+    rarity: Uncommon
+    artist: Oliver Specht
+    flavor: '"Should not the last living kin of the Rajah live in comfort? These lovely companions help me consider the gravity
+      of my responsibilities."'
+    number: 82
+
+  - title: Scholarly Hermit
+    type: Follower
+    deck: Fate
+    keywords:
+    - Fudo
+    - Gaijin
+    - Monk
+    force: 2
+    chi: 0
+    gold_cost: 2
+    focus: 2
+    text: 'Limited, w: Put a Ring from your discard pile into your hand. Destroy this Follower.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Marcus Finger
+    rarity: Common
+    artist: John Donahue
+    flavor: '"What topic would you like to discuss today, friend Tsukasa?"'
+    number: 83
+
+  - title: Spitting Llama
+    type: Follower
+    deck: Fate
+    keywords:
+    - Cavalry
+    - Nonhuman
+    force: 3
+    chi: 0
+    gold_cost: 5
+    focus: 1
+    text: 'Battle: Give a target enemy Personality or Follower -3F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Bruno Hoffman
+    rarity: Uncommon
+    artist: David Horne
+    flavor: '"Filthy, disgusting beast!" Tsimaru spat. "Wait, don''t kill it! Perhaps… that is how it shows affection?"'
+    number: 85
+
+  - title: The Bestial Ones
+    type: Follower
+    deck: Fate
+    keywords:
+    - Nonhuman
+    force: 3
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: 'After this Follower enters play, lose 1 Honor and discard a card.Engage: Give a target enemy Personality or Follower
+      -2F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Alex Nagelvoort
+    rarity: Common
+    artist: Randy Elliott
+    flavor: '"They follow the herds of elephant men. I do not know what they are." - Togashi Sakata'
+    number: 86
+
+  - title: Yodotai Legionnaire
+    type: Follower
+    deck: Fate
+    keywords:
+    - Gaijin
+    - Legionnaire
+    - Yodotai
+    force: 1
+    chi: 0
+    gold_cost: 0
+    focus: 1
+    text: You may include any number of this Follower in your deck.After this Follower enters play, lose 2 Honor.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Charles Urbach
+    flavor: '"You were not blessed to be born Yodotai, but you have become like us through Praefectus Legulus''s leadership.
+      Rejoice!" - Aulus'
+    number: 87
+
+  - title: Divination Bowl
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 2
+    focus: 3
+    text: 'Limited, w: Look at the top three cards of your Fate deck. Put them back in any order.Limited, w: Draw a card. Destroy
+      this Item.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - James Donnithorne-Tait
+    rarity: Uncommon
+    artist: Felipe Gaona
+    flavor: '"I carried some of the sacred water back to the Second City with me. I may never unlock its full potential, but
+      I will never stop trying." - Isawa Shunsuko'
+    number: 88
+
+  - title: Kshatriya Artifacts
+    type: Item
+    deck: Fate
+    keywords:
+    - Gaijin
+    force: 0
+    chi: 1
+    gold_cost: 0
+    focus: 1
+    text: Fudo and Fallen Personalities have -1F while opposing this Item.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Kevin Kennedy
+    rarity: Uncommon
+    artist: Oliver Specht
+    flavor: In the name of the Phoenix Clan, Shiba Sansesuke discovered great treasures of the fallen Ivory Kindgom. At night,
+      however, he wonders what manner of trouble he claimed with it.
+    number: 89
+
+  - title: Lantern Oil
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 0
+    focus: 4
+    text: The Attacker may not take Engage actions at this Item's battlefield.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Doruk Ã–zaydin
+    rarity: Common
+    artist: Randy Elliott
+    flavor: '"What a wondrous substance, this oil. It makes for efficient lighting, efficient transport, and efficient sabotage.
+      I simply cannot stress how valuable a versatile tool is for... an actor. This lesson I have learned from the famed Shosuro
+      Atesharu." - Shosuro Rin'
+    number: 90
+
+  - title: Lost Blade of the Maharaja
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Gaijin
+    - Sword
+    - Two-Handed
+    force: 3
+    chi: 1
+    gold_cost: 7
+    focus: 3
+    text: 'Battle, w: Bow a target Personality with Force equal to or lower than this Personality''s.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Josh Griffis
+    rarity: Rare
+    artist: Jason Juta
+    flavor: '"A fine weapon, even for something of gaijin make. It is fit as an armament for some lost king or a gift to a noble
+      samurai. I am not worthy of even touching it." - Hida Yamadera'
+    number: 91
+
+  - title: Map of the Northern Colonies
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 0
+    focus: 3
+    text: Other players' Terrains will not destroy your Terrains at this Item's battlefield.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Andrew Gordon
+    rarity: Common
+    artist: Felipe Gaona
+    flavor: '"I made a few poor quality copies to sell to the Scorpion. They were desperate to see what was in them, and I am
+      curious as to why they showed such naked interest." - Yoritomo Aranai'
+    number: 92
+
+  - title: Red Hunger's Fang
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Ninja
+    - One-Handed
+    force: 2
+    chi: 0
+    gold_cost: 4
+    focus: 4
+    text: 'After this Item enters play, lose 3 Honor.Ninja Battle, w: Give a target enemy Personality a -1F/-1C Poison token.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Kamil Pakowski
+    rarity: Rare
+    artist: Erich Schreiner
+    flavor: '"These Colonies have given me such an interesting array of materials to work with." - Kaiu Nakano'
+    number: 93
+
+  - title: Seppun's Blessed Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Sword
+    - Two-Handed
+    chi: 2
+    gold_cost: 5
+    focus: 2
+    text: (A Personality can only have one Weapon.)This Item's Force modifier equals this Personality's Personal Honor.
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - A.J. Valle
+    rarity: Common
+    artist: Jason Juta
+    flavor: '"Protectors of both the Empress'' body and spirit. They never forget that strength forges steel, and hands carry
+      it, but honor guides it." - Shinjo Tae-hyun'
+    number: 94
+
+  - title: Shard of the Great Death's Bones
+    type: Item
+    deck: Fate
+    keywords:
+    - Shadowlands
+    force: 0
+    chi: 0
+    gold_cost: 3
+    focus: 3
+    text: After this Item enters play, lose 2 Honor, create three 1F Nonhuman • Raptor • Shadowlands • Undead • Cavalry Followers,
+      and attach them to your Personalities.
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Alexander Khlobystov
+    rarity: Uncommon
+    artist: Erich Schreiner
+    flavor: '"Weapons could be made from the bones we found, but what kind of man would use them?" - Tamori Kazushige'
+    number: 95
+
+  - title: Translated Story of Shaharazad
+    type: Item
+    deck: Fate
+    force: 0
+    chi: 0
+    gold_cost: 3
+    focus: 2
+    text: 'Limited, w: Give this Item a +1F token.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Matt Rose
+    rarity: Common
+    artist: Jason Juta
+    flavor: '"Of course no one admitted to finding the gaijin story interesting, but that didn''t stop everyone at the Winter
+      Court from wanting to read it. Just out of passing curiosity, of course." - Bayushi Hurunayi'
+    number: 96
+
+  - title: Watersteel Sword
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    - Nemuranai
+    - Water
+    force: 2
+    chi: 1
+    gold_cost: 4
+    focus: 2
+    text: 'Water Open: Target a non-Unique Weapon attached to this Personality. Copy an ability on it that does not itself copy
+      ability, to this Weapon (until the turn ends).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Britt Martin
+    flavor: '"A fascinating weapon," Kanpeki mused. "With all manner of possibilities."'
+    number: 97
+
+  - title: Befriend the Tides
+    type: Spell
+    deck: Fate
+    keywords:
+    - Water
+    gold_cost: 1
+    focus: 3
+    text: 'Water Battle, w: Move this Shugenja from the current battlefield to an adjacent battlefield.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Shen Fei
+    flavor: '"Clear waters hide nothing, yet they always seem to surprise my enemies." - Asako Chukage'
+    number: 98
+
+  - title: Cast Aside Appearances
+    type: Spell
+    deck: Fate
+    keywords:
+    - Earth
+    gold_cost: 4
+    focus: 4
+    text: 'Earth Limited, w: If this Shugenja is Human, permanently give him Nonhuman, +2F, and the ability, "Battle: Bow a
+      target enemy card with lower Force." Destroy this Spell. Lose 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Jason Behnke
+    flavor: '"When directly confronted, any animal will show its true colors." - Isawa Norimichi'
+    number: 99
+
+  - title: Constructing the Self
+    type: Spell
+    deck: Fate
+    keywords:
+    - Air
+    gold_cost: 4
+    focus: 3
+    text: 'Air Limited, w: This Spell may remain bowed. Create a 0F Illusion • Nonhuman • Cavalry • Shugenja Personality with
+      this Shugenja''s Chi and Personal Honor. After the next time this game this Spell straightens or leaves play, remove the
+      Illusion from the game.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Shen Fei
+    flavor: The kami of Air are fond of games, moreso when the participants are unaware that they are being played with.
+    number: 100
+
+  - title: Gates of Chikushudo
+    type: Spell
+    deck: Fate
+    gold_cost: 4
+    focus: 1
+    text: 'Open: Target your created Spirit Personality. Create a Personality that permanently copies the target''s printed
+      keywords, traits, abilities, and stats. Destroy this Spell.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Aaron Barto
+    rarity: Uncommon
+    artist: Crystal Ben
+    flavor: '"They say deer of this size were once human in their previous lives." Kagako gestured to the shocked Crane. "I
+      think this one remembers you."'
+    number: 102
+
+  - title: Kiyoshi's Wrath
+    type: Spell
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Earth Battle, w: Bow a target enemy Follower or Personality with 4 or lower Force.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Name a Spell - Jonas Solberg
+    rarity: Rare
+    artist: Sergio Camarena
+    flavor: Serenity and balance are valued by samurai, who must maintain a pristine "face" at all times. But the Kuni have
+      learned that rage can be an asset… once one knows when and how to release it.
+    number: 103
+
+  - title: My Ancestor's Steed
+    type: Spell
+    deck: Fate
+    keywords:
+    - Water
+    gold_cost: 2
+    focus: 1
+    text: 'Home Water Battle, w: Move your target Spirit Personality at any location to the current battlefield. (Home actions
+      may be taken from home.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Jason Juta
+    flavor: '"I remember Yuichi," Kanae said, then whispered a prayer. Made of wind and starlight, the horse appeared. "She
+      serves you still, honored ancestor."'
+    number: 104
+
+  - title: Poison the Cup
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    gold_cost: 2
+    focus: 1
+    text: 'This Shugenja has Shadowlands.Maho Limited, w: Remove a target token from a Personality and give him a -1C Plague
+      token. Lose 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Oliver Specht
+    flavor: '"It is a truly foul magic that turns one''s strength into poison." - Kuni Shinoda'
+    number: 105
+
+  - title: Steal the Candle's Flame
+    type: Spell
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Fire Interrupt, w: Give a Melee or Ranged Attack +2 strength.Fire Battle: Ranged 0 Attack.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Common
+    artist: Albert Tavira
+    flavor: '"Even if it looks worse than it really is, that can still be bad enough." - Bayushi Makubesu'
+    number: 106
+
+  - title: Study the Wheel
+    type: Spell
+    deck: Fate
+    keywords:
+    - Void
+    gold_cost: 0
+    focus: 2
+    text: 'Void Limited, w: Turn a card in a Province face-up (if needed) and give it Kharmic. (Repeatable Limited, : Discard
+      a Kharmic card from your Province and refill it face-up.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Hannah Böving
+    flavor: '"To know the future is both burden and blessing. ''With our minds we make the world.'' Now that I''ve seen it,
+      it cannot be stopped."'
+    number: 107
+
+  - title: The Tao of Fudo
+    type: Spell
+    deck: Fate
+    gold_cost: 2
+    focus: 3
+    text: 'Battle/Open: Target your Ring in your discard pile or in play. Straighten it or put it in your hand. Destroy this
+      Spell.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Brent Chumley
+    flavor: '"I reject all external influences. I reject all external authorities. My path is my own; for that reason, it is
+      true." -The Tao of Fudo'
+    number: 108
+
+  - title: The Thunder Resounds
+    type: Spell
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Thunder Battle: Target a Spell at this battlefield or a Thunder Spell at any location. This Spell copies an ability
+      from the target that does not itself copy abilities (this turn).'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Uncommon
+    artist: Erich Schreiner
+    flavor: '"They say lightning never strikes the same place twice. Shall we test this theory?" - Moshi Ino'
+    number: 109
+
+  - title: A Doomseeker's Tomb
+    type: Strategy
+    deck: Fate
+    gold_cost: 1
+    focus: 4
+    text: 'Limited, : Give your target Personality a +1F/+1C/+1PH token.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Dan Jacobson
+    rarity: Uncommon
+    artist: Hannah Böving
+    flavor: '"I knew there were those who had come before me - other Doomseekers - but I had never dreamed to speak with the
+      spirit of one. It was not mere chance that brought me to that place." - Iuchi Shunshi'
+    number: 110
+
+  - title: A New Perspective
+    type: Strategy
+    deck: Fate
+    gold_cost: 2
+    focus: 2
+    text: 'Battle, : Create and attach a 1F Follower to each of your opposed Personalities at the current battlefield.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Dave Russell
+    rarity: Uncommon
+    artist: Jorge Matar
+    flavor: '"What is this?" Bayushi Kahoku muttered to himself. The carvings were unlike anything he had ever seen before,
+      and the entire area seemed to resonate with power.'
+    number: 111
+
+  - title: A Welcome Reprieve
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Open: Target your honorable Personality. Other players'' actions may not target him this phase.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Greg Wong
+    rarity: Uncommon
+    artist: Mark Poole
+    flavor: '"It is a strange name for a village. But then I suppose we are in a strange place. I would swear I saw Tamori Chieko
+      standing over there just the other day, for instance…" - Bayushi Shibata'
+    number: 112
+
+  - title: Allied Efforts
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Battle: Give a target enemy Personality or Follower -3F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Corey Beahon
+    rarity: Common
+    artist: Héctor Herrera
+    flavor: '"As strange as the conflicts that surround me are, as incomprehensible as the originators of those conflicts are,
+      for my own taste these new allies are even stranger and more incomprehensible. The world outside the Empire is vast and
+      terrifying." - The private journals of Kitsuki Jakuei'
+    number: 113
+
+  - title: Ashalan Ambush
+    type: Strategy
+    deck: Fate
+    gold_cost: 8
+    focus: 2
+    text: 'Limited,: Create a 4F/4C/0PH Ashalan • Nonhuman • Shugenja Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Noah Luckiesh
+    rarity: Uncommon
+    artist: Paul (Prof.) Herbert
+    flavor: '"You''ve come to the wrong lair, friend," the Ashalan hissed. Tanzaki''s eyes widened as his gaze fell upon the
+      dozens of other Ashalan, rousing from their rest.'
+    number: 114
+
+  - title: Boiling Point
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'As a Focus Effect: Give +1F to your Yojimbo at the same location as your Personality in this duel.Battle/Open: Bow
+      your target unbowed Personality at any location. Straighten another target Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Uncommon
+    artist: Shen Fei
+    flavor: The situation would not have deteriorated so quickly had the Bayushi slowed his 'witty' banter.
+    number: 115
+
+  - title: Chaos of Battle
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Battle: Give one or two target opposed Personalities a Force bonus equal to the number of different Clan alignments
+      on Personalities at the current battlefield.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Albert Tavira
+    flavor: In the heart of the battlefield, it is often hard to discern foe from ally.
+    number: 116
+
+  - title: Claiming the Ruins
+    type: Strategy
+    deck: Fate
+    gold_cost: 2
+    focus: 2
+    text: 'Limited, : Put a non-Unique Item from your discard pile into your hand.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Alex Nagelvoort
+    rarity: Rare
+    artist: Hannah Böving
+    flavor: '"What we have lost in lives we have more than regained in what we have recovered here. Knowledge, weapons, and
+      secrets that only the Dragon can be trusted to keep safe." - Mirumoto Kojinrue'
+    number: 117
+
+  - title: Defensive Formation
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Battle: Give one to three of your target defending Personalities +2F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Albert Tavira
+    flavor: '"When one possesses something that others desire, they may find themselves beset by enemies. If that occurs, then
+      it falls to the virtuous to stand shoulder to shoulder with those beset and follow the path of the righteous."'
+    number: 118
+
+  - title: Exotic Farmlands
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Battle, : Target your Personality. Create and attach to him a 1F Ashigaru Follower for every 3 Gold you paid, rounded
+      down.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Lawrence Alejandre
+    banned: Banned from Ivory Edition constructed tournaments, effective March 14th
+    rarity: Uncommon
+    artist: Veronica V. Jones
+    flavor: '"I do not know who ruled here before, and I must say lentils are a poor substitute for rice. But the farmers eat
+      them readily enough." - Shinjo Tselu'
+    number: 119
+
+  - title: Friends in the Jungle
+    type: Strategy
+    deck: Fate
+    gold_cost: 1
+    focus: 1
+    text: 'Battle/Open, : Give your target Nonhuman Personality +2F/+2C.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Dimitris Giannakis
+    rarity: Uncommon
+    artist: Hannah Böving
+    flavor: '"They are not without merit," Kaitoko explained. "They are clever, are eager to help, and have an unsettling ability
+      to move about these jungles unseen. Better allies than foes, I think."'
+    number: 120
+
+  - title: Hidden Storehouse of House Rafiq
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Battle, : If you (after playing this Strategy) have fewer cards in your hand than each other player, draw two cards.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Jon Palmer
+    rarity: Rare
+    artist: Hannah Böving
+    flavor: '"Of all the things I care about," Yasuki Dokansuto said, "Daigotsu Kanpeki''s opinion is not on the list. He will
+      yield it up to us, or we will take it. Those are the choices."'
+    number: 121
+
+  - title: Holding Cells
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Kolat Battle, : Target a Personality. Before this battle resolves, bow him. Lose 1 Honor.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Case Kiyonaga
+    rarity: Uncommon
+    artist: Jason Behnke
+    flavor: '"They will be useful to us in the struggle with both Fudo''s adherents and his enemy. But something about the place
+      chills my blood." - Yoritomo Kanaye'
+    number: 122
+
+  - title: Honor Replaces Rage
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Open: A target Personality has -2F while attacking this turn.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Asier Martinez Lopez
+    flavor: '"Your courage honors us both, Shiba-san. Let this conflict be at an end."'
+    number: 123
+
+  - title: Iaijutsu Dojo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Iaijutsu
+    focus: 3
+    text: 'Iaijutsu Battle: Your target unbowed Personality challenges a target enemy Personality. Dishonor and bow the duel''s
+      loser.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - David Beke
+    rarity: Uncommon
+    artist: Jonathan Moore
+    flavor: '"If you are dedicated to victory, his two blades should mean nothing to you. Widen your stance, and attack again."
+      - Kitsuki Horume'
+    number: 124
+
+  - title: Ivinda Village
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    focus: 4
+    text: '(Repeatable Limited, : Discard a Kharmic card from your hand to draw a card.)Open, : Give Cavalry to a number of
+      target cards equal to the amount of Gold you paid.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Doug Dee
+    rarity: Rare
+    artist: Veronica V. Jones
+    flavor: '"Tsai-Tsu saw something. This land is not so empty as we believed." - Tamori Sugi'
+    number: 125
+
+  - title: Ivory Magistrate Outpost
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Open: Straighten your target Magistrate.Battle: Straighten your target Personality.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Mark-Anthony Fouche
+    rarity: Uncommon
+    artist: Mateusz Ozminski
+    flavor: '"Mai-san, I do not have vast armies to support me, but I am a magistrate and I have a sword. All that I have will
+      be used to end these evils." - Doji Razan'
+    number: 126
+
+  - title: Lakeside Retreat
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    focus: 1
+    text: 'Before this battle resolves, straighten a Follower or Personality.Battle: Destroy a Terrain (if able). Put this Terrain
+      into play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Patrick Gingrich
+    rarity: Common
+    artist: John Donahue
+    flavor: '"There''s no point in bearing the burdens of responsibility if you can''t sometimes put them down and enjoy life."
+      - Yoritomo Kanahashi'
+    number: 127
+
+  - title: Lessons from the Heralds
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'Battle: If one of your Personalities has won a duel this turn, look at the top three cards of your Fate deck. Put
+      one into your hand. Put the rest back in any order.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - David Winner
+    rarity: Rare
+    artist: Veronica V. Jones
+    flavor: '"Just because you discovered this location does not make you responsible for defending it, Yoshitada." The Crane
+      smiled. "I disagree."'
+    number: 128
+
+  - title: Looting the Ruins
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    focus: 1
+    text: 'After this battle resolves, if this Terrain is in play, put it into your hand.Battle: Destroy a Terrain (if able).
+      Put this Terrain into play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Quek Fu Jin
+    rarity: Common
+    artist: John Donahue
+    flavor: Katagi does not speak of the weapon he found, nor the visions of bloodlust and fire that have plagued his mind since.
+    number: 129
+
+  - title: Lost Caravan
+    type: Strategy
+    deck: Fate
+    gold_cost: 3
+    focus: 2
+    text: 'Open, : Straighten your target Stronghold or Holding.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Nicolas Altomonte
+    rarity: Uncommon
+    artist: Florian Stitz
+    flavor: '"Beginning any new venture now is perilous; who can sort one''s own good intentions from the promptings of our
+      mysterious enemy? But some opportunities are too good to waste, regardless of the risk." - Mirumoto Yumaru'
+    number: 130
+
+  - title: Merchant Patronage
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    - Political
+    focus: 4
+    text: '(Repeatable Limited, : Discard a Kharmic card from your hand to draw a card.)Political Interrupt: If the action is
+      on another player''s Holding, you choose who gains or loses any Honor from it. If you control a Courtier, you may bow
+      him to increase the gain or loss by 1.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Wenjuinn
+    flavor: '"I think this one shows promise, don''t you?"'
+    number: 131
+
+  - title: Mukudori's Wisdom
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    gold_cost: 0
+    focus: 3
+    text: '(Repeatable Limited, : Discard a Kharmic card from your hand to draw a card.)Battle/Open: Straighten or bow a target
+      Ring.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Veronica V. Jones
+    flavor: '"The ways of Fudo are simple, yet infinite. Find your own truth, regardless of others."'
+    number: 132
+
+  - title: New Cavalry Tactics
+    type: Strategy
+    deck: Fate
+    gold_cost: 3
+    focus: 2
+    text: 'Engage, : Target your Personality. Create and attach two, or three if the target is a Commander, 1F Elephant • Nonhuman
+      • Cavalry Followers to him.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Matt Demand
+    rarity: Rare
+    artist: Aurelien Hubert
+    flavor: '"They are riding those… those behemoths? I did not see that coming. That… is actually a very good idea." - Kitsuki
+      Horume'
+    number: 133
+
+  - title: Nubane's Defense
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Battle: Give one or two of your target Personalities +1F for each Ring you control.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Artur Szymala
+    rarity: Uncommon
+    artist: Mark Poole
+    flavor: '"This place is claimed by the Dragon Clan. No others shall have it while I live." - Kitsuki Nubane'
+    number: 134
+
+  - title: Outnumbered
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Battle: Give all your opposed Personalities with Followers at the current battlefield +1F. Give all enemy Personalities
+      there without Followers -1F.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Albert Tavira
+    flavor: What makes a warrior a samurai? That in the absence of hope, he will fight regardless.
+    number: 135
+
+  - title: Practicing Kata
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kata
+    focus: 3
+    text: 'You may Equip as a Battle/Open action once per turn.Limited: Put this Kata into play. Discard all your other Kata
+      in play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Randy Elliott
+    flavor: '"Drill your men daily. Laziness breeds defeat." - Akodo''s Leadership'
+    number: 136
+
+  - title: Recovering What Was Lost
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'Absent Engage: If he would be opposed, move your target Personality at home to the current battlefield. Give him
+      +2F if he is a Tactician. (Absent actions can be taken without presence.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Alex Iartsev
+    rarity: Rare
+    artist: Paul (Prof.) Herbert
+    flavor: '"Twenty-five years and still such treasures to be found. What wonders remain hidden?" - Akodo Makotai'
+    number: 137
+
+  - title: Ritual Preparation
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Battle: Straighten your target card in a unit.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Sergio Camarena
+    flavor: '"Never neglect the task of probing an enemy''s strengths. It is an essential step in the preparation for war. Give
+      each step the reverence it deserves, and they will shield you from the disgrace of defeat." - Akodo''s Leadership'
+    number: 138
+
+  - title: Sorrowful Prayer
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Limited: Shuffle one to three target non-Unique Strategies in your discard pile into your deck. Remove this card
+      from the game.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Stefano Baldo
+    flavor: '"The names of those who succumbed will be blotted out of their family''s history. Those who held true to their
+      honor and raised their sword in the Empress''s name earned ageless glory. Thus the Heavens reward virtue." - Chronicle
+      of the Heretic War, Part IV'
+    number: 139
+
+  - title: Strength of the Bear
+    type: Strategy
+    deck: Fate
+    focus: 1
+    text: 'Battle: Bow your target unbowed Personality. Bow a target enemy card with lower Force than his. If your Personality
+      has 5 or more printed Force, straighten him.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Victor Bazan
+    rarity: Rare
+    artist: John Donahue
+    flavor: '"You seem surprised," Nikaru said. The Ebonites attacked, and the Crab Berserker lost himself in the battle.'
+    number: 140
+
+  - title: Tactical Setback
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Absent Battle: Give a target enemy Personality -2F. (Absent actions can be taken without presence.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Common
+    artist: Florian Stitz
+    flavor: Even the greatest general cannot account for everything.
+    number: 141
+
+  - title: The Crystal Tears
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    focus: 1
+    text: 'Battle: Destroy a Terrain (if able). Put this Terrain into play. You may target and bow a Personality with 4 or more
+      Force or a Fallen, Ninja, or Shadowlands card. After this Terrain is destroyed, straighten the target.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Dan Jacobson
+    rarity: Rare
+    artist: Lino Drieghe
+    flavor: '"I do not know if these crystals have the same properties as those in the Empire, but I will find out." - Kaiu
+      Onizuka'
+    number: 142
+
+  - title: The Eternal Rainbows
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    focus: 4
+    text: 'The Personality this ability targeted has +2F.Battle: Target your opposed Personality. Destroy a Terrain (if able).
+      Put this Terrain into play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Kotei Winner - Nicolas Dufau
+    card_notes: The Twenty Festivals version of this card was printed with a typo in the Battle action.
+    rarity: Common
+    artist: Nikolay Stoyanov
+    flavor: '"It is remarkable, to say the least. We must not let it slip from our hands." - Matsu Koyama'
+    number: 143
+
+  - title: The False Route
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Battle: Create a battlefield without a Province. Move your target Personality and a target enemy Personality there;
+      if your Personality is a Scout, straighten his unit.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Aurelien Hubert
+    flavor: '"A clever trick, gaijin," Dairuko acknowledged. "It will not be enough. Jeiku, find the real trail. Do whatever
+      you must, but find the gaijin."'
+    number: 144
+
+  - title: The Final Lesson
+    type: Strategy
+    deck: Fate
+    focus: 4
+    text: 'Limited: Permanently give one or two of your target unbowed Personalities Expendable. (Draw a card after your Expendable
+      card is destroyed.)'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    story: 2012 Name a Strategy - Jace Furches
+    rarity: Rare
+    artist: Stefano Baldo
+    flavor: Everyone is expendable.
+    number: 145
+
+  - title: The Tomb of Sun Tao
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kharmic
+    gold_cost: 0
+    focus: 4
+    text: '(Repeatable Limited, : Discard a Kharmic card from your hand to draw a card.)Open: Put a target Ring into its owner''s
+      hand.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Kostas Adamopoulos
+    rarity: Uncommon
+    artist: Hannah Böving
+    flavor: Hachiro reverently removed his kabuto. "For centuries, we have wondered what became of you."
+    number: 146
+
+  - title: Trade Embargo
+    type: Strategy
+    deck: Fate
+    gold_cost: 4
+    focus: 2
+    text: 'You may only play one copy of Trade Embargo per turn.Open, : All non-Unique Holdings produce 1 less Gold (this turn).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Rare
+    artist: Wenjuinn
+    flavor: '"I am afraid your shop will need to be closed temporarily. I apologize for the inconvenience. It really is quite
+      necessary."'
+    number: 147
+
+  - title: Uncovering Treasures
+    type: Strategy
+    deck: Fate
+    gold_cost: 2
+    focus: 1
+    text: 'w: Produce 2 Gold. Discard this Strategy from play.Limited, : Put this Strategy into play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Andrew Ornatov
+    rarity: Common
+    artist: John Donahue
+    flavor: '"The Gurdwara Singh," Yoritomo Singh breathed. Tears swam in his vision. "I thought I would never lay eyes upon
+      it again."'
+    number: 148
+
+  - title: Unexpected Discovery
+    type: Strategy
+    deck: Fate
+    focus: 3
+    text: 'Battle: Move your target opposed Personality (at the current battlefield) to an adjacent battlefield.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Case Kiyonaga
+    rarity: Common
+    artist: Andy Hepworth
+    flavor: '"The ship''s name is blasphemous, as near as I can translate it. But the design… fascinating!" - Yoritomo Tarao'
+    number: 149
+
+  - title: Unsettling Gathering
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Limited, : Target an attachment with Gold Cost equal to or lower than the amount paid. Transfer it to any player''s
+      target Personality (this may change control of the attachment).'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    story: 2012 Kotei Winner - Jay Coad
+    rarity: Rare
+    artist: Britt Martin
+    flavor: A wry smile crossed Waru's face. Every person in the room would have been killed if they had been seen by 'honorable'
+      Rokugani. He wondered if the same was now true of him.
+    number: 150

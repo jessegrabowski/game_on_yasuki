@@ -1,0 +1,433 @@
+set: Emperor Edition Gempukku
+cards:
+  - title: Buried Treasures
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Market
+    - Retainer
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Limited, w: If you have four or fewer cards in your hand and you are a Mantis Clan player, draw
+      a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Shen Fei
+    flavor: Even after two decades, great treasures remain hidden away in the Colonies. Some consider it their divine mandate
+      to inherit such treasures.
+    number: 1
+
+  - title: Purveyor of Questionable Goods
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Market
+    - Retainer
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Limited, w: If you have four or fewer cards in your hand and you are a Spider Clan player, draw
+      a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Brent Chumly
+    flavor: '"Good day, my friend! I know, the trouble at the Second City is most inconvenient, but I think I have what you
+      need right here!"'
+    number: 2
+
+  - title: Tattoos & Trinkets
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Market
+    - Retainer
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Limited, w: If you have four or fewer cards in your hand and you are a Dragon Clan player, draw
+      a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: '"We are nothing but a collection of memories. Should you wish to commemorate even the most insignificant of events,
+      I can assist you."'
+    number: 3
+
+  - title: The Daidoji Marketplace
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Market
+    - Retainer
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Limited, w: If you have four or fewer cards in your hand and you are a Crane Clan player, draw
+      a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Alayna Lemmer
+    flavor: The conflict between the Crane and the Mantis has lessened trade in Twin Forks City, but only slightly. Commerce
+      endures, no matter the circumstances.
+    number: 4
+
+  - title: The Ide Caravan
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Market
+    - Retainer
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Limited, w: If you have four or fewer cards in your hand and you are a Unicorn Clan player, draw
+      a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Shen Fei
+    flavor: '"It is not my business, of course, but why would you ever ship materials by sea? The humid air alone can destroy
+      such delicate treasures!"'
+    number: 5
+
+  - title: The Merchant's District
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Market
+    - Retainer
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Limited, w: If you have four or fewer cards in your hand and you are a Scorpion Clan player, draw
+      a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Diego Gisbert Lllorens
+    flavor: '"A samurai finds commerce unpleasant, certainly, and yet they require it to live. It makes it a simple matter for
+      us to gather information on them." - Shosuro Tanzaki'
+    number: 6
+
+  - title: The Mystical Merchant
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Market
+    - Retainer
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Limited, w: If you have four or fewer cards in your hand and you are a Phoenix Clan player, draw
+      a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Sergio Camarena
+    flavor: '"Many secrets were lost in this place. We are the Phoenix. It is our duty to find them, understand them, and ensure
+      no one is lost to them." - Agasha Kurou'
+    number: 7
+
+  - title: The Quartermaster's Depot
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Market
+    - Retainer
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Limited, w: If you have four or fewer cards in your hand and you are a Lion Clan player, draw a
+      card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Brent Chumley
+    flavor: '"The circumstances are irrelevant. The Lion wage war for the Empress, and the rest of us do whatever we must to
+      ensure that the armies have what they require."'
+    number: 8
+
+  - title: The Yasuki Peddler
+    type: Holding
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Market
+    - Retainer
+    gold_cost: 3
+    text: 'w: Produce 2 Gold.Limited, w: If you have four or fewer cards in your hand and you are a Crab Clan player, draw a
+      card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Shen Fei
+    flavor: '"I have precisely what you need. You say you do not need anything? That is only because you have not yet seen what
+      my brother and I offer, good sir!"'
+    number: 9
+
+  - title: Hida Yamadera
+    extended_title: Hida Yamadera • Experienced
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Berserker
+    - Crab Clan
+    - Damned
+    - Experienced
+    - Shadowlands
+    force: 8
+    chi: 3
+    gold_cost: 12
+    personal_honor: 0
+    text: 'Reaction: After another player''s Battle action resolves, if its effects destroyed Yamadera: Melee 8 Attack.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Edwin David
+    flavor: '"My curse is to live. I live when all others die. To take one''s own life is a Crab''s greatest cowardice. I must
+      live to find that which can kill me."'
+    number: 10
+
+  - title: Doji Dainagon
+    extended_title: Doji Dainagon • Experienced
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Courtier
+    - Crane Clan
+    - Experienced
+    - Imperial
+    force: 2
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Political Open: Take the Imperial Favor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Edwin David
+    flavor: '"Some enjoy the trials of life, and others prefer to immerse themselves in games. The truth is that the greatest
+      joy is in the games life offers us."'
+    number: 11
+
+  - title: Togashi Korimi
+    extended_title: Togashi Korimi • Experienced 2
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Experienced 2
+    - Unique
+    - Dragon Clan
+    - Earth
+    - Monk
+    - Tattooed
+    force: 6
+    chi: 4
+    gold_cost: 11
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Limited: Draw a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Steve Argyle
+    flavor: '"The distractions of the physical world are an obstacle we must overcome to reach the truth of enlightenment. Conflict,
+      debate, politics, even clothing can stand in our path."'
+    number: 12
+
+  - title: Jade's Roar
+    extended_title: Jade's Roar • Experienced
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Experienced Pride of the Hand
+    - Unique
+    - Legendary
+    - Lion
+    - Lion Clan
+    - Nonhuman
+    - Scout
+    force: 4
+    chi: 2
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Recon Reaction: After engaging at Jade''s Roar''s battlefield: You have Reconnaissance there. You have the first
+      opportunity to take a Battle action in this battle, which must be a Terrain action.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: David Horne
+    flavor: '"The beast can appear anywhere in the Empire, and even the Colonies, carrying out the will of its mistress. There
+      are many mysteries in the world, but I find the Jade Hand the most intriguing." - Ikoma Hagio'
+    number: 13
+
+  - title: Moshi Madoka
+    extended_title: Moshi Madoka • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Experienced
+    - Mantis Clan
+    - Scout
+    - Shugenja
+    - Thunder
+    force: 3
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 2
+    text: 'Limited: If you have attached a card from your hand this turn, bow Madoka: Draw a card.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Charles Urbach
+    flavor: '"Do not mistake my demeanor for weakness. I embrace tradition and decorum, but Thunder speaks through me just as
+      loudly as my sisters. Do not provoke its voice."'
+    number: 14
+
+  - title: Kunji
+    extended_title: Kunji • Experienced
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Experienced
+    - Fenghuang
+    - Fire
+    - Nonhuman
+    - Phoenix Clan
+    - Shugenja
+    force: 3
+    chi: 4
+    gold_cost: 8
+    personal_honor: 1
+    text: 'Open: If Kunji is honorably dead: Bring it into play, ignoring costs if you are a Phoenix Clan player.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Sergio Camarena
+    flavor: '"An old friend who once aided our clan when we needed it most has returned. What terrible things must loom on the
+      horizon for the Phoenix?" - Shiba Tsukimi'
+    number: 15
+
+  - title: Shosuro Hawado
+    extended_title: Shosuro Hawado • Experienced 2
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Experienced 2
+    - Unique
+    - Ninja
+    - Scorpion Clan
+    - Shadowspawn
+    force: 4
+    chi: 3
+    gold_cost: 8
+    personal_honor: 0
+    text: 'Limited: Target a card in a province: Discard it. Refill the province face-up.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Diego Gisbert Lllorens
+    flavor: '"I dispatched her to the Colonies to make use of her gifts. She remains there because I have begun to find her
+      gifts… unsettling." - Shosuro Keirei'
+    number: 16
+
+  - title: Daigotsu Negishi
+    extended_title: Daigotsu Negishi • Experienced
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Conqueror
+    - Loyal
+    - Unique
+    - Commander
+    - Experienced
+    - Samurai
+    - Shadowlands
+    - Spider Clan
+    force: 5
+    chi: 2
+    gold_cost: 9
+    personal_honor: 0
+    text: 'After Negishi enters play: Lose 2 Honor.Negate Negishi''s destruction from effects of actions performed by any Personality
+      whose unit''s total Gold Cost was lower than Negishi''s unit''s (when they performed it).'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Jorge Matar
+    flavor: '"I am well pleased with your service, Negishi-san. I have a task that I need to entrust to a worthy vassal. Have
+      you the courage for such a thing?" - Daigotsu Kanpeki'
+    number: 17
+
+  - title: Shinjo Byung
+    extended_title: Shinjo Byung • Experienced
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Tactician
+    - Unique
+    - Experienced
+    - Samurai
+    - Unicorn Clan
+    force: 3
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Reaction: After a Tactical Battle action resolves that Byung performed: Take an additional Battle action.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Legacy
+    - Modern
+    rarity: Fixed
+    artist: Albert Tavira
+    flavor: '"Our Empire endured a war with a gaijin demon goddess. It cannot be torn apart by mere human frailty. It would
+      be an insult to all who have bled and died to save it."'
+    number: 18

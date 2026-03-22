@@ -1,0 +1,1792 @@
+set: Death at Koten
+cards:
+  - title: Conspiracy
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, choose
+      a Personality. After the next time this game he is destroyed while in an army, you, then the player who last controlled
+      the Personality, each lose 5 Honor.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: Some long so desperately for their goals to be achieved that they would consort with whoever can assist them.
+    number: 1
+
+  - title: Imperial Arrival
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Imperial
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
+      your second turn from now begins, Personalities have +1F, or +2F if they are Magistrates, while opposing one or more dishonorable
+      Personalities.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: Regardless of the circumstances, an Imperial magistrate must be received with courtesy and hospitality.
+    number: 2
+
+  - title: The Loss of the Soul
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, look
+      at the top five cards of your Fate deck. You may show one of them that is a Spell, then put it in your hand. Put the remaining
+      cards on the bottom of the deck in any order.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Agasha Kyoso''s tale is tragic for her family and clan, but she chose her own path. Her soul''s fate is sealed."
+      - Seppun Tashime'
+    number: 3
+
+  - title: Forward Camp
+    type: Holding
+    deck: Dynasty
+    gold_cost: 1
+    text: 'w: Produce 1 Gold.After an attack is declared, straighten this card.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: Despite tradition, the interruption of an Imperial visitor is not always welcome in times of strife.
+    number: 6
+
+  - title: Hida Hachimoto
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Unique
+    - Crab Clan
+    - Hero
+    - Samurai
+    force: 6
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: Hachimoto uses his base Force as his duel stat.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Born and trained among the Dragon, he was nevertheless a loyal Crab. His skill and humor will be missed upon the
+      Wall." - Hida Benjiro'
+    number: 7
+
+  - title: Hida Kagura
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Berserker
+    - Crab Clan
+    - Samurai
+    force: 7
+    chi: 3
+    gold_cost: 9
+    personal_honor: 0
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"The death of Kisada exacerbated the situation between the Crab and the Crane. Even now that the war is over, they
+      continue to hate one another. Who benefits?" - The Sensei'
+    number: 8
+
+  - title: Hiruma Akio
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Gunso
+    - Samurai
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 3
+    personal_honor: 2
+    text: 'Battle: If any player has Reconnaissance, bow a target enemy card without attachments.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"My brother prefers to travel the Empire and protect ''prophets.'' I need only the Shadowlands, and demons to kill."'
+    number: 9
+
+  - title: Yasuki Tijaki
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crab Clan
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Political Limited: Target a Personality: He may not perform Political actions, or any actions if he is Crane Clan.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Only a fool initiates a duel he cannot win." - Doji Kishio'
+    number: 10
+
+  - title: Daidoji Inada
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Samurai
+    - Scout
+    force: 3
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'After Inada turns face-up in a Province, dishonor him.Battle: Bow a target enemy card without attachments. Destroy
+      it if Inada is honorable.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Will the Crane ever escape the stain of the Harriers'' dishonor?" -Doji Domotai'
+    number: 11
+
+  - title: Doji Kishio
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Crane Clan
+    force: 1
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Favor Political Open: Discard the Imperial Favor to straighten a target Holding.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I will show that perfumed fool how a samurai dies. Better to die with honor and glory than live as a fearful,
+      delicate flower." - Yasuki Tijaki'
+    number: 12
+
+  - title: Kakita Aichiko
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Unique
+    - Crane Clan
+    - Samurai
+    force: 2
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 4
+    text: 'Reaction: Before Focus Effects resolve in a duel involving Aichiko, set the Focus Value of one of your focused cards
+      equal to Aichiko''s Personal Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Hachimoto was a valiant opponent, and he met his fate without fear. I celebrate his memory and honor his family."'
+    number: 13
+
+  - title: Kakita Tasaka
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Crane Clan
+    - Samurai
+    force: 3
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 6
+    personal_honor: 4
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"The Crane were not responsible for Kisada''s death, but celebrated it all the same. Such a predictable response.
+      Arrogance makes an opponent weak." - The Sensei'
+    number: 14
+
+  - title: Kitsuki Umibe
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Ambassador
+    - Courtier
+    - Dragon Clan
+    force: 2
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 4
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"An appointment to the Yasuki lands is burdensome indeed. Fortunately, he possesses the patience and decorum to
+      see the job done and done correctly." - Kitsuki Berii'
+    number: 15
+
+  - title: Mirumoto Eikaru
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Duelist
+    - Dragon Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 2
+    text: After Eikaru enters play from one of your Provinces, draw a card.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Given a choice, he would have preferred the life of a courtier. Unfortunately his skill with the blade necessitated
+      a different path." - Kitsuki Umibe'
+    number: 16
+
+  - title: Tamori Shaiko
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Dragon Clan
+    - Fire
+    - Shugenja
+    - Tattooed
+    force: 2
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 3
+    personal_honor: 2
+    text: 'Battle: Target an enemy card without attachments, and destroy Shaiko unless the targeted card''s Force is equal to
+      or lower than hers: Destroy the target.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Brilliant, versatile, and completely without fear. I knew her only a short time, but I find that I miss her with
+      each passing day." - Seppun Tashime'
+    number: 17
+
+  - title: Togashi Sho
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Fire
+    - Monk
+    - Tattooed
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 2
+    text: Sho has +3F if a Tattoo card is in your discard pile.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"My presence encourages appropriate behavior in others, and I need not even speak. I believe the Lion refer to
+      it as '' deterrence.''"'
+    number: 18
+
+  - title: Akodo Tsudoken
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Unique
+    - Commander
+    - Lion Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 7
+    personal_honor: 3
+    text: 'Tireless Battle/Open: Straighten your target Personality''s unit.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"The burdens of command are without number, and it is a rare man who can handle them all without difficulty. I
+      can only strive to be such a man."'
+    number: 19
+
+  - title: Ikoma Ryudo
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Courtier
+    - Lion Clan
+    force: 1
+    chi: 3
+    gold_cost: 5
+    honor_requirement: 5
+    personal_honor: 2
+    text: 'Remote Political Battle, w: Give your target opposed Personality +4F.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"The Ikoma are the voice of the Lion, but they can also serve as its memory. None are better at such a task than
+      Ryudo." - Akodo Tsudoken'
+    number: 20
+
+  - title: Matsu Shunran
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Lion Clan
+    - Paragon
+    - Samurai
+    force: 3
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 7
+    personal_honor: 4
+    text: Shunran has +2F while attacking.Personalities may not move into an army opposing Shunran using the rulebook Cavalry
+      player ability.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: Remain close to me, Ineko-sama. I will ensure that no harm comes to you."
+    number: 21
+
+  - title: Matsu Youko
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Lion Clan
+    - Samurai
+    force: 4
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 6
+    personal_honor: 3
+    text: 'Fear Battle: Bow a target enemy Follower or Personality without Followers.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I have no use for fools or formalities. I am a warrior, not some weak-willed courtier."'
+    number: 22
+
+  - title: Moshi Enju
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Mantis Clan
+    - Shugenja
+    - Thunder
+    force: 3
+    chi: 4
+    gold_cost: 7
+    personal_honor: 3
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: A great many Moshi are assigned to serve as first mates to Yoritomo captains. Their skill at speaking to the kami
+      is a great boon to the Mantis, and their deferential nature is perhaps even more valuable to their captains.
+    number: 23
+
+  - title: Tsuruchi Suzuki
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Mantis Clan
+    - Samurai
+    - Scout
+    force: 1
+    chi: 3
+    gold_cost: 4
+    honor_requirement: 0
+    personal_honor: 2
+    text: Suzuki has +2F while at a battlefield where any player has Reconnaissance.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Who dictates that honor must bind our lives into a narrow view? Life is an adventure, and I will experience every
+      rich moment of it."'
+    number: 24
+
+  - title: Yoritomo Iwata
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Commander
+    - Mantis Clan
+    - Samurai
+    force: 3
+    chi: 2
+    gold_cost: 5
+    personal_honor: 1
+    text: 'Reaction: After your Ranged Attack action resolves, if Iwata is at the current battlefield, target your Peresonality
+      in Iwata''s army: Give him +2F.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"There is nothing quite as thrilling as battle. Except possibly commerce."'
+    number: 25
+
+  - title: Yoritomo Iwata
+    extended_title: Yoritomo Iwata • Experienced
+    type: Personality
+    clan: Mantis
+    deck: Dynasty
+    keywords:
+    - Naval
+    - Unique
+    - Commander
+    - Experienced
+    - Mantis Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Limited: Target your Mantis Clan Personality: If he is Naval, straighten him. If he is not Naval, give him Naval.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"It seems there are things more important than glory or money. If I had learned earlier, perhaps I would not have
+      ventured into the Shadowlands in the first place."'
+    number: 26
+
+  - title: Asako Fosu
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Inquisitor
+    - Magistrate
+    - Phoenix Clan
+    - Shugenja
+    - Void
+    force: 0
+    chi: 5
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 3
+    text: 'Void Limited: If you have exactly one Province, discard any cards in it, refilling it face-up.Void Limited, w: Draw
+      a card. If there are now two or more cards in your hand, discard one.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Go home, little one. Leave this sacrifice for an old man."'
+    number: 27
+
+  - title: Isawa Kumai
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Air
+    - Alchemist
+    - Ishiken
+    - Phoenix Clan
+    - Shugenja
+    - Void
+    force: 2
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 6
+    personal_honor: 4
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I draw back the veil and become one with the world. All that has been, is, and shall be is revealed to me. To
+      return to this flesh is… difficult."'
+    number: 28
+
+  - title: Isawa Mariko
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Earth
+    - Phoenix Clan
+    - Shugenja
+    force: 2
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 2
+    personal_honor: 3
+    text: Mariko has +2F while she has a Spell.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I am no ''little one,'' sensei, and I will not stand by while others perform a duty in my stead. I am Phoenix.
+      If my rebirth must come early, then let my name be remembered as a dutiful samurai."'
+    number: 29
+
+  - title: Shiba Kosoku
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Phoenix Clan
+    - Samurai
+    - Yojimbo
+    force: 4
+    chi: 3
+    gold_cost: 7
+    honor_requirement: 5
+    personal_honor: 2
+    text: 'Reaction: When another player''s action would target one of your Shugenja at Kosoku''s location: It targets Kosoku
+      instead, if legal.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I would be honored to stand by your side, Tashime-sama. Whatever you require of me, it shall be done without question."'
+    number: 30
+
+  - title: Shosuro Takuma
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Actor
+    - Ninja
+    - Scorpion Clan
+    force: 3
+    chi: 3
+    gold_cost: 7
+    personal_honor: 0
+    text: 'Open: Target a Personality: After the next time this turn he is assigned or moves to a battlefield, give him a -1F
+      Poison token.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I can be anywhere. I can be anyone. When you accept a meal from your spouse or offer an embrace to your child,
+      can you be sure it is not me?"'
+    number: 31
+
+  - title: The Sensei
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Scorpion Clan
+    - Sensei
+    force: 3
+    chi: 4
+    gold_cost: 7
+    honor_requirement: 0
+    personal_honor: 2
+    text: 'Limited: Target another Personality: The Sensei imparts his knowledge. Give the target +3F.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Do not be deceived by what you see, or what you are told. The world can only truly be perceived by the mind, and
+      with the will to understand the truth."'
+    number: 32
+
+  - title: The Student
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Scorpion Clan
+    - Student
+    force: 2
+    chi: 2
+    gold_cost: 3
+    honor_requirement: 1
+    personal_honor: 2
+    text: The Student has +1F while The Sensei is in play.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"First I shall learn how an honorable samurai must act, and then I shall learn how I must act."'
+    number: 33
+
+  - title: Yogo Kazunori
+    type: Personality
+    clan: Scorpion
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Courtier
+    - Hero
+    - Scorpion Clan
+    - Shugenja
+    - Villain
+    force: 3
+    chi: 4
+    gold_cost: 8
+    personal_honor: 0
+    text: 'Political Limited: Target a dishonorable Personality: His controller loses 2 Honor.Reaction: Before another player''s
+      action destroys Kazunori: Negate the destruction. You may move Kazunori home. If he moved, you may dishonor a Personality.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"So thin a line, between hero and monster."'
+    number: 34
+
+  - title: Chuda Seikai
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Shadowlands
+    - Shugenja
+    - Spider Clan
+    force: 3
+    chi: 3
+    gold_cost: 5
+    personal_honor: 0
+    text: 'After Seikai enters play: Lose 4 Honor.Battle: Even if Seikai is not at the current battlefield, target your Undead
+      card: Give it +3F.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"He does not speak, but then, given his abilities, he rarely has need to." - Suikotsu'
+    number: 35
+
+  - title: Daigotsu Rasetsu
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Samurai
+    - Shadowlands
+    - Spider Clan
+    force: 4
+    chi: 1
+    gold_cost: 6
+    personal_honor: 0
+    text: 'After Rasetsu enters play, lose 5 Honor.Tireless Battle/Open: Straighten Rasetsu.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Ridiculous samurai, with their honor. They make for entertaining games, but little else."'
+    number: 36
+
+  - title: Momiji
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Monk
+    - Order of Venom
+    - Shadowlands
+    - Spider Clan
+    force: 6
+    chi: 3
+    gold_cost: 8
+    personal_honor: 0
+    text: After Momiji enters play, lose 4 Honor.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    card_notes: This is a distinct card from "Momiji, the Madam" from A Line in the Sand.
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I embraced the Dark Lord''s blessings, and I have been made into so much more than what I was."'
+    number: 37
+
+  - title: Suikotsu
+    type: Personality
+    clan: Spider
+    deck: Dynasty
+    keywords:
+    - Kensai
+    - Monk
+    - Order of Venom
+    - Spider Clan
+    force: 4
+    chi: 2
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Battle: Bow a target enemy Personality with lower Force and without a Weapon.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Honor is the anvil on which we will shatter the flawed steel of the Great Clans."'
+    number: 38
+
+  - title: Moto Rena
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Unique
+    - Commander
+    - Samurai
+    - Unicorn Clan
+    force: 5
+    chi: 3
+    gold_cost: 8
+    personal_honor: 2
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: The war between the Lion and the Unicorn was long and brutal. Many were made heroes or martyrs in the process. Some,
+      however, were made tyrants.
+    number: 39
+
+  - title: Moto Sihung
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Samurai
+    - Unicorn Clan
+    force: 4
+    chi: 2
+    gold_cost: 8
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Battle, w: Ranged 4 Attack.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Stop the Lion at any cost," Rena commanded. Sihung smiled. "Our crops next year will be fed with a sea of Lion
+      blood, my lord."'
+    number: 40
+
+  - title: Shinjo Ji-tae
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Commander
+    - Samurai
+    - Unicorn Clan
+    force: 4
+    chi: 3
+    gold_cost: 8
+    honor_requirement: 4
+    personal_honor: 2
+    text: 'Battle: Target your Personality: Move him home.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: Many among the Shinjo see the war as a means of washing away the sins of their fathers. Their zeal for battle, their
+      willingness to sacrifice for the clan, has not gone unnoticed.
+    number: 41
+
+  - title: Shinjo Kai Li
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Samurai
+    - Scout
+    - Unicorn Clan
+    force: 3
+    chi: 2
+    gold_cost: 7
+    personal_honor: 1
+    text: 'Reaction: After engaging, if Kai Li is at the current battlefield and you have Reconnaissance there: You have the
+      first chance to take a Battle action in this battle, which must come from a Terrain or Region.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I would hold parley with Fu Leng himself, if it would bring my people victory over the hated Lion!"'
+    number: 42
+
+  - title: Nosloc no Oni
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 6
+    chi: 4
+    gold_cost: 6
+    personal_honor: 0
+    text: After Nosloc enters play, lose 4 Honor.
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"The wretched creatures call themselves by a strange name, but they are the backbone of any Shadowlands assault.
+      Without them, the demon hordes would collapse." - Hiruma Akio'
+    number: 43
+
+  - title: Tsudo no Oni
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Nonhuman
+    - Oni
+    - Shadowlands
+    force: 8
+    chi: 3
+    gold_cost: 10
+    personal_honor: 0
+    text: 'After Tsudo enters play: Lose 6 Honor.Battle: Target an enemy card: Destroy it. That card''s owner may target and
+      destroy one of your cards at the current battlefield, other than this card.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Be careful what you wish for," Akio warned. "I can count on one hand those who have faced an Oni Lord."'
+    number: 44
+
+  - title: Seppun Tashime
+    type: Personality
+    clan: Unaligned
+    deck: Dynasty
+    keywords:
+    - Unique
+    - Imperial
+    - Magistrate
+    - Paragon
+    - Samurai
+    force: 4
+    chi: 4
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 4
+    text: 'Limited: Target a dishonorable Personality: Bow him.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I will not endure an Empire in chaos, and I will not suffer a traitor to the throne to draw breath while I live."'
+    number: 45
+
+  - title: Hanayashiki
+    type: Region
+    deck: Dynasty
+    keywords:
+    - Singular
+    text: 'Limited, w: Straighten a target Magistrate.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"The village of Hanayashiki is famous for its order and serenity. It is a popular destination for magistrates who
+      need reaffirmation." - Seppun Katsura'
+    number: 46
+
+  - title: A False Accusation
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Political Reaction: After the resolution of another player''s action, if the action dishonored any of the player''s
+      own Personalities, target and destroy him.Battle: Target a Personality with the lowest Personal Honor at this battlefield
+      (you choose if there is a tie). Reduce his Force to 0.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    number: 47
+
+  - title: Blind Rage
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Give your target performing unbowed Berserker +5F. Lose 2 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Most berserkers fight with a cold detachment that comes from an absolute disinterest in whether they live or die.
+      The ones whose hearts are filled with rage, however… it is best to kill them with archery fire." - Daidoji Zoushi'
+    number: 48
+
+  - title: Censure of Thunder
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Thunder
+    gold_cost: 0
+    focus: 4
+    text: 'Kiho Thunder Battle: Target your performing Shugenja, and bow him unless he is Thunder, to give a target enemy Personality
+      -4F. If he now has 0F, you may take an additional Battle action.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Your very existence is an offense to the Thunder Dragon, demon. Feel its wrath!"'
+    number: 50
+
+  - title: Civil Discussion
+    type: Strategy
+    deck: Fate
+    focus: 2
+    text: 'Political Open: Target your unbowed Courtier. After each time any player assigns, he loses 1 Honor for each unit
+      he assigned, up to three units.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"You will conduct yourselves with honor and dignity befitting this court," Tashime boomed, "or I will see to it
+      that you are no longer welcome here."'
+    number: 51
+
+  - title: Crippling Strike
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 1
+    text: 'Kiho Battle: Target your performing unbowed Monk and bow him or one of your Rings to bow a target enemy card.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Spells mean as little as armor. Neither can save you from me." - Suikotsu'
+    number: 52
+
+  - title: Dance of Flames
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Fire
+    - Kiho
+    gold_cost: 0
+    focus: 2
+    text: 'Fire Kiho Limited: Bow your target performing Monk or Shugenja to give him a number of +1F Fire tokens equal to his
+      Chi, plus one if he has the Fire keyword.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I carry no steel so that my enemies will draw close enough for me to see their faces as they die."'
+    number: 53
+
+  - title: Defensive Nature
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 3
+    text: 'Political Battle/Open: Target your performing unbowed Magistrate to bow or straighten a target Personality with lower
+      Personal Honor than your Magistrate''s Chi.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Three men, carrying weapons but no armor. Please be quiet, my lady. This will only take a moment."'
+    number: 54
+
+  - title: Demonic Possession
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Fear
+    gold_cost: 0
+    focus: 3
+    text: 'Fear Battle: Target your performing unbowed Oni to target an enemy Personality. After each resolution of an action
+      (including this action) taken during this battle, give the second target -2F.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I hear your whispers but I will not succumb! I will die first!" The demon laughed. "That is perfectly acceptable."'
+    number: 55
+
+  - title: Desperate Battle
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: If you control exactly one defending Personality at the current battlefield and he is unbowed, target and
+      destroy him to destroy a target enemy Personality whose unit has equal or lower total Force than your Personality''s Force
+      plus 5; your Personality performs this action.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"A god made mortal, perhaps, but an old man just the same. How difficult can it be to kill him?" - Yogo Kazunori'
+    number: 56
+
+  - title: Doomed Undertaking
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 2
+    text: 'Non-Shadowlands Personalities have -2F/-1C while at this battlefield.Battle: If there are no Terrains at the current
+      battlefield: Put this card into play there.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"They are completely mad, the entire lot of them. I suspect we will never see any of them again." - A Crab guard
+      upon the Wall'
+    number: 57
+
+  - title: Essence of Evil
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Maho
+    gold_cost: 0
+    focus: 3
+    text: 'Battle/Open: Bow your performing Shadowlands Shugenja at any location and target one or two Shadowlands Personalities:
+      Straighten them.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"If good and evil must both exist, then why does it seem that those who succumb to evil are so much more powerful
+      than good?" - Isawa Mariko'
+    number: 58
+
+  - title: Expected Arrival
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 4
+    text: 'Kiho Battle: Target your performing unbowed Monk or Shugenja to bow or straighten a target Unique Personality.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I believe you will find everything in readiness, my lord. If you will follow me, we have arranged for the meeting
+      you desire to take place immediately."'
+    number: 59
+
+  - title: Exposing Secrets
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 1
+    text: 'Open: If you have not taken an action from any copy of this card this turn, bow your performing Courtier and target
+      another player: After the resolution of the next Reaction he takes this turn, he loses 3 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"You Crane pretend your honor is as flawless as your attire. We all know the truth!"'
+    number: 60
+
+  - title: Fatal Error
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Fear
+    gold_cost: 0
+    focus: 3
+    text: 'Fear Open: Target your performing unbowed Personality to target another Personality with lower Force. After each
+      time this turn an action resolves that the second target performed, bow him.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '""Are you challenging me, samurai? Draw your steel, and let us see who is the stronger man."'
+    number: 61
+
+  - title: Final Duty
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: If your current army has lower total Force than the current enemy army: Ranged 6 Attack.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"If I must die this way to wash away my brother''s sins," Fosu said, "then so be it. I only wish Mariko could be
+      spared."'
+    number: 62
+
+  - title: I Do Not Die So Easily!
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Reaction: After another player''s action targets your Personality during a battle: Negate his destruction from the
+      action''s effects. After the resolution of your next Battle action this battle, destroy him.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"He was so enraptured by games and manipulations that he was not prepared to be confronted." - Tashime'
+    number: 63
+
+  - title: Imperial Adjudication
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Iaijutsu
+    - Imperial
+    - Political
+    gold_cost: 4
+    focus: 3
+    text: 'Open: Choose your performing unbowed Duelist and target another player''s Personality: Your Personality challenges
+      the target. If that Personality is honorable, his controller looks at the top three cards of his Fate Deck, then the Personality
+      may refuse; if he did, bow and dishonor him, and discard those cards. Destroy the duel''s loser.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    number: 64
+
+  - title: Mutual Hatred
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Dark Virtue
+    gold_cost: 0
+    focus: 4
+    text: 'Battle: Choose your performing unbowed Samurai and target an enemy Personality: Before this battle''s resolution,
+      destroy both targets if they are opposing each other.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"A paragon of honor and a slave to duty, pitted against one another. How else could it end?" - The Sensei'
+    number: 65
+
+  - title: Presenting Papers
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 1
+    text: 'Reaction: After an action targets, or has chosen as its performer, another player''s Personality, choose your performing
+      unbowed Courtier: Negate the Personality''s movement to battlefields from that action''s effects.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: Standard procedure requires all travelers to submit their papers. Many choose to overlook it, but honor demands
+      adherence.
+    number: 66
+
+  - title: Preserving Honor
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Target an enemy Personality at the current battlefield: His controller chooses either to bow him, or to choose
+      another location and move him there. If the bowing or movement is negated, remove the Personality from the game.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: Among the samurai of the Empire, hatred is particularly difficult to overcome, no matter how honorable an individual
+      might be.
+    number: 67
+
+  - title: Ritual of Binding
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Maho
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Move your performing opposed Shugenja home and destroy one of his Spells: Draw two cards.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"The method of binding great evil requires scrolls of incredible power. The risk in creating them, not to mention
+      the binding process, must be warranted." - Asako Fosu'
+    number: 68
+
+  - title: Scouting Ahead
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Recon
+    gold_cost: 0
+    focus: 2
+    text: 'Limited: Choose your performing unbowed Scout and target a province: You have Reconnaissance at its battlefields.
+      After engaging in a battle there, give all Scouts in your units that assigned there the ability, "Battle: Move this unit
+      to, or home from, the current battlefield" until that battle ends.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"A day and a half in that direction. It is our best chance for success."'
+    number: 69
+
+  - title: Searching the Libraries
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Open: Target a Shugenja with a Spell: Straighten him.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I am convinced that all but the greatest mysteries of the universe have been solved. We simply have not been able
+      to put the pieces together as of yet." - Asako Bairei'
+    number: 70
+
+  - title: The Water Dragon's Favor
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Water
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Bow your performing Monk or Shugenja and target your unit: Straighten it. If your Shugenja or Monk is Water,
+      you may target and straighten another unit.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"You look weary, my friend! Let me offer you refreshment!"'
+    number: 71
+
+  - title: Training Maneuvers
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 2
+    text: 'Your Personalities and Followers at this battlefield have +1F.Battle: If there are no Terrains at the current battlefield
+      and you control a Tactician or Scout Personality there: Put this card into play there.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"A bushi''s life consists of endless weeks and months of rigorous practice, punctuated by hours or days in the
+      maddening chaos of battle." - Matsu Youko'
+    number: 72
+
+  - title: United
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 4
+    text: 'Battle/Open: Choose your five performing non-Shadowlands Personalities, no two of whom share a Clan alignment: Give
+      each of them +4F. Negate their movement home from other players'' actions until the turn ends.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '""It was a glorious battle against an impossible foe. Many lives were lost, and yet honor won the day." - The Ikoma
+      Histories'
+    number: 73
+
+  - title: Unleashed Fury
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Target an enemy unit: Bow it. At your next opportunity to take a Battle action in this battle, you must pass.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"Your deceit and treachery have cost the lives of good and honorable samurai! For that, I promise you, you will
+      suffer."'
+    number: 74
+
+  - title: Veiled Menace
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Political
+    gold_cost: 0
+    focus: 2
+    text: 'Open: Choose your performing unbowed Courtier and target a dishonorable Personality: His controller loses 2 Honor.
+      After each time he is assigned (this turn), his controller loses 1 Honor.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"I think you might be wise to find a different court next season, my friend. You seem to be making enemies here."'
+    number: 75
+
+  - title: Court Attendants
+    type: Follower
+    deck: Fate
+    force: 1
+    chi: 0
+    gold_cost: 1
+    focus: 2
+    text: 'Can only attach to a Courtier. Limited, w: Straighten a target Personality with a Political ability.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"By the Fortunes! Such a scandalous display!"'
+    number: 76
+
+  - title: Dragon Attendants
+    type: Follower
+    deck: Fate
+    force: 2
+    chi: 0
+    gold_cost: 3
+    honor_requirement: 0
+    focus: 3
+    text: 'Limited, w: Bow a target Follower with a lower Focus Value.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"They served the Divine Empress, prior to her ascension to the throne. Now they serve a new Kitsuki lord, with
+      the same devotion and dedication for which they are known." - Togashi Satsu, Voice of the Empress'
+    number: 77
+
+  - title: Order of Venom
+    type: Follower
+    deck: Fate
+    keywords:
+    - Shadowlands
+    force: 2
+    chi: 0
+    gold_cost: 3
+    honor_requirement: 0
+    focus: 2
+    text: 'After this card enters play: Lose 2 Honor.Reaction: After a Kiho action is announced: Lose 1 Honor. Straighten this
+      Personality. After the Kiho action ends, bow this Personality.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: Few have any idea how deadly they are.
+    number: 78
+
+  - title: Shadowed Steel
+    type: Follower
+    deck: Fate
+    keywords:
+    - Unique
+    - Ninja
+    force: 3
+    chi: 0
+    gold_cost: 4
+    honor_requirement: 0
+    focus: 2
+    text: 'Battle: Target a card with one or more Poison tokens: Bow it.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"A minor order of vassals, created from Scorpion cast-offs generations ago. They have some degree of skill, but
+      their primary benefit is their expendability." - Yogo Kazunori'
+    number: 79
+
+  - title: A Magistrate's Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    force: 2
+    chi: 1
+    gold_cost: 3
+    focus: 3
+    text: This Personality has Imperial and Magistrate.
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"There is little that a magistrate cannot accomplish with the proper tools at his disposal. An emissary of the
+      throne should have strength of steel that matches the strength of his honor." - Seppun Katsura'
+    number: 80
+
+  - title: Friendly Traveler Sake
+    type: Item
+    deck: Fate
+    keywords:
+    - Sake
+    force: 1
+    chi: 0
+    gold_cost: 3
+    focus: 1
+    text: '(This card is controlled by the controller of the Personality it is attached to).Limited: Target another player''s
+      Personality: Transfer this card to him. If it attached, gain Honor equal to the target''s Personal Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: The finest in all of Rokugan.
+    number: 81
+
+  - title: Seppun Blade
+    type: Item
+    deck: Fate
+    keywords:
+    - Weapon
+    force: 2
+    chi: 1
+    gold_cost: 4
+    focus: 4
+    text: 'Battle: Bow this card, and discard a card unless this unit is opposed: Draw a card.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Shattered Empire
+    rarity: Fixed
+    artist: IFS
+    flavor: '"An exquisite weapon, due more to the exceptional nature of those who carry them than any secret of its forging."
+      - Miya Shoin, Imperial Herald'
+    number: 82
+
+  - title: Essence of Destruction
+    type: Spell
+    deck: Fate
+    keywords:
+    - Unique
+    - Black Scroll
+    gold_cost: 4
+    focus: 4
+    text: 'If this Personality ever has a number of Corruption tokens equal to or greater than his base Chi: Destroy him.Battle:
+      Any number of times per turn, give this Personality a -1C Corruption token and target a unit: Bow it. Lose 2 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"You shall plague the Empire no longer!"'
+    number: 83
+
+  - title: Ritual of Summoning
+    type: Spell
+    deck: Fate
+    keywords:
+    - Maho
+    gold_cost: 4
+    focus: 0
+    text: 'Limited: Destroy this card: Permanently set the performing Shugenja''s Force and Chi to 5, and permanently give him
+      Shadowlands • Nonhuman • Oni and the ability, "Battle: Bow this card: Ranged 7 Attack." Lose 3 Honor.'
+    legality:
+    - Destroyer War (Celestial)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    rarity: Fixed
+    artist: IFS
+    flavor: '"You wanted power so badly, little human. Was it worth it?"'
+    number: 84

@@ -1,0 +1,422 @@
+set: Top Deck Booster Pack
+cards:
+  - title: Hida Tampako
+    type: Personality
+    clan: Crab
+    deck: Dynasty
+    keywords:
+    - Crab Clan
+    - Samurai
+    force: 2
+    chi: 1
+    gold_cost: 6
+    personal_honor: 1
+    text: Tampako has +2F while defending.
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Brian Snoddy
+    flavor: I have spent my life defending Rokugan from the horrors of the Shadowlands. Years of bitter fighting have shown
+      me how to win.
+    number: 1
+
+  - title: Doji Kuwanan
+    type: Personality
+    clan: Crane
+    deck: Dynasty
+    keywords:
+    - Crane Clan
+    - Samurai
+    force: 3
+    chi: 4
+    gold_cost: 8
+    honor_requirement: 5
+    personal_honor: 3
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Mike Raabe
+    flavor: '"He is as elegant as any Crane, but do not let his fine clothes fool you: he is a deadly swordsman." - Matsu Ketsui'
+    number: 2
+
+  - title: Hitomi Dajan
+    type: Personality
+    clan: Dragon
+    deck: Dynasty
+    keywords:
+    - Dragon Clan
+    - Monk
+    - Tattooed
+    force: 3
+    chi: 3
+    gold_cost: 6
+    honor_requirement: 0
+    personal_honor: 1
+    text: 'Will not join a Brotherhood of Shinsei player.Battle: Once per player per battle, target a player who controls a
+      unit at the current battlefield. Give Dajan +1F/+1C for each Ring that player controls until the battle ends.'
+    legality:
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: William O'Connor
+    flavor: '"They say he is tattooed with dragon''s blood. I think it is true, for his tattoos seem to crawl over his skin."
+      - Shosuro Yudoka'
+    number: 3
+
+  - title: Matsu Ketsui
+    type: Personality
+    clan: Lion
+    deck: Dynasty
+    keywords:
+    - Double Chi
+    - Unique
+    - Daimyo
+    - Lion Clan
+    - Samurai
+    force: 4
+    chi: 3
+    gold_cost: 9
+    honor_requirement: 5
+    personal_honor: 3
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    flavor: '"In my sword, the wind. In my heart, courage. In my eyes, death. I am Matsu." - from Kakita Morushijin''s play,
+      No Man''s Bride'
+    number: 4
+
+  - title: Shosuro Yudoka
+    type: Personality
+    clan: Ninja,Scorpion
+    deck: Dynasty
+    keywords:
+    - Tactician
+    - Ninja
+    - Scorpion Clan
+    force: 0
+    chi: 3
+    gold_cost: 6
+    personal_honor: 1
+    text: 'After Yudoka enters play: Lose 2 Honor.Battle: Any number of times per turn, bow Yudoka and target a Terrain: Destroy
+      it.'
+    legality:
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: William O'Connor
+    flavor: '"What do you call your weapon, samurai?" the ronin asked him. "Pincers and Tail," the Scorpion replied, then showed
+      him why.'
+    number: 5
+
+  - title: Isawa Sze
+    type: Personality
+    clan: Phoenix
+    deck: Dynasty
+    keywords:
+    - Phoenix Clan
+    - Shugenja
+    force: 1
+    chi: 2
+    gold_cost: 6
+    honor_requirement: 4
+    personal_honor: 1
+    text: 'Tireless Reaction: After an action from a Spell Sze cast resolves, straighten him. Give him a -1C Exhaustion token.'
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Carl Frank
+    flavor: '"He is small, but he has the tenacity of a Crab." - Hida Tampako'
+    number: 6
+
+  - title: Otaku Kamoko
+    type: Personality
+    clan: Unicorn
+    deck: Dynasty
+    keywords:
+    - Cavalry
+    - Battle Maiden
+    - Samurai
+    - Unicorn Clan
+    force: 3
+    chi: 2
+    gold_cost: 7
+    honor_requirement: 4
+    personal_honor: 3
+    text: Will not attach non-Cavalry Followers.Kamoko has +1F while attacking.
+    legality:
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    flavor: '"When in doubt, attack." - Unicorn Clan maxim'
+    number: 7
+
+  - title: Arrows from the Woods
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 3
+    text: 'Battle: Ranged 2 Attack.Reaction: After you target another player''s card with a Ranged Attack: Increase that Ranged
+      Attack''s strength by 2.'
+    legality:
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Shattered Empire
+    card_notes: The Pearl Edition version was misprinted with a 7 Gold Cost.
+    rarity: Fixed
+    artist: Ernie Chan
+    flavor: '"Strike first, strike hard, and vanish." - Shosuro Yudoka'
+    number: 8
+
+  - title: Careful Planning
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle/Open: Target a Personality, who must be unbowed if he is yours: Give him +1F/+1C.'
+    legality:
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Mark A.W. Jackson
+    flavor: '"There is fear in the unexpected. If you do not anticipate your enemies'' moves, they will seize the moment and
+      take advantage of it to gain victory." - Isawa Sze'
+    number: 9
+
+  - title: Charge
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Target an attacking Personality: Give him +2F, or +3F if he is Lion Clan (until the turn ends).'
+    legality:
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: Sean Murray
+    flavor: Ketsui nodded as Kamoko rode her horse into the enemy troops. " I'm impressed," Ketsui said.
+    number: 10
+
+  - title: Contentious Terrain
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Your Personalities at this battlefield have +1F. Battle: Destroy a Terrain (if able). Put this Terrain into play.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: KC Lancaster
+    flavor: '"Where you fight is as important as how you fight." - Otaku Kamoko'
+    number: 11
+
+  - title: Deadly Ground
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Terrain
+    gold_cost: 0
+    focus: 1
+    text: 'Players may not take actions during this battle unless the action will destroy this Terrain.Battle: If there are
+      no Terrains at the current battlefield: Put this card into play there.'
+    legality:
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Bob Hobbs
+    flavor: '"When your enemies do not fear death, you must make them fear you." - Shosuro Yudoka'
+    number: 12
+
+  - title: Diversionary Tactics
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Target a Terrain: Destroy it.'
+    legality:
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Rain of Blood (Diamond)
+    rarity: Fixed
+    artist: Bob Hobbs
+    flavor: '"If my enemies do not know the field of battle, then they cannot defeat me." - Matsu Ketsui'
+    number: 13
+
+  - title: Fist of the Earth
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Earth
+    - Kiho
+    focus: 3
+    text: 'Earth Kiho Battle: Bow your target unbowed Monk or Shugenja. Bow a target enemy Follower or Personality without Followers.'
+    legality:
+    - A Brother's Destiny (Twenty Festivals)
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    - War of the Seals (Onyx Edition)
+    rarity: Fixed
+    artist: William O'Connor
+    flavor: '"His eyes locked on my own, and the next thing I knew, I was flat on my back." - Doji Kuwanan'
+    number: 14
+
+  - title: Iaijutsu Duel
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Iaijutsu
+    gold_cost: 0
+    focus: 2
+    text: 'Iaijutsu Battle: Your target performing unbowed Personality challenges a target enemy Personality. The winner gains
+      5 Honor. Destroy the loser.'
+    legality:
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    flavor: '"When dueling a Crane, don''t blink." - Hitomi Dajan'
+    number: 15
+
+  - title: Outflank
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Target a defending Personality who must be unbowed if he is yours: Give him +3F.'
+    legality:
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    rarity: Fixed
+    artist: Pete Garcia
+    flavor: '"All samurai fight. Crab samurai win." - Hida Tampako'
+    number: 16
+
+  - title: Strength of My Ancestors
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    gold_cost: 0
+    focus: 1
+    text: 'Battle/Open: Bow your performing Monk or Shugenja and target your unbowed Personality: Give him +2F/+2C.'
+    legality:
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    card_notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+    rarity: Fixed
+    artist: Jeff Reitz
+    flavor: '"Never underestimate the weight of a hundred generations watching you." - Isawa Sze'
+    number: 17
+
+  - title: Strength of Purity
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 1
+    text: 'Battle: Choose your performing Personality with 3 or higher Personal Honor: Give him +3F.'
+    legality:
+    - Age of Conquest (Emperor)
+    - Clan Wars (Imperial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    mrp: No longer gives a Chi bonus
+    rarity: Fixed
+    artist: Christina Wald
+    flavor: '"Honor is your sword. Keep it clean, and you cannot be defeated." - Crane Clan maxim'
+    number: 18
+
+  - title: The Wrath of Osano-Wo
+    type: Strategy
+    deck: Fate
+    keywords:
+    - Kiho
+    - Thunder
+    gold_cost: 0
+    focus: 3
+    text: 'Kiho Thunder Battle: Bow your target unbowed Monk or Shugenja. Ranged Attack with strength equal to his Chi.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Clan Wars (Imperial)
+    - Destroyer War (Celestial)
+    - Four Winds (Gold)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    card_notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+    rarity: Fixed
+    artist: Wackwitz & Daily
+    flavor: '"To tempt the wrath of the Fortunes is not courageous or bold. It is simply foolish. " - Hitomi Dajan'
+    number: 19
+
+  - title: Wounded in Battle
+    type: Strategy
+    deck: Fate
+    gold_cost: 0
+    focus: 2
+    text: 'Battle: Target a Personality who has not been targeted by a Wounded in Battle this turn. Until the battle ends, if
+      he is a Samurai, he is not destroyed for having 0 Chi. Give him -2C.'
+    legality:
+    - A Brother's Destiny (Ivory Edition)
+    - A Brother's Destiny (Twenty Festivals)
+    - Age of Enlightenment (Lotus)
+    - Clan Wars (Imperial)
+    - Hidden Emperor (Jade)
+    - Legacy
+    - Modern
+    - Race for the Throne (Samurai)
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    - War of the Seals (Onyx Edition)
+    card_notes: Ivory Edition Promo version released in the 2014 L5R Tournament Draft Kit
+    rarity: Fixed
+    artist: Bryon Wackwitz
+    flavor: '"The Hida family has defended the wall for a thousand years. I will not fail their memory." - Hida Tampako'
+    number: 20

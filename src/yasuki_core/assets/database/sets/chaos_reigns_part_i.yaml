@@ -1,0 +1,25 @@
+set: Chaos Reigns Part I
+cards:
+  - title: Boastful Proclamation
+    type: Event
+    deck: Dynasty
+    keywords:
+    - Unique
+    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, if any
+      other player controls a Personality, then at the start of your next turn, if this Province still exists, permanently give
+      it +3 strength and gain 3 Honor, and until then, after battle resolution destroys this Province, give each Personality
+      in the attacking army a +1F token and the Attacker may draw a card.
+    legality:
+    - Age of Conquest (Emperor)
+    - Age of Enlightenment (Lotus)
+    - Four Winds (Gold)
+    - Legacy
+    - Modern
+    - Rain of Blood (Diamond)
+    - Shattered Empire
+    rarity: Fixed
+    artist: Erich Schreiner
+    flavor: '"The pretenders left my city a burnt ruin and my father dead. Lord Seiki will make Kalani''s Landing the jewel
+      of the Colonies!" - Yoritomo Wakuni'
+    pub: Onyx Lives https://sites.google.com/view/the-onyx-lives-project/home
+    number: 61
