@@ -139,6 +139,14 @@ def load_l5r_sets(yaml_path: Path, dsn: str):
                           %(code)s,
                           %(notes)s
                         )
+                        ON CONFLICT (arc, set_name) DO UPDATE SET
+                          release_date = EXCLUDED.release_date,
+                          digital = EXCLUDED.digital,
+                          featured_factions = EXCLUDED.featured_factions,
+                          size_raw = EXCLUDED.size_raw,
+                          border = EXCLUDED.border,
+                          code = EXCLUDED.code,
+                          notes = EXCLUDED.notes
                         """,
                         {
                             "arc": arc,
