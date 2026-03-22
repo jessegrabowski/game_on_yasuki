@@ -96,7 +96,9 @@ async def list_cards(
 
 
 @router.get("/cards/lookup")
+@limiter.limit("500/minute")
 async def lookup_cards_by_name(
+    request: Request,
     name: Annotated[list[str], Query(description="Card names to look up (repeatable)")] = [],
 ):
     """
@@ -105,6 +107,8 @@ async def lookup_cards_by_name(
     Matches against both name and extended_title (case-insensitive) and returns
     each card with its full list of prints for set-specific resolution.
     """
+    if len(name) > 200:
+        raise HTTPException(status_code=400, detail="Too many names (max 200)")
     try:
         cards = get_cards_by_names(name)
         by_name: dict[str, dict] = {}

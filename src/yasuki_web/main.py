@@ -35,10 +35,15 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 _default_origins = ["http://localhost:5173", "http://localhost:3000", "http://localhost:8080"]
 _cors_origins = (
-    os.environ.get("CORS_ORIGINS", "").split(",")
+    [o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()]
     if os.environ.get("CORS_ORIGINS")
     else _default_origins
 )
+if "*" in _cors_origins:
+    raise ValueError(
+        "CORS_ORIGINS must not contain '*' when allow_credentials=True. "
+        "List explicit origins instead."
+    )
 
 app.add_middleware(
     CORSMiddleware,
@@ -56,9 +61,19 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
         response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
-        if request.url.scheme == "https":
+        forwarded_proto = request.headers.get("x-forwarded-proto", request.url.scheme)
+        if forwarded_proto == "https":
             response.headers["Strict-Transport-Security"] = (
                 "max-age=63072000; includeSubDomains; preload"
+            )
+        if request.url.path.startswith("/deck-builder"):
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'self'; "
+                "img-src 'self' https://*.r2.dev data:; "
+                "style-src 'self' https://fonts.googleapis.com; "
+                "font-src https://fonts.gstatic.com; "
+                "script-src 'self' 'unsafe-inline'; "
+                "connect-src 'self'"
             )
         return response
 
