@@ -31,7 +31,7 @@
         <select id="deckFilter"><option value="">All Decks</option></select>
         <select id="typeFilter"><option value="">All Types</option></select>
       </div>
-      <div id="searchHelp" class="search-help" style="display:none">
+      <div id="searchHelp" class="search-help hidden">
         <div class="help-content">
           <b>Fields:</b> name: type: clan: deck: text: set: rarity:<br>
           <b>Shortcuts:</b> t: c: f o: s: r:<br>
@@ -62,7 +62,7 @@
         <button class="btn-small" id="exportBtn" title="Export deck as YAML file">Export</button>
       </div>
     </div>
-    <input type="file" id="importFileInput" accept=".yaml,.yml" style="display:none">
+    <input type="file" id="importFileInput" accept=".yaml,.yml" class="hidden">
     <div class="deck-name-row">
       <input type="text" id="deckNameInput" placeholder="Deck name&hellip;">
     </div>
