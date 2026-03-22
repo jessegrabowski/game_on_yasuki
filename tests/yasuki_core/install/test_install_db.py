@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import psycopg2
-import pytest
 
 from yasuki_core.install import install_db
 
@@ -55,7 +54,7 @@ class DummyImporter:
         self.called = True
 
 
-def test_schema_exists_without_force_raises(monkeypatch):
+def test_schema_exists_without_force_skips_schema_creation(monkeypatch):
     cur = DummyCursor(tables_exist=True)
     conn = DummyConnection(cur)
     monkeypatch.setattr(psycopg2, "connect", lambda dsn: conn)
@@ -70,14 +69,22 @@ def test_schema_exists_without_force_raises(monkeypatch):
         skip_cards=True,
     )
 
-    installer = install_db.Installer(cfg)
+    applied_schema = False
+
+    class TestInstaller(install_db.Installer):
+        def _apply_schema(self, cursor):
+            nonlocal applied_schema
+            applied_schema = True
+
+    installer = TestInstaller(cfg)
     with monkeypatch.context() as m:
         m.setattr(installer, "_validate_prerequisites", lambda: None)
         m.setattr(installer, "_validate_files", lambda: None)
         m.setattr(installer, "_ensure_database_exists", lambda: None)
 
-        with pytest.raises(install_db.InstallerError):
-            installer.run()
+        installer.run()
+
+    assert not applied_schema
 
 
 def test_force_drop_calls_reset(monkeypatch):

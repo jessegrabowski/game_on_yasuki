@@ -50,33 +50,20 @@ else:
     print('[db-init] ERROR: Database not reachable after 15 attempts', file=sys.stderr)
     sys.exit(1)
 
-try:
-    conn = psycopg2.connect(db_url)
-    cur = conn.cursor()
-    cur.execute(\"SELECT 1 FROM information_schema.tables WHERE table_name = 'cards'\")
-    if cur.fetchone():
-        cur.execute('SELECT COUNT(*) FROM cards')
-        count = cur.fetchone()[0]
-        if count > 0:
-            print(f'[db-init] Database already initialized ({count} cards)')
-            conn.close()
-            sys.exit(0)
-    conn.close()
-except Exception:
-    pass
-
-print('[db-init] Initializing application database...')
+print('[db-init] Running database initialization...')
 from yasuki_core.install.install_db import main as install_main
+rc = 1
 try:
-    install_main(['--dsn', db_url])
-    print('[db-init] Database initialization complete')
+    rc = install_main(['--dsn', db_url])
 except SystemExit as e:
-    if e.code == 0:
-        print('[db-init] Database initialization complete')
-    else:
-        print('[db-init] Database init failed, may already be initialized by another service')
+    rc = e.code if isinstance(e.code, int) else 1
 except Exception as e:
     print(f'[db-init] Database init error: {e}')
+
+if rc == 0:
+    print('[db-init] Database initialization complete')
+else:
+    print(f'[db-init] Database init failed (exit code {rc})')
 " &
 DB_INIT_PID=$!
 echo "Database init running in background (PID $DB_INIT_PID)"

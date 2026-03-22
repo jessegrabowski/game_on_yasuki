@@ -54,12 +54,13 @@ class Installer:
             conn.autocommit = False
             with conn.cursor() as cur:
                 if self._schema_exists(cur):
-                    if not self.cfg.force:
-                        raise InstallerError(
-                            "Database already initialized. Use --force to recreate it."
-                        )
-                    self._reset_schema(cur)
-                self._apply_schema(cur)
+                    if self.cfg.force:
+                        self._reset_schema(cur)
+                        self._apply_schema(cur)
+                    else:
+                        logger.info("Schema already exists, will upsert data")
+                else:
+                    self._apply_schema(cur)
                 conn.commit()
 
         if not self.cfg.skip_sets:

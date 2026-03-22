@@ -136,7 +136,9 @@ CREATE TABLE l5r_sets (
   size_raw          INT,
   border            TEXT,
   code              TEXT,
-  notes             TEXT
+  notes             TEXT,
+
+  UNIQUE (arc, set_name)
 );
 
 -- Fuzzy name search
