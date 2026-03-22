@@ -1,6 +1,7 @@
 import { $, debounce, titleCase, scrollToSelected } from './helpers.js';
 import { fetchJSON } from './api.js';
-import { addCard, removeCard, clearDeck, nextCardAfterRemoval, getDeckNavItems } from './deck-state.js';
+import { addCard, removeCard, clearDeck, getDeck, nextCardAfterRemoval, getDeckNavItems } from './deck-state.js';
+import { getDeckName, setDeckName, serializeDeck, parseDeckYaml } from './deck-io.js';
 import {
   initCardList,
   renderCardList,
@@ -25,6 +26,7 @@ const API = '/api';
 let IMG = '/images';
 const LIMIT = 100;
 let offset = 0;
+let totalDbCards = 0;
 
 async function init() {
   try {
@@ -34,10 +36,19 @@ async function init() {
     /* fall back to /images */
   }
 
+  try {
+    const data = await fetchJSON(`${API}/cards?limit=1&offset=0`);
+    totalDbCards = data.total;
+    $('totalDbCount').textContent = totalDbCards;
+  } catch (_) {
+    $('totalDbCount').textContent = '?';
+  }
+
   initPreview(IMG);
 
   initCardList({
     onSelect: (card) => showPreview(card, null, API),
+    onDblClick: () => doAddSelectedToDeck(),
     onLoadMore: () => {
       offset += LIMIT;
       fetchCards();
@@ -62,13 +73,27 @@ async function init() {
   });
 
   $('formatFilter').addEventListener('change', searchCards);
-  $('deckFilter').addEventListener('change', searchCards);
+  $('deckFilter').addEventListener('change', () => {
+    updateTypeFilterForDeck();
+    searchCards();
+  });
   $('typeFilter').addEventListener('change', searchCards);
 
   $('helpBtn').addEventListener('click', toggleHelp);
   $('addBtn').addEventListener('click', doAddSelectedToDeck);
   $('removeBtn').addEventListener('click', doRemoveSelectedFromDeck);
   $('clearBtn').addEventListener('click', doClearDeck);
+  $('exportBtn').addEventListener('click', doExportDeck);
+  $('importBtn').addEventListener('click', () => $('importFileInput').click());
+  $('deckNameInput').addEventListener('input', () => {
+    $('deckNameInput').closest('.deck-name-row').classList.remove('shake');
+  });
+  $('importFileInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    file.text().then((text) => doImportDeck(text));
+    e.target.value = '';
+  });
 
   await populateFilters();
   searchCards();
@@ -78,6 +103,8 @@ function toggleHelp() {
   const el = $('searchHelp');
   el.style.display = el.style.display === 'none' ? '' : 'none';
 }
+
+let allTypes = [];
 
 async function populateFilters() {
   const fill = (selectEl, items, labelFn) => {
@@ -112,9 +139,45 @@ async function populateFilters() {
       (decks.deck_types || []).map((d) => d.toUpperCase()),
       (d) => titleCase(d),
     );
-    fill($('typeFilter'), types.card_types || []);
+    allTypes = types.card_types || [];
+    fill($('typeFilter'), allTypes);
   } catch (e) {
     console.error('Failed to populate filters:', e);
+  }
+}
+
+function repopulateTypeFilter(types) {
+  const typeEl = $('typeFilter');
+  const current = typeEl.value;
+  typeEl.innerHTML = '';
+  const allOpt = document.createElement('option');
+  allOpt.value = '';
+  allOpt.textContent = 'All Types';
+  typeEl.appendChild(allOpt);
+  types.forEach((t) => {
+    const opt = document.createElement('option');
+    opt.value = t;
+    opt.textContent = t;
+    typeEl.appendChild(opt);
+  });
+  if (types.includes(current)) {
+    typeEl.value = current;
+  } else {
+    typeEl.value = '';
+  }
+}
+
+async function updateTypeFilterForDeck() {
+  const deckVal = $('deckFilter').value;
+  if (!deckVal) {
+    repopulateTypeFilter(allTypes);
+    return;
+  }
+  try {
+    const data = await fetchJSON(`${API}/card-types-by-deck?deck=${encodeURIComponent(deckVal)}`);
+    repopulateTypeFilter(data.card_types || []);
+  } catch (_) {
+    repopulateTypeFilter(allTypes);
   }
 }
 
@@ -143,7 +206,7 @@ async function fetchCards() {
   try {
     const data = await fetchJSON(`${API}/cards?${params}`);
     updateResults(data.cards, data.has_more, offset > 0);
-    $('totalCards').textContent = `${data.total} cards`;
+    $('filteredCount').textContent = data.total;
     renderCardList();
   } catch (e) {
     console.error('Failed to fetch cards:', e);
@@ -191,10 +254,93 @@ function doClearDeck() {
   renderDeckLists();
 }
 
+function doExportDeck() {
+  const input = $('deckNameInput');
+  const name = input.value.trim();
+  if (!name) {
+    input.focus();
+    const row = input.closest('.deck-name-row');
+    row.classList.remove('shake');
+    void row.offsetWidth;
+    row.classList.add('shake');
+    return;
+  }
+  setDeckName(name);
+  const yaml = serializeDeck(getDeck());
+  const filename = name.toLowerCase().replace(/[^a-z0-9]+/g, '_') + '.yaml';
+  const blob = new Blob([yaml], { type: 'text/yaml' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+async function doImportDeck(text) {
+  const parsed = parseDeckYaml(text);
+
+  const allEntries = [...parsed.pre_game, ...parsed.dynasty, ...parsed.fate];
+  const uniqueNames = [...new Set(allEntries.map((e) => e.name))];
+  if (uniqueNames.length === 0) return;
+
+  const params = new URLSearchParams();
+  uniqueNames.forEach((n) => params.append('name', n));
+
+  let cardsByName = {};
+  try {
+    const data = await fetchJSON(`${API}/cards/lookup?${params}`);
+    cardsByName = data.cards || {};
+  } catch (e) {
+    console.error('Import lookup failed:', e);
+    alert('Import failed: could not reach the card database.');
+    return;
+  }
+
+  clearDeck();
+  setSelectedDeckCard(null);
+
+  const SIDE_MAP = { pre_game: 'PRE_GAME', dynasty: 'DYNASTY', fate: 'FATE' };
+  const unresolved = [];
+
+  for (const [section, entries] of Object.entries({
+    pre_game: parsed.pre_game,
+    dynasty: parsed.dynasty,
+    fate: parsed.fate,
+  })) {
+    const side = SIDE_MAP[section];
+    for (const entry of entries) {
+      const card = cardsByName[entry.name.toLowerCase()];
+      if (!card) {
+        unresolved.push(entry.name);
+        continue;
+      }
+      const prints = card.prints || [];
+      const matchedPrint = entry.setName
+        ? (prints.find((p) => p.set_name === entry.setName) ?? prints[0])
+        : prints[0];
+      const printId = matchedPrint ? matchedPrint.print_id : 0;
+      const setName = matchedPrint ? matchedPrint.set_name : '';
+      for (let i = 0; i < entry.count; i++) {
+        addCard(card.id, side, card, printId, setName);
+      }
+    }
+  }
+
+  setDeckName(parsed.name);
+  $('deckNameInput').value = parsed.name;
+  renderDeckLists();
+  renderCardList();
+
+  if (unresolved.length > 0) {
+    alert(`Import complete.\n\nCould not find ${unresolved.length} card(s):\n${unresolved.join('\n')}`);
+  }
+}
+
 // Keyboard navigation
 let focusedList = 'cardList';
 
-['cardList', 'dynastyList', 'fateList'].forEach((id) => {
+['cardList', 'dynastyList', 'fateList', 'preGameList'].forEach((id) => {
   $(id).addEventListener('mousedown', () => {
     focusedList = id;
   });
@@ -239,8 +385,10 @@ function navigateCardList(dir) {
   scrollToSelected('cardList', '.card-list-item.selected');
 }
 
+const DECK_LIST_SIDES = { dynastyList: 'DYNASTY', fateList: 'FATE', preGameList: 'PRE_GAME' };
+
 function navigateDeckList(listId, dir) {
-  const side = listId === 'dynastyList' ? 'DYNASTY' : 'FATE';
+  const side = DECK_LIST_SIDES[listId] || 'FATE';
   const items = getDeckNavItems(side);
   if (items.length === 0) return;
 
@@ -302,6 +450,64 @@ function navigateDeckList(listId, dir) {
           colWidths[idx] = newLeft;
           colWidths[idx + 1] = newRight;
           applyWidths(colWidths);
+        }
+      }
+
+      function onUp() {
+        gutter.classList.remove('dragging');
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+      }
+
+      document.addEventListener('mousemove', onMove);
+      document.addEventListener('mouseup', onUp);
+    });
+  });
+})();
+
+(function () {
+  const sections = [
+    $('dynastySection'),
+    $('fateSection'),
+    $('preGameSection'),
+  ];
+  const gutters = document.querySelectorAll('.deck-gutter');
+  const MIN_SECTION_PX = 40;
+
+  function getSectionHeights() {
+    return sections.map((s) => s.getBoundingClientRect().height);
+  }
+
+  function applySectionHeights(heights) {
+    sections.forEach((s, i) => {
+      s.style.flex = 'none';
+      s.style.height = heights[i] + 'px';
+    });
+  }
+
+  gutters.forEach((gutter) => {
+    gutter.addEventListener('mousedown', (e) => {
+      e.preventDefault();
+      const idx = parseInt(gutter.dataset.deckGutter);
+      let heights = getSectionHeights();
+      gutter.classList.add('dragging');
+      document.body.style.cursor = 'row-resize';
+      document.body.style.userSelect = 'none';
+
+      const startY = e.clientY;
+      const startTop = heights[idx];
+      const startBottom = heights[idx + 1];
+
+      function onMove(ev) {
+        const dy = ev.clientY - startY;
+        const newTop = Math.max(MIN_SECTION_PX, startTop + dy);
+        const newBottom = Math.max(MIN_SECTION_PX, startBottom - dy);
+        if (newTop >= MIN_SECTION_PX && newBottom >= MIN_SECTION_PX) {
+          heights[idx] = newTop;
+          heights[idx + 1] = newBottom;
+          applySectionHeights(heights);
         }
       }
 

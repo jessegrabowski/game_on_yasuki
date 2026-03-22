@@ -296,6 +296,71 @@ def get_prints_by_card_id(card_id: str) -> list[dict]:
             return [dict(row) for row in cur.fetchall()]
 
 
+def get_cards_by_names(names: list[str]) -> list[dict]:
+    """
+    Fetch cards matching a list of names, including their prints.
+
+    Matches against both ``name`` and ``extended_title`` (case-insensitive).
+    Used for deck import to resolve human-readable names to card records.
+
+    Parameters
+    ----------
+    names : list of str
+        Card names to look up
+
+    Returns
+    -------
+    cards : list of dict
+        Matched card records, each with a ``prints`` key containing
+        a list of print dicts (print_id, set_name, image_path, flavor_text)
+    """
+    if not names:
+        return []
+    lower_names = [n.lower() for n in names]
+    with get_db_connection() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT
+                    c.id, c.name, c.extended_title,
+                    c.deck::text AS side, c.type::text AS type,
+                    c.clan, c.is_unique,
+                    c.rules_text AS text,
+                    c.force, c.chi, c.gold_cost, c.focus,
+                    c.honor_requirement, c.personal_honor,
+                    c.gold_production, c.province_strength, c.starting_honor
+                FROM cards c
+                WHERE lower(c.name) = ANY(%s) OR lower(c.extended_title) = ANY(%s)
+                ORDER BY c.name
+                """,
+                (lower_names, lower_names),
+            )
+            cards = [dict(row) for row in cur.fetchall()]
+
+            if not cards:
+                return []
+
+            card_ids = [c["id"] for c in cards]
+            cur.execute(
+                """
+                SELECT print_id, card_id, set_name, image_path, flavor_text
+                FROM prints
+                WHERE card_id = ANY(%s)
+                ORDER BY print_id
+                """,
+                (card_ids,),
+            )
+            prints_by_card: dict[str, list] = {}
+            for row in cur.fetchall():
+                row = dict(row)
+                prints_by_card.setdefault(row["card_id"], []).append(row)
+
+            for card in cards:
+                card["prints"] = prints_by_card.get(card["id"], [])
+
+            return cards
+
+
 def query_all_formats() -> list[str]:
     """
     Fetch all format names from database.

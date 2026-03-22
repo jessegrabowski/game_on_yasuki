@@ -129,4 +129,47 @@ describe('preview rendering', () => {
     const el = document.getElementById('preview');
     assert.ok(el.innerHTML.includes('/images/img/ie.jpg'));
   });
+
+  it('renders fallback image when print has no image_path', async () => {
+    mockFetchPrints([{ print_id: 10, set_name: 'Test', image_path: null, flavor_text: '' }]);
+    await showPreview(CARD, null, '/api');
+
+    const el = document.getElementById('preview');
+    assert.ok(el.innerHTML.includes('defaults/generic_personality.jpg'));
+  });
+
+  it('renders fallback image when card has no prints and no image_path', async () => {
+    mockFetchPrints([]);
+    const card = { ...CARD, image_path: null };
+    await showPreview(card, null, '/api');
+
+    const el = document.getElementById('preview');
+    assert.ok(el.innerHTML.includes('defaults/generic_personality.jpg'));
+  });
+
+  it('renders onerror fallback on img tag when print has image_path', async () => {
+    mockFetchPrints(PRINTS);
+    await showPreview(CARD, null, '/api');
+
+    const el = document.getElementById('preview');
+    assert.ok(el.innerHTML.includes('onerror'));
+    assert.ok(el.innerHTML.includes('defaults/generic_personality.jpg'));
+  });
+
+  it('renders flip button', async () => {
+    mockFetchPrints(PRINTS);
+    await showPreview(CARD, null, '/api');
+
+    const el = document.getElementById('preview');
+    assert.ok(el.innerHTML.includes('flipBtn'));
+    assert.ok(el.innerHTML.includes('🔄'));
+  });
+
+  it('renders flip button even without prints', async () => {
+    mockFetchPrints([]);
+    await showPreview(CARD, null, '/api');
+
+    const el = document.getElementById('preview');
+    assert.ok(el.innerHTML.includes('flipBtn'));
+  });
 });

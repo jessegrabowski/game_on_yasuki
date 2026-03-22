@@ -14,7 +14,7 @@
 <header>
   <h1>&#x26E9;&#xFE0F; Game on, Yasuki! &mdash; Deck Builder</h1>
   <div class="counts">
-    <span id="totalCards">0 cards</span> in database
+    Displaying <span id="filteredCount">0</span> / <span id="totalDbCount">&hellip;</span> cards
   </div>
 </header>
 
@@ -55,20 +55,39 @@
   <div class="gutter" data-gutter="0"></div>
 
   <div class="col">
-    <div class="col-header">Deck Composition</div>
-    <div class="deck-section">
+    <div class="col-header deck-col-header">
+      <span>Deck Composition</span>
+      <div class="deck-header-actions">
+        <button class="btn-small" id="importBtn" title="Import deck from YAML file">Import</button>
+        <button class="btn-small" id="exportBtn" title="Export deck as YAML file">Export</button>
+      </div>
+    </div>
+    <input type="file" id="importFileInput" accept=".yaml,.yml" style="display:none">
+    <div class="deck-name-row">
+      <input type="text" id="deckNameInput" placeholder="Deck name&hellip;">
+    </div>
+    <div class="deck-section" id="dynastySection">
       <div class="deck-section-header">
         <span>Dynasty Deck</span>
         <span id="dynastyCount">0</span>
       </div>
       <div class="deck-list" id="dynastyList"></div>
     </div>
-    <div class="deck-section">
+    <div class="deck-gutter" data-deck-gutter="0"></div>
+    <div class="deck-section" id="fateSection">
       <div class="deck-section-header">
         <span>Fate Deck</span>
         <span id="fateCount">0</span>
       </div>
       <div class="deck-list" id="fateList"></div>
+    </div>
+    <div class="deck-gutter" data-deck-gutter="1"></div>
+    <div class="deck-section" id="preGameSection">
+      <div class="deck-section-header">
+        <span>Pre-Game / Other</span>
+        <span id="preGameCount">0</span>
+      </div>
+      <div class="deck-list" id="preGameList"></div>
     </div>
     <div class="deck-actions">
       <button class="btn" id="addBtn">Add to Deck</button>

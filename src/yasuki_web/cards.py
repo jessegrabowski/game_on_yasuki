@@ -8,11 +8,13 @@ from yasuki_core.database import (
     query_cards_filtered,
     get_card_by_id,
     get_prints_by_card_id,
+    get_cards_by_names,
     query_all_sets,
     query_all_formats,
     query_all_decks,
     query_all_clans,
     query_all_types,
+    query_types_by_deck,
 )
 from yasuki_core.search import parse_and_build_query
 from yasuki_web.rate_limit import limiter
@@ -91,6 +93,32 @@ async def list_cards(
     except Exception as e:
         logger.error(f"Error listing cards: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve cards")
+
+
+@router.get("/cards/lookup")
+async def lookup_cards_by_name(
+    name: Annotated[list[str], Query(description="Card names to look up (repeatable)")] = [],
+):
+    """
+    Look up cards by name for deck import.
+
+    Matches against both name and extended_title (case-insensitive) and returns
+    each card with its full list of prints for set-specific resolution.
+    """
+    try:
+        cards = get_cards_by_names(name)
+        by_name: dict[str, dict] = {}
+        for card in cards:
+            key = (card.get("extended_title") or card["name"]).lower()
+            by_name[key] = card
+        for card in cards:
+            name_key = card["name"].lower()
+            if name_key not in by_name:
+                by_name[name_key] = card
+        return {"cards": by_name, "found": len(cards)}
+    except Exception as e:
+        logger.error(f"Error looking up cards by name: {e}")
+        raise HTTPException(status_code=500, detail="Failed to look up cards")
 
 
 @router.get("/cards/{card_id}")
@@ -217,6 +245,21 @@ async def list_card_types():
         return {"card_types": types, "count": len(types)}
     except Exception as e:
         logger.error(f"Error listing card types: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve card types")
+
+
+@router.get("/card-types-by-deck")
+async def list_card_types_by_deck(
+    deck: Annotated[
+        str, Query(description="Deck type to filter card types by (e.g. DYNASTY, FATE)")
+    ],
+):
+    """List card types available for a specific deck type."""
+    try:
+        types = query_types_by_deck([deck.upper()])
+        return {"card_types": types, "deck": deck.upper(), "count": len(types)}
+    except Exception as e:
+        logger.error(f"Error listing card types by deck: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve card types")
 
 

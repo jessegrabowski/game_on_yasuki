@@ -15,6 +15,7 @@ import {
 const CARD_A = { id: 'card_a', name: 'Alpha', type: 'Strategy', side: 'FATE' };
 const CARD_B = { id: 'card_b', name: 'Beta', type: 'Strategy', side: 'FATE' };
 const CARD_C = { id: 'card_c', name: 'Castle', type: 'Holding', side: 'DYNASTY' };
+const CARD_SH = { id: 'card_sh', name: 'Kyuden Hida', type: 'Stronghold', side: 'PRE_GAME' };
 
 beforeEach(() => clearDeck());
 
@@ -37,6 +38,13 @@ describe('addCard', () => {
     const prints = getBucket('FATE')['card_a'].prints;
     assert.equal(prints[10].qty, 1);
     assert.equal(prints[20].qty, 1);
+  });
+
+  it('adds card to PRE_GAME bucket', () => {
+    addCard('card_sh', 'PRE_GAME', CARD_SH, 40, 'Imperial Edition');
+    const bucket = getBucket('PRE_GAME');
+    assert.deepEqual(bucket['card_sh'].prints, { 40: { qty: 1, set_name: 'Imperial Edition' } });
+    assert.equal(bucket['card_sh'].card.type, 'Stronghold');
   });
 });
 

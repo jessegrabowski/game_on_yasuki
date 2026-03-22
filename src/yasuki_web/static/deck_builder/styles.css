@@ -82,6 +82,62 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   flex-shrink: 0;
   text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
+.deck-col-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.deck-header-actions {
+  display: flex;
+  gap: 4px;
+}
+.btn-small {
+  background: var(--surface);
+  color: var(--accent);
+  border: 1px solid var(--accent-dark);
+  border-radius: 3px;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-family: inherit;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-small:hover { background: var(--accent-dark); color: var(--text); }
+.deck-name-row {
+  padding: 6px 8px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.deck-name-row input {
+  width: 100%;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 5px 8px;
+  font-size: 0.83rem;
+  font-family: inherit;
+}
+.deck-name-row input:focus {
+  outline: none;
+  border-color: var(--accent-dark);
+  box-shadow: 0 0 0 1px var(--accent-dark);
+}
+.deck-name-row.shake input {
+  border-color: #c55;
+  box-shadow: 0 0 0 1px #c55;
+}
+.deck-name-row.shake {
+  animation: shake 0.4s ease-in-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
 
 /* Search & Filters */
 .filters {
@@ -201,6 +257,19 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   overflow: hidden;
   min-height: 0;
 }
+#dynastySection { flex: 5; }
+#fateSection { flex: 5; }
+#preGameSection { flex: 2; }
+.deck-gutter {
+  height: 4px;
+  background: var(--border);
+  cursor: row-resize;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.deck-gutter:hover, .deck-gutter.dragging {
+  background: var(--accent-dark);
+}
 .deck-section-header {
   padding: 7px 12px;
   font-weight: 700;
@@ -223,7 +292,7 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   border-radius: 3px;
   font-size: 0.83rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   border-left: 2px solid transparent;
   transition: background 0.15s, border-color 0.15s;
@@ -246,6 +315,8 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   text-align: center;
   font-weight: 700;
   font-family: system-ui, sans-serif;
+  margin-right: 8px;
+  flex-shrink: 0;
 }
 .deck-type-header {
   padding: 4px 10px;
@@ -264,7 +335,7 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   cursor: pointer;
   border-radius: 3px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   border-left: 2px solid transparent;
   transition: background 0.15s, border-color 0.15s;
@@ -288,6 +359,8 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   text-align: center;
   font-weight: 700;
   font-family: system-ui, sans-serif;
+  margin-right: 8px;
+  flex-shrink: 0;
 }
 .print-nav {
   display: flex;
@@ -373,6 +446,10 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   background: var(--surface);
   flex-shrink: 0;
   box-shadow: 0 4px 16px rgba(0,0,0,0.6), 0 0 1px var(--accent-dark);
+  transition: transform 0.3s ease;
+}
+.preview-img-flipped {
+  transform: rotate(180deg);
 }
 .preview-placeholder {
   width: 429px;
