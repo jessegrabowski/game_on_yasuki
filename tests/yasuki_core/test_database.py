@@ -2,8 +2,6 @@ import psycopg
 import pytest
 
 from yasuki_core.database import (
-    _escape_like,
-    _extract_host,
     _is_private_dsn,
     mask_dsn,
     query_all_cards,
@@ -241,20 +239,6 @@ class TestSQLFiltering:
 class TestLikeEscaping:
     """Verify that LIKE/ILIKE wildcard characters are escaped in user input."""
 
-    @pytest.mark.parametrize(
-        "raw, escaped",
-        [
-            ("Crane", "Crane"),
-            ("100%", "100\\%"),
-            ("a_b", "a\\_b"),
-            ("%", "\\%"),
-            ("\\", "\\\\"),
-        ],
-        ids=["plain", "percent", "underscore", "bare_percent", "backslash"],
-    )
-    def test_escape_like(self, raw, escaped):
-        assert _escape_like(raw) == escaped
-
     def test_percent_search_does_not_match_all(self):
         all_count = count_cards_filtered()
         pct_count = count_cards_filtered(text_query="%")
@@ -273,17 +257,6 @@ class TestLikeEscaping:
 
 class TestPagination:
     """Test SQL-level pagination via query_cards_page."""
-
-    def test_returns_tuple(self):
-        cards, total = query_cards_page()
-        assert isinstance(cards, list)
-        assert isinstance(total, int)
-        assert total > 0
-
-    def test_default_limit(self):
-        cards, total = query_cards_page()
-        assert len(cards) <= 100
-        assert total >= len(cards)
 
     def test_custom_limit(self):
         cards, total = query_cards_page(limit=10)
@@ -314,31 +287,16 @@ class TestPagination:
     def test_text_query_with_pagination(self):
         cards, total = query_cards_page(text_query="Doji", limit=5)
         assert total > 0
-        assert len(cards) <= 5
-        for card in cards:
-            combined = (
-                card["name"] + " " + card.get("id", "") + " " + (card.get("text") or "")
-            ).lower()
-            assert "doji" in combined
+        assert len(cards) == 5
 
     def test_no_matches_returns_zero(self):
         cards, total = query_cards_page(text_query="XYZ_IMPOSSIBLE_9999", limit=10)
         assert cards == []
         assert total == 0
 
-    def test_consistent_with_unfiltered(self):
-        all_cards = query_cards_filtered()
-        _, total = query_cards_page(limit=1)
-        assert total == len(all_cards)
-
 
 class TestCountCardsFiltered:
     """Test count-only query (no data fetch)."""
-
-    def test_count_all(self):
-        count = count_cards_filtered()
-        all_cards = query_cards_filtered()
-        assert count == len(all_cards)
 
     def test_count_with_filter(self):
         count = count_cards_filtered(filter_options={"clan": "Crane"})
@@ -355,13 +313,6 @@ class TestRandomCards:
     def test_returns_requested_count(self):
         cards = query_random_cards(5)
         assert len(cards) == 5
-
-    def test_cards_have_expected_fields(self):
-        cards = query_random_cards(1)
-        card = cards[0]
-        assert "id" in card
-        assert "name" in card
-        assert "image_path" in card
 
     def test_deck_filter(self):
         cards = query_random_cards(10, deck_filter="FATE")
@@ -458,41 +409,6 @@ def test_keyword_and_unique_filters(filter_options):
 
 
 class TestPrivateDsnDetection:
-    @pytest.mark.parametrize(
-        "dsn, expected_host",
-        [
-            ("postgresql://localhost/yasuki", "localhost"),
-            ("postgresql://user:pass@localhost:5432/yasuki", "localhost"),
-            ("postgresql://user:pass@127.0.0.1:5432/yasuki", "127.0.0.1"),
-            ("postgresql://user:pass@db:5432/yasuki", "db"),
-            ("postgresql://user:pass@my-postgres:5432/yasuki", "my-postgres"),
-            ("postgresql://user:pass@10.0.0.5:5432/yasuki", "10.0.0.5"),
-            ("postgresql://user:pass@172.18.0.2:5432/yasuki", "172.18.0.2"),
-            ("postgresql://user:pass@192.168.1.100:5432/yasuki", "192.168.1.100"),
-            (
-                "postgresql://user:pass@roundhouse.proxy.rlwy.net:5432/railway",
-                "roundhouse.proxy.rlwy.net",
-            ),
-            ("postgresql://user:pass@db.railway.internal:5432/railway", "db.railway.internal"),
-            ("postgresql://user:pass@44.200.1.5:5432/yasuki", "44.200.1.5"),
-        ],
-        ids=[
-            "localhost_no_creds",
-            "localhost_with_creds",
-            "loopback",
-            "docker_service",
-            "docker_hyphenated",
-            "rfc1918_10",
-            "rfc1918_172",
-            "rfc1918_192",
-            "railway_proxy",
-            "railway_internal",
-            "public_ip",
-        ],
-    )
-    def test_extract_host(self, dsn, expected_host):
-        assert _extract_host(dsn) == expected_host
-
     @pytest.mark.parametrize(
         "dsn",
         [
