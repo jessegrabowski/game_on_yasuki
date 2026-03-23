@@ -4,9 +4,8 @@ import unicodedata
 from pathlib import Path
 from typing import NamedTuple
 
-import psycopg2
-import psycopg2.extras
-from psycopg2.extras import execute_values
+import psycopg
+import psycopg.rows
 import yaml
 
 from yasuki_core.install.utils import (
@@ -310,8 +309,7 @@ def _batch_upsert_cards(cur, card_rows: list[tuple]):
     for row in card_rows:
         seen[row[0]] = row
     card_rows = list(seen.values())
-    execute_values(
-        cur,
+    cur.executemany(
         """
         INSERT INTO cards (
           id, name, name_normalized, extended_title,
@@ -320,7 +318,14 @@ def _batch_upsert_cards(cur, card_rows: list[tuple]):
           honor_requirement, personal_honor, gold_production,
           province_strength, starting_honor,
           is_unique, is_proxy, errata_text, notes
-        ) VALUES %s
+        ) VALUES (
+          %s, %s, %s, %s,
+          %s, %s, %s, %s,
+          %s, %s, %s, %s,
+          %s, %s, %s,
+          %s, %s,
+          %s, %s, %s, %s
+        )
         ON CONFLICT (id) DO UPDATE SET
           name = EXCLUDED.name,
           name_normalized = EXCLUDED.name_normalized,
@@ -344,52 +349,43 @@ def _batch_upsert_cards(cur, card_rows: list[tuple]):
           notes = EXCLUDED.notes
         """,
         card_rows,
-        page_size=_BATCH_PAGE_SIZE,
     )
 
 
 def _batch_upsert_keywords(cur, keywords: set[str], card_keywords: list[tuple[str, str]]):
     if keywords:
-        execute_values(
-            cur,
-            "INSERT INTO keywords (keyword) VALUES %s ON CONFLICT (keyword) DO NOTHING",
+        cur.executemany(
+            "INSERT INTO keywords (keyword) VALUES (%s) ON CONFLICT (keyword) DO NOTHING",
             [(kw,) for kw in keywords],
-            page_size=_BATCH_PAGE_SIZE,
         )
     if card_keywords:
-        execute_values(
-            cur,
+        cur.executemany(
             """
-            INSERT INTO card_keywords (card_id, keyword) VALUES %s
+            INSERT INTO card_keywords (card_id, keyword) VALUES (%s, %s)
             ON CONFLICT (card_id, keyword) DO NOTHING
             """,
             card_keywords,
-            page_size=_BATCH_PAGE_SIZE,
         )
 
 
 def _batch_upsert_legalities(cur, formats: set[str], legalities: list[tuple[str, str, str]]):
     if formats:
-        execute_values(
-            cur,
-            "INSERT INTO formats (name) VALUES %s ON CONFLICT (name) DO NOTHING",
+        cur.executemany(
+            "INSERT INTO formats (name) VALUES (%s) ON CONFLICT (name) DO NOTHING",
             [(f,) for f in formats],
-            page_size=_BATCH_PAGE_SIZE,
         )
     if legalities:
         seen: dict[tuple, tuple] = {}
         for row in legalities:
             seen[(row[0], row[1])] = row
         legalities = list(seen.values())
-        execute_values(
-            cur,
+        cur.executemany(
             """
-            INSERT INTO card_legalities (card_id, format_name, status) VALUES %s
+            INSERT INTO card_legalities (card_id, format_name, status) VALUES (%s, %s, %s)
             ON CONFLICT (card_id, format_name) DO UPDATE SET
               status = EXCLUDED.status
             """,
             legalities,
-            page_size=_BATCH_PAGE_SIZE,
         )
 
 
@@ -406,14 +402,13 @@ def _batch_upsert_prints(
         seen[(row[0], row[1], row[8])] = row
     print_rows = list(seen.values())
 
-    results = execute_values(
-        cur,
+    cur.executemany(
         """
         INSERT INTO prints (
           card_id, set_name, set_code, rarity, flavor_text,
           artist, primary_subset, primary_number_int, collector_number_raw,
           notes, image_path
-        ) VALUES %s
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (card_id, set_name, collector_number_raw) DO UPDATE SET
           rarity = EXCLUDED.rarity,
           flavor_text = EXCLUDED.flavor_text,
@@ -425,9 +420,9 @@ def _batch_upsert_prints(
         RETURNING print_id, card_id, set_name, collector_number_raw
         """,
         print_rows,
-        fetch=True,
-        page_size=_BATCH_PAGE_SIZE,
+        returning=True,
     )
+    results = cur.fetchall()
 
     print_number_rows: list[tuple] = []
     print_ids_to_clear: list[int] = []
@@ -444,14 +439,12 @@ def _batch_upsert_prints(
             (print_ids_to_clear,),
         )
     if print_number_rows:
-        execute_values(
-            cur,
+        cur.executemany(
             """
             INSERT INTO print_numbers (print_id, subset, number_int, position)
-            VALUES %s
+            VALUES (%s, %s, %s, %s)
             """,
             print_number_rows,
-            page_size=_BATCH_PAGE_SIZE,
         )
 
 
@@ -460,7 +453,7 @@ def load_cards(cards_dir: Path, dsn: str):
     Load card data from a directory of per-set YAML files.
 
     Parses all YAML files into memory first, then batch-inserts into PostgreSQL
-    using execute_values for dramatically faster imports over network connections.
+    using executemany for efficient imports over network connections.
 
     Parameters
     ----------
@@ -473,14 +466,14 @@ def load_cards(cards_dir: Path, dsn: str):
     if not yaml_files:
         raise ValueError(f"No YAML files found in {cards_dir}")
 
-    with psycopg2.connect(dsn) as conn:
+    with psycopg.connect(dsn) as conn:
         with conn.cursor() as cur:
             set_code_map: dict[str, str | None] = {}
             try:
                 cur.execute("SELECT set_name, code FROM l5r_sets")
-                for set_name, code in cur.fetchall():
-                    set_code_map[set_name] = code
-            except psycopg2.errors.UndefinedTable:
+                for row in cur.fetchall():
+                    set_code_map[row[0]] = row[1]
+            except psycopg.errors.UndefinedTable:
                 conn.rollback()
                 set_code_map = {}
 

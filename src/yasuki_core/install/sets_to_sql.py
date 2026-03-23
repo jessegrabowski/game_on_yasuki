@@ -3,7 +3,7 @@ import re
 import sys
 from pathlib import Path
 
-import psycopg2
+import psycopg
 import yaml
 
 from yasuki_core.install.utils import normalize_empty
@@ -82,11 +82,16 @@ def load_l5r_sets(yaml_path: Path, dsn: str):
     if not arcs:
         raise ValueError("Expected 'arcs' key in set info YAML")
 
-    with psycopg2.connect(dsn) as conn:
+    with psycopg.connect(dsn) as conn:
         with conn.cursor() as cur:
             cur.execute("SELECT code FROM l5r_sets WHERE code IS NOT NULL")
             rows = cur.fetchall()
             existing_codes: set[str] = {r[0] for r in rows if r[0]}
+
+            cur.execute("SELECT arc, set_name, code FROM l5r_sets")
+            existing_set_codes: dict[tuple[str, str], str] = {
+                (r[0], r[1]): r[2] for r in cur.fetchall() if r[2]
+            }
 
             i = 0
             for arc_group in arcs:
@@ -109,6 +114,8 @@ def load_l5r_sets(yaml_path: Path, dsn: str):
                     if raw_code:
                         code = raw_code
                         existing_codes.add(code)
+                    elif (arc, set_name) in existing_set_codes:
+                        code = existing_set_codes[(arc, set_name)]
                     else:
                         code = generate_set_code(set_name, existing_codes)
                         existing_codes.add(code)

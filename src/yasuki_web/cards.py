@@ -1,11 +1,11 @@
 from fastapi import APIRouter, HTTPException, Path, Query, Request
 from typing import Annotated
+from asyncio import to_thread
 import logging
 
 from yasuki_core.database import (
-    query_all_cards,
-    search_cards,
-    query_cards_filtered,
+    query_cards_page,
+    query_random_cards,
     get_card_by_id,
     get_prints_by_card_id,
     get_cards_by_names,
@@ -74,16 +74,16 @@ async def list_cards(
         if format:
             filter_options["legality"] = (format, ["legal"])
 
-        results = query_cards_filtered(
+        results, total = await to_thread(
+            query_cards_page,
             text_query=text_query,
             filter_options=filter_options if filter_options else None,
+            limit=limit,
+            offset=offset,
         )
 
-        total = len(results)
-        paginated_results = results[offset : offset + limit]
-
         return {
-            "cards": paginated_results,
+            "cards": results,
             "total": total,
             "limit": limit,
             "offset": offset,
@@ -110,7 +110,7 @@ async def lookup_cards_by_name(
     if len(name) > 200:
         raise HTTPException(status_code=400, detail="Too many names (max 200)")
     try:
-        cards = get_cards_by_names(name)
+        cards = await to_thread(get_cards_by_names, name)
         by_name: dict[str, dict] = {}
         for card in cards:
             key = (card.get("extended_title") or card["name"]).lower()
@@ -135,11 +135,11 @@ async def get_card(
     Includes all print variations with their set codes and image paths.
     """
     try:
-        card = get_card_by_id(card_id)
+        card = await to_thread(get_card_by_id, card_id)
         if not card:
             raise HTTPException(status_code=404, detail=f"Card '{card_id}' not found")
 
-        prints = get_prints_by_card_id(card_id)
+        prints = await to_thread(get_prints_by_card_id, card_id)
 
         return {
             "card": card,
@@ -162,7 +162,7 @@ async def list_sets():
     Returns set names that can be used for filtering cards by expansion.
     """
     try:
-        sets = query_all_sets()
+        sets = await to_thread(query_all_sets)
         return {
             "sets": sets,
             "count": len(sets),
@@ -198,7 +198,7 @@ async def list_formats():
     cross-arc formats like Modern and Legacy.
     """
     try:
-        all_formats = set(query_all_formats())
+        all_formats = set(await to_thread(query_all_formats))
         arcs = [f for f in ARC_ORDER if f in all_formats]
         other = [f for f in OTHER_ORDER if f in all_formats]
         return {
@@ -220,7 +220,7 @@ async def list_deck_types():
     In L5R, each player has two decks with different card types.
     """
     try:
-        deck_types = query_all_decks()
+        deck_types = await to_thread(query_all_decks)
         return {
             "deck_types": deck_types,
             "count": len(deck_types),
@@ -234,7 +234,7 @@ async def list_deck_types():
 async def list_clans():
     """List all clans available in the card database."""
     try:
-        clans = query_all_clans()
+        clans = await to_thread(query_all_clans)
         return {"clans": clans, "count": len(clans)}
     except Exception as e:
         logger.error(f"Error listing clans: {e}")
@@ -245,7 +245,7 @@ async def list_clans():
 async def list_card_types():
     """List all card types (Personality, Holding, Event, etc.)."""
     try:
-        types = query_all_types()
+        types = await to_thread(query_all_types)
         return {"card_types": types, "count": len(types)}
     except Exception as e:
         logger.error(f"Error listing card types: {e}")
@@ -260,7 +260,7 @@ async def list_card_types_by_deck(
 ):
     """List card types available for a specific deck type."""
     try:
-        types = query_types_by_deck([deck.upper()])
+        types = await to_thread(query_types_by_deck, [deck.upper()])
         return {"card_types": types, "deck": deck.upper(), "count": len(types)}
     except Exception as e:
         logger.error(f"Error listing card types by deck: {e}")
@@ -277,19 +277,8 @@ async def random_cards(
 
     Useful for testing, demo purposes, or generating sample hands.
     """
-    import random
-
     try:
-        if deck:
-            all_cards = search_cards(deck_filter=deck)
-        else:
-            all_cards = query_all_cards()
-
-        if not all_cards:
-            return {"cards": [], "count": 0}
-
-        selected_count = min(count, len(all_cards))
-        selected = random.sample(all_cards, selected_count)
+        selected = await to_thread(query_random_cards, count, deck)
 
         return {
             "cards": selected,

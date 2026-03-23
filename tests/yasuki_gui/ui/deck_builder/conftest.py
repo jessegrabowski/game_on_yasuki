@@ -68,7 +68,7 @@ def mock_filter_dialog_db():
         patch(f"{_PATCH_TARGET}.query_all_types", return_value=MOCK_TYPES),
         patch(f"{_PATCH_TARGET}.query_all_rarities", return_value=MOCK_RARITIES),
         patch(f"{_PATCH_TARGET}.query_types_by_deck", return_value=MOCK_TYPES),
-        patch(f"{_PATCH_TARGET}.query_cards_filtered", return_value=[]),
+        patch(f"{_PATCH_TARGET}.count_cards_filtered", return_value=0),
         patch(f"{_PATCH_TARGET}.query_stat_ranges", return_value=MOCK_STAT_RANGES),
         patch(
             f"{_PATCH_TARGET}.query_all_stat_type_mappings", return_value=MOCK_STAT_TYPE_MAPPINGS

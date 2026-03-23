@@ -1,14 +1,14 @@
 import argparse
-import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
 from collections.abc import Iterable
 import shutil
 
-import psycopg2
+import psycopg
 
 from yasuki_core import DATABASE_DIR
+from yasuki_core.database import get_connection_string, mask_dsn
 from yasuki_core.install import sets_to_sql, yaml_to_sql
 import logging
 
@@ -20,9 +20,7 @@ logger = logging.getLogger(__name__)
 DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
 DEFAULT_SETS_PATH = DATABASE_DIR / "set_info.yaml"
 DEFAULT_SCHEMA_PATH = DATABASE_DIR / "schema.sql"
-DEFAULT_DSN = os.environ.get(
-    "YASUKI_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/yasuki")
-)
+DEFAULT_DSN = get_connection_string()
 
 
 @dataclass
@@ -50,8 +48,7 @@ class Installer:
         self._ensure_database_exists()
 
         logger.info("Connecting to database")
-        with psycopg2.connect(self.cfg.dsn) as conn:
-            conn.autocommit = False
+        with psycopg.connect(self.cfg.dsn, autocommit=False) as conn:
             with conn.cursor() as cur:
                 if self._schema_exists(cur):
                     if self.cfg.force:
@@ -110,11 +107,11 @@ class Installer:
     def _ensure_database_exists(self) -> None:
         """Check if the database exists and offer to create it if it doesn't."""
         try:
-            with psycopg2.connect(self.cfg.dsn) as conn:
+            with psycopg.connect(self.cfg.dsn, connect_timeout=10) as conn:
                 with conn.cursor() as cur:
                     cur.execute("SELECT version();")
                     logger.info("Connected to database successfully")
-        except psycopg2.OperationalError as e:
+        except psycopg.OperationalError as e:
             error_msg = str(e).lower()
 
             if "database" in error_msg and "does not exist" in error_msg:
@@ -129,12 +126,12 @@ class Installer:
                     "Could not connect to PostgreSQL server. Is it running?\n"
                     "  - macOS: brew services start postgresql\n"
                     "  - Linux: sudo systemctl start postgresql\n"
-                    "  - Check connection string: " + self.cfg.dsn
+                    "  - Check connection string: " + mask_dsn(self.cfg.dsn)
                 )
             elif "authentication failed" in error_msg or "password" in error_msg:
                 raise InstallerError(
                     f"Authentication failed. Check your credentials in the DSN:\n"
-                    f"  Current DSN: {self.cfg.dsn}\n"
+                    f"  Current DSN: {mask_dsn(self.cfg.dsn)}\n"
                     f"  Format: postgresql://[user[:password]@][host][:port]/database"
                 )
             else:
@@ -223,7 +220,7 @@ def main(argv: Iterable[str] | None = None) -> int:
     except FileNotFoundError as exc:
         logger.error(f"Missing file: {exc}")
         return 1
-    except psycopg2.OperationalError as exc:
+    except psycopg.OperationalError as exc:
         logger.error(f"Database connection failed: {exc}")
         return 2
     return 0

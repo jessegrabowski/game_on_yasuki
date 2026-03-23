@@ -141,6 +141,10 @@ CREATE TABLE l5r_sets (
   UNIQUE (arc, set_name)
 );
 
+-- Fast lateral-join lookups (card → first print)
+CREATE INDEX idx_prints_card_id_print_id
+  ON prints (card_id, print_id);
+
 -- Fuzzy name search
 CREATE INDEX idx_cards_name_trgm
   ON cards USING gin (name gin_trgm_ops);

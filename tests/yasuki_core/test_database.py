@@ -1,13 +1,17 @@
-import psycopg2
+import psycopg
 import pytest
 
 from yasuki_core.database import (
-    query_all_cards,
+    _is_private_dsn,
+    mask_dsn,
     search_cards,
     get_card_by_id,
     query_all_prints,
     get_prints_by_card_id,
     query_cards_filtered,
+    query_cards_page,
+    count_cards_filtered,
+    query_random_cards,
     query_stat_ranges,
     query_types_with_stat,
     get_connection_string,
@@ -16,10 +20,10 @@ from yasuki_core.database import (
 
 def _db_available():
     try:
-        conn = psycopg2.connect(get_connection_string())
+        conn = psycopg.connect(get_connection_string())
         conn.close()
         return True
-    except psycopg2.OperationalError:
+    except psycopg.OperationalError:
         return False
 
 
@@ -29,16 +33,16 @@ pytestmark = pytest.mark.skipif(not _db_available(), reason="PostgreSQL not avai
 @pytest.fixture
 def kuni_yori_cards():
     """Fixture providing all Kuni Yori card versions."""
-    cards = query_all_cards()
+    cards = search_cards(query="Kuni Yori")
     return [c for c in cards if c["name"] == "Kuni Yori"]
 
 
 def test_query_all_cards_returns_list():
-    """Test that query_all_cards returns a list of card dictionaries."""
-    cards = query_all_cards()
+    """Test that card queries return card dictionaries with expected fields."""
+    cards, total = query_cards_page(limit=5)
 
-    assert isinstance(cards, list)
-    assert len(cards) > 0
+    assert total > 0
+    assert len(cards) == 5
 
     first_card = cards[0]
     assert "id" in first_card
@@ -62,9 +66,11 @@ def test_search_cards_with_query():
 
 def test_search_cards_with_deck_filter():
     """Test filtering cards by deck type."""
-    fate_cards = search_cards(deck_filter="FATE")
-    dynasty_cards = search_cards(deck_filter="DYNASTY")
+    fate_cards = search_cards(query="Crane", deck_filter="FATE")
+    dynasty_cards = search_cards(query="Crane", deck_filter="DYNASTY")
 
+    assert len(fate_cards) > 0
+    assert len(dynasty_cards) > 0
     assert all(card["side"] == "FATE" for card in fate_cards)
     assert all(card["side"] == "DYNASTY" for card in dynasty_cards)
 
@@ -81,10 +87,10 @@ def test_search_cards_combined_filters():
 
 def test_get_card_by_id():
     """Test fetching a single card by ID."""
-    all_cards = query_all_cards()
-    assert len(all_cards) > 0
+    cards, total = query_cards_page(limit=1)
+    assert total > 0
 
-    test_id = all_cards[0]["id"]
+    test_id = cards[0]["id"]
     card = get_card_by_id(test_id)
 
     assert card is not None
@@ -145,8 +151,10 @@ class TestSQLFiltering:
 
     def test_query_all_cards_no_filters(self):
         """Should return all cards when no filters applied."""
-        cards = query_cards_filtered()
-        assert len(cards) > 0
+        count = count_cards_filtered()
+        assert count > 0
+        cards, total = query_cards_page(limit=5)
+        assert total == count
         assert all("id" in c and "name" in c for c in cards)
 
     def test_text_search(self):
@@ -220,15 +228,103 @@ class TestSQLFiltering:
 
     def test_none_filter_value_ignored(self):
         """Should ignore filters with None values."""
-        all_cards = query_cards_filtered()
-        filtered_cards = query_cards_filtered(filter_options={"clan": None})
-        assert len(all_cards) == len(filtered_cards)
+        all_count = count_cards_filtered()
+        filtered_count = count_cards_filtered(filter_options={"clan": None})
+        assert all_count == filtered_count
 
     def test_results_include_image_path(self):
         """Should include image_path from first print."""
-        cards = query_cards_filtered()
-        for card in cards[:5]:
+        cards, _ = query_cards_page(limit=5)
+        for card in cards:
             assert "image_path" in card
+
+
+class TestLikeEscaping:
+    """Verify that LIKE/ILIKE wildcard characters are escaped in user input."""
+
+    def test_percent_search_does_not_match_all(self):
+        all_count = count_cards_filtered()
+        pct_count = count_cards_filtered(text_query="%")
+        assert pct_count < all_count
+
+    def test_underscore_search_does_not_match_single_chars(self):
+        all_count = count_cards_filtered()
+        under_count = count_cards_filtered(text_query="___")
+        assert under_count < all_count
+
+    def test_search_cards_percent(self):
+        all_count = count_cards_filtered()
+        pct_results = search_cards(query="%")
+        assert len(pct_results) < all_count
+
+
+class TestPagination:
+    """Test SQL-level pagination via query_cards_page."""
+
+    def test_custom_limit(self):
+        cards, total = query_cards_page(limit=10)
+        assert len(cards) == 10
+        assert total > 10
+
+    def test_offset_pages_do_not_overlap(self):
+        page1, total1 = query_cards_page(limit=5, offset=0)
+        page2, total2 = query_cards_page(limit=5, offset=5)
+        assert total1 == total2
+        ids1 = {c["id"] for c in page1}
+        ids2 = {c["id"] for c in page2}
+        assert ids1.isdisjoint(ids2)
+
+    def test_offset_beyond_total_returns_empty(self):
+        cards, total = query_cards_page(limit=10, offset=999999)
+        assert cards == []
+        assert total > 0
+
+    def test_filters_reduce_total(self):
+        _, all_total = query_cards_page(limit=1)
+        _, crane_total = query_cards_page(
+            filter_options={"clan": "Crane"},
+            limit=1,
+        )
+        assert 0 < crane_total < all_total
+
+    def test_text_query_with_pagination(self):
+        cards, total = query_cards_page(text_query="Doji", limit=5)
+        assert total > 0
+        assert len(cards) == 5
+
+    def test_no_matches_returns_zero(self):
+        cards, total = query_cards_page(text_query="XYZ_IMPOSSIBLE_9999", limit=10)
+        assert cards == []
+        assert total == 0
+
+
+class TestCountCardsFiltered:
+    """Test count-only query (no data fetch)."""
+
+    def test_count_with_filter(self):
+        count = count_cards_filtered(filter_options={"clan": "Crane"})
+        cards = query_cards_filtered(filter_options={"clan": "Crane"})
+        assert count == len(cards)
+
+    def test_count_no_match(self):
+        assert count_cards_filtered(text_query="XYZ_IMPOSSIBLE_9999") == 0
+
+
+class TestRandomCards:
+    """Test SQL-level random card sampling."""
+
+    def test_returns_requested_count(self):
+        cards = query_random_cards(5)
+        assert len(cards) == 5
+
+    def test_deck_filter(self):
+        cards = query_random_cards(10, deck_filter="FATE")
+        assert all(c["side"] == "FATE" for c in cards)
+
+    def test_returns_different_results(self):
+        ids1 = {c["id"] for c in query_random_cards(20)}
+        ids2 = {c["id"] for c in query_random_cards(20)}
+        assert ids1 != ids2
 
 
 def test_query_stat_ranges():
@@ -313,3 +409,60 @@ def test_keyword_and_unique_filters(filter_options):
     if filter_options.get("is_unique"):
         for card in results:
             assert card.get("is_unique") is True
+
+
+class TestPrivateDsnDetection:
+    @pytest.mark.parametrize(
+        "dsn",
+        [
+            "postgresql://localhost/yasuki",
+            "postgresql://user:pass@localhost:5432/yasuki",
+            "postgresql://user:pass@127.0.0.1:5432/yasuki",
+            "postgresql://user:pass@db:5432/yasuki",
+            "postgresql://user:pass@my-postgres:5432/yasuki",
+            "postgresql://user:pass@10.0.0.5:5432/yasuki",
+            "postgresql://user:pass@172.18.0.2:5432/yasuki",
+            "postgresql://user:pass@192.168.1.100:5432/yasuki",
+        ],
+        ids=[
+            "localhost",
+            "localhost_with_port",
+            "loopback",
+            "docker_service_name",
+            "docker_hyphenated",
+            "rfc1918_10",
+            "rfc1918_172",
+            "rfc1918_192",
+        ],
+    )
+    def test_private_hosts_detected(self, dsn):
+        assert _is_private_dsn(dsn) is True
+
+    @pytest.mark.parametrize(
+        "dsn",
+        [
+            "postgresql://user:pass@roundhouse.proxy.rlwy.net:5432/railway",
+            "postgresql://user:pass@db.railway.internal:5432/railway",
+            "postgresql://user:pass@44.200.1.5:5432/yasuki",
+        ],
+        ids=["railway_proxy", "railway_internal", "public_ip"],
+    )
+    def test_public_hosts_not_private(self, dsn):
+        assert _is_private_dsn(dsn) is False
+
+    @pytest.mark.parametrize(
+        "dsn, expected",
+        [
+            (
+                "postgresql://user:s3cret@host:5432/db",
+                "postgresql://user:****@host:5432/db",
+            ),
+            (
+                "postgresql://localhost/yasuki",
+                "postgresql://localhost/yasuki",
+            ),
+        ],
+        ids=["with_password", "no_password"],
+    )
+    def test_mask_dsn(self, dsn, expected):
+        assert mask_dsn(dsn) == expected

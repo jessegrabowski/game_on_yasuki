@@ -1,6 +1,6 @@
 from pathlib import Path
 
-import psycopg2
+import psycopg
 
 from yasuki_core.install import install_db
 
@@ -57,7 +57,7 @@ class DummyImporter:
 def test_schema_exists_without_force_skips_schema_creation(monkeypatch):
     cur = DummyCursor(tables_exist=True)
     conn = DummyConnection(cur)
-    monkeypatch.setattr(psycopg2, "connect", lambda dsn: conn)
+    monkeypatch.setattr(psycopg, "connect", lambda dsn, **kw: conn)
 
     cfg = install_db.InstallerConfig(
         dsn="fake",
@@ -90,7 +90,7 @@ def test_schema_exists_without_force_skips_schema_creation(monkeypatch):
 def test_force_drop_calls_reset(monkeypatch):
     cur = DummyCursor(tables_exist=True)
     conn = DummyConnection(cur)
-    monkeypatch.setattr(psycopg2, "connect", lambda dsn: conn)
+    monkeypatch.setattr(psycopg, "connect", lambda dsn, **kw: conn)
 
     called_reset = False
 

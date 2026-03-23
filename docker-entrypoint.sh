@@ -31,17 +31,18 @@ echo "Database URL: $MASKED_URL"
 echo "Starting database initialization in background..."
 pixi run -e prod python -u -c "
 import time, sys, os
-import psycopg2
+import psycopg
+from yasuki_core.database import get_connection_string
 
-db_url = os.environ['YASUKI_DATABASE_URL']
+db_url = get_connection_string()
 
 for attempt in range(1, 16):
     try:
-        conn = psycopg2.connect(db_url)
+        conn = psycopg.connect(db_url)
         conn.close()
         print(f'[db-init] Database reachable (attempt {attempt})')
         break
-    except psycopg2.OperationalError as e:
+    except psycopg.OperationalError as e:
         print(f'[db-init] Waiting for database... ({attempt}/15)')
         if attempt == 15:
             print(f'[db-init] Last error: {e}', file=sys.stderr)

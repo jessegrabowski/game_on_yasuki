@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from yasuki_core.install.yaml_to_sql import (
     extract_experience_level,
@@ -183,8 +183,7 @@ class TestBatchDeduplication:
     Cards reprinted across sets produce duplicate card_ids.
     """
 
-    @patch("yasuki_core.install.yaml_to_sql.execute_values")
-    def test_cards_deduplicates_by_id_last_wins(self, mock_ev):
+    def test_cards_deduplicates_by_id_last_wins(self):
         cur = MagicMock()
         row_v1 = (
             "same_id",
@@ -258,15 +257,14 @@ class TestBatchDeduplication:
 
         _batch_upsert_cards(cur, [row_v1, other, row_v2])
 
-        sent_rows = mock_ev.call_args[0][2]
+        sent_rows = cur.executemany.call_args[0][1]
         sent_ids = [r[0] for r in sent_rows]
         assert len(sent_rows) == 2
         assert sent_ids.count("same_id") == 1
         kept = next(r for r in sent_rows if r[0] == "same_id")
         assert kept[1] == "Name V2"
 
-    @patch("yasuki_core.install.yaml_to_sql.execute_values")
-    def test_legalities_deduplicates_by_card_and_format(self, mock_ev):
+    def test_legalities_deduplicates_by_card_and_format(self):
         cur = MagicMock()
         legalities = [
             ("card_a", "Imperial", "legal"),
@@ -275,16 +273,15 @@ class TestBatchDeduplication:
         ]
         _batch_upsert_legalities(cur, {"Imperial", "Jade"}, legalities)
 
-        legality_call = mock_ev.call_args_list[1]
-        sent_rows = legality_call[0][2]
+        legality_call = cur.executemany.call_args_list[1]
+        sent_rows = legality_call[0][1]
         assert len(sent_rows) == 2
         kept = next(r for r in sent_rows if r[0] == "card_a")
         assert kept[2] == "not_legal"
 
-    @patch("yasuki_core.install.yaml_to_sql.execute_values")
-    def test_prints_deduplicates_by_constraint_columns(self, mock_ev):
-        mock_ev.return_value = []
+    def test_prints_deduplicates_by_constraint_columns(self):
         cur = MagicMock()
+        cur.fetchall.return_value = []
         #                  0           1          2      3     4
         #                  card_id     set_name   code   rar   flavor
         #                  5        6              7           8
@@ -296,6 +293,6 @@ class TestBatchDeduplication:
 
         _batch_upsert_prints(cur, [row_v1, row_v2], {})
 
-        sent_rows = mock_ev.call_args[0][2]
+        sent_rows = cur.executemany.call_args[0][1]
         assert len(sent_rows) == 1
         assert sent_rows[0][3] == "R"
