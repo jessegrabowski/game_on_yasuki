@@ -4,7 +4,6 @@ import pytest
 from yasuki_core.database import (
     _is_private_dsn,
     mask_dsn,
-    query_all_cards,
     search_cards,
     get_card_by_id,
     query_all_prints,
@@ -34,16 +33,16 @@ pytestmark = pytest.mark.skipif(not _db_available(), reason="PostgreSQL not avai
 @pytest.fixture
 def kuni_yori_cards():
     """Fixture providing all Kuni Yori card versions."""
-    cards = query_all_cards()
+    cards = search_cards(query="Kuni Yori")
     return [c for c in cards if c["name"] == "Kuni Yori"]
 
 
 def test_query_all_cards_returns_list():
-    """Test that query_all_cards returns a list of card dictionaries."""
-    cards = query_all_cards()
+    """Test that card queries return card dictionaries with expected fields."""
+    cards, total = query_cards_page(limit=5)
 
-    assert isinstance(cards, list)
-    assert len(cards) > 0
+    assert total > 0
+    assert len(cards) == 5
 
     first_card = cards[0]
     assert "id" in first_card
@@ -67,9 +66,11 @@ def test_search_cards_with_query():
 
 def test_search_cards_with_deck_filter():
     """Test filtering cards by deck type."""
-    fate_cards = search_cards(deck_filter="FATE")
-    dynasty_cards = search_cards(deck_filter="DYNASTY")
+    fate_cards = search_cards(query="Crane", deck_filter="FATE")
+    dynasty_cards = search_cards(query="Crane", deck_filter="DYNASTY")
 
+    assert len(fate_cards) > 0
+    assert len(dynasty_cards) > 0
     assert all(card["side"] == "FATE" for card in fate_cards)
     assert all(card["side"] == "DYNASTY" for card in dynasty_cards)
 
@@ -86,10 +87,10 @@ def test_search_cards_combined_filters():
 
 def test_get_card_by_id():
     """Test fetching a single card by ID."""
-    all_cards = query_all_cards()
-    assert len(all_cards) > 0
+    cards, total = query_cards_page(limit=1)
+    assert total > 0
 
-    test_id = all_cards[0]["id"]
+    test_id = cards[0]["id"]
     card = get_card_by_id(test_id)
 
     assert card is not None
@@ -150,8 +151,10 @@ class TestSQLFiltering:
 
     def test_query_all_cards_no_filters(self):
         """Should return all cards when no filters applied."""
-        cards = query_cards_filtered()
-        assert len(cards) > 0
+        count = count_cards_filtered()
+        assert count > 0
+        cards, total = query_cards_page(limit=5)
+        assert total == count
         assert all("id" in c and "name" in c for c in cards)
 
     def test_text_search(self):
@@ -225,14 +228,14 @@ class TestSQLFiltering:
 
     def test_none_filter_value_ignored(self):
         """Should ignore filters with None values."""
-        all_cards = query_cards_filtered()
-        filtered_cards = query_cards_filtered(filter_options={"clan": None})
-        assert len(all_cards) == len(filtered_cards)
+        all_count = count_cards_filtered()
+        filtered_count = count_cards_filtered(filter_options={"clan": None})
+        assert all_count == filtered_count
 
     def test_results_include_image_path(self):
         """Should include image_path from first print."""
-        cards = query_cards_filtered()
-        for card in cards[:5]:
+        cards, _ = query_cards_page(limit=5)
+        for card in cards:
             assert "image_path" in card
 
 
@@ -250,9 +253,9 @@ class TestLikeEscaping:
         assert under_count < all_count
 
     def test_search_cards_percent(self):
-        all_results = search_cards()
+        all_count = count_cards_filtered()
         pct_results = search_cards(query="%")
-        assert len(pct_results) < len(all_results)
+        assert len(pct_results) < all_count
 
 
 class TestPagination:
