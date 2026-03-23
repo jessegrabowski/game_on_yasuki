@@ -11,7 +11,7 @@ from yasuki_core.database import (
     query_all_types,
     query_all_rarities,
     query_types_by_deck,
-    query_cards_filtered,
+    count_cards_filtered,
     query_stat_ranges,
     query_all_stat_type_mappings,
 )
@@ -1456,8 +1456,7 @@ class FilterDialog:
                         pass
 
             # Query database with current filters
-            cards = query_cards_filtered(filter_options=filter_options)
-            count = len(cards)
+            count = count_cards_filtered(filter_options=filter_options)
 
             # Update label
             self.card_count_label.config(text=f"Current filters will return: {count} cards")

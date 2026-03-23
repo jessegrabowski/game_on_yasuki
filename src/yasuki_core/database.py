@@ -920,92 +920,104 @@ def query_sets_by_format(format_name: str, statuses: list[str] | None = None) ->
             return results
 
 
-def query_cards_filtered(
+_CARD_SELECT = """
+    SELECT
+        c.id,
+        c.name,
+        c.extended_title,
+        c.deck::text as side,
+        c.type::text as type,
+        c.clan,
+        c.rules_text as text,
+        c.gold_cost,
+        c.focus,
+        c.force,
+        c.chi,
+        c.honor_requirement,
+        c.personal_honor,
+        c.gold_production,
+        c.province_strength,
+        c.starting_honor,
+        c.is_unique,
+        c.extra,
+        p.image_path
+    FROM cards c
+    LEFT JOIN LATERAL (
+        SELECT image_path
+        FROM prints
+        WHERE prints.card_id = c.id
+        ORDER BY print_id
+        LIMIT 1
+    ) p ON true"""
+
+_ALLOWED_COLUMNS = {
+    "deck",
+    "type",
+    "clan",
+    "is_unique",
+    "name",
+    "force",
+    "chi",
+    "honor_requirement",
+    "gold_cost",
+    "personal_honor",
+    "province_strength",
+    "gold_production",
+    "starting_honor",
+    "focus",
+}
+
+_NUMERIC_STATS = (
+    "force",
+    "chi",
+    "honor_requirement",
+    "gold_cost",
+    "personal_honor",
+    "province_strength",
+    "gold_production",
+    "starting_honor",
+    "focus",
+)
+
+
+def _build_card_filter(
     text_query: str = "",
     filter_options: dict | None = None,
-) -> list[dict]:
+) -> tuple[str, list]:
     """
-    Query cards with dynamic SQL-based filtering.
+    Build a WHERE clause and parameter list from filter criteria.
 
-    Builds SQL query based on filter options for optimal database performance.
-    Supports arbitrary combinations of card properties.
+    All conditions reference only the ``cards`` table (aliased ``c``) and
+    use subqueries for joins, so the clause works with or without the
+    lateral print join.
 
     Parameters
     ----------
     text_query : str
-        Search query for card name or ID (case-insensitive)
+        Free-text search for name, id, or rules text
     filter_options : dict, optional
-        Dictionary of property filters. Keys are property names, values are constraints.
-        Special filters:
-        - "legality": tuple of (format_name, list of statuses)
-        - Other keys map directly to card table columns
+        Property filters (see ``query_cards_filtered`` for format)
 
     Returns
     -------
-    cards : list of dict
-        Card records matching all filter criteria, sorted by name
-
-    Examples
-    --------
-    # Filter by legality
-    query_cards_filtered(filter_options={"legality": ("Ivory Edition", ["legal"])})
-
-    # Filter by clan and type
-    query_cards_filtered(filter_options={"clan": "Crane", "type": "personality"})
-
-    # Combine text search and filters
-    query_cards_filtered("Doji", filter_options={"clan": "Crane"})
+    where_clause : str
+        SQL fragment starting with ``WHERE`` or empty string
+    params : list
+        Positional parameters matching ``%s`` placeholders in the clause
     """
-    conditions = []
-    params = []
+    conditions: list[str] = []
+    params: list = []
 
-    # Base query selecting card data with first print image
-    base_query = """
-        SELECT
-            c.id,
-            c.name,
-            c.extended_title,
-            c.deck::text as side,
-            c.type::text as type,
-            c.clan,
-            c.rules_text as text,
-            c.gold_cost,
-            c.focus,
-            c.force,
-            c.chi,
-            c.honor_requirement,
-            c.personal_honor,
-            c.gold_production,
-            c.province_strength,
-            c.starting_honor,
-            c.is_unique,
-            c.extra,
-            p.image_path
-        FROM cards c
-        LEFT JOIN LATERAL (
-            SELECT image_path
-            FROM prints
-            WHERE prints.card_id = c.id
-            ORDER BY print_id
-            LIMIT 1
-        ) p ON true
-    """
-
-    # Apply text search
     if text_query:
         conditions.append("(c.name ILIKE %s OR c.id ILIKE %s OR c.rules_text ILIKE %s)")
         search_pattern = f"%{text_query}%"
         params.extend([search_pattern, search_pattern, search_pattern])
 
-    # Apply property filters
     if filter_options:
         for property_name, value in filter_options.items():
             if property_name == "legality":
-                # Special handling for legality filter
                 format_name, statuses = value
-
                 if format_name:
-                    # Filter by specific format
                     if statuses:
                         conditions.append(
                             """
@@ -1028,24 +1040,19 @@ def query_cards_filtered(
                             """
                         )
                         params.append(format_name)
-                else:
-                    # No format specified - filter by legality status across ALL formats
-                    # Find cards that have the specified status in at least one format
-                    if statuses:
-                        conditions.append(
-                            """
-                            c.id IN (
-                                SELECT DISTINCT card_id
-                                FROM card_legalities
-                                WHERE status::text = ANY(%s)
-                            )
-                            """
+                elif statuses:
+                    conditions.append(
+                        """
+                        c.id IN (
+                            SELECT DISTINCT card_id
+                            FROM card_legalities
+                            WHERE status::text = ANY(%s)
                         )
-                        params.append(statuses)
-                    # If no statuses and no format, don't add any condition
+                        """
+                    )
+                    params.append(statuses)
 
             elif property_name == "sets":
-                # Special handling for set filter (multi-select)
                 set_list = value
                 if set_list:
                     conditions.append(
@@ -1059,34 +1066,26 @@ def query_cards_filtered(
                     )
                     params.append(set_list)
             elif property_name == "decks":
-                # Special handling for deck filter (multi-select)
                 deck_list = value
                 if deck_list:
                     conditions.append("c.deck::text = ANY(%s)")
                     params.append(deck_list)
             elif property_name == "types":
-                # Special handling for type filter (multi-select, case-insensitive)
                 type_list = value
                 if type_list:
                     conditions.append("LOWER(c.type::text) = ANY(%s)")
                     params.append([t.lower() for t in type_list])
             elif property_name == "clans":
-                # Special handling for clan filter (multi-select)
-                # Clans can be comma-separated in the database, so we need to check if any selected clan appears in the field
                 clan_list = value
                 if clan_list:
-                    # Build OR conditions for each clan (handles comma-separated values)
                     clan_conditions = []
                     for clan in clan_list:
                         clan_conditions.append("c.clan ILIKE %s")
                         params.append(f"%{clan}%")
                     conditions.append(f"({' OR '.join(clan_conditions)})")
             elif property_name == "rarities":
-                # Special handling for rarity filter (multi-select)
-                # Rarities are in the prints table and can be comma-separated
                 rarity_list = value
                 if rarity_list:
-                    # Build OR conditions for each rarity (handles comma-separated values)
                     rarity_conditions = []
                     for rarity in rarity_list:
                         rarity_conditions.append("p2.rarity ILIKE %s")
@@ -1101,12 +1100,8 @@ def query_cards_filtered(
                         """
                     )
             elif property_name == "keywords":
-                # Special handling for keyword filter (multi-select)
-                # Cards must have ALL specified keywords (AND logic)
                 keyword_list = value
                 if keyword_list:
-                    # For each keyword, require it exists
-                    # Using AND logic: card must have all keywords
                     for keyword in keyword_list:
                         conditions.append(
                             """
@@ -1118,19 +1113,7 @@ def query_cards_filtered(
                             """
                         )
                         params.append(keyword)
-            elif property_name in (
-                "force",
-                "chi",
-                "honor_requirement",
-                "gold_cost",
-                "personal_honor",
-                "province_strength",
-                "gold_production",
-                "starting_honor",
-                "focus",
-            ):
-                # Handle range filters for numeric statistics
-                # Value is a tuple: (min_val, max_val) where either can be None
+            elif property_name in _NUMERIC_STATS:
                 if isinstance(value, tuple) and len(value) == 2:
                     min_val, max_val = value
                     if min_val is not None and max_val is not None:
@@ -1143,23 +1126,7 @@ def query_cards_filtered(
                         conditions.append(f"c.{property_name} <= %s")
                         params.append(max_val)
             elif value is not None:
-                _allowed_columns = {
-                    "deck",
-                    "type",
-                    "clan",
-                    "is_unique",
-                    "name",
-                    "force",
-                    "chi",
-                    "honor_requirement",
-                    "gold_cost",
-                    "personal_honor",
-                    "province_strength",
-                    "gold_production",
-                    "starting_honor",
-                    "focus",
-                }
-                if property_name not in _allowed_columns:
+                if property_name not in _ALLOWED_COLUMNS:
                     logger.warning(f"Ignoring unknown filter column: {property_name}")
                     continue
                 if property_name in ("deck", "type"):
@@ -1168,18 +1135,165 @@ def query_cards_filtered(
                     conditions.append(f"c.{property_name} = %s")
                 params.append(value)
 
-    # Build WHERE clause
-    where_clause = ""
-    if conditions:
-        where_clause = "WHERE " + " AND ".join(conditions)
+    where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
+    return where_clause, params
 
-    # Complete query
-    sql = f"{base_query} {where_clause} ORDER BY c.name"
 
-    logger.debug(f"Executing filtered query with {len(conditions)} conditions")
+def query_cards_filtered(
+    text_query: str = "",
+    filter_options: dict | None = None,
+) -> list[dict]:
+    """
+    Query cards with dynamic SQL-based filtering.
+
+    Returns all matching rows. For paginated access, use
+    ``query_cards_page`` instead.
+
+    Parameters
+    ----------
+    text_query : str
+        Search query for card name or ID (case-insensitive)
+    filter_options : dict, optional
+        Dictionary of property filters. Keys are property names, values are
+        constraints.  Special filters:
+        - "legality": tuple of (format_name, list of statuses)
+        - Other keys map directly to card table columns
+
+    Returns
+    -------
+    cards : list of dict
+        Card records matching all filter criteria, sorted by name
+    """
+    where_clause, params = _build_card_filter(text_query, filter_options)
+    sql = f"{_CARD_SELECT} {where_clause} ORDER BY c.name"
+
+    logger.debug(f"Executing filtered query with {len(params)} params")
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(sql, params)
             results = cur.fetchall()
             logger.debug(f"Retrieved {len(results)} cards from filtered query")
             return results
+
+
+def query_cards_page(
+    text_query: str = "",
+    filter_options: dict | None = None,
+    *,
+    limit: int = 100,
+    offset: int = 0,
+) -> tuple[list[dict], int]:
+    """
+    Query a single page of cards with SQL-level pagination.
+
+    Runs a ``COUNT(*)`` query (without the lateral join) and a paginated
+    data query in the same connection for consistency and efficiency.
+
+    Parameters
+    ----------
+    text_query : str
+        Search query for card name or ID (case-insensitive)
+    filter_options : dict, optional
+        Property filters (same format as ``query_cards_filtered``)
+    limit : int
+        Maximum rows to return (default 100)
+    offset : int
+        Number of rows to skip (default 0)
+
+    Returns
+    -------
+    cards : list of dict
+        One page of card records, sorted by name
+    total : int
+        Total number of cards matching the filters (for pagination metadata)
+    """
+    where_clause, params = _build_card_filter(text_query, filter_options)
+
+    count_sql = f"SELECT COUNT(*) AS n FROM cards c {where_clause}"
+    data_sql = f"{_CARD_SELECT} {where_clause} ORDER BY c.name LIMIT %s OFFSET %s"
+    data_params = params + [limit, offset]
+
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(count_sql, params)
+            total = cur.fetchone()["n"]
+
+            cur.execute(data_sql, data_params)
+            cards = cur.fetchall()
+
+    logger.debug(
+        "Page query: %d cards returned, %d total (limit=%d, offset=%d)",
+        len(cards),
+        total,
+        limit,
+        offset,
+    )
+    return cards, total
+
+
+def count_cards_filtered(
+    text_query: str = "",
+    filter_options: dict | None = None,
+) -> int:
+    """
+    Count cards matching filters without fetching row data.
+
+    Skips the lateral print join, making it significantly cheaper than
+    ``query_cards_filtered`` when only the count is needed.
+
+    Parameters
+    ----------
+    text_query : str
+        Search query for card name or ID (case-insensitive)
+    filter_options : dict, optional
+        Property filters (same format as ``query_cards_filtered``)
+
+    Returns
+    -------
+    count : int
+        Number of matching cards
+    """
+    where_clause, params = _build_card_filter(text_query, filter_options)
+    sql = f"SELECT COUNT(*) AS n FROM cards c {where_clause}"
+
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql, params)
+            return cur.fetchone()["n"]
+
+
+def query_random_cards(
+    count: int,
+    deck_filter: str | None = None,
+) -> list[dict]:
+    """
+    Fetch random cards using SQL-level sampling.
+
+    Parameters
+    ----------
+    count : int
+        Number of random cards to return
+    deck_filter : str, optional
+        Limit to a specific deck type (e.g. 'FATE', 'DYNASTY')
+
+    Returns
+    -------
+    cards : list of dict
+        Randomly selected card records
+    """
+    conditions: list[str] = []
+    params: list = []
+
+    if deck_filter:
+        conditions.append("c.deck::text = %s")
+        params.append(deck_filter.upper())
+
+    where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
+
+    sql = f"{_CARD_SELECT} {where_clause} ORDER BY RANDOM() LIMIT %s"
+    params.append(count)
+
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql, params)
+            return cur.fetchall()

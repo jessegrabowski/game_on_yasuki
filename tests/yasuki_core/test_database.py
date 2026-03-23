@@ -11,6 +11,9 @@ from yasuki_core.database import (
     query_all_prints,
     get_prints_by_card_id,
     query_cards_filtered,
+    query_cards_page,
+    count_cards_filtered,
+    query_random_cards,
     query_stat_ranges,
     query_types_with_stat,
     get_connection_string,
@@ -232,6 +235,108 @@ class TestSQLFiltering:
         cards = query_cards_filtered()
         for card in cards[:5]:
             assert "image_path" in card
+
+
+class TestPagination:
+    """Test SQL-level pagination via query_cards_page."""
+
+    def test_returns_tuple(self):
+        cards, total = query_cards_page()
+        assert isinstance(cards, list)
+        assert isinstance(total, int)
+        assert total > 0
+
+    def test_default_limit(self):
+        cards, total = query_cards_page()
+        assert len(cards) <= 100
+        assert total >= len(cards)
+
+    def test_custom_limit(self):
+        cards, total = query_cards_page(limit=10)
+        assert len(cards) == 10
+        assert total > 10
+
+    def test_offset_pages_do_not_overlap(self):
+        page1, total1 = query_cards_page(limit=5, offset=0)
+        page2, total2 = query_cards_page(limit=5, offset=5)
+        assert total1 == total2
+        ids1 = {c["id"] for c in page1}
+        ids2 = {c["id"] for c in page2}
+        assert ids1.isdisjoint(ids2)
+
+    def test_offset_beyond_total_returns_empty(self):
+        cards, total = query_cards_page(limit=10, offset=999999)
+        assert cards == []
+        assert total > 0
+
+    def test_filters_reduce_total(self):
+        _, all_total = query_cards_page(limit=1)
+        _, crane_total = query_cards_page(
+            filter_options={"clan": "Crane"},
+            limit=1,
+        )
+        assert 0 < crane_total < all_total
+
+    def test_text_query_with_pagination(self):
+        cards, total = query_cards_page(text_query="Doji", limit=5)
+        assert total > 0
+        assert len(cards) <= 5
+        for card in cards:
+            combined = (
+                card["name"] + " " + card.get("id", "") + " " + (card.get("text") or "")
+            ).lower()
+            assert "doji" in combined
+
+    def test_no_matches_returns_zero(self):
+        cards, total = query_cards_page(text_query="XYZ_IMPOSSIBLE_9999", limit=10)
+        assert cards == []
+        assert total == 0
+
+    def test_consistent_with_unfiltered(self):
+        all_cards = query_cards_filtered()
+        _, total = query_cards_page(limit=1)
+        assert total == len(all_cards)
+
+
+class TestCountCardsFiltered:
+    """Test count-only query (no data fetch)."""
+
+    def test_count_all(self):
+        count = count_cards_filtered()
+        all_cards = query_cards_filtered()
+        assert count == len(all_cards)
+
+    def test_count_with_filter(self):
+        count = count_cards_filtered(filter_options={"clan": "Crane"})
+        cards = query_cards_filtered(filter_options={"clan": "Crane"})
+        assert count == len(cards)
+
+    def test_count_no_match(self):
+        assert count_cards_filtered(text_query="XYZ_IMPOSSIBLE_9999") == 0
+
+
+class TestRandomCards:
+    """Test SQL-level random card sampling."""
+
+    def test_returns_requested_count(self):
+        cards = query_random_cards(5)
+        assert len(cards) == 5
+
+    def test_cards_have_expected_fields(self):
+        cards = query_random_cards(1)
+        card = cards[0]
+        assert "id" in card
+        assert "name" in card
+        assert "image_path" in card
+
+    def test_deck_filter(self):
+        cards = query_random_cards(10, deck_filter="FATE")
+        assert all(c["side"] == "FATE" for c in cards)
+
+    def test_returns_different_results(self):
+        ids1 = {c["id"] for c in query_random_cards(20)}
+        ids2 = {c["id"] for c in query_random_cards(20)}
+        assert ids1 != ids2
 
 
 def test_query_stat_ranges():

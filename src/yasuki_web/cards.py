@@ -4,9 +4,8 @@ from asyncio import to_thread
 import logging
 
 from yasuki_core.database import (
-    query_all_cards,
-    search_cards,
-    query_cards_filtered,
+    query_cards_page,
+    query_random_cards,
     get_card_by_id,
     get_prints_by_card_id,
     get_cards_by_names,
@@ -75,17 +74,16 @@ async def list_cards(
         if format:
             filter_options["legality"] = (format, ["legal"])
 
-        results = await to_thread(
-            query_cards_filtered,
+        results, total = await to_thread(
+            query_cards_page,
             text_query=text_query,
             filter_options=filter_options if filter_options else None,
+            limit=limit,
+            offset=offset,
         )
 
-        total = len(results)
-        paginated_results = results[offset : offset + limit]
-
         return {
-            "cards": paginated_results,
+            "cards": results,
             "total": total,
             "limit": limit,
             "offset": offset,
@@ -279,19 +277,8 @@ async def random_cards(
 
     Useful for testing, demo purposes, or generating sample hands.
     """
-    import random
-
     try:
-        if deck:
-            all_cards = await to_thread(search_cards, deck_filter=deck)
-        else:
-            all_cards = await to_thread(query_all_cards)
-
-        if not all_cards:
-            return {"cards": [], "count": 0}
-
-        selected_count = min(count, len(all_cards))
-        selected = random.sample(all_cards, selected_count)
+        selected = await to_thread(query_random_cards, count, deck)
 
         return {
             "cards": selected,
