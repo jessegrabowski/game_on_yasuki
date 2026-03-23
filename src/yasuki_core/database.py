@@ -98,7 +98,8 @@ def init_pool(min_size: int = 2, max_size: int = 20) -> None:
         kwargs={
             "autocommit": True,
             "row_factory": dict_row,
-            "options": "-c statement_timeout=30000",
+            "options": "-c statement_timeout=5000",
+            "connect_timeout": 5,
         },
     )
     logger.info("Database connection pool initialized (min=%d, max=%d)", min_size, max_size)

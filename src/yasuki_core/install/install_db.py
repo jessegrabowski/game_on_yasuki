@@ -107,7 +107,7 @@ class Installer:
     def _ensure_database_exists(self) -> None:
         """Check if the database exists and offer to create it if it doesn't."""
         try:
-            with psycopg.connect(self.cfg.dsn) as conn:
+            with psycopg.connect(self.cfg.dsn, connect_timeout=10) as conn:
                 with conn.cursor() as cur:
                     cur.execute("SELECT version();")
                     logger.info("Connected to database successfully")
