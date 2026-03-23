@@ -49,6 +49,11 @@ def mask_dsn(dsn: str) -> str:
     return re.sub(r"(://[^:]+:)[^@]+(@)", r"\1****\2", dsn)
 
 
+def _escape_like(value: str) -> str:
+    """Escape ``%`` and ``_`` wildcards for use in ILIKE patterns."""
+    return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+
 def get_connection_string() -> str:
     """
     Get PostgreSQL connection string from environment or use default.
@@ -201,8 +206,8 @@ def search_cards(query: str = "", deck_filter: str | None = None) -> list[dict]:
     params = []
 
     if query:
-        conditions.append("(c.name ILIKE %s OR c.rules_text ILIKE %s)")
-        search_pattern = f"%{query}%"
+        conditions.append("(c.name ILIKE %s ESCAPE '\\' OR c.rules_text ILIKE %s ESCAPE '\\')")
+        search_pattern = f"%{_escape_like(query)}%"
         params.extend([search_pattern, search_pattern])
 
     if deck_filter:
@@ -1010,8 +1015,12 @@ def _build_card_filter(
     params: list = []
 
     if text_query:
-        conditions.append("(c.name ILIKE %s OR c.id ILIKE %s OR c.rules_text ILIKE %s)")
-        search_pattern = f"%{text_query}%"
+        conditions.append(
+            "(c.name ILIKE %s ESCAPE '\\'"
+            " OR c.id ILIKE %s ESCAPE '\\'"
+            " OR c.rules_text ILIKE %s ESCAPE '\\')"
+        )
+        search_pattern = f"%{_escape_like(text_query)}%"
         params.extend([search_pattern, search_pattern, search_pattern])
 
     if filter_options:
@@ -1081,16 +1090,16 @@ def _build_card_filter(
                 if clan_list:
                     clan_conditions = []
                     for clan in clan_list:
-                        clan_conditions.append("c.clan ILIKE %s")
-                        params.append(f"%{clan}%")
+                        clan_conditions.append("c.clan ILIKE %s ESCAPE '\\'")
+                        params.append(f"%{_escape_like(clan)}%")
                     conditions.append(f"({' OR '.join(clan_conditions)})")
             elif property_name == "rarities":
                 rarity_list = value
                 if rarity_list:
                     rarity_conditions = []
                     for rarity in rarity_list:
-                        rarity_conditions.append("p2.rarity ILIKE %s")
-                        params.append(f"%{rarity}%")
+                        rarity_conditions.append("p2.rarity ILIKE %s ESCAPE '\\'")
+                        params.append(f"%{_escape_like(rarity)}%")
                     conditions.append(
                         f"""
                         c.id IN (
@@ -1109,11 +1118,11 @@ def _build_card_filter(
                             c.id IN (
                                 SELECT card_id
                                 FROM card_keywords
-                                WHERE keyword ILIKE %s
+                                WHERE keyword ILIKE %s ESCAPE '\\'
                             )
                             """
                         )
-                        params.append(keyword)
+                        params.append(_escape_like(keyword))
             elif property_name in _NUMERIC_STATS:
                 if isinstance(value, tuple) and len(value) == 2:
                     min_val, max_val = value

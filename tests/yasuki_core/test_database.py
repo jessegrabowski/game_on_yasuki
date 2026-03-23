@@ -2,6 +2,7 @@ import psycopg
 import pytest
 
 from yasuki_core.database import (
+    _escape_like,
     _extract_host,
     _is_private_dsn,
     mask_dsn,
@@ -235,6 +236,39 @@ class TestSQLFiltering:
         cards = query_cards_filtered()
         for card in cards[:5]:
             assert "image_path" in card
+
+
+class TestLikeEscaping:
+    """Verify that LIKE/ILIKE wildcard characters are escaped in user input."""
+
+    @pytest.mark.parametrize(
+        "raw, escaped",
+        [
+            ("Crane", "Crane"),
+            ("100%", "100\\%"),
+            ("a_b", "a\\_b"),
+            ("%", "\\%"),
+            ("\\", "\\\\"),
+        ],
+        ids=["plain", "percent", "underscore", "bare_percent", "backslash"],
+    )
+    def test_escape_like(self, raw, escaped):
+        assert _escape_like(raw) == escaped
+
+    def test_percent_search_does_not_match_all(self):
+        all_count = count_cards_filtered()
+        pct_count = count_cards_filtered(text_query="%")
+        assert pct_count < all_count
+
+    def test_underscore_search_does_not_match_single_chars(self):
+        all_count = count_cards_filtered()
+        under_count = count_cards_filtered(text_query="___")
+        assert under_count < all_count
+
+    def test_search_cards_percent(self):
+        all_results = search_cards()
+        pct_results = search_cards(query="%")
+        assert len(pct_results) < len(all_results)
 
 
 class TestPagination:
