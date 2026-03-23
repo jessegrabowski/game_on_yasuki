@@ -211,7 +211,7 @@ def search_cards(query: str = "", deck_filter: str | None = None) -> list[dict]:
         params.extend([search_pattern, search_pattern])
 
     if deck_filter:
-        conditions.append("c.deck::text = %s")
+        conditions.append("c.deck = %s::deck_type")
         params.append(deck_filter.upper())
 
     where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
@@ -655,7 +655,7 @@ def query_types_by_deck(deck_types: list[str]) -> list[str]:
                 SELECT DISTINCT type::text
                 FROM cards
                 WHERE type IS NOT NULL
-                AND deck::text = ANY(%s)
+                AND deck = ANY(%s::deck_type[])
                 ORDER BY type
             """,
                 (deck_types,),
@@ -1078,13 +1078,13 @@ def _build_card_filter(
             elif property_name == "decks":
                 deck_list = value
                 if deck_list:
-                    conditions.append("c.deck::text = ANY(%s)")
+                    conditions.append("c.deck = ANY(%s::deck_type[])")
                     params.append(deck_list)
             elif property_name == "types":
                 type_list = value
                 if type_list:
-                    conditions.append("LOWER(c.type::text) = ANY(%s)")
-                    params.append([t.lower() for t in type_list])
+                    conditions.append("c.type = ANY(%s::card_type[])")
+                    params.append([t.title() for t in type_list])
             elif property_name == "clans":
                 clan_list = value
                 if clan_list:
@@ -1118,11 +1118,11 @@ def _build_card_filter(
                             c.id IN (
                                 SELECT card_id
                                 FROM card_keywords
-                                WHERE keyword ILIKE %s ESCAPE '\\'
+                                WHERE lower(keyword) = lower(%s)
                             )
                             """
                         )
-                        params.append(_escape_like(keyword))
+                        params.append(keyword)
             elif property_name in _NUMERIC_STATS:
                 if isinstance(value, tuple) and len(value) == 2:
                     min_val, max_val = value
@@ -1139,8 +1139,10 @@ def _build_card_filter(
                 if property_name not in _ALLOWED_COLUMNS:
                     logger.warning(f"Ignoring unknown filter column: {property_name}")
                     continue
-                if property_name in ("deck", "type"):
-                    conditions.append(f"c.{property_name}::text = %s")
+                if property_name == "deck":
+                    conditions.append("c.deck = %s::deck_type")
+                elif property_name == "type":
+                    conditions.append("c.type = %s::card_type")
                 else:
                     conditions.append(f"c.{property_name} = %s")
                 params.append(value)
@@ -1295,7 +1297,7 @@ def query_random_cards(
     params: list = []
 
     if deck_filter:
-        conditions.append("c.deck::text = %s")
+        conditions.append("c.deck = %s::deck_type")
         params.append(deck_filter.upper())
 
     where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""

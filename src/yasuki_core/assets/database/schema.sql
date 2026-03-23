@@ -141,17 +141,32 @@ CREATE TABLE l5r_sets (
   UNIQUE (arc, set_name)
 );
 
--- Fast lateral-join lookups (card → first print)
+-- Fast lateral-join lookups (card → first print, covering)
 CREATE INDEX idx_prints_card_id_print_id
-  ON prints (card_id, print_id);
+  ON prints (card_id, print_id) INCLUDE (image_path);
+
+-- Set-based filtering and DISTINCT set_name
+CREATE INDEX idx_prints_set_name
+  ON prints (set_name);
 
 -- Fuzzy name search
 CREATE INDEX idx_cards_name_trgm
   ON cards USING gin (name gin_trgm_ops);
 
+-- Sort elimination for ORDER BY c.name
+CREATE INDEX idx_cards_name
+  ON cards (name);
+
 -- Normalized name search/sorting
 CREATE INDEX idx_cards_name_normalized
   ON cards (name_normalized);
+
+-- Deck import: case-insensitive name lookups
+CREATE INDEX idx_cards_lower_name
+  ON cards (lower(name));
+
+CREATE INDEX idx_cards_lower_extended_title
+  ON cards (lower(extended_title));
 
 -- Text search (substring style)
 CREATE INDEX idx_cards_rules_text_trgm
@@ -164,6 +179,13 @@ CREATE INDEX idx_cards_rules_tsv
 -- Common filters: deck/type/clan
 CREATE INDEX idx_cards_deck_type_clan
   ON cards (deck, type, clan);
+
+-- Dropdown filter + ORDER BY name (paginated queries)
+CREATE INDEX idx_cards_deck_name
+  ON cards (deck, name);
+
+CREATE INDEX idx_cards_type_name
+  ON cards (type, name);
 
 -- Numeric stat filters
 CREATE INDEX idx_cards_gold_cost
@@ -187,11 +209,15 @@ CREATE INDEX idx_cards_province_strength
 CREATE INDEX idx_cards_starting_honor
   ON cards (starting_honor);
 
--- Keyword & legality lookups
-CREATE INDEX idx_card_keywords_keyword
-  ON card_keywords (keyword);
+-- Keyword lookups (covering — avoids heap fetch for card_id)
+CREATE INDEX idx_card_keywords_lower_keyword
+  ON card_keywords (lower(keyword)) INCLUDE (card_id);
 
 CREATE INDEX idx_card_legalities_format
   ON card_legalities (format_name);
 
 CREATE INDEX idx_l5r_sets_code ON l5r_sets(code);
+
+-- Set metadata joins (l5r_sets.set_name used in query_sets_by_format)
+CREATE INDEX idx_l5r_sets_set_name
+  ON l5r_sets (set_name);
