@@ -4,6 +4,7 @@ import pytest
 from yasuki_core.database import (
     _extract_host,
     _is_private_dsn,
+    mask_dsn,
     query_all_cards,
     search_cards,
     get_card_by_id,
@@ -390,3 +391,20 @@ class TestPrivateDsnDetection:
     )
     def test_public_hosts_not_private(self, dsn):
         assert _is_private_dsn(dsn) is False
+
+    @pytest.mark.parametrize(
+        "dsn, expected",
+        [
+            (
+                "postgresql://user:s3cret@host:5432/db",
+                "postgresql://user:****@host:5432/db",
+            ),
+            (
+                "postgresql://localhost/yasuki",
+                "postgresql://localhost/yasuki",
+            ),
+        ],
+        ids=["with_password", "no_password"],
+    )
+    def test_mask_dsn(self, dsn, expected):
+        assert mask_dsn(dsn) == expected

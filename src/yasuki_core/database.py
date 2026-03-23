@@ -44,6 +44,11 @@ def _is_private_dsn(dsn: str) -> bool:
     return bool(_PRIVATE_HOST_RE.match(_extract_host(dsn)))
 
 
+def mask_dsn(dsn: str) -> str:
+    """Replace the password portion of a DSN with ``****`` for safe logging."""
+    return re.sub(r"(://[^:]+:)[^@]+(@)", r"\1****\2", dsn)
+
+
 def get_connection_string() -> str:
     """
     Get PostgreSQL connection string from environment or use default.

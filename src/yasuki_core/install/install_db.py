@@ -8,7 +8,7 @@ import shutil
 import psycopg
 
 from yasuki_core import DATABASE_DIR
-from yasuki_core.database import get_connection_string
+from yasuki_core.database import get_connection_string, mask_dsn
 from yasuki_core.install import sets_to_sql, yaml_to_sql
 import logging
 
@@ -126,12 +126,12 @@ class Installer:
                     "Could not connect to PostgreSQL server. Is it running?\n"
                     "  - macOS: brew services start postgresql\n"
                     "  - Linux: sudo systemctl start postgresql\n"
-                    "  - Check connection string: " + self.cfg.dsn
+                    "  - Check connection string: " + mask_dsn(self.cfg.dsn)
                 )
             elif "authentication failed" in error_msg or "password" in error_msg:
                 raise InstallerError(
                     f"Authentication failed. Check your credentials in the DSN:\n"
-                    f"  Current DSN: {self.cfg.dsn}\n"
+                    f"  Current DSN: {mask_dsn(self.cfg.dsn)}\n"
                     f"  Format: postgresql://[user[:password]@][host][:port]/database"
                 )
             else:
