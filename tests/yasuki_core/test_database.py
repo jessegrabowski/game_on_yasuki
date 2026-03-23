@@ -1,7 +1,9 @@
-import psycopg2
+import psycopg
 import pytest
 
 from yasuki_core.database import (
+    _extract_host,
+    _is_private_dsn,
     query_all_cards,
     search_cards,
     get_card_by_id,
@@ -16,10 +18,10 @@ from yasuki_core.database import (
 
 def _db_available():
     try:
-        conn = psycopg2.connect(get_connection_string())
+        conn = psycopg.connect(get_connection_string())
         conn.close()
         return True
-    except psycopg2.OperationalError:
+    except psycopg.OperationalError:
         return False
 
 
@@ -313,3 +315,78 @@ def test_keyword_and_unique_filters(filter_options):
     if filter_options.get("is_unique"):
         for card in results:
             assert card.get("is_unique") is True
+
+
+class TestPrivateDsnDetection:
+    @pytest.mark.parametrize(
+        "dsn, expected_host",
+        [
+            ("postgresql://localhost/yasuki", "localhost"),
+            ("postgresql://user:pass@localhost:5432/yasuki", "localhost"),
+            ("postgresql://user:pass@127.0.0.1:5432/yasuki", "127.0.0.1"),
+            ("postgresql://user:pass@db:5432/yasuki", "db"),
+            ("postgresql://user:pass@my-postgres:5432/yasuki", "my-postgres"),
+            ("postgresql://user:pass@10.0.0.5:5432/yasuki", "10.0.0.5"),
+            ("postgresql://user:pass@172.18.0.2:5432/yasuki", "172.18.0.2"),
+            ("postgresql://user:pass@192.168.1.100:5432/yasuki", "192.168.1.100"),
+            (
+                "postgresql://user:pass@roundhouse.proxy.rlwy.net:5432/railway",
+                "roundhouse.proxy.rlwy.net",
+            ),
+            ("postgresql://user:pass@db.railway.internal:5432/railway", "db.railway.internal"),
+            ("postgresql://user:pass@44.200.1.5:5432/yasuki", "44.200.1.5"),
+        ],
+        ids=[
+            "localhost_no_creds",
+            "localhost_with_creds",
+            "loopback",
+            "docker_service",
+            "docker_hyphenated",
+            "rfc1918_10",
+            "rfc1918_172",
+            "rfc1918_192",
+            "railway_proxy",
+            "railway_internal",
+            "public_ip",
+        ],
+    )
+    def test_extract_host(self, dsn, expected_host):
+        assert _extract_host(dsn) == expected_host
+
+    @pytest.mark.parametrize(
+        "dsn",
+        [
+            "postgresql://localhost/yasuki",
+            "postgresql://user:pass@localhost:5432/yasuki",
+            "postgresql://user:pass@127.0.0.1:5432/yasuki",
+            "postgresql://user:pass@db:5432/yasuki",
+            "postgresql://user:pass@my-postgres:5432/yasuki",
+            "postgresql://user:pass@10.0.0.5:5432/yasuki",
+            "postgresql://user:pass@172.18.0.2:5432/yasuki",
+            "postgresql://user:pass@192.168.1.100:5432/yasuki",
+        ],
+        ids=[
+            "localhost",
+            "localhost_with_port",
+            "loopback",
+            "docker_service_name",
+            "docker_hyphenated",
+            "rfc1918_10",
+            "rfc1918_172",
+            "rfc1918_192",
+        ],
+    )
+    def test_private_hosts_detected(self, dsn):
+        assert _is_private_dsn(dsn) is True
+
+    @pytest.mark.parametrize(
+        "dsn",
+        [
+            "postgresql://user:pass@roundhouse.proxy.rlwy.net:5432/railway",
+            "postgresql://user:pass@db.railway.internal:5432/railway",
+            "postgresql://user:pass@44.200.1.5:5432/yasuki",
+        ],
+        ids=["railway_proxy", "railway_internal", "public_ip"],
+    )
+    def test_public_hosts_not_private(self, dsn):
+        assert _is_private_dsn(dsn) is False

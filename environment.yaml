@@ -9,7 +9,7 @@ dependencies:
   - pydantic
   - pre-commit
   - Pillow
-  - psycopg2
+  - psycopg
   - fastapi
   - pip
   - pip:

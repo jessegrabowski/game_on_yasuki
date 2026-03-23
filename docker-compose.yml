@@ -29,8 +29,10 @@ services:
     command:
       - |
         pixi run -e prod python -c "
-        import psycopg2, os, sys
-        conn = psycopg2.connect(os.environ['YASUKI_DATABASE_URL'])
+        import psycopg, sys
+        from yasuki_core.database import get_connection_string
+        dsn = get_connection_string()
+        conn = psycopg.connect(dsn)
         cur = conn.cursor()
         cur.execute(\"SELECT 1 FROM information_schema.tables WHERE table_name = 'cards'\")
         if cur.fetchone():
@@ -39,7 +41,7 @@ services:
                 print('Database already seeded, nothing to do')
                 sys.exit(0)
         sys.exit(1)
-        " || pixi run -e prod install-db --dsn "$$YASUKI_DATABASE_URL"
+        " || pixi run -e prod install-db
     restart: "no"
 
   api:

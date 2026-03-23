@@ -13,6 +13,7 @@ import os
 from yasuki_web import cards, rooms, websocket
 from yasuki_web.rate_limit import limiter
 from yasuki_web.websocket import evict_stale_rooms
+from yasuki_core.database import close_pool
 from yasuki_core.paths import BUNDLED_IMAGES_DIR, SETS_DIR
 
 
@@ -139,4 +140,5 @@ async def startup_event():
 
 @app.on_event("shutdown")
 async def shutdown_event():
+    close_pool()
     logger.info("Game on, Yasuki! API shutting down...")
