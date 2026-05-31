@@ -1175,11 +1175,12 @@ packages:
   timestamp: 1773314012590
 - pypi: ./
   name: game-on-yasuki
-  version: 0.0.1.dev22+unknown.g822751618.d20260322
-  sha256: c3f66a65440a80dd6ae59d82c9aae34b7a4d7a7397295f959210af563bf303d2
+  version: 0.0.1.dev38+unknown.g65a8ff330.d20260531
+  sha256: 2305bc9f77eae34d118e70145bd4e6212cded675e8c408e1a05dfcbc1346e191
   requires_dist:
   - pillow>=10.0
-  - psycopg[binary,pool]>=3.1
+  - psycopg-pool>=3.1
+  - psycopg>=3.1
   - pydantic>=2.7
   - pyyaml>=6.0
   - unidecode>=1.4
