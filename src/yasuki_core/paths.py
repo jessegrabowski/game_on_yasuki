@@ -14,6 +14,8 @@ SETS_DIR: Path = Path(os.environ.get("YASUKI_SETS_DIR", str(_DEFAULT_SETS_DIR)))
 
 DATABASE_DIR = _PACKAGE_DIR / "assets" / "database"
 
+ART_LAYOUT_PATH = _PACKAGE_DIR / "assets" / "art_layout.json"
+
 
 def resolve_set_image_path(relative_path: str) -> Path | None:
     """
