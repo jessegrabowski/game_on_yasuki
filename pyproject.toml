@@ -19,7 +19,7 @@ dependencies = [
 
 [project.optional-dependencies]
 web = ["fastapi>=0.115", "uvicorn>=0.30", "slowapi>=0.1.9"]
-gui = []
+gui = ["reportlab>=4.0"]
 all = ["game-on-yasuki[web]"]
 
 [project.urls]
@@ -61,6 +61,7 @@ pyyaml = ">=6.0"
 tk = "*"
 unidecode = ">=1.4.0,<2"
 fastapi = ">=0.135.1,<0.136"
+reportlab = ">=4.5.1,<5"
 
 [tool.pixi.pypi-dependencies]
 game-on-yasuki = { path = ".", editable = true }
