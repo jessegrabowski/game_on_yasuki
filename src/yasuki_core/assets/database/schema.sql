@@ -1,223 +1,211 @@
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
-CREATE TYPE deck_type AS ENUM ('FATE', 'DYNASTY', 'PRE_GAME', 'OTHER');
+-- Controlled vocabularies; values match the source strings.
+CREATE TYPE deck_type AS ENUM ('Fate', 'Dynasty', 'Pre-Game', 'Other');
 
 CREATE TYPE card_type AS ENUM (
-  'Strategy',
-  'Region',
-  'Event',
-  'Spell',
-  'Holding',
-  'Item',
-  'Personality',
-  'Follower',
-  'Wind',
-  'Celestial',
-  'Stronghold',
-  'Sensei',
-  'Ancestor',
-  'Ring',
-  'Proxy',
-  'Other',
-  'Clock',
-  'Territory'
+  'Ancestor', 'Celestial', 'Clock', 'Event', 'Follower', 'Holding', 'Item', 'Other',
+  'Personality', 'Proxy', 'Region', 'Ring', 'Sensei', 'Spell', 'Strategy', 'Stronghold',
+  'Territory', 'Wind'
 );
 
-CREATE TYPE legality_status AS ENUM ('legal', 'restricted', 'banned', 'not_legal');
 
+-- `card_id` is a slug of the extended title, with a numeric suffix when two cards would collide.
+-- Multi-valued attributes (clan, type, deck) live in junction tables; source fields without a
+-- dedicated column go in `extra`.
 CREATE TABLE cards (
-  id              TEXT PRIMARY KEY,
+  card_id           TEXT PRIMARY KEY,            -- slug, e.g. 'bayushi_kachiko_exp'
+  slug              TEXT NOT NULL,                  -- display / URL only
+  name              TEXT NOT NULL,                  -- title
+  extended_title    TEXT NOT NULL,                  -- formattedtitle (experience-disambiguated)
+  name_normalized   TEXT NOT NULL,                  -- ASCII-folded lowercase, for search/sort
 
-  name            TEXT NOT NULL,
-  name_normalized TEXT NOT NULL,
-  extended_title  TEXT NOT NULL,
+  rules_text        TEXT NOT NULL DEFAULT '',       -- entity-decoded
 
-  deck            deck_type NOT NULL,
-  type            card_type NOT NULL,
-  clan            TEXT,
+  gold_cost         INTEGER,
+  focus             INTEGER,
+  force             INTEGER,
+  chi               INTEGER,
+  honor_requirement INTEGER,
+  personal_honor    INTEGER,
+  province_strength INTEGER,
+  starting_honor    INTEGER,
+  gold_production   INTEGER,
 
-  rules_text      TEXT NOT NULL DEFAULT '',
+  is_unique         BOOLEAN NOT NULL DEFAULT FALSE, -- from keywords
+  is_proxy          BOOLEAN NOT NULL DEFAULT FALSE, -- has the 'Proxy' type
+  is_banned         BOOLEAN NOT NULL DEFAULT FALSE,
 
-  gold_cost       INT,
-  focus           INT,
+  errata_text       TEXT,
+  story             TEXT,
+  notes             TEXT,
 
-  force           INT,
-  chi             INT,
+  extra             JSONB NOT NULL DEFAULT '{}'::jsonb,
 
-  honor_requirement INT,
-  personal_honor    INT,
-
-  gold_production INT,
-
-  province_strength INT,
-  starting_honor    INT,
-
-  is_unique       BOOLEAN NOT NULL DEFAULT FALSE,
-  is_proxy        BOOLEAN NOT NULL DEFAULT FALSE,
-
-  errata_text     TEXT,
-  notes           TEXT,
-
-  extra           JSONB NOT NULL DEFAULT '{}'::jsonb,
-
-  rules_tsv tsvector GENERATED ALWAYS AS (
-    to_tsvector('english', coalesce(rules_text, ''))
-  ) STORED
+  rules_tsv tsvector GENERATED ALWAYS AS (to_tsvector('english', coalesce(rules_text, ''))) STORED
 );
 
-
-DROP TABLE IF EXISTS print_numbers;
-DROP TABLE IF EXISTS prints;
-
-CREATE TABLE prints (
-  print_id             SERIAL PRIMARY KEY,
-  card_id              TEXT NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
-
-  set_name             TEXT NOT NULL,
-  set_code             TEXT,
-
-  rarity               TEXT,
-  flavor_text          TEXT,
-  artist               TEXT,
-
-  -- primary number for convenience
-  primary_subset       TEXT,
-  primary_number_int   INT,
-  collector_number_raw TEXT,  -- full original string
-
-  notes                TEXT,
-  image_path           TEXT,
-  release_date         DATE,
-  extra                JSONB NOT NULL DEFAULT '{}'::jsonb,
-
-  UNIQUE (card_id, set_name, collector_number_raw)
+CREATE TABLE card_clans (
+  card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
+  clan    TEXT NOT NULL,
+  PRIMARY KEY (card_id, clan)
 );
 
-CREATE TABLE print_numbers (
-  id          SERIAL PRIMARY KEY,
-  print_id    INT NOT NULL REFERENCES prints(print_id) ON DELETE CASCADE,
-  subset      TEXT,
-  number_int  INT NOT NULL,
-  position    INT NOT NULL
+CREATE TABLE card_card_types (
+  card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
+  type    card_type NOT NULL,
+  PRIMARY KEY (card_id, type)
 );
 
-CREATE INDEX idx_print_numbers_print_id ON print_numbers(print_id);
-
+CREATE TABLE card_decks (
+  card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
+  deck    deck_type NOT NULL,
+  PRIMARY KEY (card_id, deck)
+);
 
 CREATE TABLE keywords (
   keyword TEXT PRIMARY KEY
 );
 
 CREATE TABLE card_keywords (
-  card_id TEXT NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
+  card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
   keyword TEXT NOT NULL REFERENCES keywords(keyword) ON DELETE CASCADE,
   PRIMARY KEY (card_id, keyword)
 );
 
 
-CREATE TABLE formats (
-  name TEXT PRIMARY KEY
-);
-
-CREATE TABLE card_legalities (
-  card_id     TEXT NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
-  format_name TEXT NOT NULL REFERENCES formats(name) ON DELETE CASCADE,
-  status      legality_status NOT NULL DEFAULT 'legal',
-  PRIMARY KEY (card_id, format_name)
-);
-
+-- One row per physical set. `arc` is the storyline block the set belongs to (also the legality
+-- block). `set_slug` is the filesystem/URL slug.
 CREATE TABLE l5r_sets (
-  id                SERIAL PRIMARY KEY,
-  arc               TEXT NOT NULL,
-  set_name          TEXT,
+  set_id            SERIAL PRIMARY KEY,
+  set_name          TEXT NOT NULL UNIQUE,
+  set_slug          TEXT NOT NULL UNIQUE,
+  arc               TEXT,
   release_date      DATE,
   digital           BOOLEAN NOT NULL DEFAULT FALSE,
   featured_factions TEXT,
-  size_raw          INT,
+  size_raw          INTEGER,
   border            TEXT,
-  code              TEXT,
-  notes             TEXT,
-
-  UNIQUE (arc, set_name)
+  notes             TEXT
 );
 
--- Fast lateral-join lookups (card → first print, covering)
-CREATE INDEX idx_prints_card_id_print_id
-  ON prints (card_id, print_id) INCLUDE (image_path);
 
--- Set-based filtering and DISTINCT set_name
-CREATE INDEX idx_prints_set_name
-  ON prints (set_name);
+-- Competitive formats / storyline blocks, with rotation date windows that overlap at transitions.
+-- A NULL `legal_until` marks an eternal format (Legacy, Modern).
+CREATE TABLE formats (
+  name        TEXT PRIMARY KEY,   -- e.g. 'Age of Enlightenment (Lotus)'
+  block       TEXT,               -- e.g. 'Lotus'
+  arc         TEXT,               -- joins to l5r_sets.arc
+  legal_from  DATE,
+  legal_until DATE
+);
 
--- Fuzzy name search
-CREATE INDEX idx_cards_name_trgm
-  ON cards USING gin (name gin_trgm_ops);
+-- Card-level legality: the union across a card's printings — "is this card ever legal in format F".
+CREATE TABLE card_legalities (
+  card_id     TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
+  format_name TEXT NOT NULL REFERENCES formats(name) ON DELETE CASCADE,
+  PRIMARY KEY (card_id, format_name)
+);
 
--- Sort elimination for ORDER BY c.name
-CREATE INDEX idx_cards_name
-  ON cards (name);
 
--- Normalized name search/sorting
-CREATE INDEX idx_cards_name_normalized
-  ON cards (name_normalized);
+-- `printing_id` is a within-card key derived from the set slug, suffixed when a card has several
+-- printings in one set. Per-printing field overrides and unmapped source fields live in `extra`.
+CREATE TABLE prints (
+  print_id             SERIAL PRIMARY KEY,
+  card_id              TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
+  printing_id          TEXT NOT NULL,
+  set_id               INTEGER REFERENCES l5r_sets(set_id),
 
--- Deck import: case-insensitive name lookups
-CREATE INDEX idx_cards_lower_name
-  ON cards (lower(name));
+  rarity               TEXT,
+  flavor_text          TEXT,
+  artist               TEXT,
+  designer             TEXT,
+  collector_number_raw TEXT,
+  publisher            TEXT,
+  publisher_url        TEXT,
+  doublesided          BOOLEAN NOT NULL DEFAULT FALSE,
+  legal_date           DATE,
 
-CREATE INDEX idx_cards_lower_extended_title
-  ON cards (lower(extended_title));
+  extra                JSONB NOT NULL DEFAULT '{}'::jsonb,
 
--- Text search (substring style)
-CREATE INDEX idx_cards_rules_text_trgm
-  ON cards USING gin (rules_text gin_trgm_ops);
+  UNIQUE (card_id, printing_id)
+);
 
--- Full-text search on rules text
-CREATE INDEX idx_cards_rules_tsv
-  ON cards USING gin (rules_tsv);
+-- Collector numbers normalized for sorting; position 0 is the primary. The raw string lives on
+-- prints.collector_number_raw and never participates in identity.
+CREATE TABLE print_numbers (
+  id         SERIAL PRIMARY KEY,
+  print_id   INTEGER NOT NULL REFERENCES prints(print_id) ON DELETE CASCADE,
+  subset     TEXT,
+  number_int INTEGER NOT NULL,
+  position   INTEGER NOT NULL
+);
 
--- Common filters: deck/type/clan
-CREATE INDEX idx_cards_deck_type_clan
-  ON cards (deck, type, clan);
+-- The "bug": which formats a specific printing is legal in.
+CREATE TABLE print_legalities (
+  print_id    INTEGER NOT NULL REFERENCES prints(print_id) ON DELETE CASCADE,
+  format_name TEXT NOT NULL REFERENCES formats(name) ON DELETE CASCADE,
+  PRIMARY KEY (print_id, format_name)
+);
 
--- Dropdown filter + ORDER BY name (paginated queries)
-CREATE INDEX idx_cards_deck_name
-  ON cards (deck, name);
+-- Every image a printing carries, in source order. `role` is front / back / alt; `sha256` is the
+-- image's content hash; `path` is its sets/<set_slug>/<file> location.
+CREATE TABLE print_images (
+  print_id    INTEGER NOT NULL REFERENCES prints(print_id) ON DELETE CASCADE,
+  image_index INTEGER NOT NULL,
+  role        TEXT NOT NULL DEFAULT 'front',
+  size        TEXT NOT NULL DEFAULT 'master',
+  sha256      TEXT,
+  source_url  TEXT,
+  path        TEXT,
+  PRIMARY KEY (print_id, image_index, size)
+);
 
-CREATE INDEX idx_cards_type_name
-  ON cards (type, name);
+-- Generic card backs, selected by (deck, era). A printing's own special back is a role='back' row in
+-- print_images instead.
+CREATE TABLE card_backs (
+  deck       deck_type NOT NULL,
+  era        TEXT NOT NULL,        -- 'old' | 'new' | 'token'
+  image_path TEXT NOT NULL,
+  PRIMARY KEY (deck, era)
+);
 
--- Numeric stat filters
-CREATE INDEX idx_cards_gold_cost
-  ON cards (gold_cost);
 
-CREATE INDEX idx_cards_focus
-  ON cards (focus);
+-- ---------------------------------------------------------------------------
+-- Indexes
+-- ---------------------------------------------------------------------------
 
-CREATE INDEX idx_cards_force
-  ON cards (force);
+-- Fuzzy + full-text + sort on names and rules text.
+CREATE INDEX idx_cards_name_trgm        ON cards USING gin (name gin_trgm_ops);
+CREATE INDEX idx_cards_rules_text_trgm  ON cards USING gin (rules_text gin_trgm_ops);
+CREATE INDEX idx_cards_rules_tsv        ON cards USING gin (rules_tsv);
+CREATE INDEX idx_cards_name             ON cards (name);
+CREATE INDEX idx_cards_name_normalized  ON cards (name_normalized);
+CREATE INDEX idx_cards_lower_name       ON cards (lower(name));
+CREATE INDEX idx_cards_lower_ext_title  ON cards (lower(extended_title));
 
-CREATE INDEX idx_cards_chi
-  ON cards (chi);
+-- Numeric stat filters.
+CREATE INDEX idx_cards_gold_cost        ON cards (gold_cost);
+CREATE INDEX idx_cards_focus            ON cards (focus);
+CREATE INDEX idx_cards_force            ON cards (force);
+CREATE INDEX idx_cards_chi              ON cards (chi);
+CREATE INDEX idx_cards_personal_honor   ON cards (personal_honor);
+CREATE INDEX idx_cards_province_strength ON cards (province_strength);
+CREATE INDEX idx_cards_starting_honor   ON cards (starting_honor);
 
-CREATE INDEX idx_cards_personal_honor
-  ON cards (personal_honor);
+-- Faceted attribute filters (clan/type/deck), covering card_id to avoid heap fetches.
+CREATE INDEX idx_card_clans_clan        ON card_clans (clan) INCLUDE (card_id);
+CREATE INDEX idx_card_card_types_type   ON card_card_types (type) INCLUDE (card_id);
+CREATE INDEX idx_card_decks_deck        ON card_decks (deck) INCLUDE (card_id);
+CREATE INDEX idx_card_keywords_lower_kw ON card_keywords (lower(keyword)) INCLUDE (card_id);
+CREATE INDEX idx_card_legalities_format ON card_legalities (format_name);
+CREATE INDEX idx_print_legalities_format ON print_legalities (format_name);
 
-CREATE INDEX idx_cards_province_strength
-  ON cards (province_strength);
+-- Print + image lookups (card → its prints → front image).
+CREATE INDEX idx_prints_card_id         ON prints (card_id);
+CREATE INDEX idx_prints_set_id          ON prints (set_id);
+CREATE INDEX idx_print_images_print_role ON print_images (print_id, role) INCLUDE (path);
+CREATE INDEX idx_print_numbers_print_id ON print_numbers (print_id);
 
-CREATE INDEX idx_cards_starting_honor
-  ON cards (starting_honor);
-
--- Keyword lookups (covering — avoids heap fetch for card_id)
-CREATE INDEX idx_card_keywords_lower_keyword
-  ON card_keywords (lower(keyword)) INCLUDE (card_id);
-
-CREATE INDEX idx_card_legalities_format
-  ON card_legalities (format_name);
-
-CREATE INDEX idx_l5r_sets_code ON l5r_sets(code);
-
--- Set metadata joins (l5r_sets.set_name used in query_sets_by_format)
-CREATE INDEX idx_l5r_sets_set_name
-  ON l5r_sets (set_name);
+-- Set metadata joins.
+CREATE INDEX idx_l5r_sets_arc           ON l5r_sets (arc);
