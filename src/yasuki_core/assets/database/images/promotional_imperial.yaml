@@ -1,0 +1,158 @@
+set: Promotional – Imperial
+images:
+- card_id: a_time_of_legends
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: a_time_of_legends.jpg
+    sha256: 29147408044e6751c5c52dc5ce17a44ecac6d8545bc1ec494f3e2c49b168ae7b
+- card_id: designer_wins
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: designer_wins.jpg
+    sha256: 64fb24e082cb4b3d78dee7be03c38a747ebce835a91b313241815f44b7b8393d
+- card_id: doom_of_the_dark_lord
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: doom_of_the_dark_lord.jpg
+    sha256: c976dbeb27e4a1d2b3f03449876985f3868c160228ada421b0795307ef59abfb
+- card_id: exile
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: exile.jpg
+    sha256: bc2d3f43c2ccfe4aafb6eca1957be2faf2c2c95604d329f4daffae8fa33baccb
+- card_id: hida_sukune_experienced
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: hida_sukune_experienced.jpg
+    sha256: 0aa2823e0b458c4ceb0bac896f38482368aab4ec7e8be2d89f6691c93663ce77
+- card_id: kachikos_kiss
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: kachikos_kiss.jpg
+    sha256: 7a206d9855acb4bba2c4bbfb393c18aef08462068741f6150c97978e6de44ff2
+- card_id: otomo_sorai
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: otomo_sorai.jpg
+    sha256: 6e933660429e24ebd7bb79345d71a4cfb474741c6c07f65c97cc561144f5fb14
+- card_id: prophecies_of_uikku
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: prophecies_of_uikku.jpg
+    sha256: dc82abb5c8a852a1557dd53d1d018a7bbb73341cbaf3b52b4e8c6389a9d90e6e
+- card_id: seer
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: seer.jpg
+    sha256: 4e5e5edebf09683aa3a931f1f7903f44f9fcd1508b53f8885c7fa29ebee5e137
+- card_id: seppun_baka
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: seppun_baka.jpg
+    sha256: fa4cf4a97bcb6b2ec00f4067b04551d93d12c4fc4ffbefc6e88b3994e316f88e
+- card_id: tao_of_shinsei
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: tao_of_shinsei.jpg
+    sha256: 7a20ad1b1850b4ddaaa19563ef09408c6a579156a1448cf40683cf5e33f54c2c
+- card_id: the_ancestral_home_of_the_lion
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_ancestral_home_of_the_lion.jpg
+    sha256: cd2eb0a63372d6119f4b7f2e38a5c4d3a4584ea1c0164275cb64de6a7a1c264c
+- card_id: the_brotherhood_of_shinsei
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_brotherhood_of_shinsei.jpg
+    sha256: 2a1798f5b037e7c56f44063e75f14b48be917e35f55c78397cc5f1e434008cf8
+- card_id: the_esteemed_house_of_the_crane
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_esteemed_house_of_the_crane.jpg
+    sha256: 8f8a3f9393dcff9454c12800fa08b9c96ee268d7250997f6eb9165ee70872c6b
+- card_id: the_false_hoturi
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_false_hoturi.jpg
+    sha256: dedf3aae6912465d3408070b078918a40d34f21e1be17a5190032683db4131b5
+- card_id: the_farther_you_fall
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_farther_you_fall.jpg
+    sha256: 184b378a5afcf6a2ae09ffec3057f07988c29ef94d85faf35353a68b2b0013d2
+- card_id: the_hidden_temples_of_the_naga
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_hidden_temples_of_the_naga.jpg
+    sha256: f6cb0d8122e3782748d717808c3f360595c4fc740a5e196657447e2b3926143e
+- card_id: the_mountain_keep_of_the_dragon
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_mountain_keep_of_the_dragon.jpg
+    sha256: 94e579fdec4b1aa8cea3e6edfbc04fc0cdc83c9c778bb531cfe70174d8be406c
+- card_id: the_provincial_estate_of_the_unicorn
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_provincial_estate_of_the_unicorn.jpg
+    sha256: 3386448fb479c25655596fd60876fff2d0c3b17ed11bbb5cd8350ea208a033a1
+- card_id: the_ruined_fortress_of_the_scorpion
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_ruined_fortress_of_the_scorpion.jpg
+    sha256: 03b5bbfd9e7c1097de61a84ae2d998e168cae996061a7adf629df6ddbe132ce7
+- card_id: the_sacred_temple_of_the_phoenix
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_sacred_temple_of_the_phoenix.jpg
+    sha256: 9d6a955da0b9ec64b00c10cc25884a525de3f696d533036b63734d7c5772c97d
+- card_id: the_shadowlands_horde
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_shadowlands_horde.jpg
+    sha256: 21a6ee4d68728b3f2ed230da1a96841533545c985fca2e4ddaa7ff0a3c2cde81
+- card_id: the_war_fortress_of_the_crab
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_war_fortress_of_the_crab.jpg
+    sha256: f904f2d618d50c73d89f9f005b07bc9c1fb7830090351a31867575ab280b096b
+- card_id: the_yoritomo_alliance
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: the_yoritomo_alliance.jpg
+    sha256: 0e9e02864374ffef5cdcd881afa9f42721c36a034e9694a23415c4011f3e1a14
+- card_id: time_of_the_void
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: time_of_the_void.jpg
+    sha256: 1a0b1bfe4ef179f8a701d2646a0c114286105c16b30557ca82bee6e257adc974
+- card_id: toturis_army
+  printing_id: promotional_imperial
+  files:
+  - role: front
+    file: toturis_army.jpg
+    sha256: d8caacd6a26edbf231a0ca517778b2b0089cfb66227bf1b07019ca5d466ff0ae

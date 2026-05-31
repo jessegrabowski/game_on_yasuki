@@ -1,0 +1,1061 @@
+set: Promotional – Jade
+cards:
+- title: Bayushi Goshiu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Scorpion
+  keywords:
+  - Unique
+  - Courtier
+  - Scorpion Clan
+  text: '<b>Political Reaction:</b> Any number of times per turn, after you lose Honor, bow Goshiu and
+    target another player: He loses an equal amount of Honor.'
+  gold_cost: 9
+  force: 0
+  chi: 1
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Ken Meyer Jr.
+  flavor_text: <i>"It would be unwise to mention such crimes in court, when I could speak equally of your
+    own with an even greater eloquence."</i>
+- title: Dairya
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Toturi's Army
+  keywords:
+  - Cavalry
+  - Unique
+  - Samurai
+  - Toturi's Army
+  text: <b>Repeatable Battle, :bow::</b> Ranged 3 Attack.
+  gold_cost: 10
+  force: 4
+  chi: 5
+  honor_requirement: 10
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Some copies of the pre-Imperial Edition version were misprinted with the title Dayra.
+  rarity: Promo
+  artist: Brian Snoddy
+  flavor_text: <i>"You call me a masterless man. You are wrong. I am my own master."</i>
+- title: Dashmar
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  keywords:
+  - Unique
+  - Naga
+  - Nonhuman
+  - Venerable Lord
+  text: Will not join a Scorpion Clan player.<br><b>Repeatable Limited, :bow::</b> If you have 40 or higher
+    Family Honor and Dashmar is honorable, you win the game.<br><b>Repeatable Battle/Open, :bow::</b>
+    If any player controls the Imperial Favor, he must discard it.
+  gold_cost: 8
+  force: 0
+  chi: 2
+  honor_requirement: 5
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Randy Elliott
+- title: Duty of the Magistrate
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Target your unbowed Human Personality: Until the game ends, he may not be targeted
+    with Favor abilities by another player.'
+  gold_cost: 4
+  focus: 3
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: L.A. Williams
+  flavor_text: <i>My duty is not to a daimyo, nor to the people. It is to the Emperor alone, and only
+    the Emperor will I serve.</i>
+- title: Eternal Halls of the Shiba
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Phoenix
+  text: <b>Reaction:</b> Once per copy per Kiho per game, after your Kiho Strategy action resolves, put
+    the Strategy in your hand face-up and discard a card; you may use actions on the Strategy an additional
+    time this turn.
+  province_strength: 5
+  starting_honor: 7
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Chris Arneson
+- title: Forward Patrol
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Reaction:</b> After engaging, target your performing unbowed Scout or Tactician at the current
+    battlefield to make another target player with one or more units there show you his hand. Draw a card.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Thomas Gianni
+- title: Heart of the Shinomen Forest
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Naga
+  keywords:
+  - Forest
+  text: Forests enter play for you for 3 less Gold.<br>Negate all Fear effects upon your Naga cards.<br>If
+    you control no Shadowlands cards, you may ignore Honor Requirements when bringing Naga cards into
+    play.<br>Your deck may include four copies of any non-Unique Naga card.
+  province_strength: 5
+  starting_honor: 3
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: There were two versions of the Hidden Emperor 1 printing of this card. One had a Dynasty back
+    and was a Fixed card in the starter deck, one had a Fate back and was a Rare in the booster packs.
+  rarity: Promo
+  artist: Randy Asplund-Faith
+- title: Hida O-Ushi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Unique
+  - Bully
+  - Crab Clan
+  - Samurai
+  text: '<b>Battle/Open:</b> Any number of times per turn, bow O-Ushi and target another player''s Personality
+    with lower Force: O-Ushi challenges him to a duel which he may refuse; if he did, dishonor him and
+    permanently give him -1C. Destroy the duel''s loser.'
+  gold_cost: 8
+  force: 3
+  chi: 2
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Brian Snoddy
+  flavor_text: <i>When you mention her 'nickname', she smiles a wicked smile, draws her hammer and dares
+    you to say it again.</i>
+- title: Ide Tadaji
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unicorn
+  keywords:
+  - Unique
+  - Courtier
+  - Unicorn Clan
+  text: May not assign to armies.<br>Will not issue challenges.<br><b>Repeatable Political Reaction, :bow::</b>
+    Before a Favor action resolves, negate the action's effects.
+  gold_cost: 7
+  force: 0
+  chi: 1
+  honor_requirement: 10
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Bryon Wackwitz
+- title: Imperial Ambassador
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Imperial
+  - Retainer
+  text: <b>Political Repeatable Reaction, :bow::</b> Before another player gains or loses Honor, decrease
+    the gain or loss by 2.
+  gold_cost: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: April Lee
+  flavor_text: <i>He who speaks with anger will be heard for his anger, but his words will be forgotten.</i>
+- title: Iron Mountain
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Dragon
+  keywords:
+  - Mountain
+  text: While you are the Defender, players may not move Personalities using the rulebook Cavalry player
+    ability.<br><b>Repeatable Limited, :bow::</b> Permanently give your target Personality Tattooed.
+  province_strength: 6
+  starting_honor: 5
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Ken Meyer Jr.
+- title: Isawa Kaede
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Elemental Master
+  - Phoenix Clan
+  - Shugenja
+  - Void
+  text: <b>Void Repeatable Battle/Open, :bow::</b> Target a card in one of your Provinces. Discard it
+    to draw a card.
+  gold_cost: 11
+  force: 2
+  chi: 3
+  honor_requirement: 5
+  personal_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Susan Van Camp
+- title: Kakita Yoshi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Crane Clan
+  - Liaison
+  text: Will not attach Followers or issue challenges.<br>Yoshi cannot be assigned to defend.<br><b> Political
+    Repeatable Battle/Open, :bow::</b> Take the Imperial Favor.
+  gold_cost: 10
+  force: 0
+  chi: 1
+  honor_requirement: 10
+  personal_honor: 3
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: April Lee
+  flavor_text: <i>With allies in every House in the Empire, Yoshi can call upon favors whenever the Crane
+    Clan needs them.</i>
+- title: Kitsu Motso
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Unique
+  - Lion Clan
+  - Master Tactician
+  text: <b>Repeatable Limited, :bow::</b> Give Motso a <b>Master </b>token.<br><b>Repeatable Battle, :bow::</b>
+    Destroy a Master token on Motso to take two additional Battle actions.
+  gold_cost: 6
+  force: 2
+  chi: 4
+  honor_requirement: 8
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Randy Elliott
+- title: Kyuden Hitomi
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Dragon
+  text: After all other players reveal their Strongholds, you may search your Fate deck for zero to five
+    cards. Put them under this Stronghold, face-down.<br><b>Repeatable Reaction, :bow::</b> Before you
+    draw a card at the end of your turn, put a card under this Stronghold into your hand instead.
+  province_strength: 6
+  starting_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: There were two versions of the Hidden Emperor 2 printing of this card. One had a Dynasty back
+    and was a Fixed card in the starter deck, one had a Fate back and was a Rare in the booster packs.
+  rarity: Promo
+  artist: Paul Carrick
+- title: Kyuden Kitsune
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  text: Fox and Fox Clan Personalities enter play paying 2 less Gold for you.<br>Your Shugenja have +1C.<br>When
+    choosing the battlefield at which to fight the next battle, if you are the Defender, you choose instead
+    of the Attacker.
+  province_strength: 5
+  starting_honor: 6
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  errata_text: There is no longer a restriction on bringing Mantis Clan personalities into play.
+  rarity: Promo
+  artist: Theresa Brandon
+- title: Kyuden Yoritomo
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  keywords:
+  - Port
+  province_strength: 8
+  starting_honor: 3
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Second half of trait removed via Oracle for consistency with later Mantis Strongholds; all contemporary
+    cards which could affect Ports have had "non-Stronghold" added to their own Oracle text.
+  rarity: Promo
+  artist: Eric David Anderson
+- title: Moto Tsume
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Moto Tsume • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Experienced
+  - Nonhuman
+  - Samurai
+  - Shadowlands
+  text: After Tsume enters play, lose 6 Honor.<br>Will not enter play if your Family Honor is 1 or higher.<br>May
+    not be assigned to the same battlefield as units with no Shadowlands cards and such units may not
+    assign with Tsume.<br><b>Battle:</b> Fear 3.
+  gold_cost: 7
+  force: 5
+  chi: 5
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Bryon Wackwitz
+- title: Ninja Shapeshifter
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Ninja Shapeshifter • Inexperienced
+  clans:
+  - Ninja
+  keywords:
+  - Unique
+  - Inexperienced
+  - Ninja
+  text: <b>Ninja Repeatable Limited, :bow::</b> Ninja Shapeshifter challenges another player's target
+    Personality. If Ninja Shapeshifter wins the duel, it may copy the target's Force, the target's Chi,
+    or one of the target's abilites that does not itself copy abilities, until the next time this game
+    it performs this action. If it loses the duel, destroy it.
+  gold_cost: 8
+  force: 0
+  chi: 2
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Ron Spencer
+- title: Sepulcher of Bone
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Shadowlands
+  text: Your Family Honor has a maximum value of 0.<br>You will not lose or be eliminated by Dishonor.<br>You
+    may not take Political actions or actions that cause other players unconditional Honor losses.<br>Your
+    Undead cards in and out of play have -2 Gold Cost.<br>Negate all Fear effects upon your cards.<br>After
+    another player's non-Shadowlands Personality or Follower is destroyed, create a 1F <b>Shadowlands
+    • Undead</b> Follower and attach it to one of your target unbowed Personalities.
+  province_strength: 5
+  starting_honor: 0
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Tommy Pons
+- title: Takao
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Brotherhood of Shinsei
+  keywords:
+  - Acolyte
+  - Fire
+  - Monk
+  text: '<b>Elemental Reaction:</b> Once per duel, after entering a duel, if Takao has lower Chi than
+    the Personality facing him: You have the first opportunity to focus or strike; negate all current
+    and new effects giving another player that opportunity until this duel ends.<br><b>Elemental Reaction:</b>
+    Once per duel, after Takao enters a duel, if you control the Ring of Fire, bow him: Destroy a Weapon
+    attached to the Personality facing him.'
+  gold_cost: 7
+  force: 3
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: William O'Connor
+- title: Tattoo Madness
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Tattoo
+  text: '<b>Battle/Open:</b> Target a Tattooed Personality, who must be unbowed if he is yours: Give him
+    +2F/+2C. After the turn ends, permanently give him -1F/-1C.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Douglas Shuler
+  flavor_text: <i>"With the blood in your veins, your mind is opened to the truth... not the petty thoughts
+    of mortals, but the eye of All." - Hitomi</i>
+- title: Tell the Tale
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Limited:</b> Gain 1 Honor.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Legacy
+  - Modern
+  notes: The Promotional version of this card is a famous French misprint that had a 7 Gold Cost.
+  rarity: Promo
+  artist: Heather Hudson
+  flavor_text: <i>"Quand les enfants del'Ombre vinrent Ã la vallÃ©e de Wasureru Kizu, cent quatre vingt
+    quatre samuraÃ¯s dÃ©poserent les Ã©tendards de leurs familles et levÃ¨rent l'Ã©pÃ©e de l'unitÃ©. Dans
+    cet endroit froid, oubliÃ©, l'honneur renaissait." - des Contes de Doji Shizue</i>
+- title: Temples of the Crow
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  keywords:
+  - Temple
+  text: You may include sleeved non-Personality Sensei in your Fate deck, which must also be fully sleeved
+    identically; these Sensei act as Fate cards whenever not in play and do not count toward your minimum
+    deck size.<br><b>Repeatable Limited, :bow::</b> Discard your target non-Personality Sensei to search
+    your Fate deck, then hand, for a Sensei and put it into play.
+  province_strength: 6
+  starting_honor: 4
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  errata_text: Errata'd to work as it used to under contemporary Sensei and deck-construction rules.
+  rarity: Promo
+  artist: Ellym Sirac
+- title: The Ancient Halls of the Lion
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: <b>Repeatable Battle, :bow::</b> Destroy a target Terrain.<br><b>Repeatable Reaction, :bow::</b>
+    Before a Terrain action resolves, negate all the Terrain's effects other than entering play.
+  province_strength: 6
+  starting_honor: 7
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Carl Frank
+- title: The Brotherhood of Shinsei
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  text: <b>Repeatable Reaction, :bow::</b> Before you would trigger a Ring's printed trait that would
+    put it into play, or if you ever meet the conditions for a Ring's printed action which would put it
+    into play, search your Fate deck for that Ring, show it, and put it into your hand. <i>(If Reacting
+    to meeting a trait's trigger, you then have a chance to trigger that trait after taking this action.)</i>
+  province_strength: 6
+  starting_honor: 4
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes.
+  rarity: Promo
+  artist: Ken Meyer Jr.
+- title: The Citadel of the Hiruma
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: <b>Repeatable Battle, :bow::</b> Double the Force of your target defending Crab Clan Personality.
+    Destroy him after this battle ends.
+  province_strength: 7
+  starting_honor: 3
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Chris Arneson
+- title: The Dark Path of Shadow
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Ninja
+  text: You pay 2 less Gold for your non-Personality Ninja cards and your Ninja Strategy actions.<br>You
+    do not lose Honor from other players' cards' effects nor from your Ninja cards; this is not negation.<br><b>Absent
+    Repeatable Tireless Battle:</b> Even if you cannot take actions during the current battle, if the
+    current army attacking your Province has 9 or less total Chi, move all its units home, and bow them
+    as they move.
+  province_strength: 0
+  starting_honor: 0
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Bryon Wackwitz
+- title: The Esteemed House of the Crane
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  text: <b>Repeatable Limited, :bow::</b> Gain 2 Honor.
+  province_strength: 5
+  starting_honor: 5
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
+    the Emerald Edition border.
+  rarity: Promo
+  artist: Bryon Wackwitz
+- title: The Great Walls of Kaiu
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: You may not bring Shadowlands cards into play. <br>Fortifications enter play for you for 4 less
+    Gold.
+  province_strength: 7
+  starting_honor: 4
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: In Time of the Void, this Stronghold was printed only on the back of the starter deck boxes and
+    was never printed anywhere else.
+  rarity: Promo
+  artist: KC Lancaster
+- title: The Hidden Temples of the Naga
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Naga
+  keywords:
+  - Naga
+  - Temple
+  text: You will not win an Honor Victory.<br>Negate all Fear effects upon your Naga cards.<br>If you
+    control no Shadowlands cards, you may ignore Honor Requirements when bringing Naga cards into play.<br><b>Repeatable
+    Limited, :bow::</b> Target any player's Naga Personality. Create a 1F <b>Nonhuman • Naga</b> Follower
+    and attach it to him.
+  province_strength: 6
+  starting_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes.
+  rarity: Promo
+  artist: KC Lancaster
+- title: The House of Tao
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  text: After all players reveal Strongholds, you may search your Fate deck for a Ring and put it into
+    play.<br>After you put a Shadowlands card into play, remove all your Rings from the game.
+  province_strength: 5
+  starting_honor: 4
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: There were two versions of the Hidden Emperor 3 printing of this card. One had a Dynasty back
+    and was a Fixed card in the starter deck, one had a Fate back and was a Rare in the booster packs.
+  rarity: Promo
+  artist: Randy Asplund-Faith
+- title: The Imperial Favor
+  types:
+  - Other
+  decks:
+  - Other
+  rarity: Promo
+- title: The Iron Fortress of the Daidoji
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  text: Your Daidoji Family cards, or cards with "Daidoji" as part of any of their keywords, in and out
+    of play have their Honor Requirements lowered by 5, which may drop them below 0 despite minimums.<br>Non-Samurai,
+    non-Shugenja Personalities enter play for you for 3 more Gold.<br><b>Repeatable Battle, :bow::</b>
+    Your target unbowed performing Samurai challenges a target an enemy Personality. He may refuse; if
+    he does, move him home, bow him as he moves, and dishonor him. Destroy the loser.
+  province_strength: 6
+  starting_honor: 4
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Susan Van Camp
+- title: The Kitsu Tombs
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: Lion Clan Shugenja you own in and out of play have Shadowlands.<br>You may ignore Honor Requirements
+    when bringing Shadowlands Personalities into play.<br><b>Repeatable Reaction:</b> Before paying for
+    bringing an Oni into play, bow your target performing Human Shugenja to ignore all of the Oni's non-Gold
+    costs for entering play and negate its entering-play effects.
+  province_strength: 6
+  starting_honor: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  story: 1998 World Champion - David La
+  notes: Errata'd via internet.
+  rarity: Promo
+  artist: Lissanne Lake
+- title: The Legion of Two Thousand
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: 'After this card enters play: You may search your Fate deck for a Follower, show it, and put it
+    in your hand.'
+  gold_cost: 9
+  focus: 4
+  force: 5
+  chi: 0
+  honor_requirement: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  notes: The 2000th card
+  rarity: Promo
+  artist: Brian Snoddy
+  flavor_text: '<i>They came, on that sacred day, to tell the tales of heroes; of brotherhood and courage.
+    These were true samurai: honored among generations; the glory of the future.</i>'
+- title: The Mountain Keep of the Dragon
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Dragon
+  text: After one of your Provinces is destroyed, permanently give each of your remaining Provinces +2
+    strength.
+  province_strength: 5
+  starting_honor: 4
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
+    the Emerald Edition border.
+  rarity: Promo
+  artist: Ben Peck
+- title: The New Akasha
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Naga
+  text: Crab Clan Personalities enter play for you for 2 less Gold, but will not have their Gold cost
+    further reduced.<br>If you control no Shadowlands cards, you may ignore Honor Requirements when bringing
+    Crab Clan Personalities and Naga cards into play.<br>While you have Crab Clan and Naga Personalities
+    in the same army, each such Personality has +1F/+1C.<br>Negate all Fear effects upon your Naga cards.
+  province_strength: 6
+  starting_honor: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Chris Arneson
+- title: The Palace of Otosan Uchi
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Toturi's Army
+  text: If you are the only Toturi's Army player, you begin the game with control of the Imperial Favor.<br>Your
+    Imperial cards in and out of play have -2 Gold Cost.<br><b>Reaction:</b> When paying for a Follower
+    attaching to one of your Personalities, reduce its cost by an amount equal to the Personality's Force
+    until it is paid.
+  province_strength: 7
+  starting_honor: 4
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: The promo version of this Stronghold was misprinted with the wrong title
+  rarity: Promo
+  artist: Eric David Anderson
+- title: The Provincial Estate of the Unicorn
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unicorn
+  text: <b>Repeatable Battle/Open, :bow::</b> Give one of your target cards <b>Cavalry</b>.
+  province_strength: 6
+  starting_honor: 4
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
+    the Emerald Edition border.
+  rarity: Promo
+  artist: William O'Connor
+- title: The Ruins of Isawa Castle
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Phoenix
+  keywords:
+  - Castle
+  text: <b>Repeatable Reaction, :bow::</b> After you announce a Kiho Strategy action, search your Fate
+    deck for that Strategy and play it.
+  province_strength: 6
+  starting_honor: 5
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: In Time of the Void, this Stronghold was printed only on the back of the starter deck boxes and
+    was never printed anywhere else.
+  rarity: Promo
+  artist: William O'Connor
+- title: The Shadow Stronghold of the Bayushi
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Scorpion
+  text: <b>Repeatable Open:</b> Look at another player's hand. Lose 1 Honor.
+  province_strength: 6
+  starting_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Carl Frank
+- title: The Shadowlands Horde
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Shadowlands
+  text: You do not gain or lose Honor; this is not negation.<br>You may not take Political actions or
+    actions that cause other players unconditional Honor losses.<br>You may not be invited as an ally,
+    or invite allies.<br>Negate all Fear effects upon your cards.<br><b>Repeatable Reaction, :bow::</b>
+    When paying for a Shadowlands card, lower the card's Gold Cost by 4 until it is paid.
+  province_strength: 5
+  starting_honor: -19
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes.
+  rarity: Promo
+  artist: Bryon Wackwitz
+- title: The Spawning Ground
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Shadowlands
+  text: You do not gain or lose Honor; this is not negation.<br>You may not take Political actions or
+    actions that cause other players unconditional Honor losses.<br>Negate all Fear effects upon your
+    cards.<br>Ogre, Oni, and Troll Personalities you own, in and out of play, have +1F/+1C.
+  province_strength: 7
+  starting_honor: -19
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Paul Carrick
+- title: The Towers of the Yogo
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Scorpion
+  text: Each of your Scorpion Clan Personalities has the ability, "<b>Battle, :bow::</b> Bow a target
+    enemy Follower or Personality without Followers."
+  province_strength: 7
+  starting_honor: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Ellym Sirac
+- title: The Utaku Palaces
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unicorn
+  text: Your Magistrate Personalities and Magistrate Followers enter play for you for 1 less Gold.<br><b>Tireless
+    Reaction:</b> After another player declares an attack with you as the Defender, straighten your target
+    Personality's Cavalry unit.
+  province_strength: 5
+  starting_honor: 5
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Heather Bruton
+- title: The Yoritomo Alliance
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  text: <b>Repeatable Reaction:</b> Before bowing this Stronghold to produce Gold, if your Family Honor
+    is 0 or higher, lose any amount of Honor from 0 up to your current Family Honor total to have this
+    Stronghold produce additional Gold equal to the amount of Honor you lost which may only pay for one
+    cost; you cannot give to another player, negate, substitute, increase, or decrease this Honor loss.
+  province_strength: 6
+  starting_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes.
+  rarity: Promo
+  artist: Christina Wald
+- title: Togashi Yoshi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Shugenja
+  text: '<b>Reaction:</b> Any number of times per turn, after your Personality enters duel, bow Yoshi:
+    Discard the top card of you Fate deck. Give the Personality a Chi bonus equal to the discard''s Focus
+    Value.'
+  gold_cost: 6
+  force: 1
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Ken Meyer Jr.
+- title: Toturi's Army
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Toturi's Army
+  text: You may ignore Honor Requirements when bringing Unaligned Human Personalities or Toturi's Army
+    Personalities into play.<br>Your deck is not legal if it includes three or more Shadowlands cards.
+  province_strength: 6
+  starting_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes.
+  rarity: Promo
+  artist: Monika Livingstone
+- title: War in the Heavens
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: Permanently give the Monk or Monks with the highest Chi +1F/+1C/+2PH.
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  rarity: Promo
+  artist: Michael Phillippi
+  flavor_text: <i>"You are only a mortal," Onnotangu snarled. "I may be born of a mortal man," the monk
+    said grimly, "but I choose my own destiny."
+- title: Yoritomo
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Mantis
+  keywords:
+  - Double Chi
+  - Unique
+  - Clan Champion
+  - Mantis Clan
+  - Samurai
+  text: May attach two Weapons.<br>Yoritomo has +1F/+2C for each Weapon he has attached.<br>Yoritomo's
+    Followers have +1F.
+  gold_cost: 12
+  force: 5
+  chi: 4
+  honor_requirement: 7
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: The Promotional version of this card was misprinted with the Experienced keyword
+  rarity: Promo
+  artist: Jason Behnke
+  flavor_text: <i>"We have only one chance. The Great Clans have failed to protect the Empire. We prove
+    our worth now, or we die trying."</i>

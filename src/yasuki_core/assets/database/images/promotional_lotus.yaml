@@ -1,0 +1,548 @@
+set: Promotional – Lotus
+images:
+- card_id: a_favor_returned
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: a_favor_returned.jpg
+    sha256: 211c398cd86ffbdc5a712f7b0a0b644772eef35f377c77c284cc15ed94931d07
+- card_id: a_heros_courage
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: a_heros_courage.jpg
+    sha256: 35855d7c311947e65926b47f7b80285986dc1e4e806864bb582bf4b47f2dc17a
+- card_id: a_heros_name
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: a_heros_name.jpg
+    sha256: a6f72ff149d22e3d574696d44f48ee787b5d33d7a6ed32dd075251f421db405a
+- card_id: a_heros_tale
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: a_heros_tale.jpg
+    sha256: 441502c4adf03eb04ce4f0d681170ba827f49160d43157c15e00ab4e3df85eef
+- card_id: arrival_of_the_phoenix
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: arrival_of_the_phoenix.jpg
+    sha256: d27d658452b16654f379c9854635b562685e4fd534b374a1c5b3ac851cdf7d11
+- card_id: ayamari
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: ayamari.jpg
+    sha256: 5ea97dbac016dc62be648d3ba99cd2fef152ce88a9654f8315915b141c6e4c7f
+- card_id: battle_at_the_tomb
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: battle_at_the_tomb.jpg
+    sha256: 7093bf0dced9793ea1c4422134e51b04e4cea26ff0f586396460de62f60dc67c
+- card_id: bayushi_paneki_experienced_3
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: bayushi_paneki_experienced_3.jpg
+    sha256: 3b139afda525d9e8261169ce67a810266ef784f5bbc06d73b5b9d55fd8d9db9c
+- card_id: brilliant_artisan
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: brilliant_artisan.jpg
+    sha256: ecf8c4b6e6293139f16d89e3336b65a73eb0e1982ce7ca180255f5b06ee5d24d
+- card_id: call_of_destiny
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: call_of_destiny.jpg
+    sha256: 9829ec057816fd70c42d2f1077f8fcba822de0315e69bda9866b9632d2abc26c
+- card_id: city_guard
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: city_guard.jpg
+    sha256: d365555e0657aec512ef5ce88f552532a349d146e34f11ff0b20de397159a399
+- card_id: clan_standard
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: clan_standard.jpg
+    sha256: b9fad1c22fbefa2e0b93ac550d0ad4ed2f61c6eea2ffd4d9159e81cc88aace82
+- card_id: daigotsu_experienced
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: daigotsu_experienced.jpg
+    sha256: 802bfc668be6067c2b0a837a57928fab2de18adeee4325b7f3c5e40297d6da58
+- card_id: danjuros_legion
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: danjuros_legion.jpg
+    sha256: 35572ee05420fb4f469c1e1808bddc98a5eaf17835674722ac2e8ea921e28e96
+- card_id: dark_divination_experienced
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: dark_divination_experienced.jpg
+    sha256: d13ce8e90887f05b0710b1e588b080f0a23df1097ad0cfc9f44ba92dedc96998
+- card_id: desperate_defense
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: desperate_defense.jpg
+    sha256: e300584fc111c2b440e49576be8eaa9cc744c0df88cc7ac87ea7b0e822a232bf
+- card_id: diamond
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: diamond.jpg
+    sha256: a4eb932487defc475199c63322ecbeae0f3045757bc7c6e164d016e42f1ba776
+- card_id: district_governor
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: district_governor.jpg
+    sha256: 78bddfd26a85e136dcf3bd60f1dd56212d6a73e0586fa2b84099d60cdd9fb0db
+- card_id: doji_domotai_experienced_2
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: doji_domotai_experienced_2.jpg
+    sha256: 29b518493f6a0353c25579f2f243808320dede500793fb61b8cb3a36483a426a
+- card_id: emerald
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: emerald.jpg
+    sha256: 0f95762c14300876463ce3701a474a25b5aa3925b25498bb08ffec7bb75530fb
+- card_id: emerald_competitor
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: emerald_competitor.jpg
+    sha256: 3c90f0fb1ec68fe37bff5711102ca2369059c90c1d7f7bc43252e3a7492c4551
+- card_id: favor_of_the_emerald_champion
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: favor_of_the_emerald_champion.jpg
+    sha256: 03049de03424d463fe58bc38dd72a7a66498e50c7eb81e33444eb1c05dbdcea5
+- card_id: favor_of_the_jade_champion
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: favor_of_the_jade_champion.jpg
+    sha256: 630362265ded0a38cdff39442727d13d4413e8c014bb349740cb0559693a5cd2
+- card_id: fighting_in_the_streets
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: fighting_in_the_streets.jpg
+    sha256: 78f135b09aab631d7467b79592de9104fa3d30b917c7dd20d959c2cd84c88b86
+- card_id: fireworks
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: fireworks.jpg
+    sha256: 8f7f89acff2290c6d1da87b2e92a91e30f8c419d44ac840583ec8c280ac1716a
+- card_id: gift_of_the_shogun
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: gift_of_the_shogun.jpg
+    sha256: e88716712e23f5964bab5cf07b5e2f87734c12f506e9b018a8221cdfc3ed78eb
+- card_id: gifts_and_favors
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: gifts_and_favors.jpg
+    sha256: 51b6d96b850f1284818b0d5bcc21de6786ba82b99b55e08bc14021e048465c0e
+- card_id: gold
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: gold.jpg
+    sha256: 1d458ad75f37278414c14c018f4f2474afc0aae56929eb111af1b0e487682113
+- card_id: hida_kuon_experienced_4
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: hida_kuon_experienced_4.jpg
+    sha256: 3858a3af8de6265a8217724f8a72dc2336e206c398722664ccbc361f91c62954
+- card_id: house_of_the_blue_tanuki
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: house_of_the_blue_tanuki.jpg
+    sha256: 9a4cf1ff5c9aebe8e734f12580f0aa0b89af9e0974d4abbf92c9df537d217616
+- card_id: imperial
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: imperial.jpg
+    sha256: d57503c809ac202d4429fa391086d9184c90748d9902c5b1dbb6489ba19c8249
+- card_id: jade
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: jade.jpg
+    sha256: a8e167ae1f262a40764cf3d87a79bb415f7ff7e8262c98d7e59d2728b53cde37
+- card_id: kadanos_map
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: kadanos_map.jpg
+    sha256: 967e090c0dfbf5b7e13fd3b0af8a8bb13b13f000ffbf224219c45d9d070e93b9
+- card_id: kanekas_reserves
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: kanekas_reserves.jpg
+    sha256: e66768168615813f7091c214a02f410251f3d18ee10d9272ac3190bc51ab3b2e
+- card_id: kanokticheck_experienced_2
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: kanokticheck_experienced_2.jpg
+    sha256: 47d92a1dbabd22909c4ac9f763d35ea71e82a614cda1211107b25a091d9ebf8a
+- card_id: kitsuki_scrutiny
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: kitsuki_scrutiny.jpg
+    sha256: 9dcf469ac110dfd0d110a93b63db9cbe85e6972af30f4f97cf61d7595cfaaf76
+- card_id: kitsune_den
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: kitsune_den.jpg
+    sha256: 821d14b4339fcfe0dffadde9b92ab88a54001f4320a936292f3e30ef5b58019a
+- card_id: lion_rout_the_unicorn
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: lion_rout_the_unicorn.jpg
+    sha256: 93d3d2688101ab6fd3ebeab6997b8eb9934972a1d37e4a06a146f4cb02a2a24e
+- card_id: lotus
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: lotus.jpg
+    sha256: 502a1b9656d4a7652347de52a86d06f04fa617e7111fcb79bc2224821fd0512c
+- card_id: lotus_blade
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: lotus_blade.jpg
+    sha256: 0b4d12126a19c5686157730447bc43a93798c0777868a069b7a15e6a5dbc6b5b
+- card_id: luxurious_silk
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: luxurious_silk.jpg
+    sha256: e2890ff4266d3db72cba3bfefd8be416fccd3ab5726cf85c7f510c7170275dc4
+- card_id: mantle_of_the_jade_champion_experienced
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: mantle_of_the_jade_champion_experienced.jpg
+    sha256: b9b3cba153ab05b192731c5ddfaabb0589dd789dac26b8a7076ff8dd37391c9b
+- card_id: matsu_yoshino_experienced
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: matsu_yoshino_experienced.jpg
+    sha256: 1418d22c86e42031ceb8b2de6cfe7a1e80708487940c9aaa47afe33dd7652ea1
+- card_id: moto_chagatai_experienced_4
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: moto_chagatai_experienced_4.jpg
+    sha256: c68762ae6e1044c09fb2fede04c18fc5a80dfa370bbd278333f0e38f8c2fbc8d
+- card_id: nanashi_mura
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: nanashi_mura.jpg
+    sha256: e1c6d9e3d4bc4e51c5945a00b242e42072b4d82da24694705fc8a4bc5d87159b
+- card_id: ninja_token
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: ninja_token.jpg
+    sha256: afc3f89c93433baeb6a470b0148c0a4baaacc3334a783eacaf03e13491168171
+- card_id: oath_to_the_empire
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: oath_to_the_empire.jpg
+    sha256: c52ff69e6fc338a2389afb0c6f030628dec0b6a2e6af0d4ba90722fe41846bd1
+- card_id: obsidian
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: obsidian.jpg
+    sha256: 60dfe92e9e2462ddcd5646a56e0b42a1041163d1454cfd57ffd39c214f536cdd
+- card_id: ordered_retreat
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: ordered_retreat.jpg
+    sha256: ac884994adf8e516d0e511c3720c558beec56445dca155356e9ff62e00dbda3d
+- card_id: osami
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: osami.jpg
+    sha256: f462408ee0d1806457710be4629116496fbb2f41b3eca820d3ddedefef207cbb
+- card_id: pearl
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: pearl.jpg
+    sha256: e6d9bac0639169038bf90215e3b3cabd16b5e9941ff2cc17ce1c304b6d665dee
+- card_id: purifying_rite
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: purifying_rite.jpg
+    sha256: 8e52b3dc968b8b127de6bab83dd94f170f640d366e51488f75eaf8a5f9047ce0
+- card_id: ratling_token
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: ratling_token.jpg
+    sha256: 361a1499b8c8bc6d007d763b28da8b3ec1eb5ff126780eafe44e47db3de62a91
+- card_id: ruthless_advance
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: ruthless_advance.jpg
+    sha256: 4cb9f908e04e456dee26dd9fb119326186232db1f307afa4e87820883ed88163
+- card_id: satoru
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: satoru.jpg
+    sha256: 6d141acceaf358abc7b834582abe03b5e721ac3e59610a51c98f458ca654de7f
+- card_id: sezarus_choice
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: sezarus_choice.jpg
+    sha256: d7cf912969bf76e94b3107d0f875360d71df4b8813c8b0e5872ddc8ee49d304d
+- card_id: shiba_mirabu_experienced_3
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: shiba_mirabu_experienced_3.jpg
+    sha256: f4e198c67b14ae4f2117851ae2ad14aa2483099f1ec1911e6b6e9b708c86df40
+- card_id: shiga
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: shiga.jpg
+    sha256: 8a7dca6d6bfad8475198173001cbfb1a1d062fbf24a18bec2de9d6395845d52c
+- card_id: shourido
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: shourido.jpg
+    sha256: 8965a0641502208cd54e80980dc4395c3868161966f37fcbc443228df343fa06
+- card_id: soul_of_bushido
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: soul_of_bushido.jpg
+    sha256: bfa109e56a68953de4a0fab0cc106b44efed909dd3dd1933a6176f29ae472369
+- card_id: spearhead
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: spearhead.jpg
+    sha256: 55a37fa2c2d4af57e3a5dd579b489df648ed3aeb719469edf4350477ddc1f2d7
+- card_id: standard_bearers
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: standard_bearers.jpg
+    sha256: dae904d62ad7878d253cb108920812bbea60993d260fd8d0a66b0a1590f28eb7
+- card_id: strength_of_darkness
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_darkness.jpg
+    sha256: 8fc71de13ba0380e38e56807c144e3d152f7b49dc5b92338971aaa3f6e87ddb3
+- card_id: strength_of_the_crab
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_the_crab.jpg
+    sha256: e43afac15a293f7666ac134ca4c30ae6d8de569c6b5625a3c42dcad92c4c02a7
+- card_id: strength_of_the_crane
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_the_crane.jpg
+    sha256: 94dc367d56ee7109b0aada0f181ce16648c5ba675b79b269c2b5003258649ed1
+- card_id: strength_of_the_dragon
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_the_dragon.jpg
+    sha256: 10e1954d001f54b54012b410f99b7f0f1ef804c4391253368341c43bc8e67c83
+- card_id: strength_of_the_lion
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_the_lion.jpg
+    sha256: ca62288c32a937e716789eb628ad9e10952a463a70f32f181fc58efacfd542a0
+- card_id: strength_of_the_mantis
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_the_mantis.jpg
+    sha256: 41c1ded352646bf9c782a80053edcec132526e762b316be47ab71bd77e7998ee
+- card_id: strength_of_the_nezumi
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_the_nezumi.jpg
+    sha256: ec62f53e75374025461f32a55e877b1136021c94887931a25cbe479494efba7e
+- card_id: strength_of_the_phoenix
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_the_phoenix.jpg
+    sha256: d9cfb00ee6246714242c38034ac15b53226a78ecae8e7be12f7ec0635a99559b
+- card_id: strength_of_the_scorpion
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_the_scorpion.jpg
+    sha256: f53ec0e65c4e9601bd7a51837136394bcb096efa1161e53b52098c9b593492a3
+- card_id: strength_of_the_shadowlands
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_the_shadowlands.jpg
+    sha256: 0bcd2bb87d36b7e47160a2c2146c1dd5485ae03303c9de5413cb3a26e85e1925
+- card_id: strength_of_the_unicorn
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strength_of_the_unicorn.jpg
+    sha256: 1614c52429eaa5cc06f6bac9bb5a36279ef39fff7bffc5a3359891a6a1367a82
+- card_id: strict_training
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: strict_training.jpg
+    sha256: a30780a7e847d4b7a506dd39743990c09f72bf33771cd8203d3430df354eb4b9
+- card_id: sushi_stand
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: sushi_stand.jpg
+    sha256: 4f1da7d5a0eaf5d387e851d91dcfc93104f843889ce0268d668d75603ccbe5f7
+- card_id: the_emerald_armor_experienced
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: the_emerald_armor_experienced.jpg
+    sha256: 7e8a8ae0456cc51daf448abcd83c59fc075f66b4afcbb0bacda7a0ddacedf7c6
+- card_id: the_mystic_experienced
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: the_mystic_experienced.jpg
+    sha256: 9e6d68507d36ce7dbcbcdadade1109e41d14d4eb92b5d0c35fb5a4c43bfb65b4
+- card_id: the_race_begins
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: the_race_begins.jpg
+    sha256: 91a9e22fdbda0e23b7143adb73d3e5439d7ea37a542ae742f840e74fb4008f99
+- card_id: the_ronin_experienced
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: the_ronin_experienced.jpg
+    sha256: 13717208a688e17a4024421b6ae3edbd3c86506b93fa3fb4d35039c930e5dc3e
+- card_id: the_unclean
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: the_unclean.jpg
+    sha256: d0d67e52801362c2d6267db4acb42889e6206d37fce3c7e8ce419b128c1558c0
+- card_id: the_wanderer_experienced
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: the_wanderer_experienced.jpg
+    sha256: e22a1d08e98f1cc510439a8df5497fd16a2dcb8cb09a46bd97d38ad5cfe67534
+- card_id: togashi_satsu_experienced_3
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: togashi_satsu_experienced_3.jpg
+    sha256: de13a2c4bbb7ba59e1b75b52b2f89106308c58eefacd06b9ae268648f8e4fafc
+- card_id: tomb_of_the_seven_thunders
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: tomb_of_the_seven_thunders.jpg
+    sha256: 913bff23515833b99fc33f1cc5a28befb309831eca48f7c8a459970e208a6cd5
+- card_id: trail_of_deception
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: trail_of_deception.jpg
+    sha256: 35f0b21a3e8bcba9cec721ca820e65e1228a428ff6d31f1351bed7595a0b35dd
+- card_id: trials_of_jade
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: trials_of_jade.jpg
+    sha256: 94f7cee860f8da47a41eb79d7e455b218cceb43c7e626d4ddcb4fb90e70ba7f1
+- card_id: tsi_zutaka
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: tsi_zutaka.jpg
+    sha256: 3c0902bbe52f2d4ef0f4cd652ffd08690bd0782881f8b1599a42f397ac8bc38d
+- card_id: tsukotu
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: tsukotu.jpg
+    sha256: 88b199f15d09f345fbf84d9f68d09429c203df11b3888fbae66f801c3c1b6c7b
+- card_id: ujina_kadano
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: ujina_kadano.jpg
+    sha256: 3651323b57e0c41f760ab0549cb08a999ecba8f0b3c65d11408b1ca72db1b336
+- card_id: unexpected_resistance
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: unexpected_resistance.jpg
+    sha256: 347b6f055acc30230f9d051493bf94b2a7fdfde28e0280395ee3f89557675429
+- card_id: writ_of_the_herald
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: writ_of_the_herald.jpg
+    sha256: 3d1734c8742587d7de3005131aa095203b6dfd63c9f85e168a27efb59c733911
+- card_id: yoritomo_kumiko_experienced_2
+  printing_id: promotional_lotus
+  files:
+  - role: front
+    file: yoritomo_kumiko_experienced_2.jpg
+    sha256: 472f21c9eb55055f5a6b469513f07e51fb7a08a1977ca4214b70b992a19efab8

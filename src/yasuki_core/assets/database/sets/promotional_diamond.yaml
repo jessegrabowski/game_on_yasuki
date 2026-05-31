@@ -1,0 +1,3164 @@
+set: Promotional – Diamond
+cards:
+- title: A New Wall
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, search your Dynasty deck for a non-Unique Holding, refill this Province with it face-up,
+    and permanently give it +1 Gold Cost.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  notes: 'The Gold-bugged version of this card was released extremely late in the Gold arc: After major
+    events were already over for the season. Most Gold decks that ever saw play during the arc did not
+    have access to this card. However, since there was a Gold version of the card, it is technically legal.
+    Anyone running a tournament can choose to represent a snapshot in time - disallowing this card, or
+    a "Gold-legal" including this card.'
+  rarity: Promo
+  artist: Malcolm McClinton
+  flavor_text: <i>"If the Tower of Fear will not fall, we will rebuild the Wall around it." - Kaiu Ryojiro</i>
+- title: A Time for Vengeance
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, search your Dynasty deck for a Unique non-Experienced Personality and refill this Province
+    with him, face-up.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Franz Vohwinkel
+  flavor_text: <i>"Iuchiban moves his strongest servants to Otosan Uchi," the Dark Lord said to Kokujin.
+    "The time has come to take back our home."</i>
+- title: Akasha
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Akasha • Experienced
+  clans:
+  - Naga
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Double Chi
+  - Tactician
+  - Unique
+  - Experienced
+  - Legacy of the Naga
+  - Naga
+  - Samurai
+  - Unicorn Clan
+  text: Akasha's Gold Cost will not be reduced.<br>Akasha may perform and be targeted by your Kiho Strategy
+    actions as if she were a Shugenja.<br><b>Battle:</b> Once per battle, Ranged 2 Attack.
+  gold_cost: 11
+  force: 3
+  chi: 5
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Akodo House Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: Will only attach to a Lion Clan Personality.<br>Attaches to a non-Tactician for 4 less Gold.<br>This
+    Personality may perform one additional Tactical action per turn while he is a Tactician.
+  gold_cost: 7
+  focus: 4
+  force: 3
+  chi: 0
+  honor_requirement: 2
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+- title: Ambition
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ambition • Experienced
+  keywords:
+  - Unique
+  - Weapon
+  - Bloodsword
+  - Experienced
+  text: After this Item enters play, lose 3 Honor. <br>All Items with "Celestial" in their titles have
+    maximum Force and Chi Modifers of +0. <br>This Item has +2F/+2C for each other Unique Weapon in play.<br><b>Maho
+    Repeatable Battle, :bow::</b> If this Personality is unbowed, he challenges a target enemy Personality.
+    Destroy the loser. Lose 4 Honor.
+  gold_cost: 8
+  focus: 4
+  force: '+1'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jason Engle
+- title: Ancestral Kabuto
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: Will only attach to a Samurai. <br>After your turn begins, put one +1F/+1C <b>Soul </b>token on
+    this Item.
+  gold_cost: 1
+  focus: 4
+  force: '+1'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Brad Williams
+  flavor_text: <i>Some artifacts become magic due to the legends of their past wearers. Those who prove
+    worthy will be guided by heroes of the past.<i>
+- title: Bayushi Sunetra
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Bayushi Sunetra • Experienced
+  clans:
+  - Scorpion
+  keywords:
+  - Double Chi
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Courtier
+  - Experienced
+  - Samurai
+  - Scorpion Clan
+  text: While Sunetra is unbowed, you may assign bowed Scorpion Clan Personalities with her or to a battlefield
+    she is already at, and Scorpion Clan Personalities in her army contribute their Force to their army's
+    total Force even while bowed.
+  gold_cost: 15
+  force: 4
+  chi: 6
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  story: 2002 European Championships Top of Clan
+  rarity: Promo
+  artist: Anthony Francisco
+- title: Blade of Thorns
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Weapon
+  text: 'You may attach this card from your hand as a <b>Battle</b> action<br>After attaching this card
+    from your hand as a Battle action: You may take an additional Battle action to use its base ability.<br><b>Fear
+    Battle:</b> Fear 3.'
+  gold_cost: 7
+  focus: 4
+  force: '+3'
+  chi: '+3'
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jon Hodgson
+  flavor_text: <i>"It's so very thirsty." -Asako Kinuye</i>
+- title: Book of Air
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Singular
+  - Air
+  text: <b>Air Absent Remote Repeatable Battle:</b> Bow this Personality or your Air Ring to create a
+    1F/1C Personality <i>(under your control)</i> at the current battlefield.
+  gold_cost: 3
+  focus: 3
+  force: '+1'
+  chi: '+1'
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Book of Earth
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Singular
+  - Earth
+  text: '<b>Battle/Open:</b> Any number of times per turn, bow this Personality or your Earth Ring and
+    target a province: Until the turn ends, Reactions may not be announced during battles at its battlefields.'
+  gold_cost: 3
+  focus: 3
+  force: '+1'
+  chi: '+1'
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Book of Fire
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Singular
+  - Fire
+  text: '<b>Battle:</b> Any number of times per turn, bow this Personality or your Fire Ring: The enemy
+    leader targets an attachment in his army. Destroy it.'
+  gold_cost: 3
+  focus: 3
+  force: '+1'
+  chi: '+1'
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Book of Water
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Singular
+  - Water
+  text: '<b>Battle/Open:</b> Any number of times per turn, bow this Personality or your Water Ring and
+    target two of your Personalities: Set the Force or Chi of one equal to the other.'
+  gold_cost: 3
+  focus: 3
+  force: '+1'
+  chi: '+1'
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Book of the Void
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Singular
+  - Void
+  text: '<b>Limited:</b> Any number of times per turn, if there are more cards in your Fate discard pile
+    than in your hand, bow this Personality or your Void Ring and target a card in that discard pile:
+    Put it into your hand, face-up, and remove the rest of that discard pile from the game. At the end
+    of the turn, remove the target from the game.'
+  gold_cost: 3
+  focus: 3
+  force: '+1'
+  chi: '+1'
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Bushido
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until the game ends, after each time an action from a Strategy with the title or keyword
+    Compassion, Courage, Courtesy, Duty, Honor, Honesty, or Sincerity resolves, the player who took it
+    draws a card, and if he ever takes all seven such different titled or keyworded Strategies' actions
+    in the same turn, he wins the game.
+  is_unique: true
+  is_banned: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Chuck Lukacs
+- title: Castle of the Wasp
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  keywords:
+  - Castle
+  text: You may combine Ranged Attacks from cards in different units.<br>Before you target an uncombined
+    Ranged Attack from a card in your current attacking army, once per battle, you may target the current
+    battlefield's Province with it instead of an enemy card. If you did, give the Province a strength
+    penalty equal to the Ranged Attack's strength.<br>Before one of your cards bows for the cost of a
+    Ranged Attack action, once per battle, you may ignore the cost; if you did, its Ranged Attacks may
+    only target an enemy card.
+  province_strength: 7
+  starting_honor: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Christopher Appel
+- title: Crescent Moon Cut
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: 'As a Focus Effect: If this Personality is a Samurai with a Weapon, this card''s Focus Value equals
+    one of his Weapon''s Focus Values plus 2. <br><b>Battle:</b> Target your Samurai with a Weapon: Give
+    him +1F/+2C, or +3F/+3C if he is opposed.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Storn A. Cook
+- title: Death of Rosoku
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Open:</b> Target a Personality: Give him -2F. After the next time this game he enters a discard
+    pile, remove all dead Personalities from the game.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+  flavor_text: <i>The Emperor rushed to Rosoku's side, heedless of the danger or his own guardians, but
+    it was too late to save Shinsei's son.</i>
+- title: Death of the Heartless
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, it enters play in your home.<br><b>Open, :g4::</b> Discard this Event from play; if you
+    did, starting with you and proceeding in turn order, each player may target a dead Personality in
+    his discard pile. He Recruits it, ignoring costs other than this action's printed cost and restrictions.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+  flavor_text: <i>Sezaru killed he who could not die. His eyes showed no trace of fear, triumph, or mercy.</i>
+- title: Dire Omen
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle/Open:</b> If you control a Samurai Personality and a Shugenja Personality, target a
+    card without attachments in a unit, all three of which must be at the current battlefield if this
+    is an Attack Phase: Bow the card.'
+  gold_cost: 2
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Lisa Hunt
+  flavor_text: <i>"Old evils perish, but a greater doom arises." Shukumei laughed as he died.</i>
+- title: Doji Kurohito
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Doji Kurohito • Experienced 2
+  clans:
+  - Crane
+  keywords:
+  - Double Chi
+  - Experienced 2
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Courtier
+  - Crane Clan
+  - Samurai
+  text: 'After Kurohito enters play: Bring one copy of all Winds you do not control, except Black Heart
+    of the Empire, into play from outside the game and, after the next time this game Kurohito leaves
+    play, remove all your Winds from the game except the one with which you started the game.<br><b>Political
+    Battle:</b> Once per battle, target an enemy Personality: Kurohito duels him. Both Personalities use
+    their Personal Honor as their duel stat. Destroy the duel''s loser.'
+  gold_cost: 13
+  force: 5
+  chi: 6
+  honor_requirement: 12
+  personal_honor: 5
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: April Lee
+- title: Emperor Toturi III
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Courtier
+  - Emperor
+  - Samurai
+  text: Toturi III cannot be targeted with non-Political actions by other players. Toturi III cannot be
+    challenged.<br><b>Political Open:</b> Take the Imperial Favor.<br><b>Political Reaction:</b> Before
+    targets are chosen for a Political action, either you choose one target instead of the action's player
+    or negate the action's effects.
+  gold_cost: 10
+  force: 5
+  chi: 5
+  personal_honor: 5
+  is_unique: true
+  legality:
+  - Unreleased
+  story: World Champion 2005
+  notes: Was to be given to the 2005 World Champion if their deck was pure (no Shadowlands cards). Scott
+    Rixson won with one Shadowlands card, so this card was destroyed, never to be released.
+  rarity: Promo
+  artist: Drew Baker
+  collector_number: '1'
+- title: Excellent Student
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: While you control both a Personality in a duel and another Personality whose stat is higher than
+    the one the first is using in the duel, this card's Focus Value is equal to 8 <i>(before other modifiers)</i>.
+  gold_cost: 0
+  focus: 4
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Storn A. Cook
+  flavor_text: <i>"It is a student's duty, Korihime, to surpass his master." -Kakita Noritoshi</i>
+- title: Field of Broken Swords
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'Before this battle''s resolution: All players gain Honor equal to twice the number of opposed
+    Samurai they control at the current battlefield..<br><b>Battle:</b> If there are no Terrains at the
+    current battlefield: Put this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Tyler Walpole
+  flavor_text: <i>"Rosoku often moved secretly, helping people," Kyoji said. "We will miss his kindness
+    and his courage."</i>
+- title: Fireworks
+  types:
+  - Item
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> After an Event resolves, destroy this card: Gain 2 Honor.<br><b>Battle:</b>
+    Destroy this card: Ranged 3 Attack.<br><b>Fear Battle:</b> Destroy this card: Fear 2, with +3 strength
+    when affecting Nonhumans.'
+  gold_cost: 1
+  focus: 3
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Lisa Hunt
+- title: Flame and Lightning
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Limited:</b> Your target performing unbowed Personality challenges a another player's target
+    Personality. Permanently remove all abilities and traits from the loser.
+  gold_cost: 0
+  focus: 4
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Storn A. Cook
+- title: Forward Observer
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Retainer
+  text: ':bow:: Produce 2 Gold.<br><b>Repeatable Battle, :bow::</b> Until a target Terrain leaves play,
+    its effects are read as if you controlled it.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Paul (Prof.) Herbert
+- title: Fu Lion
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Spirit
+  - Unaligned
+  keywords:
+  - Cavalry
+  - Unique
+  - Nonhuman
+  - Spirit
+  text: Will not attach Items.<br>Will not attack.<br>Other players' cards' effects will not move Fu Lion
+    from battlefields.
+  gold_cost: 5
+  force: 4
+  chi: 4
+  honor_requirement: 0
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Llyn Hunter
+  flavor_text: <i>"Their spirits have awakened to fight this unnatural evil," Chieh said grimly. "I fear
+    they are too late."</i>
+- title: Harvest Festival
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Festival
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, target your Gold-producing Holding. Until the game ends, after each of your Dynasty Phases
+    begins, straighten the target and remove all tokens from it.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Andy Hepworth
+  flavor_text: <i>"The simple people miss Rosoku," Masae said sadly. "They are the ones he affected the
+    most."</i>
+- title: Hida Kuon
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hida Kuon • Experienced 3
+  clans:
+  - Crab
+  keywords:
+  - Double Chi
+  - Experienced 3
+  - Loyal
+  - Unique
+  - Yu 10
+  - Clan Champion
+  - Crab Clan
+  - Samurai
+  text: When paying for Kuon, you may bow any number of your Followers to lower his Gold Cost by an amount
+    equal to the number you bowed until he enters play.<br><b>Repeatable Battle:</b> Discard a card to
+    make each player player who controls a unit opposing Kuon also discard a card.
+  gold_cost: 15
+  force: 10
+  chi: 5
+  honor_requirement: 3
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+  flavor_text: <i>"Follow me to victory."</i>
+- title: Hidden City
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After one of your Personalities is destroyed by another player's action during the Action Phase,
+    bow this card.<br><b>Repeatable Reaction:</b> Before one of your Personalities is destroyed by another
+    player's action during an Action Phase, straighten this card to negate the destruction.
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Tony Moseley
+- title: Hiruma House Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Yu 4
+  text: 'Will only attach to a Crab Clan Personality.<br>Negate Fear effects upon this card. <br><b>Fear
+    Battle:</b> Once per battle: Fear with strength equal to this Personality''s Yu value. This Fear''s
+    effects on Followers will not be negated.'
+  gold_cost: 7
+  focus: 4
+  force: 4
+  chi: 0
+  honor_requirement: 1
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+- title: Honor's Lesson Dojo
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Dojo
+  text: <b>Reaction, :bow::</b> After the Combat Segment ends, take an additional Battle action.
+  gold_cost: 4
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  notes: The Dark Allies version of this card was misprinted without the Gold kanji.
+  rarity: Promo
+  artist: Malcolm McClinton
+  flavor_text: <i>"Those who shun the teachings of the Scorpion are doomed to fall prey to them." - Kakita
+    Mai</i>
+- title: Hoshi House Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: 'Will only attach to a Dragon Clan Personality.<br>This Personality has +1F/+2C for each Ring
+    you control.<br><b>Reaction:</b> After a Kiho action from a Strategy resolves that this Personality
+    performed, if he is a Monk and this ability has not affected any Strategy with the same title this
+    game: Return the Strategy to your hand.'
+  gold_cost: 6
+  focus: 4
+  force: 2
+  chi: 0
+  honor_requirement: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+- title: House of Tao
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Dragon
+  text: After all players reveal Strongholds, you may search your Fate deck for a Ring and put it into
+    play.<br>After you put a Shadowlands card into play, remove all your Rings from the game.
+  province_strength: 6
+  starting_honor: 4
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jon Hodgson
+- title: House of the Fallen Blossom
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Geisha House
+  text: ':bow:: Produce 2 Gold, plus 1 Gold for every full 10 points of Family Honor you have.<br><b>Limited,
+    :bow::</b> Target your Samurai with a Personal Honor of 2 or higher. Raise his Force, Chi, or Personal
+    Honor to 3.'
+  gold_cost: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Janine Johnston
+- title: I Am Ready
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until the game ends, you have the ability, "<b>Battle:</b> Once per battle, target your
+    performing Personality with an attachment to bow a target enemy Personality without attachments."
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Christopher Appel
+  flavor_text: <i>Your devotion to the game, culture, and players of Legend of the Five Rings is greatly
+    appreciated.</i>
+- title: In Time of War
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until the game ends, all players' Family Honor will not rise over 5 points from what
+    it was when the turn began. This is not considered modifying a gain, but may cause portions of a gain
+    to not happen.
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  notes: The L5R Experience version was misprinted with the art from Proposal of Peace.
+  rarity: Promo
+  artist: Joachim Gmoser
+  flavor_text: <i>"For five years, the Empire has remained at peace, but the old hatreds linger. There
+    are always those who see the profit in conflict - men of power and ambition with little to risk."
+    - Doji Akiko</i>
+- title: Interesting Times
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until the game ends, after a turn begins, the active player may choose to have the Dynasty
+    Phase occur before the Action Phase that turn. If he does, he may not declare attacks or target other
+    players' Personalities with his actions that turn.
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Steve Snyder
+  flavor_text: <i>"May you live in interesting times." - old Akodo family curse</i>
+- title: Isawa House Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Shugenja
+  text: 'Will only attach to a Phoenix Clan Personality.<br><b>Reaction:</b> Any number of times per turn,
+    after one of your Shugenja bows while in an army, bow this card unless this is the first time you
+    have used this ability this turn: Straighten that Shugenja.'
+  gold_cost: 6
+  focus: 4
+  force: 3
+  chi: 0
+  honor_requirement: 2
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+  flavor_text: <i>"In the name of the Elemental Council, leave this place."</i>
+- title: Iuchiban
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Double Chi
+  - Unique
+  - Bloodspeaker
+  - Champion
+  - Goblin
+  - Ogre
+  - Oni
+  - Shadowlands
+  - Shugenja
+  - Tsuno
+  text: Will not join a non-Shadowlands Horde player.<br>May not be targeted by other players' Spell or
+    Kiho actions.<br>After Iuchiban wins a duel, permanently give him +1F/+1C.<br><b>Maho Battle:</b>
+    Iuchiban challenges a target enemy Personality. Destroy the loser.
+  gold_cost: 14
+  force: 6
+  chi: 6
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Ben Peck
+- title: Jade Jitte
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Jade
+  text: 'Will only attach to a Courtier or Magistrate<br><b>Battle/Open:</b> Bow this Personality and
+    target a player who controls an unbowed Personality: He must either target and bow one of his unbowed
+    Personalities or target and dishonor one of his honorable Personalities.'
+  gold_cost: 2
+  focus: 2
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Joachim Gmoser
+- title: Junji
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Bushi
+  text: <b>Battle, :bow::</b> Ranged 7 Attack.
+  gold_cost: 6
+  force: 3
+  chi: 3
+  personal_honor: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Anthony Grabski
+  flavor_text: <i>"Of course I question why you wish me to kill him, Doji-sama, though another three koku
+    will sate my curiosity nicely."</i>
+- title: Kakita Dueling Academy
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  text: <b>Repeatable Political Limited, :bow::</b> Search your Fate deck for an Iaijutsu Strategy, show
+    it, and put it to your hand.
+  province_strength: 7
+  starting_honor: 5
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Ellym Sirac
+- title: Kakita House Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: 'Will only attach to a Crane Clan Personality.<br><b>Battle:</b> Any number of times per turn,
+    bow this card and target an enemy Personality: This Personality duels the target. Destroy the duel''s
+    loser.'
+  gold_cost: 6
+  focus: 4
+  force: 3
+  chi: 0
+  honor_requirement: 2
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+- title: Kan'ok'ticheck
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Kan'ok'ticheck • Experienced
+  clans:
+  - Ratling
+  keywords:
+  - Loyal
+  - Unique
+  - Chieftain
+  - Clan Champion
+  - Experienced
+  - Green-Green-White Tribe
+  - Nonhuman
+  - Ratling
+  text: Kan'ok'ticheck's Ratling Followers have +1F.<br>After your Ratling Follower is destroyed, if it
+    was not attached to Kan'ok'ticheck when it was destroyed, Equip it to him, ignoring costs.
+  gold_cost: 13
+  force: 6
+  chi: 5
+  honor_requirement: 0
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Carl Frank
+  collector_number: '144'
+- title: Keeper of Air
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Brotherhood of Shinsei
+  - Unaligned
+  keywords:
+  - Singular
+  - Air
+  - Keeper
+  - Monk
+  - Samurai
+  text: After Keeper of Air enters play, you may put all Rings you control in their owners' hands to search
+    your Fate deck for an Air Ring, show it, and put it in your hand.<br><b>Air Kiho Battle:</b> Ranged
+    3 Attack.
+  gold_cost: 7
+  force: 3
+  chi: 4
+  personal_honor: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Keeper of Earth
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Singular
+  - Yu 3
+  - Earth
+  - Keeper
+  - Samurai
+  text: After Keeper of Earth enters play, you may put all Rings you control in their owners' hands to
+    search your Fate deck for an Earth Ring, show it, and put it in your hand.<br><b>Earth Battle:</b>
+    The Defender targets one of his Personalities. If he is not at the current battlefield, move him here.
+    If you are not the Defender, straighten his unit.
+  gold_cost: 7
+  force: 5
+  chi: 3
+  personal_honor: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Keeper of Fire
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Singular
+  - Fire
+  - Keeper
+  - Samurai
+  text: After Keeper of Fire enters play, you may put all Rings you control in their owners' hands to
+    search your Fate deck for a Fire Ring, show it, and put it in your hand.<br><b>Fire Battle:</b> Once
+    per game, Keeper of Fire challenges a target enemy Personality. Destroy the loser.
+  gold_cost: 7
+  force: 2
+  chi: 6
+  personal_honor: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Keeper of Water
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Cavalry
+  - Singular
+  - Keeper
+  - Samurai
+  - Water
+  text: After Keeper of Water enters play, you may put all Rings you control in their owners' hands to
+    search your Fate deck for a Water Ring, show it, and put it in your hand.<br><b>Water Battle:</b>
+    Twice per battle, give a target Personality +1F.
+  gold_cost: 7
+  force: 2
+  chi: 4
+  personal_honor: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Keeper of the Void
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Singular
+  - Keeper
+  - Samurai
+  - Void
+  text: After Keeper of the Void enters play, you may put all Rings you control in their owners' hands
+    to search your Fate deck for a Void Ring, show it, and put it in your hand.<br><b>Void Tireless Limited:</b>
+    Straighten a target Void Keeper.
+  gold_cost: 7
+  force: 4
+  chi: 4
+  personal_honor: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Kenku Duelist
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Duelist
+  - Kenku
+  - Nonhuman
+  text: 'After one of your Personalities enters a duel, once per turn: Transfer this card to that Personality
+    if he can legally attach it.'
+  gold_cost: 3
+  focus: 3
+  force: '+1'
+  chi: '+2'
+  honor_requirement: 0
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Janine Johnston
+  flavor_text: <i>"They are an ancient race, burdened with great sadness and greater wisdom." -Yasuyo</i>
+- title: Kenson Gakka
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: Terrains you own in and out of play have a minimum Focus Value of 3.<br>Your non-Tactician Lion
+    Clan Samurai with 3 or higher Chi have <b>Tactician </b>while in armies and have their new Force bonuses
+    from the Rulebook Tactical Advantage action and Tactical actions negated.
+  province_strength: 7
+  starting_honor: 6
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jon Hodgson
+- title: Kihei
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Kihei • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Cavalry
+  - Unique
+  - Experienced
+  - Samurai
+  text: Kihei has -1 Gold Cost while you control two or more Infantry Personalities.
+  gold_cost: 5
+  force: 3
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jonathan Hunt
+  flavor_text: <i>"Kihei claims the Empire's finest heroes have been lunatics," Koto said dubiously. "I
+    think he hopes to follow their example."</i>
+- title: Kill the Messenger
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Political
+  text: '<b>Battle/Open:</b> Choose your performing Personality, bow him unless he is a Courtier, Spy,
+    or Ninja, and target a player who has taken three or more actions this phase: He may target and dishonor
+    a honorable Personality he controls. If he did not, he loses 4 Honor.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Malcolm McClinton
+- title: Kyuden Agasha
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Phoenix
+  text: Equipping Spells from your hand is a <b>Battle/Open</b> action for you. <br>Spells you own in
+    and out of play have -2 Gold Cost, to a minimum of 1.
+  province_strength: 6
+  starting_honor: 6
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Randy Elliott
+- title: Kyuden Doji
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  text: <b>Political Repeatable Reaction:</b> Before one of your Personalities enters a duel, bow your
+    target performing Crane Clan Samurai to have him enter the duel instead.<br><b>Political Repeatable
+    Limited, :bow::</b> Permanently give your target Crane Clan Personality <b>Courtier</b>.
+  province_strength: 6
+  starting_honor: 6
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Veronica V. Jones
+- title: Kyuden Gotei
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  keywords:
+  - Port
+  text: You have the ability, "<b>Battle:</b> Once per battle, bow your target performing Naval card to
+    take two additional Battle actions."
+  province_strength: 7
+  starting_honor: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Christopher Appel
+- title: Kyuden Hida
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: <b>Reaction:</b> After a Follower enters play from your hand, draw a card.
+  province_strength: 8
+  starting_honor: 3
+  legality:
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Michael Phillippi
+- title: Kyuden Ikoma
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: <b>Repeatable Reaction, :bow::</b> Before another player's Battle action resolves, bow your target
+    performing Lion Clan Personality at the current battlefield to negate the action's effects. Before
+    this battle ends, if the Battle action was from a Strategy being played from the player's hand and
+    is in that player's discard pile, that player may put the Strategy into his hand. He may take an additional
+    Battle action.
+  province_strength: 7
+  starting_honor: 6
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Al Eremin
+- title: Lean Times
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until the game ends, after each of your turns ends during which you brought no Personalities
+    or Holdings into play, then until your next turn begins, other players' Personalities enter play bowed.
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Malcolm McClinton
+  flavor_text: <i>"As allies of both the Lion and Unicorn, where do the Crab stand in this battle?" Kei
+    asked. "On the Wall," Todori answered. "Where we belong."</i>
+- title: Lions Rampant
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: '<b>Reaction:</b> After your army wins a battle while opposed: Put this card into play in your
+    home.<br><b>Reaction:</b> When paying a Gold cost, if this card is in play, discard it from play:
+    Produce 8 Gold.'
+  gold_cost: 0
+  focus: 4
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Malcolm McClinton
+- title: Mark of Oblivion
+  types:
+  - Item
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Discard three cards with either identical or all different Focus Values, and
+    destroy this card: Draw four cards. Discard down to your maximum hand size.'
+  gold_cost: 2
+  focus: 3
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jon Hodgson
+  flavor_text: <i>"Small shrines to the heroes who fell in the Battle of Oblivion's Gate. May their souls
+    find peace." - Miya Shoin</i>
+- title: Matsu Nimuro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Matsu Nimuro • Experienced
+  clans:
+  - Lion
+  keywords:
+  - Double Chi
+  - Loyal
+  - Tactician
+  - Unique
+  - Clan Champion
+  - Experienced
+  - Lion Clan
+  - Samurai
+  text: <b>Reaction:</b> After assigning Nimuro to an attacking army, lower the strength of each of the
+    Defender's Provinces to 0.
+  gold_cost: 15
+  force: 7
+  chi: 6
+  honor_requirement: 10
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Anthony Grabski
+  flavor_text: <i>"If Kurohito is behind this, I will crush him. If someone else plays us for fools, then
+    they shall face us both."</i>
+- title: Minor Shugenja
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Shugenja
+  text: 'This card has +1C while performing a Ritual that this Personality also performs.<br><b>Battle:</b>
+    Any number of times per turn, bow this card: Ranged 1 Attack.'
+  gold_cost: 3
+  focus: 1
+  force: 1
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Monte Moore
+- title: Miya Nishio
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Courtier
+  - Herald
+  - Imperial
+  text: <b>Political Reaction, :bow::</b> After bringing a Personality into play, target him and permanently
+    give him your Clan Alignment.<br><b>Reaction, :bow::</b> After bringing a Personality into play, if
+    you are a Shadowlands Horde player, target the Personality and permanently give him <b>Shadowlands</b>.
+  gold_cost: 4
+  force: 2
+  chi: 3
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jim Pavelec
+  flavor_text: <i>"In times such as these, loyalty is the most important virtue." -Miya Shoin</i>
+- title: Morning Glory Castle
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Phoenix
+  keywords:
+  - Castle
+  text: <b>Repeatable Limited, :bow::</b> Target your honorably dead Phoenix Clan Personality and one
+    of your Provinces. Discard a card from that Province and refill it with the targeted Personality,
+    face-up. You may bow your target performing Shugenja to ignore the cost of bowing this Stronghold
+    if the targeted Personality is a Samurai.
+  province_strength: 6
+  starting_honor: 6
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Christopher Appel
+- title: Moto Chagatai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Moto Chagatai • Experienced 2
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Experienced 2
+  - Loyal
+  - Tactician
+  - Unique
+  - Clan Champion
+  - Samurai
+  - Unicorn Clan
+  text: Before another player's effect moves Chagatai from a battlefield, you may negate the movement.<br><b>Battle,
+    :gstar::</b> Once per battle, Equip a target Item in your hand to Chagatai, for less Gold equal to
+    his Force.
+  gold_cost: 14
+  force: 6
+  chi: 5
+  honor_requirement: 4
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Carl Frank
+- title: Mysteries of Kawaru
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: 'As a Focus Effect: If you have fewer cards in your hand than each other player, draw 2 cards.<br><b>Limited:</b>
+    Search your Dynasty deck for an Event. Remove it, show it and, after shuffling, put it on top of the
+    deck.'
+  gold_cost: 7
+  focus: 4
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Lisa Hunt
+- title: Northern Provinces of the Moto
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unicorn
+  text: ':bow:: When paying for a Cavalry Follower, produce 7 Gold that may only pay for it.<br><b>Repeatable
+    Tireless Battle:</b> Target your two unbowed Cavalry Personalities that this action has not targeted
+    this turn, one of whom may be at any location. Switch their locations.'
+  province_strength: 7
+  starting_honor: 4
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  notes: The SOTE edition had two versions, the Fixed had a regular back, the storyline back was Uncommon.
+  rarity: Promo
+  artist: Eric Ren
+- title: Ogre Elite
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Elite
+  - Unique
+  - Nonhuman
+  - Ogre
+  - Shadowlands
+  text: Will only attach to a Shadowlands Personality.<br>May attach to a Personality ignoring restrictions
+    on that Personality.<br>After this card enters play, lose 6 Honor.<br><b>Repeatable Reaction, :bow::</b>
+    Before another player's card moves this unit from a battlefield, if this Personality is an Ogre or
+    Oni, negate the movement.
+  gold_cost: 8
+  focus: 4
+  force: 6
+  chi: 0
+  honor_requirement: 0
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Carl Frank
+- title: Oni Horde
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: 'Will only attach to an Oni.<br>May attach to a Personality ignoring restrictions on the Personality.<br>After
+    this card enters play: Lose 5 Honor. <br><b>Fear Battle:</b> Fear 4.'
+  gold_cost: 5
+  focus: 2
+  force: 3
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Malcolm McClinton
+- title: Otomo Ishihama
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Governor
+  - Imperial
+  text: '<b>Battle/Open:</b> Any number of times per turn, bow Ishihama and target a Farm: Straighten
+    it.'
+  gold_cost: 1
+  force: 0
+  chi: 2
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Chris Seaman
+  flavor_text: <i>"The Emperor commands that all traces of maho be rooted out and destroyed. It falls
+    to men such as us to ensure that the power he has granted Sezaru and his minions is not misused."</i>
+- title: Provocation
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target a dishonorable Personality not at the current battlefield: If he would
+    be opposed, move him to the current battlefield and straighten him.'
+  gold_cost: 4
+  focus: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Storn A. Cook
+- title: Razor's Edge Dojo
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  keywords:
+  - Dojo
+  text: Once per phase per player, after another player targets one of your Personalities with an action,
+    he must discard a card.<br><b>Repeatable Battle, :bow::</b> Give each of your Crab Clan Personalities
+    at the current battlefield +1F.
+  province_strength: 8
+  starting_honor: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Malcolm McClinton
+- title: Ring of Air
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Air
+  text: Play after you resolve two or more Favor actions in one turn. You may discard this Ring from your
+    hand to use its ability without cost.<br><b>Air Repeatable Battle/Open, :bow::</b> Straighten your
+    target Personality or attachment.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Randy Asplund-Faith
+- title: Ring of Earth
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Earth
+  text: Play after a battle resolves at your Province, if it was not destroyed and any enemy units were
+    ever at its battlefield. You may discard this Ring from your hand to use its ability without cost.<br><b>Earth
+    Repeatable Interrupt, :bow::</b> The Battle action cannot move Personalities.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Randy Asplund-Faith
+- title: Ring of Fire
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Fire
+  text: Play after you win a duel during a battle, if your Personality did not enter the duel with higher
+    Chi than the other. You may discard this Ring from your hand to use its ability without cost.<br><b>Fire
+    Battle, :bow::</b> Target an enemy card without attachments. After this battle resolves, if you lost
+    the battle, destroy the target.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Randy Asplund-Faith
+- title: Ring of Water
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Water
+  text: Play after a battle resolves in which you played a Terrain, destroyed a Terrain, and destroyed
+    any cards or provinces during resolution. You may discard this Ring from your hand to use its ability
+    without cost.<br><b>Water Absent Repeatable Battle, :bow::</b> Move your target Personality home or,
+    if he would be opposed, move your target Personality at any location to the current battlefield.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Randy Asplund-Faith
+- title: Ring of the Void
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Void
+  text: You may discard this Ring from your hand to use its Void ability without cost.<br><b>Limited:</b>
+    Play if you have two or fewer Rings in play. Discard your hand. <br><b>Void Limited, :bow::</b> Draw
+    a card. If you now have more cards in your hand than any other player, discard a card.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Randy Asplund-Faith
+- title: Rosoku's Staff
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Weapon
+  text: <b>Reaction:</b> After you put a Ring into play from your hand by its own text, if you now control
+    exactly one Ring, destroy this to search your Fate deck and hand for a Ring. Put it into play. While
+    it remains in play, it does not count towards an Enlightenment Victory.
+  gold_cost: 4
+  focus: 4
+  force: '+1'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Heather V. Kreiter
+  flavor_text: <i>"Shinsei's heir was not meant to return so soon," Ningen said in a worried voice. "He
+    risks too much."</i>
+- title: Ruby of Iuchiban
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ruby of Iuchiban • Experienced
+  keywords:
+  - Unique
+  - Experienced
+  text: 'Bringing this card into play has the additional cost, "Target a bowed Personality other than
+    the one to whom this card is attaching." <br>After this card enters play: Lose 4 Honor. <br>Until
+    this card is not in play, negate the straightening of the Personality targeted by this card''s additional
+    cost.'
+  gold_cost: 7
+  focus: 4
+  force: '+0'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jon Hodgson
+  flavor_text: <i>"For you, master. Forgive me." - Yajinden</i>
+- title: Ryokan's Sword
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ryokan's Sword • Experienced
+  keywords:
+  - Unique
+  - Weapon
+  - Experienced
+  text: This Personality will not be challenged.<br>You will not be forced to focus by other players'
+    cards' effects.<br>Negate Chi bonuses from Weapons to Personalities while they are facing a Personality
+    you control in a duel.
+  gold_cost: 6
+  focus: 4
+  force: '+2'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jon Hodgson
+- title: Scouting Report
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle/Open:</b> Give <b>Cavalry</b> to all Scout Personalities and to all Followers attached
+    to Scout Personalities.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Steve Ellis
+  flavor_text: <i>"The scouts move more swiftly and silently than ever. Now that our home is safe once
+    more they will see that it remains so." - Hiruma Todori</i>
+- title: Secluded Waystation
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: 'After the first time each turn this Holding produces Gold, put a <b>Wealth</b> token on it.<br>:bow::
+    Produce 2 Gold, plus 1 Gold for each Wealth token on this Holding.'
+  gold_cost: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Brad Williams
+  flavor_text: <i>"Surely, Hida-sama, not even you have seen weapons like these."</i>
+- title: Sennin
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Brotherhood of Shinsei
+  - Unaligned
+  keywords:
+  - Monk
+  - Nonhuman
+  text: '<b>Reaction:</b> Once per turn, after another player bows a Holding as a cost to produce 3 or
+    more Gold: Put a <b>Wealth </b>token on Sennin.<br><b>Reaction:</b> Any number of times per turn,
+    when paying a Gold cost, bow Sennin and remove a Wealth token from him: Produce 3 Gold.'
+  gold_cost: 6
+  force: 3
+  chi: 3
+  personal_honor: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Stephanie Pui-Mun Law
+- title: Seppun Kiharu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Courtier
+  - Daimyo
+  - Master of the Ten Thousand Temples
+  - Shugenja
+  text: Kiharu has -1 Gold Cost while you control a Courtier and -1 Gold Cost while you control a Shugenja.
+  gold_cost: 5
+  force: 0
+  chi: 3
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Thomas Denmark
+  flavor_text: <i>"Blessed is the man who can call an Emperor his friend."</i>
+- title: Seppun Shogo
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Courtier
+  - Imperial
+  text: 'Before paying a cost of discarding the Imperial Favor: You may bow Shogo; if you did, this pays
+    the cost instead.<br><b>Battle/Open:</b> Even if Shogo is bowed or you do not control him, pay 6 Gold:
+    Take control of Shogo.'
+  gold_cost: 6
+  force: 2
+  chi: 3
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Steve Argyle
+- title: Shadow Dragon
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Shadow Dragon • Experienced
+  clans:
+  - Ninja
+  - Unaligned
+  keywords:
+  - Cavalry
+  - Unique
+  - Dragon
+  - Experienced
+  - Ninja
+  - Nonhuman
+  - Shadowlands
+  text: 'Shadow Dragon will not bow.<br>After your Straighten Phase ends, if Shadow Dragon is dead in
+    your discard pile: You may bring it into play, paying all costs.<br><b>Battle:</b> Move Shadow Dragon
+    home from the current battlefield and target a non-Unique Personality: Take control of him. After
+    this battle ends, give control of him to the player from whom this took him.'
+  gold_cost: 15
+  force: 7
+  chi: 4
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Michael Komarck
+- title: Shadowlands Marsh
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  - Shadowlands
+  text: 'After this card enters play: Lose 10 Honor.<br>Non-Shadowlands Personalities and Followers have
+    -2F while at this province''s battlefield.'
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Michael Phillippi
+- title: Shattered Focus
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, it enters play in your home.<br>All players must focus at least once during a duel involving
+    one of their Personalities, if able.<br><b>Reaction:</b> After focus cards are revealed in a duel,
+    discard this Event from play to discard one of each player's focused cards.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Malcolm McClinton
+  flavor_text: <i>Strength is found in reaching out to others.</i>
+- title: Shiba Mirabu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Shiba Mirabu • Experienced 2
+  clans:
+  - Phoenix
+  keywords:
+  - Double Chi
+  - Experienced 2
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Phoenix Clan
+  - Samurai
+  text: '<b>Battle:</b> Any number of times per turn, bow your performing Shugenja: Give Mirabu a Force
+    bonus equal to the Shugenja''s Force plus Chi.<br><b>Battle:</b> Any number of times per turn, bow
+    your performing Shugenja and target an enemy Follower or Personality without Followers: Destroy it.'
+  gold_cost: 14
+  force: 5
+  chi: 5
+  honor_requirement: 10
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Shigekawa's Armor
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Armor
+  - Unique
+  text: 'Attaches to Toturi Shigekawa paying 3 less Gold.<br><b>Limited:</b> Bow and destroy this card:
+    Create two 3F/3C/0PH <b>Samurai • Cavalry</b> Personalities.'
+  gold_cost: 8
+  focus: 4
+  force: '+5'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Llyn Hunter
+- title: Shinsei's Shrine
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  - Temple
+  text: 'This province does not hold Dynasty cards <i>(do not refill it).</i><br>After your End Phase
+    begins: Gain 2 Honor.'
+  legality:
+  - Clan Wars (Imperial)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+- title: Shiro Mirumoto
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Dragon
+  text: Your Dragon Clan Samurai Personalities may attach two Weapons.<br><b>Limited:</b> Bow your target
+    performing Personality with 4 or higher Chi to draw a card.
+  province_strength: 7
+  starting_honor: 5
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Malcolm McClinton
+- title: Shiro Shinjo
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unicorn
+  text: Items you own in and out of play have +1 Focus Value.<br><b>Reaction:</b> After one of your Personalities
+    is destroyed, target an Item that was attached to him just before his destruction and Equip it to
+    one of your target Personalities, ignoring costs and entering-play effects.
+  province_strength: 7
+  starting_honor: 4
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Tony Moseley
+- title: Shogo's Gift
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: Attaches to Seppun Shogo paying 3 less Gold. <br>This Personality will not be dishonored or controlled
+    by other players. <br>Your Samurai Personalities have +2F while you control the Imperial Favor.
+  gold_cost: 4
+  focus: 4
+  force: '+0'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Lisa Hunt
+- title: Shosuro House Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: Will only attach to a Scorpion Clan Personality.<br><b>Repeatable Battle, :bow::</b> Target an
+    attacking Personality. His controller may choose to dishonor him; if he did not choose this, move
+    the target home.<br><b>Repeatable Tireless Battle:</b> Move this Personality home.
+  gold_cost: 6
+  focus: 4
+  force: 3
+  chi: 0
+  honor_requirement: 0
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+- title: Shrine to Osano-Wo
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Temple
+  text: ':bow:: Produce 2 Gold.<br><b>Reaction:</b> After another player''s action destroys your Personality,
+    destroy this Holding to target a Personality that player controls with a lower Gold Cost than the
+    destroyed Personality. That player may discard three cards. If he does not, destroy the target.'
+  gold_cost: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jim Pavelec
+- title: Shrine to Tsukune
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Temple
+  text: ':bow:: Produce 2 Gold.<br><b>Limited, :bow::</b> If there are three or more dead Personalities
+    in your discard pile, destroy this Holding to target your dead Personality, rehonor him, and bring
+    him into play, ignoring costs.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Lisa Hunt
+- title: Skeletal Troops
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Nonhuman
+  - Shadowlands
+  - Undead
+  text: After you Equip this Follower, lose 2 Honor. <br><b>Battle:</b> Fear 3 <i>(Bow a target enemy
+    Follower, or Personality without Followers, with 3 or lower Force)</i>.
+  gold_cost: 2
+  focus: 1
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Hugh Jamieson
+  flavor_text: <i>"If Iuchiban steals my armies from me, then we shall make more." -Daigotsu</i>
+- title: Sneak Attack
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Engage:</b> The Attacker has the first opportunity to take a Battle action or pass in this
+    battle.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Matt Cavotta
+  flavor_text: <i>No one expected the Unicorn to seize a Lion city. To attack the Lion is all but unheard
+    of.</i>
+- title: Stone Breaker
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Nonhuman
+  - Siege
+  text: 'Will not attach Items.<br>Will not challenge or be challenged.<br>Stone Breaker will not be destroyed
+    for having 0 Chi.<br>Stone Breaker has -6F while it has no unbowed Followers.<br><b>Battle:</b> Even
+    if Stone Breaker is bowed and only if it is bowed, bow a performing Follower in its unit: Straighten
+    it.'
+  gold_cost: 6
+  force: 6
+  chi: 0
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+  flavor_text: <i>"Bloodspeakers? I cannot say that I am worried." - Kaiu Umasu
+- title: Strange Assembly
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until the game ends, if a player is able to win an Honor Victory and his Family Honor
+    is ever 8 or more points above the amount required to win such a victory, he wins the game <i>(immediately)</i>.
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Malcolm McClinton
+  flavor_text: <i>"How all those Emerald Magistrates work together, I will never understand." - Kakita
+    Munemori</i>
+- title: Strategic Ground
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'After this battle''s Resolution Segement ends, if you were the winner: Draw a card, plus one
+    additional card if your current army contains a Samurai, plus one additional card if your current
+    army contains a Shugenja.<br><b>Battle:</b> If there are no Terrains at the current battlefield: Put
+    this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Ed Cox
+  flavor_text: <i>Cavalry is glorious indeed, but it is infantry that wins the battle.</i>
+- title: Suiteiru no Oni
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: 'After Suiteiru enters play: Lose 4 Honor.<br><b>Open:</b> Destroy your target unbowed Personality:
+    Create a number of 1F <b>Shadowlands • Nonhuman • Oni</b> Followers equal to his Chi. Attach them
+    to one or more of your Personalities. Lose Honor equal to the number of Followers this created.'
+  gold_cost: 8
+  force: 5
+  chi: 3
+  personal_honor: 0
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  rarity: Promo
+  artist: William O'Connor
+- title: Sword of Spirit
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Weapon
+  - Spirit
+  text: '<b>Battle/Open:</b> Discard a card: Permanently change this card''s type to "Follower" if it
+    is currently an Item or to "Item" if it is currently a Follower.'
+  gold_cost: 3
+  focus: 2
+  force: '+2'
+  chi: '+2'
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jason Engle
+  flavor_text: <i>The katana is the soul of a samurai. What becomes of a hero's blade when his soul moves
+    on to the next world?"</i>
+- title: Sword of the Righteous Emperor
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Weapon
+  - Ancestral
+  - Emperor
+  text: 'This card has +1F for each Personality you control.<br><b>Limited:</b> If you have exactly one
+    province or another player has 40 or more Family Honor, remove this card from the game and target
+    your Personality: Create three 4F/4C/3PH Personalities with all the target''s keywords.'
+  gold_cost: 8
+  focus: 4
+  force: +*
+  chi: '+1'
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  notes: The 5000th card
+  rarity: Promo
+  artist: William O'Connor
+- title: Tamori's Flame
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Siege
+  text: <b>Repeatable Battle, :bow::</b> Ranged 6 Attack.<br><b>Repeatable Battle, :bow::</b> Destroy
+    a target Fortification attached to this battlefield's Province.
+  gold_cost: 4
+  focus: 4
+  force: '+1'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jason Engle
+  flavor_text: <i>"My father used such fire to destroy the Phoenix. We use it to save them." - Mirumoto
+    Kenzo</i>
+- title: Tattered Ear Watcher
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Nonhuman
+  - Ratling
+  - Tattered Ear Tribe
+  - Unique
+  text: Will only attach to a Ratling Personality.<br><b>Repeatable Reaction:</b> After you play a card
+    that you do not own, give this Personality a +1F/+1C token.
+  gold_cost: 5
+  focus: 4
+  force: 3
+  chi: 0
+  honor_requirement: 0
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jeff Carlisle
+  flavor_text: <i>"Of course you may join us. We would be honored to have your... unique perspective on
+    this matter." - Doji Tanitsu</i>
+- title: Tch'tch Warrens
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Ratling
+  text: You begin the game with three Provinces.<br>Negate all Fear effects upon, and giving of the Shadowlands
+    keyword to, your Ratling cards.<br><b>Repeatable Limited, :bow::</b> Put a target non-Follower Fate
+    card in another player's discard pile into your hand face-up. Before the next time this game the card
+    enters a discard pile or deck, remove it from the game instead.
+  province_strength: 13
+  starting_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Tina Druce-Hoffman
+- title: Temple of the Ages
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Temple
+  text: ':bow:: Produce 2 Gold.<br><b>Repeatable Elemental Battle/Open, :bow::</b> Give a target Personality
+    a Force and Chi bonus equal to the number of Rings you control.'
+  gold_cost: 2
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Tony Moseley
+  flavor_text: <i>"If you cannot find enlightenment now, wait a hundred years. It shall be waiting for
+    you." - The Tao of Shinsei</i>
+- title: Temple of the Ninth Kami
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Shadowlands
+  keywords:
+  - Kami
+  - Temple
+  text: 'You will not gain or lose Honor; this is not negation.<br>You may not take Political actions
+    or actions that cause other players unconditional Honor losses.<br>:bow:: When paying for a Shadowlands
+    card, produce 4 Gold that may only pay for that card.<br><b>Repeatable Limited, :bow::</b> If you
+    control a Personality, target another player''s Personality. The target''s controller may choose for
+    him challenge any of your Personalities; if he does not issue a challenge, dishonor him. Destroy the
+    loser.'
+  province_strength: 6
+  starting_honor: -19
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Franz Vohwinkel
+- title: Test of Might
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing unbowed Personality and target an enemy Personality: Your
+    Personality duels the target. Both Personalities use their Force as their duel stat. The winner''s
+    controller gains 3 Honor. Bow the loser.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Eric Polak
+- title: The Daimyo's Gift
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  extended_title: The Daimyo's Gift • Experienced
+  keywords:
+  - Experienced Gifts and Favors
+  - Unique
+  text: ':bow:: Produce 2 Gold. <br><b>Repeatable Limited, :bow::</b> If you have 19 or less Family Honor
+    and you control no Shadowlands cards, gain 2 Honor.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Edward Fetterman
+- title: The Last Prophecy
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, name a card. Search your Fate deck for that card, show it, and put it in your hand. Discard
+    a number of cards equal to its Focus Value or your entire hand, whichever amount of cards is lower.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Lisa Hunt
+  flavor_text: <i>Dedication to a cause is the soul of Bushido.</i>
+- title: The Price of Power
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, this card enters play in your home.<br><b>Limited:</b> Discard this card from your home
+    to target your Personality and another player's Personality whose unit has a total Gold cost equal
+    to or lower than your target's. Destroy both units.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Thomas Denmark
+  flavor_text: <i>"The Emperor will trust whom we tell him to trust." - Doji Akiko</i>
+- title: The Shadowed Tower of the Shosuro
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Scorpion
+  text: If you control no Shadowlands cards, you may ignore Scorpion Clan cards' Honor Requirements.<br><b>Political
+    Tireless Reaction, :bow::</b> After an action from your Political Strategy resolves, shuffle the Strategy
+    into your Fate deck instead of discarding it. You may bow your target performing Courtier to ignore
+    the cost of bowing this Stronghold.
+  province_strength: 7
+  starting_honor: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Matthew S. Armstrong
+- title: The Spawning Ground
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Shadowlands
+  text: You do not gain or lose Honor; this is not negation.<br>You may not take Political actions or
+    actions that cause other players unconditional Honor losses.<br>Negate all Fear effects upon your
+    cards.<br>Ogre, Oni, and Troll Personalities you own, in and out of play, have +1F/+1C.
+  province_strength: 7
+  starting_honor: -19
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Malcolm McClinton
+- title: The Towers of the Yogo
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Scorpion
+  text: Each of your Scorpion Clan Personalities has the ability, "<b>Battle, :bow::</b> Bow a target
+    enemy Follower or Personality without Followers."
+  province_strength: 7
+  starting_honor: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Ellym Sirac
+- title: To Start a Dark Path
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, permanently remove from all cards in and out of play with "Dark Ring" in their titles
+    the trait "This card does not count toward an Enlightenment Victory" and their trait which destroys
+    them. This Event's effects will not be ended or negated.
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+  flavor_text: <i>Iuchiban gathered the treasures of Gisei Toshi, moving from temple to temple, ignoring
+    the feeble resistance the Phoenix offered.</i>
+- title: Togashi Satsu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Togashi Satsu • Experienced
+  clans:
+  - Dragon
+  keywords:
+  - Cavalry
+  - Double Chi
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Dragon
+  - Dragon Clan
+  - Experienced
+  - Monk
+  - Samurai
+  - Tattooed
+  text: 'You may ignore the cost of bowing Satsu for Kiho actions he performs.<br>Satsu may not perform
+    Maho Kiho actions.<br><b>Elemental Limited:</b> Any number of times per turn, bow Satsu: Search your
+    Fate deck and discard pile for a Ring, show it, and put it in your hand.<br><b>Elemental Battle/Open:</b>
+    Target a Ring: Straighten it.'
+  gold_cost: 14
+  force: 6
+  chi: 6
+  honor_requirement: 8
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  story: 2002 European Championships Top of Clan
+  rarity: Promo
+  artist: April Lee
+- title: Toku's Grave
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: ':bow:: Produce 2 Gold.<br><b>Limited, :bow::</b> Show the top card of your Fate deck. If it is
+    a Spell, you may discard a Battle Strategy; if it is a Battle Strategy, you may discard a Spell. If
+    you discarded a card, draw the shown card.'
+  gold_cost: 2
+  legality:
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Tony Moseley
+  flavor_text: <i>When the Emperor heard, he retired to his quarters for seven days.</i>
+- title: Tormented Plains
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  text: <b>Battle, :bow::</b> Target your Unique Personality and target an enemy Personality. The Personality's
+    controller may let you take three additional Battle actions after this one. If he does not, shuffle
+    all cards in the target's unit into their owners' decks.
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Jason Engle
+  flavor_text: <i>"Any enemy who is completely assured that he has the advantage is at a disadvantage."
+    - Sun Tao</i>
+- title: Toturi Kyoji
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Monkey Clan
+  - Samurai
+  text: '<b>Battle/Open:</b> Bow Kyoji and target a Follower or an Unaligned Samurai Personality: Bow
+    or straighten it.'
+  gold_cost: 3
+  force: 2
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Steve Ellis
+  flavor_text: <i>"I cannot imagine a world without father in it," Koto said grimly.<br>"Father will always
+    be with us," Kyoji replied.
+- title: Toturi Shigekawa
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - General
+  - Samurai
+  text: 'Other Samurai Personalities have +2F while in an army with Shigekawa.<br><b>Battle:</b> Bow your
+    2 performing Samurai Personalities and target an enemy Personality: Bow him.'
+  gold_cost: 7
+  force: 4
+  chi: 4
+  honor_requirement: 0
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Llyn Hunter
+  flavor_text: <i>"For the Shogun and the Steel Throne!"</i>
+- title: Tr-ch'da
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Ratling
+  keywords:
+  - Berserker
+  - Crippled Bone Tribe
+  - Nonhuman
+  - Ratling
+  text: '<b>Reaction:</b> After Tr-ch''da wins a duel, or after Tr-ch''da''s army destroys an enemy army
+    during battle resolution: Choose an item in a discard pile that was attached to the Personality in
+    the duel while he was facing Tr-ch''da or that opposed Tr-ch''da during that battle. Attached it to
+    Tr-ch''da, ignoring costs.'
+  gold_cost: 7
+  force: 3
+  chi: 4
+  personal_honor: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+- title: Tsuko's Shrine
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Temple
+  text: This Holding has -2 Gold Cost if you are a Lion Clan player.<br><b>Repeatable Battle, :bow::</b>
+    Give a target opposed Personality a Force bonus equal to the target's Personal Honor.<br><b>Repeatable
+    Reaction, :bow::</b> After another player's Reaction resolves during a Combat Segment, that player's
+    next normal opportunity this battle to take an action or pass does not happen <i>(this does not count
+    as "passing")</i>.
+  gold_cost: 6
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: April Lee
+- title: Tsuno Swamps
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Tsuno
+  text: <b>Reaction, :bow::</b> After a target Personality bows, while this card remains bowed, you may
+    negate its and the target's straightening.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Thomas Manning
+  flavor_text: <i>"They make this place their own," the Ratling whispered. "They wait there, to kill us."
+    </i>
+- title: Twisted Forest
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Forest
+  - Terrain
+  text: 'Before this battle''s resolution: Reduce the Force of each Shadowlands Personality at this battlefield
+    to 0, and reduce the Force of each other Shadowlands card at this battlefield to equal its own base
+    Force.<br><b>Battle:</b> If there are no Terrains at the current battlefield and, if you are the Defender,
+    even if you control no units there: Put this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Malcolm McClinton
+- title: Utaku House Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Cavalry
+  - Unique
+  - Battle Maiden
+  text: Will only attach to a Unicorn Clan Personality.<br><b>Repeatable Battle, :bow::</b> Bow zero or
+    more target enemy Followers, up to the number of Items in this army, plus one if this Personality
+    is a Battle Maiden.
+  gold_cost: 8
+  focus: 4
+  force: 4
+  chi: 0
+  honor_requirement: 1
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+- title: Utaku Stallion
+  types:
+  - Item
+  decks:
+  - Fate
+  text: 'After this card enters play: Name a base keyword on any of your Personalities. While this card
+    is attached, this Personality has that keyword.'
+  gold_cost: 2
+  focus: 4
+  force: '+1'
+  chi: '+0'
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: William O'Connor
+  flavor_text: <i>The most wondrous gift the Unicorn can give. The number bestowed outside the clan in
+    recent memory can be counted on two hands.</i>
+- title: Venerable Master
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Retainer
+  text: ':bow:: Produce 2 Gold.<br><b>Open, :bow:, :g2::</b> Destroy this Holding to create a 3F/3C/3PH
+    <b>Samurai</b> Personality with your Clan Alignment.'
+  gold_cost: 2
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Ed Cox
+- title: Vengeful Populace
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: <b>:bow::</b> Produce 2 Gold. <br><b>Battle, :bow::</b> Bow your target unbowed Follower or Item.
+    Bow a target enemy Personality without attachments.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Thomas Denmark
+  flavor_text: <i>It will be years before Unicorn are welcome in Kaeru Toshi</i>
+- title: Voitagi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Samurai
+  - Shadowlands
+  - Soul of Uragirimono
+  - Undead
+  text: After Voitagi enters play, lose 3 Honor.<br><b>Battle:</b> Fear 3 <i>(Bow a target enemy Follower
+    or Personality without Followers with 3 or lower Force)</i>.
+  gold_cost: 3
+  force: 3
+  chi: 2
+  personal_honor: 0
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Hugh Jamieson
+- title: Warrens of the Nezumi
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Ratling
+  text: You begin the game with three Provinces.<br>Non-Personality Ratling cards enter play for you for
+    1 less Gold.<br>Negate all Fear effects upon, and giving of the Shadowlands keyword to, your Ratling
+    cards.<br>Your Ratling cards have the ability, "<b>Battle:</b> Bow and destroy this card to destroy
+    a target enemy Follower."
+  province_strength: 13
+  starting_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Mark A.W. Jackson
+- title: Wedge
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Target your Personality. You may not use abilities on cards in his unit or target
+    them with actions. Before this battle resolves, double his Force and the Force of each Follower in
+    his unit. Destroy him after the battle ends.
+  focus: 2
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  errata_text: Technical erratum via Oracle, effective immediately.
+  rarity: Promo
+  artist: Michael Kaluta
+- title: Winter Storm
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Winter
+  text: Until the game ends, after each time an attack is declared, each player targets two unbowed Personalities
+    he controls with a Gold Cost less than or equal to his Stronghold's Gold Production plus 2. Bow them.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Adam Denton
+  flavor_text: <i>Not event he Khan can defy the weather.</i>
+- title: Yamainu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Assassin
+  - Spy
+  text: '<b>Open:</b> If it is not your turn, bow Yamainu and target a bowed Personality: After this phase
+    ends, if both Yamainu and the target are in play, Yaimainu challenges him; if the target''s controller
+    bows a card in his unit, he may refuse. Destroy the duel''s loser.'
+  gold_cost: 6
+  force: 1
+  chi: 3
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: beet
+  flavor_text: <i>"You do not need rabid dogs such as him," Sunetra warned.</i>
+- title: Yamainu's Dagger
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Weapon
+  text: 'Attaches to Yamainu paying 3 less Gold.<br><b>Battle/Open:</b> Bow this card and discard a number
+    of cards equal to the number of cards in a target unit: Bow it.'
+  gold_cost: 8
+  focus: 4
+  force: '+0'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Ben Peck
+  flavor_text: <i>"Coarse and jagged, like its master." -Toturi Naseru</i>
+- title: Yoritomo House Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Naval
+  - Unique
+  text: 'Can only attach to a Mantis Clan Personality.<br><b>Reaction:</b> After the last Maneuvers Segment
+    of an attack: Give <b>Naval</b> to each Follower and Mantis Clan Personality in this army that is
+    in a unit containing at least one Naval card.'
+  gold_cost: 8
+  focus: 4
+  force: 4
+  chi: 0
+  honor_requirement: 1
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Drew Baker
+- title: Yoritomo Kumiko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Yoritomo Kumiko • Experienced
+  clans:
+  - Mantis
+  keywords:
+  - Double Chi
+  - Loyal
+  - Naval
+  - Unique
+  - Clan Champion
+  - Daughter of Storms
+  - Experienced
+  - Mantis Clan
+  - Samurai
+  text: May attach two Weapons.<br>Weapons attached to Kumiko have +1F/+2C.<br>Kumiko's Followers have
+    +1F and <b>Naval</b>.<br>Other Mantis Clan Personalities in Kumiko's army have +2F.
+  gold_cost: 14
+  force: 6
+  chi: 5
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Llyn Hunter
+- title: Yotsu Bodyguards
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> After an action on a Strategy targets a card in this unit: If there is another
+    copy of that card in any discard pile, negate the action''s effects.'
+  gold_cost: 4
+  focus: 4
+  force: '+2'
+  chi: '+2'
+  honor_requirement: 0
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Brad Williams
+  flavor_text: <i>Those who can rise above tragedy and defeat make the finest guardians.</i>
+- title: Yotsu Dagurasu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Bounty Hunter
+  - Sword of Yotsu
+  text: '<b>Battle:</b> Any number of times per turn, bow Dagurasu: Ranged 5 Attack. If this destroyed
+    a Nonhuman, gain 2 Honor.'
+  gold_cost: 5
+  force: 2
+  chi: 3
+  personal_honor: 1
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: John Donahue
+  flavor_text: <i>"War is a game. Shall I teach you?</i>

@@ -1,0 +1,308 @@
+set: Promotional – Jade
+images:
+- card_id: bayushi_goshiu
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: bayushi_goshiu.jpg
+    sha256: a175786da0b9394511f8ce878ddb1057447dffbf3ef88b74623291d47f237bfd
+- card_id: dairya
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: dairya.jpg
+    sha256: bfa6cc524e8369a71de6c867ff9588ca01f3ee90731cf4ca0649eced0a188ce0
+- card_id: dashmar
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: dashmar.jpg
+    sha256: 51b8c10e824af898ed0f27b94b846d5d8bc3559eb4ffceb0cbf4935a89104e18
+- card_id: duty_of_the_magistrate
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: duty_of_the_magistrate.jpg
+    sha256: aa417aea56df470be8baca3b1abc650f6ad4659215b629c2bb528b1107986c00
+- card_id: eternal_halls_of_the_shiba
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: eternal_halls_of_the_shiba.jpg
+    sha256: 537a9dc5d2803938f2d0bcdf03ed018d1c84e4204b7a34be3729f832dfdc9a89
+- card_id: forward_patrol
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: forward_patrol.jpg
+    sha256: 83e57c5450a379866e7da11f340197f2642943378c673d574d25929e07d2938e
+- card_id: heart_of_the_shinomen_forest
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: heart_of_the_shinomen_forest.jpg
+    sha256: 5917b35dbbd0dce0e89968d4ea730b04184a7d830231929745851a0c67371551
+- card_id: hida_o_ushi
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: hida_o_ushi.jpg
+    sha256: 51d80b2af03b8d706554728054b7c24c0cbf3a0870e3aadaaec07f5087d000cf
+- card_id: ide_tadaji
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: ide_tadaji.jpg
+    sha256: 5a2171c403f6808926a6ae1aa91f1526813601cec49e561296182f9d31e297a4
+- card_id: imperial_ambassador
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: imperial_ambassador.jpg
+    sha256: 610e06e00ab0bbb7cd277fc9b1e0591d27e640905fafdbd7a93f7cf3615f7c09
+- card_id: iron_mountain
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: iron_mountain.jpg
+    sha256: cda44b7586acffda4630f7207451b9cc10885cf660be98fdae02377b5d8dad23
+- card_id: isawa_kaede
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: isawa_kaede.jpg
+    sha256: 99d06b8da8af137486d3fa7f3636268e205f3ce86cfa918b4e7aa9e41a8b6f88
+- card_id: kakita_yoshi
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: kakita_yoshi.jpg
+    sha256: ccf242e49d6f6aa94dd7315081392a4f6d160394a3f59e84ca5748a3ffccbda5
+- card_id: kitsu_motso
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: kitsu_motso.jpg
+    sha256: f2d47f2f3f806a134d8f9b3d480e3f39527228efa0693f25b8242a1202ebed7d
+- card_id: kyuden_hitomi
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: kyuden_hitomi.jpg
+    sha256: 2a98ec6a0259b8e4aeeea3dc4595c7212554cb1e3d1cc052a0b9e38ce78f3f3f
+- card_id: kyuden_kitsune
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: kyuden_kitsune.jpg
+    sha256: 44473d89401b1cb160d8d54910bcedee884341435550cd84d2deb332ec6da5ce
+- card_id: kyuden_yoritomo
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: kyuden_yoritomo.jpg
+    sha256: 23a74ce69a8c65f5f4f9aca3227cd3ea0f1d828602caf859c52e0ab9a22d3724
+- card_id: moto_tsume_experienced
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: moto_tsume_experienced.jpg
+    sha256: adf855cc07ec32e4fd27e6e6dc8edffdc5a82e450218989212ee079f6ebbb964
+- card_id: ninja_shapeshifter_inexperienced
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: ninja_shapeshifter_inexperienced.jpg
+    sha256: f3c7a5861ded5c24cd865caa478f04fb8ea344fba9b51fc7b58529487808897a
+- card_id: sepulcher_of_bone
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: sepulcher_of_bone.jpg
+    sha256: c2e8978197e9160c07bb85f6baefe8c69c90516f0ff5b0382e2565e4131fc0a0
+- card_id: takao
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: takao.jpg
+    sha256: ba56781d5853f3e34a58543a1285d0699d6bf4fdad12377cd4ad83ef1ebd9276
+- card_id: tattoo_madness
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: tattoo_madness.jpg
+    sha256: 7f3c65578763fbe0469a5df9fb560b6cb0b269422283721c875d60ba66003399
+- card_id: tell_the_tale
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: tell_the_tale.jpg
+    sha256: 82f970cce20eb7c72a1d4e7ca711ede27180a0d7675e8824b7cc510ad5245169
+- card_id: temples_of_the_crow
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: temples_of_the_crow.jpg
+    sha256: cca318f52afaab0eff6aa808f54f0fef07e7c4fa5c4d1d91e5660f48b588b4a1
+- card_id: the_ancient_halls_of_the_lion
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_ancient_halls_of_the_lion.jpg
+    sha256: 3a8f4e8245f8e7ea156278c8ef60b2b4208a0791dd7cfda56ed96d6ddfa66b3e
+- card_id: the_brotherhood_of_shinsei
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_brotherhood_of_shinsei.jpg
+    sha256: f72463090884af9f14561d92a86f7575d3b3d7a5740b118d19f1d831cc80cd9a
+- card_id: the_citadel_of_the_hiruma
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_citadel_of_the_hiruma.jpg
+    sha256: b1be6d5525bfb833194182c14dc36c6af25be1a76ae3868056357acebf185d5c
+- card_id: the_dark_path_of_shadow
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_dark_path_of_shadow.jpg
+    sha256: 9c67f54fa1d95986a3d3713e6627873b78437461c559b82e9492e4ff83711b91
+- card_id: the_esteemed_house_of_the_crane
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_esteemed_house_of_the_crane.jpg
+    sha256: 12470ec429f162ae1d6db3f89b8830444b5744e4d30b0e9b2cdf5ff900737cbc
+- card_id: the_great_walls_of_kaiu
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_great_walls_of_kaiu.jpg
+    sha256: 98e9469185b1e9c927fc93e9b01da9fe3d6f4ad0407f2a7b3c9c3d32d7dd210f
+- card_id: the_hidden_temples_of_the_naga
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_hidden_temples_of_the_naga.jpg
+    sha256: c17895fa1277b6263e63e3522cd1e99a5ff59ad72aa9b171196ace57459eb388
+- card_id: the_house_of_tao
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_house_of_tao.jpg
+    sha256: 0c4872b512a184bd55aded65e1a2d0d7019874da7c466358baf0ad58862b5ef5
+- card_id: the_imperial_favor
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_imperial_favor.jpg
+    sha256: df1a76861c020132d346893f4ca012230b94fcafcdd985928c252d99e7eb7f5a
+- card_id: the_iron_fortress_of_the_daidoji
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_iron_fortress_of_the_daidoji.jpg
+    sha256: d4f1f3a476703656091b659365a74dfa5193f04bfd6e678d0bc75e296703b92c
+- card_id: the_kitsu_tombs
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_kitsu_tombs.jpg
+    sha256: 7b0b5d421b23da1ae51a68d8b34628d9abbf13dc8f71c54d7cf238bd1de3a1be
+- card_id: the_legion_of_two_thousand
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_legion_of_two_thousand.jpg
+    sha256: d73ec17d3905f0ee0d86210cb937ce9f7fcb33abdeb27f5f9999156c7646ebc0
+- card_id: the_mountain_keep_of_the_dragon
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_mountain_keep_of_the_dragon.jpg
+    sha256: 64509d9ba86d7af6fae32b353c84bb3c9deff45cad339002c8314a021d95e968
+- card_id: the_new_akasha
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_new_akasha.jpg
+    sha256: 9231d7d11521850e71ebf5233888103256231438d4fab4523bf242e13e6ba9a4
+- card_id: the_palace_of_otosan_uchi
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_palace_of_otosan_uchi.jpg
+    sha256: aa5529a542525a9824f5d1fc905ff8ad3837a47d0af616ee21de8751edd357a6
+- card_id: the_provincial_estate_of_the_unicorn
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_provincial_estate_of_the_unicorn.jpg
+    sha256: 439399de702353c0288a82b08486251835a2df512b05d9150103eb8974bb5058
+- card_id: the_ruins_of_isawa_castle
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_ruins_of_isawa_castle.jpg
+    sha256: 1fcf28886ff495854d640f643d5a55a79bd887260f499c8b2167c1b80e963485
+- card_id: the_shadow_stronghold_of_the_bayushi
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_shadow_stronghold_of_the_bayushi.jpg
+    sha256: f25c123ad7cb5173a42fa757455ae4a778c196dd54edcf151c7bb3d9c596c6b6
+- card_id: the_shadowlands_horde
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_shadowlands_horde.jpg
+    sha256: 3d200114c9646cc778f89d90a4367e0d7fd9a29da65f10a4b5bf6f836277d705
+- card_id: the_spawning_ground
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_spawning_ground.jpg
+    sha256: 23c3238d8b13b47173b42ce2a119bbca7b3aed0f8250e60afa2e0d418fd49589
+- card_id: the_towers_of_the_yogo
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_towers_of_the_yogo.jpg
+    sha256: c709c57260e0e129582040d10adb60271cc86ce373a0a277a58a445910d66d20
+- card_id: the_utaku_palaces
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_utaku_palaces.jpg
+    sha256: 39846f5efc73f327b3fd9eda2ca5ddd28ab423d78012483a966c0192230bdfef
+- card_id: the_yoritomo_alliance
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: the_yoritomo_alliance.jpg
+    sha256: 4ff69fdbed24cab8c149131f2c66aee48ba63255e09c80d23e5825516ea5a523
+- card_id: togashi_yoshi
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: togashi_yoshi.jpg
+    sha256: d5e9ec6c56c3e72389dcd25845e1c86f662b853508fbeb0710d03fa97b0cdd26
+- card_id: toturis_army
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: toturis_army.jpg
+    sha256: 679a013b0a0cedd1b7b49b55592c20cdce53c8991b86f90e8b7b1b9bf38ee149
+- card_id: war_in_the_heavens
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: war_in_the_heavens.jpg
+    sha256: 2c289fef27beda5e45aa4b9191a2f32901ce96f2f9b940f4afd42d0df58eecc0
+- card_id: yoritomo
+  printing_id: promotional_jade
+  files:
+  - role: front
+    file: yoritomo.jpg
+    sha256: f308bfd3922057d10db770714ae9461b08f5796c540100788e916b64c9c41c9f
