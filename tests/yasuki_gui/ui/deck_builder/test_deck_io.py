@@ -1,5 +1,7 @@
 import pytest
 
+from yasuki_core.card_art import CustomPrint, custom_print_id
+from yasuki_gui.ui.deck_builder.custom_art import custom_print_record
 from yasuki_gui.ui.deck_builder.deck_data import DeckState
 from yasuki_gui.ui.deck_builder.deck_io import (
     serialize_deck,
@@ -72,6 +74,7 @@ class MockRepository:
     def __init__(self, cards=None, prints=None):
         self._cards = cards or CARDS
         self._prints = prints or PRINTS
+        self._custom = {}
 
     @property
     def cards_by_id(self):
@@ -81,7 +84,21 @@ class MockRepository:
         return self._cards.get(card_id)
 
     def get_prints(self, card_id):
-        return self._prints.get(card_id, [])
+        base = list(self._prints.get(card_id, []))
+        customs = [
+            custom_print_record(recipe, self)
+            for recipe in self._custom.values()
+            if recipe.recipient_card_id == card_id
+        ]
+        return base + customs
+
+    def register_custom_print(self, recipe):
+        print_id = custom_print_id(recipe)
+        self._custom[print_id] = recipe
+        return print_id
+
+    def get_custom_print(self, print_id):
+        return self._custom.get(print_id)
 
 
 @pytest.fixture
@@ -283,3 +300,62 @@ class TestImportDeckYaml:
         assert name == "Full Trip"
         assert unresolved == []
         assert reimported.cards == original.cards
+
+
+class TestCustomPrintIO:
+    def test_serializes_art_trailer_with_recipient_and_donor(self, repo):
+        recipe = CustomPrint("ambush", 10, "kuni_yori", 1)
+        custom_id = repo.register_custom_print(recipe)
+        yaml = serialize_deck(DeckState().add_card("ambush", custom_id), repo, deck_name="Borrowed")
+        assert "Ambush [Imperial Edition] {art: Kuni Yori [Imperial Edition]}" in yaml
+
+    def test_parses_art_trailer(self):
+        parsed = parse_deck_yaml(
+            "name: T\nfate:\n  - Ambush [Imperial Edition] {art: Kuni Yori [Imperial Edition]}"
+        )
+        entry = parsed["fate"][0]
+        assert entry["name"] == "Ambush"
+        assert entry["set_name"] == "Imperial Edition"
+        assert entry["art"] == {"name": "Kuni Yori", "set_name": "Imperial Edition"}
+
+    def test_plain_entry_has_no_art(self):
+        parsed = parse_deck_yaml("name: T\nfate:\n  - Ambush [Imperial Edition]")
+        assert parsed["fate"][0]["art"] is None
+
+    def test_custom_round_trip_reconstructs_recipe_in_fresh_repo(self, repo):
+        recipe = CustomPrint("ambush", 10, "kuni_yori", 1)
+        custom_id = repo.register_custom_print(recipe)
+        yaml = serialize_deck(DeckState().add_card("ambush", custom_id), repo)
+
+        fresh = MockRepository()
+        reimported, _, unresolved = import_deck_yaml(yaml, fresh)
+
+        assert unresolved == []
+        ((pid, count),) = reimported.cards["ambush"]
+        assert count == 1
+        assert pid == custom_id
+        assert fresh.get_custom_print(pid) == recipe
+
+    def test_unresolvable_donor_falls_back_to_plain_print(self, repo):
+        yaml = "name: T\nfate:\n  - Ambush [Imperial Edition] {art: Ghost Card [Nowhere]}"
+        state, _, unresolved = import_deck_yaml(yaml, repo)
+        assert unresolved == ["Ghost Card"]
+        assert state.cards["ambush"] == [(10, 1)]
+
+    def test_round_trip_resolves_non_default_recipient_and_donor_prints(self, repo):
+        # Recipient is ambush's Lotus print (11, not the first), donor a non-first kuni_yori print.
+        recipe = CustomPrint("ambush", 11, "kuni_yori", 2)
+        custom_id = repo.register_custom_print(recipe)
+        yaml = serialize_deck(DeckState().add_card("ambush", custom_id), repo)
+        assert "Ambush [Lotus Edition] {art: Kuni Yori [Pearl Edition]}" in yaml
+
+        fresh = MockRepository()
+        reimported, _, unresolved = import_deck_yaml(yaml, fresh)
+        assert unresolved == []
+        ((pid, _),) = reimported.cards["ambush"]
+        assert fresh.get_custom_print(pid) == recipe
+
+    def test_same_custom_print_stacks(self, repo):
+        custom_id = repo.register_custom_print(CustomPrint("ambush", 10, "kuni_yori", 1))
+        state = DeckState().add_card("ambush", custom_id).add_card("ambush", custom_id)
+        assert state.cards["ambush"] == [(custom_id, 2)]

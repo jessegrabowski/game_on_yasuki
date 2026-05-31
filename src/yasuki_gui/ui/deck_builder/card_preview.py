@@ -327,6 +327,15 @@ class CardPreviewController:
 
     def _load_card_image(self, card: dict, print_info: dict) -> ImageTk.PhotoImage | None:
         """Load card image or fallback to default."""
+        if print_info.get("is_custom"):
+            from yasuki_gui.ui.deck_builder.custom_art import render_custom_image
+
+            composite = render_custom_image(print_info["recipe"], self.repository)
+            if composite is not None:
+                resized = composite.resize((PREVIEW_CARD_W, PREVIEW_CARD_H), Image.LANCZOS)
+                return ImageTk.PhotoImage(resized, master=self.master)
+            return self._load_back_image(card)
+
         img_path = self._resolve_image_path(card, print_info)
         if img_path and img_path.exists():
             return load_large_image(img_path, self.master)
@@ -349,6 +358,37 @@ class CardPreviewController:
         decks = card.get("decks") or []
         back_path = asset_paths.FATE_BACK if "Fate" in decks else asset_paths.DYNASTY_BACK
         return load_large_image(back_path, self.master)
+
+    def current_recipient(self) -> dict | None:
+        """Resolve the real print to land borrowed art on, seeing through a custom print.
+
+        Returns a dict with ``card_id``, ``print_id``, ``image_path`` (an existing Path), and
+        ``set_name``, or None when the current print has no usable image."""
+        if not self._current_prints:
+            return None
+        print_info = self._current_prints[self._current_print_index]
+
+        if print_info.get("is_custom"):
+            recipe = print_info["recipe"]
+            card_id, print_id = recipe.recipient_card_id, recipe.recipient_print_id
+            real = next(
+                (p for p in self.repository.get_prints(card_id) if p["print_id"] == print_id), None
+            )
+        else:
+            card_id, print_id, real = self._current_card_id, print_info["print_id"], print_info
+
+        if not real:
+            return None
+        path = real.get("image_path")
+        resolved = resolve_set_image_path(path) if path else None
+        if not (resolved and resolved.exists()):
+            return None
+        return {
+            "card_id": card_id,
+            "print_id": print_id,
+            "image_path": resolved,
+            "set_name": real.get("set_name", ""),
+        }
 
     def _render_stats(self, card: dict) -> None:
         """Render card statistics."""

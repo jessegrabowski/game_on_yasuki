@@ -1,5 +1,6 @@
 import re
 
+from yasuki_core.card_art import CustomPrint
 from yasuki_gui.ui.deck_builder.deck_data import card_in_side
 
 YAML_SECTIONS = [
@@ -11,6 +12,7 @@ YAML_SECTIONS = [
 _NEEDS_QUOTE = re.compile(r"[:#\[\]{},&*?|<>=!%@`]")
 _COUNT_PREFIX = re.compile(r"^(\d+)[x×]\s+", re.IGNORECASE)
 _SET_SUFFIX = re.compile(r"^(.*?)\s+\[([^\]]+)\]\s*$")
+_ART_TRAILER = re.compile(r"\s*\{art:\s*(.+?)\}\s*$")
 
 
 def serialize_deck(
@@ -45,10 +47,10 @@ def serialize_deck(
             continue
 
         lines.append(f"{section_key}:")
-        for display_name, set_name, count in sorted(entries):
+        for display_name, set_name, art_suffix, count in sorted(entries):
             count_prefix = f"{count}x " if count > 1 else ""
             set_suffix = f" [{set_name}]" if set_name else ""
-            lines.append(f"  - {count_prefix}{display_name}{set_suffix}")
+            lines.append(f"  - {count_prefix}{display_name}{set_suffix}{art_suffix}")
         lines.append("")
 
     return "\n".join(lines).rstrip() + "\n"
@@ -69,10 +71,34 @@ def _collect_side_entries(deck_state, cards_by_id, repository, side):
         for print_id, count in print_list:
             prints = repository.get_prints(card_id)
             print_info = next((p for p in prints if p["print_id"] == print_id), None)
-            set_name = print_info.get("set_name") if print_info else None
-            entries.append((display_name, set_name, count))
+            if print_info and print_info.get("is_custom"):
+                set_name, art_suffix = _custom_entry_suffix(print_info["recipe"], repository)
+            else:
+                set_name = print_info.get("set_name") if print_info else None
+                art_suffix = ""
+            entries.append((display_name, set_name, art_suffix, count))
 
     return entries
+
+
+def _custom_entry_suffix(recipe, repository):
+    """Return (recipient set name, ``{art: ...}`` suffix) for a custom-print recipe."""
+    recipient_set = _set_name_for_print(
+        repository, recipe.recipient_card_id, recipe.recipient_print_id
+    )
+
+    donor = repository.get_card(recipe.donor_card_id) or {}
+    donor_name = donor.get("extended_title") or donor.get("name", recipe.donor_card_id)
+    donor_set = _set_name_for_print(repository, recipe.donor_card_id, recipe.donor_print_id)
+    donor_ref = f"{donor_name} [{donor_set}]" if donor_set else donor_name
+    return recipient_set, f" {{art: {donor_ref}}}"
+
+
+def _set_name_for_print(repository, card_id, print_id):
+    for p in repository.get_prints(card_id):
+        if p["print_id"] == print_id and not p.get("is_custom"):
+            return p.get("set_name")
+    return None
 
 
 def parse_deck_yaml(text: str) -> dict:
@@ -132,16 +158,23 @@ def _parse_card_line(text: str) -> dict | None:
         count = int(count_match.group(1))
         rest = rest[count_match.end() :]
 
-    set_name = None
-    set_match = _SET_SUFFIX.match(rest)
-    if set_match:
-        rest = set_match.group(1)
-        set_name = set_match.group(2)
+    art = None
+    art_match = _ART_TRAILER.search(rest)
+    if art_match:
+        art = _split_name_and_set(art_match.group(1).strip())
+        rest = rest[: art_match.start()]
 
-    name = rest.strip()
-    if not name:
+    parsed = _split_name_and_set(rest)
+    if not parsed["name"]:
         return None
-    return {"name": name, "count": count, "set_name": set_name}
+    return {"name": parsed["name"], "count": count, "set_name": parsed["set_name"], "art": art}
+
+
+def _split_name_and_set(text: str) -> dict:
+    set_match = _SET_SUFFIX.match(text)
+    if set_match:
+        return {"name": set_match.group(1).strip(), "set_name": set_match.group(2)}
+    return {"name": text.strip(), "set_name": None}
 
 
 def import_deck_yaml(
@@ -201,10 +234,41 @@ def import_deck_yaml(
                 continue
 
             print_id = matched_print["print_id"]
+            if entry.get("art"):
+                custom_id = _resolve_custom_print(
+                    card_id, print_id, entry["art"], cards_by_ext, repository
+                )
+                if custom_id is not None:
+                    print_id = custom_id
+                else:
+                    unresolved.append(entry["art"]["name"])
+
             for _ in range(entry["count"]):
                 state = state.add_card(card_id, print_id)
 
     return state, parsed["name"], unresolved
+
+
+def _resolve_custom_print(recipient_card_id, recipient_print_id, art, cards_by_ext, repository):
+    """Register the art-swap recipe for an ``{art: ...}`` entry; return its id or None if unresolved."""
+    donor = cards_by_ext.get(art["name"].lower())
+    if not donor:
+        return None
+    _, donor_card_id = donor
+
+    donor_prints = repository.get_prints(donor_card_id)
+    donor_print = None
+    if art["set_name"]:
+        donor_print = next((p for p in donor_prints if p["set_name"] == art["set_name"]), None)
+    if not donor_print and donor_prints:
+        donor_print = donor_prints[0]
+    if not donor_print:
+        return None
+
+    recipe = CustomPrint(
+        recipient_card_id, recipient_print_id, donor_card_id, donor_print["print_id"]
+    )
+    return repository.register_custom_print(recipe)
 
 
 def _build_name_index(repository) -> dict[str, tuple[dict, str]]:

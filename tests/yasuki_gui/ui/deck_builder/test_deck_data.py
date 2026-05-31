@@ -1,3 +1,6 @@
+from unittest.mock import patch
+
+from yasuki_core.card_art import CustomPrint, custom_print_id
 from yasuki_gui.ui.deck_builder.deck_data import DeckState
 
 
@@ -80,3 +83,36 @@ def test_deck_state_get_card_count():
     assert state.get_card_count("FATE", cards_by_id) == 5
     assert state.get_card_count("DYNASTY", cards_by_id) == 4
     assert state.get_card_count("SETUP", cards_by_id) == 1
+
+
+def test_repository_registers_and_surfaces_custom_print():
+    cards = [
+        {"card_id": "collision", "name": "A Collision of Wills", "types": ["Strategy"]},
+        {
+            "card_id": "ikumu",
+            "name": "Togashi Ikumu",
+            "extended_title": "Togashi Ikumu",
+            "types": ["Personality"],
+        },
+    ]
+    with (
+        patch("yasuki_gui.ui.deck_builder.deck_data.load_cards_from_db", return_value=cards),
+        patch("yasuki_gui.ui.deck_builder.deck_data.get_prints_by_card_id", return_value=[]),
+    ):
+        from yasuki_gui.ui.deck_builder.deck_data import DeckBuilderRepository
+
+        repo = DeckBuilderRepository()
+        recipe = CustomPrint("collision", 100, "ikumu", 200)
+        pid = repo.register_custom_print(recipe)
+
+        assert pid == custom_print_id(recipe)
+        assert repo.get_custom_print(pid) == recipe
+
+        prints = repo.get_prints("collision")
+        assert len(prints) == 1
+        assert prints[0]["is_custom"] is True
+        assert prints[0]["print_id"] == pid
+        assert "Togashi Ikumu" in prints[0]["set_name"]
+
+        # The custom surfaces only under its recipient, never under the donor card.
+        assert repo.get_prints("ikumu") == []
