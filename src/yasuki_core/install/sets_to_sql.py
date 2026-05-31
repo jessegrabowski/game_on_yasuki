@@ -10,8 +10,15 @@ import yaml
 logger = logging.getLogger(__name__)
 
 
+_ORDINAL = re.compile(r"(\d+)(?:st|nd|rd|th)", re.IGNORECASE)
+
+
 def coerce_date(raw) -> datetime.date | None:
-    """Parse an ISO date, returning None for missing or unparseable values."""
+    """
+    Parse a date, returning None for missing or unparseable values.
+
+    Accepts ISO ``YYYY-MM-DD`` and long form like ``November 5th, 2012`` (ordinal suffix tolerated).
+    """
     if raw is None:
         return None
     if isinstance(raw, datetime.date):
@@ -22,7 +29,11 @@ def coerce_date(raw) -> datetime.date | None:
     try:
         return datetime.date.fromisoformat(text)
     except ValueError:
-        logger.warning("Unparseable release_date, storing NULL: %r", raw)
+        pass
+    try:
+        return datetime.datetime.strptime(_ORDINAL.sub(r"\1", text), "%B %d, %Y").date()
+    except ValueError:
+        logger.warning("Unparseable date, storing NULL: %r", raw)
         return None
 
 
