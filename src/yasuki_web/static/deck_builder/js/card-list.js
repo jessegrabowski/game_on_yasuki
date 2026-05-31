@@ -105,6 +105,8 @@ export function renderCardList() {
 }
 
 export function selectCard(card) {
+  // Re-selecting the shown card keeps its current print; only switching cards reloads the preview.
+  const sameCard = selectedCard && selectedCard.card_id === card.card_id;
   selectedCard = card;
 
   $('cardList')
@@ -116,5 +118,5 @@ export function selectCard(card) {
     .querySelectorAll('.deck-item, .deck-sub-item')
     .forEach((el) => el.classList.remove('selected'));
 
-  _onSelect(card);
+  if (!sameCard) _onSelect(card);
 }
