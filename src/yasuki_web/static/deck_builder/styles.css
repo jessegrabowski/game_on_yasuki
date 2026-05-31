@@ -607,3 +607,45 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
 }
 .deck-item.custom > span:last-child,
 .deck-sub-item.custom > span:last-child { color: var(--accent-glow); font-style: italic; }
+
+/* Print sheet: built off-screen so its images load, then swapped in as the only visible content
+   when printing. Cards print at actual size (63.5 x 90 mm), 8 per landscape Letter page, flush in a
+   centered 4-wide grid, matching the desktop deck_pdf export. */
+#printSheet {
+  position: absolute;
+  left: -10000px;
+  top: 0;
+}
+.print-page {
+  display: grid;
+  grid-template-columns: repeat(4, 63.5mm);
+  grid-auto-rows: 90mm;
+  justify-content: center;
+}
+.print-card {
+  width: 63.5mm;
+  height: 90mm;
+  object-fit: fill;
+  display: block;
+}
+
+@media print {
+  @page {
+    size: letter landscape;
+    margin: 6mm;
+  }
+  body > *:not(#printSheet) {
+    display: none !important;
+  }
+  #printSheet {
+    position: static;
+    left: auto;
+  }
+  .print-page {
+    break-after: page;
+    break-inside: avoid;
+  }
+  .print-page:last-child {
+    break-after: auto;
+  }
+}
