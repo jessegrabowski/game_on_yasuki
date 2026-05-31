@@ -22,7 +22,12 @@ ERA_BANDS = [
 DEFAULT_ERA = _LAYOUT["default_era"]
 DEFAULT_LAYOUT = _LAYOUT["default_layout"]
 
-_set_eras: dict[str, str] | None = None
+# The redesigned card back debuted with Gold Edition (2001-06); earlier printings use the old back.
+BACK_NEW_FROM = datetime.date(2001, 6, 1)
+
+# set_name -> effective release date (its own, or the earliest dated set in its arc for metadata
+# gaps like Samurai Edition Banzai). Loaded once.
+_set_dates: dict[str, datetime.date | None] | None = None
 
 
 def load_art_layout() -> dict:
@@ -40,13 +45,9 @@ def era_for_date(release_date: datetime.date | None) -> str:
     return DEFAULT_ERA
 
 
-def era_for_set(set_name: str) -> str:
-    """Art-layout era for a set, by name. Set eras are computed once and cached.
-
-    A set with no release date falls back to the earliest dated set in its arc, so metadata gaps
-    (e.g. Samurai Edition Banzai, Chaos Reigns Part III) still bucket correctly."""
-    global _set_eras
-    if _set_eras is None:
+def _load_set_dates() -> dict[str, datetime.date | None]:
+    global _set_dates
+    if _set_dates is None:
         import yasuki_core.database as db
 
         with db.get_db_connection() as conn, conn.cursor() as cur:
@@ -58,11 +59,24 @@ def era_for_set(set_name: str) -> str:
                 arc = row["arc"]
                 if arc not in arc_floor or row["release_date"] < arc_floor[arc]:
                     arc_floor[arc] = row["release_date"]
-        _set_eras = {
-            row["set_name"]: era_for_date(row["release_date"] or arc_floor.get(row["arc"]))
-            for row in rows
+        _set_dates = {
+            row["set_name"]: row["release_date"] or arc_floor.get(row["arc"]) for row in rows
         }
-    return _set_eras.get(set_name, DEFAULT_ERA)
+    return _set_dates
+
+
+def era_for_set(set_name: str) -> str:
+    """Art-layout era for a set. A set with no release date falls back to its arc's earliest dated
+    set, so metadata gaps (e.g. Samurai Edition Banzai, Chaos Reigns Part III) still bucket right."""
+    return era_for_date(_load_set_dates().get(set_name))
+
+
+def back_era_for_set(set_name: str) -> str:
+    """Which generic card back a set's printings use: ``"old"`` before Gold Edition, else ``"new"``."""
+    date = _load_set_dates().get(set_name)
+    if date is None:
+        return "new"
+    return "old" if date < BACK_NEW_FROM else "new"
 
 
 def classify(card: dict, set_name: str) -> tuple[str, str]:

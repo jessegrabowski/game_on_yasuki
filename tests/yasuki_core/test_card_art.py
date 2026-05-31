@@ -80,6 +80,12 @@ def test_era_for_set_falls_back_to_arc_floor(monkeypatch):
 
     rows = [
         {
+            "set_name": "Imperial Edition",
+            "release_date": datetime.date(1995, 10, 1),
+            "arc": "Clan Wars",
+        },
+        {"set_name": "Gold Edition", "release_date": datetime.date(2001, 6, 1), "arc": "Gold"},
+        {
             "set_name": "Samurai Edition",
             "release_date": datetime.date(2007, 7, 1),
             "arc": "Samurai",
@@ -90,12 +96,17 @@ def test_era_for_set_falls_back_to_arc_floor(monkeypatch):
         {"set_name": "Onyx Edition", "release_date": datetime.date(2023, 1, 1), "arc": "Onyx"},
     ]
     monkeypatch.setattr("yasuki_core.database.get_db_connection", lambda: _FakeConn(rows))
-    monkeypatch.setattr(ca, "_set_eras", None)
+    monkeypatch.setattr(ca, "_set_dates", None)
 
     assert ca.era_for_set("Samurai Edition") == "2005-09"
     # No release date -> inherits the earliest dated set in its arc (Samurai Edition, 2007-07).
     assert ca.era_for_set("Samurai Edition Banzai") == "2005-09"
     assert ca.era_for_set("Modern Promo") == "2016+"
+
+    # Card back flips at Gold Edition (2001-06): before is the old back, Gold onward the new.
+    assert ca.back_era_for_set("Imperial Edition") == "old"
+    assert ca.back_era_for_set("Gold Edition") == "new"
+    assert ca.back_era_for_set("Samurai Edition") == "new"
 
 
 def test_classify_maps_type_to_layout_without_db(monkeypatch):
