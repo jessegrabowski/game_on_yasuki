@@ -1,6 +1,26 @@
+import datetime
+
 import pytest
 
+from yasuki_core.install.sets_to_sql import coerce_date
 from yasuki_core.install.yaml_to_sql import card_slug, parse_collector_numbers, _card_columns
+
+
+@pytest.mark.parametrize(
+    "raw, expected",
+    [
+        ("2012-11-05", datetime.date(2012, 11, 5)),
+        ("November 5th, 2012", datetime.date(2012, 11, 5)),
+        ("May 23rd, 1999", datetime.date(1999, 5, 23)),
+        ("November 1st, 2010", datetime.date(2010, 11, 1)),
+        ("Upon Release", None),
+        ("-", None),
+        ("", None),
+        (None, None),
+    ],
+)
+def test_coerce_date(raw, expected):
+    assert coerce_date(raw) == expected
 
 
 @pytest.mark.parametrize(
