@@ -1,4 +1,6 @@
-FROM ghcr.io/prefix-dev/pixi:latest
+# Pin to the pixi version that produced pixi.lock (format v6); bump deliberately alongside
+# `pixi lock` + the requires-pixi floor, never via a floating tag.
+FROM ghcr.io/prefix-dev/pixi:0.63.2
 
 ARG VERSION=0.0.0+unknown
 ENV SETUPTOOLS_SCM_PRETEND_VERSION=${VERSION}
