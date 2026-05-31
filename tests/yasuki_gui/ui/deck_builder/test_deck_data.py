@@ -62,10 +62,10 @@ def test_deck_state_clear():
 
 def test_deck_state_get_card_count():
     cards_by_id = {
-        "card1": {"id": "card1", "side": "FATE"},
-        "card2": {"id": "card2", "side": "FATE"},
-        "card3": {"id": "card3", "side": "DYNASTY"},
-        "card4": {"id": "card4", "side": "STRONGHOLD"},
+        "card1": {"card_id": "card1", "decks": ["Fate"]},
+        "card2": {"card_id": "card2", "decks": ["Fate"]},
+        "card3": {"card_id": "card3", "decks": ["Dynasty"]},
+        "card4": {"card_id": "card4", "decks": ["Pre-Game"]},
     }
 
     state = DeckState(

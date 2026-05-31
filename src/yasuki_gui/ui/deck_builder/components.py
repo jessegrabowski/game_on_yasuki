@@ -100,12 +100,12 @@ class CardStatsPanel:
         """
         # Row 1: String data
         name = card.get("name", "—")
-        card_type = card.get("type", "—")
-        clan = card.get("clan", "—")
+        types = card.get("types") or []
+        clans = card.get("clans") or []
 
         self.name_label.configure(text=name)
-        self.type_label.configure(text=card_type)
-        self.clan_label.configure(text=clan if clan else "—")
+        self.type_label.configure(text=", ".join(types) if types else "—")
+        self.clan_label.configure(text=", ".join(clans) if clans else "—")
 
         # Row 2: Numeric data - show/hide based on what's available
         for field, (frame, value_label) in self.stats.items():

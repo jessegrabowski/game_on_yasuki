@@ -8,6 +8,31 @@ if TYPE_CHECKING:
 
 _CARDS_CACHE: list[dict] | None = None
 
+_SIDE_TO_DECK = {"FATE": "Fate", "DYNASTY": "Dynasty"}
+
+
+def card_in_side(card: dict, side: str) -> bool:
+    """
+    Test whether a card belongs to a deck-builder side.
+
+    Parameters
+    ----------
+    card : dict
+        Card record with a ``decks`` list.
+    side : str
+        Side identifier: ``"FATE"``, ``"DYNASTY"``, or ``"SETUP"`` (anything not
+        in the Fate or Dynasty deck, e.g. strongholds and senseis).
+
+    Returns
+    -------
+    in_side : bool
+        True if the card belongs to the given side.
+    """
+    decks = card.get("decks") or []
+    if side == "SETUP":
+        return not ({"Fate", "Dynasty"} & set(decks))
+    return _SIDE_TO_DECK.get(side, side) in decks
+
 
 def _extract_experience_sort_key(card: dict) -> tuple[int, str]:
     """
@@ -35,35 +60,17 @@ def _extract_experience_sort_key(card: dict) -> tuple[int, str]:
     sort_key : tuple of (int, str)
         Priority and experience string for sorting
     """
-    card_id = card.get("id", "")
+    card_id = card.get("card_id", "")
 
-    if "_inexp" in card_id:
+    if "_inexperienced" in card_id:
         return (-1, "inexp")
 
-    if "_exp" in card_id:
-        parts = card_id.split("_exp")
-        if len(parts) > 1:
-            exp_suffix = parts[-1]
-
-            if not exp_suffix or exp_suffix == "":
-                return (1, "exp")
-
-            if exp_suffix.startswith("_") and exp_suffix[1:].isdigit():
-                level = int(exp_suffix[1:])
-                return (level, f"exp{level}")
-
-            if exp_suffix.isdigit():
-                level = int(exp_suffix)
-                return (level, f"exp{level}")
-
-            if "_" in exp_suffix:
-                parts = exp_suffix.split("_")
-                if parts[0].isdigit():
-                    level = int(parts[0])
-                    return (level, exp_suffix)
-                return (1, exp_suffix)
-
-            return (1, exp_suffix)
+    if "_experienced" in card_id:
+        suffix = card_id.rsplit("_experienced", 1)[1].lstrip("_")
+        if suffix.isdigit():
+            level = int(suffix)
+            return (level, f"exp{level}")
+        return (1, f"exp_{suffix}" if suffix else "exp")
 
     return (0, "")
 
@@ -88,9 +95,9 @@ def _card_sort_key(card: dict) -> tuple[str, int, str]:
         Sort key for ordering cards
     """
     full_name = card.get("name", "")
-    card_type = card.get("type", "")
+    types = card.get("types") or []
 
-    if card_type == "personality":
+    if "Personality" in types:
         base_name = full_name.split(", ")[0].lower() if ", " in full_name else full_name.lower()
     else:
         base_name = full_name.lower()
@@ -247,17 +254,8 @@ class DeckState:
             if not card:
                 continue
 
-            card_side = card.get("side")
-
-            # Check if card matches the requested side
-            if side == "SETUP":
-                # Setup cards are anything that's not FATE or DYNASTY
-                if card_side not in ("FATE", "DYNASTY"):
-                    total += sum(count for _, count in print_list)
-            else:
-                # Regular FATE or DYNASTY side
-                if card_side == side:
-                    total += sum(count for _, count in print_list)
+            if card_in_side(card, side):
+                total += sum(count for _, count in print_list)
         return total
 
 
@@ -266,7 +264,7 @@ class DeckBuilderRepository:
 
     def __init__(self):
         self._all_cards = load_cards_from_db()
-        self._cards_by_id = {c["id"]: c for c in self._all_cards}
+        self._cards_by_id = {c["card_id"]: c for c in self._all_cards}
 
     @property
     def all_cards(self) -> list[dict]:

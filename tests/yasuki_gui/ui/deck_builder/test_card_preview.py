@@ -10,25 +10,25 @@ from yasuki_gui.ui.deck_builder.card_preview import (
 
 
 def test_format_card_display_name_simple():
-    card = {"name": "Test Card", "id": "test_card"}
+    card = {"name": "Test Card", "card_id": "test_card"}
     result = format_card_display_name(card)
     assert result == "Test Card"
 
 
 def test_format_card_display_name_with_set():
-    card = {"name": "Test Card", "id": "test_card"}
+    card = {"name": "Test Card", "card_id": "test_card"}
     result = format_card_display_name(card, "Test Set")
     assert result == "Test Card [Test Set]"
 
 
 def test_format_card_display_name_experienced():
-    card = {"name": "Daigotsu", "id": "daigotsu_exp"}
+    card = {"name": "Daigotsu", "card_id": "daigotsu_experienced"}
     result = format_card_display_name(card)
     assert "Experienced" in result
 
 
 def test_format_card_display_name_experienced_level():
-    card = {"name": "Daigotsu", "id": "daigotsu_exp2"}
+    card = {"name": "Daigotsu", "card_id": "daigotsu_experienced_2"}
     result = format_card_display_name(card)
     assert "Experienced 2" in result
 
@@ -64,10 +64,10 @@ def test_preview_controller_load_card(root, preview_components):
         {"print_id": 1, "set_name": "Test Set", "image_path": None}
     ]
     mock_repo.get_card.return_value = {
-        "id": "card1",
+        "card_id": "card1",
         "name": "Test Card",
-        "type": "personality",
-        "side": "FATE",
+        "types": ["Personality"],
+        "decks": ["Fate"],
         "text": "Test text",
     }
 
@@ -105,10 +105,10 @@ def test_preview_controller_navigation(root, preview_components):
         {"print_id": 2, "set_name": "Set 2", "image_path": None},
     ]
     mock_repo.get_card.return_value = {
-        "id": "card1",
+        "card_id": "card1",
         "name": "Test Card",
-        "type": "personality",
-        "side": "FATE",
+        "types": ["Personality"],
+        "decks": ["Fate"],
         "text": "Test text",
     }
 
@@ -134,10 +134,10 @@ def test_preview_controller_handles_none_text(root, preview_components):
         {"print_id": 1, "set_name": "Test Set", "image_path": None, "flavor_text": None}
     ]
     mock_repo.get_card.return_value = {
-        "id": "card1",
+        "card_id": "card1",
         "name": "Test Card",
-        "type": "personality",
-        "side": "FATE",
+        "types": ["Personality"],
+        "decks": ["Fate"],
         "text": None,  # This can happen in database
     }
 

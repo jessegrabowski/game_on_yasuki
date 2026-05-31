@@ -17,6 +17,16 @@ from yasuki_core.database import (
 )
 
 
+def _deck_to_display(deck: str) -> str:
+    """Map a database deck value to its filter-dialog label."""
+    return "Setup Cards" if deck == "Pre-Game" else deck
+
+
+def _display_to_deck(display: str) -> str:
+    """Map a filter-dialog deck label back to its database value."""
+    return "Pre-Game" if display == "Setup Cards" else display
+
+
 @dataclass
 class FilterOptions:
     """
@@ -560,10 +570,7 @@ class FilterDialog:
         try:
             decks = query_all_decks()
             for deck in decks:
-                if deck == "PRE_GAME":
-                    self.deck_listbox.insert(tk.END, "Setup Cards")
-                else:
-                    self.deck_listbox.insert(tk.END, deck.title())
+                self.deck_listbox.insert(tk.END, _deck_to_display(deck))
 
             types = query_all_types()
             for card_type in types:
@@ -583,12 +590,7 @@ class FilterDialog:
             if deck_filter:
                 all_decks = self.deck_listbox.get(0, tk.END)
                 for i, deck_display in enumerate(all_decks):
-                    # Convert display name to internal name for comparison
-                    if deck_display == "Setup Cards":
-                        internal_name = "PRE_GAME"
-                    else:
-                        internal_name = deck_display.upper()
-                    if internal_name in deck_filter:
+                    if _display_to_deck(deck_display) in deck_filter:
                         self.deck_listbox.selection_set(i)
 
             # Restore type selections
@@ -702,13 +704,9 @@ class FilterDialog:
 
         active_stat_filters = self._get_active_stat_filters()
 
-        selected_decks = []
-        for i in self.deck_listbox.curselection():
-            deck_display = self.deck_listbox.get(i)
-            if deck_display == "Setup Cards":
-                selected_decks.append("PRE_GAME")
-            else:
-                selected_decks.append(deck_display.upper())
+        selected_decks = [
+            _display_to_deck(self.deck_listbox.get(i)) for i in self.deck_listbox.curselection()
+        ]
 
         valid_types = None
         valid_decks = None
@@ -760,10 +758,7 @@ class FilterDialog:
 
         # Populate deck listbox (with display names)
         for deck in all_decks:
-            if deck == "PRE_GAME":
-                self.deck_listbox.insert(tk.END, "Setup Cards")
-            else:
-                self.deck_listbox.insert(tk.END, deck.title())
+            self.deck_listbox.insert(tk.END, _deck_to_display(deck))
 
         # Try to restore deck selections if they still exist
         if current_deck_selections:
@@ -806,13 +801,9 @@ class FilterDialog:
         selected_types = [self.type_listbox.get(i) for i in self.type_listbox.curselection()]
 
         # Get selected decks (convert from display names)
-        selected_decks = []
-        for i in self.deck_listbox.curselection():
-            deck_display = self.deck_listbox.get(i)
-            if deck_display == "Setup Cards":
-                selected_decks.append("PRE_GAME")
-            else:
-                selected_decks.append(deck_display.upper())
+        selected_decks = [
+            _display_to_deck(self.deck_listbox.get(i)) for i in self.deck_listbox.curselection()
+        ]
 
         # If nothing selected, all stats are available
         if not selected_types and not selected_decks:
@@ -1290,14 +1281,7 @@ class FilterDialog:
         # Collect deck filter selections (multi-select)
         selected_decks = [self.deck_listbox.get(i) for i in self.deck_listbox.curselection()]
         if selected_decks:
-            # Convert back from display names to database values
-            deck_values = []
-            for deck in selected_decks:
-                if deck == "Setup Cards":
-                    deck_values.append("PRE_GAME")
-                else:
-                    deck_values.append(deck.upper())
-            new_options.add_filter("decks", deck_values)
+            new_options.add_filter("decks", [_display_to_deck(d) for d in selected_decks])
 
         # Collect type filter selections (multi-select)
         selected_types = [self.type_listbox.get(i) for i in self.type_listbox.curselection()]
@@ -1409,13 +1393,7 @@ class FilterDialog:
             # Get deck selections
             selected_decks = [self.deck_listbox.get(i) for i in self.deck_listbox.curselection()]
             if selected_decks:
-                deck_values = []
-                for deck in selected_decks:
-                    if deck == "Setup Cards":
-                        deck_values.append("PRE_GAME")
-                    else:
-                        deck_values.append(deck.upper())
-                filter_options["decks"] = deck_values
+                filter_options["decks"] = [_display_to_deck(d) for d in selected_decks]
 
             # Get type selections
             selected_types = [self.type_listbox.get(i) for i in self.type_listbox.curselection()]

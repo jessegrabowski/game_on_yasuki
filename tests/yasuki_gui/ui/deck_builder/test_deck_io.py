@@ -9,39 +9,39 @@ from yasuki_gui.ui.deck_builder.deck_io import (
 
 CARDS = {
     "kuni_yori": {
-        "id": "kuni_yori",
+        "card_id": "kuni_yori",
         "name": "Kuni Yori",
         "extended_title": "Kuni Yori",
-        "type": "Personality",
-        "side": "DYNASTY",
+        "types": ["Personality"],
+        "decks": ["Dynasty"],
     },
-    "kuni_yori_exp": {
-        "id": "kuni_yori_exp",
+    "kuni_yori_experienced": {
+        "card_id": "kuni_yori_experienced",
         "name": "Kuni Yori",
         "extended_title": "Kuni Yori \u2022 Experienced",
-        "type": "Personality",
-        "side": "DYNASTY",
+        "types": ["Personality"],
+        "decks": ["Dynasty"],
     },
     "ambush": {
-        "id": "ambush",
+        "card_id": "ambush",
         "name": "Ambush",
         "extended_title": "Ambush",
-        "type": "Strategy",
-        "side": "FATE",
+        "types": ["Strategy"],
+        "decks": ["Fate"],
     },
     "kyuden_hida": {
-        "id": "kyuden_hida",
+        "card_id": "kyuden_hida",
         "name": "Kyuden Hida",
         "extended_title": "Kyuden Hida",
-        "type": "Stronghold",
-        "side": "STRONGHOLD",
+        "types": ["Stronghold"],
+        "decks": ["Pre-Game"],
     },
     "700_soldier_plain": {
-        "id": "700_soldier_plain",
+        "card_id": "700_soldier_plain",
         "name": "700 Soldier Plain",
         "extended_title": "700 Soldier Plain",
-        "type": "Holding",
-        "side": "DYNASTY",
+        "types": ["Holding"],
+        "decks": ["Dynasty"],
     },
 }
 
@@ -50,7 +50,7 @@ PRINTS = {
         {"print_id": 1, "set_name": "Imperial Edition"},
         {"print_id": 2, "set_name": "Pearl Edition"},
     ],
-    "kuni_yori_exp": [
+    "kuni_yori_experienced": [
         {"print_id": 3, "set_name": "Pearl Edition"},
         {"print_id": 4, "set_name": "Jade Edition"},
     ],
@@ -241,7 +241,7 @@ class TestImportDeckYaml:
         state, _, unresolved = import_deck_yaml(yaml, repo)
         assert unresolved == []
         assert "kuni_yori" in state.cards
-        assert "kuni_yori_exp" in state.cards
+        assert "kuni_yori_experienced" in state.cards
 
     def test_unresolved_names_reported(self, repo):
         yaml = "name: T\nfate:\n  - Nonexistent Card"
@@ -271,7 +271,7 @@ class TestImportDeckYaml:
             DeckState()
             .add_card("kuni_yori", 1)
             .add_card("kuni_yori", 2)
-            .add_card("kuni_yori_exp", 3)
+            .add_card("kuni_yori_experienced", 3)
             .add_card("ambush", 10)
             .add_card("ambush", 11)
             .add_card("ambush", 11)

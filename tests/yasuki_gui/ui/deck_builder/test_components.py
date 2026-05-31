@@ -40,8 +40,8 @@ class TestCardStatsPanel:
         panel = CardStatsPanel(root)
         card = {
             "name": "Akodo Toturi",
-            "type": "Personality",
-            "clan": "Lion",
+            "types": ["Personality"],
+            "clans": ["Lion"],
             "gold_cost": 15,
             "force": 5,
             "chi": 3,
@@ -64,8 +64,8 @@ class TestCardStatsPanel:
         panel = CardStatsPanel(root)
         card = {
             "name": "Gold Mine",
-            "type": "Holding",
-            "clan": "Crab",
+            "types": ["Holding"],
+            "clans": ["Crab"],
             "gold_cost": 3,
             "gold_production": 2,
         }
@@ -80,8 +80,8 @@ class TestCardStatsPanel:
         panel = CardStatsPanel(root)
         card = {
             "name": "Shiro Kitsuki",
-            "type": "Stronghold",
-            "clan": "Dragon",
+            "types": ["Stronghold"],
+            "clans": ["Dragon"],
             "starting_honor": 10,
             "gold_production": 5,
             "province_strength": 8,
@@ -97,8 +97,8 @@ class TestCardStatsPanel:
         panel = CardStatsPanel(root)
         card = {
             "name": "Test Card",
-            "type": "Personality",
-            "clan": "Lion",
+            "types": ["Personality"],
+            "clans": ["Lion"],
             "force": 3,
         }
         panel.update_stats(card)
