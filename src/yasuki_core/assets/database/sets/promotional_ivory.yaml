@@ -1,0 +1,1536 @@
+set: Promotional – Ivory
+cards:
+- title: A Game of Dice
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: <b>Limited, :g3::</b> Draw two additional cards before your turn ends.
+  gold_cost: 3
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Gong Studios
+  flavor_text: <i>The uneasy resumption of peace between the Crane and the Mantis was not liked by all,
+    but all obeyed. They simply found more acceptable outlets for their rivalries.</i>
+- title: Akodo Dairuko, the Steel Lion
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Akodo Dairuko, the Steel Lion • Experienced 2
+  clans:
+  - Lion
+  keywords:
+  - Experienced 2
+  - Loyal
+  - Tactician
+  - Unique
+  - Clan Champion
+  - Lion Clan
+  - Paragon
+  - Samurai
+  text: You may target defending Personalities with the rulebook Favor Political Battle action. After
+    you destroy an enemy card during battle <i>(including resolution)</i>, gain 1 Honor.<br><b>Battle:</b>
+    Give all your other attacking Lion Clan Samurai at Dairuko's battlefield +1F and +1PH.
+  gold_cost: 10
+  force: 4
+  chi: 5
+  honor_requirement: 10
+  personal_honor: 5
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Diego Gisbert Llorens
+- title: Ancestral Armor of the Crab Clan
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ancestral Armor of the Crab Clan • Experienced
+  keywords:
+  - Armor
+  - Unique
+  - Experienced
+  text: Can only attach to a Crab Clan Personality. After you Equip this Item, gain 2 Honor. <br><b>Tireless
+    Battle/Open:</b> Straighten this Personality, and straighten his attachments if he is defending.
+  gold_cost: 8
+  focus: 4
+  force: '+3'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Aurelien Hubert
+  flavor_text: '"When donned, its bearer becomes unbreakable. To wear it is to become the perfect Crab."
+    - Hida Kisada'
+- title: Ancestral Armor of the Crane Clan
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ancestral Armor of the Crane Clan • Experienced
+  keywords:
+  - Armor
+  - Unique
+  - Experienced
+  text: Can only attach to a Crane Clan Personality. After you Equip this Item, gain 2 Honor. This Personality
+    may Lobby as an <b>Open</b> action. After this Personality Lobbies, gain 1 Honor.
+  gold_cost: 8
+  focus: 4
+  force: '+2'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Aurelien Hubert
+  flavor_text: '"I rarely find myself needing armor. But when I do, I require absolute perfection." -
+    Doji Makoto'
+- title: Ancestral Armor of the Dragon Clan
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ancestral Armor of the Dragon Clan • Experienced
+  keywords:
+  - Armor
+  - Unique
+  - Experienced
+  text: Can only attach to a Dragon Clan Personality. After you Equip this Item, gain 2 Honor. <br><b>Battle/Open,
+    :bow::</b> Straighten your target Ring.
+  gold_cost: 8
+  focus: 4
+  force: '+2'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Aurelien Hubert
+  flavor_text: '"Forged from the stuff of mountains, wind, fire, and sea. To wear it is to become one
+    with the world." - Mirumoto Shikei'
+- title: Ancestral Armor of the Lion Clan
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ancestral Armor of the Lion Clan • Experienced
+  keywords:
+  - Armor
+  - Unique
+  - Experienced
+  text: Can only attach to a Lion Clan Personality. After you Equip this Item, gain 2 Honor. <br><b>Battle,
+    :bow::</b> If he would be opposed, move a target Personality at any location to this battlefield.
+    Straighten his unit if you do not control him.
+  gold_cost: 8
+  focus: 4
+  force: '+3'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Aurelien Hubert
+  flavor_text: '"The strength of a thousand ancestors." - Akodo Dairuko'
+- title: Ancestral Armor of the Mantis Clan
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ancestral Armor of the Mantis Clan • Experienced
+  keywords:
+  - Armor
+  - Experienced Yoritomo's Armor
+  - Unique
+  text: Can only attach to a Mantis Clan Personality. After you Equip this Item, gain 2 Honor. <br><b>Open,
+    :bow::</b> Straighten your target Holding.
+  gold_cost: 8
+  focus: 4
+  force: '+3'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Aurelien Hubert
+  flavor_text: '"As the Mantis Clan was born of many efforts, so too was this armor created. It is our
+    soul and our pride. When I wear it, I cannot know defeat." - Yoritomo Hiromi'
+- title: Ancestral Armor of the Phoenix Clan
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ancestral Armor of the Phoenix Clan • Experienced
+  keywords:
+  - Armor
+  - Unique
+  - Experienced
+  text: Can only attach to a Phoenix Clan Personality. After you Equip this Item, gain 2 Honor. <br><b>Battle/Open,
+    :bow::</b> Another player may discard a Spell or Kiho from his hand. If he does not, he must target
+    and bow one of his unbowed Personalities.
+  gold_cost: 8
+  focus: 4
+  force: '+2'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Aurelien Hubert
+  flavor_text: '"Truly it is beloved of the elements." - Shiba Tsukimi'
+- title: Ancestral Armor of the Scorpion Clan
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ancestral Armor of the Scorpion Clan • Experienced
+  keywords:
+  - Armor
+  - Experienced Shoju's Armor
+  - Unique
+  text: Can only attach to a Scorpion Clan Personality. After you Equip this Item, another player loses
+    2 Honor. <br><b>Limited,:bow::</b> Target a Personality. Bow him if he is dishonorable. Dishonor him.
+  gold_cost: 8
+  focus: 4
+  force: '+2'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Aurelien Hubert
+  flavor_text: '"I cannot wear it. Not yet. But one day I shall, and on that day the whispers will end."
+    - Bayushi Nitoshi'
+- title: Ancestral Armor of the Spider Clan
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Armor
+  - Unique
+  - Weapon
+  text: Can only attach to a Spider Clan Personality. After you Equip this Item, gain 2 Honor. Does not
+    count towards a Personality's maximum number of Weapons. <br><b>Battle, :bow::</b> Fear 4.
+  gold_cost: 8
+  focus: 4
+  force: '+3'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Aurelien Hubert
+  flavor_text: '"I require adornments worthy of my power. Find me such armor. Find it and be rewarded."
+    - Daigotsu Kanpeki'
+- title: Ancestral Armor of the Unicorn Clan
+  types:
+  - Item
+  decks:
+  - Fate
+  extended_title: Ancestral Armor of the Unicorn Clan • Experienced
+  keywords:
+  - Armor
+  - Unique
+  - Experienced
+  text: Can only attach to a Unicorn Clan Personality. After you Equip this Item, gain 2 Honor.<br><b>Interrupt,
+    :bow::</b> The action cannot move Personalities.
+  gold_cost: 8
+  focus: 4
+  force: '+3'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Aurelien Hubert
+  flavor_text: '"I shall not wear it. It is the burden of the Shinjo to restore its honor. I would not
+    deprive them." - Moto Naleesh'
+- title: Back to the Front
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Absent Battle:</b> Target your Personality at any location who assigned to this battlefield
+    <i>(this turn)</i>. Move him there and straighten his unit as he moves. <i>(You may take Absent actions
+    without presence.)</i>
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Jonathan Moore
+  flavor_text: '"Do you think I care for something as inconsequential as my blood? I need a fresh horse
+    at once! I am needed at the front line!"'
+- title: Bamboo Harvesters
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  - Pre-Game
+  extended_title: Bamboo Harvesters • Experienced
+  keywords:
+  - Unique
+  - Experienced
+  - Forest
+  text: 'This card will not straighten before your third turn.<br>:bow:: Produce 2 Gold.<br><b>Limited,
+    :bow::</b> Draw a card. If you now have 6 or more cards in your hand, discard a card.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  notes: Pre-Game in Celestial/Emperor ruleset formats, Dynasty in Ivory and later formats
+  rarity: Promo
+  artist: Gong Studios
+  flavor_text: <i>"We are fortunate bamboo grows so quickly and in so many places. It is as if it was
+    blessed by the Heavens!"</i>
+- title: Bayushi Nitoshi, the Poison Mask
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Bayushi Nitoshi, the Poison Mask • Experienced 2
+  clans:
+  - Ninja
+  - Scorpion
+  keywords:
+  - Experienced 2
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Courtier
+  - Ninja
+  - Samurai
+  - Scorpion Clan
+  - Shoju's Soul
+  - Sociopath
+  text: You may use your Stronghold's abilities twice per turn.<br><b>Political Limited/Engage:</b> Dishonor
+    a target Personality.
+  gold_cost: 12
+  force: 5
+  chi: 5
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Jorge Matar
+  flavor_text: "<i>â€œThis has gone on long enough. It is time we put Shosuroâ€™s shame to a final rest.â€\x9D\
+    </i>"
+- title: Bisento-do
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Bow your target unbowed Personality. Bow a target enemy Personality with lower
+    Force. You may target and destroy one of his attachments if your Personality has <b>a</b> Weapon.
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  notes: Legal July 1st, 2014
+  rarity: Promo
+  artist: Albert Tavira
+  flavor_text: <i>Those who choose unconventional weapons find it more difficult to fully embrace their
+    art, subject as they are to scrutiny. Those who endure find their efforts richly rewarded.</i>
+  designer: Thomas
+- title: Block Supply Lines
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home a target attacking Personality. Bow his unit as he moves.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Promo
+  artist: Carlos NCT
+  flavor_text: '"A soldier can fill his soul with duty and bushido, but only for so long. Eventually,
+    an empty stomach will weaken him, and then an army becomes vulnerable. Exploit this whenever possible,
+    and victory will follow." - Akodo''s Leadership'
+- title: Border Keep
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  - Pre-Game
+  extended_title: Border Keep • Experienced
+  keywords:
+  - Unique
+  - Experienced
+  text: ':bow:: Produce 2 Gold.<br><b>Limited:</b> Once per game, put one to three cards in your hand
+    at the bottom of your deck. Draw cards equal to the number you put at the bottom.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  notes: Pre-Game in Celestial/Emperor ruleset formats, Dynasty in Ivory and later formats
+  rarity: Promo
+  artist: Gong Studios
+  flavor_text: <i>"There is peace for now, surely, but it does not mean out neighbors should be trusted.
+    Watch them closely."</i>
+- title: Chiang Sensei
+  types:
+  - Sensei
+  decks:
+  - Pre-Game
+  keywords:
+  - All Clans
+  text: 'Your Starting Family Honor is 0. Your maximum Province Strength is 0. You Recruit Fallen Personalities
+    for 2 less Gold. You do not lose Honor from your Fallen cards. If a player ends his turn with 20 or
+    more Madness tokens on his Personalities, he loses the game.<br> Limited, :bow:: Give a target Personality
+    a <b>Madness </b>token.'
+  province_strength: '*'
+  starting_honor: '*'
+  legality:
+  - Unreleased
+  notes: This promo will never be released
+  rarity: Promo
+  artist: Carlos NCT
+  designer: Bryan
+- title: Colonial Edict
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Gain 1 Honor.
+  focus: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  notes: Legal January 1st, 2015
+  rarity: Promo
+  artist: Albert Tavira
+  flavor_text: <i>"In the wake of the realization of P'an Ku's manipulation, the Commander of the Ninth
+    Legion and the Imperial Governor have ordered cessation of all hostilities until such time as culpability
+    can be determined."</i>
+  designer: Loki
+- title: Colonial Harbor
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Port
+  text: 'Your Stronghold''s abilities have <b>Tireless</b> <i>(Tireless actions may be taken while bowed.).</i><br>:bow::
+    Produce 5 Gold.'
+  gold_cost: 6
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Gong Studios
+  flavor_text: <i>"If Hiromi-sama wishes me to trade with the Crane, then I shall. But I will not trust
+    them." - Yoritomo Kanahashi</i>
+- title: Colonial Herald
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Cavalry
+  - Imperial
+  text: <b>Open:</b> Transfer your target attachment to your target Personality.
+  gold_cost: 3
+  focus: 2
+  force: 2
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  - Modern
+  notes: Legal January 1st, 2015
+  rarity: Promo
+  artist: Albert Tavira
+  flavor_text: <i>"Honorable samurai! I bring news of a most urgent nature from the Second City!"</i>
+  designer: Bryan
+- title: Contentious Terrain
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: Your Personalities at this battlefield have +1F. <br><b>Battle:</b> Destroy a Terrain <i>(if able)</i>.
+    Put this Terrain into play.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Drew Baker
+  flavor_text: More battles have been fought over possession of a simple patch of land than any other
+    cause in recorded history.
+- title: Cover Card
+  types:
+  - Other
+  decks:
+  - Other
+  rarity: Fixed
+- title: Creating Order
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: <b>Battle/Open:</b> Target a Personality. Either negate all current and new Force bonuses and
+    penalties on him from actions, or straighten his unit.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Gong Studios
+  flavor_text: <i>"With this blade, you take up the station as magistrate. Honor it, as your father did,
+    and much glory shall be yours."</i>
+- title: Daigotsu Kanpeki, the Shadow Emperor
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Daigotsu Kanpeki, the Shadow Emperor • Experienced 3
+  clans:
+  - Spider
+  keywords:
+  - Conqueror
+  - Experienced 3
+  - Kensai
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Monk
+  - Paragon
+  - Samurai
+  - Spider Clan
+  text: Reduce your Honor losses from your cards by 1, to a minimum of 1. After your Fear action at Kanpeki's
+    battlefield bows a Follower, destroy it.<br><b>Battle:</b> Take two additional Battle actions.
+  gold_cost: 12
+  force: 6
+  chi: 5
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Ben Peck
+  flavor_text: <i>"The anger and disrespect from the other clans shows only how much they fear us. In
+    that, at least, they are wise."</i>
+- title: Deadly Bisento
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Weapon
+  - Polearm
+  - Two-Handed
+  text: <b>Battle:</b> Give a target enemy Personality or Follower -3F.
+  gold_cost: 8
+  focus: 4
+  force: '+3'
+  chi: '+2'
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  notes: Legal July 1st, 2014
+  rarity: Promo
+  artist: Albert Tavira
+  flavor_text: <i>"Nothing incapacitates an enemy quite as effectively as a greivous wound." - Hida Tadama</i>
+  designer: Thomas
+- title: Doji Makoto, the Smiling Blade
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Doji Makoto, the Smiling Blade • Experienced
+  clans:
+  - Crane
+  keywords:
+  - Duelist
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Courtier
+  - Crane Clan
+  - Experienced
+  - Samurai
+  text: Your other Crane Clan Personalities have +1PH.<br><b>Favor Political Limited:</b> Discard the
+    Imperial Favor to draw a card.
+  gold_cost: 10
+  force: 3
+  chi: 6
+  honor_requirement: 10
+  personal_honor: 5
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Edwin David
+  flavor_text: "<i>â€œAre you certain of this course, my friend?â€\x9D Makoto asked. â€œIâ€™d much prefer\
+    \ we simply enjoy the sunset.â€\x9D</i>"
+- title: Encircled Terrain
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: Before this battle resolves, the Attacker and Defender, in the order of your choice, each choose
+    one of their own Personalities at its battlefield. Move all other Personalities there home. <br><b>Battle:</b>
+    Destroy a Terrain <i>(if able)</i>. Put this Terrain into play.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Hannah Böving
+  flavor_text: '"There is nowhere left to go, my friend."'
+- title: Entrenched Position
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Interrupt:</b> Negate a Battle action's effects taken by the Attacker if it is taken before
+    the Defender's first normal opportunity to act or pass.<br><b>Battle:</b> Bow a target enemy card
+    without attachments.
+  gold_cost: 0
+  focus: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Gong Studios
+  flavor_text: <i>"Feel the drum fill your soul with power! Give me a hundred men and a dozen drummers,
+    and I can take any objective!" - Kaiu Sokakaze</i>
+- title: Gates of the Second City
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unaligned
+  text: <i>(This card has +1PS and +2GP if you didn't go first.)</i><br><b>Limited, :g4::</b> Gain 2 Honor.
+    <br><b>Tireless Battle:</b> Discard a card to make a Fear effect with strength equal to the card's
+    Focus Value. <i>(Tireless actions may be taken even while bowed.)</i>
+  province_strength: 7
+  starting_honor: 8
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  story: Chris Medico
+  rarity: Promo
+  artist: Noah Bradley
+  flavor_text: '"Let us see what sort of man the Shogun is, then." -<br>Otomo Suikihime, Imperial Governor
+    of the Colonies'
+  doublesided: true
+- title: Heavy Cavalry
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Cavalry
+  gold_cost: 6
+  focus: 2
+  force: 4
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  notes: Ivory Edition Promo version released in the 2014 L5R Tournament Draft Kit
+  rarity: Promo
+  artist: Paul (Prof.) Herbert
+  flavor_text: '"Magnificent creatures, truly. They do not care about the Shogun, the Governor, or the
+    Imperial heirs. They simply do as commanded, whether hauling logs or trampling enemies. Would that
+    I had an entire army of them." - Commander of the Crab Colonial Forces'
+- title: Hida Kisada, the Little Bear
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hida Kisada, the Little Bear • Experienced
+  clans:
+  - Crab
+  keywords:
+  - Kensai
+  - Loyal
+  - Tactician
+  - Unique
+  - Clan Champion
+  - Crab Clan
+  - Experienced
+  - Samurai
+  - Siege
+  text: Your Provinces have +1 strength. Fear effects, Melee Attacks, and Ranged Attacks targeting your
+    Crab Clan Personalities in Kisada's army have -1 strength.<br><b>Tireless Battle/Open:</b> Straighten
+    your target Follower or Personality.
+  gold_cost: 12
+  force: 5
+  chi: 5
+  honor_requirement: 5
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Jason Engle
+- title: Horobei
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Duelist
+  - Kensai
+  - Ronin
+  - Samurai
+  - Yojimbo
+  text: <i><i>(Duelists win tied duels versus non-Duelists. Kensai may attach two Weapons, as long as
+    neither is Two-Handed.)</i></i>
+  gold_cost: 4
+  force: 2
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Shen Fei
+  flavor_text: '"Gifts rarely come without a price; even those from the kami themselves. But I will see
+    that their blessings do not go to waste."'
+  designer: Bryan
+- title: Incapacitated
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home a target defending Personality.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Carlos NCT
+  flavor_text: For some samurai, the notion of being removed from a battle without being defeated is far
+    worse a fate than death itself. Others find such an idea foolish in the extreme, but they are in the
+    minority.
+- title: Isawa Shunryu, the Infinite Eye
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Loyal
+  - Unique
+  - Elemental Master
+  - Phoenix Clan
+  - Shugenja
+  - Void
+  text: Before you draw cards at the end of your turn, draw a card.<br><b>Void Home Battle, :bow::</b>
+    Give all your opposed Samurai +1F, or all enemy Personalities -1F.
+  gold_cost: 10
+  force: 2
+  chi: 3
+  honor_requirement: 10
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Heather V. Kreiter
+  flavor_text: <i>"A prodigy among a line of prodigies, both in power and wisdom. I leave my seat on the
+    Council in capable, if untested, hands." - Isawa Kimi</i>
+- title: Kabuki Theater Troupe
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited, :bow::</b> Gain 1 Honor.
+  gold_cost: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Promo
+  artist: Luis NCT
+  flavor_text: '"The talk of the theater last night was the scandalous glance offered to a Dragon lord
+    by a Scorpion maiden. It was all anyone spoke of. Also I think there was a play, but honestly, who
+    was paying attention?" - Doji Dainagon'
+- title: Kagesai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Duelist
+  - Fire
+  - Samurai
+  text: <b>Fire Iaijutsu Battle, :bow::</b> Melee 2 Attack.
+  gold_cost: 6
+  force: 3
+  chi: 4
+  honor_requirement: 0
+  personal_honor: 3
+  legality:
+  - Unreleased
+  notes: This promo will never be released as its art was used for another card
+  rarity: Promo
+  artist: Shen Fei
+  flavor_text: <i>"Being born without the gift of speaking to the kami does not mean you cannot hear their
+    whispers."</i>
+  designer: Bryan
+- title: Keigo Sensei
+  types:
+  - Sensei
+  decks:
+  - Pre-Game
+  keywords:
+  - All Clans
+  text: Your Starting Family Honor is 0. <br><b>Limited:</b> Bow your Stronghold to search your discard
+    pile and Fate deck for a Fudo Ring, show it, and put it in your hand. Discard a card. <br><b>Open:</b>
+    If you control five Fudo Rings, destroy a Province.
+  province_strength: -1
+  starting_honor: '*'
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  story: 2013 The Monk and the Dragon - Chris Morano
+  notes: Legal for tournament use December 1st, 2014
+  rarity: Promo
+  artist: Charles Urbach
+  designer: Bryan
+- title: Mirumoto Shikei, the Laughing Dragon
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Mirumoto Shikei, the Laughing Dragon • Experienced
+  clans:
+  - Dragon
+  keywords:
+  - Duelist
+  - Kensai
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Dragon Clan
+  - Experienced
+  - Monk
+  - Naga
+  - Samurai
+  - Tattooed
+  text: <b>Limited:</b> Look at the top three cards of your Fate deck. You may exchange one of them with
+    one from your hand. Put the cards back in any order.<br><b>Battle/Open:</b> Straighten your target
+    Ring.
+  gold_cost: 10
+  force: 4
+  chi: 5
+  honor_requirement: 9
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Calderon Studio
+  flavor_text: "<i>â€œAnswer? No, I have the question you seek.â€\x9D</i>"
+- title: Moto Naleesh, the Living Goddess
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Moto Naleesh, the Living Goddess • Experienced
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Loyal
+  - Tactician
+  - Unique
+  - Clan Champion
+  - Commander
+  - Experienced
+  - Kami
+  - Naga
+  - Paragon
+  - Samurai
+  - Unicorn Clan
+  text: Infantry Personalities opposing Naleesh have -1F. After you Recruit a Personality during battle,
+    gain 1 Honor.<br><b>Engage:</b> Give <b>Reserve</b> to a target face-up Unicorn Clan Personality in
+    your Province.
+  gold_cost: 10
+  force: 4
+  chi: 5
+  honor_requirement: 8
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Tony Foti
+  flavor_text: "<i>â€œNone are too far for the Unicorn to protect or punish.â€\x9D</i>"
+- title: Mystical Augmentation
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Void
+  text: <b>Void Battle, :bow::</b> Give a target Personality +1F, or +2F if this Shugenja or the Personality
+    is Void or a Yojimbo.
+  gold_cost: 1
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Shen Fei
+  flavor_text: '"The void can tap into inner elements one never knew they had." - Isawa Shunryu'
+- title: Nimble Scout
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Scout
+  text: <b>Battle, :bow::</b> Straighten this Personality.
+  gold_cost: 2
+  focus: 2
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  notes: Legal October 1st, 2014
+  rarity: Promo
+  artist: James Hall
+  flavor_text: <i>"I will be where you need me, my lord."</i>
+  collector_number: '175'
+  designer: Bryan
+- title: Poorly Placed Garden
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Fortification
+  text: <i>(Fortifications attach to the Province from which they entered play.)</i><br>Enters play unbowed.
+    <br><b>Limited, :bow::</b> Gain 2 Honor.
+  gold_cost: 5
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Stefano Baldo
+  flavor_text: <i>"It is lovely, of course, but... what is that smell? Are we near a crematory?"</i>
+- title: Sadamune Blade
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Weapon
+  - One-Handed
+  - Sword
+  text: As a Focus Effect, after this duel ends, if your Personality won it, you may attach this Item
+    to him, ignoring costs.
+  gold_cost: 3
+  focus: 4
+  force: '+2'
+  chi: '+1'
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  rarity: Promo
+  artist: Greg Lambrakis
+  flavor_text: '"I offer you this blade, my lady. Its perfection cannot hope to rival your own, but may
+    its strength and might serve to enhance yours."'
+- title: Scout Tactics
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Open:</b> Bow your target unbowed Personality. Ranged 2 Attack targeting a card in a unit in
+    another player's home, with +2 strength if your Personality is a Scout, and which bows its target
+    instead of destroying it.
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  notes: Legal October 1st, 2014
+  rarity: Promo
+  artist: Anthony Grabski
+  flavor_text: <i>A well placed arrow can end a battle before it has even begun.</i>
+  collector_number: '186'
+  designer: Bryan
+- title: Shabura
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  keywords:
+  - Bushi
+  - Naga
+  - Nonhuman
+  text: <b>Open, :bow::</b> Give Shabura a -2F/+3C Change token if she does not have one, or remove one
+    if she does.
+  gold_cost: 8
+  force: 4
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  errata_text: Was accidentally printed without legality bugs. Shabura is Ivory and Ivory Part 2 legal.
+  rarity: Promo
+  artist: Héctor Herrera
+  flavor_text: <i>"My people are no longer numerous. Our temples abandoned, our cities in ruins. We no
+    longer wield the powers we once held. But our tale is not yet concluded."</i>
+- title: Sneak Attack
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Engage:</b> The Attacker has the first opportunity to take a Battle action or pass in this
+    battle.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Promo
+  artist: Shen Fei
+  flavor_text: <i>The old tricks are the best.</i>
+- title: Soul of Fire
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Fire
+  text: <b>Fire Battle/Open, :bow::</b> Give a target Personality +1F, or +2F if he or this Shugenja is
+    Fire.
+  gold_cost: 1
+  focus: 2
+  legality:
+  - Unreleased
+  notes: This promo will never be released as its art was used for another card
+  rarity: Promo
+  artist: Shen Fei
+  flavor_text: <i>"Find the essence of fire within yourself, and the world shall bend around you like
+    metal at the forge." - The Tao of Shinsei</i>
+  designer: Bryan
+- title: Soul's Sacrifice
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Target your unbowed Samurai with 3 or higher Personal Honor. Permanently give him
+    <b><b>Shadowlands • Undead</b></b>. Move home a target enemy Personality.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  notes: Ivory Edition Promo version released in the 2014 L5R Tournament Draft Kit
+  rarity: Promo
+  artist: David Horne
+  flavor_text: The worst and most terrifying secret of blood sorcery is that sometimes, there are powerful
+    rituals that are more effective against those who hold most tightly to honor.
+- title: Sparrow Clan Aide
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: After you Equip this Follower, gain 1 Honor. <br><b>Political Battle:</b> Bow or straighten a
+    target Personality with lower Personal Honor than this Personality.
+  gold_cost: 3
+  focus: 2
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  story: 2007 Kotei Winner - Jerred Moore
+  rarity: Promo
+  artist: Héctor Herrera
+  flavor_text: The Sparrow were once greatly respected among the Minor Clans, but their infiltration by
+    the Spider has left them tarnished, perhaps irredeemably.
+- title: The Eternal Temple of the Phoenix
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Phoenix
+  keywords:
+  - Temple
+  text: <b>Limited:</b> Bow your target unbowed Shugenja. Look at the top three cards of your Fate deck.
+    If one of them is a Kiho or Spell, you may show it, put it into your hand, and then discard a card.<br><i>(This
+    Stronghold has +1 Province Strength and does not need to discard a card to its ability when going
+    second)</i>
+  province_strength: 6
+  starting_honor: 6
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  - Modern
+  story: 2012 Level 20 Make a Stronghold - Toni Morcillo UrmÃ¡n
+  notes: This Stronghold may not be used in Twenty Festivals Extended formats.
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"If I am to master myself, I must first serve another. Lord Shiba knew this." - Shiba
+    Tsukimi'
+  doublesided: true
+- title: The Exquisite Palace of the Crane
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  text: <b>Limited:</b> Target a Holding. Until the phase ends, either give it +1 Gold Production, or
+    increase Honor gains from its abilities by 1.<br><i>(This Stronghold has +1 Province Strength and
+    +5 Family Honor when Lobbying when going second)</i>
+  province_strength: 6
+  starting_honor: 6
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  - Modern
+  errata_text: Erratum effective 4/18/2014
+  notes: This Stronghold may not be used in Twenty Festivals Extended formats.
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"My ancestor, Lady Doji, understood that a life without beauty is not a life at all."
+    - Doji Makoto'
+  doublesided: true
+- title: The Fruitful Port of the Mantis
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  keywords:
+  - Port
+  text: <b>Limited, :g3::</b> Draw a card.<br><i>(When going second, you may, once per game, produce 2
+    Gold)</i>
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"Insult us with snide comments if you wish, but first consider… where did this food I
+    eat come from?" - Yoritomo Hiromi'
+  doublesided: true
+- title: The Golden Plains of the Unicorn
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unicorn
+  text: <b>Battle/Engage:</b> If he would be opposed, move to the current battlefield your target unbowed
+    Personality in a Cavalry unit at any location.<br><i>(This Stronghold has +1 Province Strength and
+    you may use the Cycle player ability an additional time on your first turn when going second)</i>
+  province_strength: 7
+  starting_honor: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  - Modern
+  notes: This Stronghold may not be used in Twenty Festivals Extended formats.
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"No lavish decoration can compare to the beauty of an open horizon." - Moto Naleesh'
+  doublesided: true
+- title: The Honorable Garrison of the Lion
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: <b>Battle:</b> Give your target opposed Lion Clan Samurai a Force bonus equal to his Personal
+    Honor <i>(this turn)</i>.<br><i>(This Stronghold has +2 Province Strength when going second)</i>
+  province_strength: 7
+  starting_honor: 7
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  - Modern
+  notes: This Stronghold may not be used in Twenty Festivals Extended formats.
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"True peace of mind can only be achieved when one''s enemies know, without question, that
+    you cannot be defeated." - Akodo Dairuko'
+  doublesided: true
+- title: The Impregnable Fortress of the Crab
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: Your Crab Clan Personalities have +1F while opposed.<br><i><i>(This Stronghold has +2 Province
+    Strength when going second)</i></i>
+  province_strength: 7
+  starting_honor: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  - Modern
+  notes: This Stronghold may not be used in Twenty Festivals Extended formats.
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"If some fool wishes to break himself against our gates, let him. He will be neither the
+    first or last." - Hida Kisada'
+  doublesided: true
+- title: The Remote Monastery of the Dragon
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Dragon
+  keywords:
+  - Temple
+  text: You cannot Recruit Monks with another Clan Alignment. After all players reveal Strongholds, search
+    your Fate deck for a non-Fudo, non-Void Ring. Put it into play. <br><i><i>(This Stronghold has +1
+    Province Strength, +1 Starting Hand Size, and +1 Maximum Hand Size when going second)</i></i>
+  province_strength: 6
+  starting_honor: 5
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"One cannot find himself amidst the clutter of the world." - Mirumoto Shikei'
+  doublesided: true
+- title: The Shadowed Estate of the Scorpion
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Scorpion
+  text: <b>Tireless Open:</b> Name a Fate card, or name a Dynasty card in play. Negate the effects of
+    the next action from a card with that title.<br><i>(When going second, you get +1PS and other players
+    have -1 maximum hand size)</i>
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  notes: This Stronghold may not be used in Twenty Festivals Extended formats.
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"Underestimate us. Dismiss us. Insult us. Your anguish will be all the sweeter for it."
+    - Bayushi Nitoshi'
+  doublesided: true
+- title: The Sinister Citadel of the Spider
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Spider
+  text: '<b>Battle:</b> Fear 3.<br><i>(This Stronghold has +1 Province Strength, its ability gains Tireless,
+    and it gains the ability, "Tireless Dynasty: If any of your Provinces have been destroyed this game,
+    turn a card in one of your Provinces face-up" when going second)</i>'
+  province_strength: 7
+  starting_honor: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  - Modern
+  notes: This Stronghold may not be used in Twenty Festivals Extended formats.
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"What do the Spider care for decoration and art? My allies and enemies alike look upon
+    us with fear. I need nothing else." - Daigotsu Kanpeki'
+  doublesided: true
+- title: War
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: <b>Battle:</b> Target your Personality. If you win this battle and your army's total Force is
+    greater than this Province's strength, destroy the Province and your Personality.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  - Modern
+  notes: Legal May 1st, 2014
+  rarity: Promo
+  artist: Shen Fei
+  flavor_text: <i>The tragedy of being served by a caste of warriors is that they will always seek war,
+    no matter the circumstance.</i>
+  designer: Thomas
+- title: Wounded in Battle
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Target a Personality who has not been targeted by a Wounded in Battle this turn.
+    Until the battle ends, if he is a Samurai, he is not destroyed for having 0 Chi. Give him -2C.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  notes: Ivory Edition Promo version released in the 2014 L5R Tournament Draft Kit
+  rarity: Promo
+  artist: Lake Hurwitz
+  flavor_text: <i>"A wound is not the end of a true samurai. It is merely a momentary inconvenience that
+    can be cleansed by once more entering battle." - Akodo's Leadership</i>
+- title: Yoritomo Hiromi, the Growing Storm
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Yoritomo Hiromi, the Growing Storm • Experienced 2
+  clans:
+  - Mantis
+  keywords:
+  - Experienced 2
+  - Kensai
+  - Loyal
+  - Naval
+  - Unique
+  - Clan Champion
+  - Mantis Clan
+  - Samurai
+  - Thunder
+  text: Personalities opposing Hiromi have -1F if you took the first Battle action in this battle <i>(including
+    during that action)</i>.<br><b>Thunder Engage:</b> Your Ranged Attacks during this battle have +1
+    strength.
+  gold_cost: 10
+  force: 4
+  chi: 5
+  honor_requirement: 4
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Promo
+  artist: Sam Flegal
+  flavor_text: <i>The Colonies or the court? An easy choice.</i>

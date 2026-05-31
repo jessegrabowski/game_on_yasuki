@@ -1,0 +1,404 @@
+set: Promotional – Ivory
+images:
+- card_id: a_game_of_dice
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: a_game_of_dice.jpg
+    sha256: 3678cd6cee738cdc09830a4a80b779d7051497f7066f58986778a6914349a05a
+- card_id: akodo_dairuko_the_steel_lion_experienced_2
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: akodo_dairuko_the_steel_lion_experienced_2.jpg
+    sha256: 2c341990b9cb33e54298db4b3a58dd5d833f3e202c053afa2aed7766f9ab994c
+- card_id: ancestral_armor_of_the_crab_clan_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: ancestral_armor_of_the_crab_clan_experienced.jpg
+    sha256: ca101d223beeaa875fbeeee1398674cf8eeb1004e60c4c2c61f64eb64753ac9d
+- card_id: ancestral_armor_of_the_crane_clan_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: ancestral_armor_of_the_crane_clan_experienced.jpg
+    sha256: 9d69b18a557a4675da83e0585042b4eff00122fb8e3f1336f2be08f32e9646aa
+- card_id: ancestral_armor_of_the_dragon_clan_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: ancestral_armor_of_the_dragon_clan_experienced.jpg
+    sha256: 44f8b22624e23da4c49969da6983fcb823be53aaf574159be57ef58c1ce37bdb
+- card_id: ancestral_armor_of_the_lion_clan_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: ancestral_armor_of_the_lion_clan_experienced.jpg
+    sha256: 7e548079f5a1f9e45e0e0000e674127dfa320e012923f2d3911c61eacdc34e9b
+- card_id: ancestral_armor_of_the_mantis_clan_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: ancestral_armor_of_the_mantis_clan_experienced.jpg
+    sha256: c4b297b4dc288ce901989bd9405fba851f1788aab6ca9eead39c909ceff562cf
+- card_id: ancestral_armor_of_the_phoenix_clan_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: ancestral_armor_of_the_phoenix_clan_experienced.jpg
+    sha256: 21e614c09b51c2dce73300fc638c081fef11e2534f167872fc94dc8e9b84447e
+- card_id: ancestral_armor_of_the_scorpion_clan_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: ancestral_armor_of_the_scorpion_clan_experienced.jpg
+    sha256: 793dbc15594e00e32654caebd5ba9e85325902aa72168a5bbae71a708e544c90
+- card_id: ancestral_armor_of_the_spider_clan
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: ancestral_armor_of_the_spider_clan.jpg
+    sha256: f0fa68e37e9715917e4ae90aeeb41aab459314dc217fbb98d78ac95e72e17b0b
+- card_id: ancestral_armor_of_the_unicorn_clan_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: ancestral_armor_of_the_unicorn_clan_experienced.jpg
+    sha256: 9b736e507ee45dfc4cf4dca62b8286a2f6044c4641b4c51b05c22815079c9cd6
+- card_id: back_to_the_front
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: back_to_the_front.jpg
+    sha256: 66d67e3519483e5310fda51fbb314e016875a0bc784cc4d79629d2465d754929
+- card_id: bamboo_harvesters_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: bamboo_harvesters_experienced.jpg
+    sha256: d31c9abb2ebeb4a48a4101accfac3cb563f1a32d659a4ae6ea8ff908550d1f81
+- card_id: bayushi_nitoshi_the_poison_mask_experienced_2
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: bayushi_nitoshi_the_poison_mask_experienced_2.jpg
+    sha256: 0165b9236e558b2af940bad12f4a57cf48d56bcae905d8c7b5683afceb8d0251
+- card_id: bisento_do
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: bisento_do.jpg
+    sha256: 8072f154258226e3f1f221e5b42af10b01293faeda7658362e9ef56cd5786c66
+- card_id: block_supply_lines
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: a9accb51ed7ab50dd3edb5471d779f88496a497ffe0142c51c7260d153824d34
+- card_id: border_keep_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: border_keep_experienced.jpg
+    sha256: 29fc80a74abe31112cf88ff41991eb9380762538c9bf19c7c092b7edfd4a8cd3
+- card_id: chiang_sensei
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: chiang_sensei.jpg
+    sha256: 505f39f6a83638d4d820c40c9677daa638926c723891cc8860269aa838ecad96
+- card_id: colonial_edict
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: colonial_edict.jpg
+    sha256: bb45127b593ff3437f5707b7770266775dd355a2680e6cb55603c5237bdf2667
+- card_id: colonial_harbor
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: colonial_harbor.jpg
+    sha256: f3565d9fd50c1784acc0966f70e72791208fd49137d318fc5c304df6fddb5efd
+- card_id: colonial_herald
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: colonial_herald.jpg
+    sha256: e0ff93f2d57d1c57cfa8bcfc627f7e56e1e03d30ee792637bf5bbdb9f3b2ff48
+- card_id: contentious_terrain
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: contentious_terrain.jpg
+    sha256: b1be04677a45587bb4e2a2ffe93829ee62bae1e3be1a0153ab7a6fd9f6c9f80c
+- card_id: cover_card
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: cover_card.jpg
+    sha256: 14b0503d8f4b14839642db48432cde3072ecd6d66a2e39c4d8a5037798791a32
+- card_id: creating_order
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: creating_order.jpg
+    sha256: 99bcfd35f6c1ce3aee8d38d3d0240547679403a3845a96d4d8b009b260454d3c
+- card_id: daigotsu_kanpeki_the_shadow_emperor_experienced_3
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: daigotsu_kanpeki_the_shadow_emperor_experienced_3.jpg
+    sha256: b23059d5f1053b4ebfed48c1a961377017a921d628d69e27b1da21f38b3a9a70
+- card_id: deadly_bisento
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: deadly_bisento.jpg
+    sha256: 2bb2bd6f9cd08e4dfaa68026a55fdd02d23711a65e44b5da129b2c3f07147704
+- card_id: doji_makoto_the_smiling_blade_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: doji_makoto_the_smiling_blade_experienced.jpg
+    sha256: ae13d0986b3629724856046685c672ac41818fea3e2c752f6434f4fe5e4c08a0
+- card_id: encircled_terrain
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: encircled_terrain.jpg
+    sha256: bb37395d72654eabecc4c9db059a9292c72d7bec82584cc8ae7b5d0f95354148
+- card_id: entrenched_position
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: entrenched_position.jpg
+    sha256: b599f9bf45474cdf57d55ebef32236cbe29f239b6da09e7de1063c5d73d06136
+- card_id: gates_of_the_second_city
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: gates_of_the_second_city.jpg
+    sha256: 4be639ed74e3ea7da02cc7cd1de8e4336d30c4ab2e0efbcf619da257601a744c
+  - role: back
+    file: gates_of_the_second_city__back.jpg
+    sha256: a53fb5bf999c5685380a47a489f04208840e78887c420a0211e368f1f6dc2987
+- card_id: heavy_cavalry
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: heavy_cavalry.jpg
+    sha256: fed270abd3010cc58037c609c070a81f35e02cb589b2499e58b57419974d1697
+- card_id: hida_kisada_the_little_bear_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: hida_kisada_the_little_bear_experienced.jpg
+    sha256: 1085c37fc776738e5ef38f2f8976b0b3026d3e7f997131d359f1ba586cf8e73f
+- card_id: horobei
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: horobei.jpg
+    sha256: 2f26d306733b0cce8e16c7bb7c0eb0e3ffeded175361e12fe9b732a6d89837d4
+- card_id: incapacitated
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: incapacitated.jpg
+    sha256: 853b1d452e51a791c551f7e03d61e84d38345c03ca68741b698d5cef031c076e
+- card_id: isawa_shunryu_the_infinite_eye
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: isawa_shunryu_the_infinite_eye.jpg
+    sha256: 78aa63d5a5108c67afee01f26e7e67dd986fdd824ca7b75c3c25f695269897bd
+- card_id: kabuki_theater_troupe
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: kabuki_theater_troupe.jpg
+    sha256: 8f08779b66225669a0f2cadc4e1790e5fe42f89a69802125a2bb266f756708a7
+- card_id: kagesai
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: kagesai.jpg
+    sha256: e9ad7744615cc02e6753276dd43a5a182f022638ce8c5a9f9a06284a1426102f
+- card_id: keigo_sensei
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: keigo_sensei.jpg
+    sha256: a8b24daa04642e96d2e1a4b2def09cca4b3e9fb805f31fe86d249b3fd4f2411a
+- card_id: mirumoto_shikei_the_laughing_dragon_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: mirumoto_shikei_the_laughing_dragon_experienced.jpg
+    sha256: 57b5ea49b9a72497325f89b01fff557667a0ba4be29f6fae4cc03558a5bfbbcf
+- card_id: moto_naleesh_the_living_goddess_experienced
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: moto_naleesh_the_living_goddess_experienced.jpg
+    sha256: 9844c0ee8d3a39a820d9231f6335a9a50f0bd1aef97ad76a6cebe853d4f4c112
+- card_id: mystical_augmentation
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: mystical_augmentation.jpg
+    sha256: 17cc13a84a53d9fccc0d815d0c31925379d95daf5be7bd76de3ce3e34a24ddde
+- card_id: nimble_scout
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: nimble_scout.jpg
+    sha256: 01480223c8bb3ff6822b710a7a6b1544efe1a5657d2606f145c26ab24a450af2
+- card_id: poorly_placed_garden
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: poorly_placed_garden.jpg
+    sha256: eeeea6847fae28e7697b1b74018613312215a5d321ec09e57ead59b8a9cc3408
+- card_id: sadamune_blade
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: sadamune_blade.jpg
+    sha256: eee922ca5e6b8880275997667abe49c5d8b8fc95ce9ad62f5624075f9de2a412
+- card_id: scout_tactics
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: scout_tactics.jpg
+    sha256: 368e7fee58f936eb8d9978549251929a9a62e49b5d7b3d544f258cefc2279eef
+- card_id: shabura
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: shabura.jpg
+    sha256: 0d1a6cc8e6016a1acdcd24e59d45c40606d482ec0544488943c7e4cf3ef7ca76
+- card_id: sneak_attack
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: sneak_attack.jpg
+    sha256: 9a8d76763947f1a55b8005b4bc1052abc69c3f1468315e269ed4afa92540bf4c
+- card_id: soul_of_fire
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: soul_of_fire.jpg
+    sha256: 42bf7883c535a962fd5cf130ea1174d78bbdcc600acd376b03da4e0fe20e1b73
+- card_id: souls_sacrifice
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: souls_sacrifice.jpg
+    sha256: 0646542b37ea19090e3645fdfd901e84758ef3e24e22fbeb5d27dda21d32c2bd
+- card_id: sparrow_clan_aide
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: sparrow_clan_aide.jpg
+    sha256: 78c987e8c9b187cf9bbe14423c2d6ea31b1043d9eb9e132eaff042f8ea2c8aec
+- card_id: the_eternal_temple_of_the_phoenix
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: the_eternal_temple_of_the_phoenix.jpg
+    sha256: 6ed27d7eb79a51531eb5cbb8e2eb50765982c1ced33afab13f8ab6f8e593a9cd
+  - role: back
+    file: the_eternal_temple_of_the_phoenix__back.jpg
+    sha256: 5e0e46cf6362ca45e16969b7c3c5f2a56abb67d6d433f07362bb49adb80524f6
+- card_id: the_exquisite_palace_of_the_crane
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: the_exquisite_palace_of_the_crane.jpg
+    sha256: 8143df875bac6ceb209ecc146a03ac7729d26a694ad2102e974dce2858c21911
+  - role: back
+    file: the_exquisite_palace_of_the_crane__back.jpg
+    sha256: fdc248d0403716fdeec99c7e665ea815dbc2a235ecab0aa712b13260c4bf5e4f
+- card_id: the_fruitful_port_of_the_mantis
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: the_fruitful_port_of_the_mantis.jpg
+    sha256: c44551ee2c2e251b62d4217b67996173ba212b5763152796ec786802f75a9dee
+  - role: back
+    file: the_fruitful_port_of_the_mantis__back.jpg
+    sha256: 95c54bf39ee078a42429a0e25ea30d1b0ae34c192dc4a200e558e2777872f0e6
+- card_id: the_golden_plains_of_the_unicorn
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: the_golden_plains_of_the_unicorn.jpg
+    sha256: 3b5d7789c01ac4dfc8ebafbf624b036b98fc5213b419d7685980f08bb11e454b
+  - role: back
+    file: the_golden_plains_of_the_unicorn__back.jpg
+    sha256: 35bb4405f85cf7a5ef0e8dae43f9f3b319094d7043cd554caa49e9d42f139acc
+- card_id: the_honorable_garrison_of_the_lion
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: the_honorable_garrison_of_the_lion.jpg
+    sha256: 53c7e0647c41549a894646ec7f9e785ffcd163e7ef2df4554e304435011ba0ad
+  - role: back
+    file: the_honorable_garrison_of_the_lion__back.jpg
+    sha256: a6a228b2968b2d4cfa086107c0a23aca9d45155cb8a5d7af7f2888f79edb603a
+- card_id: the_impregnable_fortress_of_the_crab
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: the_impregnable_fortress_of_the_crab.jpg
+    sha256: 562c4f73751636634f9312e5db2fc32d66528df18821b7b4550f25aef0cfda55
+  - role: back
+    file: the_impregnable_fortress_of_the_crab__back.jpg
+    sha256: bb8e63889f6caa5d79bf8f0447321d23346b84c2c07fb4040d947ed08b3ad891
+- card_id: the_remote_monastery_of_the_dragon
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: the_remote_monastery_of_the_dragon.jpg
+    sha256: 8cc876c669adbd274e69e5227a62cfb2d6e2c2673778816329efcd781b82ef75
+  - role: back
+    file: the_remote_monastery_of_the_dragon__back.jpg
+    sha256: 1d371a15ac3481c3bbe796293b7493784f6777d86493807d61b30f8361ae2a66
+- card_id: the_shadowed_estate_of_the_scorpion
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: the_shadowed_estate_of_the_scorpion.jpg
+    sha256: 19a3c5ae97c381721992d4f85fb743a8afeea28995fde60506ab4d841a5945f0
+  - role: back
+    file: the_shadowed_estate_of_the_scorpion__back.jpg
+    sha256: 1087eceb1ca0c68ac2d6ede6d42cb2ed4651a44488b40afc86ae03b41ba6e141
+- card_id: the_sinister_citadel_of_the_spider
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: the_sinister_citadel_of_the_spider.jpg
+    sha256: 651b41c0feb65bd85c76d22179ffd52e92bc366012e2e682b3e9b9a84da9738a
+  - role: back
+    file: the_sinister_citadel_of_the_spider__back.jpg
+    sha256: 48e3e1d9bd69111ac9ebc1284778f1cc5bef6d94932b8c0501ee6f280392fbf1
+- card_id: war
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: war.jpg
+    sha256: e4f78f7d8a8eac60d216d48deac84bfdac1a9b32cf32f14bb75902e9b8520c33
+- card_id: wounded_in_battle
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: wounded_in_battle.jpg
+    sha256: b8d9d73486519630734f84c4f4dc3989f77f6263142d96d38c3aa3e89184aee2
+- card_id: yoritomo_hiromi_the_growing_storm_experienced_2
+  printing_id: promotional_ivory
+  files:
+  - role: front
+    file: yoritomo_hiromi_the_growing_storm_experienced_2.jpg
+    sha256: 0d0769c0a63abbb560e48a47b2a423f2c7d22975ce289a3560fabe0e6e2daf31

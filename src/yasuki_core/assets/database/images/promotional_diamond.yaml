@@ -1,0 +1,860 @@
+set: Promotional – Diamond
+images:
+- card_id: a_new_wall
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: a_new_wall.jpg
+    sha256: 7418132f5cde2a3f096efd7610a32a1f57f9844b525ede97a44a1de69268a37d
+- card_id: a_time_for_vengeance
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: a_time_for_vengeance.jpg
+    sha256: 1e8212b3b160e4189193a55ad2a989a200a7811b579365ec1182d11c909a025b
+- card_id: akasha_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: akasha_experienced.jpg
+    sha256: 3c84eb9b40f04a80bcf168e88d206c4d0feeae6d30b88eccad8581b37dbd1071
+- card_id: akodo_house_guard
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: akodo_house_guard.jpg
+    sha256: 916baaec486f876d22ad14d888fdfbc2f47c0663ab3c36923dbafcdbde8802d1
+- card_id: ambition_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: ambition_experienced.jpg
+    sha256: 912c38dd282d5c700e72b2bcc2fd4eaeb88652b69d8f4f252e0ea80283b4562d
+- card_id: ancestral_kabuto
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: ancestral_kabuto.jpg
+    sha256: 9ea626a41268ee406c64dc407ca1f5586beba5849d63f7cac7500cb604902868
+- card_id: bayushi_sunetra_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: bayushi_sunetra_experienced.jpg
+    sha256: 7c69f6c0a1a910509411ce1e1f181dc46c5859532c0491bbeeacc37435b1f22a
+- card_id: blade_of_thorns
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: blade_of_thorns.jpg
+    sha256: e9a1242bcc0026e28592fc4f6c183be6612cdce2636b4b671290a0e6c20f7433
+- card_id: book_of_air
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: book_of_air.jpg
+    sha256: d219cb5765d7df6bddb1a58716a6862a7c4cfd2537f2921bcd3e739c998cdaf0
+- card_id: book_of_earth
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: book_of_earth.jpg
+    sha256: 56398701e699505271b17071e0da6bf8886f773392d78d1a847f73b23e1b1fb8
+- card_id: book_of_fire
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: book_of_fire.jpg
+    sha256: 17635562e6095c172758f977dfa441336d742f0c936eeaa3eadadf73f1df431f
+- card_id: book_of_the_void
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: book_of_the_void.jpg
+    sha256: a79a4736e0e5d40c1b9c315a04fd2ab9655e2edf23f09a11a9bf4b9320cb1096
+- card_id: book_of_water
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: book_of_water.jpg
+    sha256: e4cc3325f6a954ea9dc5cc0b9acdbe760d0e8d14e3bf439fffc57b76c94c0673
+- card_id: bushido
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: bushido.jpg
+    sha256: 05660e868e308de9fc3e28d27121e66f2e6600a08e53cacb220631af7fbf5c48
+- card_id: castle_of_the_wasp
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: castle_of_the_wasp.jpg
+    sha256: 1a6120049c7c209ebaa10a800fe830b131f1116b8c867c28eb004f6453d692ec
+- card_id: crescent_moon_cut
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: crescent_moon_cut.jpg
+    sha256: 8c3bd3e1739bda766037aac3be2630ec7dcc7aac5c3aeb65f31ee3ce3410fb68
+- card_id: death_of_rosoku
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: death_of_rosoku.jpg
+    sha256: c4b4925d8f4141420d466b99a4f42a984c16db915965efaf6fa24b8ab5b9d229
+- card_id: death_of_the_heartless
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: death_of_the_heartless.jpg
+    sha256: 74daf525942de3f391ed8def9b04449def7fc1ff5e633bd9d71317a93e55dd2c
+- card_id: dire_omen
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: dire_omen.jpg
+    sha256: 1f19529be4627a42d998df205fea21d4c4cae5a98504f5e7c40c683ab3a3563e
+- card_id: doji_kurohito_experienced_2
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: doji_kurohito_experienced_2.jpg
+    sha256: 32a215025c58b2ac7adea9c351bd37a5aecd8a3a425ca4fcce5a0ac6bd6769aa
+- card_id: emperor_toturi_iii
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: emperor_toturi_iii.jpg
+    sha256: 1d2cf54b9788d45feecc25e8dbc712a087d8a92ef50f0204b71bd1edcdd628b2
+- card_id: excellent_student
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: excellent_student.jpg
+    sha256: b45a769f8807705c812d29ea0fed0d54af8cfb59f12f2187401ad47387c84a71
+- card_id: field_of_broken_swords
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: field_of_broken_swords.jpg
+    sha256: b57ae1a74570418013591d38f2122ccebe00d44079a6376bee6b0b148cd1b18c
+- card_id: fireworks
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: fireworks.jpg
+    sha256: 0bd52daecbbbfa1457426215ca818b0aa3fef173f8538b99f4c89e32e35b343d
+- card_id: flame_and_lightning
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: flame_and_lightning.jpg
+    sha256: cd281b860d3a926fae45de504e2792ae9724706e91853beb45dedf598590422d
+- card_id: forward_observer
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: forward_observer.jpg
+    sha256: 18d18245ddc96eddcd60308345aa664437d5766f597e68117de315763c869fa2
+- card_id: fu_lion
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: fu_lion.jpg
+    sha256: fdcb4fb2914c88c42f7cf0f2d3fe7dfd3c7b7d95a8dc55d30fe3d825a2c714a9
+- card_id: harvest_festival
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: harvest_festival.jpg
+    sha256: 044229d158adae379f3137b4807c7690e2e0821af4601e21e9cf37702c9c8ad8
+- card_id: hida_kuon_experienced_3
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: hida_kuon_experienced_3.jpg
+    sha256: 78355784d129a7f4ef662969f85a8aedd2a2af6e953f5c73d3a00ccd9326574a
+- card_id: hidden_city
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: hidden_city.jpg
+    sha256: 97f5e78b08642416d98548d542630e547a4f23396c96803ef0f8c0a46a3048ea
+- card_id: hiruma_house_guard
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: hiruma_house_guard.jpg
+    sha256: f14a8ed3a1564b5a2d649f8ec77db7945a5ef1adafc71f05a5e60ebe35de5677
+- card_id: honors_lesson_dojo
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: honors_lesson_dojo.jpg
+    sha256: 1430c5685f5d69a76467f91528cd9b368384376fdfb6bee1580595a6c8dc7891
+- card_id: hoshi_house_guard
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: hoshi_house_guard.jpg
+    sha256: e0be3238b0e896a67efe5a3a980f1e55cee2b1b775072133b19aaf040b51835b
+- card_id: house_of_tao
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: house_of_tao.jpg
+    sha256: c9cc539401679719d963a48647d62f51a9c21a7e90651d126f6354a323d440a9
+- card_id: house_of_the_fallen_blossom
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: house_of_the_fallen_blossom.jpg
+    sha256: 97f273abc4435e41fe02f742fd3854ea6dc0b48d8e445f625473330b76518a30
+- card_id: i_am_ready
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: i_am_ready.jpg
+    sha256: 9abe9c2bf9d6fc84d92294d566d83aa5ee1571c53c1d03eaf9f4b28145d467a5
+- card_id: in_time_of_war
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: in_time_of_war.jpg
+    sha256: e8cdffd267e4ddc0b48edc3f6e9525d3ba1f71bd85106ac2491737a82ee6c1ec
+- card_id: interesting_times
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: interesting_times.jpg
+    sha256: 20cceef609ea2be682bfeaa8508996a8292e1812e764c54d32798fae76748850
+- card_id: isawa_house_guard
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: isawa_house_guard.jpg
+    sha256: 4dc8110729f2029370516ccdf128bcfe1b436c4f77b38e50284243a56fe20510
+- card_id: iuchiban
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: iuchiban.jpg
+    sha256: 6b387e3106b646e112fb0d4f52f152ec305bb05a603aef7946a90a96c7e39274
+- card_id: jade_jitte
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: jade_jitte.jpg
+    sha256: e211ff05825d9b740fa37b2befff9eb8209118b965045b0e74deff1af2e2a4f7
+- card_id: junji
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: junji.jpg
+    sha256: 0631b6a15fc4b4e5efb4976bd4e4745314fa94d7d5edda883cbd7b40947342c5
+- card_id: kakita_dueling_academy
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kakita_dueling_academy.jpg
+    sha256: c7fe00cc446d0cc799be947d671044d85e8f52844f49843cf5b3409c8f5e2166
+- card_id: kakita_house_guard
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kakita_house_guard.jpg
+    sha256: 2b6fbd2f02fabbd8ce1fd58c4dd32076f284175844c362e104d2ece353386bbd
+- card_id: kanokticheck_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kanokticheck_experienced.jpg
+    sha256: d700f49531f0a877de1aa203edb0eaae2d1fc2e62777efe8b6e91f4770bde439
+- card_id: keeper_of_air
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: keeper_of_air.jpg
+    sha256: f9e61f60b8cd58346f81c25055c5671ff8d0c3b9d170dc7ab6fb220965ef73f7
+- card_id: keeper_of_earth
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: keeper_of_earth.jpg
+    sha256: 3a942a83d6a20c90846fe1bbb874d7f5d7d9a274587e19c0a5400f2e986ec852
+- card_id: keeper_of_fire
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: keeper_of_fire.jpg
+    sha256: 69a10197ed8c255e57c0a2fd2e7f7b66e50c634083288ceb30bc8912d3fe92a9
+- card_id: keeper_of_the_void
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: keeper_of_the_void.jpg
+    sha256: c4107afd030d55b6d614cdf34c12b41bcd504c8505f1f9ac8695aa6949b1b117
+- card_id: keeper_of_water
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: keeper_of_water.jpg
+    sha256: fbb07e0cf013e13f3aa7bafae95c2fe0e017f1e3076d9b5c8bedb8e070dcf999
+- card_id: kenku_duelist
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kenku_duelist.jpg
+    sha256: 9af5f2f83acb805a04149b51a6944678c817e1426cc23c253129019afc0c13fe
+- card_id: kenson_gakka
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kenson_gakka.jpg
+    sha256: a27f14b6f4f445dbbb033f698fbf5d4917ae8fb19244b8f30672d2a16d8f405d
+- card_id: kihei_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kihei_experienced.jpg
+    sha256: 04ab706e1e59d9d1b1e4e503346773e569cb52b431fbaf95a4d2538635f87da6
+- card_id: kill_the_messenger
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kill_the_messenger.jpg
+    sha256: e08072609c9ae0d21735a0e5db4ca13803157b148270e15f07f9d72a98eb51ab
+- card_id: kyuden_agasha
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kyuden_agasha.jpg
+    sha256: a6fde8b401fa8eaf7c510b617ed5507ed4a8febe8e5db00a7cd798704d236e85
+- card_id: kyuden_doji
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kyuden_doji.jpg
+    sha256: 6dce3dca35b40af683d1c692de178958d650c488b94ef51d86ca2408e203bcc4
+- card_id: kyuden_gotei
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kyuden_gotei.jpg
+    sha256: d15531a5596d6eb1d6a1422d3fd3010ddd2a218f943de6be8003f07ea99fb301
+- card_id: kyuden_hida
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kyuden_hida.jpg
+    sha256: 09ddd5ac71bc95870ab9fe6c3e99ed8975436dbfbb3d798c53c1634560f38d20
+- card_id: kyuden_ikoma
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: kyuden_ikoma.jpg
+    sha256: 9cdae9c4f2a0c87ada5ffd37b9dbc92df9655389aa59308b5b229bc0beb6e4f9
+- card_id: lean_times
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: lean_times.jpg
+    sha256: 8cf9a0b2d3c70933a29dc5a8601936aefb5d697ec5eece134ee74ad7e0adce12
+- card_id: lions_rampant
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: lions_rampant.jpg
+    sha256: 9f19f8afd68138fce9232ccc077332559568f19c954610eb319f043edb15ea04
+- card_id: mark_of_oblivion
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: mark_of_oblivion.jpg
+    sha256: c1e8e54b26fe025917cb7253927fbb2953b6f2c64cee36a7ff167f9c094bdce1
+- card_id: matsu_nimuro_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: matsu_nimuro_experienced.jpg
+    sha256: 5b66d455bd9dff8e4672476a06e10665d91dcd9d9689797b986339d26b7c24ec
+- card_id: minor_shugenja
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: minor_shugenja.jpg
+    sha256: 43c8c3dc7af9bf349d5bb5b17d17f9d12c671b77642b28c8262c9d94fcd7eede
+- card_id: miya_nishio
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: miya_nishio.jpg
+    sha256: af0d2e479b9a7a98ca1a84577ecd88e412e6beb56c5276221edc97692fabff59
+- card_id: morning_glory_castle
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: morning_glory_castle.jpg
+    sha256: 5d05d007e55cbd635c8f6bde7153bd07c33ffb20d510deb5ef9b06bc80676765
+- card_id: moto_chagatai_experienced_2
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: moto_chagatai_experienced_2.jpg
+    sha256: 9d87c9fc92b6c020afbbe945e4b7e21e191ad487bdf92abea9ba55768f941062
+- card_id: mysteries_of_kawaru
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: mysteries_of_kawaru.jpg
+    sha256: f5f79fbe5fe8e06ec3ea4d4eb525720090a2ee105b597e3d87bf8f5c414b35c6
+- card_id: northern_provinces_of_the_moto
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: northern_provinces_of_the_moto.jpg
+    sha256: 58c2e4d97faf5ef152d667070339e3451e4a9e78e1358728457fd0e3ba7be695
+- card_id: ogre_elite
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: ogre_elite.jpg
+    sha256: 40966ee4c85e14f1dd0f2c227d8c485198238076e74037f942bc361e2b4159e1
+- card_id: oni_horde
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: oni_horde.jpg
+    sha256: fc4ad9ff975fb39dfeca43f7447e17f99a81abf61d1098de0a677ed1d0dbd023
+- card_id: otomo_ishihama
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: otomo_ishihama.jpg
+    sha256: 6e5f209c4de574d9f1eb845d49ccb3ff845e80e1cc8338dbc0e45d9bbe2f4bd8
+- card_id: provocation
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: provocation.jpg
+    sha256: b6a8b1707f2171725330ddebe22048d537abb4348ced879ca24ba989f93d5649
+- card_id: razors_edge_dojo
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: razors_edge_dojo.jpg
+    sha256: 1277f831ef52d55a46f5e724c433d0f48a6cfc79f51cf2c8e0949b54be87535b
+- card_id: ring_of_air
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: ring_of_air.jpg
+    sha256: c8f1c88268627f22606e7af18417cbb34c889771619887173a8a46c8c6006d42
+- card_id: ring_of_earth
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: ring_of_earth.jpg
+    sha256: 56815d87301e33b33c1d58579a9ad1cceb829857c2a73bb42eb5002c4a3411ed
+- card_id: ring_of_fire
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: ring_of_fire.jpg
+    sha256: 131e9c3b19b094f2b6d4a7681254c261d3075534dd3e2941ab59587355e1b4d5
+- card_id: ring_of_the_void
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: ring_of_the_void.jpg
+    sha256: 2a3aaf1c783c9bf77bb1caf4f5d096bd7da9b493df6ca65f0c1457b761c4e437
+- card_id: ring_of_water
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: ring_of_water.jpg
+    sha256: c09c1c010bd1937d1e9577085a8754d2cced7275fbdfdd05a21668100ff2ae67
+- card_id: rosokus_staff
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: rosokus_staff.jpg
+    sha256: 124018bad57e73da22eb2495cd9c781b59d78f65956666538e68bc8a7281683d
+- card_id: ruby_of_iuchiban_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: ruby_of_iuchiban_experienced.jpg
+    sha256: 1de19c43bf83467cafada605f7a97e39fb8d76e633eab221f47dfbd185920ff4
+- card_id: ryokans_sword_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: ryokans_sword_experienced.jpg
+    sha256: 5218a2d60986f302d061c275728c0772ee295f64aff6afb8cadcde09bafb5754
+- card_id: scouting_report
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: scouting_report.jpg
+    sha256: 83ed8a85275e3a1b3e58e7468717ae50047f310b1213cbfc9433cc21f1a26ff4
+- card_id: secluded_waystation
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: secluded_waystation.jpg
+    sha256: ef36646d261bb12d1749d241849dee0dde01fb9e4d23e3008f2ffad0aec2f8e5
+- card_id: sennin
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: sennin.jpg
+    sha256: ac89ad30e62ee2bd18f6ee533616d2727b435c5b4286a91724acb6ac7b4ecafd
+- card_id: seppun_kiharu
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: seppun_kiharu.jpg
+    sha256: 87514df8cd029976c93b7b405f492046facf0f35df783262fe7d7872a34fb016
+- card_id: seppun_shogo
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: seppun_shogo.jpg
+    sha256: a254625fc6aed4cfa341c5d2ace4c9bf39215731f29c948e3e7cb66ea9872124
+- card_id: shadow_dragon_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shadow_dragon_experienced.jpg
+    sha256: 567fa41f3c0f5fab57395de9d5cb4b172d58ed821f53d55bbb12d1ebf5ea44d6
+- card_id: shadowlands_marsh
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shadowlands_marsh.jpg
+    sha256: 84f498543ba9c9eb6c66ec43acb799517298ea01440ddd7816d9ecc8a5d40362
+- card_id: shattered_focus
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shattered_focus.jpg
+    sha256: 4f0441a00bf68ac8be2fdc009df97154f87f940c4097d5587f0bfe0e00a809f4
+- card_id: shiba_mirabu_experienced_2
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shiba_mirabu_experienced_2.jpg
+    sha256: ffd44aa134c05ee82ed72e76c0471db3669cdbd87b41aeac8a4cbf38e728e59e
+- card_id: shigekawas_armor
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shigekawas_armor.jpg
+    sha256: b534c8187f8afb1e2c7cca004a75a0d958ce922bf4d9cde92f820e677f218f55
+- card_id: shinseis_shrine
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shinseis_shrine.jpg
+    sha256: dae2f2df6d83381ffd576915ee4e098f63da7bda28c44e5946213f0c9c1e8d67
+- card_id: shiro_mirumoto
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shiro_mirumoto.jpg
+    sha256: a2526eeb6ab5326de1d63ed437ba0a14642a3774e9bf8bb3ff2c62cd33136fb8
+- card_id: shiro_shinjo
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shiro_shinjo.jpg
+    sha256: bdf7c995c1b53128db65238544d1b154ed13ae05fef75c16742b313715dcd969
+- card_id: shogos_gift
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shogos_gift.jpg
+    sha256: a1ba3cf87e5e96735e29c4ade0b68dfc154d82900d6bd14453432e3dec800362
+- card_id: shosuro_house_guard
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shosuro_house_guard.jpg
+    sha256: 7f4b4833003b8a2690ab37c4bf3b1100def59085b157f47a71835af1de10d565
+- card_id: shrine_to_osano_wo
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shrine_to_osano_wo.jpg
+    sha256: 779d1d36b474e9eaf95175a05ac0678989fc1e5f201e5697c6197353e189d676
+- card_id: shrine_to_tsukune
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: shrine_to_tsukune.jpg
+    sha256: e716ae8d92906bae5f0c5a8e0abde091f7d7e9f67ad2c3529928c8a768184d4c
+- card_id: skeletal_troops
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: skeletal_troops.jpg
+    sha256: 9e7c0f9d9fbdc97c8bcbbf5a8fde8b72b6de70f03667537b1c159f32f2c41fa6
+- card_id: sneak_attack
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: sneak_attack.jpg
+    sha256: bec94a06823fc9147a31c1166a6873fe67a48f9d88488f4502dfe9f0ae3987f3
+- card_id: stone_breaker
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: stone_breaker.jpg
+    sha256: 1f14a1b8e5d4a24a1d6893258140c0c7a7c3573045e0f3e31642ef8da24c5df3
+- card_id: strange_assembly
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: strange_assembly.jpg
+    sha256: de8d2aef64c74d152af8076387bc0cfd427456dee66f51b88962e722311a8438
+- card_id: strategic_ground
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: strategic_ground.jpg
+    sha256: ee46c9cf78293a6bccb7420087af59d6fed180a404ffca8437c0df53028a9d4a
+- card_id: suiteiru_no_oni
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: suiteiru_no_oni.jpg
+    sha256: 3b5294c1fc7884bad38cd9cc5787d5e0452c5cd7002501bf9d2071dc4b8fff35
+- card_id: sword_of_spirit
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: sword_of_spirit.jpg
+    sha256: ff1d703c6afb4c65435e98f2069ab957941993a3fa1823fcb964d1ee0f1ab6b6
+- card_id: sword_of_the_righteous_emperor
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: sword_of_the_righteous_emperor.jpg
+    sha256: c6b205f025677a0a2aa55ffb73ad3d7e18fb4acf7e3ed179a97fc251a5e466ce
+- card_id: tamoris_flame
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: tamoris_flame.jpg
+    sha256: f82ae9306f05509b9c699138909149c89e9b1db678682167f36a8e408848efa8
+- card_id: tattered_ear_watcher
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: tattered_ear_watcher.jpg
+    sha256: a2f584a1522a0526fd241f9e7df16ec6c402fc943fe7062b96eb483fc90a0a58
+- card_id: tchtch_warrens
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: tchtch_warrens.jpg
+    sha256: 8ec54254577a5d7d063fe044b99ed64c7aa5e85ff75533139410a95ab53bb51e
+- card_id: temple_of_the_ages
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: temple_of_the_ages.jpg
+    sha256: 0351c5bf7ed7bfb5d2d9ca728d5fea332c7fc6025fde403d4a7d8e6b2115fc8c
+- card_id: temple_of_the_ninth_kami
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: temple_of_the_ninth_kami.jpg
+    sha256: c8162abf541da64f9f4855e9e354e169e89e5272c667a1b8b4fb48ae19f72023
+- card_id: test_of_might
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: test_of_might.jpg
+    sha256: 2e2e34ab75a37058b4ce3287184813f5259d38e500044a4754c8fe9c2ca64a53
+- card_id: the_daimyos_gift_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: the_daimyos_gift_experienced.jpg
+    sha256: 8c983bb102bac30430215c7f672dc647cb37e4074baa924e62d3d4b7004e5f07
+- card_id: the_last_prophecy
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: the_last_prophecy.jpg
+    sha256: 362f3a213cacc513d017652fa05be9ae91f43c53c010985dc9ab8eee3128e9f9
+- card_id: the_price_of_power
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: the_price_of_power.jpg
+    sha256: 0d7836447a10ee584035889a98ae7ac3aaf864179a2fd2dc2a1c0324e49819a2
+- card_id: the_shadowed_tower_of_the_shosuro
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: the_shadowed_tower_of_the_shosuro.jpg
+    sha256: 1c9687488fe37a6cd60f33533a344fb97f92be5fd133af80e4ef0a5c813da8a7
+- card_id: the_spawning_ground
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: the_spawning_ground.jpg
+    sha256: 738ade5c8c7581f72616a5036d418796e512563b252610a8143775a540a5c075
+- card_id: the_towers_of_the_yogo
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: the_towers_of_the_yogo.jpg
+    sha256: 32d13d80dd43d69a66c42cca5bfa709064fef8ddfa6c8f9a5342df3634769c13
+- card_id: to_start_a_dark_path
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: to_start_a_dark_path.jpg
+    sha256: 12ef40f721afb093b9b6bb6d6075ee25dd695876bbe1749cc93ce3ad48ce3a5e
+- card_id: togashi_satsu_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: togashi_satsu_experienced.jpg
+    sha256: c5103a4be0b705f0477faab49700779d0354d72da3e2357959e98157e678f8a6
+- card_id: tokus_grave
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: tokus_grave.jpg
+    sha256: 4bd34dea509bcd1d4c47b8cba53dd8203061ed463b967eca4afb52b08e884755
+- card_id: tormented_plains
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: tormented_plains.jpg
+    sha256: 8d37f63bb30c1a77bcb56db854cb0077fd069deb839834258f3d2b749b42304a
+- card_id: toturi_kyoji
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: toturi_kyoji.jpg
+    sha256: e1c9eeee87f6d63676042049ccdb6a979e57ed5a0c919136fe43e1ccc369d3d9
+- card_id: toturi_shigekawa
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: toturi_shigekawa.jpg
+    sha256: 4809b7f5aa3e7e952c3bf5b908c5f79365a0bc5c414b769d41fed3f3afab3778
+- card_id: tr_chda
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: tr_chda.jpg
+    sha256: fb38fd915b33118f56fce1e4af9d6e645dce074a364eeb85f04fb2000ed97499
+- card_id: tsukos_shrine
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: tsukos_shrine.jpg
+    sha256: 8c2f9a4a3fd140b6cc1c713acb2cd5d76aefd6bfb304650855270d9c90b5746e
+- card_id: tsuno_swamps
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: tsuno_swamps.jpg
+    sha256: a06bb079bbe19138588145497b86f6c6a9f94d198adeb853fa9cac9981df0ec9
+- card_id: twisted_forest
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: twisted_forest.jpg
+    sha256: 6df6b3c7880869ff9c60637f1f78ab4700c1638d5deec2861c1ec92230fa6903
+- card_id: utaku_house_guard
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: utaku_house_guard.jpg
+    sha256: 4352842a794cc7205b71d7dad47b2070ea66590e4844fe64be88b74a28cfbf07
+- card_id: utaku_stallion
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: utaku_stallion.jpg
+    sha256: 7d29c30901a8b0e97cdfd61a6a05043ad91df4d47a662245f9a2fc1da8408765
+- card_id: venerable_master
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: venerable_master.jpg
+    sha256: eb16c3406fa278e8e27b545d0dfa17643991cb14cf890505e8bff7924fa9c9d2
+- card_id: vengeful_populace
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: vengeful_populace.jpg
+    sha256: d753509d4631cb1c36faeb377f482f4401d93b952ef583031cbcfc8cbbc9ad7c
+- card_id: voitagi
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: voitagi.jpg
+    sha256: 76bd841be910fe195bc31f75ec17e2a361c1d3356c95980fe9362eb8aa92d3ce
+- card_id: warrens_of_the_nezumi
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: warrens_of_the_nezumi.jpg
+    sha256: 6b1802731e463e5ec7dce923597c430602f885c5969df502b17b7a20d9603945
+- card_id: wedge
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: wedge.jpg
+    sha256: 430d4ff35f3184da18d1e0e65fd200c886b56d26cdb0617ac089a99d48198977
+- card_id: winter_storm
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: winter_storm.jpg
+    sha256: dc7394e64f9bdceaa7cfb653ed0900a77db43bd454387415a8c5a656c770379a
+- card_id: yamainu
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: yamainu.jpg
+    sha256: 216dd999d649d0fa140d3061bbe720c198134a308deecac4443709e085a21050
+- card_id: yamainus_dagger
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: yamainus_dagger.jpg
+    sha256: 19d53705a6495c8d6d5a4dfe8f5a2c97d827739899350624492f612c1bedfbe2
+- card_id: yoritomo_house_guard
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: yoritomo_house_guard.jpg
+    sha256: fb8a5c74e46187ef49bb492afd16e8c234bcd2362b634d756a468478016f0922
+- card_id: yoritomo_kumiko_experienced
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: yoritomo_kumiko_experienced.jpg
+    sha256: f17e1990adf1c1b3420ac914339c8be4c7ad56e4f903ee9ae77243d6e8cc6908
+- card_id: yotsu_bodyguards
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: yotsu_bodyguards.jpg
+    sha256: f36706cac05c8eb673d6c3849f353ac0fed061451e78258129093bf37d84f40f
+- card_id: yotsu_dagurasu
+  printing_id: promotional_diamond
+  files:
+  - role: front
+    file: yotsu_dagurasu.jpg
+    sha256: 7dda89bf4ace175a15bf32f0c7f368a09a95205dca131508b93783af0d76368c

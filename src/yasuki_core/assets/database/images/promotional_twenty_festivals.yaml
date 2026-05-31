@@ -1,0 +1,134 @@
+set: Promotional – Twenty Festivals
+images:
+- card_id: a_prophet_revealed
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: a_prophet_revealed.jpg
+    sha256: 11e1203b79072f7500b97e792a6e09f067552e9c64ba4b2261736e0f3f07bfbf
+- card_id: another_time
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: another_time.jpg
+    sha256: 4c80bfaf66e9fac2a591ad1592135e53a278d08bb9087e77f3fec0982f4b9f03
+- card_id: berserkers
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: berserkers.jpg
+    sha256: be4f2a3678b28f1aefa06843abed52c5571cf9433d20a28df633a7e0213bd050
+- card_id: brilliant_victory
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: brilliant_victory.jpg
+    sha256: d2e39f431daeca410b71afc1ad76d7627894c5287b2f4cdafff20ce91d768c01
+- card_id: claiming_the_throne
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: claiming_the_throne.jpg
+    sha256: 227ab225a782fcbbd82948fb52e2d9eab7c0ead0a7b398d44bfb66fff6c614a1
+- card_id: corrupted_ground
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: corrupted_ground.jpg
+    sha256: 9bf911c3840bf6f2921ac16ead66d20ad2f51a20e552c4cd26a83cd532fd06d2
+- card_id: destiny_has_no_secrets
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: destiny_has_no_secrets.jpg
+    sha256: 530cf0e80821adbd33b648a4633075fdf760c6bf1b214c448009db723642bd56
+- card_id: doom_of_the_dark_lord
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: doom_of_the_dark_lord.jpg
+    sha256: c53198a5f829127e38ecf02d2504173f79e359ce4b8472b9c6fd94cc240f0f89
+- card_id: duty
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: duty.jpg
+    sha256: 642489efb27b520f906457598b248b770c2139addb6e0f15cdc54a75a97052f1
+- card_id: heavy_infantry
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: heavy_infantry.jpg
+    sha256: 842cdd1487fd477d2a1dcd77391ae0e3000710f47553b2e982fd3d2f8d2fdce2
+- card_id: imperial_summons
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: imperial_summons.jpg
+    sha256: 9716b8eb984df6ac1816e278e9acdf2718f4a68c94d3c0f275af9bc715eda4d7
+- card_id: jade_works
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: jade_works.jpg
+    sha256: 3af1dd43dd77e7013a62f311984b5c2732cfa48fe2d2c485bb37e13cbd47f29a
+- card_id: light_cavalry
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: light_cavalry.jpg
+    sha256: d6857db481d565d0bd94be5840a8921601c4898cdf206298d730cdd922247425
+- card_id: light_infantry
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: light_infantry.jpg
+    sha256: c36fdacc9212f47e087e82273f9bd184db53734f8cb3eeb3e2199779b7ec0c9e
+- card_id: medium_cavalry
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: medium_cavalry.jpg
+    sha256: 95bcb594752e2d481d492722d2099766d901923c11d0aef1447cbc01e7a220e4
+- card_id: medium_infantry
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: medium_infantry.jpg
+    sha256: 03f272e9649931f4f74503f3dfcaf89a867b28be06b44c4959baa5ed2aff153a
+- card_id: narrow_ground
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: narrow_ground.jpg
+    sha256: bb1e5ec6de67869bb43ba7f127ad056c4e6228590714f4b3b8d766048652b1f4
+- card_id: scout
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: scout.jpg
+    sha256: 92ee5883bd62a64c551994407ccc73a030e78248190afe30b1f3a4c9e317d73c
+- card_id: shadow_of_the_dark_god
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: shadow_of_the_dark_god.jpg
+    sha256: 6026b69069a9e70287146bde39cecc4a3b73a8f4e026d3e0ac2d4e3bfb73fd43
+- card_id: shadowlands_sickness
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: shadowlands_sickness.jpg
+    sha256: f368f672a415ca0aa8f659417dcf7c65d441ff2db85e6cf9944d1eedef6f7f07
+- card_id: victory_of_the_thunders
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: victory_of_the_thunders.jpg
+    sha256: cbeddb3faa4f90c99b04860a81437c0db7c48539a08723acc9ef440c469dd87b
+- card_id: zombie_troops
+  printing_id: promotional_twenty_festivals
+  files:
+  - role: front
+    file: zombie_troops.jpg
+    sha256: c93f9346b01477f6f907ffa59f16c2cba1b8d17aad9a6981c294c2b95906652f

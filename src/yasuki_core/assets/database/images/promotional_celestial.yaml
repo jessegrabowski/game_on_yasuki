@@ -1,0 +1,998 @@
+set: Promotional – Celestial
+images:
+- card_id: a_brave_new_world
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: a_brave_new_world.jpg
+    sha256: a53f003ce64953ea7688b85b15c8933f7c6ce19ce7eb283ff3edc822a6f35b72
+- card_id: akodo_senzo_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: akodo_senzo_deckbacker.jpg
+    sha256: 5306b35e203a2db1489354743c45f78b8a4c335d10060c482d3a47dff1e6d1bf
+- card_id: akodo_shigetoshi_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: akodo_shigetoshi_deckbacker.jpg
+    sha256: b7ea2375f1436299622987669ec9c7ca86f61352cc5dfa16cfb00cb564d4eab0
+- card_id: all_that_will_be_lost
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: all_that_will_be_lost.jpg
+    sha256: ebc2d703f05606f596a738be98ee2124a1f563afcbf4c5a87e586a1e21bbc9b5
+- card_id: all_within_the_world
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: all_within_the_world.jpg
+    sha256: b5f34682482115a8ced913483633fe97182b58ad7cfa694eef825330026d715f
+- card_id: alone_with_ones_thoughts
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: alone_with_ones_thoughts.jpg
+    sha256: 7f64259089c21f30938bb5279fc151c6f2d508eaa89b54a2443e1685b8e9f5be
+- card_id: aoyama
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: aoyama.jpg
+    sha256: 1fb917b7cb8c7e8980c1f74389a2d6f5aeec4cda2f2597eb51e1188ea6d763c0
+- card_id: assess_your_foe
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: assess_your_foe.jpg
+    sha256: 08c3b0604d8328e09ef72e22640e356d3b3aa1a1a6d263e7a5e56d29f7473981
+- card_id: barley_farm
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: barley_farm.jpg
+    sha256: aa2f70c07dca6ef95053dd0e7b554ec1654f79665ecee0c5bc20d35f69a0f106
+- card_id: bayushi_jutsushi_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: bayushi_jutsushi_deckbacker.jpg
+    sha256: b989267dc4cf9b90b2ee8a2ace5c2fb7a2527f928df28b06ebe63f018091581a
+- card_id: benikas_pride
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: benikas_pride.jpg
+    sha256: 9767b8b59ca3edf8ae3379b7e292817185c40b983428b40811804794b067188c
+- card_id: bentens_blessing
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: bentens_blessing.jpg
+    sha256: a9dbfc7a199f29c53a4248c126dca774489d9b9afd0d54311dafffb18772acb5
+- card_id: biwa_player
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: biwa_player.jpg
+    sha256: 7aebdac0bd276f5fb383adb0dad504338ed62761bc013f13900cbc99e158c902
+- card_id: blue_tanuki_bar
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: blue_tanuki_bar.jpg
+    sha256: 6f1089f4df3491af04bedcbfb113f423a914c7cd48528b338fb14bbd6ac74759
+- card_id: blue_tanuki_serving_girl
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: blue_tanuki_serving_girl.jpg
+    sha256: 2987d06ee21c361d44dffd4a0ad590eba13929567ff9eb81850d63d3871ccc18
+- card_id: bottled_fire
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: bottled_fire.jpg
+    sha256: dc227b9e4f0c3d4d145ccf3e9717cd38f3e3fa10fc72522f61566f24834a125e
+- card_id: bounty_hunter
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: bounty_hunter.jpg
+    sha256: dc317804220c0883434b02db71c7493c7ab62b2fc36f61797678cffffdada92d
+- card_id: brilliant_artisan
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: brilliant_artisan.jpg
+    sha256: eb0b028ef2ce09e862e09312c1c34f6c8a386217be6ac5229b5939ad6aed1e52
+- card_id: butoken
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: butoken.jpg
+    sha256: 1eb82eb722c1572b7394c81cbbc072414ae2b9c21eb2afcfc23702c193e7eaab
+- card_id: channeling_the_fallen
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: channeling_the_fallen.jpg
+    sha256: aacb5167f90922ab23828741ea7019176122fde49c9fad7ea3fba01c0ffe3b62
+- card_id: coastal_waters
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: coastal_waters.jpg
+    sha256: cd0a1f264da1b020a78b346a22f607ca355d1a3bffa3581d6a5206c128ef9d04
+- card_id: coin_pouch
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: coin_pouch.jpg
+    sha256: ba7aa173472541cefb37501e137b754cc31aaaa9085cd5637220cb891fbc3fc5
+- card_id: colonists_mark
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: colonists_mark.jpg
+    sha256: 3a73717386a24c4038c61488626764d040906c676d69c377e383c85c65cb136c
+- card_id: costly_feud
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: costly_feud.jpg
+    sha256: dc5b77aa9bcd6a853f5fe69fb67f9c560167ce7fbd799e15ddd4639b3d17393d
+- card_id: crab_clan_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: crab_clan_deckbacker.jpg
+    sha256: dfa40352433b4b24fd0d422485611ab168ec667cd7c481796e13d2539159bdd1
+- card_id: crane_clan_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: crane_clan_deckbacker.jpg
+    sha256: 524a83b43fcadf18179c2d65f3dc64c4efebed3ffbfa3f49cbde3d15d477b914
+- card_id: cultist_infiltrator
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: cultist_infiltrator.jpg
+    sha256: cc0499c8df030386df4d94e30a9c64fe6f02c94551ad521e607951a6aa1869db
+- card_id: cycle_of_heaven
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: cycle_of_heaven.jpg
+    sha256: 70a8ebea766940bb31646f15dc5c49df2a0b9f48bc816463dc47d8d753de08fe
+- card_id: daigotsu_chaozhu_experienced_2
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: daigotsu_chaozhu_experienced_2.jpg
+    sha256: 04ab1be86d5385428045efe530079d9d0194ca3c38cf20ef3b62e35378e5a37c
+- card_id: daigotsu_hotako_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: daigotsu_hotako_deckbacker.jpg
+    sha256: d4d97d4c5688a4c69c3fa5419667a05ea3f9bda350ef333b1cf1879e88e0bd5d
+- card_id: daigotsus_wrath
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: daigotsus_wrath.jpg
+    sha256: 186a0d1a942908eb3c8e002d2d8d795ac3d3e963e8982bd0798ae0c79d78dddf
+- card_id: daikokus_guidance
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: daikokus_guidance.jpg
+    sha256: 86fba5797915f6148c0c8f325ffd4a500fd06ec4bf83d89d0737e4c7b75f122c
+- card_id: deadlands
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: deadlands.jpg
+    sha256: cd64f248ec0d311cf45d3c7154764d62d5ec5390257524bcf2546cce536dcb4c
+- card_id: debt_collector
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: debt_collector.jpg
+    sha256: 42448b8f3d2cb4119811225d7efa57e6b6ad1cd94fe5cb29893e72e8901537e4
+- card_id: delayed_conflict
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: delayed_conflict.jpg
+    sha256: 60c6137d01d4834d398db8ac281bcdb9e0aa7ae464071ecc8b82872b3a47f47c
+- card_id: disposable_troops
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: disposable_troops.jpg
+    sha256: e79cb4873a0f26d47c7f493c5172e7023f254e359772f010830d794fbd69dbb3
+- card_id: doji_odaka_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: doji_odaka_deckbacker.jpg
+    sha256: 078e3973aacdd74628ba475ef210fd5b869011756dbae21b76d07e0056fa2cf7
+- card_id: dragon_clan_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: dragon_clan_deckbacker.jpg
+    sha256: f769017d26f056f40dd7452184ac8862bab4eab2c8a1542da4ee6ce0449acd13
+- card_id: drunken_nostalgia
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: drunken_nostalgia.jpg
+    sha256: 000096280f2b9b726106b035cdc8ea2b8faef399464970897e81cdc2cdc26b56
+- card_id: economic_manipulation
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: economic_manipulation.jpg
+    sha256: 18a15ff45ec7baa6dd549110d16607e003dab8522d4beb42e13af26e55f14499
+- card_id: emerald_champion
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: emerald_champion.jpg
+    sha256: 6443bd226d786b2935e5638b71ac069a924d0fab9e0d702c759b9f0fd4769a32
+- card_id: enomoto
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: enomoto.jpg
+    sha256: 74d51be1c5eea4472375f028502317ef299020884b678f894018111b7758dbac
+- card_id: festival_of_coronation
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: festival_of_coronation.jpg
+    sha256: afa4074d54c3219cb322c4425449d80d849d0c97673aa03471184322345bc879
+- card_id: festival_of_founding
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: festival_of_founding.jpg
+    sha256: 65e367b072d8144b23b7084af5ff5b52809b1bbc318b594aee9d50657dc3ff5e
+- card_id: flanked_on_all_sides
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: flanked_on_all_sides.jpg
+    sha256: a2646cad77343006cddaf88408a83c144c6f337ffe7e9408354dc06fe639a583
+- card_id: folklore
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: folklore.jpg
+    sha256: e4567e5c1216476347e5fec296f43865c999d338d14ab32c97927a4b67372d44
+- card_id: fortifications
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: fortifications.jpg
+    sha256: 0629287112f985b46177b6f2e3ce365f62238759cb17836f0f7e3a16f4b5eb52
+- card_id: freedom_of_the_air
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: freedom_of_the_air.jpg
+    sha256: 6a9b8a31ac0f339197ff2c7daadcb03d19a343b67184bec984b6b3e9e53a0b48
+- card_id: fudo_cultist
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: fudo_cultist.jpg
+    sha256: 1abadcaed72be692bda183166e1d0cd076f93bf065736b49891ceb483450b50b
+- card_id: fukurokujins_wisdom
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: fukurokujins_wisdom.jpg
+    sha256: e153a2d5712445845e72e5c07469a576e4ac90dced719f6d253695607b313c2f
+- card_id: gaining_experience
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: gaining_experience.jpg
+    sha256: b3cb2d451d764d1cc81ca5c850e9198b651708fef9ef402f1a4672ee5287722d
+- card_id: game_of_sincerity_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: game_of_sincerity_deckbacker.jpg
+    sha256: 6926a9e4557d1c426990d8c808de8c2d8e53a77df12f39e203e975f5772c919f
+- card_id: green_nightshade_blend
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: green_nightshade_blend.jpg
+    sha256: 637c9deac2a5d0997397447beefda41f3650f7375c4b48382fb13f95c86ad8ad
+- card_id: grip_of_the_earth
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: grip_of_the_earth.jpg
+    sha256: 660c905d606d567d1aae9bfce2ae82e13c80b7eee3cb97bcbae44ce7789560b6
+- card_id: head_of_fudo
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: head_of_fudo.jpg
+    sha256: 8a9f7723490084acc7190ddeee82c7deb348fbbae24a27c35ef2987c4c9ad6f1
+- card_id: heart_of_fudo
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: heart_of_fudo.jpg
+    sha256: e9dadd3013edc0311098dc8361507fc07ea00eab9cf4d2a0af3e4be0b35058ae
+- card_id: heartlands
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: heartlands.jpg
+    sha256: bb842f9f6618f7c3a169ee4bee4eb8caa6f0eb2c4f5141b4e83fac36e09a2608
+- card_id: heavy_infantry_dojo
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: heavy_infantry_dojo.jpg
+    sha256: 4bab75d80677d3d72e3cf3d320771de0770a13180cca27b978e4b686fe3c5b83
+- card_id: hida_tobashi_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: hida_tobashi_deckbacker.jpg
+    sha256: 9fcc649cf563235401f3af6839c11cbe7a164b9c69aef7a86c46ba7981a1eca8
+- card_id: hideshis_guardian
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: hideshis_guardian.jpg
+    sha256: 8af8ef7d80d49f7a3aab9e273d96e5a1e8755434fff9b4f09a0aa7b8282a8a90
+- card_id: hisamatsu
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: hisamatsu.jpg
+    sha256: 00204227e2cb17348337240efdadd4994fe7d1c372c09f275639c5cb2ac45f44
+- card_id: humble_house
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: humble_house.jpg
+    sha256: e5a7a68dd9a804a79874df22dce32c068a0d398aad0877757b672260336dd030
+- card_id: hunger_of_the_fire
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: hunger_of_the_fire.jpg
+    sha256: db47beaa145675c3eba6cf107dee64c7ead483ade3e5c9fcf91aa1d8ac7376f0
+- card_id: hyobuko
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: hyobuko.jpg
+    sha256: b2c75581354cf0175d13fd4ad8d4a4d0000639888eddb6288e7ac37dbcf99d95
+- card_id: iaijutsu_student
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: iaijutsu_student.jpg
+    sha256: 4a3e8f0e2286bcdba5f7725c50946d9fd1770c25f3e559bd69a9cd28a4e3a5b1
+- card_id: imperial_drills
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: imperial_drills.jpg
+    sha256: 357d7c8d34c8ea8a62cc700ec0450c15e3c1c32c0b4ed0f4b40a14a66e90baee
+- card_id: inexpensive_armor
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: inexpensive_armor.jpg
+    sha256: 666536037dee269b12508daafcc3c0a04a11a02dbcfe2326662b3ccacef93dda
+- card_id: infantry_follower
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: infantry_follower.jpg
+    sha256: 9158ff063f09ffc646f76fd5de20da4252b252b2297714c893220984061beba2
+- card_id: iron_kabuto
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: iron_kabuto.jpg
+    sha256: 934af8e82d049882965e2a95c2d4f154bcf5eddb6b81f874d5783ec1b775a40d
+- card_id: isawa_kimi_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: isawa_kimi_deckbacker.jpg
+    sha256: 3b93435a30b141336cae2401bcbb03ce9cd3d9ab3258824cdd425377bee80657
+- card_id: jahan
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: jahan.jpg
+    sha256: 588ef1d91220c52ab1317ad4a3d46a599c478c23505332ad834464c4ccb287b4
+- card_id: kamalakar
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: kamalakar.jpg
+    sha256: ef2df7318c6bd2713b0a4c06a72539184e03aa82a7c667e16c3f9bbfc766fc56
+- card_id: kataoko
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: kataoko.jpg
+    sha256: 6d3622dd0d8cb3582b06d3fb38e40b0bc08fc3020199c4483b638cf17a7d45f6
+- card_id: kikushima
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: kikushima.jpg
+    sha256: 871adc47490fb37ed6b807035fda2340c586ffefab87ef4d571fa0952b2dd563
+- card_id: kolat_master_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: kolat_master_deckbacker.jpg
+    sha256: 0d2d7196449b554fa018b1e46a86e888a073e0a46d7697b1d94c62a32cfee2fa
+- card_id: kuga
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: kuga.jpg
+    sha256: a82fc83cda14ce6941a667bcb5bae9b2683652c420112fc19785cd199e1df866
+- card_id: kuronada_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: kuronada_deckbacker.jpg
+    sha256: 5f2585aed01495266f8dbe005d5161766d0ed83d6603546b387fdf9b35c1085d
+- card_id: kuronada_experienced
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: kuronada_experienced.jpg
+    sha256: 6a063472900264fadb3cc55cde97b54aa4106a0d63b0d2328d31c28faf4ed450
+- card_id: lavish_gift
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: lavish_gift.jpg
+    sha256: f6cdd4904c6f55062a86d2b9b1ff46737f9ffefd6fa0831246c1d9cf564ab912
+- card_id: left_hands_wrath
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: left_hands_wrath.jpg
+    sha256: d1c0aed20fcbfaf7254123bd171d527282274ab1d12cc155e5faeeb239d04ca7
+- card_id: lion_clan_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: lion_clan_deckbacker.jpg
+    sha256: 2f5c803695927b8a5f4e1bfd54c4d02ad87f1b31b2ee7f9a059323269259ce87
+- card_id: liquid_courage
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: liquid_courage.jpg
+    sha256: 7eb18a5ccebce3b91aedf44e00e15404f1e258b5244f76ff1628428547170e48
+- card_id: low_quality_mine
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: low_quality_mine.jpg
+    sha256: a11b500e17c70bec2b62dd8799e70a5fb07686607017149e284ac34f0ca07af3
+- card_id: lying_in_ambush
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: lying_in_ambush.jpg
+    sha256: 21ca8730a8a31b8aaa53805310d543717a01353afe8112c6aae528fd2fd73f81
+- card_id: magistrates_stipend
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: magistrates_stipend.jpg
+    sha256: 28f3dd38943c3cdfbb7d461ea8f884cb8db11b6e08366c7d19a3696ba7a60361
+- card_id: mantis_clan_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: mantis_clan_deckbacker.jpg
+    sha256: 5a95da0d56c204ea33026fc8505fea6b9afaaaa6393979342640ee6626ae845b
+- card_id: masatane
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: masatane.jpg
+    sha256: 076779bd48ce632a5675ed36548fb683d7d918cd80ce8ae4a8154a304d555480
+- card_id: masaya
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: masaya.jpg
+    sha256: 7f7948b73d023afc724cdd2b5a3ab8ec8e22ffcb9f57df8ed5ab6f11fe5a1b70
+- card_id: master_scouts
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: master_scouts.jpg
+    sha256: 58b092981db9edc9327313e9e3348cc41b722396cee353d130e43cdef1784657
+- card_id: merchant_atoll
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: merchant_atoll.jpg
+    sha256: 733cd2e396b39a6f18c44dbb270f691f1cdb69e96a1d68904f4a0b21675ea22c
+- card_id: minor_blackmail
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: minor_blackmail.jpg
+    sha256: 8b7f96da6b69cea9e308329cc3c059e15ddf500a0a920a980fba8c433507e777
+- card_id: mirumoto_kenzo_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: mirumoto_kenzo_deckbacker.jpg
+    sha256: fd3c73b1ab27a6fcddd2b035e0000f8094617e381e9c7b8daa38fca024a6b482
+- card_id: miya_masatsuko
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: miya_masatsuko.jpg
+    sha256: f0e4a1a46146a0ca4773474abf41bbecdbc718d95e0635482e2db0ed56fd26f3
+- card_id: modifications
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: modifications.jpg
+    sha256: b8cf7ab1330e53103d2b182501b624bbbd6d79fab0b0d3bac9a12fbd2ccd9752
+- card_id: moshi_sayoko_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: moshi_sayoko_deckbacker.jpg
+    sha256: ee17832e364aa056fe9c84f42585f31aa3c9b4a1c2ae7fcf8b579cb115c256ce
+- card_id: moto_chagatai_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: moto_chagatai_deckbacker.jpg
+    sha256: 0cb2e1495a5d8ea8d4bf049cf41267597d4810ef973315a060074ee6cba7dfc0
+- card_id: moto_yuudai_experienced
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: moto_yuudai_experienced.jpg
+    sha256: 459023c6dc07776ab298dcf4b0737d20fe4cdcc82fe80a541d53f0ab78af91d2
+- card_id: mounted_support
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: mounted_support.jpg
+    sha256: f5c4b97145182017d8395ea4c1c485d199c2865032ca36be297afb32e5d57051
+- card_id: nakadai
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: nakadai.jpg
+    sha256: 325e79a106a0990afda42c0343be7050ffa2a026c735bc25829287e0623a03fe
+- card_id: naoharus_gift
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: naoharus_gift.jpg
+    sha256: c089258f123a6ee3f480b20434011f1ab295ccc7b36577f2ea23ec61c797052c
+- card_id: natsu_togumaras_guidance
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: natsu_togumaras_guidance.jpg
+    sha256: 1ac886e884f4bfb7e715c46bc3718a11204774568f94a79d21165a629db08c54
+- card_id: near_miss
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: near_miss.jpg
+    sha256: c943ed3aae95e18db047b161d4181184d6b1e6c04195b8ef7f0a7410090d5126
+- card_id: open_recruitment
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: open_recruitment.jpg
+    sha256: 13513684390a900dbaf38da153a920549c8cc762cc368f6570f97c100142b4ee
+- card_id: overwhelming_numbers
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: overwhelming_numbers.jpg
+    sha256: 88814f4959573f5a3ffa33a95ade82ea1e2e57717479c5b03499e656d71e3f12
+- card_id: palace_of_the_breaking_dawn
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: palace_of_the_breaking_dawn.jpg
+    sha256: 41d4e723ca5a04207937c1f0c1c1284e5daa57a992922231bd2c9ac098134acf
+- card_id: panekis_disgrace_experienced_6
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: panekis_disgrace_experienced_6.jpg
+    sha256: 95687e0e363e9cf8f7182ecb0b74fc8483da607cb79b6e98a5817dbe0e2b6d83
+- card_id: phoenix_clan_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: phoenix_clan_deckbacker.jpg
+    sha256: e20a8bc4b20d6d5f06c84b3f056b6542630367a5aa1a13ccaef5035e390fd17e
+- card_id: phoenix_yojimbo
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: phoenix_yojimbo.jpg
+    sha256: 4e2d0643cd0a6834afcd573fc8643d59b633e36e16372690047244bb19ad2512
+- card_id: plague_of_flesh
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: plague_of_flesh.jpg
+    sha256: b987f3be217313924fa89442e96c5e31e86f19f31dcffaf5bba7f701e277a167
+- card_id: plains_of_resolution
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: plains_of_resolution.jpg
+    sha256: 0f721f52786875e2daf43ce5ae07067e73f9b8879e4729ec0dc19b209f229051
+- card_id: pokku_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: pokku_deckbacker.jpg
+    sha256: 711931323c7f5bab06a1bfa37ec736ec45aed50ea42caa4ad5c18639c561752d
+- card_id: quick_recovery
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: quick_recovery.jpg
+    sha256: 52fbb6c15991517d964eeecf29b1978ef693f7dd626b29fa2bf37436b8e80f80
+- card_id: rallying_the_recruits
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: rallying_the_recruits.jpg
+    sha256: 941e3773c0b3759cc14b4df44dca5ca8b5b9594f2aba198e316757539930e3b5
+- card_id: readied_blade
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: readied_blade.jpg
+    sha256: 9e623fd923f41bdd0edd1b76e1eea08ff4a7a0eed3936e763ca02a8994a39da0
+- card_id: recruitment_center
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: recruitment_center.jpg
+    sha256: c174e8e8f38ccb996d4631299e8e31d7081ae62f87edb379acef794a41e0bb25
+- card_id: recruitment_officer
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: recruitment_officer.jpg
+    sha256: 7eea59a3a94b0d8e891ccf90bca090574fd60a2c372d3ce681f837818f9c6d4a
+- card_id: retribution
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: retribution.jpg
+    sha256: 17494584500606651de736ce65285196be6b00d6f4df9287e287b885abb6bd60
+- card_id: riverside_port
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: riverside_port.jpg
+    sha256: e5f79b35740f76a0706a993ab36d29886d0807c095aa42996158aca538568d7a
+- card_id: sasumata
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: sasumata.jpg
+    sha256: f3631e5a75022149d2f6efe052f322b235f1dd9f71844e599204b097ab499d7d
+- card_id: scorpion_clan_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: scorpion_clan_deckbacker.jpg
+    sha256: cd2d52f3bd71c2aace8596592e1fd932859bd7f085e11a2793e5272063770900
+- card_id: seiatsu
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: seiatsu.jpg
+    sha256: 52faeb7f845539c5744979f0a83bba696c145eed115e6e2a2c9ec034c0eff073
+- card_id: seppun_heavy_elite
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: seppun_heavy_elite.jpg
+    sha256: 76d9dcdefe70f526e529d1dbd9fa56fb1d653bfa272625b9c7335ea8b633dfc5
+- card_id: seppun_horai
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: seppun_horai.jpg
+    sha256: 5a8c75c54ffbdc4fbbd6f10e2f05336c17923a5d3baaf6c7589d67dd78adc446
+- card_id: seppun_tanizaki
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: seppun_tanizaki.jpg
+    sha256: 4ba28130540451045b00c5e66762f76f9bdcc39d405bdbad8ca6d2806a34c156
+- card_id: settling_the_homeless
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: settling_the_homeless.jpg
+    sha256: 2dcc7bffbe0b8b836d27ad1f35486e22c4e1662ee1a47dd58f9c27d5aad7f729
+- card_id: shadows_talon_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: shadows_talon_deckbacker.jpg
+    sha256: 39787efb7810ebde400f221d8219e895f926519463f7ca637b4865e6a7034ec3
+- card_id: shrine_to_the_heavens
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: shrine_to_the_heavens.jpg
+    sha256: 9e70fd20d01418fbc9c7f483e93f3863a781d3f86e5e9d1e354677cca0cc7a4d
+- card_id: shrine_to_yoritomo
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: shrine_to_yoritomo.jpg
+    sha256: 4a41ca531baae482595b1413a189c27f60cf299d3912fc71780caddc51987527
+- card_id: signs_and_portents
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: signs_and_portents.jpg
+    sha256: a4b82a41d8e33b57c081d5912acbba021675209f9b2767406f5cd7c4e6e3e4ba
+- card_id: soldiers_of_clay
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: soldiers_of_clay.jpg
+    sha256: 4f2320aac3de104477a4b13d8682b1d659ab1371065201c63338ca4f139a58ef
+- card_id: spider_clan_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: spider_clan_deckbacker.jpg
+    sha256: ff184e69c7d9ef3de33a1823c8ab4e6f6042b54bab9988fc73df7856d1d5b00c
+- card_id: spirit_of_the_bear
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: spirit_of_the_bear.jpg
+    sha256: fb787510ab14f8d19265235d0a3e64aba97b2fd9b230f72a2b45ec53fbef1b32
+- card_id: stone_of_remembrance
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: stone_of_remembrance.jpg
+    sha256: c4b534f2ef6eec24a63740e0ffe33d5285b3e0a3630e9ffcfb62d9edbdc715d2
+- card_id: superior_opponent
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: superior_opponent.jpg
+    sha256: 88c57e799e2dbd9b928296f43050fe7471ee4432891b20bab5cc0b7dd725c105
+- card_id: swell_the_ranks
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: swell_the_ranks.jpg
+    sha256: 20b7a7435c84efa7853c7a1d503add5a891287c77f2a50c56af818414f9cf779
+- card_id: tadatsugu
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: tadatsugu.jpg
+    sha256: 6c55fa019bcbd5f4efcfe7e689b5a2811e0ec845c9a041f3f67932fe543fa3e0
+- card_id: tanuki_tricks
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: tanuki_tricks.jpg
+    sha256: df35159099e5c552937b29d5a74cf6ce7411a5f7550438a757d20e7354ea28c4
+- card_id: tashiki
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: tashiki.jpg
+    sha256: 2832a3d17f4694a42d16d1dfb6fe631627c80e739644f181c24fe87431bdfd34
+- card_id: temple_to_tetikkir
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: temple_to_tetikkir.jpg
+    sha256: 1e2d64c591f869d84921b06b3f0d5197320cdea0d5546d79f088e13bf64c6eb3
+- card_id: the_cost_of_pride_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_cost_of_pride_deckbacker.jpg
+    sha256: 57b31175c3b0cb097949d68a64ebef3bbeafdf7ff579dc8d67092d8dc74e186a
+- card_id: the_elements_align
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_elements_align.jpg
+    sha256: b159929d2f46e0442024f4f7d3b42112063f74c735374177b271add5ed63db37
+- card_id: the_empire_awaits
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_empire_awaits.jpg
+    sha256: 7560929a2ce8de56ee5110175fa2c6cd0aaf9d4d3d1423c2154fd87360f04c7b
+- card_id: the_god_beast_unleashed
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_god_beast_unleashed.jpg
+    sha256: b08921facec943aeb908297769028e7fee2540af53aa0aeb3d3a8f577d067984
+- card_id: the_imperial_favor
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_imperial_favor.jpg
+    sha256: 8d3065bd6cd282e6d50ddfd56adeda9e95133a32df5828c519d78d91d61e8fd4
+- card_id: the_imperial_treasury
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_imperial_treasury.jpg
+    sha256: 028c447b14cefd395c87236a68b2b4e334a98ae1b12b353bc65b29f7e877fb48
+- card_id: the_ivory_coast
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_ivory_coast.jpg
+    sha256: 95aca096eadfdc52528a07ad4da49e85155dbad4b372d424051b2e86f9e6344c
+- card_id: the_onis_eye
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_onis_eye.jpg
+    sha256: 09f6da4ea03b85c9b9d86f2fea78e85d61638887b5c67c524ff18625342141e7
+- card_id: the_shrine_of_lady_sun
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_shrine_of_lady_sun.jpg
+    sha256: 992daa15c0a9f45fbb06967cbda9b61e8fd5de1e2d40b3532d2c4a29d1ffcb91
+- card_id: the_walking_dead
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_walking_dead.jpg
+    sha256: 31dea26c4ffe4a8e7819bbee5ea5a6768ba3f57030752fe60b7dd935710532d5
+- card_id: the_wrath_of_kali_ma_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: the_wrath_of_kali_ma_deckbacker.jpg
+    sha256: e52e20cf318c029b106f7deee687bd2aeec873d1687ec7f387f92adfbf189a13
+- card_id: torakichi
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: torakichi.jpg
+    sha256: 14e5d75c413f79479b325032a7ae7ece9a4a18fd0281e57f99ca7306ff4ffe61
+- card_id: tsi_mokotsu
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: tsi_mokotsu.jpg
+    sha256: 396a2fdfe5ab5f360205fca5b8679a70f73cac90d407da7591c348630617433c
+- card_id: tsubo_the_drunk
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: tsubo_the_drunk.jpg
+    sha256: 85536abec5dd781bc685216083084a352ad70332b84bc8535a130d61e0e3a294
+- card_id: twisted_fate
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: twisted_fate.jpg
+    sha256: e6f577c73a4dfc15b258293d8cc5413ecc25cfe590c8e61245c4da160055fb6e
+- card_id: underhands_wrath
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: underhands_wrath.jpg
+    sha256: f84963397057420b33e6df82dd9a7be9bb4155f3f975376209dfbbd2e32a9bc2
+- card_id: unicorn_clan_deckbacker
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: unicorn_clan_deckbacker.jpg
+    sha256: fd01ca9ea5d1764be823fad51a72baa2453848145847e6cc9cef0a4f17c46f7a
+- card_id: unicorn_scout
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: unicorn_scout.jpg
+    sha256: 39d463bff40850d8bc48e9cf8344db1df34f70f68cd6aa05a82fa52e6ee501c7
+- card_id: unwelcome_supervision
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: unwelcome_supervision.jpg
+    sha256: 265482958cd5d173dbb16d19f26126802d3a484f76e3c1b160934311f34e1327
+- card_id: utagawa_experienced_2
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: utagawa_experienced_2.jpg
+    sha256: 9546a3dc844cae4bd7f498a10ee885359edfc6be11231afb66ff6a1df8ef5bf9
+- card_id: veterans_experience
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: veterans_experience.jpg
+    sha256: 7acee2ad0efc7f3e46539203e5439bd2ba4df0395476c930993869dcffd694a2
+- card_id: war_ravaged_plain
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: war_ravaged_plain.jpg
+    sha256: 7fa7630b3e29cd3a18c47a3f52dc606e6cef376877b8aa02715e9f05f68d5f38
+- card_id: writ_of_reprimand
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: writ_of_reprimand.jpg
+    sha256: 90688b0edaa6aa410b40bc02223ebef7b548b46b3904e480b272886ffb819060
+- card_id: wyrmbone_katana
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: wyrmbone_katana.jpg
+    sha256: 8b05469c3c3fceed974949d07b4e23beedd1b3310d2beddc63f344cdadbb8970
+- card_id: yoritomo_ascends
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: yoritomo_ascends.jpg
+    sha256: fb877fe6ec9b77902b62abefd4a8637181e497801b2fe585cd6c766fb016bab3
+- card_id: yotsu_ueda
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: yotsu_ueda.jpg
+    sha256: 09dbbc66a6f8afa980ac2463c2bcb52cbcd462c94a27352ff7d9f45bb0613901
+- card_id: yotsu_uedas_chosen
+  printing_id: promotional_celestial
+  files:
+  - role: front
+    file: yotsu_uedas_chosen.jpg
+    sha256: cb8e956257c114fc6b8d0fe2cb580c4b94b63e29a4b13a65ca6ec3061735f873

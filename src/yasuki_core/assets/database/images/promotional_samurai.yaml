@@ -1,0 +1,1592 @@
+set: Promotional – Samurai
+images:
+- card_id: a_brilliant_shot
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: a_brilliant_shot.jpg
+    sha256: c98501209dd15484dbd2b981eaf6b641ffea4187612718b1801275b162f10197
+- card_id: a_surprising_tale
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: a_surprising_tale.jpg
+    sha256: 075e6000708a132cb64da1247dc5b4eb155cc88f9afff8aa6472d30c29f29e43
+- card_id: agasha_orito
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: agasha_orito.jpg
+    sha256: e8dd7cccbf5f4a87e4808ad1b17d184ac79a10ca2188b34b19642d059b088295
+- card_id: akodo_naoki
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: akodo_naoki.jpg
+    sha256: 8e1b5f83a75bba2bec33db497e54cf690dbc0600763982353c01acb90f25af14
+- card_id: akodo_tomio
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: akodo_tomio.jpg
+    sha256: 31a41980b6b60e97132723fbf17cb8a492d0c410dc95c48cc952c3bbe9d734bd
+- card_id: aligned_with_the_elements
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: aligned_with_the_elements.jpg
+    sha256: 6ccc7895fe4b9c153ed715344d86d9aa63930e38e6b6a0f70f622a18dc1407df
+- card_id: aneo
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: aneo.jpg
+    sha256: 365b9d7774b2cba5220793ad6d01046da10ae1556486501158563f6af4074724
+- card_id: archers_unleashed
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: archers_unleashed.jpg
+    sha256: 123d0a40b3e9eb5f105fdc0a2f280c109bd40d54883d4109a4bccb3c74dbea15
+- card_id: artisan_academy
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: artisan_academy.jpg
+    sha256: fcb45d84bf53640be9e9757a1ac1fdcc616b4536ed145a7b0c60036bb20fc49c
+- card_id: asahina_minori
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: asahina_minori.jpg
+    sha256: 1b36478b1500a161dcc3f085d4daa52ccf3e62e2b911a160f0a08d41afc92d97
+- card_id: ashigaru_defender
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ashigaru_defender.jpg
+    sha256: 7b4c818ee029438310743a93506a43243399f5a6fbf6b1546b9f65350ab48707
+- card_id: atarasis_banners
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: atarasis_banners.jpg
+    sha256: 3d66b4e7f2f4aff8e0f5abcf0879f3a09fed47fcd04c1586d6a53d369881ae55
+- card_id: atarasis_mempo
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: atarasis_mempo.jpg
+    sha256: b5b89e3f712e4e8c266db3f683c687b4cf27cc431a7609fb0a330e73084a3945
+- card_id: baraunghar_scouts
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: baraunghar_scouts.jpg
+    sha256: d445917bc50e99f237728680e6f4f8af8da2510a9ee6fb961f335fd6f9165834
+- card_id: barracks_of_the_damned
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: barracks_of_the_damned.jpg
+    sha256: 508073f5077635339e97023ea338d66fb173a12863f318591e15973858c34ec8
+- card_id: bayushi_paneki_experienced_4
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: bayushi_paneki_experienced_4.jpg
+    sha256: 7cfd25a98ff03c3c8f6e4d3545395c0828038440e8667606de04353e54b28859
+- card_id: belly_of_fudo
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: belly_of_fudo.jpg
+    sha256: 51d5ec97a0adf83640afeee5abac0566d9c57fd9ee87cbd746a22bce26164a86
+- card_id: benikas_pride
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: benikas_pride.jpg
+    sha256: 8513147254f6e30b03459730c7f13c4a42292ded3ec4f5c6a253b112b44f7e49
+- card_id: black_silk_castle
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: black_silk_castle.jpg
+    sha256: 29e1f3f256ea72557c3ee38e81c54c1d37efc532071579cee151822d51acc6fe
+- card_id: blessed_library
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: blessed_library.jpg
+    sha256: a8f2da5273d2dd51963bfd0d44d7280e52d4719ba03d88f9f126f306a4a86546
+- card_id: border_watch_post
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: border_watch_post.jpg
+    sha256: 694f87b7520a4bf914b61a3eccbcb79df1a8b8bef67f46b4fa072da2748a06ca
+- card_id: brilliant_artisan
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: brilliant_artisan.jpg
+    sha256: b583b2c6c31dc851abe51297313a55661f50aaa0bc226476fab69ff484608f34
+- card_id: brilliant_rebirth_temple
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: brilliant_rebirth_temple.jpg
+    sha256: c4ff25b068a89d024473d483dcdee97f3f7b2a463816dac2f9b68877d07ee279
+- card_id: brothers_of_jade
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: brothers_of_jade.jpg
+    sha256: 876842739e4cf255e7a8a6a7bbdb14270742029cc276f2e24632123140013029
+- card_id: brothers_of_the_wind
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: brothers_of_the_wind.jpg
+    sha256: c238faa2d0f587d93ae4543da396482894291173bcbd9d801eb5268b03df0698
+- card_id: calling_on_earth
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: calling_on_earth.jpg
+    sha256: 53a6961fb3b7dcf67026fe14b9709969343cc5d85e9674a4924ab54ed9309cac
+- card_id: cartographers
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: cartographers.jpg
+    sha256: e8f04f56d06263b71457df959b2e40f89e05fe470f38e5e91368d8c6d9f79d83
+- card_id: cavalry_token
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: cavalry_token.jpg
+    sha256: a42f061f5f08742eb16030e944d42d20d791ca153ac2ec9f1c376f5e4b1088fc
+- card_id: chuda_naotake
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: chuda_naotake.jpg
+    sha256: 2ecf3997089696414197f85c5fcaa9c6501de27b28cb19afd6ab2bdffd5d125b
+- card_id: chuda_saeka
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: chuda_saeka.jpg
+    sha256: 9aecab61c8d06794aa1077e991a6999b9d5b0dd9febe765acb37feba9c8e8945
+- card_id: claimants_to_the_throne
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: claimants_to_the_throne.jpg
+    sha256: 0d4b5a5c493ba7deefd4646780f6720a095e5f46a9e67473458f23caf67c05b2
+- card_id: college_of_war
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: college_of_war.jpg
+    sha256: 504480d05cc2d4476412af401e7f8af3e23caf24497ca4d601bcd68d5797d23a
+- card_id: conscript_sailors
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: conscript_sailors.jpg
+    sha256: 474c496ae424c2170370b61c80ae9d3074c9f2b00f7755ae562244bce2c5f9d4
+- card_id: contemplation_of_destiny
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: contemplation_of_destiny.jpg
+    sha256: 97819fbfba934f032745521fc19064c6058028b039e5e5c5d73bb283cd69fcd9
+- card_id: courageous_yoriki
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: courageous_yoriki.jpg
+    sha256: 78a85bf7272e46c4a218e4e6dd3aa39f1742a67dffc26b802e09fa5c8f9914a1
+- card_id: courtesy
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: courtesy.jpg
+    sha256: 876d8eb09f5357018e5c371074bb8f8658e188ea01ee72da130736b7564bd258
+- card_id: crab_master
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: crab_master.jpg
+    sha256: 7893a4236349b774c1350b9be8c83840f102a65814ff55289bb4e213c3dddc37
+- card_id: crane_levies
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: crane_levies.jpg
+    sha256: e04fc2f2cb52e9d70a86b2d1b76f59cad89b90fd5cd2e8cbe45c7e14c2b5997a
+- card_id: crane_master
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: crane_master.jpg
+    sha256: 71cc5f8de7923b63b0d21500cd2256bc279dadbfd235d6d4b2df5911758e39cd
+- card_id: crossroads_fortress
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: crossroads_fortress.jpg
+    sha256: c9a278deaf1834df0a9ffbbbb606b5364340746532d071aaeaa453ddceccf7df
+- card_id: custom_barding
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: custom_barding.jpg
+    sha256: 1d90d8dcec54d68d6591641d0ff9c7d7ad0e9b1187470e3e432edb87e4bd2c05
+- card_id: daidoji_arrows
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: daidoji_arrows.jpg
+    sha256: 5a66592017b15b5d2a6ff5276d350284fea77f8c4d743804d7afe8cae6917d45
+- card_id: daidoji_jitawa
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: daidoji_jitawa.jpg
+    sha256: ee2e5f5ff69bd57ee01cd0cb442e917d3ad37989735897fc2223f9091798e2bf
+- card_id: daigotsu_experienced_2
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: daigotsu_experienced_2.jpg
+    sha256: d2a7ffa6c12417ffe98da4c89be2c5cb478fba4c16ff6937e23928877d244468
+- card_id: daigotsu_keigo
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: daigotsu_keigo.jpg
+    sha256: cda953d23598e2658f25c5ab7a6845605a09efcc1a6bc2b46a94860345afe22c
+- card_id: daigotsu_taiji
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: daigotsu_taiji.jpg
+    sha256: ba3e19ffc5ce9809b719ee0a5ce1c911063f6d67aedfe13ba9a97252394184d1
+- card_id: dawn_of_the_dead
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: dawn_of_the_dead.jpg
+    sha256: 755c663dc6963d9131930fcd5ee4a9f91f6f7de559cecfc3378ad51f11288c0b
+- card_id: dayus_troops
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: dayus_troops.jpg
+    sha256: b3f39311443bbef983c99f8eab4bb5baa1e1f0e0d7766bb71e935ddfbf011504
+- card_id: deadly_ground
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: deadly_ground.jpg
+    sha256: cb3dae99c5e19d352126e8c4630e476320c462e0ddaa90a65088652ba0dae7aa
+- card_id: deceptions_veil_dojo
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: deceptions_veil_dojo.jpg
+    sha256: 55534eaa8d17e36af949b8d7f14093efd2948a6c55ee9e5e05d4c96cd22f4d9e
+- card_id: deeds_and_words
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: deeds_and_words.jpg
+    sha256: d81113f0993860978ffcf25f35f8d4b687fe61ca9ef1c79da4d6492458d58bcd
+- card_id: desperate_sacrifice
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: desperate_sacrifice.jpg
+    sha256: 126af2b2d52087409db3a29149e15e37aaa7590c0615aa421ea4580c08caebcc
+- card_id: desperate_wager
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: desperate_wager.jpg
+    sha256: 9155ee69c2aa1f29145a4313fef1d775002fb84fbc59f2157938cf2e3235b6bc
+- card_id: devastating_attack
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: devastating_attack.jpg
+    sha256: 7db78e00c7bfd9611dc48804866467ad530ec531918c74a875d281ecec75887c
+- card_id: dissension
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: dissension.jpg
+    sha256: a13c59303724affee1ac9714a665faed2765bc174ac78cb67cfe190d64ccefd5
+- card_id: doji_domotai_experienced_3
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: doji_domotai_experienced_3.jpg
+    sha256: faa223bca0083a795375e2a1ca22ceee1f3eb007b4b849fdac03fed14b1d8c58
+- card_id: doji_kohaku
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: doji_kohaku.jpg
+    sha256: 8138e4316840308b6be37a74cf25544d1834b264195cdd4f482b3b8dc73f8d0c
+- card_id: doji_noboru
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: doji_noboru.jpg
+    sha256: 673d7da55b40a40a96d4f34c1719ac2325b2ddf227f4c7ebcf5b4379bb44a279
+- card_id: dragon_master
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: dragon_master.jpg
+    sha256: 97bdd0c4c2525cad418159fd5ff792d1be8ddc00b1f11bf5774c61b7345845d6
+- card_id: eastern_hub_port
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: eastern_hub_port.jpg
+    sha256: e05daa70f73c8cb233df82109a4b38d55a3c4c025dd8f5ab2b6051bf10a5d8c4
+- card_id: elemental_mastery
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: elemental_mastery.jpg
+    sha256: ba4b6b65f379376f8239b1399b6071324fc62c56d4ded6040bfd1e3a20724870
+- card_id: enraged_assault
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: enraged_assault.jpg
+    sha256: cf0cb112d9cd7887f8e7f666522293200da1890333724d4a64a95fece7484a05
+- card_id: equipment_storage
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: equipment_storage.jpg
+    sha256: 1c668a9debba345ab21d4793386a0e05c7a0975b2425936901564391cd01d53a
+- card_id: essence_of_the_east_wind
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: essence_of_the_east_wind.jpg
+    sha256: 8a5eb7bae875c18dbb76918fd78bf36db2efb018ad6bd4e9fca9755d1c35be09
+- card_id: evenly_matched
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: evenly_matched.jpg
+    sha256: 799c0e094881c2170dfba02477b6dcd08e62c0e096603158b38db7814b5e66b6
+- card_id: excessive_indulgence
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: excessive_indulgence.jpg
+    sha256: ca829ba329f739c3c613993998bf7ab33d5cb7b8a170074b2e97ae4948b345f2
+- card_id: farmer
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: farmer.jpg
+    sha256: 9b50fccef13ee78723d69d4519e70cf611b3b4d23ef01f4f68d11a07afb3ab40
+- card_id: festival_of_drifting_souls
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: festival_of_drifting_souls.jpg
+    sha256: 2fcc5c94c6cd09f472644abbc97abeb9d16b6b10e08738da5f9a80129e7c21a2
+- card_id: fire_and_stones_cut
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: fire_and_stones_cut.jpg
+    sha256: b74922627baccafaf2182568fda1046d77592dc0cbdd867c64f44785b109be8e
+- card_id: front_gate
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: front_gate.jpg
+    sha256: 7c8f952fb3d60ccc1cff223aad6ea6188e381d2c0eeee676e7cc29e84e529ddc
+- card_id: front_line_camp
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: front_line_camp.jpg
+    sha256: 6dce75e9d7abf14eaa928bba6432ffbba3f77372f17f00252260ca82ba777561
+- card_id: fuyuzare
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: fuyuzare.jpg
+    sha256: 67a178ed4eec999d5dd549a4839b050dc4949ac039eb75ff42b9ca37df719932
+- card_id: geisha_escort
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: geisha_escort.jpg
+    sha256: a56e8f94ac9696aa349d93fbb096d745be2edac3c1acebb98830ff9d7f63df27
+- card_id: gong_of_the_high_house
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: gong_of_the_high_house.jpg
+    sha256: 646e8e3b472bd9d2e2d0c5e78fc983a38f6ffeff41c9583fe32dd866329d6755
+- card_id: greater_sacrifice
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: greater_sacrifice.jpg
+    sha256: a39966ca0f82d35a1e0612fe1d8688f58108cb6145edc6c896ce63033b226286
+- card_id: guardians_blade
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: guardians_blade.jpg
+    sha256: cab6bb180390d3991f28945209fa478192372dbc196701c3cd9d5f835abd50db
+- card_id: harmony_has_been_found
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: harmony_has_been_found.jpg
+    sha256: 4710dbe403305fd937613316eb855a3caa2189912058c45160ed992763395c55
+- card_id: heroic_defiance
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: heroic_defiance.jpg
+    sha256: 8561b103d4b8a00163823b63ff107e670484d18bda837f2bb57bce8e10040a6a
+- card_id: hida_fujiki
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: hida_fujiki.jpg
+    sha256: de2dc0c76a4d72afe7a81d9adec3f89ef6649c0da9ab9169a30987f9d1669c8e
+- card_id: hida_kuon_experienced_5
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: hida_kuon_experienced_5.jpg
+    sha256: 51d206fb1078fcc98934721be669229f47127c34823f22167f229d3462773d52
+- card_id: hida_motaro
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: hida_motaro.jpg
+    sha256: 15b495943a76b6738a4c2600315b2f0e80af613cb6c5744c97bc239f2d7599e0
+- card_id: hida_tajima
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: hida_tajima.jpg
+    sha256: fa92922a3aa914cca91f5c82b5230c1dee4cf83fd3db1f719f61234cca211901
+- card_id: hida_yakamo_oni
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: hida_yakamo_oni.jpg
+    sha256: d3a09ba7583de50c6c78f4c3e2ec06dbbe6a25fb12adf5218b4377b77dba8c24
+- card_id: hidden_reserves
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: hidden_reserves.jpg
+    sha256: 15b807d8344fa1417adc58ac7a2996014bf1d8e99059d3ebbe952c1c6619c317
+- card_id: hired_legion
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: hired_legion.jpg
+    sha256: 60349d8465ac756607d5ccfce8523ba6ce34382487cdbdc15bf4e1588811f3dd
+- card_id: hojatsus_standard
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: hojatsus_standard.jpg
+    sha256: 985c330e7adddf9543744a117a69bb4f1efa222e96491b7b19a7d47f6fc2e221
+- card_id: houritsu_mura
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: houritsu_mura.jpg
+    sha256: e93921a769de4fca8a1bd4894682e5aa2c35df7cd71600412fd90453b63d3849
+- card_id: house_of_the_dead
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: house_of_the_dead.jpg
+    sha256: 3b92996e5983983c929840645c88a46f06cc2acf572ad66895554cdaf12ec7da
+- card_id: house_of_the_rising_sun
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: house_of_the_rising_sun.jpg
+    sha256: a465e778fde3078fb8d4acb9c9a435204307f37ede9449782cd2b0e9de796032
+- card_id: hunger_of_the_dead
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: hunger_of_the_dead.jpg
+    sha256: 4feb189ad11b2caf67551c33998b07f9488337bdffdcf69b50d6f66b6dabe22d
+- card_id: i_am_ready
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: i_am_ready.jpg
+    sha256: ea61ace32f76b0ada815b3b7ea053d7578232414170f674c7851238d376c7209
+- card_id: ide_jiaos_hat
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ide_jiaos_hat.jpg
+    sha256: 23c5fdc6fd5461debddf283ee38221bdce4be32048310d86ff5c9dfe497e7aaf
+- card_id: ide_shinji
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ide_shinji.jpg
+    sha256: fe537f69f9f00cb1da73beb240778d84bf545d44c3a2f5c5e1a8e98165d80963
+- card_id: ikoma_bugoro
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ikoma_bugoro.jpg
+    sha256: e7cfd9d616412441cb5788eab516cf2260a64a1a802b779d2b8934d50d0a348d
+- card_id: ikoma_reinforcements
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ikoma_reinforcements.jpg
+    sha256: 13b78b956641f6933a06af15bb301fc6da8e8559d46301af455e3767823b828b
+- card_id: impenetrable_front
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: impenetrable_front.jpg
+    sha256: 234adfb6d9f3497c2156f2b7371ace5d615d86183c1a934e7c841fc27fc6c916
+- card_id: imperial_cartographer
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: imperial_cartographer.jpg
+    sha256: 74d7e236c2afec68c69be42185ed31c1ea917c61087a4cbfca40cddb4598f86f
+- card_id: imperial_command
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: imperial_command.jpg
+    sha256: 7d9e44fff5112ebfec6fbf89db810c5a5522afaeb968d4f43b450888c5306af1
+- card_id: imperial_dojo
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: imperial_dojo.jpg
+    sha256: 19855588c09b715cb8a3f6af3468df259e9f9cf6a6bac054507795649afcd33a
+- card_id: imperial_handmaidens
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: imperial_handmaidens.jpg
+    sha256: aec9b3ce36d50d894b82ee00eacf179a06c4a551643ea6a34110f30d8a53fa62
+- card_id: imperial_legionaries
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: imperial_legionaries.jpg
+    sha256: effb5fe4fa0bf340cd2eac24344c6dc74d4c12cc3b0fca4cfcbdf05c94ec1a2c
+- card_id: imperial_storyteller
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: imperial_storyteller.jpg
+    sha256: b5b8f7cd36460e0b08835ff16935c02951c2c82ec921a82a60e418c09d76e272
+- card_id: ippon
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ippon.jpg
+    sha256: c9a2d817a57934dd8de9629453a84fbb76ea1253276cf070ae8f3bd2c8f723b7
+- card_id: isawa_chihoko
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: isawa_chihoko.jpg
+    sha256: f2906700cd76122d6135682208d0856e53416f28df1840415a6569038f01dd5b
+- card_id: isawa_idomu
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: isawa_idomu.jpg
+    sha256: bd7f7d44d91f61ab213701f0bd371b881af89d7bc688b01d166c9b5c58736be6
+- card_id: isawa_ochiai_experienced
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: isawa_ochiai_experienced.jpg
+    sha256: 2a5a2b0f87aa045bca380c0b585a494b3d73e85e352ac7dc7742c29cb2fa0ea1
+- card_id: isawa_zao
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: isawa_zao.jpg
+    sha256: 52e666d49a6001a82a886d6e8324f1c81e9aee3fa49e95793e800fe7b9332872
+- card_id: kabuki_theater_troupe
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: kabuki_theater_troupe.jpg
+    sha256: 6d1752ed48ce116bb77e276898293e2c8a428b1744589dc0d80fa91a69d37cc8
+- card_id: kaiu_kirino
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: kaiu_kirino.jpg
+    sha256: 4f7c16b085ea2b377e67539e897ccbda7b07f4e06013cc1fd510a9c39860c987
+- card_id: kakita_katsuro
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: kakita_katsuro.jpg
+    sha256: b933cc2be59cc8e65ab12d286699aecb52d40021d0cefab408ad54845d41f4de
+- card_id: keukegen
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: keukegen.jpg
+    sha256: 0ebf32292ce4dbf729cf7bce843b25a0b8a4d938e07581de62f785eab28c586e
+- card_id: kitsune_akizuki
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: kitsune_akizuki.jpg
+    sha256: 83ee0563d28be6acc9fa4f43e0ea027aa2b195f2cc535aebc1f22c99264fd2dc
+- card_id: kuni_josuke
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: kuni_josuke.jpg
+    sha256: 7ec353967bebcfa3df57871a931bd4e1bbce3b0801b9aa9b39156bff4962f622
+- card_id: kurimokos_recruits
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: kurimokos_recruits.jpg
+    sha256: abca0b7c84d5d028f265a4ec2990a2348c564de724bba66052a610406acb1264
+- card_id: kyuden_asako
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: kyuden_asako.jpg
+    sha256: 64164482da93862e85bcded1d8764fa56950a80b81798f36b1a399b3c2df85e8
+- card_id: kyuden_ashinagabachi
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: kyuden_ashinagabachi.jpg
+    sha256: 7cc6fc15e4f00adb57d8c92e8086e02f495141547fb75111d339ae033b674889
+- card_id: kyuden_kyotei
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: kyuden_kyotei.jpg
+    sha256: db815f7b49ba66ca98015894135430643e3cf3951e02d566c80742b4f32cbf38
+- card_id: kyuden_wasuremono
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: kyuden_wasuremono.jpg
+    sha256: c27d28b0573065ebd11ebdf996b6af01693ec21552622ac7f8d278435a6f3c95
+- card_id: legion_of_flame_armor
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: legion_of_flame_armor.jpg
+    sha256: 661a907b22e40529d854f2375c7376830ae0b478e4ee3285451e2a402e0a3e19
+- card_id: lightwater_bay
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: lightwater_bay.jpg
+    sha256: f1ea751d9bc07f4e529d56872f5bdefdfdcd570be56a8bd36605cc58f0709b5c
+- card_id: limbs_of_fudo
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: limbs_of_fudo.jpg
+    sha256: 51f1815ad8ce28fcab3b05ddb14bbfd44f2d4fd78970e7fe40d969959f2fd025
+- card_id: link_to_the_heavens
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: link_to_the_heavens.jpg
+    sha256: 1509efd9a2b4a4ad95c359f78ea6dc3c4f083c956cdbd2ca817f9a8958bd760f
+- card_id: lion_and_unicorn
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: lion_and_unicorn.jpg
+    sha256: e55611425baa5ddc9855af645afb235182afa910b33ff04e19f4ebe5b970e89d
+- card_id: lion_master
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: lion_master.jpg
+    sha256: 58d1246fadc5edc7b45073f6c061e36271cba2b05bbfa5f465fb085f28e67e21
+- card_id: mantis_master
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: mantis_master.jpg
+    sha256: 3821a735f2061d05bfa182f6c1ed17edbaa5a46b0bf1bd60f4ea34584154402d
+- card_id: masakari
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: masakari.jpg
+    sha256: 4e257e4122ceeb1618eb7df88d5c3629c56cfb175ed82bcb5c456341f366bb5f
+- card_id: matsu_isao
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: matsu_isao.jpg
+    sha256: 0f46d4ea8eed9fc6186983334c4f7562452ad37a8ae3c569130a52e1a16541be
+- card_id: matsu_takehiko
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: matsu_takehiko.jpg
+    sha256: 7c986f52aad953f0f354137e1312ffb298b569bfbad51e98990dff38ddde7ab0
+- card_id: matsu_yoshino_experienced_2
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: matsu_yoshino_experienced_2.jpg
+    sha256: f88a480ec0144b44fa3f7946c95d94b570ed865baeb4cf8be379db7d8b69e3f6
+- card_id: men_at_arms
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: men_at_arms.jpg
+    sha256: 2b13994461396eb25648be05513d1dd2bea01947c4b83d854ca70a316a9c8169
+- card_id: militia_recruit
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: militia_recruit.jpg
+    sha256: 7db97f971646eecdeb0f4625da7f3efa7799186ba906c1e62b0ae7ef67e7bf86
+- card_id: minting_house
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: minting_house.jpg
+    sha256: 94bff968bd6159f610283f2e97b1164bf07f062ec0250374d34bd4795dd42e85
+- card_id: mirumoto_haruhide
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: mirumoto_haruhide.jpg
+    sha256: b7da11c98b3a23431557d344c7ad4c6b8aa57ebade987ed7f775e2ec521af4ea
+- card_id: mirumoto_yoma_shi
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: mirumoto_yoma_shi.jpg
+    sha256: 6f0562f7a47a19d199022393ab64b4eb98fea826a470761c7afe247f4b35c0c0
+- card_id: miya_shoin_experienced
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: miya_shoin_experienced.jpg
+    sha256: 6a1d988009bef6b90419ea9a500fc61320ed472c6e94d9b16713deffb72671f6
+- card_id: morning_frost_castle
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: morning_frost_castle.jpg
+    sha256: 216f08c7f711222c4dea32ad2b0c39513a741b077b8b065cae9d2e1e1faf86da
+- card_id: moto_chagatai_experienced_5
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: moto_chagatai_experienced_5.jpg
+    sha256: 021bd7cc6634a638f8ed16a90cad0df287550eada62c52c3293b08d8db63e78a
+- card_id: moto_horsebow
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: moto_horsebow.jpg
+    sha256: f7c97d7fd0709f6cf4318da36a2989b7a274c06ce0e7b1cc0f430d052fcabcdb
+- card_id: moto_kunio
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: moto_kunio.jpg
+    sha256: 141b9f257665e12e1f51e7a54f34c5242a04c769d0a68002d1bc65c54416a1f3
+- card_id: moto_yuudai
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: moto_yuudai.jpg
+    sha256: 72b3c7cbebd67d62a3e8a19f339ee7949459ed7d9e0df4772f8050fb3c8aac93
+- card_id: mountain_summit_temple
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: mountain_summit_temple.jpg
+    sha256: fd30dd42047da8ce682ae1d1c0597c95c3418604b61d3031bf248b60e86edd84
+- card_id: mountains_heart_blade
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: mountains_heart_blade.jpg
+    sha256: b65d09f9d4e113c27781e2ba13943bb9ac4edc955f415dc8f268ce15a13c81b4
+- card_id: mountains_shadow_dojo
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: mountains_shadow_dojo.jpg
+    sha256: f47e661fb45e901f5cb40fcf2257d8184bef686d549cf624aab8cea613187835
+- card_id: my_grandfathers_blade
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: my_grandfathers_blade.jpg
+    sha256: f693b72e210e67588ee1d0f1821a59c26854f77b300141e3e788a80abfbcc20a
+- card_id: my_grandfathers_daisho
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: my_grandfathers_daisho.jpg
+    sha256: 48bbeb87dd83d5eec653d535963873d075ba4466f7aa57d2a34f94b1d8dcb440
+- card_id: new_recruit
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: new_recruit.jpg
+    sha256: 9a8448cfda7a5388ca84a021ef1af5621d26abb942ebccd5b2afd8f596645702
+- card_id: nyokos_daisho
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: nyokos_daisho.jpg
+    sha256: 91b4978c3c5e5e210efb2e1347781734f72c46a31ec207031ea5e4428b9cbac3
+- card_id: o_yoroi
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: o_yoroi.jpg
+    sha256: 666dc048fcd0e783d609aed614609eba31227af3be6bc29758b20940fd1efda2
+- card_id: obsidian_armor
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: obsidian_armor.jpg
+    sha256: a40979095a1d7e6a970e90d9a47a1c5e20c2ea6a66a7d857a6f98ff2fc568cb4
+- card_id: ogre_warriors
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ogre_warriors.jpg
+    sha256: 59dabf770d9962ab0f2cadbcd50cdea3b1f20f1be1424e40bf0f1116bfcf24d8
+- card_id: onnotangus_memory
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: onnotangus_memory.jpg
+    sha256: a5cee17de59119e4adfd0ee352c1b5b74857aee6c5dea5c0b7a9677c89f31c00
+- card_id: opportunistic_ronin
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: opportunistic_ronin.jpg
+    sha256: d072d286b5d784a93d3af6ca05683dc9898f863a7227e3173d5dd69b312d0fd6
+- card_id: otemis_technique
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: otemis_technique.jpg
+    sha256: 0091a60db14126b83d2a4b6ac15cf942da292af957a54532ba7651bfd8a10595
+- card_id: panda_spirit
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: panda_spirit.jpg
+    sha256: 5039204a631a808398527ff5876348787eaa62f1e4f11d0b9632af169428268e
+- card_id: phial_of_poison
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: phial_of_poison.jpg
+    sha256: 13746685bfda1ddd2491e2ab61500b774e8d1edcfd89c3c37e4b58421fbc4248
+- card_id: phoenix_master
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: phoenix_master.jpg
+    sha256: 884a6816093e21a62c33af77f170b0d529b5cd3738edb02811827204129aa5ab
+- card_id: phoenix_warrior
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: phoenix_warrior.jpg
+    sha256: 07ba342ba40a0c258dc274eee16eeded88ee2daa1edf322b5b4d933f9b2c5e1e
+- card_id: poison_sake
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: poison_sake.jpg
+    sha256: 832e5ae57563d8cfed5dbcb7177cbd219b7a671be5572aabf64310ef95e9eed7
+- card_id: polite_deference
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: polite_deference.jpg
+    sha256: 79a84a4859ed2136e1b6192ed054653c0f0abae21375a6df953e264d9e8907d6
+- card_id: private_shrine
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: private_shrine.jpg
+    sha256: 30584ece14f1616bda9dc3685e8d0a70eb87cd77c8a7df40236a044e6bf40a98
+- card_id: private_trader
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: private_trader.jpg
+    sha256: 2759910420301fb3b18d7d9ee45205ecd7f98ca29eeefe17b5268f382556230f
+- card_id: rampart_sentries
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: rampart_sentries.jpg
+    sha256: 9ab993ae576b2f2760fdc42de50fbd1e30587f4ccf4dde440d0ac1769f0c58ab
+- card_id: ravaged_lands
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ravaged_lands.jpg
+    sha256: 60fa69e51803a75ca1878f8da5b515b0dbb8499c4937b78bfd724efbfc0cc34d
+- card_id: razor_of_the_dawn_castle
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: razor_of_the_dawn_castle.jpg
+    sha256: 1a06ff6f04326fa3e3c046d7acf8c5f472a8bdafbefdf10bb332c1a9e7e1a929
+- card_id: redrawing_the_maps
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: redrawing_the_maps.jpg
+    sha256: 57bc4948dc0a1a769e8e0286ca6583e13ea30407ca470ba3440dbeb10cac4149
+- card_id: revered_sensei
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: revered_sensei.jpg
+    sha256: 5d5197e76c660202caa38d85ab6ae0f27a6c72b727a68dc040afd02f45079f30
+- card_id: ring_of_air
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ring_of_air.jpg
+    sha256: a9878178d6538bd935cae8f7a2b5ef84f7389e833d3efd264e5a98454044e46a
+- card_id: ring_of_earth
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ring_of_earth.jpg
+    sha256: 2639d41cbf55a49d8fdd159f75cd63e4a7d2406c28ac2a793f3dfd3acbc09a56
+- card_id: ring_of_fire
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ring_of_fire.jpg
+    sha256: 46c3f3d10222d2ee56facc815f150af0e655c76ba62b3af168e48d79cd86c3af
+- card_id: ring_of_the_void
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ring_of_the_void.jpg
+    sha256: 4d45b898f7c32a7a52a54accd80c23ff94d8366bfb836b6d333c0018dcde00d4
+- card_id: ring_of_water
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ring_of_water.jpg
+    sha256: 59d0db0012924499111455295258f3c07eabc2c34abe56fbeb9c6466e207f0a2
+- card_id: ritual_standard
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: ritual_standard.jpg
+    sha256: 19fe28eba49ff8b8754044995ff3c557af69a6976a070944836450da0e18821a
+- card_id: scales_of_the_dragon
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: scales_of_the_dragon.jpg
+    sha256: c59b9b20c82c589d6738bba4e6c2aa364a60c65dc1da8a3e2e11771211b1d7de
+- card_id: scorpion_master
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: scorpion_master.jpg
+    sha256: 04158eab3fd44b1be0411fb8ef3697a1612d89c636debcf8b6dd4d0b37b3d139
+- card_id: secondary_keep
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: secondary_keep.jpg
+    sha256: 9d4b21f0754efe5441be703432499c476fdd2ba08500f54a838ca230d2699f6c
+- card_id: seized_territory
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: seized_territory.jpg
+    sha256: 1275ec08cb4d802a59ed1b62bcecf5a9fb70469cf58f2aca8e8eb65dd13d8263
+- card_id: seppun_goharu
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: seppun_goharu.jpg
+    sha256: af0d953790bac5de52941e3868b219a482ae75773958f7b0401cf6f6b2cfe5bb
+- card_id: seven_stings_keep
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: seven_stings_keep.jpg
+    sha256: 43be08ffbf1ece60387bcc812518cee7d55893ff30d8e83dfc2ff18cc2f905b0
+- card_id: shadow_games
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shadow_games.jpg
+    sha256: 378f0ae2b6850aa9d40ed59071741755c3e936d238c9e93a1b0aaf47b79cb925
+- card_id: sharpen_the_gaze
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: sharpen_the_gaze.jpg
+    sha256: 071217610ca948d8c88961104879d9101cbaf0ebb4c4206747931ee88851b575
+- card_id: shattered_morale
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shattered_morale.jpg
+    sha256: a44f6c8aa29b0470f7bc9f1cecbf314bdb7cbbf4f54ea80acfdd50f5834357e4
+- card_id: shell_of_the_crab
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shell_of_the_crab.jpg
+    sha256: 5d69912edd38cf5ba2b2f30ce02efc1a172b37226e00c8172e5f1a2ffcac4995
+- card_id: shiba_ryugo
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shiba_ryugo.jpg
+    sha256: 1418c57b3baf527dcf96a1534bd05f19515ca7e4f95303e16aa39da23d40397f
+- card_id: shielded_by_fire
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shielded_by_fire.jpg
+    sha256: 0fc0ea62e1a3f9490a5b79fe5f60e0f576904af60cd544011ec6b58559c6f025
+- card_id: shielding_the_command_group
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shielding_the_command_group.jpg
+    sha256: a72b5237e9bd205796dd14a346450dce498dabb422d8629493fa7b4947e1b6cb
+- card_id: shiro_usagi
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shiro_usagi.jpg
+    sha256: 14a6361fa2b88e88794883bf24485303d9417b5b7f3de74f09bd1dbeab856887
+- card_id: shizuka_toshi
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shizuka_toshi.jpg
+    sha256: 8016ed781cb7305071b2436d092a9efc1e8bcd024feebb563d713c9c8ff2c339
+- card_id: shosuro_nikai
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shosuro_nikai.jpg
+    sha256: 1c6ffdaa39b94acaf5cc96ab66a3a8f8eed5c19a101e48add7d5e278e9c56c03
+- card_id: shosuro_seibei
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shosuro_seibei.jpg
+    sha256: d644de707c9d6570339bdf2af734d4771bedde2bcbf20125bed30471d062f9ca
+- card_id: shosuro_tezuko
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: shosuro_tezuko.jpg
+    sha256: 81e1e9754644b9319a576315e6ca135a6b5039dd589dc17465c08033dfc7ade6
+- card_id: siege_engine_promo
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: siege_engine_promo.jpg
+    sha256: 3155ca219e83cc1149808a938bef54f39925b7fca899c2b9dccaa2259c4ab9f0
+- card_id: signal_fan
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: signal_fan.jpg
+    sha256: 15c31bf9f81a59ade530190a2f16046549e183eebbffc30556724635683f2f4f
+- card_id: soshi_iaike
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: soshi_iaike.jpg
+    sha256: 7c77ed2c586f7fc12c4f05937aafc9f95cc2a2efaeaa236c25d30be0e91ec919
+- card_id: soshi_ikio
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: soshi_ikio.jpg
+    sha256: 9943dda074382dffcc0640bb0e9e9d9a9de4a394d102325d3e2b4c32181aec8b
+- card_id: spider_master
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: spider_master.jpg
+    sha256: 1291676d28b00625280ae6ce9f7470decd579d7a552026b36b7b2b28b64f85c3
+- card_id: stalwart_defense
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: stalwart_defense.jpg
+    sha256: 0db4b5c7cec9e212b0a6c3b87dde5202bca55b72fa0456ca1dea889893e7ba12
+- card_id: striking_the_balance
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: striking_the_balance.jpg
+    sha256: c55ac3c2491d61b39b165f14d16a33f4ce08443f490bfad7b55945c4e1b26cd5
+- card_id: sturdy_katana
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: sturdy_katana.jpg
+    sha256: eec5b5cc0f9e3f1b135843abff3be9d7785f277d2fc27a4074b5dcade81baf48
+- card_id: suicidal_charge
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: suicidal_charge.jpg
+    sha256: 515578997acd2156aeb156959b2ec3abd6bfa3261d5e740d4fb7cecad438edac
+- card_id: summon_the_council
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: summon_the_council.jpg
+    sha256: 25979938009a58b7033a09d7ddccae070ce737eccad1894eebfccb7d5fac896c
+- card_id: summoned_sword
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: summoned_sword.jpg
+    sha256: ddb1d8df995349d614636f444cfcec561c548ba4ef993cdcc50f55154c25adec
+- card_id: supply_smugglers
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: supply_smugglers.jpg
+    sha256: dc01a48d2f1ea5921fd8ae0710758a09cf1a010390eac6e266e365235f70926a
+- card_id: surprising_resistance
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: surprising_resistance.jpg
+    sha256: af3147b55005b77285206569aab3f99c642733a0e428a15543c2b0b1e74056e1
+- card_id: swarming_attack
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: swarming_attack.jpg
+    sha256: d37202ec5bfab847426504788bd994eb0b82f5bf97b2725d3f71faa32726d148
+- card_id: swift_troops
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: swift_troops.jpg
+    sha256: 99c740e01ca93b9e28a2f08aabf3cba7e11e9a079e4f3ded464f3aea472674e3
+- card_id: tactical_maneuvers
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: tactical_maneuvers.jpg
+    sha256: 093f3ecf82199eb728c5dc25a625207c892b46e8f10247d18ea2ee712af075fa
+- card_id: takuros_apprentice
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: takuros_apprentice.jpg
+    sha256: 75f5c0a655ef91f6e0568f1998b6a867e0d813dcd4e66b6773f72d1b62b3fc88
+- card_id: tamori_akana
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: tamori_akana.jpg
+    sha256: a346dafde3b8eb50e4de84215d88a37b0dece09246c7a4f33c926cbe9152dec7
+- card_id: temple_of_the_righteous_emperor
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: temple_of_the_righteous_emperor.jpg
+    sha256: 9e3c531cd45e32b6b7ea95a25f192d7d0398ccf5ce585f9466afd9d05f3fb395
+- card_id: temple_of_the_seekers
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: temple_of_the_seekers.jpg
+    sha256: 44f0cf4fa4ec05ea33d1bff9918ed8468df0d088cd254963d2b7f0c2b9390527
+- card_id: temple_sentries
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: temple_sentries.jpg
+    sha256: 9d420a358ffb4de6a901f4ce9aa8e0fb09e3a32047524eda4bda7b3741718989
+- card_id: tetsu_kama_mura
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: tetsu_kama_mura.jpg
+    sha256: 6d3fd6d794e6d138645f49bddaac57ae665450cab815801399d120bcd412848d
+- card_id: the_agasha_foundries
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_agasha_foundries.jpg
+    sha256: 86092bc7cf68eef50668d55382ced8e93a049e77544445a77b9ae2dc3ce21eed
+- card_id: the_great_carpenter_wall
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_great_carpenter_wall.jpg
+    sha256: 39c0e0079a0067e37e30cf6a78e5bbd32c3aa624a69ccd6bfc08ef4f2bb07e3d
+- card_id: the_hall_of_ancestors
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_hall_of_ancestors.jpg
+    sha256: 6e109fb8e9e6786270614336852aa5b3c276beff08b4dec47f4ecbfa0f6d58a9
+- card_id: the_heart_speaks
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_heart_speaks.jpg
+    sha256: 1ff32615a74637b7fa0f4c30b51ea5830c4fd3e772e145e4dc604849301581d3
+- card_id: the_heavens_reborn
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_heavens_reborn.jpg
+    sha256: 6fd2da021b4ca42d8e4665785348597d7fc0c51f246e68c37b63e0666f258e10
+- card_id: the_house_of_false_hope
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_house_of_false_hope.jpg
+    sha256: daf598d5835afcbfc04ea1bc12fa113dc8f6981c681e166ade33b9e51965af70
+- card_id: the_house_of_false_hope
+  printing_id: promotional_samurai_2
+  files:
+  - role: front
+    file: the_house_of_false_hope__p2.jpg
+    sha256: 041269b0462c8abeaae7c5b3cfce10c745b0cff4120f184b32721522eb0e0e67
+- card_id: the_imperial_favor
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_imperial_favor.jpg
+    sha256: 929969464abb7cf3f084659f2bf597556f646eb064638436e04aeefdb26d9ef0
+- card_id: the_kami_hear_my_voice
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_kami_hear_my_voice.jpg
+    sha256: ae41f06395c38ca57d4932c0f0b7a0f042efdfe81c211d7641fa20fe12a20fa1
+- card_id: the_kansens_shadow
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_kansens_shadow.jpg
+    sha256: 84ecb8ef6131c319a460fa9efd5581d77239eea5f55d91d82fb84b06eb94bcaf
+- card_id: the_maws_grave
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_maws_grave.jpg
+    sha256: f69c7675fcd6aacfb44188fc7c2384fc1d2cf88d372393f080fb77b6b410f9cf
+- card_id: the_moto_feint
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_moto_feint.jpg
+    sha256: b0d665e7723ca903326768dc751503f2dff0f0cc56023496bc1a631a99f91eee
+- card_id: the_nine_fold_palace
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_nine_fold_palace.jpg
+    sha256: ccf88955cb54b89250cada2519fc6870a10a397ebab2403be9b6b293a58b8d7e
+- card_id: the_ruined_city
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_ruined_city.jpg
+    sha256: 51817c79e672ac9722620a45963faa7dba710e0f7bd7f1b4e52e76393c02829e
+- card_id: the_seventh_tower
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_seventh_tower.jpg
+    sha256: ebeb7b12c559519ef7a203c58455668d580d6901dad4ed5d44f22f5af2aaeb9f
+- card_id: the_shrine_of_lady_sun
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_shrine_of_lady_sun.jpg
+    sha256: 313f1dfe0ce73644bca7f59a152cd25d02599b248749da2fced9b5b9ebde3468
+- card_id: the_spiders_lair
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_spiders_lair.jpg
+    sha256: 0e4b6f5a40edde2a0e3df88823b0ac7371f9ecad4cda209742ee2b778d934f17
+- card_id: the_temple_of_death
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_temple_of_death.jpg
+    sha256: 9488e1ad1602182c4b9d86f776704837ab80f46113b2be6657c89cd2d8923731
+- card_id: the_trackless_road
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_trackless_road.jpg
+    sha256: 7d86ef728b53e9cb5efeaa6e99f1cf002649e1aa916d2a6255f6d30a5cd25f88
+- card_id: the_utaku_plains
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_utaku_plains.jpg
+    sha256: fbbd2c66dc4560078eefcb1bbfc4138c1ccd6d2d406338f531f75c10f265eaa5
+- card_id: the_war_of_dark_fire
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_war_of_dark_fire.jpg
+    sha256: 29d21e73965a89bdf855e93bf5044b39c70e12d68a59edff29e43b231b8d8098
+- card_id: the_western_steppes
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_western_steppes.jpg
+    sha256: e8ff4812f398a1807b7335d9f1c3cce959bcbcc5c69f54db442f244795d4d48f
+- card_id: the_wind_whispers
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: the_wind_whispers.jpg
+    sha256: c04b3b7e0923873f42623c2ddf16df74718fe81c998938755b1fe56319d7e979
+- card_id: to_move_the_shade
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: to_move_the_shade.jpg
+    sha256: c2a582310eb36858256b029635c51d3aafa780990f4c8e620de3097e992e6eaa
+- card_id: togashi_chikato
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: togashi_chikato.jpg
+    sha256: aeb7a0c546ed2fdb2179ca41d961f8fb24004d5dbe0b021248e57e2cffead795
+- card_id: togashi_ikumu
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: togashi_ikumu.jpg
+    sha256: 32d38963f45d1024484dd5b0edfe47ba4bdbdb774570271cdeb7818a603849c3
+- card_id: togashi_satsu_experienced_4
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: togashi_satsu_experienced_4.jpg
+    sha256: c443666bf2d6c724b8b61f7e4b94a9e8fbe367b14699e77ba1e41c807e2a6677
+- card_id: togashis_mask
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: togashis_mask.jpg
+    sha256: 46e236a1503fa1c8bd06175131788c2a661b709efe3141a6cbabc3f17b5432cd
+- card_id: toshi_no_ichi
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: toshi_no_ichi.jpg
+    sha256: 6481514205c31073fed54c7833c1a15cacfc6c43f2351209c390a4f821b16883
+- card_id: toshi_ranbo_guard
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: toshi_ranbo_guard.jpg
+    sha256: 87e50c28e8469623405c941405c95c561154dedbd736d7dc4a3726a040ca2941
+- card_id: trident_formation
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: trident_formation.jpg
+    sha256: a25571461d1e722a41f855b8dc37356d821f85cc59c9df9dce9c686d09abb831
+- card_id: tsi_blade
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: tsi_blade.jpg
+    sha256: dc7521eeaf011b32e2e3d47053b7a8f15864691d85e29c292b7d896f5b1243d3
+- card_id: tsuruchi_akinori
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: tsuruchi_akinori.jpg
+    sha256: c7d7141b67e87898b5cd59f87b0b06f45116ce7415a7f796b15524d28216bcf9
+- card_id: tsuruchi_kimita
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: tsuruchi_kimita.jpg
+    sha256: 70f21b9f769960cfdb9582eac903700bd863e8ffe11c0a797d00b6fadf576fa0
+- card_id: tsuruchi_longbow
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: tsuruchi_longbow.jpg
+    sha256: 9182f7a0ab9e3ecc88da05cbb6fd8ee0c6696bcf5f5b78859f2de4b381b9d04d
+- card_id: twilight
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: twilight.jpg
+    sha256: 36aa2ba43119a761634d29c62ec6588aaf2c08ae0e40f8b5d74326eef507febb
+- card_id: unicorn_master
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: unicorn_master.jpg
+    sha256: b1a9bca3747a9f0da11f876ab5f06432b608430d8755fa7ac9ee561f844760fe
+- card_id: utaku_arisa
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: utaku_arisa.jpg
+    sha256: 16e58893e1b97cf34a34849766fcff0129c2aa394b35c1eb77e6943858f450b6
+- card_id: utaku_chiasa
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: utaku_chiasa.jpg
+    sha256: 5f52100f20198b542a9ccb0d66a63a43fefbaae48063e2568d63ab7608492c48
+- card_id: venomous_steel
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: venomous_steel.jpg
+    sha256: 02e1ab527c8e5d38cb176b1b7f53b594d05ba807d6836ce222dc16e7f34ecc55
+- card_id: vigilance_keep
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: vigilance_keep.jpg
+    sha256: bce049c224806f2b209fb36ededcb19e911040d181ed6049fde8aa82924d053c
+- card_id: village_of_enigmas
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: village_of_enigmas.jpg
+    sha256: 6afc113879b6abb3ca8e533c6516e4e4384ed272f71a8780fef49a8ff52e8cf9
+- card_id: well_prepared
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: well_prepared.jpg
+    sha256: 21657cdc4cabe6f65b5e90697774a8d47a9827f1de2fe448d149a4dce55483e7
+- card_id: western_hub_sake_works
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: western_hub_sake_works.jpg
+    sha256: d2ca1cb32c51521907a808f7c3c848eb691eff2858d35f02aaac3097c15f0191
+- card_id: western_outpost
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: western_outpost.jpg
+    sha256: 4586d4ce154444897366841e425c9a8094b7a0b2334b68119d1b51f15cc9ed12
+- card_id: writ_of_protection
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: writ_of_protection.jpg
+    sha256: 3c4dd0ae0c36f9d4fc60263161a85a61dbdcce68fb10abc6e2be654bd2a7e246
+- card_id: yaichiros_men
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: yaichiros_men.jpg
+    sha256: 8555dad217152b2bb5155e31c79dbdfa8e3597a0a6ebfb68ef6b14071c0ececd
+- card_id: yasuki_miliko_experienced
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: yasuki_miliko_experienced.jpg
+    sha256: 7cc2f41637927c7c207d42218122b968fc9f51bf15fbb65b368a56f220da9c61
+- card_id: yobanjin_alliance
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: yobanjin_alliance.jpg
+    sha256: 823157a857f890cd214164dfaf383d0fec698a12a4b1e244a10c5fb154ddc9a6
+- card_id: yoritomo_bussho
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: yoritomo_bussho.jpg
+    sha256: aed00f05bd8f76183c95384df58183f90755d09b1d729ce15ae7e318b5a415ef
+- card_id: yoritomo_naizen_experienced_2
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: yoritomo_naizen_experienced_2.jpg
+    sha256: 6720b74c137659d421b6e0925dd35db1af7be0006962e651e284dd24dbe129a8
+- card_id: yoritomo_omura
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: yoritomo_omura.jpg
+    sha256: a94179095deb8bf438285716d686c5e5007087499728f5ab1d23fdeae63a563b
+- card_id: young_defender
+  printing_id: promotional_samurai
+  files:
+  - role: front
+    file: young_defender.jpg
+    sha256: 3627188548fff751ae42a27ded3e993e27f625c96742ef59850a3fff604b3545
