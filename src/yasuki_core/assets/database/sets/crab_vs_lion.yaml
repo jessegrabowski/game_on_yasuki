@@ -1,20 +1,47 @@
 set: Crab vs. Lion
 cards:
-  - title: The War Fortress of the Crab
-    type: Stronghold
-    clan: Crab
-    deck: Pre-Game
-    province_strength: 8
-    gold_production: 4
-    starting_honor: 3
-    text: 'Absent Battle/Open, w: Give the current battlefield''s Province +3 strength.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Legacy
-    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
-      the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition border.
-    rarity: Fixed
-    artist: Randy Gallegos
-    number: 1
-    collector_number: Crab 0
+- cardid: 7956
+  title: The Ancestral Home of the Lion
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: <b>Battle/Open, :bow::</b> A target Lion Clan Personality has +2F while attacking.
+  province_strength: 7
+  starting_honor: 6
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
+    the Emerald Edition border.
+  printing_id: '1'
+  rarity: Fixed
+  artist: Wackwitz & Grabski
+  collector_number: Lion 0
+- cardid: 8414
+  title: The War Fortress of the Crab
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: <b>Absent Battle/Open, :bow::</b> Give the current battlefield's Province +3 strength.
+  province_strength: 8
+  starting_honor: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
+    the Emerald Edition border.
+  printing_id: '1'
+  rarity: Fixed
+  artist: Randy Gallegos
+  collector_number: Crab 0

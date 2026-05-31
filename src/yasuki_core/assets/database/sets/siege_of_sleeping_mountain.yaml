@@ -1,1400 +1,1608 @@
 set: Siege of Sleeping Mountain
 cards:
-  - title: Gold Mine
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Mine
-    gold_cost: 2
-    text: 'w: Produce 2 Gold, or 3 Gold if you are a Dragon Clan player.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    card_notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-    rarity: Fixed
-    artist: Joseph Phillips
-    flavor: '"Beneath the palace, the Crystal Chamber rests. Shadows flicker within its walls, and pages of an ancient manuscript
-      turn by themselves. It is a dark place, filled with dreams and anguish. We must be sure of what we do..." - Hitomi Kobai'
-    number: 1
-    collector_number: Dragon 04,Dragon 18,Dragon 21
-
-  - title: Hawks and Falcons
-    type: Holding
-    deck: Dynasty
-    gold_cost: 3
-    text: 'Repeatable Limited, w: Gain 1 Honor.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Mark A.W. Jackson
-    flavor: '"Honor is a woman: one wrong move, and you waste a lifetime of effort." - Ginawa'
-    number: 2
-    collector_number: Brotherhood 07
-
-  - title: Jade Works
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Jade
-    gold_cost: 3
-    text: 'w: Produce 3 Gold. w: Produce 5 Gold, which can only pay for a single Jade card.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Joseph Phillips
-    flavor: Where darkness walks, crystal will light the way, but where the undead march in the Shadowlands, jade will be your
-      salvation.
-    number: 3
-    collector_number: Brotherhood 3
-
-  - title: Large Farm
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Farm
-    gold_cost: 1
-    text: 'w: Produce 2 Gold.'
-    legality:
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    rarity: Fixed
-    artist: Mark A.W. Jackson
-    flavor: It was not until the crystal began to crack beneath her touch that Hitomi realized where her pride had led...
-    number: 4
-    collector_number: Brotherhood 08
-
-  - title: Pearl Bed
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Pearl
-    - Pearl Bed
-    gold_cost: 2
-    text: 'w: Produce 1 Gold, or 2 Gold if you are a Naga player, plus 1 additional Gold for each Pearl Divers in play.'
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    card_notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-    rarity: Fixed
-    artist: Joseph Phillips
-    flavor: The Naga built an entire civilization, one which has been washed away over a thousand years as they slept a dreamless
-      sleep. Now they rise from their slumber, seeking to understand the nature of the world.
-    number: 5
-    collector_number: Naga 06,Naga 11,Naga 23
-
-  - title: Prayer Shrines
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Temple
-    gold_cost: 2
-    text: 'w: Produce 2 Gold, plus, if you are a Brotherhood of Shinsei player, 1 additional Gold for each Ring you control.'
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Sean Murray
-    flavor: '"Pray to the Fortunes for me, Hoshi," Hitomi said, rising from the Ivory Throne. "There is no one left to bury
-      my soul, and I must finish what I have begun."'
-    number: 6
-    collector_number: Brotherhood 04,Brotherhood 20,Brotherhood 24
-
-  - title: Sanctified Temple
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Temple
-    gold_cost: 4
-    text: 'w: Produce 2 Gold.Repeatable Limited, w, : Gain 2 Honor.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    card_notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment,Some of the War
-      of Spirits versions of this card were printed with a Fate back
-    rarity: Fixed
-    artist: Joseph Phillips
-    flavor: '"War is plum blossoms on the water, and I am a willow growing in the stream of peace. My shadow is sunk in it,
-      I cannot follow." - Dangai'
-    number: 7
-    collector_number: Brotherhood 14
-
-  - title: Small Farm
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Farm
-    gold_cost: 0
-    text: 'w: Produce 1 Gold.'
-    legality:
-    - Age of Conquest (Emperor)
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    card_notes: Some of the Anvil of Despair versions of this card were printed with a different text alignment
-    rarity: Fixed
-    artist: Joseph Phillips
-    flavor: '"The Naga carry no food, no stores or supplies on their march," hissed Ginawa. "They steal from the people we leave
-      behind." "Burn the fields," said Takuan, and it was done.'
-    number: 8
-    collector_number: Brotherhood 05
-
-  - title: Hoshi Eisai
-    type: Personality
-    clan: Brotherhood of Shinsei
-    deck: Dynasty
-    keywords:
-    - Monk
-    - Tattooed
-    force: 1
-    chi: 2
-    gold_cost: 6
-    honor_requirement: 0
-    personal_honor: 1
-    text: 'Battle: Twice per battle, set Eisai''s Force equal to equal a target enemy Personality''s.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Ellym Sirac
-    flavor: Mute, she stands between the darkness and the dawn. Eisai is not the answer - she is the Riddle itself...
-    number: 9
-    collector_number: Brotherhood 12
-
-  - title: Ikudaiu
-    type: Personality
-    clan: Brotherhood of Shinsei
-    deck: Dynasty
-    keywords:
-    - Monk
-    force: 2
-    chi: 2
-    gold_cost: 3
-    personal_honor: 1
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Margaret Organ-Kean
-    flavor: The Brotherhood is my world, and the commands of the Tao are my lifeblood. Their path can never stray from Truth.
-    number: 10
-    collector_number: Brotherhood 06
-
-  - title: Kirazo
-    type: Personality
-    clan: Brotherhood of Shinsei
-    deck: Dynasty
-    keywords:
-    - Monk
-    force: 2
-    chi: 3
-    gold_cost: 5
-    honor_requirement: 3
-    personal_honor: 2
-    text: Kirazo has +1F/+1C while there are any Tattooed cards in his army.
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Susan Van Camp
-    flavor: 'War is the only choice: blood calls for blood, and we will trade peace for vengeance.'
-    number: 11
-    collector_number: Brotherhood 09
-
-  - title: Shioda
-    type: Personality
-    clan: Brotherhood of Shinsei
-    deck: Dynasty
-    keywords:
-    - Advisor
-    - Monk
-    force: 1
-    chi: 4
-    gold_cost: 0
-    honor_requirement: 0
-    personal_honor: 2
-    text: 'Will only enter play if you control a Ring.Repeatable Battle/Open, w: Bow your target Temple to straighten your Stronghold.'
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Douglas Shuler
-    flavor: Hitome serves a darker lord. Although she has hidden her taint from mortal eyes, our allies know her blackened heart
-      - and so do we.
-    number: 12
-    collector_number: Brotherhood 02
-
-  - title: Takao
-    extended_title: Takao • Experienced
-    type: Personality
-    clan: Brotherhood of Shinsei
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Acolyte
-    - Experienced
-    - Fire
-    - Monk
-    force: 3
-    chi: 3
-    gold_cost: 8
-    honor_requirement: 0
-    personal_honor: 2
-    text: 'Elemental Reaction: After Takao enters a duel, bow him: Destroy him and the Personality facing him.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: William O'Connor
-    flavor: The world grows weary of blood and treason, and I am eager to see this dark deed finished at last...
-    number: 13
-    collector_number: Brotherhood 01
-
-  - title: Hitomi
-    extended_title: Hitomi • Experienced 3
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Experienced 3
-    - Loyal
-    - Unique
-    - Clan Champion
-    - Dragon Clan
-    - Samurai
-    - Shugenja
-    - Tattooed
-    force: 6
-    chi: 5
-    gold_cost: 14
-    personal_honor: 1
-    text: 'Negate the effects upon Hitomi from Corruption tokens.Battle: Once per battle, Hitomi challenges a target enemy Personality.
-      If she wins, take control of the loser, move him to your home, bow him as he moves, and permanently give him Tattooed.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Michael Phillippi
-    flavor: Obsidian hand, obsidian heart... her quest will destroy the Dragon in order to save the Empire.
-    number: 14
-    collector_number: Dragon 02
-
-  - title: Hitomi Akuai
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Dragon Clan
-    - Tattooed
-    force: 3
-    chi: 3
-    gold_cost: 6
-    personal_honor: 0
-    text: 'Limited: Search your Dynasty deck for an Event and put it in your discard pile.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Ben Peck
-    flavor: He guards the Crystal Chamber, pleasing with his Lady to leave the powers of Shadow contained. Though she would
-      not listen, he will stand with her, desperate to understand her quest for knowledge. Akuai was the first to follow Hitomi
-      on her path of blood, and he will be the last to fall...
-    number: 15
-    collector_number: Dragon 09
-
-  - title: Hitomi Kobai
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Dragon Clan
-    - Hitoden
-    - Tattooed
-    force: 2
-    chi: 2
-    gold_cost: 4
-    personal_honor: 1
-    text: 'After Kobai wins a duel, permanently give him +1F/+1C.Battle: Once per battle, Kobai challenges a target enemy Perseonality.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Theodor Black
-    flavor: If the Dragon are to be victorious, we must be a katana in our Lady's hand, ever ready for her call to action.
-    number: 16
-    collector_number: Dragon 3
-
-  - title: Mirumoto Bujun
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Dragon Clan
-    - Samurai
-    force: 2
-    chi: 3
-    gold_cost: 5
-    honor_requirement: 0
-    personal_honor: 2
-    text: Bujun equips Weapons for 2 less Gold.
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Eric Polak
-    flavor: The fate of the Empire depends on our actions. Our Lady demands nothing less than our lives. We will give her all
-      of that and more.
-    number: 17
-    collector_number: Dragon 07
-
-  - title: Mirumoto Taki
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Dragon Clan
-    - Samurai
-    force: 3
-    chi: 3
-    gold_cost: 6
-    honor_requirement: 3
-    personal_honor: 2
-    text: Taki may attach two Weapons.
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Ron Spencer
-    flavor: I will fight to the death, but I will never cease to question why. One is loyalty, the other, stupidity.
-    number: 18
-    collector_number: Dragon 06
-
-  - title: Balash
-    type: Personality
-    clan: Naga
-    deck: Dynasty
-    keywords:
-    - Bushi
-    - Naga
-    - Nonhuman
-    force: 1
-    chi: 3
-    gold_cost: 4
-    honor_requirement: 0
-    personal_honor: 1
-    text: 'Repeatable Battle, w: Ranged 3 Attack.'
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Craig Maher
-    flavor: Sometimes you must cut away the living flesh to amputate the disease.
-    number: 19
-    collector_number: Naga 08,Naga 12,Naga 22
-
-  - title: Damesh
-    type: Personality
-    clan: Naga
-    deck: Dynasty
-    keywords:
-    - Mountaineer
-    - Naga
-    - Nonhuman
-    force: 2
-    chi: 3
-    gold_cost: 5
-    honor_requirement: 0
-    personal_honor: 2
-    text: While Damesh is in the current attacking army, the strength of the current battlefield's Province is set equal to
-      the lowest strength of all Provinces in the game.
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Steve Bryant
-    flavor: '"I saw him bowing to the Sun as she rose in the morning sky. Of all of his kind, he understands the ways of the
-      Empire best." - Shioda'
-    number: 20
-    collector_number: Naga 09,Naga 14
-
-  - title: Naga Shugenja
-    type: Personality
-    clan: Naga
-    deck: Dynasty
-    keywords:
-    - Naga
-    - Nonhuman
-    - Shugenja
-    force: 1
-    chi: 1
-    gold_cost: 6
-    honor_requirement: 0
-    personal_honor: 1
-    text: 'Repeatable Battle/Open, w: Give all Naga cards +1F.'
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Ron Spencer
-    flavor: '"The chant of the Cobra spell-binders tore at the Mirumoto on the walls, parting mind from reason. A thousand men
-      died that day and a thousand will always wish they had..." - Ikudaiu'
-    number: 21
-    collector_number: Naga 10
-
-  - title: Naga Warlord
-    type: Personality
-    clan: Naga
-    deck: Dynasty
-    keywords:
-    - Naga
-    - Nonhuman
-    - Samurai
-    force: 3
-    chi: 2
-    gold_cost: 5
-    honor_requirement: 0
-    personal_honor: 2
-    text: All other Naga cards in the Naga Warlord's unit have +1F.
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Douglas Shuler
-    flavor: '"The field was covered in their hatred, but he looked at me with calm eyes. ''The Akasha moves within me,'' whispered
-      the Asp generald, and then, with his death, faded into dust." - Toku'
-    number: 22
-    collector_number: Naga 02
-
-  - title: Qamar
-    type: Personality
-    clan: Naga
-    deck: Dynasty
-    keywords:
-    - Loyal
-    - Tactician
-    - Unique
-    - Champion
-    - Naga
-    - Nonhuman
-    force: 6
-    chi: 4
-    gold_cost: 14
-    honor_requirement: 0
-    personal_honor: 3
-    text: 'Negate all Fear effects upon cards in this unit.Battle/Open: Any number of times per turn, bow Qamar and target a
-      Naga Personality: Straighten him.'
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Randy Elliott
-    flavor: At the gate of the Dragon palace he screamed, and its walls shook with the fury of a thousand souls...
-    number: 23
-    collector_number: Naga 16
-
-  - title: Shagara
-    type: Personality
-    clan: Naga
-    deck: Dynasty
-    keywords:
-    - Bushi
-    - Naga
-    - Nonhuman
-    force: 2
-    chi: 1
-    gold_cost: 5
-    honor_requirement: 0
-    personal_honor: 1
-    text: 'Battle: Any number of times per turn, bow Shagara: Ranged 2 Attack.'
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Brian Snoddy
-    flavor: '"By the all-knowing Pale Eye, I swear it. These furred beast will not live to see another dawn!"'
-    number: 24
-    collector_number: Naga 05
-
-  - title: Ginawa
-    type: Personality
-    clan: Toturi's Army
-    deck: Dynasty
-    keywords:
-    - Samurai
-    - Toturi's Army
-    force: 2
-    chi: 3
-    gold_cost: 4
-    personal_honor: 1
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Wackwitz & Daily
-    flavor: '"A bloodied sword in a red saya hangs by his side. Ask him his name, and he scowls and glares. Some men have secrets
-      you don''t want to understand..." - Hasame'
-    number: 25
-    collector_number: Toturi's Army 01,Toturi's Army 09,Toturi's Army 17
-
-  - title: Hasame
-    type: Personality
-    clan: Toturi's Army
-    deck: Dynasty
-    keywords:
-    - Samurai
-    - Toturi's Army
-    force: 2
-    chi: 2
-    gold_cost: 3
-    personal_honor: 1
-    text: Will not attach Nonhuman Followers.
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    card_notes: Some variants of the Hidden Emperor 1 version of this card were printed with alternate flavor text.
-    rarity: Fixed
-    artist: Shane Holloway
-    flavor: He struggles to forget his father's name and take a new path, but secrets hanf heavy in his mind and he can never
-      forget his mother's bloodied cry.
-    number: 26
-    collector_number: Toturi's Army 05
-
-  - title: Seppun Hotaitaka
-    type: Personality
-    clan: Toturi's Army
-    deck: Dynasty
-    keywords:
-    - Samurai
-    - Toturi's Army
-    force: 3
-    chi: 3
-    gold_cost: 7
-    personal_honor: 2
-    text: 'After you attach a Follower to Hotaitaka from your hand: Draw an additional card during your next End Phase.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Mark A.W. Jackson
-    flavor: '"He is the only sun of the murdered Seppun daimyo, and he fights his first war for the honor of his house. But
-      how long before he discovers the truth?" - Akodo Kage, sensei of the Lion'
-    number: 27
-    collector_number: Toturi's Army 13
-
-  - title: Takuan
-    type: Personality
-    clan: Toturi's Army
-    deck: Dynasty
-    keywords:
-    - Lieutenant
-    - Samurai
-    - Toturi's Army
-    force: 4
-    chi: 3
-    gold_cost: 11
-    honor_requirement: 0
-    personal_honor: 2
-    text: All other Toturi's Army Personalities in Takuan's army have +1F/+1C.
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Dean Vincent
-    flavor: '"The Emperor is missing and I stand in his place as defender of his Jade Throne. Is there any man in the Empire
-      who would dare defy me?"'
-    number: 28
-    collector_number: Toturi's Army 04
-
-  - title: Toku
-    type: Personality
-    clan: Toturi's Army
-    deck: Dynasty
-    keywords:
-    - Samurai
-    - Toturi's Army
-    force: 0
-    chi: 1
-    gold_cost: 0
-    personal_honor: 2
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Stacy Drum
-    flavor: Once captain of the Imperial Guard, now Toku stands at the side of the Regent, prepared to destroy all who threaten
-      the peace of the Jade Empire.
-    number: 29
-    collector_number: Toturi's Army 03
-
-  - title: Togashi Hoshi
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Unique
-    - Dragon
-    - Man-Beast
-    - Nonhuman
-    force: 7
-    chi: 7
-    gold_cost: 13
-    honor_requirement: 5
-    personal_honor: 4
-    text: Enters play paying 2 less Gold if you are a Brotherhood of Shinsei player.Will not attach Followers or Armor.Hoshi
-      will not assign to a battlefiled where the enemy army contains a Dragon.
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    flavor: Thunder shook the Dragon palace as Hoshi stared down at the battle's aftermath. "Never again will Dragon fight Dragon,"
-      he vowed. "Never again."
-    number: 30
-
-  - title: Heavy Infantry
-    type: Follower
-    deck: Fate
-    force: 5
-    chi: 0
-    gold_cost: 8
-    focus: 2
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Stacy Drum
-    flavor: '"When the battle seemed most hopeless - that was when the Regent sent us in. One stroke, and the road to the palace
-      opened wide before us, a swath of dead Naga in our path. What could resist our charge? The Dragon were broken, the Naga
-      fleeing, and only the monks of the Brotherhood stood in our way. Let the Emperor''s will be done!" - Hasame'
-    number: 31
-    collector_number: Toturi's Army 04
-
-  - title: Light Infantry
-    type: Follower
-    deck: Fate
-    force: 2
-    chi: 0
-    gold_cost: 1
-    focus: 1
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Kevin Ward
-    flavor: '"Wherever the daimyos and warlords go, the infantry must follow. For their Lord''s dishonor, the infantry die,
-      and for the bravery of their men, the nobility are rewarded." - Ginawa'
-    number: 32
-    collector_number: Brotherhood 03
-
-  - title: Medium Infantry
-    type: Follower
-    deck: Fate
-    force: 3
-    chi: 0
-    gold_cost: 3
-    focus: 2
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Mike Raabe
-    flavor: Dawn came, and the forces of the Emperor leapt to battle. The Naga turned, driving them away, but Hoshi's warriors
-      charged onward, letting nothing come between and their goal.... - The Siege of Sleeping Mountain, vol. I
-    number: 33
-    collector_number: Brotherhood 10
-
-  - title: Naga Bowmen
-    type: Follower
-    deck: Fate
-    keywords:
-    - Naga
-    - Nonhuman
-    force: 1
-    chi: 0
-    gold_cost: 6
-    honor_requirement: 1
-    focus: 2
-    text: 'Repeatable Battle, w: Ranged 3 Attack.'
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Randy Elliott
-    flavor: All I ask of the Bright Eye and the Pale is that my soul may once again do battle with the Foul!
-    number: 34
-    collector_number: Naga 06
-
-  - title: Naga Bushi
-    type: Follower
-    deck: Fate
-    keywords:
-    - Bushi
-    - Naga
-    - Nonhuman
-    force: 2
-    chi: 0
-    gold_cost: 3
-    honor_requirement: 1
-    focus: 2
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Randy Gallegos
-    flavor: The Dark One, the Unmaker, walks in the Heavens now. Soon it will be the Time of Undoing, and all the world will
-      know the wrath of the Darkness That Moves. These Dragon have released the Shadow. They have scorned our wisdom, refused
-      our demands, and given their lives, all for the return of a greater evil. May the Twin eyes have mercy on their souls.
-    number: 35
-    collector_number: Brotherhood 06
-
-  - title: Naga Spearmen
-    type: Follower
-    deck: Fate
-    keywords:
-    - Naga
-    - Nonhuman
-    force: 2
-    chi: 0
-    gold_cost: 5
-    honor_requirement: 1
-    focus: 2
-    text: 'Repeatable Battle, w: Ranged 2 Attack.'
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: William O'Connor
-    number: 36
-    collector_number: Naga 18
-
-  - title: Spearmen
-    type: Follower
-    deck: Fate
-    force: 2
-    chi: 0
-    gold_cost: 3
-    focus: 2
-    text: 'Battle, w: Ranged 2 Attack (Destroy a target enemy Follower, or Personality without Followers, with 2 or lower Force).'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    card_notes: Some variants of the Battle of Beiden Pass version of this card were printed with an alternate flavor text.
-    rarity: Fixed
-    artist: Pete Garcia
-    flavor: '"The Naga withdrew leaving behind their dead and wounded, passing into a rift between the Heavens and the World.
-      On the other side, Imperial troops saw only a tainted land and a tall stone wall..." - The Siege of Sleeping Moutnain,
-      vol. III'
-    number: 37
-    collector_number: Naga 03
-
-  - title: Naginata
-    type: Item
-    deck: Fate
-    keywords:
-    - Weapon
-    - Polearm
-    - Two-Handed
-    force: 1
-    chi: 2
-    gold_cost: 2
-    focus: 1
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    mrp: Costs 1 less Gold; is now Two-Handed.
-    rarity: Fixed
-    artist: Rob Alexander
-    flavor: '"Kokujin!" I screamed, but it was too late. His hands were on Togashi''s swords, and his lips cracked in a bloody
-      smile. Then the traitor fled, back to the Shadowlands that had spawned him. One day, I swore, his treachery would be rewarded
-      with death."'
-    number: 38
-    collector_number: Brotherhood 11
-
-  - title: No-Dachi
-    type: Item
-    deck: Fate
-    keywords:
-    - Weapon
-    force: 2
-    chi: 1
-    gold_cost: 4
-    focus: 1
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    card_notes: Some variants of the Pearl Edition version of this card were printed with a different flavor text alignment.
-    rarity: Fixed
-    artist: Mark Poole
-    flavor: '"On the courtyard, over the shattered bodies of my brothers, I looked up into the monk''s eyes and knew my fate.
-      But if I were to die, this man would share my fate..." - from The Tale of Hitomi Kobai'
-    number: 39
-    collector_number: Dragon 08
-
-  - title: Ring of the Void
-    type: Ring
-    deck: Fate
-    keywords:
-    - Unique
-    - Void
-    focus: 4
-    text: 'You may discard this Ring from your hand to use its Void ability without cost.Limited: Play if you have two or fewer
-      Rings in play. Discard your hand. Void Limited, w: Draw a card. If you now have more cards in your hand than any other
-      player, discard a card.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Michael Phillippi
-    flavor: In a moment of breath, the world pauses, waits, and listens for the future. Live so that when the world speaks,
-      you can answer.
-    number: 40
-    collector_number: Brotherhood 00
-
-  - title: Another Time
-    type: Strategy
-    deck: Fate
-    focus: 0
-    text: As a Focus Effect, discard all focused cards (their unresolved Focus Effects don't happen), and end this duel now,
-      without resolution.
-    legality:
-    - A Brother's Destiny (Twenty Festivals)
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Ben Peck
-    flavor: '"Hitomi!" Hoshi screamed, the earth rocking beneath him as the ground shook with fury. "No, my brother," she replied,
-      her voice as wind. "Our battle will have to wait for another time..."'
-    number: 41
-    collector_number: Brotherhood 22
-
-  - title: Arrows from the Woods
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Ranged 2 Attack.Reaction: After you target another player''s card with a Ranged Attack: Increase that Ranged
-      Attack''s strength by 2.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Shattered Empire
-    card_notes: The Pearl Edition version was misprinted with a 7 Gold Cost.
-    rarity: Fixed
-    artist: Ernie Chan
-    flavor: As the Imperial units charged, the trees moved, and a rain of death fell upon the Regent's men. A futile scream,
-      a bloodied cry, and then all was silent once more.
-    number: 42
-    collector_number: Naga 07
-
-  - title: Block Supply Lines
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Move home a target attacking Personality. Bow his unit as he moves.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Conquest (Emperor)
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Joseph Phillips
-    flavor: '"An army fights with its belly, not its weapons. Remove the source, and you will remove the thorn." - Master Suana'
-    number: 43
-    collector_number: Brotherhood 19
-
-  - title: Bountiful Harvest
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'Limited: All Holdings produce one additional Gold each time they produce Gold (until the turn ends).'
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: K.C. Lancaster
-    flavor: '"So, whispered Hitomi, "they think that we shall starve?" A smile crossed the Lady''s cold, obsidian face. "Open
-      the storehouse, and let our forethought preserve our lives."'
-    number: 44
-    collector_number: Dragon 11
-
-  - title: Careful Planning
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Battle/Open: Target a Personality, who must be unbowed if he is yours: Give him +1F/+1C.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Mark A.W. Jackson
-    flavor: For eight hundred years She has been trapped in the light, hidden away from the Darkness. Now, at last, Her Master's
-      will won Her freedom from the crystal cage - a tiny crack, bit was all the Shapeshifter would need.
-    number: 45
-    collector_number: Brotherhood 2
-
-  - title: Charge
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Battle: Target an attacking Personality: Give him +2F, or +3F if he is Lion Clan (until the turn ends).'
-    legality:
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Sean Murray
-    flavor: When the scream of the Qamar tore the gates of the Dragon from the stone, a flood of Mirumoto stood ready behind
-      the wall. Before the wind could move the trees, they were upon us. - The Siege of Sleeping Mountain, vol. II
-    number: 46
-    collector_number: Dragon 01
-
-  - title: Explosives
-    type: Strategy
-    deck: Fate
-    gold_cost: 6
-    focus: 2
-    text: 'Limited: Target a Holding: Destroy it.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Bob Hobbs
-    flavor: The Imperial Guard charged the cliff side, his swords ready. Then, a flash of light, a thounderous crash, and a
-      thousand rocks leapt down from above.
-    number: 47
-    collector_number: Brotherhood 07
-
-  - title: Falling Star Strike
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Kiho
-    gold_cost: 0
-    focus: 2
-    text: 'Battle: Bow your performing Monk or Shugenja and target an enemy Personality: Reduce his Force by an amount equal
-      to your performer''s Chi.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: William O'Connor
-    flavor: '"Death is not a burden; it is a blessing. When you hear the call of duty, you must follow - and know that you will
-      once more rise to join us." - Shagara'
-    number: 48
-    collector_number: Brotherhood 01
-
-  - title: Iaijutsu Challenge
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Iaijutsu
-    gold_cost: 0
-    focus: 2
-    text: 'Iaijutsu Limited: Your target performing unbowed Personality challenges another player''s target Personality. He
-      may refuse; if he did, dishonor him and his controller loses 7 Honor. The winner gains 5 Honor. Destroy the loser.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Joseph Phillips
-    flavor: '"Hoshi," she breathed, her black hand clenching a shard of crystal, "Now, at last, I see the truth..."'
-    number: 49
-    collector_number: Dragon 15
-
-  - title: Iaijutsu Duel
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Iaijutsu
-    gold_cost: 0
-    focus: 2
-    text: 'Iaijutsu Battle: Your target performing unbowed Personality challenges a target enemy Personality. The winner gains
-      5 Honor. Destroy the loser.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Joseph Phillips
-    flavor: Bloodied, eyes filled with pain, he steps at last into the court of the Dragon palace. Only a woman stands now between
-      his claim and his father's throne. A woman, and nothing more.
-    number: 50
-    collector_number: Dragon 07
-
-  - title: Kolat Assassin
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Assassin
-    - Kolat
-    gold_cost: 10
-    focus: 3
-    text: 'Limited: Target a Personality with 4 or less Chi: Destroy him. Lose 4 Honor.Limited: Target a Retainer: Destroy it.
-      Lose 4 Honor.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Carl Frank
-    flavor: There are those who say that the world moves at the whim of some god or demon, that the events of history are scenes
-      woven into the tapestry of time. They are wrong. All futures are chosen by the hand of man.
-    number: 51
-    collector_number: Dragon 06
-
-  - title: Mushin
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'Battle: Take two additional Battle actions after this one.'
-    legality:
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Audrey Corman
-    flavor: Eisai smiled, watching Hoshi as he turned his eyes from hers. Deep inside, she was already was already one with
-      him - something more than mortal and less than infinite...
-    number: 52
-    collector_number: Brotherhood 05
-
-  - title: Ninja Thief
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Ninja
-    gold_cost: 2
-    focus: 2
-    text: 'Limited: Target a Personality''s Item and another Personality: Transfer the first target to the second. Lose 3 Honor.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Matt Busch
-    flavor: Outside the battle, the shadows moved. They passed where light could not, and when they found their anceint Lady
-      at last, they took Her far away...
-    number: 53
-    collector_number: Dragon 09
-
-  - title: Outflank
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Battle: Target a defending Personality who must be unbowed if he is yours: Give him +3F.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Pete Garcia
-    flavor: '"A man''s greatest weakness lies where he cannot see the truth." - from The New Tao'
-    number: 54
-    collector_number: Dragon 21
-
-  - title: Ryoku
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Kiho
-    gold_cost: 0
-    focus: 2
-    text: 'Battle: Bow your performing Monk and target the enemy Personality with the lowest Chi (your choice if there is a
-      tie): Move him home.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Heather Bruton
-    flavor: The old monk raised his hands, and the wind howled through the Dragon palace. "Go home, young one," he smiled at
-      me. "Your death is not this day."
-    number: 55
-    collector_number: Brotherhood 09
-
-  - title: Sneak Attack
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Engage: The Attacker has the first opportunity to take a Battle action or pass in this battle.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    mrp: Is now an Engage action.
-    rarity: Fixed
-    artist: David Trowbridge
-    flavor: The dawn had not yet come, but the flicker of the last stars showed movement through the hills. "Awake!" the Naga
-      guard cried, but it was not enough.
-    number: 56
-    collector_number: Brotherhood 12
-
-  - title: Strength of My Ancestors
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Kiho
-    gold_cost: 0
-    focus: 1
-    text: 'Battle/Open: Bow your performing Monk or Shugenja and target your unbowed Personality: Give him +2F/+2C.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    card_notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-    rarity: Fixed
-    artist: Jeff Reitz
-    flavor: '"She carries four swords - her own and those of our ancient Champion - and in them rest the soul of the first Dragon,
-      Togashi. Hitomi''s burden is heavy, but her ancestors share the weight." - Mirumoto Bujun'
-    number: 57
-    collector_number: Brotherhood 04
-
-  - title: The Turtle's Shell
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Interrupt: Negate the action''s Melee or Ranged Attacks.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Carl Frank
-    flavor: '"Nagas have bows, you say?" Toku smiled grimly. "I never noticed."'
-    number: 58
-    collector_number: Toturi's Army 08,Toturi's Army 21
-
-  - title: The House of Tao
-    type: Stronghold
-    clan: Brotherhood of Shinsei
-    deck: Pre-Game
-    province_strength: 5
-    gold_production: 3
-    starting_honor: 4
-    text: After all players reveal Strongholds, you may search your Fate deck for a Ring and put it into play.After you put
-      a Shadowlands card into play, remove all your Rings from the game.
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    card_notes: There were two versions of the Hidden Emperor 3 printing of this card. One had a Dynasty back and was a Fixed
-      card in the starter deck, one had a Fate back and was a Rare in the booster packs.
-    rarity: Fixed
-    artist: Randy Asplund-Faith
-    number: 59
-    collector_number: Brotherhood 00
-
-  - title: The Mountain Keep of the Dragon
-    type: Stronghold
-    clan: Dragon
-    deck: Pre-Game
-    province_strength: 5
-    gold_production: 4
-    starting_honor: 4
-    text: After one of your Provinces is destroyed, permanently give each of your remaining Provinces +2 strength.
-    legality:
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    card_notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back of
-      the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition border.
-    rarity: Fixed
-    artist: Ben Peck
-    number: 60
-    collector_number: Dragon 00
-
-  - title: The Naga Stronghold
-    type: Stronghold
-    clan: Naga
-    deck: Pre-Game
-    keywords:
-    - Naga
-    province_strength: 6
-    gold_production: 3
-    starting_honor: 3
-    text: 'Repeatable Limited, w: Shuffle a target Naga Personality or Follower in your discard pile back into the appropriate
-      deck.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    rarity: Fixed
-    artist: Al Skaar
-    number: 61
-    collector_number: Naga 00
-
-  - title: The Palace of Otosan Uchi
-    type: Stronghold
-    clan: Toturi's Army
-    deck: Pre-Game
-    province_strength: 7
-    gold_production: 4
-    starting_honor: 4
-    text: 'If you are the only Toturi''s Army player, you begin the game with control of the Imperial Favor.Your Imperial cards
-      in and out of play have -2 Gold Cost.Reaction: When paying for a Follower attaching to one of your Personalities, reduce
-      its cost by an amount equal to the Personality''s Force until it is paid.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    card_notes: The promo version of this Stronghold was misprinted with the wrong title
-    rarity: Fixed
-    artist: Eric David Anderson
-    number: 62
-    collector_number: Toturi's Army 00
+- cardid: 410
+  title: Another Time
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: As a Focus Effect, discard all focused cards <i>(their unresolved Focus Effects don't happen)</i>,
+    and end this duel now, without resolution.
+  focus: 0
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - War of the Seals (Onyx Edition)
+  printing_id: '6'
+  rarity: Fixed
+  artist: Ben Peck
+  flavor_text: <i>"Hitomi!" Hoshi screamed, the earth rocking beneath him as the ground shook with fury.
+    "No, my brother," she replied, her voice as wind. "Our battle will have to wait for another time..."</i>
+  collector_number: Brotherhood 22
+- cardid: 475
+  title: Arrows from the Woods
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Ranged 2 Attack.<br><b>Reaction:</b> After you target another player''s card with
+    a Ranged Attack: Increase that Ranged Attack''s strength by 2.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Shattered Empire
+  notes: The Pearl Edition version was misprinted with a 7 Gold Cost.
+  printing_id: '7'
+  rarity: Fixed
+  artist: Ernie Chan
+  flavor_text: <i>As the Imperial units charged, the trees moved, and a rain of death fell upon the Regent's
+    men. A futile scream, a bloodied cry, and then all was silent once more.</i>
+  collector_number: Naga 07
+- cardid: 676
+  title: Balash
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  keywords:
+  - Bushi
+  - Naga
+  - Nonhuman
+  text: <b>Repeatable Battle, :bow::</b> Ranged 3 Attack.
+  gold_cost: 4
+  force: 1
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '4'
+  rarity: Fixed
+  artist: Craig Maher
+  flavor_text: <i>Sometimes you must cut away the living flesh to amputate the disease.</i>
+  collector_number: Naga 08
+- cardid: 711
+  title: Basecamp
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: ':bow:: Produce 2 Gold.<br>:bow:: When paying for a Follower, Unaligned Samurai, or Toturi''s
+    Army Personality, if you are a Toturi''s Army player, produce 4 Gold which may only pay for that card.'
+  gold_cost: 3
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Shattered Empire
+  printing_id: '4'
+  rarity: Fixed
+  artist: Mark A.W. Jackson
+  flavor_text: <i>"Loyalty is not a means to an end. It is both a means and an end." - Seppun Hotaitaka</i>
+  collector_number: Toturi's Army 14
+- cardid: 1045
+  title: Block Supply Lines
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home a target attacking Personality. Bow his unit as he moves.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  printing_id: '13'
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: <i>"An army fights with its belly, not its weapons. Remove the source, and you will remove
+    the thorn." - Master Suana</i>
+  collector_number: Brotherhood 19
+- cardid: 1118
+  title: Bountiful Harvest
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Limited:</b> All Holdings produce one additional Gold each time they produce Gold <i>(until
+    the turn ends)</i>.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '6'
+  rarity: Fixed
+  artist: K.C. Lancaster
+  flavor_text: <i>"So, whispered Hitomi, "they think that we shall starve?" A smile crossed the Lady's
+    cold, obsidian face. "Open the storehouse, and let our forethought preserve our lives."</i>
+  collector_number: Dragon 11
+- cardid: 1217
+  title: Careful Planning
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle/Open:</b> Target a Personality, who must be unbowed if he is yours: Give him +1F/+1C.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '10'
+  rarity: Fixed
+  artist: Mark A.W. Jackson
+  flavor_text: <i>For eight hundred years She has been trapped in the light, hidden away from the Darkness.
+    Now, at last, Her Master's will won Her freedom from the crystal cage - a tiny crack, bit was all
+    the Shapeshifter would need.</i>
+  collector_number: Brotherhood 2
+- cardid: 1298
+  title: Charge
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target an attacking Personality: Give him +2F, or +3F if he is Lion Clan <i>(until
+    the turn ends)</i>.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  printing_id: '11'
+  rarity: Fixed
+  artist: Sean Murray
+  flavor_text: <i>When the scream of the Qamar tore the gates of the Dragon from the stone, a flood of
+    Mirumoto stood ready behind the wall. Before the wind could move the trees, they were upon us. - The
+    Siege of Sleeping Mountain, vol. II</i>
+  collector_number: Dragon 01
+- cardid: 1807
+  title: Damesh
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  keywords:
+  - Mountaineer
+  - Naga
+  - Nonhuman
+  text: While Damesh is in the current attacking army, the strength of the current battlefield's Province
+    is set equal to the lowest strength of all Provinces in the game.
+  gold_cost: 5
+  force: 2
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: Steve Bryant
+  flavor_text: <i>"I saw him bowing to the Sun as she rose in the morning sky. Of all of his kind, he
+    understands the ways of the Empire best." - Shioda</i>
+  collector_number: Naga 09
+- cardid: 2415
+  title: Explosives
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Target a Holding: Destroy it.'
+  gold_cost: 6
+  focus: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '9'
+  rarity: Fixed
+  artist: Bob Hobbs
+  flavor_text: <i>The Imperial Guard charged the cliff side, his swords ready. Then, a flash of light,
+    a thounderous crash, and a thousand rocks leapt down from above.</i>
+  collector_number: Brotherhood 07
+- cardid: 2456
+  title: Falling Star Strike
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Battle:</b> Bow your performing Monk or Shugenja and target an enemy Personality: Reduce his
+    Force by an amount equal to your performer''s Chi.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"Death is not a burden; it is a blessing. When you hear the call of duty, you must follow
+    - and know that you will once more rise to join us." - Shagara</i>
+  collector_number: Brotherhood 01
+- cardid: 2642
+  title: Forest
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Forest
+  text: ':bow:: Produce 1 Gold.<br>:bow::When paying for a Nonhuman Personality or Follower, produce 2
+    Gold which may only pay for that card.'
+  gold_cost: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Some of the Shadowlands versions of this card were printed with a different flavor text
+  printing_id: '8'
+  rarity: Fixed
+  artist: Mark A.W. Jackson
+  flavor_text: <i>"The way to Enlightenment is hidden from the pattern of the sun through trees." - from
+    The New Tao</i>
+  collector_number: Naga 04
+- cardid: 2809
+  title: Ginawa
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Toturi's Army
+  keywords:
+  - Samurai
+  - Toturi's Army
+  gold_cost: 4
+  force: 2
+  chi: 3
+  personal_honor: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '6'
+  rarity: Fixed
+  artist: Wackwitz & Daily
+  flavor_text: <i>"A bloodied sword in a red saya hangs by his side. Ask him his name, and he scowls and
+    glares. Some men have secrets you don't want to understand..." - Hasame</i>
+  collector_number: Toturi's Army 01
+- cardid: 2867
+  title: Gold Mine
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Mine
+  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Dragon Clan player.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+  printing_id: '14'
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: <i>"Beneath the palace, the Crystal Chamber rests. Shadows flicker within its walls, and
+    pages of an ancient manuscript turn by themselves. It is a dark place, filled with dreams and anguish.
+    We must be sure of what we do..." - Hitomi Kobai</i>
+  collector_number: Dragon 04
+- cardid: 2988
+  title: Hasame
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Toturi's Army
+  keywords:
+  - Samurai
+  - Toturi's Army
+  text: Will not attach Nonhuman Followers.
+  gold_cost: 3
+  force: 2
+  chi: 2
+  personal_honor: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Some variants of the Hidden Emperor 1 version of this card were printed with alternate flavor
+    text.
+  printing_id: '2'
+  rarity: Fixed
+  artist: Shane Holloway
+  flavor_text: <i>He struggles to forget his father's name and take a new path, but secrets hanf heavy
+    in his mind and he can never forget his mother's bloodied cry.</i>
+  collector_number: Toturi's Army 05
+- cardid: 3004
+  title: Hawks and Falcons
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: <b>Repeatable Limited, :bow::</b> Gain 1 Honor.
+  gold_cost: 3
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '9'
+  rarity: Fixed
+  artist: Mark A.W. Jackson
+  flavor_text: '<i>"Honor is a woman: one wrong move, and you waste a lifetime of effort." - Ginawa</i>'
+  collector_number: Brotherhood 07
+- cardid: 3043
+  title: Heavy Infantry
+  types:
+  - Follower
+  decks:
+  - Fate
+  gold_cost: 8
+  focus: 2
+  force: 5
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '13'
+  rarity: Fixed
+  artist: Stacy Drum
+  flavor_text: <i>"When the battle seemed most hopeless - that was when the Regent sent us in. One stroke,
+    and the road to the palace opened wide before us, a swath of dead Naga in our path. What could resist
+    our charge? The Dragon were broken, the Naga fleeing, and only the monks of the Brotherhood stood
+    in our way. Let the Emperor's will be done!" - Hasame</i>
+  collector_number: Toturi's Army 04
+- cardid: 3355
+  title: Hitomi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hitomi • Experienced 3
+  clans:
+  - Dragon
+  keywords:
+  - Experienced 3
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Dragon Clan
+  - Samurai
+  - Shugenja
+  - Tattooed
+  text: Negate the effects upon Hitomi from Corruption tokens.<br><b>Battle:</b> Once per battle, Hitomi
+    challenges a target enemy Personality. If she wins, take control of the loser, move him to your home,
+    bow him as he moves, and permanently give him <b>Tattooed</b>.
+  gold_cost: 14
+  force: 6
+  chi: 5
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: Michael Phillippi
+  flavor_text: <i>Obsidian hand, obsidian heart... her quest will destroy the Dragon in order to save
+    the Empire.</i>
+  collector_number: Dragon 02
+- cardid: 3357
+  title: Hitomi Akuai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Tattooed
+  text: <b>Limited:</b> Search your Dynasty deck for an Event and put it in your discard pile.
+  gold_cost: 6
+  force: 3
+  chi: 3
+  personal_honor: 0
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: Ben Peck
+  flavor_text: <i>He guards the Crystal Chamber, pleasing with his Lady to leave the powers of Shadow
+    contained. Though she would not listen, he will stand with her, desperate to understand her quest
+    for knowledge. Akuai was the first to follow Hitomi on her path of blood, and he will be the last
+    to fall...</i>
+  collector_number: Dragon 09
+- cardid: 3375
+  title: Hitomi Kobai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Hitoden
+  - Tattooed
+  text: After Kobai wins a duel, permanently give him +1F/+1C.<br><b>Battle:</b> Once per battle, Kobai
+    challenges a target enemy Perseonality.
+  gold_cost: 4
+  force: 2
+  chi: 2
+  personal_honor: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: Theodor Black
+  flavor_text: <i>If the Dragon are to be victorious, we must be a katana in our Lady's hand, ever ready
+    for her call to action.</i>
+  collector_number: Dragon 3
+- cardid: 3462
+  title: Hoshi Eisai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Brotherhood of Shinsei
+  keywords:
+  - Monk
+  - Tattooed
+  text: <b>Battle:</b> Twice per battle, set Eisai's Force equal to equal a target enemy Personality's.
+  gold_cost: 6
+  force: 1
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: Ellym Sirac
+  flavor_text: <i>Mute, she stands between the darkness and the dawn. Eisai is not the answer - she is
+    the Riddle itself...</i>
+  collector_number: Brotherhood 12
+- cardid: 3547
+  title: Iaijutsu Challenge
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Iaijutsu
+  text: <b>Iaijutsu Limited:</b> Your target performing unbowed Personality challenges another player's
+    target Personality. He may refuse; if he did, dishonor him and his controller loses 7 Honor. The winner
+    gains 5 Honor. Destroy the loser.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '10'
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: <i>"Hoshi," she breathed, her black hand clenching a shard of crystal, "Now, at last, I
+    see the truth..."</i>
+  collector_number: Dragon 15
+- cardid: 3548
+  title: Iaijutsu Duel
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Iaijutsu
+  text: <b>Iaijutsu Battle:</b> Your target performing unbowed Personality challenges a target enemy Personality.
+    The winner gains 5 Honor. Destroy the loser.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '10'
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: <i>Bloodied, eyes filled with pain, he steps at last into the court of the Dragon palace.
+    Only a woman stands now between his claim and his father's throne. A woman, and nothing more.</i>
+  collector_number: Dragon 07
+- cardid: 3663
+  title: Ikudaiu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Brotherhood of Shinsei
+  keywords:
+  - Monk
+  gold_cost: 3
+  force: 2
+  chi: 2
+  personal_honor: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: Margaret Organ-Kean
+  flavor_text: <i>The Brotherhood is my world, and the commands of the Tao are my lifeblood. Their path
+    can never stray from Truth.</i>
+  collector_number: Brotherhood 06
+- cardid: 4036
+  title: Jade Works
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Jade
+  text: <b>:bow::</b> Produce 3 Gold. <br><b>:bow::</b> Produce 5 Gold, which can only pay for a single
+    Jade card.
+  gold_cost: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '10'
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: <i>Where darkness walks, crystal will light the way, but where the undead march in the
+    Shadowlands, jade will be your salvation.</i>
+  collector_number: Brotherhood 3
+- cardid: 4359
+  title: Kirazo
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Brotherhood of Shinsei
+  keywords:
+  - Monk
+  text: Kirazo has +1F/+1C while there are any Tattooed cards in his army.
+  gold_cost: 5
+  force: 2
+  chi: 3
+  honor_requirement: 3
+  personal_honor: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: Susan Van Camp
+  flavor_text: '<i>War is the only choice: blood calls for blood, and we will trade peace for vengeance.</i>'
+  collector_number: Brotherhood 09
+- cardid: 4514
+  title: Kolat Assassin
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Assassin
+  - Kolat
+  text: '<b>Limited:</b> Target a Personality with 4 or less Chi: Destroy him. Lose 4 Honor.<br><b>Limited:</b>
+    Target a Retainer: Destroy it. Lose 4 Honor.'
+  gold_cost: 10
+  focus: 3
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '10'
+  rarity: Fixed
+  artist: Carl Frank
+  flavor_text: <i>There are those who say that the world moves at the whim of some god or demon, that
+    the events of history are scenes woven into the tapestry of time. They are wrong. All futures are
+    chosen by the hand of man.</i>
+  collector_number: Dragon 06
+- cardid: 4664
+  title: Large Farm
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  text: ':bow:: Produce 2 Gold.'
+  gold_cost: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  printing_id: '6'
+  rarity: Fixed
+  artist: Mark A.W. Jackson
+  flavor_text: <i>It was not until the crystal began to crack beneath her touch that Hitomi realized where
+    her pride had led...</i>
+  collector_number: Brotherhood 08
+- cardid: 4734
+  title: Light Infantry
+  types:
+  - Follower
+  decks:
+  - Fate
+  gold_cost: 1
+  focus: 1
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '11'
+  rarity: Fixed
+  artist: Kevin Ward
+  flavor_text: <i>"Wherever the daimyos and warlords go, the infantry must follow. For their Lord's dishonor,
+    the infantry die, and for the bravery of their men, the nobility are rewarded." - Ginawa</i>
+  collector_number: Brotherhood 03
+- cardid: 5017
+  title: Medium Infantry
+  types:
+  - Follower
+  decks:
+  - Fate
+  gold_cost: 3
+  focus: 2
+  force: 3
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '10'
+  rarity: Fixed
+  artist: Mike Raabe
+  flavor_text: <i>Dawn came, and the forces of the Emperor leapt to battle. The Naga turned, driving them
+    away, but Hoshi's warriors charged onward, letting nothing come between and their goal.... - The Siege
+    of Sleeping Mountain, vol. I</i>
+  collector_number: Brotherhood 10
+- cardid: 5077
+  title: Mirumoto Bujun
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Samurai
+  text: Bujun equips Weapons for 2 less Gold.
+  gold_cost: 5
+  force: 2
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Eric Polak
+  flavor_text: <i>The fate of the Empire depends on our actions. Our Lady demands nothing less than our
+    lives. We will give her all of that and more.</i>
+  collector_number: Dragon 07
+- cardid: 5161
+  title: Mirumoto Taki
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Samurai
+  text: Taki may attach two Weapons.
+  gold_cost: 6
+  force: 3
+  chi: 3
+  honor_requirement: 3
+  personal_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '5'
+  rarity: Fixed
+  artist: Ron Spencer
+  flavor_text: <i>I will fight to the death, but I will never cease to question why. One is loyalty, the
+    other, stupidity.</i>
+  collector_number: Dragon 06
+- cardid: 5450
+  title: Mushin
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Take two additional Battle actions after this one.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '3'
+  rarity: Fixed
+  artist: Audrey Corman
+  flavor_text: <i>Eisai smiled, watching Hoshi as he turned his eyes from hers. Deep inside, she was already
+    was already one with him - something more than mortal and less than infinite...</i>
+  collector_number: Brotherhood 05
+- cardid: 5479
+  title: Naga Bowmen
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Naga
+  - Nonhuman
+  text: <b>Repeatable Battle, :bow::</b> Ranged 3 Attack.
+  gold_cost: 6
+  focus: 2
+  force: 1
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '7'
+  rarity: Fixed
+  artist: Randy Elliott
+  flavor_text: <i>All I ask of the Bright Eye and the Pale is that my soul may once again do battle with
+    the Foul!</i>
+  collector_number: Naga 06
+- cardid: 5480
+  title: Naga Bushi
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Bushi
+  - Naga
+  - Nonhuman
+  gold_cost: 3
+  focus: 2
+  force: 2
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '6'
+  rarity: Fixed
+  artist: Randy Gallegos
+  flavor_text: <i>The Dark One, the Unmaker, walks in the Heavens now. Soon it will be the Time of Undoing,
+    and all the world will know the wrath of the Darkness That Moves. These Dragon have released the Shadow.
+    They have scorned our wisdom, refused our demands, and given their lives, all for the return of a
+    greater evil. May the Twin eyes have mercy on their souls.</i>
+  collector_number: Brotherhood 06
+- cardid: 5483
+  title: Naga Shugenja
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  keywords:
+  - Naga
+  - Nonhuman
+  - Shugenja
+  text: <b>Repeatable Battle/Open, :bow::</b> Give all Naga cards +1F.
+  gold_cost: 6
+  force: 1
+  chi: 1
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - War of the Seals (Onyx Edition)
+  printing_id: '5'
+  rarity: Fixed
+  artist: Ron Spencer
+  flavor_text: <i>"The chant of the Cobra spell-binders tore at the Mirumoto on the walls, parting mind
+    from reason. A thousand men died that day and a thousand will always wish they had..." - Ikudaiu</i>
+  collector_number: Naga 10
+- cardid: 5484
+  title: Naga Spearmen
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Naga
+  - Nonhuman
+  text: <b>Repeatable Battle, :bow::</b> Ranged 2 Attack.
+  gold_cost: 5
+  focus: 2
+  force: 2
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '7'
+  rarity: Fixed
+  artist: William O'Connor
+  collector_number: Naga 18
+- cardid: 5489
+  title: Naga Warlord
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  keywords:
+  - Naga
+  - Nonhuman
+  - Samurai
+  text: All other Naga cards in the Naga Warlord's unit have +1F.
+  gold_cost: 5
+  force: 3
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - War of the Seals (Onyx Edition)
+  printing_id: '6'
+  rarity: Fixed
+  artist: Douglas Shuler
+  flavor_text: <i>"The field was covered in their hatred, but he looked at me with calm eyes. 'The Akasha
+    moves within me,' whispered the Asp generald, and then, with his death, faded into dust." - Toku</i>
+  collector_number: Naga 02
+- cardid: 5584
+  title: Ninja Thief
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Ninja
+  text: '<b>Limited:</b> Target a Personality''s Item and another Personality: Transfer the first target
+    to the second. Lose 3 Honor.'
+  gold_cost: 2
+  focus: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '8'
+  rarity: Fixed
+  artist: Matt Busch
+  flavor_text: <i>Outside the battle, the shadows moved. They passed where light could not, and when they
+    found their anceint Lady at last, they took Her far away...</i>
+  collector_number: Dragon 09
+- cardid: 5607
+  title: No-Dachi
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Weapon
+  gold_cost: 4
+  focus: 1
+  force: '+2'
+  chi: '+1'
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Some variants of the Pearl Edition version of this card were printed with a different flavor
+    text alignment.
+  printing_id: '6'
+  rarity: Fixed
+  artist: Mark Poole
+  flavor_text: <i>"On the courtyard, over the shattered bodies of my brothers, I looked up into the monk's
+    eyes and knew my fate. But if I were to die, this man would share my fate..." - from The Tale of Hitomi
+    Kobai</i>
+  collector_number: Dragon 08
+- cardid: 5831
+  title: Outflank
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target a defending Personality who must be unbowed if he is yours: Give him +3F.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '8'
+  rarity: Fixed
+  artist: Pete Garcia
+  flavor_text: <i>"A man's greatest weakness lies where he cannot see the truth." - from The New Tao</i>
+  collector_number: Dragon 21
+- cardid: 5899
+  title: Pearl Bed
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Pearl
+  - Pearl Bed
+  text: ':bow:: Produce 1 Gold, or 2 Gold if you are a Naga player, plus 1 additional Gold for each Pearl
+    Divers in play.'
+  gold_cost: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+  printing_id: '4'
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: <i>The Naga built an entire civilization, one which has been washed away over a thousand
+    years as they slept a dreamless sleep. Now they rise from their slumber, seeking to understand the
+    nature of the world.</i>
+  collector_number: Naga 06
+- cardid: 6040
+  title: Prayer Shrines
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Temple
+  text: ':bow:: Produce 2 Gold, plus, if you are a Brotherhood of Shinsei player, 1 additional Gold for
+    each Ring you control.'
+  gold_cost: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '4'
+  rarity: Fixed
+  artist: Sean Murray
+  flavor_text: <i>"Pray to the Fortunes for me, Hoshi," Hitomi said, rising from the Ivory Throne. "There
+    is no one left to bury my soul, and I must finish what I have begun."</i>
+  collector_number: Brotherhood 04
+- cardid: 6118
+  title: Qamar
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  keywords:
+  - Loyal
+  - Tactician
+  - Unique
+  - Champion
+  - Naga
+  - Nonhuman
+  text: 'Negate all Fear effects upon cards in this unit.<br><b>Battle/Open:</b> Any number of times per
+    turn, bow Qamar and target a Naga Personality: Straighten him.'
+  gold_cost: 14
+  force: 6
+  chi: 4
+  honor_requirement: 0
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Randy Elliott
+  flavor_text: <i>At the gate of the Dragon palace he screamed, and its walls shook with the fury of a
+    thousand souls...</i>
+  collector_number: Naga 16
+- cardid: 6338
+  title: Ring of the Void
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Void
+  text: You may discard this Ring from your hand to use its Void ability without cost.<br><b>Limited:</b>
+    Play if you have two or fewer Rings in play. Discard your hand. <br><b>Void Limited, :bow::</b> Draw
+    a card. If you now have more cards in your hand than any other player, discard a card.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '16'
+  rarity: Fixed
+  artist: Michael Phillippi
+  flavor_text: <i>In a moment of breath, the world pauses, waits, and listens for the future. Live so
+    that when the world speaks, you can answer.</i>
+  collector_number: Brotherhood 00
+- cardid: 6420
+  title: Ryoku
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Battle:</b> Bow your performing Monk and target the enemy Personality with the lowest Chi
+    <i>(your choice if there is a tie)</i>: Move him home.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: Heather Bruton
+  flavor_text: <i>The old monk raised his hands, and the wind howled through the Dragon palace. "Go home,
+    young one," he smiled at me. "Your death is not this day."</i>
+  collector_number: Brotherhood 09
+- cardid: 6464
+  title: Sanctified Temple
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Temple
+  text: ':bow:: Produce 2 Gold.<br><b>Repeatable Limited, :bow:, :g2::</b> Gain 2 Honor.'
+  gold_cost: 4
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+  printing_id: '11'
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: <i>"War is plum blossoms on the water, and I am a willow growing in the stream of peace.
+    My shadow is sunk in it, I cannot follow." - Dangai</i>
+  collector_number: Brotherhood 14
+- cardid: 6600
+  title: Seppun Hotaitaka
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Toturi's Army
+  keywords:
+  - Samurai
+  - Toturi's Army
+  text: 'After you attach a Follower to Hotaitaka from your hand: Draw an additional card during your
+    next End Phase.'
+  gold_cost: 7
+  force: 3
+  chi: 3
+  personal_honor: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Mark A.W. Jackson
+  flavor_text: <i>"He is the only sun of the murdered Seppun daimyo, and he fights his first war for the
+    honor of his house. But how long before he discovers the truth?" - Akodo Kage, sensei of the Lion</i>
+  collector_number: Toturi's Army 13
+- cardid: 6678
+  title: Shagara
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  keywords:
+  - Bushi
+  - Naga
+  - Nonhuman
+  text: '<b>Battle:</b> Any number of times per turn, bow Shagara: Ranged 2 Attack.'
+  gold_cost: 5
+  force: 2
+  chi: 1
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '4'
+  rarity: Fixed
+  artist: Brian Snoddy
+  flavor_text: <i>"By the all-knowing Pale Eye, I swear it. These furred beast will not live to see another
+    dawn!"</i>
+  collector_number: Naga 05
+- cardid: 6999
+  title: Shioda
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Brotherhood of Shinsei
+  keywords:
+  - Advisor
+  - Monk
+  text: Will only enter play if you control a Ring.<br><b>Repeatable Battle/Open, :bow::</b> Bow your
+    target Temple to straighten your Stronghold.
+  gold_cost: 0
+  force: 1
+  chi: 4
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '3'
+  rarity: Fixed
+  artist: Douglas Shuler
+  flavor_text: <i>Hitome serves a darker lord. Although she has hidden her taint from mortal eyes, our
+    allies know her blackened heart - and so do we.</i>
+  collector_number: Brotherhood 02
+- cardid: 7303
+  title: Small Farm
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  text: ':bow:: Produce 1 Gold.'
+  gold_cost: 0
+  legality:
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  notes: Some of the Anvil of Despair versions of this card were printed with a different text alignment
+  printing_id: '12'
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: <i>"The Naga carry no food, no stores or supplies on their march," hissed Ginawa. "They
+    steal from the people we leave behind." "Burn the fields," said Takuan, and it was done.</i>
+  collector_number: Brotherhood 05
+- cardid: 7311
+  title: Sneak Attack
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Engage:</b> The Attacker has the first opportunity to take a Battle action or pass in this
+    battle.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '13'
+  rarity: Fixed
+  artist: David Trowbridge
+  flavor_text: <i>The dawn had not yet come, but the flicker of the last stars showed movement through
+    the hills. "Awake!" the Naga guard cried, but it was not enough.</i>
+  collector_number: Brotherhood 12
+- cardid: 7399
+  title: Spearmen
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: <b>Battle, :bow::</b> Ranged 2 Attack <i>(Destroy a target enemy Follower, or Personality without
+    Followers, with 2 or lower Force)</i>.
+  gold_cost: 3
+  focus: 2
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  notes: Some variants of the Battle of Beiden Pass version of this card were printed with an alternate
+    flavor text.
+  printing_id: '13'
+  rarity: Fixed
+  artist: Pete Garcia
+  flavor_text: <i>"The Naga withdrew leaving behind their dead and wounded, passing into a rift between
+    the Heavens and the World. On the other side, Imperial troops saw only a tainted land and a tall stone
+    wall..." - The Siege of Sleeping Moutnain, vol. III</i>
+  collector_number: Naga 03
+- cardid: 7542
+  title: Strength of My Ancestors
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Battle/Open:</b> Bow your performing Monk or Shugenja and target your unbowed Personality:
+    Give him +2F/+2C.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+  printing_id: '5'
+  rarity: Fixed
+  artist: Jeff Reitz
+  flavor_text: <i>"She carries four swords - her own and those of our ancient Champion - and in them rest
+    the soul of the first Dragon, Togashi. Hitomi's burden is heavy, but her ancestors share the weight."
+    - Mirumoto Bujun</i>
+  collector_number: Brotherhood 04
+- cardid: 7739
+  title: Takao
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Takao • Experienced
+  clans:
+  - Brotherhood of Shinsei
+  keywords:
+  - Unique
+  - Acolyte
+  - Experienced
+  - Fire
+  - Monk
+  text: '<b>Elemental Reaction:</b> After Takao enters a duel, bow him: Destroy him and the Personality
+    facing him.'
+  gold_cost: 8
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>The world grows weary of blood and treason, and I am eager to see this dark deed finished
+    at last...</i>
+  collector_number: Brotherhood 01
+- cardid: 7748
+  title: Takuan
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Toturi's Army
+  keywords:
+  - Lieutenant
+  - Samurai
+  - Toturi's Army
+  text: All other Toturi's Army Personalities in Takuan's army have +1F/+1C.
+  gold_cost: 11
+  force: 4
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '4'
+  rarity: Fixed
+  artist: Dean Vincent
+  flavor_text: <i>"The Emperor is missing and I stand in his place as defender of his Jade Throne. Is
+    there any man in the Empire who would dare defy me?"</i>
+  collector_number: Toturi's Army 04
+- cardid: 8143
+  title: The House of Tao
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  text: After all players reveal Strongholds, you may search your Fate deck for a Ring and put it into
+    play.<br>After you put a Shadowlands card into play, remove all your Rings from the game.
+  province_strength: 5
+  starting_honor: 4
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: There were two versions of the Hidden Emperor 3 printing of this card. One had a Dynasty back
+    and was a Fixed card in the starter deck, one had a Fate back and was a Rare in the booster packs.
+  printing_id: '3'
+  rarity: Fixed
+  artist: Randy Asplund-Faith
+  collector_number: Brotherhood 00
+- cardid: 8226
+  title: The Mountain Keep of the Dragon
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Dragon
+  text: After one of your Provinces is destroyed, permanently give each of your remaining Provinces +2
+    strength.
+  province_strength: 5
+  starting_honor: 4
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
+    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
+    the Emerald Edition border.
+  printing_id: '9'
+  rarity: Fixed
+  artist: Ben Peck
+  collector_number: Dragon 00
+- cardid: 8232
+  title: The Naga Stronghold
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Naga
+  keywords:
+  - Naga
+  text: <b>Repeatable Limited, :bow::</b> Shuffle a target Naga Personality or Follower in your discard
+    pile back into the appropriate deck.
+  province_strength: 6
+  starting_honor: 3
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Al Skaar
+  collector_number: Naga 00
+- cardid: 8248
+  title: The Palace of Otosan Uchi
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Toturi's Army
+  text: If you are the only Toturi's Army player, you begin the game with control of the Imperial Favor.<br>Your
+    Imperial cards in and out of play have -2 Gold Cost.<br><b>Reaction:</b> When paying for a Follower
+    attaching to one of your Personalities, reduce its cost by an amount equal to the Personality's Force
+    until it is paid.
+  province_strength: 7
+  starting_honor: 4
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: The promo version of this Stronghold was misprinted with the wrong title
+  printing_id: '3'
+  rarity: Fixed
+  artist: Eric David Anderson
+  collector_number: Toturi's Army 00
+- cardid: 8400
+  title: The Turtle's Shell
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Interrupt:</b> Negate the action's Melee or Ranged Attacks.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '6'
+  rarity: Fixed
+  artist: Carl Frank
+  flavor_text: <i>"Nagas have bows, you say?" Toku smiled grimly. "I never noticed."</i>
+  collector_number: Toturi's Army 08
+- cardid: 8524
+  title: Togashi Hoshi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Cavalry
+  - Unique
+  - Dragon
+  - Man-Beast
+  - Nonhuman
+  text: Enters play paying 2 less Gold if you are a Brotherhood of Shinsei player.<br>Will not attach
+    Followers or Armor.<br>Hoshi will not assign to a battlefiled where the enemy army contains a Dragon.
+  gold_cost: 13
+  force: 7
+  chi: 7
+  honor_requirement: 5
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '6'
+  rarity: Fixed
+  artist: Bryon Wackwitz
+  flavor_text: <i>Thunder shook the Dragon palace as Hoshi stared down at the battle's aftermath. "Never
+    again will Dragon fight Dragon," he vowed. "Never again."
+  collector_number: Brotherhood 15
+- cardid: 8617
+  title: Toku
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Toturi's Army
+  keywords:
+  - Samurai
+  - Toturi's Army
+  gold_cost: 0
+  force: 0
+  chi: 1
+  personal_honor: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '6'
+  rarity: Fixed
+  artist: Stacy Drum
+  flavor_text: <i>Once captain of the Imperial Guard, now Toku stands at the side of the Regent, prepared
+    to destroy all who threaten the peace of the Jade Empire.</i>
+  collector_number: Toturi's Army 03

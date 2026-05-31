@@ -1,0 +1,1156 @@
+set: The Hidden Emperor, Episode 3
+cards:
+- cardid: 105
+  title: Abandoning the Fortunes
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until the game ends, before each player's turn ends, if his Dynasty deck has no cards,
+    he chooses and destroys one Personality or Holding he controls for each of his Provinces without a
+    Dynasty card in it.
+  is_unique: true
+  legality:
+  - Age of Conquest (Emperor)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  printing_id: '2'
+  rarity: Uncommon
+  artist: Craig Maher
+- cardid: 423
+  title: Aramoro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Aramoro • Experienced
+  clans:
+  - Ninja
+  - Scorpion
+  keywords:
+  - Experienced Bayushi Aramoro
+  - Unique
+  - Ninja
+  - Samurai
+  - Scorpion Clan
+  text: Other players may not target Aramoro with actions while Aramoro is not in an army.
+  gold_cost: 9
+  force: 3
+  chi: 4
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Ben Peck
+  flavor_text: <i>The best mask is no mask at all. - Bayushi's Lies</i>
+- cardid: 600
+  title: Ascension of the Mantis
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, choose another player's Province. You may bow any number of your Personalities and Followers
+    such that the number is greater than the total Force of all Personalities and Followers controlled
+    by the Province's player, or the Province's strength, whichever is higher. If you did, gain a Province
+    to the right of your rightmost Province, transfer all cards attached to the other player's Province
+    to it, destroy the other player's Province, and lose 7 Honor.
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Jason Behnke
+- cardid: 691
+  title: Banish All Shadows
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: <b>Kiho Limited:</b> Bow your target unbowed Monk or Shugenja. Look at the top four cards of your
+    Fate deck. Put one in your hand. Shuffle the deck.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  printing_id: '2'
+  rarity: Rare
+  artist: KC Lancaster
+  flavor_text: <i>"Fall back, Naga, and all will be well. This is not your battle, not will it ever be."
+    - Mitsu</i>
+- cardid: 2330
+  title: Empty Words
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Political
+  text: '<b>Limited:</b> Bow your Stronghold and target a dishonorable Personality: Rehonor him.<br><b>Reaction:</b>
+    Before a player loses Honor, bow your Stronghold: Reduce the Honor loss to 0.<br><b>Reaction:</b>
+    After one of your honorable Personalities is challenged, bow your Stronghold: Your Personality may
+    refuse even if the challenge is unrefusable.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Tom Biondolillo
+- cardid: 2344
+  title: Enlightened Tutor
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Enlightened
+  text: After this Personality is challenged, he may refuse it; negate any effects upon him or his controller
+    conditional upon his refusing.
+  gold_cost: 2
+  focus: 1
+  force: 0
+  chi: '+1'
+  honor_requirement: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Jennifer Mahr
+  flavor_text: <i>"Perhaps this difficulty can be solved in a more equitable manner, my Lord." - Ikudaiu</i>
+- cardid: 2431
+  title: Face of Ninube
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Open:</b> Shuffle your hand into your Fate deck: Draw a number of cards equal to the number
+    you shuffled in.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Common
+  artist: Audrey Corman
+  flavor_text: <i>Ninube's beauty is said to have outshone a jealous Sun, and the maiden's sorrowful fate
+    is seldom told in the court of the Crane.</i>
+- cardid: 2536
+  title: Fields of the Morning Sun
+  types:
+  - Region
+  decks:
+  - Dynasty
+  text: Personalities with 3 or more Personal Honor may not be assigned, and will not move, to this Province's
+    battlefields.
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Common
+  artist: Eric David Anderson
+  flavor_text: <i>The plains are a sacred place, one where honor and glory are intangible reminders of
+    the spirits of the past.</i>
+- cardid: 2554
+  title: Finding the Balance
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, choose a Personality and permanently give his lowest stat among Force, Chi, and Personal
+    Honor +2 <i>(you choose if there is a tie)</i>. His controller chooses and permanently gives one of
+    the other two stats -1.
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Craig Maher
+- cardid: 2669
+  title: Fortified Infantry
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: Before this Personality moves from one Province's battlefield to another Province's battlefield,
+    negate the movement.
+  gold_cost: 4
+  focus: 1
+  force: 3
+  chi: 0
+  honor_requirement: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Common
+  artist: Mark Poole
+  flavor_text: <i>"Hitomi's Dragon fight with bloody hands, reveling in the slaughter of their enemies.
+    If this is the New Tao, I would rather keep the old." - Asahina Tamako</i>
+- cardid: 2894
+  title: Grasp the Earth Dragon
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Earth
+  - Kiho
+  text: '<b>Limited:</b> Bow your performing Monk or Shugenja and target a discarded <i>(not dead)</i>
+    Personality or Holding in your discard pile: Shuffle it into your deck.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Scott Fischer
+  flavor_text: <i>"You think me to be aged and weak? The dragons have lived a thousand years, yet I would
+    not call one 'old'" - Asahina Tomo</i>
+- cardid: 3371
+  title: Hitomi Kazaq
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Heretic
+  - Naga
+  - Nonhuman
+  - Tattooed
+  text: Will not join a Naga player.<br><b>Battle:</b> Target an enemy Personality. Destroy all Followers
+    in his unit with Force less than or equal to Kazaq's Force.
+  gold_cost: 6
+  force: 2
+  chi: 3
+  personal_honor: 0
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Cris Dornaus
+  flavor_text: <i>"He is lost from the Akasha, torn apart from the soul of our race. Yet still, in the
+    night, we can hear the blood-filled screams." - Dashmar</i>
+- cardid: 3378
+  title: Hitomi Kokujin
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hitomi Kokujin • Experienced
+  clans:
+  - Dragon
+  keywords:
+  - Double Chi
+  - Unique
+  - Dragon Clan
+  - Experienced
+  - Shadowlands
+  - Tattooed
+  text: 'After Kokujin enters play: Lose 4 honor.<br><b>Battle:</b> Destroy your performing unbowed Personality
+    and target an enemy Personality: Kokujin duels him. Destroy the duel''s loser.<br><b>Limited:</b>
+    Destroy your performing unbowed Personality and target another player''s Personality with lower Chi
+    that the performer you chose: Kokujin duels the target. Destroy the duel''s loser.'
+  gold_cost: 12
+  force: 3
+  chi: 4
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Ben Peck
+- cardid: 3408
+  title: Hold This Ground
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> Before you gain Honor <i>(if any)</i> for winning a battle as the attacker where
+    the province will also be destroyed during resolution: Negate the Honor gain. You may take all cards
+    attached to the current battlefield''s province under your control and attach them to one of your
+    target provinces. Any card that cannot be legally attached is discarded.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Jason Behnke
+- cardid: 3462
+  title: Hoshi Eisai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Brotherhood of Shinsei
+  keywords:
+  - Monk
+  - Tattooed
+  text: <b>Battle:</b> Twice per battle, set Eisai's Force equal to equal a target enemy Personality's.
+  gold_cost: 6
+  force: 1
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Ellym Sirac
+  flavor_text: <i>"She can not speak, and we know nothing of her past. But her heart is true, and her
+    spirit sings with a warrior's tongue." - Togashi Hoshi</i>
+- cardid: 3468
+  title: Hoshi Maseru
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Brotherhood of Shinsei
+  keywords:
+  - Monk
+  - Tattooed
+  text: '<b>Reaction:</b> After Maseru bows as the cost of a Kiho Strategy''s action: Straighten him.'
+  gold_cost: 5
+  force: 2
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Lissanne Lake
+  flavor_text: <i>"Three times we have given him up for dead, and each time, he returned unscathed. Death
+    stalks a pace behind him... but always a step to slow." - Takao</i>
+- cardid: 3632
+  title: Ikoma Ryozo
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Ikoma Ryozo • Experienced
+  clans:
+  - Lion
+  keywords:
+  - Unique
+  - Experienced
+  - Lion Clan
+  - Samurai
+  - Shadowlands
+  text: After a Favor action targets a card at Ryozo's battlefield, move him home; bow him as he moves.<br><b>Battle:</b>
+    Give Ryozo +1F for each Fortification attached to the current battlefield's Province.
+  gold_cost: 8
+  force: 3
+  chi: 4
+  honor_requirement: 0
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Anson Maddocks
+  flavor_text: <i>Tirelessly, he scours the Shadowlands for any trace of Toturi, convinced that the Dark
+    One has the Emperor again in his grasp.</i>
+- cardid: 4256
+  title: Kamoko's Charge
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'Personalities and Followers in Cavalry units at this battle have +1F.<br><b>Battle:</b> If there
+    are no Terrains at the current battlefield: Put this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Uncommon
+  artist: Lissanne Lake
+  flavor_text: <i>"If your opponent strikes with fire, counter with water. Become fluid and free-flowing.
+    Water does not collide or break; on the contrary - it absorbs attacks and is not harmed." - Master
+    Suana</i>
+- cardid: 4495
+  title: Kobune Crew
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Naval
+  text: 'Will only attach to a Naval Personality.<br><b>Battle:</b> If this card is at a battlefield at
+    a province, bow this card and your target non-Stronghold Port: Move this unit to another battlefield
+    at a province.'
+  gold_cost: 4
+  focus: 1
+  force: 2
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Uncommon
+  artist: Diana Vick
+  flavor_text: '<i>"They say the Mantis'' quest for power has ended, but I know this: Never trust a starving
+    dog, a spurned woman, or an idle general." - Otaku Tetsuko</i>'
+- cardid: 4593
+  title: Kuni Utagu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Crab Clan
+  - Shugenja
+  text: Black Scroll actions may not target Utagu.<br><b>Repeatable Battle/Open, :bow::</b> Target a Personality
+    with a Maho ability, a Black Scroll attached, or who has performed a Maho action this game. Utagu
+    challenges him. Destroy the loser.
+  gold_cost: 5
+  force: 0
+  chi: 4
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Common
+  artist: Ben Peck
+  flavor_text: <i>The last foul remains of the Dark Horde still walk the face of Rokugan, and while they
+    live, I can never rest.</i>
+- cardid: 4599
+  title: Kuni Yori
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Kuni Yori • Experienced 2
+  clans:
+  - Unaligned
+  keywords:
+  - Experienced 2
+  - Unique
+  - Shadowlands
+  - Shugenja
+  text: <b>Repeatable Reaction:</b> After a Personality or Follower opposing Yori is destroyed, create
+    a 1F Nonhuman • Shadowlands • Undead Follower and attach it to him.
+  gold_cost: 9
+  force: 3
+  chi: 5
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  errata_text: Contemporary errata to add that the created Follower also has Shadowlands.
+  printing_id: '1'
+  rarity: Rare
+  artist: Anson Maddocks
+  flavor_text: <i>A darker fate than death lies buried in his cold, eyes.</i>
+- cardid: 4721
+  title: Let Your Spirit Guide You
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Spirit
+  text: 'As a Focus Effect: Set this card''s Focus Value equal to this Personality''s Personal Honor plus
+    3.<br>This card''s Focus Value equals the performing Personality''s Personal Honor plus 3 when discarded
+    for a Tactical action.'
+  gold_cost: 0
+  focus: 0
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Rare
+  artist: Theodor Black
+  flavor_text: <i>"I cannot hide here, behind these stone walls, while those I once called kinsmen are
+    cut down from both sides." - Yoshi</i>
+- cardid: 5034
+  title: Mercy Shrouds the Earth
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Earth
+  - Kiho
+  text: '<b>Reaction:</b> Before a Terrain enters play, bow your performing Monk or Shugenja at the current
+    battlefield: Negate all its effects other than entering play.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Common
+  artist: Susan Van Camp
+- cardid: 5222
+  title: Monastery
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: ':bow:: When paying for a non-variable-cost Monk, produce Gold equal to the Monk''s Gold Cost
+    which may only pay for them.'
+  gold_cost: 6
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Randy Asplund-Faith
+  flavor_text: <i>Be master of mind rather than mastered by mind. - The New Tao</i>
+- cardid: 5374
+  title: Moto Soro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Samurai
+  - Unicorn Clan
+  text: Soro is not destroyed for having 0 Chi unless his Chi is 0 after all penalties that last until
+    your turn ends wear off.
+  gold_cost: 8
+  force: 4
+  chi: 3
+  personal_honor: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Ken Tunell
+  flavor_text: <i>"I saw a group of twenty zombies stand against him - but not for very long." - Hida
+    Tsuru</i>
+- cardid: 5422
+  title: Move to the Bushes
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target your Personality: Move him home. Dishonor him.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Tommy Pons
+  flavor_text: <i>"They think we not so smart, eh? We show them! Come on, boys!" - Kappuksu</i>
+- cardid: 5450
+  title: Mushin
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Take two additional Battle actions after this one.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Common
+  artist: Audrey Corman
+  flavor_text: <i>"Turn back, Unicorn, or see your future in my blade. You will not cross Lion lands and
+    live." - Kitsu Motso</i>
+- cardid: 5629
+  title: Not While I Breathe
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Bow your performing Follower with "Guard" in its title or as part of any of its
+    keywords and remove it from the game: Triple the current battlefield''s province''s strength.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Scott Fischer
+  flavor_text: <i>Though Toturi's Personal smaurai scattered to the four winds in search of their Master,
+    his guard remained, steadfast, before the palace gates.</i>
+- cardid: 6278
+  title: Restoring the Doji Treasury
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, each player may search his Dynasty deck for one Gold-producing Holding and Recruit for
+    3 less Gold.
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Uncommon
+  artist: Val Mayerik
+- cardid: 6287
+  title: Retired Wasp General
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Retainer
+  text: <b>Repeatable Reaction, :bow::</b> After your Ranged Attack is targeted, give it +1 strength.<br><b>Repeatable
+    Reaction, :bow::</b> After a Ranged Attack targets one of your cards, give it -2 strength.
+  gold_cost: 3
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Common
+  artist: Val Mayerik
+- cardid: 6360
+  title: River Bridge of Kaiu
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Fortification
+  text: Units will not move to this Province's battlefield during Combat or Resolution Segments.
+  gold_cost: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Tom Biondolillo
+  flavor_text: <i>Only four bridges cross the great Crab river, and all four are locked in O-Ushi's metal
+    grasp.</i>
+- cardid: 6420
+  title: Ryoku
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Battle:</b> Bow your performing Monk and target the enemy Personality with the lowest Chi
+    <i>(your choice if there is a tie)</i>: Move him home.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Heather Bruton
+  flavor_text: <i>"Strike where the enemy is powerless. Even the hardest stone has a weakness." - Hizaku</i>
+- cardid: 6440
+  title: Sacrifices For Our Future
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, it enters play in your home.<br>After you draw a card, discard this Event from play.<br>While
+    this Event remains in play, before each time you would draw a card at the end of your turn, you may
+    choose not to do so instead, and after each of your turns end, if you did not draw a card during it,
+    gain 2 Honor.
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Shattered Empire
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Thomas Gianni
+- cardid: 6604
+  title: Seppun Kossori
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Shugenja
+  text: '<b>Reaction:</b> Any number of times per turn, when paying a Gold cost, bow Kossori: Produce
+    an amount of Gold equal to her Personal Honor.'
+  gold_cost: 5
+  force: 0
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Diana Vick
+  flavor_text: <i>She looks for honor at the bottom of a purse, turning a profit on the betrayals of others.
+    Perhaps even the Jade Throne has a price?</i>
+- cardid: 7042
+  title: Shiryo no Kisada
+  types:
+  - Ancestor
+  decks:
+  - Fate
+  clans:
+  - Crab
+  keywords:
+  - Unique
+  - Crab Clan
+  text: This Ancestor is considered Hida Kisada for deck construction and checking the Unique restriction.<br>This
+    Personality will not gain <b>Shadowlands</b>, and cards in this unit may not be targeted by Spell
+    or Kiho actions.
+  gold_cost: 0
+  focus: 4
+  force: '+1'
+  chi: 0
+  honor_requirement: 2
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Tommy Pons
+  flavor_text: <i>I atone in death for my sins in life.</i>
+- cardid: 7463
+  title: Stand Or Run
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Iaijutsu
+  text: <b>Iaijutsu Battle:</b> Your target unbowed Personality challenges a target enemy Personality.
+    If he is unbowed, he may refuse. If he does, move him home and bow him as he moves. Destroy the duel's
+    loser.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Uncommon
+  artist: Thomas Gianni
+  flavor_text: <i>"Your choice. Stand, and I give you an honorable death; or run, and I chase you down."
+    - Shinjo Morito</i>
+- cardid: 7681
+  title: Suzume Yugoki
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Samurai
+  - Sparrow Clan
+  gold_cost: 8
+  force: 4
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 3
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Shane Holloway
+  flavor_text: <i>He learned everything his Master taught, but turned against him to follow a different
+    path.</i>
+- cardid: 7740
+  title: Takao's Jingasa
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Jingasa
+  text: 'Before this Personality bows as a cost of performing a Kiho action: Once per turn, you may ignore
+    the cost of bowing.'
+  gold_cost: 3
+  focus: 1
+  force: '+0'
+  chi: '+1'
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Common
+  artist: Mike Raabe
+  flavor_text: <i>"A monk's soul must cast off earthly bonds, and tread in Shinsei's path. Leave this
+    war, and turn back towards enlightenment, my brothers." - Ikudaiu</i>
+- cardid: 8014
+  title: The Dark Sanctuary
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Shadowlands
+  text: <b>Repeatable Limited, :bow::</b> Bow your target performing Shugenja to target a dead Personality
+    with Chi less than or equal to the performer's in any player's discard pile. Bring him into play,
+    ignoring costs, Honor Requirement, and restrictions based upon your Clan Alignment. Permanently give
+    him <b>Shadowlands • Undead </b>and -2C, and lose 4 honor.
+  gold_cost: 6
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Mark Poole
+- cardid: 8041
+  title: The Efforts of the Clan
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Bow your Stronghold and target your Personality: Straighten him. He will not
+    straighten during your next Straighten Phase.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Craig Maher
+  flavor_text: <i>"The peasents toil, and with each dawn show the fruit of their labor. With such devotion,
+    how can our clan fail to rise again?" - Shiba Tsukune</i>
+- cardid: 8115
+  title: The Grey Crane
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: The Grey Crane • Experienced 2
+  clans:
+  - Unaligned
+  keywords:
+  - Double Chi
+  - Experienced 2 Kakita Toshimoko
+  - Unique
+  - Samurai
+  text: 'The Grey Crane will not refuse challenges.<br>Will not attach The Emerald Armor.<br><b>Limited:</b>
+    Any number of time per turn, bow The Grey Crane and target a Kolat Personality: Discard the top card
+    of your Fate deck. If its Focus Value is higher than the Kolat''s Chi, The Grey Crane duels him. Destroy
+    the duel''s loser.'
+  gold_cost: 12
+  force: 3
+  chi: 8
+  honor_requirement: 5
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: David Leri
+- cardid: 8143
+  title: The House of Tao
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  text: After all players reveal Strongholds, you may search your Fate deck for a Ring and put it into
+    play.<br>After you put a Shadowlands card into play, remove all your Rings from the game.
+  province_strength: 5
+  starting_honor: 4
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: There were two versions of the Hidden Emperor 3 printing of this card. One had a Dynasty back
+    and was a Fixed card in the starter deck, one had a Fate back and was a Rare in the booster packs.
+  printing_id: '1'
+  rarity: Fixed
+  artist: Randy Asplund-Faith
+- cardid: 8236
+  title: The New Way
+  types:
+  - Item
+  decks:
+  - Fate
+  text: Cards in this unit may not be targeted with actions performed by a Personality with an Ancestor.<br>While
+    opposing this Personality in a battle or while their Peresonality is facing him in a duel, all attached
+    Ancestors have their current and new effects, including stat bonuses, negated.
+  gold_cost: 1
+  focus: 2
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Christina Wald
+  flavor_text: <i>With delicate care, Osugi handed the thick sheaf of paper to the monk. "Guard it well,"
+    she whispered, "for it is the path to a new age."</i>
+- cardid: 8390
+  title: The Touch of the Lands
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Reaction:</b> After one of your Terrain cards is destroyed by a card effect, choose your performing
+    unbowed Monk or Shugenja at the current battlefield: Return the Terrain to your hand.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Diana Vick
+  flavor_text: <i>"A pillow of hardest stone, and for my bed a cliffside. The land serves those who respect
+    its gifts." - Agasha Gennai</i>
+- cardid: 8525
+  title: Togashi Hoshi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Togashi Hoshi • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Cavalry
+  - Unique
+  - Dragon
+  - Experienced
+  - Man-Beast
+  - Nonhuman
+  text: 'Will not attach Followers or Armor.<br>Enters play paying 2 less Gold if you are a Brotherhood
+    of Shinsei player.<br><b>Limited:</b> Bow your target non-Tattooed Personality: Permanently give him
+    +2F/+2C and <b>Tattooed</b>. He will not straighten during your next Straighten Phase. Until your
+    next Straighten Phase begins, give Hoshi -1F/-1C.'
+  gold_cost: 14
+  force: 7
+  chi: 7
+  honor_requirement: 5
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Carl Frank
+- cardid: 8642
+  title: Torii Shrine
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Temple
+  text: <b>Repeatable Reaction, :bow::</b> When attaching an Ancestor to one of your Personalities, ignore
+    the condition upon attaching of bowing that Personality.
+  gold_cost: 0
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: KC Lancaster
+  flavor_text: <i>The gentle waves of the sea enfold our ancestors' souls, the last meeting place of the
+    honored dead.</i>
+- cardid: 8762
+  title: Trusted Counsel
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Draw zero to three cards. For each card drawn, the enemy leader may either draw
+    a card or give +3F to a Personality at the current battlefield.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Jennifer Mahr
+  flavor_text: <i>In the beginner's mind, there are many possibilities. In the expert's, there are few.</i>
+- cardid: 8773
+  title: Tsuchi-do
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Battle:</b> Even if you control no units at the current battlefield and even if neither the
+    performer nor target is there, bow your performing Monk or Shugenja and target a Personality: Negate
+    his movement to and from battlefields <i>(this turn)</i>.'
+  gold_cost: 0
+  focus: 4
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Scott James
+  flavor_text: <i>… the earth is at rest, yet its force is the strength of indominable will.</i>
+- cardid: 8898
+  title: Tsuruchi's Arrow
+  types:
+  - Item
+  decks:
+  - Fate
+  text: 'Will only attach to a Samurai.<br><b>Reaction:</b> After a Ranged Attack performed by this Personality
+    is targeted, destroy this card: Give the Ranged Attack +3 strength. After this battle''s resolution,
+    if your army won and if this card was attached to a Mantis Clan Personality immediately before its
+    destruction, put it in your hand.'
+  gold_cost: 0
+  focus: 2
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Jim Pavelec
+- cardid: 8941
+  title: Umi Amaterasu
+  types:
+  - Region
+  decks:
+  - Dynasty
+  text: <b>Battle:</b> If you control an opposed unit at this Province's battlefield, even if you do not
+    control this card, once per battle per player, draw a card.
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Some variants of the Hidden Emperor 3 version of this card were printed with a different flavor
+    text alignment.
+  printing_id: '2'
+  rarity: Common
+  artist: KC Lancaster
+  flavor_text: <i>"Give a man a fish, and you'll feed him for a day. Give him a weapon, and he'll starve
+    to death fighting over a fish." - Yodin</i>
+- cardid: 9087
+  title: Utaku Meadows
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  text: <b>Limited, :g3::</b> Create a 1F <b>Cavalry </b>Follower and attach it to your target Personality.
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Destroyer War (Celestial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Common
+  artist: Heather Bruton
+  flavor_text: <i>We gaze Even at horses This morn of snow. - Basho</i>
+- cardid: 9307
+  title: Where Shinsei Stood
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'No Personality may perform more than one copy of the same Kiho action by title during this battle.<br>After
+    a Kiho action resoloves: Straighten any Shugenja or Monks at this battlefield who bowed to pay its
+    cost.<br><b>Battle:</b> If there are no Terrains at the current battlefield: Put this card into play
+    there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Diana Vick

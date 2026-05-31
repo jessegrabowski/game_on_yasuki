@@ -432,6 +432,11 @@ arcs:
         code: Samurai
         notes: Ninth base set. Included unique armors for each clan.
 
+      - set_name: Crab vs. Lion
+        release_date: 2008-01-01
+        featured_factions: Crab, Lion
+        notes: Two-player starter box. Release date approximate — verify.
+
       - set_name: Stronger than Steel
         release_date: 2007-10-01
         featured_factions: Lion, Mantis, Phoenix
@@ -590,6 +595,10 @@ arcs:
         size: 428
         code: EE
         notes: Thirteenth base set.  Included new family House Guards and a Celestial for each clan.
+
+      - set_name: Emperor Edition Demo Decks
+        release_date: 2012-02-01
+        notes: Learn-to-play demo decks. Release date approximate — verify.
 
       - set_name: Embers of War
         release_date: 2012-05-01
