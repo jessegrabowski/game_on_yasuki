@@ -1,0 +1,350 @@
+set: The Currency of War
+images:
+- card_id: a_samurais_soul
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: a_samurais_soul.jpg
+    sha256: 86763970f8d0f1e5b4d2200a57dc799b921dbaa51f2b8bbfad448496f5aa1803
+- card_id: a_warriors_brutality
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: a_warriors_brutality.jpg
+    sha256: 4bf578b04a26a5a4ded6e0808fc01f6183b06b93fe668beb868df824add499f8
+- card_id: advance_warning
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: advance_warning.jpg
+    sha256: 8f3b73c624acaf87c0f553ab2f77c222a210cf05d64782900cb5616ccd8648f3
+- card_id: akodo_kaiken
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: akodo_kaiken.jpg
+    sha256: 06ba4e9e3b736725627433db3d6a5cd116471f8025660338d20704e79836a4a4
+- card_id: allied_efforts
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: allied_efforts.jpg
+    sha256: a3f1450870c835b212991b82bc5ec5747af01b0d27a5efe6118c99f5938642e4
+- card_id: another_time
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: another_time.jpg
+    sha256: 3818b38d2feb66d665048177f6765c968690aa9a3be97bf9a15e553264dc249d
+- card_id: ashigaru_archers
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: ashigaru_archers.jpg
+    sha256: e94c9ca168aa369f80f4a98a28305897120c274e0d12e9d974a7a2014fc3ed3c
+- card_id: back_to_the_front
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: back_to_the_front.jpg
+    sha256: 96b7f51f4e4ff57e6bbfd49674b6ebea1699423feee2b4a29020ccace242009d
+- card_id: block_supply_lines
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: bbd5a734d20a6a63b2828103239366b41a5b1d503c320a92a03162ca2f930aa7
+- card_id: breaking_the_rhythm
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: breaking_the_rhythm.jpg
+    sha256: 4f2e9f3b98657a5f7a228cd0e6c0c944eb2624399c72de61bf6f0b729886b9f9
+- card_id: contested_market
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: contested_market.jpg
+    sha256: 98dba1b1eb920f0fb253312e88ad446533ed252427ef42f7fa89c6cf8a20725a
+- card_id: counting_house
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: counting_house.jpg
+    sha256: 8227db0ede40fafd0979d0179919b8f8b5fb5a50b3d93d39f2cfd3a07428020b
+- card_id: daidoji_kinta
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: daidoji_kinta.jpg
+    sha256: 6b9f7a0cd6f4b7c4dec30e60836df5be2ce3c6f37f2033a77db46161df0724f0
+- card_id: daidoji_taenaru
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: daidoji_taenaru.jpg
+    sha256: 887da1a83e4edba3e59a10e28b18ab58ec9ff8971705682b78d910b586ee02d3
+- card_id: daidoji_tametaka
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: daidoji_tametaka.jpg
+    sha256: 914d67e583a7e0fd53f14f25a164af6d0302c5e493a772555c0eb80cbfab62d3
+- card_id: daidoji_tanshi
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: daidoji_tanshi.jpg
+    sha256: 4688eaf142c3e0154fe4ce2f4d2fbb67992d4a5d9e26a21333fd6cf2ea644e07
+- card_id: destiny_has_no_secrets
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: destiny_has_no_secrets.jpg
+    sha256: d88363efb655a84a49fcf90748937955fb4fb25ab5f943bd670080e09281ccea
+- card_id: discretionary_valor
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: discretionary_valor.jpg
+    sha256: 1f88a909cf33257c86b357e0ede428f9e59af12176b6c7781f534a7efc2fb10b
+- card_id: doji_shimada
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: doji_shimada.jpg
+    sha256: 9e3b86a6455e5f0ebde40c54214a4131a4757e25a4a9f42d1724da4a86fbb535
+- card_id: drawing_first_blood
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: drawing_first_blood.jpg
+    sha256: 8f9b7c7a3c9e20a28dbd834209e79cd53e9189fb28ae971ff38277db51207e62
+- card_id: fall_back
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: fall_back.jpg
+    sha256: 3e12a4097ab790253ea57debb315ce0eff720d125367125e829967c842c5d2d8
+- card_id: family_library
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: family_library.jpg
+    sha256: c1ccfff8111e216830612e3ce1164c1048d25b4519026c0fa61a203d40363f88
+- card_id: farmers_market
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: farmers_market.jpg
+    sha256: 7d7e5f37848d44bdf92671a6b8fdfa471fb751e90a6ff58df5249e783efb4cf0
+- card_id: fortified_docks
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: fortified_docks.jpg
+    sha256: 7b5c266078e9df4f73df7138dfadaeec8fbf1186cd25fc4a2f8400c8dac5b430
+- card_id: frontline_encampment
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: frontline_encampment.jpg
+    sha256: 03d210a3bb98ad1c88cc797d8d7ac81c3bdc13a67b34b2b7115f1e4a9813538a
+- card_id: house_of_exotic_goods
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: house_of_exotic_goods.jpg
+    sha256: 4b2e5264c1768af76bbf7d4d300d2e0f45ef8da2398db4cec570b048d1d42f28
+- card_id: incapacitated
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: incapacitated.jpg
+    sha256: 25d482215a7eceadfc76967e3281f209e1efd5716a6cfd2c675f6d9a0f266f6b
+- card_id: kabuki_theater_troupe
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: kabuki_theater_troupe.jpg
+    sha256: 4f5498748b676c3ea371aeec53c2828d3f995fefbb14d58f8554b9f1e36cf8e4
+- card_id: kakita_ibara
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: kakita_ibara.jpg
+    sha256: 43a552423499d4add9644fb8b02c6d00d51f8d5383789cf7b1eb6dd2dabd976e
+- card_id: kakita_izumiko
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: kakita_izumiko.jpg
+    sha256: cf044e499c99222eb3cf39440871cb8ebf76dcf45080583a3f81173a448bcfd1
+- card_id: kakita_mitohime
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: kakita_mitohime.jpg
+    sha256: 96cab418fd1ce6f551146e2131a83a464410b1c2bdb74913b047c6e3415803f1
+- card_id: kobune_port
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: kobune_port.jpg
+    sha256: bc07030d9852f20c19b65ee2bda0728ce0c8838415eca39f7e448e68da612bd2
+- card_id: marketplace
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: marketplace.jpg
+    sha256: a04725550af6fb3971f88c2a724c7c24e3a1e2f745318b977c7cac284a998a06
+- card_id: medium_infantry
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: medium_infantry.jpg
+    sha256: f3e018e66fbd5b2120f7baffdaa074e421b62f7840ef94e53044eae05d6ad790
+- card_id: planned_departure
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: planned_departure.jpg
+    sha256: 7d9b9a60f74ed38e30cea557d47a7dda53167940f512a76254024c8113061fe5
+- card_id: reinforced_parangu
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: reinforced_parangu.jpg
+    sha256: 9e0a00867f759ff2b5eace744834a088fa8b539c3d3a9b48bc9ea4a18bdac6c1
+- card_id: ritual_preparation
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: ritual_preparation.jpg
+    sha256: 092d84b859583641937509910b45cb3218bc0c5e1e197877849e984a10c3f36a
+- card_id: ruthless_determination
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: ruthless_determination.jpg
+    sha256: 01ae90c20a62adf84d0ba8ec648cd729458dfffe076815765a092f42300c9988
+- card_id: second_city_harbor
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: second_city_harbor.jpg
+    sha256: e128037416fb07dc5ddef573433b3df3be86ae5c065835b508299bf7478d4041
+- card_id: singing_blade
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: singing_blade.jpg
+    sha256: 50fd6b8f32bbec4e718e15a9fd7142883ac0cf54a8db3cba2f3b2a5e1cd76661
+- card_id: small_library
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: small_library.jpg
+    sha256: d4c54e176d3999fde1cbedc46e614cd605e566b43e88f12deec2495dd43fa361
+- card_id: sons_of_gusai
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: sons_of_gusai.jpg
+    sha256: 848ff70717742cd7f0c30379630c48f0fe3a0a703e1e8d42f28c7e34ce154b3b
+- card_id: sparrow_clan_aide
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: sparrow_clan_aide.jpg
+    sha256: a2e6926e7696bf22dcd1ad977c079c10afa90ea9e6971cd642e9f467831a7581
+- card_id: startling_lessons
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: startling_lessons.jpg
+    sha256: e9332c110275284cb8cb504135e67f3c8098998bba8c28cd20244238f0bef759
+- card_id: steal_an_advantage
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: steal_an_advantage.jpg
+    sha256: b8b18b00f274f33c8ee375feea5ee61b4df2f386174208bd84cf8904a2e85031
+- card_id: strength_of_my_father
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: strength_of_my_father.jpg
+    sha256: 6b0cf0321772c8bc703ee139505fda8e607d6924113df13c135bc3f854e69816
+- card_id: tarui
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: tarui.jpg
+    sha256: 78b6c2cc8f272e4a19073e77a395b07b273462c48740811925bbbee035b4a971
+- card_id: temple_fortress
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: temple_fortress.jpg
+    sha256: d815a654083e0c3fff7d60f6427ed3d15a26e8124bfdb14571dae13b8c52ec0b
+- card_id: the_esteemed_palace_of_the_crane
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: the_esteemed_palace_of_the_crane.jpg
+    sha256: c9b101a7f4fe81942643d7741b004c06f51090a1ed5f552d143ba5c2ebd54a03
+  - role: back
+    file: the_esteemed_palace_of_the_crane__back.jpg
+    sha256: 4f2f713ffe5ab25c4cd885f5911f196ae2c00453d6b8bfadcaacbf8a8358eecd
+- card_id: the_eternal_chase
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: the_eternal_chase.jpg
+    sha256: 173cf6eb09796f694cd4ccebee619d3be48366fb131b5cd09cd3b0c282bcdcf2
+- card_id: the_fruitful_port_of_the_mantis
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: the_fruitful_port_of_the_mantis.jpg
+    sha256: 592df3c73949f059aa5703cf7edf5c66efa2aef675d76c98acc54893ce34f65e
+  - role: back
+    file: the_fruitful_port_of_the_mantis__back.jpg
+    sha256: 406f3dcf7bea6a67418f82aaa08c175cfe7bd73144048ca2584d802d917781f8
+- card_id: tsuruchi_jinrai
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: tsuruchi_jinrai.jpg
+    sha256: 3afddb207a2ccdcfcb8f47eb5910b035f24f955607616049b029e78d933dd478
+- card_id: tsuruchi_satou
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: tsuruchi_satou.jpg
+    sha256: 12240abd619ec1c29171f3a0baeb624c8db1fbb6da99fc61836594816e8422b2
+- card_id: tsuruchi_taito
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: tsuruchi_taito.jpg
+    sha256: a08b93952d283134ad5999f0fbb1f5894795580aed9cb01d1128220248a6a5ec
+- card_id: yoritomo_raiden
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: yoritomo_raiden.jpg
+    sha256: a05f14aea1b5aca01b5fc04c4b949d28d37956f33fd4acbc1507cb16870e567e
+- card_id: yoritomo_teihiko
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: yoritomo_teihiko.jpg
+    sha256: 03ddec4e8028e9afabb120c51801682b29c90fae1d15ec440c1e23d38b08382d
+- card_id: yoritomo_yakuwa
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: yoritomo_yakuwa.jpg
+    sha256: 133073aeb2d3ce7886f7ad48815d398a9ac204ee331acc3c9fac4da2bc695a34

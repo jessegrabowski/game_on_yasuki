@@ -1,0 +1,308 @@
+set: The Imperial Gift 3
+images:
+- card_id: a_life_for_a_soul
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: a_life_for_a_soul.jpg
+    sha256: a4107e309fad969405687e80d79bf4d88e48aa19c5c38c824b13ad56661f9c8a
+- card_id: agasha_yuhiko
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: agasha_yuhiko.jpg
+    sha256: 3012405e0bfe459a9bce6bc9b19c13e6fbf81a83cde684a223bd3bf0cf95aee3
+- card_id: akodo_tetsuru
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: akodo_tetsuru.jpg
+    sha256: f086232e85456ca7dbd1cde68e7096905f78a742b826bf628b82e7ecc52c3b7f
+- card_id: ambitious_merchant
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: ambitious_merchant.jpg
+    sha256: fe7875235eaf27e405c387c9772363b435c96589920c1199dc0214fcd5ac904c
+- card_id: aspiring_ronin
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: aspiring_ronin.jpg
+    sha256: 8c17ee49f46d07e6864f0a909dea5915135c9f5b0007709a488207667aa813bf
+- card_id: awakened_blade
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: awakened_blade.jpg
+    sha256: 258db19dbe8f452ae8a978bbcff477513eeedf7766d336cdba55e06de57568c8
+- card_id: bayushi_orijitte
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: bayushi_orijitte.jpg
+    sha256: 21d004f7a05304fec95cc3add8b9dac4ec7dd7562cda562bac18b3f50e8c5ad0
+- card_id: celestial_disfavor
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: celestial_disfavor.jpg
+    sha256: 3f762cd8f3a3b4e422ab1a5aed89efc23acca0c5cdd6fda82c95c62c3ff5165d
+- card_id: coordinated_assault
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: coordinated_assault.jpg
+    sha256: 23c1f6240adc65b6f4c2c56354bf89842719824e0ce81ba952f3e14e59ee92f8
+- card_id: demand_obedience
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: demand_obedience.jpg
+    sha256: d182e4f86b76fc9a9b161d3c8415437ac5f93df700d3307ac16c0a612be6a90e
+- card_id: deny_the_darkness
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: deny_the_darkness.jpg
+    sha256: b7ba333d4a59f9d8dace37d717e84b106baad8395251ccc4e6ba0c904351fbe2
+- card_id: deny_the_horde
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: deny_the_horde.jpg
+    sha256: aa4eb053b531241e5662b076fc87a6743f54c60e9ae2ca9c2823480f443fb82f
+- card_id: enemies_of_the_empire
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: enemies_of_the_empire.jpg
+    sha256: a0c39df33dc409bf3555f46c2fd78a9b4ceb2410c7ff0f958798580c0ca1969e
+- card_id: exotic_goods
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: exotic_goods.jpg
+    sha256: c4205aee8d76f622d103647c7c1b543be6b7b4d7ada7fb20a7843b7f979c2c46
+- card_id: faint_praise
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: faint_praise.jpg
+    sha256: 0918e559cb1a444d7da04c9630ad9bc509887f778917c877b9562a646855db68
+- card_id: fearsome_mempo
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: fearsome_mempo.jpg
+    sha256: 6fe2e083a7185fe92df7a3e3c7edc8a22f858b7578b513274743310fb30b2068
+- card_id: fettered_minion
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: fettered_minion.jpg
+    sha256: 25ed393e1b7cf55b7b5193a1fd05f3cd735d060f50a2a0dcb7a406b124260ccf
+- card_id: hida_mochitoko
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: hida_mochitoko.jpg
+    sha256: 5b4e080b1959b1f25d77211f85ccc717947da13d9ecca9560c53fa2092015342
+- card_id: howls_of_the_dead
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: howls_of_the_dead.jpg
+    sha256: a18a13c97d36c837cadea29d0856476ef7e21cdf52d5b2b7e5b2601e754790ac
+- card_id: imperial_gift_3
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: imperial_gift_3.jpg
+    sha256: 15e40c72ffde2bd97437c301f597482ae832c4968d7b859a256e036908224ed4
+- card_id: infinite_city
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: infinite_city.jpg
+    sha256: 864619ee12d3dad27ed1eb4b7ad8c8ca49c6a43faa9b33dfe2f43ee825ebce09
+- card_id: iuchi_quan
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: iuchi_quan.jpg
+    sha256: 696cd3feff3c8dd4134be08ec72f28c939827d1a30cb745c496db1f863b6fc7b
+- card_id: kakita_furegami
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: kakita_furegami.jpg
+    sha256: 438d29b113be76d7439a20c4107ca806f8f8606c8c0d8d35f2c662412a7fec03
+- card_id: kazuwaru
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: kazuwaru.jpg
+    sha256: e192d6b359b1cac68cac3394a0c05fb078dee8ac5eca3830d779f614ccd57fdb
+- card_id: kitsu_marimi
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: kitsu_marimi.jpg
+    sha256: 58fb56da147901ef973acfc4dbaf504e2ff162877dacf7ff5624ab1fa9200eb4
+- card_id: kuni_iyedo
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: kuni_iyedo.jpg
+    sha256: 5f421563a41a3aa4b880d9f0078870776ceac4b8a8cc05914b2f17bab40aecf5
+- card_id: mirumoto_miyami
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: mirumoto_miyami.jpg
+    sha256: 836b122b3aa93ef5929e8408df526388e06ddc7dfe8abc2358816af5b7373858
+- card_id: myth
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: myth.jpg
+    sha256: 9d32ba03267dcf4f23e8cf22fa377f0287a9a610b88f27e158a72fceff7da178
+- card_id: ominous_battlefield
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: ominous_battlefield.jpg
+    sha256: 0c1ca075b7835a83a23a6b8dab0d44f799ec43c09b181b4f95b535014e40f734
+- card_id: opportunistic_advance
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: opportunistic_advance.jpg
+    sha256: 3be0aa3c90132e25a9013c8fba53c149e5e86b70a68e7b020824c2d7c81b940b
+- card_id: planned_adversity
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: planned_adversity.jpg
+    sha256: 69695e35242f82075a6a335b8797ef8ca899293a2809d579329a4808fd247edd
+- card_id: seasoned_ronin
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: seasoned_ronin.jpg
+    sha256: f88eeeb85b1e0e5c0210cf32c61cd24b01c49e9b74c6d351b63d91243bb89255
+- card_id: shadowed_words
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: shadowed_words.jpg
+    sha256: a098eb8998a503a211f25c422b65f955cad47539a13089647b69b65f7127f5ac
+- card_id: shattered_stone_kata
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: shattered_stone_kata.jpg
+    sha256: e785053ab16dbc177ca8cf471ebec85fb4846b4e68c1e14a975a456b73cb974c
+- card_id: shelter_of_the_earth
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: shelter_of_the_earth.jpg
+    sha256: 09d6d1bcf56af767fc13474f722e571e91457c301c4bcce0498f70b004d3c5c2
+- card_id: shiba_kyushi
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: shiba_kyushi.jpg
+    sha256: 9579127d146a69791246bed9fbc6630999300c76f83bda2fb27bc055e9f7ed6a
+- card_id: shinjo_liu_ying
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: shinjo_liu_ying.jpg
+    sha256: 01583afa06d193f01bb0cfc5138f0becd7e5e40639db444ad73a3c9b0447f3a9
+- card_id: shosuro_nishu
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: shosuro_nishu.jpg
+    sha256: 03f555aef019279e3e03b3f0767fbc9af62ce32823250752fc358ad5c6f19904
+- card_id: soheis_duty
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: soheis_duty.jpg
+    sha256: 665fa965799a18cb2ee198ed3bf102507f5ea33fbeaf093befbdab309945a395
+- card_id: steed_of_the_ebbing_tides
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: steed_of_the_ebbing_tides.jpg
+    sha256: 525466a3b02892d7119e1b1334f1190c3f1450005102c3633ca324d7c4c30a5c
+- card_id: strategic_keep
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: strategic_keep.jpg
+    sha256: 5751bcc47d18b0dccb2694339bc28bafc83c96242064fdda5d81bc36a7b83563
+- card_id: subversive_whispers
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: subversive_whispers.jpg
+    sha256: 417839364ec8d44471379f04c4a835b7c89065cf84bfdeaca63cd357cf995644
+- card_id: succumb_to_vice
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: succumb_to_vice.jpg
+    sha256: 36086e6c815ddcf7ce4e2c76e6244107817733aeb889918b615de002cd4e095b
+- card_id: tamori_ochimo
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: tamori_ochimo.jpg
+    sha256: 5808aaca86a1a4be947d9212f8f080217257fe15af95518e03443dc193245bac
+- card_id: tarui
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: tarui.jpg
+    sha256: 0f4b8838ddeaf5d4459497ff92e90f05caba9811300fa60ef101865805ed66ae
+- card_id: the_plague_war
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: the_plague_war.jpg
+    sha256: f0452e562e14b32a0422ddfaae54d3333a0a88ee84e3535fccc1ccc4f2b8ce3a
+- card_id: thunderstone
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: thunderstone.jpg
+    sha256: e96d8fb3a1b72f26f3c005c3fb3185cfd2e2a4f59a372ef2bab3e89bb01ae1d1
+- card_id: tomb
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: tomb.jpg
+    sha256: b0a092a688755cce433838fa883fcc649c9ad7d0e150788697835b7c28a71b7c
+- card_id: war_of_honor
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: war_of_honor.jpg
+    sha256: e169ec42f8865e5c374690cb5d06a5d3e30a96e802d424973162d5ea24392543
+- card_id: yoritomo_gazuke
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: yoritomo_gazuke.jpg
+    sha256: 6cd1cfb5fffba19a8411c62f6628e3dcba659fd612a096b7def99d012304ff25
+- card_id: yoritomo_kakeko
+  printing_id: the_imperial_gift_3
+  files:
+  - role: front
+    file: yoritomo_kakeko.jpg
+    sha256: b6a4b6209e50c36ab9eb09f62e099b9d1cdeab4c02f267c2f3db74c3e89deda4

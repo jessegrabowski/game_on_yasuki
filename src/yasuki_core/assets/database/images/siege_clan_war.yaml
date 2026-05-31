@@ -1,0 +1,458 @@
+set: 'Siege: Clan War'
+images:
+- card_id: a_terrible_oath_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: a_terrible_oath_2.jpg
+    sha256: 80b4d5b3747381b868ae4814a10a60dba70038ddb72a817e8b67c4333c636557
+- card_id: bayushi_kachiko_seven_thunder_experienced_2cw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: bayushi_kachiko_seven_thunder_experienced_2cw.jpg
+    sha256: cf3499a7dabbb1d2bef21cb4bece6b4af6a4d94b61c25b8fe0d589e5a2622151
+- card_id: beiden_pass_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: beiden_pass_2.jpg
+    sha256: 3df78496cbc164dd237fab0c1dd99d0ebcf9c67f3ddcb71ac7c75bda78f303a9
+- card_id: black_wind_from_the_soul_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: black_wind_from_the_soul_2.jpg
+    sha256: 1bb4514f17677f0564f2ff3ec17d602a8845754ed9d3ea308620be087de7891e
+- card_id: compromised_supply_lines
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: compromised_supply_lines.jpg
+    sha256: c359089067d12167dc52577931a0dcaf2459bad3f799a88e30f16be1a56861f7
+- card_id: corrupt_geisha_house_experienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: corrupt_geisha_house_experienced.jpg
+    sha256: 22038c73d309af16c7f93ceac4a61cba7b7b8e2c810281c2bb7b6fdb075aea51
+- card_id: corrupt_gold_mines_experienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: corrupt_gold_mines_experienced.jpg
+    sha256: 331e3c7e75528f0740c0dd05ebae999a2417553e92a5c95bb0b183e77f3e94f6
+- card_id: corrupt_stables_experienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: corrupt_stables_experienced.jpg
+    sha256: 9b858e4c3bd7fe7cd096e1b0864f96cc9c5755649ce0f6c30075f6eed79896f8
+- card_id: corrupted_copper_mine_experienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: corrupted_copper_mine_experienced.jpg
+    sha256: cecab7d5c655904145e25c9e370a085c66ee2b79e7bb0c89e4ed07f95179f04d
+- card_id: corrupted_iron_mine_experienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: corrupted_iron_mine_experienced.jpg
+    sha256: c8c9b8e33c940b1800cac19ce9512bc5539be384a00f9c45fcccb5a85d878843
+- card_id: corrupted_silver_mine_experienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: corrupted_silver_mine_experienced.jpg
+    sha256: 3316415c5e46fbad84ec1df7de87380c1706d398a6c7ebc20e36b6db7c1d290c
+- card_id: dark_daughter_of_fu_leng_experienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: dark_daughter_of_fu_leng_experienced.jpg
+    sha256: 74945cc16ae5dcb1b7c2f2cdb97968c34cab4dd6f52db21e455635650dbd6e99
+- card_id: dark_divination_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: dark_divination_2.jpg
+    sha256: c4650736f04db429a375b507ae09c88fd7c482f69b4e74833b6f76d5dfb365b5
+- card_id: darkness_is_inevitable
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: darkness_is_inevitable.jpg
+    sha256: 824fbbeca607ffb023a137f67c2278f226891791ec7629567e6d7f2f2ffa86dd
+- card_id: doji_hoturi_seven_thunder_experienced_2cw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: doji_hoturi_seven_thunder_experienced_2cw.jpg
+    sha256: 24b2dd8325932c1e75483c49cc4e6438fa04eaa77486ac0285b1e9b3046847b6
+- card_id: doom_of_fu_leng_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: doom_of_fu_leng_2.jpg
+    sha256: ebfd9bee6de42d2ae745608f5694b3c6eb94bca34e428851ea7d2c95aac2b138
+- card_id: fallen_in_battle
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: fallen_in_battle.jpg
+    sha256: 8aff13d342809f3dd37d806c0d22fbedba91f8772cf8d41b9334bbf8789f4449
+- card_id: fu_leng_the_ninth_kami_experienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: fu_leng_the_ninth_kami_experienced.jpg
+    sha256: 624be14fe8cd96b68db93c889fa8531e4bbe7fe50ca273cadcbd7b847da11f71
+- card_id: hachiman
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: hachiman.jpg
+    sha256: 358e48172680c39cf19cc8d387698154475287e0afffdcf01b16a55d19f2e1ad
+- card_id: hida_yakamo_seven_thunder_experienced_2cw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: hida_yakamo_seven_thunder_experienced_2cw.jpg
+    sha256: 9e71454687a18a7e3cbcab16ac8db945ac358e6315c83debc9fa7a91e12edc5b
+- card_id: house_of_the_black_lion
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: house_of_the_black_lion.jpg
+    sha256: 2a4054198da404fbc3dba278f1e2680588799ebad597f7e161e4fad6846f3bbd
+- card_id: hunting_in_the_shadows
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: hunting_in_the_shadows.jpg
+    sha256: 0d8e02af0317c82faf81722747e372f9265eb1b817133e25e31df85a6de251da
+- card_id: insidious_influence
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: insidious_influence.jpg
+    sha256: 16a217c25bf169c2d8575b0304d1aaa8a3f83b8ca07d832e2ef659fbf612c376
+- card_id: isawa_palace
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: isawa_palace.jpg
+    sha256: 972a62907aea2c475d4b9e3c94277dd4f64aa07b51eb27d0d43e40d25801a5f8
+- card_id: isawa_tadaka_seven_thunder_experienced_2cw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: isawa_tadaka_seven_thunder_experienced_2cw.jpg
+    sha256: 2ece17e2d70488d49919bf34d4a066a0e637286d5ddf6ecfecf363064523f280
+- card_id: isawa_tanayama_the_necromancer_experiencedcw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: isawa_tanayama_the_necromancer_experiencedcw.jpg
+    sha256: e983a4670eb7017c15fa6fd04751549abac581854a819f384eb7fb227744102f
+- card_id: isawa_tsuke_master_of_fire_experiencedcw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: isawa_tsuke_master_of_fire_experiencedcw.jpg
+    sha256: c2fd525dd9c323746b6a8d11da2792b2b15205cf58b89afe3e0cfd6305498ee2
+- card_id: junzos_dark_citadel
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: junzos_dark_citadel.jpg
+    sha256: f0b7a7d4c7e750e94d9e07843de491799d57254019ceb0b5b13e5858872f98bc
+- card_id: kuni_yori_the_corruptor_inexperienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: kuni_yori_the_corruptor_inexperienced.jpg
+    sha256: 235858b29d2d6d33b66938fd1fb3bc2fdb69191eca436193f569287f7268e457
+- card_id: kyojin_experienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: kyojin_experienced.jpg
+    sha256: e38da092a52c298d89fc0c3e85fdcd99ae5d7ac61a37264ae413c8d7207b1dbd
+- card_id: kyoso_no_oni_experiencedcw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: kyoso_no_oni_experiencedcw.jpg
+    sha256: 1641f774981461a64f8b269af3542a879b75d47e64e28f7ec0b34b74f616134a
+- card_id: line_breaker
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: line_breaker.jpg
+    sha256: 0f031788e44170aa9d362f1a7cfc30987198e3f4546a26126a58f4c3b2abdaea
+- card_id: mirumoto_hitomi_seven_thunder_experienced_2cw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: mirumoto_hitomi_seven_thunder_experienced_2cw.jpg
+    sha256: 6d87d64ede932f70807e2bc3628701ff57bb59e5b99a0a29bc1752bf592c1227
+- card_id: moto_tsume_experiencedcw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: moto_tsume_experiencedcw.jpg
+    sha256: 736e6f9513daf264f5fb8750790d4c344fafe6f7402eaeb0982003c35284c53e
+- card_id: otaku_kamoko_seven_thunder_experienced_2cw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: otaku_kamoko_seven_thunder_experienced_2cw.jpg
+    sha256: 796ad4540322dbbda2f9884ae2c685e2bb17666a657f336be510c79c7b66f0b2
+- card_id: otosan_uchi
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: otosan_uchi.jpg
+    sha256: 9ee6c4d7eb414ea27ece63b2cb21d791329ea383eb1dd298e41fd19c7431c016
+- card_id: parasite
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: parasite.jpg
+    sha256: 9b63dea7d18092dc97b839cd92b615da51043bf5b5a5bbfc011bfc94d31530c4
+- card_id: return_of_the_fallen_lord_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: return_of_the_fallen_lord_2.jpg
+    sha256: c4615918583f92e49bd8258b67bee5d93cb4d5385d4d99c66435d3ae17e4214c
+- card_id: rite_of_binding
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: rite_of_binding.jpg
+    sha256: baaa870813322a4767b5dd0af15305d27a3527b05febe329d7d9f76390d0f457
+- card_id: scorpion_clan_coup_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: scorpion_clan_coup_2.jpg
+    sha256: e43575f482edfdec8ced68b0a98a80c5c23acec90a74843a9d537c233e5f0832
+- card_id: shapeshifting_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: shapeshifting_2.jpg
+    sha256: 113477a6a2640879460680e4035af6b8a88390f6e995f179ccff4fb4c500c564
+- card_id: tactical_retreat
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: tactical_retreat.jpg
+    sha256: 24b23ed9c3d9b00f9a9cbf18244ba1e7a346271acd7426933acd34adf0d28c48
+- card_id: terrifying_presence
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: terrifying_presence.jpg
+    sha256: b6fb395b6b39a6f8cb9074173bddf1777068fecaad17de189cfea40f7acbad73
+- card_id: the_12th_black_scroll_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_12th_black_scroll_2.jpg
+    sha256: ecd254ea1daeb53f7e0b7d2c2a742238eb849839b5e691c2b27dac64c95490f4
+- card_id: the_alliance
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_alliance.jpg
+    sha256: 819bb60ce7272e6f40f989cf4e948fa75eb22fa9ec6994c86f0782e22ab17947
+- card_id: the_blood_awakens
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_blood_awakens.jpg
+    sha256: fa784c0dc99e187922d4188ab44ae1e59a16058ec07cd9f559ec2c7d653d41b7
+- card_id: the_brotherhoods_abbey
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_brotherhoods_abbey.jpg
+    sha256: ccd0fa312a5a86a3c1164cc36e22a880e05d28dc8de00c1120f7753bed2bff40
+- card_id: the_crane_lands
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_crane_lands.jpg
+    sha256: e2eb097e0dd592820502335a1e083d0271590e0eb1c78cffa7259ec4f7b91dea
+- card_id: the_eighth_legion_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_eighth_legion_2.jpg
+    sha256: e345c31adf8d59d5d9f0e565d26040bb717ea0e5d21fd937be9724f0a73acfd8
+- card_id: the_fifth_legion
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_fifth_legion.jpg
+    sha256: 89ff19312a332390dd99f5d7e4025e3ae82e3491448c4d553912e657ba078ef1
+- card_id: the_first_legion_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_first_legion_2.jpg
+    sha256: 0e18c3202d4546b598828d44e50f2823bf2e863b1697d1f330e6ea6e19712b89
+- card_id: the_fourth_legion
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_fourth_legion.jpg
+    sha256: 11661a712db5c91f1ec0219d96d91caff36bc45d3c7274d1d17f6f9da20f1860
+- card_id: the_hidden_heart_of_iuchiban_experiencedcw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_hidden_heart_of_iuchiban_experiencedcw.jpg
+    sha256: d26bacc5d8488272a4c8089b9bd71f4567901fdd34d4cebc3111e556c3b2a49a
+- card_id: the_hooded_ronin_descendant_of_shinsei_experiencedcw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_hooded_ronin_descendant_of_shinsei_experiencedcw.jpg
+    sha256: 07c012c72d990a3175e39a4d6064220e4c1a95d7452426cc8c05c6c7b869d011
+- card_id: the_iron_citadel_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_iron_citadel_2.jpg
+    sha256: 378ebb1de3be27ae477352755d877bc4be5a8c422b717df001927db6008669f7
+- card_id: the_jade_hand_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_jade_hand_2.jpg
+    sha256: 108a5133ec727ca42c0ff00d0cfc154792e28c94a390c1a1b288b224e12e2a7c
+- card_id: the_ninth_legion
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_ninth_legion.jpg
+    sha256: 5eb1f9fc786217e42128345264d3e431041d053c3c0320b9e606bc8535a77152
+- card_id: the_obsidian_hand_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_obsidian_hand_2.jpg
+    sha256: 965a83520652fae1ca95b9a417d48ed704e75f9a6f03abee9f1d2ee5c8931335
+- card_id: the_searing_touch_of_jigoku
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_searing_touch_of_jigoku.jpg
+    sha256: 696f844f71d5fa9f47db536c2e574ea810362e6dfcd604b60fda3b0d3109150d
+- card_id: the_second_legion
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_second_legion.jpg
+    sha256: d4f2ded59093ebcf9e6b7054c65b21e55cad8a1a7e4e7052f3dc98913e34c9c2
+- card_id: the_seventh_legion
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_seventh_legion.jpg
+    sha256: d40754f4a45d9e64c8d5ea9d068507a60b24c89cd1699284133973daf5117047
+- card_id: the_sixth_legion
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_sixth_legion.jpg
+    sha256: 77faa334676f90b6b510e525feea16c330922e58f467f9a7307b20c9701c1182
+- card_id: the_tenth_legion
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_tenth_legion.jpg
+    sha256: 89140101dd0855d39c31f0c36eaa9a0fdf5aef8d9457cf7c484a14af9fcd387e
+- card_id: the_third_legion
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_third_legion.jpg
+    sha256: 13414edcb5e5c2a92fd92c1f08aa3c61c7b40784f61ecdeeaa7f7335669b8c00
+- card_id: the_throne_room
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_throne_room.jpg
+    sha256: b16815cf19d2c053aff2ff746900fb9f023f1069428ace09e20fcc110beb52d0
+- card_id: the_walking_horror_of_fu_leng_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_walking_horror_of_fu_leng_2.jpg
+    sha256: 2bed78c8b261100f5adcaf00ec948d60158778615c9a42705dd98726cd2b74dd
+- card_id: the_wasting_disease_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: the_wasting_disease_2.jpg
+    sha256: becc2dea3fa33f0048efa8f4eb2c0f664a56a05ce2c9aa14110e7d7e414c7c09
+- card_id: throne_room
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: throne_room.jpg
+    sha256: 0dc5b7594ed7d7db71e1d575afdb6ebb6f1cd38a8171ef8352a50743671959cd
+- card_id: togashi_yokuni_kami_experienced_2cw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: togashi_yokuni_kami_experienced_2cw.jpg
+    sha256: d7ff51f0a858d9e60ae4b7eb9a61db67e2b758fe93b68b182c31d330bacfa28d
+- card_id: toturi_seven_thunder_experienced_2cw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: toturi_seven_thunder_experienced_2cw.jpg
+    sha256: f931b2046d0542c4d4a7e1bc06f13ae8be3c140aa3a97e9af70242b6cd9b06b5
+- card_id: touch_of_despair_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: touch_of_despair_2.jpg
+    sha256: f0b5421a9526f4f00d8fde3c63fab807ce4fef9be767c3f495e3e58cdacbe4f4
+- card_id: touch_of_fu_leng_2
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: touch_of_fu_leng_2.jpg
+    sha256: c9e2bdf2c2a02d5abf3b2f2763b3e538b477bf7b0916e752b3ea25927ff24732
+- card_id: tsukuro_experienced
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: tsukuro_experienced.jpg
+    sha256: 44ed1c75d0debc78060bb9b478e06c94d6ec0ec682173708932b80bc9302ee9f
+- card_id: unholy_power
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: unholy_power.jpg
+    sha256: 16b4c57ce3e3d73d7fa2d1a44ba2150079597e1457c12f245324f4b384e4c1a0
+- card_id: yogo_junzo_the_betrayer_experienced_2cw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: yogo_junzo_the_betrayer_experienced_2cw.jpg
+    sha256: 025aedd27c17b85d187b684eff83ad94764c9140ff32df1fbf5d6fbc27e8168e
+- card_id: yoritomo_son_of_storms_experiencedcw
+  printing_id: siege_clan_war
+  files:
+  - role: front
+    file: yoritomo_son_of_storms_experiencedcw.jpg
+    sha256: f2990554848f92d1548a0cae1b03276fc792ac395d0536dc15c9286efdc5a2b5

@@ -1,0 +1,266 @@
+set: 'Siege: Heart of Darkness'
+images:
+- card_id: artisan_district
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: artisan_district.jpg
+    sha256: 5ba797f203e1ba7d5a2355c5d8b2d8cc381a9ed1fbc8a29980a7789703f443c0
+- card_id: askett
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: askett.jpg
+    sha256: ecb1ecf44e1360116fbd35d0c2e00566233be35ea3389b4fd6b90c3fd18ec104
+- card_id: asp_spear
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: asp_spear.jpg
+    sha256: 1f83eb000dda625c6daa45ed5b2322ba39fbb6360c3207abd763263f1178ebe5
+- card_id: asp_warrior
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: asp_warrior.jpg
+    sha256: da594a5633c252ca673cfcab9d2c8fcf211f376df620c5732d97ed8c24a1e051
+- card_id: baseless_rage
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: baseless_rage.jpg
+    sha256: 10d443849c8d7c11fb0122d68e079e407803042f95a43ecbcd781eeae3efe78d
+- card_id: breeding_grounds
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: breeding_grounds.jpg
+    sha256: 0879af2a5447c9f959c197a5b9bca81d1b6d4c577b3ba7a9543f2a4fc713a63e
+- card_id: brutal_strike
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: brutal_strike.jpg
+    sha256: d85e509cf3ac402a7721a430ab6a16956966a87170bc95b28de081f171661354
+- card_id: clutch_of_eggs
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: clutch_of_eggs.jpg
+    sha256: d00780adaa73e46f6eacffbcd55ac34fab08ce3d3b3a71921e69083038895ab3
+- card_id: corrupted_wildlife
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: corrupted_wildlife.jpg
+    sha256: 5aeb2eaf6516c78f5203b5fc1eff5edf31281f0ef40317a54c4c88ae41acd056
+- card_id: cursed_resolve
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: cursed_resolve.jpg
+    sha256: 1793fc69a1621f1211f405c810dfcb5fe216d4eff5e8b9d9fa54389a16fa47e5
+- card_id: gathering
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: gathering.jpg
+    sha256: 367b7a62965be23cc2a18e0896d1b33def68dc1e55d89046125afb3708a26f6a
+- card_id: hour_of_the_boar
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_boar.jpg
+    sha256: 959e0999cf4b3c6de9880db69c1cc3d5d888931907fafd87e3b8faaea391766b
+- card_id: hour_of_the_dog
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_dog.jpg
+    sha256: 3aadb2fd7e4d486522e78051603cd0a9b544617611703c1aa414c71c1e4d22a2
+- card_id: hour_of_the_dragon
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_dragon.jpg
+    sha256: 53fda9d399f3533cd8e61e65d1e8dc71b7de7e691dde6ca14298936d956f3550
+- card_id: hour_of_the_goat
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_goat.jpg
+    sha256: e9224f68f77361ba33c8300aab1451e786c63866609c33d50584323720d7497d
+- card_id: hour_of_the_hare
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_hare.jpg
+    sha256: 150a1e9d92b1fc70890fc79503d98923a0bb1086cb1cf2f66668f6bebe40db77
+- card_id: hour_of_the_horse
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_horse.jpg
+    sha256: c070cfbc7ccf52a0eed0bc027161207590203409648131b6697082f9ae67f18c
+- card_id: hour_of_the_monkey
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_monkey.jpg
+    sha256: 6ee5974c54794e37f6bba39be9457a583f35c827785a4f1003d7692dcda29e76
+- card_id: hour_of_the_ox
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_ox.jpg
+    sha256: 07dc27a56651179f3055a377ead4fe2e3e31f008dd56698c027cd9fd6f825004
+- card_id: hour_of_the_rat
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_rat.jpg
+    sha256: d4de850ddf27996df87ef1bede2bc6fc8e7957322bf4120297a7af1b0012ec6a
+- card_id: hour_of_the_rooster
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_rooster.jpg
+    sha256: 7ed0eed92ddda572c6a9b8a8647286dcc389d343a4199814d80189c6c0d3eb69
+- card_id: hour_of_the_serpent
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_serpent.jpg
+    sha256: b6b25bac29a96fdd6b5d0952225af5aa8325d02bbc3884e5063947f115234ae3
+- card_id: hour_of_the_tiger
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: hour_of_the_tiger.jpg
+    sha256: 86c88bfa8e87b108b88cc8f9722d3d5356da8227327cebb8da236d2337aaed81
+- card_id: imperial_district
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: imperial_district.jpg
+    sha256: 86684adc7f4bf724ce8c7ce30ae02020f6cdec29fb3058d40f812e0f992c10d5
+- card_id: inevitability
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: inevitability.jpg
+    sha256: 0f3104cb893f53bce63ee0f541ec3017a881fc19b031578c6334f13ee85e3107
+- card_id: knot_of_serpents
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: knot_of_serpents.jpg
+    sha256: 1fb770b14e561064fe751b42a18d7111998e5f19a3907029b3ced29b6d526431
+- card_id: malevolence
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: malevolence.jpg
+    sha256: 80a729e69598e093408ee37e753312cfdddbe1bd815da89511b4995781ccf874
+- card_id: merchant_district
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: merchant_district.jpg
+    sha256: ce591676be7418e0251b5b864b0b7028fd3bcc55851b5e703f1b8dc2703cc773
+- card_id: military_district
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: military_district.jpg
+    sha256: 9a1a7ae9d243ed3f970a73597866091cd120f667171313f0d9afe450ef64e6c5
+- card_id: pearl_cache
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: pearl_cache.jpg
+    sha256: 03c6cefa303d599256dcca1aec4294616512e2c0f5b6dbb1194ecaad9fa734df
+- card_id: peasant_district
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: peasant_district.jpg
+    sha256: 5b0cf9387d76d7c930727bd41d67015329310b4ad02711b9c9c853bc5dedc36c
+- card_id: serpent_tunnels
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: serpent_tunnels.jpg
+    sha256: d3618698963f509c417bc3e919be18825c29d2cad491eb494f042ff3008b7832
+- card_id: temple_district
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: temple_district.jpg
+    sha256: e75525d98c6848e809bf05aac0c8785340990ca67f6fc87653ddbec4b61a4a30
+- card_id: the_akasha
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: the_akasha.jpg
+    sha256: 22d1e7413af40893c9ef0332716e29b9781dabf6eb82d31b242309f02a9febae
+- card_id: the_dark_naga_the_heart_of_darkness_experienced_2
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: the_dark_naga_the_heart_of_darkness_experienced_2.jpg
+    sha256: cbc563a9dc29da56f79ee9428901af735be874922dd0cbc503b50c3ef2e7ce9c
+- card_id: the_niskara
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: the_niskara.jpg
+    sha256: 13156b1085f7104f682489311444403f67ed5d8f49f936ddec5e547dee1264e9
+- card_id: the_qeltash
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: the_qeltash.jpg
+    sha256: b5bf7f9db17091be4707f6269e0d8304988977da5f86703a683f9a433dae03bd
+- card_id: the_quelsa_the_forbidden_jakla_experienced
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: the_quelsa_the_forbidden_jakla_experienced.jpg
+    sha256: 917c18246e3005c34cc2f175826fe86364398aa483c648643d2b16f5e88a598b
+- card_id: the_riddiqesh
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: the_riddiqesh.jpg
+    sha256: 2a19acbadb8effadcd4063182e6b27f0d585e62aaa92bf074f20e441a7deb169
+- card_id: the_shakash_the_will_of_the_knot_experienced_2
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: the_shakash_the_will_of_the_knot_experienced_2.jpg
+    sha256: 379f0ddda66acf3d19d08ef37ef9b1e2b2554d88e5271a4d51d083a5e45212f4
+- card_id: the_sleepless_one_keeper_of_the_pearl_experienced
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: the_sleepless_one_keeper_of_the_pearl_experienced.jpg
+    sha256: e2c6e1be087bb9a5db48a544a0b077f1fc6ccf6a31b82686830be07fc3eb8892
+- card_id: the_teskath
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: the_teskath.jpg
+    sha256: 0662dbcd1881e61c0b9be33ebb3618131aec359399e79c8e51dc48ffdbbcd389
+- card_id: treacherous_growth
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: treacherous_growth.jpg
+    sha256: d5b29f8f659639c628d842e42d244929a849c4aaa39a4cea947c731439777bcc
+- card_id: warlords_command
+  printing_id: siege_heart_of_darkness
+  files:
+  - role: front
+    file: warlords_command.jpg
+    sha256: 2bd76c79514a1356acc2954511e06c4404db4f48db436deb14e10258de9578b0

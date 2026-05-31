@@ -1,0 +1,902 @@
+set: Coils of Madness
+images:
+- card_id: a_magistrate_falls
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: a_magistrate_falls.jpg
+    sha256: 19a23842ef1b0f28d5a033d55e45b088a8add77c58c360345181ddc2d07ab9a8
+- card_id: aberrations
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: aberrations.jpg
+    sha256: dfb657b272567f6274cf4219e999a978d42706f921177edfe6524c292d8e36e9
+- card_id: akodo_tsudoken_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: akodo_tsudoken_experienced_2.jpg
+    sha256: 6def27c6dee108d7f8f28d9587308a20b253f584642efb360a8b2e40889a9307
+- card_id: akumasa
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: akumasa.jpg
+    sha256: 546da0b48f26482c162543b84994189ccdef926f47afbe26ee8bd1b29924ebcc
+- card_id: among_the_clouds
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: among_the_clouds.jpg
+    sha256: c3fe95fe76aa5a4257c14f79aca8b39beb9a461bf4c0fc5768ef2a88626e78c9
+- card_id: an_empire_of_madness
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: an_empire_of_madness.jpg
+    sha256: 86eb6af1db2ea4cf9c1614f4256d16811776c70a65fcf640f6858ee548a19c5d
+- card_id: an_end_to_hostilities
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: an_end_to_hostilities.jpg
+    sha256: e383ddae5982fa5fd121f265614fc23ccc69f1cf9b9c035e579f829d1100a207
+- card_id: armor_of_the_mad
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: armor_of_the_mad.jpg
+    sha256: 15d38570463f654029f1456bc7445bf435000e57562011ee971d8ee367a1b53f
+- card_id: asako_chukage_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: asako_chukage_experienced_2.jpg
+    sha256: e44d0631524f9efb36f2072ddde70cf7e7763aa196f650dfca8f3c29dc8ca38c
+- card_id: asako_kaitoko_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: asako_kaitoko_experienced.jpg
+    sha256: 08eda3574ab4be9c41f8e2c8dbd571f44168127ec4ee7cc49115ab876b1b11e9
+- card_id: asako_usohara
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: asako_usohara.jpg
+    sha256: 4de47013d9bceb92a1e668c2796b94ed60c07619c45605c97e1901aa3b1b9a7f
+- card_id: asp_skirmisher
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: asp_skirmisher.jpg
+    sha256: c3a6b750ace4648c927bc392b644d73a57a6d448985726948f6a67b9769c6901
+- card_id: asukai_the_tireless
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: asukai_the_tireless.jpg
+    sha256: 7e62c2c8140865cf4e45dcb81fd71e48e444f3e11e2c558b00d03df92d196dfd
+- card_id: bamboo_harvesters_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: bamboo_harvesters_experienced_2.jpg
+    sha256: 6b0e99ccdbde61d5a81cc140e41bfbca1a4a95f3681a1dbbfea21735747c04cf
+- card_id: bat
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: bat.jpg
+    sha256: 3904b7f84bb96fd87f3b9b9f81c11529cd6687ec810d0e1c6150f609dd01b58b
+- card_id: bayushi_kachiko_experiencedcom
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: bayushi_kachiko_experiencedcom.jpg
+    sha256: 425b66b0800a69a052028a83f67a4c89bda7bb95cc36feaf6ffa6c6c61f6c05c
+- card_id: bayushi_kahoku_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: bayushi_kahoku_experienced_2.jpg
+    sha256: 27c6dbd3f9039a2ca076501864752e235ce6d5da02c75fe78edef186d3b5fa33
+- card_id: bayushi_nitoshi_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: bayushi_nitoshi_experienced.jpg
+    sha256: 198e08838df215f47792c60104020e01d7baac09e252e66f252581f3d18ca309
+- card_id: blade_of_storms
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: blade_of_storms.jpg
+    sha256: de27b4f346c93c3d1d8da038337aaacf67d968082d02d2db2bc234d7c22044a7
+- card_id: blood_of_the_preserver_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: blood_of_the_preserver_experienced.jpg
+    sha256: bb22b391e41fa7db7ef02811b28127a963d2890650613fa4303e5bf44865d6ec
+- card_id: border_keep_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: border_keep_experienced_2.jpg
+    sha256: 472ca138789a4df5b680159de6e9796c5eab1d030ad3cd84e0e2aeeb0c443d35
+- card_id: colonial_dojo
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: colonial_dojo.jpg
+    sha256: e7d370fb0ee65947662b1dd232c1e18fe95800f1f7a605b1e30dd4198f46cd72
+- card_id: colonial_temple
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: colonial_temple.jpg
+    sha256: 9567e834ca3885f4661d923deb274310560a2440030c16794cb4c327939f249a
+- card_id: daidoji_adachi
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: daidoji_adachi.jpg
+    sha256: e6d2882f682cfdddc71050ad749850a714be1faf777b54e76055bc617a25a3c8
+- card_id: daigotsu_arakan_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: daigotsu_arakan_experienced.jpg
+    sha256: a4f7ac40bb23dc9d101aece87a94e0088b8a08da798f3d47787066a2675b40ae
+- card_id: daigotsu_gyoken_experienced_3
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: daigotsu_gyoken_experienced_3.jpg
+    sha256: 3c2f594987262c67248743c9212af27bc21760e946da095b2c356b1350fde6f5
+- card_id: dark_audience
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: dark_audience.jpg
+    sha256: beb627edd9ee3a767314e6ec2e2174ab3bfcd7d6a773f4a3375e4d93946357a9
+- card_id: death_of_the_winds
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: death_of_the_winds.jpg
+    sha256: ca9568d18e5d0eab6aca5f64c157d53edcd3c97c4dcf984e90c8f6d6aa12c22f
+- card_id: deliberations
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: deliberations.jpg
+    sha256: fdab9b1abbd4d3b5c44b51d7633c4565bcb53d04082ba1cdd8fdf5198d1c5d7c
+- card_id: delicate_gamble
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: delicate_gamble.jpg
+    sha256: c0f58738a30fb01fb7893ae948c126a06a7dad2bd44dcdd250a654fd5eb5d512
+- card_id: doji_hakuseki_experienced_3
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: doji_hakuseki_experienced_3.jpg
+    sha256: dda461c6ce2420de6219e565b65647c449b77da53542d72e7201bc3a16d412da
+- card_id: doji_hoturi_inexperienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: doji_hoturi_inexperienced.jpg
+    sha256: 3fca942b85adbb6a94059d69be9447e3936e6c10e135c1c3081260f434ef10a0
+- card_id: false_ring_of_air
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: false_ring_of_air.jpg
+    sha256: b5d65042e3da9af7b1e31132f1d770da6a977a182ccaa53c9584dbd53396ac03
+- card_id: false_ring_of_earth
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: false_ring_of_earth.jpg
+    sha256: 1c1a9a8c21a5a190d1a4febcd3d31465fd1d7da057323fa1aa32a7d4204cb994
+- card_id: false_ring_of_fire
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: false_ring_of_fire.jpg
+    sha256: ee1bc8c93554762b20e6a3de33c37495e20c33acdf6dc1e193a12afb3a549759
+- card_id: false_ring_of_the_void
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: false_ring_of_the_void.jpg
+    sha256: 887c75fc3aea2a137f710ed9e93287b76480dc495beb168e387d94cd0c973b1c
+- card_id: false_ring_of_water
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: false_ring_of_water.jpg
+    sha256: 39821542b50d504762de5ca4174f49f67437e6eae4f30907b17a817412ea46ac
+- card_id: fires_of_turmoil
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: fires_of_turmoil.jpg
+    sha256: f6ffc3300a049ba319d9e99253d1e65c0ee96c697337ba334c0731f8d88f87b8
+- card_id: flame_lash
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: flame_lash.jpg
+    sha256: 5ebae45dc75f475ba3e3fb4ac4e1af86bbb7230696edb03dabe21f893ffcb786
+- card_id: foothold_of_the_mad
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: foothold_of_the_mad.jpg
+    sha256: 10778910b463fc920c0ba9120f1f011138ef340b65e0e749d23f818b4c024a8c
+- card_id: fudoist_advisor
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: fudoist_advisor.jpg
+    sha256: 050f6baa358dcb3055c85860fe34594a36fa98632fa1f52c9414ff36cd3cdf18
+- card_id: fudos_assurances
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: fudos_assurances.jpg
+    sha256: e32b1c19016dfdf6de5609423aaff248339884ae43e59c0c8d0782fe6b190b36
+- card_id: fudos_fiends
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: fudos_fiends.jpg
+    sha256: a4954bb9dbddb339c86aea60216a61c339be76a1e2ca4ae4570795c1f884fe9f
+- card_id: hamuro_the_wise
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: hamuro_the_wise.jpg
+    sha256: 031869f6ca3ebe7c7f4b87d70d12f3795343f90077c40706125769515a6ff012
+- card_id: hantei_xvi_inexperienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: hantei_xvi_inexperienced.jpg
+    sha256: 42cc1ee5c2a14ecbb57a17f22db5a51093433330277c7bb1ab041941323fe3c7
+- card_id: hanteis_guidance
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: hanteis_guidance.jpg
+    sha256: 951a457d7fadd4589a1279683e84984ece48a3665c66ee53bb5f4d85c87b2b5f
+- card_id: heart_of_fudo_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: heart_of_fudo_experienced_2.jpg
+    sha256: 5071bc2bc75dd84d58cb294fbdb0185cbf0658dfd8053ac488bc3e39992bd17a
+- card_id: hida_o_ushi_inexperienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: hida_o_ushi_inexperienced.jpg
+    sha256: fdc1c8f3db69902570df4f9b8a57a0b514b2a36854e78783672b1c5d185e6581
+- card_id: hidden_power
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: hidden_power.jpg
+    sha256: 7b22b6205b581ce31ab08850031c022316609a8d3b924ca676868fe230d3eb68
+- card_id: hiruma_nikaru_the_flesh_eater_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: hiruma_nikaru_the_flesh_eater_experienced_2.jpg
+    sha256: 0ec5d642c14d47af5c72a879c4ab05930ff1bd46b860c2fbea96e28d30fddf06
+- card_id: hiruma_ogata
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: hiruma_ogata.jpg
+    sha256: abfa63f9c861d6fc97f93703cdc4b4ec308613abc22fe1996b02f557dc69e59f
+- card_id: ichiro_otani_the_stone_breaker
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: ichiro_otani_the_stone_breaker.jpg
+    sha256: e734518f2dcafa2fd392f3cb0965229f472ece1c9260510bf174a993118d35b7
+- card_id: ikoma_aimi_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: ikoma_aimi_experienced.jpg
+    sha256: 33d916447cdb1d02be056fbb91d315cc1eba3b1504e3cec52f02f4ad8409bbb4
+- card_id: ikoma_ayumi
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: ikoma_ayumi.jpg
+    sha256: 73492769da3975e1b233f92556e47ce6f6644381a81dbea00e4d33768324e98d
+- card_id: ikoma_natsu_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: ikoma_natsu_experienced.jpg
+    sha256: 18434cf936ec7695b6ff06af5b4ed3ade856c3125010ab02c225da93bbf4f55b
+- card_id: imposter
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: imposter.jpg
+    sha256: ea66de78d6ee0b5688700f6f053214cd8c699efaf443f21cefc0d27feab978e2
+- card_id: invocation
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: invocation.jpg
+    sha256: c30d3b3bd5b94f6355361feceef4df5271b17f0bf4c6061e0a017bef762c8b3a
+- card_id: isawa_ryuzo
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: isawa_ryuzo.jpg
+    sha256: 6493a7ef435fa10db5b0c96046ebfb78145b9a0e2740a86ed4615c1ccdbb3202
+- card_id: isawa_tsuke_experiencedcom
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: isawa_tsuke_experiencedcom.jpg
+    sha256: 9741d23e6e1ce8c9d2fb8f2ab7df791ccde1444887f9cf8288dd172f557edade
+- card_id: iuchi_karasu_inexperienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: iuchi_karasu_inexperienced.jpg
+    sha256: e2f2db689b3fc5ed72de0aaf820dae804eab6135cbe92abfb9d8785bd6d7249a
+- card_id: iuchi_takaki
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: iuchi_takaki.jpg
+    sha256: c2b86a2c30e6c7a54d108b91b6f1dbcd45c0be78cac832f1e5b728cac55a2b38
+- card_id: jikoji_fist_of_stone
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: jikoji_fist_of_stone.jpg
+    sha256: 513467e877d579f9965c81e9c00c611b83bb6bf80793d6f160eba082cc15e7e6
+- card_id: justice_of_the_crane
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: justice_of_the_crane.jpg
+    sha256: 16c8f47ca54d9eb07b16360a192f0066e20427a79c2872e00cc43989650b83f1
+- card_id: kakita_hideo_the_fallen_keeper_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: kakita_hideo_the_fallen_keeper_experienced_2.jpg
+    sha256: fb2b1be6616cd7186de030a3fb996897a6748c77c883b70b61cd9ee78b38a55a
+- card_id: kakita_ichigiku_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: kakita_ichigiku_experienced.jpg
+    sha256: feb861a8d89f9b02e20936e97fbdd54bba6d93749b0be1f497688456e9f80d7e
+- card_id: kasuga_aizawa_the_razors_edge
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: kasuga_aizawa_the_razors_edge.jpg
+    sha256: d178218a483f1635485b6e08f4dfa7695c68a02caa0ab2006eac40ac11b201f8
+- card_id: kimura_forgiver_of_sins
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: kimura_forgiver_of_sins.jpg
+    sha256: cb9f16ece8aeabac609dcecb2fe8b69f94815100817f9b32803d8b3e47d57d95
+- card_id: kitsuki_daisuke_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: kitsuki_daisuke_experienced_2.jpg
+    sha256: d9e6a5572d96c691c75f269747f7cf41c3fd8633aa6afa82acecb1f30ef11e6b
+- card_id: kitsuki_kinaro_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: kitsuki_kinaro_experienced.jpg
+    sha256: 1e8b74de326c2644acd01027f9d1022e436d4001421ca89d3d3637834388b40a
+- card_id: koans_jingasa
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: koans_jingasa.jpg
+    sha256: 894cb7feb3157ab108cdabe832657264a19a2c78fcf5816e7bbf9d466e47fbe0
+- card_id: koans_robes
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: koans_robes.jpg
+    sha256: d32b1e208cfb4d0006383926db4f0c11c70ca021c55c9119e362b932b0f47850
+- card_id: koans_scroll_satchel
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: koans_scroll_satchel.jpg
+    sha256: 5eed6423ec65daa7eb3717bc120011c8e5becf1b828dbe9caf516733b8d40687
+- card_id: koans_staff
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: koans_staff.jpg
+    sha256: 325924fcf42ce21d0004bfd2bdc4a305d2e410679a1304b8121c75f2159ee775
+- card_id: koans_whisper
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: koans_whisper.jpg
+    sha256: 0d7e6ccbc62a51f0902687ba2a0b1e9a98c226ebc419d81f328f24c8739fa5f9
+- card_id: kokujin_inexperienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: kokujin_inexperienced.jpg
+    sha256: 6c5725c6ed1c56f48a3a3a7ce6e0f23c9a65287404d06306fb5a0ae416076a96
+- card_id: komori_miyano_the_shadow_wing
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: komori_miyano_the_shadow_wing.jpg
+    sha256: 2422f924456c2e86b1c3b1755c1b650094f81290c740d399f028da5e7f6b5025
+- card_id: kuni_renyu_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: kuni_renyu_experienced_2.jpg
+    sha256: b8746ff9e7e9ca7e72790a30c073b5843112a7ffb7c1709b6e417c72ee752fe3
+- card_id: lone_sentry
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: lone_sentry.jpg
+    sha256: a19037d62556a00646d7b787e7bbd2d8b41817f3c9f0e46dddb15c253e73afe2
+- card_id: looming_danger
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: looming_danger.jpg
+    sha256: 7c1e991e4ec81a163fd9392b2363678cc29309bd578713701df560c7948cdcb4
+- card_id: maddened_horde
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: maddened_horde.jpg
+    sha256: 4dc7856e054348c74520eea7260f17150d6072f846fd5ed41668757734788b52
+- card_id: matsu_nimuro_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: matsu_nimuro_experienced_2.jpg
+    sha256: 481abd40aacbef881beced883a8be63e8169a6c208ce1d649183d9fae77e91b8
+- card_id: mirumoto_kazuya
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: mirumoto_kazuya.jpg
+    sha256: f37cafde47e0c657cdee7be932e2ccb4c53b1b11381f3eec72cf343702b1cc60
+- card_id: moments_of_destiny
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: moments_of_destiny.jpg
+    sha256: 0e075495ad17541fa0f04c4649821c2fabdb6415452bc6a419ca7d04cd42012f
+- card_id: morito_inoue_scourge_of_the_plains
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: morito_inoue_scourge_of_the_plains.jpg
+    sha256: afaa4016d201afec99290470bdc1318842dbfaffd0a6e6d62bc935884654a752
+- card_id: moshi_tomiko_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: moshi_tomiko_experienced.jpg
+    sha256: 6eca056a7054b3b4b9f57e164d1b72e6066e77436d908525e4df7659666daa22
+- card_id: moto_ming_gwok_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: moto_ming_gwok_experienced.jpg
+    sha256: 36a55753cd1e09e1dee1d678bf0f6bfe4eda0415eccc1d93f0d020cdeac3a010
+- card_id: moto_taigo_the_skull_taker_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: moto_taigo_the_skull_taker_experienced.jpg
+    sha256: dc7aa169c1c87a12c414fad63883cc2a7d19bde6f6dff5e1d5f10763e1aa06bc
+- card_id: moto_xin
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: moto_xin.jpg
+    sha256: e663bc6dc5d528b4a4a509b5b2a057d64339257dabd9905fd09f53c696c83fdf
+- card_id: naga_remnants
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: naga_remnants.jpg
+    sha256: 2b00da470f810291eaab1bb0b4ce3634d18328b19265d2e00f190fe0f142cc3c
+- card_id: nishiguchi
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: nishiguchi.jpg
+    sha256: e2f5d681662ac1140a541a79dbc5b3b03e1c714a229bccb7b626408deea8d411
+- card_id: nishoji_the_steel_eyed
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: nishoji_the_steel_eyed.jpg
+    sha256: 8d95b5fa854012baeeffde34553beb5918d7596b138f6e7cdf87694b54a387b0
+- card_id: no_way_out
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: no_way_out.jpg
+    sha256: 863c00a0a7a5696ad88286255449fdef87bcd6a90e8ba654595e4af834bb7f69
+- card_id: okazaki_breaker_of_wills
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: okazaki_breaker_of_wills.jpg
+    sha256: 4f2b3eb9d0d5fca0a33ba13c1ba9492a2d8cb1f4fd94bb09e0828840a7eec945
+- card_id: otomo_suikihime_queen_of_fools_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: otomo_suikihime_queen_of_fools_experienced.jpg
+    sha256: eb8705106d8ce7a9748eece97485ac0c26f6ad4a0f6511acc6e2991f8c043b2b
+- card_id: overwhelming_chaos
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: overwhelming_chaos.jpg
+    sha256: dadfa70efee86989f36a21394b7d5344d086d720e9bf2c679ae32f9fff02001c
+- card_id: pan_ku_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: pan_ku_experienced.jpg
+    sha256: d4106d903c6bcf8b63977a65a0fa08d1a24ea2084dbd100f4165377488b96eb1
+- card_id: pan_kus_madness
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: pan_kus_madness.jpg
+    sha256: 713a5e301c6ffb15c06422c676765b7b06b39fb6f5ab4b6673816aabb3585286
+- card_id: parangu
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: parangu.jpg
+    sha256: ed6a20a78b98e7f8b86f08cff3a00b27069d20cd42a132d72277b4d49c6f42c8
+- card_id: questionable_merchant
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: questionable_merchant.jpg
+    sha256: 4077385a4c3474aed643c7dbe115624757cb1ca7d612b303802bf28573d03ed7
+- card_id: rampant_paranoia
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: rampant_paranoia.jpg
+    sha256: 95edb203eb423620d642ed0e6b2b14e461c69a4a2c9612bb5ffd1439fb1d64da
+- card_id: reconnaissance_scouts
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: reconnaissance_scouts.jpg
+    sha256: f24172d0b268a6bdba60030e71a21b7793853a3d7df70b73f441bc909c3bfea5
+- card_id: recruitment_station
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: recruitment_station.jpg
+    sha256: 9fdcae125cdb65079e042e3cb4705c090b8b6062467d658088f8c3d662efd0f5
+- card_id: renyus_dog
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: renyus_dog.jpg
+    sha256: b6d4f69485a8930e7b5ecc3a8cc2b116562dfa6f841c9827cc3e261c837589e3
+- card_id: riot_in_the_second_city
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: riot_in_the_second_city.jpg
+    sha256: 057206e1bc3719bd0d0a40155f1b5a1812866aba59c9aed2d0ec96d0574851cf
+- card_id: rokkaku_master_of_scrolls
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: rokkaku_master_of_scrolls.jpg
+    sha256: bad8386cb63ed0f07b6e356dc683066473a95b4493a691315c39a93181697713
+- card_id: sengmai_the_unbreakable
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: sengmai_the_unbreakable.jpg
+    sha256: 45efe74990140b6ecfe59c940b2498df4c42c25e149fcb7f1ce0c150df0a9f6d
+- card_id: shiba_iaimiko_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: shiba_iaimiko_experienced.jpg
+    sha256: f7b5467f717a0a24385e5542227550e7af5871e0737c399271733966e5d70c86
+- card_id: shinjo_tselu_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: shinjo_tselu_experienced.jpg
+    sha256: de2d3885ed35ce485c424c69e3930b067a6e1a00d9464850c2cf43cc70034cbb
+- card_id: shinobi_vassal
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: shinobi_vassal.jpg
+    sha256: a1493bb1894b6a219040d65db4fc8ca37ddd49623cff6883f979611c6d1e668a
+- card_id: shosuro_kameyoi_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: shosuro_kameyoi_experienced.jpg
+    sha256: 0c25848480fbbb6a377102164497f6de6bb1765cd2d1801040ba5959e2fc48a7
+- card_id: strength_in_the_earth
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: strength_in_the_earth.jpg
+    sha256: 481e047e8e3f23e2d21f67aa4638ab5fcb40ac9ea228a21e34ee226eaf5c5b93
+- card_id: strength_of_the_divine
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: strength_of_the_divine.jpg
+    sha256: d7ee1220d8abbb322629d33e97f631f036bf01319699fbcfb25defe454ba24a2
+- card_id: suikihimes_chambers
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: suikihimes_chambers.jpg
+    sha256: d9cdb624e28b9b7e3857b6c1b24bbdc219145931f675fb7dd16301a68b287194
+- card_id: suikihimes_sanction
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: suikihimes_sanction.jpg
+    sha256: 4e328178c28c318cfa24b5ef62fb617a158850d6fb0b9cce5e820622247da141
+- card_id: susumu_kuroko
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: susumu_kuroko.jpg
+    sha256: 6f9b3df2bb4f1f7b2be3728c31411b0b9d51c810cf6a8ecde6bbfcd30389b03c
+- card_id: suzume_shindo_the_final_blade
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: suzume_shindo_the_final_blade.jpg
+    sha256: 40c8ce2001f9e6a6902abaec7eb5e37b3c7ebcdb77cf61666b51f2192a22477e
+- card_id: takujin
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: takujin.jpg
+    sha256: 1f035ba826fa0d5306734a1039a251b05fe1d9108a0dc8d4abbd30a5118af5b3
+- card_id: tempest_of_air
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: tempest_of_air.jpg
+    sha256: d9eef5ae5cb2b254c8a3392892da38dbed1a72e3132cd2ce8fdccf132f8b3331
+- card_id: temple_grounds
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: temple_grounds.jpg
+    sha256: 5c29a9919f7ce26c5e71e4349366109f2d81d3ca449fad20b9b60e9fa5a550f9
+- card_id: temple_of_madness
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: temple_of_madness.jpg
+    sha256: a35b4c754c587a7a889bb4975ceeacc10d39db8cf9fc96cf222bf4901c49912e
+- card_id: temple_of_tengen
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: temple_of_tengen.jpg
+    sha256: 2eba4ae2e3aec752fc2a4afce6e6fa14dbcb6c9e58d3faf8c6ba86a54c395eac
+- card_id: the_dark_naga_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: the_dark_naga_experienced.jpg
+    sha256: 2b3bc52a958658cc33c46dba006cfb96d709626a5762609aca24446f403214f2
+- card_id: the_egg_of_pan_ku_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: the_egg_of_pan_ku_experienced.jpg
+    sha256: 339829de4057fa4f0770aa27c623de454df6556d1de74101f182e0a33c9d5bce
+- card_id: the_empires_foe_exposed
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: the_empires_foe_exposed.jpg
+    sha256: 39489a4f3fee566b286c8c47d466793eb227697b324123feb74f9bb0eda6ea7b
+- card_id: the_false_nimuro_experienced_2
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: the_false_nimuro_experienced_2.jpg
+    sha256: a104f4dc29c3d9a606ed98775e6df8f748a2c272a1a9f49e0dfd1c4476b34c80
+- card_id: the_false_path
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: the_false_path.jpg
+    sha256: bef171c64563343c21adbf07d5305738a8daa41a4fe3f0137dc10d33a7845bd4
+- card_id: the_heavens_blessing
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: the_heavens_blessing.jpg
+    sha256: c2b44c2656fe805c1c0881bc92fa8339dbe2de7d829a03f0d9af9449a76ddd66
+- card_id: the_madness_spreads
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: the_madness_spreads.jpg
+    sha256: 4c2462f4b5932d86d3b61f0c1642020a7876f5391ef15e51ee870b9e086c6b2e
+- card_id: the_second_battle_of_beiden_pass
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: the_second_battle_of_beiden_pass.jpg
+    sha256: 0711c5f69d2b388eb069de5c2f51c0a7ea379bbe5282fec2f4fccdfe3721ba40
+- card_id: the_shakash_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: the_shakash_experienced.jpg
+    sha256: 6eee90708f604a272dd6db1f2f503dfca4efab52dccdebd9b1a64ac73ef737c2
+- card_id: the_tale_of_the_disgraced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: the_tale_of_the_disgraced.jpg
+    sha256: ee8dded73dd4a5e352f7743c543f2a1d111c00c2cdc5e930eb8f8f40d6c9ca6c
+- card_id: thunderous_legion
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: thunderous_legion.jpg
+    sha256: 4ed81ee540aa4c805a479b274e5bc9c17d40183a10a6bfa61f342801fb75f5b0
+- card_id: tochiko_the_jagged_tusk_of_death
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: tochiko_the_jagged_tusk_of_death.jpg
+    sha256: f20439aa9e3a4fac5c5749db3a9f64c1d205c0045365a2ecbab51cd96e088606
+- card_id: togashi_mitsu_inexperienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: togashi_mitsu_inexperienced.jpg
+    sha256: ddaa7236c08e6847af3433deabcce71d758349476ee5d4e1fa1663990bf9f938
+- card_id: togashi_noboru_the_shattered_star_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: togashi_noboru_the_shattered_star_experienced.jpg
+    sha256: 83a4fd1e045ca6b7001d2530dce08ce795de7f75723968728489cfe594e11301
+- card_id: toku_saiga_the_metal_storm
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: toku_saiga_the_metal_storm.jpg
+    sha256: d15f76eb1a8ddcb0631e68140feaf12f5f29238d96e050df990b1019d1b138b5
+- card_id: tonbo_inuyama_the_eye_of_tomorrow
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: tonbo_inuyama_the_eye_of_tomorrow.jpg
+    sha256: 11843123aa1dc84fda5d062458b09f385d51833767d19123f4cfc8bffd492423
+- card_id: tsi_hayamizu_the_hand_of_steel
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: tsi_hayamizu_the_hand_of_steel.jpg
+    sha256: ab919c9256899f030019b92aa8c4d617ac33aefd37e076d206ee8f34afd3764d
+- card_id: tsiang_the_benevolent
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: tsiang_the_benevolent.jpg
+    sha256: f133148f0cc36504de942903a0535d71851689094785f6ec0beecbd497d9a90a
+- card_id: tsuruchi_inexperienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: tsuruchi_inexperienced.jpg
+    sha256: ba4852cbda875d09c21332c83a9e3e83364f62a5bed7ad401768967d47ed5f9c
+- card_id: typhoon_surge
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: typhoon_surge.jpg
+    sha256: 700aed0c2c128ab8ce8402f8c0f43b30007cc44af43c038a80b4a42c0f41540d
+- card_id: unbearable_weight
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: unbearable_weight.jpg
+    sha256: 2557a81a6d4ae928fcd0a6af440aa7df5ae610e66666f0c4c96f5d7646875b0d
+- card_id: usagi_seki_the_untouchable
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: usagi_seki_the_untouchable.jpg
+    sha256: f8ab90cb4aa574577d70edb33964b8a41528475971a52c6134ab5893296e9518
+- card_id: yasuki_tono_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: yasuki_tono_experienced.jpg
+    sha256: b5c0ba59d0d7ea3425209fad1a125aa613a5032e46c5dfd8eedc89525c2e54ea
+- card_id: yogo_katsuta
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: yogo_katsuta.jpg
+    sha256: 6384f8637a4c318d5c058ce9c1b86207cd81e551b4c13d531c7c9ffd5a24cefb
+- card_id: yoritomo_kanaye_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: yoritomo_kanaye_experienced.jpg
+    sha256: 113d813f02ffff2d33f6cd3123647e8aefff8aa83dc0af4c43c161953bebf8b1
+- card_id: yoritomo_minori_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: yoritomo_minori_experienced.jpg
+    sha256: 5fe58827e9a9ab6da532993fdb8f0eac09ed21f135eedafaa5837413148b13f7
+- card_id: yoritomo_tonogi
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: yoritomo_tonogi.jpg
+    sha256: 5163c5d033229ffb046333096dd1dbc7a5a43d0a678cefda00fa8e3063be7121
+- card_id: yunmen_the_whisper
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: yunmen_the_whisper.jpg
+    sha256: 30c1f7139b6ae08908aa46ad2003b877c73571b1e85514f2b2ac8f466c11a84c
+- card_id: zansho_experienced
+  printing_id: coils_of_madness
+  files:
+  - role: front
+    file: zansho_experienced.jpg
+    sha256: bdb36806b70c66c19432c07829bd4a34fb77f5506140da2aa397df4bf86eb7b7

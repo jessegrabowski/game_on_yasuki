@@ -1,0 +1,926 @@
+set: The Truest Test
+images:
+- card_id: a_legion_of_one
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: a_legion_of_one.jpg
+    sha256: c884b2397c95115f8dce5aa3cf4dd31b4f8c8e7705862cd31d47736b75141f30
+- card_id: akegarasu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: akegarasu.jpg
+    sha256: ce96e877208444b062e723a6f4b0ae318213db1e68dcd1541f9f94cbe586bdb7
+- card_id: akodo_shinichi
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: akodo_shinichi.jpg
+    sha256: 760e8b9272914b36803f5fd225fad0e811ba8984989b9f87c5131a2bf5df4c0b
+- card_id: allegations
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: allegations.jpg
+    sha256: 2d9ab5e864e12d51438f6b3d4c61457f704204111a5906b9184eb801af41984c
+- card_id: anvil_of_despair_experienced
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: anvil_of_despair_experienced.jpg
+    sha256: 97bc0a793d5340aaa25f49ad814609b538c2c948d26d5c55aa2d9bfc4d0d0e53
+- card_id: asako_masamichi
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: asako_masamichi.jpg
+    sha256: 2eaeaf64b54af7dfbb43110dc7a8742e42c82d2dc596554e82e5fa8ec6f1096b
+- card_id: assigning_blame
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: assigning_blame.jpg
+    sha256: 4994d41fbf71b5b89c41d0cda75511fdfd2f642a78f2be9eb0da0129193fccfc
+- card_id: astonishing_resilience
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: astonishing_resilience.jpg
+    sha256: 043a028779d3b8f319912839f8f089d343f7cafdf59b926815dcdd20d3e49ee2
+- card_id: bakemono_warpack
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: bakemono_warpack.jpg
+    sha256: 1bba129f6ef171423bc5b6e5cb31fd5016162282033713e97c5fe135a5ef2400
+- card_id: bayushi_kosaku
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: bayushi_kosaku.jpg
+    sha256: 766cbe40ca5f5d11bc05af416de30ab4706af24d681fc978ca8579421c130bfe
+- card_id: bayushi_tomo
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: bayushi_tomo.jpg
+    sha256: db628442ec840e8288652379f52fbc1c710a150937ffa1018ca412bcca8174bb
+- card_id: beginning_arbitration
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: beginning_arbitration.jpg
+    sha256: b6c46ed44236a79f33d6e0856d42b2ec1cf0be359cd18b79339247150ff2c700
+- card_id: berserkers_charge
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: berserkers_charge.jpg
+    sha256: fcf76a4ace9a5c677b6e44e3f369d0d0f493c079c3a6049e5409af227bf5c4ca
+- card_id: blunting_the_charge
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: blunting_the_charge.jpg
+    sha256: b0da87113f1855f32b00be46d31a9c5eecc0b7041bbcbf2dbfadba5aa8ed6f61
+- card_id: brand_of_cowardice
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: brand_of_cowardice.jpg
+    sha256: 1892c06643d09a3de87a0864952a1489aac45b037cb5c2c46316eba05889adf2
+- card_id: castle_moat
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: castle_moat.jpg
+    sha256: 80d2a991dbe54534664b77b98331e957cc8831cc4774de0a0bc6d78da497cbaa
+- card_id: ceremony_of_planting
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: ceremony_of_planting.jpg
+    sha256: fd37d0ac6dba7e9e88a735d9677890b8c5708ed94281b168ec21deaa79d51718
+- card_id: chuda_chiaki
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: chuda_chiaki.jpg
+    sha256: 5f3abfcfca591092a7057de1f79141c9f8eb6d1854815fecd7b64bcaf1a8c8ae
+- card_id: chuda_eiichi
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: chuda_eiichi.jpg
+    sha256: 23d7344cc27bf2b3526d26e58d62b42d0b93429e01f9f31130b646e816ba7904
+- card_id: clan_heirloom
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: clan_heirloom.jpg
+    sha256: d8ee7643e97d264614a5902adb438f1a7a1f1a4c970d2280b10368975020fd87
+- card_id: courage_in_death
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: courage_in_death.jpg
+    sha256: cdccc2a9be85f4c44236165ecd7a8820e3d591f658f63ad1076466ac5ad4d9ef
+- card_id: cowardly_rabble
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: cowardly_rabble.jpg
+    sha256: eb76772068ba113721d3b1751d5fe3f11e83caf86a7ff1c1a9ba62afbdd59777
+- card_id: cursed_gift
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: cursed_gift.jpg
+    sha256: ad7be160d45c5d6c2f93e39a8e412ba2ef87996f6059e786c9f0825e7477fe2c
+- card_id: daidoji_gempachi
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: daidoji_gempachi.jpg
+    sha256: 976dbab350b61fad161dc66ca2ce8ef19d13f867824c9424d8c97eca3a6978ad
+- card_id: daidoji_murasaki
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: daidoji_murasaki.jpg
+    sha256: 038260e1182bf3b280c2aef418f1a932b4d09883aa336e81adf1bc51754cf51f
+- card_id: daigotsu_hidetsugu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: daigotsu_hidetsugu.jpg
+    sha256: e172db529b391a695c0c0c1efd42a50f579517879e2c90c91db9c485ff96077a
+- card_id: daigotsu_iemitsu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: daigotsu_iemitsu.jpg
+    sha256: e2fda638e204d29b832e934f77b08b80910422880c4b8fe4819a54ca235e1043
+- card_id: daigotsu_yajinden_experienced_2
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: daigotsu_yajinden_experienced_2.jpg
+    sha256: 3d4a3cade6465088eb65a7463e04fe58389a1f9d28b0c56f114059a2d223a022
+- card_id: danetch
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: danetch.jpg
+    sha256: 6e8c7470575d2b248eb928db5e78a180b67f391270a5d82838f1950f0a807b95
+- card_id: dark_inheritance
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: dark_inheritance.jpg
+    sha256: 9b2e0c4d2443a6efe667876e69907e156db925b2de3d97fe7f6cb85ed4160773
+- card_id: dawn_of_the_spider
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: dawn_of_the_spider.jpg
+    sha256: c38e08ab518629e9ed4112ec54fcc9bd34ca4033ef678b94a131b75762d9f739
+- card_id: death_after_life
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: death_after_life.jpg
+    sha256: a3ec1c5378046bacd33c56f29f549ecb93a4316cdf48fbecddbd065dbde5e156
+- card_id: death_poem
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: death_poem.jpg
+    sha256: 12fdd6d5fc7aebc507ba312ebde771052f8fac1c81d6f7bff3d21ceafe8e1587
+- card_id: denounced_on_stage
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: denounced_on_stage.jpg
+    sha256: 0de3c9f3845cf4752a3f5217c92c2fc4021ad34eb16a7ff4c1617c2e2dc06ea4
+- card_id: desperate_gambit
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: desperate_gambit.jpg
+    sha256: a6c6cc0e4b68fedeff5a3cf6d39247b4cfbae284ac6c2291143a7742e49cd27f
+- card_id: devoted_yojimbo
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: devoted_yojimbo.jpg
+    sha256: ee9d04d8ba8670305c42f6b47cc81e2fa719dbb73c48edd4c0e63e33e9280499
+- card_id: double_bind
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: double_bind.jpg
+    sha256: 0adeaac7d02b56a9244ce9a3655afbd6fa74c28bea67a968c07afd3d66d9a9c2
+- card_id: earthen_guardians
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: earthen_guardians.jpg
+    sha256: 9aa0d34434dc821514c9de3b1a108948f125aecc7df3a10d1e524289fab79c48
+- card_id: echoes_of_disgrace
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: echoes_of_disgrace.jpg
+    sha256: 5bab2eb5fe19b5d9c9ca40b7a2bdb511e467eeb422099334abb02605464d1756
+- card_id: etsushi
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: etsushi.jpg
+    sha256: 8d85e6316a784088444fd14e9917c51f0c48845a025c02a8e1a00012b0285a75
+- card_id: failure_of_courage
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: failure_of_courage.jpg
+    sha256: 45c15ed69d5155b48ea8ae22829da602a2ad0c7b941f35e840288973138f1536
+- card_id: fight_another_day
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: fight_another_day.jpg
+    sha256: a23de3375759abbe88fe65afd1a5fed3cd25e5f73b8dd8ce9092b9f93f8e087a
+- card_id: find_a_way_through_it
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: find_a_way_through_it.jpg
+    sha256: f059c86971e4b8c99186c60b99bf7467fece754e7fee12545ab63ce52bc9a850
+- card_id: for_the_fallen
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: for_the_fallen.jpg
+    sha256: d486b73b93b658982b8a5b1523a548d40e8bc225f673d95cb344a045e5b5cd50
+- card_id: forgotten_battleground
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: forgotten_battleground.jpg
+    sha256: 4a4e030e1185f4039a7d24e16a8e8ecf2da5a7023f17004aa1f04c8722826ef1
+- card_id: funeral_rites
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: funeral_rites.jpg
+    sha256: 791806258087c092253f65e768aac781acf3ce36f7df72ddcb59364bbbf017cf
+- card_id: fusami
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: fusami.jpg
+    sha256: 771706051cdd7237bc9052e09ba9f77d956a655e02f3ffc1022b088fc5bb6564
+- card_id: gate_guardsman
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: gate_guardsman.jpg
+    sha256: 21664a94c1c4d2053e9f089190be7b75f6185a30acf9328584e485d116678c06
+- card_id: gift_of_the_lady
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: gift_of_the_lady.jpg
+    sha256: 9ab360fcdbe01b4228a1f24db1968abcd23b0464603b56858d8454e13c8fb12c
+- card_id: glory_in_death
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: glory_in_death.jpg
+    sha256: 11bfc334d2f934bd55d143b29b35acbbd34587efddad99c50dc3fb046764720c
+- card_id: goju_zeshin
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: goju_zeshin.jpg
+    sha256: 13a097e7e09f67e8a099d53150a2d05b90888b27908ce7890e75d601077a942c
+- card_id: gumbai_uchiwa
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: gumbai_uchiwa.jpg
+    sha256: 418672caddd03e303d7c195315ac18441ace1a2a9e911ad41a1a63883204dd73
+- card_id: hashi_no_oni
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: hashi_no_oni.jpg
+    sha256: d6f6796fe465e7bab419e64a907f2b6a2812bdb74fb5b271ea3677b151698ea6
+- card_id: hida_kozan
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: hida_kozan.jpg
+    sha256: 5d59c6749725cf0f03e087642729c5fd231a96331a9ec17cbce9890f8c654a8d
+- card_id: hida_masatari
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: hida_masatari.jpg
+    sha256: 3ccc30a3c10164a79d7c40358299ee13b0fb6d8ad263563d937011833a619054
+- card_id: hida_otoya
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: hida_otoya.jpg
+    sha256: 9b5de49c49ba2c131025720b5a847ff0987ca46593b6d16f3b6fea3a4bebf7fa
+- card_id: hida_tsuburu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: hida_tsuburu.jpg
+    sha256: 665cdb72e9ff715155a97e8a2ec34e599a13e3e30636f04828b2f1b3f771c514
+- card_id: hiruma_shotoku
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: hiruma_shotoku.jpg
+    sha256: 177236566c3017e1206cd33a5e9b5e7785fd238e9627a49fb20bd88a2dd31ce9
+- card_id: honor_in_death
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: honor_in_death.jpg
+    sha256: 65830cbe50a7d449d96481075a475746695f487fabf4a3cbf115742b177a29b8
+- card_id: honorable_rebirth
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: honorable_rebirth.jpg
+    sha256: 4820489dc86866f83f8800592dbb0e002a5ece66e48d06002313bfba02166f2f
+- card_id: hope_from_death
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: hope_from_death.jpg
+    sha256: 065c05f5226097d482e8f097f163bad81b6838753f4d26d2013d84aa50086ba7
+- card_id: horiuchi_rikako
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: horiuchi_rikako.jpg
+    sha256: c3b4ba0deb10b07a2a65027bc39e66ef3bc69cc0f78e6bb616a8010bb8f36e0e
+- card_id: i_mjek
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: i_mjek.jpg
+    sha256: 43b9ec0ddebd385d38d916a10c93821820c87c908bc23d5ae87d5661f25969ac
+- card_id: ikoma_noda
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: ikoma_noda.jpg
+    sha256: 3b8a376f1ae48e47bc43629b148766665a4ca80a50b420bff45ffcc53b2f87bd
+- card_id: ikoma_uchito
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: ikoma_uchito.jpg
+    sha256: 3ae1a0f68b922838278ec2f04439d81079203e8158364133fa93482f5a5e7f9c
+- card_id: infernos_tooth
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: infernos_tooth.jpg
+    sha256: cfd25a97b7d1abb26706b084330a40ea0c942ba68c26291937724f17831167d9
+- card_id: inspire_courage
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: inspire_courage.jpg
+    sha256: b5a48bae9c7178c0d205634e8fdb1a119056215e5293700d01fbb46ca6085ca9
+- card_id: inspire_excellence
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: inspire_excellence.jpg
+    sha256: c8ba12b43e9a0c824b889b2069f07421ee350797eb4b02c8de3d4dd5b7ad2e21
+- card_id: inspire_fear
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: inspire_fear.jpg
+    sha256: 8f48b84960d0bddc303746bfb6c0c5d866cd16e47224e6de3c809a97def9c845
+- card_id: inspire_obedience
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: inspire_obedience.jpg
+    sha256: 067deec19cd016fde8723bf19356a19fe2603fc464a1cb814a021583a588c613
+- card_id: inspire_reverence
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: inspire_reverence.jpg
+    sha256: 1d1647c34ce2a90089c83b53378166df4afac32b4ef257174f28d7fa177c758e
+- card_id: iron_tetsubo
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: iron_tetsubo.jpg
+    sha256: b00b495f43673bd01e3437409e683f4dde5edf8387bf5db6441c7b53c7424057
+- card_id: isawa_chinatsu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: isawa_chinatsu.jpg
+    sha256: f5573cff0d06d5558a0de60e73167502512787cb412fab2f0d1cb0d15bc0c737
+- card_id: isawa_sawao_experienced_2
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: isawa_sawao_experienced_2.jpg
+    sha256: c9f55b0b27fa7cdfa980e07c00accc6ba5b296ee3b1c14e4108c7561dd61496c
+- card_id: isawa_tokiko
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: isawa_tokiko.jpg
+    sha256: d9ae2233968be424331e88448fa3f104991a51deb13298ed7504f54df77d2141
+- card_id: kakita_komachi
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: kakita_komachi.jpg
+    sha256: 7dd0ff0007ab090aea0ca69321aaadfeecbb93735272ef6bdc3c13f54aa939b8
+- card_id: kanokticheck_experienced_3
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: kanokticheck_experienced_3.jpg
+    sha256: 7904384d617afdcec9d3d2612089e2c686d50b05a32777e0a705c4af8d2a0e6b
+- card_id: kanshi
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: kanshi.jpg
+    sha256: 53c4919f48859db819a1c47c2f4b2c098d15b1d429bfb09ef7ed27468246131a
+- card_id: kazumasa
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: kazumasa.jpg
+    sha256: fe700e43b5a04512f6420f35aa92ef128837f13ab586add44e2714ba45e48461
+- card_id: kharma_in_death
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: kharma_in_death.jpg
+    sha256: 945149f5ab5d2b2b1c48bc3c3807b3fc6a1a3470465ab2b49a5246245065f187
+- card_id: kmee_experienced_2
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: kmee_experienced_2.jpg
+    sha256: d86a0fab2b51450c1909194a794a4708c4354b53bff893e68fb263ab788ef5e6
+- card_id: kmees_jingasa
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: kmees_jingasa.jpg
+    sha256: 521ed86e2db4cb8f62d01a3791240bdfdb5fb5163bc794210d2d2bb403ff3dc1
+- card_id: kokujin_buncho
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: kokujin_buncho.jpg
+    sha256: 09600c01150bb92273d7f0f512173d7ed5479296616abc006d3ed3c30c03a3bf
+- card_id: krnn
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: krnn.jpg
+    sha256: 21cd498c9c82b48b18b4e0b58be361187d0b11ceabd8a3924f0cc88a9a5157cb
+- card_id: kuni_ochiyo
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: kuni_ochiyo.jpg
+    sha256: b2ea18848166c89015a65f736a62e5209c6aaf77334cc479043ae18aeee85164
+- card_id: let_them_fight_their_dead
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: let_them_fight_their_dead.jpg
+    sha256: 7cb3e03888eed3bc5ab13ad18feaf237fae889cf779d455266f6b87d586ed9ff
+- card_id: lion_advisor
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: lion_advisor.jpg
+    sha256: ac4335ff932998ce0774c1d67375c8b6564f1b2e04bbc6995c22acf9ef5c97c2
+- card_id: lion_mempo
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: lion_mempo.jpg
+    sha256: b6720a69d92b65a23c4fdd8c89570a5a91a4eceef1e38a88b508daf9d111ae79
+- card_id: loyalty_unto_death
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: loyalty_unto_death.jpg
+    sha256: 9d83d4d3a2a33348038fa3a7ff6ab81c62a07f3e711cd587f037c6b5646a17b9
+- card_id: masakazu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: masakazu.jpg
+    sha256: 4765aa5c1207aebb1968488cd6d5ba61126eb470ff462d7eb8ed1f281295fd30
+- card_id: master_saleh
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: master_saleh.jpg
+    sha256: 2c694b97d40a35c264703f0ae288b7d45020d02246ab857279485a8ae83ea2ae
+- card_id: matsu_fumiyo
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: matsu_fumiyo.jpg
+    sha256: 110ab61378b2383cbf16c49bdcfd8ae47753ad6e0f2ee97a19537815b1283657
+- card_id: matsu_ouka
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: matsu_ouka.jpg
+    sha256: dde0cf65bd71adf9cb32278cacf83d6e472207c84bfee157b1b5d58f8160492c
+- card_id: matsu_shoken
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: matsu_shoken.jpg
+    sha256: 57f309f339f28dc8c60a154f80a8e0589719b3ee467515feb956be784520f692
+- card_id: merciless_death
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: merciless_death.jpg
+    sha256: abcdd9620ffbdf16ce9fb3df560901bf8e7efc208a8784f0fc4964d2466d5211
+- card_id: mirumoto_jairuzu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: mirumoto_jairuzu.jpg
+    sha256: 5d2955f7d6c0feefb581ce69d3034be46bd2e23b45669343524f82bf9ac7da39
+- card_id: mirumoto_kei_experienced
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: mirumoto_kei_experienced.jpg
+    sha256: 9c8f800e530f24dd71f845bb104df87e471047fb9f595fbfde8fb138d8ec409e
+- card_id: moshi_kiyomori
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: moshi_kiyomori.jpg
+    sha256: 4c96d1c3a1579efe4070eec5003b234edf1bb95eb1d65797a0217893700a0d46
+- card_id: moshi_minami
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: moshi_minami.jpg
+    sha256: dd92aadc86d7f0bc5ce71f9df04c0e9f886892026b39bcd561327907e7295149
+- card_id: moto_jin_sahn
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: moto_jin_sahn.jpg
+    sha256: 163baed85b296dc27e23a065717617152cad3e731217332412b799cec6ef9949
+- card_id: moto_yong_tai
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: moto_yong_tai.jpg
+    sha256: c36eed2054bf489e214cac12e640afbb5aaa19ff7ad61e4c117ba77d06b65a9d
+- card_id: naoharu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: naoharu.jpg
+    sha256: 858e55fb486c1515099d91dd3605d19d8dcef686c27a1d8b7479353477e08a99
+- card_id: naserus_funeral
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: naserus_funeral.jpg
+    sha256: 3d9d00c640e33572d68f467c5e1df377c7da35ad6408ad5cdbb7bd4ca2706209
+- card_id: picker_of_bones
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: picker_of_bones.jpg
+    sha256: 2ba8560dc314bcf15f3aadf5847f299d5ff7e7a436dd2504406a0115e084e371
+- card_id: prepared_defense
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: prepared_defense.jpg
+    sha256: e4f0c36e99f3fd93d3b1ef9c1b3785d4a4b57b293c81db431b0baaf6cbb86714
+- card_id: preparing_stockpiles
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: preparing_stockpiles.jpg
+    sha256: b291f3f0f63e25b8a405a3dcd68033fadc5f8301e54d72877ee00df1c0b30ccb
+- card_id: profit_from_death
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: profit_from_death.jpg
+    sha256: 8992d28ffd79cb3f2c1debbdbfbac3dc188784c85caee367cfcd9feb9bd4e93b
+- card_id: purity_in_death
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: purity_in_death.jpg
+    sha256: da2cd9dbe13f078edd310ea1d777ea11334b155807151201cfeb9846c0897d25
+- card_id: reclamation
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: reclamation.jpg
+    sha256: 28fef0c43ef2c7fe3cd8cc63dcc4ae9fc505dff934dd07782c9c1f51f640a2b9
+- card_id: redeployment
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: redeployment.jpg
+    sha256: c538dd9a2995c17845d3785b319be927d34e222379b59b06ce920a78b8de7b69
+- card_id: requisitioned_troops
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: requisitioned_troops.jpg
+    sha256: 741421db27099d39684fa4fc023e5729b3f5425165468d12ab2e299823e6ed1c
+- card_id: ronin_scout
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: ronin_scout.jpg
+    sha256: 278f55961cebb6d8f8ceb5e89b26f04ae9de55d3cd55ceb9c7014c756c8aff79
+- card_id: sake_house_brawl
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: sake_house_brawl.jpg
+    sha256: 71392edb900e54b78da65cf74a72f014b9b569b872791b75784366c4d825ddb0
+- card_id: samarhad_experienced
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: samarhad_experienced.jpg
+    sha256: 42dafbef2c3df654fc5e4a175c0eb465fc6c60ef42bd9b868dc2833d93c54117
+- card_id: second_doom_of_the_dark_lord
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: second_doom_of_the_dark_lord.jpg
+    sha256: 199bbe887cc7567655c48b942854a02ef3371d71b27a24c01268713368030b87
+- card_id: shameful_tactics
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: shameful_tactics.jpg
+    sha256: f0f0e1ec24a8009cae87f40e58652d9fea1628f7c1c5aa9726a1e6e9d9eaf4c4
+- card_id: share_the_blame
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: share_the_blame.jpg
+    sha256: 9eda5a04a2c78c07375566c44c21faecafda2cd06eee41c91f16a226ce59af10
+- card_id: shiba_sotatsu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: shiba_sotatsu.jpg
+    sha256: 7bcac815358edae8651d25dac186eb7fd8e7a1aeb4d6a92ced20d19e28f20533
+- card_id: shiro_usagi
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: shiro_usagi.jpg
+    sha256: 00f3ededd391f4b2927730db28660169d2e549d9f98a0d1f4d2711daf985341d
+- card_id: shosuro_jimen
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: shosuro_jimen.jpg
+    sha256: 320d3f8b449950cc9743288d25a3851ed531198b7951a9ea1403a9213df789eb
+- card_id: shosuro_maru_experienced_2
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: shosuro_maru_experienced_2.jpg
+    sha256: ffa58e71cedc75c686f48a0c1a125c1773195fd27679785401c6ff9700ad50ef
+- card_id: shosuro_masanori
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: shosuro_masanori.jpg
+    sha256: f00b2c5d76d2afb5cbd9f82b96e973da1b9222bec64fa298543efd4143eb0ed1
+- card_id: soshi_korenaga
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: soshi_korenaga.jpg
+    sha256: 349839fb6248b7234cdb9c5a3065397b212e588912a8686828297190b8903e6f
+- card_id: soul_jar
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: soul_jar.jpg
+    sha256: a36e7449163ac203333bdee07e531f03b95690f0b1125322f0634e4c693cd831
+- card_id: spider_heavy_regulars
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: spider_heavy_regulars.jpg
+    sha256: df80c93e3c2ac12e75139e3c8bacc1b9f930416dd745ea7b6db7218bf0dc59ed
+- card_id: summon_maseru_no_oni
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: summon_maseru_no_oni.jpg
+    sha256: 655da200dcd204f39efd79c0812ff89e89c30b4a7a7f7fcb44ff016e669e5d55
+- card_id: summoned_to_justice
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: summoned_to_justice.jpg
+    sha256: abeb3ec4aff7ad4dc32313c2672fb721e476f9f025d7f735253426c7caa361f2
+- card_id: tadaka_no_oni_experienced
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: tadaka_no_oni_experienced.jpg
+    sha256: 2bee2f7fcde3be6f0c84929b958370767c26bcff50d744c173b7677de1b7fb0a
+- card_id: tales_of_battle
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: tales_of_battle.jpg
+    sha256: 75da65eb6d1f6e923aa6d5a8a2e110a4d614e4b2cad008f08ee0036b0535ba77
+- card_id: tempered_resurrection
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: tempered_resurrection.jpg
+    sha256: 696b2ae4421275891c5d835d4547ad0755907526e498af168850613b51d56d7f
+- card_id: tetsu_kama_mura
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: tetsu_kama_mura.jpg
+    sha256: 023c2e141f4c91e8071c01daec96bfdd8dcb7081b8643413dbde25a789fa4986
+- card_id: the_desiccated
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: the_desiccated.jpg
+    sha256: 54c7d0ccfab816b8ab9b15afe6e2cbf55522f3e9ab19e3251bf0c4d06435b6b0
+- card_id: the_khans_shining_horde
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: the_khans_shining_horde.jpg
+    sha256: c5bece6cffa81239d4e12f647efbbaddb3479652b8c618f231aeaf923e154141
+- card_id: the_price_of_weakness
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: the_price_of_weakness.jpg
+    sha256: ee1c7175048dcf6d01e0942daa2437742e169b3896af958f27ff12c11705cd05
+- card_id: the_quelsaurth
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: the_quelsaurth.jpg
+    sha256: ba86c8c0efe468101b0a576b77d11a3f318a941ceff51223e64c693487dce6fc
+- card_id: the_spiders_lair
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: the_spiders_lair.jpg
+    sha256: 1a299eb9d0ddfd07731753bd44263f7cdb3b77bbf8a3006323ea2824c6a59d52
+- card_id: togashi_kisu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: togashi_kisu.jpg
+    sha256: 7e0c4c99b86e3410d7c837312371707d112f81790d3eacb2bc47e6a7dec2e84f
+- card_id: togashi_wirro
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: togashi_wirro.jpg
+    sha256: 0e263980a5ca1b8f6522af7fbce97ac8891573d02372ebc8f16b4058ec47c106
+- card_id: traveling_magistrate
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: traveling_magistrate.jpg
+    sha256: b77e492a1d3db8a00c35305a8c31d5fadab0b3ed57996bbda381701ae9651395
+- card_id: triumph_of_courage
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: triumph_of_courage.jpg
+    sha256: 799d09c03aca1b4e0928f48e69bfcf2ba8e48cb5139dcd748d9c07d32f9fbe88
+- card_id: true_artistry
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: true_artistry.jpg
+    sha256: 3a9ad9fe3bb86374961ced11c39d11e4b544a0f146ff89055439cc2a427be480
+- card_id: tsukai_sagasu
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: tsukai_sagasu.jpg
+    sha256: 3a4b66657b7f8b9ea1db9a7d222d9d3668d690334661c80920a2e03b8498a7f5
+- card_id: tsuruchi_ki
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: tsuruchi_ki.jpg
+    sha256: 6f9d46708d61369b480819fe90f6f139a5821fcba55d9ea42e83659031f8f987
+- card_id: ujina_saionji
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: ujina_saionji.jpg
+    sha256: 5c9b4d683e59e8d7b05671444c3d1f0e11a63add5e52f3d9874d466da72f535b
+- card_id: unicorn_war_dogs
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: unicorn_war_dogs.jpg
+    sha256: 556f26aa40ad32bc960722f2255eaf25acd29c9d54b82079aceef6a1420de35a
+- card_id: usagi_heiji
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: usagi_heiji.jpg
+    sha256: 7613fe17876acefbc9c480c3bfb2ef4a26d461de9597d5a2f005f8390bb3ba3e
+- card_id: utaku_fujiko
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: utaku_fujiko.jpg
+    sha256: 2eefaf593ca7a5b2fe48e6db41b9dbee3ff69db551f650a149cd39472a52e62c
+- card_id: utaku_remi
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: utaku_remi.jpg
+    sha256: ffb3b079fce9d14f01426b8e1e553d19ed79e1941a2abcdf613680afc4ac4edc
+- card_id: vengeful_shadows
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: vengeful_shadows.jpg
+    sha256: 020d84a281e43e08a1967ed9417d07b1ad18bd2766a647dcce24d9e642c7184d
+- card_id: wandering_sohei
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: wandering_sohei.jpg
+    sha256: a0c47bbb8bf09b9895001d8d1c8233f34e22d7031a13cf369ecd8e4c17d55afe
+- card_id: we_join_the_ancestors
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: we_join_the_ancestors.jpg
+    sha256: b6e6c4f7b511ea560d199294d26a9aa1e0bbdb0e805ff9fa8801aaccc536b348
+- card_id: yoritomo_harada
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: yoritomo_harada.jpg
+    sha256: 81d46677fa40c7fbe2bffb7c793e1c8fcb5900b89ae0bbe569733a13c1b5fc5e
+- card_id: yoritomo_kurei
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: yoritomo_kurei.jpg
+    sha256: d46db43520461485dcaf97b207044a18d2155e3aa097f097b3bddc1c4cbdc992
+- card_id: yoritomo_sachina
+  printing_id: the_truest_test
+  files:
+  - role: front
+    file: yoritomo_sachina.jpg
+    sha256: 7671545a03b7467b2522e191ed8088204fc9d6da4e86bbade83b148fbd615872

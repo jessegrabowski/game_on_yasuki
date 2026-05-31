@@ -1,0 +1,323 @@
+set: Gathering Storms
+images:
+- card_id: anahita
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: anahita.jpg
+    sha256: 87383e17a6508243597bf01b627f7c3e23ad32b0b426c7b1bd3110cfe7698f5b
+- card_id: ancestral_estate
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: ancestral_estate.jpg
+    sha256: 2b4204207df48441f88d85e85e2589b0351c5e802a609149d71a7b759a753fc7
+- card_id: arrows_from_the_woods
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: arrows_from_the_woods.jpg
+    sha256: d6147a47d7daed35ca77d82475958f6a3bcf236f4c27e3439478f40dc7ab4a69
+- card_id: asako_kensaku
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: asako_kensaku.jpg
+    sha256: 800009e0217f3bd49e9ac49638b02a3a3b1f8c8e38b59512e089c2ba7458477f
+- card_id: brotherhood_of_the_waves
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: brotherhood_of_the_waves.jpg
+    sha256: 736107aeac5d61fe6316f7316a59b3fc20c9ebac11e4f60e2849fd0bae65fab5
+- card_id: daidoji_omezo
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: daidoji_omezo.jpg
+    sha256: 699505aa8024e051f09b5cf85ffc951e7e2e37177d8f72ad3d2e70e0a8168d1c
+- card_id: defeat_the_reserves
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: defeat_the_reserves.jpg
+    sha256: 3abdcdf0756df4dccbd500e2ca060b527184c39fcc5b854d1af5c867ef453eab
+- card_id: dockside_market
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: dockside_market.jpg
+    sha256: 31f20ef8a8166977339e85a05e2df3249e2c6c2ce63dfa99f16eb354fd587536
+- card_id: enlistment
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: enlistment.jpg
+    sha256: 4da4906f93b2e82995bc888d4466116c4ff7af9a759adbdb7a7287780067e9b6
+- card_id: from_every_side
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: from_every_side.jpg
+    sha256: 96323cf7822389cfab2fb14fdd47a4d17bdca0a9c2dd06cb7e445b19a3ee8fa5
+- card_id: goju_takemi
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: goju_takemi.jpg
+    sha256: d96992884b0dde4549f70f965f7260b7d3cb12a665921f07161f77ab5d41bedd
+- card_id: gusai_kuniken_experienced
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: gusai_kuniken_experienced.jpg
+    sha256: f8347a51a20ca5cf0bbb45d278764b0388a690a6d317438ae1a7d96775a12d2b
+- card_id: gusai_mikka
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: gusai_mikka.jpg
+    sha256: cf78ccb029104d38ad33545fee597ecb3503c31ae835e7c688654ecf766d6346
+- card_id: gusai_natsuko
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: gusai_natsuko.jpg
+    sha256: 0dcb37043bbc974619879cfa305aca6b8324d860ef8732391e633dcc432948f0
+- card_id: gusai_runa
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: gusai_runa.jpg
+    sha256: 17fe40b7757290b82c326ff2f61651a14e66df90632479af52a84e53786ddd7d
+- card_id: harsh_choices
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: harsh_choices.jpg
+    sha256: 885d086a329222e044b36c1d992e1dfd431c79d56ffb685b15fb942d6054c795
+- card_id: hoji_ejiro
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: hoji_ejiro.jpg
+    sha256: de146085b4b597e063ed32066b9543755556af8d0f20fa74445ec4c52520465b
+- card_id: house_of_high_waters
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: house_of_high_waters.jpg
+    sha256: 3736a9d55c16cd953899dc8c64ba60920143f894e3308488e046a02080be1023
+- card_id: ichiba_district
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: ichiba_district.jpg
+    sha256: 02f530b4e865506f63afa0c1f54592d73175e084744e3a4da3970a993ce6266b
+- card_id: ichido_allegiance
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: ichido_allegiance.jpg
+    sha256: c12e583b8d96f60028ce7f9b5b846888cfe4ac5366877c3b4b8fe94b7c132dae
+- card_id: ide_hideshi_experienced
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: ide_hideshi_experienced.jpg
+    sha256: e1de585f9c2f58d4f08d205faeae5a08ae65eb2cf1b69ec3b007fa3be4e001f8
+- card_id: ikoma_kunisada
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: ikoma_kunisada.jpg
+    sha256: 4eb8fec1ffefbd75c874fbf067026cc06ed0a001d14fb7a2f2b9bc3a74eb602a
+- card_id: ill_gotten_gains
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: ill_gotten_gains.jpg
+    sha256: 1fb929fa60baab5a7575ee275cb9ed19d10e1cadb0ce0e8bde6c019e129195c3
+- card_id: incendiary_archers
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: incendiary_archers.jpg
+    sha256: 49369aefb97c37321079abacd7eecea0d08982ec41f970e0320d9f55f9ff7a8d
+- card_id: kaizoku
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: kaizoku.jpg
+    sha256: 7af0afd589e725f09e55eb33b077dc76bb57bae37f39b7f0891fd1556e6756c5
+- card_id: machinations
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: machinations.jpg
+    sha256: eccd8f97275456eb80c2ae8277f4d3b46c9611635d16ab62fe5ea6009fcc0fc2
+- card_id: mantis_kama
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: mantis_kama.jpg
+    sha256: 99088b0e77775aa6f6d650c83e001082e73ed90047c55bd6b8c40e62e7b6eed7
+- card_id: minoko_allegiance
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: minoko_allegiance.jpg
+    sha256: de1dbd3a40111238e1bd3ad74bcdb71b0b85918e4dec44a75174e9e99b4c139b
+- card_id: my_fathers_weapon
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: my_fathers_weapon.jpg
+    sha256: 60754bc51371a16bf048735015a4914f459a19b66f4e84a808bc409a46ea8ba3
+- card_id: otokoshi_district
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: otokoshi_district.jpg
+    sha256: 18c4e6eb4418e8e73a885548ae0d8d60cd024062a03188fc77186b70de3fba02
+- card_id: overwhelmed
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: overwhelmed.jpg
+    sha256: 34971f4c237dbb1c491dea54f555c43919ceb9e1eab97df3e0f7399ebe21402b
+- card_id: overwhelming_numbers
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: overwhelming_numbers.jpg
+    sha256: 9fc602c21c30029a84599615316be001605724683c2be1312b2329af715d2325
+- card_id: questionable_market
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: questionable_market.jpg
+    sha256: 82108d5f0d0c601acf83f55b9d3a1db0fbb7eead85eb81d2fa998444f384235b
+- card_id: questionable_vassal
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: questionable_vassal.jpg
+    sha256: d7ea6745ac2600a2b5d8c001553009b2d740e07875219f18bc159944081cccef
+- card_id: rout
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: rout.jpg
+    sha256: db17d03a1a13152b0bf5cc47088ec3b949f4cc08a910047b1668c2fd15b17a3c
+- card_id: shosuro_eiko
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: shosuro_eiko.jpg
+    sha256: 168bed6cf5c4e9b868a1753135f3ff31cd52ee490024a511bba732c7967e028e
+- card_id: stand_against_the_waves
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: stand_against_the_waves.jpg
+    sha256: 41a82e3904e7556173e77440ff5646f048400dd9ae65b1ea43a15cf457f17aeb
+- card_id: superior_defense
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: superior_defense.jpg
+    sha256: c3654a73dc72548e1aa8bcd198b594b684a94187f5a149d6158f5cceeb7ac24f
+- card_id: the_battle_of_broken_wave_city
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: the_battle_of_broken_wave_city.jpg
+    sha256: a02dd7f186414648c634beebb8c171b9e3abe330015c41bb2d13bb84d2229b4e
+- card_id: the_height_of_courage
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: the_height_of_courage.jpg
+    sha256: e3efc9115ffa514638d8717e951da6e76469fbd7c9ceda32fb5c61942455fb6e
+- card_id: the_shattered_stormfront_of_the_mantis
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: the_shattered_stormfront_of_the_mantis.jpg
+    sha256: 9eb57b66061c7413331c47f8497198dad97845aa3417cde56ee5c5ef6df4fa2b
+  - role: back
+    file: the_shattered_stormfront_of_the_mantis__back.jpg
+    sha256: ec4f95a5f4486a777d61948b01ea6468e89d59989cad527a0e87430139a1f116
+- card_id: togashi_ogai
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: togashi_ogai.jpg
+    sha256: 034ca611ee01d9bf5abd893d8212e732a69b6861261fdba89cae5bfc9fe9c24a
+- card_id: traveling_ronin
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: traveling_ronin.jpg
+    sha256: d16990a44a76b993a92f70af74306dde74dc03535e80170977de50d97a93b042
+- card_id: watanabe_maki_first_mate
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: watanabe_maki_first_mate.jpg
+    sha256: 9095fce2c06fac18251382216ff8166f3d53bd32e7d8fc17feec4ba425d5114d
+- card_id: weigh_the_cost
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: weigh_the_cost.jpg
+    sha256: aad608ab97692c99964fec31811f3f5cc4c1ea704e95eb9884ebe0995ecdb7cc
+- card_id: yasuki_hageshi
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: yasuki_hageshi.jpg
+    sha256: e13b6b8f3fac1edce353ea7ba92a6e28adfa0bb89c6bc33f1ee71cf9985ca209
+- card_id: yoritomo_bunrakuken
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: yoritomo_bunrakuken.jpg
+    sha256: 9cc36e896a57eb7e10be5f1f86368e486df8691992601ef4e842edd4f16df573
+- card_id: yoritomo_saika
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: yoritomo_saika.jpg
+    sha256: 83633029ae0d66bea16bafe1c4db24d42e6d320ddcd0addd97bef293b4711f9e
+- card_id: yoritomo_sumiteru
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: yoritomo_sumiteru.jpg
+    sha256: 631cc2754ce07478654ace687a0e15381d9ead94e4631021e6fbfa5b1ec291e9
+- card_id: yoritomo_tatsuki
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: yoritomo_tatsuki.jpg
+    sha256: fc998807c4f939a6c2222ed452de3f9b6d36a8c21ce700e94b5c72cdb3a19f87
+- card_id: yoritomo_waito_the_salty_dog_experienced
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: yoritomo_waito_the_salty_dog_experienced.jpg
+    sha256: 8c6416cc59f1c51b6c619e24c51c5c222ed86bc2af02a5ce59df01ed4ee23075
+- card_id: yoritomo_wakuni
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: yoritomo_wakuni.jpg
+    sha256: e271b2f583070c916486b3789ca76af7ddf2a1b62e52e318177a6b89e8fd1be4
+- card_id: yoritomo_yusako_hiromis_legacy_captain
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: yoritomo_yusako_hiromis_legacy_captain.jpg
+    sha256: 2b1ec538f56d88002e919ce49a8db255bd779727a84df2281429155256889c8d

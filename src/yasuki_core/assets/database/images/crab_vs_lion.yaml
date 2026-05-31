@@ -1,0 +1,14 @@
+set: Crab vs. Lion
+images:
+- card_id: the_ancestral_home_of_the_lion
+  printing_id: crab_vs_lion
+  files:
+  - role: front
+    file: the_ancestral_home_of_the_lion.jpg
+    sha256: 4abe219f8ebd597b422c7d261cfe3b53271bc892803f44d62745721a8c0b4276
+- card_id: the_war_fortress_of_the_crab
+  printing_id: crab_vs_lion
+  files:
+  - role: front
+    file: the_war_fortress_of_the_crab.jpg
+    sha256: 30a9b545fa3bcfa40417d7186b087e66e796bc1112540b99d48e03bdd2908cb7

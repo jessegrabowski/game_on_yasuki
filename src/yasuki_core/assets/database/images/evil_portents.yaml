@@ -1,0 +1,992 @@
+set: Evil Portents
+images:
+- card_id: agasha_dorai
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: agasha_dorai.jpg
+    sha256: afa3f9a9b97c5fe6d6502575cf800465aaf10b9de69f691a9a6eeb0130c37231
+- card_id: akodo_misaka
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: akodo_misaka.jpg
+    sha256: d075b54c68506fed93958578a34d45bbe5e794754109610029620d1f8007bf1b
+- card_id: akuma_no_obake
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: akuma_no_obake.jpg
+    sha256: dd47fd80430d54cc30274e60f5c291e36d5a762ee89271d4034fe399f8b86111
+- card_id: aligned_with_fire
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: aligned_with_fire.jpg
+    sha256: b099aa18b509ce52ce7a7abf1c7f616820b29a0e93fd4c4c56daa16becb67638
+- card_id: archers_position
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: archers_position.jpg
+    sha256: 2d7bd0d5c7cf7016f6c88935b7e5347a9eb820ea25e1b18e9e12988d5cdfff78
+- card_id: asako_misai
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: asako_misai.jpg
+    sha256: ae51f6b0263dc3c657f73c9d3c2bda85b4c9b001856a3cdfbca19736ea96d34a
+- card_id: avenge_your_slights
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: avenge_your_slights.jpg
+    sha256: 28b13410d7193f167d6cdcdbc8e965cc9ed49a6c60b86dafcb722a87c68b15d9
+- card_id: bakuhatsugama
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: bakuhatsugama.jpg
+    sha256: dc04fc51dc4593599c1f77cf230f8efbeb570138351a47b018fc65757f0c1034
+- card_id: battle_of_the_first_seal
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: battle_of_the_first_seal.jpg
+    sha256: f2f3e7b1649d7f5136657f1eb8709eb74150adb58979467bdaa7b17f9272f8e9
+- card_id: battlefield_defamation
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: battlefield_defamation.jpg
+    sha256: 13ba37067aa7eb04da7fb0f4e1dba4f1ae7a6121327bd024a0ba6a25396e1157
+- card_id: bayushi_chiyoda
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: bayushi_chiyoda.jpg
+    sha256: 51cc1416dfc79e504d82cceb92f21c086f90a36158daae952704744af467196c
+- card_id: bayushi_kanihime
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: bayushi_kanihime.jpg
+    sha256: 139961219fbad95371f815d468175d42870ec35f75bd42c46635eb164ffad71f
+- card_id: bayushi_shen_lao
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: bayushi_shen_lao.jpg
+    sha256: 3913d4d2c676fdc29af7d47302731b2ba1dbc84dec10d24c8d4738d8a514f4c1
+- card_id: benika_sensei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: benika_sensei.jpg
+    sha256: eb006cddb2fe026915b4dcf8ca4d824e3bea51d3cb52344d742bc4e34de75d2f
+- card_id: betrayed_from_within
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: betrayed_from_within.jpg
+    sha256: 5cd038ecf3f5a22c4ff1572e53e14b7a2850f9ca0905ef6ac00ec860e7d4ed87
+- card_id: box_of_mysteries
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: box_of_mysteries.jpg
+    sha256: cd601fa586af501f3ef8fc0d46011c046392835fdb24c88af260f5dfdfa0f3ea
+- card_id: brotherhood_sohei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: brotherhood_sohei.jpg
+    sha256: c7f04e0993472211593a6f7bfa113231ef539401f3c9ce994ca54121077efb85
+- card_id: bukita_sensei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: bukita_sensei.jpg
+    sha256: 9c85cf97d41703be310d08592caf98d7d9d7f8011eaab3eeabb417f39791c680
+- card_id: calling_on_the_sun
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: calling_on_the_sun.jpg
+    sha256: b33736b2863d5f1fbc86b571377b6385de3e4c05638070b894252b0386c72a65
+- card_id: city_of_night_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: city_of_night_experienced.jpg
+    sha256: 10df9e35cc37e750fb67c48a8c402eaca2332f084671ce2516fca64273a7d574
+- card_id: clan_mon
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: clan_mon.jpg
+    sha256: 9c8186fc6267d62fd799b0d27fb759987c5d588343a8d91f7d01a2b10d7c65dc
+- card_id: cleaving_the_wave
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: cleaving_the_wave.jpg
+    sha256: add9811b3a351c918f10e12be81eeb434bd990840d78b66cef9ce05e322aafc3
+- card_id: compassions_invocation
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: compassions_invocation.jpg
+    sha256: 3fe62bf298b92627e8e297af0ef853c10acf88ea9c04664b90e8f4669af03a63
+- card_id: courageous_ashigaru
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: courageous_ashigaru.jpg
+    sha256: e656a806d47d0bc4409b48d157a92039dae3d33be0c2d041b78101ff584de3a7
+- card_id: daigotsu_aimaro
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: daigotsu_aimaro.jpg
+    sha256: 44d5b380513c2448ef9c2010590603d21083f9e3e7bf1cfb69971d0e1f49ecc6
+- card_id: daigotsu_endo_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: daigotsu_endo_experienced.jpg
+    sha256: d193e9dad5990d464534b88e3711b1e2dfe8fa853e8a1356d1a8eea631746628
+- card_id: daigotsu_yuhmi_experienced_2
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: daigotsu_yuhmi_experienced_2.jpg
+    sha256: 34d190ea485da4907efe7f5777f40abfccf4958b4218004c8ba0808d04ffe770
+- card_id: defensive_archers
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: defensive_archers.jpg
+    sha256: bd2b9d42f94f03d4429249c52d27edb9dfe66a420616acc6bdbcca409a48b82c
+- card_id: defensive_fortification
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: defensive_fortification.jpg
+    sha256: 0daa84468c03c66d7242a4347dd176ac0f62b0a96246900106e9045407eb69e1
+- card_id: die_on_your_feet
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: die_on_your_feet.jpg
+    sha256: d5b6404de10bd1eab3bf4b9f856e50bd9786ce91c6e53d04a2ceca2d10325abb
+- card_id: disciplined_advance
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: disciplined_advance.jpg
+    sha256: 8a43393eb304e92e6b0620ae81d200bd5eee8db4894524d01fd13bbd6d63a667
+- card_id: doji_ikei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: doji_ikei.jpg
+    sha256: 077df341dc8956f1d9d2ddec574ebaad17d98f6357c9cf089d5c140f652dc73a
+- card_id: doji_natsuyo_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: doji_natsuyo_experienced.jpg
+    sha256: 4efcbfa58e0c983a0c8db62fbc068f20e08f58be76f53bec99e1b2329c80723f
+- card_id: doji_soeka_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: doji_soeka_experienced.jpg
+    sha256: da3857daa0ca010dd952f40246052c70b72989b29d042ffff30ae4966f62db43
+- card_id: dojo_of_the_dauntless
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: dojo_of_the_dauntless.jpg
+    sha256: 9f8ac5a3d9c31cce50328e0cdf5e35c28b696749631089fa496544ac6a02124e
+- card_id: duel_of_shugenja
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: duel_of_shugenja.jpg
+    sha256: e429eb450e801c3f768427e63b6c99fd5f1bf01957a1be043fe5e81ed8bb8846
+- card_id: earths_inevitability
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: earths_inevitability.jpg
+    sha256: 6527932d3007782f8ec8db32967ef8065fd5174270727ff0b029d72c7dea1fdd
+- card_id: emerald_guard
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: emerald_guard.jpg
+    sha256: da3e6d22e9126ce66d8cf115e3bbe104ac3824822af56822697b7918e88fdd4a
+- card_id: ending_the_chase
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: ending_the_chase.jpg
+    sha256: 45b68431b5a3b986976aa07532ad0afd64cbdbcb6c4d97c608c720b48e873ee9
+- card_id: endless_drills
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: endless_drills.jpg
+    sha256: ee44984eeab87a410594129dfb0cf2c5790ccd06c3959a44ee54e73b59c1cfbd
+- card_id: erected_watchtower
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: erected_watchtower.jpg
+    sha256: 514132312760f8a21ca06e9a3ca0835c3b6a78d9ea435db5f57009a9772f6b5a
+- card_id: eternally_unyielding
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: eternally_unyielding.jpg
+    sha256: badb6a696765812d0cdb597d3e6b8d07306fe540f9f27865a771fc2d76c51f4b
+- card_id: evasion
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: evasion.jpg
+    sha256: 0d4d003db324e3be7926d50ea96e6f4ae7d8769a71ec73f0eab540f9cbfd0213
+- card_id: fight_on_your_back
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: fight_on_your_back.jpg
+    sha256: 4b7c9de3fed12e5eb57647b39b379e4922d2c118cb4cacdbfc1a01293c090428
+- card_id: fighting_unrestrained
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: fighting_unrestrained.jpg
+    sha256: 9a4f2fda5e436fc68af9a9362d06a71a449e48106a3d1ada112a3884d6dd50ae
+- card_id: goju_iaitsu
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: goju_iaitsu.jpg
+    sha256: 073e9592a8260cd3ecee1d04f673f5a12e3261de6a87040a8fc68e8af95649e0
+- card_id: goju_sensei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: goju_sensei.jpg
+    sha256: f7d8003325fd33a3c656e776afcdc9c18f81315518bab005cfc6a447e3afa187
+- card_id: goju_toriken
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: goju_toriken.jpg
+    sha256: 1f51c10bdad1aaa8291fe6856161e8d93323fd02216c6d6012634a3e664b2d6f
+- card_id: hida_genda
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: hida_genda.jpg
+    sha256: bd5760d3363a0dc7498d795620f75aa3bd6bcf51811376c5c34dfee1a451813a
+- card_id: hikayo
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: hikayo.jpg
+    sha256: a93c99e20994e9f7ee364dd2badb47545eea4f0f3e3e1ec3142e75bee1375a26
+- card_id: hisako_sensei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: hisako_sensei.jpg
+    sha256: 2d180e0e95728a3c7525331a59599b5d462bf8fe96cfdca1518918cc329318e7
+- card_id: iemasa_sensei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: iemasa_sensei.jpg
+    sha256: dfe81aeb23aa107c4827d21be5654d2d7cc9d3eccddbf8bb1529a5125077ed89
+- card_id: ikikashi_sensei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: ikikashi_sensei.jpg
+    sha256: acd6ba1627ea4b3f6fdf93717414317a90454e15179995595c444861d737bad5
+- card_id: ikoma_morita
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: ikoma_morita.jpg
+    sha256: 5fd2517ae45c140c6fe550c60677cf5bb189912b51b500d714ab826b1f26e0bc
+- card_id: illegal_justice
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: illegal_justice.jpg
+    sha256: 6dcf416362b8f281b18560fa54ccad923701e2815e4cf9097ee561f4095c349d
+- card_id: inazumas_caress
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: inazumas_caress.jpg
+    sha256: dd43f903c48310621fcaddfd6757585f4add611620cf2fc65dcb893f3be043c2
+- card_id: indifference
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: indifference.jpg
+    sha256: 7e16d42a25fe97c39fafd03553358b6586a8ce46a53d490d4601f1acd3e12761
+- card_id: into_the_shinomen
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: into_the_shinomen.jpg
+    sha256: 19b0b3cae9edad421664968c096be7d7d24a5c02fcfa03c49eb83f890e687c13
+- card_id: isawa_bikaru
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: isawa_bikaru.jpg
+    sha256: 770354536f0c7d22a4e36e2e051f0b0eac41a1ea1712d0be6a6d91a175345fd0
+- card_id: isawa_hokaiko
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: isawa_hokaiko.jpg
+    sha256: c7bd5f31c25cd3febf64a74f65f0e1ba88711e889c4f1c7c13f796bbcbf199f6
+- card_id: isawa_norimichi_elemental_master_experienced_2
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: isawa_norimichi_elemental_master_experienced_2.jpg
+    sha256: 77c8715afbf1542235d451efe77d5d85fd64d6cd94c7824e5f368eb7c89cbb9e
+- card_id: izuna_sensei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: izuna_sensei.jpg
+    sha256: 81e5162b1f0d1b04b65a3a9aac175904cc46833294c124fbb20ab527e6ccae24
+- card_id: jinai_sensei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: jinai_sensei.jpg
+    sha256: f179c83e4017219a1a6a512991021c73a49dc5d4db1f25769bede4a232f5e460
+- card_id: kaiu_eichi
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: kaiu_eichi.jpg
+    sha256: 731aff4a14cde31cc835e8a6889661509a94123713df96b387152076433a0d23
+- card_id: kaiu_o_taro
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: kaiu_o_taro.jpg
+    sha256: 9c5f64f47cf7f6d3ae3fe2dcb65a32b650526a60d831a6b7ea20433d14f701d4
+- card_id: kakita_daitsu_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: kakita_daitsu_experienced.jpg
+    sha256: a1fd19a7470b6f0dc92d8c0e3f9a1e2fc17b44e8798bb93e8f891c82ba6515b7
+- card_id: kakita_inaka
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: kakita_inaka.jpg
+    sha256: d4967732f9e37a53efd1810acacb7b96ce5808e764d10f7fd0e66aa2fee39392
+- card_id: kakita_oshaberi
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: kakita_oshaberi.jpg
+    sha256: 78d570c10d47901c7ffb9f95496882c3ba122f15f6fbe4a757dc996bcd356ea3
+- card_id: keisho
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: keisho.jpg
+    sha256: 5d5482a72f97b702b6be440f0172a08774b70277132f05911713c9283cc50015
+- card_id: ki_rins_shrine_experienced_2
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: ki_rins_shrine_experienced_2.jpg
+    sha256: 91b49d6783d2366e192ed9be190be7ed5da0786ed0df703e3a2456cfc57afda6
+- card_id: kitsuki_goshi
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: kitsuki_goshi.jpg
+    sha256: adca365b887d8b121ac9c1d031a3a654d4471545021d6562929f479df3748ede
+- card_id: kitsuki_goto
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: kitsuki_goto.jpg
+    sha256: 2f8683e71007c25dbb3b0c31593f5996dcecc86ada077acf36bc8593652bf86b
+- card_id: kuni_hokinsha
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: kuni_hokinsha.jpg
+    sha256: 2a5a6bd896249db422395c06f22c55799ab644f544888ddc7f1fb4b260e3226c
+- card_id: kuni_renyu_experienced_4
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: kuni_renyu_experienced_4.jpg
+    sha256: 2dc0a54fbbc7d1bc88945edfe9ddb5501982ce10c8fa1c6ae6a850f3356b5574
+- card_id: kuni_tenba
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: kuni_tenba.jpg
+    sha256: 7f127300153aaf59f54886ff569b01d8d239e831c77ad18c5692b6d41dcf50c7
+- card_id: legendary_warcat
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: legendary_warcat.jpg
+    sha256: 068816a281347155e93a4a764bdfa87c518cd4193084dd67850f6cbd29935669
+- card_id: libraries_of_kyuden_isawa
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: libraries_of_kyuden_isawa.jpg
+    sha256: 25963e3e347c5f185fbe8b81f8d6bed9ac7a8a0925d917f0c40a372d61539331
+- card_id: light_tetsubo
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: light_tetsubo.jpg
+    sha256: c807a63c7e2432cf8ccced7aa0baf3ebf92ea04215a4411cc3ee0c7f4343adb5
+- card_id: master_infiltrator
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: master_infiltrator.jpg
+    sha256: 32742052951b938f667c3831f5500398502614448274d14729e8722fc0d7878e
+- card_id: master_of_clear_water_dojo
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: master_of_clear_water_dojo.jpg
+    sha256: 26b8a7da710dcd6253fbd23c58afbd3a68416dbf91d883e069913bba00d688ce
+- card_id: matsu_akio
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: matsu_akio.jpg
+    sha256: cb68b83003506ce96d68119d07ad1096f3178f316bc09dc319f73b8b2a53dfe8
+- card_id: matsu_ki_ai
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: matsu_ki_ai.jpg
+    sha256: 528dea71d7018ae4ba6ed9f863fc3557f5efad7cf0f307c81c6baf4c469c6966
+- card_id: matsu_takeuchi
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: matsu_takeuchi.jpg
+    sha256: 65da59dad1385cea1aa90ef59f53131a67f81c52085144a8feedf8908476a9d3
+- card_id: matsu_tayuko_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: matsu_tayuko_experienced.jpg
+    sha256: 0286f307718d1eb6026386484f7d68b037db79427036dff43587221c7774e232
+- card_id: matsu_yamamura
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: matsu_yamamura.jpg
+    sha256: 9fa4da5dde23fbc59d14b1e878758dabc083b68974cc7939aa7f669cd6dd8079
+- card_id: min_hee_sensei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: min_hee_sensei.jpg
+    sha256: 15aff08c01379ae11a1871063d60b763e37c47b7b7ceece2859a6f417393dbaa
+- card_id: minori_sensei
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: minori_sensei.jpg
+    sha256: 29f1e4a789fd4c7e26ba242df9f4c10ac912efecbe42a911288db38c97b317cc
+- card_id: mirumoto_konoe
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: mirumoto_konoe.jpg
+    sha256: a993b36fe65698c713492cbedc336a161851d985ca3ac858a5934f32b8ef5b4d
+- card_id: moshi_chiyoko
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: moshi_chiyoko.jpg
+    sha256: 5b747d8872b1c1700e3f3e84a43a210b727cf9da4d157a6a9d0d3ab70ce03590
+- card_id: moshi_nariko
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: moshi_nariko.jpg
+    sha256: fd57457eca135e7e8ded14669205e3d35d09753d58251cae0135761271c659e7
+- card_id: moto_chinua_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: moto_chinua_experienced.jpg
+    sha256: 5055b70898134dcc2ebc00fb43495879cefab8062772e12f7e6a2387c8104722
+- card_id: moto_dai_ketsu
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: moto_dai_ketsu.jpg
+    sha256: 60c18a2f322cb03bf067a23ad4ee760f06a68b945995f933167ac3be4de8c7c8
+- card_id: moto_jengzan
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: moto_jengzan.jpg
+    sha256: e93cf449f4e86ed7f093bcbef94609217d8d2a22e60b71bd65b74ea1f64635c1
+- card_id: my_steel_is_stronger
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: my_steel_is_stronger.jpg
+    sha256: 6c33c63b39505e04b0cfec3a46ca325f056fd285ae3f667aff4066da5dcb1882
+- card_id: mysterious_murder
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: mysterious_murder.jpg
+    sha256: f70fecde55699d90cc25e8d3d4dbe95d1c1404fa9ffc832361f3dda7c083c441
+- card_id: necessary_sacrifice
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: necessary_sacrifice.jpg
+    sha256: 3f47c73bc7df94cb3ed2b5b16de28ec458990b552d15336fb11a99b115d3a3d9
+- card_id: ninja_training_exercise
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: ninja_training_exercise.jpg
+    sha256: 840404df576fd9c3efb4eb92e521b6ef1b716b4ea9b913b90926b7ceecdf4d8e
+- card_id: ominous_revelation
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: ominous_revelation.jpg
+    sha256: 03051cdfd8301993521c10ecce0cdfbb278991a7866f981880065ca7a9b3f669
+- card_id: oni_familiar
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: oni_familiar.jpg
+    sha256: 22a6fe0f1b731e4e27c99a7e604934185221bcfbda88a30efe2b0bfdc441eb05
+- card_id: opening_the_hearts_door
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: opening_the_hearts_door.jpg
+    sha256: e7e756eedc610b0526a3159452fffed2f67dc3fd191a3a612ad03ceac1331e96
+- card_id: phalanx_formation
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: phalanx_formation.jpg
+    sha256: 4aea00f67c9f677dae13885d358ebbcc8bcd3e8701d62301f05343cd8dec910c
+- card_id: primal_tempest
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: primal_tempest.jpg
+    sha256: f7c3f7bb596a022a0c65fde9cf0edd5259d6a2d91bfc448c28930d884b26c3e9
+- card_id: puritys_fist
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: puritys_fist.jpg
+    sha256: a8c74a10176334905da66eab2928e5425b8ae6db2d966dc78028fca29acd382c
+- card_id: questionable_vassal
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: questionable_vassal.jpg
+    sha256: b59b7ab80a03dc25ada70aecd92a873a913ebea1d83f864c8cad92530edb9102
+- card_id: repairing_the_walls
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: repairing_the_walls.jpg
+    sha256: e213470c30b403ee8098c23506a0cbea81ff4fb88bf923d9ba53fa2f02b918f5
+- card_id: retired_scholar
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: retired_scholar.jpg
+    sha256: eb78b639ea2ca6f7215384528edd0c1530a4cf48333bfc80c4df37620c537aa4
+- card_id: retracing_steps
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: retracing_steps.jpg
+    sha256: 1ef758c19aa0b91d3563d07bdd762d2e7c0637926a59b5e8e20a67c0ede0e7e6
+- card_id: revered_blade
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: revered_blade.jpg
+    sha256: 04e486f2b09f775bb061a2ec6d2c31a09b02a0bfd72a7ab803df88d27d87a65b
+- card_id: ritual_armor
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: ritual_armor.jpg
+    sha256: b9491af9c50ab3d27196c62abbd086ec23efe38ebdbe06c6b8a445fbf285da41
+- card_id: ritual_of_naming
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: ritual_of_naming.jpg
+    sha256: c01cdd1442383bf221abaafbd3d19ad524b8f4ac7ff2f6dd321538b9cb45bd95
+- card_id: sannin
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: sannin.jpg
+    sha256: 5f9f7b707ff785b5fcad4fcb1d505212ee0a9af7fe143a738370dc653fdd3496
+- card_id: scorpion_flexibility
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: scorpion_flexibility.jpg
+    sha256: fac385c2c2e3d7347d2309d906c87ae9ff28c82d07f25c293d6613015a1ed029
+- card_id: secretive_defense
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: secretive_defense.jpg
+    sha256: 032e9c306379e366b1829dd4f84cd99939313b63f6485d9bb6d6128773f66170
+- card_id: shadowless_strike_dojo
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: shadowless_strike_dojo.jpg
+    sha256: 90c6eb6d4d2b3389aed3697edae45b24f677c1c06c48a62532b9d92d051a5833
+- card_id: shiba_kakei_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: shiba_kakei_experienced.jpg
+    sha256: 57b2189ffa0bf329e9676b8f973595f301280542ecf85303de7294ab90a4dc20
+- card_id: shinjo_dogenda
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: shinjo_dogenda.jpg
+    sha256: 690bde28b27960c839fa5890c425bf22d196cfe27890d4b354d9dfa08aa103d1
+- card_id: shinjo_megura
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: shinjo_megura.jpg
+    sha256: 9124fab4a656e567cb6229fc8a98b10396243f5d2fdc12463a352b8e5715e6aa
+- card_id: shinseis_last_hope_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: shinseis_last_hope_experienced.jpg
+    sha256: 2c791a9c8b743ef404b8d456204ab45a7837f5dac6f199612d9b2a732ce2843d
+- card_id: shiotome_troupe
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: shiotome_troupe.jpg
+    sha256: e82817d308e6a54e9793203e25c6cb2b0e2a569af73f568cc5fce0a8adf22a8d
+- card_id: shosuro_kayo_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: shosuro_kayo_experienced.jpg
+    sha256: 26b97fd54bb662d4c2e5d01de8b6eed650652e55c9e69ef159e17501aa97be98
+- card_id: shosuro_ozu
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: shosuro_ozu.jpg
+    sha256: d3d5a9b64f7094f46f0ea0c497d63285d6e766f2fc5da8fd566fd52ad0b8eced
+- card_id: sons_of_gusai_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: sons_of_gusai_experienced.jpg
+    sha256: b4537b915ade58e9528a20f0a0e79c4b406e8f9f3e3f2abc49b8171941120c8a
+- card_id: spirits_essence_dojo
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: spirits_essence_dojo.jpg
+    sha256: be00822431396157bce5c16573f0c4006c94d6220e5cc99884b4bade0dcf9793
+- card_id: spiritual_sentries
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: spiritual_sentries.jpg
+    sha256: 320c14424bf8c1b6dac140795121371bfca5619f416143a05498040be5736238
+- card_id: stealing_the_scrolls
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: stealing_the_scrolls.jpg
+    sha256: 2e9d698725734ac327fbeb3eae01bd4d44e74c0be92eaa623f8f463459b6dde4
+- card_id: superior_assault
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: superior_assault.jpg
+    sha256: 0a1d5f13cf8e5530cf7576e5dd8ef4c55ae923acdb3b8992e632fdc03892528f
+- card_id: tamori_daiishu_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: tamori_daiishu_experienced.jpg
+    sha256: ddf6585621845f49347e959430068bd43ddc1e44581b6d89b4f6e3bd9d4919d9
+- card_id: tamori_gaitsuru
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: tamori_gaitsuru.jpg
+    sha256: 5bd186cce6d3a12ca90c8483524059e65b530501115ea6169755752c8150ae25
+- card_id: temple_of_the_first_seal
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: temple_of_the_first_seal.jpg
+    sha256: 87c3e3e9178b782fd2b97a06ccd67e98b0ef13724fae99e40b7a09795456402f
+- card_id: tetsuo_experienced_2
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: tetsuo_experienced_2.jpg
+    sha256: a526b8506ee8b1f743d1d322960cab05a4ff5db8e979c09bfeff0db97714a1d5
+- card_id: tetsuos_nagamaki
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: tetsuos_nagamaki.jpg
+    sha256: d5e0fa4846b71d3a6b999bd32513391baf8e0289cdced0e5d3af92a3fd7dd66a
+- card_id: the_crimson_mountain_oni
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_crimson_mountain_oni.jpg
+    sha256: a08d3483b0ba004c05867827da2f99547e03d2ce957691e2f9a54df4cb40e99b
+- card_id: the_fall_of_kyuden_bayushi
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_fall_of_kyuden_bayushi.jpg
+    sha256: 50b2c289a08c74cf6a46c30ae0129c42f2058c69e33c4459c08acfb90e649d70
+- card_id: the_feeding_hills
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_feeding_hills.jpg
+    sha256: 1b424384a2c77f402116c88960a34006b3e52002dedea6cc9b5be800d908625a
+- card_id: the_ikoma_halls
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_ikoma_halls.jpg
+    sha256: 7508552cfe8c3ffb35f923388b9bac24c1c0fbcd53714579dbc15b56c7deebe5
+- card_id: the_iron_mountain_school
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_iron_mountain_school.jpg
+    sha256: 77080c74ee830d0aea0ee731a19cbcec86e3d7b073091ba8db1f48e069bf85ee
+- card_id: the_last_strike
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_last_strike.jpg
+    sha256: 9255c5853e399b16c73e8847fafcf9cfd28a4ec9632b4b8738ed19bac7e66467
+- card_id: the_miya_records
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_miya_records.jpg
+    sha256: e230ad137805cd0299629279fc96477600d09bcac531db1a61ea5392a23016e4
+- card_id: the_mountainborn_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_mountainborn_experienced.jpg
+    sha256: 2d7296f3fa601e6e1cc62e6b12d332874f50353ed14bde32f8e8b841d29d0b82
+- card_id: the_search_for_enlightenment
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_search_for_enlightenment.jpg
+    sha256: 8613dbabbac73e61f7a189860c5da6534492ad3d5026ea1f2fc07b2411648b3a
+- card_id: the_tapestrys_flowing_pattern
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_tapestrys_flowing_pattern.jpg
+    sha256: 17301d4abcf48407e3748b5798c2c8c70d38a996762fc7f326ebfbc21eb56ae8
+- card_id: the_winds_clarity
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_winds_clarity.jpg
+    sha256: d9612147e9c19038ed82e12382705f93e05f0c3b030aa09477351a8f0a36d8f5
+- card_id: the_worlds_essence
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: the_worlds_essence.jpg
+    sha256: f2ee9b7bee3715eabce20d237716c5c69db95be4b09ea17bf7f738c904269def
+- card_id: threshing_flail
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: threshing_flail.jpg
+    sha256: 2d9b569474465d301d3023f1ac6594edc8dc0aa1db25acb27982b5136c073e40
+- card_id: thunders_resplendent_gift
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: thunders_resplendent_gift.jpg
+    sha256: 05f9b770248824a42f9cbfcc1c3e98da66054122f844fb2df738a3656785f3e5
+- card_id: tsuruchi_kinuyo
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: tsuruchi_kinuyo.jpg
+    sha256: 71f67cdf3844dcb73d8043dcbdc0a84e43fc8827f3407fd13cf6a150618376be
+- card_id: tsuruchi_taito_experienced
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: tsuruchi_taito_experienced.jpg
+    sha256: 6265cf263b6841d4a9864946b6f2f4b677c221efce180c2ba7bb2ca563cfbe29
+- card_id: umikaiju
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: umikaiju.jpg
+    sha256: 3ea43c9d95f33d24a248da3dbe7f77efed1ec0d1baefa2828574076244b191b6
+- card_id: unbreakable_courage
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: unbreakable_courage.jpg
+    sha256: 21fa6a9b3b1c128a1ef7dbc47e5272dba5d13d3352f7ffe695da821985840feb
+- card_id: unforgivable_shame
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: unforgivable_shame.jpg
+    sha256: 8370fe6b2c82c13755d653f5120e2f949e1236b2c2a41273662bebb31710e3a4
+- card_id: unguarded_attack
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: unguarded_attack.jpg
+    sha256: f17be2ce407b7032b9aa5a633e48440f65853b708a47cfeabf59993325cf0a8d
+- card_id: unshackled
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: unshackled.jpg
+    sha256: dcce4b6a259e0a444cc800fbb374527696fe5a73ede57981081f92dde0aa32c7
+- card_id: utaku_yabusame
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: utaku_yabusame.jpg
+    sha256: 84e33f7db8e1b05478d83e94d5f890db0484cb881067e5ef1b8307c8d4846e05
+- card_id: walking_with_the_air
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: walking_with_the_air.jpg
+    sha256: af2f51e8132a85712ac3d8818012c00cb9d00cb05b1a3e17752dc9b7efef334f
+- card_id: war_of_the_spirit_realms
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: war_of_the_spirit_realms.jpg
+    sha256: f4b65dd87ea3d185e9b9f45094f1f30ff70da9dc46232e43df7559ee7bd5a109
+- card_id: warcats_in_training
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: warcats_in_training.jpg
+    sha256: a341eba124d7e34fa2762d7e09d9b86eca043ba8bd4412bc2818aedd2712c920
+- card_id: weathered_armor
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: weathered_armor.jpg
+    sha256: d4b26438d167934c4d3bc9686c1801135876d73871b8a69203025afe07fb6d49
+- card_id: wisdoms_burden
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: wisdoms_burden.jpg
+    sha256: a999d0ef23cbc53cf9ce4da70f0ba1f004a3db66bd8376f3bb330e66b693e922
+- card_id: without_your_weapons
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: without_your_weapons.jpg
+    sha256: 09e543b8341fd7210ba9851ab15c3de2bfb45f302895304d5c4fa2dac43b9540
+- card_id: word_from_the_imperial_court
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: word_from_the_imperial_court.jpg
+    sha256: 76f0fd063ad5822a35008924fcd566c6e7f53a4a50676b63a8ee65400ca98bb2
+- card_id: wrath_of_suitengu
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: wrath_of_suitengu.jpg
+    sha256: 12154f9a47f9c4082da24862bb4ef3d5a2fef7170cbfe3ade3004e075d95e00a
+- card_id: yogo_mizoguchi
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: yogo_mizoguchi.jpg
+    sha256: d35768540fcdd5afe76eaadeb15478f987914202a03302682cd7852a2d88a729
+- card_id: yoritomo_honjo
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: yoritomo_honjo.jpg
+    sha256: f906a4d404fd2e7b7ebc62209fded7640bf75384c056379d4a2ff040beb3f13e
+- card_id: yoritomo_tamiya
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: yoritomo_tamiya.jpg
+    sha256: 574bb3d6e76db371cea1a4dd38fba39dabef7c846da0d87455e197d747207a9e
+- card_id: your_true_colors
+  printing_id: evil_portents
+  files:
+  - role: front
+    file: your_true_colors.jpg
+    sha256: 3e889e0d6c171f167929934e9fda8e4c8c1bbfc1f2ce24376adf6881cbdac1c7

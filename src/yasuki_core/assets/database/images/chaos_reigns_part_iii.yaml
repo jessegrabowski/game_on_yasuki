@@ -1,0 +1,800 @@
+set: Chaos Reigns Part III
+images:
+- card_id: a_good_day_to_die_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: a_good_day_to_die_2.jpg
+    sha256: 9dd95d97f1064cfd45dd738b32bb5b25e6485c04201e68bdbfed75933549baab
+- card_id: a_madmans_wrath
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: a_madmans_wrath.jpg
+    sha256: 58975a6630045a8f333dc1a77c5dee4768cf3e59a31e0f790cc2b51c3c027f87
+- card_id: aohama
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: aohama.jpg
+    sha256: 2e41a33ace41f094240b415f7d490aaa15fd0bc61347adf22d222608471e0036
+- card_id: asako_shino_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: asako_shino_experienced.jpg
+    sha256: bc066e1cc724604a255c5da3d772fbef229cf4f06d8d3299706f733e314fb377
+- card_id: ashutosh
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: ashutosh.jpg
+    sha256: 33eb6ceacc77a9b2743fad54b98d1fcfd9c8160c329004f32ed1de7ae4ee8c0a
+- card_id: aulus_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: aulus_2.jpg
+    sha256: 266f3413ebf78e27e3a850909013a3c6a83934cdd2dae7cb16088c16baf9030d
+- card_id: battle_of_two_rivers
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: battle_of_two_rivers.jpg
+    sha256: 584a2006eecd01610fa433a88a0f328012230c6546c278c2f72821ac12bc72e8
+- card_id: battle_of_yasuki_yashiki
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: battle_of_yasuki_yashiki.jpg
+    sha256: c7bd3fe79f2a790941c5e8510796513d54ab1a808a12fb19fa6305a80797c8fa
+- card_id: bayushi_akane_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: bayushi_akane_experienced.jpg
+    sha256: 9440442baee8551f362b76d41a85fa08688daf614e6eb8291ed26f0ec2910fcc
+- card_id: bayushi_gihei
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: bayushi_gihei.jpg
+    sha256: 98b32c00515ac9b4525244601abc4b3c17a907997fe6f50fcdc56fabda54b9e3
+- card_id: bayushi_iyashi_lady_sorrow_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: bayushi_iyashi_lady_sorrow_experienced.jpg
+    sha256: 37c8f98a0cfffb49da221c91cee9d62882f7d264b9f1dba2f57c8ce6ebff6b17
+- card_id: bayushi_purimu
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: bayushi_purimu.jpg
+    sha256: 7b099f2653747242524aed013f481a443134c43c92abc536a281dbd20272e120
+- card_id: blood_of_the_preserver_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: blood_of_the_preserver_2.jpg
+    sha256: a51f3a24aabd09e7e06e798c273d732e6ec1f75abe13e4161333858ca07818eb
+- card_id: boundless_mercy_of_suitengu
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: boundless_mercy_of_suitengu.jpg
+    sha256: 9b8913ca5d076fe8630eed34217c57efde15b7d20d893311a0adb714f9eb20b4
+- card_id: catastrophic_confrontation
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: catastrophic_confrontation.jpg
+    sha256: a351ee763030fa0bcb6b057b2f416c53deb804c2113ef5ce73dc6fdf312a298a
+- card_id: celestial_dragon_guardian_of_tengoku_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: celestial_dragon_guardian_of_tengoku_experienced.jpg
+    sha256: a7bdcbfd4c78bb7ce1f150cb3b22a3686b08d5245125308c13f5c51bf7562c60
+- card_id: channel_the_fire_dragon
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: channel_the_fire_dragon.jpg
+    sha256: cdc09ccb039e3d456d5c999f5b1414eae0be87e993ea5f0985165bc80df74683
+- card_id: chuda_jomei
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: chuda_jomei.jpg
+    sha256: 4120bfd71f8293da31237aa42737f5993320a687c4e9997af5745faeb1b0d5f7
+- card_id: comprehensive_education
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: comprehensive_education.jpg
+    sha256: a85ddc69d9897e5c22cb9695adb43a57046d4a8fcddb3113cb667cc8766abf79
+- card_id: daigotsu_rai
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: daigotsu_rai.jpg
+    sha256: 15a944c252d55d39e73abc6025923e5ac299bdbe716ac127326c76838d7472b9
+- card_id: daigotsu_tairu
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: daigotsu_tairu.jpg
+    sha256: 6352b6cb2e059527cba18d93a6aeb6c7d42fa0ace0f46250df6bd3e4824863d6
+- card_id: demonstration_of_skill
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: demonstration_of_skill.jpg
+    sha256: 1289d47d88fd9d11194e35763f0f1988fc94383119f76d19823c3a24bb425c61
+- card_id: disharmony_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: disharmony_2.jpg
+    sha256: 4d0a2760ea2e11e1b54d5b3c9704ab4da20832ad97c20089a331ebde56cb7a2f
+- card_id: dobei
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: dobei.jpg
+    sha256: ff43f141a7a00c1a2dbca2c6debf3505779e42e78d4686ff9ef5ac605e55b247
+- card_id: doji_maya_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: doji_maya_experienced.jpg
+    sha256: f0b6b3fb786ccf46be26f364d86789ea3e5ead20cc20f341fbf16b87424d63c1
+- card_id: doji_teru
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: doji_teru.jpg
+    sha256: 6517efc818cc279d734190d7a92c4260f6727b5aea62b0f6ca80774ac666c172
+- card_id: earthquake_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: earthquake_2.jpg
+    sha256: 444a11249757a48a82ac3bdf3a9799f5ea0daa39b76f7bf2715aae7c42f71508
+- card_id: end_the_tale
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: end_the_tale.jpg
+    sha256: 3b140c55af68ff824b2e2640cbdb2b7d8bce5e97ef95b0032bd969d1ba8c3447
+- card_id: factionalism
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: factionalism.jpg
+    sha256: abdeed209a3bbd7c6236b80434ff650d404631c756bd7b07c2bfcfe34b02e779
+- card_id: fantastic_gardens_of_otosan_uchi
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: fantastic_gardens_of_otosan_uchi.jpg
+    sha256: 95eed63f8212a796bb17c279cbffb2c6f16aa5ab5d8f63f450b024e2e4e10864
+- card_id: fight_for_my_favor_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: fight_for_my_favor_2.jpg
+    sha256: 887ff4fd39fc71813deed5cf836f26cfd028e42fd106c91f21b392ec10ef9035
+- card_id: flames_hunger
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: flames_hunger.jpg
+    sha256: 0cd123846a6348d61ba77e20b18c781b0a5b0c78ad6c38e7733949e8b1191312
+- card_id: flock_of_blood
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: flock_of_blood.jpg
+    sha256: ba7a0965d10f4b5a0535bbbea4f008df58e2de060441d3b1f5def4d9ca5e799b
+- card_id: for_death_and_glory
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: for_death_and_glory.jpg
+    sha256: bb9416196de96a492afcc950940ccdd96d7c852ad91eb05ba031d6ee8300eb9c
+- card_id: gashadokuro
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: gashadokuro.jpg
+    sha256: 9b933961044f209e646657683da9a04ec1e4db5faed4596d63acbeba1fed8c02
+- card_id: gusai_aeko
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: gusai_aeko.jpg
+    sha256: dbe5be9d5ab2c95d55714c63b884a452cd3e9ae04daf4194c9bdd2b91ba701ff
+- card_id: gusai_ichido_experienced_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: gusai_ichido_experienced_2.jpg
+    sha256: 32dd2f5905d5b9ec2925134934fce3699cd15a0ebb4037d52eeec583ff0bf837
+- card_id: gusai_kazuko
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: gusai_kazuko.jpg
+    sha256: 4e7b95efc608a49e5c71524bc81bda030c6edce0300e1c4d60bfad3060c5c42d
+- card_id: hantei_katsumi_heir_to_the_throne
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: hantei_katsumi_heir_to_the_throne.jpg
+    sha256: acc20f8938197ecc938bec8cdfcc476fdfb1c0da44f3986eb9752e9af0393cae
+- card_id: hantei_xl_the_glorious_emperor_experienced_6
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: hantei_xl_the_glorious_emperor_experienced_6.jpg
+    sha256: a8a283efb550064c02f7b17bbf5c53c2a470d25be7105f8651abc913bd3e19a5
+- card_id: hardayal_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: hardayal_experienced.jpg
+    sha256: d5c4edacff5319218205023b5376a80978a8b239025fb18e995584fce6ffe1e3
+- card_id: hida_rengou
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: hida_rengou.jpg
+    sha256: 1979a549bf28dbb5c1b744670b68c32a8d666804285940779845811c65b49a18
+- card_id: hinotori
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: hinotori.jpg
+    sha256: f15f7e52bc015e56c5fb42237f55d318809d7b4c0d16354ed70dc95a64758ed8
+- card_id: hoji_wakuni_pawn_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: hoji_wakuni_pawn_experienced.jpg
+    sha256: c551daf4b002f19994c8f79806053773db336fbd88d76a2b320dc30f3d290718
+- card_id: hungry_moon
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: hungry_moon.jpg
+    sha256: 91484062820592625eea5d6ca5fd44a243d128ff5def70b31ad09063f06830ce
+- card_id: ijathilu_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: ijathilu_experienced.jpg
+    sha256: cc364b89876d0c1ee6efcd8952b66939c19ea227febf49e3416bd235093ac993
+- card_id: ijathilu_zealots
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: ijathilu_zealots.jpg
+    sha256: be5bc6a34fa284cbd82bc19dc2918d627d8d5eaa98cfbf1ab388363a1a0cd7a8
+- card_id: ikoma_ayumu_clan_champion_experienced_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: ikoma_ayumu_clan_champion_experienced_2.jpg
+    sha256: 5d5c581a45f8b35360dd8c8afba72c6b27c6d3de78b8b6d0f367cfa8a82f1955
+- card_id: ikoma_kunisada_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: ikoma_kunisada_experienced.jpg
+    sha256: 8b05df7cc856dc75bd8e803deabfef6ded1de481da3d6378912376977de29b0a
+- card_id: interesting_stick
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: interesting_stick.jpg
+    sha256: bc860e37a5b62e668349ea587cdee46d1c9148a6be49c6a69903d3701532f729
+- card_id: isawa_keiji_master_of_void
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: isawa_keiji_master_of_void.jpg
+    sha256: 4beabdd052d12183be68026bb7aadae517237143d3f3fd912dd986887c55d24d
+- card_id: isawa_tsumaro_master_of_air_experienced_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: isawa_tsumaro_master_of_air_experienced_2.jpg
+    sha256: bab9ccd93883c698a83be69f172b38d7ae9820fc361507e5059aea9c84bf18b6
+- card_id: iseret_the_eye_of_night
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: iseret_the_eye_of_night.jpg
+    sha256: de3a9d47f98a75e3e23165b72cd5e2f680d55bacbc90ec90c8030c9f72bdf831
+- card_id: jagadis_singh
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: jagadis_singh.jpg
+    sha256: 13c6bcebdd9e1c9f9799bd8a8350b5bcb3361baf832b53e615d643496b1f908e
+- card_id: kaiu_gairoa_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kaiu_gairoa_experienced.jpg
+    sha256: 519f9c90fa42ae5b8d45a6fa47403d8c9dd6532e6e6480ef7ea3e92c2c3bfd0b
+- card_id: kaiu_hoseki
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kaiu_hoseki.jpg
+    sha256: 0848429d9f9c41db08ed4e61f2d967f93f7e504bc4d7128449003cffd9ff3c74
+- card_id: kaiu_jinzaburo
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kaiu_jinzaburo.jpg
+    sha256: 6fe13ed37db705b17e655157234cd6260d3d98131032e008ef9bd9c7fda5e0bc
+- card_id: kaiu_plate
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kaiu_plate.jpg
+    sha256: 2c813860ef38cd8353f0a7a157c7224f38fd6f8590ca6e89c8456814c6cf936a
+- card_id: kakita_shinichi_experienced_3
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kakita_shinichi_experienced_3.jpg
+    sha256: a76bb3bc3dfef2153f10c922a059dd23fed97b1a6c829ff0893b76ecec26d29e
+- card_id: kanos_alliance_iweko_miaka
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kanos_alliance_iweko_miaka.jpg
+    sha256: 85c870eb3e1b32dcd7ae6f9ef26e2e4bc1696ac72f214de560b2adb1a5ef0b4f
+- card_id: kayo_no_oni
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kayo_no_oni.jpg
+    sha256: fa50aaaeb07a6bfb8f17f47c92df8512b623422d454bf6c87e548b01ddb1a31e
+- card_id: kengun_grounds
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kengun_grounds.jpg
+    sha256: b3a485fc9bfb9b0ff2698fcc1bc4e132dc4c3fba16df8f32046f46fcdaf5bb77
+- card_id: kimiono_sensei
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kimiono_sensei.jpg
+    sha256: 8bba2bd7f63f16c182aa44f27b971fe4ef0892c3361c88f39053d3c48ef7be40
+- card_id: kisadas_shrine_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kisadas_shrine_2.jpg
+    sha256: 1a9ce0e882019911dbf1fbfec84da2d777ed4443211be574c72c75bb8f0248dc
+- card_id: kitsuki_miro_dogged_investigator_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kitsuki_miro_dogged_investigator_experienced.jpg
+    sha256: 5544def127ce80352d87d5a6907479127fad2c3220eb4345fb55236337bfd871
+- card_id: know_your_place
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: know_your_place.jpg
+    sha256: 19fed0c04746e544dd5d8826e8d98835d8474e763dd767cbdc550b225754eabc
+- card_id: koukei_claws_of_the_pride
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: koukei_claws_of_the_pride.jpg
+    sha256: 26193f1d93f3437b3938f20f52b2bf5097e8209f4a9b0c06d96489e22c420412
+- card_id: kuni_adokenai_nakatsugi
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kuni_adokenai_nakatsugi.jpg
+    sha256: 55f3c9c18eb9ca59dc3f90c81fee7b11309aaa65c01172a7574fa1af3294fd77
+- card_id: kyokami
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kyokami.jpg
+    sha256: 893ba9eeeffd0091e53dc64f66c3bde26d16eaea729eab67d2768977bc2c691a
+- card_id: kyufokis_steed
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: kyufokis_steed.jpg
+    sha256: 29370f13e8edc62781a2235ac84069bc43565a50da356c3642b948717c553845
+- card_id: let_the_past_die
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: let_the_past_die.jpg
+    sha256: 610f5e43de45ab8e6182f6aeb7f0b483b0ed061e99c1e5b608dadb1a3e393e61
+- card_id: maidens_of_the_wind
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: maidens_of_the_wind.jpg
+    sha256: bd5263bae491a6bfef587f339bf4909039aded5f5bd2f44eb2e8613898284546
+- card_id: matsu_hanshiro
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: matsu_hanshiro.jpg
+    sha256: dd3ad3f262b3a78129f7c46dff84b750b90c743c6a69c637a720d9f6aeb87bf3
+- card_id: matsu_nissho
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: matsu_nissho.jpg
+    sha256: 62ad6c3130427770a0623736deee6b43d44ce633f1a7072fd2d017af26bb6846
+- card_id: matters_of_succession
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: matters_of_succession.jpg
+    sha256: 19eabe6f5fe92e123d558537a11d3552a23a12f4f1326461ccad60529c1a0beb
+- card_id: minor_illness
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: minor_illness.jpg
+    sha256: f1d0dda9703e24779a5ada3f55a87013e2b2cea2ff9b396772fd122252fec526
+- card_id: mirumoto_shikei_experienced_3
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: mirumoto_shikei_experienced_3.jpg
+    sha256: db457885ae61b6bfb2e338d06c508e40b5e77c43b5dbb76d98b1721c2ad6fddd
+- card_id: mirumoto_yutaro
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: mirumoto_yutaro.jpg
+    sha256: a48710393d6aaa9d498a1abd01df3731bae7cd10cfeb36032400325e0a85cd0e
+- card_id: moto_ikarichi_bloodseeker
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: moto_ikarichi_bloodseeker.jpg
+    sha256: 3aa07887ba70aaac7497ae6f33adf0f2a46ad1f7106591700b2cf58769fd3262
+- card_id: moto_ogaru_realmborn_of_chikushudo_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: moto_ogaru_realmborn_of_chikushudo_experienced.jpg
+    sha256: 7b1e0c5073a438bb1c60f8f70a07e2454392b1e1a2090f9b1db88cdc1e056a1f
+- card_id: moto_traders
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: moto_traders.jpg
+    sha256: e40507da878dcc242184d2411dde6d29cee18633a84833cbb93b17379a9009d7
+- card_id: needles_of_dust
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: needles_of_dust.jpg
+    sha256: fa723e91bbe9499fb9d6c2d66092aec2d5c7347f21f04b90ca534ec3a905fa57
+- card_id: ninube_aitso_kakita_ikura_experienced_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: ninube_aitso_kakita_ikura_experienced_2.jpg
+    sha256: 36cff0486c98383197fe29704b526ad9d55ad26cfd13dfa0c088e90bcc8fe724
+- card_id: onizuka_sensei
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: onizuka_sensei.jpg
+    sha256: a3614e65422db1010229bae645207b0a3ecd22c9c29850a0ef18208e8bc4df52
+- card_id: onizukas_greeting
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: onizukas_greeting.jpg
+    sha256: 81f202cb47d97114511dfd90734e576213bdae4b49b5ef6c16efbdb241d29f32
+- card_id: open_the_way
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: open_the_way.jpg
+    sha256: 55e82d49beaa5c85904904906091b953c82c0f9ff81f4294773e40f61074007d
+- card_id: oracle_of_thunder_iuchi_namida
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: oracle_of_thunder_iuchi_namida.jpg
+    sha256: 022c95e33025468f6249e1e2f14bba227e6ab37fd8e90b646e7d496940ca4901
+- card_id: order_of_the_shattered_star
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: order_of_the_shattered_star.jpg
+    sha256: 9e3095f68ee4824f639366638375fadb08352991639747f0eae6b46ac8f7336c
+- card_id: otomo_isoko
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: otomo_isoko.jpg
+    sha256: 0702d564ef1d593c653fc3d5332259be062dd7c87099e8a7c027456ac52b0c9d
+- card_id: otomo_jotaro
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: otomo_jotaro.jpg
+    sha256: d00643b65a4ee856b637fbea1d94df19e61916daa49bb1d9237fbe7d97d4cfef
+- card_id: renyu_apocalypse_experienced_5
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: renyu_apocalypse_experienced_5.jpg
+    sha256: 627a3cf8cfe092854b7ec6c9e2ffe7b68a152075d54084db21e5dfb0a8c15ca1
+- card_id: ronin_blade
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: ronin_blade.jpg
+    sha256: 0cbc9709fec613dbd2f9f57cbb5d8b81b48f00987c070866cec61771cb0068f3
+- card_id: ryouko_sensei
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: ryouko_sensei.jpg
+    sha256: 945feb5a9e867f82c52b148a049bb60fc796998bbb999c4b887a7f608e004be4
+- card_id: sarassa_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: sarassa_experienced.jpg
+    sha256: 12a690a177a9c631e378430a9e9d2cffabeb73db390c2517eb389d67916f83c9
+- card_id: sarpal
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: sarpal.jpg
+    sha256: 94d75d7eff46ccfc2691d2f0f8849a475a57221b0664980db5cec131b07a59aa
+- card_id: shady_dealings_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: shady_dealings_2.jpg
+    sha256: 7b393af291aaf68e78dac19577739522cff97be1b124ac85bfee399ed5d18fcf
+- card_id: shinkokyu
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: shinkokyu.jpg
+    sha256: 1123eda3aeb18b5a1b11520dffc6dff0421a975c970ae763f3570d2ac09eae47
+- card_id: shuyo_dojo
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: shuyo_dojo.jpg
+    sha256: a4e6357695f4e50228c4decb6d9450ea6f67cfabf90a3ea99070c385de810284
+- card_id: slap_the_wave_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: slap_the_wave_2.jpg
+    sha256: 1a612d9752c8f6cbe13335976ba508d7ee8c7d4ae480eabfa01496f1ddf76d5e
+- card_id: sodai_strategy
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: sodai_strategy.jpg
+    sha256: da17a2bb1fef8d8a4ecc02c008a9692107c3e347d6b87888b89c5b893a382c54
+- card_id: sorrows_debt
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: sorrows_debt.jpg
+    sha256: 49e82915e81873cebfcfd00aa23295cfd1efacdc16fc9be7778fbb6c5d2907c0
+- card_id: soshi_aoto_master_assassin_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: soshi_aoto_master_assassin_experienced.jpg
+    sha256: 1b78fc8958d3655b17f8f9579a59c026ea26c2811dda2d48e9e28e2255eb2d9c
+- card_id: susumu_tadenori
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: susumu_tadenori.jpg
+    sha256: de9a7d7b4a4a61a51cf6eba30730a2f3032f4d00e966cd4af2b167d6298ddf8c
+- card_id: suzume_takenao
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: suzume_takenao.jpg
+    sha256: 05e286292e1b46909287377f14bfe6ffb77c3c8811fe5b260400745766803f71
+- card_id: tamori_togara
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: tamori_togara.jpg
+    sha256: c1e904f4eb9c725a2329f9024cac0d8e00df28c6d772923856ef584077044626
+- card_id: tanegashima
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: tanegashima.jpg
+    sha256: 0f9065cd284af6f9e31ced5642d4e42601fd9f69f08e66e2bb5549a080e48afb
+- card_id: tanuki_archers
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: tanuki_archers.jpg
+    sha256: 0d2f8721bd05552b2e464035a9b69caa4cfdeaee178a5252f6a5b1778f6cf5b7
+- card_id: tanuki_band
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: tanuki_band.jpg
+    sha256: 823b07ca40f4f4de772ae638e4ae161f4cbf0aa5462385874e537f6e551a52c4
+- card_id: the_black_court
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: the_black_court.jpg
+    sha256: a6c155406fc690bd2cd9769994acfdc5a46573a86640f2990d05c4286bf09430
+- card_id: the_dark_horseman_obsidian_legion_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: the_dark_horseman_obsidian_legion_experienced.jpg
+    sha256: f441e8081d638c0bc4c06217b4e7f30e90f7ef86795c5c4ec03751a72b72a97d
+- card_id: the_die_is_cast
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: the_die_is_cast.jpg
+    sha256: 9bd9930fa1db807a55c3904cd34d50456d4baa36d4f469ae43d0aef2705fffd2
+- card_id: the_emperors_legions
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: the_emperors_legions.jpg
+    sha256: baed4ad5fcb2de41ae1c05be206bf80865c50a5f194b0bc64b19308d844f84ac
+- card_id: the_lions_wedding
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: the_lions_wedding.jpg
+    sha256: 8627e77e7d5aa0a9c481810f876864f1b92e9b55100ceff1eb51e5c8ba400f67
+- card_id: the_second_kengun
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: the_second_kengun.jpg
+    sha256: 05add16a6d8a1ef9e01b42e3f531ea55a63d313b7514705367d4053ce9930294
+- card_id: the_taisen_sorrow
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: the_taisen_sorrow.jpg
+    sha256: 2229775804ef12850d3ddee82b14277d74e1856ab997d94299649f42d074680a
+- card_id: togashi_kyo_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: togashi_kyo_experienced.jpg
+    sha256: 5c8de32aac2a16f6b73b4b862d1fe8939a580baf65a94aa3e603f539e2bc4bda
+- card_id: togashi_tashishai_emissary_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: togashi_tashishai_emissary_experienced.jpg
+    sha256: 21731a12eb4c59c868129a7bef72ce6af2a7cf9e2913de63b4e304509f8f9b6d
+- card_id: tokageumi
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: tokageumi.jpg
+    sha256: a3b6a34ff691a4afa4cb3c4608d05ef4568e0932bd36dfb37c67d4df79b32430
+- card_id: toku_tsudao
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: toku_tsudao.jpg
+    sha256: 29776b225162d4a6f6776fe7081cbc0917f77612c0a3c34ec11aaf881e72e693
+- card_id: tsudaos_grave
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: tsudaos_grave.jpg
+    sha256: c573f640d9d7f673bbd3efcd42a4852eba1c4ee7831435fa82be9d5a83c5957b
+- card_id: twentieth_legion
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: twentieth_legion.jpg
+    sha256: 12edf30148a5505467713dbb351e8a651ae1d35e435d6c15f47cace1df8ef61c
+- card_id: utaku_haniko
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: utaku_haniko.jpg
+    sha256: 62d3d099897f60db6f259d3adb21f6836c03c98cf57c2037e14b242ab70b04de
+- card_id: utaku_sayaka_experienced_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: utaku_sayaka_experienced_2.jpg
+    sha256: a54d9ffad24be0354e4befdf9748360154f3c4d6c867e3a6f3e9113c3b87c8b1
+- card_id: utaku_toki
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: utaku_toki.jpg
+    sha256: 684d41831c459669b99b35a5aad776560ea0f7bc173326420b9915b16ffa310b
+- card_id: utaku_trainee
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: utaku_trainee.jpg
+    sha256: b0146c89d0f16ba566fd00e85e6e98a2237fbd9fb6c0c9c73731a8e1138e58c4
+- card_id: vijaya_suresh
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: vijaya_suresh.jpg
+    sha256: 273d15095b0da19198299013b68bc0e29d9dec4c2b34916a2fd77ad5cc857099
+- card_id: waietto_tanuki_clan_champion_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: waietto_tanuki_clan_champion_experienced.jpg
+    sha256: 322d37ed23ef81168b9ccd627e3810a6c669091ad665a2f237152bd35cd22419
+- card_id: walk_with_tengoku
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: walk_with_tengoku.jpg
+    sha256: 81ac9e678dfc2ea742ddd081bae1c238b589e08c8560d7c1d837370acbea29b3
+- card_id: what_have_you_done
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: what_have_you_done.jpg
+    sha256: 2e270ddec238f56df1ba1435837677cee68f01065404a03e1b4a45aea78ec5cc
+- card_id: with_regards
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: with_regards.jpg
+    sha256: 4db945f1f305dc2a0b84e0121a68193793d553e96f320dbfbd3991f0ee0e62c2
+- card_id: yasuki_soden_captain_of_the_i_horokabe_i_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: yasuki_soden_captain_of_the_i_horokabe_i_experienced.jpg
+    sha256: 98b09d7700c92f18d7c0c4d5b0a7483ce1ac2a032c6f17cbd85f14e44a79ce3d
+- card_id: yasuki_yushiro
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: yasuki_yushiro.jpg
+    sha256: 4ea97c48ddc3ff6ac3a5f3430d35396ea1977ac00fb385cdc6672bfe6ff19780
+- card_id: zealotry
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: zealotry.jpg
+    sha256: a3b04a2da84cba25df553d935c8196829cf5d6f33eb3561cc65650406ded8927

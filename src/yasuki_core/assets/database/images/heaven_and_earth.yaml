@@ -1,0 +1,926 @@
+set: Heaven & Earth
+images:
+- card_id: a_game_of_go
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: a_game_of_go.jpg
+    sha256: 23fb711ada2de62d83f1d633b72b5cca111a51fef72190b52d669a4f7071082d
+- card_id: a_new_guardian
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: a_new_guardian.jpg
+    sha256: 4c9e5400ed6ec406c76e6c9309ee3d44b80dfa8206d3773ac2aa46860e20b233
+- card_id: accept_with_honor
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: accept_with_honor.jpg
+    sha256: 8f32d38db354bb0a1d3fa09b04236b6ce2893b58148c1abd0e8cf374a97a1fb2
+- card_id: akodo_rokuro
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: akodo_rokuro.jpg
+    sha256: ddf7ea209de751de5854d73bdc49ef876ddbc875c0e8dc71803098e3e03b89b5
+- card_id: akodo_tekkan
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: akodo_tekkan.jpg
+    sha256: 5500aae9e330e790af48db541c90ed6efbec00f0436190fe8abf881948df4cd4
+- card_id: akodos_no_dachi
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: akodos_no_dachi.jpg
+    sha256: 0e7707250f003f602ab2b35470bbd565c5cc25f40549071dac890f7fda6dc6e4
+- card_id: ancestral_reverence
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: ancestral_reverence.jpg
+    sha256: c735351d5b18a70e827a27ad645d817f169220ae74301845b57b4b2d1f296290
+- card_id: aramasus_ashes
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: aramasus_ashes.jpg
+    sha256: afd3817ad9a4e23465bd037b4c917f45dbfd5ec1516abcdbcae643c96546d258
+- card_id: arms_merchant
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: arms_merchant.jpg
+    sha256: bd635944aab2938e50f66fb8d8d4a509c728ed974af50b1849052a2087ebd56a
+- card_id: asahina_itoeko
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: asahina_itoeko.jpg
+    sha256: 458da28644b2ebc5db714104d4346e1afee9ff5e6079ab555d75b5772a2f5290
+- card_id: asako_toshi
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: asako_toshi.jpg
+    sha256: 4c60abaf9950a978ef5ce9f40e18930ae67d2e42f480722054e92fe92fe02a90
+- card_id: ashigaru_fishermen
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: ashigaru_fishermen.jpg
+    sha256: b0aa90d0319a117b7e76837b6672bb24e05da37261f62cbc11eebe3f6d0411e8
+- card_id: avalanche_tattoo
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: avalanche_tattoo.jpg
+    sha256: 3fa07b11d95f52b7f9937f4c0f82faf228811219ac95ace5a7187739df8da812
+- card_id: bane_of_the_anvil
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: bane_of_the_anvil.jpg
+    sha256: 7ab3867afc7d1851bcbd5cd06506233108b7af668adc71564352ee0ecc519d30
+- card_id: bane_of_the_bastard
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: bane_of_the_bastard.jpg
+    sha256: 3005242fbd7780f71ce80208a08eaa9244b8e71fcd9cf00bcae7b60f617c54a3
+- card_id: bane_of_the_sword
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: bane_of_the_sword.jpg
+    sha256: ddf2d95464f03403585dde279f5cb192f252ebfa47b977587388f60630ebd6bc
+- card_id: bane_of_the_wolf
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: bane_of_the_wolf.jpg
+    sha256: 6b05fa965d2ab5af068d1226e3f2fd20062bc5efba8b18e6a8aca91690ba1870
+- card_id: bar_the_gates
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: bar_the_gates.jpg
+    sha256: f22c181fef30e9df83baf0c811df6b6b398d2bc6cbdec1166a7f2d60d1bd489d
+- card_id: bayushi_eitarou
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: bayushi_eitarou.jpg
+    sha256: 905be713ee339a451b0c755c7826c16d931e4fe8ecc841c6d3d668b8f5085c5f
+- card_id: bayushi_tai_experienced
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: bayushi_tai_experienced.jpg
+    sha256: b249235ea352afc68b42aa99e57acbcea1676d4efda2ec8b166bd76bef9ec60b
+- card_id: black_heart_of_the_empire
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: black_heart_of_the_empire.jpg
+    sha256: 4e288879807bd40fbd38f8f261b2646e9e43ff1506141950783e94f4f6eb2ed9
+- card_id: blade_of_slaughter
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: blade_of_slaughter.jpg
+    sha256: 92ad2587122a720a74285f94ecde475ead0939a2eb946b0bd9eddfbaeb51ffce
+- card_id: blessed_sword
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: blessed_sword.jpg
+    sha256: d34f9d4ff52bd5aaa3c3ca53425ea0a5e8d1c6bc18c53fddfea62dc3f2b28ac6
+- card_id: burning_smoke
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: burning_smoke.jpg
+    sha256: 8d9cb07dd895dd3d53854716f9bde50ba2b871c526819002eb5fe2c3cd7f7b23
+- card_id: by_steel_redeemed
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: by_steel_redeemed.jpg
+    sha256: 228e87194de163a0ac176443863f5ceaec2da298b52254719b78713aa006191b
+- card_id: celestial_imbalance
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: celestial_imbalance.jpg
+    sha256: 03fe3fd553ff753b98cd5dac67d2a798f547cb69ecfd56065ac110b87508fa03
+- card_id: channeling_void
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: channeling_void.jpg
+    sha256: 250e443756ced0ac6f6a8a3e1ce57a981804e3d37c3690c1e156f7279c0d4d80
+- card_id: chuktek
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: chuktek.jpg
+    sha256: 5f9bbe1d7bcba1f40c75f2156bdc715e0b17a0d3f14f145597c87d96945909ad
+- card_id: chunigo
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: chunigo.jpg
+    sha256: 6adc8f627fe2b9c89eb0e70b59421a1de8f45b47ac9ef47c16745a7ce2054c2e
+- card_id: cove_of_cursed_blades
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: cove_of_cursed_blades.jpg
+    sha256: f94dfca88bd959c6cbab8b1716132db94dfc52f61f38c91b61d2e8aa1620646d
+- card_id: crab_builders
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: crab_builders.jpg
+    sha256: 40cf280b2d848d6c43919dca432220589a9413cbed01907887faa9421dbf2498
+- card_id: critical_moment
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: critical_moment.jpg
+    sha256: 650094f9bb91b652df4122b14ff572aeddebcc1a178e6dbabdfb8ee9a0aae276
+- card_id: crude_blade
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: crude_blade.jpg
+    sha256: 67c91cb47586ece544d5a2f9ff0727c6ca8cc7f42c18cd389ff7c60c60dc4792
+- card_id: dark_covenant
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: dark_covenant.jpg
+    sha256: 76536a7d621a3a88ce9b20b35a80df3cb4f7fef64b108e9bd1de892efe8a21d7
+- card_id: dark_oracle_of_the_void_experienced
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: dark_oracle_of_the_void_experienced.jpg
+    sha256: a4032cb026b57007bf07926b2bd18642496b5a9017ba8eaa0ea24b67d98bce19
+- card_id: darkness_rising
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: darkness_rising.jpg
+    sha256: 87ee70db771ef2dbc09e34b9f3cd161bb896380830491cd66b368bbdcd994031
+- card_id: delicate_negotiation
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: delicate_negotiation.jpg
+    sha256: c675e36c9b39a624e610cd87aed562b25e9d30b7dbec490648b585e2c54ef0c5
+- card_id: deploy_scouts
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: deploy_scouts.jpg
+    sha256: f3aa658c05ffc87ec9487b9cd3370982a4a6802b5b7b9085b926cd45a5f5c3ba
+- card_id: desertion
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: desertion.jpg
+    sha256: b5b1524c086f75b79f904b8131d4c4e07cb322f6aefadbc48175626e5dfd2e67
+- card_id: doji_jurian
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: doji_jurian.jpg
+    sha256: 480ffdf4b1ce3a2e523019303a40b8408ee9ee6cbed865a579c570d8ae2c2063
+- card_id: doji_okakura_experienced
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: doji_okakura_experienced.jpg
+    sha256: 0e2a54f6e08cd310a182b192dc61e73515e27b33e91e02f4c2c4639564407d3d
+- card_id: embrace_the_elements
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: embrace_the_elements.jpg
+    sha256: a3f4340c71a71d1359894e89513cda84eb7f2ad6ae0515437de60ad24160acab
+- card_id: escape_from_shadow
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: escape_from_shadow.jpg
+    sha256: 6767d56e31a8dfbbcc216f300fb6ba789f201e999163709110ddf81d56e3da4d
+- card_id: for_the_clan
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: for_the_clan.jpg
+    sha256: 383c44f19d20347ffa494ce39e2e28c28380bd656aad1dce41b0562b82df7511
+- card_id: garden_of_serenity
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: garden_of_serenity.jpg
+    sha256: 35b5fcbeafd2477e52997e5d3c3e7148f024fa36d1f32d391243ef65c6a6e794
+- card_id: gargelara
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: gargelara.jpg
+    sha256: c82ce9babdf72fc4e084d194499834c21080b98b732439c1873b0a2d9d1b35da
+- card_id: goshiu_no_shiryo
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: goshiu_no_shiryo.jpg
+    sha256: edefa10afac39339facf1e875a5d759313df8725f2385c87ed984c7532e8ebcd
+- card_id: heart_of_rokugan
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: heart_of_rokugan.jpg
+    sha256: 1004729e867c05887c7d13656740c3a1034c3879fb8987c6b125877c540c5f3c
+- card_id: hida_benjiro
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: hida_benjiro.jpg
+    sha256: 5f6b2a85e51982100f6af2c38ac8263727038a16a7f3b2def52596b6010020ac
+- card_id: hida_hitoshi_experienced
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: hida_hitoshi_experienced.jpg
+    sha256: 777e872ffe9afb9df123132ba0008d12693ca619ad9fe2137d6a4c5000b4703a
+- card_id: hida_war_banner
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: hida_war_banner.jpg
+    sha256: 05f4a7bdf775fde4504c9768983109370694792ae033ae3d15dbae2454093e8b
+- card_id: hiruma_tsukiko
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: hiruma_tsukiko.jpg
+    sha256: 95026bf601a73ee92bcaa308133cb773ab1cd5658d29979f36846bd1b5c6c9ac
+- card_id: honors_ground
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: honors_ground.jpg
+    sha256: 7f294a7cc4a3e116e76c30d2b104f6f0465b7eb3b28085ca5c5a3522ef272316
+- card_id: hoshi_yoson
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: hoshi_yoson.jpg
+    sha256: d875274a68213c47b5b4cd0f8f09793401f180d645f28e4f942fedd7bd9fb923
+- card_id: house_of_the_first_stone
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: house_of_the_first_stone.jpg
+    sha256: 245863a8bb11d148e0ad5eeb0ccf94a5ae5f72800ab9ce1d042f5ef4ddb8a564
+- card_id: ide_tang
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: ide_tang.jpg
+    sha256: 0210957fdaa1e8ba57e5614531a177e70edce83ded29427c3aabc6e7c1ca081b
+- card_id: ikoma_fudai_experienced
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: ikoma_fudai_experienced.jpg
+    sha256: bb0749aba34720af87e3f6d9164557487dea78322f6b3c4dc6c21aaa74eb76ee
+- card_id: ikoma_tomaru
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: ikoma_tomaru.jpg
+    sha256: 02aeee4cdf5d841d5618b3b1b6c03f3d6ecebfd3b9847896d89fb5d989048dd2
+- card_id: introspection
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: introspection.jpg
+    sha256: 51dd0e6ebdf59400657dfcb1de830fccddadbd01db9838e556b89601eec24413
+- card_id: isawa_junichiro
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: isawa_junichiro.jpg
+    sha256: 77abbfa9e924b907407a9f1ad3fd900e8419d06a92168421dc0fc7ba02ace0a7
+- card_id: iuchi_yue
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: iuchi_yue.jpg
+    sha256: 8b9c5363a01a6b8eaaf7413eec701e928fcc94833dd1a163eace15e635967bfd
+- card_id: jade_katana
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: jade_katana.jpg
+    sha256: b446a1e43e52da2d2f09285838d75c3734874ab92c4144469738700d92bee53e
+- card_id: jade_pikemen
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: jade_pikemen.jpg
+    sha256: a331dc23124e91a410ea8c8df591593b40f2cb3d6631aea70d4f9fb714935412
+- card_id: jade_yari
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: jade_yari.jpg
+    sha256: 365b883ec64e439f1282f6be5ce4a9df455855ce1696c5381c0dc4419a08ae2e
+- card_id: kaiu_waotaka
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kaiu_waotaka.jpg
+    sha256: a313023c375a98199f56a7b6bce74142358f36b44ed8de5e1c26e03cb7d59368
+- card_id: kakita_chiyeko
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kakita_chiyeko.jpg
+    sha256: b77e401a156bd7c85e65fbcb33acccec70d1213887146f5d84bb72b0f10d652a
+- card_id: kakita_dojo
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kakita_dojo.jpg
+    sha256: 84202dcfe6c6d1e53b024f679b5e6e9fdbc25738276e650901c5e1f2d58c9d5d
+- card_id: kakita_soichi
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kakita_soichi.jpg
+    sha256: 826b10a9f6413ba298bac733bd30f16b3d5eab1a5f2b345e8f150ee8018307ad
+- card_id: kanashimi
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kanashimi.jpg
+    sha256: 833add3206fad79536546cd56ef67bfb39c8fa82184175cd0315dbcd57f4bbab
+- card_id: kanji_of_power
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kanji_of_power.jpg
+    sha256: c4241bf56849ee783abaa00d26b15bd49b503e9170d6231f461956c3d4c036d3
+- card_id: katana_of_the_moon
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: katana_of_the_moon.jpg
+    sha256: 1b3995c22ce64f99771600e1780271fa9d1f5ef51a5f499b7db5095a5255d985
+- card_id: kaze_no_kamis_blessing
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kaze_no_kamis_blessing.jpg
+    sha256: 56a5096901dd8a83199571afd7b6545eeed3c304b614b11a5ce94bdee36e90ce
+- card_id: kikage_zumi_initiates
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kikage_zumi_initiates.jpg
+    sha256: 52570825fd05581d54e637d580d8851ad7831174d18f59b6a17f00d5e4f5985a
+- card_id: kitsuki_tadashi
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kitsuki_tadashi.jpg
+    sha256: 052d35aef826764c1b41b3f537254dcd1309a5e7c302b89e05a2356e8285639a
+- card_id: kokujins_daisho
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kokujins_daisho.jpg
+    sha256: dabbd7f0e44ab30dd74a5800755a6dc6a8f297e6a332ddca66bbdcc404ea438b
+- card_id: kuni_rihito
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kuni_rihito.jpg
+    sha256: 2b2a3d6c87a76f0e6512097cf96068f5e98ff9ece15b7f9c0b23df9c34e41a91
+- card_id: kyuden_ikoma
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: kyuden_ikoma.jpg
+    sha256: 1b0e3ae933cb6ad38aefa1ba084c7258973d573d98aece84f80584c6e7f9d52c
+- card_id: lessons_from_earth
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: lessons_from_earth.jpg
+    sha256: 9e64549160f7f31e0b9da370eb324b657fe7ce054bdd996e93b3d56cfaac854e
+- card_id: loyalty_renewed
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: loyalty_renewed.jpg
+    sha256: 81da82f41f8221f9abae05063225bd3fbc1346897886c7e2e2af11ff84c0446b
+- card_id: mask_of_the_maw_experienced
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: mask_of_the_maw_experienced.jpg
+    sha256: a0502a83450674ac5f603ac2198b3bb4284d88456678526d72795b4c321f64b6
+- card_id: master_of_the_bells
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: master_of_the_bells.jpg
+    sha256: 7f01b9dde1f2393c3a04d7e87755d442c488ddad0eab571f575c9f1c9b5224c7
+- card_id: matsu_watako
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: matsu_watako.jpg
+    sha256: 8dd081ef3db86f7aea6f87641537aaad1f0733959e1326297c1c211faee7c2c9
+- card_id: military_advisor
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: military_advisor.jpg
+    sha256: 3c61d4c914de874a7e0c737a18c3d9a09c3c334a45793389837814fcc8da5289
+- card_id: mirumoto_kyuzo
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: mirumoto_kyuzo.jpg
+    sha256: b1024b328baae29ed3c61f119379b7ee60cd0c9400cca3edacc934f859020e00
+- card_id: morning_glory_castle
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: morning_glory_castle.jpg
+    sha256: 2e78f5b6286c927abfbadbe548efca04043a79a56a3cd7d95976b28bde62c862
+- card_id: moto_chaozhu_experienced
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: moto_chaozhu_experienced.jpg
+    sha256: 51f3488a94fafe14f88a59d21c4e4af562b5d7f5653f155b5597514e48a1797c
+- card_id: nairu_no_oni
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: nairu_no_oni.jpg
+    sha256: 29b296f358d85c88417fd27f1e3135bd78a37ba470b5ba30f35591543e3b3fef
+- card_id: noh_theater_troupe
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: noh_theater_troupe.jpg
+    sha256: 6cb2c1840f60a0d8d35100d58111c3be853a0337a09862ed6758a84f8b56220b
+- card_id: observe_the_enemy
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: observe_the_enemy.jpg
+    sha256: 8a9922f728618e4a01e58e00920e02ed0d6251a6f551687c30b79f5433f9f931
+- card_id: obsidian_mempo_of_fu_leng
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: obsidian_mempo_of_fu_leng.jpg
+    sha256: 424dc9c4c81d04d3922c1a0006f6c6d20fafa29e71c60c03e83d00c13ef606d9
+- card_id: once_and_again
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: once_and_again.jpg
+    sha256: 8b6fe51ded127c7520c01a01dbb152794c116d53cfa0d69afb356196ce88986b
+- card_id: oracle_of_blood
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: oracle_of_blood.jpg
+    sha256: c6c747386719dcb07042c7ec63e281e928a900f89332e10fba6703ef538d1ed3
+- card_id: otomo_ambassador
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: otomo_ambassador.jpg
+    sha256: 2540ec1fdaeb264f8a1a3043f8c78571ddfa3983320eaa545ff666f86106a13c
+- card_id: outrider
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: outrider.jpg
+    sha256: 833cd403a3ff3a1063f4251c28e4e7e0729b22ebd049e43a030548d848e384f8
+- card_id: poison_marsh
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: poison_marsh.jpg
+    sha256: 4f483d491db55c9d98969567ad0e238a6a2c9d777e6a273fdd6dd8ceb71ea312
+- card_id: puppet_theater_troupe
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: puppet_theater_troupe.jpg
+    sha256: 0330d69c260d3248278b84162ba0e80efb4156d70e10acbb9766f8afd8a750c8
+- card_id: purification_hande
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: purification_hande.jpg
+    sha256: 7d10a1c73449990db0681ed8a1369e7c2837285f46e89e5703dcdc30bb5ab421
+- card_id: ransom_hostage
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: ransom_hostage.jpg
+    sha256: 1aa756839807a01e1b198cc44345b73d21bf2a257aa2215b0bce8cb246e806a2
+- card_id: rebuilt_temple
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: rebuilt_temple.jpg
+    sha256: cd8c7e8c216a388d0f2470500a2573b5dc1921645b68c02bae7da026908879db
+- card_id: rekais_harriers
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: rekais_harriers.jpg
+    sha256: 676d2d73f3dae6ad6c9c5d4eb20b4a865c32e1acef6f601268e24f871d61b4c3
+- card_id: righteous_conviction
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: righteous_conviction.jpg
+    sha256: ee5bbfd37f2de97e86e3b9e39d50e9dd1cbdc326b7c0e009383bafda1e9fa7b1
+- card_id: sand_garden
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: sand_garden.jpg
+    sha256: bfb97d0a9b70449d3121e7b1f946d389a471c9a8c50760b3cd5538eb3a919dca
+- card_id: shamate_pass
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shamate_pass.jpg
+    sha256: 3cba20886d9410bc7c5b3df009616ce13e5572147f94b9c6edf8a9f3592999de
+- card_id: shiba_gyukudo
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shiba_gyukudo.jpg
+    sha256: b82637eb9226ef861057dd37623cd2618de468dd0e773379ec7b4f62bbac5177
+- card_id: shiba_mirabu_experienced
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shiba_mirabu_experienced.jpg
+    sha256: 160a4463de7e854a786a517267f7cb05ec19b4e17479c67c0be08b601682936a
+- card_id: shiba_yobei
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shiba_yobei.jpg
+    sha256: 2944bc363ae52bf04a741cfed7146af78ec1914f561d74cb801359c4cee3c2bb
+- card_id: shifting_earth
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shifting_earth.jpg
+    sha256: fe64ac319a293ea683bb973d28e947937d19771c83e4beb127f5140290e5a660
+- card_id: shinjo_guan
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shinjo_guan.jpg
+    sha256: 6bfcc648bd24d8b26ffc77563ba5081e2686fe046b63f861171400b1e9773b23
+- card_id: shinjo_slings
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shinjo_slings.jpg
+    sha256: 0d90dc625f84e3b9d31c9feb9f527b13c28053e7bae4550c7e845f0e12e984d5
+- card_id: shosuro_kamatari
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shosuro_kamatari.jpg
+    sha256: e45c12115e559b56b209bad9e3995e7c04a436f1fbc7a398f7e25f87ae30562d
+- card_id: shrine_to_benten
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shrine_to_benten.jpg
+    sha256: 4e8c5cca99df76af88b776dc0e14516dd0744039e57fb03fa42f798d21a43ec7
+- card_id: shrine_to_bishamon
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shrine_to_bishamon.jpg
+    sha256: e220ea492e8476a1383c37ae51c448966e8e443a825a0354dafb88adef1847dc
+- card_id: shrine_to_daikoku
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shrine_to_daikoku.jpg
+    sha256: 97ce30fb1c812d60fc7163906423b215031ea88905911732d03ecb671998242c
+- card_id: shrine_to_ebisu
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shrine_to_ebisu.jpg
+    sha256: 2f1749b04d68495f8d157be0b1e9d1c58cae9e470e7cb20b2b32583a09e93b56
+- card_id: shrine_to_fukurokujin
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shrine_to_fukurokujin.jpg
+    sha256: 52763903b137a03c72321df82b4eed406eeb2844ad8f2186acc0aac8551c5b4c
+- card_id: shrine_to_hotei
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shrine_to_hotei.jpg
+    sha256: 3941b099bab697c7932abd2d65707b7b5f4230c200f0e911e697984ddd4b77cd
+- card_id: shrine_to_jurojin
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: shrine_to_jurojin.jpg
+    sha256: 8f53f0e4e87b7c1272ccd6e9a3d96b78a7a0ab866f3b8121f1e5cdf766f5bff2
+- card_id: siege_towers
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: siege_towers.jpg
+    sha256: 420443297781a7fc513357b81cc031c749d1c42bd58f4dbbda640310be521398
+- card_id: soshi_aki
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: soshi_aki.jpg
+    sha256: 10bc9b587036f6e3e2321fa2783cbd338a0d6f5a5fb737052baf72373ce384dc
+- card_id: soshi_natsuo
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: soshi_natsuo.jpg
+    sha256: 933a46e461ad9660c7e95b48e966ee45464c1b06be88f2d347d219dba4c1c989
+- card_id: steel_fan
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: steel_fan.jpg
+    sha256: 258b8e071a2b793ee076ce82e5eebde0a8a2cf97b35235d0c0d136635b7c6161
+- card_id: stolen_relics
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: stolen_relics.jpg
+    sha256: 895d19362d95c7291d1642ab1f83bebba6d21fc94f9096f1717b9e584c5dba76
+- card_id: stone_hand_adepts
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: stone_hand_adepts.jpg
+    sha256: 2cd658594ee2d9334db624b0ab0e67b53bb0e0266b08c10e18914d274f5efa7e
+- card_id: strange_travelers
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: strange_travelers.jpg
+    sha256: f0f57ade68a679e3dcc9d0a7fe5a505c17a53566793efd039620afcfc033b3f0
+- card_id: subterfuge
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: subterfuge.jpg
+    sha256: 8c381b670285b45f2c1a6fe6f1ce65fac72a1e17065aa5234782b91fa0372bec
+- card_id: sunda_mizu_dojo
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: sunda_mizu_dojo.jpg
+    sha256: d098902b49387ead544a95cbc1f722953eb15532d2b4de1918a9bd41cfbc0de1
+- card_id: superior_stance
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: superior_stance.jpg
+    sha256: 5307f0fd0354b2fdb941eb4e00f6d0c22bd2eea31f80b8550b0d7422284b60e9
+- card_id: sycophant
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: sycophant.jpg
+    sha256: 4da21a5d1f9e7c5ca6cd422fb1d70fe41696a7065229174995864feedb9c50d9
+- card_id: tattoo_of_the_void
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: tattoo_of_the_void.jpg
+    sha256: 4f5f32a9b49c7735aa857afa258824cd4fea4df4f78bddc43221db80fecfa9f9
+- card_id: tax_collection
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: tax_collection.jpg
+    sha256: b2fa32b52569741c68d1104ed4183d106023f6781e94202d996a36fdc29807dd
+- card_id: tear_away_the_darkness
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: tear_away_the_darkness.jpg
+    sha256: 2148cc022a1dd9eaea152461866123ad849efb5afb5d83ca40fae14f3bd91839
+- card_id: temple_of_the_ninth_kami
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: temple_of_the_ninth_kami.jpg
+    sha256: 941045354e159bfa95529d5df74fba7d1b71763b491b94d6377aaa5f3c8d64d8
+- card_id: tengokus_gates
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: tengokus_gates.jpg
+    sha256: d7d39f09db70d72cf346c5990d7cb2173837e855e052d3ea56357f86b6c039b1
+- card_id: the_demon_skull
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: the_demon_skull.jpg
+    sha256: deb9959699967a2e496612e0bc7c84765d2c767300634e2871b803f214c1510f
+- card_id: the_mountain_does_not_move
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: the_mountain_does_not_move.jpg
+    sha256: 9a0142c412f837acf2dbdbcbc23dc3d225851e6f90be0ccc5be101e72c9d6b5f
+- card_id: the_topaz_armor
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: the_topaz_armor.jpg
+    sha256: d43f942bbce2ceaac45076c142a9aa8aa4f735e67ba19651aa47dc588ddc8a84
+- card_id: the_white_guard
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: the_white_guard.jpg
+    sha256: f63531092d6809caa518ce89e1a422871c6e8537e42ccd1b8d1ed4be942c531c
+- card_id: tireless_assault
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: tireless_assault.jpg
+    sha256: dad289e222c78e9e0cb8eb8a8186d7b1efcb4dd0b4f37541c5182b5e243383d1
+- card_id: togashi_kinuko
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: togashi_kinuko.jpg
+    sha256: 4da1dd62a7ec2e1ce9fcd62c992e1536c3a84a063f1b929eeffa291aa29f8250
+- card_id: togashi_tashishai
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: togashi_tashishai.jpg
+    sha256: f4f254c075843137e70f02ff51302732015e0aad088c435adce60e012119962f
+- card_id: toshimoko_no_shiryo
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: toshimoko_no_shiryo.jpg
+    sha256: 72ddd11c2c0c208caf29dc59fbc975e17ff6acabdd21527f6172cde0d69a2f4a
+- card_id: tsudaos_tanto
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: tsudaos_tanto.jpg
+    sha256: 66c0efd8bd060a678c0ce09a57c67b7192898a7311edf2f2f418e00a76a214ab
+- card_id: tsurayuki
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: tsurayuki.jpg
+    sha256: 779c58c9aea2e7cfb2f0f362001d02d83df434a5eebc9b7ce965357a73642adb
+- card_id: tsuruchi_ichiro
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: tsuruchi_ichiro.jpg
+    sha256: ca74aaa0ffeefd93e67024e40d4c18e76aefe32cee0d56d4648a47824795bce3
+- card_id: tsuruchi_kaii
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: tsuruchi_kaii.jpg
+    sha256: 3840c982e94cb91abfe19f82247f1806a4d59344ac0e0f32f7ef2ed2294a5ab8
+- card_id: tsuruchi_sho
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: tsuruchi_sho.jpg
+    sha256: bf028076e3ea475ad47a41f645bb2849208fa3214382b32201b1bda48f874e8d
+- card_id: unexpected_strike
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: unexpected_strike.jpg
+    sha256: 5126c374f4d5171e1433ac9a0fda604e960a54602caf9a78b4a1f80c25fd7d5d
+- card_id: unspoken_threats
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: unspoken_threats.jpg
+    sha256: e93824ed66f582b0b79282fb2895a682595f5c03356cc23aa63678e66ecb9dcf
+- card_id: utaku_yisheng
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: utaku_yisheng.jpg
+    sha256: a734c7c7547fbe1714e64d00621f2a14d841c4b88661af0ad6c467e91256c0d6
+- card_id: volcanic_fields
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: volcanic_fields.jpg
+    sha256: 43d7b4506a14d7da7a507dd1e997ceea5ca32a1d47ae3c78ff723e71bc26eb41
+- card_id: wholeness_of_self
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: wholeness_of_self.jpg
+    sha256: 95c4c176712e7c7cd9e1c1d45c8fe60308bce8a7bb2ee9d9957e5a6a6a8084c3
+- card_id: wikkithich_hie_gnich
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: wikkithich_hie_gnich.jpg
+    sha256: 8eee77cbcf86d4e1c06c4206221339a5d3201fa8fd661e142dc84afcac815c57
+- card_id: yoritomo_toyozo
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: yoritomo_toyozo.jpg
+    sha256: 629ec1006a80c4558508c7dfdbffa997799fd1e0c8ba124cc11e2dc97b55ab3b
+- card_id: zashiki_warashi
+  printing_id: heaven_and_earth
+  files:
+  - role: front
+    file: zashiki_warashi.jpg
+    sha256: e5c572ac642d0bedf525ab5e5adf86f982a37a8f34edd881d3428e99513bc7cc

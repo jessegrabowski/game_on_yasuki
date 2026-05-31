@@ -1,0 +1,938 @@
+set: The Hidden City
+images:
+- card_id: a_favor_returned
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: a_favor_returned.jpg
+    sha256: 07f7e57f41cc2b08017e4a79306b457522bddfb375763379f87fe9eeb2481e30
+- card_id: a_samurais_anger
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: a_samurais_anger.jpg
+    sha256: 66b839f5435cb05266155ba9e9a547b66c80267e8623c626e3c455bf543b199c
+- card_id: akodo_dagurasu
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: akodo_dagurasu.jpg
+    sha256: 324a655ddefc0f97c84278addff3975e2da476f320e58cad7a4345533cd1b592
+- card_id: akodo_dojo
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: akodo_dojo.jpg
+    sha256: 15f223936699e2926fe75bfd4cd80ceb4d07d66556ff6ec98c467b9193d21100
+- card_id: akodo_minako
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: akodo_minako.jpg
+    sha256: 1cb9d1242aabcc3f4fc29330db8823a5b274fcce5ec7279cd4ffbea1bf964dfd
+- card_id: akodo_tadenori_experienced_2
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: akodo_tadenori_experienced_2.jpg
+    sha256: 5d3cf3bfc0898a3d9457cdcff9191beb166ebcf9078ba89f910679d16e17d3ca
+- card_id: anvil_of_earth
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: anvil_of_earth.jpg
+    sha256: bf8dcac5807a2e1a1bc451d7a09328a86d610a94be0c48f11e427bfdc3c372d5
+- card_id: archer_squad
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: archer_squad.jpg
+    sha256: b53383e50a98cb2e0953600fd1800a7177d8ce5cec7d49245766c21f978a4085
+- card_id: armed_brigade
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: armed_brigade.jpg
+    sha256: 6a2c8ae687a70c2d27d253b46f5c4f064a9d0db83cbc63e91773b74682dc4b1b
+- card_id: asako_soun
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: asako_soun.jpg
+    sha256: 29dabe628aea1d3bc25519cbc293758f1aaea4c8a3b7677eed7208a03582653b
+- card_id: battlefield_messenger
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: battlefield_messenger.jpg
+    sha256: 5fce95b092a9cd3992c710df5991be1dc4f10e42a5b88574a90d78233955fd67
+- card_id: bayushi_adachi
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: bayushi_adachi.jpg
+    sha256: e477371d3af6a45e2635da50c9e765a50b2e74afb61b5532f8fcc457e4314a03
+- card_id: bayushi_kamnan_experienced
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: bayushi_kamnan_experienced.jpg
+    sha256: db5c790bef554485c000cb75306fa88905531ff10fa2d8fce7738514251f03a5
+- card_id: bayushi_motomu
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: bayushi_motomu.jpg
+    sha256: 5075f5a32e54e48f6d3a8c815b1f667d63393611ae7c1f3bf3b5522e8a2f4122
+- card_id: blade_of_fury
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: blade_of_fury.jpg
+    sha256: 838fcfd007754b424436828a4d0bdf3f37e5230b2a364751e5c827473027769e
+- card_id: bleeding_grounds
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: bleeding_grounds.jpg
+    sha256: 54e3859a5bf643f0e7dc6d6dc0f9a2ce6ce79d595aab2c148f485c27de307263
+- card_id: blessings_of_steel
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: blessings_of_steel.jpg
+    sha256: 23dd61288cd0895d433d338d9b28364de1509d0885dde0c877a1afb032be2b73
+- card_id: blind_honor
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: blind_honor.jpg
+    sha256: c52a0562099311e8d89103c3af11096e8a121f0a8d347d03978bf693bce2b234
+- card_id: blocked_ground
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: blocked_ground.jpg
+    sha256: d294f820516b5b2beb701662bb63dcb4fb1bdd0fbc8f5e03e98f55ea3f1b546d
+- card_id: brilliant_soul
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: brilliant_soul.jpg
+    sha256: 9145f82a3bbc076d9df6ce59ce1a55c1062eba9cd3309855ba85eef216af02c9
+- card_id: brothers_in_arms
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: brothers_in_arms.jpg
+    sha256: 77341cfcec2113ea996eef418138add2f5aa7521c5a13b50994c31c36cabe493
+- card_id: brutal_confrontation
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: brutal_confrontation.jpg
+    sha256: 21357b5aae0e924030e620970a412c9984d5eea862f14a95f43e4845e1042012
+- card_id: cautious_advance
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: cautious_advance.jpg
+    sha256: d3c48552c6af1aba695e86602e128f741046298ba675ff75475d06fd308b3c7e
+- card_id: cheetrr
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: cheetrr.jpg
+    sha256: 70fe4aede51afe560c753a9c678fca632932b9e7caabc93ce6a0370bcc5d4572
+- card_id: chizuko
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: chizuko.jpg
+    sha256: 7de123e47fbec83fff9c7fc7f1c83fa16cea58a839e1e5523de7075afc97733d
+- card_id: chkrit
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: chkrit.jpg
+    sha256: 31b0ce72fdb48d5929ec1c893fcf77a0935a48076c414ae96488fec0513c4d1c
+- card_id: daidoji_kikaze
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: daidoji_kikaze.jpg
+    sha256: 8b146d30ec4660ef76efcface23f43687f47d19c1935feb0e8553be6e707c02c
+- card_id: daidoji_tani
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: daidoji_tani.jpg
+    sha256: 0c72d617c3f29fb0dfbaf54d12e325d70215b81ea095a2765dfdee5a9e9042cf
+- card_id: daigotsu_dojo
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: daigotsu_dojo.jpg
+    sha256: 816c3e255acada15959bb1d82742c9ffbd0fc3713ab800965329e5fd395dd44a
+- card_id: daigotsu_meguro
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: daigotsu_meguro.jpg
+    sha256: 9105d9e213391a8c521c978303b9da1e96c144f9986fffa3b1c9c8c197385356
+- card_id: daigotsu_toru
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: daigotsu_toru.jpg
+    sha256: b7c648596612dac6a57123846e9367f278d551a6f5a14d12b856de1f55ac000a
+- card_id: daisho_of_water
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: daisho_of_water.jpg
+    sha256: d12e1540b6024b9e932a5045f8b24222477b7936b74806a61010b4c3a94ef03c
+- card_id: deathseekers_oath
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: deathseekers_oath.jpg
+    sha256: 1a2c75772b6e72d56ffca1eaaf2e8df2d192d038470cceb7a37dbaf8fe0fee50
+- card_id: delayed_march
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: delayed_march.jpg
+    sha256: 7b6bf8058dcf7e99522eaa6c9775450a2d65804d2e64ebd9fe7ae51ea4cb6bba
+- card_id: demanding_gunso
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: demanding_gunso.jpg
+    sha256: 72e9a5423ff61a4ee4f719ff7bc638c2074094e305fa277dcf89412edc8ed74e
+- card_id: deranged_mujina
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: deranged_mujina.jpg
+    sha256: 68f8a242246c6d135bd6d0370410b3ff992f222dd2591c514b6b5966147e6741
+- card_id: desperate_conscripts
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: desperate_conscripts.jpg
+    sha256: 989ed5a26e155447985bb112b1cdd8be38afd493128c3660cb365461d5a99cec
+- card_id: direct_assault
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: direct_assault.jpg
+    sha256: 293aa0f6531b6d9f6f2b177f17ac4e2395efd039065919d3719412435b6ea9da
+- card_id: disciplined_infantry
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: disciplined_infantry.jpg
+    sha256: eba65b5294ed9a940d9c63c9bb014a7c00669803b332a31641e8d033c587c7ea
+- card_id: doji_asano
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: doji_asano.jpg
+    sha256: 8342dd6b39698c23f7453d038e9aafb0fd374daac76b5be497e8dcede2a93006
+- card_id: doji_yasuyo_experienced_2
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: doji_yasuyo_experienced_2.jpg
+    sha256: 31ffe34e30aff170743153cd16a7e36a94d9eb5adcb79623879698e7675b2f12
+- card_id: drunken_mantis
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: drunken_mantis.jpg
+    sha256: bc5da99c8d8ae434ae4fe778bca53561f04b57b809253ffe00f6e05d40b4dcaa
+- card_id: endless_horde
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: endless_horde.jpg
+    sha256: 2085d07c506e2e9f6bc59a3c2aa420dc5c22015b22cb92e91764e637ebbc9415
+- card_id: erchi_chek
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: erchi_chek.jpg
+    sha256: d8074d831ac960b866fc7a58c9596cd640813b81faf369475e8d3571a9e05359
+- card_id: essence_of_yomi
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: essence_of_yomi.jpg
+    sha256: 6a27d42a917759ed52f056e4141f86d6cc9083201cb671dcc79ed05336293e53
+- card_id: exhaustion
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: exhaustion.jpg
+    sha256: 34d1cc02550e4a935e48f33055ba81ed2c421f4a88a82f30903c22f6865111f8
+- card_id: expert_archers
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: expert_archers.jpg
+    sha256: 01395f210ce5ca1849e392fe093281bd2ffd2d9c1bbaec8c7eec3867062b3303
+- card_id: explored_territory
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: explored_territory.jpg
+    sha256: a4898f084b81aa07109670e2ba7dbc3f52e08dd8839cd31c0797afc8adea672b
+- card_id: failure_of_duty
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: failure_of_duty.jpg
+    sha256: 87365811b61c90bc0e4fbb21e31b1d6c5c9cb8a8d6fe3bb1de4c1ae969f63302
+- card_id: family_token
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: family_token.jpg
+    sha256: f714f0e8c68f1ee7d722de8051c5f7137904f481a0b264f1d74d3ffc38aad7d9
+- card_id: family_war_banner
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: family_war_banner.jpg
+    sha256: 1d882627a403a07971c2b13c04a182ed59da775db87b36faea557fc29ea5f026
+- card_id: fire_and_water
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: fire_and_water.jpg
+    sha256: 3501295bd8caa6c56d0e400b9a6160f1749ae9af1f2839c3247f61cb5ae9d674
+- card_id: fire_in_the_hidden_city
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: fire_in_the_hidden_city.jpg
+    sha256: a550e9be267877ec1d63a76bb4905b480d710a46fdfbfa6f766319f9dcdbf7fd
+- card_id: fortress_of_thunder
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: fortress_of_thunder.jpg
+    sha256: ad8928d50f513153d9c645c7c56c65e59360e784df5a76bb1d5e3a139887bfc5
+- card_id: fortunes_gift
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: fortunes_gift.jpg
+    sha256: 84add006c48a75013ece65b9d42b6d478cf63e290b9bdc340183b42038ee58db
+- card_id: from_nowhere
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: from_nowhere.jpg
+    sha256: a019c58cb548bfd50ab338d6e93a80e75d763ee75fe9981cd5a921a73cfb8939
+- card_id: fudoshi
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: fudoshi.jpg
+    sha256: 344a8f4972e61b9e62a7967ee0192e2ea0b8b68401f126cfa8653480321f31d9
+- card_id: fushin
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: fushin.jpg
+    sha256: 458fa1e2a7662536dc5fa3028765b69e39ea3d72ef195342d47a483d1639b2f9
+- card_id: geisha_network
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: geisha_network.jpg
+    sha256: d8648f4755363fbdfcce706103336160f5a590fb3abed3fd7134353bf227660a
+- card_id: glassblower
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: glassblower.jpg
+    sha256: bca9081ca340b416103cc9cd0e6958d6488c5c0d4713e44530cfd1748fa1e7ca
+- card_id: gleaming_wakizashi
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: gleaming_wakizashi.jpg
+    sha256: a4c955ddbdd134c229d86be79ed3d9a96477700d80936fb00ba101d4e2724701
+- card_id: go_in_disgrace
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: go_in_disgrace.jpg
+    sha256: eddc009098318882ac03176959d8de6cac5b2202210a431c4be684ffb2d4c6f9
+- card_id: goju_arai
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: goju_arai.jpg
+    sha256: c1588aef2a7e29bec5904d3e5122f8435131be247071ffdfccbce1aff818bc16
+- card_id: gold_buys_security
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: gold_buys_security.jpg
+    sha256: be069ac34cc47a8424309813bac0dd49ecf219b3ae5d6de23a943f314b41dc30
+- card_id: hardy_infantry
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: hardy_infantry.jpg
+    sha256: 8fa18b052ba70217c72ec1d34c62b6b29213e0a51ac373f5a12bb49197f6feeb
+- card_id: hasty_barricades
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: hasty_barricades.jpg
+    sha256: b433be1291355892f4e08832ffa442b3a54d9dcc92423801950d442a97df235b
+- card_id: heart_of_a_hero
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: heart_of_a_hero.jpg
+    sha256: 199d37a745135583ff2da9ecf570edef48a8e972d31b610dbfc7fb2737bf411a
+- card_id: heart_of_bushido
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: heart_of_bushido.jpg
+    sha256: ea4153c4116234381326fec13c868f6fd4c8b673ad75dccc2264a268efdbae38
+- card_id: heros_banner
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: heros_banner.jpg
+    sha256: 85bebc96bdce80927f7743ab7bab2f0a160ec79e49817851e50128e492419a83
+- card_id: hida_daizu
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: hida_daizu.jpg
+    sha256: 0dfc33f6af1b0bf83df40de72c410c70dc17554d80ef9bf19c2dd40e393035b2
+- card_id: hida_enko
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: hida_enko.jpg
+    sha256: 0398439367b6889c6e0218d327289ce7c971a1589d7791768b4abe793ffca484
+- card_id: hida_sosuke
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: hida_sosuke.jpg
+    sha256: eb243746c239a747327199988155e418936c4f2196ba4dda70d9005fc0daa558
+- card_id: hiruma_todori_experienced
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: hiruma_todori_experienced.jpg
+    sha256: 9db2703d86eca0d8bf1061e7a1c3f96a16c28cf2376cd3e131735b47d2402aee
+- card_id: ichiros_yumi
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: ichiros_yumi.jpg
+    sha256: e4a5969bca8fafd291590fd13757dc28e3f66464c63582495e187a1595f975ac
+- card_id: ignominious_end
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: ignominious_end.jpg
+    sha256: c123cfa3d1a50ba7d4f27ea9e8e5802ae23333ada0a2abea95d4f4d9edebc751
+- card_id: ikmatch_tek
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: ikmatch_tek.jpg
+    sha256: 2b79cf20470fc143b5f06ff12b8917519c82dfe436d0aec0bda1c388ac0787f5
+- card_id: iron_pillar
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: iron_pillar.jpg
+    sha256: 9fe20ff7e4e5f3abbb94567dcdb464a34036b093192b160ba8c3ccd3d5b09829
+- card_id: ith_ik
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: ith_ik.jpg
+    sha256: 63b19d6f37268e9e95b6cf6b4cacccb15e9f9603937c339d1d77812e07aed464
+- card_id: iuchi_katamari
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: iuchi_katamari.jpg
+    sha256: a2665ddaacc72c8318b55a6b4c18cadb49f28ecc4d6bf77ea50c31209c50e1b2
+- card_id: kaiu_kamura
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: kaiu_kamura.jpg
+    sha256: ec0012ad43c82c5536d3a890b1a8d77deb03211affb0934b95a2025922874968
+- card_id: kakita_kaneo
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: kakita_kaneo.jpg
+    sha256: abc65e236ececbec90d38abeab79037883fdbd18e7e9f7125cf016c70c65f36b
+- card_id: kaneka
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: kaneka.jpg
+    sha256: 447175747615cf9472701276ec46cd627b5b441332daff69ca5da04a6a74694b
+- card_id: kareido_no_oni
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: kareido_no_oni.jpg
+    sha256: ef82222f5f4ce6ad719d538a4a6852dd5251bedfb15391aa1a6e561501291436
+- card_id: killing_fields
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: killing_fields.jpg
+    sha256: 1055edb03903d2829177616f5ad8b684c6733781cc896e8d4f210c346805f2a3
+- card_id: kiss_of_the_scorpion
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: kiss_of_the_scorpion.jpg
+    sha256: 189fbb5a3fa760c9ab817fc31d81020ad22c103f9808e81803889a4e3bcd9097
+- card_id: knife_in_the_dark
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: knife_in_the_dark.jpg
+    sha256: 1cd5e4bae7a63427d1cbb384b883f86d6253d65d45e094bd7ebaea7baaa95e22
+- card_id: legacy_of_my_ancestors
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: legacy_of_my_ancestors.jpg
+    sha256: 18e42edf8e37512bd825c88f43eaaceea1c456e0614c99bf016906a7cf5eea12
+- card_id: lotus_at_dusk
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: lotus_at_dusk.jpg
+    sha256: d535213372389cbfa4d6a648667974ccf1e4fdc112fb83867ba65d79e44d4727
+- card_id: marching_column
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: marching_column.jpg
+    sha256: 184481e6e308a43b443b31e8254608a5442c1f4f7ca4b1323b32c4ee83a760c1
+- card_id: matsu_fujiwe
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: matsu_fujiwe.jpg
+    sha256: c3fccaab2029310fd70d273eda6c5abc381849fc0875085dc123194d17c5096e
+- card_id: matsu_ryoichi
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: matsu_ryoichi.jpg
+    sha256: 245f1d6cfeb7458c9254b44440794b1f09dbe8cb822da6c593ed6520636e07f3
+- card_id: mirumoto_arai
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: mirumoto_arai.jpg
+    sha256: a0dad8cf309727d19ececb4838283eff5ad63a32130d2e177385bed572090f6d
+- card_id: mirumoto_daisho
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: mirumoto_daisho.jpg
+    sha256: 203f9833851102279673cdd253145636ff7a80eda8601b7f604814805d064b05
+- card_id: mirumoto_kei
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: mirumoto_kei.jpg
+    sha256: 6532794450270375662e78113a7e59b8519b2eaaee8fce38ee2c21f6ac279af7
+- card_id: mirumoto_satoe
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: mirumoto_satoe.jpg
+    sha256: a25935df2d173c8feb09b0fdf866c31c2203ec3162c189267ac120136f9b6c7e
+- card_id: moto_gurban
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: moto_gurban.jpg
+    sha256: 0b5173f1a65809d72cd97a25fe566b538b3073875b6fdd7939bddd6c71f085ec
+- card_id: moto_taidjut
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: moto_taidjut.jpg
+    sha256: f8a4ebf42811c051a712d848e8223fdcaf1fdf09aad9dc142bad8f4eeae4bec7
+- card_id: naka_tokei_experienced_2
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: naka_tokei_experienced_2.jpg
+    sha256: caabc9d0054713a886f469d91796de33be6deaaac0c999b9d1fc4e0ede9a4b02
+- card_id: outer_walls
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: outer_walls.jpg
+    sha256: 88b98dcb68fdbb5a21abf1eadd9dc7c15c4f42b2abde5b6e353039b7bf591d61
+- card_id: peasant_laborers
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: peasant_laborers.jpg
+    sha256: f224979ac0d453c5937b5b30bb755cc13632dd8c7523dadc8339339273da2aaa
+- card_id: pillar_of_flesh
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: pillar_of_flesh.jpg
+    sha256: 6ba37b1f1b4ee48b7a22d89ba7b14d92696469a2668d72e8be7bc7065226d031
+- card_id: political_adjunct
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: political_adjunct.jpg
+    sha256: de6116ac4d1b13e89ed6567dd42145d1bafe742d04afc692389ad6ac9a646613
+- card_id: purloined_letters
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: purloined_letters.jpg
+    sha256: 193fc74f9ae21d36cbbcb9a803fd175d618aef5c63a42f59a29da3f6fed26fd6
+- card_id: quartermaster
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: quartermaster.jpg
+    sha256: 6d89900ded26a5251898015a9d8ac7d398ec8e6bfebd23a1f642509f5e955c9b
+- card_id: ratling_raider
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: ratling_raider.jpg
+    sha256: 3de1a4853ccbd82558126bcaac86f3d5df1b9b3d7a14bf3e937f23fb88d51cd3
+- card_id: retired_master
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: retired_master.jpg
+    sha256: d6d53c8575c90d1151f22d2afd2dd7d1d3175291aed96d9faa3d519f43d98c4f
+- card_id: scrutinys_sweet_sting
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: scrutinys_sweet_sting.jpg
+    sha256: a935a9db5a3aeb814bf97f7e0167cf83f1a8f046e312d3a8ff809e133872ebda
+- card_id: seasoned_cavalry
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: seasoned_cavalry.jpg
+    sha256: 546d6f09270cfb9712c7f8047b759442dd3466d82811e5af8ae2a229812e80c9
+- card_id: secluded_outpost
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: secluded_outpost.jpg
+    sha256: 8e97ff082ca0132fb0ea1c8d7f9db8d373563146762a0c2d732ed66942ade0ce
+- card_id: seeds_of_the_void
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: seeds_of_the_void.jpg
+    sha256: 4fade74c55c4f957f9ef1df162a6ac3f29e8786101e5d2d5dce56e971754a62a
+- card_id: senpet_scimitar
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: senpet_scimitar.jpg
+    sha256: 5e23b062bfdc4a5a0a5ea21f89c9ee0b3452e8136bb7ab41341167a37051aa7d
+- card_id: settchrfoo
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: settchrfoo.jpg
+    sha256: 6417125c1ca0e42ad0851fe24cadcae6dd1135b44e54672edf5e060a0a939fb3
+- card_id: shakuhachi_of_air
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shakuhachi_of_air.jpg
+    sha256: 7aa8ace3dcb47bad1b5c05463c3225cf51b37f48e8f18e173d816b5b46df57e9
+- card_id: shameless_slander
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shameless_slander.jpg
+    sha256: 1dab51bb20596ef9d6754ac4b24d514da3de9567b7df48c86329032223fe29c1
+- card_id: shiba_aikune_experienced_2
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shiba_aikune_experienced_2.jpg
+    sha256: 49ce65f41da8327cc2d69607c707e568e75ccc8c9dbc886ab23cc550fa15b2ef
+- card_id: shiba_koseki
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shiba_koseki.jpg
+    sha256: cbda3b15bef3bdb7c5314a8891ae219ceeef7803d3ae00b0e1eaf973d8455f77
+- card_id: shiba_marihito
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shiba_marihito.jpg
+    sha256: 5d5c6dcee4cbe478095f55850fca4cc40d4566cb847635bdc9caa836178b8d07
+- card_id: shiba_toshiki
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shiba_toshiki.jpg
+    sha256: a3a57d9242479934d79cc66c92e7afe88aae39f41bca45bc965b8a122fe9b307
+- card_id: shining_example
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shining_example.jpg
+    sha256: 56b4b157f2f00a63ea23eda769082a0421331d2672dcc638d5d522f7f5abe654
+- card_id: shinjo_jinturi
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shinjo_jinturi.jpg
+    sha256: 1aff703c0b7f31b453a14ea5f39d0e0b210920f7b11257375dbfef7e2d33fde1
+- card_id: shiranai_toshi
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shiranai_toshi.jpg
+    sha256: ce11dcbd5fcf42a551ac70d3aa240f75243d9c532eb834c63448ea7288d4aa28
+- card_id: shosuro_mikado
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shosuro_mikado.jpg
+    sha256: 7aff6b4b5ddb85583a86e3fd668ffb27bbe79b399a571fa8e21458ca61fa2f39
+- card_id: shosuro_osamito
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shosuro_osamito.jpg
+    sha256: cc0a26b4b84ffe701ae61da7dba335da0cbb650337b611c3f775f92dc02d0a64
+- card_id: shrine_of_compassion
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shrine_of_compassion.jpg
+    sha256: b126a24e51afa0c358d42bc59897eeb0c0d35520af0de332334c5bf40b48531b
+- card_id: shrine_of_courage
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shrine_of_courage.jpg
+    sha256: 34df1187d61cd8acc61b1fd0c41c1dbe01041e2ebeaeb03423e159c3996aa6ed
+- card_id: shrine_of_duty
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: shrine_of_duty.jpg
+    sha256: 9529ee0d99de407099f5841401dad378f81a705eceec182998e3aa9dd092a86e
+- card_id: sktcha
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: sktcha.jpg
+    sha256: 27cfe87344c81804a7fc123d403126b3d4b3fa78e9419728618a55a90e92fd4e
+- card_id: strategic_assassin
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: strategic_assassin.jpg
+    sha256: ea1887ea6045f6d857dc465172b17c14ec81db11fd2656efe3e8b5fa916ba871
+- card_id: summon_air_kami
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: summon_air_kami.jpg
+    sha256: dc571cd987f03d64436e95f6d597c1912da8cfac66a16b83000ae2b3608d77e1
+- card_id: summon_earth_kami
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: summon_earth_kami.jpg
+    sha256: 131447f2b762015908a324e3ea5d59991cc493472f786d47c759e3d1a25d9aea
+- card_id: summon_fire_kami
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: summon_fire_kami.jpg
+    sha256: a87e57d8557d68ba4c0ce3be766f74fe66d49d34c25228953f2d340c94b5c0df
+- card_id: summon_water_kami
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: summon_water_kami.jpg
+    sha256: 05f0ed1789def7d83b29ae6338e06dde8014f85a84cc3b7f871be59389c0695a
+- card_id: tamori_minoru
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: tamori_minoru.jpg
+    sha256: 736e70b6a54d7ae378ae051f523977a5bdff813fe414c72dda150da8e410e193
+- card_id: tani_hitokage
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: tani_hitokage.jpg
+    sha256: d9a264b7634bbbcfe87f3e93c205607036d3369feeae3e5bd3701e8c6402b16c
+- card_id: tekteki_tek
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: tekteki_tek.jpg
+    sha256: d51b83f3235460f095a48d411d77d1405e46af9ff60554861c2e88fbb13bf7f1
+- card_id: ten_thousand_swords
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: ten_thousand_swords.jpg
+    sha256: be9a618c91a87aae831b1b4560ce3d00ddaec7853a24281026ff77d1e200ccd8
+- card_id: the_iron_legion
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: the_iron_legion.jpg
+    sha256: dae4cb474f79d5bd1381b93afa6aa406bc8a5ffed697ad33f5e6431a6bf24e57
+- card_id: the_legions_charge
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: the_legions_charge.jpg
+    sha256: 2d2e40d25e0c79bf74da6c4b9b1da494215222dd42592b4c818e7aab7cd1cd1e
+- card_id: the_meeting_place
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: the_meeting_place.jpg
+    sha256: 7f02e5c1b3d02fc50438b04b0907c6ee938fc6b37f452538117be1021f8a9e6f
+- card_id: the_pull_of_destiny
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: the_pull_of_destiny.jpg
+    sha256: e3e87f28721f5af496b468a0cea8b3b27f75510d6122e6c5a8d7a4c3bfb0427d
+- card_id: the_shoguns_armory
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: the_shoguns_armory.jpg
+    sha256: 51bcd0ec1fd1f96a8bc1eb1406ae79386730dcc72040fa8d463bdbd65658d5fa
+- card_id: third_whisker_mine
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: third_whisker_mine.jpg
+    sha256: a7183277d80b90ce525d9b870d78dd00ecbb7e374f1472a4dc812eb0e01f5457
+- card_id: togashi_tsuri
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: togashi_tsuri.jpg
+    sha256: 673008149061082247349535892740907e032a2092ef8be4f77b07598675278d
+- card_id: trade_district
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: trade_district.jpg
+    sha256: 30a30cd57fa26f3acabdc3e13e35d1d7cdcd4517d4b4323399f27980da6ecd6a
+- card_id: tsuruchi_arishia
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: tsuruchi_arishia.jpg
+    sha256: 3bb3cc902648f78da0e06df547b936d13f0ad86177aa847bbdd8efa9f9285e17
+- card_id: tsuruchi_mochisa
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: tsuruchi_mochisa.jpg
+    sha256: 725eb69157289bf5ad2a14a77b59789bcb2160c661a289bda7adb345d545db94
+- card_id: tsuruchi_nobumoto_experienced
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: tsuruchi_nobumoto_experienced.jpg
+    sha256: 09254f984513a266881c98960ec456c4906a75f3b5c0b818547b2aa98ae91ce2
+- card_id: turn_of_fortune
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: turn_of_fortune.jpg
+    sha256: 5c00c005dd25e8de4d0c8bcaeda52211230e97a5699e11c8b93a7f403b00a5bf
+- card_id: usagi_rangers
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: usagi_rangers.jpg
+    sha256: 3a54f7d2a66b0b824c65eadc8f30df0c71cbd13b1d3f9845a5ccf0175f7397f9
+- card_id: utaku_jamaira
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: utaku_jamaira.jpg
+    sha256: 8c506018fcdeae637b1e75038f23e9d72eb556fbb35e270de5742288fc968572
+- card_id: war_council
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: war_council.jpg
+    sha256: 6fac3f893e4fb117eba0e7384ef646d796e818b9ee24807de0d028bab7d68476
+- card_id: we_know
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: we_know.jpg
+    sha256: d1666369c82080a84b1b5d90b4ceaa05a5a9db6f0332383af70b6bdbc6fbcad9
+- card_id: well_tended_farm
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: well_tended_farm.jpg
+    sha256: 1c74219d93a552a6603a40404b7456b17328196509deea14e08b70ffa2a6ad87
+- card_id: yobanjin_wyrm
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: yobanjin_wyrm.jpg
+    sha256: 15ffe6451e93b72f2c8da65118e8e49bb761d5ed43be2b0b31667139aa26974e
+- card_id: yoritomo_mie
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: yoritomo_mie.jpg
+    sha256: 8889a2893af49bc1005d8d85d2f4d9f61c8fba6c6eead05878bb656fc3054f25
+- card_id: yumi_of_fire
+  printing_id: the_hidden_city
+  files:
+  - role: front
+    file: yumi_of_fire.jpg
+    sha256: 03971e43a5dda606c493127a6f78d1940a7cc5a639080f3e60e7713f10fe74f5

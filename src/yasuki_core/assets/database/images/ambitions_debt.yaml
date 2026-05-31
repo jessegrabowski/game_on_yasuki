@@ -1,0 +1,1070 @@
+set: Ambition's Debt
+images:
+- card_id: a_chance_meeting
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: a_chance_meeting.jpg
+    sha256: 1560287bca452fd3a683c0542dfc9ec3d0e1aced6b038c36d4cb06394118ebd0
+- card_id: akodo_fields
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: akodo_fields.jpg
+    sha256: 0f35b3d98a623d0f6e3dfc88c4509ee32b9463cdd34d38cabdd3b908dffe176a
+- card_id: armorer
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: armorer.jpg
+    sha256: a903641e827c381a26fc008f645432470a6862929f0617aed0b57548fcf31801
+- card_id: asahina_dorai_experienced
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: asahina_dorai_experienced.jpg
+    sha256: bdfd6a5d9440c4ba286f8f0416a7782bb96f7a232edde5a2485c2c0b9098dfdb
+- card_id: asahina_tsukiyoka
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: asahina_tsukiyoka.jpg
+    sha256: e6eeeed1befbdb3612bdfbace123166b3d9b7745ce409a0b466aaf4b8829b8c7
+- card_id: ashigaru_levies
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ashigaru_levies.jpg
+    sha256: 69b836d36bd8384c2e906de826e4faba0cd177d11ef15c948e2b533363682c81
+- card_id: ashlim_experienced
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ashlim_experienced.jpg
+    sha256: fce8cc0d2d1b1647d108ecf8d90d25042787a4f3c36b0cd58bae588af9fcd61e
+- card_id: assault_on_otosan_uchi
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: assault_on_otosan_uchi.jpg
+    sha256: 0197cb2b30f04d4ea8a36e480b3018521e7f25153fb27f6e00cb9cfc03b4956b
+- card_id: attoktuk_sensei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: attoktuk_sensei.jpg
+    sha256: 0489642e156c8830c0813743829e0b10f1334869fc5ae25245781b446d37ece3
+- card_id: baby_ki_rin
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: baby_ki_rin.jpg
+    sha256: 67a9fc1f356df1cdf12ad4bd8217ca35e8d40c741591076a030bb0cd9cb7acf6
+- card_id: bakeneko
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: bakeneko.jpg
+    sha256: aef26b2ec8dd4268885926ab4dd30841058af62a000f7e9db35970b33bfd60ef
+- card_id: barracks
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: barracks.jpg
+    sha256: 4541fec65416ea8684aeb3cd5af68407f1461d2fe6a3ed40999eadf088ffa39c
+- card_id: bayushi_aramasu_experienced
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: bayushi_aramasu_experienced.jpg
+    sha256: 06b5126431a86916cafda9d9fec6bfab8b6391bf9d4aaf81a221919e565e9396
+- card_id: bayushi_urei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: bayushi_urei.jpg
+    sha256: c5bcdbe8d9bc360bf032c4d4eb7edadde7e4925a6b00c2535b4664a6b2af6264
+- card_id: be_the_mountain
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: be_the_mountain.jpg
+    sha256: 674b113e5afedcb3ecf2ed04fb0fefdf10c77fe6d288e19770c29ee006a72aac
+- card_id: bitter_destiny
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: bitter_destiny.jpg
+    sha256: c19e3112e58a6b432fb36092ec868237660e42ee6ddba70756151afe1b9c711c
+- card_id: bloodspeakers_deal
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: bloodspeakers_deal.jpg
+    sha256: 9c4a34dbe74472250f101acd4060bc513ef8e581fc42f160632bf9f1043c37f4
+- card_id: bokken
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: bokken.jpg
+    sha256: cd6bdf6446523b629daf313ddd0bfb49d449edb49fe9972dcf1f371088005aad
+- card_id: botsumoku
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: botsumoku.jpg
+    sha256: da50113b1339dedba481e9ff6b45ed96c00ba8b1416e789c6f8f4792214878f8
+- card_id: calm_winds
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: calm_winds.jpg
+    sha256: 98b893520693f5ec09251fe508b414affd3d41051827c28db3a83782a0310895
+- card_id: carpenter_pass
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: carpenter_pass.jpg
+    sha256: 3b80eb2b43228f7c512b8de44d07b3e8150a7c8ab21320c27800b9890e6c1402
+- card_id: celestial_gift
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: celestial_gift.jpg
+    sha256: d69df9c36121f84ec6341963ebb40baee23cd81ae55d0c060385bfe676ba548e
+- card_id: concede_defeat
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: concede_defeat.jpg
+    sha256: dda42e7d03d7c1f5ea31f359ac3738129e479bf6ae6970d1e22843c400598279
+- card_id: costly_alliance
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: costly_alliance.jpg
+    sha256: 3c4ac2198fd095cba9081bbc481bef2e0e25a5781a0fc29c1646b07527bc5c89
+- card_id: critical_duel
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: critical_duel.jpg
+    sha256: 561960baca180547b99c271880f470f04061e7c501dad2aea2f9624bcd11b431
+- card_id: dangerous_terrain
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: dangerous_terrain.jpg
+    sha256: bf73564b03dc59d5a4c33b4f7f47044a1a5e3cba7a4a833391010748d90ed18b
+- card_id: dark_energy
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: dark_energy.jpg
+    sha256: 20b3f5c21fbb7412dbf48a9ece674d5ca0d72eaa794b8a78b58b9391bfd554c4
+- card_id: darkness_within
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: darkness_within.jpg
+    sha256: d1ffdad6ffd3d65586a05eba33f1ed1f5f6b42ca413baa3b15a731e97e8c7180
+- card_id: dead_eyes
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: dead_eyes.jpg
+    sha256: 5b3f557d31f442ef070b5ebba6ae60f16619a6ec5cc36a105fd172833ceffdc4
+- card_id: death_of_onnotangu
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: death_of_onnotangu.jpg
+    sha256: d3f307223c7f549b9a211be7031c33e6cd6cf34656393c19a8cad26a3f3acc41
+- card_id: declaration_of_war
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: declaration_of_war.jpg
+    sha256: 8221a9e999a842fa13b9894ad8c7aaaa0a1c9cc67782b4a6ddadd6e0c1429ad8
+- card_id: defensible_position
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: defensible_position.jpg
+    sha256: 54540fa679138a03fc4341316d8ea2019115136ddbbe745734c34ab35ffa3580
+- card_id: den_of_spies
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: den_of_spies.jpg
+    sha256: 8b2e004e08f7b3967728556d2e986888c87858658adefe258c38d1c140b6d63a
+- card_id: denying_the_emperor
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: denying_the_emperor.jpg
+    sha256: 8b27b4a5568b13111fd2356b910b1c096ddb1585de84d69c2ec598076cba1be6
+- card_id: dirty_politics
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: dirty_politics.jpg
+    sha256: ca5295d352e329507180dc1222a5df9ba5c7711d3de208242026662f7add1451
+- card_id: dragons_strength
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: dragons_strength.jpg
+    sha256: d3381f73269df414325706da09d7d0e38736f159a3b9c37d303aa471be17a887
+- card_id: dying_effort
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: dying_effort.jpg
+    sha256: b3afbc36c4b38d7962b3de00c7b6b740da1eaebc68861c4a18c01f87bee39567
+- card_id: entrench
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: entrench.jpg
+    sha256: 196895db8df3483aa5acb916a7f6495a1358cd0e49c816d833228bf217559fed
+- card_id: exiles_road
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: exiles_road.jpg
+    sha256: ccbace2d5b52d89e7834b91f3b915b8abeb5e56eb3e11ac952660dc30b8f5139
+- card_id: family_shrine
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: family_shrine.jpg
+    sha256: ea944949d35d38a1c48ca6ff6d8065f2b707e73dd9c39f8aa0474d40b659acfe
+- card_id: finding_the_harmony
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: finding_the_harmony.jpg
+    sha256: 4668433e3cb44beb5cb5027fdfaa79eb61aee009ee0fecbf848c37fb59d8f0dc
+- card_id: footsteps_of_madness
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: footsteps_of_madness.jpg
+    sha256: 225d65255c4b8987dec690882057bf50aaa7aeb4e8537fb250f5cbe55d2a1b2d
+- card_id: forethought
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: forethought.jpg
+    sha256: 0e4926d90a931408f1c1699f8defd9e60abba1e2944ba594d6b8d041d2e3b923
+- card_id: forgotten_lands
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: forgotten_lands.jpg
+    sha256: fd18878386271a94782b4a37177c96a2b468e516aa075e507313ec949a283c81
+- card_id: fortunes_turn
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: fortunes_turn.jpg
+    sha256: 3276a02b56efad220443dce182056215cde9410b91bcfe4eb4b2d9b3f8d40bee
+- card_id: forward_march
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: forward_march.jpg
+    sha256: b33f6c989baf3c51a306fd0de7eb7763ee1ed9fb9322ef5c4b00e18dc07d263f
+- card_id: goju_utsuei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: goju_utsuei.jpg
+    sha256: 9b45de4838c89349fb8779d521510eb773de702d24133bc2d74c11fa83f715c5
+- card_id: greensnake
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: greensnake.jpg
+    sha256: fffaaa6e67fd75784f84b5f055f20723ef2c4e9903d68ed6ba70095243f84b61
+- card_id: guardian_of_the_rift
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: guardian_of_the_rift.jpg
+    sha256: 64b964d112a94eb4970fe095d64f6a4b8abfd34d0e80b406110b8f262896f734
+- card_id: gyosho
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: gyosho.jpg
+    sha256: 7487820019a8c0682691f28bf6d04df629442458d5d56ec4d61fba7c84b5a46b
+- card_id: hates_heart
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: hates_heart.jpg
+    sha256: f3f271a2a7190f794b8373e5429617a959733b1618da217084c699bd19724be5
+- card_id: hida_amoro_experienced_2
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: hida_amoro_experienced_2.jpg
+    sha256: 7144848d874edeb68e0a2276fb4f85cd75284004fed5c135bc6593245dc2905f
+- card_id: hida_yakamo_experienced_3
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: hida_yakamo_experienced_3.jpg
+    sha256: 6d5b2ffa13918ab419a46e827e9f5874beaeea79b3dad46d098cb099368155bb
+- card_id: hirariko_experienced
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: hirariko_experienced.jpg
+    sha256: 461ff8d97b2d84db5bee32782274433e122a9fa5deefc06c85709200e963e2ba
+- card_id: hiruma_sensei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: hiruma_sensei.jpg
+    sha256: af589add797866d8993adfbdec51fa9cf33fcb3a2d1a727a02f09555905a81b6
+- card_id: honor_bah
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: honor_bah.jpg
+    sha256: de37a563a554c9ad53fda93f2682c0a8a9f9fe150f2fbd214f44616e024fa24e
+- card_id: honors_cost
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: honors_cost.jpg
+    sha256: 49026595c9152dbd440fe41317c9cf1b84fcfb69f4c682f5d3ce7ba91b6753fe
+- card_id: hoshi_kumonosu
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: hoshi_kumonosu.jpg
+    sha256: ee926625e688ae1efc93445e4739cacd4470d9614632a783e74ee0c584bb4c15
+- card_id: ichiro_kihongo
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ichiro_kihongo.jpg
+    sha256: 33abdd6420055605bd906b163c07e6b9bf6f989722d503eb74056c72ffa1dad3
+- card_id: ikoma_ryozo_experienced_2
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ikoma_ryozo_experienced_2.jpg
+    sha256: 3495929b1d125eef4b42f04e55f80f8f04b02e4e2d1e8caff6ac9ecfc39be047
+- card_id: ikoma_sensei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ikoma_sensei.jpg
+    sha256: 3070cbad50a536b532d4b061b7b33c18b50132cb7f2d31a9cb200c73deaa9fdf
+- card_id: ikoma_tsanuri_experienced_2
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ikoma_tsanuri_experienced_2.jpg
+    sha256: ee20adb767827bbcb12af93117d74e3f8fb540c2791b57b124562084207e6aeb
+- card_id: ikoma_yosei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ikoma_yosei.jpg
+    sha256: 4882de09d5584dee06246fc0fd9b42d617695ffbfcb340ef86e27879e40e31fd
+- card_id: ikudaiu_experienced
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ikudaiu_experienced.jpg
+    sha256: 4a156e98248ad55c222dc1e36525567da3ba40acea25d0de6cf082f0446624a2
+- card_id: imperial_highway
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: imperial_highway.jpg
+    sha256: 52535f57e269868c59216cdc7e5f99aba97a496c81243d69cb6642a1c1847527
+- card_id: imperial_summons
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: imperial_summons.jpg
+    sha256: 5d23ce8a004554019bd474444da608d975124c1c3c9de60f68a49f1418eaef77
+- card_id: in_search_of_the_future
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: in_search_of_the_future.jpg
+    sha256: 7124bb7de6661960eb1a5197bf7fc89aa9e1404e84ea8e06cb45d58af21decce
+- card_id: infantry_square
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: infantry_square.jpg
+    sha256: b9312d9cf7d4cc7718795d4504ca21f085d3e5df065184e2c64d9114d4af0772
+- card_id: isawa_kaede_experienced_2
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: isawa_kaede_experienced_2.jpg
+    sha256: c3e23d6f9454b3a2356855a4cdb413d196b7ed6a7c2146846ee0847c82a47fc2
+- card_id: isawa_mitori
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: isawa_mitori.jpg
+    sha256: 9147c9344609ea48d59a7e7ec049e7613cc7b26313b47a1e9bd19bf090a6aa59
+- card_id: issut
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: issut.jpg
+    sha256: 6d5848d5b09d43b23cd99b4fe3c87e2e778fd76352128ac500340a3bc76e1491
+- card_id: judgment_of_toshiken
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: judgment_of_toshiken.jpg
+    sha256: 872967f85810dba42ad98c348b0d189e864c4118a01511fe6f6412f87ebb49a5
+- card_id: kage_experienced_4
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: kage_experienced_4.jpg
+    sha256: 3e58f963688864068421c44fbab409bee4dbf31a3337a8235e7497c3f9219104
+- card_id: kage_sensei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: kage_sensei.jpg
+    sha256: c6489c76897e45f6f98ab059ab5967581ed628dc886c02e6776498eab2bd652c
+- card_id: kakita_aihara
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: kakita_aihara.jpg
+    sha256: 17f64f5b90e490074b7027bfe5ab871a52dd0d306e4e326418eddd2279e389ac
+- card_id: kakita_teacher
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: kakita_teacher.jpg
+    sha256: eeab5441867d06850a8157cfae32ae3320ebb47c09061657084ee544ca16f198
+- card_id: kitsune_diro_experienced
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: kitsune_diro_experienced.jpg
+    sha256: 9655ef0ce05a607b5e9709f90953170892371a2d29b2567b20f51be81d84c7d4
+- card_id: kolat_bookkeeping
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: kolat_bookkeeping.jpg
+    sha256: 81ea009b418265b117761c69b3270988a5ea67871f9173dd2bf17f54dbe07ebc
+- card_id: kukanchi
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: kukanchi.jpg
+    sha256: b0cd1a1a0044034cd07c4f8670e1fd948b86389c9867a1342aaa3e558b73647e
+- card_id: kuro_sensei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: kuro_sensei.jpg
+    sha256: c2ff7956d21d2c2d00be244c9b3520e9429987b8ca4c23874b53220e058ad0f3
+- card_id: kuros_fire
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: kuros_fire.jpg
+    sha256: d65ba2b8d1cf799c2b3aacd9dde1c4cff18c5bbe1775c6186806888c85bdbce7
+- card_id: large_shrine
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: large_shrine.jpg
+    sha256: 98e22f818bebf46f9336c2b3f37edee28883614cfc05e12262841ac0f024a1e1
+- card_id: last_stand_plain
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: last_stand_plain.jpg
+    sha256: 0934e04fe47333e9a73ea1affa690145e623b95bf9e0b1ef5f001f1e615cc57a
+- card_id: lookout_mountain
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: lookout_mountain.jpg
+    sha256: 0a3f0eb3ae03fdc661bb866d833e397cca720dd42a57e42ef9a63c7c9ef2978b
+- card_id: mantis_marine_troops
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: mantis_marine_troops.jpg
+    sha256: bc1a37141a08a4d0ae0d1882f7e370daa5b9ff39d8f9ca1559f472197429aa13
+- card_id: matsu_daoquan
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: matsu_daoquan.jpg
+    sha256: 98d42a5acace292597a9362e18f8e63833fe1c7755ca3788ee15e9af7d3f63ae
+- card_id: matsu_mori
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: matsu_mori.jpg
+    sha256: b3ab96a7b0ae5c0f4213e8ff2a6ad8e00ddc18ccc0e696d56850911b5d0345b9
+- card_id: moetechi
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: moetechi.jpg
+    sha256: 2827593e4e36101f9eedc20ac48678b0cf4611dcccadeae6f0797a83f5441fe6
+- card_id: morikage
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: morikage.jpg
+    sha256: 72871ac916206566319d77afb547afa22e41a3766a5843eccab51fd537c02c91
+- card_id: moto_soro_experienced
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: moto_soro_experienced.jpg
+    sha256: 0b91f641ac5181a07e2dc4ae9017d7e72e53ce1315914bb8b4fd051916bb245e
+- card_id: naga_spies
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: naga_spies.jpg
+    sha256: dff0bd933c51ca823dbbb2a782111b6fe7cec96cdc69ec79d71c41d5fcacdf3d
+- card_id: night_of_three_stars
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: night_of_three_stars.jpg
+    sha256: a674c1cdc3e25c783b15dc4cc775c6579eea7f8471df9ab42e252c1794dea365
+- card_id: nio_sensei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: nio_sensei.jpg
+    sha256: aec2c986d54f726fd5e98c36ee5c4a989fb76b7c73af6c95471ba4b8446df599
+- card_id: norikazu_sensei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: norikazu_sensei.jpg
+    sha256: ef54187486eb238c3d3494ab9873d850dfd306c40f32df24ce13174fc51f661a
+- card_id: nue
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: nue.jpg
+    sha256: 47ba5a7e03fa694594e72ff2fa0e7fb3715cf77910e6dc2e1dd1bec07f9a55dd
+- card_id: oath_of_courage
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: oath_of_courage.jpg
+    sha256: fd42dc7f085b898870623feafd905e4b0dc694846bf85ab14fa14cb5108a2588
+- card_id: obake
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: obake.jpg
+    sha256: 94f243bba949edc4a4b42d58b391422610cb868449aacc69162c4677af27a47b
+- card_id: olyah
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: olyah.jpg
+    sha256: 4087b6e6be6815f80a4fb8194d00ff7390891dc051c66ea728fce04e198aa1ac
+- card_id: ono
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ono.jpg
+    sha256: 5c789c6486865fd2c78caa4aecec55b58ffa2489a3fc06b673cba9e471fd40d1
+- card_id: orschat
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: orschat.jpg
+    sha256: 465f41c9b1f58b7ac8badb6ec303ae042e8ba0f18a2c6851e422a26be50ce46f
+- card_id: otomo_shishi
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: otomo_shishi.jpg
+    sha256: a15b1a0223c681500dff7cdfde53086c4689995c023374041095d22c64d3de43
+- card_id: overconfidence
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: overconfidence.jpg
+    sha256: de0a69a61eeae2c43038c9f30d3897d970995224664cefc565575d9286b28d03
+- card_id: parade_ground_practice
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: parade_ground_practice.jpg
+    sha256: f46bbced65350203c91a88509955e372d048fc03d13e2c700ccbfd494a736dba
+- card_id: plague_of_locusts
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: plague_of_locusts.jpg
+    sha256: 9d5a59cda8c8ad4f82711f65e9aa6310d277c0afe493456b07893aa6794985ee
+- card_id: poisoned
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: poisoned.jpg
+    sha256: f3d80eca26c08737c285e8d7d32a2e3fe5da5366d3f1d4f73d5bb3c3f1daca99
+- card_id: poisoned_honor
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: poisoned_honor.jpg
+    sha256: 4cfad5e5898d791867226853d5ec1deb42295502778601f34e755ed129a47c76
+- card_id: poor_health
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: poor_health.jpg
+    sha256: f9936172e324245f257d8e18cd05ce7f6425529ee1fa49748e7a55cdf06fa8d5
+- card_id: ratling_archers
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ratling_archers.jpg
+    sha256: 8474c99c51faf3426bb0725238ad458d67304a4fb4a0836d68ac1c7bcedc2b23
+- card_id: ravine
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ravine.jpg
+    sha256: a64cf379d592a2cdcf3fe2ed74e48a732aacf22b681319298c7e4da8936b1f96
+- card_id: recovering_the_true_tao
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: recovering_the_true_tao.jpg
+    sha256: 421fe0614f24bb42ed95458b12ac2b3a5cea3c7d9f1cdf6af38dd6c643536393
+- card_id: river_around_the_hill
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: river_around_the_hill.jpg
+    sha256: 59c1522f71161047a98acf3518ac34f92cbfafbf943d875b5f341521c381e297
+- card_id: roshungi
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: roshungi.jpg
+    sha256: d88ddc2cb13a08743ffeb9ebcd95e5a6a93ed89be66ff290a1b1c35eb6380c3d
+- card_id: ruantek
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: ruantek.jpg
+    sha256: 4a64142788901c439c5c230217050442bd9b753afb13e85f0757e15c3f0a6439
+- card_id: savaged_fields
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: savaged_fields.jpg
+    sha256: 5fcf74c3d9719a3578d60ea8c4a4d8bb43e84badb14c893f4b11f581e0701371
+- card_id: scorpion_courtiers
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: scorpion_courtiers.jpg
+    sha256: 714b2ad0a516faf3c222740d414013c6d3d00abb9c95b4f3ad900cf972dfae4e
+- card_id: seppun_mashita
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: seppun_mashita.jpg
+    sha256: 40a8405d8ec32b784449be1b2fead5e0a2c27de4e0f6374384af3ce190fe3bd7
+- card_id: shadow_beast
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shadow_beast.jpg
+    sha256: e965abb8bc43453b643738ec0ddc84bf445890746d9c338f9e8908a1281289d0
+- card_id: shakoki_dogu
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shakoki_dogu.jpg
+    sha256: 8b18ff6c89a7999c2a3eee00b42a62c895df2ec1df6eec7bdc189e2a38724299
+- card_id: shiba_kyukyo
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shiba_kyukyo.jpg
+    sha256: 08673701179c752dad5e6e4d4ae01227854d1d2ea03574003821e996272da00c
+- card_id: shiba_odoshi
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shiba_odoshi.jpg
+    sha256: 6d5de82dee49cdb15f5ddae5869f70fa602b3bfc7919e6465a1ee04a43d3a76a
+- card_id: shinjo_shono
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shinjo_shono.jpg
+    sha256: 68b77af8dfd1400c6ebaf67133a2fa63607ea6323167a061737afd4826082c4c
+- card_id: shipyard
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shipyard.jpg
+    sha256: 7d7c1ac3e129ecd13c6e497f88043de7a65bb021947dbb426c1939c288054448
+- card_id: shiryo_no_kaze
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shiryo_no_kaze.jpg
+    sha256: 346ae7f5812fd5dda975c63eaba764e6acf68106d2e0eb6f785d024cbf33a320
+- card_id: shiryo_no_takuan
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shiryo_no_takuan.jpg
+    sha256: 62c7e0f7c42edd6909ac1bcf737642e6ab8190e5e63a612063bb88da7980ddbe
+- card_id: shiryo_no_yasuki
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shiryo_no_yasuki.jpg
+    sha256: 9ed00f46c839264520617a1344d886234316a7e613159e56e3f5ba045624dafa
+- card_id: shiyokai
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shiyokai.jpg
+    sha256: 98e8a2bd7a85b6f59f80b8f79d444a1b997e64419038c46921b97bfe871eafb1
+- card_id: shooting_star_strike
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shooting_star_strike.jpg
+    sha256: dcede4fcf2b8914654922b8669ea354a8478c72e2deb52f55df65c5c6d76914e
+- card_id: shosuro_dojo
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shosuro_dojo.jpg
+    sha256: 0757d3d65c8a272643c3c8f9679082845b907d8c51a597bd3a793be3caf296c5
+- card_id: shosuro_yudoka
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shosuro_yudoka.jpg
+    sha256: 7f320aaa86153545749d1aece457610e9663e49313bb5f74ca5eef9401cebff5
+- card_id: shugenja_students
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: shugenja_students.jpg
+    sha256: 806913f6fa2c584c69d8644a44943fa4f3d7f0fff934382ca145c8d2376b00be
+- card_id: sorrows_path
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: sorrows_path.jpg
+    sha256: 50ea7bab3207587af32b2030ab3dc9620a7c22a416b5f1760d276349f74b946e
+- card_id: storm_of_arrows
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: storm_of_arrows.jpg
+    sha256: 2f16aea4003d3c172516ab47314ee527d60b512d628861d8d254c1c4c93c0480
+- card_id: strong_words
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: strong_words.jpg
+    sha256: f493058b5324f9ff153c6e7f754abfcd417319ec5caa827b17b469bd35183a86
+- card_id: suana_experienced
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: suana_experienced.jpg
+    sha256: 562e383babc8a88f04f19dc6a97c4ee917c2958b11d8ef8c5147c304ac82992a
+- card_id: summoning_the_moon
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: summoning_the_moon.jpg
+    sha256: 30304c3eebe8ed9b3c44cbebe58148c2c24dbc177a9893b0eff473328cc7abdb
+- card_id: swifter_arrow
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: swifter_arrow.jpg
+    sha256: 9d55ac5a8810e971f02549956402dea8d52c74d00d6c835c58f5c762eecb84f9
+- card_id: tactical_maneuvers
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: tactical_maneuvers.jpg
+    sha256: 25a1ad9a09eca8b821597b455933deb3e3346f9ecb7e3e49f8611207f6382458
+- card_id: tangens_i_lies_i
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: tangens_i_lies_i.jpg
+    sha256: 8e92e2bc4f98808b678daa74eb19cd2dbb8aa368717b4774eea64ad6961f4e69
+- card_id: temple_guard
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: temple_guard.jpg
+    sha256: 71ec32ac17a7a7b6e036d146e7fcff7594672e400087d703501af9f74c7ab166
+- card_id: the_damned
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_damned.jpg
+    sha256: f3cacbacf95fb8ea9bd55f451e8ef924d37cdf0a43d9b28310c6176d9f6ec11b
+- card_id: the_fallen_lion_fortress
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_fallen_lion_fortress.jpg
+    sha256: 98293c849f2c55dbecfc29bbc5819cb9a775c5967bdebbbf659b7b4ce4987c14
+- card_id: the_gates_to_jigoku
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_gates_to_jigoku.jpg
+    sha256: 02892ddcfc16ae7d49e1ce628cea898b46509e6f8dc0893b2d4002a3d6069021
+- card_id: the_ikoma_histories
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_ikoma_histories.jpg
+    sha256: b7bbdd05318f059c25a8aa1332b4e3322dae2e85b2db0c1a5f71777ce5c0247d
+- card_id: the_kitsu_tombs
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_kitsu_tombs.jpg
+    sha256: 23b7af4917fc4b9e35cf3f7f8bfb2a03289b951cae7fb2d29aa8f3f29c102539
+- card_id: the_legion_of_two_thousand
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_legion_of_two_thousand.jpg
+    sha256: ea477570f633da65a18d5f7bb680a890fd7b11e8156d654539af3886ec1383ca
+- card_id: the_new_akasha
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_new_akasha.jpg
+    sha256: 8492c5ebcefb0c40139f69b67c5cd69f20d55ee40ab3d4a90727652a8269a63f
+- card_id: the_path_of_akodo
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_path_of_akodo.jpg
+    sha256: efb8e1a583920c3b69e1337419fba1fdb4e91269a33f53a33dc5243eea34d3bf
+- card_id: the_prophecies
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_prophecies.jpg
+    sha256: 7b686d963e95a651a3879d38b5a2dab25d0a3c89c820662ca1a1daa635a07a7a
+- card_id: the_spawning_ground
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_spawning_ground.jpg
+    sha256: d3e1dc59d5cc2e23585da299303298bcc6d2e7bd440a838dca9a61431f11d28a
+- card_id: the_sun_in_shadow
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: the_sun_in_shadow.jpg
+    sha256: 6ae9a1e81c8f0beb8a10481ea306fa5d51e1bad73381ea7eb0ed7679f9b80808
+- card_id: togashi_hoshi_experienced_2
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: togashi_hoshi_experienced_2.jpg
+    sha256: 2b4356bfb643fb18992c2575ef2da85877dade9bdc61e8cba0c2de30829a0aeb
+- card_id: togashi_shinseken
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: togashi_shinseken.jpg
+    sha256: bfa2d0de6d6f90bb585c070a5ec3e69f63e02a55e1e72fc742bf6a3791273710
+- card_id: tohaku_experienced
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: tohaku_experienced.jpg
+    sha256: 7d9004505de165ae7799124517ca118d7a8a2eaf216466d92452feaedc4f990f
+- card_id: toichi
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: toichi.jpg
+    sha256: 52b0c5a0885617dc8e3c1b64580dce28abaea090a23274f9637f7dfcd95749b2
+- card_id: tonbo_toryu
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: tonbo_toryu.jpg
+    sha256: bb51f70c6b71bdcbb182d2c7bdaa6ec0636376ded885119a51feaf05fceceaf0
+- card_id: toturis_treatise
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: toturis_treatise.jpg
+    sha256: 7217268de00a24a8eea4d294c2377ab69fd7b4a466187d62248dec7d44cf6885
+- card_id: touching_the_void
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: touching_the_void.jpg
+    sha256: 6efc63d44e0ec3910970f3920bfa74449cdc86c21cc3e68cac81e77ef44075dd
+- card_id: troll_raiders
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: troll_raiders.jpg
+    sha256: d1c386db6228f5d517ccfbd8e6af4e620127eec9395c61cf93148b2274b4ff86
+- card_id: tsuruchis_legion
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: tsuruchis_legion.jpg
+    sha256: 8a879cf2ac047b31cfc4be24e5420a61f6feee0648e0ea4f4c3ef4e4a98784e7
+- card_id: twenty_seven_days_of_darkness
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: twenty_seven_days_of_darkness.jpg
+    sha256: 9a990677ced1c597df212e355495415228764f66c7355f5144cc3e5f126978a9
+- card_id: uncertainty
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: uncertainty.jpg
+    sha256: cc4c3fd869c2c592e575e4dad11a41a0f50b1b660758c3da55d505e6286020ef
+- card_id: unmakers_shadow
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: unmakers_shadow.jpg
+    sha256: 090c0a23b4098f07f472f6dc80c2371c7814287a3d492f24fb69c397f8de8970
+- card_id: voids_path
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: voids_path.jpg
+    sha256: fde279f9f2522ff16301536d2d8e1d9b2bd5dd5833340148ba487cb2eb4d1cf2
+- card_id: war_weary
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: war_weary.jpg
+    sha256: 2d0dc437722a85e8ade019ea59f5d833af1b7bbe9afdc6730d26355b79fab287
+- card_id: way_of_the_zokujin
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: way_of_the_zokujin.jpg
+    sha256: 3d52a90091d333ccf13cf6c652f109c0fee9e933d91a0117b247d568cb3fec4c
+- card_id: woodland_reserves
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: woodland_reserves.jpg
+    sha256: 146fcb564f2686235656e98049c6f74fb746b151c39603e5cb2dbf8e49022e78
+- card_id: yabanjin_horsemen
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yabanjin_horsemen.jpg
+    sha256: 689f9e448069462e664df1b1d7ede2007a03dae0e6a8eadfbd658f5f8756405e
+- card_id: yasuki_nokatsu_experienced
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yasuki_nokatsu_experienced.jpg
+    sha256: 73ca66a7e5183bbddf423413718338eed7122e8cb5d135d1f0af262f2c539a86
+- card_id: yasuki_taka_experienced_2
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yasuki_taka_experienced_2.jpg
+    sha256: 69f68b0f0cdd54bade03cd0a7b41bb3dc9888374e22b4f43ab82f74c804e4da7
+- card_id: yokai_no_junzo
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yokai_no_junzo.jpg
+    sha256: 21cf9d93a8dc4c4ebd9765469ddda21fc194adb6ce943ea5f68568e269814f21
+- card_id: yokatsu_experienced_2
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yokatsu_experienced_2.jpg
+    sha256: 92ea3023e7bc2a62c475edc17633fc4682d2ca9d5df603683992052e52f745ac
+- card_id: yori_sensei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yori_sensei.jpg
+    sha256: 889bba324347535bc6f16a69e625a371f03eda3eced5b3e5c48cf496de9fa91f
+- card_id: yoritomo_chujitsu
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yoritomo_chujitsu.jpg
+    sha256: c983d82bd3ec4494d53e98fb61ee5dd3e16c219a7bc674e33aa1f7f435676758
+- card_id: yoritomo_furikae
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yoritomo_furikae.jpg
+    sha256: d31e827b3cae2dc722fac6b5f27e33b5faaba6ad12f33d9282ef1d18332a29f4
+- card_id: yoritomo_sensei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yoritomo_sensei.jpg
+    sha256: 8ff55cf74e1835be30b76e2bbbbd4f6ce22397784d4591cec215692d0cb08418
+- card_id: yoshi_experienced_2
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yoshi_experienced_2.jpg
+    sha256: abbe4366ef60cc1dbc071016d25cee97c98511712fae382e7a9fd9704d70956a
+- card_id: yoshi_sensei
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yoshi_sensei.jpg
+    sha256: 691da81c8ac7fabf58a78038b54fcc9eb3eafb9c67efc46996a9832cf3d21cf6
+- card_id: yosuchi
+  printing_id: ambitions_debt
+  files:
+  - role: front
+    file: yosuchi.jpg
+    sha256: c2bcd1f2f134064ceec26b4cc31d184f2891aef93e5559a3f1fb4dd9734a6f12

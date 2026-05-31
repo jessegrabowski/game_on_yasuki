@@ -1,0 +1,1115 @@
+set: The Coming Storm
+images:
+- card_id: a_growing_rift
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: a_growing_rift.jpg
+    sha256: 77afd1a63b2cc9806457c6641fcb0615f9a91a76e0a333e9652cd93c6bb603ab
+- card_id: aikiren
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: aikiren.jpg
+    sha256: 5619eb861d119c4686c9db806b9a3ce6844291704e0846885451865a9d2abcec
+- card_id: akodo_iketsu
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: akodo_iketsu.jpg
+    sha256: 8fc1fb6983259a07dddb514406f7ab5aadbeab484bbbe9ec5dc66bd2b543dc95
+- card_id: alchemy_lab
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: alchemy_lab.jpg
+    sha256: 0c5d7b9f6e229327b4872f951a370c7e62d2ed887003679140675ba42af1a91e
+- card_id: aramasus_mask
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: aramasus_mask.jpg
+    sha256: ea4dc4b2155b36dc4a558b700e5df6bee8fd347dd732e58d7db15b790a005795
+- card_id: aranai_sensei
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: aranai_sensei.jpg
+    sha256: a121141e120aabf97ef45461c04a0435035c56bbc688218adb069d6e38fbe925
+- card_id: armor
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: armor.jpg
+    sha256: e05a8f8c1c0b08f3c9286a7a1e23d20d881ff2ab913b93c783cc33e77d5c6890
+- card_id: arrival_of_the_ivory_champion
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: arrival_of_the_ivory_champion.jpg
+    sha256: eb2bb8fa13f0310d09c30baa6a0b8c5d077010767ef27ef9b772de3c3cd01d5b
+- card_id: ashalan
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: ashalan.jpg
+    sha256: 6d450135b0f3d0bcbd16c1b8f82f7bf5927a14995cf6c13242c9fde722f51d53
+- card_id: assault_unit
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: assault_unit.jpg
+    sha256: 83e3c30894b975e6fc02b3ba0716ac39c1677ac9f1bd39a053b989004f73b1a3
+- card_id: auspicious_arrival
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: auspicious_arrival.jpg
+    sha256: 29a465ad475be2d8ac1c91a3058412aa8fc136668d27edd30a2671d4e9155809
+- card_id: awakened_naginata
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: awakened_naginata.jpg
+    sha256: fba5b71b65442d3bdc55b20f27e7bd0bfbcbaa360ce4b009c6f38dfe98b12eee
+- card_id: baraunghar_scout
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: baraunghar_scout.jpg
+    sha256: aaf56258b86577918b5ffeb7c05eed241eb68315ea6cd1e775766fcd9ea71763
+- card_id: battle_attendants
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: battle_attendants.jpg
+    sha256: d0d3ad352efa45c120aafa8258a323ae9f1d6dbb2aa1fcbba89034377c3a62b7
+- card_id: bayushi_akagi
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bayushi_akagi.jpg
+    sha256: c0d9092a6be4b8291188b4a3376079f0942ce4fdc5df4cf414751bd56dd98f59
+- card_id: bayushi_fuyuko
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bayushi_fuyuko.jpg
+    sha256: 62b0dd9f2c2a44134b0ab00271b9d8b739e4b435c9e1bcd4480274e41cc2c997
+- card_id: bayushi_jinn_ja
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bayushi_jinn_ja.jpg
+    sha256: 17482b437d2b1e4684404e1f6e83fa6c60e7753e3a37fc28383284c42da8472a
+- card_id: bayushi_kotomuri
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bayushi_kotomuri.jpg
+    sha256: 88d6b59243a3dbc05ae125ebcbf9ed9061c27966c5b8ba2b4100e7cda0263876
+- card_id: beikos_bear
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: beikos_bear.jpg
+    sha256: 857e570b518fd200f38e968e43f75945875404f07520b5b01124646a3247e0a9
+- card_id: bishamons_bow
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bishamons_bow.jpg
+    sha256: b3593d0b44403cfb2c2cc83713a2a387e4dad83a80d41e2349f75149e038861d
+- card_id: bitter_lies_technique
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bitter_lies_technique.jpg
+    sha256: 4ff44d88dbf912b9bdf4454217919164b5b20120f569e08b8c45c602914cc3b8
+- card_id: bleak_lands
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bleak_lands.jpg
+    sha256: d8cb5ab5c79a792ccf32eca8358565ec0959cc1c859c79b727a69f6d019a4ef4
+- card_id: bo_of_ritual_blessings
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bo_of_ritual_blessings.jpg
+    sha256: 4d7da4e64aace749a9e2fd6921f47283b1d4dcc75d93832f25ca212174f833dd
+- card_id: bonds_of_service
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bonds_of_service.jpg
+    sha256: 9d635c1889f73ae21b03a3127644b57c14a4dbbd1488979e490c1653c41cbcd2
+- card_id: bookkeeper
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bookkeeper.jpg
+    sha256: 3b9ed8c9f2e330442caa1c4c5e6b395f0cd708abdb58607e53754706313a83cd
+- card_id: bountiful_fields
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: bountiful_fields.jpg
+    sha256: 71f9754231ea5f992024eab5cddb50d58bb122e3598c8a429205922634f8ef02
+- card_id: carpenter_shrine
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: carpenter_shrine.jpg
+    sha256: a3e11ac1d9d4bc226a45208c8f6539baa1da3a426db30aa045288d0320a6725d
+- card_id: cavalry_escort
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: cavalry_escort.jpg
+    sha256: 2914d91309e8a669141cca1bde5b92481ab103855a00d0bf973237c8d8643aae
+- card_id: champion
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: champion.jpg
+    sha256: 2107fcb5fed06fe138cbbc0b48b2da2b1e404149a7f76b027d5f3dad845671b7
+- card_id: clay_yojimbo
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: clay_yojimbo.jpg
+    sha256: 39ed5e49da742aa3776f876026f24a5a6d962e1b17dc015362662aecf66f1345
+- card_id: cloth_market
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: cloth_market.jpg
+    sha256: bb283440426c3205c9895b19c5fd39f7b84430b5e285b01300fd8c7d1fbe2058
+- card_id: contained_at_court
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: contained_at_court.jpg
+    sha256: eec89c74cfc7d873edceb3a38bcdd05f96b0493f6553d27bf11285d9170159d5
+- card_id: daidoji_ryushi
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: daidoji_ryushi.jpg
+    sha256: f7f5829a14ec57131b38d0a91be5e1eba575a2af96b07809ad18493893196e51
+- card_id: daidoji_sutebo
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: daidoji_sutebo.jpg
+    sha256: 7e7675cc141a9aeaad8270312af84228e998c9c1971cb4fb517409e99bab46a5
+- card_id: daigotsu_atsushi
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: daigotsu_atsushi.jpg
+    sha256: 42779dff129d20a1eb92846ec3118a555ae1fe71633c65a62427728ff368e508
+- card_id: daigotsu_teruo
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: daigotsu_teruo.jpg
+    sha256: 5bcbb7e3ecbdfc1629f2ae20ff2e0195cea985ff035d0d0514509e534fc32068
+- card_id: death_from_above
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: death_from_above.jpg
+    sha256: a5272446fdd317687dc7644f98b2f0dcf68fdfb93f491bcbb7bda3dc800b59b0
+- card_id: defending_the_city
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: defending_the_city.jpg
+    sha256: 7fcdd883221f0e9176b9401950b2ad09ebd32d20a39d9100496869cbcc686c1b
+- card_id: defensive_memorial
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: defensive_memorial.jpg
+    sha256: 3edbe2f52fe8dafd10f891c22355ad334264e9589d8f23dd713f66159d286a99
+- card_id: defensive_miko
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: defensive_miko.jpg
+    sha256: 01bd1daa7295856475cc19d72048542bedb2c45ed51b9ff5d7769ca83cc651b0
+- card_id: denial
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: denial.jpg
+    sha256: 64ee0d77711dd5616946c5ccdb25eb4989fd85f3e32041044be9d3cd6c15a7aa
+- card_id: deny_the_false_form
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: deny_the_false_form.jpg
+    sha256: 7598c4d0de1a42c5561df9f48f927b24c3bb822ab5c8c14c7cb61cfd91f0f2a3
+- card_id: discovering_the_anvil_of_earth
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: discovering_the_anvil_of_earth.jpg
+    sha256: 10c5613bb9f890c67dec72cd23ebecbfb3d73df7735c48cf720d0d437ec1dc23
+- card_id: discovering_the_daisho_of_water
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: discovering_the_daisho_of_water.jpg
+    sha256: 56ff1ec6f98e7c3d9c8435420f2917ff50b6230ec47eced671226d6c6aa01411
+- card_id: discovering_the_seeds_of_the_void
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: discovering_the_seeds_of_the_void.jpg
+    sha256: be35d4cb2dab604465a3a72d1fbba727dcebca5e043fe1217906bedae1a77200
+- card_id: discovering_the_shakuhachi_of_air
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: discovering_the_shakuhachi_of_air.jpg
+    sha256: 6e241a5817307e10e5e49ee64d41d6eb70c4d081e7bff32060ad367128841939
+- card_id: doji_natsuyo
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: doji_natsuyo.jpg
+    sha256: 584552ea04240959a2212c26a086bfa58dc5eea11392d748c14aeb48c883de6a
+- card_id: expansive_range
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: expansive_range.jpg
+    sha256: 492fcd87a1b9e9655719ae2a20e722e20e3653ea06b4496233b617d82b684ad0
+- card_id: fear_the_thunder
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: fear_the_thunder.jpg
+    sha256: dd5733e439ddfaaabeaf0be54c655e0730f978485bbb091d0a2c257368233407
+- card_id: gates_of_the_second_city
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: gates_of_the_second_city.jpg
+    sha256: 153e97c865165886ec14595a0353b982afb69b58dcb1e7cb3e06d0da4ad7c66f
+  - role: back
+    file: gates_of_the_second_city__back.jpg
+    sha256: 81ec3ddc9716123ddafc2e3e17163d870301e62d966160b5a8e3078c6c22fb6b
+- card_id: goblin_follower
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: goblin_follower.jpg
+    sha256: d3b1beec72c83a9a1dffe7d08d55fa1d631a6162039ee46454e1916d89f231b1
+- card_id: hida_zaiberu
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: hida_zaiberu.jpg
+    sha256: 515b79b85ae6816a4773d6947d201743a016796f9b28f213ba108c88e39c16cc
+- card_id: hiruma_maiko
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: hiruma_maiko.jpg
+    sha256: 99e50dbb0e65f9cd3ca95fa3884fefa4917ac8ce7c7d44c9ba32782f5d31789b
+- card_id: hoteis_smile
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: hoteis_smile.jpg
+    sha256: 1d146f17f3cea13ba4008f48e4898e8fc14fc5ff6ca1603a91de4178b240514a
+- card_id: house_of_disgrace
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: house_of_disgrace.jpg
+    sha256: 734d71de1c841e6ad30e368bad0b49416873c78da8a8e1e23883134493ea3db7
+- card_id: ide_aragaki
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: ide_aragaki.jpg
+    sha256: 13f6597d9aecd12a8e001682f77dd313b488c66583d222f6b71485d89b58fbf7
+- card_id: ide_kosaka
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: ide_kosaka.jpg
+    sha256: 7d718788181e2756186622b1650bc3d6b451d7da7204c4aba672790360bb0a78
+- card_id: ikoma_keisuke
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: ikoma_keisuke.jpg
+    sha256: c88fd929ad567ccc00dc331744732696068fa15435a513d6131f5c93eb85f046
+- card_id: ikoma_shungo
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: ikoma_shungo.jpg
+    sha256: 0b6422a954ba004f3a669c35d028c728cbe29c13828f165b2e8dff917de953bc
+- card_id: inspired_leadership
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: inspired_leadership.jpg
+    sha256: c12543321acf39dfaaaae8188baa619a73f92b4946fa1a70b6c93c349b90482c
+- card_id: interrupt_the_voids_flow
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: interrupt_the_voids_flow.jpg
+    sha256: f4b1799d94bafa3cb7c891e9f9a8e410537cdef46ffeec14a250c45ab711a7e7
+- card_id: iron_and_stone
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: iron_and_stone.jpg
+    sha256: 8b35698466c0f201e36f92ca7a997998abdf1f5726b27d4801cef743b6d3ea47
+- card_id: isawa_genma
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: isawa_genma.jpg
+    sha256: 75bba8ef8bbaf9da7c2a3028e1f0708d2df79eb336a7c6f7d9551925011d5e4f
+- card_id: isawa_kaname_advisor_to_the_ruby_champion_experienced
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: isawa_kaname_advisor_to_the_ruby_champion_experienced.jpg
+    sha256: 43ed601b15b3dcbfcba8c21dbc0f0bacafc19ca0b8b6a4bc4c92b58c1ac79fb2
+- card_id: isawa_kido
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: isawa_kido.jpg
+    sha256: fdef40dbe966d203c45194020acb925702656cda48a6032fd73d9dc2fbb4d4de
+- card_id: isawa_muira
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: isawa_muira.jpg
+    sha256: 74f4d7c38f5255e70cb7ca7da68e999bb185c4bed3ac89fd91789b8df2d6a54f
+- card_id: ivory_champion
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: ivory_champion.jpg
+    sha256: 7277861173b9618bc4e24257148187b05592585e66d4bcd319fe956ab5c77a59
+- card_id: jiramus_wakizashi
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: jiramus_wakizashi.jpg
+    sha256: bb061fd4dc97ef688441e6a92542cb7447812a110fe4458bf5b5435795154c30
+- card_id: kaiu_axe
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kaiu_axe.jpg
+    sha256: 19888683e2fc36d3815762b1e120a22ed27a5a0cce5be64ceb6f0bc902c4b76e
+- card_id: kaiu_engineers
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kaiu_engineers.jpg
+    sha256: f5e7367eb32ba76fbd09f60888f5487e69e1d3ab6d5001c249bbec551ed16ecf
+- card_id: kakita_burei
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kakita_burei.jpg
+    sha256: b86e9a963cd61cb746945ccae8c8167708d6424a27fd11f9181b445194aaa69c
+- card_id: kakita_jikeru
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kakita_jikeru.jpg
+    sha256: 54ab28dc89c2c35cbcd80439ae6a5e4a21d24c7b9c38611a978e8ab25109b92e
+- card_id: kakita_mitohime
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kakita_mitohime.jpg
+    sha256: 2ba60783caccee5a705376a553befca754874cbec92c6e06850ae8ef54d496fb
+- card_id: kharmic_threat
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kharmic_threat.jpg
+    sha256: e80dc37bfb9dc103557bb24a166589583baf95bb08d34e2c982aaab26adf1608
+- card_id: kiba
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kiba.jpg
+    sha256: 4e34b750f0174ab7fd40037363dfc06e4df5886c0a230a56429b483e9800ac59
+- card_id: kichis_shadow_badger
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kichis_shadow_badger.jpg
+    sha256: adadb8f6ca8b65e001672afd0f09c0b0299ee2b951f7920d10b3d1664c362cb5
+- card_id: kikko
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kikko.jpg
+    sha256: ddc3a82fba5cce72ffaff77c5d80fa75fb194bffb1d7f6ea23fab637e0644f44
+- card_id: kitsu_asato
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kitsu_asato.jpg
+    sha256: 2f560941e99563800b4d770a55847cc5165f5ee62cedc98c83bdb0a10f46cd1f
+- card_id: kitsu_leiko
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kitsu_leiko.jpg
+    sha256: 45e4da33d865397f7532025e65a718f3cb96e685563a1ff642aec29056b83fac
+- card_id: kitsuki_kira
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kitsuki_kira.jpg
+    sha256: 97b1548e3ccc1a66990e13fc1a011af088d9a4c3a07f223d7d1be57c2371b121
+- card_id: kitsune_beiko
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kitsune_beiko.jpg
+    sha256: 40b70cd3195d6e11fd703fc6cb66d7f01bbcdcb444f07052a49bfa0e40cc34fb
+- card_id: kuni_shinoda_advisor_to_the_jade_champion_experienced_2
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: kuni_shinoda_advisor_to_the_jade_champion_experienced_2.jpg
+    sha256: 6c2aa26cddf5ab0f726035605fa00b3fa0841f5393e87a98dd9a4118fa141f39
+- card_id: legacy_of_tadaka
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: legacy_of_tadaka.jpg
+    sha256: bfebd0f2b40837336af045b5d0c5e00d3e54fcf1bce5417375bbf65d5e37d4d9
+- card_id: light_follower
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: light_follower.jpg
+    sha256: 273426907ac2581f6c2e7322875b629c49ac11773a64087cbd3971ee33df9f3c
+- card_id: lion_follower
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: lion_follower.jpg
+    sha256: a46af1743ef5f50c220b6d3bbfbe919b6337831cacc13e4d3f3c34ba9602d334
+- card_id: little_elephant
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: little_elephant.jpg
+    sha256: 386d79c1922766217c6688ffc9e866ac835b5e8b72adaa51697e91d028e65443
+- card_id: look_into_the_soul
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: look_into_the_soul.jpg
+    sha256: e6ba21946986e021aa443e7527650e7528a923de678d87389270ff78bf31aae0
+- card_id: losing_favor
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: losing_favor.jpg
+    sha256: 4a44e141f4cd844db1866a9372ddf1d8f3bb9371795e7c0d95093d9a59aae975
+- card_id: major_illusion
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: major_illusion.jpg
+    sha256: a6a0eb30a94e65a7347c734f0294c5029e43e8f03e98721b7593ee1365c3cf00
+- card_id: matsu_marii
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: matsu_marii.jpg
+    sha256: a8cd6708d8a281c587a24ab3e1903d6ecf6bdaf67a0bed573a421d3d1672d0f2
+- card_id: medium_cavalry_follower
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: medium_cavalry_follower.jpg
+    sha256: 9703c50211b8d917b9706b405e5541ef8cc6079a72e0a72b8b833158ff0171ee
+- card_id: medium_follower
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: medium_follower.jpg
+    sha256: 8ab025841159743ce84fd6606c85e65768a8f720c690ea64dbf5c445bb3e81d5
+- card_id: merciless_assault
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: merciless_assault.jpg
+    sha256: 53a13944860dbd2d2ebad1af3e89b34bcfd3e301cd028ac115966511eff8b2ee
+- card_id: minor_illusion
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: minor_illusion.jpg
+    sha256: 5fb91d27416bbd815118962c15ccde7121fb5e4998c2f8a3121ced153caca75a
+- card_id: mirumoto_reiji
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: mirumoto_reiji.jpg
+    sha256: cbf8bf3f79e784a0de0a37a48ca8f73afbfbebfe708ae5f5a6921ebae05495c4
+- card_id: mirumoto_takanori
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: mirumoto_takanori.jpg
+    sha256: bc3d17b9b05b6e0f7375df5f3683168bb1ddc37b89045eb4a250bcb0c7b1bdd6
+- card_id: mobile_troops
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: mobile_troops.jpg
+    sha256: 28fd7ceee14a1b370bf8ca9d4e79a5878cfd78dbb475eae72816bdea7c575a3f
+- card_id: moshi_raiko
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: moshi_raiko.jpg
+    sha256: 1e7a07dbce2d94bbeee0d97826bc53e4d79cb5a61f22abc7137086521bcc3827
+- card_id: moto_erdene
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: moto_erdene.jpg
+    sha256: bcf9e60b2618c319fa1b38cc4aa0a712d8fb16c672ab46e6b696754a230a165a
+- card_id: moto_qorin
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: moto_qorin.jpg
+    sha256: b7f19c3742f52cbf243476ecf267a6a220b69dbd97336219401da383c8f88b2d
+- card_id: nao
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: nao.jpg
+    sha256: 4868ace9bb8923e05d723eb79c1c0e07c203363c71f8fa2d7b24696cb6e97250
+- card_id: oneiyara
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: oneiyara.jpg
+    sha256: 86284fd199b0ca051b844a106ce73f8b6bf7e73d303fdeadaa8e36ed8c2e447a
+- card_id: oni_hatchling
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: oni_hatchling.jpg
+    sha256: e0f6182952766e8595ee34e0beaa99d5cc67df9ecb3c523eb268a7b92045ec3b
+- card_id: onyx_oni
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: onyx_oni.jpg
+    sha256: c195e9464cb68ae3b3b5ecaabbac4fd52419016238481aa35c9b98272526ccae
+- card_id: open_roads
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: open_roads.jpg
+    sha256: 88e1c3150f080e62f30004628cbf6d8d84c569cdcc804db36f97d0fdfe8771e2
+- card_id: osano_wos_bow
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: osano_wos_bow.jpg
+    sha256: 6d518bc9f18ea9fe711e13bf2648a52ef7dd96034ad563ea899f84c33796372a
+- card_id: parumbas_boar
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: parumbas_boar.jpg
+    sha256: fac8a1316eec9f3234843a24804db77bf6a9d4d1935390e9cf238e5e5b401dc2
+- card_id: patairaku_no_oni
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: patairaku_no_oni.jpg
+    sha256: 39c723c6bbf87c121043b7fdca9f5bf701ff87d5de6aae857167819543ae667c
+- card_id: peasant
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: peasant.jpg
+    sha256: 84a8d84efe10b7f41e59c5c10c307a4b970d4b950e84bc25f583f54e885a4390
+- card_id: personal_guard
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: personal_guard.jpg
+    sha256: 34699e6f565981fe415d6cd2b0755f2a68232d74ba7946413891375c116c5301
+- card_id: persuasive_tactics
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: persuasive_tactics.jpg
+    sha256: e9ddbde970d825ecd0308928b570f947dccc10b334cfee627229022f2bd05300
+- card_id: profiteer
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: profiteer.jpg
+    sha256: ba4076ea620ebeb9fa01ceac08127167116fe317c50d8da21d05407f528e5c95
+- card_id: proper_equipment
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: proper_equipment.jpg
+    sha256: 8190d836e790a8a90caf7b6d4a09cac6843e21552f126e50903467733a7574ac
+- card_id: punishing_blow
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: punishing_blow.jpg
+    sha256: 608bd8f20f3383206afb96b448d7b24a8f0a429307808e4304a197571c0b3eca
+- card_id: relentless
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: relentless.jpg
+    sha256: a608247f6d2c351aa300e9fa78e203ef41850cc6b31953780321affeb38e2b3f
+- card_id: relocating_the_court
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: relocating_the_court.jpg
+    sha256: bea458f848ad9dc7dc36833e0eb7cf3f20a1b74f54c69e028c6097946918aa73
+- card_id: samurai_lancers
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: samurai_lancers.jpg
+    sha256: b4be5567187c14612f870d89a7234bf145ab7d265d7a596afb882e7e6f2384c1
+- card_id: scout_training
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: scout_training.jpg
+    sha256: 7abda9064279347a6ca793a2d670c0304cf609f8c1169f3620e29d05f8a5a9c6
+- card_id: seppun_teshan
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: seppun_teshan.jpg
+    sha256: 4009baa999ff85010d478470ba2c739deeb8ffb982ec0662f8ee991a98c9448f
+- card_id: shiba_kakei
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: shiba_kakei.jpg
+    sha256: 07d1545018a9ac97e3ff6f7c4a2b777432e114304c49c693cfa3d3f0bfe802d2
+- card_id: shiba_yuuchi
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: shiba_yuuchi.jpg
+    sha256: 558db5f1baa1c0ebdeef1f74be66640c3adf138fa524c2893fea60fa63375698
+- card_id: shigekawas_court
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: shigekawas_court.jpg
+    sha256: 4c4c6342212d5fcd3b1c3460cfaa5e0f31d8ed9fdb6b776c2fab99951385a776
+- card_id: shinjo_ajasu_topaz_champion
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: shinjo_ajasu_topaz_champion.jpg
+    sha256: fa6fc68f5f9117875447fdc8194165272466788f0aa88b2c0cc5f54f510e38fa
+- card_id: shosuro_kayo
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: shosuro_kayo.jpg
+    sha256: 7a3f5e30a4cfe92031920688ca421cdca01da0e1dec9833a4d7ffe45ef126ece
+- card_id: shosuro_sadao
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: shosuro_sadao.jpg
+    sha256: 0c896603433055e53d9e73a1eef5a1d1c216ff8401e6e88f18e5cbffe5b11728
+- card_id: signal_the_scouts
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: signal_the_scouts.jpg
+    sha256: 16805aa2eb4423ed0edb24cea73f4879632e6b022ecf7ccee4b8948cdca90905
+- card_id: sinful_dreams
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: sinful_dreams.jpg
+    sha256: b11c64ed8d82b13d982bd41c6df7e414909a2452785ce5133caf71d85c801872
+- card_id: singing_blade
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: singing_blade.jpg
+    sha256: 930edecb54ad5a61da274c9389651941b48bc0b7ad4e880675505bb37d61a2d9
+- card_id: small_holding
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: small_holding.jpg
+    sha256: cc5bc8f7603c0f1eadeb0aab378a7ec1327863bdfc508f2666f62a6eef2749e1
+- card_id: soheis_ono
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: soheis_ono.jpg
+    sha256: 045f5f11488b934be73882473749acb6de238570310d89b795ded7ce02ce5b27
+- card_id: sora
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: sora.jpg
+    sha256: 24f4c13dc41873ae0fe7a373f8f57a615ed2ebf14668fe20838ae532ff521123
+- card_id: strength_in_subtlety
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: strength_in_subtlety.jpg
+    sha256: d9350cebe8198f8b43dffc7426681347e6752bb3fc2f3c8d21950717000cbf7b
+- card_id: strike_as_the_earth
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: strike_as_the_earth.jpg
+    sha256: 24e60487807fe450bdb5b8abcdaa5ef7a86bb15d759ad6e93bf8c5571a0949f8
+- card_id: strike_as_the_wind
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: strike_as_the_wind.jpg
+    sha256: 16fb7f07ce39c7cefacc06acc1d11721fb3e02cb27141f029a6bbc744bb17d02
+- card_id: sudden_storm
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: sudden_storm.jpg
+    sha256: 6bf41fee2781f6705365d5bcdb20b947a3386b069eae83d28a55ad773d32eb82
+- card_id: suikihime_sensei
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: suikihime_sensei.jpg
+    sha256: 25827c35b2a7caf40f3fe2ec52241aa9d2a4d71dedf38d364d7cee15aac57229
+- card_id: summer_court
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: summer_court.jpg
+    sha256: 52d245c5a74eae88bc8a8449ae1527c2a9e28ec0238965635933e8d4bc41b766
+- card_id: susumu_mizuki
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: susumu_mizuki.jpg
+    sha256: 81f733eea139f92d1cb66adfe04b3d7696307dad43169f90f531ed1e85000774
+- card_id: susumu_takuan
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: susumu_takuan.jpg
+    sha256: 02c9e11679fecca91cc6d64fd0765d59fac7ccdc9f07314ad3ddbd49f44f9010
+- card_id: swan_technique
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: swan_technique.jpg
+    sha256: c3b0c243f3de748e7d99e31af08143d140511dcfd7370339e8392dbb7e030df5
+- card_id: taken_hostage
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: taken_hostage.jpg
+    sha256: 2b7039ddc635bf7d75b0820e6a89abd89dece982368776d0979612ab753a8160
+- card_id: tamori_junya
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: tamori_junya.jpg
+    sha256: 146daf0defbf8436884fab01469fee46694304653e66de43fa9c5afb3ab32bf1
+- card_id: tamori_touya
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: tamori_touya.jpg
+    sha256: 8479228a56d005bdfb25ba20bd8cbb23aa76f8964b930b1943a60e6c16ed8f5a
+- card_id: temple_of_serenity
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: temple_of_serenity.jpg
+    sha256: 3aaf7c96086ea4cd44102f419f4c59b1fa6d303c8c1edfee09bad8f9c9617644
+- card_id: temple_of_the_heavenly_crab
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: temple_of_the_heavenly_crab.jpg
+    sha256: fe6d35a85f7277187d77e32c46158c776748ba663f2ff9d01cb3165900d5a24a
+- card_id: tested_blade
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: tested_blade.jpg
+    sha256: 0cb352c816b1274eaa82af0ac9abad9c18b30e908b76113c1debff6e00d9f9ff
+- card_id: the_blessing
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: the_blessing.jpg
+    sha256: 71bf174fe18516e02a796247793509c004046069e3490eff9aa6bb26d615aca6
+- card_id: the_dragons_breath
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: the_dragons_breath.jpg
+    sha256: c08a152f57b142c0a8a04e2e914825044fb03c85b2de5e13c982ea247fc7b284
+- card_id: the_dragons_talon
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: the_dragons_talon.jpg
+    sha256: bcd79fd7d60497af2a7ae80bbf35eb66a9125065f01b055787db7f9935835263
+- card_id: the_eternal_chase
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: the_eternal_chase.jpg
+    sha256: 464e5f9af964eb3b10f62431c894eb34c7acd063300b653fc2f79d2a4a0b40c4
+- card_id: the_swell_of_the_storm
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: the_swell_of_the_storm.jpg
+    sha256: bb876406f4eb5c43f1e39f25d4049de191a1133f0370563ef840930abeeea49e
+- card_id: thousand_year_rivalry
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: thousand_year_rivalry.jpg
+    sha256: 91d69a665c1d7220486e0c6b29818937dd08634a5570458fd3136595d069f702
+- card_id: togashi_yayoi
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: togashi_yayoi.jpg
+    sha256: 1a8004b718a21548a59386461d3c7f7833b61b90f9a1a7d12e9c3e686244f396
+- card_id: toritaka_isai
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: toritaka_isai.jpg
+    sha256: 6161d00712dad253849c54c65fa82f63fc57182fe0282fd660d78a8acf12813f
+- card_id: tower_guard
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: tower_guard.jpg
+    sha256: dd90f5addbebc6f54b05e613d6c9298ff4904956ddb3a82f825070d50aeca9c1
+- card_id: traveling_ronin_experienced
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: traveling_ronin_experienced.jpg
+    sha256: 6cc8b63e5df5867f3366e9301f0ac389c6cd09ec1d22bad431a84bffc7602bac
+- card_id: tsumaros_illusion
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: tsumaros_illusion.jpg
+    sha256: db61e966fcca648f2b8e245c4b2e6b989b0e7c511ebd645e7b68a983ca5004cf
+- card_id: tsuruchi_hikari
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: tsuruchi_hikari.jpg
+    sha256: 74dc20e730e81c5ed5704387bfb7f42a5c19c7f968acd351c4036f6e2927f4bf
+- card_id: tsuruchi_yashiro_defender_of_the_obsidian_blades_experienced
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: tsuruchi_yashiro_defender_of_the_obsidian_blades_experienced.jpg
+    sha256: 3f3693ec76c25e74dd266a6de0fa897d61fb8e56a46753fc486df17076dede99
+- card_id: tunnel_network
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: tunnel_network.jpg
+    sha256: a57a6a799456f55c6b1dcc87d1390d3554842cad1157e25373f3b59d32d67b55
+- card_id: undead_champion
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: undead_champion.jpg
+    sha256: 299bda9504367ba363010083e39fb7bb32553d7f189395c01170c03261253d21
+- card_id: unexpected_weapon
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: unexpected_weapon.jpg
+    sha256: 3f973e6f226d8d48100c4a88fcbb3a6eb791771e3b483c98c454920251364a6f
+- card_id: unsanctioned_strike
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: unsanctioned_strike.jpg
+    sha256: 90d31d82186fa47452b18da8bc49a72d706919eb5ecaca6e8ab1484b9df32cb7
+- card_id: untested_blade
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: untested_blade.jpg
+    sha256: 5b5c64681767b3306e445e4ebaffbf83e078cf9223c11b80cb5d745b2e278444
+- card_id: utaku_saiken
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: utaku_saiken.jpg
+    sha256: 750eb47c91843f106256ade1739189d779c3859c44277cd737a43673158ff62e
+- card_id: visions_of_darkness
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: visions_of_darkness.jpg
+    sha256: d7c3884abb934d6701b9ae85539d63469edd3888e09a849df1041a8405b2c684
+- card_id: voice_of_experience
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: voice_of_experience.jpg
+    sha256: 0695b093889e04beca016a37a02291db69eafb1c1d0b26d04b324e28b8effd83
+- card_id: way_of_the_crab
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: way_of_the_crab.jpg
+    sha256: 763e3603aa30f39ffe013c96c5b0c5636e94ac4179cea60668157878579ad261
+- card_id: way_of_the_crane
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: way_of_the_crane.jpg
+    sha256: 71ee11f43c293d857f5fd0b669c90a032a6145f306eb819ddb208021b1e29883
+- card_id: way_of_the_dragon
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: way_of_the_dragon.jpg
+    sha256: bca5921f6f7f74db595bea8f67bfa6ad0e629cceb5a319e3c7cf9d035e11925e
+- card_id: way_of_the_lion
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: way_of_the_lion.jpg
+    sha256: 025a365aca2b118dbe6b055535038cadf0dd33506763ae833650e26aee0d1899
+- card_id: way_of_the_mantis
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: way_of_the_mantis.jpg
+    sha256: a205a4a92751314c9f6769a72f71564bdbfe5ed593db0a0aae25d9653ff19934
+- card_id: way_of_the_phoenix
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: way_of_the_phoenix.jpg
+    sha256: 2125c4a368af646a8bfe52d1825cd898d13c6e4bbe1cd2f7e1854c2339fc0393
+- card_id: way_of_the_scorpion
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: way_of_the_scorpion.jpg
+    sha256: 66718c2b93f65b9817e7e9695c135848456959199a6fffdeeb5aaa76f4408a51
+- card_id: way_of_the_spider
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: way_of_the_spider.jpg
+    sha256: 5632cadea1d35c4a1f729e7c93440a1251dded6f3ff4477c233022152713fd4a
+- card_id: way_of_the_unicorn
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: way_of_the_unicorn.jpg
+    sha256: 4d67d4c5738f1416c51eb53538f2fc39ef5e66c404cbc6b663c6c2099180f620
+- card_id: yamazarus_monkey
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: yamazarus_monkey.jpg
+    sha256: de4fbbc394d3b95e02a04cb3d46ff99f7edb783d18afe96320d5e67f45fbe0a9
+- card_id: yasuki_aitoko
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: yasuki_aitoko.jpg
+    sha256: 4d4956e22007dcc36714b3700118e4cc1e4b7aac8636ccd588388e0802d1c421
+- card_id: yasuki_shairei
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: yasuki_shairei.jpg
+    sha256: 9953fa2823ee5edfe050c09e92d48b23d417500d11477e6f779e28716ac4c02d
+- card_id: yomanri_archers
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: yomanri_archers.jpg
+    sha256: 4d2d54ab95fa3929902668dda1859d24e8678069cd2716d0f3b8102192212539
+- card_id: yoritomo_shotsuo
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: yoritomo_shotsuo.jpg
+    sha256: 4d862a7281d44217d9ab8a398c3d2b688ee15dad1bbf8e84642725c8c3da711f
+- card_id: yoritomo_yusuke
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: yoritomo_yusuke.jpg
+    sha256: 7546372d8b31c20a82dd010ed89cb3d098fe2c3af21e1279fb83094d8a887646
+- card_id: zenathaar
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: zenathaar.jpg
+    sha256: c7ea31362df8b5790ac4959ef6027e5c1373ab5ee6f34a06389f01e6cb7866b6
+- card_id: zlkyts_family
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: zlkyts_family.jpg
+    sha256: 430cbff0e0f14026e3f5b702508fcf5485d6a3c01fe4a3655d27bbd57d8e19d7
+- card_id: zombie
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: zombie.jpg
+    sha256: f86481cb5f99c781d44e83520d9fdef53102cc501083069bc08189f35cbc8c86

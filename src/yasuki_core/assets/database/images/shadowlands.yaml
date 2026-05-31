@@ -1,0 +1,932 @@
+set: Shadowlands
+images:
+- card_id: a_gift_of_honor
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: a_gift_of_honor.jpg
+    sha256: 7690a601b6ff4b362aef101eada678967473f9b70551f4e096109f16680e4dba
+- card_id: a_stout_heart
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: a_stout_heart.jpg
+    sha256: 79dc65257103ec4c6701d99e3ccbf389bf880269637614d91a2e8752eaf09607
+- card_id: accessible_terrain
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: accessible_terrain.jpg
+    sha256: 75507d41d4c745e445cf914451dcb4971ff3048e087ddf18f308d9b8bcba5120
+- card_id: ancient_spear_of_the_naga
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: ancient_spear_of_the_naga.jpg
+    sha256: 83709eaa7f78830146a14b6fc95dab4434abe6d1abfac4c9820c68f49328ddb8
+- card_id: another_time
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: another_time.jpg
+    sha256: 42894f45d9f20d33f7564445bf392f0cd3b93f5c2633e60496dbafc0071dcd72
+- card_id: arrows_from_the_woods
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: arrows_from_the_woods.jpg
+    sha256: 7e8dcd9835b764d4414ec50634353c18a931f8329dec0117c29b5768c96f9bd2
+- card_id: ashigaru
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: ashigaru.jpg
+    sha256: b15636e66ed9b7ce7e6e7fed470da23bca2e66fc24609f1133311adac80029ad
+- card_id: ashlim
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: ashlim.jpg
+    sha256: eda4dc069ed875379970d560f73f05d7a8d9dc370815840be240936c5540f6c2
+- card_id: balash
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: balash.jpg
+    sha256: f3143b5cd6c3e4decbfdf7a9bc6f6d38de5b4ae285fbc9814843e084e57e0850
+- card_id: bayushi_aramoro
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: bayushi_aramoro.jpg
+    sha256: f062ae97c2e315a446f532d5b98b86f989b2a366d9d899c753bb7f05895a7e1a
+- card_id: bayushi_goshiu
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: bayushi_goshiu.jpg
+    sha256: c9f95ac3938f66656225ea14cab3142290d5d9df2326ea502233a0d2f663d024
+- card_id: bayushi_hisa
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: bayushi_hisa.jpg
+    sha256: 9cb4f8ba5420115ff9bcb6289248c697faa5b8b5782ffef0ddbdb93840ebad3c
+- card_id: bayushi_kyoto
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: bayushi_kyoto.jpg
+    sha256: fd8c0b8e7391281af262ea8afc154c77f64c354834ad77ae4b8cb7c1903f8e63
+- card_id: bayushi_supai
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: bayushi_supai.jpg
+    sha256: da2419b3803f64903a050932541f662f5b05b4c58bd008a8cb0fdaa4d27d4b0d
+- card_id: bayushi_tomaru
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: bayushi_tomaru.jpg
+    sha256: 7c0b31528c08c8d3b15f786b37a0f96cb84da329db1fc74087407688762d677a
+- card_id: blood_of_midnight
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: blood_of_midnight.jpg
+    sha256: 3811f77255526590dbe144229fbb0428a5779e8c6f214782535ba2d7b3300863
+- card_id: call_to_arms
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: call_to_arms.jpg
+    sha256: a765931f4e45d932bb8224e92a3d8ae0f6a94ea9d0ba8d7f597258c35f4e4909
+- card_id: change_of_loyalty
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: change_of_loyalty.jpg
+    sha256: c9ad4aecf95b2cd93609ecc2335a1d08f7ea6d5e177ff79e734a10550d51ee27
+- card_id: confusion_at_court
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: confusion_at_court.jpg
+    sha256: db10cc3625a76e81d577103a1ae733cb865ef224d1f3b3d0a913aee42e06bcd7
+- card_id: contemplate_the_void
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: contemplate_the_void.jpg
+    sha256: 37fdaf62df789ac5aa8f813038848831382415816612dd09834fd0ac78965ddb
+- card_id: corrupted_ground
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: corrupted_ground.jpg
+    sha256: 22f5687e92ae3274e0038feb7abc9eb4b01a14d5a5dc15fe194fae762f7d1d98
+- card_id: corrupted_iron_mine
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: corrupted_iron_mine.jpg
+    sha256: 80ef7a18028c029512c0eaf91c83aa68d1df172676ed5389f0add87489d58a1f
+- card_id: court_jester
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: court_jester.jpg
+    sha256: 17540c7da5435903e2ea16537929a2b571653f4bb9167f9c7cacdd04a57f5ac2
+- card_id: crystal_arrow
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: crystal_arrow.jpg
+    sha256: d1a3930a1c0abeab18fab976b4f96bf5a98b043db700cc4bf7c562d42ea99df3
+- card_id: dark_divination
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: dark_divination.jpg
+    sha256: 417be59e51b283aea0b6ea1f3d8bd27b1c07c0b05f1fc551a6d50d1cb8bf814f
+- card_id: dark_oracle_of_air
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: dark_oracle_of_air.jpg
+    sha256: b88c31f6088bc7a272fd07049106df535406eda1b7f8059a4f7913e6e47d96d3
+- card_id: dark_oracle_of_earth
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: dark_oracle_of_earth.jpg
+    sha256: 99b137254b2e2ef30e9f39c7f02c61f8066a41fa215a6f15aff5c0c76569ea0e
+- card_id: dark_oracle_of_fire
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: dark_oracle_of_fire.jpg
+    sha256: 724f9b170b7394ce3394cef13b79006f7754f85e51aed5e505d05e5bf2019377
+- card_id: dark_oracle_of_water
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: dark_oracle_of_water.jpg
+    sha256: 22031dd27325685af0f0160c0e5f135cd17e3417c19dbbb8bb0991c8a471a28d
+- card_id: darkness_feeds
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: darkness_feeds.jpg
+    sha256: b501307fd56fd67822cb82a700e40b7a52b4b9d8e7f92c70a9b1641655f62085
+- card_id: dashmar
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: dashmar.jpg
+    sha256: 05740c1535d7ae3b8f3ea929e481c06cf82542cdbb466a3c4bb65b078d6c488f
+- card_id: defend_your_honor
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: defend_your_honor.jpg
+    sha256: bbb6a2038f98d95a87ca8bfa93fb42bdd639763b7f496cd55d73946e95ff39bf
+- card_id: desperate_measures
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: desperate_measures.jpg
+    sha256: 138e8e1cd394b4572ff5efa62243db3aaec64f088736cdb86bc259694063579d
+- card_id: doji_hoturi_experienced
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: doji_hoturi_experienced.jpg
+    sha256: 097d082b5838a8b6a1137d1e0a8ea9be8c0270cf20de50771d66a2a38cb192d2
+- card_id: doji_house_guard
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: doji_house_guard.jpg
+    sha256: be468ca1babef261379bac09fcb70915f6e2c3cf814ef79178df289c2bef5707
+- card_id: doom_of_the_crab
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: doom_of_the_crab.jpg
+    sha256: b498e3b5b9fb156633fc456c88e0428923e2ab4beac4459f87717707d69e5bd2
+- card_id: doom_of_the_crane
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: doom_of_the_crane.jpg
+    sha256: dbe9406df4827d711655c2e6b1a52688c5c07cdfc25cb0cd691c4500fa111b26
+- card_id: doom_of_the_dragon
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: doom_of_the_dragon.jpg
+    sha256: 2d374c8659fe327e8cf60e788468fcd34da8edced97830375d3e111176426d95
+- card_id: doom_of_the_lion
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: doom_of_the_lion.jpg
+    sha256: b8014a5510bcba460f1ea0c1531064b6c9c1b88c1fb2b4154b246f10839db248
+- card_id: doom_of_the_naga
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: doom_of_the_naga.jpg
+    sha256: c735aae9aac6dcd40500b803739e5941fd9d2620f53623461fb299ab3f231f46
+- card_id: doom_of_the_phoenix
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: doom_of_the_phoenix.jpg
+    sha256: 49349b0025cfebf01395b96151fd3594bd8794cc6e558170b38f98f6f663ec35
+- card_id: doom_of_the_scorpion
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: doom_of_the_scorpion.jpg
+    sha256: e432412e6049023ad5ac042868e117a76a5524e0b094ab7f92836764a752ac74
+- card_id: doom_of_the_unicorn
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: doom_of_the_unicorn.jpg
+    sha256: ac5e5bbb797a4076003121cc805a13694e772b7aca7b5269bd82db5cb8498df9
+- card_id: earthworks
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: earthworks.jpg
+    sha256: 2cd91bd091ab3c652260ac42d676de94069e4128ebee4de2b66c3579f976b212
+- card_id: enough_talk
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: enough_talk.jpg
+    sha256: d3d1a6297e92289af2c655356475b6fdcd7c9f94553f7ba1d9914574f09ccde7
+- card_id: evil_ward
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: evil_ward.jpg
+    sha256: eb623981176f0cbac11d6cb221d8105a966803db0d01c562fdd1b78cdef58f22
+- card_id: false_alliance
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: false_alliance.jpg
+    sha256: b026d6dd3e7789561f21be6de3cea7c0ad6c94d03f7df95b18b34bf8891e8a89
+- card_id: festering_pit_of_fu_leng
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: festering_pit_of_fu_leng.jpg
+    sha256: a121c94acde369e7f00c504b4cba95be23f64129d2ce7f8c220a9b444b595ddc
+- card_id: final_charge
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: final_charge.jpg
+    sha256: 8d2f0d005dce01db99b3f0bf06db4eda2b4c0065e3613f4bec538993451caff4
+- card_id: force_of_will
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: force_of_will.jpg
+    sha256: 3cfa596c41b41973f64370e3b0ce8e60353d9e0a2b3e2d7023734457d9903a19
+- card_id: forced_march
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: forced_march.jpg
+    sha256: 73440e61cfd72f9604910aa1a0198c737314e2efeb8657b04d366c3cd142c048
+- card_id: gambling_house
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: gambling_house.jpg
+    sha256: e963848b51f514e13a705bad65487a6c2f2a55a4970602526e16a7f4d38bcd76
+- card_id: garegosu_no_bakemono
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: garegosu_no_bakemono.jpg
+    sha256: 0716d9d50c6eb960f570a0487a1cd70b7e0c88ffaa907115f0609e2e1b28780f
+- card_id: geisha_house
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: geisha_house.jpg
+    sha256: be9124e4ecd1a9a7f0a5bf7949f3ffa9d21a0970542f46a32f7e51b6dcc7f5af
+- card_id: goblin_shaman
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: goblin_shaman.jpg
+    sha256: 2e1ade7fbbcaf3904584fd8cd4ca583322131a2ad595a646e60d1ce5f6ae0e04
+- card_id: gust_of_wind
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: gust_of_wind.jpg
+    sha256: a880dbcbfc790147aaa77af37430bbbd45549c31491e7346785a32deef216291
+- card_id: han_kyu
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: han_kyu.jpg
+    sha256: ca4f9b1fb86640c09c19c562aa79f19ad95bcdfd980b0720fee71c6d879c80fa
+- card_id: hes_mine
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: hes_mine.jpg
+    sha256: 85eff03b08df14d6f24f4e5c0b54ff6b2ecf853d5410a82ecb6413f5187f8132
+- card_id: hida_house_guard
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: hida_house_guard.jpg
+    sha256: d2c7cfa5f4f1d14c31d460578cc6ed1e40df135b934812e8ee7313f503817f59
+- card_id: hida_o_ushi
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: hida_o_ushi.jpg
+    sha256: f85b0253b8b656534e8c3a2db9ca5641b268bb08867857fbcd2e86b51fba779a
+- card_id: hiruma_kage
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: hiruma_kage.jpg
+    sha256: d8be66d19a965807cb711d612d968a1a36d346d486a5e5ce30454f98d160317c
+- card_id: his_most_favored
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: his_most_favored.jpg
+    sha256: d5765a8291c433ef53a790d1e5a0c9184801ca2ee2882d81b9da4b207d2590e7
+- card_id: ikiryo
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: ikiryo.jpg
+    sha256: 16115ae6f409d38060f7c080a72d7ec87531e70876ee99430b65cb70dd3fc77f
+- card_id: ikoma_kaoku
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: ikoma_kaoku.jpg
+    sha256: 9a55647a01d478158425d15cf19427339f3d65e285f4767947d36dfdd9cf41b9
+- card_id: impassable_terrain
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: impassable_terrain.jpg
+    sha256: ae34162de11422ceb51f06b3b6350a8c02e2a8543572dfd819a10cd1e5f86859
+- card_id: imperial_levying
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: imperial_levying.jpg
+    sha256: e7a90dee4d4e64c7b638da10ea0fb01e3f1e62aba0dde1a502a8d87f41191e86
+- card_id: isawa_tadaka_experienced
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: isawa_tadaka_experienced.jpg
+    sha256: ce5402d5b44fb4e592b54e219e8acdcc1db0c40717bc6de2e4f1f5ce082a005f
+- card_id: isha
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: isha.jpg
+    sha256: a60bf2c7ab7919e164689a3182d4645ea64796b9f248557a0d4b6059fd583c44
+- card_id: jade_arrow
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: jade_arrow.jpg
+    sha256: 0e9302d920f47904312165862b0d77f6dc9c8b745cabf319ca64d19169b9bdef
+- card_id: jade_goblet
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: jade_goblet.jpg
+    sha256: 915c47cf77d11dccc733a7b7edd22238b1b910725f2f2eb8f7d6dcfea4aa4983
+- card_id: kakita_torikago
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: kakita_torikago.jpg
+    sha256: 42a4a547a5025b3c11934ca1b42aa66f7caedd6809011681b9dcb513862a7c03
+- card_id: kakita_yogoso
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: kakita_yogoso.jpg
+    sha256: 48ca3cbf5a44a8f746cc3394dd94216f96648a1542d0f4bd4c1272705f9ffe2f
+- card_id: kitsu_motso
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: kitsu_motso.jpg
+    sha256: cf827507d3608f42c0fcb2c713a153b228c808a2e8fb696d40d1f45f7aea88b2
+- card_id: kolat_oyabun
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: kolat_oyabun.jpg
+    sha256: 7f0f0839a4de1c094372042f601b67ff610e59f338f52611dbb6d5469363b3b6
+- card_id: kumo
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: kumo.jpg
+    sha256: 0abfe4d79924e3edff1262850347953a550fb84d171bca1202bd5c317947c805
+- card_id: levy_troops
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: levy_troops.jpg
+    sha256: d6098a155a2546fd710389f0841f28fc6e7339c22ea5d3f74d4a2f5c5c0684ec
+- card_id: mamoru
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: mamoru.jpg
+    sha256: 256114c704799933a98f61483520a54d714b959e4c8c5b6113f7c87821175f03
+- card_id: mantis_bushi
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: mantis_bushi.jpg
+    sha256: 3e5192376bdff3571e930d89a282979bc960dc4e1d4f848bf83ca50ee98e4d55
+- card_id: mara
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: mara.jpg
+    sha256: 57e5272b47a2aeeab93d65e0b35151b806773d272fad7aeda44b54ad05f23d1c
+- card_id: matsu_chokoku
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: matsu_chokoku.jpg
+    sha256: b6fe7eb9383968b5f31be7425e9a501ecd1571d82aa5695e9885a74c100b2144
+- card_id: matsu_house_guard
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: matsu_house_guard.jpg
+    sha256: 955cbf65cd7052874b7a9667cc981e18ea22b71ccd369925fa8dbf568dd0ce6b
+- card_id: minor_oni_servant
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: minor_oni_servant.jpg
+    sha256: 90599e7f444736b4476e2d063a6e1070984ad27a3ba6682fdeb4641a8224f8c8
+- card_id: mirumoto_hitomi_experienced
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: mirumoto_hitomi_experienced.jpg
+    sha256: 50de591597633872d7118c2e8818241216bc94c0a72f41dcedcfc0486bad9780
+- card_id: mirumoto_house_guard
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: mirumoto_house_guard.jpg
+    sha256: 2174197356161e63e881122b919ba7d643f58e2e4e802303aaee5abab78009f4
+- card_id: mirumoto_taki
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: mirumoto_taki.jpg
+    sha256: f287a727cf2170f9ae448bfe77e95ad455bc577a326612581af1388f58117145
+- card_id: mountain_goblin
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: mountain_goblin.jpg
+    sha256: 2ed33d40b584258dda6d6b8ebcd89b6baef3e9ca90a361e7fea1db36e781e6e6
+- card_id: nageteppo
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: nageteppo.jpg
+    sha256: bda026ee488699ec15f7346c52b5eef02a15c42551a49d0bb717ecf5f22b0867
+- card_id: new_years_celebration
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: new_years_celebration.jpg
+    sha256: 5a20513a9c841df38f9f55b9f4297a24643bc3fd52d84cb58afcce4b63b685c8
+- card_id: obsidian_mirror
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: obsidian_mirror.jpg
+    sha256: 4a24402bfaecf8102610d00a8f58d9e7bc83b39e6967bf5d0482b93cc60f7ad0
+- card_id: oni_no_kamu
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: oni_no_kamu.jpg
+    sha256: d8297a63ee17c19d853ec47d50ae95fbc2bcd68662dc2ed10bd631658f62fba5
+- card_id: oni_no_ogon
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: oni_no_ogon.jpg
+    sha256: c2e377535e3a9c0fbd1fadb7b19659015a11d4b04047230aca2bfdda7dd28280
+- card_id: oni_no_sanru
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: oni_no_sanru.jpg
+    sha256: 849dfddc2f06382b62d46e39a8992413cd2fa91eeedee361411d28bb4e109f07
+- card_id: otaku_kamoko_experienced
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: otaku_kamoko_experienced.jpg
+    sha256: 0d64dd8bd5851bbb888de141427d60605950ad3ecccb18d0f348c542fcbda9dc
+- card_id: otaku_kojiro
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: otaku_kojiro.jpg
+    sha256: 244b8612f16a55911a41292a98d74dc23add9b2e78d8bb4c8283624f1422b7bd
+- card_id: pearl_bed
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: pearl_bed.jpg
+    sha256: f1a1afc3222d9eb79ada7c3cf4f7dee1de891f740c1c96f67406c8494807d843
+- card_id: pennaggolan
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: pennaggolan.jpg
+    sha256: 767c5d0caa9b5f84438805d35b112528bc8104e0957cfdc5231d08bbf9bf4da9
+- card_id: plague_zombies
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: plague_zombies.jpg
+    sha256: 8db766e5bf26ccfca8f5e2d1ad0cf852e6910edbadd9883a6e388dde05ceacfa
+- card_id: plea_of_the_peasants
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: plea_of_the_peasants.jpg
+    sha256: cb71f0b5a63bee71dbe169163b0fbfce3de1494f111379571dacaf433ae8d86d
+- card_id: porcelain_mask_of_fu_leng
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: porcelain_mask_of_fu_leng.jpg
+    sha256: 54330a7a6f6f913044a78fd1abbc75573f51c463e217db682b9e1fe0f1f85fd6
+- card_id: qamar
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: qamar.jpg
+    sha256: a856576ce8b73546a3cbd8a85ba8e9735bca503f06a5f9086b635ab52e75c892
+- card_id: rampant_plague
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: rampant_plague.jpg
+    sha256: 9d5da0a55eaa99aded34b75d7150ba4678b6043de22dfeb8cf49ec2d5664a817
+- card_id: ratling_conscripts
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: ratling_conscripts.jpg
+    sha256: 2f68d4500cb805d26eb990512b820df5f92d96224713e2cf19a2adb6bac29792
+- card_id: ratling_scavenger
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: ratling_scavenger.jpg
+    sha256: d4bd59d34700fdd73caa19378ee8014b0dac205b0c93892e574c95238ad29852
+- card_id: ratling_thief
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: ratling_thief.jpg
+    sha256: 302c6ebcf95384deac5065ee4a3e1b58082b27b4b332122d3719a1ac2be6b163
+- card_id: setsuban_festival
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: setsuban_festival.jpg
+    sha256: 7d29073cf8a6b8b3998e74432a879ae72c319194ddf0bf762b4a19ed89676943
+- card_id: shabura
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shabura.jpg
+    sha256: ec80d010fd4d9f72c624cc76f78253388362cb2a0a39a2c4a48f8243d579dbc2
+- card_id: shadowlands_madmen
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shadowlands_madmen.jpg
+    sha256: 19e7a81c2b08a3aed8081905389ebf1654c16957eb1ff249669770d497558f90
+- card_id: shadowlands_sickness
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shadowlands_sickness.jpg
+    sha256: 04cd4bfef0fa055937221fe46b536954d3b2b9756c1100b732b1d4e6d86bdeeb
+- card_id: shadowmadness
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shadowmadness.jpg
+    sha256: 3e034fd7d9202c1843bff95165815c3cb1e3fb9cb6408896bae6debcb9749481
+- card_id: shagara
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shagara.jpg
+    sha256: 9162596317a964264a443b7f0eabec47266a1353b89692cb6e4bac6607144824
+- card_id: shapeshifting
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shapeshifting.jpg
+    sha256: 5249f309b002a06a353ed4102b46f6e505d94b874bb2e2afb64b4c1147dcdb45
+- card_id: shiba_house_guard
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shiba_house_guard.jpg
+    sha256: ca3c18a0e915d9a2d3c59c3933ccb6fbf6e5a99e554c71bf2bf620cf79414b90
+- card_id: shiba_tetsu
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shiba_tetsu.jpg
+    sha256: df808683310f8642ed77432c35414b17bce0e35418620f2c7f89ce4ae145900f
+- card_id: shinjo_house_guard
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shinjo_house_guard.jpg
+    sha256: 65c6f509ef62db4a78c8ab5a6841c7a4327b9646de8ec4440b0ee547c927a003
+- card_id: shinjo_tsuburo
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shinjo_tsuburo.jpg
+    sha256: ffd8b03b1db3e5ea9a5f342fd46c6a020c50f6f380e586ae2d971497767b442b
+- card_id: shosuro_hametsu
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shosuro_hametsu.jpg
+    sha256: b30d69ad21fb7fc3e238d435663589cec662965ee52e6de7bd279cdd6edd45a0
+- card_id: shosuro_taberu
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shosuro_taberu.jpg
+    sha256: 8c0e6e335aaf70e2a31667c8295cbaf8e71b7cc3389e6bf9c6a61e08b3762787
+- card_id: shosuro_tage
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: shosuro_tage.jpg
+    sha256: 59a6806af86d70f75195637873de3565e5c3046d1da0c7979fb307fd1238a0c4
+- card_id: skeletal_archers
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: skeletal_archers.jpg
+    sha256: 0fc6d7b1886ff17c914d3d0e046c86933db6bf5f21286eb7efa171d5fc6f520a
+- card_id: soshi_bantaro
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: soshi_bantaro.jpg
+    sha256: 3896d0e7503a1fcf83969e3e6a2a1d3b1c742084ae5b2383898eeedae6a7854a
+- card_id: stale_wind
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: stale_wind.jpg
+    sha256: 08c0e7e70b9ae6ee1453c0346a6872f5b5202b56b073695478fd7182ce962470
+- card_id: strike_at_the_tail
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: strike_at_the_tail.jpg
+    sha256: 2aa307031049da8cee829ce7106eeb3644dba7082eeea30632a2433ec082b5e4
+- card_id: suspended_terrain
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: suspended_terrain.jpg
+    sha256: ae5b6295580dafdb2f67251358515e4abd23688e6ee84672d1430727ade5e88b
+- card_id: sympathetic_energies
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: sympathetic_energies.jpg
+    sha256: ebf95dbf5f409272ba445aafb92a44013981e36372021f9b20629ae7a41432b4
+- card_id: temple_of_bishamon
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: temple_of_bishamon.jpg
+    sha256: 7cb2483ac170c3e1fb59c9016fd98598694bde2baec980e997820946309cbbb5
+- card_id: terrible_standard_of_fu_leng
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: terrible_standard_of_fu_leng.jpg
+    sha256: 22d3b280f07738584b597b3ac8b52c58b01db8ccfaae0438a162cc73fa2335ab
+- card_id: test_of_might
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: test_of_might.jpg
+    sha256: 61f19a118e21f256593d79d003b9aa9f12b768dd956da698ffea094966114505
+- card_id: tetsubo
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: tetsubo.jpg
+    sha256: 8c092db22f637a0700a8e36a52b6db5bae01a8d92dc858cc657ae0d8a6ad90c3
+- card_id: the_broken_sword_of_the_scorpion
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_broken_sword_of_the_scorpion.jpg
+    sha256: 3b208fa21e2e04aaa16affbbc91ec65cee386f55747e4c2a1adf316092e83c2f
+- card_id: the_code_of_bushido
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_code_of_bushido.jpg
+    sha256: 8c9bdbfabca15f9bc2274a8784437319a2493281c549fee936012291c09b717f
+- card_id: the_falling_darkness
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_falling_darkness.jpg
+    sha256: 7fad2c9b74dd8e4cfc8e759ef9322c604fdce2eba7c0b59a501226e97facf091
+- card_id: the_fire_from_within
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_fire_from_within.jpg
+    sha256: d1631082bd88b0aa273b3a91cd466f7532a4decbc739a34706ae7fca4babf853
+- card_id: the_hidden_temples_of_the_naga
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_hidden_temples_of_the_naga.jpg
+    sha256: 889c9559c91e92ee7899d863aecf00dfe4380d53d9b4053f0b4c0f9a47379522
+- card_id: the_hooded_ronin
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_hooded_ronin.jpg
+    sha256: e36d869dd30bc49ff12a68dfef6b704f081b979202f87d221aa9df270770a3ae
+- card_id: the_laughing_monk
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_laughing_monk.jpg
+    sha256: 692a82f76d934e2b111d7b4786e307caec2e8f28e72d37f4979d041657d961bd
+- card_id: the_nameless_one
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_nameless_one.jpg
+    sha256: 24eb27ba923820e40739f180068ca2d23a955c526f55d6aa94d3790c706f06aa
+- card_id: the_obsidian_hand
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_obsidian_hand.jpg
+    sha256: ab07bc2242967d9e14098874e4c0cfe6ef43561b93c63ae6afcfc334f3c264a4
+- card_id: the_rising_sun
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_rising_sun.jpg
+    sha256: eeabb8e57c1b4ce98c1f927e1be2d726a757a0c0a15c68dbbcbe2a286223be38
+- card_id: the_ruined_fortress_of_the_scorpion
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_ruined_fortress_of_the_scorpion.jpg
+    sha256: f03a6be4af407bdac001ba761f08f2e559d5c1d34b10acebceb8501d515921d9
+- card_id: the_turtles_shell
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: the_turtles_shell.jpg
+    sha256: 8ef4728a7004297d51582ec1dd6c8b056b55ab8c0ad936c7d8830bcb0bda4e31
+- card_id: threat_of_war
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: threat_of_war.jpg
+    sha256: b988b8f2377e6112bb5785bbfc377534eab4abf3560ede8ef2573ea8629bcfcc
+- card_id: thunder_dragon
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: thunder_dragon.jpg
+    sha256: a76b4366131ca5bdda78f31c64b550143cda6bca8d198cc743bbca9565a3a74c
+- card_id: togashi_gaijutsu
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: togashi_gaijutsu.jpg
+    sha256: e24b610d11c75f8b055951ee9a66f2807ce1de87f27c3e90ce2846c61ec4887c
+- card_id: tomb_of_jade
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: tomb_of_jade.jpg
+    sha256: 347f13f7cb5a99d21193a192567e131a9d95c5b23329a49d2a2cc19d3e08dde8
+- card_id: touch_of_despair
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: touch_of_despair.jpg
+    sha256: 4facfab6731705bdf8d48bf460cb741c5cb2bc29fd643d586b3138c57a908edb
+- card_id: touch_of_fu_leng
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: touch_of_fu_leng.jpg
+    sha256: ab285209f1dce1bdb393106739d30279d10a627c1924d740505ec68aeef71343
+- card_id: twist_of_fate
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: twist_of_fate.jpg
+    sha256: 8ab2064beeb912ad03513d629d6fe23e0cf01051aba6c23f88c352dda606985c
+- card_id: utter_defeat
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: utter_defeat.jpg
+    sha256: 55527225e5bb958271fb8dac64e31bcde4f84ab525d50972c64229019ec96ad0
+- card_id: wakizashi
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: wakizashi.jpg
+    sha256: a133157605fafe90a6a9348a85555def5938eb43395617f4952c3728154e2dc1
+- card_id: warhorses
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: warhorses.jpg
+    sha256: 3c8c777527725fd5f35a7d57521b8b908674b36da90d1eff83da59f24f9e1dcf
+- card_id: when_darkness_draws_near
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: when_darkness_draws_near.jpg
+    sha256: 5691ece1f4377fdd65df2c29fa886e66ad996e315dca8f13e9412c9b3bb01c12
+- card_id: winning_kachikos_favor
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: winning_kachikos_favor.jpg
+    sha256: b341667b3150e62d96e039a8192f0d47aa588f94b0088f725a796c1bb7c6050e
+- card_id: wounded_in_battle
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: wounded_in_battle.jpg
+    sha256: 105d2552fc7ca95e3aa8e403529c450e0be453713c4a5587b9dcabd908f4a6ab
+- card_id: yasuki_nokatsu
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: yasuki_nokatsu.jpg
+    sha256: 902cdeece8e0a4a05c754c0e3af234c3069b6eb389e1074313fe4d42bf0e5923
+- card_id: yuki_no_onna
+  printing_id: shadowlands
+  files:
+  - role: front
+    file: yuki_no_onna.jpg
+    sha256: a4b6b0b89bdfbe1b0483ec8766aee28168196679624e174903ed023ae88ff989

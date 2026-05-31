@@ -1,0 +1,560 @@
+set: Training Grounds
+images:
+- card_id: 700_soldier_plain
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: 700_soldier_plain.jpg
+    sha256: 4c189cee328e867eb5d3051dbc291c081b9a38634c3127bb12b80324f49a7522
+- card_id: akodo_kurako
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: akodo_kurako.jpg
+    sha256: 6700ee03fdac12a1948356967aeb61aea53d06a8ef8499863e83d24aa662821f
+- card_id: akodo_shigetoshi
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: akodo_shigetoshi.jpg
+    sha256: 2e7a3d26d2dc8b6f716ab2a5f8118d5c81bfc7f2e07b707fcf9c7a0b8e13fae4
+- card_id: akodo_tadenori
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: akodo_tadenori.jpg
+    sha256: 79e910743055c1e87ff8933d413088b3675f2521f99310fb67bd74151073fe31
+- card_id: akodo_yobi
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: akodo_yobi.jpg
+    sha256: f3d6965d5432a9d4734ccc779871877ba63365edc8cfbedb69b5b907a214d286
+- card_id: akodos_grave
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: akodos_grave.jpg
+    sha256: 708bd55a42ac4983308ec92843b7446a18c1a82137d7213520d57afc784079af
+- card_id: along_the_coast_at_midnight
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: along_the_coast_at_midnight.jpg
+    sha256: 7f529c3e16e25ead6587e70684c2ceebdc00bc3635991cb8c9a5e009d8fee5bf
+- card_id: armor_of_earth
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: armor_of_earth.jpg
+    sha256: 2687ce8fe0dc9fe8539122c0b03b8fc99b12561966e9c9ab058ebd0b1828a8de
+- card_id: ashigaru_fort
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: ashigaru_fort.jpg
+    sha256: 83ff2ad3f88bd9fb2e3d64d363662089fe079f716474edc4ca57f143c5a606e3
+- card_id: ashura
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: ashura.jpg
+    sha256: 06e3da20ec651d2e1ea940b8f38507dac81aea3ae4146fc09d416573b7b99d9e
+- card_id: battlefield_of_shallow_graves
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: battlefield_of_shallow_graves.jpg
+    sha256: 7d6f3aa32d55b23e2e9f14955d9168724378c1af708ce5247ebcc2b8d078794f
+- card_id: bawaru_no_oni
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: bawaru_no_oni.jpg
+    sha256: 0c4bf7753227750e34b1929261ece68a7db5796733fe682d15248be3b37701ca
+- card_id: birth_of_the_sword
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: birth_of_the_sword.jpg
+    sha256: 45ca8afbc270912f5d826ce09a8dc897c741b778ab579b1ce8c93d6625b43c69
+- card_id: black_heart_of_the_empire
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: black_heart_of_the_empire.jpg
+    sha256: bb6b474cbbb14c47dda96ba2c9039bd26e18b2803e3c047bd459c252a79ab0a8
+- card_id: blackened_claws
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: blackened_claws.jpg
+    sha256: 4bb057167172d54f3c530957fd5e0a3355a8439c55b8951e24f391af33cb38c4
+- card_id: blade_of_secrets
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: blade_of_secrets.jpg
+    sha256: ebbac5b362b4bae9099f9af52231e003118e33579145f075923c0b9e82f6309e
+- card_id: boastful_proclamation
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: boastful_proclamation.jpg
+    sha256: 410ae36d058e77448b6bba1c70036f07724caec76c2add0792180fe19fa96988
+- card_id: chuda_masaru
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: chuda_masaru.jpg
+    sha256: d2560f3ac5cde4e9f3c82682d7a0d41862b318ddc9f93860ed49a171bd66b97f
+- card_id: copper_mine
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: copper_mine.jpg
+    sha256: 9ced991572f6b44d384621db850ced6179539bc56e838a8d8525e6fe3ec5a3db
+- card_id: corrupted_dojo_woc
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: corrupted_dojo_woc.jpg
+    sha256: 0b95700728933578a180d758558cde62f247f546082c903c212f2b4b7ff855b5
+- card_id: corrupted_jade_sliver
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: corrupted_jade_sliver.jpg
+    sha256: e54cd755146b4e1db6aea690406f877f94866acc19ede7ea87c3d393bf19d923
+- card_id: deathseekers_glory
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: deathseekers_glory.jpg
+    sha256: d3d47fb0c2c7eb6c552cc891d40196f7e2c702fcaa919893c0fc338737949737
+- card_id: diversionary_tactics
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: diversionary_tactics.jpg
+    sha256: 7769b2fdba109a00539082b38bfc1a421ba4ca9cd0672abd13153f2242b8b952
+- card_id: doom_of_the_dark_lord
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: doom_of_the_dark_lord.jpg
+    sha256: 9e13975c079ec19b400cb530dc5a3af9f8fc0334d7e6cb702d6e525227cb1722
+- card_id: dragon_dancers
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: dragon_dancers.jpg
+    sha256: 5cef8021ddd6631963d3a106aba6d0e5b87ca031e82367b34f14cfb85344066a
+- card_id: elite_spearmen
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: elite_spearmen.jpg
+    sha256: acac1de72ea54501dd186e41deb232ecac1815a2e1d3874c16b0b77916304568
+- card_id: far_from_the_empire
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: far_from_the_empire.jpg
+    sha256: 76b5f8a807b0d813e7eb095e33f0d3c143c23648d637384f2ee1d2744afcfa7b
+- card_id: farmlands
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: farmlands.jpg
+    sha256: 7859ce52d82e5a5ebf9cf26506b36c3c62da084be9216ed59e89e973874487aa
+- card_id: feign_death
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: feign_death.jpg
+    sha256: 2e07e2f493e2504a33438501ce0bfa58b057ba8a2d4fc809fc9214087e447e37
+- card_id: for_the_empire
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: for_the_empire.jpg
+    sha256: ed8eaa8d9941cdcab89529ad7829c014c41462c05a19f9f3b96be3c2ac9c4be0
+- card_id: fushiki_no_oni
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: fushiki_no_oni.jpg
+    sha256: fc86facaba6309d95c3c28c48b10a628de34f50614dd685b19a024755e00f92d
+- card_id: gifts_and_favors
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: gifts_and_favors.jpg
+    sha256: b66bb501b705ab0b87349d2e135d2920425774a21aaaa076c27da67fbde65cb3
+- card_id: goblin_slingers
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: goblin_slingers.jpg
+    sha256: 534250caea46c0d6ddaf7c90f3174b6e97abded3617ba6f16e9c79254d31e793
+- card_id: gunsen_of_water
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: gunsen_of_water.jpg
+    sha256: 14466c81d8677dbe33abd8455fcedcf05ba2d306d9be0f4017f72bc51dcb4f1c
+- card_id: gunso
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: gunso.jpg
+    sha256: c5f8d8b74f6da67fa5aff8e095a02dd8af65b1c4c9183ce50ab6d7d21b853b59
+- card_id: hideo_spawn
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: hideo_spawn.jpg
+    sha256: b7aa6857380d33d8e7dcdaa5cb098f4fd2ed529e454d1fdd854433c708d1a19e
+- card_id: kenson_gakka
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: kenson_gakka.jpg
+    sha256: 9822d426726dabb7dfce1d554215a777d5aa3ce24ccde5ec767a9b12a62932ef
+- card_id: kirei
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: kirei.jpg
+    sha256: 4f4f188e120c899ea84a1ab2936943b9e7327a99e692c29b7183529fa48fb387
+- card_id: kukanchi
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: kukanchi.jpg
+    sha256: d0a5a015ec6e5f8dd875ef7d2a9976a2db12bcd7dab5000a8ff69e3a19b1f877
+- card_id: kyoso_no_oni
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: kyoso_no_oni.jpg
+    sha256: 137fd6008df56b7989eb3023e1f794d4765326f0b88c4c0477b0b8edd4ff6f30
+- card_id: lessons_from_kuro
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: lessons_from_kuro.jpg
+    sha256: 304c94658b6fca96531fd63766f1fc3402df1a15b384fc7a153458ffd26ea9aa
+- card_id: luring_tactics
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: luring_tactics.jpg
+    sha256: 63bab23547efc4d4d51cbc36e52fc142c75c93dd5095891aae874b3134f8461c
+- card_id: matsu_aoiko
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: matsu_aoiko.jpg
+    sha256: a550e279dcee382f2fe7d6ce508da3e5666e54c7b9657a40bf3ae62478ab67cf
+- card_id: matsu_ferishi
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: matsu_ferishi.jpg
+    sha256: 8aef2046fe3a41f0bb329ea0bc4678021ed37104145b572553198fa884365af5
+- card_id: matsu_hyun_experienced
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: matsu_hyun_experienced.jpg
+    sha256: b823e876f1592d905a8de44250b3e0ca28940368838c988bb0b3542b23022289
+- card_id: matsu_kenji
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: matsu_kenji.jpg
+    sha256: 7b4ef0024440fcda1152ae0a7f9da48505de7fdbd7eb9b5014d8274e6371b811
+- card_id: matsu_mabuchi
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: matsu_mabuchi.jpg
+    sha256: 41670d51ce65af9cbf115aed538d2c67781df25cd5be02bcb9a189e04b0f4713
+- card_id: matsu_reishiko
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: matsu_reishiko.jpg
+    sha256: 2ecffd0d79a8e4489da1b0f121d8906dfb3321db9655fe7201dae7e2fe3295e5
+- card_id: nairu_no_oni
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: nairu_no_oni.jpg
+    sha256: fb22ec6615b3ea540dbfd1a77cdeab67a453223bb0ca1a7f4c43c5a5d4864322
+- card_id: oblivions_gate
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: oblivions_gate.jpg
+    sha256: 186ab3290f8e6863ba4211d39885ae2e40999e1bcdea047b1f8cb4ed0f250358
+- card_id: obsidian_mine
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: obsidian_mine.jpg
+    sha256: a283de0cbd3e98106c6d50fd8e12d7a4a5ecfb82c4ba5402a7d2c3bde01eea6b
+- card_id: officers_council
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: officers_council.jpg
+    sha256: 34ba7d9da51de358ecf3c3172d6f63a49a5cee3db30112131f12756ca20ba56e
+- card_id: ogre_bushi
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: ogre_bushi.jpg
+    sha256: e0c024fb110cf117c93c2da0e5f8ecceaa93f15ba74b742915e4291ca72851f1
+- card_id: omoidasu
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: omoidasu.jpg
+    sha256: 40e123eacecdf19ec214ba263ca59ee726dad5460045d787a5112338d8450065
+- card_id: oni_horde
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: oni_horde.jpg
+    sha256: 6f3a0ca2f852ce6fcd5e74e100ada9e3b6f1f072c0dc6eb12d8415434d5c0ea9
+- card_id: parasitic_oni
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: parasitic_oni.jpg
+    sha256: aae90570ccfc160a57c74d15d836ec08216ab026b5c386565100eeae1a9d1255
+- card_id: peasant_vengeance
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: peasant_vengeance.jpg
+    sha256: 3015d74145d6b5c4fa0648158dbf8fbc001b3ce9c6479983de77c11ce076ba7e
+- card_id: primal_rage
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: primal_rage.jpg
+    sha256: 99c8f4564fe4bbf977b86258fe12f83f10eaf25aa2ed3ac6cc65ad1003f81461
+- card_id: proposal_of_peace
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: proposal_of_peace.jpg
+    sha256: d4c244ffa1359d8911ff9f80d2306ba2fc2cf8d572219670bd6ae1510f22a5d8
+- card_id: retribution
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: retribution.jpg
+    sha256: d29f0610fb90c734a775951ca8d1ecf4f7fc4151a885c7a466f208ff29c80ea1
+- card_id: rice_paddy
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: rice_paddy.jpg
+    sha256: 53ac72257ff89999b239b1896a34816567689a7870e4cc71cd32a9ac51c44c2e
+- card_id: right_hand_of_the_emperor
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: right_hand_of_the_emperor.jpg
+    sha256: 47fd9ce451f12fefd109cb521d52d99589e996dd71375f7fb98874c38650d6e4
+- card_id: ring_of_earth
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: ring_of_earth.jpg
+    sha256: 3f9a5d8fec134b8ed6fdb69ae36b11cf0b30d57722a861f9778e87c92ca000ae
+- card_id: ring_of_water
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: ring_of_water.jpg
+    sha256: 220dda5fe0bdf299c6a458ac6f511f2965668cf2982e2a930d055be25ef17130
+- card_id: run_for_your_lives
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: run_for_your_lives.jpg
+    sha256: 67ca1fd6211add1ab519e3d01e90fde7fcb48776c08af09befec1bc6466ab056
+- card_id: sanctified_temple
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: sanctified_temple.jpg
+    sha256: b0fa24fa49b3a80a65e42441599c00f1093c99e00b1b3bd786a5b4984e2c43ab
+- card_id: seppun_jin
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: seppun_jin.jpg
+    sha256: b6f1b7135fbe437060c91b4a310fbeb940f76de3ef103c2e2defbf07292f881e
+- card_id: shackled_oni
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: shackled_oni.jpg
+    sha256: 8e18528a5d5d28f82d1b9b6eea8c90139a20f4acd127697c665b4d95beef7b67
+- card_id: shadowlands_bastion
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: shadowlands_bastion.jpg
+    sha256: acdfb428a0c8ffee0013432199a5b2a9cbb6215516615a10f68c518ac28d155d
+- card_id: shadowlands_marsh
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: shadowlands_marsh.jpg
+    sha256: 31d0fceea340c2bad14d2a548ad4981d4230e6b41d98262c80f9319574a585f1
+- card_id: shireikan
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: shireikan.jpg
+    sha256: ea05539ed865aff2665ac4b5369436fb6510fdfa69225a1a1fa7b664060947be
+- card_id: shrine_to_daikoku
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: shrine_to_daikoku.jpg
+    sha256: 014d4966be54bf28fbe009d79dd172823ef7fa21d4dfb28775a103bfbd43a85a
+- card_id: shrine_to_fukurokujin
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: shrine_to_fukurokujin.jpg
+    sha256: 31f7ea235f73af26a6e94ca3d18735afeaa9c992818ec83f5c2bb1bc85166284
+- card_id: sneak_attack
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: sneak_attack.jpg
+    sha256: 3c060ea61e9710f4d8d299619d386ab38d545fbb620cf09ff8632d795e6409a8
+- card_id: spearhead
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: spearhead.jpg
+    sha256: 200501b10a9c253ff66ab201abe11bc9c93ffe56bc8f60921225085d6b571fd0
+- card_id: spearmen
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: spearmen.jpg
+    sha256: 652475d74243f1dacece8a7d941e68d4896e7e7a223545cc7e8359aa53b9bab3
+- card_id: steadfast_bushi
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: steadfast_bushi.jpg
+    sha256: e75d938b4f0fce7ee60050ebb9049cf066f7aa75e7f59184b6e4d1f0cacb25d2
+- card_id: strength_of_purity
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: strength_of_purity.jpg
+    sha256: b219d8c76aeb17385da5a444d083d1e5624a5d1ce3c914ef62099de2df71e0ad
+- card_id: superior_strategist
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: superior_strategist.jpg
+    sha256: bfc554b88e87b750667cc6f9c1b6d81d279c2e5efb8c8a80c4e733fca9c863ac
+- card_id: temples_of_the_new_tao
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: temples_of_the_new_tao.jpg
+    sha256: ca03fa9f1d36e7c161d14f5a2363b99a09e7b5152eb23eb264c5fa48648fdbe2
+- card_id: test_of_might
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: test_of_might.jpg
+    sha256: 8a4c0838d3805439438d6966760cd372f3407bc2e4ddd38cf17445f5482b0613
+- card_id: the_face_of_fear
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: the_face_of_fear.jpg
+    sha256: 9ac0c1d1e04f6e98ab4d2f700cb24c35d8a60413f33384f5e800954880d5cebc
+- card_id: the_spawning_ground
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: the_spawning_ground.jpg
+    sha256: 8986ae469b8cf6ead14cef4eabb14ca8d14d54899e13dfbbd7f3d8c9a89549e3
+- card_id: tireless_assault
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: tireless_assault.jpg
+    sha256: 83468e91ee4dc0fdd905eeaa95e20d2ec10a8596046b31000416212f6855149e
+- card_id: tsuno_blade
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: tsuno_blade.jpg
+    sha256: aa5631a1b1f6011693301d17359f47c1eec4e896614ad8980e37843902fa1233
+- card_id: veteran_bushi
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: veteran_bushi.jpg
+    sha256: d30c7036ca88721554aca61eaa4f33f524aec406aba6436d75e65bb8bcaedb19
+- card_id: violence_behind_courtliness_city
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: violence_behind_courtliness_city.jpg
+    sha256: ce48e28fd2c7af7d1093c861c477158dd9408f7ac47595f9d7ffc920a9f3d875
+- card_id: voitagi
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: voitagi.jpg
+    sha256: c78e1ab0567fb27a106f69689d70574d1c1354ee7ab2cbbe0a7529528d2c74c9
+- card_id: voitagi_experienced
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: voitagi_experienced.jpg
+    sha256: 18936fcf58df48b5652784798cdba73d5a2e542738f5410eede1902952946fd3
+- card_id: volcanic_fields
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: volcanic_fields.jpg
+    sha256: 3d34f3d3420f7d9c14c4b43f9906446b83d2e556c68fa5c2acba2b0830f15773
+- card_id: wanton_destruction
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: wanton_destruction.jpg
+    sha256: 4dcde86df5a03017f2d1b76a023a33db9ad9510f2c880d641a4da43a5fda0445
+- card_id: white_shore_plain
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: white_shore_plain.jpg
+    sha256: b8c4ba2a6c69eb9c4cfeda2b404ce9b9aa39b871aa8cd5e0641017949cb7e4fd
+- card_id: yosuchi
+  printing_id: training_grounds
+  files:
+  - role: front
+    file: yosuchi.jpg
+    sha256: b19ad6be8abbe13b3b2b0f751689ae112b9e3014c24ced0fad933d97a6e8134c

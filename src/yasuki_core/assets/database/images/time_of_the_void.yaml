@@ -1,0 +1,1370 @@
+set: Time of the Void
+images:
+- card_id: a_good_day_to_die
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: a_good_day_to_die.jpg
+    sha256: f96a22a127634b7298f7f76239683bb0f0444696ba9225ee0a9ba7f6155a7e2c
+- card_id: a_moment_of_clarity
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: a_moment_of_clarity.jpg
+    sha256: 99bcb50d1f5b2ed8328a4dfec779c0f3d655ec3274bac91afb84ab58af28c9f2
+- card_id: a_moment_of_truth_tov
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: a_moment_of_truth_tov.jpg
+    sha256: 7cb16bb3d730d9219bbf18a5459c2303d31dfd84ac18c80b639c32de421c9f7b
+- card_id: a_soul_of_thunder
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: a_soul_of_thunder.jpg
+    sha256: 33a058458610fd43655f9084ced53859a646cc09ba4c254331da444732f7835a
+- card_id: a_test_of_courage
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: a_test_of_courage.jpg
+    sha256: e1191c0f037757abd1605f570530691b7f5164b59e115c61e12337983672b89c
+- card_id: agasha_gennai
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: agasha_gennai.jpg
+    sha256: c0da615e9e929ca6e17e6f922316167d11842c3ecaf96b3ddb70b4f07da5d0dd
+- card_id: agasha_tunnels
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: agasha_tunnels.jpg
+    sha256: fb6a2b7c128f3e68237c3193ea6e8e8eba3436c04e8c8381f2637488782af5f7
+- card_id: akiyoshi_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: akiyoshi_experienced.jpg
+    sha256: ebdd15187e3f53dcb0cf3e64f1f607a9f405d0717704efe5e6388afc9e7fb82b
+- card_id: akodo_tactical_school
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: akodo_tactical_school.jpg
+    sha256: 9fdb8ab3e859371a5bf7d26eb334cbdf3be62c9f295b8244fd6c38053fa2b39b
+- card_id: al_hazaad
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: al_hazaad.jpg
+    sha256: 54604cbc19566a7382536bd91be036e8f4ddc2402ec514233c144abf387669c6
+- card_id: al_rashid
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: al_rashid.jpg
+    sha256: 0735d39d04a99db195231a47c1233e2c17488865675c5ed0870d25d709839f85
+- card_id: an_exhibition
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: an_exhibition.jpg
+    sha256: 02a02ba79cfb15d9cea08ce87ac5ac18524ed985122af07c91f33e568aaa523d
+- card_id: ancestral_standard_of_the_scorpion
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: ancestral_standard_of_the_scorpion.jpg
+    sha256: aef6ad35713109926597a26508513fbe40918a83e2059ff3db09c7835838f7b5
+- card_id: ancient_armor_of_the_qamar
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: ancient_armor_of_the_qamar.jpg
+    sha256: 784fd601fe180454029bd6b077a0b7c4859fe20cad2116085538d47233cd4e14
+- card_id: as_far_as_the_eye_can_see
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: as_far_as_the_eye_can_see.jpg
+    sha256: d38be8fca603621e46e0af009b88e7b9f92189ce5627af5182b242001601de60
+- card_id: asako_ishio
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: asako_ishio.jpg
+    sha256: 752452c4492c7c664739b19d3274b9eec9019fb9e44d04cc3a3a987ba897674c
+- card_id: asako_togama
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: asako_togama.jpg
+    sha256: 503b2e315c0e26804f1d73bb0f32e3179be2ac16e11b3e848cc925e3b8f75a07
+- card_id: ashan
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: ashan.jpg
+    sha256: 9109df3395214c8e6bda1ac3f17d05dc86ab8c81eb9a5225492586f0988a7545
+- card_id: augury
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: augury.jpg
+    sha256: 719459caa885c692c31695371bf36155abde9bb0bcf54c412f1866e372c10dea
+- card_id: battle_standard_of_shinsei
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: battle_standard_of_shinsei.jpg
+    sha256: 43a5678bb67020f38d6fc14d7c187c7b281b44ba7b9a252aa345b61e6c80ce63
+- card_id: battle_standard_of_the_mantis
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: battle_standard_of_the_mantis.jpg
+    sha256: 74666dd79bd138e089b273d808015be54acd130af5a63ca52197ffe37162235e
+- card_id: battle_standard_of_the_naga
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: battle_standard_of_the_naga.jpg
+    sha256: fec72a8bebbccf630a3069112c48ea8045b9a9f0ef9e3c3796bfb1f7088808d8
+- card_id: bayushi_goshiu_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: bayushi_goshiu_experienced.jpg
+    sha256: e23327538fdf79c9834350ad5d57cd303548401a453947abfb6808c62a02a514
+- card_id: bayushi_hisa_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: bayushi_hisa_experienced.jpg
+    sha256: 038748d507006b2e59ddc35e0f73dc2ccd478a54d8538645f00a650a33ac5c0e
+- card_id: bayushi_kachiko_experienced_2
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: bayushi_kachiko_experienced_2.jpg
+    sha256: 9c83610fa210e9f1fe798b0df9d45ea3d0be4ac92907ebcba1608f36638a1b0a
+- card_id: bayushi_marumo
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: bayushi_marumo.jpg
+    sha256: 7d05514a189dcd384b143f43c9fbab7af8391f808a9901e98ada49e25c1cdd72
+- card_id: bend_like_a_reed
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: bend_like_a_reed.jpg
+    sha256: 7872c9a2fedd9ce4453679823f77c5991601af182da19e4ce54bd36e19331c09
+- card_id: berserkers
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: berserkers.jpg
+    sha256: 230883e18d449c8156e94ef907c1d69ff0a054ff4d9cc3d0913553a7b5eb8868
+- card_id: bonds_of_darkness
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: bonds_of_darkness.jpg
+    sha256: dbb26671d22165e4efcbb743102ad4bfbc8890dcd6b00b129a71c2fa282ebc14
+- card_id: burning_your_essence
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: burning_your_essence.jpg
+    sha256: 5b77e97714008fe4a22b1d246537d990c76fc0f8dba5b23d0e164f51073f889b
+- card_id: chi_strike
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: chi_strike.jpg
+    sha256: decbce53a52ad0f3242d9d6df85cad77d6371eb4e02fd853069b3c496bcad291
+- card_id: concealed_weapon
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: concealed_weapon.jpg
+    sha256: c0159ff43ad93821a836a23f1192121f5f72475722186d47b85422967846978e
+- card_id: contested_ground
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: contested_ground.jpg
+    sha256: ba08376cb6aac60e809904bd6ff8f69e0361297b72c4f041c2204362a51e9deb
+- card_id: coordinated_fire
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: coordinated_fire.jpg
+    sha256: 48234f614554513be7f97f6d2c15c4e265f9513d4acce6aa444667bd38d81195
+- card_id: corrupt_geisha_house
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: corrupt_geisha_house.jpg
+    sha256: 952a7ae50b5569c7a57a2f1773fcef9729e90d7eada7b49e56dd088ca580bc74
+- card_id: corrupt_stables
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: corrupt_stables.jpg
+    sha256: cd96a127e17f39ec6ce455dd537da23873af9a8a64dfcf927255ab4515177368
+- card_id: corrupted_region
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: corrupted_region.jpg
+    sha256: 919b163947d34aacea66057c9c26e4252e0255ff633e815f114081b896d5825b
+- card_id: counting_the_lost
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: counting_the_lost.jpg
+    sha256: 6f7b1896c65f69ba8430051d8e4e7292faf9ab7099f69ba8b1d7d415ca4b09c4
+- card_id: crystal_gate
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: crystal_gate.jpg
+    sha256: ec7ca40085ae4e4627fdbed04a158c9601ddb8b9ab4c5669fdbe39002f594a48
+- card_id: curse_of_the_jackal
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: curse_of_the_jackal.jpg
+    sha256: 7b2f34d6f62e8f37564bfb3886a2a76dd484f1b3678e6010ce738db2ff9f4a47
+- card_id: dark_lords_favor
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: dark_lords_favor.jpg
+    sha256: 071d2739c1060931168d88e68de2283df5bc84145bbc273c873654ebcb854d98
+- card_id: dashmar_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: dashmar_experienced.jpg
+    sha256: a9a63d677c30358ddb8ab4eff68b5c115f47c8e147b221fea7761f386411f393
+- card_id: depth_of_the_void
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: depth_of_the_void.jpg
+    sha256: 31bb2e2b463ca8891e4115df353827155ae4629a1dcf2c694b5554160a19fd78
+- card_id: destiny_has_no_secrets
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: destiny_has_no_secrets.jpg
+    sha256: 8f2a7d3c6512f39f611ba44cf5cb1814e52de21875b3aaca8511f49fe97f16cd
+- card_id: disenlightenment
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: disenlightenment.jpg
+    sha256: b9e8149a90a8d9324518e920f8625b8f0f3358a305fe0badf0dacf378a46d720
+- card_id: distractions_of_the_flesh
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: distractions_of_the_flesh.jpg
+    sha256: f30b6cb5366b72f1e558279829fa38bd1dff1971cd1089b25848fc0697e38952
+- card_id: doji_chomei
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: doji_chomei.jpg
+    sha256: b6d90a2a7f231d3599f4479923e29b93ea57d52acdc8a78f923a869c03dca71e
+- card_id: doji_hoturi_experienced_2
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: doji_hoturi_experienced_2.jpg
+    sha256: ff47afddc743dbc84f53f5a1a7d0746ca74a00e83d7c5c198dcac301f4b1a8e3
+- card_id: doji_kuwanan_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: doji_kuwanan_experienced.jpg
+    sha256: 1a27d7c8adf5d1abeff25e704350154dcdbce993ce753495ea8b6d54c3468058
+- card_id: doji_shizue
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: doji_shizue.jpg
+    sha256: a2f0e34477d28b1075d495f811ad019fb83576480cf45bc15ea148682f0b428a
+- card_id: doji_yosai_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: doji_yosai_experienced.jpg
+    sha256: f012e252530c916df21835e8306ccb434dfeecf1d13504dfef1a5505e1548d0f
+- card_id: elite_heavy_infantry
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: elite_heavy_infantry.jpg
+    sha256: d6a4f3d148977432eee2944fdd05f7340ffca922cc4c7842ff28e42fb945d2f9
+- card_id: elite_light_infantry
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: elite_light_infantry.jpg
+    sha256: b21329ae2ce6d8e5124a5f8e0f5bef4ab0b5d86689ba2ebc701e8169e2ed8bd1
+- card_id: elite_medium_infantry
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: elite_medium_infantry.jpg
+    sha256: 2ccf7e40569871203f6d4285ab2f2939c72181d748bfcb8282db9663542843c0
+- card_id: enlightened_ruler
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: enlightened_ruler.jpg
+    sha256: f5e3f377f2ddae64eb2b14740c26a13ee434ed051f2a952dc8e160dbf199d9d9
+- card_id: enlistment
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: enlistment.jpg
+    sha256: 51040a91dfd48ad8b39fa88f3a4f136a30703c5caf730d167ccd0f6c6c4c1dd8
+- card_id: eshru
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: eshru.jpg
+    sha256: 8fb5968ec366d1ef5beebe06a09c7b3ce59401563710bf87c0e1e423053abee5
+- card_id: essence_of_air
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: essence_of_air.jpg
+    sha256: 8cba9aaec2170fcccb6dab0df251aa1c6200a58a0a04fa150a090cdd6921bb3f
+- card_id: essence_of_earth
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: essence_of_earth.jpg
+    sha256: c34d19fd4712a6c95235bd0e1e4397f1e59b643e1e92fba7b0547ef9db062b4f
+- card_id: factionism
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: factionism.jpg
+    sha256: 8a32d4be39023891fe95007900717fe5867b2fdc0819441f10604c7cd1f2d7dc
+- card_id: familiar_surroundings
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: familiar_surroundings.jpg
+    sha256: 270af9dd20ecbce28deb659f9b87e693cb88ce5c9bdbffb4ce52207810da430a
+- card_id: fatal_mistake
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: fatal_mistake.jpg
+    sha256: 2d785308ebb89263c2776bf818022027c1f7b030d4c941338a8f29361f3e34b6
+- card_id: festival_of_long_sticks
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: festival_of_long_sticks.jpg
+    sha256: f942af092991cb2301e20947d21f3a77357b0e25852d5fb6aa66a9bfeb53dc7b
+- card_id: final_stand
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: final_stand.jpg
+    sha256: 4174f8190779e7c07e368358b7532e72faa6c14884cc0570796802c38ee9be83
+- card_id: flight_of_doves
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: flight_of_doves.jpg
+    sha256: e2774aa1611055a18051e6f7aea7cf2bb5bcb0250de4149bdea3f7050887830e
+- card_id: flying_carpet
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: flying_carpet.jpg
+    sha256: a7ab530004c8919d820cef37a9f52adaf0ce1fef1cfc773f4ea9804396670c38
+- card_id: fog
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: fog.jpg
+    sha256: dab1544ada8fbe959354310b5ec9792e49c0aee391984a548a4820a858d0f24b
+- card_id: for_the_empire
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: for_the_empire.jpg
+    sha256: dae57ac8b3b9f8c00393ba82d0afb933a3c38b50fafe8180234a7066a1a85b43
+- card_id: forgiveness
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: forgiveness.jpg
+    sha256: 7227df10c00110fd0e7026373631e55537b6407d1bf1eedf1f6afec8d558a94d
+- card_id: gaijin_merchant
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: gaijin_merchant.jpg
+    sha256: e9d291e612bad85c3862604a07847f13780fa2469720d083242953a4f464a2bb
+- card_id: gekkai
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: gekkai.jpg
+    sha256: d93e19d09188846a5a779ab45f60a19041efa9ab6575e240c2ede776dc526338
+- card_id: goblin_madcaps
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: goblin_madcaps.jpg
+    sha256: 3d7697bfd115ce7fccfd1212b3966d7ace6e75db725a208dfc7269dccb22644c
+- card_id: goblin_sneaks
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: goblin_sneaks.jpg
+    sha256: 4725327fac018fbe601a93bc42bee6611731ad21ecb4718e1fd6d52436116b06
+- card_id: goblin_war_standard
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: goblin_war_standard.jpg
+    sha256: 6ff16008a3689124da7c2f373c0ee26a83024f555e293a5fab34ff56a7fc4183
+- card_id: goblin_wizard
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: goblin_wizard.jpg
+    sha256: 62a5513d35a480c7632b80fc6e0a4707acd127ea5aace10db406907478fcdc67
+- card_id: harima
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: harima.jpg
+    sha256: 6ac996f67cfc6b6887e7320e0e7d9fece3aba274cc65d31dd5853869a0c7f176
+- card_id: heavy_mounted_infantry
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: heavy_mounted_infantry.jpg
+    sha256: 9bec79a8da14f2c4db5e375941425b61ea83116a9e5f5a6d5a0904ea268f7119
+- card_id: hida_amoro_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: hida_amoro_experienced.jpg
+    sha256: 6d695bb9883a6956ad9c472afd5cdee87d4f418eb299ab08a2932d51e2d074c4
+- card_id: hida_o_ushi_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: hida_o_ushi_experienced.jpg
+    sha256: 45cbf626dac9cf7e0712a1fddc78ee2a4b6a8082cd83d97c497a42874256bd4f
+- card_id: hida_tadashiro
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: hida_tadashiro.jpg
+    sha256: d6e5125d7dff86e9edf1c5d51f8ac4eb66f80cd96f578c9e4a4f58cd30c49b0d
+- card_id: hida_war_college
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: hida_war_college.jpg
+    sha256: 4fd3ce75c07c203ff18572e26faf31e6e3fa0b9990ee92f3ccd412add9112e92
+- card_id: hida_yakamo_experienced_2
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: hida_yakamo_experienced_2.jpg
+    sha256: 7a162fb4324895653580048790e94718aff28e334b2868a79494f6d81ee4a44d
+- card_id: hitomi_experienced_2
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: hitomi_experienced_2.jpg
+    sha256: 77f1d1226458a3673191eb4760a772e57fed1b62c14679076a050e12ebe48890
+- card_id: hizuka
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: hizuka.jpg
+    sha256: adc4316425205c32fc1b855ba3524bad330a6f87a1679c6bcf2bed055e9691a3
+- card_id: horde_of_fu_leng
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: horde_of_fu_leng.jpg
+    sha256: 83375ac01d04ad606638deef0b1f9d8143de6d633deb305eca85ae28d84af1ef
+- card_id: horsebowmen
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: horsebowmen.jpg
+    sha256: 729e9e80f7c1047e3f0f7e4c4d850a880dc8986e3243d330833b6006239b7a6c
+- card_id: i_believed_in_you
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: i_believed_in_you.jpg
+    sha256: 3de0dca6719f9450bbed458b2b25cb176fd0413876b252695d3fa63dadc2bf6d
+- card_id: ikoma_tsanuri_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: ikoma_tsanuri_experienced.jpg
+    sha256: 0de8052efc3e0c545109d27e2d5f80517436eb51cebafeea9c1fe39ef7f1c550
+- card_id: in_time_of_war
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: in_time_of_war.jpg
+    sha256: bdf83b72e3a2170b6a1402d45d58e1000868ce3bc4f65f2da9f3d49e704039e8
+- card_id: isawa_suma
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: isawa_suma.jpg
+    sha256: bd606dff16efa75ceb6e4eb47cb41c0e7c3d638bc79a490896ab981095c5fb4e
+- card_id: isawa_tadaka_experienced_2
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: isawa_tadaka_experienced_2.jpg
+    sha256: 8c931a3727c97d2b39d20645957bd0d0e6dc1a7976d30728a5dd7f16875bff3b
+- card_id: isawa_uona_experienced_2
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: isawa_uona_experienced_2.jpg
+    sha256: 8f603296ba71e01e827989982f413c781ded6ac1587404cafb463d201bebdd02
+- card_id: isha_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: isha_experienced.jpg
+    sha256: 4872befd2d4a6fa5a0fc1120d05d03862689cfa9e16df939493b0d7e61b674be
+- card_id: iuchi_karasu_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: iuchi_karasu_experienced.jpg
+    sha256: d0f7f79776fc0361f9aefd4a97db27161d622cebf2248d59c372e05745ba7fea
+- card_id: izaku_library
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: izaku_library.jpg
+    sha256: 5e7ad1462f69d40e3a73d810b3ebfd4e0929e305777ec80d380f490ac5ccdb18
+- card_id: jade_dragon
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: jade_dragon.jpg
+    sha256: 7e32d6cf98291a87de92a09373d2012cb012a2c8c999381039ee48f4e870ccc2
+- card_id: jiujitsu_duel
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: jiujitsu_duel.jpg
+    sha256: d268da2e2ed2ea2fff6e5c406d6f7762947c833043209794f6a3f1383a080171
+- card_id: junzos_battle_standard
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: junzos_battle_standard.jpg
+    sha256: 60bca4933f68603c665e2da448c90144f7d14c06dd0f4c14c59c12b86e71250b
+- card_id: kage_experienced_2
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: kage_experienced_2.jpg
+    sha256: 1f6826a37e3032ca33b0d3c46d4bc3c539e1f87b62a001b715e488c73f0f1cc7
+- card_id: kakita_kenjutsu_school
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: kakita_kenjutsu_school.jpg
+    sha256: 95f94896b7b9a38c52d93a21f5e822025a39ef70663f922254aae7e1d7e9d3fe
+- card_id: kakita_yoshi_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: kakita_yoshi_experienced.jpg
+    sha256: 4c3569901d7b9672510e2005f640bd9b55094a91350956f6cbf4f12fa65ff10b
+- card_id: kappuksu_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: kappuksu_experienced.jpg
+    sha256: 01c0f7e962448b94efb1de4891f061219a1948b61ae43a07cb739e823879fd8e
+- card_id: kaze_do
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: kaze_do.jpg
+    sha256: 119ecf78f7607fbde91e59f6d72c887be65f245046918c9f58ebb8afd4d0d112
+- card_id: kitsu_okura
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: kitsu_okura.jpg
+    sha256: 8c5611432282c759800e72af8154b00d83729580f9410d6bf2d63045fda5b0c7
+- card_id: kitsu_toju_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: kitsu_toju_experienced.jpg
+    sha256: 8414e4676fe8c42fadec46a9e514e31f8ff77036a149510f39d1faed14708c10
+- card_id: know_the_school
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: know_the_school.jpg
+    sha256: 251166d0f0528aa0b1f678198206d7e480d615d6617e03828a1e49da91eb297d
+- card_id: kolat_spy
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: kolat_spy.jpg
+    sha256: 8cd40f74a40c4b6fd50e95aad63ac4cfe96a250bb1313ca2e7e12140efcaf798
+- card_id: komaro
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: komaro.jpg
+    sha256: e3c2718aa30287cd2eda7e8ac9a14b736bde923483f547c2dcf7b3441c5a18df
+- card_id: kuni_sensin
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: kuni_sensin.jpg
+    sha256: 818c6f1a54099ecf9f37962accfb073de92b1e8c36ff897209a01aa4780c3cdd
+- card_id: kyujutsu
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: kyujutsu.jpg
+    sha256: 44b26b0eee1cfc46b0682cee6d878b29f422b5fb3f582ef8c729de84f14f7f69
+- card_id: lady_kitsune
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: lady_kitsune.jpg
+    sha256: 1673d785b0b1bde961b0edd7f2ba782e0022cb0af0cad67bc03d4141bfd7bd1b
+- card_id: legions_of_fu_leng
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: legions_of_fu_leng.jpg
+    sha256: 683b0e497f0986ecda548b732962e7ff8a79b4f3a9c83dc662a3e8146d372d85
+- card_id: lessons_from_the_past
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: lessons_from_the_past.jpg
+    sha256: 3bbb30ada574087b615194b6a94aac527b39050943b627539133e671847e654d
+- card_id: light_mounted_infantry
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: light_mounted_infantry.jpg
+    sha256: 099f8e741235e2cf9f20903f9d0591eb2364a1b4028a3bd0ba5e11f9a13831a8
+- card_id: matsu_agetoki_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: matsu_agetoki_experienced.jpg
+    sha256: 110761d7b05cb4e9b25c63048e12c5cd2ba3c5252a005182ce2e1208c847179e
+- card_id: matsu_gohei_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: matsu_gohei_experienced.jpg
+    sha256: 7bde4e7c98b8179a50815ebcec6b42563a188c5e96ca509696c9d61f8eedc181
+- card_id: matsu_hiroru_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: matsu_hiroru_experienced.jpg
+    sha256: 3da805d7adc2f259271a0a6523826a33cc2bdfd686cbfb21b0c57901f5eae4e7
+- card_id: matsu_turi
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: matsu_turi.jpg
+    sha256: ab3a46ace7b6738334b98c0505efd731e1dfed3f99b3e6b1fd1251e9207e1604
+- card_id: mighty_protection
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: mighty_protection.jpg
+    sha256: 79688af1eb3714398f95fe74a6036838aa54b60b6b8b75cd323af8b699a8aec5
+- card_id: mikio_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: mikio_experienced.jpg
+    sha256: 3ffa57cc3eb27395e791d6035c64063aec2c565e050dc078f783db8ad60ef6a7
+- card_id: mirumoto_yukihira
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: mirumoto_yukihira.jpg
+    sha256: 3c0592d477dbe2cce4692e01131a4354f0dd9a3943329de9eae0a836941739fb
+- card_id: moshi_wakiza_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: moshi_wakiza_experienced.jpg
+    sha256: 5ee7788e7bce107af255cfcadfdd7e3b769cc88d5e9971ed03d2aec1d36b9760
+- card_id: mounted_spearmen
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: mounted_spearmen.jpg
+    sha256: 7e8ef182497f016f1086635ec17373ea15199c0190e0774fb8a7be07ecb82802
+- card_id: mujina_chieftain
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: mujina_chieftain.jpg
+    sha256: a954252fa0e21196e4123500e6dc05bdf450004e17eef0825810677319f4afb8
+- card_id: mujina_miners
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: mujina_miners.jpg
+    sha256: 203f148c01e5efb1f845a91509bea73324134dad15bbeb9b29c2e32009d570fe
+- card_id: mystical_terrain
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: mystical_terrain.jpg
+    sha256: 62387d3d68f94bdd91df22493567e173e0211d1b0826c071a844d56b4a5c5a90
+- card_id: necromancer_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: necromancer_experienced.jpg
+    sha256: 798657afbfd89ed1e99e6b1aab29de6fdc3188782b8cea22fc2bf586e3878dce
+- card_id: ninja_stalkers
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: ninja_stalkers.jpg
+    sha256: 82f1c803e04cf30604e450c0f377ab112c17d3aded17709578440e6e7290167c
+- card_id: nogotens_bow
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: nogotens_bow.jpg
+    sha256: 20e4ebcf090cd46775fa1d2b7d808e3b584f1bcbb883744194fed280a2f24881
+- card_id: obsidian_blade
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: obsidian_blade.jpg
+    sha256: 3d6eb247de601f92af6d5b2b8314d06454d678a9f6b8046b920bd53fc1f30f46
+- card_id: offer_of_fealty
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: offer_of_fealty.jpg
+    sha256: 5b0122cc6b8373a6c2f8e27c17642216ca6b914a3be2331d7a3065796f107a17
+- card_id: one_with_the_elements
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: one_with_the_elements.jpg
+    sha256: b2da75a20cb89d80f54cb95ce80e7cd390e379bcf899974c036ec246422873ee
+- card_id: oni_no_ianwa
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: oni_no_ianwa.jpg
+    sha256: dcd0b28032d08caeb2c949d5baf06a88f030b9b8e428f95a2be14ec2ccf736c7
+- card_id: oracle_of_the_void
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: oracle_of_the_void.jpg
+    sha256: 0ceba82263e5831e574dbcf31ed7ba2985231d1310dc0881a3be82bbca44ad1f
+- card_id: otaku_kamoko_experienced_2
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: otaku_kamoko_experienced_2.jpg
+    sha256: b167afa60e5898cfb3fe8adde61e717f7297774b9bf3e8958eb5556068bbf01c
+- card_id: pekkle_no_oni
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: pekkle_no_oni.jpg
+    sha256: bb7fbc10f87a31dffc2ce7e2ae325ac0284573b0551fe9035d3e4c75a99b1db5
+- card_id: plains_of_amaterasu
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: plains_of_amaterasu.jpg
+    sha256: e42be955315d2c6957421600f87bda86e1aa91960728990ee3cf8576ccfecc9c
+- card_id: plans_within_plans
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: plans_within_plans.jpg
+    sha256: 81f0845bbd56b60b3bbb2d2953a11c1517c1fefca5a788d0968a97c9b7a04e19
+- card_id: qamar_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: qamar_experienced.jpg
+    sha256: 3824d9e353ee26d9a4895f56e3fac5d5c5c3aa96ad09ded035e8be4a4301ad29
+- card_id: radakast_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: radakast_experienced.jpg
+    sha256: 1b4981c045bb0f4851042c69d4cd5d92d63c482a56276e70ac18e349b31474d8
+- card_id: rebuilding_the_kaiu_walls
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: rebuilding_the_kaiu_walls.jpg
+    sha256: f8a407e1837a174fdc18fcca76750e3838e9b8668b6924c3e4d40dda212fb0bd
+- card_id: regions_of_rokugan
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: regions_of_rokugan.jpg
+    sha256: 4c6639f3e0e23baf3efddfdb9c0845d3950568525571d978543341b75c66fb75
+- card_id: rest_my_brother
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: rest_my_brother.jpg
+    sha256: 4ff89266f7fe87e7832b45df8fe49a9a8f32243512917a20e2e378eea9746f4d
+- card_id: river_delta
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: river_delta.jpg
+    sha256: 48431924125729523b9f591fde6cb1d8cf110b9123cccec18197d25c4295e4e9
+- card_id: ruins_of_the_isawa_library
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: ruins_of_the_isawa_library.jpg
+    sha256: 40e9884fc34f6f83c7496abf2ad6d79ca87b160ffb256d16c00c816957808558
+- card_id: ryokans_sword
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: ryokans_sword.jpg
+    sha256: 9e7e198060d9ed8e39b3ac2e43f98475a33a8b7a8e4a97f431122b815d7337a1
+- card_id: sailors
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: sailors.jpg
+    sha256: 00afa5e342ca559b18da1c1849be80d3835ba11b089a81dcf4319cb2c3299c48
+- card_id: salute_of_the_samurai
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: salute_of_the_samurai.jpg
+    sha256: 28c880ecd02eb4f11de5d6faa27ab571ed99e25de3cfd7a577728e41f5649fa9
+- card_id: sanctified_ground
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: sanctified_ground.jpg
+    sha256: cd80da311d06c6de483ad4de4aba274b0219fd971baa7293cc6ad5bc0472fba5
+- card_id: seikua_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: seikua_experienced.jpg
+    sha256: 6b654e1bad5bb2e9bd7a8556ad7367f7ed1a1bd408ae90f46938b46a34f8e1ea
+- card_id: shahadets_legion
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shahadets_legion.jpg
+    sha256: eda42644db727cc3f992c1fd032b34289378b391f96246eb77e3ead639c3afd5
+- card_id: shiba_tsukune_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shiba_tsukune_experienced.jpg
+    sha256: 7640ab8c1e0f9978a0c4e678d27ab2a01cbcd3c17382d628964057b0e14e5a80
+- card_id: shinjo_hanari_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shinjo_hanari_experienced.jpg
+    sha256: 37e3dd41666f2c10951e8f35ac65282c5048e32a958888ffed2ba9c4822d6494
+- card_id: shinjo_riding_stables
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shinjo_riding_stables.jpg
+    sha256: ab2ca3d32f8af4a3f979209b295a5121234845a8716054bfb36ee077faa00de0
+- card_id: shinjo_sanetama
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shinjo_sanetama.jpg
+    sha256: daafc94e12326fed5dd7cfc0edfe4e7839ff063b2f7c39492fb613aadf3b1f03
+- card_id: shinjo_shirasu
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shinjo_shirasu.jpg
+    sha256: c99de0db4d203a4b593bda6d97a1774fe50daec04e897f565c901f9495db7e00
+- card_id: shinjo_yasamura_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shinjo_yasamura_experienced.jpg
+    sha256: 511f5893ec1dc4c9a295b158ab9e3c5c8bedc4d9fed50ba2cd932d5eab1453d2
+- card_id: shinobi
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shinobi.jpg
+    sha256: 1f10f8e5aac086082570625cc6f3d99d3ffb235d5f12c0ca15e392d3d97aa694
+- card_id: shiryo_no_asahina
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shiryo_no_asahina.jpg
+    sha256: fe1026bcb960e53b38c5bc5dc4c1d2e632442e1bfbeff39665e19bf6a8501532
+- card_id: shiryo_no_asako
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shiryo_no_asako.jpg
+    sha256: 1bac478233b89da9e05179d587153525e6440c14d21ee57dad25cfdf5cb56689
+- card_id: shiryo_no_ide
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shiryo_no_ide.jpg
+    sha256: 8dd2de7929f9c70f275171899e4ce06d76546cf6c027036690c48ebafccd1db5
+- card_id: shiryo_no_ikoma
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shiryo_no_ikoma.jpg
+    sha256: 7dfc3aea780755b7991a2f98177dbf33506501dfa0262698f32637966e50bb55
+- card_id: shiryo_no_kaiu
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shiryo_no_kaiu.jpg
+    sha256: b30ebb9e070142350d66d138d328cbd5955e194c5916e1e538504f665dd24ef8
+- card_id: shiryo_no_mirumoto
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shiryo_no_mirumoto.jpg
+    sha256: ab848c3ba8235ea7bdcd276f3d81d8d12058a5d19252beade61c979e550faff0
+- card_id: shiryo_no_yogo
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shiryo_no_yogo.jpg
+    sha256: 74d868dabf4ea515511db907f529b0034bc6bec0f6fcf54ab978f60068ed11b2
+- card_id: shiryo_no_yoritomo
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shiryo_no_yoritomo.jpg
+    sha256: 429729896ec2971dde22f424bd297f33a939d6bf24537cfb5d5b1cb18a669992
+- card_id: shosuro_hametsu_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: shosuro_hametsu_experienced.jpg
+    sha256: d5606fca937e85a9b4b94deaeca5ee045740aca6c3c7fdc4ff010c20dc102a4c
+- card_id: stance_of_the_mountain
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: stance_of_the_mountain.jpg
+    sha256: f7c4cff300665e95df8ff31b3b60a666e61dea0bfe667374d4f8a86e7bd89d06
+- card_id: strength_of_osano_wo
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: strength_of_osano_wo.jpg
+    sha256: 5cd1dea9e6f5376b47a186bb1e240c9add6b45d48cb6b944e332ac87d2aea3cc
+- card_id: strength_of_the_dark_one
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: strength_of_the_dark_one.jpg
+    sha256: be631e0af613b9bec448d9e2e7bbdbf9dfb5445cc2c499f3b4dfdf0d1f052edd
+- card_id: strike_without_striking
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: strike_without_striking.jpg
+    sha256: c3fa58ae4bd449d9c0045717f8ad7d7c4d308ec5f7eac58079d614877260b289
+- card_id: surrender
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: surrender.jpg
+    sha256: fb175165a5fb4598c3b5e1c215221cbc9e473c6d690dac7a68de142b1397025c
+- card_id: swamp_goblins
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: swamp_goblins.jpg
+    sha256: 36d641413f711e03762cbb7f555e576dd47eecc07e00919f90b98ad953c23c5b
+- card_id: sysh
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: sysh.jpg
+    sha256: c6e66cb0d190f1d1b5fe2a6916f751bdc7cd2cf372b571f703ba2316f6973a22
+- card_id: taquar
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: taquar.jpg
+    sha256: 0af94291337ab11b3e1211bfb33955f28b848d525b2cbc02294f6cab35141be8
+- card_id: teeth_of_the_serpent
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: teeth_of_the_serpent.jpg
+    sha256: 28bb2593f195a781134da9ad5974b88c9675bf55d8c92399fe01c5df2e4e93b6
+- card_id: the_12th_black_scroll
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_12th_black_scroll.jpg
+    sha256: 555bc715ab725d797f1deb92de53a52ddb7a184a984fd8ee4577a75bdc17424d
+- card_id: the_ancestral_home_of_the_lion
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_ancestral_home_of_the_lion.jpg
+    sha256: d356187a5f6762951929720cb4e4b6a4dedff00a5b046eeb7690de180206958c
+- card_id: the_brotherhood_of_shinsei
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_brotherhood_of_shinsei.jpg
+    sha256: 4f942c851db10b6770e453be3239a49277ce02009d9471792985d4cff10c64c3
+- card_id: the_darkest_magics
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_darkest_magics.jpg
+    sha256: 26e3394403b8bc9251b9babc0b7ffd29dc70c61107077fbf4243e716d3d18dee
+- card_id: the_esteemed_house_of_the_crane
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_esteemed_house_of_the_crane.jpg
+    sha256: 1d11404052473a82340ed3979bc1a78f9003f836ad40f64f0a5ed3a91c73dd92
+- card_id: the_great_walls_of_kaiu
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_great_walls_of_kaiu.jpg
+    sha256: 6af2d19b2e4780edcd1320cb8c4dd68969bfd65e06993973e39600207b32a662
+- card_id: the_heavy_shadow_of_fear
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_heavy_shadow_of_fear.jpg
+    sha256: 037c5c9886e6389b9970018f97193440f41391d184fe022a05bd16ecc23f8860
+- card_id: the_heros_triumph
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_heros_triumph.jpg
+    sha256: 33316329ed30ca648c447ea44bca153a6a512a8d8dd3f8c7b0dcdb2d2879daa1
+- card_id: the_hidden_heart_of_iuchiban
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_hidden_heart_of_iuchiban.jpg
+    sha256: fec1124db24d39be8b68886047e9bcc198a7d899e2d8820d9e798d1ba5b3f1fc
+- card_id: the_hidden_temples_of_the_naga
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_hidden_temples_of_the_naga.jpg
+    sha256: 883e6804b6544262d1f0327c40bc950aeea99b8d6ee250c6d9c265f797f809c6
+- card_id: the_light_of_amaterasu
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_light_of_amaterasu.jpg
+    sha256: 95ae7ce2daa1c1475700f4be9b73785eb87201a59f5ba1c7a1919c2657aff231
+- card_id: the_longest_night
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_longest_night.jpg
+    sha256: 13d80f21978d564d67d9c64d138a67de9514f301c3f291989f62d977b87b23cd
+- card_id: the_mountain_keep_of_the_dragon
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_mountain_keep_of_the_dragon.jpg
+    sha256: f113e6ad0a16bc0c8891f3f19d090564febb70925d473d7737046a7b47f9a04e
+- card_id: the_path_of_wisdom
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_path_of_wisdom.jpg
+    sha256: 126ab3341c5b29356bad711102122d36bc1cf047778274d9f3161f377eb23b45
+- card_id: the_phoenix_is_reborn
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_phoenix_is_reborn.jpg
+    sha256: 522a18eec1e251accf4ba908e8680305071641222c4035b377fc487fae3d66d4
+- card_id: the_provincial_estate_of_the_unicorn
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_provincial_estate_of_the_unicorn.jpg
+    sha256: 94fb53ec6caf8e0ed1fe856e3d5cd7778357ba49dd2f5cd1dbedd796a886abcf
+- card_id: the_ruined_fortress_of_the_scorpion
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_ruined_fortress_of_the_scorpion.jpg
+    sha256: 34ee1fd981add2101aba34495219086f5ed0711a885081d84c2574a7c4493424
+- card_id: the_ruins_of_isawa_castle
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_ruins_of_isawa_castle.jpg
+    sha256: ebf0bf6890f8abc8994ccbb32b603b6526f0045c89b4fd2475db38541a908fc6
+- card_id: the_sacred_temple_of_the_phoenix
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_sacred_temple_of_the_phoenix.jpg
+    sha256: aff19c7b4b7b3d2670504b0a1e3a81c35349d8d32ad1bfe0d9cb2383a6119534
+- card_id: the_scorpions_sting
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_scorpions_sting.jpg
+    sha256: a8d0f4c274b4122ab5b2bc4ea9e54609be2749be9ad8f661e5bba44bbefdc845
+- card_id: the_shadowlands_horde
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_shadowlands_horde.jpg
+    sha256: 8605ea8c5e6626f337df2267b5cfd1324b559b0b00613fc68944ec89f6e65068
+- card_id: the_sight_of_death
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_sight_of_death.jpg
+    sha256: 886fad17ae7159effa92aac002660756ddfff019d427a0f9eed044b845e1193b
+- card_id: the_time_is_now
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_time_is_now.jpg
+    sha256: c0601bd50d9c3e1214e7ab9fba4e570f5167cd00f0fa536056afa6d3a0a8ae31
+- card_id: the_touch_of_amaterasu
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_touch_of_amaterasu.jpg
+    sha256: 6c37f2ac19c173ab2a58d5d8710e9588e79e18b3b6dd7b549758bfedb884e72b
+- card_id: the_twelve_ronin
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_twelve_ronin.jpg
+    sha256: b80adf9690aa41688bdd6deb388880fc99f2e82ee39ef93def99c12f609e0c75
+- card_id: the_war_fortress_of_the_crab
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_war_fortress_of_the_crab.jpg
+    sha256: 7a6c457bbe15c514a75ebc6ced958ed331057508b6a140667d08b42361fc37db
+- card_id: the_yoritomo_alliance
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: the_yoritomo_alliance.jpg
+    sha256: 67350a6aab43ce402a44359cdb2949db6f76313fa785feee402699944e3cea1f
+- card_id: to_save_an_empire
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: to_save_an_empire.jpg
+    sha256: 5d5e4e18163699cc2a799ea5d1b31ee6a6e2c783ac0c7f922b3254c8f812f2ad
+- card_id: today_we_die
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: today_we_die.jpg
+    sha256: b886a2d3f49ff5edc937b93742697865d7ae068a0d3c14267a98950748904f33
+- card_id: togashi_kama
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: togashi_kama.jpg
+    sha256: d8ae8f72a00de5369a7b803c32c62f733f29e304c8ce1ac96a3f96e5a61d0fde
+- card_id: togashi_testing_ground
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: togashi_testing_ground.jpg
+    sha256: 7af46feaac5200d581c221e1d06748cc759c51abaa80de0bc272f73013558d48
+- card_id: togashi_yokuni_experienced_2
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: togashi_yokuni_experienced_2.jpg
+    sha256: eb405dfbee2585128502994cf6701746c82211f2b60f6a885b5939f8ff3926b6
+- card_id: toku_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: toku_experienced.jpg
+    sha256: 7c649a26488af0a18a46246f6a5e928f19bc07555d29611bb9dbe6203d3744e4
+- card_id: toturi_experienced_2
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: toturi_experienced_2.jpg
+    sha256: d4f9c04a06485c2e859e97c30fb1bee6987a85e844082a01ba28a259806c7424
+- card_id: toturis_army
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: toturis_army.jpg
+    sha256: 2f0c2d2013d00bcfe5f06ebfc1979f2e4ba8b3c3cda16c58d721bdc4dde7d307
+- card_id: toturis_battle_standard
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: toturis_battle_standard.jpg
+    sha256: a10d43091f8c4466445e581c7485e3c01d93132ffc0fabfd34abb394a406f343
+- card_id: toturis_last_stand
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: toturis_last_stand.jpg
+    sha256: a31d7c6a479728d856290fc24e5072a290b428363381b70539ded4b57c9ad8a6
+- card_id: toturis_tactics
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: toturis_tactics.jpg
+    sha256: 831f5740da80847d972e8176b1b812824789b70b6ae18d467f4a26b43708ab37
+- card_id: troops_from_the_woods
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: troops_from_the_woods.jpg
+    sha256: ed9f988a3aac496766a6ca6541516ab01ad3588df8119a35373a135c5c6388b7
+- card_id: ugulu_no_oni
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: ugulu_no_oni.jpg
+    sha256: fb4e93ac0dc61eb9b4bbe12b32d67b7390302c8d39a2fccf591f26563a6888b0
+- card_id: unattuned
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: unattuned.jpg
+    sha256: 261f61eaeb2119d9cfd5482a8e97960e2f5a9942378f7ec16452c27b11c9ff4d
+- card_id: untrustworthy
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: untrustworthy.jpg
+    sha256: 3b29dc62958473472c2c935e270fabea56688c1691d8d150f21ff7e77a9c3ff2
+- card_id: warrior_monks
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: warrior_monks.jpg
+    sha256: 261b42c100ec1743ca367568f04620b01dc4521fc22886ff6624b55a768830bf
+- card_id: wedge
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: wedge.jpg
+    sha256: 47e544ea30a8db0f1651c5bd8fe42d120a744700d73660facbe7d7e9ac0c3172
+- card_id: yasuki_taka_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: yasuki_taka_experienced.jpg
+    sha256: 5c07e73ca5dad2e5ac717a294e08552287eaee0ee9338524d0dd708959545c2f
+- card_id: yodin_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: yodin_experienced.jpg
+    sha256: 5cc0a094f5f1443cb6251b2d541cf653ef1d3ec8f5e3c5a18f5bc36cecd76292
+- card_id: yogo_oshio
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: yogo_oshio.jpg
+    sha256: e5710d133088f34fe16955970eb45c0d2acc4394a2e3173ed90365cc034801db
+- card_id: yoritomo_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: yoritomo_experienced.jpg
+    sha256: c7e3f4012ffce2f7a4ce66a2eabe605835e62d9c5684e86967c07703db120724
+- card_id: yoritomo_tsuyu
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: yoritomo_tsuyu.jpg
+    sha256: 0912c54c418df18977bb4eb1472162f77c8c10904d852e7ac12b1550bbc93915
+- card_id: yoritomos_armor
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: yoritomos_armor.jpg
+    sha256: cc65d5baaca4fd33920569aee60c26dfe1571aeba905b2b4c32e255c7e65a810
+- card_id: yoshi_experienced
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: yoshi_experienced.jpg
+    sha256: 7d8b48c4021fb311a13ef6393c9e33845716c810a437e94b12d62c0c1027f84e
+- card_id: your_last_mistake
+  printing_id: time_of_the_void
+  files:
+  - role: front
+    file: your_last_mistake.jpg
+    sha256: 679f3e3b2ebd8ffec47c1bb6c51c879b9cd0f61b4898d79020413fc51df0798b

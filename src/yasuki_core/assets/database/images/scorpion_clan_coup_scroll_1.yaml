@@ -1,0 +1,320 @@
+set: Scorpion Clan Coup, Scroll 1
+images:
+- card_id: a_samurai_never_stands_alone
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: a_samurai_never_stands_alone.jpg
+    sha256: 41e46ca712ccd30ea45fca23a89de40c1dcb482d75bc6c77325c222decfe7f60
+- card_id: agashas_illusion
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: agashas_illusion.jpg
+    sha256: b8e4439959e988bb7ad56ec4f44b5065097514a60a226c790e285629c5d95542
+- card_id: ancestral_sword_of_the_scorpion
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: ancestral_sword_of_the_scorpion.jpg
+    sha256: 6a06412cf8dd8d44e5d3cb2b5d5c01e7bbd616c4142cf1e8319126bf4e30ac61
+- card_id: armor_of_osano_wo
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: armor_of_osano_wo.jpg
+    sha256: 4f232299edc0e9f85eedba1257619f72a55bea6c4a2eedfbd1295db6374a97d7
+- card_id: arrival_of_the_unicorns
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: arrival_of_the_unicorns.jpg
+    sha256: 217252654f4d3555af9e757cab5ea526a0ff6f030c6c20b887edd18ddda0793e
+- card_id: bayushi_dozan
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: bayushi_dozan.jpg
+    sha256: ab7ba98ee6611ff3bddb9d69372cb1c46335f1fc3b3834501820d76700b95199
+- card_id: bayushi_kachiko_inexperienced
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: bayushi_kachiko_inexperienced.jpg
+    sha256: 8380a5e650887f5f81a8d38840fa74b9c7613accc925c949bcd0a2e0b0192f4f
+- card_id: bayushi_shoju_inexperienced
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: bayushi_shoju_inexperienced.jpg
+    sha256: 7484a391547f67e1554d356700d9969093aaaf4aaea1cb1a9866ec0a87307acd
+- card_id: bayushi_yokuan
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: bayushi_yokuan.jpg
+    sha256: 15ffee3e34d20612380ac688ee17c070b895eb800e742cebe3d124fc599aa534
+- card_id: behind_nights_shadow
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: behind_nights_shadow.jpg
+    sha256: 03ebb0accdd262126331b3de0e88cc62d4a9a89687c78a10d8a1eadd90c67fbf
+- card_id: cavalry_raiders
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: cavalry_raiders.jpg
+    sha256: 5be5317b8c4f0c243a80de75e3a853edba9fac8154bbdbf1ddd85671ff3e0d63
+- card_id: daikua
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: daikua.jpg
+    sha256: ca323b655a76991f423e1a65030bc7d957386e4daca970dc503d00fd123381ab
+- card_id: divinitory_pool
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: divinitory_pool.jpg
+    sha256: 2e18fdc4890c2d62587bf50d5a45d5911263bb7b4b66b51e0bd2b6a725d24dcf
+- card_id: east_wall_of_otosan_uchi
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: east_wall_of_otosan_uchi.jpg
+    sha256: 0b97b989de177f82e4b487e9ef4c4ec402883dccce351d0e298c5dc43ffb1bd6
+- card_id: flood
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: flood.jpg
+    sha256: 9dcdc3935f25b7606f3f774e5074023ac1f76b67ded9be2b90bed5e3b4c78004
+- card_id: freezing_the_lifeblood
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: freezing_the_lifeblood.jpg
+    sha256: fc560523962ddb0a14834c5ef5c51583b83b5ba5154ed8b498bd81115847aeed
+- card_id: garrison
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: garrison.jpg
+    sha256: 975367d6f3ac00423b5314f77d5724e7e09cfcb99c6426735ab126901817e61a
+- card_id: hantei_the_38th
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: hantei_the_38th.jpg
+    sha256: e7fea09e90faa41169d46ed5b8e5be0b992e8a2314fb2e6970bcfe53033822e2
+- card_id: hatsuko
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: hatsuko.jpg
+    sha256: e2ea13a8b8600ced23c0916d8b9b75eeb8e9154b8cf11ddefae0943ec47827e3
+- card_id: hirumas_last_breath
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: hirumas_last_breath.jpg
+    sha256: 2101fa19d739a534ef986b29d4a7b396a31a4a85f08445f284ffe7705cf571d8
+- card_id: imperial_palace_guard
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: imperial_palace_guard.jpg
+    sha256: cca328cbf56801f2969fdacd05eeda394c83d169f7ca0b5187f058b247a84e96
+- card_id: isawa_tomos_portal
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: isawa_tomos_portal.jpg
+    sha256: 3bfb45aa08f7b92b87093dffc716ff99039a1b33076bcf183ef74cbf23e85126
+- card_id: ishikawa
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: ishikawa.jpg
+    sha256: 2692f89c79972b2bd8c5955bf85a28eb6e3d3fbcc79c17cd9185980172407e02
+- card_id: iuchi_katta
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: iuchi_katta.jpg
+    sha256: 95c76fd0057363b9edc0461f7731e1f80b83db968117fa2c113f89b48f72769e
+- card_id: jurojins_touch
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: jurojins_touch.jpg
+    sha256: d70fc33579cfbaaf6a6108f5078920c80adb0154c32dfac25fb558043a296b78
+- card_id: lieutenant_morito
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: lieutenant_morito.jpg
+    sha256: f067b9ce90b646b48e538a924560dfa18ca13fefa138bad283d91f184e8076aa
+- card_id: lions_attack_the_crane
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: lions_attack_the_crane.jpg
+    sha256: 78189c94098a2056080ce515fd89438923dc64cc3c6a5975a5a4b81db48e2271
+- card_id: musubi
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: musubi.jpg
+    sha256: f5549d7287fb8430d909c8c3592bbc552d18d49349651412464a811e71090cda
+- card_id: plains_above_evil
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: plains_above_evil.jpg
+    sha256: d673c3ae017bc2561e949cbc5f1cc4429f55cdd9b0b30fc0e87fafa60cabd17a
+- card_id: political_distraction
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: political_distraction.jpg
+    sha256: 980cead23b93625577eab2c5351a6dc873d3307c392d57c7b98153fb51034853
+- card_id: political_mistake
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: political_mistake.jpg
+    sha256: 87fcaecd9ac0e0b96d1e810bf5245833fe1bbc57f82fa3ae3f544498025ce106
+- card_id: robbing_the_dead
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: robbing_the_dead.jpg
+    sha256: a24c8bc1546714f1521ede18c33a85fd653d65b678e11a4b6912c103363271ba
+- card_id: sanado
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: sanado.jpg
+    sha256: 48e2c20a65aaabab3125331431b6f6ecfd19006aa2637c4e13b111fb6e0a4641
+- card_id: shinjo_yokatsu_inexperienced
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: shinjo_yokatsu_inexperienced.jpg
+    sha256: f8a3e5654eadb6c5b192bd48dbad53524d96f5ecc4bbe7c49b1f4bc3d291534a
+- card_id: shioda
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: shioda.jpg
+    sha256: 28c9d1d577ccbd715b5d8d886b951745ffc86f3e5cfe539feff53934398f0924
+- card_id: shosuro_ikawa
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: shosuro_ikawa.jpg
+    sha256: cbf595125ac1b030f0ffa643a85016828e8a9e19772715fd655a08fae744b15d
+- card_id: soshi_taoshi
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: soshi_taoshi.jpg
+    sha256: d3623900a2560637275e8ae85d79ea2080c0bc1415acf8fd4e5277a33371ce35
+- card_id: soshi_ujemi
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: soshi_ujemi.jpg
+    sha256: 5640ef972f08e286ac8276734b4317994a4897003728ae7c03e6fe6d15bdcf2f
+- card_id: south_wall_of_otosan_uchi
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: south_wall_of_otosan_uchi.jpg
+    sha256: 8c42945f509abd235498fc19d85fbb6713f6d09215a300e06575817fbab85722
+- card_id: storehouses
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: storehouses.jpg
+    sha256: 5048b11492afc1c0df7d3e94ca209dc24930195b95b881ed2520c81021f2a2a8
+- card_id: streets_of_otosan_uchi
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: streets_of_otosan_uchi.jpg
+    sha256: 5f3b5e52a3cbe7d4a9fce6020321dcbd834dff85300cc7bda9a4b373b062374c
+- card_id: the_38th_hantei_falls
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: the_38th_hantei_falls.jpg
+    sha256: 878e0398a2d53356bea94cce229d106e769eabef905df95dee1c277b9f8220f0
+- card_id: the_endless_well
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: the_endless_well.jpg
+    sha256: 960e9379c34f72ef1d52d937138e0376a7d292969a186fb69d2be1892ede00a9
+- card_id: the_exalted_ugu
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: the_exalted_ugu.jpg
+    sha256: 90be247535920403741104cbf9e0d3c140de93c89fe983e12cc70687e45998ba
+- card_id: the_first_scroll_is_opened
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: the_first_scroll_is_opened.jpg
+    sha256: 6c59d1637afc5cd0275d1b412bb3b90b450a66a3e58bdf17c603a4487b539685
+- card_id: the_secret_entrance
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: the_secret_entrance.jpg
+    sha256: ca00b2e85b63b8028b5d8935fee89d1546ff9b6be8facf7440d8886885649cee
+- card_id: the_shadow_stronghold_of_the_bayushi
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: the_shadow_stronghold_of_the_bayushi.jpg
+    sha256: d91f280ff3c8acdac5dfa30df1df3db7268843b5ed8d11428169653c43639ec8
+- card_id: the_soul_goes_forth
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: the_soul_goes_forth.jpg
+    sha256: 7757dedc4e3ce7bfc4d1ef026239f3952336b076b59f842329698d4e3eca26f1
+- card_id: the_unclean_cut
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: the_unclean_cut.jpg
+    sha256: b4630211bdf606d8b5d64f5d7e12e178738ccbe23f0a2a0e81ccf4f31d231144
+- card_id: through_the_waterways
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: through_the_waterways.jpg
+    sha256: 5ae60b22856f2dd940927752a3a56735b79e86a23e5a52ef06fae5f70990bb0d
+- card_id: toturi_is_drugged
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: toturi_is_drugged.jpg
+    sha256: 05e8721f740c06cb860016431c365bee47966d21e293e8dc3fd01bf053e9e798
+- card_id: war_wagon
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: war_wagon.jpg
+    sha256: 0f649c27dcb9dcc7f8360d53256776fec3a58a4775f74f3fcb07b0c3589c6348
+- card_id: yogo_shidachi
+  printing_id: scorpion_clan_coup_scroll_1
+  files:
+  - role: front
+    file: yogo_shidachi.jpg
+    sha256: e91417896ce559402149206cd43ad855d38425aeff23fe952f919a7ff8774490

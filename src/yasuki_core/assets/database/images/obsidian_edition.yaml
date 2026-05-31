@@ -1,0 +1,1850 @@
+set: Obsidian Edition
+images:
+- card_id: air_dragon
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: air_dragon.jpg
+    sha256: 1da015912c545514802db8c4907653137db38e2ec35743815cc28fafe48330ce
+- card_id: akodo_kage
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: akodo_kage.jpg
+    sha256: 3c998f21f4b0916a57595bb41da7d336d6ea72342fe98eeb8b94818ade2a8b42
+- card_id: alhundro_cornejo
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: alhundro_cornejo.jpg
+    sha256: d8cb6d2d91343dd733466731d8a17118fdb8ca612fddce7d5543b3a8c8036185
+- card_id: alliance
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: alliance.jpg
+    sha256: 92be89be8c9b84f4fdb41ec39eb10bd25eae80c2bcc12a8c059571f11593c322
+- card_id: ambush
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ambush.jpg
+    sha256: 145aad751a65a7b4a8954d0c9c244560e5c0b0c22f3fa6ec87bba56d5f72f78d
+- card_id: ancestral_standard_of_the_crab
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ancestral_standard_of_the_crab.jpg
+    sha256: fb2d77313e4762ead4db320f290862ced112c7d29b86ba8b95e5a8805ccdf645
+- card_id: ancestral_standard_of_the_crane
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ancestral_standard_of_the_crane.jpg
+    sha256: 08148e905becb9332dfa39885d119e40f4c70427aca271cbf34dbb81e886b025
+- card_id: ancestral_standard_of_the_dragon
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ancestral_standard_of_the_dragon.jpg
+    sha256: 231d48b03be59536126efccd9da5317e0c2d84c9d3cfb448522fddfe0edd4ca2
+- card_id: ancestral_standard_of_the_lion
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ancestral_standard_of_the_lion.jpg
+    sha256: bfdc0e77bcf018d5a7d30dcf738c79efd42b7cb5eb9c00e54a41940edfe1550b
+- card_id: ancestral_standard_of_the_phoenix
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ancestral_standard_of_the_phoenix.jpg
+    sha256: d527652cd61316262f913a40da385496cc1499d33918ad021831734c3fc59169
+- card_id: ancestral_standard_of_the_unicorn
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ancestral_standard_of_the_unicorn.jpg
+    sha256: 5f77888b55ba079f86e9c162589ba637d76ec37d0249148364e74880d19c7eee
+- card_id: animate_the_dead
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: animate_the_dead.jpg
+    sha256: 73f77cb9e4e25dd6395de0ae6e528b7054c0fa9d25dca6f1012261312c0706b2
+- card_id: apprentice
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: apprentice.jpg
+    sha256: 3e09fafbcc8836bc31348b1a5206969a025d14fc98d27bfb42b22eefac3637ca
+- card_id: archers
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: archers.jpg
+    sha256: 2c65c1c67b43e9e8febf8a129a46e585e0f7c751bf232ec29c6fd13abdcb68e0
+- card_id: asahina_tamako
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: asahina_tamako.jpg
+    sha256: 345227d25c86e2587bc6ae4b659fcbd54d77bf5fa161f2408dfbddddf590ddce
+- card_id: asahina_tomo
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: asahina_tomo.jpg
+    sha256: 54e024003cf221270098981f046a26b00c1da52b8668b14a1f913411da0b5cc4
+- card_id: asako_yasu
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: asako_yasu.jpg
+    sha256: 480882d82a14cf3a405a010903163952e49ee649d1c4cb581f322d703c0cccc7
+- card_id: avoid_fate
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: avoid_fate.jpg
+    sha256: 2785c55ff40d10b9e5e419de816ddb838511f6579174b3253b38be801525c312
+- card_id: barbican
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: barbican.jpg
+    sha256: 94374343abcbfc67823d0f70efb8fb4813d4c137d684038aa0502248b0cf75fc
+- card_id: battering_ram_crew
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: battering_ram_crew.jpg
+    sha256: 0e683f31ebbfebcc4a753d34670963056e3e15f0b7e7547b5f2be963f88428a5
+- card_id: bayushi_hisa
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: bayushi_hisa.jpg
+    sha256: 46fec31217a485683cd1d68a6c547b8e88c5de3e8934dd059bafca2f39412573
+- card_id: bayushi_kachiko
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: bayushi_kachiko.jpg
+    sha256: 380a0e79e45c8931f94535ecd0a7131204feb19502c83d2ecb9f01d6ea28eadf
+- card_id: bayushi_togai
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: bayushi_togai.jpg
+    sha256: a10663745890ed482f4055c9938ce12885cf73794fd3ce141dc195fbc0016dce
+- card_id: be_prepared_to_dig_two_graves
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: be_prepared_to_dig_two_graves.jpg
+    sha256: 1b96d871256588d0f6f467f7577a486298ea3a33620484850556502993b3d71e
+- card_id: biting_steel
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: biting_steel.jpg
+    sha256: 564fc7ef05e2008b7d60fbc538826c76c63c2605705bb2482b6a1c806ee67168
+- card_id: blackmail
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: blackmail.jpg
+    sha256: f08b7e07eef40d1c4b16b7133f172db86f86810d7e57b96a18d0abcf2cca9482
+- card_id: blacksmiths
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: blacksmiths.jpg
+    sha256: 7c3a7b2b6d3a921a89680f4215dde9a16b53e486c0f3949ae46df0fe3e384544
+- card_id: blazing_arrows
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: blazing_arrows.jpg
+    sha256: 1666dc79b9740d2d49ab97e9fd1b8962cd512d35bc484df540abc700ae3f8cb8
+- card_id: block_supply_lines
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: d85633def0530fdf9324dde7431dc71853576a9472995ac847fa440178f1b751
+- card_id: bloodsword
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: bloodsword.jpg
+    sha256: 4d6f98ebd3cd7ffd0ef547e7838bc77ae6ce52779a69f430b04253a660c6b9ed
+- card_id: bloom_of_the_white_orchid
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: bloom_of_the_white_orchid.jpg
+    sha256: 54c1922a0c3571f55f73722c055b9b54194bfbeee34de463f3c9b18f6239f675
+- card_id: bon_festival
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: bon_festival.jpg
+    sha256: 9b9fec5a1637339b51e8b8343b161f32a15de6361cd5ac77aa927e7c9c459531
+- card_id: bountiful_harvest
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: bountiful_harvest.jpg
+    sha256: 16663d0d1b5d109c2933aeec4845a1b4b87f5eed6958b46ee5ba224abe586a36
+- card_id: breach_of_etiquette
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: breach_of_etiquette.jpg
+    sha256: 7d66510672775f8bccfd6bd16e844b6b6847db4072a0e04f69ec8d90168ea193
+- card_id: break_morale
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: break_morale.jpg
+    sha256: 20cec0abc722a7a137b0a0f4230e96969a9c57cad6584c2a89e2915cf00ba79b
+- card_id: brilliant_victory
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: brilliant_victory.jpg
+    sha256: 4ab551c6e2ef3be945f5ad866bb0d7682f253dfc7bbf454ff2481b40c7b672cc
+- card_id: call_upon_the_wind
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: call_upon_the_wind.jpg
+    sha256: aec6765df8e26ed13350437951b14ff0bfd870a7a2aa96d03e84d1f1c3aa823e
+- card_id: careful_planning
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: careful_planning.jpg
+    sha256: 7bebbd8edcb45336f9893bfd92262eabb84b5816a7987f3ef165419b1a5d386a
+- card_id: castle_of_water
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: castle_of_water.jpg
+    sha256: b8fd501fef2b8f460ba2a6658eddd0ffebfa316098d1e87202e98b0e34b61460
+- card_id: celestial_alignment
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: celestial_alignment.jpg
+    sha256: 36724a873ae1f55b5f3921b9b7d3c267a4f9efa1ffdd085e6078e79459dcdc46
+- card_id: charge
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: charge.jpg
+    sha256: 2eebfba426c82ef975f31c352aafe0692d21bbe052fa05282b21d20d4d714766
+- card_id: chrysanthemum_festival
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: chrysanthemum_festival.jpg
+    sha256: 1771b70792fdcb720f0f835eff26001d9c94e184eccf3ce9deffd5ac85f80e4d
+- card_id: climbing_gear
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: climbing_gear.jpg
+    sha256: 3fbf66462120f3f01ee73a74d8e956b03b7c96bf019a3ec028753edf24b620d5
+- card_id: cloak_of_night
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: cloak_of_night.jpg
+    sha256: 7ad4109f47c4f3bc95ea00f5b3ec86b6dbefb60dedaed29c070f6bf15275c0d3
+- card_id: contentious_terrain
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: contentious_terrain.jpg
+    sha256: c806e106266924ed59f743903613257007bebbeb7f6be76723e9693e3187af32
+- card_id: copper_mine
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: copper_mine.jpg
+    sha256: e7c5f1dd061ef471bd77c809b01e47a3fd6f008a46c5973dac7687a3ba7c9b25
+- card_id: counterattack
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: counterattack.jpg
+    sha256: 24c0460c4ae0e80e7a8287abcd64cce6caaf07bdf1c982b6abeb730c131d5fae
+- card_id: counterspell
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: counterspell.jpg
+    sha256: c339d16125667c9f2ed1b36a694eee9d05e37749777869966019b973766ae619
+- card_id: crystal_katana
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: crystal_katana.jpg
+    sha256: 44ddd1ff96c9b39eef6ce9e08abdc91ab4379f5ce4628301224f2b96a4e96379
+- card_id: daidoji_uji
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: daidoji_uji.jpg
+    sha256: 045af3a2e8ff7d895b117beab104b62b9845860502cf9c45cea4a3a12bd21934
+- card_id: dance_troupe
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: dance_troupe.jpg
+    sha256: 46fa63185bc99c67b7937216612eb36d1d39a035eeb944cc572bfabc6db6ffb3
+- card_id: dead_walk_the_earth
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: dead_walk_the_earth.jpg
+    sha256: 380fe8c658deef3a7f05ea0843d866bef902f5d9f3f59f09eff0a6355e187759
+- card_id: deadly_ground
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: deadly_ground.jpg
+    sha256: 436dbbf30e49cf94e93f5ad9c1f8aec8360aa59f839b11a67c03540806a81e61
+- card_id: debt_of_honor
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: debt_of_honor.jpg
+    sha256: f422c30853d683131fcf8158b015dd14748c331269bee1ddc9a528ca1ca89cff
+- card_id: diamond_mine
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: diamond_mine.jpg
+    sha256: 4193a8d5584385f07b81c50192085a7df3cebb489e38f7e3b3cdb2d555169182
+- card_id: dispersive_terrain
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: dispersive_terrain.jpg
+    sha256: 23ea541c12d0b3b5b3197c1dc3c87ae061739aa0c1db90a843e5d8b3162acbe8
+- card_id: doji_hoturi
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: doji_hoturi.jpg
+    sha256: 6f38971d803164dbb33ee62f8c5606db8ed4819e822f30e9aa4fa10ede3cc789
+- card_id: doji_yosai
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: doji_yosai.jpg
+    sha256: 4cc77e4d0b7cb5bf06248e1f6fab26856e6c5f0d69d4004f223006490e9912bc
+- card_id: dragon_helm
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: dragon_helm.jpg
+    sha256: e1e1133c20e6f6bd9a415b99be2985502a784e0c14be6af483e9dce02064f220
+- card_id: earth_dragon
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: earth_dragon.jpg
+    sha256: f0396d435c1ae134553fd07253927ff88fe27fba76ca2ad835d6048be84d021d
+- card_id: earthquake
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: earthquake.jpg
+    sha256: 31f596ff687b8400446aba1ea19a5289f5d1e403ed43d52b7940c27845b136a0
+- card_id: elemental_ward
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: elemental_ward.jpg
+    sha256: cabfd4844a12bfb8c3b6a30365c84ead14e5c3510ee5f4dba6da777c2dccf679
+- card_id: emergence_of_the_tortoise
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: emergence_of_the_tortoise.jpg
+    sha256: e4ac51937cdafb4e3ff9cb87c28877cd0448f5348636069f830efde914579026
+- card_id: emperors_peace
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: emperors_peace.jpg
+    sha256: 576a1d456e3e763f80b1227fe9e2ea3a09a9483c6202cd98328b7324bbca6cab
+- card_id: encircled_terrain
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: encircled_terrain.jpg
+    sha256: d4d57330950474b7cfeb28bc1a9b14fc7df0765f5c4b07d2c003518bafa1cf3d
+- card_id: energy_transference
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: energy_transference.jpg
+    sha256: b9c72aca2e754fcb080329510a24f5ee4355e2c1e5c395ea81172ab1cba37a8d
+- card_id: entrapping_terrain
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: entrapping_terrain.jpg
+    sha256: 336a9f42e0c07365ae531e465cbfecd4786157a33bd0a48543c9a3d9bdae114f
+- card_id: evil_feeds_upon_itself
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: evil_feeds_upon_itself.jpg
+    sha256: d59a2e113d5779a74c05735e1295f2790fb973762a7409618c30862c95bac8d7
+- card_id: evil_portents
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: evil_portents.jpg
+    sha256: a1573dad4dfd1b7f8a7b08601276d97a0f2d7bd573fb6b9009ad7965d2d77c41
+- card_id: explosives
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: explosives.jpg
+    sha256: 19c74ced96ec39ae8d679697bded56a219432cce42fd93db04d75d0cb1aa4605
+- card_id: famous_poet
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: famous_poet.jpg
+    sha256: 027329203ea6426a4053200fbe71160ad4fe43431c800b76b9d8ea06434a79d9
+- card_id: fan_of_command
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: fan_of_command.jpg
+    sha256: 64a16096be2f00affd36e3168c0690ea43431be6ac6c1f7194969a1f0408918d
+- card_id: fantastic_gardens
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: fantastic_gardens.jpg
+    sha256: 343b3f1ed0c9de059bf8111611ae4bd6f607f50e2b51387a4762a593d533aa38
+- card_id: feign_death
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: feign_death.jpg
+    sha256: bc0f448e24a7e81230b69083ad6d032c6aa3cc8765098c8e6c74a0721719b6dc
+- card_id: feint
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: feint.jpg
+    sha256: 99c8f358dc53d8c519a4c790d67e6ad6743785197ce454a7bc1bddef9bde5dc2
+- card_id: fire_breather
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: fire_breather.jpg
+    sha256: 341a83a6743d01e2bca878438e38f29fb1bee0236f68a099d7530436cf7ffff2
+- card_id: fire_dragon
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: fire_dragon.jpg
+    sha256: a9d47a01bf5e8f3354d7e7d5683111f369cb0f9efdad617c178dfa59e3ef5ddc
+- card_id: fires_of_purity
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: fires_of_purity.jpg
+    sha256: 78127344e898f8d641d343b13870c8419be4f923dffd27899f50d776d93d2ba7
+- card_id: fist_of_osano_wo
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: fist_of_osano_wo.jpg
+    sha256: 83615d7411ce764bc197d4de119dad5b3d8d1f88157df15445f73698a9835bdf
+- card_id: flight_of_dragons
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: flight_of_dragons.jpg
+    sha256: 40781db980ce70a9764df1d1a92c7605eea98d4223f590734bb1d93102d81135
+- card_id: focus
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: focus.jpg
+    sha256: 913fc60942232a32f61fdb1fab57b21be3e224e62a94414f462cc60086b60c18
+- card_id: forest
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: forest.jpg
+    sha256: 0bda6322c6ba3af997d84f80ff8104e0183aa98d14a47d833ac56dacdf899c2c
+- card_id: forgotten_tomb
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: forgotten_tomb.jpg
+    sha256: 55e5a2e95f08b539cb907127b194d9b340539c4dffc7740ba4d4fa241b2de646
+- card_id: fort_on_a_hill
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: fort_on_a_hill.jpg
+    sha256: 840d392a1d6d8d126b3e7fc2dafa719d716c3f551a75fc3e7e2e10ab2992081f
+- card_id: foxwife
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: foxwife.jpg
+    sha256: 95133f760ab7a5e3858d2924321e7d26fe06993a6c0faef3e997568ce5948bd7
+- card_id: frenzy
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: frenzy.jpg
+    sha256: 992ddbaa90be24687236cb30d28407159f1aa405ad741f19b1d0e9a4af1892f1
+- card_id: gaijin_mercenaries
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: gaijin_mercenaries.jpg
+    sha256: 48cfaca15d8a33dc4ddbeabfaf6e0d3a687a9edba6f77faac4adf326c2ef8db7
+- card_id: geisha_assassin
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: geisha_assassin.jpg
+    sha256: facb22143faf5112b5cbd13b62c5421693c4709df6dfb14edd50632db48f718b
+- card_id: ginawa
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ginawa.jpg
+    sha256: aabcf8115acca2f94d8486ba7b207a00af9ee592bbce935066e22179ea3e924d
+- card_id: glimpse_of_the_unicorn
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: glimpse_of_the_unicorn.jpg
+    sha256: 2fdc50226b727d181fedc64e9517dec9019084a151f1042411f2b0a1c0eda520
+- card_id: go_master
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: go_master.jpg
+    sha256: 0ada4f9c0d657fa17dea117bf32822696bfb4487d84dc16684cb745c882c97d5
+- card_id: goblin_chuckers
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: goblin_chuckers.jpg
+    sha256: 7889baf52eed7e2a7406664a2de829e2443ad9c28a6cf838d400daaa595d8bd5
+- card_id: goblin_mob
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: goblin_mob.jpg
+    sha256: c23f9191afc3e80cbd6a1ab19d9e08756a453d1286055cdffe2fc290dc806ea4
+- card_id: goblin_warmonger
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: goblin_warmonger.jpg
+    sha256: a221ff3085dca90ba05e968c9f0a94150878c2f178505e65f0e0bf6833c2f1bf
+- card_id: gold_mine
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: gold_mine.jpg
+    sha256: ac2e7c2bcc55e66cf40b73dae197ca778e33feaba7809b09feec615ff76c4e90
+- card_id: greater_mujina
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: greater_mujina.jpg
+    sha256: f09df4dac0ce0a23f5c9ea4475d6c551348d4d8efc683faa27b02b6c47acefd9
+- card_id: hawk_riders
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: hawk_riders.jpg
+    sha256: 8fbbeed8225f18b99933bd853004a54b7e2edb54d0fb265f3dd9b008988ec8b3
+- card_id: hawks_and_falcons
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: hawks_and_falcons.jpg
+    sha256: 8ae23fc8418e0e0d379e5f51416b6d8b3c75cb141cd7a5de7c8d9b0b837ad4b8
+- card_id: heart_of_the_inferno
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: heart_of_the_inferno.jpg
+    sha256: 7cb42bf8105f6a4638f6ee15f6641f5585400defad7042a690b28b748d208637
+- card_id: heavy_cavalry
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: heavy_cavalry.jpg
+    sha256: 49445447a11003367d37bd3b26718559272ccee3e58fb7fe8f26333183ee6bef
+- card_id: heavy_infantry
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: heavy_infantry.jpg
+    sha256: 15635114ad8c37f844d4ddcff62b99117cadcd4d0178279f00fb77327496876c
+- card_id: heichi_chokei
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: heichi_chokei.jpg
+    sha256: 762daf5b00d3147b6f734d44855171c03f12ada4d7f8dc07f7d965e3a10d3623
+- card_id: hida_amoro
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: hida_amoro.jpg
+    sha256: 6571e84e0fff883a08407b5c9d82e5c3492596b2a0d4e202da9e087d9108209e
+- card_id: hida_kisada_imperial
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: hida_kisada_imperial.jpg
+    sha256: 7e5ba0225456b69ea7191bc49a91a8c213b359dae71108730c00830fa843af0f
+- card_id: hida_sukune
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: hida_sukune.jpg
+    sha256: 54f3a4388543b2ec9b9a2f747690d6346bdc739bd619e9d502a033e9004b3545
+- card_id: hida_tampako
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: hida_tampako.jpg
+    sha256: 8528bc9c1df6b3c3b0569e95e14a1ad4166dd140720a36ec708b6161f719a599
+- card_id: hida_tsuru
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: hida_tsuru.jpg
+    sha256: 371733f8f2ab1f3f75a1e2d0c5b1ec1039d23153a00ab8f6a45062c6928d07df
+- card_id: hida_yakamo_hero
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: hida_yakamo_hero.jpg
+    sha256: 8b08bfb81c2b12355d2fbdb6cc1d02cf698e345780bc2ebb94991059c068c1cf
+- card_id: hida_yakamo_oni
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: hida_yakamo_oni.jpg
+    sha256: fcb5e35df230f0116925aa0fde6e4b18d2de05803423fd6b6d679c7c17af154d
+- card_id: honorable_seppuku
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: honorable_seppuku.jpg
+    sha256: f846dac299d9ba57fa14bbd559a2f676efc0df4ad3353b112588cff8b9c6efa0
+- card_id: horiuchi_shoan
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: horiuchi_shoan.jpg
+    sha256: 80797bc1ada91a7200df744df493e891b9e3720d435e6b90347e9d927d951787
+- card_id: hurricane
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: hurricane.jpg
+    sha256: 6ecd415cf0634f612e4935f1101a168ce2a390d909ef87663c702c134a95d9fd
+- card_id: iaijutsu_challenge
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: iaijutsu_challenge.jpg
+    sha256: 3a3e006195844e76c33f6be07ef7fbeb83f1e6de47017b9208071ec4c0ea6ab7
+- card_id: iaijutsu_duel
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: iaijutsu_duel.jpg
+    sha256: 491aa5b00177bb9cc1d78a5b8085ec93570371158e67fa691a4d32a20c62b483
+- card_id: ide_tadaji
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ide_tadaji.jpg
+    sha256: f3b1af467758bee264732825fba0be6a5974b7d2c8d0549c5ef7fc026a738379
+- card_id: ikoma_ujiaki
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ikoma_ujiaki.jpg
+    sha256: 039f675cb4297c9ccaf1dae1edaa10b8695ddc44ebef7001158ad3a2de1e4148
+- card_id: immortal_steel
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: immortal_steel.jpg
+    sha256: aa20ef5345caca2c6d8f8609a45255ef8fdb8d0c4af2cc7e10100cab5032257d
+- card_id: imperial_acrobats
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: imperial_acrobats.jpg
+    sha256: 8dae7e58fc0c26c78e2381de5a6901cdd0c58f4c266486abafa5d731a4d2aba6
+- card_id: imperial_gift
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: imperial_gift.jpg
+    sha256: 29553cbec20067cbcbe19c86ec02191024a0f14332799c7a3d73eb763293093d
+- card_id: imperial_quest
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: imperial_quest.jpg
+    sha256: 170e95ebdc233d0405a0c57a8f3546c0704242973fb76bd6ec419907144b2952
+- card_id: inheritance
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: inheritance.jpg
+    sha256: b85062ddf0776b06f3e9c8a0cbd28b4ceafbdb6c6e928b584b4276c01e1470d5
+- card_id: intersecting_highways
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: intersecting_highways.jpg
+    sha256: e1f46646f32f28ef20b7661185a8904d24504ad81dcd3597f9f5efb500875a72
+- card_id: investigation
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: investigation.jpg
+    sha256: 414f4a75d4018cef00a172ecbdb89766f125dc520610a3c99299a6b2e8e05383
+- card_id: iris_festival
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: iris_festival.jpg
+    sha256: fec3bb30cf1f47ec71d33f029fa528a6c8dd13cef36d78c5e5c94be3f09b10ce
+- card_id: iron_mine
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: iron_mine.jpg
+    sha256: f9278c31e6188693ecd6d027d9f583ba2ff9bcbc9f09e67378694dd198f295c1
+- card_id: isawa_kaede
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: isawa_kaede.jpg
+    sha256: 89f94a73c53fb3240cabd8827b282bc14669581f9f9f42d2da71224bf469947f
+- card_id: isawa_tadaka
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: isawa_tadaka.jpg
+    sha256: 29eaf0ee53af62388b0d4d044dfb96e3e8263c547298989f3d271838c691ae92
+- card_id: isawa_tomo
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: isawa_tomo.jpg
+    sha256: c3a905c68f1d873008b312318bda39ff96f049f68e45a6d11fa6a6a863cbb2b8
+- card_id: isawa_tsuke
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: isawa_tsuke.jpg
+    sha256: 5b9cf9e9d69eeb45ae25e3ee21a3931aa66f01ba14af5f74c3e0ef2bec57fc94
+- card_id: isawa_uona
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: isawa_uona.jpg
+    sha256: 03fd7ca260a9185d4654ba583c6ae86c6e7efdfe18175b8681c8150f4badcf41
+- card_id: iuchi_daiyu
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: iuchi_daiyu.jpg
+    sha256: 311e6bb92119ad8a1213477071ecb52fee4beb53c8954b97e52d5c088eea2e35
+- card_id: iuchi_karasu
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: iuchi_karasu.jpg
+    sha256: a9fe9df62e302c3cd207d635aaf353df47eb14c2eed7b8a88d2202c0568487b7
+- card_id: iuchi_takaai
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: iuchi_takaai.jpg
+    sha256: 8fb71fd53fe4e1d8559700b5050834d7c7a3c6a487f43f76cf4417766fb95e1b
+- card_id: jade_bow
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: jade_bow.jpg
+    sha256: 4dec94e3f7a018c6c48dad89d4c9f6810aae6db1ae47d64a202fbfa8a1dafb4f
+- card_id: jade_works
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: jade_works.jpg
+    sha256: 18b4bf445c4e43249cfdc035b54994e37a9b03823d5f1bacb35b51831dfd1890
+- card_id: kakita_toshimoko
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kakita_toshimoko.jpg
+    sha256: db9d9e9c46093e3903d79982d38595218561989b40ec54a11419b7e57a863ab0
+- card_id: kakita_yinobu
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kakita_yinobu.jpg
+    sha256: ae871e8de0e2ca080d9928af5058948f8d343177b03c436e28badfd5b0636662
+- card_id: kakita_yoshi
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kakita_yoshi.jpg
+    sha256: 7d7c1ebf5b57d8fb497e22e51d182d6862e6c9edc4a4d9b844bb5401de034763
+- card_id: kakita_yuri
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kakita_yuri.jpg
+    sha256: 2e548011991dc6fd8c357b7de58b4a260dde5375c4fbfda7481cd26411793833
+- card_id: kharmic_strike
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kharmic_strike.jpg
+    sha256: acdab2cbb9a4aabf7f53c87e32e046d25cecc52fd01569db8b79a5181c627c12
+- card_id: ki_rin
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ki_rin.jpg
+    sha256: 520fd81e32be6c6750c39920cc5239482aba822df65aab1eb317fce920bcf97f
+- card_id: kitsu_motso
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kitsu_motso.jpg
+    sha256: 0a31a06a241e15eae8eccffdca4de2cbd5921e923f5d54fd342a886ddd108b54
+- card_id: kitsu_toju
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kitsu_toju.jpg
+    sha256: aa90d9a53da9ebc22093c16f4e9240ccc91aa43a23ad70a4a08470236f542d5e
+- card_id: kitsuki_yasu
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kitsuki_yasu.jpg
+    sha256: 3fcac7a2992f02e08be96bf8b3b233d68a431285d26be65061fa350b9f4c466d
+- card_id: kolat_assassin
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kolat_assassin.jpg
+    sha256: 3b01c969be16a769c8b3f68582d6dc2bd20dfd30336552a15c24ffd583765ccd
+- card_id: kolat_infiltrator
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kolat_infiltrator.jpg
+    sha256: 9d0216ba6278459e67ca89fe0ead670c7320793a64d6e1a6232bd10683bc5352
+- card_id: kolat_master
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kolat_master.jpg
+    sha256: 773ceee0abe424437e514ab4af1732983de2fbffc9a90587a9c899f2401514a7
+- card_id: kuni_yori
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kuni_yori.jpg
+    sha256: 2a49e9f026284a43f84e78bc48171835c2d91944d19aca07d9d12c6ce0eed86d
+- card_id: kyoso_no_oni
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: kyoso_no_oni.jpg
+    sha256: 93e6c9a9bd951b980f86225d7ac49087e0a82348a41361350571781a1a283c99
+- card_id: legendary_victory
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: legendary_victory.jpg
+    sha256: ad30333600f9a77cb76f3a5ffa5be4a3415b43dc4e29b2ec8ff0580da81e0d2d
+- card_id: lesser_mujina
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: lesser_mujina.jpg
+    sha256: 4476f58d32c1a5d0aa04c29f9aa2b4844351102bd5e6c63ca444694918649e41
+- card_id: light_cavalry
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: light_cavalry.jpg
+    sha256: 0fb06be79ddd52a303b37e0dd79cfd0939417779c045f5e320626ec11be18949
+- card_id: light_infantry
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: light_infantry.jpg
+    sha256: d4aa98b4f695392c6365a0884d20fefeda5c63f2d45b1bd9bd0b1219a58fbf01
+- card_id: look_into_the_void
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: look_into_the_void.jpg
+    sha256: a7cf47381d6c43c594a9e64bb4af479746b1a033151d8c324d279968fcc0aac6
+- card_id: marketplace
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: marketplace.jpg
+    sha256: 00d52ef3819660d66f3a15362fa1c816a4dd6577dc86b416e15af70e37f7e9dc
+- card_id: marries_a_barbarian
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: marries_a_barbarian.jpg
+    sha256: 32c6d5a05fc013b18acb003dbaf0aaf2439d8aee0a1757a4577efce12a6ec2b1
+- card_id: marsh_troll
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: marsh_troll.jpg
+    sha256: 4cf0c7fd12ee78e12047d998e164df81a053c7e910ff809122741e91782e1357
+- card_id: martyr
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: martyr.jpg
+    sha256: 65a6953fb9c4791fdc9ff39acc8c99ad422fd1a189104306fd0e01583586343c
+- card_id: mask_of_the_oni
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: mask_of_the_oni.jpg
+    sha256: 52c8855781e57dd7ea2ced64317c6e5c420c909cf53e0d27f76b6df68a4c2377
+- card_id: master_of_the_tea_ceremony
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: master_of_the_tea_ceremony.jpg
+    sha256: febf352e16bde3d437d5300625d23f0a7bbf277a75b7d178c5eef48316808b21
+- card_id: matsu_agetoki
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: matsu_agetoki.jpg
+    sha256: 85d72e8574803a159f999e38fc7ea7c88817829e817e4a9591870c407cfdeecf
+- card_id: matsu_gohei
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: matsu_gohei.jpg
+    sha256: e2c40ebebc4eda01672c54ea542397733a339aa1c9d00a8f30c345ac0f5b5170
+- card_id: matsu_hiroru
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: matsu_hiroru.jpg
+    sha256: 07d3c177de62a19ba75e938d1c5269d30d718d7799597f11cb4ede9a7c688d06
+- card_id: matsu_imura
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: matsu_imura.jpg
+    sha256: 63b9b114ca42fce9b5ea31721d43d2b6a1d446f27b5b733f423ae01f4fdcd3fc
+- card_id: matsu_tsuko
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: matsu_tsuko.jpg
+    sha256: 38b4108935e9bb07f075483583e1bf479a562c048b83f89b21ae0c633e0ccd15
+- card_id: matsu_yojo
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: matsu_yojo.jpg
+    sha256: 6ca8d0321339b312f84cec38cd3dd837fef21e05fa26a1865ccd3c9b3e23e43d
+- card_id: meditation
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: meditation.jpg
+    sha256: 4d5753b060be07dc4244eb7c4c68efc02f4b8c4065f70a84324fd40d6dd0fd5f
+- card_id: medium_cavalry
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: medium_cavalry.jpg
+    sha256: 80b1f406daee0f42ef08d1894347864d1963c6252683a6d26f47e4ecab4a5a37
+- card_id: medium_infantry
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: medium_infantry.jpg
+    sha256: 95198203140c2e486bea08b59db4477112fc3f5b0e58d16a0d8dcf201ccb6a90
+- card_id: mercy
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: mercy.jpg
+    sha256: 96725eb86c2e8dc950be82cf4b21b68be580e61b55e0101199d58cda081e111e
+- card_id: mirumoto_daini
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: mirumoto_daini.jpg
+    sha256: 4c30134fc1f5f03e65c24dc8d1ce5eaf817b3bba207a5946f199526dd98bb347
+- card_id: mirumoto_hitomi
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: mirumoto_hitomi.jpg
+    sha256: 06fcd4941c639f8436bf86be5a431bd538d3c6ed01a7f05df0dc3449b90746e4
+- card_id: mirumoto_sukune
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: mirumoto_sukune.jpg
+    sha256: 69e957998f254c0b6e6d212f3faf76e3df689286cc015b65be7588774e8f537c
+- card_id: mists_of_illusion
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: mists_of_illusion.jpg
+    sha256: 4af43da4b80d50212d0ba3ef19c8fb4ca8dd59bc44cbfc277ca332710e17c402
+- card_id: miya_yoto
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: miya_yoto.jpg
+    sha256: be8944cf601e8e1b35a861e761494bd97870447282bb7a9b531bafeda73fb6cc
+- card_id: moat
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: moat.jpg
+    sha256: 8c6423d5683aa952a596a9129ba5fac1fee08303e5923576916344fcf4587971
+- card_id: morito
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: morito.jpg
+    sha256: a38807fd9e92c67a20b81e608dceceb3ab0d0b8b4ffe2f19ed1f2731002ac01c
+- card_id: morito_tokei
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: morito_tokei.jpg
+    sha256: 7580f4ffe2201c2294b7be89435375989d8fb6591dcea1feaac2a60d8369e589
+- card_id: moshi_wakiza
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: moshi_wakiza.jpg
+    sha256: df752350d3c465a2066a21fb6b327fb1c5b5ea21a7dac54cef8d003d9d951d2e
+- card_id: moto_tsume
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: moto_tsume.jpg
+    sha256: b1b4336d35d8bdd0c823c5c8c8a26a16a90cdd4a28e3df8bb1da62a80cb82aa3
+- card_id: naga_abomination
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: naga_abomination.jpg
+    sha256: c99ca7434a48d4101d5cc10cd37b09617858585ef37ffb6705b82402470658e4
+- card_id: naga_bowmen
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: naga_bowmen.jpg
+    sha256: e86a01472b390e733c43474e1dfbe1fc6eba2037e7578098e81452bc0a3786e4
+- card_id: naga_bushi
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: naga_bushi.jpg
+    sha256: 7f1ad4c0032266443c43f501823b4fd170eac6de0c045aad8cd81eea27797af8
+- card_id: naga_shugenja
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: naga_shugenja.jpg
+    sha256: 245a3b2d6383ef0b0019452b00a3860ac16518cf66975c89de0c8047d4c1085c
+- card_id: naga_spearmen
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: naga_spearmen.jpg
+    sha256: 9ee11b8e4cf9799364c2c95f8ef46cd4ddb51244fc463e7d85276fc8154dbc02
+- card_id: naga_warlord
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: naga_warlord.jpg
+    sha256: ebe4200d7304aeeb8f59214c7332a84594e8a825342bd66d3de3173b8b5fb649
+- card_id: naka_kuro
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: naka_kuro.jpg
+    sha256: 3fa80483c4ad976ee5316320cd1719fd7488f1c79daef4899b14eabf9fb84d68
+- card_id: necromancer
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: necromancer.jpg
+    sha256: 8e9d0d6316eba4aaa19db829b19235412fe4282a4a136e0f4cabe0f0e73f27a3
+- card_id: night_medallion
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: night_medallion.jpg
+    sha256: b4e693d7831b68df60e23f3db50e95ba720a3ea4444a54186814c34df901ba85
+- card_id: ninja_genin
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ninja_genin.jpg
+    sha256: b193307684438c27dc1ee0f11025ebcf8c8aebfe57966e0731bdf567529c41ac
+- card_id: ninja_shapeshifter
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ninja_shapeshifter.jpg
+    sha256: 8ebe79d022abee7d4cbe5c3505f16e6b6ec8ae2abf4c4853cd8c7917ecd99b28
+- card_id: ninja_spy
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ninja_spy.jpg
+    sha256: f054bf03a8a91a6e76c9d21c11d24b8fa5426b7fbddc0a3f4112417b6ad9dc77
+- card_id: ninja_stronghold
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ninja_stronghold.jpg
+    sha256: 969491f4b3669843445c5d25d3631979bf2de969c1ebabb34339fcec9b565dba
+- card_id: ninja_thief
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ninja_thief.jpg
+    sha256: e15deaa6d876b2fe788e27b3762d9dcbdcd9681fb2c9c9ac2aed0e03fa2c1c38
+- card_id: oath_of_fealty
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: oath_of_fealty.jpg
+    sha256: ee79d4c5cbd8cb3edae67f86dae2032546f46a2912b17d9cd890e50812e55914
+- card_id: occult_murders
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: occult_murders.jpg
+    sha256: b6e71944f92587d580b33e14e8977cbb6ba572c7fbdbb8ed287cfaf3f7233201
+- card_id: occupied_terrain
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: occupied_terrain.jpg
+    sha256: 4e9f62e9acc4fdcedbae95deee378acd33de22d8c0703d4c8dc33f27cc9b7534
+- card_id: ogre_bushi
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ogre_bushi.jpg
+    sha256: 8ab5959da700dd0be0aff81857d67e90a284d450015e97ead1e5a34a03cdb82d
+- card_id: oni_no_akuma
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: oni_no_akuma.jpg
+    sha256: 3a7b223e432bbab0bb549b290bc126a43f85afdbc5f1725c36f3363f970405ca
+- card_id: oni_no_shikibu
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: oni_no_shikibu.jpg
+    sha256: f859e484e8bb24fb53bdaa894dffd0bd917f2bd0768ebbfd754612b4bdb2c554
+- card_id: oracle_of_earth
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: oracle_of_earth.jpg
+    sha256: 6c4e573dea6542b5c0ebae9c2acf3c18bb22c7dbc26fd9661956529b36a64235
+- card_id: oracle_of_fire
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: oracle_of_fire.jpg
+    sha256: ad7bb6299793dec5f71384323a24c9ff47ef796c40e9a77fd3ead73ce9e1ec1e
+- card_id: oracle_of_water
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: oracle_of_water.jpg
+    sha256: 9ca8588ae23ebf3e8e4b371273fe890cffb4c0fe57ce329041b4535b2ba14cd8
+- card_id: oracle_of_wind
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: oracle_of_wind.jpg
+    sha256: e1012ff6bec3844e6cad5d3b3024005423d92df78a04fc3dab2b31f4eecabc90
+- card_id: otaku_kamoko
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: otaku_kamoko.jpg
+    sha256: 648e654a1a4deee7cac688d831e0b1bc2e569293c6af0f98fba73f2d8d807f0c
+- card_id: outflank
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: outflank.jpg
+    sha256: 601c97689a949be49e73e507db666f6dfca12a241dfa86421705440b3176c697
+- card_id: pearl_divers
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: pearl_divers.jpg
+    sha256: 69b8b58a5741fdea15d6989e96ab58c19ce64d2a46b8585b6fb22740aded5424
+- card_id: peasant_revolt
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: peasant_revolt.jpg
+    sha256: d2f4b093bee59b80582f8330cf7db2f7a420cc97e4b6371048a31e1e232c93e3
+- card_id: personal_champion
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: personal_champion.jpg
+    sha256: 9d2730927737e55552e0790f338915a7c2f976a56b73b97030f84e9d6c86537b
+- card_id: plague
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: plague.jpg
+    sha256: 68573ea7d73a4db84b8ccb0022f2c5c62273ee54d64232d05e092291b86e1ad8
+- card_id: poisoned_weapon
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: poisoned_weapon.jpg
+    sha256: be59ef74eea1186acee57c3624d9ab764b233232136b5c731a9466d0223951be
+- card_id: port
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: port.jpg
+    sha256: 15042db4eb5fbf07e0a8e8bfa9ac9f2bb9457b3b613d9f3452b66d94449de592
+- card_id: proposal_of_peace
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: proposal_of_peace.jpg
+    sha256: 9bedf0dda111531cf4cdbbdae6530382fa915b2999cf40e38f4865b776d61f15
+- card_id: rally_troops
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: rally_troops.jpg
+    sha256: dabff58ac4fb25c66af8ffe30c60d209c7a3b39bd83b0b2cd453b19505e6722b
+- card_id: rallying_cry
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: rallying_cry.jpg
+    sha256: f50697ad615d83e65df6fbcbdcda059fae059553ebf986c2b9983d85b064dda3
+- card_id: ratling_bushi
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ratling_bushi.jpg
+    sha256: 02055e2539839b1c583df9a04e2efc4d6f5534ef9ff3f231105d9af3fe3a6562
+- card_id: ratling_pack
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ratling_pack.jpg
+    sha256: b512236dc3ffbd8133ee453e245dee94aea86b774d057e0c6ad4d817bca623b9
+- card_id: reflective_pool
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: reflective_pool.jpg
+    sha256: 9ade8c4f4c0b6ba1488ab4f1af0a2099c8ca65e8cbf6efa6a3a371e6d001a7e6
+- card_id: refuse_advantage
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: refuse_advantage.jpg
+    sha256: e3a8615c6a9aa4b2646f7e71187ea02fe8b05717289bc610811fa3181bdef7cb
+- card_id: remorseful_seppuku
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: remorseful_seppuku.jpg
+    sha256: 5519dc896948e9f0285153ab73059f1bcebd4154ad22f97cfbd9b3b4893c99ba
+- card_id: resist_magic
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: resist_magic.jpg
+    sha256: 7fd2e9e9e67d6c73db1b8b34af063f2f1457091f86b03475fcde21c82f4ddc8a
+- card_id: retired_general
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: retired_general.jpg
+    sha256: c6d5bd0255496f8ba8f86039b0644d5bc9ec1fad12f617ed0d06e1cdc7ae9377
+- card_id: retreat
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: retreat.jpg
+    sha256: 363d48fcf9ddc177348aa63a8b5af478641bce58f617749ca6ac28d1b1b80300
+- card_id: ring_of_air
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ring_of_air.jpg
+    sha256: 4275084e40358d9f287037501cb1dcb66d52a909cacd4f3b1493e044748575ac
+- card_id: ring_of_earth
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ring_of_earth.jpg
+    sha256: 9302761e037dd098f217837e447e8cf30f452216cee7c20dc10c7c5df7dfa4b1
+- card_id: ring_of_fire
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ring_of_fire.jpg
+    sha256: 3e7419cb1e7fc8aa15e17217839b2940616b91d797ca3345c3d7b2e0e01217d6
+- card_id: ring_of_the_void
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ring_of_the_void.jpg
+    sha256: 951fcb4d7477f15c221c3b1343c4093080bbf6ac17f07ed903e69c00ead0213b
+- card_id: ring_of_water
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: ring_of_water.jpg
+    sha256: 90577de1627b2ac542b43ed34bec8baf2fd8ed980e04e567df4bbdec65296e65
+- card_id: rise_of_the_phoenix
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: rise_of_the_phoenix.jpg
+    sha256: 21620378bd1e41357189f1dd43430b5eb509e3249e53995d035ecc07b844b6ae
+- card_id: sacrificial_altar
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: sacrificial_altar.jpg
+    sha256: 0779202d4f55159daef67148d95d66e8cb6816c83f5f72003941bfad345c8f5d
+- card_id: sake_works
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: sake_works.jpg
+    sha256: 344556680f107056db5de1b48b6554fdf494e11d73704b16e9d37b89fb09c6af
+- card_id: samurai_cavalry
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: samurai_cavalry.jpg
+    sha256: cbf3cf489ad3f5bded29da30bb3071796b9035c85a786f32d3f39c5f534505ff
+- card_id: samurai_warriors
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: samurai_warriors.jpg
+    sha256: 3e9224523ccc23302c31febb1b42f647024281d7171255661cd7343460dc9141
+- card_id: sanctified_temple
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: sanctified_temple.jpg
+    sha256: 201b398c15e80bcebdc5308ae710204c5e2589070d50432abe209954e1ee0509
+- card_id: sanzo
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: sanzo.jpg
+    sha256: 967c6290cd2d24abc81eda7d9fac9ecd910fdb6d12304bc960decc89afa3e5cc
+- card_id: school_of_wizardry
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: school_of_wizardry.jpg
+    sha256: 5a64a0981d0b4c964f91606dbf1daf89be2ce06d5dde325943f904907a37a595
+- card_id: scout
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: scout.jpg
+    sha256: 24534a7e6572b1baf151d623300f6706651ca397de68af2b51e91d43cde4c07f
+- card_id: scribe
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: scribe.jpg
+    sha256: d280b31ebc3d5f0ab846f79152343f7f7a9d947bc002d9a7cecc357ff77969d9
+- card_id: secrets_on_the_wind
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: secrets_on_the_wind.jpg
+    sha256: 62626052d3e7cfb60f91feea5365a561db44e0f96dee46fa0f03f55c3c7ee510
+- card_id: shadow_samurai
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shadow_samurai.jpg
+    sha256: 0b5e4be26775534cd6af0f65bea156f051eab096b0b8593e1e3b679577d8dee9
+- card_id: shady_dealings
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shady_dealings.jpg
+    sha256: f81c88adc014ac1835a7a4d2b0aa6b967bb829e5ec0d7d289e4f6e39824c0451
+- card_id: shame
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shame.jpg
+    sha256: 6997161c5a0dca00e52cb282f7cfbe25db2397d9201b35dc33ba9e5cd60df871
+- card_id: shiba_katsuda
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shiba_katsuda.jpg
+    sha256: 8d5fd4f38ad5e39932d770724602e7aa8587c220627deda2fe30f7adf5a1ba41
+- card_id: shiba_tsukune
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shiba_tsukune.jpg
+    sha256: 4ec907f1c2530623a175613f07865c1159861f09b95c8da43ceefe2f0d7ec405
+- card_id: shiba_ujimitsu
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shiba_ujimitsu.jpg
+    sha256: d52bd765aea475139d12505268314a6b64c78e6acc9a21d94491bc36473084e5
+- card_id: shinjo_hanari
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shinjo_hanari.jpg
+    sha256: 282881087d3dc4d4b5bc2ba63c2d9c30a19c155da0c823bcfd4e2db13ae373b0
+- card_id: shinjo_yasamura
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shinjo_yasamura.jpg
+    sha256: e84aef9e5a6307b97973463adb766c2fdb9b0ab582c8ca2d630d74e2463633af
+- card_id: shinjo_yokatsu
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shinjo_yokatsu.jpg
+    sha256: 0d346112698ffc8a12dcaaee319296912406fdd41d7473b31bd01c6cf2bbcd6c
+- card_id: shosuro_hametsu
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shosuro_hametsu.jpg
+    sha256: 5f592270560cd6feaf5fef50fea8b3f2697af79538888bb08716b3711f00805b
+- card_id: shuriken_of_serpents
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shuriken_of_serpents.jpg
+    sha256: ff25259b7ffbabbbed89a584f7cb036dbfd3f687b5cb7499a6c8559eb01ea57c
+- card_id: shuten_doji
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: shuten_doji.jpg
+    sha256: 5e235e06c5841c6d3e7dc6ef530ad606fafb92c8c8f86884350e981afc7127fd
+- card_id: silver_mine
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: silver_mine.jpg
+    sha256: fb6ceca38d0b966eb9f1b75806904821a717341d4af7002cd722ab338007980b
+- card_id: skeletal_troops
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: skeletal_troops.jpg
+    sha256: f18bd7a3f2712b348ca6d1d155aa13399e3635f6c7b33bc455813e4e895ea332
+- card_id: small_farm
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: small_farm.jpg
+    sha256: 27b520ddc7a611818339a67779a78ab8c7a07d4d46988c61cd41bda4644abf20
+- card_id: sneak_attack
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: sneak_attack.jpg
+    sha256: 2fdbbe63cf9ecf5e233da856eedffb8b5565ba5d1318200ef3e701ce0460aaed
+- card_id: solar_eclipse
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: solar_eclipse.jpg
+    sha256: 092c62f6d3b1ad1842d9c64f558f5a633552d8438e0915516fed53a517574c7c
+- card_id: spearmen
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: spearmen.jpg
+    sha256: 8dd7857f8b8e978f27611659b1618bf2b8c23765c8555f658ec78a0ca8a99c96
+- card_id: spirit_guide
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: spirit_guide.jpg
+    sha256: 867acb0971096f90c73fd66d0cf5c10e110379bef440d0dfed2cc2c7923093b7
+- card_id: stables
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: stables.jpg
+    sha256: c7188c840b2235991a88874eb7a2682e74c51db30c4f8ce96acbc8a7397c6289
+- card_id: strength_of_purity
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: strength_of_purity.jpg
+    sha256: ce6735bc93f4af6a6055d59b26e563cf67914a0ae0b61dccda4dc0717a3540ce
+- card_id: summon_faeries
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: summon_faeries.jpg
+    sha256: 5b42df9aff7009b7be6d7259aeb5deee2c6ac175fb2068d07acb261fc8fc8651
+- card_id: summon_swamp_spirits
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: summon_swamp_spirits.jpg
+    sha256: b49b9376d1d5dc0e53da386fe39148d3fd4de043f28225a2bb00eae2bf4fa251
+- card_id: summon_undead_champion
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: summon_undead_champion.jpg
+    sha256: 11478b47c34e57836635b65c720a36d2c2a7734a0507e2d68e34934fb5f004ee
+- card_id: superior_tactics
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: superior_tactics.jpg
+    sha256: 53b665a76eef97e3080307307e9fbe013dad0f30f4ed574ad22a044455fa26c1
+- card_id: temple_of_the_ancestors
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: temple_of_the_ancestors.jpg
+    sha256: 1f3cc98414f5eb8793a47c6474ec538fabef0c17b85da24e7c1b0409f3c2ab8a
+- card_id: terrible_standard_of_fu_leng
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: terrible_standard_of_fu_leng.jpg
+    sha256: e86201d4873bf41895ac41701194066e7e3409adc96f930b44790cb017560870
+- card_id: test_of_honor
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: test_of_honor.jpg
+    sha256: 84b50e82a8760146f731606b887fbc82ec0018da22f60519225bc7d7ec00b06b
+- card_id: test_of_stone
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: test_of_stone.jpg
+    sha256: 978fd83e6a2468e0b4188d311b81c291c006370f2c53caa2e6bc352a81d08811
+- card_id: test_of_the_emerald_champion
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: test_of_the_emerald_champion.jpg
+    sha256: 44ebd4b8ba6652c1f94006cc1d2120f794469e49a4584f8ff52dd6d7ba66d0bb
+- card_id: the_ancestral_home_of_the_lion
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_ancestral_home_of_the_lion.jpg
+    sha256: e1f2d2589a536027ad497dea01efbfc4b26ba5a89692b636450404c2952f0dde
+- card_id: the_armor_of_sun_tao
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_armor_of_sun_tao.jpg
+    sha256: 26759c294169709b1c7b4e9447b84bd59986ce42e745c97fe0a77145b65b7c4a
+- card_id: the_armor_of_the_golden_samurai
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_armor_of_the_golden_samurai.jpg
+    sha256: 07d3322d54d45ba60aaa981c59b0196b261063fcf8d41d5fd4f3e68d5c8f2423
+- card_id: the_deafening_war_drums_of_fu_leng
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_deafening_war_drums_of_fu_leng.jpg
+    sha256: 12dec3704be219f85d71dd9d8483e77150f0391302817d3af3a2e7f2daf0e1be
+- card_id: the_demon_bride_of_fu_leng
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_demon_bride_of_fu_leng.jpg
+    sha256: 7005f0c3fabea787bc6fc40de9d16db13964c70e3829f2f0d8f8e7bfefdb0287
+- card_id: the_egg_of_pan_ku
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_egg_of_pan_ku.jpg
+    sha256: 00b9f919a8f38a172f33e67d28983a0f3b9075f89f12fa4e8f63f87defd88518
+- card_id: the_esteemed_house_of_the_crane
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_esteemed_house_of_the_crane.jpg
+    sha256: a729b1903cb4bf1e72a98a11d5b079d72bb5446bd1a22767c2786467aab69e37
+- card_id: the_fury_of_osano_wo
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_fury_of_osano_wo.jpg
+    sha256: baff922c959354fe5917e03b3d5eb6bce042b49935d4df5fd4c85c0d7437f08a
+- card_id: the_jade_hand
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_jade_hand.jpg
+    sha256: 05f8d9967a15dbec6906077314dc271a1401f9fc316175bb4bd90b244b6d68ef
+- card_id: the_mountain_keep_of_the_dragon
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_mountain_keep_of_the_dragon.jpg
+    sha256: 22f9441a3523fa4c5cb3caee47ff2037a11ee7bae34bc04821dd919d1fb30308
+- card_id: the_provincial_estate_of_the_unicorn
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_provincial_estate_of_the_unicorn.jpg
+    sha256: 582258038d106d655eae7ac496990f0c7202744b513ab0e5f77c787d19fa06e8
+- card_id: the_sacred_temple_of_the_phoenix
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_sacred_temple_of_the_phoenix.jpg
+    sha256: 58f9194209e599a43c4b4c3266bfcf94dfe4000f8adc1aec93a7ea55cfb90de0
+- card_id: the_star_of_laramun
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_star_of_laramun.jpg
+    sha256: 39bd0f5b8feb25ee2033ae1317fff630f2fcd141608dacc227af47465fc57254
+- card_id: the_war_fortress_of_the_crab
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: the_war_fortress_of_the_crab.jpg
+    sha256: 6f2c272e1be089b9f8092245c9cd0f6896000b99cc8c53d4eecd96ec671e808e
+- card_id: togashi_hoshi
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: togashi_hoshi.jpg
+    sha256: e43acd559bd54b50cc3cfef7f2e93f09d1905f53dbcaeaabb98750d5c75dd7e0
+- card_id: togashi_mitsu
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: togashi_mitsu.jpg
+    sha256: 766d6ccc642f17d0eb580d9e1fa581409f7ef18c36a00c77329e67967ea2404a
+- card_id: togashi_yokuni
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: togashi_yokuni.jpg
+    sha256: 8862ba4225edc0596f5a679233fbb33db2a8f113e3a6b9c7768e2635091569cc
+- card_id: togashi_yoshi
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: togashi_yoshi.jpg
+    sha256: 8594bbd9effd1adb71f1ea32cfe7719dfc76374c2c567d369c6ae4d950458808
+- card_id: toku
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: toku.jpg
+    sha256: 1e66f9a9dd6521b4b542dfdae1c6175cb484a55ded078857715f0ec65f4abf91
+- card_id: torrential_rain
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: torrential_rain.jpg
+    sha256: 8e00e371330a74bc8483d623e908edbafbbe428aacb6dd408c124f0ddfc4981a
+- card_id: toturi
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: toturi.jpg
+    sha256: 61839f042e03bf0c1e64a34f19142e9d75277e133ae255a18a6a63f4eaa40025
+- card_id: touch_of_death
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: touch_of_death.jpg
+    sha256: 9bb9a2c61ea3a85493d39b5d1a64076d0960c216f95b82b3da8ef441426c4af9
+- card_id: trade_route
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: trade_route.jpg
+    sha256: 356f162c22b9e3033f7393f896b1b5411977f5f9bd5a9f343860e86391728cf4
+- card_id: traversable_terrain
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: traversable_terrain.jpg
+    sha256: 2615d047e5fe8abc7f68b423414c26cf03bb9f07b248a20d9e31820e6987bfb5
+- card_id: tsuburu_no_oni
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: tsuburu_no_oni.jpg
+    sha256: ce5d08ee8ad2b4f2350358b34e0b8edeb22ee1bd4a3ef792d3dfe92a5a04d6e5
+- card_id: unexpected_allies
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: unexpected_allies.jpg
+    sha256: 5390ba2d845452e010807b4f252803f56265d599489817071d37a044522812ba
+- card_id: unscalable_walls
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: unscalable_walls.jpg
+    sha256: 78600f0413f45bba54d23bdf391dd76092965edf37a463c4e3de273adaa62958
+- card_id: void_dragon
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: void_dragon.jpg
+    sha256: fef2e69b095fd443073147dfda070838578fcd960f8211a09dbb36df7729d8ca
+- card_id: walking_the_way
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: walking_the_way.jpg
+    sha256: 4d799529154aba8e1733a016533be82fd6ce36f0168b72b0f505d56189490916
+- card_id: water_dragon
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: water_dragon.jpg
+    sha256: fa08396477924b56aa419c145944a76bb03e9ad4e6d771b278a8e21dc189ba9a
+- card_id: way_of_deception
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: way_of_deception.jpg
+    sha256: ca67e55e7d3ac94c65d2b014392515a0c084af02aff660773354ad8a6fdecdfd
+- card_id: wind_born_speed
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: wind_born_speed.jpg
+    sha256: c5c9f212edba87858823e4bf1a2d534e3ef2f64b255b9c899840d01f4bc516d7
+- card_id: winds_of_change
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: winds_of_change.jpg
+    sha256: ea38c07383628c75ea66049a27a7b035a5ed2a47e1db572e58e3bb22d446fcfc
+- card_id: wings_of_fire
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: wings_of_fire.jpg
+    sha256: 365c0e7f2a947b946619c89d182110e7eb38a92e788dc5ff0c1112b0aa69ed94
+- card_id: wyrm_riders
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: wyrm_riders.jpg
+    sha256: dda75091b2f479c5f591635d5f61c495ae0f826991f6f86eb55600157decb6a7
+- card_id: yasuki_taka
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: yasuki_taka.jpg
+    sha256: 7ddc972acf0085cc2ab8dfce2a471da235a0d74ac14a6beecbe30251ebbdfd5c
+- card_id: yogo_junzo
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: yogo_junzo.jpg
+    sha256: 882a8e5cce583c23bfcc343fa6612f169e97bbc981872a01bbea5165648f8170
+- card_id: yotsu_seiki
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: yotsu_seiki.jpg
+    sha256: 7db01b679826343f9ed558081c400afe2d5116e859a439ad210c4d9e23e47ee7
+- card_id: zombie_troops
+  printing_id: obsidian_edition
+  files:
+  - role: front
+    file: zombie_troops.jpg
+    sha256: b9fe7ae431f70fe7cd77a3ab897a9d497e1893ab454dd849ce7b352326c7f4e6

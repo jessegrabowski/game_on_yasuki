@@ -1,0 +1,932 @@
+set: Thunderous Acclaim
+images:
+- card_id: a_breed_apart
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: a_breed_apart.jpg
+    sha256: a69cd653e06ee912416fe62f20b4328762d269e92715ee0f930792d2a0057aa9
+- card_id: a_vision_imparted
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: a_vision_imparted.jpg
+    sha256: 99adcd68887989e4a6b8479a8f2a9a1bede0c328517b2f730665a36eb24d7940
+- card_id: accepting_the_choice
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: accepting_the_choice.jpg
+    sha256: 930a3fcce2f3667ee639329744d23ef091579a372f437e88d45a9d1c30535dfe
+- card_id: akodo_kano_master_tactician_experienced_2
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: akodo_kano_master_tactician_experienced_2.jpg
+    sha256: 36c027fbf6e2c1eee0b5c199259441c76d49e5d404ac2f251422aa3da97a7e47
+- card_id: akodo_naotaka
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: akodo_naotaka.jpg
+    sha256: 2d674934b009b3cfe772ab75b6831f1f4730549e4ee92b3492028f084e913404
+- card_id: akodo_toshigure
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: akodo_toshigure.jpg
+    sha256: 8de9c7d94c8a563bbfb28ca96663ae59a39c10e94f93aebd7e0b9dbf89cc6709
+- card_id: amethyst_adjunct
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: amethyst_adjunct.jpg
+    sha256: 504e46fc6e3b9d99da00580fc9b3ff3f07559571983f69bbd35ba3d24bce5134
+- card_id: an_honored_guest
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: an_honored_guest.jpg
+    sha256: a5882bfa458e03d5950f61008ec4b9af35d03a847f4d715006571968cc024d73
+- card_id: architect
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: architect.jpg
+    sha256: a1fdf9b4a4b33f5149394e2d91648a0088fcf532f068ac069f788b8888c4c5a8
+- card_id: asako_kazuki
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: asako_kazuki.jpg
+    sha256: b47b3c1532d197d495ca9441c15eff3403126ed8fadb805b68067da62da5c905
+- card_id: asako_nashimoto
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: asako_nashimoto.jpg
+    sha256: 37733ef193100153df6b7eca938793b78cda16cad82c5afae8590dcc13b29c2f
+- card_id: ashigaru_farmland
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: ashigaru_farmland.jpg
+    sha256: c89f2fb180a89057de0f8ff633854a61ac99f17c6602b093f76b588f3aab604e
+- card_id: ashigaru_gunso
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: ashigaru_gunso.jpg
+    sha256: 17ddc7e2292cfb3bf191b0fa81b342191364efa98e29424e37a9b40017068197
+- card_id: bamboo_irrigation
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: bamboo_irrigation.jpg
+    sha256: 69d6baf7f1304d0664472636a05962ed8a0beab1b7ec5fca73887f95c5b2a227
+- card_id: banished_experienced
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: banished_experienced.jpg
+    sha256: a70395786d91288ecc9fabc537dc67fa9d51a78f36d9178fe9957185556f31fd
+- card_id: battlefield_challenge
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: battlefield_challenge.jpg
+    sha256: 4ac12a501acccb58adcbad02bb52b3b220ca9e1c2865db77ad53bfc1c481eed6
+- card_id: bayushi_chizuken
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: bayushi_chizuken.jpg
+    sha256: c2ef59410360a6d951f6da80df509fb7e85d78dd2648320882288f115696831b
+- card_id: bayushi_fuyuko_experienced
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: bayushi_fuyuko_experienced.jpg
+    sha256: bc8db1024ff7000b1d9e5fa53906d1fe0e31e68a9ba8ce103429f253cedaf630
+- card_id: bayushi_tenburo
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: bayushi_tenburo.jpg
+    sha256: e8eb5fbe5ab67983ba7ce8e374a0ffe72e8b69adfd26149c24931fe1d9db8cba
+- card_id: be_silent
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: be_silent.jpg
+    sha256: 1b7f630ed7a48fb781962465de29e8ec47bc3b281b434bbc357c54e530916d04
+- card_id: borderless_fields
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: borderless_fields.jpg
+    sha256: 8d2b24f249b6dfca395b1a8e89e75dc73e657f144fb89ccc9a24d398189b8510
+- card_id: box_of_secrets
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: box_of_secrets.jpg
+    sha256: 86d5dda9b28612705a4353dfa35873f8dff7623429d8575d84dd4dee0049dba9
+- card_id: caravan_guards
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: caravan_guards.jpg
+    sha256: 356a1dccf2b08a870e01c07ab212b0631ba7370f37c67bbcc6c346d9b09e7057
+- card_id: caught_among_thieves
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: caught_among_thieves.jpg
+    sha256: b20fda81d5132ef5003afb191ce02e31980d3e8ea2f5f4596af69475974e730c
+- card_id: chuda_teraiko
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: chuda_teraiko.jpg
+    sha256: 00b76f0825995d3a3462e6600eeb9f7a94a35c80c07301d485b659f403ce9d6e
+- card_id: combat_drill_field
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: combat_drill_field.jpg
+    sha256: 7c822f2c0b4b982a654a5d50da32c41965876dce0014ee7a5ba72b34189184e5
+- card_id: confounding_departure
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: confounding_departure.jpg
+    sha256: daa74c633be3ee90879fa002b6f6b8a5132b7152f5f80265cb2fbffb19ed5011
+- card_id: conscription_officer
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: conscription_officer.jpg
+    sha256: fb70aec31e3f11cffc8a0acd1e8ae98e69c146771744ef8bac77b51fa2b82ec7
+- card_id: coronation_festival
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: coronation_festival.jpg
+    sha256: faf89a93858409bb836a16f18738c670415621ba5be5ee8ff2abcfcf50f3d4e1
+- card_id: daidoji_kuraou
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: daidoji_kuraou.jpg
+    sha256: 751ae94e0d2553fc119f7de58e9215561ff0f8397e46f9a0cd700e7f01444b28
+- card_id: daigotsu_kanpeki_unleashed_experienced_4
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: daigotsu_kanpeki_unleashed_experienced_4.jpg
+    sha256: 6760e26880d8c688a7ba8a5c9abb0d92fb520c5f444683c91248c985428c2d37
+- card_id: daigotsu_onita
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: daigotsu_onita.jpg
+    sha256: 72721e341104a6a91bc46cb76e9d719448c225af6b9a10be8a96bf614b718456
+- card_id: daigotsu_tomiyama
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: daigotsu_tomiyama.jpg
+    sha256: 30a031a569332782178a754f6a0b099a397c861846b101b751e6fb52bd3e12bb
+- card_id: daikura
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: daikura.jpg
+    sha256: 28e63a2b4e89bd514a36d291c4dfd18258cd67604e449666190222615f6ec204
+- card_id: darkness_inside
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: darkness_inside.jpg
+    sha256: d419b945a0558787ba5e24bd383b25d1223835669391eaa6d8d5e40f902c339a
+- card_id: dense_jungle
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: dense_jungle.jpg
+    sha256: 83a6d451ed90a5d2f9d3ccab8224efbb248f6e6b5f68ff1d5c2ae40b4894f418
+- card_id: dissension_in_command
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: dissension_in_command.jpg
+    sha256: 4f2887c3044e90ae9db90c740879488fe83a65a4bf3723165c5f26ec344a8390
+- card_id: distracting_paranoia
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: distracting_paranoia.jpg
+    sha256: 4640f58da66ce0d038dfbe526699df2c403c84bfa90040bd193f94859849d361
+- card_id: doji_buredo
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: doji_buredo.jpg
+    sha256: c6d54dbe93f877653c15cc6af4e6a6b894869453e5acd53edaf93fafca865d39
+- card_id: doji_hoshihana
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: doji_hoshihana.jpg
+    sha256: 7a9ca72a344ece398285d4f55000f91af41edf49e7fe3a7735eedabf7e4503a8
+- card_id: doji_moro
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: doji_moro.jpg
+    sha256: ed62abc2045cdaf5d3aaa6363efa6822e172db74a514a90c1071b92e4f7145da
+- card_id: exodus_of_the_spider
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: exodus_of_the_spider.jpg
+    sha256: d55f12df9a213bb83142a64b2baba45af1321f271eaeed8efd0a2feb98e864cd
+- card_id: fang_of_vengeance
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: fang_of_vengeance.jpg
+    sha256: a4c3a2ac5007ba09fa6c0e22b64f5b7d344a3e04f7d46147bc13f3d671a04353
+- card_id: fangs_of_the_heavens
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: fangs_of_the_heavens.jpg
+    sha256: d3c106a3d61a94d671ab6169a7a9c9543638fbaba493707002f95f0d85dc3248
+- card_id: flawless_naginata
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: flawless_naginata.jpg
+    sha256: 8ed4e46be89bf426668bd7192e449c0eb1b445ca62dd424c918a09d42f0c6c7f
+- card_id: fresh_recruits
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: fresh_recruits.jpg
+    sha256: b1bc6c9663b2fbac78687aa9c0ecf13d6693fdd4755cb32d4cf1c52e9609f493
+- card_id: garrison_hub
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: garrison_hub.jpg
+    sha256: 29665027d83bc4d34b5b6709af120be9a672011beec2b56606a0fe64e1fbee9b
+- card_id: goju_kenteiru
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: goju_kenteiru.jpg
+    sha256: 61ab8078591cf39a0e809cae14fa21d7d98ce1eb65152a6f696f77cc4cbcdd50
+- card_id: hasty_defenses
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: hasty_defenses.jpg
+    sha256: 57957ff23d3d4348638dcede235ce090900c2e6fcf6a689b4d5c11ab623367d4
+- card_id: heisha
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: heisha.jpg
+    sha256: 9692e09c62248de524a1ed2bc4b7738c55b4345ed405dbae4dfcbbdb1c1f40a6
+- card_id: hida_toranosuke_experienced
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: hida_toranosuke_experienced.jpg
+    sha256: 1159c1ac827f9101201dd2c76cdb8772a2e96634d80564386c5b80e753c024e8
+- card_id: hikahime_sensei
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: hikahime_sensei.jpg
+    sha256: aa074d3e0ebb1a889dd6c507495a60eea391911468dff4c6062c0b8592858ab8
+- card_id: hira_sensei
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: hira_sensei.jpg
+    sha256: 67d9487341a7b05880201fcad2864d03c11a7e8f575f2c00ba1628c9879b6839
+- card_id: hirakuras_attendant
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: hirakuras_attendant.jpg
+    sha256: 79de5f51ebfbc760242eb1b48f1660ff7ff5b6208583fe5975001c967a605182
+- card_id: ichigo_sensei
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: ichigo_sensei.jpg
+    sha256: 24bcee4949060449a0928c0705f990b252710abcc937d04c9878023e58ea6df1
+- card_id: ikoma_kiyomako
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: ikoma_kiyomako.jpg
+    sha256: fed9c428c8464d44e60c370da464a784af629077ba6689c993ab3478b4ef9b13
+- card_id: immaterial_weapons
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: immaterial_weapons.jpg
+    sha256: 33a26a73bce9b746ffc2eb3ee004d8672ad8379fdca215faaed59580bf6265fa
+- card_id: inevitable_victory
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: inevitable_victory.jpg
+    sha256: 0f08ce0848bc10b870142d07db79d0eab81ecb5dd0a6f3851c337cbd15287010
+- card_id: inexorable_advance
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: inexorable_advance.jpg
+    sha256: 1aa704784ed62bb22ca8eb05dd52c7ad2433ebe0ee05f1e6690fd378004e95fb
+- card_id: intimidation_tactic
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: intimidation_tactic.jpg
+    sha256: 793b49e5069f59dcf55de1f1e70739d5bb371c42230c30c12668abadc62a656a
+- card_id: isawa_fujisawa
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: isawa_fujisawa.jpg
+    sha256: ba5f5ae318a16b58391231c9db793398bb8ecd83d748dba34bb6cd85a553bd59
+- card_id: isawa_hibana_experienced
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: isawa_hibana_experienced.jpg
+    sha256: f1b1f85bcaea60030158600813cb6645b6f35cefa0d7fab0fb29d48127ac12cc
+- card_id: isawa_nobuo
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: isawa_nobuo.jpg
+    sha256: 9f788d2ee9c16df0aef5d19cb9fc442cbcfa5b16a55edd138b3deb01c4408446
+- card_id: isolated_farmlands
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: isolated_farmlands.jpg
+    sha256: 7ab9d550526b41a1a48342aac9e99512f67b4c309a1c4dfb283ceae9da1f4105
+- card_id: ivory_ascendance
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: ivory_ascendance.jpg
+    sha256: b3b45f7cf6fd0f2d1be2c948408c4dd885f97d53c0b65f258416f80e5044f284
+- card_id: junghar_regulars
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: junghar_regulars.jpg
+    sha256: 096b8f4264328a54a22cb6c05d0748b5caba320c609a6211acc812af26cbb4b7
+- card_id: kaiu_gizen
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kaiu_gizen.jpg
+    sha256: ad52824d7f6740ed88621b8fd841f1c7f444b5bdd5cd4db640c134afcccd968f
+- card_id: kaiu_otogou
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kaiu_otogou.jpg
+    sha256: 89f8e992c2d6ed9cc414918f5766f9febbccb980624872a2af3294b9e37eb150
+- card_id: kakita_iwari
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kakita_iwari.jpg
+    sha256: 3f2e9403171acc32c6edbaa33353ff520f190f63774b1fa7501cbf6f309d4dc9
+- card_id: kakita_shinichi_experienced
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kakita_shinichi_experienced.jpg
+    sha256: 092929683557eb9d59aa1e2d026d2097150c55697713827aee3ffef76621381c
+- card_id: kanos_tessen
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kanos_tessen.jpg
+    sha256: f94f38735e3dd429535173c25eafafa13fca0728c0e72222589c727b8a28c180
+- card_id: kenturo
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kenturo.jpg
+    sha256: 820b500aba4572009f54266be7fc1b0a782cc859276e5019076101b06aefca5f
+- card_id: kharmas_first_form
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kharmas_first_form.jpg
+    sha256: 11faac9b2157f1b73d3733f1464e502862c7e04ef8ec8438da4ff7155e0d1ee7
+- card_id: kitsuki_akito
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kitsuki_akito.jpg
+    sha256: db217cf05448da5a1abe10f42e7a0aae83fb84e79461c6d6f47d6fa100157f47
+- card_id: kitsune_narako
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kitsune_narako.jpg
+    sha256: 561bcf9a52b895097672f70eb04cadf6df7a815df37e702aca16bc56be49e61b
+- card_id: kuni_igarasu
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kuni_igarasu.jpg
+    sha256: 5d4984438b45db78f71e66e250b1c87ff30af235b6d2d981ff05d9bf1595eb3f
+- card_id: kuni_soseki
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: kuni_soseki.jpg
+    sha256: fccd87d7fca0766644260b89464f66726f3b725c50e680b93d67d7f8202b6379
+- card_id: leave_it_abandoned
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: leave_it_abandoned.jpg
+    sha256: df7ad7727dd2ff39204f0b2b611473b3d8ba8fe93dbcc30c0110ab23140cd46c
+- card_id: legion_of_the_ninth_kami
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: legion_of_the_ninth_kami.jpg
+    sha256: 216102fb3b251189d478e8810d9170280a4f3c369fb55ba9f676d1cbf21f1628
+- card_id: master_bowmans_yumi
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: master_bowmans_yumi.jpg
+    sha256: f9fca3025eb58942b268e7d1837f9a1db8e79eb305aae89c3ff10c0a88290fa3
+- card_id: matched_daisho
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: matched_daisho.jpg
+    sha256: aad202b7c733c1c8c38d9cdd0a1455e481d3442fa64fea0d4aa41a57f33aaa88
+- card_id: matsu_hideyuki
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: matsu_hideyuki.jpg
+    sha256: 701f72a2968ad8cacaefc6a70c3858a1c75e668579254b2772672b07d3d08751
+- card_id: matsu_kaori
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: matsu_kaori.jpg
+    sha256: 01cbe1ed40c36deb7a8c21efcf0cb9ab708070e838c94df2559c42ebe22df477
+- card_id: mess_hall
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: mess_hall.jpg
+    sha256: 6d88065db5b26f325363dfa9c125ba58f000eee5197a3ee3c832e799a922cde5
+- card_id: mirumoto_higaru_experienced
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: mirumoto_higaru_experienced.jpg
+    sha256: 032f7a309b117b88c0665d3f46e7b81bfdcf8c3919a6b2c28ba0df1b2e1f111a
+- card_id: moshi_kyan
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: moshi_kyan.jpg
+    sha256: 2f6e5c2442458e4ca72fc07d9f6f03b8b82de5284129809ed6a870ed4b8ddf20
+- card_id: moto_baatar
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: moto_baatar.jpg
+    sha256: d5cb3ba33503d206e0a44229624bcae1072195758df1741ccbe8721927760d63
+- card_id: narrow_passage
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: narrow_passage.jpg
+    sha256: 1cb0f2b54f2682153e6a02eb8776fb3950caf010e083503c5be6ca6a50efdcaa
+- card_id: ninube_aitso
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: ninube_aitso.jpg
+    sha256: 7249b3dd3ae791d16354c9575c458c08c277005376abb0b9f5f874c129c4d4e3
+- card_id: not_the_end
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: not_the_end.jpg
+    sha256: 517d695aaba33e533b570c806bdd6a0e3995d4313b11bb55fb747b31447b0a82
+- card_id: nourished_by_fallen_leaves
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: nourished_by_fallen_leaves.jpg
+    sha256: c602478bc667f4cf62aded550fe1ce6c89ebb73f7733fb9b1a58c3f4ee451f2c
+- card_id: numinous_mantra
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: numinous_mantra.jpg
+    sha256: 28fa787816d9504b3b6a65bfffa5477b44f3933947f2fc92f3905eb0161bcfca
+- card_id: officers_lodge
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: officers_lodge.jpg
+    sha256: f04f4e7d163f707df62eaf9a0d8618d55cd1ea9a7ee61992da994c0b6d5dd26b
+- card_id: ominous_rumors
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: ominous_rumors.jpg
+    sha256: 6be964b784b0811976501610b0132a75847892ec023e3c031698acb5b9e34561
+- card_id: on_storm_borne_wings
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: on_storm_borne_wings.jpg
+    sha256: edea282e4d17d11625b24ea65154b1dbf7bb663bd200080b136eae36028d4161
+- card_id: onyx_ascendance
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: onyx_ascendance.jpg
+    sha256: 4ee384b888f1fde5a2027764e5d18401cfd43aa5f516ca0a5a1f6dab58c41128
+- card_id: padis_dojo
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: padis_dojo.jpg
+    sha256: 473365c99dcbb27d48972a820a4461c46c863948fdab59d03333769d6b8948ad
+- card_id: peaceful_retreat
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: peaceful_retreat.jpg
+    sha256: 7521d35689d48a75a4fbd4e8f6e5196eca4a6020f339da5db1c2b0dd88a43a32
+- card_id: poisoned_shuriken
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: poisoned_shuriken.jpg
+    sha256: 0a66c3200a912012f3fca0bdc71e158f2414f2f3703a3e73d75ad9d3815ed3e9
+- card_id: razorfang
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: razorfang.jpg
+    sha256: be2e0ec088a0f98fde6eb563b82cd5fe4b270f17d58bd284f8508af25f8ab8b7
+- card_id: reinforced_yari
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: reinforced_yari.jpg
+    sha256: c8029d0c19ec44de270e373632576837bdb0b442687fecd34e8ef1f853ece3ab
+- card_id: rhetorician
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: rhetorician.jpg
+    sha256: f9031a0586afc35cfd63fedd77864e5da2b432e592838e87b2f98ba2f3d38796
+- card_id: ruby_ascendance
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: ruby_ascendance.jpg
+    sha256: dc04fd846a6388625b2e0a721768fb88ee44e153a5e445e2385aad0c9c42718e
+- card_id: secret_alliances
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: secret_alliances.jpg
+    sha256: eb20a287c4c2a81d651344ec537523d013860a852fa521441063a17e2fe93854
+- card_id: seeking_answers
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: seeking_answers.jpg
+    sha256: 91d25156789e0351fe88b9184205337988b0b6aadc5e7d1117e5569bc6181412
+- card_id: seppun_omihiru
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: seppun_omihiru.jpg
+    sha256: 11a0b7bc43f33b859e522b5a347a18a3c1549b0fe69d9131efd50345b54fba6b
+- card_id: shiba_hano
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: shiba_hano.jpg
+    sha256: f695a5672f17a21195be1fe40c232585cbb3914072bef60a57beb231dc18fd22
+- card_id: shield_of_the_honored_soul
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: shield_of_the_honored_soul.jpg
+    sha256: 19502a3a9d1d1bfbf93c4a63e469bf784aa61930c9d54242e96097ab4b3a98d1
+- card_id: shinjo_chairei
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: shinjo_chairei.jpg
+    sha256: 10b94536930e02ad113e09c33c59f975b6a8e15126bafeb8f579633c4bc48e30
+- card_id: shinjo_tsung_min
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: shinjo_tsung_min.jpg
+    sha256: b53f3b486f221d377d11770bdda445c1ca3778f6ed79162bad37d99a66305789
+- card_id: shiotome_patrol
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: shiotome_patrol.jpg
+    sha256: 8df05bc97ff37a4c3b471979dbd0456ebbdbf28b8dc6230b32b384fa17b91eed
+- card_id: shosuro_kanako
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: shosuro_kanako.jpg
+    sha256: 64c6072462d6e0dafa2f5a45e6cbc0e5667a8c91a2c3abf66d83508ce5ff06c6
+- card_id: shosuro_wayari
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: shosuro_wayari.jpg
+    sha256: 07636862fd139388b2703256b57015d94c620355170273b5cacf8b01efb1bbc1
+- card_id: soshi_mumoshi
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: soshi_mumoshi.jpg
+    sha256: 4ee36443cc9fefc852adc01c5eaf73fe2400d0a82a009e2d3495034c00c913a6
+- card_id: stepping_behind_the_tapestry
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: stepping_behind_the_tapestry.jpg
+    sha256: 5a15b96342b34b2311326cb56b043d7e797d25b2c8d41e8c27df58a3b5b9a568
+- card_id: strength_of_the_torrent
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: strength_of_the_torrent.jpg
+    sha256: 9ce3756b6b1a65693105f5c846a386d9b9f60aae980dba26ad8ff596864d9682
+- card_id: strike_of_the_obsidian_blade
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: strike_of_the_obsidian_blade.jpg
+    sha256: 658d16723a3f5f2536799829d08128095f7f056792f5580f4f22aefa5164334b
+- card_id: sundered_blade
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: sundered_blade.jpg
+    sha256: d533f8ce0d7ca641c6153b9c3025ba37c4f9e09cae6ebd806cf78cda98cbbec5
+- card_id: swifter_than_sight
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: swifter_than_sight.jpg
+    sha256: 551230c4aefe58322506a523bd04167914126921105175f5c38a13592c2d34f1
+- card_id: swordcatcher
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: swordcatcher.jpg
+    sha256: 458d394ab1bcc79890354bc1d6d94750526eeb1c91b64e61e12d64fb8675a55b
+- card_id: tamori_hirakura
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: tamori_hirakura.jpg
+    sha256: 431fd1d7ff28d85973ca48fbfa93935cbd5407e32d9f8dea25e1b501727df59b
+- card_id: tamori_mabasu
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: tamori_mabasu.jpg
+    sha256: d8ba8b5e5e4b5cbcb66264aefa99124d9c68e85effb3887f2d085a0654acaf2c
+- card_id: terrible_revelations
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: terrible_revelations.jpg
+    sha256: d9746100420f6ac4175572fca7adc870f524cfc96dc5b8910e7e2faad8dfb745
+- card_id: terrorizing_ambush
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: terrorizing_ambush.jpg
+    sha256: d55077f18fd08659994aac3744aef2ac0a6358590b44cac5c2445c65a600dfdf
+- card_id: the_dark_swords_lunacy
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: the_dark_swords_lunacy.jpg
+    sha256: 494b3cb516ba42d2630d63941c23a920dc53ec089a9b7141894e2aca1c74bdb8
+- card_id: the_indignity_of_arrest
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: the_indignity_of_arrest.jpg
+    sha256: b30f1931002881571097fa546ac312e0d9bf59e1ac84ae8bd694bd0928073dc9
+- card_id: the_looming_darkness
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: the_looming_darkness.jpg
+    sha256: baac92f371067285cd4b88a8224a2cbb6119dbd69fa26028282992cfec054f34
+- card_id: the_price_of_shame
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: the_price_of_shame.jpg
+    sha256: c3f89fba36b09ad29598a6679879692c0584ed30fde34cd4396982b3509ba552
+- card_id: the_spaces_in_between
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: the_spaces_in_between.jpg
+    sha256: a97ecd3f163ccda3651194104be3b95ee7bec94dc2d362a65086e218818dbe07
+- card_id: the_thundering_death
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: the_thundering_death.jpg
+    sha256: 03e87e90ad0ec641b7aba406923d2c75631e8c101beb02718e5300c9bfe1e25c
+- card_id: togashi_tameko
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: togashi_tameko.jpg
+    sha256: 70167cc3a8334b39ec4559df7af81dd32d75385fd750d2fb744a036d09ed8dea
+- card_id: toritaka_suppon
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: toritaka_suppon.jpg
+    sha256: d85299abaef956e8fc3dc671e2b27e106042fcbe58e227a84c686f844b0ab61d
+- card_id: tracing_with_the_mountains_finger
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: tracing_with_the_mountains_finger.jpg
+    sha256: 55140c28674f3f0737c8dc2d958c2574162945ba4138b0dde9b0d3122aad40c0
+- card_id: trick_of_moons_light
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: trick_of_moons_light.jpg
+    sha256: 93fbe02fea84cd8b25df2aa4716a85501454e3abb3fdc7f3d2b8a088f3fd5370
+- card_id: tsuruchi_akira
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: tsuruchi_akira.jpg
+    sha256: 2c9180d22bf3a6476156f4e74ebb8751daa246f510b5efe007429ac5b5c1f71f
+- card_id: turquoise_adjunct
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: turquoise_adjunct.jpg
+    sha256: 3e8a1b99143d512f7fa03e23b2190bb374cf9ed0c85a7a5c2be093e949444be5
+- card_id: unexpected_valor
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: unexpected_valor.jpg
+    sha256: f596d9d51934261dc3013a2de71ef0e16262afdb7520639bf32959fbb2a24172
+- card_id: unforgivable
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: unforgivable.jpg
+    sha256: 173935f19c924b988aa9189e6f6af352ac3f6436e4eabb8c209bdf9a17508cde
+- card_id: unseemly_brawl
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: unseemly_brawl.jpg
+    sha256: 44f56657ae14bc7dce5c62ab1ade486de9aa78d9b665a823f506202e4827d257
+- card_id: unwanted_tutelage
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: unwanted_tutelage.jpg
+    sha256: 4da87d1275c0264f1ae93776251ead4884dff86f6873621edbea3b8eeee7ea19
+- card_id: utaku_masako
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: utaku_masako.jpg
+    sha256: df5d4f290d3d7ee8673c8cf8d06b48a936d56a7862945eb76e933c4d96cba35d
+- card_id: utaku_sakiko_experienced
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: utaku_sakiko_experienced.jpg
+    sha256: c920cc8a43f5d4b9d610fe81b751cd8876260259c325a4f3536b88cba2329967
+- card_id: utaku_zo_sia
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: utaku_zo_sia.jpg
+    sha256: 4934d7e9beefdb5571d0c3714ee303dd2f929f5bff81676cc3cc541a53a07786
+- card_id: veil_of_water
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: veil_of_water.jpg
+    sha256: b07c7f23be1a3dd4692eadc041a0fedb173835a1976a1112bcd33ace88111da7
+- card_id: venerable_spirit
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: venerable_spirit.jpg
+    sha256: 6358cc478646b78e389493a941c4f97d0ab6b8ec0909704be235be467b26c77e
+- card_id: veterans_farmland
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: veterans_farmland.jpg
+    sha256: 09689d1383ba1d2b103274aa882ee00234560969faccab5f27521124ea191328
+- card_id: village_defenders
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: village_defenders.jpg
+    sha256: cef5735cb0019e16c30ee8fa83600ffcc802d23c7a9dfca8d22e7e39b83ba4c1
+- card_id: virtuous_victory
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: virtuous_victory.jpg
+    sha256: f745b13a0a6fd6671a97ae2ad6ed4d3f6f0d91ec47abc9364c2d5510b9badf11
+- card_id: walking_with_the_water
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: walking_with_the_water.jpg
+    sha256: e7b6f495328ce610a8dc9d64f8daa01c0ee08dc384abc02ebb2df8da6c253f02
+- card_id: walls_of_death
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: walls_of_death.jpg
+    sha256: 0ac31e16fa519f64cf2c610baaf7d52ae4d523dbbdbd42ebfa920d75c10778a3
+- card_id: warning_flame
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: warning_flame.jpg
+    sha256: 8de4141c4ac3d9a102a7c733591afebd69a57f62c0f23d7162a28037f9053f71
+- card_id: yajinden_sensei
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: yajinden_sensei.jpg
+    sha256: 13201f049e10f3b151fd4f0d603d4931f36c1d497786f1911eeefc97238d8e7e
+- card_id: yoritomo_kinshikirai
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: yoritomo_kinshikirai.jpg
+    sha256: 0bba42f52e5e6ca443804e94350a217a688a0e3bcea40e05dc9954e54caeb9f1
+- card_id: yoritomo_kyunan
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: yoritomo_kyunan.jpg
+    sha256: 5e7e6f9b4b100d6712ad32754558e8b3419f24d206042b5d78f7da86832dd3e8
+- card_id: yoritomo_minoko
+  printing_id: thunderous_acclaim
+  files:
+  - role: front
+    file: yoritomo_minoko.jpg
+    sha256: 125743f42e8eaea28dce442a7e103e430cb0fc5c8c305f6ed32bb60f983609f9

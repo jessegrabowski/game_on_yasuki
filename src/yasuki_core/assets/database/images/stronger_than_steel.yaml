@@ -1,0 +1,944 @@
+set: Stronger than Steel
+images:
+- card_id: a_gruesome_display
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: a_gruesome_display.jpg
+    sha256: 8d7907bd1e2dab08acba30ac7253f4dd0933d28d24a50f7aa00e6fd407a4d8e2
+- card_id: a_lions_roar
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: a_lions_roar.jpg
+    sha256: c327abd1a43db1ff9743718359066855ed9e097afa1149b3bf7b8770ede33a45
+- card_id: a_matter_of_honor
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: a_matter_of_honor.jpg
+    sha256: 523594c5dd99f0460133c22bce0af36c9f2613e50a0ae615b34871f5ef27d40a
+- card_id: agasha_tamaki
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: agasha_tamaki.jpg
+    sha256: 921e55aed62c492e2a2e4aaf674496dbea556e20189b8b7e3f563bcdbadbcb4c
+- card_id: akodo_hiroyuki
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: akodo_hiroyuki.jpg
+    sha256: f2d86e9b7befc63a9c5aeb2e0edbb964af4d244706d0875ab2e51327c094b677
+- card_id: akodo_katsumoto
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: akodo_katsumoto.jpg
+    sha256: a2a85806ce11907321d45ecb015e494bf3617850365fe72dd484bb416f870c0a
+- card_id: asahina_ekei
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: asahina_ekei.jpg
+    sha256: ee5e434dd577311ac1673492ac388333d7511809be82369ad46b92b85279228c
+- card_id: asako_bairei_experienced_3
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: asako_bairei_experienced_3.jpg
+    sha256: c1f845c80794cf4f502c5fa6e410dc3fac840bc56152ca8171ba3107bcfcde05
+- card_id: asako_eichiro
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: asako_eichiro.jpg
+    sha256: bc7bf9153200a6d67fe6c771d4a57fc0882359a43b511b9d57e9338bf0de1f24
+- card_id: baireis_vigil
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: baireis_vigil.jpg
+    sha256: 672e2454c9ce816768451bc56fdef192cfc08b4121414bd9e34c3abb1b1b3c6e
+- card_id: bayushi_arunsa
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: bayushi_arunsa.jpg
+    sha256: 71e1c4889282ddc17493bf8beff710a626681396aff636c0b211da6123c743a9
+- card_id: bayushi_nomen
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: bayushi_nomen.jpg
+    sha256: f04790ef524551e62b7a9affbe04133f0db6216725fba399c6ed11165c9104f6
+- card_id: bayushi_ryuzaburo
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: bayushi_ryuzaburo.jpg
+    sha256: 5c877f6d5367f9000dbd6a8b99937850cf9f8f05f24c704473267a1a7f38c0f5
+- card_id: bayushi_shinobu
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: bayushi_shinobu.jpg
+    sha256: 61e848234eff9fd84af06dd972e3f0ba0ab0bf19bcbde02ed1b4f99b346e8010
+- card_id: blade_of_the_kansen
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: blade_of_the_kansen.jpg
+    sha256: cade3f30c6f1fa77cce919789dd6ad91cdfe63ad383a21cd6d18996e7b52871c
+- card_id: brilliant_rebirth_temple
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: brilliant_rebirth_temple.jpg
+    sha256: 1bc9d57f92ff510dbd4d90abd698d94922381b4930415b4067967803ea780d4f
+- card_id: budokas_tonfa
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: budokas_tonfa.jpg
+    sha256: b40395173c7b4144ee10349b04323601898e63e8f8fcf4df8a813bef154a0eec
+- card_id: calling_in_favors
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: calling_in_favors.jpg
+    sha256: cc5ae0abbcef715a489ced604741ec7b4df4325fe88243905419715fe33da933
+- card_id: choose_your_ground
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: choose_your_ground.jpg
+    sha256: b0c41704f8a3507a630419ba35365cf0d1af5bdc137b0a5b93191157136720f4
+- card_id: chuda_genkei
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: chuda_genkei.jpg
+    sha256: 29666072d79908338a553bcb90716cd81818a8b59a4ac51d8b91ddb7aa9930fd
+- card_id: chutaro
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: chutaro.jpg
+    sha256: d84221253eb184a5989449e4a0372f80f62556d37e744cee4bbbf9f21ced5858
+- card_id: city_gate
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: city_gate.jpg
+    sha256: d224e04fce4f31cd4db39b001e73358c14c9a12455f5a7aa2bf8cf9d66402053
+- card_id: clan_estate
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: clan_estate.jpg
+    sha256: f2cdecc6306809ccc405d7800ba019dfde4557b2c21bd623b1464c4a54854be1
+- card_id: crosswinds_cut_style
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: crosswinds_cut_style.jpg
+    sha256: 8550e6e2f8b6c3f20a5e3523c561d522fbde79b2c0e5a3083790a3dfa11d021e
+- card_id: daidoji_kojima
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: daidoji_kojima.jpg
+    sha256: 309c22288ba31995dcb8d853b91758021526f5763011c3def33c038fbb9d7395
+- card_id: daidoji_naoshige
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: daidoji_naoshige.jpg
+    sha256: 79bdb11a878f3bb0f0f0f26e554822d4747efa4b27bda804f4f744d0ed8918f3
+- card_id: daigotsu_junichi
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: daigotsu_junichi.jpg
+    sha256: 6431ac690aab1fdcaf278b382da3e3aa589fee8f756f1288488221979c241ca7
+- card_id: daigotsu_susumu
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: daigotsu_susumu.jpg
+    sha256: 94984e0e8741546bbeb98df969659b07b235264f62369dff26b0ddd052bb9080
+- card_id: dastardly_tactics
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: dastardly_tactics.jpg
+    sha256: c80b49184876a914a4c5f370dcd8ed0608b88c7831d3b81f3102e9d5325ab0e1
+- card_id: datsue_ba
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: datsue_ba.jpg
+    sha256: 7be05dbc201a1927f81d764e399ca3d52969d5e1be70191a52aeab0e88007474
+- card_id: death_of_virtue_style
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: death_of_virtue_style.jpg
+    sha256: 9d294b0fc4c54c89f41f65e97d7e4d3020efa7232a472b421ad2a64748328a0d
+- card_id: devious_explorer
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: devious_explorer.jpg
+    sha256: 681137c90da010ce7431f94d35b3c07f52aeae599b6728e78be6d7216ccbe8ce
+- card_id: disgraced_ronin
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: disgraced_ronin.jpg
+    sha256: 07e502e96424a5665574d372b20d85251846be79b78f75fd798acbfe6a6b9dff
+- card_id: doji_armor
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: doji_armor.jpg
+    sha256: cab29ca750704d6fa5519be1b7092b71240af74ce3b3773982e695f9e18371d9
+- card_id: doji_masako
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: doji_masako.jpg
+    sha256: 61935626296252f30bd0bb4535d63078401765d3d348e4ddef7f3174cee49301
+- card_id: doji_nobuhide
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: doji_nobuhide.jpg
+    sha256: 8f45f8611783ea17e4733486b0fca98cda8ae4ac93e7cdfdf93df26aefdaba84
+- card_id: drawing_in_the_strike
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: drawing_in_the_strike.jpg
+    sha256: 057c069cd2487d9286c3f174e3d7d2e59221e001854b345c55fd962e8dbd2c12
+- card_id: establishing_a_foothold
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: establishing_a_foothold.jpg
+    sha256: 4fa48077cc787a8a1eb19ccb4937573c239f9cc54a360be7e44be5b41d68dd96
+- card_id: evenly_matched
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: evenly_matched.jpg
+    sha256: 9941604a6ec6a035d2bde19641a39d6f8b12b4ec9f11cf99aacac56996f77d49
+- card_id: failure_to_your_daimyo
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: failure_to_your_daimyo.jpg
+    sha256: 2ed8228b9627bc82f3c97e706f1bbf413e9edd2ca793a0ca40ca0c9d82de12cd
+- card_id: falling_leaf_strike
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: falling_leaf_strike.jpg
+    sha256: cfc56f268a64f763f7510defbed43608c5b4ccb9798c20f06e669db1a65bd02c
+- card_id: fight_as_one
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: fight_as_one.jpg
+    sha256: 270cdc07280825fca31ebe75f32ccd99986e1afc3fba4725f3b138bbd32379ef
+- card_id: furious_assault
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: furious_assault.jpg
+    sha256: e8ced65f379bfd0013cda104cacf4fa7bb70de6e5761dd33d6d85e41996031fd
+- card_id: gagoze_no_oni
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: gagoze_no_oni.jpg
+    sha256: 43fbb255b7070f2ed1a66e29a99c02c3c2fbce35e733d7593a23443bc2a9ac69
+- card_id: gaijin_utensil
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: gaijin_utensil.jpg
+    sha256: 8bf5d435705c5c26880f09673ef3547167a4213e7ab906d199ff864687a00f09
+- card_id: goju_ryuu
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: goju_ryuu.jpg
+    sha256: ac7bfa1ca587ad6689dcb3e96543000a2eac9dfe78bc7a6450e6e090fbfcf395
+- card_id: gujo_odori
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: gujo_odori.jpg
+    sha256: 110b371d923f85a8efd190b1aec9bbf7bbdd4fa2b210b53c384a27b0ac1a312b
+- card_id: gunso_atshushi
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: gunso_atshushi.jpg
+    sha256: 77d818b9fad24e935e39562c6b976177ce3d02d7359efab6fed3b5936a15a3ec
+- card_id: gunso_chitose
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: gunso_chitose.jpg
+    sha256: c27f728e2e459c8b0c1879c97d7106ab651334a64620c5cfcec1a770d9b62cfd
+- card_id: gunso_hirobumi
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: gunso_hirobumi.jpg
+    sha256: 71c44344075f43aba85ad7ea9a69c7898ced7e0923f5ec4874fd395ebefef555
+- card_id: haiku_school
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: haiku_school.jpg
+    sha256: 2d1befca566a600dd5360b764a8e19767bdabb18bf16e1517c1439b9e22fd1a4
+- card_id: heart_of_the_katana_style
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: heart_of_the_katana_style.jpg
+    sha256: e13cef1dc3f9f80956af8ff77105dad162cf6e39046a5b3213cd2be917a9dfe4
+- card_id: heated_discussion
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: heated_discussion.jpg
+    sha256: 4b67e58b2387c63b5050eaf15616cf711ca6a7c7e982812b1e713570fcc82ff1
+- card_id: hida_fumetsu
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: hida_fumetsu.jpg
+    sha256: a779c207dd55ae8041e65c54d0d00520f3119b431cc90edf37df443d99d07053
+- card_id: hida_itsuma
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: hida_itsuma.jpg
+    sha256: bbc06a14a0ae27a6444a628d8a92d03dc4d22b3df0ad93ab8055f1d0868c587f
+- card_id: hida_kashin
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: hida_kashin.jpg
+    sha256: c1581a2af006f15c2a871d92d944514c861be612b8a18e9c5baa69a259784c7f
+- card_id: hiromasa
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: hiromasa.jpg
+    sha256: 9a29a833c17a49e4fc353fd62e0ce27dec3af60b4d449c1967dc338387cb5c22
+- card_id: hiruma_aya
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: hiruma_aya.jpg
+    sha256: 1c65bf414d4e7e7067012407631ac2cb9b844463c1892ef2e3d073b373a5b297
+- card_id: hisao
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: hisao.jpg
+    sha256: 9f8fb413b648efc8f9fcd45ba0a8fdcd4b793d269291a697b14b277be49269bb
+- card_id: hojatsus_legacy_style
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: hojatsus_legacy_style.jpg
+    sha256: f5dfa4a8167b7a8746c3ad54234dbd1179aacd4de69e98eb66be3a9c1199a7f4
+- card_id: honor_is_power
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: honor_is_power.jpg
+    sha256: 1df9907ee5cfc4e053f171156081a4d35a6002cabe5a026a47f034adc8106ac6
+- card_id: horiuchi_yoko
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: horiuchi_yoko.jpg
+    sha256: 058e8c552a55b23456c75c96801e9b19d7f85f4bdb33c0c5a7699ccaa4871d12
+- card_id: houritsu_mura
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: houritsu_mura.jpg
+    sha256: 5126ffabc5b1bb1d727a20c491b0add4711de6d87bdd275a28005c0de1c8616c
+- card_id: ide_eien
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: ide_eien.jpg
+    sha256: 05e7aed52bbdd3a552a226e3ced6ec39563e40355f2c8f46d253e25f2a583351
+- card_id: ikoma_tatsunori
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: ikoma_tatsunori.jpg
+    sha256: 38f5603cb3fdaadded193ed22e6e2c352e113cdf36a8ae2790164eb30e240573
+- card_id: isawa_emori_experienced
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: isawa_emori_experienced.jpg
+    sha256: bf7272819f2e880c60f1f3ed5a1efbd87c0bf652ea9390b069df8fff01214814
+- card_id: isawa_kajibara
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: isawa_kajibara.jpg
+    sha256: aad6ddb4c1b9706aa5307e0d103e2377c38831df38f8a88abf428162dc45a245
+- card_id: isawas_air
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: isawas_air.jpg
+    sha256: 52d615e3205af677e0cb7819568779ee134112bd12b601077213d3a0418f9bfe
+- card_id: isawas_blood
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: isawas_blood.jpg
+    sha256: 7eba6607f148c4a949b233e6287e9ac2b02caaf33ff3a791d87083f3e350e8a7
+- card_id: isawas_earth
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: isawas_earth.jpg
+    sha256: e1063a0cfc01de039737e4192c9dcc3cdbc1fab250e43c095e88f6b8b0afe9c9
+- card_id: isawas_fire
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: isawas_fire.jpg
+    sha256: ad415c4225efd8c643b3a3816c87546941522987e44dedbb26e7404226c10081
+- card_id: isawas_void
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: isawas_void.jpg
+    sha256: 8c5b218b86a31881043115a7ae7a0b5f649fe1eb3d959e292761191f90337e6c
+- card_id: isawas_water
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: isawas_water.jpg
+    sha256: 86cdcda438b8f959f2731a40d365a9916167e314862f595fb0341bafa1b79b6e
+- card_id: justly_earned_victory
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: justly_earned_victory.jpg
+    sha256: ed37428953ecc41d6b65e70025ec36227cc282c6c51d202416d0c2cdc60a6275
+- card_id: kafu
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: kafu.jpg
+    sha256: b23bc339a52de92e7910e59622c30edba9d79613459c8c4a07ca44c3f7e55915
+- card_id: kakita_amakuni
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: kakita_amakuni.jpg
+    sha256: 5725278e4eaf9ff17228f532dfbebb2ea983006d8ab6efa056e7fa8019e7c315
+- card_id: kakita_kensho_in
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: kakita_kensho_in.jpg
+    sha256: 7b2d01e62303df316ffa8ede9b7c805da48e9cebd4155fa9d2dac0143760a6b2
+- card_id: katashi
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: katashi.jpg
+    sha256: 0b947116d8267e906c33e2bb16bc9ad84b44acce89e1037a3927e6af9d8af760
+- card_id: kitsu_tenshin
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: kitsu_tenshin.jpg
+    sha256: 4db0d7ac7086cd715654f2cd9cee0a999a9a7178a6d8d8e382d363a9fb53a65d
+- card_id: kitsune_aiko
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: kitsune_aiko.jpg
+    sha256: fc757a88e3a7320830922a93cc7a305d6af9b9d56ab256d6a0f1e47e9cf968fe
+- card_id: kolat_forgery
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: kolat_forgery.jpg
+    sha256: 06452757dbfba47e3da3c6eee6f2705632443e272ccc2be21f332d89af84d665
+- card_id: kuni_takaniro
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: kuni_takaniro.jpg
+    sha256: d892fe319cbf0f8d9ce8bdcad63d1f8436517562f8bb8e011e248b0852f67219
+- card_id: kuni_umibe
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: kuni_umibe.jpg
+    sha256: 4378b697e9a7a4ea227540f10943f8b52e4efc8b25de0bccd0260ef9dc1316ad
+- card_id: kusari_gama
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: kusari_gama.jpg
+    sha256: c2d6d55bfa93432dc13fd9c927e199e61ec298f11a7a385131abe6c6a2b85330
+- card_id: longshoremen
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: longshoremen.jpg
+    sha256: 54c649f1a927801de1e80f3ab9818d1bccc1822a8b987b0f7f4d322ed4e95fc9
+- card_id: matsu_kameko
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: matsu_kameko.jpg
+    sha256: 80df57a7f096957fc5f2e7eaca00cc70f87832d00cd326f4bcedf11abed570d4
+- card_id: matsu_sakaki
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: matsu_sakaki.jpg
+    sha256: a13f6e6fc65e0127f90de06295b26f36a58e590cc27928598e7665c14f7752f8
+- card_id: mirumoto_ryosaki_experienced
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: mirumoto_ryosaki_experienced.jpg
+    sha256: f8cc9634943707c62b73a88a809475a0f9535871e7130d6284861654a45af7b5
+- card_id: mirumoto_yozo
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: mirumoto_yozo.jpg
+    sha256: 7153ccd212f52490731029c483eaccfd64fb7ae097d2e42f68ec5c1c693b60fb
+- card_id: moshi_taya
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: moshi_taya.jpg
+    sha256: b5cb2aa4fe5f0131abe920a218367a609b3e53a7fab51fb928cb3bbcebefb84a
+- card_id: moto_chai
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: moto_chai.jpg
+    sha256: 65813f4b7892f26d309314f11419ceb84806b543bfe4c9df865ad817a00d345c
+- card_id: mysterious_deaths
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: mysterious_deaths.jpg
+    sha256: fa131c55d945a51249256600513e21fe5d6daa05a67ca0017d7aca2cff653e2c
+- card_id: noburo
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: noburo.jpg
+    sha256: 9e885e2d843fa6003e274b4dcad4eb71d08579bb98a3dbb70aea398cdbd394ca
+- card_id: o_shiken
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: o_shiken.jpg
+    sha256: afdfcfba80c1a27374c70648295b0ab73a8fa94db8abc350652981d218e6ffdd
+- card_id: overwhelming_speed
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: overwhelming_speed.jpg
+    sha256: fb5615852eaaeb33e9c8088ab8add40f52360193d37cc51594cdb38620d78ebe
+- card_id: paper_to_steel
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: paper_to_steel.jpg
+    sha256: 73d54d6da8e263fd78a9cca814d8910ca96f82b2b0dcded783508bbc9449bb87
+- card_id: paragon_of_honor
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: paragon_of_honor.jpg
+    sha256: 97f91e3c73a64d29ee1c5f5e434cd979c4d9be760d94b95b3c2a7dce4c6371d2
+- card_id: parley
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: parley.jpg
+    sha256: 8b98eed07f1c882dc305d60ec62c3f891aa4474fbba036cb778fa1d186ff8725
+- card_id: power_of_innocence
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: power_of_innocence.jpg
+    sha256: 1b80917548acc3e421386d21c1c1bc023bca9728d8c60ff06e3591b435ef30ba
+- card_id: power_of_the_masters
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: power_of_the_masters.jpg
+    sha256: d3168f743bb571fe9802ffa66400b787044c1298a26bc2fe46c98ba3cccc4973
+- card_id: powerful_accusation
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: powerful_accusation.jpg
+    sha256: 9b6694a9d4fe04288899370bbf5c0d8faa82f46d0c6b9c19fb212088be446981
+- card_id: private_whispers
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: private_whispers.jpg
+    sha256: 4b2a35f7921576d1239a3d4b44422f96b40c90823ca4980a83267376309683a2
+- card_id: red_leaf_cut
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: red_leaf_cut.jpg
+    sha256: 7cd2e9f5b722cb9ead1b73b736bc9113c2f15cf6a11ef03cee13150a7925ac7d
+- card_id: respected_mentor
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: respected_mentor.jpg
+    sha256: 959075c461e9f5c078b99a7a021a1e6ea14aeac44f0f266140d9ca9d72d70b40
+- card_id: ruthless_bandits
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: ruthless_bandits.jpg
+    sha256: 4df4750d589bb6aaf8daf61390a63b858c73b27b39aefa0b2a08a8136f06beca
+- card_id: sentei_no_oni_experienced
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: sentei_no_oni_experienced.jpg
+    sha256: c9ed60f2241fbe5392ddd558cd6dd99e1d04d7f0d17fa56d869c8169f7e1e8aa
+- card_id: seppun_detachment
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: seppun_detachment.jpg
+    sha256: 2e5999a21d5c254519cce77c1fd1eb29081326a045795639abd12ef7efd4f756
+- card_id: shiba_fusaburu
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: shiba_fusaburu.jpg
+    sha256: c3a802e5d87745322d3cf709e97e938f2f066269403e70305d820c13ed088953
+- card_id: shiba_rae
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: shiba_rae.jpg
+    sha256: 826469131c5f30d8896368ca12aa783475a41a489445a22db01532a3bb7256a7
+- card_id: shinjo_kurimoko
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: shinjo_kurimoko.jpg
+    sha256: f866c58a06164fe0d638c6b1bb75e02fe1fc0a2717e33685ce50904d49ed8c83
+- card_id: shinjo_turong_experienced
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: shinjo_turong_experienced.jpg
+    sha256: 1c3518f31cddc18df94b70120fd3f4abf61528bd54871c02243555081f07330b
+- card_id: shosuro_kyuichi
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: shosuro_kyuichi.jpg
+    sha256: ba2da0b8b68af77b6e29e9c3e0cbefa28033289e8dbdde228fc731d91e22696f
+- card_id: shosuro_takuro
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: shosuro_takuro.jpg
+    sha256: 2da00536b5c001fe4eb01f3d672ea31092f89caf7f11a2f5d8f6e6a66b27bdea
+- card_id: silent_movements
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: silent_movements.jpg
+    sha256: 150f3288752197f710f053843f3245b83a965072bef9f870df725d01d79e70a0
+- card_id: single_strike_style
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: single_strike_style.jpg
+    sha256: 94df0fec6714ff2209d01fc94cbcddd808c3c12d6bbcaa63614558fadb5b074f
+- card_id: soshi_ukon
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: soshi_ukon.jpg
+    sha256: 86b378ccea362844be47b955a2b622e0e8f87a3e241c167a7fecd7016ba7711c
+- card_id: soul_strike
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: soul_strike.jpg
+    sha256: 334c417a5f5476820c717333347402b23e4a6e7614d345bc857fea28bb84aa1f
+- card_id: splendid_phoenix_style
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: splendid_phoenix_style.jpg
+    sha256: f06c95cf5e79bf305978162f337452be04715225f47f098d75b25b7b6a92e509
+- card_id: storms_eye_style
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: storms_eye_style.jpg
+    sha256: 070ee932acacceb1bd6cf9af2d21647be053a8abfc536a318052ae58e2461cd2
+- card_id: strength_in_shadow_style
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: strength_in_shadow_style.jpg
+    sha256: d4ce89c656fca21d4beb1d2f127b02cbd0f5c7a1b828afc04d1812bb6effefb8
+- card_id: strength_of_paragons
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: strength_of_paragons.jpg
+    sha256: d8a87d95e6d748bcf4f8b709a305823428f340e19b19bf1914a1ea9b56b5c2c7
+- card_id: superior_positioning
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: superior_positioning.jpg
+    sha256: 3937dfa23e3b2ac37f7fc933eef66227fc0634084d0911cfbf734e72c543447d
+- card_id: surveying_the_land
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: surveying_the_land.jpg
+    sha256: 9ee20dda4e3edf2e1f2d4ed6d37bb96e1038571d26ac4c8268c59cf966d82209
+- card_id: tamori_sugi
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: tamori_sugi.jpg
+    sha256: 452dddd8bdd147131be192926ede5ad915669117090b8292047d88c2eb151ef1
+- card_id: temple_of_the_righteous_emperor
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: temple_of_the_righteous_emperor.jpg
+    sha256: 0be6671a811dc4f017bdc98a51ff2c6896f6361d4613d9943b247b4d09418f8b
+- card_id: the_heavens_are_watching
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: the_heavens_are_watching.jpg
+    sha256: c151bbee753d199395159b2a326d92499c30f1de453227f64bf289155988195e
+- card_id: the_hundred_hand_strike
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: the_hundred_hand_strike.jpg
+    sha256: a4ae9314bf7b6b1269b2b3c05c8e506dbcb35a096d646ed460387d82ab7053cf
+- card_id: the_rashana
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: the_rashana.jpg
+    sha256: 0d301d4a93abc19aeb1f5ca96941c6110b85bbec4934ea24c7195b13e7c1476c
+- card_id: the_throne_stands_empty
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: the_throne_stands_empty.jpg
+    sha256: 8c5dc7bb3c7d1c05025043ae6ab158055aeba178c8b872ab943d88b0f7777260
+- card_id: tight_quarters
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: tight_quarters.jpg
+    sha256: 493bc1e47e4edf116f62abc0d981b81fcd70639e64dce35af15ea230be51c2da
+- card_id: togashi_kanaye
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: togashi_kanaye.jpg
+    sha256: 04e329e9ceab769139e2ec7321f4068a8be96f5277e0f1a5aafda4c3e4333f5a
+- card_id: togashi_remi
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: togashi_remi.jpg
+    sha256: 943e27b63332e256d141caf9a1a572dc43c8de3390710007b43bcba2cb1dd234
+- card_id: togashi_shichi
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: togashi_shichi.jpg
+    sha256: 98c6609887f00a80ae770dfee251e295d4b9d9c7736dc9f5ae2f2869fc2df1e8
+- card_id: toritaka_kaiketsu
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: toritaka_kaiketsu.jpg
+    sha256: c2f0e21cf35232665de02663d0151dc50825e70f0195742ad17e5481e9a6705a
+- card_id: toshi_ranbo
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: toshi_ranbo.jpg
+    sha256: e3022290838b4f6aea536cf0d9cbaf0f0163479a4a541fe3a3cd01a99d078751
+- card_id: true_strength
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: true_strength.jpg
+    sha256: 38e79ed731c19ce79815a42e84b553cddaf11ad9cfc309c486429720a34dc482
+- card_id: tsuruchi_amaya
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: tsuruchi_amaya.jpg
+    sha256: 679d3287470a3d680a31703a2c43b8142a2937a374fd45b18ddf27a95966de0f
+- card_id: tsuruchi_fuyu
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: tsuruchi_fuyu.jpg
+    sha256: a5b9aa6ab32277ac3b3f66b817b15cd9185b267bcc8744c593edb4b49b2e37d1
+- card_id: tsuruchi_masako
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: tsuruchi_masako.jpg
+    sha256: f755592e0f6227c44a33f06f3b422a0653b0b556ffa8e11b59135d98ee76e060
+- card_id: unbroken_blade_style
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: unbroken_blade_style.jpg
+    sha256: eb41225e355b9233ff0ef2e0d711d7f68394d72601c0abd14e525f41a25bee5e
+- card_id: unexpected_intimidation
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: unexpected_intimidation.jpg
+    sha256: 491a5142ac375e2620a76501cf84f6f0c3b376c932aacb67e970ce453b70efc5
+- card_id: unexpected_reinforcements
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: unexpected_reinforcements.jpg
+    sha256: efbbe7685fe33ce99accd7e9dffe11ecb5e5aa99c14d09cbe6826fc8dabe96cb
+- card_id: unproven_guardian
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: unproven_guardian.jpg
+    sha256: 6c9176f4c99809eb5f676cad9a40fe78c0ef6a3dc594446d70d62bf13a54a123
+- card_id: unseen_assailant
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: unseen_assailant.jpg
+    sha256: 3497dd27171aaeb2a759a8598691bd4321d5a5df0266e236a7c65a2967f61fa8
+- card_id: unseen_valor
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: unseen_valor.jpg
+    sha256: 7b4946bda8fc7dd2e9280572ce26861274d9934f2c1f9395365825a271c009b5
+- card_id: use_the_wind
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: use_the_wind.jpg
+    sha256: b3a9db3c08571a654dc97fff6984cfa2728426ce3592d5ba276dd09d254763c1
+- card_id: utaku_etsuko
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: utaku_etsuko.jpg
+    sha256: 0f74435a3ee7b2482e3e34869e70abe2ad9f4759973100549d89835ff3b629a3
+- card_id: utaku_saber
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: utaku_saber.jpg
+    sha256: e40a771c8fe6ae4613dd4cd23d59797b8f1873090653ba9944b9accdd11b7eb6
+- card_id: utaku_takai
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: utaku_takai.jpg
+    sha256: bbc793e3631b54f7e20d5e38ec6dddced9098fa4453aa398a2244aeffd0407a1
+- card_id: vigilance_keep
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: vigilance_keep.jpg
+    sha256: 339053603cf018824fd7a2dffebd94120ac70a6b41c27be21e398f329977619f
+- card_id: vision_of_pan_ku
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: vision_of_pan_ku.jpg
+    sha256: a5d77379d20c7810dcb84f15debf55921f83ab54743890e7016dc104909df4e7
+- card_id: wasp_bow
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: wasp_bow.jpg
+    sha256: 5d00bb69dc08220d9617552d2e21f38de75bcaebc7aff6037d551c9135550203
+- card_id: watching_the_battle
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: watching_the_battle.jpg
+    sha256: a2233ca0841d7e2ad0b52565be39ddaa4752b45959a301dadb3271c48ebb6eb4
+- card_id: yajuu_no_oni
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: yajuu_no_oni.jpg
+    sha256: 7eea5b4b4bfae5c795541af46fa1a5b1a6448bd15396fb993a2a398e1ca83636
+- card_id: yogo_honami
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: yogo_honami.jpg
+    sha256: 04b3a046eafa38b99602b447a9d789568e0406f74f0b46a5022d2d4c54a44a17
+- card_id: yoritomo_daishiro
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: yoritomo_daishiro.jpg
+    sha256: ec7379f8c1fa8ae1ad3dce2fb5a5567827951952b587da007db26ba872781808
+- card_id: yoritomo_kane
+  printing_id: stronger_than_steel
+  files:
+  - role: front
+    file: yoritomo_kane.jpg
+    sha256: 661a9f25551c7b13d4d8293010375e6b8d09ab2bcf871d6ab73550a3e4a57e00

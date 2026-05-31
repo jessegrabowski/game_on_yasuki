@@ -9,7 +9,7 @@ import psycopg
 
 from yasuki_core import DATABASE_DIR
 from yasuki_core.database import get_connection_string, mask_dsn
-from yasuki_core.install import sets_to_sql, yaml_to_sql
+from yasuki_core.install import images_to_sql, sets_to_sql, yaml_to_sql
 import logging
 
 
@@ -19,6 +19,7 @@ logger = logging.getLogger(__name__)
 
 DEFAULT_CARDS_PATH = DATABASE_DIR / "sets"
 DEFAULT_SETS_PATH = DATABASE_DIR / "set_info.yaml"
+DEFAULT_IMAGES_PATH = DATABASE_DIR / "images"
 DEFAULT_SCHEMA_PATH = DATABASE_DIR / "schema.sql"
 DEFAULT_DSN = get_connection_string()
 
@@ -28,6 +29,7 @@ class InstallerConfig:
     dsn: str
     cards_path: Path
     sets_path: Path
+    images_path: Path
     schema_path: Path
     force: bool
     skip_sets: bool
@@ -69,6 +71,9 @@ class Installer:
         if not self.cfg.skip_cards:
             logger.info("Loading cards")
             yaml_to_sql.load_cards(self.cfg.cards_path, self.cfg.dsn)
+            logger.info("Loading print images")
+            images_to_sql.load_print_images(self.cfg.images_path, self.cfg.dsn)
+            images_to_sql.seed_card_backs(self.cfg.dsn)
         else:
             logger.info("Skipping card import")
 
@@ -186,6 +191,12 @@ def parse_args(argv: list[str]) -> InstallerConfig:
         help="Path to set info YAML (default: %(default)s)",
     )
     parser.add_argument(
+        "--images",
+        type=Path,
+        default=DEFAULT_IMAGES_PATH,
+        help="Path to per-set image manifest directory (default: %(default)s)",
+    )
+    parser.add_argument(
         "--schema",
         type=Path,
         default=DEFAULT_SCHEMA_PATH,
@@ -202,6 +213,7 @@ def parse_args(argv: list[str]) -> InstallerConfig:
         dsn=args.dsn,
         cards_path=args.cards,
         sets_path=args.sets,
+        images_path=args.images,
         schema_path=args.schema,
         force=args.force,
         skip_sets=args.skip_sets,

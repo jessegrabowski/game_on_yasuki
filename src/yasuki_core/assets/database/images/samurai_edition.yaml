@@ -1,0 +1,2462 @@
+set: Samurai Edition
+images:
+- card_id: a_new_wall
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: a_new_wall.jpg
+    sha256: 474bc63d0780eb117d078db8d3c7d8313994ec61e7d83304ded28dc56857b228
+- card_id: a_terrible_oath
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: a_terrible_oath.jpg
+    sha256: a811ee5433e8f412fdba55454f8798661c7a9a25a74f8f3e0028b1dc950f675f
+- card_id: a_test_of_courage
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: a_test_of_courage.jpg
+    sha256: fb30c9b350dbd4830197deb6e436fe0c9cf229d3d6a572aff6bb118ca0d67934
+- card_id: akodo_seiichi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: akodo_seiichi.jpg
+    sha256: 8f4d5e87ad0f8eb0c9729dd82df0c29c732f02c0f2532c67a9b913631562eab3
+- card_id: akodo_shunori
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: akodo_shunori.jpg
+    sha256: df033370ff8464612a12e80a3ff2031316cdbeb5e8d776103fa7ee91f485f4cb
+- card_id: akodo_terumoto
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: akodo_terumoto.jpg
+    sha256: 489b116c47f6595b85919b96d5309746c3dcb342fa896c9e33719cf2a4143ba0
+- card_id: akodos_grave
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: akodos_grave.jpg
+    sha256: 36df493fa36cc570ae9588868f42b645c7e4670d73d68eff88f65e452978ef3c
+- card_id: akuma_no_oni_experienced_2
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: akuma_no_oni_experienced_2.jpg
+    sha256: 7d6574e765dcdf14d54a26583601ebd88f5240f897ea8bc0ba3a9323bada215f
+- card_id: ambush
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ambush.jpg
+    sha256: f8640caccd65cf822663c4cc5e4f77d8fba1a3aa8520bf313a7c339344c3045f
+- card_id: ancestral_ground
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ancestral_ground.jpg
+    sha256: 987b021c78aea50d2be14275db79bbbcb8fff3bbb2968124534991ea919e3705
+- card_id: arrival_of_the_emerald_champion
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: arrival_of_the_emerald_champion.jpg
+    sha256: c31a349de8ed8bebb943e638ef92eda18a6ead80903e64cdf04ca569313a7691
+- card_id: arrival_of_the_obsidian_champion
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: arrival_of_the_obsidian_champion.jpg
+    sha256: ed0611887529db68aebad18348faf77985ea02948c35cafd0d49acc5f04ef957
+- card_id: arrow_of_purity
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: arrow_of_purity.jpg
+    sha256: 02894bbb2bf03ade6ae52516ca4105e2f847a61e563ec412877add43b76cc632
+- card_id: arrows_from_the_woods
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: arrows_from_the_woods.jpg
+    sha256: da034d86bd3424ebb134ff8d4735238eb4a5632db50bcdfa594890d3880f2f93
+- card_id: asahina_beniha
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: asahina_beniha.jpg
+    sha256: b3919dc9384f9b500d7205bfc5e6b89c8f8b9ecbe21fef4df9e241299e5d03ea
+- card_id: asako_meisuru
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: asako_meisuru.jpg
+    sha256: 16b5271b2a8df6b4668990698f1cafacc171151e7e78a3df79a3e37a3bfec6a5
+- card_id: asako_takakazu_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: asako_takakazu_experienced.jpg
+    sha256: c06c979b208ca77ce0e6308fe2288e6ba7a21a155670f2891bebea17a3fcc9b9
+- card_id: ashigaru_conscripts
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ashigaru_conscripts.jpg
+    sha256: 5077c7ac91a8287e0af68159ab6366bba8b55c44ce89359b3af2834c4f8aab4b
+- card_id: ashigaru_spearmen
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ashigaru_spearmen.jpg
+    sha256: 6f61824e4ba33cd481990e8f524c31d40ccc573197628a42d2adba93825b443b
+- card_id: banish_all_shadows
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: banish_all_shadows.jpg
+    sha256: 0cdeebe35daf0cd227da7a3762d96cd8899a6bc9162da7ef5953ed187d38df65
+- card_id: battlefield_of_shallow_graves
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: battlefield_of_shallow_graves.jpg
+    sha256: 28eb4ee5380ee38eeeac97eb1a8a0cf264a95b1edd0f4c5f017d177afe793c0a
+- card_id: bayushi_eisaku
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: bayushi_eisaku.jpg
+    sha256: 9c9ead374fa883a5550407018895933615042a47291416fc207de3e059df6151
+- card_id: bayushi_hisato
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: bayushi_hisato.jpg
+    sha256: c693019584b45d4567f4250a0e03f28599911f92107c23943360770a3c162c70
+- card_id: bayushi_hisoka
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: bayushi_hisoka.jpg
+    sha256: 8c9069eae0e9c2f601a48a96ff9bfcf444b013422d98b9b7c8a104e372397cae
+- card_id: bayushi_iyona
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: bayushi_iyona.jpg
+    sha256: db5e623b98cfa27d6238505ed356ddb8fc685afbfa0d7ffc478e5168cfb0e1e3
+- card_id: bayushi_kurumi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: bayushi_kurumi.jpg
+    sha256: 1496244db8d345d39dc6a455904175cb07b5644bff0a2455ff80148ee64a9b79
+- card_id: bayushi_muhito
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: bayushi_muhito.jpg
+    sha256: c0f1e2b0591a20d0fc74db7f991cb4c0df982e86a6826398bf6138b4355272ca
+- card_id: bayushi_nomen
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: bayushi_nomen.jpg
+    sha256: b006ab25fefbbc6d8134ae4de86f919f359d441e1d2a767deb6a75d7dafdec7b
+- card_id: bayushi_paneki_experienced_4
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: bayushi_paneki_experienced_4.jpg
+    sha256: 6f0beebb8ae7f61487d82e9cd8111657827b40343a87f1e2624fa56127475f6b
+- card_id: bayushi_saya
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: bayushi_saya.jpg
+    sha256: 674985db68b637439d7a93405867f53c95c4425b07f010b51f817d5650bc70ab
+- card_id: bayushi_tsimaru_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: bayushi_tsimaru_experienced.jpg
+    sha256: c831d4e72e23b2c0e772fccb94691b40ef28787e5e6ee256fc4db9b2bb702bf8
+- card_id: beiden_pass
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: beiden_pass.jpg
+    sha256: 1f8d7c2ef6eaac4d5b7e673c0ab1111f03a35d045c3656d1a194043038dc3ddc
+- card_id: berserkers
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: berserkers.jpg
+    sha256: 307836b90846a708da6eac3024c6d91fdf2c3297497459744b27d4b545ae2c21
+- card_id: blade_of_hubris
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: blade_of_hubris.jpg
+    sha256: 9f005c8abbd8989452397127310fda7d50db1bb976eeeae5fab497fdae9e16ec
+- card_id: block_supply_lines
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: af5cefa1fcac6189321b4da5d35b542bb758818eae71e31ec63edae37edfcf83
+- card_id: border_skirmish
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: border_skirmish.jpg
+    sha256: a91305772ec5152b7e07a44cb2773a4d72d08e3ab70d48393cf5dce495c52091
+- card_id: brand_of_fire_and_thunder
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: brand_of_fire_and_thunder.jpg
+    sha256: dfca0d3eebe55e0d05fca339a45a6235bf0e404aaa1f4b7e1ac3806c2d5f94b0
+- card_id: brash_hero
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: brash_hero.jpg
+    sha256: 1b31c3f9a43b867639ef9ad727099b37e87a8fc189a0c672beb430c7b7a361fd
+- card_id: brilliant_victory
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: brilliant_victory.jpg
+    sha256: fd817cc36022a4099323b0d921621c605035ab7895ea07fa2331c85d3de314cb
+- card_id: brothers_in_arms
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: brothers_in_arms.jpg
+    sha256: 6ce297330ebd01afa10296b06c9f39ffd90b4714f86cd22980093049c68e5eaf
+- card_id: brothers_in_arms_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: brothers_in_arms_experienced.jpg
+    sha256: 5182861c5e4238dd5bdba0bc43a6f54db80081b1b5a97a97ca0476c00748caaf
+- card_id: burn_it_down
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: burn_it_down.jpg
+    sha256: 4b1f45a7e787f09effc6ad1254d3877d1e9b9c5ee07e0d8361d5681760c869e1
+- card_id: call_of_thunder
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: call_of_thunder.jpg
+    sha256: e7d07411e136617aeee85f33aa29aa592c41b05b912299a9e35639248eab6d61
+- card_id: castle_barracks
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: castle_barracks.jpg
+    sha256: f9548901e8a552c8878df3f6b9f487fe7f5fef2a257d9857886fb9010a320458
+- card_id: castle_gate
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: castle_gate.jpg
+    sha256: 046d1d13d8929004b6d93eea9d7d4702c453bbf33a9d3325a5baa4fb6c898bb1
+- card_id: castle_of_water
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: castle_of_water.jpg
+    sha256: db2ba43cbad72199093121602158a3f4d5b1e7e047c6dceab77d9435ef662904
+- card_id: castle_walls
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: castle_walls.jpg
+    sha256: 5040eaa1c62fa273db24ce60447abb8c5dce2151dda35c29438bb636506c3385
+- card_id: ceremonial_armor
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ceremonial_armor.jpg
+    sha256: a5c11f767205f3e75afa9c0530a4f47a74537c8b46aa02adb87da118ee949c9c
+- card_id: chuda_hankyu
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: chuda_hankyu.jpg
+    sha256: 91bde8e64b0b3766128ae28845de92ae7e7b37cc848fdee4be5be2434d349aad
+- card_id: chuda_hiroe
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: chuda_hiroe.jpg
+    sha256: f2d9d98df1dcf8ad39a4eff2d4555c49c7a58f79e10f2a74bad5f18e12edb14e
+- card_id: chuda_ikumi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: chuda_ikumi.jpg
+    sha256: 0f81c710aac9afb1453c52a248be47c43cec9f0e60ad185cb434a978b15528e5
+- card_id: chuda_kyuwa
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: chuda_kyuwa.jpg
+    sha256: 56168abb86e7fd48c5e5ceca14459a44d0016cde23393a31d38ba85202528877
+- card_id: chuda_rintaro
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: chuda_rintaro.jpg
+    sha256: 5a7fd7ea735816c93df9a37156b5d4a8b26ca322eb8f6a3281d349601b2fa0de
+- card_id: circle_of_steel
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: circle_of_steel.jpg
+    sha256: e45138497b6a43af1a2fb75faa7d1d78cb6ff096783f5568bc13ad99664f8c31
+- card_id: city_of_the_rich_frog
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: city_of_the_rich_frog.jpg
+    sha256: d033e8759d36a0e2ad7e6047764e08167999b61f2e76250ba9de9a59223ef4bc
+- card_id: cleansing_spirit
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: cleansing_spirit.jpg
+    sha256: 2c4c7b2966ab73ec847fbc3e29f1737b20af70da4df908624a0df0d434f7a8c6
+- card_id: combined_efforts
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: combined_efforts.jpg
+    sha256: b56fd0503ed16f31bbf28b27da8f389ff9b83c7f585fa2549525baea9d97147e
+- card_id: commanding_favor
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: commanding_favor.jpg
+    sha256: 73603393132c9fcacefa10777f78f2888d1fcb1c5745d2db769c229b98227b3c
+- card_id: companion_spirit
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: companion_spirit.jpg
+    sha256: 26ef72cb4462c2ba4e607a037779307b6e22e767998441ae1400050d1cd5c5b5
+- card_id: compassion
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: compassion.jpg
+    sha256: 3ef20284fa9afeaa5b42f413475ecb9b6c27b321e9b2731ea12f72b7ed62111a
+- card_id: concealed_archers
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: concealed_archers.jpg
+    sha256: ce7155839a5866d53b7508c44d5b7693b974642945f5da0e49c6615ebb162b0b
+- card_id: consumed_by_five_fires
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: consumed_by_five_fires.jpg
+    sha256: 931f2593701b95a6289132094567db3595bdc52d38d826bd3addacffbcd97204
+- card_id: contested_ground
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: contested_ground.jpg
+    sha256: 06254385570e4e80d94be1a4cbcf5403d39dc0c0f8fa17ab67cfc6d54fac3359
+- card_id: control
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: control.jpg
+    sha256: 53fd66442cbfc11cd3f7fd191ce0656fe46fc2e2e0e08884a40a0c7b66734d36
+- card_id: control_the_field
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: control_the_field.jpg
+    sha256: b0be1e3fd34d8424a0da4bfb0e53b6a1dc12725538f335193365aef10ff8290e
+- card_id: copper_mine
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: copper_mine.jpg
+    sha256: 918a774e2c8a0af54749db1b0966fbcc0ebd85c2987cd948e252d64424e51a46
+- card_id: cornering_maneuver
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: cornering_maneuver.jpg
+    sha256: caa46e5efd1d8d4a128483e9238842c072748f106e8d60d60544778f99073593
+- card_id: corrupt_adjunct
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: corrupt_adjunct.jpg
+    sha256: fcb2d111d5954fdcef1d6960d949cf2ab19489864541a8902a509b1ab21df528
+- card_id: corrupt_officials
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: corrupt_officials.jpg
+    sha256: cf9968c84943ba578c3b524935311a5e3096b9c53c2e6080f4943e305c376fdb
+- card_id: countermove
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: countermove.jpg
+    sha256: f99bd74a470c09828412743af7530f4eeb0592d731266c66e401ebc219411949
+- card_id: courage
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: courage.jpg
+    sha256: ca56a9c95e0d41b28f4e66ef1037cc56716cd511787292905cf8269a5ff77d22
+- card_id: courtesy
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: courtesy.jpg
+    sha256: ded08e5fde10ad827879b71c712bdeea1fa820ffa39034a2de4fb129565f3c78
+- card_id: crippling_cut
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: crippling_cut.jpg
+    sha256: df30119d57cb3bfd39ccb4ab352b27f97ed3b7167ba768093f3c389c637890e5
+- card_id: crossroads_fortress
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: crossroads_fortress.jpg
+    sha256: 7acc42ad993b2a18fb5b03d0bff8561bdc5b0c43ccabaf9fd725b492cc467fb1
+- card_id: cut_them_off
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: cut_them_off.jpg
+    sha256: f94d22c1ef2105d335d8ae92e98d74adf38de0a2612ebbab00eacd3551486de6
+- card_id: daidoji_akagi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: daidoji_akagi.jpg
+    sha256: 17b6fb77855b30bc2e7f783577cecc73f59b908565ee8420f43c31af13a78dd8
+- card_id: daidoji_eitoku
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: daidoji_eitoku.jpg
+    sha256: d42f64fd37c6c39186f0916cbb36279a21dfbbc0532adc5979ac792acad071c7
+- card_id: daidoji_gunso
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: daidoji_gunso.jpg
+    sha256: fd01658818d00c729e940ab62a429848b7d7e4de4cbad19c064d4addab809fa1
+- card_id: daidoji_nagiko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: daidoji_nagiko.jpg
+    sha256: b5d6dcdea65f41249535193eddf03752629cf5ae63e9391bca17ec4d3185dddb
+- card_id: daigotsu_experienced_2
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: daigotsu_experienced_2.jpg
+    sha256: 2a6f064b2b63e4ec401bc8ea5b1689172c9487445450bfc7f9c8c2609f330f02
+- card_id: daigotsu_gyoken
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: daigotsu_gyoken.jpg
+    sha256: 47f765888eee58bb0a5bd2a115e0ebf84058f7be86b181ae26a83a0288350f10
+- card_id: daigotsu_kaikou
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: daigotsu_kaikou.jpg
+    sha256: 8d695eaa10bf58ed56391d316e86d354416872b141e03db091e714eb15b2bc59
+- card_id: daigotsu_masami
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: daigotsu_masami.jpg
+    sha256: 8fbf9769a54413a9f46c146d8115afefb435069378d8dba85026a9e97bcf2a89
+- card_id: daigotsu_meguro
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: daigotsu_meguro.jpg
+    sha256: a146c8dc54b203e94674ea9bc72d4e9ce43a0a5ac145da3653e3f8d4e752fcff
+- card_id: daruma
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: daruma.jpg
+    sha256: 2d903f6ff61e23ebdabf578ba9dd6bc26ef7f480578861f795a99e5186e4e548
+- card_id: deceptions_veil_dojo
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: deceptions_veil_dojo.jpg
+    sha256: fb35b051da940c5a990dd911939ffca7822bc707b8c411cd2dac92f9efeb32c5
+- card_id: defining_the_essence
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: defining_the_essence.jpg
+    sha256: bf6120f884e2679a0e9dd417853b21296510ed4f2129cbba59387379338ee907
+- card_id: desperate_wager
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: desperate_wager.jpg
+    sha256: 9ac9484a210a6da738e94548f6a0ee72ac92c13670855a0e5da1dcca9eb699e5
+- card_id: determination
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: determination.jpg
+    sha256: c4aaba2fec57eaf505942229ef509465e49e97976f0e3f171b546f5834eac0a7
+- card_id: diplomatic_apprentice
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: diplomatic_apprentice.jpg
+    sha256: feae21ae21f8b20b154440a62161c54859ad107c47e6c00089a9ab6fc756423d
+- card_id: dirty_politics
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: dirty_politics.jpg
+    sha256: 651d9b5cfe1cb0d8bda523bc6ddd1a5237e26921dfe0a1390ccf49ba484a09fc
+- card_id: doji_ayano
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: doji_ayano.jpg
+    sha256: 72460200f9da536f0dcd53c8c1b4eb797b421e1b61c2ba7d6c8b7d69e96d144d
+- card_id: doji_domotai_experienced_3
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: doji_domotai_experienced_3.jpg
+    sha256: f277e8e1ddd138edfea8c48d683cf854a8bea38e50226d7a66de9cf956d833ee
+- card_id: doji_hakuseki
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: doji_hakuseki.jpg
+    sha256: 6062b4e38d8f7673f726aa49b885c7db99df17f9358b44e519dce5484448deec
+- card_id: doji_jotaro
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: doji_jotaro.jpg
+    sha256: 7241e0c1aeb9fae602390f83a39bd5540d88cfd3cd38bc26f6ec2bd9c061ef93
+- card_id: doji_junai_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: doji_junai_experienced.jpg
+    sha256: a8d9d56e4ecff6dddd86d9b3a4faa7eccf8172b2be5a979cbfa2cbe168ba0d42
+- card_id: doji_koin
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: doji_koin.jpg
+    sha256: 0db285ab9ecfed4cba92bf75e13fd368b3ce3ee6b127fe14f32b1ce031db6ac9
+- card_id: doji_seo
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: doji_seo.jpg
+    sha256: b402c9d4fa9fc4fe9c0f8e1fe8acdce43e905e6c47172b8af97b84b989b4334e
+- card_id: doji_sesshu
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: doji_sesshu.jpg
+    sha256: 82f68d32d9062cec751ea1dcd51b258cca45dbaa8944c6ff84f6eb773fe7a5c8
+- card_id: draw_your_blade
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: draw_your_blade.jpg
+    sha256: 2499dd92ae48089495d890481e397ac7b103807dc31849c265888f27e5403053
+- card_id: duty
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: duty.jpg
+    sha256: 7cd81f936729aee7d996f7cb31bdc0ab46ea43a4511a25502c13febcb8cf7f90
+- card_id: eager_to_fight
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: eager_to_fight.jpg
+    sha256: b44e66d7065a2f5113cdef257b274ddd43518a586499d54712bfb7c6474c5dc4
+- card_id: earth_becomes_sky
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: earth_becomes_sky.jpg
+    sha256: 733c048fadb50194e854809a6d3dc7802d7083c33dae1c12630a647ef91820e5
+- card_id: eastern_hub_port
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: eastern_hub_port.jpg
+    sha256: 0afa78fb6d0d9bcd3096139cc401f9ab76dcf518e6a51155f2564a4dc9d118fa
+- card_id: encircled_terrain
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: encircled_terrain.jpg
+    sha256: cc35e50fc78acf4b43f9236d05943392b26d81f8a38f8819a8c16370354a8276
+- card_id: enlistment
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: enlistment.jpg
+    sha256: 68d5d3a50177a812e57d1dcb2acbabac24e8eb07060c5759e56e1919e10d8dda
+- card_id: essence_of_gaki_do
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: essence_of_gaki_do.jpg
+    sha256: 63d1d1e405613f906c2b214e31a90a35c3d34537fc937ece8b19b5b8666e2f20
+- card_id: essence_of_water
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: essence_of_water.jpg
+    sha256: 48b9e6575c93690b2de5777fe976f5f4aaaed37bd6120773b46ffad150ebcef6
+- card_id: explored_territory
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: explored_territory.jpg
+    sha256: bc1e2e33b3bbb5d59edf840bc1ba5fcff57489ad41cc082f5b1ddb29dd50a04e
+- card_id: extended_maneuvers
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: extended_maneuvers.jpg
+    sha256: 7f331b635681c9ab5a7948e531b1b7349f0a4cb00c45c5beb671540dc28cd547
+- card_id: failure_of_duty
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: failure_of_duty.jpg
+    sha256: 484a03b394938bd8e19c9aa5272720df20fdc18cf843549d5afa49c215092066
+- card_id: false_alliance
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: false_alliance.jpg
+    sha256: 77c28076634eed9f10984f3aa12418855797977d28ff81fccfa3e09b707d3f06
+- card_id: false_trail
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: false_trail.jpg
+    sha256: 1189078272be6032a1c04b981fe4e4afcebce8bb7411737941dbd5618506e2f3
+- card_id: family_library
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: family_library.jpg
+    sha256: 296c9d4811d8f298a2685d931171a1933170d3ab6c2a10e7c80b6a8e3748bd81
+- card_id: fan_of_command
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: fan_of_command.jpg
+    sha256: 413f51b86405835f7f6a2fbe8b00e1df8795401fefb8c7654c8a23efea164386
+- card_id: farmlands
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: farmlands.jpg
+    sha256: d8f1d469f2f22e7504521b2844eea4003017dc500e1732c6255f0040855a9550
+- card_id: few_against_many
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: few_against_many.jpg
+    sha256: 34f2eb04ed9d689aa3062c8ac1829c7ed8a3da676ad3bf981adc240ede880400
+- card_id: first_and_final_strike
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: first_and_final_strike.jpg
+    sha256: b93ab964598b61095d03d66d77a37dbc96985bcfae5586462615ae0187ebb298
+- card_id: flight_of_doves
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: flight_of_doves.jpg
+    sha256: 0bce92f3328287cf25506906d950b6e4dd8c926204348fa117f692d66de8ff11
+- card_id: focus
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: focus.jpg
+    sha256: bf1f468a2bdf621d798823bb0e845a80491cb282edcfaf94b8a370cee1f8c666
+- card_id: forest_cleansing
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: forest_cleansing.jpg
+    sha256: d1e3ce199dff0be65e771846d9d3b79fea50b74f9d0cb46e4a6f10168c98e775
+- card_id: forest_killer_cavern
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: forest_killer_cavern.jpg
+    sha256: 1fc9c5544af64260dafd08e27f1e7b0e251c8893521465893a6a8869b1473043
+- card_id: forewarning
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: forewarning.jpg
+    sha256: 34d41130db83d3090bcc96e380a4076e6cc921a184b767da8cc6ef865f7650ef
+- card_id: fortified_camp
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: fortified_camp.jpg
+    sha256: b5e6019485e4790157fb856d99c41d6190166a39fdc620f919b4c4dae651a85f
+- card_id: frenzy
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: frenzy.jpg
+    sha256: 30710cb52f36109d8153b8fc7d94a7d031456420ef1c45263638425964d97c84
+- card_id: fury_of_the_dark_lord
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: fury_of_the_dark_lord.jpg
+    sha256: ae4aeae7b46cf2262042cef8e31944589769aecae09fc0cdf54d107f4fa76d1d
+- card_id: geisha_house
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: geisha_house.jpg
+    sha256: 39c4c892510304a73eba63498827eab37e39e3de9a87e403a17a158b4c8b0160
+- card_id: glory_of_the_shogun
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: glory_of_the_shogun.jpg
+    sha256: 4d99db2e800b163a49139e734241020af76e81b9736c4eaf691e0f02cbc76e02
+- card_id: goblin_chuckers
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: goblin_chuckers.jpg
+    sha256: 62679abb5d01fd009037d467f049b5009dcc923ede98595816ef196cf5610a1d
+- card_id: gold_mine
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: gold_mine.jpg
+    sha256: 5f5f3e102d122775dd0b06d64cfffe165742b8696a80500ecda84ace5135b144
+- card_id: greater_sacrifice
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: greater_sacrifice.jpg
+    sha256: 170151fd632d02a68746ca33f104b42d134a67ebf644e7509a5ffdd73a710b81
+- card_id: hachiwari
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hachiwari.jpg
+    sha256: 6d2c5054d19c5a8a7d2cba94245d3951016458d61ae4ea374d2d65c8b6ef80de
+- card_id: heavy_infantry
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: heavy_infantry.jpg
+    sha256: fdf19eea05dbde3067b845586558677183393c879589f976f72717fc7062b4ba
+- card_id: hida_daizu
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hida_daizu.jpg
+    sha256: 03551f9c157e3e45e4f6a9d5b0345092b74c1af956ee4d54d43b63db87b0461f
+- card_id: hida_daizu_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hida_daizu_experienced.jpg
+    sha256: b5a91bb875399c7495465415f454977b8590cfe56ce60f98eaaa5de097be0604
+- card_id: hida_genichi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hida_genichi.jpg
+    sha256: 3fba634c5b227608ac83969222ad5433dad74c1ade81b08d5d88cd3dd4b22f51
+- card_id: hida_hiyao
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hida_hiyao.jpg
+    sha256: b15f1f87b34d7ef86854ad31c86f67164b9645ff89de6795d1da718d654158ed
+- card_id: hida_kaoru
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hida_kaoru.jpg
+    sha256: 3567f64452d7b42cf1e8a3ac7dc7ccc4ac0336f2ed7e0fa6acedf2877e263c27
+- card_id: hida_kuon_experienced_5
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hida_kuon_experienced_5.jpg
+    sha256: 91f35964c1424d76249d4af139650d63765a5f7e37886a015ff48a69276a2018
+- card_id: hida_sozen_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hida_sozen_experienced.jpg
+    sha256: 98309a035764818a6d36fb7ec29c5532e75fe22e9a50ab1ea95a4ec0f90ac4e0
+- card_id: hida_takuji
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hida_takuji.jpg
+    sha256: de272876f4b65c1221fe4226a2bd43df18391ffce7d7cbd679787eed047d142f
+- card_id: hired_killer
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hired_killer.jpg
+    sha256: da6e7c04a4ddf50fa0f5e7dfe16e239f47982c1b962082fbd8af3a2f2676993d
+- card_id: hiruma_aki
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hiruma_aki.jpg
+    sha256: 15c2ff3d71f4e6f99e17a44ac797aa363d7d77de7f060ff008b78c6f1c65fec7
+- card_id: hiruma_tama
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hiruma_tama.jpg
+    sha256: 5d69a452e6972934bd4ac9b7fc72b6e640d1534a012ce4eadbb88c116fbc19f4
+- card_id: hitsu_do
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hitsu_do.jpg
+    sha256: 1508ce189a0ab3980f6c29cec2dbcdd9a65dfd952f496db79c28ac642545939f
+- card_id: honesty
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: honesty.jpg
+    sha256: a8e6423771c02f22668509825175b5f01aa7108720e70f8bb6d7355a1e59a847
+- card_id: honor
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: honor.jpg
+    sha256: 51e1bc7ee84be20a46f945be1a80335b0e91ff86f97ea00e1c70e4428e80886e
+- card_id: house_of_the_fallen_blossom
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: house_of_the_fallen_blossom.jpg
+    sha256: acf364ef6de8d00a089d70f37b27ec36c791410888c959bd24aaf7503e67d5f1
+- card_id: hunger_of_the_earth
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: hunger_of_the_earth.jpg
+    sha256: 1d9531bc761dbed31a64af5139fc8a4232ace7779c52f3b857a1c91dbe0a4eca
+- card_id: i_am_ready
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: i_am_ready.jpg
+    sha256: c4830f8e0c4a92d2b95af314ed1a3691f34b3a55e4406c7643e6706b34fbfc11
+- card_id: ikoma_akiyama
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ikoma_akiyama.jpg
+    sha256: 28bd420f6e0f270879114844617c19a0399bdd244f4c7d8deadab2b4dbb7f410
+- card_id: ikoma_yasuko_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ikoma_yasuko_experienced.jpg
+    sha256: c5b93a31dd16c48a3cbcc2c42c5a4c770c96f794a6be18e0f91f56e93ae14357
+- card_id: imbue_chi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: imbue_chi.jpg
+    sha256: de8ef8a9ad41a331756ff24b6c5d6016d934ef57f6fd656e2a57122965953877
+- card_id: immobile_stance
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: immobile_stance.jpg
+    sha256: 9d6aa52b0a30ac3309acb9e110006ff0db47233d4f1e28c9a57c3b037b45f17e
+- card_id: imperial_summons
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: imperial_summons.jpg
+    sha256: 8c9014cb4b4158ceb7fd56ee12f6520381f955010affbb5e5ad01fe73b6d9e0c
+- card_id: impromptu_duel
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: impromptu_duel.jpg
+    sha256: 864d61f25901afb769927ca918eac3193b1093d62da4c612fda45675afa37066
+- card_id: in_time_of_war
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: in_time_of_war.jpg
+    sha256: 46c9588a2e4b426c0253e6ab8f7b5766ea03719a19237b0e14aa0686acc2ebf7
+- card_id: inner_fire
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: inner_fire.jpg
+    sha256: fbed333356dad6d763d1ddd15ab790156ee488e29dc193c5d0e07e5b71274e48
+- card_id: insight
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: insight.jpg
+    sha256: 693287a1724260d45b076dab2b6fac834d18343904f461e6151ba53e55c3770d
+- card_id: iron_mine
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: iron_mine.jpg
+    sha256: 4a3f3fc6223402fc4e71b4ae8a8b595a0cf06d1f32600a3cfdb0512c4641764b
+- card_id: isawa_eitoku
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: isawa_eitoku.jpg
+    sha256: 68577cb7842d48bd6cb62073a5ac2a35c77861c2813e85bdbf193c53f41293ea
+- card_id: isawa_kyoko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: isawa_kyoko.jpg
+    sha256: 4a5c3903070c1a3fe3107ad8b70fc2864aedead9111ca7e7f6dd8aafeb48ddb4
+- card_id: isawa_ochiai_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: isawa_ochiai_experienced.jpg
+    sha256: 41e0bb3cb3c5f3a9ebd5ba9571b14d2062f2469a35bad350a48f7add7e4ac546
+- card_id: isawa_oharu
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: isawa_oharu.jpg
+    sha256: 5c12f102d3590bc4dcdd4241d772033cc5bd4847cda91f13169fcb847ff690aa
+- card_id: isawa_takesi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: isawa_takesi.jpg
+    sha256: 0c6f9d0387a63aa67b15facc751e9a8065956c2475a70d488751aa9b7456e56b
+- card_id: isawa_umeko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: isawa_umeko.jpg
+    sha256: 24830273bc5164022a519f48cf513293378715590844030088774dc13fe47496
+- card_id: iuchi_umeka
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: iuchi_umeka.jpg
+    sha256: 16b42c9e8b54aa9afe3ac0187704e9102d3be1c602308aca7a830a72f609710a
+- card_id: kabuki_theater_troupe
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kabuki_theater_troupe.jpg
+    sha256: e6d621bd8dbe117e4bb031590eb3fdb9e133ff1f4fd356c1a4b9df03e628d0bc
+- card_id: kaiu_hisayuki
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kaiu_hisayuki.jpg
+    sha256: 546b8e4fde9318cbb2baaae29d0608d64d9492c1ef7646787f6d4baa8a48a9f8
+- card_id: kaiu_jurobei
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kaiu_jurobei.jpg
+    sha256: d749e0e5cfa12dc75061451c49e407f4c5c9ac8aae945ce3ed123e701ece5230
+- card_id: kaiu_sadao
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kaiu_sadao.jpg
+    sha256: 0c1272e6b7dc7880f2c6748ee4c9118915bc8e80694e74a654a383289814ea51
+- card_id: kakita_hideo
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kakita_hideo.jpg
+    sha256: 272a8fb7e6b981df4068214ee2073ba5044fbbcc5d79436851d95a1f36eb8717
+- card_id: katsu_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: katsu_experienced.jpg
+    sha256: e94f075697e145125a6b208a7925f5b29e2aef46dbd3b2796f3dd4d64e7aeed7
+- card_id: kitsu_katsuko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kitsu_katsuko.jpg
+    sha256: db98d36477ed669d426b09ef615a83a8e5ff3654e6d82fb05e073a132b5549e9
+- card_id: kitsuki_ryushi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kitsuki_ryushi.jpg
+    sha256: 441f6d2f09eb998836c2e112e4d9d821ad557844749c192e5e1d126151e415fb
+- card_id: kitsuki_taiko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kitsuki_taiko.jpg
+    sha256: 095a42d300f338a609e50d8347be0a2ee45c6a6abd1f06d4304c90b23c2c7c9e
+- card_id: kitsune_den
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kitsune_den.jpg
+    sha256: a2e3d540fd8e0250cc0706d8dc49836baf5bbcaf730cdad95cb0d6d7a3db254e
+- card_id: kiyomi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kiyomi.jpg
+    sha256: 76435522a06546cdd607ed1caddfa73a0bdd33998cbeb1e5f3f85a5258c12082
+- card_id: knife_in_the_darkness
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: knife_in_the_darkness.jpg
+    sha256: 1e036ca910485a38b14ccd32860ec08e78be19ee1a77dcf32bc888d01b892496
+- card_id: knowledge
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: knowledge.jpg
+    sha256: 2c7fcab4ba9153e5d3f5d0b04e4a6f8e8626ed75e544e541881a97c9bc035190
+- card_id: kobune_port
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kobune_port.jpg
+    sha256: dd335b05e53666db0f36c5b84faaa1d07fff8fc4b444d7845537dc013c584a93
+- card_id: kobune_scout
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kobune_scout.jpg
+    sha256: 9bd3e628f395a92af9d306bd49963499673ea7cfc2d87fe779f3e094a5160c55
+- card_id: kobushi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kobushi.jpg
+    sha256: 47472cc43223059c3b2b23541e0311c52c1ec823c542268e2bf5044f6dc9ae8a
+- card_id: kodomo
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kodomo.jpg
+    sha256: c1c82ac8349fc8ed7ebcead7e21d61e69f1d28b288d6b2d8939b21117fe58378
+- card_id: koutetsu_chikara
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: koutetsu_chikara.jpg
+    sha256: 01ad47266ce02c21f8af054db0ddd39297612c987835fc12a7ad1b014dd84b87
+- card_id: koutetsu_iyoku
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: koutetsu_iyoku.jpg
+    sha256: 65768014e76a4ddabd88d0f7c8c77dfff1b816a67918443caf1a3c20719f19e0
+- card_id: koutetsu_kabe
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: koutetsu_kabe.jpg
+    sha256: 4906c50010efa00686c37a3e9dee61119c4dab7713ff5ebd436e8e5bfbda185a
+- card_id: koutetsu_kyuui
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: koutetsu_kyuui.jpg
+    sha256: fc2542248a82ee44b99bae64aac394324993e01da081fde76cd9788b17b27642
+- card_id: koutetsu_meiyo
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: koutetsu_meiyo.jpg
+    sha256: 4a2101cb621b57e1d48a5539229c72d79ba3b1b2a82885c5a5dc3ce406854271
+- card_id: koutetsu_mukei
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: koutetsu_mukei.jpg
+    sha256: b681be9c5ec037623126f8520a4e5b23476f3eea0dcca43c9962fb9e73635e17
+- card_id: koutetsu_sessou
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: koutetsu_sessou.jpg
+    sha256: cd9f273213ea168055878a9d3b08bdff3a82a3e55583d92de31e9f10d46fbbff
+- card_id: koutetsu_shinri
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: koutetsu_shinri.jpg
+    sha256: 363ab1365fc6786175c80d383c6357b55390a403f5c425a210ec915886a5762e
+- card_id: koutetsu_unabara
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: koutetsu_unabara.jpg
+    sha256: 3e633e27f847c1beb39b5dce2738bf363eef49a937bbb3941b36ed8dd326a6b8
+- card_id: kyoso_no_oni
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kyoso_no_oni.jpg
+    sha256: 507c2334ed99a339670b4bdba320872c3e33ea07caac6697c2f963487d1b533d
+- card_id: kyoso_no_oni_experienced_3
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kyoso_no_oni_experienced_3.jpg
+    sha256: 30e57405653a9b196b345d3b8ef23beccea3a41238ba4cdc2cfb40e254892c24
+- card_id: kyuden_asako
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kyuden_asako.jpg
+    sha256: 6c0d2658a0335405f2ce022accab7be806eda903a1652b433ecb748e5d1a476f
+- card_id: kyuden_ashinagabachi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kyuden_ashinagabachi.jpg
+    sha256: 1d91e3346719ef82f0d9b0d00e43109680c36c15f003aa91071458fb20e407bd
+- card_id: kyuden_wasuremono
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: kyuden_wasuremono.jpg
+    sha256: 5786c3df2fc8a0a1bf5e46ad48748716109be0f5883476c986850f8d8891578c
+- card_id: lesser_shrine
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: lesser_shrine.jpg
+    sha256: 2a63587f59ef94c1141a2e6a9c5a1e0d0bde81b075d477f2cfbedb0484bc035b
+- card_id: lies_lies_lies
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: lies_lies_lies.jpg
+    sha256: d5dffd8ecac6464b11fa59d36374ed15b419a3aa2bcfd9ac37447f1a35c2caaa
+- card_id: light_infantry
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: light_infantry.jpg
+    sha256: e22de7c4bdae0833fb82f199c2288d766db0db311f2daf21df58ee5f0306bcb4
+- card_id: lions_pride
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: lions_pride.jpg
+    sha256: 7a7c695a882a603fc0ff2fd2a5e2ffa0868c36ac7ea53e02c714287c757818eb
+- card_id: mantis_detachment
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: mantis_detachment.jpg
+    sha256: 0070a07db0bbfc91ef115ac58da37268475dc826856be65bceda6baaf01b3116
+- card_id: marketplace
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: marketplace.jpg
+    sha256: cc223dd4a6c1d32e91b5c814a4ff05bee0a306b4eb903916b8610c09a697ac7d
+- card_id: master_of_the_rolling_river
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: master_of_the_rolling_river.jpg
+    sha256: 5ab4e3bdb50fa60356b43eb915b79e7f64143fa8cfda564ec7e769a69838e8b4
+- card_id: matsu_aoiko_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: matsu_aoiko_experienced.jpg
+    sha256: 64c752289c70ce01ce931b6379ce3c6ebb8ea6f61a1dc74c4046925557a13a41
+- card_id: matsu_benika
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: matsu_benika.jpg
+    sha256: 2eb548fbbfd8bb76e761f71adf491c1dda9f099decee10d3f9685ede3a133e80
+- card_id: matsu_bunka
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: matsu_bunka.jpg
+    sha256: 69a17e77e4f337e72791ba3fc4f49e0bceadb156740b9551fc2318ead74d88ec
+- card_id: matsu_robun
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: matsu_robun.jpg
+    sha256: 6ecd77b11763a9d32e3c43d1e55b85b2753312985df964f66fb95398ce592dd0
+- card_id: matsu_takeko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: matsu_takeko.jpg
+    sha256: c8e51e7aa43a8675f7b59efb595ba68b53a4540b253333e27b897ae3660d6997
+- card_id: matsu_yoshino_experienced_2
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: matsu_yoshino_experienced_2.jpg
+    sha256: e3b4acf3b4e9c0975a277e561450b799240d776db49dddcd9991df5ad6133f6a
+- card_id: matsu_yufu
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: matsu_yufu.jpg
+    sha256: c1fb54b1cd93939acfbe6f5516ced3a366f36cb97b7238b2d599463813ec0fa4
+- card_id: menhari_gata
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: menhari_gata.jpg
+    sha256: a40717cfa86263ae51b60c866291c7907fbc5728f9250c102b5a29ababf92a91
+- card_id: michio
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: michio.jpg
+    sha256: c51d0bb4c6be26051b54d5488ce35fd222761337dd3e0d9eb558b6d63e751c24
+- card_id: mirumoto_chojiro
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: mirumoto_chojiro.jpg
+    sha256: ccab4376d13324088ef9bb4372901f183b5f616aa525e5c47d34879356eea311
+- card_id: mirumoto_ichizo
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: mirumoto_ichizo.jpg
+    sha256: 07b853d37e6294b2ad8f07208a8348422b6681d0d268e25976e4795921fff792
+- card_id: mirumoto_mareshi_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: mirumoto_mareshi_experienced.jpg
+    sha256: eaff3bda932a2b4bdcf11857921290a6d496378b6a32121f1f92e87c8fe913f6
+- card_id: mirumoto_taishuu
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: mirumoto_taishuu.jpg
+    sha256: 6062d2004627efb4b86d885f15209a6566e480aa26e80fd36ff95a8ccde894de
+- card_id: misdirection
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: misdirection.jpg
+    sha256: a564d4f80230bc6e7b33a3d12be5a5547031d26c16ea48322d1f8530284a2b6c
+- card_id: morale_officer
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: morale_officer.jpg
+    sha256: 7f0eb26b662a34823477fd9fe3d76bad3267df388561ccc461afa3a672875a85
+- card_id: moshi_amika
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: moshi_amika.jpg
+    sha256: 796be0443823c47ac8e5c3d4bf2e7df592c4e111dac3663bcd66ae107f7791e4
+- card_id: moshi_euiko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: moshi_euiko.jpg
+    sha256: eb21df11996b787e8e809491c5d9471cf221981cf9d3ee951be87df60cfb6b16
+- card_id: moto_akikazu
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: moto_akikazu.jpg
+    sha256: b37ceb747159d532b06cf2590db1d0c7619a774cbccf8f28a4557d04cb14468e
+- card_id: moto_chagatai_experienced_5
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: moto_chagatai_experienced_5.jpg
+    sha256: 5e0640877971c44bcd3728a2433d5b26cc896c66b0419bbb4e1686bf5f41bee7
+- card_id: moto_suren
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: moto_suren.jpg
+    sha256: 93a00565717a3e6f7b3ade25fa0d9624a8e4d20c950a6ce88ca2b1c8c93033b0
+- card_id: moto_taban
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: moto_taban.jpg
+    sha256: 49c65bf81d509b4b469ef2eda3858cb8cd448c3fa4d202dd7744d7fdda91befd
+- card_id: mountain_summit_temple
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: mountain_summit_temple.jpg
+    sha256: 897d2b63ca6e827c578b96e519bbab87ce8d07e6eac6c7dd6de443222dee66ed
+- card_id: mountains_of_the_phoenix
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: mountains_of_the_phoenix.jpg
+    sha256: f4bcb01a39538e2ce2ad59ef7b0c094bcae867c85d61eb61d1f3381cf27d3573
+- card_id: mountains_shadow_dojo
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: mountains_shadow_dojo.jpg
+    sha256: bb9b263a1e2748ebf59fa034bd94e8340e99429024ba0c62911786a0c5be0792
+- card_id: muketsu_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: muketsu_experienced.jpg
+    sha256: 200f5d01ac2d8cf690d854c6742ec00acfec6b0a6b95902716a765c84005093f
+- card_id: never_stand_alone
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: never_stand_alone.jpg
+    sha256: 300a9560716e23182c0fd3975bccc95733dee7fdd4e354b6451c048b49543432
+- card_id: no_hiding_place
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: no_hiding_place.jpg
+    sha256: f8cb37df07d13fcc310351b03b991a94304f2c62ca2de8001800c37e82e80ce1
+- card_id: obsidian_dragon
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: obsidian_dragon.jpg
+    sha256: 8769a197ff18b4ef34c69bb61ffdbf11f71081487bce8076bccd6aa5ac07c7b5
+- card_id: ogre_warriors
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ogre_warriors.jpg
+    sha256: 45eb09ac6573002abe5d5afe63b77bda6795ecd2a102345de9fad685d3f3cee7
+- card_id: omoni_experienced_2
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: omoni_experienced_2.jpg
+    sha256: b1dc54eb43f555589be20dc435c05d48cf9715c809d7a66f73835302a9a83b5e
+- card_id: oni_daikyu
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: oni_daikyu.jpg
+    sha256: e440b484c6ca9e5b9a5f969806e02b88a9232613d122be9011f771bcd5757cd9
+- card_id: outer_walls
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: outer_walls.jpg
+    sha256: 676e0fb668be2ce9d328535cb1cb8380f3836d8e1025490680b89b841a74d96a
+- card_id: palm_strike
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: palm_strike.jpg
+    sha256: 1a6b764de0e0a315a177bdfb253ee05bab77174d715fc94e40221f27a39972ac
+- card_id: peasant_vengeance
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: peasant_vengeance.jpg
+    sha256: 57492407702ea7e7d3b387977ef28aa6e571a5f441fee59b32613a75607d2b27
+- card_id: pekkle_no_oni
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: pekkle_no_oni.jpg
+    sha256: 31b9783cd24556137568f02003d5f17015eb16bd0d8ec041913898847e9bcdd4
+- card_id: perfect_attunement
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: perfect_attunement.jpg
+    sha256: da126e4ab06d42bd140f96e68f064de94b1bae958f704f6adc063dcf32083ed9
+- card_id: perfection
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: perfection.jpg
+    sha256: 5d860ef3e5faf0a55e723ee715575e67b660c0580c11df2852b4fec29583d9b4
+- card_id: pokku
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: pokku.jpg
+    sha256: 1701947dbfb0c14de53df188f471716fee8bee9f5ae1193267008d792b54c772
+- card_id: political_interference
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: political_interference.jpg
+    sha256: 7ee93f67fbf7a85ac25a57741c151421a1d740104149b698cf0f12f300f77020
+- card_id: private_trader
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: private_trader.jpg
+    sha256: d37a57e28f9da95ad0c21a2bac2b0fe300b30e27b39a11e39bf9f843cb326425
+- card_id: proposal_of_peace
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: proposal_of_peace.jpg
+    sha256: 2a16f5be77b5cfaee4489d2f4ce7833a2d99fcb4fb083533814d58421b6626ab
+- card_id: purge_the_weak
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: purge_the_weak.jpg
+    sha256: 3bd8822ba02a3c4d942d9418bfe87360cd990e8da057074e362ae44d4b87e635
+- card_id: rapid_deployment
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: rapid_deployment.jpg
+    sha256: 8d7b8f4677944967a34885eb32cc9d73276276fb41b6c6e3794f290ac4d6f0e8
+- card_id: raze_to_the_ground
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: raze_to_the_ground.jpg
+    sha256: 7bce11cba4532734443aa09364174534514f6d5befe2675510962215dd6debea
+- card_id: razor_of_the_dawn_castle
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: razor_of_the_dawn_castle.jpg
+    sha256: 6fadb1a9189bf32f5d39216f723d4abbbca94f718d447c7f030aa0177d58f7f4
+- card_id: refugees
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: refugees.jpg
+    sha256: da840a11420eec58c114bbbe16a7b914ed3ff02cc755f06a80f32fdad1215536
+- card_id: reinforce_the_gates
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: reinforce_the_gates.jpg
+    sha256: 716a8899b505fcfbc47fceb8be7e508a60b79feada777548eac2896f1634402c
+- card_id: resumed_hostilities
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: resumed_hostilities.jpg
+    sha256: 1909e143c4902e48fce724aab66c2ea7bd3bb9371da721ef8a3370822d9762af
+- card_id: retribution
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: retribution.jpg
+    sha256: 2d978ae656539771c1edb358d4675c4b9dbf5dc019b5305f5cb3beedf82fcf84
+- card_id: rich_coffers
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: rich_coffers.jpg
+    sha256: f8ef586b729d0c3722e869f2c6d0d7ad9b87f887cbad8dbd71623722fbbb03c5
+- card_id: righteous_doshin
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: righteous_doshin.jpg
+    sha256: 13bc5c83995b7b428679e20b4070353eb560965f2ca585c834b49c63ce78ec59
+- card_id: righteous_fury
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: righteous_fury.jpg
+    sha256: 663e515197dcb0b645df9b71bf5a41986752ca19c38dbb9e89bc04f4c8e88844
+- card_id: ring_of_air
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ring_of_air.jpg
+    sha256: b1b9f730880367b97689c2cad6cb3f18d96981e9e6d7449b19eaa7a10263c6ec
+- card_id: ring_of_earth
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ring_of_earth.jpg
+    sha256: f7a1f4965bd90fe22c185b834271ff2c9b55080e84734cf0dd6b2468297c1df7
+- card_id: ring_of_fire
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ring_of_fire.jpg
+    sha256: d5a2593223a4d70bb00d342aee8601adf5331462c37fb4a6c062e5b706abb895
+- card_id: ring_of_the_void
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ring_of_the_void.jpg
+    sha256: 46422d6cf1eda0806822b780c57c43092671cc35203af5af90eaa99871e64dd2
+- card_id: ring_of_water
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ring_of_water.jpg
+    sha256: 6b8c45b62796d9c037347e02b7b424b3da25686d93b614bb697e2b864147ea35
+- card_id: roshungi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: roshungi.jpg
+    sha256: 2d23a350f3f31bc98675e5a9f9d981dbb222ae5d5aa8a231b899a99d54596b56
+- card_id: rosokus_staff
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: rosokus_staff.jpg
+    sha256: 981198b1ea27359c5a8bc320a471ef193b29852c8fbade6b1f55f474f8c97400
+- card_id: rout
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: rout.jpg
+    sha256: 1411e694d4ce2a3f78eea449cac1e22bba3e174a5b4482f56ed0b06d1792096c
+- card_id: ruins_of_otosan_uchi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: ruins_of_otosan_uchi.jpg
+    sha256: d1cce3bb8d13c3bcdf3e88cc3496795283293b39e0dbefd2f34f6aa999d25a0a
+- card_id: salute_of_the_samurai
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: salute_of_the_samurai.jpg
+    sha256: a157e7c283748065d01531f1649fc6f42e0bbcf15acc51c592d8531bd358a3c8
+- card_id: sap_the_spirit
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: sap_the_spirit.jpg
+    sha256: b9ef84c122bf19ca1a2d7d0ffab57e02d8a336aedad59fdf0949df47d0aac270
+- card_id: seat_of_power
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: seat_of_power.jpg
+    sha256: fcfdd616dd8408f90a45273399f2869dbf719e6eaa93dbbd193819f5cc11fa11
+- card_id: secluded_village
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: secluded_village.jpg
+    sha256: d85977840ffff113c1680d9f89f3bf9ed00ecff9e00264ada42f407c9a4f07f7
+- card_id: secluded_waystation
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: secluded_waystation.jpg
+    sha256: b875554cd978f6671de6852e1b94228846fcd2c523816d9ab2f12059f598aa65
+- card_id: seikitsu_mountains
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: seikitsu_mountains.jpg
+    sha256: 64971194459f7b33220da1d2d0b8338d761bdb15b351a1960742081a192131dd
+- card_id: severed_from_the_emperor
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: severed_from_the_emperor.jpg
+    sha256: 8d103572ffbe3da808a03e2f5f1f467d71e695ac87593eb977063bc88109a5bf
+- card_id: shiba_fugimori
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shiba_fugimori.jpg
+    sha256: 240c3de7c34585ffd809cb13a3848329ca9d35d48d3b61afc3e387e0fa72871b
+- card_id: shiba_ikku
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shiba_ikku.jpg
+    sha256: 5bbf6a14bf4aefe6ca90e906a56ff5012a0e3a92c09e07701e72b3ff910e952f
+- card_id: shiba_miiko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shiba_miiko.jpg
+    sha256: b63dd9c155b81fb6c96791848848d6e07b10cada96f3cc2f90701fc254222784
+- card_id: shiba_ningen_experienced_2
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shiba_ningen_experienced_2.jpg
+    sha256: f7d0ceac5f8ca5555c83e5733fac443c5aac3b535d00633575581738c244c52f
+- card_id: shinjo_horsebow
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shinjo_horsebow.jpg
+    sha256: fe525294c273475bbda6b6b4b547ad9e7f3f7aa41525f6bad99e2acddee3e881
+- card_id: shinjo_kadonomaro
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shinjo_kadonomaro.jpg
+    sha256: 5762f3e5fe81a82a3bc998fb5f9d435a7387bea1a35239a695a0ff65216bbf67
+- card_id: shinjo_meikoku
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shinjo_meikoku.jpg
+    sha256: a74cb53e6e6a17fab418fab86ff76dd40128e8eb0f5102f60965daef1578e79c
+- card_id: shinjo_xushen_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shinjo_xushen_experienced.jpg
+    sha256: a80708efba01d7b14b56e1f44a13b73cc64dae753e8772f4a5600dc4e4938eba
+- card_id: shinjos_courage
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shinjos_courage.jpg
+    sha256: 4a9346fa1720c7247af2c6302cfbf0d0b696df0af7895b8909a51c06438af815
+- card_id: shinomen_marsh
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shinomen_marsh.jpg
+    sha256: a52431332b7bbab7353c8735292f2d29129cee0cfc591a347b8705446a0e75f0
+- card_id: shinseis_last_hope
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shinseis_last_hope.jpg
+    sha256: 9c25e1a6696a4e644d14ec1a989f1637601b55b492464101c0f0f95eb88be2be
+- card_id: shizuka_toshi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shizuka_toshi.jpg
+    sha256: 172f3327a9041fc2bc0f650778cf7a31b183d8137288335d72ec238a77df59d8
+- card_id: shosuro_adeiko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shosuro_adeiko.jpg
+    sha256: 1597c1be1d7a95201934abff38921cbd50e12cf6dfad820d4879ddd23bd8fcc1
+- card_id: shosuro_uyeda
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shosuro_uyeda.jpg
+    sha256: bbe8f8e2fa052d3dc0128aa892b9f17b4612a7eb2b2ca916fe471a0fde6801ff
+- card_id: shout_of_challenge
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shout_of_challenge.jpg
+    sha256: af61b171b50c1bcdb5d223323d4d90a3b65e83e3094f923c545efcb69b57f7e9
+- card_id: shout_of_defiance
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shout_of_defiance.jpg
+    sha256: 5302da4c27c252b6a94be1d967f8e921693f7625eaafe209ddf5504595531574
+- card_id: shout_of_victory
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shout_of_victory.jpg
+    sha256: c16dd4cb03f939b38ebb399ca13dfba64eab7e7f9a3902e537105c03a4a83b57
+- card_id: shrine_of_the_sun
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shrine_of_the_sun.jpg
+    sha256: 1ea5e4159356e48c2a3abca93db0cea70f16eecd81eaf5a84af77c2fe96953a1
+- card_id: shrine_to_bishamon
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shrine_to_bishamon.jpg
+    sha256: 9b6d735b1677e53db5beb60793717d5af335b72a2606ded976208b80978a1376
+- card_id: shrine_to_fukurokujin
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shrine_to_fukurokujin.jpg
+    sha256: aeca561273f5cc7a075bdcc5736b6152801aadc26b936a5d095b642979625890
+- card_id: shrine_to_osano_wo
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shrine_to_osano_wo.jpg
+    sha256: 6d0384b0f9a5f7dab7e5a5bc7a8fa31adff3d3d42f73b6e165ecc9d996870c27
+- card_id: shuten_dojis_fury
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: shuten_dojis_fury.jpg
+    sha256: a2aa6291cd0d6aecaf81cf85ea3dd872b377f31f03a58b0869b0d7c6edbc6452
+- card_id: silence_the_future
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: silence_the_future.jpg
+    sha256: e251d2b2f6b637cd093bf3957b706ae30844814bca3293e6b136e0d866aa3b25
+- card_id: silver_mine
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: silver_mine.jpg
+    sha256: 85204657380f56d2265827464f2c5c874645b13880ddd2975e879a1cc57f3f69
+- card_id: sincerity
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: sincerity.jpg
+    sha256: 6175f5b5d64636f0ddd60210223a72450e885a7af654a8447baf6034b63ca337
+- card_id: skub
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: skub.jpg
+    sha256: 7b588f21821583b23872887954fe2fa5ed9463a6637e51625c51b1add1ec2254
+- card_id: sneak_attack
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: sneak_attack.jpg
+    sha256: 6e9f83fae8ea2651732d65851dfe6786447ad2b31c8399452deb4a0c5eb57dc9
+- card_id: sorrows_path
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: sorrows_path.jpg
+    sha256: 7e5d50fcc675cf478a101a19064404efecc47cbd8bea32ee75fb26c497208615
+- card_id: spearhead
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: spearhead.jpg
+    sha256: 2531a338fed033e17354afcedc592ebeece8dc34e623a200536bf9d47f412c3b
+- card_id: stables
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: stables.jpg
+    sha256: 3c52fae8f928be743b5ee00e2499971df21b4d504a5c89e7907d41df3f905c7c
+- card_id: stay_your_blade
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: stay_your_blade.jpg
+    sha256: 224fdd0ce502a0e1293b2f9e2f78cada6c8ca29146fe022abf30e2be00dd2292
+- card_id: stone_breaker
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: stone_breaker.jpg
+    sha256: 70b044f2fc5a89abcef7221be9bcc9d82402f3e197f3b7b6694d7f722cdf7c2d
+- card_id: strength
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: strength.jpg
+    sha256: 1eacec8fcb86f95e715f437a3cfc06f2187bba7aa5077de1eb2e8db094d122f6
+- card_id: strength_of_the_forge
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: strength_of_the_forge.jpg
+    sha256: 09d2eed5b287e839490bf04ff36a7400318c852258985abb79a7e2de2cac3050
+- card_id: strike_of_the_dragon
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: strike_of_the_dragon.jpg
+    sha256: a76d0fd1d8f96ce702ae3d75b3d0a43c940838896099bea10eb4eb600cfd7141
+- card_id: superior_strategist
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: superior_strategist.jpg
+    sha256: 7f189d43e24d464f66b5a5a8ef9b1de18e195179195292ed2540497e98863780
+- card_id: supply_outpost
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: supply_outpost.jpg
+    sha256: 11496c901fff20de3e2bfbebb7880f708d28ad5a2b346c2e0ba76bec06d5692a
+- card_id: supply_smugglers
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: supply_smugglers.jpg
+    sha256: 751110ae909d10c60263ae22000ef39a847edfe04f80f363f240ffeeb2d92d6a
+- card_id: sword_of_victory
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: sword_of_victory.jpg
+    sha256: 3eec22d5adb624df52bff105c166c6ec3bde2717f75c3d62a43a0c60eb7da896
+- card_id: tactical_advisors
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tactical_advisors.jpg
+    sha256: ae4a6324b2c8d1497bf6950d7ae77c9af503e068601ba846812076ef42d17037
+- card_id: tactical_maneuvers
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tactical_maneuvers.jpg
+    sha256: 2d2d4c9e098ec95c7fe7ca72dcbe7173f593cd114d66e9b3720cb148b27cb3ee
+- card_id: tamori_konoye
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tamori_konoye.jpg
+    sha256: 3ab4d22e0d216bbd70a1098707a814c8b2dd0aed97fc73eae15542353ad85b0a
+- card_id: temple_of_the_seekers
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: temple_of_the_seekers.jpg
+    sha256: dfda26d1efbdbd16b37dbd25455259b970f15edb193f5dea4b69540549e16e70
+- card_id: temple_to_shinsei
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: temple_to_shinsei.jpg
+    sha256: 5c7e8660c47814cd7c3de27cf93f33a7200377a39879a522153e2835127f2a7f
+- card_id: temples_of_gisei_toshi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: temples_of_gisei_toshi.jpg
+    sha256: e3775f780519b39807e0a309e30afc650eef6c1f3d2fd4b995a2cbb138410575
+- card_id: test_of_the_emerald_champion
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: test_of_the_emerald_champion.jpg
+    sha256: a394371689ae8d1682ceef294d857db1bd04395efec5ee0932a739035ad73129
+- card_id: test_of_the_jade_champion
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: test_of_the_jade_champion.jpg
+    sha256: ccf42d5dd2a83430bf588b532e3a8c2fdf66856cd20e0c3785ee677009b8afd4
+- card_id: tetsu_kama_mura
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tetsu_kama_mura.jpg
+    sha256: 7f2920be67ad80b62154e506bfbe1a2c869e47016492559d75f9cb7a783d86ff
+- card_id: the_agasha_foundries
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_agasha_foundries.jpg
+    sha256: 519d121895de745bf55b2efcf660b937cf061abed02f63750b1e6bbb46a348a2
+- card_id: the_arrow_knows_the_way
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_arrow_knows_the_way.jpg
+    sha256: d720f6d92be046396487103adde1eb10353b1406ffd251822ceb22ca1b9f02f2
+- card_id: the_bitter_shadow_of_shame
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_bitter_shadow_of_shame.jpg
+    sha256: 5e1b20b4f0b4917e0b2882d3ffc84078db33c5fea9bd6929b28b9a9a28842691
+- card_id: the_crabs_strength
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_crabs_strength.jpg
+    sha256: 1269607946836966bf6b8f361cd4c9e728cb0500634b5f5102d5fcfe6eaa0184
+- card_id: the_cranes_strength
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_cranes_strength.jpg
+    sha256: 6bab79d058b5b80cb6f3674a692dd362f5881787d6aa41da696d108a38f20696
+- card_id: the_dragons_strength
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_dragons_strength.jpg
+    sha256: d7d8f4381bcc6f285422f0a83c358d8be740f4d02af067d876dbecd33482269d
+- card_id: the_end_is_near
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_end_is_near.jpg
+    sha256: 658f50e6cee3cc737a2fb29d6eb62b94f7c08515ae90a6d472ed12cb0075227c
+- card_id: the_fires_that_cleanse
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_fires_that_cleanse.jpg
+    sha256: a4e193940a39001774e214827f928e8721ffa5216dd1f5a08c22dc2c86196cb6
+- card_id: the_fortunes_smile
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_fortunes_smile.jpg
+    sha256: ab7383dcceb1ccd2b932938ec86ad2407a6d0b66421033d1eaaafef1dffac286
+- card_id: the_hall_of_ancestors
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_hall_of_ancestors.jpg
+    sha256: 34119cc859a7be2a2d0a08684e4977b348730e7eb46790c1967d33db7777ee21
+- card_id: the_kamis_blessing
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_kamis_blessing.jpg
+    sha256: 95338137c3722ecaa68bcec5010712cbc55fe28b930f09f35d45e06e3a7251ba
+- card_id: the_lions_strength
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_lions_strength.jpg
+    sha256: 163e4c17248d604aac64adce5e9318cbdec1a7b35100a3473807c173f8338920
+- card_id: the_mantiss_strength
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_mantiss_strength.jpg
+    sha256: 5208fed1fff5355695fd0996212e8663789a444047d3e1b27ba55af01c58eb04
+- card_id: the_maws_grave
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_maws_grave.jpg
+    sha256: b38aec272952219cb1136f7d39fe0df487bb14eb1f3564bc67718701ab2dce20
+- card_id: the_path_not_taken
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_path_not_taken.jpg
+    sha256: 152616675f52ee9e0d297a99ac60061994ff59cf47d3f30332923acd4f2c74e3
+- card_id: the_phoenixs_strength
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_phoenixs_strength.jpg
+    sha256: 962e910cf886eb797dfadbc2a6ca6367b649a6bb2feca539f5ae9d90e94922bb
+- card_id: the_ruined_city
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_ruined_city.jpg
+    sha256: 7d297617824769b88e0e67abca7a46c06a12f4dee6e1fffe5ed5cb35ed041a88
+- card_id: the_scorpions_strength
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_scorpions_strength.jpg
+    sha256: 3151e4b9e067c9dcd3bd5297da85de9fef8cceab9458cbef5a8303deadd69117
+- card_id: the_seventh_tower
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_seventh_tower.jpg
+    sha256: 7e4389c5476fde4b6b668c331646aad4317130b7cf5fe259efe238b7dbc5fc8e
+- card_id: the_shoguns_peace
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_shoguns_peace.jpg
+    sha256: 91344a79ecd18b8183d9bed3144afe5d295855158f4dbe1a77d686b794ce6191
+- card_id: the_spiders_lair
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_spiders_lair.jpg
+    sha256: 96a8bd663386638c2880ec54f4bd23376484876a0cf3c2e41deb3857ede1a738
+- card_id: the_spiders_strength
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_spiders_strength.jpg
+    sha256: 92a0649409027bc573562a0e7377c42ab88b2c4b88ec12457f79e7b3bceb3952
+- card_id: the_temple_of_death
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_temple_of_death.jpg
+    sha256: 005076a19edbbab99ba7b3cbe9a97e943f58e1ca45f42bc5099d9fe59e2a92fb
+- card_id: the_unicorns_strength
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_unicorns_strength.jpg
+    sha256: d077db27f4ae3852b32e4a464e4b2355b19846015edd041f12ff9c7ee88ce3b8
+- card_id: the_utaku_plains
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_utaku_plains.jpg
+    sha256: 14a367a04236f7fe85adf7eb88145a7a0592dd9b8c115e71e7e78c8786929fff
+- card_id: the_wrath_of_osano_wo
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: the_wrath_of_osano_wo.jpg
+    sha256: c641c6881e012ad28021f40256a1b3b7351265f9a7d8ca30ffc208c801d7790f
+- card_id: three_man_alliance_plain
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: three_man_alliance_plain.jpg
+    sha256: 5906068ff2b2d38a7c456feece3cdd6ac654416a6eb25a9ec44b8a29e17e10ad
+- card_id: three_stone_river
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: three_stone_river.jpg
+    sha256: cec29462626f37aa22a81e1e07f216e3742f95e5b2700aaa561c3e59235b41f4
+- card_id: tides_of_battle
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tides_of_battle.jpg
+    sha256: 397c3201aa044e9cd5e37b16eaa724685b7528e2fa6787d5e676f90395ff1920
+- card_id: togashi_ieshige_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: togashi_ieshige_experienced.jpg
+    sha256: 88b71ad2f2a3dc9708b06dd4b761fa3a23b05a0fba5ef33773b3764f11ad5a61
+- card_id: togashi_jomei
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: togashi_jomei.jpg
+    sha256: 61028b9790fe46c76dc55e11213a65545c8606141298d235552c7bb581652ff5
+- card_id: togashi_kazuki
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: togashi_kazuki.jpg
+    sha256: c35b9c3f85424e5cd62962ffdfc61d99c625cb9502a58408833c65bc80c8076c
+- card_id: togashi_masujiro
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: togashi_masujiro.jpg
+    sha256: 450ffe3874d96ffc2a98a0fbd0aab8d2ba62dad1faadf4bfdb245050c5f6fad7
+- card_id: togashi_miyoko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: togashi_miyoko.jpg
+    sha256: 6ba2f51c89d6b16847f103abdcddd60f41e6381d2961588e41284c1a43d8cfed
+- card_id: togashi_satsu_experienced_4
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: togashi_satsu_experienced_4.jpg
+    sha256: 4f7eb5c1ab8222c898d26274ac027183ed0e5c8920ed1692355d5b763af72e52
+- card_id: togashis_shrine
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: togashis_shrine.jpg
+    sha256: c6f121f0780663644727258c00da5d790b30fd3f9efbfa19114d85591eed02a7
+- card_id: touch_of_death
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: touch_of_death.jpg
+    sha256: 91212bdea9c806a30ce3877e0502d0efc1974ff5df6884565498fcf5695e9477
+- card_id: traveling_ronin
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: traveling_ronin.jpg
+    sha256: 599f07199185f63862047dbeb4ffb6e7981962d7fb9d9cd136c174ed657910aa
+- card_id: tsi_blade
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tsi_blade.jpg
+    sha256: 7087c0cb4a824775f448604a1084c9956d4527d7b65f190976afb9b0e836ae70
+- card_id: tsuburu_no_oni
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tsuburu_no_oni.jpg
+    sha256: d92cdb3477796603a83f9da6c84a2cfaa2d633d147737867286c6d4e49d7a0f8
+- card_id: tsuruchi_kansuke
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tsuruchi_kansuke.jpg
+    sha256: 5da7044d3eb661f2ad3646ccff50a77cf93f66e0ba62d7507887f3d14e23a778
+- card_id: tsuruchi_kaya
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tsuruchi_kaya.jpg
+    sha256: e4eb5127da77f2323bdfda5803111447de5172ef9107fd16b073b63cf3de6220
+- card_id: tsuruchi_mitsuzuka
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tsuruchi_mitsuzuka.jpg
+    sha256: 84ad9df50fa80b6e297c174f4195c71633afd554ec9a59d436c09d473b7e31c7
+- card_id: tsuruchi_mochisa
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tsuruchi_mochisa.jpg
+    sha256: f5b810d8386ea55b1ef9729100e15262bf152b0e64e6a3bfefc68060dec72afa
+- card_id: tsuruchi_nobumoto_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tsuruchi_nobumoto_experienced.jpg
+    sha256: 8e3f6f3a12cb6f34b0839bc5bd83526d8944767a5dff0097cb97a0ce42956d77
+- card_id: tsuruchi_okame_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: tsuruchi_okame_experienced.jpg
+    sha256: 5fa2f11b81dba29f18f185941731813c6f9e7cbf070a56a87e4b7bc5b3e1aa1c
+- card_id: turn_of_fortune
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: turn_of_fortune.jpg
+    sha256: a7496e1e07bb65e94829592395aba7b596ea77e10b5d9ed0b41b4f9c1f4fc7c9
+- card_id: turn_the_tide
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: turn_the_tide.jpg
+    sha256: 2c92b2c20b74300f2e2a486c8ca46dbc153751f4ae21636a2ee1020116bbc83a
+- card_id: unfamiliar_ground
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: unfamiliar_ground.jpg
+    sha256: 1ea18b265c495330a212020885a02c83bc83f7c74940a349b42c2fb935d963c4
+- card_id: unfortunate_incident
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: unfortunate_incident.jpg
+    sha256: cc72b5c8df4c7437484cc062889d22edfac021590f461a1c79a2ac64954a712f
+- card_id: unrequited_love
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: unrequited_love.jpg
+    sha256: 472295e4de7ed28ee39bb44d740ec9cdc41d16491c982584a59a0255894d8203
+- card_id: unspoken_threats
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: unspoken_threats.jpg
+    sha256: 8852baa83d9fc2acfefd7f0ad0f98917745fc27307e7b5b6f6c756dd04c1b478
+- card_id: untested_scouts
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: untested_scouts.jpg
+    sha256: 5317078c29484b1c7936b4b4056896408099a7a56e4741b650bcb46a1b457120
+- card_id: unwavering_assault
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: unwavering_assault.jpg
+    sha256: 43ed9081ab3cb61e0246714f8639fe1d677f25f311b48e6c845476ac0069fc71
+- card_id: utaku_genshi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: utaku_genshi.jpg
+    sha256: 9c7d7c2e6977476cc36cf5e8dd244beba4dad71a958ba5bd1af4dd7a9ffa4373
+- card_id: utaku_kohana
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: utaku_kohana.jpg
+    sha256: fdb9d84cbfafdf0ce6dc894e2d405c61a72faf95e311d16711c10e202e0e53eb
+- card_id: utaku_meadows
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: utaku_meadows.jpg
+    sha256: 1586ceea6f03157b9b19e40531226e738ab3042d4a025f4fda827cf8670af8c8
+- card_id: utaku_tama
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: utaku_tama.jpg
+    sha256: a88b5c40c1193d5a6eb574b94c89e837f27be449bbad1c44f59a0667c64c62ed
+- card_id: utaku_tayoi
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: utaku_tayoi.jpg
+    sha256: 642540cf9540e8ed57df92ed07258178b2a3a74442204fedc669df94effd8b6c
+- card_id: utaku_yu_pan_experienced
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: utaku_yu_pan_experienced.jpg
+    sha256: 21fd7430179e3151b58776c08390743bddd483bfcee337481a2658ff1073c1ab
+- card_id: utter_defeat
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: utter_defeat.jpg
+    sha256: 3e5eef1de7c01e6896cc0be927f2854cffc69659d015e2254b1c35c25c58e823
+- card_id: venerable_master
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: venerable_master.jpg
+    sha256: ad46dfa61eb1835b7d8eeb5c83ed6d9c27b89e81f16eb3f8ee1e543e88418ce1
+- card_id: wako
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: wako.jpg
+    sha256: ff09cc6fddfe7172ad8fc5d1d25bff967d35eaa6eb453def369808630bf67acc
+- card_id: walking_the_way
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: walking_the_way.jpg
+    sha256: 4ef4de8526ccff09656aae136b4fa335791def16d98582f9b2d32f4c99de4b3c
+- card_id: wandering_budoka
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: wandering_budoka.jpg
+    sha256: 2718d4f2b6c1ee5a77aa6aec8dd9e47c388ab3cbf5b87d253b13962a54edaa91
+- card_id: wandering_scout
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: wandering_scout.jpg
+    sha256: e111649e298ce59114b3a9f99541c681e51bb5bea54bc69efb450c97e430978f
+- card_id: wardens
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: wardens.jpg
+    sha256: 9e9486dd76c6b12c329d85c5b3da414f7f8f6d2e126d8f5d974160e3f52ba822
+- card_id: wareta_no_oni
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: wareta_no_oni.jpg
+    sha256: 1b2a94dad382fd2484978d17673cf9f811ecec9513bd3db3054ec0b514e342b7
+- card_id: warrior_challenge
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: warrior_challenge.jpg
+    sha256: ecfca37381d15930236a397116e6056c94a5c775f8b9ab5f129c39887f31f374
+- card_id: we_stand_ready
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: we_stand_ready.jpg
+    sha256: 5c5382285492994120a826b4cb9eab67efac514f419bcf1bc8e3a36208f61bca
+- card_id: wedge
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: wedge.jpg
+    sha256: e910ce71293fe3fdc0ee929aa3a641a161e788eff946645ec52c5abc34086d7c
+- card_id: weigh_the_cost
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: weigh_the_cost.jpg
+    sha256: c34310ce7ca403a63b143aa6853656fe2e90308537ca9b22bf219b788d3f4cf7
+- card_id: well_prepared
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: well_prepared.jpg
+    sha256: 6e34bb55d5336bbe28527e941996e807e6f86d1ba0cb77bec25c8853630a374b
+- card_id: will
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: will.jpg
+    sha256: dde4f2c4b82b43b8cc6fbcc4cb495850cba4d83492ab759c627e0921b4fe44db
+- card_id: winter_storm
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: winter_storm.jpg
+    sha256: ac942fa53038f9d31e4f1f665be771c4b6c046d6d4073ee275ee4d5edce7486c
+- card_id: winter_warfare
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: winter_warfare.jpg
+    sha256: 46311c2073a9382dafd2bc45141d50c21df1ac4a82a3312c53ff0a270d5dd542
+- card_id: wisdom_gained
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: wisdom_gained.jpg
+    sha256: 1015c4825abd5be3845de865a20f9532259e272a387c0efc9b5ea0f871ea6f29
+- card_id: wisdom_of_the_keepers
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: wisdom_of_the_keepers.jpg
+    sha256: 703d5abfae0742d42a991e4b6e9ec43cc48874cd1e0346e7c384d5e0a6eab01d
+- card_id: wounded_in_battle
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: wounded_in_battle.jpg
+    sha256: 1fd2cc8774bb659cf5f6baa0a6f97d5cb9ffff429598f83aea218b37150d5270
+- card_id: wretched_mercenary
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: wretched_mercenary.jpg
+    sha256: ff856ab68794df4a9ea346c7d026a7193cc37a42f07111da6effb72db7b21ddd
+- card_id: writ_of_restriction
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: writ_of_restriction.jpg
+    sha256: cc629d5a7a5a93aa65284eaddd8177c2bc80b3a957c2dd8d8940bb421b1e0f55
+- card_id: yobanjin_alliance
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: yobanjin_alliance.jpg
+    sha256: 4916ce940aef4f08267968468f42a22d0c6446f56a7a545c3faea7b4cf81f618
+- card_id: yobanjin_fortress
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: yobanjin_fortress.jpg
+    sha256: 50896f856456f775dd189cad8b054a7fefcc8bd6decea371ea46a3f0ff5c9219
+- card_id: yogo_rieko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: yogo_rieko.jpg
+    sha256: 39b1249b65603ef61e4dc69dec42bbba4c0049884c3a19c51db138b129cc116a
+- card_id: yoritomo_eriko
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: yoritomo_eriko.jpg
+    sha256: 874c8a606023fc875c14a0d99117409d34cce17714848ebfa55b273b84c68048
+- card_id: yoritomo_naizen_experienced_2
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: yoritomo_naizen_experienced_2.jpg
+    sha256: 5986d4c5682816ede9359933bf22fa04c9bfb30eefb4096105e55a6daa3bbd6c
+- card_id: yoritomo_okitsugu
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: yoritomo_okitsugu.jpg
+    sha256: 6a3b5cdfc215e6c8b0ae77ef64db5721123d7208d77d042124ca996addead16b
+- card_id: yoritomo_saburo
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: yoritomo_saburo.jpg
+    sha256: cf73339f690533b205aa5e0f7732e6de5b60f98944b633bc569b22efc20a99b6
+- card_id: yoritomo_tadame
+  printing_id: samurai_edition
+  files:
+  - role: front
+    file: yoritomo_tadame.jpg
+    sha256: 319fcbed52de85a27146e49c245e21fceaa38e5dce3bd39a9afc381ff53235e0

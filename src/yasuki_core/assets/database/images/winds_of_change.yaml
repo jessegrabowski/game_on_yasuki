@@ -1,0 +1,908 @@
+set: Winds of Change
+images:
+- card_id: a_champions_heart
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: a_champions_heart.jpg
+    sha256: 3b890c922ce99a2633804bf3c75aa82d444045ee2b0908ee14864f8ab1c9deb5
+- card_id: akodo_sarasa
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: akodo_sarasa.jpg
+    sha256: 900940f54907f6dadf4d22d5fced685f6e3dd89bacdfc3a2859ac5033c0e4b61
+- card_id: akodo_tadenori_experienced
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: akodo_tadenori_experienced.jpg
+    sha256: 822f635c74268ef234390cfa8219fbc8804a325babc2b83a183d4e099091b402
+- card_id: akodos_grave
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: akodos_grave.jpg
+    sha256: e1b7ed12ecf1cf9351ed23cfb729f7fc55402d8409876dd7d33653f90783ece5
+- card_id: asahina_barako
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: asahina_barako.jpg
+    sha256: 8915a6b1befff062256ac796f5141b70deeda3adbe174aca81db6ffbd0181e67
+- card_id: asako_shiwasu
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: asako_shiwasu.jpg
+    sha256: e3e3af02c45af65cd42a6458a9704c97e1fb4569aacf10e495d6ac90643c3ea6
+- card_id: ashigaru_fort
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: ashigaru_fort.jpg
+    sha256: eb640a362ecf2089ea37ace232aabb21ebd7cd0f0f1425604253cf38b884bd1e
+- card_id: barren_fields
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: barren_fields.jpg
+    sha256: e721320a56b6fe36c2fc8437757462057cdd29e4867e34cd09a4774ef8089967
+- card_id: bawaru_no_oni
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: bawaru_no_oni.jpg
+    sha256: 32719879cc944a0ed79acabc5d993f4511eef0d205305b01413cee4fdb1058e6
+- card_id: bayushi_aotora
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: bayushi_aotora.jpg
+    sha256: 85ebcf2fc58e4304e4aca5973412946da9d9ecc8794dcb954b5a65a4e4761b69
+- card_id: bayushi_kwanchai_experienced
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: bayushi_kwanchai_experienced.jpg
+    sha256: b39828963b878c0a3c0191256f28669028ca14bbfd0d0835bc2e6fa2181e4ea7
+- card_id: bayushi_rie
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: bayushi_rie.jpg
+    sha256: 79f2b303d5faca6f216bdc7626ce09ada35204c7415e7586e37b0249f90821c0
+- card_id: bloodied_ground
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: bloodied_ground.jpg
+    sha256: 968f332fd22cea313793a73b92c806cc4a3f5977da23faa1ed02f53789f06e6e
+- card_id: castle_of_the_wasp
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: castle_of_the_wasp.jpg
+    sha256: bbed879c400113d64a21311ff2af08dcfe1d497d9261a0a407499f818b985299
+- card_id: chu_rochu
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: chu_rochu.jpg
+    sha256: 57bc8c95661eaf06dbf93ab5c72a8b64c4672b6f1dea47f359e58c69a8c94490
+- card_id: clarity_of_purpose
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: clarity_of_purpose.jpg
+    sha256: 5df08a72a0e17a33bc601d580dab2d0ea119f0d920791aee3e0f0d7ec62e4743
+- card_id: commanding_favor
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: commanding_favor.jpg
+    sha256: bb6c9221b8898a9d457e6e132ad53d174e118cdb8db3b1841eadf45fe4c70553
+- card_id: contingency_plans
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: contingency_plans.jpg
+    sha256: 9cdf760f3ba7fda3a6837eb539cda00007b5cfe0d0de2632a0be71ae9e92c52c
+- card_id: control_the_field
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: control_the_field.jpg
+    sha256: 6ebd187064c6161e1fa828f0668b83fc7fbc20da22f97027668999f7ead3145f
+- card_id: corrupted_dojo_woc
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: corrupted_dojo_woc.jpg
+    sha256: 8fc6e4953f5510b81a083ab878c93103da0b7ccaedbf2dfcff9c353b95e4aa1c
+- card_id: court_chambers
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: court_chambers.jpg
+    sha256: 58a486eb137be389886519588b4416332a0cd7caeb36c8b7a990f8979f4291a8
+- card_id: daidoji_akimasa
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: daidoji_akimasa.jpg
+    sha256: ae25bed9cacc2beebe9156d5f70b4378490341f8e3d53d27585e02c8bcd61819
+- card_id: damning_evidence
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: damning_evidence.jpg
+    sha256: edb187d92f8a7fd08b2bf4452e19ca54a27042df40462df70b994e5ad3934ffb
+- card_id: dark_soul_mask
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: dark_soul_mask.jpg
+    sha256: fb47167777700edf18105a6ea0a7ad836dae5a9f96e26974aa07ec15fa93c1d3
+- card_id: dark_wings
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: dark_wings.jpg
+    sha256: a888768ae7a078adc32edee1d5dce08b89eb9ffd11d1165732d58e3a13db98a5
+- card_id: defend_your_master
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: defend_your_master.jpg
+    sha256: cb6088b411fdaf4e68bdbe35db7fbbb64cc22644e8743608297c77adbfe86173
+- card_id: dismissed
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: dismissed.jpg
+    sha256: e0053a1579de0f6a8c02afca03c295fd265c7c4329b5e556045b8c2340df823a
+- card_id: doji_tanitsu_experienced
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: doji_tanitsu_experienced.jpg
+    sha256: 99f31a719adede2acffeb81d697bf5888e00849b62ec923f305628c146a90519
+- card_id: domotais_sacrifice
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: domotais_sacrifice.jpg
+    sha256: 41fa61cdbcc56be8c43f4f0b43bb07cf410ddbff4718524ad23278149c61c7f7
+- card_id: edict_of_glory
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: edict_of_glory.jpg
+    sha256: a4e7ca8090827f1c28861b17296be055b384a5b2704ba5148d98726a695274fe
+- card_id: edict_of_judgment
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: edict_of_judgment.jpg
+    sha256: 52bedea2b9e19b8db6db1de7efb9de152eedabb34d7559192ab6e919562ec7dd
+- card_id: eloquence
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: eloquence.jpg
+    sha256: e765d29b04b54635d12ed8093eee4d0b813c01318f1b37ee12a7c7030f87f49f
+- card_id: field_of_glorious_slaughter
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: field_of_glorious_slaughter.jpg
+    sha256: a94d08aa5de91c7ea26b8c9158565b0f384ae595d47078c6f3726864efe2553c
+- card_id: fine_steed
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: fine_steed.jpg
+    sha256: f030801eb5a783f6b8206b207b5accc92c577c02ad1aa2a50d64f614566fb6ea
+- card_id: fruitless_combat
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: fruitless_combat.jpg
+    sha256: 052567d89d4bf872bf2f5d533f0e15338d2f10493ccd0e93b919a5d211343d35
+- card_id: gaki
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: gaki.jpg
+    sha256: ca43e9988c6bbe01884196afb04f36c0cb4fd4184066ac6169bfe497fcdafca8
+- card_id: gempukku
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: gempukku.jpg
+    sha256: f3d8401f7fca36793a561c1c4b178fefd8f0fe0a95e44ffb39dd43e2925aa7eb
+- card_id: ghul_lord
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: ghul_lord.jpg
+    sha256: e7a54649e3d7a7752c88cd13b7616fe548c0d4f70d2c20cd8969bdf6a6c4d5e0
+- card_id: hachis_legion
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: hachis_legion.jpg
+    sha256: e96dd872d157c0ed84244e83a910d2f111a079a966044e0a16da4d3aeb4cc70a
+- card_id: hands_of_the_tides
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: hands_of_the_tides.jpg
+    sha256: e6cdcf1af387c944f7ff522214e327d176ca20d9cfd18dbd7244152ea6825e6d
+- card_id: heimin_laborers
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: heimin_laborers.jpg
+    sha256: 34aa073f36b5c7643007d1ec52f917b81cb02d11c6c815be58d8953c4908d4aa
+- card_id: hida_hoitsu
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: hida_hoitsu.jpg
+    sha256: 579059a136a79d5b1fddf8234c535fb2c72a6922cc7c9aa5d53c1262420d188b
+- card_id: hida_sozen
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: hida_sozen.jpg
+    sha256: 90ecfd11e47f711e9d038d650d39e68d0abf7f057c97fe830ad8ae866ee9aa6b
+- card_id: hida_wukau_experienced
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: hida_wukau_experienced.jpg
+    sha256: c0e28e221958ef37ef0e306aec53d2f960502f693c18bbb424cfe614a54aad3d
+- card_id: hiruma_tracker
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: hiruma_tracker.jpg
+    sha256: 6ea14d26db2f0e9673fd3cffe47dde15e3737631ba60293e3ed9d21e71c698ce
+- card_id: hitomi_kichi
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: hitomi_kichi.jpg
+    sha256: 9a176f141f1fb65d27e547f4f30043b74448f22a503b8bf3e17774c50e4e6956
+- card_id: honored_sensei
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: honored_sensei.jpg
+    sha256: 645b841ff99d0f7e057ee914a4d97496ebc6f7a8837feb68499fdf281182dcdd
+- card_id: hospitality
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: hospitality.jpg
+    sha256: 9547bda4056c17cde766f7546fa3ddf9151daf3547a7ddcaec11f4d374a1636b
+- card_id: ichido_no_shiryo
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: ichido_no_shiryo.jpg
+    sha256: ab17d19d9062a3c104205dd90fef2d5fbbf4f7c520a42b626be7f478ca006dd6
+- card_id: ikkrt_experienced
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: ikkrt_experienced.jpg
+    sha256: 838b6c64f1a4cfe69d5af905cb2fbff58686378c2476f63cc8128cccd3a6c11f
+- card_id: ikoma_korin
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: ikoma_korin.jpg
+    sha256: fcad51e3c5fde917f978c8df96f91de621e6c43cf70077df20719a82717b3df2
+- card_id: inspired_troops
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: inspired_troops.jpg
+    sha256: ea13b96ee4c9d9030276a6e91a844e5a61b62ca825d5ef5289ffbb8c5f2f0279
+- card_id: invasion
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: invasion.jpg
+    sha256: 67f3e65c403e132c309564941d66d2a1ed7eafb8c3b8200f90b07b582e4ac2ff
+- card_id: isawa_fosuta
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: isawa_fosuta.jpg
+    sha256: 39533e5a70f5413f37c387b7cdd0650bfaa5a2089b89f72b4a840ba662be3544
+- card_id: isawa_wazuka
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: isawa_wazuka.jpg
+    sha256: 976a48405f88feaf0b17441ddf2d5cc02a41623ac247e2f0b687e055b039fb56
+- card_id: judgment_of_the_kami
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: judgment_of_the_kami.jpg
+    sha256: 2021b1aa2339df549a420ea2c0ffd9adcf87bef8a0212ac75d62e5940f978a9b
+- card_id: kaedes_fan
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: kaedes_fan.jpg
+    sha256: a2000c65dc8fbeeaa9278e740a1493f950fb18b4bc1619e255c96925f8cd7b6f
+- card_id: kaiu_village
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: kaiu_village.jpg
+    sha256: 1e5c6fa25b1bd2211b25d2c4681710acf26e1aee02a6d28ceeda903f155f891b
+- card_id: kakita_hirotada
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: kakita_hirotada.jpg
+    sha256: 9b9dd3a890b6427808e47bb8a461259a2026b69e402fe1a3aef8049e6d2e804d
+- card_id: kakita_rekkusu
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: kakita_rekkusu.jpg
+    sha256: 471472dcd8bbf757e0e832d8dd92616f336e8fd4e4adf8d86c07f5000c38dc5c
+- card_id: karo
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: karo.jpg
+    sha256: 13908144861624103b9fd66d7285cf39987d19fa71eda9555fe724056f9ea9ad
+- card_id: kharmic_vengeance
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: kharmic_vengeance.jpg
+    sha256: be0a1d0da1327e05e62630418755815a7c8c3d40a12b308084e0338da8bd71ec
+- card_id: kitsu_tanoyame
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: kitsu_tanoyame.jpg
+    sha256: d744725b6090558e420a9006221a47ca679d51791353a73c948699aa0962c23a
+- card_id: kitsuki_kiyushichi
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: kitsuki_kiyushichi.jpg
+    sha256: b841f1bcb503f71386294ce408cae1e6c98d73c8a963c3967f967457d0e0411d
+- card_id: kitsuki_mizuochi_experienced
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: kitsuki_mizuochi_experienced.jpg
+    sha256: 003273d1e5ef42c7a42d58337d692a5b23abed3b4e5401651aa6cb37d630ab85
+- card_id: kitsune_house_guard
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: kitsune_house_guard.jpg
+    sha256: d99efd74b328e2b19175a0b885a6b805f4cdde2ba25573c63be2d3e7439ea342
+- card_id: korjagun
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: korjagun.jpg
+    sha256: 2ad289bbe33dea0953f15815b41c03c61f5192517b5373f227c18a1e2e772fab
+- card_id: koten
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: koten.jpg
+    sha256: b5ab1a4ae37d63893367f057f8d098274f32995e9f7b16527c6f2cbfb37ab074
+- card_id: kyuden_tonbo
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: kyuden_tonbo.jpg
+    sha256: 09047c73c335c0c6fad1fe83bb7ca74accf4adfe3fd0531672d903655331df09
+- card_id: mastermind
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: mastermind.jpg
+    sha256: f1ae92e62f750a54b3835ce00e4432eddb093979eb4283b6d893ec1e2620c648
+- card_id: matchek
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: matchek.jpg
+    sha256: 4248878202eb78c9aee3eb581312f99fd884341f2ffbd229153bf0b292e20e2c
+- card_id: matsu_ferishi
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: matsu_ferishi.jpg
+    sha256: b85f28128882b6fc4a39063cb75d0284767461c2b0399bf3b828063cde4a1a55
+- card_id: meditation_chamber
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: meditation_chamber.jpg
+    sha256: 6d3c7b1ff550e27ea47de25378a811824fb4f2bdd2510a05e649a7898373cfd6
+- card_id: mirumoto_ryosaki
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: mirumoto_ryosaki.jpg
+    sha256: 74512a8607fabefdd77d7ea9947c3a9e8f4bf32a305fb8eff23e7e00366dabbf
+- card_id: mirumoto_takeo
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: mirumoto_takeo.jpg
+    sha256: 3459d4cf8cfccbf2bedf0d965598359fd4f204208ba0acf7b7e7f509b1991718
+- card_id: miya_shoin
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: miya_shoin.jpg
+    sha256: 6146b682211162817f322d2f6750623f0321643c80de2192ee4a5947f4705d77
+- card_id: monkey_house_guard
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: monkey_house_guard.jpg
+    sha256: adb63214c2e91e83914e2fb72a69c02b20f01d1fd1234225a00dc6cfdc561bf3
+- card_id: moshi_eihime
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: moshi_eihime.jpg
+    sha256: 44589d267cf1b4c9cb6e8b1f2a978edd430ae99cc1599ed7c2f0a9e262e5107a
+- card_id: moshi_yoshinaka
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: moshi_yoshinaka.jpg
+    sha256: 448691401f2e970ade792b39e6c8345bde1bc6cf597804f3491d2f13f5e23cd8
+- card_id: moto_genki
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: moto_genki.jpg
+    sha256: cca5b8ffb60b72b4fcc6a138449dc73d80b2fe6ea18e01f60daffcdc06e8f2d7
+- card_id: moto_latomu
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: moto_latomu.jpg
+    sha256: 28f74414cac25529819b06b4564baa7387a8228850e88c3dbf89489e2302a01f
+- card_id: no_mercy
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: no_mercy.jpg
+    sha256: f20b6c7eb3992705c867dbb20788862d7465e883eaf3313a676ffe86ad9c39c5
+- card_id: oblivions_gate
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: oblivions_gate.jpg
+    sha256: 946649fbb841d2c73218af28ee3c0ad66dcf2ab0a7bcb5cf374d78557720b352
+- card_id: officers_council
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: officers_council.jpg
+    sha256: c5181baf084d1fd64b8a17b65cca891a3b80523bbbd913b8fd3ef1fc71fa8cd5
+- card_id: official_papers
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: official_papers.jpg
+    sha256: 7cd57f6f627d45279dfdd65a5f9d3b31722f431d51bc0c85d7a2af956dc3e712
+- card_id: omoni_experienced
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: omoni_experienced.jpg
+    sha256: 0b3215ac77fb18c1b9ff8643b3e8433a0a82736bba9a713d69570fe3aba48ed4
+- card_id: otomo_taneji
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: otomo_taneji.jpg
+    sha256: dae4c05db9f64a47b881610fff2369d141d70869bb270f314c3a6ff2426d8f6e
+- card_id: ox_house_guard
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: ox_house_guard.jpg
+    sha256: 34f3cff2eb69342f9c157a428e5b79398daac08cb451d65b18a2412b69a5f89a
+- card_id: peasant_vengeance
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: peasant_vengeance.jpg
+    sha256: dafed8a5c87de677a33af077571d0934b89fdbc408a1fcb6ddcbd8aa5d056124
+- card_id: personal_librarian
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: personal_librarian.jpg
+    sha256: 1d8bf139f34cee5dd68252b52c761b2017d76fdef20dae0b23a2b0d5d32a9dcd
+- card_id: petty_insults
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: petty_insults.jpg
+    sha256: 665267379af65d7677157b4fd88e9f2d849b27b5c2bc2a3b831785d144d41323
+- card_id: poisoned_thread
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: poisoned_thread.jpg
+    sha256: 2a95aef96198935d1bb6f56d78a8868c2fba472698c89cc0f5e033aa70284e38
+- card_id: political_entanglements
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: political_entanglements.jpg
+    sha256: 1720dd83c71a9554cbb451e3e55b9213cb0fdee6cc706aa344c0489fe6c310ba
+- card_id: promotion_to_the_court
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: promotion_to_the_court.jpg
+    sha256: c1c02421f736a2772f460c53a06cfd16065675add4cc92e5ae645df9fa1aa90d
+- card_id: prophets
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: prophets.jpg
+    sha256: f0ff01e64519de20957baaa97100e5c61cf547639665009978a871b13dcd8e94
+- card_id: provincial_governor
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: provincial_governor.jpg
+    sha256: 69465a7213b6da7858adc4c67286194bd2fd342fcd825dcc66a7b790a8350295
+- card_id: radiant_staff
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: radiant_staff.jpg
+    sha256: b7a592e48353656d575460471d71bea62f01677d6e42b9242c9967697da54e95
+- card_id: rage
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: rage.jpg
+    sha256: bffb0f2d115ddefb918f8d5aae1c9c3208899022bc17592459136a08f6af2531
+- card_id: reserve_commander
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: reserve_commander.jpg
+    sha256: f7cf6f3dd55a392c59b4b1c83ce40725c13abb28277b9893c86d3f1f00134a8e
+- card_id: retribution
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: retribution.jpg
+    sha256: c6870710597065deaab7373e75c03b006e7d3500d2e6ce9203ba74f036c3c8a5
+- card_id: rhetoric
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: rhetoric.jpg
+    sha256: c4b74e8ff9864490e07003f346e090e9427d187af6452f2ca4f092ee1a2d4b8b
+- card_id: ruins_of_yotsu_dojo
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: ruins_of_yotsu_dojo.jpg
+    sha256: 6ae943483969095b01bd85d9586941f6712d20ee3547c20666dc530aa6687607
+- card_id: running_engagement
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: running_engagement.jpg
+    sha256: 6f29ae97bb565b960b88b8957923eec604a0fca6cba72d61b2364d00cc3b5162
+- card_id: ryouko
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: ryouko.jpg
+    sha256: 8651013ad472373aaf000d47609bca2658889308be380566f73d68eba5277753
+- card_id: sacred_grove
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: sacred_grove.jpg
+    sha256: 0e820b63f70a0525fa54d077764963f8d126ef732b3fb62022c2851079d029a2
+- card_id: sashimono
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: sashimono.jpg
+    sha256: e01f39d0201d88dbb8f0bb1d2dfca9d5ac2b466096df191ddaec5ee33bb6c205
+- card_id: settozai
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: settozai.jpg
+    sha256: 6eaedd0aa9ae9d763af2b900083ed7c9ab047d11b4775a4478b6eccd7574038a
+- card_id: sharing_strength
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: sharing_strength.jpg
+    sha256: 312c9684a97f11e84bad0be30d4afd7a6e9efa6343dae3198fb3713170d3d80e
+- card_id: shiba_emiri
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: shiba_emiri.jpg
+    sha256: e15b9925f75d5e428ffbafec7cc6b8ca8b308a3a5af03895f9493af17a229a2d
+- card_id: shinjo_haruko
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: shinjo_haruko.jpg
+    sha256: c59d4da4e1d3b85c63022e6dc2b8aea61548d2e5c20a80d47ebc1f3fd07bd93b
+- card_id: shinjo_xushen_experienced
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: shinjo_xushen_experienced.jpg
+    sha256: 101d911c2b7341c0ae3a6ddcdaab69a4807b27d681c5bf5d5da52c92b35210bd
+- card_id: soshi_seika
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: soshi_seika.jpg
+    sha256: 491c7ac6620593b4742f7e8ade38b0af22e6a5336d033a43384bbe9df10f8b82
+- card_id: soshi_tabito
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: soshi_tabito.jpg
+    sha256: 315763215e7d1ff2180c8cf00adbb56eb719407a33fb6e5775001bd4659d00df
+- card_id: sound_strategy
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: sound_strategy.jpg
+    sha256: 5ed436375436b05b0bd5cbcf15102a38bef45cb20ce2372488b24d6bb682add5
+- card_id: spearhead
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: spearhead.jpg
+    sha256: 0dec2521d1814335fda84232f1d078481f5205f1cf88b370e00197adde50bfab
+- card_id: stable_master
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: stable_master.jpg
+    sha256: b124c4ab28acbee425824130d1b4b177d9b366fd0a7967caab89dadd19893c92
+- card_id: stay_your_blade
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: stay_your_blade.jpg
+    sha256: 8246828ee4f519f824f34d1b8685df6162b5650ee3f608fd1bb19857e09829cf
+- card_id: steadfast_bushi
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: steadfast_bushi.jpg
+    sha256: 48ff72d55623f30b31884b06ae6c9849e4e4a19d80d20f3459852f8208a38603
+- card_id: stern_reprimand
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: stern_reprimand.jpg
+    sha256: 26aa0a13ad18e77e5a150b625930efb13e26f2b7437733e1118921c273dddbd1
+- card_id: storm_heart
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: storm_heart.jpg
+    sha256: aaca6e7fdd87118c710ff17436f799ae4edd21762aaabda0b1f08bc9d72951dc
+- card_id: strange_politics
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: strange_politics.jpg
+    sha256: 99dea94aad336aba70f62b1db139e046ae4846cc3875480cb81df37ac2801f1f
+- card_id: strike_like_the_wind
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: strike_like_the_wind.jpg
+    sha256: 6f6fd8b393b60b26953986a959f705400b796e9ef0d963804988900c30acd3e1
+- card_id: suzume_house_guard
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: suzume_house_guard.jpg
+    sha256: 5f880dea8a9674ca8c6830858f72f98ff494567835be4190257feea09cfc4dd1
+- card_id: tadakas_children
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: tadakas_children.jpg
+    sha256: 9fbe62d46b2b4316b8f5d2d7efce3a85cdea010947e3c2877e65c21666ce783d
+- card_id: tainted_dreams
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: tainted_dreams.jpg
+    sha256: f7fa981882a2936842c41ab30ea67cfd1675525e5cd151697aa74ffa17cada38
+- card_id: taut_bowstrings
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: taut_bowstrings.jpg
+    sha256: 7b4dd1ebd404af8075b48f00e923629e5a66396e263e78321388185f70aa4af0
+- card_id: tchtch_warrens
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: tchtch_warrens.jpg
+    sha256: 8835fbd37e7978ed382498079c27876f659cf28a07115446df3a5b62375baeb4
+- card_id: the_future_is_unwritten
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: the_future_is_unwritten.jpg
+    sha256: d1b2558f9a8c6c35b02d05f9cb3c6d17ba3fa998031837bf1b92821201a5b84f
+- card_id: the_new_order
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: the_new_order.jpg
+    sha256: 61a0424790e4217d0921526efa0bb7a3c5b9ffdbb9a9a017707748794c5cf722
+- card_id: the_outer_darkness
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: the_outer_darkness.jpg
+    sha256: 5a1fbf4cb80a5bd015a910084624524aece950d37c15d30035195ca77bf7c3ce
+- card_id: the_shoguns_barracks
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: the_shoguns_barracks.jpg
+    sha256: 33064d82669a6a018cb2dde808f35dcb4d96f2120a5437c6457343c0d48095ec
+- card_id: the_world_is_empty
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: the_world_is_empty.jpg
+    sha256: 935b71f8103dce375d5ff003e84c49a4b352f7b5faa1f5f0f5da307ffaee2c41
+- card_id: time_to_pay_the_price
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: time_to_pay_the_price.jpg
+    sha256: 74ec2ca709158a06e7895d9682e2a8f90ef01f9066af735dd4211f13aac130ff
+- card_id: traitors_reward
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: traitors_reward.jpg
+    sha256: 55ab009b3e170de0fc1adb71ccb9530526726ec6213f5655ecb205eb738050ac
+- card_id: treachery
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: treachery.jpg
+    sha256: 078dd4293295d98c86e607a06e1ce55190d33d8fc6f6bf5357679c097d37b6ae
+- card_id: tsudaos_chambers
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: tsudaos_chambers.jpg
+    sha256: fe3e37e2b340ebfbee19807b1f045a714a8bb3c5534b11e5e8b190a8430afbfe
+- card_id: tsuruchi_tasuku
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: tsuruchi_tasuku.jpg
+    sha256: 56a01480d6972848087cef1895d08eaebe02a5c205978f17ccd0ed8222152d28
+- card_id: twist_the_world
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: twist_the_world.jpg
+    sha256: b4cdfc93838b28c50735b05b3388bb3a5b9cd0e52763249dd5c1a24866169c50
+- card_id: untouched_temple
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: untouched_temple.jpg
+    sha256: 0ada2c49e9a16bd859b486af674ef382ed964a1aa893798e6578ba62c21521ed
+- card_id: utaku_qsi_tsing
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: utaku_qsi_tsing.jpg
+    sha256: 8b9bd512c6fffcba73fb693fed305401ccf65232841329155f1ca17fab9104e3
+- card_id: utz
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: utz.jpg
+    sha256: fac289f78227143871367300fda68ed21f11a80274b7643690a3b3967d297819
+- card_id: wait_and_see
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: wait_and_see.jpg
+    sha256: 81ede4b9f0f3c395781553b1f3ad0664e394e79de6a952823ba2f9e94f1d7083
+- card_id: weight_of_the_heavens
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: weight_of_the_heavens.jpg
+    sha256: 818f8f79ab552ee051cbff1014bd5eac2de67a778e576911d2e9c27003af558f
+- card_id: well_prepared
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: well_prepared.jpg
+    sha256: c1515d3830065fd88130da99a81f896721ee6f52477bd9354e8dafac71ffe458
+- card_id: wretches
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: wretches.jpg
+    sha256: 5d63d9dca71f3fd99dfcad5bfe69b0e6490764750b9de9817ed86d7961443355
+- card_id: writ_of_conscription
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: writ_of_conscription.jpg
+    sha256: e708f41f28770bfe47c6964bc506ef58dfb6cf0623d46bf9bbbcd3d3f8e14b53
+- card_id: writ_of_justice
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: writ_of_justice.jpg
+    sha256: e8b79dc32845771467d6db2efa33c6ab9006be1f6167496dbb8000ead377b20f
+- card_id: writ_of_peace
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: writ_of_peace.jpg
+    sha256: 0119a0d7c76bccc4af1acc2ca9bfa706f85414ba00e284d9e35c5ae93d829638
+- card_id: yasuki_namika
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: yasuki_namika.jpg
+    sha256: 70ac8b35b6dcd77ec1de0cf8636a4d49a3051e844c2601d1a91cc4cc530d989c
+- card_id: yoritomo_manobu
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: yoritomo_manobu.jpg
+    sha256: 138aadb9889aae98b42095a066d987786c68d8474bd84c56ff318e4ed1d8a980
+- card_id: yoritomo_yorikane
+  printing_id: winds_of_change
+  files:
+  - role: front
+    file: yoritomo_yorikane.jpg
+    sha256: 6d2d77abef0380ccbc9b7a4c1690af8f4930e337f247ae9d2f9906d9514c6dc0

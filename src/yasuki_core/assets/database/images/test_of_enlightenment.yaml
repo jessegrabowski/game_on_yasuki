@@ -1,0 +1,746 @@
+set: Test of Enlightenment
+images:
+- card_id: a_clan_divided
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: a_clan_divided.jpg
+    sha256: c6baf99f25bb3909815472f4724403627197011bfbf15b13138265c2e5e68a83
+- card_id: a_clan_united
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: a_clan_united.jpg
+    sha256: 51de5b7e923c83f632e4f39fcdae756c44870c9a57e9271da7f7d045cd444f79
+- card_id: a_long_journey
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: a_long_journey.jpg
+    sha256: cb47840abaa2a044d131acdac02631353ad53cb7381db004659a5f3fa2119f88
+- card_id: a_quest_abandoned
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: a_quest_abandoned.jpg
+    sha256: 9c88877803eba97788d343b3cbf637fa293829bc6bec6f5dafb5c15de1d75fe5
+- card_id: a_sages_counsel
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: a_sages_counsel.jpg
+    sha256: fce1474cf5e3a4c9b3a746aa8ff462fc360f234069349dd6117cb3798470e7d4
+- card_id: a_scorpions_wisdom
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: a_scorpions_wisdom.jpg
+    sha256: cba0f4fcde5f3343d3f4106932ef84716da7a7558b75399d2a9112c05a652a0c
+- card_id: achirin_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: achirin_experienced.jpg
+    sha256: 0da75d4fd05488523cebc0c05ef75f595e24c1123ba179d2e086c60ec8a6fa36
+- card_id: agasha_miyoshi_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: agasha_miyoshi_experienced.jpg
+    sha256: dbb2e9fd3d594ef73bbf906e5c3fd2d69a9599513e18d629530d1136071bd60d
+- card_id: aikido_demonstration
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: aikido_demonstration.jpg
+    sha256: 5a6615a9cb59904602d465429301facec2c65e35e34edaad2f8cd08d11192ac8
+- card_id: akifumi
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: akifumi.jpg
+    sha256: d45a5f10a9a266cf41fd983973695eef52f3eb4409f894ac7ae39ea394911c89
+- card_id: akodo_anshiro_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: akodo_anshiro_experienced.jpg
+    sha256: 9c1a194b72589ff6e20c898e66af0b82a6969572350eb53cb0f0393429bd37ea
+- card_id: akodo_bakin_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: akodo_bakin_experienced.jpg
+    sha256: 1f07e3adb6ec7700f4fb39e3a95b8bef3718ea21f3a03058c91a528c9f74a104
+- card_id: akodo_kuemon_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: akodo_kuemon_experienced.jpg
+    sha256: f0176a57685744ca17ee07c8ef4376ab82497e54e6e67807196cddfe9ee4b341
+- card_id: akodo_natsu_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: akodo_natsu_experienced.jpg
+    sha256: ffeea41e2ae259918a8eb0593a507b8c345b5965167211dcf000b026eba7954a
+- card_id: akodo_rokuro_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: akodo_rokuro_experienced.jpg
+    sha256: 05460acca21cedd579b8923964eee653c858817cdaf7f549de9da8000ce527a0
+- card_id: asahina_yoshino_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: asahina_yoshino_experienced.jpg
+    sha256: 5c037db25b54b9e39ba8f721c163cbc63b89dab2c97eb5183d51bc89a4c2b38a
+- card_id: asako_takakazu_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: asako_takakazu_experienced.jpg
+    sha256: 38836058dc72e8b72f47021ddce633a0eb59c7f228105435c422e70d4d2fac8a
+- card_id: banzai_cry
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: banzai_cry.jpg
+    sha256: e64bc2eb92a986dbd8b40acdb4e5b1ccd518e04649967ddefdc18a51e3493449
+- card_id: bay_of_green_coral
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: bay_of_green_coral.jpg
+    sha256: 2deb87f9c871529c3f9785c03d9f2f8c1d0b18b65f25026dfafbb9299c1fa3b3
+- card_id: bayushi_adachi_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: bayushi_adachi_experienced.jpg
+    sha256: 506a4aecd5afaef79404ebc16d9880ac5619406dd4d7fad7713891bf7e7a3878
+- card_id: bayushi_bokatsu_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: bayushi_bokatsu_experienced.jpg
+    sha256: 4d61c672c6fa989528ccf0eee5c90ef9965d0bb8f0dc471539e93db405c7ffb2
+- card_id: bayushi_kan_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: bayushi_kan_experienced.jpg
+    sha256: a1cb974d947514d71d64acb50483feaa57861610ff252ca0b01d41acaeb584a1
+- card_id: bayushi_saya_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: bayushi_saya_experienced.jpg
+    sha256: aa8485619ee99132321819730ea66979452606708bf44b9e541402ecfd3f45a1
+- card_id: bayushi_shinzo_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: bayushi_shinzo_experienced.jpg
+    sha256: da9a7a683c7a2d71d66570ecb247b510727e55b528325f0b94305eb28756328d
+- card_id: boisterous_soldiers
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: boisterous_soldiers.jpg
+    sha256: 979b1beffee6c772826f8897942a66f23e241c1bfa9f5d1faf2cdb795c560a41
+- card_id: brothers_in_arms_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: brothers_in_arms_experienced.jpg
+    sha256: cea743aadca8e8562df2c451cc7c79f0032ff3730d1d5fc0b8285a94f9088c72
+- card_id: cautious_escort
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: cautious_escort.jpg
+    sha256: 4227223d5f89b5473d4b42352f7ade5600b8c232f656421c72872093b518117a
+- card_id: chikka_tek_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: chikka_tek_experienced.jpg
+    sha256: 5eadb5f778f1f70ef94b96f663d5f39306125021acd3373cedcff0e9819dc3b0
+- card_id: chuda_ruri_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: chuda_ruri_experienced.jpg
+    sha256: 351a570a92c4dd634e68f03130135a1a1f28752d65a6cf87845fd50887eba522
+- card_id: curfew_declared
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: curfew_declared.jpg
+    sha256: 6047f4969db8e6a967a3fd9d35c46ea430f481ade978bc0da03b75b8d66d8c25
+- card_id: daidoji_akagi_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: daidoji_akagi_experienced.jpg
+    sha256: 773361292bb4b05719b37496a6f32097ee9b203393d7af494269fe633cf3110d
+- card_id: daidoji_setsuko_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: daidoji_setsuko_experienced.jpg
+    sha256: 7926cc49fd24a1dd202d0ae8f2811d1319c4ca112018cb1059ae513227c4b259
+- card_id: daigotsu_fumiaki_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: daigotsu_fumiaki_experienced.jpg
+    sha256: 7a3a3885534951a65f829b90711c26834bc3aaa98931f89b44172fea79f55b0a
+- card_id: daigotsu_soetsu_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: daigotsu_soetsu_experienced.jpg
+    sha256: 6eb9f7240faf7553eb06b5fdb53ce2be0d524fe8999703674b8aaa4de18e0635
+- card_id: destined_enemies
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: destined_enemies.jpg
+    sha256: 31a6f3c255ee90e382cd1a7e426c35ac6a225643e536163f0980d74b8ead3212
+- card_id: divining_pool
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: divining_pool.jpg
+    sha256: e64ac2a1c1fd6ccff32347b2889240ddc8665450ea30902f62b3f622f6cd67e6
+- card_id: doji_saori_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: doji_saori_experienced.jpg
+    sha256: 900b5cef7ab3358c56431561d0905fa3653c413e68311dc9eccca32ffde16df3
+- card_id: doji_seo_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: doji_seo_experienced.jpg
+    sha256: b163bff0b7a5800206b5cc25254f2445d8598d2a3bf5ad98156dff970a93e6d4
+- card_id: eager_students
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: eager_students.jpg
+    sha256: e5e25efb543db898c9cf43b9a6305607e7bb5f2e4aecef5e852340c5dfa226ca
+- card_id: elemental_arrow
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: elemental_arrow.jpg
+    sha256: 30ab5a41fa4944541c4451d58b217726a18d227dafe988731ec30e11388c3769
+- card_id: epkee_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: epkee_experienced.jpg
+    sha256: d31875d3030625129b1643057e4911863d71efb130cd80e2debf19f5e644c4b5
+- card_id: festival_of_inari
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: festival_of_inari.jpg
+    sha256: 9eeda7723bbd2db55a2dd71fd962fbf2c68f2e9fd821820d797aa68a2042da54
+- card_id: fragrant_waters
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: fragrant_waters.jpg
+    sha256: 53743c68a7c1b86e0512707319e59bf603e0b1078002ebf4f733c5dbed71479f
+- card_id: gaijin_writings
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: gaijin_writings.jpg
+    sha256: 868fc702e8635181fe2e9a1e125fb07ef723c472c6105b2ecc2440c6ba6fc626
+- card_id: gift_of_rice
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: gift_of_rice.jpg
+    sha256: 085d4dc3146b1bfa322dcda151307edb64ce3c2be9ee55c31c156624583b6a6b
+- card_id: gran_otik_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: gran_otik_experienced.jpg
+    sha256: e6ba321d5a92a1c3956e4924661ab034e0c7031fff2ed94b5ba5676a983d036b
+- card_id: hard_pressed
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: hard_pressed.jpg
+    sha256: bce583a63e2e47eee06ec59c3fcc4e61062faef3d143f3a2dee0b6b43a78a34f
+- card_id: hida_nari_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: hida_nari_experienced.jpg
+    sha256: 6906a6322eff69a8d17d4018ade3aaed61c65dfcb838b187e39d18a2d76b82e2
+- card_id: hida_sosuke_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: hida_sosuke_experienced.jpg
+    sha256: 09b2f86c5025871b8d14c14016e29ec9b9de77cd64d33e9ba9146ac1d989dcfb
+- card_id: hida_sozen_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: hida_sozen_experienced.jpg
+    sha256: 2a6384e48cb9a838237cb5a80f72ee708764e5e017d7a1059349acb05b55819a
+- card_id: hiruma_oda_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: hiruma_oda_experienced.jpg
+    sha256: 066bc7183a12b7183f280d62a490f8fdecdd7ca1209fa15feac3510236435792
+- card_id: hitomi_kazu_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: hitomi_kazu_experienced.jpg
+    sha256: 547f3c1802bc6e3a9c995dd85afa794663ead66d29ebc7b39c86f57c538695fa
+- card_id: hoshi_masote_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: hoshi_masote_experienced.jpg
+    sha256: cdbdd660f518c2ce2c4b8cfcb008fd056261051b286ad9559f01f6bdd0375576
+- card_id: ikoma_kosaku_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: ikoma_kosaku_experienced.jpg
+    sha256: dd470485cafb6cbcded5411d3329c2827984cf56ac9505cb0866a871b9a3ccfc
+- card_id: inspiring_leadership
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: inspiring_leadership.jpg
+    sha256: 356ebf3ec380cf1159e2f4d00572ee61817ded7c7010015e771f6b272096cbf6
+- card_id: isawa_kimi_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: isawa_kimi_experienced.jpg
+    sha256: ba4a46bc56750aba4e7717f21b5df4121d9d94d0bce66ce55899a55ff42e6ec2
+- card_id: isawa_sawao_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: isawa_sawao_experienced.jpg
+    sha256: 7926004758923175daa2f89dfcade86249b5a17c0003da69af2bdcad4b45a87c
+- card_id: itsume
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: itsume.jpg
+    sha256: 1609a7994d919402ca277fa2195b49b587d7e389b23c603aad49d35ac27f6729
+- card_id: iuchi_umeka_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: iuchi_umeka_experienced.jpg
+    sha256: 075e0c0363a4f4f17985373c1e6152a432f3a5094228cc6d04a35ee32d8c40d4
+- card_id: journeys_beginning
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: journeys_beginning.jpg
+    sha256: dfccadd1a6aaafd499725480ab00de1813ee8c97a8858569b50cfc3dcfc932f1
+- card_id: journeys_end
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: journeys_end.jpg
+    sha256: aef6987f7b3b28a061055cb4ab487269e63d55de60d383c81cbd285d7634ab0c
+- card_id: kaiu_haku_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: kaiu_haku_experienced.jpg
+    sha256: 8fe0e561557962e1ca7e58c397d935a21e84fba8ee10ac40262243fe63df8285
+- card_id: kakita_funaki_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: kakita_funaki_experienced.jpg
+    sha256: d3244b5e1a964a614f7d7ceac9f032cd3f49099b512fb36b6e60e8d9c6cbebb3
+- card_id: kmee_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: kmee_experienced.jpg
+    sha256: 17283a4890ada309611afafcca0e5748d1c508e533b9e7abafcd0195638a15e9
+- card_id: komori_junsaku
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: komori_junsaku.jpg
+    sha256: a2e666622991627e6195a84bbcb14d5d987d7b556227566c3324e3b50bcf2727
+- card_id: kuni_okichi_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: kuni_okichi_experienced.jpg
+    sha256: c5414449507dc6844f5462ff125051dc79333e17a8f21c2884c17b0c46791a84
+- card_id: kyoso_no_oni_experienced_3
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: kyoso_no_oni_experienced_3.jpg
+    sha256: 4cde4aacf7bbeebbf4d74f51b31dc73eb5f9a89e95d136d93611900bd1fa2456
+- card_id: mantle_of_flame
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: mantle_of_flame.jpg
+    sha256: 2367df8a8ce02904402d82f1a17f2f723ad704bf6196e215992c4acf33d780ce
+- card_id: mirumoto_bokkai_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: mirumoto_bokkai_experienced.jpg
+    sha256: f6907967ad2f660956adb27f632f45f156c995c1cba1790e8927731b1ed794ef
+- card_id: mirumoto_gonkuro_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: mirumoto_gonkuro_experienced.jpg
+    sha256: c4cff0840170377756305acc9f7601c9faac794f41ec58344aa68aa28514039e
+- card_id: mirumoto_hakahime_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: mirumoto_hakahime_experienced.jpg
+    sha256: 9927282248b72e1be416862732bbf6f713899b64a5c511b6f06996e570711d66
+- card_id: monastery_classroom
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: monastery_classroom.jpg
+    sha256: ac873fece35858c140bee2d75c3fec348a678f9c26d7056a99be44d865131285
+- card_id: moshangoru_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: moshangoru_experienced.jpg
+    sha256: 23962c279d25c638499dc1fa9c298e455a083aefa72f0804d1e0658186ba7688
+- card_id: moshi_amika_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: moshi_amika_experienced.jpg
+    sha256: 0471f90d013f66a61077cfd7e4facc9d81a289d1a868a39be2b75c3d650bd3c7
+- card_id: moshi_kekiesu_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: moshi_kekiesu_experienced.jpg
+    sha256: 3054efae40867277276b24d4ef4644558f847bb7b34dbb318a72c6a748303975
+- card_id: moto_akikazu_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: moto_akikazu_experienced.jpg
+    sha256: 53852737691f33c8274ea3bdc2c8d3a0d50db5f2e1ac59ee0a0eb2579eacc0c4
+- card_id: moto_rumiko_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: moto_rumiko_experienced.jpg
+    sha256: 0e43170a73585ec1a3d1ca09d1325172c850b2e2f0ab53473d7b9c153f56aef3
+- card_id: muketsu_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: muketsu_experienced.jpg
+    sha256: 4f2b33c85f00fcdc6815b0c758080a98d0fcd3cf7628fad2d248e780b48fda31
+- card_id: mystic_waterfall
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: mystic_waterfall.jpg
+    sha256: e0da47adae08749e0f28907a8910cda9adf13389dcfae9dc3fd973500d322007
+- card_id: nagisa
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: nagisa.jpg
+    sha256: 3e86ba86562e5ccac55c5fd184be2886f588b2da64f2b0facdf863dbe6de5ddf
+- card_id: partake_of_the_fire
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: partake_of_the_fire.jpg
+    sha256: 3b1d123c02d894aa4b668ade04591be6f3dd82d271287bd463ffec56c2f328a3
+- card_id: qolsa
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: qolsa.jpg
+    sha256: fa717036954d5acda16d7e9f12a132fb7c85fe92abb2723b3bc40c2182182f05
+- card_id: reckless_charge
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: reckless_charge.jpg
+    sha256: 2b8a0c765585209c16c4c9910f85e801fff8c7a73d6c56bb9415f9bc111dafd8
+- card_id: rosoku_sensei
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: rosoku_sensei.jpg
+    sha256: 1d40475c5619a2f546efac0d7c423492eccd93f98971347fe210f59a751d39b0
+- card_id: sacred_hillside
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: sacred_hillside.jpg
+    sha256: 016c0799bbc7a95fb2e893cbe82cdd3adea9a8ec9c535b624736eba78db59842
+- card_id: seeking_enlightenment
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: seeking_enlightenment.jpg
+    sha256: a4d70f1703d867006a523fbe0744eecb6d044e8903e468cfa7791e26cff19af8
+- card_id: shiba_denbe_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: shiba_denbe_experienced.jpg
+    sha256: 3808df05cef8584796f52aaad9cd50cccba6c3a8a15e8930eb3c0b8950abb738
+- card_id: shiba_yoshimi_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: shiba_yoshimi_experienced.jpg
+    sha256: bfebb5ba7608238ab1c6224878be590e26149d1fe26e0ca13a0913f47d004579
+- card_id: shinjo_wei_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: shinjo_wei_experienced.jpg
+    sha256: c2655527e8551fa2c95cec3bd6eecbfbe307b050684b672b43e2f18458058ad2
+- card_id: shosuro_dazai_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: shosuro_dazai_experienced.jpg
+    sha256: 79d6cfde80fa476eac47028e9ab7858c3e3096e4d23a5287b03598b65c0dfc2c
+- card_id: sisters_of_the_elements
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: sisters_of_the_elements.jpg
+    sha256: 572f0215d019e898b4fee409f120d70117d0994d2b9b927508ded2ff7bfac659
+- card_id: snow_blocked_pass
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: snow_blocked_pass.jpg
+    sha256: 924326b4d3a3b5d3f5d79451255f7833aba46cfc3c0c4cf8b738fd46477e41e1
+- card_id: strength_of_the_crab
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: strength_of_the_crab.jpg
+    sha256: d3a2bbf884b4ce0879c20517a77b7e18b8e69693e3433b279eafda1eccb48709
+- card_id: strength_of_the_crane
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: strength_of_the_crane.jpg
+    sha256: 5f7c97e712c2bc7a0838f249334110616e2b74b99be55f67e9badd0b84eb3b07
+- card_id: strength_of_the_dragon
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: strength_of_the_dragon.jpg
+    sha256: 47ceb2608ecfde146d49021fe4d9df5ebf09f53afd2e3b7c651dc78145216c5a
+- card_id: strength_of_the_lion
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: strength_of_the_lion.jpg
+    sha256: e15b28364832d850fadb75e2b179cf90dc43da15af4eac1e24370bd42b69919a
+- card_id: strength_of_the_mantis
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: strength_of_the_mantis.jpg
+    sha256: 4666de0e9aa40754f8077d0417e6811ead964ba7e308139816ed2a4042bb3776
+- card_id: strength_of_the_nezumi
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: strength_of_the_nezumi.jpg
+    sha256: 5026061cce6db6822c90d86cd84561bfa9c8e91a431f577953cd3dede0dc8a10
+- card_id: strength_of_the_phoenix
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: strength_of_the_phoenix.jpg
+    sha256: 4f911863a38cf2eb8085d8a1fabe5955150d3651bead987a8d6a989461d6cf3b
+- card_id: strength_of_the_scorpion
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: strength_of_the_scorpion.jpg
+    sha256: e25bc466b9196f5a8c45e52724faa47926ee3c805c3d13a47cae19ab0b78d0b7
+- card_id: strength_of_the_shadowlands
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: strength_of_the_shadowlands.jpg
+    sha256: 5f59076afec4919979ed9283935f85334ecbc08ab702a4289112f4080d37b70e
+- card_id: strength_of_the_unicorn
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: strength_of_the_unicorn.jpg
+    sha256: 95459a1efb214df623d5c5f82a3f826ba436115ea00116af528c35454d3564cd
+- card_id: sumotori_arena
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: sumotori_arena.jpg
+    sha256: 7ff2bc6813f82c05ff40a087aa6e90776c7ef5d3eec12a3b019ff427a91c4662
+- card_id: teaching_stick
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: teaching_stick.jpg
+    sha256: a33dda80c88508d840ade7eb1fa3736d515394e7e0c5605155d73db214f9b783
+- card_id: test_of_enlightenment
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: test_of_enlightenment.jpg
+    sha256: 56abce710d2eef1f3613d9d0e8db5e3f7e58627dda44e3ce52617406e606ea3d
+- card_id: the_darkened_path
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: the_darkened_path.jpg
+    sha256: a7e491939ddd5af9a2258c7f031fb35a4821dfcfa039f50d0a073ded7b9dbbc3
+- card_id: the_dragons_talons
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: the_dragons_talons.jpg
+    sha256: 922fecb447fcc99a8dfebe2bc94f07b6ccf532c717a288c24602ce82572a8024
+- card_id: the_mystic_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: the_mystic_experienced.jpg
+    sha256: eb909c27da2fdc193e9df6c79119ce13d745d7e11c48ac1f29c9de44132c70ea
+- card_id: the_ronin_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: the_ronin_experienced.jpg
+    sha256: 0a63b43126db907c7acd6370a4c56a806a4137508462348527649ca8bc4c3d5f
+- card_id: the_wanderer_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: the_wanderer_experienced.jpg
+    sha256: 91d34097c786f3626f2c376ffc7c859b9c8d3fe67c28c145e90bd136fcc4f1cb
+- card_id: the_way_of_will
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: the_way_of_will.jpg
+    sha256: cf4bb17e149cfc93cddba6df78f63dce5a36a2c1aa3576220e2ed3cb1bcfe650
+- card_id: togashi_nyima_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: togashi_nyima_experienced.jpg
+    sha256: 58974daedbf44942e1dea0b7679cc6038cf12d775721cd86af5be8ba031ddb14
+- card_id: tsuruchi_arishia_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: tsuruchi_arishia_experienced.jpg
+    sha256: 5971e2845c1d1f351ee92010547709fec62a6ed61da7694cb9e39ab054cd2e10
+- card_id: tsuruchi_terao_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: tsuruchi_terao_experienced.jpg
+    sha256: 7183bc3708f31da762c2fadcaa8dac7fd71f6c762e0a1230c35a719e81942ccf
+- card_id: tuftuf_sake_house
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: tuftuf_sake_house.jpg
+    sha256: 808cb62cef733d2a4b19ec45aecf59176ca40d8a07874a85d53185b57e4742bd
+- card_id: unexpected_find
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: unexpected_find.jpg
+    sha256: fdc3489702c3908f108bddfe2a0fc327cb64989c0ab62a8c4adc0682c06ed3b4
+- card_id: utaku_keyo_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: utaku_keyo_experienced.jpg
+    sha256: 73da55700f3de7fb0ab5ab6ec60644737ec21b4951a54107446ab76cf5f74c5b
+- card_id: utaku_tarako_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: utaku_tarako_experienced.jpg
+    sha256: 4420b41aaf5de3f282f5645627e8f5077213cedea9480cddf2fab3d5e0990c86
+- card_id: wanderers_revealed
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: wanderers_revealed.jpg
+    sha256: 08b51877b13c556f7bfcaf4bff6bc87420f63cc896a874c81e3ae416646980ce
+- card_id: wandering_pilgrim
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: wandering_pilgrim.jpg
+    sha256: 222e3837c9181fc1a5e81d0be106204cccd4d5a27d40c3269c2e25ed8a42e1fd
+- card_id: writ_of_the_elements
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: writ_of_the_elements.jpg
+    sha256: 26ab84674ca3d62486fb8efce99320087704fb4f0e614db459c54ac89d2364f2
+- card_id: yoritomo_chimori_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: yoritomo_chimori_experienced.jpg
+    sha256: 792fb6ab936aa8dabe80e097afc066ca1ca464b51bb48d0b06f2a4bcc790da11
+- card_id: yoritomo_iongi_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: yoritomo_iongi_experienced.jpg
+    sha256: 3983180a3783278ddc477a7c759fc5701b2fe1ba2f983c02f6d0aebd5e542489
+- card_id: zchkir_experienced
+  printing_id: test_of_enlightenment
+  files:
+  - role: front
+    file: zchkir_experienced.jpg
+    sha256: cf2596a9fcb95dd4810c3ed5ef288f00644d72289b747c9645557f3892ff4db6

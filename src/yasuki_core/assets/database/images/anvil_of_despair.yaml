@@ -1,0 +1,908 @@
+set: Anvil of Despair
+images:
+- card_id: a_hidden_fortress
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: a_hidden_fortress.jpg
+    sha256: 19065335126718b54476027ead8f275a43a25784253a44d1e44df218ac35ec08
+- card_id: a_moment_of_truth_aod
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: a_moment_of_truth_aod.jpg
+    sha256: 1fde258cda809607fdd92bfc467c9beb3bd795ebddea2ab6aa7b025722275303
+- card_id: a_prophecy_fulfilled
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: a_prophecy_fulfilled.jpg
+    sha256: 4af10a97540197cdbca2595e2fcc2a09035bd0f5d3cb7d4d05ed161b7af7a87c
+- card_id: a_thunders_sacrifice
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: a_thunders_sacrifice.jpg
+    sha256: a00064ad0c563dad9693a2d2398913be27c0a8906b846516cf40e7b982430cbf
+- card_id: agasha_koishi
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: agasha_koishi.jpg
+    sha256: 4e7d84a580dbdd0067e132ffa2bf4a281781d12f98b762395d4808e7891b8a8f
+- card_id: akodo_kage_experienced
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: akodo_kage_experienced.jpg
+    sha256: 32f94b5c25bd7fea767f881e21d71d894fcf48e564e3d52452a97ea6ec6c36f6
+- card_id: ancestral_shrines_of_otosan_uchi
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: ancestral_shrines_of_otosan_uchi.jpg
+    sha256: b9df07e54dbbc7504602691743406026a9684c64a8653931bee92f28163a578f
+- card_id: arrival_of_the_emerald_champion
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: arrival_of_the_emerald_champion.jpg
+    sha256: 8163989fc1f01bf271cef25d9438575ec5c9efe66cf80d8be186eb532f55cc1a
+- card_id: as_the_shadow_falls
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: as_the_shadow_falls.jpg
+    sha256: 4ce856d9e184c4905df2cef1d1e2a932820c082d29bafe68d4bf6bd95e930db6
+- card_id: at_the_last_moment
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: at_the_last_moment.jpg
+    sha256: 7d8003e9c34669a4b990609a62b6b65cffed8105a1d49de31376dff4e7ab5997
+- card_id: basecamp
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: basecamp.jpg
+    sha256: 31d735f24f320bf569f98f4197921e8284de493340deed6061e03c48cd85091f
+- card_id: battlefield_of_shallow_graves
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: battlefield_of_shallow_graves.jpg
+    sha256: 7f93cb1ac9d976706e3f37a4c2bfd7bd171c946275f652b8391d4cf3af7a9b3f
+- card_id: bayushi_kachiko_experienced
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: bayushi_kachiko_experienced.jpg
+    sha256: 125e280b46b1ccf9edb8a60d909c2fd654ab811194e13c82e864f52e3aae278e
+- card_id: bayushi_tangen
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: bayushi_tangen.jpg
+    sha256: 2918c1a492bab4d22734ae6363a4df39dec83c690588b78b142bd0b16e31c887
+- card_id: benevolent_protection_of_shinsei
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: benevolent_protection_of_shinsei.jpg
+    sha256: a4b513bacb0a5c3eac3bcd3d4f28daf93c198554a47fb5513d1f9abdaea84795
+- card_id: blood_oath
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: blood_oath.jpg
+    sha256: 4ecb01a1da0d6cd46cbd07751b265e61e4b05299657fe6377f60152c4a8dbcc8
+- card_id: bo_stick
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: bo_stick.jpg
+    sha256: b3ae8de296fde4658c8b3ce4d6929cfa6c65a72d6a708a076c1503425c9a8878
+- card_id: candle_of_the_void
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: candle_of_the_void.jpg
+    sha256: fe6495b99b5e1cba406a6673a8f81daf4e34e5faaecc85dcea4f93325a91890b
+- card_id: cornered
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: cornered.jpg
+    sha256: 73e17e97e632ee2dddde0e8c411fc854e5046b739164e7f98c2a295f8ea817fb
+- card_id: corrupted_energies
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: corrupted_energies.jpg
+    sha256: 651c9d010db7ea980abc5669bfc313d172c8b762b06b05d2bd8c834fb7ad33a7
+- card_id: corrupted_silver_mine
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: corrupted_silver_mine.jpg
+    sha256: 4d38ba34ff56559d01dde5d0698e462c3d6f076b33dd7d286cf6f0685949862b
+- card_id: corruption_of_the_harmonies
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: corruption_of_the_harmonies.jpg
+    sha256: 70b97d22daa8ce1071807dbc53d2d07a8a87bb1cc9978932561dc93a88c35d73
+- card_id: cremation
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: cremation.jpg
+    sha256: 6f6061799de94d1e1ad3c5a3da941fa7f9c153f5ef9838c030113baf4779bf72
+- card_id: daidoji_sembi
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: daidoji_sembi.jpg
+    sha256: 911b1cdd0b9275690e87c7276f4d3d9a5c40db31a2a21df567558a9607135bce
+- card_id: daidoji_uji_experienced
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: daidoji_uji_experienced.jpg
+    sha256: fbdbc96bd8a5237738e86ff47a31834f3b76d164a23def37984ebd4e08914ce3
+- card_id: daisho_technique
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: daisho_technique.jpg
+    sha256: d964cf9f7bcf4da71bb330ed5ec89ba4cb15dd01af3faa237ce8301871736a77
+- card_id: defender_from_beyond
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: defender_from_beyond.jpg
+    sha256: 6dc3949b915504c907fc967c64afb42b05066740da3bc1be3d69bbacf724a383
+- card_id: disarmament
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: disarmament.jpg
+    sha256: 9d8f880e32c75322084e41558ed5f5a4158daf5a6eace08b8ecdf2409bba9220
+- card_id: disfavored
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: disfavored.jpg
+    sha256: 44054754c90d01abb43217a562851e26278ee4cf311e927d6a4be21d8423f942
+- card_id: disrupted_resources
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: disrupted_resources.jpg
+    sha256: 613327f645d729cb4fe22daf1ff374eabb7cdd61d7a2a6dfa11fbbb42b7c8896
+- card_id: doom_of_fu_leng
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: doom_of_fu_leng.jpg
+    sha256: 24898eb8eb33771c8d5006087fa0f9fab7d277da92afb13fd48c930a59f8cb38
+- card_id: drum_of_water
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: drum_of_water.jpg
+    sha256: 38c7586b56acbfb0bad8077bdce40d430675c8b6e8c2054cf985f6c632070f8b
+- card_id: duty_to_the_clan
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: duty_to_the_clan.jpg
+    sha256: 4dfa03a127bda273d55c9d10b30b91daf2c617f075a5ca968672cc914a3a7bde
+- card_id: duty_to_the_empire
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: duty_to_the_empire.jpg
+    sha256: a195da17deb99278660e2bdd4feabda38ae98e23926ddeaf602c4de17f84d684
+- card_id: elemental_vortex
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: elemental_vortex.jpg
+    sha256: 4333924abf243f74c23bc906b27cbd750e140466ede1a7a55bd58d41829e092a
+- card_id: emperors_protection
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: emperors_protection.jpg
+    sha256: afa8bc562b1c4298c7156cf1a89b4f596d02dfb1f86cc768aceba8b154381dfe
+- card_id: essence_of_fire
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: essence_of_fire.jpg
+    sha256: 0f52ab6b2dc794fbc331979100b76821241c3e7fffcd153f0b377e9e083a2990
+- card_id: essence_of_the_void
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: essence_of_the_void.jpg
+    sha256: b721c54f379a2dd62ecb3a086c0ba37a1a56bcc802243dd65728ae75d757fba9
+- card_id: essence_of_water
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: essence_of_water.jpg
+    sha256: 43a73528aec2797f6ea47ede83f5d29de4ae96c121ce62085789546bbeabc834
+- card_id: fields_of_the_asahina_temple
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: fields_of_the_asahina_temple.jpg
+    sha256: d0df923d25135b8afdc21f59fff526593437acc86bb310ca82e839207fd1cca3
+- card_id: fight_to_the_setting_sun
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: fight_to_the_setting_sun.jpg
+    sha256: 4eb4b745a7aafe4ea1cac5cc3b6fb7b5631a4bb7458ccf08986bdcca70b96c20
+- card_id: forests_of_shinomen
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: forests_of_shinomen.jpg
+    sha256: f6a7ca4410e7d807f08606230698f6018a0298264bbabbab5f9a721bd2ef90e8
+- card_id: fortified_coast
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: fortified_coast.jpg
+    sha256: 0c4fd312aff73d8003279691948d2f5f9bd693fbcdd4b2ef264872b913727c48
+- card_id: fu_lengs_horde
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: fu_lengs_horde.jpg
+    sha256: 0da2603ee6d1e4e962c165fc32652c59326e1fa04cad73b64d79c8ae90958a88
+- card_id: garden_of_purification
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: garden_of_purification.jpg
+    sha256: a984dfa3d37cca6accb227f903ca9f94485bd1f8a6d04bdacf575a5466396b69
+- card_id: golden_obi_of_the_sun_goddess
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: golden_obi_of_the_sun_goddess.jpg
+    sha256: d1429cd554960426134c177f1b77f55968d3f139150208264bfe1e8fe8bdcf69
+- card_id: hammer_of_earth
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: hammer_of_earth.jpg
+    sha256: ff6dc3e4833561443d9f843538d0a2c80548ff3f95a8a0e337123c85a2b78303
+- card_id: hida_unari
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: hida_unari.jpg
+    sha256: b30eb92c2fda9ba8a701596d32f4616ae713f147ba2a42df8cbe4eef23101cbf
+- card_id: hida_yakamo_oni_experienced
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: hida_yakamo_oni_experienced.jpg
+    sha256: eaee9dfc7bdde1a6291926c7ee1d35ae677382f5a1d4b6bbd6a1bccff38b16d4
+- card_id: hirariko
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: hirariko.jpg
+    sha256: 3bb6b761c875cfbadf19de17dc7b4426cd7e8d0fe7bf00f60a325c8e0eb4729c
+- card_id: hitomi_kokujin
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: hitomi_kokujin.jpg
+    sha256: dc9f44d08303fff968d72989f8da39506cd2f2f362a395a95162788e701c0779
+- card_id: hoseki
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: hoseki.jpg
+    sha256: ecc76a716973ddfd2cfd4f9d7f39cda70b0fbb062b423c42cd890a6de46653cf
+- card_id: hototogitsu
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: hototogitsu.jpg
+    sha256: a7000f7a9fb39c8ba3805b3988359e393a37194732ed7ff1b53085dbccfbc5a9
+- card_id: ichiin
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: ichiin.jpg
+    sha256: c0fe5b445c9eb88c01c953c4928e759113c8d1380502e6d91522be0899aa5d99
+- card_id: ikoma_kimura
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: ikoma_kimura.jpg
+    sha256: 3b8c7cfa603603e1dff8bdcf3924cfe6667aa81491eab7a371c2e183abf6d9a2
+- card_id: imperial_honor_guard
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: imperial_honor_guard.jpg
+    sha256: f5e113c29f12165c25e76ee51d0f0e04143e125dba30e654cb1990746338afa6
+- card_id: imperial_taxation
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: imperial_taxation.jpg
+    sha256: 007525cd3a83102430f331861cacb254d63f0ec957a875de5bdc52b39f364329
+- card_id: inaccessible_region
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: inaccessible_region.jpg
+    sha256: 78942321b691c7d15a9613b2db63467b3e04c24a970ab4677964ecc0bf9d457a
+- card_id: isawa_osugi
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: isawa_osugi.jpg
+    sha256: 0ecc009c5a39351b482729f17749bbbbca8a19825d9ece8a189e8b0533070d90
+- card_id: isawa_tsuke_experienced
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: isawa_tsuke_experienced.jpg
+    sha256: c34e9d000118a4628b9e4743be73897bd3b75316a5fa9500012fd8a78f2b9d7f
+- card_id: kaiu_pass
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: kaiu_pass.jpg
+    sha256: 933c8e52ba809d753d7a745b0079644857a0b871e25e34ffe048b9e0788285a6
+- card_id: kaiu_utsu
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: kaiu_utsu.jpg
+    sha256: 6569e82e986c2f74cbaf28604ee9d39cac891453ef8abb3a21914d124e68f592
+- card_id: kakita_shijin
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: kakita_shijin.jpg
+    sha256: aaa9dab5fe8a70a00d4e66afc71fc70be1a6f9ea379701f801315fd7a6071073
+- card_id: kasuga_kyoji
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: kasuga_kyoji.jpg
+    sha256: 9c3f1f986900e583bea6763f61da2ab477cd5a02f356d7d528b74a43d8538817
+- card_id: kisadas_blockade
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: kisadas_blockade.jpg
+    sha256: a5551b8249ffefb49d21b154a40a36f4eb92605dc7c61758e276e608b5989fc8
+- card_id: kolat_instigator
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: kolat_instigator.jpg
+    sha256: 3a20f720b8863efa4c4d4ebbc64b4193dc5d28dd96eb1d36a2dea1e4ec46d2ed
+- card_id: kolat_interference
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: kolat_interference.jpg
+    sha256: d9fae7d9199dcf048ba64bc20f45b23ee1a5b8dfcf6f8509aacfacaa7363fa86
+- card_id: kusatte_iru
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: kusatte_iru.jpg
+    sha256: 809a087e35785b6a933086723f048da767b9c8fea90c8f561dfe2bd1697059fa
+- card_id: kyojin
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: kyojin.jpg
+    sha256: 3fc8cd30b18f8eaceabc14c36ac01f8726ddf3c5b3904ce396a7e37f80606246
+- card_id: lies_lies_lies
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: lies_lies_lies.jpg
+    sha256: 557c1acd52f23654a746ac3801de5ffd7f21f8c7a22e9e6c6f7d4f7180266e1c
+- card_id: mantle_of_fire
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: mantle_of_fire.jpg
+    sha256: 45638c3e9589e6fdbf8c2fef36fa7fab4df441415876ddfdcab1277caf06e9ea
+- card_id: matsu_seijuro
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: matsu_seijuro.jpg
+    sha256: 3e020e3c70b2e011e843a78c78cbbf0ac178e9e870e11b7cd2729a04b50a82d5
+- card_id: mikaru
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: mikaru.jpg
+    sha256: 13a37907d9df2d2f1a1b0d36a679e405570bf5fa2f102da479d7ee32b37a913e
+- card_id: mikio
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: mikio.jpg
+    sha256: f9c37510e9297c5fcf682588950bbb2e980a891ca11fd1048589098d521272be
+- card_id: minor_shugenja
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: minor_shugenja.jpg
+    sha256: e9aa8ba60b8f043a623aabc2dd68df29a32b462fcb5ff21549bc4fc21676db9c
+- card_id: monsoon
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: monsoon.jpg
+    sha256: 564ab69790496c5f420834a8ae38565d0e41d60e41836cd729f30b80870a2478
+- card_id: mountain_of_the_seven_thunders
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: mountain_of_the_seven_thunders.jpg
+    sha256: 448d31bd08bf86f1d96dbe503bfa7972faf9a81034f4f67572bc395a805421c6
+- card_id: naga_guard
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: naga_guard.jpg
+    sha256: dd6c1eb69689b50ffba45261c9fb541b8a550ccc42f937857f135e14dfaca8c3
+- card_id: night_battle
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: night_battle.jpg
+    sha256: 82a0ce66448298349cee0cda79f31d4b3741874fbab7f86498d0817d1dbcacba
+- card_id: oni_no_tadaka
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: oni_no_tadaka.jpg
+    sha256: 6762c76f4bfa2de03f65264b6d7492579db40393559e3ee85716a1e202135ae5
+- card_id: otaku_baiken
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: otaku_baiken.jpg
+    sha256: 3fc1744f449a61756d80bc4de7e2b7f7e0680106a2a9fec2ee02ec990d1a400f
+- card_id: peasant_defense
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: peasant_defense.jpg
+    sha256: 0a72d7533b61b16fc02ce8404be981a192f00bc7b1ba37eaba8a1ba3ad1764dd
+- card_id: pitch_and_fire
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: pitch_and_fire.jpg
+    sha256: d5df9728d21c77252a2b4a0d6d0970eee63804578df512a03a6de97f89e9199a
+- card_id: plague_infested_region
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: plague_infested_region.jpg
+    sha256: a2d7c91f7112ef3199160ebb39b483f8096d5832bbcd39b4e98c7936ebe7be32
+- card_id: plague_skulls
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: plague_skulls.jpg
+    sha256: 754a476cdd56ce9d5b7ad386cb88ebdc131292bb1deaaac819029c6c6f96fb96
+- card_id: political_dissent
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: political_dissent.jpg
+    sha256: c2d58559ef84ebae394ee53be629c3fb48e8fac2e6ff774b8fcb6b150f4fd017
+- card_id: possession
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: possession.jpg
+    sha256: 34ccb8800926a72e69a2230b9ad513790cba01185bb07ac98f08e964f4031c36
+- card_id: prophecy_of_the_hero
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: prophecy_of_the_hero.jpg
+    sha256: 5cee01f73cd1a69993e054d589e97f413410cdda47577b8f5ae10e14756acd3b
+- card_id: qakar
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: qakar.jpg
+    sha256: b77ecc76aae07cd4c8a54f408af44816f01bd3233313a45e74067ec798be1af3
+- card_id: radakast
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: radakast.jpg
+    sha256: b6ffffd55f754ef5483243adc619c814cc389d9b34f963b2cb4f39494f7dfd80
+- card_id: ratling_conjuror
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: ratling_conjuror.jpg
+    sha256: 1a9673c6157b2202e880a0506ff03ef73a9758ef5de119818ed95542772c419a
+- card_id: refugees
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: refugees.jpg
+    sha256: 6cf380730f576ed7072593b81a2ef69fd84adfb1f83739573646d00bfeb0e9fe
+- card_id: retirement
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: retirement.jpg
+    sha256: 2a36b18362281bb277ce94528f340f4928935d8a890f7c602f8f897cc2859ac1
+- card_id: rise_brother
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: rise_brother.jpg
+    sha256: 9e995b2aca3b75ff607c7482bf507a370179ee33641efea57c1912d3f76890f4
+- card_id: river_region
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: river_region.jpg
+    sha256: 659f2e51b5cd8276d52783383937fae4a89591b51e2138f4d766391819b35639
+- card_id: scorched_earth
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: scorched_earth.jpg
+    sha256: 365426cda23756a680d34a94838268524452392426e39b25b9aebc66575677c6
+- card_id: shallow_victory
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shallow_victory.jpg
+    sha256: 52a70f3e9dc5098b60c3bd059ceb5f664095d2bdaeb2f04a34ac2a4d55d97eba
+- card_id: shashakar_experienced
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shashakar_experienced.jpg
+    sha256: 93183214818b7001770cce082b03bf2137f820dc14aaa75c1a2556e44cf526b4
+- card_id: shinjo_morito_experienced
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shinjo_morito_experienced.jpg
+    sha256: e2f64b6130fb287f82b46fc3c5bee2d7be707df4f9a3e1a31dc79bd59b5bca0a
+- card_id: shinjo_yasoma
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shinjo_yasoma.jpg
+    sha256: 25a9f2e2607a62874551f18fecd3acc6e072bc0fbffcdd533b85f991c00c5aeb
+- card_id: shiryo_no_akodo
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shiryo_no_akodo.jpg
+    sha256: 1bef5da193955f7c0c2b96ad41e46250a8539943360673bdd1c5a463226b0164
+- card_id: shiryo_no_bayushi
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shiryo_no_bayushi.jpg
+    sha256: 54e91b07d3965631a34c88d8c4edd5ff2d61a3b0a8ba5b68a3f483adb2994111
+- card_id: shiryo_no_hiruma
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shiryo_no_hiruma.jpg
+    sha256: 37546e01545baabf5140fad25ac350ffe231c23abcbe42135392528c18524920
+- card_id: shiryo_no_isawa
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shiryo_no_isawa.jpg
+    sha256: 1f5a9bdf2c4ee1a36461be49e146a528199f6d297c4dbc6c122625427df69431
+- card_id: shiryo_no_kakita
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shiryo_no_kakita.jpg
+    sha256: e9dbeab82d4c6a360d9a37b5a138c5804f32f130eb0350fd06258cb3827f2a52
+- card_id: shiryo_no_shinjo
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shiryo_no_shinjo.jpg
+    sha256: ea3e577b7b43001ff0291d4ac241c91b27952b5b979cbb1cff9abc61176830dd
+- card_id: shiryo_no_togashi
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: shiryo_no_togashi.jpg
+    sha256: 89f9d6d814ee2a37a0eb7785d7d8d1c908a3727d63ee032d9e270e1ee7a8fb80
+- card_id: slander
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: slander.jpg
+    sha256: b586f34318afcc405cb615ca045d49d35de4101399ae087aefd64302ab56f94f
+- card_id: spiritual_presence
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: spiritual_presence.jpg
+    sha256: e2697b893ac285ba6afe81659fef8f72677aa4cdc60de66e34e45579a0895065
+- card_id: stall_until_sunrise
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: stall_until_sunrise.jpg
+    sha256: e98766f7791a220294b34290934a5f3ade9867df3288fe473ee3c7fd923be47d
+- card_id: stealing_the_soul
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: stealing_the_soul.jpg
+    sha256: 3c016387a6984646159d730efa287a211aa562fe106bba05977f8bace821c891
+- card_id: stifling_wind
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: stifling_wind.jpg
+    sha256: 6ef93c15c230499275478544ae88820e711026f6e3bd9f1c3220bad1bdc987a2
+- card_id: strategic_victory
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: strategic_victory.jpg
+    sha256: 81059af0598b38570f5aa845913371cebf93a878b22a04436fdf4aabcfb407e9
+- card_id: summon_nightstalker
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: summon_nightstalker.jpg
+    sha256: 48773b48f64140dbaf86c59521d6510b17df29b658bc2f4426fd164439a9f623
+- card_id: suzume_mukashino
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: suzume_mukashino.jpg
+    sha256: e819a2cb86665595e9f17f83b57db1a08b0a4ce8e2315b00ad9998d65501c1e4
+- card_id: takuan
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: takuan.jpg
+    sha256: 9298c3a0aa6864176dfc60a4ad4696ff0e48ecee6b6149961a7dbc162acf9030
+- card_id: tapestry_of_air
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: tapestry_of_air.jpg
+    sha256: 24f05697a63775048981785ad8c5d6f8e8ed692378a63f80d0ec39fbaf1c080f
+- card_id: tessen
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: tessen.jpg
+    sha256: 4376e8fdf4ad95011499d0a6c33d7782d707b55cc891ac9cc6d7981f2c4c1fac
+- card_id: the_blood_feud
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_blood_feud.jpg
+    sha256: a3fe8afcb0b9be36fa3c865e090f75d9a4189156efabf11aa7b706f058ad8d8c
+- card_id: the_bronze_gong_of_the_hantei
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_bronze_gong_of_the_hantei.jpg
+    sha256: 7b27fe4a5746f408c721e6f37cba57f4da05b54b4347e19785fba43d85751c12
+- card_id: the_celestial_pattern
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_celestial_pattern.jpg
+    sha256: 5c0345e152f8a350f7f92cfe949cfce11def21d434c36fd72db2330837f9e4fe
+- card_id: the_darkest_day
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_darkest_day.jpg
+    sha256: 0b85f039937910392a5366630a789030886a4275a44c495e0491cf7c9c8cad1d
+- card_id: the_face_of_fear
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_face_of_fear.jpg
+    sha256: 441c7b7a30fb03773d79da5ff257d47c9d49389b22fb38607ece2878958daeb8
+- card_id: the_perfect_gift
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_perfect_gift.jpg
+    sha256: bbe8b3b3af6c4edefec89b1b9c6d81fee2a80ae82a7e5fd69073eaf671416798
+- card_id: the_return_of_fu_leng
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_return_of_fu_leng.jpg
+    sha256: eef584b7c72f0cbf46846c5cd01c4acc7f4ca396b5e962bb8d1234409bc78e1e
+- card_id: the_shadowlands_horde
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_shadowlands_horde.jpg
+    sha256: 164e9365044063c2d7cd470774a89a11e571836a9830ebb05abc20950011215d
+- card_id: the_tao_of_the_naga
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_tao_of_the_naga.jpg
+    sha256: f9b0f667180e21ab0adbeae60b26fb7431d52d10039588bb8c10da5efeaa0d59
+- card_id: the_way_of_air
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_way_of_air.jpg
+    sha256: 5c47ce894bc1f23acfedb06f7b0d6cbf1b62d1a11149af88c24a9095dde68bf3
+- card_id: the_way_of_earth
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_way_of_earth.jpg
+    sha256: 4e7be33aba5011ea4238c02b7b8fe4ede930008cdf16030d19ae1ea31db74535
+- card_id: the_way_of_water
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: the_way_of_water.jpg
+    sha256: 502877b57ccabe60efea3dfac84ea27dd1bbb3af763788c4359ea73ece1b4100
+- card_id: there_is_no_hope
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: there_is_no_hope.jpg
+    sha256: 6640a0319d59c4407098e297c0a2d042dfe669d06ae60e79996cb101ed8952bc
+- card_id: to_avenge_our_ancestors
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: to_avenge_our_ancestors.jpg
+    sha256: 8c498191e6cda12277fd081c0c8c378ea86bb953f4ee056125c4baf91e6ac1dc
+- card_id: to_do_what_we_must
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: to_do_what_we_must.jpg
+    sha256: 4b13b64992d6102ebc4bd697e07f9c54b2b84162e7c87d9947c9a00363f3e7bf
+- card_id: to_the_last_man
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: to_the_last_man.jpg
+    sha256: e3f86b251b63ec1a347eb0113e39547a3046d20458a61f2884d55cf630bf2d8a
+- card_id: togashi_yama
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: togashi_yama.jpg
+    sha256: 72e507ab411a91d3d000b19befc71c4c8b9cf0279f0ee007a9f51037d5a2e134
+- card_id: togashi_yokuni_experienced
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: togashi_yokuni_experienced.jpg
+    sha256: 0b461eab9df0c12807602efd5c6d4e5b62cd999f5e33f0b2394c71eaa47df514
+- card_id: tomb_of_iuchiban
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: tomb_of_iuchiban.jpg
+    sha256: 6693d77b0aff70e922152021ba780dc1ea11292777c32d57726b785c7197e22d
+- card_id: tortuous_terrain
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: tortuous_terrain.jpg
+    sha256: 44e96307c5bc61311ceba7c75f8f64b9a78777645f0b3e4370003f916f1ce599
+- card_id: toturi_experienced
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: toturi_experienced.jpg
+    sha256: 12c1d5468a5343ad62a1803bcfef36aa879f823b3e4701a155142187b98204cf
+- card_id: toturis_army
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: toturis_army.jpg
+    sha256: d8caacd6a26edbf231a0ca517778b2b0089cfb66227bf1b07019ca5d466ff0ae
+- card_id: trading_grounds
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: trading_grounds.jpg
+    sha256: 620c4cb7f74b3f0ff28f08686b3cffc67a19505a8f879783083b862b96926efe
+- card_id: training_grounds
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: training_grounds.jpg
+    sha256: 6cb342425b4e979d6a61b806b16faf602cd51a89584b0fca05abaa601c90742b
+- card_id: traveling_poet
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: traveling_poet.jpg
+    sha256: d59c14251be396d10d7013e9ab6aba22f0f37b6413b7959548379d075d369c9d
+- card_id: treacherous_terrain
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: treacherous_terrain.jpg
+    sha256: a8876a59c46268ae8372171b8d0ff1fc42c0221fdeaf162ddd8066ddd367352a
+- card_id: tsukuro
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: tsukuro.jpg
+    sha256: 171bbedff466b15b085a27071ba9beecc3b09a5f31f60d021381c021c660f918
+- card_id: valley_of_shadow
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: valley_of_shadow.jpg
+    sha256: 3fb7c26966fbfca5933e877fd6a537299877641607704df403e3635d9391f4bf
+- card_id: watchtower
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: watchtower.jpg
+    sha256: 9a59678be725cb9bdf0332fde3394cf20f10776cb25dfe9b960e755d05004e22
+- card_id: wetlands
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: wetlands.jpg
+    sha256: a82f5aab1b3b8b66f1563099c10d5640c5afa818e43f857e378319f519615fea
+- card_id: yodin
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: yodin.jpg
+    sha256: c00154301722c869dddecf2a258acd84648d13489a740b73448d82aa2c0a94c7
+- card_id: yogo_ichiba
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: yogo_ichiba.jpg
+    sha256: bd555e87eafb33fdeafd2d1b53e514a20f4df27e7f92481549e7f7e77e97a743
+- card_id: yoritomo_kamoto
+  printing_id: anvil_of_despair
+  files:
+  - role: front
+    file: yoritomo_kamoto.jpg
+    sha256: 1a4d3591aadddcd3450e3a2f1044e11a9c8422377771e0bda350e76536972779

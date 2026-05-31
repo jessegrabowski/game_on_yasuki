@@ -1,0 +1,926 @@
+set: A Perfect Cut
+images:
+- card_id: a_desperate_act
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: a_desperate_act.jpg
+    sha256: 25b6c7099c7e2e33caea3d881de8a471491c2190fc468b7a175b960f307a9330
+- card_id: a_matter_of_pride
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: a_matter_of_pride.jpg
+    sha256: a01e83763f8a932a8f8195b5be79831624d2f506c1c4e654f7ac8e92572ca5e4
+- card_id: a_plague_spreads
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: a_plague_spreads.jpg
+    sha256: 37d77e18030847674c38bbcb98820bc308f0b77486e864657406663c161b7bde
+- card_id: acquiring_favor
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: acquiring_favor.jpg
+    sha256: 2ad7eacb77fc40f10d5ee68335ebb5923865ae3fad2933f3808e3b6b1ccaf7af
+- card_id: advance_scout
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: advance_scout.jpg
+    sha256: 3ea458be0fd1933d5c021f5be60c0dfa40b77dc10627a7ca408ca0bfb6136d93
+- card_id: akodo_setai
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: akodo_setai.jpg
+    sha256: 387a064f10081ecbb5efd1ab9f54b2548685b633b2ba53b5d0bd518f7c75dfae
+- card_id: anekkusais_feathers
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: anekkusais_feathers.jpg
+    sha256: e77d4d75f5dee2d381f1a9e26aeefcd155ddcb08c3c531996ec7ba62e9685d7c
+- card_id: asahina_handen
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: asahina_handen.jpg
+    sha256: 970a166620de84419aa4ed03b5437ca776a0f6247e0522f9ec6e00efb09d14ec
+- card_id: banner_guard
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: banner_guard.jpg
+    sha256: 0e7a7c33d12ed1389a1c47b6adf55a828e50f241e57b3cf4bcbb5aaa97791f2b
+- card_id: bayushi_tai
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: bayushi_tai.jpg
+    sha256: 90350dbe0f3a0eb7bba20a07a04996d3867ea43253fb2e3b02643efb68eff1a4
+- card_id: bayushi_tasogare
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: bayushi_tasogare.jpg
+    sha256: cb2f7e2348833a5c9c7772378737159002fd115f17af3a1e5628d90a70c18fc7
+- card_id: blazing_sun
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: blazing_sun.jpg
+    sha256: f1c51cb189997f9ad33e017b22f7aea2faf23c5e9870d0166ab95716aff5f90b
+- card_id: blood_madness
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: blood_madness.jpg
+    sha256: ddb971451c215965ba4d6ff2a5e3435d066eb0fd3cf2f95a786a777247518ad3
+- card_id: breaking_concentration
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: breaking_concentration.jpg
+    sha256: 263ca5a646b18122fd7e13d02946bb1be7c62cef7f93a600bbfeba7da76819f7
+- card_id: by_will_of_the_wind
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: by_will_of_the_wind.jpg
+    sha256: 6c5e84e25718e113340658416a646c132e3f3174b79cd2cac98f651bd69a3631
+- card_id: cast_down_the_meek
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: cast_down_the_meek.jpg
+    sha256: f0380d8bdbab929ad08df2509f82321ccc2eb1c4adae653cba932b41578b112d
+- card_id: command_group
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: command_group.jpg
+    sha256: 15b907d9c37fe65482a81b5f0a05648847035d6f9e82cadbff2da4c9608d17f8
+- card_id: contemplation_of_osano_wo
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: contemplation_of_osano_wo.jpg
+    sha256: 8033b62951417ea7f5903e560c3d1cc35deaba7261a6e65d5e6fea6588ac62d5
+- card_id: contingency_planning
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: contingency_planning.jpg
+    sha256: 47732bc6480383cdccc3770a54182eb20fb95b9543c7888b210f922fb82394c8
+- card_id: crab_recruiter
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: crab_recruiter.jpg
+    sha256: 032f61c1104afcce6e30aba6105998d959a35ad451e5bb1b624534a68060cf3b
+- card_id: crane_tradesman
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: crane_tradesman.jpg
+    sha256: 356eb5377206b10245b320978b7bfbaf71ecf8b6463d8751598b819622cdbc25
+- card_id: daidoji_megumi
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: daidoji_megumi.jpg
+    sha256: 1c8d9291158983b51fd05d7ec7b66b423c234d7e7a35ad57ec75c1271f428abe
+- card_id: dairu_no_shiryo
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: dairu_no_shiryo.jpg
+    sha256: 52edfc08c95b8fe50bb7dcbdf713c6b0efa60b34dcfdbf3366bf35a82fd50762
+- card_id: dairyas_cackling_skull
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: dairyas_cackling_skull.jpg
+    sha256: ae7676557a3c11137b1655d4758f2aedbdba7c85ef65cd213e586fe839ecb9a5
+- card_id: defensive_duty
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: defensive_duty.jpg
+    sha256: 3356ccf3d12c3ae806fb77c5751c57c7dfa333ca2803b0c7ed1a1455a0d2405e
+- card_id: diplomatic_apprentice
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: diplomatic_apprentice.jpg
+    sha256: f6545e5e1072f868622061ed9346d527cb7fe3d2c40061cc18e70a6f60e2a4eb
+- card_id: doji_kurohito_experienced
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: doji_kurohito_experienced.jpg
+    sha256: 623013852849a785fd863a7060771bc7071f9ddfaa8ce7404a37bcd7748d4f9d
+- card_id: elemental_shock
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: elemental_shock.jpg
+    sha256: 8cfa2ca60e9c11173fbfd9d6444e781466ba22fd60b9fadcb8dbc43bb9eaf70e
+- card_id: endless_deluge
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: endless_deluge.jpg
+    sha256: c143ee630e407182a3301d829886e4576ff8200601e3f7b2166d113b545faf1c
+- card_id: family_tactics
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: family_tactics.jpg
+    sha256: 31b2d1eec707736a2368d5120373cfdbe90f8d77c5b393cc773dcb17b39007d2
+- card_id: fire_and_air
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: fire_and_air.jpg
+    sha256: 01b405115c67c03ec2b0611cd52b5a4aa82acd70888f3312a88a3f70a50da17b
+- card_id: fortify
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: fortify.jpg
+    sha256: a0330877e6fa3de2bf093fa1cdc6b0e4d89deefd84aab4c62cf697d543d22a9c
+- card_id: fukurokujin_seido
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: fukurokujin_seido.jpg
+    sha256: 0db215101692c962312d7d2db9dc29b54c5d7b6fdc6ad6d1acd3995d8ccc2e47
+- card_id: furious_strike
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: furious_strike.jpg
+    sha256: 1450c891fc6151fdee46bbcc091d0610d102844521bb2c61eea130295810d709
+- card_id: guard_house
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: guard_house.jpg
+    sha256: 9f02bc12ab6ca09823c822387884aad4f819e7f4a54ebda4d6d4477b969311ce
+- card_id: hida_kagore
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: hida_kagore.jpg
+    sha256: 3702f33b4d9593688947296f0a81290a08c5e2d358bb82c2c4cbe4fc0df2dd45
+- card_id: hida_kuon_experienced
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: hida_kuon_experienced.jpg
+    sha256: 1c2dec6e16abaa05d9fdf661d0d210d1067a4f1e7d787b866b1173898ea6324c
+- card_id: hida_reiha
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: hida_reiha.jpg
+    sha256: f12680b4a677c5f051b752374c663d4c723e5a251553ed41a43789bf6950b070
+- card_id: hiruma_todori
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: hiruma_todori.jpg
+    sha256: ff61c3621906ea47cd7e4353d7d6192175211b4ef6ec334851381a87591f3529
+- card_id: hunter
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: hunter.jpg
+    sha256: 159a5c51fa22de6c2085bdee0889c7d810b20f4b2060ed865d1a9a9599e217b3
+- card_id: hyakute_no_oni
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: hyakute_no_oni.jpg
+    sha256: d766cfdfc89ac51d96df67aac397a4e827bc000617dfadd17fe5c62b9fcc7688
+- card_id: iaijutsu_lesson
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: iaijutsu_lesson.jpg
+    sha256: 04c74c9de1bbdf01c550e420fd0487252df6c561ad3b807e905238e1705b3175
+- card_id: ide_michisuna
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: ide_michisuna.jpg
+    sha256: 25435909ddb2d55e8f10497f70d99cf48340456e907af39614ff27e30b6ec3e7
+- card_id: in_light_of_darkness
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: in_light_of_darkness.jpg
+    sha256: 47ea5f33ccee5db4d0de3082d480ecc75ec425d366c8bc972f81fd792879f5e0
+- card_id: inside_agent
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: inside_agent.jpg
+    sha256: cc23fac44ca70ead7b8a5f6d6c66e80b18038dc25b2df9e45ca1c55ff7b31aa7
+- card_id: interesting_sticks
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: interesting_sticks.jpg
+    sha256: 87d00d4dd8a8a292c57a6aaf4e73f0c1fa3a5688f0c3e530f3889f61d2032dce
+- card_id: isawa_hochiu_experienced
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: isawa_hochiu_experienced.jpg
+    sha256: bc9c6dfaa699d31ce525e6cbd66a9286876a017c94ea03b178558fe014042b4f
+- card_id: isawa_nakamuro_experienced
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: isawa_nakamuro_experienced.jpg
+    sha256: e06ea5c62eb2c7b30bf16057b14285e4455a7235951e986aa41f4b4a52583079
+- card_id: isawa_nodotai
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: isawa_nodotai.jpg
+    sha256: c323a3346beee949482a371ff1c6bc24ed8973ffdf182ad89a22c0f80b74b22a
+- card_id: kaeru_kenko
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: kaeru_kenko.jpg
+    sha256: 367a6fa5db4383eaef7f1db41dac54250e5fd7e413865339512c14a09dc809a7
+- card_id: kaiu_hosaru
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: kaiu_hosaru.jpg
+    sha256: 297627296c6a36bf1bc009bcd46bd68a024dc9bb8d3c3526d0c7bf9fe6fa600a
+- card_id: kakita_dueling_academy
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: kakita_dueling_academy.jpg
+    sha256: cc1f5c526acdf3d31091464ee841d78f834a31ca57b2dc725b67dc9eb8f903d7
+- card_id: kakita_gosha
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: kakita_gosha.jpg
+    sha256: 2bb604526046a020059fbe0cc378f5e67cec5045db129b569ac2714600ce2c56
+- card_id: kayobun
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: kayobun.jpg
+    sha256: 2d261364393576526203c44113980bd56b13074c7f2337fae547be9421a1fb44
+- card_id: kitsune_taro
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: kitsune_taro.jpg
+    sha256: a0ce71eea4c19ee90d20e8bf60b0b9e42fed280bdca82791de6af42070c016f3
+- card_id: kokoro
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: kokoro.jpg
+    sha256: db34ca649ecfbff30dcc6d1b3f016f10fbb7663ff5347c375d5f79f308c863c3
+- card_id: kukan_do
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: kukan_do.jpg
+    sha256: a0daebe465d1de33ecea58ac8aa78d890bf642dab45dc858beeee009854ea4a5
+- card_id: kyuden_hida
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: kyuden_hida.jpg
+    sha256: 15bb80b728cb3f4308971ca98303de3f0097bfc78ecc7e522df8868bd30de6b0
+- card_id: lion_scout
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: lion_scout.jpg
+    sha256: 84fc4ca9bc51f473270eede9585b11931f78b175427fb2e758e2332c8b64cec7
+- card_id: mapped_region
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: mapped_region.jpg
+    sha256: fd9216ca76637c8f4684dfed747a975717adc730eccca9c5479067f0fa06f575
+- card_id: matsu_domotai_experienced
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: matsu_domotai_experienced.jpg
+    sha256: 7dcce787eb1c1543ec91071db1c02d10e7e3d161505137bdd7c907d4b4e02236
+- card_id: matsu_hyun
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: matsu_hyun.jpg
+    sha256: d3fb7ff3e43e51aac5dc6ab1584dca8343ba7d1a8ea66f902883b9336afbe676
+- card_id: matsu_kenji
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: matsu_kenji.jpg
+    sha256: 8b450e67de56244d942cdc7bc3273e1e10518836c0fe025ce66e76f872728348
+- card_id: matsu_kenseiko
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: matsu_kenseiko.jpg
+    sha256: 20510f82ad523bbbdc554ed241b21a7a87d899f6390ae6e7133777cdeaa4907d
+- card_id: memorial
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: memorial.jpg
+    sha256: 8bfaa32716263faae3e93e40ab13f353d5a041b8b84de7a1e2f45579a6ff60ae
+- card_id: mining_foreman
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: mining_foreman.jpg
+    sha256: 05b95f5ae8e513a3da3b6f73d186f8d876be6b1b57349198c5e931bb7acdf279
+- card_id: minor_illusions
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: minor_illusions.jpg
+    sha256: f810c241ac24793e3069d502d67dc93b9044407da0af798e142251cba2f0f8e2
+- card_id: mirumoto_junnosuke
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: mirumoto_junnosuke.jpg
+    sha256: 609cd4b142fee8d241d41399bcde7ae7e4f4c6ab44fc568ef9240b4dcf13f817
+- card_id: mirumoto_taiu
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: mirumoto_taiu.jpg
+    sha256: 5b44bb59ed3e404dc003e71f54c6d617927a9ae394fac2953e87b5495f118e3f
+- card_id: miya_heikichi
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: miya_heikichi.jpg
+    sha256: fbc0e699e96e2aaf899bb08b2b41c15e998a875845ac04c150f82ca64b14044c
+- card_id: moto_chen
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: moto_chen.jpg
+    sha256: 094215568d32d6f22a68c0ce2da5f688ab1dc4c206b3eeff8c9b0033447cedab
+- card_id: moto_reijiro
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: moto_reijiro.jpg
+    sha256: 29856c3e9062837671c3d45fe019dbad271e03f1a46b62e5d67538d33aea3c10
+- card_id: mujina_gang
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: mujina_gang.jpg
+    sha256: 2773eeeebd8acfb369ee215d20178ed0e4a25051d12f633eacbda3bcf231b6aa
+- card_id: nagamaki
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: nagamaki.jpg
+    sha256: daae1d7bffacc6f5be83fcbc5afea1154bd5848378c74edb438b8af8bdecb4ff
+- card_id: needed_at_the_wall
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: needed_at_the_wall.jpg
+    sha256: 55614559cdde84d6addd31f972d6bb5df13b0a8f858ec9f193b70f78aa2a9b70
+- card_id: no_one_wins
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: no_one_wins.jpg
+    sha256: 9debb25249e2dd013c308563e50dae3919bd8d7309969985bbac2b90c8f07337
+- card_id: omoni
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: omoni.jpg
+    sha256: 9f975261a72b9479b6c864c10e46023440de1187f0069860ff34fcdd802a3878
+- card_id: open_arms
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: open_arms.jpg
+    sha256: cb77f608628cc1c9d5cb7c53e284b5364f9179dc8081abe0d9991ca4db0297c6
+- card_id: osoreru_no_oni
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: osoreru_no_oni.jpg
+    sha256: 3d6d4c6ccf8f5ecc34cfd08557bd2308b97b25cedb0dcf5e6221a6f566756329
+- card_id: outmaneuvered_by_force
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: outmaneuvered_by_force.jpg
+    sha256: f22dda3ed5b3397687d3cdd2c214cf92de69847f5d20bb195708cea8441b626b
+- card_id: outmaneuvered_in_court
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: outmaneuvered_in_court.jpg
+    sha256: 9f0f201016bee85c6916658a057c8ed935e9ad70e9aa5fe2778e51df3e4d2d8d
+- card_id: persuasion
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: persuasion.jpg
+    sha256: 105aa3c9283f7a0d38b791127ba4b2cf753a6e877b9155e11c29132f77c8243e
+- card_id: phoenix_library
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: phoenix_library.jpg
+    sha256: d2c6b1828aae116927d366f852c6f8e91a901d81104aac804d5d57e524fcf14d
+- card_id: plum_tree_training_ground
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: plum_tree_training_ground.jpg
+    sha256: 843d132223e73382fd825c15a22ee2b6ba78147d0b13b952dd4dd1cffe675656
+- card_id: political_warfare
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: political_warfare.jpg
+    sha256: cf79c4f37f4318d9bdb0f4fcf0ce0d2f7ecb07a4f37563a8159e4abd0976946e
+- card_id: prepared_for_the_enemy
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: prepared_for_the_enemy.jpg
+    sha256: bf429ea0e0654abd4a0aaac41eb2b512a737c459c39f506974d592975bfdbb37
+- card_id: preparing_the_edge
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: preparing_the_edge.jpg
+    sha256: 194933c7686ae42747f61283429d14a7c147ab5c62b369c291133336f13956f9
+- card_id: rain_of_emeralds
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: rain_of_emeralds.jpg
+    sha256: f91112b5e37ed6260dcfe15a2200bc9cf5d7db50d3a69995c368a01809304d3e
+- card_id: reassert_ones_mettle
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: reassert_ones_mettle.jpg
+    sha256: 16427bfeacc57a055d78143dd4ca92bc4a251b75f3b4e8e775b8cfbf0112452a
+- card_id: retired_sohei
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: retired_sohei.jpg
+    sha256: b751621945478eb029b677328e3ed48410a62dab5e56f252940843440a6db049
+- card_id: returned_to_the_pit
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: returned_to_the_pit.jpg
+    sha256: 5140f73ca76aa52e54a8330c0e6a0778c40718e1e2c3b619ec706290ba495b0e
+- card_id: ronin_at_the_wall
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: ronin_at_the_wall.jpg
+    sha256: f7382c3c024eb53245ca11e0093857fedb6e0b97528ed8ecc757da379d47f966
+- card_id: scorpion_distracter
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: scorpion_distracter.jpg
+    sha256: d6e5bf5e6fca94d64f02d02a132b6421f9cd54b21f9b657db36ce80c9d2f0b49
+- card_id: seppun_isei
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: seppun_isei.jpg
+    sha256: 2862160388b54d1ee8f4299198f98a674e2b4310791cb2f7d3cadaaed203369d
+- card_id: shadowlands_bastion
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: shadowlands_bastion.jpg
+    sha256: 0c81c7566015db44bf24ca80b195373c2b194a9e957dc5ef5df1ca67152b81af
+- card_id: shallow_graves
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: shallow_graves.jpg
+    sha256: e43792fa38898da47e3ca7d40991635aade9d6b5e5ab51e1838d03a1d835d47b
+- card_id: shiba_mirabu
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: shiba_mirabu.jpg
+    sha256: 6c945fbff36dad5d0fd4f61f7f6e828dd8666d46c2760161163528ef2d7e4adf
+- card_id: shiba_unasagi
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: shiba_unasagi.jpg
+    sha256: fca1094b84094717b692d05dd0222520d85f973c828c9e8959067c2406cebb05
+- card_id: shinjo_sanraku
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: shinjo_sanraku.jpg
+    sha256: 02fa602dfe7084459024c452037e3c5d5130c3a4ed649caae206d98888730e67
+- card_id: shinseis_smile
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: shinseis_smile.jpg
+    sha256: 64f3281edcc8dadf6a33cf1aa142d765926522a56371c0c4747e0f781c869aff
+- card_id: shosuro_gardens
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: shosuro_gardens.jpg
+    sha256: 935099d8769e6f3353754f73e3679345806128123b33353279055a25c20de1ef
+- card_id: shosuro_higatsuku
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: shosuro_higatsuku.jpg
+    sha256: 5612447bfdb8feb4597577b307934ccf7f1c4e321dab213d9883cc67f1b302a4
+- card_id: shosuro_yasuko
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: shosuro_yasuko.jpg
+    sha256: 9255fafe3356ccdfed12adea5403bb73e31febd0b8c160b49f304a8c9ec6a781
+- card_id: show_of_strength
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: show_of_strength.jpg
+    sha256: e98250e3ba99cc2b792028ce89475a51d437371b00c7ba8e887100c0f96deddd
+- card_id: snowy_fields
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: snowy_fields.jpg
+    sha256: 2a400e2707f1faa78544dd713b26f561a7a6901b0de6e8a6d10b21509053f53f
+- card_id: sohei
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: sohei.jpg
+    sha256: d0a77e8710ab62bcc4e5a016127ec6aff4c72e355a7d73290a122b575ccd2d8f
+- card_id: soshi_tishi
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: soshi_tishi.jpg
+    sha256: 52e89396dbf56ff864790f463af6236136328bce1928c370ee666b5736fe53d5
+- card_id: speed_of_the_waterfall
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: speed_of_the_waterfall.jpg
+    sha256: 27ad432fb5f10e7300b4a9d639d754967918e6282ec42460cc8e8a9af248794e
+- card_id: spyglass
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: spyglass.jpg
+    sha256: 81cf04f072727fb508ab54abeede532a77a43bf0b44a7454105613f82b424e47
+- card_id: stand_as_stone
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: stand_as_stone.jpg
+    sha256: 82b5ac049009f726c3879600a177e815df59dcf51d4ffdfa5899c4b6665ceda4
+- card_id: stand_your_ground
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: stand_your_ground.jpg
+    sha256: 25d03dfb3aecbc8056561d46478eadcbf9db457f7e20636922e3a2dcb7550d23
+- card_id: standing_tall
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: standing_tall.jpg
+    sha256: 605c1ee99fe5242cd9ccd34d00ebd859972c8d335e05cd303b8d4cb0891f8edd
+- card_id: strong_guard
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: strong_guard.jpg
+    sha256: ee6571079327c66e3ab758de983fb1d663c5d263162ba396592b27c309466afc
+- card_id: summoning_the_gale
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: summoning_the_gale.jpg
+    sha256: aa397337891d6ff076a3f313966620cc5fc499dbf4c09c3a0e55afd5cd32d36c
+- card_id: tachi
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: tachi.jpg
+    sha256: 8e785edee4b4d0fa96ce061f7ede1446998caad0568d8ebf449e257f4657ed1c
+- card_id: taijikku
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: taijikku.jpg
+    sha256: 67ee7eba4efecb70c39e9d099ef185290289dd366de848eced59584485a6125a
+- card_id: taiko_no_shiryo
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: taiko_no_shiryo.jpg
+    sha256: 4671fa26d7c43e322785482e255d05babc71747e6f0b97f32f20d8478bce49e3
+- card_id: tainted_bushi
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: tainted_bushi.jpg
+    sha256: 88f19d52a921850d14305ec254489d1ebfb64f1b59e4d28b99a553acc0536ca1
+- card_id: tamori_chieko
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: tamori_chieko.jpg
+    sha256: 708426a4a2c19bca3284d210ab1fcf0f3ff0bfdaf3308e8a3801bc8ceb7d9c33
+- card_id: tampako_no_shiryo
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: tampako_no_shiryo.jpg
+    sha256: c55cf84f00e54f75ff651e933b95f808579d6845b1152c69ab2b726ede05cfc8
+- card_id: tea_house
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: tea_house.jpg
+    sha256: 57a865c9f79ddd8dfb13cd84b104bd52eb2d69a7406ac8ca7df805c2b3585213
+- card_id: temple_of_the_dragon
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: temple_of_the_dragon.jpg
+    sha256: 33b297e68772b709c5196cbc17f1ac9cc51348873f562b0cd3a09f999a5e1660
+- card_id: the_enemy_you_deserve
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: the_enemy_you_deserve.jpg
+    sha256: a50a1d251531357b4bf6f866003e4581fd33ec907528844fd169810285afc40d
+- card_id: the_great_climb
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: the_great_climb.jpg
+    sha256: d4e2a73bcc85ea9834aa4701ec1678f77e0a6910355b5c1e31b8ea04d0d468f8
+- card_id: the_greatest_cost
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: the_greatest_cost.jpg
+    sha256: 77aae3df7d5e08f6ac947cec631fabfc720a5099542542c3be1fd34fbfc93cfe
+- card_id: the_hand_of_thunder
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: the_hand_of_thunder.jpg
+    sha256: 86602a041fded22547e88a2259a4d5ad213ada1a747afc48f794f3b1293ee67d
+- card_id: the_power_of_nothing
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: the_power_of_nothing.jpg
+    sha256: cf1573c14423363fa37272a3b98a944baa230e074b4881924702e8ec1ab493e0
+- card_id: the_wolf_speaks
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: the_wolf_speaks.jpg
+    sha256: 63b232c2181e0e18264c3fdc20f8dbf98c76271aaf67ad4d05ad598f75b3a1f9
+- card_id: thuk_kigis_war_machine
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: thuk_kigis_war_machine.jpg
+    sha256: 43ea48b0a7dee7c8a0a120d674343c3a72bddea25856b9809db3d40afb5aa7c3
+- card_id: thunder_calls_to_fortune
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: thunder_calls_to_fortune.jpg
+    sha256: 6c556e71898f895e65c3ac81fab23f0dadf21f9557ce804ef1cbd81c1afc3ae6
+- card_id: togashi_iroshi
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: togashi_iroshi.jpg
+    sha256: a41d46eee7333f20085c64aa4ec818524a94026a21c4a2338487829b6c52db86
+- card_id: togashi_satsu
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: togashi_satsu.jpg
+    sha256: 04533c7a8f434a7d4367eb30b6635fe531cf05014009475a42609ca3d68e59e1
+- card_id: too_much_too_soon
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: too_much_too_soon.jpg
+    sha256: 1e3851948b6e665edfc80cdd036e54c9f54fe37d5177426d6e103a2d6a42ac7d
+- card_id: training_dojo
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: training_dojo.jpg
+    sha256: ea9bcad20ae17c57fcb2fe9101bf48eeaed7b9fdd2fb610efd8ee7aa89d44572
+- card_id: training_exercises
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: training_exercises.jpg
+    sha256: fb88a7643373a71b284fc48da245ae45a3bdf9b3a0e4d423a71505df737b2fd8
+- card_id: traitors_grove
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: traitors_grove.jpg
+    sha256: 7012289540c359a21c6afb48b40a32cc563840e0caca1dde9b839a00466db2b5
+- card_id: tsudaos_challenge
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: tsudaos_challenge.jpg
+    sha256: 9fb482313b0a27f3359bdca0ace6c0710ec97f8d1fe5074fd8d4f5c02fb908ef
+- card_id: tsuno_kurushimi
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: tsuno_kurushimi.jpg
+    sha256: ece5f59a25b105819002441697ae6b446e9dac0da10eb7b94ab12b8731665e96
+- card_id: tsuno_ravagers
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: tsuno_ravagers.jpg
+    sha256: 53f66e149bebde8bf4679af3a9a4d5e9e344b85d73673abc29180b22d6193ef0
+- card_id: tsuno_squad
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: tsuno_squad.jpg
+    sha256: 65e6663e4d53011acdae080aad8283c9bd26fbaaf909dd03436baf651b536dee
+- card_id: twenty_goblin_winter
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: twenty_goblin_winter.jpg
+    sha256: 8208a8ebb1f8ec1fb9ad90a1a051a3aa33d2fc410e1db01ee21f0e0abee14018
+- card_id: unavoidable_destiny
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: unavoidable_destiny.jpg
+    sha256: 64580f97da2da4a2a896afb154dd28b6839a230838b1a7a114a13aac2665566c
+- card_id: unexpected_assault
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: unexpected_assault.jpg
+    sha256: f7418c6c085423f5e001ea75b54453dc2bd0967b7383059c54612287f2b62934
+- card_id: unexpected_confrontation
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: unexpected_confrontation.jpg
+    sha256: 72c6e5d31b53725982f21e74d0d64beb9651cdb7140e58b786198c25d41779ee
+- card_id: unicorn_marketeer
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: unicorn_marketeer.jpg
+    sha256: e547a8849c4ead78181d99940b013f692b972f8261ac5705266f5a38d7856571
+- card_id: unspeakable_preparations
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: unspeakable_preparations.jpg
+    sha256: 2cbd9727237a09cd23ee76010df10dc80fae693571989b09343b447d949f8f08
+- card_id: usagi_kashira
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: usagi_kashira.jpg
+    sha256: e4f3da894ecba747bbd110de1a692a0537ef3f830400a82a05fd82abc712a17c
+- card_id: utaku_mu_dan
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: utaku_mu_dan.jpg
+    sha256: 8ed8bf968fd1d308d6d4c0df9da3a4c5a3da4c958c1f56d52a6f1679053d4f0c
+- card_id: while_the_empire_watches
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: while_the_empire_watches.jpg
+    sha256: 0feb8f7b0e236921d8c502f951717c99f38c0cc2d428214960dd129b87384bae
+- card_id: yasuki_heikichi
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: yasuki_heikichi.jpg
+    sha256: ad45b00983bdc9ba01afea9d1c02c86080fcf07a8faf01cc6d614ef20bf1e541
+- card_id: yasuki_palaces
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: yasuki_palaces.jpg
+    sha256: 82f5008e464c8beef870e1dbcf5f164e9eedb9661a3eb95af6431f86b53ef74e
+- card_id: yogoso_no_shiryo
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: yogoso_no_shiryo.jpg
+    sha256: 0d3a0399861fbdd4f7e42db410c07e3f7d3d054f028ee4f5e739efe033f390c7
+- card_id: yoritomo_kitao_experienced
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: yoritomo_kitao_experienced.jpg
+    sha256: 9d9887fcb867a6813ff079232aff8e6d365da7c6604317a1dc25d2cac388d505
+- card_id: yoshis_fan
+  printing_id: a_perfect_cut
+  files:
+  - role: front
+    file: yoshis_fan.jpg
+    sha256: 19a50b29bed891c1bfba5a8c5b22e56e423b94a6d368c83a889709053e37d3d1

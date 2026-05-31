@@ -1,0 +1,122 @@
+set: Top Deck Booster
+images:
+- card_id: arrows_from_the_woods
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: arrows_from_the_woods.jpg
+    sha256: d4028978e4f766f692f75c7e76dcf82d873909bbb1782d56e600453d2a8929bc
+- card_id: careful_planning
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: careful_planning.jpg
+    sha256: 1241e78a2f229e2f085a1d709db3f03a471da770a6d95f823ec26708131e2b70
+- card_id: charge
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: charge.jpg
+    sha256: e777795fafd18111c015f9b5af692321f87db1c20204e9d24bd06a4d1cdaa2ab
+- card_id: contentious_terrain
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: contentious_terrain.jpg
+    sha256: d3305660882511aa0860201e087127103bf2343184e6cd21e83ee13266429ff8
+- card_id: deadly_ground
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: deadly_ground.jpg
+    sha256: 6c03fb71cd82dcc5eb2bc893f4fa5abdd0ad52c57999c85f68baf1cce85bff3a
+- card_id: diversionary_tactics
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: diversionary_tactics.jpg
+    sha256: f78febf48b369599e16cbef27f93348719e78c0582335239958851d4e0042c2c
+- card_id: doji_kuwanan
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: doji_kuwanan.jpg
+    sha256: 878712ff9a70e58bfa983c2480125cfb62a3b47587a77678978f6d884f8e86a9
+- card_id: fist_of_the_earth
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: fist_of_the_earth.jpg
+    sha256: 6866d1371a3b3486d1c5b3bf4877c653dafd5a85b1f030a437c599a6859d8655
+- card_id: hida_tampako
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: hida_tampako.jpg
+    sha256: 0683e0aa432d743d0ee712919bc37980eed8855a4d8fae0e47d55c2d3c42c386
+- card_id: hitomi_dajan
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: hitomi_dajan.jpg
+    sha256: 7e095ec631c1b14f2a8c4ce7612358ba1fe51ba3ab52b8adc3929b4137cc3e97
+- card_id: iaijutsu_duel
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: iaijutsu_duel.jpg
+    sha256: e9edc62eceaca09972090c301a0908a2ceaed0f62bed4603065c6f5b11215d4f
+- card_id: isawa_sze
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: isawa_sze.jpg
+    sha256: a4188766a5595f7de567edac140dca9342b7aacfdc7e141ace9ae208190739a4
+- card_id: matsu_ketsui
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: matsu_ketsui.jpg
+    sha256: 8062af6caaf051bb827340a29e52ea24ac408ef199c397ffa0cf811cd6c27f64
+- card_id: otaku_kamoko
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: otaku_kamoko.jpg
+    sha256: 85677878b54bb31960d91a5d1983802b587b4fa65fc9430ab7604f767aea4ad8
+- card_id: outflank
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: outflank.jpg
+    sha256: ce42c6a7386629dff95a597552273ef3fec4910d3e33b7cd47c49d8786ee7fd5
+- card_id: shosuro_yudoka
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: shosuro_yudoka.jpg
+    sha256: 38fd82d2c255ce35b4dd1198b1f76b282112ba4f83f14abbb64a36db13ffe6d0
+- card_id: strength_of_my_ancestors
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: strength_of_my_ancestors.jpg
+    sha256: d9f417c28911f3b4e39b74c0d611c0b8b704150b2033ddb315a44a5ab13bbddb
+- card_id: strength_of_purity
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: strength_of_purity.jpg
+    sha256: f05db9356f4be006ce0778b842ece58ef17fba1e7c3e7ed422471560ad2ecd29
+- card_id: the_wrath_of_osano_wo
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: the_wrath_of_osano_wo.jpg
+    sha256: 4f428c7b427b7c14b4cf0d3214f5ab8808b7e241eca100c8814e2825d2dcf948
+- card_id: wounded_in_battle
+  printing_id: top_deck_booster
+  files:
+  - role: front
+    file: wounded_in_battle.jpg
+    sha256: 1d337781d6afd79685d88881f7f83643e00426d22af2acdcf417077e4771644e

@@ -1,0 +1,986 @@
+set: Embers of War
+images:
+- card_id: a_weak_poison
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: a_weak_poison.jpg
+    sha256: 79ff74c16428e72771d5f1f34cc9dd5a08789ddb6f1f147cee536d1e90c78e9d
+- card_id: akodo_tamisu
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: akodo_tamisu.jpg
+    sha256: 1a689b8400949e2b2f240876e43711f8ab51c4bf9d9daeaf18db655616b957d6
+- card_id: armor_of_the_uruwashii
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: armor_of_the_uruwashii.jpg
+    sha256: 7868b7de09c952504be0d73b4031d2d198778d10b339184da0b80f876556542e
+- card_id: asahina_konomi
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: asahina_konomi.jpg
+    sha256: 1935c6f1cc952325c2c8a651cb504d343f13dd9306307b0ecfc4a51be528af5a
+- card_id: asako_kikugoro
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: asako_kikugoro.jpg
+    sha256: db4dcfba8f6fad5994611b9da3949b0ae7bcb8df59cb9939fca3565937cafdcc
+- card_id: asako_megu
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: asako_megu.jpg
+    sha256: 3acf9c8fdebb0e09022707d4c465eb1706d3f5cb9261a921f87c8407d2da508b
+- card_id: ashigaru_guards
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: ashigaru_guards.jpg
+    sha256: bd31c239578df21ca8cc68a410d35fe9d3fddea6a65bbebbea578e429072a946
+- card_id: assassin
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: assassin.jpg
+    sha256: 87404ea7f8b71cd78420775372d3ca96da36c733d26a3978ef83196f0478b9b0
+- card_id: astonishing_accusation
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: astonishing_accusation.jpg
+    sha256: 89dd9a5f290761cfc4b8d29a677a94d4fc2c2d2ed872f8d7fe6646a4293fd49b
+- card_id: bayushi_kazutoshi_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: bayushi_kazutoshi_experienced.jpg
+    sha256: 8f90499a72cbe7c96756acb9e7c7a180bf130a725360f46874def3e81beaf622
+- card_id: bayushi_nomen_experienced_2
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: bayushi_nomen_experienced_2.jpg
+    sha256: c77ff3777e585baef233aa9daacc8b6deb65a0d413785f508b7affffc8dcfbe8
+- card_id: bayushi_tenzan
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: bayushi_tenzan.jpg
+    sha256: d4fd7ca770b75d6d0f6571d5508faf7341d24c6fe4e328e7e0c9c08b09c57d42
+- card_id: broken_cipher
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: broken_cipher.jpg
+    sha256: e7c3b81973f3636615930fde04f15553d4053109c09f74a5ff38e2985ca7f17a
+- card_id: celestial_sword_of_the_lion_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: celestial_sword_of_the_lion_experienced.jpg
+    sha256: a1a7f885985c86a2154e58dfaf0bab6c96959470f144f8b139cafe831d68b771
+- card_id: celestial_sword_of_the_unicorn_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: celestial_sword_of_the_unicorn_experienced.jpg
+    sha256: 63dfe0798d40814064f2b260563806c79aa67a4c718da8209a49a47b1d5b9179
+- card_id: centering_the_soul
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: centering_the_soul.jpg
+    sha256: 4f1c18cb792472efafa939ab919c38f952e0eee403f00a6aacc200e22bd5d16c
+- card_id: daidoji_akeha
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: daidoji_akeha.jpg
+    sha256: 47e4e6b85504a8bb8c1994608f86ce08455917268d077a7ed40293287f32f950
+- card_id: daidoji_narizane
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: daidoji_narizane.jpg
+    sha256: b4d5b3faf4a0595e86a69e1cc42b1a0b43361946866458d79e205b75e8ebb0e1
+- card_id: daigotsu_kazuko
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: daigotsu_kazuko.jpg
+    sha256: 70d5c457f13217d4f85c244a908c5fcb82ffb9751b2d9adf05b976265a9364c2
+- card_id: daigotsu_susaiken
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: daigotsu_susaiken.jpg
+    sha256: 905fa03a67005ccb616968490890e8193df2534c1cc4d77db1970d2884b0a036
+- card_id: daigotsu_takayasu_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: daigotsu_takayasu_experienced.jpg
+    sha256: 4b5b9e7c4678dd39aa8a5108efb2cb4447014d7f1ff8a6144138e466762e8ddb
+- card_id: daigotsu_tenbatsu
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: daigotsu_tenbatsu.jpg
+    sha256: 4b1b95109bf45aa9e5d1dd3d71df0f90998a495f5c7154056d26b0a62b3b2798
+- card_id: damning_ceremony
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: damning_ceremony.jpg
+    sha256: 7589f6c5f0b8bf519786c2a513c427de214a4c4ccde9bb95e30fa1e5065aefa3
+- card_id: dazzling_attire
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: dazzling_attire.jpg
+    sha256: 9516171a7798fe9c01a5e4cc45cedb326dea71974ee8551c2fd6295315a23f0d
+- card_id: deadly_discipline
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: deadly_discipline.jpg
+    sha256: 65d91ff06b865c05c715877cdb755a0494b295c40c7c06942263e3e31bc10def
+- card_id: deep_snows
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: deep_snows.jpg
+    sha256: 9dd60d0f4fcb16154292ce530d8d41ee992f4b2c04967d66bba3135397de1388
+- card_id: delving_into_history
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: delving_into_history.jpg
+    sha256: 68a01612ddb00876b21ca2f90e508dc32f950365eb7ac64cf66825065fceeda3
+- card_id: emerald_magistrate
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: emerald_magistrate.jpg
+    sha256: d340292cf003eda8cf032c84e56fc8fdf8c33cd79ec621d091b0b06a299f02aa
+- card_id: exploited_advantage
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: exploited_advantage.jpg
+    sha256: f77f07d5fe65be9f9b0aac9f283a0689906241ec6f65d28dca16a80caadb9434
+- card_id: extending_influence
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: extending_influence.jpg
+    sha256: b00c2f727bb36711ba2637da9f15be750f11607a51b8adefce7bcd7402808a5f
+- card_id: field_messenger
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: field_messenger.jpg
+    sha256: 1594c72a767fa20eb8b39d555ca109d1aa10fec8cf617794aeec90ed8919f26c
+- card_id: flanking_unit
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: flanking_unit.jpg
+    sha256: 6325f5bb2dbc33b809d760ab4927cede0b54c6d5f176bc37332fbc0a92c4c181
+- card_id: fresh_recruit
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: fresh_recruit.jpg
+    sha256: 8820797dff0e14992b30ae876e61d19ad63373ee02c7dc46470375b641fbeed8
+- card_id: gaining_advantage
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: gaining_advantage.jpg
+    sha256: 2fe30fec5d0967dc9f51569230df7cf486cb70c2d2fbd08079bfced3e9163167
+- card_id: games_of_will
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: games_of_will.jpg
+    sha256: 781d939d6caed79891d2817600455fd91a770a76a4842e76984c18616617d72a
+- card_id: goju_gochiso
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: goju_gochiso.jpg
+    sha256: 2c3c1314d09cb99152ff59237c447b1d63ecaec2e30ff5fe03127b92276061e4
+- card_id: gozaru_no_oni
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: gozaru_no_oni.jpg
+    sha256: 195eb0f4f49c88550ea7df3f082f3a734f4d37af6bcfbfc8a5c97d65edaa2799
+- card_id: greasing_the_wheels
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: greasing_the_wheels.jpg
+    sha256: b7f824b5ba05fe3631f7adb89de3cc028876a274c4e17439090483185179e7e4
+- card_id: growing_hostility
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: growing_hostility.jpg
+    sha256: 748f68f2ec8fe43d9d18cbb749a7b94080de0c5d374b205c356e6a0868800a39
+- card_id: guest
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: guest.jpg
+    sha256: 37baa2a53ea3d7c429fd1f54bb0f478f91ad32225baae13d401dd2553c0f2d70
+- card_id: harukis_deer
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: harukis_deer.jpg
+    sha256: b19712fd4efd50c191908c2d5f47f3e1e33b2b4da1311af771a621b1f990ef78
+- card_id: help_from_the_shadows
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: help_from_the_shadows.jpg
+    sha256: efbef9774876ba7cb36ffe3055dd890ebcfa6ad8c081b766e44bd8b1f1fd9178
+- card_id: hida_bakishi
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: hida_bakishi.jpg
+    sha256: 41a043a67cb698856062ae1d09de9e7fef6d5e1a52ce4b544843184f3060f557
+- card_id: hida_osote
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: hida_osote.jpg
+    sha256: 0abf84fd2175ff2db1e98077110dfd51e8cdfd5727b29bfde215480367121079
+- card_id: hiromis_vassals
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: hiromis_vassals.jpg
+    sha256: ea10fee38b62d766a5b89b61646b8e9d03e2b0e3ef45cff47169328ac21d0ffa
+- card_id: hiruma_moritoki
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: hiruma_moritoki.jpg
+    sha256: 431b389f0ce50421a6132c14c68f382d7f6fec6cadecab048914b40b2728d941
+- card_id: home_guard
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: home_guard.jpg
+    sha256: 940b2dcd4b532c2005aafd0c5d854e21c34b1b823f43347153886c9ced43e30f
+- card_id: honest_assessment
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: honest_assessment.jpg
+    sha256: b43fc5b9cd1da7a7cb1884ceea7217600a4edb9be0b5807465ba892093e839c6
+- card_id: hoteis_contentment
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: hoteis_contentment.jpg
+    sha256: 69531c16c45edeb00ea8a53202c94ad9474b1fd5d64f347a43ff6304e103e778
+- card_id: ikoma_hakige
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: ikoma_hakige.jpg
+    sha256: d78f386f7d5a151efd92ec3a5a059c5fbcb418b40dd140670f38639646214f6b
+- card_id: ikoma_shika_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: ikoma_shika_experienced.jpg
+    sha256: 2bf8fdb66a504dafef5a0c8660e65415b8ffa1c8caa62649dab4579322cd1ea6
+- card_id: ikoma_sido
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: ikoma_sido.jpg
+    sha256: 53d61e25dc9e1df3788e4c8510f8d31f6d03226c946a316259254894a089de42
+- card_id: ikoma_yamahatsu
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: ikoma_yamahatsu.jpg
+    sha256: dc80578fbf54b4a2b11a5b6aaa3a5daa24bc0d512681efabff1005813ae5fcb3
+- card_id: illusory_defense
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: illusory_defense.jpg
+    sha256: 52c086e329b37daa99bb2be0b41c1e4345f925e40c26e4e668a1685c904a9ed5
+- card_id: in_search_of_guidance
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: in_search_of_guidance.jpg
+    sha256: 57d85d89a1146ea526954a7925ad678bd34f64a03e0156c02e8170c3df395d05
+- card_id: incite_the_phantoms
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: incite_the_phantoms.jpg
+    sha256: 1c79f6bc0ccce536d524f1226341d52642936133a83d8b7bc1674c7f21a0f6e0
+- card_id: inciting_mistrust
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: inciting_mistrust.jpg
+    sha256: 4f88fead52ac00223f0ec17d4e8cbba6d10c05876221b507f8af140091a19e99
+- card_id: indecision
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: indecision.jpg
+    sha256: d0875f8a314514a97f1b1c95cea98aac69c7aa6ebc25f919947b72c6f6140d1d
+- card_id: inescapable_snare
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: inescapable_snare.jpg
+    sha256: ee58eff3308fcac2922cdc54dab97d6fbd639d5fd6e3ddefd1be284a094b06f6
+- card_id: inexorable
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: inexorable.jpg
+    sha256: a48c5343ef2d93c83e6431ce2cd8ebd16f7d357f104d224f814e60e66b46abec
+- card_id: isawa_koiso
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: isawa_koiso.jpg
+    sha256: 367e079f0551e8fc935f3d7da5a7463f0c0ce590e7bbc55c03fec5cf997ec34e
+- card_id: isawa_mina
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: isawa_mina.jpg
+    sha256: 6afd94207646ab41db9f87faf71ffd2c8792f6d4e20de7d3166e67cbaa1f0a55
+- card_id: isawa_sanetomo
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: isawa_sanetomo.jpg
+    sha256: d29b38ca79dfc956494c9a6db61eb61db2d5a6655ab8df0898a6f24f8eba901c
+- card_id: itoku_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: itoku_experienced.jpg
+    sha256: 298df2606294ea9eb0484d2df0bbf24f73d36b834ffa3367c3712c324aa070b3
+- card_id: iuchi_yuri
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: iuchi_yuri.jpg
+    sha256: b18199dc31eb5fe4aade1131c55d1444c49221cc235c2f3e2b164e8998a8440c
+- card_id: kaiu_onizuka
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: kaiu_onizuka.jpg
+    sha256: 2fc4261a842637bb94cfe62e60849c60bed294324a0a08646a5f0b11cacc32db
+- card_id: kaiu_tojikana
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: kaiu_tojikana.jpg
+    sha256: 86bef1053ede5cd42affa95fc17cb891f8d674ecfdea1838d6c56da899e32e21
+- card_id: kakita_gonji
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: kakita_gonji.jpg
+    sha256: 40dc8b992ef5a2c92a4bff76770c50240fc34cb19a841d759ba7705704619156
+- card_id: kakita_kae
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: kakita_kae.jpg
+    sha256: bc41cef24a5569abfe0c6b2079331f224c94029af2c6e70c913501ff2a77fead
+- card_id: kakita_kenta
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: kakita_kenta.jpg
+    sha256: 82faa344d0a6dffaea698c6f7fac86d0652eeb972f8f59b72df88edf1354d643
+- card_id: killing_intent
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: killing_intent.jpg
+    sha256: 0708443f9c4669671d25c707bc36a9aef12d8d5fc9eebe4762ee63abbae4252d
+- card_id: kitsu_miro
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: kitsu_miro.jpg
+    sha256: 52fb08e5945374fdad01225cf16a8984d03eb0f845bc7fa4bd829fc28c64573c
+- card_id: kitsuki_daisuke_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: kitsuki_daisuke_experienced.jpg
+    sha256: d528d983a9258e9c420ee83840ba608b16bfb5f2a81dd13ec56c41669e3f3ef4
+- card_id: kitsuki_jakuei
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: kitsuki_jakuei.jpg
+    sha256: bd932d677ad43ecedd9380f73037a680c527eb50416b82643077f8c57ed93841
+- card_id: kitsune_haruki
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: kitsune_haruki.jpg
+    sha256: c62d6bf4e90c74b189a4876136a814603350be9d8da57ded809bddde6777ba9b
+- card_id: lady_matsus_rage
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: lady_matsus_rage.jpg
+    sha256: ad6cd9eb53b1e7d0bab1b9eaa80aa223145524c9c30a3d1afa38cb2a9619cdf0
+- card_id: lion_ancestor
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: lion_ancestor.jpg
+    sha256: a609ad3cd6eb2d315cab264552b745b50aba9a3ab161c4008fe5d25a99a75bb4
+- card_id: low_market
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: low_market.jpg
+    sha256: cb568f5719f4be0f2b687e905c9caba17f789794d905ef20ef559c1e3cbd6028
+- card_id: makito_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: makito_experienced.jpg
+    sha256: 2629bb87225aa0d453098f769ec0f56dc94b5c3bb4349a84730633d1fcb5412e
+- card_id: maras_touch
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: maras_touch.jpg
+    sha256: ed40d45503ff31fe9844c82707f4553469e0b1f4842fc35ef8aa1737a348fa8b
+- card_id: mirumoto_hikaro
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: mirumoto_hikaro.jpg
+    sha256: 7c91dac5b363348b2ce47ef6c58ff8999a3968a3431d7adc85ed1df9bf77235e
+- card_id: mirumoto_kouzei
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: mirumoto_kouzei.jpg
+    sha256: 6973c501970789ec35f0e97e25f7a80dc77c4ef009f18e539102e5c10f85ee52
+- card_id: moshi_tomiko
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: moshi_tomiko.jpg
+    sha256: 398899c73ccf392513c752d26daf8a4121156a9836fe7053cb64dfd8a04cbfc9
+- card_id: moto_isul
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: moto_isul.jpg
+    sha256: 6fc80c58dac85f239c5fcc4e7ec4fcc5d5f5691c021fb3fb04fdf1c3db3a5d45
+- card_id: moto_rani_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: moto_rani_experienced.jpg
+    sha256: c0edbd3b005db454c06ec9a7dcc33cba5d463f1b1c3895dd7c264aa8b760565b
+- card_id: moving_and_unmoving
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: moving_and_unmoving.jpg
+    sha256: d807bfccb361a233da184757d0c4f8fae53df34220054dfc62455ec3a66e53f4
+- card_id: murderous_thieves
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: murderous_thieves.jpg
+    sha256: 07767296ec57eb560fffbe2e8940bef7ea45e1d46d498736c6fee1c7faf071d7
+- card_id: ninja_guards
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: ninja_guards.jpg
+    sha256: 3bb2d4df155f8accc11a18124d905121a9b6ac8b022c664f104c4b824eceb5a9
+- card_id: ochiais_bravery
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: ochiais_bravery.jpg
+    sha256: a48252df1be5d6631d10f37ee57451005d6a6c3ffd1bb9606b98713d067fb293
+- card_id: perfect_sacrifice
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: perfect_sacrifice.jpg
+    sha256: 7d100e93c04749230a244a5bbd01442072e612330aba0f2afe7a2fb4b1866f38
+- card_id: perplexing_guests
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: perplexing_guests.jpg
+    sha256: 1443596a0a9e0f2e59a85c0d33374720fcd77a4eaeea0660a2e4dad6545e01ad
+- card_id: phantom_visage
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: phantom_visage.jpg
+    sha256: 46ffd8d13c1b235b97faea5cc5fdf8514b776dde706d4b6b308484a679cc117e
+- card_id: pillar_tattoo
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: pillar_tattoo.jpg
+    sha256: afa6311c61f0a1e313bd48fb38919fece233042aaecd5f458e2cabd88b22c782
+- card_id: pillowbook
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: pillowbook.jpg
+    sha256: 7ab689b20dfa11a936d09a74c4d43c74b8d3141126cdae6dd2a305c0ad8844c4
+- card_id: power_of_strength
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: power_of_strength.jpg
+    sha256: c624cec5dd3f2430726da5ae9dead491d525ea1e09d5907a1087f6e78c34dd1e
+- card_id: preceding_reputation
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: preceding_reputation.jpg
+    sha256: 22c61f3a00056cfaca30c41ba20de3ad99961256fe9d849861b440c9ef191f9e
+- card_id: precision
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: precision.jpg
+    sha256: 59ac26da5f25c8d9cebc28b8827ad9912e0426f67e3d4eb9551f2b19ebe4129f
+- card_id: preserving_forces
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: preserving_forces.jpg
+    sha256: b63ab3fbc09354f5186322443d9b75a4194d25bcc33c3eaca9f873e394e5a98d
+- card_id: pronouncement_of_guilt
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: pronouncement_of_guilt.jpg
+    sha256: 11343ebdc5d6a1e6e22c519ae50f3e9dbab5c94bcaae3678b0e7859550d4e0c1
+- card_id: rata
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: rata.jpg
+    sha256: 91c1fcec06a038a7481479400b69f82c1afb316c6bda7b9556af21e958e18874
+- card_id: reckless_duel
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: reckless_duel.jpg
+    sha256: b377c4b1d95de4120528834696397256889d9fa0f2bde79176107b12782a475e
+- card_id: request_authorization
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: request_authorization.jpg
+    sha256: 10d807f429587143b1ac4904e5eb34ea19f4b2cd07254ce73e4f7fdd5cab767d
+- card_id: riddle_of_rebirth
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: riddle_of_rebirth.jpg
+    sha256: f92b9695cf882ba247da54b22b0a2284675ee8d152ebd70bd8ef4b2a72848690
+- card_id: ride_the_breeze
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: ride_the_breeze.jpg
+    sha256: 1924b9f61971975d3913e95551f94d2a681e60d3714ce7fb875626ddc8ba6c98
+- card_id: rokku_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: rokku_experienced.jpg
+    sha256: bad61e10fd677a19ac2b196448b3a588f6788fd7657ffc9c4b2e49ce57d0ac32
+- card_id: sakti
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: sakti.jpg
+    sha256: 6f56e2efac98bbf23cfde0ae00349f682c0806cb4b361777669b85cc6d92fe25
+- card_id: sankaku_yari
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: sankaku_yari.jpg
+    sha256: 151e8987dbd4b2567a973619b326c5d7e6bc84fa54225f94431a6917f2b7c9e0
+- card_id: scouting_the_pass
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: scouting_the_pass.jpg
+    sha256: c93c964f34f9b6c9fef5e1cfa36ada0bc79b7ed36586f8a3c9cbea8c8572ea8a
+- card_id: searching_for_answers
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: searching_for_answers.jpg
+    sha256: c5bab4289fe87fc1a10ee009b1c00d859eb74993cb4a2ad8d5a997425eb71824
+- card_id: secret_reserve
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: secret_reserve.jpg
+    sha256: 65e2b9e8f85e976cc0c340d61448dcd3e9b7bab3b563a1c668e413e29addaa91
+- card_id: seeking_the_question
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: seeking_the_question.jpg
+    sha256: d2d352fbe1b669b64db9e16c3c16753ce6bf895bf7486a7885b13a6d664e36bd
+- card_id: shadow_dragon_experienced_2
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: shadow_dragon_experienced_2.jpg
+    sha256: 65d77829d134df1e16f0c3b3b44a6a96b3ce7570468abc669a3b88ec81758f0b
+- card_id: shamsir
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: shamsir.jpg
+    sha256: 4467697f071a6a69913d49b4d83974f459f250e6252feee5eb20d5d655575234
+- card_id: sheathing_the_sword
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: sheathing_the_sword.jpg
+    sha256: 553a83d1a942ea1764866bb525f99f4d5c5fff375d74f80c32370be65f739b09
+- card_id: shiba_toshisugo
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: shiba_toshisugo.jpg
+    sha256: 67c0f3daec7baa3e24a645bae69227e73b5478852fe1a249dbb983c1d7478cce
+- card_id: shinjo_hayan
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: shinjo_hayan.jpg
+    sha256: 07c495b86d94cfa39a641bf08364144c133c48d1d321954d595e5a4247c3e7a3
+- card_id: shinjo_junpei_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: shinjo_junpei_experienced.jpg
+    sha256: 36ef8e84760d886b50cf4ff2717d05a75081b9ce7cea88b46419d115c28a2e36
+- card_id: shinjo_sarang
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: shinjo_sarang.jpg
+    sha256: ae1df0d42a3aa85ae58622832c25c60f55fe0ba466f39ef01629c15d48cb44fc
+- card_id: shosuro_ietsuno
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: shosuro_ietsuno.jpg
+    sha256: f73a7abbf9907420f8fe337f99a815e243787f1e19882fc3253c9cfec56c669d
+- card_id: shosuro_ryoichi
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: shosuro_ryoichi.jpg
+    sha256: 92764ac3b1bd8d0514ec6dcdf54e35813f473af019cecbbc0a6590742d8accdb
+- card_id: shrine_to_nimuro
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: shrine_to_nimuro.jpg
+    sha256: 86bef742ad5577489c07c30b11fd750128b87d11472d51a1212c331c39d03d1b
+- card_id: soshi_yoshihara_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: soshi_yoshihara_experienced.jpg
+    sha256: ed65a4db86dd9937b286353baf16062a29cf6f2bc4f083147931c845ce9095b2
+- card_id: splintered_weapon
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: splintered_weapon.jpg
+    sha256: 7d295abfdbf49943445b42e0ebbc47cdbcac5128d6d198a5bc92af060516c3b2
+- card_id: staging_grounds
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: staging_grounds.jpg
+    sha256: 7d2edb784dabcbb1ec915000abbf072c8c4cfd0524d154ce7e98d71953a25514
+- card_id: stand_as_the_mountain
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: stand_as_the_mountain.jpg
+    sha256: 9dd8e557aaaf047231be5d9b3e84bdcaa21f5d5e549333245722aee78d579b9d
+- card_id: stuck_in_rokugan
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: stuck_in_rokugan.jpg
+    sha256: 69ee72fd852e145fc74e9c4ee424f9362ea8edf4ee49730786a74538dea140f7
+- card_id: sudden_guardian
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: sudden_guardian.jpg
+    sha256: 5ec971c47332f17647dd712bee9f70725133a38bb7f6362736806c6d26a3e905
+- card_id: sugihara
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: sugihara.jpg
+    sha256: 3ecb2b0deab779ed24e23c284020ec7ba000e798b5d0c0dff239d0fd08258d57
+- card_id: surrounded
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: surrounded.jpg
+    sha256: 3fbbdd3068985e5ced02e1429255c61be6e4212d3db03fa5092cdb559084f3ea
+- card_id: surveillance_outpost
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: surveillance_outpost.jpg
+    sha256: 1625912f8a43f5ae1e78d4ba36cc6803e2ed0c7cde52efdd1ece9754d1d7bfec
+- card_id: tactical_trap
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: tactical_trap.jpg
+    sha256: a439d1d00208d0b4f2812d24e5404673d086deb6d1aedf075ee3eabb7c6f4461
+- card_id: tamori_seiken
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: tamori_seiken.jpg
+    sha256: 86baeabfc5c5c23998a59ee918c7491e1608919f6b1d1fc065a8b4d3604cfd90
+- card_id: temple_fortress
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: temple_fortress.jpg
+    sha256: 7893725d76b8e72f0343e23e3209794c893d7626b45349839f86e8903202d885
+- card_id: temple_to_the_elements
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: temple_to_the_elements.jpg
+    sha256: 2066deb2fa89a061e8db26642a9808e8a378b6e2c9aadd2b56ef18b0cb8cc6ca
+- card_id: terraced_farm
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: terraced_farm.jpg
+    sha256: 1ea05da12ee47eef7f5bcf775cac02cb8bd81ff453351abbae0b297639953cd6
+- card_id: the_ancestral_sword_of_hantei_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_ancestral_sword_of_hantei_experienced.jpg
+    sha256: 29389df1495b7d4a036a5a2f8a992c97caa928046c98d6fe546e3559d83ece77
+- card_id: the_bite_of_winter
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_bite_of_winter.jpg
+    sha256: bb2dd69b41eaca69881a97e3532d8e99d1690663c57a7b8e50504c187a42d2ab
+- card_id: the_cycle_of_vengeance
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_cycle_of_vengeance.jpg
+    sha256: 9f2dd572a7660ea7ab2234606a2f7d81008c6f3320a7315041de5cf94822d629
+- card_id: the_distant_reaches
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_distant_reaches.jpg
+    sha256: bfbeff4b762553771f9fc4ded5af4f8234f25c3969e8608020890969b52a4a79
+- card_id: the_heirs_wrath
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_heirs_wrath.jpg
+    sha256: 8bffbd1c0fb51bbeae5cba61183f1481d98b6140d049b830a01c1dd62eeb84d0
+- card_id: the_hosts_advantage
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_hosts_advantage.jpg
+    sha256: 99c0117a27a1802210679e0e49dc0dae9ec83da435446fee23fedde0c35f56fc
+- card_id: the_ki_rins_path
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_ki_rins_path.jpg
+    sha256: 3036b5da7b99833f1d3a3bba5c244433ce962d46a8b9bf3394d6be73b06d6e73
+- card_id: the_marshalling_fields
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_marshalling_fields.jpg
+    sha256: fc268955ad6dc685fda921c29b92907507d40abd5c279f7d2d2ebfafbef29dee
+- card_id: the_menacing_sky
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_menacing_sky.jpg
+    sha256: f9b8abb36a0904312a9ab0acc22278451d182a55ffaad43a38e1b8b63f3424ac
+- card_id: the_plain_of_glass
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_plain_of_glass.jpg
+    sha256: b976110ef87a472decdc3850c53015154c656f44ed3a2e864ba9419ee72f7737
+- card_id: the_scorpion_wall_is_finished
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_scorpion_wall_is_finished.jpg
+    sha256: 09f03bc81d47ea955843ef8f2f242f0e5da0ebd33b2a9cd11e57e1e5e2778daa
+- card_id: the_snow_has_teeth
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_snow_has_teeth.jpg
+    sha256: c20dc2fdbf7bc486ac4a49f0b8c17cbc7a3876c367a2673c029eca7af0771686
+- card_id: the_swell_of_strength
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: the_swell_of_strength.jpg
+    sha256: 5b01d29728ca32289676899ca8d4266b26516853466381d01a135e62c96c4f57
+- card_id: thick_marsh
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: thick_marsh.jpg
+    sha256: bed8d64b4203152aa74c5cde0d87bd22b005036511a15c2b6a79c5779defc21a
+- card_id: togashi_rikyou
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: togashi_rikyou.jpg
+    sha256: da0d465cd5f6dfac169ca6ecc2db91e808ff261259b4ed76f888d9151dba16b8
+- card_id: tokiko_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: tokiko_experienced.jpg
+    sha256: 4b81e33a20c89c39faac3a7967efa9652472f5f884fbae24c3d02a34dc8f6065
+- card_id: too_much_for_mortals
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: too_much_for_mortals.jpg
+    sha256: 7220b9204352a7570914c12b1f97e11313924b38e1ed24fa78d79449d85c7be5
+- card_id: tsuruchi_shichiro
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: tsuruchi_shichiro.jpg
+    sha256: 17aa488b969edb0e99f3701aea86bb43d46f925a1e5347c8508e167b3c1c85fb
+- card_id: tsuruchi_shigekazu
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: tsuruchi_shigekazu.jpg
+    sha256: 53bba23c3c36b5314117e6214fff31784816919a4273ef56d46b99edf706ec9b
+- card_id: tsuruchi_tomaru_experienced
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: tsuruchi_tomaru_experienced.jpg
+    sha256: 787fe87c468d9ab61c0c032b309ded724f9e9c57e012647f811d096df5d172e4
+- card_id: two_fronts
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: two_fronts.jpg
+    sha256: c106b899a797d30cf90889abff3dff57628c65607e0963a2a59cb1fe025f4315
+- card_id: unsafe_passage
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: unsafe_passage.jpg
+    sha256: c86d221b7508897721e26e6b328bb961481e87500dd6634984bc43b8984fd3ae
+- card_id: unstoppable_strike
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: unstoppable_strike.jpg
+    sha256: 869168d46020a246cdadd6be0de7490b6375ce5a44d8ce301835cbdc15211a71
+- card_id: utaku_lishan
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: utaku_lishan.jpg
+    sha256: 839edad1aba3be8be7fa722221138b1cbc41b05b187c5944351b5cae5733481d
+- card_id: village_raiders
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: village_raiders.jpg
+    sha256: 53cebe0c1a39910511ff857352f6a1c47c998167346b16cd5b5d6304e935f7b8
+- card_id: yasuki_makoto
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: yasuki_makoto.jpg
+    sha256: 4fd67c6a2b1f4e6d0845715c6818b57c5d5e6814ae60b5146943b6d0fed5029e
+- card_id: yojimbo_assemble
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: yojimbo_assemble.jpg
+    sha256: 6acaa97b7446fb49a855ff89c50fff2360cb05faa1ba7ef78afd5e7c0780081b
+- card_id: yoritomo_kanaye
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: yoritomo_kanaye.jpg
+    sha256: 613e4e112733bede39586f7df7c81bb41f04d37b5017c18d7b900258610b6399
+- card_id: you_are_unworthy
+  printing_id: embers_of_war
+  files:
+  - role: front
+    file: you_are_unworthy.jpg
+    sha256: 4c7910bacb26e8bb39d3506298984ed268f8d8e5adcef7f0e959e58295400667

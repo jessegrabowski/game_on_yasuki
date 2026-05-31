@@ -1,0 +1,974 @@
+set: Before the Dawn
+images:
+- card_id: a_champion_in_court
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: a_champion_in_court.jpg
+    sha256: fe328e48ef3b3dcd5fd00b434ba2a0620946b9cc3270766e1182dae4198c8f79
+- card_id: a_dragons_favor
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: a_dragons_favor.jpg
+    sha256: 9a87860f0f0bcc0c1ced9129e41afe6f705ab892fc4c0ae4abb56d7d1894d02b
+- card_id: a_gentle_word
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: a_gentle_word.jpg
+    sha256: 55ee716ffc8a93ece9655a6812005e9ee08f6869b50e23fa1d93c777f5bb5ac2
+- card_id: a_simple_yari
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: a_simple_yari.jpg
+    sha256: aacdd5fe7e2933c79f644278350789ce5e0c05c3061d9951d33267918dc1c11e
+- card_id: advance_warning
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: advance_warning.jpg
+    sha256: 10e0686d33a26e7c6d47ef0ac02957f40a930467945a46554343ccf5ddd9c604
+- card_id: akodo_ashiko
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: akodo_ashiko.jpg
+    sha256: 10e7d05d0fdb3275b5166d8481ef2b81f4475eacfb6b87116ebcc9c3460f7d65
+- card_id: akodo_kobi_experienced
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: akodo_kobi_experienced.jpg
+    sha256: 075c274cf6f18b4b5c7084dfd099313468ecb423d2b6e691c04f3cb35628fdcc
+- card_id: akodo_tezuka
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: akodo_tezuka.jpg
+    sha256: a7e859acbc9c1ee0243c558b3ae1427e040c24c654c998ef7b8bc58b8f0ca877
+- card_id: amazing_feat
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: amazing_feat.jpg
+    sha256: 6244de6cdba5a38194b4359ca88f295f555e935f8172e7b83d5e6f818e3571f3
+- card_id: anger_management
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: anger_management.jpg
+    sha256: a17f2462aaa59029fcaf71fa90b6ea850ba7964bbaa3a0186b5ec11df9bb8c59
+- card_id: asahina_nanae
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: asahina_nanae.jpg
+    sha256: c8cb6fdb38764cdbc0f1ce013a2b6abced38125b6e00b3079b7dbed9e62b20aa
+- card_id: asako_heiwa
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: asako_heiwa.jpg
+    sha256: 1a750eed28859c2b2ce4bae21b957c9dbd782c1751e82ff5e23cd5172f3b7feb
+- card_id: asako_izuna
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: asako_izuna.jpg
+    sha256: 6bc98e93d4189f7ff7025b7bd645185d5fd6a7770f7a38b1d997d1bff769b593
+- card_id: ascending_the_ranks
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: ascending_the_ranks.jpg
+    sha256: fad95c793979d993a6fccce38949aba8833dbebe458ff184d9b4b9329bdc095a
+- card_id: ashigaru_elite
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: ashigaru_elite.jpg
+    sha256: 573811c2cef5d990553e058b298a2c3cf918c788d0f314f8aa2ba25b901dfb03
+- card_id: ashigaru_recruits
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: ashigaru_recruits.jpg
+    sha256: 10f5202eb0d8c7a67aa261b288b0e0a653b937f204e5fc3de5d2db33a1227965
+- card_id: bayushi_ebara
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: bayushi_ebara.jpg
+    sha256: 73d7c4d9f961eac8c1a356ee0960f5b520eb9c316bdf0aa823bfd103a17c05e0
+- card_id: bayushi_shibata
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: bayushi_shibata.jpg
+    sha256: 7d25d8c4c44de8f9238b9520cead005540c45ab2951c406098ae371314f065a5
+- card_id: bayushi_suwabe
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: bayushi_suwabe.jpg
+    sha256: d36f3171ad02ad3a0c7b7307452f76b55a56996243b893c30f6cd0d2b9588247
+- card_id: beautiful_host
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: beautiful_host.jpg
+    sha256: ba08bda73e9a2ff381715a54e4dfbb1af7ce8cf4650e3f0db447e9d0aa438636
+- card_id: beyond_the_line
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: beyond_the_line.jpg
+    sha256: 2f16f2318f0fd3e5b26a8d61a1498a3c36d1ac1f08682f089856511188a0a9de
+- card_id: bird_of_prey
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: bird_of_prey.jpg
+    sha256: c7b2724e4ac3eec7b68e5d0f93a56b60324091a6d6347d02345cdf92cb7f544b
+- card_id: brothers_in_battle
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: brothers_in_battle.jpg
+    sha256: 2a3d3405e33bd737b53186f0e60771a7c9086fd6f96367dea2d15b7232b2eb92
+- card_id: brothers_of_goemon
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: brothers_of_goemon.jpg
+    sha256: 6047d0bd39b0e0d1a083c73bf150d4fdce42a9d15f438bb37f953e7ee36626c9
+- card_id: chuda_kiuchi
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: chuda_kiuchi.jpg
+    sha256: c0ad114d4b0a800d3e2872d31ec0b3c6798d1298fa348704747dd271a07b9a56
+- card_id: consuming_weakness
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: consuming_weakness.jpg
+    sha256: fe50e858f51fe17c6af17330d43237edd84f4514ad610aa54af7c6f78dff93d8
+- card_id: control_the_board
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: control_the_board.jpg
+    sha256: ba3ac4189b3f5c2ff0d6d00c4a476a342d077e22ea27c39ca9c43641b031e15f
+- card_id: crimson_shadow_armor
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: crimson_shadow_armor.jpg
+    sha256: b7f5a4781082aa5818feaf73c798921acf1c1e3de2a5e2ba17a236e35079c4a3
+- card_id: daidoji_masafuni
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: daidoji_masafuni.jpg
+    sha256: 64be25702b02bc4bc8ce295a6d14e5699d5cc12a42e1d2298206c292918edefa
+- card_id: daigotsu_bukaro
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: daigotsu_bukaro.jpg
+    sha256: f674d01c36ba0fd0f4b731f7c4353239aa9154304687062fd4cf62b018ada4e5
+- card_id: daigotsu_miki
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: daigotsu_miki.jpg
+    sha256: 765cca198947a7d8310d9c7c6efcebe898325503ee327eb2a893d3d45a47b0b4
+- card_id: daigotsu_yajinden_experienced_3
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: daigotsu_yajinden_experienced_3.jpg
+    sha256: 53edc33ce91996794033034025242ee9bc544c7d9b2bcaa9ba4dd7d13ecc6800
+- card_id: death_defeated
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: death_defeated.jpg
+    sha256: a7cb903ac51e0c4924f8d8e4db2a06e9b6258efa23c1d27174f41dfbef0d629a
+- card_id: defending_their_home
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: defending_their_home.jpg
+    sha256: c17b174a87bb7b0eda6d067725bdcc4232409e750b082cb397c576a2397ae17a
+- card_id: destructive_priorities
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: destructive_priorities.jpg
+    sha256: 2e331e81a0b661455aa5f27878bb6d0d44df5eeb1f0ab2bb0efdaee353713e69
+- card_id: detained
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: detained.jpg
+    sha256: a5e010d2e5470c64a9811c82c0454ba2a998ee15b2bdd1d7bc7000f710563796
+- card_id: disgraceful_conduct
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: disgraceful_conduct.jpg
+    sha256: 72b496301aa60872b0b82f7baf5f5063b5a59b2ee9c865e1d6adcbeed5c21ddd
+- card_id: dismissing_the_cur
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: dismissing_the_cur.jpg
+    sha256: 0af076898a6821952c7d5603c6d168239536563ec2a7907cece96946dec72996
+- card_id: disrupting_communication
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: disrupting_communication.jpg
+    sha256: b2d2952c18e96b64999a6d7e34b4f7b0eee11407bd51067b038cfbba40c7ec28
+- card_id: doji_shigeyuki
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: doji_shigeyuki.jpg
+    sha256: cd22ddb45dff38cd806ffba59c71e7e04e703f0c02711b96cad0118759e0a868
+- card_id: drawing_on_the_mountain
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: drawing_on_the_mountain.jpg
+    sha256: 2c3d9f7e4a63d37e4113bea1898e7830cb8d741e6cc051cb973260cd492d9603
+- card_id: ebisus_honesty
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: ebisus_honesty.jpg
+    sha256: 38cd18a1a3bde9d47b5830d0260bb87b58f11cbbb92e6169baf1bfe910a8f43b
+- card_id: embers_final_fire
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: embers_final_fire.jpg
+    sha256: e9f2dc25aef90ba94ef4708a13bdeff5a0ba33886d32ceadea33aaacc4cd96c7
+- card_id: enyou
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: enyou.jpg
+    sha256: b05902dd19dc3d866e71b372e67e78fa720eeb345bc5e1c408a3c73c926cc491
+- card_id: erosion
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: erosion.jpg
+    sha256: 409445ba68dff2fb2cf6d25de3ff1e03f685477f439ed35c88ac90f9761c7498
+- card_id: favors
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: favors.jpg
+    sha256: e97090519ca42cd80034b618df4b8e013968bddbed3bc892cee83d6783e6b738
+- card_id: fear_me
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: fear_me.jpg
+    sha256: c7143a40d0a23e5845dcf0e1dea0f0976e62a620fbe04f708b8eca8bb98c8d4a
+- card_id: firm_censure
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: firm_censure.jpg
+    sha256: b7281bbd0dc691849f21c14540e0b7553f78f0e36b9b49909227934d35814db0
+- card_id: fledgling_ashigaru
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: fledgling_ashigaru.jpg
+    sha256: 42e43741bba73177477323d3a2cffd0611b34e880960b76f35e338fd8cd4876e
+- card_id: forging_destiny
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: forging_destiny.jpg
+    sha256: 0e1aebab20d5125580c1ce2209fa80c7ec1dcddb66a3a4bba840e42cbb103a76
+- card_id: fury_of_a_mob
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: fury_of_a_mob.jpg
+    sha256: ba024dadf1ba70542b97deaa1ac2e11d76ef8881d8fdac8c9d31003143a81964
+- card_id: genjis_students
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: genjis_students.jpg
+    sha256: 9162378e0cc32ed6f9d4ec64493515ea143a871a61bee48a1199e88a16325132
+- card_id: goju_genin
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: goju_genin.jpg
+    sha256: 23e1cecd427966a646ed5841a55a8ce885aaa885e92c14b653dbe924fe404c79
+- card_id: goju_sawaki
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: goju_sawaki.jpg
+    sha256: 7f178ac3087decad3a0a556e30c24a65c6cffa858d1e0372fda7fa13cdf60db3
+- card_id: headbutt
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: headbutt.jpg
+    sha256: c1dac236ad1071f6fe01a6905f56daa63d71148bf70c834534642547f63a7709
+- card_id: hida_defenders
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: hida_defenders.jpg
+    sha256: e17686dfe347c4c77455eb16ea824c80da6b0cea290e990585afcbc7f8714d5f
+- card_id: hida_fujita
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: hida_fujita.jpg
+    sha256: ae9bd384ccf16e3e659fb39b881e0c2c46ee51d76048129c01cb81b02c82d708
+- card_id: hida_yamadera
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: hida_yamadera.jpg
+    sha256: 3a1caded2fbed409cc29fa287226d47c593a6075701b5d2407c8c4b7742191ae
+- card_id: hiruma_akio_experienced
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: hiruma_akio_experienced.jpg
+    sha256: 4bed0c9a48689ba38b66cf500ce1b9e3c721094e07a03fe817a89d8944ddedd0
+- card_id: horse_archers
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: horse_archers.jpg
+    sha256: 4d777965e9a484858364a15b4b42f5524bd000e3c17ee5fe83c92edca97ad4d8
+- card_id: hunger
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: hunger.jpg
+    sha256: c86e6d1b27d366bd4e4ddf6779e4f1ac02c055091a4adbcb41525adbfbc1f4ad
+- card_id: ikoma_ayumu
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: ikoma_ayumu.jpg
+    sha256: ccd53b0b0512c793a1ebef2b71f2a7078579ce89053bf589caf4ec9061726c82
+- card_id: ikoma_shinohara
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: ikoma_shinohara.jpg
+    sha256: 8c4bb76e7c87a5a58f55baebafbe2b109b56dd7efa43a8d747c31eea09f4b7c1
+- card_id: indomitable_home
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: indomitable_home.jpg
+    sha256: e365d41c7300b4a2a0bb0ac2082a952f30d396387841d9ffb5f57f6f65672f63
+- card_id: iron_will
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: iron_will.jpg
+    sha256: f2338e8a6e9b24661b20d866cf955fc9e054b7934123e9f678d31c6241f95a9c
+- card_id: isawa_kaname
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: isawa_kaname.jpg
+    sha256: 9fa7bbf90bcb7ed5dc2dfb0cbc705b395a6ebcbd729038326af14832ec151d11
+- card_id: isawa_sakonoko
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: isawa_sakonoko.jpg
+    sha256: bef87923b9c3bf96cf524b08039f990930ccce899c5277f10774bd8a77a230e7
+- card_id: iuchi_kota_experienced
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: iuchi_kota_experienced.jpg
+    sha256: 7eb72f576be4104730b088f9768b81ea446175c64b63080af331a215a9c64375
+- card_id: iuchi_yupadi
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: iuchi_yupadi.jpg
+    sha256: 28215de76ad3ff2772e543ffce3c226020459e96bb933e9abd1e50127448b0f4
+- card_id: kaiu_iemasa
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: kaiu_iemasa.jpg
+    sha256: 5ac9356f580a15311ad8e73c3110c7aabbae45b34d676534cc3fe802314b6659
+- card_id: kaiu_nakano
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: kaiu_nakano.jpg
+    sha256: 4002c2c9cd048a5ba244cf7373b4eb1113fd9287c567ba77400f1f3e6a14b214
+- card_id: kakita_munemori_experienced
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: kakita_munemori_experienced.jpg
+    sha256: 280c2ca8db1428e8c6edcf2aff4f4f3d76b4c8020adac857d723514d92c22edd
+- card_id: kakita_nara
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: kakita_nara.jpg
+    sha256: a78265b57e35f76b989c9397f7830d70e4bac0d8b941293b068dbdb2a5ff1b01
+- card_id: kakita_yasunori
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: kakita_yasunori.jpg
+    sha256: 2214ad9a9f4f0a613ca2410409eeaf17cfaca539ed91ae25fe1d2fb8609d9ddb
+- card_id: kitsuki_fujimura
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: kitsuki_fujimura.jpg
+    sha256: bbb0951149f2e3be8333dda6c1e251e5112797f214dec4d53c56069fa2b4403f
+- card_id: komori_taruko
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: komori_taruko.jpg
+    sha256: a0d1bb9f2d1e0008f05290c5fe4bce94b355b0b6b3e884e54df674d68ec0f030
+- card_id: kunji
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: kunji.jpg
+    sha256: febb311cd1896fcbf72cdc7efaa030c0f874eca260a5f2628e6e108b32d39d95
+- card_id: kyuden_hida_experienced
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: kyuden_hida_experienced.jpg
+    sha256: e1a2f06d1db81ad4a7c8e1b1b05fdadebf846515059edf09db02db3724432fbb
+- card_id: kyuden_hida_survivor
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: kyuden_hida_survivor.jpg
+    sha256: d2ccc0e6bfc213b7ef79d43699ca76cb7bb10d255f6c35555277258114904a82
+- card_id: matsu_kaido
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: matsu_kaido.jpg
+    sha256: 2b85ec64cd365bacade6a17e68ccaf399ed2601f10db57183d45ff4858dc0cfe
+- card_id: measure_of_devotion
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: measure_of_devotion.jpg
+    sha256: 26dad50bc55eaf136ab4413be87356df590660bfcfe0891d90bfc761a77c1a97
+- card_id: mirumoto_houken
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: mirumoto_houken.jpg
+    sha256: f546da31dde25dd23c26cc0a17bb9042d36116fbacbf438a0d6f76c9ffb82562
+- card_id: mirumoto_inokuchi
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: mirumoto_inokuchi.jpg
+    sha256: 1a0c2b84febe6e4475c56b88c981bf631c950c90b4b4a97109535f3ca02cc894
+- card_id: mirumoto_yozo_experienced
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: mirumoto_yozo_experienced.jpg
+    sha256: 52ae76e80c399e55e7e7c2f230424926f4a2e61474b5e3c81635a01777e25413
+- card_id: moshi_umiko
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: moshi_umiko.jpg
+    sha256: a194fb61a8f93041ab734cb9b3c184db9452acbeeeb45666d0a95e0b06fe0c59
+- card_id: moto_hailung
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: moto_hailung.jpg
+    sha256: d3244d8fcaf80bfb24fd7cc1e7d697d76e26908df12a7f1e6eca431b3093e4bd
+- card_id: necessary_evil
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: necessary_evil.jpg
+    sha256: 93b77bad0f3cb068a954191ea8f7a78f5aeb34fcf4eb1d529c23a9d142c844a5
+- card_id: never_enough_soldiers
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: never_enough_soldiers.jpg
+    sha256: 96c8daced62137cf08df9894468e1c1d79cdf8d0f99af822b77584c8397f33e9
+- card_id: nijugun
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: nijugun.jpg
+    sha256: 5d58a25995ef25cb5e47cf4de26d7b09cfccdf6488cee4dfdc182cff08a03af2
+- card_id: no_time_for_games
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: no_time_for_games.jpg
+    sha256: ff09877d0b1bbd61e111580ebc9ae4577c80feb2dc78973dedbca2210f66d01b
+- card_id: oathsworn_deathseeker
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: oathsworn_deathseeker.jpg
+    sha256: 5c43e7d5f30f447d3d07715d1269ac487a60ffb81aa72b2a56a984156afb6760
+- card_id: of_one_instant
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: of_one_instant.jpg
+    sha256: e089298e50bd8797b078dcec710dd9c05d9af9b3f1bbbc789556fdb4b8a391ae
+- card_id: omigawa
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: omigawa.jpg
+    sha256: 9a5bf4bc6a3918c23adb0d81b828c425dd9333ed3a98e6e03a2f2b66a1900112
+- card_id: one_action_two_strikes
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: one_action_two_strikes.jpg
+    sha256: 335827b83c75beb46accb16bceb817d6188b37cd5d6513a51e2b3a62550ed9ba
+- card_id: pride_of_the_hand
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: pride_of_the_hand.jpg
+    sha256: ecfc37e65774b614b3e845c5c552d15e3bc51a0274b34a73630fdad1d049d935
+- card_id: raido_no_oni
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: raido_no_oni.jpg
+    sha256: cca755e26d695e4d2d6c50ac31adfac762ced29497cba9b2ba4e329f7b66e022
+- card_id: readied_steel
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: readied_steel.jpg
+    sha256: f9c6e924cb0bd7f43b0e2dcce9a0474433647e192272e87ce50a95875a3920a8
+- card_id: reckless_rush
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: reckless_rush.jpg
+    sha256: 949d12323478b9e9ea56b641eebde7c863b2fc1229133f2e315c6ce4f953421c
+- card_id: record_of_failure
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: record_of_failure.jpg
+    sha256: 359f64359be5d9ee335e885204aa8e239ad3173c2137615d2d1112d5b9b26b3d
+- card_id: revenge
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: revenge.jpg
+    sha256: 887595149a7cd0d02aef3f92b329e015a59ac5ffca65de00ccfb8cf48f7bcf29
+- card_id: rocky_terrain
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: rocky_terrain.jpg
+    sha256: 9c82ba0430674ecdc4a6d74e6d48e6e43924658726651b59609990f95eea05fd
+- card_id: rumormonger
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: rumormonger.jpg
+    sha256: a1a4276b08696443bee768a3361078fb9a538848292473974eff653295069aa2
+- card_id: saibankans_justice
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: saibankans_justice.jpg
+    sha256: 7e26cedfb6436af853badc83548da8fea5d4d5c827f8245e587d033a510b6f7f
+- card_id: scars_of_war
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: scars_of_war.jpg
+    sha256: 021e4cb2b56138b506dca42ad2a0d2f4720e8bee375e33d12057b92cedab32f4
+- card_id: seaside_bazaar
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: seaside_bazaar.jpg
+    sha256: 63eb5573be0fe5b108d8ff3e45ba8796104dc33d946892ec8285f696c2524d08
+- card_id: seek_the_stain
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: seek_the_stain.jpg
+    sha256: 5f5aacec8cec959116cbbfc3734bffc540f28b3490b9489fd4309b32cb2f1e12
+- card_id: shadow_tactics
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: shadow_tactics.jpg
+    sha256: 050dc4619c4d28fd707f3019807a94fd5139c04a7c0b9231280921e3ea939d13
+- card_id: shamate_keep
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: shamate_keep.jpg
+    sha256: f30f5f0f2cb48908b2e702ec2ce39f110b30ae12a635d53bde4d28c126ac5d2c
+- card_id: shiba_jouta_experienced
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: shiba_jouta_experienced.jpg
+    sha256: d8b70463e3eef82e02de37f1b9e8c424a1117d2a3d937c8fcf3e98bf0d004f0a
+- card_id: shiba_ryuba
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: shiba_ryuba.jpg
+    sha256: c7dbc89fc32c1f94f3452af743039be557c69f4fe98a5ee9ce554cf2ff593770
+- card_id: shinjo_byung
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: shinjo_byung.jpg
+    sha256: 338e0d596e7d8f25427fd766e00366799ab86d225e7762448c61e2af066e4ff0
+- card_id: shinjo_dak_ho
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: shinjo_dak_ho.jpg
+    sha256: 21b6849f58a48c818bff33e4fe8d6b74cb40f6e841457bea57439bb1277292e7
+- card_id: shosuro_toson_experienced_2
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: shosuro_toson_experienced_2.jpg
+    sha256: 877746a9d6676bd31f8c7d8824ff63cee98f7b037d51e928c553c7391e21619f
+- card_id: shosuro_tsuji
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: shosuro_tsuji.jpg
+    sha256: 81817bd8a6d82c690994fcf5880e6535d1a9526ca86d597ed0803415ddf32cf2
+- card_id: show_of_restraint
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: show_of_restraint.jpg
+    sha256: b45c07da3cf8e0edf463d7a46f9c1e61665b3757ca2c19261be540e6527f773a
+- card_id: sly_deceiver
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: sly_deceiver.jpg
+    sha256: 544cb1803deb6fcb530953a18bcbe2a5953d42d7553cce80a0be86b3130c71f6
+- card_id: soshi_komiko
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: soshi_komiko.jpg
+    sha256: 5a3391b554806cdc7c495c0a031428dfaef77796bb6188883e2c85091e70084b
+- card_id: spirit_of_the_blade
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: spirit_of_the_blade.jpg
+    sha256: e888b0df845f591c39a896f6d5f7c431d14f8002b3b5ba213a2b491097ecc902
+- card_id: spirit_of_the_shadows
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: spirit_of_the_shadows.jpg
+    sha256: a9957816af7830a92876b6a3aa3bfb648ed957486e7c80d21bfa0d8b98d19c97
+- card_id: spirit_of_the_truth
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: spirit_of_the_truth.jpg
+    sha256: a1901d50c3d0819d925b746c5b6996498a81c063025c38bb2782ca60aa1c44b1
+- card_id: spirit_of_the_warrior
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: spirit_of_the_warrior.jpg
+    sha256: 675f2d58f931943dce52b0cae3578fca94b07788f05d3c459071f8fccdac80da
+- card_id: stockpiled_resources
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: stockpiled_resources.jpg
+    sha256: 1a2bcda2bc83a5eb1450152f12b8de53df1ac111737e3df8e2ea77d0cc64c46c
+- card_id: stolen_merchandise
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: stolen_merchandise.jpg
+    sha256: 27439cd80840aa32075e471d8140e288f55dce6a5d1df16bf109598c0a4cd0c4
+- card_id: stone_hewed_shrine
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: stone_hewed_shrine.jpg
+    sha256: e4bbe83a652a77d1a02b2c4780b1288a31f8638b0c3df56bf86cc37331d31742
+- card_id: strength_of_the_mountain
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: strength_of_the_mountain.jpg
+    sha256: c690b5bc86f092ffb3e4e4abbca98306962e3054d2f6a596cdebb4a719befec7
+- card_id: string_of_victories
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: string_of_victories.jpg
+    sha256: 978541be3f0def87908155260bd1cbdcc54ea88a5ba167fa99a6570797487112
+- card_id: taishuu_experienced
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: taishuu_experienced.jpg
+    sha256: 2d9eedc3a6bf8bacc9cd2287ec40bcff37cd141b9c11fddc9a6732dd9d6189bf
+- card_id: takayuki
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: takayuki.jpg
+    sha256: aeb98bdecb6410616afe8e6cb61d8cbfc96db786d5f7dfb5fff29a4909898ce8
+- card_id: tamori_shosei
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: tamori_shosei.jpg
+    sha256: 7bad58f8f5f678acc390665a564f734402d10d54b8308bde6f13e9cee4e47e96
+- card_id: temple_of_purity
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: temple_of_purity.jpg
+    sha256: 06485718c8af5a08c204f5afc2b8dc308d4076b26f195455f237192ef5056901
+- card_id: temple_of_the_seven_fortunes
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: temple_of_the_seven_fortunes.jpg
+    sha256: c149bf6b6877282181b00acc79523f65f44ea2e0e8e118a354ccc6343f2cb1b2
+- card_id: the_agony_of_her_gaze
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_agony_of_her_gaze.jpg
+    sha256: 7a19dc5670e3b90041f8eee8d9561eb65e37e9f50fdc87febac59aee85fc9a44
+- card_id: the_crimson_mark
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_crimson_mark.jpg
+    sha256: dc4a23a57e10ca1bbcb9771c268178f4a4ac8bb89d3737d1fc5f5228278cba39
+- card_id: the_great_death
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_great_death.jpg
+    sha256: 1c49c5a68d48bf8bf1d1dfae8198f9c27087e659544df4732ad36c946a6ea50e
+- card_id: the_killing_grounds
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_killing_grounds.jpg
+    sha256: 87b726074162e806aff427dc03d1993ea7f831231d477c7b1a281f02596fbc4b
+- card_id: the_price_of_honor
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_price_of_honor.jpg
+    sha256: 8da601a293908864d22a69149fabaf35275bfd9a88ebbbd344132021b7c57af1
+- card_id: the_red_hunger
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_red_hunger.jpg
+    sha256: c85971bfb6978608f82f35a5e99864727d5d58f3f0cfe5efc264792928791c9f
+- card_id: the_second_feint
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_second_feint.jpg
+    sha256: 0c99e308a8d8ab67abf9f06839753c0fd88d755443b325fdc018ae19bc23626e
+- card_id: the_sound_of_thunder
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_sound_of_thunder.jpg
+    sha256: 3e3678f63116f51bbac334cbf492f815a8b33b5d8ad24ba78aba9add022a6c66
+- card_id: the_spirit_of_knowledge
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_spirit_of_knowledge.jpg
+    sha256: 09ea7a332844c12cc9aa417126e86900a0b874297ad266e0bb8f3f77d912a89f
+- card_id: the_tapestry_perceived
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_tapestry_perceived.jpg
+    sha256: 10f17f1aac347c4eca083535652e27ce97399cd000e48d00023144fd1afaacd9
+- card_id: the_world_disappears
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: the_world_disappears.jpg
+    sha256: f5ad3013297a23d69b9dcc43d23fee72dea3968dd8d13b8184309e0bda632a95
+- card_id: thoughts_of_wind
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: thoughts_of_wind.jpg
+    sha256: f40b711ab98d8b3cbcdf32d1f412cd2ab6e376297a7cc8e911ab70c32eb2b40d
+- card_id: togashi_sakata
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: togashi_sakata.jpg
+    sha256: a3491ae1cfad8bfc2d8fc06c7e8110796f27bdfb6f2adf0a553d5b7e2554e129
+- card_id: too_close_to_home
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: too_close_to_home.jpg
+    sha256: 0d471ced1d6fca1484ecfa676faa482136b7d9c251f8cc7fb9c6eee0872d1e9d
+- card_id: tsi_weapon
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: tsi_weapon.jpg
+    sha256: 45688d1e9c3b277522955ab6e4d653cd2f456936a80c78408bf47e2d4dcc6cde
+- card_id: tsubute
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: tsubute.jpg
+    sha256: 6b6380c99768365626f461733721185047af76968c7411cc4a6a3bd7620167eb
+- card_id: tsunami_tattoo
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: tsunami_tattoo.jpg
+    sha256: bfa4702b8048d53fa7d6ad509d6f6c626e7c41547c3555ed883588adcc7c9a19
+- card_id: tsuruchi_yashiro
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: tsuruchi_yashiro.jpg
+    sha256: 94fd8b13e143ffef7c84127215e196b1bdd3101a81a2f0e93db2a3dc216f4c4e
+- card_id: unorthodox_attack
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: unorthodox_attack.jpg
+    sha256: 92d00d5ef6643565d9bfc0368f51881c4e693a0436b149bec7daf6c20f7e84cd
+- card_id: utaku_eun_ju
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: utaku_eun_ju.jpg
+    sha256: f40c6738dc71cfcdfebf8ffff13a0b0cc66d79a11daa61a71db2a01f1d64b602
+- card_id: utaku_tairu_experienced
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: utaku_tairu_experienced.jpg
+    sha256: df1867fd9605354a0aef92a91f38a176b091f0ce00de2f07c2c07d380138a942
+- card_id: vigilant_riders
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: vigilant_riders.jpg
+    sha256: e29525f9a96741f6c0aedfac75aab7700626f856dff1d096e509db2725284011
+- card_id: visage_of_the_orochi
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: visage_of_the_orochi.jpg
+    sha256: b59467c47ac14ec8edad693c6dfd2a9135df1845a93b45f34fe94f7424a0c101
+- card_id: words_of_consecration
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: words_of_consecration.jpg
+    sha256: c2e892c81cf94a9538c71951a237b89684c7e0f4237fcd89304e73210f3db299
+- card_id: wrathful_dead
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: wrathful_dead.jpg
+    sha256: 88c2b94af8a5fb0c896ae76b251b52d43c16e3c8779b7d78535a4e4c498f885f
+- card_id: xijkt
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: xijkt.jpg
+    sha256: b9f8ad8349f04f9cf44ed7239b80c48b5870766a74c9e65bb40cf594001b974d
+- card_id: yasuki_dokansuto
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: yasuki_dokansuto.jpg
+    sha256: 958c10baae48f2eb417eb6455e0a2e248e35a2549efa38a3c7b22cdb14ffdb40
+- card_id: yoritomo_sachina_experienced
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: yoritomo_sachina_experienced.jpg
+    sha256: 1ad2b3a35c6d8c0ec3e7203c23e96685b0d784fdec705cca91a804230ab86160
+- card_id: yoritomo_singh_experienced_2
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: yoritomo_singh_experienced_2.jpg
+    sha256: 85c1b64c0740fca2460c64765cadfe139115d3863c600095efac1ed0e923da6b
+- card_id: yoritomo_tarao
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: yoritomo_tarao.jpg
+    sha256: 24844b9690d4172a5a19bf53ec39ffea93d0b1dea8c2f6d35df4abfb1fca36ff
+- card_id: yoritomo_zinan
+  printing_id: before_the_dawn
+  files:
+  - role: front
+    file: yoritomo_zinan.jpg
+    sha256: 371c5bd2a9636a574588b765479a75c88875be8b931e4b0ea102479668e3dbb4

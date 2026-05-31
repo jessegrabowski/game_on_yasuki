@@ -1,0 +1,2348 @@
+set: Twenty Festivals
+images:
+- card_id: a_lions_roar
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: a_lions_roar.jpg
+    sha256: 9fcbdfded83e978ec0ff9033515c3b6bfc5ec28175580f680fa826b8f28b9a63
+- card_id: a_new_year
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: a_new_year.jpg
+    sha256: 94eee24c0c478f0056d11fce05290ba1190f94d2b89d6a8f1eab1e0c8c63c482
+- card_id: a_samurais_soul
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: a_samurais_soul.jpg
+    sha256: 3df73d8a96c51bb98986418811e9615914b435656f8a6441f39586cf1aee1798
+- card_id: a_test_of_courage
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: a_test_of_courage.jpg
+    sha256: 619eed56f187691c619ddf4d72f8044b4c3ce99ebec09a8bf39fbcfb0ef7f408
+- card_id: a_warriors_brutality
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: a_warriors_brutality.jpg
+    sha256: eacde9f9fa52e249ce4ca690f3e0684bec73a0335a7061c5d0ea2aa47a548a5c
+- card_id: absolution
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: absolution.jpg
+    sha256: 767f9eb93bed282a7e496a5e324821bb7e24cb5b5d0dad405a6b7c1f36118d34
+- card_id: accessible_terrain
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: accessible_terrain.jpg
+    sha256: 7da5f57027bec606b1a6f8712a1a2c8b339ac5d0889b4e59d880c23cbbf4c776
+- card_id: agasha_shikeno
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: agasha_shikeno.jpg
+    sha256: d69aea0ddf780d9293caa8dc4649aacfa741188613614417db8daa72540b2536
+- card_id: agasha_tameko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: agasha_tameko.jpg
+    sha256: 1fd255321f02a2886381e2b32c22c68f7b1e1135026ece03653e5e42466d8a39
+- card_id: air_dragon_experienced_3
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: air_dragon_experienced_3.jpg
+    sha256: 7c9377793d4e8b87f59af0c043ee874325a0f542eef2a0685c8da6d71d711a1f
+- card_id: akodo_eirasu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: akodo_eirasu.jpg
+    sha256: ed7703854aee1859fa207de535cf21d67ffb09c57485428c4daaa7e0cc5cf1dd
+- card_id: akodo_hio
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: akodo_hio.jpg
+    sha256: 10e41c3f5b60c7b9da10bc57b8f2b524e5885a7e8dbd97864437d7fb0798e444
+- card_id: akodo_kenaro_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: akodo_kenaro_experienced.jpg
+    sha256: 0b707404c1eaa8408e7f09ba2fddbe30e36c399cb78c96e4a042711852123bbd
+- card_id: akodo_naikiru
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: akodo_naikiru.jpg
+    sha256: 84e9a1a7acc120dd373def530f89e20276b8d2079143d57c0d6ce59f3d589d8b
+- card_id: akodo_shaido
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: akodo_shaido.jpg
+    sha256: ca047256c1d493b8afb5896fed1adf60d949661824529837a3c4a9160e589832
+- card_id: akodo_taiketsu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: akodo_taiketsu.jpg
+    sha256: f77182411411673fb93cd553308ba79d56f25d6d2766f9d62806bdd2d19f2f85
+- card_id: alliance_threatened
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: alliance_threatened.jpg
+    sha256: 75b85f34e94062e7455bf6f6b8849b5bf968a8aac053c7c32556d57a2d76d5d6
+- card_id: amoral_wave_men
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: amoral_wave_men.jpg
+    sha256: 42d77d3cefaef9ec3eddc6f5e449521d866c06909c9315f71cfe687d2553c044
+- card_id: an_act_of_disdain
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: an_act_of_disdain.jpg
+    sha256: 65133c121dae1bf352038a494ce604396a96b9caa689618bfdaf6d748911e69c
+- card_id: armor_of_the_emperor
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: armor_of_the_emperor.jpg
+    sha256: 39f7dfb227eb2aa25a54843891d25a915ecc17a5c5c4e33b218c5e9d5e44a3bf
+- card_id: aroru_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: aroru_sensei.jpg
+    sha256: 109080b15a6cc466e5378a44f2df38c2f1375f1580ef4b7ddca70d152af1ecc5
+- card_id: art_of_the_iai
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: art_of_the_iai.jpg
+    sha256: 463d284b35c144bd078e166c158e73e568adff85c7bdc4de770fdf51cabd6fda
+- card_id: asahina_hirakane
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: asahina_hirakane.jpg
+    sha256: 5d0e65b3525e8b1b8fbe0b775118f7938a27ad9e949ccd37cb3d2d3535c2c0a7
+- card_id: asako_hiribe
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: asako_hiribe.jpg
+    sha256: 78336d9c75a5a0f943805abe890b33682bfdf8c333c7115a4f34533b467e39de
+- card_id: asako_misora
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: asako_misora.jpg
+    sha256: 218a22d597fafbbc38343a145a4478ffaebf32557e2cd0b7ce8d0f43ef4efca6
+- card_id: asako_tsunefusa_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: asako_tsunefusa_experienced.jpg
+    sha256: d295786ee70c81f25c59b3003647a4b4aab20dd58ea5ae1c0d554b74a7b75bdf
+- card_id: ashigaru_archers
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ashigaru_archers.jpg
+    sha256: aeaa3ee8a07ba0659ae7a4316357149b69edcc512b25a3fc496c25f2cf13744c
+- card_id: assassins_strike
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: assassins_strike.jpg
+    sha256: e26ad888c1b8b31c14ff0836a82de890409becd752463a68e09085f309598515
+- card_id: awed_witness
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: awed_witness.jpg
+    sha256: f9d4ab5fe2377ebd98e85b7b88354e2155f529b21120d628a64c08d851c55087
+- card_id: balance_in_nothingness
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: balance_in_nothingness.jpg
+    sha256: aaf4a1a71023a1a51fbec99d708a966abaa5556e8b8f938b2942823b43f3fb43
+- card_id: band_of_brothers
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: band_of_brothers.jpg
+    sha256: 759d9f811ed471d338d4caa7583112cb4c2ac13fddf12d3b6e8a77daf2202a69
+- card_id: banzai
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: banzai.jpg
+    sha256: 50554a656b78374f2d2eabe223c87cb85c4bbf15103b0e1f651e6213f72b8c52
+- card_id: bayushi_aibako
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: bayushi_aibako.jpg
+    sha256: f6d205919064775d978ab72b4018ad63d83303bdb54ba47d96632ae17b86592b
+- card_id: bayushi_junko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: bayushi_junko.jpg
+    sha256: fe67845e35882f187990f1b84788d3eeba0c5c345cbb9ba38936d90ee11231e7
+- card_id: bayushi_katsue
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: bayushi_katsue.jpg
+    sha256: dec7940a4038220182194f3d18d19ebafc764e68e42a8d97359062900f38a33a
+- card_id: bayushi_manora
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: bayushi_manora.jpg
+    sha256: 863284924dd1d7536b2398321fafe1498afdb0936dac2f3c962c053145671430
+- card_id: bayushi_mifuyu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: bayushi_mifuyu.jpg
+    sha256: ce8e71475d5560d01f6e915038097fa8cfc00054e59c45121a6373d0847c2951
+- card_id: bayushi_saikaku
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: bayushi_saikaku.jpg
+    sha256: 0f1bb2a1f1ab445603fdbf799550b807a4b63f33187b91a49465c07f7f91641a
+- card_id: bayushi_sunetsu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: bayushi_sunetsu.jpg
+    sha256: 0239349fe67d5a580156f008990833fe9dda0971773ed0994883163766d0f92f
+- card_id: bayushi_toshimo_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: bayushi_toshimo_experienced.jpg
+    sha256: 6571be1bbf1460a59e972daa2ba8ff61556bfb197c5e0ab814bb6e2c51f9849d
+- card_id: beautiful_host
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: beautiful_host.jpg
+    sha256: 64f10c9afeaa40109c7f51c0cbabae17f986605415e206271fb88479d3299237
+- card_id: bisento
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: bisento.jpg
+    sha256: 2fcc32274964218cb299f9860186f500f756b8664ef614e42592e323b741a8aa
+- card_id: blessed_dojo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: blessed_dojo.jpg
+    sha256: 6eb7046b68d4eb13121d7e4830eb641e0de9988907ba12576e00814d9c25c22a
+- card_id: blessed_herbalist
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: blessed_herbalist.jpg
+    sha256: 70440221d4abf5043da6012e89b0d5b78cebf7932282bd0dc02a5bd4543ccf27
+- card_id: brazen_challenge
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: brazen_challenge.jpg
+    sha256: 07979eca870a1bc06600435b2f158f9afe264152f3636ae230b6924d0f92c3d2
+- card_id: breaking_the_rhythm
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: breaking_the_rhythm.jpg
+    sha256: 0c13b73815c5b36707f97cd56ad5f8ae9cb9726df62eab0390a0311f54d71394
+- card_id: bridging_the_gap
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: bridging_the_gap.jpg
+    sha256: f2329fd945a1ffa5463ec5a58ce05dc9fca1b6a0b991d0beed166b4e23c19edd
+- card_id: brush_the_arrow_aside
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: brush_the_arrow_aside.jpg
+    sha256: a550b45d45e02fd0defe326ce8cd227ac1c935f5e140adf2fdef429d92212621
+- card_id: building_contract
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: building_contract.jpg
+    sha256: 082a86c0781c8eea4aa26a28cb7159d1b1d1c331bb51c54fccfac19428c8df81
+- card_id: camel_mounts
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: camel_mounts.jpg
+    sha256: 721c96e13cb194c51a3e1796a6f4eb78ced590ba42a39ef3331116362023769d
+- card_id: chaldera
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: chaldera.jpg
+    sha256: cb7e07fc56f524598735427210dde4dcd499998db187437835ed36da3ac3f38c
+- card_id: chukage_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: chukage_sensei.jpg
+    sha256: 9c6dbcaf5686d543d9fac40033acb6778e2ecb47852fd625497dc68011aa794d
+- card_id: chuuna_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: chuuna_sensei.jpg
+    sha256: 801b538bf6f7ecc07e4a00fdb80f3c55bfe2953c1077c2efa596aeb12f5969a7
+- card_id: civil_discussion
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: civil_discussion.jpg
+    sha256: 97cf8d95bc8180fcb5fd56b115fd784b1f336690fa7051d52f2fac93bf61f2bb
+- card_id: clash_of_blades
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: clash_of_blades.jpg
+    sha256: 029a8bb8ea694445beeacdee13ff53d215cb00a985f2af2b2bb6e671d06111c5
+- card_id: coastal_pearl_bed
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: coastal_pearl_bed.jpg
+    sha256: b2bc93249b7959c356ff7f5b7bca0b182212c554a852ccb42f6c2343942f11fb
+- card_id: colonial_temple
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: colonial_temple.jpg
+    sha256: a237a58789e6ae54477c76e1e7ef086561204e3c6ae7a64e464a534893ce5e43
+- card_id: concealed_archers
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: concealed_archers.jpg
+    sha256: de8454fa906cb652d9d9ee323c3c1dade132cf1db171b26e5e3b9ea56685b964
+- card_id: conflagration
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: conflagration.jpg
+    sha256: d598e74fda50e4d0a4078d7ed7e5f668898f97927f9afa541decaf1585657967
+- card_id: conscript_farmer
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: conscript_farmer.jpg
+    sha256: 593496d11589839222717d2e395da4bfe6bbced6be59f039dcd628a3b03aad30
+- card_id: conservation
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: conservation.jpg
+    sha256: f868b168ed66aff556183d06a14e9af1b4dbe032761c87794ff15326857e5a93
+- card_id: control
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: control.jpg
+    sha256: 912f797073c9a44dbfcd13d56b5fe9f90c59e54e423e95bdc1a0310a16522108
+- card_id: daidoji_hiroteru
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: daidoji_hiroteru.jpg
+    sha256: f5734b32b425777e133104a86db34884bfcbd7334bb5068ab0d746328223e7e2
+- card_id: daidoji_taenaru
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: daidoji_taenaru.jpg
+    sha256: a3135b83c40702ac5e1c28317d7b95d10d3b0e3d0837d69a28c219b87b3a584e
+- card_id: daigo_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: daigo_sensei.jpg
+    sha256: d4f1ba2f8de5ebf74075f607d47b10cc1af39272a1228575747d594d2fac7396
+- card_id: daigotsu_atsushi_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: daigotsu_atsushi_experienced.jpg
+    sha256: f53536840f60fc8f8e3427dabc305dd7664e3d3bff119c4a2b9ebf617f3d9f06
+- card_id: daigotsu_hachiko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: daigotsu_hachiko.jpg
+    sha256: 9c4b02cc0ac6079a83b10e071e9e6abd81156c5959ac39693bb4bf648a714ca1
+- card_id: daigotsu_hayigi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: daigotsu_hayigi.jpg
+    sha256: 315c77267b3029245ada3d4f44c58e74eb9a8d9c764618130e3cbc8a2e509b6c
+- card_id: daigotsu_kendo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: daigotsu_kendo.jpg
+    sha256: e63fa4a069275aee26f83ce2d58e7376f1f2c65d9131b63102d8ba6c06442e4f
+- card_id: daigotsu_ryuko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: daigotsu_ryuko.jpg
+    sha256: 73e00589b3e8792731cca8fc54bf59952713ec9eb4176333b2261a90797be983
+- card_id: daigotsu_shaoru
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: daigotsu_shaoru.jpg
+    sha256: a626c23c581ffaf96ac54504eeebf8f602c5644900bc786bd05f8fa3f58ee3f8
+- card_id: daigotsu_zenshi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: daigotsu_zenshi.jpg
+    sha256: bfa2472ad18f03df1042f7b7e6d3b4a48ac89c434dcc79fce9853b8f3aa74234
+- card_id: death_of_the_winds
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: death_of_the_winds.jpg
+    sha256: 4f6f17d97b6156d8b24aa9e4735ea5b953ee5d18b17a72c47a0b0b6cb0d1ecc1
+- card_id: defend_your_honor
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: defend_your_honor.jpg
+    sha256: f0c602100c9660d6670be6022fd177bad8274066ecb36ba539d83f690a41bc3a
+- card_id: defenses
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: defenses.jpg
+    sha256: 0a2baa8e4451d457423f1cdc452c36af3a7704107d2c629bd4afa8e3c6315d4f
+- card_id: defensive_technique
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: defensive_technique.jpg
+    sha256: ab28a3117c09868057b14f89feda8667432044f57922b91e956a6d1304b4a1e3
+- card_id: desperate_sacrifice
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: desperate_sacrifice.jpg
+    sha256: d7fe8e06f53b0cc8dadaef2ab119260533d725fbbc9f5ddb3a232b43d253e4f3
+- card_id: dijuro_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: dijuro_sensei.jpg
+    sha256: e4e11776626c34a65b282c056fa2927eb19206b12ffd5485d9b988fe2d5ea319
+- card_id: diligent_care
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: diligent_care.jpg
+    sha256: 848d6ef960d03f07d5f79cf24b6e5467ac84815c7a826b2653a86bc21f85deb0
+- card_id: diplomatic_apprentice
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: diplomatic_apprentice.jpg
+    sha256: 5d2afbc703387a178ba0d3e7e99f63e3472d464fe6a0abb3dd2f89299e74f6ad
+- card_id: directing_the_battle
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: directing_the_battle.jpg
+    sha256: 716e7de69bcb8290dbb5945fde58e4014ff9823256fa2beb266780ee9316316a
+- card_id: distracted_sentries
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: distracted_sentries.jpg
+    sha256: 13a6677dd2944fd7b568649f1e54ee052f3295ca0331773d68c2aad470bd619e
+- card_id: divide_into_ash
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: divide_into_ash.jpg
+    sha256: 4d4aa75d18ddc932c4afc2a4433e763c8655814f1e61a7000c7cc639a8ee4479
+- card_id: doji_masachika
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: doji_masachika.jpg
+    sha256: 2979665a603d4008fcb00c33bb7390084b3de559a67aad8a227bed53b9215c51
+- card_id: doji_norime
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: doji_norime.jpg
+    sha256: 11b1d9278c6ad6e22f5b280381274b8c515e2c478608a7674ac73e07550c421f
+- card_id: doji_senkiku
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: doji_senkiku.jpg
+    sha256: 717808814823e438ab4c4467942642db656c5714afa17bb631e1d0d9b7d81fab
+- card_id: doji_tashihime
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: doji_tashihime.jpg
+    sha256: 6ea58e1eadd9e7e12017748b5984d70792edf35a79e8000e4091bed14bc9ff9b
+- card_id: earth_dragon_experienced_2
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: earth_dragon_experienced_2.jpg
+    sha256: 90fead823d385f9daa72f470d7d49c69c9753dca14f4c761c16ab2cf2d001aee
+- card_id: earths_embrace
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: earths_embrace.jpg
+    sha256: 276e8ae9a946a23541d517f3786d015bef4a5fd5783cae9a50ed5ff2d4debf15
+- card_id: elemental_library
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: elemental_library.jpg
+    sha256: 7dc39041a67e119910266903a15d616d2ffbc3f575b19feb74364fdd63975a4e
+- card_id: elite_spearmen
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: elite_spearmen.jpg
+    sha256: d9c855cdbce156600039da3dc283b894db8a2f813a163fc1f52c5721f20dbf8e
+- card_id: enlistment
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: enlistment.jpg
+    sha256: 890eb0ab6468edba220ed5aa642f10ebc53a37d808dd17e114ad6160e84cbe28
+- card_id: enomoto
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: enomoto.jpg
+    sha256: b981dd5644e203f236a4a2d41e1369a886f64e5eee6023b2600648ba9b14dcf0
+- card_id: enslaved_djinn
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: enslaved_djinn.jpg
+    sha256: f39e3e013bf153260a3246273e3ebcc43f518e66a5fba19c6bbaf3c313ac3eb2
+- card_id: eternal_armor
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: eternal_armor.jpg
+    sha256: 54442cf75fe2c68380cd7112f910813a89a611223e04ff7ef447df1ec9787d2a
+- card_id: explored_territory
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: explored_territory.jpg
+    sha256: bdb6a2f467cb3613e00afe4864d6d6fb154677a3c6addd3fa0e447ef5a492111
+- card_id: faceless
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: faceless.jpg
+    sha256: c5cad0aaa0fa9a3d2a06dde73b825c0ab78cd8886f8a74e9b6f0f1be21b13cff
+- card_id: false_trail
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: false_trail.jpg
+    sha256: 2b0a5f5c07a52fef0ca42e8a45ac5cebef1b8568c61fc00e39347f240e0678de
+- card_id: farmers_kama
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: farmers_kama.jpg
+    sha256: b45430c285bbeef706d3e4717646ce4385a8c37964ac009a8a361d335227da2f
+- card_id: favor_of_the_air_spirits
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: favor_of_the_air_spirits.jpg
+    sha256: 55497033e0c18553b4b39b34886f24c7b0170bb62a15c7a12b17711ef1198ba5
+- card_id: fearless_heavy_cavalry
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fearless_heavy_cavalry.jpg
+    sha256: 07b01b1d469421e5c06398ff4f7d795736872ad6a2958da1e7f757c6dcfdea81
+- card_id: fearless_heavy_infantry
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fearless_heavy_infantry.jpg
+    sha256: 299d6018549d635e7ee6d6460a2c166a581a43f5ddf71987c1ed47a52a2980ad
+- card_id: fearless_light_cavalry
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fearless_light_cavalry.jpg
+    sha256: 18cff078a0bcea651a88033daa0fb924baad0cb2c18f471a57ec86b37cc6e5af
+- card_id: fearless_light_infantry
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fearless_light_infantry.jpg
+    sha256: e32a8b1ee4403d96c4b3f56f9557acc9e0fba547f70a6c01c5a26e7da9164a98
+- card_id: fearless_medium_cavalry
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fearless_medium_cavalry.jpg
+    sha256: 50fd7529baee768e7206d9f722afdc1077df8be2b709dded598da911714f54c5
+- card_id: fearless_medium_infantry
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fearless_medium_infantry.jpg
+    sha256: 3247f7c0669512f139b8c149c3d1df99e942bc4782b4b0401b664f35ccdc963b
+- card_id: feign_death
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: feign_death.jpg
+    sha256: 81129359f4778c5263895f5b7988443b77f14272bc3793513901d29494d29664
+- card_id: feinting_maneuver
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: feinting_maneuver.jpg
+    sha256: 46c7c82a15b6506556ae46988ec8c53226eb937e9b60eb0db24862e5ba41408b
+- card_id: fire_dragon_experienced_3
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fire_dragon_experienced_3.jpg
+    sha256: 375a93edfac15acab0c7dab9253942b4a7e880a3cee2373b478f38ce3ff37fc4
+- card_id: fist_of_the_earth
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fist_of_the_earth.jpg
+    sha256: 1cfb6cce7e098cf942aea09c16490a0b77311d541618a28c9d379de5e06b61ea
+- card_id: forest_kitsune
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: forest_kitsune.jpg
+    sha256: 9116454e4daaaa0e0ffad70deff65c4a176b7203a1362adecdb8c3fadd141102
+- card_id: forgotten_legacy_2
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: forgotten_legacy_2.jpg
+    sha256: e9a76893a800999e29eebf9097d7317f90e38dba8f200264331acd96ee48df96
+- card_id: fortified_docks
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fortified_docks.jpg
+    sha256: 895f0b791461819880e65063970c127d20420cbf5f30e8687e7c02dc82ea471d
+- card_id: forward_encampment
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: forward_encampment.jpg
+    sha256: a16daebe9b5667b12ebc10a4cf9bc5be35e7c0d54d625a2ea74b6934334bcceb
+- card_id: front_rank_troops
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: front_rank_troops.jpg
+    sha256: 36a75016e285f64843988f9f312d513433fe1c91b8a9a8909ce180aeec8325f8
+- card_id: frozen_tomb
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: frozen_tomb.jpg
+    sha256: 257140251f1329cd723b922ec194afb4aeb06f85795f7fc6e633d955ca6876cb
+- card_id: fubatsu_blade
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fubatsu_blade.jpg
+    sha256: e661ea740734e002bf854906eafded7976c28819b0ffc1c37ddb7427e6ff0369
+- card_id: fudoist_temple
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fudoist_temple.jpg
+    sha256: 474680eae1e37b00f74efee9959db85fd7fc3eb886b62bd47c461b9c5e9107c2
+- card_id: fudoshi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fudoshi.jpg
+    sha256: bf9983374e6516c3d89a637fe37d580f2a2f66a938996ee27a238d8eab42e559
+- card_id: fushiki_no_oni
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: fushiki_no_oni.jpg
+    sha256: 9c8fb6192bda205d3e17f282024000aedef66414ada9fc0f58c78b274da4b65b
+- card_id: gaining_an_edge
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: gaining_an_edge.jpg
+    sha256: 0d8f048cfb92bc201b066e5607f3dd3d886aff5f95ce4601fbd8369a0056b4e1
+- card_id: gates_of_the_second_city
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: gates_of_the_second_city.jpg
+    sha256: 903e6db4d5fad6f289641834bbe4b018b81eadfe0072cfa22d96ac87c363d05e
+  - role: back
+    file: gates_of_the_second_city__back.jpg
+    sha256: ed97342de555356c251494c3eb9c22bc305be056241d3ac42f6dd88ccfe76b77
+- card_id: gempukku
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: gempukku.jpg
+    sha256: 636e44efdec54dd4f101839d0ff482d17033913ca713f2daf14b90b8a51be92e
+- card_id: genin
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: genin.jpg
+    sha256: 338ee49e3deecf27d99e08c2a7614d738c8bdc6d3e0c286fa4e6d75b7048e725
+- card_id: goblin_chuckers
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: goblin_chuckers.jpg
+    sha256: bb3892e21cfc759b43496cb83cf89cc5a879d60e528effe5e00595c563089a55
+- card_id: goblin_soldier
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: goblin_soldier.jpg
+    sha256: ce6070d85b2547e35163eb95c14f9380792719aa275b177dbab510dd4a647f6a
+- card_id: goju_kumoru
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: goju_kumoru.jpg
+    sha256: 018574e677c63f96290959fbdbfa1fb7647c38996c1c8771794f16d9062ccc1b
+- card_id: goju_mitsuru
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: goju_mitsuru.jpg
+    sha256: 6eff302d9ee6381ccd71f4dda6e75c850c12ab6ee1421990e4ef96235d09a9b4
+- card_id: goju_yurishi_experienced_2
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: goju_yurishi_experienced_2.jpg
+    sha256: e8b9286eb403607b3e85ab6eab52f3f8ac80f2cd87a73e5aa89a9c2a53d40cfb
+- card_id: grasp_the_swords
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: grasp_the_swords.jpg
+    sha256: e7f0c4b5b98f0035665cc02912e7f38a56bfb8552f987fb4489cbc28b69f24dc
+- card_id: gunso
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: gunso.jpg
+    sha256: 4707a2d2cfca5bd9f9095beab104a05778ae11f05504875f454caeeece9c7fde
+- card_id: haikitsu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: haikitsu.jpg
+    sha256: d421af0104b7a559964f30311db1b896478a4ddacc0c13e00184c97bb9fb8f37
+- card_id: hakuseki_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hakuseki_sensei.jpg
+    sha256: f5a0bc936a503d54f58b5ac409b577799663e4735b8f9c62833e9951c32a735f
+- card_id: heart_thunder
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: heart_thunder.jpg
+    sha256: 5d65419dbac6033ed5492695532be93acfdb633e836563ff7471a37c9a3f85eb
+- card_id: hida_iguchi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hida_iguchi.jpg
+    sha256: 177cc5886fe02fa71ed5b55634f872cb063c9c2a682741f221a45380acc7ddf7
+- card_id: hida_kurabi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hida_kurabi.jpg
+    sha256: 07bc444d5f8404c898bbc7471b2a67c4bdedd06f0eeb7d7c3082180322d037ab
+- card_id: hida_taisho
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hida_taisho.jpg
+    sha256: e53c7a4d0ae60ce3db47c25b22bd7d5578f748cbdac56cd6ed40104614da4271
+- card_id: hida_zaiburo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hida_zaiburo.jpg
+    sha256: 97ae7d185dab9fbab13d594dfac4cc563e0231bd175cf8e56f147ad259d140ea
+- card_id: hidden_reserves
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hidden_reserves.jpg
+    sha256: c302b635fcf1b7ae8067dab8ff1ce1e0503fb5c7e39cdff7a354cdcb4ba9880f
+- card_id: hidden_storehouse_of_house_rafiq
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hidden_storehouse_of_house_rafiq.jpg
+    sha256: 3d6c08846d1f9441d23bf99bf0df5e04db5f424e201a6a22f0e194e44414da92
+- card_id: hidden_strength
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hidden_strength.jpg
+    sha256: 3452045ef3da682ef8d8383c3adff7d887770520cf645bef83793fef7ff7fe63
+- card_id: hiruma_raikohime
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hiruma_raikohime.jpg
+    sha256: cda71a0d71709fd0f5b14560915776302f9b47ec586b2c1d3bc519ab3359d64f
+- card_id: hitomis_devotion
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hitomis_devotion.jpg
+    sha256: 3b1b6200e9e786873a13ab14d8ebe1feb81c6434969b8891b6f37577615ff324
+- card_id: hold_the_walls
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: hold_the_walls.jpg
+    sha256: fd64d3e47f0a0b8362f0568c3594487c3a90f5f0af9b98749381dd03c7f3f2bd
+- card_id: holding_cells
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: holding_cells.jpg
+    sha256: c5a3eb83c4914a81391c480c842b344904e4ebe0b4595ed4843438f4567b63dd
+- card_id: honored_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: honored_sensei.jpg
+    sha256: c262dc7a0c28ba1e39b12736585b33b6c7680dd34866b52f05a09a3383bcb537
+- card_id: ichiros_yumi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ichiros_yumi.jpg
+    sha256: d5a1c69ead3cc7d64bcf7e85505e66a941abc14bc0e4c615c893e607ed12a054
+- card_id: ikoma_noritsu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ikoma_noritsu.jpg
+    sha256: 5fb60d1ed025d50047f55e92023e6f2b120b984df1d1088fe31d427f826d3619
+- card_id: ikoma_sairei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ikoma_sairei.jpg
+    sha256: c286af5bf870d2dd87beff7784d5cfb4a9cdf479e57272cf6d7912f139aa236d
+- card_id: interference
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: interference.jpg
+    sha256: 3a057b91c580a5a8f6abbebd58b825d576298597c68912aa9c83b2154df2d2ba
+- card_id: into_the_wastes
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: into_the_wastes.jpg
+    sha256: 0a02f76714648958af22c51e7e2de791171a109a297796d3679ae06c4f68f2d6
+- card_id: iron_defenders
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: iron_defenders.jpg
+    sha256: a55521fd3e75cfddd234637fd91a885c1d05859693b69276b34d945e753dba7f
+- card_id: isawa_akime
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: isawa_akime.jpg
+    sha256: 46adac0c2418a6694d36fef60b6ae824dfd98de0308ea6089bf60b84450e702e
+- card_id: isawa_haruge
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: isawa_haruge.jpg
+    sha256: a8cdbc58569c564d57e5e26a4c66ecb015978543802e389acdd0e208608c26a2
+- card_id: isawa_ikariya
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: isawa_ikariya.jpg
+    sha256: 948999319879669984c71bdca1876dd93d26494b48ea7e1de50c337687c11ba9
+- card_id: isawa_kageharu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: isawa_kageharu.jpg
+    sha256: 85ce318a87bb5c73f4b4d1a94a0fc458d7abab56d06191a1d005acdc02e5b488
+- card_id: isawa_mochiko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: isawa_mochiko.jpg
+    sha256: bd60bdd2d7f44c0ad60c1a7334e6ef857454819a3fa9d88188e8bfc76c2a1eb1
+- card_id: isawa_nairuko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: isawa_nairuko.jpg
+    sha256: 1655a173835c9d502ce91b13513a9ff0f9c5336e3e2a6424701e113f6772c074
+- card_id: isawa_uzuyumi_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: isawa_uzuyumi_experienced.jpg
+    sha256: 859d611a99bd70994861c1f480a029c4445734b31f6778d6fed095d0a1064281
+- card_id: iuchi_daitoru
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: iuchi_daitoru.jpg
+    sha256: 874afd8441a4ef9fd929c0e8172764f0d96cdf345e2922c48209b6f8caab65af
+- card_id: ivory_magistrate_outpost
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ivory_magistrate_outpost.jpg
+    sha256: 58c6fbf18e4cf2de045cb54b79aa1b9348b50ed6e11b0e64a9d55905abb502de
+- card_id: jade_mine
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: jade_mine.jpg
+    sha256: 1aa06d2b49f8be4be7b20ee87f8d31e23cb5d21ab901fcfa6e323f86e1dd9115
+- card_id: jade_sun_disciple
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: jade_sun_disciple.jpg
+    sha256: 0dfeeb9e62a948912616cf0c023966769927f8d7c197f639b81b7fe59e5833f3
+- card_id: kaiu_built_defenses
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kaiu_built_defenses.jpg
+    sha256: 6db6912fcbd1096443b5271c1bf243e6b4064853c7ecc56bd4f6fad510ef03d2
+- card_id: kaiu_burei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kaiu_burei.jpg
+    sha256: 3c33ad2f33fa8712047f6f6ce88b6cba22c3879eeb37d4f8b0d56cbc89768204
+- card_id: kaiu_daikohime
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kaiu_daikohime.jpg
+    sha256: 6a779648b7e9b2478b53d33e20e0e16ccc3b80ce2aba8513d0a752c2f2f6bd2d
+- card_id: kaiu_gorobei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kaiu_gorobei.jpg
+    sha256: 66c1ea7c58a00a80fab74e18c70f2c0ad6ea8db1786d3e32b3d6482ea931408f
+- card_id: kaiu_watsuki_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kaiu_watsuki_experienced.jpg
+    sha256: 041ac068cfca3ae39640cfa2d93d50604cbf4f58144dc190c381c0230459e7ab
+- card_id: kakita_akitomo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kakita_akitomo.jpg
+    sha256: 71b33f07aca38a858cd924fc5f3496468dc345a65be39aba852e3f270d09d69b
+- card_id: kakita_hikai
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kakita_hikai.jpg
+    sha256: 46694d0420f8e5f3e1622fadeaf59cb0afbd7777038e04090eb7ab4290c03aa9
+- card_id: kakita_ikura
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kakita_ikura.jpg
+    sha256: 53d5e2ede3841de264f7e6241681f9aea407e0862b8c876e5ea80cd6f3930713
+- card_id: kakita_izumiko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kakita_izumiko.jpg
+    sha256: 6794690a75060354c82809ade2249c861b52076ac0e695f89c4ab0600dc5b31f
+- card_id: kakita_mitsumichi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kakita_mitsumichi.jpg
+    sha256: ed8a9dd98b6a7c15c757facbaa922f7d530d11763d321f48543ddb7a805d657b
+- card_id: kakita_ujirou_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kakita_ujirou_experienced.jpg
+    sha256: 10374272f5f873a013d5e0c8318ba9c7b8f4d9a1f65feb246afd80afd577d888
+- card_id: karo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: karo.jpg
+    sha256: 0d873522c683091bae3c65eed8fbba6bd3587ce7a9ddf3b1474054c9dde6f598
+- card_id: kemono
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kemono.jpg
+    sha256: 6bad1e9d41217f5fbd581d4ded384643a204b68e523aefae051b3e5f68db8165
+- card_id: kitsuki_einosuke
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kitsuki_einosuke.jpg
+    sha256: 4d9a5cc13d2aa9b8e31b4a38a33c919e1fba4de2397a88770b64cb72c7c85ff4
+- card_id: kitsuki_goichi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kitsuki_goichi.jpg
+    sha256: 4dab2b5a6d249cda1b8db3c6910a476a186688aa0b647025aa12d7b86471628d
+- card_id: kitsuki_masamitsu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kitsuki_masamitsu.jpg
+    sha256: 9ab3da377f72891e117c2452e60672e0276f8a78dcbeec9dd99db015304b693c
+- card_id: kiyoshis_wrath
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kiyoshis_wrath.jpg
+    sha256: 1a6f963298069faa226aecfa7e32e9f54e4defbde3317e87596809f4da839790
+- card_id: kiyoteru_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kiyoteru_sensei.jpg
+    sha256: 68c0166261334af742d83780a0e3c71fc8aaefb77d56af66338bc2c3e4af1a99
+- card_id: knife_in_the_darkness
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: knife_in_the_darkness.jpg
+    sha256: cddef73154bf649f49558a6abdfcd9aade6029d5e12cdbdfc7a71cde054fbfb8
+- card_id: kokujin_gunjao
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kokujin_gunjao.jpg
+    sha256: f7912736fca6f52e0292fc2a5c379412239a6771b95196640cf1513a6afcbb4b
+- card_id: kung_an
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kung_an.jpg
+    sha256: 265e23792364cf39d703137f77313a94f758e142506c01eaf45ca89659c3606d
+- card_id: kuni_chutsu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kuni_chutsu.jpg
+    sha256: bceff313c5df8292c61c17c045118fff0a3973dd79525d2f2d2a1b917906e937
+- card_id: kuni_harakibi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kuni_harakibi.jpg
+    sha256: 399f291931b7a6a804bbe457fddbe6d0e001887b595f4a88f5db93f5c1ec19e9
+- card_id: kuni_renyu_experienced_3
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kuni_renyu_experienced_3.jpg
+    sha256: 062f2ae402e58c1ba65e06f02f6df1b2806b4e3c173df615e2a40043bbb65538
+- card_id: kuni_yairao
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: kuni_yairao.jpg
+    sha256: 997945f14db03e26698f5df0931a895e854bafc7f654a3a30f6b513ead45a331
+- card_id: labor_crew
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: labor_crew.jpg
+    sha256: 585d19a524af6f44155c0c6f0aeedea5bb911f36843dcf88f92c59ebf75b40cb
+- card_id: lacquered_armor
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: lacquered_armor.jpg
+    sha256: ae04aea9f33f492cec6e8df3b2ad82aaa8d1eff312946fa940bae289962a5612
+- card_id: lakeside_retreat
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: lakeside_retreat.jpg
+    sha256: d90daea8df8717c9a4a3063bf3108a4b08d4fb7cd96c656032220983e7527fa1
+- card_id: lao_she
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: lao_she.jpg
+    sha256: a917a3e92ca41ba08647b42a24e3c4dc3ebfd09ab947cef3092113fd4f239880
+- card_id: legendary_victory
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: legendary_victory.jpg
+    sha256: 434806a0615925787ca0064b01633b2b73ac2b7a91a217ec77046476aae5e3cf
+- card_id: little_brother
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: little_brother.jpg
+    sha256: 0f5505f305c1ef75e1de03a4c607b37896412c194d2dda1d9976204dfcdf92db
+- card_id: lookout
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: lookout.jpg
+    sha256: 117d0bee2f0afeef35bdf9919f6b3dfe591b4e82ce62c3d86335d33ee93eab13
+- card_id: lookout_post
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: lookout_post.jpg
+    sha256: 57e0e0b780cac090813094059f419466906838b30bec921568888c738293c00d
+- card_id: lost_blade_of_the_maharaja
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: lost_blade_of_the_maharaja.jpg
+    sha256: e919e70300b5683f5a7f6038a2f94de303e1fd8bea6804c488ee63dffbeafcc9
+- card_id: lost_in_transit
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: lost_in_transit.jpg
+    sha256: f7063e48b1a5a243fef23858cca8daa41603566fd11698a93cb9e403c0adf6fe
+- card_id: mahatsu_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mahatsu_sensei.jpg
+    sha256: a0aa60a18459b0cb6d70107b96cc29d8811851472d4a53f04629255263465dd6
+- card_id: mark_of_heavens_favor
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mark_of_heavens_favor.jpg
+    sha256: 2a5f21efd6dada4af158d5cf97cc2382d5dc5dbdcb1687a671e4d1ff36e981d4
+- card_id: mastery_of_chikujo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mastery_of_chikujo.jpg
+    sha256: dd72701b1fc9a4b1df01872be2db214f1ca9b56c44beef3273dbcc38077b4310
+- card_id: matsu_ataruko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: matsu_ataruko.jpg
+    sha256: 37a8f9071c443ef4d61e54f5ab945717079184934880e6b7d9b59af37a33102b
+- card_id: matsu_chizuki
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: matsu_chizuki.jpg
+    sha256: fa43e074cbcadc082bbd253ec6e0afaaf0712e481ff6323bf28cefca76599839
+- card_id: matsu_iairimi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: matsu_iairimi.jpg
+    sha256: 61d715388278c64c73cda9a33c4bb333cb6a31581f026e425ea2bc330e926cb9
+- card_id: matsu_karoko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: matsu_karoko.jpg
+    sha256: 2eb176e13c5b5b44c7a999a6c0eecdbe1c11ee114f5205669ceca03776e4e81e
+- card_id: matsu_keiasu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: matsu_keiasu.jpg
+    sha256: 5937a735c8a94cab4443584c072e1610d44062c50d3d575b9debb1cef5b695de
+- card_id: matsu_seijuko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: matsu_seijuko.jpg
+    sha256: 96931a4e01281844ad9e9c80e5a1804ddd9fa534b5cd26131285b9861ec40ea4
+- card_id: mercantile_conflict
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mercantile_conflict.jpg
+    sha256: e084997e5261774cc14b57f7019af57578a97d962315fad41d4594d08da4c81d
+- card_id: mirumoto_akifumi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mirumoto_akifumi.jpg
+    sha256: 3e68c71302b5001299083c702e87be0009acf9ced647a26e2a67381fa9723ec7
+- card_id: mirumoto_eisuke
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mirumoto_eisuke.jpg
+    sha256: 76909ebb77328ba397a415198c301ea5f7cd47dce3b52da4269d00862668d2f6
+- card_id: mirumoto_rikiya
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mirumoto_rikiya.jpg
+    sha256: b53b4c6c9c0e87e8758817da8a07d1e39688b54031e9a46b91c1dabb195927c0
+- card_id: mirumoto_tsuda_emerald_champion_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mirumoto_tsuda_emerald_champion_experienced.jpg
+    sha256: 599d0a48d5b3cb262092a5fc2f99c420023bddc4bb3848c1ec1ad86b07a62c81
+- card_id: miryoku_no_shima
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: miryoku_no_shima.jpg
+    sha256: 9b3fd346dbc2e831a55d25263498738b5c320e48a9b2db5d6ea63d83ec067eb1
+- card_id: moshi_ikako_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: moshi_ikako_experienced.jpg
+    sha256: 5d60f65a48d4cfb62dc09613c056e623d79d0b1906531d3cc1892d128b4d88dd
+- card_id: moshi_karuiko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: moshi_karuiko.jpg
+    sha256: edba058f43bb868a41ac44f96d85d4f1063c14499b5fc3783f5b382e711d110f
+- card_id: moshi_yokohime
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: moshi_yokohime.jpg
+    sha256: 18eb4fa4c7894626d35f6ce169bae9cc449c924671ee4da514bdef56cd0e28ea
+- card_id: moto_aikenro
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: moto_aikenro.jpg
+    sha256: fab25d9209190ea70bca14d355a82f301b8c769512abea8fce4e053d56c2b546
+- card_id: moto_daigoro
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: moto_daigoro.jpg
+    sha256: d6e866d5ce6b6d3b993b172e69737695f95e23aabd75bc4fdd1a9691cec8d5af
+- card_id: moto_paikao
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: moto_paikao.jpg
+    sha256: 486452fb964aa730d027ec3337620ba33a332c53aedabe142d834145d9347010
+- card_id: moto_taigo_shogun_experienced_2
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: moto_taigo_shogun_experienced_2.jpg
+    sha256: cdf5f5b808ac1f25bdf4898bebc4f907865b7756736d69654de6eaf27bf21cd4
+- card_id: moto_yao_tsu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: moto_yao_tsu.jpg
+    sha256: fe7760f5865ebe07a71f9001022eeeab643116166c63e1fb96ea7725eff26743
+- card_id: moto_zaitsuta
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: moto_zaitsuta.jpg
+    sha256: 4d95b856f1e77385f524188db6f34c00e6e2d91e75d306576035b545b6079449
+- card_id: mounted_support
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mounted_support.jpg
+    sha256: d30cc63c7bc86d918ddde1c7007a62f15367a9f664bc60b02d2df3122b8ef61b
+- card_id: mutual_support
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mutual_support.jpg
+    sha256: 812b4d236a1078eb3a13a8eb1e1477241e75022311acbb1c3216a33730466bdb
+- card_id: mystic_dojo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: mystic_dojo.jpg
+    sha256: 37e1c38a4a1cfb98e99bfccf5e38826ef01b47c42eaac58594934f2bcf5b303a
+- card_id: naibu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: naibu.jpg
+    sha256: 663b1347695c2a3bfaf8c2bf145c3eb9a12b8ce9423b63d334aee6af30c1e8f9
+- card_id: needed_at_the_wall
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: needed_at_the_wall.jpg
+    sha256: 34e72cff56e7139f2364f1648e2f86f1093517e49a80109a1865540752be1790
+- card_id: nendo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: nendo.jpg
+    sha256: 9f05224a157c06345397be77a0a9bb6b63cba9639e0703a5a2ef556235301681
+- card_id: nexus_of_lies
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: nexus_of_lies.jpg
+    sha256: 2cbb8d74fc34bcc5c7fc776955ecbee262508db037cc845eb9a03dcece13859b
+- card_id: ninja_guards
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ninja_guards.jpg
+    sha256: d36dbf2cfebf4ac4929c7cfb7c3f64a7d90d654ea9c53e16b4f16c7eae02a103
+- card_id: ninja_shapeshifter
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ninja_shapeshifter.jpg
+    sha256: 9940fbc04f71cf765863ed498404548964524e3c9daa5b8923e350b49d5004b0
+- card_id: okuma_beikos_bear
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: okuma_beikos_bear.jpg
+    sha256: dbfb2d06176854350fbd73a866ebb3ccbea87b76b42dc497f769bab96aa5aa08
+- card_id: ominous_armor
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ominous_armor.jpg
+    sha256: 7c5c682aabfdd5de03fb9918c434d2eeda686fdd76664b29e9839d411fc77268
+- card_id: otomo_terumoto
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: otomo_terumoto.jpg
+    sha256: 84ba8e018a920ef3a968f24c59fd1cdcfe3a730be57a95959658c4b46e675dd0
+- card_id: ouma_jirushi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ouma_jirushi.jpg
+    sha256: 4e76b051a4dfe36afbd6e34abfdc3e6d00fddead0fade8cc079246d6b55892a7
+- card_id: outmaneuvered_by_force
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: outmaneuvered_by_force.jpg
+    sha256: 15d1fe49a7f0212d9b1f76a8e2fdbf2716bb5637aa574a7e5f4037a6111d821c
+- card_id: pacify
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: pacify.jpg
+    sha256: 7838737b3b5c90d8a55924521e43e8eef1b32b43b3feffc60eb699ab2115716d
+- card_id: personal_dojo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: personal_dojo.jpg
+    sha256: 673243a7e474bb45bec74fe0bf6bd55bee149d33da7684109422e591ea521e29
+- card_id: personal_instructor
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: personal_instructor.jpg
+    sha256: 3919307d15df29f314521e3bd30d897dda2189711abc99cc63e45823d90e9e37
+- card_id: platinum_mine
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: platinum_mine.jpg
+    sha256: 9138e7269b17daa18397579dc80a5747c0e19007dfe97c1d7073443c3dfcee7f
+- card_id: poison_sake
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: poison_sake.jpg
+    sha256: 739f91935d49fcf8f3afabb28aed54720a015d61b1b447006180fa87c2ddfb6c
+- card_id: polvora_cache
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: polvora_cache.jpg
+    sha256: 6785b3fe4fea830ff76bc087f4f68541cc5f4bdf9fd2afa01b40a9a28d6a46b5
+- card_id: powerful_motivation
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: powerful_motivation.jpg
+    sha256: 7f6c298df497901de838fee9140a8fd120ac3d0a006743da7306d54654b7f054
+- card_id: preserving_forces
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: preserving_forces.jpg
+    sha256: 1d3df6cb17236dc5c5e5f5ad197da2f1f2287b9d43e3d1021d81c6c650783188
+- card_id: public_arrest
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: public_arrest.jpg
+    sha256: 042a7c9cba1bca9f84976f22c951a9c12c63ca23bc22e084395e1b8fe1109ff8
+- card_id: pull_of_the_tides
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: pull_of_the_tides.jpg
+    sha256: babdf46409ced949a191e9ab7381a7fdac8f8646234f7d202b16db428921b247
+- card_id: puppet_theater_troupe
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: puppet_theater_troupe.jpg
+    sha256: 1b271f4b4608da00857868891a4a94a4ec5a798ca1d147853c29f33218c74ec2
+- card_id: pure_intent
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: pure_intent.jpg
+    sha256: 6a7c9084c4fef98fda2be6a536a22d05cbf5e46d441ea0b8f5ff92fa67164135
+- card_id: purity_of_spirit
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: purity_of_spirit.jpg
+    sha256: 145489226469db9e7d16c608e1fcf2593d90debbb6011749d71612f0fcb0f171
+- card_id: questionable_market
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: questionable_market.jpg
+    sha256: fab30940dd2d0d6e1e6387d4133897771faf7d8b04c82caa03585d608b3106c8
+- card_id: rank_hath_privilege
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: rank_hath_privilege.jpg
+    sha256: 5f3ad5b2dc1d3e10fc428ff500e07e636474a35c43d4f7327bb999ca82da5621
+- card_id: ratling_archers
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ratling_archers.jpg
+    sha256: 75546b4468cd244ee521f2173ca1d4367b099ab6f1a69b3b9c46a079f7b388b9
+- card_id: ratling_raider
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ratling_raider.jpg
+    sha256: 15accc936909f48e5a900490622e9a1e54d605636d4e709f8c2b6e644e946945
+- card_id: reach_across_the_world
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: reach_across_the_world.jpg
+    sha256: 7d2c91ba14da1fe2983fd8b012d363fe0edd5c80ac21fd62e58d1fe48946a3cf
+- card_id: red_hungers_fang
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: red_hungers_fang.jpg
+    sha256: 1c7e856d5a8ab9b67ff420d2439369788b4c15b927e5e6397e3701cef3d9fa24
+- card_id: reserve_commander
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: reserve_commander.jpg
+    sha256: d3f7d75d2f011a158663415879bf6a9fd863714e7f6f8b3dcf181b4771dd353b
+- card_id: reservist
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: reservist.jpg
+    sha256: aad8b08f4ec1bb7955d4c942081b236b60294988379b87b819c239d606b16b61
+- card_id: return_of_myth
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: return_of_myth.jpg
+    sha256: 82e92061ce1b9b4515e48b92928b3393826840b9b9a3793cbbeef0f9c9a9d660
+- card_id: rewards_of_experience
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: rewards_of_experience.jpg
+    sha256: d68cabb13aaa15ea53b7cd6cda48ff7f9e9e9a3ec784da22624de54a5158666c
+- card_id: ring_of_air
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ring_of_air.jpg
+    sha256: c7e1dea87ce21b8d8eb1d6a394025e0a222a6e1c54145f20550d526f83b69a6f
+- card_id: ring_of_earth
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ring_of_earth.jpg
+    sha256: 3f3b8f8594d45f9c2192505d4c79eb0b1005efea5f716e1f016bdfdcf94c58c5
+- card_id: ring_of_fire
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ring_of_fire.jpg
+    sha256: 7f21c941cb3a91c1d5743379b220d1250959a8ddc27842a17a722e20f370acd0
+- card_id: ring_of_the_void
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ring_of_the_void.jpg
+    sha256: f12718d1ab8e289ec28cc2dec228312f829334a295608b5e089158003aab0c5b
+- card_id: ring_of_water
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: ring_of_water.jpg
+    sha256: 0dfbf10536f0118502189cb7520089cb3d60af575633baac7055246cbe36f879
+- card_id: sahara_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: sahara_sensei.jpg
+    sha256: 23e73cbe7dd6585f06b90859fd4accb9cadcdf62576e898f3c198aa7c02000b2
+- card_id: sailors_warning
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: sailors_warning.jpg
+    sha256: 789396a2734c8c1c6459a637321e9bfd32ecebd02ab81c68613a9eabbbaa3c81
+- card_id: sake_house_brawl
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: sake_house_brawl.jpg
+    sha256: 7a85ba06c0b03e2eb020acb29b60568cfcb6d9064c795f62b50b01835dcb2e11
+- card_id: salvage
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: salvage.jpg
+    sha256: 1aa3ffc70c89e8d416b139c66956b129288f2af1151aaaa7653b1c61e1fd5942
+- card_id: sarassa
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: sarassa.jpg
+    sha256: d4eb72f8b92ddc34d9a4042100355e00fc6f3308cfe25cbecd64ba73de156ffe
+- card_id: scour_the_unworthy
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: scour_the_unworthy.jpg
+    sha256: 65469a9b1511a6cbf8624272b350ec642a3aa6885428e0a05007f748aba2edfd
+- card_id: seasoned_ronin
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: seasoned_ronin.jpg
+    sha256: d990ad78812b78f50f3d7e52a44bb9b09d2a4733461731e9080164074283d02d
+- card_id: secret_dojo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: secret_dojo.jpg
+    sha256: 992c83cc9f07bc295e82150bb715c0fe2412cfa227f7d0da5d489f5a467ddd99
+- card_id: see_the_many_faces
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: see_the_many_faces.jpg
+    sha256: fdca78e64e32ba97e9389a13fb147e971ca8da4d3b0d60987173f9862adb0f9d
+- card_id: seijuro_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: seijuro_sensei.jpg
+    sha256: 35a96a0f249725389578ee632a43253d4153e80cc516be233722f2768824e142
+- card_id: selfless_politics
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: selfless_politics.jpg
+    sha256: fae295309d73416e4af32f05a2f070928623174f0e8b0aa66a74819f013fd3a8
+- card_id: seppuns_blessed_blade
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: seppuns_blessed_blade.jpg
+    sha256: f91ce5ebfc658796007401444bbb1d9822edd45b671bdf555afe652b639a0f21
+- card_id: shadow_of_the_goju
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shadow_of_the_goju.jpg
+    sha256: f265ff5af0de45bcd99838ad93be7858ff293a106947cfd0f03b5f9a6beb4b57
+- card_id: shiba_danjiro
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shiba_danjiro.jpg
+    sha256: 096dcd11b7e037f5965fe0b3bbd7f1d38a00bd01cd9327e1ce242dbb8dfa4313
+- card_id: shiba_kiyomichi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shiba_kiyomichi.jpg
+    sha256: 59e6c148db4135c350167787bcf306aae2fe110f7b9ed6b0ddc054810150494f
+- card_id: shinjo_hamura
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shinjo_hamura.jpg
+    sha256: 4f3d2af7017224742bbd53b46212f99de860d8a50506ec18f1ba32469ffc772a
+- card_id: shinjo_jalendu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shinjo_jalendu.jpg
+    sha256: b1bfd153fc13a90265926a45a51301114c6e82f30187550b396a9af1980772dc
+- card_id: shinjo_jao_shen
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shinjo_jao_shen.jpg
+    sha256: c6d2432650343da03cc6ac0469aa1ca0f7acd44850ae24fd2b82ffe92611fa18
+- card_id: shinjo_nobunaga
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shinjo_nobunaga.jpg
+    sha256: dfcb5ba5c0466278d9937b089fba9f83a312e9a271436cd5c70cae22a3cf987b
+- card_id: shinjo_tae_hyun_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shinjo_tae_hyun_experienced.jpg
+    sha256: 6a1b419c97d0a2442183349df1ad17794f28b216bb5b01af3272f50ede85e59f
+- card_id: shinjo_zhi_tae
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shinjo_zhi_tae.jpg
+    sha256: 476f61e3324390d642759dba8954c1f7703ecb742fa028b1f4703730b45f71c0
+- card_id: short_season
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: short_season.jpg
+    sha256: c5f42424f2f7ca218e4479c4a30a9b0d5a38f41cac4003eacb3d6291435c86ac
+- card_id: shosuro_longji
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shosuro_longji.jpg
+    sha256: dd741f8a848d3417f3da44860c1b86a57016a63792b187a64150cc523f0aef2d
+- card_id: shosuro_orikasa
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shosuro_orikasa.jpg
+    sha256: bb1e607aec0f9bd924d64226f8c579166cd82db4899aa48628bbf0cc235db57c
+- card_id: shosuro_saigyo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shosuro_saigyo.jpg
+    sha256: c93992fc4811bed8a2194fb6ed36dc0a4f3449d650b2ff5c25d0262d55398aad
+- card_id: shosuro_sakura
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shosuro_sakura.jpg
+    sha256: dc51cd51ffa6f07cc8a64566ccc082f544515520746fab5c34633d2f77c904cd
+- card_id: show_me_your_stance
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: show_me_your_stance.jpg
+    sha256: 46250d9595c250a2efe6ead2978ed108ff03b8aebd2483ab3c1c67ad49ca1109
+- card_id: shugenja_aide
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shugenja_aide.jpg
+    sha256: 80a36888fa56560c68a904f33fef458805c4774f4b369b48f30f91b674b2454f
+- card_id: shune
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: shune.jpg
+    sha256: 494eb1826c7f97a8c74f17c47f8bd9431226fc3c2e125b3b16f279d8aeea4014
+- card_id: slave_pits
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: slave_pits.jpg
+    sha256: 0edd9ff812546f2fd3deb8f47d5def4295411c33a55c51398a028578afb20d4a
+- card_id: small_library
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: small_library.jpg
+    sha256: 621f7193be6c794e55c138105578da280b63c3299b7698dbc553b9aad5234492
+- card_id: smoke_and_mirrors
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: smoke_and_mirrors.jpg
+    sha256: 7d646861f852e1aa51ba0309faa4a5339515ffc0de5b089cac6075c0eecb51a5
+- card_id: soshi_kodanshi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: soshi_kodanshi.jpg
+    sha256: 9ac82adc425a4f3c86c8dde305f1ed83eedb0a514095ad4f205db16afa1ab160
+- card_id: soshi_rei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: soshi_rei.jpg
+    sha256: 8b0c96115f0c1aafd51304e6f0c53a0a04456fae16501c5e2cd0eea46a14f1ba
+- card_id: spinning_the_web
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: spinning_the_web.jpg
+    sha256: fc730278cc4401305abd13698e5be3994807e8f2363aa8a06489571e299deb7a
+- card_id: standing_fast
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: standing_fast.jpg
+    sha256: ff0aad90ec4b99b7b6125830a631cbef3bceef51f83d9649fa81f7da446a2895
+- card_id: startling_kiai
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: startling_kiai.jpg
+    sha256: ed25f28d24d661a9b27e9c6a62b5c68e3f14bdeafab217acd4511522b8588c67
+- card_id: steal_an_advantage
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: steal_an_advantage.jpg
+    sha256: f893738ef64fde917929db9bdf9e55101d33e5ba359f79009e16f5f7195a4f64
+- card_id: steal_the_candles_flame
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: steal_the_candles_flame.jpg
+    sha256: cc4f610f3e063a6c917b59558271956dfaaadd981106174694d827224ffa9712
+- card_id: strategic_withdrawal
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: strategic_withdrawal.jpg
+    sha256: d1344de2b780ef9807194e6f65b3916ac4166ebb1f3bb24aa46c09f162ccbbc5
+- card_id: suana_dojo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: suana_dojo.jpg
+    sha256: 18b8277d49970a97e35d39af9f80f15a3426a6218845a75acfff8099380d19dc
+- card_id: summon_water_kami
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: summon_water_kami.jpg
+    sha256: 6ceaf10775728018fafd624406d58032e5b7ff000c5668613cafd32af769cb7a
+- card_id: superior_defense
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: superior_defense.jpg
+    sha256: c8a120ff794c05fe0eb8ed74d376cd3f4067ba7723fd1dca4704997615818242
+- card_id: superior_tactics
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: superior_tactics.jpg
+    sha256: f7484a4593b8ab9e507fe99930e362a0acfe4dfe0ec689b3b12e804d1eb58d04
+- card_id: tachi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tachi.jpg
+    sha256: b385c37589d29aef498be2f337fd77c6163223debdc9390b38b5382673d387c4
+- card_id: taitaken_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: taitaken_sensei.jpg
+    sha256: 29816cdfc04bb428fd8fcf15573a19be665d5dbb7fc923aff472e921b987c08b
+- card_id: tamori_jinai
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tamori_jinai.jpg
+    sha256: c029a8bac643e2188362c6674207f1f05fe487d0bee5eeb91b60cf39c46cb59d
+- card_id: tamori_seiken_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tamori_seiken_experienced.jpg
+    sha256: 715ddb4d85f0b2a4059f828ba6832c6076f7569904e0da5c06f9dd9970387b8d
+- card_id: tamori_shoko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tamori_shoko.jpg
+    sha256: e333aea281e573103e401a52676ef55a8402954e311ad79796ff58f6e5c0bf1b
+- card_id: tamori_tsunemi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tamori_tsunemi.jpg
+    sha256: a6c8a1e80296f39b604121d12344009b719c0a1df13cdc6930296b66fd685d92
+- card_id: tarui
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tarui.jpg
+    sha256: 05a1d2972e5251d8003417ca465287b16aba97351337e9199548d529840aaf33
+- card_id: temple_fortress
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: temple_fortress.jpg
+    sha256: dd3b7a9854863da842fe8182548f40ee7f74fe3f6bd40b04f37cb775694c102e
+- card_id: temple_of_destiny
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: temple_of_destiny.jpg
+    sha256: ca93b234a7f5e1eb71e55e312e67d7a42080c1e0f3ad58f181e42b5b5110892c
+- card_id: test_of_character
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: test_of_character.jpg
+    sha256: f26e95b75958beeafd75ef911b60fbfc3ddfd1e85f92c09bb1f3814a55654479
+- card_id: test_of_sincerity
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: test_of_sincerity.jpg
+    sha256: 1c112a0b2bb5687d9460544f1e650cee5866673f348f55547b6019c93af4324e
+- card_id: the_blessed_herd
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_blessed_herd.jpg
+    sha256: eb64605321efe932e01beec130c69881d91f527746870dc5bc5d3fd83d210e4c
+- card_id: the_call_of_battle
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_call_of_battle.jpg
+    sha256: 9cb75df89cf7789b6b8a0ee1fea1cadf5a77542d1aaed2d1e6df85d695b2b5a2
+- card_id: the_code_of_bushido
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_code_of_bushido.jpg
+    sha256: 4134f631b67270ee8aa95de02c4ca04d5698a5d32c86a4045d69d7807bb3ecb6
+- card_id: the_emperors_road
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_emperors_road.jpg
+    sha256: 62a9b473a7e2ae9c6969823c54a7cd45bcf550968dda2e7c2bce509a2b62a217
+- card_id: the_endless_plains_of_the_unicorn
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_endless_plains_of_the_unicorn.jpg
+    sha256: 067e6c7c02e7520c55a285e42e5b3c861c1e99f9a828d930e698f9c59f7aac79
+  - role: back
+    file: the_endless_plains_of_the_unicorn__back.jpg
+    sha256: 0a4ea535c061ad0b65f061091b4cd6a2c89e6ec44e7781c4cc478b97a8c93b4a
+- card_id: the_esteemed_palace_of_the_crane
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_esteemed_palace_of_the_crane.jpg
+    sha256: 63982f76c557ba55e1ef1850e1e4e2d6455edd6234b41b9df680e047c66a1f80
+  - role: back
+    file: the_esteemed_palace_of_the_crane__back.jpg
+    sha256: 9b4098e9ac60e0a7478dcbf89ddcf8022df48223ea8c9d862206b70137449caf
+- card_id: the_eternal_rainbows
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_eternal_rainbows.jpg
+    sha256: 491580a23fa990d94b70deed7bbbae0a94af0285bd499f7416893c48cac75248
+- card_id: the_fortified_monastery_of_the_dragon
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_fortified_monastery_of_the_dragon.jpg
+    sha256: 392dd9e4e95996f5406cc9ac8e85fa483f3ba8865d2435d3d12e219adbc7af59
+  - role: back
+    file: the_fortified_monastery_of_the_dragon__back.jpg
+    sha256: 71b9adc448e7b94127bddd059f7d4781995592a2f713630973545beeb2637e2d
+- card_id: the_fruitful_port_of_the_mantis
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_fruitful_port_of_the_mantis.jpg
+    sha256: 8d5529904fcb780f0fc9e0d46503af4f0c9dcdbbf205b9369affad03452d0f4b
+  - role: back
+    file: the_fruitful_port_of_the_mantis__back.jpg
+    sha256: a481ff46bf09861daaf7eaeba4d3110792fa951ae9dccbcd68d9b3411a602bfe
+- card_id: the_grand_halls_of_the_lion
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_grand_halls_of_the_lion.jpg
+    sha256: 1a163b2d263e6b1a22f7507f076ee35e3f2d6d5e7c26ce00cf496668d232411b
+  - role: back
+    file: the_grand_halls_of_the_lion__back.jpg
+    sha256: 72217e495917c8f37bbdbab324efd1b9b5f38f9075b89f76cc26eb369f6efc06
+- card_id: the_heavens_are_watching
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_heavens_are_watching.jpg
+    sha256: 935be8a867451cc22592d3c58c74c9e9d31e2c002d687d0540611388ac423ac0
+- card_id: the_hidden_bastion_of_the_spider
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_hidden_bastion_of_the_spider.jpg
+    sha256: c8f3cecc3c97d721e6aef170392d21909200b7bb13568f5e33b30f891beb5356
+  - role: back
+    file: the_hidden_bastion_of_the_spider__back.jpg
+    sha256: 403494642f76499a2e20a5c6c4985977674b2079f714c3816112fe8a165e2701
+- card_id: the_majestic_temple_of_the_phoenix
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_majestic_temple_of_the_phoenix.jpg
+    sha256: 0d334eea179cbe020f6e2eaf963944b0792e9f74737ce53c19d9ed3aaa6d8608
+  - role: back
+    file: the_majestic_temple_of_the_phoenix__back.jpg
+    sha256: c01ac906a4f5d41f279325c1263e408d9f87489d2ed5bd02737f94f95bfacbc9
+- card_id: the_mountains_feet
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_mountains_feet.jpg
+    sha256: dda19e19211b73c70f585c9edc86f7d10dcbabbaf9de83e0f8995e9804030e8d
+- card_id: the_new_order
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_new_order.jpg
+    sha256: 2d976a7847cb7a15a2018c554b38057b423a4a3590a78b6eebae1efb59a83a17
+- card_id: the_obsidian_dojo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_obsidian_dojo.jpg
+    sha256: aed37884882befe56c4b4309ce6759cc9d231292de73b9abf77b6e6e3af92204
+- card_id: the_path_of_wisdom
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_path_of_wisdom.jpg
+    sha256: 10647badbdf7756dcb97fb89d453769b79195d601d968fd561f32c9aff3e69e5
+- card_id: the_shadowed_estate_of_the_scorpion
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_shadowed_estate_of_the_scorpion.jpg
+    sha256: a72c574232ddeab76dd6cfd7dca11865d96a5d601f6954bc2026091b70fecacc
+  - role: back
+    file: the_shadowed_estate_of_the_scorpion__back.jpg
+    sha256: cc0bc9da8e210bad0001ef82368424b3012387737b0183a734eec82b390745b8
+- card_id: the_thunder_resounds
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_thunder_resounds.jpg
+    sha256: 112053986432b7cb2bed1aac4ceb609f795cf0f560988f443eed3edd73d82860
+- card_id: the_twisted_one
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_twisted_one.jpg
+    sha256: 18bc3fe2f6584992fc92db2eec05cda0d0420b78b4adaf994051836f7bfee304
+- card_id: the_unassailable_fortress_of_the_crab
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_unassailable_fortress_of_the_crab.jpg
+    sha256: a77fe8c437b805872ad42300ece7d5c7510f12682940a27ead923e4c3503a7b9
+  - role: back
+    file: the_unassailable_fortress_of_the_crab__back.jpg
+    sha256: 22f3ab4d4d88d12121a267c6523ebce05939ec2ccce0eb4269ead777a564d610
+- card_id: the_unquiet_moto
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_unquiet_moto.jpg
+    sha256: e9da2b5d19b01ef107be7161d5c151133852eede8d5bfd01c81027bf15efe8de
+- card_id: throes_of_madness
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: throes_of_madness.jpg
+    sha256: 100cf1886c65ec2a27deec46163917f53a7dab98658014025d9bf5dabd845cfc
+- card_id: throwing_knives
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: throwing_knives.jpg
+    sha256: 4131819870fcc3d7b456b16a5e51ff217046088bd0740f11319a9a1b1f362491
+- card_id: thunder_dragons_child
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: thunder_dragons_child.jpg
+    sha256: 79e7d2ba5dce5b6c5ba575f621c0459ca7f5172428cc480ede596acc5c513975
+- card_id: thunderers_embrace
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: thunderers_embrace.jpg
+    sha256: d393ab4fe536490d561fcac5237dc2d2603a07d5074c5f997aab8b9deea6c78d
+- card_id: tiger_claw
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tiger_claw.jpg
+    sha256: a3200283cbbf28ef08d26c28a3e9370eb25d44c2cd5e0baf613bf5da30aacd80
+- card_id: togashi_kasuru
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: togashi_kasuru.jpg
+    sha256: f89921fc06e750860102aebc55a0cd7a74708a367a7ecd65cb9cafca81b944f3
+- card_id: togashi_taiki
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: togashi_taiki.jpg
+    sha256: a8ac81a9e59cc017880c3e57b2f6d82f1276ad50630ac77eb0da67915dcc4de4
+- card_id: togashi_tsukagi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: togashi_tsukagi.jpg
+    sha256: dcbbcc6e772741ab4d745789317ade4e934a4abf4f88a96d2f986b8809f857dc
+- card_id: tonbo_jairyu
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tonbo_jairyu.jpg
+    sha256: b5e9922b9875d6c6186f2ece66c714ca131b11f5f6fba95a9fd5f038a27a7fcb
+- card_id: toritaka_iabuchi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: toritaka_iabuchi.jpg
+    sha256: 2e10269dc17ee09be535619c75bdcb1a5ca44f30e8c5d0db1e1c1ad9b07b6fa0
+- card_id: trading_grounds
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: trading_grounds.jpg
+    sha256: 13d74c826a23c49b2be31ef2423efc8e9d96b90b7f690263e1fc53e976ec37e1
+- card_id: tselu_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tselu_sensei.jpg
+    sha256: fb79a6c288a19f9db70f9e5010bfc6b0af4bc1ff205c96dbcb6569c8b09ef3d9
+- card_id: tsuruchi_arayo
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tsuruchi_arayo.jpg
+    sha256: e60ae1695c51317d06742c00317ac23539105d7fa0d29e6c5a3f26b5605e74c4
+- card_id: tsuruchi_jinrai
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: tsuruchi_jinrai.jpg
+    sha256: b0a15099dc2bd52a54bafda6740c21d11d88543fb3afd3da569a70e4daa386f5
+- card_id: typhoon_surge
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: typhoon_surge.jpg
+    sha256: e1f8b74ca60bcde21b82e6b1d5a63c121bf1a5ff096611f3651c419afc11033b
+- card_id: unexpected_testimony
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: unexpected_testimony.jpg
+    sha256: 33eab07988d9aadee4cfb9fba94db8b8df2afa4a9c539845c72ec3257cdfff66
+- card_id: unexplained_illness
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: unexplained_illness.jpg
+    sha256: cdb5038dbea9622ed1fb6398b3d1f703849daeac4e7635afc977546e693cab71
+- card_id: unholy_strike
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: unholy_strike.jpg
+    sha256: 38608a6be063f2ea60f2105a8d7765599d63e5f5cd332b7c09caaa89257294c9
+- card_id: unrequited_love
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: unrequited_love.jpg
+    sha256: a30cbc009b3d3b957482495b04b5e5c8a49ecd8b4ac53829fc2220d5af22b885
+- card_id: unsafe_passage
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: unsafe_passage.jpg
+    sha256: 3533f680bfc929d3502821696888319f519a04efefbc9839394161320534f5c9
+- card_id: usurpation
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: usurpation.jpg
+    sha256: de48f5cef759d2348d932cd9164cc2abca32b417ee4a34054f722bbeef43db4b
+- card_id: utaku_kazue
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: utaku_kazue.jpg
+    sha256: 705f9cf0de0bd69b88732070dd839927f110b389ada1685b620254b5811fc1b3
+- card_id: utaku_sakiko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: utaku_sakiko.jpg
+    sha256: 7bd3e416daff1245620b9160ce0ac96573027013c585abf7a336c5336cfc6555
+- card_id: versatile_blade
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: versatile_blade.jpg
+    sha256: 557f94a453345ffca7eb719486a5b660fbe57d22b3eb040ceec80b660eefdc27
+- card_id: void_dragon_experienced_3
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: void_dragon_experienced_3.jpg
+    sha256: 6006e60f5498751ef6d37d0680b832f9883f7dbac5a44a279bec6e81896a2993
+- card_id: voitagi
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: voitagi.jpg
+    sha256: 04ad78995833713da43d92e26eddba9810c80c4b50216d24d879b5b315782293
+- card_id: walking_with_the_earth
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: walking_with_the_earth.jpg
+    sha256: a566f322812aaa6c3c06858c8f5ecc26d1a24170b9c40d0ac0483f043d79179b
+- card_id: walking_with_the_fire
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: walking_with_the_fire.jpg
+    sha256: 1a5e7ca48d574ec1c1013387029e47d64ad7562b5a132322c3fe4601f9229ef7
+- card_id: warranted_search
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: warranted_search.jpg
+    sha256: 2d64644e92de2f14e0a3ad016439601c88eb377d430a5809eab847dc189e7927
+- card_id: water_dragon_experienced_3
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: water_dragon_experienced_3.jpg
+    sha256: cd3bcf756327e05fb03163a6e4dc7833199179fb3b336397dc44b47caa9c1ec8
+- card_id: wedge
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: wedge.jpg
+    sha256: 9517d383bca530850bad7fe02d9cde71f6136bf394f69ac52e3a3c029428e8e4
+- card_id: wooden_nunchaku
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: wooden_nunchaku.jpg
+    sha256: f8705e94a2e9891773900749762bc121f4af9ea06c809470489ad51662566903
+- card_id: yodo_sensei
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: yodo_sensei.jpg
+    sha256: fe7267583d9e58b05e2351030a50bc724488bd7f0f12256f42916ca03fd50972
+- card_id: yoritomo_juriken
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: yoritomo_juriken.jpg
+    sha256: ad5bd5ed756e349fdfd669b6cb973514d5d808fcffcdf6b7c7d60dce1a899d04
+- card_id: yoritomo_kuniken
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: yoritomo_kuniken.jpg
+    sha256: 2cb39d96b9ec62bcba6c6c47d05788d8fe288b1e82a06fb9ddcc7ce70bbbe4d3
+- card_id: yoritomo_matsuo_experienced
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: yoritomo_matsuo_experienced.jpg
+    sha256: c1cd38e9c0c4380527548d2d3a1d48b54f9fc31aca12d38354055a9f582e98c7
+- card_id: yoritomo_minoro
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: yoritomo_minoro.jpg
+    sha256: 2741c88883f0f55e45bda54cc8fdea1b1c5ec5fb6fc39cb46224ff64cd4ac27d
+- card_id: yoritomo_nintai
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: yoritomo_nintai.jpg
+    sha256: 284cc388103246ec039d671f464c9959d6af8fe8191fa3c500e44188700c93e7
+- card_id: yoritomo_saitsuko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: yoritomo_saitsuko.jpg
+    sha256: dd34c6cc4263e82256300716fa8c36067d85cd04355345d89a5f9f94e9b76d40
+- card_id: yoritomo_tsuhime
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: yoritomo_tsuhime.jpg
+    sha256: 53d5b26a9ba0acdc33ff30718841bd4763d7404f7d4cc612a6ce7911dab92c24
+- card_id: yoritomo_waito
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: yoritomo_waito.jpg
+    sha256: 3ccc1f66be3c206e3f38946e3ffb52fed2c9ad46a636f5d34c7576fbd4b54e41
+- card_id: you_walk_with_evil
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: you_walk_with_evil.jpg
+    sha256: da056917bcf315b9e489b798494983572f7c68fa966a091520493df376359356
+- card_id: young_battlecat
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: young_battlecat.jpg
+    sha256: 4f81d1a189303726c6943e233eb2f92072ba273de56bfef7735556b00a0f6859
+- card_id: yukihimes_hot_springs
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: yukihimes_hot_springs.jpg
+    sha256: 631f4ce0cbac58a8b2c7c8f940049568755dc7edc57b24b0fdc048dc4aa904dc
+- card_id: zaiko
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: zaiko.jpg
+    sha256: 9275c0a37a59a1708ec5b388f211d63b9ae6363cb57aabfd3291a6f31fb25dfb

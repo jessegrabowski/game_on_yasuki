@@ -1,0 +1,938 @@
+set: Web of Lies
+images:
+- card_id: agasha_miyoshi
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: agasha_miyoshi.jpg
+    sha256: 11646bfe6397fb235c81296ad46c1d71a8a76e359f27aa0ab996fdb6685176f3
+- card_id: akodo_kitaka
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: akodo_kitaka.jpg
+    sha256: 1d0c46f1cc9eb306d64d2a6a2b0a9a6cadac5e6bebc1de2542cf8feb3f16bbd8
+- card_id: akodo_kuemon
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: akodo_kuemon.jpg
+    sha256: fe24af542429d5c1a7749482b3cc4be5bad6a2daad8969fe5b54bce6c8add7b1
+- card_id: akodo_rokku
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: akodo_rokku.jpg
+    sha256: 14621f772b6387002c0fa1027777c0278c32d818b4bfc920d152cfbac3571b13
+- card_id: anchor_the_line
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: anchor_the_line.jpg
+    sha256: 4f8ff6dd7df27a910aba3e42c53e429ce427aaac48d017cff8ecf4e748acf56d
+- card_id: aramasus_pride
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: aramasus_pride.jpg
+    sha256: cb96ae1b3d04cccd2ffa9d2fb4a5e24a511feac903f009e395c443c012763c34
+- card_id: asahina_sekawa_experienced_2
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: asahina_sekawa_experienced_2.jpg
+    sha256: fd87d43a97ed331282cfbb878a4a8bb356b822ac4701a2543eae8050ec05787a
+- card_id: asako_hirotsugu
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: asako_hirotsugu.jpg
+    sha256: c1ed913248f870235ad7ae7dba75e85511c1a686b61094d214afd9fd6fdb9dc0
+- card_id: asako_kinuye_experienced
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: asako_kinuye_experienced.jpg
+    sha256: e504217b608145584ae31bdd7f65be4ac88ae2c6e2a7a7d05ead7249ffc9c3a8
+- card_id: baraunghar_amulet
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: baraunghar_amulet.jpg
+    sha256: 5ae88926363ea74148b9430ae19966d87539a53c91a56bd8a6223f8d62a0cc4e
+- card_id: bayushi_paneki_experienced_2
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: bayushi_paneki_experienced_2.jpg
+    sha256: 7bdb654e4db9947beacb20a1dc44549aed7601f03b1ceffe1cac556577f33998
+- card_id: bayushi_shusui
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: bayushi_shusui.jpg
+    sha256: b69e7ac87baa59bc9f4cff7b61a18eb2085d2bdd1c8adaf6c2699e184ca2a910
+- card_id: bishamons_fury
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: bishamons_fury.jpg
+    sha256: b668f4f1320bc606d5233fd1bf5125ab9f90e55ffdac5409cccb0c272b741089
+- card_id: blade_of_the_master
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: blade_of_the_master.jpg
+    sha256: 7eaa2d5ade251476bae4b2f82065089db8c37ac7309f179a68c7a4f9239c4411
+- card_id: blood_pearl
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: blood_pearl.jpg
+    sha256: 4daf54a0c32f9375ca0085cd0df3d866c2f57422fcb251da89ea120eef3b55aa
+- card_id: brand_of_fire_and_thunder
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: brand_of_fire_and_thunder.jpg
+    sha256: 4bbcd524609bc537f0934e44fd7a04fe41747bc72e5442b5b53173c1e0c54032
+- card_id: cavalry_reserves
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: cavalry_reserves.jpg
+    sha256: 2aa38386e07b1350e540cba2c663f1aeb71c0a62cd207acb43d9a81148847ef4
+- card_id: chirtk
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: chirtk.jpg
+    sha256: ca6e19d4143a77e8085599a7b54bead8b6541573b5d2f380c6aa436f1a55ed11
+- card_id: circle_of_steel
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: circle_of_steel.jpg
+    sha256: 293ebc11cc0789b9ef54856097a1125baec488b7f89c9cfa674485b117c7041f
+- card_id: city_of_blood
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: city_of_blood.jpg
+    sha256: 8ff22d3f9ca9079b2d08a8ece519a42ce5ddeff0fae48b2dd692b56e55928fc3
+- card_id: cunning_of_daidoji
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: cunning_of_daidoji.jpg
+    sha256: cd56e4b1ced5cc62c106635b893133fcec4be961d71de923795ac53e9d056df5
+- card_id: daidoji_setsuko
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: daidoji_setsuko.jpg
+    sha256: 227db8b58cf5beee327a9c636e2fc952319b175ea7b85ec6fa83d5c99d12afca
+- card_id: daidoji_takihiro
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: daidoji_takihiro.jpg
+    sha256: 3e5dac8fd51726c7523a89435b8ad41dc4a0d4e2393b7def7579205a4a4589dd
+- card_id: daigotsu
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: daigotsu.jpg
+    sha256: d1bdf74eff3f58c8902499963c830b9a2d97e309c05176367b44418219b9ff3b
+- card_id: defining_the_essence
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: defining_the_essence.jpg
+    sha256: 4c934db0a19807108df5e3bedc0f96c1560243692b0d147538c04c8dfbcadfb1
+- card_id: distant_keep
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: distant_keep.jpg
+    sha256: 6ec00527a243d4d0170688ee0ca56fd0c7b035af4c425916d057990c05547ec0
+- card_id: doji_saori
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: doji_saori.jpg
+    sha256: e80ccfe26d7928214bb57f444fbd2399993883b36c972d6e055162343d74e0b8
+- card_id: doji_takeji
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: doji_takeji.jpg
+    sha256: 9999f14b1f3a3201b5206674891574b2c2fb7f7e631ec70ffe644a5872faf90c
+- card_id: false_trail
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: false_trail.jpg
+    sha256: 030989b7bed5b47c71ece92b6d992eed8251c706d44c4a40e97b6ef8804a2ca2
+- card_id: few_against_many
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: few_against_many.jpg
+    sha256: 816ef0c6c0f182798db70665002374e2a7279e64edf20a891ef8e83a63ee800d
+- card_id: fields_of_pyrrhic_victory
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: fields_of_pyrrhic_victory.jpg
+    sha256: 5889ae0b5bfcaa64ad10c5f77af238cc33e445880633f5c672ba6d9f0b7a7499
+- card_id: forward_sentries
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: forward_sentries.jpg
+    sha256: ed6818839f9814a337f38554af4f14bc1412c44d31fd5610717a50199085fab7
+- card_id: fury_of_hida
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: fury_of_hida.jpg
+    sha256: 74083f9f8b5b8c78ff391525d5687eeaf59d6b891c6c9dd4042cb6b7d75355f3
+- card_id: fury_of_steel
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: fury_of_steel.jpg
+    sha256: 5b9718e7525020b29fd7075f0b4c93174c531cd81bd598d9b652d754d6655f5e
+- card_id: glory_of_mirumoto
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: glory_of_mirumoto.jpg
+    sha256: 45c6e454aa89bb73d01b3584c2f5d1e1cafcde7b550db6e0edcd60da7fb67cec
+- card_id: glory_of_the_shogun
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: glory_of_the_shogun.jpg
+    sha256: fdfb98cce0ec633af9d4c5db47cac5ba94c235afdf7e8005d96b2e19e0d82cfe
+- card_id: gong_of_the_righteous_emperor
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: gong_of_the_righteous_emperor.jpg
+    sha256: fbb584539079cfe7eab8694d9c0cdf671641992cc5e845951c0ac12ee28d8257
+- card_id: gozoku_influence
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: gozoku_influence.jpg
+    sha256: d8db2483b914371d04966ee46c5b12f8817ad7d75060faecd248862b7b50cbc4
+- card_id: gozoku_pawn
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: gozoku_pawn.jpg
+    sha256: 01b83e956d7e0b5e775a0ff1a0d4e4e0d08653fb470c252d109869b3a4aff923
+- card_id: gunsen_gata
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: gunsen_gata.jpg
+    sha256: 77a95ec4446d5069ad18c7c963505f28a5c89ad9435fa2f4f5b32c301cf5f76b
+- card_id: henshins_amulet
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: henshins_amulet.jpg
+    sha256: 7eff1d1dbf23952ae15786ae6fafdef40d3ace2229562b177ce4912f5542366b
+- card_id: hida_atsumori
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: hida_atsumori.jpg
+    sha256: db7c31622fd3c85bc031fb8b7296ed611b8c6b2685219e5b0633f12e173a7619
+- card_id: hida_rikyu
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: hida_rikyu.jpg
+    sha256: 19a94ec8551b8b5da8f5e3e7f8be6bb22f576feabfdf95c23e628e5b753765a1
+- card_id: hida_shara_experienced
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: hida_shara_experienced.jpg
+    sha256: cca1ada15f1d80eb28d2741c9568b44ba45144e65901689f3cb863b66e29837a
+- card_id: hiruma_oda
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: hiruma_oda.jpg
+    sha256: 0c099678219c96839fafa8ef4c2af083d55a22ce1d8ee42231cb008ca0bd84e5
+- card_id: hordes_of_the_nezumi
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: hordes_of_the_nezumi.jpg
+    sha256: c4e8387830c5d432e1b9fecb383ae5edc5bc50303fd0d281b0ec4b663466e221
+- card_id: hoshi_masote
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: hoshi_masote.jpg
+    sha256: fb3157083ad178836024d55d8f2ccc0b453801125d729c5691acf3e692f85425
+- card_id: house_of_the_spring_chrysanthemum
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: house_of_the_spring_chrysanthemum.jpg
+    sha256: f5aac287f2ada31e6b8d5454f339eef9d79f68d984ca2f9227f892818ba6916d
+- card_id: i_am_ready
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: i_am_ready.jpg
+    sha256: 4e2a9fef3b7a151f4fa7c68178a5cab9c067afcc33c489d16d760eeb204ab5b0
+- card_id: ikkrt_experienced_2
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: ikkrt_experienced_2.jpg
+    sha256: 7d27cc546a18c4f0fa86952b9675ec16e0242cefd4433ea202c65bd9f585f0c2
+- card_id: ikoma_korin_experienced
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: ikoma_korin_experienced.jpg
+    sha256: b295c4add7b6477bf0b8ea0cbf2066dc64dd894513e27d66eea86e6516288a03
+- card_id: invincible_legions
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: invincible_legions.jpg
+    sha256: 877a075c9f3b8a6e97a53c1f1843c5e8a39df0e279257047920848d73e65e67f
+- card_id: isawa_sachi
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: isawa_sachi.jpg
+    sha256: 6acf490f236fb3fb42e78e53b5dbf0c00a1510bf7bc66e5ef4f0b91fec15c6c6
+- card_id: isawa_sezaru
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: isawa_sezaru.jpg
+    sha256: 33876093f8474f8944f2c0627bda2675b29d853253484c863d87f38418697fa1
+- card_id: jade_stores
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: jade_stores.jpg
+    sha256: 47ae679880efbd388b1a433b21750d00a82acff30c0594feb0c93a418e2d4ef2
+- card_id: juma_jirushi
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: juma_jirushi.jpg
+    sha256: 6a559b6a06e28011d9eaedf22ba6d1e3c16d85efe3b6858630f53646cc554758
+- card_id: kaeru_fields
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: kaeru_fields.jpg
+    sha256: 58a096c23f96f5562c4514113249c0f289d01646ad1ae364c52d1fc2c1b68668
+- card_id: kaiu_kazu
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: kaiu_kazu.jpg
+    sha256: b49f546354fc7eb6d2072c186c0790350c6cb02487b9dabdac3f4b4c6480967d
+- card_id: kakita_benkei
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: kakita_benkei.jpg
+    sha256: 7a31cfcbd186a64e7b9c72444506c6f3bc70c699b7d06d07493ef848fe7adff4
+- card_id: kanjiro
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: kanjiro.jpg
+    sha256: 63fdc2dff443e5d674f82fc3eb6b514125c10d50a83bc7369d4944ad9631b633
+- card_id: kinuyes_blood
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: kinuyes_blood.jpg
+    sha256: 0e1312c9323f7ed222c05f0b9001980a5e0dbf9c6b94289466d81e186fe4eeb7
+- card_id: kinuyes_garden
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: kinuyes_garden.jpg
+    sha256: 54092798900d85cd8900286662b143fbee5df686edc88fa03dfa7cd57a3410f5
+- card_id: kitsuki_yojimbo
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: kitsuki_yojimbo.jpg
+    sha256: a38f79e4e27435f1b2e3afb7efb6514fe55dcd3f810c886e9904cf7eb36a9043
+- card_id: kobune_scout
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: kobune_scout.jpg
+    sha256: bb6be9b905b255258d43356ec7fb67f8f2f1704a29c3c54f4a781453a3d329e4
+- card_id: kuni_kiyoshi_experienced
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: kuni_kiyoshi_experienced.jpg
+    sha256: 5964369e8fdb8860d4417c80e1ce85e779fae893635253f8378fe493331808aa
+- card_id: legendary_confrontation
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: legendary_confrontation.jpg
+    sha256: 0caa885bd02e3e09531c7b61ba270d9c7611994022c4cab2c7079250787040f5
+- card_id: lessons_of_pain
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: lessons_of_pain.jpg
+    sha256: 4bfe516466cf519aa80c04dbd4eac4962ba9d88f0475230ca19d51c5cb6b85f2
+- card_id: living_blade_dojo
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: living_blade_dojo.jpg
+    sha256: cabcc72aaf446728421aa37ff73c2baf09e91b279afed9ed4dd28b68be573dee
+- card_id: make_your_stand
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: make_your_stand.jpg
+    sha256: ab35a80dc1658eb61eb3c689a8f33a8524e96a7af9eb82e6a2a938d94d9086ee
+- card_id: makirtch
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: makirtch.jpg
+    sha256: 1b5340f410e8b9f2ec223b772cc0141ec8f4ae5843257b13d163d941eebec0f0
+- card_id: matsu_mieko
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: matsu_mieko.jpg
+    sha256: 19f29799e2848a970bf42c40dceb20e5446128e36c30641b5114666d5e160092
+- card_id: mirumoto_gukochi
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: mirumoto_gukochi.jpg
+    sha256: 1f34f0dc250fba887a894719fa0b90299457a4db67b185bf6e008b5f3c258069
+- card_id: mirumoto_kenzo_experienced
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: mirumoto_kenzo_experienced.jpg
+    sha256: c0234c555d6281fbfc331ee0588a4cd7c5ecf93ce92fbc3ca1ebc2960971a8a6
+- card_id: mirumoto_takige
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: mirumoto_takige.jpg
+    sha256: eca9078da2c0a443c26894a4ffe270c4dd1f63b333109e7fa30f03abb6061859
+- card_id: misdirection
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: misdirection.jpg
+    sha256: f8bdff9ae132f54d13dfc5efbd20d550d40ee833da3bc8807132b4cb4ea13ec7
+- card_id: morisue
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: morisue.jpg
+    sha256: 429877c47e399691b19a2610181c3da150b963ed36050cb7c9d9bcd13c0ad33a
+- card_id: moshi_hinome_experienced
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: moshi_hinome_experienced.jpg
+    sha256: 010338564aa11124bbfdada2dcbb3a8dd5a8a7a81864ba6b1b3518133928aad0
+- card_id: moto_latomu_experienced
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: moto_latomu_experienced.jpg
+    sha256: 6b7a06b078fb9af942c95ec0d710e488520d8417f72e78b03a5d9997b4932405
+- card_id: moto_ogedei
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: moto_ogedei.jpg
+    sha256: cc019c849bbe4a19418beae4d94f6cba16c361633ea4f0e440a5a54912a84b03
+- card_id: muketsu
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: muketsu.jpg
+    sha256: 27af3e307ca89293d3497059df73d1c88174fc92d9e37615ed34c2980561058a
+- card_id: mura_sabishii_toshi
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: mura_sabishii_toshi.jpg
+    sha256: a3a6b3d1d2ae7843778462eebebbae8d6e2dd3527b06be38287530a660f509bb
+- card_id: natsumono
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: natsumono.jpg
+    sha256: 66b83f394cd1e5ec60bd07d893690303892858823fb9d67dbdce74efdd64c79e
+- card_id: no_victory
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: no_victory.jpg
+    sha256: 236088c16702065667b57c04ee6203043729d4e73a5c43e82e72d44ee50dba95
+- card_id: ogre_mage
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: ogre_mage.jpg
+    sha256: 60b88bbf1ea74031fc4bac7dd3bb9ccc13802c2e22e6a3bc37577459c7301986
+- card_id: oni_lair
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: oni_lair.jpg
+    sha256: cdf97674b4ed88ce8648a76a52407b9c2289c9aa18a7cafb978530ff652375ff
+- card_id: passion
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: passion.jpg
+    sha256: a571d3f14da131c6dbabed0c1b47b1c9880a8f83c9fc4b2fdc1a265172e3c28c
+- card_id: peasant_defenders
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: peasant_defenders.jpg
+    sha256: f5aa4fabf10015d0973905f063bfa3ff6b7317bccf2641f0782e0e9f309b8c03
+- card_id: poetry
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: poetry.jpg
+    sha256: 708b55eb741d96a3479c759c2b4723256c4fe95ee96a35e91f64a4367173795a
+- card_id: political_outcast
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: political_outcast.jpg
+    sha256: b5eb00835f2c54a470efacf5da86a40ee2ef812299fb37511a52bdcc64e53acd
+- card_id: rage_of_matsu
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: rage_of_matsu.jpg
+    sha256: 911cc220fcd81591a0eb12cca13dd0224c72dd1fb7fea2ac48f7731c0e849ebc
+- card_id: rain_of_death
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: rain_of_death.jpg
+    sha256: 983909b7df83f5e61f8fba8e57dae9f6c37b11e6c28087ba679649d4bfdfac76
+- card_id: rememberers_stick
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: rememberers_stick.jpg
+    sha256: 4f4d6faffdcfebfcaf49b99112ebb9ce6a902ddf6e7a83fb5f3525885b77a468
+- card_id: roadside_shrine
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: roadside_shrine.jpg
+    sha256: c37f7718104d23a44742385be04e7a301da3fd026763becde3c3b8878849111b
+- card_id: ronin_swordsman
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: ronin_swordsman.jpg
+    sha256: d2d06d144ca7f71d290db850ab0f0fa6092ee7b78a296a471d584ad6521606dc
+- card_id: sapphire_strike
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: sapphire_strike.jpg
+    sha256: 79415a10cf40fbbd1e33ae17ecb4d4fa67d9ee772db32393ed3e4cda4e0d53fe
+- card_id: savagery_of_moto
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: savagery_of_moto.jpg
+    sha256: fd9425c37b080cbfd5e339ae049448a0b43b76d3b452cde1e14aec2a62309c56
+- card_id: secured_ground
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: secured_ground.jpg
+    sha256: 55fff5b1ca18e667e4bc70c121de7ef62a26687e45eb0c4b11a167b7b0a0be39
+- card_id: shadow_harrier
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shadow_harrier.jpg
+    sha256: 5e70d511df52bb59c6397a7690e64dc5632740390ab0d8a819bc28c9c13a5a1a
+- card_id: shadow_of_shosuro
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shadow_of_shosuro.jpg
+    sha256: be79fddc926517da34f66ce752c173546b89a979a125b6d6308054ee6d4d1142
+- card_id: shahai_experienced
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shahai_experienced.jpg
+    sha256: 6736ac332ff59de728bcfab70ec19b29a2b2072bc23eda02d71987548bcc9aee
+- card_id: shattered_focus
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shattered_focus.jpg
+    sha256: 1ed485200f3d997342aa1a8fac5aad84b04109cba936ee2fdd0aaed7365a8bad
+- card_id: shinjo_loruko
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shinjo_loruko.jpg
+    sha256: cfaf66cbc0ff3b0386879e0e21351a221cc012b930a02ae4ef6399170c3e2157
+- card_id: shinjo_suboto
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shinjo_suboto.jpg
+    sha256: 60cce52fafb1e3f3d33687dcadecac3e1047c4d0653ff0c9a6c127aa45cc545d
+- card_id: shinjo_turong
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shinjo_turong.jpg
+    sha256: 8ddcf6c89ec55b11ebae18a201f286cb8300f02377a80cd8295d8b01813f6e02
+- card_id: shiny_treasure
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shiny_treasure.jpg
+    sha256: 2a87b95a0131ca4416b2bab6d961c0ca6e81eacf549b3ec26895e3455bc2db06
+- card_id: shore_commander
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shore_commander.jpg
+    sha256: e2aaacab195814333f95fe29f4587e1c49462a290eb5ab6b40b1e9c21107ec8d
+- card_id: shosuro_infiltrator
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shosuro_infiltrator.jpg
+    sha256: 456e77af8362443032744a05f0236af642297917ced4b56943c1412f058bc26e
+- card_id: shosuro_saemon
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shosuro_saemon.jpg
+    sha256: b8ba905cc90bac2f04e456ae6b7da4bee4ed4a1080612d7b051d67ff09744685
+- card_id: shosuro_toki
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shosuro_toki.jpg
+    sha256: e94ab4602027517bd020ffbfaf8edfbfefffd251e5efd416a93b0803700f39d3
+- card_id: shosuro_tsuyoshi
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: shosuro_tsuyoshi.jpg
+    sha256: b435773a3cc0e4b1b251f04216fa1d7690cd57238396198880eb796180c2e577
+- card_id: siege_engine_wol
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: siege_engine_wol.jpg
+    sha256: 71a5ed8f883afaf7e3919a9f6f72e86e803d584fa39b1a592931f567210af08e
+- card_id: silent_warriors
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: silent_warriors.jpg
+    sha256: 6fd264605ec9468c294989b45636ad3acd9cabea3cbd0bf90261625aa84b767b
+- card_id: soul_of_the_clan
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: soul_of_the_clan.jpg
+    sha256: 1378bf7fcc1606515d776cf2061fb654271279b6941ad97194321f741caa76ff
+- card_id: storm_of_isawa
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: storm_of_isawa.jpg
+    sha256: 092ecb15e8362e21f9ed580ddfd852ea458c7a8317b89b2107429ee90f3dc8a4
+- card_id: stranglehold
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: stranglehold.jpg
+    sha256: b7a7551e1d92aa72771ce0889a50049c5dfb5a2f1ea1650ad43bc918ddaaa124
+- card_id: suitengus_surge
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: suitengus_surge.jpg
+    sha256: 67077d39b05bd50e779e1a869632347b3deaedf062c4f2007503586a80ccb66f
+- card_id: sword_of_gales
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: sword_of_gales.jpg
+    sha256: 52a2a4a821775dd48d7b2390a2c0722471aee806d3a068404ad4f8185b15ce70
+- card_id: swordmaster_dojo
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: swordmaster_dojo.jpg
+    sha256: b6f458c196ab9df86cd27d0ef22e1b4ad2c00103b0ccc1c4c4c749982206efbc
+- card_id: swordmasters_wakizashi
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: swordmasters_wakizashi.jpg
+    sha256: 10db8ca3046ac7a9762821de0f41927374ef2be27058a88417d1643467089d1e
+- card_id: tamori_watoshu
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tamori_watoshu.jpg
+    sha256: 0cba6eb8aaf157a2ecb236426cb76caf4e8bf8ee78edd932b0ef39b8efea7b0e
+- card_id: tangen_sensei
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tangen_sensei.jpg
+    sha256: 2bd3c691b26708e651888f1913d9ae70b16ffc335653e82fa32a153aef40e3cf
+- card_id: tchwik
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tchwik.jpg
+    sha256: 5e600555354c8dec836bb879ad34879b879d6d3417ab374fab25c4f25c5aba32
+- card_id: tears_of_blood
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tears_of_blood.jpg
+    sha256: 2bfb30f344a4adee81dd095c6d28eddd75a6c79f185af49fe90b6b2beb122dc5
+- card_id: tejinas_blessings
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tejinas_blessings.jpg
+    sha256: 6d4d14b71f41e68765995a032816f45ad29c0c991877d7f01be01948aaa6f0cb
+- card_id: tengoku_acolyte
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tengoku_acolyte.jpg
+    sha256: 3d9b51932a80e0522f8af0f2ddce8ca6d2952c3327f694e65b1b35e3a5fde7f0
+- card_id: the_fortunes_smile
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: the_fortunes_smile.jpg
+    sha256: 2982eb698315564280903e87d84dc7d195b54f82b4f9d3d76f37612421c05f7d
+- card_id: the_khol_wall
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: the_khol_wall.jpg
+    sha256: 6705b1e74d7d84306054346696ba5d78179ca20780ebceb5f1ec79e199da7bb3
+- card_id: the_last_prophecy
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: the_last_prophecy.jpg
+    sha256: 088ddf915e54d89206ea5efe24487413d34a4b156fe4960f77680f90a9b9fd22
+- card_id: the_tribeless
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: the_tribeless.jpg
+    sha256: 43bd9c701ccc430a9949df458de4d49212481dd7fcade3b72936e67b5fa49619
+- card_id: tiktek
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tiktek.jpg
+    sha256: 14230bc0045f6780ad008b995a90b3093a62a817c52456da0c107225a14959d2
+- card_id: togashi_matsuo_experienced
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: togashi_matsuo_experienced.jpg
+    sha256: ad1f13fec70b8a10605bb9e869258fc9b1855dedb238487460b5e4b6c815a09c
+- card_id: toturi_kurako_experienced
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: toturi_kurako_experienced.jpg
+    sha256: 7d4ac0c9ebf3be2be1d0e4840ba636a86b2e40ea43d044d53f955b10d165ad0d
+- card_id: tsuma_dojo
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tsuma_dojo.jpg
+    sha256: 053e9b30b02af21fba68e667cb914b1d3b0feacb94310334bd82f63a9d4882c3
+- card_id: tsuruchi_armband
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tsuruchi_armband.jpg
+    sha256: 25960e21317c1d83fc0341570577d0dcd1e8cb7eaaf0edb91d9e5c6952a2fc71
+- card_id: tsuruchi_etsui
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tsuruchi_etsui.jpg
+    sha256: 365ee63f05e6f80974702547bd2a71c3a59d7c46560b79d4d034f532ce82fb21
+- card_id: tsuruchi_iyaken
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tsuruchi_iyaken.jpg
+    sha256: 965f5bc1db7d146ac8d98ed168c4dd0942dee302d432ae444ed9a37b52d56a9b
+- card_id: tsuruchi_shiroko
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tsuruchi_shiroko.jpg
+    sha256: 97786002ea78ac3bd7a18985ed917290ae1a87737e5b7eeb69e0e3f82e506b90
+- card_id: tsuruchis_retreat
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: tsuruchis_retreat.jpg
+    sha256: ac48c40b9ffaf80105822a3aed750d1e43e0719a3347766683b7915270e6e910
+- card_id: umasu_sensei
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: umasu_sensei.jpg
+    sha256: ac85ce80cc00f77ef1f4fe13eb4ab1c191a5f211ae46fe885d91170f7af352c6
+- card_id: uso_sensei
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: uso_sensei.jpg
+    sha256: ec60835ba6cf414766172e98ae411bdea4f19f8c9f45882db268ae499ec3c531
+- card_id: utaku_tarako
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: utaku_tarako.jpg
+    sha256: 78a3b16707686a77b51fa927a0ee38bcd49c159141291f0ce2f20548fa3797f8
+- card_id: victory_or_death
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: victory_or_death.jpg
+    sha256: 09aa5fc9226816bd6d3ad9a29072c5153343539ed01ff815802ae9a441b72c6e
+- card_id: wardens
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: wardens.jpg
+    sha256: 446afa6080db2edfaabd100b3c4966ea2595017df7001a7d0a027e226c7941c6
+- card_id: warrior_pilgrim
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: warrior_pilgrim.jpg
+    sha256: 3a14f06426132a4eb22f6dbf0a7b66bb53f9d59fd6ab1ca85b2a4c2ceb1dd165
+- card_id: way_of_sincerity
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: way_of_sincerity.jpg
+    sha256: 594c8079bbaa07c9a8354912f30e44f6937dbff241bc474ca9c8385180ce32f1
+- card_id: weapon_rack
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: weapon_rack.jpg
+    sha256: ae114c213e256cda059cd431db15ef5ce6f4ece2345c1d939531365c78be33bd
+- card_id: weigh_the_cost
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: weigh_the_cost.jpg
+    sha256: c99217cb6625ff558d3eedd486411f0a2345f82cc326c133242acd8e9f526e5e
+- card_id: well_laid_plans
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: well_laid_plans.jpg
+    sha256: c450985ef31fe04b90ab3a8ff9a0be65197e084199d4f0773ecbb593cca3be11
+- card_id: wrath_of_the_storm
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: wrath_of_the_storm.jpg
+    sha256: b3e276117e1698dcef2e813f7c8cfd969455633d57358005bd54723291bc87ff
+- card_id: writ_of_commendation
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: writ_of_commendation.jpg
+    sha256: 3693e193911cd750cd5d8d9a7a1c6801371c3ca4f0963dda50bb1694bbc5420d
+- card_id: writ_of_obligation
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: writ_of_obligation.jpg
+    sha256: 1c0497ce12d48c289d9e66d71658d4fe4c1120656c10646bba8947390068f0dd
+- card_id: writ_of_requisition
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: writ_of_requisition.jpg
+    sha256: 10b49180dafa5a0db721fea7e515bfaf2e273ac97f7a26829cf531adbf220625
+- card_id: yogo_rieko
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: yogo_rieko.jpg
+    sha256: 1628df5dbe14d98ae68a9420538ec26aac66c291249377b9296e26b452461051
+- card_id: yoritomo_matsoru
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: yoritomo_matsoru.jpg
+    sha256: 806f154e45d26bd7e407ed4a117bf372ea3ecd9d7c1f2f97a5e3875b63d7149e
+- card_id: yoritomo_tokaro
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: yoritomo_tokaro.jpg
+    sha256: f0fcc405c38632811ebccebac03a42a5636d131cf4607d09a2d952fcced6e84f
+- card_id: zchkir
+  printing_id: web_of_lies
+  files:
+  - role: front
+    file: zchkir.jpg
+    sha256: 685db4aeb5e344429f4f830f1c0824c3d17c0a7d68372a5c264b82bb17d2e151

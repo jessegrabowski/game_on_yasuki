@@ -1,0 +1,932 @@
+set: The Fall of Otosan Uchi
+images:
+- card_id: a_champions_strike
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: a_champions_strike.jpg
+    sha256: 5b4beea804e46bbc997233758cddbd554b5c610f51ee88d933a1bfb2cbdf0b5d
+- card_id: a_new_path
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: a_new_path.jpg
+    sha256: e6791e78de6dc55badc7387c6c7d1c854fff83b5ceb9479369ef5f07a53b572a
+- card_id: agasha_oshu
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: agasha_oshu.jpg
+    sha256: 48dc72080b8fd52abfa7a7eca126458e00d7a8306f505448f484fa81b1501b8d
+- card_id: agasha_yubisaki
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: agasha_yubisaki.jpg
+    sha256: b82c317176966c56bc7d397ee27cd18b39378fef792a521f21a19068f42bf6fd
+- card_id: aid_of_the_fortunes
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: aid_of_the_fortunes.jpg
+    sha256: 65bc9c6f8cd9677aa7fc8582a1a1af3bcd24e260c262bca9b81e7fa13b18d312
+- card_id: akodo_tsuri
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: akodo_tsuri.jpg
+    sha256: 352a9409c3d49c19d2fced7c39fd639ea463064d7fa9ee9d0a578edbea09260c
+- card_id: ambush_pits
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: ambush_pits.jpg
+    sha256: a664ee10f10e7edd2baf1af3c6088f9138aed96ff3e9c92a88e9ca15e040bfd7
+- card_id: armed_and_ready
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: armed_and_ready.jpg
+    sha256: 2c76e78a6da81a1b6270be92ffff1a420a773ac7b3f01087e044de2114e11e4e
+- card_id: arrow_of_purity
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: arrow_of_purity.jpg
+    sha256: 8d045d389031c2547f10b5ab9d53f68cde3a14440a747d7786c664386dcbd7e7
+- card_id: balance_in_nothingness
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: balance_in_nothingness.jpg
+    sha256: 2f1e6571e3ee4dcdc16181fdd7e5555459bbf31da7bb03e645adeefdcc9688e7
+- card_id: bayushi_kaukatsu_experienced
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: bayushi_kaukatsu_experienced.jpg
+    sha256: 2cf608403018aa0f5605e91e291c576484e6d604939d6c568596b37d5bd6e90b
+- card_id: bayushi_seiryo
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: bayushi_seiryo.jpg
+    sha256: 00fc8a793cfbedcf1f897d611015bb1af9b73ff0f5b51c0725f54d1c9e927316
+- card_id: bayushi_sharaku
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: bayushi_sharaku.jpg
+    sha256: 1341ad9971a6546918938e052ea41f8957856bef5f37fcedfe2478826a0b93cf
+- card_id: beachhead
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: beachhead.jpg
+    sha256: 1fee0f62f56f9ea9a4be8a7947c021c3b95ecf88a772dfbff9f372fbe70eb008
+- card_id: blood_money
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: blood_money.jpg
+    sha256: b755244ae2e9e8c22038a33f8084eb572b72372c76c9b2af421f94c557b94913
+- card_id: bonds_of_fate
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: bonds_of_fate.jpg
+    sha256: ebab30c7386171cde15445fcf893b8ebc87f1649e308dce793c6dbae900e5185
+- card_id: broken_words
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: broken_words.jpg
+    sha256: 2b0c1be0079b745067a2dd2c58ffbf9be2820edfc1d12ceb66139b7d85b8049f
+- card_id: carrions_breath
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: carrions_breath.jpg
+    sha256: 886fd056eeb7bb40aad6a95d79d7d92e705852ce1c1c5bba43a434e99268d10e
+- card_id: chaldera
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: chaldera.jpg
+    sha256: 512de8e30d37226714b3f7e37c301a8e5a2db6fb9f0a430dc2796a00f24ae66a
+- card_id: chtppukich
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: chtppukich.jpg
+    sha256: af770b7607588f20ba8b7cf2743f6b8e32ca7e36508794810e3f046ca9e9e288
+- card_id: consuming_darkness
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: consuming_darkness.jpg
+    sha256: 2b7ff7a5211a7600997c47d5bf6429c18d992cceb1340fd6e5701db3de5c0079
+- card_id: daidoji_ekiken
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: daidoji_ekiken.jpg
+    sha256: 4ffd2d7232debf4c8855fa780f338dd4f49ebe9d1bb4be8d5a3e7e8496c85d8d
+- card_id: dark_eyes_on_the_wall
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: dark_eyes_on_the_wall.jpg
+    sha256: 8cbdb6e1c818c3d72183bdc5d97f916a8185eff569626667d5783d011c63be10
+- card_id: denkyu_no_shiryo
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: denkyu_no_shiryo.jpg
+    sha256: a85cbc6fc41f642cc4e7961707d40eafa928636644c8ba67ca473b0da6a38dd3
+- card_id: dojo_raiden
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: dojo_raiden.jpg
+    sha256: 9de8ce89f21d638c184545ed14fff06a1f4d26087bc499b6f967cadb46e49e28
+- card_id: dotanuki
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: dotanuki.jpg
+    sha256: 10a800a0c3ce09daf53f49f88de752ae0f7aa3d19be4c1193f9323e6e7a43f06
+- card_id: earthly_yearnings
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: earthly_yearnings.jpg
+    sha256: efa12299cebf5a88e2d3d52dc120c5701268963c9daf26d524b0ecd1fd49ff80
+- card_id: eye_of_the_needle
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: eye_of_the_needle.jpg
+    sha256: c55fe2a6d52974d71a4daacb9679154b807ad06641cc4004fa437b2be775d8eb
+- card_id: far_and_wide
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: far_and_wide.jpg
+    sha256: a0ef793843de12fa276fbff43353cfe9c32bcad6e1daafec222c2cb51de818ff
+- card_id: favor_for_a_favor
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: favor_for_a_favor.jpg
+    sha256: 2a66e61307ea443f05c2f7ef2144b423bde9f26c8577c6677e82d72fe1d41ef4
+- card_id: fields_of_grain
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: fields_of_grain.jpg
+    sha256: 425b6c960d17020a37648f6755549811d98d42ccb381f057d1d437fdff0ead30
+- card_id: fires_of_the_phoenix
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: fires_of_the_phoenix.jpg
+    sha256: a859129eec2f21240dfd873947687c509ab916e05108d5ad3fcb1e539e1f04c3
+- card_id: footmans_yari
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: footmans_yari.jpg
+    sha256: ec3dbcc273eedae122b88aaee531f51c490f90dccbe62ea2f360706e440bf337
+- card_id: forgery
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: forgery.jpg
+    sha256: e122eadfa937e5a0bb46f24bbe4fe4ff053a87b966536a6b666e0fd47bf6a9ae
+- card_id: forward_guard
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: forward_guard.jpg
+    sha256: ea0cc0de37beb67ae37cc75b6b25614295beaf6a87d541b9d0503137247c8437
+- card_id: fury_of_the_damned
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: fury_of_the_damned.jpg
+    sha256: f9bb8cc8b2e811b111770c131c67fa0b04d5c9d85a6d1a1167a0bd225719b495
+- card_id: glick
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: glick.jpg
+    sha256: 9c0b7303bdb907500817d3c98165460c4350673fd22908347f2c63afaad7b1ea
+- card_id: h_tachch
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: h_tachch.jpg
+    sha256: 5832712911b13d0b5a712d69e6494e00d8f6885c91ffeb81bd8d4d798b803ebb
+- card_id: hand_of_the_shogun
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: hand_of_the_shogun.jpg
+    sha256: 727388fbcc909a2fcbeace90b124fbaf552593ac20e7e91f96c37c57752af803
+- card_id: hida_ishi
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: hida_ishi.jpg
+    sha256: 7a23b6a782f500024d3e4f6c6f773fd60f83def6d250d28a6f4747b46468d78e
+- card_id: hida_yagimaki
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: hida_yagimaki.jpg
+    sha256: 31e3df7179eed3876f27e5e481df2c746021c2248c7b3b12e45fa208f80e4efc
+- card_id: hideo_spawn
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: hideo_spawn.jpg
+    sha256: a6610fe6775c3ccd7b073e2b60f87c1b59252de14e70ee1df8557f99fdaf54af
+- card_id: hiruma_tatsuzo
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: hiruma_tatsuzo.jpg
+    sha256: ac14bbb8e95f5da5865227e5d5b9fd434123f4d28b3d1174cb0f558796587759
+- card_id: hitaka
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: hitaka.jpg
+    sha256: f40896646d03b2aa2324feb1b85aed709f6a82a7fb10417a828c63b42cfbf51d
+- card_id: hoshi_chuichi
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: hoshi_chuichi.jpg
+    sha256: 7675bdc5c82f8cf32bc0a78ecbaec5c8b9c6e66e708df531a6e0dd921a2caf45
+- card_id: hungry_ghost
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: hungry_ghost.jpg
+    sha256: 87229da5c67105333f0361a9b2cca72ef58b14cb3f5030deb7b9e72a552caa64
+- card_id: hunting_cabin
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: hunting_cabin.jpg
+    sha256: 209d205f23c3a5c2edc7afefe61ff7307e0a139b5f350fffa021785923f01d3c
+- card_id: hurricane_tattoo
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: hurricane_tattoo.jpg
+    sha256: 82b722c5d2218463fc60042d929efc46d255487ce68d1001d2b6208393236f87
+- card_id: ikoma_kyuso
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: ikoma_kyuso.jpg
+    sha256: 1a6447d4bcd7324c74cef91eb35119f8c9b265c6f8c1767d255a48f9e28c4b2e
+- card_id: imperial_messenger
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: imperial_messenger.jpg
+    sha256: 17cbe161c0f08facb24d2353dd5ef3dce66e217a549e76d2aa2bfeeb6434617e
+- card_id: imperial_proclamation
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: imperial_proclamation.jpg
+    sha256: 10f4556e568654cc849c2e8c6c4913748a5f0a2b7654563bf91cbf6e74002f55
+- card_id: inferno
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: inferno.jpg
+    sha256: a3dd1a64e0ee408cae4d0dff1c2377b487ff056f6dfc89694624811802b96ec5
+- card_id: informant
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: informant.jpg
+    sha256: c1e34688a749a442f3b05b5fbc876ccd70f4da682748e2621850ad89b70b246b
+- card_id: isawa_nodotai_experienced
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: isawa_nodotai_experienced.jpg
+    sha256: c1b4ed9c49e8045dd36d5cf521645900b608efcdd3a843b1736bdd3568e24af8
+- card_id: iuchi_huasha
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: iuchi_huasha.jpg
+    sha256: 0095776ba1b83376d9a8d45e50d2b96d74f13afea3fa47e3e3614e66c522967a
+- card_id: jester
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: jester.jpg
+    sha256: 92d7f8b0763607c4baa2bc6ffc95bf9c2f460a7928aa3975df05f8f51cf142a1
+- card_id: kaeru_contractor
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kaeru_contractor.jpg
+    sha256: e83f22e72967fbc43df26c7575bb3ea08e2d4151975bc6ae286ad543b47c7226
+- card_id: kaiu_tasuku
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kaiu_tasuku.jpg
+    sha256: 9f9356d0446485af3fc1824adc0790cd895b717701a75529c12ce6253517bd0c
+- card_id: kakita_instructor
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kakita_instructor.jpg
+    sha256: 4540e50583f5567a837459787ea99c834f1946f5976ef64fa03130dbe4cf5394
+- card_id: kakita_munemori
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kakita_munemori.jpg
+    sha256: 7f6beb8451763ba88d63f43c56871a72289c722ef9219a49fe935d6af609b91d
+- card_id: kakita_nakazo
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kakita_nakazo.jpg
+    sha256: d5ea8dfc36d55400923a46891f393a1bb4cf2297d7ecad91727e660639b4df89
+- card_id: kakita_yariga
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kakita_yariga.jpg
+    sha256: e1b5c2c9b0fa1e5d8f27d684e61259fb96bd3cfbfd7767d4f1aec7722af4620f
+- card_id: kansen_haunting
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kansen_haunting.jpg
+    sha256: 22f7a2a3c91ccd2f492aae3b1afae54e3796a66a13043656ce6fd1ec2e97b9fc
+- card_id: keen_eye
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: keen_eye.jpg
+    sha256: c870fa1b0f93c902dd0c1b954d11bd8aaa7ba98461b33952e05dfb25c8de724d
+- card_id: kirei
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kirei.jpg
+    sha256: 31e0795c86f7507cb396ed570c9bf742d235e78905f06f1ed08bc585254938bd
+- card_id: kiseru
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kiseru.jpg
+    sha256: caea05ea9762ca83ccd50e8cb0c9aaa6723860696209d5b85d1da4add470ed9e
+- card_id: kitsu_juri
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kitsu_juri.jpg
+    sha256: 926101bb6d9847c0e0993f66b163318b57374ad11053b1d1e32cb0a3d6c48005
+- card_id: kjgkt
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kjgkt.jpg
+    sha256: bb91c0885f1beaef27dfa0b5c823b57b3ad5a013f1822b60ca89ba0fd8f2c8a9
+- card_id: kokujin_experienced_2
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kokujin_experienced_2.jpg
+    sha256: 6fe3a9690213b9414a415e1e00ff0d949a17716aa314ff78d20e064a7c5bd7e6
+- card_id: konetsu
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: konetsu.jpg
+    sha256: 04d08c0e19da2f3b16b50876bdb7f32f1c2a4f91ddf55e9bb135fce0ecba7841
+- card_id: kyofu_experienced
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kyofu_experienced.jpg
+    sha256: 3a2a099e29d504d911651ed7a02464e03cacfa3b807f48174d7191f811450661
+- card_id: kyuden_doji
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kyuden_doji.jpg
+    sha256: 2e914a2e9fdc2326d2d71b69145c3118bb155de3e6820912d2886c9004bdbe83
+- card_id: kyuden_gotei
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: kyuden_gotei.jpg
+    sha256: ad41b537eb1e1ce413cb6ea1e12e04d2254a908472235d08a86c09b79c3f9e2c
+- card_id: led_into_darkness
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: led_into_darkness.jpg
+    sha256: 13cf1fd99a20779acf609d55b5d51cd5753162cf62524dbde94e5f00128c418b
+- card_id: legendary_strength
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: legendary_strength.jpg
+    sha256: c412dbc30a81a8d34678e970ffcea867232296c2b9f83550defcd07425863a53
+- card_id: let_courage_guide_me
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: let_courage_guide_me.jpg
+    sha256: 92bba9e8bac567b0cc380bfeec603951c19adf273dd260ce50083268b751c77a
+- card_id: lost_ashigaru
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: lost_ashigaru.jpg
+    sha256: c0409936b0d2b5be6458ef77a18ecfa5470cf8e4037ab6d3b3b49eb2c5b15ee5
+- card_id: master_sculptor
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: master_sculptor.jpg
+    sha256: 553dbb615e1ba0d0b7e81f0a553140c47be96d100a5d5e38166fc621b7c6cf2d
+- card_id: matsu_masakado
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: matsu_masakado.jpg
+    sha256: 727641d6f5b1ab679fb6b77e4b9ca3ece4bb314460e646d005a35fea5b5cb3cd
+- card_id: matsu_reishiko
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: matsu_reishiko.jpg
+    sha256: 25c3cbbdc454d88a0bd1bf9763655b3f2394f370ed15be2ccf7421742f0daf9f
+- card_id: menhari_gata
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: menhari_gata.jpg
+    sha256: 9785e7a24dd07e1ed9f53d9b68ad9ca1b70a3bc8a3008d9976966fdb74144e4b
+- card_id: mirumoto_tachiyama
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: mirumoto_tachiyama.jpg
+    sha256: 29f0ead7d272f5c581a008f21146d53d66003a8cbb18b4ac2b7d15c5e557fc4b
+- card_id: mirumotos_haori
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: mirumotos_haori.jpg
+    sha256: ed667254c73dc59f266cb4bf072675b5ce01eb986153a562e0fbd86064028641
+- card_id: moneylender
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: moneylender.jpg
+    sha256: 366653c86d0f7863471215a3b3967ab1a3e82682c671d464cf5e2a615416a720
+- card_id: monkey_magistrates
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: monkey_magistrates.jpg
+    sha256: 9614108a8088d0ea410c7fe33cd76861e749c4c1fd3fd888aa0a792a09ad940b
+- card_id: moshi_hinome
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: moshi_hinome.jpg
+    sha256: 50a16eb0bd6c31891a15d90f1efb0b7419bb57f5b260db4476e8e4c37be80c62
+- card_id: moto_sanpao
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: moto_sanpao.jpg
+    sha256: a26b53134118dc34af2c7bed124a0d8a8074b8fd940301c2f545830a67c8a399
+- card_id: moto_tsusung
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: moto_tsusung.jpg
+    sha256: 32be3cafa5f2926eae902f1d675889d0fa93e71b8af468f391e40951296d21bb
+- card_id: mystic
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: mystic.jpg
+    sha256: 862444a70b4e897339ac4d4e7d9938a81d9aa51f08cbfac391042a22c198d14b
+- card_id: now_face_me
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: now_face_me.jpg
+    sha256: 9b43eb2ab272510f05fe72c6f53b70d06235ad300fef105383f65dd3a6a9dcb6
+- card_id: ogre_hordes
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: ogre_hordes.jpg
+    sha256: 394984ccb0d5adc0eb843398f28b6dde942c67e1ce675e8571128efaa38e1329
+- card_id: omoidasu
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: omoidasu.jpg
+    sha256: 6914fea2448b7c1af51c542dec6ba71cb8545b0e6b38e296a974ff8c69172b0a
+- card_id: one_will_fall
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: one_will_fall.jpg
+    sha256: bf60e1c3241e0f15a0e4cdf694f1997f855b0e8950b9b9561b0accb866ce6bab
+- card_id: perfect_attunement
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: perfect_attunement.jpg
+    sha256: 30eaac604e4eb664fbdd10dbf9e31b3a5c4a3c18c54c07eb7c137361b41e1657
+- card_id: pile_of_stones
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: pile_of_stones.jpg
+    sha256: 28d45cd0f74a3e91b0521c18c78d8398714082f46b5e9863c0f9a0b2705e1a1c
+- card_id: playing_with_madness
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: playing_with_madness.jpg
+    sha256: 2d2004d56f08e09094b70ea7948a7dbd51812d3be6bc1899119a052e00285061
+- card_id: precise_orders
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: precise_orders.jpg
+    sha256: 82948bf14f3066d100c6ed701e309bcb517172ddf45fd2e4d79e5365b16fda50
+- card_id: private_dojo
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: private_dojo.jpg
+    sha256: d4a8d6f49ba019e4a453912fbee859f465bb922a2a9ad30942f427a09f41b7f0
+- card_id: pulse_of_the_black_river
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: pulse_of_the_black_river.jpg
+    sha256: 18e418db39f5a6d8c384988d54eed267f8154647faf760e5710b2e532514ea05
+- card_id: purify
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: purify.jpg
+    sha256: 210a033b48ff5557feebc330855935342d8c1df4dcac87f0fd344119f79a2f5c
+- card_id: recruiting_drive
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: recruiting_drive.jpg
+    sha256: 3c7757dde6c3c73a4396e6fb1853a304db28228408f28afc2b59fe179e5a4a56
+- card_id: run_for_your_lives
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: run_for_your_lives.jpg
+    sha256: 613be909fd19f52de511e0a33461c6be33fac687f313a6163f97fdb379a2cf80
+- card_id: scouting_maneuvers
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: scouting_maneuvers.jpg
+    sha256: 1da845b9589ff196dd929b2af230747722b1bf3bbb8d4bfe3bd3cc332597b685
+- card_id: shahais_fan
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: shahais_fan.jpg
+    sha256: ad655a216768a0908908f04949c773bf45fa3ce4b450f6cee84ac7f1aa63b1c2
+- card_id: shiba_takeishi
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: shiba_takeishi.jpg
+    sha256: d9b7d804f33670d75d90e74c8d6cd5a1726d111ec9ebb79ca166b23fccf42176
+- card_id: shiba_yoma_experienced
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: shiba_yoma_experienced.jpg
+    sha256: 6f28558d14c068cac3e7adb627f8e2e65417bc9fec8c13342cb0387cd816c613
+- card_id: shinjo_horsebow
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: shinjo_horsebow.jpg
+    sha256: 9a572905ae89b57f914625c906037639dbdb52b083109347fbd6cc8e585dac26
+- card_id: shinjo_rao
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: shinjo_rao.jpg
+    sha256: eff2a83dbc45844622bcabaaa7480b07f210c3bb42d6a5fc63941878cc630ca9
+- card_id: shinjo_shono_experienced_2
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: shinjo_shono_experienced_2.jpg
+    sha256: eeec8674148582647fbe7b60287368823fbce4e5562cc9b903a43c08a9185d08
+- card_id: shiro_tamori
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: shiro_tamori.jpg
+    sha256: 32760362fb1a4c08952dc12ce6058d98baf9f3d054c629c37f4535b48e1c628f
+- card_id: shosuro_miyo
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: shosuro_miyo.jpg
+    sha256: 41c81625ffd81df63b0d1f5d328a5c1ef8659e5a522b80a9c3afcb0a6fa9a315
+- card_id: show_of_good_faith
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: show_of_good_faith.jpg
+    sha256: 52a8b361d51b7690e251495d22b9417a1b975712e3d0b0a419907e12b1be2359
+- card_id: shrine_of_the_moon
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: shrine_of_the_moon.jpg
+    sha256: 5fb6e87663004ba129519c5c6d114f5c352584f2a7c0a1365dda3871b347e8cd
+- card_id: shrine_of_the_sun
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: shrine_of_the_sun.jpg
+    sha256: 3b7a507f6f4d4f1bcdc845fbb1e961eceb2eb8bef784152d3cef13048e7c9f60
+- card_id: snake_tattoo
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: snake_tattoo.jpg
+    sha256: ee94862921c56d005bbb13b24d22c56ba4991cfca65da84e3235cff47f72e7c1
+- card_id: song_of_corruption
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: song_of_corruption.jpg
+    sha256: d241dd7bdee10b4bd8bc751b12468b7e70575b3bb96a3a20c5f0e479afa6bdef
+- card_id: soshi_kiyo_experienced
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: soshi_kiyo_experienced.jpg
+    sha256: fb59a2658086ff729d47b22567997fe80839bb114d299d99c093aea629c936fb
+- card_id: storm_legion
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: storm_legion.jpg
+    sha256: 78d514a57c5d56d6f4208825d784dd820064c5e37027baee911cc6a3b59af7b9
+- card_id: strike_at_the_soul
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: strike_at_the_soul.jpg
+    sha256: 55ed022ae9df4d919af7c62b9d9a0b05da07ad167516c4b81506613aafcef06c
+- card_id: summon_the_dead
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: summon_the_dead.jpg
+    sha256: 8dddbc77491fec2e2393485cfe7568e23e33b1eeecfce609037cabec32194411
+- card_id: superior_swordplay
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: superior_swordplay.jpg
+    sha256: 70da9e3c58d9ee4b33341a363a5a3a6105e86d902d49ee88492d2568d27f2e74
+- card_id: tempting_kansen
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: tempting_kansen.jpg
+    sha256: 3ef7c3a6b548a07330f7f4b6064cd9411bc8853afd33fa0aff50c085b6d6ae73
+- card_id: terror
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: terror.jpg
+    sha256: 4bb72d25d16deb4c0387f6f6a7241ec3594ebb02a5588fe85d1daf8ad66fcddc
+- card_id: the_anvils_blessing
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: the_anvils_blessing.jpg
+    sha256: fb0dc8b3a30bd7ac2245f143b4efc3ec28c83c9baccaa9674cb4f2171e0555f5
+- card_id: the_deathless
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: the_deathless.jpg
+    sha256: b90f25ad2f18b61f936ad9dfb22f6eb497d3bd7a39165e86210bcb015d393189
+- card_id: the_seppun_temples
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: the_seppun_temples.jpg
+    sha256: 8b9e53d45025728ee94d1be3d8f31bc9b3043afc60f594698f7cf1323a61194e
+- card_id: the_shadows_claw
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: the_shadows_claw.jpg
+    sha256: d3bd460bd014b577418ff68606a65555d9374470e21cc5fd8b096b58d418a5ad
+- card_id: the_time_is_not_right
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: the_time_is_not_right.jpg
+    sha256: 4d84c5aaa376f327e5af082fc87885c6a3a27de759d1d84eae88710851abc9c7
+- card_id: third_whisker_warren
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: third_whisker_warren.jpg
+    sha256: 9f30df6620fcdc5c06c59f7c4bac51e31711dcee84c10ab7080184a4607142fe
+- card_id: togashi_kansuke
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: togashi_kansuke.jpg
+    sha256: 211d16e975f1284c9b59e10a93c1adf633bed69a14287bacb970134f76a33456
+- card_id: togashis_shrine
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: togashis_shrine.jpg
+    sha256: b560e5935d9d5ed4f97c8bfa443997a6fb592a5cf45fc878e21bbec07404fc67
+- card_id: traveling_ronin
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: traveling_ronin.jpg
+    sha256: 4cecf8200de9b17d50b6b1c856aaddf8b39750fcde19fb035d9ffeaa5fe8a6cb
+- card_id: trickster_spirits
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: trickster_spirits.jpg
+    sha256: cf87fbb7419dadd257b93e6ef4cad918535450c02fe6bc7618aade4efa618c18
+- card_id: tsuno_blade
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: tsuno_blade.jpg
+    sha256: d27cf8e5635834b421b90290d81942d3df4ca4dbf5c705b947731efb466bf8fc
+- card_id: tsuno_house_guard
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: tsuno_house_guard.jpg
+    sha256: efe14f3f8241fc2f42987b7ae2a9cb30bf559451723b038c530981240d2c5a7a
+- card_id: tsuno_sochi
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: tsuno_sochi.jpg
+    sha256: 24ef309f42ef227d0648ffc74fa6fea90fbd8e1c544aaeef0c0506d7ad177002
+- card_id: tsuruchi_hunters
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: tsuruchi_hunters.jpg
+    sha256: 2d95649842d5858e361880211d9e5dd8ae2f06e75d3c9c5326ee5b3e84b91863
+- card_id: tsuruchi_technique
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: tsuruchi_technique.jpg
+    sha256: 8d424986c8f22d4eae772e350abba5855e7c42b96578240e43bbec29319ce4f4
+- card_id: tsuruchi_terao
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: tsuruchi_terao.jpg
+    sha256: 8677e515e4c880737db96bac2bf7a6ff71a809b9dcc886b784b7397725a1702c
+- card_id: tsutomu_no_shiryo
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: tsutomu_no_shiryo.jpg
+    sha256: 9803a3f9eb83ebf8e45a2d6efddc6312927f9445d5b9396f7632ff9d0120018b
+- card_id: unicorn_striders
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: unicorn_striders.jpg
+    sha256: 38e467a87384abf5a2b70af1c524a5aa3bc88506141929b66572512b6d66aec4
+- card_id: unquiet_spirits
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: unquiet_spirits.jpg
+    sha256: c95e3487f055ec80a1631f9ff43c17b5c6efb6512232010f1e505b29a6a6df6b
+- card_id: unraveling
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: unraveling.jpg
+    sha256: e6a184037207d29495a734108be1cdf2db5d1b3fd09c207f2d30e9652d665401
+- card_id: using_the_wish
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: using_the_wish.jpg
+    sha256: d1f90c138e26823d5a46c13624ada60a04bd094d5989fde135e347015ddb50d6
+- card_id: vengeful_dead
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: vengeful_dead.jpg
+    sha256: 454575441c46c458a9f5637dc5d154506833c2d37b9ad2f1b5f07e7eb3f8ce16
+- card_id: watanabe_builders
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: watanabe_builders.jpg
+    sha256: 290d484b7c20db8da2f5b32e54b1f47a8a562cbfa395e237db81dfad93e8ca98
+- card_id: wazinu_no_yokai
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: wazinu_no_yokai.jpg
+    sha256: 85e7ff8ac345be8b21016234065ee90b0ecd3f8132d72b26fd14fa85bbc09ae3
+- card_id: wear_him_down
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: wear_him_down.jpg
+    sha256: 74a48cd6b0b4caece63d519e1379c2018f1dbabdde76ad8f016b328560152198
+- card_id: whispers
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: whispers.jpg
+    sha256: c002adbece8820e988be371db2d1172dc3fc7b04d308914a1747e3cf38e1f959
+- card_id: words_cut_like_steel
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: words_cut_like_steel.jpg
+    sha256: b12662c68cf5eb9cb8812839d61c5e576d81f0ba63cfb06298ac2619a3280167
+- card_id: yasuki_yukinaga
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: yasuki_yukinaga.jpg
+    sha256: 1f52f7e7ab60050ded54bc6865f6df2ddc1a285c518b09a68f9c3ae5e43c46c8
+- card_id: yokutsu_no_shiryo
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: yokutsu_no_shiryo.jpg
+    sha256: 95f3923da737bf33b09f8b731b06c3ace1286a9b894a5b22bea97058bce9b637
+- card_id: yoritomo_kalilea
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: yoritomo_kalilea.jpg
+    sha256: add1a62610192f37b808490141383806dd5d7f5b49a30a4e28c9911a18bc92cc
+- card_id: yoritomo_komori_experienced
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: yoritomo_komori_experienced.jpg
+    sha256: 6a7f3b81d47d658fdb5d82deca1875ae2d09b9f0fbb5e2f796b8edca33e89821
+- card_id: yoritomo_yoyonagi
+  printing_id: the_fall_of_otosan_uchi
+  files:
+  - role: front
+    file: yoritomo_yoyonagi.jpg
+    sha256: ef525decfbfe069b08fd2f95b14be041fd3bb3e90fe7c37f57dc0e19c7ec7005

@@ -1,0 +1,992 @@
+set: The Heaven's Will
+images:
+- card_id: adepts_of_mighty_pokku
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: adepts_of_mighty_pokku.jpg
+    sha256: 24a6e2f52bf4612fb393de93e14d0e58c83118c012b0d6b2f81a8a6673915129
+- card_id: agasha_iwarou
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: agasha_iwarou.jpg
+    sha256: 9e0bbdc5d8d4669f8e4724dcb43d51ce7df58f49e6262c882cb86d434bfcb486
+- card_id: aggressive_landing
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: aggressive_landing.jpg
+    sha256: 98c12c30ef5b4342d88550204bbdaf001837348b050d4d609e8fb506bdf3fe29
+- card_id: akodo_hijikata
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: akodo_hijikata.jpg
+    sha256: 6ee2c32ac3ba445ff0ebafc19e8906fd9b62e239202c9cbf8089edce7f800d96
+- card_id: akodo_shinichi_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: akodo_shinichi_experienced.jpg
+    sha256: 1758311269b555f2ac9dc8071ed1aa6d3c8332df2ab04efde3ec3217eb8a739b
+- card_id: akodo_tadatoshi
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: akodo_tadatoshi.jpg
+    sha256: dae3539485eb172e98fe4b13c2f3c5d5cad37843bc27ec899b7b3c466f3dd71f
+- card_id: armor_of_light
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: armor_of_light.jpg
+    sha256: 2ddd629d602f8a4ba165f6251044d94d8caf1234bb9d8f00d074abb92ce609e3
+- card_id: asako_juro_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: asako_juro_experienced.jpg
+    sha256: 282b10b8f1d6667f59fb1e5a9b041b11ac8556d40819ff69182e9a772e4e4097
+- card_id: assassins_strike
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: assassins_strike.jpg
+    sha256: d42e207538856b7b12420d189240242fd50dc015cce1a6b23cd5c6e75d2a951c
+- card_id: bayushi_gaho
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: bayushi_gaho.jpg
+    sha256: d5995f475f51f332c329ae993cb67132c4cc52e0e4fec08669218c971ef02ea1
+- card_id: bayushi_irishi
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: bayushi_irishi.jpg
+    sha256: dd3f97f6ca82f648ab1083b445977c488be965ac6a06652b61aefc15493ded79
+- card_id: bayushi_kasata
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: bayushi_kasata.jpg
+    sha256: fd403afb11bc17399c21c9a44d98d1d92c25bf2e1cac8ce498e2e5b11f508b43
+- card_id: bayushi_kurumi_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: bayushi_kurumi_experienced.jpg
+    sha256: b5b6822f8b0ee8009da13db60d99004ca66cde464ee401b93a09fa9bc4cc685e
+- card_id: beloved_of_the_clan
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: beloved_of_the_clan.jpg
+    sha256: 65101f2744b034f081e17d4b9f6776d71734c4d85a55fa1c6b8f926b54743588
+- card_id: blessed_tessen
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: blessed_tessen.jpg
+    sha256: 12ea1658923d17f46e271c5a610d9ffc802f8f4c8437f768e037e051bf392696
+- card_id: blighted_region
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: blighted_region.jpg
+    sha256: 51a7495a0320f774f0be692690f5bd2dea3aae14561edb5b08640513ef40936b
+- card_id: broken_reef_keep
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: broken_reef_keep.jpg
+    sha256: 92ba7c5fcc38617fc69bc22a0d881046e9018c8380192e9d9b855fd4c8b3c056
+- card_id: bronze_memorial
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: bronze_memorial.jpg
+    sha256: 6ece3866f10312f1dec337080a2b5febcff155acc808f4402b5963dcd807facc
+- card_id: chagatais_legion
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: chagatais_legion.jpg
+    sha256: 0b44a64c4d766ee4681dd3667aa89dd3564ee5fda0b2320c62052be256984a09
+- card_id: chuda_mishime_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: chuda_mishime_experienced.jpg
+    sha256: 3c89a4f21067bc14cb5e3dbfaaf5ab3b266e75d7e8f64f6307d331688515d550
+- card_id: chuda_shikyo
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: chuda_shikyo.jpg
+    sha256: dff9baf8b7900b35423970ee33492e6deed8c9178296ae9391dff48d8a2661dd
+- card_id: claiming_the_throne
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: claiming_the_throne.jpg
+    sha256: e5840553dd4833a90bbc077fac30651c9602a4452b48ea2cd7b28a955af61f46
+- card_id: consecration
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: consecration.jpg
+    sha256: d1233f60d72f678d2c8eb1d52c38ad269bd2247a6b0be5a2727e31dd6fb58194
+- card_id: daidoji_awao
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: daidoji_awao.jpg
+    sha256: a41c7f7a10bcac7cbc9d0c3717201ca929de75a7fbba621c486cf1ba0c7373c5
+- card_id: daidoji_barashi
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: daidoji_barashi.jpg
+    sha256: 76fa4b47da87f37d21b36d1b05cd953f988470a4d07711ebd54cd608e317e6e0
+- card_id: daigotsu_kurai
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: daigotsu_kurai.jpg
+    sha256: 4acddb55af2aeca7af3a1328f65368e40f8530dac1f488272bf8503d7ce7b6e2
+- card_id: daigotsu_meguro_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: daigotsu_meguro_experienced.jpg
+    sha256: 8546f5147d3c47e95ed25e2d2baf098b7bee9e7f7862c26578ee257b9cd543be
+- card_id: daigotsu_sendo
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: daigotsu_sendo.jpg
+    sha256: e40432cead4e0449177785851d2b733b0133015f1ac8d2aba12f0042e289a9fa
+- card_id: daigotsu_shiraki
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: daigotsu_shiraki.jpg
+    sha256: e7c570e9a15b1d647b0525857b2f9b3964439cba3054bf24a25d264f8bc66c56
+- card_id: dance_of_the_kami
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: dance_of_the_kami.jpg
+    sha256: 0c97eb6d8e66eaae0f534f15000d980d8bf8bc425fc3a46656fd8c640e8a949f
+- card_id: decisive_strike
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: decisive_strike.jpg
+    sha256: 0123817be834e5c4f63682959578c738755664b7d83343e3283cdee518b5bd0a
+- card_id: decree_of_peace
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: decree_of_peace.jpg
+    sha256: 2408324c3732266b2becfcd7a647225053fb9d5dc92349cb98783147d7752b38
+- card_id: defensive_tactics
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: defensive_tactics.jpg
+    sha256: cf9edee39d1b1636dcf72e801895321d26cea60a531988565c0525124bd2f5a1
+- card_id: deftly_wielded
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: deftly_wielded.jpg
+    sha256: 36fcf75840676344c859e77b3e4d6de1df71a4e8d5a7f881df4f89fca4964fde
+- card_id: desperate_plea
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: desperate_plea.jpg
+    sha256: 5cf088c79c30ea768bc2a6795ed3634d6d0c33513638e8a0f6a06d776ee15934
+- card_id: discretionary_valor
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: discretionary_valor.jpg
+    sha256: d5d97f69041ed53084333edda0455008fa200ac787ae80039aa9bc1d9a94d377
+- card_id: doji_hiromi
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: doji_hiromi.jpg
+    sha256: e4bf7d09b5963315660bdcba7b156b186457a714c4643a55095cbb164ad1cde1
+- card_id: dojo_applicants
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: dojo_applicants.jpg
+    sha256: f7bc23037b3ca9758442ad70ee479784655d3963adfbac6589c4655f9a6cc3d6
+- card_id: eku
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: eku.jpg
+    sha256: 3d3da0fc29bbe48c26a84b97381acfbda60418e6d69e031a1c1578b3f4eeffe2
+- card_id: entangling_terrain
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: entangling_terrain.jpg
+    sha256: 324adba3874fa98fe1c4d99a39d3c4da11332506a6f4642a673d7be4308f5a72
+- card_id: estate_halls
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: estate_halls.jpg
+    sha256: 52365f65458064df159306d150b763c69e88c593aa6f15388998bff47717397d
+- card_id: fall_of_greatness
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: fall_of_greatness.jpg
+    sha256: 6b82b008158da8055b2e55913abc8d08f9d2d2641854deeaba53bcded096bd09
+- card_id: flame_of_truth
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: flame_of_truth.jpg
+    sha256: 3de74dde59611300a3499f44c013f94b8f9a774bd838e049e2948d8e2ecae424
+- card_id: flanked_by_nightmares
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: flanked_by_nightmares.jpg
+    sha256: 0d95057b14f0bc5b2d8430eb72b834f1f2d41ab109717bfe8d0b736237561084
+- card_id: footmans_pike
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: footmans_pike.jpg
+    sha256: 3990a54b2b779c21e3f4f1502eb65f149531e21bbdc4d2756e2e751f6ba31f82
+- card_id: fortified_fields
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: fortified_fields.jpg
+    sha256: d8b86765d814f9c6908767ce039c7ced78c84b347d631f516e993e89f08ef910
+- card_id: fortunes_favor
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: fortunes_favor.jpg
+    sha256: 35053963606163c4814931c2c096f88910d7636c9148a91e6fd8f37dbe2fd332
+- card_id: fubiri_no_oni
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: fubiri_no_oni.jpg
+    sha256: 9fe20cc2a301164b448cd93a89cd0ec5f688c8a66c98eb653ea25717d34e781d
+- card_id: gentle_blade_of_winter
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: gentle_blade_of_winter.jpg
+    sha256: 64bc1491b1a780b41cd79501d0dcefc2347d9d4475d0f3a7a50bf075dd440e52
+- card_id: glukku
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: glukku.jpg
+    sha256: 11c3cc195231c1e8779ae812573103c33668c39c16a036925ca4f18299d1f4b3
+- card_id: great_falls_castle
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: great_falls_castle.jpg
+    sha256: ac099482da0ae5491491b09610abc7afb0d1e1c9a40f6ddb614983044c0056d0
+- card_id: hand_of_osano_wo
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: hand_of_osano_wo.jpg
+    sha256: d68268366ac7221711446a4a31e42f274b9e7e1663934fdf3cc31351090f5a18
+- card_id: hateful_curse
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: hateful_curse.jpg
+    sha256: 58513f288cc0825f3f0f05ae1bdc4818a581744aaaaabfdb4545fe6609c3e64b
+- card_id: hida_kaoru_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: hida_kaoru_experienced.jpg
+    sha256: 5283741bc54fb7b5bd5008b681c1f37c3f146fbf9709c5b1c83898b7cd9a6152
+- card_id: hida_ubogin
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: hida_ubogin.jpg
+    sha256: 767c00e97b8e9a437a73ca203797722b911ebb4857c751bd55fe83dc84992b9e
+- card_id: hiruma_moshiro
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: hiruma_moshiro.jpg
+    sha256: cc37fa7d07f61285e3aae401cb999c8dd0d72b315a715d854f27a4950b62130c
+- card_id: hiruma_tabarou
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: hiruma_tabarou.jpg
+    sha256: 17791cb28e8e055261f05596138e9a384aed71bf11d0eb5e3526a44824c01ed9
+- card_id: hold
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: hold.jpg
+    sha256: 905df7eb32929dc89b4b6ab675cb75d9d4ac14739c1a2c049ca349b0b7d74ddd
+- card_id: holy_site
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: holy_site.jpg
+    sha256: af524357773b7f0b3a93aed1b9fc10bc1970362cf5d510660280b19d35c035fe
+- card_id: ideal_grounds
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: ideal_grounds.jpg
+    sha256: 75753530ff1ce228b038bff77e8cf66cfcc7c11953b232a023b15555cdf5330c
+- card_id: ikoma_okita
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: ikoma_okita.jpg
+    sha256: 165736c432f3abf1c3af8199d191a9bb4afb7908bacec0764fbd98178723a0fe
+- card_id: imperial_city_guards
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: imperial_city_guards.jpg
+    sha256: fb5ff5000a13157353243c94fa7e5634491ca7021359a6a5f27d5ad5596efbb4
+- card_id: isawa_chishaki
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: isawa_chishaki.jpg
+    sha256: 14f0dde3f8bc1c688dcf6cbe708086db58589a86b55177ba55c40f6d350f2a22
+- card_id: isawa_naki
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: isawa_naki.jpg
+    sha256: 7633cdb6c0eae616793ddcc23d3e316370c44dcb4dceb686c74ead5b6d9a66ce
+- card_id: isawa_ochiai_experienced_2
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: isawa_ochiai_experienced_2.jpg
+    sha256: af41935160202d026cf946223e1e547b63fe22f2719e6de930aa1be7f7aac0b8
+- card_id: iuchi_konyo
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: iuchi_konyo.jpg
+    sha256: 630f98ec7331eed77f51bbacf23a2deea32d7f26bd3d3a5057dac0684724150c
+- card_id: kaiu_seison
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kaiu_seison.jpg
+    sha256: e78aa06edd4b2997be6de7c2212123d6f3793017c24d7b87652ceaef0eb969a3
+- card_id: kakita_hideo_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kakita_hideo_experienced.jpg
+    sha256: acb0b3f66b77db05b35c538798605f315db3db5f3401712f3a3a0a0fdc5e1a09
+- card_id: kakita_hideshi
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kakita_hideshi.jpg
+    sha256: 4acb771220ce82de9882e5f8688f962285a7ce160e5a1d0aa3b463c11d253eb0
+- card_id: kakita_idzuki
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kakita_idzuki.jpg
+    sha256: a2cdba437806b0537d5abe118ddeffb0321fa89d070d632aff95ee7e24377be4
+- card_id: kakita_toma
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kakita_toma.jpg
+    sha256: 21a12f8f4daa2806b39b162d2ea8f64d9ba5b8ae87bbc99c4a6adbaeabfc7570
+- card_id: katana_of_twilight
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: katana_of_twilight.jpg
+    sha256: 1f091fa726043b92a42a716635312bf12e1f5c65823bbde47d05917c2d86536b
+- card_id: keen_blade
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: keen_blade.jpg
+    sha256: c8290a95aa8ade6a402caf50db45455905b5d87e6adeb7b86b517d3dfce75f08
+- card_id: keeping_enemies_close
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: keeping_enemies_close.jpg
+    sha256: 6db59b34dc4578de38f840359a01a43d5e62eb43e78a7cf8545391721004696b
+- card_id: kimogen
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kimogen.jpg
+    sha256: 284231dbdd48f024e4c615d2a4b346d38981c10b6e194f3d0978e7da04c4b580
+- card_id: kitsu_yutaro
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kitsu_yutaro.jpg
+    sha256: 8c97db562e535328de7574f7b8820dd7d0e9713625c12ba6724eed132337f290
+- card_id: kitsuki_rai
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kitsuki_rai.jpg
+    sha256: 5671ef36fef6d8966a39e8e05df1c0ea4d5e9257da4bef03a6aab7289890eb33
+- card_id: kitsuki_taji
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kitsuki_taji.jpg
+    sha256: 83c0a2b52137352cbd9d1426eba97d3a914c194f407ef6692b2accdd17fbb19d
+- card_id: kitsune_hisano
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kitsune_hisano.jpg
+    sha256: d217f6b8184ca5f0a51a67477ef704d05a4110bcac168fdf25556115afb187be
+- card_id: kuni_tanin
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kuni_tanin.jpg
+    sha256: 7586926a97da1b51d8a4d127d6e56fcf43372f29ea900d8812d3ebc6a19db455
+- card_id: kuri
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kuri.jpg
+    sha256: 0f3e0769f7d4623db3c5dae009567a8c9072edc2149bf878582c052d4d8114b7
+- card_id: kuronada
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: kuronada.jpg
+    sha256: 38781575c2ff5111c1f54e2dbc6c68153bb605e0c546fcc7a506c3a2f0190566
+- card_id: laborious_effort
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: laborious_effort.jpg
+    sha256: 6470fa681cca9f412f00c37f0626cf03faaa284956696efa9b53de5da8f4fd8b
+- card_id: let_them_run
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: let_them_run.jpg
+    sha256: 9dff19374589ff35f1a1813ec8538b53078bb573eb1c9fa04829b66a360a725d
+- card_id: masu
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: masu.jpg
+    sha256: 51f0fca1e31a908c0581074d5db0f942d34e7cbc4d700b3375cf185c52416d6e
+- card_id: matsu_hatsuyo
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: matsu_hatsuyo.jpg
+    sha256: 0dc5dda569a7c033a96b2d7f79228d2aa4e650a7e7f9a10d5bc8cef3f879819d
+- card_id: matsu_mikura
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: matsu_mikura.jpg
+    sha256: 824e02698f6288687f5bffd8eed0fc2b5d3b26a8cc64b30279e861a39fe73073
+- card_id: might_of_paragons
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: might_of_paragons.jpg
+    sha256: 92c8d69d6fd8eeb3506171d942bbef383602c5ff5c33383853d35f0680899096
+- card_id: mirumoto_akio
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: mirumoto_akio.jpg
+    sha256: a85b3eb1ce8ff08546699f45ef551036fa68f31ce0cff54ac8fc2f518858e24e
+- card_id: moshi_amarante
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: moshi_amarante.jpg
+    sha256: a84a2d6763ae0e5bbf7507225f9d6cc988888117413862911a9e345e9499f707
+- card_id: moshi_mareo
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: moshi_mareo.jpg
+    sha256: 9487c94e9f26b130a2002aac25781cc34d3bb1942f71801c16d9ff46ae85633d
+- card_id: moto_soonshin
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: moto_soonshin.jpg
+    sha256: 55e20acfcbb6e2e3ae38b751b57c63645afc17468dbd533cce31ad8712d3a04e
+- card_id: musha_shugyo
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: musha_shugyo.jpg
+    sha256: b42b68f5fd417b61e1b076929aeec4a807f16ff0dd2261494c52dcd051912e58
+- card_id: my_allys_strength
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: my_allys_strength.jpg
+    sha256: 9bc9993130f044403631eddfa4129bf6e5cc879463bbe77ec58c86825071bf00
+- card_id: my_enemys_mercy
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: my_enemys_mercy.jpg
+    sha256: 4d577831c97035a8026742e0945cde583d2806d1c80efc073b2169c6e7c11738
+- card_id: no_escape
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: no_escape.jpg
+    sha256: 122bb3ab4485f791639a03db40c0513dc515b027e9ad8161eef86ac64ac19ed0
+- card_id: offered_gift
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: offered_gift.jpg
+    sha256: 1e8666fe69a54392f6f99df60375cdc6fb98c7fd2137fc3f9dfc361e634d3039
+- card_id: old_rivalries
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: old_rivalries.jpg
+    sha256: 221dba2b5d9487789054d225946886085fb9a285fe6eb73329777ba1bddaaafd
+- card_id: only_the_well_trained_listen
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: only_the_well_trained_listen.jpg
+    sha256: 31a894eace66738719d9884af03b8c495ee3ff1c60d3e4e494f6b11c6929bbdf
+- card_id: ornate_armor
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: ornate_armor.jpg
+    sha256: eb9d90b43e130f0bb9e974ef19e4c1cb6a196f5f91c33f5ecd83c30c7ce14b7d
+- card_id: pack_tactics
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: pack_tactics.jpg
+    sha256: 385d2d0e1ccbac3b9ca59065a5d453ae9f4c6cc5c3af877ce1cfec011967107b
+- card_id: peaceful_interlude
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: peaceful_interlude.jpg
+    sha256: 15bf6cfffeb244cdd218004a02543c39523c4e03510e16c2a4427b9099b727da
+- card_id: political_influence
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: political_influence.jpg
+    sha256: 21ae9df1c4ed151bfb9a06f7011d86698a04eff53d77012aec0489bec7dfdfe4
+- card_id: powerful_blow
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: powerful_blow.jpg
+    sha256: 40ecd0ed798c938794df00c0dbe56fa3c1dea8d7d6ce957834a95a7d5dd43a4c
+- card_id: ramifications
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: ramifications.jpg
+    sha256: 941933ac9a7e7a0ffa215bc5115dae950b91641fed0298845a8debc1dc2cc318
+- card_id: regroup_and_redeploy
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: regroup_and_redeploy.jpg
+    sha256: fb29177b639e9b321ddd7383dbc56adaaad18a67fca286dbe37741d7bd947571
+- card_id: reprimand
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: reprimand.jpg
+    sha256: a39633f4dea1f40dcc2e1adbb58f4c1d6038b0ee0762369ca3f0b611d87d7d40
+- card_id: resurgence
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: resurgence.jpg
+    sha256: 131ffa4252be500004382ef93f3cee25670403b017a37dd2871f74a3f072a5b5
+- card_id: roaring_to_shake_heaven
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: roaring_to_shake_heaven.jpg
+    sha256: 7b51882db8ebf695315732d7a38b5d04bd4bf0dd7ccf68c8ec9316a8351b2ede
+- card_id: sacrificial_lands
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: sacrificial_lands.jpg
+    sha256: d81d36a32e1ce50d91f90a43d4218e6d03e394e2bacc9842f0ea440793c176e2
+- card_id: seeking_the_path
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: seeking_the_path.jpg
+    sha256: 93ce8bd8595f5881d375d682d3a880dcb70ae9feb01c4ea8b2efe74047e5797f
+- card_id: seiko
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: seiko.jpg
+    sha256: e53666ba72621e2321b07e51b77461f05832ee4718998496aa7da3854d217918
+- card_id: seppun_miharu
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: seppun_miharu.jpg
+    sha256: bec073e5997e8a60ee1c8a4466e78329ca90f0218254a9f8b7e5e5e41f8305b7
+- card_id: shelter_for_refugees
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: shelter_for_refugees.jpg
+    sha256: fc5d82f62461051b1382958e6728c054175a9befd3f80818e9afe1b0f3ecf44e
+- card_id: shiba_morihiko
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: shiba_morihiko.jpg
+    sha256: 37754e9f7275fef00d20d2f84c284748ac7a598b0c7055c9d49e0e1bd7494e79
+- card_id: shikibu_no_oni_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: shikibu_no_oni_experienced.jpg
+    sha256: 2ec886389dd41decf1cfd1445dcbbc3c0c04a2d81c86796a4e8ce140c0ad856c
+- card_id: shinjo_aniji
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: shinjo_aniji.jpg
+    sha256: d5ffc3c7b6c23d30fa73ef5cd9ab779614cebab5dc35e972371b7e247c8b8a1f
+- card_id: shinjo_joyung
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: shinjo_joyung.jpg
+    sha256: 232d437f01fce4dc8ee0f63c9f075b0a7237521b7485ded9bdbf925c94afd08b
+- card_id: shinjo_kirita
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: shinjo_kirita.jpg
+    sha256: 489f6c73a1bfb8cb4fec8838c94cf55707d4e312b1c14409938ed00c59fa6972
+- card_id: shosuro_hihiko
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: shosuro_hihiko.jpg
+    sha256: 504d369e41fdd02de98759c9a0508bb19de7a387f1174935a0e697d021e199f6
+- card_id: shosuro_kiemon
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: shosuro_kiemon.jpg
+    sha256: 0ba4342ec025f70fe005dfcf00c7d4916cf6022c233f29718f99a47f0675eeb3
+- card_id: silent_rot
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: silent_rot.jpg
+    sha256: 2db8c88411567500c53017b2bb0731b931aa78b3fd22b9e58761e194a0ce56e5
+- card_id: skin_of_the_naga
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: skin_of_the_naga.jpg
+    sha256: 5d2fb6fdb173d02dc70a72985213828c270c8fb8e21474e1f7058be51ad28378
+- card_id: small_estate
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: small_estate.jpg
+    sha256: a2163e4798e961be60dbbaf1d799bdd990c2d071dbd3165f319368da05263407
+- card_id: stalemate
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: stalemate.jpg
+    sha256: feeec5365d6f48dea9217fd2379008c9812d258329a9d27098a29bfe623300da
+- card_id: stolen_blade
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: stolen_blade.jpg
+    sha256: c133fcb2abeb7ec31fe76e456c2a91519b0e9f1d012bbd5e9c0ca136c83319c3
+- card_id: strength_in_simplicity
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: strength_in_simplicity.jpg
+    sha256: 8438eab62b2eb2f0c1c8e2fcb40aedef3d6962db468bd91e610932b1127b4015
+- card_id: strength_of_my_father
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: strength_of_my_father.jpg
+    sha256: 5d3643781baa39dcfa086d7faeb7de9fbb219a725513309405cdf40220380c04
+- card_id: sublime_peacock_stance
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: sublime_peacock_stance.jpg
+    sha256: 8273bd3ab613760a47cb02c94ef9c38deb547f643d13f04bf6474857be1da76f
+- card_id: subtle_reminder
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: subtle_reminder.jpg
+    sha256: 81fa6f99b541b186568858a036565c77d49010c54fcda56edcaf22e08bc5f518
+- card_id: swift_darkness
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: swift_darkness.jpg
+    sha256: 79fc66d025c47693f81fbffabbd4f1ba97ee66c7bed2c5d394dde2a5dca5cf85
+- card_id: sword_saint_shrine
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: sword_saint_shrine.jpg
+    sha256: 2d3e3fe2d31104203489ded7f844902599c80168e3273f713c569e8624c5a9cf
+- card_id: tamori_akeno
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: tamori_akeno.jpg
+    sha256: 94c9954dc2bea7d3d14888804e7720ae3597b1be57aea95002d13e6cb1d03cec
+- card_id: the_earths_wrath
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: the_earths_wrath.jpg
+    sha256: 0c013dcb36c86973cb5a0480312445cbe334ad2d121fdc81b590f04c9806d554
+- card_id: the_slow_death
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: the_slow_death.jpg
+    sha256: b5d738b8022c3627e2b518bdb2f9e6c023b5f9a7ee4a9011f9989dc18d6ce096
+- card_id: threat_of_execution
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: threat_of_execution.jpg
+    sha256: f7b6afe017eb051fe5594489bd49ef814c858a34e99a341f886ac0270b733c2b
+- card_id: tiger_climbing_mountain
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: tiger_climbing_mountain.jpg
+    sha256: 1086b0dd09f00486f995d56c91ed238aba972bb737a5ddb99b344a3f3faca1f0
+- card_id: togashi_chiko
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: togashi_chiko.jpg
+    sha256: 4715dd7f11963a28fc1aaf18f3dd7626bbcb5510e4620b849677b629011bc37b
+- card_id: togashi_dai
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: togashi_dai.jpg
+    sha256: 586e014ab3ee36c861b8212e55bd010cf653566cab603c3a5fe6ddbe21094f55
+- card_id: togashi_miyoko_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: togashi_miyoko_experienced.jpg
+    sha256: 21cb60c2482dbed212e05bd30c10027dc50f6fcd4ce9a615d32784b72392012b
+- card_id: transcendence_of_flesh
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: transcendence_of_flesh.jpg
+    sha256: 6eb0a4515019900cb901ad1dae0fa3beebf55414e215454a269f192cbd8238e9
+- card_id: traveling_smugglers
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: traveling_smugglers.jpg
+    sha256: 7346f5e31a984f2cec91fe14039b7b94c403ec1ae0b835f41951ac6c76701a3d
+- card_id: tsuruchi_shisuken
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: tsuruchi_shisuken.jpg
+    sha256: 05495aced713e39518a362d8cad760cb9d5c9a1833c5bfb686d638d110b69c10
+- card_id: underhanded_attack
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: underhanded_attack.jpg
+    sha256: b0b1b89273ca957cd9c90dec01ebed6812dc3bd4c0a59d60e38bbf6bec41fc51
+- card_id: undermining_command
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: undermining_command.jpg
+    sha256: 4be302f26cf27bf31dafcf55b57b50ea61af3c642b2b860571b9efb07ec065f9
+- card_id: undignified_death
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: undignified_death.jpg
+    sha256: eb986afed0f04c2ba0944f007df070f838f66db40a50b1e6999c452cd4da69cd
+- card_id: unpleasant_discovery
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: unpleasant_discovery.jpg
+    sha256: 69652f6cbfafce14ceb429982aaeec06c0182521ff1d84df1f029b1d10e2a92a
+- card_id: utaku_jisoo
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: utaku_jisoo.jpg
+    sha256: 9c690f611be148e333c6aefe7c9a95ebb8227338fc311d1dc9e5f452ab29d00f
+- card_id: utaku_kohana_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: utaku_kohana_experienced.jpg
+    sha256: 2708f15d576ce6573c0d2c5cb0f74eb862416c8afc2dd37944bb7f7d01286825
+- card_id: venerable_plains_of_the_ikoma
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: venerable_plains_of_the_ikoma.jpg
+    sha256: 71286bfff523aea0f39fbfb975e130c7549222cb4fc9fd3892ba4ea3aa1d4777
+- card_id: veteran_advisor
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: veteran_advisor.jpg
+    sha256: d122cd6d9fc746d00fbb62a76385a24a62d16d2b590074b9816f2fdd01361514
+- card_id: victory_march
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: victory_march.jpg
+    sha256: 55949c23f94167a8cd422b2c805cb1f5e2a9edd1ba340172c63b9eb7c6c4fb1e
+- card_id: viper_tattoo
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: viper_tattoo.jpg
+    sha256: cfcb567b932d51ca45a455b0a69a79b62b2e178617004a7553793b890ea62088
+- card_id: wakened_dead
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: wakened_dead.jpg
+    sha256: bc712d1064cf268c3db18c39d23eafda562f33fd92060b43bebb2957455d9dc9
+- card_id: wandering_ronin
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: wandering_ronin.jpg
+    sha256: 335bd9e671d61e188b2a5c21a43c9618c9d96c783869d2db0ff1b45d55ffb4cd
+- card_id: ward_of_the_kami
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: ward_of_the_kami.jpg
+    sha256: ae626e38857717b63001d81d3e23206dbc7d3d86b500dcb9a6535f7e3e1ccb78
+- card_id: wary_peace
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: wary_peace.jpg
+    sha256: 0369e139a2a625b70292ee947a33e1e40eef6b100583833cef04371c364038c5
+- card_id: wrack_the_soul
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: wrack_the_soul.jpg
+    sha256: b9639a3c7259b7fd1a0f4311866390048b3cc4b8f8b34dd580afdb5756c652e8
+- card_id: yakamos_end
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: yakamos_end.jpg
+    sha256: bc2df6c79a4c37295242e4b75c7e65a4f76fb758b40916ea017d5c700ba0c254
+- card_id: yasuki_takai
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: yasuki_takai.jpg
+    sha256: 6a8d97fd540450de28da095ea3430c66136853dfdec57311328f68c781cb2da3
+- card_id: yogo_koji_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: yogo_koji_experienced.jpg
+    sha256: 2a47d8d927d5e435bb08ea76337b4033334628a13b1969a13bd39d9882c306fe
+- card_id: yoritomo_joben
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: yoritomo_joben.jpg
+    sha256: 024fba60fcf2ba2fa3a2043155f94ebd0e1495efbc420c6b783c14f5a823105a
+- card_id: yoritomo_saburo_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: yoritomo_saburo_experienced.jpg
+    sha256: 2f8f99b1565070e1d43866cc546f8f5fc129d3c45ed6b5665092e0d524d255af
+- card_id: yoritomo_tadame_experienced
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: yoritomo_tadame_experienced.jpg
+    sha256: b99f5af520c3859937b692c1b27262db9d7ecd8dfde98a817b98fab1c47be6ee
+- card_id: yoshe
+  printing_id: the_heavens_will
+  files:
+  - role: front
+    file: yoshe.jpg
+    sha256: b11e2b5327db27fa9f11e11dc71b79f3ecd196f61efd0f000e47f5bc2a28713b

@@ -1,0 +1,986 @@
+set: The Blackest Storm
+images:
+- card_id: a_moment_to_reflect
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: a_moment_to_reflect.jpg
+    sha256: aaaf7924e5336eda5a4e60fd11140e98e19767b73ed22b3d96165c91d979a806
+- card_id: abandoned_village
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: abandoned_village.jpg
+    sha256: ea57aced02bc90ea6994277812d9005711f564ab0ed4fe21e20042bf99af9de6
+- card_id: agasha_jigan
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: agasha_jigan.jpg
+    sha256: ee6eca9986c56ac524eac49f0b88bd40c4c8bdfc0fa824d454130eec9616797e
+- card_id: akeha_sensei
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: akeha_sensei.jpg
+    sha256: 5b92238a9e937d267c6673260e3af3429138591596b77f72c18ce16a1c35cf72
+- card_id: akifumi_sensei
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: akifumi_sensei.jpg
+    sha256: 58dda9929b632dcdfc5be524804060a99f74fd9be60d73f1753b94bb2f005332
+- card_id: akodo_aeshma
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: akodo_aeshma.jpg
+    sha256: 3ed8ef6f64ac0cef13bc2d742f02d0c537f214003367ff8da1714914d4047b02
+- card_id: akodo_shaido_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: akodo_shaido_experienced.jpg
+    sha256: ba94242ca7a5d4daae17ec15af012cabae7b9d64ff0ebf31e867c2aeb7cd4f6f
+- card_id: an_ocean_of_defeat
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: an_ocean_of_defeat.jpg
+    sha256: 75ca94a16015a4740f9b743c284e173383c2517fcdcc908b7ac4d7e487ebe851
+- card_id: an_undeniable_request
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: an_undeniable_request.jpg
+    sha256: 91daa0dd63bca5cae78e1410780b724d9f6fc24f5beac5cd5222a8509e54f342
+- card_id: an_unnecessary_risk
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: an_unnecessary_risk.jpg
+    sha256: 1d3f98b93961510753976e13e29822477f53f9e3a778c84a2e2c73f7212423c6
+- card_id: armor_of_the_black_guard
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: armor_of_the_black_guard.jpg
+    sha256: 1b68993a1d6c5e4d37027648154b1a9f7cf7dc5469f889d7201d0969ea0f52fd
+- card_id: asako_keshiki
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: asako_keshiki.jpg
+    sha256: bc4aba6a3dfcb1b49b5808f88e2606e812a8e0ca8f8f141044f2c1ccb55727dc
+- card_id: balash_experienced_2
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: balash_experienced_2.jpg
+    sha256: c151ef5d474e2470b11938e978ccc5de89b45ed2ec4fef5b9fc02dc76581ac0f
+- card_id: bathel
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: bathel.jpg
+    sha256: 574705f99d1cd281b89e692eaeed3e2a242ffc90c91fc4aa447e7b78bcca0d0d
+- card_id: bayushi_manora_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: bayushi_manora_experienced.jpg
+    sha256: 14deb1462569792f193b38ecd049d8fe8c3e31f56a3429f9a062f089f2fc7f26
+- card_id: bayushi_urubei
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: bayushi_urubei.jpg
+    sha256: 3153c47e0dd476d1d3abd417cbb0444bb2a237fb8d0b28650a0a0b17b4fed0de
+- card_id: bayushi_zenkiri
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: bayushi_zenkiri.jpg
+    sha256: f76f30fca38a69eb31fe7b7bbd95f6d218cb3526602c5205f9e643cd2a7f5eaf
+- card_id: black_rabble
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: black_rabble.jpg
+    sha256: 20aa6d4596d730c0abbce76655f9be80808b87742a43649845c7d66906c205f5
+- card_id: breaking_point
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: breaking_point.jpg
+    sha256: dd971e9b5851e68a8935cbdba808a991faaf8f8dd3ad94674f42900daed1476b
+- card_id: cessation_of_hostilities
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: cessation_of_hostilities.jpg
+    sha256: b59e9a816279e688cf2b2341564a0814798fd37f51c948579eb656cf122d9cb8
+- card_id: chuda_tairao_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: chuda_tairao_experienced.jpg
+    sha256: 919b1a7b014cd6b196105c20a51789ea3d401372075a4adcdd99fc01485279ad
+- card_id: cleasing_wave
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: cleasing_wave.jpg
+    sha256: 5f176f7a6eec03f16ae874b8d1cd3ecf44f623f7540b569fc1ce76ec2b849331
+- card_id: corner_tower
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: corner_tower.jpg
+    sha256: 06cbbaff1d826bb54794ed27c240e9abf7733e081e5288a61a7a3e86f83f323e
+- card_id: corpse_monstrosity
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: corpse_monstrosity.jpg
+    sha256: a4bbcab8bf99d904403cfb88df22c0fd14ed3f457d1be145d83ac156f269e135
+- card_id: corruption_sensei
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: corruption_sensei.jpg
+    sha256: 796de404dd3b827fc05a30abf09e971066e9d47608b428153b8e7b3742aa6c1e
+- card_id: cull_the_weak
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: cull_the_weak.jpg
+    sha256: 34f5b09a7ed463d3aeab66ded896ec42a6a38d9f1375b9545a5dae1e51210cd8
+- card_id: daidoji_eigoro
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: daidoji_eigoro.jpg
+    sha256: 287e0bd031e328a3b532db5f85c4d8b0828cf43722292bb02423206866673b4d
+- card_id: daidoji_tametaka_experienced_3
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: daidoji_tametaka_experienced_3.jpg
+    sha256: 8af77628257a4d9e0d4eae8e9eb29336887c88381377b821fe8cf0bbff04b4cb
+- card_id: daigotsu_burogun
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: daigotsu_burogun.jpg
+    sha256: c34a6eefc4e4f80e3e026e84b082f8b7b77ef970ecd290b7970b9b41ca94775e
+- card_id: dairukos_challenge
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: dairukos_challenge.jpg
+    sha256: 1713b0484432172b2b354e0b0f0331ed6998a961a76e39d3035ceb8fefd5ccda
+- card_id: dashmar_venerable_lord
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: dashmar_venerable_lord.jpg
+    sha256: 09f863d3675aef44617f4e481bb4417645665502297015581430c9407935acd6
+- card_id: decayed_blade
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: decayed_blade.jpg
+    sha256: 7213eb23b3aaee025a0648c61bda2b6b5462ae3b23b180e6ee912f0a7f9294cd
+- card_id: doji_kurizuma
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: doji_kurizuma.jpg
+    sha256: 1a9e9e1a908e1d0119e4bfe2f2c8340f84b581699cc7d7668810b548af12ddc0
+- card_id: doji_norime_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: doji_norime_experienced.jpg
+    sha256: 8e93b6001f2506bfb3a94d5229ac9944bc8dab7000614cc37dea7a684c463d7f
+- card_id: double_strike
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: double_strike.jpg
+    sha256: 9e35cbba4db3c9eaf4c223480aa7c05d852ec09726c28b033247680333c677be
+- card_id: draw_back_the_shadow
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: draw_back_the_shadow.jpg
+    sha256: d99620d2e46a9d9010cc066261de2c99e39d24ec148353bec8f9748ab5bb1c3d
+- card_id: elemental_rebuke
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: elemental_rebuke.jpg
+    sha256: ca7da3f8487c673e683b6b6c374be80b485f017dc11fb59dea3b26c804fc4da4
+- card_id: exult_in_triumph
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: exult_in_triumph.jpg
+    sha256: 2b23d51543a898642889b847c2b6526d57addee09f471dea12bbb46b3b33471b
+- card_id: final_moments
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: final_moments.jpg
+    sha256: a7e84e1007d13b17cea96825dd3b726b68e0d7ab3fefa78f62f9a96d8bc3dd25
+- card_id: final_stroke
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: final_stroke.jpg
+    sha256: 2bb87385a7e7374bead2083abbd565e8f5616f7f0c944cdc9d52626a27df7a7a
+- card_id: foreboding_path
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: foreboding_path.jpg
+    sha256: a4a4a884a6e1df62b5e9fe6e7417c28e36f43ad7e6bf60d2eaca9ad983060e9b
+- card_id: forgotten_shrine
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: forgotten_shrine.jpg
+    sha256: 4ca6da668da220506f8f72fd8046c36edf695348d3552e980c1b37a2a35853b9
+- card_id: gallant_defeat
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: gallant_defeat.jpg
+    sha256: d190959a82e1ccff609ce17959ab11f6dff7d63b2110bb19464208d4a7cc114b
+- card_id: glory_seekers
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: glory_seekers.jpg
+    sha256: a94194e4affc75e981c53de81482c37d485e9cbc6541ed8eb4dd2fbb2609c351
+- card_id: goblin_barracks
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: goblin_barracks.jpg
+    sha256: d84d3288c6921f9494951a4bbf462bb7b7ff5bc888c5dfd06f3244f24b923288
+- card_id: goju_tsichu
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: goju_tsichu.jpg
+    sha256: 60763043826d3699f075b450afbb0c3dc2d86d8473ddb73f4c8b32ceb074ba0b
+- card_id: grievous_wound
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: grievous_wound.jpg
+    sha256: b1e807dbc07ee09ef21bd61828f12b719099d8feb2b1c1401de517eb980b0338
+- card_id: grinder
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: grinder.jpg
+    sha256: 519fb1f8f95e583f1d7f7881d86521b5790136a5326b9c62899847cd772dc1e9
+- card_id: hida_tsurasho
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: hida_tsurasho.jpg
+    sha256: 13c492da6f2cd1fb668a3d7646be760db1fee186690ddb569eed06ec4a1bbd2a
+- card_id: hiruma_hoshie
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: hiruma_hoshie.jpg
+    sha256: 4928f229852cfaf03a17748f6e41e63b3a7e0a2866f628a12534a35d86b2e303
+- card_id: hoarded_library
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: hoarded_library.jpg
+    sha256: 3db69de7ad620a2b107002e3b8e4fc36a18a8ce1ea05fb9defb0aa4ccc8dc99a
+- card_id: i_name_you_craven
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: i_name_you_craven.jpg
+    sha256: 114bed37b723b55d46c6e20c1077eb11b05af2d3ad574515336cba8ccca3fe7e
+- card_id: ide_jyunkai
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: ide_jyunkai.jpg
+    sha256: cbaceedc539f65da3ba533af93bc383feb3b1dcbbae26a8d532b91916b8e2cdc
+- card_id: ikoma_hitoro
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: ikoma_hitoro.jpg
+    sha256: 0948d00fe954e2c0287cb5befbe397b77f7c9114772b6cd11d0ae99dd0961b21
+- card_id: impending_doom
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: impending_doom.jpg
+    sha256: 096dca58538363b4b5091ac4d08f74a464c6f9168edb6313af1086c4a148785f
+- card_id: imperial_reinforcements
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: imperial_reinforcements.jpg
+    sha256: 9c464dd0f5446df80da5522276c582d3214a7d039cb05f6a714567203955807d
+- card_id: indigent_revelers
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: indigent_revelers.jpg
+    sha256: ed686e7d72b98c678473fcf567324d22c9c5d768aa5818edc60847710ce998d5
+- card_id: irasshai
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: irasshai.jpg
+    sha256: b4d03b92635e6a1e9ba85685578bc08107e4fd447bf0b36fd95862c5e5541ae7
+- card_id: isawa_koiso_master_of_fire_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: isawa_koiso_master_of_fire_experienced.jpg
+    sha256: 675b5f7f1235915e59de311ce154d230c6fb5ea77635062f2e1d9c017ac04fc7
+- card_id: isawa_ren
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: isawa_ren.jpg
+    sha256: ddae85013dcb61b6a9470413aabbf5fbd110742c79b91d50e27382c2266853b2
+- card_id: isawa_tsumaro_master_of_air_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: isawa_tsumaro_master_of_air_experienced.jpg
+    sha256: 23bf7c4191db8c4a3e71b34a7f1090f05896cb6485aa4c98165fecf5a207b5d4
+- card_id: isawa_zuiun
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: isawa_zuiun.jpg
+    sha256: 5c26b94db2349c6ce484e2d1f3ecc686375cfff93ec9cdfce721b6d9d1910e74
+- card_id: iuchi_namida
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: iuchi_namida.jpg
+    sha256: a7b77132486812b5e120f79b7fa4ecb6dcece247cbb10702706ab6ddb377c7e6
+- card_id: jovial_ronin_2
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: jovial_ronin_2.jpg
+    sha256: c3f977a67a8e11adeaf1aab8eb32c68361c5729ae6375892eb3cd61e8ed1d556
+- card_id: kaiu_netsuko
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: kaiu_netsuko.jpg
+    sha256: 5f9daf776337e91949baa19557aa5de980662132a40b55c663c68e48ea4fddf0
+- card_id: kakita_seiyami
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: kakita_seiyami.jpg
+    sha256: b30360fffdc8dea127f26e3f4c65d7fdf70fa95e92f9c786e0e6cf79bf5c214c
+- card_id: kitras_pride
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: kitras_pride.jpg
+    sha256: 8c4470486ee12d4a336b189a192e12d5c14baf6ed468ca2347d3d1efad553358
+- card_id: kitsuki_chotama
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: kitsuki_chotama.jpg
+    sha256: afe766de096099e2fc97b9920e9ded604f42c76b34897428a9e96e1705af3462
+- card_id: kitsuki_masamitsu_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: kitsuki_masamitsu_experienced.jpg
+    sha256: f35fb5b3a1a4892f20350f3d32c4cbd9a88739bfe3428d4ac98d262aa4944983
+- card_id: kitsune_beiko_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: kitsune_beiko_experienced.jpg
+    sha256: 3bbc3e60dc95666cfd0ca4d9436341606911f9ee0db740c43ff140ddd140254e
+- card_id: kitsune_mori_grove
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: kitsune_mori_grove.jpg
+    sha256: 4b9c9945954039e5c6eda6fc961f13774296a836b3b8378f25e7e214f069793a
+- card_id: kokujin_aoijiro
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: kokujin_aoijiro.jpg
+    sha256: 17f1be873d12ec42c54dbd2a1f75a0c92f36edecb528776e978886d9774a8175
+- card_id: kuni_seifukusha
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: kuni_seifukusha.jpg
+    sha256: c2c317b9ed939bf126e7e7724db90e168ebef78f9652cf1618694b5bba3712d9
+- card_id: kuni_yukiko
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: kuni_yukiko.jpg
+    sha256: b1e0a66a7b9436d65eaa2f7fdc7b859c9234a7a07e94b69f336083e2ec503ab7
+- card_id: lesser_kama
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: lesser_kama.jpg
+    sha256: fd132d348a39f65cab99cdf963f4c9807b3cc0a73841f5b7c6683c1bcca781aa
+- card_id: lord_of_the_kumo_the_great_sea_spider_experienced_2
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: lord_of_the_kumo_the_great_sea_spider_experienced_2.jpg
+    sha256: 8010bbd6a2ee826e27d64bbf1fca2fcc75cf64bdec537f32b481264fdb1bd639
+- card_id: lost_ground
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: lost_ground.jpg
+    sha256: e4777097d583b73937af307d2f658b581e72bec17e4b787f3142d553482ee0e7
+- card_id: lost_port
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: lost_port.jpg
+    sha256: c9cc4285aea139a6dd7077cfe86f82b207b033308c42e74a6df3323c0424e803
+- card_id: makeshift_defenses
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: makeshift_defenses.jpg
+    sha256: 5c290f4be7f06d4f91ee02dc5e78061834e62c4fffa5a95ffaf74dd1e9df5f77
+- card_id: makeshift_storefront
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: makeshift_storefront.jpg
+    sha256: 24fc35e2d25e26e37133945ad73db439f20991585fbfe6eb41658111bace34b3
+- card_id: mara_experienced_2
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: mara_experienced_2.jpg
+    sha256: 96f97b39922d6b634b8398e98faeeba9151405e874883404351f73592969923b
+- card_id: matsu_budoken
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: matsu_budoken.jpg
+    sha256: 3bee6ec31dc786b5fce6049bd661e7fb4548a3877802d0c26038f2096b33151a
+- card_id: matsu_iairimi_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: matsu_iairimi_experienced.jpg
+    sha256: 1398c2d5f7377b2cbe222564794391f4c920e32395e0fdf314626c2b858beb8a
+- card_id: matsu_kirihime
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: matsu_kirihime.jpg
+    sha256: 55717911307f3c645a9cdc8e6501cb7fe7c1049515cc0e9a08e382663f6de1b4
+- card_id: meaningless_words
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: meaningless_words.jpg
+    sha256: 6d4aac6df41fd1785e19b5e0f5a08233e3a1a66755f2d7d7b2b0a1bff17eda25
+- card_id: mirror_armor
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: mirror_armor.jpg
+    sha256: 26d0b312bf8c90095dabf6f699ddb63ac766b0fee80659d6627561125563b04e
+- card_id: mirumoto_sadahachi
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: mirumoto_sadahachi.jpg
+    sha256: f35a479fa4561f9f1a928bbd81d1fe9642e1ad695e8b020c75338b619b812d42
+- card_id: moshi_madohime_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: moshi_madohime_experienced.jpg
+    sha256: ee3f266cdbb6dca552e9bdad120b72e24a0c137d1ae7d5eb51195b1214a466f8
+- card_id: moto_shai_tan
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: moto_shai_tan.jpg
+    sha256: 2f3f515d3b27da574845fc41333c5b3a1305ae576fa80c122439aa0822f5de2b
+- card_id: moto_taosu
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: moto_taosu.jpg
+    sha256: fd0bacc92a9e5f08cd3b7bad6c3f44f358b62b4e05eb12f80d18e7a8685f4271
+- card_id: mouth_of_jigoku
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: mouth_of_jigoku.jpg
+    sha256: d16a52130bf20902b19a7d4b6373106411473a04ade32efd1d4ba52c76ec6b1e
+- card_id: muri
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: muri.jpg
+    sha256: b06b4971680e834a8414c5c21bb9cb0efb48858247bc9c605662aecb4051f76a
+- card_id: murmur_of_earth
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: murmur_of_earth.jpg
+    sha256: 8dd4ae91c1844937b8a770fa81cbae738bfd04014b3d94612ef742be00512a7b
+- card_id: ninube_shiho_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: ninube_shiho_experienced.jpg
+    sha256: 46a227a24d90060626b7adf3a0dcb7ce5026a76b9c290da8a6822e0553c0760b
+- card_id: no_matter_the_cost
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: no_matter_the_cost.jpg
+    sha256: fd1b65b1ec5363d38a9d573392da599d1d917c6561ad5e919c4f19a496e0fbf1
+- card_id: not_in_my_home
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: not_in_my_home.jpg
+    sha256: ed5adc936d548db7e2f4b68cc9a0b099b4b3debd8a0064fb2870faa46f9cab3a
+- card_id: one_final_stand
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: one_final_stand.jpg
+    sha256: 4ea2a13111410b199226fc2122b91d56db971f780d85de3798c7469ee92f7c21
+- card_id: panicked
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: panicked.jpg
+    sha256: 2601295a53da9dd67b5590c89ce0e32884261ec1ec2da89fd2954f62887c5c30
+- card_id: pawnbroker
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: pawnbroker.jpg
+    sha256: f0c8216b1a044a9ab35bf34baf17bb4ce5f17b64fcadf6d9365bd4c73ef24bca
+- card_id: petals_and_pincers
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: petals_and_pincers.jpg
+    sha256: 91ac33606b35da1ae773ce1b05f6a0c5d7cbf71d9ac4135dbb205fed4d228404
+- card_id: pillar_of_water
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: pillar_of_water.jpg
+    sha256: e48a8096ff824d5b759833c6cadfdae3ee00639a009856da9c70395b6a460746
+- card_id: protect_the_innocent
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: protect_the_innocent.jpg
+    sha256: a76d65bd90157ef737d2ff87cee15e0aee765c23772162fddc1bb5c4b598382f
+- card_id: public_shame
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: public_shame.jpg
+    sha256: 26871de03e19cd368beff697a8980ebe1c3355002d553fab8c28f1cbc250b77e
+- card_id: recruitment
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: recruitment.jpg
+    sha256: 36edfa9ac11e53016e550b2bfaee462d0079d6d953a5945de6eabe8029dd0bfa
+- card_id: recurring_nightmare
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: recurring_nightmare.jpg
+    sha256: 2084172e85d8f9730b4ed86b1c8a62fc40f73a41221cd29508c8810c9a11cab0
+- card_id: redoubled_assault
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: redoubled_assault.jpg
+    sha256: 517baca95e117ab8dca252144ad0e064d8e3371f221fa5ff47e02b051d3159db
+- card_id: reprobate
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: reprobate.jpg
+    sha256: 6e3532fc87d1b1c9bac62a083eb8fdd0d9d08bc43ac5474211f7f5c6293c400c
+- card_id: return_to_greatness
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: return_to_greatness.jpg
+    sha256: ae6e776a5fb56c3d504d2bd3e32e222ed73310bf9e886ad5b70ad123a06d9f38
+- card_id: scholars_fa_ade
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: scholars_fa_ade.jpg
+    sha256: df43a071b687c44c2db52639d1d207f368ba7aafaac8d7373f5cfa03fe6e8956
+- card_id: seeking_the_void
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: seeking_the_void.jpg
+    sha256: 3cd822026285ddafe28e74ae7fb5ef86dbf1fffaf7ff9335752fb42bfc361435
+- card_id: selfless_sacrifice
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: selfless_sacrifice.jpg
+    sha256: fb10e82ca23f23b01203f2a5befa4147ee745eda5c102c481077d4436f2d9c71
+- card_id: sense_the_void
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: sense_the_void.jpg
+    sha256: 789ef0089b0a63c886cf92cdc68982bb5de34dcacb90601af7559a51b83a1609
+- card_id: shahadet_experienced_3
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shahadet_experienced_3.jpg
+    sha256: 0f131e7b176838ea4be926f5c8e1c69d201d19a9d3f91d4c55c83dcedaa5bcc5
+- card_id: shahadets_legion_2
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shahadets_legion_2.jpg
+    sha256: fe615b0a9f65fec9476390a0827d0854a409746643bf3746fad3f3ceba760d40
+- card_id: shame_of_the_moto
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shame_of_the_moto.jpg
+    sha256: 5a27085654c0ff2af759413ffc3c05dbf7e294ff0b25d90b5c4517c32978469b
+- card_id: shinden_hisui_no_taiyo
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shinden_hisui_no_taiyo.jpg
+    sha256: 5ff19d514bc00af9421d1f93d31e3d2ee47fbfd8c6ddb3a07a1f2bd393eda735
+- card_id: shinjo_saeki_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shinjo_saeki_experienced.jpg
+    sha256: e6fc8828462788cea53470a4b06faa0cce7bbf5ebdec688628184be3d9c65c50
+- card_id: shinomen_defenders
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shinomen_defenders.jpg
+    sha256: 26343639ad3c2daba2ca81cf36a180969267e174c6a2ca22c8b7aa7e72f8a3d1
+- card_id: shinomen_village
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shinomen_village.jpg
+    sha256: d4fc5be2baf7348f59ed4d663be1f32b6c77ab41f2002e9b19002d3de3814a20
+- card_id: shocking_rumor
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shocking_rumor.jpg
+    sha256: c688bc5c0ca5fd7ee9640c9398b693b5d0128a2a54855b22a00cea0ec2019030
+- card_id: shosuro_dokumaro
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shosuro_dokumaro.jpg
+    sha256: 24cc65be542a3735fa6e2463d14a599fbc5fd8a31638c47db84bd48684c413a1
+- card_id: shosuro_narami
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shosuro_narami.jpg
+    sha256: ee6b13d4abb2b9a332cbe0814ef24413247114891dfefda01dcc19c446111716
+- card_id: shosuro_saigyo_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: shosuro_saigyo_experienced.jpg
+    sha256: 2592e7a7897863d7eb66457d9e27caf9d14c9754263bf1463dd27b65709bcdf3
+- card_id: siksa
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: siksa.jpg
+    sha256: 4ef5c169eba3302b62d19521a4f3d9a8b73481db28aaf7556d3f34f085e75327
+- card_id: skillful_recorder
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: skillful_recorder.jpg
+    sha256: ae853801d19a22d8e941f7b2b734167f4d1fb340633e2a6b5d28a5e4f70af9d4
+- card_id: slice_the_web
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: slice_the_web.jpg
+    sha256: 74e1a9fdca69cf79772a254bccda70ad4fdfdb5bb609eec62348bc8d6e7ac87e
+- card_id: somber_assurance
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: somber_assurance.jpg
+    sha256: 4bd30d1790569a954b82914071edaef0172d50eacfd0d7817eb8a899854ea077
+- card_id: soul_of_the_flame
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: soul_of_the_flame.jpg
+    sha256: 0ef6bc2acbe41b8dd15109b68da0bc8062a930eadbd444493706079af29db3d5
+- card_id: spark_of_thunder
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: spark_of_thunder.jpg
+    sha256: 130b3cb980d8835f7b19fc1d446ac42df24454bc388dc771a817c5f8f3414251
+- card_id: staff_of_peace
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: staff_of_peace.jpg
+    sha256: a667b541731b30f6d2f18e410b1022697fa95be98874dc6e92f188fa0dcae1e1
+- card_id: stand_united
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: stand_united.jpg
+    sha256: a93cabb1e4a3c6f4fb3b62e626e8006c3311fcc627b90033fd8e5a0dfbaa3c3f
+- card_id: stand_without_fear
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: stand_without_fear.jpg
+    sha256: c925edc066a8528a63e901198b239fbeafb7cafd03bc0ecaa87fd91a250fadf2
+- card_id: standard_caller
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: standard_caller.jpg
+    sha256: f1b182b28a2d15338d64eac8c964b3d4a85fa52ce7df431e9ffe841cbe5fd419
+- card_id: sweeping_maneuvers
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: sweeping_maneuvers.jpg
+    sha256: 81a182c27b815e27c4323fc4248b30bb5c8c1ca211b232fc9b2742598c101efc
+- card_id: tamori_busuke
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: tamori_busuke.jpg
+    sha256: 791f588ea55c6133d2f0cc165e8078a582d60681f5448d4afd545072abcbfe29
+- card_id: tamori_nishiki
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: tamori_nishiki.jpg
+    sha256: c7742fbc6d689ebf697ef7b67c3cfd6ea248e6ff493a50ff853762c7d142c83b
+- card_id: the_bite_of_fire
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: the_bite_of_fire.jpg
+    sha256: 8f8a5b8ac5594f87c158d9f1810ec4d03cdbb34c0c4fbf66eb0053392c6f3210
+- card_id: the_dark_horseman
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: the_dark_horseman.jpg
+    sha256: 32bb53e416b4937e0d89af2b74be44fb474c5065549a6a97867b65aeb361ba4f
+- card_id: the_kurai_district_court
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: the_kurai_district_court.jpg
+    sha256: 2ec51ecfba4f98c7d699ffc592e81d7a9271d4f1cabeb7d0bb4ce4456681f3d0
+- card_id: the_wake_of_slaughter
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: the_wake_of_slaughter.jpg
+    sha256: d5a04a59249398ecfa8539f71445bcd36d8980391d26d70c558cde70cf869d12
+- card_id: togashi_fusawa
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: togashi_fusawa.jpg
+    sha256: 3032f2f6c5e97335dd1e79a315c3f9f6e63dccfaf035b3b9fc8cdc0858fb96dd
+- card_id: tsuruchi_kaito_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: tsuruchi_kaito_experienced.jpg
+    sha256: 7b8c137cd665887bc0b05f23f346d0537e0163d4639bd361ea98cbe3703ccb16
+- card_id: twin_thunders_strike
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: twin_thunders_strike.jpg
+    sha256: d2a2e796bd2151a3b35f7c447c8f50d5f316dd8758b5ece0c7bd7a84b1ebfaa5
+- card_id: undead_taskmaster
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: undead_taskmaster.jpg
+    sha256: 3ee688895f1195af09c5c76ab0fa6c6946050d55483aa5c09c6b124ce1846b16
+- card_id: unmitigated_disaster
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: unmitigated_disaster.jpg
+    sha256: 8dd050e78ea5ab9f626bb597c9978793399fd0ac820938617556e52debc7697c
+- card_id: unveil_the_realms
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: unveil_the_realms.jpg
+    sha256: 0444ffa01df3ded25f190f92b8529a8ad67b66aba5b86d1c1c6fae457a0dbd59
+- card_id: utaku_sayaka_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: utaku_sayaka_experienced.jpg
+    sha256: 5e616bf495fab00b05de2e95e1847259805474773e33b1fc98f14ec5a848ee26
+- card_id: utaku_zo_sia_imperial_regent_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: utaku_zo_sia_imperial_regent_experienced.jpg
+    sha256: 7435bd6cabf02fee78c6b925402325db5c2a9191c0ace381b28ea4a5c2043891
+- card_id: utter_destruction
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: utter_destruction.jpg
+    sha256: f7b2ffad8bcfc5ae51f2fcf592966cf2e3e7e5cc42314c813be5322705a083b2
+- card_id: valiant_sacrifice
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: valiant_sacrifice.jpg
+    sha256: 23040e69caaec2224b191603ef95cfff051fd73c9e60819db2ecd9b48989179d
+- card_id: vetrevel
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: vetrevel.jpg
+    sha256: 5ff6385c10871ca47963758cb75d64c16056ff1877be29e116f142df5796ff5a
+- card_id: voitagi_sensei
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: voitagi_sensei.jpg
+    sha256: 4555f946fa89fac9fc6f22ce12dcef19fa66746bb2cfe8ce714e62de751b10e4
+- card_id: walking_with_the_void
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: walking_with_the_void.jpg
+    sha256: d6842eb3f807573df119aa9039d8696e1d3a0dd9d7062e79e010e4ab52f40bc2
+- card_id: wall_of_earth
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: wall_of_earth.jpg
+    sha256: faa85473a8739dab4b31f52a57c04f38c0adc369464000b75dd66127f5a4d898
+- card_id: welcoming_demeanor
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: welcoming_demeanor.jpg
+    sha256: a92caf4a8bc436903687c19f388c910c87d98d0d20bb579a8c6e05102199e31e
+- card_id: wicked_chain
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: wicked_chain.jpg
+    sha256: 9ce234599b5277d5842dd73604a239595b2a547a28fc7a429a953b35f77101f2
+- card_id: words_of_ice
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: words_of_ice.jpg
+    sha256: d0925312799c53a8b3e091c4fb8f2d72467211d922b0a9a1be0565d9020d2eae
+- card_id: yamauba
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: yamauba.jpg
+    sha256: ef94e03ba85a0bf0162be14099b63352f837e61461697d62f924a94b067eea5f
+- card_id: yoritomo_dairu_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: yoritomo_dairu_experienced.jpg
+    sha256: c3fd28a99ddac7ad47fdc0b4851ee3c3fae3f8f9db25db4867a939d69c8d7203
+- card_id: yoritomo_harumi_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: yoritomo_harumi_experienced.jpg
+    sha256: f946fe1969bd3b801ad25568e2c19480192661ec39a828590fcac52c73cd0b76
+- card_id: yoritomo_hiromi_the_final_storm_experienced_3
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: yoritomo_hiromi_the_final_storm_experienced_3.jpg
+    sha256: d42043e6576e8e32d7dd426a14e020a2add1b4fab1a70ee642d6f8969b45e10d
+- card_id: zenathaar_warrior_of_the_bright_eye_experienced
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: zenathaar_warrior_of_the_bright_eye_experienced.jpg
+    sha256: 44de1e0dffa3ae5f9186338e3c5def8fcd9879c82b3b15d2a1f4f413592d6125
+- card_id: zerai_the_fleshless
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: zerai_the_fleshless.jpg
+    sha256: 0dcd90f90ef78535628b5a6ca6c785f41872151cc1f299a48f920632d8ad3ccf
+- card_id: zoh_zoh
+  printing_id: the_blackest_storm
+  files:
+  - role: front
+    file: zoh_zoh.jpg
+    sha256: 6cea92ded5fd9b4448c9d21c06cf67d9e9f3746880c554631ecb5f7d914c35cd

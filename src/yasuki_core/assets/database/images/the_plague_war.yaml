@@ -1,0 +1,1040 @@
+set: The Plague War
+images:
+- card_id: a_pure_heart
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: a_pure_heart.jpg
+    sha256: cfb11d88b913bae7839242a331e402340685397ad3e343ef25046f2988280f2d
+- card_id: a_tranquil_mind
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: a_tranquil_mind.jpg
+    sha256: 7f4efec46e4ca105a5515a2a613ddb9e389c8d9bbedfd5133b706c0a07352b86
+- card_id: agasha_gifu
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: agasha_gifu.jpg
+    sha256: 79b112ecea795d2e2ced39016f08827a79345170b3dedfef22919cc6538a845e
+- card_id: agasha_kitsukis_ashes
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: agasha_kitsukis_ashes.jpg
+    sha256: 05d6194edd6be37164207931a586d02bb95679abb421d88e7603e4ab972c0755
+- card_id: air_dragons_guidance
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: air_dragons_guidance.jpg
+    sha256: 99daad37192a9978dae4dd7268c7c7616f309156b7509158fb0cba8a5cfe9e8b
+- card_id: akodo_kuma
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: akodo_kuma.jpg
+    sha256: 4544ccf0d9b05c4dbc5279ec4abc13deffc05b934d1d6122d281835923e57ffd
+- card_id: ao_bozu
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: ao_bozu.jpg
+    sha256: bc147771d392225bb9e8a26e4fcb471116c553c4cb399f41f9a1b33846cfac64
+- card_id: ao_bozus_blade
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: ao_bozus_blade.jpg
+    sha256: 1374af8a4a375107e9189e31f94c025e42934fa2ff70d8e9ef8ada98919a8696
+- card_id: asako_bairei_experienced_4
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: asako_bairei_experienced_4.jpg
+    sha256: 58d085fe89695bd02bc094054b02c6b82bbf2979f1d70d8575379fbf2bec6fb1
+- card_id: asijins_legacy
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: asijins_legacy.jpg
+    sha256: 7000d873165423cd293cf6e7fdc31459313fa9d3c2ef63e54534a0d73e6f63d5
+- card_id: bayushi_eiyu
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: bayushi_eiyu.jpg
+    sha256: 7bd67b6a801ea46ec307dc71028477ccb17b90fb4777c1b244f497451014cf7c
+- card_id: bayushi_keirei
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: bayushi_keirei.jpg
+    sha256: b186c1c201bc21a99f1ca0f48da735712b06d8ff9a2e270cec2eaf97f5cb57d9
+- card_id: bayushi_shigeo
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: bayushi_shigeo.jpg
+    sha256: c726fa74d7275e3f60db8c0796cc33e58afce5c555068294040cbe67f76d5cac
+- card_id: bayushi_sorii
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: bayushi_sorii.jpg
+    sha256: cd8fbbb0566de853d0d2f80b91ab49fdf63f9d82cb78f1bafe276f950011670c
+- card_id: blessings_of_sky
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: blessings_of_sky.jpg
+    sha256: 3491462d4dcff8083d0bfdef63c068f36540500fa8c6499d2eca8acc74f49d5f
+- card_id: caught_unawares
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: caught_unawares.jpg
+    sha256: c2b7568d3a4cf8a9dba86215a049919f41870814f2af7195bc7cf7862726f666
+- card_id: choose_your_fight
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: choose_your_fight.jpg
+    sha256: a5165b8a60ce3a70d5281e020a2981a292a95f4b6c2fe0c216c813e3902a8c62
+- card_id: chuda_kanashi
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: chuda_kanashi.jpg
+    sha256: 2ec3689008d760bcb2d7f2a6741693f729e2c273a9f08a6d5f70026884531b97
+- card_id: chuda_mishime_experienced_2
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: chuda_mishime_experienced_2.jpg
+    sha256: 36d0a8c649d5e948d496fb1b1b23b47b17631bf419b899d1e4d995ebfa032b6f
+- card_id: chuda_otsu
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: chuda_otsu.jpg
+    sha256: 0b4f693edee0a40fbddb55a7b31a1088f2ef0a3a5a60f1430421353c26c4fd2f
+- card_id: claws_of_the_wolf
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: claws_of_the_wolf.jpg
+    sha256: a336975840469de370e9091236a0c6d8ac469ab3a891ae3ffb1d202e49cd53a1
+- card_id: cold_hands_stone_heart
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: cold_hands_stone_heart.jpg
+    sha256: 6cc9a5f71454c2d25edd66353b9e7d3285d12e314d89dc02c276a88b2010e2d4
+- card_id: concealed_scroll
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: concealed_scroll.jpg
+    sha256: 2850f2928b86258d38cae38343c78491fd3f9a0a24f795f3cd60f8dc380fd260
+- card_id: cricket_tattoo
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: cricket_tattoo.jpg
+    sha256: e8cb986259e82e2f6367f3f9ce02c20b9ac92a01337c5ca79a20632bfc2459ad
+- card_id: daidoji_akagi_experienced_2
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: daidoji_akagi_experienced_2.jpg
+    sha256: 1eecc0c98d91b8a33b99db71ab4c8e22a815a36c10024fd0fce4f47688fd08d3
+- card_id: daidoji_gisei
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: daidoji_gisei.jpg
+    sha256: d2b548306722c11916dcb2a7e4d259f06b9b8cd73a695177ac581285f6bbbd50
+- card_id: daidoji_kyorai
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: daidoji_kyorai.jpg
+    sha256: 96e9146c37cadca89021c24e21a5f25d5bf6a288eb208061f22b1e149ad0cbef
+- card_id: daigotsu_arima
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: daigotsu_arima.jpg
+    sha256: 3f0914fc93f77a1500d8fdca0fe47880c6215a298f8ba9d0bdb23a06ca558cc4
+- card_id: daigotsu_setsuko_experienced
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: daigotsu_setsuko_experienced.jpg
+    sha256: bf37db66f59f6d5019a35e1de780ea0d7dacc929a2aeda1af93e7aaddac24119
+- card_id: daigotsu_shimekiri
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: daigotsu_shimekiri.jpg
+    sha256: a6149d3e4dbe3214e9916e1a9b1c54ccadc7bd3bababbbd6a3da599ab4aeaeee
+- card_id: dance_of_the_void
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: dance_of_the_void.jpg
+    sha256: fc53bc23db6045383c7efd34c2ca2a9edd815262b0617949b0e82a9c5a83de66
+- card_id: deathly_aura
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: deathly_aura.jpg
+    sha256: 31a52d8e7de78016f8f44b9a6e6f05b0af750b0a0cf4b9e5c4ffb2723f80140b
+- card_id: deception_revealed
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: deception_revealed.jpg
+    sha256: 7a2b07c5dd6d5b43d87c50ebc24515d028d5a3c4ff6fb6c025eb81a23aa7ad40
+- card_id: defenders_of_nanashi
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: defenders_of_nanashi.jpg
+    sha256: 3cdc3fcaee32b5bd4ba5a2037b34450c337ca13216768e5001f008478e87488b
+- card_id: doji_gotobo
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: doji_gotobo.jpg
+    sha256: 64101e76a5da089559b852a5626855d56ff20b91124a810d2d66eceae9ea1fcf
+- card_id: doji_hakuseki_experienced
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: doji_hakuseki_experienced.jpg
+    sha256: 4a886538461fe2347c966b078721c3e5f4ed855b4d8f210223ebc785164300b6
+- card_id: doji_tadanori
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: doji_tadanori.jpg
+    sha256: 6be10a5db81b40a151657a5fe8194a4b0848d17e4c3c4f2bd56fabb07f55e38b
+- card_id: dutiful_cavalry
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: dutiful_cavalry.jpg
+    sha256: 85973b3e5ab5f3e94291a19bf4f4dffffb52f30fea233f1af89ce24d73594d3c
+- card_id: earth_dragons_guidance
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: earth_dragons_guidance.jpg
+    sha256: fc61b0d1721084aa5c1b33efee3b805345dee5edd2dce1a317bc5738616626b7
+- card_id: earthen_tetsubo
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: earthen_tetsubo.jpg
+    sha256: 7d8e83a0f7a9c65e3c37caf96cf66810ea6542479c0717de50e3338d1d0d4d00
+- card_id: east_wind_riders
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: east_wind_riders.jpg
+    sha256: 5c8ab8761cc70995124aca84140dd9153b4ac60db1c46f6c5e5315fc96f8f5ae
+- card_id: excellent_armor
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: excellent_armor.jpg
+    sha256: ed7eda4a919cbb9d04dc9847eb99f3171042f570b8cf8871258b5f84e6fede4f
+- card_id: farmland_conscripts
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: farmland_conscripts.jpg
+    sha256: def53e256502fa4afadee4933261635a53525071900e9c38128167c8108985a9
+- card_id: feinting_position
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: feinting_position.jpg
+    sha256: ca235afdaab1493d2f500e464d4a1dc9fb2fa9726fb659a2b9ef6ca2efdf64c9
+- card_id: fire_blossom
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: fire_blossom.jpg
+    sha256: 22fb8773b8e3deec5e01bf0699b047b45f87a2b7539202d108e3b2aa6054a316
+- card_id: fire_dragons_guidance
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: fire_dragons_guidance.jpg
+    sha256: 48aac7243e98e49458a23d43919e54fbda1dd2246aed3a4266cafc1b4f4bda45
+- card_id: flow_of_the_elements
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: flow_of_the_elements.jpg
+    sha256: 28b127a8c60b12937a5a0638b5b064846fe9a65cdea665f4fd8870fdbe99c69b
+- card_id: foolish_pride
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: foolish_pride.jpg
+    sha256: a4b9f73bbe9fa090f2de9db0e242655903165bba07e662a155de2ab6b6fd6777
+- card_id: fortress_of_the_forgotten
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: fortress_of_the_forgotten.jpg
+    sha256: 59dfb61e213aba5f0abd476cc50b476c2bf9441a31ab3118427594344605dfe5
+- card_id: great_hall_of_records
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: great_hall_of_records.jpg
+    sha256: cbc82a12844220cb42ac0e27be6ff8b290e1821bd5df0cfa388239fa15a38470
+- card_id: gutobo_experienced
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: gutobo_experienced.jpg
+    sha256: f8c5ee621ad7b5229dd8ba033d591f1c386890042cfdc9156d55ab936bc751f0
+- card_id: hariyas_blade
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: hariyas_blade.jpg
+    sha256: ee8b8931055dafe67a03f5653b0c6fb5d5f603a879365de05975225103fcce13
+- card_id: hasty_evaluation
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: hasty_evaluation.jpg
+    sha256: 26e0f28e25c0bcac5d6170066bc8caf4b561efccf7a199259bbc110e2deb74d3
+- card_id: heedless_assault
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: heedless_assault.jpg
+    sha256: 9f9df146d7c6c452ef2536cc4d3233097852dbe8efc071306ad973d47ba1cd19
+- card_id: hida_demopen
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: hida_demopen.jpg
+    sha256: bec07ddbeaed1564ff4d231f256b991fd26777c5cb1a64d9070927f10c9eb95b
+- card_id: hida_kichiro
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: hida_kichiro.jpg
+    sha256: bf1a2e40fae6821ac3944abb7e8f527ae3d453297781872b701d50ef74181dcb
+- card_id: hida_satoshi
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: hida_satoshi.jpg
+    sha256: c41936bfccf53503513c4c0d2f49e09f316b0a84aaee66d9664e41ee400dfb68
+- card_id: hida_shimonai
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: hida_shimonai.jpg
+    sha256: d04a78c1a6c8b1a441fe09ac998f1dd4180bd29cc7793d310104a99774004a0b
+- card_id: hida_tenshi
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: hida_tenshi.jpg
+    sha256: 1b36ed9427e51e5889c13401230d4132388c753e57d7df493e8abc3b080cb30d
+- card_id: hida_yaheiko_experienced
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: hida_yaheiko_experienced.jpg
+    sha256: 651710c64f655e3f7d44bd57ab73bcd15b3c6a5c7f48360ea71247fba3cf98f1
+- card_id: hiruma_sniper
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: hiruma_sniper.jpg
+    sha256: 2a5523115528d5fc838bf20f028b716b26a0c77a14822be2c416362352dc0333
+- card_id: honor_and_strength
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: honor_and_strength.jpg
+    sha256: 8fa7fb43cb3153d30eb1f7cff5d4462796f449e7d1f01f1917e29f693f583c2b
+- card_id: honors_hope
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: honors_hope.jpg
+    sha256: a489edf4316222b1f587e99e32f3895489c998e8d6dd527c9994f1252aa73695
+- card_id: hundred_fold_cut
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: hundred_fold_cut.jpg
+    sha256: 69980eebbe38e67779da29e3c66709249b20fe97bdeffc1ea347be31427d6c0d
+- card_id: ide_kin
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: ide_kin.jpg
+    sha256: ddd9890410f8e8bd384725960b2e6f1ccf5a7b1788d13654c139ad76e6bdfd7f
+- card_id: ikoma_satoru
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: ikoma_satoru.jpg
+    sha256: 62d98692adb56e92f4d89da41dbfe92b499ce4c6d84fdf7f20440a895599b37f
+- card_id: imaishi
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: imaishi.jpg
+    sha256: b52ee1e21ceb72e44ccfba7777c2d170f9b39d336de2f41007c90d7f3100fc3e
+- card_id: impetuous_challenge
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: impetuous_challenge.jpg
+    sha256: af1985bb5eac9364cf1d72a6716598c310e55e59a5776bb998f36ba0dd2a2df5
+- card_id: inexorable_defeat
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: inexorable_defeat.jpg
+    sha256: ee059fcdc769a0bf1f0ef1b24dba26f4191a28caf138e142ae007cb82f4a3929
+- card_id: infantry_follower
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: infantry_follower.jpg
+    sha256: 5b6bfce8f93f3132a9167e7d0845791c642af7fe5bc4783f8fc085db128290d9
+- card_id: innuendo
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: innuendo.jpg
+    sha256: 6d089a3b0b7a7b2bea2d4b62ac42e45d46b0ca83feb13c6535781d6da959f3ce
+- card_id: inugami
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: inugami.jpg
+    sha256: 15c5d6760f6aa70a1d3aa5381c682c671355c590d4748dcf3b492b01ddffc6e9
+- card_id: iron_gauntlet_brothers
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: iron_gauntlet_brothers.jpg
+    sha256: 704d747e3132b63f9f9e7a35b9ad8091f253a3aec8214d6c8b41da280578ba47
+- card_id: isawa_hachiko
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: isawa_hachiko.jpg
+    sha256: b616570a13cd6297cbd687533dad817135b20245e9058fd6159ac9b281efefab
+- card_id: isawa_ochiai_experienced_3
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: isawa_ochiai_experienced_3.jpg
+    sha256: 0185b888fabe22e7f4700d75b8f73db00d08cf55433df28fbf2b07ba4bb6a004
+- card_id: isawa_shun
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: isawa_shun.jpg
+    sha256: 15270d28eb0a0fd9fc4a975da09111bcf56a3d7a598d1e6b7fbb39e1cc1e5b16
+- card_id: iwekos_journals
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: iwekos_journals.jpg
+    sha256: 2d01ad18666353665a1b5e1d947da3e918aff96009280fb4dae6ef1e9698a5a4
+- card_id: karatsu
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: karatsu.jpg
+    sha256: ce2f4ee5bc57337163da6fb019465a7a979af6268320d1aca6045cba0ce278c3
+- card_id: kitsu_iwao
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: kitsu_iwao.jpg
+    sha256: dea0311bf9d414fd1e6dbc91f80445b1f07e4e54994e61e66b59d4c2568e1b6d
+- card_id: kitsuki_yukari
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: kitsuki_yukari.jpg
+    sha256: db35c3185ff5aed1943665ddc4ab1a69c0d6159ce7e21f0a438eea7d4b2a2b4d
+- card_id: masked_in_shadows
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: masked_in_shadows.jpg
+    sha256: ef1d3467b9ad41dbae558f295884c6e366931812e6815ce2cfa3b5a8e084d711
+- card_id: matsu_haruya
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: matsu_haruya.jpg
+    sha256: de7be810de16371643487f8944ade2545fd66620388158977094280684f23437
+- card_id: matsu_kenji_experienced
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: matsu_kenji_experienced.jpg
+    sha256: 141c1da88435162a01ef9920536f95f333c6f44f025e233f1c7216f255131092
+- card_id: matsu_mikura_experienced
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: matsu_mikura_experienced.jpg
+    sha256: f427d3fff6ca008bb23d53809744f79fc36e4a6df274f9b3ade18412cde1d6ba
+- card_id: matsu_nishijo
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: matsu_nishijo.jpg
+    sha256: 5759a1cdf13bcb7e90b8ea825f5875c0f51fce9b8dfe1c8fd5cfa40d9dcdd8f3
+- card_id: mirumoto_haru
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: mirumoto_haru.jpg
+    sha256: aef947ec030189846d3e8f49ec74968a11365a34f74b4e55fd6ff22a1a1b3284
+- card_id: mirumoto_mori
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: mirumoto_mori.jpg
+    sha256: 239d1757614d078639a89f232336aaaff94664a7f7c400b5aa0fa04a8e8263ac
+- card_id: mountain_herd
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: mountain_herd.jpg
+    sha256: 55bac78195f33bec9548254b33f7f18ee4ea63867c257e8c8e8dfc6597bc2fe9
+- card_id: mountain_storehouse
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: mountain_storehouse.jpg
+    sha256: d5c884ccd261e1d0d5317e88b6897842e0f31d5d6a97c25eae03fa52c489af0d
+- card_id: mouth_of_the_plague
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: mouth_of_the_plague.jpg
+    sha256: f85f085709ed7a43715c8b0488403d9fa5bd169229ee0b70a4e05c79a68e30a7
+- card_id: murderous_intent
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: murderous_intent.jpg
+    sha256: 5a39321110ccfe0e59999d8d3856a0643bc6d0284002f1854553e2ddac7c8d92
+- card_id: my_life_is_yours
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: my_life_is_yours.jpg
+    sha256: 04ad39fa446c68b42911d2601edc4f623725954fddb54c4fad99e2c67cf59eac
+- card_id: narrow_cliffs
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: narrow_cliffs.jpg
+    sha256: 75880f872802ee86f42fcb32140f9db28a2c5678323fde0a633470f9733dd76a
+- card_id: natures_embrace
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: natures_embrace.jpg
+    sha256: 93d7dd22e8ae1baacae604b35f3fc820b6947404e59a5149c7102a58b9436082
+- card_id: nitoru
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: nitoru.jpg
+    sha256: 9d5cf58a53e99afe15202c41e75b8686a55bf2cbf6268652d38353759a01cf1b
+- card_id: on_all_sides
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: on_all_sides.jpg
+    sha256: 50e175404b60280ae6dd7302c05fbcd3174500422778c71442a78efd41071210
+- card_id: only_actions_speak
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: only_actions_speak.jpg
+    sha256: 3a2eab6c5c76ba81658a7337a8dd0712f1f22d437015fc6788f50bc419ac425b
+- card_id: oppression
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: oppression.jpg
+    sha256: db83a57b033f6a63b3b1d168cc45177f669d56506ffb8d19ef442b9ef9ecd25c
+- card_id: order_of_the_wooden_blade
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: order_of_the_wooden_blade.jpg
+    sha256: 3494e2902f8aa714f7cef59d9da2a87426e16d609bce7386ee9a47b8f3e08d52
+- card_id: overpowering_assault
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: overpowering_assault.jpg
+    sha256: dc8f9ea15152eaa335f86552dbc47e48cb4885b3d5982a36bfb08cd5e51fa03f
+- card_id: part_the_waves
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: part_the_waves.jpg
+    sha256: 4359ab30b147249d221b315d46c875eff61fb9d7c0c7402fe82f61fda4ac2359
+- card_id: patrolling_the_roads
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: patrolling_the_roads.jpg
+    sha256: 45c80cd283d034c01ac274e62510934f1c1fd958d3e491a346dd775943408032
+- card_id: plagued_terrain
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: plagued_terrain.jpg
+    sha256: 0a607eb80b55c01fb6587d0ba437d2fb87d694570f56bd4d452ae0005e582e68
+- card_id: precious_burden
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: precious_burden.jpg
+    sha256: 63cc272ca32da9d1a7ec4e049b930da9632faa6597699cf8c1d054aee3669af7
+- card_id: proper_deference
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: proper_deference.jpg
+    sha256: 669f23de081ec8e301b8f7118b44a967f652f0f668ae15635e95427ef88cfded
+- card_id: province_assaulted
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: province_assaulted.jpg
+    sha256: 560bb0eeabf96a452b492c8c0522ce12f9e671f56866a2b19c461d119e863ca9
+- card_id: questionable_charity
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: questionable_charity.jpg
+    sha256: b238f906be46fd1cf13a04381be90e0045a932c3ab4cf717304a0000c1f2a01d
+- card_id: radiant_steel
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: radiant_steel.jpg
+    sha256: 6c14c2a9048cb49b3ad702b1c5a507fb1fdba08cd038170ee3d333990fb69c08
+- card_id: reckless_confrontation
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: reckless_confrontation.jpg
+    sha256: 98d782724e2c9ac34110659cf3ee5949d32f6ba6acd1d59ba06ee0d0a1bf35ac
+- card_id: relentless_conviction
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: relentless_conviction.jpg
+    sha256: 0dee3e355a5417882637d68da16795a26fb4030159f6dd20d4cd5fb748b13106
+- card_id: remember_their_valor
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: remember_their_valor.jpg
+    sha256: 090e47049692cd7c72618baaadc5b12e45ff1b5f7016d6fa558228674a930181
+- card_id: rise_corrupted
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: rise_corrupted.jpg
+    sha256: 1bee0f9b1e05a7a9845a46a25a0fbbcf55a8f507b8b76b6893d5736089e64d4c
+- card_id: rising_sun_blade
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: rising_sun_blade.jpg
+    sha256: 93f676c6a9b8f0bed7210a515a14e7b7cf64047ade8e63e0bf8f986eb42f092f
+- card_id: sarassa
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: sarassa.jpg
+    sha256: 882400ec01558f6a8b56275270be26b9392ab2eda31d7b76a6c1f14db2d3563b
+- card_id: seawatch_castle
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: seawatch_castle.jpg
+    sha256: 0d2de1746f06f367c55eec31640b24b815ab20de412900c44d39f6fe14517a61
+- card_id: shadows_talon
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: shadows_talon.jpg
+    sha256: 822c8d3fba59cff6ef43fd38dac61e935653b5c34edca8404e17677093e77a63
+- card_id: shiba_kotaro
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: shiba_kotaro.jpg
+    sha256: eb9ec60d5f0b6b4e719e04068da377d2d25e79a665a1f63a667914775e22882b
+- card_id: shinjo_dong_min
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: shinjo_dong_min.jpg
+    sha256: 3d9875f523f26a2b99669e21b2011f5783b5b8fef120571455cc5a4eb0d179e5
+- card_id: shinjo_hee_young
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: shinjo_hee_young.jpg
+    sha256: cf2ba827057a750ff158cfbd16633350a178bd0eebdc3592e690a5058a8af733
+- card_id: shinjo_ki_chang_experienced
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: shinjo_ki_chang_experienced.jpg
+    sha256: 12626a35add196f56149fdb8274abd788d82e09b8f6cce0a4b03a39b0e0bce9d
+- card_id: shosuro_orikasa
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: shosuro_orikasa.jpg
+    sha256: 7bb07011db9873cd4479e5d1fa2b0503ccff7d85d9f936b2a907e658d75acde1
+- card_id: shosuro_rokujo
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: shosuro_rokujo.jpg
+    sha256: 1570b53716824f03c306f361245be147bec9c785189a0c44e182bd6baa27d655
+- card_id: shune
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: shune.jpg
+    sha256: c9d0b2b2418da6170b6bad01ef0ac735ec9939738a329d255e1f1a4d7c4d818c
+- card_id: silent_struggle
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: silent_struggle.jpg
+    sha256: a9842f4565151d08f35d3d79d25426cae3c2c82519216fa32303410d6484d69c
+- card_id: simple_men
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: simple_men.jpg
+    sha256: 18985fcae6d0e9bbaf8fecae62701115910393e200657be9e26ebf8e16e08996
+- card_id: spirit_of_gaki_do
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: spirit_of_gaki_do.jpg
+    sha256: 268d7500e0ce8c750c3a6b92b70fe4bbb37f9fe390d4322d9b797b65998a28f8
+- card_id: stand_as_one
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: stand_as_one.jpg
+    sha256: 4331312ad47a81589b98603889a21b30ab9666ae15f46d9b68c568fdcdef8665
+- card_id: stare_into_the_void
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: stare_into_the_void.jpg
+    sha256: f254b69816f9304164b7284ff9b9036df8885578a45834a2aed655390cf75ba8
+- card_id: strength_of_will
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: strength_of_will.jpg
+    sha256: 5b271b7388fddad5956632c364ac2ff371c2ccc9d4b3b7da49cfa137bf02b21b
+- card_id: successful_bounty
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: successful_bounty.jpg
+    sha256: 3510cbf949386768aa9f0f7d6cd730cd1225f3391e61e9ca063c584a8fed199f
+- card_id: talisman_of_sakkaku
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: talisman_of_sakkaku.jpg
+    sha256: dd20dfb2f78558a082271060b060056af698ba71daa4a1da4183d1b9a064dab5
+- card_id: talisman_of_yomi
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: talisman_of_yomi.jpg
+    sha256: 82852c4c9a0bf8f98508746065161452ea1459efb7880a586089f2f84f00a0ca
+- card_id: talisman_of_yume_do
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: talisman_of_yume_do.jpg
+    sha256: 571d0601ec7f530ebac6449d405c508ecbc79790b359518731025e55623a4d67
+- card_id: tamori_shimura
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: tamori_shimura.jpg
+    sha256: b284c3d7f823a5e8e79a2fd7dc38d30baf6742d03da410535c313bea9c3ac0ce
+- card_id: tennyo
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: tennyo.jpg
+    sha256: 24a062de41212a69b8647ff4b9ca98646f401016d34603e2f58b6c818343a058
+- card_id: tetsu_kama_mine
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: tetsu_kama_mine.jpg
+    sha256: e92a49021e8e554a24e6bef7f58261da413513f49e77db29df79dafb09386c7b
+- card_id: tetsubo_of_earth
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: tetsubo_of_earth.jpg
+    sha256: 30358d749426ae8f24c8bcc3f470bd44843ae0180855f8b1585a69f8669b5f6a
+- card_id: the_blessed_herd
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_blessed_herd.jpg
+    sha256: 747e06a3afcd0571a5b1b833cbcbe4fcf4b9d4eddaeb981c8c114bb340f9b111
+- card_id: the_cost_of_pride
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_cost_of_pride.jpg
+    sha256: 359086adb670521153144c5f7f0b01ac86807f6054f7ee0d0dd70c7a7cbbf9e2
+- card_id: the_cursed_dead
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_cursed_dead.jpg
+    sha256: 8d3514a09f6c2b311e601b92105494536149c0f19e6559d1706567b8d73f2f85
+- card_id: the_masters_guard
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_masters_guard.jpg
+    sha256: 797bc856ab3edee5c87f1f94095949a199fec67b70301e1db8d3f863231456f7
+- card_id: the_onis_footsteps
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_onis_footsteps.jpg
+    sha256: 7c0c393211d251ce984bac5101662783db3705e09ebf18f6433ba348f4d715b5
+- card_id: the_quiet_death
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_quiet_death.jpg
+    sha256: d429c0ee6a4ba31cf9b285af70dadded400bba88998d4e72637decd2ae465c96
+- card_id: the_serpents_deception
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_serpents_deception.jpg
+    sha256: d086c15deb5d792791a906d56e8586dcb7fc4a969cfacc9aa5eaa5bc6f664046
+- card_id: the_silent_blade
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_silent_blade.jpg
+    sha256: a585a9eb724ada138689cd0366eec694abbbcfd67977bcadf45e2a70ccbf59ac
+- card_id: the_trap_is_sprung
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_trap_is_sprung.jpg
+    sha256: 2f2d5cd49db3298cc7633466dee282abd1ac70a2d4376134778aa94388f72eb8
+- card_id: the_walking_dead
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_walking_dead.jpg
+    sha256: 15dda1e1d95b719c28eb487653fddad6f7fcc13cb904ebfc7236f62e2ba09ef2
+- card_id: the_wind_never_stops
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: the_wind_never_stops.jpg
+    sha256: 082ec1d7665f724bebf4608b39d7aeecd86a84788c490dea707650a34dd2f880
+- card_id: thoughtful_present
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: thoughtful_present.jpg
+    sha256: e4c541d53ecd6c09b4080d5fcc1962ef0e5215b9aa62a035fb34eecf11dd518f
+- card_id: thunders_blessing
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: thunders_blessing.jpg
+    sha256: 9e1cf03b56ed155b8a23cf80193c02994af2ecdeea9e1f65d6dbc286dfbf6c62
+- card_id: togashi_kanmu
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: togashi_kanmu.jpg
+    sha256: 959e8a37b4d62c5b4105b0867e13c65e63991ee727fcb1ec0268fc24a807826f
+- card_id: togashi_konishi
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: togashi_konishi.jpg
+    sha256: cf2a620ffdc45613647fbc314cefa411bab68f0c7873da6ac9ae5a3d589c02e8
+- card_id: toshi_ranbo_guard
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: toshi_ranbo_guard.jpg
+    sha256: 732060310c528ff83ca32f3924d96607a5d4681a4e0ca11eda2a9174e17b277a
+- card_id: touch_of_the_flames
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: touch_of_the_flames.jpg
+    sha256: 5f044198e976f5923eaba9f7aec2da624e38f76fcee3c886cdc24043d3db6958
+- card_id: triumph_before_battle
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: triumph_before_battle.jpg
+    sha256: d33f5e5f1912c1cff4af88507b41a11c6b3f767dc94437cec7ec5eb56fe3af89
+- card_id: trust_the_void
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: trust_the_void.jpg
+    sha256: 0f69fc3a360e487b7cf4b67e3407b09c9eed64a84c4bd20d4e786933f6967a6b
+- card_id: tsai_tsu
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: tsai_tsu.jpg
+    sha256: 174437fd599ba2e120fe7eac21b135c85815eb84c89f3a9dde8635190e3b6e57
+- card_id: tsuruchi_gidayu_experienced
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: tsuruchi_gidayu_experienced.jpg
+    sha256: f5cf63f9d5db40934ee719bd95e1d481b23929a15a418a747181aee954d1741a
+- card_id: tsuruchi_kuze
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: tsuruchi_kuze.jpg
+    sha256: 71e060aa1fda9e9b281c3f606933fad742fa16ea33313c44c7ddc43e2b832471
+- card_id: tsuruchi_ogata
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: tsuruchi_ogata.jpg
+    sha256: 236bc8bedb8eb0782292fe4b0ea1aeec933892f15c2bdf4cb051c9207a9fcbd1
+- card_id: tsuruchi_ohashi
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: tsuruchi_ohashi.jpg
+    sha256: caf37e9e09c9e0e8211246515ed9f96923c21d4edfa5f1c9b9eff0a4bcf063e3
+- card_id: two_men_at_a_river
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: two_men_at_a_river.jpg
+    sha256: a1949ccd22c92d89320244ab72b942797355251c549a96009c6ac52b275aad0a
+- card_id: unexpected_sympathy
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: unexpected_sympathy.jpg
+    sha256: c6a01b6191ad87a9eb52b334347ef37169fe06e9743aec0820a6fa0c76e11516
+- card_id: unimpeachable_name
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: unimpeachable_name.jpg
+    sha256: 22d596cbf7e6c70e96565e708ff594b8fd48031f318f8cea0e63c5dea9855f22
+- card_id: unwavering_commitment
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: unwavering_commitment.jpg
+    sha256: 9015ed991d2424fd3e1787e07bf5b527929cdee4e03b4e3673f7e8f9a49b3de6
+- card_id: utaku_kana
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: utaku_kana.jpg
+    sha256: 37b78bd8ade16f3194aa1366117c44b4624f6cd66826604760e38592410d0f2e
+- card_id: utaku_yu_pan_experienced_2
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: utaku_yu_pan_experienced_2.jpg
+    sha256: fd6fd74f0a9717605a988cdad9e621ddd73f87182a2d74313d2738cc43c36037
+- card_id: void_dragons_guidance
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: void_dragons_guidance.jpg
+    sha256: fe78613470f33c739722d8489132f76a7cb2e8798af5e6205bd7f0aa8196dcb8
+- card_id: water_dragons_guidance
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: water_dragons_guidance.jpg
+    sha256: 7f1ca707d7c64a99b077d4b54cfff70f2554499f34559332c8f5275f8a994a2f
+- card_id: whispers_of_the_forgotten
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: whispers_of_the_forgotten.jpg
+    sha256: c12749a84f2b65524b34d9dab8005ca228027062183ed33f7f1ce0eb9be7b12a
+- card_id: yogo_rieko_experienced
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: yogo_rieko_experienced.jpg
+    sha256: 77caa8d7ae9a4278c6551fd47abcfe4d17e6d301d5739d3680b98f7473ca7ed1
+- card_id: yoritomo_chiako
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: yoritomo_chiako.jpg
+    sha256: 032d3aff3f990b8e91bbf5b9660a35d1f94adbb7438e085e13dafeed92f8a174
+- card_id: yoritomo_tahei
+  printing_id: the_plague_war
+  files:
+  - role: front
+    file: yoritomo_tahei.jpg
+    sha256: ba5be06f28fb2134527f57d99228281e819a1203bd65c61640d3835aeda6c64f

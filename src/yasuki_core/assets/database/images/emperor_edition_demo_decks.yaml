@@ -1,0 +1,746 @@
+set: Emperor Edition Demo Decks
+images:
+- card_id: a_dragons_favor
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: a_dragons_favor.jpg
+    sha256: 614d1f9b7bccfd7f6af2fa9a3f9215d3425b2bbf7d1f9e42d2247dbb15f9537b
+- card_id: advance_warning
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: advance_warning.jpg
+    sha256: 220ed4c383d74df1ce8deb70c9e02480475c44f1472a81aa99df6a2263e5dc62
+- card_id: agasha_ryo
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: agasha_ryo.jpg
+    sha256: 8bc8b730457949961b58d546d78dbb2d42fab25b096f88b2a4db96fbc28de31e
+- card_id: apprentice_shinobi
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: apprentice_shinobi.jpg
+    sha256: 3f2b6f2c427ea388b9cf9371b07200eca51085059baa926b4764a7009456bf23
+- card_id: asahina_michiru
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: asahina_michiru.jpg
+    sha256: 0a58406341f2a629490b297b31c64df58e3e063c9f3b6d382814873809327e42
+- card_id: asahina_yasutora
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: asahina_yasutora.jpg
+    sha256: 9d4873c33374c127ac55abe1b76f25cff77cba2549e0ee85ccb2042c097a19a7
+- card_id: ascending_the_ranks
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: ascending_the_ranks.jpg
+    sha256: 3964ee1f2d4964f7b89674183f47858a4af96f9926e61547a06b6c498fbe9c84
+- card_id: back_to_the_front
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: back_to_the_front.jpg
+    sha256: 4f727127668ebf2a81c66ea226a35b31435537a20b1b120db67249800e3347aa
+- card_id: bamboo_harvesters
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: bamboo_harvesters.jpg
+    sha256: fe064a22f03212c6959c117ce676f25e713ceaa431df761245df647d2d33511d
+- card_id: bayushi_hurunayi
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: bayushi_hurunayi.jpg
+    sha256: ab7e3f81fb4250fc4cb018a193e59e96813b40e49402a1e13529eff3f1d4f55a
+- card_id: bayushi_mitsuo
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: bayushi_mitsuo.jpg
+    sha256: b81c37af650b08309e60661d79cb3a0e24a6271d2ae1f842f575e3337ec5d897
+- card_id: blind_rage
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: blind_rage.jpg
+    sha256: 82e26615dbebcce665241272adc7863d98f1ce767ac6e6a7a75a9018f6b31ab3
+- card_id: block_supply_lines
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: 71b330269e32ed6a05f87be03077eb1a887851fb05131ccd1f49b0d4596e35f4
+- card_id: bonds_of_coin
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: bonds_of_coin.jpg
+    sha256: 8bcc2139dae760cb5396be385250136508aba9643f9551a6a9e06b23468140ac
+- card_id: bow_before_my_will
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: bow_before_my_will.jpg
+    sha256: 3ca297cd9d17a1e168a651a8b55afeb342c944ceb3df509859992fd4b58ab9f4
+- card_id: breath_of_the_heavens
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: breath_of_the_heavens.jpg
+    sha256: 15c5b196bdbf66997c151131701af976f7a6d646742cf31cbbba271853610b97
+- card_id: brothers_in_battle
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: brothers_in_battle.jpg
+    sha256: f363598d3af5f1479df8dccb9295fd43a52eefbdce11a3ee078126c58cf84ef5
+- card_id: burn_the_towers
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: burn_the_towers.jpg
+    sha256: 258fde8bfb588f26ce57696a2c272796a3b1205281d32f6435f3580fe4a3f860
+- card_id: chrysanthemum_blossom
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: chrysanthemum_blossom.jpg
+    sha256: 032d9881f64338273971bced411f8e9ece7012ed222267d4040115be918fd9eb
+- card_id: cleansing_the_path
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: cleansing_the_path.jpg
+    sha256: b96bcaf7b4913320b84fa4f8b73958968a0da9e5dbcab9fbdfbafc1c993f9fe6
+- card_id: conflagration
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: conflagration.jpg
+    sha256: 63c4f22198a09db528b528d7c61cdd862d9a5cf5df07851aa9ab2efc18385f08
+- card_id: copper_mine
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: copper_mine.jpg
+    sha256: 6eee4ed84f008d8a1eda379fcc653618a06a6b0f312ccda06ca303092e85fa03
+- card_id: daigotsu_bofana
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: daigotsu_bofana.jpg
+    sha256: a15a2db54b1ac1a2ac361c07442f89a1c55e2c5a8889fe98b9f5f35e01afa379
+- card_id: daigotsu_gyoken
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: daigotsu_gyoken.jpg
+    sha256: c82c49daf2c743e66eb37da3813e91b058862e942ffa8feeb5f499f489d057c7
+- card_id: daigotsu_ishibashi
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: daigotsu_ishibashi.jpg
+    sha256: 90d889117e1c917fb70192c7f92190a7b355ea4c7fe0111ea199467646b88dde
+- card_id: daigotsu_matsuda
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: daigotsu_matsuda.jpg
+    sha256: 77f3ecd8fe3c2fed303c3d3cc06dc3cda8e7f7d5f998ef7c703d621f4414c31a
+- card_id: daigotsu_negishi
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: daigotsu_negishi.jpg
+    sha256: ce4989f4455a02ba4d4d80640c8cddae18eca71eec80564abd42ee3d410b6b50
+- card_id: doji_dainagon
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: doji_dainagon.jpg
+    sha256: 3cf2b4bceb7574388b76db6548bda66d26bba3ac65c36fba2ab47d3cf15bffd6
+- card_id: doji_shunya
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: doji_shunya.jpg
+    sha256: d7a261fa0cf43b0e6c39c18bb45a06673ca5df0b49098140a5f8e8849a4c85dc
+- card_id: doji_tatsuki
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: doji_tatsuki.jpg
+    sha256: bc678232ac529a9ed94da3aed40806ce2a4ca5063219c2dbe18d53af13b0212f
+- card_id: embers_final_fire
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: embers_final_fire.jpg
+    sha256: ba31fb4fdca36f96c0eb6185a5d6264c74ae609197d3737e520078fb9d234d0a
+- card_id: engulfing_flames
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: engulfing_flames.jpg
+    sha256: 736a4f2df673a47990a482706ee6f67257641de7630bc5786f4ef146a6fabbec
+- card_id: fall_back
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: fall_back.jpg
+    sha256: 0137d60d58cde5a70f395d969fd9af9ccf994e872b803c54211eb81b6b174699
+- card_id: falling_leaf_strike
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: falling_leaf_strike.jpg
+    sha256: 16e805b586b202200ea3f600b987ce63072395f17783f7f66bce026523d55f63
+- card_id: flooded_pass
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: flooded_pass.jpg
+    sha256: df3ba271fbeea55c620cc23a712ce6b82a29c2bbeaaf030b27845743f8751593
+- card_id: fortitude
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: fortitude.jpg
+    sha256: d37cbf118ae35a21d04b61d4433720c1cbf18200fc53e60c070b006771417ece
+- card_id: geisha_house
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: geisha_house.jpg
+    sha256: ae5570cc467a4332bc9e926d94c442d0e501d1fc3035aa58d580929f20d59297
+- card_id: gold_mine
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: gold_mine.jpg
+    sha256: 589a163bc6586d9b77dd2e0c34c0f980c82c6f7869b568c7d2c6172f2eb03555
+- card_id: halls_of_the_forgotten
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: halls_of_the_forgotten.jpg
+    sha256: 1186c4892c9fb41204495e521996661611fef5970dd0e47f850dc00fcfddf196
+- card_id: hard_pressed
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: hard_pressed.jpg
+    sha256: 6c5802e67415f8740536200b38261e333245b15aab648a03d39517368c7aaab8
+- card_id: heart_of_rokugan
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: heart_of_rokugan.jpg
+    sha256: 609b5fbe223e2b9f0ce330004d47a76d04a7d2a58f90efdc2e74fefdb273befa
+- card_id: hida_bushotsu
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: hida_bushotsu.jpg
+    sha256: 1d98ac453811f34908c4490be9ccaf356f3e1a1a101798c5b2e529f50356f946
+- card_id: hida_defenders
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: hida_defenders.jpg
+    sha256: 0336305d97c11da7c9e3821ce3312872f0abb384f25b604e788f7cd089c753b6
+- card_id: hida_horu
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: hida_horu.jpg
+    sha256: d4f67b99b858a27738de32557b256b596f1a1ac44980a8ca8b28b5586c96fa23
+- card_id: hida_mimori
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: hida_mimori.jpg
+    sha256: c879f8202c3a738f6daf0a96815a89c2ef1b61542018679171f7aa8282158e2a
+- card_id: hida_takeuchi
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: hida_takeuchi.jpg
+    sha256: cb66ef67d7b47bcccfb9219edfab803cb6c434aaa8e806bbb1eec23349093dd4
+- card_id: hida_yamadera
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: hida_yamadera.jpg
+    sha256: fc9f8aa0d0a65066632619b69e94addc2f153415852b9077e326d37ec3eac15e
+- card_id: ikoma_shika
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: ikoma_shika.jpg
+    sha256: 7b179eb2c9ba14aeef3e771ca8d1bc506517cba0b913f582283dcb7ea1b74b11
+- card_id: ikoma_shinju
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: ikoma_shinju.jpg
+    sha256: f29bd55e8ad6338d2e98e9e10313eaaa26494965b62f93e6e5303b5fda9848bf
+- card_id: ikoma_sugo
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: ikoma_sugo.jpg
+    sha256: 5af6f850f5ff1788162bd7b8f40eb71258bc16da05788ece0f087c90100c40f9
+- card_id: incapacitated
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: incapacitated.jpg
+    sha256: 8ed1ff08a34b4c251e907405367636eb81d31256294008edb76dd6d07befdb41
+- card_id: iron_mine
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: iron_mine.jpg
+    sha256: 5b0552223f348e8eb5f91c2fb97e3855f97df0baa457c33ced250ed777c4f6b5
+- card_id: isawa_shunsuko
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: isawa_shunsuko.jpg
+    sha256: 2f33a6057a180d7f8c9ff60db602d7c0665ef9d4129ec970656be609ce673d44
+- card_id: isawa_tamaki
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: isawa_tamaki.jpg
+    sha256: ef6e8e3fc8dfdd80cf19e1d854a363b5afac9af5b638516c1767ddfdd29a69c9
+- card_id: isawa_tomohiro
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: isawa_tomohiro.jpg
+    sha256: 9440c78c7566158d8534a1f02cf4aa02d0f550f907c45056c17a7e7f65a16695
+- card_id: journeys_end_keep
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: journeys_end_keep.jpg
+    sha256: e1a34275a2c210d7736d0908417bcd59e5c1defb405ff29bf1e1c539a1440f63
+- card_id: knife_in_the_darkness
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: knife_in_the_darkness.jpg
+    sha256: 5ac29cc41826e5009dde754343f4f7780760707bf09d294a860e735e65667810
+- card_id: kobune_port
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: kobune_port.jpg
+    sha256: 0ba503a1423d9c91a791c88c839fead327fcc6b64a86d9249cce6eadad47b016
+- card_id: koshin_keep
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: koshin_keep.jpg
+    sha256: 86e457589794653c13f1d7ffc5e68f635cbef2680947334c2448e696ffa30b32
+- card_id: kunji
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: kunji.jpg
+    sha256: b2a54e73fc354c30b42c483b2f73f23c2c9c6f31ee975efa3e95b6d86ca09321
+- card_id: kyuden_otomo
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: kyuden_otomo.jpg
+    sha256: bda7f02818a1ed7db6134f968b05413cf68ec622fcf3ca1f1c073c2522535716
+- card_id: large_farm
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: large_farm.jpg
+    sha256: 6426b38968aadb94e1daf5ba564da110dd3b137c7bf51b7d11f732bf378b8356
+- card_id: library_of_rebirth
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: library_of_rebirth.jpg
+    sha256: 053e509ba8b5fe4fb1fa10f999f5d2bd1b62541c5ef5f119a429175d42ae4320
+- card_id: maga_yari
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: maga_yari.jpg
+    sha256: 669279693fedeebe2b3b9955b9ecb938b7d13f12a90384ae033149cb694364dc
+- card_id: marketplace
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: marketplace.jpg
+    sha256: 6d05c7264b12b3a13e0b09246ba4396db9bc1f05d0f826996e3c990714fb9b30
+- card_id: matsu_hachiro
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: matsu_hachiro.jpg
+    sha256: c70e4d8b29bd04d18d22661e90d4360bbcf7023502c2a270b9f19ba471e78f25
+- card_id: moto_hailung
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: moto_hailung.jpg
+    sha256: de3b1da71db2d83bb86a6fe362cea9fb1c3d57865d5d3710c64de9525c290fcb
+- card_id: moto_tetsuo
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: moto_tetsuo.jpg
+    sha256: b319eb2cc0dc0b97e73e541a2478d0615f29622137a55e5b5edd0aa456ef1e8d
+- card_id: murderous_intent
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: murderous_intent.jpg
+    sha256: 7610fac8b9efb5b608afb2c83b2600f14dada6d9a483357bf254e3e7b71a77ef
+- card_id: never_safe
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: never_safe.jpg
+    sha256: 68a5d2be72fa57dca066038463d20af9605e5183f5ae58ea9ff9671f08767a40
+- card_id: ninja_tricks
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: ninja_tricks.jpg
+    sha256: 622e02c780d037d190d036def32dce90de44027a7aec27c3a7ab31ab88f4f7d9
+- card_id: outriders
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: outriders.jpg
+    sha256: 0f238ab9f5471287607f5a4af1bf7ab73890a2cf1254c53cdb184a18ef94d175
+- card_id: pillars_of_virtue
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: pillars_of_virtue.jpg
+    sha256: 0bb90dd53a471ac6ad180c68b127a30761b38dba8b9c016be772fe66bb28c742
+- card_id: pride_of_the_hand
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: pride_of_the_hand.jpg
+    sha256: 51e7585c5240ff09954bb4384517db1022a92a339d179c8e45d96c2069a9571e
+- card_id: prosperous_village
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: prosperous_village.jpg
+    sha256: d50d7c4c6d383abca64d2196ae44e5ad3da1d0987a63def2793c89033eb27dd9
+- card_id: remote_village
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: remote_village.jpg
+    sha256: dcd10c7e7ab94b033378062d8e4e29ee4c677679e0d00815b191a16dbfa8b154
+- card_id: revenge
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: revenge.jpg
+    sha256: 21cae00ea906cb5f5b5d0814c2b3dffe2f70a4ff1a2f388089dbfe205a9bc9a1
+- card_id: rhetoric
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: rhetoric.jpg
+    sha256: e98e549f6d33d9be522df710aa85b4410353a58628d3c68eaa1480fdce7b01a0
+- card_id: ring_of_air
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: ring_of_air.jpg
+    sha256: 9156dba206fd7697e12e0114075843cba01d27981da75cd462b523a7620f546d
+- card_id: ring_of_earth
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: ring_of_earth.jpg
+    sha256: 0fad4c02afce1a9b2b64182c3414211caa3ad0abbc3c7b28c9220f717c2dd875
+- card_id: ring_of_water
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: ring_of_water.jpg
+    sha256: 52311fbf1ffb33442e6b3de104234c4df9319ae248d267c5a78097469cfd9b9a
+- card_id: riverside_port
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: riverside_port.jpg
+    sha256: d7738fb412c2b41eab59afee85ec9d83b424234e3dae44ab812236ca5a5609fc
+- card_id: scouring_flood
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: scouring_flood.jpg
+    sha256: 22c578171ee37c78acb1bf5828b2532162f1e7145d6d3b28d31275e61b6580d7
+- card_id: shinjo_horibe
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: shinjo_horibe.jpg
+    sha256: 14d62f3cad7d439ea9a4da4b8790af9f5fc71784fe84c8d64597cc6638a0106d
+- card_id: shinjo_itao
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: shinjo_itao.jpg
+    sha256: 55e142dea9ed93dc959b759a6c0da8259e15daaa778f1d759ee5c4e981b26a83
+- card_id: shinjo_taeken
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: shinjo_taeken.jpg
+    sha256: c70fd5f5626187745eed24aed453bed1d72bd75376abf137123d48201f889ef7
+- card_id: shinjos_children
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: shinjos_children.jpg
+    sha256: 56605432e6e9fca2facfd1d9966a8d481d7406d8d9792ca61da36b35f9456852
+- card_id: shinomen_marsh
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: shinomen_marsh.jpg
+    sha256: d10565d72b8adc1ef09aa3925bd6f624042001cb5b496e3ad979a5c44370eedb
+- card_id: shiotome_plains
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: shiotome_plains.jpg
+    sha256: 369a215cc51ffd59ee34424487e93d300d9e1bea5af1119d366a6ee0b6aac663
+- card_id: shosuro_hawado
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: shosuro_hawado.jpg
+    sha256: 85d48e61ebf71b17177957dfc59a7181985573b34890dd7bc6f7e198a547ac27
+- card_id: shosuro_konishi
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: shosuro_konishi.jpg
+    sha256: 9ef0016a55ea91f4e0c92dc9d6490e7fd0bae23a2f799dbe310b6852cffbe27b
+- card_id: shosuro_tsuji
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: shosuro_tsuji.jpg
+    sha256: 0cee6537ee0c169c3289b70d7b70f954632b696c8770256ef11dda61a0a9b6df
+- card_id: silk_works
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: silk_works.jpg
+    sha256: a7011f0152e5986ed1ad3ff6300f559699df8e368e4117389381f96f3bc85f9e
+- card_id: silver_mine
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: silver_mine.jpg
+    sha256: 379dfb423c409749355bf320a102fb55c38456e178a07c39553ea708fe1bfef7
+- card_id: small_farm
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: small_farm.jpg
+    sha256: f6af37a628b7bc5dbbb542a3bb1826f1c3eeb06eaef6e3575c301720b6134cf9
+- card_id: sniping
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: sniping.jpg
+    sha256: 2d2a2130a8633a1cc65d69677a0428492816faf90bb59d9b394a961d447e52bd
+- card_id: spiked_tetsubo
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: spiked_tetsubo.jpg
+    sha256: 53063f85f0b7d31ba8d151b6c1624c9acb8a293e0cac3d714afdd8ca5f82d574
+- card_id: spinning_heel_kick
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: spinning_heel_kick.jpg
+    sha256: 8337f844e7244caa96813b6f043b120cfdc925f22845531209658565f448eed6
+- card_id: stables
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: stables.jpg
+    sha256: 3d55a0c061b99c42daefe8a3eed591268c87419eb7a69442e9c2c0c3bc2dbca4
+- card_id: steel_soul_dojo
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: steel_soul_dojo.jpg
+    sha256: 78b5c07b6d5daffa6e0b07c263eae379a40cbbf8ab1214e5b9999c2b4479343d
+- card_id: strength_in_terror
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: strength_in_terror.jpg
+    sha256: b7bb7a206cf8affa796d61bb60c8649666721abd8533a68d3292f46dde06cc8f
+- card_id: tell_the_tale
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: tell_the_tale.jpg
+    sha256: a5848a37e9475571497960d30af520e4b89cfd63b88855fbf6184d847e43153a
+- card_id: the_golden_plains
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: the_golden_plains.jpg
+    sha256: 4b7b2338e1ed64f10b7998a84707c0fb73e0a3130c860883edc70885f62f352b
+- card_id: the_otoro_estate
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: the_otoro_estate.jpg
+    sha256: 8e9e8e0c2e829c21fd843de6befe45667167f134b442c0e7ad5149fc6686f6f5
+- card_id: togashi_hizumi
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: togashi_hizumi.jpg
+    sha256: 5c47a1949f8e155dca20e4a5721e8a586d255416858a742fdcf18384c6985930
+- card_id: togashi_korimi
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: togashi_korimi.jpg
+    sha256: 9bcd7f349111e03eafee143b49c5d1e6c81b0149d325ffa503d9a87aaea1527b
+- card_id: togashi_meiyu
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: togashi_meiyu.jpg
+    sha256: 51f982c6206f0752f5d04d5dc69bc736aa30ba36d5251184983109f4ed887831
+- card_id: togashi_torazu
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: togashi_torazu.jpg
+    sha256: c498ee0ec31a68c95ed00fdaf5c697e53c02e84c5b6e89ab2fd2a5b546fb0135
+- card_id: togashi_tsukagi
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: togashi_tsukagi.jpg
+    sha256: 67b02048267daa4bc022192ae5eaa2a8084091942e1f475792a72d8471fa3697
+- card_id: torchs_flame_flickers
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: torchs_flame_flickers.jpg
+    sha256: 46548ebda56aa40ac9c41c0190e0257c198b4b361276f024fdc560a694eeadb0
+- card_id: tsubute
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: tsubute.jpg
+    sha256: 56f95a38113996841754c33c85ce2680f7ecf3481f58e9343256feaac4a1b42e
+- card_id: tsunami_tattoo
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: tsunami_tattoo.jpg
+    sha256: 43371b3e24324f5e0ddc152deaa72647c9457079c2d1e8541cc1866865aff514
+- card_id: tsuruchi_kosoko
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: tsuruchi_kosoko.jpg
+    sha256: 205bee6108114f9fbdb7692a7101c2742e3dd4ac151b2f86a801e9d4b05ba1bc
+- card_id: tsuruchi_tomaru
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: tsuruchi_tomaru.jpg
+    sha256: e207c2a4c3421891ab10376232a4fad7c53e65e73b02abab0f45031b318440dd
+- card_id: tsuruchi_yashiro
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: tsuruchi_yashiro.jpg
+    sha256: 818de2a63782070d1ee0412aa1a9f729428dcb678dd9926039ad66e366d1430a
+- card_id: unexpected_support
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: unexpected_support.jpg
+    sha256: 507c275a22b35b25a803aee11e350affa73172460dee1a460d8b937a015984db
+- card_id: veteran_skirmishers
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: veteran_skirmishers.jpg
+    sha256: b4bb05304c2160f581a718442a1d80c352993007b0289d91b49e527cf2cae759
+- card_id: vigilant_eyes
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: vigilant_eyes.jpg
+    sha256: 1cb4760dd6c45d885abe143410a84fcd177120e34948d5aaef81249a4249bf8b
+- card_id: village_guardian
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: village_guardian.jpg
+    sha256: 92075b608f6550fb10460c4e0a7edaaa5effef606886c4326e02aeba1a455c0f
+- card_id: volcano_tattoo
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: volcano_tattoo.jpg
+    sha256: 6e44a69027a9ecf46d01baa40cc873a77774c89c0d76079be07aac53dbd2131d
+- card_id: well_prepared
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: well_prepared.jpg
+    sha256: 3b869a3558fc084ced2ca9e4396948beb7ea626689b7f042a08a0e4c68b3143a
+- card_id: wisdom_gained
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: wisdom_gained.jpg
+    sha256: 413e63d542a95e76f151a286fab7d5db514bf30725ba15170499d5b10db5a5f7
+- card_id: yoritomo_nakoshi
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: yoritomo_nakoshi.jpg
+    sha256: 4e82fd21e8e4442ecba9ba504718e6ce2ea933a44ad00ec23585cc094b723dd8
+- card_id: yoritomo_naoto
+  printing_id: emperor_edition_demo_decks
+  files:
+  - role: front
+    file: yoritomo_naoto.jpg
+    sha256: 9e0417e16b4297a6c3481e8b02497f8e873552fd5252ea4f9ac38108218046dc

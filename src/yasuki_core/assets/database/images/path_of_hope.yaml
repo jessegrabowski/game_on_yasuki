@@ -1,0 +1,926 @@
+set: Path of Hope
+images:
+- card_id: a_heros_gift
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: a_heros_gift.jpg
+    sha256: 8295efdf4d1165304d06d4a0c08a29593a675c26dbf1d9a035f7b1426854cf20
+- card_id: a_life_for_a_life
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: a_life_for_a_life.jpg
+    sha256: d390c617c2965f2b2b06c56da7ea9898c49671f91969258a4da5b5478453bda0
+- card_id: abandoned
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: abandoned.jpg
+    sha256: 8b66e9f231a95bb755d2e2f39e04930e333be5387d3ec4c9bb0acee6c3227762
+- card_id: accusation
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: accusation.jpg
+    sha256: 73847f6214e770a2cade38b005cb81ee105dfb01e39533cdf56a9937c13b6cf1
+- card_id: agasha_shaku
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: agasha_shaku.jpg
+    sha256: c55a8ab9ab3d5e624c933e4d030164b35b4c68b627d81aef0ab80326a649d365
+- card_id: akodo_michio
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: akodo_michio.jpg
+    sha256: f07787301beafa581d61dcac1e615445cd531b50940d59f2b2dd1de4fc30bcdc
+- card_id: akodo_nariaki
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: akodo_nariaki.jpg
+    sha256: dc2ce3064a12b8f3f9a496c0e82292b67bb3ed73e024b3d9610670d8ceaee3cb
+- card_id: akodo_terumoto
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: akodo_terumoto.jpg
+    sha256: fdc4db9aa69dd9377d077a9fc4a0ff894b7ca8b2493b4e4491f85a33511dbb75
+- card_id: akutenshis_tribute
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: akutenshis_tribute.jpg
+    sha256: 6310b27b12cb2ff083ca8517ff61efa701e2462e148e89c674d81e678e94fdf8
+- card_id: allegiance_to_the_emperor
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: allegiance_to_the_emperor.jpg
+    sha256: 34605f48e0216a02a389a8bf09570195fb8a5cf602d01facfcd2c17862b1f28d
+- card_id: allegiance_to_the_shogun
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: allegiance_to_the_shogun.jpg
+    sha256: ca275e5bb7c21cbfbc78197ce68653c0b647ab432ed37dd486025f54fa0d1658
+- card_id: always_ready
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: always_ready.jpg
+    sha256: 66d96b04f0b1f26fb76ed8cb577927403da76120973f68f8c090c7520c50ed1c
+- card_id: arrival_of_the_obsidian_champion
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: arrival_of_the_obsidian_champion.jpg
+    sha256: b69527890ade7f55d262f5530cbe3d63c87c2699806a9da39b66b08372e96856
+- card_id: arrogance
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: arrogance.jpg
+    sha256: 0e8b1c692cab3e6d90bb8bb4a843f44f42899cebff0941563f7fc9fb6d401c89
+- card_id: baraunghar_technique
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: baraunghar_technique.jpg
+    sha256: 36cab374b833caed6d05efd5869fcc4fa339772696ddfd8cd07ee2f1fe826787
+- card_id: bayushi_kageki_experienced
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: bayushi_kageki_experienced.jpg
+    sha256: 4b57bf3cca67919b6e637a276de42766fede3df51f52d68f623b35c90294dbca
+- card_id: bayushi_kaneo
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: bayushi_kaneo.jpg
+    sha256: adf40b76fc96f143b782b58512c07b3f6fa2e55b26b186a5d803fbbfa1cf882a
+- card_id: bayushi_moyotoshi
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: bayushi_moyotoshi.jpg
+    sha256: 8bfbb1cc070df95f234f7dc0e9826aa52f707b9e179cef3d51f115e3d7fcc540
+- card_id: bayushi_shumpei
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: bayushi_shumpei.jpg
+    sha256: 296674eed1a7d470da007e0f7b86a4573a7926f01790a3dbbcfc3124d54838ae
+- card_id: blood_and_steel
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: blood_and_steel.jpg
+    sha256: c669d605abb1cad556200423f33d82a1eb78d26a1ba53d87d7a58787338ade40
+- card_id: blossoming_conflict
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: blossoming_conflict.jpg
+    sha256: 708d2541cf628189f3166ef13f3bbe163683f31c778ce718878819fe13b4cd14
+- card_id: castle_gate
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: castle_gate.jpg
+    sha256: 5eef092b91ddd7625914a200ecf63a9a0a6f51459e951ed185a145d1a64048df
+- card_id: castle_towers
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: castle_towers.jpg
+    sha256: 163693c7100f9db8b03a26c8b5884bdd9b63f1694dae631581b1570d6190fa90
+- card_id: castle_walls
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: castle_walls.jpg
+    sha256: 0927b7a8a295ad518470075547d1d8ebd23ffff83342c6af8a9e98cc6fb870db
+- card_id: chitik
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: chitik.jpg
+    sha256: 7453aaf3cf51aad5d312e6e31960b0424d80707301f5f95a017bef7e52da05c3
+- card_id: chuda_hankyu
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: chuda_hankyu.jpg
+    sha256: c543b25216a539b7c0b8f677d52300e424d92c057270a1040b4343a1e8ec3b2a
+- card_id: conscriptors
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: conscriptors.jpg
+    sha256: 233bc8573a98ec484ff7d77e7cbb2a63ca8f2e6689af92f42251a0ea402ae54f
+- card_id: conserve_your_strength
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: conserve_your_strength.jpg
+    sha256: f4211faac2583d617c5ffa2c9b4914c24b91081473cd41a0590e38279880a550
+- card_id: counsel_of_the_keepers
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: counsel_of_the_keepers.jpg
+    sha256: 9766580679b5643a0cda3d51de7b597c67b66165cc493ecb552cde7e65560326
+- card_id: courtly_scholars
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: courtly_scholars.jpg
+    sha256: 70838e872ac3bac5ebfa231f957adc55a9584c19f6d03ac079baef23433c4480
+- card_id: credit_where_due
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: credit_where_due.jpg
+    sha256: 71969ca13e559eb99607dcbc3ed1d9eb2eb0fa13caf8230de8c48def2a2cb4e3
+- card_id: daidoji_munabu
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: daidoji_munabu.jpg
+    sha256: 31de6a2499b5631a567626ee40946896f80d127c27d486bcbd42165688609276
+- card_id: daidoji_naito
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: daidoji_naito.jpg
+    sha256: d37aecce440441ac12c53dd3e9682d4b393d71df35981437de6cb1d3e0402217
+- card_id: daigotsu_fumiaki
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: daigotsu_fumiaki.jpg
+    sha256: f1990a3ab5d9dad3ea879edbb93f90fd811a46899f0b2d223105a9bb5d5cfdc7
+- card_id: daigotsu_ogiwara
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: daigotsu_ogiwara.jpg
+    sha256: ca46ded70d5db2b497e89cecd2b7ebda1e1399568dba6541ae176f590ab6a9bf
+- card_id: dark_feeding
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: dark_feeding.jpg
+    sha256: c1d9089dee63bce1136c89d1776cfe70e0828900b3acb922e048a48dd9c3a57c
+- card_id: doji_fujie
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: doji_fujie.jpg
+    sha256: 0a133f709de52381f3a5a256c3d47682a7338d2306c61fbf173f3ad023675b99
+- card_id: doji_junai_experienced
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: doji_junai_experienced.jpg
+    sha256: 94214e42b6429da0b26e33cd9cf8927dc980d3436c313d632caf4adccb079244
+- card_id: doji_kazo_experienced
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: doji_kazo_experienced.jpg
+    sha256: 1b0fb280db0662bcde32d8fd96ff2df03e959c6c9a55222e95a32508792cda93
+- card_id: draw_your_blade
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: draw_your_blade.jpg
+    sha256: 9b16c2ea8f18f4947a9bbda39e61ab67d33fce913e0612de33cc73600f4d5d12
+- card_id: eyes_of_the_serpent
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: eyes_of_the_serpent.jpg
+    sha256: 448e37d197010f6a7d807cc39adbe85005b4696ecff7b19ba642b927a50733bb
+- card_id: favor_to_the_dragon
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: favor_to_the_dragon.jpg
+    sha256: 7ce71e2e7111bdb7d34fb368dec5826b26fe976096d532533440a5de471b6024
+- card_id: favor_to_the_horde
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: favor_to_the_horde.jpg
+    sha256: 8cd5b84a18367dbabf5771ddb0a2bb6aaf6d871ebdccf07c0613cf02bea131b2
+- card_id: favor_to_the_scorpion
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: favor_to_the_scorpion.jpg
+    sha256: 546ae4543ea3380f72c7bfb7140ba23a023ec7224a7365802cf4d5cffa0b1098
+- card_id: favorable_terrain
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: favorable_terrain.jpg
+    sha256: 6235e0ab14c9b13b38634a0c37b35979e21a5cea9d64a3bbffb1e194499165b9
+- card_id: fields_of_foolish_pride
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: fields_of_foolish_pride.jpg
+    sha256: f26532747a7216d2574210225f23deb4adf9ea9711c58e3fd970c0a96ea7947c
+- card_id: flee_from_tomorrow
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: flee_from_tomorrow.jpg
+    sha256: 88ebd8a6872832c31c2038d9816aa6670d319cc562f193eeb6485150a1d957f6
+- card_id: forest_cleansing
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: forest_cleansing.jpg
+    sha256: a885c4337ff5c7e1766040f41f4344a1c9b8d2637d60656c273d2296e43433e5
+- card_id: forest_killer_cavern
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: forest_killer_cavern.jpg
+    sha256: dcd13a3e1c0f77f1e629e5b0e7e854b658de2820eb45442bb9034dff606ff87e
+- card_id: fortress_of_the_bear
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: fortress_of_the_bear.jpg
+    sha256: f43168bf6c4f3608287840ebe84ba5ea385a4f130faa9a39d38c36a44432b25c
+- card_id: fuhaos_shadow
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: fuhaos_shadow.jpg
+    sha256: 0bc42270928a3e5fe49ddcc3119a61a225185f92858de7ebfbb41bf56a7df31d
+- card_id: golden_obi_of_the_sun_goddess_experienced
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: golden_obi_of_the_sun_goddess_experienced.jpg
+    sha256: ca12174cced7519d1f089d3d4eae612e460904e78dd57d90394c590e18e76054
+- card_id: grtik_er
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: grtik_er.jpg
+    sha256: d40da6a02d5e71e41aff2d552626cf23cc9a1c7c552c8a841c3b1b18a62f3e01
+- card_id: heart_of_the_mountain
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: heart_of_the_mountain.jpg
+    sha256: 1e0c27f3bfa7c74ead9fc8320b5cb9b9c4a441508dcd180e92821f69f4c1b96d
+- card_id: hida_hiyao
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: hida_hiyao.jpg
+    sha256: 8615d45cf1304481b87735e3a67bcf0918a5e03826e106011bed4298d711bc32
+- card_id: hida_iseki
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: hida_iseki.jpg
+    sha256: 72bd555e1e56d0fe24bee2079c595f3f5680013f3c7908af19102c12ed84d8f2
+- card_id: hida_takuma
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: hida_takuma.jpg
+    sha256: 7010fd161f080bfe11b792c715ca52e693eb461848eabd4f0fbc2411cec0750f
+- card_id: hida_unkei
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: hida_unkei.jpg
+    sha256: f2f0b57f6869ffd1348ff2db03c58b1a0ef8a3106d02b89272a11c8553a47477
+- card_id: hida_war_cry
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: hida_war_cry.jpg
+    sha256: 9dc7f8dfa969c48299036b7809347d8b2df4752e9909737e171e95a2e2ad38f4
+- card_id: hiruma_hino
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: hiruma_hino.jpg
+    sha256: a82383d948487d4b24c630736b75a86d058e9940d5d0b677cf27ad02b8f688ef
+- card_id: hiruma_hitaken
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: hiruma_hitaken.jpg
+    sha256: ed72c51bf03f79d32ce29d88dd365153d06032982073b87d3aa1585397f39a35
+- card_id: hisaki
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: hisaki.jpg
+    sha256: 611c4a80120652602bb1f1ad9fdb4c0bfa409971b9590216d840f606bc70c95b
+- card_id: homecoming
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: homecoming.jpg
+    sha256: 5477c2a50aeb4bec3a7f82ecef3c27346d2d3992547f6ea446dea8cf4d24e385
+- card_id: honor_guard
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: honor_guard.jpg
+    sha256: daa742c09431922f8f3595a3a79b9e7b76f227b063c094020cdf85da87bcdfba
+- card_id: house_of_the_white_jade_fan
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: house_of_the_white_jade_fan.jpg
+    sha256: fb629bc7438091e535a6fa359148bc466af9aade34ecf415bbe0ff88b5b16a63
+- card_id: howl_of_the_wolf
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: howl_of_the_wolf.jpg
+    sha256: 7a800d723dfbc4a837aedaa2b3853ca8c31f3db0ee3a0b3761509e080ef8ad8a
+- card_id: i_know_that_trick
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: i_know_that_trick.jpg
+    sha256: 7e080f414e3b372314675eab2d9a35e2001f4f1cdf623290365a2262d6118dc5
+- card_id: ide_jiao
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: ide_jiao.jpg
+    sha256: 3feb196db752efc41303e94c2e72461e8be0f48773d25cb11bf0f3dc74f693a0
+- card_id: isawa_sata
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: isawa_sata.jpg
+    sha256: 04954276f887ccfb0afb840935353506d1767deb0b04e3f869f377e0bcb91e65
+- card_id: isawa_tanaka_poh
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: isawa_tanaka_poh.jpg
+    sha256: 1fcdad3a4bb3eb17dce6400242e722ecab5a37a8781be8d6b764ec3dac185163
+- card_id: isawa_tomita
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: isawa_tomita.jpg
+    sha256: 9599256b2660ac895199e6047a53b923bf88cff3455687a1df2ce9a36fb45511
+- card_id: iwase
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: iwase.jpg
+    sha256: b5633277b7a6ed03be8e83b43a983b0bd5139448459dbdce411840f42361a8f4
+- card_id: jade_petal_tea
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: jade_petal_tea.jpg
+    sha256: f931d03bc600dd059324b61b0bf10b990d19d43164a7016beb38c4fc221d61a2
+- card_id: kakita_tsuken_experienced
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: kakita_tsuken_experienced.jpg
+    sha256: 54c6ca9510f92932f3d017da2541d26a7ee3567400c3623e4e0db1d9f00e042a
+- card_id: kharmic_struggle
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: kharmic_struggle.jpg
+    sha256: 3048fcd057cb2d41b20996e94dc7f7a4d91a6d600444eab283859dee566650f0
+- card_id: kitsuki_ryushi
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: kitsuki_ryushi.jpg
+    sha256: 62b2187c92e940c0ec1591bd6c6f48124d7c75cffc58299454bb6ec9da9b9745
+- card_id: kitsuki_seiji
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: kitsuki_seiji.jpg
+    sha256: f15cb486bfd4b0a47907637535b0a6e0b23104a94dfffbdc7d507e7af8ee0143
+- card_id: kokujin_experienced_3
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: kokujin_experienced_3.jpg
+    sha256: 17fa56f192039b221069ed6e00831ef67b62ff5cc6cf65fc9fa26e3b48ed33bc
+- card_id: kokujins_temptation
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: kokujins_temptation.jpg
+    sha256: f088dffd7bb9b6943cb6282b397611cc7ee7ac8b460664d9ea065f9df123ea38
+- card_id: kunis_eye
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: kunis_eye.jpg
+    sha256: 44be2b84e67fc19bef4fcf20f712c1828f02a73bcb1ee6056ade0662fab726ea
+- card_id: kyosos_hunters
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: kyosos_hunters.jpg
+    sha256: 9a36781717d63fabfb1e1de2fc5b248bc3a94d71cc348e2158efe87e4c58a4fd
+- card_id: letter_of_confession
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: letter_of_confession.jpg
+    sha256: bca57978296c8a3b81366b98476e43f61c99f0140aa567b388413d97a2689717
+- card_id: lone_magistrate
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: lone_magistrate.jpg
+    sha256: 3f2807f7dee7d78858a599dd8a4a1e6711bf4e5002dee8a64954a5c421babaef
+- card_id: matsu_hirake
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: matsu_hirake.jpg
+    sha256: 05e7f8d6776331046b1c7713c37c0b93a591780af368e60ff1f69db653ca6b6f
+- card_id: matsu_shimei
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: matsu_shimei.jpg
+    sha256: f00c4827267b9db15050380b851c11942b4138f32f60cd2f9ac3d5638a3f63df
+- card_id: matsu_yoshino
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: matsu_yoshino.jpg
+    sha256: 1bc40e19e9c2521203403b9d9e1e9d2d8b3e10ccc3717b9232d32d985048e0bb
+- card_id: mirumoto_chojiro
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: mirumoto_chojiro.jpg
+    sha256: 9cc0d2c0d2d18146e23f8e53c1248497bff1af0a6041cf63b1c85c7e3dac4768
+- card_id: mirumoto_masae_experienced
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: mirumoto_masae_experienced.jpg
+    sha256: 31ceec2efb04a86d71028c64790c71edbf5a95e5f1c8c06480b0ab6c5174e4a4
+- card_id: mishakene
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: mishakene.jpg
+    sha256: edb12d33ac95c3a9e05a0e0824fd0c1cb953ba1233fa95c016b211d575e56ceb
+- card_id: mitsus_return
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: mitsus_return.jpg
+    sha256: 2b19970abf02c73f41291ba97102d6da623b1ce52ba9bf3d1f10aa4e3beca3c3
+- card_id: moshi_sayoko
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: moshi_sayoko.jpg
+    sha256: 52bb41c1302499aa876d73121ea05758d8c8372acfcfa606305db807060f8b70
+- card_id: moto_kang
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: moto_kang.jpg
+    sha256: 32628aeadd774781c0c06e2ce79803a1b0a1cd6fb6d56416b5468d8f177988da
+- card_id: moto_tsume_experienced_3
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: moto_tsume_experienced_3.jpg
+    sha256: 0d493e14e57db4783df9c5527c23c2601ff5a880b8effc4b2650488cf1328f8d
+- card_id: nck
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: nck.jpg
+    sha256: cecae4cc111838f7aa0ce6407ba29a234370cba1a63e669700dd1d983f6e0a2d
+- card_id: night_crystal_scepter
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: night_crystal_scepter.jpg
+    sha256: 8a6c7a8fc681138a6072c010bb403f410cdc9f526be0999d36acfef3bd85382b
+- card_id: obsidian_riders
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: obsidian_riders.jpg
+    sha256: a807d421b78a217f9ee86b3d81d2d4f1270b78142d497d0bc161c13897572057
+- card_id: p_otch
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: p_otch.jpg
+    sha256: b91a568f1f2f27e1b5f4725fb6f28aaf3cd3e1c77e5bc1e3e359fb1568debbff
+- card_id: preparation
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: preparation.jpg
+    sha256: 547da081f230513962007e200e1afb192ae1ef1871777606628cc1e9f55071ae
+- card_id: proof_of_dishonor
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: proof_of_dishonor.jpg
+    sha256: 273e552d714db1c9ab2b513c0a79bbe0a898e1b43fb489f928942cabd835de93
+- card_id: prosperous_plains_city
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: prosperous_plains_city.jpg
+    sha256: 88a626c2e55bc68e87dc677a59130086925dec29caf730960c31f1a57d896c3e
+- card_id: rapid_deployment
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: rapid_deployment.jpg
+    sha256: c8aa13dbaa032acb0b0af2c74f352d086b8c3dc08195d357488afc33c2762048
+- card_id: repair_crew
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: repair_crew.jpg
+    sha256: e538ad1130b528f1f8a84b2ff826bbff730d76cb02e4e9a9ca19948fb16abb60
+- card_id: righteous_doshin
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: righteous_doshin.jpg
+    sha256: 6ea45856375409b5be167d664d8fe68555b8f2a76d6c21d9c4e7741086b02d6a
+- card_id: sachis_defiance
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: sachis_defiance.jpg
+    sha256: 3c9243ecc8582f0647728736997501060193ef1f0c2ae2ec88fa14564ec5200a
+- card_id: scrutiny_of_the_wasp
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: scrutiny_of_the_wasp.jpg
+    sha256: 7c3a0e79ea1ae3b8f4e39fb67a1c48d4be95cdd92b838cedf8997295d15b6556
+- card_id: second_doom_of_the_crab
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: second_doom_of_the_crab.jpg
+    sha256: 65a7aec56fdc96bcc24f8d010e7fd39da49ff39c2a49f402b9cc2e898e6ee50a
+- card_id: second_doom_of_the_crane
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: second_doom_of_the_crane.jpg
+    sha256: 165685c4d59371c341cc0983cf49a8896bb4cf6c1e10ddfff8aa4b6a18e5cc44
+- card_id: secret_from_the_mantis
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: secret_from_the_mantis.jpg
+    sha256: 43e75bbb4d638c085e9aa75305b93e70099ae80d0500723518f006aad91b418c
+- card_id: secret_from_the_ratling
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: secret_from_the_ratling.jpg
+    sha256: 3684c19145f2a66ff3fda3dd12e96bd31d42eb7387a66555c328118810b55a9c
+- card_id: seeking_within
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: seeking_within.jpg
+    sha256: ba51737879cc9eca2aadcf72c4cb896a4c7c4cf2c4bc19a21e290a7b543fd33e
+- card_id: selfless_courage
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: selfless_courage.jpg
+    sha256: ae705fd872d9fd362d849f08e6bbe583640f468b741392d8ae2f10ef0f619bb0
+- card_id: shiba_fugimori
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: shiba_fugimori.jpg
+    sha256: 24e7f732130f48bfbb04d199ab56d1a609fcaa3862d051b9a23c22c6621f3044
+- card_id: shiba_riza
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: shiba_riza.jpg
+    sha256: cacfd35b92f7b7a06293eba3d7a102b0e0144baaa4b3cf5de17a7406591e73a3
+- card_id: shinjo_senhao
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: shinjo_senhao.jpg
+    sha256: 5c9b132a26a7e5f2fc2ac6619846a77ff56fb5b43b5c7ed6a59c939ebcb5183d
+- card_id: shinjo_wei
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: shinjo_wei.jpg
+    sha256: d53a8f3379be5be472791febf89de00a4b8a96fca08b28b040518c0a4394d3b7
+- card_id: shinjo_xie
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: shinjo_xie.jpg
+    sha256: fbcbe39d3c07aab636905e7657d9e11787d0c4f47ea80701aad2aaebd81e88db
+- card_id: shinjos_arrow
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: shinjos_arrow.jpg
+    sha256: a20d1af52a2ed508704e6ec10e88d56bb3cb682ebea6671637d029655533ce54
+- card_id: shosuro_mikado_experienced
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: shosuro_mikado_experienced.jpg
+    sha256: 873ee8199987c01ee0dd43bb036b018f9926e29edad67bcae4137f7ac5f466f5
+- card_id: shosuro_toma
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: shosuro_toma.jpg
+    sha256: 5f35f376f202b3aed07625f44dba0af8d7bb288be6dde428f4b8afbeaf7d0108
+- card_id: shuten_dojis_fury
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: shuten_dojis_fury.jpg
+    sha256: 107abe4902c7487118e8abe3ef53e2a3f4a2ceb5e38de23493a84d45d1f731e8
+- card_id: storm_rider_explorer
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: storm_rider_explorer.jpg
+    sha256: 900bd3a01bc4020b5ff2a6d93403a8e35f3b81cdee3f09d896dd6d129819663a
+- card_id: tainted_whispers
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: tainted_whispers.jpg
+    sha256: fca85e9d8ea5d6d907f22b0e88a7d9d81fb55b613853b9f954fca7392e3f615c
+- card_id: tawagoto
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: tawagoto.jpg
+    sha256: 4726657efc92e00153c9c0d74b8f8115b5e53bc3fdc731da1c3ad173cd2100e1
+- card_id: tchree
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: tchree.jpg
+    sha256: 324bafead129b7a4ba34b27992d65e5f71e8b064f967e0025a9e3749e2752243
+- card_id: temple_of_the_general
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: temple_of_the_general.jpg
+    sha256: d43e7953a0a18fe58bb0b766c32aa13fdfd01338a6d13277e266c75bda0a1503
+- card_id: temple_of_the_lotus
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: temple_of_the_lotus.jpg
+    sha256: ff631bb8e58d6ed71848358e4d87d9f435dba3c222033276ee558b3497fbfd0a
+- card_id: ten_thousand_temples
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: ten_thousand_temples.jpg
+    sha256: db2e0c1c1efb46a7f9b0d00905e825add4b6a6148780a40f74107d39c12ae313
+- card_id: test_his_mettle
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: test_his_mettle.jpg
+    sha256: d02e7000199cc0ae1f57bfd31cb3d74cb095cfecbbb7604e0ffc8e468b30f304
+- card_id: test_of_loyalty
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: test_of_loyalty.jpg
+    sha256: 66987aba0098d9c54053fd9ed882a6545ef9cae8f3426aef81c103fd9003f6d6
+- card_id: the_bitter_shadow_of_shame
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: the_bitter_shadow_of_shame.jpg
+    sha256: 919754e4ad341d9ec32e65c01dcc1ea007a40442b13835269bd0ab0d932e5b74
+- card_id: the_death_of_akiko
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: the_death_of_akiko.jpg
+    sha256: 32e849996d92a8c386d55be6fde70b935699c39654a476644e7db71c3f7af5cb
+- card_id: the_halls_of_the_damned
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: the_halls_of_the_damned.jpg
+    sha256: 0447daaadfaa8181a0a54f9e03abf270ee5977737f0e9fcb1fe911227e193136
+- card_id: the_kamis_blessing
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: the_kamis_blessing.jpg
+    sha256: 8a347825b1b1d1bc2127e9575eacdf676fe935678c92886603ff8feb606612fe
+- card_id: the_tail_strikes
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: the_tail_strikes.jpg
+    sha256: bfe16dacd43498b550275209d741f7ee3e55a40841f9d97afce0e1d1332b841c
+- card_id: the_war_of_fire_and_thunder
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: the_war_of_fire_and_thunder.jpg
+    sha256: 3c4a0bc2eef30f05ceeef7637225ae4475b0cd97052bcee24194487809e1164b
+- card_id: thunder_and_steel
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: thunder_and_steel.jpg
+    sha256: a98068bf82f914e22c01485c42c729e4348989cc35409efb97054a0589b43dd8
+- card_id: togashi_masujiro
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: togashi_masujiro.jpg
+    sha256: 2c6f09ee63ea9161ff03251ee2bcc7f46b1aab485ec8699eed01a44573ab71f1
+- card_id: togashi_razan
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: togashi_razan.jpg
+    sha256: 9b5e79af9ba0c1f0145bfbffd4d559115bc6dd81abf7b2dc65aac2efe02fd444
+- card_id: tsukens_blade
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: tsukens_blade.jpg
+    sha256: bbc421d3c006c98da54e274a069dce5cd8bfe624ee7210c43a99c6975872d587
+- card_id: tsuruchi_chae
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: tsuruchi_chae.jpg
+    sha256: fc3b58bf7378f83200275683c4a5559166866c6f3cc72e8d84b4cd4c6fa53a25
+- card_id: tsuruchi_kaya
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: tsuruchi_kaya.jpg
+    sha256: 138d893ee5e6f8de8275643af171021dd8de3fc8785496beef241355cbb2bced
+- card_id: unexpected_testimony
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: unexpected_testimony.jpg
+    sha256: 4a3519b13f70bad5dd89e6303f9da267f69973c7e22265be1966f70c5a7d7e6f
+- card_id: unity_of_purpose
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: unity_of_purpose.jpg
+    sha256: b8ba25b244bf26bc05e748f34e46ca3187c8599abbc416b543283c3ec1affee2
+- card_id: utaku_minhua
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: utaku_minhua.jpg
+    sha256: d310088048c8df3242390a73955c69ea7116c84fbcbd50aef846e70d4051d862
+- card_id: valiant_stand
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: valiant_stand.jpg
+    sha256: f93a084833a72c2767081dc0f0079a85eb6dcad79abf2f6342f47576400d6524
+- card_id: wareta_no_oni
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: wareta_no_oni.jpg
+    sha256: 44072a275a641d04b28ed683aad5abbce56d489e4e9e540b59746da4b5d58ce1
+- card_id: water_dragon_experienced_2
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: water_dragon_experienced_2.jpg
+    sha256: ce7528bdc55420d276845796e234c36ec32a1073dd02e5001aa346ee550a7acc
+- card_id: weakened_defenses
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: weakened_defenses.jpg
+    sha256: dbf6870709150d9c8a2b7d49380928d53f3eb04f39ee1c5782ae0b3e0776cf2f
+- card_id: wisdom_and_courage
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: wisdom_and_courage.jpg
+    sha256: 9bc7f2dbdad65782469f2c09f4fa8f321796ecca5ae1f9d44f40a3152731d89f
+- card_id: wrath_of_the_keepers
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: wrath_of_the_keepers.jpg
+    sha256: caf0f2229b80533174b2c2bf2aeffe16682d5434b216e4ac2b13c54b585d1b68
+- card_id: wretched_mercenary
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: wretched_mercenary.jpg
+    sha256: 1222bfc313ac086f4c3f3e4f85f3a28644ad52fa5fa89fe349bb5cc2e0628f6c
+- card_id: yoritomo_ietsuna
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: yoritomo_ietsuna.jpg
+    sha256: 0471cea08eb05de40f0b3d2508f32b9be3576a112a4707b3251333a1e060f5ba
+- card_id: you_are_too_late
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: you_are_too_late.jpg
+    sha256: 4f3e5507afcaa9963a1669a079c05ead88b16735106565f06ad775b4738c7a0b
+- card_id: ytchee
+  printing_id: path_of_hope
+  files:
+  - role: front
+    file: ytchee.jpg
+    sha256: 2fca7a33cf29a4cdf3256849aa582029fad78dc282b2acd360864a6684d17781

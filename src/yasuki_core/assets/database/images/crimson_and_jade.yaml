@@ -1,0 +1,962 @@
+set: Crimson & Jade
+images:
+- card_id: a_glimpse_of_the_souls_shadow
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: a_glimpse_of_the_souls_shadow.jpg
+    sha256: f4b1645cafb31f73dd2052c3ca699e3c271169af6631b554464c365bc0dc2a78
+- card_id: a_samurais_fury
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: a_samurais_fury.jpg
+    sha256: 343164e8d6fe33df7fcbb967eea3e9dbcd26eb9f4bd4c4667c08f5304256f54c
+- card_id: agasha_heizo
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: agasha_heizo.jpg
+    sha256: d487fc314f7e6842e36175ccb29039d0a24d512b9481f5700ae134ab870455e9
+- card_id: along_the_coast_at_midnight
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: along_the_coast_at_midnight.jpg
+    sha256: c9f1a922fd2e06c8ddc3354dcfcd1e97f0e10edd5b2a5f933cd903e0fd059e91
+- card_id: an_onis_fury
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: an_onis_fury.jpg
+    sha256: bc8a015c75b3520d510f4eab58f9564dd9a1959f6e66ba7126b8b5056b3d886a
+- card_id: ancestral_guidance
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: ancestral_guidance.jpg
+    sha256: bb9d27adda3dc4c1dea2d6255a01539c7823625fbf9b2c720f2ea3ab85e8dcbb
+- card_id: ancestral_weapons_of_the_mantis
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: ancestral_weapons_of_the_mantis.jpg
+    sha256: bc0953f45974539f97bb71cf3490d6009c51412237343511bdd625ca215d035a
+- card_id: antidote
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: antidote.jpg
+    sha256: 0756df8b95fb880bda2127187b9934e891612eb252a843fa33be5477efe26bdf
+- card_id: architects_of_the_wall
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: architects_of_the_wall.jpg
+    sha256: 6f5e26cc69eb5ed6a92f38a7b5ddc4dd25f6f710dcb0eb1d00d433503a32b744
+- card_id: are_you_with_me
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: are_you_with_me.jpg
+    sha256: e4cb1fbbc738135d0f87d5046b187b1a70a48a3178d206eaebe01ccc252acd17
+- card_id: armor_of_the_shadow_warrior
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: armor_of_the_shadow_warrior.jpg
+    sha256: 3dfa33ef08ce4e9d394264a1234004e7b555f62c1c9a2960e10b72ba729e0fc0
+- card_id: armory
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: armory.jpg
+    sha256: 96608913cea67d46781fa16be0693586c0048de6428fcfcb91e640836e914655
+- card_id: asahina_tomo_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: asahina_tomo_experienced.jpg
+    sha256: 653868e66c784a5445f90ff3a06c996c78515173d3952aaf327afdb585556035
+- card_id: ashamana
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: ashamana.jpg
+    sha256: 9b3b423c26f35e7263007950f020c66748098b733677b9c1dd01e503bbc2d49c
+- card_id: bad_kharma
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: bad_kharma.jpg
+    sha256: 11e3e551d46c1454973c227f3df121aee41c554ae06e986bc9b19a1a6ad9e587
+- card_id: bandit_gang
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: bandit_gang.jpg
+    sha256: ef671af26f3bd326ae8bec9e942b65329ec99021981b44827b6c2ca27cc21fc0
+- card_id: barbarian_horde
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: barbarian_horde.jpg
+    sha256: 97caf85ab943e654d4f45b395adb8188d040c857e9a65a17e8421e391db99c0c
+- card_id: battle_at_isawa_palace
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: battle_at_isawa_palace.jpg
+    sha256: 986e847f8b447a3981a09e870c69e1eb699019734136cfd98199f0b67ab56162
+- card_id: bayushi_tasu
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: bayushi_tasu.jpg
+    sha256: 64612e0e5d04bc29e6f6c13246209b6b3a422343b9be202ec09e529e7fe650a5
+- card_id: borderland
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: borderland.jpg
+    sha256: 2405fc5bed47bf6da0a2fcee35dc2f1838b3b4c37366d7f23284e8e5e6b1c438
+- card_id: breaking_blow
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: breaking_blow.jpg
+    sha256: d63eac054118223f16968c634f2deed677661d65e7a2c6b6986b1cb8f655c33a
+- card_id: bridged_pass
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: bridged_pass.jpg
+    sha256: e3ad489edaf6bb4c44bfbee1a6d5900405559b57a2874ab4ed417b98c2d0911e
+- card_id: brothers_of_thunder
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: brothers_of_thunder.jpg
+    sha256: 6e0d9be28ccfe60f45da0c14997cc400c22a606e282edad9908bb2a672712c14
+- card_id: carrier_pigeon
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: carrier_pigeon.jpg
+    sha256: b7b99ef1a362890fd51d6363d014e044596b84d7b63b93512a845067cae3533f
+- card_id: catching_the_winds_favor
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: catching_the_winds_favor.jpg
+    sha256: 83cf8432657013be4418253afd9a393e38adf02b30f9ea5d24e24d7a53d35cf1
+- card_id: chime_of_harmony
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: chime_of_harmony.jpg
+    sha256: f5a3a61a9088df7b3fd08349fb2ed4993dc7cbeb829ad5715b6364cf310eb242
+- card_id: chinoko
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: chinoko.jpg
+    sha256: 9989d721ec20edbdc883733434477c3123578cfc3462c4494dc21beac40527c6
+- card_id: clan_banner
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: clan_banner.jpg
+    sha256: d50e9ab4ba2db2a731237ee7d396536f45d2d9a16941b9b9eef3da529bb9a38a
+- card_id: clan_heartland
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: clan_heartland.jpg
+    sha256: ad5796aa58c57b3c7f523174bc112fd29d23bbdbec1ceeb1cab3ecc41b7d1169
+- card_id: corrupted_copper_mine
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: corrupted_copper_mine.jpg
+    sha256: edf80914d720c7da8d205366e9f68c81c7f051267616227682c0eb6ea1070735
+- card_id: counterfeit
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: counterfeit.jpg
+    sha256: 28f895f71e80f9b60cfc5686a5d7b973feadb518f2388c18aedc3ff5b7afaba1
+- card_id: courier
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: courier.jpg
+    sha256: d4f079095d26a3e7917778a85d5a884a66bdf9bc4182cf9158caf33fa2ea29b9
+- card_id: cowardice
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: cowardice.jpg
+    sha256: 70cdb44a456f02ad8951e9a0fd435a9442fd31bae270d6b4260233cc4e4435e0
+- card_id: dance_of_the_elements
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: dance_of_the_elements.jpg
+    sha256: a73196941094c34ba269cbd23963a4cacaa3d5694e192f6eb371de72b0f2f76d
+- card_id: deploy_reserves
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: deploy_reserves.jpg
+    sha256: 5f95c1ea495a59c93791a987d77af50d95e29583e4d0aa2762aaf0a7fc022d2e
+- card_id: disrupt_the_aura
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: disrupt_the_aura.jpg
+    sha256: 13ca7041ea8c8e1c1ff532990dfcf04d9f19da3b432d3577cfcfe81c5df70552
+- card_id: divine_the_future
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: divine_the_future.jpg
+    sha256: 9e6d569dbefaed05325168928c7ccbfeeb3ee47cd7e70be3c73e1e69808ca912
+- card_id: doji_reju
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: doji_reju.jpg
+    sha256: 69dd996b784ac7460052dfd9b1c76d7a16564df6b81f39d334e8c37b2a8b17ae
+- card_id: double_chi
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: double_chi.jpg
+    sha256: 9b4652ac801978e66e9ac19440d92835166fdb446c434fbb20e536293d133183
+- card_id: dragons_teeth
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: dragons_teeth.jpg
+    sha256: 3f24ffa903dac96184fe262fd2c334993122c13935282436711f85fbc7d0f1e5
+- card_id: engineering_crew
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: engineering_crew.jpg
+    sha256: aee459b231e0c8a35ce448c43ab3ba0a81792d08fe8c72db8bb775ed86534454
+- card_id: extortion
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: extortion.jpg
+    sha256: f3ebf1eb77b76992854ef6d7a18156e96343b25f6c4445ba596e73a0ee2eca60
+- card_id: fiery_wrath
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: fiery_wrath.jpg
+    sha256: fbaaaa1786f5b483027214726298c514e157791e3f68cbd2b713687034980c27
+- card_id: fight_for_my_favor
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: fight_for_my_favor.jpg
+    sha256: c52e2e5fa54780bac6966aee9e55e589fe90e1f48596f88c478b6296e5e30a39
+- card_id: fist_of_the_earth
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: fist_of_the_earth.jpg
+    sha256: a3264e21498dcd60d00c73facee2318723196a0aa8d343b18838eec2a033f659
+- card_id: forced_alliance
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: forced_alliance.jpg
+    sha256: bc8dbbdb5e26f6d8b745ab5be7a722799bdebdf9747ca2b49c087663d0c619f6
+- card_id: forest_of_thorns
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: forest_of_thorns.jpg
+    sha256: 521d9ec80a427686dfe47faad02602ae70cb16ac92d721e360ff15b33d92db23
+- card_id: fresh_horses
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: fresh_horses.jpg
+    sha256: 4ed2f7ac364bce765b4200dc8894e900b8183cd19455819d180e8e8788f84c88
+- card_id: genzo
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: genzo.jpg
+    sha256: 92cb91663fa2b534d23a330b9ab6d6daba45b75de347bca927f0c79074037a2a
+- card_id: gift_of_the_wind
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: gift_of_the_wind.jpg
+    sha256: f6cf440fd7dfc37e3024ca410d7d0d2b99f380776b23023818ee6290d0b45518
+- card_id: ginawa_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: ginawa_experienced.jpg
+    sha256: acf5913bd2bfc5eb66398ca479c947cdcd16487f509e1f072a970657b693ca86
+- card_id: hida_yakamo_hero_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: hida_yakamo_hero_experienced.jpg
+    sha256: eae2948322d703d27b1c8e50223b7683485bd96d0beb8e48b0446d46d63f1404
+- card_id: hiruma_yoshi
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: hiruma_yoshi.jpg
+    sha256: d6aea9260f7de7ceec63c52edc85a94032fe7ffc18a2b1b81c99f70041073c86
+- card_id: historian
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: historian.jpg
+    sha256: c32655547908ceb9dd884076d0784d361d0f1a6b9eadc30de585584c7e325270
+- card_id: hitoshi
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: hitoshi.jpg
+    sha256: 10771f29e83d4cff2528396caa9e662323da193d9247e29868c3a9e2080a76e8
+- card_id: hyobe
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: hyobe.jpg
+    sha256: db24da3fcc0221bc7fb666bb805322e0694ad4ba6226dccd7ea6e54f6826cf68
+- card_id: ikoma_ryozo
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: ikoma_ryozo.jpg
+    sha256: f9f30f3438d76341fa596e52b3f6bed5542fca5696c323e7e7baef1a769fc54b
+- card_id: incense_of_concentration
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: incense_of_concentration.jpg
+    sha256: add95cc1eb5a854939e5977c93038f4ee36e6f1a1dd5e1fa4161b0e76db32056
+- card_id: inner_fire
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: inner_fire.jpg
+    sha256: 301c7d979bbb072ff62a08b966a3697799c55a9fe89e7901eb3fd142c5fda7e5
+- card_id: isawa_norikazu
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: isawa_norikazu.jpg
+    sha256: 59fe56008ac5e27273eb4c9209f8ea155381c5d67c0024578f0c520fc7099e8f
+- card_id: isawa_tomo_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: isawa_tomo_experienced.jpg
+    sha256: 14271668544f261874eccdb069dd180e4cbc1979a7afb474f302f3155f203fb4
+- card_id: island_wharf
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: island_wharf.jpg
+    sha256: 05fc14bf555d695bced9628727e64000e7fe10970e70f1492c186c141002fc36
+- card_id: iuchi_daiyu_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: iuchi_daiyu_experienced.jpg
+    sha256: 104f6cbedabc3678b1deb2ad537d4c93e26c4864f452c66b31f3b834266134b9
+- card_id: kado
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: kado.jpg
+    sha256: 5996f6b491dc14c9926e832b9338b146a8505c98daf124128a45d97db8da6dad
+- card_id: kakita_ichiro
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: kakita_ichiro.jpg
+    sha256: 41c9eff4e07b0a81d5a5881a6da481a2cccf53dd7bc5f7dd9ca4fcf638ebf02e
+- card_id: kenku
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: kenku.jpg
+    sha256: d82c396c150423336d155d5ee1c677a13e7c763e176f9b7f3cbe4fbee757993d
+- card_id: kenku_teacher
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: kenku_teacher.jpg
+    sha256: 2fc304cede049a5811863d0ce10af384cbf7ac1b373b9382b588966ed773e012
+- card_id: kenshins_helm
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: kenshins_helm.jpg
+    sha256: c67a333191a95e509078412cfec37f34cb21bf0895584aaf7257afa12472c214
+- card_id: kitsu_motso_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: kitsu_motso_experienced.jpg
+    sha256: 05947c39915445a0aa85c9bc6d97494bc63c7c3d555e3c8989a3658f5a1a2cac
+- card_id: know_your_enemy
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: know_your_enemy.jpg
+    sha256: c74b974c19c14145c1bdcf098fb90862835ee04e3bba154cbc61424aed05dac5
+- card_id: koichi
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: koichi.jpg
+    sha256: e3aa23261f18ff8ebbc5e34f43978b620a1c3b732e1d1d87aadc93e0eb71ebcd
+- card_id: kolat_bodyguard
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: kolat_bodyguard.jpg
+    sha256: 0eb76cd6db7824b7365fed40dcfa8f2104d7948db178cee53c36bf3c340e2a37
+- card_id: kolats_favor
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: kolats_favor.jpg
+    sha256: 304d3965ddfbff239ca4b0494010ca608e3a9dd0d87705870bd5c0ee5e4ea4ad
+- card_id: light_of_the_sun_goddess
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: light_of_the_sun_goddess.jpg
+    sha256: d91e77152f017b986aefb9d82b9d857a6c40a8ba2ea9ebba3e7d24ae6879ca25
+- card_id: lost_valley
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: lost_valley.jpg
+    sha256: 081d910044222faf21723157bda2e3caf58862752f2d0cc8d4fca76db9a0d2a9
+- card_id: mantis_shugenja
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: mantis_shugenja.jpg
+    sha256: dbaa2eda600e734a1efe685f929b2201c8d66bfbd5b997ca7db44d3f0cac606f
+- card_id: master_of_the_rolling_river
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: master_of_the_rolling_river.jpg
+    sha256: 9316cf23ef8bb9d63ef0a0362e045bfbda175964bd5872523466da9e96579473
+- card_id: matsu_goemon
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: matsu_goemon.jpg
+    sha256: 92e20a8a7561d182caf52a8d7f0e7d34e6cbf756e171e3a16e863e9b30dde7cd
+- card_id: mine_riots
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: mine_riots.jpg
+    sha256: e404a59c1f633cfa0eaba53b77b9d70afe16bd5b108c01117234f07acd21dd19
+- card_id: mitsu_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: mitsu_experienced.jpg
+    sha256: 106356e1e841959318126516879d0bafda9922cd934505876f4a2de444ac400b
+- card_id: moto_sada
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: moto_sada.jpg
+    sha256: 6a818f2c3732f8d53645caeaff1ca89c89bef9b0b1ae8f31d65ae652b236b4b7
+- card_id: moto_tsume_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: moto_tsume_experienced.jpg
+    sha256: 630e2a76f88c269afa9fdea35e678e873e3f0a738e2857c9f20893a6bb453626
+- card_id: mounts
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: mounts.jpg
+    sha256: 0c491a17ff90ae8514f2be33b9ca31a8b7b0ddb197bd85195a9249b046b7b5b1
+- card_id: mukami
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: mukami.jpg
+    sha256: dc2a2b9b2680abff5a040ed160d6a0991446c34bd368fc3c22990fd65d457db7
+- card_id: naming_the_true_evil
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: naming_the_true_evil.jpg
+    sha256: b2951c8ad30f2e095293bf4b6f50cbb67469aac4302bd817fbbe40c5b925b1d4
+- card_id: narrow_ground
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: narrow_ground.jpg
+    sha256: 59ea2c80f2a0329a366a0fad58905a67088d20439aa09bb770be91a59a583382
+- card_id: new_taxes
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: new_taxes.jpg
+    sha256: 26108d9c828de1839468d01106ddd07bde0e698c5051dd2f74126e45fda6ed13
+- card_id: night_of_a_thousand_fires
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: night_of_a_thousand_fires.jpg
+    sha256: fd7ff9c102e0a3187431314602e792d17fcb439670e0491918cc144a5d303e1f
+- card_id: nobuo
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: nobuo.jpg
+    sha256: 52dd5b24362326eb2c330ab8769130e8728d1bc1022ab64ef503caed442cb97a
+- card_id: norio
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: norio.jpg
+    sha256: ade86219eaf40fa335dfe01e1200e25a36cadb9502aad24916d41504862a6eaf
+- card_id: ogre_outlaw
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: ogre_outlaw.jpg
+    sha256: 520bd47ee96fb74f03ec4359fe320352424bf120b094f7da1fcc47f6830ede9e
+- card_id: one_koku
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: one_koku.jpg
+    sha256: cddc9a28e09ce6fac2d901d12149c9181bc3e0365ff877ca3741aafdbbc87f95
+- card_id: oni_no_chi
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: oni_no_chi.jpg
+    sha256: 62dfb27813354f905fe954b9bc77243250e3669661d063d4e1b6c96bb2b7afc1
+- card_id: oni_no_genso
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: oni_no_genso.jpg
+    sha256: ad006b525e191ab7f0a4df883162b9e442661fea56f661677ba0b6c441bea4a0
+- card_id: oni_warding
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: oni_warding.jpg
+    sha256: fb8dbc097821053eb00fa23fff334795b6d1e28b7d1a8fe3875ae3d8c4d70ff3
+- card_id: orochi
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: orochi.jpg
+    sha256: 9f5e5359d95c6469590c1cca18869645458d42d2440581735a391a6c2be963a7
+- card_id: osano_wos_breath
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: osano_wos_breath.jpg
+    sha256: f87b2c1a62b295bb26b7526f30a36c7fd0a8468e31f653ce13862545ec5a5de6
+- card_id: pearl_encrusted_staff
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: pearl_encrusted_staff.jpg
+    sha256: 504b168df41f3be7ad3c3140ba1f09e2c8e02386295a026e9c41b54d7856942d
+- card_id: peasant_levies
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: peasant_levies.jpg
+    sha256: 51d480c8b62ae823460e93eb61dd47533ccfbf00c1524f856a21ab44406fb076
+- card_id: prayer_shrines
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: prayer_shrines.jpg
+    sha256: e3b3b4c38883e2bb72c9aa8fb26418311eaa91da8b2f49993f16943059945d76
+- card_id: ryosei
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: ryosei.jpg
+    sha256: ccf4cbaf482e026021ab852f15cdab2866219dc1b09a52db0dd2733313800b77
+- card_id: secluded_ravine
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: secluded_ravine.jpg
+    sha256: 09a05dad1f850a0a23e05b3afb42784e6effd51832ff41dc809a17bb8374f7dc
+- card_id: severed_from_the_emperor
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: severed_from_the_emperor.jpg
+    sha256: 5a674c84a23676abafe17b31662852729ff1aaea636f4115d0d8ac9b10142da4
+- card_id: shabura_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shabura_experienced.jpg
+    sha256: 17b76995f6cfba049fcc0e339d34623b74019d2bf7cf1a2d1ed6270e9acd7743
+- card_id: shadow_of_the_dark_god
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shadow_of_the_dark_god.jpg
+    sha256: 28728b66eb7b249b558a62ed3617fd9b4895eacf0389501c75db725169af9ab2
+- card_id: shalasha
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shalasha.jpg
+    sha256: 0eb8fdfa9a07b6cac860fe1059563f45c6f300d959b546918ede7c6eb9e60ca6
+- card_id: shiba_shingo
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shiba_shingo.jpg
+    sha256: 71228c4b254931cc0f27792a8a28f5bd1e53dab3f8d95b0144a0a075187ba77a
+- card_id: shinjo_rojin
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shinjo_rojin.jpg
+    sha256: 22843c6107b695eb07e3a027e5ed05d733cac452709f0603b80814dbcd63601d
+- card_id: shinjo_tashima
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shinjo_tashima.jpg
+    sha256: 2b9edfa45979fb971ec1c43915ef57f5f3ec4cd9b4914c370bdf7be489fb67a0
+- card_id: shinseis_shrine
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shinseis_shrine.jpg
+    sha256: a4597f43775fea68ff14f7e7b721e1a4de58bc08be7a537559aae1d0f54b4099
+- card_id: shiryo_no_agasha
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shiryo_no_agasha.jpg
+    sha256: 96b6748fe463f7cc3ae45a9b1e8634c58b73971064ce2ce6bb513488182dbaa6
+- card_id: shiryo_no_doji
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shiryo_no_doji.jpg
+    sha256: f2f369bbf85cdb500b548c0443e1f0bde607d1f50e831d56d0b4a285640c7357
+- card_id: shiryo_no_hida
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shiryo_no_hida.jpg
+    sha256: 025cdf951cd7d840ae1209aac76081d180ab3ef946aa5192fc0f468bb402f39c
+- card_id: shiryo_no_matsu
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shiryo_no_matsu.jpg
+    sha256: ccbdb4c613269574d97245cd416be07d7b4cafeec8bcfa1e50e66787fd9234dc
+- card_id: shiryo_no_otaku
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shiryo_no_otaku.jpg
+    sha256: 4c987b19bcab27486102e039b03487638d82c805ebd7ac65b89e024e396da04a
+- card_id: shiryo_no_shiba
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shiryo_no_shiba.jpg
+    sha256: 4f5cb5ac78026716322f96850579e53fec6e9d4fba4dcbbf4426992d781a095e
+- card_id: shiryo_no_shosuro
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shiryo_no_shosuro.jpg
+    sha256: 60e8097dbdf6441c3b78d668be53a26166a782a5ad551f30138c455e22b0315a
+- card_id: shosuro_sadato
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: shosuro_sadato.jpg
+    sha256: 11e9e3264748328d621177bde879b467a8ec40dd8ed7246f4a79d8c802a22ff0
+- card_id: soshi_bantaro_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: soshi_bantaro_experienced.jpg
+    sha256: e04d2b3e7798d9718fc7b27e27450e55372462952229d3bb50cfe90180315f36
+- card_id: stand_against_the_waves
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: stand_against_the_waves.jpg
+    sha256: 18b714ffc70bd6acfe40d91766aa2a28b30080ac8cefc2f70fdea4789f15c467
+- card_id: stand_firm
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: stand_firm.jpg
+    sha256: bc0ae15c6c817d4dc43480a1dd3615c61cc6d49a2ff34b65eae31abb919f2792
+- card_id: strength_of_my_ancestors
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: strength_of_my_ancestors.jpg
+    sha256: cfcaee0518e12bb022691eddd9a95681a1a8283d591fecaf55a6e9ec391897d4
+- card_id: strike_of_flowing_water
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: strike_of_flowing_water.jpg
+    sha256: 08117718b6bb46515e8ae227cd80bccd6f71120b97d3ed4dad5c0edd5d8f57fb
+- card_id: suana
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: suana.jpg
+    sha256: 3895099fc822e8e526a36ab257900e10608c7c6cd44574103ef37bfb8e394d54
+- card_id: summons_from_beyond
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: summons_from_beyond.jpg
+    sha256: 352a200aa8ed6e93e23f7304919e694fdf153dcb73088ef0d6653c1350c6e740
+- card_id: sunken_city
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: sunken_city.jpg
+    sha256: f1ce299011e51f7ea7d097216a9948118b7887c233e6ea4f6425a7f270458af9
+- card_id: superior_strategist
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: superior_strategist.jpg
+    sha256: 8038657ed842705a82665fd65d43df5b97f0900faf2e777484b399617f915e0c
+- card_id: takao
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: takao.jpg
+    sha256: 5faa077d9c1e897d39b109a0ae57effa0963327a9f5c5828fc80530bdd3a7843
+- card_id: taro
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: taro.jpg
+    sha256: 7b76be1ac9f399beb028d81ab11a3b5d4872de2ca04bef549b798be563fb4c23
+- card_id: temple_of_osano_wo
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: temple_of_osano_wo.jpg
+    sha256: a1cbab0f873100175bc4d0ea4d94db624277bc5ff183a6215a2558ab67226580
+- card_id: tetsuya
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: tetsuya.jpg
+    sha256: b6fb4aa36eb3539fe8efb2f1c8dc2ae148b3d8a22696f8f5a8fea2bfe3ed8da5
+- card_id: the_brotherhood_of_shinsei
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_brotherhood_of_shinsei.jpg
+    sha256: 2a1798f5b037e7c56f44063e75f14b48be917e35f55c78397cc5f1e434008cf8
+- card_id: the_death_of_tsuko
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_death_of_tsuko.jpg
+    sha256: 373e9baa8b40a5c80833d9a4987512c4f0d6115f7799c4504ce5269b1cd1ab33
+- card_id: the_fault_is_mine
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_fault_is_mine.jpg
+    sha256: b05441996fd99464ed3ea4260984a635d9e299829f5d758860df063d5e382764
+- card_id: the_great_bear
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_great_bear.jpg
+    sha256: 3d1d1c9557f8d945fe26fb6282e2e48e36836454ba1424ec56d70c73d29fa19a
+- card_id: the_hooded_ronin_experienced
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_hooded_ronin_experienced.jpg
+    sha256: 9eaf8187a7ab6a6419a48338f4a03b6ec69fb01e905ec2bf85c59d656dcfea27
+- card_id: the_purity_of_shinsei
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_purity_of_shinsei.jpg
+    sha256: 0e8507861d0a0166116611d882593f50203e8bef335f0f0d2d6c0f887c0b630d
+- card_id: the_spirit_of_water
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_spirit_of_water.jpg
+    sha256: 7146259ec39fe3629e802234507ee89632c509a66c3a668e2adf2229fcdf8735
+- card_id: the_touch_of_shinsei
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_touch_of_shinsei.jpg
+    sha256: 1b5b336a4b3444da250e52d428fda899878042e5599bc6f31988f61284991301
+- card_id: the_wrath_of_osano_wo
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_wrath_of_osano_wo.jpg
+    sha256: c3d98b287decc903aaa155da1a154af565cee3b0ed06b8cb1d3d862227997541
+- card_id: the_yasuki_estates
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_yasuki_estates.jpg
+    sha256: ef7adc9065666d2aaa0c394faec6e12ac0dca4dc95921a837b0db1560453142d
+- card_id: the_yoritomo_alliance
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: the_yoritomo_alliance.jpg
+    sha256: 4d2c6156f4b08a6acb45135ec6a7340b92b16b94a4ea4a437936f27bb9eabd9b
+- card_id: togashi_jodome
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: togashi_jodome.jpg
+    sha256: 1284c5f17be6158bab978bdc5233cc7fdea2c6725779063b6bb474c1890e7890
+- card_id: tokiuji
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: tokiuji.jpg
+    sha256: e3539214de5e34b1da2a03615521a6f996530ff0b999f722e6b0d0fe2566c33c
+- card_id: toturis_fan
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: toturis_fan.jpg
+    sha256: 2bfe02949eabd457b6febfea8b28eeab661cd9b05d6467e90e16f08c795c59a1
+- card_id: tradeposts_of_the_mantis
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: tradeposts_of_the_mantis.jpg
+    sha256: 72482540f7c63e1f114ccc4623228f75b26b05d0009f45cc840a441af82d3762
+- card_id: tsunami
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: tsunami.jpg
+    sha256: da4b413cd24d27488bdf5f3487cbdb200fe3bfaf41385953f59342dddcbda0c6
+- card_id: tsuo
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: tsuo.jpg
+    sha256: 16843b6880c6942aa563f883e4fc1dfd7236f205ab30320f80c374df224ace3a
+- card_id: tunnel_system
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: tunnel_system.jpg
+    sha256: ccaefd223fc808dfc6e5a4cfc7d4ddf75cdd82bf0f42a5f4c28921faad80ef97
+- card_id: visage_of_the_void
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: visage_of_the_void.jpg
+    sha256: 3ba354b47d0e9021d92eb70933b75f66f957beafaaefc2392c4d59d9b5e898c2
+- card_id: void_strike
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: void_strike.jpg
+    sha256: dfaede0fff43f6b5589a96a68839e23403d0a9b7c5c50b648ca1c1575e5b6381
+- card_id: winter_warfare
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: winter_warfare.jpg
+    sha256: 54d0084b33436b7d11babdf303b3d23a65691c4e3ad2e3a3c7f1114868b9b688
+- card_id: wisdom_the_wind_brings
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: wisdom_the_wind_brings.jpg
+    sha256: 0bbaaf52569518e6dcabf41972ca443ac52c50ee8cdb512c2f77caa9c2b3dc19
+- card_id: yasuki_kojiro
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: yasuki_kojiro.jpg
+    sha256: a7df66a3f1804ca501ea11ecd329073204458a01e220ca7cc479a80473e6f6c8
+- card_id: yoritomo
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: yoritomo.jpg
+    sha256: 5082ba1ab8ee927b08ef86d6e2c69b4a3c10ba1b3fd0826dc197cd82a7619ed2
+- card_id: yoritomo_kanbe
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: yoritomo_kanbe.jpg
+    sha256: 52c8469f8e5c13638c345279de1a9e142aeb7e89c09564de7043f37585c3158b
+- card_id: yoritomo_masasue
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: yoritomo_masasue.jpg
+    sha256: 84af7fa4e10a28ef88f61a88fc3aad2e1b0f98f9c77da3147ac516d6bc499fb7
+- card_id: yoritomo_takuni
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: yoritomo_takuni.jpg
+    sha256: 6ad3440bfdee0732d207eef39935408f01a70ae8d7550719ff543a49c48667ef
+- card_id: you_walk_with_evil
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: you_walk_with_evil.jpg
+    sha256: 39e32eccebe5c4a4e7c7d5d3ad5ddfc16b76a906b995a070429b713d86cab507
+- card_id: yugoro
+  printing_id: crimson_and_jade
+  files:
+  - role: front
+    file: yugoro.jpg
+    sha256: d90764f9a64db53540e36b4323006b5b9eee08ff7af6adbe0f8693cf5dd1dccd

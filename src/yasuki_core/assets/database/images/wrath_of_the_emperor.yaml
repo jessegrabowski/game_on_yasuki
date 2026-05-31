@@ -1,0 +1,926 @@
+set: Wrath of the Emperor
+images:
+- card_id: agasha_tomioko
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: agasha_tomioko.jpg
+    sha256: 09758661ef64ea754b486086503ac5698e8b6f7e3a4f835eaa4de39192ed313b
+- card_id: akodo_sanuro
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: akodo_sanuro.jpg
+    sha256: c7d3d748ce718bbd13e5c600de8cb40eec38a3d689c2fa4aa374296183eb551c
+- card_id: akodo_tsuyumi
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: akodo_tsuyumi.jpg
+    sha256: a5de08d38fe50eeb594dc25e5a4946567a29a12e58053235c14c91c9e924a4e3
+- card_id: ambush_at_sea
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: ambush_at_sea.jpg
+    sha256: 8db917e6187b579aeda58835a4cc9381f8681d63cdeb04e86a7689ad3ac032f4
+- card_id: ambush_duel
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: ambush_duel.jpg
+    sha256: 327d3051ae489ea44357faa296b5eb5ebacb3e34891e63a0cec360002f5636b3
+- card_id: archer_towers
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: archer_towers.jpg
+    sha256: a38108504c0f47009b99d24141d612404b9e8952de386fc642802ff7d548c5dd
+- card_id: archers_row
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: archers_row.jpg
+    sha256: 4032da16e4f37422579e484a46a0632ed37ef7c61f3cf489914ed5580d58cb88
+- card_id: armor_of_sacrifice
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: armor_of_sacrifice.jpg
+    sha256: 91d11dbe6d452cb37375580d4b97a4e7e735c303a7935172071f0784efa3fe9b
+- card_id: army_of_jigoku
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: army_of_jigoku.jpg
+    sha256: be4d05eb8ecc65b24eab64e0b710df4b3903a1f6b101cc574629b1c19bc44d2a
+- card_id: asako_bairei_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: asako_bairei_experienced.jpg
+    sha256: 460159851c69ca2880eb07770cdbdb4c5d56bd15e1f9bf23ab6ab1fce7e8d3fe
+- card_id: asako_tsuruko
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: asako_tsuruko.jpg
+    sha256: b938dcb6d3d4fa8acda8426a0962171d70ad3c9e8bee7edf09a1044195dbe143
+- card_id: ashigaru_armor
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: ashigaru_armor.jpg
+    sha256: a85df5a8770194289210a7ebf137523a1fe9f9e350568fa3be5ec3c093511278
+- card_id: bamboo_forest
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: bamboo_forest.jpg
+    sha256: beeafb1dc6117bb15e416117abbba501437131695c0d20c8eddd39c06dfca1fc
+- card_id: bayushi_baku_experienced_2
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: bayushi_baku_experienced_2.jpg
+    sha256: 285ebfedef06d83136142168da90c75f0bb7c6baee83513b048a4bbb004c10f8
+- card_id: bayushi_muhito
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: bayushi_muhito.jpg
+    sha256: d0492888307f788ebea96f55a1a7dc7e8d0799ac023de71c393704bcce07d889
+- card_id: bayushi_toho
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: bayushi_toho.jpg
+    sha256: fb5eb4f259714cef9970694c5799e38f67b7aaabd329d9b2eef7be02940b1d69
+- card_id: bayushis_knives
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: bayushis_knives.jpg
+    sha256: e61781312804583ddafc1b64d3d5d3b0d461bd3a35e617a995c7ba1a218ef070
+- card_id: beiden_shadows
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: beiden_shadows.jpg
+    sha256: 61c5911f39a5f189381221d3068a896a213cccb260b4b7b732ffaa2254a10355
+- card_id: binding_kharma
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: binding_kharma.jpg
+    sha256: aa469e06e46a1b0dbe4bec1bcd17db8fca07c200272c28f658c78ec86a1c001f
+- card_id: blade_of_the_meek
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: blade_of_the_meek.jpg
+    sha256: 250252ea4a62709a88f7477e5d74ad532c019a7a773a9c6a2384f556858e92f4
+- card_id: blood_frenzy
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: blood_frenzy.jpg
+    sha256: c68121f8828df260f6545854f7794cfcb9a39d27aa5f47419b6d2763ff576448
+- card_id: brother_of_lightning
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: brother_of_lightning.jpg
+    sha256: b78a7ccc7b5a79515ef5b5183dc47147187d65d4f6d387972dbb40e69a00f379
+- card_id: chimamire_no_oni
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: chimamire_no_oni.jpg
+    sha256: 95621340985b5c4547a71cb7a4e767c47838d248b9cf83a470c963d65ff0260f
+- card_id: chuda_mishime
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: chuda_mishime.jpg
+    sha256: 83e3ae97bcef7ca7b27e25885ce9557009c966f9602c552a657e3848f0bc6f14
+- card_id: companion_spirit
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: companion_spirit.jpg
+    sha256: 084f05968a9c4d4b29962584d4cb5c5ad46f22028b635f1b1cee07f4d16b56c7
+- card_id: contagion
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: contagion.jpg
+    sha256: 06c2ef900b39c439b0764a93f3b2fb19d64920c2defd2c7437d7ed00b31ee225
+- card_id: courtly_sabotage
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: courtly_sabotage.jpg
+    sha256: ef0fc387f8fb4fa76b4c4a841f2ef8df4f188633f2374c71f2a468e6c52a2018
+- card_id: crippled_bone_runner
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: crippled_bone_runner.jpg
+    sha256: b5a83a180a3e6a65f0c67f5501be639a21a74fb590d45a4a4be695ed4b19f314
+- card_id: crush_the_unworthy
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: crush_the_unworthy.jpg
+    sha256: 7b4f6257a0a26870670ba9850e9cc224fb79d7ed8285e049e999634da672519f
+- card_id: curse_of_blood
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: curse_of_blood.jpg
+    sha256: 1a2e97f912abf92fab0608cd13dc68fa4699358516679c88e109d4894c2461e2
+- card_id: daidoji_kumi
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: daidoji_kumi.jpg
+    sha256: 53b29974e3bcf80b319b51588df9c4d829be5807f71b46de6b16f94c78e8919b
+- card_id: daidoji_ryunosuke
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: daidoji_ryunosuke.jpg
+    sha256: 1e07d067faadd467fc8b56c2a8b1352959ca19ad1882478481f8f02712202c4a
+- card_id: dgrn_ki
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: dgrn_ki.jpg
+    sha256: c54d3d0aa54170c5a32663f08632ea3b1cc13b50745f54fdb4bccb7f7d63d8d0
+- card_id: divide_and_conquer
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: divide_and_conquer.jpg
+    sha256: 95cfa304785495f02a4a8a12bb244c7849ca643648d7c7325d9c869b23eed934
+- card_id: do_not_delay_the_inevitable
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: do_not_delay_the_inevitable.jpg
+    sha256: b02d49e52b9bf4edfe3b1534c75726f6146d81570f6030b1c0ff81e8f108a6b2
+- card_id: exquisite_armor
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: exquisite_armor.jpg
+    sha256: 371b13ee7ce70921e3a5e8951d701d73ef80153908221ab9593c66c776f76ba1
+- card_id: fall_before_the_master
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: fall_before_the_master.jpg
+    sha256: 5456483fc3200823bd247a4a66390193695d6358f64643862608bfc7884238f5
+- card_id: fierce_bushi
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: fierce_bushi.jpg
+    sha256: 302aedba2791dab55341327f3fb726ab2ac0079dd369cf9ec6832a9dba4c2d58
+- card_id: for_the_lady
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: for_the_lady.jpg
+    sha256: b6f5511a00b90f44fdb164040e3c03d21c7d865bfa11db61b31925ef30fd33da
+- card_id: fury_of_the_dark_lord
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: fury_of_the_dark_lord.jpg
+    sha256: c11f547269513b2743a55c0f7feae2192e9627121a03dfa3ebbee8a51e45d143
+- card_id: fury_of_the_wolf
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: fury_of_the_wolf.jpg
+    sha256: bcd16ac46f2d1080478c39c24be2ab6ab8aa9e125dbc05a2584dde9c19dfb5d3
+- card_id: goemons_ascension
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: goemons_ascension.jpg
+    sha256: 751bd9ee8a846fbacdf81dd4bea8684d92714cb9f51936de1617598fe9149357
+- card_id: gozoku_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: gozoku_sensei.jpg
+    sha256: 08b129c981138772cb2c743507b6595e42110738992ce294e058ccd474cdf7c0
+- card_id: hand_of_vengeance
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: hand_of_vengeance.jpg
+    sha256: fa27896fad38ae01704219d92afe4ce2b740941486647a1066014ccc86be0149
+- card_id: hida_horii
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: hida_horii.jpg
+    sha256: 482d4c85dbd681780c6ea7e7058121d0322f78b44275702116d8a80c7fb8642a
+- card_id: hida_sobu
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: hida_sobu.jpg
+    sha256: 41fc51760ea0c986302581aef5cf532a2ffe9af4d28bd0d9271972fb9a28aabb
+- card_id: hida_tonoji
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: hida_tonoji.jpg
+    sha256: 27b38c72ef7925b4147a3e7b79b8141d380b9146b8dd83ec685ad06268fb4add
+- card_id: hidas_formation
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: hidas_formation.jpg
+    sha256: 66e29b34d028adf1b327a838a89dbc04d2c875d5429233b2fe5c9a62973f4be9
+- card_id: hiruma_tokito
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: hiruma_tokito.jpg
+    sha256: 2b4f778b2076b89646290d3385256706dfbd09f5976f6836b5aa5b79008e5418
+- card_id: hitomi_suguhara
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: hitomi_suguhara.jpg
+    sha256: 7abe93cc29fde1bfaeb87b6ef43bff576033b05d9fa7aab968fab2a85dfb23ef
+- card_id: horiuchi_nobane
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: horiuchi_nobane.jpg
+    sha256: 15f1a69746ed9aeccd08718b57f53d354e86f74c93fa6304660022c93ce9043e
+- card_id: hoshi_ishida
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: hoshi_ishida.jpg
+    sha256: 8b7ae311b76231e04848bafd6e9cefc110ea8714fc30790b3cb958b15a26683f
+- card_id: house_of_the_jade_princess
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: house_of_the_jade_princess.jpg
+    sha256: 07d534fcc01036b1e33f3fc2384c4927fa19cc3d956bb970fdc7c3ad6c88bd7f
+- card_id: ide_tang_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: ide_tang_experienced.jpg
+    sha256: 7ccb483335af3e4d9c5c8a27413585536248a50bcd2e723f6ab5719243b030e0
+- card_id: ikoma_hasaku
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: ikoma_hasaku.jpg
+    sha256: a74af94a5542c1ef2ccf4eaa7d295deb752add99cbea6004590ff511187c3cf3
+- card_id: ikoma_masote
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: ikoma_masote.jpg
+    sha256: 74e2ab5b68f19c9fd261f151b7930aff484437fe1219990ca7e77d4f058f113b
+- card_id: ikoma_tsai_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: ikoma_tsai_experienced.jpg
+    sha256: 6987e1fb15e7c12b7de968d9d70287bb1e40822d2aa7ea3a76b05bbf9596a560
+- card_id: isawa_sueno
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: isawa_sueno.jpg
+    sha256: f6c8b52d6982a64927f744515cf9c9ee5d86d508cb36ae21c46d791f3ee39c46
+- card_id: iuchi_ryoi
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: iuchi_ryoi.jpg
+    sha256: f6c402fc58bb4255024bad017502908a0e8c8dd8b9d3b127c52c490b7a760823
+- card_id: iuchiban_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: iuchiban_sensei.jpg
+    sha256: 2398c2ed16e3d879b4062a51574cf01e88fa2aa070bc005b59e4cede77b5a779
+- card_id: iuchibans_citadel
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: iuchibans_citadel.jpg
+    sha256: 54e10d36cfd909db9059d81f7789d553823d03b2e520f7bcd4ceb94a9854fc05
+- card_id: jak_irt
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: jak_irt.jpg
+    sha256: c192b7ec43b711598c20a929c23cdde5c4b073bf6695d9fb5f4bf1cc6bcbdb27
+- card_id: jigoku_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: jigoku_sensei.jpg
+    sha256: cc2660a9790c65e43ed556c632f07815754c891bfed1512f8ef29aed9d4fa8b9
+- card_id: kaimetsu_uos_blade
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: kaimetsu_uos_blade.jpg
+    sha256: 714e3695442259a307fa2167ffeb9f6d3e2759f3c481b80fd0c6b67522bc095f
+- card_id: kakita_noritoshi_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: kakita_noritoshi_experienced.jpg
+    sha256: 52e5a4a09326475a965b06ce21c646986c4a151df579b18f3da9ee3ac1ebb5a2
+- card_id: kakita_tamura
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: kakita_tamura.jpg
+    sha256: 1bd3151ec8644f9e0b52cf8688a81234f8b40126c4fd8d061b7c6258abb84b28
+- card_id: kakita_totani
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: kakita_totani.jpg
+    sha256: 2371be4406746bdfdba8210ed85a3c2bda375fb1d612dcf1f11aecd45f17a89c
+- card_id: katsu_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: katsu_experienced.jpg
+    sha256: c738b772b7359a5742bc2d5d83283e9b6dfa3690fcf66e7ff41a9199a6a2427c
+- card_id: knife_in_the_darkness
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: knife_in_the_darkness.jpg
+    sha256: 6c7e992e3732c2b8fccb13dee649db7111128a245529c506849f086977a2c179
+- card_id: kuni_tansho_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: kuni_tansho_experienced.jpg
+    sha256: 1c87e8f2583732bcf62ab4030fc802272235394de081c7311b748f91a70a1b3a
+- card_id: kuni_yae
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: kuni_yae.jpg
+    sha256: 0572de30fdd555ec1eefa95f084576b08c16ca037243a3b86201458dad43aa39
+- card_id: kyuden_bayushi
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: kyuden_bayushi.jpg
+    sha256: 4eed57b0879e52b4267982ab80cbf086fff14ef57de8415e806aeb81a478afa7
+- card_id: layered_armor
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: layered_armor.jpg
+    sha256: c7d6f947c71e5afa4550f81754decb1c21c5e892556f14789f0a4f84ff25dc98
+- card_id: many_temple_master
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: many_temple_master.jpg
+    sha256: 32478eacdd99cce99912965187a47743192b790cbaf6e3b8d7080b356f25469f
+- card_id: martial_instruction
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: martial_instruction.jpg
+    sha256: 50dc18d49c7b3dcf25634b7a9c5fcc55b54ad487a4ed21fc3292b318a1c64292
+- card_id: megumi_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: megumi_experienced.jpg
+    sha256: 44eb76a8671b385b840e95d8c670c38c55fddd5f8aa8b2ec8c6e0165e7598a17
+- card_id: mercy_in_battle
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: mercy_in_battle.jpg
+    sha256: 9c44cf6990de8e9254c96ed1bca35b22088c77996a7e5f9be3b4e8588a8b63b7
+- card_id: mihoko_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: mihoko_sensei.jpg
+    sha256: 79432fe0a6b735763b6218ee1b96e46fa50fe0904c464427945edc6e40feff5b
+- card_id: mirumoto_kaiji
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: mirumoto_kaiji.jpg
+    sha256: e2645a39fe749bd08ff2bb1316b4f3678547cfc544a8fc1f80332ff9455bb669
+- card_id: mirumoto_narumi
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: mirumoto_narumi.jpg
+    sha256: 5eaa17bd72db34f9143e417ea604e16094d85ef53a0f189f144fa8f3787c152a
+- card_id: mirumoto_rosanjin_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: mirumoto_rosanjin_experienced.jpg
+    sha256: 65ebdc368e56a62cb29016733bffd95cfbe084bab77a5514157270ebf904f5b4
+- card_id: moshi_mogai_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: moshi_mogai_experienced.jpg
+    sha256: 098c2fd546a2c07236308ed44a1a0a71fbbb334649c8366b7dcc5e1cf4c68e70
+- card_id: motivation
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: motivation.jpg
+    sha256: 4505cb5620a9bcb141604f05f678ad91207441cc6cb7c0ca1a5dfc00cd74ea10
+- card_id: moto_chen_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: moto_chen_experienced.jpg
+    sha256: 99226a7084fa2d7836fee6b0b47023296ea4d1ad1bd9a243dfd7fca99d0552fc
+- card_id: murder_in_the_streets
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: murder_in_the_streets.jpg
+    sha256: 1de48a58d1017951ceecf2b3bd5ae9e29eb86927cbf53c9cd1823b3aeeeb4c9f
+- card_id: musaboru_no_oni
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: musaboru_no_oni.jpg
+    sha256: 0051b699401b880af6872890b1cc65e1c289a2039ddcb51ae6302432c6adcd76
+- card_id: musume_mura
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: musume_mura.jpg
+    sha256: 70e5d5a56bf32368e5520570ec713d0df14482c40a8e982a37d346905b967d9e
+- card_id: ninja_mentor
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: ninja_mentor.jpg
+    sha256: c365719adb2d8354eb659054150eda49e80b6dc2863ec729573cbc4af0eef269
+- card_id: one_tribe
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: one_tribe.jpg
+    sha256: 6128c33430170e2fdbada80dd19d86621eab5e883d51730cff68ed8f62eb1168
+- card_id: otomo_spokesman
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: otomo_spokesman.jpg
+    sha256: 3c73e81ecc24753b2fb78153df0782355aa15220392f48f87ef7b46b1118835d
+- card_id: patronage
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: patronage.jpg
+    sha256: 36839518993cc9ca25673fcd1041cd33e215a611f7abc9c35e754cbe0a94e338
+- card_id: peasant_weapons
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: peasant_weapons.jpg
+    sha256: 253063d1964546d6118fce2a1ed71170d93f18cbe837b2443a787b6e7698223a
+- card_id: purge_the_weak
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: purge_the_weak.jpg
+    sha256: b99fee2c6108508b7c6442e28f91142686eeeb9ff6d439cfa1ea171b433e6b18
+- card_id: ratling_guide
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: ratling_guide.jpg
+    sha256: 008d36d4030bad1dba6a9662132d0d648a293f75a125e1398eb1a4c7ac860af8
+- card_id: ratling_nameseeker
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: ratling_nameseeker.jpg
+    sha256: 5c56cb6e2dd179511a522f05ac53ac651483f7ff13d9c654bad253f3c7b5ed01
+- card_id: rich_coffers
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: rich_coffers.jpg
+    sha256: dd70e951e55c2c9650e22d58f6e398c7e2de68c4e2e4a193b09c4359b1cd803b
+- card_id: sai_no_oni
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: sai_no_oni.jpg
+    sha256: 48786bee093eb4143361a83e98dc18bb95ae578dbedde982eb46d3137d530422
+- card_id: scroll_satchel
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: scroll_satchel.jpg
+    sha256: 88eef13a706fe520126736bdbc577ed69c87b4c66fa33bc689f03685866a4c77
+- card_id: setai_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: setai_sensei.jpg
+    sha256: cc1bf300b0cdf10638bc36fdc3801af9e642e87e0ac6b53358debf19089e17c1
+- card_id: sezarus_punishment
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: sezarus_punishment.jpg
+    sha256: c76cabf1865a9186eb28750c1d10349f7b5a27dc721449085a30476ba336aa3e
+- card_id: shi_tien_yen_wang_temple
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: shi_tien_yen_wang_temple.jpg
+    sha256: 65ab097ca866b239d3063f5dfffb9d31f0fe38e3671e01006f5e5dc1ddb3be79
+- card_id: shiba_hayama
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: shiba_hayama.jpg
+    sha256: e56167ff91e784a76f07782586e0cc1bea460df9433ab76c5033ff84b9689b53
+- card_id: shiba_tsukimi_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: shiba_tsukimi_experienced.jpg
+    sha256: 1c953e5d7dca0d0c6706316e9305eeb3cf624be938a9e67296a88d372aeb9350
+- card_id: shifting_fortunes
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: shifting_fortunes.jpg
+    sha256: 260f2b1d8a16c1d2e2c43be0120ad8812b8b1f2d48b9120af21457ebbe62919d
+- card_id: shinjo_isuto
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: shinjo_isuto.jpg
+    sha256: c2ad3d0dfad2742e2a78a1d76da2d5a80e0d2baf80f9f50af141d6d6101597ad
+- card_id: shinjo_riders
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: shinjo_riders.jpg
+    sha256: f101f2121f8ded5ddb4b4c55deb5eaa2d328b01f5a517abf1b0fd5a51065df11
+- card_id: shiro_giji
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: shiro_giji.jpg
+    sha256: 274889ad1b622330313f0c54a62ae8e31098c8f3722fa0822cd6fa30b7e9ce93
+- card_id: shosuku_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: shosuku_sensei.jpg
+    sha256: b78ec4605cdb2ff7f2260209e172ef04a95e433264b1aa24215ba87b8d5f522c
+- card_id: shosuro_hokii
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: shosuro_hokii.jpg
+    sha256: 6f05bbbe04e2864f8bcb2f29dc50c9b0290cd2c94e27a55d1880279fc98edd24
+- card_id: shosuro_naname
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: shosuro_naname.jpg
+    sha256: a559cb9bc622c33c9d430c1779163b66a0ac42bf0361bcb57aaca505cf2ae744
+- card_id: siege_breakers
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: siege_breakers.jpg
+    sha256: 04defd58f14a5212b603930fd9a25e32c52654745cf97541a423f4b86c4b8849
+- card_id: slaterr
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: slaterr.jpg
+    sha256: 20a52dc82963478d4aa0b35bba64a44349e0087ffabb84ae8d77b27d69db5640
+- card_id: snow_covered_pass
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: snow_covered_pass.jpg
+    sha256: 10df5515f52d1532e3e1db90fbd28c4172e83674d71c45500cc4cb30229dc8d3
+- card_id: someisa_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: someisa_sensei.jpg
+    sha256: 06ee36801178745e4cd3f07770119dfc0241d6ad76a9f970d6a4d115d69c00d8
+- card_id: souls_in_harmony
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: souls_in_harmony.jpg
+    sha256: f8e7e63923070435d72ec0a52ab9a450a9061ab9c5427ffd2954b1b07fe7062c
+- card_id: spirits_and_steel
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: spirits_and_steel.jpg
+    sha256: 66007b0bf50ceda9cf39308d3b17b39ffc41302b01410f5ca833f9e3ccc34abb
+- card_id: strength_from_weakness
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: strength_from_weakness.jpg
+    sha256: 38738a728e44d28661528659c33863348827adb2cf13922135f423109d1a3133
+- card_id: strike_and_move
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: strike_and_move.jpg
+    sha256: fdb5e469d9cff71dca6214956623131e4cd2461474a22be783035b21d77ee611
+- card_id: strike_with_no_shadow
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: strike_with_no_shadow.jpg
+    sha256: beb4b8db5928f61ac6ec271e7d4ec2945fb046a75c17a3c09f758a950554c75a
+- card_id: supply_lines
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: supply_lines.jpg
+    sha256: b4784a25edf239fe81a8b0e0a205acbca7de6e89ec1ff0d1e56be375c0c4d2b3
+- card_id: surus_mempo_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: surus_mempo_experienced.jpg
+    sha256: 7125c1ecd266044d8b81f3c965d682a76d15e02b44c60193a729d945429c5833
+- card_id: swamp_harriers
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: swamp_harriers.jpg
+    sha256: 9cdf512a5b6aa42fb35d75bc334bdfdd4bf265bff335147285d30960e6989b9b
+- card_id: tadaji_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: tadaji_sensei.jpg
+    sha256: c8fbf33a22df3bc67857b75a6e519d2b5f6347566b304053ec654087afec121d
+- card_id: tamago
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: tamago.jpg
+    sha256: 9f98688e90f7341fd083b46d1146045cf57b181ffc258145d1e06df36b17679b
+- card_id: temple_of_initiation
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: temple_of_initiation.jpg
+    sha256: f49d781743a6342cd9b72bdfb43b592b9f9cda9b658a3d19adacfe30c13499fe
+- card_id: tenshu_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: tenshu_sensei.jpg
+    sha256: f601af140c3c3b3d3faabce8481e9cafdc4340a00058e86e1c40273407ba7482
+- card_id: tetikkir_experienced_2
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: tetikkir_experienced_2.jpg
+    sha256: 8209b3e20e11adc9ec4b00380322e448492f50a8e19c8ab69d96495a86cd335b
+- card_id: the_barbarian_wall
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: the_barbarian_wall.jpg
+    sha256: 621c9fc51959f7a704fa6074d99a7336966ebd048ab813e9c1a6c2d6d55dc8f4
+- card_id: the_iron_citadel_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: the_iron_citadel_experienced.jpg
+    sha256: 1d16242c6ea944249a7009bdc110ca82039bced017cf5c12ad1e1085eb4cfb81
+- card_id: the_same_old_tricks
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: the_same_old_tricks.jpg
+    sha256: 966491260fc4e9865cedc99b830273d8c4f7d637079a33a5a3b733d8808eff9d
+- card_id: the_tribes_gather
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: the_tribes_gather.jpg
+    sha256: c1f86bdcf61392cb47ff8264ca1bea72e249c8608b13e9ea05fd6c9b631a74c8
+- card_id: tishi_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: tishi_sensei.jpg
+    sha256: 5f3937ee094a34f3689f5aca308c9f52a060d4e5dcadce1a1237315611454c39
+- card_id: to_the_forests
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: to_the_forests.jpg
+    sha256: 82cecd2cb733ecdfc8b0a2412552996c79caf04c292ad5d062dc203ed68e654e
+- card_id: tomorrow_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: tomorrow_sensei.jpg
+    sha256: 2335e0d6d5b5a1188be9d3ec9263234b503f5192c63c7207d4371aad2d7f6cc3
+- card_id: touching_the_elements
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: touching_the_elements.jpg
+    sha256: cf88fe2fb2ed3aabdf00e9af766af31ef396de2532f51e19dba7ba6b9a9a030d
+- card_id: tower_of_the_ningyo
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: tower_of_the_ningyo.jpg
+    sha256: 13e6b173d9b90392e08d93c23823545798bc7d2e715b29f47d32be81b2edb779
+- card_id: trading_house
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: trading_house.jpg
+    sha256: 8f51f7ee0f06ca22a4647f92212d6834fc8b9a8c3f631144974c48f5d9ce635d
+- card_id: troublesome_bureaucrat
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: troublesome_bureaucrat.jpg
+    sha256: e6d60d270b897ccc7698b26441ac19cc7afc8b3e8f975ad740635aa97bb7dd51
+- card_id: tsuruchi_okame_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: tsuruchi_okame_experienced.jpg
+    sha256: 5eb11613b3faa1f97c21e5ef2fa1e76f10a58a6570ea83d37baf559c716199cc
+- card_id: tsuruchi_renshi
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: tsuruchi_renshi.jpg
+    sha256: b562850af86197f8fccec98ae070ac3542c7a3a334e8ca7116acf16ee47aa5c0
+- card_id: unleash_the_demons
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: unleash_the_demons.jpg
+    sha256: fdecb722dfb94a9855393d87dd9bf74e334eeff89cd434653c2fbd1d0336ec4b
+- card_id: utaku_rishimaru
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: utaku_rishimaru.jpg
+    sha256: e5267df5302d21a76d79d04cfd31f7d52c2ecf332777ec83f6281acb78604ac5
+- card_id: veteran_spearmen_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: veteran_spearmen_experienced.jpg
+    sha256: 4b27a9f05096f6537afacaa9fc3fbdc3414b3452a9e808b1d5e2f27b135eb7ba
+- card_id: victory_of_the_wolf
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: victory_of_the_wolf.jpg
+    sha256: 79142848f776a9616090806828365d39f68c743537b8316994ac515b3c646348
+- card_id: war_on_the_plains
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: war_on_the_plains.jpg
+    sha256: d4c5d50cb2374b26bf8254a29d7fbd7349bef3fad147d6033869e650c35983ee
+- card_id: wikkithich_hie_z_ee
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: wikkithich_hie_z_ee.jpg
+    sha256: 6d4fb2ba1be99e5aca2f7d234d8b53cbf166cb3b2cb8434956a58b9e2c8aec06
+- card_id: wrath_of_the_bloodspeaker
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: wrath_of_the_bloodspeaker.jpg
+    sha256: dbb731829d920e5dee429ceb9bf365c069d47904a9bd9ff50bcaf67d49bb5ca7
+- card_id: wrath_of_the_emperor
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: wrath_of_the_emperor.jpg
+    sha256: 04a9f66179db512062f23ed8cc46b15cebd3d3d699b8be951e21b00c35c70369
+- card_id: yasuki_hachi_experienced_2
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: yasuki_hachi_experienced_2.jpg
+    sha256: 08f6e8c23cf31342b713c1262894fd315dd4f7d40dc331bf0ca64c636779246f
+- card_id: yogo_baisetsu
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: yogo_baisetsu.jpg
+    sha256: fba0ae3dc7a8f75c652cfa4ccbc46958a1c7f84790e0d91d7ddb34c3aeaa3abb
+- card_id: yoma_sensei
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: yoma_sensei.jpg
+    sha256: bf78d8d00a54365bee82c8736bfa81700190eabe4c140c0bf10bc96d8fa893ba
+- card_id: yoritomo_egumi
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: yoritomo_egumi.jpg
+    sha256: 79225c3bbfc84ceb7b9c07e210af6a305b6ad7147bf4147167c84e6eb4a73879
+- card_id: yoritomo_hotako
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: yoritomo_hotako.jpg
+    sha256: 7a1c99128622a7139d2f83fa4b3b00bad09d9748c2b5614a6356f87b2d2286ed
+- card_id: yoritomo_katoa_experienced
+  printing_id: wrath_of_the_emperor
+  files:
+  - role: front
+    file: yoritomo_katoa_experienced.jpg
+    sha256: 3cbdd7787f799a064f19ffe987741940e198acc27e82d078cdc44bdb3f3481fb

@@ -1,0 +1,536 @@
+set: Forgotten Legacy
+images:
+- card_id: a_game_of_dice
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: a_game_of_dice.jpg
+    sha256: bf9e8ca884def18e5a099ddb98592a6caca8dd80ccad4b8adc6f64b6031edb0d
+- card_id: a_yojimbos_duty
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: a_yojimbos_duty.jpg
+    sha256: f6f24317afce6a00373ae4c10396e8833bf4aff1e5c1a05533ce71439efb38a5
+- card_id: accidental_confession
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: accidental_confession.jpg
+    sha256: 47d9abace947334951bf456dfa9c52b3c0ec2fc483c6115ed78725dc824a80e4
+- card_id: ageless_shrine
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: ageless_shrine.jpg
+    sha256: 5249afca71ffdd5cf545b2a0e2cfc385e44d6ebd5a4f05eb384d7895bf1d2e54
+- card_id: akodo_tsudoken_experienced
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: akodo_tsudoken_experienced.jpg
+    sha256: 6f27dce67983ab70124d3d37527a2151374614c2ebf71eca94de324ee6a01492
+- card_id: asahina_shigemitsu
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: asahina_shigemitsu.jpg
+    sha256: 4d4b95f4593b0d5c0e98a9cadc0276cd6791ac0a2807c38fd02d1fbde773f2c3
+- card_id: asako_chukage
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: asako_chukage.jpg
+    sha256: 3df9694209577e2f0752f5621324a5785689172d4beded81a5e1506b8b39608d
+- card_id: asako_kaitoko
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: asako_kaitoko.jpg
+    sha256: 39e420bdcaa3abe7d603a0d9dba495b9bfa33f5b48433a3195a112a224499e74
+- card_id: asako_karachu
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: asako_karachu.jpg
+    sha256: a6b8fd60c301ee32f8d08e040ecd3ef51d21c78f268ad083604f642951c79597
+- card_id: assault_in_the_jungle
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: assault_in_the_jungle.jpg
+    sha256: 7eceda5e9130a26c7fc2f02ab504a7f436fa4ac5091227216308274128b0d471
+- card_id: asset_denial
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: asset_denial.jpg
+    sha256: 5ddfebee47bba8bfaccac90f11cf9a92800b3d41c5f71fe51cd1160601d3f27b
+- card_id: bamboo_harvesters_experienced
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: bamboo_harvesters_experienced.jpg
+    sha256: 43bc3d68ce031dd09fcee9f2e37bf838c0b2a429ba65fa1d6bb3510299013728
+- card_id: bayushi_higaonna
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: bayushi_higaonna.jpg
+    sha256: 07e7666abc5373dbb9c89c46b2f2800ea1af5c6de698f5c9fe64112768d8d932
+- card_id: bayushi_toshimo
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: bayushi_toshimo.jpg
+    sha256: cd0a3a8fef0010c6cf0560d1b48e87d8901401a745881857c4cd5d008e05997d
+- card_id: black_pearl_experienced
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: black_pearl_experienced.jpg
+    sha256: 84a12fb62be8b36f1be9af3344f1f4a0e839bd17cbabe0d786165024e18119d6
+- card_id: border_keep_experienced
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: border_keep_experienced.jpg
+    sha256: d6d0bba106541b6fb6b2dd5d7a6f0226a83575f0828b4669a6d78a699a4e3e94
+- card_id: broken_alliance
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: broken_alliance.jpg
+    sha256: 8b1665192108166f1b6cdce16b72fa17d0d0577c75116970f725ef8704b3a1be
+- card_id: burning_dreams
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: burning_dreams.jpg
+    sha256: ff5827caf0a1306bcc082944c6213460df3b7ce6160a0826c6b52a543dfd360d
+- card_id: cast_aside_the_weak
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: cast_aside_the_weak.jpg
+    sha256: 627dbcfafcf7db49344db2d982b9471ec09bec04cb5c5dbeebda61e05b05e63a
+- card_id: colonial_harbor
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: colonial_harbor.jpg
+    sha256: 216e81c9706e3718909fc52af94c5860fdbcc495358b09f6bc38a28568953c03
+- card_id: consideration
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: consideration.jpg
+    sha256: 320b894f1bbe8c43594355a5c75dd2d113be747af4c1304c38b4bbbdcdb15f59
+- card_id: creating_order
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: creating_order.jpg
+    sha256: c91685bd19faee8647a971691579a5821886ee01227255e0b9ad14a84189e64b
+- card_id: cursed_relic
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: cursed_relic.jpg
+    sha256: fb014c174b620e6dbf63c1a51c864f09f279776246d193dc67cb5cd87dca1b9d
+- card_id: daidoji_takichi
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: daidoji_takichi.jpg
+    sha256: 09d0723ef1190dbdbc60bc288c982d4fd2354436503cd67cb155c2a85b0a1b9b
+- card_id: daigotsu_gyoken_experienced_2
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: daigotsu_gyoken_experienced_2.jpg
+    sha256: 16b902c624376267f554ed495f88e88d863ba781df7979090770e9ef7e2e4f53
+- card_id: daigotsu_murota
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: daigotsu_murota.jpg
+    sha256: edcb8af2970e41016d6137f82ae8c2a65bc4b1a822c4d32e6d328d9dbc0eb7c5
+- card_id: doji_hakuseki_experienced_2
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: doji_hakuseki_experienced_2.jpg
+    sha256: 4912d9c33d7ced3098510a68cd3868277b4335e773a2c80fc223d7807aad7c9e
+- card_id: doji_rengetsu
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: doji_rengetsu.jpg
+    sha256: 3dc594acd258a83f9092157226590ee7c5e1f258c56c88f05867060fa6fbcb76
+- card_id: duel_of_haiku
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: duel_of_haiku.jpg
+    sha256: c1644114060461185b7d3c20667b46e5181902466d11aaeaff9bc51efc0b7874
+- card_id: economic_repercussions
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: economic_repercussions.jpg
+    sha256: 51f292c00f463c8476e34368a8aa6c570d67feb4b319e15a8922906bb968347e
+- card_id: entrenched_position
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: entrenched_position.jpg
+    sha256: fab86f31f0efe3bda42c5db168c22e776cfb9fe39044e31bed9609a50614ddc3
+- card_id: fruitless_search
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: fruitless_search.jpg
+    sha256: e556c8530732ad8c3cbe31ff39e33c4ec5412a675da30d2f34940603d63b0021
+- card_id: grateful_reward
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: grateful_reward.jpg
+    sha256: 220d3267eff8794d9d6ee6a62cb9612426dd4446275d187f214d42094455d8ae
+- card_id: gripped_by_terror
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: gripped_by_terror.jpg
+    sha256: 3c7b2f05bd80a73f92dbfdd1bb600ec2267db82d08ae3b204ac03939450fb76f
+- card_id: heart_of_darkness
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: heart_of_darkness.jpg
+    sha256: 442e4670308c75eac707c966a549758aaa10d27bb57c402e8f8b0edbe0969340
+- card_id: hida_fubatsu_experienced
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: hida_fubatsu_experienced.jpg
+    sha256: 4fa3c7f230fac3141ca833ebaa9223d089dc89c20b2090b04339aa41fd0b988d
+- card_id: hiruma_nikaru
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: hiruma_nikaru.jpg
+    sha256: af1e63defee98b4d8f2b35281a761ccdf77f0eb2f76483f1a472046163afc0e7
+- card_id: hisanos_guide
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: hisanos_guide.jpg
+    sha256: 3859fb38ac6b3135ff364b55d44366306d72e250462b07e24b20485c026a44e6
+- card_id: honor_never_falls
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: honor_never_falls.jpg
+    sha256: 137f982550602e073aa4a7cd9584e711278e384266a57a485de3773767fe6ff3
+- card_id: hunter_of_harmony
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: hunter_of_harmony.jpg
+    sha256: 69e838f0be44d317a92b5382a28573461a33f620cb28f0477ac976cdd47c36e7
+- card_id: ikoma_tsukasa
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: ikoma_tsukasa.jpg
+    sha256: bd395b38e8d19b5f0cd2c05e7e632757d6bf76fd774a2d01c777899d21bd31b9
+- card_id: intimidation
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: intimidation.jpg
+    sha256: 24ec2580c15bcfcd051e65059c82ed9fa90faf3acd1f0671f2233f08d2500832
+- card_id: iuchi_abodan
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: iuchi_abodan.jpg
+    sha256: 913808e91c0e7291f4889383933f01f5f5f658a24214e72ece1c0f558745be65
+- card_id: kitsu_kagako
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: kitsu_kagako.jpg
+    sha256: bbef23dcd8d8d9f1cb6af26e4cfc28f311614dc9f6c7e54e1b3a31621da7428c
+- card_id: kitsuki_nubane
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: kitsuki_nubane.jpg
+    sha256: 61e1474c392986636a80ee2cfe187062155712eae67e81a8f50a660dd77fffd0
+- card_id: matsu_koyama
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: matsu_koyama.jpg
+    sha256: 319f1e70b1bc4637c668c8a0084c50c193135561b7c8f5c91cfce3d94695d198
+- card_id: mirumoto_kojinrue
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: mirumoto_kojinrue.jpg
+    sha256: 9be4f8df2f075c44a42c86baeda21c9988860e6994cf5d26dde4518835be0c08
+- card_id: moshi_sasako
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: moshi_sasako.jpg
+    sha256: 4e7f6795b5dc9376c7b6f42a23c04fe8d55b3cacc5a9e6fb16692136762a7915
+- card_id: moto_xiao_experienced
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: moto_xiao_experienced.jpg
+    sha256: d678e82bf9134836989692e27d9704cc5ad48b452d56201edab8b3143985c9ac
+- card_id: never_beyond_my_reach
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: never_beyond_my_reach.jpg
+    sha256: 95bc349d5cc388ad07e2004f5fa2b0dd7d86fd2358f74ca24aa40ff763448340
+- card_id: ninube_shiho
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: ninube_shiho.jpg
+    sha256: 34281637c9d448398fdaec545d03c8ae6a6544672331bee4856910b15e974297
+- card_id: oblivious
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: oblivious.jpg
+    sha256: 9b654ba5480950f091ec03885eeeed385456229ee827d4d834a460f2bba39a49
+- card_id: pearl_of_embers
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: pearl_of_embers.jpg
+    sha256: 9bf3d50f73762838307adce2c1959ecfaa1034d52b961f876e6d3f0f070bcf68
+- card_id: pearl_of_rage
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: pearl_of_rage.jpg
+    sha256: f980ce2256a2dbd5e889d203008b132beb96edd623e0a74f13b2ba8b9f65b1a5
+- card_id: pearls_and_spirits
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: pearls_and_spirits.jpg
+    sha256: 287c4dc536c5392ba98a9b08e197d87e870b998db81fc1b2e54439e7cc815c52
+- card_id: petty_squabbles
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: petty_squabbles.jpg
+    sha256: a33062a1706b226f8fed5c1bd07112920766d2997ac462beeaed67eac0aec875
+- card_id: returning_home
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: returning_home.jpg
+    sha256: d7fed030709f6d8d7e5f0d15fd09ce4a47335819d52b8b52701cf409f46a2902
+- card_id: rise_of_the_dark_naga
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: rise_of_the_dark_naga.jpg
+    sha256: d3e21fc262d7718e60f11a573caaf1599c3fd46e503a888c4b655d34cbe8da61
+- card_id: ryoshuns_guidance
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: ryoshuns_guidance.jpg
+    sha256: 2557f7090f83aa74420fafb20e7baf3f71cfbd6496acfe95edefc4f38768a308
+- card_id: scourge_of_the_sea
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: scourge_of_the_sea.jpg
+    sha256: 4b6b1e51e355e86867c726df019eac122e8d0ae76e9940d4e2388ba73a2e5134
+- card_id: seeking_the_truth
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: seeking_the_truth.jpg
+    sha256: a58602f1abdcfdc9179192a0c04ad164d896edbddde33d8f41b3784ba274f519
+- card_id: shiba_sawaken
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: shiba_sawaken.jpg
+    sha256: d17e6f312682933ee9ec749ce35f86cfd330377866b833b8feb5d46a29d7ef71
+- card_id: shinjo_junpei
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: shinjo_junpei.jpg
+    sha256: e49f9c5bf2601a8250667539bad4e2ea7edac813b66933d9f25c54f98a91bfb1
+- card_id: shosuro_aroru_experienced_2
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: shosuro_aroru_experienced_2.jpg
+    sha256: d21e21cb21ce8e8778c04f8ab7792c79ed0299664748e8d1fd804e13bbb67403
+- card_id: shosuro_makiko
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: shosuro_makiko.jpg
+    sha256: d44c7c85247a3b5649fb7e34124a3aded4a6b23a140db7f5453a21a2095d0e6b
+- card_id: siege_volley
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: siege_volley.jpg
+    sha256: d2e467194bc778a97c1ee3947e698a55e72e49b8ecf6ef280ea49ece5b230bc0
+- card_id: steadfast_defense
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: steadfast_defense.jpg
+    sha256: dc10f03a5133539be24cd5a77d54b28615ad64709243e9d892b286d120e7d785
+- card_id: sundering_strike
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: sundering_strike.jpg
+    sha256: 0aab9ba245205d7be109b27e644c7c7a298367a76fe03c834da214101e5c0d3a
+- card_id: sword_for_hire
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: sword_for_hire.jpg
+    sha256: f3cd6593d517211bc58fc1da021e66222b534a7f91e691479b16b93b13d100a1
+- card_id: tamori_kazushige
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: tamori_kazushige.jpg
+    sha256: 2c7baa26496eae22fafe35da604ff3daa78f281cdad8831cf54ccd64a710693d
+- card_id: the_dark_naga
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: the_dark_naga.jpg
+    sha256: 9c48ba0161d5743f13529090acbc3ad61f74f32165058699878444364ab53a65
+- card_id: the_forgotten_temple
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: the_forgotten_temple.jpg
+    sha256: 7d731f1a55f23a22c9317b51b2cddc4c2af6bd2ddf838e6406283e94a84b0fcf
+- card_id: the_mountains_power
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: the_mountains_power.jpg
+    sha256: 6cac6407458e347d832aaf3a99eab2a611a82de44edc27e1b29674751d028172
+- card_id: the_perfect_moment
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: the_perfect_moment.jpg
+    sha256: c6315d7ad135f8ef61869d0283d4c3489ed3e5ab1f49658e05e34b767bdc0aab
+- card_id: the_second_city
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: the_second_city.jpg
+    sha256: f08e82048d69f921e32e41d322cadad893fe0d01f2534d473fa4e9c797bbd576
+- card_id: the_shakash
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: the_shakash.jpg
+    sha256: 0b625bcd7e329292d0590cc7f77ffc7f3abb5515be6d76605d8a0fa016816b86
+- card_id: the_sleepless_one
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: the_sleepless_one.jpg
+    sha256: b77f37a26add2405852182e2f4872c089916d670df6551a89194bc46dd0256a4
+- card_id: the_vengeful
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: the_vengeful.jpg
+    sha256: 580769002427f80b30f8a0db4ed272c3a2d19a8bec98550700b3b3a92cd0bd16
+- card_id: thunders_wrath
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: thunders_wrath.jpg
+    sha256: 1b4c74f4db4a5022d9812736c96ea864f466b47c8324f544172b5ecd718419e7
+- card_id: togashi_osawa_experienced
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: togashi_osawa_experienced.jpg
+    sha256: 838f7d5ebfa164d746b1edee405ef29f145037cea6d0684c5318a9febd37f50f
+- card_id: toritaka_chokichi
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: toritaka_chokichi.jpg
+    sha256: a6ad5d00ffcea15f3114cbc08b13320b92fa334ab169eaecd162fa90013e5634
+- card_id: tsuruchi_nobukatsu
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: tsuruchi_nobukatsu.jpg
+    sha256: 9d01dfc15385c20f1b12a3c0b7afee4bdff7ecf2292fbefd70723acec9bfe929
+- card_id: utaku_ji_yun
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: utaku_ji_yun.jpg
+    sha256: 91122d6a626be452d118f76da6142f2a479a1b5eb0ab595a900d6b5cdf114cee
+- card_id: wanted_for_questioning
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: wanted_for_questioning.jpg
+    sha256: 12885f64d49c8d7a5f5881f25f776f3cf9f174442f861e4c6256cb3477cb076a
+- card_id: willing_spirits
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: willing_spirits.jpg
+    sha256: 627c136b6e323da3fa34eccaf694776bc455cb25d37271d97ef0fa72fe2b3d84
+- card_id: wind_of_the_moon
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: wind_of_the_moon.jpg
+    sha256: 7fa93acaed71f68477101858c8e3a184e58cd9fb7a03adf2da0820467bd1a6e4
+- card_id: yamazaki
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: yamazaki.jpg
+    sha256: aef502fef5a3b5c82422980f9f25de646caa458f1607245c35d0fadfe4d96c7b
+- card_id: yasuki_daiki
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: yasuki_daiki.jpg
+    sha256: 66791aff21533d0c8d80487703679f0c0666058c97b63f40b9159fee6a9198fd
+- card_id: yoritomo_haruhiko
+  printing_id: forgotten_legacy
+  files:
+  - role: front
+    file: yoritomo_haruhiko.jpg
+    sha256: e6675645d13ad83648c29d3a93d252b05c29cd3c3dae8f5db07f66680de0406b

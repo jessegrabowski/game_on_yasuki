@@ -1,0 +1,986 @@
+set: Path of the Destroyer
+images:
+- card_id: agasha_asai
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: agasha_asai.jpg
+    sha256: 8bf729d458fa9fd907961c04231279d0b6f09a5dc4221d847537089afc85bd35
+- card_id: akodo_dosei
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: akodo_dosei.jpg
+    sha256: eda06120987b0f20f784446542d99485c21a24e496cd409f86ce67c3430161d1
+- card_id: akodo_masao
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: akodo_masao.jpg
+    sha256: 318c78e6c794a153b88bc528b0f1278e39417dd7593c72c1a185a860209a9549
+- card_id: akodo_nagataka
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: akodo_nagataka.jpg
+    sha256: fcb77382245304b133a1d669f7f0e582f412e37388a02dca11850e80b1b85070
+- card_id: akodo_shunori_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: akodo_shunori_experienced.jpg
+    sha256: fffb6bec6ff0c0ec03e36e9d2758d85dc62e2e7fa9f0e8940b73b61596f62529
+- card_id: akodos_guidance
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: akodos_guidance.jpg
+    sha256: 2126029913860c513ad564824c909e489825d1c02966263eccbfdd47f2c1dd09
+- card_id: apprentice_shinobi
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: apprentice_shinobi.jpg
+    sha256: 664b09dbdae3723c1fdeacc7c71718b014250e952fe103026e955162b1fa812b
+- card_id: armor_of_legacy
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: armor_of_legacy.jpg
+    sha256: eb3df6408b0d3ad20fe57eb2578c945a951a2f8397c88ed43321c123e5ca738a
+- card_id: asako_hoshimi
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: asako_hoshimi.jpg
+    sha256: 83f65c9ffaaf96700878a5f3fe32c5f4030100e00805418e9fcf3a8758d8d79c
+- card_id: asako_misako
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: asako_misako.jpg
+    sha256: 96c5d60336a4e05abaf5cfec9045033944532ca7350778ff71e0e125c23eade0
+- card_id: assault_riders
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: assault_riders.jpg
+    sha256: f88d6c226d2c54f6f52bcb04c5a0253b6e9c64b5f0e89efb88b850334ce832d0
+- card_id: bare_ground
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: bare_ground.jpg
+    sha256: 64e980fabda7f45bdf70f19edf94b5063d09af937ded436d54ce432f4a3bb9e7
+- card_id: bayushi_hisoka_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: bayushi_hisoka_experienced.jpg
+    sha256: cadc3805300a00a6d228bdf6fda19ef2bff527f9c9b22b7238b6077be79deb42
+- card_id: bayushi_komiya
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: bayushi_komiya.jpg
+    sha256: bfbd7540ba8d52512374d5582a898ae85ced42ad4ad5058f9b6bed47a7470ab1
+- card_id: bayushi_minoru
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: bayushi_minoru.jpg
+    sha256: 5d226a6bf5dc99866c04984a077d8eb90851db71101ecdca75904b4358f2900b
+- card_id: bayushi_saka
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: bayushi_saka.jpg
+    sha256: 31fdc68e682f302fc53da66e46540120f44477c448898019e99ea439c6e7081d
+- card_id: bayushis_guidance
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: bayushis_guidance.jpg
+    sha256: bd2f86e75f3196911d890ea0e826f4cbab14e07270553a3175538c1fb4187290
+- card_id: besieged_borderland
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: besieged_borderland.jpg
+    sha256: 4d4ddad77b6089fd6a55cef17d4ab306d79b19f5e9420001d9d6892aa0ba2cd3
+- card_id: border_ambush
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: border_ambush.jpg
+    sha256: 23089ad463933cf55f0533b64880a093b74e6f495cab2e850cd95a1a16daedbb
+- card_id: breath_of_the_heavens
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: breath_of_the_heavens.jpg
+    sha256: 1d83083f5511bc243a81805dd3f0c2cec665ac6d4de73c75fbff3e83be85c687
+- card_id: brothers_in_harmony
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: brothers_in_harmony.jpg
+    sha256: c7e811eadefe25c35e5a7956c3b474c1fbc5761b1bace66cb1c000c20cc689fc
+- card_id: burn_the_towers
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: burn_the_towers.jpg
+    sha256: 5f647e3a8e1d21428ff8cc52898eb10acd98ee25f6fb9e0a6842c87cd776f133
+- card_id: calm_before_death
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: calm_before_death.jpg
+    sha256: 3dd12b786d556cf1b3c3a68598f349b90633ce231d054bce0ab7fda8b0e93f00
+- card_id: chagatais_armor
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: chagatais_armor.jpg
+    sha256: 760e71c6ccb2178f7c87182e3fabfc5beda2b32f1d712dc1caf36328f774b649
+- card_id: channeling_jigokus_essence
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: channeling_jigokus_essence.jpg
+    sha256: d5ccaecfbf28fe0067577d77c0f957cce86460e452ab7c666270c214175c9433
+- card_id: chikara_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: chikara_experienced.jpg
+    sha256: f41cb06dac5a2927fe181607cd201f82d8d09086b57f2a3dec2157e13d93a3fe
+- card_id: cleansing_the_path
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: cleansing_the_path.jpg
+    sha256: 87e08a7119d915049bd2ad73998873d0c5c396b2e27680260d06cf5a999a1bb7
+- card_id: consuming_the_flesh
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: consuming_the_flesh.jpg
+    sha256: 762a7d61fe6c227952e2466eb05c660f7e2141d49cecc98acbed2e56adf0060a
+- card_id: crushing_strength
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: crushing_strength.jpg
+    sha256: e89ba7cd3f39aa248adddbe71ae31b9b9508da97dcf95c27f3d41951f3659030
+- card_id: daidoji_kirimi
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: daidoji_kirimi.jpg
+    sha256: b5e5d59960aba6f982917ef466d853f7673c273f01884db5f9dc3eff00e3da43
+- card_id: daidoji_yorio
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: daidoji_yorio.jpg
+    sha256: 95b22ecd171b6cab301188929b5aacb09efbbe58fcb7f818ef90cc8b36865d5e
+- card_id: daigotsu_gahseng
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: daigotsu_gahseng.jpg
+    sha256: abd1c49f7b8f22865561430e66a18c79cc5017b9f8bf783703f2cf9623010b67
+- card_id: daigotsu_isoroku
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: daigotsu_isoroku.jpg
+    sha256: 54736b4fb1b67aba056fb0fceb106acdb99f6d14a3aac9d7e26f670ba090aad8
+- card_id: daigotsu_susumu_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: daigotsu_susumu_experienced.jpg
+    sha256: 7d097436eddddc498228fea6dbf297b535b0564ee61560fe3eaa528110a53402
+- card_id: deflection
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: deflection.jpg
+    sha256: e226d2578580a88d097345518c4d6b3fef41152a30d5786d8088fa0b7e9b1557
+- card_id: deployed_reinforcements
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: deployed_reinforcements.jpg
+    sha256: 4b9bfce51868fc6216c79d5e5ad43055bb33ed1438f85344d8a30d7d41b3f3ec
+- card_id: desperate_rush
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: desperate_rush.jpg
+    sha256: ffcdd03c4a98bd09c3277aaa0ef98a30ddf8949d813de8c1a9359faa64b1d69c
+- card_id: desperate_throw
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: desperate_throw.jpg
+    sha256: c172e21d8ec17556949e2922948381dd482d43c617c7c7a897cd994050d609cd
+- card_id: disarm
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: disarm.jpg
+    sha256: 0badcd40d01ea0236ab6d1d92409364a96f91ea59a18f6e4948a012d7b1dd4e8
+- card_id: doji_bukita
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: doji_bukita.jpg
+    sha256: d5abe846f4d9ab078309fa59ca411f6e49d69c74132d5c63d37d7b0b041e2633
+- card_id: doji_shikana
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: doji_shikana.jpg
+    sha256: 7771c9389a02b42c10eb7037ee821b008c9df2ff8e12c692f316b213c83c950b
+- card_id: doji_tsubota
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: doji_tsubota.jpg
+    sha256: 5065f1009a85bde0d37e9539e1232dc47ca8c8310e3923ef4b140f433695b798
+- card_id: dojis_guidance
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: dojis_guidance.jpg
+    sha256: b7ec2989edd872fdc32ea892cfcb04d58ddad56a54d91dee578ec37bbc9c8a36
+- card_id: dutiful_apprentice
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: dutiful_apprentice.jpg
+    sha256: 983e87539fed6bc7330fd638dcbce7930fb0e515d9c39b883a14e2fd56edb376
+- card_id: earths_embrace
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: earths_embrace.jpg
+    sha256: bd63e5992c0d3e4e1a924d8b27ed6cfa8dbdf5bec6454bf85bd1bd64ef7bd283
+- card_id: eternal_armor
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: eternal_armor.jpg
+    sha256: 745157c8c4fa955e9bf8a8f691b06e6d0ef131e75c619340fe8ad1a5bae0999c
+- card_id: expendable_resources
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: expendable_resources.jpg
+    sha256: 74b629c5fee11082f8bd2a1c956e81627daec956b02b27b05cb6ac11593e73c2
+- card_id: first_to_fall
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: first_to_fall.jpg
+    sha256: 833aa018b2dd522e89fb49be2a7546e6d16737992e12d9b0c6d946f4829de5cb
+- card_id: force_of_law
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: force_of_law.jpg
+    sha256: d090189c16f658c16431feb9457dee206eeb5cf4b1cddcf873e2a57c31db22bd
+- card_id: forging_the_gift
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: forging_the_gift.jpg
+    sha256: 6e8a99418071184f76fdade7bdc5284a093fde13177d3ff5dd7c8cf7d6d8b845
+- card_id: fu_lengs_guidance
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: fu_lengs_guidance.jpg
+    sha256: be5287dde11f2bc009102784be1445d17e2ab479a017f5ebd0e308517f671e96
+- card_id: gakku
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: gakku.jpg
+    sha256: 93c7fe540a0547c297623b1a19d291a57df114077565256798548575f4fd0d42
+- card_id: greater_good
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: greater_good.jpg
+    sha256: 8693d27c6716f540a1d6e5b23716c16f7d2ab6e1cd03b6ba0a3d00bc6f7a2bd5
+- card_id: hand_of_the_jade_dragon
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: hand_of_the_jade_dragon.jpg
+    sha256: 706e709a99c0308c4391165acc1d5e30d5a291f031464eb967f6b41abe1ac108
+- card_id: hand_of_the_obsidian_dragon
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: hand_of_the_obsidian_dragon.jpg
+    sha256: 3c7c73877c98f83c7414352f8ce70c65d1fff20f6e8c686cc862017097e28048
+- card_id: hida_fosuko
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: hida_fosuko.jpg
+    sha256: 1eeb1b08ad965f4e4dbc361c3a4f1f3ed07f088d10686da12c0076c2164dc772
+- card_id: hida_ikarukani
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: hida_ikarukani.jpg
+    sha256: 3d9fc96f94dfb0852664dc3aea33b8a1aa1184624a73cc61f126d3c2817d308d
+- card_id: hida_kitamura
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: hida_kitamura.jpg
+    sha256: 0e66e1d76ef8aacf562dd7092e52b3417a5a33801644f4a56a4051d75d7572a1
+- card_id: hida_suteru
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: hida_suteru.jpg
+    sha256: 5c6ae3c35333827456e8ed2b838dee3f1ee5f4bfeb0168f9762863303028fbd2
+- card_id: hida_tobashi
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: hida_tobashi.jpg
+    sha256: 83836dc2ffcde7c5a6a53a291348ab4a316856c86aa6671ef1912b4cb234dbef
+- card_id: hidas_guidance
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: hidas_guidance.jpg
+    sha256: cccf0790f7de5b9b425e713c6308f312a49e9dbd9c97af40076bfe73ace0246e
+- card_id: hidden_route
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: hidden_route.jpg
+    sha256: 49c139dbe8845abf6d83a0c6f6045915f1b9c8404ef6f93d8e914b62e643cf02
+- card_id: hiruma_hidora
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: hiruma_hidora.jpg
+    sha256: 9344c4e87fc9844437ec8bf8a0d4d4f2ff398e780896f5fcbf28ecf0cf2fb131
+- card_id: ikoma_tobikuma
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: ikoma_tobikuma.jpg
+    sha256: 448a003ceeb5c80db6d4a6cab43a488f4f43e4ebaec42d196f50ab9a644fc39c
+- card_id: impossible_force
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: impossible_force.jpg
+    sha256: c2d7cbf67d0da43ae77609feac069b8fd6523a77f20090a97a2e2e891450f219
+- card_id: inspirational_victory
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: inspirational_victory.jpg
+    sha256: 0d05e3e39316a7141a7bffe691ee3230fa5b22761697e5b4ecaa673838266893
+- card_id: isawa_fosuta_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: isawa_fosuta_experienced.jpg
+    sha256: 4df7b801e2446e3b9567b54dd9f80ea286b6b1b28d8effcc50172d9140ef3be6
+- card_id: isawa_mizuhiko_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: isawa_mizuhiko_experienced.jpg
+    sha256: 92095d71310767156470996f6152e27de90444960511d5de07f3771cb74bc7d7
+- card_id: kaiu_smithy
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: kaiu_smithy.jpg
+    sha256: 28ef7c470a6464487230d6fca75d3717eac6ba738a73052794468d162dd9f523
+- card_id: kakita_kensho_in_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: kakita_kensho_in_experienced.jpg
+    sha256: acfb22e3d68636e5e78cda291d34c0728e3300dafa55259e2ce8827542f099ca
+- card_id: kakita_sadaka
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: kakita_sadaka.jpg
+    sha256: 0b67124705d54629902ad234d5a07c710568667ce17cbc6bf38fa0ac6e0b7475
+- card_id: kata_of_the_concealed_blade
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: kata_of_the_concealed_blade.jpg
+    sha256: 06d903c1344cbe3ac72b0ef1ff80f4c00455d8ce438988ac2a0303038538dc55
+- card_id: kitsuki_yodo
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: kitsuki_yodo.jpg
+    sha256: 89b8fc65eea48962d0aba1e0087bc8eff90e0fac27f686e0a41be1da73004d0b
+- card_id: kitsune_iwarou
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: kitsune_iwarou.jpg
+    sha256: 3050cfe68cdf917d3cf1be4cd067cb3e86527f42be3743e1f61feeec96a6ed6e
+- card_id: last_stand
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: last_stand.jpg
+    sha256: 6a408cdb7101297eb9eef3cf6d9f8c8b1250ab965c2b579977d3017bc067dc41
+- card_id: laughter_of_the_flames
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: laughter_of_the_flames.jpg
+    sha256: 740878054c589752ee31f345876caf8d558b1ab0cefbdcf5af9b3650cbbd31f0
+- card_id: laying_in_wait
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: laying_in_wait.jpg
+    sha256: ebdeb48c08913ccc8d626472f548d3bcef1d7d08d9f9ffc5bbdbf5bcf4cf584f
+- card_id: lead_by_example
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: lead_by_example.jpg
+    sha256: aa9bc6d2763bd66fcd0511e5d6973848b6272717d6081b154b1eb38f62f26d9d
+- card_id: legion_of_toshigoku
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: legion_of_toshigoku.jpg
+    sha256: 701c6af77d8284c1af6d1015648b23973c80743b7ad2aad6b72a8955e89402f9
+- card_id: march_beyond_hope
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: march_beyond_hope.jpg
+    sha256: daec2bea515a05b3d343bf9cffe04106ffa81089ba7efd2c7ad08589096a944c
+- card_id: masserah
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: masserah.jpg
+    sha256: 4418b0d08b15d78d305ee9561c5fb7e4faeb9ce993fbf4e32d95a3aacf07b954
+- card_id: master_the_body
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: master_the_body.jpg
+    sha256: 663b180d9af347cf84cb7462e2a2904dcc2687a2b087e9a5bda2073bea2cb105
+- card_id: matsu_benika_experienced_2
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: matsu_benika_experienced_2.jpg
+    sha256: 384d841f523f0d86dc1758dad5049597ffbc73658a708074dea4bcd59aeaaf8f
+- card_id: matsu_kasei
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: matsu_kasei.jpg
+    sha256: 6a20e918aec9513f0190f5590e2394c3cfe1cd017a7dcc0553ec634e2373137e
+- card_id: might_of_the_kami
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: might_of_the_kami.jpg
+    sha256: 0070e0732b983df83dc8fc4a947c1b3fe7c6645ef1ef4420cd4984aa83ca0ad6
+- card_id: mirumoto_kondo
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: mirumoto_kondo.jpg
+    sha256: 0c22ffe23c501cbad18d6e7f030fe9a6fe49aafb77df12a6de00f404b683e7d1
+- card_id: mirumoto_washizuka
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: mirumoto_washizuka.jpg
+    sha256: b5a557c4714cadd09443dd582d88cad13ade738ee8b9810665c28eb568314a1c
+- card_id: misleading_wasteland
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: misleading_wasteland.jpg
+    sha256: d08e2433eafc1bb358321cc1bb6e816612f151a7d4d301847aebd2148f21ec6e
+- card_id: monstrous_might
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: monstrous_might.jpg
+    sha256: e62f03900faa38860e50ed042e5b2c139707ba7b200566528aa11c886cc81751
+- card_id: moshi_chuuna
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: moshi_chuuna.jpg
+    sha256: 9074222af3edb177ad34fac8f46760959954dee018a2df614fb5f8e6f7a70a2c
+- card_id: moto_chiang_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: moto_chiang_experienced.jpg
+    sha256: 95e2f45635585de247f6892a23915992ad3880617c25be9079efece5c2c051d8
+- card_id: moto_jin_sahn_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: moto_jin_sahn_experienced.jpg
+    sha256: 7960b52989b83c4a74931d720a28bd71966fa13df9b52035a764b811500877ee
+- card_id: moto_kangs_sword
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: moto_kangs_sword.jpg
+    sha256: f38cf3a13fcea2d045598a6c7854b97abd368663b35974554c4a897209816540
+- card_id: moto_paisei
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: moto_paisei.jpg
+    sha256: 4d35e2336880ca26d841cf3d655b6ba3e46a824498d1eb4e26e76ee29c4db824
+- card_id: mountain_watch_keep
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: mountain_watch_keep.jpg
+    sha256: b8e1d4f07a630b84a2ee3c2daaf71beac95718fc9f3e46aa0c97387ccbbdc689
+- card_id: nerve_strike
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: nerve_strike.jpg
+    sha256: 4cee09e9509cd544b59965f5ca4d8a8d570e284b5cf146dd56f8f4dc963bb3bb
+- card_id: nightshade_touch
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: nightshade_touch.jpg
+    sha256: 34e5139b291de96925204d177beb6084e13b52d361ddaba77b0024a188e8098d
+- card_id: one_souls_strength
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: one_souls_strength.jpg
+    sha256: 1bd497615d4c8524dfc1431d36d846fb34346eb6fe6a0dba0c99c0a0a6f42d04
+- card_id: overwhelming_pressure
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: overwhelming_pressure.jpg
+    sha256: 5405a14601153723067a410169dad724f7569af25b54793627122a3d5f70b7e7
+- card_id: palace_of_crimson_shadows
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: palace_of_crimson_shadows.jpg
+    sha256: 6163a99613c689a304bee07ba131694f55cca2be4490f7d6d4931d6044c2602f
+- card_id: pull_the_string
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: pull_the_string.jpg
+    sha256: 5d7a802d7adf246139052671612e7b47ad61b69dcc1d130448c5ead1224355af
+- card_id: seeking_the_guilty
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: seeking_the_guilty.jpg
+    sha256: aa9842527186f92a65edef2f9322eac3a9b946c6a9b23e44fb8318750802e114
+- card_id: selfless_defense
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: selfless_defense.jpg
+    sha256: ff58cc556c152264d92f7c12f15892945893e49ac3abb18e99540d8d2fa27fd9
+- card_id: seven_waves_mercenaries
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: seven_waves_mercenaries.jpg
+    sha256: 01171fea3f99a23ca4b9f806a7eac8219eb30039c5f48025011e1a61f4414e09
+- card_id: sharpened_naginata
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: sharpened_naginata.jpg
+    sha256: df7889cb62797288614f4d54641b0d28db89349e7566a3cef2029c5db96cbc04
+- card_id: shiba_ningen_experienced_3
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shiba_ningen_experienced_3.jpg
+    sha256: c3c2e3cc5db93832986bfc935b8a0433e6eb1c21fec15c1fc2a9281f615aa224
+- card_id: shiba_sakaki
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shiba_sakaki.jpg
+    sha256: 6abb514975d8314274ef0d7280ec7d23e70bac906177121797f4d5ec11b9d0d8
+- card_id: shiba_yukihito
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shiba_yukihito.jpg
+    sha256: 3b599fff50abedebba9e63b5e587811ee234f87b358751a700af0ee3d9f2c363
+- card_id: shibas_guidance
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shibas_guidance.jpg
+    sha256: c02522ce9b831535f27f078c3c48bda2c5271f1e2ca065bf59892865c3deac54
+- card_id: shielded_by_tempest
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shielded_by_tempest.jpg
+    sha256: a296781c47cf7a8a2f52601d37d846e13a14d3827cc4f74e6294c95b93a0ad58
+- card_id: shinjo_hansu
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shinjo_hansu.jpg
+    sha256: f1fd28ecf711f733152da72fd20ecfc0fb9a577d98750bd5140e5d24981691e6
+- card_id: shinjo_rina
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shinjo_rina.jpg
+    sha256: 83034874292e6d48adda97ed162499db6d3dcde3db76500bcfe7dbe373aac8ed
+- card_id: shinjo_scouts
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shinjo_scouts.jpg
+    sha256: b2eb730507ba60847ec95ad589717f24da883c371aa42d10f9c7b23994d39b15
+- card_id: shinjo_tae_hyun
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shinjo_tae_hyun.jpg
+    sha256: 0ce056eeeb82dae1df9c0405af8d335b6089ed6d9a70d8fcb64a125676b748e1
+- card_id: shinjos_guidance
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shinjos_guidance.jpg
+    sha256: 0a1971a424fe4ca3d9440f46d7598a5aa1f7f325fde7e21271a593360884a6d3
+- card_id: shosuro_ohba
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shosuro_ohba.jpg
+    sha256: 57db0e0e0ddb2868e54285ca88a241eb749e8df19431ed886961a87f15d3cba7
+- card_id: shosuro_sogetsu
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: shosuro_sogetsu.jpg
+    sha256: 33d1c9f1bff7c321362a22e2ca5e1272e7af620707e3b254488803147e464be8
+- card_id: soshi_yoshihara
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: soshi_yoshihara.jpg
+    sha256: df055d0ce16cb7ca9a0da3cf1f84eef417dde3a27f8431543794d7571c800c1c
+- card_id: speed_of_the_blade
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: speed_of_the_blade.jpg
+    sha256: 8d4471bd1e5c179d8a86173685ba492a7be6da5e2c61b0b7e8e62b863e64251b
+- card_id: spiteful_obstruction
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: spiteful_obstruction.jpg
+    sha256: ec23ad5f68b55b8313efb348d7b9793a2c264cd8d823833c0c929daf49d52227
+- card_id: storm_filled_sails
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: storm_filled_sails.jpg
+    sha256: 9f88d6011710eb30d69bf9943efc58a03f28b6939508134f6c8a872398b571f0
+- card_id: strategic_strike
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: strategic_strike.jpg
+    sha256: ff91ad48d4141820fa2b3f953d87d764f8c79a47a04ae4bf8eba3baeff7ca739
+- card_id: strength_in_honor
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: strength_in_honor.jpg
+    sha256: 46814068527d280a5daad1bfcca3fd27b240868347514f57639e8fafba3106cb
+- card_id: strength_in_terror
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: strength_in_terror.jpg
+    sha256: 6382775d0cf114af6e2048ff7224f2c43d02a9745d438178f37ee455e24ee035
+- card_id: suitengus_gateway
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: suitengus_gateway.jpg
+    sha256: 146a29e324457987e0fe91b266d6e6ef3e97338eaacea64607e93742d3b15dab
+- card_id: sympathy_for_the_assaulted
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: sympathy_for_the_assaulted.jpg
+    sha256: 15358349f407df7c9fd0dc6570ef3446d73bfc8b484661927894af0899a5b761
+- card_id: synchronized_attack
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: synchronized_attack.jpg
+    sha256: ecfbe8fb9c9be90df77554cacbe4f076146125c411383383e5966ae09da1637e
+- card_id: talisman_of_chikushudo
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: talisman_of_chikushudo.jpg
+    sha256: ab734b73ac66f9cdeb07d3a2d96f0d04feefbd4ad7e3b2f4cf0d872f15b922de
+- card_id: talisman_of_gaki_do
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: talisman_of_gaki_do.jpg
+    sha256: 0c554842d340b644f2bff924a86bdb58b6b43c34c4d2e0c53cdc0ef46b0fa289
+- card_id: talisman_of_meido
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: talisman_of_meido.jpg
+    sha256: b1f62f96b25cffcd1f4090c66a862acd0c1abfba06f82aa18dc2c573329d3004
+- card_id: talisman_of_tengoku
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: talisman_of_tengoku.jpg
+    sha256: 8a9d165c58317c39e616dea5c7e0d288675308e2ac3c0ffff7e2d09631340545
+- card_id: tempered_no_dachi
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: tempered_no_dachi.jpg
+    sha256: fe35f8cb6f083b680e7710d3bf13f305475182c89fa42231d19177bfb2225c48
+- card_id: test_of_sincerity
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: test_of_sincerity.jpg
+    sha256: 88157acf3b1db85b425339ea8f13db62a06f9fba7949a29c2d73d8f7eb2c0821
+- card_id: the_direct_approach
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: the_direct_approach.jpg
+    sha256: b036b447e0feaab3ea19d4462f4428a40d9694f7cef294cfd65a6f649408231e
+- card_id: the_earth_answers
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: the_earth_answers.jpg
+    sha256: b358591584be3d50cca5b0d92446696dcf63398c715fe33e73fcc3d21b676c13
+- card_id: the_fingers_of_bone
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: the_fingers_of_bone.jpg
+    sha256: 0495e572394f4524e4e01355b5823e2721f90d75b26e799c7e29b8b1ce768a5d
+- card_id: the_fire_answers
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: the_fire_answers.jpg
+    sha256: c0acc7b11550f6315d2593c0ad10d25c18f9e47e4a174fcbe4012380caa8f805
+- card_id: the_lost_path
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: the_lost_path.jpg
+    sha256: 626e01b5f07cb6fba26bf391700316f4a54f5711702008a2cabebc1296e4c01c
+- card_id: thorough_preparations
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: thorough_preparations.jpg
+    sha256: 79a41a851d8c4768cc4bdc3fa1b2dd96ee6bd8871b8b9232fbcf57a65deec030
+- card_id: togashi_akagi
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: togashi_akagi.jpg
+    sha256: d8ce6a1942cd11b15fb2f520fb562b7ab3fc44c3511fa99fb429cb4b9563010a
+- card_id: togashi_kazuki_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: togashi_kazuki_experienced.jpg
+    sha256: 7aac213d35dd5b260470b9268fc90299062c3a7e4be3dcd6a77ab8b10840f272
+- card_id: togashi_satsu_experienced_5
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: togashi_satsu_experienced_5.jpg
+    sha256: b64e52fb2382a421647786d431fd36a980658c1c82b56ee46f39c1cfde4136d0
+- card_id: togashi_shintaro
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: togashi_shintaro.jpg
+    sha256: d6e0cb13892ed66e84c7c1ad0429093d605b8e3e0b2da24976be90c13cf51ddc
+- card_id: togashis_guidance
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: togashis_guidance.jpg
+    sha256: c4e851546cb9d3be7e775b8d834b309bd83f3908b3d0588503504d4a6956101e
+- card_id: torao
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: torao.jpg
+    sha256: ae931173d657a9ee16fee1c7a4b2db9bdc73780ff3f14082216dc04231ef2b2d
+- card_id: tsuruchi_mochisa_experienced
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: tsuruchi_mochisa_experienced.jpg
+    sha256: 619d12a88fc3e932aa67fce3cfbac43be65320b6621629d7003d00ca9436368c
+- card_id: tsuruchi_nabeta
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: tsuruchi_nabeta.jpg
+    sha256: 3ec751085c7d449cebcfb0f8e4cda529dec955a12730092999e3932643d7e8bd
+- card_id: udo
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: udo.jpg
+    sha256: 63b88b07ae4fcd97b7f7cc1d3bd688490f0e54d6d4e0eeb0277f35471230eecc
+- card_id: unclean_sacrifice
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: unclean_sacrifice.jpg
+    sha256: dc8014081af031718b4537eba0ae32514dfda1e1cb7ab75ee5ec941c19b8f8fb
+- card_id: unshakable_resolve
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: unshakable_resolve.jpg
+    sha256: 9de7219604e89d5665770c802b6ecfe8ea5759037525d8e528019fa7988a43c5
+- card_id: untaken
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: untaken.jpg
+    sha256: 6e713e5053b76e292a103644f38b459a02b2ef9f89ba8c6d149124ac2160cd0d
+- card_id: untrained_scouts
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: untrained_scouts.jpg
+    sha256: b1c473412d81f8dfaf580e40c5254738cf70ac7c8be100be3343f981763d96fb
+- card_id: useful_connections
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: useful_connections.jpg
+    sha256: f5735bb521f763009ea778caadb456a6f5a8d737f3ffd8e38bff31650b42b8cd
+- card_id: uzaki_no_oni
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: uzaki_no_oni.jpg
+    sha256: 8549bbc40f17a599a280549bf9d0b18d6b31fefa62b130cf41ca8c883a8d1349
+- card_id: walk_in_shadows
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: walk_in_shadows.jpg
+    sha256: 58fe0256db7734c13ba0f9ab20d7e26a06fd076fd8a1f521366009c61ac43a19
+- card_id: wall_of_honor
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: wall_of_honor.jpg
+    sha256: 108faac64dcebaf7ba9f2f63dc629726cee05211bb65118d22a8a7930ecae2b0
+- card_id: wandering_caravan
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: wandering_caravan.jpg
+    sha256: 56916d3370b008ef7b525d17d0002344049da157e6970aa5573ef5b7df98a085
+- card_id: whispers_of_the_dying_moon
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: whispers_of_the_dying_moon.jpg
+    sha256: 95aa79b399e237fb4e2acf251e820457ca319b0bd2299c657972337a9a4055ed
+- card_id: whispers_of_the_dying_sun
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: whispers_of_the_dying_sun.jpg
+    sha256: ac523cd825a3dc79d24a675a481c4e9beeca02e75077e4f291469effd4ccbde3
+- card_id: wrath_of_the_thunder
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: wrath_of_the_thunder.jpg
+    sha256: c435c3274e045e4b09b600217c3ba8e8ffb7085d31eca22e81e96ab405e2a804
+- card_id: yasuki_otsuka
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: yasuki_otsuka.jpg
+    sha256: e4d5e65f4a91aea1b84266ac4a1130fe2829ba5ce2985df62c689ae9c5ce299f
+- card_id: yoritomo_eihiko
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: yoritomo_eihiko.jpg
+    sha256: 8a462b580eb86e5b6c597c025d455aa78003c1f2a0abea3200af5901fdd165ac
+- card_id: yoritomo_souhiko
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: yoritomo_souhiko.jpg
+    sha256: ff3d531ff7b84be46e7662492d536d51dfe8e25168b28c9a2274f39bf0cea96f
+- card_id: yoritomos_guidance
+  printing_id: path_of_the_destroyer
+  files:
+  - role: front
+    file: yoritomos_guidance.jpg
+    sha256: f7fce807adabdb426e9eefd12b2cb849d5b124610e2f9641b450b6ea79bd7ba1

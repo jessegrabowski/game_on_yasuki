@@ -1,0 +1,332 @@
+set: Storms Over Matsu Palace
+images:
+- card_id: akodo_matoko
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: akodo_matoko.jpg
+    sha256: fe4f9a4ef56e7252665ed93ac320a922ac3afb7867408528c45ddd23971a653f
+- card_id: another_time
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: another_time.jpg
+    sha256: a779f42a66d05bd2d647cc1a5bccf09a1d3f2920068f4f42658257d3ebb9fe47
+- card_id: block_supply_lines
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: d68cbf52b9b6948bc0ffbe1e095e8cf7aa32745e2a17088cb17651910c90c3f2
+- card_id: bloodstained_forest
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: bloodstained_forest.jpg
+    sha256: 416b522e390820910d46643408e18e55eaab25da5578ba578382418d7e68dd13
+- card_id: careful_planning
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: careful_planning.jpg
+    sha256: 46e0d9d246959ac06a7f79d34c5a1c02e197e9c9053b9cb0db5dc3a7aaa4df59
+- card_id: charge
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: charge.jpg
+    sha256: 38f941f4d2dd555f03c8321dd8bdad9b64048a7740e453641727fc599f827937
+- card_id: copper_mine
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: copper_mine.jpg
+    sha256: bd9a2b1f8fa2ad9c99b82d54aeb1c1bdef120aa22f2f0bdc439e3544e6001eba
+- card_id: deadly_ground
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: deadly_ground.jpg
+    sha256: b47968e6c8902d91a026a76b93fa7b479cb7bac4a66c7271e362643568e41c4c
+- card_id: diversionary_tactics
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: diversionary_tactics.jpg
+    sha256: 542b8a33fa1e25a6e8a31bf20f50a1a9d655608607db25302751cfa34bae1865
+- card_id: entrapping_terrain
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: entrapping_terrain.jpg
+    sha256: 3fdc63d975752cd80853b7a3d2f42527579f6eef11b3481f3735ce07c8ce23f0
+- card_id: focus
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: focus.jpg
+    sha256: 70c5c6ec0a80e74dd169cd956786ba2c358b2b7e8c96d97af25f78b442030e54
+- card_id: fog
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: fog.jpg
+    sha256: ce6dd57000bd3e80871c9dce1dbc4a9a70879866d7de7e04790a1e19bf0afd57
+- card_id: glimpse_of_the_unicorn
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: glimpse_of_the_unicorn.jpg
+    sha256: 592620bfcbe64d798ac388d2fac88ec994bba6ebbcefdd9d9c12c91174c3e359
+- card_id: hawks_and_falcons
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: hawks_and_falcons.jpg
+    sha256: 6b280c130d801fc72672bfd6ef262e9b6cb87c3469e9d629369ecf54c28315e5
+- card_id: heart_of_the_inferno
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: heart_of_the_inferno.jpg
+    sha256: a0087d1fc3814c7722e42502c2f1731adf2d5de886697c566341dcf4d1b5fb22
+- card_id: heavy_cavalry
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: heavy_cavalry.jpg
+    sha256: ca92311a2d2150de90e65345be9c777bc400a3cbe6fedf7de6953fb6a0ebe164
+- card_id: heavy_infantry
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: heavy_infantry.jpg
+    sha256: 61d9f786be24ceea96cf1d273938c1e744158b2090ec7fed0ea798bb7a84cbe4
+- card_id: higher_ground
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: higher_ground.jpg
+    sha256: 181e3ed716a29a34ea11cf779e315a99c065097b4d237f7c44e1c424f29ac791
+- card_id: horsebowmen
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: horsebowmen.jpg
+    sha256: fbf9005dd546fb94e0a29c8399bb82e5f6cf5c63396f935f060c23ce824f76a3
+- card_id: hurricane
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: hurricane.jpg
+    sha256: dd9b466e617a81a6d643e177d82796f464e96ee0c22a507710a31a036ff1ddd2
+- card_id: iaijutsu_duel
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: iaijutsu_duel.jpg
+    sha256: 938683c9fc7b27d9fe2ffd62541cc320685cb1e88702ec90a8cdb9be04a05f16
+- card_id: ikoma_gunjin
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: ikoma_gunjin.jpg
+    sha256: 360c95b7c2ee0c388a5958c606e75444187b31d00545f201fed7792fd7f52f15
+- card_id: ikoma_technique
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: ikoma_technique.jpg
+    sha256: b9239118dbd1dc1a109e8148a1fbb059415070e4c2d5229ef0d451cca5d45c68
+- card_id: ikoma_tsanuri
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: ikoma_tsanuri.jpg
+    sha256: f0e2e6eadb04beb18df7e160e31d9bc7a07673ed574694069bbc7a24f99df163
+- card_id: iuchi_daiyu
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: iuchi_daiyu.jpg
+    sha256: a312c7ce5382c2e4381688b06c771a0446c38d5e6f92f70ddcf7dd02d5866af5
+- card_id: jade_works
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: jade_works.jpg
+    sha256: 6ae1b4c4df1c17066113f97bfedfa8d7a953835577c329cb8bd98251e0596ef9
+- card_id: kabuki_theater_troupe
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: kabuki_theater_troupe.jpg
+    sha256: 0b754d71c31d8d70465010a7f80f192b53b621df26267d2ac20f239cc1e9773d
+- card_id: kitsu_okura
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: kitsu_okura.jpg
+    sha256: 5d9b8175284e177c3e322750dbfd9a119565e5c7891c1d320c47d412d200257e
+- card_id: large_farm
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: large_farm.jpg
+    sha256: 7e7dcc7260491d4ffe740879b628f99f0e1409718bc5b5762f84fadb58856392
+- card_id: light_infantry
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: light_infantry.jpg
+    sha256: 51dec249f9c6f59cbf3f1d0832a5d2bef69a4a53968b4fee33db3544d3eb9409
+- card_id: matsu_ketsui
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: matsu_ketsui.jpg
+    sha256: 0d2ae0aff31820a510a83e819cc722198080fd4e0e3ca18d3bbb29ac478e85e5
+- card_id: matsu_morishigi
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: matsu_morishigi.jpg
+    sha256: aebe28d32997a50bcf450ac5e8198a1daffc125ce929f614270fedd852f35644
+- card_id: matsu_suhada
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: matsu_suhada.jpg
+    sha256: cd114b35fe30223ffca19252d0828cacb933619eb597df8e6f6c29ed4b32a819
+- card_id: medium_cavalry
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: medium_cavalry.jpg
+    sha256: 9c5803a8ef032f820d9b68e4c81cfc1704eac2d98790a4d8c1bff21d2475fd90
+- card_id: medium_infantry
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: medium_infantry.jpg
+    sha256: 933314df40c789fc7347a6b709b5f5750a311eeb64c3cd6535936a0d48146b58
+- card_id: moto_yesugai
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: moto_yesugai.jpg
+    sha256: 92f251b24e5e13fc99d81745c68db940e62ba94d54ad47258654905a9ab5bddd
+- card_id: mounted_spearmen
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: mounted_spearmen.jpg
+    sha256: 1a164576ae7272b52381bd040735f511537c753060bd564d337a9ed8802dd711
+- card_id: new_years_celebration
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: new_years_celebration.jpg
+    sha256: 45d884b98d195554a504cf6d4cfda3fa4890cabf134e3fc88a33e3dd2828f55a
+- card_id: otaku_kamoko
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: otaku_kamoko.jpg
+    sha256: 9a687e7585ae343d7dac006c62c99ffcdbb82465e270f2b6305f4b5b910330cf
+- card_id: retired_general
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: retired_general.jpg
+    sha256: e4543508e210c7c2ade6fcdd8c9cb92456620e81ac25e4c82521e920ae20b799
+- card_id: shinjo_hanari
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: shinjo_hanari.jpg
+    sha256: eaaa63fd88317e49aec78ecadd580172096d4f6ce033ebcba1bbf54166c8886b
+- card_id: shinjo_sadato
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: shinjo_sadato.jpg
+    sha256: 90f64b5a3906df4c83d70c443b465d6e1961ea72d7da6754c3880a8e0d4e9880
+- card_id: shinjo_yasamura_experienced
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: shinjo_yasamura_experienced.jpg
+    sha256: 84bb67fa3e56d615a8a37f0dfa5de8b00ee754a0803ab62475a8e30f0facbf7e
+- card_id: silk_works
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: silk_works.jpg
+    sha256: 4313cb516b0559ef3aafb00022b126aad5aa7e21be2aa6e2068a6efa2d4555e6
+- card_id: small_farm
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: small_farm.jpg
+    sha256: c54692a4061a49d3ad68bddfbc5ddd185301a6fc855eef647a262e15f642d1bb
+- card_id: spearmen
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: spearmen.jpg
+    sha256: 1b8584d81559726c6411e25b4f030fbf419c8846b55b5465af65a5586728e1ed
+- card_id: stables
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: stables.jpg
+    sha256: b21fd87d19cd671c307443d2af59f41ee35e7c4351bc98dfdb561fe74e75d6ed
+- card_id: stifling_wind
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: stifling_wind.jpg
+    sha256: 3d2d04de11d7327bcebbb4f8b3ef9ba063fad91e3c02dfe9c417cefdb362e9a3
+- card_id: strength_of_purity
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: strength_of_purity.jpg
+    sha256: 99c7f14763963ce2a4483b0f1adca74dae89a6895b0decadb5bcae761e3caa23
+- card_id: strike_at_the_tail
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: strike_at_the_tail.jpg
+    sha256: 6c06716f1e01e37b4d39e4efd366c86fe35248629e4fdc4cb4544735d6d6f854
+- card_id: the_ancestral_home_of_the_lion
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: the_ancestral_home_of_the_lion.jpg
+    sha256: 5fd0028a628afa19074c795423fea1abae3c0247cae168cc2f7b68040987654e
+- card_id: the_fires_that_cleanse
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: the_fires_that_cleanse.jpg
+    sha256: ea7b5b2bc1dd829b096a7748237ddc7c681c34594b8951568dd6459844788a16
+- card_id: the_provincial_estate_of_the_unicorn
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: the_provincial_estate_of_the_unicorn.jpg
+    sha256: efd32cd25fe6775818063ff426019f5440c671acbdccac6ee9969dc85554e4c5
+- card_id: unexpected_allies
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: unexpected_allies.jpg
+    sha256: ff6dcbdfeed400cb2271994614b0ba2160328ea1c2aa5262829feb7bc77b54a4
+- card_id: utaku_xieng_chi
+  printing_id: storms_over_matsu_palace
+  files:
+  - role: front
+    file: utaku_xieng_chi.jpg
+    sha256: c5dd8cf33b53d6c030b575420da6edab097f64b70ba8ff34242f0236a1d7e273

@@ -1,0 +1,314 @@
+set: Test of the Emerald and Jade Championships
+images:
+- card_id: akasha_experienced_2
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: akasha_experienced_2.jpg
+    sha256: 245d5a969e0a74e554a346ab4e27f1aebb349126538b39ed3d6539987b87a241
+- card_id: bayushi_arashii
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: bayushi_arashii.jpg
+    sha256: 8644361760f266e51dd580e06794a063a92fd4cab396335b959b48e88464a37c
+- card_id: bayushi_norachai_experienced_2
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: bayushi_norachai_experienced_2.jpg
+    sha256: 750edf543e7b68dadee7f3188f2a038434f2c8c4fc07f9482ef688bc5902fade
+- card_id: brisk_economy
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: brisk_economy.jpg
+    sha256: 1ce6d04fb1a90c84cf0e57a56123aa599d373b04b90d9c3f22689356b70b8828
+- card_id: caught_in_the_act
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: caught_in_the_act.jpg
+    sha256: 519683ed60cc522a712836dd41ab50a42418f69b4553e4649f93c864c1484469
+- card_id: daigotsu_eiya_experienced
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: daigotsu_eiya_experienced.jpg
+    sha256: d377bd44a13d4dcdb2f3fe8b9ae5d2a12448e9505cc1644380e7765659814df6
+- card_id: daigotsu_kanpeki
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: daigotsu_kanpeki.jpg
+    sha256: 1496ba6db6abab02bc0932a97784ec49c7c517e74f9b67395afe2173ad411ff2
+- card_id: daigotsu_sachio
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: daigotsu_sachio.jpg
+    sha256: eee3a4cb6f371ec5fe8869b3a59a58f56305123db1e5ee206667eebf05e1a5ea
+- card_id: death_at_the_mikado
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: death_at_the_mikado.jpg
+    sha256: ae35470f15dd4ae6ebdd6eb8f946f18128cef09f18bd10e6b9a7edf0030f8307
+- card_id: doji_toyoaki
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: doji_toyoaki.jpg
+    sha256: 3716f242a18c047b40b5d0a0ec26f147e59060fe768c8d2d66fe50bec1c2b317
+- card_id: doji_yasuyo_experienced_3
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: doji_yasuyo_experienced_3.jpg
+    sha256: a232b460498e6e1ac6ac91b89c425fb3ad339753108c67f846612f8afb08ac66
+- card_id: emerald_champions_mempo
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: emerald_champions_mempo.jpg
+    sha256: 2a9847899f35b3dfa5d200a6e0209731e0f66f9d7242cc37c8ea4e8ba7a3b715
+- card_id: hida_haruko
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: hida_haruko.jpg
+    sha256: c6a71046df9165a7e6aa9d4782c378ed7509444b6b6b7b5f8267307c3011c4ae
+- card_id: hida_sozen_experienced_2
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: hida_sozen_experienced_2.jpg
+    sha256: 207e967c5ff246c44b463162ee64fb471930953d6a34ae7c62d78c0b3979dc6f
+- card_id: hida_yagimaki_experienced
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: hida_yagimaki_experienced.jpg
+    sha256: cac349da1aa1ccc240f2d94f63a7ae074b00f39e8a9649d29c142095adf6c911
+- card_id: hiruma_todori_experienced_2
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: hiruma_todori_experienced_2.jpg
+    sha256: 20597efe6831f26244b448e899b9b63e514bc8912f8232898de7a6383ce1e828
+- card_id: ikoma_otemi_experienced_3
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: ikoma_otemi_experienced_3.jpg
+    sha256: d429c81b026502f27655073ccb8cb5fc81a08fa390c5182d3d39690b258e47f8
+- card_id: isawa_kokuten
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: isawa_kokuten.jpg
+    sha256: 1c8c353566f776bb423ed2fbd3996e3eefaff0b06b529ecedb2b2610c7ee0964
+- card_id: kabuki_show
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: kabuki_show.jpg
+    sha256: cdf1b69fbd21c1d87e4dea2fee8349387ef13e6eaba11ccae39507de0f4e790e
+- card_id: kakita_noritoshi_experienced_2
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: kakita_noritoshi_experienced_2.jpg
+    sha256: 04719c185ea598dc3993af6de5297cf356944ebab9832b5100f716e166f1af87
+- card_id: kitsuki_iweko_experienced
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: kitsuki_iweko_experienced.jpg
+    sha256: 1bf865d8d61cf0ee1800dd56a6df2c16f5235efa2305361314993709a4a672a3
+- card_id: magistrate_station
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: magistrate_station.jpg
+    sha256: d55de7b9d0b4aa165d2ada37c1730eab1433a428978077787f855a29c8ad589d
+- card_id: matsu_robun_experienced
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: matsu_robun_experienced.jpg
+    sha256: 5de37d3c31d49cb742659f77240c08339dbebdb4533bd88a3a25bd1b6fa9dad1
+- card_id: matsu_yoshifumi
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: matsu_yoshifumi.jpg
+    sha256: 762f9ab20d92a44343e85e21926a047d387e0a25cd56ce56390c495d64ab1bbf
+- card_id: meanwhile
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: meanwhile.jpg
+    sha256: 5ce25cd8767cc4a1edf7d2a5532e9dade332a58f193871c964533055b4f3732a
+- card_id: mikado_invitation
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: mikado_invitation.jpg
+    sha256: ded8a42d59025616c073fffbd40ce91b701b5b97ec3d26266f1656936429b6b6
+- card_id: mirumoto_agito
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: mirumoto_agito.jpg
+    sha256: 3d347913acf4c9f63e984ab5e8fa4c34fa0e6ae90e7fd720737f6b4b02017427
+- card_id: mirumoto_narumi_experienced
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: mirumoto_narumi_experienced.jpg
+    sha256: 7167742d8faf3556d92089f3c3698ad8abbc91ae9cbd2bc34d8f858a2e2076ec
+- card_id: miyas_mercy
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: miyas_mercy.jpg
+    sha256: dae4aa437aaeb6e3fec26a6945da031ecdb72241b52f1dbce86a7abc4a5f302a
+- card_id: moto_hotei
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: moto_hotei.jpg
+    sha256: 5e3fbb9e15cc26e95023e3286c71aab11e0119c7f403cd056fafd9995838e7fb
+- card_id: night_silk_poison
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: night_silk_poison.jpg
+    sha256: bdf0f3bdfdb9d694c4460f0f7da08efbc14f2801fe1ad60aa6a8f104f5744b95
+- card_id: ribbon_of_success
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: ribbon_of_success.jpg
+    sha256: f279ef11b8f4f16e37c5536b540b5b05ecdf16bbcd8d82ca92eaa084cc9411c6
+- card_id: shiba_danjuro_experienced_2
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: shiba_danjuro_experienced_2.jpg
+    sha256: 3a5825b942312a046f2ac568c3f4ece45f002fdd38d938d14a138906f38f38d6
+- card_id: shiba_yoma_experienced_3
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: shiba_yoma_experienced_3.jpg
+    sha256: c6be5700d118374cbcd42fd9df01582de1391c82413612180b65f652142c2240
+- card_id: shosuro_jimen_experienced
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: shosuro_jimen_experienced.jpg
+    sha256: 369d20d702de84da4ab1f7a2624f4ed594109f1ae8c7040bf1d77d3b73b0e51d
+- card_id: test_of_etiquette
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: test_of_etiquette.jpg
+    sha256: cd40eabe43d7e00c860b09f7648d99c8354a4e2528e354af28b77439abcb59e2
+- card_id: test_of_investigation
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: test_of_investigation.jpg
+    sha256: b49d4e68faec995b960fc61de3c52c7fe1e40e7551601897f2094a2b3b2b3f57
+- card_id: test_of_law
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: test_of_law.jpg
+    sha256: 5b13f3742ab77551e0c7f2677b1348a00284cf29d29b67efbd70b06fffbe3bb0
+- card_id: test_of_leadership
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: test_of_leadership.jpg
+    sha256: eb207f87c3794ee4f94db56e696bc000bcccee68ae16b8a2cc4e2d1733e6671c
+- card_id: test_of_martial_ability
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: test_of_martial_ability.jpg
+    sha256: 5031fb419dbdeee3d0ea4bac639ee39a2f336c3d9fda119d961539041ff7c83c
+- card_id: test_of_resources
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: test_of_resources.jpg
+    sha256: 3ac5edefd01b504a42fd56ea300a7a12777f4a756cc17b0118310e61e6e0b2c9
+- card_id: the_kamis_justice
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: the_kamis_justice.jpg
+    sha256: c496bc600ecbe92b0c41a1b8abe92adc4ecbc8375032e60039b4141b09d2360a
+- card_id: the_khan
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: the_khan.jpg
+    sha256: 99891bfa499c3eed76caca7ff423b9ae8942492a3aa29ad7d71c64fb82f909c9
+- card_id: the_mikado
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: the_mikado.jpg
+    sha256: 647e1695a9123990cacb1c9f8339208b503c59ae47fe0082ecb33f506b4e2e6d
+- card_id: the_saga_of_taki
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: the_saga_of_taki.jpg
+    sha256: 40f3c73388790cf1be1c7bf12a7457a35e0b6033773d0f0a4785e3959d4e4798
+- card_id: tsuruchi_etsui_experienced_2
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: tsuruchi_etsui_experienced_2.jpg
+    sha256: 5c85ac7d9ccae7e62077f98fd5eb98fd23eeac18e368a6ea64be9bb75922c984
+- card_id: tsuruchi_kaya_experienced
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: tsuruchi_kaya_experienced.jpg
+    sha256: 3e11b2aaba7bed7abbd66aa0df1249d54c51f808b27d0b9bdd5104f7614d11bb
+- card_id: tsuruchi_ki_experienced
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: tsuruchi_ki_experienced.jpg
+    sha256: c32e4c52f52f2d402b51d7522a36ef76068b47b13a7247490d23848ab0a02196
+- card_id: unauthorized_duel
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: unauthorized_duel.jpg
+    sha256: 6e8aa843d80c1de4f7cdf7d9e607b8a788a3ccd2662154cec07a35036264edb5
+- card_id: utagawa_experienced
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: utagawa_experienced.jpg
+    sha256: ea3335ec7db3519622a8121d1f03a6ad6af55327fca0168fe62c1697c741f65d
+- card_id: wheels_within_wheels
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: wheels_within_wheels.jpg
+    sha256: c207f6de3c4c38939154a429b076966639f04aec301afc66f3ba732cf2d8dc58
+- card_id: yoritomo_kazuma
+  printing_id: test_of_the_emerald_and_jade_championships
+  files:
+  - role: front
+    file: yoritomo_kazuma.jpg
+    sha256: 61b9dc04245879d57d22f2b32331d86c67d5a8df9511ff080589370e5ef759b8

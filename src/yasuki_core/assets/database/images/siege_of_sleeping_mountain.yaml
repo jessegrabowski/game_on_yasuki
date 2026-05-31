@@ -1,0 +1,380 @@
+set: Siege of Sleeping Mountain
+images:
+- card_id: another_time
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: another_time.jpg
+    sha256: f7cb9e58d2f1ce41274e87ac7c4a8c2fcfc4f07446027c760c64275eea9b4403
+- card_id: arrows_from_the_woods
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: arrows_from_the_woods.jpg
+    sha256: d4579dfabf074d7406e30be6d5947568bcb1afb56ec7e9e0136545dfe755c467
+- card_id: balash
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: balash.jpg
+    sha256: f6daa0c06d42ca38c3aecfae7ae43a07c03f743ed1ebffef543065a6402b9af9
+- card_id: basecamp
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: basecamp.jpg
+    sha256: 316f4e97685640c128d54cd129174185a49c2a5ac9008f41106949bef59d0ecf
+- card_id: block_supply_lines
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: 4580e833b6794fe495755037dddf7bf792030e996cc0a326d8bf440946d536b5
+- card_id: bountiful_harvest
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: bountiful_harvest.jpg
+    sha256: 423697a29cbd37d6b8e88d963c9431870a8709b57ae74029338275ddfad31fe6
+- card_id: careful_planning
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: careful_planning.jpg
+    sha256: a23d0964a534115e6004e409bfb81e9bc7a0e4a0528115deeb9462c28efc76f9
+- card_id: charge
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: charge.jpg
+    sha256: 63795661bc14237f7868c84c7ae5c2e41b81e631ad3db1991e5939c4ab6f635f
+- card_id: damesh
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: damesh.jpg
+    sha256: b42fd52f640e708f75e3d0682441f06bc55e57b7b802f3a6c6fd29805aca05ed
+- card_id: explosives
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: explosives.jpg
+    sha256: fdd9e26f0f82789c0cb500257162df17ad7f1f6ab9242e3fd65e938401d3a743
+- card_id: falling_star_strike
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: falling_star_strike.jpg
+    sha256: 19bc424f31c7802fc3cb2dc54cac79d366b065b989b8aaefe6e8a0ee06019f12
+- card_id: forest
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: forest.jpg
+    sha256: a8f7e1a1b9712290d638de3b1033d936ba9f6776416cc915171b133cba5a0272
+- card_id: ginawa
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: ginawa.jpg
+    sha256: 8365adff6b98f31f031d651b7862ea5e02b7c92b32e1f971c7d2638ceaa1415e
+- card_id: gold_mine
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: gold_mine.jpg
+    sha256: 4406a14f46365ca937bc3591df5dfafff01543503483e9c1189a5bd5a0fdc985
+- card_id: hasame
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: hasame.jpg
+    sha256: 6a2f50bfc4796d1b4da47fdbfe00715769dfd9e8697b181fe3ddc901f3b701d7
+- card_id: hawks_and_falcons
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: hawks_and_falcons.jpg
+    sha256: efa18479c6c4f23f113699af6e01417541d9e86efcd8175e24907c9ae1f7853c
+- card_id: heavy_infantry
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: heavy_infantry.jpg
+    sha256: ba444398aed24f24c92433f304efd55c90438233e456f8f4f53161b20e33a2a0
+- card_id: hitomi_akuai
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: hitomi_akuai.jpg
+    sha256: 3895afa405af4cf3ac4ffc490b3e31cd6a55ed42404a706eb07a1f1b1b064a6c
+- card_id: hitomi_experienced_3
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: hitomi_experienced_3.jpg
+    sha256: 344290cf44cff24a6081cf9ab6eca7264f9bd37d3e2c5ddc9b56a723c77bef58
+- card_id: hitomi_kobai
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: hitomi_kobai.jpg
+    sha256: 2fee5b5ebe6b8a8f014b43457d8db6673df07c3d8115a2e6330d1ab7fcde9a06
+- card_id: hoshi_eisai
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: hoshi_eisai.jpg
+    sha256: 4e34d2df2f48a63c1ac06511937e3df4b2b64647d5cd21c6ea9c08147456e641
+- card_id: iaijutsu_challenge
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: iaijutsu_challenge.jpg
+    sha256: 93aa4c1b91eb36dd01afaf2a585449ad136abee5b85d9b444b088b303a564ff4
+- card_id: iaijutsu_duel
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: iaijutsu_duel.jpg
+    sha256: 2cba7dec03d222b77b7da77b9c604ab5051fbc7e811f9e0cbd309a6eecddad3a
+- card_id: ikudaiu
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: ikudaiu.jpg
+    sha256: aff46e4851d51bec6ed0d9cae4f9bb80c4bb6c9a084c81c7d1cda7cd17fbc3a0
+- card_id: jade_works
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: jade_works.jpg
+    sha256: b2f677030c56a3c0c2de35ede1b410f708b6d35bb4d3d40380e99a452379fb4f
+- card_id: kirazo
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: kirazo.jpg
+    sha256: bdc269261088d652eb4da7984da837d572df562bc7437006f807431b22a44172
+- card_id: kolat_assassin
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: kolat_assassin.jpg
+    sha256: f8c60da3fd8dfaf60e0fe687ec005b6ebb97187fb65a8724a329786d9f3b18d6
+- card_id: large_farm
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: large_farm.jpg
+    sha256: 09e3a141e6db02f47492482f64a939680b0f445fa2a74318866ad8840fed7e63
+- card_id: light_infantry
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: light_infantry.jpg
+    sha256: 81559b75870019775aabf29598db09989b5f1ac401bb83824729d26898049e18
+- card_id: medium_infantry
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: medium_infantry.jpg
+    sha256: 18b15824c1907c6d83fb56177b1605d4188e2361537bf88baafd870d55013948
+- card_id: mirumoto_bujun
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: mirumoto_bujun.jpg
+    sha256: d562237f349d76f635e59f74740d1141e84b8378d5b600fbb49f73ca8ff5eb1d
+- card_id: mirumoto_taki
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: mirumoto_taki.jpg
+    sha256: 280d963b2d6ff46e3bdd73c5954871dddbc15a767ae4393774c811a186b765ca
+- card_id: mushin
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: mushin.jpg
+    sha256: 6b911dcf433812d0574536be3a2b713c58bfeac9cc7d2928558d5e7cb79fb0a6
+- card_id: naga_bowmen
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: naga_bowmen.jpg
+    sha256: 08fe33a605fbf63b420e9e886580a5e8370eec405285580156b62198d225c79f
+- card_id: naga_bushi
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: naga_bushi.jpg
+    sha256: 47a5da201a3ea0e8c5c98a278b68de07da80e20a8ca09a0311a9d9aeb7332542
+- card_id: naga_shugenja
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: naga_shugenja.jpg
+    sha256: d79297eeeee6a499e95876336a565296e05a6304a87713f537347693c93eec53
+- card_id: naga_spearmen
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: naga_spearmen.jpg
+    sha256: 8b928b7094e7f6e800f90b28b28db8917f6ac51014a1b2895c51e943b3e9af11
+- card_id: naga_warlord
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: naga_warlord.jpg
+    sha256: d0c3280651dbdc6bc3da954713ca91889d4821c21a79b8c364bbe7f5cae1209c
+- card_id: ninja_thief
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: ninja_thief.jpg
+    sha256: b766a2f2fd4692b1e00f9316a94be1bbfbe047680c9c89481e00cc0865028816
+- card_id: no_dachi
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: no_dachi.jpg
+    sha256: ea48622322448195c90530618530659e74e3d64f8535549be21d7d4de720db43
+- card_id: outflank
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: outflank.jpg
+    sha256: 3a21de5fb2e0c25b377d7921166dd352a0457be709d7255728fd0cc31b71e8a2
+- card_id: pearl_bed
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: pearl_bed.jpg
+    sha256: 31fac1040c8e5d6fbba0ad315908118d41c1cd465cbbb05c4175b89f59031447
+- card_id: prayer_shrines
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: prayer_shrines.jpg
+    sha256: 9ccf8a0aa6f7e0710dce05f82ab501f250d76b107f0d176c7f6b2346f6931aa7
+- card_id: qamar
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: qamar.jpg
+    sha256: 24e85020522ad76c1eb5329ffd213ae1ab41ec5a9378f0ec58697effcd9ca6f0
+- card_id: ring_of_the_void
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: ring_of_the_void.jpg
+    sha256: 74e35dae35f1a555fc1b3b95af52fc78e91de7f1547338664f8fc19d89ac2ba5
+- card_id: ryoku
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: ryoku.jpg
+    sha256: ea7c94bebd59c43a0a5fb23eb9e5e05dff02d15f4ba4c066a66d8ae8ff1c835e
+- card_id: sanctified_temple
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: sanctified_temple.jpg
+    sha256: 6290409d546c130029f22b4e6b3b068503eae6d70014559236362a90779e8b31
+- card_id: seppun_hotaitaka
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: seppun_hotaitaka.jpg
+    sha256: bbe84d439423aaa6c6694a3d303a5c47ef432cee200026daa31e58138d3e8239
+- card_id: shagara
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: shagara.jpg
+    sha256: 777891b6ea388e05d82ac9a1ada6a8f453924b1711f98de71ce425a344b3130b
+- card_id: shioda
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: shioda.jpg
+    sha256: ef1702915f1317b507eb9c51074f3daeedfa58a26f0186f0cb72614311d317da
+- card_id: small_farm
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: small_farm.jpg
+    sha256: 9c3ffa0f9a4a2db1600c74751e8c105e9b3a79aae995ee2c2d35ad45ee5fd72f
+- card_id: sneak_attack
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: sneak_attack.jpg
+    sha256: d68ce1a24da39381c2810adc2d6f39292e49c27cbadca5d25babcf0ad30ca717
+- card_id: spearmen
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: spearmen.jpg
+    sha256: fb22867aa68a2989308ab4a5ef6ac7e27e92a8096f5a13b3bf3976033deb208b
+- card_id: strength_of_my_ancestors
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: strength_of_my_ancestors.jpg
+    sha256: d689ce485ed1c2ea2683009df81a3e258a589d5ee0d0a393cc71be0f50176de8
+- card_id: takao_experienced
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: takao_experienced.jpg
+    sha256: a1e7aa832b73c2c8d81e9994a5490dda2c9844a976a7f4c4a97866b24d1c0a70
+- card_id: takuan
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: takuan.jpg
+    sha256: 9e6fc246c3b143ab04d85ff40219ce0968d931a0cd6cae3d072a91be680d5d1f
+- card_id: the_house_of_tao
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: the_house_of_tao.jpg
+    sha256: f4741ee7c428b2179849f47acbc6077ae704db5d23896da5f1a6884b74ef2401
+- card_id: the_mountain_keep_of_the_dragon
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: the_mountain_keep_of_the_dragon.jpg
+    sha256: 965b47e834d5c605078a56be3b5d3eae8ef266524b040e54a444ad47b242a718
+- card_id: the_naga_stronghold
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: the_naga_stronghold.jpg
+    sha256: 355e437d4f74dc6ff2013d7ec26ac39d3d6ed8569d04f40fa1d85572f5889997
+- card_id: the_palace_of_otosan_uchi
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: the_palace_of_otosan_uchi.jpg
+    sha256: fc2dbac094f612a44aa5c907111cb615d7675ae6249478e06b224acef4511f2a
+- card_id: the_turtles_shell
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: the_turtles_shell.jpg
+    sha256: 8845b4f7533ef32959b141ff6dd3ef82ae345b5873d3114a7d6c8e1ac75c7c54
+- card_id: togashi_hoshi
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: togashi_hoshi.jpg
+    sha256: 04c0b1e35a7e74fcfe69cf75375826253b9f9c6003744e657790a6733a8053c2
+- card_id: toku
+  printing_id: siege_of_sleeping_mountain
+  files:
+  - role: front
+    file: toku.jpg
+    sha256: 80408401e62c8866c2640e5afa8e9f20721084952123ffeefb9578df3c4baecb
