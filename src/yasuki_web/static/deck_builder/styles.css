@@ -449,9 +449,6 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   box-shadow: 0 4px 16px rgba(0,0,0,0.6), 0 0 1px var(--accent-dark);
   transition: transform 0.3s ease;
 }
-.preview-img-flipped {
-  transform: rotate(180deg);
-}
 .preview-placeholder {
   width: 429px;
   height: 600px;

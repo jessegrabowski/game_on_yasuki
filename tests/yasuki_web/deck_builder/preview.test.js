@@ -2,6 +2,7 @@ import { describe, it, beforeEach, mock } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { resetDOM } from './dom-shim.js';
+import { makeCard } from './fixtures.js';
 
 const fetchMock = mock.fn();
 globalThis.fetch = fetchMock;
@@ -10,6 +11,7 @@ import {
   initPreview,
   getCurrentPrintId,
   getCurrentSetName,
+  getCurrentFaces,
   showPreview,
 } from '../../../src/yasuki_web/static/deck_builder/js/preview.js';
 
@@ -19,7 +21,13 @@ const PRINTS = [
   { print_id: 30, set_name: 'Twenty Festivals', image_path: 'img/tf.jpg', flavor_text: 'Flavor TF' },
 ];
 
-const CARD = { id: 'card1', name: 'Hida Kisada', type: 'Personality', side: 'DYNASTY' };
+const CARD = makeCard({
+  card_id: 'card1',
+  name: 'Hida Kisada',
+  types: ['Personality'],
+  decks: ['Dynasty'],
+  clans: ['Crab'],
+});
 
 function mockFetchPrints(prints) {
   fetchMock.mock.mockImplementation(() =>
@@ -105,6 +113,29 @@ describe('preview rendering', () => {
     assert.ok(el.innerHTML.includes('3'));
   });
 
+  it('renders type, clan, and deck rows from the new array shape', async () => {
+    const card = makeCard({
+      card_id: 'multi',
+      name: 'Test',
+      types: ['Personality', 'Item'],
+      clans: ['Crab', 'Crane'],
+      decks: ['Dynasty'],
+    });
+    mockFetchPrints(PRINTS);
+    await showPreview(card, null, '/api');
+
+    const html = document.getElementById('preview').innerHTML;
+    assert.ok(html.includes('Personality, Item'), 'joins multiple types');
+    assert.ok(html.includes('Crab, Crane'), 'joins multiple clans');
+    assert.ok(html.includes('Dynasty'), 'shows deck');
+  });
+
+  it('fetches card detail by card_id', async () => {
+    mockFetchPrints(PRINTS);
+    await showPreview(CARD, null, '/api');
+    assert.equal(fetchMock.mock.calls[0].arguments[0], '/api/cards/card1');
+  });
+
   it('renders flavor text from current print', async () => {
     mockFetchPrints(PRINTS);
     await showPreview(CARD, null, '/api');
@@ -171,5 +202,41 @@ describe('preview rendering', () => {
 
     const el = document.getElementById('preview');
     assert.ok(el.innerHTML.includes('flipBtn'));
+  });
+});
+
+describe('flip faces', () => {
+  function mockFetch({ prints, backs }) {
+    fetchMock.mock.mockImplementation((url) => {
+      const body = url.includes('/card-backs') ? { backs } : { card: CARD, prints };
+      return Promise.resolve({ ok: true, json: () => Promise.resolve(body) });
+    });
+  }
+
+  it('flips a single-sided card to its generic deck back', async () => {
+    mockFetch({ prints: PRINTS, backs: { Dynasty: { new: 'sets/backs/dynasty_new.jpg' } } });
+    await showPreview(CARD, null, '/api'); // CARD is in the Dynasty deck
+
+    const { front, back } = getCurrentFaces();
+    assert.equal(front, '/images/img/ie.jpg');
+    assert.equal(back, '/images/sets/backs/dynasty_new.jpg');
+  });
+
+  it('shows the Fate back for a Fate card', async () => {
+    const fateCard = makeCard({ card_id: 'fc', decks: ['Fate'], types: ['Strategy'] });
+    mockFetch({ prints: PRINTS, backs: { Fate: { new: 'sets/backs/fate_new.jpg' } } });
+    await showPreview(fateCard, null, '/api');
+
+    assert.equal(getCurrentFaces().back, '/images/sets/backs/fate_new.jpg');
+  });
+
+  it('flips a double-sided card to its printed back face, not the generic back', async () => {
+    const dsPrints = [
+      { print_id: 10, set_name: 'X', image_path: 'img/front.jpg', back_image_path: 'img/back.jpg' },
+    ];
+    mockFetch({ prints: dsPrints, backs: { Dynasty: { new: 'sets/backs/dynasty_new.jpg' } } });
+    await showPreview(CARD, null, '/api');
+
+    assert.equal(getCurrentFaces().back, '/images/img/back.jpg');
   });
 });
