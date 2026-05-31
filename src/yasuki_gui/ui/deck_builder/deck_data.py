@@ -2,6 +2,8 @@ from dataclasses import dataclass, field, replace
 from typing import TYPE_CHECKING
 
 from yasuki_core.database import query_all_cards, get_prints_by_card_id, query_cards_filtered
+from yasuki_core.card_art import CustomPrint, custom_print_id
+from yasuki_gui.ui.deck_builder.custom_art import custom_print_record
 
 if TYPE_CHECKING:
     from yasuki_gui.ui.deck_builder.filter_dialog import FilterOptions
@@ -265,6 +267,7 @@ class DeckBuilderRepository:
     def __init__(self):
         self._all_cards = load_cards_from_db()
         self._cards_by_id = {c["card_id"]: c for c in self._all_cards}
+        self._custom_prints: dict[int, CustomPrint] = {}
 
     @property
     def all_cards(self) -> list[dict]:
@@ -292,7 +295,7 @@ class DeckBuilderRepository:
 
     def get_prints(self, card_id: str) -> list[dict]:
         """
-        Get all prints for a card.
+        Get all prints for a card, including any registered custom (art-swap) prints.
 
         Parameters
         ----------
@@ -302,9 +305,26 @@ class DeckBuilderRepository:
         Returns
         -------
         prints : list of dict
-            Print records from database
+            Database print records followed by synthetic custom-print records whose recipient is
+            this card.
         """
-        return get_prints_by_card_id(card_id)
+        prints = get_prints_by_card_id(card_id)
+        customs = [
+            custom_print_record(recipe, self)
+            for recipe in self._custom_prints.values()
+            if recipe.recipient_card_id == card_id
+        ]
+        return prints + customs
+
+    def register_custom_print(self, recipe: CustomPrint) -> int:
+        """Register an art-swap recipe and return its stable synthetic print id."""
+        print_id = custom_print_id(recipe)
+        self._custom_prints[print_id] = recipe
+        return print_id
+
+    def get_custom_print(self, print_id: int) -> CustomPrint | None:
+        """Return the recipe behind a synthetic custom-print id, or None for a real print."""
+        return self._custom_prints.get(print_id)
 
     def filter_cards(
         self,

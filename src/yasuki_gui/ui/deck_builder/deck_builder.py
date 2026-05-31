@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 from collections.abc import Callable
 
+from yasuki_core.card_art import CustomPrint, classify
+from yasuki_gui.ui.deck_builder.art_swap import BorrowArtDialog
 from yasuki_gui.ui.deck_builder.components import CardStatsPanel, PrintSelector
 from yasuki_gui.ui.deck_builder.card_preview import CardPreviewController
 from yasuki_gui.ui.deck_builder.deck_data import DeckBuilderRepository, DeckState
@@ -137,8 +139,20 @@ class DeckBuilderWindow:
         preview_img_lbl.pack(anchor="n", pady=(4, 0), expand=True, fill="both")
         preview_img_lbl.bind("<Double-Button-1>", lambda e: self._add_from_preview())
 
-        print_selector = PrintSelector(col, self._on_prev_print, self._on_next_print)
-        print_selector.pack(fill="x", pady=(4, 0))
+        print_row = tk.Frame(col)
+        print_row.pack(fill="x", pady=(4, 0))
+        print_selector = PrintSelector(print_row, self._on_prev_print, self._on_next_print)
+        print_selector.pack(side="left")
+        tk.Button(
+            print_row,
+            text="⇄ art",
+            command=self._borrow_art,
+            relief="flat",
+            borderwidth=0,
+            fg="#4a90d9",
+            cursor="hand2",
+            padx=4,
+        ).pack(side="right")
 
         stats_panel = CardStatsPanel(col)
         stats_panel.pack(fill="x", pady=(4, 0))
@@ -348,6 +362,25 @@ class DeckBuilderWindow:
 
         self._deck_state = self._deck_state.add_card(card_id, print_id)
         self._refresh_deck_lists()
+
+    def _borrow_art(self) -> None:
+        base = self.preview_controller.current_recipient()
+        if not base:
+            messagebox.showinfo("Borrow Art", "Select a card with an image first.", parent=self.win)
+            return
+        card = self._repository.get_card(base["card_id"]) or {}
+        recipient_key = classify(card, base["set_name"])
+        result = BorrowArtDialog(
+            self.win, self._repository, base["image_path"], recipient_key
+        ).show()
+        if not result:
+            return
+
+        recipe = CustomPrint(
+            base["card_id"], base["print_id"], result["donor_card_id"], result["donor_print_id"]
+        )
+        custom_id = self._repository.register_custom_print(recipe)
+        self.preview_controller.load_card(base["card_id"], preferred_print_id=custom_id)
 
     def _remove_from_fate(self) -> None:
         ids = self.fate_list.get_selected_ids()
