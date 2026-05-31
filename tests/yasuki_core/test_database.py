@@ -45,11 +45,11 @@ def test_query_all_cards_returns_list():
     assert len(cards) == 5
 
     first_card = cards[0]
-    assert "id" in first_card
+    assert "card_id" in first_card
     assert "name" in first_card
-    assert "side" in first_card
-    assert "type" in first_card
-    assert first_card["side"] in ("FATE", "DYNASTY", "PRE_GAME", "OTHER")
+    assert "decks" in first_card
+    assert "types" in first_card
+    assert set(first_card["decks"]).issubset({"Fate", "Dynasty", "Pre-Game", "Other"})
 
 
 def test_search_cards_with_query():
@@ -66,20 +66,20 @@ def test_search_cards_with_query():
 
 def test_search_cards_with_deck_filter():
     """Test filtering cards by deck type."""
-    fate_cards = search_cards(query="Crane", deck_filter="FATE")
-    dynasty_cards = search_cards(query="Crane", deck_filter="DYNASTY")
+    fate_cards = search_cards(query="Crane", deck_filter="Fate")
+    dynasty_cards = search_cards(query="Crane", deck_filter="Dynasty")
 
     assert len(fate_cards) > 0
     assert len(dynasty_cards) > 0
-    assert all(card["side"] == "FATE" for card in fate_cards)
-    assert all(card["side"] == "DYNASTY" for card in dynasty_cards)
+    assert all("Fate" in card["decks"] for card in fate_cards)
+    assert all("Dynasty" in card["decks"] for card in dynasty_cards)
 
 
 def test_search_cards_combined_filters():
     """Test combining query and deck filter."""
-    results = search_cards(query="Lion", deck_filter="DYNASTY")
+    results = search_cards(query="Lion", deck_filter="Dynasty")
 
-    assert all(card["side"] == "DYNASTY" for card in results)
+    assert all("Dynasty" in card["decks"] for card in results)
     for card in results:
         card_text = (card["name"] + " " + (card["text"] or "")).lower()
         assert "lion" in card_text
@@ -90,14 +90,14 @@ def test_get_card_by_id():
     cards, total = query_cards_page(limit=1)
     assert total > 0
 
-    test_id = cards[0]["id"]
+    test_id = cards[0]["card_id"]
     card = get_card_by_id(test_id)
 
     assert card is not None
-    assert card["id"] == test_id
+    assert card["card_id"] == test_id
     assert "name" in card
-    assert "side" in card
-    assert "type" in card
+    assert "decks" in card
+    assert "types" in card
 
 
 def test_get_card_by_invalid_id():
@@ -114,16 +114,16 @@ def test_query_all_prints_returns_multiple_prints_per_card():
     assert "print_id" in sample
     assert "set_name" in sample
     assert "image_path" in sample
-    assert "id" in sample
+    assert "card_id" in sample
     assert "name" in sample
-    assert "side" in sample
+    assert "decks" in sample
 
 
 def test_kuni_yori_different_versions_as_separate_cards(kuni_yori_cards):
     """Test that different versions of Kuni Yori are separate cards with unique IDs."""
     assert len(kuni_yori_cards) > 1
 
-    card_ids = [c["id"] for c in kuni_yori_cards]
+    card_ids = [c["card_id"] for c in kuni_yori_cards]
     assert len(card_ids) == len(set(card_ids)), "Card IDs should be unique"
 
     stats = [(c["force"], c["chi"], c["gold_cost"]) for c in kuni_yori_cards]
@@ -134,7 +134,7 @@ def test_get_prints_by_card_id(kuni_yori_cards):
     """Test getting prints for a specific card ID."""
     assert len(kuni_yori_cards) > 0, "Should find at least one Kuni Yori card"
 
-    test_card_id = kuni_yori_cards[0]["id"]
+    test_card_id = kuni_yori_cards[0]["card_id"]
     prints = get_prints_by_card_id(test_card_id)
 
     assert len(prints) >= 1
@@ -155,7 +155,7 @@ class TestSQLFiltering:
         assert count > 0
         cards, total = query_cards_page(limit=5)
         assert total == count
-        assert all("id" in c and "name" in c for c in cards)
+        assert all("card_id" in c and "name" in c for c in cards)
 
     def test_text_search(self):
         """Should filter by card name, ID, or rules text."""
@@ -163,28 +163,28 @@ class TestSQLFiltering:
         assert len(cards) > 0
         assert all(
             "doji" in c["name"].lower()
-            or "doji" in c["id"].lower()
+            or "doji" in c["card_id"].lower()
             or (c.get("text") and "doji" in c["text"].lower())
             for c in cards
         )
 
     def test_filter_by_clan(self):
-        """Should filter by clan property."""
-        cards = query_cards_filtered(filter_options={"clan": "Crane"})
+        """Should filter by clan membership."""
+        cards = query_cards_filtered(filter_options={"clans": ["Crane"]})
         assert len(cards) > 0
-        assert all(c["clan"] == "Crane" for c in cards)
+        assert all("Crane" in (c["clans"] or []) for c in cards)
 
     def test_filter_by_type(self):
-        """Should filter by card type with enum casting."""
-        cards = query_cards_filtered(filter_options={"type": "Personality"})
+        """Should filter by card type."""
+        cards = query_cards_filtered(filter_options={"types": ["Personality"]})
         assert len(cards) > 0
-        assert all(c["type"] == "Personality" for c in cards)
+        assert all("Personality" in c["types"] for c in cards)
 
     def test_filter_by_deck(self):
-        """Should filter by deck type with enum casting."""
-        cards = query_cards_filtered(filter_options={"deck": "FATE"})
+        """Should filter by deck type."""
+        cards = query_cards_filtered(filter_options={"decks": ["Fate"]})
         assert len(cards) > 0
-        assert all(c["side"] == "FATE" for c in cards)
+        assert all("Fate" in c["decks"] for c in cards)
 
     def test_filter_by_unique(self):
         """Should filter by is_unique boolean."""
@@ -196,30 +196,32 @@ class TestSQLFiltering:
         """Should apply multiple filters together."""
         cards = query_cards_filtered(
             filter_options={
-                "clan": "Crane",
-                "type": "Personality",
+                "clans": ["Crane"],
+                "types": ["Personality"],
             }
         )
         assert len(cards) > 0
-        assert all(c["clan"] == "Crane" and c["type"] == "Personality" for c in cards)
+        assert all("Crane" in (c["clans"] or []) and "Personality" in c["types"] for c in cards)
 
     def test_text_search_with_filters(self):
         """Should combine text search with property filters."""
-        cards = query_cards_filtered(text_query="Doji", filter_options={"type": "Personality"})
+        cards = query_cards_filtered(text_query="Doji", filter_options={"types": ["Personality"]})
         assert len(cards) > 0
         for card in cards:
             assert (
                 "doji" in card["name"].lower()
-                or "doji" in card["id"].lower()
+                or "doji" in card["card_id"].lower()
                 or (card.get("text") and "doji" in card["text"].lower())
             )
-            assert card["type"] == "Personality"
+            assert "Personality" in card["types"]
 
     def test_filter_by_legality(self):
         """Should filter by format legality using subquery."""
-        cards = query_cards_filtered(filter_options={"legality": ("Ivory Edition", ["legal"])})
+        cards = query_cards_filtered(
+            filter_options={"legality": ("A Brother's Destiny (Ivory Edition)", None)}
+        )
         assert isinstance(cards, list)
-        assert all("id" in c for c in cards)
+        assert all("card_id" in c for c in cards)
 
     def test_no_matches_returns_empty_list(self):
         """Should return empty list when no cards match filters."""
@@ -270,8 +272,8 @@ class TestPagination:
         page1, total1 = query_cards_page(limit=5, offset=0)
         page2, total2 = query_cards_page(limit=5, offset=5)
         assert total1 == total2
-        ids1 = {c["id"] for c in page1}
-        ids2 = {c["id"] for c in page2}
+        ids1 = {c["card_id"] for c in page1}
+        ids2 = {c["card_id"] for c in page2}
         assert ids1.isdisjoint(ids2)
 
     def test_offset_beyond_total_returns_empty(self):
@@ -282,7 +284,7 @@ class TestPagination:
     def test_filters_reduce_total(self):
         _, all_total = query_cards_page(limit=1)
         _, crane_total = query_cards_page(
-            filter_options={"clan": "Crane"},
+            filter_options={"clans": ["Crane"]},
             limit=1,
         )
         assert 0 < crane_total < all_total
@@ -302,8 +304,8 @@ class TestCountCardsFiltered:
     """Test count-only query (no data fetch)."""
 
     def test_count_with_filter(self):
-        count = count_cards_filtered(filter_options={"clan": "Crane"})
-        cards = query_cards_filtered(filter_options={"clan": "Crane"})
+        count = count_cards_filtered(filter_options={"clans": ["Crane"]})
+        cards = query_cards_filtered(filter_options={"clans": ["Crane"]})
         assert count == len(cards)
 
     def test_count_no_match(self):
@@ -318,12 +320,12 @@ class TestRandomCards:
         assert len(cards) == 5
 
     def test_deck_filter(self):
-        cards = query_random_cards(10, deck_filter="FATE")
-        assert all(c["side"] == "FATE" for c in cards)
+        cards = query_random_cards(10, deck_filter="Fate")
+        assert all("Fate" in c["decks"] for c in cards)
 
     def test_returns_different_results(self):
-        ids1 = {c["id"] for c in query_random_cards(20)}
-        ids2 = {c["id"] for c in query_random_cards(20)}
+        ids1 = {c["card_id"] for c in query_random_cards(20)}
+        ids2 = {c["card_id"] for c in query_random_cards(20)}
         assert ids1 != ids2
 
 
@@ -361,7 +363,7 @@ def test_query_types_with_stat_force():
     assert isinstance(decks, list)
     assert "Personality" in types
     assert "Stronghold" not in types
-    assert "DYNASTY" in decks
+    assert "Dynasty" in decks
 
 
 def test_query_types_with_stat_starting_honor():
