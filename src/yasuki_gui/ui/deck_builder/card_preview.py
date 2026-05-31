@@ -30,6 +30,28 @@ DEFAULT_BY_TYPE: dict[str, Path] = {
 }
 
 
+def front_image_source(card: dict, print_info: dict, repository):
+    """A printable front for a print: the custom composite (PIL image), the print's own image, or
+    the card-type default (both as a Path). None only when nothing resolves.
+
+    Used by the deck-PDF export, which feeds it to reportlab (paths and PIL images both work)."""
+    if print_info.get("is_custom"):
+        from yasuki_gui.ui.deck_builder.custom_art import render_custom_image
+
+        composite = render_custom_image(print_info["recipe"], repository)
+        if composite is not None:
+            return composite
+
+    path = print_info.get("image_path")
+    resolved = resolve_set_image_path(path) if path else None
+    if resolved and resolved.exists():
+        return resolved
+
+    types = card.get("types") or []
+    ctype = types[0].lower() if types else ""
+    return DEFAULT_BY_TYPE.get(ctype)
+
+
 def _extract_base_name(full_name: str) -> str:
     """
     Extract base personality name without subtitle.

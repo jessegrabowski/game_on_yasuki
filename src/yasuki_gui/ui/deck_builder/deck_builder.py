@@ -5,7 +5,7 @@ from collections.abc import Callable
 from yasuki_core.card_art import CustomPrint, classify
 from yasuki_gui.ui.deck_builder.art_swap import BorrowArtDialog
 from yasuki_gui.ui.deck_builder.components import CardStatsPanel, PrintSelector
-from yasuki_gui.ui.deck_builder.card_preview import CardPreviewController
+from yasuki_gui.ui.deck_builder.card_preview import CardPreviewController, front_image_source
 from yasuki_gui.ui.deck_builder.deck_data import DeckBuilderRepository, DeckState
 from yasuki_gui.ui.deck_builder.deck_components import FilteredCardList, DeckCardList
 from yasuki_gui.ui.deck_builder.deck_io import serialize_deck, import_deck_yaml
@@ -126,6 +126,9 @@ class DeckBuilderWindow:
         actions = tk.Frame(col)
         actions.pack(fill="x", pady=(12, 0))
         tk.Button(actions, text="Clear Deck", command=self._clear_deck).pack(side="left")
+        tk.Button(actions, text="Print Deck…", command=self._print_deck).pack(
+            side="left", padx=(4, 0)
+        )
 
         return col
 
@@ -269,6 +272,52 @@ class DeckBuilderWindow:
     def _clear_deck(self) -> None:
         self._deck_state = self._deck_state.clear()
         self._refresh_deck_lists()
+
+    _SIDE_ORDER = {"SETUP": 0, "DYNASTY": 1, "FATE": 2}
+
+    def _collect_deck_images(self) -> list:
+        """One printable front per card copy, ordered setup -> dynasty -> fate, then by name."""
+        cards = self._repository.cards_by_id
+
+        def order_key(card_id: str) -> tuple[int, str]:
+            card = cards.get(card_id) or {}
+            decks = set(card.get("decks") or [])
+            side = "DYNASTY" if "Dynasty" in decks else "FATE" if "Fate" in decks else "SETUP"
+            return (self._SIDE_ORDER[side], card.get("name", ""))
+
+        images = []
+        for card_id in sorted(self._deck_state.cards, key=order_key):
+            card = cards.get(card_id) or {}
+            prints = self._repository.get_prints(card_id)
+            for print_id, count in self._deck_state.cards[card_id]:
+                info = next((p for p in prints if p["print_id"] == print_id), None)
+                source = front_image_source(card, info, self._repository) if info else None
+                if source is not None:
+                    images.extend([source] * count)
+        return images
+
+    def _print_deck(self) -> None:
+        images = self._collect_deck_images()
+        if not images:
+            messagebox.showinfo("Print Deck", "Add some cards to the deck first.", parent=self.win)
+            return
+        name = self._deck_name.get().strip() or "deck"
+        default_filename = "".join(c if c.isalnum() else "_" for c in name.lower())
+        path = filedialog.asksaveasfilename(
+            parent=self.win,
+            title="Print Deck",
+            defaultextension=".pdf",
+            initialfile=f"{default_filename}.pdf",
+            filetypes=[("PDF files", "*.pdf"), ("All files", "*.*")],
+        )
+        if not path:
+            return
+        from yasuki_core.deck_pdf import render_deck_pdf
+
+        pages = render_deck_pdf(images, path)
+        messagebox.showinfo(
+            "Print Deck", f"Wrote {len(images)} cards across {pages} page(s).", parent=self.win
+        )
 
     def _export_deck(self) -> None:
         name = self._deck_name.get().strip()

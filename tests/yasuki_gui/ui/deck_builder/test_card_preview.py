@@ -4,9 +4,17 @@ from unittest.mock import Mock
 import pytest
 
 from yasuki_gui.ui.deck_builder.card_preview import (
+    DEFAULT_BY_TYPE,
     format_card_display_name,
+    front_image_source,
     CardPreviewController,
 )
+
+
+def test_front_image_source_falls_back_to_type_default_when_image_missing():
+    card = {"types": ["Strategy"]}
+    print_info = {"image_path": "sets/nope/missing.jpg"}
+    assert front_image_source(card, print_info, repository=None) == DEFAULT_BY_TYPE["strategy"]
 
 
 def test_format_card_display_name_simple():
