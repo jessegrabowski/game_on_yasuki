@@ -15,6 +15,7 @@ from yasuki_core.database import (
     query_all_clans,
     query_all_types,
     query_types_by_deck,
+    get_card_backs,
 )
 from yasuki_core.search import parse_and_build_query
 from yasuki_web.rate_limit import limiter
@@ -239,6 +240,24 @@ async def list_clans():
     except Exception as e:
         logger.error(f"Error listing clans: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve clans")
+
+
+@router.get("/card-backs")
+async def list_card_backs():
+    """
+    List the generic card backs, nested as ``{deck: {era: image_path}}``.
+
+    The deck builder uses these to show a card's reverse when it has no printed back face.
+    """
+    try:
+        backs = await to_thread(get_card_backs)
+        nested: dict[str, dict[str, str]] = {}
+        for (deck, era), image_path in backs.items():
+            nested.setdefault(deck, {})[era] = image_path
+        return {"backs": nested}
+    except Exception as e:
+        logger.error(f"Error listing card backs: {e}")
+        raise HTTPException(status_code=500, detail="Failed to retrieve card backs")
 
 
 @router.get("/card-types")

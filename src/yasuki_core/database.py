@@ -298,11 +298,13 @@ def get_prints_by_card_id(card_id: str) -> list[dict]:
                 """
                 SELECT
                     p.print_id, p.card_id, s.set_name, p.rarity, p.artist,
-                    pi.path AS image_path, p.flavor_text
+                    front.path AS image_path, back.path AS back_image_path, p.flavor_text
                 FROM prints p
                 JOIN l5r_sets s ON s.set_id = p.set_id
-                LEFT JOIN print_images pi
-                    ON pi.print_id = p.print_id AND pi.role = 'front' AND pi.size = 'master'
+                LEFT JOIN print_images front
+                    ON front.print_id = p.print_id AND front.role = 'front' AND front.size = 'master'
+                LEFT JOIN print_images back
+                    ON back.print_id = p.print_id AND back.role = 'back' AND back.size = 'master'
                 WHERE p.card_id = %s
                 ORDER BY s.set_name
             """,

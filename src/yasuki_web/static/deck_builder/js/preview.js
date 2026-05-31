@@ -6,6 +6,9 @@ let currentPrintIndex = 0;
 let _imgBase = '/images';
 let _flipped = false;
 let _currentCard = null;
+let _cardBacks = null;
+let _frontSrc = null;
+let _backSrc = null;
 
 const DEFAULT_BY_TYPE = {
   celestial: 'defaults/generic_celestial.jpg',
@@ -24,13 +27,37 @@ const DEFAULT_BY_TYPE = {
 };
 
 function fallbackSrc(card) {
-  const type = (card.type || '').toLowerCase();
+  const type = ((card.types || [])[0] || '').toLowerCase();
   const path = DEFAULT_BY_TYPE[type];
   return path ? _imgBase + '/' + path : null;
 }
 
+async function loadCardBacks(apiBase) {
+  if (_cardBacks) return;
+  try {
+    _cardBacks = (await fetchJSON(`${apiBase}/card-backs`)).backs || {};
+  } catch (_) {
+    _cardBacks = {};
+  }
+}
+
+// The reverse image for a print: its printed back face if the card is double-sided, otherwise the
+// generic back for the card's deck (Fate cards show the Fate back, everything else the Dynasty back).
+function backSrc(card, print) {
+  if (print && print.back_image_path) return `${_imgBase}/${print.back_image_path}`;
+  const deck = (card.decks || []).includes('Fate') ? 'Fate' : 'Dynasty';
+  const path = _cardBacks?.[deck]?.new;
+  return path ? `${_imgBase}/${path}` : null;
+}
+
 export function initPreview(imgBase) {
   _imgBase = imgBase;
+  _cardBacks = null;
+}
+
+// Front and back image URLs for the print currently shown, in the order the flip button toggles.
+export function getCurrentFaces() {
+  return { front: _frontSrc, back: _backSrc };
 }
 
 export function getCurrentPrintId() {
@@ -51,11 +78,12 @@ export async function showPreview(card, preferredPrintId, apiBase) {
   _flipped = false;
   _currentCard = card;
   try {
-    const detail = await fetchJSON(`${apiBase}/cards/${card.id}`);
+    const detail = await fetchJSON(`${apiBase}/cards/${card.card_id}`);
     currentPrints = detail.prints || [];
   } catch (_) {
     /* ignore */
   }
+  await loadCardBacks(apiBase);
 
   if (preferredPrintId != null && currentPrints.length > 0) {
     const idx = currentPrints.findIndex((p) => p.print_id === preferredPrintId);
@@ -66,11 +94,13 @@ export async function showPreview(card, preferredPrintId, apiBase) {
   const imgPath = currentPrint ? currentPrint.image_path : card.image_path;
   const imgSrc = imgPath ? `${_imgBase}/${imgPath}` : null;
   const fb = fallbackSrc(card);
+  _frontSrc = imgSrc || fb;
+  _backSrc = backSrc(card, currentPrint);
 
   const stats = [
-    ['Type', card.type],
-    ['Clan', card.clan],
-    ['Deck', card.side],
+    ['Type', (card.types || []).join(', ')],
+    ['Clan', (card.clans || []).join(', ')],
+    ['Deck', (card.decks || []).join(', ')],
     ['Force', card.force],
     ['Chi', card.chi],
     ['Gold Cost', card.gold_cost],
@@ -151,11 +181,10 @@ export async function showPreview(card, preferredPrintId, apiBase) {
 }
 
 function toggleFlip() {
+  if (!_backSrc) return;
   _flipped = !_flipped;
   const imgEl = document.querySelector('.preview-img');
-  if (imgEl) {
-    imgEl.classList.toggle('preview-img-flipped', _flipped);
-  }
+  if (imgEl) imgEl.src = _flipped ? _backSrc : _frontSrc;
 }
 
 function prevPrint() {
@@ -175,21 +204,20 @@ function updatePreviewPrint() {
   if (!print) return;
 
   _flipped = false;
+  _frontSrc = print.image_path
+    ? `${_imgBase}/${print.image_path}`
+    : _currentCard
+      ? fallbackSrc(_currentCard)
+      : null;
+  _backSrc = _currentCard ? backSrc(_currentCard, print) : null;
 
   const imgEl = document.querySelector('.preview-img');
   if (imgEl) {
-    imgEl.classList.remove('preview-img-flipped');
-    if (print.image_path) {
-      imgEl.src = _imgBase + '/' + print.image_path;
+    if (_frontSrc) {
+      imgEl.src = _frontSrc;
       imgEl.style.display = '';
     } else {
-      const fb = _currentCard ? fallbackSrc(_currentCard) : null;
-      if (fb) {
-        imgEl.src = fb;
-        imgEl.style.display = '';
-      } else {
-        imgEl.style.display = 'none';
-      }
+      imgEl.style.display = 'none';
     }
   }
 
