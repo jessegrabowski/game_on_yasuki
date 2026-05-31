@@ -66,13 +66,13 @@ async def list_cards(
             text_query, filter_options = parse_and_build_query(search)
 
         if deck:
-            filter_options.setdefault("decks", []).append(deck.upper())
+            filter_options.setdefault("decks", []).append(deck)
         if clan:
             filter_options.setdefault("clans", []).append(clan)
         if card_type:
-            filter_options.setdefault("types", []).append(card_type.lower())
+            filter_options.setdefault("types", []).append(card_type)
         if format:
-            filter_options["legality"] = (format, ["legal"])
+            filter_options["legality"] = (format, None)
 
         results, total = await to_thread(
             query_cards_page,
@@ -260,8 +260,8 @@ async def list_card_types_by_deck(
 ):
     """List card types available for a specific deck type."""
     try:
-        types = await to_thread(query_types_by_deck, [deck.upper()])
-        return {"card_types": types, "deck": deck.upper(), "count": len(types)}
+        types = await to_thread(query_types_by_deck, [deck.title()])
+        return {"card_types": types, "deck": deck.title(), "count": len(types)}
     except Exception as e:
         logger.error(f"Error listing card types by deck: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve card types")
