@@ -17,7 +17,7 @@ from yasuki_core.database import (
     query_types_by_deck,
     get_card_backs,
 )
-from yasuki_core.card_art import load_art_layout
+from yasuki_core.card_art import back_era_for_set, classify, load_art_layout
 from yasuki_core.search import parse_and_build_query
 from yasuki_web.rate_limit import limiter
 
@@ -127,6 +127,19 @@ async def lookup_cards_by_name(
         raise HTTPException(status_code=500, detail="Failed to look up cards")
 
 
+def _prints_with_layout(card: dict, card_id: str) -> list[dict]:
+    """Prints for a card, each annotated with its art-swap (era, layout_type) so the browser canvas
+    can look up the art rect without reimplementing era classification."""
+    prints = get_prints_by_card_id(card_id)
+    for print_info in prints:
+        set_name = print_info.get("set_name", "")
+        era, layout_type = classify(card, set_name)
+        print_info["era"] = era
+        print_info["layout_type"] = layout_type
+        print_info["back_era"] = back_era_for_set(set_name)
+    return prints
+
+
 @router.get("/cards/{card_id}")
 async def get_card(
     card_id: Annotated[str, Path(max_length=200, pattern=r"^[\w\s\-\.\,\'\!\(\)]+$")],
@@ -141,7 +154,7 @@ async def get_card(
         if not card:
             raise HTTPException(status_code=404, detail=f"Card '{card_id}' not found")
 
-        prints = await to_thread(get_prints_by_card_id, card_id)
+        prints = await to_thread(_prints_with_layout, card, card_id)
 
         return {
             "card": card,

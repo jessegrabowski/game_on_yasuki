@@ -79,10 +79,14 @@ function renderSinglePrintItem(el, side, id, entry, cardQty, printEntry) {
   const div = document.createElement('div');
   const isSelected =
     selectedDeckCard && selectedDeckCard.side === side && selectedDeckCard.id === id;
-  div.className = 'deck-item' + (isSelected ? ' selected' : '');
+  div.className = 'deck-item' + (isSelected ? ' selected' : '') + (printData.isCustom ? ' custom' : '');
 
   const nameSpan = document.createElement('span');
-  const setTag = printData.set_name ? ' [' + printData.set_name + ']' : '';
+  const setTag = printData.isCustom
+    ? ' [Custom: ' + (printData.art?.donorName || 'art') + ']'
+    : printData.set_name
+      ? ' [' + printData.set_name + ']'
+      : '';
   nameSpan.textContent = displayName(entry.card) + setTag;
   const qtySpan = document.createElement('span');
   qtySpan.className = 'qty';
@@ -144,10 +148,13 @@ function renderMultiPrintItem(el, side, id, entry, cardQty, printEntries) {
         selectedDeckCard.side === side &&
         selectedDeckCard.id === id &&
         selectedDeckCard.printId === pid;
-      subDiv.className = 'deck-sub-item' + (isSubSelected ? ' selected' : '');
+      subDiv.className =
+        'deck-sub-item' + (isSubSelected ? ' selected' : '') + (pData.isCustom ? ' custom' : '');
 
       const subName = document.createElement('span');
-      subName.textContent = pData.set_name || 'Unknown';
+      subName.textContent = pData.isCustom
+        ? 'Custom: ' + (pData.art?.donorName || 'art')
+        : pData.set_name || 'Unknown';
       const subQty = document.createElement('span');
       subQty.className = 'qty';
       subQty.textContent = '\u00D7' + pData.qty;

@@ -1,7 +1,17 @@
 import { $, debounce, titleCase, scrollToSelected, deckSide } from './helpers.js';
 import { fetchJSON } from './api.js';
-import { addCard, removeCard, clearDeck, getDeck, nextCardAfterRemoval, getDeckNavItems } from './deck-state.js';
+import {
+  addCard,
+  addCustomPrint,
+  removeCard,
+  clearDeck,
+  getDeck,
+  nextCardAfterRemoval,
+  getDeckNavItems,
+} from './deck-state.js';
 import { getDeckName, setDeckName, serializeDeck, parseDeckYaml } from './deck-io.js';
+import { buildCompositeDataURL, customPrintId, loadArtLayout } from './art.js';
+import { openBorrowArt } from './borrow-art.js';
 import {
   initCardList,
   renderCardList,
@@ -22,7 +32,15 @@ import {
   setSelectedDeckCard,
   selectDeckItem,
 } from './deck-list.js';
-import { initPreview, showPreview, getCurrentPrintId, getCurrentSetName } from './preview.js';
+import {
+  initPreview,
+  showPreview,
+  showCustomPreview,
+  addCustomPrintToCycle,
+  getCurrentPrint,
+  getCurrentPrintId,
+  getCurrentSetName,
+} from './preview.js';
 
 const API = '/api';
 let IMG = '/images';
@@ -46,7 +64,13 @@ async function init() {
     $('totalDbCount').textContent = '?';
   }
 
-  initPreview(IMG, recordPrintChoice);
+  try {
+    await loadArtLayout(fetchJSON);
+  } catch (_) {
+    /* borrow-art unavailable until /api/art-layout responds */
+  }
+
+  initPreview(IMG, recordPrintChoice, onBorrowArt);
 
   initCardList({
     onSelect: (card) => showPreview(card, getPrintChoice(card.card_id)?.printId ?? null, API),
@@ -60,7 +84,11 @@ async function init() {
   initDeckList({
     onSelect: (card, printId, el) => {
       setSelectedCard(card);
-      showPreview(card, printId, API);
+      const sel = getSelectedDeckCard();
+      const entry = sel ? getDeck()[sel.side]?.[sel.id] : null;
+      const printData = entry?.prints?.[printId];
+      if (printData?.isCustom) showCustomPreview(card, printData);
+      else showPreview(card, printId, API);
       selectDeckItem(el);
     },
     onDblClick: () => doRemoveSelectedFromDeck(),
@@ -219,10 +247,31 @@ function doAddSelectedToDeck() {
   const card = getSelectedCard();
   if (!card) return;
   const side = deckSide(card);
-  const printId = getCurrentPrintId() || 0;
-  const setName = getCurrentSetName();
-  addCard(card.card_id, side, card, printId, setName);
+  const active = getCurrentPrint();
+  if (active?.isCustom) {
+    addCustomPrint(side, card, active.print_id, {
+      set_name: active.set_name || '',
+      isCustom: true,
+      art: active.art,
+      recipe: active.recipe,
+      dataUrl: active.dataUrl,
+    });
+  } else {
+    addCard(card.card_id, side, card, getCurrentPrintId() || 0, getCurrentSetName());
+  }
   renderDeckLists();
+}
+
+function onBorrowArt(card, recipientPrint) {
+  if (!card || !recipientPrint) return;
+  openBorrowArt({
+    recipientCard: card,
+    recipientPrint,
+    imgBase: IMG,
+    api: API,
+    // The chosen art becomes the active print in the cycle; the user still hits Add to commit it.
+    onUse: (customPrint) => addCustomPrintToCycle(customPrint),
+  });
 }
 
 function doRemoveSelectedFromDeck() {
@@ -282,7 +331,12 @@ async function doImportDeck(text) {
   const parsed = parseDeckYaml(text);
 
   const allEntries = [...parsed.pre_game, ...parsed.dynasty, ...parsed.fate];
-  const uniqueNames = [...new Set(allEntries.map((e) => e.name))];
+  const names = new Set();
+  allEntries.forEach((e) => {
+    names.add(e.name);
+    if (e.art?.donorName) names.add(e.art.donorName); // resolve donors for custom prints too
+  });
+  const uniqueNames = [...names];
   if (uniqueNames.length === 0) return;
 
   const params = new URLSearchParams();
@@ -322,6 +376,10 @@ async function doImportDeck(text) {
         : prints[0];
       const printId = matchedPrint ? matchedPrint.print_id : 0;
       const setName = matchedPrint ? matchedPrint.set_name : '';
+
+      if (entry.art && (await addImportedCustom(side, card, matchedPrint, entry, cardsByName, unresolved))) {
+        continue;
+      }
       for (let i = 0; i < entry.count; i++) {
         addCard(card.card_id, side, card, printId, setName);
       }
@@ -336,6 +394,63 @@ async function doImportDeck(text) {
   if (unresolved.length > 0) {
     alert(`Import complete.\n\nCould not find ${unresolved.length} card(s):\n${unresolved.join('\n')}`);
   }
+}
+
+// Re-create a custom (art-swap) print from an imported {art:} entry: resolve the donor, fetch both
+// prints' era/layout, recompose the art client-side. Returns true on success, false to fall back to
+// a plain print.
+async function addImportedCustom(side, recipientCard, recipientPrint, entry, cardsByName, unresolved) {
+  const donorCard = cardsByName[(entry.art.donorName || '').toLowerCase()];
+  if (!recipientPrint || !donorCard) {
+    unresolved.push(entry.art.donorName || '(art donor)');
+    return false;
+  }
+  const donorPrints = donorCard.prints || [];
+  const donorPrint = entry.art.donorSet
+    ? (donorPrints.find((p) => p.set_name === entry.art.donorSet) ?? donorPrints[0])
+    : donorPrints[0];
+  if (!donorPrint) {
+    unresolved.push(entry.art.donorName);
+    return false;
+  }
+
+  let rDetail, dDetail;
+  try {
+    [rDetail, dDetail] = await Promise.all([
+      fetchJSON(`${API}/cards/${recipientCard.card_id}`),
+      fetchJSON(`${API}/cards/${donorCard.card_id}`),
+    ]);
+  } catch (_) {
+    return false;
+  }
+  const rp = (rDetail.prints || []).find((p) => p.print_id === recipientPrint.print_id);
+  const dp = (dDetail.prints || []).find((p) => p.print_id === donorPrint.print_id);
+  if (!rp?.image_path || !dp?.image_path) return false;
+
+  let dataUrl;
+  try {
+    dataUrl = await buildCompositeDataURL(
+      {
+        recipientImagePath: rp.image_path,
+        recipientEra: rp.era,
+        recipientLayout: rp.layout_type,
+        donorImagePath: dp.image_path,
+        donorEra: dp.era,
+        donorLayout: dp.layout_type,
+      },
+      IMG,
+    );
+  } catch (_) {
+    return false;
+  }
+
+  const recipe = { recipientPrintId: rp.print_id, donorCardId: donorCard.card_id, donorPrintId: dp.print_id };
+  const printData = { set_name: rp.set_name || '', isCustom: true, art: entry.art, recipe, dataUrl };
+  const printId = customPrintId(recipe);
+  for (let i = 0; i < entry.count; i++) {
+    addCustomPrint(side, recipientCard, printId, printData);
+  }
+  return true;
 }
 
 // Keyboard navigation

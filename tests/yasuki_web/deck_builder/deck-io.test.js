@@ -22,7 +22,7 @@ describe('parseDeckYaml', () => {
   });
   it('parses a simple card entry', () => {
     const r = parseDeckYaml('name: T\nfate:\n  - Ambush');
-    assert.deepEqual(r.fate[0], { name: 'Ambush', count: 1, setName: null });
+    assert.deepEqual(r.fate[0], { name: 'Ambush', count: 1, setName: null, art: null });
   });
   it('parses count prefix', () => {
     const r = parseDeckYaml('name: T\ndynasty:\n  - 3x Doji Hoturi');
@@ -243,6 +243,63 @@ describe('confusing deck round-trip', () => {
     const firstDynSets = first.dynasty.map((e) => e.setName).sort();
     const secondDynSets = second.dynasty.map((e) => e.setName).sort();
     assert.deepEqual(secondDynSets, firstDynSets);
+  });
+});
+describe('custom-print art trailer', () => {
+  it('parses a {art: Donor [Set]} trailer alongside the recipient set', () => {
+    const r = parseDeckYaml('name: T\nfate:\n  - Ambush [Imperial Edition] {art: Doji Hoturi [Lotus Edition]}');
+    assert.deepEqual(r.fate[0], {
+      name: 'Ambush',
+      count: 1,
+      setName: 'Imperial Edition',
+      art: { donorName: 'Doji Hoturi', donorSet: 'Lotus Edition' },
+    });
+  });
+  it('leaves art null for a plain entry', () => {
+    assert.equal(parseDeckYaml('name: T\nfate:\n  - Ambush [Imperial Edition]').fate[0].art, null);
+  });
+  it('serializes a custom print with the art trailer', () => {
+    setDeckName('Borrowed');
+    const deck = {
+      PRE_GAME: {},
+      DYNASTY: {},
+      FATE: {
+        ambush: {
+          card: CARD_STR,
+          prints: {
+            'art:1:2': {
+              qty: 1,
+              set_name: 'Imperial Edition',
+              art: { donorName: 'Doji Hoturi', donorSet: 'Lotus Edition' },
+            },
+          },
+        },
+      },
+    };
+    assert.match(serializeDeck(deck), /Ambush \[Imperial Edition\] \{art: Doji Hoturi \[Lotus Edition\]\}/);
+  });
+  it('round-trips a custom print back to the same art recipe', () => {
+    setDeckName('Borrowed');
+    const deck = {
+      PRE_GAME: {},
+      DYNASTY: {},
+      FATE: {
+        ambush: {
+          card: CARD_STR,
+          prints: {
+            'art:1:2': {
+              qty: 2,
+              set_name: 'Imperial Edition',
+              art: { donorName: 'Doji Hoturi', donorSet: 'Lotus Edition' },
+            },
+          },
+        },
+      },
+    };
+    const entry = parseDeckYaml(serializeDeck(deck)).fate[0];
+    assert.equal(entry.count, 2);
+    assert.equal(entry.setName, 'Imperial Edition');
+    assert.deepEqual(entry.art, { donorName: 'Doji Hoturi', donorSet: 'Lotus Edition' });
   });
 });
 describe('getDeckName / setDeckName', () => {
