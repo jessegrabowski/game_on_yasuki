@@ -11,11 +11,17 @@ import {
   nextCardAfterRemoval,
   getDeckNavItems,
 } from '../../../src/yasuki_web/static/deck_builder/js/deck-state.js';
+import { makeCard } from './fixtures.js';
 
-const CARD_A = { id: 'card_a', name: 'Alpha', type: 'Strategy', side: 'FATE' };
-const CARD_B = { id: 'card_b', name: 'Beta', type: 'Strategy', side: 'FATE' };
-const CARD_C = { id: 'card_c', name: 'Castle', type: 'Holding', side: 'DYNASTY' };
-const CARD_SH = { id: 'card_sh', name: 'Kyuden Hida', type: 'Stronghold', side: 'PRE_GAME' };
+const CARD_A = makeCard({ card_id: 'card_a', name: 'Alpha', types: ['Strategy'], decks: ['Fate'] });
+const CARD_B = makeCard({ card_id: 'card_b', name: 'Beta', types: ['Strategy'], decks: ['Fate'] });
+const CARD_C = makeCard({ card_id: 'card_c', name: 'Castle', types: ['Holding'], decks: ['Dynasty'] });
+const CARD_SH = makeCard({
+  card_id: 'card_sh',
+  name: 'Kyuden Hida',
+  types: ['Stronghold'],
+  decks: ['Pre-Game'],
+});
 
 beforeEach(() => clearDeck());
 
@@ -44,7 +50,7 @@ describe('addCard', () => {
     addCard('card_sh', 'PRE_GAME', CARD_SH, 40, 'Imperial Edition');
     const bucket = getBucket('PRE_GAME');
     assert.deepEqual(bucket['card_sh'].prints, { 40: { qty: 1, set_name: 'Imperial Edition' } });
-    assert.equal(bucket['card_sh'].card.type, 'Stronghold');
+    assert.equal(bucket['card_sh'].card.types[0], 'Stronghold');
   });
 });
 
@@ -135,9 +141,9 @@ describe('getDeckNavItems', () => {
 
   it('groups by type alphabetically', () => {
     addCard('card_a', 'FATE', CARD_A, 10, 'IE');
-    addCard('card_c', 'FATE', { ...CARD_C, side: 'FATE' }, 30, 'Gold');
+    addCard('card_c', 'FATE', CARD_C, 30, 'Gold');
     const items = getDeckNavItems('FATE');
-    assert.equal(items[0].card.type, 'Holding');
-    assert.equal(items[1].card.type, 'Strategy');
+    assert.equal(items[0].card.types[0], 'Holding');
+    assert.equal(items[1].card.types[0], 'Strategy');
   });
 });

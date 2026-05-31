@@ -1,4 +1,4 @@
-import { $, displayName } from './helpers.js';
+import { $, displayName, deckSide, primaryDeck } from './helpers.js';
 
 let allResults = [];
 let hasMore = false;
@@ -57,13 +57,14 @@ export function renderCardList() {
   allResults.forEach((card) => {
     const div = document.createElement('div');
     div.className =
-      'card-list-item' + (selectedCard && selectedCard.id === card.id ? ' selected' : '');
-    div._cardId = card.id;
+      'card-list-item' +
+      (selectedCard && selectedCard.card_id === card.card_id ? ' selected' : '');
+    div._cardId = card.card_id;
     const nameSpan = document.createElement('span');
     nameSpan.textContent = displayName(card);
     const sideSpan = document.createElement('span');
-    sideSpan.className = 'side-tag ' + (card.side || '').toLowerCase();
-    sideSpan.textContent = card.side || '?';
+    sideSpan.className = 'side-tag ' + deckSide(card).toLowerCase();
+    sideSpan.textContent = primaryDeck(card) || '?';
     div.appendChild(nameSpan);
     div.appendChild(sideSpan);
     div.addEventListener('click', () => selectCard(card));
@@ -88,7 +89,7 @@ export function selectCard(card) {
   $('cardList')
     .querySelectorAll('.card-list-item')
     .forEach((el) => {
-      el.classList.toggle('selected', el._cardId === card.id);
+      el.classList.toggle('selected', el._cardId === card.card_id);
     });
   document
     .querySelectorAll('.deck-item, .deck-sub-item')
