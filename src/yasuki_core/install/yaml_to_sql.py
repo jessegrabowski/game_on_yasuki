@@ -1,551 +1,272 @@
+import logging
 import re
 import sys
-import unicodedata
 from pathlib import Path
-from typing import NamedTuple
 
 import psycopg
-import psycopg.rows
 import yaml
+from psycopg.types.json import Json
 
-from yasuki_core.install.utils import (
-    DECK_MAP,
-    expected_card_image_path,
-    normalize_name,
-    strip_title,
-)
-import logging
-
+from yasuki_core.install.sets_to_sql import coerce_date
+from yasuki_core.install.utils import normalize_name
 
 logger = logging.getLogger(__name__)
 
-
-def slugify_id(title: str, disambiguator: str = "") -> str:
-    nfkd = unicodedata.normalize("NFKD", title)
-    stripped = "".join(ch for ch in nfkd if not unicodedata.combining(ch))
-    stripped = stripped.lower()
-    stripped = re.sub(r"[^a-z0-9']+", "_", stripped)
-    stripped = stripped.strip("_")
-    base = stripped or "card"
-
-    if disambiguator:
-        dis_slug = re.sub(r"[^a-z0-9]+", "_", disambiguator.lower()).strip("_")
-        return f"{base}_{dis_slug}"
-
-    return base
+# YAML stat field == card column name. A value that is a clean integer fills the column; a meaningful
+# non-integer (a follower modifier like "+2", a variable "*") is kept under "<col>_raw" in extra.
+STAT_FIELDS = (
+    "gold_cost",
+    "focus",
+    "force",
+    "chi",
+    "honor_requirement",
+    "personal_honor",
+    "province_strength",
+    "starting_honor",
+)
 
 
-def extract_experience_level(keywords: list[str]) -> str | None:
-    """
-    Extract experience level from keywords list.
-
-    Returns
-    -------
-    exp_level : str or None
-        Experience level identifier: 'exp', 'exp2', 'exp3', 'exp4', 'inexp', or special markers like 'exp2kyd'.
-        Returns 'inexp' for explicitly inexperienced versions.
-        Returns None for base (first printing) versions.
-    """
-    filtered_keywords = [kw for kw in keywords if not kw.startswith("Soul of")]
-
-    for kw in filtered_keywords:
-        if kw.lower() == "inexperienced":
-            return "inexp"
-
-    for kw in filtered_keywords:
-        if kw.startswith("Experienced") and " " not in kw.replace("Experienced", "", 1):
-            remainder = kw[len("Experienced") :].strip()
-
-            has_digit = any(c.isdigit() for c in remainder)
-            has_alpha = any(c.isalpha() and c.upper() == c for c in remainder)
-
-            if has_digit and has_alpha:
-                match = re.match(r"(\d+)([A-Z]+)", remainder)
-                if match:
-                    level = match.group(1)
-                    campaign = match.group(2).lower()
-                    return f"exp{level}{campaign}"
-
-            if remainder and not any(c.isdigit() for c in remainder):
-                return f"exp_{remainder.lower()}"
-
-    for kw in filtered_keywords:
-        kw_lower = kw.lower()
-        if kw_lower == "experienced 4" or kw_lower == "experienced4":
-            return "exp4"
-        if kw_lower == "experienced 3" or kw_lower == "experienced3":
-            return "exp3"
-        if kw_lower == "experienced 2" or kw_lower == "experienced2":
-            return "exp2"
-        if kw_lower == "experienced":
-            return "exp"
-
-    return None
+def card_slug(text: str) -> str:
+    """Slug used as the card id when the YAML entry carries no explicit `id`."""
+    s = text.lower().replace("&", "and").replace("'", "")
+    return re.sub(r"[^a-z0-9]+", "_", s).strip("_")
 
 
-def parse_legalities(value: list[str] | None) -> list[tuple[str, str]]:
-    """
-    Convert legality list into (format_name, status) pairs.
-    Status is 'legal' or 'not_legal' (for 'Not Legal' / 'Proxy' entries).
-    """
-    result: list[tuple[str, str]] = []
-    if not value:
-        return result
-    for fmt in value:
-        lower = fmt.lower()
-        if "not legal" in lower or "proxy" in lower:
-            status = "not_legal"
-        else:
-            status = "legal"
-        result.append((fmt, status))
-    return result
-
-
-def detect_is_unique(keywords: list[str]) -> bool:
-    return any(kw.lower() == "unique" for kw in keywords)
-
-
-def detect_is_proxy(record: dict) -> bool:
-    t = record.get("type", "").lower()
-    if "proxy" in t:
-        return True
-    for entry in record.get("legality") or []:
-        lower = entry.lower()
-        if "not legal" in lower and "proxy" in lower:
-            return True
-    return False
-
-
-def map_deck(deck_str: str) -> str:
-    try:
-        return DECK_MAP[deck_str]
-    except KeyError:
-        raise ValueError(f"Unknown deck value: {deck_str!r}")
-
-
-def map_card_type(type_str: str) -> str:
-    return type_str
-
-
-DECK_FROM_TYPE = {
-    "Strategy": "Fate",
-    "Region": "Dynasty",
-    "Event": "Dynasty",
-    "Spell": "Fate",
-    "Holding": "Dynasty",
-    "Item": "Fate",
-    "Personality": "Dynasty",
-    "Follower": "Fate",
-    "Ancestor": "Fate",
-    "Wind": "Pre-Game",
-    "Sensei": "Pre-Game",
-    "Celestial": "Dynasty",
-    "Stronghold": "Pre-Game",
-    "Ring": "Fate",
-    "Proxy": "Other",
-    "Other": "Other",
-    "Clock": "Other",
-    "Territory": "Other",
-}
-
-
-def parse_collector_number(number: str | None) -> tuple[str | None, int | None, str | None]:
-    if number is None:
-        return None, None, None
-
-    raw = number.strip()
-    if raw == "":
-        return None, None, None
-
-    m = re.match(r"^\s*([A-Za-z ]*?)\s*([0-9]+)\s*$", raw)
-    if m:
-        subset = m.group(1).strip() or None
-        num_int = int(m.group(2))
-        return subset, num_int, raw
-
-    return None, None, raw
-
-
-class NumberEntry(NamedTuple):
-    subset: str | None
-    number_int: int
-
-
-def parse_all_numbers(raw: str | None) -> list[NumberEntry]:
+def parse_collector_numbers(raw: str | None) -> list[tuple[str | None, int]]:
+    """Split a collector-number string into (subset, number) pairs, in order."""
     if not raw:
         return []
-
-    parts = [p.strip() for p in raw.split(",") if p.strip()]
-    entries: list[NumberEntry] = []
-
-    for part in parts:
-        m = re.match(r"^\s*([A-Za-z ]*?)\s*([0-9]+)\s*$", part)
+    entries: list[tuple[str | None, int]] = []
+    for part in (p.strip() for p in raw.split(",")):
+        m = re.match(r"^([A-Za-z ]*?)\s*([0-9]+)$", part)
         if m:
-            subset = m.group(1).strip() or None
-            num_int = int(m.group(2))
-            entries.append(NumberEntry(subset, num_int))
-            continue
-
-        m2 = re.match(r"^\s*([0-9]+)\s*$", part)
-        if m2:
-            num_int = int(m2.group(1))
-            entries.append(NumberEntry(None, num_int))
-
+            entries.append((m.group(1).strip() or None, int(m.group(2))))
     return entries
 
 
-def choose_primary(entries: list[NumberEntry]) -> tuple[str | None, int | None]:
-    if not entries:
-        return None, None
-    best = min(entries, key=lambda e: e.number_int)
-    return best.subset, best.number_int
-
-
-def _prepare_card_row(record: dict) -> tuple[str, tuple, list[str], list[tuple[str, str]]]:
-    title = record["title"]
-    extended_title = record.get("extended_title", title)
-    card_id = strip_title(extended_title)
-
-    deck = map_deck(record.get("deck", DECK_FROM_TYPE[record["type"]]))
-    ctype = map_card_type(record["type"])
-    clan = record.get("clan")
-    rules_text = record.get("text", "") or ""
-
-    gold_cost = record.get("gold_cost")
-    focus = record.get("focus")
-    force = record.get("force")
-    chi = record.get("chi")
-    honor_req = record.get("honor_requirement")
-    personal_honor = record.get("personal_honor")
-    province_strength = record.get("province_strength")
-    gold_production = record.get("gold_production")
-    starting_honor = record.get("starting_honor")
-
-    keyword_list = record.get("keywords", [])
-    is_unique = detect_is_unique(keyword_list)
-    is_proxy = detect_is_proxy(record)
-
-    errata_text = record.get("errata_text")
-    notes = record.get("card_notes")
-    name_normalized = normalize_name(title)
-
-    card_values = (
+def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[tuple, dict]:
+    """Build the cards-table row for an entry, plus the `extra` payload for non-integer stats."""
+    title = entry["title"]
+    extra: dict[str, str] = {}
+    stats: dict[str, int | None] = {}
+    for col in STAT_FIELDS:
+        value = entry.get(col)
+        if isinstance(value, int):
+            stats[col] = value
+        else:
+            stats[col] = None
+            if value is not None:
+                extra[f"{col}_raw"] = str(value)
+    row = (
         card_id,
+        card_slug(extended_title),
         title,
-        name_normalized,
         extended_title,
-        deck,
-        ctype,
-        clan,
-        rules_text,
-        gold_cost,
-        focus,
-        force,
-        chi,
-        honor_req,
-        personal_honor,
-        gold_production,
-        province_strength,
-        starting_honor,
-        is_unique,
-        is_proxy,
-        errata_text,
-        notes,
+        normalize_name(title),
+        entry.get("text", "") or "",
+        stats["gold_cost"],
+        stats["focus"],
+        stats["force"],
+        stats["chi"],
+        stats["honor_requirement"],
+        stats["personal_honor"],
+        stats["province_strength"],
+        stats["starting_honor"],
+        None,  # gold_production: no source field
+        bool(entry.get("is_unique")),
+        bool(entry.get("is_proxy")),
+        bool(entry.get("is_banned")),
+        entry.get("errata_text"),
+        entry.get("story"),
+        entry.get("notes"),
+        Json(extra),
     )
-
-    legalities = parse_legalities(record.get("legality"))
-    return card_id, card_values, keyword_list, legalities
+    return row, extra
 
 
-def _prepare_print_row(
-    card_id: str,
-    extended_title: str,
-    set_name: str,
-    record: dict,
-    set_code_map: dict[str, str | None],
-) -> tuple[tuple, list[NumberEntry]]:
-    rarity = record.get("rarity")
-    flavor = record.get("flavor")
-    artist = record.get("artist")
-    notes = record.get("print_notes")
-
-    number = record.get("number")
-    collector_number = record.get("collector_number")
-    collector_number_raw = (
-        collector_number if collector_number else (str(number) if number is not None else None)
-    )
-
-    entries = parse_all_numbers(collector_number_raw)
-    primary_subset, primary_int = choose_primary(entries)
-    if not entries and number is not None:
-        primary_int = number
-
-    set_code = set_code_map.get(set_name)
-    image_path = expected_card_image_path(extended_title, set_name) if set_name else None
-
-    print_values = (
-        card_id,
-        set_name,
-        set_code,
-        rarity,
-        flavor,
-        artist,
-        primary_subset,
-        primary_int,
-        collector_number_raw,
-        notes,
-        image_path,
-    )
-    return print_values, entries
-
-
-_BATCH_PAGE_SIZE = 1000
-
-
-def _batch_upsert_cards(cur, card_rows: list[tuple]):
-    if not card_rows:
-        return
-    seen: dict[str, tuple] = {}
-    for row in card_rows:
-        seen[row[0]] = row
-    card_rows = list(seen.values())
-    cur.executemany(
-        """
-        INSERT INTO cards (
-          id, name, name_normalized, extended_title,
-          deck, type, clan, rules_text,
-          gold_cost, focus, force, chi,
-          honor_requirement, personal_honor, gold_production,
-          province_strength, starting_honor,
-          is_unique, is_proxy, errata_text, notes
-        ) VALUES (
-          %s, %s, %s, %s,
-          %s, %s, %s, %s,
-          %s, %s, %s, %s,
-          %s, %s, %s,
-          %s, %s,
-          %s, %s, %s, %s
-        )
-        ON CONFLICT (id) DO UPDATE SET
-          name = EXCLUDED.name,
-          name_normalized = EXCLUDED.name_normalized,
-          extended_title = EXCLUDED.extended_title,
-          deck = EXCLUDED.deck,
-          type = EXCLUDED.type,
-          clan = EXCLUDED.clan,
-          rules_text = EXCLUDED.rules_text,
-          gold_cost = EXCLUDED.gold_cost,
-          focus = EXCLUDED.focus,
-          force = EXCLUDED.force,
-          chi = EXCLUDED.chi,
-          honor_requirement = EXCLUDED.honor_requirement,
-          personal_honor = EXCLUDED.personal_honor,
-          gold_production = EXCLUDED.gold_production,
-          province_strength = EXCLUDED.province_strength,
-          starting_honor = EXCLUDED.starting_honor,
-          is_unique = EXCLUDED.is_unique,
-          is_proxy = EXCLUDED.is_proxy,
-          errata_text = EXCLUDED.errata_text,
-          notes = EXCLUDED.notes
-        """,
-        card_rows,
-    )
-
-
-def _batch_upsert_keywords(cur, keywords: set[str], card_keywords: list[tuple[str, str]]):
-    if keywords:
-        cur.executemany(
-            "INSERT INTO keywords (keyword) VALUES (%s) ON CONFLICT (keyword) DO NOTHING",
-            [(kw,) for kw in keywords],
-        )
-    if card_keywords:
-        cur.executemany(
-            """
-            INSERT INTO card_keywords (card_id, keyword) VALUES (%s, %s)
-            ON CONFLICT (card_id, keyword) DO NOTHING
-            """,
-            card_keywords,
-        )
-
-
-def _batch_upsert_legalities(cur, formats: set[str], legalities: list[tuple[str, str, str]]):
-    if formats:
-        cur.executemany(
-            "INSERT INTO formats (name) VALUES (%s) ON CONFLICT (name) DO NOTHING",
-            [(f,) for f in formats],
-        )
-    if legalities:
-        seen: dict[tuple, tuple] = {}
-        for row in legalities:
-            seen[(row[0], row[1])] = row
-        legalities = list(seen.values())
-        cur.executemany(
-            """
-            INSERT INTO card_legalities (card_id, format_name, status) VALUES (%s, %s, %s)
-            ON CONFLICT (card_id, format_name) DO UPDATE SET
-              status = EXCLUDED.status
-            """,
-            legalities,
-        )
-
-
-def _batch_upsert_prints(
-    cur,
-    print_rows: list[tuple],
-    number_map: dict[tuple, list[NumberEntry]],
-):
-    if not print_rows:
-        return
-
-    seen: dict[tuple, tuple] = {}
-    for row in print_rows:
-        seen[(row[0], row[1], row[8])] = row
-    print_rows = list(seen.values())
-
-    cur.executemany(
-        """
-        INSERT INTO prints (
-          card_id, set_name, set_code, rarity, flavor_text,
-          artist, primary_subset, primary_number_int, collector_number_raw,
-          notes, image_path
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-        ON CONFLICT (card_id, set_name, collector_number_raw) DO UPDATE SET
-          rarity = EXCLUDED.rarity,
-          flavor_text = EXCLUDED.flavor_text,
-          artist = EXCLUDED.artist,
-          primary_subset = EXCLUDED.primary_subset,
-          primary_number_int = EXCLUDED.primary_number_int,
-          notes = EXCLUDED.notes,
-          image_path = EXCLUDED.image_path
-        RETURNING print_id, card_id, set_name, collector_number_raw
-        """,
-        print_rows,
-        returning=True,
-    )
-    results = cur.fetchall()
-
-    print_number_rows: list[tuple] = []
-    print_ids_to_clear: list[int] = []
-    for print_id, card_id, set_name, cn_raw in results:
-        entries = number_map.get((card_id, set_name, cn_raw), [])
-        if entries:
-            print_ids_to_clear.append(print_id)
-            for pos, entry in enumerate(entries):
-                print_number_rows.append((print_id, entry.subset, entry.number_int, pos))
-
-    if print_ids_to_clear:
-        cur.execute(
-            "DELETE FROM print_numbers WHERE print_id = ANY(%s)",
-            (print_ids_to_clear,),
-        )
-    if print_number_rows:
-        cur.executemany(
-            """
-            INSERT INTO print_numbers (print_id, subset, number_int, position)
-            VALUES (%s, %s, %s, %s)
-            """,
-            print_number_rows,
-        )
-
-
-def load_cards(cards_dir: Path, dsn: str):
+def load_cards(cards_dir: Path, dsn: str) -> None:
     """
-    Load card data from a directory of per-set YAML files.
+    Load every per-set YAML file into the card tables.
 
-    Parses all YAML files into memory first, then batch-inserts into PostgreSQL
-    using executemany for efficient imports over network connections.
+    Cards are identified by their explicit `id` or, failing that, a slug of the extended title, and
+    deduplicated across the sets they appear in. Each YAML entry contributes one printing; a card with
+    several printings in one set gets suffixed printing ids. Set names resolve to set ids via l5r_sets.
 
     Parameters
     ----------
-    cards_dir : Path
-        Directory containing per-set YAML files (e.g. jade_edition.yaml)
+    cards_dir : path
+        Directory of per-set YAML files.
     dsn : str
-        PostgreSQL connection string
+        PostgreSQL connection string.
     """
     yaml_files = sorted(cards_dir.glob("*.yaml"))
     if not yaml_files:
         raise ValueError(f"No YAML files found in {cards_dir}")
 
-    with psycopg.connect(dsn) as conn:
-        with conn.cursor() as cur:
-            set_code_map: dict[str, str | None] = {}
-            try:
-                cur.execute("SELECT set_name, code FROM l5r_sets")
-                for row in cur.fetchall():
-                    set_code_map[row[0]] = row[1]
-            except psycopg.errors.UndefinedTable:
-                conn.rollback()
-                set_code_map = {}
+    cards: dict[str, tuple] = {}
+    clan_links: set[tuple[str, str]] = set()
+    type_links: set[tuple[str, str]] = set()
+    deck_links: set[tuple[str, str]] = set()
+    keywords: set[str] = set()
+    keyword_links: set[tuple[str, str]] = set()
+    formats: set[str] = set()
+    legality_links: set[tuple[str, str]] = set()
+    print_rows: list[tuple] = []
+    number_map: dict[tuple[str, str], list[tuple[str | None, int]]] = {}
 
-            card_rows: list[tuple] = []
-            all_keywords: set[str] = set()
-            card_keyword_rows: list[tuple[str, str]] = []
-            all_formats: set[str] = set()
-            legality_rows: list[tuple[str, str, str]] = []
-            print_rows: list[tuple] = []
-            number_map: dict[tuple, list[NumberEntry]] = {}
+    with psycopg.connect(dsn) as conn, conn.cursor() as cur:
+        cur.execute("SELECT set_name, set_id, set_slug FROM l5r_sets")
+        set_map = {name: (set_id, slug) for name, set_id, slug in cur.fetchall()}
 
-            total_cards = 0
-            for yaml_file in yaml_files:
-                data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
-                set_name = data["set"]
-                cards = data.get("cards", [])
-                logger.info(f"Parsing {yaml_file.name}: {len(cards)} cards")
+        for yaml_file in yaml_files:
+            data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
+            set_name = data["set"]
+            resolved = set_map.get(set_name)
+            if resolved is None:
+                logger.warning("Set %r not in l5r_sets; skipping %s", set_name, yaml_file.name)
+                continue
+            set_id, set_slug = resolved
 
-                for record in cards:
-                    card_id, card_vals, keywords, legalities = _prepare_card_row(record)
-                    card_rows.append(card_vals)
+            printings_seen: dict[str, int] = {}
+            for entry in data.get("cards", []):
+                extended_title = entry.get("extended_title") or entry["title"]
+                card_id = entry.get("id") or card_slug(extended_title)
 
-                    for kw in keywords:
-                        all_keywords.add(kw)
-                        card_keyword_rows.append((card_id, kw))
+                if card_id not in cards:
+                    cards[card_id], _ = _card_columns(card_id, extended_title, entry)
+                    clan_links.update((card_id, c) for c in entry.get("clans", []))
+                    type_links.update((card_id, t) for t in entry.get("types", []))
+                    deck_links.update((card_id, d) for d in entry.get("decks", []))
+                    for kw in entry.get("keywords", []):
+                        keywords.add(kw)
+                        keyword_links.add((card_id, kw))
+                    for fmt in entry.get("legality", []):
+                        formats.add(fmt)
+                        legality_links.add((card_id, fmt))
 
-                    for fmt_name, status in legalities:
-                        all_formats.add(fmt_name)
-                        legality_rows.append((card_id, fmt_name, status))
-
-                    extended_title = record.get("extended_title", record["title"])
-                    print_vals, number_entries = _prepare_print_row(
-                        card_id, extended_title, set_name, record, set_code_map
+                n = printings_seen.get(card_id, 0)
+                printings_seen[card_id] = n + 1
+                printing_id = set_slug if n == 0 else f"{set_slug}_{n + 1}"
+                collector = entry.get("collector_number")
+                print_rows.append(
+                    (
+                        card_id,
+                        printing_id,
+                        set_id,
+                        entry.get("rarity"),
+                        entry.get("flavor_text"),
+                        entry.get("artist"),
+                        entry.get("designer"),
+                        collector,
+                        entry.get("publisher"),
+                        entry.get("publisher_url"),
+                        bool(entry.get("doublesided")),
+                        coerce_date(entry.get("legal_date")),
                     )
-                    print_rows.append(print_vals)
-                    number_map[(card_id, set_name, print_vals[8])] = number_entries
+                )
+                number_map[(card_id, printing_id)] = parse_collector_numbers(collector)
 
-                    total_cards += 1
+        _insert_all(
+            cur,
+            cards,
+            clan_links,
+            type_links,
+            deck_links,
+            keywords,
+            keyword_links,
+            formats,
+            legality_links,
+            print_rows,
+            number_map,
+        )
+        conn.commit()
 
-            logger.info(
-                f"Parsed {total_cards} cards from {len(yaml_files)} sets, batch inserting..."
-            )
+    logger.info(
+        "Loaded %d cards, %d printings from %d sets", len(cards), len(print_rows), len(yaml_files)
+    )
 
-            _batch_upsert_cards(cur, card_rows)
-            logger.info(f"Upserted {len(card_rows)} cards")
 
-            _batch_upsert_keywords(cur, all_keywords, card_keyword_rows)
-            logger.info(
-                f"Upserted {len(all_keywords)} keywords, "
-                f"{len(card_keyword_rows)} card-keyword links"
-            )
+def _insert_all(
+    cur,
+    cards,
+    clan_links,
+    type_links,
+    deck_links,
+    keywords,
+    keyword_links,
+    formats,
+    legality_links,
+    print_rows,
+    number_map,
+) -> None:
+    """Batch-insert the accumulated rows in dependency order, then resolve print numbers."""
+    cur.executemany(
+        "INSERT INTO formats (name) VALUES (%s) ON CONFLICT DO NOTHING", [(f,) for f in formats]
+    )
+    cur.executemany(
+        "INSERT INTO keywords (keyword) VALUES (%s) ON CONFLICT DO NOTHING",
+        [(k,) for k in keywords],
+    )
+    cur.executemany(
+        """
+        INSERT INTO cards (
+          card_id, slug, name, extended_title, name_normalized, rules_text,
+          gold_cost, focus, force, chi, honor_requirement, personal_honor,
+          province_strength, starting_honor, gold_production,
+          is_unique, is_proxy, is_banned, errata_text, story, notes, extra
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+                  %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (card_id) DO NOTHING
+        """,
+        list(cards.values()),
+    )
+    cur.executemany(
+        "INSERT INTO card_clans (card_id, clan) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+        list(clan_links),
+    )
+    cur.executemany(
+        "INSERT INTO card_card_types (card_id, type) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+        list(type_links),
+    )
+    cur.executemany(
+        "INSERT INTO card_decks (card_id, deck) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+        list(deck_links),
+    )
+    cur.executemany(
+        "INSERT INTO card_keywords (card_id, keyword) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+        list(keyword_links),
+    )
+    cur.executemany(
+        "INSERT INTO card_legalities (card_id, format_name) VALUES (%s, %s) ON CONFLICT DO NOTHING",
+        list(legality_links),
+    )
 
-            _batch_upsert_legalities(cur, all_formats, legality_rows)
-            logger.info(
-                f"Upserted {len(all_formats)} formats, {len(legality_rows)} legality entries"
-            )
-
-            _batch_upsert_prints(cur, print_rows, number_map)
-            logger.info(f"Upserted {len(print_rows)} prints")
-
-            logger.info(
-                f"Card import completed: {total_cards} card-prints from {len(yaml_files)} sets"
-            )
+    cur.executemany(
+        """
+        INSERT INTO prints (
+          card_id, printing_id, set_id, rarity, flavor_text, artist, designer,
+          collector_number_raw, publisher, publisher_url, doublesided, legal_date
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        """,
+        print_rows,
+    )
+    cur.execute("SELECT print_id, card_id, printing_id FROM prints")
+    print_ids = {
+        (card_id, printing_id): print_id for print_id, card_id, printing_id in cur.fetchall()
+    }
+    number_rows = [
+        (print_ids[key], subset, value, position)
+        for key, numbers in number_map.items()
+        for position, (subset, value) in enumerate(numbers)
+    ]
+    if number_rows:
+        cur.executemany(
+            "INSERT INTO print_numbers (print_id, subset, number_int, position) "
+            "VALUES (%s, %s, %s, %s)",
+            number_rows,
+        )
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        logger.error(
-            "Usage: python yaml_to_sql.py PATH_TO_SETS_DIR 'postgres://user:pass@host:port/dbname'"
-        )
-        sys.exit(1)
-
-    cards_dir = Path(sys.argv[1])
-    dsn = sys.argv[2]
-    load_cards(cards_dir, dsn)
+    logging.basicConfig(level=logging.INFO)
+    load_cards(Path(sys.argv[1]), sys.argv[2])
