@@ -40,7 +40,45 @@ export function openBorrowArt({ recipientCard, recipientPrint, imgBase, api, onU
     </div>`;
   document.body.appendChild(overlay);
 
-  const close = () => overlay.remove();
+  let resultCards = [];
+  let selectedIndex = -1;
+  let offset = 0;
+  let hasMore = false;
+  let loading = false;
+  let query = '';
+
+  // Infinite-scroll pagination: load the next page when the sentinel scrolls into the results pane.
+  const observer = new IntersectionObserver(
+    (entries) => {
+      if (entries[0].isIntersecting && hasMore && !loading) loadPage();
+    },
+    { root: $('borrowResults'), threshold: 0 },
+  );
+
+  // Arrow keys move the donor selection in this window (not the main card list). Captured on
+  // document so it pre-empts the global navigation handler while the modal is open.
+  const onKey = (e) => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!resultCards.length) return;
+      const next = e.key === 'ArrowDown' ? selectedIndex + 1 : selectedIndex - 1;
+      selectRow(Math.max(0, Math.min(next, resultCards.length - 1)));
+    } else if (e.key === 'Enter') {
+      e.stopPropagation();
+      if (!$('borrowUse').disabled) $('borrowUse').click();
+    } else if (e.key === 'Escape') {
+      e.stopPropagation();
+      close();
+    }
+  };
+  document.addEventListener('keydown', onKey, true);
+
+  function close() {
+    document.removeEventListener('keydown', onKey, true);
+    observer.disconnect();
+    overlay.remove();
+  }
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) close();
   });
@@ -56,32 +94,62 @@ export function openBorrowArt({ recipientCard, recipientPrint, imgBase, api, onU
   searchEl.focus();
   runSearch(); // populate on open so the window isn't empty
 
+  const pickDebounced = debounce((card) => card && pickDonor(card), 120);
+
+  function selectRow(index) {
+    selectedIndex = index;
+    const rows = $('borrowResults').querySelectorAll('.borrow-result');
+    rows.forEach((el, i) => el.classList.toggle('selected', i === index));
+    if (rows[index]) rows[index].scrollIntoView({ block: 'nearest' });
+    pickDebounced(resultCards[index]);
+  }
+
   async function runSearch() {
-    const q = searchEl.value.trim();
-    const results = $('borrowResults');
-    if (q.length === 1) return; // wait for a meaningful query; empty shows the first page
-    const params = q ? `search=${encodeURIComponent(q)}&limit=40` : 'limit=40';
-    let cards = [];
+    query = searchEl.value.trim();
+    if (query.length === 1) return; // wait for a meaningful query; empty shows the first page
+    offset = 0;
+    resultCards = [];
+    selectedIndex = -1;
+    $('borrowResults').innerHTML = '';
+    loadPage();
+  }
+
+  async function loadPage() {
+    if (loading) return;
+    loading = true;
+    const params = new URLSearchParams({ limit: '40', offset: String(offset) });
+    if (query) params.set('search', query);
+    let data;
     try {
-      cards = (await fetchJSON(`${api}/cards?${params}`)).cards || [];
+      data = await fetchJSON(`${api}/cards?${params}`);
     } catch (_) {
+      loading = false;
       return;
     }
-    results.innerHTML = '';
-    cards.forEach((card) => {
+    const results = $('borrowResults');
+    const oldSentinel = results.querySelector('#borrowSentinel');
+    if (oldSentinel) oldSentinel.remove();
+    (data.cards || []).forEach((card) => {
+      const i = resultCards.length;
+      resultCards.push(card);
       const row = document.createElement('div');
       row.className = 'borrow-result';
       row.textContent = displayName(card);
-      row.addEventListener('click', () => pickDonor(card, row));
+      row.addEventListener('click', () => selectRow(i));
       results.appendChild(row);
     });
+    offset += (data.cards || []).length;
+    hasMore = !!data.has_more;
+    const sentinel = document.createElement('div');
+    sentinel.id = 'borrowSentinel';
+    sentinel.style.height = '1px';
+    results.appendChild(sentinel);
+    observer.disconnect();
+    if (hasMore) observer.observe(sentinel);
+    loading = false;
   }
 
-  async function pickDonor(card, row) {
-    $('borrowResults')
-      .querySelectorAll('.borrow-result')
-      .forEach((el) => el.classList.remove('selected'));
-    row.classList.add('selected');
+  async function pickDonor(card) {
     donorCard = card;
     donorIndex = 0;
     try {
