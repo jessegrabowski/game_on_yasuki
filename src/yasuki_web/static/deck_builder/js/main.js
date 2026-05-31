@@ -12,6 +12,7 @@ import {
 import { getDeckName, setDeckName, serializeDeck, parseDeckYaml } from './deck-io.js';
 import { buildCompositeDataURL, customPrintId, loadArtLayout } from './art.js';
 import { openBorrowArt } from './borrow-art.js';
+import { printDeck } from './print.js';
 import {
   initCardList,
   renderCardList,
@@ -114,6 +115,7 @@ async function init() {
   $('removeBtn').addEventListener('click', doRemoveSelectedFromDeck);
   $('clearBtn').addEventListener('click', doClearDeck);
   $('exportBtn').addEventListener('click', doExportDeck);
+  $('printBtn').addEventListener('click', () => printDeck(getDeck(), IMG, API));
   $('importBtn').addEventListener('click', () => $('importFileInput').click());
   $('deckNameInput').addEventListener('input', () => {
     $('deckNameInput').closest('.deck-name-row').classList.remove('shake');
