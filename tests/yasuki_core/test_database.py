@@ -17,7 +17,11 @@ from yasuki_core.database import (
     get_card_backs,
     get_connection_string,
 )
-from yasuki_core.paths import resolve_set_image_path
+from yasuki_core.paths import SETS_DIR, resolve_set_image_path
+
+# Card images are gitignored and served from R2, so they're absent in CI and fresh clones; only
+# assert on-disk existence when the local image tree is actually populated.
+_IMAGES_PRESENT = SETS_DIR.exists() and any(SETS_DIR.iterdir())
 
 
 def _db_available():
@@ -237,14 +241,16 @@ class TestSQLFiltering:
         assert all_count == filtered_count
 
     def test_results_include_image_path(self):
-        """Should include image_path from first print, resolving to a real file."""
+        """Should include an image_path of the served form sets/<slug>/<file> (or None)."""
         cards, _ = query_cards_page(limit=5)
         for card in cards:
             assert "image_path" in card
             if card["image_path"]:
                 assert card["image_path"].startswith("sets/")
                 resolved = resolve_set_image_path(card["image_path"])
-                assert resolved is not None and resolved.exists()
+                assert resolved is not None
+                if _IMAGES_PRESENT:
+                    assert resolved.exists()
 
 
 class TestCardBacks:
@@ -258,7 +264,9 @@ class TestCardBacks:
             ("Dynasty", "token"),
         }
         for path in backs.values():
-            assert resolve_set_image_path(path).exists()
+            assert path.startswith("sets/backs/")
+            if _IMAGES_PRESENT:
+                assert resolve_set_image_path(path).exists()
 
 
 class TestLikeEscaping:
