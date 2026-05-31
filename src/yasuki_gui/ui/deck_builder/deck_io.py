@@ -1,5 +1,7 @@
 import re
 
+from yasuki_gui.ui.deck_builder.deck_data import card_in_side
+
 YAML_SECTIONS = [
     ("pre_game", "SETUP"),
     ("dynasty", "DYNASTY"),
@@ -59,11 +61,7 @@ def _collect_side_entries(deck_state, cards_by_id, repository, side):
         if not card:
             continue
 
-        card_side = card.get("side")
-        if side == "SETUP":
-            if card_side in ("FATE", "DYNASTY"):
-                continue
-        elif card_side != side:
+        if not card_in_side(card, side):
             continue
 
         display_name = card.get("extended_title") or card.get("name", card_id)

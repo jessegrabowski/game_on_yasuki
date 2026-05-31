@@ -24,14 +24,14 @@ def mock_repository():
     repo = Mock()
     repo.filter_cards = Mock(
         return_value=[
-            {"id": "card1", "name": "Test Card 1"},
-            {"id": "card2", "name": "Test Card 2"},
+            {"card_id": "card1", "name": "Test Card 1"},
+            {"card_id": "card2", "name": "Test Card 2"},
         ]
     )
     repo.get_card = Mock(
         side_effect=lambda card_id: {
-            "card1": {"id": "card1", "name": "Test Card 1", "side": "FATE"},
-            "card2": {"id": "card2", "name": "Test Card 2", "side": "DYNASTY"},
+            "card1": {"card_id": "card1", "name": "Test Card 1", "decks": ["Fate"]},
+            "card2": {"card_id": "card2", "name": "Test Card 2", "decks": ["Dynasty"]},
         }.get(card_id)
     )
     repo.get_prints = Mock(return_value=[{"print_id": 1, "set_name": "Test Set"}])
@@ -96,7 +96,12 @@ def test_deck_card_list_refresh_fate(root, mock_repository):
     # Update mock to include type information
     mock_repository.get_card = Mock(
         side_effect=lambda card_id: {
-            "card1": {"id": "card1", "name": "Test Card 1", "side": "FATE", "type": "Strategy"},
+            "card1": {
+                "card_id": "card1",
+                "name": "Test Card 1",
+                "decks": ["Fate"],
+                "types": ["Strategy"],
+            },
         }.get(card_id)
     )
 
@@ -156,12 +161,17 @@ def test_deck_card_list_setup_side(root, mock_repository):
     mock_repository.get_card = Mock(
         side_effect=lambda card_id: {
             "stronghold1": {
-                "id": "stronghold1",
+                "card_id": "stronghold1",
                 "name": "Test Stronghold",
-                "side": "STRONGHOLD",
-                "type": "Stronghold",
+                "decks": ["Pre-Game"],
+                "types": ["Stronghold"],
             },
-            "card1": {"id": "card1", "name": "Test Card 1", "side": "FATE", "type": "Strategy"},
+            "card1": {
+                "card_id": "card1",
+                "name": "Test Card 1",
+                "decks": ["Fate"],
+                "types": ["Strategy"],
+            },
         }.get(card_id)
     )
 
@@ -186,7 +196,12 @@ def test_deck_card_list_multiple_prints_hierarchical(root, mock_repository):
     # Add type info to mock
     mock_repository.get_card = Mock(
         side_effect=lambda card_id: {
-            "card1": {"id": "card1", "name": "Test Card 1", "side": "FATE", "type": "Strategy"},
+            "card1": {
+                "card_id": "card1",
+                "name": "Test Card 1",
+                "decks": ["Fate"],
+                "types": ["Strategy"],
+            },
         }.get(card_id)
     )
 
@@ -241,7 +256,12 @@ def test_deck_card_list_single_print_one_line(root, mock_repository):
     # Add type info to mock
     mock_repository.get_card = Mock(
         side_effect=lambda card_id: {
-            "card1": {"id": "card1", "name": "Test Card 1", "side": "FATE", "type": "Strategy"},
+            "card1": {
+                "card_id": "card1",
+                "name": "Test Card 1",
+                "decks": ["Fate"],
+                "types": ["Strategy"],
+            },
         }.get(card_id)
     )
 
@@ -273,14 +293,19 @@ def test_deck_card_list_multiple_types_grouped(root, mock_repository):
     # Mock cards with different types
     mock_repository.get_card = Mock(
         side_effect=lambda card_id: {
-            "strategy1": {"id": "strategy1", "name": "Ambush", "side": "FATE", "type": "Strategy"},
-            "strategy2": {
-                "id": "strategy2",
-                "name": "Uncertainty",
-                "side": "FATE",
-                "type": "Strategy",
+            "strategy1": {
+                "card_id": "strategy1",
+                "name": "Ambush",
+                "decks": ["Fate"],
+                "types": ["Strategy"],
             },
-            "item1": {"id": "item1", "name": "Naginata", "side": "FATE", "type": "Item"},
+            "strategy2": {
+                "card_id": "strategy2",
+                "name": "Uncertainty",
+                "decks": ["Fate"],
+                "types": ["Strategy"],
+            },
+            "item1": {"card_id": "item1", "name": "Naginata", "decks": ["Fate"], "types": ["Item"]},
         }.get(card_id)
     )
 

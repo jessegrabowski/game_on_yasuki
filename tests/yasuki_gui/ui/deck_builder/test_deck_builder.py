@@ -17,7 +17,7 @@ def root():
 def mock_repository():
     with patch("yasuki_gui.ui.deck_builder.deck_builder.DeckBuilderRepository") as mock:
         repo_instance = Mock()
-        repo_instance.all_cards = [{"id": "card1", "name": "Test Card"}]
+        repo_instance.all_cards = [{"card_id": "card1", "name": "Test Card"}]
         repo_instance.filter_cards = Mock(return_value=[])
         repo_instance.get_card = Mock(return_value=None)
         repo_instance.get_prints = Mock(return_value=[])
@@ -84,7 +84,7 @@ class TestDeckBuilderWindow:
         from yasuki_gui.ui.deck_builder.filter_dialog import FilterOptions
 
         window._filter_options = FilterOptions()
-        window._filter_options.add_filter("clan", "Crab")
+        window._filter_options.add_filter("clans", ["Crab"])
 
         # Clear filters
         window._clear_filters()

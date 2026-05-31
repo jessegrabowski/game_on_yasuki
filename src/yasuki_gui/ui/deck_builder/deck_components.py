@@ -4,6 +4,7 @@ import logging
 
 from yasuki_gui.ui.deck_builder.components import ScrollableListBox
 from yasuki_gui.ui.deck_builder.card_preview import format_card_display_name
+from yasuki_gui.ui.deck_builder.deck_data import card_in_side
 from yasuki_core.search import parse_and_build_query
 
 if TYPE_CHECKING:
@@ -140,7 +141,7 @@ class FilteredCardList(ScrollableListBox):
         for card in filtered:
             display_name = format_card_display_name(card)
             self.insert(tk.END, display_name)
-            self._card_ids.append(card["id"])
+            self._card_ids.append(card["card_id"])
 
     def get_selected_card_id(self) -> str | None:
         """
@@ -189,20 +190,12 @@ class DeckCardList(ScrollableListBox):
             if not card:
                 continue
 
-            card_side = card.get("side")
-
-            # Check if card matches this list's side
-            if self._side == "SETUP":
-                # Setup cards are anything that's not FATE or DYNASTY
-                if card_side in ("FATE", "DYNASTY"):
-                    continue
-            else:
-                # Regular FATE or DYNASTY list
-                if card_side != self._side:
-                    continue
+            if not card_in_side(card, self._side):
+                continue
 
             # Group by type
-            card_type = card.get("type", "Unknown")
+            types = card.get("types") or []
+            card_type = types[0] if types else "Unknown"
             if card_type not in cards_by_type:
                 cards_by_type[card_type] = []
             cards_by_type[card_type].append((card_id, print_list))

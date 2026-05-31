@@ -104,9 +104,9 @@ def format_card_display_name(
     """
     extended_title = card.get("extended_title")
     name = card.get("name", "")
-    card_type = card.get("type", "").lower()
+    types = card.get("types") or []
 
-    if card_type == "personality" and extended_title and not include_subtitle:
+    if "Personality" in types and extended_title and not include_subtitle:
         base_name = _extract_base_name(name)
         experience = _extract_experience_from_extended_title(extended_title)
         display_name = f"{base_name}{experience}"
@@ -130,44 +130,28 @@ def format_card_display_name(
 
 def _extract_experience_level(card: dict) -> str | None:
     """
-    Extract experience level from card data.
+    Extract an experience-level code from a card's slug identifier.
 
-    Handles:
-    - Inexperienced cards (_inexp)
-    - Regular experienced (_exp, _exp2, _exp3, etc.)
-    - Campaign experienced (_expcow, _expcw, etc.)
+    Returns ``"inexp"`` for inexperienced cards, ``"exp"``/``"expN"`` for
+    experienced (optionally numbered) cards, and ``"exp_<campaign>"`` /
+    ``"expN_<campaign>"`` for campaign-specific experienced versions. Returns
+    None for base (non-experienced) cards.
     """
-    card_id = card.get("id", "")
+    card_id = card.get("card_id", "")
 
-    if "_inexp" in card_id:
+    if "_inexperienced" in card_id:
         return "inexp"
 
-    if "_exp" in card_id:
-        parts = card_id.split("_exp")
-        if len(parts) > 1:
-            exp_suffix = parts[-1]
-
-            if not exp_suffix or exp_suffix == "":
-                return "exp"
-
-            if exp_suffix.startswith("_") and exp_suffix[1:].isdigit():
-                level = int(exp_suffix[1:])
-                return f"exp{level}"
-
-            if exp_suffix.isdigit():
-                return f"exp{exp_suffix}"
-
-            if "_" in exp_suffix:
-                parts = exp_suffix.split("_")
-                if parts[0].isdigit():
-                    level_num = parts[0]
-                    campaign_code = parts[1].lower()
-                    return f"exp{level_num}_{campaign_code}"
-
-                campaign_code = exp_suffix.lower()
-                return f"exp_{campaign_code}"
-
+    if "_experienced" in card_id:
+        suffix = card_id.rsplit("_experienced", 1)[1].lstrip("_")
+        if not suffix:
             return "exp"
+        if suffix.isdigit():
+            return f"exp{suffix}"
+        level, _, campaign = suffix.partition("_")
+        if level.isdigit():
+            return f"exp{level}_{campaign}" if campaign else f"exp{level}"
+        return f"exp_{suffix}"
 
     return None
 
@@ -356,13 +340,14 @@ class CardPreviewController:
         if resolved and resolved.exists():
             return resolved
 
-        ctype = card.get("type", "").lower()
+        types = card.get("types") or []
+        ctype = types[0].lower() if types else ""
         return DEFAULT_BY_TYPE.get(ctype)
 
     def _load_back_image(self, card: dict) -> ImageTk.PhotoImage | None:
         """Load card back image as fallback."""
-        side = str(card.get("side", "FATE")).upper()
-        back_path = asset_paths.FATE_BACK if side == "FATE" else asset_paths.DYNASTY_BACK
+        decks = card.get("decks") or []
+        back_path = asset_paths.FATE_BACK if "Fate" in decks else asset_paths.DYNASTY_BACK
         return load_large_image(back_path, self.master)
 
     def _render_stats(self, card: dict) -> None:
