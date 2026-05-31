@@ -137,53 +137,41 @@ def get_db_connection() -> Generator[psycopg.Connection, None, None]:
         yield conn
 
 
-def query_all_cards() -> list[dict]:
-    """
-    Fetch all cards from database with their primary print information.
+# Shared card SELECT: card-level columns, multi-valued clan/type/deck as text arrays, and the front
+# image path from the card's first printing (NULL until print images are materialized).
+_CARD_SELECT = """
+    SELECT
+        c.card_id,
+        c.name,
+        c.extended_title,
+        (SELECT array_agg(deck::text ORDER BY deck) FROM card_decks d WHERE d.card_id = c.card_id)
+            AS decks,
+        (SELECT array_agg(type::text ORDER BY type) FROM card_card_types t WHERE t.card_id = c.card_id)
+            AS types,
+        (SELECT array_agg(clan ORDER BY clan) FROM card_clans cl WHERE cl.card_id = c.card_id)
+            AS clans,
+        c.rules_text AS text,
+        c.gold_cost, c.focus, c.force, c.chi,
+        c.honor_requirement, c.personal_honor, c.gold_production,
+        c.province_strength, c.starting_honor,
+        c.is_unique, c.is_proxy, c.is_banned, c.extra,
+        img.image_path
+    FROM cards c
+    LEFT JOIN LATERAL (
+        SELECT pi.path AS image_path
+        FROM prints p
+        JOIN print_images pi ON pi.print_id = p.print_id AND pi.role = 'front'
+        WHERE p.card_id = c.card_id
+        ORDER BY p.print_id, pi.image_index
+        LIMIT 1
+    ) img ON true"""
 
-    Returns
-    -------
-    cards : list of dict
-        List of card records with fields: id, name, deck, type, clan,
-        rules_text, and image_path from the first print if available
-    """
-    logger.debug("Querying all cards from database")
-    with get_db_connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute("""
-                SELECT
-                    c.id,
-                    c.name,
-                    c.extended_title,
-                    c.deck::text as side,
-                    c.type::text as type,
-                    c.clan,
-                    c.rules_text as text,
-                    c.gold_cost,
-                    c.focus,
-                    c.force,
-                    c.chi,
-                    c.honor_requirement,
-                    c.personal_honor,
-                    c.gold_production,
-                    c.province_strength,
-                    c.starting_honor,
-                    c.is_unique,
-                    c.extra,
-                    p.image_path
-                FROM cards c
-                LEFT JOIN LATERAL (
-                    SELECT image_path
-                    FROM prints
-                    WHERE prints.card_id = c.id
-                    ORDER BY print_id
-                    LIMIT 1
-                ) p ON true
-                ORDER BY c.name
-            """)
-            results = cur.fetchall()
-            logger.debug(f"Retrieved {len(results)} cards from database")
-            return results
+
+def query_all_cards() -> list[dict]:
+    """Fetch every card with its multi-valued attributes and front image, ordered by name."""
+    with get_db_connection() as conn, conn.cursor() as cur:
+        cur.execute(f"{_CARD_SELECT} ORDER BY c.name")
+        return cur.fetchall()
 
 
 def search_cards(query: str = "", deck_filter: str | None = None) -> list[dict]:
@@ -211,47 +199,16 @@ def search_cards(query: str = "", deck_filter: str | None = None) -> list[dict]:
         params.extend([search_pattern, search_pattern])
 
     if deck_filter:
-        conditions.append("c.deck = %s::deck_type")
-        params.append(deck_filter.upper())
+        conditions.append(
+            "EXISTS (SELECT 1 FROM card_decks d WHERE d.card_id = c.card_id AND d.deck = %s::deck_type)"
+        )
+        params.append(deck_filter)
 
     where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
 
-    sql = f"""
-        SELECT
-            c.id,
-            c.name,
-            c.extended_title,
-            c.deck::text as side,
-            c.type::text as type,
-            c.clan,
-            c.rules_text as text,
-            c.gold_cost,
-            c.focus,
-            c.force,
-            c.chi,
-            c.honor_requirement,
-            c.personal_honor,
-            c.gold_production,
-            c.province_strength,
-            c.starting_honor,
-            c.is_unique,
-            c.extra,
-            p.image_path
-        FROM cards c
-        LEFT JOIN LATERAL (
-            SELECT image_path
-            FROM prints
-            WHERE prints.card_id = c.id
-            ORDER BY print_id
-            LIMIT 1
-        ) p ON true
-        {where_clause}
-        ORDER BY c.name
-    """
-
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(sql, params)
+            cur.execute(f"{_CARD_SELECT} {where_clause} ORDER BY c.name", params)
             return cur.fetchall()
 
 
@@ -270,32 +227,31 @@ def query_all_prints() -> list[dict]:
         with conn.cursor() as cur:
             cur.execute("""
                 SELECT
-                    c.id,
+                    c.card_id,
                     c.name,
                     c.extended_title,
-                    c.deck::text as side,
-                    c.type::text as type,
-                    c.clan,
-                    c.rules_text as text,
-                    c.gold_cost,
-                    c.focus,
-                    c.force,
-                    c.chi,
-                    c.honor_requirement,
-                    c.personal_honor,
-                    c.gold_production,
-                    c.province_strength,
-                    c.starting_honor,
-                    c.is_unique,
+                    (SELECT array_agg(deck::text ORDER BY deck) FROM card_decks d
+                       WHERE d.card_id = c.card_id) AS decks,
+                    (SELECT array_agg(type::text ORDER BY type) FROM card_card_types t
+                       WHERE t.card_id = c.card_id) AS types,
+                    (SELECT array_agg(clan ORDER BY clan) FROM card_clans cl
+                       WHERE cl.card_id = c.card_id) AS clans,
+                    c.rules_text AS text,
+                    c.gold_cost, c.focus, c.force, c.chi,
+                    c.honor_requirement, c.personal_honor, c.gold_production,
+                    c.province_strength, c.starting_honor, c.is_unique,
                     p.print_id,
-                    p.set_name,
+                    s.set_name,
                     p.rarity,
                     p.artist,
-                    p.image_path,
+                    pi.path AS image_path,
                     p.flavor_text
-                FROM cards c
-                JOIN prints p ON c.id = p.card_id
-                ORDER BY c.name, p.set_name
+                FROM prints p
+                JOIN cards c ON c.card_id = p.card_id
+                JOIN l5r_sets s ON s.set_id = p.set_id
+                LEFT JOIN print_images pi
+                    ON pi.print_id = p.print_id AND pi.role = 'front' AND pi.size = 'master'
+                ORDER BY c.name, s.set_name
             """)
             results = cur.fetchall()
             logger.debug(f"Retrieved {len(results)} prints from database")
@@ -318,38 +274,7 @@ def get_card_by_id(card_id: str) -> dict | None:
     """
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(
-                """
-                SELECT
-                    c.id,
-                    c.name,
-                    c.deck::text as side,
-                    c.type::text as type,
-                    c.clan,
-                    c.rules_text as text,
-                    c.gold_cost,
-                    c.focus,
-                    c.force,
-                    c.chi,
-                    c.honor_requirement,
-                    c.personal_honor,
-                    c.gold_production,
-                    c.province_strength,
-                    c.starting_honor,
-                    c.is_unique,
-                    p.image_path
-                FROM cards c
-                LEFT JOIN LATERAL (
-                    SELECT image_path
-                    FROM prints
-                    WHERE prints.card_id = c.id
-                    ORDER BY print_id
-                    LIMIT 1
-                ) p ON true
-                WHERE c.id = %s
-            """,
-                (card_id,),
-            )
+            cur.execute(f"{_CARD_SELECT} WHERE c.card_id = %s", (card_id,))
             return cur.fetchone()
 
 
@@ -372,16 +297,14 @@ def get_prints_by_card_id(card_id: str) -> list[dict]:
             cur.execute(
                 """
                 SELECT
-                    print_id,
-                    card_id,
-                    set_name,
-                    rarity,
-                    artist,
-                    image_path,
-                    flavor_text
-                FROM prints
-                WHERE card_id = %s
-                ORDER BY set_name
+                    p.print_id, p.card_id, s.set_name, p.rarity, p.artist,
+                    pi.path AS image_path, p.flavor_text
+                FROM prints p
+                JOIN l5r_sets s ON s.set_id = p.set_id
+                LEFT JOIN print_images pi
+                    ON pi.print_id = p.print_id AND pi.role = 'front' AND pi.size = 'master'
+                WHERE p.card_id = %s
+                ORDER BY s.set_name
             """,
                 (card_id,),
             )
@@ -412,19 +335,9 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(
-                """
-                SELECT
-                    c.id, c.name, c.extended_title,
-                    c.deck::text AS side, c.type::text AS type,
-                    c.clan, c.is_unique,
-                    c.rules_text AS text,
-                    c.force, c.chi, c.gold_cost, c.focus,
-                    c.honor_requirement, c.personal_honor,
-                    c.gold_production, c.province_strength, c.starting_honor
-                FROM cards c
-                WHERE lower(c.name) = ANY(%s) OR lower(c.extended_title) = ANY(%s)
-                ORDER BY c.name
-                """,
+                f"{_CARD_SELECT} "
+                "WHERE lower(c.name) = ANY(%s) OR lower(c.extended_title) = ANY(%s) "
+                "ORDER BY c.name",
                 (lower_names, lower_names),
             )
             cards = cur.fetchall()
@@ -432,13 +345,16 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
             if not cards:
                 return []
 
-            card_ids = [c["id"] for c in cards]
+            card_ids = [c["card_id"] for c in cards]
             cur.execute(
                 """
-                SELECT print_id, card_id, set_name, image_path, flavor_text
-                FROM prints
-                WHERE card_id = ANY(%s)
-                ORDER BY print_id
+                SELECT p.print_id, p.card_id, s.set_name, pi.path AS image_path, p.flavor_text
+                FROM prints p
+                JOIN l5r_sets s ON s.set_id = p.set_id
+                LEFT JOIN print_images pi
+                    ON pi.print_id = p.print_id AND pi.role = 'front' AND pi.size = 'master'
+                WHERE p.card_id = ANY(%s)
+                ORDER BY p.print_id
                 """,
                 (card_ids,),
             )
@@ -447,7 +363,7 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
                 prints_by_card.setdefault(row["card_id"], []).append(row)
 
             for card in cards:
-                card["prints"] = prints_by_card.get(card["id"], [])
+                card["prints"] = prints_by_card.get(card["card_id"], [])
 
             return cards
 
@@ -470,49 +386,27 @@ def query_all_formats() -> list[str]:
             return results
 
 
-def query_cards_by_legality(format_name: str, statuses: list[str] | None = None) -> list[str]:
+def query_cards_by_legality(format_name: str) -> list[str]:
     """
-    Fetch card IDs that match legality criteria for a format.
+    Fetch the ids of cards legal in a format.
 
     Parameters
     ----------
     format_name : str
-        Format name to filter by
-    statuses : list of str, optional
-        List of legality statuses to include (e.g., ['legal', 'not_legal']).
-        If None, includes all cards with any legality entry for the format.
+        Format name to filter by.
 
     Returns
     -------
     card_ids : list of str
-        List of card IDs matching the criteria
+        Ids of cards legal in the format.
     """
-    logger.debug(f"Querying cards for format '{format_name}' with statuses {statuses}")
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            if statuses:
-                cur.execute(
-                    """
-                    SELECT card_id
-                    FROM card_legalities
-                    WHERE format_name = %s AND status::text = ANY(%s)
-                    ORDER BY card_id
-                    """,
-                    (format_name, statuses),
-                )
-            else:
-                cur.execute(
-                    """
-                    SELECT card_id
-                    FROM card_legalities
-                    WHERE format_name = %s
-                    ORDER BY card_id
-                    """,
-                    (format_name,),
-                )
-            results = [row["card_id"] for row in cur.fetchall()]
-            logger.debug(f"Retrieved {len(results)} cards for format '{format_name}'")
-            return results
+            cur.execute(
+                "SELECT card_id FROM card_legalities WHERE format_name = %s ORDER BY card_id",
+                (format_name,),
+            )
+            return [row["card_id"] for row in cur.fetchall()]
 
 
 def query_all_sets() -> list[str]:
@@ -528,10 +422,10 @@ def query_all_sets() -> list[str]:
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT DISTINCT set_name
-                FROM prints
-                WHERE set_name IS NOT NULL AND set_name != ''
-                ORDER BY set_name
+                SELECT DISTINCT s.set_name
+                FROM l5r_sets s
+                JOIN prints p ON p.set_id = s.set_id
+                ORDER BY s.set_name
             """)
             results = [row["set_name"] for row in cur.fetchall()]
             logger.debug(f"Retrieved {len(results)} sets from database")
@@ -550,12 +444,7 @@ def query_all_decks() -> list[str]:
     logger.debug("Querying all deck types from database")
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute("""
-                SELECT DISTINCT deck::text
-                FROM cards
-                WHERE deck IS NOT NULL
-                ORDER BY deck
-            """)
+            cur.execute("SELECT DISTINCT deck::text AS deck FROM card_decks ORDER BY deck")
             results = [row["deck"] for row in cur.fetchall()]
             logger.debug(f"Retrieved {len(results)} deck types from database")
             return results
@@ -563,25 +452,17 @@ def query_all_decks() -> list[str]:
 
 def query_all_clans() -> list[str]:
     """
-    Fetch all unique individual clans from cards.
-
-    Cards may have multiple clans stored as comma-separated values.
-    This splits them and returns each unique clan individually.
+    Fetch all unique clans.
 
     Returns
     -------
     clans : list of str
-        List of clan names, sorted alphabetically
+        Clan names, sorted alphabetically.
     """
     logger.debug("Querying all clans from database")
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute("""
-                SELECT DISTINCT trim(unnest(string_to_array(clan, ','))) AS clan
-                FROM cards
-                WHERE clan IS NOT NULL AND clan != ''
-                ORDER BY clan
-            """)
+            cur.execute("SELECT DISTINCT clan FROM card_clans ORDER BY clan")
             results = [row["clan"] for row in cur.fetchall()]
             logger.debug(f"Retrieved {len(results)} clans from database")
             return results
@@ -599,12 +480,7 @@ def query_all_types() -> list[str]:
     logger.debug("Querying all card types from database")
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute("""
-                SELECT DISTINCT type::text
-                FROM cards
-                WHERE type IS NOT NULL
-                ORDER BY type
-            """)
+            cur.execute("SELECT DISTINCT type::text AS type FROM card_card_types ORDER BY type")
             results = [row["type"] for row in cur.fetchall()]
             logger.debug(f"Retrieved {len(results)} card types from database")
             return results
@@ -652,10 +528,12 @@ def query_types_by_deck(deck_types: list[str]) -> list[str]:
         with conn.cursor() as cur:
             cur.execute(
                 """
-                SELECT DISTINCT type::text
-                FROM cards
-                WHERE type IS NOT NULL
-                AND deck = ANY(%s::deck_type[])
+                SELECT DISTINCT t.type::text AS type
+                FROM card_card_types t
+                WHERE EXISTS (
+                    SELECT 1 FROM card_decks d
+                    WHERE d.card_id = t.card_id AND d.deck = ANY(%s::deck_type[])
+                )
                 ORDER BY type
             """,
                 (deck_types,),
@@ -746,20 +624,18 @@ def query_types_with_stat(stat_name: str) -> tuple[list[str], list[str]]:
     logger.debug(f"Querying types with stat '{stat_name}'")
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            # Find card types with non-NULL values for this stat
             cur.execute(f"""
-                SELECT DISTINCT type::text
-                FROM cards
-                WHERE {stat_name} IS NOT NULL
+                SELECT DISTINCT t.type::text AS type
+                FROM card_card_types t JOIN cards c ON c.card_id = t.card_id
+                WHERE c.{stat_name} IS NOT NULL
                 ORDER BY type
             """)
             types = [row["type"] for row in cur.fetchall()]
 
-            # Find deck types with non-NULL values for this stat
             cur.execute(f"""
-                SELECT DISTINCT deck::text
-                FROM cards
-                WHERE {stat_name} IS NOT NULL
+                SELECT DISTINCT d.deck::text AS deck
+                FROM card_decks d JOIN cards c ON c.card_id = d.card_id
+                WHERE c.{stat_name} IS NOT NULL
                 ORDER BY deck
             """)
             decks = [row["deck"] for row in cur.fetchall()]
@@ -798,10 +674,12 @@ def query_all_stat_type_mappings() -> dict[str, tuple[set[str], set[str]]]:
                 # Single query per stat, but all done in one connection
                 cur.execute(f"""
                     SELECT
-                        ARRAY_AGG(DISTINCT type::text ORDER BY type::text) FILTER (WHERE type IS NOT NULL) as types,
-                        ARRAY_AGG(DISTINCT deck::text ORDER BY deck::text) FILTER (WHERE deck IS NOT NULL) as decks
-                    FROM cards
-                    WHERE {stat} IS NOT NULL
+                        (SELECT array_agg(DISTINCT t.type::text ORDER BY t.type::text)
+                           FROM card_card_types t JOIN cards c ON c.card_id = t.card_id
+                           WHERE c.{stat} IS NOT NULL) AS types,
+                        (SELECT array_agg(DISTINCT d.deck::text ORDER BY d.deck::text)
+                           FROM card_decks d JOIN cards c ON c.card_id = d.card_id
+                           WHERE c.{stat} IS NOT NULL) AS decks
                 """)
                 row = cur.fetchone()
                 types = set(row["types"]) if row["types"] else set()
@@ -812,155 +690,53 @@ def query_all_stat_type_mappings() -> dict[str, tuple[set[str], set[str]]]:
     return mappings
 
 
-def query_sets_by_format(format_name: str, statuses: list[str] | None = None) -> list[str]:
+def query_sets_by_format(format_name: str) -> list[str]:
     """
-    Fetch unique set names that belong to a specific format's arc/era.
+    Fetch the set names that belong to a format's arc/era.
 
-    For arc-specific formats (e.g., "Clan Wars (Imperial)"), only returns sets
-    that are actually part of that format's arc.
-
-    For cross-era formats (Modern, Legacy), returns all sets with legal cards.
+    Arc-specific formats (e.g. "Clan Wars (Imperial)") return only sets from that arc; cross-era
+    formats (Modern, Legacy) return every set holding a card legal in the format.
 
     Parameters
     ----------
     format_name : str
-        Format name to filter by
-    statuses : list of str, optional
-        List of legality statuses to include (e.g., ['legal', 'not_legal']).
-        If None, includes all cards with any legality entry for the format.
+        Format name to filter by.
 
     Returns
     -------
     sets : list of str
-        List of unique set names, sorted alphabetically
+        Set names, sorted alphabetically.
     """
-    logger.debug(f"Querying sets for format '{format_name}' with statuses {statuses}")
+    logger.debug("Querying sets for format '%s'", format_name)
 
-    # Cross-era formats that include cards from multiple arcs
     cross_era_formats = {"Modern", "Legacy", "Not Legal (Proxy)", "Unreleased"}
-
+    legal = "p.card_id IN (SELECT card_id FROM card_legalities WHERE format_name = %s)"
+    arc_match = (
+        "(s.arc ILIKE '%%' || SPLIT_PART(%s, ' (', 1) || '%%'"
+        " OR %s ILIKE '%%' || s.arc || '%%'"
+        " OR s.arc = SPLIT_PART(%s, ' (', 1))"
+    )
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             if format_name in cross_era_formats:
-                # For cross-era formats, return all sets with cards legal in the format
-                if statuses:
-                    cur.execute(
-                        """
-                        SELECT DISTINCT p.set_name
-                        FROM prints p
-                        WHERE p.card_id IN (
-                            SELECT card_id
-                            FROM card_legalities
-                            WHERE format_name = %s AND status::text = ANY(%s)
-                        )
-                        AND p.set_name IS NOT NULL AND p.set_name != ''
-                        ORDER BY p.set_name
-                        """,
-                        (format_name, statuses),
-                    )
-                else:
-                    cur.execute(
-                        """
-                        SELECT DISTINCT p.set_name
-                        FROM prints p
-                        WHERE p.card_id IN (
-                            SELECT card_id
-                            FROM card_legalities
-                            WHERE format_name = %s
-                        )
-                        AND p.set_name IS NOT NULL AND p.set_name != ''
-                        ORDER BY p.set_name
-                        """,
-                        (format_name,),
-                    )
+                cur.execute(
+                    f"SELECT DISTINCT s.set_name FROM l5r_sets s JOIN prints p ON p.set_id = s.set_id"
+                    f" WHERE {legal} ORDER BY s.set_name",
+                    (format_name,),
+                )
             else:
-                # For arc-specific formats, only return sets from that arc
-                if statuses:
-                    cur.execute(
-                        """
-                        SELECT DISTINCT p.set_name
-                        FROM prints p
-                        INNER JOIN l5r_sets s ON p.set_name = s.set_name
-                        WHERE p.card_id IN (
-                            SELECT card_id
-                            FROM card_legalities
-                            WHERE format_name = %s AND status::text = ANY(%s)
-                        )
-                        AND p.set_name IS NOT NULL AND p.set_name != ''
-                        AND (
-                            -- Match sets where the arc contains part of the format name
-                            -- or the format name contains the arc name
-                            s.arc ILIKE '%%' || SPLIT_PART(%s, ' (', 1) || '%%'
-                            OR %s ILIKE '%%' || s.arc || '%%'
-                            OR s.arc = SPLIT_PART(%s, ' (', 1)
-                        )
-                        ORDER BY p.set_name
-                        """,
-                        (format_name, statuses, format_name, format_name, format_name),
-                    )
-                else:
-                    cur.execute(
-                        """
-                        SELECT DISTINCT p.set_name
-                        FROM prints p
-                        INNER JOIN l5r_sets s ON p.set_name = s.set_name
-                        WHERE p.card_id IN (
-                            SELECT card_id
-                            FROM card_legalities
-                            WHERE format_name = %s
-                        )
-                        AND p.set_name IS NOT NULL AND p.set_name != ''
-                        AND (
-                            -- Match sets where the arc contains part of the format name
-                            -- or the format name contains the arc name
-                            s.arc ILIKE '%%' || SPLIT_PART(%s, ' (', 1) || '%%'
-                            OR %s ILIKE '%%' || s.arc || '%%'
-                            OR s.arc = SPLIT_PART(%s, ' (', 1)
-                        )
-                        ORDER BY p.set_name
-                        """,
-                        (format_name, format_name, format_name, format_name),
-                    )
-            results = [row["set_name"] for row in cur.fetchall()]
-            logger.debug(f"Retrieved {len(results)} sets for format '{format_name}'")
-            return results
+                cur.execute(
+                    f"SELECT DISTINCT s.set_name FROM l5r_sets s JOIN prints p ON p.set_id = s.set_id"
+                    f" WHERE {legal} AND {arc_match} ORDER BY s.set_name",
+                    (format_name, format_name, format_name, format_name),
+                )
+            return [row["set_name"] for row in cur.fetchall()]
 
-
-_CARD_SELECT = """
-    SELECT
-        c.id,
-        c.name,
-        c.extended_title,
-        c.deck::text as side,
-        c.type::text as type,
-        c.clan,
-        c.rules_text as text,
-        c.gold_cost,
-        c.focus,
-        c.force,
-        c.chi,
-        c.honor_requirement,
-        c.personal_honor,
-        c.gold_production,
-        c.province_strength,
-        c.starting_honor,
-        c.is_unique,
-        c.extra,
-        p.image_path
-    FROM cards c
-    LEFT JOIN LATERAL (
-        SELECT image_path
-        FROM prints
-        WHERE prints.card_id = c.id
-        ORDER BY print_id
-        LIMIT 1
-    ) p ON true"""
 
 _ALLOWED_COLUMNS = {
-    "deck",
-    "type",
-    "clan",
     "is_unique",
+    "is_proxy",
+    "is_banned",
     "name",
     "force",
     "chi",
@@ -1017,7 +793,7 @@ def _build_card_filter(
     if text_query:
         conditions.append(
             "(c.name ILIKE %s ESCAPE '\\'"
-            " OR c.id ILIKE %s ESCAPE '\\'"
+            " OR c.card_id ILIKE %s ESCAPE '\\'"
             " OR c.rules_text ILIKE %s ESCAPE '\\')"
         )
         search_pattern = f"%{_escape_like(text_query)}%"
@@ -1026,101 +802,55 @@ def _build_card_filter(
     if filter_options:
         for property_name, value in filter_options.items():
             if property_name == "legality":
-                format_name, statuses = value
+                format_name, _statuses = value
                 if format_name:
-                    if statuses:
-                        conditions.append(
-                            """
-                            c.id IN (
-                                SELECT card_id
-                                FROM card_legalities
-                                WHERE format_name = %s AND status::text = ANY(%s)
-                            )
-                            """
-                        )
-                        params.extend([format_name, statuses])
-                    else:
-                        conditions.append(
-                            """
-                            c.id IN (
-                                SELECT card_id
-                                FROM card_legalities
-                                WHERE format_name = %s
-                            )
-                            """
-                        )
-                        params.append(format_name)
-                elif statuses:
                     conditions.append(
-                        """
-                        c.id IN (
-                            SELECT DISTINCT card_id
-                            FROM card_legalities
-                            WHERE status::text = ANY(%s)
-                        )
-                        """
+                        "c.card_id IN (SELECT card_id FROM card_legalities WHERE format_name = %s)"
                     )
-                    params.append(statuses)
-
+                    params.append(format_name)
             elif property_name == "sets":
-                set_list = value
-                if set_list:
+                if value:
                     conditions.append(
-                        """
-                        c.id IN (
-                            SELECT DISTINCT card_id
-                            FROM prints
-                            WHERE set_name = ANY(%s)
-                        )
-                        """
+                        "c.card_id IN (SELECT p.card_id FROM prints p"
+                        " JOIN l5r_sets s ON s.set_id = p.set_id WHERE s.set_name = ANY(%s))"
                     )
-                    params.append(set_list)
+                    params.append(value)
             elif property_name == "decks":
-                deck_list = value
-                if deck_list:
-                    conditions.append("c.deck = ANY(%s::deck_type[])")
-                    params.append(deck_list)
+                if value:
+                    conditions.append(
+                        "c.card_id IN (SELECT card_id FROM card_decks"
+                        " WHERE deck = ANY(%s::deck_type[]))"
+                    )
+                    params.append([d.title() for d in value])
             elif property_name == "types":
-                type_list = value
-                if type_list:
-                    conditions.append("c.type = ANY(%s::card_type[])")
-                    params.append([t.title() for t in type_list])
+                if value:
+                    conditions.append(
+                        "c.card_id IN (SELECT card_id FROM card_card_types"
+                        " WHERE type = ANY(%s::card_type[]))"
+                    )
+                    params.append([t.title() for t in value])
             elif property_name == "clans":
-                clan_list = value
-                if clan_list:
-                    clan_conditions = []
-                    for clan in clan_list:
-                        clan_conditions.append("c.clan ILIKE %s ESCAPE '\\'")
-                        params.append(f"%{_escape_like(clan)}%")
-                    conditions.append(f"({' OR '.join(clan_conditions)})")
+                if value:
+                    conditions.append(
+                        "c.card_id IN (SELECT card_id FROM card_clans WHERE clan = ANY(%s))"
+                    )
+                    params.append(value)
             elif property_name == "rarities":
-                rarity_list = value
-                if rarity_list:
+                if value:
                     rarity_conditions = []
-                    for rarity in rarity_list:
-                        rarity_conditions.append("p2.rarity ILIKE %s ESCAPE '\\'")
+                    for rarity in value:
+                        rarity_conditions.append("rarity ILIKE %s ESCAPE '\\'")
                         params.append(f"%{_escape_like(rarity)}%")
                     conditions.append(
-                        f"""
-                        c.id IN (
-                            SELECT DISTINCT card_id
-                            FROM prints p2
-                            WHERE {" OR ".join(rarity_conditions)}
-                        )
-                        """
+                        "c.card_id IN (SELECT card_id FROM prints"
+                        f" WHERE {' OR '.join(rarity_conditions)})"
                     )
             elif property_name == "keywords":
-                keyword_list = value
-                if keyword_list:
-                    for keyword in keyword_list:
+                if value:
+                    for keyword in value:
                         conditions.append(
-                            """
-                            c.id IN (
-                                SELECT card_id
-                                FROM card_keywords
-                                WHERE lower(keyword) = lower(%s)
-                            )
-                            """
+                            "c.card_id IN (SELECT card_id FROM card_keywords"
+                            " WHERE lower(keyword) = lower(%s))"
                         )
                         params.append(keyword)
             elif property_name in _NUMERIC_STATS:
@@ -1139,12 +869,7 @@ def _build_card_filter(
                 if property_name not in _ALLOWED_COLUMNS:
                     logger.warning(f"Ignoring unknown filter column: {property_name}")
                     continue
-                if property_name == "deck":
-                    conditions.append("c.deck = %s::deck_type")
-                elif property_name == "type":
-                    conditions.append("c.type = %s::card_type")
-                else:
-                    conditions.append(f"c.{property_name} = %s")
+                conditions.append(f"c.{property_name} = %s")
                 params.append(value)
 
     where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
@@ -1297,8 +1022,10 @@ def query_random_cards(
     params: list = []
 
     if deck_filter:
-        conditions.append("c.deck = %s::deck_type")
-        params.append(deck_filter.upper())
+        conditions.append(
+            "EXISTS (SELECT 1 FROM card_decks d WHERE d.card_id = c.card_id AND d.deck = %s::deck_type)"
+        )
+        params.append(deck_filter)
 
     where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
 
