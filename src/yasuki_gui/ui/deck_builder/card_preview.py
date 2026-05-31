@@ -5,10 +5,29 @@ from pathlib import Path
 from PIL import Image, ImageTk
 
 from yasuki_core import paths as asset_paths
+from yasuki_core.card_art import back_era_for_set
 from yasuki_core.paths import resolve_set_image_path
 from yasuki_gui.constants import CARD_W, CARD_H
 
 logger = logging.getLogger(__name__)
+
+_card_backs: dict[tuple[str, str], str] | None = None
+
+
+def _card_back_path(deck: str, era: str) -> Path | None:
+    """The generic back image for a deck/era ('old'/'new'), resolved from the card-backs table."""
+    global _card_backs
+    if _card_backs is None:
+        from yasuki_core.database import get_card_backs
+
+        try:
+            _card_backs = get_card_backs()
+        except Exception:
+            _card_backs = {}
+    rel = _card_backs.get((deck, era)) or _card_backs.get((deck, "new"))
+    resolved = resolve_set_image_path(rel) if rel else None
+    return resolved if resolved and resolved.exists() else None
+
 
 PREVIEW_CARD_W = 4 * CARD_W
 PREVIEW_CARD_H = 4 * CARD_H
@@ -356,13 +375,13 @@ class CardPreviewController:
             if composite is not None:
                 resized = composite.resize((PREVIEW_CARD_W, PREVIEW_CARD_H), Image.LANCZOS)
                 return ImageTk.PhotoImage(resized, master=self.master)
-            return self._load_back_image(card)
+            return self._load_back_image(card, print_info)
 
         img_path = self._resolve_image_path(card, print_info)
         if img_path and img_path.exists():
             return load_large_image(img_path, self.master)
 
-        return self._load_back_image(card)
+        return self._load_back_image(card, print_info)
 
     def _resolve_image_path(self, card: dict, print_info: dict) -> Path | None:
         """Resolve image path from print info or card type default."""
@@ -375,10 +394,19 @@ class CardPreviewController:
         ctype = types[0].lower() if types else ""
         return DEFAULT_BY_TYPE.get(ctype)
 
-    def _load_back_image(self, card: dict) -> ImageTk.PhotoImage | None:
-        """Load card back image as fallback."""
+    def _load_back_image(
+        self, card: dict, print_info: dict | None = None
+    ) -> ImageTk.PhotoImage | None:
+        """Load the generic card back as a fallback, matching the card's deck and print era.
+
+        Prints before Gold Edition show the old back; Gold onward the new back."""
         decks = card.get("decks") or []
-        back_path = asset_paths.FATE_BACK if "Fate" in decks else asset_paths.DYNASTY_BACK
+        deck = "Fate" if "Fate" in decks else "Dynasty"
+        set_name = print_info.get("set_name") if print_info else None
+        era = back_era_for_set(set_name) if set_name else "new"
+        back_path = _card_back_path(deck, era)
+        if back_path is None:
+            back_path = asset_paths.FATE_BACK if deck == "Fate" else asset_paths.DYNASTY_BACK
         return load_large_image(back_path, self.master)
 
     def current_recipient(self) -> dict | None:
