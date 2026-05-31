@@ -17,6 +17,7 @@ from yasuki_core.database import (
     query_types_by_deck,
     get_card_backs,
 )
+from yasuki_core.card_art import load_art_layout
 from yasuki_core.search import parse_and_build_query
 from yasuki_web.rate_limit import limiter
 
@@ -258,6 +259,15 @@ async def list_card_backs():
     except Exception as e:
         logger.error(f"Error listing card backs: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve card backs")
+
+
+@router.get("/art-layout")
+async def art_layout():
+    """The art-swap layout data (rects, era bands, layout map) shared with the browser canvas.
+
+    Serving it from the same JSON the Python renderers read keeps the GUI and web composites in
+    step."""
+    return load_art_layout()
 
 
 @router.get("/card-types")
