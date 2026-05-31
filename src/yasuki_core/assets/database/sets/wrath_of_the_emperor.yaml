@@ -1,7 +1,6 @@
 set: Wrath of the Emperor
 cards:
-- cardid: 159
-  title: Agasha Tomioko
+- title: Agasha Tomioko
   types:
   - Personality
   decks:
@@ -25,14 +24,12 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 The Emperor's Eyes Top of Clan - Frank Dermody
-  printing_id: '1'
   rarity: Common
   artist: Matthew S. Armstrong
   flavor_text: <i>"Those called to the highest order of the Imperial Legions are the finest of all samurai,
     commanded by the heroes of future legend." - Miya Shoin</i>
   collector_number: '44'
-- cardid: 270
-  title: Akodo Sanuro
+- title: Akodo Sanuro
   types:
   - Personality
   decks:
@@ -53,13 +50,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>"War is the dream of every true Deathseeker." - Ikoma Sume</i>
   collector_number: '33'
-- cardid: 304
-  title: Akodo Tsuyumi
+- title: Akodo Tsuyumi
   types:
   - Personality
   decks:
@@ -82,31 +77,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: William O'Connor
   flavor_text: <i>"There is only one path to my forgiveness. You stand upon it, Scorpion."</i>
   collector_number: '32'
-- cardid: 345
-  title: Ambush at Sea
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Battle/Open, :g1::</b> Target a Personality: Give him +1F/+2C.<br><b>Battle/Open:</b> Target
-    your Personality with a Chi penalty from another player''s card: Permanently give him +2F/+5C.'
-  gold_cost: 0
-  focus: 3
-  legality:
-  - Legacy
-  - Rain of Blood (Diamond)
-  printing_id: '1'
-  rarity: Common
-  artist: Malcolm McClinton
-  flavor_text: <i>"The Emperor is no fool, Munemori. Seek the true reasons for what he does." - Doji Akiko</i>
-  collector_number: '86'
-- cardid: 346
-  title: Ambush Duel
+- title: Ambush Duel
   types:
   - Strategy
   decks:
@@ -121,12 +96,26 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Malcolm McClinton
   collector_number: '79'
-- cardid: 426
-  title: Archer Towers
+- title: Ambush at Sea
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle/Open, :g1::</b> Target a Personality: Give him +1F/+2C.<br><b>Battle/Open:</b> Target
+    your Personality with a Chi penalty from another player''s card: Permanently give him +2F/+5C.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Common
+  artist: Malcolm McClinton
+  flavor_text: <i>"The Emperor is no fool, Munemori. Seek the true reasons for what he does." - Doji Akiko</i>
+  collector_number: '86'
+- title: Archer Towers
   types:
   - Holding
   decks:
@@ -143,12 +132,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Theresa Brandon
   collector_number: '10'
-- cardid: 427
-  title: Archer's Row
+- title: Archer's Row
   types:
   - Strategy
   decks:
@@ -167,12 +154,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Thomas Denmark
   collector_number: '80'
-- cardid: 442
-  title: Armor of Sacrifice
+- title: Armor of Sacrifice
   types:
   - Item
   decks:
@@ -190,13 +175,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Ed Cox
   flavor_text: <i>"Remember those who die. Live for their memory." - Crab proverb</i>
   collector_number: '118'
-- cardid: 460
-  title: Army of Jigoku
+- title: Army of Jigoku
   types:
   - Strategy
   decks:
@@ -215,12 +198,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: John Wigley
   collector_number: '96'
-- cardid: 531
-  title: Asako Bairei
+- title: Asako Bairei
   types:
   - Personality
   decks:
@@ -247,12 +228,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: William O'Connor
   collector_number: '45'
-- cardid: 591
-  title: Asako Tsuruko
+- title: Asako Tsuruko
   types:
   - Personality
   decks:
@@ -273,13 +252,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>"Sleep well, nameless stranger. Your remains will serve my masters well."</i>
   collector_number: '46'
-- cardid: 609
-  title: Ashigaru Armor
+- title: Ashigaru Armor
   types:
   - Item
   decks:
@@ -296,12 +273,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Ed Cox
   collector_number: '120'
-- cardid: 678
-  title: Bamboo Forest
+- title: Bamboo Forest
   types:
   - Region
   decks:
@@ -313,14 +288,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Tony Moseley
   flavor_text: <i>"Tell me what you have seen, Reizo," Katamari roared, and seized the drunken samurai
     by his shoulders. "Tell me what happened in the Twilight Mountains!"</i>
   collector_number: '75'
-- cardid: 754
-  title: Bayushi Baku
+- title: Bayushi Baku
   types:
   - Personality
   decks:
@@ -350,12 +323,10 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2002 Unfinished Business 2 - Ryan Carter
-  printing_id: '1'
   rarity: Fixed
   artist: Lisa Hunt
   collector_number: '56'
-- cardid: 845
-  title: Bayushi Muhito
+- title: Bayushi Muhito
   types:
   - Personality
   decks:
@@ -378,13 +349,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: Michael Phillippi
   flavor_text: <i>"Magic is a word fools use to describe that which they do not understand."</i>
   collector_number: '57'
-- cardid: 912
-  title: Bayushi Toho
+- title: Bayushi Toho
   types:
   - Personality
   decks:
@@ -403,14 +372,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>"My lord Tsimaru sends his greetings, Kei-sama. He asks that you weigh carefully the
     promises your family has made."</i>
   collector_number: '58'
-- cardid: 935
-  title: Bayushi's Knives
+- title: Bayushi's Knives
   types:
   - Strategy
   decks:
@@ -429,12 +396,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Lee Moyer
   collector_number: '98'
-- cardid: 950
-  title: Beiden Shadows
+- title: Beiden Shadows
   types:
   - Region
   decks:
@@ -446,15 +411,13 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Tony Moseley
   flavor_text: <i>"Beiden Pass is but a distant memory. Those who do not wish to offer the Unicorn tribute
     must journey through the many smaller passes, called Beiden Shadows. The passage is risky, but possible."
     - Akodo Setai</i>
   collector_number: '76'
-- cardid: 972
-  title: Binding Kharma
+- title: Binding Kharma
   types:
   - Spell
   decks:
@@ -470,12 +433,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Lisa Hunt
   collector_number: '149'
-- cardid: 1015
-  title: Blade of the Meek
+- title: Blade of the Meek
   types:
   - Item
   decks:
@@ -494,12 +455,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Llyn Hunter
   collector_number: '119'
-- cardid: 1054
-  title: Blood Frenzy
+- title: Blood Frenzy
   types:
   - Strategy
   decks:
@@ -515,13 +474,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Llyn Hunter
   flavor_text: <i>"Kill us if you must. We have tested your power, Wolf." Sezaru complied.</i>
   collector_number: '127'
-- cardid: 1161
-  title: Brother of Lightning
+- title: Brother of Lightning
   types:
   - Follower
   decks:
@@ -539,12 +496,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Jon Hodgson
   collector_number: '113'
-- cardid: 1326
-  title: Chimamire no Oni
+- title: Chimamire no Oni
   types:
   - Personality
   decks:
@@ -567,14 +522,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Jim Pavelec
   flavor_text: <i>"The Children of Jigoku offer our services where you will, but remember... no mortal
     is our master."</i>
   collector_number: '62'
-- cardid: 1359
-  title: Chuda Mishime
+- title: Chuda Mishime
   types:
   - Personality
   decks:
@@ -597,12 +550,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: Ed Cox
   collector_number: '63'
-- cardid: 1439
-  title: Companion Spirit
+- title: Companion Spirit
   types:
   - Spell
   decks:
@@ -618,13 +569,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Stephanie Pui-Mun Law
   flavor_text: <i>"Ancestors, watch over my daughter." - Shinjo Shono</i>
   collector_number: '147'
-- cardid: 1470
-  title: Contagion
+- title: Contagion
   types:
   - Strategy
   decks:
@@ -640,12 +589,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Malcolm McClinton
   collector_number: '128'
-- cardid: 1541
-  title: Courtly Sabotage
+- title: Courtly Sabotage
   types:
   - Event
   decks:
@@ -660,12 +607,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Beth Trott
   collector_number: '3'
-- cardid: 1567
-  title: Crippled Bone Runner
+- title: Crippled Bone Runner
   types:
   - Follower
   decks:
@@ -685,13 +630,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: John Donahue
   flavor_text: <i>"If my people must die, so be it. Better that than live as a mockery." - Ikm'atch-tek</i>
   collector_number: '112'
-- cardid: 1586
-  title: Crush the Unworthy
+- title: Crush the Unworthy
   types:
   - Strategy
   decks:
@@ -705,13 +648,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: Steve Ellis
   flavor_text: <i>"We are not afraid of the Khan." - last words of Matsu Ikari</i>
   collector_number: '101'
-- cardid: 1601
-  title: Curse of Blood
+- title: Curse of Blood
   types:
   - Spell
   decks:
@@ -726,13 +667,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Jon Hodgson
   flavor_text: <i>"You have sought us out, Wolf," Sura said. "We are here."</i>
   collector_number: '153'
-- cardid: 1613
-  title: D'gr'n-ki
+- title: D'gr'n-ki
   types:
   - Personality
   decks:
@@ -755,12 +694,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: John Donahue
   collector_number: '54'
-- cardid: 1651
-  title: Daidoji Kumi
+- title: Daidoji Kumi
   types:
   - Personality
   decks:
@@ -783,12 +720,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: William O'Connor
   collector_number: '22'
-- cardid: 1670
-  title: Daidoji Ryunosuke
+- title: Daidoji Ryunosuke
   types:
   - Personality
   decks:
@@ -810,12 +745,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Uncommon
   artist: Steve Ellis
   collector_number: '23'
-- cardid: 2045
-  title: Divide and Conquer
+- title: Divide and Conquer
   types:
   - Strategy
   decks:
@@ -830,14 +763,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Steve Ellis
   flavor_text: <i>The Lion counterattack struck between the Unicorn and Scorpion lines, but was quickly
     turned away. The Scorpion had known they were coming.</i>
   collector_number: '82'
-- cardid: 2051
-  title: Do Not Delay the Inevitable
+- title: Do Not Delay the Inevitable
   types:
   - Strategy
   decks:
@@ -853,13 +784,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: John Wigley
   flavor_text: <i>"Face me, lest I find justice in the slaughter of your family."</i>
   collector_number: '93'
-- cardid: 2417
-  title: Exquisite Armor
+- title: Exquisite Armor
   types:
   - Item
   decks:
@@ -874,14 +803,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Jason Engle
   flavor_text: <i>Crafted as gifts for those assuming new duties, many such suits are far more ornamental
     than practical.</i>
   collector_number: '117'
-- cardid: 2446
-  title: Fall Before the Master
+- title: Fall Before the Master
   types:
   - Strategy
   decks:
@@ -895,13 +822,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Storn A. Cook
   flavor_text: <i>"Offer me battle, offer me victory, and I will follow you anwhere, my lord."</i>
   collector_number: '131'
-- cardid: 2538
-  title: Fierce Bushi
+- title: Fierce Bushi
   types:
   - Follower
   decks:
@@ -920,12 +845,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Lee Moyer
   collector_number: '116'
-- cardid: 2635
-  title: For the Lady
+- title: For the Lady
   types:
   - Strategy
   decks:
@@ -940,13 +863,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Steve Ellis
   flavor_text: <i>"Never attack a Hitomi with the full moon in the sky." - unknown Matsu officer</i>
   collector_number: '132'
-- cardid: 2743
-  title: Fury of the Dark Lord
+- title: Fury of the Dark Lord
   types:
   - Strategy
   decks:
@@ -963,13 +884,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Storn A. Cook
   flavor_text: <i>"You can hide from them, Bloodspeaker. You cannot hide from me."</i>
   collector_number: '91'
-- cardid: 2746
-  title: Fury of the Wolf
+- title: Fury of the Wolf
   types:
   - Strategy
   decks:
@@ -983,12 +902,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Llyn Hunter
   collector_number: '99'
-- cardid: 2842
-  title: Goemon's Ascension
+- title: Goemon's Ascension
   types:
   - Event
   decks:
@@ -1004,14 +921,12 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 European Champion - Tolis Koutsikos
-  printing_id: '1'
   rarity: Rare
   artist: Beth Trott
   flavor_text: <i>"I name you Fortune of Heroes, Matsu Goemon, General of the Legion of the Dead." - Toturi
     I</i>
   collector_number: '1'
-- cardid: 2885
-  title: Gozoku Sensei
+- title: Gozoku Sensei
   types:
   - Sensei
   decks:
@@ -1029,12 +944,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Matthew S. Armstrong
   collector_number: '135'
-- cardid: 2960
-  title: Hand of Vengeance
+- title: Hand of Vengeance
   types:
   - Event
   decks:
@@ -1048,12 +961,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: David Horne
   collector_number: '5'
-- cardid: 3107
-  title: Hida Horii
+- title: Hida Horii
   types:
   - Personality
   decks:
@@ -1076,12 +987,10 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 The Emperor's Eyes Top of Clan - Mike Brown
-  printing_id: '1'
   rarity: Uncommon
   artist: Jason Engle
   collector_number: '67'
-- cardid: 3185
-  title: Hida Sobu
+- title: Hida Sobu
   types:
   - Personality
   decks:
@@ -1104,12 +1013,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: John Wigley
   collector_number: '16'
-- cardid: 3212
-  title: Hida Tonoji
+- title: Hida Tonoji
   types:
   - Personality
   decks:
@@ -1132,13 +1039,11 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 The Emperor's Eyes Top of Clan - Jim Brophy
-  printing_id: '2'
   rarity: Uncommon
   artist: William O'Connor
   flavor_text: <i>"Patience is for cowards."</i>
   collector_number: '15'
-- cardid: 3248
-  title: Hida's Formation
+- title: Hida's Formation
   types:
   - Strategy
   decks:
@@ -1156,12 +1061,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Ed Cox
   collector_number: '81'
-- cardid: 3338
-  title: Hiruma Tokito
+- title: Hiruma Tokito
   types:
   - Personality
   decks:
@@ -1181,14 +1084,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Malcolm McClinton
   flavor_text: <i>"The Bloodspeakers have not attacked Hiruma lands for months. Tokito has used that time
     well."</i>
   collector_number: '17'
-- cardid: 3386
-  title: Hitomi Suguhara
+- title: Hitomi Suguhara
   types:
   - Personality
   decks:
@@ -1212,13 +1113,11 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 The Emperor's Eyes Top of Clan - Eljas Oksanen
-  printing_id: '2'
   rarity: Common
   artist: Craig Maher
   flavor_text: <i>"If you cannot gain wisdom from the defeat I bring you, you do not deserve victory."</i>
   collector_number: '27'
-- cardid: 3448
-  title: Horiuchi Nobane
+- title: Horiuchi Nobane
   types:
   - Personality
   decks:
@@ -1242,13 +1141,11 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 The Emperor's Eyes Top of Clan - Joe McDonnell
-  printing_id: '1'
   rarity: Common
   artist: Jason Engle
   flavor_text: <i>"Stand aside, Hasaku. Neither of us shall influence this war."</i>
   collector_number: '69'
-- cardid: 3465
-  title: Hoshi Ishida
+- title: Hoshi Ishida
   types:
   - Personality
   decks:
@@ -1269,13 +1166,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>"To walk another's path is to walk a false path."</i>
   collector_number: '28'
-- cardid: 3500
-  title: House of the Jade Princess
+- title: House of the Jade Princess
   types:
   - Holding
   decks:
@@ -1291,12 +1186,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Llyn Hunter
   collector_number: '14'
-- cardid: 3577
-  title: Ide Tang
+- title: Ide Tang
   types:
   - Personality
   decks:
@@ -1323,12 +1216,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: David Horne
   collector_number: '70'
-- cardid: 3609
-  title: Ikoma Hasaku
+- title: Ikoma Hasaku
   types:
   - Personality
   decks:
@@ -1351,13 +1242,11 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 The Emperor's Eyes Top of Clan - Neil Jones
-  printing_id: '1'
   rarity: Common
   artist: Matthew S. Armstrong
   flavor_text: <i>"I serve the Lion and the Emperor. There is no difference."</i>
   collector_number: '35'
-- cardid: 3622
-  title: Ikoma Masote
+- title: Ikoma Masote
   types:
   - Personality
   decks:
@@ -1378,14 +1267,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: David Hudnut
   flavor_text: <i>"Lion to the east, Dragon to the north, Unicorn and Scorpion to the south and west.
     Crane waiting only for their opportunity. This shall be a tale of glory."</i>
   collector_number: '37'
-- cardid: 3651
-  title: Ikoma Tsai
+- title: Ikoma Tsai
   types:
   - Personality
   decks:
@@ -1411,14 +1298,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: April Lee
   flavor_text: <i>"Your former master was weak, Mieko. Surpass his deeds and assume his title, if you
     can."</i>
   collector_number: '36'
-- cardid: 3906
-  title: Isawa Sueno
+- title: Isawa Sueno
   types:
   - Personality
   decks:
@@ -1443,12 +1328,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Uncommon
   artist: Craig Maher
   collector_number: '47'
-- cardid: 3999
-  title: Iuchi Ryoi
+- title: Iuchi Ryoi
   types:
   - Personality
   decks:
@@ -1470,13 +1353,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Uncommon
   artist: Franz Vohwinkel
   flavor_text: <i>"Your steel is nothing. This is power."</i>
   collector_number: '71'
-- cardid: 4013
-  title: Iuchiban Sensei
+- title: Iuchiban Sensei
   types:
   - Sensei
   decks:
@@ -1491,12 +1372,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Jonathan Hunt
   collector_number: '134'
-- cardid: 4014
-  title: Iuchiban's Citadel
+- title: Iuchiban's Citadel
   types:
   - Stronghold
   decks:
@@ -1512,12 +1391,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Brad Williams
   collector_number: '156'
-- cardid: 4040
-  title: Jak-ir't
+- title: Jak-ir't
   types:
   - Personality
   decks:
@@ -1539,13 +1416,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Steve Ellis
   flavor_text: <i>"Interesting," chuckled Munemori. "Disgusting, yes, but interesting."</i>
   collector_number: '51'
-- cardid: 4046
-  title: Jigoku Sensei
+- title: Jigoku Sensei
   types:
   - Sensei
   decks:
@@ -1562,12 +1437,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: John Wigley
   collector_number: '144'
-- cardid: 4103
-  title: Kaimetsu-uo's Blade
+- title: Kaimetsu-uo's Blade
   types:
   - Item
   decks:
@@ -1584,13 +1457,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Jason Engle
   flavor_text: <i>"Mantis not miss this." - Sla't'err</i>
   collector_number: '122'
-- cardid: 4212
-  title: Kakita Noritoshi
+- title: Kakita Noritoshi
   types:
   - Personality
   decks:
@@ -1618,12 +1489,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '24'
-- cardid: 4227
-  title: Kakita Tamura
+- title: Kakita Tamura
   types:
   - Personality
   decks:
@@ -1647,12 +1516,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Matthew S. Armstrong
   collector_number: '25'
-- cardid: 4236
-  title: Kakita Totani
+- title: Kakita Totani
   types:
   - Personality
   decks:
@@ -1675,13 +1542,11 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 The Emperor's Eyes Top of Clan - Keith Owens
-  printing_id: '1'
   rarity: Common
   artist: April Lee
   flavor_text: <i>"You call yourself a samurai, Hotako? I call you a pirate."</i>
   collector_number: '21'
-- cardid: 4298
-  title: Katsu
+- title: Katsu
   types:
   - Personality
   decks:
@@ -1708,13 +1573,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"For the one true Dark Lord!"</i>
   collector_number: '65'
-- cardid: 4480
-  title: Knife in the Darkness
+- title: Knife in the Darkness
   types:
   - Strategy
   decks:
@@ -1732,14 +1595,12 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Uncommon
   artist: Malcolm McClinton
   flavor_text: <i>"An army led by an Akodo has never failed. Remove their generals, and the Lion will
     fall." - Bayushi Tsimaru</i>
   collector_number: '84'
-- cardid: 4591
-  title: Kuni Tansho
+- title: Kuni Tansho
   types:
   - Personality
   decks:
@@ -1764,14 +1625,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: William O'Connor
   flavor_text: <i>"Sezaru, you seek what we have hunted for centuries. Do you think that you will have
     greater success?"<br>"No," Sezaru said, "not without you."</i>
   collector_number: '19'
-- cardid: 4596
-  title: Kuni Yae
+- title: Kuni Yae
   types:
   - Personality
   decks:
@@ -1795,12 +1654,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Drew Baker
   collector_number: '18'
-- cardid: 4634
-  title: Kyuden Bayushi
+- title: Kyuden Bayushi
   types:
   - Stronghold
   decks:
@@ -1816,12 +1673,10 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   notes: Contemporary erratum, that the player MUST begin the game with two Winds, reversed via Oracle.
-  printing_id: '1'
   rarity: Fixed
   artist: Brad Williams
   collector_number: '155'
-- cardid: 4679
-  title: Layered Armor
+- title: Layered Armor
   types:
   - Item
   decks:
@@ -1837,13 +1692,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Britt Martin
   flavor_text: <i>Arrows and black energy rained from the sky, but Sezaru's forces did not waver.</i>
   collector_number: '124'
-- cardid: 4828
-  title: Many-Temple Master
+- title: Many-Temple Master
   types:
   - Personality
   decks:
@@ -1865,13 +1718,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Llyn Hunter
   flavor_text: <i>"Look upon endings as new beginnings."</i>
   collector_number: '68'
-- cardid: 4843
-  title: Martial Instruction
+- title: Martial Instruction
   types:
   - Strategy
   decks:
@@ -1887,13 +1738,11 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Joachim Gmoser
   flavor_text: <i>"Get up," the sensei snapped. "Do not fall so easily again."</i>
   collector_number: '129'
-- cardid: 5019
-  title: Megumi
+- title: Megumi
   types:
   - Personality
   decks:
@@ -1918,13 +1767,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Thomas Manning
   flavor_text: <i>"Welcome home, Megumi-chan." - Rekai</i>
   collector_number: '66'
-- cardid: 5033
-  title: Mercy in Battle
+- title: Mercy in Battle
   types:
   - Strategy
   decks:
@@ -1938,12 +1785,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Joachim Gmoser
   collector_number: '92'
-- cardid: 5048
-  title: Mihoko Sensei
+- title: Mihoko Sensei
   types:
   - Sensei
   decks:
@@ -1958,12 +1803,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Franz Vohwinkel
   collector_number: '137'
-- cardid: 5110
-  title: Mirumoto Kaiji
+- title: Mirumoto Kaiji
   types:
   - Personality
   decks:
@@ -1986,12 +1829,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Jason Engle
   collector_number: '26'
-- cardid: 5135
-  title: Mirumoto Narumi
+- title: Mirumoto Narumi
   types:
   - Personality
   decks:
@@ -2012,14 +1853,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Michael Kaluta
   flavor_text: <i>"It is how we live with the choices we make that is important, more so than how we make
     that choice."</i>
   collector_number: '29'
-- cardid: 5141
-  title: Mirumoto Rosanjin
+- title: Mirumoto Rosanjin
   types:
   - Personality
   decks:
@@ -2046,12 +1885,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: William O'Connor
   collector_number: '30'
-- cardid: 5276
-  title: Moshi Mogai
+- title: Moshi Mogai
   types:
   - Personality
   decks:
@@ -2077,12 +1914,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: William O'Connor
   collector_number: '38'
-- cardid: 5294
-  title: Motivation
+- title: Motivation
   types:
   - Strategy
   decks:
@@ -2095,13 +1930,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Steve Argyle
   flavor_text: <i>When the Righteous Emperor demands actions, there is no option but to triumph.</i>
   collector_number: '94'
-- cardid: 5311
-  title: Moto Chen
+- title: Moto Chen
   types:
   - Personality
   decks:
@@ -2130,12 +1963,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Steve Argyle
   collector_number: '74'
-- cardid: 5443
-  title: Murder in the Streets
+- title: Murder in the Streets
   types:
   - Strategy
   decks:
@@ -2152,12 +1983,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Ed Cox
   collector_number: '102'
-- cardid: 5446
-  title: Musaboru no Oni
+- title: Musaboru no Oni
   types:
   - Personality
   decks:
@@ -2178,12 +2007,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Janine Johnston
   collector_number: '64'
-- cardid: 5452
-  title: Musume Mura
+- title: Musume Mura
   types:
   - Region
   decks:
@@ -2195,14 +2022,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Tony Moseley
   flavor_text: <i>"The finest marriage arrangers of the Crane make their home here. Seek your future here,
     or seal your fate." - Kakita Munemori</i>
   collector_number: '77'
-- cardid: 5568
-  title: Ninja Mentor
+- title: Ninja Mentor
   types:
   - Follower
   decks:
@@ -2221,12 +2046,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Marta Preta Mora
   collector_number: '110'
-- cardid: 5718
-  title: One Tribe
+- title: One Tribe
   types:
   - Strategy
   decks:
@@ -2244,12 +2067,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Malcolm McClinton
   collector_number: '104'
-- cardid: 5823
-  title: Otomo Spokesman
+- title: Otomo Spokesman
   types:
   - Follower
   decks:
@@ -2265,12 +2086,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Chris Seaman
   collector_number: '108'
-- cardid: 5894
-  title: Patronage
+- title: Patronage
   types:
   - Strategy
   decks:
@@ -2285,13 +2104,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Chris Seaman
   flavor_text: <i>"The Doji are most gracious hosts."</i>
   collector_number: '89'
-- cardid: 5916
-  title: Peasant Weapons
+- title: Peasant Weapons
   types:
   - Item
   decks:
@@ -2309,13 +2126,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Malcolm McClinton
   flavor_text: <i>Don't call them that around a Yoritomo.</i>
   collector_number: '121'
-- cardid: 6104
-  title: Purge the Weak
+- title: Purge the Weak
   types:
   - Spell
   decks:
@@ -2331,13 +2146,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: Thomas Manning
   flavor_text: <i>Mohai and Suru both turned their power upon the Wolf.</i>
   collector_number: '146'
-- cardid: 6170
-  title: Ratling Guide
+- title: Ratling Guide
   types:
   - Follower
   decks:
@@ -2356,14 +2169,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: John Donahue
   flavor_text: <i>"Tomorrow Chieftan's warriors, hunt us even on most well-hidden paths. Time to find-find
     new paths."</i>
   collector_number: '111'
-- cardid: 6172
-  title: Ratling Nameseeker
+- title: Ratling Nameseeker
   types:
   - Personality
   decks:
@@ -2385,13 +2196,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Britt Martin
   flavor_text: <i>"Only heroes run-run father than Tomorrow."</i>
   collector_number: '50'
-- cardid: 6315
-  title: Rich Coffers
+- title: Rich Coffers
   types:
   - Holding
   decks:
@@ -2405,14 +2214,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: Veronica V. Jones
   flavor_text: <i>The Emperor seeks retribution, and even those with no connection to the Bloodspeakers
     are wise to avoid his furry.</i>
   collector_number: '6'
-- cardid: 6445
-  title: Sai no Oni
+- title: Sai no Oni
   types:
   - Follower
   decks:
@@ -2432,13 +2239,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Thomas Manning
   flavor_text: <i>Sometimes moving out of the way is not enough.</i>
   collector_number: '114'
-- cardid: 6517
-  title: Scroll Satchel
+- title: Scroll Satchel
   types:
   - Item
   decks:
@@ -2454,12 +2259,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Jon Hodgson
   collector_number: '123'
-- cardid: 6627
-  title: Setai Sensei
+- title: Setai Sensei
   types:
   - Sensei
   decks:
@@ -2475,12 +2278,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Steve Argyle
   collector_number: '139'
-- cardid: 6643
-  title: Sezaru's Punishment
+- title: Sezaru's Punishment
   types:
   - Spell
   decks:
@@ -2494,13 +2295,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Storn A. Cook
   flavor_text: <i>"In the name of the Righteous Emperor, die."</i>
   collector_number: '150'
-- cardid: 6733
-  title: Shi-Tien Yen-Wang Temple
+- title: Shi-Tien Yen-Wang Temple
   types:
   - Holding
   decks:
@@ -2514,12 +2313,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Tony Moseley
   collector_number: '8'
-- cardid: 6758
-  title: Shiba Hayama
+- title: Shiba Hayama
   types:
   - Personality
   decks:
@@ -2540,14 +2337,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: John Donahue
   flavor_text: <i>"Hayama was one of many we assumed dead at Gisei Toshi. His fate was more tragic than
     that." - Isawa Nakamuro</i>
   collector_number: '48'
-- cardid: 6819
-  title: Shiba Tsukimi
+- title: Shiba Tsukimi
   types:
   - Personality
   decks:
@@ -2572,12 +2367,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: April Lee
   collector_number: '49'
-- cardid: 6845
-  title: Shifting Fortunes
+- title: Shifting Fortunes
   types:
   - Strategy
   decks:
@@ -2594,13 +2387,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Anthony Francisco
   flavor_text: <i>"Let weakness become strength."</i>
   collector_number: '130'
-- cardid: 6894
-  title: Shinjo Isuto
+- title: Shinjo Isuto
   types:
   - Personality
   decks:
@@ -2624,13 +2415,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: John Donahue
   flavor_text: <i>"We are the wind that devours mountains."</i>
   collector_number: '72'
-- cardid: 6925
-  title: Shinjo Riders
+- title: Shinjo Riders
   types:
   - Follower
   decks:
@@ -2647,14 +2436,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Janine Johnston
   flavor_text: <i>"Take time, scout the terrain well, so that when the time comes for battle there will
     be no mistakes." - Shinjo Huang</i>
   collector_number: '109'
-- cardid: 7010
-  title: Shiro Giji
+- title: Shiro Giji
   types:
   - Stronghold
   decks:
@@ -2670,12 +2457,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Brad Williams
   collector_number: '154'
-- cardid: 7083
-  title: Shosuku Sensei
+- title: Shosuku Sensei
   types:
   - Sensei
   decks:
@@ -2691,12 +2476,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Chris Seaman
   collector_number: '140'
-- cardid: 7108
-  title: Shosuro Hokii
+- title: Shosuro Hokii
   types:
   - Personality
   decks:
@@ -2720,12 +2503,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Michael Kaluta
   collector_number: '59'
-- cardid: 7139
-  title: Shosuro Naname
+- title: Shosuro Naname
   types:
   - Personality
   decks:
@@ -2749,12 +2530,10 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 The Emperor's Eyes Top of Clan - Thomas Scheer
-  printing_id: '1'
   rarity: Common
   artist: Jason Engle
   collector_number: '60'
-- cardid: 7249
-  title: Siege-Breakers
+- title: Siege-Breakers
   types:
   - Holding
   decks:
@@ -2766,13 +2545,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Tony Moseley
   flavor_text: <i>"No oni is coming through these." - Kaiu Namboku</i>
   collector_number: '12'
-- cardid: 7289
-  title: Sla't'err
+- title: Sla't'err
   types:
   - Personality
   decks:
@@ -2797,13 +2574,11 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 The Emperor's Eyes Top of Clan - Simon Slater
-  printing_id: '1'
   rarity: Uncommon
   artist: Jason Engle
   flavor_text: <i>"Have faced creatures of shadow and lies before, Tsuno."</i>
   collector_number: '53'
-- cardid: 7316
-  title: Snow-Covered Pass
+- title: Snow-Covered Pass
   types:
   - Strategy
   decks:
@@ -2817,13 +2592,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Tony Moseley
   flavor_text: <i>"Only a fool starts a war in winter." - Daidoji Kikaze</i>
   collector_number: '100'
-- cardid: 7333
-  title: Someisa Sensei
+- title: Someisa Sensei
   types:
   - Sensei
   decks:
@@ -2838,12 +2611,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Drew Baker
   collector_number: '138'
-- cardid: 7386
-  title: Souls in Harmony
+- title: Souls in Harmony
   types:
   - Strategy
   decks:
@@ -2861,12 +2632,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Lee Moyer
   collector_number: '88'
-- cardid: 7431
-  title: Spirits and Steel
+- title: Spirits and Steel
   types:
   - Strategy
   decks:
@@ -2885,12 +2654,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Stephanie Pui-Mun Law
   collector_number: '106'
-- cardid: 7532
-  title: Strength From Weakness
+- title: Strength From Weakness
   types:
   - Strategy
   decks:
@@ -2905,13 +2672,30 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Stephanie Pui-Mun Law
   flavor_text: <i>In the halls of lost Gisei Toshi, Aikune seeks the truth.</i>
   collector_number: '133'
-- cardid: 7568
-  title: Strike and Move
+- title: Strike With No Shadow
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Ninja
+  text: '<b>Limited:</b> Bow your performing Ninja Personality, you may pay 2 Gold, and target a player:
+    If any of his provinces contain cards, you may target and discard one of these cards or, if none do,
+    that player targets one of his Personalities who is then destroyed. If you paid 2 Gold, shuffle this
+    card into your deck instead of discarding it after playing it.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Rare
+  artist: Chris Dien
+  collector_number: '83'
+- title: Strike and Move
   types:
   - Strategy
   decks:
@@ -2930,33 +2714,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Thomas Denmark
   collector_number: '85'
-- cardid: 7583
-  title: Strike With No Shadow
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Ninja
-  text: '<b>Limited:</b> Bow your performing Ninja Personality, you may pay 2 Gold, and target a player:
-    If any of his provinces contain cards, you may target and discard one of these cards or, if none do,
-    that player targets one of his Personalities who is then destroyed. If you paid 2 Gold, shuffle this
-    card into your deck instead of discarding it after playing it.'
-  gold_cost: 0
-  focus: 2
-  legality:
-  - Legacy
-  - Rain of Blood (Diamond)
-  printing_id: '1'
-  rarity: Rare
-  artist: Chris Dien
-  collector_number: '83'
-- cardid: 7661
-  title: Supply Lines
+- title: Supply Lines
   types:
   - Strategy
   decks:
@@ -2975,12 +2736,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Uncommon
   artist: Jason Engle
   collector_number: '103'
-- cardid: 7670
-  title: Suru's Mempo
+- title: Suru's Mempo
   types:
   - Item
   decks:
@@ -3000,12 +2759,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Beth Trott
   collector_number: '125'
-- cardid: 7684
-  title: Swamp Harriers
+- title: Swamp Harriers
   types:
   - Follower
   decks:
@@ -3023,14 +2780,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Malcolm McClinton
   flavor_text: <i>Draw a superior enemy into hostile terrain, weaken them so you stand on even footing
     and finish them.</i>
   collector_number: '107'
-- cardid: 7719
-  title: Tadaji Sensei
+- title: Tadaji Sensei
   types:
   - Sensei
   decks:
@@ -3045,12 +2800,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Steve Ellis
   collector_number: '145'
-- cardid: 7765
-  title: Tamago
+- title: Tamago
   types:
   - Personality
   decks:
@@ -3077,12 +2830,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Drew Baker
   collector_number: '34'
-- cardid: 7850
-  title: Te'tik'kir
+- title: Te'tik'kir
   types:
   - Personality
   decks:
@@ -3109,13 +2860,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: William O'Connor
   flavor_text: <i>"I am sorry, Mat'tck. Soon, my rest will come."</i>
   collector_number: '55'
-- cardid: 7876
-  title: Temple of Initiation
+- title: Temple of Initiation
   types:
   - Holding
   decks:
@@ -3129,12 +2878,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Thomas Manning
   collector_number: '11'
-- cardid: 7913
-  title: Tenshu Sensei
+- title: Tenshu Sensei
   types:
   - Sensei
   decks:
@@ -3148,12 +2895,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: John Wigley
   collector_number: '136'
-- cardid: 7967
-  title: The Barbarian Wall
+- title: The Barbarian Wall
   types:
   - Region
   decks:
@@ -3165,13 +2910,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Tony Moseley
   flavor_text: <i>"Not yet as impressive as the Kaiu Wall, but it has its uses." - Moto Chagatai</i>
   collector_number: '78'
-- cardid: 8153
-  title: The Iron Citadel
+- title: The Iron Citadel
   types:
   - Spell
   decks:
@@ -3192,12 +2935,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Tony Moseley
   collector_number: '148'
-- cardid: 8295
-  title: The Same Old Tricks
+- title: The Same Old Tricks
   types:
   - Strategy
   decks:
@@ -3209,14 +2950,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Beth Trott
   flavor_text: <i>"Root out the vices of your enemies so you might hinder them more easily, like blocking
     a well-traveled road." - Bayushi Kaukatsu</i>
   collector_number: '95'
-- cardid: 8396
-  title: The Tribes Gather
+- title: The Tribes Gather
   types:
   - Strategy
   decks:
@@ -3231,13 +2970,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Beth Trott
   flavor_text: <i>"The time has come," the Chief-of-Chiefs said. "Stand together, or die alone."</i>
   collector_number: '105'
-- cardid: 8497
-  title: Tishi Sensei
+- title: Tishi Sensei
   types:
   - Sensei
   decks:
@@ -3252,12 +2989,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Jonathan Hunt
   collector_number: '143'
-- cardid: 8506
-  title: To the Forests
+- title: To the Forests
   types:
   - Strategy
   decks:
@@ -3276,12 +3011,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: David Horne
   collector_number: '97'
-- cardid: 8627
-  title: Tomorrow Sensei
+- title: Tomorrow Sensei
   types:
   - Sensei
   decks:
@@ -3299,12 +3032,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Britt Martin
   collector_number: '142'
-- cardid: 8700
-  title: Touching the Elements
+- title: Touching the Elements
   types:
   - Spell
   decks:
@@ -3317,13 +3048,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: John Donahue
   flavor_text: <i>"Incredible, the mystery of it all." - Naka Tokei</i>
   collector_number: '152'
-- cardid: 8703
-  title: Tower of the Ningyo
+- title: Tower of the Ningyo
   types:
   - Holding
   decks:
@@ -3340,13 +3069,11 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   story: 2002 Tower of the Ningyo - Kevin Christopher
-  printing_id: '2'
   rarity: Rare
   artist: Tony Moseley
   flavor_text: <i>"So many wonderful secrets." - Kitsuki Tadashi</i>
   collector_number: '13'
-- cardid: 8711
-  title: Trading House
+- title: Trading House
   types:
   - Holding
   decks:
@@ -3356,14 +3083,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Thomas Denmark
   flavor_text: <i>"The mysterious disappearance of so many ships has driven the price of basic goods to
     an all-time high. I recommend hiring skilled Mantis captains to avert tragedy." - Yoritomo Katoa</i>
   collector_number: '9'
-- cardid: 8757
-  title: Troublesome Bureaucrat
+- title: Troublesome Bureaucrat
   types:
   - Holding
   decks:
@@ -3377,12 +3102,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Anthony Francisco
   collector_number: '7'
-- cardid: 8869
-  title: Tsuruchi Okame
+- title: Tsuruchi Okame
   types:
   - Personality
   decks:
@@ -3412,12 +3135,10 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   story: 2002 European Championships Top of Clan - Gordon O'Keefe
-  printing_id: '2'
   rarity: Rare
   artist: Franz Vohwinkel
   collector_number: '39'
-- cardid: 8872
-  title: Tsuruchi Renshi
+- title: Tsuruchi Renshi
   types:
   - Personality
   decks:
@@ -3438,13 +3159,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: Michael Kaluta
   flavor_text: <i>"Find Hiro, Okame." - Tsuruchi Nobumoto</i>
   collector_number: '40'
-- cardid: 8992
-  title: Unleash the Demons
+- title: Unleash the Demons
   types:
   - Spell
   decks:
@@ -3461,12 +3180,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Jim Pavelec
   collector_number: '151'
-- cardid: 9093
-  title: Utaku Rishimaru
+- title: Utaku Rishimaru
   types:
   - Personality
   decks:
@@ -3490,13 +3207,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>She rides with Sezaru, seeking vengeance for the Rain of Blood.</i>
   collector_number: '73'
-- cardid: 9148
-  title: Veteran Spearmen
+- title: Veteran Spearmen
   types:
   - Follower
   decks:
@@ -3516,13 +3231,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Ed Cox
   flavor_text: <i>"Survival is the surest proof of valor." -Kihei</i>
   collector_number: '115'
-- cardid: 9153
-  title: Victory of the Wolf
+- title: Victory of the Wolf
   types:
   - Strategy
   decks:
@@ -3538,12 +3251,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Llyn Hunter
   collector_number: '126'
-- cardid: 9219
-  title: War On the Plains
+- title: War On the Plains
   types:
   - Strategy
   decks:
@@ -3557,12 +3268,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: David Horne
   collector_number: '90'
-- cardid: 9329
-  title: Wikki'thich-hie Z-ee
+- title: Wikki'thich-hie Z-ee
   types:
   - Personality
   decks:
@@ -3584,13 +3293,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Ed Cox
   flavor_text: <i>"Tomorrow comes swiftly, and with terrible hunger."</i>
   collector_number: '52'
-- cardid: 9383
-  title: Wrath of the Bloodspeaker
+- title: Wrath of the Bloodspeaker
   types:
   - Event
   decks:
@@ -3605,12 +3312,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Drew Baker
   collector_number: '4'
-- cardid: 9385
-  title: Wrath of the Emperor
+- title: Wrath of the Emperor
   types:
   - Event
   decks:
@@ -3624,12 +3329,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Malcolm McClinton
   collector_number: '2'
-- cardid: 9440
-  title: Yasuki Hachi
+- title: Yasuki Hachi
   types:
   - Personality
   decks:
@@ -3660,12 +3363,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: April Lee
   collector_number: '20'
-- cardid: 9487
-  title: Yogo Baisetsu
+- title: Yogo Baisetsu
   types:
   - Personality
   decks:
@@ -3685,14 +3386,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>"The Wolf and his pack move howling through the streets like starving beasts. They shall
     thin the weak, and the strong shall prosper."</i>
   collector_number: '61'
-- cardid: 9517
-  title: Yoma Sensei
+- title: Yoma Sensei
   types:
   - Sensei
   decks:
@@ -3708,12 +3407,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Rare
   artist: Jason Engle
   collector_number: '141'
-- cardid: 9540
-  title: Yoritomo Egumi
+- title: Yoritomo Egumi
   types:
   - Personality
   decks:
@@ -3738,12 +3435,10 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 The Emperor's Eyes Top of Clan - Thomas Pelleger
-  printing_id: '1'
   rarity: Common
   artist: Franz Vohwinkel
   collector_number: '41'
-- cardid: 9561
-  title: Yoritomo Hotako
+- title: Yoritomo Hotako
   types:
   - Personality
   decks:
@@ -3767,12 +3462,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Uncommon
   artist: Matthew S. Armstrong
   collector_number: '42'
-- cardid: 9583
-  title: Yoritomo Katoa
+- title: Yoritomo Katoa
   types:
   - Personality
   decks:
@@ -3797,7 +3490,6 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Janine Johnston
   flavor_text: <i>"Pirate? I prefer 'opportunist'."</i>

@@ -1,7 +1,6 @@
 set: 1,000 Years of Darkness
 cards:
-- cardid: 19
-  title: A Fallen Friend
+- title: A Fallen Friend
   types:
   - Strategy
   decks:
@@ -17,13 +16,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>Toturi and Hoturi faced one another one final time.</i>
   collector_number: '56'
-- cardid: 100
-  title: A Wish Granted
+- title: A Wish Granted
   types:
   - Strategy
   decks:
@@ -38,13 +35,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: April Lee
   flavor_text: <i>The Last Wish, at last, was complete.</i>
   collector_number: '57'
-- cardid: 409
-  title: Another Hero Falls
+- title: Another Hero Falls
   types:
   - Event
   decks:
@@ -60,14 +55,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"You will die poorly, Goemon. Alone, and unmourned. Such is the fate of all who oppose
     the Hantei." - Ikoma Ujiaki</i>
   collector_number: '1'
-- cardid: 424
-  title: Aramoro's Promise
+- title: Aramoro's Promise
   types:
   - Strategy
   decks:
@@ -86,14 +79,12 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>"I promised my brother that I would protect you." the ninja whispered. "There is only
     one way I can do that now."</i>
   collector_number: '58'
-- cardid: 557
-  title: Asako Kinuye
+- title: Asako Kinuye
   types:
   - Personality
   decks:
@@ -117,14 +108,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Christopher Appel
   flavor_text: <i>"Do you thirst for revenge against the Dark Masters?" Daigotsu asked. "I can give you
     the means, if you have the courage."</i>
   collector_number: '33'
-- cardid: 601
-  title: Ashalan Blade
+- title: Ashalan Blade
   types:
   - Item
   decks:
@@ -145,14 +134,12 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Jeremy Jarvis
   flavor_text: <i>"Your land is cursed," said the pale-skinned wanderer. "We will help you cleanse it,
     Moto."</i>
   collector_number: '75'
-- cardid: 622
-  title: Ashura
+- title: Ashura
   types:
   - Personality
   decks:
@@ -176,13 +163,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Thomas Manning
   flavor_text: <i>The Chosen of Fu Leng hover on wings of death. All that they touch is destroyed.</i>
   collector_number: '42'
-- cardid: 743
-  title: Bayushi Aramoro
+- title: Bayushi Aramoro
   types:
   - Personality
   decks:
@@ -208,13 +193,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>"When you need me, I will return."</i>
   collector_number: '39'
-- cardid: 976
-  title: Birth of the New Hantei
+- title: Birth of the New Hantei
   types:
   - Event
   decks:
@@ -227,13 +210,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Luis Vazquez
   flavor_text: <i>"Why does an immortal god require an heir?" Hoturi mused. Kachiko said nothing.</i>
   collector_number: '2'
-- cardid: 1069
-  title: Bloodspeaker's Altar
+- title: Bloodspeaker's Altar
   types:
   - Holding
   decks:
@@ -248,14 +229,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Storn A. Cook
   flavor_text: <i>"Not all the Oni Lords have returned." Daigotsu said. "Perphaps Akuma is waiting for
     a better offer."</i>
   collector_number: '6'
-- cardid: 1178
-  title: Burial Mound
+- title: Burial Mound
   types:
   - Holding
   decks:
@@ -271,12 +250,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Hugh Jamieson
   collector_number: '7'
-- cardid: 1213
-  title: Candas
+- title: Candas
   types:
   - Region
   decks:
@@ -290,13 +267,11 @@ cards:
   legality:
   - Four Winds (Gold)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Rob Alexander
   flavor_text: <i>"Hidden by the sea, Candas is the only Naga city that remains." - Zanshar</i>
   collector_number: '52'
-- cardid: 1291
-  title: Chamber of the Dark Council
+- title: Chamber of the Dark Council
   types:
   - Holding
   decks:
@@ -311,14 +286,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Luis Vazquez
   flavor_text: <i>"Shahai is dead, Daigotsu," Tsuke said with a smile. "Cease your games and return to
     the table."</i>
   collector_number: '8'
-- cardid: 1324
-  title: Child of Fu Leng
+- title: Child of Fu Leng
   types:
   - Item
   decks:
@@ -332,14 +305,12 @@ cards:
   chi: '+0'
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Lisa Hunt
   flavor_text: <i>"Yakusoku is a beautiful child." the Emperor said. "No doubt she will make her father
     proud."</i>
   collector_number: '77'
-- cardid: 1331
-  title: Chithith
+- title: Chithith
   types:
   - Personality
   decks:
@@ -360,13 +331,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Luis Vazquez
   flavor_text: <i>"Humans say Empire gone-gone to blazes. For Nezumi, not much really changed."</i>
   collector_number: '37'
-- cardid: 1365
-  title: Chuda Retainer
+- title: Chuda Retainer
   types:
   - Holding
   decks:
@@ -380,13 +349,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Luis Vazquez
   flavor_text: <i>The Snake Clan flourished under Fu Leng's rule.</i>
   collector_number: '9'
-- cardid: 1688
-  title: Daidoji Uji
+- title: Daidoji Uji
   types:
   - Personality
   decks:
@@ -411,13 +378,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Snyder
   flavor_text: <i>"He is like a vengeful spirit, the last of a proud clan."</i>
   collector_number: '18'
-- cardid: 1829
-  title: Dark Emperor's Blessing
+- title: Dark Emperor's Blessing
   types:
   - Item
   decks:
@@ -433,14 +398,12 @@ cards:
   chi: '+0'
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Jason Engle
   flavor_text: <i>"You are like a son to me, Daigotsu," Fu Leng said. "Thank you, Dark Lord," the young
     man replied.</i>
   collector_number: '76'
-- cardid: 1850
-  title: Dark Ring of Air
+- title: Dark Ring of Air
   types:
   - Ring
   decks:
@@ -459,12 +422,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Cris Dornaus
   collector_number: '85'
-- cardid: 1851
-  title: Dark Ring of Earth
+- title: Dark Ring of Earth
   types:
   - Ring
   decks:
@@ -483,12 +444,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Cris Dornaus
   collector_number: '86'
-- cardid: 1852
-  title: Dark Ring of Fire
+- title: Dark Ring of Fire
   types:
   - Ring
   decks:
@@ -508,12 +467,33 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Cris Dornaus
   collector_number: '87'
-- cardid: 1853
-  title: Dark Ring of the Void
+- title: Dark Ring of Water
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Shadowlands
+  - Water
+  text: This card does not count toward an Enlightenment Victory.<br>After battle resolution destroys
+    a defending army or Province, if you are the Attacker and assigned no Personalities to the current
+    battlefield, you may put this card into play from your hand.<br>After this card enters play, lose
+    5 Honor.<br>After a Ring of Water enters play, destroy this card.<br><b>Water Reaction:</b> Before
+    an action moves one or more cards to or from a battlefield, negate the action's effects.
+  focus: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Cris Dornaus
+  collector_number: '89'
+- title: Dark Ring of the Void
   types:
   - Ring
   decks:
@@ -534,37 +514,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Cris Dornaus
   collector_number: '88'
-- cardid: 1854
-  title: Dark Ring of Water
-  types:
-  - Ring
-  decks:
-  - Fate
-  keywords:
-  - Unique
-  - Shadowlands
-  - Water
-  text: This card does not count toward an Enlightenment Victory.<br>After battle resolution destroys
-    a defending army or Province, if you are the Attacker and assigned no Personalities to the current
-    battlefield, you may put this card into play from your hand.<br>After this card enters play, lose
-    5 Honor.<br>After a Ring of Water enters play, destroy this card.<br><b>Water Reaction:</b> Before
-    an action moves one or more cards to or from a battlefield, negate the action's effects.
-  focus: 3
-  is_unique: true
-  legality:
-  - Four Winds (Gold)
-  - Legacy
-  - Rain of Blood (Diamond)
-  printing_id: '1'
-  rarity: Fixed
-  artist: Cris Dornaus
-  collector_number: '89'
-- cardid: 1999
-  title: Dim Mak
+- title: Dim Mak
   types:
   - Strategy
   decks:
@@ -581,13 +534,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Thomas Manning
   flavor_text: <i>"A curse on you. A curse of death..."</i>
   collector_number: '84'
-- cardid: 2393
-  title: Everyone Dies
+- title: Everyone Dies
   types:
   - Event
   decks:
@@ -600,14 +551,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Lisa Hunt
   flavor_text: <i>"Never before had I seen so many Ashura in one place. As I saw them descend from the
     sky. I knew the City of Lightning was doomed." - Kuni Osaku</i>
   collector_number: '3'
-- cardid: 2458
-  title: False Scroll
+- title: False Scroll
   types:
   - Item
   decks:
@@ -623,13 +572,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Veronica V. Jones
   flavor_text: <i>"Seek them," the Dark Lord said, "if you dare."</i>
   collector_number: '78'
-- cardid: 2807
-  title: Gifts and Favors
+- title: Gifts and Favors
   types:
   - Holding
   decks:
@@ -644,13 +591,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Edward Fetterman
   flavor_text: <i>"The Hantei sends his regards, Lord Ikoma."</i>
   collector_number: '11'
-- cardid: 2850
-  title: Goju Hitomi
+- title: Goju Hitomi
   types:
   - Personality
   decks:
@@ -677,12 +622,10 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   collector_number: '22'
-- cardid: 2946
-  title: Hakumei
+- title: Hakumei
   types:
   - Personality
   decks:
@@ -706,15 +649,13 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Hugh Jamieson
   flavor_text: <i>"Uji's elite students fight with all the old dirty tricks of the Daidoji, and a few
     new ones. Hakumei, his prodigy, was not born a Crane, but her indefatiable spirit is a reminder of
     that fallen clan." - Toturi</i>
   collector_number: '20'
-- cardid: 2966
-  title: Hantei Kachiko
+- title: Hantei Kachiko
   types:
   - Personality
   decks:
@@ -737,14 +678,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Snyder
   flavor_text: <i>The Ashura returned with one of Toturi's children. It amused the Hantei to place the
     boy in Kachiko's care.</i>
   collector_number: '40'
-- cardid: 2970
-  title: Hantei the 39th
+- title: Hantei the 39th
   types:
   - Personality
   decks:
@@ -767,13 +706,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"On your knees, samurai, before your Emperor and god."</i>
   collector_number: '43'
-- cardid: 3053
-  title: Hellbeast
+- title: Hellbeast
   types:
   - Item
   decks:
@@ -794,13 +731,11 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Jeremy Jarvis
   flavor_text: <i>Kamoko laughed over the ruins of Shiro Shinjo.</i>
   collector_number: '79'
-- cardid: 3063
-  title: Heroic Sacrifice
+- title: Heroic Sacrifice
   types:
   - Strategy
   decks:
@@ -817,12 +752,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: '60'
-- cardid: 3235
-  title: Hida Yakamo
+- title: Hida Yakamo
   types:
   - Personality
   decks:
@@ -850,13 +783,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"The Wall has not fallen. Now we are the Wall."</i>
   collector_number: '15'
-- cardid: 3393
-  title: Hitomi's Choice
+- title: Hitomi's Choice
   types:
   - Event
   decks:
@@ -868,14 +799,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"Simply say the word, and I will share the powers of the Lying Darkness with Toturi's
     Army," Hitomi said. Yakamo growled in disgust.</i>
   collector_number: '4'
-- cardid: 3441
-  title: Honzo
+- title: Honzo
   types:
   - Follower
   decks:
@@ -891,14 +820,12 @@ cards:
   honor_requirement: 2
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Stephanie Pui-Mun Law
   flavor_text: <i>"You are the new teacher." Tadaka's Last Wish said. "No I am not." Honzo replied. "I
     am not Shinsei." "Yes." the Wish said with a smile. "You are."</i>
   collector_number: '72'
-- cardid: 3453
-  title: Horiuchi Shoan
+- title: Horiuchi Shoan
   types:
   - Personality
   decks:
@@ -920,14 +847,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Jonathan Hunt
   flavor_text: <i>"The most unlikely of leaders have stepped forward to guide the clans. It was little
     Shoan who guided the Unicorn into the desert." - Togashi Mitsu</i>
   collector_number: '49'
-- cardid: 3487
-  title: Hoturi the Heartless
+- title: Hoturi the Heartless
   types:
   - Personality
   decks:
@@ -955,14 +880,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: '<i>"The magnificent power of the Emperor has made me what I am: Powerful. Merciless. Unique.
     Perfect."</i>'
   collector_number: '19'
-- cardid: 3541
-  title: I Give You My Name
+- title: I Give You My Name
   types:
   - Spell
   decks:
@@ -980,12 +903,10 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Steve Snyder
   collector_number: '90'
-- cardid: 3657
-  title: Ikoma Ujiaki
+- title: Ikoma Ujiaki
   types:
   - Personality
   decks:
@@ -1011,13 +932,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Snyder
   flavor_text: <i>A man can only stand in the shadow for so long...</i>
   collector_number: '24'
-- cardid: 3715
-  title: Importune Kami
+- title: Importune Kami
   types:
   - Spell
   decks:
@@ -1034,13 +953,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Storn A. Cook
   flavor_text: <i>"A small favor, little spirit," the shugenja said. "Help me wash the pain away..."</i>
   collector_number: '91'
-- cardid: 3933
-  title: Isawa Tsuke
+- title: Isawa Tsuke
   types:
   - Personality
   decks:
@@ -1066,13 +983,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Llyn Hunter
   flavor_text: <i>"I have been looking for you, girl." Tsuke said. Shahai did not have the time to scream.</i>
   collector_number: '34'
-- cardid: 3961
-  title: Ishada
+- title: Ishada
   types:
   - Personality
   decks:
@@ -1094,14 +1009,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Kevin Wasden
   flavor_text: <i>"The power your slavemasters took from you, I can return." Ishada said as he crouched
     on the skull tide. "I am listening." the Great Sea spider replied.</i>
   collector_number: '27'
-- cardid: 3965
-  title: Island Sanctuary
+- title: Island Sanctuary
   types:
   - Holding
   decks:
@@ -1113,14 +1026,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"Kuni Osaku and Shashakar purified the Great Sea Spider. Now even the Obsidian Legions
     do not dare attack us here." - Yoritomo</i>
   collector_number: '12'
-- cardid: 4096
-  title: Kage
+- title: Kage
   types:
   - Personality
   decks:
@@ -1141,13 +1052,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Storn A. Cook
   flavor_text: <i>"Of course I will help you protect her, Hakumei."</i>
   collector_number: '47'
-- cardid: 4582
-  title: Kuni Osaku
+- title: Kuni Osaku
   types:
   - Personality
   decks:
@@ -1170,14 +1079,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Kevin Wasden
   flavor_text: <i>"She carries the name of the one who defeated me. It is an insult I will not endure."
     - The Maw</i>
   collector_number: '16'
-- cardid: 4598
-  title: Kuni Yori
+- title: Kuni Yori
   types:
   - Personality
   decks:
@@ -1204,13 +1111,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Jim Pavelec
   flavor_text: <i>"You were right, Lord Kisada." Yori smiled as he drew the knife.</i>
   collector_number: '17'
-- cardid: 4614
-  title: Kuruma Date
+- title: Kuruma Date
   types:
   - Follower
   decks:
@@ -1232,12 +1137,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Hugh Jamieson
   collector_number: '68'
-- cardid: 4615
-  title: Kuruma Seiro
+- title: Kuruma Seiro
   types:
   - Follower
   decks:
@@ -1258,14 +1161,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Hugh Jamieson
   flavor_text: <i>"With Yori's necromancy and the Tainted Crab serving the Dark Lord, the siege weapons
     of the Obsidian Legion became a terror to behold."</i>
   collector_number: '69'
-- cardid: 4706
-  title: Lesser of Two Evils
+- title: Lesser of Two Evils
   types:
   - Strategy
   decks:
@@ -1280,13 +1181,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Llyn Hunter
   flavor_text: <i>"Your destiny awaits, Togashi Mitsu."</i>
   collector_number: '59'
-- cardid: 4951
-  title: Matsu Masutaro
+- title: Matsu Masutaro
   types:
   - Personality
   decks:
@@ -1308,14 +1207,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Christopher Appel
   flavor_text: <i>"I cannot abandon my oath or my duty. I can only pray that when I find death, the ancestors
     will forgive me."</i>
   collector_number: '25'
-- cardid: 5345
-  title: Moto Kumari
+- title: Moto Kumari
   types:
   - Personality
   decks:
@@ -1337,13 +1234,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Llyn Hunter
   flavor_text: <i>"Kamako has lost more than her soul. She has lost her edge. She'll never catch me."</i>
   collector_number: '50'
-- cardid: 5404
-  title: Mountain of Shadows
+- title: Mountain of Shadows
   types:
   - Region
   decks:
@@ -1356,14 +1251,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Luis Vazquez
   flavor_text: <i>"Those who enter the lands of the Dragon return mad or not at all. My home has become
     the new Shadowlands." - Togashi Mitsu</i>
   collector_number: '53'
-- cardid: 5448
-  title: Musha
+- title: Musha
   types:
   - Item
   decks:
@@ -1378,36 +1271,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Chris Seaman
   flavor_text: <i>"Sanzo's horse is old and weary, but she is fast enough when she needs to be." - Toku</i>
   collector_number: '80'
-- cardid: 5652
-  title: Obsidian and Jade
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Jade
-  - Obsidian
-  text: '<b>Limited:</b> Bow your Stronghold and target your Personality: Permanently give him <b>Shadowlands</b>,
-    a Force bonus equal to the number of Shadowlands Personalities you control, and the trait, "This Personality
-    may not be assigned, and will not move, into an army with other Personalities, and other Personalities
-    may not be assigned, and will not move, into an army with this Personality."'
-  gold_cost: 0
-  focus: 2
-  legality:
-  - Four Winds (Gold)
-  - Legacy
-  - Rain of Blood (Diamond)
-  printing_id: '1'
-  rarity: Fixed
-  artist: Steve Snyder
-  collector_number: '61'
-- cardid: 5658
-  title: Obsidian Magistrate
+- title: Obsidian Magistrate
   types:
   - Follower
   decks:
@@ -1427,13 +1295,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Hugh Jamieson
   flavor_text: <i>"Run from me. It makes the kill more satisfying."</i>
   collector_number: '70'
-- cardid: 5660
-  title: Obsidian Mine
+- title: Obsidian Mine
   types:
   - Holding
   decks:
@@ -1448,14 +1314,33 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"This is jade?" Matyu asked, watching the greasy black substance drip between his fingers.
     "It used to be," said Yakamo.</i>
   collector_number: '10'
-- cardid: 5774
-  title: Oracle of Thunder
+- title: Obsidian and Jade
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Jade
+  - Obsidian
+  text: '<b>Limited:</b> Bow your Stronghold and target your Personality: Permanently give him <b>Shadowlands</b>,
+    a Force bonus equal to the number of Shadowlands Personalities you control, and the trait, "This Personality
+    may not be assigned, and will not move, into an army with other Personalities, and other Personalities
+    may not be assigned, and will not move, into an army with this Personality."'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Steve Snyder
+  collector_number: '61'
+- title: Oracle of Thunder
   types:
   - Holding
   decks:
@@ -1476,13 +1361,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Llyn Hunter
   flavor_text: <i>"Have courage, my son."</i>
   collector_number: '13'
-- cardid: 5798
-  title: Otaku Kamoko
+- title: Otaku Kamoko
   types:
   - Personality
   decks:
@@ -1508,13 +1391,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Rob Alexander
   flavor_text: <i>"Darkness travels more swiftly than light."</i>
   collector_number: '51'
-- cardid: 5875
-  title: Parasitic Oni
+- title: Parasitic Oni
   types:
   - Follower
   decks:
@@ -1534,14 +1415,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Thomas Manning
   flavor_text: <i>"Yori is not the most powerful of the Dark Masters, but he is certainly the most creative."
     - Hantei the 39th</i>
   collector_number: '71'
-- cardid: 5947
-  title: Pick Your Battles
+- title: Pick Your Battles
   types:
   - Strategy
   decks:
@@ -1556,12 +1435,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: '62'
-- cardid: 5991
-  title: Pointless Sacrifice
+- title: Pointless Sacrifice
   types:
   - Strategy
   decks:
@@ -1574,14 +1451,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"The last of the Otomo stood their ground against Fu Leng's minions. Their deaths were
     quick and pointless." - Shosuro Nobukazo</i>
   collector_number: '63'
-- cardid: 6134
-  title: Radakast
+- title: Radakast
   types:
   - Personality
   decks:
@@ -1607,14 +1482,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Randy Elliott
   flavor_text: <i>"Retreat!" the Radakast shouted as the oni stormed the walls. "The city of Iyotisha
     is not worth the lives of the Naga!"</i>
   collector_number: '30'
-- cardid: 6188
-  title: Ray of Hope
+- title: Ray of Hope
   types:
   - Strategy
   decks:
@@ -1628,14 +1501,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"You remind me of your father," Uji said. "I have much to learn yet," Kaneka replied.
     "We have time," the Crane said. "I will teach you."</i>
   collector_number: '64'
-- cardid: 6400
-  title: Ruins of Otosan Uchi
+- title: Ruins of Otosan Uchi
   types:
   - Region
   decks:
@@ -1652,14 +1523,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Rob Alexander
   flavor_text: <i>"Fu Leng's dark power has cursed the capital. Nothing pure will ever live here again."
     - Yotsu Seou</i>
   collector_number: '54'
-- cardid: 6606
-  title: Seppun Matsuo
+- title: Seppun Matsuo
   types:
   - Personality
   decks:
@@ -1680,14 +1549,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Jonathan Hunt
   flavor_text: <i>"Yoritomo hauled Matsuo from the sea on the Day of Thunder. He now serves the Son of
     Storms with the same dedication he once showed the Emperor." - Komori</i>
   collector_number: '28'
-- cardid: 6684
-  title: Shahai no Yokai
+- title: Shahai no Yokai
   types:
   - Ancestor
   decks:
@@ -1708,12 +1575,10 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Lisa Hunt
   collector_number: '67'
-- cardid: 6707
-  title: Sharp-Sharp Stick
+- title: Sharp-Sharp Stick
   types:
   - Item
   decks:
@@ -1730,13 +1595,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Jeremy Jarvis
   flavor_text: <i>The Maw shrieked in rage, but the Ratling danced away.</i>
   collector_number: '81'
-- cardid: 6711
-  title: Shashakar
+- title: Shashakar
   types:
   - Personality
   decks:
@@ -1760,14 +1623,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Randy Elliott
   flavor_text: <i>"Where are the rest of the Naga?" Toturi asked, looking at the huddled band that followed
     Shashakar, "These are all that remain." the Jakla said softly.</i>
   collector_number: '31'
-- cardid: 6820
-  title: Shiba Tsukune
+- title: Shiba Tsukune
   types:
   - Personality
   decks:
@@ -1791,13 +1652,11 @@ cards:
   personal_honor: 3
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: April Lee
   flavor_text: <i>"Together, Tsukune, we will see the Phoenix reborn."</i>
   collector_number: '35'
-- cardid: 7144
-  title: Shosuro Nobukazo
+- title: Shosuro Nobukazo
   types:
   - Personality
   decks:
@@ -1821,13 +1680,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Luis Vazquez
   flavor_text: <i>"How may I serve you, my lord?"</i>
   collector_number: '41'
-- cardid: 7309
-  title: Snak
+- title: Snak
   types:
   - Personality
   decks:
@@ -1847,13 +1704,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Storn A. Cook
   flavor_text: <i>"Shiny-shiny!" the Ratling said, drawing the obisidian mirror from the rubble. "Me keep."</i>
   collector_number: '38'
-- cardid: 7381
-  title: Soul of the Grand Master
+- title: Soul of the Grand Master
   types:
   - Item
   decks:
@@ -1868,14 +1723,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Jason Engle
   flavor_text: <i>"Your pain is exquisite Kuro-san." Fu Leng said, caressing the crystal. "I almost pity
     you. Almost."</i>
   collector_number: '82'
-- cardid: 7682
-  title: Swallowed by the Sea
+- title: Swallowed by the Sea
   types:
   - Spell
   decks:
@@ -1890,13 +1743,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Kevin Wasden
   flavor_text: <i>"No more tricks, Mantis!" Osaku roared.</i>
   collector_number: '92'
-- cardid: 7722
-  title: Tadaka's Last Wish
+- title: Tadaka's Last Wish
   types:
   - Personality
   decks:
@@ -1919,13 +1770,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: April Lee
   flavor_text: <i>"We will try, Tsukune. We will fix what we can."</i>
   collector_number: '36'
-- cardid: 7724
-  title: Tadaka's Sacrifice
+- title: Tadaka's Sacrifice
   types:
   - Spell
   decks:
@@ -1938,14 +1787,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"You run," Tadaka replied. "I die." With a brilliant explosion of energy, Tadaka consumed
     the throne room in fire.</i>
   collector_number: '93'
-- cardid: 8018
-  title: The Darkest Shadow
+- title: The Darkest Shadow
   types:
   - Strategy
   decks:
@@ -1958,13 +1805,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Snyder
   flavor_text: <i>"Kill the Daidoji," said Hoturi, pointing at the castle. The Ashura gladly complied.</i>
   collector_number: '65'
-- cardid: 8148
-  title: The Imperial Palace of Fu Leng
+- title: The Imperial Palace of Fu Leng
   types:
   - Stronghold
   decks:
@@ -1980,12 +1825,10 @@ cards:
   starting_honor: 15
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Jim Pavelec
   collector_number: '94'
-- cardid: 8165
-  title: The Jade Hand
+- title: The Jade Hand
   types:
   - Item
   decks:
@@ -2006,12 +1849,10 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   collector_number: '83'
-- cardid: 8216
-  title: The Maw
+- title: The Maw
   types:
   - Personality
   decks:
@@ -2036,14 +1877,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Hugh Jamieson
   flavor_text: <i>"The greatest of the Oni Lords, it was thought lost in the depths of Jigoku. Fu Leng
     has returned it to Rokugan, to our sorrow." - Kuni Sensin</i>
   collector_number: '44'
-- cardid: 8382
-  title: The Thunders Fall
+- title: The Thunders Fall
   types:
   - Event
   decks:
@@ -2057,13 +1896,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>As Hoturi fell, the Hooded Ronin vanished with a mournful sigh.</i>
   collector_number: '5'
-- cardid: 8553
-  title: Togashi Mitsu
+- title: Togashi Mitsu
   types:
   - Personality
   decks:
@@ -2090,14 +1927,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Llyn Hunter
   flavor_text: <i>"He lost his arm to the Maw, but he still fights better than any three men I know."
     - Moto Kumari</i>
   collector_number: '23'
-- cardid: 8585
-  title: Togashi Shunsen
+- title: Togashi Shunsen
   types:
   - Personality
   decks:
@@ -2123,14 +1958,12 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   errata_text: Errata'd to add the "Loyal" keyword, ~May 2005.
-  printing_id: '1'
   rarity: Fixed
   artist: Llyn Hunter
   flavor_text: <i>"The power of Nothing is as dangerous as Fu Leng. The Dragon must be cleansed." - Togashi
     Mitsu</i>
   collector_number: '21'
-- cardid: 8605
-  title: Togashi's Prison
+- title: Togashi's Prison
   types:
   - Holding
   decks:
@@ -2143,14 +1976,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Storn A. Cook
   flavor_text: <i>"Many believe Togashi perished, but Fu Leng preserved him for his own amusement." -
     Bayushi Aramoro</i>
   collector_number: '14'
-- cardid: 8615
-  title: Toku
+- title: Toku
   types:
   - Personality
   decks:
@@ -2176,13 +2007,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Jonathan Hunt
   flavor_text: <i>"So tired... Just a bit father and I can rest..."</i>
   collector_number: '46'
-- cardid: 8659
-  title: Tosekiki
+- title: Tosekiki
   types:
   - Follower
   decks:
@@ -2204,14 +2033,12 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Fixed
   artist: Hugh Jamieson
   flavor_text: <i>"The Dark Lord's catapults are living things. Fall to them, and you will become their
     ammunition."</i>
   collector_number: '73'
-- cardid: 8666
-  title: Toturi
+- title: Toturi
   types:
   - Personality
   decks:
@@ -2240,14 +2067,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"Beaten, broken, but never defeated. The Black Lion carries the hopes of an Empire."
     - Kuni Osaku</i>
   collector_number: '26'
-- cardid: 8684
-  title: Toturi's Defeat
+- title: Toturi's Defeat
   types:
   - Strategy
   decks:
@@ -2259,14 +2084,12 @@ cards:
   focus: 2
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>The army of the Thunders fell again. Had it not been for Kaede, Toturi and Yakamo would
     have died there.</i>
   collector_number: '66'
-- cardid: 8686
-  title: Toturi's Grave
+- title: Toturi's Grave
   types:
   - Region
   decks:
@@ -2281,13 +2104,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Veronica V. Jones
   flavor_text: <i>"You will not be forgotten, father."</i>
   collector_number: '55'
-- cardid: 9041
-  title: Usagi Masashi
+- title: Usagi Masashi
   types:
   - Personality
   decks:
@@ -2309,13 +2130,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Chris Seaman
   flavor_text: <i>"That was close... Much too close..."</i>
   collector_number: '48'
-- cardid: 9137
-  title: Vengeful Kami
+- title: Vengeful Kami
   types:
   - Follower
   decks:
@@ -2335,13 +2154,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Stephanie Pui-Mun Law
   flavor_text: <i>"The elemental spirits are not pleased by what the world has become." Wakiza hissed.</i>
   collector_number: '74'
-- cardid: 9493
-  title: Yogo Junzo
+- title: Yogo Junzo
   types:
   - Personality
   decks:
@@ -2366,13 +2183,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Jim Pavelec
   flavor_text: <i>"You were fast, Kamoko, but the Dark Lord was faster."</i>
   collector_number: '45'
-- cardid: 9520
-  title: Yoritomo
+- title: Yoritomo
   types:
   - Personality
   decks:
@@ -2398,13 +2213,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>"He lives," Matsuo said, staring at the fallen Champion.</i>
   collector_number: '29'
-- cardid: 9703
-  title: Zanshar
+- title: Zanshar
   types:
   - Personality
   decks:
@@ -2428,7 +2241,6 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Randy Elliott
   flavor_text: <i>"Zanshar, the guardian of Candas will not rest. The fate of his race depends upon him."

@@ -1,7 +1,6 @@
 set: Spirit Wars
 cards:
-- cardid: 206
-  title: Akodo Ginawa
+- title: Akodo Ginawa
   types:
   - Personality
   decks:
@@ -29,12 +28,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Anthony Grabski
   flavor_text: <i>"I will lead them," he whispered hoarsely, "if they will follow."</i>
-- cardid: 217
-  title: Akodo Ijiasu
+- title: Akodo Ijiasu
   types:
   - Personality
   decks:
@@ -55,14 +52,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Anthony Grabski
   flavor_text: <i>He remembers his father's words from when they huddled about a ronin's fire. He had
     dreamed through childhood of the day when the Akodo would return. Ronin no more, he will stand by
     his Clan and make his family's name ring from the halls of honor once more.</i>
-- cardid: 260
-  title: Akodo Quehao
+- title: Akodo Quehao
   types:
   - Personality
   decks:
@@ -85,13 +80,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Eric David Anderson
   flavor_text: <i>"All of those who would be Lion, listen to me. I will tell you the tale of Akodo the
     One-Eye, and of the brave samurai who followed him to their deaths. . . and beyond."</i>
-- cardid: 276
-  title: Akodo Sensei
+- title: Akodo Sensei
   types:
   - Sensei
   decks:
@@ -109,13 +102,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: KC Lancaster
   flavor_text: <i>War is inevitable. It rises and falls like the tide, and the shore is ever changed by
     it.</i>
-- cardid: 339
-  title: Amaterasu's Furnace
+- title: Amaterasu's Furnace
   types:
   - Region
   decks:
@@ -126,14 +117,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: William O'Connor
   flavor_text: <i>"I stood on the brink of the fires of Gakido. Nothing lives there; no one has ever returned.
     Still, I watched as Hiroru walked toward the flames, determined to find Shizue's soul there." - Akodo
     Ginawa</i>
-- cardid: 365
-  title: Ancestral Dictate
+- title: Ancestral Dictate
   types:
   - Strategy
   decks:
@@ -148,13 +137,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Bryon Wackwitz
   flavor_text: <i>"You will obey me!" the spirit samurai shouted. "I am daimyo of the Akodo. I am Champion
     of the Lion!" "No more," Motso said, his voice like ice. - "No more."</i>
-- cardid: 370
-  title: Ancestral Protection
+- title: Ancestral Protection
   types:
   - Strategy
   decks:
@@ -169,14 +156,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Rare
   artist: Bob Hobbs
   flavor_text: <i>Turi rose wearily, but the blood that stained his armor was not his own. "Remember,"
     whispered the spirit as it died, "that not all of those who have escaped Jigoku's fires have forgotten
     the meaning of duty. "</i>
-- cardid: 398
-  title: Ancient Knowledge
+- title: Ancient Knowledge
   types:
   - Strategy
   decks:
@@ -191,13 +176,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: John Cadice
   flavor_text: <i>"He handed me his final prophecy. 'For the next Oracle,' he said, and disappeared with
     the sun." - Shiba Ningen</i>
-- cardid: 467
-  title: Arriving at the Imperial Gates
+- title: Arriving at the Imperial Gates
   types:
   - Strategy
   decks:
@@ -215,13 +198,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Talon Dunning
   flavor_text: <i>"We stand at a time of crisis. Before us lie the road of the past and the road of the
     future. Which one will you follow?" - Toturi the First</i>
-- cardid: 564
-  title: Asako Misao
+- title: Asako Misao
   types:
   - Personality
   decks:
@@ -243,13 +224,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Gold edition art miscredited to Beet, you can see art on <a href="http://www.bradleywilliamsart.net/legend-of-5-rings.html">http://www.bradleywilliamsart.net/legend-of-5-rings.html</a>
-  printing_id: '2'
   rarity: Uncommon
   artist: William O'Connor
   flavor_text: <i>Hantei commanded his spirit armies to take the Phoenix children as hostages against
     the wrath of the Isawa. It was one of his greatest mistakes.</i>
-- cardid: 575
-  title: Asako Riders
+- title: Asako Riders
   types:
   - Follower
   decks:
@@ -268,12 +247,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Sean Murray
   flavor_text: <i>They serve the Phoenix as they did long ago."</i>
-- cardid: 660
-  title: Back Banner
+- title: Back Banner
   types:
   - Item
   decks:
@@ -287,13 +264,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: John Cadice
   flavor_text: <i>"The broken banner shafts jutted from their corpses like spears, daring us to come forward
     to claim our just victory." - Kitsu Dejiko</i>
-- cardid: 717
-  title: Battle at White Shore Plain
+- title: Battle at White Shore Plain
   types:
   - Strategy
   decks:
@@ -309,14 +284,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Joachim Gmoser
   flavor_text: <i>"I remember...," the Unicorn whispered. "Here is where I fought, where I died. Can you
     tell me that I do not belong in the Empire, after I gave my life for it? You cannot force me to die
     again-and I will not leave my home."</i>
-- cardid: 722
-  title: Battle of Drowned Honor
+- title: Battle of Drowned Honor
   types:
   - Strategy
   decks:
@@ -333,14 +306,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Common
   artist: Justin Norman
   flavor_text: <i>"The fighting was ruthless, and in the end only the golden aura of spirits still moved
     forward. We had lost the battle, and I had lost my finest general. I will not rest until he is avenged."
     - Hida O-Ushi</i>
-- cardid: 723
-  title: Battle of Quiet Winds
+- title: Battle of Quiet Winds
   types:
   - Strategy
   decks:
@@ -356,14 +327,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: John Cadice
   flavor_text: <i>"The Scorpion have betrayed the Lion and the Crane, just as you said they would. Tsuneo
     will be able to march on Beiden Pass, and we will soon take Otosan Uchi from the upstart, thanks to
     your treachery." "It is our nature, Hantei-sama," Baku replied, and the trap was set.</i>
-- cardid: 724
-  title: Battle of Shallow Waters
+- title: Battle of Shallow Waters
   types:
   - Strategy
   decks:
@@ -380,13 +349,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: David Martin
   flavor_text: <i>"His eyes blazed, and his sword moved like lightning. Before we knew it, the sprits
     had swarmed through our small bastion, leaving us behind to die on the Golden Plains." - Akodo Ijiasu.</i>
-- cardid: 755
-  title: Bayushi Baku
+- title: Bayushi Baku
   types:
   - Personality
   decks:
@@ -412,13 +379,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: David Martin
   flavor_text: <i>"Toturi attempts to deny the natural order, my lord Hantei," said the Scorpion spirit.
     "One should never deny one's nature."</i>
-- cardid: 860
-  title: Bayushi Paneki
+- title: Bayushi Paneki
   types:
   - Personality
   decks:
@@ -438,15 +403,13 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: April Lee
   flavor_text: <i>"The spirits of the past have come through Oblivion's Gate to the present, brining with
     them old wars long since forgotten. If they do not return, they challenge the Emperor, the strength
     of the clans, and the very balance of nature. I will see them die, even if I must give up my life
     to join them."</i>
-- cardid: 926
-  title: Bayushi Yojiro
+- title: Bayushi Yojiro
   types:
   - Personality
   decks:
@@ -473,11 +436,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: William O'Connor
-- cardid: 944
-  title: Beginning and End
+- title: Beginning and End
   types:
   - Strategy
   decks:
@@ -492,14 +453,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Joseph Phillips
   flavor_text: <i>"One half of the Tao is forever gone - but without the Crane we might have lost more.
     We owe it to the Empire to spread those teachings we retain, that these fragments might one day guide
     us all to peace." - Chou-Sin.</i>
-- cardid: 974
-  title: Birth of the Anvil
+- title: Birth of the Anvil
   types:
   - Event
   decks:
@@ -514,14 +473,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: William O'Connor
   flavor_text: <i>"One of your children, Toturi, must bear the Hantei name and accept the Hantei blood.
     Only if our ancestors are honored, and only if a child of both our bloodlines remains close to the
     throne, will we cease our war." - Hantei XVI</i>
-- cardid: 977
-  title: Birth of the Sword
+- title: Birth of the Sword
   types:
   - Event
   decks:
@@ -535,14 +492,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Ken Meyer Jr.
   flavor_text: <i>"As a young girl, she defeated the greatest sensei that the Lion could offer. I have
     never before seen the like of Toturi's oldest child, nor ever will I again." - Kitsu Motso, Champion
     of the Lion</i>
-- cardid: 978
-  title: Birth of the Wolf
+- title: Birth of the Wolf
   types:
   - Event
   decks:
@@ -556,13 +511,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Ramon Perez
   flavor_text: <i>"Toturi's second child - his first son - has much of his mother's magic in his veins
     - and more, if the blood of Dragons carries true through the oracle's child." - Soshi Jomyako</i>
-- cardid: 982
-  title: Bitter
+- title: Bitter
   types:
   - Item
   decks:
@@ -583,12 +536,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Talon Dunning
   flavor_text: <i>"That which can be cut down does not stand in my way." - Dragon samurai</i>
-- cardid: 1202
-  title: Call the Spirit
+- title: Call the Spirit
   types:
   - Spell
   decks:
@@ -603,13 +554,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Jeff Reitz
   flavor_text: <i>The Dragon shugenja turned, spinning his hands into the air. As he chanted, the spirit
     samurai ceased moving, its eyes flung open, forced to obey.</i>
-- cardid: 1339
-  title: Chou-Sin
+- title: Chou-Sin
   types:
   - Personality
   decks:
@@ -629,12 +578,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Bob Hobbs
   flavor_text: <i>"Can one truly know a thing when it is incomplete?"</i>
-- cardid: 1413
-  title: Clay Soldiers
+- title: Clay Soldiers
   types:
   - Follower
   decks:
@@ -651,14 +598,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Christina Wald
   flavor_text: <i>Tsuneo stormed the provinces of the Isawa, murdering the daughter of the Master of Earth
     and stealing the Phoenix children. "If you will not bow to your past," the letter to the imperial
     court read, "you will bow to save their future."</i>
-- cardid: 1420
-  title: Cliffs of Golden Tears
+- title: Cliffs of Golden Tears
   types:
   - Region
   decks:
@@ -669,14 +614,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Justin Norman
   flavor_text: <i>One by one, the legion of the dead marched to the cliffs above the Phoenix temples and
     leapt into the sea. Thus, the spirits returned to the land of the dead and the Empire was free to
     begin anew.</i>
-- cardid: 1553
-  title: Crab Tattoo
+- title: Crab Tattoo
   types:
   - Strategy
   decks:
@@ -691,13 +634,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Theresa Brandon
   flavor_text: <i>Secrets still haunt the Crab who returned from Volturnum... and not all shadows in Hida
     lands are cast by mortal forms.</i>
-- cardid: 1606
-  title: Cursed Ground
+- title: Cursed Ground
   types:
   - Region
   decks:
@@ -707,14 +648,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Tony Moseley
   flavor_text: <i>"Deep in the Shadowlands, a new threat arises. People find oni chewed as if by the wind,
     torn apart, with limbs missing and torsos frayed. Something collects hearts and bodies. . . and when
     it comes to Rokugan, we must be prepared." - Kuni Masaki</i>
-- cardid: 1637
-  title: Daidoji Hachi
+- title: Daidoji Hachi
   types:
   - Personality
   decks:
@@ -735,12 +674,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: April Lee
   flavor_text: '<i>"My family is Daidoji, and I am theirs, but my ancestors had another name: Yasuki."</i>'
-- cardid: 1855
-  title: Dark Secrets
+- title: Dark Secrets
   types:
   - Strategy
   decks:
@@ -754,12 +691,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Tom Biondolillo
   flavor_text: <i>"The best mask is the one no one knows you have."</i>
-- cardid: 1990
-  title: Devastation of Beiden Pass
+- title: Devastation of Beiden Pass
   types:
   - Spell
   decks:
@@ -779,11 +714,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: This card was printed as both a Common and Rare
-  printing_id: '1'
   rarity: Common
   artist: Paul (Prof.) Herbert
-- cardid: 2109
-  title: Doji Kurohito
+- title: Doji Kurohito
   types:
   - Personality
   decks:
@@ -803,14 +736,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: William O'Connor
   flavor_text: <i>"I do not care that she died in dishonor; I do not care that her life ended hundreds
     of years ago. She is the daughter of a Thunder, and she is my bride. She has died for her dishonor
     and come back. If you would like to match that feat, I would be pleased to help you on your way."</i>
-- cardid: 2122
-  title: Doji Meihu
+- title: Doji Meihu
   types:
   - Personality
   decks:
@@ -833,13 +764,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Some versions were printed with a Fate back.
-  printing_id: '1'
   rarity: Uncommon
   artist: Pamela Shanteau
   flavor_text: <i>An ancient general, fallen in war against the Crab. The present means nothing to these
     spirits - save that they can use it to attain their forgotten goals.</i>
-- cardid: 2141
-  title: Doji Reju
+- title: Doji Reju
   types:
   - Personality
   decks:
@@ -869,13 +798,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Justin Norman
   flavor_text: <i>He stood by Kuwanan's side as the Horde shattered the Crane army, but he could not save
     his lord.</i>
-- cardid: 2211
-  title: Dragon Dancers
+- title: Dragon Dancers
   types:
   - Holding
   decks:
@@ -887,12 +814,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Common
   artist: David Martin
   flavor_text: <i>"Never promise more than you can perform." - The Tao of Shinsei</i>
-- cardid: 2267
-  title: Earthquake at Otosan Uchi
+- title: Earthquake at Otosan Uchi
   types:
   - Event
   decks:
@@ -906,14 +831,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Diana Vick
   flavor_text: <i>In the twelfth year of the Emperor's reign, a terrible earthquake shook the imperial
     city. It took only a few minute's of the earth's labor to create, but it will take the course of centuries
     to undo.</i>
-- cardid: 2271
-  title: East Wall of Otosan Uchi
+- title: East Wall of Otosan Uchi
   types:
   - Holding
   decks:
@@ -934,11 +857,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   story: 1999 Walls of Otosan Uchi - Stephane Cornier
-  printing_id: '1'
   rarity: Rare
   artist: Audrey Corman
-- cardid: 2324
-  title: Emperor's Favor
+- title: Emperor's Favor
   types:
   - Event
   decks:
@@ -953,14 +874,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Anthony Grabski
   flavor_text: <i>"Toturi rules with dignity and wisdom. He upholds honor and enforces the law of the
     Jade Throne. To hold the favor of such a great man is to hold the heavens and the skies in your palm.
     With his word, you can do anything." - Akodo Ijiasu</i>
-- cardid: 2327
-  title: Emperor's Under-Hand
+- title: Emperor's Under-Hand
   types:
   - Holding
   decks:
@@ -976,12 +895,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Michael Phillippi
   flavor_text: <i>"See that the spirits do not succeed, Yojiro-san." - Toturi the First</i>
-- cardid: 2328
-  title: Empress's Guard
+- title: Empress's Guard
   types:
   - Follower
   decks:
@@ -1003,14 +920,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Ben Peck
   flavor_text: <i>"Ten years of service, and not a single spirit has laid a hand upon my wife or children.
     I trust my wife's safety to the finest people, Yojiro. I will not see them questioned." - Toturi the
     First.</i>
-- cardid: 2449
-  title: Fall of the Alliance
+- title: Fall of the Alliance
   types:
   - Event
   decks:
@@ -1024,12 +939,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Monika Livingstone
   flavor_text: <i>"Now there will be only the Mantis. . . and the forgotten." - Yoritomo Aramasu</i>
-- cardid: 2450
-  title: Fall on Your Knees
+- title: Fall on Your Knees
   types:
   - Strategy
   decks:
@@ -1042,13 +955,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: David Martin
   flavor_text: <i>"The Phoenix will do as we command, or their children will die. To prove that we mean
     what we say kill…that one." - Hantei XVI</i>
-- cardid: 2451
-  title: Fallen Ground
+- title: Fallen Ground
   types:
   - Strategy
   decks:
@@ -1063,14 +974,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Tony Moseley
   flavor_text: <i>"It was the first battle of the War of Spirits. The Lion did not expect Tsuneo's troops
     to stand against their charge. Though the Lion carried the day, the victory came at a terrible price."
     - "Battle of Fallen Ground," The Ikoma Histories</i>
-- cardid: 2452
-  title: Fallen Legion
+- title: Fallen Legion
   types:
   - Follower
   decks:
@@ -1092,14 +1001,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Michael Phillippi
   flavor_text: '<i>"Something dark grows in the heart of the Shadowlands, but the Seven Clans have no
     time for the minions of Fu Leng. Let the clans fight their ancestors: the Crab have better things
     to do."</i>'
-- cardid: 2526
-  title: Fields of Darkness
+- title: Fields of Darkness
   types:
   - Region
   decks:
@@ -1109,14 +1016,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Justin Norman
   flavor_text: <i>"I remember the Battle of Drowned Honor. Like a striking serpent, the Black Finger River
     rose up to meet us, and now my family lies deep beneath the black waters of the Forbidden Lake. Their
     screams haunt me, echoing on empty waves." Hiruma Yugure.</i>
-- cardid: 2537
-  title: Fields of the Sun
+- title: Fields of the Sun
   types:
   - Region
   decks:
@@ -1130,13 +1035,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Mark Evans
   flavor_text: <i>Tsukiyoka stood over Tampako's corpse. "The Empire will never kneel to tyranny, Tsuneo,"
     he said, and with those words the Asahina lost a favored son.</i>
-- cardid: 2749
-  title: Fushiki no Oni
+- title: Fushiki no Oni
   types:
   - Personality
   decks:
@@ -1162,12 +1065,10 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>Fire is the harbinger of war.</i>
-- cardid: 2812
-  title: Giuniko
+- title: Giuniko
   types:
   - Personality
   decks:
@@ -1186,12 +1087,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Val Mayerik
   flavor_text: <i>"One cannot teach wisdom unless one has students to listen."</i>
-- cardid: 2897
-  title: Great Crater
+- title: Great Crater
   types:
   - Region
   decks:
@@ -1205,13 +1104,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Tony Moseley
   flavor_text: <i>"After Beiden Pass fell, Lord Sun's fire broke open the mountains at the spine of the
     world, that we could still pass through. It is a road - but one fit only for the brave." - Moto Fujeki</i>
-- cardid: 2913
-  title: Guard the House
+- title: Guard the House
   types:
   - Strategy
   decks:
@@ -1224,13 +1121,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Dennis Calero
   flavor_text: <i>"We defeated the Shadow and returned home with honor and glory... but when we arrived,
     we found the fields flooded, our palace destroyed." -Daidoji Hachi</i>
-- cardid: 2971
-  title: Hantei XVI
+- title: Hantei XVI
   types:
   - Personality
   decks:
@@ -1254,12 +1149,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Justin Norman
   flavor_text: <i>"Let the people hate, as long as they also fear."</i>
-- cardid: 3064
-  title: Hesitation
+- title: Hesitation
   types:
   - Strategy
   decks:
@@ -1273,13 +1166,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Stefano Gaudiano
   flavor_text: <i>"You may think we should not fight these spirits, Soshi-sama," the general said, "but
     first hear how your son has died."</i>
-- cardid: 3102
-  title: Hida Hio
+- title: Hida Hio
   types:
   - Personality
   decks:
@@ -1302,13 +1193,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"He fights beside Ratlings, not his own family. Perhaps he is afraid to be seen with
     a true Crab?" -Hida Unari</i>
-- cardid: 3137
-  title: Hida Kuon
+- title: Hida Kuon
   types:
   - Personality
   decks:
@@ -1327,14 +1216,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Dan Hazeltine
   flavor_text: <i>"When they told him his father was dead, he did not weep, did not shout or howl. Kuon
     only looked at me and asked how he could avenge Yasamura -sama. He will be a strong Crab - a fit general
     for the Hida and a worthy son of his mother's line." - Hida Rohiteki</i>
-- cardid: 3142
-  title: Hida Kuroda
+- title: Hida Kuroda
   types:
   - Personality
   decks:
@@ -1355,13 +1242,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Dennis Gelon
   flavor_text: <i>"He studied in the Unicorn lands, following in his father's footsteps. One day he will
     be Champion of the Crab, but for now he has much still to learn." - Hida Rohiteki</i>
-- cardid: 3194
-  title: Hida Sukune
+- title: Hida Sukune
   types:
   - Personality
   decks:
@@ -1392,11 +1277,9 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Justin Norman
-- cardid: 3214
-  title: Hida Tsuneo
+- title: Hida Tsuneo
   types:
   - Personality
   decks:
@@ -1420,14 +1303,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"Tsuneo was the greatest general of his age, now turned against the Empire at Hantei
     XVI's command. He will never surrender, and he will never fall. How can we defeat a legend?" - Shiba
     Gensui</i>
-- cardid: 3395
-  title: Hitomi's Glare
+- title: Hitomi's Glare
   types:
   - Strategy
   decks:
@@ -1442,12 +1323,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Michael Phillippi
   flavor_text: <i>Takao aided her; now she must aid the Brotherhood before their pride fails them.</i>
-- cardid: 3434
-  title: Honorable
+- title: Honorable
   types:
   - Item
   decks:
@@ -1467,11 +1346,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Talon Dunning
-- cardid: 3566
-  title: Ide Gokun
+- title: Ide Gokun
   types:
   - Personality
   decks:
@@ -1494,12 +1371,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Joachim Gmoser
   flavor_text: <i>"I know your tracks, Paneki, and I know your ways. You cannot escape me."</i>
-- cardid: 3650
-  title: Ikoma Tsai
+- title: Ikoma Tsai
   types:
   - Personality
   decks:
@@ -1520,14 +1395,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Michael Phillippi
   flavor_text: <i>"The ox bought their freedom from the Unicorn with the blood of our ancestors, fighting
     to destroy the sprit armies that threaten Iuchi lands. Neither treachery has been forgotten. . . and
     a child's eyes have seen the truth." - Matsu Ketsui</i>
-- cardid: 3684
-  title: Imperial Census
+- title: Imperial Census
   types:
   - Event
   decks:
@@ -1546,13 +1419,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Rare
   artist: Mark Evans
   flavor_text: <i>The Empire flourished under its Emperor and Empress, and with each child born the land
     rejoiced.</i>
-- cardid: 3747
-  title: Infantry Charge
+- title: Infantry Charge
   types:
   - Strategy
   decks:
@@ -1567,14 +1438,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Michael Phillippi
   flavor_text: <i>Tsuneo's legions were on higher ground and had greater troops. The Moto had only courage.
     The remaining spirit forces fled, but the Moto ran them down and left them dying in pools of golden
     blood.</i>
-- cardid: 3756
-  title: Inkyo
+- title: Inkyo
   types:
   - Follower
   decks:
@@ -1593,13 +1462,11 @@ cards:
   - Legacy
   notes: Inkyo's Chi, Honor Requirement, and Personal Honor were misprinted and received contemporary
     errata.
-  printing_id: '1'
   rarity: Common
   artist: Justin Norman
   flavor_text: <i>"We saw the hills shake and the earth fall. As we watched, the ocean tore the rocks
     away from the shore. The renegade spirits anger the Celestial Heavens, and we will all pay the price."</i>
-- cardid: 3781
-  title: Intelligence Agent
+- title: Intelligence Agent
   types:
   - Holding
   decks:
@@ -1614,11 +1481,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Justin Norman
-- cardid: 3786
-  title: Interruption
+- title: Interruption
   types:
   - Strategy
   decks:
@@ -1631,12 +1496,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Heather Bruton
   flavor_text: <i>"I told you once before" - the merchant captain grinned - "not on my ship."</i>
-- cardid: 3807
-  title: Iron Mempo
+- title: Iron Mempo
   types:
   - Item
   decks:
@@ -1652,13 +1515,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Tom Biondolillo
   flavor_text: <i>"It burst from the melee, a beast at the center of a whirling wind of steel. Its eye
     fixed upon me from behind a mask of iron, and I ran." - Nameless Ashigaru</i>
-- cardid: 3859
-  title: Isawa Metigaru
+- title: Isawa Metigaru
   types:
   - Personality
   decks:
@@ -1678,12 +1539,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Dennis Calero
   flavor_text: <i>"You stand against fate, Tsukune. 'Defend and serve,' or your line will pay the price."</i>
-- cardid: 3871
-  title: Isawa Nakamuro
+- title: Isawa Nakamuro
   types:
   - Personality
   decks:
@@ -1705,13 +1564,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Thomas Gianni
   flavor_text: <i>"They took Yaruko's life to 'convince' the Masters to betray Toturi. They did not expect
     us to fight at the sound of her screams. . . but we were still to late."</i>
-- cardid: 4136
-  title: Kaiu Sensei
+- title: Kaiu Sensei
   types:
   - Sensei
   decks:
@@ -1732,11 +1589,9 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: KC Lancaster
-- cardid: 4182
-  title: Kakita Kaiten
+- title: Kakita Kaiten
   types:
   - Personality
   decks:
@@ -1762,13 +1617,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   story: 1999 Hero's Redemption - Jon Palmer
-  printing_id: '2'
   rarity: Rare
   artist: April Lee
   flavor_text: <i>"…Over the inevitable, do not grieve. But seek the ever-changing and find the core."
     - Rezan's Awakening, Part II</i>
-- cardid: 4257
-  title: Kamoko's Constellation
+- title: Kamoko's Constellation
   types:
   - Event
   decks:
@@ -1784,12 +1637,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Joachim Gmoser
   flavor_text: <i>"Forever."</i>
-- cardid: 4372
-  title: Kitsu Dejiko
+- title: Kitsu Dejiko
   types:
   - Personality
   decks:
@@ -1810,13 +1661,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Ron Chironna
   flavor_text: <i>"There is no choice between strength and honor. Bone and muscle will fail with time;
     my honor will not."</i>
-- cardid: 4451
-  title: Kitsune
+- title: Kitsune
   types:
   - Personality
   decks:
@@ -1837,12 +1686,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Monika Livingstone
   flavor_text: <i>In the lands of Kitsune Mori roam the Lady of the Forest's children.</i>
-- cardid: 4490
-  title: Knowing Lands and Giving Trees
+- title: Knowing Lands and Giving Trees
   types:
   - Region
   decks:
@@ -1852,13 +1699,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Justin Norman
   flavor_text: <i>"I loved her," Aikune said, placing the last flower upon the marker of her death. With
     pained eyes, Nakamuro looked down at the still, cold stone. - "I know."</i>
-- cardid: 4500
-  title: Kohuri
+- title: Kohuri
   types:
   - Personality
   decks:
@@ -1880,12 +1725,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Val Mayerik
   flavor_text: <i>Death does not frighten those who stand watch in the night.</i>
-- cardid: 4594
-  title: Kuni Utagu
+- title: Kuni Utagu
   types:
   - Personality
   decks:
@@ -1912,11 +1755,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Ben Peck
-- cardid: 4661
-  title: Lady of the Forest Sensei
+- title: Lady of the Forest Sensei
   types:
   - Sensei
   decks:
@@ -1931,12 +1772,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: KC Lancaster
   flavor_text: <i>Even the largest mountains are made of small stones.</i>
-- cardid: 4662
-  title: Lalesha
+- title: Lalesha
   types:
   - Personality
   decks:
@@ -1960,11 +1799,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Theodor Black
-- cardid: 4666
-  title: Last Gift
+- title: Last Gift
   types:
   - Strategy
   decks:
@@ -1980,14 +1817,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Common
   artist: Justin Norman
   flavor_text: '<i>"The Lady gave us this last gift in trust for Ryoshen. It turned to glass in his hands
     as he returned it to us to keep for you." As Yoshune bowed and reached out to accept the warm stone,
     he heard a soft whisper in his soul: Satsu."</i>'
-- cardid: 4678
-  title: Lay the Blame
+- title: Lay the Blame
   types:
   - Strategy
   decks:
@@ -2002,13 +1837,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: David Martin
   flavor_text: <i>"The Lion must pay for the mistakes of the Kitsu and restore the balance of the Celestial
     Heavens." - Bayushi Yojiro</i>
-- cardid: 4718
-  title: Let the Spirit Move You
+- title: Let the Spirit Move You
   types:
   - Strategy
   decks:
@@ -2024,13 +1857,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>"He was an honorable opponent, and for his courage, I allowed him to live." Hantei snarled,
     "You decide nothing, general. Ride him down."</i>
-- cardid: 4784
-  title: Lsinyuan
+- title: Lsinyuan
   types:
   - Personality
   decks:
@@ -2050,13 +1881,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Sean Murray
   flavor_text: <i>"My infantry have already seen death and suffered Jigoku's chains. What have they to
     fear?"</i>
-- cardid: 4785
-  title: Luring Tactics
+- title: Luring Tactics
   types:
   - Strategy
   decks:
@@ -2072,13 +1901,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Uncommon
   artist: Theodor Black
   flavor_text: <i>"Bitter swords drove the Crab and the Scorpion armies backward into the pass. I saw
     Tadashiro fall there, fighting with his family. Then I heard the most horrible roar…" - Hida Unari.</i>
-- cardid: 4832
-  title: Mara's Farewell
+- title: Mara's Farewell
   types:
   - Strategy
   decks:
@@ -2092,12 +1919,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Malcolm McClinton
   flavor_text: <i>"Sleep on, my people….I will be with you again." - Mara</i>
-- cardid: 4870
-  title: Master Smith Ascends
+- title: Master Smith Ascends
   types:
   - Spell
   decks:
@@ -2113,12 +1938,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Michael Phillippi
   flavor_text: <i>"Henshin, beware. Your time is near." - The Scrolls of Norikazu</i>
-- cardid: 5171
-  title: Mirumoto Ukira
+- title: Mirumoto Ukira
   types:
   - Personality
   decks:
@@ -2139,12 +1962,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Pamela Shanteau
   flavor_text: <i>"Even loss and betrayal can bring an awakening."</i>
-- cardid: 5173
-  title: Mirumoto Uso
+- title: Mirumoto Uso
   types:
   - Personality
   decks:
@@ -2169,13 +1990,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: April Lee
   flavor_text: <i>"Certain in death for all those who are born, and certain in birth for the dead…" -Rezan's
     Awakening, Part I</i>
-- cardid: 5194
-  title: Miya Dosonu
+- title: Miya Dosonu
   types:
   - Personality
   decks:
@@ -2195,13 +2014,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Val Mayerik
   flavor_text: <i>"I have done my duty - served my clan in this life and in the next. Now it is time for
     me to respect the laws of the Fortunes and return to the lands beyond death."</i>
-- cardid: 5201
-  title: Miya Sensei
+- title: Miya Sensei
   types:
   - Sensei
   decks:
@@ -2216,12 +2033,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: KC Lancaster
   flavor_text: <i>The art of war is the way to preserve peace.</i>
-- cardid: 5204
-  title: Miya Yemi
+- title: Miya Yemi
   types:
   - Personality
   decks:
@@ -2242,13 +2057,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Christina Wald
   flavor_text: <i>"His father has returned to Jigoku as the Emperor commanded, but Donosu's child will
     remain with me. If that means I am disobedient, then so be it."</i>
-- cardid: 5211
-  title: Mizuichi
+- title: Mizuichi
   types:
   - Personality
   decks:
@@ -2267,14 +2080,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Sean Murray
   flavor_text: <i>"When the Lion first attacked, Mizuichi and his swift steed carried their battle-plan
     to Tsuneo's ear. His cavalry kept the Matsu at bay until the Stone Crab could rally and defeat them,
     and, through his valor, they forced even the Matsu to retreat." - Kakita Kaiten</i>
-- cardid: 5218
-  title: Mokoto
+- title: Mokoto
   types:
   - Personality
   decks:
@@ -2296,13 +2107,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Joachim Gmoser
   flavor_text: <i>"I rode with Toturi when Fu Leng fell, I stayed by his side on the march home from Volturnum.
     I will not fail him now."</i>
-- cardid: 5240
-  title: Morito
+- title: Morito
   types:
   - Personality
   decks:
@@ -2329,12 +2138,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Dennis Calero
   flavor_text: <i>Nothing destroys as swiftly as ambition… or as painfully as regret.</i>
-- cardid: 5245
-  title: Mortal Flesh
+- title: Mortal Flesh
   types:
   - Strategy
   decks:
@@ -2349,12 +2156,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Eric David Anderson
   flavor_text: <i>And with mortal flesh came mortal desires. . . .</i>
-- cardid: 5282
-  title: Moshi Shanegon
+- title: Moshi Shanegon
   types:
   - Personality
   decks:
@@ -2374,13 +2179,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Thomas Gianni
   flavor_text: <i>"Go back and tell the all-powerful Hantei XVI that he has no empire and that the Mantis
     have no need for his 'gratitude'. If he wants to take his armies to Otosan Uchi, he can swim there."</i>
-- cardid: 5325
-  title: Moto Hideyo
+- title: Moto Hideyo
   types:
   - Personality
   decks:
@@ -2402,13 +2205,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Michael Phillippi
   flavor_text: <i>"They say that those who stand before him are as a willow tree against a tsunami." Kitsu
     Dejiko smiled. "But he has not yet met the Lion."</i>
-- cardid: 5381
-  title: Moto Technique
+- title: Moto Technique
   types:
   - Strategy
   decks:
@@ -2422,13 +2223,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Michael Phillippi
   flavor_text: <i>"I never knew how insane the Moto were until I saw them with my own eyes." - Daidoji
     Hachi</i>
-- cardid: 5390
-  title: Moto Vordu
+- title: Moto Vordu
   types:
   - Personality
   decks:
@@ -2449,13 +2248,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Tom Biondolillo
   flavor_text: <i>"Without sacrifice, there can be no victory. Think on that, Hideyo, when the time comes
     to pay the price for what I have given you."</i>
-- cardid: 5425
-  title: Moving the Wind
+- title: Moving the Wind
   types:
   - Strategy
   decks:
@@ -2470,13 +2267,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Garry McKee
   flavor_text: <i>Roshungi grinned, his bloody ax dripping with rotted flesh. "Too late, little Phoenix
     spirit. . . too late!"</i>
-- cardid: 5492
-  title: Nage-yari
+- title: Nage-yari
   types:
   - Item
   decks:
@@ -2492,13 +2287,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Malcolm McClinton
   flavor_text: <i>"The Asahina mourn for their own that would give hate a place in their hearts. Where,
     then, is there room for hope?" - Isawa Taeruko</i>
-- cardid: 5541
-  title: New Kimono
+- title: New Kimono
   types:
   - Item
   decks:
@@ -2513,14 +2306,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: April Lee
   flavor_text: <i>"Not all of the days of The War of Spirits are remembered as days of bloodshed and death.
     In the courts of the Crane and Phoenix, the young samurai remind us that our glorious Empire still
     lives and breathes." - The journal of Kakita Meyoko, imperial courtier</i>
-- cardid: 5557
-  title: Nightmare
+- title: Nightmare
   types:
   - Strategy
   decks:
@@ -2533,13 +2324,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Michael Phillippi
   flavor_text: <i>"Having scouted the depths of the Shadowlands, I know not from whence this has come."
     - Hiruma Taki</i>
-- cardid: 5611
-  title: Noekam
+- title: Noekam
   types:
   - Personality
   decks:
@@ -2565,12 +2354,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Uncommon
   artist: Ramon Perez
   flavor_text: <i>"The Keeper of the Tomb hordes the bones of the dead like jewels…but to what purpose?"</i>
-- cardid: 5623
-  title: North Wall of Otosan Uchi
+- title: North Wall of Otosan Uchi
   types:
   - Holding
   decks:
@@ -2591,11 +2378,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   story: 1999 Walls of Otosan Uchi - Bruno Di Napoli
-  printing_id: '1'
   rarity: Rare
   artist: Audrey Corman
-- cardid: 5663
-  title: Obsidian Statues
+- title: Obsidian Statues
   types:
   - Region
   decks:
@@ -2611,13 +2396,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Michael Phillippi
   flavor_text: <i>"Why did you trust me, Odoshi?" The Phoenix replied, "Because the Empire is more important
     that our war."</i>
-- cardid: 5690
-  title: Old Debts
+- title: Old Debts
   types:
   - Follower
   decks:
@@ -2632,13 +2415,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Justin Norman
   flavor_text: <i>"Welcome back to the Empire, Akodo. Let us see how long your rebirth lasts…." - Kitsuki
     Mizuochi</i>
-- cardid: 5751
-  title: Oni Spawn
+- title: Oni Spawn
   types:
   - Follower
   decks:
@@ -2658,13 +2439,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: David Martin
   flavor_text: <i>"Far from their spawning pools, oni have begun to multiply. . . within the Empire's
     borders."</i>
-- cardid: 5813
-  title: Otomo Dsichi
+- title: Otomo Dsichi
   types:
   - Personality
   decks:
@@ -2686,12 +2465,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Val Mayerik
   flavor_text: <i>"A single word in the right person's ear can wreak more havoc than a thousand swords."</i>
-- cardid: 5814
-  title: Otomo Hoketuhime
+- title: Otomo Hoketuhime
   types:
   - Personality
   decks:
@@ -2712,13 +2489,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Ramon Perez
   flavor_text: <i>"A beautiful woman of noble lineage, Hoketuhime has a heart colder than Dragon snows
     and harder than their mountains. She will never be won." - Seppun Mashita</i>
-- cardid: 5932
-  title: Personal Sacrifice
+- title: Personal Sacrifice
   types:
   - Strategy
   decks:
@@ -2732,13 +2507,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Joseph Phillips
   flavor_text: <i>"Do not do this, Mio. You know that your fight is wrong." The Dragon's eyes were tortured.
     "I have no choice, Ukira. I have no choice."</i>
-- cardid: 6021
-  title: Poorly Placed Garden
+- title: Poorly Placed Garden
   types:
   - Holding
   decks:
@@ -2757,13 +2530,11 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Common
   artist: Sean Murray
   flavor_text: <i>"Fifteen years, and all the Kuni has been able to grow are a few roots and scrub grasses.
     What does he think could live in that barren patch of soil?" - Hiruma Zunguri</i>
-- cardid: 6133
-  title: Quiet Tombs
+- title: Quiet Tombs
   types:
   - Region
   decks:
@@ -2773,14 +2544,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: KC Lancaster
   flavor_text: <i>Tsuneo stood before the Emperor, sword in hand. "We who have been reborn will not return
     to Jigoku without a fight. Whether you kill us or whether we go willingly - it is all the same. We
     cannot ignore our duties, and you cannot ignore your honor." With those words the War of Spirits began.</i>
-- cardid: 6178
-  title: Ratling Scroungers
+- title: Ratling Scroungers
   types:
   - Follower
   decks:
@@ -2799,13 +2568,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"They take what they can find, and what they cannot find they steal. The Nezumi are
     repugnant creatures fit only for work an eta would avoid." - Kakita Kaiten</i>
-- cardid: 6291
-  title: Return For Training
+- title: Return For Training
   types:
   - Strategy
   decks:
@@ -2822,13 +2589,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Uncommon
   artist: April Lee
   flavor_text: <i>"The battlefield is not your destiny." The old Daidoji looked southward. "You will tend
     to the carp, Akeu. When they have wings, you may return."</i>
-- cardid: 6301
-  title: Revealing the Bastard
+- title: Revealing the Bastard
   types:
   - Event
   decks:
@@ -2841,13 +2606,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Brian Snoddy
   flavor_text: <i>"I was raised in the Lion lands, weaned on tales of your honor and her love. She was
     a simple geisha, and I am nothing more than her child - your son, Toturi-sama." - The Bastard</i>
-- cardid: 6305
-  title: Revering the Past
+- title: Revering the Past
   types:
   - Event
   decks:
@@ -2863,13 +2626,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Theodor Black
   flavor_text: <i>"Remember me, my grandson, though your family destroys the spirits who would live again.
     Remember, as I die, and learn." - The spirit of Ide Kasagi at the Leaping Place</i>
-- cardid: 6325
-  title: Right to Rule
+- title: Right to Rule
   types:
   - Event
   decks:
@@ -2885,13 +2646,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: April Lee
   flavor_text: <i>"You have no power over us, Hantei," the Emperor said. "I have more than you know,"
     the spirit replied, and Tsukune reached slowly for her sword.</i>
-- cardid: 6386
-  title: Roshungi
+- title: Roshungi
   types:
   - Personality
   decks:
@@ -2916,12 +2675,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Garry McKee
   flavor_text: '<i>"Spell through flesh: steel through bone - all things can be severed, in time."</i>'
-- cardid: 6398
-  title: Ruin and Devastation
+- title: Ruin and Devastation
   types:
   - Spell
   decks:
@@ -2936,13 +2693,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Tony Moseley
   flavor_text: <i>"Hida Tsuneo was a brilliant general and, while on Hantei's leash, ruthless to anything
     in his path." - Bayushi Hisa</i>
-- cardid: 6448
-  title: Saigorei
+- title: Saigorei
   types:
   - Personality
   decks:
@@ -2967,12 +2722,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Jeff Reitz
   flavor_text: <i>"An imperial courtesan's son?" The Crab laughed. "I would sooner fear a geisha."</i>
-- cardid: 6489
-  title: Scaring the Masses
+- title: Scaring the Masses
   types:
   - Strategy
   decks:
@@ -2985,12 +2738,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"Run, fools." - Kaiu Endo</i>
-- cardid: 6493
-  title: Scholarship
+- title: Scholarship
   types:
   - Strategy
   decks:
@@ -3003,13 +2754,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Heather Bruton
   flavor_text: <i>"In peace, there is scholarship. In learning, there is wisdom. In war, there is only
     death."</i>
-- cardid: 6714
-  title: Shasyahkar
+- title: Shasyahkar
   types:
   - Personality
   decks:
@@ -3034,13 +2783,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Ken Meyer Jr.
   flavor_text: <i>"Sleep well, beloved ones. Know that I will stand between you and danger, and see you
     once more when you wake."</i>
-- cardid: 6725
-  title: Shaunasea
+- title: Shaunasea
   types:
   - Personality
   decks:
@@ -3063,13 +2810,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Ron Chironna
   flavor_text: '<i>"We are the makers of dreams: you, the dreamers. While you sleep, we will wander alone
     beneath the pale moon-the movers of the world."</i>'
-- cardid: 6735
-  title: Shiba Aikune
+- title: Shiba Aikune
   types:
   - Personality
   decks:
@@ -3089,13 +2834,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: April Lee
   flavor_text: <i>"Tsukune's son is bold and brash like his father, and the loss of Isawa Yaruko has turned
     his young eyes toward revenge." - Soshi Angai</i>
-- cardid: 6791
-  title: Shiba Ningen
+- title: Shiba Ningen
   types:
   - Personality
   decks:
@@ -3123,14 +2866,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Dennis Calero
   flavor_text: <i>"I see the weight of ages upon his young soul. His responsibility has changed him; he
     serves the Council - not his family. But no matter what comes, a Shiba will sit at the Council of
     Masters." - Shiba Tsukune</i>
-- cardid: 6943
-  title: Shinjo Shono
+- title: Shinjo Shono
   types:
   - Personality
   decks:
@@ -3157,12 +2898,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Justin Norman
   flavor_text: <i>"Though my father is dead and my family ruined, I will have my vengeance!"</i>
-- cardid: 7026
-  title: Shiryo no Ch'i
+- title: Shiryo no Ch'i
   types:
   - Ancestor
   decks:
@@ -3183,12 +2922,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: April Lee
   flavor_text: <i>"She served in the libraries of the Asako and serves her destiny still."</i>
-- cardid: 7034
-  title: Shiryo no Hotei
+- title: Shiryo no Hotei
   types:
   - Ancestor
   decks:
@@ -3210,13 +2947,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Eric Ren
   flavor_text: <i>"Do not fear sanity, for samurai will not risk what they fear to lose. Fear samurai
     who have lost their minds; they have nothing left to gain." - Kakita's The Sword</i>
-- cardid: 7050
-  title: Shiryo no Nyoko
+- title: Shiryo no Nyoko
   types:
   - Ancestor
   decks:
@@ -3237,13 +2972,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Jeff Reitz
   flavor_text: <i>"She forged Bitter and Honorable-swords thought lost to time. With their return, her
     soul has awakened, guiding us to restore the balance of the Karmic Wheel." - Togashi Hoshi.</i>
-- cardid: 7056
-  title: Shiryo no Shoju
+- title: Shiryo no Shoju
   types:
   - Ancestor
   decks:
@@ -3267,12 +3000,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Ken Meyer Jr.
   flavor_text: <i>"Secrets are locks to hide the truth, but all locks have keys."</i>
-- cardid: 7059
-  title: Shiryo no Taisa
+- title: Shiryo no Taisa
   types:
   - Ancestor
   decks:
@@ -3295,12 +3026,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Bryon Wackwitz
   flavor_text: <i>"Knowledge of your position is not as vital as knowledge of your enemy's."</i>
-- cardid: 7064
-  title: Shiryo no Ujik-hai
+- title: Shiryo no Ujik-hai
   types:
   - Ancestor
   decks:
@@ -3322,13 +3051,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Michael Phillippi
   flavor_text: <i>"In my wake, a thousand warriors bled their lives into the sand. I expect no less from
     my children."</i>
-- cardid: 7093
-  title: Shosuro Chian
+- title: Shosuro Chian
   types:
   - Personality
   decks:
@@ -3354,11 +3081,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Dennis Calero
-- cardid: 7213
-  title: Shrine of the Evening Star
+- title: Shrine of the Evening Star
   types:
   - Holding
   decks:
@@ -3375,13 +3100,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: KC Lancaster
   flavor_text: <i>Only the Phoenix know the path to return from death. From the Celestial Heavens, a grateful
     Moon looks down on them with honor.</i>
-- cardid: 7215
-  title: Shrine of the Spirits
+- title: Shrine of the Spirits
   types:
   - Stronghold
   decks:
@@ -3399,11 +3122,9 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Ramon Perez
-- cardid: 7237
-  title: Shuriken
+- title: Shuriken
   types:
   - Item
   decks:
@@ -3421,11 +3142,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Some of the War of Spirits versions were printed with a Dynasty back
-  printing_id: '1'
   rarity: Common
   artist: Dan Hazeltine
-- cardid: 7250
-  title: Sign of Weakness
+- title: Sign of Weakness
   types:
   - Strategy
   decks:
@@ -3439,12 +3158,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Ramon Perez
   flavor_text: <i>"Lightning destroyed dozens of fighters - the first of her victories."</i>
-- cardid: 7251
-  title: Signal Corps
+- title: Signal Corps
   types:
   - Follower
   decks:
@@ -3460,13 +3177,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Christina Wald
   flavor_text: <i>"The spirit generals under Tsuneo's command coordinated their attacks with ancient magics
     and ruthless efficiency."</i>
-- cardid: 7267
-  title: Simple Huts
+- title: Simple Huts
   types:
   - Holding
   decks:
@@ -3478,13 +3193,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: David Martin
   flavor_text: <i>"Supplies run short, my lord. Tsuneo has taken the Hida lands, and the Daidoji and Asahina
     fields are in flames. If Tsuneo chooses to press the advantage, we will be lost." - Ide Buodin</i>
-- cardid: 7313
-  title: Snow Crane Tattoo
+- title: Snow Crane Tattoo
   types:
   - Strategy
   decks:
@@ -3502,12 +3215,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   errata_text: Errata'd via the internet.
-  printing_id: '1'
   rarity: Rare
   artist: Diana Vick
   flavor_text: <i>"My time is done, Rekai." Uji choked as he died. "Yours begins."</i>
-- cardid: 7322
-  title: Sodegarami
+- title: Sodegarami
   types:
   - Item
   decks:
@@ -3524,13 +3235,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Talon Dunning
   flavor_text: <i>"Tsuneo has commanded, and I will obey," she hissed and her eyes shone with gleeful
     madness. "Remember me when you feel the fires of death."</i>
-- cardid: 7341
-  title: Soshi Angai
+- title: Soshi Angai
   types:
   - Personality
   decks:
@@ -3552,14 +3261,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Uncommon
   artist: Diana Vick
   flavor_text: <i>"All things are possible. For a time a Scorpion can be a Crane, and a woman can even
     pass as a man. When I have the secrets of the Kakita in my hands, I will suddenly vanish - and not
     even their great Kenshinzen will ever find me."</i>
-- cardid: 7384
-  title: Soul Sword
+- title: Soul Sword
   types:
   - Spell
   decks:
@@ -3575,13 +3282,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Mark Evans
   flavor_text: <i>"Some will fall in this battle, but, if your soul is strong, you will not be among them."
     - Tamori Shaitung</i>
-- cardid: 7393
-  title: South Wall of Otosan Uchi
+- title: South Wall of Otosan Uchi
   types:
   - Holding
   decks:
@@ -3602,11 +3307,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   story: 1999 Walls of Otosan Uchi - Mark Wootton
-  printing_id: '1'
   rarity: Rare
   artist: Audrey Corman
-- cardid: 7414
-  title: Spirit Bells
+- title: Spirit Bells
   types:
   - Holding
   decks:
@@ -3621,13 +3324,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Justin Norman
   flavor_text: <i>"Shugenja have rung them for centuries to call their ancestors at festival. Who would
     ever have guessed of the power they displayed during the War of Spirits?" - Iuchi Tzichung</i>
-- cardid: 7417
-  title: Spirit Hounds
+- title: Spirit Hounds
   types:
   - Follower
   decks:
@@ -3644,13 +3345,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"He released the dogs with glee, watching as they tore through our cornered legion.
     If it had not been for Tsuko's Heart, they would surely have killed us all." - Ikom Tsai</i>
-- cardid: 7470
-  title: Star-Filled Steel
+- title: Star-Filled Steel
   types:
   - Spell
   decks:
@@ -3665,13 +3364,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Michael Phillippi
   flavor_text: <i>"Under the guidance of the Sun and Moon, the master smith forged new weapons for the
     arisen Kami to continue their feud."</i>
-- cardid: 7626
-  title: Sumai Match
+- title: Sumai Match
   types:
   - Event
   decks:
@@ -3687,11 +3384,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: David Deitrick
-- cardid: 7679
-  title: Suzume Roshi
+- title: Suzume Roshi
   types:
   - Personality
   decks:
@@ -3711,13 +3406,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Talon Dunning
   flavor_text: <i>"The Shadowlands did not place within us the shadow that falls over our souls, nor did
     the Goju. It is not there because others have failed us, but because we have failed ourselves."</i>
-- cardid: 7680
-  title: Suzume Sensei
+- title: Suzume Sensei
   types:
   - Sensei
   decks:
@@ -3732,12 +3425,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: KC Lancaster
   flavor_text: <i>Dream of the skies; walk on the earth.</i>
-- cardid: 7728
-  title: Taikon
+- title: Taikon
   types:
   - Personality
   decks:
@@ -3756,12 +3447,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Monika Livingstone
   flavor_text: <i>"Even with his skills, we may still never recover." - Asahina Dorai</i>
-- cardid: 7772
-  title: Tamori Chosai
+- title: Tamori Chosai
   types:
   - Personality
   decks:
@@ -3780,12 +3469,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Val Mayerik
   flavor_text: <i>"He has returned from retirement, his loyalty to his clan greater than his family's."</i>
-- cardid: 7792
-  title: Tamori Shaitung
+- title: Tamori Shaitung
   types:
   - Personality
   decks:
@@ -3806,13 +3493,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Uncommon
   artist: William O'Connor
   flavor_text: <i>"Our magic is not as the Phoenix practice it. My father understood this, though his
     family did not."</i>
-- cardid: 7849
-  title: Te'tik'kir
+- title: Te'tik'kir
   types:
   - Personality
   decks:
@@ -3835,13 +3520,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Michael Phillippi
   flavor_text: <i>"Do not insult the Nameseekers. They give life, but they take-take it as well. Anger
     one, and it can also steal away your life, your name….and your soul." - Chicuk, Ratling Guide</i>
-- cardid: 7904
-  title: Temptation
+- title: Temptation
   types:
   - Strategy
   decks:
@@ -3852,13 +3535,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Ken Meyer Jr.
   flavor_text: <i>"I will help you," Ayisha purred, "but in return you must help me. Help me live, samurai,
     and I will give you the world."</i>
-- cardid: 8237
-  title: The Noble Halls of the Akodo
+- title: The Noble Halls of the Akodo
   types:
   - Stronghold
   decks:
@@ -3874,11 +3555,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Anthony Grabski
-- cardid: 8460
-  title: Three-Stone River
+- title: Three-Stone River
   types:
   - Strategy
   decks:
@@ -3898,11 +3577,9 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Uncommon
   artist: Monika Livingstone
-- cardid: 8461
-  title: Through the Flames
+- title: Through the Flames
   types:
   - Strategy
   decks:
@@ -3916,12 +3593,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Jim Pavelec
   flavor_text: <i>"Utagu's methods are extreme, but his results cannot be questioned."</i>
-- cardid: 8552
-  title: Togashi Mio
+- title: Togashi Mio
   types:
   - Personality
   decks:
@@ -3942,13 +3617,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Theresa Brandon
   flavor_text: <i>He fought with Tsuneo's legions when they stormed the fields of the Unicorn, tearing
     through the Iuchi guards. "I died at your hands once, Unicorn," he said. "I will not do so again."</i>
-- cardid: 8640
-  title: Torii Arch
+- title: Torii Arch
   types:
   - Holding
   decks:
@@ -3961,13 +3634,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Thomas Gianni
   flavor_text: <i>"Our war is not a war of arrogance, your majesty, but of a people who have returned
     home. We only wish to take our due. If that means your empire must change, then so it must." - Uidori</i>
-- cardid: 8643
-  title: Torii Tattoo
+- title: Torii Tattoo
   types:
   - Strategy
   decks:
@@ -3984,11 +3655,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Malcolm McClinton
-- cardid: 8704
-  title: Towers of the Asako
+- title: Towers of the Asako
   types:
   - Stronghold
   decks:
@@ -4004,11 +3673,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Garry McKee
-- cardid: 8743
-  title: Treaty
+- title: Treaty
   types:
   - Item
   decks:
@@ -4022,13 +3689,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Heather Bruton
   flavor_text: <i>"We offer you the protection of the Phoenix." "Tetsuya-san, we need room to live, not
     your protection." The Master's eyes grew cold, and the Kitsuki, too late, knew his mistake.</i>
-- cardid: 8781
-  title: Tsuko Sensei
+- title: Tsuko Sensei
   types:
   - Sensei
   decks:
@@ -4048,11 +3713,9 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: KC Lancaster
-- cardid: 8782
-  title: Tsuko's Heart
+- title: Tsuko's Heart
   types:
   - Follower
   decks:
@@ -4071,13 +3734,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Anthony Grabski
   flavor_text: <i>"Turi's pitiful soldiers swore to destroy those spirits who flee their duty and would
     not return," Hida Tsuneo laughed, "but students cannot best masters at their own lessons."</i>
-- cardid: 8868
-  title: Tsuruchi Okame
+- title: Tsuruchi Okame
   types:
   - Personality
   decks:
@@ -4100,11 +3761,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Dennis Calero
-- cardid: 8907
-  title: Turn of Fate
+- title: Turn of Fate
   types:
   - Spell
   decks:
@@ -4118,11 +3777,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Ben Peck
-- cardid: 8930
-  title: Uidori
+- title: Uidori
   types:
   - Personality
   decks:
@@ -4141,12 +3798,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Susan Van Camp
   flavor_text: <i>"When you struggle against the moment, you struggle against the universe."</i>
-- cardid: 8951
-  title: Undead Legion
+- title: Undead Legion
   types:
   - Follower
   decks:
@@ -4166,11 +3821,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Jim Pavelec
-- cardid: 9035
-  title: Uona Sensei
+- title: Uona Sensei
   types:
   - Sensei
   decks:
@@ -4189,12 +3842,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: KC Lancaster
   flavor_text: <i>All things will come to virtue in time, as all winds come before storms.</i>
-- cardid: 9038
-  title: Usagi Gohei
+- title: Usagi Gohei
   types:
   - Personality
   decks:
@@ -4214,12 +3865,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Justin Norman
   flavor_text: <i>"I gave my life for the honor of my clan. It will take another lifetime to restore it."</i>
-- cardid: 9117
-  title: Utaku Yu-Pan
+- title: Utaku Yu-Pan
   types:
   - Personality
   decks:
@@ -4242,14 +3891,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Michael Phillippi
   flavor_text: <i>"We cannot track spirits," Xieng Chi said. The hunter replied, "They killed my family
     to honor a war three hundred years old. If need be, I can find them in Jigoku itself, and I will give
     them death."</i>
-- cardid: 9197
-  title: Wall of Bones
+- title: Wall of Bones
   types:
   - Holding
   decks:
@@ -4266,12 +3913,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Eric Ren
   flavor_text: <i>"The ground is scoured clean; we will never return." - Kuni Yasashii</i>
-- cardid: 9220
-  title: War Paints
+- title: War Paints
   types:
   - Strategy
   decks:
@@ -4286,12 +3931,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"I don't want to know what you use in that paint…and no, I don't want any!" - Hida Hio</i>
-- cardid: 9237
-  title: Warriors of the Great Climb
+- title: Warriors of the Great Climb
   types:
   - Follower
   decks:
@@ -4310,13 +3953,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Eric Polak
   flavor_text: <i>"We saw a unit of spirit warriors turn back without a strike, unwilling to fight against
     three Dragon ise zumi. When we asked the Dragon why, they spoke in riddles."</i>
-- cardid: 9242
-  title: Wasp Sensei
+- title: Wasp Sensei
   types:
   - Sensei
   decks:
@@ -4331,12 +3972,10 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: KC Lancaster
   flavor_text: <i>The only thing samurai truly own is their word. Break your word, and you are nothing.</i>
-- cardid: 9277
-  title: Weapons Cache
+- title: Weapons Cache
   types:
   - Strategy
   decks:
@@ -4350,13 +3989,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: David Martin
   flavor_text: <i>"Come, come, Otomo-sama. All wars must have soldiers, and soldiers must have weapons.
     Where else can you get such fine wares, now that the spirits have taken the mines of the Crab?"</i>
-- cardid: 9295
-  title: West Wall of Otosan Uchi
+- title: West Wall of Otosan Uchi
   types:
   - Holding
   decks:
@@ -4379,11 +4016,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   story: 1999 Walls of Otosan Uchi - Brian Farmer
-  printing_id: '1'
   rarity: Rare
   artist: Audrey Corman
-- cardid: 9310
-  title: Where Tsanuri Fell
+- title: Where Tsanuri Fell
   types:
   - Strategy
   decks:
@@ -4398,13 +4033,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Malcolm McClinton
   flavor_text: <i>"She was a brave general and a courageous warrior. Ten men died in the Shadowlands while
     building her shrine - but many more would have died, if not for her honor." - The Ikoma Histories.</i>
-- cardid: 9360
-  title: Witch Hunt
+- title: Witch Hunt
   types:
   - Strategy
   decks:
@@ -4418,13 +4051,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: William O'Connor
   flavor_text: <i>"Come, Utagu. Let us see where your heart truly lies." - Mohai, The Battle of Drowned
     Honor, vol II</i>
-- cardid: 9361
-  title: Witch Hunter's Accusation
+- title: Witch Hunter's Accusation
   types:
   - Strategy
   decks:
@@ -4438,13 +4069,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Ben Peck
   flavor_text: <i>"Utagu has been relentless, driving them from their bloody rituals and purifying the
     Empire of maho. But there is still one tsukai he has yet to catch...." - Asahina Tsukiyoka</i>
-- cardid: 9412
-  title: Wutho
+- title: Wutho
   types:
   - Personality
   decks:
@@ -4467,12 +4096,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Michael Phillippi
   flavor_text: <i>"He's a clever little one. But not clever enough."- Hida Rohiteki</i>
-- cardid: 9426
-  title: Yakamo's Smile
+- title: Yakamo's Smile
   types:
   - Strategy
   decks:
@@ -4489,11 +4116,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Michael Phillippi
-- cardid: 9429
-  title: Yamaso no Oni
+- title: Yamaso no Oni
   types:
   - Holding
   decks:
@@ -4508,13 +4133,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Jim Pavelec
   flavor_text: <i>"The wall of tortured spirits formed a barrier that stole from our ranks even as we
     tried to reach the other side." - Tsuruchi Okame</i>
-- cardid: 9472
-  title: Yeiseo
+- title: Yeiseo
   types:
   - Personality
   decks:
@@ -4534,14 +4157,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Ken Meyer Jr.
   flavor_text: <i>"You live in falsehoods, in fables and deceptions. There is no peace beyond death -
     only torture and agony, knowing that you have failed. Do not listen to the world. It lies; it lies
     to us all."</i>
-- cardid: 9482
-  title: Yoee'trr
+- title: Yoee'trr
   types:
   - Personality
   decks:
@@ -4565,12 +4186,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Uncommon
   artist: Paul (Prof.) Herbert
   flavor_text: <i> *THUNK* "Now me hit-hit other eye. You watch."</i>
-- cardid: 9511
-  title: Yokai no Mizushai
+- title: Yokai no Mizushai
   types:
   - Ancestor
   decks:
@@ -4593,13 +4212,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Stefano Gaudiano
   flavor_text: <i>"The mist of the Black Finger River does not take insult; it takes lives." - Kyoso no
     Oni</i>
-- cardid: 9526
-  title: Yoritomo Aramasu
+- title: Yoritomo Aramasu
   types:
   - Personality
   decks:
@@ -4627,12 +4244,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Ben Peck
   flavor_text: <i>"We stand isolated, with enemies on all sides."</i>
-- cardid: 9589
-  title: Yoritomo Kitao
+- title: Yoritomo Kitao
   types:
   - Personality
   decks:
@@ -4653,14 +4268,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>"I do not care how honorable these spirits and ancient ancestors were a hundred years
     ago." The kobune captain grinned mercilessly, fingering her nunchaku. "The question is, how much can
     they pay now?"</i>
-- cardid: 9658
-  title: Yoritomo Yukue
+- title: Yoritomo Yukue
   types:
   - Personality
   decks:
@@ -4686,6 +4299,5 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Audrey Corman

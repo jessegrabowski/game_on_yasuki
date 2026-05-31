@@ -1,7 +1,6 @@
 set: The Imperial Gift 1
 cards:
-- cardid: 480
-  title: As the Breakers
+- title: As the Breakers
   types:
   - Strategy
   decks:
@@ -18,14 +17,25 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Stephanie Pui-Mun Law
   flavor_text: <i>Be as the water, and your strength will ebb and flow. Be as the stone, and your perseverance
     knows no limit.</i>
   collector_number: '15'
-- cardid: 1199
-  title: Call Forth the Dead
+- title: Blood War
+  types:
+  - Other
+  decks:
+  - Other
+  text: '2003<br>The dreaded Bloodspeaker, the unholy sorcerer known as Iuchiban, rose from the grave
+    for the second time to challenge the sovereignty of the ruling Dynasty and plunged the Empire into
+    darkness through the sinister workings of his cult, the Bloodspeakers. His very existence was such
+    a disruption to the natural order that the Spirit Realms opened up and allowed one hero to return
+    to the mortal realm to counter his darkness: Hida Kisada, the Great Bear of the Crab Clan. Through
+    the sheer force of will of Kisada and the raw power of Isawa Sezaru, brother to the Emperor, Iuchiban
+    and his cult were eventually undone.'
+  rarity: Fixed
+- title: Call Forth the Dead
   types:
   - Strategy
   decks:
@@ -41,14 +51,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Brandon Leach
   flavor_text: <i>"What need have I for magistrates and soldiers? They follow my orders without question,
     and death is not a concern." - The Onyx Champion</i>
   collector_number: '16'
-- cardid: 1459
-  title: Consecration of Steel
+- title: Consecration of Steel
   types:
   - Event
   decks:
@@ -64,13 +72,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Ancor Gil Hernandez
   flavor_text: <i>"The Heavens have blessed this steel. Now go forth and use it to slay your lord's enemies."</i>
   collector_number: '1'
-- cardid: 1708
-  title: Daigotsu Bundoru
+- title: Daigotsu Bundoru
   types:
   - Personality
   decks:
@@ -93,13 +99,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Jarreau Wimberly
   flavor_text: <i>"I need no eyes to see the truth. To me, all is darkness."</i>
   collector_number: '10'
-- cardid: 1806
-  title: Daku no Oni
+- title: Daku no Oni
   types:
   - Personality
   decks:
@@ -121,14 +125,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Adam Bray
   flavor_text: <i>"I do not care what it is called or what it can do. I will kill it, and then I will
     find another." - Hida Manoru</i>
   collector_number: '12'
-- cardid: 1815
-  title: Dance of the Winds
+- title: Dance of the Winds
   types:
   - Strategy
   decks:
@@ -146,14 +148,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Stephanie Pui-Mun Law
   flavor_text: <i>"Entreating the kami to destruction is a simpleton's task. Creating beauty is far more
     difficult."</i>
   collector_number: '17'
-- cardid: 2012
-  title: Discovering Lost Lore
+- title: Discovering Lost Lore
   types:
   - Strategy
   decks:
@@ -167,13 +167,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Wen Juinn
   flavor_text: <i>"By the Fortunes! Could this really be the chop of Isawa Hochiu?"</i>
   collector_number: '18'
-- cardid: 2239
-  title: Drinking One's Life
+- title: Drinking One's Life
   types:
   - Strategy
   decks:
@@ -188,13 +186,23 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Ancor Gil Hernandez
   flavor_text: <i>"Even a samurai is good for something." - Omoni</i>
   collector_number: '19'
-- cardid: 2434
-  title: Facilitation
+- title: Era of Enlightenment
+  types:
+  - Other
+  decks:
+  - Other
+  text: 2005<br>Prompted by the arrival of a great prophet, the descendant of Shinsei, the Empire came
+    under a fevered enthusiasm for seeking enlightenment, the mythical state of absolute oneness with
+    the universe. Even though the prophet was murdered by the Shadowlands, some did find enlightenment
+    through his teachings, and those of his vassals, the Keepers of the Elements. Sadly, the quest for
+    enlightenment leads to the death of Emperor Toturi III at the legendary Tomb of the Seven Thunders,
+    deep in the Shadowlands.
+  rarity: Fixed
+- title: Facilitation
   types:
   - Strategy
   decks:
@@ -210,13 +218,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Ancor Gil Hernandez
   flavor_text: <i>"I asked for the firestorm spell! No, the other one!"</i>
   collector_number: '20'
-- cardid: 2717
-  title: Fubatsu Blade
+- title: Fubatsu Blade
   types:
   - Item
   decks:
@@ -237,13 +243,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Fixed
   artist: IFS
   flavor_text: <i>"Surely Hida Fubatsu is of Kaiu blood, to create so perfect a blade." - Hiruma Aki</i>
   collector_number: '27'
-- cardid: 2769
-  title: Game of Sincerity
+- title: Game of Sincerity
   types:
   - Strategy
   decks:
@@ -260,14 +264,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Genzoman
   flavor_text: <i>Even in the midst of battle, words can cut as easily as steel, and the shame can linger
     far, far longer.</i>
   collector_number: '21'
-- cardid: 3146
-  title: Hida Manoru
+- title: Hida Manoru
   types:
   - Personality
   decks:
@@ -291,13 +293,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Adam Bray
   flavor_text: <i>"I am no mindless brute. I am a Crab warrior, and you should fear me."</i>
   collector_number: '3'
-- cardid: 3354
-  title: Hitofu
+- title: Hitofu
   types:
   - Personality
   decks:
@@ -320,13 +320,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: IFS
   flavor_text: <i>"I never know where my next meal will come from. What do I care who sits upon the throne?"</i>
   collector_number: '13'
-- cardid: 3687
-  title: Imperial Couriers
+- title: Imperial Couriers
   types:
   - Follower
   decks:
@@ -345,13 +343,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: David Horne
   flavor_text: <i>The Miya heralds bring messages of hope for those who serve the Emperor's will.</i>
   collector_number: '25'
-- cardid: 3782
-  title: Intercession
+- title: Intercession
   types:
   - Strategy
   decks:
@@ -366,13 +362,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Chris Seaman
   flavor_text: <i>"If you please, this is a matter best left to Imperial discretion."</i>
   collector_number: '22'
-- cardid: 3835
-  title: Isawa Itsuoko
+- title: Isawa Itsuoko
   types:
   - Personality
   decks:
@@ -396,13 +390,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Wen Juinn
   flavor_text: <i>"Sometimes purification requires power, pure and simple."</i>
   collector_number: '8'
-- cardid: 4226
-  title: Kakita Taminoko
+- title: Kakita Taminoko
   types:
   - Personality
   decks:
@@ -424,14 +416,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Mario Wibisono
   flavor_text: <i>"Samurai are made for more than war. If we cannot rise above simple violence, then how
     can we hope for a better world for the future?"</i>
   collector_number: '4'
-- cardid: 4967
-  title: Matsu Notsuo
+- title: Matsu Notsuo
   types:
   - Personality
   decks:
@@ -452,13 +442,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Wen Juinn
   flavor_text: <i>"I need steel and battle. Words mean nothing."</i>
   collector_number: '6'
-- cardid: 5055
-  title: Military Assessment
+- title: Military Assessment
   types:
   - Strategy
   decks:
@@ -477,13 +465,22 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   errata_text: Errata'd via the internet.
-  printing_id: '1'
   rarity: Fixed
   artist: David Horne
   flavor_text: <i>There are few generals who do not use scouts. Such an advantage is not quickly discarded.</i>
   collector_number: '23'
-- cardid: 5790
-  title: Osano-Wo's Rebuke
+- title: One Thousand Years of Darkness
+  types:
+  - Other
+  decks:
+  - Other
+  text: 2002<br>Somewhere in a distant realm the dreams of a thwarted god take shape, and a realm where
+    Fu Leng was victorious in the Clan War is born. Ruled by a corrupted god made flesh, this Rokugan
+    is a tortured and miserable place, where the people suffer for no reason other than that it amuses
+    their malevolent masters. Only the aged ronin Toturi and a handful of his allies, some quite unexpected,
+    have any chance of overthrowing the Dark Emperor and restoring the world to its natural state.
+  rarity: Fixed
+- title: Osano-Wo's Rebuke
   types:
   - Spell
   decks:
@@ -499,13 +496,22 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Genzoman
   flavor_text: <i>"You will die. But first, you will suffer!"</i>
   collector_number: '28'
-- cardid: 6230
-  title: Regional Treasurer
+- title: Race for the Throne
+  types:
+  - Other
+  decks:
+  - Other
+  text: 2007<br>With the Emperor dead, and his family lost in battle with no clear line of succession,
+    the throne sits empty once again. Rather than throw their armies into battle with one another, the
+    Great Clans instead attempt to accrue sufficient political, economic, and military might to claim
+    the throne, securing their place as the ruling clan of Rokugan. Unknown to mortals, however, the Celestial
+    Heavens have grown tired of man's folly and plan to restore the proper Celestial Order.
+  rarity: Fixed
+- title: Regional Treasurer
   types:
   - Holding
   decks:
@@ -520,14 +526,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Joe Wilson
   flavor_text: <i>"The position of Imperial Treasurer shall be created, in order to supervise the security
     and distribution of the throne's wealth." - The New Emperor</i>
   collector_number: '2'
-- cardid: 6438
-  title: Sacred Valley
+- title: Sacred Valley
   types:
   - Region
   decks:
@@ -541,14 +545,35 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: IFS
   flavor_text: <i>Such places are favored by those who have brought shame to their family name, that they
     might find atonement.</i>
   collector_number: '14'
-- cardid: 6492
-  title: Scholarly Attendant
+- title: Saga of the Clan War
+  types:
+  - Other
+  decks:
+  - Other
+  text: 1995<br>The dark god Fu Leng, unwittingly released from his prison, possessed the young Emperor,
+    pitting the clans against one another in a bid for the throne. The forces of the Shadowlands ravaged
+    the Empire, keeping the clans on the defensive until the Black Lion, a ronin warrior named Toturi,
+    began uniting sympathetic forces under his banner. It was Toturi who led the Seven Thunders to defeat
+    Fu Leng and it was Toturi who sat upon the throne when the Clan War was at last ended.
+  rarity: Fixed
+- title: Saga of the Four Winds
+  types:
+  - Other
+  decks:
+  - Other
+  text: 2001<br>The Emperor lay dead, murdered by the Shadowlands, having never declared his chosen successor.
+    His four children, known as the Sword, the Wolf, the Anvil, and the Bastard, each set their sights
+    upon the throne, albeit for vastly different reasons. The support of the clans was divided among them,
+    and war, while tragic, was inevitable. The Dark Lord of the Shadowlands, the man responsible for the
+    Emperor's death, sought to exploit the situation, but the Sword sacrificed herself to end his machinations.
+    In the end, the Anvil sat upon the throne, served by his two surviving siblings.
+  rarity: Fixed
+- title: Scholarly Attendant
   types:
   - Follower
   decks:
@@ -564,14 +589,26 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Gong Studios
   flavor_text: <i>"I think you might find your argument more effective if you remind the Lion ambassador
     of the writings of sensei Akodo Tishikaru, my lord."</i>
   collector_number: '26'
-- cardid: 7135
-  title: Shosuro Miyoto
+- id: scorpion_clan_coup
+  title: Scorpion Clan Coup
+  types:
+  - Other
+  decks:
+  - Other
+  text: 1997<br>Driven by a prophecy of terrifying proportions, the Scorpion Clan Champion Bayushi Shoju
+    enacts a bold and ultimately tragic plan to save the Empire from certain doom. Shoju assassinates
+    his greatest friend, the Emperor Hantei XXXVIII, and seizes control of the Imperial City. The Great
+    Clans band together against him, but Shoju's brilliant and unorthodox tactics hold out until, he hopes,
+    the Crab Clan will arrive and support his bid for the throne. Sadly for the Scorpion, the Crab do
+    not support Shoju's coup, and the Scorpion are undone by the arrival of the Lion Champion, previously
+    thought dead by Shoju's scheming.
+  rarity: Fixed
+- title: Shosuro Miyoto
   types:
   - Personality
   decks:
@@ -592,13 +629,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Gong Studios
   flavor_text: <i>"I only kill the corrupt. It is a tragedy that so many are easily corrupted."</i>
   collector_number: '9'
-- cardid: 8515
-  title: Togashi Chunoken
+- title: Togashi Chunoken
   types:
   - Personality
   decks:
@@ -621,13 +656,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Anthony Grabski
   flavor_text: <i>"Many mistake piety for passivity. No one repeats the mistake."</i>
   collector_number: '5'
-- cardid: 8876
-  title: Tsuruchi Saya
+- title: Tsuruchi Saya
   types:
   - Personality
   decks:
@@ -648,13 +681,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Mario Wibisono
   flavor_text: <i>"You are of no use to me dead. I do not care what condition you are in, however."</i>
   collector_number: '7'
-- cardid: 9079
-  title: Utaku Kioko
+- title: Utaku Kioko
   types:
   - Personality
   decks:
@@ -678,14 +709,34 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Jarreau Wimberly
   flavor_text: <i>"She fills her soul with duty and anger to fill the emptiness left there by war." -
     Utaku Kohana</i>
   collector_number: '11'
-- cardid: 9226
-  title: War-Torn Plains
+- title: War Against the Darkness
+  types:
+  - Other
+  decks:
+  - Other
+  text: 1998<br>An ancient, unknown force called the Lying Darkness abducted the Emperor Toturi I, leaving
+    the Empire in chaos. The clans blamed one another. Adding to the chaos, the clans each had conflicts
+    among their own ranks. The faceless shadow minions of the Darkness sowed discord even among the Heavens.
+    When the conflict was at last at an end, the Lady Sun and Lord Moon were dead, replaced by mortals,
+    and the Spirit Realms had spilled forth a vast army into the mortal realm.
+  rarity: Fixed
+- title: War of Spirits
+  types:
+  - Other
+  decks:
+  - Other
+  text: 2000<br>A vast army of spirits, the souls of samurai released from the Spirit Realms, united under
+    the banner of the spirit Hantei XVI, the despot also known as the Steel Chrysanthemum. The tyrant
+    demanded that the current Emperor relinquish his throne, but he refused, and war consumed the Empire
+    as samurai took up arms against one another. Surely no other war has so badly damaged the people of
+    Rokugan, who were forced to take up arms against their own ancestors in defense of their beloved Emperor.
+  rarity: Fixed
+- title: War-Torn Plains
   types:
   - Strategy
   decks:
@@ -702,136 +753,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Joe Wilson
   flavor_text: <i>Once it had critical importance, but now it has been despoiled by too many battles.</i>
   collector_number: '24'
-- cardid: 11350
-  title: Saga of the Clan War
-  types:
-  - Other
-  decks:
-  - Other
-  text: 1995<br>The dark god Fu Leng, unwittingly released from his prison, possessed the young Emperor,
-    pitting the clans against one another in a bid for the throne. The forces of the Shadowlands ravaged
-    the Empire, keeping the clans on the defensive until the Black Lion, a ronin warrior named Toturi,
-    began uniting sympathetic forces under his banner. It was Toturi who led the Seven Thunders to defeat
-    Fu Leng and it was Toturi who sat upon the throne when the Clan War was at last ended.
-  printing_id: '1'
-  rarity: Fixed
-- cardid: 11351
-  title: Scorpion Clan Coup
-  types:
-  - Other
-  decks:
-  - Other
-  text: 1997<br>Driven by a prophecy of terrifying proportions, the Scorpion Clan Champion Bayushi Shoju
-    enacts a bold and ultimately tragic plan to save the Empire from certain doom. Shoju assassinates
-    his greatest friend, the Emperor Hantei XXXVIII, and seizes control of the Imperial City. The Great
-    Clans band together against him, but Shoju's brilliant and unorthodox tactics hold out until, he hopes,
-    the Crab Clan will arrive and support his bid for the throne. Sadly for the Scorpion, the Crab do
-    not support Shoju's coup, and the Scorpion are undone by the arrival of the Lion Champion, previously
-    thought dead by Shoju's scheming.
-  printing_id: '1'
-  rarity: Fixed
-- cardid: 11352
-  title: War Against the Darkness
-  types:
-  - Other
-  decks:
-  - Other
-  text: 1998<br>An ancient, unknown force called the Lying Darkness abducted the Emperor Toturi I, leaving
-    the Empire in chaos. The clans blamed one another. Adding to the chaos, the clans each had conflicts
-    among their own ranks. The faceless shadow minions of the Darkness sowed discord even among the Heavens.
-    When the conflict was at last at an end, the Lady Sun and Lord Moon were dead, replaced by mortals,
-    and the Spirit Realms had spilled forth a vast army into the mortal realm.
-  printing_id: '1'
-  rarity: Fixed
-- cardid: 11353
-  title: War of Spirits
-  types:
-  - Other
-  decks:
-  - Other
-  text: 2000<br>A vast army of spirits, the souls of samurai released from the Spirit Realms, united under
-    the banner of the spirit Hantei XVI, the despot also known as the Steel Chrysanthemum. The tyrant
-    demanded that the current Emperor relinquish his throne, but he refused, and war consumed the Empire
-    as samurai took up arms against one another. Surely no other war has so badly damaged the people of
-    Rokugan, who were forced to take up arms against their own ancestors in defense of their beloved Emperor.
-  printing_id: '1'
-  rarity: Fixed
-- cardid: 11354
-  title: Saga of the Four Winds
-  types:
-  - Other
-  decks:
-  - Other
-  text: 2001<br>The Emperor lay dead, murdered by the Shadowlands, having never declared his chosen successor.
-    His four children, known as the Sword, the Wolf, the Anvil, and the Bastard, each set their sights
-    upon the throne, albeit for vastly different reasons. The support of the clans was divided among them,
-    and war, while tragic, was inevitable. The Dark Lord of the Shadowlands, the man responsible for the
-    Emperor's death, sought to exploit the situation, but the Sword sacrificed herself to end his machinations.
-    In the end, the Anvil sat upon the throne, served by his two surviving siblings.
-  printing_id: '1'
-  rarity: Fixed
-- cardid: 11355
-  title: One Thousand Years of Darkness
-  types:
-  - Other
-  decks:
-  - Other
-  text: 2002<br>Somewhere in a distant realm the dreams of a thwarted god take shape, and a realm where
-    Fu Leng was victorious in the Clan War is born. Ruled by a corrupted god made flesh, this Rokugan
-    is a tortured and miserable place, where the people suffer for no reason other than that it amuses
-    their malevolent masters. Only the aged ronin Toturi and a handful of his allies, some quite unexpected,
-    have any chance of overthrowing the Dark Emperor and restoring the world to its natural state.
-  printing_id: '1'
-  rarity: Fixed
-- cardid: 11356
-  title: Blood War
-  types:
-  - Other
-  decks:
-  - Other
-  text: '2003<br>The dreaded Bloodspeaker, the unholy sorcerer known as Iuchiban, rose from the grave
-    for the second time to challenge the sovereignty of the ruling Dynasty and plunged the Empire into
-    darkness through the sinister workings of his cult, the Bloodspeakers. His very existence was such
-    a disruption to the natural order that the Spirit Realms opened up and allowed one hero to return
-    to the mortal realm to counter his darkness: Hida Kisada, the Great Bear of the Crab Clan. Through
-    the sheer force of will of Kisada and the raw power of Isawa Sezaru, brother to the Emperor, Iuchiban
-    and his cult were eventually undone.'
-  printing_id: '1'
-  rarity: Fixed
-- cardid: 11357
-  title: Era of Enlightenment
-  types:
-  - Other
-  decks:
-  - Other
-  text: 2005<br>Prompted by the arrival of a great prophet, the descendant of Shinsei, the Empire came
-    under a fevered enthusiasm for seeking enlightenment, the mythical state of absolute oneness with
-    the universe. Even though the prophet was murdered by the Shadowlands, some did find enlightenment
-    through his teachings, and those of his vassals, the Keepers of the Elements. Sadly, the quest for
-    enlightenment leads to the death of Emperor Toturi III at the legendary Tomb of the Seven Thunders,
-    deep in the Shadowlands.
-  printing_id: '1'
-  rarity: Fixed
-- cardid: 11358
-  title: Race for the Throne
-  types:
-  - Other
-  decks:
-  - Other
-  text: 2007<br>With the Emperor dead, and his family lost in battle with no clear line of succession,
-    the throne sits empty once again. Rather than throw their armies into battle with one another, the
-    Great Clans instead attempt to accrue sufficient political, economic, and military might to claim
-    the throne, securing their place as the ruling clan of Rokugan. Unknown to mortals, however, the Celestial
-    Heavens have grown tired of man's folly and plan to restore the proper Celestial Order.
-  printing_id: '1'
-  rarity: Fixed
-- cardid: 11359
-  title: What Is Yet to Come
+- title: What Is Yet to Come
   types:
   - Other
   decks:
@@ -843,5 +769,4 @@ cards:
     Yet shadows grow ever darker in the deepest forests, a clan of renegades hide in the forgotten places,
     a brilliant flame burns brightly in the mountains, and somewhere in the Empire the treacherous Ebon
     Daughter enacts the sinister plots of her master.
-  printing_id: '1'
   rarity: Fixed

@@ -1,7 +1,6 @@
 set: Honor and Treachery
 cards:
-- cardid: 262
-  title: Akodo Regulars
+- title: Akodo Regulars
   types:
   - Follower
   decks:
@@ -18,14 +17,36 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Edwin David
   flavor_text: Lion forces continued to serve as an honor guard in the City of Remembrance in the Phoenix
     lands. In the absence of orders to the contrary from their lord, they were honor-bound to take up
     arms to defend Phoenix lands, even if it meant potentially facing their brothers in battle.
-- cardid: 662
-  title: Back to the Front
+- title: Akodo Shihiro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Samurai
+  - Soul of Akodo Ieshige
+  text: 'Before <i>(each time)</i> another player''s action resolves during a battle at Shihiro''s battlefield:
+    Give Shihiro +1F <i>(until the turn ends)</i>.'
+  gold_cost: 7
+  force: 3
+  chi: 4
+  personal_honor: 2
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Drew Baker
+  flavor_text: <i>"I crave war. If I must fight alongside the Scorpion to experience it, then so be it."</i>
+- title: Back to the Front
   types:
   - Strategy
   decks:
@@ -42,13 +63,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '7'
   rarity: Fixed
   artist: Raymond Gaustadnes
   flavor_text: '"A brief reprieve, my friends," Taiken said to the troops as they re-entered the Crane
     lands. "Rest while you can. Soon, the Scorpion will feel our wrath again."'
-- cardid: 679
-  title: Bamboo Harvesters
+- title: Bamboo Harvesters
   types:
   - Holding
   decks:
@@ -63,13 +82,11 @@ cards:
   - Age of Conquest (Emperor)
   - Destroyer War (Celestial)
   - Legacy
-  printing_id: '6'
   rarity: Fixed
   artist: Veronica V. Jones
   flavor_text: '"The forests in the Phoenix lands are sacred, and they often eschew even the use of bamboo
     in building. Just another example of their foolishness." - Bayushi Manami'
-- cardid: 793
-  title: Bayushi Irezu
+- title: Bayushi Irezu
   types:
   - Personality
   decks:
@@ -92,11 +109,34 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Jorge Matar
-- cardid: 836
-  title: Bayushi Manami
+- title: Bayushi Kasumi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Scorpion
+  keywords:
+  - Elite
+  - Samurai
+  - Scorpion Clan
+  text: <i>(Elite cards contribute Force even if bowed.)</i>
+  gold_cost: 7
+  force: 4
+  chi: 3
+  personal_honor: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Shen Fei
+  flavor_text: <i>"Her lust for the deaths of our enemies is cold and calculating, but she shows potential.
+    If she survives this war, she may emerge with some use in the future. We shall see what fate has in
+    store." - Yogo Haruto</i>
+- title: Bayushi Manami
   types:
   - Personality
   decks:
@@ -117,1166 +157,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Stu Barnes
   flavor_text: '"Clinging to a vestige of honor or conscience might seem to give a man strength, but in
     truth it merely weakens him. Better to cast aside such things and be free of doubt or remorse." -
     Bayushi Nitoshi'
-- cardid: 1045
-  title: Block Supply Lines
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move home a target attacking Personality. Bow his unit as he moves.
-  gold_cost: 0
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Clan Wars (Imperial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  printing_id: '20'
-  rarity: Fixed
-  artist: Llyn Hunter
-  flavor_text: '"That is unfortunate," Konishi said as the Lion departed from the Scorpion camp. "They
-    are fools, but excellent soldiers."<br>"They are unimportant," Haruto said with a wave. "Their departure
-    was inevitable, and has long been anticipated."'
-- cardid: 1190
-  title: Bushi Dojo
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Dojo
-  text: ':bow:: When paying for an action that Equips or creates a Follower, produce 6 Gold which may
-    only pay for one action.'
-  gold_cost: 3
-  legality:
-  - Age of Conquest (Emperor)
-  - Clan Wars (Imperial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  notes: Some variants of the Pearl Edition version of this card were printed with a different flavor
-    text alignment.
-  printing_id: '6'
-  rarity: Fixed
-  artist: Tom Biondolillo
-  flavor_text: '"Our clan is known for its shugenja, and rightfully so. Those of us who carry the sword
-    should never find reason to give less than all of ourselves."'
-- cardid: 1416
-  title: Cleansing the Path
-  types:
-  - Spell
-  decks:
-  - Fate
-  keywords:
-  - Fire
-  text: '<b>Battle:</b> Destroy this card: Ranged 4 Attack, or Ranged 5 Attack if the performing Shugenja
-    is Fire.'
-  gold_cost: 0
-  focus: 3
-  legality:
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '4'
-  rarity: Fixed
-  artist: Joe Wilson
-  flavor_text: Despite two decades having passed since the end of the Destroyer War, pockets of the plague-dead
-    occasionally still arise. When such things happen, the Phoenix are often consulted.
-- cardid: 1449
-  title: Conflagration
-  types:
-  - Spell
-  decks:
-  - Fate
-  text: If this Shugenja is Fire, Ranged Attacks from actions in this unit have +1 strength.<br><b>Fire
-    Battle, :bow::</b> Give this Shugenja +3F.
-  gold_cost: 2
-  focus: 2
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Asier Martinez Lopez
-  flavor_text: '"The people of the city fled, save those who insisted upon fighting to defend their homes.
-    Of the city itself, virtually nothing remains. The Firestorm Legion was nothing if not thorough."
-    - The Death of Shutai, Part III'
-- cardid: 1471
-  title: Contemplate the Void
-  types:
-  - Spell
-  decks:
-  - Fate
-  keywords:
-  - Void
-  text: '<b>Limited:</b> Bow this Shugenja, destroy this card, and discard your hand <i>(even if empty)</i>:
-    Draw four cards.'
-  gold_cost: 6
-  focus: 4
-  legality:
-  - Age of Conquest (Emperor)
-  - Clan Wars (Imperial)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '4'
-  rarity: Fixed
-  artist: Sergio Camarena
-  flavor_text: '"The only limit that exists within the Void is the limit we place upon ourselves. Unfortunately,
-    I have discovered that prolonged contact with the Imperial Court can be quite limiting indeed." -
-    Isawa Tamaki'
-- cardid: 1589
-  title: Crushing Strength
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Battle:</b> Target your opposed Personality: Give him +3F.<br><b>Battle:</b> Target an enemy
-    Follower or Item: Destroy it.'
-  gold_cost: 0
-  focus: 1
-  legality:
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '3'
-  rarity: Fixed
-  artist: Sergio Camarena
-  flavor_text: '"The Scorpion know nothing of our winters. They know nothing of how to cope with the suffering
-    and misery they bring. It is a tactical mistake, and they will deeply regret it." - Shiba Mitsushen'
-- cardid: 1645
-  title: Daidoji Kenshi
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crane
-  keywords:
-  - Crane Clan
-  - Iron Crane
-  - Samurai
-  - Scout
-  gold_cost: 5
-  force: 3
-  chi: 3
-  honor_requirement: 4
-  personal_honor: 2
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Charles Urbach
-  flavor_text: '"The bond between our clans is strong, Tamaki-sama. My kinsmen have lent my skills to
-    you and yours. I suggest you make great use of them, for rarely will you have an opportunity of this
-    nature."'
-- cardid: 1992
-  title: Devoted Yojimbo
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Yojimbo
-  text: <b>Battle:</b> Bow one of your Followers or Personalities in this army to straighten a target
-    Follower or Personality in this army.
-  gold_cost: 3
-  focus: 3
-  force: 2
-  chi: 0
-  honor_requirement: 2
-  legality:
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '2'
-  rarity: Fixed
-  artist: Patrick McEvoy
-  flavor_text: '"You will not take the life of my lord," the yojimbo said, steel in his voice. "You made
-    your best attempt, and it was lacking. Now you will face the consequences."'
-- cardid: 1997
-  title: Diamond Mine
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Mine
-  text: ':bow:: Produce 5 Gold.'
-  gold_cost: 6
-  legality:
-  - Age of Conquest (Emperor)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  printing_id: '11'
-  rarity: Fixed
-  artist: Ed Cox
-  flavor_text: '"The Scorpion delve deep beneath the earth, seeking secret wealth hidden away in the recesses
-    of the world. There is nothing they do, it seems, that they cannot wrap in a veneer of dishonor."
-    - Isawa Nairuko'
-- cardid: 2261
-  title: Earth's Embrace
-  types:
-  - Spell
-  decks:
-  - Fate
-  text: Attaches to an Earth Shugenja for 2 less Gold.<br><b>Earth Battle, :bow::</b> Give each of your
-    Shugenja in this army +1F.
-  gold_cost: 2
-  focus: 1
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '2'
-  rarity: Fixed
-  artist: Wen Juinn
-  flavor_text: The enemy's attack was fearsome and relentless. It made no difference whatsoever.
-- cardid: 2445
-  title: Fall Back!
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move home your target Personality. As he moves, straighten his unit and you may
-    straighten one of your other units <i>(at any location)</i>.
-  gold_cost: 0
-  focus: 4
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '6'
-  rarity: Fixed
-  artist: Llyn Hunter
-  flavor_text: '"Now! Now let them come at us!" Shiba Jikaro said. "We shall show them that steel is as
-    plentiful in our lands as silver."'
-- cardid: 2784
-  title: Geisha House
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Geisha House
-  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Scorpion Clan player.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  notes: Some of the Hidden Emperor versions of this card were printed with a different flavor text alignment
-  printing_id: '14'
-  rarity: Fixed
-  artist: Charles Urbach
-  flavor_text: '"I do not know what they serve in that wretched place. All I know is that I awoke the
-    next morning with very few memories of the previous night, and a geisha who knew far too much sensitive
-    information." - An unnamed magistrate'
-- cardid: 3079
-  title: Hida Bushotsu
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crab
-  keywords:
-  - Berserker
-  - Crab Clan
-  gold_cost: 8
-  force: 7
-  chi: 2
-  personal_honor: 0
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '3'
-  rarity: Fixed
-  artist: Sergio Camarena
-  flavor_text: The Crab warrior lifted Bayushi Irezu to his feet. "I think there might be something wrong
-    with your mind, friend. I have seen demons with more sense of self-preservation."<br>Irezu only laughed.
-- cardid: 3277
-  title: Hired Legion
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Unique
-  text: <b>Battle, :bow::</b> Draw a card.
-  gold_cost: 4
-  focus: 4
-  force: 3
-  chi: 0
-  honor_requirement: 0
-  is_unique: true
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Malcolm McClinton
-  flavor_text: '"Hello, my friends!" Irezu laughed. "Today we will fight and die far from home in the
-    name of a lord who will never know our names! Haha! Is life not grand?"'
-- cardid: 3730
-  title: Incapacitated
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move home a target defending Personality.
-  gold_cost: 0
-  focus: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '7'
-  rarity: Fixed
-  artist: Chris Pritchard
-  flavor_text: '"My unit would be far more useful to the Phoenix if my brothers-in-arms didn''t keep dropping
-    from traps, inexplicable accidents, and mysteriously bad rice. I am starting to understand, and sympathize
-    with, the Matsu dislike of the Daidoji." - From the pillowbook of Daidoji Kenshi'
-- cardid: 3767
-  title: Inspirational Address
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Battle:</b> Choose your performing Personality and target a Follower in your hand or discard
-    pile: Attach it to him, paying 1 less Gold.'
-  gold_cost: 0
-  focus: 1
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '2'
-  rarity: Fixed
-  artist: John Moriarty
-  flavor_text: '"We get to fight in a thunderstorm! Maybe someone will get struck by lightning while they
-    are raising their blade to finish off their greatest enemy! Wouldn''t that be exciting?" - Bayushi
-    Irezu'
-- cardid: 3918
-  title: Isawa Tamaki
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Phoenix
-  keywords:
-  - Ishiken
-  - Phoenix Clan
-  - Shugenja
-  - Soul of Isawa Hachiko
-  - Void
-  text: <b>Void Limited:</b> Look at the top card of your Fate deck. You may put it at the bottom of the
-    deck.
-  gold_cost: 7
-  force: 4
-  chi: 3
-  honor_requirement: 5
-  personal_honor: 2
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '3'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: '"She moves like a phantom through the halls of the Imperial Court. Others respect her,
-    perhaps even fear her, but they do not understand her, I think." - Shiba Jikaro'
-- cardid: 4664
-  title: Large Farm
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Farm
-  text: ':bow:: Produce 2 Gold.'
-  gold_cost: 1
-  legality:
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  printing_id: '10'
-  rarity: Fixed
-  artist: Ted Pendergraft
-  flavor_text: '"Assure our people that greater productivity is required," Nitoshi said. "Our loyal and
-    brave soldiers are fighting a war in a distant land, and they need supplies. The lower castes must
-    do their part. No exceptions."'
-- cardid: 6051
-  title: Prepared for Death
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Limited:</b> Choose your performing Personality: Give him +2F.'
-  gold_cost: 0
-  focus: 2
-  legality:
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '3'
-  rarity: Fixed
-  artist: Eric Lofgren
-  flavor_text: '"What is death to a phoenix? We must show the acceptance of that noble spirit in all of
-    our actions. We will do what we feel is necessary in this world, and meet the consequences without
-    flinching." - Shiba Mitsushen'
-- cardid: 6258
-  title: Remote Village
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Farm
-  text: ':bow:: Produce 3 Gold.'
-  gold_cost: 3
-  legality:
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '3'
-  rarity: Fixed
-  artist: Gong Studios
-  flavor_text: The peasants worked diligently, as they did each and every day. The only pause came as
-    they heard a strange, distant sound. It was not long before the sight of Scorpion troops on the horizon
-    was reported.
-- cardid: 6314
-  title: Rice Paddy
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Farm
-  text: <b>:bow::</b> Produce 2 Gold.<br><b>Battle, :bow::</b> Bow a target enemy attacking Follower.
-    Destroy this Holding.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Four Winds (Gold)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  printing_id: '6'
-  rarity: Fixed
-  artist: Christopher Appel
-  flavor_text: Rice is the lifeblood of an Empire. So much so, in fact, that Rokugan's traditional greeting
-    can be translated as "Have you had rice today?"
-- cardid: 6502
-  title: Scouring Flood
-  types:
-  - Spell
-  decks:
-  - Fate
-  keywords:
-  - Water
-  text: 'This Personality has +2F. <br><b>Battle:</b> Bow this card and target a defending Personality:
-    Move him home.'
-  gold_cost: 2
-  focus: 3
-  legality:
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '4'
-  rarity: Fixed
-  artist: Llyn Hunter
-  flavor_text: '"I have devoted my life to the intricacies of fire, but even I must admit… that was quite
-    amusing." - Isawa Taiken'
-- cardid: 6596
-  title: Seppun Heavy Elite
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Elite
-  - Imperial
-  text: <i>(Elite cards contribute Force even if bowed.)</i><br>This Personality has <b>Elite</b>.
-  gold_cost: 3
-  focus: 3
-  force: 2
-  chi: 0
-  honor_requirement: 0
-  legality:
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Greg Lambrakis
-  flavor_text: '"There was an incident where two Seppun units nearly faced one another on the field. Both
-    clans withdrew to avoid such an embarrassment." - Bayushi Manami'
-- cardid: 6624
-  title: Servitors of Stone
-  types:
-  - Spell
-  decks:
-  - Fate
-  keywords:
-  - Earth
-  text: <b>Earth Battle, :bow::</b> Straighten a target card in a unit.
-  gold_cost: 0
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Andy Hepworth
-  flavor_text: A tiny stone man handed the shugenja a scroll. "Thank you, little one," he said absently,
-    deep in communion with the earth.
-- cardid: 7121
-  title: Shosuro Konishi
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Ninja
-  - Scorpion
-  keywords:
-  - Ninja
-  - Scorpion Clan
-  text: <b>Battle:</b> Ranged 5 Attack.
-  gold_cost: 9
-  force: 5
-  chi: 3
-  personal_honor: 0
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '4'
-  rarity: Fixed
-  artist: Jason Engle
-  flavor_text: The youngest students of the Shosuro are dressed in black and sent out as a distraction
-    for the clan's enemies. Those who survive are trained in the true secrets of the arts. Some return
-    to the black attire, finding it a suitable tool for a true warrior.
-- cardid: 7265
-  title: Silk Works
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  text: ':bow:: Produce 4 Gold.'
-  gold_cost: 5
-  legality:
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  printing_id: '9'
-  rarity: Fixed
-  artist: Diana Vick
-  flavor_text: In time, Takiko's work became a sensation throughout the Empire. Countless courtiers sought
-    her out to commission her work, so much so that she could not possibly keep pace. When one was politely
-    refused, the irritable samurai killed Takiko outright, denying the Empire one of its greatest treasures.
-    - The Tale of Takiko, Part II
-- cardid: 7266
-  title: Silver Mine
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Mine
-  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Phoenix Clan player.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  printing_id: '15'
-  rarity: Fixed
-  artist: Charles Urbach
-  flavor_text: '"I regret the order, my friend, but we must resume a summer schedule in the mines. The
-    Scorpion have plagued our supplies to the point that we desperately require additional funding." -
-    Shiba Tsukimi'
-- cardid: 7303
-  title: Small Farm
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Farm
-  text: ':bow:: Produce 1 Gold.'
-  gold_cost: 0
-  legality:
-  - Age of Conquest (Emperor)
-  - Clan Wars (Imperial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  notes: Some of the Anvil of Despair versions of this card were printed with a different text alignment
-  printing_id: '17'
-  rarity: Fixed
-  artist: Joseph Phillips
-  flavor_text: '"The atrocities committed by the Scorpion during their incursion into the Phoenix lands
-    are without measure. Generations will feel the pain of the war, for no reason other than to teach
-    some presumed lesson. The villainy of Yogo Haruto shall be a thing of legend." - The Miya Histories'
-- cardid: 7780
-  title: Tamori Kusugi
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Dragon
-  keywords:
-  - Dragon Clan
-  - Earth
-  - Shugenja
-  - Soul of Tamori Sugi
-  text: '<b>Battle:</b> Even if Kusugi is not at the current battlefield, bow him: Raise or lower the
-    current battlefield''s province''s strength by 4.'
-  gold_cost: 7
-  force: 3
-  chi: 3
-  honor_requirement: 0
-  personal_honor: 2
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Britt Martin
-  flavor_text: '"I am sorry, friend Scorpion. I would spare you the ignominy of this defeat, but it was
-    you who brought war to these lands."'
-- cardid: 8392
-  title: The Towers of the Yogo
-  types:
-  - Stronghold
-  decks:
-  - Pre-Game
-  clans:
-  - Scorpion
-  text: Each of your Scorpion Clan Personalities has the ability, "<b>Battle, :bow::</b> Bow a target
-    enemy Follower or Personality without Followers."
-  province_strength: 7
-  starting_honor: 1
-  legality:
-  - Age of Conquest (Emperor)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  printing_id: '8'
-  rarity: Fixed
-  artist: Ellym Sirac
-  flavor_text: The Scorpion lands lie in the center of the Empire, like a blade held close to the heart,
-    ever ready for the killing blow.
-- cardid: 8741
-  title: Treachery and Deceit
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move home a target Personality whose unit's total Force is 7 or higher.
-  gold_cost: 0
-  focus: 4
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  printing_id: '7'
-  rarity: Fixed
-  artist: David Horne
-  flavor_text: '"The disgrace of the Scorpion Champion <br>is without measure, but cannot be spoken of
-    <br>outside our lands. His lies, the poison in his very <br>soul, would be unleashed upon us once
-    again. <br>Read, my brothers. Read, and know the enemy."<br>- Shiba Sawaken, The Tale of the Duel
-    II'
-- cardid: 9147
-  title: Veteran Skirmishers
-  types:
-  - Follower
-  decks:
-  - Fate
-  gold_cost: 2
-  focus: 3
-  force: 3
-  chi: 0
-  honor_requirement: 0
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '3'
-  rarity: Fixed
-  artist: Malcolm McClinton
-  flavor_text: '"The War of the Twins is generally regarded as the end of this period of tranquility,
-    for the debates that ensued as a result of the conflict divided the Great Clans in courts across the
-    land. These disagreements brought forth older, more serious issues that would later prove problematic."
-    - The Miya Histories'
-- cardid: 9255
-  title: Wave Man
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Ronin
-  text: 'Will only attach to a Samurai. <br>After an Attack Phase ends: Straighten this unit.'
-  gold_cost: 4
-  focus: 1
-  force: 2
-  chi: 0
-  honor_requirement: 0
-  legality:
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '2'
-  rarity: Fixed
-  artist: Chuck Lukacs
-  flavor_text: '"I look upon them and see what I once was. I look upon them and all I feel is pity." -
-    Tsubo'
-- cardid: 9839
-  title: Natsumi
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Phoenix
-  keywords:
-  - Nonhuman
-  - Phoenix Clan
-  - Ryu
-  - Shugenja
-  - Water
-  text: Will not attach Followers or Items.<br><b>Absent Tireless Battle:</b> If Natsumi would be opposed,
-    move it to the current battlefield. After this moves it, straighten its unit.
-  gold_cost: 7
-  force: 3
-  chi: 4
-  honor_requirement: 5
-  personal_honor: 3
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  notes: This is a distinct card from "Natsumi, the Socialite" from A Line in the Sand.
-  printing_id: '2'
-  rarity: Fixed
-  artist: Alex Tooth
-  flavor_text: '"I find your prayers and offerings pleasing, little humans. What boon would you ask in
-    return?"'
-  designer: Duncan
-- cardid: 9867
-  title: Clearing Crew
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Ashigaru
-  text: After this Follower enters play from your hand, draw an additional card before your next turn
-    ends.
-  gold_cost: 2
-  focus: 2
-  force: 2
-  chi: 0
-  honor_requirement: 1
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Patrick Reinemann
-  flavor_text: '"Have you seen the size of these bugs? I would rather go back to the front lines!"'
-  designer: Bryan
-- cardid: 9871
-  title: Native Guide
-  types:
-  - Follower
-  decks:
-  - Fate
-  gold_cost: 6
-  focus: 3
-  force: 5
-  chi: 0
-  honor_requirement: 0
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: David Horne
-  flavor_text: '"The fact that the forces of the Empire now occupy foreign lands cannot be ignored," Isawa
-    Kimi observed. "Even if we wish to avoid contamination by gaijin cultures, can we afford to risk that
-    lost culture''s secrets falling into the hands of another clan?"'
-  designer: Duncan
-- cardid: 9916
-  title: Never Afraid
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Battle:</b> Target an attachment: Destroy it.'
-  gold_cost: 0
-  focus: 3
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Storn A. Cook
-  flavor_text: '"Are you no better than this? Why should I draw my sword when you cannot even fight an
-    old man with a staff?"'
-  designer: Loki
-- cardid: 9917
-  title: One Shout
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Battle:</b> Choose your performing opposed Personality: Give him +2F, or +4F if he has an
-    attachment.'
-  gold_cost: 0
-  focus: 3
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Hannah Böving
-  flavor_text: '"More than one thousand years ago, the Shiba swore an oath to defend the Isawa with our
-    lives," Mitsushen said, his words echoing across the field to his troops. "Today I intend to honor
-    that promise. Who stands beside me?"'
-  designer: Thomas
-- cardid: 10240
-  title: Border Keep
-  types:
-  - Holding
-  decks:
-  - Pre-Game
-  extended_title: Border Keep • Inexperienced
-  keywords:
-  - Unique
-  - Inexperienced
-  - Winter
-  text: ':bow:: Produce 2 Gold. <br><b>Limited:</b> If it is your first turn, put one or more cards in
-    your Provinces at the bottom of your deck, refilling the Provinces face-up.'
-  gold_cost: 0
-  is_unique: true
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Regis Moulin
-  flavor_text: <i>"It is a gentle, peaceful place. One can find true serenity there. I would see it remain
-    so." - Shiba Mitsushen</i>
-- cardid: 10241
-  title: Akodo Shihiro
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Lion
-  keywords:
-  - Lion Clan
-  - Samurai
-  - Soul of Akodo Ieshige
-  text: 'Before <i>(each time)</i> another player''s action resolves during a battle at Shihiro''s battlefield:
-    Give Shihiro +1F <i>(until the turn ends)</i>.'
-  gold_cost: 7
-  force: 3
-  chi: 4
-  personal_honor: 2
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '1'
-  rarity: Fixed
-  artist: Drew Baker
-  flavor_text: <i>"I crave war. If I must fight alongside the Scorpion to experience it, then so be it."</i>
-- cardid: 10242
-  title: Isawa Nairuko
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Phoenix
-  keywords:
-  - Earth
-  - Shugenja
-  - Soul of Isawa Mariko
-  text: <i>(Shugenja may attach and cast Spells.)</i><br>Nairuko has +2F while she has a Spell.
-  gold_cost: 6
-  force: 2
-  chi: 3
-  honor_requirement: 2
-  personal_honor: 3
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '1'
-  rarity: Fixed
-  artist: IFS
-  flavor_text: <i>"For an acolyte, she possesses unique insights and tremendous skill. I think she will
-    have a bright future, if she can but overcome her more earthly tendencies. Ironic, I know." - Isawa
-    Norimichi, Elemental Master of earth</i>
-- cardid: 10243
-  title: Isawa Taiken
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Phoenix
-  keywords:
-  - Duelist
-  - Fire
-  - Firestorm Legion
-  - Phoenix Clan
-  - Shugenja
-  - Soul of Isawa Kokuten
-  text: '<b>Battle:</b> Bow Taiken: Ranged 4 Attack.'
-  gold_cost: 7
-  force: 3
-  chi: 3
-  honor_requirement: 4
-  personal_honor: 3
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '1'
-  rarity: Fixed
-  artist: Chris Seaman
-  flavor_text: <i>"Every Phoenix hopes for peace. I simply understand that the path to peace may unfortunately
-    be one strewn with ashes."</i>
-- cardid: 10244
-  title: Shiba Jikaro
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Phoenix
-  keywords:
-  - Stalwart
-  - Phoenix Clan
-  - Samurai
-  - Yojimbo
-  text: <i>(Stalwart cards negate their first bowing each turn by other players' cards.)</i>
-  gold_cost: 6
-  force: 3
-  chi: 3
-  honor_requirement: 6
-  personal_honor: 3
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '1'
-  rarity: Fixed
-  artist: Shen Fei
-  flavor_text: <i>"For all that I now wish for peace, however, I am unable to silence the hope that the
-    Scorpion will see justice for their crimes."</i>
-- cardid: 10245
-  title: Shiba Mitsushen
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Phoenix
-  keywords:
-  - Unique
-  - Commander
-  - Phoenix Clan
-  - Samurai
-  text: '<b>Battle:</b> Target your Personality: Move him to Mitsushen''s battlefield. If he moved, straighten
-    his unit.'
-  gold_cost: 9
-  force: 5
-  chi: 4
-  honor_requirement: 4
-  personal_honor: 3
-  is_unique: true
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '1'
-  rarity: Fixed
-  artist: Diego Gisbert Llorens
-  flavor_text: <i>"When my life is at an end, what shall be said of me? Let others say only that I honored
-    my clan above all else."</i>
-- cardid: 10246
-  title: Shiba Tsukimi
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  extended_title: Shiba Tsukimi • Experienced 3.5
-  clans:
-  - Phoenix
-  keywords:
-  - Duelist
-  - Experienced 3.5
-  - Loyal
-  - Unique
-  - Clan Champion
-  - Daimyo
-  - Phoenix Clan
-  - Samurai
-  - Shiba's Soul
-  text: '<b>Battle:</b> Twice per turn, target a card in a unit: Straighten it. It may use its abilities
-    a second time this turn.'
-  gold_cost: 10
-  force: 6
-  chi: 5
-  honor_requirement: 6
-  personal_honor: 4
-  is_unique: true
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '1'
-  rarity: Fixed
-  artist: Adam Schumpert
-  flavor_text: <i>"This is a disgrace, and I will bear it no longer. I will see Nitoshi answer for his
-    crimes, each and every one of them."</i>
-- cardid: 10247
-  title: Bayushi Kasumi
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Scorpion
-  keywords:
-  - Elite
-  - Samurai
-  - Scorpion Clan
-  text: <i>(Elite cards contribute Force even if bowed.)</i>
-  gold_cost: 7
-  force: 4
-  chi: 3
-  personal_honor: 1
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '1'
-  rarity: Fixed
-  artist: Shen Fei
-  flavor_text: <i>"Her lust for the deaths of our enemies is cold and calculating, but she shows potential.
-    If she survives this war, she may emerge with some use in the future. We shall see what fate has in
-    store." - Yogo Haruto</i>
-- cardid: 10248
-  title: Bayushi Nitoshi
+- title: Bayushi Nitoshi
   types:
   - Personality
   decks:
@@ -1306,12 +192,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Adam Schumpert
   flavor_text: <i>"Duels, court, war… all merely distractions."</i>
-- cardid: 10249
-  title: Bayushi Utoro
+- title: Bayushi Utoro
   types:
   - Personality
   decks:
@@ -1331,13 +215,869 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: John Donahue
   flavor_text: <i>"My will and my loyalty were tested in blood and fire, and I was not found wanting.
     I will bring glory to my ancestors for many years to come."</i>
-- cardid: 10250
-  title: Shosuro Chikata
+- title: Block Supply Lines
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home a target attacking Personality. Bow his unit as he moves.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Llyn Hunter
+  flavor_text: '"That is unfortunate," Konishi said as the Lion departed from the Scorpion camp. "They
+    are fools, but excellent soldiers."<br>"They are unimportant," Haruto said with a wave. "Their departure
+    was inevitable, and has long been anticipated."'
+- title: Border Keep
+  types:
+  - Holding
+  decks:
+  - Pre-Game
+  extended_title: Border Keep • Inexperienced
+  keywords:
+  - Unique
+  - Inexperienced
+  - Winter
+  text: ':bow:: Produce 2 Gold. <br><b>Limited:</b> If it is your first turn, put one or more cards in
+    your Provinces at the bottom of your deck, refilling the Provinces face-up.'
+  gold_cost: 0
+  is_unique: true
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  rarity: Fixed
+  artist: Regis Moulin
+  flavor_text: <i>"It is a gentle, peaceful place. One can find true serenity there. I would see it remain
+    so." - Shiba Mitsushen</i>
+- title: Bushi Dojo
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Dojo
+  text: ':bow:: When paying for an action that Equips or creates a Follower, produce 6 Gold which may
+    only pay for one action.'
+  gold_cost: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  notes: Some variants of the Pearl Edition version of this card were printed with a different flavor
+    text alignment.
+  rarity: Fixed
+  artist: Tom Biondolillo
+  flavor_text: '"Our clan is known for its shugenja, and rightfully so. Those of us who carry the sword
+    should never find reason to give less than all of ourselves."'
+- title: Cleansing the Path
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Fire
+  text: '<b>Battle:</b> Destroy this card: Ranged 4 Attack, or Ranged 5 Attack if the performing Shugenja
+    is Fire.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Joe Wilson
+  flavor_text: Despite two decades having passed since the end of the Destroyer War, pockets of the plague-dead
+    occasionally still arise. When such things happen, the Phoenix are often consulted.
+- title: Clearing Crew
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Ashigaru
+  text: After this Follower enters play from your hand, draw an additional card before your next turn
+    ends.
+  gold_cost: 2
+  focus: 2
+  force: 2
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Patrick Reinemann
+  flavor_text: '"Have you seen the size of these bugs? I would rather go back to the front lines!"'
+  designer: Bryan
+- title: Communion with Earth
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Earth
+  text: 'This Shugenja has <b>Stalwart</b>. <i>(Stalwart cards negate their first bowing each turn by
+    other players'' cards.)</i><br><b>Battle:</b> Target another of your Shugenja, who must be Earth:
+    Transfer this card to him.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Matt Zeilinger
+  flavor_text: <i>"The greatest joy that exists is to experience the soul of your fellow Phoenix through
+    the eyes of the Earth." - The Journal of Isawa Emori, Volume I
+- title: Conflagration
+  types:
+  - Spell
+  decks:
+  - Fate
+  text: If this Shugenja is Fire, Ranged Attacks from actions in this unit have +1 strength.<br><b>Fire
+    Battle, :bow::</b> Give this Shugenja +3F.
+  gold_cost: 2
+  focus: 2
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Asier Martinez Lopez
+  flavor_text: '"The people of the city fled, save those who insisted upon fighting to defend their homes.
+    Of the city itself, virtually nothing remains. The Firestorm Legion was nothing if not thorough."
+    - The Death of Shutai, Part III'
+- title: Contemplate the Void
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Void
+  text: '<b>Limited:</b> Bow this Shugenja, destroy this card, and discard your hand <i>(even if empty)</i>:
+    Draw four cards.'
+  gold_cost: 6
+  focus: 4
+  legality:
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Sergio Camarena
+  flavor_text: '"The only limit that exists within the Void is the limit we place upon ourselves. Unfortunately,
+    I have discovered that prolonged contact with the Imperial Court can be quite limiting indeed." -
+    Isawa Tamaki'
+- title: Crushing Strength
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target your opposed Personality: Give him +3F.<br><b>Battle:</b> Target an enemy
+    Follower or Item: Destroy it.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Sergio Camarena
+  flavor_text: '"The Scorpion know nothing of our winters. They know nothing of how to cope with the suffering
+    and misery they bring. It is a tactical mistake, and they will deeply regret it." - Shiba Mitsushen'
+- title: Daidoji Kenshi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Crane Clan
+  - Iron Crane
+  - Samurai
+  - Scout
+  gold_cost: 5
+  force: 3
+  chi: 3
+  honor_requirement: 4
+  personal_honor: 2
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Charles Urbach
+  flavor_text: '"The bond between our clans is strong, Tamaki-sama. My kinsmen have lent my skills to
+    you and yours. I suggest you make great use of them, for rarely will you have an opportunity of this
+    nature."'
+- title: Devoted Yojimbo
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Yojimbo
+  text: <b>Battle:</b> Bow one of your Followers or Personalities in this army to straighten a target
+    Follower or Personality in this army.
+  gold_cost: 3
+  focus: 3
+  force: 2
+  chi: 0
+  honor_requirement: 2
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Fixed
+  artist: Patrick McEvoy
+  flavor_text: '"You will not take the life of my lord," the yojimbo said, steel in his voice. "You made
+    your best attempt, and it was lacking. Now you will face the consequences."'
+- title: Diamond Mine
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Mine
+  text: ':bow:: Produce 5 Gold.'
+  gold_cost: 6
+  legality:
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Ed Cox
+  flavor_text: '"The Scorpion delve deep beneath the earth, seeking secret wealth hidden away in the recesses
+    of the world. There is nothing they do, it seems, that they cannot wrap in a veneer of dishonor."
+    - Isawa Nairuko'
+- title: Earth's Embrace
+  types:
+  - Spell
+  decks:
+  - Fate
+  text: Attaches to an Earth Shugenja for 2 less Gold.<br><b>Earth Battle, :bow::</b> Give each of your
+    Shugenja in this army +1F.
+  gold_cost: 2
+  focus: 1
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Wen Juinn
+  flavor_text: The enemy's attack was fearsome and relentless. It made no difference whatsoever.
+- title: Elite Training
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Limited:</b> Target your performing Personality. <i>He undergoes vigorous training.</i> Permanently
+    give him <b>Elite</b>. <i>(Elite cards contribute Force even if bowed.)</i>
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Diego Gisbert Llorens
+  flavor_text: <i>"Assemble your finest assassins, officers. I want to see this upstart general dead on
+    the ground. I want to see his men weeping and tearing at their clothes. I want them broken." - Yogo
+    Haruto</i>
+- title: Fall Back!
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home your target Personality. As he moves, straighten his unit and you may
+    straighten one of your other units <i>(at any location)</i>.
+  gold_cost: 0
+  focus: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Llyn Hunter
+  flavor_text: '"Now! Now let them come at us!" Shiba Jikaro said. "We shall show them that steel is as
+    plentiful in our lands as silver."'
+- title: Geisha House
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Geisha House
+  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Scorpion Clan player.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  notes: Some of the Hidden Emperor versions of this card were printed with a different flavor text alignment
+  rarity: Fixed
+  artist: Charles Urbach
+  flavor_text: '"I do not know what they serve in that wretched place. All I know is that I awoke the
+    next morning with very few memories of the previous night, and a geisha who knew far too much sensitive
+    information." - An unnamed magistrate'
+- title: Hida Bushotsu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Berserker
+  - Crab Clan
+  gold_cost: 8
+  force: 7
+  chi: 2
+  personal_honor: 0
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Sergio Camarena
+  flavor_text: The Crab warrior lifted Bayushi Irezu to his feet. "I think there might be something wrong
+    with your mind, friend. I have seen demons with more sense of self-preservation."<br>Irezu only laughed.
+- title: Hired Legion
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: <b>Battle, :bow::</b> Draw a card.
+  gold_cost: 4
+  focus: 4
+  force: 3
+  chi: 0
+  honor_requirement: 0
+  is_unique: true
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: '"Hello, my friends!" Irezu laughed. "Today we will fight and die far from home in the
+    name of a lord who will never know our names! Haha! Is life not grand?"'
+- title: Incapacitated
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home a target defending Personality.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Chris Pritchard
+  flavor_text: '"My unit would be far more useful to the Phoenix if my brothers-in-arms didn''t keep dropping
+    from traps, inexplicable accidents, and mysteriously bad rice. I am starting to understand, and sympathize
+    with, the Matsu dislike of the Daidoji." - From the pillowbook of Daidoji Kenshi'
+- title: Inspirational Address
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing Personality and target a Follower in your hand or discard
+    pile: Attach it to him, paying 1 less Gold.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Fixed
+  artist: John Moriarty
+  flavor_text: '"We get to fight in a thunderstorm! Maybe someone will get struck by lightning while they
+    are raising their blade to finish off their greatest enemy! Wouldn''t that be exciting?" - Bayushi
+    Irezu'
+- title: Isawa Nairuko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Earth
+  - Shugenja
+  - Soul of Isawa Mariko
+  text: <i>(Shugenja may attach and cast Spells.)</i><br>Nairuko has +2F while she has a Spell.
+  gold_cost: 6
+  force: 2
+  chi: 3
+  honor_requirement: 2
+  personal_honor: 3
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: IFS
+  flavor_text: <i>"For an acolyte, she possesses unique insights and tremendous skill. I think she will
+    have a bright future, if she can but overcome her more earthly tendencies. Ironic, I know." - Isawa
+    Norimichi, Elemental Master of earth</i>
+- title: Isawa Taiken
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Duelist
+  - Fire
+  - Firestorm Legion
+  - Phoenix Clan
+  - Shugenja
+  - Soul of Isawa Kokuten
+  text: '<b>Battle:</b> Bow Taiken: Ranged 4 Attack.'
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 4
+  personal_honor: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Chris Seaman
+  flavor_text: <i>"Every Phoenix hopes for peace. I simply understand that the path to peace may unfortunately
+    be one strewn with ashes."</i>
+- title: Isawa Tamaki
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Ishiken
+  - Phoenix Clan
+  - Shugenja
+  - Soul of Isawa Hachiko
+  - Void
+  text: <b>Void Limited:</b> Look at the top card of your Fate deck. You may put it at the bottom of the
+    deck.
+  gold_cost: 7
+  force: 4
+  chi: 3
+  honor_requirement: 5
+  personal_honor: 2
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: '"She moves like a phantom through the halls of the Imperial Court. Others respect her,
+    perhaps even fear her, but they do not understand her, I think." - Shiba Jikaro'
+- title: Large Farm
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  text: ':bow:: Produce 2 Gold.'
+  gold_cost: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Ted Pendergraft
+  flavor_text: '"Assure our people that greater productivity is required," Nitoshi said. "Our loyal and
+    brave soldiers are fighting a war in a distant land, and they need supplies. The lower castes must
+    do their part. No exceptions."'
+- title: Native Guide
+  types:
+  - Follower
+  decks:
+  - Fate
+  gold_cost: 6
+  focus: 3
+  force: 5
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: David Horne
+  flavor_text: '"The fact that the forces of the Empire now occupy foreign lands cannot be ignored," Isawa
+    Kimi observed. "Even if we wish to avoid contamination by gaijin cultures, can we afford to risk that
+    lost culture''s secrets falling into the hands of another clan?"'
+  designer: Duncan
+- title: Natsumi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Nonhuman
+  - Phoenix Clan
+  - Ryu
+  - Shugenja
+  - Water
+  text: Will not attach Followers or Items.<br><b>Absent Tireless Battle:</b> If Natsumi would be opposed,
+    move it to the current battlefield. After this moves it, straighten its unit.
+  gold_cost: 7
+  force: 3
+  chi: 4
+  honor_requirement: 5
+  personal_honor: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  notes: This is a distinct card from "Natsumi, the Socialite" from A Line in the Sand.
+  rarity: Fixed
+  artist: Alex Tooth
+  flavor_text: '"I find your prayers and offerings pleasing, little humans. What boon would you ask in
+    return?"'
+  designer: Duncan
+- title: Never Afraid
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target an attachment: Destroy it.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Storn A. Cook
+  flavor_text: '"Are you no better than this? Why should I draw my sword when you cannot even fight an
+    old man with a staff?"'
+  designer: Loki
+- title: One Shout
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing opposed Personality: Give him +2F, or +4F if he has an
+    attachment.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Hannah Böving
+  flavor_text: '"More than one thousand years ago, the Shiba swore an oath to defend the Isawa with our
+    lives," Mitsushen said, his words echoing across the field to his troops. "Today I intend to honor
+    that promise. Who stands beside me?"'
+  designer: Thomas
+- title: Prepared for Death
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Choose your performing Personality: Give him +2F.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Eric Lofgren
+  flavor_text: '"What is death to a phoenix? We must show the acceptance of that noble spirit in all of
+    our actions. We will do what we feel is necessary in this world, and meet the consequences without
+    flinching." - Shiba Mitsushen'
+- title: Rank & File
+  types:
+  - Follower
+  decks:
+  - Fate
+  gold_cost: 4
+  focus: 2
+  force: 4
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: David Horne
+  flavor_text: <i>"The conflict between the two clans began in court, with the Phoenix seeking satisfaction.
+    The Imperial line would not intervene, and eventually the Phoenix petitioned for the right to avenge
+    their honor on the field of battle. The Empress agreed." - The War of the Twins, Part II</i>
+- title: Remote Village
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  text: ':bow:: Produce 3 Gold.'
+  gold_cost: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Gong Studios
+  flavor_text: The peasants worked diligently, as they did each and every day. The only pause came as
+    they heard a strange, distant sound. It was not long before the sight of Scorpion troops on the horizon
+    was reported.
+- title: Rice Paddy
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  text: <b>:bow::</b> Produce 2 Gold.<br><b>Battle, :bow::</b> Bow a target enemy attacking Follower.
+    Destroy this Holding.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Christopher Appel
+  flavor_text: Rice is the lifeblood of an Empire. So much so, in fact, that Rokugan's traditional greeting
+    can be translated as "Have you had rice today?"
+- title: Scouring Flood
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Water
+  text: 'This Personality has +2F. <br><b>Battle:</b> Bow this card and target a defending Personality:
+    Move him home.'
+  gold_cost: 2
+  focus: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Fixed
+  artist: Llyn Hunter
+  flavor_text: '"I have devoted my life to the intricacies of fire, but even I must admit… that was quite
+    amusing." - Isawa Taiken'
+- title: Seppun Heavy Elite
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Elite
+  - Imperial
+  text: <i>(Elite cards contribute Force even if bowed.)</i><br>This Personality has <b>Elite</b>.
+  gold_cost: 3
+  focus: 3
+  force: 2
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Greg Lambrakis
+  flavor_text: '"There was an incident where two Seppun units nearly faced one another on the field. Both
+    clans withdrew to avoid such an embarrassment." - Bayushi Manami'
+- title: Servitors of Stone
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Earth
+  text: <b>Earth Battle, :bow::</b> Straighten a target card in a unit.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Fixed
+  artist: Andy Hepworth
+  flavor_text: A tiny stone man handed the shugenja a scroll. "Thank you, little one," he said absently,
+    deep in communion with the earth.
+- title: Shiba Jikaro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Stalwart
+  - Phoenix Clan
+  - Samurai
+  - Yojimbo
+  text: <i>(Stalwart cards negate their first bowing each turn by other players' cards.)</i>
+  gold_cost: 6
+  force: 3
+  chi: 3
+  honor_requirement: 6
+  personal_honor: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Shen Fei
+  flavor_text: <i>"For all that I now wish for peace, however, I am unable to silence the hope that the
+    Scorpion will see justice for their crimes."</i>
+- title: Shiba Mitsushen
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Unique
+  - Commander
+  - Phoenix Clan
+  - Samurai
+  text: '<b>Battle:</b> Target your Personality: Move him to Mitsushen''s battlefield. If he moved, straighten
+    his unit.'
+  gold_cost: 9
+  force: 5
+  chi: 4
+  honor_requirement: 4
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Diego Gisbert Llorens
+  flavor_text: <i>"When my life is at an end, what shall be said of me? Let others say only that I honored
+    my clan above all else."</i>
+- title: Shiba Tsukimi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Shiba Tsukimi • Experienced 3.5
+  clans:
+  - Phoenix
+  keywords:
+  - Duelist
+  - Experienced 3.5
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Daimyo
+  - Phoenix Clan
+  - Samurai
+  - Shiba's Soul
+  text: '<b>Battle:</b> Twice per turn, target a card in a unit: Straighten it. It may use its abilities
+    a second time this turn.'
+  gold_cost: 10
+  force: 6
+  chi: 5
+  honor_requirement: 6
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Adam Schumpert
+  flavor_text: <i>"This is a disgrace, and I will bear it no longer. I will see Nitoshi answer for his
+    crimes, each and every one of them."</i>
+- title: Shosuro Chikata
   types:
   - Personality
   decks:
@@ -1359,43 +1099,199 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: John Moriarty
   flavor_text: <i>"I follow your lead, Konishi. Together we will bring ruin to the house of Agasha."</i>
-- cardid: 10251
-  title: Yogo Haruto
+- title: Shosuro Konishi
   types:
   - Personality
   decks:
   - Dynasty
   clans:
+  - Ninja
   - Scorpion
   keywords:
-  - Loyal
-  - Unique
-  - Air
-  - Commander
+  - Ninja
   - Scorpion Clan
-  - Shugenja
-  - Villain
-  text: '<b>Battle:</b> Target a Follower in your discard pile: Attach it to Haruto, paying 2 less Gold.'
+  text: <b>Battle:</b> Ranged 5 Attack.
   gold_cost: 9
   force: 5
-  chi: 4
+  chi: 3
   personal_honor: 0
-  is_unique: true
   legality:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
-  artist: Diego Gisbert Llorens
-  flavor_text: <i>"He is delightfully devoid of anything resembling scruples or a conscience. It is amazing
-    what a man can accomplish for his lord when he is without the burden of a soul." - Bayushi Nitoshi</i>
-- cardid: 10252
-  title: Tsubo
+  artist: Jason Engle
+  flavor_text: The youngest students of the Shosuro are dressed in black and sent out as a distraction
+    for the clan's enemies. Those who survive are trained in the true secrets of the arts. Some return
+    to the black attire, finding it a suitable tool for a true warrior.
+- title: Silk Works
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: ':bow:: Produce 4 Gold.'
+  gold_cost: 5
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Diana Vick
+  flavor_text: In time, Takiko's work became a sensation throughout the Empire. Countless courtiers sought
+    her out to commission her work, so much so that she could not possibly keep pace. When one was politely
+    refused, the irritable samurai killed Takiko outright, denying the Empire one of its greatest treasures.
+    - The Tale of Takiko, Part II
+- title: Silver Mine
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Mine
+  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Phoenix Clan player.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Charles Urbach
+  flavor_text: '"I regret the order, my friend, but we must resume a summer schedule in the mines. The
+    Scorpion have plagued our supplies to the point that we desperately require additional funding." -
+    Shiba Tsukimi'
+- title: Small Farm
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  text: ':bow:: Produce 1 Gold.'
+  gold_cost: 0
+  legality:
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  notes: Some of the Anvil of Despair versions of this card were printed with a different text alignment
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: '"The atrocities committed by the Scorpion during their incursion into the Phoenix lands
+    are without measure. Generations will feel the pain of the war, for no reason other than to teach
+    some presumed lesson. The villainy of Yogo Haruto shall be a thing of legend." - The Miya Histories'
+- title: Tamori Kusugi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Earth
+  - Shugenja
+  - Soul of Tamori Sugi
+  text: '<b>Battle:</b> Even if Kusugi is not at the current battlefield, bow him: Raise or lower the
+    current battlefield''s province''s strength by 4.'
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Britt Martin
+  flavor_text: '"I am sorry, friend Scorpion. I would spare you the ignominy of this defeat, but it was
+    you who brought war to these lands."'
+- title: The Sacred Temple of the Phoenix
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  extended_title: The Sacred Temple of the Phoenix • Inexperienced
+  clans:
+  - Phoenix
+  keywords:
+  - Inexperienced
+  - Temple
+  text: ':bow:: When paying for a Spell or Shugenja, produce 5 Gold which may only pay for that card.'
+  province_strength: 5
+  starting_honor: 6
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Mike Raabe (miscredited Aaron Boyd)
+  flavor_text: <i>In the northeastern reaches of the Empire, the Phoenix delve into the secrets of the
+    universe with their wisdom, and some say with their arrogance as well.</i>
+- title: The Towers of the Yogo
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Scorpion
+  text: Each of your Scorpion Clan Personalities has the ability, "<b>Battle, :bow::</b> Bow a target
+    enemy Follower or Personality without Followers."
+  province_strength: 7
+  starting_honor: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Ellym Sirac
+  flavor_text: The Scorpion lands lie in the center of the Empire, like a blade held close to the heart,
+    ever ready for the killing blow.
+- title: Treachery and Deceit
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home a target Personality whose unit's total Force is 7 or higher.
+  gold_cost: 0
+  focus: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: David Horne
+  flavor_text: '"The disgrace of the Scorpion Champion <br>is without measure, but cannot be spoken of
+    <br>outside our lands. His lies, the poison in his very <br>soul, would be unleashed upon us once
+    again. <br>Read, my brothers. Read, and know the enemy."<br>- Shiba Sawaken, The Tale of the Duel
+    II'
+- title: Tsubo
   types:
   - Personality
   decks:
@@ -1420,96 +1316,80 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: John Moriarty
   flavor_text: <i>"The Phoenix saved me when I was lost, and they brought me back from the brink of the
     abyss. I will never crawl into a sake bottle again, and I will never forget the debt I owe to the
     Phoenix."</i>
-- cardid: 10253
-  title: Rank & File
+- title: Veteran Skirmishers
   types:
   - Follower
   decks:
   - Fate
-  gold_cost: 4
-  focus: 2
-  force: 4
+  gold_cost: 2
+  focus: 3
+  force: 3
   chi: 0
   honor_requirement: 0
   legality:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
-  artist: David Horne
-  flavor_text: <i>"The conflict between the two clans began in court, with the Phoenix seeking satisfaction.
-    The Imperial line would not intervene, and eventually the Phoenix petitioned for the right to avenge
-    their honor on the field of battle. The Empress agreed." - The War of the Twins, Part II</i>
-- cardid: 10254
-  title: Communion with Earth
+  artist: Malcolm McClinton
+  flavor_text: '"The War of the Twins is generally regarded as the end of this period of tranquility,
+    for the debates that ensued as a result of the conflict divided the Great Clans in courts across the
+    land. These disagreements brought forth older, more serious issues that would later prove problematic."
+    - The Miya Histories'
+- title: Wave Man
   types:
-  - Spell
+  - Follower
   decks:
   - Fate
   keywords:
-  - Earth
-  text: 'This Shugenja has <b>Stalwart</b>. <i>(Stalwart cards negate their first bowing each turn by
-    other players'' cards.)</i><br><b>Battle:</b> Target another of your Shugenja, who must be Earth:
-    Transfer this card to him.'
-  gold_cost: 0
-  focus: 2
+  - Ronin
+  text: 'Will only attach to a Samurai. <br>After an Attack Phase ends: Straighten this unit.'
+  gold_cost: 4
+  focus: 1
+  force: 2
+  chi: 0
+  honor_requirement: 0
   legality:
   - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
   - Legacy
   - Modern
-  printing_id: '1'
+  - Race for the Throne (Samurai)
   rarity: Fixed
-  artist: Matt Zeilinger
-  flavor_text: <i>"The greatest joy that exists is to experience the soul of your fellow Phoenix through
-    the eyes of the Earth." - The Journal of Isawa Emori, Volume I
-- cardid: 10255
-  title: Elite Training
+  artist: Chuck Lukacs
+  flavor_text: '"I look upon them and see what I once was. I look upon them and all I feel is pity." -
+    Tsubo'
+- title: Yogo Haruto
   types:
-  - Strategy
+  - Personality
   decks:
-  - Fate
-  text: <b>Limited:</b> Target your performing Personality. <i>He undergoes vigorous training.</i> Permanently
-    give him <b>Elite</b>. <i>(Elite cards contribute Force even if bowed.)</i>
-  gold_cost: 0
-  focus: 3
+  - Dynasty
+  clans:
+  - Scorpion
+  keywords:
+  - Loyal
+  - Unique
+  - Air
+  - Commander
+  - Scorpion Clan
+  - Shugenja
+  - Villain
+  text: '<b>Battle:</b> Target a Follower in your discard pile: Attach it to Haruto, paying 2 less Gold.'
+  gold_cost: 9
+  force: 5
+  chi: 4
+  personal_honor: 0
+  is_unique: true
   legality:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Diego Gisbert Llorens
-  flavor_text: <i>"Assemble your finest assassins, officers. I want to see this upstart general dead on
-    the ground. I want to see his men weeping and tearing at their clothes. I want them broken." - Yogo
-    Haruto</i>
-- cardid: 10256
-  title: The Sacred Temple of the Phoenix
-  types:
-  - Stronghold
-  decks:
-  - Pre-Game
-  extended_title: The Sacred Temple of the Phoenix • Inexperienced
-  clans:
-  - Phoenix
-  keywords:
-  - Inexperienced
-  - Temple
-  text: ':bow:: When paying for a Spell or Shugenja, produce 5 Gold which may only pay for that card.'
-  province_strength: 5
-  starting_honor: 6
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '1'
-  rarity: Fixed
-  artist: Mike Raabe (miscredited Aaron Boyd)
-  flavor_text: <i>In the northeastern reaches of the Empire, the Phoenix delve into the secrets of the
-    universe with their wisdom, and some say with their arrogance as well.</i>
+  flavor_text: <i>"He is delightfully devoid of anything resembling scruples or a conscience. It is amazing
+    what a man can accomplish for his lord when he is without the burden of a soul." - Bayushi Nitoshi</i>

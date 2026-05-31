@@ -1,7 +1,6 @@
 set: Top Deck Booster
 cards:
-- cardid: 475
-  title: Arrows from the Woods
+- title: Arrows from the Woods
   types:
   - Strategy
   decks:
@@ -19,12 +18,10 @@ cards:
   - Race for the Throne (Samurai)
   - Shattered Empire
   notes: The Pearl Edition version was misprinted with a 7 Gold Cost.
-  printing_id: '8'
   rarity: Fixed
   artist: Ernie Chan
   flavor_text: <i>"Strike first, strike hard, and vanish." - Shosuro Yudoka</i>
-- cardid: 1217
-  title: Careful Planning
+- title: Careful Planning
   types:
   - Strategy
   decks:
@@ -37,13 +34,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '11'
   rarity: Fixed
   artist: Mark A.W. Jackson
   flavor_text: <i>"There is fear in the unexpected. If you do not anticipate your enemies' moves, they
     will seize the moment and take advantage of it to gain victory." - Isawa Sze</i>
-- cardid: 1298
-  title: Charge
+- title: Charge
   types:
   - Strategy
   decks:
@@ -60,13 +55,11 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '14'
   rarity: Fixed
   artist: Sean Murray
   flavor_text: <i>Ketsui nodded as Kamoko rode her horse into the enemy troops. " I'm impressed," Ketsui
     said.</i>
-- cardid: 1475
-  title: Contentious Terrain
+- title: Contentious Terrain
   types:
   - Strategy
   decks:
@@ -87,12 +80,10 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '10'
   rarity: Fixed
   artist: KC Lancaster
   flavor_text: <i>"Where you fight is as important as how you fight." - Otaku Kamoko</i>
-- cardid: 1882
-  title: Deadly Ground
+- title: Deadly Ground
   types:
   - Strategy
   decks:
@@ -108,12 +99,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '12'
   rarity: Fixed
   artist: Bob Hobbs
   flavor_text: <i>"When your enemies do not fear death, you must make them fear you." - Shosuro Yudoka</i>
-- cardid: 2043
-  title: Diversionary Tactics
+- title: Diversionary Tactics
   types:
   - Strategy
   decks:
@@ -127,13 +116,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '10'
   rarity: Fixed
   artist: Bob Hobbs
   flavor_text: <i>"If my enemies do not know the field of battle, then they cannot defeat me." - Matsu
     Ketsui</i>
-- cardid: 2114
-  title: Doji Kuwanan
+- title: Doji Kuwanan
   types:
   - Personality
   decks:
@@ -152,13 +139,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '4'
   rarity: Fixed
   artist: Mike Raabe
   flavor_text: '<i>"He is as elegant as any Crane, but do not let his fine clothes fool you: he is a deadly
     swordsman." - Matsu Ketsui</i>'
-- cardid: 2586
-  title: Fist of the Earth
+- title: Fist of the Earth
   types:
   - Strategy
   decks:
@@ -178,13 +163,11 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '6'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"His eyes locked on my own, and the next thing I knew, I was flat on my back." - Doji
     Kuwanan</i>
-- cardid: 3203
-  title: Hida Tampako
+- title: Hida Tampako
   types:
   - Personality
   decks:
@@ -203,13 +186,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '5'
   rarity: Fixed
   artist: Brian Snoddy
   flavor_text: <i>I have spent my life defending Rokugan from the horrors of the Shadowlands. Years of
     bitter fighting have shown me how to win.</i>
-- cardid: 3362
-  title: Hitomi Dajan
+- title: Hitomi Dajan
   types:
   - Personality
   decks:
@@ -231,13 +212,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"They say he is tattooed with dragon's blood. I think it is true, for his tattoos seem
     to crawl over his skin." - Shosuro Yudoka</i>
-- cardid: 3548
-  title: Iaijutsu Duel
+- title: Iaijutsu Duel
   types:
   - Strategy
   decks:
@@ -253,12 +232,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '13'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: <i>"When dueling a Crane, don't blink." - Hitomi Dajan
-- cardid: 3909
-  title: Isawa Sze
+- title: Isawa Sze
   types:
   - Personality
   decks:
@@ -279,12 +256,10 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Carl Frank
   flavor_text: <i>"He is small, but he has the tenacity of a Crab." - Hida Tampako</i>
-- cardid: 4941
-  title: Matsu Ketsui
+- title: Matsu Ketsui
   types:
   - Personality
   decks:
@@ -307,13 +282,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '4'
   rarity: Fixed
   artist: Anson Maddocks
   flavor_text: <i>"In my sword, the wind. In my heart, courage. In my eyes, death. I am Matsu." - from
     Kakita Morushijin's play, No Man's Bride
-- cardid: 5801
-  title: Otaku Kamoko
+- title: Otaku Kamoko
   types:
   - Personality
   decks:
@@ -335,12 +308,10 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '8'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"When in doubt, attack." - Unicorn Clan maxim
-- cardid: 5831
-  title: Outflank
+- title: Outflank
   types:
   - Strategy
   decks:
@@ -353,12 +324,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '9'
   rarity: Fixed
   artist: Pete Garcia
   flavor_text: <i>"All samurai fight. Crab samurai win." - Hida Tampako</i>
-- cardid: 7185
-  title: Shosuro Yudoka
+- title: Shosuro Yudoka
   types:
   - Personality
   decks:
@@ -380,13 +349,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '3'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"What do you call your weapon, samurai?" the ronin asked him. "Pincers and Tail," the
     Scorpion replied, then showed him why.</i>
-- cardid: 7542
-  title: Strength of My Ancestors
+- title: Strength of My Ancestors
   types:
   - Strategy
   decks:
@@ -403,12 +370,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '7'
   rarity: Fixed
   artist: Jeff Reitz
   flavor_text: <i>"Never underestimate the weight of a hundred generations watching you." - Isawa Sze</i>
-- cardid: 7546
-  title: Strength of Purity
+- title: Strength of Purity
   types:
   - Strategy
   decks:
@@ -424,12 +389,10 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '12'
   rarity: Fixed
   artist: Christina Wald
   flavor_text: <i>"Honor is your sword. Keep it clean, and you cannot be defeated." - Crane Clan maxim</i>
-- cardid: 8440
-  title: The Wrath of Osano-Wo
+- title: The Wrath of Osano-Wo
   types:
   - Strategy
   decks:
@@ -452,13 +415,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '8'
   rarity: Fixed
   artist: Wackwitz & Daily
   flavor_text: <i>"To tempt the wrath of the Fortunes is not courageous or bold. It is simply foolish.
     " - Hitomi Dajan</i>
-- cardid: 9380
-  title: Wounded in Battle
+- title: Wounded in Battle
   types:
   - Strategy
   decks:
@@ -480,7 +441,6 @@ cards:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
   notes: Ivory Edition Promo version released in the 2014 L5R Tournament Draft Kit
-  printing_id: '8'
   rarity: Fixed
   artist: Bryon Wackwitz
   flavor_text: <i>"The Hida family has defended the wall for a thousand years. I will not fail their memory."

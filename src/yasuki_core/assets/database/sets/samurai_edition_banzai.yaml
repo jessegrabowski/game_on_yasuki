@@ -1,7 +1,6 @@
 set: Samurai Edition Banzai
 cards:
-- cardid: 79
-  title: A Soldier's Fate
+- title: A Soldier's Fate
   types:
   - Strategy
   decks:
@@ -16,12 +15,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Heather V. Kreiter
   collector_number: '56'
-- cardid: 281
-  title: Akodo Shigetoshi
+- title: Akodo Shigetoshi
   types:
   - Personality
   decks:
@@ -50,12 +47,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Chris Seaman
   flavor_text: <i>"Let us remind them why they fear the Akodo."</i>
-- cardid: 413
-  title: Anvil of Despair
+- title: Anvil of Despair
   types:
   - Holding
   decks:
@@ -76,12 +71,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2005 Courage and Despair - James Lippens
-  printing_id: '2'
   rarity: Rare
   artist: Michael Kaluta
   collector_number: '2'
-- cardid: 489
-  title: Asahina Ekei
+- title: Asahina Ekei
   types:
   - Personality
   decks:
@@ -103,13 +96,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Leonardo Borazio
   flavor_text: <i>"I do not understand the purpose of these wars. The Celestial Heavens will make their
     wishes known to us, and we shall bow to their will."</i>
-- cardid: 635
-  title: Assigning Blame
+- title: Assigning Blame
   types:
   - Strategy
   decks:
@@ -126,12 +117,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: John Donahue
   collector_number: '57'
-- cardid: 638
-  title: Astonishing Resilience
+- title: Astonishing Resilience
   types:
   - Strategy
   decks:
@@ -148,12 +137,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Ed Cox
   collector_number: '58'
-- cardid: 817
-  title: Bayushi Kaukatsu
+- title: Bayushi Kaukatsu
   types:
   - Personality
   decks:
@@ -182,11 +169,9 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Stephen Bautista
-- cardid: 870
-  title: Bayushi Ryuzaburo
+- title: Bayushi Ryuzaburo
   types:
   - Personality
   decks:
@@ -208,12 +193,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Jaime Jones
   flavor_text: <i>"The wise dog sets the wolves against one another, and walks away with the prize unnoticed."</i>
-- cardid: 1006
-  title: Blade of Guile
+- title: Blade of Guile
   types:
   - Item
   decks:
@@ -234,12 +217,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 L5R Fantasy League - Doruk Ozaydin
-  printing_id: '3'
   rarity: Rare
   artist: Britt Martin
   collector_number: '105'
-- cardid: 1020
-  title: Blanketed Forest
+- title: Blanketed Forest
   types:
   - Strategy
   decks:
@@ -260,12 +241,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Rare
   artist: Beth Trott
   collector_number: '59'
-- cardid: 1173
-  title: Brute Force
+- title: Brute Force
   types:
   - Strategy
   decks:
@@ -281,12 +260,10 @@ cards:
   - Race for the Throne (Samurai)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Rare
   artist: Paul (Prof.) Herbert
   collector_number: '60'
-- cardid: 1531
-  title: Courage in Death
+- title: Courage in Death
   types:
   - Strategy
   decks:
@@ -301,12 +278,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Michael Kaluta
   collector_number: '61'
-- cardid: 1581
-  title: Crosswinds Cut Style
+- title: Crosswinds Cut Style
   types:
   - Strategy
   decks:
@@ -321,12 +296,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: IFS
   collector_number: '62'
-- cardid: 1633
-  title: Daidoji Gempachi
+- title: Daidoji Gempachi
   types:
   - Personality
   decks:
@@ -349,12 +322,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Drew Baker
   flavor_text: <i>"The Khan's men have no manners - a good thing we were here to teach them some!"</i>
-- cardid: 1647
-  title: Daidoji Kikaze
+- title: Daidoji Kikaze
   types:
   - Personality
   decks:
@@ -386,12 +357,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Defend the Emperor Top of Clan - Jesse Gibson
-  printing_id: '2'
   rarity: Rare
   artist: Chris Seaman
   flavor_text: <i>"Shiro Giji," Domotai demanded. "What is it?"</i>
-- cardid: 1756
-  title: Daigotsu Rekai
+- title: Daigotsu Rekai
   types:
   - Personality
   decks:
@@ -423,11 +392,9 @@ cards:
   story: 2006 Defend the Emperor Top of Clan - Daniel Swartz
   notes: The first Spider Clan card ever printed, a false version was previewed online with 9GC, an Unaligned
     border, and no Spider Clan keyword to maintain this surprise.
-  printing_id: '2'
   rarity: Rare
   artist: April Lee
-- cardid: 1772
-  title: Daigotsu Susumu
+- title: Daigotsu Susumu
   types:
   - Personality
   decks:
@@ -448,11 +415,9 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: April Lee
-- cardid: 1887
-  title: Death after Life
+- title: Death after Life
   types:
   - Strategy
   decks:
@@ -468,11 +433,9 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Steve Ellis
-- cardid: 1894
-  title: Death of Virtue Style
+- title: Death of Virtue Style
   types:
   - Strategy
   decks:
@@ -487,12 +450,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: IFS
   collector_number: '63'
-- cardid: 2130
-  title: Doji Nobuhide
+- title: Doji Nobuhide
   types:
   - Personality
   decks:
@@ -514,13 +475,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Jared Flores
   flavor_text: <i>"Lady Domotai, your father gave the Crab the chance to make peace, and they repay us
     with war. Now is the time to settle this."</i>
-- cardid: 2199
-  title: Doomed Intentions
+- title: Doomed Intentions
   types:
   - Strategy
   decks:
@@ -537,12 +496,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '4'
   rarity: Rare
   artist: Jason Engle
   collector_number: '64'
-- cardid: 2277
-  title: Echoes of Disgrace
+- title: Echoes of Disgrace
   types:
   - Strategy
   decks:
@@ -560,12 +517,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Rare
   artist: Heather V. Kreiter
   collector_number: '65'
-- cardid: 2389
-  title: Etsushi
+- title: Etsushi
   types:
   - Personality
   decks:
@@ -590,12 +545,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Miguel Coimbra
   flavor_text: <i>"A ronin, yes, but never without honor."</i>
-- cardid: 2470
-  title: Famous Bazaar
+- title: Famous Bazaar
   types:
   - Holding
   decks:
@@ -614,12 +567,10 @@ cards:
   - Race for the Throne (Samurai)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '4'
   rarity: Rare
   artist: Iordanis Lazaridis
   flavor_text: <i>"I hear the market next to the Shrine of Benten sells the strongest fabrics."</i>
-- cardid: 2563
-  title: Fire Dragon
+- title: Fire Dragon
   types:
   - Personality
   decks:
@@ -650,12 +601,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 World Championships Top of Clan - Mariano Gallardo
-  printing_id: '2'
   rarity: Rare
   artist: Steve Argyle
   flavor_text: <i>The egg called, and the Heavens answered.</i>
-- cardid: 2595
-  title: Flanking Action
+- title: Flanking Action
   types:
   - Strategy
   decks:
@@ -669,12 +618,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Ed Cox
   collector_number: '67'
-- cardid: 2600
-  title: Flash of Steel
+- title: Flash of Steel
   types:
   - Strategy
   decks:
@@ -690,12 +637,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Matt Dixon
   collector_number: '66'
-- cardid: 2748
-  title: Fusami
+- title: Fusami
   types:
   - Personality
   decks:
@@ -724,12 +669,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 North American Champion - Jesse Michalica
-  printing_id: '2'
   rarity: Rare
   artist: Miguel Coimbra
   flavor_text: <i>"I serve Satsu alone."</i>
-- cardid: 2822
-  title: Glory in Death
+- title: Glory in Death
   types:
   - Strategy
   decks:
@@ -743,12 +686,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Christine Griffin
   collector_number: '68'
-- cardid: 2878
-  title: Governor's Court
+- title: Governor's Court
   types:
   - Holding
   decks:
@@ -763,12 +704,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Rare
   artist: Veronica V. Jones
   flavor_text: <i>"The kingdoms of petty tyrants." - Bayushi Kaukatsu</i>
-- cardid: 2990
-  title: Hashi no Oni
+- title: Hashi no Oni
   types:
   - Region
   decks:
@@ -785,12 +724,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: David Horne
   collector_number: '53'
-- cardid: 3019
-  title: Heart of the Katana Style
+- title: Heart of the Katana Style
   types:
   - Strategy
   decks:
@@ -806,12 +743,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Attila Adorjany
   collector_number: '69'
-- cardid: 3094
-  title: Hida Fumetsu
+- title: Hida Fumetsu
   types:
   - Personality
   decks:
@@ -833,13 +768,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Topaz Champion - Jason Aken
-  printing_id: '2'
   rarity: Rare
   artist: Miguel Coimbra
   flavor_text: <i>The Topaz Champiobship is Rokugan's most famous coming-of-age ceremony. The clans send
     their best to compete, and glory awaits the winner.</i>
-- cardid: 3166
-  title: Hida Otoya
+- title: Hida Otoya
   types:
   - Personality
   decks:
@@ -868,12 +801,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Gift of the Shogun Top of Clan - Josh Kolb
-  printing_id: '2'
   rarity: Rare
   artist: Franz Vohwinkel
   flavor_text: <i>"Allow your enemy to waste his strength, exert yourself only when you must."</i>
-- cardid: 3279
-  title: Hiromasa
+- title: Hiromasa
   types:
   - Personality
   decks:
@@ -895,12 +826,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Ed Cox
   flavor_text: <i>"If any get too close to the truth, their lives are forfeit."</i>
-- cardid: 3404
-  title: Hojatsu's Legacy Style
+- title: Hojatsu's Legacy Style
   types:
   - Strategy
   decks:
@@ -915,12 +844,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: IFS
   collector_number: '70'
-- cardid: 3423
-  title: Honor in Death
+- title: Honor in Death
   types:
   - Strategy
   decks:
@@ -936,12 +863,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Charles Urbach
   collector_number: '71'
-- cardid: 3443
-  title: Hope from Death
+- title: Hope from Death
   types:
   - Strategy
   decks:
@@ -957,12 +882,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Kari Christensen
   collector_number: '72'
-- cardid: 3450
-  title: Horiuchi Rikako
+- title: Horiuchi Rikako
   types:
   - Personality
   decks:
@@ -990,12 +913,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Gift of the Shogun Top of Clan - Kit Falbo
-  printing_id: '2'
   rarity: Rare
   artist: Miguel Coimbra
   flavor_text: <i>She presses forward with admirable skill and recklessness."</i>
-- cardid: 3643
-  title: Ikoma Tatsunori
+- title: Ikoma Tatsunori
   types:
   - Personality
   decks:
@@ -1017,13 +938,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Edwin David
   flavor_text: <i>"What would I sacrafice for the Lion? Better to ask what I would not sacrifice. The
     answer is nothing."</i>
-- cardid: 3656
-  title: Ikoma Uchito
+- title: Ikoma Uchito
   types:
   - Personality
   decks:
@@ -1051,12 +970,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Gift of the Shogun Top of Clan - Scott Rixson
-  printing_id: '2'
   rarity: Rare
   artist: Miguel Coimbra
   flavor_text: <i>"He is a true Lion." - Akodo Bakin</i>
-- cardid: 3717
-  title: Impressive Resilience
+- title: Impressive Resilience
   types:
   - Strategy
   decks:
@@ -1071,13 +988,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Rare
   artist: David Horne
   flavor_text: <i>"History is filled with failed traitors. Let Chagatai join them."</i>
   collector_number: '73'
-- cardid: 3764
-  title: Insolence Punished
+- title: Insolence Punished
   types:
   - Strategy
   decks:
@@ -1092,12 +1007,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Thomas Denmark
   collector_number: '74'
-- cardid: 3770
-  title: Inspire Excellence
+- title: Inspire Excellence
   types:
   - Strategy
   decks:
@@ -1116,13 +1029,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   notes: Reprinted from The Truest Test
-  printing_id: '2'
   rarity: Rare
   artist: Mark Poole
   flavor_text: <i>The Crane seek to elevate all things to the level of art - be it poetry, dance, or war.</i>
   collector_number: '75'
-- cardid: 3895
-  title: Isawa Sawao
+- title: Isawa Sawao
   types:
   - Personality
   decks:
@@ -1153,13 +1064,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Test of the Amethyst Champion - Bryan Reese
-  printing_id: '2'
   rarity: Rare
   artist: Steve Argyle
   flavor_text: <i>"The time has com when philosophy is not enough. If there is to be peace, must demand
     of others as we demand it of ourselves."</i>
-- cardid: 4072
-  title: Justly Earned Victory
+- title: Justly Earned Victory
   types:
   - Strategy
   decks:
@@ -1174,12 +1083,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '4'
   rarity: Rare
   artist: Drew Baker
   collector_number: '76'
-- cardid: 4304
-  title: Kazumasa
+- title: Kazumasa
   types:
   - Personality
   decks:
@@ -1206,13 +1113,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Fate of the Adventurer - Will Jones
-  printing_id: '2'
   rarity: Rare
   artist: Edwin David
   flavor_text: <i>"What glorious peaks the Badger dwell among!"</i>
   collector_number: '51'
-- cardid: 4332
-  title: Kharma in Death
+- title: Kharma in Death
   types:
   - Strategy
   decks:
@@ -1227,12 +1132,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: John Donahue
   collector_number: '77'
-- cardid: 4579
-  title: Kuni Ochiyo
+- title: Kuni Ochiyo
   types:
   - Personality
   decks:
@@ -1254,14 +1157,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Randy Elliott
   flavor_text: <i>"If the Unicorn succeed where the Crab once failed, then are they not worthy of respect?
     Perhaps even of loyalty?"</i>
   collector_number: '10'
-- cardid: 4644
-  title: Kyuden Miya
+- title: Kyuden Miya
   types:
   - Region
   decks:
@@ -1277,12 +1178,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Charles Urbach
   collector_number: '54'
-- cardid: 4719
-  title: Let Them Fight Their Dead
+- title: Let Them Fight Their Dead
   types:
   - Strategy
   decks:
@@ -1300,12 +1199,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Paul (Prof.) Herbert
   collector_number: '78'
-- cardid: 4743
-  title: Lion Advisor
+- title: Lion Advisor
   types:
   - Holding
   decks:
@@ -1323,13 +1220,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Chris Seaman
   flavor_text: <i>"I can breathe, so I can serve." - Ikoma Otemi</i>
   collector_number: '5'
-- cardid: 4746
-  title: Lion Mempo
+- title: Lion Mempo
   types:
   - Item
   decks:
@@ -1350,12 +1245,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Corene Werhane
   collector_number: '106'
-- cardid: 4783
-  title: Loyalty, Unto Death
+- title: Loyalty, Unto Death
   types:
   - Strategy
   decks:
@@ -1370,12 +1263,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Manuel Calderon
   collector_number: '79'
-- cardid: 4849
-  title: Masakazu
+- title: Masakazu
   types:
   - Personality
   decks:
@@ -1405,12 +1296,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Gift of the Shogun Top of Clan - Bryan Reese
-  printing_id: '2'
   rarity: Rare
   artist: Edwin David
   flavor_text: <i>"Every day an adventure! Every battle a festival!"</i>
-- cardid: 4898
-  title: Matsu Benika
+- title: Matsu Benika
   types:
   - Personality
   decks:
@@ -1439,11 +1328,9 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Defend the Emperor Top of Clan - Sean Eggleston
-  printing_id: '2'
   rarity: Rare
   artist: Miguel Coimbra
-- cardid: 4909
-  title: Matsu Fumiyo
+- title: Matsu Fumiyo
   types:
   - Personality
   decks:
@@ -1467,13 +1354,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '4'
   rarity: Rare
   artist: Steve Argyle
   flavor_text: <i>When spring began, Lion solderis quickly mobilized. Thousands of soliders gathered to
     oppose the Khan.</i>
-- cardid: 5030
-  title: Merciless Death
+- title: Merciless Death
   types:
   - Strategy
   decks:
@@ -1488,12 +1373,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Miguel Coimbra
   collector_number: '80'
-- cardid: 5300
-  title: Moto Chagatai
+- title: Moto Chagatai
   types:
   - Personality
   decks:
@@ -1526,13 +1409,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '5'
   rarity: Rare
   artist: Michael Komarck
   flavor_text: <i>"Who will stop me?"</i>
   collector_number: '47'
-- cardid: 5304
-  title: Moto Chai
+- title: Moto Chai
   types:
   - Personality
   decks:
@@ -1553,12 +1434,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Anthony Francisco
   collector_number: '48'
-- cardid: 5309
-  title: Moto Chen
+- title: Moto Chen
   types:
   - Personality
   decks:
@@ -1589,12 +1468,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Defend the Emperor Champion - Sean Raycraft
-  printing_id: '2'
   rarity: Rare
   artist: Steve Argyle
   collector_number: '49'
-- cardid: 5498
-  title: Nairu no Oni
+- title: Nairu no Oni
   types:
   - Personality
   decks:
@@ -1622,12 +1499,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Eric Lofgren
   collector_number: '52'
-- cardid: 5509
-  title: Naoharu
+- title: Naoharu
   types:
   - Personality
   decks:
@@ -1655,12 +1530,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Gift of the Shogun Top of Clan - James Lippens
-  printing_id: '2'
   rarity: Rare
   artist: Edwin David
   collector_number: '16'
-- cardid: 5896
-  title: Peaceful Discourse
+- title: Peaceful Discourse
   types:
   - Strategy
   decks:
@@ -1677,12 +1550,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Rare
   artist: Anthony Grabski
   collector_number: '81'
-- cardid: 6033
-  title: Power of Innocence
+- title: Power of Innocence
   types:
   - Strategy
   decks:
@@ -1698,12 +1569,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Rare
   artist: Edwin David
   collector_number: '82'
-- cardid: 6072
-  title: Private Whispers
+- title: Private Whispers
   types:
   - Strategy
   decks:
@@ -1719,12 +1588,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Rare
   artist: Malcolm McClinton
   collector_number: '83'
-- cardid: 6074
-  title: Profit from Death
+- title: Profit from Death
   types:
   - Strategy
   decks:
@@ -1739,12 +1606,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Glen Osterberger
   collector_number: '84'
-- cardid: 6110
-  title: Purity in Death
+- title: Purity in Death
   types:
   - Spell
   decks:
@@ -1761,12 +1626,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Kari Christensen
   collector_number: '108'
-- cardid: 6215
-  title: Recruiting Allies
+- title: Recruiting Allies
   types:
   - Strategy
   decks:
@@ -1780,12 +1643,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Patrick McEvoy
   collector_number: '85'
-- cardid: 6304
-  title: Reverence for Chikushudo
+- title: Reverence for Chikushudo
   types:
   - Strategy
   decks:
@@ -1800,12 +1661,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Dennis Calero
   collector_number: '86'
-- cardid: 6567
-  title: Seeking the Way
+- title: Seeking the Way
   types:
   - Spell
   decks:
@@ -1825,12 +1684,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   errata_text: Tech erratum to link the Honor gain to the condition of bowing of the Shugenja.
-  printing_id: '3'
   rarity: Rare
   artist: Dennis Calero
   collector_number: '109'
-- cardid: 6572
-  title: Seiden Sanzo
+- title: Seiden Sanzo
   types:
   - Holding
   decks:
@@ -1848,12 +1705,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2004 Blind Fury - Lee Masheter
-  printing_id: '3'
   rarity: Rare
   artist: Malcolm McClinton
   flavor_text: <i>"His chase is over. He is at peace at last."</i>
-- cardid: 6737
-  title: Shiba Aikune
+- title: Shiba Aikune
   types:
   - Personality
   decks:
@@ -1882,12 +1737,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Defend the Emperor Top of Clan - Bob Avers
-  printing_id: '2'
   rarity: Rare
   artist: William O'Connor
   collector_number: '33'
-- cardid: 6794
-  title: Shiba Rae
+- title: Shiba Rae
   types:
   - Personality
   decks:
@@ -1909,12 +1762,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Rare
   artist: Charles Urbach
   collector_number: '34'
-- cardid: 7090
-  title: Shosuro Aroru
+- title: Shosuro Aroru
   types:
   - Personality
   decks:
@@ -1943,12 +1794,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Defend the Emperor Top of Clan - Rob Beatty
-  printing_id: '2'
   rarity: Rare
   artist: Anthony Grabski
   collector_number: '37'
-- cardid: 7114
-  title: Shosuro Jimen
+- title: Shosuro Jimen
   types:
   - Personality
   decks:
@@ -1974,12 +1823,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Gift of the Shogun Top of Clan - Jim Chatham
-  printing_id: '2'
   rarity: Rare
   artist: Eric Lofgren
   collector_number: '38'
-- cardid: 7123
-  title: Shosuro Kyuichi
+- title: Shosuro Kyuichi
   types:
   - Personality
   decks:
@@ -2001,12 +1848,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Britt Martin
   collector_number: '39'
-- cardid: 7128
-  title: Shosuro Maru
+- title: Shosuro Maru
   types:
   - Personality
   decks:
@@ -2035,12 +1880,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Blessings of the Obsidian - Jesse Michalica
-  printing_id: '2'
   rarity: Rare
   artist: April Lee
   collector_number: '40'
-- cardid: 7273
-  title: Single Strike Style
+- title: Single Strike Style
   types:
   - Strategy
   decks:
@@ -2055,12 +1898,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: IFS
   collector_number: '87'
-- cardid: 7376
-  title: Soul Jar
+- title: Soul Jar
   types:
   - Item
   decks:
@@ -2077,12 +1918,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Malcolm McClinton
   collector_number: '107'
-- cardid: 7434
-  title: Splendid Phoenix Style
+- title: Splendid Phoenix Style
   types:
   - Strategy
   decks:
@@ -2097,12 +1936,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: IFS
   collector_number: '88'
-- cardid: 7467
-  title: Standing Fast
+- title: Standing Fast
   types:
   - Strategy
   decks:
@@ -2118,12 +1955,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Rare
   artist: Kevin Wasden
   collector_number: '89'
-- cardid: 7511
-  title: Storm's Eye Style
+- title: Storm's Eye Style
   types:
   - Strategy
   decks:
@@ -2138,12 +1973,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: IFS
   collector_number: '90'
-- cardid: 7533
-  title: Strength in Certainty
+- title: Strength in Certainty
   types:
   - Strategy
   decks:
@@ -2158,12 +1991,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Leonardo Borazio
   collector_number: '91'
-- cardid: 7536
-  title: Strength in Shadow Style
+- title: Strength in Shadow Style
   types:
   - Strategy
   decks:
@@ -2178,12 +2009,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: IFS
   collector_number: '92'
-- cardid: 7580
-  title: Strike the Base
+- title: Strike the Base
   types:
   - Strategy
   decks:
@@ -2201,12 +2030,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Patrick McEvoy
   collector_number: '93'
-- cardid: 7631
-  title: Summon Maseru no Oni
+- title: Summon Maseru no Oni
   types:
   - Spell
   decks:
@@ -2223,12 +2050,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Rare
   artist: Paul (Prof.) Herbert
   collector_number: '110'
-- cardid: 7743
-  title: Take the Charge
+- title: Take the Charge
   types:
   - Strategy
   decks:
@@ -2244,12 +2069,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Malcolm McClinton
   collector_number: '94'
-- cardid: 7892
-  title: Temple of Unity
+- title: Temple of Unity
   types:
   - Holding
   decks:
@@ -2265,13 +2088,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Doug Kovacs
   flavor_text: <i>Winter is the Brotherhood's chance to counsel against war.</i>
   collector_number: '7'
-- cardid: 7986
-  title: The Champion's Guidance
+- title: The Champion's Guidance
   types:
   - Strategy
   decks:
@@ -2284,12 +2105,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: April Lee
   collector_number: '96'
-- cardid: 8059
-  title: The Empress' Address
+- title: The Empress' Address
   types:
   - Strategy
   decks:
@@ -2309,12 +2128,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   errata_text: Errata'd via the internet.
-  printing_id: '3'
   rarity: Rare
   artist: Patrick McEvoy
   collector_number: '97'
-- cardid: 8279
-  title: The Quelsaurth
+- title: The Quelsaurth
   types:
   - Personality
   decks:
@@ -2346,13 +2163,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Gift of the Shogun Top of Clan - Daniel Swartz
-  printing_id: '2'
   rarity: Rare
   artist: Edwin David
   flavor_text: <i>"The Soetsu was the first, but there is much yet to learn."</i>
   collector_number: '45'
-- cardid: 8536
-  title: Togashi Kanaye
+- title: Togashi Kanaye
   types:
   - Personality
   decks:
@@ -2374,13 +2189,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Drew Baker
   flavor_text: <i>"Be centered. Be whole."</i>
   collector_number: '18'
-- cardid: 8593
-  title: Togashi Tsuri
+- title: Togashi Tsuri
   types:
   - Personality
   decks:
@@ -2408,13 +2221,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2005 European Championships Top of Clan - Faber Van Kraanen
-  printing_id: '2'
   rarity: Rare
   artist: Franz Vohwinkel
   flavor_text: <i>Imbalance is the only true sin. The Heavens tolerate all else.</i>
   collector_number: '19'
-- cardid: 8779
-  title: Tsukai-sagasu
+- title: Tsukai-sagasu
   types:
   - Follower
   decks:
@@ -2431,12 +2242,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Franz Vohwinkel
   collector_number: '104'
-- cardid: 8827
-  title: Tsuruchi Etsui
+- title: Tsuruchi Etsui
   types:
   - Personality
   decks:
@@ -2465,13 +2274,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Defend the Emperor Top of Clan - Dan Dineen
-  printing_id: '4'
   rarity: Rare
   artist: Jason Engle
   flavor_text: <i>"The Emperor's death haunts me. Could I have done more?"<br></i>
   collector_number: '25'
-- cardid: 8855
-  title: Tsuruchi Masako
+- title: Tsuruchi Masako
   types:
   - Personality
   decks:
@@ -2493,13 +2300,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Amandine Labarre
   flavor_text: <i>"There does not need to be an Emperor for us to enforce his laws."<br></i>
   collector_number: '26'
-- cardid: 8925
-  title: Two-Front War
+- title: Two-Front War
   types:
   - Strategy
   decks:
@@ -2516,12 +2321,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Joachim Gmoser
   collector_number: '98'
-- cardid: 8947
-  title: Unbroken Blade Style
+- title: Unbroken Blade Style
   types:
   - Strategy
   decks:
@@ -2536,12 +2339,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: IFS
   collector_number: '99'
-- cardid: 8968
-  title: Unexpected Betrayal
+- title: Unexpected Betrayal
   types:
   - Strategy
   decks:
@@ -2556,12 +2357,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Glen Osterberger
   collector_number: '100'
-- cardid: 8971
-  title: Unexpected Intimidation
+- title: Unexpected Intimidation
   types:
   - Strategy
   decks:
@@ -2576,12 +2375,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '5'
   rarity: Rare
   artist: Paul (Prof.) Herbert
   collector_number: '101'
-- cardid: 9013
-  title: Unshakable
+- title: Unshakable
   types:
   - Strategy
   decks:
@@ -2600,12 +2397,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Chris Seaman
   collector_number: '102'
-- cardid: 9126
-  title: Valley of Heroes
+- title: Valley of Heroes
   types:
   - Region
   decks:
@@ -2620,12 +2415,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Edwin David
   collector_number: '55'
-- cardid: 9271
-  title: We Join the Ancestors
+- title: We Join the Ancestors
   types:
   - Strategy
   decks:
@@ -2639,12 +2432,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Andy Hepworth
   collector_number: '103'
-- cardid: 9387
-  title: Wrath of the People
+- title: Wrath of the People
   types:
   - Event
   decks:
@@ -2659,14 +2450,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: David Day
   flavor_text: <i>"The Emperor that saved them is dead. The Khan is on the march, burning their fields.
     There is a limit to what they can endure."</i>
   collector_number: '1'
-- cardid: 9446
-  title: Yasuki Jinn-Kuen
+- title: Yasuki Jinn-Kuen
   types:
   - Personality
   decks:
@@ -2697,12 +2486,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Defend the Emperor Top of Clan - Chris Nicoll
-  printing_id: '2'
   rarity: Rare
   artist: April Lee
   collector_number: '11'
-- cardid: 9491
-  title: Yogo Honami
+- title: Yogo Honami
   types:
   - Personality
   decks:
@@ -2727,14 +2514,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Jaime Jones
   flavor_text: <i>"She served the clan loyally for decades before her death. Afterwards, she continued
     to serve. That is the power of Scorpion loyalty." - Bayushi Paneki</i>
   collector_number: '41'
-- cardid: 9598
-  title: Yoritomo Kurei
+- title: Yoritomo Kurei
   types:
   - Personality
   decks:
@@ -2758,14 +2543,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Rare
   artist: Jeff Menges
   flavor_text: <i>Naizen and his generals led their army deaper into the mainland, restoring order everything
     they passed.</i>
   collector_number: '27'
-- cardid: 9622
-  title: Yoritomo Sachina
+- title: Yoritomo Sachina
   types:
   - Personality
   decks:
@@ -2791,12 +2574,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Gift of the Shogun Top of Clan - Jordan Summerside
-  printing_id: '2'
   rarity: Rare
   artist: Miguel Coimbra
   collector_number: '28'
-- cardid: 9651
-  title: Yoritomo Utemaro
+- title: Yoritomo Utemaro
   types:
   - Personality
   decks:
@@ -2825,7 +2606,6 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2005 European Championships Top of Clan - Meik Nowak
-  printing_id: '2'
   rarity: Rare
   artist: Nicole Cardiff
   collector_number: '29'

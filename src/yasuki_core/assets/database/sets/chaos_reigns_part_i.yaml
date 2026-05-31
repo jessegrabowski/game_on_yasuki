@@ -1,544 +1,26 @@
 set: Chaos Reigns Part I
 cards:
-- cardid: 1086
-  title: Boastful Proclamation
+- title: Act With Authority
   types:
-  - Event
+  - Strategy
   decks:
-  - Dynasty
+  - Fate
   keywords:
-  - Unique
-  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
-    one of them, if any other player controls a Personality, then at the start of your next turn, if this
-    Province still exists, permanently give it +3 strength and gain 3 Honor, and until then, after battle
-    resolution destroys this Province, give each Personality in the attacking army a +1F token and the
-    Attacker may draw a card.
-  is_unique: true
-  legality:
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Four Winds (Gold)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  - Shattered Empire
-  printing_id: '7'
-  rarity: Fixed
-  artist: Erich Schreiner
-  flavor_text: <i>"The pretenders left my city a burnt ruin and my father dead. Lord Seiki will make Kalani's
-    Landing the jewel of the Colonies!" - Yoritomo Wakuni</i>
-  collector_number: '61'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13957
-  title: The Iweko Heir
-  types:
-  - Event
-  decks:
-  - Dynasty
-  keywords:
+  - Edict
   - Imperial
-  - Unique
-  text: <b>Dynasty:</b> Put this Event into play and, if your Wind is House of Suikihime, gain 2 Honor.<br><b>Open:</b>
-    If this Event is in play, banish it to discard a target Event <i>(from play)</i>. If the target is
-    Unique, its owner may reshuffle it into their Dynasty deck.
-  is_unique: true
+  - Courage
+  text: 'You have the ability, "<b>Political Battle, :favor: :</b> :melee: 3."<br><b>Open:</b> Put this
+    Edict into play. Discard your other Edicts in play.'
+  focus: 3
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
-  artist: '"Tenno gosairei no keshiki"'
-  flavor_text: <i>"The future of our Empire."</i>
-  collector_number: '1'
+  flavor_text: <i>"Atsutane will discover Tselu's murderers, and deliver the Emperor's justice. He has
+    our utmost confidence." - Otomo Suikihime</i>
+  collector_number: '48'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13958
-  title: Caravansary
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Merchant Caravan
-  text: <b>Response:</b> If the action was yours and discarded a Fate card, give this Holding a +1GP Wealth
-    token if it has fewer than 3.
-  gold_cost: 4
-  legality:
-  - Shattered Empire
-  errata_text: 'Functional errata to add an explicit condition to the <b>Response</b> trigger: <a target="_new"
-    href="https://sites.google.com/view/the-onyx-lives-project/errata-and-updates/july-2024-updates-new-artist-cri-errata-for-gencon">18
-    Jul 2024</a>'
-  printing_id: '1'
-  rarity: Fixed
-  artist: Shen Fei
-  flavor_text: <i>The Unicorn quickly secured safe passage for both refugees and rich supply caravans
-    through the Western Wastes..</i>
-  collector_number: '2'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13959
-  title: Den of Needful Things
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Geisha House
-  - Sincerity
-  text: 'Sincerity: All players gain 1 Honor, or all players lose 1 Honor, for each token removed <i>(you
-    choose)</i>, to a maximum of 2.<br><b>Open: :bow::</b> Destroy this Holding to dishonor or rehonor
-    a target Personality.'
-  gold_cost: 1
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: Steve Argyle
-  flavor_text: <i>Peasants who fled the Empire or lost their farms during the Siege found many willing
-    to aid them, or exploit them. </i>
-  collector_number: '3'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13960
-  title: Fortune's Folly
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Gambling House
-  text: After this Holding enters play, discard the top card of your Fate deck to give this Holding one
-    +1GP Wealth token, or two if the Focus Value of the discard was odd.
-  gold_cost: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: Steve Argyle
-  flavor_text: <i>"Better luck next time, my lord."</i>
-  collector_number: '4'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13961
-  title: Kinuye's Garden
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  extended_title: Kinuye's Garden • Experienced
-  keywords:
-  - Temple
-  - Experienced
-  - Jade
-  text: <b>Open, :bow::</b> This Holding may remain bowed. Target your Personality. While this Holding
-    remains bowed, the target cannot assign or be targeted by actions, abilities from cards in their unit
-    cannot be taken, and after your turn begins, give the Personality a +1F/+1C token.
-  gold_cost: 2
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"I burned that witch's cult to the ground for what she did, my lord. Every leaf, every
-    root, even the soil itself in that place, purified by the cleansing power of jade. A perfect place
-    for you to recover from your injuries."</i>
-  collector_number: '5'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13962
-  title: Shrine to Inari
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Farm
-  - Temple
-  - Legacy
-  text: Your Stronghold's printed abilities have <b>Tireless</b> while this Holding is unbowed.
-  gold_cost: 2
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: Patrick Manjares
-  flavor_text: <i>The Fortune of Rice and Good Grain is vital to the people of Rokugan, peasant or noble.
-    Even in the furthest reaches of the Colonies, every village has a shrine to him.</i>
-  collector_number: '6'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13963
-  title: Amrusha
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Naga
-  keywords:
-  - Asp
-  - Commander
-  - Naga
-  - Nonhuman
-  text: 'Amrusha has <b>Conqueror</b> if another player''s Wind is House of Suikihime.<br><b>Interrupt,
-    :X::</b> After the action copies an ability from your discarded Follower, Equip it to Amrusha paying
-    :g2: less instead of putting it at the bottom of your deck.'
-  gold_cost: 5
-  force: 3
-  chi: 3
-  honor_requirement: 0
-  personal_honor: 1
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"We are wasting our time, Manjodh. Human words are not worth the breath they use to
-    speak them."</i>
-  collector_number: '7'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13964
-  title: Kitsune Yamazaru
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  extended_title: Kitsune Yamazaru • Experienced
-  clans:
-  - Naga
-  keywords:
-  - Fox Clan
-  - Scout
-  - Shugenja
-  - Experienced
-  - Earth
-  text: <b>Response, :g4::</b> After the action recruits Yamazaru, create and Recruit <i>(without further
-    cost)</i> a 2F/3C/4GC/3PH Monkey • Nonhuman • Spirit Personality with the ability, "<b>Battle, :bow::</b>
-    Move this Personality home to move home a target enemy Personality with lower Chi."
-  gold_cost: 4
-  force: 0
-  chi: 3
-  honor_requirement: 2
-  personal_honor: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: Shen Fei
-  flavor_text: <i>"We will take them. We know the Colonies well."</i>
-  collector_number: '8'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13965
-  title: Manjodh
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Naga
-  keywords:
-  - Courtier
-  - Greensnake
-  - Naga
-  - Nonhuman
-  - Loyal
-  text: '<b>Political Interrupt, :bow::</b> If you have no Wind, pay the action''s :favor: cost.'
-  gold_cost: 4
-  force: 2
-  chi: 2
-  honor_requirement: 0
-  personal_honor: 2
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"The Qamar wishes to make amends to the Dark Naga's victims, and to seek answers to
-    rumors of our kin in this foreign land."</i>
-  collector_number: '9'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13966
-  title: Hida Gojiro, Tetsubo Master
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  extended_title: Hida Gojiro, Tetsubo Master • Experienced
-  clans:
-  - Crab
-  keywords:
-  - Berserker
-  - Experienced
-  text: While Gojiro has a Tetsubo, he has +1F and players must discard a card to have their Personality
-    challenge him.<br><b>Battle:</b> Target one of Gojiro's Heavy Weapons. You may use its printed abilities
-    one additional time. If the target is a Tetsubo, straighten it.
-  gold_cost: 7
-  force: 4
-  chi: 3
-  personal_honor: 1
-  legality:
-  - Shattered Empire
-  story: Weapon Master 2015 - David Toldano
-  printing_id: '1'
-  rarity: Fixed
-  artist: illus Jonathan Moore
-  collector_number: '10'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13967
-  title: Yasuki Angosu, Master Coin
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crab
-  keywords:
-  - Courtier
-  - Fallen
-  - Kolat
-  - Merchant
-  - Unique
-  text: 'Your Kolat actions and Kolat Personalities cost :g1: less.<br><b>Economic Open, :bow: or :favor::</b>
-    Target another player who may pay Gold equal to Angosu''s Chi. If they did not pay, they discard a
-    card.'
-  gold_cost: 9
-  force: 2
-  chi: 4
-  personal_honor: 0
-  is_unique: true
-  legality:
-  - Shattered Empire
-  story: Face The Madness - Case Kiyonaga
-  printing_id: '1'
-  rarity: Fixed
-  artist: Albert Tavira
-  flavor_text: <i>"Jinn-Kuen no longer responds to the simplest inquiries. I will assume responsibility,
-    with no objections."</i>
-  collector_number: '11'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13968
-  title: Yasuki Shairei
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  extended_title: Yasuki Shairei • Experienced
-  clans:
-  - Crab
-  keywords:
-  - Courtier
-  - Merchant
-  - Experienced
-  text: '<b>Economic Dynasty, :bow::</b> Target another player who may choose to lose 2 Honor. If they
-    did not choose this, give a face-up card in your Province <b>Renew</b> and, if the target''s Wind
-    is House of Suikihime, it enters play for :g1: less.'
-  gold_cost: 6
-  force: 0
-  chi: 3
-  personal_honor: 1
-  legality:
-  - Shattered Empire
-  story: Spring Kotei 2015 – Chris Martin
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Lord Toranosuke has bade me return to this dismal stewpot to monitor our merchants'
-    activities, and to train the next generation."</i>
-  collector_number: '12'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13969
-  title: Asahina Tsienko
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  extended_title: Asahina Tsienko • Experienced
-  clans:
-  - Crane
-  keywords:
-  - Fudo
-  - Courtier
-  - Shugenja
-  - Experienced
-  - Loyal
-  - Unique
-  - Air
-  text: '<b>Political Open, :favor: :</b> If it is your turn, discard a Fate card to draw a card.<br><b>Home
-    Political Battle, :favor:, :bow::</b> Move a target attacking enemy Personality home.'
-  gold_cost: 6
-  force: 0
-  chi: 4
-  honor_requirement: 6
-  personal_honor: 3
-  is_unique: true
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: (FFG) Maerel Hibadita - Fantasy Flight Games
-  flavor_text: <i>"Lady Natsuyo is concerned about the Aerie. Her inquiries receive only terse replies,
-    and the tension is palpable."</i>
-  collector_number: '13'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13970
-  title: Daidoji Tokiko
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crane
-  keywords:
-  - Iron Crane
-  - Samurai
-  - Yojimbo
-  - Sincerity
-  text: 'Sincerity: Give Tokiko a Guard token for each token removed.<br>Tokiko cannot attack. Tokiko
-    has <b>Elite</b> while she has two or more Guard tokens.<br><b>Battle, :bow::</b> :melee: 3. Gain
-    1 Honor if Tokiko has any Guard tokens.'
-  gold_cost: 6
-  force: 3
-  chi: 3
-  honor_requirement: 5
-  personal_honor: 3
-  legality:
-  - Shattered Empire
-  story: Spring Kotei 2015 - Mike George
-  printing_id: '1'
-  rarity: Fixed
-  artist: (FFG) Polar Engine - Fantasy Flight Games
-  collector_number: '14'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13971
-  title: Kakita Tatewaki, Bishonen
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crane
-  keywords:
-  - Braggart
-  - Samurai
-  - Duelist
-  text: When Tatewaki wins a duel, gain 2 Honor and negate all other effects of winning and losing the
-    duel.<br>You may Proclaim Tatewaki even if you have already Proclaimed once this turn.
-  gold_cost: 5
-  force: 1
-  chi: 3
-  honor_requirement: 5
-  personal_honor: 2
-  legality:
-  - Shattered Empire
-  errata_text: 'Functional errata to reflect original intent: <a target="_new" href="https://sites.google.com/view/the-onyx-lives-project/errata-and-updates/july-2024-updates-new-artist-cri-errata-for-gencon">18
-    Jul 2024</a>'
-  story: Stronghold Store Events 2014 – Aaron Barto
-  printing_id: '1'
-  rarity: Fixed
-  artist: (PD) Stock Art
-  flavor_text: <i>"Is it not the custom to introduce oneself first? I am called the Blue Thunder of Tsuma
-    Dojo! What? You have not heard of me? Absurd!"</i>
-  collector_number: '15'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13972
-  title: Kitsuki Miro, Dogged Investigator
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Dragon
-  keywords:
-  - Courtier
-  - Magistrate
-  - Shugenja
-  - Earth
-  text: <b>Open, :bow::</b> <i>Miro suspects a plot.</i> Turn a target face-down card in another player's
-    hand face-up. They may discard it. If they did not, gain 1 Honor. They lose 3 Honor if it is an Assassin,
-    Kolat, or Ninja card.
-  gold_cost: 4
-  force: 2
-  chi: 3
-  honor_requirement: 5
-  personal_honor: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"I share my brother's concerns that some here may be taking advantage of the chaos."</i>
-  collector_number: '16'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13973
-  title: Mirumoto Tsuda
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  extended_title: Mirumoto Tsuda • Experienced 2
-  clans:
-  - Dragon
-  keywords:
-  - Samurai
-  - Yojimbo
-  - Cavalry
-  - Duelist
-  - Duty
-  - Experienced 2
-  - Unique
-  text: <b>Remote Tireless Interrupt:</b> If the action is targeting your other Personality, straighten
-    and move Tsuda to that Personality's location. The action targets Tsuda instead <i>(if legal)</i>.
-  gold_cost: 10
-  force: 3
-  chi: 5
-  honor_requirement: 10
-  personal_honor: 3
-  is_unique: true
-  legality:
-  - Shattered Empire
-  story: Fall Kotei 2015 – Przemek Wawer
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Perhaps I might still find redemption."</i>
-  collector_number: '17'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13974
-  title: Togashi Marumo
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Dragon
-  keywords:
-  - Monk
-  - Tattooed
-  - Duelist
-  - Earth
-  text: Marumo has +1C for each player that controls any Rings.<br><b>Response:</b> If the action created
-    a duel during a battle, give Marumo a Force bonus equal to his Chi.
-  gold_cost: 4
-  force: 0
-  chi: 2
-  honor_requirement: 4
-  personal_honor: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"These Fudoists think they can take root in the Second City and turn us from Shinsei.
-    They will not find it so simple."</i>
-  collector_number: '18'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13975
-  title: Akodo Atsutane, Ivory Champion
+- title: Akodo Atsutane, Ivory Champion
   types:
   - Personality
   decks:
@@ -566,13 +48,469 @@ cards:
   is_unique: true
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
   collector_number: '19'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13976
-  title: Ikoma Kohuri
+- title: Amrusha
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  keywords:
+  - Asp
+  - Commander
+  - Naga
+  - Nonhuman
+  text: 'Amrusha has <b>Conqueror</b> if another player''s Wind is House of Suikihime.<br><b>Interrupt,
+    :X::</b> After the action copies an ability from your discarded Follower, Equip it to Amrusha paying
+    :g2: less instead of putting it at the bottom of your deck.'
+  gold_cost: 5
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"We are wasting our time, Manjodh. Human words are not worth the breath they use to
+    speak them."</i>
+  collector_number: '7'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Asahina Tsienko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Asahina Tsienko • Experienced
+  clans:
+  - Crane
+  keywords:
+  - Fudo
+  - Courtier
+  - Shugenja
+  - Experienced
+  - Loyal
+  - Unique
+  - Air
+  text: '<b>Political Open, :favor: :</b> If it is your turn, discard a Fate card to draw a card.<br><b>Home
+    Political Battle, :favor:, :bow::</b> Move a target attacking enemy Personality home.'
+  gold_cost: 6
+  force: 0
+  chi: 4
+  honor_requirement: 6
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: (FFG) Maerel Hibadita - Fantasy Flight Games
+  flavor_text: <i>"Lady Natsuyo is concerned about the Aerie. Her inquiries receive only terse replies,
+    and the tension is palpable."</i>
+  collector_number: '13'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Asceticism
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Edict
+  - Kharmic
+  text: 'The first time each turn another player uses the rulebook Equip ability, the attachment it targets
+    costs :g2: more until it enters play.<br><b>Open:</b> Put this Edict into play. Discard your other
+    Edicts in play.'
+  focus: 3
+  legality:
+  - Shattered Empire
+  errata_text: 'Technical errata to allow the trait to work as intended: <a target="_new" href="https://sites.google.com/view/the-onyx-lives-project/home/april-updates-new-art-errata-icons-and-cr2-previews">28
+    Apr 2025</a>'
+  rarity: Fixed
+  artist: Thulsa Doom
+  flavor_text: <i>Not all who lived in the Colonies embraced the opulence of the Second City, or were
+    content to allow others to.</i>
+  collector_number: '49'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Bajozutsu
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Firearm
+  - Gaijin
+  - One-Handed
+  - Weapon
+  text: '<b>Battle, :bow::</b> :ranged: 3 compared against the target''s printed Force, that cannot be
+    combined or have its strength increased or decreased. Lose 1 Honor.'
+  gold_cost: 4
+  focus: 0
+  force: '+1'
+  chi: '+0'
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>Forbidden since the Battle of White Stag, new trade in the Colonies meant more of these
+    foreign weapons found their way into unscrupulous hands. </i>
+  collector_number: '42'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Bayushi Akinari, "The Devil of Nihai Tower"
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Scorpion
+  keywords:
+  - Assassin
+  - Merchant
+  - Samurai
+  - Yojimbo
+  text: 'Invest :g1:: Permanently give your other target Personality <b>Expendable</b>.<br>After Akinari
+    is Recruited or attacks, all players lose 1 Honor.'
+  gold_cost: 7
+  force: 4
+  chi: 3
+  personal_honor: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: Thulsa Doom
+  flavor_text: <i>"I take pride in solving problems, Lady Fuyuko. I would be honored to solve yours."</i>
+  collector_number: '28'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Bayushi Fuyuko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Bayushi Fuyuko • Experienced 3
+  clans:
+  - Scorpion
+  keywords:
+  - Courtier
+  - Experienced 3
+  - Unique
+  text: <b>Political Open:</b> Before the next time <i>(this turn)</i> a target player draws a card, they
+    must show it. You may have them put it on the bottom of their Fate deck instead of drawing it. If
+    you did, they draw a card.
+  gold_cost: 5
+  force: 2
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"I did what was necessary, my love. Just as you knew I would." </i>
+  collector_number: '29'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Boastful Proclamation
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, if any other player controls a Personality, then at the start of your next turn, if this
+    Province still exists, permanently give it +3 strength and gain 3 Honor, and until then, after battle
+    resolution destroys this Province, give each Personality in the attacking army a +1F token and the
+    Attacker may draw a card.
+  is_unique: true
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  rarity: Fixed
+  artist: Erich Schreiner
+  flavor_text: <i>"The pretenders left my city a burnt ruin and my father dead. Lord Seiki will make Kalani's
+    Landing the jewel of the Colonies!" - Yoritomo Wakuni</i>
+  collector_number: '61'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Caravansary
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Merchant Caravan
+  text: <b>Response:</b> If the action was yours and discarded a Fate card, give this Holding a +1GP Wealth
+    token if it has fewer than 3.
+  gold_cost: 4
+  legality:
+  - Shattered Empire
+  errata_text: 'Functional errata to add an explicit condition to the <b>Response</b> trigger: <a target="_new"
+    href="https://sites.google.com/view/the-onyx-lives-project/errata-and-updates/july-2024-updates-new-artist-cri-errata-for-gencon">18
+    Jul 2024</a>'
+  rarity: Fixed
+  artist: Shen Fei
+  flavor_text: <i>The Unicorn quickly secured safe passage for both refugees and rich supply caravans
+    through the Western Wastes..</i>
+  collector_number: '2'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Daidoji Tokiko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Iron Crane
+  - Samurai
+  - Yojimbo
+  - Sincerity
+  text: 'Sincerity: Give Tokiko a Guard token for each token removed.<br>Tokiko cannot attack. Tokiko
+    has <b>Elite</b> while she has two or more Guard tokens.<br><b>Battle, :bow::</b> :melee: 3. Gain
+    1 Honor if Tokiko has any Guard tokens.'
+  gold_cost: 6
+  force: 3
+  chi: 3
+  honor_requirement: 5
+  personal_honor: 3
+  legality:
+  - Shattered Empire
+  story: Spring Kotei 2015 - Mike George
+  rarity: Fixed
+  artist: (FFG) Polar Engine - Fantasy Flight Games
+  collector_number: '14'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Daigotsu Tobei
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Spider
+  keywords:
+  - Commander
+  - Imperial
+  - Samurai
+  - Undead
+  - Conqueror
+  - Shadowlands
+  text: Other players cannot target Tobei with Favor actions unless their Wind is The Kanpeki Dynasty.<br><b>Response:</b>
+    If the action was Favor or discarded :favor:, give a target player's Provinces +1 or -1 strength <i>(you
+    choose)</i>.
+  gold_cost: 8
+  force: 4
+  chi: 2
+  personal_honor: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: Eric Polak
+  flavor_text: <i>"If you do not wish to engage in diplomacy, then I shall relish seeing this land burn."</i>
+  collector_number: '31'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Den of Needful Things
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Geisha House
+  - Sincerity
+  text: 'Sincerity: All players gain 1 Honor, or all players lose 1 Honor, for each token removed <i>(you
+    choose)</i>, to a maximum of 2.<br><b>Open: :bow::</b> Destroy this Holding to dishonor or rehonor
+    a target Personality.'
+  gold_cost: 1
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: Steve Argyle
+  flavor_text: <i>Peasants who fled the Empire or lost their farms during the Siege found many willing
+    to aid them, or exploit them. </i>
+  collector_number: '3'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Disturbing Message
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Economic Battle, :g2::</b> Target your unbowed Merchant to move home a target enemy Personality.
+    You may destroy your Wealth token to make a target player gain or lose 2 Honor.
+  focus: 2
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: Thulsa Doom
+  flavor_text: <i>"How...," he whispered, clenching the scroll in his hand, "how could they know this?"</i>
+  collector_number: '50'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Entreat Bishamon
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Courage
+  - Earth
+  text: While this Shugenja is defending, their battlefield's Province has +2 strength.<br><b>Open, :bow::</b>
+    Target a Province. The next time <i>(this turn)</i> a Personality assigns to attack that Province,
+    gain 2 Honor.
+  gold_cost: 3
+  focus: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"The Fortunes understand resistance is as powerful a show of strength as conquest."
+    - Isawa Kosea</i>
+  collector_number: '45'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Flawless Tetsubo
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Heavy Weapon
+  - One-Handed
+  - Tetsubo
+  - Weapon
+  text: <b>Battle:</b> Give a target enemy Personality -2F. You may target and destroy their attached
+    Armor, if any. If the targeted Personality's Force is now 0, bow them.
+  gold_cost: 4
+  focus: 2
+  force: '+2'
+  chi: '+0'
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"Perfectly balanced, as all things should be." - Hida Gojiro</i>
+  collector_number: '43'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Fortune's Folly
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Gambling House
+  text: After this Holding enters play, discard the top card of your Fate deck to give this Holding one
+    +1GP Wealth token, or two if the Focus Value of the discard was odd.
+  gold_cost: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: Steve Argyle
+  flavor_text: <i>"Better luck next time, my lord."</i>
+  collector_number: '4'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Hida Gojiro, Tetsubo Master
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hida Gojiro, Tetsubo Master • Experienced
+  clans:
+  - Crab
+  keywords:
+  - Berserker
+  - Experienced
+  text: While Gojiro has a Tetsubo, he has +1F and players must discard a card to have their Personality
+    challenge him.<br><b>Battle:</b> Target one of Gojiro's Heavy Weapons. You may use its printed abilities
+    one additional time. If the target is a Tetsubo, straighten it.
+  gold_cost: 7
+  force: 4
+  chi: 3
+  personal_honor: 1
+  legality:
+  - Shattered Empire
+  story: Weapon Master 2015 - David Toldano
+  rarity: Fixed
+  artist: illus Jonathan Moore
+  collector_number: '10'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Hoji Okura
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Mantis
+  keywords:
+  - Enforcer
+  - Kobun
+  - Merchant
+  text: '<b>Battle:</b> Destroy your Wealth token to make a :ranged: 3. If this destroyed a dishonorable
+    target, their owner discards a card.'
+  gold_cost: 6
+  force: 4
+  chi: 2
+  personal_honor: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"You say you are a family of the Mantis? I've never heard of you," the merchant said.
+    "No surprise," Okura replied, drawing a tanto.</i>
+  collector_number: '22'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Hoji Tsai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Mantis
+  keywords:
+  - Courtier
+  - Kobun
+  - Merchant
+  text: <b>Battle:</b> Dishonor a target Personality at any location. Bow them if they are not at a battlefield.
+    If this is a Raid battle, their controller loses 2 Honor.
+  gold_cost: 5
+  force: 3
+  chi: 2
+  personal_honor: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"Lady Misato sent me. Let's talk."</i>
+  collector_number: '23'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Honor Your Oaths
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Political Battle:</b> If you control :favor:, move home a target enemy Personality. You may
+    bow your target Yojimbo or discard :favor: to gain 1 Honor and draw a card.'
+  focus: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>Tsuda pushed through the crowd past fallen guards, leaping in front of the surprised
+    Governor, unflinching as the assassin's blade struck his neck instead of the baby she held.</i>
+  collector_number: '51'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Ikoma Kohuri
   types:
   - Personality
   decks:
@@ -592,7 +530,6 @@ cards:
   personal_honor: 2
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
   artist: (PD) Stock Art
   flavor_text: <i>"The Unicorn Clan? Ide-san, it appears your fellows have left Rokugan for another thousand
@@ -600,64 +537,26 @@ cards:
   collector_number: '20'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13978
-  title: Hoji Okura
+- title: In the Pale Moonlight
   types:
-  - Personality
+  - Strategy
   decks:
-  - Dynasty
-  clans:
-  - Mantis
+  - Fate
   keywords:
-  - Enforcer
-  - Kobun
-  - Merchant
-  text: '<b>Battle:</b> Destroy your Wealth token to make a :ranged: 3. If this destroyed a dishonorable
-    target, their owner discards a card.'
-  gold_cost: 6
-  force: 4
-  chi: 2
-  personal_honor: 0
+  - Edict
+  - Honor
+  text: You have a Lobby bonus equal to the highest Chi among your dishonorable Personalities. You lose
+    1 less Honor from actions targeting your dishonorable Personalities, to a minimum of 1.<br><b>Political
+    Open:</b> Dishonor your target Personality to put this Edict into play. Discard your other Edicts
+    in play.
+  focus: 3
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
-  flavor_text: <i>"You say you are a family of the Mantis? I've never heard of you," the merchant said.
-    "No surprise," Okura replied, drawing a tanto.</i>
-  collector_number: '22'
+  collector_number: '52'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13980
-  title: Yoritomo Saigo, Master Silk
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Mantis
-  keywords:
-  - Courtier
-  - Kolat
-  - Merchant
-  - Unique
-  text: You have a Lobby bonus equal to your Wealth tokens.<br><b>Economic Open:</b> Destroy a Wealth
-    token to draw a card. Bow Saigo if the token was not yours.
-  gold_cost: 6
-  force: 3
-  chi: 3
-  personal_honor: 0
-  is_unique: true
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: Troy Graham
-  flavor_text: <i>"Do not put too much stock in rumors."</i>
-  collector_number: '24'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13981
-  title: Isawa Bunzo
+- title: Isawa Bunzo
   types:
   - Personality
   decks:
@@ -678,15 +577,13 @@ cards:
   personal_honor: 3
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
   flavor_text: <i>"This city is polluted by cultists, gaijin, and upstart heimin. Do our sacred traditions
     mean nothing?"</i>
   collector_number: '25'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13982
-  title: Isawa Kosea, Master of Earth
+- title: Isawa Kosea, Master of Earth
   types:
   - Personality
   decks:
@@ -713,7 +610,6 @@ cards:
   is_unique: true
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
   artist: Hinkle / Goxuny Art
   flavor_text: <i>"It was decided a member of the Council was needed in the Colonies. I have been informed
@@ -721,183 +617,193 @@ cards:
   collector_number: '26'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13983
-  title: Shiba Ozawa
+- title: Kakita Tatewaki, Bishonen
   types:
   - Personality
   decks:
   - Dynasty
   clans:
-  - Phoenix
+  - Crane
   keywords:
-  - Fudo
+  - Braggart
   - Samurai
-  - Yojimbo
   - Duelist
-  text: <b>Response:</b> After the action recruits Ozawa, you may search your Fate deck for a Ring or
-    Spell and discard it. If this discarded a Ring, draw a card. If this discarded a Spell, gain 1 Honor.
-  gold_cost: 6
+  text: When Tatewaki wins a duel, gain 2 Honor and negate all other effects of winning and losing the
+    duel.<br>You may Proclaim Tatewaki even if you have already Proclaimed once this turn.
+  gold_cost: 5
+  force: 1
+  chi: 3
+  honor_requirement: 5
+  personal_honor: 2
+  legality:
+  - Shattered Empire
+  errata_text: 'Functional errata to reflect original intent: <a target="_new" href="https://sites.google.com/view/the-onyx-lives-project/errata-and-updates/july-2024-updates-new-artist-cri-errata-for-gencon">18
+    Jul 2024</a>'
+  story: Stronghold Store Events 2014 – Aaron Barto
+  rarity: Fixed
+  artist: (PD) Stock Art
+  flavor_text: <i>"Is it not the custom to introduce oneself first? I am called the Blue Thunder of Tsuma
+    Dojo! What? You have not heard of me? Absurd!"</i>
+  collector_number: '15'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Kasuga Kinji
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Courtier
+  - Merchant
+  - Smuggler
+  - Tortoise Clan
+  - Naval
+  text: 'Invest :g2:: Banish a Fate card in your discard pile to put your discarded Strategy face-up in
+    your hand.'
+  gold_cost: 4
+  force: 2
+  chi: 1
+  personal_honor: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: Trevor Cuba
+  flavor_text: <i>"You cannot buy a Tortoise's loyalty, Lord Seiki, but we gladly accept investments."</i>
+  collector_number: '37'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Kinuye's Garden
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  extended_title: Kinuye's Garden • Experienced
+  keywords:
+  - Temple
+  - Experienced
+  - Jade
+  text: <b>Open, :bow::</b> This Holding may remain bowed. Target your Personality. While this Holding
+    remains bowed, the target cannot assign or be targeted by actions, abilities from cards in their unit
+    cannot be taken, and after your turn begins, give the Personality a +1F/+1C token.
+  gold_cost: 2
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"I burned that witch's cult to the ground for what she did, my lord. Every leaf, every
+    root, even the soil itself in that place, purified by the cleansing power of jade. A perfect place
+    for you to recover from your injuries."</i>
+  collector_number: '5'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Kitsu Kouki • Experienced
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Ancestor
+  - Shugenja
+  - Spirit
+  - Experienced
+  - Water
+  text: Kouki has -3F while in an army without another Ancestor or Shugenja.
+  gold_cost: 4
   force: 3
+  chi: 3
+  honor_requirement: 7
+  personal_honor: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"Mere death cannot stop a Lion's roar."</i>
+  collector_number: '21'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Kitsuki Miro, Dogged Investigator
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Courtier
+  - Magistrate
+  - Shugenja
+  - Earth
+  text: <b>Open, :bow::</b> <i>Miro suspects a plot.</i> Turn a target face-down card in another player's
+    hand face-up. They may discard it. If they did not, gain 1 Honor. They lose 3 Honor if it is an Assassin,
+    Kolat, or Ninja card.
+  gold_cost: 4
+  force: 2
   chi: 3
   honor_requirement: 5
   personal_honor: 3
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
-  flavor_text: <i>"The prophet says we must abandon wisdom to find it. Shall we speak more on this together,
-    friends?"</i>
-  collector_number: '27'
+  flavor_text: <i>"I share my brother's concerns that some here may be taking advantage of the chaos."</i>
+  collector_number: '16'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13984
-  title: Bayushi Akinari, "The Devil of Nihai Tower"
+- title: Kitsune Yamazaru
   types:
   - Personality
   decks:
   - Dynasty
+  extended_title: Kitsune Yamazaru • Experienced
   clans:
-  - Scorpion
+  - Naga
   keywords:
-  - Assassin
-  - Merchant
-  - Samurai
-  - Yojimbo
-  text: 'Invest :g1:: Permanently give your other target Personality <b>Expendable</b>.<br>After Akinari
-    is Recruited or attacks, all players lose 1 Honor.'
-  gold_cost: 7
-  force: 4
-  chi: 3
-  personal_honor: 0
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: Thulsa Doom
-  flavor_text: <i>"I take pride in solving problems, Lady Fuyuko. I would be honored to solve yours."</i>
-  collector_number: '28'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13985
-  title: Bayushi Fuyuko
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  extended_title: Bayushi Fuyuko • Experienced 3
-  clans:
-  - Scorpion
-  keywords:
-  - Courtier
-  - Experienced 3
-  - Unique
-  text: <b>Political Open:</b> Before the next time <i>(this turn)</i> a target player draws a card, they
-    must show it. You may have them put it on the bottom of their Fate deck instead of drawing it. If
-    you did, they draw a card.
-  gold_cost: 5
-  force: 2
-  chi: 3
-  personal_honor: 1
-  is_unique: true
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"I did what was necessary, my love. Just as you knew I would." </i>
-  collector_number: '29'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13986
-  title: Soshi Itsuki
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Ninja
-  - Scorpion
-  keywords:
-  - Infiltrator
-  - Kuroiban
-  - Ninja
+  - Fox Clan
+  - Scout
   - Shugenja
-  - Cavalry
-  - Air
-  text: '<b>Engage:</b> Give a target Personality with :shadowlands: or no Poison tokens a -1F/-1C Poison
-    token.'
+  - Experienced
+  - Earth
+  text: <b>Response, :g4::</b> After the action recruits Yamazaru, create and Recruit <i>(without further
+    cost)</i> a 2F/3C/4GC/3PH Monkey • Nonhuman • Spirit Personality with the ability, "<b>Battle, :bow::</b>
+    Move this Personality home to move home a target enemy Personality with lower Chi."
   gold_cost: 4
-  force: 2
-  chi: 2
-  personal_honor: 0
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: Thulsa Doom
-  flavor_text: <i>"Understood."</i>
-  collector_number: '30'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13987
-  title: Daigotsu Tobei
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Spider
-  keywords:
-  - Commander
-  - Imperial
-  - Samurai
-  - Undead
-  - Conqueror
-  - Shadowlands
-  text: Other players cannot target Tobei with Favor actions unless their Wind is The Kanpeki Dynasty.<br><b>Response:</b>
-    If the action was Favor or discarded :favor:, give a target player's Provinces +1 or -1 strength <i>(you
-    choose)</i>.
-  gold_cost: 8
-  force: 4
-  chi: 2
-  personal_honor: 0
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: Eric Polak
-  flavor_text: <i>"If you do not wish to engage in diplomacy, then I shall relish seeing this land burn."</i>
-  collector_number: '31'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13988
-  title: Miya Tamiyo, Herald of the Hantei
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Spider
-  keywords:
-  - Courtier
-  - Imperial
-  - Loyal
-  text: Other players have a Lobby penalty equal to Tamiyo's Personal Honor.<br><b>Political Open, :bow:,
-    :favor::</b> Discard the top card of your Fate deck to gain Honor equal to the discard's Focus Value
-    or make a target player lose 2 Honor.
-  gold_cost: 6
-  force: 2
+  force: 0
   chi: 3
+  honor_requirement: 2
   personal_honor: 3
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
-  artist: Draw Souls
-  collector_number: '32'
+  artist: Shen Fei
+  flavor_text: <i>"We will take them. We know the Colonies well."</i>
+  collector_number: '8'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13989
-  title: M'rika
+- title: Latest Fashions
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Kimono
+  text: A Personality may only attach one Kimono.<br><b>Response:</b> If the action was Political and
+    it targeted or was from this Personality, gain 1 Honor.
+  gold_cost: 3
+  focus: 3
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Shattered Empire
+  errata_text: 'Technical errata to clarify play condition: <a target="_new" href="https://sites.google.com/view/the-onyx-lives-project/errata-and-updates/technical-errata-june-2024">7
+    Jun 2024</a>'
+  rarity: Fixed
+  artist: Thulsa Doom
+  flavor_text: <i>"It is all the rage in Twin Forks City, I assure you."</i>
+  collector_number: '44'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: M'rika
   types:
   - Personality
   decks:
@@ -923,7 +829,6 @@ cards:
   is_unique: true
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
   artist: Mario Wibisono
   flavor_text: <i>"My beloved aunt has been my mentor since I was a child. Her honor is above reproach."
@@ -931,8 +836,110 @@ cards:
   collector_number: '33'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13990
-  title: Moto Khedai, Head Priest of the Second City
+- title: Manjodh
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  keywords:
+  - Courtier
+  - Greensnake
+  - Naga
+  - Nonhuman
+  - Loyal
+  text: '<b>Political Interrupt, :bow::</b> If you have no Wind, pay the action''s :favor: cost.'
+  gold_cost: 4
+  force: 2
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"The Qamar wishes to make amends to the Dark Naga's victims, and to seek answers to
+    rumors of our kin in this foreign land."</i>
+  collector_number: '9'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Maw of the Earth
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Earth
+  - Fire
+  text: 'If this Shugenja is :earth: and :fire:, after the first time each turn this Spell bows, straighten
+    it.<br><b>Battle, :bow::</b> If this Shugenja is :earth:, give a target enemy Personality -2F.<br><b>Battle,
+    :bow::</b> If this Shugenja is :fire:, :ranged: 3.'
+  gold_cost: 2
+  focus: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  collector_number: '46'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Mirumoto Tsuda
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Mirumoto Tsuda • Experienced 2
+  clans:
+  - Dragon
+  keywords:
+  - Samurai
+  - Yojimbo
+  - Cavalry
+  - Duelist
+  - Duty
+  - Experienced 2
+  - Unique
+  text: <b>Remote Tireless Interrupt:</b> If the action is targeting your other Personality, straighten
+    and move Tsuda to that Personality's location. The action targets Tsuda instead <i>(if legal)</i>.
+  gold_cost: 10
+  force: 3
+  chi: 5
+  honor_requirement: 10
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Shattered Empire
+  story: Fall Kotei 2015 – Przemek Wawer
+  rarity: Fixed
+  flavor_text: <i>"Perhaps I might still find redemption."</i>
+  collector_number: '17'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Miya Tamiyo, Herald of the Hantei
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Spider
+  keywords:
+  - Courtier
+  - Imperial
+  - Loyal
+  text: Other players have a Lobby penalty equal to Tamiyo's Personal Honor.<br><b>Political Open, :bow:,
+    :favor::</b> Discard the top card of your Fate deck to gain Honor equal to the discard's Focus Value
+    or make a target player lose 2 Honor.
+  gold_cost: 6
+  force: 2
+  chi: 3
+  personal_honor: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: Draw Souls
+  collector_number: '32'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Moto Khedai, Head Priest of the Second City
   types:
   - Personality
   decks:
@@ -959,15 +966,199 @@ cards:
   is_unique: true
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
   flavor_text: <i>With the rebuilding of the Temple District came the restoration of the Lords of Death's
     most impressive place of worship.</i>
   collector_number: '34'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13991
-  title: Shinjo Araragi
+- title: Only the Wind
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Assassin
+  text: <b>Open:</b> Target another player's unbowed Personality to create a Raid Attack. The target's
+    controller must assign them to defend, and cannot assign other Personalities, to its battlefield.
+    After the battle ends, if you won it, destroy the target and lose Honor equal to half your Starting
+    Family Honor, rounded up.
+  focus: 2
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"Who is there?" Tselu asked warily.</i>
+  collector_number: '53'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Otomo Nami
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Courtier
+  - Imperial
+  text: You may Proclaim Nami if your Wind is House of Suikihime. After Nami enters play, you may give
+    a card in a Province a Sincerity token.<br>You have +1 maximum hand size.
+  gold_cost: 2
+  force: 0
+  chi: 1
+  personal_honor: 2
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"My sister Nami needs a husband, Atsutane-san. You will find the arrangement beneficial
+    as well." - Otomo Suikihime</i>
+  collector_number: '38'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Personal Assassin
+  types:
+  - Follower
+  decks:
+  - Fate
+  extended_title: Personal Assassin • Experienced
+  keywords:
+  - Assassin
+  - Ninja
+  - Experienced
+  text: <b>Engage:</b> Remove a target Personality's abilities. After each time an action targets them,
+    if they are at this battlefield, give them a -1F/-1C Poison token and, if receiving the token reduces
+    their current Chi to 0, banish this Follower and lose 1 Honor.
+  gold_cost: 5
+  focus: 1
+  force: 3
+  chi: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"Eliminate the Empress, or the child."</i>
+  collector_number: '39'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Reject Conflict
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Negate a target Personality's current Force bonuses or penalties <i>(you choose)</i>.<br><b>Battle:</b>
+    Move home your target unbowed Personality and a target enemy Personality.
+  focus: 4
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"Human conflict cannot survive without human participation." - Togashi Higaru</i>
+  collector_number: '54'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Rumormongering
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Edict
+  - Honor
+  text: After another player discards :favor:, they lose 1 Honor or you gain 1 Honor <i>(you choose)</i>.<br><b>Political
+    Open:</b> Put this Edict into play. Discard your other Edicts in play.
+  focus: 1
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"They say Kano has seduced the traumatized princess, and pushes her to deny the Iweko
+    heir and seize the throne. Shocking, I know, but my sources are unimpeachable."</i>
+  collector_number: '55'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Sadane Match
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Political Open:</b> Starting with you, each player may target one of their Personalities and
+    discard a card to make a player of their choice gain or lose 2 Honor. Each player who targeted a Courtier
+    may draw a card.
+  focus: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>The once subtle 'game of insults' has become wildly popular entertainment in the Colonies.
+    Impromptu public 'matches' are common.</i>
+  collector_number: '56'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Sanctifying Amaterasu's Vigilance
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Air
+  - Fire
+  text: '<b>Kiho Open:</b> Bow your target Monk or Shugenja Personality to target one or two of your Provinces.
+    Negate the targets'' current strength penalties. Gain 1 Honor for each target if your Personality
+    is :air: or :fire:. Engage actions cannot be taken during battles at, and actions cannot move Personalities
+    to, the targets'' battlefields.'
+  focus: 3
+  legality:
+  - Shattered Empire
+  story: Kotei 2012 Honor Winner (Montreal)
+  rarity: Fixed
+  flavor_text: <i>"Our thanks to the Kitsu for gifting us this territory, to remember our matron Ikako
+    and venerate Lady Sun in this still-hostile land." - Moshi Yuna</i>
+  collector_number: '57'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Seiki Allegiance
+  types:
+  - Sensei
+  decks:
+  - Pre-Game
+  keywords:
+  - Mantis Clan
+  text: Your Wind must be House of Suikihime. Your Raid Attacks' resolutions do not bow your Merchants.
+    After your Raid battle ends, if you won it, the Defender loses 2 Honor.<br><b>Economic Open, :bow::</b>
+    If you won a Raid battle this turn, destroy your Wealth token and target your Merchant to dishonor
+    a target Personality.
+  province_strength: -1
+  starting_honor: -1
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  collector_number: '60'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Shiba Ozawa
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Fudo
+  - Samurai
+  - Yojimbo
+  - Duelist
+  text: <b>Response:</b> After the action recruits Ozawa, you may search your Fate deck for a Ring or
+    Spell and discard it. If this discarded a Ring, draw a card. If this discarded a Spell, gain 1 Honor.
+  gold_cost: 6
+  force: 3
+  chi: 3
+  honor_requirement: 5
+  personal_honor: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"The prophet says we must abandon wisdom to find it. Shall we speak more on this together,
+    friends?"</i>
+  collector_number: '27'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Shinjo Araragi
   types:
   - Personality
   decks:
@@ -989,15 +1180,186 @@ cards:
   - Shattered Empire
   errata_text: 'Errata to increase PH from 2 to 3: <a target="_new" href="https://sites.google.com/view/the-onyx-lives-project/home/october-update-set-restoration-errata-and-criii-information">24
     Oct 2025</a>'
-  printing_id: '1'
   rarity: Fixed
   flavor_text: <i>"The traitor Naleesh stains our Clan for a generation. Meanwhile, Chinua lounges with
     many of our troops in the lands of that prattling would-be Empress."</i>
   collector_number: '35'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13992
-  title: Utaku Kimiono
+- title: Shrine to Inari
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  - Temple
+  - Legacy
+  text: Your Stronghold's printed abilities have <b>Tireless</b> while this Holding is unbowed.
+  gold_cost: 2
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: Patrick Manjares
+  flavor_text: <i>The Fortune of Rice and Good Grain is vital to the people of Rokugan, peasant or noble.
+    Even in the furthest reaches of the Colonies, every village has a shrine to him.</i>
+  collector_number: '6'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Silence, Fool!
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Open, :g1: :</b> Discard an Edict in play.<br><b>Response:</b> Target your unbowed Personality.
+    If a player drew cards from the action and you have not Responded to it with another copy of this
+    Strategy, they discard two cards.'
+  focus: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"Enough! That is not wisdom! It is inane prattling!"</i>
+  collector_number: '58'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Soft Power
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: Discipline :g2:<br><b>Economic Open:</b> Target your unbowed Merchant and another player's dishonorable
+    Personality. The second target's controller may bow them. If this did not bow them, their controller
+    loses 2 Honor.
+  focus: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"Kalani's Landing welcomes you, Lord Seiki," Saigo said, bowing. "We are honored to
+    serve the Champion of the Mantis Clan."</i>
+  collector_number: '59'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Soshi Itsuki
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Ninja
+  - Scorpion
+  keywords:
+  - Infiltrator
+  - Kuroiban
+  - Ninja
+  - Shugenja
+  - Cavalry
+  - Air
+  text: '<b>Engage:</b> Give a target Personality with :shadowlands: or no Poison tokens a -1F/-1C Poison
+    token.'
+  gold_cost: 4
+  force: 2
+  chi: 2
+  personal_honor: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: Thulsa Doom
+  flavor_text: <i>"Understood."</i>
+  collector_number: '30'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Symbol of Air
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Ward
+  - Air
+  text: <b>Battle, :bow::</b> Move home a target Personality. You may destroy one of the target's Poison
+    tokens to give this Shugenja a Force bonus equal to their Chi.
+  gold_cost: 2
+  focus: 1
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"It would be far too troublesome to kill you right now."</i>
+  collector_number: '47'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Iweko Heir
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Imperial
+  - Unique
+  text: <b>Dynasty:</b> Put this Event into play and, if your Wind is House of Suikihime, gain 2 Honor.<br><b>Open:</b>
+    If this Event is in play, banish it to discard a target Event <i>(from play)</i>. If the target is
+    Unique, its owner may reshuffle it into their Dynasty deck.
+  is_unique: true
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  artist: '"Tenno gosairei no keshiki"'
+  flavor_text: <i>"The future of our Empire."</i>
+  collector_number: '1'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Masters' Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  extended_title: The Masters' Guard • Experienced
+  keywords:
+  - Yojimbo
+  - Experienced
+  - Honor
+  text: Will only attach to a Shugenja. After this Follower attaches from your hand to a Unique Shugenja,
+    gain 2 Honor.<br><b>Interrupt, :X::</b> If this Follower is in your hand and this is an Attack Phase,
+    Equip it to your target Personality. The action targets this Follower instead, if legal.
+  gold_cost: 4
+  focus: 3
+  force: 2
+  chi: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"Why has the Council sent you to me?" Kosea asked. The yojimbo held out a sealed scroll
+    in reply.</i>
+  collector_number: '40'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Togashi Marumo
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Monk
+  - Tattooed
+  - Duelist
+  - Earth
+  text: Marumo has +1C for each player that controls any Rings.<br><b>Response:</b> If the action created
+    a duel during a battle, give Marumo a Force bonus equal to his Chi.
+  gold_cost: 4
+  force: 0
+  chi: 2
+  honor_requirement: 4
+  personal_honor: 3
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: <i>"These Fudoists think they can take root in the Second City and turn us from Shinsei.
+    They will not find it so simple."</i>
+  collector_number: '18'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Utaku Kimiono
   types:
   - Personality
   decks:
@@ -1020,123 +1382,13 @@ cards:
   personal_honor: 2
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
   artist: (FFG) Derek D. Edgell - Fantasy Flight Games
   flavor_text: <i>"I prefer interesting times."</i>
   collector_number: '36'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13993
-  title: Kasuga Kinji
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Unaligned
-  keywords:
-  - Courtier
-  - Merchant
-  - Smuggler
-  - Tortoise Clan
-  - Naval
-  text: 'Invest :g2:: Banish a Fate card in your discard pile to put your discarded Strategy face-up in
-    your hand.'
-  gold_cost: 4
-  force: 2
-  chi: 1
-  personal_honor: 0
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: Trevor Cuba
-  flavor_text: <i>"You cannot buy a Tortoise's loyalty, Lord Seiki, but we gladly accept investments."</i>
-  collector_number: '37'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13994
-  title: Otomo Nami
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Unaligned
-  keywords:
-  - Courtier
-  - Imperial
-  text: You may Proclaim Nami if your Wind is House of Suikihime. After Nami enters play, you may give
-    a card in a Province a Sincerity token.<br>You have +1 maximum hand size.
-  gold_cost: 2
-  force: 0
-  chi: 1
-  personal_honor: 2
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"My sister Nami needs a husband, Atsutane-san. You will find the arrangement beneficial
-    as well." - Otomo Suikihime</i>
-  collector_number: '38'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13995
-  title: Personal Assassin
-  types:
-  - Follower
-  decks:
-  - Fate
-  extended_title: Personal Assassin • Experienced
-  keywords:
-  - Assassin
-  - Ninja
-  - Experienced
-  text: <b>Engage:</b> Remove a target Personality's abilities. After each time an action targets them,
-    if they are at this battlefield, give them a -1F/-1C Poison token and, if receiving the token reduces
-    their current Chi to 0, banish this Follower and lose 1 Honor.
-  gold_cost: 5
-  focus: 1
-  force: 3
-  chi: 0
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Eliminate the Empress, or the child."</i>
-  collector_number: '39'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13996
-  title: The Masters' Guard
-  types:
-  - Follower
-  decks:
-  - Fate
-  extended_title: The Masters' Guard • Experienced
-  keywords:
-  - Yojimbo
-  - Experienced
-  - Honor
-  text: Will only attach to a Shugenja. After this Follower attaches from your hand to a Unique Shugenja,
-    gain 2 Honor.<br><b>Interrupt, :X::</b> If this Follower is in your hand and this is an Attack Phase,
-    Equip it to your target Personality. The action targets this Follower instead, if legal.
-  gold_cost: 4
-  focus: 3
-  force: 2
-  chi: 0
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Why has the Council sent you to me?" Kosea asked. The yojimbo held out a sealed scroll
-    in reply.</i>
-  collector_number: '40'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13997
-  title: Wako
+- title: Wako
   types:
   - Follower
   decks:
@@ -1154,447 +1406,71 @@ cards:
   chi: 0
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
   flavor_text: <i>"Such a fancy ship. We should go say hello!"</i>
   collector_number: '41'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13998
-  title: Bajozutsu
-  types:
-  - Item
-  decks:
-  - Fate
-  keywords:
-  - Firearm
-  - Gaijin
-  - One-Handed
-  - Weapon
-  text: '<b>Battle, :bow::</b> :ranged: 3 compared against the target''s printed Force, that cannot be
-    combined or have its strength increased or decreased. Lose 1 Honor.'
-  gold_cost: 4
-  focus: 0
-  force: '+1'
-  chi: '+0'
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>Forbidden since the Battle of White Stag, new trade in the Colonies meant more of these
-    foreign weapons found their way into unscrupulous hands. </i>
-  collector_number: '42'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 13999
-  title: Flawless Tetsubo
-  types:
-  - Item
-  decks:
-  - Fate
-  keywords:
-  - Heavy Weapon
-  - One-Handed
-  - Tetsubo
-  - Weapon
-  text: <b>Battle:</b> Give a target enemy Personality -2F. You may target and destroy their attached
-    Armor, if any. If the targeted Personality's Force is now 0, bow them.
-  gold_cost: 4
-  focus: 2
-  force: '+2'
-  chi: '+0'
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Perfectly balanced, as all things should be." - Hida Gojiro</i>
-  collector_number: '43'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14000
-  title: Latest Fashions
-  types:
-  - Item
-  decks:
-  - Fate
-  keywords:
-  - Kimono
-  text: A Personality may only attach one Kimono.<br><b>Response:</b> If the action was Political and
-    it targeted or was from this Personality, gain 1 Honor.
-  gold_cost: 3
-  focus: 3
-  force: '+0'
-  chi: '+0'
-  legality:
-  - Shattered Empire
-  errata_text: 'Technical errata to clarify play condition: <a target="_new" href="https://sites.google.com/view/the-onyx-lives-project/errata-and-updates/technical-errata-june-2024">7
-    Jun 2024</a>'
-  printing_id: '1'
-  rarity: Fixed
-  artist: Thulsa Doom
-  flavor_text: <i>"It is all the rage in Twin Forks City, I assure you."</i>
-  collector_number: '44'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14001
-  title: Entreat Bishamon
-  types:
-  - Spell
-  decks:
-  - Fate
-  keywords:
-  - Courage
-  - Earth
-  text: While this Shugenja is defending, their battlefield's Province has +2 strength.<br><b>Open, :bow::</b>
-    Target a Province. The next time <i>(this turn)</i> a Personality assigns to attack that Province,
-    gain 2 Honor.
-  gold_cost: 3
-  focus: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"The Fortunes understand resistance is as powerful a show of strength as conquest."
-    - Isawa Kosea</i>
-  collector_number: '45'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14002
-  title: Maw of the Earth
-  types:
-  - Spell
-  decks:
-  - Fate
-  keywords:
-  - Earth
-  - Fire
-  text: 'If this Shugenja is :earth: and :fire:, after the first time each turn this Spell bows, straighten
-    it.<br><b>Battle, :bow::</b> If this Shugenja is :earth:, give a target enemy Personality -2F.<br><b>Battle,
-    :bow::</b> If this Shugenja is :fire:, :ranged: 3.'
-  gold_cost: 2
-  focus: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  collector_number: '46'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14003
-  title: Symbol of Air
-  types:
-  - Spell
-  decks:
-  - Fate
-  keywords:
-  - Ward
-  - Air
-  text: <b>Battle, :bow::</b> Move home a target Personality. You may destroy one of the target's Poison
-    tokens to give this Shugenja a Force bonus equal to their Chi.
-  gold_cost: 2
-  focus: 1
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"It would be far too troublesome to kill you right now."</i>
-  collector_number: '47'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14004
-  title: Act With Authority
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Edict
-  - Imperial
-  - Courage
-  text: 'You have the ability, "<b>Political Battle, :favor: :</b> :melee: 3."<br><b>Open:</b> Put this
-    Edict into play. Discard your other Edicts in play.'
-  focus: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Atsutane will discover Tselu's murderers, and deliver the Emperor's justice. He has
-    our utmost confidence." - Otomo Suikihime</i>
-  collector_number: '48'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14005
-  title: Asceticism
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Edict
-  - Kharmic
-  text: 'The first time each turn another player uses the rulebook Equip ability, the attachment it targets
-    costs :g2: more until it enters play.<br><b>Open:</b> Put this Edict into play. Discard your other
-    Edicts in play.'
-  focus: 3
-  legality:
-  - Shattered Empire
-  errata_text: 'Technical errata to allow the trait to work as intended: <a target="_new" href="https://sites.google.com/view/the-onyx-lives-project/home/april-updates-new-art-errata-icons-and-cr2-previews">28
-    Apr 2025</a>'
-  printing_id: '1'
-  rarity: Fixed
-  artist: Thulsa Doom
-  flavor_text: <i>Not all who lived in the Colonies embraced the opulence of the Second City, or were
-    content to allow others to.</i>
-  collector_number: '49'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14006
-  title: Disturbing Message
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Economic Battle, :g2::</b> Target your unbowed Merchant to move home a target enemy Personality.
-    You may destroy your Wealth token to make a target player gain or lose 2 Honor.
-  focus: 2
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  artist: Thulsa Doom
-  flavor_text: <i>"How...," he whispered, clenching the scroll in his hand, "how could they know this?"</i>
-  collector_number: '50'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14007
-  title: Honor Your Oaths
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Political Battle:</b> If you control :favor:, move home a target enemy Personality. You may
-    bow your target Yojimbo or discard :favor: to gain 1 Honor and draw a card.'
-  focus: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>Tsuda pushed through the crowd past fallen guards, leaping in front of the surprised
-    Governor, unflinching as the assassin's blade struck his neck instead of the baby she held.</i>
-  collector_number: '51'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14008
-  title: In the Pale Moonlight
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Edict
-  - Honor
-  text: You have a Lobby bonus equal to the highest Chi among your dishonorable Personalities. You lose
-    1 less Honor from actions targeting your dishonorable Personalities, to a minimum of 1.<br><b>Political
-    Open:</b> Dishonor your target Personality to put this Edict into play. Discard your other Edicts
-    in play.
-  focus: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  collector_number: '52'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14009
-  title: Only the Wind
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Assassin
-  text: <b>Open:</b> Target another player's unbowed Personality to create a Raid Attack. The target's
-    controller must assign them to defend, and cannot assign other Personalities, to its battlefield.
-    After the battle ends, if you won it, destroy the target and lose Honor equal to half your Starting
-    Family Honor, rounded up.
-  focus: 2
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Who is there?" Tselu asked warily.</i>
-  collector_number: '53'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14010
-  title: Reject Conflict
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Negate a target Personality's current Force bonuses or penalties <i>(you choose)</i>.<br><b>Battle:</b>
-    Move home your target unbowed Personality and a target enemy Personality.
-  focus: 4
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Human conflict cannot survive without human participation." - Togashi Higaru</i>
-  collector_number: '54'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14011
-  title: Rumormongering
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Edict
-  - Honor
-  text: After another player discards :favor:, they lose 1 Honor or you gain 1 Honor <i>(you choose)</i>.<br><b>Political
-    Open:</b> Put this Edict into play. Discard your other Edicts in play.
-  focus: 1
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"They say Kano has seduced the traumatized princess, and pushes her to deny the Iweko
-    heir and seize the throne. Shocking, I know, but my sources are unimpeachable."</i>
-  collector_number: '55'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14012
-  title: Sadane Match
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Political Open:</b> Starting with you, each player may target one of their Personalities and
-    discard a card to make a player of their choice gain or lose 2 Honor. Each player who targeted a Courtier
-    may draw a card.
-  focus: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>The once subtle 'game of insults' has become wildly popular entertainment in the Colonies.
-    Impromptu public 'matches' are common.</i>
-  collector_number: '56'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14013
-  title: Sanctifying Amaterasu's Vigilance
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Air
-  - Fire
-  text: '<b>Kiho Open:</b> Bow your target Monk or Shugenja Personality to target one or two of your Provinces.
-    Negate the targets'' current strength penalties. Gain 1 Honor for each target if your Personality
-    is :air: or :fire:. Engage actions cannot be taken during battles at, and actions cannot move Personalities
-    to, the targets'' battlefields.'
-  focus: 3
-  legality:
-  - Shattered Empire
-  story: Kotei 2012 Honor Winner (Montreal)
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Our thanks to the Kitsu for gifting us this territory, to remember our matron Ikako
-    and venerate Lady Sun in this still-hostile land." - Moshi Yuna</i>
-  collector_number: '57'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14014
-  title: Silence, Fool!
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Open, :g1: :</b> Discard an Edict in play.<br><b>Response:</b> Target your unbowed Personality.
-    If a player drew cards from the action and you have not Responded to it with another copy of this
-    Strategy, they discard two cards.'
-  focus: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Enough! That is not wisdom! It is inane prattling!"</i>
-  collector_number: '58'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14015
-  title: Soft Power
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: Discipline :g2:<br><b>Economic Open:</b> Target your unbowed Merchant and another player's dishonorable
-    Personality. The second target's controller may bow them. If this did not bow them, their controller
-    loses 2 Honor.
-  focus: 3
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  flavor_text: <i>"Kalani's Landing welcomes you, Lord Seiki," Saigo said, bowing. "We are honored to
-    serve the Champion of the Mantis Clan."</i>
-  collector_number: '59'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14016
-  title: Seiki Allegiance
-  types:
-  - Sensei
-  decks:
-  - Pre-Game
-  keywords:
-  - Mantis Clan
-  text: Your Wind must be House of Suikihime. Your Raid Attacks' resolutions do not bow your Merchants.
-    After your Raid battle ends, if you won it, the Defender loses 2 Honor.<br><b>Economic Open, :bow::</b>
-    If you won a Raid battle this turn, destroy your Wealth token and target your Merchant to dishonor
-    a target Personality.
-  province_strength: -1
-  starting_honor: -1
-  legality:
-  - Shattered Empire
-  printing_id: '1'
-  rarity: Fixed
-  collector_number: '60'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14380
-  title: Kitsu Kouki • Experienced
+- title: Yasuki Angosu, Master Coin
   types:
   - Personality
   decks:
   - Dynasty
   clans:
-  - Lion
+  - Crab
   keywords:
-  - Ancestor
-  - Shugenja
-  - Spirit
-  - Experienced
-  - Water
-  text: Kouki has -3F while in an army without another Ancestor or Shugenja.
-  gold_cost: 4
-  force: 3
-  chi: 3
-  honor_requirement: 7
-  personal_honor: 3
+  - Courtier
+  - Fallen
+  - Kolat
+  - Merchant
+  - Unique
+  text: 'Your Kolat actions and Kolat Personalities cost :g1: less.<br><b>Economic Open, :bow: or :favor::</b>
+    Target another player who may pay Gold equal to Angosu''s Chi. If they did not pay, they discard a
+    card.'
+  gold_cost: 9
+  force: 2
+  chi: 4
+  personal_honor: 0
+  is_unique: true
   legality:
   - Shattered Empire
-  printing_id: '1'
+  story: Face The Madness - Case Kiyonaga
   rarity: Fixed
-  flavor_text: <i>"Mere death cannot stop a Lion's roar."</i>
-  collector_number: '21'
+  artist: Albert Tavira
+  flavor_text: <i>"Jinn-Kuen no longer responds to the simplest inquiries. I will assume responsibility,
+    with no objections."</i>
+  collector_number: '11'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14381
-  title: Hoji Tsai
+- title: Yasuki Shairei
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Yasuki Shairei • Experienced
+  clans:
+  - Crab
+  keywords:
+  - Courtier
+  - Merchant
+  - Experienced
+  text: '<b>Economic Dynasty, :bow::</b> Target another player who may choose to lose 2 Honor. If they
+    did not choose this, give a face-up card in your Province <b>Renew</b> and, if the target''s Wind
+    is House of Suikihime, it enters play for :g1: less.'
+  gold_cost: 6
+  force: 0
+  chi: 3
+  personal_honor: 1
+  legality:
+  - Shattered Empire
+  story: Spring Kotei 2015 – Chris Martin
+  rarity: Fixed
+  flavor_text: <i>"Lord Toranosuke has bade me return to this dismal stewpot to monitor our merchants'
+    activities, and to train the next generation."</i>
+  collector_number: '12'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Yoritomo Saigo, Master Silk
   types:
   - Personality
   decks:
@@ -1603,19 +1479,21 @@ cards:
   - Mantis
   keywords:
   - Courtier
-  - Kobun
+  - Kolat
   - Merchant
-  text: <b>Battle:</b> Dishonor a target Personality at any location. Bow them if they are not at a battlefield.
-    If this is a Raid battle, their controller loses 2 Honor.
-  gold_cost: 5
+  - Unique
+  text: You have a Lobby bonus equal to your Wealth tokens.<br><b>Economic Open:</b> Destroy a Wealth
+    token to draw a card. Bow Saigo if the token was not yours.
+  gold_cost: 6
   force: 3
-  chi: 2
+  chi: 3
   personal_honor: 0
+  is_unique: true
   legality:
   - Shattered Empire
-  printing_id: '1'
   rarity: Fixed
-  flavor_text: <i>"Lady Misato sent me. Let's talk."</i>
-  collector_number: '23'
+  artist: Troy Graham
+  flavor_text: <i>"Do not put too much stock in rumors."</i>
+  collector_number: '24'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home

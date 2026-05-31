@@ -1,7 +1,6 @@
 set: Storms Over Matsu Palace
 cards:
-- cardid: 244
-  title: Akodo Matoko
+- title: Akodo Matoko
   types:
   - Personality
   decks:
@@ -20,15 +19,13 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Audrey Corman
   flavor_text: <i>Once, the Akodo were the greatest samurai in the Empire, dedicated to defending the
     Emperor's throne. Now they have fallen, their honor stained and their lives dedicated to death. What
     great heights to reach - and how far the mighty can fall.</i>
   collector_number: Lion 13
-- cardid: 410
-  title: Another Time
+- title: Another Time
   types:
   - Strategy
   decks:
@@ -43,15 +40,13 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - War of the Seals (Onyx Edition)
-  printing_id: '5'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>"Out of my way, boy!" Iron-shod hooves churned the earth to paste, and the youth removed
     his hand from his sword as the Unicorn sentry leapt away, his steed carrying him to safety. "I will
     remember," the Lion whispered, staring at the coward's back.</i>
   collector_number: Unicorn 13
-- cardid: 1045
-  title: Block Supply Lines
+- title: Block Supply Lines
   types:
   - Strategy
   decks:
@@ -70,15 +65,13 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '12'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: '<i>The Unicorn crested the hill, their weary steeds grateful for a moment''s rest. But
     where they looked across the open plain, they saw only fire and blood; all of the surplus rice had
     been destroyed. Now it became a new race: they would win, or they would starve.</i>'
   collector_number: Unicorn 12
-- cardid: 1072
-  title: Bloodstained Forest
+- title: Bloodstained Forest
   types:
   - Spell
   decks:
@@ -93,15 +86,13 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '3'
   rarity: Fixed
   artist: Mark Evans
   flavor_text: <i>"Light the fires!" the Unicorn commander called. "Give the Lion no place to hide." Within
     moments, the land around the Lion keep had begun to blaze, bringing brightness and fear to the dark
     night.</i>
   collector_number: Lion 07
-- cardid: 1217
-  title: Careful Planning
+- title: Careful Planning
   types:
   - Strategy
   decks:
@@ -114,15 +105,13 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '9'
   rarity: Fixed
   artist: Mark A.W. Jackson
   flavor_text: '<i>"The forest burns to ash, and the melt of winter''s snow turns the plain to mud. There
     is only one way through Lion lands: between the mountains and through the southern province. If we
     can take the Valley of Storms, then we will close our fist around the Lion''s throat." - Shinjo Hanari</i>'
   collector_number: Unicorn 09
-- cardid: 1298
-  title: Charge
+- title: Charge
   types:
   - Strategy
   decks:
@@ -139,14 +128,12 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '10'
   rarity: Fixed
   artist: Sean Murray
   flavor_text: <i>"Roar, Lion, and shake theheavens with the sound of courage!" - Matsu Ketsui, general
     of the Lion armies</i>
   collector_number: Lion 08
-- cardid: 1497
-  title: Copper Mine
+- title: Copper Mine
   types:
   - Holding
   decks:
@@ -168,15 +155,13 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '14'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: <i>"His pocket heavy with Unicorn gold, the spy leapt down from the wall of the valley
     to carry his master's plans away. If it had not been for Morishigi's quick eye and ready sword, we
     would not have awakened, this dawn." - Akodo Matoko</i>
   collector_number: Lion 01
-- cardid: 1882
-  title: Deadly Ground
+- title: Deadly Ground
   types:
   - Strategy
   decks:
@@ -192,13 +177,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '10'
   rarity: Fixed
   artist: Jim Pavelec
   flavor_text: <i>"You bring the Lion," Hanari commanded. "I will worry about the rest."</i>
   collector_number: Unicorn 24
-- cardid: 2043
-  title: Diversionary Tactics
+- title: Diversionary Tactics
   types:
   - Strategy
   decks:
@@ -212,14 +195,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '7'
   rarity: Fixed
   artist: Mark A.W. Jackson
   flavor_text: <i>The forces met in the center of the valley at dawn, purple and orange banners flying
     high. By the time the sun set, all color had faded, save the dark red stain of bloodied ground.</i>
   collector_number: Lion 21
-- cardid: 2353
-  title: Entrapping Terrain
+- title: Entrapping Terrain
   types:
   - Strategy
   decks:
@@ -236,12 +217,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '9'
   rarity: Fixed
   artist: Eric Polak
   collector_number: Lion 14
-- cardid: 2619
-  title: Focus
+- title: Focus
   types:
   - Strategy
   decks:
@@ -259,15 +238,13 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '10'
   rarity: Fixed
   artist: Mark Tedin
   flavor_text: <i>"Face death. Death is a companion, a badge to be borne by those who refuse to fial.
     If I must die, I will die a samurai. That is all the legacy a true warrior should need." - Otaku Xieng
     Chi</i>
   collector_number: Lion 11
-- cardid: 2620
-  title: Fog
+- title: Fog
   types:
   - Strategy
   decks:
@@ -282,12 +259,10 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Justin Norman
   collector_number: Lion 09
-- cardid: 2818
-  title: Glimpse of the Unicorn
+- title: Glimpse of the Unicorn
   types:
   - Event
   decks:
@@ -302,14 +277,12 @@ cards:
   - Legacy
   - Modern
   notes: Some variants of the Pearl Edition version of this card were printed with a different text alignment.
-  printing_id: '8'
   rarity: Fixed
   artist: Sandra Everingham
   flavor_text: <i>"All things are necessary - war, peace, the edge of the sword, and the sound of a poem.
     With understanding, all things are one." - from the True Tao of Shinsei</i>
   collector_number: Unicorn 09
-- cardid: 3004
-  title: Hawks and Falcons
+- title: Hawks and Falcons
   types:
   - Holding
   decks:
@@ -321,15 +294,13 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '8'
   rarity: Fixed
   artist: Mark A.W. Jackson
   flavor_text: <i>"The katana is the body of true samurai, but honor is their soul. Remember that, Unicorn,
     when you try to seize our land and destroy our heritage. Your greed may serve you here, but not in
     the next life." - Ikoma Tsanuri</i>
   collector_number: Lion 19
-- cardid: 3018
-  title: Heart of the Inferno
+- title: Heart of the Inferno
   types:
   - Spell
   decks:
@@ -344,14 +315,12 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Ken Meyer Jr.
   flavor_text: <i>Seven clans rule the Empire. But when the throne is empty and the Celestial Heavens
     are in chaos, who will rise to take command?</i>
   collector_number: Unicorn 15
-- cardid: 3040
-  title: Heavy Cavalry
+- title: Heavy Cavalry
   types:
   - Follower
   decks:
@@ -374,14 +343,12 @@ cards:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
   notes: Ivory Edition Promo version released in the 2014 L5R Tournament Draft Kit
-  printing_id: '9'
   rarity: Fixed
   artist: Sean Murray
   flavor_text: <i>Shinjo, fleet and fair. She was never where she stood. Her soul the fifth wind. - traditionally
     attributed to Doji</i>
   collector_number: Unicorn 01
-- cardid: 3043
-  title: Heavy Infantry
+- title: Heavy Infantry
   types:
   - Follower
   decks:
@@ -404,13 +371,11 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '12'
   rarity: Fixed
   artist: Mark A.W. Jackson
   flavor_text: <i>In my sword, the wind. In my heart, courage. In my eyes, death. I am Matsu.</i>
   collector_number: Lion 01
-- cardid: 3273
-  title: Higher Ground
+- title: Higher Ground
   types:
   - Strategy
   decks:
@@ -429,12 +394,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '5'
   rarity: Fixed
   artist: William O'Connor
   collector_number: Unicorn 08
-- cardid: 3457
-  title: Horsebowmen
+- title: Horsebowmen
   types:
   - Follower
   decks:
@@ -452,13 +415,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '4'
   rarity: Fixed
   artist: Val Mayerik
   flavor_text: <i>"For Shinjo, and the name of duty!" she cried.</i>
   collector_number: Unicorn 05
-- cardid: 3528
-  title: Hurricane
+- title: Hurricane
   types:
   - Event
   decks:
@@ -474,13 +435,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '7'
   rarity: Fixed
   artist: Cline Siegenthaler
   flavor_text: <i>"People argue. Nature acts." - from the True Tao of Shinsei</i>
   collector_number: Lion 18
-- cardid: 3548
-  title: Iaijutsu Duel
+- title: Iaijutsu Duel
   types:
   - Strategy
   decks:
@@ -496,14 +455,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '9'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: <i>In the storm-torn valley the youth's voice rang out. "Come, Unicorn! Show me that you
     sword is as swift as your steed."</i>
   collector_number: Lion 10
-- cardid: 3603
-  title: Ikoma Gunjin
+- title: Ikoma Gunjin
   types:
   - Personality
   decks:
@@ -523,14 +480,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Craig Maher
   flavor_text: <i>"Unicorn - bah! Cut away the steed, and a Unicorn is nothing more than another dead
     samurai."</i>
   collector_number: Lion 23
-- cardid: 3644
-  title: Ikoma Technique
+- title: Ikoma Technique
   types:
   - Strategy
   decks:
@@ -544,14 +499,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Rob Alexander
   flavor_text: <i>To awaken, sit calmly and let each breath open your heart. Only when your mind is at
     peace can you listen to the world.</i>
   collector_number: Lion 16
-- cardid: 3653
-  title: Ikoma Tsanuri
+- title: Ikoma Tsanuri
   types:
   - Personality
   decks:
@@ -572,13 +525,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Matt Wilson
   flavor_text: '<i>Those who fight with the power of conviction make no sacrifice: karma is their ally.</i>'
   collector_number: Lion 15
-- cardid: 3976
-  title: Iuchi Daiyu
+- title: Iuchi Daiyu
   types:
   - Personality
   decks:
@@ -599,14 +550,12 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Pamela Shanteau
   flavor_text: <i>"My Lord Hanari." The young Unicorn smiled. "Do not fear the Lion's roar. While its
     mouth is open, its eyes are closed."</i>
   collector_number: Unicorn 23
-- cardid: 4036
-  title: Jade Works
+- title: Jade Works
   types:
   - Holding
   decks:
@@ -626,15 +575,13 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '9'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: <i>"Jade is a weapon against the creatures of the dark south lands, where the earth rolls
     and boils with the very heart of evil. If you must travel too far south, bring jade - and say farewell
     to those who follow you. You may never return." - Shinjo Yasamura</i>
   collector_number: Lion 02
-- cardid: 4080
-  title: Kabuki Theater Troupe
+- title: Kabuki Theater Troupe
   types:
   - Holding
   decks:
@@ -650,12 +597,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '6'
   rarity: Fixed
   artist: Cris Dornaus
   collector_number: Unicorn 11
-- cardid: 4391
-  title: Kitsu Okura
+- title: Kitsu Okura
   types:
   - Personality
   decks:
@@ -675,14 +620,12 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '4'
   rarity: Fixed
   artist: Mike Kimble
   flavor_text: <i>The shugenja of the Lion are well - known for their ancient and mysterious powers. When
     they call upon the ancestors, they commune with the strength of a thousand lives.</i>
   collector_number: Lion 08
-- cardid: 4664
-  title: Large Farm
+- title: Large Farm
   types:
   - Holding
   decks:
@@ -699,15 +642,13 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '5'
   rarity: Fixed
   artist: Mark A.W. Jackson
   flavor_text: <i>It is our duty to keep the Empire safe, to give our lives in duty to the Jade Throne.
     If you insist on marching an army through our lands, then we will bring our own to meet you. We are
     the Lion, sword of the Emperor, and we stand at his right hand.</i>
   collector_number: Lion 04
-- cardid: 4734
-  title: Light Infantry
+- title: Light Infantry
   types:
   - Follower
   decks:
@@ -728,14 +669,12 @@ cards:
   - Race for the Throne (Samurai)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '10'
   rarity: Fixed
   artist: Mark A.W. Jackson
   flavor_text: <i>"Having been born into the house of a warrior, one's intentions should be to grasp the
     long and short swords and to die." - Ikoma Tsanuri</i>
   collector_number: Lion 06
-- cardid: 4941
-  title: Matsu Ketsui
+- title: Matsu Ketsui
   types:
   - Personality
   decks:
@@ -758,14 +697,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '3'
   rarity: Fixed
   artist: Anson Maddocks
   flavor_text: <i>My honor is my life. Take one from me, and the other will soon follow. This is the way
     of the Lion, and I will follow no other path.</i>
   collector_number: Lion 14
-- cardid: 4960
-  title: Matsu Morishigi
+- title: Matsu Morishigi
   types:
   - Personality
   decks:
@@ -786,14 +723,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>"We will call thunder from the heaven and raise the cry of a hundred thousand Lion who
     gave their lives that we may know honor. Fight with me, and honor their names!"</i>
   collector_number: Lion 05
-- cardid: 4985
-  title: Matsu Suhada
+- title: Matsu Suhada
   types:
   - Personality
   decks:
@@ -813,14 +748,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Douglas Shuler
   flavor_text: <i>"Where is your commander?" Ketsui demanded as the boy led the wounded home. "Dead, my
     lady," he replied. "Dead on the field of honor."</i>
   collector_number: Lion 06
-- cardid: 5016
-  title: Medium Cavalry
+- title: Medium Cavalry
   types:
   - Follower
   decks:
@@ -842,14 +775,12 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '9'
   rarity: Fixed
   artist: Sean Murray
   flavor_text: '<i>"You talk much of death, Lion, and you roar for battle. But tell me this: are you so
     eager for death that you have grown afraid to live?" - Iuchi Daiyu</i>'
   collector_number: Unicorn 02
-- cardid: 5017
-  title: Medium Infantry
+- title: Medium Infantry
   types:
   - Follower
   decks:
@@ -868,15 +799,13 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '9'
   rarity: Fixed
   artist: Mark A.W. Jackson
   flavor_text: <i>"This land has grown wheat, rice, and grain. Each harvest has been cut down and crushed
     beneath Lion feet. Now the Valley of Storms raises a different crop - a field of purple banners against
     a bright blue sky. But nothing has changed, and again, it is time to harvest the chaff." - Ikoma Gunjin</i>
   collector_number: Lion 03
-- cardid: 5396
-  title: Moto Yesugai
+- title: Moto Yesugai
   types:
   - Personality
   decks:
@@ -897,13 +826,11 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Heather Bruton
   flavor_text: <i>In uncertainty, follow the path of discipline.</i>
   collector_number: Unicorn 14
-- cardid: 5416
-  title: Mounted Spearmen
+- title: Mounted Spearmen
   types:
   - Follower
   decks:
@@ -920,12 +847,10 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Justin Norman
   collector_number: Unicorn 06
-- cardid: 5543
-  title: New Year's Celebration
+- title: New Year's Celebration
   types:
   - Event
   decks:
@@ -942,14 +867,12 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   - Shattered Empire
-  printing_id: '4'
   rarity: Fixed
   artist: Nicola Leonard
   flavor_text: <i>New Year's Day, the snow is melting<br>Birds sing, and the village is flooded<br>With
     children.<br>- Rezan the Ronin Poet</i>
   collector_number: Unicorn 18
-- cardid: 5801
-  title: Otaku Kamoko
+- title: Otaku Kamoko
   types:
   - Personality
   decks:
@@ -971,15 +894,13 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '6'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"Otaku's children are fleet of foot and strong of mind; their tremendous steeds can
     be no less. When they charge across the fields of the Ikoma, we shall be hard-pressed to stop them."
     - Kitsu Okura</i>
   collector_number: Unicorn 06
-- cardid: 6283
-  title: Retired General
+- title: Retired General
   types:
   - Holding
   decks:
@@ -994,13 +915,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Some of the Imperial Edition versions of this card were printed with a larger font<br>
-  printing_id: '8'
   rarity: Fixed
   artist: Wackwitz & Grabski
   flavor_text: <i>Anyone can be prepared to kill. A samurai is, at all times, prepared to die.</i>
   collector_number: Unicorn 15
-- cardid: 6878
-  title: Shinjo Hanari
+- title: Shinjo Hanari
   types:
   - Personality
   decks:
@@ -1022,14 +941,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: The pre-Imperial Edition's art was used for Shinjo Yasamura.
-  printing_id: '1'
   rarity: Fixed
   artist: Daniel Gelon
   flavor_text: <i>Time has scarred the body of Hanari, general of the Unicorn armies, with memories of
     battles past. But the deepest wound of all was the death of his son.</i>
   collector_number: Unicorn 08
-- cardid: 6929
-  title: Shinjo Sadato
+- title: Shinjo Sadato
   types:
   - Personality
   decks:
@@ -1051,14 +968,12 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '3'
   rarity: Fixed
   artist: Jason Behnke
   flavor_text: <i>"If I do not take the souther provinces, my lord, then you will not need to order my
     death. I will have lost my life an a hundred more in the knowledge that I have failed."</i>
   collector_number: Unicorn 16
-- cardid: 6967
-  title: Shinjo Yasamura
+- title: Shinjo Yasamura
   types:
   - Personality
   decks:
@@ -1084,14 +999,12 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Mike Raabe
   flavor_text: <i>"The Lion have broken the Empire's law. We must teach them that even the right hand
     of the Emperor is not immune to his judgement."</i>
   collector_number: Unicorn 05
-- cardid: 7265
-  title: Silk Works
+- title: Silk Works
   types:
   - Holding
   decks:
@@ -1106,15 +1019,13 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '5'
   rarity: Fixed
   artist: Margaret Organ-Kean
   flavor_text: <i>It is our duty to bring justice to the Empire. If you insist on turning us away, then
     we will bring our judgement upon your lands, and we will rule them for you. We are the Unicorn, and
     we carry out the Emperor's law.</i>
   collector_number: Unicorn 01
-- cardid: 7303
-  title: Small Farm
+- title: Small Farm
   types:
   - Holding
   decks:
@@ -1131,15 +1042,13 @@ cards:
   - Legacy
   - Modern
   notes: Some of the Anvil of Despair versions of this card were printed with a different text alignment
-  printing_id: '11'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: <i>"Let the Unicorn come. Let them feel our tooth and claw and fear the courage of the
     Lion Clan. For a thousand years, we have stood at the Emperor's right hand, and we will not lay down
     our steel - today or ever." - Matsu Morishigi</i>
   collector_number: Lion 03
-- cardid: 7399
-  title: Spearmen
+- title: Spearmen
   types:
   - Follower
   decks:
@@ -1163,14 +1072,12 @@ cards:
   - Rain of Blood (Diamond)
   notes: Some variants of the Battle of Beiden Pass version of this card were printed with an alternate
     flavor text.
-  printing_id: '12'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"I will stand off the forces of the Empire, if necessary, and die a replendent death.
     But you will not take the Lion lands, barbarian. Not this day." - Matsu Morishigi</i>
   collector_number: Lion 05
-- cardid: 7443
-  title: Stables
+- title: Stables
   types:
   - Holding
   decks:
@@ -1192,14 +1099,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '12'
   rarity: Fixed
   artist: Sean Murray
   flavor_text: <i>In the Unicorn lands, a scholar pores over ancient texts, finding where the law ends
     and the karma begins. If he finds the answer too late, the war may never end.</i>
   collector_number: Unicorn 04
-- cardid: 7489
-  title: Stifling Wind
+- title: Stifling Wind
   types:
   - Spell
   decks:
@@ -1216,12 +1121,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '6'
   rarity: Fixed
   artist: Mark Tedin
   collector_number: Unicorn 17
-- cardid: 7546
-  title: Strength of Purity
+- title: Strength of Purity
   types:
   - Strategy
   decks:
@@ -1237,14 +1140,12 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '10'
   rarity: Fixed
   artist: Monika Livingstone
   flavor_text: <i>"The greatest strength of samurai is not what they are, but what they can become." -
     Kitsu Okura</i>
   collector_number: Lion 20
-- cardid: 7572
-  title: Strike At the Tail
+- title: Strike At the Tail
   types:
   - Strategy
   decks:
@@ -1260,13 +1161,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Bob Hobbs
   flavor_text: <i>"No!" Hanari screamed, seeing his bloody blade. "My son!"</i>
   collector_number: Unicorn 18
-- cardid: 7956
-  title: The Ancestral Home of the Lion
+- title: The Ancestral Home of the Lion
   types:
   - Stronghold
   decks:
@@ -1284,12 +1183,10 @@ cards:
   notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
     on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
     the Emerald Edition border.
-  printing_id: '7'
   rarity: Fixed
   artist: Wackwitz & Grabski
   collector_number: Lion 00
-- cardid: 8085
-  title: The Fires that Cleanse
+- title: The Fires that Cleanse
   types:
   - Spell
   decks:
@@ -1307,15 +1204,13 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '7'
   rarity: Fixed
   artist: Heather Hudson
   flavor_text: <i>"Be brave, be valiant, and be Lion. If any of you begin to walk the path of dishonor
     or of cowardice, I will watch you die on Lion spears. For the sake of my clan and my ancestors, I
     swear it will be done." - Matsu Ketsui</i>
   collector_number: Lion 19
-- cardid: 8275
-  title: The Provincial Estate of the Unicorn
+- title: The Provincial Estate of the Unicorn
   types:
   - Stronghold
   decks:
@@ -1332,12 +1227,10 @@ cards:
   notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
     on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
     the Emerald Edition border.
-  printing_id: '8'
   rarity: Fixed
   artist: Michael Phillippi
   collector_number: Unicorn 00
-- cardid: 8965
-  title: Unexpected Allies
+- title: Unexpected Allies
   types:
   - Event
   decks:
@@ -1355,14 +1248,12 @@ cards:
   - Legacy
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '9'
   rarity: Fixed
   artist: Bryon Wackwitz
   flavor_text: <i>The battle maidens charged. The Lion fell back, their leader dead and their wounded
     scattered.</i>
   collector_number: Lion 09
-- cardid: 9110
-  title: Utaku Xieng Chi
+- title: Utaku Xieng Chi
   types:
   - Personality
   decks:
@@ -1385,7 +1276,6 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '3'
   rarity: Fixed
   artist: Margaret Organ-Kean
   flavor_text: <i>A whispered prayer was all the battle cry she gave. The ancestors would hear her, or

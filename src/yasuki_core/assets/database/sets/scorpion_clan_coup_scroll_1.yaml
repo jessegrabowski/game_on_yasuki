@@ -1,7 +1,6 @@
 set: Scorpion Clan Coup, Scroll 1
 cards:
-- cardid: 73
-  title: A Samurai Never Stands Alone
+- title: A Samurai Never Stands Alone
   types:
   - Strategy
   decks:
@@ -17,13 +16,11 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>"With the spirit of his ancestors standing beside him, a samurai never stands alone."
     - from Akodo's Leadership</i>
-- cardid: 164
-  title: Agasha's Illusion
+- title: Agasha's Illusion
   types:
   - Spell
   decks:
@@ -42,11 +39,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Diana Vick
-- cardid: 388
-  title: Ancestral Sword of the Scorpion
+- title: Ancestral Sword of the Scorpion
   types:
   - Item
   decks:
@@ -66,11 +61,9 @@ cards:
   - Clan Wars (Imperial)
   - Legacy
   story: 1997 Secret of the Sword - Andy Morris
-  printing_id: '1'
   rarity: Uncommon
   artist: Vick & Raabe
-- cardid: 441
-  title: Armor of Osano-Wo
+- title: Armor of Osano-Wo
   types:
   - Item
   decks:
@@ -90,13 +83,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Brian Snoddy
   flavor_text: <i>Thought to have been worn by the Thunderer, it is now worn by one whose soul carries
     thunder.</i>
-- cardid: 466
-  title: Arrival of the Unicorns
+- title: Arrival of the Unicorns
   types:
   - Strategy
   decks:
@@ -109,13 +100,11 @@ cards:
   - Clan Wars (Imperial)
   - Legacy
   notes: This card was printed in both Scorpion Clan Coup Scroll 1 and Scroll 2.
-  printing_id: '1'
   rarity: Common
   artist: David Martin
   flavor_text: <i>Yokatsu pushed them forward through the day and night... and they loved him all the
     more.</i>
-- cardid: 762
-  title: Bayushi Dozan
+- title: Bayushi Dozan
   types:
   - Personality
   decks:
@@ -136,13 +125,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: This card's art was intended for Bayushi Yojiro (non-Experienced).
-  printing_id: '2'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>He knows the price that must be paid, and is willing to have those who follow him pay
     it.</i>
-- cardid: 802
-  title: Bayushi Kachiko
+- title: Bayushi Kachiko
   types:
   - Personality
   decks:
@@ -166,12 +153,10 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Michael Sutfin
   flavor_text: <i>"Come, come, my lord. You know it is always easier to gain forgiveness than permission."</i>
-- cardid: 889
-  title: Bayushi Shoju
+- title: Bayushi Shoju
   types:
   - Personality
   decks:
@@ -199,11 +184,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Thomas Manning
-- cardid: 929
-  title: Bayushi Yokuan
+- title: Bayushi Yokuan
   types:
   - Personality
   decks:
@@ -226,13 +209,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Randy Elliott
   flavor_text: <i>His lord commanded him to guard the south, but it was the south wall that was the first
     to fall to the Lions...</i>
-- cardid: 948
-  title: Behind Night's Shadow
+- title: Behind Night's Shadow
   types:
   - Strategy
   decks:
@@ -248,11 +229,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Mark Poole
-- cardid: 1244
-  title: Cavalry Raiders
+- title: Cavalry Raiders
   types:
   - Follower
   decks:
@@ -268,13 +247,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Eric David Anderson
   flavor_text: <i>The Moto charged and cut the Scorpion cavalry in half, leaving them naked for the second
     charge... from the Otaku battle maidens.</i>
-- cardid: 1791
-  title: Daikua
+- title: Daikua
   types:
   - Personality
   decks:
@@ -294,11 +271,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: KC Lancaster
-- cardid: 2049
-  title: Divinitory Pool
+- title: Divinitory Pool
   types:
   - Holding
   decks:
@@ -309,13 +284,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Ellym Sirac
   flavor_text: <i>It is rumored Kachiko has three means of scrying the secrets of the Seven Clans. One
     is her mirror, the second is her pool, and the third is her smile.</i>
-- cardid: 2270
-  title: East Wall of Otosan Uchi
+- title: East Wall of Otosan Uchi
   types:
   - Holding
   decks:
@@ -332,11 +305,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: David Martin
-- cardid: 2611
-  title: Flood
+- title: Flood
   types:
   - Spell
   decks:
@@ -350,11 +321,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Thomas Manning
-- cardid: 2694
-  title: Freezing the Lifeblood
+- title: Freezing the Lifeblood
   types:
   - Strategy
   decks:
@@ -374,11 +343,9 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Common
   artist: Anson Maddocks
-- cardid: 2777
-  title: Garrison
+- title: Garrison
   types:
   - Holding
   decks:
@@ -394,11 +361,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Randy Asplund-Faith
-- cardid: 2969
-  title: Hantei the 38th
+- title: Hantei the 38th
   types:
   - Personality
   decks:
@@ -422,11 +387,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Thomas Manning
-- cardid: 3000
-  title: Hatsuko
+- title: Hatsuko
   types:
   - Personality
   decks:
@@ -447,11 +410,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Audrey Corman
-- cardid: 3346
-  title: Hiruma's Last Breath
+- title: Hiruma's Last Breath
   types:
   - Spell
   decks:
@@ -467,11 +428,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Craig Maher
-- cardid: 3706
-  title: Imperial Palace Guard
+- title: Imperial Palace Guard
   types:
   - Follower
   decks:
@@ -489,13 +448,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: David Martin
   flavor_text: <i>"The palace guard stood valiantly, but Shoju's men employed poisons, ninja and all manners
     of treachery to gain his prize." - the Lion Histories, Volume II</i>
-- cardid: 3929
-  title: Isawa Tomo's Portal
+- title: Isawa Tomo's Portal
   types:
   - Region
   decks:
@@ -505,13 +462,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Greg Simonson
   flavor_text: <i>The chaotic forces that were somehow harnessed by the Master of Water pushed the attacking
     army leagues away where they were harmless.</i>
-- cardid: 3962
-  title: Ishikawa
+- title: Ishikawa
   types:
   - Personality
   decks:
@@ -534,11 +489,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Douglas Shuler
-- cardid: 3991
-  title: Iuchi Katta
+- title: Iuchi Katta
   types:
   - Personality
   decks:
@@ -559,11 +512,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Stephen Daniele
-- cardid: 4071
-  title: Jurojin's Touch
+- title: Jurojin's Touch
   types:
   - Strategy
   decks:
@@ -578,11 +529,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Audrey Corman
-- cardid: 4728
-  title: Lieutenant Morito
+- title: Lieutenant Morito
   types:
   - Follower
   decks:
@@ -602,11 +551,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Anson Maddocks
-- cardid: 4752
-  title: Lions Attack the Crane
+- title: Lions Attack the Crane
   types:
   - Event
   decks:
@@ -623,11 +570,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Liz Danforth
-- cardid: 5451
-  title: Musubi
+- title: Musubi
   types:
   - Strategy
   decks:
@@ -641,11 +586,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: David Fooden
-- cardid: 5976
-  title: Plains Above Evil
+- title: Plains Above Evil
   types:
   - Region
   decks:
@@ -659,11 +602,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: Cris Dornaus
-- cardid: 6010
-  title: Political Distraction
+- title: Political Distraction
   types:
   - Strategy
   decks:
@@ -679,13 +620,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: April Lee
   flavor_text: <i>"Shoju had to distract the Lion before attacking Otosan Uchi. Of course, Kachiko would
     handle that part of the plan." - The Scorpion Coup, Part II</i>
-- cardid: 6016
-  title: Political Mistake
+- title: Political Mistake
   types:
   - Strategy
   decks:
@@ -699,11 +638,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Heather Hudson
-- cardid: 6372
-  title: Robbing the Dead
+- title: Robbing the Dead
   types:
   - Strategy
   decks:
@@ -716,11 +653,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Eric David Anderson
-- cardid: 6461
-  title: Sanado
+- title: Sanado
   types:
   - Personality
   decks:
@@ -741,13 +676,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Val Mayerik
   flavor_text: <i>"Suddenly, Retsuko spun and plunged a blade into our lord's belly, then disappeared
     into the shadows while our lord breathed his last." - Shiba Kyo</i>
-- cardid: 6970
-  title: Shinjo Yokatsu
+- title: Shinjo Yokatsu
   types:
   - Personality
   decks:
@@ -776,11 +709,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Carl Frank
-- cardid: 6999
-  title: Shioda
+- title: Shioda
   types:
   - Personality
   decks:
@@ -801,11 +732,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Douglas Shuler
-- cardid: 7111
-  title: Shosuro Ikawa
+- title: Shosuro Ikawa
   types:
   - Personality
   decks:
@@ -824,13 +753,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Paul (Prof.) Herbert
   flavor_text: <i>For a thousand years, the Shosuro have found strength in the shadows. It would be in
     their time of greatest need that the shadows would betray them.</i>
-- cardid: 7365
-  title: Soshi Taoshi
+- title: Soshi Taoshi
   types:
   - Personality
   decks:
@@ -851,13 +778,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Heather Hudson
   flavor_text: <i>He knew of the Lion's dark mines long before they came to light, but his knowledge would
     not save him from his fate.</i>
-- cardid: 7369
-  title: Soshi Ujemi
+- title: Soshi Ujemi
   types:
   - Follower
   decks:
@@ -874,11 +799,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Douglas Shuler
-- cardid: 7392
-  title: South Wall of Otosan Uchi
+- title: South Wall of Otosan Uchi
   types:
   - Holding
   decks:
@@ -895,11 +818,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: David Martin
-- cardid: 7503
-  title: Storehouses
+- title: Storehouses
   types:
   - Holding
   decks:
@@ -913,11 +834,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Tom Biondolillo
-- cardid: 7530
-  title: Streets of Otosan Uchi
+- title: Streets of Otosan Uchi
   types:
   - Region
   decks:
@@ -933,11 +852,9 @@ cards:
   - Four Winds (Gold)
   - Legacy
   notes: This card was printed in both Scorpion Clan Coup Scroll 1 and Scroll 3.
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
-- cardid: 7948
-  title: The 38th Hantei Falls
+- title: The 38th Hantei Falls
   types:
   - Event
   decks:
@@ -953,11 +870,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Thomas Manning
-- cardid: 8062
-  title: The Endless Well
+- title: The Endless Well
   types:
   - Strategy
   decks:
@@ -975,12 +890,10 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Mark Poole
   flavor_text: <i>If your soul is one with the elements, it is an endless well of possibilities.</i>
-- cardid: 8066
-  title: The Exalted Ugu
+- title: The Exalted Ugu
   types:
   - Personality
   decks:
@@ -1002,11 +915,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Mike Raabe
-- cardid: 8090
-  title: The First Scroll Is Opened
+- title: The First Scroll Is Opened
   types:
   - Event
   decks:
@@ -1022,12 +933,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   errata_text: Erratum via Oracle to correct change of function on CWS MRP.
-  printing_id: '2'
   rarity: Uncommon
   artist: Kevin Daily
   flavor_text: <i>Shoju read the prophecy hidden behind the seal and knew his destiny</i>
-- cardid: 8307
-  title: The Secret Entrance
+- title: The Secret Entrance
   types:
   - Strategy
   decks:
@@ -1039,11 +948,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Craig Maher
-- cardid: 8314
-  title: The Shadow Stronghold of the Bayushi
+- title: The Shadow Stronghold of the Bayushi
   types:
   - Stronghold
   decks:
@@ -1058,11 +965,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Anthony Grabski
-- cardid: 8344
-  title: The Soul Goes Forth
+- title: The Soul Goes Forth
   types:
   - Strategy
   decks:
@@ -1077,13 +982,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Randy Asplund-Faith
   flavor_text: <i>"Your soul--your life energy--is not bound by flesh. It can reach where your fingers
     cannot." - The Tao of Shinsei</i>
-- cardid: 8403
-  title: The Unclean Cut
+- title: The Unclean Cut
   types:
   - Strategy
   decks:
@@ -1097,12 +1000,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Mike Kimble
   flavor_text: <i>"Without a clean cut, your opponent may dishonor himself and you by crying out." - Toshimoko</i>
-- cardid: 8462
-  title: Through the Waterways
+- title: Through the Waterways
   types:
   - Strategy
   decks:
@@ -1115,13 +1016,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Mark Poole
   flavor_text: '<i>"Shoju''s plan was simple: attack Otosan Uchi from within, capture her fortifications,
     and wait for the Lions." - The Scorpion Coup, Part I</i>'
-- cardid: 8668
-  title: Toturi Is Drugged
+- title: Toturi Is Drugged
   types:
   - Strategy
   decks:
@@ -1137,12 +1036,10 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Bryon Wackwitz
   flavor_text: <i>"Do not fear your enemies. Only a friend can betray you." - from Bayushi's Lies</i>
-- cardid: 9221
-  title: War Wagon
+- title: War Wagon
   types:
   - Item
   decks:
@@ -1158,11 +1055,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Craig Maher
-- cardid: 9502
-  title: Yogo Shidachi
+- title: Yogo Shidachi
   types:
   - Personality
   decks:
@@ -1181,7 +1076,6 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>Shidachi trained for many months with Isawa Tomo, and the Master of Water's lessons

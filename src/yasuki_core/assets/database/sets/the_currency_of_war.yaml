@@ -1,7 +1,6 @@
 set: The Currency of War
 cards:
-- cardid: 76
-  title: A Samurai's Soul
+- title: A Samurai's Soul
   types:
   - Item
   decks:
@@ -21,14 +20,32 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '4'
   rarity: Fixed
   artist: Rhonda Libby
   flavor_text: The philosophy of the samurai is such that the katana represents the soul. No samurai will
     allow dishonor to come to his blade, on pain of death.
   collector_number: '33'
-- cardid: 121
-  title: Advance Warning
+- title: A Warrior's Brutality
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Give your target opposed Personality +3F.
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Hannah Böving
+  flavor_text: The Code of Bushido dictates that courtesy and compassion are virtues all samurai should
+    extol. Many warriors often forget these, however, in favor of the glory of battle.
+  collector_number: '37'
+  designer: Duncan
+- title: Advance Warning
   types:
   - Strategy
   decks:
@@ -43,14 +60,57 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '4'
   rarity: Fixed
   artist: Patrick McEvoy
   flavor_text: Deception is unacceptable according to the code of bushido, but successful scouting and
     reconaissance is simply proper warfare.
   collector_number: '38'
-- cardid: 410
-  title: Another Time
+- title: Akodo Kaiken
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Weapon
+  - Knife
+  - One-Handed
+  text: <b>Battle, :bow::</b> Reduce the Force of a target enemy Follower or Personality by this Personality's
+    Chi.
+  gold_cost: 3
+  focus: 4
+  force: '+1'
+  chi: '+1'
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Jonathan Moore
+  flavor_text: The five sacred daggers of the Lion Clan are among the most famous artifacts in Rokugan.
+  collector_number: '34'
+- title: Allied Efforts
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Give a target enemy Personality or Follower -3F.
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  story: 2012 Kotei Winner - Corey Beahon
+  rarity: Fixed
+  artist: Héctor Herrera
+  flavor_text: The Mantis control considerable holdings in the distant Colonies, and as such have allies
+    upon which they can call that the Crane have never seen.
+  collector_number: '39'
+  designer: Thomas
+- title: Another Time
   types:
   - Strategy
   decks:
@@ -65,14 +125,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - War of the Seals (Onyx Edition)
-  printing_id: '10'
   rarity: Fixed
   artist: Sean Murray
   flavor_text: '"Today we will not finish our fued, villain, but our time will come. Pray to your ancestors
     that when it does, you die with honor."'
   collector_number: '40'
-- cardid: 608
-  title: Ashigaru Archers
+- title: Ashigaru Archers
   types:
   - Follower
   decks:
@@ -94,14 +152,12 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '8'
   rarity: Fixed
   artist: John Cadice
   flavor_text: <i>The majority of any army in Rokugan consists of ashigaru; trained warriors from the
     lower castes.</i>
   collector_number: '29'
-- cardid: 662
-  title: Back to the Front
+- title: Back to the Front
   types:
   - Strategy
   decks:
@@ -118,14 +174,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '8'
   rarity: Fixed
   artist: Raymond Gaustadnes
   flavor_text: '"The commander offers these orders for the reserves! I have no time for healing, my kinsmen
     need me at the front!"'
   collector_number: '41'
-- cardid: 1045
-  title: Block Supply Lines
+- title: Block Supply Lines
   types:
   - Strategy
   decks:
@@ -144,14 +198,55 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '21'
   rarity: Fixed
   artist: David Dietrick
   flavor_text: The seaways are under the unquestionable control of the Mantis, but the Crane need no supply
     lines that cover the sea. The conflict would be resolved exclusively by land forces.
   collector_number: '42'
-- cardid: 1528
-  title: Counting House
+- title: Breaking the Rhythm
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: As a Focus Effect, after you win this duel, gain 1 Honor and give the winner +1F.<br><b>Absent
+    Battle:</b> Negate a target Personality's current Force bonuses or penalties <i>(you choose)</i>.
+    <i>(Absent actions may be taken without presence.)</i>
+  focus: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Nicholas Kay
+  flavor_text: The Crane advance was halted by a rain of arrows that darkened the sky.
+  collector_number: '43'
+  designer: Bryan
+- title: Contested Market
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Market
+  - Port
+  text: <b>:bow::</b> Produce 2 Gold. <br><b>Economic Open, :g2::</b> Choose a player with three or more
+    Holdings in play. Give his target Holding -2GP <i>(this turn)</i>.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Albert Tavira
+  flavor_text: '"Good day, fishmonger. Oh, I''m sorry, I meant ''Mantis.'' I get the two confused quite
+    often."'
+  collector_number: '1'
+  designer: Randy
+- title: Counting House
   types:
   - Holding
   decks:
@@ -165,14 +260,66 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '5'
   rarity: Fixed
   artist: Ed Cox
   flavor_text: The fact that economics are looked upon with such disdain seems ironic when one considers
     how important it is to the Empire's function.
   collector_number: '2'
-- cardid: 1682
-  title: Daidoji Tametaka
+- title: Daidoji Kinta
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Crane Clan
+  - Samurai
+  - Soul of Daidoji Gudeta
+  text: <b>Battle, :bow::</b> Ranged 4 Attack <i>(Destroy a target enemy Follower, or Personality without
+    Followers, with 4 or lower Force)</i>.
+  gold_cost: 6
+  force: 2
+  chi: 2
+  honor_requirement: 6
+  personal_honor: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: David Horne
+  flavor_text: '"We meet again, wave man. Did you not learn to avoid your betters the first time? I will
+    gladly repeat the lesson for you."'
+  collector_number: '14'
+- title: Daidoji Taenaru
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Samurai
+  - Soul of Daidoji Tae
+  text: After Taenaru is destroyed, gain 2 Honor.<br><b>Battle:</b> Once per battle, move home a target
+    enemy Personality with lower current Force than his own printed Force. Bow him as he moves.
+  gold_cost: 8
+  force: 3
+  chi: 3
+  honor_requirement: 2
+  personal_honor: 2
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Jim Pavelec
+  flavor_text: '"The Tsuruchi move through the wilderness like ghosts. How are we supposed to find them?"'
+  collector_number: '15'
+- title: Daidoji Tametaka
   types:
   - Personality
   decks:
@@ -199,645 +346,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Thomas Denmark
   flavor_text: '"They claim that when the Mantis Champion heard you were involved, my lord, he set course
     for the mainland immediately." Tametaka grunted. "That sounds like him."'
   collector_number: '16'
-- cardid: 1982
-  title: Destiny Has No Secrets
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give your target Personality +2F/+2C. Show your hand to all players.
-  focus: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Clan Wars (Imperial)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  - War of the Seals (Onyx Edition)
-  printing_id: '6'
-  rarity: Fixed
-  artist: Anthony Francisco
-  flavor_text: On the field of battle, whatever secrets a man hides deep in his heart have no bearing.
-    Death comes for all, regardless of their shortcomings.
-  collector_number: '44'
-- cardid: 2014
-  title: Discretionary Valor
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: As a Focus Effect, bow the other Personality.<br><b>Battle:</b> Move your target opposed Personality
-    home. Gain 1 Honor. Draw a card.
-  gold_cost: 0
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '4'
-  rarity: Fixed
-  artist: IFS
-  flavor_text: '"Please accept the mediation of the Dragon Clan, my friend. We wish only to help." The
-    Mantis Champion smiled. "We do not want or need your help, monk."'
-  collector_number: '45'
-- cardid: 2445
-  title: Fall Back!
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move home your target Personality. As he moves, straighten his unit and you may
-    straighten one of your other units <i>(at any location)</i>.
-  gold_cost: 0
-  focus: 4
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '7'
-  rarity: Fixed
-  artist: Chris Pritchard
-  flavor_text: '"Curse the Mantis and curse their archers!" Tametaka exploded. "Fall back until we can
-    discern their location!"'
-  collector_number: '47'
-- cardid: 2463
-  title: Family Library
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Library
-  text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited:</b> Discard a face-up card from one of your Provinces.
-    Refill the Province with your target discarded <i>(not dead)</i> Personality. Destroy this Holding.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '6'
-  rarity: Fixed
-  artist: Malcolm McClinton
-  flavor_text: Every samurai family maintains at least one library to preserve their most important lore,
-    heraldy chief among them.
-  collector_number: '3'
-- cardid: 2666
-  title: Fortified Docks
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Port
-  text: <b>Open:</b> Give your target Personality Naval. Destroy this Holding. <i>(Once a turn, the Attacker
-    gets the first Battle action, if it's from a Naval Personality's unit.)</i>
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Stefano Baldo
-  flavor_text: '"The war may be far from here, but I want all sentries on full alert. Never trust a Crane."
-    - Governor of Kyuden Kumiko'
-  collector_number: '5'
-- cardid: 2706
-  title: Frontline Encampment
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  text: <b>:bow::</b> Produce 2 Gold.<br><b>Limited:</b> Give your target Personality +2F. Destroy this
-    Holding.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '5'
-  rarity: Fixed
-  artist: IFS
-  flavor_text: '"Smoke on the horizon, commander!" "Ride forth and see if it''s a campfire or part of
-    a larger military force!"'
-  collector_number: '6'
-- cardid: 3493
-  title: House of Exotic Goods
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited:</b> Put one or more face-up cards in your Provinces
-    at the bottom of your deck <i>(and refill the Provinces)</i>. Turn all cards in your Provinces face-up.
-    Destroy this Holding.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '4'
-  rarity: Fixed
-  artist: Joe Wilson
-  flavor_text: '"What do you need, my friend? Silk from the Colonies? Spices from the Burning Sands? We
-    have it all!"'
-  collector_number: '7'
-- cardid: 3730
-  title: Incapacitated
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move home a target defending Personality.
-  gold_cost: 0
-  focus: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '8'
-  rarity: Fixed
-  artist: Chris Pritchard
-  flavor_text: '"Our Champion gave orders that Daidoji Tametaka was not to be killed," the officer said.
-    "However, there is no reason that we cannot remove him from the battlefield through other means."'
-  collector_number: '48'
-- cardid: 4080
-  title: Kabuki Theater Troupe
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited, :bow::</b> Gain 1 Honor.
-  gold_cost: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Enlightenment (Lotus)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '11'
-  rarity: Fixed
-  artist: Brad Williams
-  flavor_text: The system of artisans and patronage is as essential to the function of the Crane, and
-    a keystone of their dominance in the courts.
-  collector_number: '8'
-- cardid: 4496
-  title: Kobune Port
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Port
-  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Mantis Clan player.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  printing_id: '9'
-  rarity: Fixed
-  artist: Charles Urbach
-  flavor_text: The Crane hold dominion over the courts, but there is not a port in the Empire that is
-    free of Mantis influence.
-  collector_number: '9'
-- cardid: 4840
-  title: Marketplace
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Market
-  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Crane Clan player.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  printing_id: '17'
-  rarity: Fixed
-  artist: Charles Urbach
-  flavor_text: '"And what goods do you hope to acquire today, friend Mantis?" "The exact same things you
-    do, friend Crane. As always."'
-  collector_number: '10'
-- cardid: 5017
-  title: Medium Infantry
-  types:
-  - Follower
-  decks:
-  - Fate
-  gold_cost: 3
-  focus: 2
-  force: 3
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Clan Wars (Imperial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '15'
-  rarity: Fixed
-  artist: Mark A. W. Jackson
-  flavor_text: The samurai forces in any army consists of light, medium, and heavy infantry. The largest
-    portion of the force is made up of medium infantry, the rank and file of samurai trained by their
-    dojo to wage war in the name of their family and clan.
-  collector_number: '30'
-- cardid: 6415
-  title: Ruthless Determination
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Dark Virtue
-  - Determination
-  text: <b>Dark Virtue Battle:</b> Target your unbowed Samurai Personality. Fear with strength equal to
-    his Force minus 1 <i>(minimum zero)</i>.
-  gold_cost: 0
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '3'
-  rarity: Fixed
-  artist: IFS
-  flavor_text: The last enemy fell before her, his blood glinting on her blade. She sighed. "How wonderful
-    an evening stroll can prove to be."
-  collector_number: '51'
-- cardid: 7396
-  title: Sparrow Clan Aide
-  types:
-  - Follower
-  decks:
-  - Fate
-  text: After you Equip this Follower, gain 1 Honor. <br><b>Political Battle:</b> Bow or straighten a
-    target Personality with lower Personal Honor than this Personality.
-  gold_cost: 3
-  focus: 2
-  force: 2
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  story: 2007 Kotei Winner - Jerred Moore
-  printing_id: '4'
-  rarity: Fixed
-  artist: Mike Capprotti
-  flavor_text: The Sparrow are one of the Empire's Minor Clans, renowned for their artistry and oratory
-    skills. An aide from the Sparrow Clan is a mark of prestige among the elite.
-  collector_number: '32'
-- cardid: 7543
-  title: Strength of my Father
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give your target opposed Personality a Force bonus equal to his Personal Honor.
-  gold_cost: 0
-  focus: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '4'
-  rarity: Fixed
-  artist: Malcolm McClinton
-  flavor_text: '"Begone, spirit! You will not defeat me any more than you were able to defeat my father,
-    who banished you to the realm of the dead twenty years ago!"'
-  collector_number: '54'
-- cardid: 7821
-  title: Tarui
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Unaligned
-  keywords:
-  - Duelist
-  - Ronin
-  - Samurai
-  text: <i>(Duelists win tied duels versus non-Duelists.)</i>
-  gold_cost: 3
-  force: 2
-  chi: 3
-  personal_honor: 0
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Ben Peck
-  flavor_text: '"That Crane interfered with my contract with the Mantis. I would kill him for the insult
-    alone, not to mention the koku he cost me."'
-  collector_number: '28'
-- cardid: 7869
-  title: Temple Fortress
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Castle
-  - Temple
-  text: After the first time each turn you bow this Holding, gain 1 Honor.
-  gold_cost: 4
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Albert Tavira
-  flavor_text: Many assume that because they dwell upon islands, the Mantis have little experience with
-    being besieged. They are gravely mistaken.
-  collector_number: '13'
-  designer: Loki
-- cardid: 10033
-  title: Farmer's Market
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Farm
-  - Market
-  text: You have +1 maximum hand size.<br><b>:bow::</b> Produce 2 Gold.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '4'
-  rarity: Fixed
-  artist: Stefano Baldo
-  flavor_text: No matter how heated the conflict, no matter how righteous the cause, a samurai will never
-    thoughtlessly endanger a farmer. They are too important.
-  collector_number: '4'
-  designer: Thomas
-- cardid: 10038
-  title: Small Library
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Library
-  text: After this Holding enters play from a Province, refill the Province face-up.
-  gold_cost: 4
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Stefano Baldo
-  flavor_text: To many, knowledge is the only currency that has any true value. Coins lose their lustre,
-    but knowledge never fades.
-  collector_number: '12'
-  designer: Loki
-- cardid: 10576
-  title: Kakita Izumiko
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crane
-  keywords:
-  - Duelist
-  - Samurai
-  text: <i>(Duelists win tied duels versus non-Duelists.)</i><br>After Izumiko wins a duel, gain 1 Honor.
-  gold_cost: 5
-  force: 2
-  chi: 3
-  honor_requirement: 6
-  personal_honor: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Nicholas Kay
-  flavor_text: '"Will your precious bow save you now, Mantis? I think perhaps it will not. Offer final
-    prayers to your ancestors. You will stand among them shortly."'
-  collector_number: '20'
-  designer: Bryan
-- cardid: 10714
-  title: Ritual Preparation
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Straighten your target card in a unit.
-  focus: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '3'
-  rarity: Fixed
-  artist: Sergio Camarena
-- cardid: 10738
-  title: Allied Efforts
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give a target enemy Personality or Follower -3F.
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  story: 2012 Kotei Winner - Corey Beahon
-  printing_id: '3'
-  rarity: Fixed
-  artist: Héctor Herrera
-  flavor_text: The Mantis control considerable holdings in the distant Colonies, and as such have allies
-    upon which they can call that the Crane have never seen.
-  collector_number: '39'
-  designer: Thomas
-- cardid: 10927
-  title: A Warrior's Brutality
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give your target opposed Personality +3F.
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '4'
-  rarity: Fixed
-  artist: Hannah Böving
-  flavor_text: The Code of Bushido dictates that courtesy and compassion are virtues all samurai should
-    extol. Many warriors often forget these, however, in favor of the glory of battle.
-  collector_number: '37'
-  designer: Duncan
-- cardid: 10931
-  title: Breaking the Rhythm
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: As a Focus Effect, after you win this duel, gain 1 Honor and give the winner +1F.<br><b>Absent
-    Battle:</b> Negate a target Personality's current Force bonuses or penalties <i>(you choose)</i>.
-    <i>(Absent actions may be taken without presence.)</i>
-  focus: 4
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Nicholas Kay
-  flavor_text: The Crane advance was halted by a rain of arrows that darkened the sky.
-  collector_number: '43'
-  designer: Bryan
-- cardid: 10955
-  title: Steal an Advantage
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: This Strategy's ability is Battle/Engage if you control a Scout at the current battlefield.<br><b>Battle:</b>
-    A target enemy card may not use one of its abilities <i>(you choose)</i>.
-  focus: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Britt Martin
-  flavor_text: Deprive a warrior of his weapon and you have all but won the day.
-  collector_number: '53'
-  designer: Duncan
-- cardid: 11156
-  title: Daidoji Kinta
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crane
-  keywords:
-  - Crane Clan
-  - Samurai
-  - Soul of Daidoji Gudeta
-  text: <b>Battle, :bow::</b> Ranged 4 Attack <i>(Destroy a target enemy Follower, or Personality without
-    Followers, with 4 or lower Force)</i>.
-  gold_cost: 6
-  force: 2
-  chi: 2
-  honor_requirement: 6
-  personal_honor: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: David Horne
-  flavor_text: '"We meet again, wave man. Did you not learn to avoid your betters the first time? I will
-    gladly repeat the lesson for you."'
-  collector_number: '14'
-- cardid: 11157
-  title: Daidoji Tanshi
+- title: Daidoji Tanshi
   types:
   - Personality
   decks:
@@ -858,7 +372,6 @@ cards:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Jason Juta
   flavor_text: The Daidoji are one of the most respected of all bushi families. They often choose to serve
@@ -866,8 +379,270 @@ cards:
     that desire to overrun it.
   collector_number: '17'
   designer: Bryan
-- cardid: 11165
-  title: Kakita Ibara
+- title: Destiny Has No Secrets
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Give your target Personality +2F/+2C. Show your hand to all players.
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Anthony Francisco
+  flavor_text: On the field of battle, whatever secrets a man hides deep in his heart have no bearing.
+    Death comes for all, regardless of their shortcomings.
+  collector_number: '44'
+- title: Discretionary Valor
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: As a Focus Effect, bow the other Personality.<br><b>Battle:</b> Move your target opposed Personality
+    home. Gain 1 Honor. Draw a card.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: IFS
+  flavor_text: '"Please accept the mediation of the Dragon Clan, my friend. We wish only to help." The
+    Mantis Champion smiled. "We do not want or need your help, monk."'
+  collector_number: '45'
+- title: Doji Shimada
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Magistrate
+  - Samurai
+  gold_cost: 4
+  force: 2
+  chi: 3
+  honor_requirement: 2
+  personal_honor: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Kez Laczin
+  flavor_text: '"Go forth to war, my kinsmen. Know that you have my support and, through my art, you shall
+    have the support of the other Great Clans as well. This I can gladly do for you."'
+  collector_number: '18'
+  designer: Randy
+- title: Drawing First Blood
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: As a Focus Effect, remove <b>Duelist</b> from the Personality facing yours in this duel.<br><b>Battle:</b>
+    Target your unbowed Personality, and bow him if he's defending. Move home a target enemy Personality
+    with lower Chi. Gain 1 Honor if your Personality is a Duelist.
+  focus: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  notes: This card was misprinted in The Currency of War with a 3 Focus Value.
+  rarity: Fixed
+  artist: David Horne
+  flavor_text: '"Remember me, each time you see the scar. Remember me and know that I was your better,
+    this day and all days."'
+  collector_number: '46'
+  designer: Julien
+- title: Fall Back!
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home your target Personality. As he moves, straighten his unit and you may
+    straighten one of your other units <i>(at any location)</i>.
+  gold_cost: 0
+  focus: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Chris Pritchard
+  flavor_text: '"Curse the Mantis and curse their archers!" Tametaka exploded. "Fall back until we can
+    discern their location!"'
+  collector_number: '47'
+- title: Family Library
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Library
+  text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited:</b> Discard a face-up card from one of your Provinces.
+    Refill the Province with your target discarded <i>(not dead)</i> Personality. Destroy this Holding.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: Every samurai family maintains at least one library to preserve their most important lore,
+    heraldy chief among them.
+  collector_number: '3'
+- title: Farmer's Market
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  - Market
+  text: You have +1 maximum hand size.<br><b>:bow::</b> Produce 2 Gold.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Stefano Baldo
+  flavor_text: No matter how heated the conflict, no matter how righteous the cause, a samurai will never
+    thoughtlessly endanger a farmer. They are too important.
+  collector_number: '4'
+  designer: Thomas
+- title: Fortified Docks
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Port
+  text: <b>Open:</b> Give your target Personality Naval. Destroy this Holding. <i>(Once a turn, the Attacker
+    gets the first Battle action, if it's from a Naval Personality's unit.)</i>
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Stefano Baldo
+  flavor_text: '"The war may be far from here, but I want all sentries on full alert. Never trust a Crane."
+    - Governor of Kyuden Kumiko'
+  collector_number: '5'
+- title: Frontline Encampment
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: <b>:bow::</b> Produce 2 Gold.<br><b>Limited:</b> Give your target Personality +2F. Destroy this
+    Holding.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: IFS
+  flavor_text: '"Smoke on the horizon, commander!" "Ride forth and see if it''s a campfire or part of
+    a larger military force!"'
+  collector_number: '6'
+- title: House of Exotic Goods
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited:</b> Put one or more face-up cards in your Provinces
+    at the bottom of your deck <i>(and refill the Provinces)</i>. Turn all cards in your Provinces face-up.
+    Destroy this Holding.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Fixed
+  artist: Joe Wilson
+  flavor_text: '"What do you need, my friend? Silk from the Colonies? Spices from the Burning Sands? We
+    have it all!"'
+  collector_number: '7'
+- title: Incapacitated
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home a target defending Personality.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Chris Pritchard
+  flavor_text: '"Our Champion gave orders that Daidoji Tametaka was not to be killed," the officer said.
+    "However, there is no reason that we cannot remove him from the battlefield through other means."'
+  collector_number: '48'
+- title: Kabuki Theater Troupe
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited, :bow::</b> Gain 1 Honor.
+  gold_cost: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Fixed
+  artist: Brad Williams
+  flavor_text: The system of artisans and patronage is as essential to the function of the Crane, and
+    a keystone of their dominance in the courts.
+  collector_number: '8'
+- title: Kakita Ibara
   types:
   - Personality
   decks:
@@ -890,271 +665,41 @@ cards:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Lee Smith
   flavor_text: '"I enjoyed burning your village, Tsuruchi. Perhaps I''ll burn a few more."'
   collector_number: '19'
   designer: Bryan
-- cardid: 11197
-  title: Yoritomo Teihiko
+- title: Kakita Izumiko
   types:
   - Personality
   decks:
   - Dynasty
   clans:
-  - Mantis
+  - Crane
   keywords:
-  - Naval
-  - Mantis Clan
+  - Duelist
   - Samurai
-  - Soul of Yoritomo Mie
-  text: <i><i>(Once a turn, the Attacker gets the first Battle action, if it's from a Naval Personality's
-    unit.)</i></i>
+  text: <i>(Duelists win tied duels versus non-Duelists.)</i><br>After Izumiko wins a duel, gain 1 Honor.
   gold_cost: 5
-  force: 4
-  chi: 2
-  personal_honor: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Shen Fei
-  flavor_text: '"You have no blade," the Crane laughed, "just that ridiculous thing on your arm." Teihiko
-    smiled. "Come closer and say that."'
-  collector_number: '26'
-- cardid: 11247
-  title: Akodo Kaiken
-  types:
-  - Item
-  decks:
-  - Fate
-  keywords:
-  - Weapon
-  - Knife
-  - One-Handed
-  text: <b>Battle, :bow::</b> Reduce the Force of a target enemy Follower or Personality by this Personality's
-    Chi.
-  gold_cost: 3
-  focus: 4
-  force: '+1'
-  chi: '+1'
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '2'
-  rarity: Fixed
-  artist: Jonathan Moore
-  flavor_text: The five sacred daggers of the Lion Clan are among the most famous artifacts in Rokugan.
-  collector_number: '34'
-- cardid: 11299
-  title: The Fruitful Port of the Mantis
-  types:
-  - Stronghold
-  decks:
-  - Pre-Game
-  clans:
-  - Mantis
-  keywords:
-  - Port
-  text: <b>Limited, :g3::</b> Draw a card.<br><i>(When going second, you may, once per game, produce 2
-    Gold)</i>
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  printing_id: '4'
-  rarity: Fixed
-  artist: Alayna Lemmer
-  flavor_text: '"Let the Empire look down upon commerce all they wish. When the Mantis can fund an army
-    to defeat any foe, they will reconsider their ludicrous ideas." - Yoritomo Hiromi'
-  collector_number: '58'
-  doublesided: true
-- cardid: 11310
-  title: Reinforced Parangu
-  types:
-  - Item
-  decks:
-  - Fate
-  keywords:
-  - Weapon
-  - One-Handed
-  - Sword
-  text: <b>Battle:</b> Fear 2 <i>(Bow a target enemy Follower, or Personality without Followers, with
-    2 or lower Force)</i>.
-  gold_cost: 2
-  focus: 2
-  force: '+2'
-  chi: '+0'
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '2'
-  rarity: Fixed
-  artist: Gong Studios
-  flavor_text: A crude, simple blade used by the Mantis for mundane affairs.
-  collector_number: '35'
-  designer: Bryan
-- cardid: 11549
-  title: Contested Market
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Market
-  - Port
-  text: <b>:bow::</b> Produce 2 Gold. <br><b>Economic Open, :g2::</b> Choose a player with three or more
-    Holdings in play. Give his target Holding -2GP <i>(this turn)</i>.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Albert Tavira
-  flavor_text: '"Good day, fishmonger. Oh, I''m sorry, I meant ''Mantis.'' I get the two confused quite
-    often."'
-  collector_number: '1'
-  designer: Randy
-- cardid: 11558
-  title: Second City Harbor
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Port
-  text: <b>:bow::</b> Produce 2 Gold.<br>You may use this Holding's printed ability one additional time
-    per turn for each of your Markets in play. <br><b>Economic Battle, :g2::</b> Give a target enemy Personality
-    -1F.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Jason Juta
-  flavor_text: The Second City exists far from the Empire, in its Colonies.
-  collector_number: '11'
-  designer: Trevor
-- cardid: 11589
-  title: Tsuruchi Taito
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Mantis
-  keywords:
-  - Naval
-  - Samurai
-  - Scout
-  text: <b>Battle, :bow::</b> Ranged 3 Attack. If the Defender has not had an opportunity to take a Battle
-    action or pass, discard a card.
-  gold_cost: 7
-  force: 3
+  force: 2
   chi: 3
-  honor_requirement: 0
-  personal_honor: 1
+  honor_requirement: 6
+  personal_honor: 3
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
+  - War of the Seals (Onyx Edition)
   rarity: Fixed
-  artist: Sergio Camarena
-  flavor_text: He watched the village burning to ash. "Ibara," he said through clenched teeth. "We will
-    meet again."
-  collector_number: '24'
-  designer: Loki
-- cardid: 11631
-  title: Sons of Gusai
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Mercenary
-  - Pirate
-  text: This Follower has +1F while you control a Port.<br><b>Battle, :bow::</b> Ranged 2 Attack.
-  gold_cost: 2
-  focus: 1
-  force: 1
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  story: 2013 Kotei Winner - Jan Penafuerte
-  printing_id: '2'
-  rarity: Fixed
-  artist: Albert Tavira
-  flavor_text: Gusai was a former Mantis Champion, revered by the clan but reviled by the Empire.
-  collector_number: '31'
-  designer: Jeremy
-- cardid: 11679
-  title: Planned Departure
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move your target Personality home and straighten his unit as he moves. You may
-    target a Personality and give him +2F or -2F.
-  focus: 4
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Jeff Hill
-  flavor_text: He took one last look around. "It seems a pity that tomorrow, all this will be trod into
-    a mud-soaked battlefield. Such is destiny, however."
-  collector_number: '49'
+  artist: Nicholas Kay
+  flavor_text: '"Will your precious bow save you now, Mantis? I think perhaps it will not. Offer final
+    prayers to your ancestors. You will stand among them shortly."'
+  collector_number: '20'
   designer: Bryan
-- cardid: 11687
-  title: Startling Lessons
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Iaijutsu Battle:</b> Your target unbowed Personality challenges a target enemy Personality.
-    Give the loser -3F. If the winner is a Duelist, give him a +1F token.
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  story: 2013 Kotei Winner - Eric Gardiner
-  printing_id: '2'
-  rarity: Fixed
-  artist: Brent Chumley
-  flavor_text: '"No. Your blade position is perfect but you do not feel it in your spirit. Steel yourself
-    and try again. Now!"'
-  collector_number: '52'
-  designer: Julien
-- cardid: 11739
-  title: Kakita Mitohime
+- title: Kakita Mitohime
   types:
   - Personality
   decks:
@@ -1178,15 +723,193 @@ cards:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Héctor Herrera
   flavor_text: '"I was born without my honor because of my parents'' mistakes. I have regained it, and
     I will not see it lost due to the insults of the Mantis."'
   collector_number: '21'
   designer: Jeremy
-- cardid: 11806
-  title: Singing Blade
+- title: Kobune Port
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Port
+  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Mantis Clan player.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Charles Urbach
+  flavor_text: The Crane hold dominion over the courts, but there is not a port in the Empire that is
+    free of Mantis influence.
+  collector_number: '9'
+- title: Marketplace
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Market
+  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Crane Clan player.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Charles Urbach
+  flavor_text: '"And what goods do you hope to acquire today, friend Mantis?" "The exact same things you
+    do, friend Crane. As always."'
+  collector_number: '10'
+- title: Medium Infantry
+  types:
+  - Follower
+  decks:
+  - Fate
+  gold_cost: 3
+  focus: 2
+  force: 3
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Mark A. W. Jackson
+  flavor_text: The samurai forces in any army consists of light, medium, and heavy infantry. The largest
+    portion of the force is made up of medium infantry, the rank and file of samurai trained by their
+    dojo to wage war in the name of their family and clan.
+  collector_number: '30'
+- title: Planned Departure
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move your target Personality home and straighten his unit as he moves. You may
+    target a Personality and give him +2F or -2F.
+  focus: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Jeff Hill
+  flavor_text: He took one last look around. "It seems a pity that tomorrow, all this will be trod into
+    a mud-soaked battlefield. Such is destiny, however."
+  collector_number: '49'
+  designer: Bryan
+- title: Reinforced Parangu
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Weapon
+  - One-Handed
+  - Sword
+  text: <b>Battle:</b> Fear 2 <i>(Bow a target enemy Follower, or Personality without Followers, with
+    2 or lower Force)</i>.
+  gold_cost: 2
+  focus: 2
+  force: '+2'
+  chi: '+0'
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Gong Studios
+  flavor_text: A crude, simple blade used by the Mantis for mundane affairs.
+  collector_number: '35'
+  designer: Bryan
+- title: Ritual Preparation
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Straighten your target card in a unit.
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Sergio Camarena
+- title: Ruthless Determination
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Dark Virtue
+  - Determination
+  text: <b>Dark Virtue Battle:</b> Target your unbowed Samurai Personality. Fear with strength equal to
+    his Force minus 1 <i>(minimum zero)</i>.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: IFS
+  flavor_text: The last enemy fell before her, his blood glinting on her blade. She sighed. "How wonderful
+    an evening stroll can prove to be."
+  collector_number: '51'
+- title: Second City Harbor
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Port
+  text: <b>:bow::</b> Produce 2 Gold.<br>You may use this Holding's printed ability one additional time
+    per turn for each of your Markets in play. <br><b>Economic Battle, :g2::</b> Give a target enemy Personality
+    -1F.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Jason Juta
+  flavor_text: The Second City exists far from the Empire, in its Colonies.
+  collector_number: '11'
+  designer: Trevor
+- title: Singing Blade
   types:
   - Item
   decks:
@@ -1205,14 +928,209 @@ cards:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Jason Juta
   flavor_text: Drawing it from its scabbard creatures a single, perfect note, like the sweetest of music.
   collector_number: '36'
   designer: Bryan
-- cardid: 11853
-  title: The Eternal Chase
+- title: Small Library
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Library
+  text: After this Holding enters play from a Province, refill the Province face-up.
+  gold_cost: 4
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Stefano Baldo
+  flavor_text: To many, knowledge is the only currency that has any true value. Coins lose their lustre,
+    but knowledge never fades.
+  collector_number: '12'
+  designer: Loki
+- title: Sons of Gusai
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Mercenary
+  - Pirate
+  text: This Follower has +1F while you control a Port.<br><b>Battle, :bow::</b> Ranged 2 Attack.
+  gold_cost: 2
+  focus: 1
+  force: 1
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  story: 2013 Kotei Winner - Jan Penafuerte
+  rarity: Fixed
+  artist: Albert Tavira
+  flavor_text: Gusai was a former Mantis Champion, revered by the clan but reviled by the Empire.
+  collector_number: '31'
+  designer: Jeremy
+- title: Sparrow Clan Aide
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: After you Equip this Follower, gain 1 Honor. <br><b>Political Battle:</b> Bow or straighten a
+    target Personality with lower Personal Honor than this Personality.
+  gold_cost: 3
+  focus: 2
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  story: 2007 Kotei Winner - Jerred Moore
+  rarity: Fixed
+  artist: Mike Capprotti
+  flavor_text: The Sparrow are one of the Empire's Minor Clans, renowned for their artistry and oratory
+    skills. An aide from the Sparrow Clan is a mark of prestige among the elite.
+  collector_number: '32'
+- title: Startling Lessons
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Iaijutsu Battle:</b> Your target unbowed Personality challenges a target enemy Personality.
+    Give the loser -3F. If the winner is a Duelist, give him a +1F token.
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  story: 2013 Kotei Winner - Eric Gardiner
+  rarity: Fixed
+  artist: Brent Chumley
+  flavor_text: '"No. Your blade position is perfect but you do not feel it in your spirit. Steel yourself
+    and try again. Now!"'
+  collector_number: '52'
+  designer: Julien
+- title: Steal an Advantage
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: This Strategy's ability is Battle/Engage if you control a Scout at the current battlefield.<br><b>Battle:</b>
+    A target enemy card may not use one of its abilities <i>(you choose)</i>.
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Britt Martin
+  flavor_text: Deprive a warrior of his weapon and you have all but won the day.
+  collector_number: '53'
+  designer: Duncan
+- title: Strength of my Father
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Give your target opposed Personality a Force bonus equal to his Personal Honor.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: '"Begone, spirit! You will not defeat me any more than you were able to defeat my father,
+    who banished you to the realm of the dead twenty years ago!"'
+  collector_number: '54'
+- title: Tarui
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Duelist
+  - Ronin
+  - Samurai
+  text: <i>(Duelists win tied duels versus non-Duelists.)</i>
+  gold_cost: 3
+  force: 2
+  chi: 3
+  personal_honor: 0
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Ben Peck
+  flavor_text: '"That Crane interfered with my contract with the Mantis. I would kill him for the insult
+    alone, not to mention the koku he cost me."'
+  collector_number: '28'
+- title: Temple Fortress
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Castle
+  - Temple
+  text: After the first time each turn you bow this Holding, gain 1 Honor.
+  gold_cost: 4
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Albert Tavira
+  flavor_text: Many assume that because they dwell upon islands, the Mantis have little experience with
+    being besieged. They are gravely mistaken.
+  collector_number: '13'
+  designer: Loki
+- title: The Esteemed Palace of the Crane
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  text: <b>Political Open, :bow::</b> If you control a Personality, gain 2 Honor.<br><i>(When going second,
+    you get +1PS and a +5 Lobby bonus)</i>
+  province_strength: 6
+  starting_honor: 6
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Alayna Lemmer
+  flavor_text: '"It is unfortunate that the Mantis have chosen to force our hand in this matter. We will
+    have no choice but to teach them a lesson." - Doji Makoto'
+  collector_number: '56'
+  doublesided: true
+- title: The Eternal Chase
   types:
   - Strategy
   decks:
@@ -1227,43 +1145,63 @@ cards:
   - Legacy
   - Modern
   story: 2013 Kotei Winner - Felipe Raffani
-  printing_id: '2'
   rarity: Fixed
   artist: Alayna Lemmer
   flavor_text: '"I yield," he said through clenched teeth. "I cannot defeat your technique. Not today.
     But soon."'
   collector_number: '55'
   designer: Loki
-- cardid: 11893
-  title: Doji Shimada
+- title: The Fruitful Port of the Mantis
   types:
-  - Personality
+  - Stronghold
   decks:
-  - Dynasty
+  - Pre-Game
   clans:
-  - Crane
+  - Mantis
   keywords:
-  - Magistrate
-  - Samurai
-  gold_cost: 4
-  force: 2
-  chi: 3
-  honor_requirement: 2
-  personal_honor: 3
+  - Port
+  text: <b>Limited, :g3::</b> Draw a card.<br><i>(When going second, you may, once per game, produce 2
+    Gold)</i>
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
-  artist: Kez Laczin
-  flavor_text: '"Go forth to war, my kinsmen. Know that you have my support and, through my art, you shall
-    have the support of the other Great Clans as well. This I can gladly do for you."'
-  collector_number: '18'
-  designer: Randy
-- cardid: 11911
-  title: Tsuruchi Satou
+  artist: Alayna Lemmer
+  flavor_text: '"Let the Empire look down upon commerce all they wish. When the Mantis can fund an army
+    to defeat any foe, they will reconsider their ludicrous ideas." - Yoritomo Hiromi'
+  collector_number: '58'
+  doublesided: true
+- title: Tsuruchi Jinrai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Mantis
+  keywords:
+  - Magistrate
+  - Samurai
+  - Soul of Tsuruchi Jougo
+  text: <b>Battle, :bow::</b> Ranged 3 Attack. You may target a Mantis Clan Personality in one of your
+    Provinces and reduce his Gold Cost by 2 <i>(this turn)</i>, to a minimum of 3.
+  gold_cost: 6
+  force: 2
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: He sprang from the battlements, firing arrow after arrow without ceasing. Each one found
+    their mark perfectly.
+  collector_number: '22'
+- title: Tsuruchi Satou
   types:
   - Personality
   decks:
@@ -1287,14 +1225,41 @@ cards:
   - Legacy
   - Modern
   story: 2013 Level 10 Winner - Chris Medico
-  printing_id: '2'
   rarity: Fixed
   artist: Jason Behnke
   flavor_text: '"I haven''t killed a Crane before. What a delightful opportunity this will be."'
   collector_number: '23'
   designer: Julien
-- cardid: 11912
-  title: Yoritomo Raiden
+- title: Tsuruchi Taito
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Mantis
+  keywords:
+  - Naval
+  - Samurai
+  - Scout
+  text: <b>Battle, :bow::</b> Ranged 3 Attack. If the Defender has not had an opportunity to take a Battle
+    action or pass, discard a card.
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Sergio Camarena
+  flavor_text: He watched the village burning to ash. "Ibara," he said through clenched teeth. "We will
+    meet again."
+  collector_number: '24'
+  designer: Loki
+- title: Yoritomo Raiden
   types:
   - Personality
   decks:
@@ -1317,15 +1282,41 @@ cards:
   - Legacy
   - Modern
   story: 2013 6th Ring Kickstarter Supporter - Bradley Reeves
-  printing_id: '2'
   rarity: Fixed
   artist: Lee Smith
   flavor_text: '"Sail up a river during monsoon season so that you can help in the fight against the Crane?
     Of course, my lord Champion. I thought you wanted something difficult."'
   collector_number: '25'
   designer: Julien
-- cardid: 11913
-  title: Yoritomo Yakuwa
+- title: Yoritomo Teihiko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Mantis
+  keywords:
+  - Naval
+  - Mantis Clan
+  - Samurai
+  - Soul of Yoritomo Mie
+  text: <i><i>(Once a turn, the Attacker gets the first Battle action, if it's from a Naval Personality's
+    unit.)</i></i>
+  gold_cost: 5
+  force: 4
+  chi: 2
+  personal_honor: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Shen Fei
+  flavor_text: '"You have no blade," the Crane laughed, "just that ridiculous thing on your arm." Teihiko
+    smiled. "Come closer and say that."'
+  collector_number: '26'
+- title: Yoritomo Yakuwa
   types:
   - Personality
   decks:
@@ -1347,114 +1338,9 @@ cards:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Luis NCT
   flavor_text: He watched the Crane scouts fade in and out of the wilderness like wraiths. "This may be
     more of a problem than we anticipated," he muttered.
   collector_number: '27'
   designer: Julien
-- cardid: 11995
-  title: Drawing First Blood
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: As a Focus Effect, remove <b>Duelist</b> from the Personality facing yours in this duel.<br><b>Battle:</b>
-    Target your unbowed Personality, and bow him if he's defending. Move home a target enemy Personality
-    with lower Chi. Gain 1 Honor if your Personality is a Duelist.
-  focus: 4
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  notes: This card was misprinted in The Currency of War with a 3 Focus Value.
-  printing_id: '2'
-  rarity: Fixed
-  artist: David Horne
-  flavor_text: '"Remember me, each time you see the scar. Remember me and know that I was your better,
-    this day and all days."'
-  collector_number: '46'
-  designer: Julien
-- cardid: 12093
-  title: Daidoji Taenaru
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crane
-  keywords:
-  - Samurai
-  - Soul of Daidoji Tae
-  text: After Taenaru is destroyed, gain 2 Honor.<br><b>Battle:</b> Once per battle, move home a target
-    enemy Personality with lower current Force than his own printed Force. Bow him as he moves.
-  gold_cost: 8
-  force: 3
-  chi: 3
-  honor_requirement: 2
-  personal_honor: 2
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '2'
-  rarity: Fixed
-  artist: Jim Pavelec
-  flavor_text: '"The Tsuruchi move through the wilderness like ghosts. How are we supposed to find them?"'
-  collector_number: '15'
-- cardid: 12131
-  title: Tsuruchi Jinrai
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Mantis
-  keywords:
-  - Magistrate
-  - Samurai
-  - Soul of Tsuruchi Jougo
-  text: <b>Battle, :bow::</b> Ranged 3 Attack. You may target a Mantis Clan Personality in one of your
-    Provinces and reduce his Gold Cost by 2 <i>(this turn)</i>, to a minimum of 3.
-  gold_cost: 6
-  force: 2
-  chi: 2
-  honor_requirement: 0
-  personal_honor: 2
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '2'
-  rarity: Fixed
-  artist: Malcolm McClinton
-  flavor_text: He sprang from the battlements, firing arrow after arrow without ceasing. Each one found
-    their mark perfectly.
-  collector_number: '22'
-- cardid: 12258
-  title: The Esteemed Palace of the Crane
-  types:
-  - Stronghold
-  decks:
-  - Pre-Game
-  clans:
-  - Crane
-  text: <b>Political Open, :bow::</b> If you control a Personality, gain 2 Honor.<br><i>(When going second,
-    you get +1PS and a +5 Lobby bonus)</i>
-  province_strength: 6
-  starting_honor: 6
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Alayna Lemmer
-  flavor_text: '"It is unfortunate that the Mantis have chosen to force our hand in this matter. We will
-    have no choice but to teach them a lesson." - Doji Makoto'
-  collector_number: '56'
-  doublesided: true

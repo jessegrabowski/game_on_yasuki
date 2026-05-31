@@ -1,7 +1,6 @@
 set: Embers of War
 cards:
-- cardid: 99
-  title: A Weak Poison
+- title: A Weak Poison
   types:
   - Strategy
   decks:
@@ -15,15 +14,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Lee Smith
   flavor_text: <i>"If I wished him dead, he would be dead. I only wish him to be indisposed." - Yasuki
     Makoto</i>
   collector_number: '108'
   designer: Loki
-- cardid: 294
-  title: Akodo Tamisu
+- title: Akodo Tamisu
   types:
   - Personality
   decks:
@@ -47,14 +44,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>"There is no greater virtue than to teach. There is no greater service to the future."</i>
   collector_number: '31'
   designer: Duncan
-- cardid: 453
-  title: Armor of the Uruwashii
+- title: Armor of the Uruwashii
   types:
   - Item
   decks:
@@ -72,15 +67,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Aurelien Hubert
   flavor_text: <i>"One of the Tsi's latest creations, its craft is as legendary as its bearer." - Kaiu
     Tojikana</i>
   collector_number: '87'
   designer: Thomas
-- cardid: 502
-  title: Asahina Konomi
+- title: Asahina Konomi
   types:
   - Personality
   decks:
@@ -101,15 +94,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Anna Christenson
   flavor_text: <i>"The breath of the world is my brush. The smallest hopes can fly when you paint them
     wings."</i>
   collector_number: '19'
   designer: Thomas
-- cardid: 556
-  title: Asako Kikugoro
+- title: Asako Kikugoro
   types:
   - Personality
   decks:
@@ -132,14 +123,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Heather V. Kreiter
   flavor_text: <i>"Each step along the Path brings more of the world into view."</i>
   collector_number: '44'
   designer: Bryan
-- cardid: 561
-  title: Asako Megu
+- title: Asako Megu
   types:
   - Personality
   decks:
@@ -163,14 +152,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Greg Lambrakis
   flavor_text: <i>"I am not satisfied by your answers, Matsu-san. Let us begin again."</i>
   collector_number: '45'
   designer: Bryan
-- cardid: 615
-  title: Ashigaru Guards
+- title: Ashigaru Guards
   types:
   - Follower
   decks:
@@ -187,7 +174,6 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Aurelien Hubert
   flavor_text: <i>"The attacks make the overland route even more perilous. We have increased the guards
@@ -195,8 +181,29 @@ cards:
     these raids." - Shinjo Min-Hee</i>
   collector_number: '79'
   designer: Loki
-- cardid: 637
-  title: Astonishing Accusation
+- title: Assassin
+  types:
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Unaligned
+  keywords:
+  - Duelist
+  - Assassin
+  text: May not be included in decks.
+  gold_cost: 0
+  force: 0
+  chi: 3
+  personal_honor: 0
+  is_proxy: true
+  legality:
+  - Not Legal (Proxy)
+  rarity: Common
+  artist: Chris Pritchard
+  flavor_text: <i>The most perfect implement of vengeance<br>is one that is never suspected.</i>
+  collector_number: '3'
+- title: Astonishing Accusation
   types:
   - Strategy
   decks:
@@ -212,14 +219,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Jason Engle
   flavor_text: <i>"You are mixed up in something horrible, I know it!"</i>
   collector_number: '109'
   designer: Duncan
-- cardid: 820
-  title: Bayushi Kazutoshi
+- title: Bayushi Kazutoshi
   types:
   - Personality
   decks:
@@ -246,14 +251,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Charles Urbach
   flavor_text: <i>"I honor my sensei in all ways."</i>
   collector_number: '50'
   designer: Bryan
-- cardid: 853
-  title: Bayushi Nomen
+- title: Bayushi Nomen
   types:
   - Personality
   decks:
@@ -277,15 +280,13 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Common
   artist: Sam Kennedy
   flavor_text: <i>"It is a proud name, though I cannot exactly claim it is my own. But with it I will
     defend our clan against all who would harm it."</i>
   collector_number: '51'
   designer: Bryan
-- cardid: 910
-  title: Bayushi Tenzan
+- title: Bayushi Tenzan
   types:
   - Personality
   decks:
@@ -313,15 +314,13 @@ cards:
   - Legacy
   - Modern
   story: 2011 Amber Blackburn BGG Charity Auction - Seth Abraham
-  printing_id: '1'
   rarity: Uncommon
   artist: Steve Argyle
   flavor_text: <i>"Tasu helped stop Shoju when he rose. His grandson Tenzan hopes to do the same with
     Paneki." - Bayushi Keirei</i>
   collector_number: '52'
   designer: Bryan
-- cardid: 1151
-  title: Broken Cipher
+- title: Broken Cipher
   types:
   - Strategy
   decks:
@@ -335,15 +334,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Felipe Gaona
   flavor_text: <i>The ciphers used by shugenja families to protect their secrets are closely guarded.
     Those who betray the secrets are often short-lived.</i>
   collector_number: '110'
   designer: Bryan
-- cardid: 1268
-  title: Celestial Sword of the Lion
+- title: Celestial Sword of the Lion
   types:
   - Item
   decks:
@@ -366,13 +363,11 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '88'
   designer: Loki
-- cardid: 1273
-  title: Celestial Sword of the Unicorn
+- title: Celestial Sword of the Unicorn
   types:
   - Item
   decks:
@@ -395,13 +390,11 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '89'
   designer: Bryan
-- cardid: 1277
-  title: Centering the Soul
+- title: Centering the Soul
   types:
   - Spell
   decks:
@@ -417,14 +410,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Miss Tak
   flavor_text: <i>"Listen to the candle's flame as it flickers in the wind."</i>
   collector_number: '96'
   designer: Loki
-- cardid: 1621
-  title: Daidoji Akeha
+- title: Daidoji Akeha
   types:
   - Personality
   decks:
@@ -452,14 +443,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Mario Wibisono
   flavor_text: <i>"Surely Kikaze's daughter will improve the luck of the Crane." - Doji Takara</i>
   collector_number: '20'
   designer: Thomas
-- cardid: 1663
-  title: Daidoji Narizane
+- title: Daidoji Narizane
   types:
   - Personality
   decks:
@@ -484,14 +473,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Sergio Camarena
   flavor_text: <i>"You only get one try, and one is not enough."</i>
   collector_number: '21'
   designer: Thomas
-- cardid: 1734
-  title: Daigotsu Kazuko
+- title: Daigotsu Kazuko
   types:
   - Personality
   decks:
@@ -514,15 +501,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Lee Smith
   flavor_text: <i>"The new governor's orders tie our hands. We are unable to follow the mandate and continue
     our plans."</i>
   collector_number: '56'
   designer: Duncan
-- cardid: 1771
-  title: Daigotsu Susaiken
+- title: Daigotsu Susaiken
   types:
   - Personality
   decks:
@@ -546,15 +531,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>"The other clans embrace the importance of teaching. What they fail to understand is
     the content of the lessons that must be learned."</i>
   collector_number: '57'
   designer: Duncan
-- cardid: 1777
-  title: Daigotsu Takayasu
+- title: Daigotsu Takayasu
   types:
   - Personality
   decks:
@@ -580,15 +563,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Andy Hepworth
   flavor_text: <i>He was once a young man, struggling to utilize his inhuman powers. His mastery is now
     complete, and he leads the Spider into the face of death without hesitation.</i>
   collector_number: '58'
   designer: Duncan
-- cardid: 1778
-  title: Daigotsu Tenbatsu
+- title: Daigotsu Tenbatsu
   types:
   - Personality
   decks:
@@ -610,15 +591,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Franz Vohwinkel
   flavor_text: <i>"There is no point in holding back our potential. Give us freedom to run rampant upon
     our enemies!"</i>
   collector_number: '59'
   designer: Duncan
-- cardid: 1808
-  title: Damning Ceremony
+- title: Damning Ceremony
   types:
   - Spell
   decks:
@@ -634,14 +613,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: John Donahue
   flavor_text: <i>There is never a shortage of men willing to trade their souls for power.</i>
   collector_number: '97'
   designer: Duncan
-- cardid: 1875
-  title: Dazzling Attire
+- title: Dazzling Attire
   types:
   - Item
   decks:
@@ -655,15 +632,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Heather V. Kreiter
   flavor_text: <i>Some spend their entire lives avoiding the collective eyes of the court. Meanwhile,
     the bold are forever seeking its attentions.</i>
   collector_number: '90'
   designer: Bryan
-- cardid: 1880
-  title: Deadly Discipline
+- title: Deadly Discipline
   types:
   - Strategy
   decks:
@@ -680,14 +655,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Alex Drummond
   flavor_text: <i>It purifies, it strengthens, it destroys.</i>
   collector_number: '111'
   designer: Duncan
-- cardid: 1921
-  title: Deep Snows
+- title: Deep Snows
   types:
   - Strategy
   decks:
@@ -704,14 +677,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Arkady Roytman
   flavor_text: <i>"The raiders are not troubled by winter, so we must not be." - Moto Naleesh</i>
   collector_number: '112'
   designer: Duncan
-- cardid: 1945
-  title: Delving into History
+- title: Delving into History
   types:
   - Spell
   decks:
@@ -729,15 +700,38 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Rare
   artist: Jorge Matar
   flavor_text: <i>The Asako and Ikoma know the strength of tradition and written history. All answers
     lie within their ancestors' actions.</i>
   collector_number: '98'
   designer: Bryan
-- cardid: 2413
-  title: Exploited Advantage
+- title: Emerald Magistrate
+  types:
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Unaligned
+  keywords:
+  - Duelist
+  - Imperial
+  - Magistrate
+  - Samurai
+  text: May not be included in decks.
+  gold_cost: 0
+  force: 4
+  chi: 4
+  personal_honor: 3
+  is_proxy: true
+  legality:
+  - Not Legal (Proxy)
+  rarity: Common
+  artist: Andy Hepworth
+  flavor_text: <i>"They travel from city to city, never tiring in<br>their search for justice. They are
+    the purest<br>expression of the Empress's will in the mortal<br>realm." - The Journal of Seppun Tashime</i>
+  collector_number: '4'
+- title: Exploited Advantage
   types:
   - Strategy
   decks:
@@ -750,14 +744,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Cos Koniotis
   flavor_text: <i>"What is the point of being better if you do not exploit it?" - Daigotsu Gyoken</i>
   collector_number: '113'
   designer: Duncan
-- cardid: 2420
-  title: Extending Influence
+- title: Extending Influence
   types:
   - Spell
   decks:
@@ -773,14 +765,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Veronica V. Jones
   flavor_text: <i>The subtlest effects can have powerful repercussions.</i>
   collector_number: '99'
   designer: Duncan
-- cardid: 2520
-  title: Field Messenger
+- title: Field Messenger
   types:
   - Follower
   decks:
@@ -797,15 +787,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Asier Martinez Lopez
   flavor_text: <i>"The winter is harsh, but not so much as to stop our messengers. We must speak to the
     Unicorn about these raids." - Akodo Dairuko</i>
   collector_number: '80'
   designer: Duncan
-- cardid: 2598
-  title: Flanking Unit
+- title: Flanking Unit
   types:
   - Follower
   decks:
@@ -824,14 +812,35 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Brandon Leach
   flavor_text: <i>They can turn a battle's course.</i>
   collector_number: '81'
   designer: Loki
-- cardid: 2759
-  title: Gaining Advantage
+- title: Fresh Recruit
+  types:
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Unaligned
+  keywords:
+  - Ronin
+  - Samurai
+  text: May not be included in decks.
+  gold_cost: 0
+  force: 2
+  chi: 2
+  personal_honor: 2
+  is_proxy: true
+  legality:
+  - Not Legal (Proxy)
+  rarity: Common
+  artist: David Horne
+  flavor_text: <i>Trained over the course of months rather<br>than years, they have value on the battlefield<br>to
+    be sure. Their greatest strength, however,<br>is that they are utterly expendable.</i>
+  collector_number: '5'
+- title: Gaining Advantage
   types:
   - Event
   decks:
@@ -848,14 +857,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Sam Kennedy
   flavor_text: <i>The Crane sought clear dominance with every small victory.</i>
   collector_number: '3'
   designer: Duncan
-- cardid: 2771
-  title: Games of Will
+- title: Games of Will
   types:
   - Strategy
   decks:
@@ -870,14 +877,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Albert Tavira
   flavor_text: <i>"Ah, politics." - Shiba Tsukimi</i>
   collector_number: '114'
   designer: Thomas
-- cardid: 2849
-  title: Goju Gochiso
+- title: Goju Gochiso
   types:
   - Personality
   decks:
@@ -899,15 +904,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Troy Graham
   flavor_text: <i>He could meld into every shadow with ease, and his powers have only grown stronger of
     late.</i>
   collector_number: '60'
   designer: Duncan
-- cardid: 2880
-  title: Gozaru no Oni
+- title: Gozaru no Oni
   types:
   - Personality
   decks:
@@ -929,15 +932,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Jason Engle
   flavor_text: <i>"There is no peace in Jigoku. Many powerful demons reject the very concept." - Isawa
     Kimi</i>
   collector_number: '63'
   designer: Thomas
-- cardid: 2896
-  title: Greasing the Wheels
+- title: Greasing the Wheels
   types:
   - Strategy
   decks:
@@ -951,14 +952,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Veronica V. Jones
   flavor_text: <i>"Everyone has a price. The trouble lies only in finding it."</i>
   collector_number: '115'
   designer: Loki
-- cardid: 2911
-  title: Growing Hostility
+- title: Growing Hostility
   types:
   - Event
   decks:
@@ -973,14 +972,60 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: John Moriarty
   flavor_text: <i>The Spider were the victims, but they were not the only ones to suffer.</i>
   collector_number: '4'
   designer: Thomas
-- cardid: 3055
-  title: Help from the Shadows
+- title: Guest
+  types:
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Unaligned
+  keywords:
+  - Monk
+  text: May not be included in decks.
+  gold_cost: 0
+  force: 1
+  chi: 1
+  personal_honor: 1
+  is_proxy: true
+  legality:
+  - Not Legal (Proxy)
+  rarity: Common
+  artist: Florian Stitz
+  flavor_text: <i>"What better opportunity to teach others to<br>stretch the boundaries of their perceptions<br>than
+    that of a lengthy visit in another's court.<br>What a wonderful teaching opportunity!"</i>
+  collector_number: '6'
+- title: Haruki's Deer
+  types:
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Mantis
+  keywords:
+  - Deer
+  - Mantis Clan
+  - Nonhuman
+  - Spirit
+  text: 'May not be included in decks.<br><b>Limited:</b> If another player has higher Family Honor than
+    you: Gain 2 Honor.'
+  gold_cost: 0
+  force: 2
+  chi: 2
+  personal_honor: 3
+  is_proxy: true
+  legality:
+  - Not Legal (Proxy)
+  rarity: Common
+  artist: Heather V. Kreiter
+  flavor_text: <i>"The spirits of Chikushudo are rarely as innocuous<br>as their mortal counterparts.
+    You see a deer, but<br>I see a deadly warrior." - Kitsune Haruki</i>
+  collector_number: '2'
+- title: Help from the Shadows
   types:
   - Strategy
   decks:
@@ -995,14 +1040,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Luis NCT
   flavor_text: <i>"There is no such thing as a lone assassin." - Little Truths</i>
   collector_number: '116'
   designer: Bryan
-- cardid: 3075
-  title: Hida Bakishi
+- title: Hida Bakishi
   types:
   - Personality
   decks:
@@ -1025,15 +1068,13 @@ cards:
   - Legacy
   - Modern
   story: 2010 Winner's Choice - Josh Griffis
-  printing_id: '1'
   rarity: Common
   artist: Cos Koniotis
   flavor_text: <i>All berserkers throw themselves off the cliffs of sanity. Some never climb their way
     back.</i>
   collector_number: '13'
   designer: Bryan
-- cardid: 3165
-  title: Hida Osote
+- title: Hida Osote
   types:
   - Personality
   decks:
@@ -1056,14 +1097,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Ben Peck
   flavor_text: <i>"Practice the basics."</i>
   collector_number: '14'
   designer: Bryan
-- cardid: 3280
-  title: Hiromi's Vassals
+- title: Hiromi's Vassals
   types:
   - Follower
   decks:
@@ -1081,14 +1120,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Lake Hurwitz
   flavor_text: <i>"The seas grow strangely hostile, but the Mantis do not flinch." - Moshi Tomeno</i>
   collector_number: '82'
   designer: Bryan
-- cardid: 3307
-  title: Hiruma Moritoki
+- title: Hiruma Moritoki
   types:
   - Personality
   decks:
@@ -1111,15 +1148,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Diego Gisbert Llorens
   flavor_text: <i>"Observing the enemy is only half the task of a well-trained scout. The other half is
     knowing him."</i>
   collector_number: '15'
   designer: Bryan
-- cardid: 3413
-  title: Home Guard
+- title: Home Guard
   types:
   - Follower
   decks:
@@ -1135,15 +1170,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Shawn Lindow
   flavor_text: <i>"Even an indifferent soldier can become fearsome when he stands with is back towards
     his home. Never forget this, my father told me." - Kaiu Onizuka</i>
   collector_number: '83'
   designer: Bryan
-- cardid: 3415
-  title: Honest Assessment
+- title: Honest Assessment
   types:
   - Strategy
   decks:
@@ -1159,14 +1192,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Brent Chumley
   flavor_text: <i>There are moments when honesty is more appreciated than it would be otherwise.</i>
   collector_number: '117'
   designer: Thomas
-- cardid: 3484
-  title: Hotei's Contentment
+- title: Hotei's Contentment
   types:
   - Celestial
   decks:
@@ -1182,14 +1213,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Edwin David
   flavor_text: <i>The moments of peace are few, and thus must be savored all the more.</i>
   collector_number: '1'
   designer: Bryan
-- cardid: 3607
-  title: Ikoma Hakige
+- title: Ikoma Hakige
   types:
   - Personality
   decks:
@@ -1216,15 +1245,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"He is gruff and unpleasant, and often mistaken for a Matsu. But his skill and his honor
     are without reproach, and so we forgive him his eccentricities." - Akodo Dairuko</i>
   collector_number: '33'
   designer: Duncan
-- cardid: 3637
-  title: Ikoma Shika
+- title: Ikoma Shika
   types:
   - Personality
   decks:
@@ -1250,15 +1277,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Sergio Camarena
   flavor_text: <i>She was the first to uncover the devastated remnants of the Unicorn caravan. Her expert
     eyes immediately scanned the battlefield for any signs of the departed attackers.</i>
   collector_number: '34'
   designer: Duncan
-- cardid: 3640
-  title: Ikoma Sido
+- title: Ikoma Sido
   types:
   - Personality
   decks:
@@ -1278,15 +1303,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Glen Osterberger
   flavor_text: <i>"Some of my brothers have found it difficult to adapt to life in the Colonies. There
     are treasures to find in these strange lands if one is brave enough to search for them."</i>
   collector_number: '35'
   designer: Duncan
-- cardid: 3660
-  title: Ikoma Yamahatsu
+- title: Ikoma Yamahatsu
   types:
   - Personality
   decks:
@@ -1310,15 +1333,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Stu Barnes
   flavor_text: <i>His father had the fortune to marry a Seppun wife. He gratefully accepted every opportunity
     his heritage opened to him and quickly rose in rank.</i>
   collector_number: '36'
   designer: Duncan
-- cardid: 3666
-  title: Illusory Defense
+- title: Illusory Defense
   types:
   - Spell
   decks:
@@ -1335,14 +1356,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Manuel Calderon
   flavor_text: <i>He wove his magic and felt the land change around him.</i>
   collector_number: '100'
   designer: Bryan
-- cardid: 3723
-  title: In Search of Guidance
+- title: In Search of Guidance
   types:
   - Event
   decks:
@@ -1356,15 +1375,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Raymond Guastadnes
   flavor_text: <i>"When seeking a teacher, first find those who know what you know, then those who know
     what you do not." - The Tao of Shinsei</i>
   collector_number: '5'
   designer: Bryan
-- cardid: 3732
-  title: Incite the Phantoms
+- title: Incite the Phantoms
   types:
   - Spell
   decks:
@@ -1381,14 +1398,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Felipe Gaona
   flavor_text: <i>He stopped laughing as the twentieth creature appeared.</i>
   collector_number: '101'
   designer: Thomas
-- cardid: 3733
-  title: Inciting Mistrust
+- title: Inciting Mistrust
   types:
   - Strategy
   decks:
@@ -1404,13 +1419,11 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Brent Chumley
   collector_number: '118'
   designer: Thomas
-- cardid: 3736
-  title: Indecision
+- title: Indecision
   types:
   - Strategy
   decks:
@@ -1425,15 +1438,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Chris Pritchard
   flavor_text: <i>"Why do you hesitate? It is a simple matter, boy. Denounce our Yoritomo host for his
     smuggling ties, and everything will fall into place."</i>
   collector_number: '119'
   designer: Thomas
-- cardid: 3738
-  title: Inescapable Snare
+- title: Inescapable Snare
   types:
   - Spell
   decks:
@@ -1448,14 +1459,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Patrick McEvoy
   flavor_text: <i>"Struggle more, foolish creature. You only ensure your doom."</i>
   collector_number: '102'
   designer: Loki
-- cardid: 3739
-  title: Inexorable
+- title: Inexorable
   types:
   - Strategy
   decks:
@@ -1468,15 +1477,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: William O'Connor
   flavor_text: <i>The only thing more terrifying than one thousand horsemen charging is two thousand horsemen
     charging.</i>
   collector_number: '120'
   designer: Bryan
-- cardid: 3849
-  title: Isawa Koiso
+- title: Isawa Koiso
   types:
   - Personality
   decks:
@@ -1503,14 +1510,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Mario Wibisono
   flavor_text: <i>"Fire speaks to me. What will it say to you?"</i>
   collector_number: '46'
   designer: Bryan
-- cardid: 3861
-  title: Isawa Mina
+- title: Isawa Mina
   types:
   - Personality
   decks:
@@ -1532,15 +1537,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Alayna Lemmer
   flavor_text: <i>"The Second City is the gate to many mysteries. The Lion err in thinking that we should
     be kept from them. And we do not need them to protect us from any dangers that lurk there."</i>
   collector_number: '47'
   designer: Bryan
-- cardid: 3892
-  title: Isawa Sanetomo
+- title: Isawa Sanetomo
   types:
   - Personality
   decks:
@@ -1564,14 +1567,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: April Lee
   flavor_text: <i>"The elements support and nurture us. Why should I worry when they are with me always?"</i>
   collector_number: '48'
   designer: Bryan
-- cardid: 3972
-  title: Itoku
+- title: Itoku
   types:
   - Personality
   decks:
@@ -1600,15 +1601,13 @@ cards:
   - Legacy
   - Modern
   story: 2011 The Seven Sohei - David Attali
-  printing_id: '1'
   rarity: Rare
   artist: Carlos Cardenas
   flavor_text: <i>The legend of the Seven Sohei from the Destroyer War continues to inspire, even decades
     later.</i>
   collector_number: '64'
   designer: Bryan
-- cardid: 4011
-  title: Iuchi Yuri
+- title: Iuchi Yuri
   types:
   - Personality
   decks:
@@ -1629,15 +1628,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: MuYoung Kim
   flavor_text: <i>"We control land access to the Colonies. What do the Mantis control? The seas are too
     vast for any to claim dominion."</i>
   collector_number: '70'
   designer: Thomas
-- cardid: 4131
-  title: Kaiu Onizuka
+- title: Kaiu Onizuka
   types:
   - Personality
   decks:
@@ -1663,15 +1660,13 @@ cards:
   - Legacy
   - Modern
   story: 2010 Topaz Championship - Dan Jacobson
-  printing_id: '1'
   rarity: Rare
   artist: William O'Connor
   flavor_text: <i>As the Empire continued to rebuild and expand, the value of the Kaiu's insights increased
     tenfold. Some became more important than the average.</i>
   collector_number: '16'
   designer: Bryan
-- cardid: 4145
-  title: Kaiu Tojikana
+- title: Kaiu Tojikana
   types:
   - Personality
   decks:
@@ -1695,15 +1690,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Erich Schreiner
   flavor_text: <i>Thanks to the aid of the Kaiu, the castles of the Scorpion were never more resilient,
     if a little less menacing.</i>
   collector_number: '17'
   designer: Bryan
-- cardid: 4167
-  title: Kakita Gonji
+- title: Kakita Gonji
   types:
   - Personality
   decks:
@@ -1728,14 +1721,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: April Lee
   flavor_text: <i>"Watch again, and perfect your form."</i>
   collector_number: '22'
   designer: Thomas
-- cardid: 4179
-  title: Kakita Kae
+- title: Kakita Kae
   types:
   - Personality
   decks:
@@ -1758,14 +1749,12 @@ cards:
   - Legacy
   - Modern
   story: 2011 MageCon Charity Auction - Giovanni Aviles
-  printing_id: '1'
   rarity: Rare
   artist: Mario Wibisono
   flavor_text: <i>Even the Scorpion are wary of her sweet words.</i>
   collector_number: '23'
   designer: Thomas
-- cardid: 4189
-  title: Kakita Kenta
+- title: Kakita Kenta
   types:
   - Personality
   decks:
@@ -1788,14 +1777,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Veronica V. Jones
   flavor_text: <i>"His technique is overshadowed by the uses he puts it to." - Kakita Gonji</i>
   collector_number: '24'
   designer: Thomas
-- cardid: 4352
-  title: Killing Intent
+- title: Killing Intent
   types:
   - Strategy
   decks:
@@ -1809,15 +1796,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: John Donahue
   flavor_text: <i>His enemy's ferocity froze Hiro in place. The truth dawned upon him as he met the Crab's
     gaze. He would die if he made any movement.</i>
   collector_number: '121'
   designer: Duncan
-- cardid: 4386
-  title: Kitsu Miro
+- title: Kitsu Miro
   types:
   - Personality
   decks:
@@ -1843,14 +1828,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Charles Urbach
   flavor_text: <i>"My brother taught me the ways of warfare, and a thousand ancestors bolster my weaknesses."</i>
   collector_number: '37'
   designer: Duncan
-- cardid: 4407
-  title: Kitsuki Daisuke
+- title: Kitsuki Daisuke
   types:
   - Personality
   decks:
@@ -1876,15 +1859,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Aaron Miller
   flavor_text: <i>"I am just as mistaken about the evidence as you are mistaken about fashion trends at
     Winter Court. Tell me about your meeting with the silk merchant, or name your champion."</i>
   collector_number: '25'
   designer: Loki
-- cardid: 4416
-  title: Kitsuki Jakuei
+- title: Kitsuki Jakuei
   types:
   - Personality
   decks:
@@ -1909,14 +1890,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Tony Foti
   flavor_text: <i>"Are you certain this is not a counterfeit?"</i>
   collector_number: '26'
   designer: Loki
-- cardid: 4462
-  title: Kitsune Haruki
+- title: Kitsune Haruki
   types:
   - Personality
   decks:
@@ -1939,14 +1918,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Heather V. Kreiter
   flavor_text: <i>"Let others worry about the Empress and her promises."</i>
   collector_number: '38'
   designer: Loki
-- cardid: 4658
-  title: Lady Matsu's Rage
+- title: Lady Matsu's Rage
   types:
   - Celestial
   decks:
@@ -1962,14 +1939,36 @@ cards:
   - Legacy
   - Modern
   story: 2010 Name a Card - Diego Lastorta
-  printing_id: '1'
   rarity: Rare
   artist: Edwin David
   flavor_text: <i>Let the Akodo plan. The Matsu will destroy.</i>
   collector_number: '2'
   designer: Thomas
-- cardid: 4777
-  title: Low Market
+- id: lion_ancestor
+  title: Lion Ancestor
+  types:
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ancestor
+  - Lion Clan
+  - Samurai
+  - Spirit
+  text: May not be included in decks.
+  gold_cost: 0
+  force: 2
+  chi: 2
+  personal_honor: 3
+  is_proxy: true
+  legality:
+  - Not Legal (Proxy)
+  rarity: Common
+  artist: Matt Zeilinger
+  flavor_text: <i>"If you face a single Lion, he is never alone. The strength of ten thousand ancestors
+    fills him from the fields of Yomi. We are, each of us, an army." - Kitsu Tamasine</i>
+  collector_number: '1'
+- title: Low Market
   types:
   - Region
   decks:
@@ -1983,14 +1982,12 @@ cards:
   - Legacy
   - Modern
   notes: Erratum effective October 11th.
-  printing_id: '1'
   rarity: Uncommon
   artist: Alex Drummond
   flavor_text: <i>Even in the new kingdom, there are places that the samurai choose not to acknowledge.</i>
   collector_number: '77'
   designer: Bryan
-- cardid: 4806
-  title: Makito
+- title: Makito
   types:
   - Personality
   decks:
@@ -2019,13 +2016,11 @@ cards:
   - Legacy
   - Modern
   story: 2010 The Seven Sohei - John Dibattista
-  printing_id: '1'
   rarity: Rare
   artist: Manuel Calderon
   collector_number: '65'
   designer: Thomas
-- cardid: 4833
-  title: Mara's Touch
+- title: Mara's Touch
   types:
   - Spell
   decks:
@@ -2040,14 +2035,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Randy Elliott
   flavor_text: <i>"I know you must still be alive, grandmother."</i>
   collector_number: '103'
   designer: Thomas
-- cardid: 5095
-  title: Mirumoto Hikaro
+- title: Mirumoto Hikaro
   types:
   - Personality
   decks:
@@ -2072,14 +2065,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: '<i>Sun and Moon: two swords, two strikes.</i>'
   collector_number: '27'
   designer: Loki
-- cardid: 5125
-  title: Mirumoto Kouzei
+- title: Mirumoto Kouzei
   types:
   - Personality
   decks:
@@ -2100,15 +2091,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Mario Wibisono
   flavor_text: <i>"No matter how benign the Naga were once, if they are eager to leap onto my swords,
     I am happy to oblige them."</i>
   collector_number: '28'
   designer: Loki
-- cardid: 5286
-  title: Moshi Tomiko
+- title: Moshi Tomiko
   types:
   - Personality
   decks:
@@ -2130,15 +2119,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Tony Foti
   flavor_text: <i>"These lands belong to the Mantis, and the interlopers sent by Iweko are not needed
     or wanted."</i>
   collector_number: '39'
   designer: Loki
-- cardid: 5332
-  title: Moto Isul
+- title: Moto Isul
   types:
   - Personality
   decks:
@@ -2159,15 +2146,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Aurelien Hubert
   flavor_text: <i>After the Unicorn caravan from the Colonies was attacked, Naleesh's distrust cast a
     wide net.</i>
   collector_number: '71'
   designer: Thomas
-- cardid: 5361
-  title: Moto Rani
+- title: Moto Rani
   types:
   - Personality
   decks:
@@ -2195,14 +2180,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Jason Engle
   flavor_text: <i>"Life is weak."</i>
   collector_number: '72'
   designer: Thomas
-- cardid: 5423
-  title: Moving and Unmoving
+- title: Moving and Unmoving
   types:
   - Strategy
   decks:
@@ -2216,15 +2199,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Manuel Calderon
   flavor_text: <i>"When you have the sword in your heart, all manner of marvels will bloom." - Mirumoto
     Reiyu</i>
   collector_number: '122'
   designer: Thomas
-- cardid: 5445
-  title: Murderous Thieves
+- title: Murderous Thieves
   types:
   - Follower
   decks:
@@ -2241,7 +2222,6 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Patrick McEvoy
   flavor_text: <i>"The Second City is safe to all, but the lands around it are dangerous for those who
@@ -2249,8 +2229,7 @@ cards:
     we have been exploring." - Yoritomo Emoto</i>
   collector_number: '84'
   designer: Thomas
-- cardid: 5565
-  title: Ninja Guards
+- title: Ninja Guards
   types:
   - Follower
   decks:
@@ -2271,15 +2250,13 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Uncommon
   artist: Felipe Gaona
   flavor_text: <i>"The Crane are growing bold in their quest for power, but we have resources they cannot
     dream of." - Shosuro Hawado</i>
   collector_number: '85'
   designer: Thomas
-- cardid: 5666
-  title: Ochiai's Bravery
+- title: Ochiai's Bravery
   types:
   - Spell
   decks:
@@ -2295,15 +2272,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Wen Juinn
   flavor_text: <i>The Inquisitor temple brought forth a host of Phoenix magical might into the Colonies.
     The Lion fumed at its presence.</i>
   collector_number: '104'
   designer: Thomas
-- cardid: 5923
-  title: Perfect Sacrifice
+- title: Perfect Sacrifice
   types:
   - Strategy
   decks:
@@ -2319,14 +2294,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Héctor Herrera
   flavor_text: <i>"Katsutoshi-sensei would have known how to deal with these beasts, and so do I!"</i>
   collector_number: '123'
   designer: Bryan
-- cardid: 5928
-  title: Perplexing Guests
+- title: Perplexing Guests
   types:
   - Strategy
   decks:
@@ -2341,15 +2314,13 @@ cards:
   - Legacy
   - Modern
   errata_text: Eratta'd via the internet on 7/17/2012, effective 8/14/2012
-  printing_id: '1'
   rarity: Uncommon
   artist: Florian Stitz
   flavor_text: <i>"He has not moved in three days! I hope our northern guests will not make our home familiar
     grounds."</i>
   collector_number: '124'
   designer: Thomas
-- cardid: 5941
-  title: Phantom Visage
+- title: Phantom Visage
   types:
   - Strategy
   decks:
@@ -2364,14 +2335,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Héctor Herrera
   flavor_text: <i>Only a select few ever obtain the privilege to glimpse a Goju's true face.</i>
   collector_number: '125'
   designer: Loki
-- cardid: 5956
-  title: Pillar Tattoo
+- title: Pillar Tattoo
   types:
   - Strategy
   decks:
@@ -2387,15 +2356,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Tony Foti
   flavor_text: <i>The budoka watched the Dragon monk feel the power of his kami's blood. "Is he strong?"<br>The
     poet smiled. "Listen..."</i>
   collector_number: '126'
   designer: Loki
-- cardid: 5958
-  title: Pillowbook
+- title: Pillowbook
   types:
   - Item
   decks:
@@ -2410,15 +2377,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Anna Christenson
   flavor_text: <i>"It is impossible to know exactly how popular pillowbooks are throughout the Empire.
     Most who read them would never confess to it." - Doji Tatsuki</i>
   collector_number: '91'
   designer: Duncan
-- cardid: 6034
-  title: Power of Strength
+- title: Power of Strength
   types:
   - Strategy
   decks:
@@ -2436,15 +2401,13 @@ cards:
   notes: 'Clarification: The targets are chosen simultaneously during the choose targets step of taking
     an action; the "first target" in the final sentence refers to the target that was bowed, which only
     becomes known at the time the bowing effect is resolved.'
-  printing_id: '1'
   rarity: Rare
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"Strength is not just brute force, but the ability to apply it properly. Never forget
     this, or your enemies will teach it to you." - Hida Osote</i>
   collector_number: '127'
   designer: Duncan
-- cardid: 6043
-  title: Preceding Reputation
+- title: Preceding Reputation
   types:
   - Strategy
   decks:
@@ -2457,14 +2420,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Ed Cox
   flavor_text: <i>"Back! Back! Out of the way! Heimin fools, don't you know who I am!?"</i>
   collector_number: '128'
   designer: Thomas
-- cardid: 6047
-  title: Precision
+- title: Precision
   types:
   - Strategy
   decks:
@@ -2477,14 +2438,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Sergio Camarena
   flavor_text: <i>"The dead serve no one. The injured serve their enemy." - Ikoma Shika</i>
   collector_number: '129'
   designer: Duncan
-- cardid: 6059
-  title: Preserving Forces
+- title: Preserving Forces
   types:
   - Strategy
   decks:
@@ -2499,15 +2458,13 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Common
   artist: David Horne
   flavor_text: <i>"I will say this for the Scorpion," Hida Horu said, "they know how to hold on in a fight.
     Almost like fighting alongside a Crab."</i>
   collector_number: '130'
   designer: Bryan
-- cardid: 6077
-  title: Pronouncement of Guilt
+- title: Pronouncement of Guilt
   types:
   - Strategy
   decks:
@@ -2520,14 +2477,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Eric Lofgren
   flavor_text: <i>"Bring the guilty party. I would have him made an example to all." - Moto Rani</i>
   collector_number: '131'
   designer: Bryan
-- cardid: 6165
-  title: Rata
+- title: Rata
   types:
   - Personality
   decks:
@@ -2547,15 +2502,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Troy Graham
   flavor_text: <i>"I know your words of power. Goju, Ninube, Shadow Dragon. They are words, nothing more.
     I will drink your shadows and spit on your corpses."</i>
   collector_number: '66'
   designer: Loki
-- cardid: 6209
-  title: Reckless Duel
+- title: Reckless Duel
   types:
   - Strategy
   decks:
@@ -2570,14 +2523,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Greg Lambrakis
   flavor_text: <i>The Dragon would not rest until the Dark Naga revealed their secrets.</i>
   collector_number: '132'
   designer: Loki
-- cardid: 6265
-  title: Request Authorization
+- title: Request Authorization
   types:
   - Strategy
   decks:
@@ -2593,13 +2544,11 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Asier Martinez Lopez
   collector_number: '133'
   designer: Bryan
-- cardid: 6316
-  title: Riddle of Rebirth
+- title: Riddle of Rebirth
   types:
   - Strategy
   decks:
@@ -2619,14 +2568,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Carlos Cardenas
   flavor_text: <i>"Who have I been? Who shall I yet be? The very question thrills the soul!"</i>
   collector_number: '134'
   designer: Duncan
-- cardid: 6317
-  title: Ride the Breeze
+- title: Ride the Breeze
   types:
   - Strategy
   decks:
@@ -2642,15 +2589,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Storn A. Cook
   flavor_text: <i>"Surrender yourself to the winds, my friend! I assure you, the experience is highly
     enlightening!"</i>
   collector_number: '135'
   designer: Loki
-- cardid: 6376
-  title: Rokku
+- title: Rokku
   types:
   - Personality
   decks:
@@ -2678,14 +2623,12 @@ cards:
   - Legacy
   - Modern
   story: 2010 The Seven Sohei - Sebastian Neuefeind
-  printing_id: '1'
   rarity: Rare
   artist: Carlos Cardenas
   flavor_text: <i>First among the Seven Sohei, his path was ever true.</i>
   collector_number: '67'
   designer: Duncan
-- cardid: 6454
-  title: Sakti
+- title: Sakti
   types:
   - Personality
   decks:
@@ -2705,15 +2648,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Lake Hurwitz
   flavor_text: <i>"Do you think you know the darkness within, Spider? You know nothing. I will show you
     horrors you cannot imagine."</i>
   collector_number: '68'
   designer: Bryan
-- cardid: 6469
-  title: Sankaku-Yari
+- title: Sankaku-Yari
   types:
   - Item
   decks:
@@ -2729,15 +2670,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Brent Chumley
   flavor_text: <i>"With this in your hands, even the boldest of their mounted warriors will think twice."
     - Daidoji Tametaka</i>
   collector_number: '92'
   designer: Duncan
-- cardid: 6513
-  title: Scouting the Pass
+- title: Scouting the Pass
   types:
   - Strategy
   decks:
@@ -2754,15 +2693,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Hannah Böving
   flavor_text: <i>All clans condone the use of scouts, for the information they gather paves the path
     to victory.</i>
   collector_number: '136'
   designer: Bryan
-- cardid: 6526
-  title: Searching for Answers
+- title: Searching for Answers
   types:
   - Strategy
   decks:
@@ -2777,14 +2714,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: J. Edwin Stevens
   flavor_text: <i>"Tell me what you know. Now."</i>
   collector_number: '137'
   designer: Bryan
-- cardid: 6552
-  title: Secret Reserve
+- title: Secret Reserve
   types:
   - Strategy
   decks:
@@ -2798,15 +2733,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Brent Chumley
   flavor_text: <i>The Yasuki merchants always seem to have the item you need before you realize you need
     it.</i>
   collector_number: '138'
   designer: Bryan
-- cardid: 6565
-  title: Seeking the Question
+- title: Seeking the Question
   types:
   - Strategy
   decks:
@@ -2823,14 +2756,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Mario Wibisono
   flavor_text: <i>"I can give you the answer, but it will not help." - Isawa Kimi</i>
   collector_number: '139'
   designer: Duncan
-- cardid: 6653
-  title: Shadow Dragon
+- title: Shadow Dragon
   types:
   - Personality
   decks:
@@ -2863,13 +2794,11 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Genzoman
   collector_number: '61'
   designer: Duncan
-- cardid: 6702
-  title: Shamsir
+- title: Shamsir
   types:
   - Item
   decks:
@@ -2886,15 +2815,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Florian Stitz
   flavor_text: <i>As the virtues of gaijin weapons became well known, more were willing to cast aside
     tradition.</i>
   collector_number: '93'
   designer: Duncan
-- cardid: 6727
-  title: Sheathing the Sword
+- title: Sheathing the Sword
   types:
   - Strategy
   decks:
@@ -2909,15 +2836,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Richard Garcia
   flavor_text: <i>One samurai could defeat a hundred ashigaru, but one Imperial decree could silence ten
     thousand samurai.</i>
   collector_number: '140'
   designer: Thomas
-- cardid: 6814
-  title: Shiba Toshisugo
+- title: Shiba Toshisugo
   types:
   - Personality
   decks:
@@ -2938,15 +2863,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Glen Osterberger
   flavor_text: <i>"Earth is strong in him and keeps his Fire steady," Sanetomo said. "He will serve the
     clan well in our unfortunate disagreements with the Lion Clan."</i>
   collector_number: '49'
   designer: Bryan
-- cardid: 6883
-  title: Shinjo Hayan
+- title: Shinjo Hayan
   types:
   - Personality
   decks:
@@ -2971,14 +2894,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>"First observe, and then act. First move, and then strike."</i>
   collector_number: '73'
   designer: Thomas
-- cardid: 6901
-  title: Shinjo Junpei
+- title: Shinjo Junpei
   types:
   - Personality
   decks:
@@ -3004,15 +2925,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Wen Juinn
   flavor_text: <i>"Was it the Ruhmal? Bandits? Maybe, but I cannot rule out any save the Spider. We will
     uncover this treachery together."</i>
   collector_number: '74'
   designer: Thomas
-- cardid: 6934
-  title: Shinjo Sarang
+- title: Shinjo Sarang
   types:
   - Personality
   decks:
@@ -3035,15 +2954,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Ed Cox
   flavor_text: <i>"Let others distrust the Spider. That will only make their support of the Unicorn all
     the stronger."</i>
   collector_number: '75'
   designer: Thomas
-- cardid: 7110
-  title: Shosuro Ietsuno
+- title: Shosuro Ietsuno
   types:
   - Personality
   decks:
@@ -3066,14 +2983,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"I am always watching."</i>
   collector_number: '54'
   designer: Bryan
-- cardid: 7157
-  title: Shosuro Ryoichi
+- title: Shosuro Ryoichi
   types:
   - Personality
   decks:
@@ -3092,7 +3007,6 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Chris Pritchard
   flavor_text: <i>"With the wealth from the Colonies come those who wish to grow rich off of it. Which
@@ -3100,8 +3014,7 @@ cards:
     or dispose of the foolish. Were you still alive, you could figure out which you were."</i>
   collector_number: '53'
   designer: Bryan
-- cardid: 7227
-  title: Shrine to Nimuro
+- title: Shrine to Nimuro
   types:
   - Holding
   decks:
@@ -3118,14 +3031,12 @@ cards:
   - Legacy
   - Modern
   story: 2011 Make a Card - Albert Mialet
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>Lion's roar, Lion's courage, Lion's soul.</i>
   collector_number: '7'
   designer: Duncan
-- cardid: 7373
-  title: Soshi Yoshihara
+- title: Soshi Yoshihara
   types:
   - Personality
   decks:
@@ -3155,14 +3066,12 @@ cards:
   - Legacy
   - Modern
   story: 2010 Jade Championship - Ferran Villegas
-  printing_id: '1'
   rarity: Rare
   artist: Matt Zeilinger
   flavor_text: <i>"They make it too easy, but I do not complain."</i>
   collector_number: '55'
   designer: Bryan
-- cardid: 7435
-  title: Splintered Weapon
+- title: Splintered Weapon
   types:
   - Item
   decks:
@@ -3180,14 +3089,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Max Degen
   flavor_text: <i>Anything one can find can be a weapon...</i>
   collector_number: '94'
   designer: Loki
-- cardid: 7444
-  title: Staging Grounds
+- title: Staging Grounds
   types:
   - Holding
   decks:
@@ -3202,15 +3109,13 @@ cards:
   - Legacy
   - Modern
   story: 2008 Masterpiece - Jeff Williamson
-  printing_id: '1'
   rarity: Common
   artist: Charles Urbach
   flavor_text: <i>With the threat of the Taint gone, the Crab began making regular forays into the Shadowlands
     in hopes of reclaiming land for purification.</i>
   collector_number: '8'
   designer: Duncan
-- cardid: 7459
-  title: Stand as the Mountain
+- title: Stand as the Mountain
   types:
   - Strategy
   decks:
@@ -3223,15 +3128,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Steve Argyle
   flavor_text: <i>"These paltry things?" Osote roared with laughter. "These are nothing. A moment's diversion
     before the day's true work begins. Enjoy!"</i>
   collector_number: '141'
   designer: Loki
-- cardid: 7593
-  title: Stuck in Rokugan
+- title: Stuck in Rokugan
   types:
   - Strategy
   decks:
@@ -3246,15 +3149,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Greg Lambrakis
   flavor_text: <i>There are few in the Empire who wish to travel to the Colonies, but during the long
     winter months, that number can temporarily grow quite high indeed.</i>
   collector_number: '142'
   designer: Thomas
-- cardid: 7612
-  title: Sudden Guardian
+- title: Sudden Guardian
   types:
   - Spell
   decks:
@@ -3270,14 +3171,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Eddie Sharam
   flavor_text: <i>"Borrow my strength, scion. I shall protect you."</i>
   collector_number: '105'
   designer: Loki
-- cardid: 7615
-  title: Sugihara
+- title: Sugihara
   types:
   - Personality
   decks:
@@ -3299,15 +3198,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: John Donahue
   flavor_text: <i>"There is tranquility in the heart of the battlefield, and true knowledge in the arterial
     spray of my enemy as it splashes upon my mask."</i>
   collector_number: '62'
   designer: Duncan
-- cardid: 7668
-  title: Surrounded!
+- title: Surrounded!
   types:
   - Strategy
   decks:
@@ -3322,14 +3219,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Franz Vohwinkel
   flavor_text: <i>"End their suffering. They do not deserve this terrible fate."</i>
   collector_number: '143'
   designer: Thomas
-- cardid: 7671
-  title: Surveillance Outpost
+- title: Surveillance Outpost
   types:
   - Holding
   decks:
@@ -3343,14 +3238,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Gong Studios
   flavor_text: <i>We saw the glint of steel, like teeth, from a long way off.</i>
   collector_number: '9'
   designer: Loki
-- cardid: 7717
-  title: Tactical Trap
+- title: Tactical Trap
   types:
   - Strategy
   decks:
@@ -3365,14 +3258,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Carlos NCT
   flavor_text: <i>Never count on overwhelming odds.</i>
   collector_number: '144'
   designer: Bryan
-- cardid: 7790
-  title: Tamori Seiken
+- title: Tamori Seiken
   types:
   - Personality
   decks:
@@ -3398,15 +3289,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Aurelien Hubert
   flavor_text: <i>"Master the earth, and you will have the most faithful of mounts. It does not tire,
     needs no food or water, and will never flee in fear. What more do I need?"</i>
   collector_number: '29'
   designer: Loki
-- cardid: 7869
-  title: Temple Fortress
+- title: Temple Fortress
   types:
   - Holding
   decks:
@@ -3422,15 +3311,13 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Common
   artist: Albert Tavira
   flavor_text: <i>"I mourn their deaths, for I know their actions are not their own. They are compelled
     by a force they cannot resist, but we cannot spare their lives despite the fact." - Yung</i>
   collector_number: '10'
   designer: Loki
-- cardid: 7897
-  title: Temple to the Elements
+- title: Temple to the Elements
   types:
   - Holding
   decks:
@@ -3448,14 +3335,12 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Common
   artist: Stu Barnes
   flavor_text: <i>Each time the monk looked at the garden, the pebbles formed a different pattern.</i>
   collector_number: '11'
   designer: Loki
-- cardid: 7915
-  title: Terraced Farm
+- title: Terraced Farm
   types:
   - Holding
   decks:
@@ -3469,14 +3354,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Luis NCT
   flavor_text: <i>There are many roads to prosperity.</i>
   collector_number: '12'
   designer: Bryan
-- cardid: 7958
-  title: The Ancestral Sword of Hantei
+- title: The Ancestral Sword of Hantei
   types:
   - Item
   decks:
@@ -3499,13 +3382,11 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '95'
   designer: Thomas
-- cardid: 7972
-  title: The Bite of Winter
+- title: The Bite of Winter
   types:
   - Strategy
   decks:
@@ -3520,14 +3401,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Erich Schreiner
   flavor_text: <i>"Even my sword feels the cold," she complained.</i>
   collector_number: '145'
   designer: Loki
-- cardid: 8004
-  title: The Cycle of Vengeance
+- title: The Cycle of Vengeance
   types:
   - Strategy
   decks:
@@ -3541,14 +3420,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Héctor Herrera
   flavor_text: <i>"Brother!"</i>
   collector_number: '146'
   designer: Thomas
-- cardid: 8030
-  title: The Distant Reaches
+- title: The Distant Reaches
   types:
   - Region
   decks:
@@ -3561,15 +3438,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Alex Drummond
   flavor_text: <i>The light places had fallen to darkness. <br>The dark places had become something much
     worse.</i>
   collector_number: '78'
   designer: Duncan
-- cardid: 8127
-  title: The Heir's Wrath
+- title: The Heir's Wrath
   types:
   - Strategy
   decks:
@@ -3589,14 +3464,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Richard Garcia
   flavor_text: <i>The condemned man's protests faded all too quickly.</i>
   collector_number: '147'
   designer: Duncan
-- cardid: 8141
-  title: The Host's Advantage
+- title: The Host's Advantage
   types:
   - Strategy
   decks:
@@ -3614,14 +3487,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Anna Christenson
   flavor_text: <i>"Unfortunately, my friends, there are liars standing among us."</i>
   collector_number: '148'
   designer: Duncan
-- cardid: 8187
-  title: The Ki-Rin's Path
+- title: The Ki-Rin's Path
   types:
   - Stronghold
   decks:
@@ -3635,15 +3506,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Noah Bradley
   flavor_text: <i>"The sea routes of the Mantis took less time, but the distance between the Colonies'
     ports and the Second City made the overland route more practical. Thus the Unicorn maintained their
     prestige in the Colonies." - The Ikoma Records</i>
   collector_number: '159'
-- cardid: 8211
-  title: The Marshalling Fields
+- title: The Marshalling Fields
   types:
   - Stronghold
   decks:
@@ -3659,14 +3528,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Noah Bradley
   flavor_text: <i>"Here we enact the largest-scale maneuvers learned from the gaijin book. For such to
     be needed, we would be indeed threatened." - Ikoma Shika</i>
   collector_number: '157'
-- cardid: 8219
-  title: The Menacing Sky
+- title: The Menacing Sky
   types:
   - Spell
   decks:
@@ -3681,15 +3548,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Héctor Herrera
   flavor_text: <i>The skies opened up with furious vengeance, and the defenders wondered if foul play
     was at work.</i>
   collector_number: '106'
   designer: Bryan
-- cardid: 8260
-  title: The Plain of Glass
+- title: The Plain of Glass
   types:
   - Stronghold
   decks:
@@ -3705,14 +3570,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Noah Bradley
   flavor_text: <i>Far to the west, on the desolate plains plagued by storms, the Spider held dominion
     of the ruined lands.</i>
   collector_number: '158'
-- cardid: 8298
-  title: The Scorpion Wall is Finished
+- title: The Scorpion Wall is Finished
   types:
   - Event
   decks:
@@ -3729,14 +3592,12 @@ cards:
   - Legacy
   - Modern
   errata_text: The word "after" changed to "if" via technical erratum.
-  printing_id: '1'
   rarity: Uncommon
   artist: J. Edwin Stevens
   flavor_text: <i>The Scorpion readily accepted the aid of the Crab - together they held a dark secret.</i>
   collector_number: '6'
   designer: Loki
-- cardid: 8342
-  title: The Snow Has Teeth
+- title: The Snow Has Teeth
   types:
   - Strategy
   decks:
@@ -3753,14 +3614,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Patrick McEvoy
   flavor_text: <i>Winter is a cruel ally.</i>
   collector_number: '149'
   designer: Duncan
-- cardid: 8366
-  title: The Swell of Strength
+- title: The Swell of Strength
   types:
   - Spell
   decks:
@@ -3776,14 +3635,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Stu Barnes
   flavor_text: <i>"Lend your strength to me, oh water kami."</i>
   collector_number: '107'
   designer: Duncan
-- cardid: 8445
-  title: Thick Marsh
+- title: Thick Marsh
   types:
   - Strategy
   decks:
@@ -3799,14 +3656,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Gong Studios
   flavor_text: <i>The commander's secret weapon. <br>The commander's tactical nightmare.</i>
   collector_number: '150'
   designer: Loki
-- cardid: 8568
-  title: Togashi Rikyou
+- title: Togashi Rikyou
   types:
   - Personality
   decks:
@@ -3829,15 +3684,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Heather V. Kreiter
   flavor_text: <i>"On the contrary," he called as he made his leap, "this is exactly what rooftops were
     made for."</i>
   collector_number: '30'
   designer: Loki
-- cardid: 8613
-  title: Tokiko
+- title: Tokiko
   types:
   - Personality
   decks:
@@ -3866,14 +3719,12 @@ cards:
   - Legacy
   - Modern
   story: 2010 The Seven Sohei - Gustavo Caperan
-  printing_id: '1'
   rarity: Rare
   artist: Wen Juinn
   flavor_text: <i>"She was our conscience, and my salvation." - Makito</i>
   collector_number: '69'
   designer: Loki
-- cardid: 8634
-  title: Too Much for Mortals
+- title: Too Much for Mortals
   types:
   - Strategy
   decks:
@@ -3886,14 +3737,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: John Moriarty
   flavor_text: <i>For the first time, he saw clearly how little he had lived up to his ancestors' valor.</i>
   collector_number: '151'
   designer: Thomas
-- cardid: 8878
-  title: Tsuruchi Shichiro
+- title: Tsuruchi Shichiro
   types:
   - Personality
   decks:
@@ -3916,14 +3765,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>"He does not rely on just words to inspire." - Yoritomo Hiromi</i>
   collector_number: '40'
   designer: Loki
-- cardid: 8879
-  title: Tsuruchi Shigekazu
+- title: Tsuruchi Shigekazu
   types:
   - Personality
   decks:
@@ -3943,15 +3790,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Common
   artist: Albert Tavira
   flavor_text: <i>"The Spider were not welcomed openly, but at least they had a purpose. The other clans
     that are arriving, one by one, serve no purpose other than to take what belongs to us."</i>
   collector_number: '41'
   designer: Loki
-- cardid: 8894
-  title: Tsuruchi Tomaru
+- title: Tsuruchi Tomaru
   types:
   - Personality
   decks:
@@ -3976,15 +3821,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Andy Hepworth
   flavor_text: <i>"With each mile we find wonders unimagined. The other clans sully this land as they
     scramble to place their claims. This place is to be unfolded, not torn open through petty squabbles."</i>
   collector_number: '42'
   designer: Loki
-- cardid: 8922
-  title: Two Fronts
+- title: Two Fronts
   types:
   - Strategy
   decks:
@@ -3997,14 +3840,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Ancor Gil Hernandez
   flavor_text: <i>"There is always a way to surround them," he said with a ferocious grin.</i>
   collector_number: '152'
   designer: Duncan
-- cardid: 9008
-  title: Unsafe Passage
+- title: Unsafe Passage
   types:
   - Strategy
   decks:
@@ -4019,15 +3860,13 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Uncommon
   artist: Gong Studios
   flavor_text: <i>"Fall back!" the Moto shouted. "Tell the wagons to travel the secondary route! We will
     hold these gaijin devils!"</i>
   collector_number: '153'
   designer: Loki
-- cardid: 9020
-  title: Unstoppable Strike
+- title: Unstoppable Strike
   types:
   - Strategy
   decks:
@@ -4040,15 +3879,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Ancor Gil Hernandez
   flavor_text: <i>He was still expounding on the virtues of different alloys long after the corpse had
     stopped moving.</i>
   collector_number: '154'
   designer: Bryan
-- cardid: 9083
-  title: Utaku Lishan
+- title: Utaku Lishan
   types:
   - Personality
   decks:
@@ -4073,14 +3910,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Ben Peck
   flavor_text: <i>"Rokugan is ignorant of what we have accomplished. They sleep while we serve."</i>
   collector_number: '76'
   designer: Thomas
-- cardid: 9163
-  title: Village Raiders
+- title: Village Raiders
   types:
   - Follower
   decks:
@@ -4098,15 +3933,13 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Jason Behnke
   flavor_text: <i>"The Ruhmal erred when they did this. Before, we killed for duty. Now it's for vengeance."
     - Daigotsu Negishi</i>
   collector_number: '86'
   designer: Duncan
-- cardid: 9449
-  title: Yasuki Makoto
+- title: Yasuki Makoto
   types:
   - Personality
   decks:
@@ -4132,14 +3965,12 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Rare
   artist: Mario Wibisono
   flavor_text: <i>Few know the irony of her name.</i>
   collector_number: '18'
   designer: Bryan
-- cardid: 9507
-  title: Yojimbo Assemble
+- title: Yojimbo Assemble
   types:
   - Strategy
   decks:
@@ -4153,14 +3984,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Glen Osterberger
   flavor_text: <i>Swords are not the only threats.</i>
   collector_number: '155'
   designer: Loki
-- cardid: 9579
-  title: Yoritomo Kanaye
+- title: Yoritomo Kanaye
   types:
   - Personality
   decks:
@@ -4184,14 +4013,12 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Rare
   artist: Jason Behnke
   flavor_text: <i>"My loyalty lies with no governor."</i>
   collector_number: '43'
   designer: Loki
-- cardid: 9683
-  title: You Are Unworthy
+- title: You Are Unworthy
   types:
   - Strategy
   decks:
@@ -4204,163 +4031,9 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Uncommon
   artist: Jason Juta
   flavor_text: <i>"Not only does that sword have a better lineage than you do, even the tea we drank this
     morning has a better lineage than you do. Do not disgrace either again."</i>
   collector_number: '156'
   designer: Bryan
-- cardid: 9785
-  title: Lion Ancestor
-  types:
-  - Proxy
-  decks:
-  - Other
-  keywords:
-  - Ancestor
-  - Lion Clan
-  - Samurai
-  - Spirit
-  text: May not be included in decks.
-  gold_cost: 0
-  force: 2
-  chi: 2
-  personal_honor: 3
-  is_proxy: true
-  legality:
-  - Not Legal (Proxy)
-  printing_id: '4'
-  rarity: Common
-  artist: Matt Zeilinger
-  flavor_text: <i>"If you face a single Lion, he is never alone. The strength of ten thousand ancestors
-    fills him from the fields of Yomi. We are, each of us, an army." - Kitsu Tamasine</i>
-  collector_number: '1'
-- cardid: 9995
-  title: Assassin
-  types:
-  - Proxy
-  decks:
-  - Other
-  clans:
-  - Unaligned
-  keywords:
-  - Duelist
-  - Assassin
-  text: May not be included in decks.
-  gold_cost: 0
-  force: 0
-  chi: 3
-  personal_honor: 0
-  is_proxy: true
-  legality:
-  - Not Legal (Proxy)
-  printing_id: '1'
-  rarity: Common
-  artist: Chris Pritchard
-  flavor_text: <i>The most perfect implement of vengeance<br>is one that is never suspected.</i>
-  collector_number: '3'
-- cardid: 9996
-  title: Emerald Magistrate
-  types:
-  - Proxy
-  decks:
-  - Other
-  clans:
-  - Unaligned
-  keywords:
-  - Duelist
-  - Imperial
-  - Magistrate
-  - Samurai
-  text: May not be included in decks.
-  gold_cost: 0
-  force: 4
-  chi: 4
-  personal_honor: 3
-  is_proxy: true
-  legality:
-  - Not Legal (Proxy)
-  printing_id: '1'
-  rarity: Common
-  artist: Andy Hepworth
-  flavor_text: <i>"They travel from city to city, never tiring in<br>their search for justice. They are
-    the purest<br>expression of the Empress's will in the mortal<br>realm." - The Journal of Seppun Tashime</i>
-  collector_number: '4'
-- cardid: 9997
-  title: Fresh Recruit
-  types:
-  - Proxy
-  decks:
-  - Other
-  clans:
-  - Unaligned
-  keywords:
-  - Ronin
-  - Samurai
-  text: May not be included in decks.
-  gold_cost: 0
-  force: 2
-  chi: 2
-  personal_honor: 2
-  is_proxy: true
-  legality:
-  - Not Legal (Proxy)
-  printing_id: '1'
-  rarity: Common
-  artist: David Horne
-  flavor_text: <i>Trained over the course of months rather<br>than years, they have value on the battlefield<br>to
-    be sure. Their greatest strength, however,<br>is that they are utterly expendable.</i>
-  collector_number: '5'
-- cardid: 9998
-  title: Guest
-  types:
-  - Proxy
-  decks:
-  - Other
-  clans:
-  - Unaligned
-  keywords:
-  - Monk
-  text: May not be included in decks.
-  gold_cost: 0
-  force: 1
-  chi: 1
-  personal_honor: 1
-  is_proxy: true
-  legality:
-  - Not Legal (Proxy)
-  printing_id: '1'
-  rarity: Common
-  artist: Florian Stitz
-  flavor_text: <i>"What better opportunity to teach others to<br>stretch the boundaries of their perceptions<br>than
-    that of a lengthy visit in another's court.<br>What a wonderful teaching opportunity!"</i>
-  collector_number: '6'
-- cardid: 9999
-  title: Haruki's Deer
-  types:
-  - Proxy
-  decks:
-  - Other
-  clans:
-  - Mantis
-  keywords:
-  - Deer
-  - Mantis Clan
-  - Nonhuman
-  - Spirit
-  text: 'May not be included in decks.<br><b>Limited:</b> If another player has higher Family Honor than
-    you: Gain 2 Honor.'
-  gold_cost: 0
-  force: 2
-  chi: 2
-  personal_honor: 3
-  is_proxy: true
-  legality:
-  - Not Legal (Proxy)
-  printing_id: '1'
-  rarity: Common
-  artist: Heather V. Kreiter
-  flavor_text: <i>"The spirits of Chikushudo are rarely as innocuous<br>as their mortal counterparts.
-    You see a deer, but<br>I see a deadly warrior." - Kitsune Haruki</i>
-  collector_number: '2'

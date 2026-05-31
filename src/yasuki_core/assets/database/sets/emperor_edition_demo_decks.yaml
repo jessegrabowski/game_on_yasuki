@@ -1,7 +1,6 @@
 set: Emperor Edition Demo Decks
 cards:
-- cardid: 18
-  title: A Dragon's Favor
+- title: A Dragon's Favor
   types:
   - Spell
   decks:
@@ -17,15 +16,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Troy Graham
   flavor_text: '"The power our shugenja now possess is wondrous and terrible, but we must never become
     reliant upon it. If it were revoked, I would not have my clan founder in its absence." - Yoritomo
     Naizen'
   collector_number: '77'
-- cardid: 121
-  title: Advance Warning
+- title: Advance Warning
   types:
   - Strategy
   decks:
@@ -40,12 +37,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Patrick McEvoy
   collector_number: '82'
-- cardid: 153
-  title: Agasha Ryo
+- title: Agasha Ryo
   types:
   - Personality
   decks:
@@ -68,12 +63,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: April Lee
   collector_number: '43'
-- cardid: 419
-  title: Apprentice Shinobi
+- title: Apprentice Shinobi
   types:
   - Follower
   decks:
@@ -91,12 +84,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: John Moriarty
   collector_number: '63'
-- cardid: 503
-  title: Asahina Michiru
+- title: Asahina Michiru
   types:
   - Personality
   decks:
@@ -119,12 +110,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Jorge Matar
   collector_number: '23'
-- cardid: 521
-  title: Asahina Yasutora
+- title: Asahina Yasutora
   types:
   - Personality
   decks:
@@ -144,12 +133,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: MuYoung Kim
   collector_number: '24'
-- cardid: 599
-  title: Ascending the Ranks
+- title: Ascending the Ranks
   types:
   - Strategy
   decks:
@@ -163,14 +150,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Brandon Leach
   flavor_text: '"I am grateful for all that you have taught me.<br>I am sure you are honored to be the
     first to<br>discover just how much I have learned."'
   collector_number: '83'
-- cardid: 662
-  title: Back to the Front
+- title: Back to the Front
   types:
   - Strategy
   decks:
@@ -187,12 +172,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '6'
   rarity: Fixed
   artist: Raymond Gaustadnes
   collector_number: '84'
-- cardid: 679
-  title: Bamboo Harvesters
+- title: Bamboo Harvesters
   types:
   - Holding
   decks:
@@ -207,12 +190,10 @@ cards:
   - Age of Conquest (Emperor)
   - Destroyer War (Celestial)
   - Legacy
-  printing_id: '5'
   rarity: Fixed
   artist: Veronica V. Jones
   collector_number: '2'
-- cardid: 790
-  title: Bayushi Hurunayi
+- title: Bayushi Hurunayi
   types:
   - Personality
   decks:
@@ -235,12 +216,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Anthony Grabski
   collector_number: '48'
-- cardid: 840
-  title: Bayushi Mitsuo
+- title: Bayushi Mitsuo
   types:
   - Personality
   decks:
@@ -263,12 +242,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Michael Phillippi
   collector_number: '49'
-- cardid: 1044
-  title: Blind Rage
+- title: Blind Rage
   types:
   - Strategy
   decks:
@@ -282,12 +259,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: IFS
   collector_number: '85'
-- cardid: 1045
-  title: Block Supply Lines
+- title: Block Supply Lines
   types:
   - Strategy
   decks:
@@ -306,12 +281,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '19'
   rarity: Fixed
   artist: David Dietrick
   collector_number: '86'
-- cardid: 1092
-  title: Bonds of Coin
+- title: Bonds of Coin
   types:
   - Strategy
   decks:
@@ -328,14 +301,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Jason Juta
   flavor_text: '"Bonds of blood are important, but<br>sometimes bonds made in coin can hold<br>more power."
     - Yoritomo Sakuma'
   collector_number: '87'
-- cardid: 1121
-  title: Bow Before My Will
+- title: Bow Before My Will
   types:
   - Strategy
   decks:
@@ -351,14 +322,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Troy Graham
   flavor_text: '"You play in the shadows but cling to<br>the light. Your vague notion of honor<br>cripples
     you and makes you weak."'
   collector_number: '88'
-- cardid: 1135
-  title: Breath of the Heavens
+- title: Breath of the Heavens
   types:
   - Strategy
   decks:
@@ -376,12 +345,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Esabra Studio
   collector_number: '89'
-- cardid: 1164
-  title: Brothers in Battle
+- title: Brothers in Battle
   types:
   - Strategy
   decks:
@@ -399,13 +366,11 @@ cards:
   - Legacy
   - Modern
   - Shattered Empire
-  printing_id: '3'
   rarity: Fixed
   artist: Mark Smylie
   flavor_text: Even among former enemies, the bonds forged<br>on the battlefield cannot easily be broken.
   collector_number: '90'
-- cardid: 1180
-  title: Burn the Towers
+- title: Burn the Towers
   types:
   - Strategy
   decks:
@@ -421,12 +386,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Raymond Gaustadnes
   collector_number: '91'
-- cardid: 1340
-  title: Chrysanthemum Blossom
+- title: Chrysanthemum Blossom
   types:
   - Item
   decks:
@@ -444,12 +407,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Heather Kreiter
   collector_number: '69'
-- cardid: 1416
-  title: Cleansing the Path
+- title: Cleansing the Path
   types:
   - Spell
   decks:
@@ -465,12 +426,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Joe Wilson
   collector_number: '78'
-- cardid: 1449
-  title: Conflagration
+- title: Conflagration
   types:
   - Spell
   decks:
@@ -485,12 +444,10 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Asier Martinez Lopez
   collector_number: '79'
-- cardid: 1497
-  title: Copper Mine
+- title: Copper Mine
   types:
   - Holding
   decks:
@@ -512,12 +469,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '19'
   rarity: Fixed
   artist: Charles Urbach
   collector_number: '3'
-- cardid: 1706
-  title: Daigotsu Bofana
+- title: Daigotsu Bofana
   types:
   - Personality
   decks:
@@ -544,13 +499,11 @@ cards:
   - Legacy
   - Modern
   story: 2010 Winner's Choice - Charles Thorp
-  printing_id: '2'
   rarity: Fixed
   artist: Tony Foti
   flavor_text: '"He has no way to hide his fury. And no<br>desire to do so." - Daigotsu Gyoken'
   collector_number: '53'
-- cardid: 1720
-  title: Daigotsu Gyoken
+- title: Daigotsu Gyoken
   types:
   - Personality
   decks:
@@ -571,12 +524,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '4'
   rarity: Fixed
   artist: Thomas Denmark
   collector_number: '54'
-- cardid: 1728
-  title: Daigotsu Ishibashi
+- title: Daigotsu Ishibashi
   types:
   - Personality
   decks:
@@ -600,12 +551,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Drew Baker
   collector_number: '55'
-- cardid: 1744
-  title: Daigotsu Matsuda
+- title: Daigotsu Matsuda
   types:
   - Personality
   decks:
@@ -628,12 +577,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Ed Cox
   collector_number: '56'
-- cardid: 1751
-  title: Daigotsu Negishi
+- title: Daigotsu Negishi
   types:
   - Personality
   decks:
@@ -655,12 +602,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Leonardo Borazio
   collector_number: '57'
-- cardid: 2070
-  title: Doji Dainagon
+- title: Doji Dainagon
   types:
   - Personality
   decks:
@@ -684,14 +629,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '4'
   rarity: Fixed
   artist: Rebekah Norris
   flavor_text: '"All the strings of power in the Empire run towards the Imperial Palace. And I intend
     to have my hand on all of them."'
   collector_number: '25'
-- cardid: 2158
-  title: Doji Shunya
+- title: Doji Shunya
   types:
   - Personality
   decks:
@@ -712,12 +655,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Llyn Hunter
   collector_number: '26'
-- cardid: 2166
-  title: Doji Tatsuki
+- title: Doji Tatsuki
   types:
   - Personality
   decks:
@@ -739,12 +680,10 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Edwin David
   collector_number: '27'
-- cardid: 2309
-  title: Ember's Final Fire
+- title: Ember's Final Fire
   types:
   - Spell
   decks:
@@ -760,14 +699,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Joachim Gmoser
   flavor_text: The priest clutched his bloodied stomach. "It is too<br>late for me," he rasped. "But I
     will not enter the next<br>world alone. Run while you can. I will end this."
   collector_number: '80'
-- cardid: 2342
-  title: Engulfing Flames
+- title: Engulfing Flames
   types:
   - Strategy
   decks:
@@ -784,13 +721,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Caio Cacau
   flavor_text: '"You pretend to be an ise zumi to earn food<br>and respect from the villagers? Despicable."'
   collector_number: '93'
-- cardid: 2445
-  title: Fall Back!
+- title: Fall Back!
   types:
   - Strategy
   decks:
@@ -808,12 +743,10 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '5'
   rarity: Fixed
   artist: Chris Pritchard
   collector_number: '94'
-- cardid: 2454
-  title: Falling Leaf Strike
+- title: Falling Leaf Strike
   types:
   - Strategy
   decks:
@@ -830,12 +763,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '4'
   rarity: Fixed
   artist: Mark Poole
   collector_number: '95'
-- cardid: 2613
-  title: Flooded Pass
+- title: Flooded Pass
   types:
   - Strategy
   decks:
@@ -852,12 +783,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Nathaniel Arches
   collector_number: '96'
-- cardid: 2671
-  title: Fortitude
+- title: Fortitude
   types:
   - Strategy
   decks:
@@ -872,12 +801,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Leonardo Borazio
   collector_number: '97'
-- cardid: 2784
-  title: Geisha House
+- title: Geisha House
   types:
   - Holding
   decks:
@@ -900,12 +827,10 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   notes: Some of the Hidden Emperor versions of this card were printed with a different flavor text alignment
-  printing_id: '13'
   rarity: Fixed
   artist: Charles Urbach
   collector_number: '4'
-- cardid: 2867
-  title: Gold Mine
+- title: Gold Mine
   types:
   - Holding
   decks:
@@ -928,12 +853,10 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '18'
   rarity: Fixed
   artist: Charles Urbach
   collector_number: '5'
-- cardid: 2950
-  title: Halls of the Forgotten
+- title: Halls of the Forgotten
   types:
   - Stronghold
   decks:
@@ -948,12 +871,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Noah Bradley
   collector_number: '119'
-- cardid: 2972
-  title: Hard Pressed
+- title: Hard Pressed
   types:
   - Strategy
   decks:
@@ -970,12 +891,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Paul (Prof.) Herbert
   collector_number: '98'
-- cardid: 3016
-  title: Heart of Rokugan
+- title: Heart of Rokugan
   types:
   - Strategy
   decks:
@@ -994,12 +913,10 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Wen Juinn
   collector_number: '99'
-- cardid: 3079
-  title: Hida Bushotsu
+- title: Hida Bushotsu
   types:
   - Personality
   decks:
@@ -1017,12 +934,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Sergio Camarena
   collector_number: '18'
-- cardid: 3083
-  title: Hida Defenders
+- title: Hida Defenders
   types:
   - Follower
   decks:
@@ -1039,13 +954,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: With their lands occupied, all must do their<br>duty, no matter what their training.
   collector_number: '64'
-- cardid: 3108
-  title: Hida Horu
+- title: Hida Horu
   types:
   - Personality
   decks:
@@ -1066,12 +979,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: John Donahue
   collector_number: '19'
-- cardid: 3150
-  title: Hida Mimori
+- title: Hida Mimori
   types:
   - Personality
   decks:
@@ -1091,14 +1002,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Caio Cacau
   flavor_text: The Empire faced no wars as it recovered from the devastating push from Kali-Ma's forces.
     The Crab continued to train, fight, and wait.
   collector_number: '20'
-- cardid: 3200
-  title: Hida Takeuchi
+- title: Hida Takeuchi
   types:
   - Personality
   decks:
@@ -1120,12 +1029,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Michael Phillippi
   collector_number: '21'
-- cardid: 3242
-  title: Hida Yamadera
+- title: Hida Yamadera
   types:
   - Personality
   decks:
@@ -1148,14 +1055,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Jarreau Wimberly
   flavor_text: '"Kill me! My life means nothing and I cannot even throw it away because you are too pathetic
     to take it!"'
   collector_number: '22'
-- cardid: 3636
-  title: Ikoma Shika
+- title: Ikoma Shika
   types:
   - Personality
   decks:
@@ -1178,12 +1083,10 @@ cards:
   - Legacy
   - Modern
   - Shattered Empire
-  printing_id: '4'
   rarity: Fixed
   artist: Sergio Camarena
   collector_number: '33'
-- cardid: 3638
-  title: Ikoma Shinju
+- title: Ikoma Shinju
   types:
   - Personality
   decks:
@@ -1204,12 +1107,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Héctor Herrera
   collector_number: '34'
-- cardid: 3641
-  title: Ikoma Sugo
+- title: Ikoma Sugo
   types:
   - Personality
   decks:
@@ -1232,14 +1133,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Asier Martinez Lopez
   flavor_text: '"Our cheers shall pierce the heavens, and the<br>Fortunes themselves shall know that the
     Lion<br>alone are worthy of the mantle of the Heavens!"'
   collector_number: '35'
-- cardid: 3730
-  title: Incapacitated
+- title: Incapacitated
   types:
   - Strategy
   decks:
@@ -1254,12 +1153,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '6'
   rarity: Fixed
   artist: Chris Pritchard
   collector_number: '100'
-- cardid: 3808
-  title: Iron Mine
+- title: Iron Mine
   types:
   - Holding
   decks:
@@ -1282,12 +1179,10 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '16'
   rarity: Fixed
   artist: Charles Urbach
   collector_number: '6'
-- cardid: 3904
-  title: Isawa Shunsuko
+- title: Isawa Shunsuko
   types:
   - Personality
   decks:
@@ -1309,12 +1204,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: John Donahue
   collector_number: '44'
-- cardid: 3918
-  title: Isawa Tamaki
+- title: Isawa Tamaki
   types:
   - Personality
   decks:
@@ -1338,12 +1231,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Conceptopolis
   collector_number: '45'
-- cardid: 3930
-  title: Isawa Tomohiro
+- title: Isawa Tomohiro
   types:
   - Personality
   decks:
@@ -1367,12 +1258,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: IFS
   collector_number: '46'
-- cardid: 4059
-  title: Journey's End Keep
+- title: Journey's End Keep
   types:
   - Stronghold
   decks:
@@ -1387,12 +1276,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Noah Bradley
   collector_number: '127'
-- cardid: 4480
-  title: Knife in the Darkness
+- title: Knife in the Darkness
   types:
   - Strategy
   decks:
@@ -1410,12 +1297,10 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '7'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: '101'
-- cardid: 4496
-  title: Kobune Port
+- title: Kobune Port
   types:
   - Holding
   decks:
@@ -1435,12 +1320,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '8'
   rarity: Fixed
   artist: Charles Urbach
   collector_number: '7'
-- cardid: 4541
-  title: Koshin Keep
+- title: Koshin Keep
   types:
   - Stronghold
   decks:
@@ -1457,12 +1340,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Noah Bradley
   collector_number: '123'
-- cardid: 4604
-  title: Kunji
+- title: Kunji
   types:
   - Personality
   decks:
@@ -1485,14 +1366,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Luis NCT
   flavor_text: '"It came to fight the Dark Fire. Will it stay<br>with its purifying light, or will it
     leave now that<br>the threat has passed?" - Shiba Tsukimi'
   collector_number: '47'
-- cardid: 4645
-  title: Kyuden Otomo
+- title: Kyuden Otomo
   types:
   - Stronghold
   decks:
@@ -1509,12 +1388,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Noah Bradley
   collector_number: '120'
-- cardid: 4664
-  title: Large Farm
+- title: Large Farm
   types:
   - Holding
   decks:
@@ -1531,12 +1408,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '9'
   rarity: Fixed
   artist: Mark A.W. Jackson
   collector_number: '8'
-- cardid: 4724
-  title: Library of Rebirth
+- title: Library of Rebirth
   types:
   - Stronghold
   decks:
@@ -1553,12 +1428,10 @@ cards:
   - Legacy
   - Modern
   notes: Erratum effective October 11th.
-  printing_id: '2'
   rarity: Fixed
   artist: Noah Bradley
   collector_number: '124'
-- cardid: 4790
-  title: Maga-yari
+- title: Maga-yari
   types:
   - Item
   decks:
@@ -1575,12 +1448,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Lee Smith
   collector_number: '70'
-- cardid: 4840
-  title: Marketplace
+- title: Marketplace
   types:
   - Holding
   decks:
@@ -1602,12 +1473,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '16'
   rarity: Fixed
   artist: Charles Urbach
   collector_number: '9'
-- cardid: 4915
-  title: Matsu Hachiro
+- title: Matsu Hachiro
   types:
   - Personality
   decks:
@@ -1628,12 +1497,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   collector_number: '36'
-- cardid: 5322
-  title: Moto Hailung
+- title: Moto Hailung
   types:
   - Personality
   decks:
@@ -1657,14 +1524,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Albert Tavira
   flavor_text: '"Never have I felt such exhaustion, friend<br>Hiruma. But if you, whose home is lost,
     will<br>fight on, then I will fight beside you."'
   collector_number: '58'
-- cardid: 5382
-  title: Moto Tetsuo
+- title: Moto Tetsuo
   types:
   - Personality
   decks:
@@ -1687,12 +1552,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Drew Baker
   collector_number: '59'
-- cardid: 5444
-  title: Murderous Intent
+- title: Murderous Intent
   types:
   - Strategy
   decks:
@@ -1706,12 +1569,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: John Moriarty
   collector_number: '102'
-- cardid: 5535
-  title: Never Safe
+- title: Never Safe
   types:
   - Strategy
   decks:
@@ -1727,14 +1588,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Luis NCT
   flavor_text: Some felt they were safe behind their walls or<br>in their homes. They were, but only so
     long<br>as their enemies were likewise deluded.
   collector_number: '103'
-- cardid: 5585
-  title: Ninja Tricks
+- title: Ninja Tricks
   types:
   - Strategy
   decks:
@@ -1750,12 +1609,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '4'
   rarity: Fixed
   artist: Stu Barnes
   collector_number: '104'
-- cardid: 5837
-  title: Outriders
+- title: Outriders
   types:
   - Follower
   decks:
@@ -1771,12 +1628,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Jason Juta
   collector_number: '65'
-- cardid: 5957
-  title: Pillars of Virtue
+- title: Pillars of Virtue
   types:
   - Stronghold
   decks:
@@ -1792,12 +1647,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '4'
   rarity: Fixed
   artist: Noah Bradley
   collector_number: '121'
-- cardid: 6064
-  title: Pride of the Hand
+- title: Pride of the Hand
   types:
   - Personality
   decks:
@@ -1821,13 +1674,11 @@ cards:
   - Legacy
   - Modern
   story: 2010 Winner's Choice - Sergio Garcia
-  printing_id: '2'
   rarity: Fixed
   artist: Andrew Olson
   flavor_text: '"They seem to have gained a taste for Destroyer<br>flesh, such as it is." - Matsu Benika'
   collector_number: '37'
-- cardid: 6086
-  title: Prosperous Village
+- title: Prosperous Village
   types:
   - Holding
   decks:
@@ -1839,12 +1690,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Arkady Roytman
   collector_number: '10'
-- cardid: 6258
-  title: Remote Village
+- title: Remote Village
   types:
   - Holding
   decks:
@@ -1858,14 +1707,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Gong Studios
   flavor_text: They settled into what used to be the Ivory Kingdoms. It was a strange land filled with
     wondrous sights. In the end, the necessary chores and work needed to be repeated on new soil.
   collector_number: '11'
-- cardid: 6302
-  title: Revenge
+- title: Revenge
   types:
   - Strategy
   decks:
@@ -1883,13 +1730,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Edwin David
   flavor_text: The Spider fought alongside the rest of<br>Rokugan, but some remembered past days.
   collector_number: '105'
-- cardid: 6312
-  title: Rhetoric
+- title: Rhetoric
   types:
   - Strategy
   decks:
@@ -1907,12 +1752,10 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Rebekah Norris
   collector_number: '106'
-- cardid: 6333
-  title: Ring of Air
+- title: Ring of Air
   types:
   - Ring
   decks:
@@ -1940,12 +1783,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '20'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '74'
-- cardid: 6334
-  title: Ring of Earth
+- title: Ring of Earth
   types:
   - Ring
   decks:
@@ -1973,12 +1814,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '21'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '75'
-- cardid: 6339
-  title: Ring of Water
+- title: Ring of Water
   types:
   - Ring
   decks:
@@ -2007,12 +1846,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '21'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '76'
-- cardid: 6366
-  title: Riverside Port
+- title: Riverside Port
   types:
   - Holding
   decks:
@@ -2027,14 +1864,12 @@ cards:
   legality:
   - Legacy
   notes: Released with The Shrine of the Lady Sun Draft Pack 2009
-  printing_id: '3'
   rarity: Fixed
   artist: IFS
   flavor_text: Rivers provide travel routes, sources of food, and opportunities for trade. Even landlocked
     clans count ports among their holdings.
   collector_number: '12'
-- cardid: 6502
-  title: Scouring Flood
+- title: Scouring Flood
   types:
   - Spell
   decks:
@@ -2051,12 +1886,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Llyn Hunter
   collector_number: '81'
-- cardid: 6885
-  title: Shinjo Horibe
+- title: Shinjo Horibe
   types:
   - Personality
   decks:
@@ -2079,12 +1912,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Edwin David
   collector_number: '60'
-- cardid: 6895
-  title: Shinjo Itao
+- title: Shinjo Itao
   types:
   - Personality
   decks:
@@ -2107,12 +1938,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: '61'
-- cardid: 6950
-  title: Shinjo Taeken
+- title: Shinjo Taeken
   types:
   - Personality
   decks:
@@ -2134,12 +1963,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Jason Juta
   collector_number: '62'
-- cardid: 6975
-  title: Shinjo's Children
+- title: Shinjo's Children
   types:
   - Follower
   decks:
@@ -2156,12 +1983,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Brandon Leach
   collector_number: '66'
-- cardid: 6984
-  title: Shinomen Marsh
+- title: Shinomen Marsh
   types:
   - Holding
   decks:
@@ -2178,12 +2003,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '5'
   rarity: Fixed
   artist: Charles Urbach
   collector_number: '13'
-- cardid: 7001
-  title: Shiotome Plains
+- title: Shiotome Plains
   types:
   - Strategy
   decks:
@@ -2199,14 +2022,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Alex Tooth
   flavor_text: War had ravaged much of Rokugan, but there were<br>still places that remembered they were
     once serene.
   collector_number: '107'
-- cardid: 7103
-  title: Shosuro Hawado
+- title: Shosuro Hawado
   types:
   - Personality
   decks:
@@ -2230,14 +2051,12 @@ cards:
   - Legacy
   - Modern
   story: 2010 Winner's Choice - Matt Sherry
-  printing_id: '2'
   rarity: Fixed
   artist: Lake Hurwitz
   flavor_text: '"You have been reading too many children''s stories.<br>There is no such person." - Bayushi
     Nori'
   collector_number: '50'
-- cardid: 7121
-  title: Shosuro Konishi
+- title: Shosuro Konishi
   types:
   - Personality
   decks:
@@ -2257,12 +2076,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Jason Engle
   collector_number: '51'
-- cardid: 7179
-  title: Shosuro Tsuji
+- title: Shosuro Tsuji
   types:
   - Personality
   decks:
@@ -2284,15 +2101,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Jason Engle
   flavor_text: '"The Destroyers are iron, but their leaders, their<br>officers, are living creatures.
     And the living can<br>be killed. Do this, and teach them what it means<br>to cross the Scorpion."
     - Bayushi Miyako'
   collector_number: '52'
-- cardid: 7265
-  title: Silk Works
+- title: Silk Works
   types:
   - Holding
   decks:
@@ -2307,12 +2122,10 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '8'
   rarity: Fixed
   artist: Diana Vick
   collector_number: '14'
-- cardid: 7266
-  title: Silver Mine
+- title: Silver Mine
   types:
   - Holding
   decks:
@@ -2334,12 +2147,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '14'
   rarity: Fixed
   artist: Charles Urbach
   collector_number: '15'
-- cardid: 7303
-  title: Small Farm
+- title: Small Farm
   types:
   - Holding
   decks:
@@ -2356,12 +2167,10 @@ cards:
   - Legacy
   - Modern
   notes: Some of the Anvil of Despair versions of this card were printed with a different text alignment
-  printing_id: '16'
   rarity: Fixed
   artist: Joseph Phillips
   collector_number: '16'
-- cardid: 7312
-  title: Sniping
+- title: Sniping
   types:
   - Strategy
   decks:
@@ -2375,12 +2184,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Arkady Roytman
   collector_number: '109'
-- cardid: 7411
-  title: Spiked Tetsubo
+- title: Spiked Tetsubo
   types:
   - Item
   decks:
@@ -2401,12 +2208,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Modern
-  printing_id: '4'
   rarity: Fixed
   artist: David Horne
   collector_number: '72'
-- cardid: 7413
-  title: Spinning Heel Kick
+- title: Spinning Heel Kick
   types:
   - Strategy
   decks:
@@ -2423,12 +2228,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '5'
   rarity: Fixed
   artist: Patrick Reinemann
   collector_number: '110'
-- cardid: 7443
-  title: Stables
+- title: Stables
   types:
   - Holding
   decks:
@@ -2450,12 +2253,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '14'
   rarity: Fixed
   artist: Charles Urbach
   collector_number: '17'
-- cardid: 7484
-  title: Steel Soul Dojo
+- title: Steel Soul Dojo
   types:
   - Stronghold
   decks:
@@ -2472,12 +2273,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Noah Bradley
   collector_number: '126'
-- cardid: 7538
-  title: Strength in Terror
+- title: Strength in Terror
   types:
   - Strategy
   decks:
@@ -2494,12 +2293,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Gonzalo Ordoñez Arias
   collector_number: '111'
-- cardid: 7862
-  title: Tell the Tale
+- title: Tell the Tale
   types:
   - Strategy
   decks:
@@ -2513,12 +2310,10 @@ cards:
   - Legacy
   - Modern
   notes: The Promotional version of this card is a famous French misprint that had a 7 Gold Cost.
-  printing_id: '5'
   rarity: Fixed
   artist: Heather Hudson
   collector_number: '112'
-- cardid: 8105
-  title: The Golden Plains
+- title: The Golden Plains
   types:
   - Stronghold
   decks:
@@ -2534,12 +2329,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Noah Bradley
   collector_number: '122'
-- cardid: 8246
-  title: The Otoro Estate
+- title: The Otoro Estate
   types:
   - Stronghold
   decks:
@@ -2555,12 +2348,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Noah Bradley
   collector_number: '125'
-- cardid: 8521
-  title: Togashi Hizumi
+- title: Togashi Hizumi
   types:
   - Personality
   decks:
@@ -2586,13 +2377,11 @@ cards:
   - Legacy
   - Modern
   story: 2010 Winner's Choice - Juan JosÃ© Martinez
-  printing_id: '2'
   rarity: Fixed
   artist: Luis NCT
   flavor_text: '"There is truth in devastation."'
   collector_number: '28'
-- cardid: 8545
-  title: Togashi Korimi
+- title: Togashi Korimi
   types:
   - Personality
   decks:
@@ -2619,12 +2408,10 @@ cards:
   - Legacy
   - Modern
   - Shattered Empire
-  printing_id: '3'
   rarity: Fixed
   artist: William O'Connor
   collector_number: '29'
-- cardid: 8550
-  title: Togashi Meiyu
+- title: Togashi Meiyu
   types:
   - Personality
   decks:
@@ -2647,14 +2434,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Alex Tooth
   flavor_text: '"The lord of this province has declared war on<br>his neighbor? Why do you disturb us
     with such<br>things? Resolve such minor squabbles yourselves."'
   collector_number: '30'
-- cardid: 8590
-  title: Togashi Torazu
+- title: Togashi Torazu
   types:
   - Personality
   decks:
@@ -2678,12 +2463,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Britt Martin
   collector_number: '31'
-- cardid: 8591
-  title: Togashi Tsukagi
+- title: Togashi Tsukagi
   types:
   - Personality
   decks:
@@ -2705,12 +2488,10 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: John Donahue
   collector_number: '32'
-- cardid: 8639
-  title: Torch's Flame Flickers
+- title: Torch's Flame Flickers
   types:
   - Strategy
   decks:
@@ -2727,12 +2508,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Slawomir Maniak
   collector_number: '113'
-- cardid: 8772
-  title: Tsubute
+- title: Tsubute
   types:
   - Item
   decks:
@@ -2751,14 +2530,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Gong Studios
   flavor_text: '"Such a simple thing can be so useful in the hands<br>of the properly trained." - Shosuro
     Toson'
   collector_number: '73'
-- cardid: 8793
-  title: Tsunami Tattoo
+- title: Tsunami Tattoo
   types:
   - Strategy
   decks:
@@ -2776,13 +2553,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Troy Graham & Dennis Darmody
   flavor_text: '"We are wounded but never defenseless."'
   collector_number: '114'
-- cardid: 8852
-  title: Tsuruchi Kosoko
+- title: Tsuruchi Kosoko
   types:
   - Personality
   decks:
@@ -2803,12 +2578,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Mario Wibisono
   collector_number: '38'
-- cardid: 8893
-  title: Tsuruchi Tomaru
+- title: Tsuruchi Tomaru
   types:
   - Personality
   decks:
@@ -2829,12 +2602,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Troy Graham
   collector_number: '39'
-- cardid: 8896
-  title: Tsuruchi Yashiro
+- title: Tsuruchi Yashiro
   types:
   - Personality
   decks:
@@ -2857,13 +2628,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Diego Gisbert Llorens
   flavor_text: '"They have both wronged us, but a brother<br>from a different clan is still a brother."'
   collector_number: '40'
-- cardid: 8977
-  title: Unexpected Support
+- title: Unexpected Support
   types:
   - Strategy
   decks:
@@ -2877,14 +2646,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Héctor Herrera
   flavor_text: '"Stay your blade, Scorpion. We serve the<br>same master. Forget that, and I shall have<br>no
     reason to remember it either."'
   collector_number: '115'
-- cardid: 9147
-  title: Veteran Skirmishers
+- title: Veteran Skirmishers
   types:
   - Follower
   decks:
@@ -2898,12 +2665,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: '67'
-- cardid: 9156
-  title: Vigilant Eyes
+- title: Vigilant Eyes
   types:
   - Strategy
   decks:
@@ -2922,12 +2687,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '4'
   rarity: Fixed
   artist: Rhonda Libby
   collector_number: '116'
-- cardid: 9162
-  title: Village Guardian
+- title: Village Guardian
   types:
   - Follower
   decks:
@@ -2944,12 +2707,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '4'
   rarity: Fixed
   artist: Anthony Grabski
   collector_number: '68'
-- cardid: 9186
-  title: Volcano Tattoo
+- title: Volcano Tattoo
   types:
   - Strategy
   decks:
@@ -2968,13 +2729,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: '"Fire without as within. If you temper your own<br>flame, others are simple to manipulate."'
   collector_number: '117'
-- cardid: 9287
-  title: Well Prepared
+- title: Well Prepared
   types:
   - Strategy
   decks:
@@ -2992,12 +2751,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '6'
   rarity: Fixed
   artist: Mike Raabe
   collector_number: '118'
-- cardid: 9356
-  title: Wisdom Gained
+- title: Wisdom Gained
   types:
   - Event
   decks:
@@ -3020,12 +2777,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '12'
   rarity: Fixed
   artist: Raymond Gaustadses
   collector_number: '1'
-- cardid: 9610
-  title: Yoritomo Nakoshi
+- title: Yoritomo Nakoshi
   types:
   - Personality
   decks:
@@ -3046,12 +2801,10 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Miguel Coimbra
   collector_number: '41'
-- cardid: 9611
-  title: Yoritomo Naoto
+- title: Yoritomo Naoto
   types:
   - Personality
   decks:
@@ -3074,7 +2827,6 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Tiago da Silva
   collector_number: '42'

@@ -1,7 +1,6 @@
 set: War of Honor
 cards:
-- cardid: 76
-  title: A Samurai's Soul
+- title: A Samurai's Soul
   types:
   - Item
   decks:
@@ -21,15 +20,13 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Rhonda Libbey
   flavor_text: <i>"A Lion's blade found at the scene of a crime is more than an insult. It is a blasphemy
     of everything that we stand for, and everything that our ancestors worked to achieve during their
     mortal lives." - Matsu Fumiyo</i>
   collector_number: '71'
-- cardid: 98
-  title: A Warrior's Wisdom
+- title: A Warrior's Wisdom
   types:
   - Strategy
   decks:
@@ -43,14 +40,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"Warrior monks are a dangerous breed, but I would prefer to face a dozen of them than
     those tattooed madmen from the Dragon Clan." - Ikoma Toraji</i>
   collector_number: '85'
-- cardid: 116
-  title: Acrobat Troupe
+- title: Acrobat Troupe
   types:
   - Holding
   decks:
@@ -63,14 +58,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Erich Schreiner
   flavor_text: <i>"They travel the Empire bringing culture and entertainment to all who would host them.
     It can prove a pleasant distraction from the affairs of the day." - Doji Domotai</i>
   collector_number: '8'
-- cardid: 128
-  title: Agasha Asai
+- title: Agasha Asai
   types:
   - Personality
   decks:
@@ -95,13 +88,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: IFS
   flavor_text: <i>"Speak the truth. I command it!"</i>
   collector_number: '49'
-- cardid: 136
-  title: Agasha Gifu
+- title: Agasha Gifu
   types:
   - Personality
   decks:
@@ -128,13 +119,11 @@ cards:
   - Legacy
   - Modern
   - Shattered Empire
-  printing_id: '2'
   rarity: Fixed
   artist: John Donahue
   flavor_text: <i>"I have stopped a volcano, little Lion. You think I cannot stop your war?"</i>
   collector_number: '50'
-- cardid: 202
-  title: Akodo Dosei
+- title: Akodo Dosei
   types:
   - Personality
   decks:
@@ -155,15 +144,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Max Degen
   flavor_text: <i>"The Lion would never commit such a disgraceful act. The implication that we had done
     so was more than puzzling, it was maddening. The Dragon have revealed the truth, however. It is the
     Scorpion who are to blame, and it is the Scorpion who shall suffer the Lion's just wrath."</i>
   collector_number: '41'
-- cardid: 262
-  title: Akodo Regulars
+- title: Akodo Regulars
   types:
   - Follower
   decks:
@@ -180,14 +167,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"We are the rank and file of the Lion armies, and it is our might that the Scorpion
     will learn to fear!"</i>
   collector_number: '66'
-- cardid: 327
-  title: Allegations
+- title: Allegations
   types:
   - Strategy
   decks:
@@ -205,13 +190,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Veronica V. Jones
   flavor_text: <i>"Do not overstep, Isawa-san."</i>
   collector_number: '86'
-- cardid: 541
-  title: Asako Hoshimi
+- title: Asako Hoshimi
   types:
   - Personality
   decks:
@@ -233,15 +216,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Erich Schreiner
   flavor_text: <i>"All living things change and grow. All the world - from the grass to the stones to
     the burning mountains - has a spirit. All things with a spirit are alive. Thus, all the world can
     be made to change. Allow me to demonstrate."</i>
   collector_number: '51'
-- cardid: 562
-  title: Asako Meisuru
+- title: Asako Meisuru
   types:
   - Personality
   decks:
@@ -263,14 +244,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>She will not lift her hand against another, nor will she ignore suffering. During times
     of conflict, she walks among the injured, bringing the kami's healing to them.</i>
   collector_number: '52'
-- cardid: 611
-  title: Ashigaru Conscripts
+- title: Ashigaru Conscripts
   types:
   - Follower
   decks:
@@ -291,12 +270,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: '67'
-- cardid: 679
-  title: Bamboo Harvesters
+- title: Bamboo Harvesters
   types:
   - Holding
   decks:
@@ -311,13 +288,11 @@ cards:
   - Age of Conquest (Emperor)
   - Destroyer War (Celestial)
   - Legacy
-  printing_id: '4'
   rarity: Fixed
   artist: Veronica V. Jones
   flavor_text: <i>"Lumber is a rare commodity, but fortunately bamboo has infinite uses." - Kitsune Engo</i>
   collector_number: '10'
-- cardid: 777
-  title: Bayushi Hikoko
+- title: Bayushi Hikoko
   types:
   - Personality
   decks:
@@ -339,13 +314,11 @@ cards:
   - Legacy
   - Modern
   story: 2009 Kotei Winner - Wayne Duyvestyn
-  printing_id: '2'
   rarity: Fixed
   artist: Britt Martin
   flavor_text: <i>"Tell me again exactly how you saw the Lion do this thing."</i>
   collector_number: '57'
-- cardid: 780
-  title: Bayushi Hirose
+- title: Bayushi Hirose
   types:
   - Personality
   decks:
@@ -367,14 +340,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Troy Graham
   flavor_text: <i>"Contacts among the Imperial organizations are most useful when we have need to obtain
     certain rare items," Saka said with a chuckle.</i>
   collector_number: '58'
-- cardid: 798
-  title: Bayushi Jutsushi
+- title: Bayushi Jutsushi
   types:
   - Personality
   decks:
@@ -395,13 +366,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Jarreau Wimberly
   flavor_text: <i>"I have no taste for such things, but necessity often requires distasteful acts."</i>
   collector_number: '59'
-- cardid: 834
-  title: Bayushi Maemi
+- title: Bayushi Maemi
   types:
   - Personality
   decks:
@@ -424,13 +393,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"Some secrets can be so easily purchased."</i>
   collector_number: '60'
-- cardid: 872
-  title: Bayushi Saka
+- title: Bayushi Saka
   types:
   - Personality
   decks:
@@ -451,14 +418,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Gaona - Maureira
   flavor_text: <i>"Dosei is a straight-laced buffoon. He has no inkling what is really going on here.
     By the time he realizes it, it will all be over."</i>
   collector_number: '61'
-- cardid: 881
-  title: Bayushi Shigeo
+- title: Bayushi Shigeo
   types:
   - Personality
   decks:
@@ -479,14 +444,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"Deception is hardly my strength. But war, on the other hand… in that I can teach even
     a Lion a valuable lesson."</i>
   collector_number: '62'
-- cardid: 895
-  title: Bayushi Sorii
+- title: Bayushi Sorii
   types:
   - Personality
   decks:
@@ -507,13 +470,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: John Donahue
   flavor_text: <i>"The arrogance of the Phoenix is so vast as to be incomprehensible."</i>
   collector_number: '63'
-- cardid: 946
-  title: Begone, Fool!
+- title: Begone, Fool!
   types:
   - Strategy
   decks:
@@ -529,13 +490,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jeff Himmelman
   flavor_text: <i>"This does not concern you. You and yours are not welcome here!"</i>
   collector_number: '87'
-- cardid: 977
-  title: Birth of the Sword
+- title: Birth of the Sword
   types:
   - Event
   decks:
@@ -549,13 +508,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Ken Meyer Jr.
   flavor_text: <i>"We remember the Empress Toturi II, and we shall live by her example." - Akodo Dosei</i>
   collector_number: '1'
-- cardid: 987
-  title: Black and White
+- title: Black and White
   types:
   - Strategy
   decks:
@@ -571,13 +528,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: IFS
   flavor_text: <i>The line between right and wrong is hard to see in battle.</i>
   collector_number: '88'
-- cardid: 1019
-  title: Blades of the Fallen Phoenix
+- title: Blades of the Fallen Phoenix
   types:
   - Item
   decks:
@@ -595,14 +550,12 @@ cards:
   - Legacy
   - Modern
   story: 2009 Kotei Winner - Walbert Ibarra
-  printing_id: '2'
   rarity: Fixed
   artist: Bob Stevlic
   flavor_text: <i>"A life given in pursuit of peace is a tragedy, but noble and honorable just the same."
     - Isawa Kyoko</i>
   collector_number: '72'
-- cardid: 1045
-  title: Block Supply Lines
+- title: Block Supply Lines
   types:
   - Strategy
   decks:
@@ -621,15 +574,13 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '14'
   rarity: Fixed
   artist: Brad McDevitt
   flavor_text: <i>War is a difficult practice. So many men moving around, with so much equipment. To feed
     an army requires a second army of peasants and merchants. Stop the second army, and the first will
     starve.</i>
   collector_number: '89'
-- cardid: 1106
-  title: Border Keep
+- title: Border Keep
   types:
   - Holding
   decks:
@@ -646,12 +597,10 @@ cards:
   - Age of Conquest (Emperor)
   - Destroyer War (Celestial)
   - Legacy
-  printing_id: '4'
   rarity: Fixed
   artist: Jason Juta
   collector_number: '11'
-- cardid: 1111
-  title: Border Village
+- title: Border Village
   types:
   - Holding
   decks:
@@ -665,14 +614,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Max Degen
   flavor_text: <i>It was near an unremarkable village at the Crane border that the remnants of the caravan
     were discovered, along with a single dagger bearing the Lion Clan mon.</i>
   collector_number: '12'
-- cardid: 1294
-  title: Changing Paths
+- title: Changing Paths
   types:
   - Strategy
   decks:
@@ -690,12 +637,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Jon Hodgson
   collector_number: '90'
-- cardid: 1298
-  title: Charge
+- title: Charge
   types:
   - Strategy
   decks:
@@ -712,14 +657,12 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '12'
   rarity: Fixed
   artist: Jason Juta
   flavor_text: <i>"You have one chance and one chance only, Scorpion. Recant your dishonor and admit what
     you have done. Perhaps then the Lion will have mercy upon your diseased souls."</i>
   collector_number: '91'
-- cardid: 1310
-  title: Chasing Osano-Wo
+- title: Chasing Osano-Wo
   types:
   - Strategy
   decks:
@@ -743,14 +686,12 @@ cards:
   - War of the Seals (Onyx Edition)
   notes: Some variants of the Hidden Emperor 1 version of this card were printed with a different flavor
     text alignment.
-  printing_id: '6'
   rarity: Fixed
   artist: Pia Guerra
   flavor_text: <i>The Phoenix are not alone in their ability to command the elements, but they are without
     question the most skilled.</i>
   collector_number: '92'
-- cardid: 1336
-  title: Chokehold
+- title: Chokehold
   types:
   - Strategy
   decks:
@@ -764,14 +705,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Andrew Bosley
   flavor_text: <i>"I sincerely believe that your philosophy is flawed, my friend. Now that I have your
     attention, let me explain why…"</i>
   collector_number: '93'
-- cardid: 1392
-  title: City of Tears (GotE)
+- title: City of Tears (GotE)
   types:
   - Stronghold
   decks:
@@ -788,13 +727,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   notes: This is a distinct card from the Soul of the Empire card of the same name.
-  printing_id: '3'
   rarity: Fixed
   artist: Charles Urbach
   flavor_text: <i>"We weep for those who die without purpose." - Isawa Kyoko</i>
   collector_number: '126'
-- cardid: 1428
-  title: Cold Hands, Stone Heart
+- title: Cold Hands, Stone Heart
   types:
   - Strategy
   decks:
@@ -810,13 +747,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Luis Nuñez de Castro
   flavor_text: <i>"Let us discuss philosophy, Isawa-san."</i>
   collector_number: '94'
-- cardid: 1464
-  title: Consumed by Five Fires
+- title: Consumed by Five Fires
   types:
   - Spell
   decks:
@@ -832,14 +767,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '4'
   rarity: Fixed
   artist: Patrick McEvoy
   flavor_text: <i>"I have no wish to harm anyone, but if in taking one life I might save one hundred more,
     then that is a sacrifice I shall make again and again." - Isawa Akihiro</i>
   collector_number: '78'
-- cardid: 1497
-  title: Copper Mine
+- title: Copper Mine
   types:
   - Holding
   decks:
@@ -861,13 +794,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '16'
   rarity: Fixed
   artist: Charles Urbach
   flavor_text: <i>"Honest work is something no Scorpion understands." - Matsu Fumiyo</i>
   collector_number: '13'
-- cardid: 1540
-  title: Courtesy
+- title: Courtesy
   types:
   - Strategy
   decks:
@@ -886,14 +817,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '5'
   rarity: Fixed
   artist: Chuck Lukacs
   flavor_text: <i>"An essential precept of the code of bushido, and yet one that so many clans completely
     ignore." - Togashi Gato</i>
   collector_number: '95'
-- cardid: 1814
-  title: Dance of the Void
+- title: Dance of the Void
   types:
   - Strategy
   decks:
@@ -911,12 +840,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Gong Studios
   collector_number: '96'
-- cardid: 1902
-  title: Deathseeker Troop
+- title: Deathseeker Troop
   types:
   - Follower
   decks:
@@ -931,13 +858,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Storn A. Cook
   flavor_text: <i>"Men for whom survival is no concern can be somewhat problematic." - Bayushi Shigeo</i>
   collector_number: '68'
-- cardid: 1974
-  title: Desperate Mediation
+- title: Desperate Mediation
   types:
   - Strategy
   decks:
@@ -954,13 +879,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Patrick McEvoy
   flavor_text: <i>"Honorable samurai, please! Think of what you are doing!"</i>
   collector_number: '97'
-- cardid: 1997
-  title: Diamond Mine
+- title: Diamond Mine
   types:
   - Holding
   decks:
@@ -977,14 +900,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '10'
   rarity: Fixed
   artist: Ed Cox
   flavor_text: <i>Matters of commerce are beneath a samurai's notice, but the economy flourishes with
     trinkets and beautiful gems.</i>
   collector_number: '14'
-- cardid: 2032
-  title: Disreputable House
+- title: Disreputable House
   types:
   - Holding
   decks:
@@ -995,14 +916,12 @@ cards:
   gold_cost: 2
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Pennington
   flavor_text: <i>"It is a simple matter to disgrace a single samurai, regardless of what he has actually
     done. An entire clan? That may prove more difficult." - Bayushi Maemi</i>
   collector_number: '15'
-- cardid: 2313
-  title: Embracing Virtue
+- title: Embracing Virtue
   types:
   - Strategy
   decks:
@@ -1017,13 +936,11 @@ cards:
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Britt Martin
   flavor_text: <i>"This is what it means to have honor. This is what it means to be samurai."</i>
   collector_number: '98'
-- cardid: 2321
-  title: Emissary of the Ivory Kingdoms
+- title: Emissary of the Ivory Kingdoms
   types:
   - Event
   decks:
@@ -1037,14 +954,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>"Ill fortunes arrive only when the door has been left open for them. Good fortune knocks,
     and is too often turned away." - from The True Tao</i>
   collector_number: '2'
-- cardid: 2346
-  title: Enlistment
+- title: Enlistment
   types:
   - Event
   decks:
@@ -1063,13 +978,11 @@ cards:
   - Race for the Throne (Samurai)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '4'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"To arms, you filthy dogs! The time has come to teach the Scorpion a lesson!"</i>
   collector_number: '3'
-- cardid: 2411
-  title: Expendable Resources
+- title: Expendable Resources
   types:
   - Holding
   decks:
@@ -1082,14 +995,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Brent Chumley
   flavor_text: <i>"The sons of Bayushi are mistaken. All men have value. To ruin one's honor for a material
     possession is the height of shame." - Togashi Gato</i>
   collector_number: '16'
-- cardid: 2463
-  title: Family Library
+- title: Family Library
   types:
   - Holding
   decks:
@@ -1110,13 +1021,11 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '4'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"Remember everything, I shall require it upon my return." - Isawa</i>
   collector_number: '17'
-- cardid: 2584
-  title: Fist and Blade
+- title: Fist and Blade
   types:
   - Strategy
   decks:
@@ -1131,13 +1040,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Adam Denton
   flavor_text: <i>"Flesh against steel. Which shall prove stronger?"</i>
   collector_number: '99'
-- cardid: 2677
-  title: Fortuitous Alliance
+- title: Fortuitous Alliance
   types:
   - Strategy
   decks:
@@ -1149,13 +1056,11 @@ cards:
   focus: 1
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Pennington
   flavor_text: <i>"Thank you, friends. Always good to see you!"</i>
   collector_number: '100'
-- cardid: 2701
-  title: From Every Side
+- title: From Every Side
   types:
   - Strategy
   decks:
@@ -1172,13 +1077,11 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - Shattered Empire
-  printing_id: '4'
   rarity: Fixed
   artist: Ed Cox
   flavor_text: <i>"The most interesting of scenarios." - Akodo Shigetoshi</i>
   collector_number: '101'
-- cardid: 2745
-  title: Fury of the Sea
+- title: Fury of the Sea
   types:
   - Spell
   decks:
@@ -1194,13 +1097,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jeff Himmelman
   flavor_text: <i>Those who stand against the Phoenix are shattered like the land before the tsunami.</i>
   collector_number: '79'
-- cardid: 2769
-  title: Game of Sincerity
+- title: Game of Sincerity
   types:
   - Strategy
   decks:
@@ -1217,14 +1118,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>Even in the midst of battle, words can cut as easily as steel, and the shame can linger
     far, far longer.</i>
   collector_number: '102'
-- cardid: 2784
-  title: Geisha House
+- title: Geisha House
   types:
   - Holding
   decks:
@@ -1247,14 +1146,12 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   notes: Some of the Hidden Emperor versions of this card were printed with a different flavor text alignment
-  printing_id: '10'
   rarity: Fixed
   artist: Charles Urbach
   flavor_text: <i>"We will have guests from the north arriving shortly. Be certain that you are available
     to entertain them, should the opportunity arise." - Soshi Idaurin</i>
   collector_number: '18'
-- cardid: 2820
-  title: Glorious Path to Victory
+- title: Glorious Path to Victory
   types:
   - Strategy
   decks:
@@ -1270,13 +1167,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"Follow me, brothers! Today we may die, or claim victory! Either way, our tale lives
     forever!"</i>
-- cardid: 2867
-  title: Gold Mine
+- title: Gold Mine
   types:
   - Holding
   decks:
@@ -1299,14 +1194,12 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '16'
   rarity: Fixed
   artist: Charles Urbach
   flavor_text: <i>"Wealth we have, should we so choose. True riches come from a life of virtue and honesty.
     It is a lesson that perhaps the Dragon alone have learned, but such can be changed." - Togashi Taro</i>
   collector_number: '19'
-- cardid: 2910
-  title: Groves of Stone
+- title: Groves of Stone
   types:
   - Spell
   decks:
@@ -1321,14 +1214,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Chris Pritchard
   flavor_text: <i>"Remove the target and the assault will have no purpose. Destruction of property is
     preferable to loss of life." - Agasha Gifu</i>
   collector_number: '80'
-- cardid: 3026
-  title: Heaven's Tears
+- title: Heaven's Tears
   types:
   - Spell
   decks:
@@ -1344,14 +1235,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Stephanie Pui-Mun Law
   flavor_text: <i>"This border brawl is ridiculous. Save your steel for the Empress's enemies!" - Isawa
     Tanaka</i>
   collector_number: '81'
-- cardid: 3277
-  title: Hired Legion
+- title: Hired Legion
   types:
   - Follower
   decks:
@@ -1370,14 +1259,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"Easily purchased and completely disposable. It is a combination that is most convenient."
     - Soshi Idaurin</i>
   collector_number: '69'
-- cardid: 3648
-  title: Ikoma Toraji
+- title: Ikoma Toraji
   types:
   - Personality
   decks:
@@ -1396,15 +1283,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Genzoman
   flavor_text: <i>"The Ikoma are historians and storytellers. We follow the traditions of the first Ikoma
     and live according to his philosophies. Make the mistake of believing that we are not warriors, however,
     and it shall be your final error."</i>
   collector_number: '42'
-- cardid: 3679
-  title: Imperial Ambassadorship
+- title: Imperial Ambassadorship
   types:
   - Event
   decks:
@@ -1423,14 +1308,12 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '5'
   rarity: Fixed
   artist: David Horne
   flavor_text: <i>"A caravan with papers of Imperial ambassadorship, my lord. It has been attacked." Akihiro
     frowned. "Much blood will be spilled for this, I fear."</i>
   collector_number: '4'
-- cardid: 3816
-  title: Isawa Akihiro
+- title: Isawa Akihiro
   types:
   - Personality
   decks:
@@ -1451,14 +1334,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Max Degen
   flavor_text: <i>"The Empire must change, or war will never cease. For those who are unwilling or unable
     to change, we must assist them."</i>
   collector_number: '53'
-- cardid: 3855
-  title: Isawa Kyoko
+- title: Isawa Kyoko
   types:
   - Personality
   decks:
@@ -1479,14 +1360,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Kari Christensen
   flavor_text: <i>"Some among us consider intervention a mandate of our enlightened perspective. I simply
     see a chance to preserve life. What would it say of us if we failed to act?"</i>
   collector_number: '54'
-- cardid: 3856
-  title: Isawa Kyoko
+- title: Isawa Kyoko
   types:
   - Personality
   decks:
@@ -1513,13 +1392,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Mark Poole
   flavor_text: <i>"The horror of war can stir even the gentlest of spirits." - Isawa Akihiro</i>
   collector_number: '55'
-- cardid: 3873
-  title: Isawa Naki
+- title: Isawa Naki
   types:
   - Personality
   decks:
@@ -1542,14 +1419,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Mark Poole
   flavor_text: <i>"The elements align and show us the path. We act only because it is necessary, and we
     act with clear purpose. The Dragon's purpose is anything but clear."</i>
   collector_number: '56'
-- cardid: 4664
-  title: Large Farm
+- title: Large Farm
   types:
   - Holding
   decks:
@@ -1566,14 +1441,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '7'
   rarity: Fixed
   artist: Ted Pendergraft (Miscredited to Mark A.W. Jackson)
   flavor_text: <i>"A samurai does not concern himself with matters of coin, so why should concerns over
     baubles such as diamonds… or papers… be any different?" - Togashi Akagi</i>
   collector_number: '20'
-- cardid: 4793
-  title: Magistrate's Accusation
+- title: Magistrate's Accusation
   types:
   - Strategy
   decks:
@@ -1588,13 +1461,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Anthony Grabski
   flavor_text: <i>"The Dragon are an unpredictable ally at best. Perhaps a distraction?" - Bayushi Maemi</i>
   collector_number: '104'
-- cardid: 4909
-  title: Matsu Fumiyo
+- title: Matsu Fumiyo
   types:
   - Personality
   decks:
@@ -1618,13 +1489,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"Step aside, friend Phoenix. I do not wish to fight you, but I will if you bar my path."</i>
   collector_number: '43'
-- cardid: 4948
-  title: Matsu Mansaiko
+- title: Matsu Mansaiko
   types:
   - Personality
   decks:
@@ -1646,14 +1515,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"The Lion are grateful for your assistance in this matter, Togashi-sama. That gratitude
     does not extend to allowing your interference in a war of honor."</i>
   collector_number: '44'
-- cardid: 4958
-  title: Matsu Miyahara
+- title: Matsu Miyahara
   types:
   - Personality
   decks:
@@ -1672,13 +1539,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: John Donahue
   flavor_text: <i>"Dragon, Phoenix, Scorpion… simply tell me who to kill and it shall be done."</i>
   collector_number: '45'
-- cardid: 4966
-  title: Matsu Nishijo
+- title: Matsu Nishijo
   types:
   - Personality
   decks:
@@ -1702,13 +1567,11 @@ cards:
   - Legacy
   - Modern
   story: 2009 Winner's Choice - Lon Schlittenhart
-  printing_id: '2'
   rarity: Fixed
   artist: Anthony Grabski
   flavor_text: <i>"Face me, Scorpion! Face me and die!"</i>
   collector_number: '46'
-- cardid: 4975
-  title: Matsu Sakaki
+- title: Matsu Sakaki
   types:
   - Personality
   decks:
@@ -1730,14 +1593,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"It was not an Akodo blade they found among the caravan, nor Ikoma, nor Kitsu. It was
     the Matsu who were implicated, and it is the Matsu who shall settle the debt."</i>
   collector_number: '47'
-- cardid: 5002
-  title: Matsu Yosa
+- title: Matsu Yosa
   types:
   - Personality
   decks:
@@ -1760,14 +1621,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Aaron Acevedo
   flavor_text: <i>"Something of an anomaly among the Matsu, to tell the truth. Serenity instead of anger?
     Perhaps she should have been born an Akodo." - Akodo Dosei</i>
   collector_number: '48'
-- cardid: 5054
-  title: Military Alliance
+- title: Military Alliance
   types:
   - Event
   decks:
@@ -1783,14 +1642,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Raymond Gaustadnes
   flavor_text: <i>"The Lion respect the Phoenix, my lord, but your intervention in this matter is unwelcome.
     Stand aside, or our alliance will suffer for it."</i>
   collector_number: '5'
-- cardid: 5457
-  title: My Enemy's Mercy
+- title: My Enemy's Mercy
   types:
   - Strategy
   decks:
@@ -1807,13 +1664,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Heather V. Kreiter
   flavor_text: <i>"Their brutality will not foster the same in us."</i>
   collector_number: '105'
-- cardid: 5890
-  title: Paths of Honor & Glory
+- title: Paths of Honor & Glory
   types:
   - Strategy
   decks:
@@ -1830,14 +1685,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Mike Capprotti
   flavor_text: <i>"Two paths exist, one light and one dark. The light path has ever been the greater,
     but the dark path gains new adherents each day." - Asahina Hira</i>
   collector_number: '106'
-- cardid: 5927
-  title: Permanent Encampment
+- title: Permanent Encampment
   types:
   - Holding
   decks:
@@ -1851,14 +1704,12 @@ cards:
   - Legacy
   - Modern
   errata_text: Errata'd via the Oracle.
-  printing_id: '3'
   rarity: Fixed
   artist: Erich Schreiner
   flavor_text: <i>"Divert forces from the southernmost encampment. We will teach the Scorpion what it
     means to arouse the Lion's wrath." - Akodo Dosei</i>
   collector_number: '21'
-- cardid: 6065
-  title: Prideful Allies
+- title: Prideful Allies
   types:
   - Strategy
   decks:
@@ -1874,14 +1725,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Andrew Bosley
   flavor_text: <i>"A thousand thanks to you, brother Crane, but this day, the battlefield belongs to the
     Lion and the Lion alone."</i>
   collector_number: '107'
-- cardid: 6157
-  title: Ramifications
+- title: Ramifications
   types:
   - Strategy
   decks:
@@ -1899,14 +1748,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: IFS
   flavor_text: <i>Disagreements between the clans cause great chaos and discord, but the situation ultimately
     benefits the Imperial families in one way or another.</i>
   collector_number: '108'
-- cardid: 6247
-  title: Relentless Conviction
+- title: Relentless Conviction
   types:
   - Strategy
   decks:
@@ -1922,14 +1769,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Erich Schreiner
   flavor_text: <i>A Lion army, already hungry for war, and given an opportunity to avenge a debt of honor,
     is a force of nature unto itself.</i>
   collector_number: '109'
-- cardid: 6276
-  title: Restoring Order
+- title: Restoring Order
   types:
   - Strategy
   decks:
@@ -1947,13 +1792,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Kevin Wasden
   flavor_text: <i>"Remind them of the Empress's law." - Shosuro Jimen</i>
   collector_number: '110'
-- cardid: 6315
-  title: Rich Coffers
+- title: Rich Coffers
   types:
   - Holding
   decks:
@@ -1967,14 +1810,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '7'
   rarity: Fixed
   artist: Veronica V. Jones
   flavor_text: <i>"Conflict, regardless of its nature, is profitable. Lion against Scorpion, against Dragon,
     against Phoenix. Imagine the riches to be had!"</i>
   collector_number: '22'
-- cardid: 6333
-  title: Ring of Air
+- title: Ring of Air
   types:
   - Ring
   decks:
@@ -2002,13 +1843,11 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '17'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>The world is wind, immaterial and ever-changing.</i>
   collector_number: '73'
-- cardid: 6334
-  title: Ring of Earth
+- title: Ring of Earth
   types:
   - Ring
   decks:
@@ -2036,13 +1875,11 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '18'
   rarity: Fixed
   artist: Charles Urbach
   flavor_text: <i>The world is earth, eternal, immobile.</i>
   collector_number: '74'
-- cardid: 6336
-  title: Ring of Flame
+- title: Ring of Flame
   types:
   - Ring
   decks:
@@ -2058,46 +1895,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>The world is fire, consuming, growing, dying.</i>
   collector_number: '75'
-- cardid: 6338
-  title: Ring of the Void
-  types:
-  - Ring
-  decks:
-  - Fate
-  keywords:
-  - Unique
-  - Void
-  text: You may discard this Ring from your hand to use its Void ability without cost.<br><b>Limited:</b>
-    Play if you have two or fewer Rings in play. Discard your hand. <br><b>Void Limited, :bow::</b> Draw
-    a card. If you now have more cards in your hand than any other player, discard a card.
-  focus: 4
-  is_unique: true
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '18'
-  rarity: Fixed
-  artist: Steve Argyle
-  flavor_text: <i>The world is all. The world is nothing.</i>
-- cardid: 6339
-  title: Ring of Water
+- title: Ring of Water
   types:
   - Ring
   decks:
@@ -2126,12 +1928,41 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '18'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '77'
-- cardid: 6378
-  title: Ronin Brotherhood
+- title: Ring of the Void
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Void
+  text: You may discard this Ring from your hand to use its Void ability without cost.<br><b>Limited:</b>
+    Play if you have two or fewer Rings in play. Discard your hand. <br><b>Void Limited, :bow::</b> Draw
+    a card. If you now have more cards in your hand than any other player, discard a card.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Steve Argyle
+  flavor_text: <i>The world is all. The world is nothing.</i>
+- title: Ronin Brotherhood
   types:
   - Follower
   decks:
@@ -2150,14 +1981,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: IFS
   flavor_text: <i>"They fight not just for money, but for honor, and for one another. Three generations
     of warriors deserve respect, even if they are ronin." - Matsu Kenji</i>
   collector_number: '70'
-- cardid: 6562
-  title: Seeking the Guilty
+- title: Seeking the Guilty
   types:
   - Strategy
   decks:
@@ -2173,12 +2002,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Bob Stevlic
   collector_number: '111'
-- cardid: 6630
-  title: Settling the Homeless
+- title: Settling the Homeless
   types:
   - Strategy
   decks:
@@ -2191,14 +2018,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Eric Lofgren
   flavor_text: <i>"A dispute between two clans, with two more involved in a misguided attempt to mediate,
     and how many suffer as a result?" - Shinjo Dun</i>
   collector_number: '112'
-- cardid: 6634
-  title: Seven Stings Keep
+- title: Seven Stings Keep
   types:
   - Stronghold
   decks:
@@ -2214,13 +2039,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Charles Urbach
   flavor_text: <i>"True strength is doing what must be done, no matter the consequences." - Soshi Tabito</i>
   collector_number: '127'
-- cardid: 6697
-  title: Shameful Death
+- title: Shameful Death
   types:
   - Strategy
   decks:
@@ -2235,13 +2058,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Pennington
   flavor_text: <i>"Urk!"</i>
   collector_number: '113'
-- cardid: 6699
-  title: Shameful Rebuke
+- title: Shameful Rebuke
   types:
   - Strategy
   decks:
@@ -2258,13 +2079,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Arkady Roytman
   flavor_text: <i>"You are a disgrace. Leave this place at once!"</i>
   collector_number: '114'
-- cardid: 6842
-  title: Shielded by Tempest
+- title: Shielded by Tempest
   types:
   - Spell
   decks:
@@ -2281,13 +2100,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Jason Juta
   flavor_text: <i>"This path shall be closed to our enemies."</i>
   collector_number: '82'
-- cardid: 6995
-  title: Shinsei's Tomb
+- title: Shinsei's Tomb
   types:
   - Holding
   decks:
@@ -2304,13 +2121,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"He gave us wisdom. It is up to us to act upon it." - Togashi Nakahara</i>
   collector_number: '23'
-- cardid: 7222
-  title: Shrine to Fukurokujin
+- title: Shrine to Fukurokujin
   types:
   - Holding
   decks:
@@ -2329,13 +2144,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '5'
   rarity: Fixed
   artist: Tony Moseley
   flavor_text: <i>The Fortunes bless those wise enough to revere them.</i>
   collector_number: '24'
-- cardid: 7266
-  title: Silver Mine
+- title: Silver Mine
   types:
   - Holding
   decks:
@@ -2357,14 +2170,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '12'
   rarity: Fixed
   artist: Charles Urbach
   flavor_text: <i>"Please, Akodo-sama… put your anger aside. There is nothing to be gained here by more
     death. Do not let an imagined stain upon your honor become a true disgrace." - Asako Hoshimi</i>
   collector_number: '25'
-- cardid: 7268
-  title: Simple Men
+- title: Simple Men
   types:
   - Holding
   decks:
@@ -2378,15 +2189,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Héctor Herrera
   flavor_text: <i>"It is upon the backs of such men that the fate of the Empire rests, and yet it is they
     who are most frequently overlooked. Now the plague ravages them, and the samurai seem more interested
     in their wars." - Kuronada</i>
   collector_number: '26'
-- cardid: 7303
-  title: Small Farm
+- title: Small Farm
   types:
   - Holding
   decks:
@@ -2403,13 +2212,11 @@ cards:
   - Legacy
   - Modern
   notes: Some of the Anvil of Despair versions of this card were printed with a different text alignment
-  printing_id: '13'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: <i>"Great things come from humble beginnings."-Toku</i>
   collector_number: '27'
-- cardid: 7349
-  title: Soshi Idaurin
+- title: Soshi Idaurin
   types:
   - Personality
   decks:
@@ -2433,13 +2240,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2005 Origins RPG Tournament - Doreen M. Noe
-  printing_id: '2'
   rarity: Fixed
   artist: Adam Denton
   flavor_text: <i>"If you wish my assistance against the Lion, Saka, there is certain information you
     will have to provide first."</i>
-- cardid: 7364
-  title: Soshi Tabito
+- title: Soshi Tabito
   types:
   - Personality
   decks:
@@ -2464,14 +2269,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2005 European Championships Top of Clan - Ferran Villegas
-  printing_id: '2'
   rarity: Fixed
   artist: April Lee
   flavor_text: <i>"Your assistance is most welcome, friend Dragon. Now… perhaps you can enlighten me as
     to the purpose of your recent visit with the Lion?"</i>
   collector_number: '65'
-- cardid: 7413
-  title: Spinning Heel Kick
+- title: Spinning Heel Kick
   types:
   - Strategy
   decks:
@@ -2488,14 +2291,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '4'
   rarity: Fixed
   artist: Patrick Reinemann
   flavor_text: <i>A master of kaze-do, the Way of the Wind, can defeat an armed and armored samurai with
     nothing but his bare hands.</i>
   collector_number: '115'
-- cardid: 7446
-  title: Stagnation
+- title: Stagnation
   types:
   - Strategy
   decks:
@@ -2509,14 +2310,12 @@ cards:
   legality:
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Patrick McEvoy
   flavor_text: <i>"Sometimes, the mind is blocked and the soul is emptied. Do not fear. Only after the
     winter can again come the spring." - Naka Kuro</i>
   collector_number: '116'
-- cardid: 7587
-  title: Striking Through the Void
+- title: Striking Through the Void
   types:
   - Strategy
   decks:
@@ -2535,13 +2334,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Patrick McEvoy
   flavor_text: <i>"Distance has no meaning in the Void." - Togashi Akagi</i>
   collector_number: '117'
-- cardid: 7866
-  title: Tempest of Flame
+- title: Tempest of Flame
   types:
   - Spell
   decks:
@@ -2558,13 +2355,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Pennington
   flavor_text: <i>"Part your ranks and stand aside!" he roared with the voice of a wildfire.</i>
   collector_number: '83'
-- cardid: 7874
-  title: Temple of Harmony
+- title: Temple of Harmony
   types:
   - Holding
   decks:
@@ -2581,13 +2376,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Asier Martinez Lopez
   flavor_text: <i>"Enlightenment does not only come in times of peace." - Togahi Gato</i>
   collector_number: '28'
-- cardid: 7894
-  title: Temple to Shinsei
+- title: Temple to Shinsei
   types:
   - Holding
   decks:
@@ -2604,14 +2397,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '7'
   rarity: Fixed
   artist: David Horne
   flavor_text: <i>"Despite generations of war, turmoil, and uncertainty, there remain essential truths
     that never change." - Tanari, head of the Brotherhood of Shinsei</i>
   collector_number: '29'
-- cardid: 7896
-  title: Temple to the Ancestors
+- title: Temple to the Ancestors
   types:
   - Holding
   decks:
@@ -2622,14 +2413,12 @@ cards:
   gold_cost: 2
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Asier Martinez Lopez
   flavor_text: <i>"Give me your strength and will, grandfather, that I might see our family's name purged
     of this Scorpion-borne disgrace." - Matsu Nishijo</i>
   collector_number: '9'
-- cardid: 7937
-  title: Tetsu Kama Mura
+- title: Tetsu Kama Mura
   types:
   - Stronghold
   decks:
@@ -2646,13 +2435,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '5'
   rarity: Fixed
   artist: Charles Urbach
   flavor_text: <i>"Iron Mountain Village breeds souls of iron." - Togashi Kanmu</i>
   collector_number: '124'
-- cardid: 8200
-  title: The Lion's Charge
+- title: The Lion's Charge
   types:
   - Strategy
   decks:
@@ -2666,13 +2453,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"Forward! There is no glory in restraint this day!"</i>
   collector_number: '118'
-- cardid: 8308
-  title: The Seekers' Temple
+- title: The Seekers' Temple
   types:
   - Holding
   decks:
@@ -2689,14 +2474,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Arkady Roytman
   flavor_text: <i>Those who quest for knowledge and enlightenment may seek respite and the company of
     others within.</i>
   collector_number: '30'
-- cardid: 8360
-  title: The Storm Within
+- title: The Storm Within
   types:
   - Spell
   decks:
@@ -2712,13 +2495,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Stephanie Pui-Mun Law
   flavor_text: <i>"Begone," Kyoko whispered.</i>
   collector_number: '84'
-- cardid: 8440
-  title: The Wrath of Osano-Wo
+- title: The Wrath of Osano-Wo
   types:
   - Strategy
   decks:
@@ -2741,15 +2522,13 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '7'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>The Fortune of Fire and Thunder was once a mortal, if exceptional, man. Now he is among
     the most tempestuous and wrathful of Rokugan's gods, and one of the most likely to intervene in mortal
     affairs.</i>
   collector_number: '119'
-- cardid: 8511
-  title: Togashi Akagi
+- title: Togashi Akagi
   types:
   - Personality
   decks:
@@ -2770,14 +2549,12 @@ cards:
   - Legacy
   - Modern
   story: 2008 Magecon Koku Auction - Jon Paulson
-  printing_id: '3'
   rarity: Fixed
   artist: John Donahue
   flavor_text: <i>"Violence is a pursuit for lesser men. Fortunately, I have not yet achieved enlightenment,
     and my skills are base indeed."</i>
   collector_number: '33'
-- cardid: 8514
-  title: Togashi Chiko
+- title: Togashi Chiko
   types:
   - Personality
   decks:
@@ -2798,14 +2575,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: IFS
   flavor_text: <i>The Scorpion stared up from the ground. "I said no killing," Chiko repeated. "I did
     not specify Lion or Scorpion."</i>
   collector_number: '34'
-- cardid: 8519
-  title: Togashi Gato
+- title: Togashi Gato
   types:
   - Personality
   decks:
@@ -2828,13 +2603,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Leonardo Borazio
   flavor_text: <i>"Stand aside, Isawa-sama. This is an opportunity for the Lion and Scorpion to grow beyond
     their mutual hatred. Resolve the problem for them, and they accomplish nothing."</i>
-- cardid: 8537
-  title: Togashi Kanmu
+- title: Togashi Kanmu
   types:
   - Personality
   decks:
@@ -2857,14 +2630,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"The mandate of the Togashi is to teach. The content of our lessons is not specified,
     however."</i>
   collector_number: '36'
-- cardid: 8559
-  title: Togashi Nakahara
+- title: Togashi Nakahara
   types:
   - Personality
   decks:
@@ -2890,13 +2661,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Max Degen
   flavor_text: <i>"I would share enlightenment with you."</i>
   collector_number: '37'
-- cardid: 8563
-  title: Togashi Oki
+- title: Togashi Oki
   types:
   - Personality
   decks:
@@ -2916,14 +2685,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"Lies, war, knowledge… all of it is meaningless. Harmony with the universe is the only
     real concern."</i>
   collector_number: '38'
-- cardid: 8582
-  title: Togashi Shiori
+- title: Togashi Shiori
   types:
   - Personality
   decks:
@@ -2947,13 +2714,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Miguel Coimbra
   flavor_text: <i>"Idiot samurai! What will it take for you to change your perspective!"</i>
   collector_number: '39'
-- cardid: 8586
-  title: Togashi Taro
+- title: Togashi Taro
   types:
   - Personality
   decks:
@@ -2973,14 +2738,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: David Horne
   flavor_text: <i>"I was once a different man. I left that life behind and climbed the mountain to join
     the Togashi. The man I was is dead, and my spirit is richer for his passing."</i>
   collector_number: '40'
-- cardid: 8729
-  title: Traveling Peddler
+- title: Traveling Peddler
   types:
   - Holding
   decks:
@@ -2995,14 +2758,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '4'
   rarity: Fixed
   artist: Erich Schreiner
   flavor_text: <i>"Yes, yes, I have just what you need. Just... just let me catch my breath a moment...
     I have it right here."</i>
   collector_number: '31'
-- cardid: 9001
-  title: Unpredictable Strategy
+- title: Unpredictable Strategy
   types:
   - Strategy
   decks:
@@ -3016,14 +2777,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Eric Lofgren
   flavor_text: <i>"The ones you are looking for are not here, Scorpion. I thought we might resolve this
     matter ourselves."</i>
   collector_number: '120'
-- cardid: 9019
-  title: Unstoppable Power
+- title: Unstoppable Power
   types:
   - Strategy
   decks:
@@ -3040,14 +2799,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Shattered Empire
-  printing_id: '3'
   rarity: Fixed
   artist: Jason Engle
   flavor_text: <i>"Many fear the power of the Phoenix, as they should. But they need not fear a loss of
     control. Those days are long gone." - Isawa Ochiai, the Master of Fire</i>
   collector_number: '121'
-- cardid: 9132
-  title: Venerable Plains of the Ikoma
+- title: Venerable Plains of the Ikoma
   types:
   - Stronghold
   decks:
@@ -3064,13 +2821,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2007 Gift of the Anou - Aaron Barto
-  printing_id: '3'
   rarity: Fixed
   artist: Charles Urbach
   flavor_text: <i>"Its honor will remain unblemished." - Matsu Yosa</i>
   collector_number: '125'
-- cardid: 9165
-  title: Viper Tattoo
+- title: Viper Tattoo
   types:
   - Strategy
   decks:
@@ -3088,14 +2843,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - War of the Seals (Onyx Edition)
-  printing_id: '3'
   rarity: Fixed
   artist: John Moriarty
   flavor_text: <i>"Tattoos inked with the blood of the divine are capable of wondrous things. Wondrous,
     and occasionally horrible." - Moshi Kamiya</i>
   collector_number: '122'
-- cardid: 9198
-  title: Wall of Honor
+- title: Wall of Honor
   types:
   - Strategy
   decks:
@@ -3110,14 +2863,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '3'
   rarity: Fixed
   artist: Fares Maese
   flavor_text: <i>"A true samurai's soul is hardened against attack. No weakness can break it, but insults
     should not be borne lightly regardless." - Akodo Dosei</i>
   collector_number: '123'
-- cardid: 9215
-  title: War Encampment
+- title: War Encampment
   types:
   - Holding
   decks:
@@ -3130,14 +2881,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Jose Cua
   flavor_text: <i>"The Lion forces mass near our northern border. It seems they have discovered something
     that angered them. How enormously inconvenient." - Bayushi Saka</i>
   collector_number: '32'
-- cardid: 9286
-  title: Welcome Home
+- title: Welcome Home
   types:
   - Event
   decks:
@@ -3149,13 +2898,11 @@ cards:
   legality:
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Asier Martinez Lopez
   flavor_text: <i>Welcome home, Hikoko-san," Saka said with a smile. "Was your mission successful?"</i>
   collector_number: '6'
-- cardid: 9356
-  title: Wisdom Gained
+- title: Wisdom Gained
   types:
   - Event
   decks:
@@ -3178,7 +2925,6 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '8'
   rarity: Fixed
   artist: Raymond Gaustadnes
   flavor_text: <i>"There is little wisdom to be gained in the keeping of secrets, brother Lion. It was

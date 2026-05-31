@@ -1,7 +1,6 @@
 set: Path of Hope
 cards:
-- cardid: 37
-  title: A Hero's Gift
+- title: A Hero's Gift
   types:
   - Strategy
   decks:
@@ -14,12 +13,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Chris Seaman
   collector_number: '91'
-- cardid: 43
-  title: A Life for a Life
+- title: A Life for a Life
   types:
   - Spell
   decks:
@@ -34,12 +31,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Ted Pendergraft
   collector_number: '146'
-- cardid: 104
-  title: Abandoned
+- title: Abandoned
   types:
   - Strategy
   decks:
@@ -52,13 +47,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Tyler Walpole
   flavor_text: <i>"What side do the Scorpion take?" Naizen demanded.</i>
   collector_number: '90'
-- cardid: 110
-  title: Accusation
+- title: Accusation
   types:
   - Strategy
   decks:
@@ -74,13 +67,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: April Lee
   flavor_text: <i>"Akiko, a traitor?" the Emperor asked quietly.</i>
   collector_number: '118'
-- cardid: 156
-  title: Agasha Shaku
+- title: Agasha Shaku
   types:
   - Personality
   decks:
@@ -103,13 +94,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Michael Kaluta
   flavor_text: <i>"Predict the Void and it will change, if only to defy your prediction."</i>
   collector_number: '31'
-- cardid: 246
-  title: Akodo Michio
+- title: Akodo Michio
   types:
   - Personality
   decks:
@@ -130,14 +119,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Anthony Grabski
   flavor_text: <i>"It does not matter why the beasts listen to him so intently - only that they do." -
     Kitsu Katsuko</i>
   collector_number: '24'
-- cardid: 255
-  title: Akodo Nariaki
+- title: Akodo Nariaki
   types:
   - Personality
   decks:
@@ -157,13 +144,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Chuck Lukacs
   flavor_text: <i>"If the Crane would conspire against the Emperor, then our path is clear."</i>
   collector_number: '20'
-- cardid: 296
-  title: Akodo Terumoto
+- title: Akodo Terumoto
   types:
   - Personality
   decks:
@@ -185,14 +170,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Matt Dixon
   flavor_text: <i>"We must be patient," Terumoto whispered, "until the Golden Lion's son becomes the hero
     his father was."</i>
   collector_number: '21'
-- cardid: 316
-  title: Akutenshi's Tribute
+- title: Akutenshi's Tribute
   types:
   - Strategy
   decks:
@@ -204,14 +187,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Adam Denton
   flavor_text: <i>"This city. A veneer of honor, with a heart of darkness." Tsume's eyes gleamed. "Whom
     shall we slaughter, Dark Lord?"</i>
   collector_number: '86'
-- cardid: 329
-  title: Allegiance to the Emperor
+- title: Allegiance to the Emperor
   types:
   - Strategy
   decks:
@@ -228,12 +209,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Veronica V. Jones
   collector_number: '123'
-- cardid: 330
-  title: Allegiance to the Shogun
+- title: Allegiance to the Shogun
   types:
   - Strategy
   decks:
@@ -250,12 +229,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Veronica V. Jones
   collector_number: '124'
-- cardid: 337
-  title: Always Ready
+- title: Always Ready
   types:
   - Strategy
   decks:
@@ -271,12 +248,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Adam Denton
   collector_number: '100'
-- cardid: 464
-  title: Arrival of the Obsidian Champion
+- title: Arrival of the Obsidian Champion
   types:
   - Strategy
   decks:
@@ -292,12 +267,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Jon Hodgson
   collector_number: '119'
-- cardid: 468
-  title: Arrogance
+- title: Arrogance
   types:
   - Strategy
   decks:
@@ -310,12 +283,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Torstein Nordstrand
   collector_number: '151'
-- cardid: 701
-  title: Baraunghar Technique
+- title: Baraunghar Technique
   types:
   - Strategy
   decks:
@@ -327,13 +298,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Stephanie Pui-Mun Law
   flavor_text: <i>Even the Utaku are taken aback by the speed of Lixue's forces.</i>
   collector_number: '111'
-- cardid: 805
-  title: Bayushi Kageki
+- title: Bayushi Kageki
   types:
   - Personality
   decks:
@@ -361,12 +330,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2004 The Mad Ronin - Jon Meertens
-  printing_id: '1'
   rarity: Rare
   artist: Steve Argyle
   collector_number: '45'
-- cardid: 813
-  title: Bayushi Kaneo
+- title: Bayushi Kaneo
   types:
   - Personality
   decks:
@@ -388,14 +355,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Matt Dixon
   flavor_text: <i>"Kwanchai and his madmen now serve the Shogun, at the Emperor's request." - Bayushi
     Kaukatsu</i>
   collector_number: '48'
-- cardid: 844
-  title: Bayushi Moyotoshi
+- title: Bayushi Moyotoshi
   types:
   - Personality
   decks:
@@ -417,12 +382,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Michael Komarck
   collector_number: '43'
-- cardid: 890
-  title: Bayushi Shumpei
+- title: Bayushi Shumpei
   types:
   - Personality
   decks:
@@ -443,13 +406,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>"The more you drench yourself in blood and shame, the less it seems to matter."</i>
   collector_number: '46'
-- cardid: 1049
-  title: Blood and Steel
+- title: Blood and Steel
   types:
   - Strategy
   decks:
@@ -461,13 +422,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Torstein Nordstrand
   flavor_text: <i>"Remeber, Kinuye," Yajinden said. "Your life, your freedom, is my gift."</i>
   collector_number: '99'
-- cardid: 1078
-  title: Blossoming Conflict
+- title: Blossoming Conflict
   types:
   - Strategy
   decks:
@@ -480,14 +439,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Ed Cox
   flavor_text: <i>"There shall be no more war between Lion and Crane," Domotai commanded, raising Masote's
     head high.</i>
   collector_number: '109'
-- cardid: 1229
-  title: Castle Gate
+- title: Castle Gate
   types:
   - Holding
   decks:
@@ -504,12 +461,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Mark Poole
   collector_number: '76'
-- cardid: 1235
-  title: Castle Towers
+- title: Castle Towers
   types:
   - Holding
   decks:
@@ -523,12 +478,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Ed Cox
   collector_number: '77'
-- cardid: 1236
-  title: Castle Walls
+- title: Castle Walls
   types:
   - Holding
   decks:
@@ -544,12 +497,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Common
   artist: Joachim Gmoser
   collector_number: '78'
-- cardid: 1332
-  title: Chitik
+- title: Chitik
   types:
   - Personality
   decks:
@@ -572,13 +523,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   errata_text: Errata'd via the internet.
-  printing_id: '1'
   rarity: Rare
   artist: Llyn Hunter
   flavor_text: <i>"Prove worthy of your Name, human, and I will return it."</i>
   collector_number: '39'
-- cardid: 1349
-  title: Chuda Hankyu
+- title: Chuda Hankyu
   types:
   - Item
   decks:
@@ -596,12 +545,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Theresa Brandon
   collector_number: '125'
-- cardid: 1455
-  title: Conscriptors
+- title: Conscriptors
   types:
   - Holding
   decks:
@@ -613,13 +560,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Ed Cox
   flavor_text: <i>"Shogun? Emperor? Both as strong, as weak, as any man." - Tawagoto</i>
   collector_number: '71'
-- cardid: 1460
-  title: Conserve Your Strength
+- title: Conserve Your Strength
   types:
   - Strategy
   decks:
@@ -633,12 +578,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Britt Martin
   collector_number: '113'
-- cardid: 1523
-  title: Counsel of the Keepers
+- title: Counsel of the Keepers
   types:
   - Strategy
   decks:
@@ -652,12 +595,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Janine Johnston
   collector_number: '117'
-- cardid: 1542
-  title: Courtly Scholars
+- title: Courtly Scholars
   types:
   - Holding
   decks:
@@ -669,12 +610,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Janine Johnston
   collector_number: '73'
-- cardid: 1559
-  title: Credit Where Due
+- title: Credit Where Due
   types:
   - Strategy
   decks:
@@ -689,13 +628,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Janine Johnston
   flavor_text: <i>"My lord, I merely stand on the shoulders of your many loyal servants."</i>
   collector_number: '120'
-- cardid: 1657
-  title: Daidoji Munabu
+- title: Daidoji Munabu
   types:
   - Personality
   decks:
@@ -718,12 +655,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: William O'Connor
   collector_number: '9'
-- cardid: 1661
-  title: Daidoji Naito
+- title: Daidoji Naito
   types:
   - Personality
   decks:
@@ -745,12 +680,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Michael Komarck
   collector_number: '11'
-- cardid: 1715
-  title: Daigotsu Fumiaki
+- title: Daigotsu Fumiaki
   types:
   - Personality
   decks:
@@ -770,14 +703,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Drew Baker
   flavor_text: <i>"The Kami founded Rokugan, but all feared Fu Leng. We serve the Lost Brother. Who is
     the most worthy, I ask you?"</i>
   collector_number: '52'
-- cardid: 1752
-  title: Daigotsu Ogiwara
+- title: Daigotsu Ogiwara
   types:
   - Personality
   decks:
@@ -800,13 +731,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Jason Engle
   flavor_text: <i>"All men are damned. Why not revel in our damnation?"</i>
   collector_number: '53'
-- cardid: 1834
-  title: Dark Feeding
+- title: Dark Feeding
   types:
   - Strategy
   decks:
@@ -818,13 +747,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Beth Trott
   flavor_text: <i>"My life for yours, Dark Daughter."<br>"I want more," she said.</i>
   collector_number: '121'
-- cardid: 2077
-  title: Doji Fujie
+- title: Doji Fujie
   types:
   - Personality
   decks:
@@ -844,13 +771,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Beth Trott
   flavor_text: <i>"Your war is not with the Lion, Domotai-sama, only with one man. Leave Masote to me."</i>
   collector_number: '12'
-- cardid: 2097
-  title: Doji Jun'ai
+- title: Doji Jun'ai
   types:
   - Personality
   decks:
@@ -883,14 +808,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: Path of Water 2005 - The Crane Clan
-  printing_id: '2'
   rarity: Rare
   artist: Steve Argyle
   flavor_text: <i>"Like the sea, she can be calm or filled with wrath. I could stare into her depths forever."
     - Kakita Tsuken</i>
   collector_number: '8'
-- cardid: 2102
-  title: Doji Kazo
+- title: Doji Kazo
   types:
   - Personality
   decks:
@@ -917,12 +840,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2001 GenCon Challenge Booth - Tyler Running Deer
-  printing_id: '1'
   rarity: Uncommon
   artist: April Lee
   collector_number: '10'
-- cardid: 2233
-  title: Draw Your Blade
+- title: Draw Your Blade
   types:
   - Strategy
   decks:
@@ -937,12 +858,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Shattered Empire
-  printing_id: '2'
   rarity: Rare
   artist: Beth Trott
   collector_number: '153'
-- cardid: 2428
-  title: Eyes of the Serpent
+- title: Eyes of the Serpent
   types:
   - Spell
   decks:
@@ -955,12 +874,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Ted Pendergraft
   collector_number: '147'
-- cardid: 2488
-  title: Favor to the Dragon
+- title: Favor to the Dragon
   types:
   - Strategy
   decks:
@@ -972,13 +889,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2004 Chosen by the Sun Top of Clan - Brian Yoon
-  printing_id: '1'
   rarity: Uncommon
   artist: Brad Williams
   flavor_text: <i>"The gift of rice," Satsu said. "The gift of life."</i>
   collector_number: '92'
-- cardid: 2489
-  title: Favor to the Horde
+- title: Favor to the Horde
   types:
   - Strategy
   decks:
@@ -993,14 +908,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Uncommon
   artist: Ted Pendergraft
   flavor_text: <i>"A Lion would offer us aid?" Toru asked suspicously. "Tell your master this name," the
     Lion replied. "Shimizu."</i>
   collector_number: '94'
-- cardid: 2490
-  title: Favor to the Scorpion
+- title: Favor to the Scorpion
   types:
   - Strategy
   decks:
@@ -1014,13 +927,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2004 Chosen by the Sun Top of Clan - Dave Smith
-  printing_id: '1'
   rarity: Uncommon
   artist: Storn A. Cook
   flavor_text: <i>A bond that has surpassed wars, surpassed dynasties. A bond of understanding.</i>
   collector_number: '93'
-- cardid: 2491
-  title: Favorable Terrain
+- title: Favorable Terrain
   types:
   - Strategy
   decks:
@@ -1036,12 +947,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Marta Preta Mora
   collector_number: '102'
-- cardid: 2527
-  title: Fields of Foolish Pride
+- title: Fields of Foolish Pride
   types:
   - Strategy
   decks:
@@ -1056,12 +965,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: John Donahue
   collector_number: '83'
-- cardid: 2606
-  title: Flee from Tomorrow
+- title: Flee from Tomorrow
   types:
   - Strategy
   decks:
@@ -1077,13 +984,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Kevin Wasden
   flavor_text: <i>"Nezumi courage is a peculiar thing." - Hida Tenshu</i>
   collector_number: '81'
-- cardid: 2643
-  title: Forest Cleansing
+- title: Forest Cleansing
   types:
   - Strategy
   decks:
@@ -1097,13 +1002,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Eric Lofgren
   flavor_text: <i>"Drive the filthy beast from the forest," the Unicorn ordered.</i>
   collector_number: '116'
-- cardid: 2645
-  title: Forest Killer Cavern
+- title: Forest Killer Cavern
   types:
   - Holding
   decks:
@@ -1117,12 +1020,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Common
   artist: Jeff Menges
   collector_number: '75'
-- cardid: 2673
-  title: Fortress of the Bear
+- title: Fortress of the Bear
   types:
   - Stronghold
   decks:
@@ -1137,12 +1038,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Poole
   collector_number: '154'
-- cardid: 2725
-  title: Fuhao's Shadow
+- title: Fuhao's Shadow
   types:
   - Spell
   decks:
@@ -1154,13 +1053,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Janine Johnston
   flavor_text: <i>"Begone, annoying creature!"</i>
   collector_number: '143'
-- cardid: 2870
-  title: Golden Obi of the Sun Goddess
+- title: Golden Obi of the Sun Goddess
   types:
   - Item
   decks:
@@ -1182,12 +1079,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2004 Chosen by the Sun - Jared Devlin-Scherer
-  printing_id: '1'
   rarity: Rare
   artist: April Lee
   collector_number: '131'
-- cardid: 2889
-  title: Gr'tik-er
+- title: Gr'tik-er
   types:
   - Personality
   decks:
@@ -1207,14 +1102,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Britt Martin
   flavor_text: <i>"The Unicorn drive Tattered Ear deep into the great forest. Can we fight samurai? Not
     alone."</i>
   collector_number: '38'
-- cardid: 3020
-  title: Heart of the Mountain
+- title: Heart of the Mountain
   types:
   - Strategy
   decks:
@@ -1235,12 +1128,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Janine Johnston
   collector_number: '104'
-- cardid: 3105
-  title: Hida Hiyao
+- title: Hida Hiyao
   types:
   - Personality
   decks:
@@ -1263,14 +1154,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Common
   artist: Chuck Lukacs
   flavor_text: <i>"Lord Kisada would turn the Shadowlands against itself. Should we not use every weapon
     we have?"</i>
   collector_number: '5'
-- cardid: 3113
-  title: Hida Iseki
+- title: Hida Iseki
   types:
   - Personality
   decks:
@@ -1293,13 +1182,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"No surrender. No compromise. Even one step into shadow is too many." - Hida Kuon</i>
   collector_number: '1'
-- cardid: 3202
-  title: Hida Takuma
+- title: Hida Takuma
   types:
   - Personality
   decks:
@@ -1318,14 +1205,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Ed Cox
   flavor_text: <i>"The mountain does not move, little Scorpion. Cross me and it will march right over
     you."</i>
   collector_number: '4'
-- cardid: 3220
-  title: Hida Unkei
+- title: Hida Unkei
   types:
   - Personality
   decks:
@@ -1343,14 +1228,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Chris Seaman
   flavor_text: <i>"Hida teaches us to use every weapon against the Shadowlands. Why should we not help
     the Lost fight their own?"</i>
   collector_number: '2'
-- cardid: 3225
-  title: Hida War Cry
+- title: Hida War Cry
   types:
   - Strategy
   decks:
@@ -1365,12 +1248,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Malcolm McClinton
   collector_number: '105'
-- cardid: 3296
-  title: Hiruma Hino
+- title: Hiruma Hino
   types:
   - Personality
   decks:
@@ -1392,13 +1273,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Malcolm McClinton
   flavor_text: <i>"Run, Hino-chan!" Todori hissed. "Tell Lord Kuon that his brother marches against us."</i>
   collector_number: '6'
-- cardid: 3298
-  title: Hiruma Hitaken
+- title: Hiruma Hitaken
   types:
   - Personality
   decks:
@@ -1424,13 +1303,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2004 Destiny of the Dragon - Salman Barakat
-  printing_id: '1'
   rarity: Rare
   artist: William O'Connor
   flavor_text: <i>Yozo the Fortune and Musaboru the demon destroyed one another. Now, only Hitaken remains.</i>
   collector_number: '3'
-- cardid: 3349
-  title: Hisaki
+- title: Hisaki
   types:
   - Personality
   decks:
@@ -1456,12 +1333,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Jason Engle
   collector_number: '25'
-- cardid: 3414
-  title: Homecoming
+- title: Homecoming
   types:
   - Strategy
   decks:
@@ -1475,14 +1350,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Beth Trott
   flavor_text: <i>"Don't be foolish, Akihiro. It is too rare that ronin can find a safe place to call
     home."</i>
   collector_number: '89'
-- cardid: 3422
-  title: Honor Guard
+- title: Honor Guard
   types:
   - Follower
   decks:
@@ -1498,13 +1371,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Jaime Jones
   flavor_text: <i>"Kisada is well protected," Yudoka warned.</i>
   collector_number: '135'
-- cardid: 3504
-  title: House of the White Jade Fan
+- title: House of the White Jade Fan
   types:
   - Holding
   decks:
@@ -1519,13 +1390,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Brad Williams
   flavor_text: <i>"A luxurious prison, but a prison all the same." - Isawa Sezaru</i>
   collector_number: '74'
-- cardid: 3505
-  title: Howl of the Wolf
+- title: Howl of the Wolf
   types:
   - Spell
   decks:
@@ -1538,12 +1407,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Roberto Marchesi
   collector_number: '145'
-- cardid: 3543
-  title: I Know That Trick
+- title: I Know That Trick
   types:
   - Strategy
   decks:
@@ -1557,12 +1424,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Tyler Walpole
   collector_number: '79'
-- cardid: 3568
-  title: Ide Jiao
+- title: Ide Jiao
   types:
   - Personality
   decks:
@@ -1584,13 +1449,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Matt Dixon
   flavor_text: <i>"Make no mistake, Dragon," Jiao whispered, "we come not to serve you, but to serve justice."</i>
   collector_number: '58'
-- cardid: 3893
-  title: Isawa Sata
+- title: Isawa Sata
   types:
   - Personality
   decks:
@@ -1611,13 +1474,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Chris Seaman
   flavor_text: <i>"I see bloodied steel, buried deep in the heart of the Phoenix. A Master holds the blade."</i>
   collector_number: '34'
-- cardid: 3920
-  title: Isawa Tanaka (PoH)
+- title: Isawa Tanaka (PoH)
   types:
   - Personality
   decks:
@@ -1639,13 +1500,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   notes: This is a distinct card from the Imperial Gift 2 card of the same name.
-  printing_id: '1'
   rarity: Uncommon
   artist: Anthony Grabski
   flavor_text: <i>"Conflict is unseemly for the children of Isawa. Let us end this quickly."</i>
   collector_number: '32'
-- cardid: 3925
-  title: Isawa Tomita
+- title: Isawa Tomita
   types:
   - Personality
   decks:
@@ -1665,13 +1524,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: John Donahue
   flavor_text: <i>"My life, my soul, for the Phoenix, Lady Kinuye."</i>
   collector_number: '35'
-- cardid: 4016
-  title: Iwase
+- title: Iwase
   types:
   - Personality
   decks:
@@ -1691,12 +1548,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: April Lee
   collector_number: '64'
-- cardid: 4029
-  title: Jade Petal Tea
+- title: Jade Petal Tea
   types:
   - Strategy
   decks:
@@ -1710,12 +1565,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Amandine Lebarre
   collector_number: '88'
-- cardid: 4238
-  title: Kakita Tsuken
+- title: Kakita Tsuken
   types:
   - Personality
   decks:
@@ -1742,13 +1595,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"He is brash and bold, quick of wit and full of passion." - Doji Jun'ai</i>
   collector_number: '7'
-- cardid: 4335
-  title: Kharmic Struggle
+- title: Kharmic Struggle
   types:
   - Strategy
   decks:
@@ -1764,14 +1615,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Chris Seaman
   flavor_text: <i>"Both Mitsu and Kokujin have returned with new purpose. It can be no coincidence." -
     Togashi Satsu</i>
   collector_number: '106'
-- cardid: 4435
-  title: Kitsuki Ryushi
+- title: Kitsuki Ryushi
   types:
   - Personality
   decks:
@@ -1794,13 +1643,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: April Lee
   flavor_text: <i>"How can the Phoenix be so blind?" Ryushi wondered. "Perhaps they choose not to see."</i>
   collector_number: '16'
-- cardid: 4437
-  title: Kitsuki Seiji
+- title: Kitsuki Seiji
   types:
   - Personality
   decks:
@@ -1819,14 +1666,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Michael Kaluta
   flavor_text: <i>"The Lion will strike here first, for even the Matsu recognize the Dragonfly are under
     the Wolf's protection."</i>
   collector_number: '17'
-- cardid: 4504
-  title: Kokujin
+- title: Kokujin
   types:
   - Personality
   decks:
@@ -1854,12 +1699,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: April Lee
   collector_number: '50'
-- cardid: 4511
-  title: Kokujin's Temptation
+- title: Kokujin's Temptation
   types:
   - Strategy
   decks:
@@ -1872,13 +1715,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Chris Seaman
   flavor_text: <i>"Make your choice, samurai."</i>
   collector_number: '85'
-- cardid: 4603
-  title: Kuni's Eye
+- title: Kuni's Eye
   types:
   - Item
   decks:
@@ -1892,13 +1733,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: David Horne
   flavor_text: <i>"Covering your corruption with jade tea? You cannot hide from us." - Kuni Kiyoshi</i>
   collector_number: '129'
-- cardid: 4630
-  title: Kyoso's Hunters
+- title: Kyoso's Hunters
   types:
   - Follower
   decks:
@@ -1917,13 +1756,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Jon Hodgson
   flavor_text: <i>"Do what you will with the Lost," Kyoso hissed, "but the Dark Daughter is mine."</i>
   collector_number: '136'
-- cardid: 4722
-  title: Letter of Confession
+- title: Letter of Confession
   types:
   - Item
   decks:
@@ -1936,14 +1773,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Mark Poole
   flavor_text: <i>"When shame falls upon you, share it with an enemy. How readily others will believe
     a dishonest man." - Tangen's Lies</i>
   collector_number: '126'
-- cardid: 4760
-  title: Lone Magistrate
+- title: Lone Magistrate
   types:
   - Follower
   decks:
@@ -1960,12 +1795,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Malcolm McClinton
   collector_number: '137'
-- cardid: 4921
-  title: Matsu Hirake
+- title: Matsu Hirake
   types:
   - Personality
   decks:
@@ -1985,12 +1818,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Franz Vohwinkel
   collector_number: '22'
-- cardid: 4981
-  title: Matsu Shimei
+- title: Matsu Shimei
   types:
   - Personality
   decks:
@@ -2011,12 +1842,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Michael Komarck
   collector_number: '23'
-- cardid: 5005
-  title: Matsu Yoshino
+- title: Matsu Yoshino
   types:
   - Personality
   decks:
@@ -2040,14 +1869,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: John Donahue
   flavor_text: <i>"He's just a boy," Fujimaro said. "A shadow of his great father."<br>"All legends begin
     somewhere," Otemi replied.</i>
   collector_number: '19'
-- cardid: 5078
-  title: Mirumoto Chojiro
+- title: Mirumoto Chojiro
   types:
   - Personality
   decks:
@@ -2070,13 +1897,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>"The Lion will never scale our mountains while carrying so much pride."</i>
   collector_number: '18'
-- cardid: 5130
-  title: Mirumoto Masae
+- title: Mirumoto Masae
   types:
   - Personality
   decks:
@@ -2102,14 +1927,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Steve Argyle
   flavor_text: <i>"First of us all. Wisest of us all. Time will test the gifts Rosoku has given her."
     - Asahina Sekawa</i>
   collector_number: '13'
-- cardid: 5187
-  title: Mishakene
+- title: Mishakene
   types:
   - Personality
   decks:
@@ -2132,13 +1955,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>"Strong as an ogre, but obedient. Magnificent." - Omoni</i>
   collector_number: '54'
-- cardid: 5192
-  title: Mitsu's Return
+- title: Mitsu's Return
   types:
   - Strategy
   decks:
@@ -2152,13 +1973,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Kevin Wasden
   flavor_text: <i>"My teacher has returned with a cry of Thunder." - Togashi Matsuo</i>
   collector_number: '108'
-- cardid: 5280
-  title: Moshi Sayoko
+- title: Moshi Sayoko
   types:
   - Personality
   decks:
@@ -2178,14 +1997,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Franz Vohwinkel
   flavor_text: <i>"Kaigen's forces are impressive, but crude. If only their talent had been born into
     a true Great Clan." - Isawa Sachi
   collector_number: '27'
-- cardid: 5340
-  title: Moto Kang
+- title: Moto Kang
   types:
   - Personality
   decks:
@@ -2208,12 +2025,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Tyler Walpole
   collector_number: '57'
-- cardid: 5386
-  title: Moto Tsume
+- title: Moto Tsume
   types:
   - Personality
   decks:
@@ -2243,12 +2058,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: '49'
-- cardid: 5475
-  title: N'ck
+- title: N'ck
   types:
   - Personality
   decks:
@@ -2269,13 +2082,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>"If humans will not give us respect, I will steal it."</i>
   collector_number: '41'
-- cardid: 5549
-  title: Night Crystal Scepter
+- title: Night Crystal Scepter
   types:
   - Item
   decks:
@@ -2292,13 +2103,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Tyler Walpole
   flavor_text: <i>"What does it do?" Chagatai asked. "What do you need it to do, Khan?" the Horiuchi replied.</i>
   collector_number: '128'
-- cardid: 5662
-  title: Obsidian Riders
+- title: Obsidian Riders
   types:
   - Follower
   decks:
@@ -2319,12 +2128,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Amandine Lebarre
   collector_number: '132'
-- cardid: 5856
-  title: P-o'tch
+- title: P-o'tch
   types:
   - Personality
   decks:
@@ -2346,13 +2153,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Ted Pendergraft
   flavor_text: <i>"Savage? Yes. Stupid? No." - Hida Isamu</i>
   collector_number: '42'
-- cardid: 6048
-  title: Preparation
+- title: Preparation
   types:
   - Strategy
   decks:
@@ -2365,13 +2170,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Jon Hodgson
   flavor_text: <i>"Win the battle before steel is drawn." - Matsu Yoshino</i>
   collector_number: '149'
-- cardid: 6078
-  title: Proof of Dishonor
+- title: Proof of Dishonor
   types:
   - Item
   decks:
@@ -2384,13 +2187,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Chris Seaman
   flavor_text: <i>"Stand down, Phoenix, or all will know the truth."</i>
   collector_number: '130'
-- cardid: 6085
-  title: Prosperous Plains City
+- title: Prosperous Plains City
   types:
   - Stronghold
   decks:
@@ -2405,12 +2206,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2005 World Champion - Scott Rixson
-  printing_id: '1'
   rarity: Fixed
   artist: Joachim Gmoser
   collector_number: '155'
-- cardid: 6164
-  title: Rapid Deployment
+- title: Rapid Deployment
   types:
   - Strategy
   decks:
@@ -2425,14 +2224,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Common
   artist: Malcolm McClinton
   flavor_text: <i>"The clan hungers for war, Yoshino," Otemi said as he looked to the north. "We must
     have an enemy."</i>
   collector_number: '112'
-- cardid: 6263
-  title: Repair Crew
+- title: Repair Crew
   types:
   - Holding
   decks:
@@ -2444,13 +2241,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   notes: Misprinted with the "DoW" expansion notation instead of "PoH".
-  printing_id: '1'
   rarity: Uncommon
   artist: Ed Cox
   flavor_text: <i>"Do not offer excuses. Do not sow blame. I care only for results."</i>
   collector_number: '63'
-- cardid: 6327
-  title: Righteous Doshin
+- title: Righteous Doshin
   types:
   - Follower
   decks:
@@ -2468,12 +2263,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Common
   artist: Jon Hodgson
   collector_number: '134'
-- cardid: 6431
-  title: Sachi's Defiance
+- title: Sachi's Defiance
   types:
   - Strategy
   decks:
@@ -2485,13 +2278,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Jeff Menges
   flavor_text: <i>"You dare soil this land, Mantis? Then be buried beneath it."</i>
   collector_number: '114'
-- cardid: 6519
-  title: Scrutiny of the Wasp
+- title: Scrutiny of the Wasp
   types:
   - Strategy
   decks:
@@ -2505,13 +2296,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Ted Pendergraft
   flavor_text: <i>Kazushi watched the men in silence, his scowl deepening with every word.</i>
   collector_number: '95'
-- cardid: 6540
-  title: Second Doom of the Crab
+- title: Second Doom of the Crab
   types:
   - Event
   decks:
@@ -2525,14 +2314,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Malcolm McClinton
   flavor_text: <i>"You once promised we would never again bow to darkness, Kisada," Kuon said. "We will
     not make peace with the Shadowlands," the Great Bear said darkly.</i>
   collector_number: '67'
-- cardid: 6541
-  title: Second Doom of the Crane
+- title: Second Doom of the Crane
   types:
   - Event
   decks:
@@ -2548,14 +2335,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Stephanie Pui-Mun Law
   flavor_text: <i>With a single blow, Kurohito silenced all enemies. With three cuts, he ended his clan's
     shame.</i>
   collector_number: '67'
-- cardid: 6549
-  title: Secret from the Mantis
+- title: Secret from the Mantis
   types:
   - Strategy
   decks:
@@ -2568,14 +2353,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2004 Chosen by the Sun Top of Clan - Sam Sadle
-  printing_id: '1'
   rarity: Uncommon
   artist: Britt Martin
   flavor_text: <i>"The Mantis looked at the orochi and see only power," Manithith warned N'ck. "They do
     not know them as we do."</i>
   collector_number: '97'
-- cardid: 6550
-  title: Secret from the Ratling
+- title: Secret from the Ratling
   types:
   - Strategy
   decks:
@@ -2589,12 +2372,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2004 Chosen by the Sun Top of Clan - Craig Hopkins
-  printing_id: '1'
   rarity: Uncommon
   artist: Mark Poole
   collector_number: '96'
-- cardid: 6568
-  title: Seeking Within
+- title: Seeking Within
   types:
   - Strategy
   decks:
@@ -2609,14 +2390,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Nate Barnes
   flavor_text: <i>"Dragons, Masters, Oracles," Sugimoto said as he studied the Tower of Vines. "What purpose
     do we Keepers serve?"</i>
   collector_number: '139'
-- cardid: 6583
-  title: Selfless Courage
+- title: Selfless Courage
   types:
   - Strategy
   decks:
@@ -2628,13 +2407,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Britt Martin
   flavor_text: <i>A warrior who fights only to kill, not survive, sees his course much more clearly.</i>
   collector_number: '80'
-- cardid: 6750
-  title: Shiba Fugimori
+- title: Shiba Fugimori
   types:
   - Personality
   decks:
@@ -2656,12 +2433,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Llyn Hunter
   collector_number: '33'
-- cardid: 6798
-  title: Shiba Riza
+- title: Shiba Riza
   types:
   - Personality
   decks:
@@ -2683,12 +2458,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: William O'Connor
   collector_number: '36'
-- cardid: 6936
-  title: Shinjo Senhao
+- title: Shinjo Senhao
   types:
   - Personality
   decks:
@@ -2712,13 +2485,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: William O'Connor
   flavor_text: <i>"Are we ready to ride?" Senhao laughed. "Lord Shono, you know better than to ask."</i>
   collector_number: '55'
-- cardid: 6960
-  title: Shinjo Wei
+- title: Shinjo Wei
   types:
   - Personality
   decks:
@@ -2739,14 +2510,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Steve Argyle
   flavor_text: <i>"The Lion conspire against the Crane and march against the Dragon. Let the Shinjo bring
     order once more."</i>
   collector_number: '56'
-- cardid: 6962
-  title: Shinjo Xie
+- title: Shinjo Xie
   types:
   - Personality
   decks:
@@ -2768,12 +2537,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Michael Kaluta
   collector_number: '59'
-- cardid: 6973
-  title: Shinjo's Arrow
+- title: Shinjo's Arrow
   types:
   - Strategy
   decks:
@@ -2785,13 +2552,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: David Horne
   flavor_text: <i>"Lady Shinjo is gone, but her purity guides us still."</i>
   collector_number: '152'
-- cardid: 7133
-  title: Shosuro Mikado
+- title: Shosuro Mikado
   types:
   - Personality
   decks:
@@ -2817,12 +2582,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Tyler Walpole
   collector_number: '44'
-- cardid: 7174
-  title: Shosuro Toma
+- title: Shosuro Toma
   types:
   - Personality
   decks:
@@ -2845,13 +2608,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>"Yudoka's students gather in Ryoko Owari, but to what prupose?" - Bayushi Tsimaru</i>
   collector_number: '47'
-- cardid: 7242
-  title: Shuten Doji's Fury
+- title: Shuten Doji's Fury
   types:
   - Strategy
   decks:
@@ -2865,13 +2626,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Thomas Denmark
   flavor_text: <i>The Chuda command powers that mortals should not contemplate.</i>
   collector_number: '84'
-- cardid: 7508
-  title: Storm Rider Explorer
+- title: Storm Rider Explorer
   types:
   - Follower
   decks:
@@ -2889,13 +2648,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Adam Denton
   flavor_text: <i>"The beast have shown us a power, a freedom, we would never know alone."</i>
   collector_number: '138'
-- cardid: 7732
-  title: Tainted Whispers
+- title: Tainted Whispers
   types:
   - Strategy
   decks:
@@ -2911,13 +2668,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: April Lee
   flavor_text: <i>"The Wolf slew our master. He cannot deny his destiny forever." - Asako Kinuye</i>
   collector_number: '141'
-- cardid: 7837
-  title: Tawagoto
+- title: Tawagoto
   types:
   - Personality
   decks:
@@ -2937,12 +2692,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Drew Baker
   collector_number: '65'
-- cardid: 7848
-  title: Tchree
+- title: Tchree
   types:
   - Personality
   decks:
@@ -2962,13 +2715,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: April Lee
   flavor_text: <i>"To fight Tomorrow, stand upon Yesterday."</i>
   collector_number: '40'
-- cardid: 7885
-  title: Temple of the General
+- title: Temple of the General
   types:
   - Region
   decks:
@@ -2981,13 +2732,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Chuck Lukacs
   flavor_text: <i>"He rose from poverty to divinity. Lord Toku is an example to us all." - Toturi III</i>
   collector_number: '69'
-- cardid: 7886
-  title: Temple of the Lotus
+- title: Temple of the Lotus
   types:
   - Holding
   decks:
@@ -3001,13 +2750,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: David Horne
   flavor_text: <i>"To understand is to begin a new path." - Asahina Sekawa</i>
   collector_number: '72'
-- cardid: 7908
-  title: Ten Thousand Temples
+- title: Ten Thousand Temples
   types:
   - Region
   decks:
@@ -3022,12 +2769,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Uncommon
   artist: Stephanie Pui-Mun Law
   collector_number: '70'
-- cardid: 7919
-  title: Test His Mettle
+- title: Test His Mettle
   types:
   - Strategy
   decks:
@@ -3040,12 +2785,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Beth Trott
   collector_number: '148'
-- cardid: 7926
-  title: Test of Loyalty
+- title: Test of Loyalty
   types:
   - Strategy
   decks:
@@ -3058,12 +2801,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Lisa Hunt
   collector_number: '122'
-- cardid: 7973
-  title: The Bitter Shadow of Shame
+- title: The Bitter Shadow of Shame
   types:
   - Strategy
   decks:
@@ -3079,14 +2820,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Malcolm McClinton
   flavor_text: <i>"Help me, Yasuko. Help me bind the ancient wounds Kurohito's death has opened." - Ikoma
     Otemi</i>
   collector_number: '82'
-- cardid: 8021
-  title: The Death of Akiko
+- title: The Death of Akiko
   types:
   - Event
   decks:
@@ -3100,14 +2839,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: April Lee
   flavor_text: <i>"Lord Kurohito loved Isawa's daughter, but a choice between love and honor always ends
     in blood." - Doji Nagori</i>
   collector_number: '68'
-- cardid: 8118
-  title: The Halls of the Damned
+- title: The Halls of the Damned
   types:
   - Stronghold
   decks:
@@ -3124,12 +2861,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Brad Williams
   collector_number: '156'
-- cardid: 8175
-  title: The Kami's Blessing
+- title: The Kami's Blessing
   types:
   - Spell
   decks:
@@ -3146,12 +2881,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Uncommon
   artist: Thomas Denmark
   collector_number: '144'
-- cardid: 8367
-  title: The Tail Strikes
+- title: The Tail Strikes
   types:
   - Strategy
   decks:
@@ -3167,13 +2900,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Malcolm McClinton
   flavor_text: <i>"I wash my hands of Masote. How may I aid the noble Crane?" Kaukatsu asked with a smile.</i>
   collector_number: '98'
-- cardid: 8416
-  title: The War of Fire and Thunder
+- title: The War of Fire and Thunder
   types:
   - Strategy
   decks:
@@ -3188,14 +2919,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Jim Pavelec
   flavor_text: <i>"Men always begin wars for honorable purposes. The endings are less clean." - Yoritomo
     Kitao</i>
   collector_number: '115'
-- cardid: 8466
-  title: Thunder and Steel
+- title: Thunder and Steel
   types:
   - Strategy
   decks:
@@ -3214,12 +2943,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Jaime Jones
   collector_number: '103'
-- cardid: 8547
-  title: Togashi Masujiro
+- title: Togashi Masujiro
   types:
   - Personality
   decks:
@@ -3242,12 +2969,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Uncommon
   artist: Adam Denton
   flavor_text: <i>"Bold claims amount to nothing, Crane."</i>
-- cardid: 8566
-  title: Togashi Razan
+- title: Togashi Razan
   types:
   - Personality
   decks:
@@ -3266,13 +2991,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Anthony Grabski
   flavor_text: <i>"If a man tells you he has found enlightenment, then that man is surely lying."</i>
   collector_number: '15'
-- cardid: 8780
-  title: Tsuken's Blade
+- title: Tsuken's Blade
   types:
   - Item
   decks:
@@ -3288,13 +3011,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: John Donahue
   flavor_text: <i>The Keeper found Ochiai's gift most appropriate.</i>
   collector_number: '127'
-- cardid: 8819
-  title: Tsuruchi Chae
+- title: Tsuruchi Chae
   types:
   - Personality
   decks:
@@ -3314,13 +3035,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Drew Baker
   flavor_text: <i>"Already they call this the War of Fire and Thunder. Whatever the end, it shall be glorious."</i>
   collector_number: '26'
-- cardid: 8846
-  title: Tsuruchi Kaya
+- title: Tsuruchi Kaya
   types:
   - Personality
   decks:
@@ -3344,13 +3063,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Common
   artist: Malcolm McClinton
   flavor_text: <i>"The Tsuruchi despise politics. That is why they excel at it." - Akodo Setai</i>
   collector_number: '30'
-- cardid: 8979
-  title: Unexpected Testimony
+- title: Unexpected Testimony
   types:
   - Strategy
   decks:
@@ -3365,13 +3082,11 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Rare
   artist: Joachim Gmoser
   flavor_text: <i>Others stepped forward to support Masote's accusations. Akiko was taken unaware.</i>
   collector_number: '110'
-- cardid: 8991
-  title: Unity of Purpose
+- title: Unity of Purpose
   types:
   - Strategy
   decks:
@@ -3385,12 +3100,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Jon Hodgson
   collector_number: '107'
-- cardid: 9088
-  title: Utaku Minhua
+- title: Utaku Minhua
   types:
   - Personality
   decks:
@@ -3414,13 +3127,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: John Donahue
   flavor_text: <i>"Rats, return to your holes and trouble the People of the Wind no more."</i>
   collector_number: '60'
-- cardid: 9125
-  title: Valiant Stand
+- title: Valiant Stand
   types:
   - Strategy
   decks:
@@ -3435,12 +3146,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Ed Cox
   collector_number: '87'
-- cardid: 9230
-  title: Wareta no Oni
+- title: Wareta no Oni
   types:
   - Personality
   decks:
@@ -3462,14 +3171,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Jim Pavelec
   flavor_text: <i>Where Daigotsu commands loyalty through charisma, the Maw's demons serve out of sheer
     terror.</i>
   collector_number: '51'
-- cardid: 9251
-  title: Water Dragon
+- title: Water Dragon
   types:
   - Personality
   decks:
@@ -3497,12 +3204,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Llyn Hunter
   collector_number: '62'
-- cardid: 9275
-  title: Weakened Defenses
+- title: Weakened Defenses
   types:
   - Strategy
   decks:
@@ -3518,12 +3223,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Lisa Hunt
   collector_number: '150'
-- cardid: 9355
-  title: Wisdom and Courage
+- title: Wisdom and Courage
   types:
   - Strategy
   decks:
@@ -3539,13 +3242,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Thomas Denmark
   flavor_text: <i>"Shinsei was no warrior, but he inspired warriors to greatness." - Doji Jun'ai</i>
   collector_number: '140'
-- cardid: 9386
-  title: Wrath of the Keepers
+- title: Wrath of the Keepers
   types:
   - Strategy
   decks:
@@ -3560,13 +3261,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Tyler Walpole
   flavor_text: <i>"Enlightenment is not always subtle." - Doji Jun'ai</i>
   collector_number: '142'
-- cardid: 9393
-  title: Wretched Mercenary
+- title: Wretched Mercenary
   types:
   - Follower
   decks:
@@ -3583,14 +3282,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Common
   artist: Steve Ellis
   flavor_text: <i>"Men light that do not die. Such vermin always flee before disaster arrives." Yoritomo
     Kumiko</i>
   collector_number: '133'
-- cardid: 9416
-  title: Y'tchee
+- title: Y'tchee
   types:
   - Personality
   decks:
@@ -3613,12 +3310,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Britt Martin
   collector_number: '37'
-- cardid: 9564
-  title: Yoritomo Ietsuna
+- title: Yoritomo Ietsuna
   types:
   - Personality
   decks:
@@ -3638,13 +3333,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: William O'Connor
   flavor_text: <i>"If the Phoenix would question our birthright, they will pay in blood."</i>
   collector_number: '28'
-- cardid: 9682
-  title: You Are Too Late
+- title: You Are Too Late
   types:
   - Strategy
   decks:
@@ -3660,7 +3353,6 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: John Donahue
   collector_number: '101'
