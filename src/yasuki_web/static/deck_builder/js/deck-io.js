@@ -37,7 +37,11 @@ export function serializeDeck(deck) {
           .forEach(([, printData]) => {
             const countPrefix = printData.qty > 1 ? `${printData.qty}x ` : '';
             const setSuffix = printData.set_name ? ` [${printData.set_name}]` : '';
-            lines.push(`  - ${countPrefix}${name}${setSuffix}`);
+            const art = printData.art;
+            const artSuffix = art
+              ? ` {art: ${art.donorName}${art.donorSet ? ` [${art.donorSet}]` : ''}}`
+              : '';
+            lines.push(`  - ${countPrefix}${name}${setSuffix}${artSuffix}`);
           });
       });
     lines.push('');
@@ -76,6 +80,12 @@ export function parseDeckYaml(text) {
   return result;
 }
 
+function _splitNameSet(text) {
+  const setMatch = text.match(/^(.*?)\s+\[([^\]]+)\]\s*$/);
+  if (setMatch) return { name: setMatch[1].trim(), setName: setMatch[2] };
+  return { name: text.trim(), setName: null };
+}
+
 function _parseCardLine(text) {
   let count = 1;
   let rest = text;
@@ -86,14 +96,15 @@ function _parseCardLine(text) {
     rest = rest.slice(countMatch[0].length);
   }
 
-  let setName = null;
-  const setMatch = rest.match(/^(.*?)\s+\[([^\]]+)\]\s*$/);
-  if (setMatch) {
-    rest = setMatch[1];
-    setName = setMatch[2];
+  let art = null;
+  const artMatch = rest.match(/\s*\{art:\s*(.+?)\}\s*$/);
+  if (artMatch) {
+    const donor = _splitNameSet(artMatch[1].trim());
+    art = { donorName: donor.name, donorSet: donor.setName };
+    rest = rest.slice(0, artMatch.index);
   }
 
-  const name = rest.trim();
+  const { name, setName } = _splitNameSet(rest);
   if (!name) return null;
-  return { name, count, setName };
+  return { name, count, setName, art };
 }

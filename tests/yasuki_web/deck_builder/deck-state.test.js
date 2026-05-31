@@ -5,6 +5,7 @@ import {
   getDeck,
   getBucket,
   addCard,
+  addCustomPrint,
   removeCard,
   clearDeck,
   deckEntryTotal,
@@ -145,5 +146,38 @@ describe('getDeckNavItems', () => {
     const items = getDeckNavItems('FATE');
     assert.equal(items[0].card.types[0], 'Holding');
     assert.equal(items[1].card.types[0], 'Strategy');
+  });
+});
+
+describe('addCustomPrint', () => {
+  beforeEach(clearDeck);
+  const customData = {
+    set_name: 'Imperial Edition',
+    isCustom: true,
+    art: { donorName: 'Beta', donorSet: 'Gold Edition' },
+    recipe: { recipientPrintId: 10, donorCardId: 'card_b', donorPrintId: 20 },
+    dataUrl: 'data:image/jpeg;base64,xxx',
+  };
+
+  it('stores the custom print under its synthetic key with its metadata', () => {
+    addCustomPrint('FATE', CARD_A, -5, customData);
+    const entry = getDeck().FATE.card_a.prints[-5];
+    assert.equal(entry.qty, 1);
+    assert.equal(entry.isCustom, true);
+    assert.equal(entry.set_name, 'Imperial Edition');
+    assert.deepEqual(entry.art, { donorName: 'Beta', donorSet: 'Gold Edition' });
+  });
+
+  it('stacks the same custom print instead of duplicating', () => {
+    addCustomPrint('FATE', CARD_A, -5, customData);
+    addCustomPrint('FATE', CARD_A, -5, customData);
+    assert.equal(getDeck().FATE.card_a.prints[-5].qty, 2);
+    assert.equal(Object.keys(getDeck().FATE.card_a.prints).length, 1);
+  });
+
+  it('coexists with a real print of the same card', () => {
+    addCard('card_a', 'FATE', CARD_A, 10, 'Imperial Edition');
+    addCustomPrint('FATE', CARD_A, -5, customData);
+    assert.equal(deckEntryTotal(getDeck().FATE.card_a), 2);
   });
 });

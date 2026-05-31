@@ -16,6 +16,17 @@ export function addCard(cardId, side, card, printId, setName) {
   bucket[cardId].prints[printId].qty++;
 }
 
+// Add a custom (art-swap) print of a card. printId is a negative synthetic id (customPrintId);
+// printData carries set_name (recipient set, for the [Set] suffix), art {donorName, donorSet} for
+// serialization, recipe (to re-render), dataUrl (cached composite), and isCustom.
+export function addCustomPrint(side, card, printId, printData) {
+  const bucket = deck[side] || deck.FATE;
+  if (!bucket[card.card_id]) bucket[card.card_id] = { card, prints: {} };
+  const prints = bucket[card.card_id].prints;
+  if (!prints[printId]) prints[printId] = { qty: 0, ...printData };
+  prints[printId].qty++;
+}
+
 export function removeCard(cardId, side, printId) {
   const bucket = deck[side];
   if (!bucket || !bucket[cardId]) return { cardRemoved: false, printRemoved: false };

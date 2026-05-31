@@ -52,6 +52,9 @@ def test_card_detail_shape(client):
         assert "set_name" in print_
         assert "image_path" in print_  # served as sets/<slug>/<file> or None
         assert "back_image_path" in print_  # back face for double-sided prints, else None
+        assert isinstance(print_["era"], str)  # art-swap era band, e.g. "2016+"
+        assert isinstance(print_["layout_type"], str)  # art-swap layout, e.g. "Personality"
+        assert print_["back_era"] in ("old", "new")  # which generic card back to flip to
 
 
 def test_card_backs_shape(client):

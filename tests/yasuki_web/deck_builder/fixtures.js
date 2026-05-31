@@ -14,3 +14,21 @@ export function makeCard(overrides = {}) {
     ...overrides,
   };
 }
+
+// Canonical print shape, mirroring /api/cards/{id}.prints[*]. era/layout_type are appended
+// server-side for the art-swap canvas; keep in lockstep with the API contract test.
+export function makePrint(overrides = {}) {
+  return {
+    print_id: 123,
+    card_id: 'doji_hoturi',
+    set_name: 'Imperial Edition',
+    rarity: 'Rare',
+    artist: 'Kaija Rudek',
+    image_path: 'sets/imperial_edition/doji_hoturi.jpg',
+    back_image_path: null,
+    flavor_text: null,
+    era: '1995-99',
+    layout_type: 'Personality',
+    ...overrides,
+  };
+}
