@@ -2,9 +2,10 @@ import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { getDeckName, setDeckName, serializeDeck, parseDeckYaml } from '../../../src/yasuki_web/static/deck_builder/js/deck-io.js';
 import { addCard, clearDeck, getDeck } from '../../../src/yasuki_web/static/deck_builder/js/deck-state.js';
-const CARD_PERS = { id: 'doji_hoturi', name: 'Doji Hoturi', extended_title: 'Doji Hoturi', type: 'Personality', side: 'DYNASTY' };
-const CARD_STR  = { id: 'ambush',      name: 'Ambush',      extended_title: 'Ambush',      type: 'Strategy',   side: 'FATE' };
-const CARD_SH   = { id: 'kyuden_doji', name: 'Kyuden Doji', extended_title: 'Kyuden Doji', type: 'Stronghold', side: 'PRE_GAME' };
+import { makeCard } from './fixtures.js';
+const CARD_PERS = makeCard({ card_id: 'doji_hoturi', name: 'Doji Hoturi', types: ['Personality'], decks: ['Dynasty'] });
+const CARD_STR  = makeCard({ card_id: 'ambush', name: 'Ambush', extended_title: 'Ambush', types: ['Strategy'], decks: ['Fate'] });
+const CARD_SH   = makeCard({ card_id: 'kyuden_doji', name: 'Kyuden Doji', extended_title: 'Kyuden Doji', types: ['Stronghold'], decks: ['Pre-Game'] });
 beforeEach(() => { clearDeck(); setDeckName(''); });
 describe('parseDeckYaml', () => {
   it('parses deck name', () => {
@@ -129,7 +130,7 @@ describe('serializeDeck', () => {
     assert.ok(yaml.includes('  - Ambush'));
   });
   it('round-trips card name starting with digits', () => {
-    const CARD_NUM = { id: '700_soldier_plain', name: '700 Soldier Plain', extended_title: '700 Soldier Plain', type: 'Holding', side: 'DYNASTY' };
+    const CARD_NUM = makeCard({ card_id: '700_soldier_plain', name: '700 Soldier Plain', extended_title: '700 Soldier Plain', types: ['Holding'], decks: ['Dynasty'] });
     addCard('700_soldier_plain', 'DYNASTY', CARD_NUM, 50, 'Diamond Edition');
     const parsed = parseDeckYaml(serializeDeck(getDeck()));
     assert.equal(parsed.dynasty[0].name, '700 Soldier Plain');
@@ -222,7 +223,7 @@ describe('confusing deck round-trip', () => {
     const addParsedEntries = (entries, side) => {
       entries.forEach((e, i) => {
         const cardId = e.name.toLowerCase().replace(/[^a-z0-9]/g, '_') + '_' + i;
-        const card = { id: cardId, name: e.name, extended_title: e.name, type: 'Personality', side };
+        const card = makeCard({ card_id: cardId, name: e.name, extended_title: e.name });
         const printId = i + 1;
         for (let c = 0; c < e.count; c++) addCard(cardId, side, card, printId, e.setName);
         allCards[cardId] = card;

@@ -14,6 +14,20 @@ export function displayName(card) {
   return card.is_unique ? '\u25C6 ' + title : title;
 }
 
+// The deck-builder bucket a card belongs to: FATE, DYNASTY, or PRE_GAME (strongholds, senseis,
+// anything not in the Fate or Dynasty deck). Derived from the card's `decks` array.
+export function deckSide(card) {
+  const decks = card.decks || [];
+  if (decks.includes('Fate')) return 'FATE';
+  if (decks.includes('Dynasty')) return 'DYNASTY';
+  return 'PRE_GAME';
+}
+
+// Primary deck label for the card-list side tag (e.g. "Fate", "Dynasty", "Pre-Game").
+export function primaryDeck(card) {
+  return (card.decks || [])[0] || '';
+}
+
 export function pluralize(word) {
   const w = word.toLowerCase();
   let result;

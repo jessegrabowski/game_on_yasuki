@@ -9,10 +9,11 @@ import {
   setSelectedDeckCard,
   renderDeckLists,
 } from '../../../src/yasuki_web/static/deck_builder/js/deck-list.js';
+import { makeCard } from './fixtures.js';
 
-const CARD_STR = { id: 'strategy1', name: 'Ambush', type: 'Strategy', side: 'FATE' };
-const CARD_HOLD = { id: 'holding1', name: 'Gold Mine', type: 'Holding', side: 'DYNASTY' };
-const CARD_SH = { id: 'stronghold1', name: 'Kyuden Hida', type: 'Stronghold', side: 'PRE_GAME' };
+const CARD_STR = makeCard({ card_id: 'strategy1', name: 'Ambush', types: ['Strategy'], decks: ['Fate'] });
+const CARD_HOLD = makeCard({ card_id: 'holding1', name: 'Gold Mine', types: ['Holding'], decks: ['Dynasty'] });
+const CARD_SH = makeCard({ card_id: 'stronghold1', name: 'Kyuden Hida', types: ['Stronghold'], decks: ['Pre-Game'] });
 
 beforeEach(() => {
   resetDOM();

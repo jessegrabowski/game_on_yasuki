@@ -73,7 +73,7 @@ export function getDeckNavItems(side) {
 
   for (const id in bucket) {
     const entry = bucket[id];
-    const type = entry.card.type || 'Unknown';
+    const type = (entry.card.types || [])[0] || 'Unknown';
     if (!cardsByType[type]) cardsByType[type] = [];
     cardsByType[type].push({ id, entry });
   }

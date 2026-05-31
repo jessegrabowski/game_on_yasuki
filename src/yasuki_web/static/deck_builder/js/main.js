@@ -1,4 +1,4 @@
-import { $, debounce, titleCase, scrollToSelected } from './helpers.js';
+import { $, debounce, titleCase, scrollToSelected, deckSide } from './helpers.js';
 import { fetchJSON } from './api.js';
 import { addCard, removeCard, clearDeck, getDeck, nextCardAfterRemoval, getDeckNavItems } from './deck-state.js';
 import { getDeckName, setDeckName, serializeDeck, parseDeckYaml } from './deck-io.js';
@@ -216,10 +216,10 @@ async function fetchCards() {
 function doAddSelectedToDeck() {
   const card = getSelectedCard();
   if (!card) return;
-  const side = card.side || 'FATE';
+  const side = deckSide(card);
   const printId = getCurrentPrintId() || 0;
   const setName = getCurrentSetName();
-  addCard(card.id, side, card, printId, setName);
+  addCard(card.card_id, side, card, printId, setName);
   renderDeckLists();
 }
 
@@ -321,7 +321,7 @@ async function doImportDeck(text) {
       const printId = matchedPrint ? matchedPrint.print_id : 0;
       const setName = matchedPrint ? matchedPrint.set_name : '';
       for (let i = 0; i < entry.count; i++) {
-        addCard(card.id, side, card, printId, setName);
+        addCard(card.card_id, side, card, printId, setName);
       }
     }
   }
@@ -376,7 +376,7 @@ function navigateCardList(dir) {
   const results = getAllResults();
   if (results.length === 0) return;
   const sel = getSelectedCard();
-  let idx = sel ? results.findIndex((c) => c.id === sel.id) : -1;
+  let idx = sel ? results.findIndex((c) => c.card_id === sel.card_id) : -1;
   idx += dir;
   if (idx < 0) idx = 0;
   if (idx >= results.length) idx = results.length - 1;

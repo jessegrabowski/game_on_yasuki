@@ -35,7 +35,7 @@ function renderDeckSide(side, listId, countId) {
     const _entry = bucket[_id];
     const qty = deckEntryTotal(_entry);
     total += qty;
-    const type = _entry.card.type || 'Unknown';
+    const type = (_entry.card.types || [])[0] || 'Unknown';
     if (!cardsByType[type]) cardsByType[type] = [];
     cardsByType[type].push({ id: _id, entry: _entry, qty });
   }

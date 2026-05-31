@@ -14,7 +14,7 @@ beforeEach(() => {
 
 describe('fetchJSON', () => {
   it('returns parsed JSON on success', async () => {
-    const body = { cards: [{ id: 'c1' }] };
+    const body = { cards: [{ card_id: 'c1' }] };
     fetch.mock.mockImplementation(() =>
       Promise.resolve({ ok: true, json: () => Promise.resolve(body) }),
     );
