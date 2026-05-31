@@ -1,7 +1,6 @@
 set: Forgotten Legacy
 cards:
-- cardid: 25
-  title: A Game of Dice
+- title: A Game of Dice
   types:
   - Strategy
   decks:
@@ -18,14 +17,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Gong Studios
   flavor_text: <i>"I enjoy a pleasant diversion, but who understands the games the Mantis play with these
     strange gaijin dice?" - Yasuki Daiki</i>
   collector_number: '59'
-- cardid: 101
-  title: A Yojimbo's Duty
+- title: A Yojimbo's Duty
   types:
   - Strategy
   decks:
@@ -40,13 +37,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Luis Nuñez de Castro Torres
   flavor_text: <i>"Look out, my lord! Move!"</i>
   collector_number: '60'
-- cardid: 109
-  title: Accidental Confession
+- title: Accidental Confession
   types:
   - Strategy
   decks:
@@ -65,14 +60,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Alayna Lemmer
   flavor_text: <i>"Your poem revealed that you knew too much about the incident at the temple. The magistrates
     will wish to speak with you now."</i>
   collector_number: '61'
-- cardid: 166
-  title: Ageless Shrine
+- title: Ageless Shrine
   types:
   - Holding
   decks:
@@ -89,14 +82,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Asier Martinez Lopez
   flavor_text: <i>The Rokugani assumed the Naga temples to be ruined or abandoned. Their hubris proved
     costly.</i>
   collector_number: '5'
-- cardid: 302
-  title: Akodo Tsudoken
+- title: Akodo Tsudoken
   types:
   - Personality
   decks:
@@ -125,14 +116,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>"We will find the Governor's murderer, or I will claim the lives of every man on duty
     the night he was slain. I will have answers!"</i>
   collector_number: '21'
-- cardid: 515
-  title: Asahina Shigemitsu
+- title: Asahina Shigemitsu
   types:
   - Personality
   decks:
@@ -155,14 +144,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jeff Himmelman
   flavor_text: <i>"These are troubling signs, and our clan is still recovering from the troubles of the
     past. We must be vigilant so that our rebuilding is not jeopardized."</i>
   collector_number: '13'
-- cardid: 533
-  title: Asako Chukage
+- title: Asako Chukage
   types:
   - Personality
   decks:
@@ -194,13 +181,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Aaron Miller
   flavor_text: <i>"Seek the ever-changing mysteries of water, and find yourself."</i>
   collector_number: '29'
-- cardid: 549
-  title: Asako Kaitoko
+- title: Asako Kaitoko
   types:
   - Personality
   decks:
@@ -225,15 +210,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"They are guilty, and their lives forfeit. Favors, status, statue in the Empire... they
     will be as nothing to you. Deal harshly with tsukai, for you protect the purity of the Empire." -
     The teachings of Isawa Mitsuko</i>
   collector_number: '30'
-- cardid: 551
-  title: Asako Karachu
+- title: Asako Karachu
   types:
   - Personality
   decks:
@@ -257,14 +240,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: David Horne
   flavor_text: <i>"The world asks questions of those who would listen. Discover the questions, and you
     can begin to seek the answers." - The Lessons of Oyo</i>
   collector_number: '31'
-- cardid: 628
-  title: Assault in the Jungle
+- title: Assault in the Jungle
   types:
   - Event
   decks:
@@ -281,14 +262,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Matt Zeilinger
   flavor_text: <i>"The air was filled with flames, smoke, battle cries, the screams of the dying. It was
     glorious. Few escaped our righteous blades." - Yamazaki</i>
   collector_number: '2'
-- cardid: 634
-  title: Asset Denial
+- title: Asset Denial
   types:
   - Strategy
   decks:
@@ -305,13 +284,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Franz Vohwinkel
   flavor_text: <i>"Your master will have to continue without you."</i>
   collector_number: '62'
-- cardid: 680
-  title: Bamboo Harvesters
+- title: Bamboo Harvesters
   types:
   - Holding
   decks:
@@ -333,13 +310,11 @@ cards:
   - Legacy
   - Modern
   notes: Pre-Game in Celestial/Emperor ruleset formats, Dynasty in Ivory and later formats
-  printing_id: '1'
   rarity: Fixed
   artist: Jeff Himmelman
   flavor_text: <i>In the wilderness, serenity.</i>
   collector_number: '6'
-- cardid: 775
-  title: Bayushi Higaonna
+- title: Bayushi Higaonna
   types:
   - Personality
   decks:
@@ -360,14 +335,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>The magistrate held his badge of office for all to see. "I will say it once more," he
     said quietly. "What happened here?"</i>
   collector_number: '33'
-- cardid: 916
-  title: Bayushi Toshimo
+- title: Bayushi Toshimo
   types:
   - Personality
   decks:
@@ -396,14 +369,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jorge Matar
   flavor_text: <i>He held the item in his hand and felt a smile creep onto his face. He followed every
     order to the letter, even if he did not understand.</i>
   collector_number: '34'
-- cardid: 993
-  title: Black Pearl
+- title: Black Pearl
   types:
   - Item
   decks:
@@ -426,14 +397,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>The words haunted their dreams, recited perfectly in the Qatol's voice. "What are they?"
     he asked. "What are they?"</i>
   collector_number: '52'
-- cardid: 1107
-  title: Border Keep
+- title: Border Keep
   types:
   - Holding
   decks:
@@ -454,12 +423,10 @@ cards:
   - Legacy
   - Modern
   notes: Pre-Game in Celestial/Emperor ruleset formats, Dynasty in Ivory and later formats
-  printing_id: '1'
   rarity: Fixed
   artist: Jason Juta
   collector_number: '7'
-- cardid: 1150
-  title: Broken Alliance
+- title: Broken Alliance
   types:
   - Strategy
   decks:
@@ -475,13 +442,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Carlos Nuñez de Castro
   flavor_text: <i>The Dragon felt little for the Naga. The Naga considered the Dragon to be abominations.</i>
   collector_number: '63'
-- cardid: 1185
-  title: Burning Dreams
+- title: Burning Dreams
   types:
   - Event
   decks:
@@ -499,13 +464,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Asier Martinez Lopez
   flavor_text: <i>"Mara's body was not recovered from the ruins."</i>
   collector_number: '3'
-- cardid: 1225
-  title: Cast Aside the Weak
+- title: Cast Aside the Weak
   types:
   - Strategy
   decks:
@@ -523,13 +486,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Leonardo Borazio
   flavor_text: <i>"Your needs are inconsequential in the great scheme of things."</i>
   collector_number: '64'
-- cardid: 1431
-  title: Colonial Harbor
+- title: Colonial Harbor
   types:
   - Holding
   decks:
@@ -545,14 +506,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Gong Studios
   flavor_text: <i>The years following the Mantis discovery of the new lands were prosperous for the Empire.
     Trade over and across the sea brought about new opportunities for the industrious.</i>
   collector_number: '8'
-- cardid: 1461
-  title: Consideration
+- title: Consideration
   types:
   - Strategy
   decks:
@@ -566,14 +525,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jorge Matar
   flavor_text: <i>"We must double the guard if our next caravan is to reach the Second City. No expense
     can be spared."</i>
   collector_number: '65'
-- cardid: 1557
-  title: Creating Order
+- title: Creating Order
   types:
   - Strategy
   decks:
@@ -590,14 +547,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Troy Graham
   flavor_text: <i>"I do not care what serpents held sway here thousands of years ago. These lands were
     given to the Spider to bring into the Empire!"</i>
   collector_number: '66'
-- cardid: 1607
-  title: Cursed Relic
+- title: Cursed Relic
   types:
   - Item
   decks:
@@ -617,13 +572,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jason Juta
   flavor_text: <i>"Some secrets of the kingdom are best left forgotten." - Yoritomo Singh</i>
   collector_number: '53'
-- cardid: 1679
-  title: Daidoji Takichi
+- title: Daidoji Takichi
   types:
   - Personality
   decks:
@@ -647,15 +600,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Dan Masso
   flavor_text: <i>"I know little about the Naga, but were they men I would say they behaved as sleepwalkers
     do, moving through the world around them but unaware of it. Is this the action of the Akasha scholars
     speak of, or is some other force at work?"</i>
   collector_number: '14'
-- cardid: 1719
-  title: Daigotsu Gyoken
+- title: Daigotsu Gyoken
   types:
   - Personality
   decks:
@@ -686,12 +637,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   collector_number: '37'
-- cardid: 1750
-  title: Daigotsu Murota
+- title: Daigotsu Murota
   types:
   - Personality
   decks:
@@ -716,13 +665,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Aurelien Hubert
   flavor_text: <i>"I have never killed a Naga. I look forward to the experience."</i>
   collector_number: '38'
-- cardid: 2082
-  title: Doji Hakuseki
+- title: Doji Hakuseki
   types:
   - Personality
   decks:
@@ -753,12 +700,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Tony Foti
   collector_number: '15'
-- cardid: 2142
-  title: Doji Rengetsu
+- title: Doji Rengetsu
   types:
   - Personality
   decks:
@@ -781,14 +726,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Stu Barnes
   flavor_text: <i>"The new Imperial Governor must be someone of vision and boldness. Great things can
     come from these new lands, and we must not be timid in grasping them."</i>
   collector_number: '16'
-- cardid: 2245
-  title: Duel of Haiku
+- title: Duel of Haiku
   types:
   - Strategy
   decks:
@@ -805,13 +748,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Alayna Lemmer
   flavor_text: <i>"A masterful poem, my lady. If I may, I think I have one you may enjoy even more."</i>
   collector_number: '67'
-- cardid: 2280
-  title: Economic Repercussions
+- title: Economic Repercussions
   types:
   - Strategy
   decks:
@@ -828,13 +769,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Stu Barnes
   flavor_text: <i>"I believe this bears your seal, does it not?"</i>
   collector_number: '68'
-- cardid: 2355
-  title: Entrenched Position
+- title: Entrenched Position
   types:
   - Strategy
   decks:
@@ -850,14 +789,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jorge Matar
   flavor_text: <i>If there was a legacy to the attack by the Destroyers, it was that the samurai of Rokugan
     knew how to defend their homes.</i>
   collector_number: '69'
-- cardid: 2708
-  title: Fruitless Search
+- title: Fruitless Search
   types:
   - Strategy
   decks:
@@ -877,13 +814,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Andy Hepworth
   flavor_text: <i>"I seek information, fool. Can you satisfy my inquiry or shall I move on?"</i>
   collector_number: '71'
-- cardid: 2895
-  title: Grateful Reward
+- title: Grateful Reward
   types:
   - Strategy
   decks:
@@ -901,14 +836,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Leonardo Borazio
   flavor_text: <i>After the attack on the Second City, Rokugani of all castes wished to aid in the defeat
     of the enemy.</i>
   collector_number: '72'
-- cardid: 2908
-  title: Gripped by Terror
+- title: Gripped by Terror
   types:
   - Strategy
   decks:
@@ -925,13 +858,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Franz Vohwinkel
   flavor_text: <i>"There are things in this world of such horror that one can only scream." - Ninube Shiho</i>
   collector_number: '73'
-- cardid: 3013
-  title: Heart of Darkness
+- title: Heart of Darkness
   types:
   - Strategy
   decks:
@@ -948,13 +879,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Asier Martinez Lopez
   flavor_text: <i>Few can venture into the depths of the jungles and hope to survive.</i>
   collector_number: '74'
-- cardid: 3091
-  title: Hida Fubatsu
+- title: Hida Fubatsu
   types:
   - Personality
   decks:
@@ -986,13 +915,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Diego Gisbert Llorens
   flavor_text: <i>"Something dark was born this day."</i>
   collector_number: '9'
-- cardid: 3310
-  title: Hiruma Nikaru
+- title: Hiruma Nikaru
   types:
   - Personality
   decks:
@@ -1012,14 +939,38 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Mike Capprotti
   flavor_text: <i>All of Fubatsu's students were dead and the Sensei was missing. The Crab swore that
     blood would flow for this, whether that blood be red or not.</i>
   collector_number: '10'
-- cardid: 3426
-  title: Honor Never Falls
+- title: Hisano's Guide
+  types:
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Mantis
+  keywords:
+  - Unique
+  - Fox
+  - Mantis Clan
+  - Nonhuman
+  - Spirit
+  text: 'May not be included in decks.<br><b>Battle:</b> Target an enemy attacking Personality: Move him
+    home.'
+  gold_cost: 0
+  force: 2
+  chi: 2
+  personal_honor: 3
+  is_unique: true
+  is_proxy: true
+  legality:
+  - Not Legal (Proxy)
+  rarity: Fixed
+  artist: Conceptopolis
+  collector_number: '1'
+- title: Honor Never Falls
   types:
   - Strategy
   decks:
@@ -1037,12 +988,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Mike Capprotti
   collector_number: '75'
-- cardid: 3522
-  title: Hunter of Harmony
+- title: Hunter of Harmony
   types:
   - Follower
   decks:
@@ -1059,13 +1008,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Arkady Roytman
   flavor_text: <i>"It is all the more important to keep calm in times of great strife."</i>
   collector_number: '49'
-- cardid: 3655
-  title: Ikoma Tsukasa
+- title: Ikoma Tsukasa
   types:
   - Personality
   decks:
@@ -1088,14 +1035,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Manuel Calderon
   flavor_text: <i>"No, I do not ride a horse. You assumed I would, and that is why I am victorious and
     you lay dying."</i>
   collector_number: '22'
-- cardid: 3790
-  title: Intimidation
+- title: Intimidation
   types:
   - Strategy
   decks:
@@ -1111,13 +1056,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Mike Capprotti
   flavor_text: <i>"Do not just stand there, Phoenix! Make your peace, lift your blade, and test your strength!"</i>
   collector_number: '76'
-- cardid: 3974
-  title: Iuchi Abodan
+- title: Iuchi Abodan
   types:
   - Personality
   decks:
@@ -1142,13 +1085,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Asier Martinez Lopez
   flavor_text: <i>"This is an insult to our ancestors and our heritage. It must be answered with blood."</i>
   collector_number: '41'
-- cardid: 4382
-  title: Kitsu Kagako
+- title: Kitsu Kagako
   types:
   - Personality
   decks:
@@ -1171,13 +1112,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Matt Zeilinger
   flavor_text: <i>"I implore aid, grandmother, though I am unworthy."</i>
   collector_number: '23'
-- cardid: 4429
-  title: Kitsuki Nubane
+- title: Kitsuki Nubane
   types:
   - Personality
   decks:
@@ -1200,15 +1139,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Chris Pritchard
   flavor_text: <i>The Kitsuki family interpreted their initial failure to explain the disappearance of
     Mirumoto Mareshi as a failure of their methods. Throughout the Empire, Kitsuki-trained magistrates
     attempted to find answers to the mystery.</i>
   collector_number: '17'
-- cardid: 4944
-  title: Matsu Koyama
+- title: Matsu Koyama
   types:
   - Personality
   decks:
@@ -1231,14 +1168,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Diego Gisbert Llorens
   flavor_text: <i>"Endless years of peace when a warrior's heart craves war, and now these attacks take
     place and the clans wish only to discuss it? Where is bushido's fire?"</i>
   collector_number: '24'
-- cardid: 5123
-  title: Mirumoto Kojinrue
+- title: Mirumoto Kojinrue
   types:
   - Personality
   decks:
@@ -1261,15 +1196,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Carlos Nuñez de Castro
   flavor_text: <i>The history between the Dragon Clan and Naga race was turbulent. When the time came
     to take up arms against the children of the Black Pearl, some Mirumoto were eager for the chance to
     slay Naga.</i>
   collector_number: '18'
-- cardid: 5279
-  title: Moshi Sasako
+- title: Moshi Sasako
   types:
   - Personality
   decks:
@@ -1291,14 +1224,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"Something is disturbing the soul of the ocean. I can feel the turmoil in the waves;
     I hear trouble in the roar of the surf. Are the Phoenix causing it, or are they also puzzled by it?"</i>
   collector_number: '26'
-- cardid: 5395
-  title: Moto Xiao
+- title: Moto Xiao
   types:
   - Personality
   decks:
@@ -1325,14 +1256,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Andy Hepworth
   flavor_text: <i>The Unicorn armies raced across the plains, in pursuit of those they believed were responsible.
     The enemies disappeared into the heart of the forest, where no cavalry could ever follow.</i>
   collector_number: '42'
-- cardid: 5533
-  title: Never Beyond My Reach
+- title: Never Beyond My Reach
   types:
   - Strategy
   decks:
@@ -1347,14 +1276,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Erich Schreiner
   flavor_text: <i>"Flee the region, flee the province, flee the entire Empire. You will never escape my
     vengeance."</i>
   collector_number: '77'
-- cardid: 5591
-  title: Ninube Shiho
+- title: Ninube Shiho
   types:
   - Personality
   decks:
@@ -1382,13 +1309,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Aurelien Hubert
   flavor_text: <i>"In a moment, it will be as if you never were."</i>
   collector_number: '39'
-- cardid: 5648
-  title: Oblivious
+- title: Oblivious
   types:
   - Strategy
   decks:
@@ -1403,14 +1328,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Luis Nuñez de Castro Torres
   flavor_text: <i>"Fascinating that this temple has gone undetected all these years. There must be mystical
     concealment at work here. I wonder what other defenses might be in place?"</i>
   collector_number: '78'
-- cardid: 5902
-  title: Pearl of Embers
+- title: Pearl of Embers
   types:
   - Item
   decks:
@@ -1427,14 +1350,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"There is so much we could learn from these noble creatures," Chukage said sadly. "If
     only Bairei-sama were still with us."</i>
   collector_number: '54'
-- cardid: 5903
-  title: Pearl of Rage
+- title: Pearl of Rage
   types:
   - Spell
   decks:
@@ -1453,13 +1374,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>Their combined power was great.</i>
   collector_number: '55'
-- cardid: 5906
-  title: Pearls & Spirits
+- title: Pearls & Spirits
   types:
   - Strategy
   decks:
@@ -1476,12 +1395,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jason Engle
   collector_number: '79'
-- cardid: 5939
-  title: Petty Squabbles
+- title: Petty Squabbles
   types:
   - Strategy
   decks:
@@ -1496,14 +1413,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Anna Christenson
   flavor_text: <i>"As the mystery of the missing ships deepened, tempers became shorter. Everyone agreed
     something had to be done, but no one agreed on what." - Legacy of a Pearl and a Dream</i>
   collector_number: '80'
-- cardid: 6299
-  title: Returning Home
+- title: Returning Home
   types:
   - Strategy
   decks:
@@ -1517,15 +1432,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Erich Schreiner
   flavor_text: <i>"For too long our people have slept while the upstart humans have carved out their empire
     from our lands. No more! We shall gather our people and rekindle their greatness, and then we shall
     wipe our lands clean of these invaders." - The Shahismael</i>
   collector_number: '81'
-- cardid: 6343
-  title: Rise of the Dark Naga
+- title: Rise of the Dark Naga
   types:
   - Strategy
   decks:
@@ -1539,13 +1452,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Dan Masso
   flavor_text: <i>The oceans turned against the Mantis and a nightmare emerged.</i>
   collector_number: '82'
-- cardid: 6425
-  title: Ryoshun's Guidance
+- title: Ryoshun's Guidance
   types:
   - Celestial
   decks:
@@ -1562,13 +1473,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Aurelien Hubert
   flavor_text: <i>"He guards the dead and guides the living."</i>
   collector_number: '1'
-- cardid: 6501
-  title: Scourge of the Sea
+- title: Scourge of the Sea
   types:
   - Follower
   decks:
@@ -1588,14 +1497,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Luis Nuñez de Castro Torres
   flavor_text: <i>The Orochi Riders of the Mantis made pacts with many of the strange beasts, but some
     Orochi are impossible to tame.</i>
   collector_number: '50'
-- cardid: 6566
-  title: Seeking the Truth
+- title: Seeking the Truth
   types:
   - Strategy
   decks:
@@ -1613,13 +1520,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Chris Pritchard
   flavor_text: <i>"Poor, accursed creatures…"</i>
   collector_number: '83'
-- cardid: 6804
-  title: Shiba Sawaken
+- title: Shiba Sawaken
   types:
   - Personality
   decks:
@@ -1642,14 +1547,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Diego Gisbert Llorens
   flavor_text: <i>"I think it unwise to explore this ruin without first informing the clan of your discovery,
     my lord. My duty is to follow, however."</i>
   collector_number: '32'
-- cardid: 6900
-  title: Shinjo Junpei
+- title: Shinjo Junpei
   types:
   - Personality
   decks:
@@ -1672,14 +1575,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Luis Nuñez de Castro Torres
   flavor_text: <i>"We must understand our enemy before we blindly rush into combat. Who knows what secrets
     they may have ready to strike?"</i>
   collector_number: '43'
-- cardid: 7089
-  title: Shosuro Aroru
+- title: Shosuro Aroru
   types:
   - Personality
   decks:
@@ -1708,12 +1609,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   collector_number: '35'
-- cardid: 7126
-  title: Shosuro Makiko
+- title: Shosuro Makiko
   types:
   - Personality
   decks:
@@ -1735,14 +1634,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Diego Gisbert Llorens
   flavor_text: <i>"Why, this is exactly what I needed. Thank you for helping me. I will be willing to
     help you in return if you would like…"</i>
   collector_number: '36'
-- cardid: 7248
-  title: Siege Volley
+- title: Siege Volley
   types:
   - Strategy
   decks:
@@ -1758,14 +1655,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: David Horne
   flavor_text: <i>"Let's see what their precious Void has to say about this. Threaten the Scorpion and
     you deal with the Crab!"</i>
   collector_number: '84'
-- cardid: 7477
-  title: Steadfast Defense
+- title: Steadfast Defense
   types:
   - Strategy
   decks:
@@ -1781,14 +1676,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jason Juta
   flavor_text: <i>They knew the disappearances were no accidents. Many felt the old Hitomi blood stir
     within them and were fueled to action with reckless abandon.</i>
   collector_number: '85'
-- cardid: 7650
-  title: Sundering Strike
+- title: Sundering Strike
   types:
   - Strategy
   decks:
@@ -1802,14 +1695,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Troy Graham
   flavor_text: <i>"Hello, friend! You do not appear pleased to see me. Shall we discuss why your anger
     seems to overcome civility?"</i>
   collector_number: '86'
-- cardid: 7696
-  title: Sword for Hire
+- title: Sword for Hire
   types:
   - Strategy
   decks:
@@ -1826,13 +1717,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Chris Pritchard
   flavor_text: <i>"Know me? No, you do not. But we have business together today regardless."</i>
   collector_number: '87'
-- cardid: 7777
-  title: Tamori Kazushige
+- title: Tamori Kazushige
   types:
   - Personality
   decks:
@@ -1856,13 +1745,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jorge Matar
   flavor_text: <i>"You seek to cut the earth with a blade?"</i>
   collector_number: '19'
-- cardid: 8012
-  title: The Dark Naga
+- title: The Dark Naga
   types:
   - Personality
   decks:
@@ -1891,12 +1778,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Aurelien Hubert
   collector_number: '45'
-- cardid: 8094
-  title: The Forgotten Temple
+- title: The Forgotten Temple
   types:
   - Stronghold
   decks:
@@ -1917,12 +1802,10 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Noah Bradley
   collector_number: '90'
-- cardid: 8228
-  title: The Mountain's Power
+- title: The Mountain's Power
   types:
   - Spell
   decks:
@@ -1939,13 +1822,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: David Horne
   flavor_text: <i>"You do not face a man. You face the mountain!"</i>
   collector_number: '56'
-- cardid: 8257
-  title: The Perfect Moment
+- title: The Perfect Moment
   types:
   - Strategy
   decks:
@@ -1961,13 +1842,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Manuel Calderon
   flavor_text: <i>"Even during the chaos of battle, there are times when opportunity presents itself."</i>
   collector_number: '88'
-- cardid: 8303
-  title: The Second City
+- title: The Second City
   types:
   - Region
   decks:
@@ -1983,13 +1862,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Gong Studios
   flavor_text: <i>A shining jewel amid the wilderness.</i>
   collector_number: '48'
-- cardid: 8320
-  title: The Shakash
+- title: The Shakash
   types:
   - Personality
   decks:
@@ -2012,13 +1889,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"You set me free, dark master. Name your enemies, and I will end them for you."</i>
   collector_number: '46'
-- cardid: 8339
-  title: The Sleepless One
+- title: The Sleepless One
   types:
   - Personality
   decks:
@@ -2042,14 +1917,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Troy Graham
   flavor_text: <i>"Before man walked the earth, we were cursed. Our greatest strength became our greatest
     weakness."</i>
   collector_number: '47'
-- cardid: 8409
-  title: The Vengeful
+- title: The Vengeful
   types:
   - Follower
   decks:
@@ -2071,14 +1944,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Carlos Nuñez de Castro
   flavor_text: <i>"They take our rightful place as masters of the world. We will correct this offense
     with their deaths!"</i>
   collector_number: '51'
-- cardid: 8475
-  title: Thunder's Wrath
+- title: Thunder's Wrath
   types:
   - Spell
   decks:
@@ -2095,13 +1966,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Gong Studios
   flavor_text: <i>"The seas shall be ours again!" - Yoritomo Naizen</i>
   collector_number: '57'
-- cardid: 8565
-  title: Togashi Osawa
+- title: Togashi Osawa
   types:
   - Personality
   decks:
@@ -2129,15 +1998,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>"You say a force of Naga threatens us? It hardly matters to me. The Empire has faced
     greater threats and yet still stands. Disturb my meditation again, and I will show you why I have
     faith in the strength of our defenders."</i>
   collector_number: '20'
-- cardid: 8644
-  title: Toritaka Chokichi
+- title: Toritaka Chokichi
   types:
   - Personality
   decks:
@@ -2160,13 +2027,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>"We will find Fubatsu, or those who took him. We will not suffer a serpent to live…"</i>
   collector_number: '11'
-- cardid: 8861
-  title: Tsuruchi Nobukatsu
+- title: Tsuruchi Nobukatsu
   types:
   - Personality
   decks:
@@ -2190,14 +2055,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Mike Capprotti
   flavor_text: '<i>"There are two things that I love above all else: money and justice. Truly my job is
     a blessed one."</i>'
   collector_number: '27'
-- cardid: 9071
-  title: Utaku Ji-Yun
+- title: Utaku Ji-Yun
   types:
   - Personality
   decks:
@@ -2221,14 +2084,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"When our hidden enemies destroyed the Shinomen Tower, they killed my brothers… I must
     keep my calm when we enter battle or I will lose everything."</i>
   collector_number: '44'
-- cardid: 9208
-  title: Wanted for Questioning
+- title: Wanted for Questioning
   types:
   - Strategy
   decks:
@@ -2242,14 +2103,12 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Arkady Roytman
   flavor_text: <i>"Murder? Arson? I will not have it! Bring me the scum from which one might typically
     expect such an act."</i>
   collector_number: '89'
-- cardid: 9337
-  title: Willing Spirits
+- title: Willing Spirits
   types:
   - Event
   decks:
@@ -2264,14 +2123,12 @@ cards:
   - Legacy
   - Modern
   story: To all of our volunteers who make this game great.
-  printing_id: '1'
   rarity: Fixed
   artist: Jeff Himmelman
   flavor_text: <i>"The people of the Empire, willing to uproot themselves and move across the world to
     enact the will of the Empress, are blessed among all mortal people." - The Voice of the Empress</i>
   collector_number: '4'
-- cardid: 9339
-  title: Wind of the Moon
+- title: Wind of the Moon
   types:
   - Spell
   decks:
@@ -2288,13 +2145,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Arkady Roytman
   flavor_text: <i>The black has eclipsed the gold, and Rokugan suffers for it.</i>
   collector_number: '58'
-- cardid: 9430
-  title: Yamazaki
+- title: Yamazaki
   types:
   - Personality
   decks:
@@ -2316,15 +2171,13 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Jason Engle
   flavor_text: <i>The abominations that attacked the Spider in the distant colonies were as different
     from the Naga of Rokugan as were the salamanders from the Burning Sands. Slowly, the truth of their
     race began to unfold.</i>
   collector_number: '40'
-- cardid: 9436
-  title: Yasuki Daiki
+- title: Yasuki Daiki
   types:
   - Personality
   decks:
@@ -2347,13 +2200,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: David Horne
   flavor_text: <i>"There are many ways to win a war."</i>
   collector_number: '12'
-- cardid: 9556
-  title: Yoritomo Haruhiko
+- title: Yoritomo Haruhiko
   types:
   - Personality
   decks:
@@ -2375,37 +2226,8 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '1'
   rarity: Fixed
   artist: Erich Schreiner
   flavor_text: <i>"We found bodies on the beach, washed up with ship wreckage and seaweed. A few still
     breathed. When they finally awake, we will know who is attacking our ships, and who needs to be killed."</i>
   collector_number: '28'
-- cardid: 10020
-  title: Hisano's Guide
-  types:
-  - Proxy
-  decks:
-  - Other
-  clans:
-  - Mantis
-  keywords:
-  - Unique
-  - Fox
-  - Mantis Clan
-  - Nonhuman
-  - Spirit
-  text: 'May not be included in decks.<br><b>Battle:</b> Target an enemy attacking Personality: Move him
-    home.'
-  gold_cost: 0
-  force: 2
-  chi: 2
-  personal_honor: 3
-  is_unique: true
-  is_proxy: true
-  legality:
-  - Not Legal (Proxy)
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  collector_number: '1'

@@ -1,7 +1,6 @@
 set: Anvil of Despair
 cards:
-- cardid: 40
-  title: A Hidden Fortress
+- title: A Hidden Fortress
   types:
   - Holding
   decks:
@@ -15,11 +14,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Kevin Ward
-- cardid: 52
-  title: A Moment of Truth (AoD)
+- title: A Moment of Truth (AoD)
   types:
   - Strategy
   decks:
@@ -35,11 +32,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: This is a distinct card from the Time of the Void card of the same name.
-  printing_id: '2'
   rarity: Rare
   artist: Randy Gallegos
-- cardid: 65
-  title: A Prophecy Fulfilled
+- title: A Prophecy Fulfilled
   types:
   - Spell
   decks:
@@ -54,11 +49,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Anson Maddocks
-- cardid: 88
-  title: A Thunder's Sacrifice
+- title: A Thunder's Sacrifice
   types:
   - Spell
   decks:
@@ -74,11 +67,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Jason Behnke
-- cardid: 143
-  title: Agasha Koishi
+- title: Agasha Koishi
   types:
   - Personality
   decks:
@@ -99,11 +90,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Daren Bader
-- cardid: 222
-  title: Akodo Kage
+- title: Akodo Kage
   types:
   - Personality
   decks:
@@ -130,11 +119,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Anson Maddocks
-- cardid: 373
-  title: Ancestral Shrines of Otosan Uchi
+- title: Ancestral Shrines of Otosan Uchi
   types:
   - Holding
   decks:
@@ -148,12 +135,10 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Liz Danforth
   flavor_text: <i>The pearl of Rokugan, Otosan Uchi stood to greet us at the end of our long pilgrimage.</i>
-- cardid: 463
-  title: Arrival of the Emerald Champion
+- title: Arrival of the Emerald Champion
   types:
   - Strategy
   decks:
@@ -172,11 +157,9 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Rare
   artist: Tom Biondolillo
-- cardid: 481
-  title: As the Shadow Falls
+- title: As the Shadow Falls
   types:
   - Event
   decks:
@@ -190,14 +173,12 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Douglas Shuler
   flavor_text: <i>When Kisada entered the Imperial Chambers, he learned the truth as Kachiko had. Hantei's
     body was broken by her wile and poisons, a ripe receptacle for the dark soul of a fallen god. - The
     Doom of Hantei, Part II</i>
-- cardid: 640
-  title: At the Last Moment
+- title: At the Last Moment
   types:
   - Strategy
   decks:
@@ -209,11 +190,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Eric David Anderson
-- cardid: 711
-  title: Basecamp
+- title: Basecamp
   types:
   - Holding
   decks:
@@ -226,13 +205,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Shattered Empire
-  printing_id: '2'
   rarity: Common
   artist: Anthony Grabski
   flavor_text: <i>The men in the camp move as if they were possessed. What manner of man is this that
     can command such devotion, such loyalty? - Hida Yakamo</i>
-- cardid: 730
-  title: Battlefield of Shallow Graves
+- title: Battlefield of Shallow Graves
   types:
   - Strategy
   decks:
@@ -253,11 +230,9 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Common
   artist: John Cadice
-- cardid: 804
-  title: Bayushi Kachiko
+- title: Bayushi Kachiko
   types:
   - Personality
   decks:
@@ -282,12 +257,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Some variants of the Anvil of Despair version of this card were printed with bold flavor text.
-  printing_id: '1'
   rarity: Rare
   artist: Matt Wilson
   flavor_text: <i>"The time of darkness is here, and you must play your part." - Togashi Yokuni</i>
-- cardid: 905
-  title: Bayushi Tangen
+- title: Bayushi Tangen
   types:
   - Personality
   decks:
@@ -307,11 +280,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Tom Biondolillo
-- cardid: 958
-  title: Benevolent Protection of Shinsei
+- title: Benevolent Protection of Shinsei
   types:
   - Spell
   decks:
@@ -326,11 +297,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Mike Raabe
-- cardid: 1058
-  title: Blood Oath
+- title: Blood Oath
   types:
   - Strategy
   decks:
@@ -343,11 +312,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Jason Behnke
-- cardid: 1085
-  title: Bo Stick
+- title: Bo Stick
   types:
   - Item
   decks:
@@ -366,11 +333,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Ben Peck
-- cardid: 1215
-  title: Candle of the Void
+- title: Candle of the Void
   types:
   - Item
   decks:
@@ -389,11 +354,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Pamela Shanteau
-- cardid: 1498
-  title: Cornered
+- title: Cornered
   types:
   - Strategy
   decks:
@@ -406,11 +369,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Mike Raabe
-- cardid: 1512
-  title: Corrupted Energies
+- title: Corrupted Energies
   types:
   - Strategy
   decks:
@@ -421,13 +382,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Monika Livingstone
   flavor_text: <i>Uona's lips quivered as black blood trickled from their ears. "I tried to tell you,"
     she whispered.</i>
-- cardid: 1517
-  title: Corrupted Silver Mine
+- title: Corrupted Silver Mine
   types:
   - Holding
   decks:
@@ -443,11 +402,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Mark Tedin
-- cardid: 1518
-  title: Corruption of the Harmonies
+- title: Corruption of the Harmonies
   types:
   - Event
   decks:
@@ -462,12 +419,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Randy Elliott
   flavor_text: <i>It was as if the evil of the Shadowlands had corrupted the celestial harmonies themselves.</i>
-- cardid: 1560
-  title: Cremation
+- title: Cremation
   types:
   - Strategy
   decks:
@@ -479,11 +434,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: April Lee
-- cardid: 1674
-  title: Daidoji Sembi
+- title: Daidoji Sembi
   types:
   - Personality
   decks:
@@ -502,14 +455,12 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Liz Danforth
   flavor_text: <i>He charged forth from open ground, cutting down the Shadowlands army like paper. No
     one saw where he came from, but when I looked I saw a faint smile on the face of the old Shugenja
     next to me.</i>
-- cardid: 1691
-  title: Daidoji Uji
+- title: Daidoji Uji
   types:
   - Personality
   decks:
@@ -535,13 +486,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Some variants of the Anvil of Despair version of this card were printed with bold flavor text.
-  printing_id: '2'
   rarity: Rare
   artist: Douglas Shuler
   flavor_text: <i>For months he has fought against the onslaught of the False Hoturi. If any one knows
     his ways, it is Uji.</i>
-- cardid: 1803
-  title: Daisho Technique
+- title: Daisho Technique
   types:
   - Strategy
   decks:
@@ -554,11 +503,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Tom Biondolillo
-- cardid: 1926
-  title: Defender From Beyond
+- title: Defender From Beyond
   types:
   - Spell
   decks:
@@ -571,11 +518,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Mike Kimble
-- cardid: 2008
-  title: Disarmament
+- title: Disarmament
   types:
   - Strategy
   decks:
@@ -588,11 +533,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Bryon Wackwitz
-- cardid: 2016
-  title: Disfavored
+- title: Disfavored
   types:
   - Strategy
   decks:
@@ -608,11 +551,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Rare
   artist: Monika Livingstone
-- cardid: 2034
-  title: Disrupted Resources
+- title: Disrupted Resources
   types:
   - Strategy
   decks:
@@ -623,10 +564,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Ben Peck
-- cardid: 2186
+- id: doom_of_fu_leng
   title: Doom of Fu Leng
   types:
   - Spell
@@ -647,11 +587,9 @@ cards:
   - Clan Wars (Imperial)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Rare
   artist: Ellym Sirac
-- cardid: 2241
-  title: Drum of Water
+- title: Drum of Water
   types:
   - Item
   decks:
@@ -671,11 +609,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Nicola Leonard
-- cardid: 2252
-  title: Duty to the Clan
+- title: Duty to the Clan
   types:
   - Strategy
   decks:
@@ -689,11 +625,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Christina Wald
-- cardid: 2253
-  title: Duty to the Empire
+- title: Duty to the Empire
   types:
   - Event
   decks:
@@ -708,11 +642,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Monika Livingstone
-- cardid: 2296
-  title: Elemental Vortex
+- title: Elemental Vortex
   types:
   - Follower
   decks:
@@ -732,11 +664,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Bryon Wackwitz
-- cardid: 2326
-  title: Emperor's Protection
+- title: Emperor's Protection
   types:
   - Strategy
   decks:
@@ -754,11 +684,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Heather Hudson
-- cardid: 2373
-  title: Essence of Fire
+- title: Essence of Fire
   types:
   - Spell
   decks:
@@ -773,30 +701,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Nicola Leonard
-- cardid: 2379
-  title: Essence of the Void
-  types:
-  - Spell
-  decks:
-  - Fate
-  keywords:
-  - Void
-  text: '<b>Limited:</b> Any number of times per turn, bow this Shugenja and target a Personality with
-    a lower Chi: Bow him. While your Shugenja remains bowed, you may negate his straightening, and the
-    target will not straighten.'
-  gold_cost: 5
-  focus: 2
-  legality:
-  - Clan Wars (Imperial)
-  - Legacy
-  printing_id: '1'
-  rarity: Common
-  artist: Nicola Leonard
-- cardid: 2381
-  title: Essence of Water
+- title: Essence of Water
   types:
   - Spell
   decks:
@@ -812,11 +719,26 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Common
   artist: Nicola Leonard
-- cardid: 2532
-  title: Fields of the Asahina Temple
+- title: Essence of the Void
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Void
+  text: '<b>Limited:</b> Any number of times per turn, bow this Shugenja and target a Personality with
+    a lower Chi: Bow him. While your Shugenja remains bowed, you may negate his straightening, and the
+    target will not straighten.'
+  gold_cost: 5
+  focus: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Legacy
+  rarity: Common
+  artist: Nicola Leonard
+- title: Fields of the Asahina Temple
   types:
   - Region
   decks:
@@ -828,13 +750,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Eric David Anderson
   flavor_text: <i>"You wil not despoil this place with the spilling of blood!" cried the angry Shugenja.
     "Then," answered Hoturi, "you will all die." - at the Battle of Asahina Temple</i>
-- cardid: 2544
-  title: Fight to the Setting Sun
+- title: Fight to the Setting Sun
   types:
   - Strategy
   decks:
@@ -848,13 +768,11 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Dean Vincent White
   flavor_text: <i>"The day stretched into night as Hoturi's army pounced against our gates. We could only
     pray that the other castles still stood." - Daidoji Uji</i>
-- cardid: 2648
-  title: Forests of Shinomen
+- title: Forests of Shinomen
   types:
   - Region
   decks:
@@ -871,11 +789,9 @@ cards:
   - Legacy
   - Modern
   errata_text: This card was errata'd via the internet.
-  printing_id: '2'
   rarity: Common
   artist: Jason Behnke
-- cardid: 2665
-  title: Fortified Coast
+- title: Fortified Coast
   types:
   - Region
   decks:
@@ -888,11 +804,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: William O'Connor
-- cardid: 2711
-  title: Fu Leng's Horde
+- title: Fu Leng's Horde
   types:
   - Event
   decks:
@@ -912,11 +826,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Tom Biondolillo
-- cardid: 2772
-  title: Garden of Purification
+- title: Garden of Purification
   types:
   - Holding
   decks:
@@ -928,11 +840,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: KC Lancaster
-- cardid: 2869
-  title: Golden Obi of the Sun Goddess
+- title: Golden Obi of the Sun Goddess
   types:
   - Item
   decks:
@@ -951,11 +861,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Brian Snoddy
-- cardid: 2951
-  title: Hammer of Earth
+- title: Hammer of Earth
   types:
   - Item
   decks:
@@ -973,11 +881,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Jeff Remmer
-- cardid: 3219
-  title: Hida Unari
+- title: Hida Unari
   types:
   - Personality
   decks:
@@ -995,13 +901,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Randy Elliott
   flavor_text: <i>His eyes were wild as if possessed with some ancient fury, but his countenance was as
     calm as a still lake. One look at him and knew he was a man to be feared.</i>
-- cardid: 3241
-  title: Hida Yakamo (Oni)
+- title: Hida Yakamo (Oni)
   types:
   - Personality
   decks:
@@ -1028,11 +932,9 @@ cards:
   - Clan Wars (Imperial)
   - Legacy
   notes: This is a distinct card from the Crimson and Jade card of the same name.
-  printing_id: '1'
   rarity: Rare
   artist: Ron Spencer
-- cardid: 3274
-  title: Hirariko
+- title: Hirariko
   types:
   - Personality
   decks:
@@ -1051,12 +953,10 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Matt Wilson
   flavor_text: <i>You didn't really need that wakizashi, did you, Lord Togashi?</i>
-- cardid: 3377
-  title: Hitomi Kokujin
+- title: Hitomi Kokujin
   types:
   - Personality
   decks:
@@ -1082,11 +982,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Jason Behnke
-- cardid: 3459
-  title: Hoseki
+- title: Hoseki
   types:
   - Personality
   decks:
@@ -1107,13 +1005,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Mark Tedin
   flavor_text: <i>She came like smoke and vanished like lightning, leaving his twisting corpse in her
     wake.</i>
-- cardid: 3485
-  title: Hototogitsu
+- title: Hototogitsu
   types:
   - Event
   decks:
@@ -1128,11 +1024,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Heather Bruton
-- cardid: 3554
-  title: Ichiin
+- title: Ichiin
   types:
   - Personality
   decks:
@@ -1151,11 +1045,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Daniel Gelon
-- cardid: 3616
-  title: Ikoma Kimura
+- title: Ikoma Kimura
   types:
   - Personality
   decks:
@@ -1176,11 +1068,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Douglas Shuler
-- cardid: 3697
-  title: Imperial Honor Guard
+- title: Imperial Honor Guard
   types:
   - Follower
   decks:
@@ -1200,13 +1090,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Uncommon
   artist: Daren Bader
   flavor_text: <i>"Something in the Palace has changed, I tell you. You can see it in their eyes." - Kakita
     Toshimoko</i>
-- cardid: 3712
-  title: Imperial Taxation
+- title: Imperial Taxation
   types:
   - Strategy
   decks:
@@ -1220,11 +1108,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: KC Lancaster
-- cardid: 3727
-  title: Inaccessible Region
+- title: Inaccessible Region
   types:
   - Region
   decks:
@@ -1236,11 +1122,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Jeff Remmer
-- cardid: 3887
-  title: Isawa Osugi
+- title: Isawa Osugi
   types:
   - Personality
   decks:
@@ -1264,11 +1148,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Heather Bruton
-- cardid: 3935
-  title: Isawa Tsuke
+- title: Isawa Tsuke
   types:
   - Personality
   decks:
@@ -1297,11 +1179,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Randy Elliott
-- cardid: 4132
-  title: Kaiu Pass
+- title: Kaiu Pass
   types:
   - Region
   decks:
@@ -1313,11 +1193,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: KC Lancaster
-- cardid: 4147
-  title: Kaiu Utsu
+- title: Kaiu Utsu
   types:
   - Personality
   decks:
@@ -1338,11 +1216,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Carl Frank
-- cardid: 4222
-  title: Kakita Shijin
+- title: Kakita Shijin
   types:
   - Personality
   decks:
@@ -1362,11 +1238,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Rob Alexander
-- cardid: 4285
-  title: Kasuga Kyoji
+- title: Kasuga Kyoji
   types:
   - Personality
   decks:
@@ -1386,12 +1260,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Greg Simonson
   flavor_text: <i>I will trade your bloody battlefield for the solitude of this place on any day.</i>
-- cardid: 4363
-  title: Kisada's Blockade
+- title: Kisada's Blockade
   types:
   - Event
   decks:
@@ -1405,13 +1277,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Bryon Wackwitz
   flavor_text: <i>He sailed legions of men up the coast of Rokugan, and marched into the Imperial Palace.
     He expected to find an empty throne; what he found was his doom. - The Doom of Hantei, Part One</i>
-- cardid: 4524
-  title: Kolat Instigator
+- title: Kolat Instigator
   types:
   - Strategy
   decks:
@@ -1426,11 +1296,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Anthony Grabski
-- cardid: 4526
-  title: Kolat Interference
+- title: Kolat Interference
   types:
   - Strategy
   decks:
@@ -1444,11 +1312,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Tom Biondolillo
-- cardid: 4617
-  title: Kusatte Iru
+- title: Kusatte Iru
   types:
   - Personality
   decks:
@@ -1472,11 +1338,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Matt Wilson
-- cardid: 4623
-  title: Kyojin
+- title: Kyojin
   types:
   - Personality
   decks:
@@ -1499,11 +1363,9 @@ cards:
   - Clan Wars (Imperial)
   - Legacy
   notes: Some versions of this card were printed with a larger font
-  printing_id: '1'
   rarity: Uncommon
   artist: Daren Bader
-- cardid: 4726
-  title: Lies, Lies, Lies...
+- title: Lies, Lies, Lies...
   types:
   - Strategy
   decks:
@@ -1522,12 +1384,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Uncommon
   artist: Heather Hudson
   flavor_text: <i>"Even a tongue as sweet as yours cannot change the truth, Scorpion." - Kitsu Motso</i>
-- cardid: 4824
-  title: Mantle of Fire
+- title: Mantle of Fire
   types:
   - Item
   decks:
@@ -1546,11 +1406,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Douglas Shuler
-- cardid: 4980
-  title: Matsu Seijuro
+- title: Matsu Seijuro
   types:
   - Personality
   decks:
@@ -1573,11 +1431,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Bryon Wackwitz
-- cardid: 5050
-  title: Mikaru
+- title: Mikaru
   types:
   - Personality
   decks:
@@ -1595,12 +1451,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Bryon Wackwitz
   flavor_text: <i>"Like the sash?"</i>
-- cardid: 5051
-  title: Mikio
+- title: Mikio
   types:
   - Personality
   decks:
@@ -1624,11 +1478,9 @@ cards:
   - Clan Wars (Imperial)
   - Legacy
   notes: Some versions of this card were printed with a larger font
-  printing_id: '1'
   rarity: Uncommon
   artist: Jeff Remmer
-- cardid: 5064
-  title: Minor Shugenja
+- title: Minor Shugenja
   types:
   - Follower
   decks:
@@ -1646,11 +1498,9 @@ cards:
   - Clan Wars (Imperial)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: Diana Vick
-- cardid: 5230
-  title: Monsoon
+- title: Monsoon
   types:
   - Event
   decks:
@@ -1664,11 +1514,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Kevin Ward
-- cardid: 5405
-  title: Mountain of the Seven Thunders
+- title: Mountain of the Seven Thunders
   types:
   - Region
   decks:
@@ -1685,13 +1533,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Some variants of the Anvil of Despair version of this card were printed with bold flavor text.
-  printing_id: '2'
   rarity: Rare
   artist: Mark Tedin
   flavor_text: <i>He spoke with the force of storm clouds and the power of the highest peaks; we knew
     we could not refuse him.</i>
-- cardid: 5481
-  title: Naga Guard
+- title: Naga Guard
   types:
   - Follower
   decks:
@@ -1710,12 +1556,10 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Ron Spencer
   flavor_text: <i>No matter where we turned, there they were, waiting for our next move. - Hida Tampako</i>
-- cardid: 5548
-  title: Night Battle
+- title: Night Battle
   types:
   - Strategy
   decks:
@@ -1734,11 +1578,9 @@ cards:
   - Legacy
   notes: Some variants of the Anvil of Despair version of this card were printed with a different text
     alignment.
-  printing_id: '2'
   rarity: Common
   artist: Brian Snoddy
-- cardid: 5748
-  title: Oni no Tadaka
+- title: Oni no Tadaka
   types:
   - Personality
   decks:
@@ -1760,12 +1602,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Anson Maddocks
   flavor_text: <i>"I give you my name..."</i>
-- cardid: 5797
-  title: Otaku Baiken
+- title: Otaku Baiken
   types:
   - Personality
   decks:
@@ -1787,11 +1627,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Brian Snoddy
-- cardid: 5909
-  title: Peasant Defense
+- title: Peasant Defense
   types:
   - Strategy
   decks:
@@ -1807,12 +1645,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: KC Lancaster
   flavor_text: <i>"I came to fight soldiers, not boys." - Hida Yakamo</i>
-- cardid: 5964
-  title: Pitch and Fire
+- title: Pitch and Fire
   types:
   - Holding
   decks:
@@ -1829,29 +1665,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Anthony Grabski
-- cardid: 5967
-  title: Plague-Infested Region
-  types:
-  - Region
-  decks:
-  - Dynasty
-  keywords:
-  - Corrupted
-  text: After a Personality enters play from this Province, until the game ends, negate all effects of
-    Plague tokens on him.<br>After the Combat Segment of a battle at this province's battlefield ends,
-    give all Personalities at that battlefield a -1C <b>Plague </b>token.
-  legality:
-  - Clan Wars (Imperial)
-  - Legacy
-  printing_id: '1'
-  rarity: Uncommon
-  artist: Anson Maddocks
-  flavor_text: <i>We may have lost our homeland, but our loss has made us stronger. - Doji Kuwanan</i>
-- cardid: 5971
-  title: Plague Skulls
+- title: Plague Skulls
   types:
   - Item
   decks:
@@ -1866,11 +1682,25 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Matt Wilson
-- cardid: 6009
-  title: Political Dissent
+- title: Plague-Infested Region
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Corrupted
+  text: After a Personality enters play from this Province, until the game ends, negate all effects of
+    Plague tokens on him.<br>After the Combat Segment of a battle at this province's battlefield ends,
+    give all Personalities at that battlefield a -1C <b>Plague </b>token.
+  legality:
+  - Clan Wars (Imperial)
+  - Legacy
+  rarity: Uncommon
+  artist: Anson Maddocks
+  flavor_text: <i>We may have lost our homeland, but our loss has made us stronger. - Doji Kuwanan</i>
+- title: Political Dissent
   types:
   - Strategy
   decks:
@@ -1889,11 +1719,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Ellym Sirac
-- cardid: 6030
-  title: Possession
+- title: Possession
   types:
   - Spell
   decks:
@@ -1911,11 +1739,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Bryon Wackwitz
-- cardid: 6081
-  title: Prophecy of the Hero
+- title: Prophecy of the Hero
   types:
   - Spell
   decks:
@@ -1932,11 +1758,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: KC Lancaster
-- cardid: 6116
-  title: Qakar
+- title: Qakar
   types:
   - Personality
   decks:
@@ -1959,11 +1783,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Randy Gallegos
-- cardid: 6135
-  title: Radakast
+- title: Radakast
   types:
   - Personality
   decks:
@@ -1985,11 +1807,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Daren Bader
-- cardid: 6168
-  title: Ratling Conjuror
+- title: Ratling Conjuror
   types:
   - Personality
   decks:
@@ -2012,11 +1832,9 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: Randy Elliott
-- cardid: 6227
-  title: Refugees
+- title: Refugees
   types:
   - Strategy
   decks:
@@ -2037,12 +1855,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Common
   artist: Mike Raabe
   flavor_text: <i>"Move aside!" Hitomi screamed in useless fury.</i>
-- cardid: 6288
-  title: Retirement
+- title: Retirement
   types:
   - Event
   decks:
@@ -2058,11 +1874,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Christina Wald
-- cardid: 6346
-  title: Rise, Brother
+- title: Rise, Brother
   types:
   - Strategy
   decks:
@@ -2077,11 +1891,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Uncommon
   artist: Ron Chironna
-- cardid: 6365
-  title: River Region
+- title: River Region
   types:
   - Region
   decks:
@@ -2092,11 +1904,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Daren Bader
-- cardid: 6495
-  title: Scorched Earth
+- title: Scorched Earth
   types:
   - Region
   decks:
@@ -2108,11 +1918,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Tom Biondolillo
-- cardid: 6690
-  title: Shallow Victory
+- title: Shallow Victory
   types:
   - Strategy
   decks:
@@ -2127,11 +1935,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Craig Gilmore
-- cardid: 6712
-  title: Shashakar
+- title: Shashakar
   types:
   - Personality
   decks:
@@ -2157,11 +1963,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Ron Spencer
-- cardid: 6916
-  title: Shinjo Morito
+- title: Shinjo Morito
   types:
   - Personality
   decks:
@@ -2186,11 +1990,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Anson Maddocks
-- cardid: 6968
-  title: Shinjo Yasoma
+- title: Shinjo Yasoma
   types:
   - Personality
   decks:
@@ -2212,11 +2014,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Randy Gallegos
-- cardid: 7022
-  title: Shiryo no Akodo
+- title: Shiryo no Akodo
   types:
   - Ancestor
   decks:
@@ -2239,11 +2039,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Tom Biondolillo
-- cardid: 7025
-  title: Shiryo no Bayushi
+- title: Shiryo no Bayushi
   types:
   - Ancestor
   decks:
@@ -2264,13 +2062,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Jason Behnke
   flavor_text: <i>You have turned from duty to walk the path of revenge. Only a few realize the cost they
     must pay when destiny comes to call.</i>
-- cardid: 7033
-  title: Shiryo no Hiruma
+- title: Shiryo no Hiruma
   types:
   - Ancestor
   decks:
@@ -2293,13 +2089,11 @@ cards:
   - Legacy
   notes: Some variants of the Anvil of Despair version of this card were printed with flavor text that
     got cut off and was bold.
-  printing_id: '1'
   rarity: Rare
   artist: William O'Connor
   flavor_text: <i>You have lost your way, young one, and that is why you cannot see the evil that festers
     on the Throne.</i>
-- cardid: 7038
-  title: Shiryo no Isawa
+- title: Shiryo no Isawa
   types:
   - Ancestor
   decks:
@@ -2320,11 +2114,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Bryon Wackwitz
-- cardid: 7040
-  title: Shiryo no Kakita
+- title: Shiryo no Kakita
   types:
   - Ancestor
   decks:
@@ -2345,13 +2137,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Heather Hudson
   flavor_text: <i>Do not think of the blade, do not think of the draw. Only he who acts with no thought
     will draw the purest, most perfect strike.</i>
-- cardid: 7055
-  title: Shiryo no Shinjo
+- title: Shiryo no Shinjo
   types:
   - Ancestor
   decks:
@@ -2371,13 +2161,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Jeff Reitz
   flavor_text: <i>Do not let your mind be clouded with what is proper. Let your mind be cleared with what
     is right.</i>
-- cardid: 7062
-  title: Shiryo no Togashi
+- title: Shiryo no Togashi
   types:
   - Ancestor
   decks:
@@ -2398,11 +2186,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Eric David Anderson
-- cardid: 7290
-  title: Slander
+- title: Slander
   types:
   - Strategy
   decks:
@@ -2416,12 +2202,10 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Anthony Grabski
   flavor_text: <i>In the right hands, slander can kill a man more certainly than a sword.</i>
-- cardid: 7432
-  title: Spiritual Presence
+- title: Spiritual Presence
   types:
   - Spell
   decks:
@@ -2434,11 +2218,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Pamela Shanteau
-- cardid: 7451
-  title: Stall Until Sunrise
+- title: Stall Until Sunrise
   types:
   - Strategy
   decks:
@@ -2453,13 +2235,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Tom Biondolillo
   flavor_text: <i>Again and again they retreated from the Shadowlands army until they saw the fear dawning
     in the Oni's eyes.</i>
-- cardid: 7479
-  title: Stealing the Soul
+- title: Stealing the Soul
   types:
   - Spell
   decks:
@@ -2476,11 +2256,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Carl Frank
-- cardid: 7489
-  title: Stifling Wind
+- title: Stifling Wind
   types:
   - Spell
   decks:
@@ -2497,11 +2275,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Mark Tedin
-- cardid: 7526
-  title: Strategic Victory
+- title: Strategic Victory
   types:
   - Strategy
   decks:
@@ -2517,11 +2293,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Jeff Remmer
-- cardid: 7632
-  title: Summon Nightstalker
+- title: Summon Nightstalker
   types:
   - Spell
   decks:
@@ -2533,11 +2307,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Randy Gallegos
-- cardid: 7678
-  title: Suzume Mukashino
+- title: Suzume Mukashino
   types:
   - Personality
   decks:
@@ -2560,11 +2332,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Heather Hudson
-- cardid: 7748
-  title: Takuan
+- title: Takuan
   types:
   - Personality
   decks:
@@ -2585,11 +2355,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Dean Vincent White
-- cardid: 7818
-  title: Tapestry of Air
+- title: Tapestry of Air
   types:
   - Item
   decks:
@@ -2608,11 +2376,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Eric David Anderson
-- cardid: 7918
-  title: Tessen
+- title: Tessen
   types:
   - Item
   decks:
@@ -2629,13 +2395,11 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Tom Biondolillo
   flavor_text: <i>The ninjato cut silently through the darkness only to ring harmlessly off the stalwart
     steel of the war fan. "Not this time, ninja," smiled Ginawa. "Not this time."</i>
-- cardid: 7976
-  title: The Blood Feud
+- title: The Blood Feud
   types:
   - Strategy
   decks:
@@ -2651,11 +2415,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Ron Chironna
-- cardid: 7979
-  title: The Bronze Gong of the Hantei
+- title: The Bronze Gong of the Hantei
   types:
   - Holding
   decks:
@@ -2670,11 +2432,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Heather Hudson
-- cardid: 7985
-  title: The Celestial Pattern
+- title: The Celestial Pattern
   types:
   - Event
   decks:
@@ -2689,13 +2449,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Heather Bruton
   flavor_text: <i>Nothing in life is random, it is all part of the celestial pattern. Become one with
     the elements and you will learn their sublime scheme.</i>
-- cardid: 8016
-  title: The Darkest Day
+- title: The Darkest Day
   types:
   - Event
   decks:
@@ -2708,13 +2466,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Mark Tedin
   flavor_text: '<i>Now all began to realize the meaning of the prophecy: "When the last Akodo falls, so
     falls the last Hantei." - The Doom of Hantei, Part III</i>'
-- cardid: 8068
-  title: The Face of Fear
+- title: The Face of Fear
   types:
   - Strategy
   decks:
@@ -2729,11 +2485,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Common
   artist: Ron Spencer
-- cardid: 8256
-  title: The Perfect Gift
+- title: The Perfect Gift
   types:
   - Strategy
   decks:
@@ -2746,11 +2500,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Diana Vick
-- cardid: 8284
-  title: The Return of Fu Leng
+- title: The Return of Fu Leng
   types:
   - Event
   decks:
@@ -2765,11 +2517,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Matt Wilson
-- cardid: 8319
-  title: The Shadowlands Horde
+- title: The Shadowlands Horde
   types:
   - Stronghold
   decks:
@@ -2789,11 +2539,9 @@ cards:
   - Legacy
   notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
     on the back of the starter deck boxes.
-  printing_id: '2'
   rarity: Fixed
   artist: Matt Wilson
-- cardid: 8370
-  title: The Tao of the Naga
+- title: The Tao of the Naga
   types:
   - Event
   decks:
@@ -2809,13 +2557,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Carl Frank
   flavor_text: <i>Unlike your folk, Lady Kachiko, I am not disuaded by a smooth tongue and empty promises.
     - Dashmar</i>
-- cardid: 8420
-  title: The Way of Air
+- title: The Way of Air
   types:
   - Strategy
   decks:
@@ -2831,11 +2577,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Bob Hobbs
-- cardid: 8421
-  title: The Way of Earth
+- title: The Way of Earth
   types:
   - Strategy
   decks:
@@ -2851,11 +2595,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Bob Hobbs
-- cardid: 8423
-  title: The Way of Water
+- title: The Way of Water
   types:
   - Strategy
   decks:
@@ -2871,11 +2613,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Bob Hobbs
-- cardid: 8444
-  title: There is No Hope
+- title: There is No Hope
   types:
   - Event
   decks:
@@ -2889,11 +2629,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Ellym Sirac
-- cardid: 8498
-  title: To Avenge our Ancestors
+- title: To Avenge our Ancestors
   types:
   - Strategy
   decks:
@@ -2909,12 +2647,10 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Jeff Remmer
   flavor_text: <i>"Today, we avange our ancestors or we join them." - Doji Hoturi</i>
-- cardid: 8499
-  title: To Do What We Must
+- title: To Do What We Must
   types:
   - Strategy
   decks:
@@ -2930,11 +2666,9 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Uncommon
   artist: Ben Peck
-- cardid: 8508
-  title: To the Last Man
+- title: To the Last Man
   types:
   - Strategy
   decks:
@@ -2949,11 +2683,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Rare
   artist: Tom Biondolillo
-- cardid: 8595
-  title: Togashi Yama
+- title: Togashi Yama
   types:
   - Personality
   decks:
@@ -2975,11 +2707,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Greg Simonson
-- cardid: 8598
-  title: Togashi Yokuni
+- title: Togashi Yokuni
   types:
   - Personality
   decks:
@@ -3007,11 +2737,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Matt Wilson
-- cardid: 8622
-  title: Tomb of Iuchiban
+- title: Tomb of Iuchiban
   types:
   - Holding
   decks:
@@ -3028,12 +2756,10 @@ cards:
   - Legacy
   notes: Some variants of the Anvil of Despair version of this card were printed with flavor text that
     got cut off and was bold.
-  printing_id: '2'
   rarity: Rare
   artist: Daren Bader
   flavor_text: <i>Behind those doors lie unknown treasures. Behind those doors lie horrors beyond imagining.</i>
-- cardid: 8658
-  title: Tortuous Terrain
+- title: Tortuous Terrain
   types:
   - Strategy
   decks:
@@ -3048,12 +2774,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Daren Bader
   flavor_text: <i>"Those on a straight way thrive. Those on a tortuous course die." - Sun-Tzu</i>
-- cardid: 8667
-  title: Toturi
+- title: Toturi
   types:
   - Personality
   decks:
@@ -3080,11 +2804,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Randy Gallegos
-- cardid: 8680
-  title: Toturi's Army
+- title: Toturi's Army
   types:
   - Stronghold
   decks:
@@ -3101,11 +2823,9 @@ cards:
   - Legacy
   notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
     on the back of the starter deck boxes.
-  printing_id: '2'
   rarity: Fixed
   artist: Randy Gallegos
-- cardid: 8710
-  title: Trading Grounds
+- title: Trading Grounds
   types:
   - Holding
   decks:
@@ -3123,13 +2843,11 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Common
   artist: Diana Vick
   flavor_text: <i>The merchants of Otosan Uchi continued to thrive, unaware of the horror that had awakened
     in the Imperial Palace.</i>
-- cardid: 8717
-  title: Training Grounds
+- title: Training Grounds
   types:
   - Region
   decks:
@@ -3139,12 +2857,10 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Christina Wald
   flavor_text: <i>There are few advantages greater than fighting where you train.</i>
-- cardid: 8730
-  title: Traveling Poet
+- title: Traveling Poet
   types:
   - Follower
   decks:
@@ -3160,13 +2876,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Nicola Leonard
   flavor_text: <i>"How can I forget my duty while he sings songs of the courage of my ancestors?" - Daidoji
     Uji</i>
-- cardid: 8739
-  title: Treacherous Terrain
+- title: Treacherous Terrain
   types:
   - Strategy
   decks:
@@ -3185,11 +2899,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Dean Vincent White
-- cardid: 8788
-  title: Tsukuro
+- title: Tsukuro
   types:
   - Personality
   decks:
@@ -3209,11 +2921,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Bryon Wackwitz
-- cardid: 9127
-  title: Valley of Shadow
+- title: Valley of Shadow
   types:
   - Region
   decks:
@@ -3228,11 +2938,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Mike Kimble
-- cardid: 9248
-  title: Watchtower
+- title: Watchtower
   types:
   - Holding
   decks:
@@ -3247,11 +2955,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Dean Vincent White
-- cardid: 9298
-  title: Wetlands
+- title: Wetlands
   types:
   - Region
   decks:
@@ -3262,11 +2968,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Pamela Shanteau
-- cardid: 9478
-  title: Yodin
+- title: Yodin
   types:
   - Personality
   decks:
@@ -3288,13 +2992,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Rare
   artist: Heather Hudson
   flavor_text: <i>Do not laugh at my garden, samurai. If you look, you can find secrets of the universe
     within its patterns.</i>
-- cardid: 9492
-  title: Yogo Ichiba
+- title: Yogo Ichiba
   types:
   - Personality
   decks:
@@ -3313,13 +3015,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Eric David Anderson
   flavor_text: <i>"I am sorry to hear of your loss, my friend. I guess you will have to purchase your
     silk from me after all, eh?"</i>
-- cardid: 9578
-  title: Yoritomo Kamoto
+- title: Yoritomo Kamoto
   types:
   - Personality
   decks:
@@ -3343,7 +3043,6 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Some variants of the Anvil of Despair version of this card were printed with bold flavor text.
-  printing_id: '2'
   rarity: Rare
   artist: Brian Snoddy
   flavor_text: <i>Never have I met a man so driven to prove his honor, and so eager to fill his pockets

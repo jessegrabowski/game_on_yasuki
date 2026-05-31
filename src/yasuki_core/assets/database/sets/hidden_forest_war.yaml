@@ -1,7 +1,81 @@
 set: Hidden Forest War
 cards:
-- cardid: 2445
-  title: Fall Back!
+- title: Bhaya
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  keywords:
+  - Constrictor
+  - Naga
+  - Nonhuman
+  text: <b>Battle:</b> Fear equal to the number of Naga in this army <i>(Bow a target enemy Follower or
+    Personality without Followers with Force equal to or lower than the Fear's strength).</i> Destroy
+    cards after this bows them if they are Shadowlands or have 2 or less Force.
+  gold_cost: 8
+  force: 4
+  chi: 4
+  honor_requirement: 2
+  personal_honor: 2
+  legality:
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Angga Satriohadi
+  flavor_text: <i>"Flee before me, pathetic creatures!"</i>
+  collector_number: '20'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Bisala
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  keywords:
+  - Asp
+  - Naga
+  - Nonhuman
+  text: Bisala has +1F/+1C for each other Naga Personality in this army, to a maximum of four Personalities.
+  gold_cost: 4
+  force: 1
+  chi: 1
+  honor_requirement: 2
+  personal_honor: 1
+  legality:
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Angga Satriohadi
+  flavor_text: <i>Unlike the other Bloodlines, the Asp are invariably born for war, and excel in all combat
+    situations.</i>
+  collector_number: '21'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Drutata
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  keywords:
+  - Greensnake
+  - Naga
+  - Nonhuman
+  - Cavalry
+  text: <i>(Once per turn, as an <b>Absent Engage</b>, move your unbowed Personality in a Cavalry unit
+    to the battle.)</i>
+  gold_cost: 4
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Angga Satriohadi
+  flavor_text: <i>Female Naga are blessed with the ability to exchange their tails for legs when they
+    feel the need to, offering them superior maneuverability in some situations.</i>
+  collector_number: '22'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Fall Back!
   types:
   - Strategy
   decks:
@@ -19,7 +93,6 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '8'
   rarity: Fixed
   artist: Chris Pritchard
   flavor_text: <i>The Naga cut down their foe from the trees, but the Spider kept coming on. Mere arrows
@@ -28,8 +101,57 @@ cards:
   collector_number: '65'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 5483
-  title: Naga Shugenja
+- title: Hattaya
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  keywords:
+  - Asp
+  - Naga
+  - Nonhuman
+  - Cavalry
+  text: <b>Home Battle:</b> If he or she would be opposed, move your target Naga Personality at home to
+    the current battlefield. <i>(Home actions may be taken from home.)</i>
+  gold_cost: 6
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Angga Satriohadi
+  flavor_text: <i>"Do not underestimate their speed." – Daigotsu Kendo</i>
+  collector_number: '23'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Khumti
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  keywords:
+  - Greensnake
+  - Naga
+  - Nonhuman
+  text: <b>Battle:</b> You may bow one of your Forests. Straighten your target Naga Personality, who must
+    be opposed unless you bowed a Forest.
+  gold_cost: 5
+  force: 3
+  chi: 3
+  honor_requirement: 2
+  personal_honor: 1
+  legality:
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Angga Satriohadi
+  flavor_text: <i>Bonded to one another through the Akasha, members of the Naga race easily work with
+    one another, as their enemies often discover to their detriment.</i>
+  collector_number: '24'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Naga Shugenja
   types:
   - Personality
   decks:
@@ -51,7 +173,6 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - War of the Seals (Onyx Edition)
-  printing_id: '6'
   rarity: Fixed
   artist: Charles Joseph Slucher
   flavor_text: <i>Although called shugenja by samurai, the spellcasters of the Naga call themselves jakla.
@@ -60,8 +181,7 @@ cards:
   collector_number: '25'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 5489
-  title: Naga Warlord
+- title: Naga Warlord
   types:
   - Personality
   decks:
@@ -83,7 +203,6 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - War of the Seals (Onyx Edition)
-  printing_id: '7'
   rarity: Fixed
   artist: Subroto Bhaumik
   flavor_text: <i>In battle, Naga will naturally follow the instructions of the highest ranked warrior,
@@ -91,167 +210,7 @@ cards:
   collector_number: '26'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14368
-  title: Secret Grove
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Forest
-  text: After this Holding enters play, you may discard a face-up card from one of your Provinces and
-    refill it face-up. If this discarded a Forest, you may instead refill the Province with a discarded
-    <i>(not dead)</i> non-Shadowlands Nonhuman Personality in your discard pile.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Twenty Festivals)
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '1'
-  rarity: Fixed
-  artist: Angga Satriohadi
-  flavor_text: <i>"We are fighting more than men tomorrow, so we must practice and perfect forms of killing
-    that we may not have considered before." – Daigotsu Ryuko</i>
-  collector_number: '14'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14369
-  title: Bhaya
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  keywords:
-  - Constrictor
-  - Naga
-  - Nonhuman
-  text: <b>Battle:</b> Fear equal to the number of Naga in this army <i>(Bow a target enemy Follower or
-    Personality without Followers with Force equal to or lower than the Fear's strength).</i> Destroy
-    cards after this bows them if they are Shadowlands or have 2 or less Force.
-  gold_cost: 8
-  force: 4
-  chi: 4
-  honor_requirement: 2
-  personal_honor: 2
-  legality:
-  - War of the Seals (Onyx Edition)
-  printing_id: '1'
-  rarity: Fixed
-  artist: Angga Satriohadi
-  flavor_text: <i>"Flee before me, pathetic creatures!"</i>
-  collector_number: '20'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14370
-  title: Bisala
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  keywords:
-  - Asp
-  - Naga
-  - Nonhuman
-  text: Bisala has +1F/+1C for each other Naga Personality in this army, to a maximum of four Personalities.
-  gold_cost: 4
-  force: 1
-  chi: 1
-  honor_requirement: 2
-  personal_honor: 1
-  legality:
-  - War of the Seals (Onyx Edition)
-  printing_id: '1'
-  rarity: Fixed
-  artist: Angga Satriohadi
-  flavor_text: <i>Unlike the other Bloodlines, the Asp are invariably born for war, and excel in all combat
-    situations.</i>
-  collector_number: '21'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14371
-  title: Drutata
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  keywords:
-  - Greensnake
-  - Naga
-  - Nonhuman
-  - Cavalry
-  text: <i>(Once per turn, as an <b>Absent Engage</b>, move your unbowed Personality in a Cavalry unit
-    to the battle.)</i>
-  gold_cost: 4
-  force: 3
-  chi: 3
-  honor_requirement: 0
-  personal_honor: 2
-  legality:
-  - War of the Seals (Onyx Edition)
-  printing_id: '1'
-  rarity: Fixed
-  artist: Angga Satriohadi
-  flavor_text: <i>Female Naga are blessed with the ability to exchange their tails for legs when they
-    feel the need to, offering them superior maneuverability in some situations.</i>
-  collector_number: '22'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14372
-  title: Hattaya
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  keywords:
-  - Asp
-  - Naga
-  - Nonhuman
-  - Cavalry
-  text: <b>Home Battle:</b> If he or she would be opposed, move your target Naga Personality at home to
-    the current battlefield. <i>(Home actions may be taken from home.)</i>
-  gold_cost: 6
-  force: 3
-  chi: 3
-  honor_requirement: 0
-  personal_honor: 2
-  legality:
-  - War of the Seals (Onyx Edition)
-  printing_id: '1'
-  rarity: Fixed
-  artist: Angga Satriohadi
-  flavor_text: <i>"Do not underestimate their speed." – Daigotsu Kendo</i>
-  collector_number: '23'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14373
-  title: Khumti
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  keywords:
-  - Greensnake
-  - Naga
-  - Nonhuman
-  text: <b>Battle:</b> You may bow one of your Forests. Straighten your target Naga Personality, who must
-    be opposed unless you bowed a Forest.
-  gold_cost: 5
-  force: 3
-  chi: 3
-  honor_requirement: 2
-  personal_honor: 1
-  legality:
-  - War of the Seals (Onyx Edition)
-  printing_id: '1'
-  rarity: Fixed
-  artist: Angga Satriohadi
-  flavor_text: <i>Bonded to one another through the Akasha, members of the Naga race easily work with
-    one another, as their enemies often discover to their detriment.</i>
-  collector_number: '24'
-  publisher: Onyx Lives
-  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14376
-  title: Prasthana
+- title: Prasthana
   types:
   - Personality
   decks:
@@ -269,7 +228,6 @@ cards:
   personal_honor: 1
   legality:
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Fixed
   artist: Angga Satriohadi
   flavor_text: <i>"Every Naga is a piece of the Akasha. As such, our lives must be treated with respect,
@@ -277,8 +235,7 @@ cards:
   collector_number: '27'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14377
-  title: Sahaya
+- title: Sahaya
   types:
   - Personality
   decks:
@@ -295,7 +252,6 @@ cards:
   personal_honor: 1
   legality:
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Fixed
   artist: Angga Satriohadi
   flavor_text: <i>Unconcerned with glory, many Naga are happy to serve in support roles, knowing they
@@ -303,8 +259,29 @@ cards:
   collector_number: '28'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14378
-  title: Sisya
+- title: Secret Grove
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Forest
+  text: After this Holding enters play, you may discard a face-up card from one of your Provinces and
+    refill it face-up. If this discarded a Forest, you may instead refill the Province with a discarded
+    <i>(not dead)</i> non-Shadowlands Nonhuman Personality in your discard pile.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Angga Satriohadi
+  flavor_text: <i>"We are fighting more than men tomorrow, so we must practice and perfect forms of killing
+    that we may not have considered before." – Daigotsu Ryuko</i>
+  collector_number: '14'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Sisya
   types:
   - Personality
   decks:
@@ -321,7 +298,6 @@ cards:
   personal_honor: 2
   legality:
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Fixed
   artist: Angga Satriohadi
   flavor_text: <i>The Naga techniques are centuries old, despite their recent appearance from the Rokugani
@@ -329,8 +305,7 @@ cards:
   collector_number: '29'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
-- cardid: 14379
-  title: Tirandaja
+- title: Tirandaja
   types:
   - Personality
   decks:
@@ -348,7 +323,6 @@ cards:
   personal_honor: 2
   legality:
   - War of the Seals (Onyx Edition)
-  printing_id: '1'
   rarity: Fixed
   artist: Angga Satriohadi
   flavor_text: <i>The Naga are renowned for their archers, and although their techniques differ from those

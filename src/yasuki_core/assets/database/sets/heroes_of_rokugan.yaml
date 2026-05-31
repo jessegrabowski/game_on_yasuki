@@ -1,7 +1,6 @@
 set: Heroes of Rokugan
 cards:
-- cardid: 412
-  title: Anvil of Despair
+- title: Anvil of Despair
   types:
   - Holding
   decks:
@@ -19,11 +18,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Joseph Phillips
-- cardid: 643
-  title: Atarasi's Armor
+- title: Atarasi's Armor
   types:
   - Item
   decks:
@@ -41,13 +38,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Brian Snoddy
   flavor_text: <i>Forged by Osano-Wo, the armor was a gift to celebrate his brother's return. But the
     Shadowlands are empty, and Atarasi has never come home.</i>
-- cardid: 1252
-  title: Celestial Dragon
+- title: Celestial Dragon
   types:
   - Personality
   decks:
@@ -72,13 +67,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Quinton Hoover
   flavor_text: '<i>Seven Dragons hold the world aloft: five for the Elements, one for the Thunder, which
     seperates Earth and Sky, and the eldest-guardian of the Path of Immortality-for the Celestial Heavens.</i>'
-- cardid: 1314
-  title: Cherry Blossom Festival
+- title: Cherry Blossom Festival
   types:
   - Event
   decks:
@@ -95,13 +88,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Christopher Rush
   flavor_text: <i>Blown in from the west,<br> Fallen petals gathering.<br> To the east, they fall.<br>
     - Rezan the Ronin Poet</i>
-- cardid: 2861
-  title: Goju Yume
+- title: Goju Yume
   types:
   - Personality
   decks:
@@ -124,13 +115,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Alan Rabinowitz
   flavor_text: <i>The land of the dead is barred by the Living Shadow; none will pass that way while Yume
     stands guard.</i>
-- cardid: 2935
-  title: Gusai
+- title: Gusai
   types:
   - Personality
   decks:
@@ -153,14 +142,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Zug
   flavor_text: '<i>"Linger when you study art, history, and war. Take time to comtemplate the Fortunes,
     the Masters, and Shinsei''s Tao. But always remember, each day of your learning: If it is time to
     strike, strike. The moment does not last."</i>'
-- cardid: 3164
-  title: Hida Osano-Wo
+- title: Hida Osano-Wo
   types:
   - Personality
   decks:
@@ -185,13 +172,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: <i>"If you know what it is to lose all for which you have fought and bled, and you still
     have the strength to try again, then you are truly my son."</i>
-- cardid: 3834
-  title: Isawa Ijime
+- title: Isawa Ijime
   types:
   - Personality
   decks:
@@ -215,13 +200,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Donato Giancola
   flavor_text: '<i>"We are the claw from which dreams are made, a false life surrounded by the truth of
     sleep. Yet our dreams are shadows, fleeing with the sun, and truth is no more: lost, alone, and unawakened."</i>'
-- cardid: 4061
-  title: Judgment
+- title: Judgment
   types:
   - Item
   decks:
@@ -241,13 +224,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Quinton Hoover
   flavor_text: <i>"The sworn oath of Bushido is harder than metal; how strong then, is a samurai's soul?"
     - Iuchiban</i>
-- cardid: 4218
-  title: Kakita Rensei
+- title: Kakita Rensei
   types:
   - Personality
   decks:
@@ -272,12 +253,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Zina Saunders
   flavor_text: <i>"Brave deeds may be forgotten; brave people never die."</i>
-- cardid: 4663
-  title: Land of the Dead
+- title: Land of the Dead
   types:
   - Region
   decks:
@@ -291,13 +270,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>Stepping through oblivion's gate, the heroes of the past fight in the present to save
     the future.</i>
-- cardid: 4925
-  title: Matsu Hitomi
+- title: Matsu Hitomi
   types:
   - Personality
   decks:
@@ -322,13 +299,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Zina Saunders
   flavor_text: '<i>"Every scar has a story. That is why the Fortunes gave them to us: you can forget pain,
     but you never forget the scar it leaves behind."</i>'
-- cardid: 5166
-  title: Mirumoto Tokeru
+- title: Mirumoto Tokeru
   types:
   - Personality
   decks:
@@ -351,12 +326,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: <i>"The mountains never learned to step aside."</i>
-- cardid: 5199
-  title: Miya Mashigai
+- title: Miya Mashigai
   types:
   - Personality
   decks:
@@ -378,13 +351,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Ken Meyer Jr.
   flavor_text: <i>"For you, my Emperor, I have done all things," he smiled, and died at peace with the
     world.</i>
-- cardid: 5719
-  title: One Virtue and Seventy Faults
+- title: One Virtue and Seventy Faults
   types:
   - Spell
   decks:
@@ -402,11 +373,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Donato Giancola
-- cardid: 5806
-  title: Otaku Shiko
+- title: Otaku Shiko
   types:
   - Personality
   decks:
@@ -431,13 +400,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Mark A.W. Jackson
   flavor_text: <i>"One should make a deciscion in the space of seven breaths. More, and courage flees;
     less, and impatience dulls the strike."</i>
-- cardid: 6121
-  title: Qatol
+- title: Qatol
   types:
   - Personality
   decks:
@@ -462,13 +429,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Quinton Hoover
   flavor_text: <i>One soul, one mind, the Naga see in his eyes the past-and now, the future. The Naga
     believe he will be reborn in human guise, lifted to the heavens and given jade and pearl...</i>
-- cardid: 6300
-  title: Revealing the Ancient Wisdom
+- title: Revealing the Ancient Wisdom
   types:
   - Strategy
   decks:
@@ -485,13 +450,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Thomas Gianni
   flavor_text: '<i>True force of chi is this: to be swift at the beginning and the end, and tranquil in
     the middle.</i>'
-- cardid: 6310
-  title: Rezan
+- title: Rezan
   types:
   - Personality
   decks:
@@ -515,13 +478,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Ken Meyer Jr.
   flavor_text: <i>"You should tell the honorable Emperor how much you like my poems, samurai." The ronin
     grinned, his katana cold and shining. "Or do I have to teach you a new style of haiku?"</i>
-- cardid: 6608
-  title: Seppun Murayasu
+- title: Seppun Murayasu
   types:
   - Personality
   decks:
@@ -546,14 +507,12 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Brian Snoddy
   flavor_text: <i>"Do not worry that no one recognizes you. Seek to be worthy of recognition. Do not carry
     a sword that is famous. Make your own sword famous with your deeds. Do not worry about the rigors
     of life. Concern yourself only with courage in death."</i>
-- cardid: 6991
-  title: Shinsei's Riddle
+- title: Shinsei's Riddle
   types:
   - Strategy
   decks:
@@ -570,13 +529,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Christopher Rush
   flavor_text: <i>The student asked, "What is truth?" Shinsei smiled. "Whatever I tell you," he replied,
     "will be a lie."</i>
-- cardid: 7098
-  title: Shosuro Furuyari
+- title: Shosuro Furuyari
   types:
   - Personality
   decks:
@@ -599,13 +556,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Christopher Rush
   flavor_text: <i>"How easily mortals are corrupted, and now difficult it is to make them just." - from
     Bayushi's Lies</i>
-- cardid: 7332
-  title: Someisa
+- title: Someisa
   types:
   - Personality
   decks:
@@ -627,13 +582,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Thomas Gianni
   flavor_text: <i>"In each breath lies the secret of the Celestial Heavens, and with each word we lose
     enlightenment. With silence, the world speaks, and we must answer in kind."</i>
-- cardid: 7418
-  title: Spirit Legion
+- title: Spirit Legion
   types:
   - Follower
   decks:
@@ -653,13 +606,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: <i>"True samurai must keep constantly in mind, by day and by night, the fact that they
     must die." - Kakita Rensei</i>
-- cardid: 8089
-  title: The First Oni
+- title: The First Oni
   types:
   - Personality
   decks:
@@ -685,13 +636,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Brian Snoddy
   flavor_text: <i>Foul inside, to match the face of corruption. How else could the first son of Fu leng
     survive his master?</i>
-- cardid: 9232
-  title: Warrens of the Nezumi
+- title: Warrens of the Nezumi
   types:
   - Stronghold
   decks:
@@ -709,11 +658,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Mark A.W. Jackson
-- cardid: 9447
-  title: Yasuki Kaneko
+- title: Yasuki Kaneko
   types:
   - Personality
   decks:
@@ -736,7 +683,6 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Michael Sutfin
   flavor_text: <i>"Her blade was all the swifter, hidden behind innocent smiles." - Miya Mashigai</i>

@@ -1,7 +1,6 @@
 set: Pre-Imperial
 cards:
-- cardid: 221
-  title: Akodo Kage
+- title: Akodo Kage
   types:
   - Personality
   decks:
@@ -24,11 +23,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Anson Maddocks
-- cardid: 428
-  title: Archers
+- title: Archers
   types:
   - Follower
   decks:
@@ -44,13 +41,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Anson Maddocks
   flavor_text: <i>We charged up the hill, following the fleeing troops. Just as we reached the top, we
     looked down and saw a thousand arrows soar into our ranks...</i>
-- cardid: 801
-  title: Bayushi Kachiko
+- title: Bayushi Kachiko
   types:
   - Personality
   decks:
@@ -74,12 +69,10 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Matt Wilson
   flavor_text: <i>"They believe you have the plague, but we know better... don't we, my Lord?"</i>
-- cardid: 911
-  title: Bayushi Togai
+- title: Bayushi Togai
   types:
   - Personality
   decks:
@@ -100,13 +93,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>They killed our Lord, broke his sword and enslaved our Lady. For these crimes, revenge
     shall be an eternity of darkness.</i>
-- cardid: 939
-  title: Be Prepared to Dig Two Graves
+- title: Be Prepared to Dig Two Graves
   types:
   - Strategy
   decks:
@@ -122,12 +113,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Pete Garcia
   flavor_text: <i>Before sailing on the sea of revenge...</i>
-- cardid: 981
-  title: Biting Steel
+- title: Biting Steel
   types:
   - Spell
   decks:
@@ -141,13 +130,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: David Trowbridge
   flavor_text: <i>The sharpest blade does not win the duel, but neither can you be victorious with mere
     conviction.</i>
-- cardid: 1045
-  title: Block Supply Lines
+- title: Block Supply Lines
   types:
   - Strategy
   decks:
@@ -166,12 +153,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Brad McDevitt
   flavor_text: <i>One bushel of our enemy's foodstuffs is worth one hundred of our own. - Sun Tzu</i>
-- cardid: 1128
-  title: Breach of Etiquette
+- title: Breach of Etiquette
   types:
   - Strategy
   decks:
@@ -186,12 +171,10 @@ cards:
   - Legacy
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Robin Wood
   flavor_text: <i>Sometimes the downfall of houses hinges on a fumble of the wrist. - The Tao of Shinsei</i>
-- cardid: 1146
-  title: Brilliant Victory
+- title: Brilliant Victory
   types:
   - Strategy
   decks:
@@ -207,11 +190,9 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Richard Emond
-- cardid: 1217
-  title: Careful Planning
+- title: Careful Planning
   types:
   - Strategy
   decks:
@@ -224,13 +205,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Christina Wald
   flavor_text: <i>If you know yourself and your enemy, you need not fear the outcome of a thousand battles.
     - Sun Tzu</i>
-- cardid: 1298
-  title: Charge
+- title: Charge
   types:
   - Strategy
   decks:
@@ -247,13 +226,11 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Carl Frank
   flavor_text: <i>If the enemy is numerous, disciplined and about to advance... I would say, first seize
     something they love, and they will listen to you. - Sun Tzu</i>
-- cardid: 1475
-  title: Contentious Terrain
+- title: Contentious Terrain
   types:
   - Strategy
   decks:
@@ -274,12 +251,10 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: KC Lancaster
   flavor_text: <i>"...ground upon which it is advantageous for us and our enemy to be." - Sun Tzu</i>
-- cardid: 1497
-  title: Copper Mine
+- title: Copper Mine
   types:
   - Holding
   decks:
@@ -301,13 +276,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Steve Morales
   flavor_text: <i>They toil hour after hour. Bring me the devotion of the men of the Lion Clan, and I
     will bring you victory.</i>
-- cardid: 1524
-  title: Counterattack
+- title: Counterattack
   types:
   - Strategy
   decks:
@@ -321,11 +294,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Matt Busch
-- cardid: 1592
-  title: Crystal Katana
+- title: Crystal Katana
   types:
   - Item
   decks:
@@ -343,13 +314,11 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Robin Wood
   flavor_text: <i>Not even the Shugenja know why a blade of purest crystal seems to melt the creatures
     with the slightest touch.</i>
-- cardid: 1798
-  title: Dairya
+- title: Dairya
   types:
   - Personality
   decks:
@@ -373,12 +342,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Some copies of the pre-Imperial Edition version were misprinted with the title Dayra.
-  printing_id: '2'
   rarity: Fixed
   artist: Brian Snoddy
   flavor_text: <i>You call me a masterless man. You are wrong. I am my own master.</i>
-- cardid: 1882
-  title: Deadly Ground
+- title: Deadly Ground
   types:
   - Strategy
   decks:
@@ -394,11 +361,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Bob Hobbs
-- cardid: 2176
-  title: Doji Yosai
+- title: Doji Yosai
   types:
   - Personality
   decks:
@@ -418,11 +383,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Susan Van Camp
   flavor_text: <i>"Never before have I seen the armies of the dead rise up to strike us down."</i>
-- cardid: 2266
+- id: earthquake
   title: Earthquake
   types:
   - Spell
@@ -441,13 +405,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Bob Hobbs
   flavor_text: <i>There was a force from the earth. It threw me from my horse just as the enemy began
     their charge. My bushi looked back at me, their eyes begging instruction.</i>
-- cardid: 2332
-  title: Encircled Terrain
+- title: Encircled Terrain
   types:
   - Strategy
   decks:
@@ -474,11 +436,9 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: KC Lancaster
-- cardid: 2339
-  title: Energy Transference
+- title: Energy Transference
   types:
   - Spell
   decks:
@@ -492,12 +452,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   notes: The pre-Imperial Edition version was named Inversion of Energies.
-  printing_id: '2'
   rarity: Fixed
   artist: David Bollt
   flavor_text: <i>Masters of Ying Yang Lore are capable of tapping both soft and hard energies.</i>
-- cardid: 2353
-  title: Entrapping Terrain
+- title: Entrapping Terrain
   types:
   - Strategy
   decks:
@@ -514,13 +472,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Richard Emond
   flavor_text: <i>Where there are mountains and forests, ravines and defiles... wherever the road is difficult.
     - Sun Tzu</i>
-- cardid: 2394
-  title: Evil Feeds Upon Itself
+- title: Evil Feeds Upon Itself
   types:
   - Event
   decks:
@@ -534,13 +490,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Randy Gallegos
   flavor_text: <i>The way of darkness always brings great power. The way of darkness always brings a great
     price. - The Tao of Shinse</i>
-- cardid: 2473
-  title: Fan of Command
+- title: Fan of Command
   types:
   - Item
   decks:
@@ -561,13 +515,11 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   notes: Some variants of the Imperial Edition version of this card were printed with a 5 gold cost.
-  printing_id: '2'
   rarity: Fixed
   artist: Mark Poole
   flavor_text: <i>We could see his commands from across the battlefield as if he were standing beside
     us.</i>
-- cardid: 2585
-  title: Fist of Osano-Wo
+- title: Fist of Osano-Wo
   types:
   - Spell
   decks:
@@ -581,11 +533,9 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Kevin Ward
-- cardid: 2696
-  title: Frenzy
+- title: Frenzy
   types:
   - Strategy
   decks:
@@ -602,11 +552,9 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Wackwitz & Daily
-- cardid: 2827
-  title: Go Master
+- title: Go Master
   types:
   - Holding
   decks:
@@ -621,13 +569,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Christina Wald
   flavor_text: <i>"Think before you place that stone, for I know why you are placing it there before you
     do." - Master Suana</i>
-- cardid: 2832
-  title: Goblin Mob
+- title: Goblin Mob
   types:
   - Follower
   decks:
@@ -648,12 +594,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Matt Wilson
   flavor_text: <i>Look out boys, here comes the samurai! Hey, anybody seen the boss?</i>
-- cardid: 2840
-  title: Goblin Warmonger
+- title: Goblin Warmonger
   types:
   - Personality
   decks:
@@ -675,12 +619,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Matt Wilson
   flavor_text: <i>He who lives and runs away live to fight - uh - later.</i>
-- cardid: 3070
-  title: Hida Amoro
+- title: Hida Amoro
   types:
   - Personality
   decks:
@@ -700,13 +642,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Ron Spencer
   flavor_text: <i>We were hundreds against thousands. I looked at him and watched his face twist into
     an insane grin.</i>
-- cardid: 3193
-  title: Hida Sukune
+- title: Hida Sukune
   types:
   - Personality
   decks:
@@ -725,13 +665,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Anson Maddocks
   flavor_text: <i>He looks to the Shadowlands with suspicion, knowing that his father has struck a deal
     with something... unspeakable.</i>
-- cardid: 3547
-  title: Iaijutsu Challenge
+- title: Iaijutsu Challenge
   types:
   - Strategy
   decks:
@@ -749,11 +687,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Stacy Drum
-- cardid: 3548
-  title: Iaijutsu Duel
+- title: Iaijutsu Duel
   types:
   - Strategy
   decks:
@@ -769,12 +705,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Quinton Hoover
   flavor_text: <i>Soon blades would cross - Soon blood would be spilled.</i>
-- cardid: 3808
-  title: Iron Mine
+- title: Iron Mine
   types:
   - Holding
   decks:
@@ -797,12 +731,10 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '2'
   rarity: Fixed
   artist: Cline Siegenthaler
   flavor_text: <i>Oni moving this way and that, all enslaved in the dark mines of the Crab.</i>
-- cardid: 3841
-  title: Isawa Kaede
+- title: Isawa Kaede
   types:
   - Personality
   decks:
@@ -825,11 +757,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Susan Van Camp
-- cardid: 3910
-  title: Isawa Tadaka
+- title: Isawa Tadaka
   types:
   - Personality
   decks:
@@ -851,11 +781,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Daniel Gelon
-- cardid: 3976
-  title: Iuchi Daiyu
+- title: Iuchi Daiyu
   types:
   - Personality
   decks:
@@ -876,13 +804,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Pamela Shanteau
   flavor_text: <i>We saw them charging, we watched as arrows of fire descended upon them, and still, they
     charged on. - Isawa Tsutoke</i>
-- cardid: 4022
-  title: Jade Bow
+- title: Jade Bow
   types:
   - Item
   decks:
@@ -901,13 +827,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '2'
   rarity: Fixed
   artist: Brian Snoddy
   flavor_text: <i>He took careful aim with power thundering down his arm and lightning burning at his
     fingertips...</i>
-- cardid: 4036
-  title: Jade Works
+- title: Jade Works
   types:
   - Holding
   decks:
@@ -927,13 +851,11 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Diana Vick
   flavor_text: <i>Long regarded for its worth against the denizens of the Shadowlands, now the Jadesmiths
     begin to turn their skills to weapons...</i>
-- cardid: 4248
-  title: Kakita Yuri
+- title: Kakita Yuri
   types:
   - Personality
   decks:
@@ -953,13 +875,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Robin Wood
   flavor_text: <i>Now if only there was another way to solve this disagreement. Perhaps I could make a
     suggestion...</i>
-- cardid: 4514
-  title: Kolat Assassin
+- title: Kolat Assassin
   types:
   - Strategy
   decks:
@@ -977,12 +897,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Ron Spencer
   flavor_text: <i>A silent, painful, honorless death awaits those who do not know the secrets of the shadows.</i>
-- cardid: 4840
-  title: Marketplace
+- title: Marketplace
   types:
   - Holding
   decks:
@@ -1004,12 +922,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Nicola Leonard
   flavor_text: <i>I tell you resources of the Crane are limitless...</i>
-- cardid: 4841
-  title: Marries a Barbarian
+- title: Marries a Barbarian
   types:
   - Strategy
   decks:
@@ -1022,12 +938,10 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Robin Wood
   flavor_text: <i>The choice between love and honor is never easy...</i>
-- cardid: 4842
-  title: Marsh Troll
+- title: Marsh Troll
   types:
   - Follower
   decks:
@@ -1050,11 +964,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Randy Elliott
-- cardid: 4922
-  title: Matsu Hiroru
+- title: Matsu Hiroru
   types:
   - Personality
   decks:
@@ -1076,11 +988,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Wackwitz & Daily
-- cardid: 4996
-  title: Matsu Turi
+- title: Matsu Turi
   types:
   - Personality
   decks:
@@ -1101,13 +1011,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: The pre-Imperial Edition's art was used for Matsu Yojo, and its trait became Matsu Gohei's.
-  printing_id: '2'
   rarity: Fixed
   artist: Susan Van Camp
   flavor_text: <i>The fear you feel in your heart - it is only illusion. When you feel hunger you feed
     your belly, eh? When you feel fear, feed your heart with courage.</i>
-- cardid: 5016
-  title: Medium Cavalry
+- title: Medium Cavalry
   types:
   - Follower
   decks:
@@ -1129,13 +1037,11 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Randy Gallegos (one version was miscredited to Mark Tedin)
   flavor_text: <i>"Watch the Unicorns closely, and you will learn that it is the maneuver that carries
     the day, not strength, as the Crab would have you believe." - Matsu Daira</i>
-- cardid: 5017
-  title: Medium Infantry
+- title: Medium Infantry
   types:
   - Follower
   decks:
@@ -1154,13 +1060,11 @@ cards:
   - Modern
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Mike Raabe
   flavor_text: <i>"They broke through the mist, a thousand of them. They ran towards us as we lowered
     our spears and I knew that we would soon be crossing swords." - Miroto Daini</i>
-- cardid: 5190
-  title: Mists of Illusion
+- title: Mists of Illusion
   types:
   - Spell
   decks:
@@ -1173,13 +1077,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Heather Bruton
   flavor_text: <i>One must learn to see what is to be seen and to see through what others wish you to
     see. - The Tao of Shinsei</i>
-- cardid: 5477
-  title: Naga Abomination
+- title: Naga Abomination
   types:
   - Personality
   decks:
@@ -1201,11 +1103,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Randy Elliott
-- cardid: 5479
-  title: Naga Bowmen
+- title: Naga Bowmen
   types:
   - Follower
   decks:
@@ -1223,13 +1123,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Randy Elliott
   flavor_text: <i>Watching the elegance of their archers, I could not help but think of these creatures
     as samurai of a sort.</i>
-- cardid: 5484
-  title: Naga Spearmen
+- title: Naga Spearmen
   types:
   - Follower
   decks:
@@ -1247,13 +1145,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>Their hands were sure and their eyes showed no fear. They charged into the fray with
     the ferocity of wildmen and the nobility of dragons. - Togashi Toshioki</i>
-- cardid: 5489
-  title: Naga Warlord
+- title: Naga Warlord
   types:
   - Personality
   decks:
@@ -1275,12 +1171,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Matt Wilson
   flavor_text: <i>They say his blood carries the souls of a thousand ancestors...</i>
-- cardid: 5641
-  title: Oath of Fealty
+- title: Oath of Fealty
   types:
   - Strategy
   decks:
@@ -1297,12 +1191,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: KC Lancaster
   flavor_text: <i>Would you be masterless men forever? Follow me!</i>
-- cardid: 5664
-  title: Occult Murders
+- title: Occult Murders
   types:
   - Event
   decks:
@@ -1319,13 +1211,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Ron Spencer
   flavor_text: <i>… the name we had thought long-forgotten, was scrawled in blood on the walls of our
     own houses...</i>
-- cardid: 5675
-  title: Ogre Bushi
+- title: Ogre Bushi
   types:
   - Personality
   decks:
@@ -1352,13 +1242,11 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Carl Frank
   flavor_text: <i>It walked from the very heart of the Shadowlands. It was neither man nor beast, and
     it walked with haunched shoulders and drooling lips. - Hida Tampako</i>
-- cardid: 5912
-  title: Peasant Revolt
+- title: Peasant Revolt
   types:
   - Event
   decks:
@@ -1374,11 +1262,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Stacy Drum
-- cardid: 6027
-  title: Port
+- title: Port
   types:
   - Holding
   decks:
@@ -1392,13 +1278,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Kevin Ward
   flavor_text: <i>… and all along the docks, the merchants of Crane Clan can be seen, winning wars with
     silver and gold instead of spears and swords.</i>
-- cardid: 6153
-  title: Rallying Cry
+- title: Rallying Cry
   types:
   - Strategy
   decks:
@@ -1414,13 +1298,11 @@ cards:
   - Legacy
   notes: The gold-bordered Gold Edition Promotional version of this card was misprinted with the Rare
     symbol.
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>Sleep? My bushi need no sleep! They need battle to awaken their souls and feed their
     hearts!</i>
-- cardid: 6167
-  title: Ratling Bushi
+- title: Ratling Bushi
   types:
   - Follower
   decks:
@@ -1441,13 +1323,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Randy Elliott
   flavor_text: <i>Like a swarm they were, overcoming the samurai as if they were standing still. - Hoiuchi
     Junzo</i>
-- cardid: 6256
-  title: Remorseful Seppuku
+- title: Remorseful Seppuku
   types:
   - Strategy
   decks:
@@ -1461,11 +1341,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Eric David Anderson
-- cardid: 6333
-  title: Ring of Air
+- title: Ring of Air
   types:
   - Ring
   decks:
@@ -1493,11 +1371,9 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Matt Wilson
-- cardid: 6334
-  title: Ring of Earth
+- title: Ring of Earth
   types:
   - Ring
   decks:
@@ -1525,11 +1401,9 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Matt Wilson
-- cardid: 6335
-  title: Ring of Fire
+- title: Ring of Fire
   types:
   - Ring
   decks:
@@ -1558,43 +1432,9 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Matt Wilson
-- cardid: 6338
-  title: Ring of the Void
-  types:
-  - Ring
-  decks:
-  - Fate
-  keywords:
-  - Unique
-  - Void
-  text: You may discard this Ring from your hand to use its Void ability without cost.<br><b>Limited:</b>
-    Play if you have two or fewer Rings in play. Discard your hand. <br><b>Void Limited, :bow::</b> Draw
-    a card. If you now have more cards in your hand than any other player, discard a card.
-  focus: 4
-  is_unique: true
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '2'
-  rarity: Fixed
-  artist: Matt Wilson
-- cardid: 6339
-  title: Ring of Water
+- title: Ring of Water
   types:
   - Ring
   decks:
@@ -1623,11 +1463,39 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Matt Wilson
-- cardid: 6460
-  title: Samurai Warriors
+- title: Ring of the Void
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Void
+  text: You may discard this Ring from your hand to use its Void ability without cost.<br><b>Limited:</b>
+    Play if you have two or fewer Rings in play. Discard your hand. <br><b>Void Limited, :bow::</b> Draw
+    a card. If you now have more cards in your hand than any other player, discard a card.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Matt Wilson
+- title: Samurai Warriors
   types:
   - Follower
   decks:
@@ -1645,13 +1513,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Mark Poole
   flavor_text: <i>"The way of the warrior is to build an indomitable spirit and an iron will; to believe
     that you cannot fail in doing anything." - Miyamoto Musashi</i>
-- cardid: 6464
-  title: Sanctified Temple
+- title: Sanctified Temple
   types:
   - Holding
   decks:
@@ -1667,12 +1533,10 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '2'
   rarity: Fixed
   artist: Ken Meyer Jr.
   flavor_text: <i>What price is too high to pay for Honor?</i>
-- cardid: 6878
-  title: Shinjo Hanari
+- title: Shinjo Hanari
   types:
   - Personality
   decks:
@@ -1694,13 +1558,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   notes: The pre-Imperial Edition's art was used for Shinjo Yasamura.
-  printing_id: '2'
   rarity: Fixed
   artist: Mike Raabe
   flavor_text: <i>"Yes, I know of Tsuru of House Hida, and I know his manner and tactics, and I promise
     you, if we should ever meet on the battlefield, he would be counting the cost."</i>
-- cardid: 7239
-  title: Shuriken of Serpents
+- title: Shuriken of Serpents
   types:
   - Item
   decks:
@@ -1714,13 +1576,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Ellym Sirac
   flavor_text: <i>The only thing he heard was an evil hiss, but even after he fell, he could feel the
     venom creeping toward his heart.</i>
-- cardid: 7303
-  title: Small Farm
+- title: Small Farm
   types:
   - Holding
   decks:
@@ -1737,13 +1597,11 @@ cards:
   - Legacy
   - Modern
   notes: Some of the Anvil of Despair versions of this card were printed with a different text alignment
-  printing_id: '2'
   rarity: Fixed
   artist: Eric David Anderson
   flavor_text: <i>Courage may feed a man's soul, but it is rice that feeds his belly, and an army cannot
     move on courage alone. - The Tao of Shinsei</i>
-- cardid: 7660
-  title: Superior Tactics
+- title: Superior Tactics
   types:
   - Strategy
   decks:
@@ -1759,11 +1617,9 @@ cards:
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Pete Garcia
-- cardid: 8223
-  title: The Monstrous War Machine of Fu Leng
+- title: The Monstrous War Machine of Fu Leng
   types:
   - Personality
   decks:
@@ -1786,11 +1642,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Brian Snoddy
-- cardid: 8555
-  title: Togashi Mitsu
+- title: Togashi Mitsu
   types:
   - Personality
   decks:
@@ -1821,11 +1675,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Wackwitz & Daily
-- cardid: 8599
-  title: Togashi Yoshi
+- title: Togashi Yoshi
   types:
   - Personality
   decks:
@@ -1847,11 +1699,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Ken Meyer Jr.
-- cardid: 8771
-  title: Tsuburu no Oni
+- title: Tsuburu no Oni
   types:
   - Personality
   decks:
@@ -1877,11 +1727,9 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Ron Spencer
-- cardid: 8965
-  title: Unexpected Allies
+- title: Unexpected Allies
   types:
   - Event
   decks:
@@ -1899,11 +1747,9 @@ cards:
   - Legacy
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Richard Emond
-- cardid: 9196
-  title: Walking the Way
+- title: Walking the Way
   types:
   - Spell
   decks:
@@ -1927,13 +1773,11 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Quinton Hoover
   flavor_text: <i>Wisdom can be found in many places, but you must always begin at home. - The Tao of
     Shinsei</i>
-- cardid: 9259
-  title: Way of Deception
+- title: Way of Deception
   types:
   - Strategy
   decks:
@@ -1947,13 +1791,11 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Bonnie Hill
   flavor_text: <i>"When your obective is near, make it look distant; when far away, create the illusion
     of being nearby. Warfare is the Way of Deception." - Sun Tzu</i>
-- cardid: 9338
-  title: Wind Born Speed
+- title: Wind Born Speed
   types:
   - Spell
   decks:
@@ -1965,13 +1807,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Christina Wald
   flavor_text: <i>"We stood firm, ready for their charge. I saw their leader give a command, and before
     I could take another breath, they were moments away, weapons at the ready." - Doji Hitora</i>
-- cardid: 9345
-  title: Wings of Fire
+- title: Wings of Fire
   types:
   - Spell
   decks:
@@ -1985,13 +1825,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Susan Van Camp
   flavor_text: <i>"Suddenly, the Crab forces burst into an unearthly fire … and they began to fly." -
     Shinjo Kamoko</i>
-- cardid: 9413
-  title: Wyrm Riders
+- title: Wyrm Riders
   types:
   - Follower
   decks:
@@ -2013,13 +1851,11 @@ cards:
   - Destroyer War (Celestial)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: David Bollt
   flavor_text: <i>Barbarians from the mountains, mounted on beasts that were obominations of the noble
     Ryu, flew out from over our enemy …</i>
-- cardid: 9677
-  title: Yotsu Seiki
+- title: Yotsu Seiki
   types:
   - Personality
   decks:
@@ -2038,7 +1874,6 @@ cards:
   - Clan Wars (Imperial)
   - Legacy
   notes: The pre-Imperial Edition version was named Motto Seiki and its art was used for Sanzo.
-  printing_id: '2'
   rarity: Fixed
   artist: Douglas Shuler
   flavor_text: <i>"It was if he reached into my soul, pulling away what was there with only his eyes."</i>

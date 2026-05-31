@@ -1,7 +1,6 @@
 set: Tomorrow
 cards:
-- cardid: 58
-  title: A New Wall
+- title: A New Wall
   types:
   - Event
   decks:
@@ -24,13 +23,11 @@ cards:
     have access to this card. However, since there was a Gold version of the card, it is technically legal.
     Anyone running a tournament can choose to represent a snapshot in time - disallowing this card, or
     a "Gold-legal" including this card.'
-  printing_id: '5'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"The Kaiu Wall protects the south. The Khol Wall protects the west. One day our labors
     shall encircle all of Rokugan." - Kaiu Umasu</i>
-- cardid: 324
-  title: All Things Have A Price
+- title: All Things Have A Price
   types:
   - Strategy
   decks:
@@ -45,13 +42,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Heather V. Kreiter
   flavor_text: <i>"If I stay, might die," Kan'okticheck said. "If I go, might die. But if I go, might
     defeat Tomorrow forever."</i>
-- cardid: 391
-  title: Ancestral Urn
+- title: Ancestral Urn
   types:
   - Item
   decks:
@@ -72,12 +67,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 The Battle of the Tomb Top of Clan - Owen Michaud
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '8'
-- cardid: 459
-  title: Arms Smugglers
+- title: Arms Smugglers
   types:
   - Holding
   decks:
@@ -91,11 +84,9 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Chris Arneson
-- cardid: 707
-  title: Barracks of the Damned
+- title: Barracks of the Damned
   types:
   - Stronghold
   decks:
@@ -113,13 +104,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 World Championships Top of Clan - Salman Barakat
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>A place of fallen men who shout their defiance at the Shadowlands. Wretched, yet inspiring.</i>
   collector_number: '1'
-- cardid: 989
-  title: Black Heart of the Empire
+- title: Black Heart of the Empire
   types:
   - Wind
   decks:
@@ -135,11 +124,9 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Ben Peck
-- cardid: 1214
-  title: Candle of Shadows
+- title: Candle of Shadows
   types:
   - Item
   decks:
@@ -161,12 +148,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 The Battle of the Tomb Top of Clan - Francois Carriere
-  printing_id: '1'
   rarity: Fixed
   artist: Britt Martin
   collector_number: '10'
-- cardid: 1837
-  title: Dark Lord's Favor
+- title: Dark Lord's Favor
   types:
   - Strategy
   decks:
@@ -185,11 +170,9 @@ cards:
   - Clan Wars (Imperial)
   - Legacy
   - War of the Seals (Onyx Edition)
-  printing_id: '3'
   rarity: Fixed
   artist: Drew Baker
-- cardid: 2284
-  title: Egg of the Void
+- title: Egg of the Void
   types:
   - Item
   decks:
@@ -212,13 +195,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 The Battle of the Tomb Top of Clan - Mariano Gallardo
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"You alone are not worthy," the dragon roared.</i>
   collector_number: '12'
-- cardid: 2322
-  title: Emma-O's Amulet
+- title: Emma-O's Amulet
   types:
   - Item
   decks:
@@ -237,11 +218,9 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 Divine Guidance Part 2 - Hendrik Bursee
-  printing_id: '2'
   rarity: Fixed
   artist: Eliza Gauger
-- cardid: 2332
-  title: Encircled Terrain
+- title: Encircled Terrain
   types:
   - Strategy
   decks:
@@ -268,12 +247,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '13'
   rarity: Fixed
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"Without One Tribe, Transcendants fall before Tomorrow."</i>
-- cardid: 2376
-  title: Essence of Jigoku
+- title: Essence of Jigoku
   types:
   - Spell
   decks:
@@ -293,13 +270,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 The Battle of the Tomb Top of Clan - Javier Jimenez
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"Allow me this burden," Natsuo said. "Let me prove my loyalty."</i>
   collector_number: '16'
-- cardid: 2415
-  title: Explosives
+- title: Explosives
   types:
   - Strategy
   decks:
@@ -313,11 +288,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '11'
   rarity: Fixed
   artist: Mike Raabe
-- cardid: 2527
-  title: Fields of Foolish Pride
+- title: Fields of Foolish Pride
   types:
   - Strategy
   decks:
@@ -332,11 +305,9 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: John Donahue
-- cardid: 2645
-  title: Forest Killer Cavern
+- title: Forest Killer Cavern
   types:
   - Holding
   decks:
@@ -350,12 +321,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '3'
   rarity: Fixed
   artist: Jeff Menges
   flavor_text: <i>"Empty now. Good-good for hiding."</i>
-- cardid: 2807
-  title: Gifts and Favors
+- title: Gifts and Favors
   types:
   - Holding
   decks:
@@ -370,11 +339,9 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '7'
   rarity: Fixed
   artist: Edward Fetterman
-- cardid: 2870
-  title: Golden Obi of the Sun Goddess
+- title: Golden Obi of the Sun Goddess
   types:
   - Item
   decks:
@@ -396,11 +363,9 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2004 Chosen by the Sun - Jared Devlin-Scherer
-  printing_id: '2'
   rarity: Fixed
   artist: April Lee
-- cardid: 3032
-  title: Heavenly Kobune of Suitengu
+- title: Heavenly Kobune of Suitengu
   types:
   - Item
   decks:
@@ -422,12 +387,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 The Battle of the Tomb Top of Clan - Pablo Rojo
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '20'
-- cardid: 3276
-  title: Hired Killer
+- title: Hired Killer
   types:
   - Strategy
   decks:
@@ -442,11 +405,9 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Shattered Empire
-  printing_id: '3'
   rarity: Fixed
   artist: Michael Kaluta
-- cardid: 4028
-  title: Jade Mirror
+- title: Jade Mirror
   types:
   - Item
   decks:
@@ -468,13 +429,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 The Battle of the Tomb Top of Clan - Kostas Adamopoulos
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>Within it, see the truth.</i>
   collector_number: '6'
-- cardid: 4250
-  title: Kakita's Edge
+- title: Kakita's Edge
   types:
   - Strategy
   decks:
@@ -489,13 +448,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Miguel Coimbra
   flavor_text: <i>"Lead as he led. With honor." - Doji Domotai</i>
   collector_number: '3'
-- cardid: 4251
-  title: Kakita's First Blade
+- title: Kakita's First Blade
   types:
   - Item
   decks:
@@ -516,14 +473,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 The Battle of the Tomb Top of Clan - Reda Lounis
-  printing_id: '1'
   rarity: Fixed
   artist: Miguel Coimbra
   flavor_text: <i>Nagori is a storyteller, a courtier, and a magistrate. With this blade, young Crane
     look to him as an example.</i>
   collector_number: '4'
-- cardid: 4255
-  title: Kamoko's Avatar
+- title: Kamoko's Avatar
   types:
   - Strategy
   decks:
@@ -545,13 +500,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"She rides the heavens, and the Unicorn bear her favor."</i>
   collector_number: '19'
-- cardid: 4264
-  title: Kanashimi Toshi
+- title: Kanashimi Toshi
   types:
   - Region
   decks:
@@ -565,13 +518,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Thomas Denmark
   flavor_text: <i>"Everything that was once theirs in this world is gone. They have only what remains
     in their realm of dreams. How could they let that die without a struggle?" - Zamalash</i>
-- cardid: 4560
-  title: Ku'chek
+- title: Ku'chek
   types:
   - Personality
   decks:
@@ -595,14 +546,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"Stay to fight purple ones, or abandon warrens forever to wage war in Dream? Hard-hard
     choice."</i>
   collector_number: '51'
-- cardid: 4800
-  title: Mak'irtch
+- title: Mak'irtch
   types:
   - Personality
   decks:
@@ -630,11 +579,9 @@ cards:
   errata_text: Text omitted from the Tomorrow deck MRP restored, due to the MRP being removed from SE
     legality and allowed to be sent back for Koku redemption.
   story: 2006 World Champion - Faber Van Kraanen
-  printing_id: '1'
   rarity: Fixed
   artist: John Donahue
-- cardid: 4837
-  title: Mark of Oblivion
+- title: Mark of Oblivion
   types:
   - Item
   decks:
@@ -649,12 +596,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: John Hodgson
   flavor_text: <i>"The Shadowlands shall never have their Tao, not while we live." - Hida Kuon</i>
-- cardid: 5228
-  title: Monkey Man
+- title: Monkey Man
   types:
   - Personality
   decks:
@@ -681,14 +626,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"I bear dire news from across the sands, my lord," the old man said. "Your time is short.
     You must make haste to secure your empire."</i>
   collector_number: '17'
-- cardid: 5515
-  title: Naseru's Last Words
+- title: Naseru's Last Words
   types:
   - Strategy
   decks:
@@ -705,13 +648,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"Virtue," he whispered. "Virtue is the key to the throne. Seek it out or we are lost."</i>
   collector_number: '9'
-- cardid: 5830
-  title: Outer Walls
+- title: Outer Walls
   types:
   - Strategy
   decks:
@@ -727,13 +668,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '5'
   rarity: Fixed
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"Tomorrow comes at last. It washes over Dream, eating everything in its path. Nothing
     left."</i>
-- cardid: 6227
-  title: Refugees
+- title: Refugees
   types:
   - Strategy
   decks:
@@ -754,11 +693,9 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '9'
   rarity: Fixed
   artist: beet
-- cardid: 6235
-  title: Reinforce the Gates
+- title: Reinforce the Gates
   types:
   - Strategy
   decks:
@@ -775,11 +712,9 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '4'
   rarity: Fixed
   artist: Britt Martin
-- cardid: 6315
-  title: Rich Coffers
+- title: Rich Coffers
   types:
   - Holding
   decks:
@@ -793,13 +728,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '6'
   rarity: Fixed
   artist: Veronica V. Jones
   flavor_text: <i>"Our loyalty is to you, Kurako-sama, as it was to your husband." "Thank you, my friend,"
     the Empress said. "I fear I will need your support soon enough."
-- cardid: 6337
-  title: Ring of the Phoenix
+- title: Ring of the Phoenix
   types:
   - Ring
   decks:
@@ -819,12 +752,10 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Unknown
   collector_number: '11'
-- cardid: 6852
-  title: Shinbone Pack
+- title: Shinbone Pack
   types:
   - Personality
   decks:
@@ -845,12 +776,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"Tomorrow comes in the Dream!" the Truthseeker screamed.</i>
-- cardid: 6854
-  title: Shinbone Warrior
+- title: Shinbone Warrior
   types:
   - Personality
   decks:
@@ -875,11 +804,9 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Paul (Prof.) Herbert
-- cardid: 6995
-  title: Shinsei's Tomb
+- title: Shinsei's Tomb
   types:
   - Holding
   decks:
@@ -896,13 +823,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"There is but one chance to save us all." - Ashahina Sekawa</i>
   collector_number: '21'
-- cardid: 7046
-  title: Shiryo no Matsu
+- title: Shiryo no Matsu
   types:
   - Ancestor
   decks:
@@ -927,13 +852,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"Her strength, her will, can never be equaled." - Matsu Kenji</i>
   collector_number: '7'
-- cardid: 7815
-  title: Tao of Fu Leng
+- title: Tao of Fu Leng
   types:
   - Item
   decks:
@@ -955,12 +878,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 The Battle of the Tomb Top of Clan - Salman Barakat
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   collector_number: '2'
-- cardid: 7922
-  title: Test of Honor
+- title: Test of Honor
   types:
   - Strategy
   decks:
@@ -976,13 +897,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '7'
   rarity: Fixed
   artist: Veronica V. Jones
   flavor_text: <i>"I go to sail the seas of Heaven, Amika-sama. The Unicorn would be honored to have a
     Mantis on this voyage." - Horiuchi Rikako</i>
-- cardid: 7974
-  title: The Blasted Lands
+- title: The Blasted Lands
   types:
   - Region
   decks:
@@ -999,13 +918,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"A powerful weapon, but the price is high."</i>
   collector_number: '15'
-- cardid: 8092
-  title: The First Wedding
+- title: The First Wedding
   types:
   - Event
   decks:
@@ -1021,11 +938,9 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Malcolm McClinton
-- cardid: 8192
-  title: The Last Prophecy
+- title: The Last Prophecy
   types:
   - Event
   decks:
@@ -1040,13 +955,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Lisa Hunt
   flavor_text: <i>"The future cannot be foretold," Masae said. "But there are patterns, and those can
     be anticipated if you know what to seek."</i>
-- cardid: 8271
-  title: The Price of Power
+- title: The Price of Power
   types:
   - Event
   decks:
@@ -1062,12 +975,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Thomas Denmark
   flavor_text: <i>"Why could it not have been another?" Kurako asked. "Why did he have to go alone?"</i>
-- cardid: 8296
-  title: The Scarab Case
+- title: The Scarab Case
   types:
   - Item
   decks:
@@ -1088,13 +999,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 The Battle of the Tomb Top of Clan - Tobias Vater
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"It reeks of power," the Ghul Lord said. "Why can we not unlock it?"</i>
   collector_number: '18'
-- cardid: 8460
-  title: Three-Stone River
+- title: Three-Stone River
   types:
   - Strategy
   decks:
@@ -1114,13 +1023,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '5'
   rarity: Fixed
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"Transcendants try to fight Tomorrow, but too few of them. They strong, but not enough
     Name to win, and nowhere to run."</i>
-- cardid: 8491
-  title: Timely Arrival
+- title: Timely Arrival
   types:
   - Strategy
   decks:
@@ -1133,11 +1040,9 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Janine Johnston
-- cardid: 8601
-  title: Togashi's Devoted
+- title: Togashi's Devoted
   types:
   - Follower
   decks:
@@ -1156,14 +1061,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 The Battle of the Tomb Top of Clan - Kostas Adamopoulos
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>The monk smiled atop the Wall. "What better place to see purity within ourselves?" he
     laughed.</i>
   collector_number: '5'
-- cardid: 8626
-  title: Tomorrow
+- title: Tomorrow
   types:
   - Event
   decks:
@@ -1181,14 +1084,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '1'
   rarity: Fixed
   artist: Iordanis Lazaridis
   flavor_text: <i>They believe they have come to the Empire to assist against the Shadowlands, but it
     shall be this very action that will be their doom. - Prophecies of Uikku</i>
   collector_number: '13'
-- cardid: 8627
-  title: Tomorrow Sensei
+- title: Tomorrow Sensei
   types:
   - Sensei
   decks:
@@ -1206,11 +1107,9 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Britt Martin
-- cardid: 8628
-  title: Tomorrow's Hourglass
+- title: Tomorrow's Hourglass
   types:
   - Item
   decks:
@@ -1231,12 +1130,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 World Champion - Faber Can Kraanen
-  printing_id: '1'
   rarity: Fixed
   artist: Britt Martin
   collector_number: '14'
-- cardid: 9233
-  title: Warrens of the One Tribe
+- title: Warrens of the One Tribe
   types:
   - Stronghold
   decks:
@@ -1253,11 +1150,9 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Chuck Lukacs
-- cardid: 9313
-  title: Whispered Rumors
+- title: Whispered Rumors
   types:
   - Strategy
   decks:
@@ -1270,11 +1165,9 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Veronica V. Jones
-- cardid: 9675
-  title: Yotsu Dojo
+- title: Yotsu Dojo
   types:
   - Holding
   decks:
@@ -1289,12 +1182,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2005 The Unsheathed Sword - Francisco Ruiz
-  printing_id: '2'
   rarity: Fixed
   artist: Charles Urbach
   flavor_text: <i>"The Sword of Yotsu stands watch over Kyuden Otomo."</i>
-- cardid: 9698
-  title: Z'chkir
+- title: Z'chkir
   types:
   - Personality
   decks:
@@ -1317,11 +1208,9 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
-- cardid: 9701
-  title: Zamalash
+- title: Zamalash
   types:
   - Personality
   decks:
@@ -1348,7 +1237,6 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   story: 2004 The Resurrection Top of Clan - Peter Leiher
-  printing_id: '2'
   rarity: Fixed
   artist: Anthony Grabski
   flavor_text: <i>"You cannot help my people if your are in danger. Go, my friends. The Naga will endure

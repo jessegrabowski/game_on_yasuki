@@ -1,7 +1,6 @@
 set: Test of Enlightenment
 cards:
-- cardid: 10
-  title: A Clan Divided
+- title: A Clan Divided
   types:
   - Strategy
   decks:
@@ -14,14 +13,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Franz Vohwinkel
   flavor_text: <i>"I do not wish to disobey Lady Shinjo, but I fear the Khan's ambition will undo us all."
     - Shinjo Shono</i>
   collector_number: '83'
-- cardid: 11
-  title: A Clan United
+- title: A Clan United
   types:
   - Strategy
   decks:
@@ -35,14 +32,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Chris Seaman
   flavor_text: <i>"On this day, Matsu Yoshino has earned his father's blade." Otemi proclaimed. "All hail
     Yoshino, Champion of the Lion!"</i>
   collector_number: '84'
-- cardid: 46
-  title: A Long Journey
+- title: A Long Journey
   types:
   - Strategy
   decks:
@@ -54,14 +49,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"So few options remaining. Why do I deny the one possibility my spirit tells me is the
     truth?" - The Wanderer</i>
   collector_number: '85'
-- cardid: 69
-  title: A Quest Abandoned
+- title: A Quest Abandoned
   types:
   - Event
   decks:
@@ -76,13 +69,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Ed Cox
   flavor_text: <i>"Enough games. The throne cannot remain unprotected."</i>
   collector_number: '1'
-- cardid: 72
-  title: A Sage's Counsel
+- title: A Sage's Counsel
   types:
   - Strategy
   decks:
@@ -93,14 +84,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"Why is it so hard to see the simple wisdom in life unless you change your perspective?"
     - The Wanderer</i>
   collector_number: '86'
-- cardid: 77
-  title: A Scorpion's Wisdom
+- title: A Scorpion's Wisdom
   types:
   - Strategy
   decks:
@@ -115,14 +104,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: John Donahue
   flavor_text: <i>"I do not doubt Kisada's wisdom. I doubt his ability to see anyone as being wiser."
     - Bayushi Paneki</i>
   collector_number: '87'
-- cardid: 112
-  title: Achirin
+- title: Achirin
   types:
   - Personality
   decks:
@@ -150,13 +137,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Charel Thoss
-  printing_id: '1'
   rarity: Fixed
   artist: Llyn Hunter
   flavor_text: <i>"I have seen Tomorrow. We fear it, but it fears us!"</i>
   collector_number: '50'
-- cardid: 149
-  title: Agasha Miyoshi
+- title: Agasha Miyoshi
   types:
   - Personality
   decks:
@@ -185,13 +170,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Bryan Reese
-  printing_id: '1'
   rarity: Fixed
   artist: Chris Seaman
   flavor_text: <i>"I know not why I have been chosen, but I will not fail."</i>
   collector_number: '44'
-- cardid: 172
-  title: Aikido Demonstration
+- title: Aikido Demonstration
   types:
   - Strategy
   decks:
@@ -205,13 +188,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"Size does not matter. Strength does not matter. Only leverage matters."</i>
   collector_number: '88'
-- cardid: 186
-  title: Akifumi
+- title: Akifumi
   types:
   - Personality
   decks:
@@ -231,14 +212,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Amandine LaBarre
   flavor_text: <i>"I have seen my share of fools, and my share of sages. If it is wisdom you seek, I shall
     tell you what little I know."</i>
   collector_number: '12'
-- cardid: 191
-  title: Akodo Anshiro
+- title: Akodo Anshiro
   types:
   - Personality
   decks:
@@ -267,14 +246,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Jim Werner
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Poole
   flavor_text: <i>"Our enemy does not understand. Ignore his flanking maneuver and continue. All will
     be as it should."</i>
   collector_number: '31'
-- cardid: 196
-  title: Akodo Bakin
+- title: Akodo Bakin
   types:
   - Personality
   decks:
@@ -301,13 +278,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Chris Fossum
-  printing_id: '1'
   rarity: Fixed
   artist: Michael Kaluta
   flavor_text: <i>"We are more than stones on a board. Each life has meaning and purpose."</i>
   collector_number: '32'
-- cardid: 235
-  title: Akodo Kuemon
+- title: Akodo Kuemon
   types:
   - Personality
   decks:
@@ -332,14 +307,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Joachim Gmoser
   flavor_text: <i>"He longs to seek Enlightenment, but knows that his duty must come first. He is the
     essence of all that is Akodo." - Akodo Setai</i>
   collector_number: '33'
-- cardid: 257
-  title: Akodo Natsu
+- title: Akodo Natsu
   types:
   - Personality
   decks:
@@ -364,14 +337,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Kevin Wasden
   flavor_text: <i>"These false paths will lead to ruin for all who seek them. Better to die a warrior's
     death than a fool's."</i>
   collector_number: '34'
-- cardid: 265
-  title: Akodo Rokuro
+- title: Akodo Rokuro
   types:
   - Personality
   decks:
@@ -396,14 +367,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Amandine LaBarre
   flavor_text: <i>"Enlightenment is the business of monks and priests!" he shouted. "We are soldiers!
     We need nothing but an enemy!"</i>
   collector_number: '35'
-- cardid: 523
-  title: Asahina Yoshino
+- title: Asahina Yoshino
   types:
   - Personality
   decks:
@@ -430,14 +399,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - David Winner
-  printing_id: '1'
   rarity: Fixed
   artist: Jason Engle
   flavor_text: <i>"There is more to Enlightenment than temples and contemplation. The world cannot be
     understood at a distance!"</i>
   collector_number: '19'
-- cardid: 587
-  title: Asako Takakazu
+- title: Asako Takakazu
   types:
   - Personality
   decks:
@@ -464,14 +431,12 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Heather V. Kreiter
   flavor_text: <i>"One cannot research one's way to Enlightenment, but if it were possible, Takakazu would
     be the first." - Asako Toshi</i>
   collector_number: '45'
-- cardid: 695
-  title: Banzai Cry
+- title: Banzai Cry
   types:
   - Strategy
   decks:
@@ -484,14 +449,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Ellis
   flavor_text: <i>"Now!" Matsu Yoshino screamed. "Now! Make them suffer for the death of our brothers!
     Of my father! Banzai!"</i>
   collector_number: '89'
-- cardid: 734
-  title: Bay of Green Coral
+- title: Bay of Green Coral
   types:
   - Region
   decks:
@@ -503,14 +466,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"A peaceful place. A place of beauty. Legend holds that the first Hantei spent a week
     here when searching for his bride."</i>
   collector_number: '80'
-- cardid: 737
-  title: Bayushi Adachi
+- title: Bayushi Adachi
   types:
   - Personality
   decks:
@@ -536,14 +497,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Eugene Earnshaw-Whyte
-  printing_id: '1'
   rarity: Fixed
   artist: April Lee
   flavor_text: <i>"Why would this Mystic go to such lengths to conceal his identity? What secrets does
     he hide?"</i>
   collector_number: '56'
-- cardid: 757
-  title: Bayushi Bokatsu
+- title: Bayushi Bokatsu
   types:
   - Personality
   decks:
@@ -572,12 +531,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Jacques Goldcher
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   collector_number: '57'
-- cardid: 812
-  title: Bayushi Kan
+- title: Bayushi Kan
   types:
   - Personality
   decks:
@@ -605,14 +562,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Savvas Themistocles
-  printing_id: '1'
   rarity: Fixed
   artist: April Lee
   flavor_text: <i>"She counters her inner darkness with outer light, and somehow finds balance in between."
     - Shosuro Maru</i>
   collector_number: '58'
-- cardid: 875
-  title: Bayushi Saya
+- title: Bayushi Saya
   types:
   - Personality
   decks:
@@ -638,14 +593,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Tim Wiinkainen
-  printing_id: '1'
   rarity: Fixed
   artist: Amandine LaBarre
   flavor_text: <i>"It is time for a new game, I think. Perhaps the Lion and the Unicorn will prove more
     interesting the second time."</i>
   collector_number: '59'
-- cardid: 886
-  title: Bayushi Shinzo
+- title: Bayushi Shinzo
   types:
   - Personality
   decks:
@@ -675,12 +628,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Walbert Ibarra
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '60'
-- cardid: 1088
-  title: Boisterous Soldiers
+- title: Boisterous Soldiers
   types:
   - Follower
   decks:
@@ -698,13 +649,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Slawomir Maniak
   flavor_text: <i>"Nothing like a quick drink to put you in the mood for a good scap, eh boys?"</i>
   collector_number: '110'
-- cardid: 1163
-  title: Brothers in Arms
+- title: Brothers in Arms
   types:
   - Follower
   decks:
@@ -726,13 +675,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"Only through the efforts of our loyal allies was the peasant rebellion thwarted." -
     Miya Hatori</i>
-- cardid: 1241
-  title: Cautious Escort
+- title: Cautious Escort
   types:
   - Strategy
   decks:
@@ -745,13 +692,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Ed Cox
   flavor_text: <i>"Stockpile every grain of rice you can," the Khan ordered.</i>
   collector_number: '90'
-- cardid: 1322
-  title: Chikka-tek
+- title: Chikka-tek
   types:
   - Personality
   decks:
@@ -775,14 +720,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Storn A. Cook
   flavor_text: <i>"When I take Enlightenment from humans, they pay much to get it back! Then all respect
     the One Tribe!"</i>
   collector_number: '51'
-- cardid: 1368
-  title: Chuda Ruri
+- title: Chuda Ruri
   types:
   - Personality
   decks:
@@ -809,12 +752,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Josh Griffis
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '62'
-- cardid: 1598
-  title: Curfew Declared
+- title: Curfew Declared
   types:
   - Event
   decks:
@@ -829,14 +770,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: John Donahue
   flavor_text: <i>"All loyal citizens shall remain in their homes after sunset, for their own protection."
     - Magistrate's Decree</i>
   collector_number: '2'
-- cardid: 1620
-  title: Daidoji Akagi
+- title: Daidoji Akagi
   types:
   - Personality
   decks:
@@ -864,12 +803,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Faber Van Kraanen
-  printing_id: '1'
   rarity: Fixed
   artist: Christopher Appel
   collector_number: '20'
-- cardid: 1676
-  title: Daidoji Setsuko
+- title: Daidoji Setsuko
   types:
   - Personality
   decks:
@@ -898,13 +835,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Tuomas Poikela
-  printing_id: '1'
   rarity: Fixed
   artist: Chris Seaman
   flavor_text: <i>"Certainty is truth. Purity of purpose is purity of spirit."</i>
   collector_number: '21'
-- cardid: 1716
-  title: Daigotsu Fumiaki
+- title: Daigotsu Fumiaki
   types:
   - Personality
   decks:
@@ -928,14 +863,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"I care nothing for your lies, Ruri!" he snarled. "I serve a god, and you serve yourself.
     Keep your distance or I shall end your blasphemy."</i>
   collector_number: '63'
-- cardid: 1770
-  title: Daigotsu Soetsu
+- title: Daigotsu Soetsu
   types:
   - Personality
   decks:
@@ -964,14 +897,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Sean Donnelly
-  printing_id: '1'
   rarity: Fixed
   artist: Jason Engle
   flavor_text: <i>"I understand well the pain of loss, Tanitsu-san," he said. "The question is how to
     channel that pain."</i>
   collector_number: '64'
-- cardid: 1981
-  title: Destined Enemies
+- title: Destined Enemies
   types:
   - Strategy
   decks:
@@ -986,13 +917,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Patrick McEvoy
   flavor_text: <i>"One day soon, little Lion. I will reunite you with your precious father." - Moto Chagatai</i>
   collector_number: '91'
-- cardid: 2048
-  title: Divining Pool
+- title: Divining Pool
   types:
   - Holding
   decks:
@@ -1005,14 +934,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"All the secrets of this world and beyond," Ruri whispered, "if only one has the courage
     to look."</i>
   collector_number: '6'
-- cardid: 2145
-  title: Doji Saori
+- title: Doji Saori
   types:
   - Personality
   decks:
@@ -1039,14 +966,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - LeAnn Dennis
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"Those who think duels are a method to 'honorably resolve disputes' are fools. Duels
     are the means to eliminate otherwise inconvenient opposition."</i>
   collector_number: '22'
-- cardid: 2150
-  title: Doji Seo
+- title: Doji Seo
   types:
   - Personality
   decks:
@@ -1074,12 +999,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Alexander Magoulas
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   collector_number: '25'
-- cardid: 2255
-  title: Eager Students
+- title: Eager Students
   types:
   - Holding
   decks:
@@ -1093,14 +1016,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"As eager to please as they are to learn. They scurry about like helpful little rabbits!"
     - Doji Seishiro</i>
   collector_number: '7'
-- cardid: 2291
-  title: Elemental Arrow
+- title: Elemental Arrow
   types:
   - Strategy
   decks:
@@ -1117,13 +1038,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: April Lee
   flavor_text: <i>"I could kill you easily," Akagi said, "but I have no wish to."</i>
   collector_number: '118'
-- cardid: 2358
-  title: Ep'kee
+- title: Ep'kee
   types:
   - Personality
   decks:
@@ -1151,12 +1070,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Joe Torrez
-  printing_id: '1'
   rarity: Fixed
   artist: David Esbri
   collector_number: '52'
-- cardid: 2514
-  title: Festival of Inari
+- title: Festival of Inari
   types:
   - Event
   decks:
@@ -1172,14 +1089,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"War or peace, all that matters to the peasants is that they have a harvest that pays
     taxes and feeds their children."</i>
   collector_number: '3'
-- cardid: 2692
-  title: Fragrant Waters
+- title: Fragrant Waters
   types:
   - Item
   decks:
@@ -1197,13 +1112,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"So wonderful, so relaxing. Does it not put you at ease?"</i>
   collector_number: '114'
-- cardid: 2757
-  title: Gaijin Writings
+- title: Gaijin Writings
   types:
   - Item
   decks:
@@ -1221,13 +1134,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Kevin Wasden
   flavor_text: <i>"These scrolls are bound with dead flesh! Disgusting!" - Miya Nishio</i>
   collector_number: '115'
-- cardid: 2800
-  title: Gift of Rice
+- title: Gift of Rice
   types:
   - Strategy
   decks:
@@ -1241,14 +1152,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   errata_text: Errata'd via the internet.
-  printing_id: '1'
   rarity: Fixed
   artist: Amandine LaBarre
   flavor_text: <i>"In times of war, it is easy for samurai to forget the peasants. A simple gift can win
     their loyalty." - Kokujin</i>
   collector_number: '92'
-- cardid: 2891
-  title: Gran-otik
+- title: Gran-otik
   types:
   - Personality
   decks:
@@ -1276,14 +1185,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Jan Ang
-  printing_id: '1'
   rarity: Fixed
   artist: Britt Martin
   flavor_text: <i>"To have no clan, a terrible thing. Still, Gran-otik will find no home until his spirit
     learns to rest." - K'mee</i>
   collector_number: '53'
-- cardid: 2972
-  title: Hard Pressed
+- title: Hard Pressed
   types:
   - Strategy
   decks:
@@ -1300,13 +1207,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Paul (Prof.) Herbert
   flavor_text: <i>The Nezumi hissed. "No-name humans die!" The ninja sneered. "I will not die to vermin."</i>
   collector_number: '93'
-- cardid: 3155
-  title: Hida Nari
+- title: Hida Nari
   types:
   - Personality
   decks:
@@ -1330,13 +1235,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Ellis
   flavor_text: <i>"Is this all there is for me? Is violence my only destiny?"</i>
   collector_number: '13'
-- cardid: 3188
-  title: Hida Sosuke
+- title: Hida Sosuke
   types:
   - Personality
   decks:
@@ -1364,13 +1267,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Paul Heaver
-  printing_id: '1'
   rarity: Fixed
   artist: Heather V. Kreiter
   flavor_text: <i>"The elements speak to me... of victory!" he laughed.</i>
   collector_number: '14'
-- cardid: 3191
-  title: Hida Sozen
+- title: Hida Sozen
   types:
   - Personality
   decks:
@@ -1398,14 +1299,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Kotei Winner - Jon Oakes
-  printing_id: '2'
   rarity: Fixed
   artist: Nate Barnes
   flavor_text: <i>"He left the Dragon because Enlightenment did not interest him. The irony was not lost
     upon him." - Kaiu Sugimoto</i>
   collector_number: '15'
-- cardid: 3313
-  title: Hiruma Oda
+- title: Hiruma Oda
   types:
   - Personality
   decks:
@@ -1433,12 +1332,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Andreas Stavropoulos
-  printing_id: '1'
   rarity: Fixed
   artist: Ben Peck
   collector_number: '16'
-- cardid: 3373
-  title: Hitomi Kazu
+- title: Hitomi Kazu
   types:
   - Personality
   decks:
@@ -1465,14 +1362,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Howard Hooven
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"He claims Lady Moon has opened his eyes. All I know is that he is more dangerous than
     ever." - Daidoji Kikaze</i>
   collector_number: '25'
-- cardid: 3471
-  title: Hoshi Masote
+- title: Hoshi Masote
   types:
   - Personality
   decks:
@@ -1500,13 +1395,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - John Seals
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"What happens when a man gains the only thing he desires?" - Mirumoto Mareshi</i>
   collector_number: '26'
-- cardid: 3620
-  title: Ikoma Kosaku
+- title: Ikoma Kosaku
   types:
   - Personality
   decks:
@@ -1532,13 +1425,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Chuck Lukacs
   flavor_text: <i>"I have no time for games. My calling is war!"</i>
   collector_number: '36'
-- cardid: 3777
-  title: Inspiring Leadership
+- title: Inspiring Leadership
   types:
   - Strategy
   decks:
@@ -1550,14 +1441,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Lisa Hunt
   flavor_text: <i>"Think for yourself!" Tawagoto encouraged. "Act on your own! Your will belongs to no
     one, despite what they may tell you!"</i>
   collector_number: '94'
-- cardid: 3848
-  title: Isawa Kimi
+- title: Isawa Kimi
   types:
   - Personality
   decks:
@@ -1584,13 +1473,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Bryan Reese
-  printing_id: '1'
   rarity: Fixed
   artist: Ed Cox
   flavor_text: <i>"When my day comes," Ningen smiled, "you shall stand in my place."</i>
   collector_number: '46'
-- cardid: 3896
-  title: Isawa Sawao
+- title: Isawa Sawao
   types:
   - Personality
   decks:
@@ -1618,14 +1505,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Bryan Reese
-  printing_id: '1'
   rarity: Fixed
   artist: Miguel Coimbra
   flavor_text: <i>"There can be no growth without loss, no healing without pain. All answers can be found
     within the flames."</i>
   collector_number: '47'
-- cardid: 3973
-  title: Itsume
+- title: Itsume
   types:
   - Personality
   decks:
@@ -1650,12 +1535,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Veronica V. Jones
   collector_number: '68'
-- cardid: 4007
-  title: Iuchi Umeka
+- title: Iuchi Umeka
   types:
   - Personality
   decks:
@@ -1684,12 +1567,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Aaron Boyhan
-  printing_id: '1'
   rarity: Fixed
   artist: Lisa Hunt
   collector_number: '74'
-- cardid: 4057
-  title: Journey's Beginning
+- title: Journey's Beginning
   types:
   - Strategy
   decks:
@@ -1702,13 +1583,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Llyn Hunter
   flavor_text: <i>"Go," the Khan ordered. "Return victorious, or not at all."</i>
   collector_number: '95'
-- cardid: 4058
-  title: Journey's End
+- title: Journey's End
   types:
   - Strategy
   decks:
@@ -1724,13 +1603,11 @@ cards:
   - Legacy
   - Modern
   errata_text: Tech erratum via Oracle.
-  printing_id: '1'
   rarity: Fixed
   artist: Llyn Hunter
   flavor_text: <i>"More Unicorn have been sighted, Yoshino-sama," Fujimaro reported. "What are your orders?"</i>
   collector_number: '96'
-- cardid: 4076
-  title: K'mee
+- title: K'mee
   types:
   - Personality
   decks:
@@ -1760,13 +1637,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Seng Huat Lim
-  printing_id: '1'
   rarity: Fixed
   artist: Jonathan Hunt
   flavor_text: <i>"Not all humans fools after all."</i>
   collector_number: '54'
-- cardid: 4114
-  title: Kaiu Haku
+- title: Kaiu Haku
   types:
   - Personality
   decks:
@@ -1791,13 +1666,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Miguel Coimbra
   flavor_text: <i>"Enlightenment means nothing. Duty is all I need."</i>
   collector_number: '17'
-- cardid: 4164
-  title: Kakita Funaki
+- title: Kakita Funaki
   types:
   - Personality
   decks:
@@ -1826,12 +1699,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Christian Zoli
-  printing_id: '1'
   rarity: Fixed
   artist: Ed Cox
   collector_number: '24'
-- cardid: 4536
-  title: Komori Junsaku
+- title: Komori Junsaku
   types:
   - Personality
   decks:
@@ -1851,14 +1722,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Patrick McEvoy
   flavor_text: <i>The Bat Clan are summoners of creatures and spirits. Their spirit allies carry a message
     across the Empire in days.</i>
   collector_number: '69'
-- cardid: 4581
-  title: Kuni Okichi
+- title: Kuni Okichi
   types:
   - Personality
   decks:
@@ -1886,13 +1755,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Lars Bodach
-  printing_id: '1'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>"He found secrets in the shadows, but what else?"</i>
   collector_number: '18'
-- cardid: 4628
-  title: Kyoso no Oni
+- title: Kyoso no Oni
   types:
   - Personality
   decks:
@@ -1922,12 +1789,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   story: 2006 Kotei Winner - Daniel Sales
-  printing_id: '2'
   rarity: Fixed
   artist: Steve Argyle
   collector_number: '65'
-- cardid: 4825
-  title: Mantle of Flame
+- title: Mantle of Flame
   types:
   - Spell
   decks:
@@ -1944,12 +1809,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Slawomir Maniak
   collector_number: '122'
-- cardid: 5075
-  title: Mirumoto Bokkai
+- title: Mirumoto Bokkai
   types:
   - Personality
   decks:
@@ -1977,12 +1840,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Brandon Flake
-  printing_id: '1'
   rarity: Fixed
   artist: Anthony Francisco
   collector_number: '27'
-- cardid: 5089
-  title: Mirumoto Gonkuro
+- title: Mirumoto Gonkuro
   types:
   - Personality
   decks:
@@ -2008,14 +1869,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Steve Fazio
-  printing_id: '1'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>Gonkuro charged at the Crane line, bellowing a war cry and laughing. He was outnumbered
     six to one, and yet he returned alone.</i>
   collector_number: '28'
-- cardid: 5092
-  title: Mirumoto Hakahime
+- title: Mirumoto Hakahime
   types:
   - Personality
   decks:
@@ -2041,14 +1900,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Jesus Mera
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Poole
   flavor_text: <i>"This 'Wanderer' is to be allowed to travel anywhere he wishes in Dragon lands, without
     restraint. How odd."</i>
   collector_number: '29'
-- cardid: 5223
-  title: Monastery Classroom
+- title: Monastery Classroom
   types:
   - Holding
   decks:
@@ -2060,14 +1917,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: John Donahue
   flavor_text: <i>"Is Enlightenment hidden atop some remote mountain? Or is it merely hiding in plain
     sight, where none of us look anymore?" - The Mystic</i>
   collector_number: '8'
-- cardid: 5247
-  title: Moshangoru
+- title: Moshangoru
   types:
   - Personality
   decks:
@@ -2095,13 +1950,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Stephen LaFolette
-  printing_id: '1'
   rarity: Fixed
   artist: Eric Lofgren
   flavor_text: <i>"I bring news, great Kyoso," the ogre rumbled. "News of a human called the Wanderer."</i>
   collector_number: '66'
-- cardid: 5250
-  title: Moshi Amika
+- title: Moshi Amika
   types:
   - Personality
   decks:
@@ -2129,12 +1982,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Richard Chan
-  printing_id: '1'
   rarity: Fixed
   artist: Franz Vohwinkel
   collector_number: '37'
-- cardid: 5268
-  title: Moshi Kekiesu
+- title: Moshi Kekiesu
   types:
   - Personality
   decks:
@@ -2161,13 +2012,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - David Campos
-  printing_id: '1'
   rarity: Fixed
   artist: Llyn Hunter
   flavor_text: <i>"She knows many frightening things," Sayoko mused. "Perhaps too many."</i>
   collector_number: '38'
-- cardid: 5296
-  title: Moto Akikazu
+- title: Moto Akikazu
   types:
   - Personality
   decks:
@@ -2196,13 +2045,11 @@ cards:
   - Legacy
   errata_text: Clarified that the ability's effect only refers to the targeted Personality.
   story: 2006 Kotei Winner - Sean Raycraft
-  printing_id: '1'
   rarity: Fixed
   artist: Anthony Grabski
   flavor_text: <i>"Death awaits within the heart of a ruby."</i>
   collector_number: '75'
-- cardid: 5366
-  title: Moto Rumiko
+- title: Moto Rumiko
   types:
   - Personality
   decks:
@@ -2231,12 +2078,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Aaron Boyhan
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   collector_number: '76'
-- cardid: 5438
-  title: Muketsu
+- title: Muketsu
   types:
   - Personality
   decks:
@@ -2262,13 +2107,11 @@ cards:
   - Legacy
   - Modern
   - Race for the Throne (Samurai)
-  printing_id: '2'
   rarity: Fixed
   artist: Chris Seaman
   flavor_text: <i>"Do you think you understand pain, demon? You know nothing. Let me enlighten you."</i>
   collector_number: '67'
-- cardid: 5472
-  title: Mystic Waterfall
+- title: Mystic Waterfall
   types:
   - Holding
   decks:
@@ -2280,13 +2123,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"Would that I had such freedom." - The Wanderer</i>
   collector_number: '9'
-- cardid: 5496
-  title: Nagisa
+- title: Nagisa
   types:
   - Personality
   decks:
@@ -2305,14 +2146,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Britt Martin
   flavor_text: <i>"I am on warrior pilgramage, my friend. Kindly stand out of my way, or shall be my next
     test."</i>
   collector_number: '70'
-- cardid: 5878
-  title: Partake of the Fire
+- title: Partake of the Fire
   types:
   - Spell
   decks:
@@ -2327,14 +2166,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Patrick McEvoy
   flavor_text: <i>"It smells like poison. The morning after you drink it, it feels like poison as well."
     - Yoritomo Iongi</i>
   collector_number: '123'
-- cardid: 6122
-  title: Qolsa
+- title: Qolsa
   types:
   - Personality
   decks:
@@ -2358,14 +2195,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"A second Constrictor has awakened!" Akasha said breathlessly. "After so long with so
     few, what can this mean for the Naga?"</i>
   collector_number: '43'
-- cardid: 6207
-  title: Reckless Charge
+- title: Reckless Charge
   types:
   - Strategy
   decks:
@@ -2379,14 +2214,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"The front line shall break their defenses. You shall stand with your fathers in Yomi
     tonight!" - Matsu Yoshino</i>
   collector_number: '97'
-- cardid: 6388
-  title: Rosoku Sensei
+- title: Rosoku Sensei
   types:
   - Sensei
   decks:
@@ -2401,13 +2234,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   errata_text: Errata'd via internet August 30th, 2006
-  printing_id: '1'
   rarity: Fixed
   artist: Ed Cox
   flavor_text: <i>"Is his legacy a blessing or a curse?" - Asahina Sekawa</i>
   collector_number: '121'
-- cardid: 6436
-  title: Sacred Hillside
+- title: Sacred Hillside
   types:
   - Region
   decks:
@@ -2419,14 +2250,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Amandine LaBarre
   flavor_text: <i>"An honest man was once blessed by the Fortunes here. Many seek to honor his memory.
     Reverence, or greed?" - The Ronin</i>
   collector_number: '81'
-- cardid: 6560
-  title: Seeking Enlightenment
+- title: Seeking Enlightenment
   types:
   - Event
   decks:
@@ -2440,13 +2269,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"You are not who you claim to be, human," the Naga said, "but your quest is pure."</i>
   collector_number: '4'
-- cardid: 6747
-  title: Shiba Denbe
+- title: Shiba Denbe
   types:
   - Personality
   decks:
@@ -2474,13 +2301,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - regan O'Niell
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"I fear his discoveries may have shaken his mind." - Shiba Danjuro</i>
   collector_number: '48'
-- cardid: 6833
-  title: Shiba Yoshimi
+- title: Shiba Yoshimi
   types:
   - Personality
   decks:
@@ -2510,12 +2335,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Jeff Hardee
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Poole
   collector_number: '49'
-- cardid: 6961
-  title: Shinjo Wei
+- title: Shinjo Wei
   types:
   - Personality
   decks:
@@ -2544,13 +2367,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Galuleu Paolo
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>"The Khan prepares for a second offensive, Lord Shono," Wei said. "What are your orders?"</i>
   collector_number: '77'
-- cardid: 7096
-  title: Shosuro Dazai
+- title: Shosuro Dazai
   types:
   - Personality
   decks:
@@ -2577,13 +2398,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Matthew Maddocks
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"The spirits whisper to me truths about these 'Wanderers'. Interesting truths indeed!"</i>
   collector_number: '61'
-- cardid: 7278
-  title: Sisters of the Elements
+- title: Sisters of the Elements
   types:
   - Follower
   decks:
@@ -2609,13 +2428,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Lisa Hunt
   flavor_text: <i>"A small order, but wise." - Tanrai</i>
   collector_number: '112'
-- cardid: 7315
-  title: Snow-Blocked Pass
+- title: Snow-Blocked Pass
   types:
   - Region
   decks:
@@ -2627,14 +2444,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"The other clans have become accustomed to winter crippling their wars. They allow their
     guard to drop." - Moto Chagatai</i>
   collector_number: '82'
-- cardid: 7548
-  title: Strength of the Crab
+- title: Strength of the Crab
   types:
   - Strategy
   decks:
@@ -2646,13 +2461,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>Duty.</i>
   collector_number: '98'
-- cardid: 7549
-  title: Strength of the Crane
+- title: Strength of the Crane
   types:
   - Strategy
   decks:
@@ -2664,13 +2477,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: April Lee
   flavor_text: <i>Perfection.</i>
   collector_number: '99'
-- cardid: 7552
-  title: Strength of the Dragon
+- title: Strength of the Dragon
   types:
   - Strategy
   decks:
@@ -2683,13 +2494,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>Wisdom.</i>
   collector_number: '100'
-- cardid: 7555
-  title: Strength of the Lion
+- title: Strength of the Lion
   types:
   - Strategy
   decks:
@@ -2701,13 +2510,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Chris Seaman
   flavor_text: <i>Tradition.</i>
   collector_number: '101'
-- cardid: 7556
-  title: Strength of the Mantis
+- title: Strength of the Mantis
   types:
   - Strategy
   decks:
@@ -2719,13 +2526,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Anthony Grabski
   flavor_text: <i>Ingenuity.</i>
   collector_number: '102'
-- cardid: 7558
-  title: Strength of the Nezumi
+- title: Strength of the Nezumi
   types:
   - Strategy
   decks:
@@ -2737,13 +2542,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Corene Werhane
   flavor_text: <i>Survival.</i>
   collector_number: '104'
-- cardid: 7559
-  title: Strength of the Phoenix
+- title: Strength of the Phoenix
   types:
   - Strategy
   decks:
@@ -2755,13 +2558,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Ed Cox
   flavor_text: <i>Knowledge.</i>
   collector_number: '103'
-- cardid: 7560
-  title: Strength of the Scorpion
+- title: Strength of the Scorpion
   types:
   - Strategy
   decks:
@@ -2774,13 +2575,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: April Lee
   flavor_text: <i>Secrets.</i>
   collector_number: '105'
-- cardid: 7561
-  title: Strength of the Shadowlands
+- title: Strength of the Shadowlands
   types:
   - Strategy
   decks:
@@ -2794,13 +2593,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>Fear.</i>
   collector_number: '106'
-- cardid: 7563
-  title: Strength of the Unicorn
+- title: Strength of the Unicorn
   types:
   - Strategy
   decks:
@@ -2812,13 +2609,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Steve Argyle
   flavor_text: <i>Mobility.</i>
   collector_number: '107'
-- cardid: 7643
-  title: Sumotori Arena
+- title: Sumotori Arena
   types:
   - Holding
   decks:
@@ -2832,13 +2627,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Chuck Lukacs
   flavor_text: <i>In such uncertain times, diversion for the masses is extremely important.</i>
   collector_number: '10'
-- cardid: 7854
-  title: Teaching Stick
+- title: Teaching Stick
   types:
   - Item
   decks:
@@ -2855,12 +2648,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Britt Martin
   collector_number: '116'
-- cardid: 7920
-  title: Test of Enlightenment
+- title: Test of Enlightenment
   types:
   - Strategy
   decks:
@@ -2874,13 +2665,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Poole
   flavor_text: <i>"Tell me what you've learned," the Wanderer said. Sawao smiled. "I can only show you."</i>
   collector_number: '108'
-- cardid: 8015
-  title: The Darkened Path
+- title: The Darkened Path
   types:
   - Strategy
   decks:
@@ -2898,13 +2687,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Franz Vohwinkel
   flavor_text: <i>"What's the matter beast? Do you fear yourself?" Kokujin laughed.</i>
   collector_number: '119'
-- cardid: 8034
-  title: The Dragons' Talons
+- title: The Dragons' Talons
   types:
   - Spell
   decks:
@@ -2921,13 +2708,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"I do not wish to harm you," Miyoshi said. "Please, come no farther."</i>
   collector_number: '124'
-- cardid: 8230
-  title: The Mystic
+- title: The Mystic
   types:
   - Personality
   decks:
@@ -2954,12 +2739,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Michael Komarck
   collector_number: '71'
-- cardid: 8287
-  title: The Ronin
+- title: The Ronin
   types:
   - Personality
   decks:
@@ -2986,12 +2769,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Michael Komarck
   collector_number: '72'
-- cardid: 8412
-  title: The Wanderer
+- title: The Wanderer
   types:
   - Personality
   decks:
@@ -3016,12 +2797,10 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Michael Komarck
   collector_number: '73'
-- cardid: 8424
-  title: The Way of Will
+- title: The Way of Will
   types:
   - Strategy
   decks:
@@ -3036,14 +2815,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Ed Cox
   flavor_text: <i>"The enlightened soul can be harnessed and used as a weapon. But what price does a soul
     pay for such squandered potential?"</i>
   collector_number: '120'
-- cardid: 8561
-  title: Togashi Nyima
+- title: Togashi Nyima
   types:
   - Personality
   decks:
@@ -3070,13 +2847,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Michael Habel
-  printing_id: '1'
   rarity: Fixed
   artist: Joachim Gmoser
   flavor_text: <i>"Rage and brutality are weaknesses."</i>
   collector_number: '30'
-- cardid: 8816
-  title: Tsuruchi Arishia
+- title: Tsuruchi Arishia
   types:
   - Personality
   decks:
@@ -3105,13 +2880,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Richard Chan
-  printing_id: '1'
   rarity: Fixed
   artist: Franz Vohwinkel
   flavor_text: <i>"End battles quickly, decisively. That is how we preserve lives."</i>
   collector_number: '39'
-- cardid: 8891
-  title: Tsuruchi Terao
+- title: Tsuruchi Terao
   types:
   - Personality
   decks:
@@ -3137,13 +2910,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Jack Eddy
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Poole
   flavor_text: <i>"Death?" he laughed. "Death only comes for those who fear it!"</i>
   collector_number: '40'
-- cardid: 8905
-  title: Tuftuf Sake House
+- title: Tuftuf Sake House
   types:
   - Holding
   decks:
@@ -3160,13 +2931,11 @@ cards:
   - Legacy
   notes: The effects of giving Shadowlands and dishonoring the Personality occur immediately after the
     Gold is produced, before the Personality enters play.
-  printing_id: '1'
   rarity: Fixed
   artist: Drew Baker
   flavor_text: <i>"Black Water Sake is the finest in all the land!"</i>
   collector_number: '11'
-- cardid: 8970
-  title: Unexpected Find
+- title: Unexpected Find
   types:
   - Strategy
   decks:
@@ -3181,13 +2950,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   errata_text: Eratta'd via internet
-  printing_id: '1'
   rarity: Fixed
   artist: Britt Martin
   flavor_text: <i>"Humans think these very valuable. We trade for lots of treasures with these."</i>
   collector_number: '109'
-- cardid: 9076
-  title: Utaku Keyo
+- title: Utaku Keyo
   types:
   - Personality
   decks:
@@ -3217,13 +2984,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Francisco Briano
-  printing_id: '1'
   rarity: Fixed
   artist: Edwin David
   flavor_text: <i>"More death, more war, more suffering." She looked to the stars. "Guide me, Kamoko-sama."</i>
   collector_number: '78'
-- cardid: 9104
-  title: Utaku Tarako
+- title: Utaku Tarako
   types:
   - Personality
   decks:
@@ -3254,12 +3019,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Frederic Capbert
-  printing_id: '1'
   rarity: Fixed
   artist: Ed Cox
   collector_number: '79'
-- cardid: 9201
-  title: Wanderers Revealed
+- title: Wanderers Revealed
   types:
   - Event
   decks:
@@ -3271,14 +3034,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Michael Komarck
   flavor_text: <i>"The time has come to put aside deception," Naseru said. "I cannot find what I seek
     with a lie."</i>
   collector_number: '5'
-- cardid: 9204
-  title: Wandering Pilgrim
+- title: Wandering Pilgrim
   types:
   - Follower
   decks:
@@ -3297,13 +3058,11 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Thomas Denmark
   flavor_text: <i>"A bowl of soup is all the thanks I need, friend Dragon."</i>
   collector_number: '113'
-- cardid: 9407
-  title: Writ of the Elements
+- title: Writ of the Elements
   types:
   - Item
   decks:
@@ -3319,14 +3078,12 @@ cards:
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Mark Poole
   flavor_text: <i>"They hold great power, if you are but willing to spend your entire life learning their
     secrets."</i>
   collector_number: '117'
-- cardid: 9535
-  title: Yoritomo Chimori
+- title: Yoritomo Chimori
   types:
   - Personality
   decks:
@@ -3352,14 +3109,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Eric Gardiner
-  printing_id: '1'
   rarity: Fixed
   artist: Jonathan Hunt
   flavor_text: <i>"The Empire believed him dead. In his second life, perhaps he will find something he
     believes in." - Komori</i>
   collector_number: '41'
-- cardid: 9567
-  title: Yoritomo Iongi
+- title: Yoritomo Iongi
   types:
   - Personality
   decks:
@@ -3386,13 +3141,11 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Juan Palomo
-  printing_id: '1'
   rarity: Fixed
   artist: John Donahue
   flavor_text: <i>"I free others from the burden of possessions, that they might find understanding."</i>
   collector_number: '42'
-- cardid: 9699
-  title: Z'chkir
+- title: Z'chkir
   types:
   - Personality
   decks:
@@ -3419,7 +3172,6 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   story: 2006 Kotei Winner - Grzegorz Rak
-  printing_id: '2'
   rarity: Fixed
   artist: Veronica V. Jones
   flavor_text: <i>"One day, other tribes understand what Third Whisker seeking all these Yesterdays. That

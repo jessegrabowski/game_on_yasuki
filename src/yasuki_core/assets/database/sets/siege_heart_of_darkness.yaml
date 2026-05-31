@@ -1,257 +1,22 @@
 set: 'Siege: Heart of Darkness'
 cards:
-- cardid: 12024
-  title: Hour of the Boar
+- title: Artisan District
   types:
-  - Clock
+  - Territory
   decks:
   - Other
-  text: 1- Fear effects targeting Human cards have +2 strength. <br>6- Fear effects may target Human Personalities
-    with Followers.<br>10- After any Fear effect bows a Human card, destroy it.
-  printing_id: '1'
+  text: <i>(Cannot be destroyed.)</i> <b>Political Open:</b> Bow your target unbowed Personality. Gain
+    Political Tokens equal to his Personal Honor. <i>(Only one Rokugani player may use this ability per
+    turn.)</i><br><i>(The Military District may now be destroyed. All Rokugani players destroy their leftmost
+    Province.)</i>
+  province_strength: 10
   rarity: Fixed
   artist: Conceptopolis
-  flavor_text: <i>"The boar was the last to finish the race. 'Where is Cat?' he wondered. 'Surely I have
-    not beaten him?' Rat laughed, 'I told him the race was tomorrow!'" <br>- The Great Race XII</i>
-  collector_number: '1'
-- cardid: 12025
-  title: Hour of the Dog
-  types:
-  - Clock
-  decks:
-  - Other
-  text: 1- The first Forest you bring into play enters play for 2 less Gold.<br>4- Your Forests have +1GP.<br>9-
-    Your Forests have <b>Destined </b>and after they enter play from a Province, it refills face-up.
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Dog nearly did not finish; he was distracted by the river and had paused to play in
-    the waters." - The Great Race XI</i>
+  flavor_text: <i>Adjacent to the Peasant District, the Artisan District was among the most vibrant in
+    the city. During the prior invasion, the people here were mostly relaxed. Every samurai valued artisans,
+    after all…</i>
   collector_number: '2'
-- cardid: 12026
-  title: Hour of the Dragon
-  types:
-  - Clock
-  decks:
-  - Other
-  text: '1- <b>Repeatable Battle:</b> Bow your target unbowed Naga. Melee Attack equal to his Force. <br>4-
-    :Rank: is increased by 1.<br>10- Your Followers have +1F and your Personalities have +1F/+1C.'
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Dragon would have won the race, but he spotted a drought parching the lands and stopped
-    partway to summon rain." - The Great Race V</i>
-  collector_number: '3'
-- cardid: 12027
-  title: Hour of the Goat
-  types:
-  - Clock
-  decks:
-  - Other
-  text: '1- Draw a card.<br>4- Each Rokugani player discards a random card.<br>9- Draw :Rank-1: cards.'
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Goat arrived at the head of a raft, Monkey and Rooster beside him. They'd worked together
-    to reach the other side." - The Great Race VIII</i>
-  collector_number: '4'
-- cardid: 12028
-  title: Hour of the Hare
-  types:
-  - Clock
-  decks:
-  - Other
-  text: 1- After your Stronghold creates Warriors, create one more.<br>5- Your Warriors have +1F/+1C.<br>10-
-    <b>Repeatable Battle:</b> Bow your target unbowed Warrior. Move your target Personality at any location
-    to this battlefield.
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Hare was the fourth to finish the great race. He arrived just in time to bow to Amaterasu,
-    who smiled upon him and brushed his fur dry." - The Great Race IV</i>
-  collector_number: '5'
-- cardid: 12029
-  title: Hour of the Horse
-  types:
-  - Clock
-  decks:
-  - Other
-  text: '1- Your Stronghold has +2GP. <br>5- Negate the first effect each turn that moves a Naga out of
-    the battle.<br>11- :Rank: is increased by 1.'
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Amaterasu felt sorry for Horse, who should have placed sixth. She gave him the speed
-    of the wind, so that he might be faster." - The Great Race VII</i>
-  collector_number: '6'
-- cardid: 12030
-  title: Hour of the Monkey
-  types:
-  - Clock
-  decks:
-  - Other
-  text: 1- Choose a Clock card in the discard pile. This card copies all its traits and abilities <i>(resolving
-    each Threat Level as appropriate)</i>.
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Monkey crossed after Goat, laughing as he did. One by one, he imitated all of the others
-    for the goddess' amusement. 'How are you so sure I did not cross before now?' he joked." - The Great
-    Race IX</i>
-  collector_number: '7'
-- cardid: 12031
-  title: Hour of the Ox
-  types:
-  - Clock
-  decks:
-  - Other
-  text: 1- Search your Fate deck for The Akasha. Show it and put it in your hand.<br>5- Fear effects,
-    Melee Attacks, and Ranged Attacks targeting your Naga have -2 strength.<br>9- Melee and Ranged attacks
-    bow Naga instead of destroying them.
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Ox was next to reach the shore, for he was the strongest swimmer. He thought he'd won
-    the race, until Rat leapt off of his back." - The Great Race II</i>
-  collector_number: '8'
-- cardid: 12032
-  title: Hour of the Rat
-  types:
-  - Clock
-  decks:
-  - Other
-  text: '1- Remove all text from intact, non-Imperial Districts.<br>6- Remove all abilities from :Rank:
-    target attachments.<br>9- Remove :Rank: abilities from cards until your next turn begins.'
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"To gain the favor of heaven, the animals held a race across the river. Rat secretly
-    rode on Ox's back; he was first to cross and bow to Onnotangu." - The Great Race I</i>
-  collector_number: '9'
-- cardid: 12033
-  title: Hour of the Rooster
-  types:
-  - Clock
-  decks:
-  - Other
-  text: 1- You may use the Cycle ability an extra time, even if it is not the first turn. <br>4- <b>Open,
-    [*]:</b> You may search through your discard pile and Dynasty deck and Recruit a Unique Personality
-    found there <i>(triggering your Stronghold as usual)</i>.<br>11- You may Recruit as an Open action.
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Rooster interrupted Monkey's jests with a crow. Onnotangu blessed him, pleased by the
-    silence that followed." - The Great Race X</i>
-  collector_number: '10'
-- cardid: 12034
-  title: Hour of the Serpent
-  types:
-  - Clock
-  decks:
-  - Other
-  text: <i>(This is always the last card of the deck and cannot be discarded.)</i><br>12- Recruit the
-    Dark Naga from outside the game <i>(triggering your Stronghold as usual)</i>. Before this turn ends,
-    you lose the game.
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Snake clung to Horse's leg, startling him with a hiss. When he crossed he was the sixth,
-    and the others gave him wide berth." - The Great Race VI</i>
-  collector_number: '11'
-- cardid: 12035
-  title: Hour of the Tiger
-  types:
-  - Clock
-  decks:
-  - Other
-  text: 1- Each Rokugani player discards a card. <br>6- Each Rokugani player discards a card. <br>11-
-    Each Rokugani player discards a card.
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Tiger was the third to finish the great race. Neither Sun nor Moon witnessed his arrival."
-    - The Great Race III</i>
-  collector_number: '12'
-- cardid: 12036
-  title: Breeding Grounds
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Forest
-  text: <b>:bow::</b> Produce 2 Gold; if this pays for a single Nonhuman Personality, refill the Province
-    it comes from face-up.
-  gold_cost: 2
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>The Naga suddenly swarmed out from the heart of the forest, ready to destroy the Foul.
-    They joined arms with the samurai of Rokugan as they faced the ancient enemy.</i>
-  collector_number: '13'
-- cardid: 12037
-  title: Clutch of Eggs
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Forest
-  text: <b>:bow::</b> Produce 2 Gold.<br><b>:bow::</b> Produce 3 Gold which can only pay for a single
-    Nonhuman.
-  gold_cost: 2
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"Quick, Dairu-san! Down here!" <br>"How remarkable, Toshimo. Your clumsiness has led
-    us to another dank part of this miserable forest."</i>
-  collector_number: '14'
-- cardid: 12038
-  title: Pearl Cache
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Forest
-  - Pearl
-  text: Cannot be destroyed. Other player's effects will not discard cards from your hand, and focusing
-    is always optional for you. Negate all Force penalties that come from a single source and affect three
-    or more Nonhuman Personalities.<br><b>:bow::</b> Produce 4 Gold.
-  gold_cost: 4
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>Only a fool would attempt to steal from the Naga, yet their sanctuaries are littered
-    with the bones of those who tried.</i>
-  collector_number: '15'
-- cardid: 12039
-  title: Treacherous Growth
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Forest
-  text: After you Recruit this Holding from a Province, refill the Province face-up.<br><b>:bow::</b>
-    Produce 2 Gold.
-  gold_cost: 2
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"The Dark Naga are not finished, my lord. We must stand together and fight now, lest
-    the threat grows beyond our skill to defeat it." - misplaced scroll</i>
-  collector_number: '16'
-- cardid: 12040
-  title: Askett
+- title: Askett
   types:
   - Personality
   decks:
@@ -268,14 +33,36 @@ cards:
   personal_honor: 0
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>"My own race cast me aside, for I was imperfect. Shahismael asks only that I serve,
     and that I am of the serpent. The latter I am thankfully, the former I shall do with relish."</i>
   collector_number: '17'
-- cardid: 12041
-  title: Asp Warrior
+- title: Asp Spear
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Reserve
+  - Weapon
+  - Naga
+  - Spear
+  - Two-Handed
+  text: Will only attach to a Naga. This Personality uses his Force as his duel stat.<br><b>Battle, :bow::</b>
+    Melee 3 Attack.<br><b>Tireless Battle:</b> Ranged 3 Attack. Discard this Item. Put it into your hand
+    before the turn ends.
+  gold_cost: 4
+  focus: 3
+  force: '+3'
+  chi: '+1'
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"A grand weapon. Grander still when tempered with the blood of mammals."</i>
+  collector_number: '27'
+- title: Asp Warrior
   types:
   - Proxy
   decks:
@@ -293,12 +80,453 @@ cards:
   is_proxy: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   collector_number: '38'
-- cardid: 12042
-  title: The Dark Naga, the Heart of Darkness
+- title: Baseless Rage
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target a Personality. He flees in terror. Move him home.<br><b>Unstoppable Battle:</b>
+    Destroy your target Warrior. Move home one or two target Personalities.<br><b>Battle:</b> Melee :Rank:
+    Attack.'
+  focus: 2
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  collector_number: '29'
+- title: Breeding Grounds
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Forest
+  text: <b>:bow::</b> Produce 2 Gold; if this pays for a single Nonhuman Personality, refill the Province
+    it comes from face-up.
+  gold_cost: 2
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>The Naga suddenly swarmed out from the heart of the forest, ready to destroy the Foul.
+    They joined arms with the samurai of Rokugan as they faced the ancient enemy.</i>
+  collector_number: '13'
+- title: Brutal Strike
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Melee :Rank: Attack.<br><b>Unstoppable Battle:</b> Destroy your target Warrior.
+    One or two Melee 3 Attacks.<br><b>Interrupt:</b> Give each Melee or Ranged Attack +3 or -3 strength.'
+  focus: 1
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>His tail, he suddenly realized. It allowed the Naga to react unlike any human. The thought
+    was no comfort to him as he died.</i>
+  collector_number: '30'
+- title: Clutch of Eggs
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Forest
+  text: <b>:bow::</b> Produce 2 Gold.<br><b>:bow::</b> Produce 3 Gold which can only pay for a single
+    Nonhuman.
+  gold_cost: 2
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Quick, Dairu-san! Down here!" <br>"How remarkable, Toshimo. Your clumsiness has led
+    us to another dank part of this miserable forest."</i>
+  collector_number: '14'
+- title: Corrupted Wildlife
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Expendable
+  - Reserve
+  - Naga
+  - Nonhuman
+  text: Will only attach to a Naga.<br><b>Battle:</b> Melee 3 Attack.
+  gold_cost: 4
+  focus: 2
+  force: 3
+  chi: 0
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Such a glorious place," the Dark Naga gloated, "filled with all manner of horrors eager
+    to bend to my most inevitable will."</i>
+  collector_number: '26'
+- title: Cursed Resolve
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Interrupt:</b> Destroy your target unbowed Warrior. Negate the action's effects.<br><b>Unstoppable
+    Battle:</b> Bow one or more of your target unbowed Warriors. Destroy a target enemy unit with a number
+    of cards in it equal to the number of Warriors you bowed. If you now have two or less cards in your
+    hand, you may destroy the targeted Warriors.
+  focus: 3
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>The Dark Naga leads an army. His determination would never allow anything less.</i>
+  collector_number: '31'
+- title: Gathering
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Engage:</b> You have the first opportunity to take a Battle action. Create a 2F/2C/0PH <b>Naga
+    • Nonhuman • Warrior</b> Personality.<br><b>Unstoppable Battle:</b> Destroy your target Warrior. Create
+    two 2F/2C/0PH <b>Naga • Nonhuman • Warrior</b> Personalities.
+  focus: 4
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"We need not be alone any longer, my brothers," he hissed. The shard floated in front
+    of him, and suddenly he could sense the minds of his brothers pushing into his thoughts.</i>
+  collector_number: '32'
+- title: Hour of the Boar
+  types:
+  - Clock
+  decks:
+  - Other
+  text: 1- Fear effects targeting Human cards have +2 strength. <br>6- Fear effects may target Human Personalities
+    with Followers.<br>10- After any Fear effect bows a Human card, destroy it.
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"The boar was the last to finish the race. 'Where is Cat?' he wondered. 'Surely I have
+    not beaten him?' Rat laughed, 'I told him the race was tomorrow!'" <br>- The Great Race XII</i>
+  collector_number: '1'
+- title: Hour of the Dog
+  types:
+  - Clock
+  decks:
+  - Other
+  text: 1- The first Forest you bring into play enters play for 2 less Gold.<br>4- Your Forests have +1GP.<br>9-
+    Your Forests have <b>Destined </b>and after they enter play from a Province, it refills face-up.
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Dog nearly did not finish; he was distracted by the river and had paused to play in
+    the waters." - The Great Race XI</i>
+  collector_number: '2'
+- title: Hour of the Dragon
+  types:
+  - Clock
+  decks:
+  - Other
+  text: '1- <b>Repeatable Battle:</b> Bow your target unbowed Naga. Melee Attack equal to his Force. <br>4-
+    :Rank: is increased by 1.<br>10- Your Followers have +1F and your Personalities have +1F/+1C.'
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Dragon would have won the race, but he spotted a drought parching the lands and stopped
+    partway to summon rain." - The Great Race V</i>
+  collector_number: '3'
+- title: Hour of the Goat
+  types:
+  - Clock
+  decks:
+  - Other
+  text: '1- Draw a card.<br>4- Each Rokugani player discards a random card.<br>9- Draw :Rank-1: cards.'
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Goat arrived at the head of a raft, Monkey and Rooster beside him. They'd worked together
+    to reach the other side." - The Great Race VIII</i>
+  collector_number: '4'
+- title: Hour of the Hare
+  types:
+  - Clock
+  decks:
+  - Other
+  text: 1- After your Stronghold creates Warriors, create one more.<br>5- Your Warriors have +1F/+1C.<br>10-
+    <b>Repeatable Battle:</b> Bow your target unbowed Warrior. Move your target Personality at any location
+    to this battlefield.
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Hare was the fourth to finish the great race. He arrived just in time to bow to Amaterasu,
+    who smiled upon him and brushed his fur dry." - The Great Race IV</i>
+  collector_number: '5'
+- title: Hour of the Horse
+  types:
+  - Clock
+  decks:
+  - Other
+  text: '1- Your Stronghold has +2GP. <br>5- Negate the first effect each turn that moves a Naga out of
+    the battle.<br>11- :Rank: is increased by 1.'
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Amaterasu felt sorry for Horse, who should have placed sixth. She gave him the speed
+    of the wind, so that he might be faster." - The Great Race VII</i>
+  collector_number: '6'
+- title: Hour of the Monkey
+  types:
+  - Clock
+  decks:
+  - Other
+  text: 1- Choose a Clock card in the discard pile. This card copies all its traits and abilities <i>(resolving
+    each Threat Level as appropriate)</i>.
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Monkey crossed after Goat, laughing as he did. One by one, he imitated all of the others
+    for the goddess' amusement. 'How are you so sure I did not cross before now?' he joked." - The Great
+    Race IX</i>
+  collector_number: '7'
+- title: Hour of the Ox
+  types:
+  - Clock
+  decks:
+  - Other
+  text: 1- Search your Fate deck for The Akasha. Show it and put it in your hand.<br>5- Fear effects,
+    Melee Attacks, and Ranged Attacks targeting your Naga have -2 strength.<br>9- Melee and Ranged attacks
+    bow Naga instead of destroying them.
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Ox was next to reach the shore, for he was the strongest swimmer. He thought he'd won
+    the race, until Rat leapt off of his back." - The Great Race II</i>
+  collector_number: '8'
+- title: Hour of the Rat
+  types:
+  - Clock
+  decks:
+  - Other
+  text: '1- Remove all text from intact, non-Imperial Districts.<br>6- Remove all abilities from :Rank:
+    target attachments.<br>9- Remove :Rank: abilities from cards until your next turn begins.'
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"To gain the favor of heaven, the animals held a race across the river. Rat secretly
+    rode on Ox's back; he was first to cross and bow to Onnotangu." - The Great Race I</i>
+  collector_number: '9'
+- title: Hour of the Rooster
+  types:
+  - Clock
+  decks:
+  - Other
+  text: 1- You may use the Cycle ability an extra time, even if it is not the first turn. <br>4- <b>Open,
+    [*]:</b> You may search through your discard pile and Dynasty deck and Recruit a Unique Personality
+    found there <i>(triggering your Stronghold as usual)</i>.<br>11- You may Recruit as an Open action.
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Rooster interrupted Monkey's jests with a crow. Onnotangu blessed him, pleased by the
+    silence that followed." - The Great Race X</i>
+  collector_number: '10'
+- title: Hour of the Serpent
+  types:
+  - Clock
+  decks:
+  - Other
+  text: <i>(This is always the last card of the deck and cannot be discarded.)</i><br>12- Recruit the
+    Dark Naga from outside the game <i>(triggering your Stronghold as usual)</i>. Before this turn ends,
+    you lose the game.
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Snake clung to Horse's leg, startling him with a hiss. When he crossed he was the sixth,
+    and the others gave him wide berth." - The Great Race VI</i>
+  collector_number: '11'
+- title: Hour of the Tiger
+  types:
+  - Clock
+  decks:
+  - Other
+  text: 1- Each Rokugani player discards a card. <br>6- Each Rokugani player discards a card. <br>11-
+    Each Rokugani player discards a card.
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"Tiger was the third to finish the great race. Neither Sun nor Moon witnessed his arrival."
+    - The Great Race III</i>
+  collector_number: '12'
+- title: Imperial District
+  types:
+  - Territory
+  decks:
+  - Other
+  text: <i>(Cannot be destroyed.)</i> Rokugani players ignore Honor Requirements. After a player Enlightens,
+    discard a Clock Card. Each Rokugani player has the abilities, "<b>Battle:</b> Move your target Personality
+    at a District to the Imperial District" and "<b>Dynasty:</b> Discard [Rank10] <i>(10 per player)</i>
+    Political Tokens to discard the Clock Deck's top card."<br><i>(The Rokugani players lose the game.)</i>
+  province_strength: 15
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>The highest seat of power in the untamed lands. A crucible of order and control.</i>
+  collector_number: '6'
+- title: Inevitability
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Interrupt:</b> Negate an Event''s effects. Draw a card.<br><b>Battle:</b> Destroy a target
+    attachment or Terrain.<br><b>Unstoppable Battle:</b> Destroy your target Warrior. Give :Rank: target
+    enemy Personalities or Followers -3F.'
+  focus: 4
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>It hurt to be in his presence. The Akasha wailed in pain.</i>
+  collector_number: '33'
+- title: Knot of Serpents
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  text: 'Your Province Strength cannot be reduced. After you Recruit a Naga Personality, create :Rank-2:,
+    or :Rank-1: if he is Unique, 2F/2C/0PH <b>Naga • Nonhuman • Warrior</b> Personalities. After your
+    card destroys your Warrior, draw a card. Your Unstoppable effects cannot be prevented.<br><b>Dynasty,
+    :g*::</b> Recruit a Forest for 2 less Gold and refill its Province face-up.'
+  province_strength: '[Rank10]'
+  starting_honor: -20
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  collector_number: '37'
+- title: Malevolence
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Fear :Rank+1:.<br><b>Unstoppable Battle:</b> Destroy your target Warrior. One or
+    two Fear 4 effects.<br><b>Interrupt:</b> Give each Fear effect +4 or -4 strength.
+  focus: 2
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>Her eyes were glassy with pain. He watched, tears blurring his vision, as even the pain
+    faded away.<br>"Why?" he screamed angrily. The sadistic grin was the only answer he received.</i>
+  collector_number: '34'
+- title: Merchant District
+  types:
+  - Territory
+  decks:
+  - Other
+  text: <i>(Cannot be destroyed.)</i> Each Rokugani player has the ability, <br>"<b>Absent Battle, [*]:</b>
+    Increase the current District's Province Strength by the amount paid, up to 10." <i>(This is usable
+    at any District.)</i><br><i>(The Military District may now be destroyed. All Rokugani players destroy
+    their leftmost Province.)</i>
+  province_strength: 10
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>One of the busiest centers of trade throughout the Empire, rivaling even city squares
+    within the mainland. It was the beating heart through which all gold flowed.</i>
+  collector_number: '3'
+- title: Military District
+  types:
+  - Territory
+  decks:
+  - Other
+  text: <i>(Cannot be destroyed.)</i> Rokugani players' Personalities have <b>Conqueror</b>. After battle
+    resolution here destroys a Rokugani army, the Dark Naga player chooses and destroys cards in his army
+    equal to half, rounded down, the number of Rokugani cards destroyed in battle resolution.<br><i>(The
+    Imperial District may now be destroyed.)</i>
+  province_strength: 20
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>The most fortified section of the city, it was the gate that separated the outermost
+    ring from the inner districts.</i>
+  collector_number: '5'
+- title: Pearl Cache
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Forest
+  - Pearl
+  text: Cannot be destroyed. Other player's effects will not discard cards from your hand, and focusing
+    is always optional for you. Negate all Force penalties that come from a single source and affect three
+    or more Nonhuman Personalities.<br><b>:bow::</b> Produce 4 Gold.
+  gold_cost: 4
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>Only a fool would attempt to steal from the Naga, yet their sanctuaries are littered
+    with the bones of those who tried.</i>
+  collector_number: '15'
+- title: Peasant District
+  types:
+  - Territory
+  decks:
+  - Other
+  text: <b>Battle:</b> Move your target Human Personality home. If he is unbowed, Melee 2 Attack. <i>(Only
+    one Rokugani player may use this ability per turn.)</i><br><i>(The Artisan, Merchant, and Temple Districts
+    may now be destroyed.<br>The Dark Naga player creates a 2F/2C/0PH <b>Naga • Nonhuman • Warrior</b>
+    Personality in his home.)</i>
+  province_strength: 0
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>The district of the bonge lay outside the city walls, far from districts frequented
+    by the kuge. Here, heimin of the Second City went about their daily lives in peace, unconcerned with
+    the world of samurai…</i>
+  collector_number: '1'
+- title: Serpent Tunnels
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: The cards this ability targeted have +2F/+2C.<br><b>Unstoppable Battle:</b> Destroy a Terrain
+    <i>(if able)</i>. Put this Terrain into play. Target your Personality at any location; you may destroy
+    a Warrior at this battlefield to target two Personalities at any location instead. Move the targets
+    to this battlefield. Straighten their units as they move.
+  focus: 2
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"I'm beginning to cultivate a complex," he muttered to himself, as the thoughts of reward
+    urged him forward.</i>
+  collector_number: '35'
+- title: Temple District
+  types:
+  - Territory
+  decks:
+  - Other
+  text: <i>(Cannot be destroyed.)</i> Lobbying is an <b>Open</b> action. Players need not discard a card
+    for the Favor rulebook ability. The Favor Battle rulebook ability has <b>Absent</b>.<br><i>(The Military
+    District may now be destroyed. All Rokugani players destroy their leftmost Province.)</i>
+  province_strength: 10
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>The sacredness of the Rokugani Fortunes reached even into the Second City. The bells
+    of the Temple District touched every home, every heart, every soul.</i>
+  collector_number: '4'
+- title: The Akasha
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Corrupted
+  - Naga
+  text: Play after a card enters your Fate discard pile if it now has more cards than your hand, then
+    draw a card.<br>Your Fear effects, Melee Attacks, and Ranged Attacks have +1 strength.
+  focus: 0
+  is_unique: true
+  legality:
+  - Legacy
+  rarity: Fixed
+  artist: Conceptopolis
+  flavor_text: <i>"The Shahismael is hunger and madness given form," the Siminoth said. "His ambition
+    will see him victorious, or utterly eradicated; nothing else."</i>
+  collector_number: '28'
+- title: The Dark Naga, the Heart of Darkness
   types:
   - Personality
   decks:
@@ -322,13 +550,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>"That which is not born of the serpent shall not be permitted to exist."</i>
   collector_number: '18'
-- cardid: 12043
-  title: The Niskara
+- title: The Niskara
   types:
   - Personality
   decks:
@@ -346,13 +572,11 @@ cards:
   personal_honor: 0
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>"The humans will fall, great Shahismael."</i>
   collector_number: '19'
-- cardid: 12044
-  title: The Qeltash
+- title: The Qeltash
   types:
   - Personality
   decks:
@@ -369,14 +593,12 @@ cards:
   personal_honor: 0
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>The Phoenix warrior slid from his blade and lay broken on the ground. "The blood of
     mammals reeks, but the sight of it is beautiful."</i>
   collector_number: '20'
-- cardid: 12045
-  title: The Quelsa, the Forbidden Jakla
+- title: The Quelsa, the Forbidden Jakla
   types:
   - Personality
   decks:
@@ -399,14 +621,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>"Long have I remained hidden, learning of things dark and terrible. Now I must use those
     secrets against my own people. What folly the humans have brought me to."</i>
   collector_number: '21'
-- cardid: 12046
-  title: The Riddiqesh
+- title: The Riddiqesh
   types:
   - Personality
   decks:
@@ -423,14 +643,12 @@ cards:
   personal_honor: 0
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>Only a handful of Constrictors survived the Great Sleep. Of those who survived, one
     fell under the sway of the Dark Naga. It was an unparalleled tragedy.</i>
   collector_number: '22'
-- cardid: 12047
-  title: The Shakash, the Will of the Knot
+- title: The Shakash, the Will of the Knot
   types:
   - Personality
   decks:
@@ -452,13 +670,11 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>"Such weak creatures. So fragile. So unworthy to hold dominion over the world."</i>
   collector_number: '23'
-- cardid: 12048
-  title: The Sleepless One, Keeper of the Pearl
+- title: The Sleepless One, Keeper of the Pearl
   types:
   - Personality
   decks:
@@ -481,14 +697,12 @@ cards:
   is_unique: true
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>Alone among the Dark Naga's forces, the Sleepless One possessed the will to shield his
     thoughts from the Shahismael.</i>
   collector_number: '24'
-- cardid: 12049
-  title: The Teskath
+- title: The Teskath
   types:
   - Personality
   decks:
@@ -505,210 +719,29 @@ cards:
   personal_honor: 0
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>"Find the fang and claim it for the Great One!" he bellowed. "Destroy anything that
     walks upon legs that stands in your path!"</i>
   collector_number: '25'
-- cardid: 12050
-  title: Corrupted Wildlife
+- title: Treacherous Growth
   types:
-  - Follower
+  - Holding
   decks:
-  - Fate
+  - Dynasty
   keywords:
-  - Expendable
-  - Reserve
-  - Naga
-  - Nonhuman
-  text: Will only attach to a Naga.<br><b>Battle:</b> Melee 3 Attack.
-  gold_cost: 4
-  focus: 2
-  force: 3
-  chi: 0
+  - Forest
+  text: After you Recruit this Holding from a Province, refill the Province face-up.<br><b>:bow::</b>
+    Produce 2 Gold.
+  gold_cost: 2
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
-  flavor_text: <i>"Such a glorious place," the Dark Naga gloated, "filled with all manner of horrors eager
-    to bend to my most inevitable will."</i>
-  collector_number: '26'
-- cardid: 12051
-  title: Asp Spear
-  types:
-  - Item
-  decks:
-  - Fate
-  keywords:
-  - Reserve
-  - Weapon
-  - Naga
-  - Spear
-  - Two-Handed
-  text: Will only attach to a Naga. This Personality uses his Force as his duel stat.<br><b>Battle, :bow::</b>
-    Melee 3 Attack.<br><b>Tireless Battle:</b> Ranged 3 Attack. Discard this Item. Put it into your hand
-    before the turn ends.
-  gold_cost: 4
-  focus: 3
-  force: '+3'
-  chi: '+1'
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"A grand weapon. Grander still when tempered with the blood of mammals."</i>
-  collector_number: '27'
-- cardid: 12052
-  title: The Akasha
-  types:
-  - Ring
-  decks:
-  - Fate
-  keywords:
-  - Unique
-  - Corrupted
-  - Naga
-  text: Play after a card enters your Fate discard pile if it now has more cards than your hand, then
-    draw a card.<br>Your Fear effects, Melee Attacks, and Ranged Attacks have +1 strength.
-  focus: 0
-  is_unique: true
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"The Shahismael is hunger and madness given form," the Siminoth said. "His ambition
-    will see him victorious, or utterly eradicated; nothing else."</i>
-  collector_number: '28'
-- cardid: 12053
-  title: Baseless Rage
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Battle:</b> Target a Personality. He flees in terror. Move him home.<br><b>Unstoppable Battle:</b>
-    Destroy your target Warrior. Move home one or two target Personalities.<br><b>Battle:</b> Melee :Rank:
-    Attack.'
-  focus: 2
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  collector_number: '29'
-- cardid: 12054
-  title: Brutal Strike
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Battle:</b> Melee :Rank: Attack.<br><b>Unstoppable Battle:</b> Destroy your target Warrior.
-    One or two Melee 3 Attacks.<br><b>Interrupt:</b> Give each Melee or Ranged Attack +3 or -3 strength.'
-  focus: 1
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>His tail, he suddenly realized. It allowed the Naga to react unlike any human. The thought
-    was no comfort to him as he died.</i>
-  collector_number: '30'
-- cardid: 12055
-  title: Cursed Resolve
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Interrupt:</b> Destroy your target unbowed Warrior. Negate the action's effects.<br><b>Unstoppable
-    Battle:</b> Bow one or more of your target unbowed Warriors. Destroy a target enemy unit with a number
-    of cards in it equal to the number of Warriors you bowed. If you now have two or less cards in your
-    hand, you may destroy the targeted Warriors.
-  focus: 3
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>The Dark Naga leads an army. His determination would never allow anything less.</i>
-  collector_number: '31'
-- cardid: 12056
-  title: Gathering
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Engage:</b> You have the first opportunity to take a Battle action. Create a 2F/2C/0PH <b>Naga
-    • Nonhuman • Warrior</b> Personality.<br><b>Unstoppable Battle:</b> Destroy your target Warrior. Create
-    two 2F/2C/0PH <b>Naga • Nonhuman • Warrior</b> Personalities.
-  focus: 4
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"We need not be alone any longer, my brothers," he hissed. The shard floated in front
-    of him, and suddenly he could sense the minds of his brothers pushing into his thoughts.</i>
-  collector_number: '32'
-- cardid: 12057
-  title: Inevitability
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: '<b>Interrupt:</b> Negate an Event''s effects. Draw a card.<br><b>Battle:</b> Destroy a target
-    attachment or Terrain.<br><b>Unstoppable Battle:</b> Destroy your target Warrior. Give :Rank: target
-    enemy Personalities or Followers -3F.'
-  focus: 4
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>It hurt to be in his presence. The Akasha wailed in pain.</i>
-  collector_number: '33'
-- cardid: 12058
-  title: Malevolence
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Fear :Rank+1:.<br><b>Unstoppable Battle:</b> Destroy your target Warrior. One or
-    two Fear 4 effects.<br><b>Interrupt:</b> Give each Fear effect +4 or -4 strength.
-  focus: 2
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>Her eyes were glassy with pain. He watched, tears blurring his vision, as even the pain
-    faded away.<br>"Why?" he screamed angrily. The sadistic grin was the only answer he received.</i>
-  collector_number: '34'
-- cardid: 12059
-  title: Serpent Tunnels
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Terrain
-  text: The cards this ability targeted have +2F/+2C.<br><b>Unstoppable Battle:</b> Destroy a Terrain
-    <i>(if able)</i>. Put this Terrain into play. Target your Personality at any location; you may destroy
-    a Warrior at this battlefield to target two Personalities at any location instead. Move the targets
-    to this battlefield. Straighten their units as they move.
-  focus: 2
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>"I'm beginning to cultivate a complex," he muttered to himself, as the thoughts of reward
-    urged him forward.</i>
-  collector_number: '35'
-- cardid: 12060
-  title: Warlord's Command
+  flavor_text: <i>"The Dark Naga are not finished, my lord. We must stand together and fight now, lest
+    the threat grows beyond our skill to defeat it." - misplaced scroll</i>
+  collector_number: '16'
+- title: Warlord's Command
   types:
   - Strategy
   decks:
@@ -719,129 +752,8 @@ cards:
   focus: 3
   legality:
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Conceptopolis
   flavor_text: <i>The Naga adopt unorthodox tactics in combat that take full measure of their unique bodies.
     The second rank rises on their tails, effectively striking the enemy line with double the power.</i>
   collector_number: '36'
-- cardid: 12061
-  title: Knot of Serpents
-  types:
-  - Stronghold
-  decks:
-  - Pre-Game
-  text: 'Your Province Strength cannot be reduced. After you Recruit a Naga Personality, create :Rank-2:,
-    or :Rank-1: if he is Unique, 2F/2C/0PH <b>Naga • Nonhuman • Warrior</b> Personalities. After your
-    card destroys your Warrior, draw a card. Your Unstoppable effects cannot be prevented.<br><b>Dynasty,
-    :g*::</b> Recruit a Forest for 2 less Gold and refill its Province face-up.'
-  province_strength: '[Rank10]'
-  starting_honor: -20
-  legality:
-  - Legacy
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  collector_number: '37'
-- cardid: 12062
-  title: Artisan District
-  types:
-  - Territory
-  decks:
-  - Other
-  text: <i>(Cannot be destroyed.)</i> <b>Political Open:</b> Bow your target unbowed Personality. Gain
-    Political Tokens equal to his Personal Honor. <i>(Only one Rokugani player may use this ability per
-    turn.)</i><br><i>(The Military District may now be destroyed. All Rokugani players destroy their leftmost
-    Province.)</i>
-  province_strength: 10
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>Adjacent to the Peasant District, the Artisan District was among the most vibrant in
-    the city. During the prior invasion, the people here were mostly relaxed. Every samurai valued artisans,
-    after all…</i>
-  collector_number: '2'
-- cardid: 12063
-  title: Imperial District
-  types:
-  - Territory
-  decks:
-  - Other
-  text: <i>(Cannot be destroyed.)</i> Rokugani players ignore Honor Requirements. After a player Enlightens,
-    discard a Clock Card. Each Rokugani player has the abilities, "<b>Battle:</b> Move your target Personality
-    at a District to the Imperial District" and "<b>Dynasty:</b> Discard [Rank10] <i>(10 per player)</i>
-    Political Tokens to discard the Clock Deck's top card."<br><i>(The Rokugani players lose the game.)</i>
-  province_strength: 15
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>The highest seat of power in the untamed lands. A crucible of order and control.</i>
-  collector_number: '6'
-- cardid: 12064
-  title: Merchant District
-  types:
-  - Territory
-  decks:
-  - Other
-  text: <i>(Cannot be destroyed.)</i> Each Rokugani player has the ability, <br>"<b>Absent Battle, [*]:</b>
-    Increase the current District's Province Strength by the amount paid, up to 10." <i>(This is usable
-    at any District.)</i><br><i>(The Military District may now be destroyed. All Rokugani players destroy
-    their leftmost Province.)</i>
-  province_strength: 10
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>One of the busiest centers of trade throughout the Empire, rivaling even city squares
-    within the mainland. It was the beating heart through which all gold flowed.</i>
-  collector_number: '3'
-- cardid: 12065
-  title: Military District
-  types:
-  - Territory
-  decks:
-  - Other
-  text: <i>(Cannot be destroyed.)</i> Rokugani players' Personalities have <b>Conqueror</b>. After battle
-    resolution here destroys a Rokugani army, the Dark Naga player chooses and destroys cards in his army
-    equal to half, rounded down, the number of Rokugani cards destroyed in battle resolution.<br><i>(The
-    Imperial District may now be destroyed.)</i>
-  province_strength: 20
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>The most fortified section of the city, it was the gate that separated the outermost
-    ring from the inner districts.</i>
-  collector_number: '5'
-- cardid: 12066
-  title: Peasant District
-  types:
-  - Territory
-  decks:
-  - Other
-  text: <b>Battle:</b> Move your target Human Personality home. If he is unbowed, Melee 2 Attack. <i>(Only
-    one Rokugani player may use this ability per turn.)</i><br><i>(The Artisan, Merchant, and Temple Districts
-    may now be destroyed.<br>The Dark Naga player creates a 2F/2C/0PH <b>Naga • Nonhuman • Warrior</b>
-    Personality in his home.)</i>
-  province_strength: 0
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>The district of the bonge lay outside the city walls, far from districts frequented
-    by the kuge. Here, heimin of the Second City went about their daily lives in peace, unconcerned with
-    the world of samurai…</i>
-  collector_number: '1'
-- cardid: 12067
-  title: Temple District
-  types:
-  - Territory
-  decks:
-  - Other
-  text: <i>(Cannot be destroyed.)</i> Lobbying is an <b>Open</b> action. Players need not discard a card
-    for the Favor rulebook ability. The Favor Battle rulebook ability has <b>Absent</b>.<br><i>(The Military
-    District may now be destroyed. All Rokugani players destroy their leftmost Province.)</i>
-  province_strength: 10
-  printing_id: '1'
-  rarity: Fixed
-  artist: Conceptopolis
-  flavor_text: <i>The sacredness of the Rokugani Fortunes reached even into the Second City. The bells
-    of the Temple District touched every home, every heart, every soul.</i>
-  collector_number: '4'

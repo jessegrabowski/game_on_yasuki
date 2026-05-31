@@ -1,7 +1,6 @@
 set: Scorpion Clan Coup, Scroll 3
 cards:
-- cardid: 22
-  title: A Final Duel
+- title: A Final Duel
   types:
   - Event
   decks:
@@ -15,12 +14,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Thomas Manning
   flavor_text: <i>In the end, there was a broken throne, a broken sword and a broken man...</i>
-- cardid: 34
-  title: A Greater Destiny
+- title: A Greater Destiny
   types:
   - Strategy
   decks:
@@ -34,11 +31,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Tom Biondolillo
-- cardid: 113
-  title: Acolyte Kaede
+- title: Acolyte Kaede
   types:
   - Follower
   decks:
@@ -56,13 +51,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Audrey Corman
   flavor_text: <i>She follows her father and sensei Ujina, ignorant of the destiny that only she is worthy
     to bear.</i>
-- cardid: 150
-  title: Agasha Mumoko
+- title: Agasha Mumoko
   types:
   - Personality
   decks:
@@ -81,13 +74,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Paul Carrick
   flavor_text: <i>After her apprenticeship she spent many months with the Kaiu family, learning how to
     bring her skills to the battlefield.</i>
-- cardid: 165
-  title: Agasha's Mirror
+- title: Agasha's Mirror
   types:
   - Item
   decks:
@@ -102,11 +93,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Susan Van Camp
-- cardid: 211
-  title: Akodo Hari
+- title: Akodo Hari
   types:
   - Personality
   decks:
@@ -126,13 +115,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Susan Van Camp
   flavor_text: <i>The Scorpion army was routed, and when Tsuko cried for a charge, Hari stepped down.
     "I will not slaughter defeated men," he said.</i>
-- cardid: 218
-  title: Akodo Ikawa
+- title: Akodo Ikawa
   types:
   - Personality
   decks:
@@ -152,13 +139,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Mark Poole
   flavor_text: <i>"Surrounded by a thousand Scorpions, Ikawa charged into the thick of them, screaming
     his death cry, cutting and butchering as he went."</i>
-- cardid: 244
-  title: Akodo Matoko
+- title: Akodo Matoko
   types:
   - Personality
   decks:
@@ -177,13 +162,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Audrey Corman
   flavor_text: <i>You question my honor, you question the honor of every man who follows me. Are you prepared
     for that challenge, Crane?</i>
-- cardid: 300
-  title: Akodo Toturi
+- title: Akodo Toturi
   types:
   - Personality
   decks:
@@ -213,13 +196,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Fixed
   artist: Randy Gallegos
   flavor_text: <i>"We will employ tactics that even the greatest strategist will not anticipate." - Bayushi
     Kachiko</i>
-- cardid: 322
-  title: All Distances are One
+- title: All Distances are One
   types:
   - Spell
   decks:
@@ -235,11 +216,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Randy Asplund-Faith
-- cardid: 525
-  title: Asahina's Breath
+- title: Asahina's Breath
   types:
   - Spell
   decks:
@@ -256,11 +235,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Ron Chironna
-- cardid: 936
-  title: Bayushi's Labyrinth
+- title: Bayushi's Labyrinth
   types:
   - Holding
   decks:
@@ -274,11 +251,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Eric David Anderson
-- cardid: 2575
-  title: Fires of Retribution
+- title: Fires of Retribution
   types:
   - Strategy
   decks:
@@ -293,13 +268,11 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: David Martin
   flavor_text: <i>Isawa Szu threw fire on Shoju's army, but Bantaro whispered, and Szu's robes burst into
     flames.</i>
-- cardid: 2813
-  title: Give Me Your Hand
+- title: Give Me Your Hand
   types:
   - Event
   decks:
@@ -314,12 +287,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Diana Vick
   flavor_text: <i>Give me your hand, my brother.</i>
-- cardid: 3022
-  title: Heartbeat Drummers
+- title: Heartbeat Drummers
   types:
   - Holding
   decks:
@@ -334,12 +305,10 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Nicola Leonard
   flavor_text: <i>Strings? Pah! Give me the music that fires the soul! - Otaku Kamoko</i>
-- cardid: 3125
-  title: Hida Kisada
+- title: Hida Kisada
   types:
   - Personality
   decks:
@@ -365,13 +334,11 @@ cards:
   - Clan Wars (Imperial)
   - Legacy
   errata_text: Contemporarily errata'd to include the rough equivalent of "Loyal".
-  printing_id: '1'
   rarity: Uncommon
   artist: William O'Connor
   flavor_text: <i>The battle ceased as both Toturi and Shoju waited to see what army the Great Bear would
     join...</i>
-- cardid: 3314
-  title: Hiruma Osuno
+- title: Hiruma Osuno
   types:
   - Personality
   decks:
@@ -392,13 +359,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Ron Spencer
   flavor_text: <i>Kisada left only a few Hiruma on the Kaiu walls as he gathered his forces to storm Otosan
     Uchi.</i>
-- cardid: 3938
-  title: Isawa Ujina
+- title: Isawa Ujina
   types:
   - Personality
   decks:
@@ -424,11 +389,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Eric David Anderson
-- cardid: 3953
-  title: Isawa's Helm
+- title: Isawa's Helm
   types:
   - Item
   decks:
@@ -442,13 +405,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Mark Tedin
   flavor_text: <i>A gift from Asahina, Isawa's helm guards its wielder with both Crane magic and the lingering
     spirit of its first owner.</i>
-- cardid: 4051
-  title: Jitte
+- title: Jitte
   types:
   - Item
   decks:
@@ -466,11 +427,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: KC Lancaster
-- cardid: 4107
-  title: Kaiu Castle
+- title: Kaiu Castle
   types:
   - Region
   decks:
@@ -484,11 +443,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Eric David Anderson
-- cardid: 4652
-  title: Kyudo
+- title: Kyudo
   types:
   - Strategy
   decks:
@@ -502,11 +459,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Liz Danforth
-- cardid: 4729
-  title: Lieutenant Sukune
+- title: Lieutenant Sukune
   types:
   - Follower
   decks:
@@ -525,12 +480,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Sam Wood
   flavor_text: <i>His mettle will be tested first here. It will be tested again.</i>
-- cardid: 4730
-  title: Lieutenant Tsanuri
+- title: Lieutenant Tsanuri
   types:
   - Follower
   decks:
@@ -550,12 +503,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Monika Livingstone
   flavor_text: <i>She follows Tsuko, wonering where her sensei could be.</i>
-- cardid: 4865
-  title: Master Painter
+- title: Master Painter
   types:
   - Holding
   decks:
@@ -571,11 +522,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Uncommon
   artist: Eric David Anderson
-- cardid: 5066
-  title: Mirror Image
+- title: Mirror Image
   types:
   - Spell
   decks:
@@ -589,11 +538,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Bob Hobbs
-- cardid: 5146
-  title: Mirumoto Satsu
+- title: Mirumoto Satsu
   types:
   - Personality
   decks:
@@ -616,13 +563,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Monika Livingstone
   flavor_text: <i>"If there is ever a single shadow of doubt, you will fail and you will die." -from Mirumoto's
     Niten</i>
-- cardid: 5645
-  title: Obi of Protection
+- title: Obi of Protection
   types:
   - Item
   decks:
@@ -635,12 +580,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Jason Behnke
   flavor_text: <i>Matsu Hitomi's obi was lost long ago, but not lost forever...</i>
-- cardid: 5981
-  title: Plains of the Emerald Champion
+- title: Plains of the Emerald Champion
   types:
   - Region
   decks:
@@ -651,11 +594,9 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Monika Livingstone
-- cardid: 6125
-  title: Quarry
+- title: Quarry
   types:
   - Holding
   decks:
@@ -672,11 +613,9 @@ cards:
   - Legacy
   errata_text: Errata'd in the Fire and Shadow rulebook to negate its straightening any turn its second
     trait produces Gold.
-  printing_id: '1'
   rarity: Common
   artist: Mark Poole
-- cardid: 6775
-  title: Shiba Kyo
+- title: Shiba Kyo
   types:
   - Personality
   decks:
@@ -697,13 +636,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: William O'Connor
   flavor_text: <i>"If only we could be beyond the walls," Tomo said. Kyo bowed. "Let me be your eyes,
     my lord."</i>
-- cardid: 7529
-  title: Street to Street
+- title: Street to Street
   types:
   - Strategy
   decks:
@@ -724,11 +661,9 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Shattered Empire
-  printing_id: '2'
   rarity: Common
   artist: Eric David Anderson
-- cardid: 7530
-  title: Streets of Otosan Uchi
+- title: Streets of Otosan Uchi
   types:
   - Region
   decks:
@@ -744,11 +679,9 @@ cards:
   - Four Winds (Gold)
   - Legacy
   notes: This card was printed in both Scorpion Clan Coup Scroll 1 and Scroll 3.
-  printing_id: '3'
   rarity: Common
   artist: William O'Connor
-- cardid: 7605
-  title: Subversion
+- title: Subversion
   types:
   - Strategy
   decks:
@@ -761,12 +694,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Anson Maddocks
   flavor_text: <i>The shadows have secrets even the Scorpions cannot fathom.</i>
-- cardid: 7647
-  title: Sunabe
+- title: Sunabe
   types:
   - Personality
   decks:
@@ -785,11 +716,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Monika Livingstone
-- cardid: 7669
-  title: Suru's Mempo
+- title: Suru's Mempo
   types:
   - Item
   decks:
@@ -803,13 +732,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Douglas Shuler
   flavor_text: <i>Worn by Iuchiban's chief lieutenant Suru, the mask steals the will of others to make
     its wielder stronger.</i>
-- cardid: 7686
-  title: Swamp Spirits
+- title: Swamp Spirits
   types:
   - Follower
   decks:
@@ -828,13 +755,11 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Common
   artist: Bryon Wackwitz
   flavor_text: <i>"The treacherous Scorpion shugenja employed the darkest maho in defending the captured
     Otosan Uchi." - the Lion Histories, Volume I</i>
-- cardid: 7862
-  title: Tell the Tale
+- title: Tell the Tale
   types:
   - Strategy
   decks:
@@ -848,12 +773,10 @@ cards:
   - Legacy
   - Modern
   notes: The Promotional version of this card is a famous French misprint that had a 7 Gold Cost.
-  printing_id: '2'
   rarity: Common
   artist: Heather Hudson
   flavor_text: <i>It is not the eyes that see, but the tongue that tells the tale.</i>
-- cardid: 7959
-  title: The Ancient Halls of the Lion
+- title: The Ancient Halls of the Lion
   types:
   - Stronghold
   decks:
@@ -869,11 +792,9 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  printing_id: '2'
   rarity: Fixed
   artist: Kevin Daily
-- cardid: 7994
-  title: The Courage of Osano-Wo
+- title: The Courage of Osano-Wo
   types:
   - Event
   decks:
@@ -887,13 +808,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Pamela Shanteau
   flavor_text: <i>For it is the courage of Osano-Wo - the Thunderer - that fills men's souls and drives
     them when their flesh fails.</i>
-- cardid: 7998
-  title: The Crab Arrive
+- title: The Crab Arrive
   types:
   - Strategy
   decks:
@@ -905,11 +824,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Craig Maher
-- cardid: 8093
-  title: The Fog of War
+- title: The Fog of War
   types:
   - Strategy
   decks:
@@ -921,13 +838,11 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Susan Van Camp
   flavor_text: <i>"Sending an army without a scout is like leaping from a mountain without looking below."
     - from Akodo's Leadership</i>
-- cardid: 8095
-  title: The Fortune's Wisdom
+- title: The Fortune's Wisdom
   types:
   - Strategy
   decks:
@@ -942,12 +857,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Jason Behnke
   flavor_text: <i>Wisdom comes in finding the opportunities that dilemmas provide.</i>
-- cardid: 8144
-  title: The Hub Villages
+- title: The Hub Villages
   types:
   - Region
   decks:
@@ -957,11 +870,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Monika Livingstone
-- cardid: 8253
-  title: The People's Champion
+- title: The People's Champion
   types:
   - Strategy
   decks:
@@ -978,11 +889,9 @@ cards:
   - Age of Enlightenment (Lotus)
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Bob Hobbs
-- cardid: 8321
-  title: The Shiba Fortification
+- title: The Shiba Fortification
   types:
   - Holding
   decks:
@@ -996,11 +905,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Diana Vick
-- cardid: 8345
-  title: The Soul of Akodo
+- title: The Soul of Akodo
   types:
   - Strategy
   decks:
@@ -1013,12 +920,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Christina Wald
   flavor_text: <i>"A great man's heart can pump the life's blood of a thousand men." - from Akodo's Leadership</i>
-- cardid: 8346
-  title: The Soul of Shiba
+- title: The Soul of Shiba
   types:
   - Spell
   decks:
@@ -1032,11 +937,9 @@ cards:
   - Clan Wars (Imperial)
   - Four Winds (Gold)
   - Legacy
-  printing_id: '2'
   rarity: Uncommon
   artist: Monika Livingstone
-- cardid: 8375
-  title: The Temples of Shinsei
+- title: The Temples of Shinsei
   types:
   - Region
   decks:
@@ -1049,11 +952,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Alan Prior
-- cardid: 8438
-  title: The World Stood Still
+- title: The World Stood Still
   types:
   - Event
   decks:
@@ -1068,12 +969,10 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Uncommon
   artist: Eric David Anderson
   flavor_text: <i>And the world stood still, as if the next moment would change everything...</i>
-- cardid: 9319
-  title: Whispers of the Land
+- title: Whispers of the Land
   types:
   - Spell
   decks:
@@ -1088,11 +987,9 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Liz Danforth
-- cardid: 9471
-  title: Yazaki
+- title: Yazaki
   types:
   - Personality
   decks:
@@ -1109,6 +1006,5 @@ cards:
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  printing_id: '1'
   rarity: Common
   artist: Brian Despain

@@ -1,7 +1,6 @@
 set: Crab vs. Lion
 cards:
-- cardid: 7956
-  title: The Ancestral Home of the Lion
+- title: The Ancestral Home of the Lion
   types:
   - Stronghold
   decks:
@@ -19,12 +18,10 @@ cards:
   notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
     on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
     the Emerald Edition border.
-  printing_id: '1'
   rarity: Fixed
   artist: Wackwitz & Grabski
   collector_number: Lion 0
-- cardid: 8414
-  title: The War Fortress of the Crab
+- title: The War Fortress of the Crab
   types:
   - Stronghold
   decks:
@@ -41,7 +38,6 @@ cards:
   notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
     on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
     the Emerald Edition border.
-  printing_id: '1'
   rarity: Fixed
   artist: Randy Gallegos
   collector_number: Crab 0

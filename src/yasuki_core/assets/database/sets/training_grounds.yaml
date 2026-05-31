@@ -1,7 +1,6 @@
 set: Training Grounds
 cards:
-- cardid: 2
-  title: 700 Soldier Plain
+- title: 700 Soldier Plain
   types:
   - Region
   decks:
@@ -14,13 +13,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Tony Moseley
   flavor_text: <i>"The time has come for the Lion to fight," Shigetoshi said.</i>
   collector_number: Lion 41
-- cardid: 237
-  title: Akodo Kurako
+- title: Akodo Kurako
   types:
   - Personality
   decks:
@@ -41,14 +38,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: beet
   flavor_text: <i>"We owe you our lives, Shigetoshi-sama," Iemitsu said. "The Sword of Yotsu shall defend
     the city beside you."</i>
   collector_number: Lion 33
-- cardid: 279
-  title: Akodo Shigetoshi
+- title: Akodo Shigetoshi
   types:
   - Personality
   decks:
@@ -69,14 +64,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Chris Seaman
   flavor_text: <i>"Be on your guard, all of you," Shigetoshi said firmly. "Even after all this time, the
     Dark Lord's minions may still skulk through these streets."</i>
   collector_number: Lion 18
-- cardid: 291
-  title: Akodo Tadenori
+- title: Akodo Tadenori
   types:
   - Personality
   decks:
@@ -98,14 +91,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Ben Peck
   flavor_text: <i>"You survey the city as if it were a battlefield," Shigetoshi said with an amused grin.<br>"Everything
     is a battlefield, my lord," the old general replied.</i>
   collector_number: Lion 23
-- cardid: 307
-  title: Akodo Yobi
+- title: Akodo Yobi
   types:
   - Personality
   decks:
@@ -127,13 +118,11 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: '1999 Name a Personality: California - Ash Thomason'
-  printing_id: '3'
   rarity: Fixed
   artist: Kevin Wasden
   flavor_text: <i>"I agree with Aoiko," Yobi added. "We cannot allow Otosan Uchi's grave to be defiled."</i>
   collector_number: Lion 46
-- cardid: 309
-  title: Akodo's Grave
+- title: Akodo's Grave
   types:
   - Holding
   decks:
@@ -151,14 +140,12 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '7'
   rarity: Fixed
   artist: Joachim Gmoser
   flavor_text: <i>"Do not mourn that I die, Aoiko," Yobi whispered. "Mourn that Voitagi lives. Avenge
     me."</i>
   collector_number: Shadowlands 02
-- cardid: 335
-  title: Along the Coast at Midnight
+- title: Along the Coast at Midnight
   types:
   - Strategy
   decks:
@@ -173,13 +160,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '6'
   rarity: Fixed
   artist: Tony Moseley
   flavor_text: <i>The Deathless set out as fast as it could, with Kitsu magic filling its sails.</i>
   collector_number: Shadowlands 08
-- cardid: 438
-  title: Armor of Earth
+- title: Armor of Earth
   types:
   - Item
   decks:
@@ -201,12 +186,10 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   errata_text: Removal of cost reduction trait via contemporary erratum.
-  printing_id: '3'
   rarity: Fixed
   artist: Bryan Heyboer
   collector_number: Shadowlands 23
-- cardid: 614
-  title: Ashigaru Fort
+- title: Ashigaru Fort
   types:
   - Holding
   decks:
@@ -225,12 +208,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '2'
   rarity: Fixed
   artist: Tony Moseley
   collector_number: Lion 10
-- cardid: 622
-  title: Ashura
+- title: Ashura
   types:
   - Personality
   decks:
@@ -254,13 +235,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Thomas Manning
   flavor_text: <i>Deathseeker's Shrine survived the night, and the Lion gave thanks for their good fortune.</i>
   collector_number: Shadowlands 37
-- cardid: 730
-  title: Battlefield of Shallow Graves
+- title: Battlefield of Shallow Graves
   types:
   - Strategy
   decks:
@@ -281,12 +260,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '5'
   rarity: Fixed
   artist: Al Eremin
   collector_number: Lion 48
-- cardid: 733
-  title: Bawaru no Oni
+- title: Bawaru no Oni
   types:
   - Personality
   decks:
@@ -307,13 +284,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Thomas Manning
   flavor_text: <i>"Here they come," Tadenori hissed.</i>
   collector_number: Shadowlands 06
-- cardid: 977
-  title: Birth of the Sword
+- title: Birth of the Sword
   types:
   - Event
   decks:
@@ -327,14 +302,12 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Beth Trott
   flavor_text: <i>"After Toturi Tsudao drove the Dark Lord from Otosan Uchi, the Lion destroyed what was
     left. The Swords of Yotsu patrol the Imperial City now, fighting the shadowy things that remain."</i>
   collector_number: Lion 08
-- cardid: 989
-  title: Black Heart of the Empire
+- title: Black Heart of the Empire
   types:
   - Wind
   decks:
@@ -350,12 +323,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Ben Peck
   collector_number: Shadowlands 00
-- cardid: 996
-  title: Blackened Claws
+- title: Blackened Claws
   types:
   - Item
   decks:
@@ -375,12 +346,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Ramos Perez
   collector_number: Shadowlands 26
-- cardid: 1011
-  title: Blade of Secrets
+- title: Blade of Secrets
   types:
   - Item
   decks:
@@ -399,13 +368,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Jon Hodgson
   flavor_text: <i>The lowly bakemono scuttled back into the shadows, the greater part of the army defeated.</i>
   collector_number: Shadowlands 41
-- cardid: 1086
-  title: Boastful Proclamation
+- title: Boastful Proclamation
   types:
   - Event
   decks:
@@ -426,12 +393,10 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - Shattered Empire
-  printing_id: '5'
   rarity: Fixed
   artist: Mark Symlie
   collector_number: Lion 42
-- cardid: 1358
-  title: Chuda Masaru
+- title: Chuda Masaru
   types:
   - Personality
   decks:
@@ -451,14 +416,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Christopher Appel
   flavor_text: <i>"Continue with the ritual," Jin ordered. "The gateway to Jogoku may yet be closed, if
     we are not diligent."</i>
   collector_number: Shadowlands 44
-- cardid: 1497
-  title: Copper Mine
+- title: Copper Mine
   types:
   - Holding
   decks:
@@ -480,14 +443,12 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '15'
   rarity: Fixed
   artist: Joseph Phillips
   flavor_text: <i>"Our Ancestors watch over us always," Shigetoshi said. "We cannot allow their deeds
     to be forgotten."</i>
   collector_number: Lion 03
-- cardid: 1511
-  title: Corrupted Dojo (WoC)
+- title: Corrupted Dojo (WoC)
   types:
   - Holding
   decks:
@@ -503,12 +464,10 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   notes: This is a distinct card from the Fire and Shadow card of the same name.
-  printing_id: '2'
   rarity: Fixed
   artist: Tony Moseley
   collector_number: Shadowlands 05
-- cardid: 1515
-  title: Corrupted Jade Sliver
+- title: Corrupted Jade Sliver
   types:
   - Item
   decks:
@@ -526,12 +485,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Luis Vazquez
   collector_number: Shadowlands 06
-- cardid: 1903
-  title: Deathseeker's Glory
+- title: Deathseeker's Glory
   types:
   - Strategy
   decks:
@@ -543,12 +500,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Ben Peck
   collector_number: Lion 06
-- cardid: 2043
-  title: Diversionary Tactics
+- title: Diversionary Tactics
   types:
   - Strategy
   decks:
@@ -562,12 +517,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '8'
   rarity: Fixed
   artist: Mark A.W. Jackson
   collector_number: Shadowlands 46
-- cardid: 2191
-  title: Doom of the Dark Lord
+- title: Doom of the Dark Lord
   types:
   - Event
   decks:
@@ -584,12 +537,10 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '3'
   rarity: Fixed
   artist: Ben Peck
   collector_number: Lion 43
-- cardid: 2211
-  title: Dragon Dancers
+- title: Dragon Dancers
   types:
   - Holding
   decks:
@@ -601,13 +552,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: David Martin
   flavor_text: <i>"Draw bows and fire!" Tadenori commanded, pointing toward the ronin with his fan.</i>
   collector_number: Lion 05
-- cardid: 2305
-  title: Elite Spearmen
+- title: Elite Spearmen
   types:
   - Follower
   decks:
@@ -626,12 +575,10 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '4'
   rarity: Fixed
   artist: Joachim Gmoser
   collector_number: Lion 42
-- cardid: 2477
-  title: Far from the Empire
+- title: Far from the Empire
   types:
   - Event
   decks:
@@ -646,12 +593,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Drew Baker
   collector_number: Shadowlands 43
-- cardid: 2478
-  title: Farmlands
+- title: Farmlands
   types:
   - Region
   decks:
@@ -670,13 +615,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '10'
   rarity: Fixed
   artist: Tony Moseley
   flavor_text: <i>With a peasant's borrowed steed, Hyun galloped across the countryside.</i>
   collector_number: Shadowlands 41
-- cardid: 2503
-  title: Feign Death
+- title: Feign Death
   types:
   - Strategy
   decks:
@@ -693,12 +636,10 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '6'
   rarity: Fixed
   artist: Franz Vohwinkel
   collector_number: Shadowlands 48
-- cardid: 2633
-  title: For the Empire
+- title: For the Empire
   types:
   - Strategy
   decks:
@@ -715,12 +656,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Michael Phillips
   collector_number: Shadowlands 12
-- cardid: 2749
-  title: Fushiki no Oni
+- title: Fushiki no Oni
   types:
   - Personality
   decks:
@@ -746,12 +685,10 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '3'
   rarity: Fixed
   artist: William O'Connor
   collector_number: Shadowlands 24
-- cardid: 2807
-  title: Gifts and Favors
+- title: Gifts and Favors
   types:
   - Holding
   decks:
@@ -766,12 +703,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '5'
   rarity: Fixed
   artist: Edward Fetterman
   collector_number: Lion 32
-- cardid: 2835
-  title: Goblin Slingers
+- title: Goblin Slingers
   types:
   - Follower
   decks:
@@ -792,12 +727,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: Shadowlands 42
-- cardid: 2923
-  title: Gunsen of Water
+- title: Gunsen of Water
   types:
   - Item
   decks:
@@ -820,12 +753,10 @@ cards:
   - Rain of Blood (Diamond)
   errata_text: 'Errata''d via the internet: Removal of cost reduction trait via contemporary erratum;
     erratum of ability to modernize via Oracle.'
-  printing_id: '3'
   rarity: Fixed
   artist: Britt Martin
   collector_number: Lion 26
-- cardid: 2925
-  title: Gunso
+- title: Gunso
   types:
   - Follower
   decks:
@@ -846,12 +777,10 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '4'
   rarity: Fixed
   artist: Eric Polak
   collector_number: Lion 07
-- cardid: 3269
-  title: Hideo Spawn
+- title: Hideo Spawn
   types:
   - Follower
   decks:
@@ -870,12 +799,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: Shadowlands 02
-- cardid: 4327
-  title: Kenson Gakka
+- title: Kenson Gakka
   types:
   - Stronghold
   decks:
@@ -890,12 +817,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Jon Hodgson
   collector_number: Lion 00
-- cardid: 4360
-  title: Kirei
+- title: Kirei
   types:
   - Follower
   decks:
@@ -913,12 +838,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Luis Vazquez
   collector_number: Shadowlands 05
-- cardid: 4563
-  title: Kukanchi
+- title: Kukanchi
   types:
   - Personality
   decks:
@@ -942,12 +865,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Lisa Hunt
   collector_number: Shadowlands 46
-- cardid: 4626
-  title: Kyoso no Oni
+- title: Kyoso no Oni
   types:
   - Personality
   decks:
@@ -972,12 +893,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '9'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: Shadowlands 29
-- cardid: 4711
-  title: Lessons from Kuro
+- title: Lessons from Kuro
   types:
   - Item
   decks:
@@ -991,12 +910,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Monte Moore
   collector_number: Lion 41
-- cardid: 4785
-  title: Luring Tactics
+- title: Luring Tactics
   types:
   - Strategy
   decks:
@@ -1012,12 +929,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Theodor Black
   collector_number: Lion 11
-- cardid: 4890
-  title: Matsu Aoiko
+- title: Matsu Aoiko
   types:
   - Personality
   decks:
@@ -1037,14 +952,12 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>Fearless as she was, Aoiko still clutched her grandfather's trident just a bit closer
     when she saw the bleak ruins of the Imperial City for the first time.</i>
   collector_number: Lion 12
-- cardid: 4906
-  title: Matsu Ferishi
+- title: Matsu Ferishi
   types:
   - Personality
   decks:
@@ -1064,14 +977,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>"We have searched for days, Ferishi, and found nothing," Aoiko said.<br>"Then we must
     search harder."</i>
   collector_number: Lion 11
-- cardid: 4929
-  title: Matsu Hyun
+- title: Matsu Hyun
   types:
   - Personality
   decks:
@@ -1097,12 +1008,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Ben Peck
   collector_number: Lion 16
-- cardid: 4938
-  title: Matsu Kenji
+- title: Matsu Kenji
   types:
   - Personality
   decks:
@@ -1127,14 +1036,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Michael Kulta
   flavor_text: <i>"Do not allow emotions to override your sense, Aoiko. Your soul is like a blade, and
     must be kept sheathed lets it become rusted and dull."</i>
   collector_number: Lion 15
-- cardid: 4946
-  title: Matsu Mabuchi
+- title: Matsu Mabuchi
   types:
   - Personality
   decks:
@@ -1154,13 +1061,11 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Michael Kulta
   flavor_text: <i>The demon was terrifyingly powerful, but he was no match for the Lion's finest samurai.</i>
   collector_number: Lion 26
-- cardid: 4971
-  title: Matsu Reishiko
+- title: Matsu Reishiko
   types:
   - Personality
   decks:
@@ -1182,12 +1087,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: William O'Connor
   collector_number: Lion 19
-- cardid: 5497
-  title: Nairu no Oni
+- title: Nairu no Oni
   types:
   - Personality
   decks:
@@ -1208,13 +1111,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Thomas Manning
   flavor_text: <i>Wave after wave," Kenji said, firing another arrow. "Is there no end?"</i>
   collector_number: Shadowlands 19
-- cardid: 5647
-  title: Oblivion's Gate
+- title: Oblivion's Gate
   types:
   - Holding
   decks:
@@ -1231,14 +1132,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Tony Moseley
   flavor_text: <i>"Death is no barrier to those who serve Jigoku. So long as our corruption stains the
     earth, Fu Leng can restore his loyal servants."</i>
   collector_number: Shadowlands 23
-- cardid: 5660
-  title: Obsidian Mine
+- title: Obsidian Mine
   types:
   - Holding
   decks:
@@ -1253,14 +1152,12 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"Here, in the place of Toturi's greatest victory, Voitagi. Here, we shall remake the
     Empire." - Seppun Jin</i>
   collector_number: Shadowlands 01
-- cardid: 5672
-  title: Officers' Council
+- title: Officers' Council
   types:
   - Strategy
   decks:
@@ -1276,12 +1173,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Llyn Hunter
   collector_number: Lion 16
-- cardid: 5675
-  title: Ogre Bushi
+- title: Ogre Bushi
   types:
   - Personality
   decks:
@@ -1308,14 +1203,12 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '10'
   rarity: Fixed
   artist: Jim Callahan
   flavor_text: <i>The ogres lifted their clubs, circling Hyun warily. These beasts were no fools - strong,
     intelligent, and deadly. The poet held her blade in both hands and prepared to die.</i>
   collector_number: Shadowlands 10
-- cardid: 5698
-  title: Omoidasu
+- title: Omoidasu
   types:
   - Follower
   decks:
@@ -1334,12 +1227,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: William O'Connor
   collector_number: Lion 02
-- cardid: 5725
-  title: Oni Horde
+- title: Oni Horde
   types:
   - Follower
   decks:
@@ -1359,12 +1250,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: Shadowlands 44
-- cardid: 5875
-  title: Parasitic Oni
+- title: Parasitic Oni
   types:
   - Follower
   decks:
@@ -1384,12 +1273,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Thomas Manning
   collector_number: Shadowlands 01
-- cardid: 5915
-  title: Peasant Vengeance
+- title: Peasant Vengeance
   types:
   - Strategy
   decks:
@@ -1406,13 +1293,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '6'
   rarity: Fixed
   artist: Mike Jackson
   flavor_text: <i>Aoiko rushed to Yobi, but corrupted spearmen blocked her path.</i>
   collector_number: Lion 17
-- cardid: 6066
-  title: Primal Rage
+- title: Primal Rage
   types:
   - Strategy
   decks:
@@ -1425,13 +1310,11 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Kyri Komotou
   flavor_text: <i>No oni could stand against Aoiko, until at last she faced Voitagi.</i>
   collector_number: Shadowlands 09
-- cardid: 6084
-  title: Proposal of Peace
+- title: Proposal of Peace
   types:
   - Event
   decks:
@@ -1450,14 +1333,12 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '9'
   rarity: Fixed
   artist: Anthony Hightower
   flavor_text: <i>"Once this city is ours, Lord Iuchiban will oppose the Empire on both sides. Rokugan
     will know no peace..."</i>
   collector_number: Shadowlands 18
-- cardid: 6290
-  title: Retribution
+- title: Retribution
   types:
   - Strategy
   decks:
@@ -1478,13 +1359,11 @@ cards:
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
   notes: The Promotional version of this card is legal upon release
-  printing_id: '7'
   rarity: Fixed
   artist: Ed Cox
   flavor_text: <i>Jin sensed a change. More samurai had arrived.</i>
   collector_number: Lion 13
-- cardid: 6314
-  title: Rice Paddy
+- title: Rice Paddy
   types:
   - Holding
   decks:
@@ -1502,14 +1381,12 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Christopher Appel
   flavor_text: <i>The Lion archers fired true, past the fleeing ronin and into the mighty demon that hounded
     them.</i>
   collector_number: Lion 22
-- cardid: 6324
-  title: Right Hand of the Emperor
+- title: Right Hand of the Emperor
   types:
   - Wind
   decks:
@@ -1522,12 +1399,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Christopher Appel
   collector_number: Lion 00
-- cardid: 6334
-  title: Ring of Earth
+- title: Ring of Earth
   types:
   - Ring
   decks:
@@ -1555,12 +1430,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '16'
   rarity: Fixed
   artist: Randy Asplund-Faith
   collector_number: Lion 23
-- cardid: 6339
-  title: Ring of Water
+- title: Ring of Water
   types:
   - Ring
   decks:
@@ -1589,12 +1462,10 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '16'
   rarity: Fixed
   artist: Randy Asplund-Faith
   collector_number: Lion 08
-- cardid: 6408
-  title: Run For Your Lives!
+- title: Run For Your Lives!
   types:
   - Event
   decks:
@@ -1610,13 +1481,11 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Malcolm McClinton
   flavor_text: <i>"To me!" Hyun shouted to the peasants.</i>
   collector_number: Shadowlands 13
-- cardid: 6464
-  title: Sanctified Temple
+- title: Sanctified Temple
   types:
   - Holding
   decks:
@@ -1632,13 +1501,11 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '12'
   rarity: Fixed
   artist: Pia Guerra
   flavor_text: <i>"All the same, Tadenori, they shall be defeated," Aoiko replied.</i>
   collector_number: Lion 20
-- cardid: 6602
-  title: Seppun Jin
+- title: Seppun Jin
   types:
   - Personality
   decks:
@@ -1663,12 +1530,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Jim Pavelec
   collector_number: Shadowlands 04
-- cardid: 6647
-  title: Shackled Oni
+- title: Shackled Oni
   types:
   - Holding
   decks:
@@ -1685,12 +1550,10 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   notes: The Dark Allies version of this card was misprinted without the Gold kanji.
-  printing_id: '3'
   rarity: Fixed
   artist: Jim Pavelec
   collector_number: Shadowlands 25
-- cardid: 6670
-  title: Shadowlands Bastion
+- title: Shadowlands Bastion
   types:
   - Holding
   decks:
@@ -1706,14 +1569,12 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Tony Moseley
   flavor_text: <i>"Here, with blood and Tainted jade, we shall reopen doorway Fu Leng created. We shall
     create a new Festering Pit."</i>
   collector_number: Shadowlands 26
-- cardid: 6673
-  title: Shadowlands Marsh
+- title: Shadowlands Marsh
   types:
   - Region
   decks:
@@ -1728,12 +1589,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '6'
   rarity: Fixed
   artist: Michael Phillips
   collector_number: Shadowlands 42
-- cardid: 7007
-  title: Shireikan
+- title: Shireikan
   types:
   - Follower
   decks:
@@ -1751,12 +1610,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Monte Moore
   collector_number: Lion 44
-- cardid: 7220
-  title: Shrine to Daikoku
+- title: Shrine to Daikoku
   types:
   - Holding
   decks:
@@ -1771,12 +1628,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Tony Moseley
   collector_number: Lion 09
-- cardid: 7222
-  title: Shrine to Fukurokujin
+- title: Shrine to Fukurokujin
   types:
   - Holding
   decks:
@@ -1795,12 +1650,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '4'
   rarity: Fixed
   artist: Tony Moseley
   collector_number: Lion 02
-- cardid: 7311
-  title: Sneak Attack
+- title: Sneak Attack
   types:
   - Strategy
   decks:
@@ -1824,13 +1677,11 @@ cards:
   - Rain of Blood (Diamond)
   - Shattered Empire
   - War of the Seals (Onyx Edition)
-  printing_id: '14'
   rarity: Fixed
   artist: John Cadice
   flavor_text: <i>"To Deathseeker's Shrine!" Hyun shouted.</i>
   collector_number: Shadowlands 22
-- cardid: 7398
-  title: Spearhead
+- title: Spearhead
   types:
   - Strategy
   decks:
@@ -1847,13 +1698,11 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '7'
   rarity: Fixed
   artist: beet
   flavor_text: <i>"Yobi!" Aoiko shouted, pushing the peasants aside and lunging at Voitagi with her trident.</i>
   collector_number: Lion 35
-- cardid: 7399
-  title: Spearmen
+- title: Spearmen
   types:
   - Follower
   decks:
@@ -1877,14 +1726,12 @@ cards:
   - Rain of Blood (Diamond)
   notes: Some variants of the Battle of Beiden Pass version of this card were printed with an alternate
     flavor text.
-  printing_id: '14'
   rarity: Fixed
   artist: William O'Connor
   flavor_text: <i>Aoiko frowned as she saw a band of Yotsu swordsmen flee from the oni. She turned to
     Yobi but his face was grim - there was nothing they could do to save them.</i>
   collector_number: Lion 21
-- cardid: 7476
-  title: Steadfast Bushi
+- title: Steadfast Bushi
   types:
   - Follower
   decks:
@@ -1903,14 +1750,12 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Anthony Grabski
   flavor_text: <i>The beast followed Hyun into the depths, and she collapsed the doorway on its massive
     shoulders. With the creature immobile, she turned and raised her blade."</i>
   collector_number: Lion 19
-- cardid: 7546
-  title: Strength of Purity
+- title: Strength of Purity
   types:
   - Strategy
   decks:
@@ -1926,14 +1771,12 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '11'
   rarity: Fixed
   artist: Pia Guerra
   flavor_text: <i>Aoiko did not volunteer to accompany Yobi - there was no need to prove sincerity with
     words. All knew she would wish to be the first to see the enemy.</i>
   collector_number: Lion 01
-- cardid: 7658
-  title: Superior Strategist
+- title: Superior Strategist
   types:
   - Strategy
   decks:
@@ -1953,12 +1796,10 @@ cards:
   - Modern
   - Race for the Throne (Samurai)
   - Rain of Blood (Diamond)
-  printing_id: '6'
   rarity: Fixed
   artist: Ellym Sirac
   collector_number: Lion 46
-- cardid: 7900
-  title: Temples of the New Tao
+- title: Temples of the New Tao
   types:
   - Region
   decks:
@@ -1974,12 +1815,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '5'
   rarity: Fixed
   artist: David Deitrick
   collector_number: Lion 01
-- cardid: 7929
-  title: Test of Might
+- title: Test of Might
   types:
   - Strategy
   decks:
@@ -1995,12 +1834,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '8'
   rarity: Fixed
   artist: Eric Polak
   collector_number: Shadowlands 07
-- cardid: 8068
-  title: The Face of Fear
+- title: The Face of Fear
   types:
   - Strategy
   decks:
@@ -2015,12 +1852,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '5'
   rarity: Fixed
   artist: Tim Gerstmar
   collector_number: Shadowlands 03
-- cardid: 8348
-  title: The Spawning Ground
+- title: The Spawning Ground
   types:
   - Stronghold
   decks:
@@ -2037,12 +1872,10 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '6'
   rarity: Fixed
   artist: Malcolm McClinton
   collector_number: Shadowlands 00
-- cardid: 8495
-  title: Tireless Assault
+- title: Tireless Assault
   types:
   - Strategy
   decks:
@@ -2054,12 +1887,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Jonathan Hunt
   collector_number: Lion 24
-- cardid: 8795
-  title: Tsuno Blade
+- title: Tsuno Blade
   types:
   - Item
   decks:
@@ -2077,12 +1908,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Jeremy Jarvis
   collector_number: Shadowlands 17
-- cardid: 9145
-  title: Veteran Bushi
+- title: Veteran Bushi
   types:
   - Follower
   decks:
@@ -2097,12 +1926,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Chris Seaman
   collector_number: Lion 09
-- cardid: 9164
-  title: Violence Behind Courtliness City
+- title: Violence Behind Courtliness City
   types:
   - Region
   decks:
@@ -2118,14 +1945,12 @@ cards:
   - Legacy
   - Rain of Blood (Diamond)
   story: 2003 Heart of the Empire - Paul Heaver
-  printing_id: '3'
   rarity: Fixed
   artist: Christopher Appel
   flavor_text: <i>"Hyun, ride for help as swiftly as you are able. Nimuro must know what has happened
     here."</i>
   collector_number: Lion 38
-- cardid: 9182
-  title: Voitagi
+- title: Voitagi
   types:
   - Personality
   decks:
@@ -2150,13 +1975,11 @@ cards:
   - Modern
   - Rain of Blood (Diamond)
   - War of the Seals (Onyx Edition)
-  printing_id: '3'
   rarity: Fixed
   artist: Sean Murray
   flavor_text: <i>"Not all those who once followed Toturi are heroes." - Seppun Jin</i>
   collector_number: Shadowlands 03
-- cardid: 9183
-  title: Voitagi
+- title: Voitagi
   types:
   - Personality
   decks:
@@ -2181,12 +2004,10 @@ cards:
   - Age of Enlightenment (Lotus)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Ben Peck
   collector_number: Shadowlands 07
-- cardid: 9184
-  title: Volcanic Fields
+- title: Volcanic Fields
   types:
   - Strategy
   decks:
@@ -2202,12 +2023,10 @@ cards:
   - Four Winds (Gold)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '2'
   rarity: Fixed
   artist: Al Eremin
   collector_number: Lion 10
-- cardid: 9209
-  title: Wanton Destruction
+- title: Wanton Destruction
   types:
   - Strategy
   decks:
@@ -2221,12 +2040,10 @@ cards:
   legality:
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '1'
   rarity: Fixed
   artist: Ben Peck
   collector_number: Shadowlands 11
-- cardid: 9323
-  title: White Shore Plain
+- title: White Shore Plain
   types:
   - Strategy
   decks:
@@ -2245,13 +2062,11 @@ cards:
   - Legacy
   - Modern
   - Rain of Blood (Diamond)
-  printing_id: '6'
   rarity: Fixed
   artist: Pamela Shanteau
   flavor_text: <i>"Fortify that shrine," Tadenori commanded. "This will be our headquarters."</i>
   collector_number: Lion 05
-- cardid: 9672
-  title: Yosuchi
+- title: Yosuchi
   types:
   - Personality
   decks:
@@ -2275,7 +2090,6 @@ cards:
   - Hidden Emperor (Jade)
   - Legacy
   - Rain of Blood (Diamond)
-  printing_id: '3'
   rarity: Fixed
   artist: Thomas Manning
   collector_number: Shadowlands 48

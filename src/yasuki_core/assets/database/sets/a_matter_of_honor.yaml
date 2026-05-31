@@ -1,711 +1,48 @@
 set: A Matter of Honor
 cards:
-- cardid: 201
-  title: Akodo Dojo
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Dojo
-  text: <b>:bow::</b> Produce 2 Gold.<br><b>:bow::</b> When paying for a Follower, it enters play for
-    3 less Gold.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Chris Seaman
-  flavor_text: A true Lion samurai trains his entire life for war. An entire generation has been raised
-    without the opportunity, and they are hungry for it.
-  collector_number: '2'
-- cardid: 619
-  title: Ashigaru Spearmen
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Ashigaru
-  text: After this Follower enters play from your hand, you may draw an additional card when this turn
-    ends. <br><b>Battle, :bow::</b> Ranged 1 Attack.
-  gold_cost: 2
-  focus: 1
-  force: 1
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Enlightenment (Lotus)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '8'
-  rarity: Fixed
-  artist: William O'Connor
-  collector_number: '30'
-- cardid: 662
-  title: Back to the Front
+- title: A Warrior's Brutality
   types:
   - Strategy
   decks:
   - Fate
-  text: <b>Absent Battle:</b> Target your Personality at any location who assigned to this battlefield
-    <i>(this turn)</i>. Move him there and straighten his unit as he moves. <i>(You may take Absent actions
-    without presence.)</i>
-  gold_cost: 0
+  text: <b>Battle:</b> Give your target opposed Personality +3F.
   focus: 3
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
   - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '4'
-  rarity: Fixed
-  artist: Raymond Gaustadnes
-  flavor_text: '"This report is most troubling, as are your injuries. I shall have my finest shugenja
-    attend to you." "Forgive me, but my lord has need of me at the front, and these scratches will not
-    delay me."'
-  collector_number: '41'
-- cardid: 1045
-  title: Block Supply Lines
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move home a target attacking Personality. Bow his unit as he moves.
-  gold_cost: 0
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Clan Wars (Imperial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  printing_id: '17'
-  rarity: Fixed
-  artist: David Dietrick
-  flavor_text: War is a difficult practice. So many men moving around, and with so much equipment. To
-    feed an army requires a second army of peasants and merchants. Stop the second army, and the first
-    will starve.
-  collector_number: '42'
-- cardid: 1497
-  title: Copper Mine
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Mine
-  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Lion Clan player.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  printing_id: '18'
-  rarity: Fixed
-  artist: Charles Urbach
-  flavor_text: The Crab lands have vast mineral wealth, but the Lion lands have only copper. The Lion
-    have made do with what they have.
-  collector_number: '3'
-- cardid: 1528
-  title: Counting House
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  text: You may only have one copy of Counting House in play.<br><b>:bow::</b> Produce 2 Gold.<br><b>Limited,
-    :bow::</b> If you have fewer Provinces than each other player, draw a card.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '4'
-  rarity: Fixed
-  artist: Ed Cox
-  flavor_text: The Yasuki family of the Crab Clan revels in the mercantile and the dishonorable. Anything
-    and everything that profits the clan is acceptable.
-  collector_number: '4'
-- cardid: 1982
-  title: Destiny Has No Secrets
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give your target Personality +2F/+2C. Show your hand to all players.
-  focus: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Clan Wars (Imperial)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  - War of the Seals (Onyx Edition)
-  printing_id: '4'
-  rarity: Fixed
-  artist: Anthony Francisco
-  flavor_text: '"All enemies of the Crab shall be defeated. It is an inevitability. You cannot break the
-    wall. None can."'
-  collector_number: '44'
-- cardid: 2445
-  title: Fall Back!
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move home your target Personality. As he moves, straighten his unit and you may
-    straighten one of your other units <i>(at any location)</i>.
-  gold_cost: 0
-  focus: 4
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '4'
-  rarity: Fixed
-  artist: Chris Pritchard
-  flavor_text: '"This is not the ideal place to engage the enemy. Fall back one quarter mile to the base
-    of the hill. There we can hold them indefinitely!"'
-  collector_number: '45'
-- cardid: 2706
-  title: Frontline Encampment
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  text: <b>:bow::</b> Produce 2 Gold.<br><b>Limited:</b> Give your target Personality +2F. Destroy this
-    Holding.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '4'
-  rarity: Fixed
-  artist: IFS
-  flavor_text: A samurai army is a vast and hungry thing. The encampments that house such armies are temporary,
-    but they achieve that which is required.
-  collector_number: '6'
-- cardid: 3043
-  title: Heavy Infantry
-  types:
-  - Follower
-  decks:
-  - Fate
-  gold_cost: 8
-  focus: 2
-  force: 5
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Enlightenment (Lotus)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '16'
-  rarity: Fixed
-  artist: Mark AW Jackson
-  flavor_text: An army is carefully constructed, with each general taking the care of an artist in striking
-    the right balance between the various units comprising it. The heavy infantry is the chisel, making
-    the broad, deep cuts in the stone of an enemy force.
-  collector_number: '32'
-- cardid: 3307
-  title: Hiruma Moritoki
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crab
-  keywords:
-  - Crab Clan
-  - Samurai
-  - Scholar
-  - Scout
-  gold_cost: 6
-  force: 4
-  chi: 3
-  honor_requirement: 0
-  personal_honor: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '3'
-  rarity: Fixed
-  artist: Diego Gisbert Llorens
-  flavor_text: The mighty Crab army advanced along the Plains of Thunder, and the Hiruma scouts paved
-    the way. No danger was undiscovered, no peril unidentified.
-  collector_number: '16'
-  designer: Bryan
-- cardid: 3493
-  title: House of Exotic Goods
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited:</b> Put one or more face-up cards in your Provinces
-    at the bottom of your deck <i>(and refill the Provinces)</i>. Turn all cards in your Provinces face-up.
-    Destroy this Holding.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Joe Wilson
-  flavor_text: '"Disgusting. Is there no end to the lengths these Yasuki will go for mere coins?" - Akodo
-    Daiken'
-  collector_number: '8'
-- cardid: 3636
-  title: Ikoma Shika
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Lion
-  keywords:
-  - Lion Clan
-  - Samurai
-  - Scout
-  gold_cost: 2
-  force: 2
-  chi: 2
-  honor_requirement: 4
-  personal_honor: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - Shattered Empire
-  printing_id: '3'
-  rarity: Fixed
-  artist: Sergio Camarena
-  flavor_text: '"There are troubling reports of Naga activity in the Crab ranks," Dairuko said. "What
-    is the report of the scout company?" <br>Shika bowed deeply. "I have seen the serpent men myself,
-    my Champion. The reports are true."'
-  collector_number: '23'
-- cardid: 3730
-  title: Incapacitated
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move home a target defending Personality.
-  gold_cost: 0
-  focus: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Destroyer War (Celestial)
-  - Legacy
-  - Modern
-  printing_id: '4'
-  rarity: Fixed
-  artist: Chris Pritchard
-  flavor_text: '"There are enemies too dangerous to kill, and allies too dangerous to be risked. Sometimes
-    they are even the same. We have our ways of dealing with such unfortunate incidents." - The Pragmatism
-    of Tsuruchi'
-  collector_number: '46'
-- cardid: 3808
-  title: Iron Mine
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Mine
-  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Crab Clan player.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Rain of Blood (Diamond)
-  notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
-  printing_id: '15'
-  rarity: Fixed
-  artist: Charles Urbach
-  flavor_text: '"Copper is a weak, flimsy metal. Fitting that the Lion should mine it while we harvest
-    iron to forge true steel." - Hida Reigoro'
-  collector_number: '9'
-- cardid: 4348
-  title: Kikage Zumi Initiates
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Tattooed
-  text: Negate Fear effects targeting this Follower.<br><b>Battle:</b> Fear 2 <i>(Bow a target enemy Follower,
-    or Personality without Followers, with 2 or lower Force)</i>.
-  gold_cost: 3
-  focus: 3
-  force: 2
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Four Winds (Gold)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Steve Snyder
-  flavor_text: The more militant among the Tattooed Monks of the Dragon Clan are quite dangerous.
-  collector_number: '33'
-- cardid: 4734
-  title: Light Infantry
-  types:
-  - Follower
-  decks:
-  - Fate
-  gold_cost: 1
-  focus: 1
-  force: 2
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '14'
-  rarity: Fixed
-  artist: Mark AW Jackson
-  flavor_text: Compared to the heavy infantry, the light infantry is more like the calligraphy brush than
-    the chisel, moving quickly and deftly on the field of battle to seize opportunities the moment they
-    arise.
-  collector_number: '34'
-- cardid: 5017
-  title: Medium Infantry
-  types:
-  - Follower
-  decks:
-  - Fate
-  gold_cost: 3
-  focus: 2
-  force: 3
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Clan Wars (Imperial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Shattered Empire
-  - War of the Seals (Onyx Edition)
-  printing_id: '13'
-  rarity: Fixed
-  artist: Mark AW Jackson
-  flavor_text: The medium infantry comprises the bulk of any army, and strikes the balance between light
-    and heavy. They have more power and resilience than their light counterparts, but are faster and more
-    adaptable than the heavy.
-  collector_number: '35'
-- cardid: 5059
-  title: Minikui no Oni
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Unaligned
-  keywords:
-  - Nonhuman
-  - Oni
-  - Shadowlands
-  text: After you Recruit Minikui, lose 5 Honor.<br><b>Battle:</b> Fear with a strength equal to your
-    target Oni's Chi.
-  gold_cost: 7
-  force: 6
-  chi: 3
-  personal_honor: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Enlightenment (Lotus)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Ted Pendergraff
-  flavor_text: The slavering monstrosity rose from the earth, shattering stone and soil in its path. The
-    villagers screamed, but there was no time to run.
-  collector_number: '28'
-- cardid: 6314
-  title: Rice Paddy
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Farm
-  text: <b>:bow::</b> Produce 2 Gold.<br><b>Battle, :bow::</b> Bow a target enemy attacking Follower.
-    Destroy this Holding.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Four Winds (Gold)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  printing_id: '5'
-  rarity: Fixed
-  artist: Christopher Appel
-  flavor_text: All samurai, regardless of their status, consume rice from the simple farms of the Empire.
-  collector_number: '10'
-- cardid: 7399
-  title: Spearmen
-  types:
-  - Follower
-  decks:
-  - Fate
-  text: <b>Battle, :bow::</b> Ranged 2 Attack <i>(Destroy a target enemy Follower, or Personality without
-    Followers, with 2 or lower Force)</i>.
-  gold_cost: 3
-  focus: 2
-  force: 2
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Enlightenment (Lotus)
-  - Clan Wars (Imperial)
-  - Destroyer War (Celestial)
-  - Four Winds (Gold)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  notes: Some variants of the Battle of Beiden Pass version of this card were printed with an alternate
-    flavor text.
-  printing_id: '18'
-  rarity: Fixed
-  artist: William O'Connor
-  flavor_text: The numbers of the lower classes are vastly greater than that of the samurai. While an
-    army appears a vast sea of warriors, most are barely trained peasants with spears.
-  collector_number: '38'
-- cardid: 7543
-  title: Strength of my Father
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give your target opposed Personality a Force bonus equal to his Personal Honor.
-  gold_cost: 0
-  focus: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  - Race for the Throne (Samurai)
-  printing_id: '3'
-  rarity: Fixed
-  artist: Malcolm McClinton
-  flavor_text: The spirits of the dead are among us often. Most often they seek to offer guidance. On
-    occasion, however, they must be dispatched back to the realms of their final fate.
-  collector_number: '50'
-- cardid: 8741
-  title: Treachery and Deceit
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Move home a target Personality whose unit's total Force is 7 or higher.
-  gold_cost: 0
-  focus: 4
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Age of Enlightenment (Lotus)
-  - Hidden Emperor (Jade)
-  - Legacy
-  - Modern
-  - Rain of Blood (Diamond)
-  printing_id: '6'
-  rarity: Fixed
-  artist: Thomas Denmark
-  flavor_text: A warrior prefers the field of battle, because in battle there is truth. The words of a
-    courtier or even a daimyo can be twisted and deceitful. It is better to have truth, even at the end
-    of a sword.
-  collector_number: '53'
-- cardid: 10033
-  title: Farmer's Market
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Farm
-  - Market
-  text: You have +1 maximum hand size.<br><b>:bow::</b> Produce 2 Gold.
-  gold_cost: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
   - Legacy
   - Modern
   - War of the Seals (Onyx Edition)
-  printing_id: '3'
   rarity: Fixed
-  artist: Stefano Baldo
-  flavor_text: Although they are paid no mind by samurai, it is on the backs of farmers that the Empire's
-    existence rests.
-  collector_number: '5'
-  designer: Thomas
-- cardid: 10431
-  title: Temple of Tengen
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Unique
-  - Temple
-  text: <b>:bow::</b> Produce 2 Gold.<br><b>Limited, :bow::</b> Draw a card. Discard a card.
-  gold_cost: 2
-  is_unique: true
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Aurelien Hubert
-  flavor_text: There are temples to the ten thousand Fortunes throughout the Emerald Empire. Some, like
-    those devoted to the Fortune of Writing, are less frequented.
-  collector_number: '11'
+  artist: Hannah Böving
+  flavor_text: The demeanor that a warrior presents can be every bit as important as the skill with which
+    he wields his blade. An enemy that is demoralized before the battle begins is an enemy that has already
+    been defeated.
+  collector_number: '39'
   designer: Duncan
-- cardid: 10513
-  title: Naga Remnants
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Naga
-  - Nonhuman
-  text: <b>Battle:</b> Bow a target enemy attachment.
-  gold_cost: 2
-  focus: 1
-  force: 2
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Jeremy McHugh
-  flavor_text: '"The serpent men were once allies," Kisada said, rubbing his chin. "They have been untrustworthy
-    of late, due to the influence of that accursed sorcerer of theirs, but if these wish to fight alongside
-    us, we shall permit them."'
-  collector_number: '36'
-  designer: Thomas
-- cardid: 10572
-  title: General's Hatamoto
+- title: Abundant Farmlands
   types:
   - Holding
   decks:
   - Dynasty
   keywords:
-  - Retainer
-  text: <b>Battle, :bow::</b> Give a target Personality or Follower +2F.
+  - Farm
+  text: After each player's turn begins, straighten this Holding.<br><b>:bow::</b> Produce 1 Gold.
   gold_cost: 1
   legality:
   - A Brother's Destiny (Ivory Edition)
   - Age of Conquest (Emperor)
   - Legacy
   - Modern
-  notes: Legal December 1st, 2013
-  printing_id: '2'
+  story: 2012 Kotei Winner - Gordon Ho
   rarity: Fixed
-  artist: Edwin David
-  flavor_text: '"A proper samurai retires to a monastery at the age of forty years. However, some retired
-    samurai may yet serve their lord." - Akodo''s Leadership'
-  collector_number: '7'
-  designer: Bryan
-- cardid: 10578
-  title: Akodo Daiken
+  artist: Lino Drieghe
+  flavor_text: The plains of the Lion provinces are both vast and fertile. They must be in order to feed
+    the many legions of that clan's armies.
+  collector_number: '1'
+  designer: Duncan
+- title: Akodo Daiken
   types:
   - Personality
   decks:
@@ -727,7 +64,6 @@ cards:
   - Legacy
   - Modern
   notes: Legal December 1st, 2013
-  printing_id: '2'
   rarity: Fixed
   artist: Mateusz Ozminski
   flavor_text: The Lion charged with a roar of fury and the passion of men who have trained for war but
@@ -735,569 +71,28 @@ cards:
     have tasted it far too often.
   collector_number: '20'
   designer: Bryan
-- cardid: 10584
-  title: Armed Rice Farmer
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Unaligned
-  keywords:
-  - Expendable
-  - Ashigaru
-  text: <i><i><i><i>(Draw a card after your Expendable card is destroyed.)</i></i></i></i>
-  gold_cost: 2
-  force: 1
-  chi: 1
-  personal_honor: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  notes: Legal February 1st, 2014
-  printing_id: '2'
-  rarity: Fixed
-  artist: Albert Tavira
-  flavor_text: '"Take up this spear, peasant. Your lords have need of you on the fields of battle."'
-  collector_number: '26'
-  designer: Bryan
-- cardid: 10587
-  title: Rice Farmer
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Kharmic
-  - Ashigaru
-  text: '<i><b>(Limited, :g2:: </b>Discard a Kharmic card from your hand to draw a card.)</i>'
-  gold_cost: 2
-  focus: 2
-  force: 2
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  notes: Legal February 1st, 2014
-  printing_id: '2'
-  rarity: Fixed
-  artist: Albert Tavira
-  flavor_text: Only in the most desperate need will samurai press a farmer into war. On the whole, a man
-    raising crops is of much greater value than a man with a spear.
-  collector_number: '37'
-  designer: Bryan
-- cardid: 10606
-  title: Abundant Farmlands
+- title: Akodo Dojo
   types:
   - Holding
   decks:
   - Dynasty
   keywords:
-  - Farm
-  text: After each player's turn begins, straighten this Holding.<br><b>:bow::</b> Produce 1 Gold.
-  gold_cost: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  story: 2012 Kotei Winner - Gordon Ho
-  printing_id: '2'
-  rarity: Fixed
-  artist: Lino Drieghe
-  flavor_text: The plains of the Lion provinces are both vast and fertile. They must be in order to feed
-    the many legions of that clan's armies.
-  collector_number: '1'
-  designer: Duncan
-- cardid: 10616
-  title: The Breeding Ground
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Stables
-  text: <b>Limited, :bow::</b> Give your target Personality Conqueror.
-  gold_cost: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  story: 2012 Kotei Winner - Case Kiyonaga
-  printing_id: '2'
-  rarity: Fixed
-  artist: Carlos NCT
-  flavor_text: '"This demon crawled from some foul pit, and we are honor bound to find that pit and destroy
-    it. No unclean beast bloodies the Lion and survives." - Akodo Daiken'
-  collector_number: '12'
-  designer: Thomas
-- cardid: 10639
-  title: Ikoma Jeiku
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Lion
-  keywords:
-  - Lion Clan
-  - Samurai
-  - Scout
-  text: 'Invest :g1:: Refill the Province Jeiku entered play from face-up. <i>(After this card enters
-    play, you may also pay the Invest cost to get the effect, once.)</i>'
-  gold_cost: 5
-  force: 3
-  chi: 3
-  honor_requirement: 0
-  personal_honor: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  story: 2012 Charity Auction - Jake Laird
-  printing_id: '2'
-  rarity: Fixed
-  artist: Aurelien Hubert
-  flavor_text: '"I bring dire news, my lord! A village has fallen to a ravenous beast, a demon from the
-    pit! We must ride at once!"'
-  collector_number: '22'
-  designer: Bryan
-- cardid: 10666
-  title: The Lost Colossus
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Unaligned
-  keywords:
-  - Earth
-  - Golem
-  - Nonhuman
-  text: After The Lost Colossus enters play, bow it.<br>Will not attach cards. Will not challenge. You
-    may not target The Lost Colossus with Political actions.
-  gold_cost: 8
-  force: 6
-  chi: 5
-  personal_honor: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  story: 2012 Kotei Winner - Trevor Valentine
-  printing_id: '2'
-  rarity: Fixed
-  artist: Chris Burdett
-  flavor_text: In the distant Colonies, the Crab had assets at their disposal that would render the war
-    a moot point. Fortunately for the Lion, these were too far to bring to bear.
-  collector_number: '29'
-  designer: Duncan
-- cardid: 10669
-  title: Boyoh Mercenary
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Unaligned
-  keywords:
-  - Mercenary
-  text: After Boyoh Mercenary enters play, discard a card.<br>After Boyoh Mercenary's army destroys a
-    Province, draw a card.
-  gold_cost: 5
-  force: 3
-  chi: 2
-  personal_honor: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  story: 2012 Kotei Winner - Michael Dickinson
-  printing_id: '2'
-  rarity: Fixed
-  artist: Felipe Gaona
-  flavor_text: '"The Crab may employ such disgraceful men, for they have no honor. The Lion will never
-    stoop so low." - Akodo Dairuko'
-  collector_number: '27'
-  designer: Bryan
-- cardid: 10681
-  title: Frontier Farmer
-  types:
-  - Follower
-  decks:
-  - Fate
-  keywords:
-  - Ashigaru
-  text: You may Equip this Follower from your discard pile.
-  gold_cost: 3
-  focus: 1
-  force: 2
-  chi: 0
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  story: 2012 Kotei Winner - Lawrence Alejandre
-  printing_id: '2'
-  rarity: Fixed
-  artist: Brent Chumley
-  flavor_text: There was a sound on the wind, like that of distant thunder, but no clouds marred the skies.
-    The peasants grimaced at the thought, for they knew all too well the sound of armies on the march.
-  collector_number: '31'
-  designer: Thomas
-- cardid: 10714
-  title: Ritual Preparation
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Straighten your target card in a unit.
-  focus: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Sergio Camarena
-  flavor_text: In all things there are rituals. The life of a samurai is filled with them. To don one's
-    armor is a ritual. To duel one's enemy is a ritual. Even the most unthinkable of activities, the war
-    fought in the shadows and across rooftops, is a ritual.
-  collector_number: '49'
-  designer: Loki
-- cardid: 10721
-  title: Defensive Formation
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give one to three of your target defending Personalities +2F.
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Albert Tavira
-  flavor_text: '"Stand at ease, friend Lion. We only wish to offer the Dragon Clan''s aid in this time
-    of strife."'
-  collector_number: '43'
-  designer: Bryan
-- cardid: 10738
-  title: Allied Efforts
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give a target enemy Personality or Follower -3F.
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  story: 2012 Kotei Winner - Corey Beahon
-  printing_id: '2'
-  rarity: Fixed
-  artist: Héctor Herrera
-  flavor_text: Sometimes beings that are considered allies can be extremely difficult to deal with. This
-    is the reality of the modern era of Rokugan, where alliances of the strangest sort can be found.
-  collector_number: '40'
-  designer: Thomas
-- cardid: 10746
-  title: Outnumbered
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give all your opposed Personalities with Followers at the current battlefield +1F.
-    Give all enemy Personalities there without Followers -1F.
-  focus: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Albert Tavira
-  flavor_text: The only concern for a samurai is that he might perish before enacting his lord's will.
-    Death is a meaningless triviality compared to that.
-  collector_number: '48'
-  designer: Bryan
-- cardid: 10747
-  title: Tactical Setback
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Absent Battle:</b> Give a target enemy Personality -2F. <i>(Absent actions can be taken without
-    presence.)</i>
-  focus: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Florian Stitz
-  flavor_text: '"What happened to you?" "I am not entirely sure. Did… did you see a dragon come through
-    here, or…?"'
-  collector_number: '52'
-  designer: Duncan
-- cardid: 10829
-  title: Well-Defended Farm
-  types:
-  - Holding
-  decks:
-  - Dynasty
-  keywords:
-  - Farm
-  text: Your Ashigaru Personalities and Followers have +1F while opposed.<br><b>:bow::</b> Produce 2 Gold.
+  - Dojo
+  text: <b>:bow::</b> Produce 2 Gold.<br><b>:bow::</b> When paying for a Follower, it enters play for
+    3 less Gold.
   gold_cost: 2
-  is_banned: true
-  legality:
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Felipe Gaona
-  flavor_text: '"My neighbors and I have stood against bandits. We will stand against a demon as well,
-    if we must."'
-  collector_number: '14'
-  designer: Loki
-- cardid: 10835
-  title: Kaiu Gorobei
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crab
-  keywords:
-  - Samurai
-  - Siege
-  text: <b>Battle:</b> Discard a card to bow a target enemy card with Force equal to or lower than the
-    discarded card's Focus Value.
-  gold_cost: 5
-  force: 3
-  chi: 4
-  honor_requirement: 3
-  personal_honor: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '2'
-  rarity: Fixed
-  artist: Zhi Kang Lim
-  flavor_text: '"Push past these Lion weaklings, my lord, and I will see every fortification in their
-    lands brought to ruin."'
-  collector_number: '18'
-  designer: Thomas
-- cardid: 10851
-  title: Ikoma Takakura
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Lion
-  keywords:
-  - Lion Clan
-  - Samurai
-  - Scout
-  gold_cost: 4
-  force: 3
-  chi: 3
-  honor_requirement: 4
-  personal_honor: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Brent Chumley
-  flavor_text: The Akodo are known for their brilliance, the Matsu for their ferocity, and the Kitsu for
-    their purity. But the Ikoma are known for their cunning, their practicality, and their willingness
-    to do whatever they must to achieve victory.
-  collector_number: '24'
-  designer: Bryan
-- cardid: 10927
-  title: A Warrior's Brutality
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give your target opposed Personality +3F.
-  focus: 3
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  - War of the Seals (Onyx Edition)
-  printing_id: '2'
-  rarity: Fixed
-  artist: Hannah Böving
-  flavor_text: The demeanor that a warrior presents can be every bit as important as the skill with which
-    he wields his blade. An enemy that is demoralized before the battle begins is an enemy that has already
-    been defeated.
-  collector_number: '39'
-  designer: Duncan
-- cardid: 10946
-  title: Marshal Your Strength
-  types:
-  - Strategy
-  decks:
-  - Fate
-  text: <b>Battle:</b> Give your target Personality Force and Chi bonuses equal to his Personal Honor,
-    minus 1 if he is unopposed.
-  focus: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: David Horne
-  flavor_text: '"Focus is the key to victory. Know your strengths and weaknesses, focus on them, and you
-    can achieve victory in the face of any hardship." - Akodo''s Leadership'
-  collector_number: '47'
-  designer: Thomas
-- cardid: 10957
-  title: Suffer the Consequences
-  types:
-  - Strategy
-  decks:
-  - Fate
-  keywords:
-  - Kharmic
-  text: <i>(<b>Repeatable Limited, :g2::</b> Discard a Kharmic card to draw a card.)</i><br><b>Battle,
-    :gstar::</b> Destroy a target enemy Follower or Weapon with Force less than or equal to the amount
-    of Gold paid plus 2.
-  focus: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - Age of Conquest (Emperor)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Britt Martin
-  flavor_text: '"I probably should have thought that through…"'
-  collector_number: '51'
-  designer: Thomas
-- cardid: 11147
-  title: Hida Reigoro
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crab
-  keywords:
-  - Crab Clan
-  - Samurai
-  - Soul of Hida Renga
-  text: <b>Battle:</b> Bow Reigoro's target unbowed Follower. The enemy leader targets and bows one of
-    his unbowed Followers or Personalities.
-  gold_cost: 7
-  force: 4
-  chi: 3
-  personal_honor: 1
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
   - Modern
-  printing_id: '2'
+  - Rain of Blood (Diamond)
   rarity: Fixed
-  artist: Ben Peck
-  flavor_text: '"Foolish Lion! Swordsmen are not true warriors! Shatter stone with your weapon and then
-    I will respect you!"'
-  collector_number: '15'
-- cardid: 11148
-  title: Hida Saiyuki
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crab
-  keywords:
-  - Crab Clan
-  - Samurai
-  - Soul of Kaiu Hisayuki
-  text: Increase by 1 all Force bonuses Saiyuki receives <i><i>(for the duration of the Force bonus)</i></i>.
-  gold_cost: 4
-  force: 3
-  chi: 2
-  personal_honor: 1
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: Malcolm McClinton
-  flavor_text: '"Bring your tactics and strategy against me, and see them dashed like waves upon the cliff
-    face. I cannot be defeated by such as you!"'
-  collector_number: '19'
-- cardid: 11152
-  title: Hiruma Tsurao
-  types:
-  - Personality
-  decks:
-  - Dynasty
-  clans:
-  - Crab
-  keywords:
-  - Crab Clan
-  - Samurai
-  - Scout
-  - Soul of Hiruma Todori
-  text: <b>Battle:</b> Straighten your target Follower.
-  gold_cost: 5
-  force: 2
-  chi: 4
-  honor_requirement: 3
-  personal_honor: 2
-  legality:
-  - A Brother's Destiny (Ivory Edition)
-  - A Brother's Destiny (Twenty Festivals)
-  - Legacy
-  - Modern
-  printing_id: '2'
-  rarity: Fixed
-  artist: William O'Connor
-  flavor_text: '"The Lion are right about one thing… the clan that knows the land best will win the day.
-    Too bad it won''t be them."'
-  collector_number: '17'
-- cardid: 11179
-  title: Akodo Kenaro
+  artist: Chris Seaman
+  flavor_text: A true Lion samurai trains his entire life for war. An entire generation has been raised
+    without the opportunity, and they are hungry for it.
+  collector_number: '2'
+- title: Akodo Kenaro
   types:
   - Personality
   decks:
@@ -1322,14 +117,749 @@ cards:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Anthony Grabski
   flavor_text: '"The Crab fight only mindless beasts and creatures. They have no notion of what true tactics
     are. They will learn soon, and they will deeply regret it."'
   collector_number: '21'
-- cardid: 11182
-  title: Matsu Agai
+- title: Allied Efforts
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Give a target enemy Personality or Follower -3F.
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  story: 2012 Kotei Winner - Corey Beahon
+  rarity: Fixed
+  artist: Héctor Herrera
+  flavor_text: Sometimes beings that are considered allies can be extremely difficult to deal with. This
+    is the reality of the modern era of Rokugan, where alliances of the strangest sort can be found.
+  collector_number: '40'
+  designer: Thomas
+- title: Armed Rice Farmer
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Expendable
+  - Ashigaru
+  text: <i><i><i><i>(Draw a card after your Expendable card is destroyed.)</i></i></i></i>
+  gold_cost: 2
+  force: 1
+  chi: 1
+  personal_honor: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  notes: Legal February 1st, 2014
+  rarity: Fixed
+  artist: Albert Tavira
+  flavor_text: '"Take up this spear, peasant. Your lords have need of you on the fields of battle."'
+  collector_number: '26'
+  designer: Bryan
+- title: Ashigaru Spearmen
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Ashigaru
+  text: After this Follower enters play from your hand, you may draw an additional card when this turn
+    ends. <br><b>Battle, :bow::</b> Ranged 1 Attack.
+  gold_cost: 2
+  focus: 1
+  force: 1
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: William O'Connor
+  collector_number: '30'
+- title: Back to the Front
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Absent Battle:</b> Target your Personality at any location who assigned to this battlefield
+    <i>(this turn)</i>. Move him there and straighten his unit as he moves. <i>(You may take Absent actions
+    without presence.)</i>
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Raymond Gaustadnes
+  flavor_text: '"This report is most troubling, as are your injuries. I shall have my finest shugenja
+    attend to you." "Forgive me, but my lord has need of me at the front, and these scratches will not
+    delay me."'
+  collector_number: '41'
+- title: Block Supply Lines
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home a target attacking Personality. Bow his unit as he moves.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: David Dietrick
+  flavor_text: War is a difficult practice. So many men moving around, and with so much equipment. To
+    feed an army requires a second army of peasants and merchants. Stop the second army, and the first
+    will starve.
+  collector_number: '42'
+- title: Boyoh Mercenary
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Mercenary
+  text: After Boyoh Mercenary enters play, discard a card.<br>After Boyoh Mercenary's army destroys a
+    Province, draw a card.
+  gold_cost: 5
+  force: 3
+  chi: 2
+  personal_honor: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  story: 2012 Kotei Winner - Michael Dickinson
+  rarity: Fixed
+  artist: Felipe Gaona
+  flavor_text: '"The Crab may employ such disgraceful men, for they have no honor. The Lion will never
+    stoop so low." - Akodo Dairuko'
+  collector_number: '27'
+  designer: Bryan
+- title: Copper Mine
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Mine
+  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Lion Clan player.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Charles Urbach
+  flavor_text: The Crab lands have vast mineral wealth, but the Lion lands have only copper. The Lion
+    have made do with what they have.
+  collector_number: '3'
+- title: Counting House
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: You may only have one copy of Counting House in play.<br><b>:bow::</b> Produce 2 Gold.<br><b>Limited,
+    :bow::</b> If you have fewer Provinces than each other player, draw a card.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Ed Cox
+  flavor_text: The Yasuki family of the Crab Clan revels in the mercantile and the dishonorable. Anything
+    and everything that profits the clan is acceptable.
+  collector_number: '4'
+- title: Defensive Formation
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Give one to three of your target defending Personalities +2F.
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Albert Tavira
+  flavor_text: '"Stand at ease, friend Lion. We only wish to offer the Dragon Clan''s aid in this time
+    of strife."'
+  collector_number: '43'
+  designer: Bryan
+- title: Destiny Has No Secrets
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Give your target Personality +2F/+2C. Show your hand to all players.
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Anthony Francisco
+  flavor_text: '"All enemies of the Crab shall be defeated. It is an inevitability. You cannot break the
+    wall. None can."'
+  collector_number: '44'
+- title: Fall Back!
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home your target Personality. As he moves, straighten his unit and you may
+    straighten one of your other units <i>(at any location)</i>.
+  gold_cost: 0
+  focus: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Chris Pritchard
+  flavor_text: '"This is not the ideal place to engage the enemy. Fall back one quarter mile to the base
+    of the hill. There we can hold them indefinitely!"'
+  collector_number: '45'
+- title: Farmer's Market
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  - Market
+  text: You have +1 maximum hand size.<br><b>:bow::</b> Produce 2 Gold.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Stefano Baldo
+  flavor_text: Although they are paid no mind by samurai, it is on the backs of farmers that the Empire's
+    existence rests.
+  collector_number: '5'
+  designer: Thomas
+- title: Frontier Farmer
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Ashigaru
+  text: You may Equip this Follower from your discard pile.
+  gold_cost: 3
+  focus: 1
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  story: 2012 Kotei Winner - Lawrence Alejandre
+  rarity: Fixed
+  artist: Brent Chumley
+  flavor_text: There was a sound on the wind, like that of distant thunder, but no clouds marred the skies.
+    The peasants grimaced at the thought, for they knew all too well the sound of armies on the march.
+  collector_number: '31'
+  designer: Thomas
+- title: Frontline Encampment
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: <b>:bow::</b> Produce 2 Gold.<br><b>Limited:</b> Give your target Personality +2F. Destroy this
+    Holding.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: IFS
+  flavor_text: A samurai army is a vast and hungry thing. The encampments that house such armies are temporary,
+    but they achieve that which is required.
+  collector_number: '6'
+- title: General's Hatamoto
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Retainer
+  text: <b>Battle, :bow::</b> Give a target Personality or Follower +2F.
+  gold_cost: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  notes: Legal December 1st, 2013
+  rarity: Fixed
+  artist: Edwin David
+  flavor_text: '"A proper samurai retires to a monastery at the age of forty years. However, some retired
+    samurai may yet serve their lord." - Akodo''s Leadership'
+  collector_number: '7'
+  designer: Bryan
+- title: Heavy Infantry
+  types:
+  - Follower
+  decks:
+  - Fate
+  gold_cost: 8
+  focus: 2
+  force: 5
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Mark AW Jackson
+  flavor_text: An army is carefully constructed, with each general taking the care of an artist in striking
+    the right balance between the various units comprising it. The heavy infantry is the chisel, making
+    the broad, deep cuts in the stone of an enemy force.
+  collector_number: '32'
+- title: Hida Reigoro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Crab Clan
+  - Samurai
+  - Soul of Hida Renga
+  text: <b>Battle:</b> Bow Reigoro's target unbowed Follower. The enemy leader targets and bows one of
+    his unbowed Followers or Personalities.
+  gold_cost: 7
+  force: 4
+  chi: 3
+  personal_honor: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Ben Peck
+  flavor_text: '"Foolish Lion! Swordsmen are not true warriors! Shatter stone with your weapon and then
+    I will respect you!"'
+  collector_number: '15'
+- title: Hida Saiyuki
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Crab Clan
+  - Samurai
+  - Soul of Kaiu Hisayuki
+  text: Increase by 1 all Force bonuses Saiyuki receives <i><i>(for the duration of the Force bonus)</i></i>.
+  gold_cost: 4
+  force: 3
+  chi: 2
+  personal_honor: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: '"Bring your tactics and strategy against me, and see them dashed like waves upon the cliff
+    face. I cannot be defeated by such as you!"'
+  collector_number: '19'
+- title: Hiruma Moritoki
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Crab Clan
+  - Samurai
+  - Scholar
+  - Scout
+  gold_cost: 6
+  force: 4
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Diego Gisbert Llorens
+  flavor_text: The mighty Crab army advanced along the Plains of Thunder, and the Hiruma scouts paved
+    the way. No danger was undiscovered, no peril unidentified.
+  collector_number: '16'
+  designer: Bryan
+- title: Hiruma Tsurao
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Crab Clan
+  - Samurai
+  - Scout
+  - Soul of Hiruma Todori
+  text: <b>Battle:</b> Straighten your target Follower.
+  gold_cost: 5
+  force: 2
+  chi: 4
+  honor_requirement: 3
+  personal_honor: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: '"The Lion are right about one thing… the clan that knows the land best will win the day.
+    Too bad it won''t be them."'
+  collector_number: '17'
+- title: House of Exotic Goods
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited:</b> Put one or more face-up cards in your Provinces
+    at the bottom of your deck <i>(and refill the Provinces)</i>. Turn all cards in your Provinces face-up.
+    Destroy this Holding.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Fixed
+  artist: Joe Wilson
+  flavor_text: '"Disgusting. Is there no end to the lengths these Yasuki will go for mere coins?" - Akodo
+    Daiken'
+  collector_number: '8'
+- title: Ikoma Jeiku
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Samurai
+  - Scout
+  text: 'Invest :g1:: Refill the Province Jeiku entered play from face-up. <i>(After this card enters
+    play, you may also pay the Invest cost to get the effect, once.)</i>'
+  gold_cost: 5
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  story: 2012 Charity Auction - Jake Laird
+  rarity: Fixed
+  artist: Aurelien Hubert
+  flavor_text: '"I bring dire news, my lord! A village has fallen to a ravenous beast, a demon from the
+    pit! We must ride at once!"'
+  collector_number: '22'
+  designer: Bryan
+- title: Ikoma Shika
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Samurai
+  - Scout
+  gold_cost: 2
+  force: 2
+  chi: 2
+  honor_requirement: 4
+  personal_honor: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  rarity: Fixed
+  artist: Sergio Camarena
+  flavor_text: '"There are troubling reports of Naga activity in the Crab ranks," Dairuko said. "What
+    is the report of the scout company?" <br>Shika bowed deeply. "I have seen the serpent men myself,
+    my Champion. The reports are true."'
+  collector_number: '23'
+- title: Ikoma Takakura
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Samurai
+  - Scout
+  gold_cost: 4
+  force: 3
+  chi: 3
+  honor_requirement: 4
+  personal_honor: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Brent Chumley
+  flavor_text: The Akodo are known for their brilliance, the Matsu for their ferocity, and the Kitsu for
+    their purity. But the Ikoma are known for their cunning, their practicality, and their willingness
+    to do whatever they must to achieve victory.
+  collector_number: '24'
+  designer: Bryan
+- title: Incapacitated
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home a target defending Personality.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Destroyer War (Celestial)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Chris Pritchard
+  flavor_text: '"There are enemies too dangerous to kill, and allies too dangerous to be risked. Sometimes
+    they are even the same. We have our ways of dealing with such unfortunate incidents." - The Pragmatism
+    of Tsuruchi'
+  collector_number: '46'
+- title: Iron Mine
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Mine
+  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Crab Clan player.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+  rarity: Fixed
+  artist: Charles Urbach
+  flavor_text: '"Copper is a weak, flimsy metal. Fitting that the Lion should mine it while we harvest
+    iron to forge true steel." - Hida Reigoro'
+  collector_number: '9'
+- title: Kaiu Gorobei
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Samurai
+  - Siege
+  text: <b>Battle:</b> Discard a card to bow a target enemy card with Force equal to or lower than the
+    discarded card's Focus Value.
+  gold_cost: 5
+  force: 3
+  chi: 4
+  honor_requirement: 3
+  personal_honor: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Zhi Kang Lim
+  flavor_text: '"Push past these Lion weaklings, my lord, and I will see every fortification in their
+    lands brought to ruin."'
+  collector_number: '18'
+  designer: Thomas
+- title: Kikage Zumi Initiates
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Tattooed
+  text: Negate Fear effects targeting this Follower.<br><b>Battle:</b> Fear 2 <i>(Bow a target enemy Follower,
+    or Personality without Followers, with 2 or lower Force)</i>.
+  gold_cost: 3
+  focus: 3
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Steve Snyder
+  flavor_text: The more militant among the Tattooed Monks of the Dragon Clan are quite dangerous.
+  collector_number: '33'
+- title: Light Infantry
+  types:
+  - Follower
+  decks:
+  - Fate
+  gold_cost: 1
+  focus: 1
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  rarity: Fixed
+  artist: Mark AW Jackson
+  flavor_text: Compared to the heavy infantry, the light infantry is more like the calligraphy brush than
+    the chisel, moving quickly and deftly on the field of battle to seize opportunities the moment they
+    arise.
+  collector_number: '34'
+- title: Marshal Your Strength
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Give your target Personality Force and Chi bonuses equal to his Personal Honor,
+    minus 1 if he is unopposed.
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: David Horne
+  flavor_text: '"Focus is the key to victory. Know your strengths and weaknesses, focus on them, and you
+    can achieve victory in the face of any hardship." - Akodo''s Leadership'
+  collector_number: '47'
+  designer: Thomas
+- title: Matsu Agai
   types:
   - Personality
   decks:
@@ -1353,39 +883,307 @@ cards:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
   - Modern
-  printing_id: '2'
   rarity: Fixed
   artist: Michael Komarck
   flavor_text: The Deathseekers are an order of warriors whose shame is so great that they must die to
     correct it. They have no fear of death, but inspire it in others.
   collector_number: '25'
-- cardid: 11290
-  title: The Impregnable Fortress of the Crab
+- title: Medium Infantry
   types:
-  - Stronghold
+  - Follower
   decks:
-  - Pre-Game
-  clans:
-  - Crab
-  text: Your Crab Clan Personalities have +1F while opposed.<br><i><i>(This Stronghold has +2 Province
-    Strength when going second)</i></i>
-  province_strength: 7
-  starting_honor: 3
+  - Fate
+  gold_cost: 3
+  focus: 2
+  force: 3
+  chi: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
   - Legacy
   - Modern
-  notes: This Stronghold may not be used in Twenty Festivals Extended formats.
-  printing_id: '3'
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
   rarity: Fixed
-  artist: Chris Ostrowski
-  flavor_text: '"The Lion think that they understand war. They read their scrolls and study their maps
-    and practice their kata. They have no understanding of what true war is. We shall show them." - Hida
-    Kisada'
-  collector_number: '55'
-  doublesided: true
-- cardid: 11296
-  title: The Honorable Garrison of the Lion
+  artist: Mark AW Jackson
+  flavor_text: The medium infantry comprises the bulk of any army, and strikes the balance between light
+    and heavy. They have more power and resilience than their light counterparts, but are faster and more
+    adaptable than the heavy.
+  collector_number: '35'
+- title: Minikui no Oni
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: After you Recruit Minikui, lose 5 Honor.<br><b>Battle:</b> Fear with a strength equal to your
+    target Oni's Chi.
+  gold_cost: 7
+  force: 6
+  chi: 3
+  personal_honor: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Ted Pendergraff
+  flavor_text: The slavering monstrosity rose from the earth, shattering stone and soil in its path. The
+    villagers screamed, but there was no time to run.
+  collector_number: '28'
+- title: Naga Remnants
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Naga
+  - Nonhuman
+  text: <b>Battle:</b> Bow a target enemy attachment.
+  gold_cost: 2
+  focus: 1
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Jeremy McHugh
+  flavor_text: '"The serpent men were once allies," Kisada said, rubbing his chin. "They have been untrustworthy
+    of late, due to the influence of that accursed sorcerer of theirs, but if these wish to fight alongside
+    us, we shall permit them."'
+  collector_number: '36'
+  designer: Thomas
+- title: Outnumbered
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Give all your opposed Personalities with Followers at the current battlefield +1F.
+    Give all enemy Personalities there without Followers -1F.
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Albert Tavira
+  flavor_text: The only concern for a samurai is that he might perish before enacting his lord's will.
+    Death is a meaningless triviality compared to that.
+  collector_number: '48'
+  designer: Bryan
+- title: Rice Farmer
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Kharmic
+  - Ashigaru
+  text: '<i><b>(Limited, :g2:: </b>Discard a Kharmic card from your hand to draw a card.)</i>'
+  gold_cost: 2
+  focus: 2
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  notes: Legal February 1st, 2014
+  rarity: Fixed
+  artist: Albert Tavira
+  flavor_text: Only in the most desperate need will samurai press a farmer into war. On the whole, a man
+    raising crops is of much greater value than a man with a spear.
+  collector_number: '37'
+  designer: Bryan
+- title: Rice Paddy
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  text: <b>:bow::</b> Produce 2 Gold.<br><b>Battle, :bow::</b> Bow a target enemy attacking Follower.
+    Destroy this Holding.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Christopher Appel
+  flavor_text: All samurai, regardless of their status, consume rice from the simple farms of the Empire.
+  collector_number: '10'
+- title: Ritual Preparation
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Straighten your target card in a unit.
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Sergio Camarena
+  flavor_text: In all things there are rituals. The life of a samurai is filled with them. To don one's
+    armor is a ritual. To duel one's enemy is a ritual. Even the most unthinkable of activities, the war
+    fought in the shadows and across rooftops, is a ritual.
+  collector_number: '49'
+  designer: Loki
+- title: Spearmen
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: <b>Battle, :bow::</b> Ranged 2 Attack <i>(Destroy a target enemy Follower, or Personality without
+    Followers, with 2 or lower Force)</i>.
+  gold_cost: 3
+  focus: 2
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  notes: Some variants of the Battle of Beiden Pass version of this card were printed with an alternate
+    flavor text.
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: The numbers of the lower classes are vastly greater than that of the samurai. While an
+    army appears a vast sea of warriors, most are barely trained peasants with spears.
+  collector_number: '38'
+- title: Strength of my Father
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Give your target opposed Personality a Force bonus equal to his Personal Honor.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: The spirits of the dead are among us often. Most often they seek to offer guidance. On
+    occasion, however, they must be dispatched back to the realms of their final fate.
+  collector_number: '50'
+- title: Suffer the Consequences
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kharmic
+  text: <i>(<b>Repeatable Limited, :g2::</b> Discard a Kharmic card to draw a card.)</i><br><b>Battle,
+    :gstar::</b> Destroy a target enemy Follower or Weapon with Force less than or equal to the amount
+    of Gold paid plus 2.
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Britt Martin
+  flavor_text: '"I probably should have thought that through…"'
+  collector_number: '51'
+  designer: Thomas
+- title: Tactical Setback
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Absent Battle:</b> Give a target enemy Personality -2F. <i>(Absent actions can be taken without
+    presence.)</i>
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Florian Stitz
+  flavor_text: '"What happened to you?" "I am not entirely sure. Did… did you see a dragon come through
+    here, or…?"'
+  collector_number: '52'
+  designer: Duncan
+- title: Temple of Tengen
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Temple
+  text: <b>:bow::</b> Produce 2 Gold.<br><b>Limited, :bow::</b> Draw a card. Discard a card.
+  gold_cost: 2
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Aurelien Hubert
+  flavor_text: There are temples to the ten thousand Fortunes throughout the Emerald Empire. Some, like
+    those devoted to the Fortune of Writing, are less frequented.
+  collector_number: '11'
+  designer: Duncan
+- title: The Breeding Ground
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Stables
+  text: <b>Limited, :bow::</b> Give your target Personality Conqueror.
+  gold_cost: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  story: 2012 Kotei Winner - Case Kiyonaga
+  rarity: Fixed
+  artist: Carlos NCT
+  flavor_text: '"This demon crawled from some foul pit, and we are honor bound to find that pit and destroy
+    it. No unclean beast bloodies the Lion and survives." - Akodo Daiken'
+  collector_number: '12'
+  designer: Thomas
+- title: The Honorable Garrison of the Lion
   types:
   - Stronghold
   decks:
@@ -1401,7 +1199,6 @@ cards:
   - Legacy
   - Modern
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
-  printing_id: '3'
   rarity: Fixed
   artist: Chris Ostrowski
   flavor_text: '"The Crab stand on a wall and slay stupid beasts and twisted demons every day. They practice
@@ -1409,3 +1206,98 @@ cards:
     art. They have no notion of what they face." - Akodo Dairuko'
   collector_number: '57'
   doublesided: true
+- title: The Impregnable Fortress of the Crab
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: Your Crab Clan Personalities have +1F while opposed.<br><i><i>(This Stronghold has +2 Province
+    Strength when going second)</i></i>
+  province_strength: 7
+  starting_honor: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Legacy
+  - Modern
+  notes: This Stronghold may not be used in Twenty Festivals Extended formats.
+  rarity: Fixed
+  artist: Chris Ostrowski
+  flavor_text: '"The Lion think that they understand war. They read their scrolls and study their maps
+    and practice their kata. They have no understanding of what true war is. We shall show them." - Hida
+    Kisada'
+  collector_number: '55'
+  doublesided: true
+- title: The Lost Colossus
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Earth
+  - Golem
+  - Nonhuman
+  text: After The Lost Colossus enters play, bow it.<br>Will not attach cards. Will not challenge. You
+    may not target The Lost Colossus with Political actions.
+  gold_cost: 8
+  force: 6
+  chi: 5
+  personal_honor: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  story: 2012 Kotei Winner - Trevor Valentine
+  rarity: Fixed
+  artist: Chris Burdett
+  flavor_text: In the distant Colonies, the Crab had assets at their disposal that would render the war
+    a moot point. Fortunately for the Lion, these were too far to bring to bear.
+  collector_number: '29'
+  designer: Duncan
+- title: Treachery and Deceit
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Move home a target Personality whose unit's total Force is 7 or higher.
+  gold_cost: 0
+  focus: 4
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  rarity: Fixed
+  artist: Thomas Denmark
+  flavor_text: A warrior prefers the field of battle, because in battle there is truth. The words of a
+    courtier or even a daimyo can be twisted and deceitful. It is better to have truth, even at the end
+    of a sword.
+  collector_number: '53'
+- title: Well-Defended Farm
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  text: Your Ashigaru Personalities and Followers have +1F while opposed.<br><b>:bow::</b> Produce 2 Gold.
+  gold_cost: 2
+  is_banned: true
+  legality:
+  - Age of Conquest (Emperor)
+  - Legacy
+  - Modern
+  rarity: Fixed
+  artist: Felipe Gaona
+  flavor_text: '"My neighbors and I have stood against bandits. We will stand against a demon as well,
+    if we must."'
+  collector_number: '14'
+  designer: Loki
