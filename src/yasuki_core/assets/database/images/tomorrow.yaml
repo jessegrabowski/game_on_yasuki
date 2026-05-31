@@ -1,0 +1,338 @@
+set: Tomorrow
+images:
+- card_id: a_new_wall
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: a_new_wall.jpg
+    sha256: 4c6115b85e29bc06d098853a738acee3a585a103d9151102114edaddcf7d41cd
+- card_id: all_things_have_a_price
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: all_things_have_a_price.jpg
+    sha256: 77ea34e797f80c950f7a4725a212a4ad8219fec59d6eebe5f3ac84069f8b445a
+- card_id: ancestral_urn
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: ancestral_urn.jpg
+    sha256: ecbf6aac5d5cdf67d49459224f8d6c5dcd224a420cd945160215bc23c0413088
+- card_id: arms_smugglers
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: arms_smugglers.jpg
+    sha256: 6883ac2df1e7050df239a33789c26ea051d517840f644ad5322fe5d9f1b7d59f
+- card_id: barracks_of_the_damned
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: barracks_of_the_damned.jpg
+    sha256: 8b058ed4a58e41cbd16bde58930132ce297aaa110b66ddeb8c4c2a547c94651b
+- card_id: black_heart_of_the_empire
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: black_heart_of_the_empire.jpg
+    sha256: 2c0d1cd6924dfe1e01e2e4b3a0570828224a6da831d9df79c323e81ec2791ec1
+- card_id: candle_of_shadows
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: candle_of_shadows.jpg
+    sha256: d64f2ee4c17bcba648dd712a2d070e3b4c961dd282805d27d366e2a292a3df31
+- card_id: dark_lords_favor
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: dark_lords_favor.jpg
+    sha256: a7921e75885ce4fa2ac78ecc71d1f0fe2990443a3eb7f3b6353d60e70ccb32b4
+- card_id: egg_of_the_void
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: egg_of_the_void.jpg
+    sha256: e87ca3222234056bc09f86c2f21cd297b63c9a25a01addb18877b23ee66399e7
+- card_id: emma_os_amulet
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: emma_os_amulet.jpg
+    sha256: 07da74183a0809b1dd90b78d6105f409537e7516ebb1bad9715a938d952926c7
+- card_id: encircled_terrain
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: encircled_terrain.jpg
+    sha256: e5b4ecb23daf608fc2dca6a8b3558d7259f889d5d62aff38c661f83c6c487f4e
+- card_id: essence_of_jigoku
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: essence_of_jigoku.jpg
+    sha256: 633f9ba01dc511856071527f2bab6a4d2be74dcd1f2b9b5193adc32e7007694d
+- card_id: explosives
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: explosives.jpg
+    sha256: 79cc9c21206f421ef1280ff59c275b2e3a9480e1669b5968c9d54b4c22a7ed5c
+- card_id: fields_of_foolish_pride
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: fields_of_foolish_pride.jpg
+    sha256: c646f57e25cd1785269ce80e91726d285ba45bcab03a3f5eb17ce51766b3b708
+- card_id: forest_killer_cavern
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: forest_killer_cavern.jpg
+    sha256: 53c7279ffc379606111e61e79f7ffdaa46bdebc4cf9f6e776b68232a2f3121f6
+- card_id: gifts_and_favors
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: gifts_and_favors.jpg
+    sha256: 6ade01f94ebc2666e7a72bd0fd3147d8cfe27b034fadc51b47ff6553ce410fa5
+- card_id: golden_obi_of_the_sun_goddess_experienced
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: golden_obi_of_the_sun_goddess_experienced.jpg
+    sha256: c1a448a429c7057c4fc315f5c4374a61d5294ffd742648e28e2f665aa6bee528
+- card_id: heavenly_kobune_of_suitengu
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: heavenly_kobune_of_suitengu.jpg
+    sha256: e649c90f9972e540f055de481ce9680e29e60094a9af7f5c0de132c6e57235a1
+- card_id: hired_killer
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: hired_killer.jpg
+    sha256: f5a70aa5ff4a3f90013b2072a612e9488e76770b0e110ea864a1d6ffd0eac09d
+- card_id: jade_mirror
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: jade_mirror.jpg
+    sha256: 6a257ccaff0c43264ee8144d7ad3049480d65e834d85c3c8b3d4379fed4e6981
+- card_id: kakitas_edge
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: kakitas_edge.jpg
+    sha256: 36ca18d300715f4b5abc799c5dc06a5f8cf6fd762388a1040393931e78d4006e
+- card_id: kakitas_first_blade
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: kakitas_first_blade.jpg
+    sha256: 7c1d75177d28d80df9cee167cef1f06f6cf447036ec0aecfb63c9e80fe096bb4
+- card_id: kamokos_avatar
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: kamokos_avatar.jpg
+    sha256: 354d911d24cdeb00a1a2d9beb98743e9ff067a52abf5211c755b4d73eec4ccab
+- card_id: kanashimi_toshi
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: kanashimi_toshi.jpg
+    sha256: e9595aef384e3ce92109807e4f0291078d43a25cc493a8ddb9c4e1e42c831933
+- card_id: kuchek
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: kuchek.jpg
+    sha256: 96027a2d16bab942d29c2eae72f8db8aacef6e354713bce2c5f5cf4063d3f23a
+- card_id: makirtch
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: makirtch.jpg
+    sha256: 32235e35ddcdd4ae4ca9a7da061d0577cdb34118767f86f8c05ed240715fdcff
+- card_id: mark_of_oblivion
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: mark_of_oblivion.jpg
+    sha256: 2af398aeba6a071f7d1aba3f1556f5906d1359fccaba33ba4e7be06f2409f754
+- card_id: monkey_man_experienced_2
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: monkey_man_experienced_2.jpg
+    sha256: 2c86e303d7f6a81b2b9d5a52be460163b4885e47ac6bcf2814cf1fbc004dc260
+- card_id: naserus_last_words
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: naserus_last_words.jpg
+    sha256: beca8061ee7cdc425a159182bda9c6b39e82e5d783bfef9471a70105a8cf3023
+- card_id: outer_walls
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: outer_walls.jpg
+    sha256: f4da782f064fc8b731ee9c0ed2bc9b01462e9c25bc863bfd6f76708dfe8f6869
+- card_id: refugees
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: refugees.jpg
+    sha256: 7b04327229e88c9b590a5a05b9be823a8af670101288d61dc9015be9f3b0142b
+- card_id: reinforce_the_gates
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: reinforce_the_gates.jpg
+    sha256: 1f1477bea1e2f4ed26a133f17c745945de2d2a0d9c40501beedf0e947f011539
+- card_id: rich_coffers
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: rich_coffers.jpg
+    sha256: 03ae5033f1a9c2b09b6d9569cef2443387225524cad298e153aa1813089fe3fb
+- card_id: ring_of_the_phoenix
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: ring_of_the_phoenix.jpg
+    sha256: 138454d762fce7e366b43cf5626acc9363188d8a880094adb28a1412749169b8
+- card_id: shinbone_pack
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: shinbone_pack.jpg
+    sha256: 457aa43c75159208e406530775c2e3f380010b1962d6ff813f165f55808dc091
+- card_id: shinbone_warrior
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: shinbone_warrior.jpg
+    sha256: 2af04f2993acb373f1a1109d5a898ec02679041bd9e6672e2bd1a591f4a8331a
+- card_id: shinseis_tomb
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: shinseis_tomb.jpg
+    sha256: 98b0c279f929bb8195df98b56f98fdd5a529b725ec22a833b61ec4abee6bc575
+- card_id: shiryo_no_matsu_experienced
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: shiryo_no_matsu_experienced.jpg
+    sha256: f3cdb34b4c68c24c9d67baa2369cddab019d2086c4eb259f065280923e47774c
+- card_id: tao_of_fu_leng
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: tao_of_fu_leng.jpg
+    sha256: 09bd538416c235aeafcda56ef65b790fd4c538a7b19738dea3b1ad17c07f3066
+- card_id: test_of_honor
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: test_of_honor.jpg
+    sha256: ab6daeb0f8e2357b01873df1107011637768ef68aed881b20dc5f34535a629de
+- card_id: the_blasted_lands
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: the_blasted_lands.jpg
+    sha256: e6cb27893bd4d2da2ef6114e09f5c4cd90d7e277e0505286af60fdecc1c32dec
+- card_id: the_first_wedding
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: the_first_wedding.jpg
+    sha256: 75c5a11083c814334d5e626117e7daa902ba0940562bb891d88c8ba77bad456c
+- card_id: the_last_prophecy
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: the_last_prophecy.jpg
+    sha256: 6eff8a004920cde05ba5cb30d0ea24771eb70bd3d0da71ee9c49285d2a402688
+- card_id: the_price_of_power
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: the_price_of_power.jpg
+    sha256: ebc698ac3a32128f92e7bf5384576ef38117b0951d4e988e74b2db11ae3d7e1b
+- card_id: the_scarab_case
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: the_scarab_case.jpg
+    sha256: eb575e021eb178cd0f696fb0fdf1d1f77fc79c1d3519e903ea04153d5b5cd70c
+- card_id: three_stone_river
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: three_stone_river.jpg
+    sha256: 24a445591e259d8a25788431fbeee87b0d789b7c22b5154893c4f7368ba3e7c6
+- card_id: timely_arrival
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: timely_arrival.jpg
+    sha256: f20595affe927bed3ab63cf3726e29487ccd81810817b2afc99a8fdb21dab66c
+- card_id: togashis_devoted
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: togashis_devoted.jpg
+    sha256: ec9d3832b916b653a020c32af8f1419e9048c510873d026e1c2c6192b2818acc
+- card_id: tomorrow
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: tomorrow.jpg
+    sha256: f5456b5c31d2a50204342db58851002d48af8b1c4317fe89f6fc4dfac09886f3
+- card_id: tomorrow_sensei
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: tomorrow_sensei.jpg
+    sha256: 1a1cdff4465c8fece5a975a349faa75fef9bde4d132d533a628276776fe2b671
+- card_id: tomorrows_hourglass
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: tomorrows_hourglass.jpg
+    sha256: cf859b89f346f5f697052478068c20d5e46eb1f89373aa77aa0fcf5c8932bffd
+- card_id: warrens_of_the_one_tribe
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: warrens_of_the_one_tribe.jpg
+    sha256: 5763bb1cc791dbc4812e8ea0d8d02258c654bdaf7f76b4b599e17a100894ca26
+- card_id: whispered_rumors
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: whispered_rumors.jpg
+    sha256: a4da85f00bfe0f7a54c07aeb29be4cd30022159fd50bcae756b0d80c0da7702f
+- card_id: yotsu_dojo
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: yotsu_dojo.jpg
+    sha256: e0809f204b86258855377893f313d53e692ea43409136cdb421ff798a8d8c1be
+- card_id: zamalash
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: zamalash.jpg
+    sha256: fb1dd1377abe2fbe63942b38e2a28b0d0c38446b2f2973fa735558a5d87497e4
+- card_id: zchkir
+  printing_id: tomorrow
+  files:
+  - role: front
+    file: zchkir.jpg
+    sha256: ec53bf84cd6ef8856d7f1a287a1b016e51ee06527594935634e5d72242adb71c

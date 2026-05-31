@@ -1,0 +1,926 @@
+set: Honor's Veil
+images:
+- card_id: a_common_goal
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: a_common_goal.jpg
+    sha256: 188a3e33173f9b0bac90f7a6b4643049b68e6d24b8941ba3224ae72f3554092e
+- card_id: a_generous_offer
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: a_generous_offer.jpg
+    sha256: 7194d8dd957afd0bd7d039435d99c8c90ceb8dff4da38c211367d9219e704014
+- card_id: a_lords_compassion
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: a_lords_compassion.jpg
+    sha256: 6026beca93995121ce69c272cbf485c0e4bebeadd169df913a4a72eff0ba2e03
+- card_id: a_priests_courtesy
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: a_priests_courtesy.jpg
+    sha256: 88f95dfd7e89ff7b7d5f22e8c96d3a03041c449cdb839e9e175c8e1e57a533db
+- card_id: a_prophet_revealed
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: a_prophet_revealed.jpg
+    sha256: c06e58a62e12e07bb96e91ced1383f3067915846a621c0e29edeb68f154a4856
+- card_id: a_warriors_courtesy
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: a_warriors_courtesy.jpg
+    sha256: fedf22251a4f9511127765ce9d8b85b7b2b2daa0a40d9a8b7a9363740e4e9b3a
+- card_id: advantageous_climate
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: advantageous_climate.jpg
+    sha256: 5949ede69194c910cdaa5c2ae8b6f0d443720e267790e0c6a84f85cdffb8715a
+- card_id: akodo_bakin_experienced_2
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: akodo_bakin_experienced_2.jpg
+    sha256: f3fbf135e43fb142d24b6b2d1ec89f9468bb8cfb87d1d056fc24e56b0b87ec3e
+- card_id: akodo_nakama
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: akodo_nakama.jpg
+    sha256: 6d7e0bd789880f67e5830e6a797302ee35e3eb6516afad1fa1a653d7781e0d66
+- card_id: ancestral_sword_of_the_ki_rin
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: ancestral_sword_of_the_ki_rin.jpg
+    sha256: 8de1fdddf14cc361180dbc9728ba1de6239aa29a6ffa8ca0d4d85db79d2a8c0c
+- card_id: arranged_marriage
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: arranged_marriage.jpg
+    sha256: 9682f6d74b0b917a5b5395645f2430cfb306427d53fb6b0a7947f02c1915c053
+- card_id: asako_nagami
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: asako_nagami.jpg
+    sha256: 6bcabbd35f41fe80ffc86129bb6906ec8a6633a4333bfdf9d1cefa801779bbb2
+- card_id: asp_warriors
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: asp_warriors.jpg
+    sha256: 5475fe3b5a477429ae4bfdaa5ae1f67462be22d5c38d0f96300379513b05bc33
+- card_id: bayushi_eisaku_experienced
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: bayushi_eisaku_experienced.jpg
+    sha256: 09ac36afe224d53ccb44294cb9f24eb1cb59a0420440a3fb2acde6ee84da42f2
+- card_id: bayushi_kosugi
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: bayushi_kosugi.jpg
+    sha256: 568753cd8621d1e61dae9ee9cfeb39d89f639e193e8446070654fbfa25d6b7de
+- card_id: bayushi_nomen_experienced
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: bayushi_nomen_experienced.jpg
+    sha256: f308222e8479c4077fae4187d3596d4741b072dd822191e2e361b19a6fb01528
+- card_id: binding_contract
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: binding_contract.jpg
+    sha256: 57cb1c477434d16de476a7ae01831c7f1ef2c25d43f80c5a40c4370ef87ba301
+- card_id: blessings_of_the_death_lords
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: blessings_of_the_death_lords.jpg
+    sha256: 042e37f9ba4f60b409561e67d725ad81975975dab8bf773796d98e521b6b9623
+- card_id: borrowed_advisors
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: borrowed_advisors.jpg
+    sha256: 6ab72f99e9c6bc5598673a6f128afd28947386846f9d83a8476d59748ca97216
+- card_id: brute_force
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: brute_force.jpg
+    sha256: 88e884669c243e08354e1d7b316cace1ef2651fa6f2ee0af2b0329c471c231e3
+- card_id: clear_signals
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: clear_signals.jpg
+    sha256: ba475e2456f5ef4d16f236c7e8d01c3d8d995e8225deeea0e5d31156498f569d
+- card_id: consecrating_the_temple
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: consecrating_the_temple.jpg
+    sha256: 5112073ed9a0c5bc04b798fcc1c7ddda2812f179f2bd7078946e491e2c94e96a
+- card_id: cornered_market
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: cornered_market.jpg
+    sha256: 5be0a8673243c5819584b20217ad632f5058f13b3208fecccf48c3f14760874a
+- card_id: court_invitation
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: court_invitation.jpg
+    sha256: 1d42745af718058535d4c099d74f7f6e3d4ce7d6cf5a7d55207685db18d7cfc8
+- card_id: daidoji_takihiro_experienced
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: daidoji_takihiro_experienced.jpg
+    sha256: 4eb0072805545cc19fd0dc596a280546e08870ab65c117018927266a06d3efea
+- card_id: daidoji_zoushi
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: daidoji_zoushi.jpg
+    sha256: ac2489914c591491392e8afa5fe1304f77a82f7bd426bb434bca58330b9fbec7
+- card_id: daigotsu_hirata
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: daigotsu_hirata.jpg
+    sha256: 987db33b0ebc4dbf75209c204dcbf2a4db25b1171b3a10181597b42ab0078053
+- card_id: daigotsu_masahiko
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: daigotsu_masahiko.jpg
+    sha256: 8ea459bb9eb7acff36c003b9967eba68ebca615988d5520bf6ec38f9be1082f5
+- card_id: daigotsu_ryudo
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: daigotsu_ryudo.jpg
+    sha256: 6ee43abb67d90db964005dc1b2b4902da922de55a3740a151eda349fd7061702
+- card_id: daigotsu_sahara
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: daigotsu_sahara.jpg
+    sha256: a10c11ddfe9edeb9825ce42ea31a8fef24561af5a4687ced66bac0afbae06915
+- card_id: daigotsu_takayasu
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: daigotsu_takayasu.jpg
+    sha256: 75be83036e440730c3464639cad14ea458cbb76e97011751690f4fdac519d0c8
+- card_id: daigotsu_usharo
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: daigotsu_usharo.jpg
+    sha256: fdc302b5027e5b59c6a3de547105f549b2304afc8d57a84e9a231cfb8f7cad7e
+- card_id: daimyos_blade
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: daimyos_blade.jpg
+    sha256: db96c660340c775769d41ca14cf0f89802d876a44fcacd732f3b291e2629e314
+- card_id: darling_of_the_season
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: darling_of_the_season.jpg
+    sha256: c1eafe7b45424a292cb59c94718eb960814cc1c6d969fc890fbb7f309651fddf
+- card_id: desolate_plains
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: desolate_plains.jpg
+    sha256: 1768148d50b65078ec60dd96fb1918931e4988f32e12179b563b18375e5ff449
+- card_id: doji_jorihime
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: doji_jorihime.jpg
+    sha256: e5503808169ff93fdf9fc6552beb493a80b534321cbe1e08aec581181c6b6fc5
+- card_id: doji_tsubakita
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: doji_tsubakita.jpg
+    sha256: 6d63bf52c6a1e1c24736df1ade84ad0cb23761ec9716e1ff02ea61c02dc15efd
+- card_id: duel_to_the_death
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: duel_to_the_death.jpg
+    sha256: f26a96a13c7ac113f3dc62e9bdc155f3ddbae351c141fe43452b0936c31c26ae
+- card_id: elaborate_preparations
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: elaborate_preparations.jpg
+    sha256: 4edb83f86480950660eddf04b29b980e88d2b94b41569bc773d16ac19696ba1c
+- card_id: essence_of_jade_dragon
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: essence_of_jade_dragon.jpg
+    sha256: 9d2241850decafadaf842c2440f9b52f572dc93a0629f232810dd4498de53d35
+- card_id: exchange_of_hostages
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: exchange_of_hostages.jpg
+    sha256: 0e121fd8dfb77f7d55a7bf97839f672dff7c0200b1744ad24f8b462fadedf385
+- card_id: exchanging_civilities
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: exchanging_civilities.jpg
+    sha256: 679ed79c4beebc535f8ebc05069f734742fc5a4ab599a7ef4c65149d34e057b2
+- card_id: famous_bazaar
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: famous_bazaar.jpg
+    sha256: 975c17d6e28cc9252cd324d0c9d1a998f8e6447395a3bbaf298a105d14eb129c
+- card_id: gaining_momentum
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: gaining_momentum.jpg
+    sha256: 98692851870cfd31fd3c770477f1b394be1c902343f4c292df99b38bb23febfd
+- card_id: gaki_of_desire
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: gaki_of_desire.jpg
+    sha256: 5e14da1f04855668e62e115342ca75803dbdb0f39a379b2940c4bd8301270a55
+- card_id: gempukku_blade
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: gempukku_blade.jpg
+    sha256: 8eed92b21a4fe71d143b177d7475215894e26f1f5d6cb00d29b5cd06cae53647
+- card_id: gempukku_ceremony
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: gempukku_ceremony.jpg
+    sha256: 7aa0f9ac113615601ab27149bbeb225181ff6e739a0f0f0605274721df8848f4
+- card_id: gift_armor
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: gift_armor.jpg
+    sha256: 7dbb855b82f97a95b60968863f0ed60d70357640a8a9fc55221f661472a8b0a1
+- card_id: gunso_kirita
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: gunso_kirita.jpg
+    sha256: 89fab2618c003fb48ec8175a330814e1bd109c06ef1d14bef23c9ccb92bf805c
+- card_id: gunso_shiraki
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: gunso_shiraki.jpg
+    sha256: e56f16d70a0dcf6ac6b2383d7ca002be52818817d963ef5907de01ff98335be9
+- card_id: gunso_tabarou
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: gunso_tabarou.jpg
+    sha256: 78fe48697b4c16b5198f3e03930aa581a0f6e6e90c12c45049ec338fb3923b58
+- card_id: hazardous_ford
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: hazardous_ford.jpg
+    sha256: f55d808dc884aa706f010546eee40bd2a997eb4688abf1157bf50be778725146
+- card_id: hida_lineage
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: hida_lineage.jpg
+    sha256: 46f193396d7ad7e8345a5bbacc8c1d6ae46267d108925c19c3d10764f0b11264
+- card_id: hidden_dragon_temple
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: hidden_dragon_temple.jpg
+    sha256: 4b97df9fd6f9e85bf6ffd8375b72983d7ffdac347bad25ff144bad54a99c6153
+- card_id: hidden_scandal
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: hidden_scandal.jpg
+    sha256: 2cb3e66655e2045b9eb36c677fe407070f64b762a61bf8e56fd18d8c7177fe18
+- card_id: hidden_sword_ronin
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: hidden_sword_ronin.jpg
+    sha256: 702378b080f4c90efb9e039ea84ad569994aa1f558715d49f42ee78adb6d5e01
+- card_id: hidekazu
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: hidekazu.jpg
+    sha256: 3481c02033f5f7aa4fef11903b80709db637bc2044f55becb50138c226467c86
+- card_id: high_temple_of_toshi_ranbo
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: high_temple_of_toshi_ranbo.jpg
+    sha256: 64b72a4dd4bd75265f2aacbdc6e4e1f5500b2b5612a1a936b46c6186da7bbd26
+- card_id: hiruma_aki_experienced
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: hiruma_aki_experienced.jpg
+    sha256: 4a051787889a7af10d879b53bef7383e67fb276c2ef4f8f4f49f28ceb0baec90
+- card_id: hiruma_ikage
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: hiruma_ikage.jpg
+    sha256: e5f3921ac01317f422ad769e1c0871907685b26ba42da7d11e589dc41458869d
+- card_id: horiuchi_meimei
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: horiuchi_meimei.jpg
+    sha256: 8bcbe82a6e14ca45fbec4ad9eca002bb0bb8ac66fd92c6440bcb42a7c3eb1daa
+- card_id: hummingbird_wings
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: hummingbird_wings.jpg
+    sha256: 11b4c17c34f79b8b9daf4dfe572979dc1e8bb0a7ab646c4301488c0cac4fdbde
+- card_id: ide_towako
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: ide_towako.jpg
+    sha256: feee6d56e5a520730e389d3585f84a3a73ab31c65969e3f0cc17a69b822955d8
+- card_id: ide_yusuke
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: ide_yusuke.jpg
+    sha256: 4f45ca2a296f9ad5c91f09d57b67628cedda062ceabb9283e6f3f6aeda0e93ee
+- card_id: ikoma_hodota
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: ikoma_hodota.jpg
+    sha256: 70faf178e7433f529168dfffe5ba38b511675961f8078e831343ee3d62bff2e3
+- card_id: impeccable_nobility
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: impeccable_nobility.jpg
+    sha256: 7d4e2ed5eda0b9811acecdb88ac0b2dc69892aad77194f58da300d80cacadb3a
+- card_id: inspecting_the_charts
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: inspecting_the_charts.jpg
+    sha256: d51f6874a43463c1efecdfec9940da275ebaa68dbb0679c09eeeff557734c8f5
+- card_id: inspiring_speech
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: inspiring_speech.jpg
+    sha256: 1f494f4ab0baf7754f2c9e811911d8f5e99a6fc1887e54817b3e5a864d17c884
+- card_id: isawa_mizuhiko
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: isawa_mizuhiko.jpg
+    sha256: 1b0102a4f14149a4f6294af8fb867d03b62016addc1c505e1f4a70a92bde1cc2
+- card_id: isawa_shokuta
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: isawa_shokuta.jpg
+    sha256: 1da08f5427f01e2c74725ba8ad6e391e3e88113b0319e5b11c1944aafd228100
+- card_id: kaiu_genji
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kaiu_genji.jpg
+    sha256: b074e83a53cf24e458417eaabf4de386afdd6d5c3e12d8d9b586bed2348cb2d0
+- card_id: kaiu_taru
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kaiu_taru.jpg
+    sha256: 093c49582611dde6e1738a795c5d4ba0d9ea67972c1c1a0f889698a88ebb7612
+- card_id: kakita_senko
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kakita_senko.jpg
+    sha256: 86391cd67e78b878f3e5adb1ed726dd8bbbdbf1802e8e550d1d1eacf357208e0
+- card_id: kakita_tsukao
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kakita_tsukao.jpg
+    sha256: 441ea75c4003a3f19bb559fe922b8e578dad58548432fd3557e8f4ca584fa640
+- card_id: kata_training_grounds
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kata_training_grounds.jpg
+    sha256: 2112c5c8c6404bc369b0663c900679281b0d1a31f79a421a8d59ff2063c043a0
+- card_id: kayomasa
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kayomasa.jpg
+    sha256: b4ac73e5dbf1bb09f74d18cf1640f80eb41dd0797d8fc763089f69e479a4447f
+- card_id: kishida
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kishida.jpg
+    sha256: 35f8491e4320522253bbd8d7ee27503b8191b6919643980c610dc381625f4047
+- card_id: kitsu_nariyumi
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kitsu_nariyumi.jpg
+    sha256: 11a6b289963b34554721eec3a085da35130595ae0e36270a579ecab5a2b13a62
+- card_id: kitsuki_kouri
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kitsuki_kouri.jpg
+    sha256: 66112143883c5259b68e3c8da6ffacc4002fdffe4ddf746ccff58fd43ecb6adc
+- card_id: kitsuki_taiko_experienced
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kitsuki_taiko_experienced.jpg
+    sha256: 039810c377e5fc2343663ffac4134914dd98d09e35996d70d842a3913987fb6e
+- card_id: kitsune_mizuru
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kitsune_mizuru.jpg
+    sha256: ccb7d187895ad882544c0043e22918e940e38a7071f3cd21926e433994437844
+- card_id: kitsune_ryukan_experienced
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kitsune_ryukan_experienced.jpg
+    sha256: faae8f2b26bf9b0131ccc81af9f134ae990ac917e3dcd3e8e33874ae7131a4e9
+- card_id: kuni_bachida
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kuni_bachida.jpg
+    sha256: 9b2e99c55bb5750203af329b33ee14966d390e3ed8443f9df769c05c484c0b56
+- card_id: kyuden_kyotei
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kyuden_kyotei.jpg
+    sha256: 544705d6a8451efb35b5a552ea8140ab1722211dad3f5ac51384a7cfdd068910
+- card_id: kyuden_miya
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: kyuden_miya.jpg
+    sha256: c8f335d50a01edc21b1673199c6139b3e20fbe9e8d1d5e1f5a0620cd13081d71
+- card_id: luxurious_gift
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: luxurious_gift.jpg
+    sha256: ed2d805e30dc245ec1988c154ac8a9fbbb3b0448e5e9e5ca6bd67fb3f6b8a77c
+- card_id: manipulation
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: manipulation.jpg
+    sha256: 41795e54f6702e5f7c1d392cad9852d42505baa959297cd75c730db1cc97f070
+- card_id: martyr_and_pawn
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: martyr_and_pawn.jpg
+    sha256: e11ccc9793a18649f7542dafd19157520e7668fd6392c93c9cbb992f1993e4ef
+- card_id: matsu_fukiki
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: matsu_fukiki.jpg
+    sha256: 687477ba50d71f7a84f70e7ac58c148e44f96264a0603313b612b9f035783bfe
+- card_id: matsu_nao
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: matsu_nao.jpg
+    sha256: 3bba0687a260445c29f59d5d019e30fef8b701d282894635ebca9ea394624ceb
+- card_id: mirumoto_katsutoshi
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: mirumoto_katsutoshi.jpg
+    sha256: b175651465070f3cc771583c1f4bac57e239382d154dedf0ad40535b4df86052
+- card_id: mirumoto_satobe
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: mirumoto_satobe.jpg
+    sha256: 89226454edaa64412ba7a436b5d3cfdee5af7e57b6252eb760d9c17af7087ee1
+- card_id: mirumoto_toraizo
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: mirumoto_toraizo.jpg
+    sha256: 19f5cf40bba8c2fea4d30e501ae7c357f34ebe4128137c06bf21077ad316ff49
+- card_id: miya_anzai
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: miya_anzai.jpg
+    sha256: 973b5affbf6a0ccc84c7f111efff10b988c7e1693edada1de7055c91854d7606
+- card_id: morning_frost_castle
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: morning_frost_castle.jpg
+    sha256: 0dfce99cc23c1986a6e4256e8a1e7205aec35bd44ac57eaf6694f386482ef29c
+- card_id: moto_choon_yei
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: moto_choon_yei.jpg
+    sha256: 9019325cd325f221ee68686a5dc9c2451469bd5397107f053ea77a281a423b99
+- card_id: moto_masakage
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: moto_masakage.jpg
+    sha256: 10f3666574891a1647c6f3e3b0543d49c8a0c72cbc9ad82b8dca870dc98fe0ee
+- card_id: muddy_sandals
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: muddy_sandals.jpg
+    sha256: 9c658cfa821458c153ffd06bafbe5113796bcda151182098042dcd03c0c050c7
+- card_id: my_ancestors_strength
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: my_ancestors_strength.jpg
+    sha256: 121196cdccb20e793de06a4ac6edc18f00b737fdf914074cd74bd512764bfeb1
+- card_id: northern_hub_village_shipwrights
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: northern_hub_village_shipwrights.jpg
+    sha256: 9fd37f9a73e61b6a4234cbf15d4cddad15bc41e2f4616e444caaff171652cff3
+- card_id: odori_dance
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: odori_dance.jpg
+    sha256: 48343c68ecb4d30bf504217b66cc2fcc6eb329930803d725a8cdefbee32745cb
+- card_id: oni_mura
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: oni_mura.jpg
+    sha256: 3bdf05c4d8d8e1a5a6407983fa748ff53ae23bdbb18184e12bc53e341bb31048
+- card_id: otomo_lineage
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: otomo_lineage.jpg
+    sha256: 3654a7cda9ce51b70530b02e60107cc365f5462505a39ab7f677ff3f85044ca3
+- card_id: passing_judgement
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: passing_judgement.jpg
+    sha256: 5aa32d5d3c63f6e65092e04c67e8126067c5fee4814a07610b261e3b70419a37
+- card_id: perilous_ground
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: perilous_ground.jpg
+    sha256: bc5ddecbac7fb5f903b18f67c229d57e0162f357df4b8a70c26d8a00629ef472
+- card_id: poisoned_gift
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: poisoned_gift.jpg
+    sha256: 38b15266467a25f747f4a184c4e430ec79ac349cde81df174fddf03f581d9fa7
+- card_id: pokkus_raiders
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: pokkus_raiders.jpg
+    sha256: f172451578b071ba0dab4894b41539967f615b9af96bd56273885aeb93d28d64
+- card_id: polite_discussion
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: polite_discussion.jpg
+    sha256: e492e27c568c7d3bfba35d10bca99c3fa1cfe24ff7c9c2d778478fc394419a17
+- card_id: resilient_naginata
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: resilient_naginata.jpg
+    sha256: 1d7a1d3212f8c33eaf5a0e75d0cb9fd0942f7c557f1d5dd19242bfcbcd535e36
+- card_id: respect_among_warriors
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: respect_among_warriors.jpg
+    sha256: 2528c6a2cfd6fa1636173ca622587af156c3574f8f80fd59dd81261932e4b346
+- card_id: return_to_the_heavens
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: return_to_the_heavens.jpg
+    sha256: d46cd8f53ab059a16b95c324368e8b62a7e95392727efd96c6a0c764c0cb1490
+- card_id: shattered_peaks
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: shattered_peaks.jpg
+    sha256: 028d4092fcacf8aeda8759240a97b48ff86c53b80517c1427ac7115cc70955db
+- card_id: shiba_maroyo
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: shiba_maroyo.jpg
+    sha256: 18da3c339f12cd829f12d5cf7c285c8b6d4125d289bec3f4112e68a3ec9daf3c
+- card_id: shiba_sakishi
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: shiba_sakishi.jpg
+    sha256: b245f44d52401f87f52037029e0eababcf3770ef96e33f3cd44452365e4ccb73
+- card_id: shiba_tsukimi_experienced_2
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: shiba_tsukimi_experienced_2.jpg
+    sha256: 8e5a64656b0bd3217e26867669edd5b3d6ae57eaa098b01283e15e250e7f74c4
+- card_id: shikage_no_oni
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: shikage_no_oni.jpg
+    sha256: ba405e902cc9a94b224f959cc345eacc2051c7f8e9ec6146a474d666909b16e8
+- card_id: shosuro_chihiro
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: shosuro_chihiro.jpg
+    sha256: 4b70de18700d76bb2e6a431c109d8c98bf13947d6ec70ad0d3cd4277e89eab53
+- card_id: shosuro_lineage
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: shosuro_lineage.jpg
+    sha256: 4c1fe2c9144dd25f9379ba2138438e4d0ba6ad85a0cdc22bf20a19ba334472d9
+- card_id: shosuro_masato
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: shosuro_masato.jpg
+    sha256: d82bbd72f84e8b901200da178061646848522c5f7f942495d618815bfa92c28a
+- card_id: shosuro_mizuno
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: shosuro_mizuno.jpg
+    sha256: 5d51ebeb7eb0d594c094c0c2750a64585585aba860d3540962730d0979546c54
+- card_id: skilled_quartermaster
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: skilled_quartermaster.jpg
+    sha256: dccc0d2239d6065e5c40d0c24042861679aa54141ffc5d68205f15de09a14d8a
+- card_id: snow_riders
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: snow_riders.jpg
+    sha256: db3dba891e946cf0ee3f669b2800301d4e9841e4fc386d1e34fd707c5f81c40e
+- card_id: solid_defense
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: solid_defense.jpg
+    sha256: f194f7a2bda79be2bbcef212bc497a403d4205c562ae156e986f088a09697f6d
+- card_id: solving_the_riddle
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: solving_the_riddle.jpg
+    sha256: cca263f86dd0f5e86d0fb1ca92441188648366b43a1df75fc11aea24ec06b3cc
+- card_id: sparrow_clan_aide
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: sparrow_clan_aide.jpg
+    sha256: 5c4d91797e433ae287c92e297366ed6a028b9aade61e7c2d5649b0364c56155f
+- card_id: sun_doru
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: sun_doru.jpg
+    sha256: b90a1a43289a1a306e6ff1cabcce2d80dbb6fbb2743ea6df0255822a2bf8dd3c
+- card_id: swift_counterattack
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: swift_counterattack.jpg
+    sha256: fa3204ece19a1e896aca8a659b615cc4be72b4373136450a835f89d09014ad1b
+- card_id: swift_punishment
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: swift_punishment.jpg
+    sha256: 5e41b11c5e80bcdd81444f9f9d825fd9acb938e4ff4ca54911690277b5b3331e
+- card_id: teardrop_island
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: teardrop_island.jpg
+    sha256: a08043a88f7fc87ee05f4d0513ebdd900a4193adadc5922a0775b00a3ef7eed6
+- card_id: tempest_of_osano_wo
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: tempest_of_osano_wo.jpg
+    sha256: 8d0c6590867af999c0b89360778d2860924aa2a144872ba461dd63b94cf6d594
+- card_id: the_balance_shifts
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: the_balance_shifts.jpg
+    sha256: 1df9c00c7f36c6a3ecf08008acb7bde5a4abf14a347ab3de1d5f658a5851455c
+- card_id: the_champions_guidance
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: the_champions_guidance.jpg
+    sha256: 6659200faa8e9fa229d46ef249e3a6975eb73b987d1d3afc3dd142d1419fa750
+- card_id: the_house_of_false_hope
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: the_house_of_false_hope.jpg
+    sha256: 1808273c5c3c955863c06af43e6c3fcd1f829eb50a21babe33813f482fbc3c6f
+- card_id: the_spiders_shadow
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: the_spiders_shadow.jpg
+    sha256: 9f2c93afaca20179ba78c6eaf9e5914c353d1f23ad4c423a48d3732766c587e4
+- card_id: the_strength_of_allies
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: the_strength_of_allies.jpg
+    sha256: cea3d70c609e5532c55c60f261baa266954f01d6b50b6bac41e9980ff3cadc39
+- card_id: to_serve_justice
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: to_serve_justice.jpg
+    sha256: 1925dc3b2b43976ccf807f446cf81b79f397f1b0a1cd841711979ad2d1b1aa2b
+- card_id: togashi_keitori
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: togashi_keitori.jpg
+    sha256: d40148692d62bcc73c5ad595a9cba81a71859d122d910bd7ebd2a3645b0a5099
+- card_id: tonfajutsu
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: tonfajutsu.jpg
+    sha256: 21506ec7a5a7549ac78a6ce55bba6082bb0ce88d317c2bb35d33d9f9471046f8
+- card_id: torchs_flame_flickers
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: torchs_flame_flickers.jpg
+    sha256: b059efe66697c338ba3a1554db11fb3bb20fca5eb7db6f9e8977b597bade281e
+- card_id: tsuruchi_takeba
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: tsuruchi_takeba.jpg
+    sha256: c1d9a2b11da1a98991d1546c4a70e699b1beb176e01a6f3b234b4ebc6380b083
+- card_id: unbiased_advice
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: unbiased_advice.jpg
+    sha256: 0b4ea0ad58d949740b27f14b8dda6df66cc9248b3e9e9ad0a833246861beef04
+- card_id: under_suspicion
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: under_suspicion.jpg
+    sha256: dbd518f02905da826756d8acccb8077948a0b9f7a2d5568e0091f4860980b6d9
+- card_id: ungrateful_host
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: ungrateful_host.jpg
+    sha256: 4b0b9b3b5d01f402287c0cf3a7966a34daaf644a933e9a7f2dd25cf3d3af8dc2
+- card_id: utaku_keiko
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: utaku_keiko.jpg
+    sha256: a185b5d04c6b35530efd14af27d8245624b5244e737558a92ce1bc5d3ca0003c
+- card_id: versatile_army
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: versatile_army.jpg
+    sha256: 4fb9aa925106fdfa9ab15c7810adc80c85925390618c1925cc716495466605ec
+- card_id: winter_ravager
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: winter_ravager.jpg
+    sha256: 3848912779d93e74974fbaaa4a1e092f6322b82aa23fa5842d1f29f20e862837
+- card_id: wolf_legion
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: wolf_legion.jpg
+    sha256: c787df558654690c42c179c032488ea22fc6a40b03e00ea6397e1573edd3e363
+- card_id: wolfs_little_lesson
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: wolfs_little_lesson.jpg
+    sha256: 0d22b97a3415aad9fbe5a9f399f1a7a751dccd5fc8df047f9481a052c75c77e0
+- card_id: yarijutsu
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: yarijutsu.jpg
+    sha256: e62973e87831cc4d6df4f0b078f06833976f70c7a2a38922068fe0ce3715fc4f
+- card_id: yasuki_tenzo
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: yasuki_tenzo.jpg
+    sha256: be8f83e9e764d3b478790886d37acee2ba076bebd64fa86123149784b14c796a
+- card_id: yoritomo_hotako_experienced
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: yoritomo_hotako_experienced.jpg
+    sha256: e23df34314e12c2fdfceb591b87a365f058a6a375a3cd963deae5fb8572d3c04
+- card_id: yoritomo_jera
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: yoritomo_jera.jpg
+    sha256: 04945e153855569d485c9fdb420fe25954e004aad1282b6831f17685b9ccafda
+- card_id: yoritomo_yagami
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: yoritomo_yagami.jpg
+    sha256: 5c635b56fe29385c0c96a0ecd313edeed70f75045ea81338c69a02c50b9d9cac
+- card_id: yoritomo_yoyonagi_experienced
+  printing_id: honors_veil
+  files:
+  - role: front
+    file: yoritomo_yoyonagi_experienced.jpg
+    sha256: dc04b9ea90a6cae72b1e34fc2f3cff9c60f724af13026b9dbd9eb4d4beb8f046

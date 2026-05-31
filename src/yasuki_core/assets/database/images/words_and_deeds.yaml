@@ -1,0 +1,998 @@
+set: Words and Deeds
+images:
+- card_id: a_warriors_patience
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: a_warriors_patience.jpg
+    sha256: 97918382950ef62ffee41779d336795e01af6f3b35c6b24a7b9f5e018ef6d470
+- card_id: agasha_sanami
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: agasha_sanami.jpg
+    sha256: 931209f6dc6ebede95d87f3a8728391a212a09c6314bc7ddf48d6bb5134cf15c
+- card_id: akodo_itoku
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: akodo_itoku.jpg
+    sha256: 7efc263fd511193b01b560b0c174d71e8fe3f3ce5c12421ea90593fa53e75c7e
+- card_id: akodo_sadahige_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: akodo_sadahige_experienced.jpg
+    sha256: b655e13e23f18b21b2b53da5d7ad8159b67d85657f1b711e112e3ee51c8d44b6
+- card_id: an_act_of_disdain
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: an_act_of_disdain.jpg
+    sha256: cbc092edf0f8aac47bf52113c9930826d229a5adcf8b0351aae145439f031a75
+- card_id: armor_of_command
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: armor_of_command.jpg
+    sha256: c02db7811d33f1fd8b638480214b7b6983c5f53822dedf034de3588d813ea71d
+- card_id: armor_of_toshigoku
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: armor_of_toshigoku.jpg
+    sha256: df160c5d0aca12520d1e88d59261395d316d7060946d24e1b5e775e6561fcf42
+- card_id: arrogant_dismissal
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: arrogant_dismissal.jpg
+    sha256: 2d19146967f64f1e31db77f015fab565e993b69a66cf6bc87720b0572c33eb6c
+- card_id: asahina_keitaro_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: asahina_keitaro_experienced.jpg
+    sha256: 3ae17f2af44c0777496926d0a27741cbdf375182b70214bd9816b9b0ac9baa6a
+- card_id: asahina_naoki
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: asahina_naoki.jpg
+    sha256: 247a977df74b435798a5b30740446a306f132afc00e1857664ca808ea223bad9
+- card_id: asako_bushiken
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: asako_bushiken.jpg
+    sha256: 1691739c2760c5ef3859c7261e10d02135e6095924b6a0d5d95be557ebc76325
+- card_id: bayushi_chikayo
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: bayushi_chikayo.jpg
+    sha256: 3fd4852b096257cf2bb47ca74e6dad42f407d11ca34768d2dc342b369d8ddfeb
+- card_id: bayushi_ikkou
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: bayushi_ikkou.jpg
+    sha256: 0a91963909a160ad9a16b796a02a30158983cde51fe032a8067031d751d2c139
+- card_id: bayushi_ryouya
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: bayushi_ryouya.jpg
+    sha256: 86aab04c0776e7f58a8b253d925addaff8d2cd22e1da908075adc05766fdc0e1
+- card_id: bayushi_tenbin
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: bayushi_tenbin.jpg
+    sha256: 138253bf1b9b30e515d4c6e5e4f3e9bb5bf7394b23b7d557244b2a696374596b
+- card_id: bayushi_yousui
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: bayushi_yousui.jpg
+    sha256: 3d8db367e74757060f9ea91fa7b1ce8159b6bac4f70d2600d985462055927d89
+- card_id: behind_enemy_lines
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: behind_enemy_lines.jpg
+    sha256: 0deddef0bef9fa5fad54d97e82cc2409abeff1e3de0bb88472a579f8d398a504
+- card_id: besieged
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: besieged.jpg
+    sha256: c201fb72204c8ffcb6cfcd4dae6bb79628e50de27f3ff18e5b8d550ca5773c52
+- card_id: black_and_white
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: black_and_white.jpg
+    sha256: 393039e1bfe7e68deb7dd2a57a93017ebbbe972e008cd1d70770a3283578fd53
+- card_id: black_silk_castle
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: black_silk_castle.jpg
+    sha256: ed39367dbf5376af46f67fe74cceba9a113fc743af007ed90565bbc754c32b7e
+- card_id: blade_of_awe
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: blade_of_awe.jpg
+    sha256: 71136353f9cba6a02c2ac91001e10a7df80b8ea494ae20774c19d98e53f6dfc9
+- card_id: blade_of_the_pure_soul
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: blade_of_the_pure_soul.jpg
+    sha256: 06a9abc1265de806a20e8d18891e564029d5a08b9eff7e89ec2d23f51f46c948
+- card_id: brink_of_exhaustion
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: brink_of_exhaustion.jpg
+    sha256: 8b1f6e61e64869d9bac25c0f499a8c25adde2edca0bbdf79e2c0949ece845aea
+- card_id: celestial_unrest
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: celestial_unrest.jpg
+    sha256: 086b1badf982748edbbe27bf949da491590f2834b0a62380cc2b28446bdd8da1
+- card_id: chuda_jinsei
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: chuda_jinsei.jpg
+    sha256: 37da42fe1217519f074efece604fef1cb49983f5c364a953270589db010a0b95
+- card_id: contested_ownership
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: contested_ownership.jpg
+    sha256: cf8c5cc93cec4cfc4ffd42cfa697cd8e63873bb751a76b1375bd489c4353c940
+- card_id: coordinated_movement
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: coordinated_movement.jpg
+    sha256: 57c6e2408b952211fa6b026cff293c321c41b4e4ade9235ea65f1607da863b03
+- card_id: coronation_of_jade
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: coronation_of_jade.jpg
+    sha256: 7239515743ab0c07e649309e9e5f1d879fc4bec539b35a6c648471552fa6d6bb
+- card_id: crude_trap
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: crude_trap.jpg
+    sha256: 2fb8322f325b2b5857aa0adda44fa93944d601a79009143e2f874d5ea6937270
+- card_id: customized_armor
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: customized_armor.jpg
+    sha256: c8674e45c78bf5a1c97ae861a300f26f6f3cfc81662858501015e64666dc8c40
+- card_id: daidoji_teruo
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: daidoji_teruo.jpg
+    sha256: 3fd0f7d5cab239e1beda71ee1a4fb531b53f28416febf4d43345d9d28db0fad2
+- card_id: daigotsu_gyoken_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: daigotsu_gyoken_experienced.jpg
+    sha256: 7d0e0837f92a0dfa34edea734a557c8eeed482ec3a82f287889cd312be0186b3
+- card_id: daigotsu_harushi
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: daigotsu_harushi.jpg
+    sha256: e7f7be0906561fb407cb8edb09077f902df971a12a605dbd79b31a023f14ae8d
+- card_id: daigotsu_masisha
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: daigotsu_masisha.jpg
+    sha256: 24a88576e34c13102c799897e944de96590eb697465bda7678576a6eb86062aa
+- card_id: daimyos_vassals
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: daimyos_vassals.jpg
+    sha256: d7aad4672bed1ae9fee196385cbe18cdccc3ecaa3f60922afc1a7aa850d54b74
+- card_id: darkness_unleashed
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: darkness_unleashed.jpg
+    sha256: ee9cb2516bdcf7ac2043e24aba0a0096e91557db6ac13eecbf51865c11ff5d0c
+- card_id: death_trance
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: death_trance.jpg
+    sha256: fdb9308a8670f76a22e870d9e2cd382eb83a9b2f7ad4ce1438064a98c9f73a19
+- card_id: demented_craftsman
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: demented_craftsman.jpg
+    sha256: a5c73176d42ddafdec701b081fe814a782f3af01cfae63c6f2435ed838e5c1fb
+- card_id: devastating_blow
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: devastating_blow.jpg
+    sha256: 1fd73ec049e1475199535caeb4777ccc800db2bdfc1e18c9f4f4297aa401476b
+- card_id: differences_between_us
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: differences_between_us.jpg
+    sha256: 36133324e06d184be0d207fa025f499136689f441132b39ddf61f1f6dfa20365
+- card_id: dissolution
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: dissolution.jpg
+    sha256: f74d63ce56a87eca7b28c00b4523e8943f0df6fc1183176a3418c999c7bb4873
+- card_id: diverting_the_reserves
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: diverting_the_reserves.jpg
+    sha256: 449e3f4ab5bbc7af1b1b1db1acc0f5bd9d2f30d4b12657a3aea44cf3f66887cd
+- card_id: doji_ayano_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: doji_ayano_experienced.jpg
+    sha256: 4b6910862195cc5a43b5b08f906e6532493c4ea2620cbc4a9fc5273efcfc6c50
+- card_id: doji_chitose
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: doji_chitose.jpg
+    sha256: 0b0c67917dafd8f4de6e5ebace6ccc389684fc069866322e5c22fac7dd833ea3
+- card_id: doji_sakurako
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: doji_sakurako.jpg
+    sha256: 4b408bf593b70a5058f7970ad4ba7bd7783b2e3f45f69947830e957cd64bca44
+- card_id: duel_of_champions
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: duel_of_champions.jpg
+    sha256: 5faea57527d1b23a08f2e5db8db89fc8de08357ee6e85b4d1e1d1f73cad21a4f
+- card_id: failure_of_diplomacy
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: failure_of_diplomacy.jpg
+    sha256: ec12440aafbf33fbff2715a83abcdad69cad49806a4d694624ea3bc070e7d1e9
+- card_id: fatina
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: fatina.jpg
+    sha256: f32f719c81ec791fccce4a43b6851e26e23e8c7ad801ab9f56a9f5a9f47d9dec
+- card_id: final_sacrifice
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: final_sacrifice.jpg
+    sha256: 6d7934efdc0b5197225d8345d351568dff71b7b064adba5a7cd1889fafe38a0d
+- card_id: follow_the_flame
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: follow_the_flame.jpg
+    sha256: 899008519777ecbc78a4572f41acaedaddd04e976bf4f8fc5b3af7d0f2591832
+- card_id: fortified_cavalry
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: fortified_cavalry.jpg
+    sha256: f8e52ac7057db7c19ea3f1e8de0b53084862b4413a323e62eef0db0a6bb05365
+- card_id: glorious_path_to_victory
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: glorious_path_to_victory.jpg
+    sha256: a781e06be4d88bcb2565a7b2f60cfb5d82b70f1605176d52825ab25bffeb6ef0
+- card_id: gunso_hiroshi
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: gunso_hiroshi.jpg
+    sha256: 016e5c1f4154691403dd129a85dc4bf4bc8df439c89adb768b55e200cfbea0ac
+- card_id: gunso_kisho
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: gunso_kisho.jpg
+    sha256: 9f4986a4edcd829007e8f3aea93b45273aa695295f59300449cafac2ab333288
+- card_id: gunso_raiden
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: gunso_raiden.jpg
+    sha256: e8e084835b5ff5acf3a78f829e5ed1b9052ab354fc44193f7740e729d8bb2e77
+- card_id: hamstrung
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: hamstrung.jpg
+    sha256: 09306c7ffd9999ec0bb5b5b5acbafdf764263ab1a2df1e43a8824dcb9e1de61c
+- card_id: heavens_fire
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: heavens_fire.jpg
+    sha256: 6ed151adde4adbfed83417a5f3e9884fbc84ec652743dbe6dffbccccd1b1ac55
+- card_id: hida_bachiatari
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: hida_bachiatari.jpg
+    sha256: f3fc8082c48cfb70153014c2249f93736f7eb071388bba0716d45b0072938ee5
+- card_id: hida_fubatsu
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: hida_fubatsu.jpg
+    sha256: 6157098258de807645c345facd7d6d8e80f79605b73241d7c9c0f9c05ee133a7
+- card_id: hida_manabu
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: hida_manabu.jpg
+    sha256: 829753e1282067c1532bb883787f4c4e30bd9029084a02d3fe0e72a484791a35
+- card_id: hida_nichie_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: hida_nichie_experienced.jpg
+    sha256: 8f6a6ed48e3f56f16d97e7c8f98ca46999eb0eed017dca732a449853a4a128b0
+- card_id: hiruma_kaikawa
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: hiruma_kaikawa.jpg
+    sha256: 26f439fb5fa53c5cfb5af4a4e8e440dfd5c5398a09a3d384b1760fec150d0572
+- card_id: hub_of_commerce
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: hub_of_commerce.jpg
+    sha256: 4f1730df6930cd9ca6a2f5525d7218a47d868fc36898a039d61df825584f4206
+- card_id: hurried_gempukku
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: hurried_gempukku.jpg
+    sha256: 500e619f6206e94b16941af48a72209625949c5e69b9a34f5e3af8a4fdbdc9d6
+- card_id: i_will_not_die_alone
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: i_will_not_die_alone.jpg
+    sha256: bd1b476e3c4a2ccf63920a2af9fcf546062d4ce28788bfa2862f02f7c68685fc
+- card_id: ikoma_asa
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: ikoma_asa.jpg
+    sha256: 8f1b25d9792237d289e0b2376ddfcbb9aee5f3766cd329a3ceffa82716d1b07b
+- card_id: inspirational_address
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: inspirational_address.jpg
+    sha256: bef333f716931c4dfa7cda324dd23217434852874686750b46a40e68ae1b508d
+- card_id: insurmountable_obstacle
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: insurmountable_obstacle.jpg
+    sha256: 2832c719578567007d8d37dafce4bf2d0948607f33dfd335dfd9467c2df3ae9b
+- card_id: inu
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: inu.jpg
+    sha256: 0db9eb90206ea411bd05d356f2d87c414efae259489e1a01b2988b5997657db7
+- card_id: isawa_kyoko_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: isawa_kyoko_experienced.jpg
+    sha256: 6aaf00d8197938eff8d30303bc2f664c3e956d3d4e3920a7a1b3aac112a7dc5d
+- card_id: isawa_miniko
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: isawa_miniko.jpg
+    sha256: 9513ff621a39331f50ea25c29bf9af8a2280f01fad26c6a878cf261f33ffd925
+- card_id: isawa_wakasa
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: isawa_wakasa.jpg
+    sha256: ebd63aa1446c63e3e119812e07e3445fce0c77752b0bf7536dd5c91cae00af37
+- card_id: iuchi_ietsuna
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: iuchi_ietsuna.jpg
+    sha256: 852ca27741dc3db4b6dbcd3baadb2565645ebd87e69dcf83922a53d01401fe28
+- card_id: jinako
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: jinako.jpg
+    sha256: b154ab884dd2abea02b049991075858c670dc51690d1502c7367dfb9ecc96da8
+- card_id: kaiu_shoichi
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: kaiu_shoichi.jpg
+    sha256: 977be6e6307dd0114962daa23b7048b0827562891ae3a37fed3d654116d4a358
+- card_id: kakita_michihiro
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: kakita_michihiro.jpg
+    sha256: 44ff5bbeabfcb7e6e4a84c6dbe5246d4696c54b20e23b9bae82c0457344fe1cd
+- card_id: kata_of_the_north_wind
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: kata_of_the_north_wind.jpg
+    sha256: 12ab633272aa9f0de586a5e4c92059013ebff7108351c295bef919df9e93db23
+- card_id: keeping_the_peace
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: keeping_the_peace.jpg
+    sha256: 5c7b76fe532bbb0e7bc732f071cb96ed5487cc8a9c3f9c456d2ef84ca55ff1f0
+- card_id: kensais_blade
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: kensais_blade.jpg
+    sha256: cd00f45733e24283e9adec775e4f1a2d966fabd00802836869b55a027f994d3d
+- card_id: kitsuki_mayako
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: kitsuki_mayako.jpg
+    sha256: c31af7062248ef1e7c683377d585c57724263a24f252c28d9c1542f0c48284f2
+- card_id: kitsuki_nagiken_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: kitsuki_nagiken_experienced.jpg
+    sha256: f21fc36a6759e940901340cda4e724a5882197ea0a683963659fb16732c9455f
+- card_id: kitsune_engo
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: kitsune_engo.jpg
+    sha256: ae39e7a05c116a69dc9992bb0417825345aa92d864111524e611ce82378f0f08
+- card_id: kote
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: kote.jpg
+    sha256: 330e73edb25b715ee7ff8c2d6168ab8e8ffa2cf17443442da23349f30f87840a
+- card_id: kuni_daigo_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: kuni_daigo_experienced.jpg
+    sha256: 02978493280a42523c72aa89dbca6ebee5ba0d0b54532643277739ce0ed23525
+- card_id: lightening_the_load
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: lightening_the_load.jpg
+    sha256: 0237a01fae523e7bf0835dabf7bdd835b2f235d2af0a2c447fc85b40d846a6f0
+- card_id: maga_yari
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: maga_yari.jpg
+    sha256: 6aa205df7af20ed81797a8466550368681cd75bfb789a16c3d220069c5b31fbc
+- card_id: masterpiece
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: masterpiece.jpg
+    sha256: 19c35678bfa870eae0ec95e4b299b019129a4d85997106cd7dd42a4120f1b4c7
+- card_id: masters_of_steel
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: masters_of_steel.jpg
+    sha256: 4ad82ad7505c8e5789ca0b5b05d396513540628f801a5998211358d9d65682c1
+- card_id: matsu_daichi
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: matsu_daichi.jpg
+    sha256: 0d27a1f5ec76ee9853e1c562315d2761c80f7cf3c56e5a093a162486af6ad94b
+- card_id: matsu_takeko_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: matsu_takeko_experienced.jpg
+    sha256: 2e3493ad9ba018667e7ff05657ab95f519b78d10cdace57f8ec2dc4006a43898
+- card_id: matsu_ushio
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: matsu_ushio.jpg
+    sha256: e560ee63e70c0f1df63c224c5842b2120a905818c31ba2b669766e3245d5cb7d
+- card_id: matsu_yosa
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: matsu_yosa.jpg
+    sha256: 6769f7d67e1b686c071d9baddab8de189096c9f4ea1a4b225de99d03bb9c0813
+- card_id: michio_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: michio_experienced.jpg
+    sha256: 50c50c3c5ad0c1876a0a3b4c4b4c0e8863a8c62948a617fa8f32c4dee1119f7d
+- card_id: militia_training_ground
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: militia_training_ground.jpg
+    sha256: 714aba3762598bddb5312d18c2ab318caca71ba849338803bc470e278e4f291f
+- card_id: mirumoto_atsushi
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: mirumoto_atsushi.jpg
+    sha256: bd17ec5153050aea74bc0d585cf9813b236c1f8d7c2fdeda6ce82a2e0385b931
+- card_id: mirumoto_otohiko
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: mirumoto_otohiko.jpg
+    sha256: 055d829ced5b170ef7a11840d05867c22f266f5e16e9c4ab72a6e51a45709cd8
+- card_id: mirumoto_toshiyuki
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: mirumoto_toshiyuki.jpg
+    sha256: 60680c6b95632aa167626bd6348c8e70e4995e605b0b0fc5a969453df6a55733
+- card_id: moshi_chuuya
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: moshi_chuuya.jpg
+    sha256: eab380b4df41da226fcf4f2226a7516157dbb5f442552b086bfee801542474ea
+- card_id: moto_yong_tai_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: moto_yong_tai_experienced.jpg
+    sha256: a815f6e8c534c2a8eadd131429176891bd3a18722332cae32786817910cb8e81
+- card_id: muduro_no_oni
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: muduro_no_oni.jpg
+    sha256: b08e0604eec63430c1b6b9bdc7d547c35ba7293d921a1699ee7676c43160b94a
+- card_id: mukku
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: mukku.jpg
+    sha256: d0fee254785d78e1508b228fbfb44ca2adea2af53b3ebcf533e43b457d373325
+- card_id: naserus_private_journal
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: naserus_private_journal.jpg
+    sha256: 6882124147dd88b18850bc0e0b79229cd2dcf0cfed8b87cfa9140ff66e97ae9e
+- card_id: one_after_another
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: one_after_another.jpg
+    sha256: 2ae7a7ecb237b1bb4b91f6ea24475ab906d8b24fed976d48096a0227a2afa4cb
+- card_id: otomo_ouga
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: otomo_ouga.jpg
+    sha256: 3a52aef3b2a964d49d2358146646792058b3c2b7d0eb572cb5cdc3dee119ee66
+- card_id: patron_of_the_arts
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: patron_of_the_arts.jpg
+    sha256: 3d72ebcd8a523f0040dca1cab8cd51c49da20b98e83e62f3646b2b4ccc925eb7
+- card_id: pokku_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: pokku_experienced.jpg
+    sha256: a114ddc9f674201edf511f15414b8546a9f5e2e9326b4e58292dda7ff560e1a1
+- card_id: prized_farmlands
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: prized_farmlands.jpg
+    sha256: e0bf4dd441be11a6b0feed9a05309e7f435894144f0e9330b9d27e25f77e027b
+- card_id: questionable_patron
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: questionable_patron.jpg
+    sha256: 92b36720a453fe034cd529a7c70dcf702a231a685ca82d2c1e3d2cb3150693ab
+- card_id: reckless_abandon
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: reckless_abandon.jpg
+    sha256: f4020e193590ad54879cced4b2a0391ba302e92470dac5180c27127bd85e8a0e
+- card_id: reihado_shinsei
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: reihado_shinsei.jpg
+    sha256: de7ef259a53bf9fc5edc729b9d912583611144a565b91597e8caecbe87e3657a
+- card_id: rejoining_the_fight
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: rejoining_the_fight.jpg
+    sha256: a66b3f09307b1d1cdc1d96d18ec10b2a7e69ca597aa03ab94212ce9b0417ddaf
+- card_id: remote_farms
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: remote_farms.jpg
+    sha256: 6244ed64ff375da2999e9e6111e9eeab5bb187e67fc76b3699be8c2392d872d0
+- card_id: removing_the_advantage
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: removing_the_advantage.jpg
+    sha256: 5643a32015c2d03e6b925b93bb55fcd76bcd261cbe10e9f566107e45c5ae3998
+- card_id: rewards_of_experience
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: rewards_of_experience.jpg
+    sha256: d728a5be328ce6f10ee172cd16b9da65c9755bbcc63e5b99f2c4bfe91b03a7fe
+- card_id: rising_lava_strike
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: rising_lava_strike.jpg
+    sha256: 28c8eae7cf97066df8e149d457515b33cd3fb42d9e3fb12124902959c4de01c1
+- card_id: secret_passages
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: secret_passages.jpg
+    sha256: df3558310ce9793814b9090090b2ef6d24e4d585c2bd2e875819318bf10a0c88
+- card_id: seized_assets
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: seized_assets.jpg
+    sha256: 2d6ee061aaba0f7a62bfb7b62a1a387ec6d1f83e7ad2c919b6d253dc41751268
+- card_id: selfless_politics
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: selfless_politics.jpg
+    sha256: 828010aa9beac0dc30b40e46fa212787e5ab0566372e80a76c28766a7cb6fdd0
+- card_id: shameful_injury
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: shameful_injury.jpg
+    sha256: 13f575692ae25e915018dca55b3cdfb3e5b331626b962f7da3a819032610ce05
+- card_id: shiba_erena
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: shiba_erena.jpg
+    sha256: 2a7a267f6393679e0519a0736aaaf5e69d6cbd029cd9b543772d3d12481ca58f
+- card_id: shiba_ritsuo
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: shiba_ritsuo.jpg
+    sha256: 6908b5b1a40948d7a783c0cd11efdfad558c8751997c70425cfb34661cb60887
+- card_id: shinjo_genya
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: shinjo_genya.jpg
+    sha256: bd3754e329fac815b14e07263b00fa9a092c851897ff5267bd87476fd04c2e55
+- card_id: shinjo_naota
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: shinjo_naota.jpg
+    sha256: 7bed27262ecaadf3bd63bb3daea0c33d22122fd612b7887db539c5e1f976bced
+- card_id: shinjo_shono_experienced_4
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: shinjo_shono_experienced_4.jpg
+    sha256: c2627dc175248f970a8707fb10d9ba7922d2fc203adb597d5b95e07c40eafb31
+- card_id: shinjo_tsao
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: shinjo_tsao.jpg
+    sha256: 377ca46b0d05c28cbbb67f52acb40c47583fd710fc17c27bd3f740e39fa960b9
+- card_id: shiotome
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: shiotome.jpg
+    sha256: 898531ce456c3dd85fc13e44301bd6f8b82f860514b0d4e6ee0832fda335448a
+- card_id: shosuro_hirobumi
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: shosuro_hirobumi.jpg
+    sha256: d440416bbfe9e53f3afdc05319bedf8fd67de63a2fac5dceabb2185c6af9d1c2
+- card_id: skilled_defense
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: skilled_defense.jpg
+    sha256: 3f024ee460babb9d9c2926fda32a23a3b82e9e1533075f4908377b064a3e5d93
+- card_id: song_of_the_world
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: song_of_the_world.jpg
+    sha256: 545e904e2d63d165c9f16aa8d35b4f8d3d730f105f56223734b4938acdf11002
+- card_id: soshi_tishi_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: soshi_tishi_experienced.jpg
+    sha256: 0ab705044bc3c8c3e4c4f2f2fa44291ea5eb301ba543468d643f867596bfd62d
+- card_id: sowing_suspicion
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: sowing_suspicion.jpg
+    sha256: 4edc87595848782ee5397642e9e5db23440132937099ca6b4afb2bf32b4cfda7
+- card_id: speed_of_the_sea
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: speed_of_the_sea.jpg
+    sha256: 7e7a6711c711eca835bb51ef16e4f8b3dd99517c1bdafcb52d22ff1eeb79c3b7
+- card_id: spider_abbot
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: spider_abbot.jpg
+    sha256: d7fb7c0814362120144767a24ff9cc3a061e410742c7854346d1ed5de1d154e4
+- card_id: strength_of_arms
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: strength_of_arms.jpg
+    sha256: 86498293011235a1774ed6bea05e11cecb4820e166ccfbc477613987e8f94c43
+- card_id: swift_sword_cut
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: swift_sword_cut.jpg
+    sha256: e3f29fdf71aaa9c9e009899a751b8bd6accbadc1bac801b75828cb251207c229
+- card_id: tadakas_mirror
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: tadakas_mirror.jpg
+    sha256: 60ceef2745be616d6ae18cd416c9f86e56b20187facf314dc85ee8a5dac012ed
+- card_id: taoist_archer
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: taoist_archer.jpg
+    sha256: 4ed303ea1c0da369b0fc7bc7e7283b57f131c72429cbe8e2672c45c0eb31da21
+- card_id: tengokus_justice
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: tengokus_justice.jpg
+    sha256: eb7e4951dedf85b0946820140bb6a65cc16fcc6890770db0854ac63bde0bcb5b
+- card_id: tetsuo
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: tetsuo.jpg
+    sha256: 9140948bf10ae44e8f670093b5f3ea669b5fcb44cecec31ec7d3501b97397013
+- card_id: the_emperors_road
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: the_emperors_road.jpg
+    sha256: f0a4fa2c9a005a0ee3c5f93fc38c8c1c6f4a0fc3ce5726bc10d77ca623bc9ff1
+- card_id: the_fall_of_shiro_moto
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: the_fall_of_shiro_moto.jpg
+    sha256: 89870d0e0d4e19bab6356afbb3bc3bcf253ccd849b7e6f721fe3d3e7d2793011
+- card_id: the_final_wave
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: the_final_wave.jpg
+    sha256: ea60faf4f8eb48efde5b2e4cc43880a802ae991cff429dcff8906dbabf0d7558
+- card_id: the_great_carpenter_wall
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: the_great_carpenter_wall.jpg
+    sha256: 2f0fba7b704e7c10c2611d551bdf702d670714186805fc8690e150cc62dc1623
+- card_id: the_jackals_kiss
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: the_jackals_kiss.jpg
+    sha256: e8486dad53840d50d2e78d752eb8e1dd063bf02a65e7b8445226ee3d514115d3
+- card_id: the_last_one
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: the_last_one.jpg
+    sha256: 7627a86342d90cf09d047c4ff3ffd678b2429fa03eeb4c5d0fe36e38bc21a675
+- card_id: the_mountains_feet
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: the_mountains_feet.jpg
+    sha256: 1b89e0fef01c0dc5523b7b70b7da5c78b4eb3c818a3ddadf29fd26fc8ee37859
+- card_id: the_tale_of_tsukuro
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: the_tale_of_tsukuro.jpg
+    sha256: ea34ae95d52c180e1ade2c49d24459e35749b676ff620ada4fded1ef85600e7f
+- card_id: the_third_yasuki_war
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: the_third_yasuki_war.jpg
+    sha256: 7f50d9bc38141c29a4f3fe1d2463a1cba932c85647d6eee64fcc64c49db8fefc
+- card_id: the_western_steppes
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: the_western_steppes.jpg
+    sha256: 29f9873238d29399dc1d035abaa190b832ef25331548770c150a45cdb243ee51
+- card_id: togashi_binya
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: togashi_binya.jpg
+    sha256: f231b53cbd46e6a3a7ec787feb1c172d8e7d56e66fd99d7250f5ccfc7999e0d5
+- card_id: togashi_hogai_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: togashi_hogai_experienced.jpg
+    sha256: 5c576a281d9e2d33610f7c326678236996eb217b354820ddb9b5ba6446dd0573
+- card_id: touch_of_the_infinite
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: touch_of_the_infinite.jpg
+    sha256: d00d876cbb322d0eba7334efb8294f0d106151d82af117787038a9b31ebd9a5c
+- card_id: tsuruchi_akinobu
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: tsuruchi_akinobu.jpg
+    sha256: 3e08d2719b292e78b577f88f787342492023dffc08ca95340b3a1f6b930bbbc5
+- card_id: tsuruchi_taiga
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: tsuruchi_taiga.jpg
+    sha256: 1e2d20e1fec9fa18ffc1d5873e8367d2e106ee50e2354312ee941597a6190e56
+- card_id: ujina_ukita
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: ujina_ukita.jpg
+    sha256: 0de8881e066ee9143405ffc0f289119aeed671ee833eae76621205692ba6a2e6
+- card_id: unwanted_mediation
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: unwanted_mediation.jpg
+    sha256: 33604c8cfd009c12197746a0601aba9ea6ed458a1252d31157094c59f8e92e50
+- card_id: usurpation
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: usurpation.jpg
+    sha256: 72b7f3d8f31951fa3f01ef2d0f5767283912fbbd40e2a30c6f6a85107fb87298
+- card_id: utaku_fusae
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: utaku_fusae.jpg
+    sha256: e87188299fb29fcca65d5f5da288d516803cb9e8492072a98a742289d4c71e9a
+- card_id: web_of_pain
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: web_of_pain.jpg
+    sha256: 5fd085a0b37c9c642d2b7d890e33742a4cece3ce32f4adecc1369e0e9dac74a5
+- card_id: wrist_lock
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: wrist_lock.jpg
+    sha256: f4510bb6090caefa9bd2e80cc739961db71bd40527565a60c090a06f00f50809
+- card_id: yin_and_yang
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: yin_and_yang.jpg
+    sha256: e866b0225fe38177b9a88088e09a0aece0816fe04b77230bd1d680d184684533
+- card_id: yobanjin_mercenaries
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: yobanjin_mercenaries.jpg
+    sha256: ea98decb5301072bb896f8034cc10c968544a45e1042e55f710f9764436395cd
+- card_id: yoritomo_eriko_experienced
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: yoritomo_eriko_experienced.jpg
+    sha256: 63a9004737ced5f3650c0c41310028d5c244bbb09acd9f4f53e54bcc51ba90e8
+- card_id: yoritomo_fushou
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: yoritomo_fushou.jpg
+    sha256: 2e90b2da2afdd711909cef759747e756b7d2b400a3586e8142dd18a2f756c928
+- card_id: yoritomo_han_ku
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: yoritomo_han_ku.jpg
+    sha256: 52b1a386a28e70279a530afac727bbec597d17d67bd52317632768f455e8f0f7
+- card_id: zanaru
+  printing_id: words_and_deeds
+  files:
+  - role: front
+    file: zanaru.jpg
+    sha256: 52154a5b00937be2d205e70b4747fe93294d161cbdbda9ed373398d4f1266489

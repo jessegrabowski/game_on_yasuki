@@ -1,0 +1,1181 @@
+set: A Line in the Sand
+images:
+- card_id: a_kensais_art
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: a_kensais_art.jpg
+    sha256: 5a8c6b314774f199709a90d07f5c44b58eba00171e5cdf2e7b4d75ea66b90c5f
+- card_id: a_kensais_victory
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: a_kensais_victory.jpg
+    sha256: 6502b5834e844e38a439299e54ab633aaa77b60a6aad77f533052d613fd0930a
+- card_id: a_kensais_will
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: a_kensais_will.jpg
+    sha256: 008113fe289bf31bf78b923cca1d75a6f0c798eba883933092b579a24702f97a
+- card_id: abdication
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: abdication.jpg
+    sha256: c957c8585e04ffa6f334094138c099b9e9b50234b878b27c15e7bc88593f95c1
+- card_id: agasha_beiru
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: agasha_beiru.jpg
+    sha256: 1d25ea02d500a8e4cbba7201dabef4e8c2d1b2bbf9c12c67c41aee2f478e4fb1
+- card_id: akodo_niito
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: akodo_niito.jpg
+    sha256: 918123342be0d97fd87a6164085a45f05ed75bea01411ea5e85317fd53f3602c
+- card_id: aranais_armor
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: aranais_armor.jpg
+    sha256: b8a5c9ec6aee619f871a2f7f21bce50239d08c38c62c6a62b6432b867e33bb99
+- card_id: aranais_kama
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: aranais_kama.jpg
+    sha256: 25363fb43a03783e8484b4efaea0d17ae69700224145595312167004f609691d
+- card_id: armor
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: armor.jpg
+    sha256: 0542d6ddd05bec9136416d6196bd52c5258e193bd1e5e29a65eb015ea47907fd
+- card_id: asako_ontaiko
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: asako_ontaiko.jpg
+    sha256: a8e407ade62c7096c97a8479407e46fecd81c3c80a9a1025624a08531e080413
+- card_id: ashalan
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: ashalan.jpg
+    sha256: 0e89dd332b50bd0747e6b70e7b60588ca877e92c4555e1512c40c36eaf801769
+- card_id: banishing_breath
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: banishing_breath.jpg
+    sha256: e17b5c218b724d0af5f85917646c7ea6bda58a82945596ef31444077251a96bf
+- card_id: baraunghar_scout
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: baraunghar_scout.jpg
+    sha256: 580b5b14a042f66530700e2cd74293eb1b551f2dca1c76cf2df27b166fa8811e
+- card_id: bayushi_atsuto
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: bayushi_atsuto.jpg
+    sha256: 5a9ee0205c0ed3af85fed1332af6cd1565daef65c1482f6fbf412dfd8d3f9d08
+- card_id: bayushi_yasunari
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: bayushi_yasunari.jpg
+    sha256: aeda41ce293a6bd3ef1da3e203c82b5430a887ca1baf4042cfc279cceff42f67
+- card_id: beikos_bear
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: beikos_bear.jpg
+    sha256: 28aae1eed7296860bdd4ccb252d108aa268fe7aca47b01d02987b2bb325391f7
+- card_id: benefits_of_honor
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: benefits_of_honor.jpg
+    sha256: 4363877801708264090cbde078b05fb78feacd49dec43909cb663c9575fd2871
+- card_id: beset_from_all_sides
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: beset_from_all_sides.jpg
+    sha256: aa939cf2f3520644e783ba2141fbb21f6a2f5b200cb992b070de5297e2b01012
+- card_id: burning_spirit
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: burning_spirit.jpg
+    sha256: 09047f8659493c88e51d5fc639660d6498d88a757bb18c33cc8f31da811b695d
+- card_id: calculated_risk
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: calculated_risk.jpg
+    sha256: cdcfe9ef1ede1fadf310be69afb4581abebbd7ad511924cfc2e223bb05b4bddf
+- card_id: casting_aside_honor
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: casting_aside_honor.jpg
+    sha256: 32859748c1afd7a0c015c6b79de6775ce59fe2bbae06bca562d03d11b663e912
+- card_id: champion
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: champion.jpg
+    sha256: de35b9f60015588b41d9a0680fef22955166f263d770682c6e64d70b85b0a9a8
+- card_id: clay_yojimbo
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: clay_yojimbo.jpg
+    sha256: d4337be14a8d4d14c24a27e04d6d2ee9a33f20392ac3989e97d8c367867351d8
+- card_id: coastal_lane
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: coastal_lane.jpg
+    sha256: ac59d5c1471c7cf624f9e4f561a78ddee9413288e333a3618833e2f5e1b116ec
+- card_id: colonial_conscripts
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: colonial_conscripts.jpg
+    sha256: cc8c82ebd9028cfcc33290d50bc80b0252204b00f374f56a6ce6422f8bdc76a2
+- card_id: colonial_market
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: colonial_market.jpg
+    sha256: dc8ee9ebb374a679fa2b8da90cdefab7e3f25ef12a8b0f12b6b9917d00480198
+- card_id: combat_at_court
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: combat_at_court.jpg
+    sha256: a883d65f7abcffd1324fc72d4f3531bbcf540116cd4c211d0126194ce05f526a
+- card_id: contested_market
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: contested_market.jpg
+    sha256: 16fd442737b517edcaeb19ce1919e2dc13f129a917b1a7aa0bc37e920e044840
+- card_id: crude_dai_kyu
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: crude_dai_kyu.jpg
+    sha256: 16099c183d6a3fedfef2780f6310fd210a28b72c1261cae8920e58e2ff667fad
+- card_id: daidoji_hirota
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: daidoji_hirota.jpg
+    sha256: ea6eac8b955879e7d4342348cd38319c2500b0d87ea6418a645126b19c662521
+- card_id: daidoji_natsuki
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: daidoji_natsuki.jpg
+    sha256: 54343a232a26c079cc88cdb7883011c82ea6e2865622999514fef70f15cf3b33
+- card_id: daidoji_takeda
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: daidoji_takeda.jpg
+    sha256: c0880108c1a4eed9ea10caba3702a3c794ec35f2364b95671aa469a18856ae2a
+- card_id: daigotsu_jemaru
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: daigotsu_jemaru.jpg
+    sha256: 2be38eae21cd0796ca8ffec481be590833d48e8f45ef4c271e999847e3b7e842
+- card_id: dark_naga_ambusher
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: dark_naga_ambusher.jpg
+    sha256: 04117f12c6baa6cdddee02577f65e76d94338dc63c6ba742de014f2c90121506
+- card_id: diplomacy_breaks_down
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: diplomacy_breaks_down.jpg
+    sha256: c0bbfefc3ba8f208cdf3beb1e2f71ff34383bfe9447f16413d42b80db0bca2fb
+- card_id: disappearing_world_style
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: disappearing_world_style.jpg
+    sha256: b6cde151cb1cb245356e3f88ffe7e5bb2a03fbfc8187a6f35dacee558fb7c32c
+- card_id: dragon_elite_inkyo
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: dragon_elite_inkyo.jpg
+    sha256: c1704083197b5c395b57bb1e3e2994c4f26106ad3d58aa5913b1163d8b2045fa
+- card_id: ensorcelled_longsword
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: ensorcelled_longsword.jpg
+    sha256: d6009e36e9fc6cc2bb73ad0f63647101d8e76e97ef9975f7fb96a8c767acbfe9
+- card_id: familiar_terrain
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: familiar_terrain.jpg
+    sha256: b0c93ea00cddcdffccd36a1b7eeb3dc2d65626976924e6fc5a66e69727c42e5f
+- card_id: fearless_devotion
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: fearless_devotion.jpg
+    sha256: 83a3ca54d62501a7cbffbf994bd85be7fca89142ff427504eca90be84a23157b
+- card_id: flight_of_no_mind
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: flight_of_no_mind.jpg
+    sha256: 306d751c7da25d7570c4938637e3adb57ac408aee9f37bc92bbb1eba50518120
+- card_id: front_line_fodder
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: front_line_fodder.jpg
+    sha256: 1574db5b922d8c20c0f62673592cc092e6a81d84de8d87662a790293d814696f
+- card_id: gates_of_the_second_city
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: gates_of_the_second_city.jpg
+    sha256: c4d486297e9b9e62958339304de704f18eb4e169cc83c4ab2e85a8a67a73c544
+  - role: back
+    file: gates_of_the_second_city__back.jpg
+    sha256: 18e406f54d6e49a48c16dbe61b79cbc708bf04cf5d21248505ff13315b5f4ac1
+- card_id: goblin_follower
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: goblin_follower.jpg
+    sha256: aca29a5610f03abff04b2b05054a63782ccb99db5e489db4e508fabba2a7d92f
+- card_id: goju_saido
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: goju_saido.jpg
+    sha256: af00957a0c570983552f26629a37c9394b4499da4a5ed056390fb94ea9521c1e
+- card_id: guidance_in_war
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: guidance_in_war.jpg
+    sha256: aecd6ee4a65a4869bb409330694fcd52863369d4aade832201346b74f66c2985
+- card_id: hanamachi
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: hanamachi.jpg
+    sha256: c29ddf6f2edf5fbcb4f7654462d4fa598ec204ea60cf4fdbd3e7f8a501c7b68d
+- card_id: harukaze_the_confidant
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: harukaze_the_confidant.jpg
+    sha256: 092f6168a217fa740c8b4ee29d4ae2e0ac104aa0b3920cddaaca28b68496b565
+- card_id: heirloom_tanto
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: heirloom_tanto.jpg
+    sha256: 7ea00f67470161e7e46ec3c728fa87c2d99ea6fbabde84dd42b2f70e529c4747
+- card_id: hida_kozan_voice_of_the_empress
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: hida_kozan_voice_of_the_empress.jpg
+    sha256: 99f40f865f4d82ddacf5820eac0e6b5713547503905772a872187f2339ac1ccd
+- card_id: hida_kurima
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: hida_kurima.jpg
+    sha256: 093895b077344405d71dc9229d3363e6889e729a18831f29eb10ea2c50873b98
+- card_id: hidden_dagger
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: hidden_dagger.jpg
+    sha256: 7256a997db5b884d6f892bc9780292fa6eb9ee7263e6373e73a7cc57ea4246bf
+- card_id: hidden_machinations
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: hidden_machinations.jpg
+    sha256: 9f0d7062b7b0e2fcb1b426f9ae5a64c9335e431e9d774ba5f78f8d84b809feb7
+- card_id: hiruma_daizen
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: hiruma_daizen.jpg
+    sha256: 0235852fcc366401d51933a81b89baa9e7ade7847715509cc2b532dd7c39fc75
+- card_id: house_of_floating_petals
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: house_of_floating_petals.jpg
+    sha256: f60a424d9b178a7743833d06fe069b259a616b8039c4dfdc687ad1c5e135e4e7
+- card_id: house_of_loose_silk
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: house_of_loose_silk.jpg
+    sha256: 1965c5fcfe15e351424e5b22ff8e6167842bc88bb4fc0c6eda2992440edfd2d0
+- card_id: house_of_the_floating_lotus
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: house_of_the_floating_lotus.jpg
+    sha256: c96b69e4b929af698ca6a30d189d94e1a4acaa0dc257428055a9f34612569dcc
+- card_id: ichigos_guard
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: ichigos_guard.jpg
+    sha256: b3f37ac90b8d8acf8f3ff6e3d66efb95d4559dfc23e36c261e7aeb4bd37508c7
+- card_id: ide_ryou
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: ide_ryou.jpg
+    sha256: ab555ef75c393bc53a98988fbefe668779c3359d157803f2f08cb8f2750ac0c1
+- card_id: ideological_differences
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: ideological_differences.jpg
+    sha256: dcd02144658f6b4afcc35a826c2d2bd0cd11088ad27d6672709a535376f84193
+- card_id: ikoma_akinari
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: ikoma_akinari.jpg
+    sha256: 01252e1b07d740770a8c0e7dc5315784b95c345b69c6abb86dae183dfe989751
+- card_id: ikoma_genichi
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: ikoma_genichi.jpg
+    sha256: 13b6d4c34614679ead2b9241b32f479746ab5e9651faf9ea2f9329bf4bab81c9
+- card_id: impassable_waters
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: impassable_waters.jpg
+    sha256: fbf329dd121dfcd3b5f75bee1f7b40fca87bda41822bc467c07f269281dc312b
+- card_id: isawa_kaisei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: isawa_kaisei.jpg
+    sha256: 532cc7987fff7c269c07ba6e041c98b8387bcd5c4615d0fa5cb67bf4cd4a2665
+- card_id: isawa_orinoko
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: isawa_orinoko.jpg
+    sha256: 01398edbebbeee9db73dea2afd56b310ab300e94619c89aeff787ec41d50b64c
+- card_id: isawa_waiko
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: isawa_waiko.jpg
+    sha256: 90d0455636c10d624de25153d6deea473ae463f0cb059f5c251a24302781d66b
+- card_id: iuchi_kalsang
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: iuchi_kalsang.jpg
+    sha256: f9bac95a1a850392660ea266ba5a87f52b919dca4d288fbefce83f5afcb5a46a
+- card_id: ivory_champion
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: ivory_champion.jpg
+    sha256: 4be60376a693e455ef42021875650bbbacc81bb9180738124dee72f95ee17dca
+- card_id: kagako_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kagako_sensei.jpg
+    sha256: a004b22867937a16baca89b1c1f3ac75c8060ed31653b999542cacaed920a233
+- card_id: kakita_ariyoshi
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kakita_ariyoshi.jpg
+    sha256: 30cdecb4c37c40936756e20596c329a01e517fe5e725b313f7bfa16849ff3c2d
+- card_id: kakita_mariko
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kakita_mariko.jpg
+    sha256: 0f68a6b6f557751ca3ceef33b0f9b958f9391bf6b1fb088284e0005bba2ec469
+- card_id: kakita_shinichi
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kakita_shinichi.jpg
+    sha256: 35975f12be1abca2684a55601c805bff73887d61b9a4e6cf0030a3fd23d28a10
+- card_id: kiba
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kiba.jpg
+    sha256: 00d881c695fca71f1df2a938f56a6326693aeb6b7c70bf604534c9d4e24b9621
+- card_id: kichis_shadow_badger
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kichis_shadow_badger.jpg
+    sha256: c05e694bcf68242242f4e41834e14b15d969204f05db865714c3e025054abb81
+- card_id: kikuchiyo
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kikuchiyo.jpg
+    sha256: ed1c807bdea06962c274a822db7ea1ee390b5b37adcc0f4332831d9b86d855db
+- card_id: kitsu_junsuke
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kitsu_junsuke.jpg
+    sha256: 01a5c6602947f569b73cd16f11990d27cbcea3b3f165f5a4177efce21d3ef08c
+- card_id: kitsu_watanabe
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kitsu_watanabe.jpg
+    sha256: 139964001b8da9a4a53d8132cab6a71c992707dd7bdb4d7498d5fe9823d28903
+- card_id: kitsune_nakumi
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kitsune_nakumi.jpg
+    sha256: 8260d7f5da29eadec26434fe3770f7458f26eb47e706adb5f945191e4ae1b0cd
+- card_id: kitsune_satoko
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kitsune_satoko.jpg
+    sha256: 1c9a42f17e98e3c91c8f4f049709837c754375d2f60bb1252baf288ddaa1d92b
+- card_id: kobi_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kobi_sensei.jpg
+    sha256: 9cdea53cbbdbf61c7f610b013601acb2d5bc83deaad235a64f5ff80483e584a9
+- card_id: koiso_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: koiso_sensei.jpg
+    sha256: 80eb93abe53b9ecc608bb6fd2220eedc77e5d17e93d0873f157dd4c58690cc5c
+- card_id: kumite_grounds
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kumite_grounds.jpg
+    sha256: cc085014fd270d72907f5f7c1f001dee3aff729a598e74bb001f7fe870052ea4
+- card_id: kuni_araizen
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kuni_araizen.jpg
+    sha256: 0997d52ca40cca64f6b9a315bb45adf737ddfe0c3947ebf596359f31ddaff015
+- card_id: kuroko_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: kuroko_sensei.jpg
+    sha256: 027dc8b85cc825f7ef6d18ce26ec8ae6591cbeecfb8db8569255781497cf4dfd
+- card_id: legion_of_the_khan
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: legion_of_the_khan.jpg
+    sha256: 4d23a832c8db80b99193cab69e285e7107b4c55a84874ad3b0e299ec774a1216
+- card_id: light_follower
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: light_follower.jpg
+    sha256: 97c1f30578337718c4fe749066802cfd42adb15d8cad829fa8371eec1d48b914
+- card_id: light_of_the_morning_sun
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: light_of_the_morning_sun.jpg
+    sha256: 286f2465f444843883b28425ff1d25240213d3662428b1428fb7442886028359
+- card_id: lion_follower
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: lion_follower.jpg
+    sha256: 191466f1a65ab6f09c6257ba94d4e6c9defc34c9618148e74c9e0708eab7c3a7
+- card_id: little_elephant
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: little_elephant.jpg
+    sha256: 203a7c533e660473d620b0fea83868c0e5b4a6626a88f87adc5a6e025c952b0c
+- card_id: lonely_dojo
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: lonely_dojo.jpg
+    sha256: 8851a01956746601d9b9297ae043ce2972ceb1dbb63a883c09e8f32c30b2e071
+- card_id: long_term_fruition
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: long_term_fruition.jpg
+    sha256: 8b4a5d8f12fcefad246c48bdb5cae8be15be5e6439bb33ca8830d7c6517ff1ef
+- card_id: major_illusion
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: major_illusion.jpg
+    sha256: 664048aaf9384395c56a4a9a32a8bb2c91a6fec603989be47dc8af322aed1cb8
+- card_id: marimako
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: marimako.jpg
+    sha256: 496a8f88cacd0893d1ca5e45aed62d513325f0184b15062a99bf2ad3643e3239
+- card_id: matsu_rishou
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: matsu_rishou.jpg
+    sha256: bceebff1a6affbc6a3bb19eed1b7b037b0f2a7ab18a2b42ad0f18c76072e6911
+- card_id: medium_cavalry_follower
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: medium_cavalry_follower.jpg
+    sha256: ed7f91feb8eaa67ee9e98642213cb46341d5f51a3dabfad4ee683a63004ef366
+- card_id: medium_follower
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: medium_follower.jpg
+    sha256: de78ab95e81c59f5e5d27f6d339ca3b5fe31230e4e896a5a970993ed4e12e4ad
+- card_id: mercenary_guard
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: mercenary_guard.jpg
+    sha256: a13d6a51269d20b71f5468dbb26e1a62e57143658b21d10cdb6fc9fdc8843f8a
+- card_id: minor_illusion
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: minor_illusion.jpg
+    sha256: 31902efe6e66e90f4919bcd55d7c2e8a6890bce4bdf773d765d12a1a5f5806ff
+- card_id: mirumoto_futoro
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: mirumoto_futoro.jpg
+    sha256: d4d221b5aeca094962ab6820657f3496c06052a8e2f11d08d6c482d50c49b2c9
+- card_id: mirumoto_jaikei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: mirumoto_jaikei.jpg
+    sha256: 6b7a73229d2d8b2a1ffe156166187afbfad4f896736ddb62cfff2c126d4129e5
+- card_id: mirumoto_saiko
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: mirumoto_saiko.jpg
+    sha256: 0b97d95d7e607dbd5521a7fdf80fd6b30f14649d59734221e123637605c8d99c
+- card_id: momiji_the_madam
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: momiji_the_madam.jpg
+    sha256: f58b2d7c3500cace72c6a39b02b8a187b23375992a372f41256f4bdee406b359
+- card_id: momijis_chambers
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: momijis_chambers.jpg
+    sha256: b9ecfbad4b620b8430b95b7808dd5d1df2902ac21bfc9aac00116238ab55f057
+- card_id: moto_alani
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: moto_alani.jpg
+    sha256: 630885d2e1791264a76fc142e129bcd9b7ffa77960424b0187c5b87cd6cdc24f
+- card_id: moto_kyouaku_inu
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: moto_kyouaku_inu.jpg
+    sha256: 91a2ccb69a95814c5e0698d242adf774372f85020e78013b6f809edf36504d7f
+- card_id: mounted_skirmishers
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: mounted_skirmishers.jpg
+    sha256: 52a5e332691719a2d17d38377ddd868f76b093851cb7bf0f3eaf911a4f62a9bf
+- card_id: musha_gaeshi
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: musha_gaeshi.jpg
+    sha256: ad9c5feb0922c9d2d090ae6b19a2a51d86b09f9f7aacde27d053faf4eafb2dbf
+- card_id: nakumis_fox
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: nakumis_fox.jpg
+    sha256: b5bcfb29e439cebd1938707a3aa53fdb9e9d63fab00c021321603693fc6c02c8
+- card_id: natsumi_the_socialite
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: natsumi_the_socialite.jpg
+    sha256: 588c6ba6a9ca9e41c989fd7e31b184f8ada6e405aeb9ee7ba5b4fca0c20f39c4
+- card_id: not_yet_finished
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: not_yet_finished.jpg
+    sha256: afeadfb77f4021aa306408ff9f155483f9da824bb424ec7db84fd5a067590b5b
+- card_id: oboro_the_liar
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: oboro_the_liar.jpg
+    sha256: bd2d4628bd6e3ff16ad6276b2dc5bd4d2ff0eea6b6b169109a845378ad87da91
+- card_id: official_sanction
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: official_sanction.jpg
+    sha256: 8d97aa3ff721be5a937a83a43554baa9f5a394ac355868bdc8bf090eddac30e4
+- card_id: oni_hatchling
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: oni_hatchling.jpg
+    sha256: 3afe81c6d39ad783c9b925b5f77885ce75cf602a9e04faedf47f82038f502d44
+- card_id: onyx_oni
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: onyx_oni.jpg
+    sha256: b1b159a95ee9faf95480b488f7b1711f1e2db5f010f772c7b15b88456cc0734c
+- card_id: opportune_weapon
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: opportune_weapon.jpg
+    sha256: 37dd5850cf0df6a4a3d59e60f80dc75704671d05c08a5315c140c94f0c70fe3d
+- card_id: ornery
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: ornery.jpg
+    sha256: 5f280bcd472889ad351decd4523589079c6c9dab9c9b317cfcd96daa2a028eb7
+- card_id: parumbas_boar
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: parumbas_boar.jpg
+    sha256: c600b667bc8a11ecbac6ff3d8bb9f1cabcf2fb928ebac130ef4e07528a9379ae
+- card_id: past_and_future
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: past_and_future.jpg
+    sha256: ccb8e60d6e351c48c44e6449668f0fe1666e0fa0de1dc5ba6e37ea03bc2b8e4d
+- card_id: peasant
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: peasant.jpg
+    sha256: 1942f2efc572d4ab693dd66dcab17e29c94f4d9672a0d4162973f8df403ce28e
+- card_id: planned_departure
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: planned_departure.jpg
+    sha256: 8f51e303ff4d7b521723d929afafb8300f8969a2fc45979c5506dba7d9441fdc
+- card_id: press_the_advantage
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: press_the_advantage.jpg
+    sha256: 08ad045af021bc2f147cc3dd938d8b6afb6e724268eef63156d7177ec138f883
+- card_id: progressive
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: progressive.jpg
+    sha256: 3c8ebb8105a21ef808420cba54091d2ee991b61b6039c4c12d18ff8887c634b1
+- card_id: pursuit_riders
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: pursuit_riders.jpg
+    sha256: f76ba7978b7a2bd4211ff252656e981e2618dcd929415931acbc402dfa1694e7
+- card_id: redirecting_rage
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: redirecting_rage.jpg
+    sha256: 5adf7043a7483f5d44ed3c229756513579cd27edd2c6aa4010a9eb9783cfb004
+- card_id: sachina_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: sachina_sensei.jpg
+    sha256: 373d612950342704d58bf1bdc367a8ec480a1f876c98190c7a9cf0a752f8a52e
+- card_id: sanctioned_declaration
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: sanctioned_declaration.jpg
+    sha256: 218a1c28ca8cbcbdf47936e5e777b4e796f8e24c76c252294c47f2f9eb5dfa2d
+- card_id: second_city_harbor
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: second_city_harbor.jpg
+    sha256: bc360a3abaf5957ca52d70761a647dda17a6238558dd0c3200cffd6ee4460906
+- card_id: second_city_market
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: second_city_market.jpg
+    sha256: 58f804304ea39a441631130352c12e831177efaa42802cfae7b7b6451d555da4
+- card_id: see_the_souls_past
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: see_the_souls_past.jpg
+    sha256: 799f1e571d49879542025e6812efa168a80a0cf5ce8967f315263f51384ad2f6
+- card_id: shiba_tuoko
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: shiba_tuoko.jpg
+    sha256: 41a29313328ea5bfa1b3621fa3c77c04e694204b4c51dbd6aca73d965601ee27
+- card_id: shiba_yinfuo
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: shiba_yinfuo.jpg
+    sha256: 5042754a2bee7a6ce9fcf0ccd05d0e4e489e8857b9616b3de9a19d4f0c3bf5d2
+- card_id: shibata_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: shibata_sensei.jpg
+    sha256: e13ba43b8e05b30973c394dcc759e210e95a1e90ce68c88450bf0b88683b0f16
+- card_id: shikomizue
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: shikomizue.jpg
+    sha256: e6a53ba9c2ca161147024dea1d96b91a8a180a7e3ef05509b52057efd7482dbb
+- card_id: shinai
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: shinai.jpg
+    sha256: 89f07e63bb65b38f43c1e56d17e91eabb208c3b34434edbc9c079a7be87be9e9
+- card_id: shinjo_shimikoto
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: shinjo_shimikoto.jpg
+    sha256: ab039460ca8a28e10c05f6ce21dd547c1e376c4e22a6e3ce77850db514fa49e4
+- card_id: shosuro_kiyofumi
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: shosuro_kiyofumi.jpg
+    sha256: 367c4c6df297971f940892fd426d8f8c97828a24d2e1cf5ee328b813e4651c88
+- card_id: shosuro_yasumasa
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: shosuro_yasumasa.jpg
+    sha256: 5ece399a16f66fea732da2c548b76130a4b3f7c05e7986b5b6fa89fc3002606b
+- card_id: show_no_mercy
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: show_no_mercy.jpg
+    sha256: 81c3a858db80e24d91476b6651d8aa738909871a8e8a19eb8b245ba3f4c3f245
+- card_id: show_of_power
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: show_of_power.jpg
+    sha256: 5aea50a0d725b06a69601d8fb9a6cfeb502f0bca29b99c0f86ef92e9e9dd2366
+- card_id: small_holding
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: small_holding.jpg
+    sha256: 3f45a2e369fe96a253f07f9c1ddca154d8528ac5a009204b5e9770e21baef066
+- card_id: sons_of_gusai
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: sons_of_gusai.jpg
+    sha256: 067a753ca71a1a930cc38a0e6a5679eb9027002ac143c6b8d878af3cb008f255
+- card_id: soshi_kitaiko
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: soshi_kitaiko.jpg
+    sha256: bac981723ef21a39d4c71569b39992cb737c9eafd8523df72d2fc50be330853b
+- card_id: spider_elite_sohei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: spider_elite_sohei.jpg
+    sha256: 53044030df566c2d90f1c2df605d72c7a6e30df42f283610f1a73a5ed5c6995d
+- card_id: spirited_dispute
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: spirited_dispute.jpg
+    sha256: 3bd133561855f8f3de51abe84ae55273cf09639bfe506b98a113cbd36c535d85
+- card_id: staff_of_the_rajas_court
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: staff_of_the_rajas_court.jpg
+    sha256: a1527c2eae25eda1edcfb9275559b4d58a5e2c9cf6e7b84024724d91900ae558
+- card_id: startling_lessons
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: startling_lessons.jpg
+    sha256: 073b09cfbcd8dbbf6d8de6271dab44ce351e8a4fe13a02391e499a0b2d08ab28
+- card_id: step_into_the_fray
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: step_into_the_fray.jpg
+    sha256: 4a48e73e60e2a743e88b30b60d0255276b7f317416dfc61da84ed549e1d9620c
+- card_id: stockpiled_weapon
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: stockpiled_weapon.jpg
+    sha256: ee834f97482706b78e763ae08662c8a8a8db024fcffc01c0918eb725e695bebb
+- card_id: stones_of_purity
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: stones_of_purity.jpg
+    sha256: 72884e10a292381da20b31bedb28a1366a4891a41e2e8d6ae0d75f0193899eb4
+- card_id: streets_of_the_second_city
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: streets_of_the_second_city.jpg
+    sha256: 1776da49d25b6937abb63cb7d19accf7d277df31d82d66bd48f009cfd0018852
+- card_id: strength_remains
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: strength_remains.jpg
+    sha256: 5d5a54fba119c7054e3a8120e9fe5e224446c02c27e4805504e15cf6f88b89ec
+- card_id: strike_first
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: strike_first.jpg
+    sha256: 3b181178c4b97a2e3d67c96f8dc3ea46f660e8df9057a8766f9cd8f2ec6a806b
+- card_id: strike_to_both_sides
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: strike_to_both_sides.jpg
+    sha256: 27444eef4d55f0b326b116effd4a1679692516614348312dfe423b803dd21b16
+- card_id: suspending_wind
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: suspending_wind.jpg
+    sha256: 3668437adacd59adcea37d9ec6776a4116f66e06b7a93ed02747d190e6d51a89
+- card_id: susumu_jaru
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: susumu_jaru.jpg
+    sha256: 2c7a8ddd2a8a8ad5c8ffb3662ba372da19bb1a7e68c6c4b0dd45899e5adcb7f3
+- card_id: susumu_tanjin
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: susumu_tanjin.jpg
+    sha256: 63850eb6f9cbb0b0865acae668f1c01bd89938f9a88edc6207d75649d60749cb
+- card_id: suzune_the_coy
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: suzune_the_coy.jpg
+    sha256: 5a4268681d89ea41f48ed389def2ef66630f979cb673b7b75f61587f133997a6
+- card_id: tadanobu_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: tadanobu_sensei.jpg
+    sha256: 817103fd11f92a276fa0605831f6a55da2eb858650d5639159195095f5401299
+- card_id: takeru_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: takeru_sensei.jpg
+    sha256: 53dc09a6a714e2b77ef32b61ae2db2ce095f434e3347afff489224786519db6f
+- card_id: talented_maiko
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: talented_maiko.jpg
+    sha256: 08370c724d1780bfad360c9cf87e82732032b14dc807b8f8fde835d6b40570e5
+- card_id: tamoko_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: tamoko_sensei.jpg
+    sha256: 7d308da19ad25a83c62841fa33b92a9d83c7d6cec996e79476e7eeed5b1d64d6
+- card_id: tamori_ginrao
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: tamori_ginrao.jpg
+    sha256: 1a6070aa90cb6aacd8c5f7f4321250a4203a42697ca7d3a7a381e1f4fb1ca667
+- card_id: tamori_wataru
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: tamori_wataru.jpg
+    sha256: 6b5d805abf71607dec1badb75dd4b284edf6cc3893f310ee584c0adb53a88652
+- card_id: tanizaki_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: tanizaki_sensei.jpg
+    sha256: 80ea317183a282a82867fdf2d1c59c9ab3c1e73efbf906b532804a569f3d088d
+- card_id: the_inner_ring
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: the_inner_ring.jpg
+    sha256: 751c16f7a0a39df067bb328cbccd29046841e5d970a35cb199b38d6df1e91560
+- card_id: the_ivory_courtroom
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: the_ivory_courtroom.jpg
+    sha256: 48383976f5ad4e8d88684f5a9acf867238a698e44beade08586f1c6a1d57f447
+- card_id: the_samurai_caste_divides
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: the_samurai_caste_divides.jpg
+    sha256: 56fe586d8c09c8d8693abc07c53bac8ee8313b57458b95c15fa1e02969b35e93
+- card_id: the_serpent_war
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: the_serpent_war.jpg
+    sha256: f50a4c396f4c27fc29b24df67eb34da039fb6d7967dc71ef2c3ba3bbd11b4d34
+- card_id: thundering_waves
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: thundering_waves.jpg
+    sha256: b8ed8d458cefdf24fb09a681cc2242b95825da3e9c800510aecd37ea3216018f
+- card_id: togashi_shao
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: togashi_shao.jpg
+    sha256: 8e1945303813c2f0cebf615777e22082acf3440fbeba241754f857613804a508
+- card_id: toshigokus_blade
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: toshigokus_blade.jpg
+    sha256: 2ad7461fa43f99a1b9ad0207a527d9759a9d2a5a3768a3cd31dc0a23ee08ea1c
+- card_id: tower_guard
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: tower_guard.jpg
+    sha256: be86443f195bc5ce66a106b346061d83587731d666bc60d2181d73bc5a81987c
+- card_id: traditionalist
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: traditionalist.jpg
+    sha256: c4a810fd4af0152e927a3a2f747da238fe84967b235ceefaab06ded6ee4349d7
+- card_id: tsujiken_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: tsujiken_sensei.jpg
+    sha256: 08e8a7b7ee4ada023b310c5889587c5ae3325d300bd61338a777c4bd1093eb34
+- card_id: tsumaros_illusion
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: tsumaros_illusion.jpg
+    sha256: 9c5fe5fc99be363c530e41f28f164c1315cee7a1067f595ec867f9606e283fdc
+- card_id: tsuruchi_kaitaru
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: tsuruchi_kaitaru.jpg
+    sha256: 5f6d93e1d64bbdfbea16d9589ec02c56b3ac6e83b19f5f962e449ecb593fa639
+- card_id: tsuruchi_taito
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: tsuruchi_taito.jpg
+    sha256: cf837e76b7911f30bc42712f2e545ada3d6801b9180680fa34f0a300185c52b6
+- card_id: uncovered_plans
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: uncovered_plans.jpg
+    sha256: 527f46fb263dc057692929a415c88baa810c0378cbf4d9d1852050ef7c301147
+- card_id: undead_champion
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: undead_champion.jpg
+    sha256: c3ca841753ac58c4e27f01940320d01111a91ff89f36f18181c68ca8cf559ef0
+- card_id: unexpected_weapon
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: unexpected_weapon.jpg
+    sha256: 05a202fe2634e2c34de86972f68965c3e737f8ae02d7137ae20a6a87e5b8276c
+- card_id: untouched_lands
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: untouched_lands.jpg
+    sha256: e50ddd0ede80a02e8ab1faf6256826c14347781df1ee084f667515c6685526bd
+- card_id: unwavering_resolve
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: unwavering_resolve.jpg
+    sha256: 948abc43465a7bee65d10a94e4e0dea44e050041615454c49c579c8d05a7b137
+- card_id: utaku_kimiono
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: utaku_kimiono.jpg
+    sha256: 51209bb82daeb99b8e23c4f2a1a3be9bd3f0d33e5a17ef71cd16bc588274d016
+- card_id: victory_through_deference
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: victory_through_deference.jpg
+    sha256: d47123ec8f3efcae1d67da3a0bf56d611d8ee0c45c3dd9cb84bfdc58b7f9daf4
+- card_id: watarus_potion
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: watarus_potion.jpg
+    sha256: d536b3178b1d7e5f9a8475c82543c83ac23aa28d3928f581d34f7f882bbaff88
+- card_id: yamazarus_monkey
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: yamazarus_monkey.jpg
+    sha256: 291450c359e2bdd50f198db525f10b19b35fbb6528917f7ad2843c5fdf14b4c7
+- card_id: yasi
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: yasi.jpg
+    sha256: 8a482e009d0e7497fd290d9088a0a75c7cddb3197d69a03bea8c88a2399886e4
+- card_id: yasuki_hora
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: yasuki_hora.jpg
+    sha256: a9651eba846a47ee843618930782eb7bf551c9e8b079488cb9d0ae70a1ff4e74
+- card_id: yasuki_nakura
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: yasuki_nakura.jpg
+    sha256: 671506958f852fda42e11955ff600760b239394bed789413ba95198eb6508277
+- card_id: yogo_gingo
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: yogo_gingo.jpg
+    sha256: 1631f12f0fe8469e1a195be566e001d72075791a88543e1b95f26324af72bbcf
+- card_id: yoritomo_dairu
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: yoritomo_dairu.jpg
+    sha256: 9305d38d9561a67b2166d72c6db4f4b7fe093b02f2d50899bc5f59d3d9fbc0ed
+- card_id: yoritomo_haruna
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: yoritomo_haruna.jpg
+    sha256: 638a2148edf035c2992d2e1477fdaa4d7055e5ebcd28fc04131b545c7fd1c2e9
+- card_id: your_past
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: your_past.jpg
+    sha256: b17bb169103c1f3c41e0f1de67e2b9660185019dd74bf44c18c18df7bbfee4af
+- card_id: your_true_nature
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: your_true_nature.jpg
+    sha256: 009c4dc95e583b2b6345fc7d257081fde92d60604e345d2ba6e224a2c7965713
+- card_id: yung_sensei
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: yung_sensei.jpg
+    sha256: 007e1712b2e4518de28ef73af7c6c576a06c6591365b1f69a953f2276ae227a5
+- card_id: zombie
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: zombie.jpg
+    sha256: 5787c44d6af2ed079d4f5891049fd8aea609dce5bfb8996144dd7683bc6415be

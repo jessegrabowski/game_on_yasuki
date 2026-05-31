@@ -1,0 +1,980 @@
+set: The Dead of Winter
+images:
+- card_id: 1_000_cuts_technique
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: 1_000_cuts_technique.jpg
+    sha256: dcf099eed85be7df9c111cfebd42ea0dc8e6170b4cdda0cdf78f78fb49c99355
+- card_id: agasha_kamarou
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: agasha_kamarou.jpg
+    sha256: eca0807db6a987caaafd7e3ebcea3504344873cf4e202d7feb40bcaad9b840bf
+- card_id: agasha_kokiden
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: agasha_kokiden.jpg
+    sha256: 3f29dd73b1919cc182a5aa10bd0716ecae9fb253fc2233f4b753be2c7bfe540c
+- card_id: akodo_ebiro
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: akodo_ebiro.jpg
+    sha256: 1fc8734ed74661740159e5c071421f9554a7ee0326aadefd59a750f5fbcc52cf
+- card_id: akodo_raemon
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: akodo_raemon.jpg
+    sha256: f431f0430f3383bdff164ba33e260dbae2fc63dbd9aa2b7a2565d09d93219f73
+- card_id: akodo_seiichi_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: akodo_seiichi_experienced.jpg
+    sha256: a6201ceafc3b4ecda45a0cf1ee21e846a31012ae73950f16db1664bf18d1e58d
+- card_id: all_water_flows
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: all_water_flows.jpg
+    sha256: 98e9593bd07a42c481db2dd73cae2018b4e128057d18e150066fd4ebfea66a18
+- card_id: ancestral_temple
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: ancestral_temple.jpg
+    sha256: 712de98f219dab6216759b0e5b3c39af544a9058faf8997d50c4b76db610d2bd
+- card_id: aramasus_vigilance
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: aramasus_vigilance.jpg
+    sha256: db6fb144d912a14c6b9ac0b2887a02363761f67b7b018bff00e06f897111743e
+- card_id: archery_unit
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: archery_unit.jpg
+    sha256: 8866e6b94c5a0ff84f8a9a17ccc16e2b2fdc76b4aba530cfbf3744592e43f5d9
+- card_id: armor_of_the_loyal_son
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: armor_of_the_loyal_son.jpg
+    sha256: 1197922902564997fae9931970ca3f818dddf15ebfeb7ff705b2e1109c7b6972
+- card_id: asahina_beniha_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: asahina_beniha_experienced.jpg
+    sha256: 8ab371c377133a5b6a7f54ff303b5499de5680b42aae8f4dc50eb2cf4c5783e6
+- card_id: asako_hitsuko
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: asako_hitsuko.jpg
+    sha256: b1641870bdc3841bf64dd206776539262895dfdb4cdea732325ecd298f5faab1
+- card_id: atone_through_life
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: atone_through_life.jpg
+    sha256: e5392dadaac219c526929b1a178577856e540195562f53cde8daa5e40eb48a7c
+- card_id: awed_witness
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: awed_witness.jpg
+    sha256: dab5846cbfe3590341c4ce1249a23b503bfe0851812522960f478cadba26881a
+- card_id: balance_in_water
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: balance_in_water.jpg
+    sha256: 0d202797b209addc1a502d80b4a8309c9660b2a783e5973211a6ec19c9d25269
+- card_id: bayushi_azumamoru
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: bayushi_azumamoru.jpg
+    sha256: 51b384d9aa173fb4cfba7cda5c40766c6bb62b54a38dba52133745d19472dd85
+- card_id: bayushi_jou
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: bayushi_jou.jpg
+    sha256: 2def6bfed5b239641785f081c103f2fbd6e25e9219f092177def794c52d17ae9
+- card_id: bayushi_muhito_experienced_2
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: bayushi_muhito_experienced_2.jpg
+    sha256: 0cbb3bb6ca67b23ecae20c3a1a704430ab0950360b289ba8c263fecd423c4571
+- card_id: bayushi_saito
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: bayushi_saito.jpg
+    sha256: 02901290445013afded5334b238259447f88078a5dd81ff5129441807ebb4ee9
+- card_id: bestial_rage
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: bestial_rage.jpg
+    sha256: e8855282fd3564e0208010ba3b49ae84e6039988ebe8a8200b02f48e3fa121bf
+- card_id: calculated_offensive
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: calculated_offensive.jpg
+    sha256: c800b7f021cbb7d43527f5ad39c633820da498cc1bf106265b94663d18b50d54
+- card_id: castle_of_earth
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: castle_of_earth.jpg
+    sha256: 50929fcc5cbbdc0f4a1aaf9e7473ae85b1c56a1748b4180e54354cb4e951141e
+- card_id: cavalry_for_hire
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: cavalry_for_hire.jpg
+    sha256: 8e061284e0336ec7dda24afeb2dc656c57aa97ae47c62d25585cceb5e862982c
+- card_id: chuda_inisi
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: chuda_inisi.jpg
+    sha256: 1635fe1916751201ec6a55f28e4ca5a9fd2b38c581afd924541c3292ff067fe6
+- card_id: compromised
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: compromised.jpg
+    sha256: 544561a7ac0d80418a67a2a1ba7ee26463b187bb08a094ffc9aa0dd83e860f6c
+- card_id: concentrated_fire
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: concentrated_fire.jpg
+    sha256: 60a2daaa735646577406f25675aa94c78ca4ffa1386ae9fd2bb6a0eabb50794f
+- card_id: consumption_by_fire
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: consumption_by_fire.jpg
+    sha256: d113a29389ae7e8373e7dd88fef155fe588a536fe7d971e57b4c87ba5a0f6745
+- card_id: controlling_the_seas
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: controlling_the_seas.jpg
+    sha256: f0f0c0f61d46bc159d28c7c49aeeaaac8ad59e2fe71637304c6aafb4dcbe69fd
+- card_id: corrupt_governor
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: corrupt_governor.jpg
+    sha256: c0aac3fba80fdabfa2ec3f8e1ebc1998eb76b9baab20ebdd2852061039579279
+- card_id: crippling_weather
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: crippling_weather.jpg
+    sha256: fb6cfc5119b4b4111340c9e57cd3157fba257b40e2dd02c7ea97996b9736d74f
+- card_id: croplands
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: croplands.jpg
+    sha256: 59eefdc46e8febfd29f924b831ce87dbf9b9bfdcc643a39df6edd080f4934e54
+- card_id: daidoji_kagami
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: daidoji_kagami.jpg
+    sha256: 84db88dea67c69fbc753edb4d7ca77b9b41828170f7ed361548621934b040878
+- card_id: daidoji_sadayori
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: daidoji_sadayori.jpg
+    sha256: f24e88ff6ca1f129c8cb276dc05a4f286515c13053208646b618b933ba2c02f3
+- card_id: daigotsu_gahseng_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: daigotsu_gahseng_experienced.jpg
+    sha256: d075350f6bc26424172400ac6c20e2ad97dfe755e6a0763ea44ade2058c131ed
+- card_id: daigotsu_sahara_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: daigotsu_sahara_experienced.jpg
+    sha256: 68c727f0bc30a06d2d6c0dae254aa116f745af29d358b343c3ef9dbd80ad78fa
+- card_id: daisho
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: daisho.jpg
+    sha256: c83c85a1aa2f28a4ac1e1118e8459b67fce46db223a4b3db613287b18d3f996e
+- card_id: dark_oracle_of_fire_experienced_2
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: dark_oracle_of_fire_experienced_2.jpg
+    sha256: 5e4639c9e475043263e2a7750f73301532128e5ad132ecd955cf2c2713c2dab3
+- card_id: dependable_gear
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: dependable_gear.jpg
+    sha256: 3541cadbc9ef549503266acbe35d388f96d45014b12f8a235f1e1899acf31006
+- card_id: doji_nukada
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: doji_nukada.jpg
+    sha256: 1e12cb22adc88e5ca56f54712a4a40a6b47905c84b261bad21b691d3217665ee
+- card_id: doji_shikatsu
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: doji_shikatsu.jpg
+    sha256: cc61c113a71017be5c30c4af6bbb000fef3fe964fe2e0de16b257ffa144f8411
+- card_id: draw_attention
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: draw_attention.jpg
+    sha256: 3cd91ff50a5866a8283b0a3ed120bd7c431b58ffbbcd562e6fe4a983458d23fd
+- card_id: drawing_the_void
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: drawing_the_void.jpg
+    sha256: eaa50e6592142cd5221adf041fd1e4699c78576c10ed55f0acbd234e9c892899
+- card_id: ekibyogamis_spite
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: ekibyogamis_spite.jpg
+    sha256: eeee255f924cf35c2be7e2fd3328628a8655bbb5fe6118ec3fdac6f7ae09e5c8
+- card_id: embassy_of_the_crane
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: embassy_of_the_crane.jpg
+    sha256: ffba409e26a414fb27b32a3e0161a65f8ad9a62e4633f0800280bec8d779d0f9
+- card_id: endless_stamina
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: endless_stamina.jpg
+    sha256: 323d9f98fb58b0acf4fac8939e07c65f18a933f891f14ec1dfc3aefd781e4e5b
+- card_id: favor_of_artisans
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: favor_of_artisans.jpg
+    sha256: 12c4085986f7874ca8d95e357bd83eeb52ad7c21b2f86618c6176a9856696147
+- card_id: fifth_wind_cavalry
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: fifth_wind_cavalry.jpg
+    sha256: 2efa2537f636c9a3d045dd53d35d6c573bc3f79206bdcb27069e66a443a4ae6b
+- card_id: fosuta_no_oni
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: fosuta_no_oni.jpg
+    sha256: 06490d55a48b7dbab20375bde73090780a7ae976ef29f0801cf4ba8550471fba
+- card_id: guardian_of_earth
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: guardian_of_earth.jpg
+    sha256: f59879a07ecd7605450cbeccae75ccfa4a70fa40a7f8e22bbf135ac130621d85
+- card_id: guided_by_honor
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: guided_by_honor.jpg
+    sha256: 189d623efa3d21d7591c324ac9e6c6ae6792c61f260cbb6c5e0f1c87a7b64cd9
+- card_id: hachigoro
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: hachigoro.jpg
+    sha256: db1d5afa74b8ef81abce72f6137d03db02feb41a24eacc278a2909df83748eaf
+- card_id: heroic_inspiration
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: heroic_inspiration.jpg
+    sha256: c4bac2b47c8a5346cc319252ab8c55aa1ff0c9f71c69ecc93083307fa3853740
+- card_id: hida_akeno
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: hida_akeno.jpg
+    sha256: 23cbc953a349765b791f87961afaa56af640ad07aed35dc0bb6d4b17fa46f08c
+- card_id: hida_desora
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: hida_desora.jpg
+    sha256: 296283a4da618918d45aaf44d6ea56b11daa5214a50658ff5aeb8ac0c8287db9
+- card_id: hida_eijiko_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: hida_eijiko_experienced.jpg
+    sha256: ceafae0997deeec334163f82909d6cfcc0ab1977fa78d586a81a87c63e44850b
+- card_id: hida_tokido
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: hida_tokido.jpg
+    sha256: a84fdb374d9f33ec811685fefc47bb160b6cb495e9e53a3e31442c6bd36bc811
+- card_id: hida_yiu
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: hida_yiu.jpg
+    sha256: 1c9affb21e3985b6c51d729c574a09824f1ea413039f7357ee866036cfb85298
+- card_id: hidden_in_the_shadows
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: hidden_in_the_shadows.jpg
+    sha256: c529851dc311005f6fbf269c5b3cc78ab326b04d49b487183aeddf1b14ae6d9c
+- card_id: hunting_the_daughter
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: hunting_the_daughter.jpg
+    sha256: 12533a1da8390f97c6fcdf48ca637ecbee96a68e0989e1c9bcb0eb9920e005c5
+- card_id: iainuki
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: iainuki.jpg
+    sha256: 583ab884f2f49a6d9a09bccaa5a992d10674821b90d0733b63ff41536758422b
+- card_id: ieyoshi
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: ieyoshi.jpg
+    sha256: ea52bb26ba21a626f622c57790f593a3c3e10cd700c67aa4cda9a885d68e8a8f
+- card_id: ignoble_demise
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: ignoble_demise.jpg
+    sha256: 2e1f4cb9d6fc43de107489114586c0e656c24b7af316c9bea786b041c8d4c675
+- card_id: impromptu_weapon
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: impromptu_weapon.jpg
+    sha256: f5390056e1f53ec149a7fcc888b8ebaf06af7c4ebe7f6939a829f38622cbbfab
+- card_id: inaris_blessing
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: inaris_blessing.jpg
+    sha256: f8e8396e860de25df658f079159dc46e992a446a0590e5f1393ee4b0a49d6c5c
+- card_id: infamous_strike
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: infamous_strike.jpg
+    sha256: 1cea31f28c33724f0e5340e1124fa9c352876d4e666c6e920b90265610320d24
+- card_id: inspired_devotion
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: inspired_devotion.jpg
+    sha256: 972e279c71def94085e13d0a8060630bbb92bd6943bdd548833df8f8541139b1
+- card_id: isawa_furiko
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: isawa_furiko.jpg
+    sha256: ae3ade9f97c7383042ae391fff81f5ccd111f3a0ff1db7a04bc6177972074948
+- card_id: isawa_kumai_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: isawa_kumai_experienced.jpg
+    sha256: 2730289a9a38d4ef1c68e4ea6becb486dcaa0ff28677dac67a8ca7bc256f9207
+- card_id: isawa_kuniki
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: isawa_kuniki.jpg
+    sha256: bdd0d2bd51c20488506f8ac217fcaeff6ebe92d68e7e9c895c842509a4d64f62
+- card_id: iuchi_katamari_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: iuchi_katamari_experienced.jpg
+    sha256: 26903e2bb199c90d74b914c43e7a9944dd690e2072fe93b72e7540808f383c4d
+- card_id: jimens_decree
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: jimens_decree.jpg
+    sha256: f30de193c9e76eef57c73e3e8e2e869f3aac9aa33d4248a888b0c079728869f5
+- card_id: kakita_noritoshi_experienced_3
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: kakita_noritoshi_experienced_3.jpg
+    sha256: 0d7fd7cd4c4ee602ca9c3804cdf356bf3af87958b4adc5addfc397955ce1341d
+- card_id: kakita_yosuga
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: kakita_yosuga.jpg
+    sha256: 4441fc4ea7641ca5d2947caee747239679633745a6435ec609395780669ecdb2
+- card_id: karyuudo
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: karyuudo.jpg
+    sha256: 709d1cbbbbb3700cfe8c795a7d0293a94c4fbd9ec766f6442cbdb64a0a62c0e5
+- card_id: katahide
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: katahide.jpg
+    sha256: 61e53a34776efdffa58e125e31679f7a99d05256f702973b9f613c102779b87d
+- card_id: khol_regulars
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: khol_regulars.jpg
+    sha256: ec6b2ce19ccc9873e9c32da1da342dcecb54fe2be0e3d44d229f2afca0a78219
+- card_id: kitsuki_bokuko
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: kitsuki_bokuko.jpg
+    sha256: 60701a88b240d45d9ddb0c6bf71feed87c3b8ffee24f8a9827b9afacd3098536
+- card_id: know_the_terrain
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: know_the_terrain.jpg
+    sha256: 931ce7fd71de9f40d81c279372cdc7cb99812359e915eb6ed4910b8ede123a84
+- card_id: kuni_kiyoshi_experienced_2
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: kuni_kiyoshi_experienced_2.jpg
+    sha256: c5734e6f686c28538f6ec1ccc9f5eebe640bc6ceef7d8ff5bd17b9c025eb4051
+- card_id: kyuden_suzume
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: kyuden_suzume.jpg
+    sha256: ff8ae968a83474effc4de802141efe198ec53992cd15ffdc4a97a1a7d15021b8
+- card_id: lack_of_vigilance
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: lack_of_vigilance.jpg
+    sha256: fe54af3af6fd34a37da980cca586477a6046c37641966175e982bee9699526ec
+- card_id: leaked_information
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: leaked_information.jpg
+    sha256: 130663421c3df67c35df16d249ff7f48fb516e0448fe2be2c440d5f05eaad6d2
+- card_id: legendary_feud
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: legendary_feud.jpg
+    sha256: 69002c319544789a8a18d08ccd247e7ed2144a71163ce528cc7787f60a8acd66
+- card_id: matsu_amuro
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: matsu_amuro.jpg
+    sha256: 1500a697d7b48d3f312e6b5cd2fe5cf5d57aaa1bf9a3360ca72f0613c148d925
+- card_id: matsu_ato
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: matsu_ato.jpg
+    sha256: a85144172f60fe9d62a057ab082b3eac1eba8174516886e14493cfaab2b7ba7d
+- card_id: matsu_fumiyo_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: matsu_fumiyo_experienced.jpg
+    sha256: 8ecfa3a5ad9692992fd9f7b835efcfa8eaf9998f8e76e048f03a0d0b6efa2ded
+- card_id: matsu_sako
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: matsu_sako.jpg
+    sha256: 0594c6ef6b4b0b3eb94b55827ac9f916a6a93aabb263db8494c542284b8c2e12
+- card_id: midnight_shadows
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: midnight_shadows.jpg
+    sha256: 83f4f7ed13655d50df627660b673489886582824d48d4af9c98919da2cedb7eb
+- card_id: mirumoto_hojatsu_tdow
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: mirumoto_hojatsu_tdow.jpg
+    sha256: 6d0d3a22090271da91693655456147ce1b907248df8e3a7d79bab9eb82134131
+- card_id: mirumoto_kijima
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: mirumoto_kijima.jpg
+    sha256: 29743611b08fa5adbdad1c9cfbee1bd1206c76e47f7fdfad0b87a57923850149
+- card_id: moshi_kalani_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: moshi_kalani_experienced.jpg
+    sha256: 44f50670490ee604755f44b62a128ea35059aa769305054e527d6dee511e38e9
+- card_id: moshi_kinyo
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: moshi_kinyo.jpg
+    sha256: fb746cb8e4ae4162a1150222b881a4dc7a4f534f4976e0b9b8431cdebe948d8f
+- card_id: moto_jeng_yun
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: moto_jeng_yun.jpg
+    sha256: 101ee890b4ae2dbaa33c0b4aba71d42689daed84db0d72f4e329fd0718105d37
+- card_id: muscle_and_steel
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: muscle_and_steel.jpg
+    sha256: 4e389376c0c695748f86f739acc80abead9402ecffff612047804f3a761d7435
+- card_id: no_pure_breaths
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: no_pure_breaths.jpg
+    sha256: 1bb2f8e7b700a35b97ee24a188fe138bf64be74e01d0957a8fc11c1c1196c277
+- card_id: open_emotion
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: open_emotion.jpg
+    sha256: 12bdd3a02d7c76e9210869cf4ce37d7f9f6ee117a47adc357e6dc780b3773148
+- card_id: out_of_nowhere
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: out_of_nowhere.jpg
+    sha256: f70a07833db0621555ba9fdf6096a6524835570691eaf210fee9d8176f71db75
+- card_id: panther_tattoo
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: panther_tattoo.jpg
+    sha256: 54999a7061b152ebbc3198ee89d3049c40ac1a135b2c2c9726fa3e10dd99c86d
+- card_id: preparedness
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: preparedness.jpg
+    sha256: c87956126ce39d96522a9c31be6a47c106a00ea748fe00e6f5608d2ef752bfa3
+- card_id: preserve_your_forces
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: preserve_your_forces.jpg
+    sha256: 9ac1fcdeffbef30b7307919eb4fe65dc42fe148dfe5da6e7fc82e663285d89a0
+- card_id: private_farm
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: private_farm.jpg
+    sha256: 1401cbe0b0fd70b8c05654d826816dad6365b5fc221f9fb1d8c9f7e3ad82f610
+- card_id: public_records
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: public_records.jpg
+    sha256: 17f3a4b528da998ec9958f17086e3b20f8a6ad8361d997584e64c4495e1ba346
+- card_id: pure_breath
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: pure_breath.jpg
+    sha256: 39765d61ec28189376d3b704367ecabdd9ac1c66746425527a6d5f75f2235cbf
+- card_id: rain_of_justice
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: rain_of_justice.jpg
+    sha256: 00c144f4f0d89530e832a02456102d97a7462c6038bee44b6f40054e6b65a9a7
+- card_id: rally_through_sacrifice
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: rally_through_sacrifice.jpg
+    sha256: 54d674ee2a5ee2f7fc95507121d9da31bca2980bd58cc4332d5e37b8fedfa7c3
+- card_id: reach_across_the_world
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: reach_across_the_world.jpg
+    sha256: bddeffdcfd3005c7ffcdf8a2afdc2c9df4c2e37a10df1e14a587b0b12358344e
+- card_id: reckless_assault
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: reckless_assault.jpg
+    sha256: 252814ba8dc007b0991a72f1ed529c78834776f5c9bca26c2aff00be61bf725a
+- card_id: retired_magistrates
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: retired_magistrates.jpg
+    sha256: 19872a2c5973e6eb1454b924ae70df84cceba36753cb0196c4acbf333f8c18d7
+- card_id: second_hand_goods
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: second_hand_goods.jpg
+    sha256: 298e1f8ddeda23775e316ae81a41207bff297f52ff7d5507cbeb218e4b29f071
+- card_id: seppun_ujifusa
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: seppun_ujifusa.jpg
+    sha256: 544e2108cca7fed5b2d50273aede1e7985f770e29349743a4b7c7d29ab5efbe1
+- card_id: serene_brother
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: serene_brother.jpg
+    sha256: 6e4c8bc508f23db02d5da0b4bce52a18933b493f3c65991e4653945c782226e3
+- card_id: shatter_the_wave
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: shatter_the_wave.jpg
+    sha256: 41c6d8378230f531021755c3a086e5934d9b30a05b4614645b2a4bd65fafb648
+- card_id: shiba_gohiko
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: shiba_gohiko.jpg
+    sha256: 47496f8916f3447ad7428a114bf041f1324ae4682a122aa930500798d2ec7241
+- card_id: shinjo_chu_yeung
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: shinjo_chu_yeung.jpg
+    sha256: 0b4920c806d99db0e043962408b38e14948ce6490514446cbeec1ed1ab0038ad
+- card_id: shinjo_hwarang_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: shinjo_hwarang_experienced.jpg
+    sha256: 1db9fb67b9f38737b8621678df4f75b2ae35b90c65dd1af0d95531a949a31965
+- card_id: shinjo_meng_do
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: shinjo_meng_do.jpg
+    sha256: c0418ae258db639d0d82cd7367b2e9ece83bd41e1828ffe3d8056b6a380c8d81
+- card_id: shinjo_tobasa
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: shinjo_tobasa.jpg
+    sha256: 73bfd5f7683e687eeb343b77368a0ed2950af9ebeb18573f2018ec41965664d8
+- card_id: shosuro_jimen_experienced_2
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: shosuro_jimen_experienced_2.jpg
+    sha256: 5badcf4acbca1338afb38af470ede2c463947a0f4a4373373fe6076d4b372140
+- card_id: shosuro_shigemasa
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: shosuro_shigemasa.jpg
+    sha256: 92d5a110b429181cdfc8f902da2665c60235c7e4e853e05cb8f09b6a226b8067
+- card_id: shuriken_and_smoke
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: shuriken_and_smoke.jpg
+    sha256: fa3bfe8854a7c4f85d2c641dfdfa50776a6596154fa3857dfa9674327b6fa3b9
+- card_id: snow_covered_plain
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: snow_covered_plain.jpg
+    sha256: 297a56459fc5745a0ebb1c17d0d6c0153cddbfaeeac4b266d8cc9689f210df35
+- card_id: snowy_plains
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: snowy_plains.jpg
+    sha256: 610c3ed22567b50a1721dca031ae5b7361b84eefc704317834782c41405a7789
+- card_id: soshi_hirotsugu
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: soshi_hirotsugu.jpg
+    sha256: e608ae16ea93af899f80286d625d59bea93c220feb4725b2bdb50a6aa90a699a
+- card_id: southern_blockade
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: southern_blockade.jpg
+    sha256: 9df5bdc2d39837fc42eca23c26abc921bff057fac02488140c6088cf6ed68af1
+- card_id: stand_alone
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: stand_alone.jpg
+    sha256: 1f84bcd631dff000db60f2877fff56c86a207793e53937b0391140e845622bc2
+- card_id: stealing_the_essence
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: stealing_the_essence.jpg
+    sha256: 5d955912ba3c1a3fbc6945ca18199d8dcd332d546a235eb8cc99a73d7b7fead0
+- card_id: stone_guardian
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: stone_guardian.jpg
+    sha256: 6ccdd9ae82499efc46eb4df31d24429d3f21601d0e3f9d8d73467ca222adaf7d
+- card_id: strike_quickly
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: strike_quickly.jpg
+    sha256: ef06c8a26c660e079e5933d33b29a5ef2e6fd58c81a2918fef02cf42612a638b
+- card_id: subversive_influence
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: subversive_influence.jpg
+    sha256: de665f91baa7ab6693b7189923bdfa846b425d061abc11b626a21074d9b7e889
+- card_id: takaharu
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: takaharu.jpg
+    sha256: 450a8b2c51eac65be2663e4465603db37ac7fcdfbdc81515e3bef9134aee3188
+- card_id: tamori_wotan_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: tamori_wotan_experienced.jpg
+    sha256: b078d6173f42637227c707c0e93db749e3886a120b58b31bc4e121abf5622b84
+- card_id: taxing_the_scum
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: taxing_the_scum.jpg
+    sha256: 27b4ba6d4aa263e7eeaf39e923f2ef233fada271127e92b90ae3adef6122b825
+- card_id: temple_of_redemption
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: temple_of_redemption.jpg
+    sha256: 3761a1a3923f0b0502fc9c5d06ca6d5da187862476b49d693b2581c6ff5e2b4c
+- card_id: temporizing_ground
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: temporizing_ground.jpg
+    sha256: 800c8b367867568a850a249dfe3798ee6bfd16a893a19bd178251d299a62ae9d
+- card_id: the_fires_of_war
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: the_fires_of_war.jpg
+    sha256: 4c2b800af69608d40109b981ba396bc03139525faf47a4ebb72efb73c929b0ed
+- card_id: the_kamis_whisper
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: the_kamis_whisper.jpg
+    sha256: fc57ac8d727bca0dc590097577631b75ebf1340cf18490f1a1fd97cd186d6792
+- card_id: the_shadow_court
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: the_shadow_court.jpg
+    sha256: 8105112e469dbfe121474de9fd2b3cb657e80cd6c64a4008182388f559a7452d
+- card_id: the_testament_of_fire
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: the_testament_of_fire.jpg
+    sha256: 5fffae1fe9eee962f511cb494600c8a947a0d336f0a826198d0e5e760f84a1bd
+- card_id: togashi_okamoto
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: togashi_okamoto.jpg
+    sha256: 72180d02936a2d065aa07cf6318875ab7979a2d2060efab48adf9b0d81d07afe
+- card_id: togashi_shiori_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: togashi_shiori_experienced.jpg
+    sha256: 313981615692b0273f4394d79f1f282efafd46cf58e3d809b37a3987810a7106
+- card_id: toritaka_horoiso
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: toritaka_horoiso.jpg
+    sha256: 55a307376f96838a1a58c7a82b96cd3c801a5b854be0cd3598a522dc7de83cd5
+- card_id: touch_of_thunder
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: touch_of_thunder.jpg
+    sha256: ca85c8a22d719f40a3e5f04ac18991afa9cc8fc052a03e9588c0cb336c3a05c9
+- card_id: treacherous_defile
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: treacherous_defile.jpg
+    sha256: 98fe1a3a91dfaa0f509be21f817f5547c649f13e01e7b7611d060f4a900c86a5
+- card_id: tsangusuri
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: tsangusuri.jpg
+    sha256: a7e351a0ade12cf60579418a43ce997c86792ee657b5497cf0c6b80beb6ebda0
+- card_id: tsume_spearmen
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: tsume_spearmen.jpg
+    sha256: 7a7bc1b3be1a9b233481da29de3db386d5fc00aa24a37bc3df4354013df3b7ec
+- card_id: tsuruchi_daikyu
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: tsuruchi_daikyu.jpg
+    sha256: e34196c6b48624bc70c4b71eebdaf27b38eac6e0bf21bcf9c9e9eda72b77e38a
+- card_id: tsuruchi_seisha
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: tsuruchi_seisha.jpg
+    sha256: 483e5ec39c76a33d6ad26283504018d5ba1ade0847ab09bcf6d456db6cbc0aa7
+- card_id: tsuruchi_toburo
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: tsuruchi_toburo.jpg
+    sha256: 98ea08978a8836409e90261d2d0217abf2c46c0561095a1cdf80c738e4ed952c
+- card_id: ujisato
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: ujisato.jpg
+    sha256: d633151587c0961c1c7a50cc99ca51b880032a2cdb6e8e376268f964e7cc479c
+- card_id: unnatural_hunger
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: unnatural_hunger.jpg
+    sha256: 38c69797bdcc6a8670aa16519509e2eea7c88b72db9cba7054521081bcd14278
+- card_id: utaku_liu_xeung
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: utaku_liu_xeung.jpg
+    sha256: 830d7dbb23ae1ce3d782c3259ad2ad454236340ca4e48c80433efc602463e58e
+- card_id: vigorous_sparring
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: vigorous_sparring.jpg
+    sha256: 2c4d257a893bb7a853a0b2f838dea48a083279dbcac25a535fb9d3c3f4808ede
+- card_id: waves_rush_to_the_shore
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: waves_rush_to_the_shore.jpg
+    sha256: b77296ff45d8a075c20ff4b32a6284ec56906399b76dab75bc91a6dc8fc60b4c
+- card_id: well_scouted_target
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: well_scouted_target.jpg
+    sha256: 49e0ff4cf1bd2c65f7b9c6c410ed4377d37b305469c616011964d967de5348ba
+- card_id: winter_pilgrimage
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: winter_pilgrimage.jpg
+    sha256: 07627d6302ba9a7e1c5b81ff8e5832ed3a40648e64bb42f43b091e8ad8d02ae9
+- card_id: winter_siege
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: winter_siege.jpg
+    sha256: dcdff9446dd555ddc17db455e480139e33ff2130966d11b4d2234684a9a71e65
+- card_id: with_my_last_breath
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: with_my_last_breath.jpg
+    sha256: d19567c5b10b10eb32d77d0363405edd8bae8cbaf0266748a7684b1092faa92c
+- card_id: words_have_strength
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: words_have_strength.jpg
+    sha256: 337401ac82d629fa1e51ef3c8d8f243e36726f9983834e034e1d11cdcb7885ff
+- card_id: yoritomo_ai
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: yoritomo_ai.jpg
+    sha256: 7cf454f0083a74b8e4a9630bd95848530942dbe1338c895ba501e15a1ae62062
+- card_id: yoritomo_aranai
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: yoritomo_aranai.jpg
+    sha256: 0f3e28edb1d48bae4770d22241ddd689450b867a21f07f04fd27081328a93fd7
+- card_id: yoritomo_eihiko_experienced
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: yoritomo_eihiko_experienced.jpg
+    sha256: 7cae1e23cde04fa842f5d7406fe2d48d5edc0aed399deb80364ec796f981d268
+- card_id: yukataka_no_onna
+  printing_id: the_dead_of_winter
+  files:
+  - role: front
+    file: yukataka_no_onna.jpg
+    sha256: 8ebd922b2a5475e33f155f0fe6be14be6bb97da9e355f3b1c6b30d0517b31fed

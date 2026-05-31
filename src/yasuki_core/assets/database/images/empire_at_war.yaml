@@ -1,0 +1,1052 @@
+set: Empire at War
+images:
+- card_id: a_stain_cleansed
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: a_stain_cleansed.jpg
+    sha256: 046ca64e69575a9fe2763f49681247f74d2d95d373f4b8ef0ace48ad75340b2b
+- card_id: akodo_areru
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: akodo_areru.jpg
+    sha256: 6ef5c1a4a478ffd7d6736885eb03c8ebc9b8556f99aed5d1bebb9f8e7fbf1911
+- card_id: akodo_kusamoto
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: akodo_kusamoto.jpg
+    sha256: b4f36682d767ff2fa944ce0de68f4cf377ab37e2d2b5a186ac345ef1e36cd5b8
+- card_id: alter_history
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: alter_history.jpg
+    sha256: 80c4e13157e1abfcd3a7bd9b0d7bba062db96977d5e6d8f45f45a7dd3d18d52e
+- card_id: ancient_tome
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: ancient_tome.jpg
+    sha256: 89ab29530dea55d816ba5394957edb4b3e746972b5cf65cee199e35afc52495e
+- card_id: asako_ayako
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: asako_ayako.jpg
+    sha256: 2f162f9f8a6e559f9581a23818d1661fbbe3d0c3a51a8b266e1f0eba8014e92e
+- card_id: attuned_to_the_elements
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: attuned_to_the_elements.jpg
+    sha256: 91f8203fb2dfc19f68a2d0bd1f73819799e036a5d38b145803be714283ec912b
+- card_id: bakunai
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: bakunai.jpg
+    sha256: 415b88c9fbceaeedfa2ff0f09a8e5d66108263d46cb132348bcf99576eb06563
+- card_id: battle_fatigue
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: battle_fatigue.jpg
+    sha256: 895b5182d5efccc4b8bb11cda9bd6308edf866e2093bb258a7c3bee5359fee04
+- card_id: bayushi_darisu
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: bayushi_darisu.jpg
+    sha256: 6a672057353786fb276c2e382e073129844761bb7d1e6a77febd284117ba966d
+- card_id: bayushi_himaru
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: bayushi_himaru.jpg
+    sha256: 953edf3ccf3c1b8c2c2bed098a869dbb469443df248636dd6fd04321a581e899
+- card_id: bayushi_jutsushi_experienced
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: bayushi_jutsushi_experienced.jpg
+    sha256: 228dabbf1a79170bf137f2c378b2a29eec5a37634923958823a16dfe1ab5fae5
+- card_id: bayushi_kahoku
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: bayushi_kahoku.jpg
+    sha256: f8f28048208e7f44e0f30e96c12f80272a739828392765fcec49374003663560
+- card_id: bayushi_miyako_experienced_2
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: bayushi_miyako_experienced_2.jpg
+    sha256: 29aee61b0a7d4c32c5db64a7d9c86a23114394d003cd766d9b725d3f2de2e473
+- card_id: bayushi_shigehiro
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: bayushi_shigehiro.jpg
+    sha256: c680b51544699d8e9429550fd38fa7a4b5cad6e5ebeb0efb7966ed0a226b12ed
+- card_id: bishamons_guidance
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: bishamons_guidance.jpg
+    sha256: d4bb6327c853a6eb9024ac30de143122c2730965a46b673b18fcf3613f17ceb9
+- card_id: bitter_lies_student
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: bitter_lies_student.jpg
+    sha256: 2aa4feecd3f1ca783adc408a38835ef0acac3de90015140c7b8521ea34c5fb28
+- card_id: blade_of_perfection
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: blade_of_perfection.jpg
+    sha256: 5c1ea018aefc728ac1d2e3d3a7212f27707cd7ff3a96e1d7e28f28f209ca088e
+- card_id: bridging_the_gap
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: bridging_the_gap.jpg
+    sha256: 9f53d12d0c05e4699e4866ad43175921b770e07da8a760f0904e3d11659d752b
+- card_id: clan_conflict
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: clan_conflict.jpg
+    sha256: e60eb30847276a3cab270288e334fffdfb5638f48ace9383fee4aadecab00eae
+- card_id: conscript_troops
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: conscript_troops.jpg
+    sha256: 67506685b7fe4456d18d7510a93f55c884a92150cd5172e50b155bd72f509e9e
+- card_id: crossing_the_forbidden_sea
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: crossing_the_forbidden_sea.jpg
+    sha256: cca20ea16a3e61979cfa41e66bc689490d606a1c2a114c0af453d8ef1e0335d4
+- card_id: daidoji_arima
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: daidoji_arima.jpg
+    sha256: 04334a9ec6a4df85a993dd3721ee1c460d4b95da9201a8cf20d5419cdf37733e
+- card_id: daidoji_yaichiro_experienced
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: daidoji_yaichiro_experienced.jpg
+    sha256: bb6d3a4570573cd2c4c95924532217c9488fec84edecd6f35cfec9b0d6d7339f
+- card_id: daigotsu_akihime
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: daigotsu_akihime.jpg
+    sha256: 8c3076cbc511fcc2359c1475fb1c04e4715beb278eaf1c86dcbc9dd56606ddd4
+- card_id: daigotsu_hotako_experienced_2
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: daigotsu_hotako_experienced_2.jpg
+    sha256: c38cf9b73ef37a035836098adaa6b5e80e25bb6dbf64e5227bb34d8f778238d1
+- card_id: daigotsu_shaiko_experienced
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: daigotsu_shaiko_experienced.jpg
+    sha256: 82c7427ae96f5ffc33558c839f25eab2fa7a5bf7c7197bd3684320ad700f0d0a
+- card_id: dangerous_indulgence
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: dangerous_indulgence.jpg
+    sha256: 4b901a8734322a6c6eb0ac0241c9e09b70444a34f00957ba37711a2d1b95bdcc
+- card_id: death_is_not_the_end
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: death_is_not_the_end.jpg
+    sha256: d295b1f2710fad46fd752b6f123f3bfa0f3f6a05faa4d8a35cf50a19045c9edb
+- card_id: disposable_troops
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: disposable_troops.jpg
+    sha256: ac28b817b382b53cbfef8c6225a7b2b10bf4677112790850215ca566e3a2af98
+- card_id: distractions_in_court
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: distractions_in_court.jpg
+    sha256: d9654f88652891c7d0d8fe0dc51432f46d512667e0754b5934ed35c8d7276469
+- card_id: dockside_market
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: dockside_market.jpg
+    sha256: aaa7fc1595deeb7231bae9fadc0dc666758a99d8a0202eea90ef73689a8cd380
+- card_id: doji_kusari
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: doji_kusari.jpg
+    sha256: c85c3863894e5976149a8f0e8ce31cfc0dd8b73aebe728a63d7144d6cf93efa0
+- card_id: doji_shikishi
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: doji_shikishi.jpg
+    sha256: 0b85d7362e70caff2530c24ae3c25f6384ca33b232566d3910a7f27da7853d63
+- card_id: doji_tajihi
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: doji_tajihi.jpg
+    sha256: d8b6d42b333f843a95b76fc398f0697d04a59a334e377f5eb1c01c80e2d3842c
+- card_id: doji_umakai
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: doji_umakai.jpg
+    sha256: af15cc6c20d9e04fc95ed13ff1346b6e9ea7d198a8efc841c239623a1ed18125
+- card_id: dove_tattoo
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: dove_tattoo.jpg
+    sha256: 66d1b583c1fe9332f3a7839d89830cdfc35f2ec4c56c350e652ba01cf0314f2f
+- card_id: downhill_assault
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: downhill_assault.jpg
+    sha256: c79edccde7c682586af47bd6375e9f86ff3b1e5bc3c2ed1440003cbb69a03f68
+- card_id: earthen_armor_3f
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: earthen_armor_3f.jpg
+    sha256: 9c36d4a0b268829a21fc6168118776485eb3f57e0e187dcfa0d225292547978b
+- card_id: earthen_armor_4f
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: earthen_armor_4f.jpg
+    sha256: 5229c02f47c6eebe675e3e7c303c5679aa3a4b6097a486119ccf53785ad89d09
+- card_id: earthen_fist
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: earthen_fist.jpg
+    sha256: 7dcc1b987beb4ca39e7d1cef88be9854a7e38d101ea56274092789f6d3e99862
+- card_id: ekichu_no_oni
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: ekichu_no_oni.jpg
+    sha256: 612a5683e3206ff8860c2906a15bd2604e7b8e205b1384bfd879bc44233231da
+- card_id: elemental_disciple
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: elemental_disciple.jpg
+    sha256: 4f333836a784263dd55518b616f706e6c79beae3e12699af437724c58ceecd0c
+- card_id: endless_rain
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: endless_rain.jpg
+    sha256: eee92c5c60b6d421b944e8afd20be78dbf90e6706aa16d687f7e4e27dcb0ca60
+- card_id: essence_of_death
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: essence_of_death.jpg
+    sha256: 0a4439a97e14d6c57d4218d0e93a879668ed81bfa721eaf0881c02cef86c92c2
+- card_id: farthest_fortress
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: farthest_fortress.jpg
+    sha256: 12bc393ff2714cdd49d6decd2caa68610fd4b1f1fe8c28e29aca30c8d4d319cd
+- card_id: fearless_defense
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: fearless_defense.jpg
+    sha256: dd87287dbeb63fe32f5b1c04a8624eae2c87dfebacf27d7712aa2ca643410637
+- card_id: feign_weakness
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: feign_weakness.jpg
+    sha256: 7ab79c64dce7308c3939e88eaaf9a2ada9e83fdb3ebbed79b63e4fffeb80164d
+- card_id: fertile_plains
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: fertile_plains.jpg
+    sha256: 8bf3d5198e8dd1b0563e9c9c9f6c2a3241fefb9c740ae5bc6b5a42d25eb8ac94
+- card_id: final_confrontation
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: final_confrontation.jpg
+    sha256: f527e0d3e9dbc87e4cac0a8f0be0e4fc6bd1c76705a2787cfbfef8f14c1859f8
+- card_id: fire_on_my_command
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: fire_on_my_command.jpg
+    sha256: 4fe7cde5602af38004d4f0109e2e12386e271c44f1f9942db113a1df335457fd
+- card_id: fires_of_the_heart
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: fires_of_the_heart.jpg
+    sha256: 61017efec1c176bf7f39ec4450d45d4d11ae3d1051b45b09bd1c7d82ef38bbcc
+- card_id: flood_the_earth
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: flood_the_earth.jpg
+    sha256: 88b7a77394a9496ec013f794af6cd2939cdbc12a731c227b2a1ea991c484b4ee
+- card_id: flooded_terrain
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: flooded_terrain.jpg
+    sha256: 991e1b25e7c999befb736b838997469fec1f4089679bb3da6486f1d70b68e415
+- card_id: flow_of_the_water
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: flow_of_the_water.jpg
+    sha256: 225b1282901bab1414ae2f1af83ef8fe9f729bd2ea98051013fb10f63f3a5512
+- card_id: force_of_spirit
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: force_of_spirit.jpg
+    sha256: 83d6f2d0324d7b54452fc94df07f397ae144c8f8f4343dc1efc03f89fc0f676e
+- card_id: fortified_docks
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: fortified_docks.jpg
+    sha256: da7f2877e10797a5718e9cb35ea44de8399a7ff2d3847017aaefd693fd667f7f
+- card_id: fortress_of_blackened_sight
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: fortress_of_blackened_sight.jpg
+    sha256: 5f025d7b87351b6d8a1f0d37d0d8bb1c98d090def0284d8d8f6fe64dc515bb09
+- card_id: fortune_favors_the_bold
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: fortune_favors_the_bold.jpg
+    sha256: fe5887ce9821c8d0ce4367304824235025fc5643afa8cfb35bd57b88e571a537
+- card_id: fury_of_suitengu
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: fury_of_suitengu.jpg
+    sha256: 492a7b2556b86f0df7be19890aff29a690a2efe5bb13808095bd2af8176e2f36
+- card_id: goju_katsume
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: goju_katsume.jpg
+    sha256: 417de699407166f112a440fef946c20953d61047d2bcf5b3af51a2181ad64e9d
+- card_id: hands_of_stone
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hands_of_stone.jpg
+    sha256: cf940a72b5e6062705677bef4b9671fbe00b08115a7339e0daf07e5b1cba22ef
+- card_id: hida_benjiro_experienced_2
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hida_benjiro_experienced_2.jpg
+    sha256: 39c2268d3570c5da5ce62e87e2704590edce2332dc1441f40974164222c3c6db
+- card_id: hida_maruken
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hida_maruken.jpg
+    sha256: 104cce430261e3c42888b0b1fa2ed00fccfdcf100d733ea002d13b3b48c44de1
+- card_id: hida_shikoujin
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hida_shikoujin.jpg
+    sha256: 98d89ac647829513a9b21eddfc7b59993c120c0a278f58cfdbb65641dd3f3509
+- card_id: hidden_entrance
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hidden_entrance.jpg
+    sha256: ae9ef2a1e1d4876b4b254ddd55c273f05ff7ae40ad0061b896b218a130858681
+- card_id: hidden_valley
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hidden_valley.jpg
+    sha256: 8a713e1f3473ac8d0787acefdb3b351edf0c7b87c279ca060c25e3e27710f903
+- card_id: hired_thugs
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hired_thugs.jpg
+    sha256: d27167ecb10c0e9470440a943b78851db7342cee7c66d1f1f0d05086c4ceb38a
+- card_id: hiroshis_legion
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hiroshis_legion.jpg
+    sha256: ecc6cbbe16e32124f89b56e0139d14a45c04ecaef761e09ce5a1c52c047bf80a
+- card_id: hiruma_house_guard_experienced
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hiruma_house_guard_experienced.jpg
+    sha256: b4f4ce3b90a5cf95cf666890ce4eb393e0fac416e0a90adb3c75b6a6649ce9ec
+- card_id: hiruma_ikuya
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hiruma_ikuya.jpg
+    sha256: 90cc3bd746f49ebfe0a3f0819e69c59e3716eb7b2518852aa28f5c0aa786d68e
+- card_id: hiruma_todori_experienced_3
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hiruma_todori_experienced_3.jpg
+    sha256: c10ec3abda5ecf68bb90d56af56475561912d3ecd2e8735664ab8d479dee6378
+- card_id: honorable_death
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: honorable_death.jpg
+    sha256: a2417653f6c3638819007c54fa537f8c8a71956353d7d2c4f7073e8188fc32fc
+- card_id: hozumi
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: hozumi.jpg
+    sha256: fa8b5141460cadfa0ab8390c06e68ea30baf5f117fed7df5795b53c8ef7d5bf6
+- card_id: ichiro_kaagi
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: ichiro_kaagi.jpg
+    sha256: 8b6981a950b63c9227bb303d9f5ec040f7ff1142cae43e8808543a6dbf59b4eb
+- card_id: ikoma_hagio_experienced
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: ikoma_hagio_experienced.jpg
+    sha256: dcabb0c577a3d705600e0ef34143c0b9debe71a63990a1b2dfed6e6dcd3db294
+- card_id: ikoma_toruken
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: ikoma_toruken.jpg
+    sha256: 351407ee5cd4165cdedca4cf1569cb8bd62f0bf785f7c137cb6e9aaec45a88f1
+- card_id: immovable_object
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: immovable_object.jpg
+    sha256: cdc9c98c1f48fc5d858472345e5d3bf8ca37a122c480b4e394a6222288f26b14
+- card_id: imperial_orders
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: imperial_orders.jpg
+    sha256: c54c1b6ebdf72ac610c6cf325ba3e402ec9f5e02f8a73d107ce729601ce2d052
+- card_id: improvised_weapon
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: improvised_weapon.jpg
+    sha256: 564b5ef0ea110f13d9f155e913a411a3c4e2bac36d3a2472fb9165f9b8cc16c8
+- card_id: in_the_heart_of_battle
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: in_the_heart_of_battle.jpg
+    sha256: 0f185081aaba3194f8d498dba2533b6327d9eca55d3900dbb92981d090a1cb6c
+- card_id: infantry_follower
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: infantry_follower.jpg
+    sha256: c8875f2d82ed3600e270131ede9f1c1b6a0d57c57045727fab9feb260d31eef4
+- card_id: invincible_determination
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: invincible_determination.jpg
+    sha256: 0188111f4be1e43babbeb5b6927521f1263f18a6eb14508077ac5f4581bcb2bc
+- card_id: isawa_kimi_experienced_2
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: isawa_kimi_experienced_2.jpg
+    sha256: 5156786b132c4c382dbd299249f3085c7526ac0f182d36f823adecaad3bbfbc5
+- card_id: isawa_shioki
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: isawa_shioki.jpg
+    sha256: 5e5f686ac48eba080cb13ea65f18bb6d140323a0ec0be24ced5523afbd2a35fc
+- card_id: isawa_takahiro
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: isawa_takahiro.jpg
+    sha256: 97cb99b060fc693a7e2f6b6abaa6c8dbbc515d8deea1402da5e826fb1187570f
+- card_id: isawa_toshio
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: isawa_toshio.jpg
+    sha256: 3316a553b0755cf5f0c450f4681d203646754861a2844fcc17aa84c8a75f97e0
+- card_id: iuchi_jadaran
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: iuchi_jadaran.jpg
+    sha256: aeb3fa08c0373ac0fbee2582038893755c77f776aa8002ac45620c1a3c7f7fc5
+- card_id: kaiu_futaro
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: kaiu_futaro.jpg
+    sha256: a3f2ee9eda59dba7ae4e3a75448dae816f0f25338718cf06c2dfb71f89d2c13e
+- card_id: kakita_mimaro
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: kakita_mimaro.jpg
+    sha256: fd761a86b55e43582e4a366b98a80897fbb13d171c1251e531640448993608fc
+- card_id: kitsuki_nakai
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: kitsuki_nakai.jpg
+    sha256: 52298fb20f6dd0656aeab72619b4d5096949c5b3c5957f781289525cfd6d4d7d
+- card_id: knowledge_of_the_land
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: knowledge_of_the_land.jpg
+    sha256: f8cab8a50ca3fefab5e0efb0d82129c5dbd5db4b9a86bf8c0c51608405b04ed5
+- card_id: koji
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: koji.jpg
+    sha256: fd1282cba2c3f96af59983a80d87ba3227180c1ad5c811c6281a4592e065faef
+- card_id: kuni_shikehime
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: kuni_shikehime.jpg
+    sha256: ca114d332536bd7771adf30d228b008019150088cbac3e798cfa35469b707af8
+- card_id: kurokos_creation
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: kurokos_creation.jpg
+    sha256: bcf2b3b9841af9e4a6be9f31e527dff64b626b62b5268d831d2b31af2f12efaa
+- card_id: lion_ancestor
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: lion_ancestor.jpg
+    sha256: 3ec39010fe0731e31ab38e015e8fe1c8c1c48e810980c0c6756e0603156c5851
+- card_id: matsu_kinihara
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: matsu_kinihara.jpg
+    sha256: f74e550541a5891331dedd790e1c86c7df9e68e9dbf7b79e5af985a114fe4631
+- card_id: matsu_misuka
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: matsu_misuka.jpg
+    sha256: f3c07134cb6eebc69cf5a9e724e714df792a8f9bc043572f3213f479fdce641b
+- card_id: matsu_otsuko
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: matsu_otsuko.jpg
+    sha256: 277c893101eac14a4a339f0d0275435d1531054731e0febcddb995a532af770b
+- card_id: merciless_tactics
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: merciless_tactics.jpg
+    sha256: 40f3696235b093965a2bc26b3de8e320bedc88ba674321ca7f87fe754200309f
+- card_id: mirumoto_asakazu
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: mirumoto_asakazu.jpg
+    sha256: ac4531383db2e23b645fd83a88bdd78761c0b716a9f4b3ebf381d8b9612f05e4
+- card_id: mirumoto_kalen
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: mirumoto_kalen.jpg
+    sha256: cb8d7e0120b23b978747825dbaade8376b20df177d7b115f5baba9c686fa951e
+- card_id: mirumoto_kenzo_experienced_2
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: mirumoto_kenzo_experienced_2.jpg
+    sha256: b5e488c5a0458e692250c6fe8a5c1130bea33b1ca5b7d75706b9a70452128978
+- card_id: mirumoto_tobushi
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: mirumoto_tobushi.jpg
+    sha256: 26180fabbc9ddeca098b26df29cb1b4243b26fc0db6dc3569a29d51de19eaedd
+- card_id: moshi_yuriko
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: moshi_yuriko.jpg
+    sha256: df49c574d020204ece55ffa8eb1313159497bf46702617a3d3c52f414fb344fa
+- card_id: moto_hunters
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: moto_hunters.jpg
+    sha256: 462d1da45109e328ddbd0dab550f30e977f96b7a7359d189364db4d7e751aa7e
+- card_id: moto_munoru
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: moto_munoru.jpg
+    sha256: 3ef5d84e89cbd240b305dd29be055678683b1398e022b4bc16af0fc2918731e6
+- card_id: moto_shanyu
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: moto_shanyu.jpg
+    sha256: 254e994eddb5b5e88825502513c09d00d60e0273a71c0c9889318a9e9bdac1d0
+- card_id: mountainous_region
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: mountainous_region.jpg
+    sha256: 7553600b832806348a3687d37257f4c19230315c67c96193049a35f471fb73b8
+- card_id: mysterious_ailment
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: mysterious_ailment.jpg
+    sha256: 4b26fa5da2b405e348f38721a581320a6355cd84dfbef6848f560a6753121579
+- card_id: night_watchers
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: night_watchers.jpg
+    sha256: c80285da1e417af4f67e1cc07814713d03b52f00d0522663d8565200a3e04f71
+- card_id: one_with_the_world
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: one_with_the_world.jpg
+    sha256: 3bf0c0e391ac97c82d7cae263e9f8313e179f8777147057c4d68abc874b99892
+- card_id: osano_wos_guidance
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: osano_wos_guidance.jpg
+    sha256: 904739a2a36377200a4883fdeefe9802e8cad6a01c23e70bdefa6c3ac09c0023
+- card_id: otomo_seimi
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: otomo_seimi.jpg
+    sha256: 104d8c98a52b6f3d82bae4bc923e8066f30bb300b5d290a0f7fffd50dff1953d
+- card_id: outsider_keep
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: outsider_keep.jpg
+    sha256: 1c2909724c6be04b2f3395ad5a17396564e29cb1b6e68951eac80e482112bcea
+- card_id: paid_off
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: paid_off.jpg
+    sha256: b5797e8019456392e9eedb95853cdecc11ef0bdb3d7fb478f20832819f7eff49
+- card_id: perfect_aim
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: perfect_aim.jpg
+    sha256: d1589a2345dd45c7378ef8d11fec092c44255bedf8a9dfcd4c289bbef1ebdb66
+- card_id: preparing_the_bodies
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: preparing_the_bodies.jpg
+    sha256: 90e442b6a6ab678cbdd6379c451b55372e3f6b664ac12dc0b1c193aaf2b96924
+- card_id: protect_the_caravan
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: protect_the_caravan.jpg
+    sha256: 9d5100334edf7e30815557150ccd9aa9b467719cf80d4b82273c7fed6d60b630
+- card_id: readied_blade
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: readied_blade.jpg
+    sha256: 6f35cfc8aa277510d7225c230b9a0f3ba8e69db501d2eb047f0f04e87ad85746
+- card_id: rekais_yumi
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: rekais_yumi.jpg
+    sha256: eb8834cfcec173a2c4a27c730fc115e6051d71f122eaac9b913166cb43f89378
+- card_id: rustiktik
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: rustiktik.jpg
+    sha256: 6082bc9dbb0b9f34d8a4aec457c2242fb03de735ce55c07ab6690c64dd0640f3
+- card_id: savagery
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: savagery.jpg
+    sha256: 8b59084725d5b472165a5b3077bf2f411ad50ac53d6ae6d8aaeb95f513993484
+- card_id: secured_borders
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: secured_borders.jpg
+    sha256: dbfce51245d4fa9f3a223d2ce062c9fdb46955bd55b321264e25156eb16bc509
+- card_id: shameful_and_cowardly
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: shameful_and_cowardly.jpg
+    sha256: 6327ad0ddeab310c34da46f47779aa2928f7cfe79764865dc5fdc226cf1e5397
+- card_id: shatter_the_line
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: shatter_the_line.jpg
+    sha256: 98f817d0975cfa41633abede7b92faebe0e47f268dbfc3ffef053c4fc916f5bc
+- card_id: shiba_goto
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: shiba_goto.jpg
+    sha256: 091618ce812e87f7a4c8610982be6a67b2c7f728c65b0fb91b53bfa389e0bac6
+- card_id: shiba_morihiko_experienced
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: shiba_morihiko_experienced.jpg
+    sha256: f00dbb40a4fb9a98894601d17fbcd8c2260947b3ef258988bd36d7e8ef137831
+- card_id: shinjo_dun_experienced
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: shinjo_dun_experienced.jpg
+    sha256: 2a7295a23ca9a3edfe504b73972a3d54950e1944b1bae1bda06fe85d17d7589a
+- card_id: shinjo_jalair
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: shinjo_jalair.jpg
+    sha256: d949911281bf720fad6ebb53f26666f1704d594c88d5b9339cd55ac6546dceb3
+- card_id: shinjos_children
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: shinjos_children.jpg
+    sha256: 7b7aa8fbc0748a09dae4192f072423652962d9c9d99058b12513047eb604c10f
+- card_id: shinran
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: shinran.jpg
+    sha256: 0c197bd610fd12055dd22275b039886c44d21decd30ff75b56bda81aaa240c55
+- card_id: shosuro_ritsuko
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: shosuro_ritsuko.jpg
+    sha256: 86cadb00d8c303841c4911d5766089dc8ce9876e1a06d5fada78d3340a6c0b1f
+- card_id: smoke_cover
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: smoke_cover.jpg
+    sha256: 615d17b1f676f22fffebabce4261773cb38893c3c48a5e7d2feea09f5d6d811c
+- card_id: sought_for_justice
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: sought_for_justice.jpg
+    sha256: 9feb7b3f102f4c8404ee28949731fef2377197a888bb9a46e4d29246c11af68a
+- card_id: stable_ground
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: stable_ground.jpg
+    sha256: 552d5800a9870b0dce9c4bd753d252ae1b53a7750fb762b234847756c1c083b3
+- card_id: startling_attack
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: startling_attack.jpg
+    sha256: d5a9569bbeb2def3bbc14a07967dbb6b19a293b7964b9d2023b6ac78a6f19739
+- card_id: stay_put
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: stay_put.jpg
+    sha256: 2996d4ff4325df707687e915bc75ee21e434f22ecf0b16ef13e06588d29e0683
+- card_id: stripped_armor
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: stripped_armor.jpg
+    sha256: 95259e5b19994e26427ccbda590bb5e2637b378e964929dd365664c821f1326b
+- card_id: sudden_rebuke
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: sudden_rebuke.jpg
+    sha256: e84e43ab40a724a21229cb96f4b32ee0a038a22d03836e90518cb58fe2089e5a
+- card_id: sudden_strike
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: sudden_strike.jpg
+    sha256: 89f79db680a40ad4733febe42be3af1f44247fca4ed7efaa2934879cce624e91
+- card_id: sullied_gift
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: sullied_gift.jpg
+    sha256: 634e4f323c56c88bf8055d5fea3d4cfedcc30f1791b75f4691bb94fc9a49d60a
+- card_id: superior_mobility
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: superior_mobility.jpg
+    sha256: 73838054a836eae452169c49fa484573a353babad751b7048478307c9ed198e8
+- card_id: takaikabe_mura
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: takaikabe_mura.jpg
+    sha256: d7c02f16abc46aa5770a903b0960bcd48a8762626a29e697d0388a27718453a7
+- card_id: talisman_of_jigoku
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: talisman_of_jigoku.jpg
+    sha256: 9a0691da8cf05628cf4d964a855f82bbfbc7ffb05586c021fe26653dbd0ec101
+- card_id: tamori_kuroko
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: tamori_kuroko.jpg
+    sha256: d6af05c8ecc2b3e40d7a4b3e81455bc1d7107fca71a0ecc83528eae8d8c5a3c9
+- card_id: the_art_of_ninjutsu
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: the_art_of_ninjutsu.jpg
+    sha256: 5da14cdea18941b7617ab5cb62294e1d6f0e6b065882f10255f56c54cb9ba37b
+- card_id: the_laws_strength
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: the_laws_strength.jpg
+    sha256: 0895727322366fd3f47d1cd7b3de915163f315c1c824ea88cd31853680c20027
+- card_id: the_unmaking
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: the_unmaking.jpg
+    sha256: 45dd60ab10273134d78acdb9156be3db330861fe3ef0f0aabb00591c3873a1ab
+- card_id: timely_save
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: timely_save.jpg
+    sha256: 36c0574974a114f38a644fe8373690742fb56fb595b913ad5f96e21c1073d7fc
+- card_id: togashi_furai
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: togashi_furai.jpg
+    sha256: 38fcc23f96eb5d516c476384fa3e49ad4dc882072a04de7f9424067b5fe59ead
+- card_id: travel_light
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: travel_light.jpg
+    sha256: 1c373a54d1da732201434f9e6efebfebdf01d6b8f06c9811ed9bd19f5c3a9410
+- card_id: tsuruchi_chiko
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: tsuruchi_chiko.jpg
+    sha256: 10c1ad6c9b7ac85851836895bf362a2d831f72f4bc547e5ba320593cbabd7b4b
+- card_id: tsuruchi_nobumoto_experienced_2
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: tsuruchi_nobumoto_experienced_2.jpg
+    sha256: 54fb37050afceec2463cc5d2480bd5989bb3c0ecf14b2020d91b5a8e9e95f3af
+- card_id: tsuruchi_shisuken_experienced
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: tsuruchi_shisuken_experienced.jpg
+    sha256: ced5c5eba5482b196784b50893d52412fee13d69386e5f04655531308a0f00b0
+- card_id: tsuruchis_legacy
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: tsuruchis_legacy.jpg
+    sha256: e90f206622ca8787d719ba6d69b8c9c921f1f9ae88eb57ca4f7f6b98ab74459e
+- card_id: ugaro
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: ugaro.jpg
+    sha256: d9f5e5d9382a2ed3f8e8f51636841e7d8ac53484878e6f228ae8d6c6b6a27640
+- card_id: ultimate_sacrifice
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: ultimate_sacrifice.jpg
+    sha256: 7a1f56640d7213c7f3478f0d4d564b458e1d126e857902af41e71ec8c7093635
+- card_id: under_arrest
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: under_arrest.jpg
+    sha256: f8b038229ef2863750b3d2a159df3316f2b2eb1161579861ce4dd83d3987f7ac
+- card_id: undying_warriors
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: undying_warriors.jpg
+    sha256: 0b016093e97ce753583c8477436f88dc79de3eaf80d5be9f0a984078d6151513
+- card_id: unmoving_as_the_mountain
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: unmoving_as_the_mountain.jpg
+    sha256: 92a8547e06b48408a5220bb288c6b4764417c1f97641ae289bd74f25d0158fb0
+- card_id: unnatural_flood
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: unnatural_flood.jpg
+    sha256: 798e6797b9c86a961cd32922c32d3c606b120da5169a072491606aa882bc038f
+- card_id: unstoppable_cut
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: unstoppable_cut.jpg
+    sha256: 52ff2431ac7f9ae0a5f92417068b9389f87d6c38f32175d5ffae47379f76ccd5
+- card_id: untouchable_escort
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: untouchable_escort.jpg
+    sha256: 08147a79c841973313387395e2cca0e02b9ecff1bd38901a5a53c978cd02ce0f
+- card_id: utaku_fujiko_experienced
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: utaku_fujiko_experienced.jpg
+    sha256: 10c6ba9230b043c55caf4d524e45bc5929c82404173c9296a482510950b7ecf2
+- card_id: utaku_jin_lao
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: utaku_jin_lao.jpg
+    sha256: 0d6396a63c456014b1f67a3c9b486ba88b85ec43496f1892eae2ec3e90e87860
+- card_id: waylay_the_messenger
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: waylay_the_messenger.jpg
+    sha256: 21beea8aca32cdc510a545355858f1c9c92ac12d8ac187abeafcc7610f79f2b1
+- card_id: weight_of_numbers
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: weight_of_numbers.jpg
+    sha256: 0e3892461c8ea3c9ab6ea6b2682ae709901876516c6b44eff4fda0226215131d
+- card_id: whirlwind
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: whirlwind.jpg
+    sha256: 6730b87ee13aeb69cebc8c16f5a1d56f2ea17cce76834a23445bd5621e766faa
+- card_id: wooden_barricade
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: wooden_barricade.jpg
+    sha256: 9172bf821274bb7ac2b31cf824bcbf77b4172fa8da383c884f1047ac9ae4ab45
+- card_id: wrath
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: wrath.jpg
+    sha256: 545d4746390a3189a6224ad38e6b7c014e615c7ba33bb70bdd9e325cc0d0e1bd
+- card_id: yagimakis_fist
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: yagimakis_fist.jpg
+    sha256: 17f49d476676e306016b0f2c6f7ca769f5ac970e4b1ec333edbf7d645c728f75
+- card_id: yoritomo_manzo
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: yoritomo_manzo.jpg
+    sha256: 861c89a3dd74e6c64ce57422b5d40bf84d4bb32107718f2e723287315906dc30
+- card_id: yoritomo_rai
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: yoritomo_rai.jpg
+    sha256: 085ee2fba7c5d36c050bdc5c35286f0ca76de21f73530041d97b8fb67cce27dd
+- card_id: zombie_peasant
+  printing_id: empire_at_war
+  files:
+  - role: front
+    file: zombie_peasant.jpg
+    sha256: 89c47464c4bc60ec533b8ac8c9981e8b072f7e299ce672a9bb8c49ea77624671

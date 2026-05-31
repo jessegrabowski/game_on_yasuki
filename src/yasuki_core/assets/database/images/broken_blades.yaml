@@ -1,0 +1,938 @@
+set: Broken Blades
+images:
+- card_id: a_time_for_action
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: a_time_for_action.jpg
+    sha256: 13b24193adb114949c74cecc6de79148abaece8451791552163a4eb1631e336d
+- card_id: agasha_chieh
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: agasha_chieh.jpg
+    sha256: 0d1ee9940905411c865ae7ec091e3688c4f191f66e0960a7d21c8158739cf5da
+- card_id: akodo_fumio
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: akodo_fumio.jpg
+    sha256: fad97164cd62c8d743ea29fa9a452b05a8ac67487d4e96a162c3eb2f94197a30
+- card_id: akodo_hakuseki
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: akodo_hakuseki.jpg
+    sha256: c37333f50e6c9354ecc3484a835912e2598986ce7429932c64661f965c477895
+- card_id: akodo_yobi
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: akodo_yobi.jpg
+    sha256: 7ad59e20cbeccaaa91d115edf6fc20df9e7d056ffa0ff758a3174ce9d4df41b5
+- card_id: ancient_promise
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: ancient_promise.jpg
+    sha256: bd506d6b2831a1978d602dcd9d0ed3331898940e908dd77ab075db19a6293d8d
+- card_id: armor_of_the_mountain
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: armor_of_the_mountain.jpg
+    sha256: ff804aab51bdebf8d34c463977e2c18b16fd8ac452e1c8727024b6f9d0636a5f
+- card_id: asahina_sekawa_experienced
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: asahina_sekawa_experienced.jpg
+    sha256: 2e48f280acc7107419b2bf0c85a2ab71f8daee4c8ce8c3d41c4424379e39ec8b
+- card_id: asako_bairei
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: asako_bairei.jpg
+    sha256: a0efab301c3d8d18f0b3ba9546f92eba03a29d88342f1c75dc4ea65027d2850b
+- card_id: at_your_command
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: at_your_command.jpg
+    sha256: 363d4b79e9d49a932ea9779e393f5251db19e4b99c8f59f3d4a0827be4c8a448
+- card_id: badge_of_purity
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: badge_of_purity.jpg
+    sha256: 7173e3dad9834766f5358f805358145c1aebb54a092c1b9222c2317461465282
+- card_id: banzai_charge
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: banzai_charge.jpg
+    sha256: 7e4ed7fdda1af0d44537b43583aa3f8ff860e2a389250e3db0e47294060d03ad
+- card_id: bayushi_katai
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: bayushi_katai.jpg
+    sha256: 4cee488d8f58da8b54112dffaad07cbe4beb86e47db666eb815d14256105ffdc
+- card_id: bayushi_yaro
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: bayushi_yaro.jpg
+    sha256: 3a3d1d14f3a9df061615a248435a3af83ced89f1971dd5259fa8ef0e6896dfb1
+- card_id: berserker_rage
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: berserker_rage.jpg
+    sha256: a900dce695a1d6476d05c722e029ebef6a1e7a45df6a99edc6c649c09d6354db
+- card_id: blessed_dojo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: blessed_dojo.jpg
+    sha256: 5001ac86edec5b1dabfdca0dc05b673e8e2ef4a2774fc3bce752246f29a086f7
+- card_id: blessed_ward
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: blessed_ward.jpg
+    sha256: d10ed0d64135af4bd712de9eaa7102dfc44880d83e299acdb8142b8245d2a4c9
+- card_id: blood_in_the_shinomen
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: blood_in_the_shinomen.jpg
+    sha256: 81701a6e087fcfdc754c108dd064ea2f57754417fcd726de368f96c26ec25f8c
+- card_id: boundless_sight
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: boundless_sight.jpg
+    sha256: 0d929046328d6c99dbd818b1ac7dce11d12989abcf7fb982738ebfb2a607870e
+- card_id: brilliant_armor
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: brilliant_armor.jpg
+    sha256: 3087f1e02b98532cae0b4ec88393472d031b83f859498d6609846ac5c1b92474
+- card_id: burning_blade
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: burning_blade.jpg
+    sha256: 0d468f6da0ba28edbb14f62bec6925dfa5db69ef7c4e3e3e88887a5fd0e52296
+- card_id: choke_the_soul
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: choke_the_soul.jpg
+    sha256: dc7a53fe0fab27e0189458fe6617aff56737dbca72334096194cd2ae93d65bd1
+- card_id: chukandomo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: chukandomo.jpg
+    sha256: 1b026a8f122eab44e58c5604bd9d7882dfaf57487abd98fca52b83714ac130b5
+- card_id: city_of_gold
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: city_of_gold.jpg
+    sha256: 9eaf5f38bcaf46ebf3c2cb2f068d9c3c6cd9f525f9958a3f14a0218fd2d64f06
+- card_id: conscription
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: conscription.jpg
+    sha256: 52889a8401e87bca696008b36da940a891d1babfb15e795e697d50630bf119b3
+- card_id: consumption
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: consumption.jpg
+    sha256: f71c8bf9424e03b1ee08179ca07df409b4c3910e25eda4da1202820ad5bc3f3c
+- card_id: corruptions_price
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: corruptions_price.jpg
+    sha256: fcaf4391d86a8d4f1de4e0be2d34012cd6002d132b80a7f933c388127b4b146b
+- card_id: cut_them_off
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: cut_them_off.jpg
+    sha256: 65d3bbd3de7e3fe48be42737362ce588efa24aa546c4eec60b65eb760bebee76
+- card_id: daidoji_heizo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: daidoji_heizo.jpg
+    sha256: 58a1f5062fd7308efffcbe42f029ab6a8d856c6425703eb06cbe567fbf3fc802
+- card_id: daidoji_merchants
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: daidoji_merchants.jpg
+    sha256: fcee3663fb8443c1b0285bda3e3d3710c74d9b708254dea0504ed9df055a7f13
+- card_id: dangerous_extremes
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: dangerous_extremes.jpg
+    sha256: 5e8af4e589a95ee760094ac849748d97e9c6ac84660ca0400b498b75c6e86219
+- card_id: dark_oracle_of_air_experienced
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: dark_oracle_of_air_experienced.jpg
+    sha256: 5610fc6200697529596f2a20163af5a7cac0211e3db0212254d2dcd0fa8310ef
+- card_id: deep_in_meditation
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: deep_in_meditation.jpg
+    sha256: 3cfec6842482da733eb235d6c1e8c760478c4017e7eae20b98b57e53154caf05
+- card_id: devout_acolyte
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: devout_acolyte.jpg
+    sha256: 78b99d12b91bca72885576cda32c30fffb57768014476e3967955405f787b2bf
+- card_id: dirty_fighting
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: dirty_fighting.jpg
+    sha256: 91e5d73b8d6abbf71c65a92702c38710c57e8a497c4944c2b310a79c6dd592f2
+- card_id: doji_akiko
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: doji_akiko.jpg
+    sha256: b5252d62cd6d2cf51921ddfff1ce82b259cadbdf0079ff2f8dd03afa26b2d700
+- card_id: doji_jotaro
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: doji_jotaro.jpg
+    sha256: 135ddcbeefa8394a5ce4f894a2cc13a1c2c8490160b14c5cc395719f979f0214
+- card_id: draw_them_out
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: draw_them_out.jpg
+    sha256: 6dffbfed8c8f1bf8db57fc18c5748747606f8a514fb11b9f207bafc6842ed332
+- card_id: embargo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: embargo.jpg
+    sha256: fa4292611cd4d46b511c35cb48242a0bf3fac95b9b531bfe44d134f5ff612f44
+- card_id: entrenchment
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: entrenchment.jpg
+    sha256: 8996fd22bbd1d4de766347b0d335b070276a35d90cac31d47a50605386fce53c
+- card_id: falcon_messengers
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: falcon_messengers.jpg
+    sha256: bd5158a35aca6eba9fb27e756815367cfe090cc3f5c50db30849452f9ebd0fd0
+- card_id: field_of_amaterasu
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: field_of_amaterasu.jpg
+    sha256: 89c28488081b6d1e679e6f537604bb85579166c96160948c0a708558a56082db
+- card_id: gaheris_no_shiryo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: gaheris_no_shiryo.jpg
+    sha256: fbd101f2274d919cfe274ee29a51d25eaaa58bf76c9cfba5bc4e10f745b5e5fd
+- card_id: garen
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: garen.jpg
+    sha256: 80ed4db191a00d84370faada98a6849b447524f6ca0d6851418b40edaa5e576b
+- card_id: gunso
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: gunso.jpg
+    sha256: 01859a48b9cd26cd07002b5c20e9670360450b3449b8b5d80369bdbe96b2d561
+- card_id: harsh_winter
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: harsh_winter.jpg
+    sha256: 1dccaa07d19856582b8b671a0c36784ac6a26540be4fd79d8a037866c3b17dbb
+- card_id: hida_advisor
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: hida_advisor.jpg
+    sha256: 0daf2bd8337274fd4093e3c183ee9c3683dd48946d8d91ef7d989026a6955fc5
+- card_id: hida_kuon_experienced_2
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: hida_kuon_experienced_2.jpg
+    sha256: 8ef5eb2557563f74149bdf48b36b2e4791d913fa0dd5c7b3b234b3a0f35c5fc1
+- card_id: hida_reiha_experienced
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: hida_reiha_experienced.jpg
+    sha256: 1c53285e0233dcdce139f7a6b677b724cb26ee1570cac97bf4e9d8f47b696fa2
+- card_id: hida_tokichiro
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: hida_tokichiro.jpg
+    sha256: 18d7fab5301d82829e6d9e3ab41ee4e5b214beabaa96ca1e645098ac7f5c1a18
+- card_id: hiruma_ryuichi
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: hiruma_ryuichi.jpg
+    sha256: b073d97119a44141f89d6ea6fdaac1390149cc3f6bfafc3ff3e3484002166973
+- card_id: hitomi_echiko
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: hitomi_echiko.jpg
+    sha256: 5822223dc9e3c1e410fa88cfc36c66e36234dfd6061574edd20a26736cd0317a
+- card_id: hitomi_hogai
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: hitomi_hogai.jpg
+    sha256: 33ae68505541e520bc2db17c95c656ba0d8b9d57e6fb10bb3c37e1b9c34efd30
+- card_id: honor_is_my_blade
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: honor_is_my_blade.jpg
+    sha256: 7733dd6c242144e4443916aa453ea35cc0164c37052e04d937cf919f60de1645
+- card_id: hound_of_the_lost
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: hound_of_the_lost.jpg
+    sha256: 8a75395dd564c7cdcc17b76f7bec21ea153f9f6f84919dc5bd3d5cc33cee5fee
+- card_id: i_give_you_my_sword
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: i_give_you_my_sword.jpg
+    sha256: a78592b4d2ae594d8f7b4e0a6b24dc150172384ef8e1f11a99d17a2833315574
+- card_id: iaijutsu_technique
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: iaijutsu_technique.jpg
+    sha256: 09ea12f32b4841ec2716f9ac0db8226ed754605d1a4b84e047d6cb2469587048
+- card_id: ide_sadanobu
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: ide_sadanobu.jpg
+    sha256: 60e748594f342c8c23ae5492cd0d2c78d7ffbe9f3ac34ed0fe1aea6a0428cc89
+- card_id: ikoma_otemi_experienced
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: ikoma_otemi_experienced.jpg
+    sha256: bc710945e5559a59873a7c29884cd07604291c7806ddb1c456ca143cccbac841
+- card_id: iron_defenders
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: iron_defenders.jpg
+    sha256: 67800cfc5d4287628dfe4bd9b4560ee3bf169200d8edabab21af6af1cd78461f
+- card_id: isawa_izumi
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: isawa_izumi.jpg
+    sha256: 453788b2db12f35b49d1610b38c38e57f2a6e0a89ed3b85fec1ca39503f35ea3
+- card_id: isawa_yoriko
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: isawa_yoriko.jpg
+    sha256: c86b1429003cbbe775f5a79d9357f61b25918fca833adba0c7d215136ebfd2e8
+- card_id: iuchi_hari
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: iuchi_hari.jpg
+    sha256: 66fe8bb4c0dfd13f809e8578031db968b5db4e44876a310fdf03acd9899bfe62
+- card_id: jade_vein
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: jade_vein.jpg
+    sha256: 552084036593403c00be0335df7bc771084ab6f26ca22b7dfa9984df8aa26150
+- card_id: jotei
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: jotei.jpg
+    sha256: f1d86e13092f75d5e3aca62d2d19fe8b27021dd5781e62be864095b7fbd793ad
+- card_id: kaelung
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: kaelung.jpg
+    sha256: 55aa52b8fbebaf0bddd5a1e6e07d944ba95a393c24bb44b4aecf48393faeb072
+- card_id: katsu
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: katsu.jpg
+    sha256: 6dcdd224d354a1d378e98c85bf6e28c7a7d7a120c8e8d7cb76d9ff36fe1dc4ab
+- card_id: kisadas_fist
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: kisadas_fist.jpg
+    sha256: 643bceabba43becfba6ab7e3aa17b5ee2f9880f385931305667254adc3832ddd
+- card_id: kisadas_shrine
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: kisadas_shrine.jpg
+    sha256: c732a6432f90546da36b31d4c5052923934d75113693826680ce039292077bb5
+- card_id: kozue
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: kozue.jpg
+    sha256: a2d2f736030dc782402a2a465b60cb3a144ff6220a811e48f6fa849c06187cd4
+- card_id: lady_moons_curse
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: lady_moons_curse.jpg
+    sha256: 53ff33c220df25bc1cc9e289a732715281e532e2591e75aa42458b35927a34fd
+- card_id: lesser_shrine
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: lesser_shrine.jpg
+    sha256: 64e251e3dca563edc506cac60db3252880ad8c2931febd2d66130ad2396dea38
+- card_id: lobbyists
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: lobbyists.jpg
+    sha256: dea163d5283cbba22a953cdcc5291e6c24db9580a8b22aae4c1849ef4e3d7f56
+- card_id: loyal_yojimbo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: loyal_yojimbo.jpg
+    sha256: 122701616f16fadc3df20f2919a64c9c3dad289ffae01b6be3e85f587f13841b
+- card_id: maho_bujin
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: maho_bujin.jpg
+    sha256: bd2c713656f7ba82ade7bf16620bf75dfdc5c3da8250b55c8c4694493772103f
+- card_id: make_your_choice
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: make_your_choice.jpg
+    sha256: fa058e867c99fdf6e5cc7d5907a6b69170e887ceda9d0a949a809d0e5d9239ad
+- card_id: matsu_makiko
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: matsu_makiko.jpg
+    sha256: 494f156995107852a28fd95f2e65415c020ec6df56bc2912cb014d5b8f35756e
+- card_id: mirumoto_shokan
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: mirumoto_shokan.jpg
+    sha256: f26e19a3b319c08f17396609088a9a3a46b934369f5fd49c924f170ca7945a6b
+- card_id: moshi_jukio
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: moshi_jukio.jpg
+    sha256: aa7192f2b9e76dcc566340d041be547d7550b6f2b83598384109c47e7a30de2b
+- card_id: moth_tattoo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: moth_tattoo.jpg
+    sha256: 5f5be864f29a2c705b48e3324f7aa4402f30258afab7ebaa2fb3c1cf53b2ed0f
+- card_id: moto_kubulai
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: moto_kubulai.jpg
+    sha256: 87ca553460c0bea87c1bbfe80cf25bc05f7cd5813b9af878228832b5c979cb7f
+- card_id: muchitsujo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: muchitsujo.jpg
+    sha256: ea3e35ff9f0f13ace743dab109bd83b8aeda8a7f1d11846d2174c801c8bc0482
+- card_id: my_fathers_weapon
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: my_fathers_weapon.jpg
+    sha256: a20fecdff2c1ff262698d3f8d9ca449b5feea8d89beb9ffe9816b8ce0f06c391
+- card_id: mystic_dojo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: mystic_dojo.jpg
+    sha256: 68526f8042bf4bcd2b51ac0634baaa1a6cdeeb832922a884bba7daaedb61a041
+- card_id: no_more_games_yasuki
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: no_more_games_yasuki.jpg
+    sha256: 262a5ef9d2226b516f4db523804e63c1dc59275996fd38ad3f2229e3d1337ba6
+- card_id: ogre_hag
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: ogre_hag.jpg
+    sha256: c3f5f5bd32928f79502c005bfcc90ae528360b370db49409d09ef626f6ed4e09
+- card_id: open_the_waves
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: open_the_waves.jpg
+    sha256: ad70b9c650b6cc2100d888105c0de93f378cfc481ae9cd66a73bc45d34bd1ab8
+- card_id: open_warfare
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: open_warfare.jpg
+    sha256: 57b9f3c74920f96a0734b04b6ffd6f5ab6cd0f0261b1b36c55b89cd33bba982f
+- card_id: overwhelmed
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: overwhelmed.jpg
+    sha256: 9e6044dd1eabbbef8ed95bb0072816be50d8761c19ef72af0ccd3b62fc26e816
+- card_id: paddock
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: paddock.jpg
+    sha256: 1ce2885c95277fa3101584bdce5fd2de29c56af19f5e48140f5f3f8cc92429f1
+- card_id: palm_strike
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: palm_strike.jpg
+    sha256: 90f346014cf15a18dead7eca6ab701513267ed62bb5a91f9bc02eb2a60e65d19
+- card_id: path_of_the_dragon_star
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: path_of_the_dragon_star.jpg
+    sha256: 840d6cf70b960be71acb4a887dc22d4140a03946ff0ab6a4d4a8f9e669d76707
+- card_id: perfect_silence
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: perfect_silence.jpg
+    sha256: ce6fb5e0d9ac92061475fdb4c7c114a16a3945925bffe71916512e89d29c1bcf
+- card_id: petition_forgiveness
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: petition_forgiveness.jpg
+    sha256: 600791488f2c2118d6a7778ebf4cc3f6ef7bd5dc1cc732eefe0d30aaaff7697a
+- card_id: pirate_wharf
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: pirate_wharf.jpg
+    sha256: c253f3aa70cc04017a21768b8b1c453cd24ce21171f41f416401ebf351f09fe4
+- card_id: plumb_the_darkness
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: plumb_the_darkness.jpg
+    sha256: b37d0dd4b6c21c9480f62fd2929bce26bae7c6d27effb13d978813e4034983ec
+- card_id: port_town
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: port_town.jpg
+    sha256: d0a9430491e24e0ef06c3e5d04065bdb7b698ae0350bf8bdc63525d8b9a546a5
+- card_id: private_augury
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: private_augury.jpg
+    sha256: c0817832039575266d96735134769676015f4520733bce211068cc089c5ca863
+- card_id: quest_for_guidance
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: quest_for_guidance.jpg
+    sha256: 3595a058f3441b97d8f048edac40e2c499de5a57848c1ae6995e87a19e5d831d
+- card_id: ravenous_podlings
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: ravenous_podlings.jpg
+    sha256: 6fd972b317be8fbe9c3be3ddbd0a892bf7789a060e79297e262f8f910286defd
+- card_id: razors_edge_dojo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: razors_edge_dojo.jpg
+    sha256: ad029e2d61da97812907c6855ca18919f50e0b9f39ce4fd043882e05d9faad60
+- card_id: relentless_assault
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: relentless_assault.jpg
+    sha256: 6d9db7e82636904e09d0d4df23d110820d984e69e3b1d79db5dee7f09bbcfc57
+- card_id: rice_paddy
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: rice_paddy.jpg
+    sha256: b20b7f1d8367c2ca126e036ae761005453cdf811ab8530585a17b42bedfce34d
+- card_id: righteous_protection
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: righteous_protection.jpg
+    sha256: 8aa4b68e1179d69a17e70289aa571579d59b0e0488411bccfff8b25da4ce8702
+- card_id: rising_sun_tattoo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: rising_sun_tattoo.jpg
+    sha256: dc8b3d8a82f2de1093fdd9aedd52676428647f30777e190359254a6377f9b745
+- card_id: run_him_down
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: run_him_down.jpg
+    sha256: c4df9fac5878b54e6155bae864d2347f834cbbb35644f177c9e5b02edad53c99
+- card_id: sacred_gong
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: sacred_gong.jpg
+    sha256: d05180b1a74f12be58ab12fdaf7a5209f6163fd7f3cf7e8d7c018fee78e07d99
+- card_id: sailors_for_hire
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: sailors_for_hire.jpg
+    sha256: b82e1e4c1f3da6761fb9a09d9a2fa5597063095918aa640db71f076fe296c408
+- card_id: sampan
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: sampan.jpg
+    sha256: 1573d53b7982043db4bc94b59d15c6d08406d08db4786aac8efec27e11673688
+- card_id: scroll_cache
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: scroll_cache.jpg
+    sha256: e3c00d22cb8ea046b89074ba562dd6215607ffcb7235424aaa61f7d76c381077
+- card_id: seas_of_shadow
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: seas_of_shadow.jpg
+    sha256: c75e579578a2d7cb42971d1ab152f940e52829e3e6b46d61b0db659bad25a17e
+- card_id: seductive_kansen
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: seductive_kansen.jpg
+    sha256: d47b135168767771c210503a7ff726c5f7287e05622a2d317ab1f08f7e4f8950
+- card_id: seiko_no_shiryo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: seiko_no_shiryo.jpg
+    sha256: e93ce517212c053649225148bc8fcfdb00e226434de7ff6edc967e000932af11
+- card_id: shadow_dragon
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: shadow_dragon.jpg
+    sha256: eedb1dc3d3883ecfeb5f9bd66307235c141bca9d246a592aa5879914a367c8e1
+- card_id: shiba_hayoto
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: shiba_hayoto.jpg
+    sha256: e54a5e6b475e63b73197b66a73d107b78009e6f850e16a297289d80fe644e285
+- card_id: shinjo_inoue
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: shinjo_inoue.jpg
+    sha256: 1bfcbdd00651c15810bef0b1dadfd5a046bb91a48800eac81fce40eff99507e4
+- card_id: shinjo_noriyori
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: shinjo_noriyori.jpg
+    sha256: 005fa59b5c548873c22994b5c06e7208cc5ab8f1f43a4247c5df41bbd2a85d3b
+- card_id: shiro_shinjo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: shiro_shinjo.jpg
+    sha256: 3959b2ebb38ab53c4f2e58423a579763c88e8cdfc8e0c9c35902eb7ab3638279
+- card_id: shosuro_yudoka_experienced
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: shosuro_yudoka_experienced.jpg
+    sha256: 1285a6970f6139616b53b72b01c9912b4be762dbb23b614d64f3faa9494146e7
+- card_id: shrine_of_stone
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: shrine_of_stone.jpg
+    sha256: dc0b82b4e6c06ce58a3e3406df9803813ce67655e8edd74c6da603fe9b559e92
+- card_id: slaying_fields
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: slaying_fields.jpg
+    sha256: 8b0c1ca90deb9aea8143a4bd680d78141691755b76d903cbf99f50ea89623187
+- card_id: solitary_engagement
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: solitary_engagement.jpg
+    sha256: 32c36df0391907d19957c6a98eed4071805867e9963938e1010bc3a9056a5463
+- card_id: stand_aside
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: stand_aside.jpg
+    sha256: 402333cb25a31886c0fbefb4b54ba66fa4dc40a8c536e343b7aec39089c6ac57
+- card_id: tamori_shaitung_experienced
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: tamori_shaitung_experienced.jpg
+    sha256: 4aac7777f6e7bc166ebe00664eff81234eda4c91b5bbb88338923bbd725333c6
+- card_id: tamori_shukuen
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: tamori_shukuen.jpg
+    sha256: b03f39b0607dc41ab17bc2c470a9995732e76881508134b53644fde9e0260ba1
+- card_id: ten_thousand_as_one
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: ten_thousand_as_one.jpg
+    sha256: eb0509868e358478b8a97b8baf28125ec99428fd68db469b1d57da6d7ff19746
+- card_id: the_dark_daughters_caress
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: the_dark_daughters_caress.jpg
+    sha256: 664833ecd4410120aa0efc113495c115bc3e968759e0a4124b3783666f572abc
+- card_id: the_importunate_vu
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: the_importunate_vu.jpg
+    sha256: d8259b5bdd5383bdcbbbd925a9947ecb98e06cfa7da24599e4e2fbe64251a25c
+- card_id: the_shadowed_tower_of_the_shosuro
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: the_shadowed_tower_of_the_shosuro.jpg
+    sha256: e898652882134a0b974d6055021d1a0ab36656de7cb9d3935b9fc9fc686d6c89
+- card_id: the_shoguns_fealty
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: the_shoguns_fealty.jpg
+    sha256: 5c666dd40591a2649108ad6c9f4116621c65e2808db5c6a334759298f1d83104
+- card_id: the_steel_throne
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: the_steel_throne.jpg
+    sha256: 7d57c656de34264623b5434328eb806a379872f407134a0b7a71b249718c6a03
+- card_id: the_wolfs_proposal
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: the_wolfs_proposal.jpg
+    sha256: 68b854daf271380152c9a769601e3ef834c45fe4146c3ee7d6589f3d88ed5029
+- card_id: three_pronged_assault
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: three_pronged_assault.jpg
+    sha256: 098da4e1019cb77b97cc1cd7277913da3f2d846de0a1fd25eca2a1fbaa6dde1b
+- card_id: time_of_loyalty
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: time_of_loyalty.jpg
+    sha256: cc5b508f86a2fd69f60c04e2fd2d8772e9b26c2c42f2fa133ff3cd617dab0d50
+- card_id: tonfa
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: tonfa.jpg
+    sha256: 8d0c4e20af7d914fbfb84481853a65572f0839f03c8baf74ab4836268378f2e5
+- card_id: toturis_shrine
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: toturis_shrine.jpg
+    sha256: a34d7fc4792c9bf491aa3aa3bf92eaff0f4099930793a4937f335347411e8301
+- card_id: trade_hub
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: trade_hub.jpg
+    sha256: 481b589c5f53be22f44e97bfa80f966a306323ac98cbc2a988b5d94849c40a10
+- card_id: traveling_merchants
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: traveling_merchants.jpg
+    sha256: 2daded6f938b6e0ccb2c10442d55e1a1a26bd0a09caa53ca800de87aed314277
+- card_id: tsuruchi_heishiro
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: tsuruchi_heishiro.jpg
+    sha256: a1f61cf1c73edf4ff363a645b1ab5607343228bdecf3d561eda8c1b8422ccb3e
+- card_id: tsuruchi_yutaka
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: tsuruchi_yutaka.jpg
+    sha256: 2468029416b31f837bdec0d4ee117db70e9493229920fbcf23e1c70a9aed339c
+- card_id: twisted_forest
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: twisted_forest.jpg
+    sha256: 01b1125ed6fc79169dd6ecb45b474c32e00a04efa82258bf228bb35dbdf5b97a
+- card_id: uona_no_shiryo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: uona_no_shiryo.jpg
+    sha256: f07de9800246702c2b0eedd83c25398977dee3373f578070b59ef6f5554dbbca
+- card_id: veteran_bushi
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: veteran_bushi.jpg
+    sha256: 3829812726957a380e40381336589c634dd1f24eb9bf9a119edfe059ccc61924
+- card_id: we_will_have_revenge
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: we_will_have_revenge.jpg
+    sha256: 463b3ea9b2e9fed846cf5eaca149906ad15bac11e7ad3b09044b8610078e682c
+- card_id: white_stag_burns
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: white_stag_burns.jpg
+    sha256: 2cd7f288e7f295d4afcbcad62571d9280c6c60c9210f23c571c6ed63c468a515
+- card_id: will_of_air
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: will_of_air.jpg
+    sha256: 8796ff8f6d9593d10d8c1a5a3b8cf1ec8caec1e4e8e43fbff356b9f809788b97
+- card_id: will_of_earth
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: will_of_earth.jpg
+    sha256: 76fec6095f4b1010e2394aeed265b94d606f9a3cfa5fb8d0afeeb916230cad80
+- card_id: will_of_fire
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: will_of_fire.jpg
+    sha256: 7ae5f04b487834c2c551e405511667d42e0ad752e1c344162dcd8871f1760994
+- card_id: will_of_water
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: will_of_water.jpg
+    sha256: 03ed2e9103d850ca023884fdd9ed1b8bb04f6835fe162b63d79afbfa48fc8b41
+- card_id: yasuki_jinn_kuen
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: yasuki_jinn_kuen.jpg
+    sha256: 92759ec677d5a7eea2bc137d80c99520ca685c1dc8bd2b2705484ee36c28d92c
+- card_id: yasuki_palaces
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: yasuki_palaces.jpg
+    sha256: 9429aeab20a37f31134dc55abc174a7c0c31b2652b94f3b106072d3586c5e5d6
+- card_id: yogo_hatsumi
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: yogo_hatsumi.jpg
+    sha256: ea99bc13f4b44ebe4d21f70067da395dce9fecb7b4c17c3ffd4e9aa213394955
+- card_id: yogo_tjeki_experienced
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: yogo_tjeki_experienced.jpg
+    sha256: 5aafb62d11139610051351164ee5c951f25e447fec0b71e577c2135071b30f6f
+- card_id: yoritomo_kumiko
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: yoritomo_kumiko.jpg
+    sha256: 5f9bfe7f9f0fc07a449959d220ffe2e3ce8ef439423396cd92882b7ec97bd027
+- card_id: yoritomo_soetsuko
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: yoritomo_soetsuko.jpg
+    sha256: 44cfee39a25df81b1b760c1ca05b4dfd62972106ce246db86f68c110afd33341
+- card_id: yoshi_no_shiryo
+  printing_id: broken_blades
+  files:
+  - role: front
+    file: yoshi_no_shiryo.jpg
+    sha256: 3c20b297ba3d919532e8c844aecee5f311458662a2ea40faef5eb18f6b7bc510

@@ -1,0 +1,932 @@
+set: Torn Asunder
+images:
+- card_id: a_cleansing_breath
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: a_cleansing_breath.jpg
+    sha256: 11076971cd1d66041ef450a725d3a9d5f068732b95fe9ed31bf39de42240a4c2
+- card_id: a_close_call
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: a_close_call.jpg
+    sha256: d05f6f17d8cf9cecb505857d083cf8f09bff178edff790810ce3fefdc3f6f749
+- card_id: a_dangerous_game
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: a_dangerous_game.jpg
+    sha256: 14a63b2c5cd94bce7b1656208435c3eac497610901647a2af35996fa78f196ac
+- card_id: a_threat_enacted
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: a_threat_enacted.jpg
+    sha256: 9d5cb2fae4fbb9ceaa30d5a8c9239510c37e4baa992ebc99f9ff4610f3463ca5
+- card_id: akodo_chiyo
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: akodo_chiyo.jpg
+    sha256: be342394551410fb7867620f57175e985f2d059761ab15b5f8237b6d1a6109cd
+- card_id: ambush_tactics
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: ambush_tactics.jpg
+    sha256: bec953f2a41211598b3529df8f98eee5175fb57c64f20722f242e9e0a3422187
+- card_id: anchored_in_earth
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: anchored_in_earth.jpg
+    sha256: 41be22f778a2715fd5f98e1c84ff4209a84b00cbb990dfe9bcaddb5da1b4eba1
+- card_id: asahina_akahiko
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: asahina_akahiko.jpg
+    sha256: 0aec8c42eca69b1359a8122d81c8b785613d770eceda2ec8b5db17cd64fbd0cd
+- card_id: asahina_nanae_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: asahina_nanae_experienced.jpg
+    sha256: 4b496d5c33a4413ccddd126064db716f0a096fa85315ab0dc47537ed1780a90e
+- card_id: asako_izuna_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: asako_izuna_experienced.jpg
+    sha256: e3667f4846d2ea1530b1aa64c9c5606e8e86fbd1ac92ebcc941eae1c97278486
+- card_id: asako_kyuudo
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: asako_kyuudo.jpg
+    sha256: 157f11a83950f4e07258700058f59c61ad9c50a4f502292e5c14aaa3ef2923e7
+- card_id: asako_suzukaze
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: asako_suzukaze.jpg
+    sha256: 4ec9ee7147f8960fad80b6334fa7515a1aba6ed1fa7856b32b703c39e321d4e0
+- card_id: avenging_the_fallen
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: avenging_the_fallen.jpg
+    sha256: d463c1c15ffd6360a3b38aa93282198d02d1a06573a0e0ec8930274417cab8ba
+- card_id: bamboo_tattoo
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: bamboo_tattoo.jpg
+    sha256: 8086c7b36f3e4400c90f3de093b2c495e600154e06e4050fda19f931123d708d
+- card_id: bayushi_hamada
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: bayushi_hamada.jpg
+    sha256: 8ba3cba7dfd48fbe2f225865a49f1490fd49faf916acf77d26d52c6a74396155
+- card_id: bayushi_kazutoshi_experienced_2
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: bayushi_kazutoshi_experienced_2.jpg
+    sha256: 96af262aaa565495a5603f0afed37cf77b333009ede756a9b83960971a58f97e
+- card_id: bayushi_wakui
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: bayushi_wakui.jpg
+    sha256: 6ca86d1553dc6375cdf7052eb1034f9db6502b631e8973f617057b549eff725a
+- card_id: blood_of_isawas_tribe
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: blood_of_isawas_tribe.jpg
+    sha256: 16904258973ac556256788f75cf502d8840b08ab9ec9d33455d5aaf3fc57965a
+- card_id: blood_wave
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: blood_wave.jpg
+    sha256: 2e7d852e07acf46cd5ddc4b826ebbfbed4c406df0df19b78cb4b4705aaa0fbd8
+- card_id: bonds_of_hospitality
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: bonds_of_hospitality.jpg
+    sha256: 7c907bd88b1dd283fa1b3cc0ba98329d3aba92340eefcc6fa39bf2d1d3ef8d90
+- card_id: breached_oni
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: breached_oni.jpg
+    sha256: b0de6796aae3a8434a3df505152f500f9cea9e707b6daa94d32f38b0214dadfe
+- card_id: brothers_of_the_great_lake
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: brothers_of_the_great_lake.jpg
+    sha256: 44b558e1d54ae5db3003474e0579ac5412a1940c9c67983e623f270ae7f98ffe
+- card_id: calling_the_darkness
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: calling_the_darkness.jpg
+    sha256: f601514efdd06915bb164b2539a34f2b7d6ea5d202c120b73fdd07ddc350c1cb
+- card_id: cavalry_flankers
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: cavalry_flankers.jpg
+    sha256: 4f758198c63a6218e566bf71558e7dc7589fca4c6febcd06d0b755c1800e4e1b
+- card_id: charge_into_danger
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: charge_into_danger.jpg
+    sha256: bb9c543d9fd419a71cac8e7a9334a4af895b05f9ccbe4bac15864d11e4988210
+- card_id: charter
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: charter.jpg
+    sha256: 322114878c6c31ba1ca6d9166ffbd550c8200439917d7015178b141d878365d0
+- card_id: chiyureis_axe
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: chiyureis_axe.jpg
+    sha256: 291e3f41dec7e525404ae5ecdf0e0d898bb095ba6849499e37112ce7c41a6b5a
+- card_id: chuda_kaito
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: chuda_kaito.jpg
+    sha256: 93a71cdbc919770cec558899e052c8e6609fad11104e285ba709d3bd26565621
+- card_id: chun
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: chun.jpg
+    sha256: 020114570e2063433d4ed3721299f7cb9ba2ccf61e0dc3b61d1c34c22d5e3c87
+- card_id: courteous_gift
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: courteous_gift.jpg
+    sha256: 2e36c23e5bc3a656bf77e4b75c4f5ff81f3c568a6da13fa7bd578c6b08e59103
+- card_id: daidoji_ibara
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: daidoji_ibara.jpg
+    sha256: f1e5ef16a6745de8a7db5bab332f9389858b0415264c9fd3b20a46c1e524273e
+- card_id: daigotsu_arare
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: daigotsu_arare.jpg
+    sha256: cc2fa52ad106c821012902176a3f27a465e9784f77bd6d6bf81205158bfe4e09
+- card_id: daigotsu_bofana_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: daigotsu_bofana_experienced.jpg
+    sha256: c4248995ed42602daecabd0136fe393a1650d5cac62179a9b1088ece8800c802
+- card_id: daigotsu_hashibei
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: daigotsu_hashibei.jpg
+    sha256: d6f178fd4d0b17434dbfaf6d48cf4c81dc72efd2932016081fd5bf0890e2324e
+- card_id: daigotsu_shiraume
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: daigotsu_shiraume.jpg
+    sha256: af5fa1f17b08801f5e95ec12474c298d7b2749b2148d3f0deaaae542703688a5
+- card_id: damaged_port
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: damaged_port.jpg
+    sha256: 716092d48deddd9000e226cdc669ca2b68eb4a910843dcf634c5a25ae994a88f
+- card_id: defensive_stance
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: defensive_stance.jpg
+    sha256: ae8d2cf23bacbd253572f945a58595bbb1cf3ff06760ae3ec66ab81936b7276d
+- card_id: destrier
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: destrier.jpg
+    sha256: f267da78c0fa9d2d217460aef22a517c15df94c2098310a46162505f2eb8c41b
+- card_id: disciples_of_master_coin
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: disciples_of_master_coin.jpg
+    sha256: 7e0008a3b89b385bb578c85ae1ae3af9763d0d4b1c5dc4072e565c0c56e47ae1
+- card_id: doji_iza
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: doji_iza.jpg
+    sha256: 5813512bc1885194370fc0b97d9863e0359a94c6b954ac2b122617f083cf4f58
+- card_id: doji_kazuo_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: doji_kazuo_experienced.jpg
+    sha256: f1d20f57fcbda183a5614083d4df6983bda151c99ac5a911dd7298f757872d5d
+- card_id: doji_tatsuzo
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: doji_tatsuzo.jpg
+    sha256: 668cd328e09b324fef946ea26e1ae7a5c196b1fd33edfed9c328b9c2816fd010
+- card_id: drain_of_effort
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: drain_of_effort.jpg
+    sha256: 066b5e249c3ffc7b3ad3dc3b2cf762edd4257156587b9647bb06ccf742f01af7
+- card_id: duty_over_all_things
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: duty_over_all_things.jpg
+    sha256: 2bdb96cdab4b1329b6f3239dd7b6c0c8523f1b5ae7974af5237b120fd9431b28
+- card_id: earths_protection
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: earths_protection.jpg
+    sha256: a6882e87245df4d389fc3d5c0a32a37c53f333a625fdd3ac44fb1b7b559db6c1
+- card_id: eye_of_the_sword
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: eye_of_the_sword.jpg
+    sha256: 6c836ba5fe5d42052bd2877505f1f66389a79abd1e8c8069268c59712e35bb42
+- card_id: forest_cover
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: forest_cover.jpg
+    sha256: 66290b9b05826a238f1f25b77f181f0702f92296f96182361dbd7284d8d256af
+- card_id: forgotten_teachings
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: forgotten_teachings.jpg
+    sha256: a01ae0b854bf4431694aee78ae3fd0df2649fc8391b260b5b77594140cdcb288
+- card_id: frozen_in_place
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: frozen_in_place.jpg
+    sha256: 0e9850bcdcae82be9c25b40e77170ecf84b762f0218c69c2fbe7c6c1188ff13e
+- card_id: fubuko
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: fubuko.jpg
+    sha256: 444e4f54636dda624918023038230cd79359fd4054b59b3c0aa65b47048b2a68
+- card_id: generational_gap
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: generational_gap.jpg
+    sha256: eabd96f9d56a5ca795d355f74748ddf9bc853dea28803279d8650b206ed40bbe
+- card_id: goju_kaxt
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: goju_kaxt.jpg
+    sha256: cd5dd95b8adffada52e8bd35d2a961490b01f82855a96528b49bbd1c09d9b090
+- card_id: hachimans_prowess
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: hachimans_prowess.jpg
+    sha256: c1b340224f91d11ef8cf4513635580b6cd2d40e3a069ab679a9afa2059eeba43
+- card_id: harbingers_of_war
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: harbingers_of_war.jpg
+    sha256: ed2e7e58e10244a941a99bcbaa8f2bc7a2770fbd795d3ce60176836524b2d396
+- card_id: harbor_of_kalanis_landing
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: harbor_of_kalanis_landing.jpg
+    sha256: a7429845b074c6b1ff3dbf89809892394208f0f17077d0c0a4a6364fbbd76bb8
+- card_id: harmony
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: harmony.jpg
+    sha256: 7a917200b5b00e593e7f28e286284d1adb1467e77dbac7ad6b76f620104314bd
+- card_id: heros_memorial
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: heros_memorial.jpg
+    sha256: 62855e8ba175b8a064e360b9bf1cbd31b268f4e51ec36aa1afb8065907786929
+- card_id: hida_chiyurei
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: hida_chiyurei.jpg
+    sha256: 4f19af0c782b2777359fc4b98ac557ad94e48bfad49d9d37f163fe416fab752c
+- card_id: hired_samurai
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: hired_samurai.jpg
+    sha256: 5924ed9c8cd6773aff8ca55e63964057eb01e1ef4517ef7bf96cb44860edab9f
+- card_id: hiruma_ikeuchi
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: hiruma_ikeuchi.jpg
+    sha256: 9cb8b3ff69c0f1e215456296b3d7489e1f579460de721b32a1f7fdad2a067268
+- card_id: ikoma_satoru_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: ikoma_satoru_experienced.jpg
+    sha256: f534e79386b8271af20930002a3f7fde201e1ce807099ab18db1135415c1ae72
+- card_id: ikoma_shizuka
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: ikoma_shizuka.jpg
+    sha256: 314e3ee5991a92b60b62c40c8ffef022c4815ff5d11850f2f2f166b14f38e708
+- card_id: imperial_deployment
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: imperial_deployment.jpg
+    sha256: f87cf8b4fa714ef32e16283f36328ed3acd65f1a251f24807ca41b229e3fcf4b
+- card_id: improper_papers
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: improper_papers.jpg
+    sha256: 1ca70a41b398edc294ce9e27c56ec0f5b72c8b1c87502d7a988adba9a51d2a6b
+- card_id: imprudent_misstep
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: imprudent_misstep.jpg
+    sha256: 719dc2bd5e331bb51a16487e6b3b86aa48f9c4f3d5a50d5f06acb226496ebdd0
+- card_id: in_the_right
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: in_the_right.jpg
+    sha256: 0c4d7ebc65561c8f0efb1d220e7c7dfa63efdebf5e0a92854da96702f9a6595a
+- card_id: isawa_hibana
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: isawa_hibana.jpg
+    sha256: dd445725308fe7e03ed85377ab7c9ce748deb144afa806d32be0e685d476dec9
+- card_id: isawa_mizuhama
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: isawa_mizuhama.jpg
+    sha256: 7b9896533ce5e062748bffcadbcaea226c702d720530a755e90de884d79536fb
+- card_id: iuchi_shaocheng
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: iuchi_shaocheng.jpg
+    sha256: 02ab38dde132639897257c6251b312da35d7faf19c0bba0c3855b931144ae4f5
+- card_id: journeys_end_keep_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: journeys_end_keep_experienced.jpg
+    sha256: 5141c7b3bb8286c433abbf84df418cb72ef7399ce5c4ed70ad57314506a3fcc3
+- card_id: kages_teachings
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: kages_teachings.jpg
+    sha256: 2bee743d755034497ed825a336023ec65a701b4665f9a98d63dd874965ce007b
+- card_id: kaiu_nagai
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: kaiu_nagai.jpg
+    sha256: c77257a6ca12a1b9acf9fee8a360cf99c3a08988d9a5ae1a8357937d0e95efdf
+- card_id: kaxt
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: kaxt.jpg
+    sha256: edc6f93d6bac8a3dbfaf5df002160602fdd8fec6252f83cd917a28e9e9748a44
+- card_id: ki_podling
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: ki_podling.jpg
+    sha256: 4df09d4beba827c5a5ddb3140e15f0481284fcdd38d59f0f07f5abbb32c810d8
+- card_id: kitsu_miwa
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: kitsu_miwa.jpg
+    sha256: 76f8770e2fad74e473f6016db11fc4411003cd6fa50df2edb8d01cb340373518
+- card_id: kitsuki_judgment
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: kitsuki_judgment.jpg
+    sha256: 43e0b649b188481e4db87b19ff22cbaa8a98447b986c4191b6568f10605939fc
+- card_id: kitsune_yuribara
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: kitsune_yuribara.jpg
+    sha256: 6a2c4ddfd049a26dd45048c21d5ceb4b7098c7de32d9af822421584cce8a8783
+- card_id: kokures_lands
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: kokures_lands.jpg
+    sha256: fb7e704bc10bba69d7d32e717cafac6cb7f9246bc06622fd5595bf844caaba22
+- card_id: kuni_renyu_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: kuni_renyu_experienced.jpg
+    sha256: 06ce52257d59047d244e7d583c932a3050063a46713f6396f74d8121fe18abe0
+- card_id: kuni_shinoda_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: kuni_shinoda_experienced.jpg
+    sha256: 5a428f4cca5b2ad7e3c2b3af691b50ec2e5cfc2a20efe473eea34a11c18b01e9
+- card_id: kurohitos_perfection
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: kurohitos_perfection.jpg
+    sha256: 9300a099b2a9ec797dfe45ba64c432a096c4547984f66ebf57694204022483b3
+- card_id: martyrs_call
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: martyrs_call.jpg
+    sha256: 628655893a398b5117646f8043472e202ac404ea7f04b232956dbe09a8a7afc1
+- card_id: matsu_sango
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: matsu_sango.jpg
+    sha256: 1d2409faed99b203180c3eeb1bb1732b0a0f2c43da97805f0ed59bcd9cb75cf9
+- card_id: matsu_yoshito
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: matsu_yoshito.jpg
+    sha256: c1311404935c0c2b895c5a908a2f58c8d33b3d41cdce41a3c88c7f02ea6f806e
+- card_id: merchant_outpost
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: merchant_outpost.jpg
+    sha256: f5d0e16ea3f2fd9e3882ee0d717d82c1bb3fcc7ea95908a1535749c1a5c73f7f
+- card_id: mirumoto_kojinrue_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: mirumoto_kojinrue_experienced.jpg
+    sha256: 9d1ba3de458fc5ee0d58ffb2ee433ed5d5dde4462788fba9ec4ae0c20176d9c9
+- card_id: mirumoto_kyoshiro
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: mirumoto_kyoshiro.jpg
+    sha256: 85eac9e2c096abff5580337f8bb7be8ddedaa4bd8478a9ff702f51ee63e0e292
+- card_id: mirumoto_yonekura
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: mirumoto_yonekura.jpg
+    sha256: 47bfccc26553cc9208d96eb86dbab56ea7ffa67889cb490813e9d1fc818f87ac
+- card_id: mirumoto_yozo_experienced_2
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: mirumoto_yozo_experienced_2.jpg
+    sha256: f8552278eaf9543978e36e0f32591e39c8f28813642577222a67842f42c6b753
+- card_id: miryoku_no_shima
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: miryoku_no_shima.jpg
+    sha256: d1f1ec0fb4d7cf22f30822988aa3f2232d7e52eb72fa7c3ba60c6a630bbfc98c
+- card_id: moshi_ira
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: moshi_ira.jpg
+    sha256: 3e80cdf994c21f61996f91e02f7b182ddf28b5d804e1c780b32cadc36fd8621d
+- card_id: moto_ogaru
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: moto_ogaru.jpg
+    sha256: f95dc5d547dba67e731ce0d867e56801b47e8263ca6a4463099ba212e214bc87
+- card_id: mumoku_no_oni
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: mumoku_no_oni.jpg
+    sha256: a66ebd511c5a6078b4c652fcd6df0dc6b9bf34416527abcf2dea2da0184e72c5
+- card_id: mutual_support
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: mutual_support.jpg
+    sha256: 4734337f4d814d64166d996a89151c93a920eacaa50549572b8dcdd9483a9ded
+- card_id: ninube_tsukau
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: ninube_tsukau.jpg
+    sha256: 1318a6cb4ae29564eee741c710e983af6bb126c3ff6fe6b04b0c39a1359bb77d
+- card_id: nocturnal_attack
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: nocturnal_attack.jpg
+    sha256: 16849dd8d26f7ea80548c05edde9c7de8c7dca9cb16ba59d59617dd1b192c5f3
+- card_id: now_we_are_enemies
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: now_we_are_enemies.jpg
+    sha256: 5043bc8d1b0c24473f2971a4b79dce369cdd91f793eb14f55fc4b2d01e69e8b8
+- card_id: opening_the_veil
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: opening_the_veil.jpg
+    sha256: 33812119cd5c391f1dd165b817b57650376f39b95068f499eaf7b110fc47b5ca
+- card_id: oriole_imperial_vanguard
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: oriole_imperial_vanguard.jpg
+    sha256: b83e75b64ca7e75f5b1b72c0fd4582a7fc97fb24963a51f91869b96e46589929
+- card_id: overpower
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: overpower.jpg
+    sha256: 214cfb45ebc8379c8ae87beeaf4b89d06cf354f2220eb87cf76af40d6a01808f
+- card_id: panekis_mask
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: panekis_mask.jpg
+    sha256: 9f8ec2ba7efce27ef0a3379f47824bc96e45743c0a41b1440478aa29d10d18a8
+- card_id: path_to_inner_peace
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: path_to_inner_peace.jpg
+    sha256: 0224191cb9128ff072e76063e8547c2bbbc83678f3bf57eac787539b2d261563
+- card_id: pierce_the_tapestery
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: pierce_the_tapestery.jpg
+    sha256: 864f8ba63649b76a9e2d1969f9f2e81bd58ce24e21419790d84d6167349d60db
+- card_id: read_the_essence
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: read_the_essence.jpg
+    sha256: 515f6904c3c1265bd088e366c4060fca752001b12831c073eef1ad69e28e0d51
+- card_id: ready_the_defenses
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: ready_the_defenses.jpg
+    sha256: 42c81c76afb09394b1a9313415f874bdcda0f2a485fa64ed138d237c96962ec4
+- card_id: recruitment_effort
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: recruitment_effort.jpg
+    sha256: c561aaeed4cd11c013ffebd14f091e8336f68c36462b974c99fab7b7697b2cd5
+- card_id: rejected_mediation
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: rejected_mediation.jpg
+    sha256: dba6d11f5dcb08819b298f4ae2ad54a454ba8ebc89c7dc0302dd691213bf4d9a
+- card_id: renyus_wrath
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: renyus_wrath.jpg
+    sha256: d618b7deb62a80fd926e12b881a8b1655a82640a931ca74c825a49923c2c6acb
+- card_id: revelations
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: revelations.jpg
+    sha256: 4c60e8f321ffbe45f1b51ed3842550df4d1c6299a165efee9dc0672305f1847f
+- card_id: riku
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: riku.jpg
+    sha256: cad83daeab2c946802bac9891399957e882a6f6510dd94be581d4ffe410ee899
+- card_id: scandalous_gossip
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: scandalous_gossip.jpg
+    sha256: d5fcbc138ac5e706d52abf8318f3745838d5b7a81bab5b508e1896fea311971c
+- card_id: scorching_lash
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: scorching_lash.jpg
+    sha256: d1f3ada9cf851c787857880e307f6d12c814cf4265c2027b3deed39f3dd53e36
+- card_id: seppun_ryota
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: seppun_ryota.jpg
+    sha256: 63ed006f5ab52a4b32c0b203a4b3825d0afb954652eb2d01b43c91c12a76b8e1
+- card_id: shiba_tetsaka
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: shiba_tetsaka.jpg
+    sha256: 76d4b1d33c102cdd2b362c2cc35c397d6d2ef57ee8c3518e6eb65367a7360693
+- card_id: shifting_waves
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: shifting_waves.jpg
+    sha256: 1b8232e0d518892bd0cdbf4eccdb19b6f04abf6facd092b7b9f755928f258d83
+- card_id: shinjo_sihung
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: shinjo_sihung.jpg
+    sha256: f8b6993110209fa012bdec973ebcbb709e2e173a0bcdb44e2d902eaba46b933d
+- card_id: shinjo_tselu
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: shinjo_tselu.jpg
+    sha256: 39f4f4f832ff918d8f6c9ead647730a9d01a5139a90b1869373384a434c446b5
+- card_id: shosuro_makiko_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: shosuro_makiko_experienced.jpg
+    sha256: 455f01d26d254e7822a29c9a28db1923dc4b16ce023459ed697aa7587f3c0c2e
+- card_id: shosuro_tanihara
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: shosuro_tanihara.jpg
+    sha256: a51318399d1770b5bd6ced830a8528828a6ca94ffb0187acf2d65c9f37a39c31
+- card_id: soshi_shinoko
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: soshi_shinoko.jpg
+    sha256: 3e32e3b34d5260382edcb0dd80de24797c0b0ba33dc4671df05808f982194d01
+- card_id: spiritual_coalescence
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: spiritual_coalescence.jpg
+    sha256: da208a99d25fa2e219f1480eea41d9637461d60a74c4bc2a9f3b0eb6e17e92e9
+- card_id: spoils_of_exploration
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: spoils_of_exploration.jpg
+    sha256: 0d95a0123096720838a97d390730242fd03bfe1e2b93bbd00505effe93c4c99c
+- card_id: sturdy_armor
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: sturdy_armor.jpg
+    sha256: 82ba8c2085c981bc8e73806836d4ccb05b484a1237a4be91f3965e7320c94534
+- card_id: suck_the_marrow
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: suck_the_marrow.jpg
+    sha256: 981fa736b07d282a303c3d8e1dbfe24118c84f20068f21f03574e8291c9777cc
+- card_id: sudden_blockade
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: sudden_blockade.jpg
+    sha256: 4c17583d225888455a588a203740f9d57d3255849ee4dd10c850f0b83bff5268
+- card_id: sycophants
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: sycophants.jpg
+    sha256: 43e4308e267e2434145d7a58a9a2a8c9ad452b4eb7a537e29db4b0b1f04a8564
+- card_id: tactical_sacrifice
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: tactical_sacrifice.jpg
+    sha256: 8fb600234444e986c38f992ec5e89c1d4745a07fbd4d506fbc1e838f0a3c7bd4
+- card_id: tamori_tsuchiya
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: tamori_tsuchiya.jpg
+    sha256: 0be00b108a6c3c17494fe3ab89429045f95d0bdf5fa59190e1223ed64f2669d0
+- card_id: the_forgotten_bay_dojo
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: the_forgotten_bay_dojo.jpg
+    sha256: e2bf2f959c40b793fc6884ae376d444e2dc8b41303b3bf8548b126a5c48f94db
+- card_id: the_last_move
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: the_last_move.jpg
+    sha256: 79144cadd4bf1df68bb62a1ef2aef6156bae0aca70dc634938fba06f4dff0b97
+- card_id: the_passing_of_tradition
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: the_passing_of_tradition.jpg
+    sha256: af291e5c8c92f2081262eba41e2a2a9d97622151c685ee953c24f9c275bbcd96
+- card_id: the_skys_barrier
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: the_skys_barrier.jpg
+    sha256: b633a5e55ec80cbeabd16d64fe0840b7eb9c6339468d04e879cb381024d8f5a1
+- card_id: the_tachikaze
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: the_tachikaze.jpg
+    sha256: d6365f075956c2749c50d136987628331717793f88f1d16f0194a57e66f45818
+- card_id: the_thunderers_protection
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: the_thunderers_protection.jpg
+    sha256: 071db86fa83211bf91006e91c44742d6d70b8667f06d5038443258604e501118
+- card_id: thunder_bow
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: thunder_bow.jpg
+    sha256: 647d2d26958bf1c8d62eed2e4eb7dde96cca1a3e1b1d72be33719b5a116d9aa7
+- card_id: togashi_mihato
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: togashi_mihato.jpg
+    sha256: a93d66cf14ee2c19080c8f488a3dcf03efa39a36e16eb0c287c4a7e829d00622
+- card_id: touch_of_the_night
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: touch_of_the_night.jpg
+    sha256: cc81dbfdb93b9649f24e7fc067e7a71de4bdb84fa933c20a35e76426ee4b4a07
+- card_id: truce
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: truce.jpg
+    sha256: 4136029a6b0e00f8ccf4b324b0992d339c31329983cbfecca0af406203a9b731
+- card_id: trusting_instinct
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: trusting_instinct.jpg
+    sha256: 0823ffab2a6f7ae6302398262e0fbe67a57e4cfc493c85b883849f0b040bb4d1
+- card_id: ujis_saboteurs
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: ujis_saboteurs.jpg
+    sha256: 7b8691f181f541d8f76e1a8d3ccba9919b0281d1d5f23b1c3b8890a7589be3b0
+- card_id: unbound_essence
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: unbound_essence.jpg
+    sha256: eff4244fb959fccbcdb69065484b5ae10db20db8a529881e7e65eee9fffa523d
+- card_id: unseasonable_weather
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: unseasonable_weather.jpg
+    sha256: bc2141d6934a18fd9e9bfe9145dd04fd0acfa77e6f8f4ef04312dc8adb84aaf7
+- card_id: utaku_ji_yun_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: utaku_ji_yun_experienced.jpg
+    sha256: a794e415e529609275afc1c3679d16c659b2058cadb6b490b670e6de5e4ed0dc
+- card_id: utaku_suying
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: utaku_suying.jpg
+    sha256: aaf482fb0da7e29745e51a4f2148b99412f7733b732c3ad52a84648e983ce811
+- card_id: vast_paddy_fields
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: vast_paddy_fields.jpg
+    sha256: 7a1032321420fcd6e09409f5eb1b0f6cc8dd307be91e80688534cd2b8afb188f
+- card_id: vital_pathways
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: vital_pathways.jpg
+    sha256: 23383d228e4f1f246e05e4f63b5119a7d8d41a5f455f57f1c13d1dbf8575ab85
+- card_id: warded_premises
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: warded_premises.jpg
+    sha256: d6303194a202dc8a841797dcec467502d9d6c0b8353b3207a71989d08727749f
+- card_id: without_mercy
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: without_mercy.jpg
+    sha256: 7d4e46b9f77a56cd0e084c83d3dbe19b85670a0c78d45e3d8fa44949d06f4a1b
+- card_id: witness_the_untold
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: witness_the_untold.jpg
+    sha256: ace29e4dcd2cdfb4548e4dd890036a3b1614f2b139b8ed97a779b4b127e02455
+- card_id: yasuki_daito
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: yasuki_daito.jpg
+    sha256: 800fededbe1b9cfb4517a3bc25cba4e1db14ea31c8705be27f9679cf34367135
+- card_id: yoritomo_harumi
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: yoritomo_harumi.jpg
+    sha256: 886f83b2025cf5dd3addbd84f0353639f269a0a18ff5d58e8830c9a552c393c8
+- card_id: yoritomo_hofu
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: yoritomo_hofu.jpg
+    sha256: e146a5e58ae5e1b33b4b9484141dd8bdda2a43045d161d75f7b09fc8bb315032
+- card_id: yoritomo_naoto_experienced
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: yoritomo_naoto_experienced.jpg
+    sha256: 5a35d4367f1281460f69f3560da55aa40fe8360045797403882e6371f254c38a
+- card_id: yoritomo_tansen
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: yoritomo_tansen.jpg
+    sha256: e31886adeb7aa39b437a078a5111c72f21f1399469bbfce244f15789ecd03f71
+- card_id: yuribaras_butterflies
+  printing_id: torn_asunder
+  files:
+  - role: front
+    file: yuribaras_butterflies.jpg
+    sha256: 9b83fb0ee3db808245b62a3643115189142d3b5bff125826818985c5dd5bc569

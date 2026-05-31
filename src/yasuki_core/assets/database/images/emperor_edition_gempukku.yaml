@@ -1,0 +1,104 @@
+set: 'Emperor Edition: Gempukku'
+images:
+- card_id: buried_treasures
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: buried_treasures.jpg
+    sha256: 8d499272e28e6b60a4d8fc496b5f53a26ac222b2488bb572773d14fc8c6693cc
+- card_id: daigotsu_negishi_experienced
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: daigotsu_negishi_experienced.jpg
+    sha256: 35e742a0598fb3f2b592934be2b8096a0472883087109459ab379fe8218de8cb
+- card_id: doji_dainagon_experienced
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: doji_dainagon_experienced.jpg
+    sha256: 570e4c5ddd95338130aca78534a0361491ed34df8e9febca6ee34b10deeeb1c3
+- card_id: hida_yamadera_experienced
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: hida_yamadera_experienced.jpg
+    sha256: ac14bae8f4349a2385d83c23ffb35a1565ed3f855b6faaf86f75e525971937b5
+- card_id: jades_roar_experienced
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: jades_roar_experienced.jpg
+    sha256: 8db347d7e989441fdb8ceba97a71d03450e8a5d08bee0f1fd7b0a8fd9980712a
+- card_id: kunji_experienced
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: kunji_experienced.jpg
+    sha256: cfbb368295d4c98c4558df89d0ce29c3fd6333b2cfce42e3bf44c226df667795
+- card_id: moshi_madoka_experienced
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: moshi_madoka_experienced.jpg
+    sha256: c9cb316822a3aa3fa4e753ffd4ec569a4fc587e74b77872eb68d7d171cc698b2
+- card_id: shinjo_byung_experienced
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: shinjo_byung_experienced.jpg
+    sha256: 3b79068175c1c2b9773cb098d8fca41a499471b440e16b366d68dbc15b4e0af0
+- card_id: shosuro_hawado_experienced_2
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: shosuro_hawado_experienced_2.jpg
+    sha256: 304b980040f0a7b28d030764131f91311c464458fcd1f7c0deacdf72f62631c4
+- card_id: tattoos_and_trinkets
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: tattoos_and_trinkets.jpg
+    sha256: b6171b63768492ed50f6d8ae6284fa79d9d1c65e28c381f256c6f21eada41efe
+- card_id: the_daidoji_marketplace
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: the_daidoji_marketplace.jpg
+    sha256: 4ea34c4c3ebbfaef13c95d9cd1645dee8b20be10dda59d889a1948394a95b4da
+- card_id: the_ide_caravan
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: the_ide_caravan.jpg
+    sha256: cdfbf99a064bca67ec385fc41b1d05cc6c9fb751f948e1b9c5a14cd00d00b7c8
+- card_id: the_merchants_district
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: the_merchants_district.jpg
+    sha256: 3031153847b8acffd78feabbdc917b920c211a18ea75501b9a49ef7ad13770e8
+- card_id: the_mystical_merchant
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: the_mystical_merchant.jpg
+    sha256: 47d756db7a3a8ca71906bc34ee7795e8577243838a4c5efb6dc0204ed89a0ddc
+- card_id: the_quartermasters_depot
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: the_quartermasters_depot.jpg
+    sha256: 5cb071ca8e477c872496334882ac081b8a69cb29aec25f71e7b77b1086ada24c
+- card_id: the_yasuki_peddler
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: the_yasuki_peddler.jpg
+    sha256: 8d04ad39fbb7f4de26f2645b8b4fffc9bed41d8d6dbf944943b7e6e704cbf659
+- card_id: togashi_korimi_experienced_2
+  printing_id: emperor_edition_gempukku
+  files:
+  - role: front
+    file: togashi_korimi_experienced_2.jpg
+    sha256: 1c04a7e7bb3873d73c72a3b3c0c9e9b7fa5331d1441f361dfc530834a47d9089

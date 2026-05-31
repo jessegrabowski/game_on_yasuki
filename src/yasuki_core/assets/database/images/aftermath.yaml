@@ -1,0 +1,896 @@
+set: Aftermath
+images:
+- card_id: a_moving_battle
+  printing_id: aftermath
+  files:
+  - role: front
+    file: a_moving_battle.jpg
+    sha256: 2cfa96374628c848b7391132c21f0bf775e371805d90b4b15d663ed30d2cba49
+- card_id: a_small_favor
+  printing_id: aftermath
+  files:
+  - role: front
+    file: a_small_favor.jpg
+    sha256: 58d2a66afa4627820f6f7d1d7628dda8eab5a89cb73b9b9154cb771dc84a8016
+- card_id: a_warriors_brutality
+  printing_id: aftermath
+  files:
+  - role: front
+    file: a_warriors_brutality.jpg
+    sha256: 5effe59b6695f7b4b888972e65873c96d2268f9020aee9cb3cd50a58c480da86
+- card_id: absolution
+  printing_id: aftermath
+  files:
+  - role: front
+    file: absolution.jpg
+    sha256: edd86a9bb229edc009c6559ac622834bf997ae7df120e9dc370f590eb4dd013b
+- card_id: akodo_kano_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: akodo_kano_experienced.jpg
+    sha256: 719d16dc3eceb0288545ff3c6e45a66383161a51573783b147aa8a42b1efc17f
+- card_id: akodo_uehara_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: akodo_uehara_experienced.jpg
+    sha256: 4f531593e5b9887f198147d1c04be4bec642753d32449e6427bdbbdb17d36512
+- card_id: asahina_umehiko
+  printing_id: aftermath
+  files:
+  - role: front
+    file: asahina_umehiko.jpg
+    sha256: 771cd84103c3a4e52bcc86ba35d478599e79ef3a6af5af913fe27328d0ce9b9c
+- card_id: asako_misora
+  printing_id: aftermath
+  files:
+  - role: front
+    file: asako_misora.jpg
+    sha256: ea6cb440978ea4cdb104a62d09f7d92a83621008e73edb896a4929bea1bdf8d4
+- card_id: band_of_brothers
+  printing_id: aftermath
+  files:
+  - role: front
+    file: band_of_brothers.jpg
+    sha256: dd0970274de49cfef36e6c12952eba5f2329166b48c5daccbc2c047803e79f73
+- card_id: banished_from_the_realm
+  printing_id: aftermath
+  files:
+  - role: front
+    file: banished_from_the_realm.jpg
+    sha256: 041402690b1345dbf1a62a8fdc1049c5139a0c5762a12f39b005edc2c28a52ed
+- card_id: banzai
+  printing_id: aftermath
+  files:
+  - role: front
+    file: banzai.jpg
+    sha256: 3d7b6ed0c9205bff41bafb2e1e71475e6f59e2f028d08b7c19b8e83152d4eaf1
+- card_id: bayushi_dijuro
+  printing_id: aftermath
+  files:
+  - role: front
+    file: bayushi_dijuro.jpg
+    sha256: 4c313b6be997659e61209450e12488d6491b85e2d2d60eef45ada7d5eca5e682
+- card_id: bayushi_jin_e
+  printing_id: aftermath
+  files:
+  - role: front
+    file: bayushi_jin_e.jpg
+    sha256: d167a5df12fd3bb163c62b7d393d1f0ee47bdd5ba5e58bc4b9b365db0e4c1ff9
+- card_id: bayushi_mifuyu
+  printing_id: aftermath
+  files:
+  - role: front
+    file: bayushi_mifuyu.jpg
+    sha256: 4f54950a1b541f0a272e7c9dcf148fd7b3c392ce1b5e14b1dac729576bf33a35
+- card_id: bayushi_wateru
+  printing_id: aftermath
+  files:
+  - role: front
+    file: bayushi_wateru.jpg
+    sha256: d8ca945d3398a97047ee88bed7128fcbb36422c5b03f82cca41ecf19a8d6a7c8
+- card_id: benediction
+  printing_id: aftermath
+  files:
+  - role: front
+    file: benediction.jpg
+    sha256: 71daedc7e88a04576617d86c674ca578ca0db4f816aeae9e9f397c524c85f93d
+- card_id: blistering_rain
+  printing_id: aftermath
+  files:
+  - role: front
+    file: blistering_rain.jpg
+    sha256: 69b525a16e37bb9f945b59ee589dcdd8c2166d1b165902c975b85c8fb0fb1a9c
+- card_id: breaking_the_rhythm
+  printing_id: aftermath
+  files:
+  - role: front
+    file: breaking_the_rhythm.jpg
+    sha256: ad068905d5981b33474470a9ae96f5c24ee8232811cf3583f9b46f6dcee37fb7
+- card_id: chagatais_wrath
+  printing_id: aftermath
+  files:
+  - role: front
+    file: chagatais_wrath.jpg
+    sha256: 88b65325161b94d0480523e18970ffe0a777f7c5f6d34d0c05b69601d5323844
+- card_id: changing_the_game
+  printing_id: aftermath
+  files:
+  - role: front
+    file: changing_the_game.jpg
+    sha256: 8830b831d76a2ce02b8ceee33d5c18b28beb194641c4d88d7c4782ffb6ab0dc2
+- card_id: chikushudos_infusion
+  printing_id: aftermath
+  files:
+  - role: front
+    file: chikushudos_infusion.jpg
+    sha256: 03b30e497e5d9acb7c7516ff0475fe3905b034cc9d2957d5878607d6d009b418
+- card_id: commanders_steed
+  printing_id: aftermath
+  files:
+  - role: front
+    file: commanders_steed.jpg
+    sha256: 63ec287972ed9c1fb6a7114e0819ff9c9c642865088488e9f5da0119bc5fb267
+- card_id: concealed_reserves
+  printing_id: aftermath
+  files:
+  - role: front
+    file: concealed_reserves.jpg
+    sha256: d91c9ef21e1bd2b0d8c18b1e2e95984783f3fecb90cca50ba0af13f15ec833fe
+- card_id: court_scribe
+  printing_id: aftermath
+  files:
+  - role: front
+    file: court_scribe.jpg
+    sha256: 3f50375fff51f18fb7265deb403e05b7d919e99e4ee5e5c7434422a532cce655
+- card_id: dagger_of_crystal_wind
+  printing_id: aftermath
+  files:
+  - role: front
+    file: dagger_of_crystal_wind.jpg
+    sha256: a417c74f59b14f851a67aca6c63395b489b73a74ca75ae123ec7f938106d23a1
+- card_id: daidoji_gensai
+  printing_id: aftermath
+  files:
+  - role: front
+    file: daidoji_gensai.jpg
+    sha256: 0adcc00062eeb37f2cc048ad6d04b1d0ff45f8b75d51c69e88a110300a7af41a
+- card_id: daidoji_tametaka_experienced_2
+  printing_id: aftermath
+  files:
+  - role: front
+    file: daidoji_tametaka_experienced_2.jpg
+    sha256: 1a9fdceed489e3e15cf50aada9ceb830c0ab1d6908915a1e4259b73001b0dd20
+- card_id: daigotsu_chiboshi
+  printing_id: aftermath
+  files:
+  - role: front
+    file: daigotsu_chiboshi.jpg
+    sha256: 1738e6931bb0b3a4ec4351ed9fef560e3e776718d0f8c533967f733d7b793fb6
+- card_id: daigotsu_endo
+  printing_id: aftermath
+  files:
+  - role: front
+    file: daigotsu_endo.jpg
+    sha256: f0599e5221b4de3df9880b186067b1f5076ff30050751f8004b4a2a989c60a6b
+- card_id: daigotsu_kanpeki_experienced_2
+  printing_id: aftermath
+  files:
+  - role: front
+    file: daigotsu_kanpeki_experienced_2.jpg
+    sha256: ebf6c46f07c524242b7c09d5daaaff8881bacf91ab579c93d14be2b499a8fedc
+- card_id: demonstrating_technique
+  printing_id: aftermath
+  files:
+  - role: front
+    file: demonstrating_technique.jpg
+    sha256: 2423c9bf5eaed72ae8a21a6207973ef1a4d0d9e9a0f6516dabccd8cbefd716cc
+- card_id: desire
+  printing_id: aftermath
+  files:
+  - role: front
+    file: desire.jpg
+    sha256: 815a7001449d7ea85fe7b1441247cf8db200dce4a4292e04d9441c6aefa02a44
+- card_id: directing_the_battle
+  printing_id: aftermath
+  files:
+  - role: front
+    file: directing_the_battle.jpg
+    sha256: bbeff4f5d7fbfb55e54bcb216e45c52bc25ed3bf583b5a7507a0437e693e255e
+- card_id: disciples_of_ganesh
+  printing_id: aftermath
+  files:
+  - role: front
+    file: disciples_of_ganesh.jpg
+    sha256: 60766e18d43b2a4538326a41eb71d0bed7ba49617425aca5cf379dfe48909d83
+- card_id: doji_kurohime
+  printing_id: aftermath
+  files:
+  - role: front
+    file: doji_kurohime.jpg
+    sha256: a548a7e3403fcf6414ae1fafc0f29373486ef94db84b87643aaad459c6d490aa
+- card_id: doji_tatsuki_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: doji_tatsuki_experienced.jpg
+    sha256: f9dd5dd66554c66d15174979f73d894621188087d1032afd9ae30130ea7c386c
+- card_id: drawing_on_all_things
+  printing_id: aftermath
+  files:
+  - role: front
+    file: drawing_on_all_things.jpg
+    sha256: 6eacdde063befcd9491a849cdad8b5809ac09531052a16a9934a74d8dda8742f
+- card_id: dying_remonstration
+  printing_id: aftermath
+  files:
+  - role: front
+    file: dying_remonstration.jpg
+    sha256: a482b6dc337a2b4290e733102193c84ff12b7e25b2d8e8180e9cbeb777724fa7
+- card_id: exotic_market
+  printing_id: aftermath
+  files:
+  - role: front
+    file: exotic_market.jpg
+    sha256: 9d46394c5b83aad4aba364feadf5a8cc9b0e1dda9b583616752938494fd3b49f
+- card_id: expanding_the_gardens
+  printing_id: aftermath
+  files:
+  - role: front
+    file: expanding_the_gardens.jpg
+    sha256: 82a4d7f66339b2f7fc83eda6ebb6a45d9e936dec40db3c8ecc8f4f37810da815
+- card_id: expensive_achievement
+  printing_id: aftermath
+  files:
+  - role: front
+    file: expensive_achievement.jpg
+    sha256: 07e23bc9b85fb4922fa591aefba4e0f6e88e113cd39ad8efe0a35a0bf1fb4dcd
+- card_id: find_your_center
+  printing_id: aftermath
+  files:
+  - role: front
+    file: find_your_center.jpg
+    sha256: 618b37958b84140d74e96aeb5e68a60e77c7de8580886960a917d128d83ce562
+- card_id: floating_reserve
+  printing_id: aftermath
+  files:
+  - role: front
+    file: floating_reserve.jpg
+    sha256: 749851650d0bfedd5e457d4132b06db5d5e72a7c1ec47e33e78053c1b6b86cd3
+- card_id: fortunes_charm
+  printing_id: aftermath
+  files:
+  - role: front
+    file: fortunes_charm.jpg
+    sha256: 4b6ba9b500c5de653477ab96d74127bfc1574915742bfa7f6efed2c882e82202
+- card_id: front_rank_troops
+  printing_id: aftermath
+  files:
+  - role: front
+    file: front_rank_troops.jpg
+    sha256: 0fb85a4244d1c12713b7fd4774fed903104fd7bd86f7d91872ef65ad5f165b6b
+- card_id: goju_obayashi
+  printing_id: aftermath
+  files:
+  - role: front
+    file: goju_obayashi.jpg
+    sha256: 65b107c578d46e7ab356835e7b289961f0ec91d1917dfa4eee466804a24c307d
+- card_id: grasp_the_swords
+  printing_id: aftermath
+  files:
+  - role: front
+    file: grasp_the_swords.jpg
+    sha256: 5d78602455320a5625f52e33cfbb32d9fcb7ca36d3c59ad43cdfe7191ba78fb9
+- card_id: hida_kaiji_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: hida_kaiji_experienced.jpg
+    sha256: 6feb8525b991186dc90b762bd2bff636282f9126b92226791be3c64438c38a62
+- card_id: hida_kurabi
+  printing_id: aftermath
+  files:
+  - role: front
+    file: hida_kurabi.jpg
+    sha256: dec6a3b47f571604372381cfd6b4dcc7a8e26dd585e614ba633dc185bc538666
+- card_id: hiruma_koru
+  printing_id: aftermath
+  files:
+  - role: front
+    file: hiruma_koru.jpg
+    sha256: 152a563fbf89a10543eb5c4e2c331c210a0ee52208ea3897e076cb90ed46aa49
+- card_id: hitomis_devotion
+  printing_id: aftermath
+  files:
+  - role: front
+    file: hitomis_devotion.jpg
+    sha256: f197a26281e559dc736dc1cfdecd1fba87b93bd149cfd90dbe2898bd4fcde9d8
+- card_id: hold_the_walls
+  printing_id: aftermath
+  files:
+  - role: front
+    file: hold_the_walls.jpg
+    sha256: 8805a22e8ecde5d6fdf2c2ae05ae2703ce07521de230f51a5677c10efe624bc2
+- card_id: house_of_prophecy
+  printing_id: aftermath
+  files:
+  - role: front
+    file: house_of_prophecy.jpg
+    sha256: 4d2a58019d9dbd0d0059e936cb6a308bd163c630358627a76cdfaf745e604704
+- card_id: ide_mutsuken
+  printing_id: aftermath
+  files:
+  - role: front
+    file: ide_mutsuken.jpg
+    sha256: 9c4782c0fb5553443c4e18ec0e1156c15078ee61ce5cc58f3a10967a364d7a07
+- card_id: ikoma_takakura
+  printing_id: aftermath
+  files:
+  - role: front
+    file: ikoma_takakura.jpg
+    sha256: 9dcf7b1681088a1982eb06a956d21bdfa8bba86398b858051ca9a3dc9cf9dfca
+- card_id: into_the_wastes
+  printing_id: aftermath
+  files:
+  - role: front
+    file: into_the_wastes.jpg
+    sha256: 7db738262f67c308cbdabac7d1b6a5cfce3f62d855eb03420b30334effda58ac
+- card_id: isawa_ikariya
+  printing_id: aftermath
+  files:
+  - role: front
+    file: isawa_ikariya.jpg
+    sha256: 43acfb66e1f73b248c3fc874143261c8d3b4d72e698c54f53cc940f568cefe63
+- card_id: isawa_tsumaro
+  printing_id: aftermath
+  files:
+  - role: front
+    file: isawa_tsumaro.jpg
+    sha256: 9b3717010517b096810cd467e6b849d212e96f44909a53e85f53cd7cef9a102b
+- card_id: isidoros
+  printing_id: aftermath
+  files:
+  - role: front
+    file: isidoros.jpg
+    sha256: 31340b325786bdc626a24ab828cea768453771edaf2d2219f55be48ec41d0347
+- card_id: iuchi_wattu
+  printing_id: aftermath
+  files:
+  - role: front
+    file: iuchi_wattu.jpg
+    sha256: a3a2696760a1c8b55cc7244aa13f33f8aabac5ddc565a93fde7753f50226bc08
+- card_id: iweko_seiken
+  printing_id: aftermath
+  files:
+  - role: front
+    file: iweko_seiken.jpg
+    sha256: 94f3d69b63171162a34af40b5284fcfe574a4495039aeefb59e9b8ab1f795346
+- card_id: iweko_shibatsu
+  printing_id: aftermath
+  files:
+  - role: front
+    file: iweko_shibatsu.jpg
+    sha256: 2c801f0a3ffc624d34cd41479a396f9784e3665cdb82721a27a0cd139bcab5d3
+- card_id: jade_pearl_inn
+  printing_id: aftermath
+  files:
+  - role: front
+    file: jade_pearl_inn.jpg
+    sha256: 1a8effe5b31c8d7dcf3fc8dc9220fc687ccd2e848de5aa5d6d639f78993df0c3
+- card_id: kaiu_esumi_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: kaiu_esumi_experienced.jpg
+    sha256: 2559fa3e64327b6073706888b68ac2889212157f9a906ce760fe483e1cd78985
+- card_id: kaiu_gorobei
+  printing_id: aftermath
+  files:
+  - role: front
+    file: kaiu_gorobei.jpg
+    sha256: 040ba7b1af2ea695e418cd291d8e2b42e2edba73bf1b1b782568d5533c4481f4
+- card_id: kakita_ujirou
+  printing_id: aftermath
+  files:
+  - role: front
+    file: kakita_ujirou.jpg
+    sha256: 08d3aa56b9edf26ba333a3fc785f03fe4d6441a47ca4d666d9a3b1016b010f37
+- card_id: khalimpeh_jiak
+  printing_id: aftermath
+  files:
+  - role: front
+    file: khalimpeh_jiak.jpg
+    sha256: d682cea74b7e4b36c67511947f8e58a676854513338cbe778ce46e8b73bafd1d
+- card_id: kitsu_tamao
+  printing_id: aftermath
+  files:
+  - role: front
+    file: kitsu_tamao.jpg
+    sha256: 6d282d09267ae1fd0e642ad6798ce8b75bba32e0622ee364f5922fe967c1126f
+- card_id: kitsuki_miroken
+  printing_id: aftermath
+  files:
+  - role: front
+    file: kitsuki_miroken.jpg
+    sha256: a10192ec293a510d530d715f3cdb22fb5e036a71025da2407b18e0523486cf05
+- card_id: kitsune_kichi_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: kitsune_kichi_experienced.jpg
+    sha256: 13a309f854ac478cd15e7836b6b42706f06779cb6c55399f5bbde1a658a80232
+- card_id: kitsune_merihiko_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: kitsune_merihiko_experienced.jpg
+    sha256: 065eeda79ea112fe1f9f809718a0397e99f10860c543b6afe968599fabb1c9f6
+- card_id: kitsune_yamazaru
+  printing_id: aftermath
+  files:
+  - role: front
+    file: kitsune_yamazaru.jpg
+    sha256: ba32b6df32b64c41e156adf4ab2b4bf2e46edc3aa61c7ed1fc823c4e8c7f2546
+- card_id: knowledge_and_power
+  printing_id: aftermath
+  files:
+  - role: front
+    file: knowledge_and_power.jpg
+    sha256: 65ad4ea334ccc6731357a908382df23c0fbf6a26bcc632ae2e149dca82f8ef78
+- card_id: legion_of_the_fallen
+  printing_id: aftermath
+  files:
+  - role: front
+    file: legion_of_the_fallen.jpg
+    sha256: 0abb5adde3be52c01e274d0a5d6460bb3e4166e4ebb4f475b15c0bfca9a292b0
+- card_id: leguluss_legion
+  printing_id: aftermath
+  files:
+  - role: front
+    file: leguluss_legion.jpg
+    sha256: 8a722e038b1a3d5d2c4d990280f12c7d9edf4ef4c822d58b1478bb9618672e79
+- card_id: lonely_battlefield
+  printing_id: aftermath
+  files:
+  - role: front
+    file: lonely_battlefield.jpg
+    sha256: bb78d9f6088913ab1f34ee91f79121cad05be0b1b611c8d3364c12deb7baee97
+- card_id: long_range_scouts
+  printing_id: aftermath
+  files:
+  - role: front
+    file: long_range_scouts.jpg
+    sha256: c768e833a380238d5d544504501869e2aeb8fe23880c79d03d9f3a8e7105be09
+- card_id: lost_equipment
+  printing_id: aftermath
+  files:
+  - role: front
+    file: lost_equipment.jpg
+    sha256: 6a79bc5edff544f1105aa532d189aea6ad93d7dd5e2fd6c8e780bbfd7db14a44
+- card_id: lost_in_transit
+  printing_id: aftermath
+  files:
+  - role: front
+    file: lost_in_transit.jpg
+    sha256: 3f16f2a188c64e7db6d061ab6b3c05d66d8424cd0466ea183948aaf3250606d6
+- card_id: marriage_of_the_emerald_champion
+  printing_id: aftermath
+  files:
+  - role: front
+    file: marriage_of_the_emerald_champion.jpg
+    sha256: af711b7e803eaa09aaa8960019e34b4ef35e63983cc1568a91ae77b518026781
+- card_id: marshal_your_strength
+  printing_id: aftermath
+  files:
+  - role: front
+    file: marshal_your_strength.jpg
+    sha256: c6e4b69973bfbf59156fd051d35251dfe165ca3a910e08808376c31fde5f07f8
+- card_id: matsu_miura
+  printing_id: aftermath
+  files:
+  - role: front
+    file: matsu_miura.jpg
+    sha256: 3cec1ddc1e74f41e105380f0d50728ba8f7e18971bacdf1a0b136637f0c0e465
+- card_id: matsu_ryohei
+  printing_id: aftermath
+  files:
+  - role: front
+    file: matsu_ryohei.jpg
+    sha256: 1fa55a4d016503775f1ef5b4797b04d520b3179738e1428b6d97a54c7aafa4f3
+- card_id: mercantile_conflict
+  printing_id: aftermath
+  files:
+  - role: front
+    file: mercantile_conflict.jpg
+    sha256: 6ac2f2bb13db8ba732cede5dd4495bc14540fa8f421b30e797d3ac4ee6ed0b07
+- card_id: mirumoto_hatsuto
+  printing_id: aftermath
+  files:
+  - role: front
+    file: mirumoto_hatsuto.jpg
+    sha256: 01329486a1c105bc54a5c37891cfb87b72b95551a68efa1bcaf26beb2dbc6158
+- card_id: mirumoto_kalen_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: mirumoto_kalen_experienced.jpg
+    sha256: 83ec1323dbd5f1303d6d56547547bdc1e5690b7cc25fb445a6c300b75ae1b54d
+- card_id: moshi_ikako
+  printing_id: aftermath
+  files:
+  - role: front
+    file: moshi_ikako.jpg
+    sha256: e44c942edb53b530bfe02c3a4523233ffbfc9d46388d5e4cfb7442b2bba06165
+- card_id: moto_paikao
+  printing_id: aftermath
+  files:
+  - role: front
+    file: moto_paikao.jpg
+    sha256: 8c10a068aa2061cbfd57b640f3d813f7d0a06a14b1394445aa54ffe2743f8c23
+- card_id: move_the_troops
+  printing_id: aftermath
+  files:
+  - role: front
+    file: move_the_troops.jpg
+    sha256: 459bfb4695d2ba3cebadbbd14eaef119ecc1425265aaab40d54d897ab5900491
+- card_id: mystical_augmentation
+  printing_id: aftermath
+  files:
+  - role: front
+    file: mystical_augmentation.jpg
+    sha256: f15f5368a824e2785db03e1531e1625d144c6ab2f6883a0ceb33aa4a99ebba1d
+- card_id: natsumi_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: natsumi_experienced.jpg
+    sha256: 02cf0ca750cc53708071e90be052a9856af785f4186469c5982632b21fed9073
+- card_id: never_without_a_weapon
+  printing_id: aftermath
+  files:
+  - role: front
+    file: never_without_a_weapon.jpg
+    sha256: b16f58311dd56ec80495cd1f254d9619bc998c15aa304dd4a8d53793aeb86d3f
+- card_id: nexus_of_lies
+  printing_id: aftermath
+  files:
+  - role: front
+    file: nexus_of_lies.jpg
+    sha256: d7651c6b337f7d6ff24bf516cc8f7cfca0c41df134c9dde2e33e63b0ce96b4b0
+- card_id: ningens_treatise_on_the_nezumi
+  printing_id: aftermath
+  files:
+  - role: front
+    file: ningens_treatise_on_the_nezumi.jpg
+    sha256: 5ccb3d90420f09494eaa8570bf2757d0ec30e79a5932623399812448e53c8ede
+- card_id: nonaka
+  printing_id: aftermath
+  files:
+  - role: front
+    file: nonaka.jpg
+    sha256: be46642db274832fa1ff8fcdf0779ce06b65fc4d4e54182d65d9f49f4bf18301
+- card_id: ominous_armor
+  printing_id: aftermath
+  files:
+  - role: front
+    file: ominous_armor.jpg
+    sha256: 281e8e146ab1f6a003d37615d3c44960292162bbb7a08651338496919c84e652
+- card_id: planted_evidence
+  printing_id: aftermath
+  files:
+  - role: front
+    file: planted_evidence.jpg
+    sha256: a5e0e9f7bb81bf80c27f62eb8c6106840e2e487c63a854272ec85481f88984a0
+- card_id: provoked_violence
+  printing_id: aftermath
+  files:
+  - role: front
+    file: provoked_violence.jpg
+    sha256: d8144bc015295ce1e344ef44ab309139d747485b883c4413393f7bdc975bbbeb
+- card_id: purge_of_fudoism
+  printing_id: aftermath
+  files:
+  - role: front
+    file: purge_of_fudoism.jpg
+    sha256: 882fa8aaacaf52f616a9f0553f1640cc167012bfb2172abe7a051f3addec7fc9
+- card_id: respect
+  printing_id: aftermath
+  files:
+  - role: front
+    file: respect.jpg
+    sha256: d8efd8fd1a178b9ca491b332e04279d74836eb425527ef967cbdbabfda14a935
+- card_id: return_to_action
+  printing_id: aftermath
+  files:
+  - role: front
+    file: return_to_action.jpg
+    sha256: 0caa7cfc6c3b2cbbdf7a2eab1da5540f43c9809798b4a222f5778887cf11fb34
+- card_id: reverse_fate
+  printing_id: aftermath
+  files:
+  - role: front
+    file: reverse_fate.jpg
+    sha256: 6cae5ace2d5f2ddf7d3b68239e746b128b0eadafca35ec0688736a3d0524a476
+- card_id: sailors_warning
+  printing_id: aftermath
+  files:
+  - role: front
+    file: sailors_warning.jpg
+    sha256: ed28f029bfb1da156473ef2f33a4aecd4d0dbb3225e719947d9b60aa4dbacb38
+- card_id: searing_siege
+  printing_id: aftermath
+  files:
+  - role: front
+    file: searing_siege.jpg
+    sha256: b6849c968ec737b6959b925dc391d464a3faa9a540543de2bc0f8b5ceafc53b7
+- card_id: seasoned_ashigaru
+  printing_id: aftermath
+  files:
+  - role: front
+    file: seasoned_ashigaru.jpg
+    sha256: 590ce8ec8e0ce6b5d64db16d69c5d134ae82fb5300bf53047712a99ce1c9bb29
+- card_id: senior_infantry_legion
+  printing_id: aftermath
+  files:
+  - role: front
+    file: senior_infantry_legion.jpg
+    sha256: 51db8b7fbe2abeeb6538167054a7a8a90545a118c736a9169021d16b8a43975f
+- card_id: shiba_heirai
+  printing_id: aftermath
+  files:
+  - role: front
+    file: shiba_heirai.jpg
+    sha256: a29131dddbedd22e4320a3b0d4ba741e4c0320e7774fffb2db484dd990b07560
+- card_id: shinjo_kinto_experienced_2
+  printing_id: aftermath
+  files:
+  - role: front
+    file: shinjo_kinto_experienced_2.jpg
+    sha256: 40adcd2bc0c64d8e3cc3baffe78b43d9b846f8766d1219c01a4167dbf30d6b3a
+- card_id: shinjo_sujikaro
+  printing_id: aftermath
+  files:
+  - role: front
+    file: shinjo_sujikaro.jpg
+    sha256: 115f5fc3fde3408beb770aea0bc1dec15b95b140248105875b18cdf954ca0f1f
+- card_id: shosuro_chizuru
+  printing_id: aftermath
+  files:
+  - role: front
+    file: shosuro_chizuru.jpg
+    sha256: 719ede987a7a8785c8134cfbcaf668c700364a6430dc08adc0e196715702d3c0
+- card_id: shosuro_takazaki
+  printing_id: aftermath
+  files:
+  - role: front
+    file: shosuro_takazaki.jpg
+    sha256: f8b20b225482e2201b39f59ceed60326fdfc2e7eb55c004bb89be9f98fd5685b
+- card_id: sleight_of_hand
+  printing_id: aftermath
+  files:
+  - role: front
+    file: sleight_of_hand.jpg
+    sha256: 8839957a2bc54d578d415778bdf1d480bbc90e89ec3be8e42d148504554cedce
+- card_id: steal_an_advantage
+  printing_id: aftermath
+  files:
+  - role: front
+    file: steal_an_advantage.jpg
+    sha256: fd7ed2aed1e068f884fba6ccee1ccd239d1e938f87285c1dee31ee97e2f4e167
+- card_id: stonemasons_hammer
+  printing_id: aftermath
+  files:
+  - role: front
+    file: stonemasons_hammer.jpg
+    sha256: b039330500d615cf06f8602d18f35d4e9fbf31b44a2f1776f2db70b4c60934a2
+- card_id: strategic_withdrawal
+  printing_id: aftermath
+  files:
+  - role: front
+    file: strategic_withdrawal.jpg
+    sha256: f4deed0e58b8c2a79961cff4cd78f1b6c5184f259a0c06164d40e77d02d857e9
+- card_id: suana_dojo
+  printing_id: aftermath
+  files:
+  - role: front
+    file: suana_dojo.jpg
+    sha256: 155ba6982e202c81f2182de2caf5b513022ce74e703a992129025d6e85690bbc
+- card_id: suffer_the_consequences
+  printing_id: aftermath
+  files:
+  - role: front
+    file: suffer_the_consequences.jpg
+    sha256: 7ae98ff71fafd1abb98b5f82cbd7411ed5fae2e794c219f62db987b782b3256e
+- card_id: susumu_takada
+  printing_id: aftermath
+  files:
+  - role: front
+    file: susumu_takada.jpg
+    sha256: 5968d12a48e5545ff014759a1de44e848768a398c76d0df93ef896ce8f0e5a16
+- card_id: tamori_shinji
+  printing_id: aftermath
+  files:
+  - role: front
+    file: tamori_shinji.jpg
+    sha256: 3dbabee0b456e14176041379dc95480e31f53c336f9e3c8243a8503a50281d91
+- card_id: tankoji
+  printing_id: aftermath
+  files:
+  - role: front
+    file: tankoji.jpg
+    sha256: b87dc925a50581273d28e1518859473df893d55e6834fb21dac074992e1442a6
+- card_id: the_asahinas_shame
+  printing_id: aftermath
+  files:
+  - role: front
+    file: the_asahinas_shame.jpg
+    sha256: 18af87982d139de0a21317a097ee6edcfe2d4e967fc2c2ff7153ed91aa4118cc
+- card_id: the_broken_man
+  printing_id: aftermath
+  files:
+  - role: front
+    file: the_broken_man.jpg
+    sha256: dab006cace1d54957db0bfd1b928c2f8d4f84739039dded776f8e16d336bfdf0
+- card_id: the_earths_armor
+  printing_id: aftermath
+  files:
+  - role: front
+    file: the_earths_armor.jpg
+    sha256: d5591928ceedbe557decd8820a598ca7bb7ce96192520c7ff026615c067a427c
+- card_id: the_inevitable_grasp_of_conquest
+  printing_id: aftermath
+  files:
+  - role: front
+    file: the_inevitable_grasp_of_conquest.jpg
+    sha256: 0adc413a671f9b5dceebfc4004c1aab0ec1cdbec3d5ed1667d5057d803662b16
+- card_id: the_legions_might
+  printing_id: aftermath
+  files:
+  - role: front
+    file: the_legions_might.jpg
+    sha256: 8cac962a663216f970bec49e2f72d4130cd21820cecdcc00cf50adbd3e3ac73a
+- card_id: the_sorrow_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: the_sorrow_experienced.jpg
+    sha256: ef2afa9a02f00f8df66383230124ee1265d18a9f2ee30e135baea008d5dd2826
+- card_id: the_way_of_the_world
+  printing_id: aftermath
+  files:
+  - role: front
+    file: the_way_of_the_world.jpg
+    sha256: 13bcb4bc2f05ef3ab42cdab3e86f56d6c369907ead7f3d2e8bd2b2f739c5c257
+- card_id: the_ways_of_sensei_wu
+  printing_id: aftermath
+  files:
+  - role: front
+    file: the_ways_of_sensei_wu.jpg
+    sha256: 8008c970e9505088b6ae473fa6c86659694cdca688723ef135eb15b7ffdcbf76
+- card_id: the_winds_champion
+  printing_id: aftermath
+  files:
+  - role: front
+    file: the_winds_champion.jpg
+    sha256: 043b6c654478a432b5c8dc6fa263dc8b6c7754393735aeabf7cee693173b21d2
+- card_id: thoughtless_sacrifice
+  printing_id: aftermath
+  files:
+  - role: front
+    file: thoughtless_sacrifice.jpg
+    sha256: 14d9c7393867f8bfc527809e80e401f87d26a2d878f806eabf2047bda51e6ec1
+- card_id: tiger_claw
+  printing_id: aftermath
+  files:
+  - role: front
+    file: tiger_claw.jpg
+    sha256: 1a1713d1d89fd19e5b2d754d9c77df9d9ca644260b2fa6abf03ab35d6f02039d
+- card_id: togashi_noboru_experienced_2
+  printing_id: aftermath
+  files:
+  - role: front
+    file: togashi_noboru_experienced_2.jpg
+    sha256: 41becb724d82e8f9a0abb20caa48e279eea36e69f2ddc3c9add1eaaa5431a3b5
+- card_id: togashi_obote
+  printing_id: aftermath
+  files:
+  - role: front
+    file: togashi_obote.jpg
+    sha256: e743d4159ec2bae327e516d76b3b3405c5ca1582531eeacb616978374f2f44b4
+- card_id: tsujikens_coin
+  printing_id: aftermath
+  files:
+  - role: front
+    file: tsujikens_coin.jpg
+    sha256: afb9dd3adc0d9058a87f735e7e85f25519fac0b565d50a17dc85afd4fc922585
+- card_id: tsuruchi_shusaku
+  printing_id: aftermath
+  files:
+  - role: front
+    file: tsuruchi_shusaku.jpg
+    sha256: 00de603129089e256292ddaa2f7400f5fa4435ad84737a8fa5f0ddceff714de5
+- card_id: two_steady_breaths
+  printing_id: aftermath
+  files:
+  - role: front
+    file: two_steady_breaths.jpg
+    sha256: 37f65b99420f0df6780c49e29178de75f5c379073d61c237119c8d5cc4bd4144
+- card_id: unchecked_fury
+  printing_id: aftermath
+  files:
+  - role: front
+    file: unchecked_fury.jpg
+    sha256: 922fdfb3215f72156f36f799a054a291255488316b8299f882d70a909346d642
+- card_id: unholy_strike
+  printing_id: aftermath
+  files:
+  - role: front
+    file: unholy_strike.jpg
+    sha256: 6eab064e4cae8c797f95df2faeaa01299e13930496a99d95565c1d92cebc2ce4
+- card_id: unpleasant_truths
+  printing_id: aftermath
+  files:
+  - role: front
+    file: unpleasant_truths.jpg
+    sha256: f0055d79ba03b5e28275c9ebb730dbffa7d8127dfe0e3436cf57440057c0b820
+- card_id: unseemly_alliance
+  printing_id: aftermath
+  files:
+  - role: front
+    file: unseemly_alliance.jpg
+    sha256: 681eb458394ecde2732d860985de73d3b8f4e03a4b70380f14763ec249fb2bf8
+- card_id: usui
+  printing_id: aftermath
+  files:
+  - role: front
+    file: usui.jpg
+    sha256: cea5a55cd955ede894a5cd56f84c8ae4ff3eeb86886e9e40ab96f087d8bad943
+- card_id: utaku_sakiko
+  printing_id: aftermath
+  files:
+  - role: front
+    file: utaku_sakiko.jpg
+    sha256: 8e42452e3c650619c94b4bfc428584bc6e717abef0616e81adb8ec9ed01f82e3
+- card_id: versatile_blade
+  printing_id: aftermath
+  files:
+  - role: front
+    file: versatile_blade.jpg
+    sha256: 9a06f58dd7d998d22484cea0f769ff7db4eb72d0af802c5631a89fc416e5900c
+- card_id: well_defended_farm
+  printing_id: aftermath
+  files:
+  - role: front
+    file: well_defended_farm.jpg
+    sha256: 3e40a5787c99a6b9338c644625404790cbe4ed6f4beebc2a38a5b92c721c9f30
+- card_id: yasuki_jiro
+  printing_id: aftermath
+  files:
+  - role: front
+    file: yasuki_jiro.jpg
+    sha256: 8fa609b5bc2c5373e0302d7e0f3f89cdbc3e10fd400f656439ce2e4611d22991
+- card_id: yojimbo_of_earth
+  printing_id: aftermath
+  files:
+  - role: front
+    file: yojimbo_of_earth.jpg
+    sha256: fd988460c5ca25a40556dc6ae828a14c8a104ecd13c828994035efd77d283440
+- card_id: yoritomo_toganin
+  printing_id: aftermath
+  files:
+  - role: front
+    file: yoritomo_toganin.jpg
+    sha256: 06cb966f2c846082c6f14d340e40862522e2f84029d172427241ba643ba53e16
+- card_id: yoritomo_yashinko_experienced
+  printing_id: aftermath
+  files:
+  - role: front
+    file: yoritomo_yashinko_experienced.jpg
+    sha256: 376bec5b6e8fd26b51c50fc3a3c6916fdbce35d90c9fbac283d826f2f5fb08a2
+- card_id: yukihimes_hot_springs
+  printing_id: aftermath
+  files:
+  - role: front
+    file: yukihimes_hot_springs.jpg
+    sha256: 43f2e004f9c3ce0faf7bc35c644cd0823956cd9bce055d24554bc99aba5fca4f

@@ -1,0 +1,500 @@
+set: Pre-Imperial
+images:
+- card_id: akodo_kage
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: akodo_kage.jpg
+    sha256: 6e897beb5eb90b4c9ef415eb87ea0988d25b97f08fdbd76643a14f826f614440
+- card_id: archers
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: archers.jpg
+    sha256: e7fd194febcba765769bfc575d1a6a7c03e17272988c4d3ade273f26fcc27ad7
+- card_id: bayushi_kachiko
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: bayushi_kachiko.jpg
+    sha256: 1880f854e56b79124f279e75a085d0d59f6e547606e1930fb13960b710dfec58
+- card_id: bayushi_togai
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: bayushi_togai.jpg
+    sha256: 147b0d90fdee21f9b0620a6da9ffa229297bd21201f4f4bd39cb87ba5ab3abe2
+- card_id: be_prepared_to_dig_two_graves
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: be_prepared_to_dig_two_graves.jpg
+    sha256: c66153273cb22bf112aa8e6887493dd4b149d7289a10e871e60e65b9649ac32e
+- card_id: biting_steel
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: biting_steel.jpg
+    sha256: 0e66bf65b63deed575b26ef98cf95b009a2b1acf47dc06093bba7099b452dc7d
+- card_id: block_supply_lines
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: 474f54f669f9ed2df5ef36b33fd36c09192fb08350cad75ecb6b2527b67f038e
+- card_id: breach_of_etiquette
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: breach_of_etiquette.jpg
+    sha256: 6de091ca55a3a02427b1ae868b1f79397e13fc640bdb9dfca6a18ed7452f3f82
+- card_id: brilliant_victory
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: brilliant_victory.jpg
+    sha256: ed57dd553fa57085702eb51980cad282d277f28d4a753ddacbf3b69a184f6630
+- card_id: careful_planning
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: careful_planning.jpg
+    sha256: 870fc9308b026272a6d4f5178c73a2fc294d379282457f1a9f12c84215c79ae1
+- card_id: charge
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: charge.jpg
+    sha256: 157443292302b6728bc9c3d8c057069213fd02f939093b968462a47829f50a51
+- card_id: contentious_terrain
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: contentious_terrain.jpg
+    sha256: 6b115eab9bbd4f6bbb24d33bd7b260c92d59b23a9747786777b4ad6aa855ba71
+- card_id: copper_mine
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: copper_mine.jpg
+    sha256: bcccd2d1fffae9fbeeb0892566d998ff12c7e690e15ffacd23c127ec2461e119
+- card_id: counterattack
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: counterattack.jpg
+    sha256: 71d3e7a4807d4792ec56a96a6ff303f6e1add4140c32c4d1b3455dd8dfcaa7fd
+- card_id: crystal_katana
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: crystal_katana.jpg
+    sha256: 2fa9d87b4e0608aafe445b0d9dae8e39be3b0b70be8954b7e567477838474a75
+- card_id: dairya
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: dairya.jpg
+    sha256: de193c928321090dae8c20d4059ed3b6e13df6b728b6abec412a487a3f8e1061
+- card_id: deadly_ground
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: deadly_ground.jpg
+    sha256: 50f11eae19de0d0bf099cd4338d452d5334eefe6b1cb6ad2f7e18d1be9f8cc58
+- card_id: doji_yosai
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: doji_yosai.jpg
+    sha256: 30bbdb9c11d0cd7627b2a715c58d1e166ef5b8c0518f1dec7dee889d458c9e98
+- card_id: earthquake
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: earthquake.jpg
+    sha256: dd42f1395407d184e1ed34b1d8ddd67ddf19f75462ffcffb315f6c034422c15c
+- card_id: encircled_terrain
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: encircled_terrain.jpg
+    sha256: ece08325f2a5f9715182d72956b7332bc12355f8b918cbf0e54a6c368b48188d
+- card_id: energy_transference
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: energy_transference.jpg
+    sha256: 5fa3f7f15e164b9d135f8869a5dec1f609b25f977881f9318c9fb9c3e4270288
+- card_id: entrapping_terrain
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: entrapping_terrain.jpg
+    sha256: c19790310a5a5648a1720d00fb5f2623ce306e619f6a15b93ec3ad665a83a0f9
+- card_id: evil_feeds_upon_itself
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: evil_feeds_upon_itself.jpg
+    sha256: ed1dd10ce072eced2538c8aef0301da121b840e3a1ef3ba251836e4e36a8e536
+- card_id: fan_of_command
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: fan_of_command.jpg
+    sha256: f1314b42ccda2f414576b3fe0fd7316edac409739f6b31190a756cf38bedb128
+- card_id: fist_of_osano_wo
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: fist_of_osano_wo.jpg
+    sha256: d03b7aa082be7f3232f99c601dc039bb68a80a208be23fe60fd5babcb2752fb5
+- card_id: frenzy
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: frenzy.jpg
+    sha256: 0e3266a305139133780696a0df39f3e4036d32816ae96f9246939878dc9c4921
+- card_id: go_master
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: go_master.jpg
+    sha256: 9d764284d03a515e4d6e3398ead9de580ad0cedacb6d1d15a58ab7d3c6cb6bee
+- card_id: goblin_mob
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: goblin_mob.jpg
+    sha256: 2570600bf8aa16b493aacb6da34a7944929932954e9477eef5d6af339c63d6dc
+- card_id: goblin_warmonger
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: goblin_warmonger.jpg
+    sha256: 396b849fb5f7a2a4af048047b18d8fcafa72465eea945e37056cfb0a507c3fa5
+- card_id: hida_amoro
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: hida_amoro.jpg
+    sha256: 4fea737d8f24695bbb78f95f137e740a51648a5e28017a219c8acd930746b9bd
+- card_id: hida_sukune
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: hida_sukune.jpg
+    sha256: 68b0ceaa984d1b567e7168e0aa737ed2a5c7f633ab4919958be7f20ad93e2958
+- card_id: iaijutsu_challenge
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: iaijutsu_challenge.jpg
+    sha256: b199d1ebfee9a195f2821871162f9493e2badfa38b607a68627d2779ce77dd33
+- card_id: iaijutsu_duel
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: iaijutsu_duel.jpg
+    sha256: bf416891c77638c72d194e7a5a549fa4e206330ff8eaabf2bf28e52c9666007a
+- card_id: iron_mine
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: iron_mine.jpg
+    sha256: 4bfef2d4ad32771a0c04124c69265d744c7f131f70e585c34369b62b30253874
+- card_id: isawa_kaede
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: isawa_kaede.jpg
+    sha256: 58af1782aa9622b8a3c696b581d8e3510cb286f380f6b756499ee5f725674fca
+- card_id: isawa_tadaka
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: isawa_tadaka.jpg
+    sha256: d30d6a4f9525c750a82f47c13e18b3b40b409a27c0103c72a20dfc146967cf1e
+- card_id: iuchi_daiyu
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: iuchi_daiyu.jpg
+    sha256: bf34d0d9b7f9c70e655ed617c444b53e7e437b1439f841362cd0136c9d81af56
+- card_id: jade_bow
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: jade_bow.jpg
+    sha256: 108cc2d8111228d4c1eb196d909d28312f0466d3bbb8d2bbe221c976115d1d56
+- card_id: jade_works
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: jade_works.jpg
+    sha256: c8b490f8190675b3500c55b7ea50b49f8abd26614edfb9c97a96120100515eff
+- card_id: kakita_yuri
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: kakita_yuri.jpg
+    sha256: 7135a51c29b82fb149688ca91572dfad64a6696be5a85fc758b9f4c947dd5d2b
+- card_id: kolat_assassin
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: kolat_assassin.jpg
+    sha256: c7f017757a6c7845884c06d1950aee4b04d36513a89f2dafe0afc4c9b6b8ceba
+- card_id: marketplace
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: marketplace.jpg
+    sha256: a5d7b6513a06c5bea5a7af21a0e93281317fef6d2ac42e44496d2ed84bd08938
+- card_id: marries_a_barbarian
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: marries_a_barbarian.jpg
+    sha256: fe08c905a412dce27065165e234422db0d60e0373bd9200440bc9db57ed3bdc5
+- card_id: marsh_troll
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: marsh_troll.jpg
+    sha256: ca9e2f6e5b9d2cf997d0fab50a3a3101b9af7ef55016970dceb37cbbce5ce243
+- card_id: matsu_hiroru
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: matsu_hiroru.jpg
+    sha256: 64c5bb63cf4d1ec6d2508a5c823ab11b70d6e6c360d54a0628d692f3a78d720d
+- card_id: matsu_turi
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: matsu_turi.jpg
+    sha256: bf15742cad40c6f770096b76efe5ced4b5fe323a18b5bf504ee3158a4142bf59
+- card_id: medium_cavalry
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: medium_cavalry.jpg
+    sha256: c7d72e6fbd3f9619359a4c1c27aec2d012cdb67a9246f0fb6ae5b385601eede9
+- card_id: medium_infantry
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: medium_infantry.jpg
+    sha256: c1c15794ab2d76195913a086270552e1c8f9a1c3f12401a46fd4959ecdd8c426
+- card_id: mists_of_illusion
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: mists_of_illusion.jpg
+    sha256: 2bf210aaf8d5f85b01c0141a47dd97de793d0d3f67e99f4ce8e069743fa9f04c
+- card_id: naga_abomination
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: naga_abomination.jpg
+    sha256: 355afae586baff4d90f76e793e53e8463ec4d0173fcff039dd5773f08e527292
+- card_id: naga_bowmen
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: naga_bowmen.jpg
+    sha256: 7fb3007786d0763c5f3bdd3888a26095b614492a358cce85b94fb13cf16ce676
+- card_id: naga_spearmen
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: naga_spearmen.jpg
+    sha256: 031c02e4e4e8f465db8cd202c2e801342c67b23312ec68e7ac789a9548731252
+- card_id: naga_warlord
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: naga_warlord.jpg
+    sha256: 4de48e5bbc1e0532dacd32e17a85c15039638963855b7fe1798693a9d81ebeb7
+- card_id: oath_of_fealty
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: oath_of_fealty.jpg
+    sha256: 6fb105194e941354e7674e98047604087dd8e339d5710d4d8a96b55d418ed8a3
+- card_id: occult_murders
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: occult_murders.jpg
+    sha256: f30c494451b936430bcde9273933b67f5279723af3a038813faabf734c08f34d
+- card_id: ogre_bushi
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: ogre_bushi.jpg
+    sha256: 7d2a4935354d9f23359a88216fce4db9e0c58e62e7d44b959ae497fea0595ab8
+- card_id: peasant_revolt
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: peasant_revolt.jpg
+    sha256: 99da01a43c06bf45afabb20938eba443f374637b0a9ecaa9a8f4709b1f56b7bb
+- card_id: port
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: port.jpg
+    sha256: 71a2ebf7e60a077f467015a87855e3fcacb9ac050cc7a998a88f09a0beb8c836
+- card_id: rallying_cry
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: rallying_cry.jpg
+    sha256: efc687935fd8ce20daacc1d15e1e7a29df520936dc5d9d669a7fffd0f03a7f11
+- card_id: ratling_bushi
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: ratling_bushi.jpg
+    sha256: e8a674d3663c57e5f8be3941c57efd5302186a91ff0b95024b99f0b80f8aaf73
+- card_id: remorseful_seppuku
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: remorseful_seppuku.jpg
+    sha256: 6d70879d73897bfbf9c87cba00606a697bacde261dd5b4050a7990ee9e2b0446
+- card_id: ring_of_air
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: ring_of_air.jpg
+    sha256: ece3bd86f1770f0d90e66eddc2825ded9b8ed4b5f58f69a553c3d11cec44953c
+- card_id: ring_of_earth
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: ring_of_earth.jpg
+    sha256: 0ca9452e5bbfa2d41bb2733dbe61a73d30e836f24f7eda6cab40093e8d955a5f
+- card_id: ring_of_fire
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: ring_of_fire.jpg
+    sha256: fef78eba42bb64ff909757d088cd64c4aa423b1a3f7195e15c78b7f43a7430e6
+- card_id: ring_of_the_void
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: ring_of_the_void.jpg
+    sha256: c4dcb5c9ad016d28e8d4044ff05c4e4045949a1ad3c07d0468e2cb983a520024
+- card_id: ring_of_water
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: ring_of_water.jpg
+    sha256: 4a019981267486d9c0fda45e870e34ff75c45050a8187448f2b924a7b399aa10
+- card_id: samurai_warriors
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: samurai_warriors.jpg
+    sha256: 60c65d1d523c7449cbf1267a05fe6bcc761668fee0913a73146f320307235918
+- card_id: sanctified_temple
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: sanctified_temple.jpg
+    sha256: e474f6c0f19e413a465980d5793b962e2b4ae4e0477716b6190e6a14014db089
+- card_id: shinjo_hanari
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: shinjo_hanari.jpg
+    sha256: 104b5797f14091d678adede8d30c6f315274439e2ad4ed0b662fe5b5da5dd66a
+- card_id: shuriken_of_serpents
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: shuriken_of_serpents.jpg
+    sha256: 323c9f61c1b9e089bbf78b9bdd60f399c9ae237aac1a8e85b76cb86161eb123d
+- card_id: small_farm
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: small_farm.jpg
+    sha256: 8af33ea795c80be8ebf5dd76247b62293f13309217e7265d02974df46b055a61
+- card_id: superior_tactics
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: superior_tactics.jpg
+    sha256: ea92fe087619781ac30d571e8bcdea844099ef2fe712fc6ec2cffd9d784cefcb
+- card_id: the_monstrous_war_machine_of_fu_leng
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: the_monstrous_war_machine_of_fu_leng.jpg
+    sha256: 2a18b9bc1c8e2eded4cdc7d9aa9b22befec17187223301b1d56cf796ca6729d2
+- card_id: togashi_mitsu
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: togashi_mitsu.jpg
+    sha256: 463ad8e4f827fea2516688c1a9b4a51159f7b0945f9283eb52fc03e13437cb46
+- card_id: togashi_yoshi
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: togashi_yoshi.jpg
+    sha256: c97335f8815f082d2f2ae8369db79a48727650d67d9533ce3a8af826ebd93a79
+- card_id: tsuburu_no_oni
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: tsuburu_no_oni.jpg
+    sha256: 8394603d96fad040402491e65e8d499acb8841e18f1de305da3062323f79f4ce
+- card_id: unexpected_allies
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: unexpected_allies.jpg
+    sha256: e4cffc6c62eb6e8e0d8ec145598430ea2652e6ce09329ff06ae31c4c3629e030
+- card_id: walking_the_way
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: walking_the_way.jpg
+    sha256: c28a94f54debfdd6b780a0ae61134bb3e37fb1a5ee2204132086b83a5793bd51
+- card_id: way_of_deception
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: way_of_deception.jpg
+    sha256: ca18c8a2f96c990e3f8273eab7284a530dd91184a1811ac3514af8ee8eb5c6a7
+- card_id: wind_born_speed
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: wind_born_speed.jpg
+    sha256: 71210be341aa5b004d3bcf38c22edbe45504e27277d27fa9837791932774b61a
+- card_id: wings_of_fire
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: wings_of_fire.jpg
+    sha256: c85ee3faffa38aa781a486dc20737a5ec363ff4790b71d46d7c14be929632c3a
+- card_id: wyrm_riders
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: wyrm_riders.jpg
+    sha256: 455997c2b0b705313f7ffb1f6f3ec775353b834d4bffa0a43e9e88042b761109
+- card_id: yotsu_seiki
+  printing_id: pre_imperial
+  files:
+  - role: front
+    file: yotsu_seiki.jpg
+    sha256: 1253316d9c3af0fab8a8814d6481b00c7d533019b4f642434b1fccd2590d8c61

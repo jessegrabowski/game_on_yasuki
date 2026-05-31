@@ -1,0 +1,362 @@
+set: Honor and Treachery
+images:
+- card_id: akodo_regulars
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: akodo_regulars.jpg
+    sha256: 45983c6b0681ced7b1e2bb47b048d592d11d45cf8b8532a92e4d9c4967a86bdb
+- card_id: akodo_shihiro
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: akodo_shihiro.jpg
+    sha256: a1081f2eff872a92c8559ce6a0216511b6b47a8f8b26e4ffbf23cdfd416daafd
+- card_id: back_to_the_front
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: back_to_the_front.jpg
+    sha256: e5073cf23b1ff40c2b211cf3b8e545db7db95f29d35b49a9b673066826ab6ab0
+- card_id: bamboo_harvesters
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: bamboo_harvesters.jpg
+    sha256: af8658fb17e5a8726a44a4c431ebd736582543e03c58cdd46b0cd76ab57c122d
+- card_id: bayushi_irezu
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: bayushi_irezu.jpg
+    sha256: 9af3103853eb88a1fbcb9143094a40c2f942f89c726fcf2a52dd4e6c7af0904e
+- card_id: bayushi_kasumi
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: bayushi_kasumi.jpg
+    sha256: 171aea25699dbf76d972ca98978714588fbd897f29a269c5db1d40f99341ab88
+- card_id: bayushi_manami
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: bayushi_manami.jpg
+    sha256: 20844808d6657664f77fc679d18f9b40b1376478e9bb2ea2cb50c280980c89fc
+- card_id: bayushi_nitoshi_inexperienced
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: bayushi_nitoshi_inexperienced.jpg
+    sha256: 9adcdf0a98f32839b403bdd84798903d4c77e99bcbf07672292867df51337eb7
+- card_id: bayushi_utoro
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: bayushi_utoro.jpg
+    sha256: 6637455568f382a1df50188a0456baa3898393efa73b01ef27f7bcb092d94d8c
+- card_id: block_supply_lines
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: b0b0724989d76451a27917325d138bee411b0481784de7e8c0a1c5c6ca120c54
+- card_id: border_keep_inexperienced
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: border_keep_inexperienced.jpg
+    sha256: adda650f84f23ed607765db9e83ea87e3b0da6ffd59b60d09f6b4ce49bcf84ed
+- card_id: bushi_dojo
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: bushi_dojo.jpg
+    sha256: 2f6caf4206203bdacf274efeb05583bbb252e36c8f211e73d9ecff1877c39115
+- card_id: cleansing_the_path
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: cleansing_the_path.jpg
+    sha256: 7bc9fe9506114057ab25aea59cb09b64e3575569825df273382c9e1caa38da28
+- card_id: clearing_crew
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: clearing_crew.jpg
+    sha256: 12dccaf3d5cf7e4e583aa933bf77ed84575f75a2a61775dbb2a0d444f5677a2c
+- card_id: communion_with_earth
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: communion_with_earth.jpg
+    sha256: 66bb9ec8fd9a22dccfe5f06a0996ceccd41cdb376ba3915a260bcd293f632f11
+- card_id: conflagration
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: conflagration.jpg
+    sha256: c58de35541a7c39f821f2e0ecc3dd2f3836d1ff962dcfbd434bfc3883e96d4e4
+- card_id: contemplate_the_void
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: contemplate_the_void.jpg
+    sha256: 9054ecc7e8ecf224516ea28309af2e9e78e5a096840202fa3df865473dab81f2
+- card_id: crushing_strength
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: crushing_strength.jpg
+    sha256: 1d31bde103050c18fa877d9ae9f506c3920145cc9af78c86487c25e1a24a0773
+- card_id: daidoji_kenshi
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: daidoji_kenshi.jpg
+    sha256: 0ca4711e0bc8457ebc70366b0027c745152473f4a91086810651bd6a9142d728
+- card_id: devoted_yojimbo
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: devoted_yojimbo.jpg
+    sha256: c33152687eab3b576a8af0a298c0e0036f833c00a5c6d49ad41d4cefdfb40a46
+- card_id: diamond_mine
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: diamond_mine.jpg
+    sha256: 989f7598c20e385178296ffffaa8cf3968ab5f4f08e2927a247aa3225d88fe72
+- card_id: earths_embrace
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: earths_embrace.jpg
+    sha256: b0ed532c613a91c8331d61979602ffdb14a6f58523175c8e740f45faafd007a2
+- card_id: elite_training
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: elite_training.jpg
+    sha256: abb80b0e533f8a1262ce9e127bb2b29f66703b4eff7d3b26e035abad9c2d9c26
+- card_id: fall_back
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: fall_back.jpg
+    sha256: bf5f7b084c7a98fd309f830f4ba07d2d4b711089676cb2d90935ca489517f6d5
+- card_id: geisha_house
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: geisha_house.jpg
+    sha256: a181e970731aa77e13caca3e3baffa3d14a1e90ecc4d0e02844bc0425c8d2df2
+- card_id: hida_bushotsu
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: hida_bushotsu.jpg
+    sha256: 7d86e0b17b1770459f89a51df80b148cfda7e3c692725a262e885cf3a335296e
+- card_id: hired_legion
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: hired_legion.jpg
+    sha256: aca08beb97fc94c761d24d414fa501c7aa315389b4933807bce9fb33b9566954
+- card_id: incapacitated
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: incapacitated.jpg
+    sha256: 0305bb111fead77c481a77903564898065353b588ad87b8b4a2d5deb7ee0461f
+- card_id: inspirational_address
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: inspirational_address.jpg
+    sha256: 701c220fb148c82c58bbb5a28d74067d1d874a2ac632d4e62657de4bac9317f3
+- card_id: isawa_nairuko
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: isawa_nairuko.jpg
+    sha256: bed0989b57cc547ab4e0d7a9fb7354afce3dbb974a50a6e0e3733d6fb40e28b4
+- card_id: isawa_taiken
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: isawa_taiken.jpg
+    sha256: 1736691fac7f5e5d00ed0e9b9a7f88e07184a7ab40a6693700453f71f98ec3e5
+- card_id: isawa_tamaki
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: isawa_tamaki.jpg
+    sha256: 2a641b5d2709a33751a5ef3c4adc5325ae2b63ab03ae695bf8229515e39a0b57
+- card_id: large_farm
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: large_farm.jpg
+    sha256: 6af3c4dc28aa597e96b5814eb3c6f5f5f0a7b215bdfd5a3c891511ec19e70ebc
+- card_id: native_guide
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: native_guide.jpg
+    sha256: 7bd49da3e86ee03a6c83c3f1f316796267a3a249c5cbd659093914e3986046b6
+- card_id: natsumi
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: natsumi.jpg
+    sha256: 9e10c4abe3f552a5298987ad27b4942b381f85f3a2705ffffa2e40939890b29a
+- card_id: never_afraid
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: never_afraid.jpg
+    sha256: 8fc667da9a1c42f67e0c6514141b7d3b53b45b7800b103722b77e8bc6e3f6510
+- card_id: one_shout
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: one_shout.jpg
+    sha256: e3ecb2590149b770bf762094056100cc21a3fe3a3f6f0a45e6c16c8d1a76cd90
+- card_id: prepared_for_death
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: prepared_for_death.jpg
+    sha256: 5c5451b0b136e42b3d72e2b026fff9dc59fb4f91395add2bdaeba2a14e834200
+- card_id: rank_and_file
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: rank_and_file.jpg
+    sha256: 8e54b994103a455657c69cbf850290f72b1b9fa2964551f2b1feeff2162b9b45
+- card_id: remote_village
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: remote_village.jpg
+    sha256: 07170a5511c54ef799eed0989fd8adc2cf2f06bfe610f950c99fdf3238703601
+- card_id: rice_paddy
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: rice_paddy.jpg
+    sha256: 4083b3bf48514806cae42d9bf9e52e36aa5585b1a6731d0af9219cec27d05be0
+- card_id: scouring_flood
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: scouring_flood.jpg
+    sha256: 861057e94d30713ebd8f1c17cc96226e13e3eb941d47cf3f0b9e7326320b635a
+- card_id: seppun_heavy_elite
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: seppun_heavy_elite.jpg
+    sha256: ee980e8f4c7886480904faa7c2a06c1a631c20b257abde5a7a7d1e227edefa8b
+- card_id: servitors_of_stone
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: servitors_of_stone.jpg
+    sha256: 067bb6c5716d8f5e74244baf73ce1e7ca787714f99cac3585b422dce9be90510
+- card_id: shiba_jikaro
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: shiba_jikaro.jpg
+    sha256: 680b13f5467288be5f5181a2aa4138d3ebe96e9aa6e293a79ad46f21ad572a44
+- card_id: shiba_mitsushen
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: shiba_mitsushen.jpg
+    sha256: cf3bc751e4e9e9ae90c2c602658985cfef4b23c43582944a62d2c8231f915b72
+- card_id: shiba_tsukimi_experienced_3_5
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: shiba_tsukimi_experienced_3_5.jpg
+    sha256: f0afb1d2ab05bd5d5dd7e5700c9816e95e96aa465016cfa40f12b7f977839eca
+- card_id: shosuro_chikata
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: shosuro_chikata.jpg
+    sha256: e526f458d4e4ae476ca8541bb12cd3216a184fa9bd696933be6bebf96c2bba04
+- card_id: shosuro_konishi
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: shosuro_konishi.jpg
+    sha256: d95c9bba6c48a7d30e5c936bf7495b2b122859675231eccb1809bb260ae060da
+- card_id: silk_works
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: silk_works.jpg
+    sha256: a139a13ebd693b37eb5e11c4c663e4f94c7b1661c7151733199e78cf60f488a7
+- card_id: silver_mine
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: silver_mine.jpg
+    sha256: f822c80ab1697ea29481c17e02a18c16fa5b86c5aa6624738218e1786d9097ab
+- card_id: small_farm
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: small_farm.jpg
+    sha256: 82533989ca7cfd61eefd94b44a935bcffef94f3ed6240763fa269026282d4a26
+- card_id: tamori_kusugi
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: tamori_kusugi.jpg
+    sha256: 5b33c2877328413706baed002bac530ae703fb772196cf8883dcf92b195dae50
+- card_id: the_sacred_temple_of_the_phoenix_inexperienced
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: the_sacred_temple_of_the_phoenix_inexperienced.jpg
+    sha256: 9a01b07cb71a060986507b6bf47128ad4c774280a991b7faf8cee8f296c46cf9
+- card_id: the_towers_of_the_yogo
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: the_towers_of_the_yogo.jpg
+    sha256: 61fdc2db45247badeb0d51ec2002486c8bf4c23ca3b3e124d6259f79ebf75fda
+- card_id: treachery_and_deceit
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: treachery_and_deceit.jpg
+    sha256: 21fcd30b7b54f942bba03163bd6abf14aee2c40b87fca46ead6b50c119e71395
+- card_id: tsubo_experienced
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: tsubo_experienced.jpg
+    sha256: f36dcc38d00f319db74f38f4dfe95ec6a659bffdc1110b261b11dcc6040c3163
+- card_id: veteran_skirmishers
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: veteran_skirmishers.jpg
+    sha256: 3891388d17bc58a61ddcb8f0ab5f14e0360d7e0cc25f3bdcf7b5971d3c3fce19
+- card_id: wave_man
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: wave_man.jpg
+    sha256: cb283000c9472349ef8b380e7a131ea9f5157ae99e006467daaaf21c392a6b7e
+- card_id: yogo_haruto
+  printing_id: honor_and_treachery
+  files:
+  - role: front
+    file: yogo_haruto.jpg
+    sha256: 424be07f6bf896384140a0080a4175c07b94eb8a86ba987f39a5f1aa33c6d20a

@@ -1,0 +1,992 @@
+set: Rise of Jigoku
+images:
+- card_id: a_collision_of_wills
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: a_collision_of_wills.jpg
+    sha256: aa5a11d397016c73f2a1361afee3b4a470746af6aa46bc057d5eb49b694aaf65
+- card_id: a_terrible_glory
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: a_terrible_glory.jpg
+    sha256: 9e3ca9c6d3d1939d39c8a939f584b16ed62841c4d9cd532318e99a9fbcc5cc68
+- card_id: abandoned_farm
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: abandoned_farm.jpg
+    sha256: ae55b31c4b2dd1775a6c8a2ed7b9ab333db56943f6f2db8b2c7ec3ebbe190d2c
+- card_id: absence_of_authority
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: absence_of_authority.jpg
+    sha256: 5ce743f4b76a5026584efd845132e99142809a2a52e3e96c63c58786e34daf3d
+- card_id: agasha_seiji
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: agasha_seiji.jpg
+    sha256: a37daceaafba927d4253df4752d785e9d174a867dea234a112b40f874ad2d23e
+- card_id: ahuja
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: ahuja.jpg
+    sha256: 84297d224d2c1b6629d7bc0cc6cf5131ae512dd2278bf965fe841a743b189a90
+- card_id: akodo_atsutane
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: akodo_atsutane.jpg
+    sha256: f8ad115528570a820145d0231919fca3c4cf33a2189329c590ccc369df684cbe
+- card_id: akodo_sojuro
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: akodo_sojuro.jpg
+    sha256: b273dc88c7a27b227dc8b7ca745cc3638d94cfa4b394a2e9471de3bcc1fc102f
+- card_id: arrogant_posture
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: arrogant_posture.jpg
+    sha256: 59181c9943a17569a94220c796a79f43d713b6e82b277843527fb5620856a347
+- card_id: barrier_of_purity
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: barrier_of_purity.jpg
+    sha256: 665c2883eecbe7a6ea0cf8660424bd1aeab02698b0266cc010aa0d5b27606c67
+- card_id: bayushi_geboku
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: bayushi_geboku.jpg
+    sha256: af842558a2c7290284264c726b66a7e1cd1a36b9d9b468845ecb248567270102
+- card_id: bayushi_norimasa_blade_of_the_black_cabal
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: bayushi_norimasa_blade_of_the_black_cabal.jpg
+    sha256: 08452b9db900b5ae65d6121078487bbb4b4ee49ebb53b1e6ce71ab51f71ac311
+- card_id: blade_of_truths_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: blade_of_truths_experienced.jpg
+    sha256: 1ac54d2f0bc437662dfecc9286452b5176cdbde602f4fb21a0ff5d22cff7c0b5
+- card_id: blood_of_fu_leng
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: blood_of_fu_leng.jpg
+    sha256: 01280d543679da524a5b70d1c8d329a7df9152f9bb883bedb7092982a581e6e6
+- card_id: bracing_ground
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: bracing_ground.jpg
+    sha256: 2c94353e94bbb63d6cf540063c83e50d8e6ff3cd11e1c02f9bfbe79ed9b8d3d4
+- card_id: break_ranks
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: break_ranks.jpg
+    sha256: a819a8045589f2329892d24384d97e77d06353acf62004fce96d81f516537fbe
+- card_id: brutal_lesson
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: brutal_lesson.jpg
+    sha256: a9e73b64841f5aa92f3f9f8334321b02854e6938fccd05158d4ddd5e5a0efe50
+- card_id: burn_the_mind
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: burn_the_mind.jpg
+    sha256: 95f9148025403c3d3159cf7975957ff7c978ed049617c17c4dd74e9fa6a313d7
+- card_id: chuda_kuri
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: chuda_kuri.jpg
+    sha256: d46073c4b5bf7adf79a19c79acfe28f3128ffbfd1bd52aedd0ab28fe809547d7
+- card_id: combined_will
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: combined_will.jpg
+    sha256: d1c634e09b8ed51260f506630aad7cccf5bee4eb0fd49b7eec46823d510596a9
+- card_id: come_then
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: come_then.jpg
+    sha256: 2529671c4a687c0da1465597c6b7e9df501c352146a918a961ef9e68fe17a043
+- card_id: confront_your_truth
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: confront_your_truth.jpg
+    sha256: 9e08d8dc18271514cd5938a271e0ba8c5ae2b9d64cf07d7245703f4a7c42e229
+- card_id: crippling_toll
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: crippling_toll.jpg
+    sha256: 2ed9a0d7f073677ae514e073f861551bd618e3c748b35a4b08e3ec9ec20c9675
+- card_id: daidoji_akeha_iron_crane_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: daidoji_akeha_iron_crane_experienced.jpg
+    sha256: 19a0dd48efe44e88a44c47fa16828d5444616538a41b72ca3258a1bccfa44cb6
+- card_id: daidoji_harrier
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: daidoji_harrier.jpg
+    sha256: fc961ddd4681543c112fdc19ef4ec7f859917620f6db41568348d3359230b643
+- card_id: daidoji_nerishma_topaz_champion
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: daidoji_nerishma_topaz_champion.jpg
+    sha256: 449294ec631f8a509f7ffb7cd77b0483a80a108305d2ac5e993cf1c0af753e24
+- card_id: daidoji_sakuzou
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: daidoji_sakuzou.jpg
+    sha256: 08d031e1141f474fe2a72b020df2c4d8d9beadd3d51f02eae13cbbe801ee6ba7
+- card_id: daigotsu_aneko
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: daigotsu_aneko.jpg
+    sha256: 071c869af722845f00ecaa0099925f63c7690388d09a7fca266323eba3375ab6
+- card_id: daigotsu_hashibei_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: daigotsu_hashibei_experienced.jpg
+    sha256: 11c89961a880247dcf9d0ee3c31531fbe493aa7fc2ada213dcec9741510a4c02
+- card_id: daigotsu_shion
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: daigotsu_shion.jpg
+    sha256: 823fbe137a0670a74efd4f91327fe19c8a8908dfc7e021f18b7f85c7b2f95f9d
+- card_id: doji_saomi
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: doji_saomi.jpg
+    sha256: f74ef2c913ecc02382e5131d4fddbca913a06dfdf97bc22cb3f094fcd9be348a
+- card_id: domination
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: domination.jpg
+    sha256: dcf60b66ce4d0617d6b1c5873d4158ce15580a12557f98a1e84614bb09c06c69
+- card_id: draw_strength_from_your_oaths
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: draw_strength_from_your_oaths.jpg
+    sha256: b0efaa0c4fcb4f47f06986a00ebfce482e8e035dc2db0cba0764b7dab317b927
+- card_id: earths_yearning_clasp
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: earths_yearning_clasp.jpg
+    sha256: 9e71233ff6787bbbd283eaa147ce68e63890cf984d0726c6c124135a178e8f73
+- card_id: elder_veteran
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: elder_veteran.jpg
+    sha256: 38ac85d9646e964fad643363908f272f14e7d7632f6dc1fb39ffd08b11345964
+- card_id: embrace_the_mountain
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: embrace_the_mountain.jpg
+    sha256: 45c98abdaf552bbf976697698339eaad8b8e7de7fc66f047ff02bdb900d0aa01
+- card_id: enervation
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: enervation.jpg
+    sha256: c8d9975a5eff788ff6f9aac944cbc0e230449124c0dec7670271d2977d36c166
+- card_id: face_your_destruction
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: face_your_destruction.jpg
+    sha256: e3db256ef47834a08bafa11583d9d4d9ad0a93533affc65e688a8ce6eb059c2c
+- card_id: forgotten_mine
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: forgotten_mine.jpg
+    sha256: 8ac938e1cd3fa0acfdcd155a4e5c338025de73e3d00fafe12338a9b8db71b65c
+- card_id: fusako_sensei
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: fusako_sensei.jpg
+    sha256: d8decbe2bfb5b8a3efc1e4a4476a2caf1466dc8ab19a01a8289f794103240d05
+- card_id: gusai_mercenary
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: gusai_mercenary.jpg
+    sha256: fb2c84457a7edcb63d4c416366dd453ce2c8960bfd87258b060e629e2490bcd7
+- card_id: hard_choices
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hard_choices.jpg
+    sha256: 4e0af536b962fba22377477604e3930b95a96818c8c4d540e4d11b55eb24a8ac
+- card_id: harvested_land
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: harvested_land.jpg
+    sha256: bf0a249b1f0536cbb6e031bbeaed590cc7606d3b061d285cecade40b39dbd501
+- card_id: hawk_riders_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hawk_riders_experienced.jpg
+    sha256: c36bf5345b0facf2359a32398eb207186a9abba0095c95cdd36666ffe6cea8a8
+- card_id: hayameru_ruins
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hayameru_ruins.jpg
+    sha256: 33d700b163840e480fd605e5cde1df492d91f5a4bb9b8b557d81a528bd58332b
+- card_id: heart_of_honor
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: heart_of_honor.jpg
+    sha256: a069351f389c0cb394a48485eb1597d0d7a96aa306ebad7238b2f50c1a89d3eb
+- card_id: heichi_tochiko_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: heichi_tochiko_experienced.jpg
+    sha256: d0fb9912761357992ac668c10515c3f26fac928a0305530fb30ff59f53a2be2a
+- card_id: hida_elite_guard
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hida_elite_guard.jpg
+    sha256: 97be55d3d59c1490c8614117d153d998c67a58381bcd727d0c87c8b2862b52e0
+- card_id: hida_izo
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hida_izo.jpg
+    sha256: 17f6bb1a7a308b42072971e74b6a4fe576b00b45f03a424f49dd29432698ae33
+- card_id: hida_zaiberu_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hida_zaiberu_experienced.jpg
+    sha256: 3a55bb27b68ae0321a38768658b2e0978d95e5de21291ab33458f111782949c6
+- card_id: hideyo_sensei
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hideyo_sensei.jpg
+    sha256: 875f819d730ba22c4b682dddb4965113ee3af8a23eb577ddc127b757fca1e325
+- card_id: hikarou_sensei
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hikarou_sensei.jpg
+    sha256: 4a88c724c904685afbec471f69059d354d0f2b292879e177c6a89dd8ea525977
+- card_id: hiruma_redoubt
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hiruma_redoubt.jpg
+    sha256: b18966d66aa273a20ff4312706b2199179199b83e305a1ce1a26b338527eb2d7
+- card_id: hiruma_tetsuya_secret_heart
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hiruma_tetsuya_secret_heart.jpg
+    sha256: fb075988d51415ba945e08dc8383685e88a5616b901dc01263e62f5abef35b32
+- card_id: hold_the_way
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: hold_the_way.jpg
+    sha256: cce74af997503b3494e898d3d0688678829cb5152edc05e5d7f4131eece2e17d
+- card_id: i_do_not_forget
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: i_do_not_forget.jpg
+    sha256: adb5810ef2b538be0c1e5c890b5c5fe9e88f8e2e6859db901b535c7317d2150b
+- card_id: ijathilu_adherent
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: ijathilu_adherent.jpg
+    sha256: 709ced68a497d77d932b8c806cf7ca94682a139f5ac801f459daf891887068be
+- card_id: ikoma_masaru
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: ikoma_masaru.jpg
+    sha256: b03ba8e0f96efe48c08106b9a757a4a58a6c29a91238730b3584b12d623458da
+- card_id: impressment
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: impressment.jpg
+    sha256: 7bdb6657a5cc24c113f1011eb796215b57c6b0816f90c19298bda7e96185a999
+- card_id: inner_spirit
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: inner_spirit.jpg
+    sha256: a2a6355a1e8dcde1f5b9b57114088d3f423c529ee1e71af91b2bae7f19e806eb
+- card_id: iron_foot_kata
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: iron_foot_kata.jpg
+    sha256: eff848cfbde4306920ed0545b470a13e4e79c01a2ed18cb1158beceecd0e9e68
+- card_id: isawa_hyosuke
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: isawa_hyosuke.jpg
+    sha256: 8c32e9b4491b4098106f2c214a0ebfb13efa6b08ee1c17fa15097d4972030003
+- card_id: isawa_kioko
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: isawa_kioko.jpg
+    sha256: 3545fd36a3ae16140b11e3f2ad9efb25770a5f57f642f298fce76361bb9ff368
+- card_id: isawa_nomura_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: isawa_nomura_experienced.jpg
+    sha256: 3cff38b9ce0703c331e1d546295c69c87bd05a1a88074cf87d5e9511a9b8671d
+- card_id: isawa_taisho
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: isawa_taisho.jpg
+    sha256: 94aab999eddd9e53c1dae597e223c618c2c5a1ec52784e76e43d93e6084298fa
+- card_id: jade_legion
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: jade_legion.jpg
+    sha256: 61aec146ccbf96c7daf17f85cb315b8475dfd5993fbbf7e48d15c379ef80f7bb
+- card_id: jade_legion_ono
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: jade_legion_ono.jpg
+    sha256: 71cd314553b9aaac0e0b78a429eb3df6113e7da6862fc0925b142160ea9e2ba2
+- card_id: kagami_sensei
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: kagami_sensei.jpg
+    sha256: 8e65efdabd5c1502d44813baf6b6c6a73b69c6c72afa224a1013aec3706695d3
+- card_id: kakita_haturo
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: kakita_haturo.jpg
+    sha256: 95de399f31622d235da7d85dc0a49ee10ac7ebe78456a64e90dcb27ca6ae444a
+- card_id: kakita_takara
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: kakita_takara.jpg
+    sha256: a53c8b436f60e03482185a023721a0dc464d5de51219ca78c99fa33716e2801f
+- card_id: kanos_march
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: kanos_march.jpg
+    sha256: c8a6f748bb6d863e152f487d531591fd2886b732678dbb1d10459884d9d29202
+- card_id: kayo_sensei
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: kayo_sensei.jpg
+    sha256: 43ebde47bd1681ae2ac57ea2a84848dbfe3328bf3d10a0c730f17b69a2318945
+- card_id: khurana
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: khurana.jpg
+    sha256: 4b7f9cbdc8c6724a4823740392351dcc9f383292a7f85e499c33b5e121f2f462
+- card_id: kitsu_miro_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: kitsu_miro_experienced.jpg
+    sha256: 7528e1bb18a915f2f8be23625c1737308b559e33375f6f16c6e8df0884854a10
+- card_id: kitsu_nishi
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: kitsu_nishi.jpg
+    sha256: 217780dd7b911482c7045390559ea897b731672e1a8e675604c72f032b886ad1
+- card_id: kolat_oyabun_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: kolat_oyabun_experienced.jpg
+    sha256: fa72b913802538d159675102edb9ddebaa3958f7df0eb87120ddd0353173c2d8
+- card_id: kuni_seifukusha_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: kuni_seifukusha_experienced.jpg
+    sha256: 6b643dbc6948d8ce702568d5c163942ebe89f2fae3f5f7c41dace95d9713606a
+- card_id: last_full_measure
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: last_full_measure.jpg
+    sha256: ab8490f11f7013287ce6cb09659e220ad684cad0837d5e207fce9579afbe0fc4
+- card_id: lay_siege
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: lay_siege.jpg
+    sha256: ad8bb1f63ecd21113e9ecda08e4cc6f3db7b198ea0d44da2ff0d0cdb247f7802
+- card_id: makeshift_fortifications
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: makeshift_fortifications.jpg
+    sha256: adbfcbb6759a1723e299dc380e57e835c279572465abf4cd89e604c313c18ac4
+- card_id: massacre_grounds
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: massacre_grounds.jpg
+    sha256: 213bf7bc04778ec5c8c4d5b2fb90339fd7fe7dd401292b8dfc5a26e07e71aa57
+- card_id: mirumoto_harada
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: mirumoto_harada.jpg
+    sha256: 44d1fef6306bf61d52216ae6f27bdbf81572284cf8bfe86de792c51e9d3712ac
+- card_id: mirumoto_himeka
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: mirumoto_himeka.jpg
+    sha256: 0fef31dcc91555efd7d614015329ef3d228f95692f954292b58a1935fe1bebda
+- card_id: mirumoto_utzuki
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: mirumoto_utzuki.jpg
+    sha256: fd31cd0ce7a7f1fc9e025ea2c7ea6c956735bc5b62a46980470148ceb626648a
+- card_id: mishime_sensei
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: mishime_sensei.jpg
+    sha256: a82b39937d18b349ffc0fe3e4c178c0b31d4186f363add232db4a5a103e08003
+- card_id: modest_farm
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: modest_farm.jpg
+    sha256: 975abd7bee320cc66bfdf1af7bbb6903d10e9caeb75e1678955833198f703119
+- card_id: moshi_durucho
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: moshi_durucho.jpg
+    sha256: 31181dcdb8a8d1d9a07221767ac0d257fed78e416b47eac40f498a1c7fcc7314
+- card_id: moto_khasar
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: moto_khasar.jpg
+    sha256: 3c3f2ad5f8c9b3bdb9d31b44a2a2177fe74e59f3d758a0598fa2ad20c0279064
+- card_id: moto_khedai
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: moto_khedai.jpg
+    sha256: 2c7df550ec49b165ec0501516a95c2d42bf79fee55273145fe778753365a0f85
+- card_id: moto_maral
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: moto_maral.jpg
+    sha256: 3767e49fb9dd5d0b28cc8e10de3dde551e34ebcdc55ca49bb249b3676f12b582
+- card_id: moto_qatun
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: moto_qatun.jpg
+    sha256: 1e4720adbd6b8966d8ca67912f5b8e606e329ee8a87a842154584b49a3430c49
+- card_id: nanashi_defenders
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: nanashi_defenders.jpg
+    sha256: 89e19e88a62de18838e1474a2756e373704cec7237790958596fa43c434ca206
+- card_id: necessary_tactics
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: necessary_tactics.jpg
+    sha256: 64ba4eef2612d3f1d5d16bc37a7cd2e955350d73ab1e4ec14fac2a7e9ec8b140
+- card_id: ninube_kaede
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: ninube_kaede.jpg
+    sha256: 233f3c745163222b5f38f312c4b34e2db09929bcaccd8786b04201eaf7023486
+- card_id: olyah_sensei
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: olyah_sensei.jpg
+    sha256: afa184e5ad7a90f3926ca9a647fba3071c835503c38d6a9d9e8cbc8c7ca59765
+- card_id: outlaw_band
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: outlaw_band.jpg
+    sha256: 4e69f35c408c889de48bef17c989d1c354df5f6f8f19c848d2135bb048d44f5a
+- card_id: political_division
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: political_division.jpg
+    sha256: c7cff612dc6600e4da2369752bee4b1fed8a273af32dc99b708028331ff595c0
+- card_id: push_through
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: push_through.jpg
+    sha256: 78fc48946a1b86381ff5b9f20e865bb53874f390de66c3a25b00f5de61853cd5
+- card_id: radakast_experienced_3
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: radakast_experienced_3.jpg
+    sha256: f8b19686384df8e9416dbea5a07f24defd58c0326c5a5ac3d06dbed02685cd6b
+- card_id: resilient_armor
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: resilient_armor.jpg
+    sha256: b5161f246117aefb7fe6213ac6ca1e6382b4bf7a3b7eacf3e2d629d56d183f69
+- card_id: resplendent_pearl_cache
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: resplendent_pearl_cache.jpg
+    sha256: e6818b55fa7d28533173bd61a997c0d422dc4859a305f66fa03460cc855e87fc
+- card_id: retreating_salvo
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: retreating_salvo.jpg
+    sha256: c6ae4a1536dc18cdb24d2289ec7b51c1d1f0c5044958ce2f074d3f17a538169d
+- card_id: rise_air
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: rise_air.jpg
+    sha256: 0042b4de409a0f9b9d4250c43a2f86fb53c1911bc363aee4ec55c795a33260c3
+- card_id: roll_of_the_waves
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: roll_of_the_waves.jpg
+    sha256: 1228634e8cb4d2ab2b54d3216e7e49704ab8a75edbb9048307ed3ae7e9237268
+- card_id: ronin_recruits
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: ronin_recruits.jpg
+    sha256: eda512346d516b7c7869f903965d728d4453b166fceeedaa794a473a51ac34a8
+- card_id: rural_market
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: rural_market.jpg
+    sha256: 7af4574a55cd66ef7d526a71be8f585f91940609bde7d010959a87f5d7b3bf23
+- card_id: rustic_estate
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: rustic_estate.jpg
+    sha256: c4bd6987a35c616bd124ef2a70117b05510f10515f779f51a1ebaf519c575d75
+- card_id: sapphire_mine
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: sapphire_mine.jpg
+    sha256: d9da884a8a8115df06353e5a7cb7b953d998332112f769e6e50ae256672b5dd1
+- card_id: seven_heavens_strike
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: seven_heavens_strike.jpg
+    sha256: 05a7eedc791e5cc38cabeeff6ed57199c30cc413ac2a446f862878b076593874
+- card_id: shadows_of_the_shinomen
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: shadows_of_the_shinomen.jpg
+    sha256: 7d68ea63799a9339d44cabb397581aafdb766c12fd3b2fec4ec3bcd5ed01363e
+- card_id: shiba_etsuya
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: shiba_etsuya.jpg
+    sha256: b19227d846fe9c9f3ab2e4c113c4cc0e64b25b9158a4b288b24611d02f7afe00
+- card_id: shinjo_archers_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: shinjo_archers_experienced.jpg
+    sha256: f5d6f77d577a866a72baed9dee308cf55ddf0b5d3ed69660a4f1da06f1437166
+- card_id: shinjo_fields
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: shinjo_fields.jpg
+    sha256: 9376b7e6a73d121a2f00f058b7bfc1f95db70f56ffed26660b323cc46de11607
+- card_id: shinjo_nobunaga_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: shinjo_nobunaga_experienced.jpg
+    sha256: f7f9f831609acf56b5f38a9af974349ce94705397061a6a5d2a8dfdf9fa8f76a
+- card_id: shokansuru_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: shokansuru_experienced.jpg
+    sha256: af2f36054f1f738ad8615e33c401d120add2276c3dd147d4c39f894c9ece8cb9
+- card_id: shosuro_miiko
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: shosuro_miiko.jpg
+    sha256: c3c4ea3b3a678c7493a355cbcb2730c85ed6ce14d1abd9e51a44165b97b11a40
+- card_id: shosuro_riiko
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: shosuro_riiko.jpg
+    sha256: 1efb345b4dc66337673b4498ee4c1de443173550ed24fd5c8e868e511a3b344f
+- card_id: soban
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: soban.jpg
+    sha256: cab862fe692fcd3cb11515783ff723ca4c82e8acfbd34c8781f354e43978b640
+- card_id: soshi_kitaiko_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: soshi_kitaiko_experienced.jpg
+    sha256: e45f5a3f1e44fffe29c34a734bb36f71c997f7d923394d7d9f1dc680d58bc45b
+- card_id: spear_of_the_shahadet
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: spear_of_the_shahadet.jpg
+    sha256: 4db025ae53cf2c5e99a8bcf4006c9719aadcfeeb327f63b958324fc643061b53
+- card_id: stand_up_eight
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: stand_up_eight.jpg
+    sha256: a775ddd554b9876a03a0b6e458bfb4aa2850544a4c60f7e8751cbfe512cfe207
+- card_id: sugimoto_sensei
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: sugimoto_sensei.jpg
+    sha256: e10cfad67450f3deb36fa966664f90fa22c42fc6b0a120cf8e6289176913f382
+- card_id: swallow_the_soul
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: swallow_the_soul.jpg
+    sha256: c06cfbca7d353a88c2398349d2d5212c93a2a0e8b9c790ed27c51a63e57731de
+- card_id: symbol_of_fire
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: symbol_of_fire.jpg
+    sha256: e9030f061bff570617a06cbfe6ef6b5f945bafc5e38cfd4b96c483ca93e5197c
+- card_id: take_the_body
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: take_the_body.jpg
+    sha256: fabd562e5f376135394d5ba73c1039c2ab14729abbe76b12d96e101c5b38e833
+- card_id: tamori_reisa
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: tamori_reisa.jpg
+    sha256: a55b075f1538c94d39dcc2c307fa4e0dc5419a21c84edaa4b3cc503656255468
+- card_id: temple_of_the_endless_sky
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: temple_of_the_endless_sky.jpg
+    sha256: fc09393f9dc3ec2b5e30d06993c9f1e68b60ae459814e21a1fcec034244627cc
+- card_id: temples_of_gisei_toshi
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: temples_of_gisei_toshi.jpg
+    sha256: ce33a1764a5d25483ad081ec7ade9f0283947d589074e16e854870600c2a6f57
+- card_id: the_crimson_mountain_oni_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: the_crimson_mountain_oni_experienced.jpg
+    sha256: e6d14978a1ea8fb69381040948b97a04ae8b48cc96ae8eff18f4715c57553200
+- card_id: the_culled
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: the_culled.jpg
+    sha256: 31ae8e467aea07d5e31652b41c76cd9d882324c2d572e88039e16e23c620bb6d
+- card_id: the_deathseekers_oath
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: the_deathseekers_oath.jpg
+    sha256: 260e59eb2d91013c38b66ddcf155e0d66c4237bd859075bbb59b3fb0584e709e
+- card_id: the_essence_of_honor
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: the_essence_of_honor.jpg
+    sha256: 82baf5da166e3bfebd44da4c5c07c11d156af73f8323f8c0a6251a98cd1cca23
+- card_id: the_last_sons_of_the_storm
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: the_last_sons_of_the_storm.jpg
+    sha256: 11ec5823a8b59caa5e34a741957d6a29b816dca84192524eb2e23aff20df7fbe
+- card_id: the_realms_merge
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: the_realms_merge.jpg
+    sha256: d42137d1012d5173f5ed47b744169decad7dc922e691d3176c71331ac70b6c1d
+- card_id: the_western_wastes
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: the_western_wastes.jpg
+    sha256: 3285a3160af92b527652c5462fb508e39f189637b6b584e051b05b5495ee2952
+- card_id: tide_from_beyond
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: tide_from_beyond.jpg
+    sha256: 976a0efb8e6886250a3a5b63b675d06ad91528b6213ef059ec7012becdc64387
+- card_id: togashi_shao_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: togashi_shao_experienced.jpg
+    sha256: 432e044aafe4291b27280a319586c52746618ab336306c8eff0f9a5fa306016c
+- card_id: togashi_uki
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: togashi_uki.jpg
+    sha256: bc2590e6d29aa131e8b85126ae9a369045301e73c36141d9f3779a4abf02c277
+- card_id: touch_of_airs_grace
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: touch_of_airs_grace.jpg
+    sha256: d92338f2e375a9eb8bbe260734723547a8a43b828e8242dcab4a13cf34bf48b7
+- card_id: transpose_the_infinite
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: transpose_the_infinite.jpg
+    sha256: 8e23f1638d93707c05e9876286fa35db4d67d1eb3c8b29cd274dbdfeb3916f95
+- card_id: tsuruchi_kinuyo_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: tsuruchi_kinuyo_experienced.jpg
+    sha256: d9a55b0cd14743ed2a0f53b1fe302d5b88c71a975eed446528d8e8c82dc33d61
+- card_id: tsuruchi_yurio
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: tsuruchi_yurio.jpg
+    sha256: 0b80e8a13c226a5acc4aef42584f7e1ecd07bf71858f7d97e68f18eaac328b92
+- card_id: unbalanced_by_nothingness
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: unbalanced_by_nothingness.jpg
+    sha256: 3bcd02f891ace2801753fe0004e4105f86a4f5086fc24e6ef13791fb5a05cc23
+- card_id: utaku_yukino
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: utaku_yukino.jpg
+    sha256: f66f8165c65cff1163131bb711feb96106043812d14dd6e02b607e099e80bd2f
+- card_id: varajita
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: varajita.jpg
+    sha256: 96da076bdc8663f7f35f4520a10776fb59a67d3e759dce6ea5e03846d35adf34
+- card_id: vayla
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: vayla.jpg
+    sha256: cc812ebbb9c5bed57af51b37b58cd255726723ca7091046b4ff38dde76436c84
+- card_id: versatile_commander
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: versatile_commander.jpg
+    sha256: fe11540351b16a33b15035c1ded98198ad464b788ec0d05d88ef7555e5bb51d7
+- card_id: wall_armor
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: wall_armor.jpg
+    sha256: ed4ab41bfc7d48800458cd20a2b685df8d6059f7e442bd8b0027f01d11978ef1
+- card_id: ward_of_shelter
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: ward_of_shelter.jpg
+    sha256: 734ecb0cf00429fcb615d743c918d7b29ad75c242c2af25eb1773b4d4afb102d
+- card_id: ward_of_supplication
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: ward_of_supplication.jpg
+    sha256: 65474621880b22ceeb6f0fb5fb3a5e239f12d48fe04fc9141e293d42b76a460c
+- card_id: wardog_trainee
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: wardog_trainee.jpg
+    sha256: 0979e1abd4b261aea332794312b271e5b58d33b18fb7860f54187fe007a848dc
+- card_id: wasureta
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: wasureta.jpg
+    sha256: 203c6ae60ba686d132c77b789e24d82e2f9c0e39d6e9585960baf9c1825d5090
+- card_id: wataru_sensei
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: wataru_sensei.jpg
+    sha256: 2641b5bbe9be650722d9021dc34c20b6da1eaf90636931d0700ffa8dafe5dc29
+- card_id: well_forged_blade
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: well_forged_blade.jpg
+    sha256: 4af40abacc41dea1ff73323b4f3fe4ba8a4fe0fe6a11529e64d8ace4d88a0829
+- card_id: well_tested_tactics
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: well_tested_tactics.jpg
+    sha256: b6b2801fd05469fd9072dc905c4ec699595f84933b481cac3cab536e98665d1e
+- card_id: withered_soils
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: withered_soils.jpg
+    sha256: 4fb705ae2e9cfb51b174527417af43bbee6f9eadd7cb32568b7c9540f1d55bc5
+- card_id: worn_jingasa
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: worn_jingasa.jpg
+    sha256: cabb5bc7c55ea4cdb1f9e84da0ca1015fb8d4149eeac2ca1b741803e958782fd
+- card_id: yaheiko_sensei
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: yaheiko_sensei.jpg
+    sha256: dccee04f0b0412d70fc046a681eb854566ed86727a5604064c7d240ca5445beb
+- card_id: yasuki_umi_ushi_first_magistrate
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: yasuki_umi_ushi_first_magistrate.jpg
+    sha256: 269245822ecab63308c4f97393a7e6517bbc3a8417faf3c10f385abb0e58597b
+- card_id: yobanjin_raids
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: yobanjin_raids.jpg
+    sha256: 58a64ebf4c8ce8ad0e3faeb4bb9de6cfe65b9a4cda7d2c64ff7c03ec452eb87b
+- card_id: yogo_ayuri
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: yogo_ayuri.jpg
+    sha256: abfe2dec98a67a68eca9a17e3c7bf62dd624403ecefc60993aba139a6aecbf0d
+- card_id: yoritomo_minoko_experienced
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: yoritomo_minoko_experienced.jpg
+    sha256: c1679bf4dfcd752b4fd8211794e72ac4fc1526f46990771e2be0cb4bee19ae7a
+- card_id: zaiberus_trinket
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: zaiberus_trinket.jpg
+    sha256: daf22494111a5c36177184043155330eaf0357113d53fe6c0730aa6d89af4c3b
+- card_id: zansatsu
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: zansatsu.jpg
+    sha256: 1729d361fc5b0db21e9d3ef87bbf43bc8150e2e8a45f0a321d6122af7be0a6f6
+- card_id: zugaikotsu_ro
+  printing_id: rise_of_jigoku
+  files:
+  - role: front
+    file: zugaikotsu_ro.jpg
+    sha256: 2b3f7a9aa219cea4b5b228a2203a8d1406f2927f1cf65bb596cfaeee0153e7b2

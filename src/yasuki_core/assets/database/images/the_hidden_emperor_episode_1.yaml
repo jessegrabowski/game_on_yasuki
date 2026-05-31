@@ -1,0 +1,308 @@
+set: The Hidden Emperor, Episode 1
+images:
+- card_id: a_time_for_mortal_men
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: a_time_for_mortal_men.jpg
+    sha256: 510eda7b86d4b334c9c4934cb2c2e68f616e4841d37c08860a88f756c6e6a1bd
+- card_id: aiki_tactics
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: aiki_tactics.jpg
+    sha256: 1655d4ac3883a65076cd8d2c032049e24fa26fb788fe813021fb376fb5d89fe8
+- card_id: blackened_sky
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: blackened_sky.jpg
+    sha256: fcd7e3c61a4bb0e698054df7e53dfdf3dc8de7cdaf8e1bbb7d682140df2d5504
+- card_id: broken_guard
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: broken_guard.jpg
+    sha256: 166613b6a955d0798ee5640490ab1a7bf194290e6c962ceabe1f2d591a79b8d4
+- card_id: chasing_osano_wo
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: chasing_osano_wo.jpg
+    sha256: 9e049f0448e24628732ac5a9dbb45c90ef9ab4404c247dbf8598d74567503a80
+- card_id: concealed_archers
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: concealed_archers.jpg
+    sha256: aeaeabe001b04c889f58ee80ea400bf487231ae785d86bd0b3353e122729deae
+- card_id: cricket
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: cricket.jpg
+    sha256: de9d27ba33abd0e43e3810f01964a9c0207badcd15b0b025dcdc532ee41272b5
+- card_id: dai_kyu_of_anekkusai
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: dai_kyu_of_anekkusai.jpg
+    sha256: 9b9a009666cc7dbf4ebd5cb5668ecb4ef8943e560ecf31d50024579f6431350b
+- card_id: daidoji_rekai
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: daidoji_rekai.jpg
+    sha256: 4fe974c5a1b538e0f4c9fd85477667371f19a6e9ee63fe98d413d61af5638d89
+- card_id: damesh
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: damesh.jpg
+    sha256: 99e3f0f8eaf0e06831cbf43c88c63381800a9569ed4942bbe8a7f509d913a413
+- card_id: day_and_night
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: day_and_night.jpg
+    sha256: 0f209c9f29e2099ec1d326ce7823f8fac2841f2e6a0ec066ccb503939da26ada
+- card_id: elite_spearmen
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: elite_spearmen.jpg
+    sha256: ebac11d1c218ded2c70c5f40be6f6bd8e62362523e9c02978ec45772e7c8b499
+- card_id: flanking_maneuver
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: flanking_maneuver.jpg
+    sha256: 1db7faf616cdf81067da8f013004a3d9a6e474d625db372f68dacc7f160d6cb6
+- card_id: flee_the_darkness
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: flee_the_darkness.jpg
+    sha256: 0aa13adad1d9bab3bd5e7b5ba7758a8677205a6bbbe56c336a19c64c713338db
+- card_id: fu_lengs_skull
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: fu_lengs_skull.jpg
+    sha256: 291c7c40cb8ba1ac7b3d4df3e08cf645ed71cfeaaa4dca6d13516dcca8d80b96
+- card_id: grove_of_the_five_masters
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: grove_of_the_five_masters.jpg
+    sha256: 32520ab2a26854f9be3bbd6fc3617b112ca9900c7381e89c8308683aa4b507a7
+- card_id: hasame
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: hasame.jpg
+    sha256: 5e14b6ced1e6fb97bd720f159ddf66c81c3ae99f2654f27c7b6ac6294004137f
+- card_id: haunted_lands
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: haunted_lands.jpg
+    sha256: 0a3f6ca0a1cf457d5819ca77c85b1d136a571cb7cd31936bac9d0269463d7e37
+- card_id: heart_of_the_shinomen_forest
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: heart_of_the_shinomen_forest.jpg
+    sha256: a3634d7a030829835d620c824b87d1f66ae9cd4ff65987959659930842f38386
+- card_id: hiruma_castle
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: hiruma_castle.jpg
+    sha256: 8c4ad1a0cfd210766b58b967753c751cd696e81d94e9bb118be24540273b06fb
+- card_id: ikudaiu
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: ikudaiu.jpg
+    sha256: 337c416abc08521d7bf11cd8e5f8c3df1fd6bb6c825f6ef62ab1a9ef28e25245
+- card_id: journey_to_the_burning_sands
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: journey_to_the_burning_sands.jpg
+    sha256: 94fd6a72acdade289459e07635495fe82e50b93239ae028636d89a722e07e8e1
+- card_id: kakita_yoshi_experienced_2
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: kakita_yoshi_experienced_2.jpg
+    sha256: ae242e27889efa50f22cc36d003b38dd8a39adfc0c6f83dfdbd6e12d0b4db7a0
+- card_id: kyoso_no_oni_experienced
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: kyoso_no_oni_experienced.jpg
+    sha256: acd31d36c6a0be9a4e1b563129990c4d45043ec716b21e26539b0815291ef478
+- card_id: masters_tactics
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: masters_tactics.jpg
+    sha256: eb16898b884b5f602f53c34a726ade68245313721c7c2bef0471586dc5f50df9
+- card_id: mizu_do
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: mizu_do.jpg
+    sha256: ae66b699de4f5d476117f74aca2438b6557f140e213eacdb4d7395b9b55eb2d2
+- card_id: mukami_experienced
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: mukami_experienced.jpg
+    sha256: 3408fec424024268ab4989a420b3b67c8893eeff5a015ba057d00d9a98771f80
+- card_id: naga_apprentice
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: naga_apprentice.jpg
+    sha256: df2ada48fde5576c25532ed2606f6c9d140b158fbb2c8e4c11f088fdc25d914a
+- card_id: naga_storm_mirumoto_mountain
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: naga_storm_mirumoto_mountain.jpg
+    sha256: 0366fe2b1c793e062e313dd27d173ff9551be4f8b9ec1dc0a557c37c7ccee0a1
+- card_id: naka_kuro_experienced
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: naka_kuro_experienced.jpg
+    sha256: 0120a97f258ef4661c56cf85bf287922473a2cced8ced2282787d7531bd8ddcc
+- card_id: open_fields
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: open_fields.jpg
+    sha256: d8316a1d136e8606999a0384cb1828302090bb1bcad56c2153a6d33e96d003cd
+- card_id: otaku_tetsuko
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: otaku_tetsuko.jpg
+    sha256: 0a132ae159bc3586493ab8c330f29effa713db7133ad966ce28b30debcdb15a1
+- card_id: otomo_banu
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: otomo_banu.jpg
+    sha256: 5db943007392128da6a32e211723b322feca452c246fbaea29f4c2da6e058b76
+- card_id: political_marriage
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: political_marriage.jpg
+    sha256: 69f642b4da10d304e24b3ad713c7648aa49af969c436cf9f95360ab3b77f9749
+- card_id: ralish
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: ralish.jpg
+    sha256: 9107aabb7f94bb2415901aae6d2ddae73413d8595fa7b8482dd10886fb57f4ec
+- card_id: rebuilding_the_empire
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: rebuilding_the_empire.jpg
+    sha256: 526968e1d0e7f1dcbb710f1156254c27c2a17120b19fe4465cc697f8b55909bf
+- card_id: scouting_team
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: scouting_team.jpg
+    sha256: e66edc8f31975070a7e12c801130de83abec7e4eb67d60e7a1b9412c52a09f84
+- card_id: selection_of_the_chancellor
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: selection_of_the_chancellor.jpg
+    sha256: 3126b53322a12d57ab8852d17bf8953e0a1fd40eeccf03482c88ac13c7355a1e
+- card_id: shahadet_experienced_2
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: shahadet_experienced_2.jpg
+    sha256: 14885b6e515d77d7aaada02b424c429bf338157bcb5ed251c1bf70791078368e
+- card_id: shinjo_yokatsu_experienced
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: shinjo_yokatsu_experienced.jpg
+    sha256: 41e32d4b694588108891bcd3e3a82e67fc23bf3800de90c1bb18397d61f580af
+- card_id: shiryo_no_hoturi
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: shiryo_no_hoturi.jpg
+    sha256: 83866715073648d6d75125454efd74e2cdefad897ab3926f3a46733f2e0c6769
+- card_id: shiryo_no_tsuko
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: shiryo_no_tsuko.jpg
+    sha256: d6c35b8626870042e39fe6784468afb5cd72d4cb3b1e9ce59a0d87b01e12ace5
+- card_id: show_me_your_stance
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: show_me_your_stance.jpg
+    sha256: a0f887a76b90815e7d2412caec60ccebec81e79ec12547c0c9afb49ca811ac01
+- card_id: takuan_experienced
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: takuan_experienced.jpg
+    sha256: ec09e4640baaa15739beab627b49c49bba9e4b56680b245faeed9276e7b5be33
+- card_id: the_hidden_emperor
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: the_hidden_emperor.jpg
+    sha256: a38ff87431ec425d788e7558826b2526a5fc327ba759e42c2b239bf8ccbd4092
+- card_id: the_hiruma_dojo
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: the_hiruma_dojo.jpg
+    sha256: d0af1688cb208385694b1a1650a939d538389e1f407cbba804120bb7738481b6
+- card_id: the_jade_throne
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: the_jade_throne.jpg
+    sha256: f54a8c9db66adfe903e8137f58335f06ab342b04f0309dc3d398c1027f0f2b84
+- card_id: the_mountains_below_kyuden_hitomi
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: the_mountains_below_kyuden_hitomi.jpg
+    sha256: 5f837323995a32c866c2b1e0d03a612381aa2c2cb8313d8f4e944ce33c3c350f
+- card_id: the_peoples_hero
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: the_peoples_hero.jpg
+    sha256: 2baa42e3ac83f683ede366eebf766721bfcf6209540ca7a363a6f0f685ce1531
+- card_id: the_scorpion_children
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: the_scorpion_children.jpg
+    sha256: 2505d30c4e35785af71811e2f4f13b9f6dea75dbfc82dee4f231e9cd484f3226
+- card_id: tidal_land_bridge
+  printing_id: the_hidden_emperor_episode_1
+  files:
+  - role: front
+    file: tidal_land_bridge.jpg
+    sha256: c65770133a7eb2485ada5b8ef020c23446b86bd224a62f5b9b48f0377f2e8878

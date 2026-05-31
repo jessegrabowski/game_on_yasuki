@@ -1,0 +1,608 @@
+set: Gates of Tengoku
+images:
+- card_id: a_vision_of_ama_no_fuchigoma
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: a_vision_of_ama_no_fuchigoma.jpg
+    sha256: 8dfdb1ef8f10108e5a2745036cd8d8e9b96d003204f29bbdc9326285017e396c
+- card_id: a_wish_lost
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: a_wish_lost.jpg
+    sha256: f3f672a6b2169db6f21027d11510bcfa1ec9a460cd77ca6eae4861f5f6212f4b
+- card_id: akodo_motetsu_scourge_of_the_scorpion_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: akodo_motetsu_scourge_of_the_scorpion_experienced.jpg
+    sha256: 057824f68d5239377d204e4e44320f50d7ee31d46470475dfd3e3e45ab6647eb
+- card_id: akodo_nojima_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: akodo_nojima_experienced.jpg
+    sha256: 54c972b8ff7a5cb319a4e6f44aa6c6b2204915cef6cb29b8923b4bbd6c7a13a5
+- card_id: along_the_coast_at_midnight_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: along_the_coast_at_midnight_experienced.jpg
+    sha256: ab940ce86fa97b449dd46f965366c2449cd330c0feddb562054c00ad43ca913e
+- card_id: asako_dotari_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: asako_dotari_experienced.jpg
+    sha256: 2960c2e88256dd9f14032bff4604e109fe3044806bd5b16f4c7f15bd5ec76b7d
+- card_id: ashigaru_partisans
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: ashigaru_partisans.jpg
+    sha256: 8457c430fab14952d8204e3efc81e3d2c55ccfa7600202b3d4a04cfc311a7d0f
+- card_id: bayushi_mifuyu_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: bayushi_mifuyu_experienced.jpg
+    sha256: db81bc554e1c350b7392f728d8ad61bf03173795d53d8a51712df4c947e15050
+- card_id: bayushi_waietto_tanuki_clan_champion
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: bayushi_waietto_tanuki_clan_champion.jpg
+    sha256: 9ae6bc3cf2dd5a41bdd9994ec79fa6c8f49d9ae26cd847d2617a5f3a084c4f7f
+- card_id: bend_like_a_reed_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: bend_like_a_reed_experienced.jpg
+    sha256: 6224c3c6527da038c16d15893c1e16ef3ed74794212e10ad0ee48d37442c5b49
+- card_id: bitter_truths
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: bitter_truths.jpg
+    sha256: 5c425723582d786f44c6f0ae4d322ac7619101d53f104ea1677e0d4f105e0f6e
+- card_id: blood_of_isawas_tribe_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: blood_of_isawas_tribe_experienced.jpg
+    sha256: 250519e1ed0d8e28ec0d5c8e98817fd5b43bf4a248c4ceb0aaef8f80107c1e45
+- card_id: brash_challenger
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: brash_challenger.jpg
+    sha256: 46ecde759c9b6b9de9deaced2d1de8778678ea370989eb92814ef28c16dfd436
+- card_id: brnn_the_eternal_experienced_2
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: brnn_the_eternal_experienced_2.jpg
+    sha256: b98a13413e98cee6656dc19c5a2d0d4e1033e385a5cd5885c4c37d545da795e3
+- card_id: call_of_thunder_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: call_of_thunder_experienced.jpg
+    sha256: 9d16c9948b39c2e24fff6b2868c00bd2b1115b8a8d737e1f46f2e0a8c3b4449e
+- card_id: daidoji_ujirou_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: daidoji_ujirou_experienced.jpg
+    sha256: 14b7f4e4def54ac5f26085dfa7bbf06cf56dda896dd2771ae8185ee0ca96eff2
+- card_id: daigotsu_ryuko_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: daigotsu_ryuko_experienced.jpg
+    sha256: da9ee13d83756ec78c612f9c115e32a7ef27116d44a178a6c6a5c33566e3c752
+- card_id: dangai_sensei_tanuki_clan_tattoo_master
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: dangai_sensei_tanuki_clan_tattoo_master.jpg
+    sha256: 021393b171e115c0f5193b4753d2699b7f746d55b117baf628e667e0643f0f24
+- card_id: dark_oracle_of_air_soshi_yoshihara_experienced_2
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: dark_oracle_of_air_soshi_yoshihara_experienced_2.jpg
+    sha256: 276be1168566e368478722a55779129cefacc375d3002b65dde7a3fd5ccfcd64
+- card_id: dark_oracle_of_earth_the_broken_man_experienced_2
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: dark_oracle_of_earth_the_broken_man_experienced_2.jpg
+    sha256: 2b61ba8251d7aba97141a6587d516085004a9f47fbd331632d9d033f1fac748a
+- card_id: dark_oracle_of_fire_tamori_wotan_experienced_3
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: dark_oracle_of_fire_tamori_wotan_experienced_3.jpg
+    sha256: 3d5b04f7300015383ecbc8f1d8eee44eed0877941589a0dfd3454461ed34fd08
+- card_id: dark_oracle_of_water_hida_saiyuki_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: dark_oracle_of_water_hida_saiyuki_experienced.jpg
+    sha256: 3e917f061f859a182b4265a59b8bb814782f38bb84e560318b5fafbcc479abc1
+- card_id: decree_of_the_hantei
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: decree_of_the_hantei.jpg
+    sha256: 16e53e259a7168f9f73b269d4c605f3c0c3c22852381abbf5e9e367148ca9c7d
+- card_id: desecration
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: desecration.jpg
+    sha256: 088a5d5bd0170a4d779dbf3625ea8ebf3f4c4372dcdfab108a4b5470c12d4eb8
+- card_id: dismiss_the_unworthy
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: dismiss_the_unworthy.jpg
+    sha256: 1a859d7f830cdf7920fe19c33c638288d2f563a0c4cba43d1f5f1d59cc58aa38
+- card_id: doji_muroken_master_steel
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: doji_muroken_master_steel.jpg
+    sha256: cf4b5377f176e1da02dfe7c9277b06e1400ba58dafe2da0537c6ffdb931bc75c
+- card_id: fall_of_thunder
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: fall_of_thunder.jpg
+    sha256: 55c45537c3c6dd911f89299c1c464badd16eb1fb2b0d3bbb30af67046f22d23d
+- card_id: favor_of_the_blessed_guard
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: favor_of_the_blessed_guard.jpg
+    sha256: fbc365e6dfed2d425e02c3e1998d20eb167a60956ca95bf36fc45586f2a07c63
+- card_id: gift_of_the_emperor_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: gift_of_the_emperor_experienced.jpg
+    sha256: c79510fc16aa22f2bad17ba1a87ea0c8c8e97325982ce7ca0179917edfb88db8
+- card_id: guardians_of_the_three_dynasties
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: guardians_of_the_three_dynasties.jpg
+    sha256: f3f133029a3a9b2c5159eeb4d04fedd44d149e393b33f0f746dea874c24a2b71
+- card_id: gusai_haruna_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: gusai_haruna_experienced.jpg
+    sha256: fa5ae3cec35e7dd1820218653a74a46f07f71f3f3fef5fa2b1ca3be01e7eb9e2
+- card_id: hida_o_win_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: hida_o_win_experienced.jpg
+    sha256: 7d9ef92c1f634a5c9de7d85f71fd3faa9a6d966b4810328b1b2e317dc3c202fb
+- card_id: hida_yamadera_dark_human_experienced_2
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: hida_yamadera_dark_human_experienced_2.jpg
+    sha256: 80f6efbdefd60c9f325cf336ab05c69f3e958fb1f0afaa7edc516e80d2590e30
+- card_id: ill_tides
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: ill_tides.jpg
+    sha256: 69fbf94a704c335c61ba990bf4fbae21e83aed39467698650617ae42e1bbc8d9
+- card_id: isawa_kaname_experienced_2
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: isawa_kaname_experienced_2.jpg
+    sha256: 2d97bee4c657cd203ccae18e4f262eb1a3915e3d849d5d6db77a0c55d1745466
+- card_id: iuchibans_hunger
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: iuchibans_hunger.jpg
+    sha256: 12a3b8253d8b411dff3ca938ec2c3befb853bd305c19baf00f951819f5dc4d86
+- card_id: iweko_shibatsu_the_shattered_prince_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: iweko_shibatsu_the_shattered_prince_experienced.jpg
+    sha256: bfccf77206616a277458b96233950b4966f3de79b89c6055baef09cbd4015aa0
+- card_id: jinn_kuen_dark_abbot_of_fu_leng_experienced_4
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: jinn_kuen_dark_abbot_of_fu_leng_experienced_4.jpg
+    sha256: ccca82097875b92543cf51ea4d9ff9dc6980e01b289c3ef8a716dc971b91482d
+- card_id: jotsu_eihime
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: jotsu_eihime.jpg
+    sha256: 39813d51d0cf5ff0b3d88da2456831731772755ed455384b5394acc2c7e04aad
+- card_id: kaiu_kempachi
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: kaiu_kempachi.jpg
+    sha256: cdda4e954dfaf85d45e5dccbc310e71a31c1a9df747863ccad39a9c280f9b657
+- card_id: kakita_mitohime_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: kakita_mitohime_experienced.jpg
+    sha256: 161803a5e29120ce9cd482854fbcdd475a96b2d0b2625e763c4e385ebe68f3f7
+- card_id: kanoltichek
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: kanoltichek.jpg
+    sha256: a67c325501995ba722441cf1b14c59b31d62c322f4e047f8dbfce78baa11f930
+- card_id: karan_bhatt_ruhmalite_advisor
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: karan_bhatt_ruhmalite_advisor.jpg
+    sha256: 8f10f77e77c6ebf245bcacb7fc8783661f7add9704add2cd3bf23bbd2e9a7f68
+- card_id: ketsuen_armor_of_the_shadow_warrior_experienced_2
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: ketsuen_armor_of_the_shadow_warrior_experienced_2.jpg
+    sha256: eff81d7eaee7997a78fe265df3ce650f3d9a8209f8875923c6f2d02e56411bf4
+- card_id: kharmic_lamentation
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: kharmic_lamentation.jpg
+    sha256: 7a675ddf532221e408867663460eb4d44385d89d0cd874f7d7d5b5796465fd06
+- card_id: kiba_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: kiba_experienced.jpg
+    sha256: da1ac9cfcf10f3d148bd61f77409d29694b2d264ef811c59d1c9cdbe0bfe14ce
+- card_id: kitsune_kohaki_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: kitsune_kohaki_experienced.jpg
+    sha256: a226c7e406dde07a32c388c8f275a0a0668fe225bbb1761658196c0aed9d957c
+- card_id: mantle_of_flame_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: mantle_of_flame_experienced.jpg
+    sha256: 767a3a2d19cd03851b0d56fe99afe211ebdef670e098d3c5791ed6f43a576231
+- card_id: matsu_chizuki_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: matsu_chizuki_experienced.jpg
+    sha256: 1aa8ee6500bc6e891abdf46b4bea2d4a54252debc43fa62eaf0a7ce65c291b8d
+- card_id: measure_of_wills
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: measure_of_wills.jpg
+    sha256: 3e0598a0581d29deb1313dfa2ef7d6c109826f15d150ca732e4bc36474264245
+- card_id: mirror_of_the_twins
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: mirror_of_the_twins.jpg
+    sha256: dc53796cacd98faebe96c2a3bfe47dc022fb4be31e82ceef6b104c1019f44a90
+- card_id: ninube_aitso_doji_yeiko_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: ninube_aitso_doji_yeiko_experienced.jpg
+    sha256: d4093c97db4e5af64ef66adfed76d5db8a88dc56a416e62360ba39043b93c989
+- card_id: oracle_of_air_isawa_koizumi_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: oracle_of_air_isawa_koizumi_experienced.jpg
+    sha256: 5ddaccb7623cbc294bfc0623cc74e90edcf3df3dc6671782855cf73973260e50
+- card_id: oracle_of_earth_mirumoto_saori_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: oracle_of_earth_mirumoto_saori_experienced.jpg
+    sha256: d34fff95eecdf3da2273fcdb19e916024812019a4503fb31c8b6907e00796d31
+- card_id: oracle_of_fire_kakita_ibara_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: oracle_of_fire_kakita_ibara_experienced.jpg
+    sha256: df54f0da7ed4163692b9c85fbb680562e22ea0cb6b0abf50839e09fd17e435b3
+- card_id: oracle_of_water_agasha_kyokuta_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: oracle_of_water_agasha_kyokuta_experienced.jpg
+    sha256: 5c7a3bc5275e73958e750c1e13555392f7b9ac3c4472c44f34670a636a9fc724
+- card_id: pierce_the_spirit
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: pierce_the_spirit.jpg
+    sha256: f322ff5a8e493eb9f7266f20afcf2392c3deaaa3370381c221e6919f64e767e2
+- card_id: plains_of_whispered_melancholy
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: plains_of_whispered_melancholy.jpg
+    sha256: 2dd358ba978266377d3ea44b3907d9e6743a96307b260fe237ce55309ee80fc5
+- card_id: prickly_glen
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: prickly_glen.jpg
+    sha256: 6fa0813c78fc1b856ea156e8600e909370955cf9c66bb920d43251be53ec14df
+- card_id: questionable_supplies
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: questionable_supplies.jpg
+    sha256: b53fccc431e78262b4427e41bf11e4f97733f2c13e82cbd57785fc67851cb6bf
+- card_id: ruby_of_iuchiban_experienced_2
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: ruby_of_iuchiban_experienced_2.jpg
+    sha256: abb1c9833994358302d8d67f8ceafceabb257a4827d328a18e3142c789c1c6dd
+- card_id: sasada_pearl_champion_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: sasada_pearl_champion_experienced.jpg
+    sha256: 286ab2dc38d7c24ae8a65167e8c1033fa7e302913c0da994387179f7a308fb2f
+- card_id: seppun_remnants
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: seppun_remnants.jpg
+    sha256: c04ffa275f785f894c493977912cbd800a54c329afbc1b251520a60cb6544e59
+- card_id: shiba_kintaro_the_remembered_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shiba_kintaro_the_remembered_experienced.jpg
+    sha256: ec91cb88ab4f6474819f6e0a51fb81fc5fe18b2d9439d010e67535ff43244420
+- card_id: shinjo_dairu
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shinjo_dairu.jpg
+    sha256: 175ae03890f959e8181c6fd2c166d18d2710acea8748cea2e5892ad4e2c4db5c
+- card_id: shosuro_isaki
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shosuro_isaki.jpg
+    sha256: e62f290d281c44411dd74d6ae57c127fc7df491e9bcd4bd132b3b078c3154e51
+- card_id: shoubai_ancestral_weapon_of_the_mantis
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shoubai_ancestral_weapon_of_the_mantis.jpg
+    sha256: 2d90ad2a98a0f33d1471e70275238a1b2997a60470729fffa3cebc559eaf1495
+- card_id: show_of_authority
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: show_of_authority.jpg
+    sha256: b4b711427fa413d3a56252f56350148784cc6bd3183d9176c254c7017896faae
+- card_id: shrine_of_compassion_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shrine_of_compassion_experienced.jpg
+    sha256: 606e28531e7f921612bad7ef594e1b2443ea490dfb23c74df4973a39cfccb9a6
+- card_id: shrine_of_courage_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shrine_of_courage_experienced.jpg
+    sha256: eb7f5c144700fec4d7b3b97364c4d8b4360eab2214a6d076be9f59ef35775086
+- card_id: shrine_of_courtesy
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shrine_of_courtesy.jpg
+    sha256: 08b0107296e5571022d210c6c766d4dba7fdfa0cf2e6f701ad67cd1028fcd022
+- card_id: shrine_of_duty_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shrine_of_duty_experienced.jpg
+    sha256: a860db7b64b9b1ef4f20f4374ebe53d927936724478892280c90608a5cf1d6fe
+- card_id: shrine_of_honesty
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shrine_of_honesty.jpg
+    sha256: 5190b19653ff47aa987b9bf87d44e4a1be2f0d7e0328136f1b02e2fe58174567
+- card_id: shrine_of_honor
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shrine_of_honor.jpg
+    sha256: cccb9e50b7a1a73f3757b4c8f5f61c7d45bf1723b32b09e74679c25efed059f2
+- card_id: shrine_of_sincerity
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: shrine_of_sincerity.jpg
+    sha256: 6db17c8e9a71074ec82953cbbf087c383439e6f2735fdd443da9abd2c6872b98
+- card_id: struggle_on
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: struggle_on.jpg
+    sha256: c4dd36d97018c1300e9acb8dcc84a5175ab1cf0a3e07e83265aab6528fbf4333
+- card_id: susumu_neya_heart_of_vengeance_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: susumu_neya_heart_of_vengeance_experienced.jpg
+    sha256: f77b67e7ec085acfb00e0f1920735085df0f8d2e9be304f2709e892195a58a93
+- card_id: the_bad_death_of_hida_daizu
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_bad_death_of_hida_daizu.jpg
+    sha256: 3e6e769354d70929be969a22e1e40d4ad072352b2c754043753f255f5325212b
+- card_id: the_boar_returns
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_boar_returns.jpg
+    sha256: d47326a78ea29de736733ee9008983e39b772047eb4d99b7988bcb52b5e7e3bc
+- card_id: the_confessions_of_yoritomo_aranai
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_confessions_of_yoritomo_aranai.jpg
+    sha256: b770c651989adab27b3ebae3ab9beb1d24101eb8811434feb6e685378bdba105
+- card_id: the_dreamers_journal
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_dreamers_journal.jpg
+    sha256: 91a1d6fe6ce4f0af0a6ae18411396065de9c59f973a140d5a257897955d58ac3
+- card_id: the_eyes_gaze
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_eyes_gaze.jpg
+    sha256: 7bb13f9373183d3c6c9f560c77f1fa6ae572af697392a68e03d74667009815e8
+- card_id: the_fall_of_kyuden_seppun
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_fall_of_kyuden_seppun.jpg
+    sha256: 226008a15768ab350984abf33e252f57b056d83f0e943230a41ceca9506744ca
+- card_id: the_false_naleesh
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_false_naleesh.jpg
+    sha256: 2eccab45501f90118c77638c130a59540b373e4b0d9bb1a20041b7f6cdacaee5
+- card_id: the_false_shikei
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_false_shikei.jpg
+    sha256: 033bdfe8489606af0fecfc163fcbb75bc71073c862df4488e2ef1a22ab62df64
+- card_id: the_future_looks_bleak
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_future_looks_bleak.jpg
+    sha256: a6f10942d4dfc429cfc9dbe5e8b721b36cb7f48b114505a7ccae67e82e912388
+- card_id: the_tale_of_sacred_stone_village
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_tale_of_sacred_stone_village.jpg
+    sha256: 82f01571e598d1623937a410996ecf9125be6dc76cf93262bc2e2682755f9f38
+- card_id: the_way_of_the_black_watch
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_way_of_the_black_watch.jpg
+    sha256: 1032e17a6af2fd7fe7a0f195d1b003b21b0c6ee4762b4448c3f32ce66005f123
+- card_id: the_way_of_the_tsukai_sagasu
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: the_way_of_the_tsukai_sagasu.jpg
+    sha256: d06a2865ed706d08719eec16b62088c3180d6e746251ae685a37c20fefb778aa
+- card_id: to_the_next_generation
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: to_the_next_generation.jpg
+    sha256: 17b255d42f5de0034b24c00e10fcadce0ed215b31601aab4f4eff95e7b5687ed
+- card_id: togashi_noritada_defender_of_the_high_house_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: togashi_noritada_defender_of_the_high_house_experienced.jpg
+    sha256: 0f02857cc7534537c80694a581630e8842c6f75b7cf30f9df78c4fd03c2318a1
+- card_id: togashis_daisho_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: togashis_daisho_experienced.jpg
+    sha256: c81f19eeda26eb839c5edafeab6b8f36005878702f19892fbbce5ea5411ec32c
+- card_id: tricksters_legacy
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: tricksters_legacy.jpg
+    sha256: be4446dabae9c295495ce9c86ca2f925bfd3defddea08b3a03d40bcb42b48480
+- card_id: tsuruchi_technique_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: tsuruchi_technique_experienced.jpg
+    sha256: af2338e67048483e44214e5d129761e0a766d586320b9ce106b1b7d3d4ba8f29
+- card_id: tsuruchi_yurio_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: tsuruchi_yurio_experienced.jpg
+    sha256: 9af83a889be9c847830dcbc52322b24b90e1dcd6b316b67f68b64ba4edd35cb1
+- card_id: utaku_gorou_colonial_stablemaster_experienced
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: utaku_gorou_colonial_stablemaster_experienced.jpg
+    sha256: fc9b6432f142ed4f3deaf3a098d12b5116c023b718fc648d2c4ba0c62da44dba
+- card_id: veteran_of_thunder
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: veteran_of_thunder.jpg
+    sha256: c430f3eda3f29186c7cc22d424441fe4f3cd7fbb6b60ba68a33e984fd2c3dd83
+- card_id: watarus_masterpiece
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: watarus_masterpiece.jpg
+    sha256: d251f57b1aed54e8559b38d00c2928074ce2bb334ca6a7682ed04c873dc610c7
+- card_id: yoritomo_robusuta_master_of_gaijin_pepper
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: yoritomo_robusuta_master_of_gaijin_pepper.jpg
+    sha256: d009d37e09aec3b94cfdd97fa37b4207c6bfd1dbbc331968aa46692e63ecbc82
+- card_id: zenathaars_faithful
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: zenathaars_faithful.jpg
+    sha256: a69bed892183d22ae504d06f184521af9a818b3b9cbc6e4ddc075511ebaa57e9
+- card_id: zintikkir_sensei
+  printing_id: gates_of_tengoku
+  files:
+  - role: front
+    file: zintikkir_sensei.jpg
+    sha256: f23db40d94c3b9ed6df84f2f53e5c2c2ba33e22ea5539a255a97c7695ee60a52

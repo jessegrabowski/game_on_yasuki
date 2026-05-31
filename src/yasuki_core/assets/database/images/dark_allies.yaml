@@ -1,0 +1,968 @@
+set: Dark Allies
+images:
+- card_id: agetoki_no_shiryo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: agetoki_no_shiryo.jpg
+    sha256: 2abb6b59196814a303481bb0a1d4a41d711a9e13a2439397ffbeb1f0147f40cd
+- card_id: aid_of_the_grand_master
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: aid_of_the_grand_master.jpg
+    sha256: 1e5c8a8e8825a30b0dd9c42a3d61e4fbc626163c3b877a449ac7da76621a13d4
+- card_id: akodo_jusho
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: akodo_jusho.jpg
+    sha256: 81015e7c8c8d378017e88037e4b9d090171afd7fd0d92233c6f1ff6303c40a92
+- card_id: akodo_map
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: akodo_map.jpg
+    sha256: e1e423cdf0d0559b12a09f19bcc0e570e0748953ac23d53f84a7e03dd917b8cc
+- card_id: akodo_ninsei
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: akodo_ninsei.jpg
+    sha256: be417848d1c1102c5fa92adbe28ed9571536bca3954c275bf2b6a7b32bf08d0d
+- card_id: asahina_keitaro
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: asahina_keitaro.jpg
+    sha256: d136df3ecb4d855a83f93da7eb2d202ce02907d8934b1bdf2b468fb293cf9846
+- card_id: asahinas_blessing
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: asahinas_blessing.jpg
+    sha256: ae38eaff9cac4e806f65d5cffbbe75be38e6596e9910aa8cdaa61e59c714d55b
+- card_id: asako_hirariko_experienced_2
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: asako_hirariko_experienced_2.jpg
+    sha256: 8d93be3592fbc81f5c6d12c7319320c47127954ec3a307da14304dd38f727735
+- card_id: asako_misao_experienced
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: asako_misao_experienced.jpg
+    sha256: e62754df817cf82426cb23819089bd2914961f1f0847b71daf109a1172ce2a52
+- card_id: asako_yuya
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: asako_yuya.jpg
+    sha256: 4e25ad6efca9c6f74b222c0865322061cfdd894432b999f25a52615bd44089a7
+- card_id: auspicious_house
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: auspicious_house.jpg
+    sha256: 9dfed0a2a37de623764c9f9d3020ca6c0faf388728d89b9023adf4f1f237fefd
+- card_id: baku_no_oni
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: baku_no_oni.jpg
+    sha256: e8e2a0946cf05df3b6825db172552b98effec155ef1b7f0c6cf372e337e505f4
+- card_id: bayushi_hirono
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: bayushi_hirono.jpg
+    sha256: 1b5a1792f9b9ea2d45c16cdfe4bb42dbde34b5c60d66b46e9f452c3744b69502
+- card_id: bayushi_norachai_experienced
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: bayushi_norachai_experienced.jpg
+    sha256: 601620f6e9124e96d2d6a9a35a5914d203a310d6598d9f117d913c02406e476b
+- card_id: bayushi_ogura
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: bayushi_ogura.jpg
+    sha256: 097ff2a09f622c7a35a602a8d93aee278477b4b20cf3d2b5e7a228dc2998f46f
+- card_id: bayushi_toru
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: bayushi_toru.jpg
+    sha256: 3739064eb3c2743fd11759535491741a28d845c95146c00d6593ae1a491ca05f
+- card_id: be_the_breeze
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: be_the_breeze.jpg
+    sha256: 30087f7aaa59653aecc4c1f0c6a998cdcf609392f99f1961e1d397f9f2a684e6
+- card_id: bitter_vengeance
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: bitter_vengeance.jpg
+    sha256: be251a35187f3945deaddeff166e22db72300c1ad7c942034497f881b1fe9eb5
+- card_id: blackened_honor
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: blackened_honor.jpg
+    sha256: 6be9219704330cecf77b8906e26b0207f61cc8911d7f7a40bcffb2225d1558b4
+- card_id: blade_of_truths
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: blade_of_truths.jpg
+    sha256: 66cccb18349e3a2954c1e6ca19e9af4eb3014eb8e336ae17484a1decedf04b99
+- card_id: boastful_proclamation
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: boastful_proclamation.jpg
+    sha256: fd3960161206af5d85711465d4b0ecec01d77b66d6dfe43811cf4feb46f9fe2f
+- card_id: break_the_wave
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: break_the_wave.jpg
+    sha256: df7bdc8161ca1344f554b00e71fff0017be8fb72b34da2db39e8f4135678b6a4
+- card_id: celestial_sword_of_the_mantis
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: celestial_sword_of_the_mantis.jpg
+    sha256: 8bc9358522c8836feb0f106b963076a104a182accc0ea6024ebc79fdeb5a86e3
+- card_id: city_of_lightning
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: city_of_lightning.jpg
+    sha256: eff9ab4402645863090efcfaf15d7315bd226f1ee920523075fbdfc5f08378e9
+- card_id: city_of_the_lost
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: city_of_the_lost.jpg
+    sha256: d979d31cb4d49e464c57ac14b7b7e1f22e86aa341ab0f01f39493ac14a71602e
+- card_id: clear_water_village
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: clear_water_village.jpg
+    sha256: adfa59ad1b72cc262d848f56ac59c30a93ef32b78a0aaf51617d2aa923ee28e1
+- card_id: construction_crew
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: construction_crew.jpg
+    sha256: 427451084625446abfabb13350a3d55e8c2df6f68984557506918ed93b5dbfdc
+- card_id: court_intrigue
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: court_intrigue.jpg
+    sha256: f7372c18616a6a46216a49d2f3dc1970247c862507b91a5007849de18a498081
+- card_id: cowardly_conscripts
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: cowardly_conscripts.jpg
+    sha256: e573d82faad01be366645c23d310a4e86a36ef0766835a60306308afcc69d834
+- card_id: curse_of_weakness
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: curse_of_weakness.jpg
+    sha256: d75bb8e1c037fd19369666da5487bfcf4c1db29ffdcf12fbbcc48c35f9b60484
+- card_id: deep_earth_sanctum
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: deep_earth_sanctum.jpg
+    sha256: d257d5bdf2dcb48035c3e92f1a6704ee89ca268bfc9e397757b0128452f4feab
+- card_id: defend_yourself
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: defend_yourself.jpg
+    sha256: 49351490bb9d60138f235375ae2e8570519edcb5d226802530131f0dd8c7cb5b
+- card_id: doji_kazo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: doji_kazo.jpg
+    sha256: ebf226fdc363cb1677ac05ca681c0367f6599151b3d5bc869024c75f35d1c348
+- card_id: doji_midoru
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: doji_midoru.jpg
+    sha256: 8f5345768c193da49d6f35b79f77f939e18c4ad68ec0c5db4113cef0ed765807
+- card_id: doji_okakura
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: doji_okakura.jpg
+    sha256: 1bf1c61ee0ead75bcf17c8bf5bc65fbac4dac233f06172a4328754f9c463fd04
+- card_id: doji_seishiro
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: doji_seishiro.jpg
+    sha256: 127d7ea501bd2e30bde6a2ad99456e1356d858aaa5c5ed389449da7337e0671d
+- card_id: doomsayers
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: doomsayers.jpg
+    sha256: e9f5dc06ea0e35ac9c0fe61bedee845e50fb0842c51804fdb0f57236ad75793c
+- card_id: drain_the_soul
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: drain_the_soul.jpg
+    sha256: f0159056839ca8a0cf2f9c8c912fc19baf239f0b9c67acf477fb06f015dc19c7
+- card_id: draw_from_within
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: draw_from_within.jpg
+    sha256: 0929fe3a8503b24de5c283cbe28092c0a7bccc61ebe2c12918542140371149cb
+- card_id: ebbing_strength
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: ebbing_strength.jpg
+    sha256: 3a6b25ee0a31348815715d5bd746517fc32522706ae78c131a53037c60029b1a
+- card_id: face_me
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: face_me.jpg
+    sha256: 3151c19bdb11910a9fce072cfc853f27666c0954315a7fed84cd98d28fc40987
+- card_id: faith_in_my_clan
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: faith_in_my_clan.jpg
+    sha256: 1cb659bdf2a678c15726f791fdb3ec7f11cd56c992756ab0754af3203b63d591
+- card_id: gale_force_winds
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: gale_force_winds.jpg
+    sha256: 8326027c14b905534bf9456a81e822e4b9c77a1cbebed81b87680c6b07b1e25a
+- card_id: gift_of_the_water_dragon
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: gift_of_the_water_dragon.jpg
+    sha256: 23419e3db3d42d461be4dd6a203d396193de06a0590ccc062ca58a1229ee15bb
+- card_id: goblin_slingers
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: goblin_slingers.jpg
+    sha256: 75b619a4ea8f5e414b83cca55dd1fd4034c44615ad67c70807eeff3e484022ba
+- card_id: goju_kyoden
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: goju_kyoden.jpg
+    sha256: 3c9b78cb9790b05056c8d32a993c813960c4122895d22d920544aa035823af8e
+- card_id: grim_mempo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: grim_mempo.jpg
+    sha256: bf4324319c71fdc8efa04b40505dc2d392a894a035e17cb9c71a8abdeba98d8d
+- card_id: heavy_armor
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: heavy_armor.jpg
+    sha256: e695a0ec9ad809699ed776d61d96e8343293d266336ff4114673d78b8ed407a7
+- card_id: hida_hitoshi
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: hida_hitoshi.jpg
+    sha256: 09feadc9d1b2c84033ea1df781feb9f16c79bd7a2e5d3688696001777ef1b8d4
+- card_id: hida_kosho
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: hida_kosho.jpg
+    sha256: 0a26e3e9f1cc74844759dff30111baa0f838d0a4d6e817487019d81aee2b65c0
+- card_id: hida_shara
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: hida_shara.jpg
+    sha256: f38f59f57c06f9d683ec8cc46cf878fd3b618d72cb43e8dcc1deac5a98d99b26
+- card_id: hiruma_slayers
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: hiruma_slayers.jpg
+    sha256: 90090a44e0c916cbb36c3239082b1e2b9a9c04962b2f83e0a778c928ee5bb1b0
+- card_id: hitomi_maya
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: hitomi_maya.jpg
+    sha256: 55d83c6ba72229f1555b08e118e1e1adbe00bdd28977c64d7984a716d60292ff
+- card_id: honors_lesson_dojo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: honors_lesson_dojo.jpg
+    sha256: 0608e921ec3ba47621388fc22f8973c207c004b8453399a14610aba9c035991c
+- card_id: hoshi_tadao
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: hoshi_tadao.jpg
+    sha256: bf2f3572627e9e4705837545752d58ae763b97d13a05c27bc330489912a15bc3
+- card_id: hoshi_takeji
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: hoshi_takeji.jpg
+    sha256: f53e8e888ed1109fd05e3f13079c9952c9dd94c94590a68707c64fd52951b920
+- card_id: house_of_fates
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: house_of_fates.jpg
+    sha256: 6fa139373e9774bb54791d504fb004263a8a0c168a142cfebd06aefc2f899fde
+- card_id: ikkrt
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: ikkrt.jpg
+    sha256: 1d046ffbfb4c9d835a258fe32a2ae636c502e1843656558b95dba23725973845
+- card_id: ikoma_fujimaro
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: ikoma_fujimaro.jpg
+    sha256: 6987edd3e20466a080f766e2893f0a5b55a62b60a0db07f4a2cf5eadbdcdfbc6
+- card_id: ikoma_goro
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: ikoma_goro.jpg
+    sha256: 6867347a213dbe12895ef915df06af9742a96b536b16326b1b7fba7a59ba4daa
+- card_id: inspiration
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: inspiration.jpg
+    sha256: 2db51fd8a23423213251758f6708500aa642a1dccb83ccf1624a091ca6798bd5
+- card_id: isawa_maasaki
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: isawa_maasaki.jpg
+    sha256: 30148fc43ea0de514c7fb90da938b0ced3485f718de0c0225d021cb7fbb1ba36
+- card_id: its_a_trap
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: its_a_trap.jpg
+    sha256: c9f71eb3b29a8508d808e051d1992c43b4fadbdc9b2a5b91ab8e725d489d0440
+- card_id: ivory_isles_mercenaries
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: ivory_isles_mercenaries.jpg
+    sha256: 5bc9524c16a68a3084f07c71d7228ee5bea42e935c792b6b6b9b0bca50f835a7
+- card_id: jagged_earth
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: jagged_earth.jpg
+    sha256: 933a5aa57db92030caeb57fd8cfed7d3a635c17cdcacb8ae1c19d897dbbc2fce
+- card_id: junnosuke_experienced
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: junnosuke_experienced.jpg
+    sha256: 6ea2be92882cd8c9fe09e089257707a4f76a3028af7cf18b6a4a17388adfd21a
+- card_id: kabuki_mask
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: kabuki_mask.jpg
+    sha256: c437387c5d72b0338f1ff0c40a5b2896dfd0707dfa7a3adeb911b6e3850a0b7d
+- card_id: kaiu_namboku
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: kaiu_namboku.jpg
+    sha256: df2a1ac2973ccb509a28f8515672209f71ea760047efac796dcf0e8f801522d5
+- card_id: kanbe_no_shiryo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: kanbe_no_shiryo.jpg
+    sha256: 04f0414798895d3e714a286827ce1a3ee814b59a48d83196ea7543ccd90bc311
+- card_id: kanekas_blockade
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: kanekas_blockade.jpg
+    sha256: a1726efa1e64abb75e9245af450518d11371ce0bb181ecd4db5c5de0ec936553
+- card_id: kanekas_strength
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: kanekas_strength.jpg
+    sha256: 5671df76fbcea6f0aae6f9271e5a2218ebeeead314e4d34a916d66dcbc6c2958
+- card_id: kawaru_coins
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: kawaru_coins.jpg
+    sha256: 53664fafcb1df8e90b8ee1c93de639ffcfa0a83aaf484e5e8accc143ae184d85
+- card_id: ki_rins_blessing
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: ki_rins_blessing.jpg
+    sha256: 78962216ee7197690bd909190b6b1a9b611e0e58e686019aed0a3ef73b892295
+- card_id: kitsu_hisashi
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: kitsu_hisashi.jpg
+    sha256: 16613451274f058b5d54a02601daa7e2d31f9c38d110b8b0cf62579c4271b22a
+- card_id: koan
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: koan.jpg
+    sha256: 58e989f7bf717a0cdca3b9863b43dc3bc8250e6c25b073e5d3d6a008097f85e0
+- card_id: kobune_port
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: kobune_port.jpg
+    sha256: c203edef94e39a4cefa47ea3c124e7f2f1a528f576f3bf078cbc2dbb3f45791d
+- card_id: kyojins_blade
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: kyojins_blade.jpg
+    sha256: eb5b6f6b336e9e0a320bd610cebffe0cb67f9743adff2a7a93a106dcf90d1d90
+- card_id: kyuden_agasha
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: kyuden_agasha.jpg
+    sha256: ba63239bb097bd7fe9feea152bbdfe3cdaef3163cb1d60c136b0aefb2addc740
+- card_id: lies
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: lies.jpg
+    sha256: b9c78bb9cf9150930f0f131a86868f25870a7169925791d57552ea3d62a01112
+- card_id: light_a_candle
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: light_a_candle.jpg
+    sha256: 9fdf4d5cb3751e16d447ae7cd1dc7d234e0fa99721486b19f7a334f8657f85ec
+- card_id: light_of_the_kami
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: light_of_the_kami.jpg
+    sha256: 360a91367ac5ce398d3ab77f038880e33691a89c31e2126443169c9791888ef5
+- card_id: living_death
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: living_death.jpg
+    sha256: 14524dba27155357f5b744a9e3c5403357dde9262e0916a0b825de97829b331d
+- card_id: lost_souls_da
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: lost_souls_da.jpg
+    sha256: a59b13a289e02de9a80025f06d5f6bae38a65e6f61a754b01c59b29d5e01cc83
+- card_id: make_them_pay
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: make_them_pay.jpg
+    sha256: e310bf9ad7ec3c26b118017f98e795f71f9ff50df8d5b7bcbcf655ad4ab44fb1
+- card_id: massive_power
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: massive_power.jpg
+    sha256: 065718a9912103951c780ca7a9d77bb33f7a6eeab977de5f42c74194365274ba
+- card_id: mirumoto_zenko
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: mirumoto_zenko.jpg
+    sha256: 07db9a0f5a377fc62fd80f2169c58022532ba78232ac75d4bc62bab64a7dc6c6
+- card_id: miya_gensaiken_experienced
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: miya_gensaiken_experienced.jpg
+    sha256: 3280f8dc3f6b1c36c750f611a8197dcb8782b51aec9e4a8eb2c68cf191fda020
+- card_id: moshi_junichi
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: moshi_junichi.jpg
+    sha256: c069d210d882ae177ee2153e4f211d28a1a342e02fcb3161b92a241907464d03
+- card_id: moshi_mogai
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: moshi_mogai.jpg
+    sha256: 956aa2c186a30965f2df1a195246656aeb465f3d71d9fa9112228735b208b181
+- card_id: moto_chaozhu
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: moto_chaozhu.jpg
+    sha256: 51800b10f3643d9e619d98406b1f0af2ca8dd8c7991868c7042c12c36ee043a6
+- card_id: moto_feng
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: moto_feng.jpg
+    sha256: e0574fe12b27739126db75e3d51138f6ef64e8c41b2e6ad50294872247a2424c
+- card_id: moto_qing
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: moto_qing.jpg
+    sha256: b6394fd845dc1fc99de2e6ae5617e31a37cf656b1f7c648ceec9ec39fb9949d7
+- card_id: moto_steed
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: moto_steed.jpg
+    sha256: 30201c1aa3aff79825612298efcf0cab6dfcf7ca93deb8bf5f5ae82661d48837
+- card_id: naishi
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: naishi.jpg
+    sha256: fe98d852a7eee2ee8342ee28d7a64f9c748fa55d68652caabe4e49ecbb7261bc
+- card_id: naserus_strength
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: naserus_strength.jpg
+    sha256: e16f8360c39ab41af7fae19154c149d4a9820766c5cb2f8ffe73cadd36c212c7
+- card_id: new_formation
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: new_formation.jpg
+    sha256: 0f9cf138a02d47602dc314fa27c8d72ca26143715e82feb3f6acd1b7b3dc855e
+- card_id: nikushimi
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: nikushimi.jpg
+    sha256: 80e9aef240e8563ea29e3ed49432b14813034b0d8d6f3e1256124cdc24357ae8
+- card_id: no_failure
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: no_failure.jpg
+    sha256: 162a9da2b6ed1bead2511631403893884d290b9599f5e19e62e8c31c0ce88bd2
+- card_id: no_hiding_place
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: no_hiding_place.jpg
+    sha256: 9f00f1f911ac83450c3323bfe0f8ff3410d4bd25023ee0281b16339192773626
+- card_id: omen
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: omen.jpg
+    sha256: f4c3f85864d9c08dc77aad76abc5942292f19903bb6e0ab054b761dee8a84389
+- card_id: one_sword
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: one_sword.jpg
+    sha256: a73857e16462ae5726a6463804161f6570a3e73165d88988eed5cbb28d904342
+- card_id: oni_horde
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: oni_horde.jpg
+    sha256: 7a0ea11cb9297ad41dc0dae8960105c741d54f86588ce82e3f1d36c1d2348a80
+- card_id: patience
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: patience.jpg
+    sha256: 9b800d020a53c6858fd11aa688c2664f34140678f2d88f4b5bc90459ded0cd66
+- card_id: personal_sohei
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: personal_sohei.jpg
+    sha256: 26895bba5b15c4fa9bea8e9c0537d4a94240e8342df5cf8413488665ccd6f0ce
+- card_id: pillaged
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: pillaged.jpg
+    sha256: 4bd08de9efab153f5b0ddc452d4534d819eefc201abb141191e37d4ed28ecbd2
+- card_id: raise_the_dead
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: raise_the_dead.jpg
+    sha256: 6e2d6aa3f2f193ff21ebed88386b4994fbcabfc44e6943b57c880688e73a04f3
+- card_id: restless_zokujin
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: restless_zokujin.jpg
+    sha256: c37b25e40fb87694ae00702b5e1c7f480380f4fe89e7c9977c9557593a553f74
+- card_id: roaming_caravan
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: roaming_caravan.jpg
+    sha256: 9ccf68009a33c648d4fa5b3d8d25b749e44b54b0fb2205aa9b82cf699fe54a89
+- card_id: ronin_village
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: ronin_village.jpg
+    sha256: d2e04c681f72639ca97df5d63452e0c1e4388a067062a8d6a27102554f117774
+- card_id: rubble_of_beiden_pass
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: rubble_of_beiden_pass.jpg
+    sha256: 8cb565ea01bd82dd19bb7cd012d30f8ec4bf2f8b3c1d1f15ac8b7b20379a2e4e
+- card_id: selecting_the_chancellor
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: selecting_the_chancellor.jpg
+    sha256: 444189265aaaab60503a9e6eadc029455491f2d72e9e634563666928ff8b815f
+- card_id: sezarus_mask
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: sezarus_mask.jpg
+    sha256: 029c2f2959dfdfff99ef8caa7b06407d2370e032a5e59809a79b479c267f828a
+- card_id: sezarus_strength
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: sezarus_strength.jpg
+    sha256: c82a1a66529410c6328d10ecaacf7b86333d13d69dbd7ae5772f0cc2c539c992
+- card_id: shackled_oni
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: shackled_oni.jpg
+    sha256: d8a780bb3115d8305c3e18d75a9f3842323aa9cf76c748535729c93c61990dd8
+- card_id: shiba_itami
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: shiba_itami.jpg
+    sha256: dc2a4ef0a3661eca24382228ac7e7ff121fd1b43dbf3b9125d5cbd5ca4243462
+- card_id: shibas_shrine
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: shibas_shrine.jpg
+    sha256: 1203898e32feb692d8ef625009da06d7d09e1a34d9ab05807ac22fbb9b6a429c
+- card_id: shinjo_xushen
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: shinjo_xushen.jpg
+    sha256: 9aee7e215caeb61c9cc48827d1f4e24de3fdcd61a3685d71bc73c7baa9cc77fa
+- card_id: shinseis_staff
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: shinseis_staff.jpg
+    sha256: 9ec135958e1d4138de7c08ef35f7a5c0d26589003da0e58be1952e5bd3e24742
+- card_id: shiro_matsu
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: shiro_matsu.jpg
+    sha256: 82088e9337df0b6c04920a3de79ca28a33bc2dfa5fd00101b319e528229d0d24
+- card_id: short_season
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: short_season.jpg
+    sha256: 6dd60f339a78fcf2edd7e40ed0a56a949545a5bd2f4568939b3e56efe070d0ee
+- card_id: shosuro_koneko
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: shosuro_koneko.jpg
+    sha256: 37622b46fad07d9962ce3a299822fe9f33c08ff50d9c5392024333e04bf997aa
+- card_id: shrieking_mujina
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: shrieking_mujina.jpg
+    sha256: 2068a621f640a11783484eb28410b25439afbe7a2a4121ef05c83bd5771802ac
+- card_id: shrine_of_reverse_fortunes
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: shrine_of_reverse_fortunes.jpg
+    sha256: 93a78081529a7b5e3ec445b805797859f6730c5f6ee1a7d182e4ee462792383c
+- card_id: soshi_kiyo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: soshi_kiyo.jpg
+    sha256: 3a4250b12e1da62ca4792701f33e44816ba971ef361e412aecaf3088f5c215d8
+- card_id: strength_in_unity
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: strength_in_unity.jpg
+    sha256: 4ed4adb0ea48aa74e1d5fd3712e39307bf802c2829053f489a9b40f5e88c9aa5
+- card_id: taken_unawares
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: taken_unawares.jpg
+    sha256: 73ef6fc653028f428a0874d702e6828eaf30537791bca83c5ffd8fe0e3875424
+- card_id: tamori_yamabushi
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: tamori_yamabushi.jpg
+    sha256: 16aa7cb305cad12f3397377e91f707db9a8526e6421abbe131dbaf907573386b
+- card_id: teeth_of_osano_wo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: teeth_of_osano_wo.jpg
+    sha256: a391108f4e89f0f084a90bec71aa71386b25541ce834f148b7da51c396a86b59
+- card_id: tetikkir_experienced
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: tetikkir_experienced.jpg
+    sha256: f148a39cd58abff9cafc4b4debd714cb68b465dd5af38a3de3a13470a171c82c
+- card_id: the_future_laid_bare
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: the_future_laid_bare.jpg
+    sha256: 5251ca4b8ff3bd00efcdb0c4fa859f5aa28eb041540c7da0924069d5bfae9af0
+- card_id: the_wandering_monk
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: the_wandering_monk.jpg
+    sha256: d7ab43d9b21b8705ced6521be4dcb8905806d4d3ef69ad9528c5c166a5de1b3b
+- card_id: thunders_kiss
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: thunders_kiss.jpg
+    sha256: 3ebaa2d5cf81d1eb5fe8ab0c55f5b335baad4fc1bedf505a14ace86575e585ac
+- card_id: tk
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: tk.jpg
+    sha256: 4453f0098d1c61214bd6cc8070f09e11b76cce136a9064036c1d177090aa8310
+- card_id: togashi_matsuo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: togashi_matsuo.jpg
+    sha256: 44ef9025dc1f353fb02c458c73cd608a4ac5036e0430410e0f823338c13db669
+- card_id: toturi_koshei
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: toturi_koshei.jpg
+    sha256: 4db63efa7269765d9716f04140596917d98c145330b7bb6032fa4434a68b717e
+- card_id: trusted_advisor
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: trusted_advisor.jpg
+    sha256: a5480942b515d17f78905cd36a2df81eefef3ae2980cba6b33a1616c7cd8b212
+- card_id: tsudaos_strength
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: tsudaos_strength.jpg
+    sha256: a54fdbd12f03c9c63cdb9a0c389948a5b6675f2b201ad96afffb4002145513ed
+- card_id: tsuno_nintai
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: tsuno_nintai.jpg
+    sha256: f3a5833b9af7cf668cfbaa6f6f03b3b5860096f5d2fbecb19f5eae1b403fee45
+- card_id: tsuruchi_hiro
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: tsuruchi_hiro.jpg
+    sha256: 0848304f6afd09803d3435c44977e5e9c86cb7ed9f768fdf92f35c9327f1416d
+- card_id: tsuruchi_nobumoto
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: tsuruchi_nobumoto.jpg
+    sha256: 6d15153afbee66df4b472cf177cc2e640dd6ccbcb72143cfc7ca2c0870185ef7
+- card_id: uji_no_shiryo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: uji_no_shiryo.jpg
+    sha256: fe39da98b4cb25a587b266055213f93afdd51b8ca9d6396d72c7df67b2ae3803
+- card_id: unprepared
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: unprepared.jpg
+    sha256: e7bfe8d39c57884c9e8c395cec316526cd1241ef16ecb2a8ceb67370adab8277
+- card_id: untested_troops
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: untested_troops.jpg
+    sha256: 58b4ce5f5058362d01d4975d33eb3313111e2c48fe10b4088b9fd4c6cfac0d79
+- card_id: utaku_keyo_da
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: utaku_keyo_da.jpg
+    sha256: 3f4d8feb2c0ef0982f7fedd794a6cb330497e387b89e360c55c9949e13edfc28
+- card_id: vengeful_ronin
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: vengeful_ronin.jpg
+    sha256: 5fcd2ac6316682890afdfef63d653d0f8d2cbdee3b82b8bddb1fc6661a4b7dd8
+- card_id: veteran_samurai
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: veteran_samurai.jpg
+    sha256: 07e668dac14e088cf48eea9855e2b25181ef19d25cef1f7e44ff38bf530d7401
+- card_id: violence_behind_courtliness_city
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: violence_behind_courtliness_city.jpg
+    sha256: c08268297fae4d7ca23fe2d81e1e69ab79b5fc8a1dea0163ed4e1b399f3ab90d
+- card_id: voice_of_the_shiryo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: voice_of_the_shiryo.jpg
+    sha256: 0259060ad0139c0cbca8dba58018f2a64c288f59ae936f963b78374f5a9fb052
+- card_id: wall_of_steel
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: wall_of_steel.jpg
+    sha256: 76a9573728acbb1fdff4058f4c368c4a5f5e0fa103c50d5bab7f49a39f8c6c06
+- card_id: wasp_tattoo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: wasp_tattoo.jpg
+    sha256: c105f267f38bba1077dc448123f7a39d77b498102284c52752aaeffea3db58f4
+- card_id: wave_tattoo
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: wave_tattoo.jpg
+    sha256: c0671b5821350109a219bf31d6cd001889e7aa838ba9a08f8bbba4a876ce4b2b
+- card_id: whistling_bulb_arrow
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: whistling_bulb_arrow.jpg
+    sha256: b7428ed73826c25c0b8a3cad26eec8ed3d68d06d3c9c0f0c11e8d8fc8b1a65f0
+- card_id: wikkithich_hie_atck
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: wikkithich_hie_atck.jpg
+    sha256: 977572fd96720b4299c3c25979968d88355ad9038afe5202ac9ca259eae2d50b
+- card_id: yoritomo_gombei
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: yoritomo_gombei.jpg
+    sha256: c86b52dee2b1a6b94984e0e6f63c83b41e58eabb61dc71879c59bfd4e4b20cae
+- card_id: yoritomo_heishiro
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: yoritomo_heishiro.jpg
+    sha256: 3994d7b81edf220692e1c5f2caaebbec01cf439d54f083f85bc27f0b61969e6a
+- card_id: yoritomo_ikemoto
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: yoritomo_ikemoto.jpg
+    sha256: cf1721dbb0568575018940b76afef905138988de084e2352f7cb035a7859faf8
+- card_id: yoritomo_naizen
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: yoritomo_naizen.jpg
+    sha256: 1fd2ee8fe4f9455185d404d9ebf16d2e0faac793be42218093cdbeba607a4c4f
+- card_id: yoritomo_sen
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: yoritomo_sen.jpg
+    sha256: dc0e7cfd0a315c905e0ac511d9e8bdf548db3a9ae236968dfb25173bdc145f42
+- card_id: yoritomo_sumio
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: yoritomo_sumio.jpg
+    sha256: 500014efab0c5fba35e20de3c2615288ae22d11a5801b1488f35ec8ad6cb995b
+- card_id: yoritomos_kama
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: yoritomos_kama.jpg
+    sha256: 29245342897a99af59636c1b454513c601df35b6c4da7cb242b9cd28d661f11d
+- card_id: you_are_weak
+  printing_id: dark_allies
+  files:
+  - role: front
+    file: you_are_weak.jpg
+    sha256: 7bb1a82234b10039113730077abac86ae6e9f1aafa4aa801c2e2482c012b28fd

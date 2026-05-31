@@ -1,0 +1,938 @@
+set: Code of Bushido
+images:
+- card_id: agasha_fumihiro
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: agasha_fumihiro.jpg
+    sha256: 9f67558a162d32b170b3d173555cd585004ec348a22635711a125a9e57355097
+- card_id: akatch
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: akatch.jpg
+    sha256: c0b6d3288e1bf6d85b9f6bc2a6beaa17150ad920c9283f093e61c8edefcea0b9
+- card_id: akodo_bakin
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: akodo_bakin.jpg
+    sha256: 444681a8bfff4adf554e1073ae87ef7afffb6831a7b8131106dbd279d155d453
+- card_id: akodo_chikafusa
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: akodo_chikafusa.jpg
+    sha256: 10da8c31cd2aedabc26aae26caa98231b8b8c4511b50ebc5113442dc8da31887
+- card_id: akodo_mokichi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: akodo_mokichi.jpg
+    sha256: 0d051859ea840e432e61dc736061e6dcbf63f0574ef2007fd6fac7917e16b1e3
+- card_id: akodo_moromao
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: akodo_moromao.jpg
+    sha256: e8987657c5881509bc2b6889c5653f23f3022db54134e5ffeef028ce030ee2dd
+- card_id: baraunghar_tactics
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: baraunghar_tactics.jpg
+    sha256: 34dce2d1f66b8df1c5109291bd37565670d849b062b042a456417a0e10e36cf9
+- card_id: bayushi_bokatsu
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: bayushi_bokatsu.jpg
+    sha256: 9593002bb3aa07aecb58c56302a72d250a80e3f2e1a710f054c380d81c5cb16f
+- card_id: bayushi_fujio
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: bayushi_fujio.jpg
+    sha256: 7c8cbc576765382ca9090cb94669ddf95b74f361df91a2e8076202dc2395bdc2
+- card_id: bayushi_hikaru
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: bayushi_hikaru.jpg
+    sha256: a6f854b441e3898161588177b31093d1eb8ab07d015198bcfccc0fc25c22a351
+- card_id: bayushi_kan
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: bayushi_kan.jpg
+    sha256: bf44c0c4160a116351f46ae4eae2e373efe4e7181fc4e97f09e8e008779c0aeb
+- card_id: bayushi_shun
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: bayushi_shun.jpg
+    sha256: 359bf90b3e810e2675c24ff45186127649201fca366f535f48a30cdfd3789c61
+- card_id: bayushis_feint
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: bayushis_feint.jpg
+    sha256: 6fc04c5308e5ab84c78a91bd7ea1e3be35a8a902d7a55c86ab75a2d0d6d1f099
+- card_id: border_skirmish
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: border_skirmish.jpg
+    sha256: 9ae9e833c67c8f5cdfde6f6fce4b24a393a6e620b97bb4c7741af4d931b5bd7e
+- card_id: cast_out
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: cast_out.jpg
+    sha256: 65f279708c70cd5ee960d501e784b69b07c4cefa7b7463dcfbc346f7980559ce
+- card_id: chikka_tek
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: chikka_tek.jpg
+    sha256: 4d3121f5ebd272a9189463925113f9c821a1aa75f5b4acaecb41675968883a43
+- card_id: chuda_isoruko
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: chuda_isoruko.jpg
+    sha256: cf17451c0c6763ce19fe947ded6a84a68dad1531727d4ddc25b57afb8f7d991f
+- card_id: chuda_kyuwa
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: chuda_kyuwa.jpg
+    sha256: a03eb74f1961c1358e9206a1bdd54086cc422f01c1fdd092928e117e0f27f2bb
+- card_id: chuda_ruri
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: chuda_ruri.jpg
+    sha256: e92433496e63d13cbb51cb4e7a1389239eb2fe57bc45cb783866102c067952c2
+- card_id: compassion
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: compassion.jpg
+    sha256: d7a27047ae045d1695765107ae09393ff54de8c602c78d73e112c132d92e151c
+- card_id: countermove
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: countermove.jpg
+    sha256: ddc190ef0a2ab2ee73c36c22ac0d3c9c6fee96f8549e20a9b845257e83e946d8
+- card_id: courage
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: courage.jpg
+    sha256: 7f1e8a7cacb6c96135962e8ed74521aa1d679b63d60b5ff792ed08fe84839eec
+- card_id: courtesy
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: courtesy.jpg
+    sha256: 479e63f7edf1f531a8a5673202146d1677b0e408574b180b4660743f8024af5b
+- card_id: crippled_bone_blade
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: crippled_bone_blade.jpg
+    sha256: 7be97d5b84e8458bf4ef8eb7874fa024c65bb1c9bbd7034210d849616b65d648
+- card_id: czinntch
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: czinntch.jpg
+    sha256: 1f9b3cfa3c7bbd5fb438d1238052cce831393daf3e2c28a2eb259fe5013fa69d
+- card_id: daidoji_nichiren
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: daidoji_nichiren.jpg
+    sha256: 74e030b9f966ca889b689a08472e2e4a9ebc391b4b6ee46185098c6590925726
+- card_id: daidoji_tae
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: daidoji_tae.jpg
+    sha256: 56a0b500742ee6c7261a300351c64289e0e9129dfef22bc5db875dec913c96e0
+- card_id: daidoji_teika
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: daidoji_teika.jpg
+    sha256: 103ba5546d0fc7c2fcbf86e6af2bf074b15a03c3327031d92d1ee1fcfc2b8715
+- card_id: daidoji_uji_experienced_3
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: daidoji_uji_experienced_3.jpg
+    sha256: e763d1030f519075b7793f07a3196ef8d29c8554c878f39f8cb405d979a1cbdd
+- card_id: daigotsu_soetsu
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: daigotsu_soetsu.jpg
+    sha256: b456d54c170c6fb75aa70bddb653b7e9c0968274804c960f85997ce5e6f21d5a
+- card_id: daigotsu_yajinden_experienced
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: daigotsu_yajinden_experienced.jpg
+    sha256: 0adc7d6b9da8f2468ba1ebf1ccdb91f77b32fd97899e9efac25785a27830413a
+- card_id: dark_fate
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: dark_fate.jpg
+    sha256: 2cfe70faf673048f5e969545c791605dd109746db826ac3fd3bd9865ad6d09e3
+- card_id: devoured_by_the_sea
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: devoured_by_the_sea.jpg
+    sha256: f2056ab0ad3f33c2b7902431235581acd22feeea3c6fc7ef08aa45c839e1b5a8
+- card_id: disavowed
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: disavowed.jpg
+    sha256: 5560cc1a870aa11c9a8213154047fa3e18655f8b8adb54ba8327b05aaeb4c77d
+- card_id: doji_koin
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: doji_koin.jpg
+    sha256: ec2ecca6fd40eb70732125df68be3defa1347081f8421928d430223f8529bbef
+- card_id: doji_midoru_experienced
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: doji_midoru_experienced.jpg
+    sha256: 426cde811e80616cf8c58ebf28d42930dd058786d4cb3d0e8537261e76c0901e
+- card_id: doji_nio
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: doji_nio.jpg
+    sha256: a8452a3f82c295000983d80732aa5c9b79c97db3920a272bced94304da010e8b
+- card_id: doji_ranmaru
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: doji_ranmaru.jpg
+    sha256: 8580da24861fa4b1f8772a5e07daa1837eb3e51073dfadd1afb02e42a906595d
+- card_id: doji_soh
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: doji_soh.jpg
+    sha256: 6ab5021a5ebd0c9a95349e11e299ce771868b04403f7f18f3427d98065570683
+- card_id: duty
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: duty.jpg
+    sha256: 7f2d5b6d6caa30bd856df0f8400e3f652c1efff2e21c6445d159502b2852d6fe
+- card_id: emikek
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: emikek.jpg
+    sha256: 317c6501f8be3d1c865893747a7b45903759ad7feb4463ed8b968ac5874cc3d9
+- card_id: expanding_territory
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: expanding_territory.jpg
+    sha256: 527f8fab331b85ac6f3f4a335edb56e07cb3508566b58abde7884a316b2accf1
+- card_id: extended_maneuvers
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: extended_maneuvers.jpg
+    sha256: 41819a4f405f9b68208fbe45d67ce00c6777e8a205ffacbdedb8e5783fc83ef6
+- card_id: goblin_swarm
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: goblin_swarm.jpg
+    sha256: c238304d1be00e34f54678149d974a462fd4764bcabab4bbb47f63609b244a2a
+- card_id: governors_quarters
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: governors_quarters.jpg
+    sha256: 9ff5a7b87687b5b6ee00ce5596119d63087304edb6eb9a9c87598c9d3ecd6912
+- card_id: guilt_by_association
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: guilt_by_association.jpg
+    sha256: 339972c0a73b3bc2880fda46ac3feae640183595bf3dec9ea3abaf4e1daf54d2
+- card_id: hida_kosedo
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hida_kosedo.jpg
+    sha256: 9da4f27cac9f6b0bcb2fbf9659be24c41827521520dc566c1255692b2ef072fa
+- card_id: hida_renga
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hida_renga.jpg
+    sha256: bba4ca511a89ac70fb34d20bfac05a85d3583d811b2ce718c1976f9001dfa5b6
+- card_id: hida_takuji
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hida_takuji.jpg
+    sha256: 0832657732c1ffabc268072736efae45104d013245857b10de8806a3c86cfc28
+- card_id: hida_yachi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hida_yachi.jpg
+    sha256: 5288b60bd7b0d864178510cd50eb146228676c1cc703450f82b4c332ac18441b
+- card_id: hiruma_hiroji
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hiruma_hiroji.jpg
+    sha256: 1e4ceb44d49db0ff2415da7b2a813493ac0b2182902be579214ab430ab77d9b7
+- card_id: hiruma_takaaki
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hiruma_takaaki.jpg
+    sha256: 58e387ee8f7948c31890a2938bd7720350542c5eda12faa75673bfa6fa780d4e
+- card_id: hiruma_tama
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hiruma_tama.jpg
+    sha256: 577cf0af310ec61fc0138ed03856dd8d6167f6eaa0bbf9fe7756d3f1c559eb31
+- card_id: hitomi_kobai_experienced
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hitomi_kobai_experienced.jpg
+    sha256: 03da6f7cadb303a87d45c1264f25da25bbae0d9c570f476722442408fe230303
+- card_id: hitomi_morimasa
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hitomi_morimasa.jpg
+    sha256: ff86edca5f0856fdea68a4baec98db5907566293ce21ab874d648097c32d1790
+- card_id: honesty
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: honesty.jpg
+    sha256: 42645c6d73cab25959bc9bdc611669cc6f46551a65eef41a34fabda47217b3bf
+- card_id: honor
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: honor.jpg
+    sha256: 813080f7bc60d164892aee83ed6e3aecd4c1a33fdceca821a470959741326b1b
+- card_id: hoshi_kaelung_experienced
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hoshi_kaelung_experienced.jpg
+    sha256: 210d424c2965aab4b734eb7f3a4279c13dfe25d69087f6f9a2cc07fb60cd3ecf
+- card_id: hyotaru
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: hyotaru.jpg
+    sha256: 2a091fe3f7b0fa2d389654202850c991743fd18b173f5618f34241bb02b74d42
+- card_id: ichiro_yojimbo
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: ichiro_yojimbo.jpg
+    sha256: 9037ac0d6a3b804da89df0c50c5f3b4d7e54a0299b8e7a651589c2935944c559
+- card_id: ikoma_chikao
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: ikoma_chikao.jpg
+    sha256: d1d2a43f0dff4ffc26cb28813f0c397efaf843ad7e6a90167f7b3a6c08c90989
+- card_id: ikoma_itagi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: ikoma_itagi.jpg
+    sha256: 1861adccbd250b4739258aa965e1a69f5e7a593ce286e1cc54af79a2e64b8154
+- card_id: iron_hand_strike
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: iron_hand_strike.jpg
+    sha256: 5335e8ea11ad3702d1fbdbec8eae1de9684d41ddd58cba55dc139ac375c8efb0
+- card_id: isawa_eitoku
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: isawa_eitoku.jpg
+    sha256: 1adb532f2af4c9c554e7c0d1f43b2bee5474458c69166503cbbf8cbe18bb4221
+- card_id: isawa_kimi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: isawa_kimi.jpg
+    sha256: 4a0242052b55263ae6316d9f459edaf7b1ba26a727e8d6581343b9a6a04c7526
+- card_id: isawa_suzuko
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: isawa_suzuko.jpg
+    sha256: 9c6495e6bd52a139565da5b377bf57cb631efcf576d7e60a42b53d9290126ca8
+- card_id: isawa_tsune
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: isawa_tsune.jpg
+    sha256: 183c6702e1ba65323f31ba65bc64713a6a38a4f76e024d87bac35b18d31b4feb
+- card_id: iuchi_lixue_experienced
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: iuchi_lixue_experienced.jpg
+    sha256: 939498ae09cc418e2f99112cace8f6b00e4cc74d39a10877fc5d1e110440a73c
+- card_id: iuchi_umeka
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: iuchi_umeka.jpg
+    sha256: 2cc20c28f9a9682cb80704820f97c473aa9319ff0c682bff59a9ff2050b57ea3
+- card_id: kagami_no_oni
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kagami_no_oni.jpg
+    sha256: 902a78fbbcea05b1394df59a288f9bbc5ab4252cd8087a26a2fbc2d3338a4b25
+- card_id: kaimetsu_uos_formation
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kaimetsu_uos_formation.jpg
+    sha256: 2824055cb3fcfd1a8bf7aad22e078dbefd17aac65134ccbe7977c0756f2f0c62
+- card_id: kaiu_haku
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kaiu_haku.jpg
+    sha256: 8b53eafb37f4b36f444a3a1ea1d21964e8cdb6cd1baf799ac804599b07a75087
+- card_id: kaiu_sugimoto_experienced
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kaiu_sugimoto_experienced.jpg
+    sha256: 0acd76cad5702e9a6e423b8531d24b563fa7386dc79f2ae792e5bc776ad34ca5
+- card_id: kakita_kiyonobu
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kakita_kiyonobu.jpg
+    sha256: 045c25452bf986be350c159a07c30e8188a0ae63954b721640a1b14c8486b999
+- card_id: keep_the_peace
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: keep_the_peace.jpg
+    sha256: fd3f55cf549d99379819d6c2509aabd460f63b5bf89fe38074b63aaf46c23390
+- card_id: kensaku
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kensaku.jpg
+    sha256: 1ed208a877e27bee77416d74895b4ac98cee391370990714c12338e9247e01c8
+- card_id: kiii
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kiii.jpg
+    sha256: 953e89bc9a52941bb0d225f5a6859ad153d9f568c4946c7e97109b3a19dd62c5
+- card_id: kitsuki_hakihime
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kitsuki_hakihime.jpg
+    sha256: 1750b2bdcf3e61eeefb80e1a50584f9f266f9eb5da62acbfa0369b46a67df389
+- card_id: kitsuki_nagiken
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kitsuki_nagiken.jpg
+    sha256: 9939df19143024bf8cfc864e76930f9e2c36950678e4887d454125a5664e6db8
+- card_id: kitsuki_raichi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kitsuki_raichi.jpg
+    sha256: e2fa8268c4ac5b158ffe992ac1e3b0493069d8200facb0d7a0e3ac8f29b67474
+- card_id: kmee
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kmee.jpg
+    sha256: 14403f21eae6674f039ea803b7b06dbfec2795040875dfae684deb487dd92a5d
+- card_id: kobushi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kobushi.jpg
+    sha256: 809677aba24c50770e8c67a7f2d38f79b64cbf7a562bb73c412652646f55595d
+- card_id: kyuden_otomo
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: kyuden_otomo.jpg
+    sha256: 49afb1a5798a9c3afe50478757faa55ae8dc3b4326031876629e7cccc437dccf
+- card_id: manithith
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: manithith.jpg
+    sha256: d22ef09942c152b970566b395710030a2e4c405e19f511fefc213b4b2f4fb1d8
+- card_id: masahigis_blade
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: masahigis_blade.jpg
+    sha256: 365be5000efc8a3ee4c673a644eeb7f756597d47f6db43917456bd063b601cc7
+- card_id: matsu_arinori
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: matsu_arinori.jpg
+    sha256: 3528ba5fc76a44833872be725aaae6b58962d8f1c7c4b1a45e0893ff3d8f009f
+- card_id: matsu_eishi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: matsu_eishi.jpg
+    sha256: 853d0045cbf0cd61ae9289978ac70056a82e059b88b568d245a3af4e0b8e16fd
+- card_id: matsu_okyoito
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: matsu_okyoito.jpg
+    sha256: 30247a71a63a5944745d2167fd29e62471c30cfcddb4b049427b24c3ab4be2f6
+- card_id: matsu_sanraku
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: matsu_sanraku.jpg
+    sha256: 8218b3292c2865ba58bd432e888e6387138a72d74f61db2154f6ac315249339f
+- card_id: midnight_blades
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: midnight_blades.jpg
+    sha256: 4687b3bd8c1ffb735adb4d4edf1a42f000853eeb3850f3aa6063c753d3e75651
+- card_id: minikui_no_oni
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: minikui_no_oni.jpg
+    sha256: 757dabb1cc01a88cd4c17cd550493ac48abd6306b81c80ddc15bcb41c9248cdc
+- card_id: mirumoto_bokkai
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: mirumoto_bokkai.jpg
+    sha256: c48ac4d56f47364743bafc90512d741e9b0bac4bbb44cf497166a84981e9d592
+- card_id: mirumoto_etsuya
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: mirumoto_etsuya.jpg
+    sha256: 64ad5c02dab747de155d61ffc95266ac6bf580d95bb667dfef1315e11c44ceff
+- card_id: mirumoto_kiyohira
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: mirumoto_kiyohira.jpg
+    sha256: 495b98d95b7a8de9b61c04f9d8e05a01f87a06c3b05427cf1dc8937f11b46a70
+- card_id: moshi_hitaka
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: moshi_hitaka.jpg
+    sha256: f499f63af16a7d17b40bd271c1f073e70369a25a5be8925657290f09f9d3da0c
+- card_id: moto_hideyo_experienced
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: moto_hideyo_experienced.jpg
+    sha256: 8de623cada734289aa6cece034a7dad1e238998c8e0d5c607c0d546a7413e6c2
+- card_id: moto_ichezo
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: moto_ichezo.jpg
+    sha256: fbc9c6e65ccc8ad336a87a341ee07609868fdfa45e98c7d57d1890b114b31091
+- card_id: moto_jippensha
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: moto_jippensha.jpg
+    sha256: 05d3aaf44828ab0f21e6e7642f1a03d3e6faeeb0a0762eb12a26ae759df48316
+- card_id: moto_kinnojo
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: moto_kinnojo.jpg
+    sha256: 996fdc27e95ef7c2fc0604e9454b0ac3bb0520386933f9a44bfe5dc1a58c1d24
+- card_id: moto_rumiko
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: moto_rumiko.jpg
+    sha256: 0cba3cad9f5e38f8bc6343f4da9b30c188e3cc5d3a4624c6bad7b03bf85d41d7
+- card_id: nemtek
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: nemtek.jpg
+    sha256: 5310c5576dc51f38b5c67d23f4bcf86b927f363c26935dd17320212e064f4a2d
+- card_id: nezumi_migration
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: nezumi_migration.jpg
+    sha256: 76c6fbe3093ddd834f2335c22c11c70f77fa60b3bf96d48e74a6f8b85de7874f
+- card_id: nimmk
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: nimmk.jpg
+    sha256: 52850feb3a361bf35d4e0cf4b136e16fd07ca907f67258676645e3359866b537
+- card_id: nomi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: nomi.jpg
+    sha256: a9121c1a5676119679a074fd362894ffbd5c8438af3f31165d383c1a2944599b
+- card_id: obsidian_halls_of_the_lost
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: obsidian_halls_of_the_lost.jpg
+    sha256: 282d70ed146be7b171e30e36ae2682d2f64750214a253ee49f4a62ee093cbc35
+- card_id: ochin
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: ochin.jpg
+    sha256: 4523a79dea66ecb346ea33a40b4b12b458b08a06acc065af180663d5f3eeb7a6
+- card_id: passage_between_worlds
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: passage_between_worlds.jpg
+    sha256: 1fda989fd93e0f6e38ba24623d8b22613ff4dc1d92d79e0013a39656c6fefeac
+- card_id: peasant_uprising
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: peasant_uprising.jpg
+    sha256: 050e632cd6a6fc6f03b0ab077f8b4ba36a0f2d810e01a8a1f5121d0023c660ef
+- card_id: righteous_fury
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: righteous_fury.jpg
+    sha256: 986967c44235acb3f1b50f9981bec79261591695120bc346b26019b286b1aefc
+- card_id: rise_of_the_shogun
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: rise_of_the_shogun.jpg
+    sha256: 126da5210423a33540ce0cd78ff22af42c38970c16d4486b1ddbfd0377907bc3
+- card_id: ryoken
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: ryoken.jpg
+    sha256: eb9ecf787c062516c84208849b2ac8de8855643563d1b2d6754363f131eb1c68
+- card_id: scouring_the_shadows
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: scouring_the_shadows.jpg
+    sha256: 4bc3292a41f2b176c879780b0351b41c66bd3170502705296f6d9856337253ad
+- card_id: seal_the_way
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: seal_the_way.jpg
+    sha256: 446ac7dd2b8def3cb305138fcda653ad9797d79def06fd25afe553e1a803ef07
+- card_id: shiba_denbe
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shiba_denbe.jpg
+    sha256: 75b9d1cf5f6d2a7686b69fca4a342c3083bb34674e5d818621f4bfd2fe0a80c7
+- card_id: shiba_ningen_experienced_2
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shiba_ningen_experienced_2.jpg
+    sha256: 46f0b48baeb5e1ecdc940b85bf5516ee86641ac8141e23270db9e57a0c6349ad
+- card_id: shiba_shinsaku
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shiba_shinsaku.jpg
+    sha256: 5b4da12f271f25b23e3ef882de35cc7b5e94f2c66a446ca3cd0d6d2d20214810
+- card_id: shiba_yoshimi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shiba_yoshimi.jpg
+    sha256: 75f17c00d16bf4bd27a4a0c623943d4f042c80090c20a832c299c5466d051913
+- card_id: shinjo_irosuko
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shinjo_irosuko.jpg
+    sha256: 67048d9c7f28cdb8264156af31e1dba091e378fd284555a3ea2d599601dea005
+- card_id: shinjo_natsume
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shinjo_natsume.jpg
+    sha256: d716b72e5f74074b87e05067a600e37fe072a71d7d4cfbe5f41b9e37df54fb12
+- card_id: shinjo_shria
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shinjo_shria.jpg
+    sha256: f126cb82babbab7979f1021eaf400828f6d21749907accfab2f9b7e4d0baf4a0
+- card_id: shiro_no_soshi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shiro_no_soshi.jpg
+    sha256: 1274651bb373e7bd5dfcd1484e7e2d32c7eaae09d4c794c7a093883770c22d8a
+- card_id: shiro_no_yojin
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shiro_no_yojin.jpg
+    sha256: 4a476c2aa28265a3ac3de3302e19c020d592494c0be9e88b325908f59e5d70a9
+- card_id: shorihotsus_blessing
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shorihotsus_blessing.jpg
+    sha256: 8d9a8c9722b7aacb4f43b3a32bfd70dcf4ceb82db54090b1605fbb6a202d4e3f
+- card_id: shosuro_hisashi
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shosuro_hisashi.jpg
+    sha256: 5a183605ed8e3687bc659cb15b4d833a68ec6899e94e6b85de5ab1a564ade371
+- card_id: shosuro_kinji
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shosuro_kinji.jpg
+    sha256: e41875ab5288de4f8a05e49fbf8dcc09d394e6938dcc63c1515f9f5719b2bbea
+- card_id: shosuro_madoka
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shosuro_madoka.jpg
+    sha256: 2e183e8d2c4c54e9142d2b0889f25dee7f33bba1c6ff33240582e95370ae2b5d
+- card_id: shosuro_nakaga_experienced
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shosuro_nakaga_experienced.jpg
+    sha256: 1b47d840e6c14ebabf99da80292ada0804ebe9b9d00da462028e2204e78d1a27
+- card_id: shosuro_oniji
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: shosuro_oniji.jpg
+    sha256: cee5fdc9e90c3bb776d8bab50d4c52ab4d00d4e8fb0f7e6cfc180a0c0ffcec5e
+- card_id: sincerity
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: sincerity.jpg
+    sha256: bcb332ad34c37b4a94ab5b39b769e2606a9cedeac7f11e5f33e98783a0b2e0d3
+- card_id: skirt_the_edge
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: skirt_the_edge.jpg
+    sha256: a7050308fd61994b0cec0abaf990bf0fdc03e0633c518f1fd6744e8cfa631cb4
+- card_id: strike_at_the_head
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: strike_at_the_head.jpg
+    sha256: d444e1425e9a2569221558c254c21c5266aea12ecbc5a0a999e4764ed22ac15f
+- card_id: sucking_mire
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: sucking_mire.jpg
+    sha256: 40796de08cb6bf057678a84d118759802efa1dcfbd7e572640dcf264095b4160
+- card_id: sunder_the_darkness
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: sunder_the_darkness.jpg
+    sha256: 93f4dab5af07cf096cbae2f0ce55b77cd4f8291eb5301cce45f8a55a931ef9ce
+- card_id: tactics_of_the_bear
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: tactics_of_the_bear.jpg
+    sha256: aca8b6e24badd771de23967eacb8e430b7d519c95d803f90b4a24b838f896b0a
+- card_id: tamafune
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: tamafune.jpg
+    sha256: 239ef44e3a8879f4fb0aae0076a2e915238532c6e0a1c66fd47ee9af69837929
+- card_id: tamori_konoye
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: tamori_konoye.jpg
+    sha256: 7742e349d07e6b9c1387dac24f8da2eb504f125d733343c38fa1fd8bea82172c
+- card_id: tasu_no_oni
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: tasu_no_oni.jpg
+    sha256: 693d6d5d8075019b44eca073f1dd90d3505f2f08d91aa1ee729d50d08c2e6572
+- card_id: tempest_island_initiate
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: tempest_island_initiate.jpg
+    sha256: 103b11823bafc31dfce77c4b1b76726f188e89e8e17d6c1cabf0b6f45228359c
+- card_id: the_emperors_defense
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: the_emperors_defense.jpg
+    sha256: 0ec5f0e4be07ead7cc2ae76e77fa3c0ccc86e285bc8537e6a8a2761553228946
+- card_id: the_emperors_justice
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: the_emperors_justice.jpg
+    sha256: 87524689af5efd953489fe8275c90d072bec616b1e0b5c92109bb8746005bb97
+- card_id: the_lions_roar
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: the_lions_roar.jpg
+    sha256: 1772aeaecbe35a259009ec1803a801ebc1e0e09fdd3c72eccb8d5df9face1268
+- card_id: the_master_redeemed
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: the_master_redeemed.jpg
+    sha256: 45cb8713522d9c8aca9df0bbb62a3d1f8b1688a4f6abc81ac8082d4cbd12e4d8
+- card_id: the_wolfs_mercy
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: the_wolfs_mercy.jpg
+    sha256: cd08c5708847d58fbb98c1ce9bcc28912624219d10661a4ddf2a2668ced47b8d
+- card_id: threads_of_fate
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: threads_of_fate.jpg
+    sha256: 56c0e8a0834ce74c2eda4c25bc83cf4f2e5ff119ef0e0409a2d4aae9cac10f81
+- card_id: tsuruchi_masanori
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: tsuruchi_masanori.jpg
+    sha256: 6294e3d392883ce32d97f3559972612305d7bbb920c28f1ade908d4f45629344
+- card_id: usagi_retainer
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: usagi_retainer.jpg
+    sha256: c6483e8a23a6d94e0fa48543f89c91c4e0418158556d2ee82b7453eca13ba756
+- card_id: wayward_attack
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: wayward_attack.jpg
+    sha256: 88bf98835b70e807fc9c0f0415bcdf9448a65a71dea7cb5be361b843360f92b5
+- card_id: we_stand_ready
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: we_stand_ready.jpg
+    sha256: 39c958558a77cade6b9bdedc6947a75f1ebaff031384ef3070a4d0ec2de28571
+- card_id: will_of_the_elements
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: will_of_the_elements.jpg
+    sha256: 08e651c33de692a692e62fe191859d6b9805ad4bcf1e022f2fada45be9ec6c9f
+- card_id: writ_of_the_anvil
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: writ_of_the_anvil.jpg
+    sha256: a91c3f85375cd536ec44495064f2a871bd5ba8c8c687ab8ba0c3c0babb9a9400
+- card_id: yasuki_miliko
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: yasuki_miliko.jpg
+    sha256: dbbc3c8e9d195bad2f9707e1e225dc50f24ebff9a0c48e520466e386c6877d21
+- card_id: yoritomo_buntaro
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: yoritomo_buntaro.jpg
+    sha256: 02a3beb0c7946f24a8d77547e92a1c35d003fe26d8b0f79a33737c8ebb554866
+- card_id: yoritomo_kaigen
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: yoritomo_kaigen.jpg
+    sha256: 896cfc63dff6c19559c7cb7ec6c63ffaae4117ae1030cf773de1495e400b4863
+- card_id: yoritomo_kiroto
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: yoritomo_kiroto.jpg
+    sha256: a3903f1724903a02331ddf13696629db12b6a1fb7db410cacbdf3bf554c79fb6
+- card_id: yoritomo_kumita
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: yoritomo_kumita.jpg
+    sha256: 1841ae9eea0475db0ca6bba4064239edece040b9b4b0f38435cfaa303000971f
+- card_id: yoritomo_okitsugu
+  printing_id: code_of_bushido
+  files:
+  - role: front
+    file: yoritomo_okitsugu.jpg
+    sha256: 1c337e062b76c10c6c601f5c1930c4a1bcc08614c4b4c23d484f59165e5a603b

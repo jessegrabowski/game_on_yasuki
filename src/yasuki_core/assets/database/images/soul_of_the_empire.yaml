@@ -1,0 +1,1196 @@
+set: Soul of the Empire
+images:
+- card_id: air_dragon_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: air_dragon_experienced.jpg
+    sha256: cb2f5e280bb2b2877379b840c4d98dc377b8c0fa27eeb20b32310ca35d7188e1
+- card_id: amoros_honor
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: amoros_honor.jpg
+    sha256: 135213e5950c95a5ecdcc75890ac18b90768209f5cab51d9fd4f3f132ca87415
+- card_id: armor_of_the_ebony_samurai
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: armor_of_the_ebony_samurai.jpg
+    sha256: e728daff7e2413910c1cba9ee322e53b523ee76ce5c05d16c5a96914f78bbbd7
+- card_id: armor_of_the_monkey_clan
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: armor_of_the_monkey_clan.jpg
+    sha256: 3b411b3ad68d9284505151233f50896fefca5a19ae6ab2e2919eeebc229422a0
+- card_id: armor_of_the_twilight_mountains
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: armor_of_the_twilight_mountains.jpg
+    sha256: ba4f64cfa73f361c5a36426c0f4fbe8e8f90cb08318088a4126674a5d57b2d53
+- card_id: armored_steeds
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: armored_steeds.jpg
+    sha256: d1e02f93e7c6cedbe9868da6fe70bbe1227e65407028bf71de2c90dfd693c756
+- card_id: asahina_archers
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: asahina_archers.jpg
+    sha256: edcaf508997c093c1c21a11877eb18d925fcc1b72c3e00af484132c034af6cb4
+- card_id: ashida
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: ashida.jpg
+    sha256: d4b82da27d6d073fede847e9b5c9a422c01adc92d94225f6d09c2627529e586d
+- card_id: ashigaru_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: ashigaru_2.jpg
+    sha256: 92d696594201ebf674e4f702386f751c43fe961e50a18ce792e9feb881a92649
+- card_id: bayushi_aramoro_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: bayushi_aramoro_experienced_3.jpg
+    sha256: 3a29c6494f493dd540d970e229d99cb0bfb0c11495dba863895be93f7f938367
+- card_id: bayushi_goshiu_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: bayushi_goshiu_experienced_3.jpg
+    sha256: 49b6d4963c25b2c20842230f0485a470d6a17af261e7815c183d560bfe32e688
+- card_id: bayushi_hisa_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: bayushi_hisa_experienced_3.jpg
+    sha256: b636a312884d00ee5bfb90e8362c5f2e2daf1dde48a2ab432fca586fe2cee2f3
+- card_id: bayushi_ikita
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: bayushi_ikita.jpg
+    sha256: 44ebfa50f958f1fec5eee314442c1a9afc91c9e4f980733e4e7320eb8525ed5c
+- card_id: bayushi_meharu
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: bayushi_meharu.jpg
+    sha256: a5f4e5073cafc04e0932527beb2a8de6811ef0151fbecd62f655ed7a4f483bbe
+- card_id: bhakarash
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: bhakarash.jpg
+    sha256: 13796d44a7e77e185aa8a7eb5c1ea39f7491ab7a20c168ef0393d888adb8f6b5
+- card_id: bide_your_time
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: bide_your_time.jpg
+    sha256: de33116d69f0ee84294d4b0c1d6a015d689315e3f52c76e9c1de79e52710060d
+- card_id: blessing_of_the_celestial_heavens
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: blessing_of_the_celestial_heavens.jpg
+    sha256: f2b938ba0ca2751b3b04ae41f9d4818ab2db06bfabe8fbe2157246324cfeaf29
+- card_id: blood_rite
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: blood_rite.jpg
+    sha256: a49d91b258c7fe1ec64e67c93dff9447017f88642a86a54a71a56ea8a88e072b
+- card_id: bloodstained_forest
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: bloodstained_forest.jpg
+    sha256: e13db49611f0cb12b371e433441226357187c7b27cc94d48ec81cb726b4d3ac1
+- card_id: bokatu
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: bokatu.jpg
+    sha256: 2bc7452a8fe5e52ca8686eeffac713d4638f28dbb968bdead3148dcde37d9eb4
+- card_id: brothers_in_blood
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: brothers_in_blood.jpg
+    sha256: ba5dab5c269095fde996b98bf955f1fa8e9111224cf0f91865b8067ba7ddecb1
+- card_id: burning_the_ashes
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: burning_the_ashes.jpg
+    sha256: 5e459af61f1263420edfc2b8e04d24e6a8a52e69b6b490ce4b8fec9337be3a36
+- card_id: byoki_no_oni
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: byoki_no_oni.jpg
+    sha256: 10933416b31cbd6b1f4fb8f8fe05690979558bf4a643dca9ee6d80c5d1441d6c
+- card_id: cavalry
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: cavalry.jpg
+    sha256: 42f89d7a8d13096496e7f2bc8228f5c0a17aa6c4eb81d5bbca029854de3318e0
+- card_id: cavalry_screen
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: cavalry_screen.jpg
+    sha256: ed0505cb99d2b4a6e525acda88cb5b02876c6be81327fcd4d5f0967d9a358d16
+- card_id: chains_of_jigoku
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: chains_of_jigoku.jpg
+    sha256: 0a088cba2ec5d903154e40e45b47ffe3e2ff558bcffce3e4abe2582a81eb7f33
+- card_id: city_of_empty_dreams
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: city_of_empty_dreams.jpg
+    sha256: 5ae9763afd9a59bf4e110bf2327a90cf2857bd6c79316a0b12f667daabff6d3e
+- card_id: city_of_living_flames
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: city_of_living_flames.jpg
+    sha256: c00d98e7900323698fc03b0043dd56a57bb89e13abb5e3bc9f631c501488d018
+- card_id: city_of_loyalty
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: city_of_loyalty.jpg
+    sha256: 30f548d0c258a6ce386de758eb6926f6a49e58247bede063937bf43c40970240
+- card_id: city_of_tears_sote
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: city_of_tears_sote.jpg
+    sha256: e42ea1181d85c4840fd3de6ec5567d0dcbc36781f7408045bb3d13dd08e0a975
+- card_id: city_of_white_clouds
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: city_of_white_clouds.jpg
+    sha256: d066d4c04ca2650c8476f314038901120ae44793b8daa6d070c215f461ba98e0
+- card_id: cornering_maneuver
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: cornering_maneuver.jpg
+    sha256: 2dfd74728cc62cee516cbb6c716de1173fc67b449a3f6b8c65ea5a672ddc22ce
+- card_id: daidoji_rekai_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: daidoji_rekai_experienced_2.jpg
+    sha256: 4ffeb763175b24c2fcec9865639410645454f4cfe549641759303cef1a8710b5
+- card_id: daidoji_technique
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: daidoji_technique.jpg
+    sha256: 425162c5f95cc853ba062dd634aae4e82161dcfdef7c843bbeeb1413df8e36e2
+- card_id: dairya_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: dairya_experienced_3.jpg
+    sha256: d4493104b52831ff0e320e78a8992c1d5b793995832432c04ef47d8a966e2f4e
+- card_id: dark_plains
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: dark_plains.jpg
+    sha256: 68707c17d5ee2b1b28a88aa1d4258e1c1a51196423d6b1a5f11a18564976da7e
+- card_id: deadly_fright
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: deadly_fright.jpg
+    sha256: 6d87b8e7406c23cf264bd50f012ef8ac2c31cb7e123c7a64612f76cc8b370c9f
+- card_id: deathseeker_technique
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: deathseeker_technique.jpg
+    sha256: b14870f62e99bbbd81553fb4b79b8af704d12dc7153f8286d25d9eeb276e6f1c
+- card_id: defenders_of_the_wall
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: defenders_of_the_wall.jpg
+    sha256: f2313174a1d6c1af06dae6f3fd110bee197d9a0639e8a2ce541936dce1ec0fe6
+- card_id: devastation
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: devastation.jpg
+    sha256: 994786f2d62e8108e73be149d9e06a4a6d4488844d19f928cd5e4224c0364205
+- card_id: doji_benku
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: doji_benku.jpg
+    sha256: 3334aaa68f7935d33b314b6c0eff152917b78cccd55effcb9ee168be93a24815
+- card_id: doji_kuwanan_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: doji_kuwanan_experienced_3.jpg
+    sha256: cacddd7b0b526393097afed2adef79079da143ac20897f5a5ad7d1560b0e53bd
+- card_id: draft_notice
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: draft_notice.jpg
+    sha256: 0ed47245b4613ff07dd0b9f74ac945c65416e000e3b108cd53cfdf07710e78fe
+- card_id: dragon_of_fire_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: dragon_of_fire_experienced.jpg
+    sha256: 93548e53ab5f5440304c064c47978bea5fedb3d565c66382bb97b7cf4f0ec72e
+- card_id: dragons_tooth
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: dragons_tooth.jpg
+    sha256: c36491a4446154c270c2507ad851685b150896055f1475fc1c31c44ae84a5786
+- card_id: earth_dragon_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: earth_dragon_experienced.jpg
+    sha256: a6475ef1f291275a33c090e7fd6794ab48b0fcb0f95fc0b67a31ea75a34d9dad
+- card_id: elder_goju
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: elder_goju.jpg
+    sha256: 31b6b687a981d7f340f03300a9ad78ee5d9677a485f0887af9a664b993d93c36
+- card_id: empty_crevasse
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: empty_crevasse.jpg
+    sha256: 3e888722512e075dd8e906ddc10fac7cf7070ca1f6a860e1b86547fa09c722b0
+- card_id: eternal_halls_of_the_shiba
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: eternal_halls_of_the_shiba.jpg
+    sha256: e69d4acff8b6fc29895eff19dcedb5c5fc48d9aae7bc76f76c144ff35ae82d4e
+- card_id: eyes_shall_not_see
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: eyes_shall_not_see.jpg
+    sha256: 649e81e2402a36702eb88dbb9fe8fdbae7bf0b1b6c0ae77b992508786d904fa1
+- card_id: farmer
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: farmer.jpg
+    sha256: 6e9507d1bfa70afb23932b810dac827ba609922707f51e2941cf4db898de571f
+- card_id: fearful_soul
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: fearful_soul.jpg
+    sha256: fcfdc4a99fa8be0f29e895b74f689b3bae5c0dfe26f3f550df9bd5f905f4b10c
+- card_id: fields_of_courage
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: fields_of_courage.jpg
+    sha256: 0fab22ac29acb5eed4622339a674a87cc63261ceb96cc7911fa784e2ea3ebc53
+- card_id: fields_of_the_moon
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: fields_of_the_moon.jpg
+    sha256: 8f1dc3ea1e2250b28aa054605f2f4173d48f356159e1f0db669747c33f6ae37a
+- card_id: firefly_tattoo
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: firefly_tattoo.jpg
+    sha256: 831134429979028b9115504c7048cabaf6c721b1e81f052478c5b328a139022f
+- card_id: for_my_clan
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: for_my_clan.jpg
+    sha256: 824831a86917287eec5e1a4ca65e28cdf3c420a76f0726aa6692e37279d0ba56
+- card_id: fortified_ground
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: fortified_ground.jpg
+    sha256: 7d9b320dc6872816ed7b606a892c44a05ebd90d01e3e9c6b071bfd20cf8ccfaf
+- card_id: from_broken_ground
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: from_broken_ground.jpg
+    sha256: 99af21fdb1f7588b306e88af0a91c20d647a5a5f794ef77ffc082be125b56273
+- card_id: fulfilling_my_duty
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: fulfilling_my_duty.jpg
+    sha256: 5897cddafe40a79f31862c6cd6008389f7a60a6a8c53d0057a97fca7be673849
+- card_id: fully_armed
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: fully_armed.jpg
+    sha256: 99b5e4bb64e275c0bfd648fb5d4da32e32f2af877cf3a247d5334b07790b1d10
+- card_id: ginawa_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: ginawa_experienced_3.jpg
+    sha256: 8500824030f027959a692b239301337b42804d23363c358ac57a927300853dbf
+- card_id: glory_grounds
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: glory_grounds.jpg
+    sha256: 931bac55355fff9128bc50926bcb0b9ff9e0569529599f3c3df6945af829b743
+- card_id: goju_adorai_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: goju_adorai_experienced.jpg
+    sha256: 2b95c1c7a16b1a30986266c45e94a85500961cdff0770ea384268950234aeb2f
+- card_id: half_beat_strike
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: half_beat_strike.jpg
+    sha256: b7afd1195932cd559a81d2225fa9344083463734b3d73f7ceeb71023816a415f
+- card_id: heavy_barde
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: heavy_barde.jpg
+    sha256: 13339026e318b75eab2b98b75c9a3904ab0f2ba1cdc042f00d729fb63d49e444
+- card_id: hida_tsuru_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: hida_tsuru_experienced.jpg
+    sha256: 4ff656c82d554c9f8a826ebddb7e223b05ae9cc4a0a83d90ec1488d49d395fb2
+- card_id: hiruma_abun
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: hiruma_abun.jpg
+    sha256: 2fc704f8ae79c1a1eb71643d126720f3512aede84d5dde3e792dacc1552d8aa0
+- card_id: hitomi_iyojin_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: hitomi_iyojin_experienced.jpg
+    sha256: eee12a195eb6d33559b870adf6dc9fc17c9d2032913cd67743dc20b8166e3fcb
+- card_id: hoshi_eisai_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: hoshi_eisai_experienced.jpg
+    sha256: 40a05b877dd1fbdbc74dd81d2acec9442674f7b4c5c7802db7c41dc1b749ac6d
+- card_id: hoshi_sensei
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: hoshi_sensei.jpg
+    sha256: c55925d19590237cd12f8e7b6274bb5a7816b5288e3ca77c1be1fdc935aae4bf
+- card_id: hoshi_wayan_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: hoshi_wayan_experienced_2.jpg
+    sha256: 3a626a56e9b48d7bcaf55e56738e107a664f0cd4c227595dcdd34d576bfdab76
+- card_id: hoturi_sensei
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: hoturi_sensei.jpg
+    sha256: 0f26e27c448d73718cc53b451ab424d2f9151f27ba1d43b0bdf45beda786a9ff
+- card_id: hurlspit_goblins
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: hurlspit_goblins.jpg
+    sha256: d674dab903df88153bbd45f02c9666ea39ca5e465af6a5ad6e8481051540d77f
+- card_id: ide_tadaji_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: ide_tadaji_experienced.jpg
+    sha256: 50d19f6b55da9f07df498ccb9a2b6a7304523ec7f2fca9207a19b4fa4b13074a
+- card_id: imperial_wedding
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: imperial_wedding.jpg
+    sha256: 1f350c7cb91e8927a47802fc25c8846b78b66c19a92ef3cfc2c7145dd392398a
+- card_id: increased_production
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: increased_production.jpg
+    sha256: 62a63eb1483ac0bdb6e0e929800cf0a3c6132eefede0771894493b6c1e3b1d20
+- card_id: into_the_heavens
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: into_the_heavens.jpg
+    sha256: c91ae3ee1adeef9e6ff9878d5c6712223a33d9fffae1ac5bdd137f46e3d6537f
+- card_id: iron_mountain
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: iron_mountain.jpg
+    sha256: 6809ee7fb5eee663694a28ac12aacc62880fc0add7cbaac9871e1c60bd32b6a1
+- card_id: isawa_tomo_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: isawa_tomo_experienced_2.jpg
+    sha256: 33173d5bc1a5fec80f17c6094d48db3002313db28e13b059af5275c5185b7d99
+- card_id: jal_pur_raiders
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: jal_pur_raiders.jpg
+    sha256: 6161f26a8a91caeabc96c589b377f0af712021f0f08f06dded57da7854fe85bc
+- card_id: jama_suru_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: jama_suru_experienced.jpg
+    sha256: d30f76138bc1ee79e80dba1624db7e751f88249fa4e00d2e9a50293118d6ac47
+- card_id: kaedes_tears
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kaedes_tears.jpg
+    sha256: 6c152adb51fb4767ab5e1a97cb502a8b83792bfa465d6967ac0f8f709428dea9
+- card_id: kage_experienced_5
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kage_experienced_5.jpg
+    sha256: 030c11ed443da617990b2bb73cd00a32e9dab4336dfddbab8420440fcadba54a
+- card_id: kakita_kyruko
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kakita_kyruko.jpg
+    sha256: 0f3e36da30d85b408e0225edf9a6eb56431eb8b6e7517bc21756469b43c61e41
+- card_id: kakita_yoshi_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kakita_yoshi_experienced_3.jpg
+    sha256: c51f11dfdb731d42939f974df5fd7c20366042f75b5f71799f118ac8b36786bc
+- card_id: karmic_link
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: karmic_link.jpg
+    sha256: 71915519ffc741551435549949ab471480079c13ce46d88cda2c0f8f85bb912a
+- card_id: katana_of_the_twilight_mountains
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: katana_of_the_twilight_mountains.jpg
+    sha256: af504dd8de6208e5c1dd109eeff32c667e631e6837d6429f2db7d183d4167f05
+- card_id: keda
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: keda.jpg
+    sha256: 11ec0cea28651b00905dce7bbbb74a3d92da76bb8a871b9d0f95d1971eff60f3
+- card_id: kingdom_of_ghosts
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kingdom_of_ghosts.jpg
+    sha256: a050e7d2fd123d5275bd54087cd8479cc8e9d179750813b9f6387aaf4b1b566f
+- card_id: kitsu_motso_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kitsu_motso_experienced_2.jpg
+    sha256: aef13d7b1f680d034619033fcd62be3dc7b30402e0323f26477b2e4108a4119d
+- card_id: kolat_chambers
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kolat_chambers.jpg
+    sha256: 2755039a9e50fb5fcee6b3c193fa0988a373267b8dcf3469a63079285a7df22a
+- card_id: kolat_courtiers
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kolat_courtiers.jpg
+    sha256: 4f9a227b088a9890c1eae6235a434cad2af1adbfc442d558d0c42bc5597721b0
+- card_id: kosaten_shiro
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kosaten_shiro.jpg
+    sha256: 3e08b7fb1e8a6a52a85c43c701f39f3523a8772b280ca622aa8ab9e54374adb2
+- card_id: kyoso_no_oni_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kyoso_no_oni_experienced_2.jpg
+    sha256: d16a7781c11f63e7181152607acb67855db05488b96a6b293fe8103f694ce0a4
+- card_id: kyuden_kitsune
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: kyuden_kitsune.jpg
+    sha256: 8ae9ba0105b64305548f2cb1772626e7ac4ab0708f01c82310000ab1534f72ee
+- card_id: lessons_of_honor
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: lessons_of_honor.jpg
+    sha256: 497149b553195504e5b3634aed19c782ce5381476273ae716084b21276fa2853
+- card_id: lost_souls_sote
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: lost_souls_sote.jpg
+    sha256: d8780780abdbeb354b10006fe33829816fb0dc43263bea0b68d62531ab821e63
+- card_id: magistrates_blade
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: magistrates_blade.jpg
+    sha256: 714b2df90e2971c6cfccc3a6faab57f3d134633711fe8a67cee092398716adb8
+- card_id: master_courtier
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: master_courtier.jpg
+    sha256: 3531f6901284ad686084fcd05a92cb2f6460a9f4bfba8909213ded7988c55fe3
+- card_id: matsu_agetoki_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: matsu_agetoki_experienced_2.jpg
+    sha256: f7b3f6504185696b88c67c612d2936ebc952b50a21f570d26d283bf2ff33fac1
+- card_id: matsu_domotai
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: matsu_domotai.jpg
+    sha256: 17c1e71b9e54b2c226f8261c0c21770781085927e780be07abe08f3612a3cb94
+- card_id: mattck
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: mattck.jpg
+    sha256: 536b3d7742ff581b8b0c69ad81f2eb292a9fa098c98e1cff99f56941d3096187
+- card_id: mirumoto_taki_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: mirumoto_taki_experienced.jpg
+    sha256: a39f6b9053bcc570ead1d3b3fe84a2cb22bb5b9ade680c43f24c5d63d4a3497e
+- card_id: moon_and_sun
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: moon_and_sun.jpg
+    sha256: 4b3922902e122166ecdca35b35510cadcd660727a30137516b9100c4bcd335df
+- card_id: moto_chargers
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: moto_chargers.jpg
+    sha256: 6a9928a990e348a0057827f3fe9103fa39a341d7b6ac68f9c96d7a34be74e287
+- card_id: moto_gaheris_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: moto_gaheris_experienced.jpg
+    sha256: 47110034718c86e6f956cc24bfffb04438fe830f7fac04a7fd134d94c4141c33
+- card_id: moto_tsugi
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: moto_tsugi.jpg
+    sha256: 911900042946b4cd8f5ad246b9a9ee891efee3e1e7c551cbeed6a20e23eb3228
+- card_id: mujina
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: mujina.jpg
+    sha256: 7bab689c3aa19b0470dced610b82678bdfd32533a5955bb3fc53025ad07bdbf8
+- card_id: mukami_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: mukami_experienced_2.jpg
+    sha256: 76ade4d8caf055630927b02d78b9cc84b3f972073458619647416e62b8962c26
+- card_id: naga
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: naga.jpg
+    sha256: dd257b1b09b7f4be49eb2fe1d73a70c71b28a834326df26e737e3e0f0fd0d03f
+- card_id: naga_vipers
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: naga_vipers.jpg
+    sha256: bf5baf081aeb31d3cf49b07a7ead301404d75c76fe388d660ed7a2861e1a1552
+- card_id: naka_kuro_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: naka_kuro_experienced_2.jpg
+    sha256: e63da0e498682c61855ae0d5303406abcdf78de8a7f70798030aea8ad6ff3ecb
+- card_id: nature_provides
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: nature_provides.jpg
+    sha256: 4f66d4bcc01ac8a50c4f4ea392ffeaaa6f1c9a597aaba1b685f98736aab3e895
+- card_id: ninja_mystic_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: ninja_mystic_experienced_3.jpg
+    sha256: 8f4bfb205d93ada4966a1412aa58563d630887ff0d897806c9e266bb6cf67c6a
+- card_id: ninja_shadow_walker_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: ninja_shadow_walker_experienced_2.jpg
+    sha256: 54c0da564f886d369794a230ce8ec5ae08f16b838db0115dcccc2afadbef04d4
+- card_id: nori_farm
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: nori_farm.jpg
+    sha256: bd0af397c044201956d2e090630abba8ecb121bd4b2fee23a7a2fe64c97dde25
+- card_id: norikesh
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: norikesh.jpg
+    sha256: 97047912c2062b0b43e4545cef6690d87e40c687381635f8a2fc6db8358794f0
+- card_id: northern_provinces_of_the_moto
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: northern_provinces_of_the_moto.jpg
+    sha256: 4ed50348e324a01dcd7fad40e8e42923671027cefe5aa4b8f9bd6d488f7a9c10
+- card_id: o_ushi_sensei
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: o_ushi_sensei.jpg
+    sha256: 68b358e86de68720799684c587b17150e44c1d4b663dafb1a7ff00a5d25690c6
+- card_id: o_ushis_hammer
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: o_ushis_hammer.jpg
+    sha256: 46e73f3e2767939567b44c619702bc7dccbceeacd617fceb90e21e9faec5a691
+- card_id: oni_no_gorusei
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: oni_no_gorusei.jpg
+    sha256: 5c4d3e6f10c7c291b7991f0d12332f8694886fa82f76e122900e29e928d9ab58
+- card_id: oni_no_okura_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: oni_no_okura_experienced_2.jpg
+    sha256: d6679c66536710d1391878ffba242bfd112f8ada50f10f1108dcfeb29cb92b0b
+- card_id: oni_podling
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: oni_podling.jpg
+    sha256: a4e0f0778fa081699d260a87e8fcbf50fbecb1a5c1d422520b3be4d9bbecece1
+- card_id: orochi_tattoo
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: orochi_tattoo.jpg
+    sha256: c60db63f0e06c2309c5f923d6e41c011f672b80c83ad50d5e9ceedc5f1fe7b1b
+- card_id: otaku_kamoko_experienced_4
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: otaku_kamoko_experienced_4.jpg
+    sha256: 972996e235bfcb4a20f09c97d2104681e56b5efea7f4a6ab87c082cd742ab92b
+- card_id: otaku_sahijir
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: otaku_sahijir.jpg
+    sha256: 68911c7acdfefff3b4037586f4e424a24378e617046c55617b0f7c6bdb662956
+- card_id: otomo_sensei
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: otomo_sensei.jpg
+    sha256: 026f253f77db419fff70c8bad66cc70b493610b24c7f928b3e25599e47868fd6
+- card_id: otomo_towers
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: otomo_towers.jpg
+    sha256: 7bb194bf2f5964bf323c7b2fdfb4f6a4af1ea9c86f89e6301eb5afe80cfbb5ed
+- card_id: overwhelm
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: overwhelm.jpg
+    sha256: 81ce42e5f13d9d1aef213e986964e7b7898457cacc3d550954b075ba00cbfb9a
+- card_id: passage_of_time
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: passage_of_time.jpg
+    sha256: bf4063c4c07c6d0ceb6f747a8958be61dc9555a7281bb3f1a4609eba2ab6a4e0
+- card_id: past_glories
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: past_glories.jpg
+    sha256: b2346f54dea240a46f072dd6d944527ff8f376096cb96851f036250824e88464
+- card_id: political_favors
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: political_favors.jpg
+    sha256: db72b664ca0e6de690f7e1c308900bd38751bf951d583bf2808030c759bbd6f6
+- card_id: public_ridicule
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: public_ridicule.jpg
+    sha256: d694fafbc3e0a79bbdba5ceaa333dbf40fb537efd1408a5568c6dee4fcd68b1f
+- card_id: question_without_an_answer
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: question_without_an_answer.jpg
+    sha256: 913036cc6b5f4fc16b24a779e18a7b4398c30f2c0291aa5faed1dbf03b06d41d
+- card_id: rank_hath_privilege
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: rank_hath_privilege.jpg
+    sha256: 164544793b9704daa8a53b590298b7eb1f7d11fe437e89ac25c10466514424ee
+- card_id: ratling_pack_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: ratling_pack_2.jpg
+    sha256: 49d5ebc40b3cc453bd2dadd7fd280cf1a2a0827febdb0807dce92058af89f254
+- card_id: rebirth_of_the_dark_daughter
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: rebirth_of_the_dark_daughter.jpg
+    sha256: 9dcd34c5d410f1e639140350f3f09db8772e1d4022b4b6b6c7c3b905f8b65147
+- card_id: regional_travel_papers
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: regional_travel_papers.jpg
+    sha256: 8a5337b100f3015374d6a683add3d1bd8c1b2cd0e96d65659c3dfa028b1bba1a
+- card_id: restoring_the_age_of_myth
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: restoring_the_age_of_myth.jpg
+    sha256: 16dec4af444b9dc81aaf72de7fc1d5e3f9034cc56182708a52718e0377a7e846
+- card_id: return_of_thunder
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: return_of_thunder.jpg
+    sha256: c7ad6b4c1204816c7674717799d3f41d4bdb6320fb45d0ea2007432bc85b5c2b
+- card_id: riding_yari
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: riding_yari.jpg
+    sha256: 82ba8b45e07ecda3f359e2f73599829671222a60c95eef816bc10c2a1473be63
+- card_id: ruined_earth
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: ruined_earth.jpg
+    sha256: ffccf53b20ccb42d2c9b6076d453b3c912f8bc962b2c55936dc28fc2b1a70a70
+- card_id: ryoshuns_last_words
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: ryoshuns_last_words.jpg
+    sha256: 5fe6af32a953a7b7bb044ab3c0bd7e7aff9cbd4b0f3050d2afa2f462a4c3bad6
+- card_id: seppun_toshiken_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: seppun_toshiken_experienced_2.jpg
+    sha256: 0e955f095cb9c8c88a3b1d546beec30377ac66e052d451944172191154dcf79e
+- card_id: shadow_assassins
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shadow_assassins.jpg
+    sha256: 3b40f5c8d96a2ec5a7995b5bd1622cbca741dca3b7353bbf191b9681ed6eb3e1
+- card_id: shadowed_wastes
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shadowed_wastes.jpg
+    sha256: bb1e10755fd6e081c9ce1373856977ec54521fd8f6a9998fbc73a928ef082529
+- card_id: shiba_kiku
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shiba_kiku.jpg
+    sha256: cae3d5c226a113fbd055ad187348a6d8ad414ccdf4e8f6fa17184f3926970f7c
+- card_id: shiba_tsukune_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shiba_tsukune_experienced_3.jpg
+    sha256: 5fae6e7457b9ad6156ead2058e3685c12660d00c3bcbe4c505bc455bb3494fb0
+- card_id: shinjo_hanari_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shinjo_hanari_experienced_2.jpg
+    sha256: af834c516a83a86c052dce275ee174478a697fedcaffeb565343a7ce8a57e989
+- card_id: shiryo_no_chiroku
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shiryo_no_chiroku.jpg
+    sha256: 6acc4fd479bcb6b872030132343d600d16513f4298f63ac8431902df7872c99a
+- card_id: shiryo_no_gohei
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shiryo_no_gohei.jpg
+    sha256: 30929fff77ee5e6351f1b806725fd7351a4948aaee6189e5559ac6b90dee6be9
+- card_id: shiryo_no_hantei
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shiryo_no_hantei.jpg
+    sha256: f2418fcfe8ce887dd69bce4763943586b04b3c1800ee441f638a21f79ddf0775
+- card_id: shiryo_no_kunliu
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shiryo_no_kunliu.jpg
+    sha256: 97f149f0bb75c59d5d007a721d6dd351dabc66111dfa907b5cc0e86e2d836d24
+- card_id: shrine_of_the_dead
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shrine_of_the_dead.jpg
+    sha256: 4bdff4b39fb81182c1a132c62ff6d8c62207804f771ee894945b3581727abcd1
+- card_id: shrines_of_the_emperor
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: shrines_of_the_emperor.jpg
+    sha256: 3376949fa3647a3dd50c4389e794aa001fa82aebfb4e9dd15a98b1c5da160734
+- card_id: sniping
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: sniping.jpg
+    sha256: 810edb6a42668228a234dbdb84c0b057ec086982d30ae30e719c58dbda619b89
+- card_id: something_worth_dying_for
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: something_worth_dying_for.jpg
+    sha256: 2cc8f2e03c7f6c52fbbb65450371a8dcdec243538d55a9d64b0a09e233f922f4
+- card_id: son_of_the_clan
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: son_of_the_clan.jpg
+    sha256: d58367bd47cbd5dcdb03f41c6c65dc096588a0f84fffab64edf385099383efeb
+- card_id: soul_of_the_empire
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: soul_of_the_empire.jpg
+    sha256: a2d4215bab5b4e9e2e8fc5d6a2919d68fe36311a074d2ef917278a41d132ee7c
+- card_id: spy_network
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: spy_network.jpg
+    sha256: fa1432f8f2db36f5f0bd6543226c03eb05ce06d6bc4ff64af1975fc2ed770707
+- card_id: steel_and_iron
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: steel_and_iron.jpg
+    sha256: a2d4583098bbfcc6288f25fa2d0adcf49ca0158037f097da12a9566d76297582
+- card_id: strike_from_behind
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: strike_from_behind.jpg
+    sha256: 73f91d9d15010fe89cd95fd9b28b46681e26ad6064773a3ec088fd1cce393fc6
+- card_id: suana_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: suana_experienced_2.jpg
+    sha256: 8c774a84f6e8295da9a7b3cd72d397a84fcbdd6c068302c69bd6d83054dc7784
+- card_id: swamp_marsh
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: swamp_marsh.jpg
+    sha256: 07d8dc7b539d78e1e3ed6ec95f04aab82a1f8dbca9f30861cfb5769d144e9e77
+- card_id: temples_of_the_crow
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: temples_of_the_crow.jpg
+    sha256: c5c66a3a1f6a60cf0fdba2e89e5e7cbda7c112a1a16f6d7283ad8b1eeafdde8c
+- card_id: temples_of_the_new_tao
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: temples_of_the_new_tao.jpg
+    sha256: 25511bdd9473db2323b8f30673053a4d88c7ce6149eb88a5b714879608b3903d
+- card_id: tetsuya_sensei
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: tetsuya_sensei.jpg
+    sha256: 8c2094b7767eb816c55ba0e0fa94469e9b4f8663bf1aee0827ce5829ff0e396d
+- card_id: the_citadel_of_the_hiruma
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: the_citadel_of_the_hiruma.jpg
+    sha256: 93624a1c44f6f81420ecc5893069da8ad86ca64ffb4bd4991a0bae8d62ecc296
+- card_id: the_dark_path_of_shadow
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: the_dark_path_of_shadow.jpg
+    sha256: ca2e7cd24db1d544a4839b9cc5049ceea8c2e266a99519ab44a59a1e28cb1103
+- card_id: the_emperor_returns
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: the_emperor_returns.jpg
+    sha256: 5089062c3064824fe5fff734118c9bbb6265e98916d661c6c51db3a4d1af104a
+- card_id: the_grey_crane_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: the_grey_crane_experienced_3.jpg
+    sha256: 62deb9691067b344b68e405c994e36e708c208e070b81bee93d57a2c1c305224
+- card_id: the_kitsu_tombs
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: the_kitsu_tombs.jpg
+    sha256: cc20201d52243015a80a2a845d0bdacbe333efe0bf64485ce47bc87fd771a968
+- card_id: the_new_akasha
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: the_new_akasha.jpg
+    sha256: 9c24ca3ae2069e7b8b734f4179c4ec4aa23d01e00c14d8724ee31cea07b1dbfa
+- card_id: the_spawning_ground
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: the_spawning_ground.jpg
+    sha256: 0eaa91b367794e83b7f1a1f84f671874a7d858336aad44bdee8606164cbd58f7
+- card_id: the_sun_returns
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: the_sun_returns.jpg
+    sha256: 03ebfb42ffb453114d3ac23ffe084435531e27197bd9381706adbc3f70568cb4
+- card_id: the_towers_of_the_yogo
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: the_towers_of_the_yogo.jpg
+    sha256: 548cb64d1b21a66019046a0fb6fd8802aa4447527742bcadeb4e4b6fd697e331
+- card_id: thunder_dragon_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: thunder_dragon_experienced.jpg
+    sha256: 99c9c6ceabdff31ae7f482df89b68ef33a3a40a7d373d588d03abb635f9f5044
+- card_id: time_of_destiny
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: time_of_destiny.jpg
+    sha256: 83ebdeda1eb288f6f47c1f1176143ddb77f2d34f9d33eb577052a64ec76d3c8e
+- card_id: togashi_mitsu_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: togashi_mitsu_experienced_2.jpg
+    sha256: bc0b5434a09e06ee6f998c9cb6a529497c2686ae0c041f821f2a449666a563b9
+- card_id: togashi_senai
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: togashi_senai.jpg
+    sha256: 913b0a809be7488978b2b5ea17c3e599b006a70190fd278b7d67cf8e385aa2a6
+- card_id: toku_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: toku_experienced_3.jpg
+    sha256: 29701c9a178925aba7021ea59734c7a2bfb7ed6631f526e61c72cd6e7df03aa9
+- card_id: toritaka_mariko
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: toritaka_mariko.jpg
+    sha256: 154f3df3d494c8a14a662c63f2d2baf3da97eacaf36bea7e8a645ba43f34c39f
+- card_id: toturi_the_first_experienced_4
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: toturi_the_first_experienced_4.jpg
+    sha256: d5ed8e0b10a4b537879d256e721228983a45a983ae15ac9b1d15e7040e7c139a
+- card_id: traveling_caravan
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: traveling_caravan.jpg
+    sha256: 6fe828855993964f6874a55213767172fd167d17b6c059e3f01936f65681a534
+- card_id: tsunami_legion
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: tsunami_legion.jpg
+    sha256: 3ba9183fed9eaa0524ee2febdd2fd7bb7e225df9cd86fb6ebd6e52bcb1a40636
+- card_id: undead
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: undead.jpg
+    sha256: 5c7fa254c74b899efc6731346cb504c87a83542ff40bf928adc09678020d9c89
+- card_id: vigilant_keep_of_the_monkey
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: vigilant_keep_of_the_monkey.jpg
+    sha256: 63fabfeaa4562f5fa78963469186c6bd5ed46a8d4105a854bb472cf49b0e1684
+- card_id: void_dragon_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: void_dragon_experienced.jpg
+    sha256: 832f5c904e6b66e75454804963107efb7ec0f159aa003a7bcb3be7b598e57d7a
+- card_id: void_guard
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: void_guard.jpg
+    sha256: b4fae3663806e896eca805f681f189f75378c40434d33254d2d252ba78ade540
+- card_id: water_dragon_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: water_dragon_experienced.jpg
+    sha256: 7179bfb201cbbfa1b69244f47481f1e81289d7e2865eda06f9924a407688a1bc
+- card_id: when_spirits_walked
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: when_spirits_walked.jpg
+    sha256: 13af1d90d51949cb9e9de8015cdef69fd600ad102b06f0a362dad28ee22140b6
+- card_id: where_the_sun_walked
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: where_the_sun_walked.jpg
+    sha256: a0ba85f337c4e678a975c36a1eae3126512c7c4a40dfaf88f78d7ea2539da0e3
+- card_id: yaro
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: yaro.jpg
+    sha256: 8a86bbf3a53131ed99f0da6f299d31fbc08f5e3e8176f5f8edb0ef95185a3da0
+- card_id: yasuki_nokatsu_experienced_2
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: yasuki_nokatsu_experienced_2.jpg
+    sha256: 6471459943725c69f09e253a279b76c495fae609e46b766aecf0369a966fd305
+- card_id: yodin_sensei
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: yodin_sensei.jpg
+    sha256: 6cdb082f86f6ed4a30671948fd717302a6e8fcccd0a84a9ef63d8abdca8b0aaa
+- card_id: yoritomo_experienced_3
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: yoritomo_experienced_3.jpg
+    sha256: 5b9c12598d43debaef9fc39631e987d99e0abc6c80b6308751e27de78692770d
+- card_id: yoritomo_furikae_experienced
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: yoritomo_furikae_experienced.jpg
+    sha256: 2c28d606ed2f93591e6e97d69cceb2ba6942adb275fd3df52395851c906d06fb
+- card_id: yotsu_shoku
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: yotsu_shoku.jpg
+    sha256: 79dcfe1159ebd75e028d093ced67fc50358220692f9270e3eae18463801cc034
+- card_id: zorrtek
+  printing_id: soul_of_the_empire
+  files:
+  - role: front
+    file: zorrtek.jpg
+    sha256: 32b3384d34ede7f516aebc45789fe5af2adfd0c416cde6f45a432cab622aa52f

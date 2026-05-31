@@ -1,0 +1,698 @@
+set: Battle of Beiden Pass
+images:
+- card_id: alliance
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: alliance.jpg
+    sha256: d0a9d99b2545d16b4c39811ad49e3d1c4efd2ff893e09aaa9bfcbb6c1961f042
+- card_id: ancestral_armor_of_dragon_clan
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: ancestral_armor_of_dragon_clan.jpg
+    sha256: fd1cd4cf069bca9653c6ca6e36546d9167c0ba9f04e1b76da290b9b8bf177628
+- card_id: ancestral_sword_of_crab_clan
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: ancestral_sword_of_crab_clan.jpg
+    sha256: 9b72fca5885d28fefa7632da07061417a98dfee73f2ec95c507fc1b2b00a8c26
+- card_id: another_time
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: another_time.jpg
+    sha256: 316352d5a7a8bfe2b6cf80e888005411e2d949d94883e05b4b3886d09a11d144
+- card_id: archers
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: archers.jpg
+    sha256: c986cdc8df5f73240e1a1f70ba281a140bc620176614de23eddaff0230f30b86
+- card_id: biting_steel
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: biting_steel.jpg
+    sha256: e06f6f8ab45985d218d92d26d3ec60b20e4fec81be659c6faf602576abf471ad
+- card_id: blacksmiths
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: blacksmiths.jpg
+    sha256: 38c68491d2d4ec5ad10cf79f88c1bbe8b900fb0d68cc297098d029ce8aedc173
+- card_id: block_supply_lines
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: 850a842914ef07cdfccfc607f46166e7b1ed99e894e107541c1d11cec0e94839
+- card_id: blood_of_midnight
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: blood_of_midnight.jpg
+    sha256: f916eddab041cf08ed51965043f2bab7069657d920a77dc3b75b0bde5b97b513
+- card_id: bushi_dojo
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: bushi_dojo.jpg
+    sha256: f067a868c7849e0d49de52fa51530c80390172e985030f57923b60b4db3d50fd
+- card_id: careful_planning
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: careful_planning.jpg
+    sha256: 9083b0f3786a2ed343718506994e0ab7d16dfa4f0e72ded2644de05b16cb2db5
+- card_id: charge
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: charge.jpg
+    sha256: aa71c1ddbfcf6e920a0e7958b6b5cd638edb57ad1f347229cee4b5a9718b17a1
+- card_id: contentious_terrain
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: contentious_terrain.jpg
+    sha256: 279e2f5700348cb30c7261feaed2ff61a6a67b0ee052bcf132c8c4378bf40db4
+- card_id: corrupted_ground
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: corrupted_ground.jpg
+    sha256: 8dd2a52469b50424664db878cb2b90b6aba5bb320fe5471c1fb9c647d7963900
+- card_id: crystal_arrow
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: crystal_arrow.jpg
+    sha256: 9e73aa52ae5faf91c5af12c1633119ce9bd0872da34290391f4af45950032ce1
+- card_id: crystal_katana
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: crystal_katana.jpg
+    sha256: 09f7a2e7272661ddc5e08bff80917212411b39669ab92f6228dec3284bcc4c14
+- card_id: dairya
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: dairya.jpg
+    sha256: 49ee531d04b9b1a21b8dcf6552b047e56428e7b7090813731aeb9c875474d68c
+- card_id: deadly_ground
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: deadly_ground.jpg
+    sha256: 07ff25bdff08caafdfa5a5ddc3eb66ff84b77d46d3ef4446d64777c6418d349a
+- card_id: diamond_mine
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: diamond_mine.jpg
+    sha256: cf5b1a8848e30a184ea8e6d9817567783dbf736469d9325154816e961a48ffc2
+- card_id: diversionary_tactics
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: diversionary_tactics.jpg
+    sha256: 99cf95e43985240c320b781c06c97c7564c1e6cbd6a6c3ef0ae08f925b41e4a9
+- card_id: doji_kuwanan
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: doji_kuwanan.jpg
+    sha256: 367886d72010d5e79ea96b367cf3a57137ce9c61982d07a322d56b48a84b1d77
+- card_id: earthquake
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: earthquake.jpg
+    sha256: 5614b29539afd37cdda35e9e312ee395b2c0c073e26d9f7303c3bddfcc3215c5
+- card_id: emperors_peace
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: emperors_peace.jpg
+    sha256: 927bed1c9e28b408e9f2a773c4b33e22063cb1927297184f48e3abd778590bc8
+- card_id: encircled_terrain
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: encircled_terrain.jpg
+    sha256: b02ddce82a1e482ad056eae1a0ffc877f2fc0807807cf210221b27644c4774ad
+- card_id: entrapping_terrain
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: entrapping_terrain.jpg
+    sha256: f511bd04ed335ec9a2be53d78a07f2d637d82aef18546b749563bd464012c032
+- card_id: explosives
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: explosives.jpg
+    sha256: 0110b592d9cd7ce7cf0b5afa7537013359a4e8b2326ac6b4364a4192e1d29e91
+- card_id: famous_poet
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: famous_poet.jpg
+    sha256: 766765b8504225635b9d3d100df9fa642eee258133701b20c15547c2dee1be3f
+- card_id: fire_dragon
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: fire_dragon.jpg
+    sha256: 39783f6df3d99eb2aa8307a5f2403562bb56eb6ce6143983f7d9c5361b88f5b4
+- card_id: frenzy
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: frenzy.jpg
+    sha256: 1de2336e1a52713c130ca96b71d708efe04319a2b20bf03a341246b2f0a905e8
+- card_id: gambling_house
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: gambling_house.jpg
+    sha256: 95875370e061575c2b8ec0e175f7c23d529bad3e25783ab746d4e3e3cdd19b02
+- card_id: ginawa
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: ginawa.jpg
+    sha256: 6d307cd1e979721eb865066bbcac6c626eade75dfe7f2eb3b0417479893ce36a
+- card_id: glimpse_of_the_unicorn
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: glimpse_of_the_unicorn.jpg
+    sha256: 1a6270636c05aa3ce5a31a8ab1be615dd4dfc76b7bd288636072b3c385cba3c2
+- card_id: go_master
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: go_master.jpg
+    sha256: c52a518a17dd2921390f565b958a8270989a8b81ce48c60a67beefbe797453b2
+- card_id: goblin_chuckers
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: goblin_chuckers.jpg
+    sha256: 282b614b2a7a18a925430efd2e2154152b1e5da0f1f576a78d87cc90bd21cee8
+- card_id: goblin_mob
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: goblin_mob.jpg
+    sha256: 5e881ef2d1df0b1dfaad906f4d166d40c1768100e220b8e7a62a98abdffd7cf1
+- card_id: goblin_warmonger
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: goblin_warmonger.jpg
+    sha256: 79efba3aa3e9f55c84158074b79d605c1a7a7ae37b90e1fea70758d57f120332
+- card_id: gold_mine
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: gold_mine.jpg
+    sha256: f5fabc82ace79a08ae8990f106df29cb36a1d15b2a9e692db3a04345b2753829
+- card_id: hawks_and_falcons
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: hawks_and_falcons.jpg
+    sha256: 1d9b05ace71936f1702ff16c0bf2299879a4440205ccf8d495731e72b9b18064
+- card_id: heavy_infantry
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: heavy_infantry.jpg
+    sha256: a771849f32479798dfa3f85a7a06e3462e53b9019cc9ebb5fbedac74c9bcd136
+- card_id: heichi_chokei
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: heichi_chokei.jpg
+    sha256: 0a649b0227fc01beb789531c567b82f891f1a807dc4e8f74d6c4b5e122e6b1dd
+- card_id: hes_mine
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: hes_mine.jpg
+    sha256: 730199288600f75565f4e210e2e2118f7bb1070d2b6e7535f97d7d713ea9cbd0
+- card_id: hida_amoro
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: hida_amoro.jpg
+    sha256: 3b3483f9dd586148fffbc1fb1d0dd300b096248ca0f09683ad6ed94048ceab74
+- card_id: hida_kisada_imperial
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: hida_kisada_imperial.jpg
+    sha256: f5177a11503aada45d1f6def2462e88482bc6d061858f12fdf7dd48353dbd62a
+- card_id: hida_sukune
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: hida_sukune.jpg
+    sha256: ba9627114c1b0db1d69fc8027b9394b908569796913ca93726d1af491d17afc3
+- card_id: hida_tampako
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: hida_tampako.jpg
+    sha256: 1aff1535bdb5e0e2d1ecd2b5a382cf7765464f13a4ce3c120f8624b203bdb60d
+- card_id: hida_tsuru
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: hida_tsuru.jpg
+    sha256: 069b3944391078c92854ebb2b4ce2366ee5d6616bf638ecbc17b16f0e551f205
+- card_id: hida_yakamo_hero
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: hida_yakamo_hero.jpg
+    sha256: edb781462e0f1d052ea02e8d70bae4e1f4b32bbdbbc2239fd8962e61bb9a5102
+- card_id: hida_yakamo_oni
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: hida_yakamo_oni.jpg
+    sha256: 27b07617debd2974d85d635a7d777751fa70bede75e20054a0b8d36de7410617
+- card_id: iaijutsu_challenge
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: iaijutsu_challenge.jpg
+    sha256: cd2e2d976ca8f90409c268795b8171017ce593003cdede60549bfd20608e7532
+- card_id: iaijutsu_duel
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: iaijutsu_duel.jpg
+    sha256: 068e527debb834bc2af7cba8bbae18425fe456370d920618e21b4384e95ae0aa
+- card_id: iron_mine
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: iron_mine.jpg
+    sha256: 60d911106caf0c462b066452b98db439797789617f3cc425009832c58fce61b0
+- card_id: isha
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: isha.jpg
+    sha256: 3a105f191dcd5246c262874a743873d9e91683454a7c95b6b0f09af5edb01375
+- card_id: jade_works
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: jade_works.jpg
+    sha256: 1cab8dee021b426b9e34528c7161ee19a6a7f76de365266ac5eedea6ee209ef6
+- card_id: kolat_assassin
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: kolat_assassin.jpg
+    sha256: a0524f3db086c8497c7449a2c0e433209c95707cd6797ed87fda69ecb8190edf
+- card_id: kumo
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: kumo.jpg
+    sha256: 0cf6899d4d12b590e33bcbd07a6b079e906fc53e314860e00aa7afd068cf31be
+- card_id: kuni_yori
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: kuni_yori.jpg
+    sha256: 9ef82761e047f4fd1e76b7f240e526c6eae27a29d4a9e6ae365bbb26fb04a5c2
+- card_id: kyoso_no_oni
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: kyoso_no_oni.jpg
+    sha256: 5ea224c47ab26d810f2a31a8b42333a3337775885694d38c57eb064fb033736b
+- card_id: lesser_oni
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: lesser_oni.jpg
+    sha256: f9c2492d646b293b4c4c9748444223846dd4fb04e11a96d153e8e34f93003ea9
+- card_id: light_infantry
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: light_infantry.jpg
+    sha256: d5e2be0af865e69bab70b8df4bc85a372ddf9ca12f294d0fe7b8ac03b683c651
+- card_id: matsu_chokoku
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: matsu_chokoku.jpg
+    sha256: 3b412ced2dd4b83739bd3b5db73cf8788922699e5d487580255d6cb4cefab6ce
+- card_id: medium_cavalry
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: medium_cavalry.jpg
+    sha256: 4d7ed3f94f68a47abba05a4af7b606d430c184219a2716d95e11844e8d9cc742
+- card_id: medium_infantry
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: medium_infantry.jpg
+    sha256: 3401e3b802c2d961074c825645838af16c9a37db6d748915fa10aeb8027a91bf
+- card_id: merchant_caravan
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: merchant_caravan.jpg
+    sha256: 386d34c57db81bf2b8e88f6184abb4b5461310089317c08fa4047ccde653d0d8
+- card_id: mirumoto_daini
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: mirumoto_daini.jpg
+    sha256: 12175bba0458ad16f648d1b9c58777b86785b861603f16a36cbe6df703d84238
+- card_id: mirumoto_hitomi
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: mirumoto_hitomi.jpg
+    sha256: 81886ac57fd95fed46bb2f12fa51df4eb4a27c9b6f033ce5d80e969e0b67fc9b
+- card_id: mirumoto_sukune
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: mirumoto_sukune.jpg
+    sha256: a61f47286ab2d9cfe4dc5b9db2155e198183daf1a8b9caf4b759a94982265c11
+- card_id: mirumoto_taki
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: mirumoto_taki.jpg
+    sha256: c9f2a841b9ce02308af4bfc9c9ce083567af86e0ff2955c890c7f5839fe34d64
+- card_id: morito_tokei
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: morito_tokei.jpg
+    sha256: 8e27a9ea22cd3e87e82ec268a18f48b82de80d853f3f1cfd2a5c001143b27dc2
+- card_id: moshi_wakiza
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: moshi_wakiza.jpg
+    sha256: 1bae900bb6dfebaeaa1e760050b768b5c44e1b2f8f9ba4093bfa52fe9a2c1057
+- card_id: moto_tsume
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: moto_tsume.jpg
+    sha256: f0224502248982189952fe57390c39571066af4ea55731c0277aa449f257955e
+- card_id: ninja_spy
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: ninja_spy.jpg
+    sha256: 4dc80b3cb514733baf50254b1c42b4e678ace56e9181631e2f60d87c1fba0acf
+- card_id: no_dachi
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: no_dachi.jpg
+    sha256: 27abe8646fcaa48832d81fb0306b7e49fa2662b861cf90cecbd5878cd68b824f
+- card_id: oath_of_fealty
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: oath_of_fealty.jpg
+    sha256: 8a70b016999bc66a69a97635f72e9297152099207dbc9bd1a3fe1db97b5d1d64
+- card_id: ogre_bushi
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: ogre_bushi.jpg
+    sha256: dd56f23265980ccad8bd4e5a42a08023aa37414b5250ac02b7a38fb758e20d06
+- card_id: otaku_kamoko
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: otaku_kamoko.jpg
+    sha256: 676bd48596376bcdea5c34d2c9b4644e3903cec1d7741eb4a48817deb1c1120c
+- card_id: outflank
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: outflank.jpg
+    sha256: de3fcc28dfdab33343d2df56ff1151702db9c94a6f24d31e1a77baac21b3f3ca
+- card_id: rallying_cry
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: rallying_cry.jpg
+    sha256: 66dc81171e2a616141469f8a725c0aeae8136d0d2fa4cae9e2c5fc9d226a6137
+- card_id: retired_general
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: retired_general.jpg
+    sha256: e1a8b73afa98cd185934f5fdca90b3e108e56cffaf4add6d8de03c56180259fc
+- card_id: ring_of_air
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: ring_of_air.jpg
+    sha256: 1513b0e279fa3c897113851df511d9d6c45d64a7e7828100fd0677290cadc43e
+- card_id: ring_of_earth
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: ring_of_earth.jpg
+    sha256: 839a972a84e05eaa5f757c786aa0034611828488c3a00d7a906412e2dc698621
+- card_id: ring_of_fire
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: ring_of_fire.jpg
+    sha256: 24547a664ec1f34073f9b5c3d58355d7a971ea56d8a2ba58508f8314fe79e048
+- card_id: ring_of_the_void
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: ring_of_the_void.jpg
+    sha256: fe1de94bcb0e42cd2c841596ae8ffadb75b2f566723512eaac40e9812821213b
+- card_id: ring_of_water
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: ring_of_water.jpg
+    sha256: 2bf71bf9e0034685e68276f1f439a02797f85a416e53033dfda461e611a710d5
+- card_id: sanctified_temple
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: sanctified_temple.jpg
+    sha256: 19e3fcf7c13f045b6574362dcec5de1ae8054d428d54abe2319a6baa7dbb5bbc
+- card_id: sanzo
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: sanzo.jpg
+    sha256: 739067173259b2dec28510aeeeafd22197b302e3f78ebe36b928e88c0deed89a
+- card_id: scout
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: scout.jpg
+    sha256: 7bbe719d71202be493df4b05cd919c645e69de8a46d45774d45077c74b025aeb
+- card_id: shiba_katsuda
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: shiba_katsuda.jpg
+    sha256: 9bd79dfc0628d3cb5468ff06eba5bbcb49b19fcff597fc57191cdf14f303a695
+- card_id: shield_wall
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: shield_wall.jpg
+    sha256: d45fd4cd38ee44746ffbf0629ef1e18eda303edb0abe13d26cc9861b8d66e4ec
+- card_id: shinjo_hanari
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: shinjo_hanari.jpg
+    sha256: be9f2b8666ce4ff45b0af6cd7d1b71eca700d1a8f56e23808f6ff8b1cd686db7
+- card_id: shinjo_tsuburo
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: shinjo_tsuburo.jpg
+    sha256: b944efd42bafea031d301cce013c093f41b9726a50f2d1ffcfc6566d65bb8df8
+- card_id: shosuro_taberu
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: shosuro_taberu.jpg
+    sha256: e101a290a806145ebc3e292c2a7af5e1d9066d148d7442ae508dc4e49d8d7b02
+- card_id: skeletal_troops
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: skeletal_troops.jpg
+    sha256: dbed7dbd026405368efd7bdeb4c56fe3219611ae93aecedf43d75f8067988577
+- card_id: small_farm
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: small_farm.jpg
+    sha256: 9cb0eb449f234fb563a517fe43d5216dd0da68e4583480edd0892635f9e192bb
+- card_id: solar_eclipse
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: solar_eclipse.jpg
+    sha256: cdab7154446aa210cd617c2a2d093e78cb6fa1eecf8f8ba4409e0194fd9e2274
+- card_id: spearmen
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: spearmen.jpg
+    sha256: c0cab9d3b7ee4a3644cd498432cff0a68e17332a52de4f206fc1e83588b933e7
+- card_id: strength_of_purity
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: strength_of_purity.jpg
+    sha256: 369add069657e2f0e893daeda36dbf7d02db8db35f470ce6fd2750b02e3e4c81
+- card_id: summon_undead_champion
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: summon_undead_champion.jpg
+    sha256: 799e8e22a0902f469d8fe36c23ccfe9cf23aa425fcb061dc00711762022d98b2
+- card_id: superior_tactics
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: superior_tactics.jpg
+    sha256: ef50b9b71549f042e54618268a26dd677f7b086aaf0dd0a6ba30923e4f4447dc
+- card_id: test_of_might
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: test_of_might.jpg
+    sha256: 113b142eb0d590ed017ea993048ad2f9eba49c41f04d528f295ea6448cdbac14
+- card_id: the_fire_from_within
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: the_fire_from_within.jpg
+    sha256: 39f3913352089a3fcae4f46d2d25ccbf76873eb497d431105bf35d6bbb71cc8c
+- card_id: the_monstrous_war_machine_of_fu_leng
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: the_monstrous_war_machine_of_fu_leng.jpg
+    sha256: e3364ff7f2f227be88cea13c37d8cbf560fe3f7353f21ab18493a3339e6fb7a5
+- card_id: the_mountain_keep_of_the_dragon
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: the_mountain_keep_of_the_dragon.jpg
+    sha256: 96c93813f2f3b394f2788301cf6dd97ae1a24989f4955f33e5416d2a5af07063
+- card_id: the_rising_sun
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: the_rising_sun.jpg
+    sha256: a2bffeaa1be8ca529ef33b43b453997f604dbce84819ae848bd69b66f1b84b80
+- card_id: the_turtles_shell
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: the_turtles_shell.jpg
+    sha256: 2be0a6c79c5428ca7eab264c8157ac731016003f126ed7d2228198632e182499
+- card_id: the_war_fortress_of_the_crab
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: the_war_fortress_of_the_crab.jpg
+    sha256: 5d97896300e951f5dba3070a3737ef77611fbc317aeabf47889d5915a561687a
+- card_id: togashi_rinjin
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: togashi_rinjin.jpg
+    sha256: 6830f01bfcac52ca2435c4b42a6c8a32ac2f05326f5fe6d1fcb8b64f52ac4869
+- card_id: togashi_yoshi
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: togashi_yoshi.jpg
+    sha256: 5fb2c34ef5e49382bef64bd2775354aa849558aab736a54ea98710f2b5c907f9
+- card_id: toku
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: toku.jpg
+    sha256: b8f5a0b663651e6ec7cff31cc106adcc3f355e10060e725c6f35aa84cc3ae613
+- card_id: tomb_of_jade
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: tomb_of_jade.jpg
+    sha256: ac826d5effed35453d0cef73ab93d47882fc6a75bac01877c5c823c6fe70e0f3
+- card_id: torrential_rain
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: torrential_rain.jpg
+    sha256: 5e731a35030e4234ccfa65100a461339486bcba361c3f0de0a291ffa81c17e8a
+- card_id: toturi
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: toturi.jpg
+    sha256: f66fa25988221c870c828451ad9589b5ba16a15dbd3d4e0afdf6a371a7066b79
+- card_id: unexpected_allies
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: unexpected_allies.jpg
+    sha256: 0df50625274d0c971a1654598c4661bdd02f3a949d8aab0c960c49ed8de31881
+- card_id: wounded_in_battle
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: wounded_in_battle.jpg
+    sha256: 0dc7563ba38c481cebb77ef56e05cdf0f6f4a0f3f90a297e0421ccd711254928
+- card_id: yasuki_nokatsu
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: yasuki_nokatsu.jpg
+    sha256: 84becc34b612837559d68f048f9fee88735ea421f536eea1d870d2add4c70982
+- card_id: yotsu_seiki
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: yotsu_seiki.jpg
+    sha256: 293e2ef0263679273ed54c57be738d0ae1e0e8147deb3bac6e233d8edf032b21
+- card_id: zombie_troops
+  printing_id: battle_of_beiden_pass
+  files:
+  - role: front
+    file: zombie_troops.jpg
+    sha256: e7cb3b443b09c56016c1709954b9dfac6b1bbb636a57a156b75dda327df5d7a5

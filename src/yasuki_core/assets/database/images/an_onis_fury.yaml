@@ -1,0 +1,932 @@
+set: An Oni's Fury
+images:
+- card_id: a_new_legacy
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: a_new_legacy.jpg
+    sha256: da22f074e1314e36b2b24c00b46d89cad6e7d8f705f823f650dabab9424ffa72
+- card_id: aikunes_wrath
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: aikunes_wrath.jpg
+    sha256: cecc0ae1926db1408466f7e6209bf9b00a42585c850e8a3b7cd597de7572aadb
+- card_id: akodo_koun
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: akodo_koun.jpg
+    sha256: 5b3d877b5e2ee85b0e2bf718a6916639d38b66c9156ec72eb111efea8b625fb1
+- card_id: akodo_senke
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: akodo_senke.jpg
+    sha256: 3b2c661271e5554b7e24509833ea9bc22ee65e086d6f79a606233457d027acbb
+- card_id: an_error_in_orders
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: an_error_in_orders.jpg
+    sha256: b18898da192bc058e3333ca9b86894c9810a62567951bbaafb482385a0798c64
+- card_id: ancestral_shrine
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: ancestral_shrine.jpg
+    sha256: f6670bce0050822bf149be07f96030892ea5e8748274622aeb2079367bb2585a
+- card_id: armor_of_shadows_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: armor_of_shadows_experienced.jpg
+    sha256: 10fa7986e3b43a65b6a7ec0ad9a778f1927f551cc1d40bf6b42463a7b2dfc1a9
+- card_id: asako_itaru
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: asako_itaru.jpg
+    sha256: 63be819435d437c88589f58f3ed35256e621da8619a7a8e8e9371d9b3a5b285a
+- card_id: asako_shuntaro
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: asako_shuntaro.jpg
+    sha256: 619b1532153269bda6910e2e2dd29cf3782a717992e97cdac8251bfd65bd682d
+- card_id: ashigaru_barracks
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: ashigaru_barracks.jpg
+    sha256: a1191f4ec2a5cd484d69227c31128d60f550a4f71e61ebe3c0c78248b0f87cc9
+- card_id: ashigaru_hordes
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: ashigaru_hordes.jpg
+    sha256: fa78bef735c5e5c81af02a49956aff4c55c399f254be97e6b8bbe140e7e46bde
+- card_id: bayushi_ambushers
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: bayushi_ambushers.jpg
+    sha256: 90252fecdaa7fe116967dcf62c86a230ecea1e29b79e8790587cc55cdc2fab12
+- card_id: bayushi_paneki_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: bayushi_paneki_experienced.jpg
+    sha256: 2dbbc0a40e214286727c78f40c6a30e90f727a99ed003875748b20062da7cf93
+- card_id: bayushi_shixiang
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: bayushi_shixiang.jpg
+    sha256: 9e4376ca96267ee0206cdb8cd54200de3229416385731a18edc93bf42f93e7b3
+- card_id: benefactor
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: benefactor.jpg
+    sha256: 18cb4ac084f7e2303e229740d0a0af3ab45270c4d89a4de40bc705aec769f395
+- card_id: blacksteel_blade
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: blacksteel_blade.jpg
+    sha256: 9ce657834e754bc7ad04797db4c5f0f28a9069bd904f7b8c7236f069d60f2fe2
+- card_id: blue_skies
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: blue_skies.jpg
+    sha256: 3e4112b43fbac8dc078e5693f18316fe5b116eea7936f48d5103fffb89369d4c
+- card_id: brightest_winter
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: brightest_winter.jpg
+    sha256: b7389d3bd2b0c7a9f233c3771c70915e84c774603ecf799ab583633812279d91
+- card_id: burning_the_tombs
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: burning_the_tombs.jpg
+    sha256: fdb994c8b3887c5236ba89811e2ddbffd75ebf4c20ded17245de939cf47cd0d0
+- card_id: carpenter_wall_falls
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: carpenter_wall_falls.jpg
+    sha256: a5a524fb5c49b78daff712af170eab27fbd0032d52b0f8db86b896db91aa7303
+- card_id: cascading_fire
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: cascading_fire.jpg
+    sha256: d10b720c4c8db977a22fb498de8c7d2943e39b683ff9530eca798729572a6736
+- card_id: celestial_vision
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: celestial_vision.jpg
+    sha256: 236a95b9861bec93763019b9b300c13021c5050a9e3d699912e787cbad55dcc6
+- card_id: child_of_the_last_wish
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: child_of_the_last_wish.jpg
+    sha256: bf19b14313ade48d689f2b05d74b65c508bf0eada571146e2a695a7f0a93c21a
+- card_id: citadel_of_daigotsu
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: citadel_of_daigotsu.jpg
+    sha256: 7c83a08d2ae83388f11aa2ef6ce147c0e028284360291c85d0d7e26bcbc6d67e
+- card_id: city_of_night
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: city_of_night.jpg
+    sha256: 22ba4c52caa6ee29b84ceda2ce0eff61728e3d695e874edffaffba92ba048199
+- card_id: cleared_grounds
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: cleared_grounds.jpg
+    sha256: 5455e40402db00f23dcbb7b6d6a5bbb6dd82d6b6e7afb2636414acfb3dd6e599
+- card_id: coastal_region
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: coastal_region.jpg
+    sha256: 1004692807b51c04a884c824f770f7aae48e57a849675ac369973fd8320df5f1
+- card_id: complications
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: complications.jpg
+    sha256: 06f738f9e2030ca6a487ce401386f6d7da6ebbe33f2bb32c0b0d018af9fed065
+- card_id: consecrate_the_land
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: consecrate_the_land.jpg
+    sha256: 4b0003511653c39c9f0b606b32834f83093aa9ea4b2e75841c60c9ebda59a9e6
+- card_id: daidoji_enai
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: daidoji_enai.jpg
+    sha256: c2bc7d5c459b195f09040a52381dd775c05f1a78d9730e1eacd4d8d2dc6bf65d
+- card_id: daidoji_gudeta
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: daidoji_gudeta.jpg
+    sha256: 61d8fd3c027f6e5a5f1460ef3da6c32c24f1407a571e5ed511cf5397c3dc8525
+- card_id: daikyu
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: daikyu.jpg
+    sha256: d98f10817eefd669386b320024ee9053c8fbfac1c9aac4b524bc6fbb255dc64e
+- card_id: darkest_winter
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: darkest_winter.jpg
+    sha256: 2364a071d07115efd752193aac962b49acb782b2f41a35362a07bff66a77f4e1
+- card_id: dirty_scum
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: dirty_scum.jpg
+    sha256: cc4b09995bfedd36ad06fec50cf1cbeb397b5ad0b004c87974ce9d4dbe973558
+- card_id: doji_yasuyo_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: doji_yasuyo_experienced.jpg
+    sha256: 94569e0ecfaa4406292b843fd23284e4096d8c14abf7abd97a1ca0f85e5faea8
+- card_id: elegant_kimono
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: elegant_kimono.jpg
+    sha256: d22d74c2564354407eb0539456d4a83f452b296d25587b83d4092a6852ccd7ee
+- card_id: engage_the_enemy
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: engage_the_enemy.jpg
+    sha256: a8cd2c99bd73ee0d2788d2486fa9b509ab216dbaa08e7eed6dcf6ef798d8a897
+- card_id: everpresent_fear
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: everpresent_fear.jpg
+    sha256: bf9bc0326a76b24c7f4b86da980a9ac3233ad77b7d602b8815f011405d5e8591
+- card_id: follow_the_path
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: follow_the_path.jpg
+    sha256: d14511493552939b2e8f44d930de1f67116d2b78b9d3996dac8b1f68b39c16ed
+- card_id: fox_nagamaki
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: fox_nagamaki.jpg
+    sha256: 2bc94fc31f8a0cbba4d17ad6ccfce49f407924b7d252a63bfde0dcc311afa283
+- card_id: friendly_traveler_village
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: friendly_traveler_village.jpg
+    sha256: c20b8bfd085700fc9f0bffdd8a2ac841ffd2fe6ee85b4010d4215f9ecba59dda
+- card_id: frontal_assault
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: frontal_assault.jpg
+    sha256: 277718974f052b8ec68402fc49bdbe005d033e7fa5c29d95683aa929c74b57ea
+- card_id: gaijutsu_no_shiryo
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: gaijutsu_no_shiryo.jpg
+    sha256: 8fd600c9cc3155535c2f44d73fae82e7358ddbf12672253afe960f6ffd5f05bf
+- card_id: harvest_time
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: harvest_time.jpg
+    sha256: b115803892e467039ee3631b802330c44548a3c9146250fcacc221c5e9fd6312
+- card_id: hasty_exploitation
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: hasty_exploitation.jpg
+    sha256: ee7c2266218ea066bdbfe7e0e2fe687af7f7eb9e2bd3491c9f1a0d5563cc9911
+- card_id: hida_sakamoto
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: hida_sakamoto.jpg
+    sha256: 9980a393dbd81ac9f78727a369a0f66a30a833fa8b811b27e6f50682a5c9514f
+- card_id: hida_sunao
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: hida_sunao.jpg
+    sha256: 46277302fe058bfb2416f24e5c40fd445801753dfeec97569838f9f1acda152e
+- card_id: hiruma_archers
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: hiruma_archers.jpg
+    sha256: 50fe33e06994557baae9f6ea30f6836eb27cb9ea9d69abd6202b0b7ffa7fde70
+- card_id: hiruma_nichi
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: hiruma_nichi.jpg
+    sha256: a4f099028a7ff775f1ffb94ef1aa53db29a59a870d2ed3c8fdd722c7d24b7a2e
+- card_id: hitomi_akuai_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: hitomi_akuai_experienced.jpg
+    sha256: dc101694feeca56806333ca51ce674140ef792dc8e4382a4b963a3fe77491238
+- card_id: hitomi_kagetora_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: hitomi_kagetora_experienced.jpg
+    sha256: 7bb9b84ed43c0a9e2f8650b42d2653894cd4d8f39657670835b3ddde9b37b9f4
+- card_id: hoshis_claw
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: hoshis_claw.jpg
+    sha256: 198f6c305f77976fbcfcfc63ca2b52bf4fe2452dc1826f6b9c1ea61f63e712ed
+- card_id: hoturis_blade
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: hoturis_blade.jpg
+    sha256: b1029b94008f4c98e08642596edd0f2ddd10195f2431a15de80c36ec6ef462ef
+- card_id: house_of_the_red_lotus
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: house_of_the_red_lotus.jpg
+    sha256: 2086e7b190b9ce31bcb7a1f8cfcf624a7093049adab761a0b10bcfa63a9144ac
+- card_id: ikoma_fudai
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: ikoma_fudai.jpg
+    sha256: 69b4940f41e2a4b9d89f5403b1dcd9767c45458fb9d3ac5f6be44e9fde085c3a
+- card_id: imperial_scrutiny
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: imperial_scrutiny.jpg
+    sha256: 66f8bb92413a5890ee705759721c2652baa75be3a18c856fc8d27edc98f2557d
+- card_id: inner_wall
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: inner_wall.jpg
+    sha256: 1daf26e32d8d4fa35b8c1726173fb534d4f51ddf39585ecd9a61f2a47d3a47b4
+- card_id: isawa_ihara
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: isawa_ihara.jpg
+    sha256: 51b6a3bc95752391f42adf29be752ba41e050bc1bf4a0cc3610cbbdc1c3334b5
+- card_id: iuchi_lixue
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: iuchi_lixue.jpg
+    sha256: c0b2514dfcd11d5fe740de1c394c1b9633ca2e0e578231790a7da3e872950aad
+- card_id: kaiu_ryojiro
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: kaiu_ryojiro.jpg
+    sha256: e17c8d79300298ad2f525b7dd5c0d2d7196cca120acc238265cacbc31c395ff4
+- card_id: kanekas_advance
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: kanekas_advance.jpg
+    sha256: 9ce53740af7c9d2ab7c82c62b97d5465bad4e892810d0daf76218a5e51beff4f
+- card_id: kharmic_unison
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: kharmic_unison.jpg
+    sha256: 7b7deeec177597677347fe05efc65e706e191da17c5fd8e6edefa168a91d565d
+- card_id: ki_rins_shrine_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: ki_rins_shrine_experienced.jpg
+    sha256: 235408fd5454cf3a5acd28ec03800ba198fa4a8f869c2ad79f4d177b20a64ad8
+- card_id: kitsu_dejiko_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: kitsu_dejiko_experienced.jpg
+    sha256: 92c7ca8ea3759f98128435f520dedf3765a116d35a0ee83909732fc1299db54d
+- card_id: kitsuki_remata
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: kitsuki_remata.jpg
+    sha256: 2de34bbfcfbc6ef1f417c59fa24064450ea9000b51f65ba6483268a641cabece
+- card_id: kitsune_gohei
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: kitsune_gohei.jpg
+    sha256: 35409eca9f9c2be81d53e0ac3e3ba3288bb6cdae763e4cf3a0fe4ef18804c34d
+- card_id: kiyomi
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: kiyomi.jpg
+    sha256: ddc6a6296cf2499e7c5a0ac98641fe760064a9ef8cb747e55c352dde9a570073
+- card_id: know_the_enemy
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: know_the_enemy.jpg
+    sha256: 4c9263cbf8e9863650e13d3f178a60248e4c425f7f77ba076f69b04e9801199a
+- card_id: know_the_truth
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: know_the_truth.jpg
+    sha256: e8a76f96758cbf65ff1df4fac2c315389b3d4f84628f7cfe584fd215385db2a2
+- card_id: kuni_kiyoshi
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: kuni_kiyoshi.jpg
+    sha256: d9a95455aa66217b69b3fcb93d0cdebe134ae88f53c231349bdacadfc0709c9f
+- card_id: lion_warcats
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: lion_warcats.jpg
+    sha256: e4db350c166dff0c07fcc555bbfb86bec6e8ed51a0f90194d36ba663e6e81162
+- card_id: lobbyist
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: lobbyist.jpg
+    sha256: ba9fde726e1470db8449efced90d920aa5671056926306fd10b6d27ceca9dc7d
+- card_id: logistics_problem
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: logistics_problem.jpg
+    sha256: ba780e12057f530bc149a7f1f7f67579bc1fde042cb3292881f8c4458a6bef75
+- card_id: lost_glories
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: lost_glories.jpg
+    sha256: 8253c35333a46c43d46c951903215a9838aca59733e73ec38b01d2f85fa3015d
+- card_id: mantis_raiders
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: mantis_raiders.jpg
+    sha256: e456e2c60172635ca74911161232fc978fd8e5d5b0ca8cdddfeaf1e8e66ea29a
+- card_id: masume_wakizashi
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: masume_wakizashi.jpg
+    sha256: 4da20445556dbd9373396b560ff0f99e0f6d7c5954d47ea04befdb6ca413354c
+- card_id: matsu_shinya
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: matsu_shinya.jpg
+    sha256: 8e41186decff4130436d8f0a1ea567c5e73a1d93ec0a639d86faa8ddb0dc7cca
+- card_id: mirumoto_tsuge
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: mirumoto_tsuge.jpg
+    sha256: 2366e2a32ccc0ed5215843b95cc488f97334a95ccaeef7007698e07b9ad32f18
+- card_id: miya_hatori
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: miya_hatori.jpg
+    sha256: 347041940b76130c1116972daa3029df73ab2306115e4bc18091315fa5a0d599
+- card_id: moment_in_the_sun
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: moment_in_the_sun.jpg
+    sha256: 9e7fb5a9d25f8052134999261b254d5ea490cdd5fee542706584b6e5fe08084e
+- card_id: moshi_kalani
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: moshi_kalani.jpg
+    sha256: 2fdb290b3334aefb94360e311f967eb7fdd1cdab6055a605391bbfaf40c289c6
+- card_id: moto_chagatai_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: moto_chagatai_experienced.jpg
+    sha256: d7c08171e4da8e5da4dd7c72eea45febc735cfb90cd768ae8b135cb0f09ef4f1
+- card_id: moto_vordu_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: moto_vordu_experienced.jpg
+    sha256: c62ad18bd595d30885c54260cbe63541c326d0f4172f03c33670ba4320acbdab
+- card_id: moto_wardogs
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: moto_wardogs.jpg
+    sha256: fbc1298093d6731b94ebf76ee335a46bbef00cd634bcf4bd0e129d9c2001d4c5
+- card_id: moto_zhijuan
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: moto_zhijuan.jpg
+    sha256: 052c689ac40919fac1e890a5ac93e50d6c7f2b6dc791c93629c3fa859f7d8c5d
+- card_id: naga_tattoo
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: naga_tattoo.jpg
+    sha256: 855da518945142f5e9ca4a23f38f131cd2b80300266596a5bbac1708114f3813
+- card_id: naka_tokei_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: naka_tokei_experienced.jpg
+    sha256: 9692dd5e84568ef1e46178ec346391d05158d686ba7862bb58e34e4bb5dfd341
+- card_id: natsune_no_shiryo
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: natsune_no_shiryo.jpg
+    sha256: 2d41032046bf66ecd944de90dd0cd5a449bddaa6f2b810cf4fd862e40b0589ad
+- card_id: new_emerald_champion
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: new_emerald_champion.jpg
+    sha256: 16d2113d351b65be90cc4c30b47a3f8217d49ba10644850ea687dc3949fb5680
+- card_id: nezumi_technique
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: nezumi_technique.jpg
+    sha256: 602a94b44a80703998ecca79124c9021eea926d9ac877584c53a75f0af2e6430
+- card_id: osoreru_no_oni_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: osoreru_no_oni_experienced.jpg
+    sha256: 369006e500624a36fe0df56c971a0568db002d332266f2cdbd0f1db4e8a108ba
+- card_id: otomo_motoshi
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: otomo_motoshi.jpg
+    sha256: 4ef05a4ba18fd08f596e33441367cde913f3261b48d5c1aa4739a1642416be31
+- card_id: poetry_contest
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: poetry_contest.jpg
+    sha256: 6fcff35a08fcf140c50611a4cdcb6f879abad6884d64334e2f3d13904bbd670a
+- card_id: poree_rep
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: poree_rep.jpg
+    sha256: 04c0971605c9c3d55f9ca2ea3262d1ebdaab9545dbe0e677897b156a656dd622
+- card_id: power
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: power.jpg
+    sha256: c7b131b1f768a3cb9d0233160359103390e86ed240361eda11fc4c19ab93b94b
+- card_id: quench_the_ashes
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: quench_the_ashes.jpg
+    sha256: 2d2c297e5e29b1604d3c7d8ef6b3a45cdd2b80e3da8bf3acd568ad525d6bbd3d
+- card_id: remember_the_mountain
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: remember_the_mountain.jpg
+    sha256: 89553db268f7809178b54d0d5f1cbeeab62ff5629e2d23c260698aa9cb5a1782
+- card_id: rewards_of_rank
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: rewards_of_rank.jpg
+    sha256: 252b15c10f02188828b7d4646acc837285b66f5b36438e0a2d77aed1064184d5
+- card_id: ruins_of_the_kappa
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: ruins_of_the_kappa.jpg
+    sha256: caa5efe540d0bd02c8dee53e311ed3730328d0d5dfe326bfb40206c83bf56bb1
+- card_id: rumors
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: rumors.jpg
+    sha256: ee4d324f2fb786a983670ae19ef3851f519b92d302e1aac4838178792ba92b19
+- card_id: sacred_tunnels
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: sacred_tunnels.jpg
+    sha256: 599c158a92cc7820949f96c55493cd97299ffd936167a7e679a5780e009a6c5b
+- card_id: sanshu_denki
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: sanshu_denki.jpg
+    sha256: c5e76ebae51e502d0cc9168f645ecb0209cd7be86dbca4519e11cb6e0dfc0adc
+- card_id: seeking_the_master
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: seeking_the_master.jpg
+    sha256: d81161808f52bcf1bf1253b3e0b06ff1f59cdbd145ddffef3e698a7f0843c1dd
+- card_id: seeping_darkness
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: seeping_darkness.jpg
+    sha256: 1ca3b8697ec4ea9dec4d7ba8b7c34be3ca22701e50d12c43eefd0086d48da6c1
+- card_id: shatter_the_elements
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: shatter_the_elements.jpg
+    sha256: dd9d674a508f3dbdfd7450520982da6b2822913a4f20bdd17e254a2984c202c1
+- card_id: shiba_aikune_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: shiba_aikune_experienced.jpg
+    sha256: 8641686a7091056117317d9b3ed4ff3d51309a71d7533c9314a1fa7433f7fe0a
+- card_id: shiba_arai
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: shiba_arai.jpg
+    sha256: 77c7db0386a9a25ee9b33610f693ae63d4b30e94dec77fff7db680038067ab94
+- card_id: shinjo_huang
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: shinjo_huang.jpg
+    sha256: 5ceded1ed3489479977397fd39e6675e0533d7f7629617b94ca8ad232a932123
+- card_id: shinmaki_monastery
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: shinmaki_monastery.jpg
+    sha256: ac1268d2eaea5e955b953e427ea2d19cee7739f072f6850a24fbb2f3835c8284
+- card_id: shintao_library
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: shintao_library.jpg
+    sha256: 0b56d8b7066738786f19f668e94c3d12817aec1531a9452a6d0ab0b7d5178670
+- card_id: shiro_ide
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: shiro_ide.jpg
+    sha256: 4f8ed05cd3159441100f4ea7b6f3a06f32277c39b3301ad615a3e099938635c3
+- card_id: shiro_mirumoto
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: shiro_mirumoto.jpg
+    sha256: e0ac531a2c9fbafd9476f24a9d809649255888beb17680f8a5b5d41b1a9f06bb
+- card_id: show_no_fear
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: show_no_fear.jpg
+    sha256: 8599deb63f4eecc405dcaf09cd550cf9256b963946d4ac2052bbd37c435c19f1
+- card_id: slaughter_the_scout
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: slaughter_the_scout.jpg
+    sha256: 9e17755126fcde99a51eb21ee9f9001cbe3519290ab324b7c31f0bd98ba7e4ff
+- card_id: sleepless_nights
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: sleepless_nights.jpg
+    sha256: 1d54161a488c19764b97c264ff5b7e170af9283b52ed661a9dd3f8028c42c5d7
+- card_id: soshi_eiji
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: soshi_eiji.jpg
+    sha256: e06c11165f6520aa951989c1d7de3a6612ef0746485f45ac05c8fe573f24de86
+- card_id: spider_tattoo
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: spider_tattoo.jpg
+    sha256: 08b768599735b4e39ff12fffe07006e454439a8b0df685a0d0a683272abd3bf7
+- card_id: stolen_records
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: stolen_records.jpg
+    sha256: 0765ec083cf22e41a4eab76beb2a7a163a96d8dbf7c61b884c225ff126409908
+- card_id: sun_kites
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: sun_kites.jpg
+    sha256: bc929e0cc200a25ff5aa75cbf58876c94a38af4033a0a1ad86497e53d903c314
+- card_id: sun_taos_tessen
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: sun_taos_tessen.jpg
+    sha256: c26e5dac8fdb67c87f91172388058d7eba0b98ba3694412bbf8f05ad7c094a18
+- card_id: taking_the_wall
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: taking_the_wall.jpg
+    sha256: f51d087bc71a5e6470718de4afef5ea83e36dcc3373ce5e54642933382b52f2a
+- card_id: tamori_hiroko
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: tamori_hiroko.jpg
+    sha256: 9b27234bf78040efaf36d3086b946625e72e52fb0b53312622ee5b5def0b692f
+- card_id: tetsuko_no_shiryo
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: tetsuko_no_shiryo.jpg
+    sha256: d32df46d8b9d5aaa90538ddc68796d938e83117eebf0fada0a96667432419e2c
+- card_id: the_calm_of_shinsei
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: the_calm_of_shinsei.jpg
+    sha256: 55f171d5e1606583a8eb194db7e48563424a3f10808403ba7f14b1f9c0845114
+- card_id: the_company_you_keep
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: the_company_you_keep.jpg
+    sha256: f37779bb1a5e47ee15a5392392fd0770483d147555ab9c7bfacd2479c9bce7c6
+- card_id: the_first_legion
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: the_first_legion.jpg
+    sha256: f65b73297d6c85a76907a358cedb1c87a3812500fb4d1fb4453b27d978db4924
+- card_id: the_jaws_of_defeat
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: the_jaws_of_defeat.jpg
+    sha256: f4fee80e72aefab5e94f17ac43854029b9e5c0ee3cfe2b85f23f0cf52f226a7c
+- card_id: the_jaws_of_victory
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: the_jaws_of_victory.jpg
+    sha256: 567328cc86fcb154eacb7e2606f50fe23819ef4967304ca13c521277f201f445
+- card_id: the_masters_imprisoned
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: the_masters_imprisoned.jpg
+    sha256: a5c22927388297164e96d8ab3e0a8e5e2123211d12ba1af5e75ca18c2069432a
+- card_id: the_oracle_awakens
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: the_oracle_awakens.jpg
+    sha256: 60df3f752600e383697b250843a97220c5e2a10f7601a73df8d216f9797b72bc
+- card_id: the_price_of_innocence
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: the_price_of_innocence.jpg
+    sha256: a7473cab0b7d8579047f1d0f4e0a32a97157869391f252fc2a8cda464ef93737
+- card_id: the_thunders_clap
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: the_thunders_clap.jpg
+    sha256: 41ccc66a26803f870513944485f2e753be1b5f4a4055c339c69c9ca6aaa00470
+- card_id: thunder_of_the_earth
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: thunder_of_the_earth.jpg
+    sha256: c15acf35dfdb5c4512e00f01550654eb84c2e90f16381eba6227ae06814b2f5f
+- card_id: toturi_miyako
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: toturi_miyako.jpg
+    sha256: a07c6b3f9be3aa2056b682312b7a078e835d710addbc67ff3905011af6e84be8
+- card_id: tsukune_ascends
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: tsukune_ascends.jpg
+    sha256: dd75dd684fc99b83c446080a86b70dd621fba72be4d465bb8f14d52505b5abe1
+- card_id: tsukunes_choice
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: tsukunes_choice.jpg
+    sha256: f4d5f9ef0f02173ff41b40425fba5088f763b6c0160855ff94214c65188f6798
+- card_id: tsuno_attack
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: tsuno_attack.jpg
+    sha256: 8c5926494208508007c92ca205eefa91469581d5095ba004e36e82fe77a97fb2
+- card_id: tsuno_scouts
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: tsuno_scouts.jpg
+    sha256: ef411fbd1e4814ccf341fd5a52cc507609d97e21730319a1385ad1920f3da827
+- card_id: tsuno_takuma
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: tsuno_takuma.jpg
+    sha256: af7d7ed5c4ec0af6ec37fefb5b1a626422fdb84ca8848deb343dae62a8657e67
+- card_id: usagi_ozaki
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: usagi_ozaki.jpg
+    sha256: 731a52c2a430111400a50bc96b6012061a49379454933b0f344570bf201bb0fb
+- card_id: using_the_land
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: using_the_land.jpg
+    sha256: 44f1802e4b05553ffe0ffae1a39c1313eb970b7df5aa79c9730f0fc4410c9f3e
+- card_id: vengeance
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: vengeance.jpg
+    sha256: 94027e396ca65a332f64d8f016e61659d15a9366eaab95719501433546540e8f
+- card_id: vordus_discovery
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: vordus_discovery.jpg
+    sha256: 8ff1c715e40bf24fdd6b58f15a45c770d516a64b992ffd5266a951855cf25c7e
+- card_id: word_of_the_anvil
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: word_of_the_anvil.jpg
+    sha256: 605fe10447e236c52bd40bd55df71f80d835343204165074733e3a7c5b8eb3be
+- card_id: word_of_the_bastard
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: word_of_the_bastard.jpg
+    sha256: c5558a9a43f068091bbf45c452afb77f989514cd38b34811701df7d48c122383
+- card_id: word_of_the_sword
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: word_of_the_sword.jpg
+    sha256: 03e1ecba35093fd04d20525c4a9a9e309c61e9aeeee4d0ee7cf9885b6197fdc6
+- card_id: word_of_the_wolf
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: word_of_the_wolf.jpg
+    sha256: 0db40de0baf12468ed63ca842e7a1da970dc71c5043966d8d5bd2be09c91b4a9
+- card_id: written_in_blood
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: written_in_blood.jpg
+    sha256: 40ebdeda83b3ac955d0c70f3e6f101f9376e2eb85032882e424ebd2add613fa3
+- card_id: yakamos_armor
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: yakamos_armor.jpg
+    sha256: 4d9da02da9eddc284aebcb8f76b3fb52f38864553678212ef56e7ee579ea4fb5
+- card_id: yasuki_hachi_experienced
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: yasuki_hachi_experienced.jpg
+    sha256: f3ab5eba3a0e02f4c32083ae82641b2401a928d0f2d614f725e845adfcc238b9
+- card_id: yasuki_nishi
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: yasuki_nishi.jpg
+    sha256: 53ec913771e08113060626e44393f5a73c996b736af1b14cd5e551113d47c35c
+- card_id: yogo_tjeki
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: yogo_tjeki.jpg
+    sha256: 9d6b43ed96cc27842be7b3f3455c92dea7dcc01660ac13af16fb846c41bf841a
+- card_id: yokubo
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: yokubo.jpg
+    sha256: 1b772fcf4cc95a8eef6bde0fa4c5434b0cb2536f2d4bd83f28b5dc31df05384e
+- card_id: yoritomo_katoa
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: yoritomo_katoa.jpg
+    sha256: 012f4e601229a0cec5b42631c263c5a011d45d8a6290060d05fd939579d99a02
+- card_id: yoshimitsu_no_yokai
+  printing_id: an_onis_fury
+  files:
+  - role: front
+    file: yoshimitsu_no_yokai.jpg
+    sha256: 50d5f814ee015fc442158206c346a1bd754d5924f2806d97ef3b28212f896008

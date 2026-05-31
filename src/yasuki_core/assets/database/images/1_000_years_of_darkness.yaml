@@ -1,0 +1,566 @@
+set: 1,000 Years of Darkness
+images:
+- card_id: a_fallen_friend
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: a_fallen_friend.jpg
+    sha256: ab0b2dcb701f6cda55ef6c2181efe2bafc0350b99c9df80990073d98dcd0a0e9
+- card_id: a_wish_granted
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: a_wish_granted.jpg
+    sha256: ac5b9151e4e3403c77a7162db94f93820eeb8c99981a1409e8c955174997aaea
+- card_id: another_hero_falls
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: another_hero_falls.jpg
+    sha256: 3fc32cf5c72959308206a0d2b3b3611949d69a016e048006cbf7f07e292aad53
+- card_id: aramoros_promise
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: aramoros_promise.jpg
+    sha256: 0e4a041642854842c0d35dd0ec8d762fd24fa60091585d022337ab043a293679
+- card_id: asako_kinuye
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: asako_kinuye.jpg
+    sha256: 0e7771907d71a262b7f5ee065a31d44149e53967a82ee0dcb555bcba8b2a922f
+- card_id: ashalan_blade
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: ashalan_blade.jpg
+    sha256: 87155e21f7555d715eb7a8dd191489519a7b682033f1e5a09435723c1befe609
+- card_id: ashura
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: ashura.jpg
+    sha256: 076b3bde50b0bfd2b8f4e558016f4de5f4b2903495e48576fb6c772a9dc11bed
+- card_id: bayushi_aramoro_experiencedkyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: bayushi_aramoro_experiencedkyd.jpg
+    sha256: dd6cf4ffa15b9275be226822d876ba3dfb7c655978083bcb8ffccb704052790b
+- card_id: birth_of_the_new_hantei
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: birth_of_the_new_hantei.jpg
+    sha256: dca0a0e104a22b8325735976857c6befa4b7aa0e51f9f919edb7ff70d189d66d
+- card_id: bloodspeakers_altar
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: bloodspeakers_altar.jpg
+    sha256: 7c2de6486c2b1f6ddb25c84e53bf4c21f742279231928b4f5e5819286635cd1c
+- card_id: burial_mound
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: burial_mound.jpg
+    sha256: 17fbea295c8c88c5bb8c4533aed11307a528bb7625411520dd1a6faae24237c6
+- card_id: candas
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: candas.jpg
+    sha256: 6c968adcc5523d08ba69cbecbaea98550a5edb6dc1a3c5739b243f055aa2e518
+- card_id: chamber_of_the_dark_council
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: chamber_of_the_dark_council.jpg
+    sha256: e61101086ed3321dd8dc33c6644f804cc6e8df4f1c70b4e904eeff934a566f8b
+- card_id: child_of_fu_leng
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: child_of_fu_leng.jpg
+    sha256: 5e9b7c735b9e903505fb213cd98612ebcbeac63ffabf5e92b755f0c7490d500b
+- card_id: chithith
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: chithith.jpg
+    sha256: 8ed1efaa483bb17fb379b99ff195723e3b0bc36186a832abb66c480ced8f90b8
+- card_id: chuda_retainer
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: chuda_retainer.jpg
+    sha256: 93143130cccaa35ed23a84bb11a81170f103fca11d9e5fc6f71689734b280707
+- card_id: daidoji_uji_experienced_2
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: daidoji_uji_experienced_2.jpg
+    sha256: b4095549c5e00f2cb0b868fc90390ef77bedb4fcc26668c6aa71f3cf6ef3b51b
+- card_id: dark_emperors_blessing
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: dark_emperors_blessing.jpg
+    sha256: 4a70e1db07f76e4a4f026f7d61554b01cce51177b52c567c13cec73805b0dd27
+- card_id: dark_ring_of_air
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: dark_ring_of_air.jpg
+    sha256: 5acdf4887060418023b96a847d1539c0523a5fad0910c2d9f2146ca9b73ca0f1
+- card_id: dark_ring_of_earth
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: dark_ring_of_earth.jpg
+    sha256: 2e8f54cfb354efb1c5b9fa63d7cc90e3366577c5c0d0b81867912d2f8abd64c9
+- card_id: dark_ring_of_fire
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: dark_ring_of_fire.jpg
+    sha256: 4dcd38dc43f099c828d8282d853aa65e6eccbf5449b4580e41b7a1a5787a8e5b
+- card_id: dark_ring_of_the_void
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: dark_ring_of_the_void.jpg
+    sha256: d231238fbef405a8f3d1add471c25774573ca352a1498343c93946efeded7be0
+- card_id: dark_ring_of_water
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: dark_ring_of_water.jpg
+    sha256: 05f2a99589535265c48bb92c04f175956c5bc65f6eff443eb762ba7a2a24703d
+- card_id: dim_mak
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: dim_mak.jpg
+    sha256: 46e418cfeaab7db669c122d7d7c6ec842f0ea986ff9b8d668ca4e88714eabc34
+- card_id: everyone_dies
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: everyone_dies.jpg
+    sha256: c875b0b35d97f87bb5069e47a8959983e95ff54c760fd59b1b12b15b9942e459
+- card_id: false_scroll
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: false_scroll.jpg
+    sha256: 115207ace88343480fb21af2c4a8c7bf057a596609663c8658b54c0679818fa1
+- card_id: gifts_and_favors
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: gifts_and_favors.jpg
+    sha256: 574da32712e20b397b670e5b2eaa2077366a2ff8f91e8accd653687dc1987028
+- card_id: goju_hitomi_experienced_3kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: goju_hitomi_experienced_3kyd.jpg
+    sha256: b65f1c986774646103722da588406a3c6d9b34b1af7e5440b281f059979d93c1
+- card_id: hakumei
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: hakumei.jpg
+    sha256: b97bcf50e6986bec464663182de2be50faaa27755fb6e44fb6282cedbc509966
+- card_id: hantei_kachiko_experienced_3kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: hantei_kachiko_experienced_3kyd.jpg
+    sha256: ece7d489f01fb4ca8ee632fccf74b8cad357b54c97b550d4d1dc35571af76bcc
+- card_id: hantei_the_39th
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: hantei_the_39th.jpg
+    sha256: 8108b097c20b5f4a1b26bc5b15adbf22423b81946210b1115cfec9e3c13cde80
+- card_id: hellbeast
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: hellbeast.jpg
+    sha256: d3db34f39cd68aa0607b75dfc50e084f4bff2b6487119b6545674e0c3642320f
+- card_id: heroic_sacrifice
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: heroic_sacrifice.jpg
+    sha256: 77aad7879d8e5c739ece33c0b4c1cc61df5287be56a1bbdd9688dcacbb1c3f7e
+- card_id: hida_yakamo_experienced_3kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: hida_yakamo_experienced_3kyd.jpg
+    sha256: 5abeea398adbd3d02c3d5989ac3252a6142ccc820320ea4634264234f67181ba
+- card_id: hitomis_choice
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: hitomis_choice.jpg
+    sha256: 5eb3425fdaa57ce6bf82cd803fe582d96684efd4c6526249cf448228e5dc99e4
+- card_id: honzo
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: honzo.jpg
+    sha256: 892211fcd3cb5c5e5c9ea2454475c31c13d203db7815f2d2fe85e61cc624ab71
+- card_id: horiuchi_shoan_experienced
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: horiuchi_shoan_experienced.jpg
+    sha256: e51e6d199bad8b8757015f8ce50f0201eeb86755b6ce5dc59cdc38a8eeaf6261
+- card_id: hoturi_the_heartless_experienced_3
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: hoturi_the_heartless_experienced_3.jpg
+    sha256: 39a801d2af942e83f43b8dab8ea57e0450380008fdf9992a444104bae528d634
+- card_id: i_give_you_my_name
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: i_give_you_my_name.jpg
+    sha256: 34dbde1f31e058232b19aff16621a08258fd4abdca652485016abbdb1ed1c2cd
+- card_id: ikoma_ujiaki_experienced_2kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: ikoma_ujiaki_experienced_2kyd.jpg
+    sha256: 6425b61f2ac83fcf8634853c13918074840d23130d56df5cce51ef3c67ef9e14
+- card_id: importune_kami
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: importune_kami.jpg
+    sha256: 3412f13517c28b847767702ba0b94c48e46cf5696cf7d2af561243f985d4a51c
+- card_id: isawa_tsuke_experienced_2
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: isawa_tsuke_experienced_2.jpg
+    sha256: eb2daf2142d0902949cf5508a0aa91e8875bce32cc5c5106b375c7cc69548a02
+- card_id: ishada
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: ishada.jpg
+    sha256: 49d064c669b86d8a7534f0da68f6749fccc37e9f1a1dc41339e9c694aa92f858
+- card_id: island_sanctuary
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: island_sanctuary.jpg
+    sha256: c6e33e2d03ba275e9289ee57a0c174590f25709693188679b335c903fa9e7597
+- card_id: kage_experienced_3kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: kage_experienced_3kyd.jpg
+    sha256: 8bca78f6bfbfa07cff628353e5108ddd839b6b570677cee99fcfe72dc311637c
+- card_id: kuni_osaku
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: kuni_osaku.jpg
+    sha256: 7653cd99929874983f562ec1cea286712d9c0fe5fc9e956947a7f8f4e7c7a621
+- card_id: kuni_yori_experienced_2kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: kuni_yori_experienced_2kyd.jpg
+    sha256: 88a9f83bf5f952b64762d21905cfbd8acbf63277e2ebc8e265d9d092ce67a08c
+- card_id: kuruma_date
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: kuruma_date.jpg
+    sha256: 615d2638a41f63f7b70e4ccba8b76e107814b58ffc3248550516a35a8bab310f
+- card_id: kuruma_seiro
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: kuruma_seiro.jpg
+    sha256: 40b6771190fd8def4c37152e4c5a7d85204925eb46822cd231c59e2b06c6029e
+- card_id: lesser_of_two_evils
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: lesser_of_two_evils.jpg
+    sha256: eaed0472490a152443cb7bdddd1ce9847a0dd7f2852fdbf5fa0b96ca2e26dec1
+- card_id: matsu_masutaro
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: matsu_masutaro.jpg
+    sha256: c613fc1d859e7994fef15246ec0263f3d0319790b38e694ed365bf3b1e3d5508
+- card_id: moto_kumari
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: moto_kumari.jpg
+    sha256: c02aef970cac9d0ecdc0c6014d33c325040146f3ff30a1652c22d77778d35da9
+- card_id: mountain_of_shadows
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: mountain_of_shadows.jpg
+    sha256: 299108eeb0477dd1e90ce2457fe0e8c41f663ea95939c4bf52840889b17ed732
+- card_id: musha
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: musha.jpg
+    sha256: 01e12f778bb62f153e151ffda54878c6f14331ed3da0e1b07648d994acde0309
+- card_id: obsidian_and_jade
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: obsidian_and_jade.jpg
+    sha256: 1de602f5b94e04db4cb35e88294e7778b0e5d5636a099e110242b86c2e17c824
+- card_id: obsidian_magistrate
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: obsidian_magistrate.jpg
+    sha256: 30a9cbb129cbb9e54ce3bd3f25512062f9953ca89bbcd1f302d6936456522822
+- card_id: obsidian_mine
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: obsidian_mine.jpg
+    sha256: 32fecf6a2e487103d09402b587d3a6703fe12884d71758b1ca567ceb50eb988e
+- card_id: oracle_of_thunder_experiencedkyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: oracle_of_thunder_experiencedkyd.jpg
+    sha256: 8048696dd5f62fa25bd522ca63743708aa176965359f28384f6d9ece547919e7
+- card_id: otaku_kamoko_experienced_3kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: otaku_kamoko_experienced_3kyd.jpg
+    sha256: 6ff7ea6350462f8957a7f756dae1d57ca1c6202af1bef871fd6a1cc3deb9c324
+- card_id: parasitic_oni
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: parasitic_oni.jpg
+    sha256: 9827699776ee74e9f9abf8c9721e557a63d79c0857ccc64e602e73b413227e22
+- card_id: pick_your_battles
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: pick_your_battles.jpg
+    sha256: eef2aa78c2a4e68a0efc9e8636d6f1e4018dfd31a3bbe5cd54f8e715855278a0
+- card_id: pointless_sacrifice
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: pointless_sacrifice.jpg
+    sha256: aeedb5bb177d73086b957df520d14c37981a4be1e577bdc99bff50e474490284
+- card_id: radakast_experienced_2
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: radakast_experienced_2.jpg
+    sha256: e6e859643bfa78737c40eddaa965b8824a14caee706a4dc321125d116562224f
+- card_id: ray_of_hope
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: ray_of_hope.jpg
+    sha256: b2f4fcc62c2bb28de99c9dca257360489a5531ebdc3e522a658b9d7d325b2755
+- card_id: ruins_of_otosan_uchi
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: ruins_of_otosan_uchi.jpg
+    sha256: 292c7d0da2052d350b4dfba3516392db9efe2dbb027c5e7de58b54efc816d4c5
+- card_id: seppun_matsuo
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: seppun_matsuo.jpg
+    sha256: c5bed0f35e6169e04ffb4a2ee23a21f9b8ba1a620aa897d30baec97a880c6949
+- card_id: shahai_no_yokai
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: shahai_no_yokai.jpg
+    sha256: cc842285314325fba115fa5cdedab899467dcf212aec67acffafb56b56daa744
+- card_id: sharp_sharp_stick
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: sharp_sharp_stick.jpg
+    sha256: aef7af12a1da91649047c7db18f52aa184edc65a10dcf675c18d6d2bb17d8b6d
+- card_id: shashakar_experienced_2
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: shashakar_experienced_2.jpg
+    sha256: 30a01f82a59fc627cfc84c643ee8d980ff7886b187481dd5f3e48a8524133c19
+- card_id: shiba_tsukune_experienced_2kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: shiba_tsukune_experienced_2kyd.jpg
+    sha256: 03bee71cb5cca439c3712919cc0252b8b6cb5052ff31ef889fecab317484a8d4
+- card_id: shosuro_nobukazo
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: shosuro_nobukazo.jpg
+    sha256: 037fd1ca701d48d6bcdeee632310fdf7f10c78590c3bb33163d0c985e950b05d
+- card_id: snak
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: snak.jpg
+    sha256: 54ee47356435b95212677163da1090f41d5e40803299425f418aa834a883d5a6
+- card_id: soul_of_the_grand_master
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: soul_of_the_grand_master.jpg
+    sha256: 8ab6ca5877b8206abb584e0c16eb4d44581d5b515549c53a5e585aad39553a6e
+- card_id: swallowed_by_the_sea
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: swallowed_by_the_sea.jpg
+    sha256: 71f7c8aa4ef78a00c8566727d0cf5f19d5ce6c45217e223033e8ccf0d1150966
+- card_id: tadakas_last_wish
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: tadakas_last_wish.jpg
+    sha256: 3a1a269033aebcb3a11c89ae9917a0dc86fdd1a516ae665c213bb0b82cdc59ad
+- card_id: tadakas_sacrifice
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: tadakas_sacrifice.jpg
+    sha256: 1e108d96a5c77403da765572f67623bb6b4ffef3e929e8b052102177d2297de0
+- card_id: the_darkest_shadow
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: the_darkest_shadow.jpg
+    sha256: c0c16fd1499b25cdd5a6364e551a48d792ad771d1ba8ff354ae68d8f15be0fdd
+- card_id: the_imperial_palace_of_fu_leng
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: the_imperial_palace_of_fu_leng.jpg
+    sha256: 9e2582444012993859d1fdfc0ddec28d117a92af4456d71141b3982f3047dd4a
+- card_id: the_jade_hand_experienced
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: the_jade_hand_experienced.jpg
+    sha256: f0b85f7b74838bba0a7188cd825f6ac1d595f9747897717b9950706a0c6183e4
+- card_id: the_maw
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: the_maw.jpg
+    sha256: 8fda1e7c11fce79f8fce08957b8e870456a18a1e3abe360bd278bc6d692bac6b
+- card_id: the_thunders_fall
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: the_thunders_fall.jpg
+    sha256: f14bfb7449e31763b634b8df5a1624ccf126908a89fc4fe4d36751cdcd585c15
+- card_id: togashi_mitsu_experienced_2kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: togashi_mitsu_experienced_2kyd.jpg
+    sha256: 19e505f5e255c5c5290a863dae099b92a15ae38987d0c0877b782f440c65c55e
+- card_id: togashi_shunsen
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: togashi_shunsen.jpg
+    sha256: 4bbd9126f31ef5281c10136999246f82d6f7ab0af324e0693852154f83c4126a
+- card_id: togashis_prison
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: togashis_prison.jpg
+    sha256: 84a60e2aa032fd4d580524b9b44e8ca2db0becc80a4c52ae9bc8992b0b102eb8
+- card_id: toku_experienced_2kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: toku_experienced_2kyd.jpg
+    sha256: d6378450ed47f336d7b73c58b7d4d9419b746f056375b24f37e4b97e89ec73ab
+- card_id: tosekiki
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: tosekiki.jpg
+    sha256: ccff30e3868a249d5108a0d23b562111e7d7a19e61bec7abd60933e23bd144c6
+- card_id: toturi_experienced_3kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: toturi_experienced_3kyd.jpg
+    sha256: d059e1e81174f506d2e315358aab4dcdb3c2e9f3cbd4dea3817c32afbb660c14
+- card_id: toturis_defeat
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: toturis_defeat.jpg
+    sha256: cceff4fdbfbcce1303f3c84e5035945da72ea776d6e6ee51ce9da268f5ea2335
+- card_id: toturis_grave
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: toturis_grave.jpg
+    sha256: d511e5ce49c836d24d3e49a6e9f48f81c029f90db5232254b83f03243494df52
+- card_id: usagi_masashi
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: usagi_masashi.jpg
+    sha256: f6c0ebbed78a050b693c0de60360f311ac66d46b3867a654c7ed0eca631d870a
+- card_id: vengeful_kami
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: vengeful_kami.jpg
+    sha256: d82d1914046d114a212b2da241aa5383ad3035a4e37431c1060c81b4d75c4520
+- card_id: yogo_junzo_experienced_2
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: yogo_junzo_experienced_2.jpg
+    sha256: 7c38850717257ab562f1324261c89dbb998e3dc35b254cc9d72fa27f27c52433
+- card_id: yoritomo_experienced_2kyd
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: yoritomo_experienced_2kyd.jpg
+    sha256: d90df0bb980319bcaa17fd370ac62747d068c25090b7c1a81e65551338d29470
+- card_id: zanshar
+  printing_id: 1_000_years_of_darkness
+  files:
+  - role: front
+    file: zanshar.jpg
+    sha256: 358ba90c8057c48d424245a971420ad7816fd0727aa32fb76415aaf1b2170558

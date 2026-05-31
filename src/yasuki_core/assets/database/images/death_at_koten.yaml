@@ -1,0 +1,506 @@
+set: Death at Koten
+images:
+- card_id: a_false_accusation
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: a_false_accusation.jpg
+    sha256: f99c844fcdede49b5b9d0f477e05426b042933c2a85eb94191cd03fc1c358976
+- card_id: a_magistrates_blade
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: a_magistrates_blade.jpg
+    sha256: e630f4f10bf7cbfffa6967342942347b2b56776ec47c9e6e40fc2565eeba0780
+- card_id: akodo_tsudoken
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: akodo_tsudoken.jpg
+    sha256: cc3dd1fc625e95963ae6ddeaba6b6e8390787690ac3a15f4ff026b2400f15119
+- card_id: asako_fosu
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: asako_fosu.jpg
+    sha256: c640f1335b4d6168c6b53607a7f808bb136af0cf4d0d03145b45c356b5220924
+- card_id: blind_rage
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: blind_rage.jpg
+    sha256: 1236702de1b42b2991a5569064ac0632d63ac5b0dbf66833e212606a6ca9abb9
+- card_id: cavalry_tactics
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: cavalry_tactics.jpg
+    sha256: 452ef1d18995072d2eb77859db0a2195575c27ea3de94e870203a291606cfcc1
+- card_id: censure_of_thunder
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: censure_of_thunder.jpg
+    sha256: 4fe9dbffdedb7a9781abcdaac173caff696f3168a53fd65927c8b7b290358515
+- card_id: chuda_seikai
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: chuda_seikai.jpg
+    sha256: a6b73ae7278057cf3a719f41bfcebfd77a2cce6b12892de2a4cdedc94593ec78
+- card_id: chugo_seido
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: chugo_seido.jpg
+    sha256: a6f21f2e575ec6f5fddf91af63ebb0612f3218b4be354de411a3dc4a8cc9b0d3
+- card_id: civil_discussion
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: civil_discussion.jpg
+    sha256: e9799476fd77bdaee8e1001986d8c200b21c103c131569f40d71d6e4a62568cc
+- card_id: conspiracy
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: conspiracy.jpg
+    sha256: 5b587dccd252a92dfa5c2230ddc08928a8326b095428d75b87560c9ed642454f
+- card_id: court_attendants
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: court_attendants.jpg
+    sha256: c519ff6adbe177233014bd20c5f56add7fe9c85963185b9dc5e92e03a48332c9
+- card_id: crippling_strike
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: crippling_strike.jpg
+    sha256: dbc33730dbda78cf67818e8a90db42f6b9ebee631ae0c3a2f62d664cccf3c0d4
+- card_id: daidoji_inada
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: daidoji_inada.jpg
+    sha256: 1b116243ae040ebbe44bbd2e53e17c6b2900a1f0d6cedce4e11fc92379a77649
+- card_id: daigotsu_rasetsu
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: daigotsu_rasetsu.jpg
+    sha256: b8862793ae554afc2ee622832fbc127c54b23833e2712828bdc4eeda702be235
+- card_id: dance_of_flames
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: dance_of_flames.jpg
+    sha256: b3ed14782408ba50dda42b3b6a8c847ecdf764bd516117b8f278d8514f2e0360
+- card_id: defensive_nature
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: defensive_nature.jpg
+    sha256: 39339e877c9e452a68a5a6817d1ce0f53cc35be430c14a39cc0c55a52ce194f9
+- card_id: demonic_possession
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: demonic_possession.jpg
+    sha256: 6a830fc987e992dbbf271e7723c259d5f68c0ae03c0c18365acf924daecee31f
+- card_id: desperate_battle
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: desperate_battle.jpg
+    sha256: 5c1f03c9c85feee17af3f4d4295b519cb37515d57618759b51db3a676d585825
+- card_id: doji_kishio
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: doji_kishio.jpg
+    sha256: 33f3e51c14e84c8d9477cd7b83c24e7280543a32d034e77a651ad1459273d68b
+- card_id: doomed_undertaking
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: doomed_undertaking.jpg
+    sha256: ff87b3a8a86be0696bc825b61020226c644d180fe4e79889a21d42f41dee4a34
+- card_id: dragon_attendants
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: dragon_attendants.jpg
+    sha256: f91a39320bae2cb547666022300b24cf36dcb7793b27aa4e5815132b2018de24
+- card_id: essence_of_destruction
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: essence_of_destruction.jpg
+    sha256: a113b06212492a5f3a20d4ccb1899042a88b9a463fc8298ae07747279d92f6f1
+- card_id: essence_of_evil
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: essence_of_evil.jpg
+    sha256: 2f0dd556ebd9fe59aa73d977df31943aedeb78dd66aca4d02f1992a89f3d61c3
+- card_id: expected_arrival
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: expected_arrival.jpg
+    sha256: 676a886361f513121af9987cf9c6de5ea04528b9609d556980d5bd92ed7fe5d9
+- card_id: exposing_secrets
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: exposing_secrets.jpg
+    sha256: dcf45389f06183bb902d8430d1d74348818e1bf70a0ffae1fae321433d39d0b3
+- card_id: fatal_error
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: fatal_error.jpg
+    sha256: f44de0f28392609afd65adaac3433c8f35b2079d524e63b6b8b5463a2ed9f647
+- card_id: final_duty
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: final_duty.jpg
+    sha256: c8247eca4f8f140b00157e6c7f42d590e8c097f8d218425dd326705dee5504c2
+- card_id: forward_camp
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: forward_camp.jpg
+    sha256: f2b14ecb3d1a10f91963752811255d43723946ee35972de26665a60fea374d66
+- card_id: friendly_traveler_sake
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: friendly_traveler_sake.jpg
+    sha256: 7dae115c2f04c4414cb9a78c0f92ee1cd4d18d7193f40987ae637c184680d4b4
+- card_id: hanayashiki
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: hanayashiki.jpg
+    sha256: f4345d9f073c46781b9a8aed6d758f1add8aff9a36224b600c765fedc8a7279b
+- card_id: hida_hachimoto
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: hida_hachimoto.jpg
+    sha256: ff5e6bbb07e3b2e7201eb5094cee8651c37f2fa87c3c2b82d770c111900fb48b
+- card_id: hida_kagura
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: hida_kagura.jpg
+    sha256: dea6f014a88fb78e1d07cae1565186d3bc87a7ad0198f254744d4ad7feee1bde
+- card_id: hiruma_akio
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: hiruma_akio.jpg
+    sha256: 6608044c1c3ce6dd08543fae176422eda55d75a01dc97f6655b07469b8e98693
+- card_id: i_do_not_die_so_easily
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: i_do_not_die_so_easily.jpg
+    sha256: 623b26e5baa5f653acedcbec8d81f7fac8e7ae8bd8ba2c9c341d287b47b84908
+- card_id: ikoma_ryudo
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: ikoma_ryudo.jpg
+    sha256: 7d7c0c3ff7c22d14fefd99ca8d012ac70efa1dc19e50c19c7b7197ba03fa58f6
+- card_id: imperial_adjudication
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: imperial_adjudication.jpg
+    sha256: 03f9df919584188414b2631e78bcecd4853ac58a83f6d8ba654065a4e4fe2cf7
+- card_id: imperial_arrival
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: imperial_arrival.jpg
+    sha256: 420ba0ab61c3e235c9003548b996c43c12df43f346b2810c46136b662f0ee6fb
+- card_id: isawa_kumai
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: isawa_kumai.jpg
+    sha256: 7b2dff5d21ae0b6f11fe3ca5fe2a24e13f5e12422d1ff7e0042a0f750e9b19af
+- card_id: isawa_mariko
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: isawa_mariko.jpg
+    sha256: 23a4c4f8d7aba1de93781fd5787d507a1bd6e87fef88e1e166927af2c933f46e
+- card_id: kakita_aichiko
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: kakita_aichiko.jpg
+    sha256: f3cdabbd7f1e0973212124e05d2f833f075325c5c770fa5e50c63b7c4bf5b29e
+- card_id: kakita_tasaka
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: kakita_tasaka.jpg
+    sha256: d4ef4b837067cd45152a6bac1af7c0904facc1590ed620dfcf729d866ed3f324
+- card_id: kitsuki_umibe
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: kitsuki_umibe.jpg
+    sha256: bb338f82ecbd65b0f1f05d75b618a714960b4dc417b4cda444da72e05e990e50
+- card_id: matsu_shunran
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: matsu_shunran.jpg
+    sha256: 44eaf23a63efd41bd419f96fec5f98997603bad82ff14e155c0d8cb5f286b8c8
+- card_id: matsu_youko
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: matsu_youko.jpg
+    sha256: 3641d7d42297e463d5950f889d5d92958b6dd162ea5d6bf492304e39b5861f05
+- card_id: mirumoto_eikaru
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: mirumoto_eikaru.jpg
+    sha256: ec4007d43b58be3591a19fb00b5dee6ac74e2c7329bba375842326e504192067
+- card_id: momiji
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: momiji.jpg
+    sha256: 1a3716d23b57aa0c7d5c7b031d10434586dadadf77e39b6a2c1a098d67d37ef0
+- card_id: moshi_enju
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: moshi_enju.jpg
+    sha256: 4329e5954243b7bd16f981b29691d25248d2b8bab778bbf0ab8cd7841372ac52
+- card_id: moto_rena
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: moto_rena.jpg
+    sha256: a657447ec821fb8e16792c7193a334297271c6f888041659daeeac785c6a8d11
+- card_id: moto_sihung
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: moto_sihung.jpg
+    sha256: e10794f0147c37a0d92fdcc5bfbaa7ff24fffc888fb5ef9cecfe72c844231a5c
+- card_id: mutual_hatred
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: mutual_hatred.jpg
+    sha256: 29a99745c6d4145730750d63feef045b6c62af556686e92789439d2addb159f1
+- card_id: nosloc_no_oni
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: nosloc_no_oni.jpg
+    sha256: 74361efac45b2c58f7984d408c74898a8d6c61ce75d6a2b45788bb2f63488a96
+- card_id: order_of_venom
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: order_of_venom.jpg
+    sha256: 7edd77cb9eea04b89814c2664f13fdabd688e9153a3360c1d2a370eecc3a496d
+- card_id: presenting_papers
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: presenting_papers.jpg
+    sha256: 86c075f5b5f065ad9cf20d503fc4e2ccff22b40a185b4c4faa7f0d6f5a4c98a5
+- card_id: preserving_honor
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: preserving_honor.jpg
+    sha256: 01fad39deb090a312912e249c2b5ae4b349143611a4c6ec68d8828673509b1fb
+- card_id: ritual_of_binding
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: ritual_of_binding.jpg
+    sha256: 1a64328e879227ea55923234c074f250170b9df2cc31cb203777cc31fb99a87a
+- card_id: ritual_of_summoning
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: ritual_of_summoning.jpg
+    sha256: 25c6ab2ce1957992a31e532c08f540cc208d8bf1c9d43ed5046d765507814ef8
+- card_id: scouting_ahead
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: scouting_ahead.jpg
+    sha256: c404d06231b9839819b0c8066927a0b7c821fbc942a0d1f0800dd3e5d9e5f812
+- card_id: searching_the_libraries
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: searching_the_libraries.jpg
+    sha256: 6ec58c541b65abcfa3f938623571e5d473c40c72118d95501abadceba62c571f
+- card_id: seppun_blade
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: seppun_blade.jpg
+    sha256: f900874d366d4a8bf50eae59d4c69997f053aa640ee66c5b48dc785d2f2c9170
+- card_id: seppun_tashime
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: seppun_tashime.jpg
+    sha256: 85c3078601fc1bcc817d89fa15410e960f04f54e87a506e2cef0ec38e2a125cd
+- card_id: shadowed_steel
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: shadowed_steel.jpg
+    sha256: 584dbf94df6b52bef7f4c71721f273ea50f2da4bc72d6023f8a09ffc93fe72ed
+- card_id: shiba_kosoku
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: shiba_kosoku.jpg
+    sha256: 2e8d6155e6f97aa8713492a8ecaab1ea60da6eaadaa7c05cbb5ac8035b8d1839
+- card_id: shinjo_ji_tae
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: shinjo_ji_tae.jpg
+    sha256: 475d007b10318d60093ae69c228c6b0789f8c0ae51b1dc587cc175460e83e5b6
+- card_id: shinjo_kai_li
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: shinjo_kai_li.jpg
+    sha256: f13c3b80eac0cadf974a0c0f504e2bdd651d056e267f0e0f57249d73c95a3dc2
+- card_id: shosuro_takuma
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: shosuro_takuma.jpg
+    sha256: f46b6426c626201ad1396e0bcd0fcdcb2ff992069d9cd85c5105806dd11ff0cd
+- card_id: suikotsu
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: suikotsu.jpg
+    sha256: 4ac7cb873df143bbae1adf89e3dc37d89401ba2cf46393a6c295583dadd6d85f
+- card_id: tamori_shaiko
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: tamori_shaiko.jpg
+    sha256: d72b49f45be8ad4ada359247b103d80e36719956d71b5c0ed7429ca60af39c59
+- card_id: the_loss_of_the_soul
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: the_loss_of_the_soul.jpg
+    sha256: 48fcde3b9705c8f48dfae33e87419852fd1e3f417469178a3eed504597eee9d8
+- card_id: the_second_death_of_kisada
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: the_second_death_of_kisada.jpg
+    sha256: 1a8eba61e1142231e3ded73c0ce914fa722519fc53e814a4d227a55b0347bf9e
+- card_id: the_sensei
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: the_sensei.jpg
+    sha256: 90bbb8790f033086f3c37db580c124b9ee5e0edc12c7003970ef57f216c06f63
+- card_id: the_student
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: the_student.jpg
+    sha256: 56e217eb967a06c925e9deeb5450892d5d36dedeeb916493c0572276455cae8f
+- card_id: the_water_dragons_favor
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: the_water_dragons_favor.jpg
+    sha256: c3d5220ff0a03c2a30d0187ea9f1eee69a3db0f260a9c0e449602fe9405032ff
+- card_id: togashi_sho
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: togashi_sho.jpg
+    sha256: f546e0e7435af8dce2e3dafeff4b1f7d6106aed6349a24f138e9c73809a683db
+- card_id: training_maneuvers
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: training_maneuvers.jpg
+    sha256: 640fad5ecd70c7daa42246d5a84280c0fb93bc92c2a59d580789efdd6121ad48
+- card_id: tsudo_no_oni
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: tsudo_no_oni.jpg
+    sha256: 4191a2622abf6c7d483986182ddd2db1c6650704e98b6791c2da40a6c7c5b467
+- card_id: tsuruchi_suzuki
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: tsuruchi_suzuki.jpg
+    sha256: db0fd034b93214f2a28900736de919cc6606010a6190cde2f650cf3f3577ef03
+- card_id: united
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: united.jpg
+    sha256: 464c3428c59d82df5de3b72be760209549aa177782f65da1eb7dca6bf009b580
+- card_id: unleashed_fury
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: unleashed_fury.jpg
+    sha256: 9102d9a5081154ac9f039c2438ba08d23a09a2fdf2c27af40485f896d849d2a9
+- card_id: veiled_menace
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: veiled_menace.jpg
+    sha256: 98102d2e516cb43e8397198044b56e43700923b26385dd75593b8c74b1c062bd
+- card_id: yasuki_tijaki
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: yasuki_tijaki.jpg
+    sha256: 98bc03859238b9c446483d146cb559fc8de4418bf9eac71b20f7f1214add2385
+- card_id: yogo_kazunori
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: yogo_kazunori.jpg
+    sha256: b58c9a635109a968c3e315fa16317578077c8a42e146c266b78f9207bc6b4199
+- card_id: yoritomo_iwata
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: yoritomo_iwata.jpg
+    sha256: 6a764825aac849b02342ea56c38b7477895999757fa3ea231739995a63ee62df
+- card_id: yoritomo_iwata_experienced
+  printing_id: death_at_koten
+  files:
+  - role: front
+    file: yoritomo_iwata_experienced.jpg
+    sha256: 8ed06c60e4ce73469d61b7b828ccc663df94773ae1450c7e42f095a45d59a10b

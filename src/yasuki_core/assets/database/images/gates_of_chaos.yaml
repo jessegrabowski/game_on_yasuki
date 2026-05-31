@@ -1,0 +1,896 @@
+set: Gates of Chaos
+images:
+- card_id: a_doomseekers_tomb
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: a_doomseekers_tomb.jpg
+    sha256: 7c1437c5b3f988fa846c40f65aef1f3b9079f97ad5f6fdd4cf2f408de9209bd1
+- card_id: a_fever_in_the_blood
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: a_fever_in_the_blood.jpg
+    sha256: 4d53a3581087305b1a43481bc93479eced4cd4b1e10d0ddc26db9db4194cd0d3
+- card_id: a_new_perspective
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: a_new_perspective.jpg
+    sha256: 418a6bcb45ac89b66e61848e1e37830ffae6ff60725b62c8e0799c057cbf69a3
+- card_id: a_welcome_reprieve
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: a_welcome_reprieve.jpg
+    sha256: 70958c452f635bdf793e1b5239fca4369573f80e44ae3b4c1b233a9c216cb8d4
+- card_id: abdollah
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: abdollah.jpg
+    sha256: c6cd42d2e934cfa28c802d6a94bc7f84634518400a59d5e09ab9a2742d6d2cb0
+- card_id: abundant_farmlands
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: abundant_farmlands.jpg
+    sha256: 5d402376590187736759d8560ecc42dd36ab6ec86835527c59afcab866ed28f9
+- card_id: akodo_dairuko_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: akodo_dairuko_experienced.jpg
+    sha256: bda9500fd7af64a1429c228c5400aff62932cdec2b89981928985df1cec60c68
+- card_id: akodo_kamina_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: akodo_kamina_experienced.jpg
+    sha256: b9e9c0a9c8601b35731a7812b11b37f6ffd7f85bdc906d7a52d5477fc86c607b
+- card_id: akodo_nojima
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: akodo_nojima.jpg
+    sha256: 0f6fa0ebd7331dd391aadb156a91f7db6f8ce81b54a397960cab99cf738d341c
+- card_id: allied_efforts
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: allied_efforts.jpg
+    sha256: 2dcd95af002c7792b4aa91606e725cff9a8650d7eb8806c54c34647ec9a2717e
+- card_id: asahina_kitiaru_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: asahina_kitiaru_experienced.jpg
+    sha256: 73b4d11e633a48bd4858dea275638ac461d323e31f1eba690b74145fae81f383
+- card_id: asahina_shigemitsu_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: asahina_shigemitsu_experienced.jpg
+    sha256: 2dbb8a2f623b612cdba4152846587fb54f355b0b2af554a8694e15727b5f5183
+- card_id: asako_ifukube
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: asako_ifukube.jpg
+    sha256: ab87e1bb13adb0f52b331ed3c33daa24569dab2f1a7cbf9e37d0dc01a4698641
+- card_id: asako_karachu_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: asako_karachu_experienced.jpg
+    sha256: f6dc99f5504ce7de89a4e4d87276a74c33250de2e53f825384b4c6053604470a
+- card_id: ashalan_ambush
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: ashalan_ambush.jpg
+    sha256: 839b9f21900e0425c8bf82fa224b20e9667ba1c541859b04bef9809168fa2cdc
+- card_id: aulus
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: aulus.jpg
+    sha256: 9154d001616ac8138874fd011eee924da2e59689055597d89dd2933a778fdff0
+- card_id: bayushi_amorie
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: bayushi_amorie.jpg
+    sha256: 216b2f496da440c86335c24de4a46108142cfc2d036e259c281e5b686de47169
+- card_id: bayushi_manami_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: bayushi_manami_experienced.jpg
+    sha256: 7cc1ccc62d6f491358ef413a76fbec6bc4e7eb5909d44bd384d634166ca7e0f8
+- card_id: befriend_the_tides
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: befriend_the_tides.jpg
+    sha256: 0da1aa691eddb2bec008873e9b74c004816f467d0481987a3a135c2be760f2b5
+- card_id: blood_of_shahai
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: blood_of_shahai.jpg
+    sha256: 662925592a2bae83a9aa349cf071d4b22034e52576f112a952488a9a953d6312
+- card_id: boiling_point
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: boiling_point.jpg
+    sha256: 38dc6bcab90baa2942a6b70cba6e579a372d13188902bb9f1f43e548c78f7356
+- card_id: boyoh_mercenary
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: boyoh_mercenary.jpg
+    sha256: 91bcdbc942c41fe7b2ea2bdcfdf628b3df75d51e5d098412a6b480a436ffde2b
+- card_id: camel_mounts
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: camel_mounts.jpg
+    sha256: 0d505916e73b873d0bd407e40a60d8b07f56d30af03b8b2efe3cc8035f87015e
+- card_id: cast_aside_appearances
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: cast_aside_appearances.jpg
+    sha256: e9357913d8d1639dae2546048a60a29da893bd18aaa63aaffc232dce0a4f789c
+- card_id: chaos_of_battle
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: chaos_of_battle.jpg
+    sha256: 5e5e344fc3ef22f1045b914750ccd18aa87887d5f2c316a66975a8667234bc89
+- card_id: chuda_hikano
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: chuda_hikano.jpg
+    sha256: 289e327af6063e20020e90a1d03c67668ac68e4001a68cc06cf5e9b04fc75d22
+- card_id: claiming_the_ruins
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: claiming_the_ruins.jpg
+    sha256: 1a22d2728f0868e4e455b9938c05f1bbca325f960ce508f0c48fa68a6498326f
+- card_id: clay_kshatriya
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: clay_kshatriya.jpg
+    sha256: 03ea48bca588044489a3627ad7bfe5ca7a4bee40a58e27eae5efaae6772005e7
+- card_id: coastal_pearl_bed
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: coastal_pearl_bed.jpg
+    sha256: 43abef518b95a85a6e8c9982e9ac2c8b678667fb1854e7e5abba66c47dee834c
+- card_id: constructing_the_self
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: constructing_the_self.jpg
+    sha256: 946ad9b8fb7116311cd0508b3cc14de3e46d1d7590a6642ec39da8ca508846c0
+- card_id: daidoji_soken
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: daidoji_soken.jpg
+    sha256: 4ced98360d035ca0b07d458245630fc685d2a39fab6a540c8d3661dd541e8769
+- card_id: daidoji_tametaka_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: daidoji_tametaka_experienced.jpg
+    sha256: 2c4cda6129dd0895df08e07d797f38275a64b23ef991a75378521743edabca84
+- card_id: daidoji_tobei
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: daidoji_tobei.jpg
+    sha256: 52e7470bf45da3b7a8af5b28c23a78ded9e3fbb5b3b416d335d25b9d508665ae
+- card_id: daigotsu_kikumura
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: daigotsu_kikumura.jpg
+    sha256: 0f13048d85d66e1cde63858d22aa1682db86ed665a756df196f0aa5061074bb8
+- card_id: daigotsu_ryuko
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: daigotsu_ryuko.jpg
+    sha256: 3c7113810765c6b38a9081b585cc1d55800ce3f912949d90890143a4e3dac743
+- card_id: defensive_formation
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: defensive_formation.jpg
+    sha256: fbb2f468ed3b4a60f3740966e722f5236c0fd1e110006677ce3def5fca150b45
+- card_id: divination_bowl
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: divination_bowl.jpg
+    sha256: 937d1a03962b8784f9185910da19def119ff09d04797b94b880e8418c0540e1e
+- card_id: doji_razan
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: doji_razan.jpg
+    sha256: 8b4a63400b852997ba2aafc47ee652ff49684acd2684ad40bf819fa7c35bed67
+- card_id: elephant_cavalry
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: elephant_cavalry.jpg
+    sha256: 3766b123cabe70f46c2b42b62232e0d62120bf531fb4f4ce9725ddcf592118fe
+- card_id: enslaved_djinn
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: enslaved_djinn.jpg
+    sha256: f225b2761cb8ba22f9a044b8920b8a27f4da505e6d48385e05a82ae6cdec84fc
+- card_id: exotic_farmlands
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: exotic_farmlands.jpg
+    sha256: 6898c469ef239f9e989cdd7abafe3a2b0e7dc4ec08d8c22c8f9a2248feda65e3
+- card_id: exquisite_silk_works
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: exquisite_silk_works.jpg
+    sha256: 13ceb6d21750d3dc3f4f674067a9f7f5fd8b05d1961676c16d9b56d72a2b2d55
+- card_id: focus_on_the_flame
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: focus_on_the_flame.jpg
+    sha256: 882b4a55dab996b8886393d60f58731202eecdfdfe776cff69fcc3b219a4fc30
+- card_id: friends_in_the_jungle
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: friends_in_the_jungle.jpg
+    sha256: 6563779b1b88aed31d8c47a177bcebdb2a972275a87d492ec7465e3f2e49f7d2
+- card_id: frontier_farmer
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: frontier_farmer.jpg
+    sha256: 2e791412e29a33fd303e24aeaa0f7e323348c7235f0d3d767d4db979d17862a9
+- card_id: fudoist_temple
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: fudoist_temple.jpg
+    sha256: 1d607c6adb66a434422284b9859026a810bafe547eddbfe656cac19d0ab94ce5
+- card_id: gates_of_chikushudo
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: gates_of_chikushudo.jpg
+    sha256: d00082653a834f9f26ff5f414d19589c0ac8af6298cee78beaf847b84a5484c9
+- card_id: glassworks
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: glassworks.jpg
+    sha256: fca850713815b77867f32b3a1554a01fd117563ab4432dcff3a436de6dc73dcc
+- card_id: hida_gojiro
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: hida_gojiro.jpg
+    sha256: 2b00e370fb475938b8a1ee69070c83ad87a415a591a078191cf37d87e3224141
+- card_id: hida_tadama
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: hida_tadama.jpg
+    sha256: d855ac0af468836e903dc8218ce22800f91ed836d32d3e6be22ded57dcb25268
+- card_id: hidden_storehouse_of_house_rafiq
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: hidden_storehouse_of_house_rafiq.jpg
+    sha256: 23b977c7b4ab5f769df697dbbc139b4642fad52523ad1dcbe52077088cac94b1
+- card_id: holding_cells
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: holding_cells.jpg
+    sha256: dcd81da708f2858e94eabe291327c6dc42f6f3c335ab0e1dacaf5699196bb7b1
+- card_id: honor_replaces_rage
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: honor_replaces_rage.jpg
+    sha256: b7f5063d469287e1194aaa5923d572d26f20b78cf69dff03161a27349858b0e1
+- card_id: hoshoku_sha
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: hoshoku_sha.jpg
+    sha256: e1f8a6297d29f50c3ba5b63b2c67b10a65bd9bc98267dc34403033c41e4c3cae
+- card_id: iaijutsu_dojo
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: iaijutsu_dojo.jpg
+    sha256: be157a6b472c363db40c81b17a3738b345cd8298585798a721df376362e2cb7c
+- card_id: ide_hinobu
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: ide_hinobu.jpg
+    sha256: e94dd87f763d7d8d3eac9d46cfb45ee788632db9d191f0a5edcd134948e13d5e
+- card_id: ikoma_ayumu_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: ikoma_ayumu_experienced.jpg
+    sha256: 34b0e2bd0def262c5e40a62a5abb7ac48dcf4bc57f94a1dd2f437d3e0f1d11cc
+- card_id: ikoma_jeiku
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: ikoma_jeiku.jpg
+    sha256: 262e0de5e7c9f07f89a180252425915c17f11fee0b0f57c4e80a819764c20dc4
+- card_id: imperial_explorers_dojo
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: imperial_explorers_dojo.jpg
+    sha256: d84c90d807bb773d08c7b6b79367054d75ea211abb5f715f792e1ee9c4fd98c4
+- card_id: isawa_hajime
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: isawa_hajime.jpg
+    sha256: 7ce6ae2774508a492dd1598f8cbc607a3ffea383f4370379438637f8f7903665
+- card_id: isawa_koizumi
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: isawa_koizumi.jpg
+    sha256: 579ce87411dd24472cb0836142783e19c0a1811c96a090071f2fc151c4df4fed
+- card_id: isawa_norimichi_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: isawa_norimichi_experienced.jpg
+    sha256: 0fc506b74b0c9a8124a42eb65fe7056d0640a5fb844d8355f61523404ee2d847
+- card_id: ivinda_village
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: ivinda_village.jpg
+    sha256: 389089c8e154a8a31a8b730b0917c005edac2651526f34064b636f49456ad431
+- card_id: ivory_magistrate_outpost
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: ivory_magistrate_outpost.jpg
+    sha256: 9cd223699151c3b518e48c1c87434f987280402a03899ec85edab901093b8294
+- card_id: jade_mine
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: jade_mine.jpg
+    sha256: a77e95d48d24b71ba4caab5eb7da665405cbf862e2b5963e3ea167d7b87b906b
+- card_id: journeys_end_siege
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: journeys_end_siege.jpg
+    sha256: 67a719da5ebc01555021125d34652267cbc476dbbc7d75f851ffc15ec0cd14d7
+- card_id: kaiu_sokakaze
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: kaiu_sokakaze.jpg
+    sha256: 9d89db35e17a7ade8343334a6e89d14555c054a7130ab78bda34dde2a5b75eaf
+- card_id: kamalakars_harem
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: kamalakars_harem.jpg
+    sha256: 43b33ec6b592d7ed8e706d487ad47b4c3d95c3bda572360b26f9c548a54e18ea
+- card_id: kitsu_ririko
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: kitsu_ririko.jpg
+    sha256: ca5550103439e250be818fdfc1de085a0cca923bdd92b652684cd1e2efeaccb7
+- card_id: kitsuki_nakai_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: kitsuki_nakai_experienced.jpg
+    sha256: 3ca6064810b56b1cd3edd8da494023aa2850ca1b8899f325d3dddacb00182bc3
+- card_id: kitsune_yuko
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: kitsune_yuko.jpg
+    sha256: b0006d5010c486ebde2ea686ac6891ae23432b4287ec91d3a8edd876ef831c62
+- card_id: kiyoshis_wrath
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: kiyoshis_wrath.jpg
+    sha256: 534e6e47f86c0f730fd1815237757f008bd497144c91c23df6af5e1aa5fc1321
+- card_id: kshatriya_artifacts
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: kshatriya_artifacts.jpg
+    sha256: 20631ae1fc3f909aabf7b8c2deb379404eb8b8f43e2d8b4adbd94186058e4c62
+- card_id: lakeside_retreat
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: lakeside_retreat.jpg
+    sha256: 7cb2ebb51a70d89ec1839dc68bf0ab411bae83028d89357a311fbd4a9b2835af
+- card_id: lantern_oil
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: lantern_oil.jpg
+    sha256: ba3e4577fefc14bc070adab2994408f662289ac9931c1efde3487ee71cd4e4f9
+- card_id: lao_she
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: lao_she.jpg
+    sha256: 9267c2d768e3c4461a51365e5fc462917632c610b30ccf63dd5d75633ea48338
+- card_id: legulus
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: legulus.jpg
+    sha256: d9ca54cfe016180df8abc73a667185d879671cf18c1655b7de9660f1869833f4
+- card_id: lessons_from_the_heralds
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: lessons_from_the_heralds.jpg
+    sha256: f8f9aa810f88050b4a09f5a12d52cac16a9be081243f8a979e26bb3305ef6c97
+- card_id: looting_the_ruins
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: looting_the_ruins.jpg
+    sha256: ce5cc410dccc8498acc7e07595e42f786f8f493fb6a6173c8e01de2f0c7a3627
+- card_id: lost_blade_of_the_maharaja
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: lost_blade_of_the_maharaja.jpg
+    sha256: 719f786b9ce2113f36ce7c04a67c04a0a152bb8422fcf8c1cace24ba8f8bb43d
+- card_id: lost_caravan
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: lost_caravan.jpg
+    sha256: d96be1c08a86b0b2a57007bb80335bb7ecc98d9ff79ac808d65bb15390e8cc64
+- card_id: map_of_the_northern_colonies
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: map_of_the_northern_colonies.jpg
+    sha256: 2214d66714e4474e3d1601ecbbb181bb1c4ffd433dbbb86920ffb9b5dd6940fe
+- card_id: merchant_patronage
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: merchant_patronage.jpg
+    sha256: a482030798cddd0731b6f954dcebae28288325c6ee9796d68b2e7beae92b58f7
+- card_id: mirumoto_bojan
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: mirumoto_bojan.jpg
+    sha256: 5853c380d249fb0407a306c70e09616e3574f23d9d8fa78445c319ef4baabae8
+- card_id: mirumoto_katagi_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: mirumoto_katagi_experienced.jpg
+    sha256: cb09cb54aad7b38a574612354d5ff1633afd1894b6e577d855d5f13e827be2db
+- card_id: mirumoto_omero
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: mirumoto_omero.jpg
+    sha256: fdd2f7610ad54f8ab14c56b587208132df07465c0d7ddf50aa2064c2ab886090
+- card_id: moshi_rukia_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: moshi_rukia_experienced.jpg
+    sha256: 28d730402c8d48aa4c7993d03f8b30e50ade312ddeb3b7670e2055aba1f1c282
+- card_id: moshi_sasako_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: moshi_sasako_experienced.jpg
+    sha256: e78099f5c9ce0a18ce28fe264d9377606d679eee4658c22fef689908570dbd5f
+- card_id: moto_daiken
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: moto_daiken.jpg
+    sha256: 1f94b19d5145fa335301970a5c7f0f9eb8c0b8e00cbf8a3c3dd7f9b4beb05b7d
+- card_id: mrika_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: mrika_experienced.jpg
+    sha256: a171aff2f6f96de9eb617beadcb33954f46fa7ea65c8a676c08bea175bb5b19e
+- card_id: mukudoris_wisdom
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: mukudoris_wisdom.jpg
+    sha256: f63415c396076c0b458098e8903bc38f301afd110a1b4f405e6a4366a987cd25
+- card_id: my_ancestors_steed
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: my_ancestors_steed.jpg
+    sha256: 761b6e021fcbd71f6d7546b951dbdf10db54809e73094d1cc007482f1b63235f
+- card_id: new_cavalry_tactics
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: new_cavalry_tactics.jpg
+    sha256: 9c429f261819f1f92e27007a37fb3d7cacb81e1ff41ce41dea0d8842ef13bf7b
+- card_id: ninube_onchi_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: ninube_onchi_experienced.jpg
+    sha256: b2df49424f2acf261b273b65d9a46d6500558763c8c15fd0329afa9c62c2667b
+- card_id: nubanes_defense
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: nubanes_defense.jpg
+    sha256: b8c4f87c4141287278191528838c4d07f97f743aafd6d0f6a629d1ee20629b81
+- card_id: outnumbered
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: outnumbered.jpg
+    sha256: b516cbf38695882bc49be504478eafa8a5012b3d10fd882db723be4b7e6e0d68
+- card_id: poison_the_cup
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: poison_the_cup.jpg
+    sha256: 06aa0788f83fea97a9db37328b9965bbb6d27c527bec0024483425d2e5e12b1c
+- card_id: practicing_kata
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: practicing_kata.jpg
+    sha256: c1d48359753e2bca6581e68fc9472551ff626cd3e2fe5f44691d82eb2a6cc918
+- card_id: productive_mine
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: productive_mine.jpg
+    sha256: fb0b385e2e58fcadb47d2e2bd4be68523491dbff8d29fd7844a6e7521b35001c
+- card_id: recovering_what_was_lost
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: recovering_what_was_lost.jpg
+    sha256: 7120627b30532099c0e5b7865b2ed8f597a1404a97f2576613eb04a73a25e6b0
+- card_id: red_hungers_fang
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: red_hungers_fang.jpg
+    sha256: 3fed92600a1772cdb8bf0b8a8343d9086c535e1df7c24451d2c844f31f3c8253
+- card_id: riding_to_the_rescue
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: riding_to_the_rescue.jpg
+    sha256: 3d389a52f28fe5f6f9a205a4144857143d7759c484e5a9a2cd520c2b707bbb19
+- card_id: ritual_preparation
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: ritual_preparation.jpg
+    sha256: dde49db6df3d48b6aebf82ebccd0fa26442cf5971345db272f0f17f6b9905294
+- card_id: scholarly_hermit
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: scholarly_hermit.jpg
+    sha256: 714aa4d7cfb1c58b97d2fa44367ff132fff80f44f6eed812a14fdf8a96845e2f
+- card_id: seppuns_blessed_blade
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: seppuns_blessed_blade.jpg
+    sha256: 6a8130861ee8a1a7fd14431bc1e8d9e7c795558126bc809ee99141c4957692f1
+- card_id: shard_of_the_great_deaths_bones
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: shard_of_the_great_deaths_bones.jpg
+    sha256: 1d4b40380eb86ea5ddcfd49bbcab96c7995a3852fde1daacbdb2cb6531c0ae43
+- card_id: shiba_tsurao
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: shiba_tsurao.jpg
+    sha256: 6fd5c83c2f43241c830b357756e547e8d11fbc27a38d066da3302e48316ceafe
+- card_id: shinjo_kinto_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: shinjo_kinto_experienced.jpg
+    sha256: 03adb588599372b8cf3e8399e31ea227b620f8f457024c223cedc766bc377149
+- card_id: shinjo_tselu_experienced_2
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: shinjo_tselu_experienced_2.jpg
+    sha256: eafb8b03c003bfc1bb1c2bddddf349beccd1361b256fbe79ea00665b13393d54
+- card_id: shinjo_yoshie
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: shinjo_yoshie.jpg
+    sha256: b0ff1dd7ecad0567171921af885a46a826954b22bc38f656d0e25273a65013b5
+- card_id: shosuro_nigawa
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: shosuro_nigawa.jpg
+    sha256: 1982002e19621f4546c37645cadea4d2b109ac3e46cdde7290ef4e0a0c992d82
+- card_id: slave_pits
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: slave_pits.jpg
+    sha256: f5034be1becee4530535fdfba2456e29f060ce8cdbc777b8732ac4225a3427f2
+- card_id: sorrowful_prayer
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: sorrowful_prayer.jpg
+    sha256: fd5f61d8f769170f5ad232c14b5fa8a210d5eb46310292ce5c6d1ff0c051eab6
+- card_id: soshi_kodanshi_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: soshi_kodanshi_experienced.jpg
+    sha256: 2ca4d0f8971c56a6ed3fe7f3f9becf7ce4fd4be0e92f28bb840eb3c714025204
+- card_id: spawn_of_vritra
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: spawn_of_vritra.jpg
+    sha256: e36de4413feb8464de3d915788767d834fc072f22653c1c86888b9703575df0e
+- card_id: spitting_llama
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: spitting_llama.jpg
+    sha256: a561d60eb26ec8f65cc34a64518bd5c1252b8dd285e681698b897fade4984a35
+- card_id: steal_the_candles_flame
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: steal_the_candles_flame.jpg
+    sha256: 817a0e2ae77a2e0b91633e8b638d9795d96102371a438ded93d656ddab35c8b9
+- card_id: strength_of_the_bear
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: strength_of_the_bear.jpg
+    sha256: 955bdeb24bc415e0f1c47929af2aefeb649cd12dc54765419bc152b90f00a85f
+- card_id: study_the_wheel
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: study_the_wheel.jpg
+    sha256: d457830d3e2d365e9d4b1e436c6c654fd1cd20ab806aa04f5851281ac61a97a8
+- card_id: susumu_haikaro
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: susumu_haikaro.jpg
+    sha256: e0fa6a1bd93008aa0e3c4a8987047f69e366cfde3dcecac2611fa21137a752d9
+- card_id: tactical_setback
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: tactical_setback.jpg
+    sha256: 2d188ad3bdf58f71a81a0f753b26883b7f03320b31ade1b4841d1f2654b2a6c5
+- card_id: tamori_jinai
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: tamori_jinai.jpg
+    sha256: e0fbf9a8264ef29a17faa0a211d677ff8d213ed36e9ee766e9b01346971ae9b1
+- card_id: the_bestial_ones
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_bestial_ones.jpg
+    sha256: bb9838db2ab88e49f36c647e821f84008c99751bc52ec770548e9c01d915fb9a
+- card_id: the_breeding_ground
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_breeding_ground.jpg
+    sha256: 399e12278a9ab0315c3c531a4ca5c5dff440a8aa92ee432c0ebecef48c4fb6c5
+- card_id: the_crystal_tears
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_crystal_tears.jpg
+    sha256: 0d4fc4ce8ae88e40d9a409e8a50e6b4cfb40ff23eaebb7133c98a4915e0089eb
+- card_id: the_eternal_rainbows
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_eternal_rainbows.jpg
+    sha256: d582d5dfffb976061fb82a650c470d44dc7153a7d31338d9b62fd8d3e3f53cda
+- card_id: the_false_route
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_false_route.jpg
+    sha256: e3f626a36b0fc945e390b30533c2f0ccdb3cb10a2c8e860c71991dfd29979023
+- card_id: the_final_lesson
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_final_lesson.jpg
+    sha256: d80e7ae3182582b81efd53ccfd57fae7aa332d7a12c3683c23b7f0c2f3f65afd
+- card_id: the_lost_colossus
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_lost_colossus.jpg
+    sha256: 2ebfdfe77cb499bd3bae3661907ff76c443e62c7e904714717c44329419507a5
+- card_id: the_tao_of_fudo
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_tao_of_fudo.jpg
+    sha256: 0d92188360ef03ee4de56a03074795d2174abd5cf7b888de089a2c3d136787b0
+- card_id: the_thunder_resounds
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_thunder_resounds.jpg
+    sha256: 37d985285988e38048629b071f684ada64bb67d7b561e4191190c523b1b9db74
+- card_id: the_tomb_of_sun_tao
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_tomb_of_sun_tao.jpg
+    sha256: eda74d0841dc4d8477a5cb6ca6e18127e785b8abf9216fbab9858b360fa75e13
+- card_id: the_tower_of_vigilance
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: the_tower_of_vigilance.jpg
+    sha256: 4c3de635c34a8f838b1f8f0411b557398de61c016f1c3cc5f38d7ba62e85140f
+- card_id: togashi_noritada
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: togashi_noritada.jpg
+    sha256: f6823900048d1452cdd97159134a23bf2c4b72920d0076caba0ef345d9878dd7
+- card_id: toritaka_chokichi_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: toritaka_chokichi_experienced.jpg
+    sha256: dc3b22e51a346fe0c5bffb4da30f1bcb4c91e880a2e381435c0152d586721603
+- card_id: toritaka_iabuchi
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: toritaka_iabuchi.jpg
+    sha256: 7767ff0db037dd42054830cf05934808b6d020c3aaee6e9ba7464cc1790da1dd
+- card_id: trade_embargo
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: trade_embargo.jpg
+    sha256: 5fc682531e12576e44376a3e8ab506681d61cba3f3d016670f022ce1bfa42085
+- card_id: translated_story_of_shaharazad
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: translated_story_of_shaharazad.jpg
+    sha256: 9ca64c1ae9ca7b29f9156773c667c07263b95eef55f566256f2f5cc0d03a0955
+- card_id: tsuruchi_gombei
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: tsuruchi_gombei.jpg
+    sha256: 09bb5562095013885de196d402a59ce3698add951627a13a9d7ec0c787742a27
+- card_id: uncovering_treasures
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: uncovering_treasures.jpg
+    sha256: 5f725cfcb562231ba07ca40d4622596c3875cf423448ddf196988a528d5fecf8
+- card_id: unexpected_discovery
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: unexpected_discovery.jpg
+    sha256: 46b7952bdaa68775e29cf53187d1bbcade92eae77da8743f07305e135d6a7059
+- card_id: utaku_sayaka
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: utaku_sayaka.jpg
+    sha256: a6ea3406d3f7e90c434fc02b9dbf68e8fc0c8f6faf37f18c37fe04109ec511d2
+- card_id: watersteel_sword
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: watersteel_sword.jpg
+    sha256: 918b7a3bc43a2a1766f4252bc615987503c48dec06c83e86c1346a22727d6455
+- card_id: yasuki_daisuki
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: yasuki_daisuki.jpg
+    sha256: 7fb3d5552f9b8ace51e0b6fcf460e128f4c54c18b228bf6bc183efa1ae2074f6
+- card_id: yodotai_legionnaire
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: yodotai_legionnaire.jpg
+    sha256: 6b5ee7071bf417e7007c2d3132d2825b944e08a1a232465279215227b48251de
+- card_id: yogo_nobukai
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: yogo_nobukai.jpg
+    sha256: 691dad448e428d3ec3422ea7199e2be526e80fb479543a6866a63a715c785558
+- card_id: yogo_takashi
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: yogo_takashi.jpg
+    sha256: bdc9413acafa38f924f861b8c9cfb1cf2b08c2a777a18f3059d69f2d1bb61525
+- card_id: yoritomo_hiromi_experienced
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: yoritomo_hiromi_experienced.jpg
+    sha256: b2e79165219a0979a016c9784dd6f87d6ffc59d0b9cc2b378f37ac043a836a43
+- card_id: yoritomo_mikaru
+  printing_id: gates_of_chaos
+  files:
+  - role: front
+    file: yoritomo_mikaru.jpg
+    sha256: 5612785e6a4c9d048194d29126e35d9f891d32584f454bddf86b6bd02048e58a

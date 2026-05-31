@@ -1,0 +1,644 @@
+set: Dawn of the Empire
+images:
+- card_id: akodo
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: akodo.jpg
+    sha256: 0030d92cd4fe6caf64ad8a38211e68a57bd1b2322f87b04c8115e8f94e552107
+- card_id: akodo_mirotai
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: akodo_mirotai.jpg
+    sha256: 086d9873731d6ff9414b9b7cc137eb471a9da26b8b5206e5961283fa56a2246e
+- card_id: amaterasus_blessing
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: amaterasus_blessing.jpg
+    sha256: 61b217c807096bd4a5dd414e006d9369741d1485bda6be4c55e4dbbe8ba792de
+- card_id: ancient_armor
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: ancient_armor.jpg
+    sha256: 5456e894c750b95f73b7b6cb9b3234acb18fadebfcc45a163b858fff98546026
+- card_id: ancient_battlefield
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: ancient_battlefield.jpg
+    sha256: 66f175f117456bbd3dca2e269f4139164ba1d6bbfa22a616e6c699de6ba1da38
+- card_id: ancient_sword
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: ancient_sword.jpg
+    sha256: e3d1fbaa8fc5f9752037aaa63a9be13a4cd4f7b2dd4007f218722b2afe1c2d7a
+- card_id: asako_moharu
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: asako_moharu.jpg
+    sha256: 7671f43578a4a18b8350b2c2ef7b0b2fa8148dce284b80091ae1262c43a72663
+- card_id: asako_yogo
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: asako_yogo.jpg
+    sha256: 667d61ce79c02ffbbc02470a40d386417b33f59738d616d352de7ef72d82706a
+- card_id: atck
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: atck.jpg
+    sha256: d990db3e28e09528c97bfde8bd507509de29a1f1f885a19454d949c5824b62a3
+- card_id: battul
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: battul.jpg
+    sha256: 7b8187b0fddd32d58fcdb580e10702b85a7eb55ad501b28ed2ab411a827f39f4
+- card_id: bayushi
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: bayushi.jpg
+    sha256: 15623b49e80eba46f064d6ea8b4687c08c708302743762136fa2a2a2e47cc20d
+- card_id: bayushi_nissho
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: bayushi_nissho.jpg
+    sha256: 08cd017c99509fce5bfbb980e2c2ce6ad5ed496142789ab48fca0b0cc0d9604c
+- card_id: bayushis_mask
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: bayushis_mask.jpg
+    sha256: 5bec011f2e9b587a4b29f16bf50bba5d33b0aae83b6841bc25e0f2758cbd1ee6
+- card_id: blood_calls_to_blood
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: blood_calls_to_blood.jpg
+    sha256: 1e1db5830217c036656ebab7c00b45394cdd9c708ccc21448c576275020d5730
+- card_id: broken_sword_of_the_lion
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: broken_sword_of_the_lion.jpg
+    sha256: 1105078a17cd22040de78fa7207668eac672ad54daf0c2e800f050d762341d4e
+- card_id: call_of_thunder
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: call_of_thunder.jpg
+    sha256: 73df778a12b56c2f3cea2a4df1d11a67beb880bc06a5360fbc6f460bb9ca22c0
+- card_id: chamber_of_the_damned
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: chamber_of_the_damned.jpg
+    sha256: da986ba308af836c9c4ec1794a4b60f5b479c53fe234f59f7269e69db461f3ff
+- card_id: deeds_of_my_ancestors
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: deeds_of_my_ancestors.jpg
+    sha256: 7f68c037536394938a9f3d98299d0b64fa881a45c82d6cf1ca1b093bd2180d02
+- card_id: depths_of_jigoku
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: depths_of_jigoku.jpg
+    sha256: ce024127e8d0aaddfa6182769702edbfc2b1bc5b8fb426aada4ef0aff4537396
+- card_id: dnirch
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: dnirch.jpg
+    sha256: 26edc7b380454a55b13420f86795c330d0537e6308cdd6573c4a70b01f304903
+- card_id: doji
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: doji.jpg
+    sha256: df03ef474edc14f52c43504f810b6fb0680ae002b61523b020928d77081f15f2
+- card_id: doji_hayaku
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: doji_hayaku.jpg
+    sha256: 84262a9056d97f9742bb430c84decdf2f2744e8ae136304996b85be0eabd5a8a
+- card_id: doji_konishiko_experienced_7
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: doji_konishiko_experienced_7.jpg
+    sha256: af7569041cded8128a2ae90794eecaf8960b6cf07bb45d2dd057607e2d023d33
+- card_id: eclipse
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: eclipse.jpg
+    sha256: 2dd45f8e6f431baa1bf24be7bb6ab880cb5953dbfdf1ddf485b06f9691cdeda3
+- card_id: enmity
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: enmity.jpg
+    sha256: e1b429a101965e91eff02d75c1b48b7ebbe797f678f18dc5bad433e06df4213e
+- card_id: extermination
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: extermination.jpg
+    sha256: cc29a2e6698423f8db10390f6a90bed8bcff1b10cb2382451b86516a54e19344
+- card_id: eye_of_the_emperor
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: eye_of_the_emperor.jpg
+    sha256: a5005c6a0ad985d4b041da024201f0990088949fcd6e4cf6e04e19b16043b8a0
+- card_id: fall_from_the_heavens
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: fall_from_the_heavens.jpg
+    sha256: 0d54d67796d3671fe1605cb2cd7e8fc791cb6a4fc924331eccbb08075ea975dc
+- card_id: fallen_thunder
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: fallen_thunder.jpg
+    sha256: 8c55423252601ad7c1cd3ecee76d5c91711e5fea6e42150eb580cf7495145bb9
+- card_id: family_library
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: family_library.jpg
+    sha256: a2afdccdaed16ab8e6e2a99107686f8bde60a471d2e18b16cf39707f3e95cd04
+- card_id: fu_leng
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: fu_leng.jpg
+    sha256: 531e6a5cbd12c5ae8a22ec7dbe824edd027cb8330092bcd57dd6c5418d973c09
+- card_id: fu_lengs_sword
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: fu_lengs_sword.jpg
+    sha256: a5f5977f5f355b684b6639af0e189a90514c8b9713d8287af5c8d02b0288a2de
+- card_id: golden_mirror
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: golden_mirror.jpg
+    sha256: 3a79ba0eca91e21e73215a5132d118b9e3c13c588b303b68e10f7957600e8c9f
+- card_id: hantei
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: hantei.jpg
+    sha256: 048744ecac068b68906fb0556cdb0203368750cff5ca75fa6deafbb476348fdf
+- card_id: hantei_genji
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: hantei_genji.jpg
+    sha256: c0b7c3fb540a5e0893dcdd300fce4d8db5e9d904e88ded9947b631b8a7ae2236
+- card_id: hatsu_suru_no_oni
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: hatsu_suru_no_oni.jpg
+    sha256: 598cf6668272d4192b199418e66be038320a6dc431faa5e60738564acccbf476
+- card_id: hida_atarasi_experienced_7
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: hida_atarasi_experienced_7.jpg
+    sha256: 1650912eb9240b95cd1f2e0481d656add201413fc5958ff03e5852f8074fc9b0
+- card_id: hiruma
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: hiruma.jpg
+    sha256: cb8e10ae8edc9a3481a091e97929b2893c4395453ca9cbff5ac4377f9dadd0c5
+- card_id: hole_in_the_sky
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: hole_in_the_sky.jpg
+    sha256: ae698ca5950bcce004bc6803a7b01a9e4e5319b396483aad35fcd66d2e04aedf
+- card_id: i_can_swim
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: i_can_swim.jpg
+    sha256: c9c687e39825976e8b2f8a56a93094f9bf99db3ecef1f8f14269e690ab0f7ed4
+- card_id: ide
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: ide.jpg
+    sha256: 726c2404997e85b6a133e2070706a32b69ca2d6342ce547a85f07857581e7a79
+- card_id: ikoma
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: ikoma.jpg
+    sha256: e02da0a2fea54b2c6b0a6db0929beea4846fc30b64b7ef8ce8c4dc2d2bc834b5
+- card_id: into_the_darkness
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: into_the_darkness.jpg
+    sha256: 0dd2dd37456f5f3a7fa1ce2d11b7e1de19723748808a25c0b5883c9065c5e548
+- card_id: isawa_ariminhime
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: isawa_ariminhime.jpg
+    sha256: 4e899fee3df77bf69fd61604a58953480f1ec0d57a59999a671625f0047eea34
+- card_id: isawa_experienced_7
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: isawa_experienced_7.jpg
+    sha256: a882ebc97bdea4bdbc9c36796bb65f2613608ccd0c4709a849da8241beebf177
+- card_id: isawas_last_wish_inexperienced
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: isawas_last_wish_inexperienced.jpg
+    sha256: dca115f9cacd26f8c7d68ba44978b2ee965eb60045903f94f8d3a64adec180fb
+- card_id: isawas_scrolls
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: isawas_scrolls.jpg
+    sha256: ed2bcf7fea2ef82d43b6028e671d25a2a8397c0b3e944bffc6805489d6ce48e4
+- card_id: kaimetsu_uo
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: kaimetsu_uo.jpg
+    sha256: ecf195c559302e1f1afddfb1c45faa9e3e722c0dd238c1f8b4189e4991862fd2
+- card_id: kaiu_fortress
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: kaiu_fortress.jpg
+    sha256: bc96eb20b8e87b822f75bdda371f5e3da35a3ec74dace547c47d878ea3591733
+- card_id: kaiu_norio
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: kaiu_norio.jpg
+    sha256: c2c32986cc403941fafd80d303e21209a581bcc5a15caaad2767aa223685f03e
+- card_id: kakita
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: kakita.jpg
+    sha256: 80a978119bec7265df213d19e7a4908d37d419048d5aa7f86cc9c5f1bfc035fb
+- card_id: kanashimi_toshi
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: kanashimi_toshi.jpg
+    sha256: cfbbdce5d22cd0ca9562858a59bd1a68d619870711e893e88be88f738f34a17f
+- card_id: kanchek
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: kanchek.jpg
+    sha256: ccecb9d7e33b7b15b038b2830805f8ac352b36c6e343da4efdf2dc13f57d9357
+- card_id: ki_rins_exodus
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: ki_rins_exodus.jpg
+    sha256: f037a6982696f1002b81a21ea339e3144a21ca1e37befbc31ec7c99c6f00345c
+- card_id: kindari
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: kindari.jpg
+    sha256: d43aec03080ef73fdcce3cb1f075381b876c427b496d93b4ceee6bb60b7ff7c6
+- card_id: legion_of_the_kami
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: legion_of_the_kami.jpg
+    sha256: 2b3aba6f80613f263f7c496ee88cf8ba777da502566d31aeba6023368357a693
+- card_id: lesson_of_thunder
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: lesson_of_thunder.jpg
+    sha256: c2a617694c5958eb64ab4e08b6229170f1b794f42112441f1ca8269540771eed
+- card_id: matsu_experienced_7
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: matsu_experienced_7.jpg
+    sha256: 67436756eddf70767804a1afb5693a803d773a41534525695914dfa07fa8a1f3
+- card_id: men_of_cunning
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: men_of_cunning.jpg
+    sha256: dea22d552b2278f9eacec2e1013169bb26aa2c4102810e26b2ae145cc3037fed
+- card_id: mirumoto_experienced_7
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: mirumoto_experienced_7.jpg
+    sha256: 76ae8270a01ca14d3bc30449f6bd5f00eac0a0933ca2371c06644ed2a8ab3088
+- card_id: mirumoto_hojatsu_dote
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: mirumoto_hojatsu_dote.jpg
+    sha256: b356695c7784dc58aae5413c149b2ba95feae95af85463e6fb444228148c4bbf
+- card_id: mountains_of_exile
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: mountains_of_exile.jpg
+    sha256: ceb182cf23e47c0af87e9a4c625c88616863e55cfa16f16e6122458fdd68ecff
+- card_id: muhomono
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: muhomono.jpg
+    sha256: f05461235cf04f08e41fdc8badb284a0866fb6acda2e13d8f2a4bd998aebb06d
+- card_id: mutsuhito
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: mutsuhito.jpg
+    sha256: 2a07d4b046403d4db455ac01b5f7b489f5edcea52f98e578a53790f93036e46f
+- card_id: one_thousand_years_of_peace
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: one_thousand_years_of_peace.jpg
+    sha256: 30a630537b2e34dd25d15870978ca8b7fb777939699f1c0b66d5b48f47b64aad
+- card_id: onnotangus_hand_inexperienced
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: onnotangus_hand_inexperienced.jpg
+    sha256: 3849c74c0088f013304806e1b30ab9b9ae5f5a93ac924069d862bbbda4a318b1
+- card_id: otaku_experienced_7
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: otaku_experienced_7.jpg
+    sha256: 093ece797e5159d0ca31ce3032a1f6e83eae018fdf29eb9e8a7305bc5f124b5f
+- card_id: pan_ku
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: pan_ku.jpg
+    sha256: 081238888b81cd706788e60686a8b28c39536caaa4f166cf7bbea1e0feeafa0b
+- card_id: rebirth_of_the_dark_kami
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: rebirth_of_the_dark_kami.jpg
+    sha256: cc55ce900768c73913f4cfec17a23ae4fad14941a80ec942331eac2f1d183239
+- card_id: sacred_arena
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: sacred_arena.jpg
+    sha256: dc60a6364669c9a565658f91f4077dcee84f1758e607f4d39b04debf2eea39ae
+- card_id: scribing_the_tao
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: scribing_the_tao.jpg
+    sha256: 09fa75c5823f8d5ccd2244ef7aa24ed4cfb6e153ba67bf9c101bde59d88fe6a6
+- card_id: sculpting_flesh
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: sculpting_flesh.jpg
+    sha256: 1890ca0f467a0a89ebeba3334d7d801d1b13f9c16ab517a6eb6e73231b39f859
+- card_id: seppun_hill
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: seppun_hill.jpg
+    sha256: 324a9a141d2e2bcc5f49c2d2604946838a0f9d132a6317dacd7fa251515fe512
+- card_id: shiba
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: shiba.jpg
+    sha256: 329881938c5896cfc7c61f313dfdc1595d6a4b595f10c7c6e4c3de3002a161bc
+- card_id: shinjo
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: shinjo.jpg
+    sha256: 566dca2b021e2c469a1db1c6cbec99f6fb4737987e5454d7b0fa5cd2f60fc0a3
+- card_id: shinjo_bairezu
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: shinjo_bairezu.jpg
+    sha256: 897624d290f6c21b6bc65467f2b7489b3b01ec8c8608be586fc106b0daacbb5c
+- card_id: shinjos_courage
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: shinjos_courage.jpg
+    sha256: 75237cec6a5826a7b628944680c5841917b2f2acd207d03a14c1c8630a0b2a4f
+- card_id: shinsei
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: shinsei.jpg
+    sha256: 39dbc95a376dd36228c98bf6042f57ee004cc18401eac538d0f17065abf318c0
+- card_id: shinseis_legion
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: shinseis_legion.jpg
+    sha256: 91bbbf79f36443dae4753c60265703988892f8d61390421fe5e6a73481d49b6b
+- card_id: shosuro_experienced_7
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: shosuro_experienced_7.jpg
+    sha256: e3a3dfcd17c50c4d63beed69b8785ab2216890a85cbcaf8aaa9041a6f29c005b
+- card_id: shrine_of_discussion
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: shrine_of_discussion.jpg
+    sha256: dd7b54c11da29aa1ddb5746ecb11e7f582a6968fbba0b538fe705a27268c5c67
+- card_id: souls_of_the_fallen
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: souls_of_the_fallen.jpg
+    sha256: da502191e47b8c3f837331568e653b3f2bb86e362c3ebbd32c87dd71fde8bae7
+- card_id: spirit_made_flesh
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: spirit_made_flesh.jpg
+    sha256: eb7b3598ba769a04701a851df262773247128df00c5b2ef924d33a45e50f4b79
+- card_id: standing_stones
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: standing_stones.jpg
+    sha256: 963cde8b3e8a3c0f9a926a274aebe8b1794d4166e3b4e61d249e45e836228513
+- card_id: student_of_the_tao
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: student_of_the_tao.jpg
+    sha256: d63a95317d86a6cda4a528fedf11a61cbe1a22a437567b659cadb4b65e03d1ec
+- card_id: tashrak
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: tashrak.jpg
+    sha256: db39f0bd6b16d59569248a473d5cc3c8ba9117cf334f7489566848482779eee0
+- card_id: temples_of_gisei_toshi
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: temples_of_gisei_toshi.jpg
+    sha256: 94d1208a615dd979557310b1324d5fd262df0bc92fd3b4de75e7c216a9601682
+- card_id: test_of_the_kami
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: test_of_the_kami.jpg
+    sha256: 0cc6c7ddd5b110ca5862f64d99aa0ed6ce9a5e94133d1f9c44be0834348291a1
+- card_id: the_death_of_ryoshun
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: the_death_of_ryoshun.jpg
+    sha256: f33895144cab57665aef55aec09c731253078764fde927ead6386cb7b5be21f3
+- card_id: the_emperors_blessing
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: the_emperors_blessing.jpg
+    sha256: c011dcca25ec90579396be6c84d4b2adc7cbf7047378f1524185b48bb98e4994
+- card_id: the_first_dojo
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: the_first_dojo.jpg
+    sha256: e2d188a8045764ea879ce9376ec6f26914e4ee7eceba4dd01abaa6264cf30163
+- card_id: the_first_oni_inexperienced
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: the_first_oni_inexperienced.jpg
+    sha256: 036f41d5f356e568ac579efb6b295d737f1699696a76953f6a5fbc38fedba10e
+- card_id: the_first_wedding
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: the_first_wedding.jpg
+    sha256: 9bed91f031d331c7cee7d07319020f4fbbf40d15e3b659c3836938e114f5552e
+- card_id: the_lying_darkness
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: the_lying_darkness.jpg
+    sha256: 1b5282ca0013e058007a54244e9510e2248ee67a0615c95b2c7f4417aec21140
+- card_id: the_tao
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: the_tao.jpg
+    sha256: 5e04410b666a6f703cf36c59f68cdaa4fe152babbe2885072f6b6a46e0dc5857
+- card_id: togashi
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: togashi.jpg
+    sha256: 6982275f8943d7ec9f65e86b933fc3eaf5aeb12b8151c9c27a3312ec48a33d81
+- card_id: togashi_kaiteru
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: togashi_kaiteru.jpg
+    sha256: 6e96dcdaea658ea47cb7f9b6fe4ff454d0292327eae025b15cf9fa38f7a4a286
+- card_id: tora
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: tora.jpg
+    sha256: 82af67d2c5a34b665aeaefb55557128b5b77d523532ddea04cbee55a3208d15c
+- card_id: troll_war_band
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: troll_war_band.jpg
+    sha256: 90dbc794905c4a43df105920729d3223b6b23a7d2972d099c2da06422c0a8f04
+- card_id: unmei
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: unmei.jpg
+    sha256: ee737d4b1d8dcb7bf247aa5ebc2ac6a1a20c84a011efe1cbb95f138815b3cda0
+- card_id: until_i_understand
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: until_i_understand.jpg
+    sha256: a38eb2a93b1abea1f4c6591b77fdef9dddd74c5fc50751b28a853a1128670f12
+- card_id: wako
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: wako.jpg
+    sha256: e5f1e37ab43fc85ae3d162de79d3073fa268a4738ca38a5e992eb06bf37bb67c
+- card_id: war_chariot
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: war_chariot.jpg
+    sha256: ef472d09e85cfe8660e0d534300fc9c6252113f7cde0337486291fa72dc54012
+- card_id: way_of_the_horse_and_bow
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: way_of_the_horse_and_bow.jpg
+    sha256: 962f6f3007e07df18f556d6b8626b080f2027b7c1b3b2fabde5d5dabbae6f3f5
+- card_id: where_gods_have_fallen
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: where_gods_have_fallen.jpg
+    sha256: 8eb900b4f909a28edb3d545d6ab6af382ac04cb5243d94f375508d1d517e775d
+- card_id: yobanjin_fortress
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: yobanjin_fortress.jpg
+    sha256: 581c0dbbcb8349af4b6b304c24e0c5e43afff518764e5b773cad47b36413b709
+- card_id: yogo_experienced
+  printing_id: dawn_of_the_empire
+  files:
+  - role: front
+    file: yogo_experienced.jpg
+    sha256: 396a9ae8fa114bb64b74681e628a38eaf15147afeff79cc8ec4d8dc7e29eed26

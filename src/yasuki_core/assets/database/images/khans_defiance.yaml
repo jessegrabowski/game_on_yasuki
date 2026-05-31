@@ -1,0 +1,938 @@
+set: Khan's Defiance
+images:
+- card_id: a_noble_end
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: a_noble_end.jpg
+    sha256: bdd450406ec7b16e7dcf06a793801dc93316a61515cdbeae2f64daabd21b1555
+- card_id: a_soldiers_fate
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: a_soldiers_fate.jpg
+    sha256: 24521cc4f752ad683beff98db1cba59d4b77ad90d8cf1c8fddd684e107ced2ae
+- card_id: a_soldiers_spirit
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: a_soldiers_spirit.jpg
+    sha256: 30d952be97d637fff531529541753ab64ec7fb7311e7aab2222d0579bff976aa
+- card_id: advance_position
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: advance_position.jpg
+    sha256: d7d31546b4b585639e0b87bd2c96274321d49329bf4149bf61b494a67bf39434
+- card_id: aka_name
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: aka_name.jpg
+    sha256: 6029d24f95c0967c0290d656a3f1c0bd4eabfa26f273a6e8ea0484842af917c4
+- card_id: akodo_hachigoro
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: akodo_hachigoro.jpg
+    sha256: 01b7612aeea70569b3a5cea2783720724bab7509df5d2de4dc6f3f4a7d660285
+- card_id: akodo_shigetoshi_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: akodo_shigetoshi_experienced.jpg
+    sha256: 19ac3a294bf91da5c748de19c073c0fed6c2287ccf16ad0cd8338ead6e28e9bf
+- card_id: allies_become_enemies
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: allies_become_enemies.jpg
+    sha256: fa04daf4ed37c63c68830771944eb31c0ebb2bb708734ec9ea4317cb87a7a90f
+- card_id: asahina_hideki
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: asahina_hideki.jpg
+    sha256: bc0b5ea22cd6bf9e2776c901fb51c6d602984888ac3b4aba64493d86992d3de1
+- card_id: asako_juro
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: asako_juro.jpg
+    sha256: b2c4f0e934dcc1fd74e2991bdb2942fa997acc48a816dff02c2a41278b7f3986
+- card_id: asako_keiki
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: asako_keiki.jpg
+    sha256: 88d1c3526cb334710946c8f43bfdcbdf95588d943caab6e92fb788be0a756540
+- card_id: badge_of_authority
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: badge_of_authority.jpg
+    sha256: 41a48a4224e6edb4f3e475b943ec2a438132cbcbb246594b1e4503e49fdd4e9a
+- card_id: bayushi_hisako
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: bayushi_hisako.jpg
+    sha256: 399fe0f2b40d378c04b1c919a169877899d0b168337eaa7f9770b99fa940ce12
+- card_id: bayushi_kaukatsu_experienced_2
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: bayushi_kaukatsu_experienced_2.jpg
+    sha256: 042d764fb963f9c19fe8f958b347698594e8dc5c1c18674ca60c357255bc7a21
+- card_id: bayushi_maemi
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: bayushi_maemi.jpg
+    sha256: f6158d5b10d794898a7fce846b12e8b693f92b232e35e623d9489bbcd3ec33d5
+- card_id: bayushi_yumita
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: bayushi_yumita.jpg
+    sha256: 02d19d5830aa4e7e9c51efdedea6d6271bfd9c9f4dbad95dba95a2563113c536
+- card_id: birth_of_the_blood_heir
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: birth_of_the_blood_heir.jpg
+    sha256: bb0a2620da8511b072672ccd1267a0fd58a31f51a317e8120113b2138f5e9dd8
+- card_id: blade_of_guile
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: blade_of_guile.jpg
+    sha256: def17add3db436649353ffe10da92d37277dd27d94e547c74c8ffda78f73d89b
+- card_id: blanketed_forest
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: blanketed_forest.jpg
+    sha256: 3754b7ae1b24a773171a1d83cdba501589967e6fa0fa687f5b924557c0624b03
+- card_id: broken_lines
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: broken_lines.jpg
+    sha256: 6ff184bcfc9cbf216e291d9b23696f8d3399290d1b8764633971b8ed9d0cfb82
+- card_id: chutoburo
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: chutoburo.jpg
+    sha256: 4e14ce55ec6dfb41ad54fd976d9300ff832123bc259508c42bb6deb067360bd8
+- card_id: cool_heads_prevail
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: cool_heads_prevail.jpg
+    sha256: 192c2ee5c8f378c74f3db12e586fb74604591c3f7107e05c6c20a137c0bc24c7
+- card_id: coward
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: coward.jpg
+    sha256: 9e290c00ffc973d18c75d41387d2222214a6658b327a34a0cd221bb21a091e98
+- card_id: crippled_bone_berserker
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: crippled_bone_berserker.jpg
+    sha256: 3444bdb7446f521ffa178c3548b92df81b4a19382652d94c26400351eac86903
+- card_id: crushing_blow
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: crushing_blow.jpg
+    sha256: 4ecf30d1ada833ca4cc2c98dcdc5538b179669a118cfdd3bbf363e5300af74a0
+- card_id: daidoji_kikaze_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: daidoji_kikaze_experienced.jpg
+    sha256: 9040020a3590903a5fd17b5eb31207a645fac85611b0a76d28de71dec3de7e53
+- card_id: daidoji_yaichiro
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: daidoji_yaichiro.jpg
+    sha256: ab3556c277e28be99c07b79371c56b44fe4f9529628e5553db1814c32a476b48
+- card_id: daigotsu_rekai_experienced_4
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: daigotsu_rekai_experienced_4.jpg
+    sha256: c3593d14dd5819a463a27528b0d8aa733af61205d84a5d5efcfa05a101d38b78
+- card_id: dishonored_vassal
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: dishonored_vassal.jpg
+    sha256: 4b06a3394f8fa40cd8671f982a63b921d116e8613aa3bcafe5c2bc9a94bfefd7
+- card_id: dissent
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: dissent.jpg
+    sha256: c8aa41a1eb2e1c3ef2b470128ab45edb61ca2d7ab71970519cffe799d3074ee1
+- card_id: doji_doukohito
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: doji_doukohito.jpg
+    sha256: 978bb3ee511c0022251cefc54562b640495f3617eb9ff539af300b1054d6ef4c
+- card_id: doji_nagori_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: doji_nagori_experienced.jpg
+    sha256: 6e2f94887c37cce9de5c3009c7e8f926c50ff73b23e713be016f0c5fe92e6b30
+- card_id: doomed_intentions
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: doomed_intentions.jpg
+    sha256: 763240470fe7090d4f9f862c3f2b38fbee1aa1f8dda9de22a8d5f07fa7b6407a
+- card_id: fire_dragon_experienced_2
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: fire_dragon_experienced_2.jpg
+    sha256: 9b6e8a8e3451b722ce42d71793f2dd07fe1468dd590923acbfb0f9f07b8bd673
+- card_id: fist_and_blade
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: fist_and_blade.jpg
+    sha256: f9f58bab2ad165217d23ff65ef74b1928963080a91bb5ed2a1a45b7e2f89d9c6
+- card_id: flanking_action
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: flanking_action.jpg
+    sha256: 36601851188509134e0a0b3804c88a45b47942331d31aa00977b67d18d2f1f3d
+- card_id: flanking_assault
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: flanking_assault.jpg
+    sha256: b8eb6a486e5ff23880335f01e9660f972726c409b61f688b69d9e85c9128117d
+- card_id: flash_of_steel
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: flash_of_steel.jpg
+    sha256: 98f2247d736149134afd63ba16bd7592ed47919e6c5aff48e5d5ac0271d405c4
+- card_id: frenzied_charge
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: frenzied_charge.jpg
+    sha256: 737b689367ddccb08506f3a6aec37d30db224dc4575fa4a0ca0b99f6737876cb
+- card_id: gathering_darkness
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: gathering_darkness.jpg
+    sha256: 1bcb4611859ac50b59c91bdcc3953176987470eaec1b3e8dc70872ed8c9ab1ff
+- card_id: governors_court
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: governors_court.jpg
+    sha256: 84019a14171fffd4189ba101d91b152964130cb3a2a281e478268c47fdd87dd3
+- card_id: gutobo
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: gutobo.jpg
+    sha256: 545396150bd517a078a58727d0ed1c6bc448bacbe09e05fece4702561c7f02c7
+- card_id: harmonious_temple
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: harmonious_temple.jpg
+    sha256: 518090911a4fbf01b90c169a4eb22e047b565981656ee48b9698565603528966
+- card_id: hch_tik
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: hch_tik.jpg
+    sha256: 569d61bf5795ac6bd369c01c28def69001aac6d78f456f6975c029265edaab78
+- card_id: hida_dayu
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: hida_dayu.jpg
+    sha256: 5a7d754270a0aa13a9fd3aed8d42ba4324241e45c23582985e9bc438745f8714
+- card_id: hida_ikkaku
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: hida_ikkaku.jpg
+    sha256: 74650cbaf839d592b6ad9e6472598620fa9242b83d4ba56a9f4eddd01bb85ca1
+- card_id: hida_rikyu_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: hida_rikyu_experienced.jpg
+    sha256: b42dd9322cfaecaaa30737a50260994903c9e068bd79eb8aeb78890b792bd1b4
+- card_id: hida_yaheiko
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: hida_yaheiko.jpg
+    sha256: 21325c53861b5049ab1f6f93e4dd1466e0b903d7da31bf2fd24dfcbddf6dde2f
+- card_id: hidden_warrens
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: hidden_warrens.jpg
+    sha256: bf8cd8801dc41e1d0a160b59849177051fe46128c7365724267b0a25a69e77f9
+- card_id: high_courts
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: high_courts.jpg
+    sha256: 9a42c455ceafe07cee59ab4afcc7b0f294675f429977744bb31a93ac0704d36e
+- card_id: hitsu_taeruko
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: hitsu_taeruko.jpg
+    sha256: f7e280056f10aba8c77b3f1b367a922f063bf46c674e3a8da91a853963732b88
+- card_id: hoshi_noritada
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: hoshi_noritada.jpg
+    sha256: ef670ea08ea68e106b0857dfd5d5316cea550c334e8e65d17d478c34f58c2e5a
+- card_id: houhou
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: houhou.jpg
+    sha256: 94b12129d2b3c98a8766c41c99769ea28c411a86e42e4a1d50ce3975c0c84966
+- card_id: hunting_the_prophet
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: hunting_the_prophet.jpg
+    sha256: bb3e5d32140d8e39ffe87a196c36e9294833a59737129f519a9d17a8458e2d8f
+- card_id: ideal_conditions
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: ideal_conditions.jpg
+    sha256: f07970e15c723e08110781c8a9ab2ab6639b96bfc10b3941a2e1b15f02e2c42d
+- card_id: ikoma_hanshiro
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: ikoma_hanshiro.jpg
+    sha256: 56c3348d4c5d6d7f5b1d547ecfa8e94fce717628fb98eca2b2f6d3bd0bed8bae
+- card_id: imperial_magistrates
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: imperial_magistrates.jpg
+    sha256: 83c3f726027bf71a91a78b5ec3c33ff6854d5b3820d20abcbf359f1db5793140
+- card_id: impressive_resilience
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: impressive_resilience.jpg
+    sha256: 4d263142cbf284f524020f5fa3a4fbbafa2054d367f5a571346465092d7459fc
+- card_id: insolence_punished
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: insolence_punished.jpg
+    sha256: 50475362074fc25dab745c2518bd13ae012613c6c2c0b7380bf1ddbee9d5e1f7
+- card_id: iuchi_eiji
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: iuchi_eiji.jpg
+    sha256: 3fdce06901adbad4801ff4c438bbadc3a7b56bee6630a96e25c9cbb70161ca85
+- card_id: jikagun
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: jikagun.jpg
+    sha256: 77a56365c60ebda846e311b3752295828b66c53f0d334f5a35f42be4565772ba
+- card_id: kaiu_shiro
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: kaiu_shiro.jpg
+    sha256: 50585c28cb2901f4c4ac75eeb16070cd5f1aeb2d96a25dbbd73ed0a23104a62f
+- card_id: kakita_noriko
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: kakita_noriko.jpg
+    sha256: a480100c070407b745ca733ddb76994f2524fbcaca4968346c31228b3cf076e5
+- card_id: kitsu_ineko
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: kitsu_ineko.jpg
+    sha256: 07d6554fba588dc50bc6c663f1e4b90ab7c565ff750b9b9c740e9824d909ae00
+- card_id: kitsune_tsutaro
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: kitsune_tsutaro.jpg
+    sha256: a56ac0ae1ebc42bec34b6a8ae86c525b215c5df1228b5523361b206a3faa0178
+- card_id: kumade
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: kumade.jpg
+    sha256: 6c92585a49f38140a63d0936a656fd1b82c04f2edb4298d0490700acb4ed2e78
+- card_id: lacquered_armor
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: lacquered_armor.jpg
+    sha256: 90b09b2bb38fdbc5be02917c459a426237d35c924471a571a7a9adf1ac22e464
+- card_id: matsu_benika_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: matsu_benika_experienced.jpg
+    sha256: 7d0d4b43e5946fe99ffa2965150e925e796d35a9de765b566e49fe670565c66a
+- card_id: matsu_yoshike
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: matsu_yoshike.jpg
+    sha256: 73712a74f19f5a754fd59cf17214452e0ace3905300f3083ed58c334b478cf7f
+- card_id: mirumoto_rosanjin_experienced_2
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: mirumoto_rosanjin_experienced_2.jpg
+    sha256: 29571d5513aea4e5764698cf6965b0fbf2e667655efceb2efcf68f571070bab0
+- card_id: mirumoto_taikishi
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: mirumoto_taikishi.jpg
+    sha256: 6e308752c31a6b30fb1cec23763a777eec3f3772e274729e3bd17b5049559a8c
+- card_id: moto_chagatai_experienced_4
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: moto_chagatai_experienced_4.jpg
+    sha256: 04b06f3eeb0a4a4a23e4eb9d0dac8623d4284d8cc0f2e3dd9f8aa916cf336cda
+- card_id: moto_chen_experienced_2
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: moto_chen_experienced_2.jpg
+    sha256: 24b3ead3464adb9b41d84c79776711950e7044c69d2de9d7dc3d174f96d82205
+- card_id: mytchokan
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: mytchokan.jpg
+    sha256: 1909e532009d27a7117ea6378fb6d1686d6a63d41ea20dca06078f2d0e7ea7d9
+- card_id: nairu_no_oni_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: nairu_no_oni_experienced.jpg
+    sha256: cefb9834aeb4c86a284c951be5f8113654c622ea6ecb3c6037d17ef3513c5121
+- card_id: nezumi_vengeance
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: nezumi_vengeance.jpg
+    sha256: 795f42fd194eb6057a3880dc9303ce8cffd003e543323dfcaa91a2e47cd17cfd
+- card_id: okkantich
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: okkantich.jpg
+    sha256: 5341f35b99288056c968814ef46be8deef6176e9ed6714fca9a7ef7c18974f70
+- card_id: old_alliances
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: old_alliances.jpg
+    sha256: 810e58e47d36fff06c9b238537dd411742517535c5b629541823b6d06908af08
+- card_id: one_final_march
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: one_final_march.jpg
+    sha256: 111650570098e7787f873c9351b89f357e20d4095fed2d8067c94ec01865d66f
+- card_id: one_more_sacrifice
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: one_more_sacrifice.jpg
+    sha256: 7d5ce3e21f5e651eb7921b644fbb4d8a0525bf481026c7fe8eff8868537ece4b
+- card_id: ordered_retreat
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: ordered_retreat.jpg
+    sha256: 441fd0b8b6d0a9fa7c849eba7cb20edec706521a20c1e7c698c6c99353d2c2c9
+- card_id: overflowing_fields
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: overflowing_fields.jpg
+    sha256: 0696bed8324c9d8935fb582ad6337b8ff737802da1a9dea7e93617ab2e2ba526
+- card_id: ox_sentry
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: ox_sentry.jpg
+    sha256: e8f4cbcd13843b4655d020afd41ea54d9b8bd4c84992f654c4a884bab664fa88
+- card_id: peaceful_discourse
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: peaceful_discourse.jpg
+    sha256: 095b6c815327e9fc2d35378a9ef20a5a8a982e77cc4e667987e60eeb2bb3b8cb
+- card_id: peptrchek_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: peptrchek_experienced.jpg
+    sha256: 3e5776cd44c4aad432f288381ab80096f0af27abf8e33dec432cc057e8c09439
+- card_id: pincers_and_tail
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: pincers_and_tail.jpg
+    sha256: 834a3408f360018a6f4e9351e2cb667a791561b5caa4b9bc5e5ceb21616a7c8e
+- card_id: purge_the_unclean
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: purge_the_unclean.jpg
+    sha256: c0d44646a3fe3f7b670681e6aa666064f639ab35a567127a7fb500bcd69b27b6
+- card_id: recruiting_allies
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: recruiting_allies.jpg
+    sha256: 053f4a67c61e01a6ee2b871f99ca48b0fce23a7cdaf46683cbcb431d4f0113ae
+- card_id: restoring_order
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: restoring_order.jpg
+    sha256: 2c4200aed3930efffaf2f8ce14c1b71b996baefc60eef54b82cf3455da08542c
+- card_id: reverence_for_chikushudo
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: reverence_for_chikushudo.jpg
+    sha256: 3c625a65dba25f4a4f3c5f771826939608137098847e472d422b56bd996917f9
+- card_id: revolutionaries
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: revolutionaries.jpg
+    sha256: 4ef3311f15484778ac2e8fb3c6717858d79a41ee7bd247c3cdbfac0176434e4f
+- card_id: ruthless_advance
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: ruthless_advance.jpg
+    sha256: 69fce8f0ede28bc525755cd75f035ab5481ee4ecb20da8640b35e799259674d3
+- card_id: sachika
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: sachika.jpg
+    sha256: cc28cdb16508b688223b106d3bd2e2a8b698a87823c919be54eea2be57d0d75c
+- card_id: sasada
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: sasada.jpg
+    sha256: 33b1ce6551973be47555a7192c7c4878dfed529dc86312027a2c0fa43ee30c8c
+- card_id: scouring_the_village
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: scouring_the_village.jpg
+    sha256: 927efc84981cbab08eba3b7286826b18dc2f6821001689e61beff373b5f95e77
+- card_id: seasoned_deckhand
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: seasoned_deckhand.jpg
+    sha256: 0eba44d895864b1e01e88f99db0de81d34c35502aab7bfde5974dece14c3ce4b
+- card_id: second_doom_of_the_unicorn
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: second_doom_of_the_unicorn.jpg
+    sha256: 3375b0d62bd1ba9a163be99854b18511e21281c8c5cc21636614637f7467b3d6
+- card_id: seeking_the_way
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: seeking_the_way.jpg
+    sha256: ab0e3495e1859d97ef0c727bf409484117593be260a1a3758e4e3fe92646476e
+- card_id: seiden_sanzo
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: seiden_sanzo.jpg
+    sha256: a90c31edf4c3e24bab5e42d047207be0b53426843ecfb7faccc81a1f6c165fb3
+- card_id: shiba_aikune_experienced_3
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: shiba_aikune_experienced_3.jpg
+    sha256: 8469c2af981f7bbee8ed1ba5a1c647efc9caaf5eb7e799d119c0f6ef16206c7b
+- card_id: shiba_daizan
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: shiba_daizan.jpg
+    sha256: 22a0842b9f1995b9bb0415db9dac909c4ff9044fb64ea4ad728b5ae9777f3276
+- card_id: shinbone_warpack_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: shinbone_warpack_experienced.jpg
+    sha256: 75b560c899d25ca07fc873af40569b0076a3460b3587849dac66b65c284183cf
+- card_id: shinjo_isuke
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: shinjo_isuke.jpg
+    sha256: 5a1d6389f5cb358be3e21f06dc7b2492dc0948c0e30490969a7588b77c1582f5
+- card_id: shinjo_saihan
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: shinjo_saihan.jpg
+    sha256: ff154339e29d57486adf60a09e0af5f45f1b32fdc0532de0961a30f915c9e491
+- card_id: shizuka_toshi
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: shizuka_toshi.jpg
+    sha256: 042dbc5a6168123ac94ecd3e788c575b0d6aa461c0c92d5cfc2125386f38251a
+- card_id: shosuro_aroru_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: shosuro_aroru_experienced.jpg
+    sha256: a0a8dc0d318c97c8d4cbfbe6060183b17e805819a400293879b638a830261b3f
+- card_id: silent_solace
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: silent_solace.jpg
+    sha256: b477c4205df48d9fe78436a5b2568fca1c5337b920feb09047e00aedc299c3bb
+- card_id: snowy_overlook
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: snowy_overlook.jpg
+    sha256: 4c6ef8f9770ad98fda1ef28b6eb404474ab9be60d565f3cbd57e9b9e23716567
+- card_id: soshi_idaurin
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: soshi_idaurin.jpg
+    sha256: 0c016a74e3a277e350698fe5fdb97a6ee77a331ec0c5b7d6a0599cb76245dd21
+- card_id: soul_of_battle
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: soul_of_battle.jpg
+    sha256: 1b05107c667222287b664e79a51c5a4144ea362d0ac7097af0941bd7dd69d5a8
+- card_id: soul_of_the_winds
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: soul_of_the_winds.jpg
+    sha256: 9b478707442d5ee83b55dfd8ac257f53f4a248b7262782fe92611cd053e7a75a
+- card_id: standing_fast
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: standing_fast.jpg
+    sha256: c5d9095ffe756df6d01e2d84cce5877ec3c9d024d76b69034ff1bdb1c2891893
+- card_id: strength_in_certainty
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: strength_in_certainty.jpg
+    sha256: ba8090414d57acae3983a1f7e2510218d91cca7acd98c3ff90ecf8c2d79e26ee
+- card_id: strike_the_base
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: strike_the_base.jpg
+    sha256: d913486331279901cf104671cf260b3201ed9c5b8c7c3745138acd4e88e514d5
+- card_id: strike_the_center
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: strike_the_center.jpg
+    sha256: 716dd19265fc03c10ae64caab633b083cdd347238f4155f7ef1589bb2c0b0d01
+- card_id: strike_the_summit
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: strike_the_summit.jpg
+    sha256: 7e59006fc7587641fa0892d476f63566b1933b3ea6c78f6b5a710607b25e3210
+- card_id: surprise_attack
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: surprise_attack.jpg
+    sha256: 82ae7b3bf06163763e63b7230677c36792f72cab6870d9a9b6a38be89120f1a3
+- card_id: take_the_charge
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: take_the_charge.jpg
+    sha256: 586219c0902374481ef5c4885b4ca4fc8b280ad201712f29b49da90ece6b08b7
+- card_id: tamori_nakamuro_experienced_2
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: tamori_nakamuro_experienced_2.jpg
+    sha256: ebd9902f09a78489c242c2f087128cf3f96fd937e1c88779c51478c5a0479a43
+- card_id: tamori_wotan
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: tamori_wotan.jpg
+    sha256: afcee68d80a98c2d8d84aefb50063af799681d35763de25ed1b0d80795c9a66b
+- card_id: temple_acolytes
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: temple_acolytes.jpg
+    sha256: 89ee625d72209ffb3c3aacdd241d4d8708f5804dc887b174ad32e08be2a92f21
+- card_id: temple_of_unity
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: temple_of_unity.jpg
+    sha256: d3f985bacf286c52dc0a8d74544f6bffcaadad6910e597469237af7917b48608
+- card_id: the_brotherhoods_influence
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: the_brotherhoods_influence.jpg
+    sha256: d71bd6e2b232a431d2c437506626487d3cf9c4b056931e8096491fb6d55391fc
+- card_id: the_elements_path
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: the_elements_path.jpg
+    sha256: 00ed0cd15108e17612bf304adb8c7ca617452aaed2139cf12be61d4397e874bd
+- card_id: the_empress_address
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: the_empress_address.jpg
+    sha256: ea112062ee9e5681dc39b30cf245f054afa5d51b2e227c6d5e4677c6cd86e2df
+- card_id: the_general_falls
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: the_general_falls.jpg
+    sha256: 7c4b2af306f5579313f020a1616262380529d164b16c8d8696a4041d7bde6ceb
+- card_id: the_kamis_embrace
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: the_kamis_embrace.jpg
+    sha256: 66c7a0709303df7d8584bfcafd2361adea6adf89269b0f87511ea7fdaf65dbe0
+- card_id: the_khans_gambit
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: the_khans_gambit.jpg
+    sha256: 755eece2f966e4ecf979bf964b114a8aa42d2ec15ca26910946f561fa08c44e2
+- card_id: the_lesser_evil
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: the_lesser_evil.jpg
+    sha256: e8437758e163b887f3282b1703773307c472b2d078ffffd5b11fc57031718b2b
+- card_id: the_portals_open
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: the_portals_open.jpg
+    sha256: adafa1741dab074cfc446811f68562cf967da43cebd44cdf2e5cad0d247d640d
+- card_id: the_winter_warren
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: the_winter_warren.jpg
+    sha256: 5d108455151ba3771717d6724398f7b997343ef7ec9fb51b67a572c9d9556aff
+- card_id: togashi_shiori
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: togashi_shiori.jpg
+    sha256: 7752ac56bffd4c8103efae2f4e9de8dedf476d8f382980993dc6182a374bc2c3
+- card_id: togashi_tsuri_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: togashi_tsuri_experienced.jpg
+    sha256: 86898a4a16bd719bc36a43ca313cb42517b6a0567812287f5203d4207b39bf31
+- card_id: touch_of_ice
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: touch_of_ice.jpg
+    sha256: 9655b9b825833f4319663f5bba01de23800618d8941b003a2dec4da57bdde92b
+- card_id: tsuruchi_ayame
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: tsuruchi_ayame.jpg
+    sha256: 309487ec8ecc28c73ed24112809e8d81bf6fa945c709df6f9bda923f377ebb8a
+- card_id: tsuruchi_etsui_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: tsuruchi_etsui_experienced.jpg
+    sha256: db56468e78a60fd02d47772f9939de974001f7aff525998e0b90ad6bb27b6475
+- card_id: tsuruchi_gidayu
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: tsuruchi_gidayu.jpg
+    sha256: 277c12b000b5aaefda14102ea14f52df09975d70758645051dda742e843c03bc
+- card_id: two_front_war
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: two_front_war.jpg
+    sha256: 18920265f2900965cd294e508ac0e279bc49497068a750e9a0f9d4e9d20fc96f
+- card_id: umi_bozu
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: umi_bozu.jpg
+    sha256: aec893cec62b55b22b2dce55c2710e28d83697a21e4120cffaea73debae40c00
+- card_id: unexpected_betrayal
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: unexpected_betrayal.jpg
+    sha256: 9946dc2376d4f9797d8e57f822b66cfa6ff59aaee34db20eb18f6ba276140998
+- card_id: unexpected_news
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: unexpected_news.jpg
+    sha256: b2653c43d5e40bab98073ad3bc650b060a03c55c6c85c0de0ed7159066ef323e
+- card_id: unshakable
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: unshakable.jpg
+    sha256: 25a9a097b94bef48703942404feca29787cba26cf95960092ea47c3ed01602d8
+- card_id: unstoppable_power
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: unstoppable_power.jpg
+    sha256: fe923e683b26c428240d2d64cd2d6a45addd43ae65891ed8d9e36f5a3e85b374
+- card_id: utaku_nayan
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: utaku_nayan.jpg
+    sha256: 937135049b6682103363087def43379840010c965bc0be1d4337845b6f9aca0b
+- card_id: valley_of_heroes
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: valley_of_heroes.jpg
+    sha256: e47750beeca80b2a39ca3aabcb2a94037239e9afe8371e3c0c9ad05140241fcf
+- card_id: veteran_warrior
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: veteran_warrior.jpg
+    sha256: 5d78f64b969edea83537c98279e23f61f7358bbf3e9fa89f37ad8313d7e55915
+- card_id: vik_schtok
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: vik_schtok.jpg
+    sha256: 9adf250c4c4ed8856f0cc6a4209ff88318c22f932b36a7f562edc0abbd77a287
+- card_id: watch_commander
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: watch_commander.jpg
+    sha256: 87ab4ef90009ebdbe1452b12aa5e9f47b54ad6c783ab050860b69916ef203a91
+- card_id: wave_man
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: wave_man.jpg
+    sha256: f5529dfcd5f71510f053c148e53f1567343526a73acd857c192f05f3ec18a73f
+- card_id: wrath_of_the_people
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: wrath_of_the_people.jpg
+    sha256: d82d574b39e8f19c93eae19d0e3993eae6fffc154cb0b964731d9e5e732172f2
+- card_id: yasuki_jinn_kuen_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: yasuki_jinn_kuen_experienced.jpg
+    sha256: 2ee688445cddbad6844cce24f6bdd4814e233aae34bcb4675aa8d21795ae516d
+- card_id: yoritomo_isoshi
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: yoritomo_isoshi.jpg
+    sha256: 11eb479b38b82448a4148d5cb6dd002a998c552f68da1da52836d8978c1db818
+- card_id: yoritomo_utemaro_experienced
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: yoritomo_utemaro_experienced.jpg
+    sha256: fc27effd340018b30875c95ed97ef9ea2a1f85a731f59e9ab7fdba4242643035
+- card_id: you_die_with_me
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: you_die_with_me.jpg
+    sha256: e593ebb2ec22fc489192d3a8d6b554183f59817f86810665a90bf5fb5eec46e1
+- card_id: yukari_no_onna
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: yukari_no_onna.jpg
+    sha256: 7e2a2b0518157a20b3b1f285786eac1327016d63aafd97ee51400fceed96e22e
+- card_id: yuki_no_onnas_wrath
+  printing_id: khans_defiance
+  files:
+  - role: front
+    file: yuki_no_onnas_wrath.jpg
+    sha256: df7502b141b1fd180c691e03118fd26694529ae76dd44aedc93f71a82836af5e

@@ -14,8 +14,10 @@ from yasuki_core.database import (
     query_random_cards,
     query_stat_ranges,
     query_types_with_stat,
+    get_card_backs,
     get_connection_string,
 )
+from yasuki_core.paths import resolve_set_image_path
 
 
 def _db_available():
@@ -235,10 +237,28 @@ class TestSQLFiltering:
         assert all_count == filtered_count
 
     def test_results_include_image_path(self):
-        """Should include image_path from first print."""
+        """Should include image_path from first print, resolving to a real file."""
         cards, _ = query_cards_page(limit=5)
         for card in cards:
             assert "image_path" in card
+            if card["image_path"]:
+                assert card["image_path"].startswith("sets/")
+                resolved = resolve_set_image_path(card["image_path"])
+                assert resolved is not None and resolved.exists()
+
+
+class TestCardBacks:
+    def test_get_card_backs_returns_five(self):
+        backs = get_card_backs()
+        assert set(backs) == {
+            ("Fate", "old"),
+            ("Fate", "new"),
+            ("Dynasty", "old"),
+            ("Dynasty", "new"),
+            ("Dynasty", "token"),
+        }
+        for path in backs.values():
+            assert resolve_set_image_path(path).exists()
 
 
 class TestLikeEscaping:

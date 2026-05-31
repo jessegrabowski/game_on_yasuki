@@ -1,0 +1,332 @@
+set: A Matter of Honor
+images:
+- card_id: a_warriors_brutality
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: a_warriors_brutality.jpg
+    sha256: 9d1921281f50c48aaa8536fc2d6ec994b93d02f82f5b215fcf8f18a8a8e84bae
+- card_id: abundant_farmlands
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: abundant_farmlands.jpg
+    sha256: 78572757e96d291186261bf851af1b24c05b11904f610d4c01e2ca3b1e2fd83d
+- card_id: akodo_daiken
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: akodo_daiken.jpg
+    sha256: 76458685f8b9dec4581899ca389f6ea0a44dcc910e1c30818bbca0b533c0f5c3
+- card_id: akodo_dojo
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: akodo_dojo.jpg
+    sha256: 7a4f04641ba1256294e1616cf7bfa2552f74942f3c81e6019509bb72bc392ac9
+- card_id: akodo_kenaro
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: akodo_kenaro.jpg
+    sha256: 35296e43e5b08a74e510c8eb5ffe32e78e70c30c1a195b0aa2840c29a5830fa4
+- card_id: allied_efforts
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: allied_efforts.jpg
+    sha256: de141ad9e5406fe481996c79b5c01fea5097b1ad36fcf5dc914962457b9b2c1d
+- card_id: armed_rice_farmer
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: armed_rice_farmer.jpg
+    sha256: 64cd9d7218b4145e2f4ed1783d3122249e731c3f96cfd9b247995eae05d07ac8
+- card_id: ashigaru_spearmen
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: ashigaru_spearmen.jpg
+    sha256: 22b4eba7a41e59732cd61d6d649bea28d88adcc161972640bb6e1a660f7aeca2
+- card_id: back_to_the_front
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: back_to_the_front.jpg
+    sha256: 8c793fffadc188509f99ddd5e692de9e3bcb15ceebf3b12ecf60b24f13bffb21
+- card_id: block_supply_lines
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: 15cb8f4395f75ca9ae1dc48533d2174dd3d754f7b3275b58905c61cec2c623c1
+- card_id: boyoh_mercenary
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: boyoh_mercenary.jpg
+    sha256: 4a8700c3f6c598f861b85cc7861e40a15f8b8ccfded3d3f9f526db3318e10773
+- card_id: copper_mine
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: copper_mine.jpg
+    sha256: 7fc6b71c2e968d6b3c5beb4a0c0113cb09ed804f8253599dd4338bd471d8839f
+- card_id: counting_house
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: counting_house.jpg
+    sha256: cf20a4fcda89eeca0e9f14f37d32652b3afc90f62ecd17a848110efc3eee4015
+- card_id: defensive_formation
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: defensive_formation.jpg
+    sha256: 4c29dabecaaf9f06ee233032181a74f79009da2352fb746e5fde503477e6fb98
+- card_id: destiny_has_no_secrets
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: destiny_has_no_secrets.jpg
+    sha256: 57bd21b7d3acf53eca89537c834e781371d85c5ca722d8599b1217facb9c4dae
+- card_id: fall_back
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: fall_back.jpg
+    sha256: ad7064ce5309e9d6fbd0af958b5cbd0a2bbb74617688902109cb95886b5be903
+- card_id: farmers_market
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: farmers_market.jpg
+    sha256: 7f6530c44e5c31f6ef4b83e89ff37f88f6ffc823957aa9f64d628d4e001c0d67
+- card_id: frontier_farmer
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: frontier_farmer.jpg
+    sha256: 2a1e920a84f5c06c128e3dadd5f84487b0982e2bac10a02e4ac705b35fb6f18c
+- card_id: frontline_encampment
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: frontline_encampment.jpg
+    sha256: bc3d99ca34f03aa2cf89054f139648c54122e77f326d95daac5483a5ab644a2b
+- card_id: generals_hatamoto
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: generals_hatamoto.jpg
+    sha256: d0b6b77802646b36dda3e0a48f65eba4b896b36c70916b1b476682980a180a9f
+- card_id: heavy_infantry
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: heavy_infantry.jpg
+    sha256: dd4c86cd378ba6865fe66dd0b9fa4b9ad3dff7382b07f64677992c31d4bae5d8
+- card_id: hida_reigoro
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: hida_reigoro.jpg
+    sha256: 7a53339aa7cd30f0fc271ed13b99a5110532417cccea9a2c1724464ca6fe1571
+- card_id: hida_saiyuki
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: hida_saiyuki.jpg
+    sha256: abce71e734537ecf3962c989ffb9e32a4870527904960a67eda80cb3c88d46fb
+- card_id: hiruma_moritoki
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: hiruma_moritoki.jpg
+    sha256: d58c7b2bd5cf3048b9fdc18e17190e1cab0f6d983a4385fc98bf878e1d6a7087
+- card_id: hiruma_tsurao
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: hiruma_tsurao.jpg
+    sha256: 8c4515f2c879971f7639e4d57e658808c98c949c6691ec9b42eefb73cc6a5c44
+- card_id: house_of_exotic_goods
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: house_of_exotic_goods.jpg
+    sha256: 0da25766c40b9907f474bd7e5f8c4df8f780ff8f7f480db6072a652825828aa0
+- card_id: ikoma_jeiku
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: ikoma_jeiku.jpg
+    sha256: 9aeb96a908f0e2f7b99f8a8f1e82fe0646eb4a4d888dea183c77898ad65d54d5
+- card_id: ikoma_shika
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: ikoma_shika.jpg
+    sha256: eb09f4aa08dbb10baa8ca40265b28555d79a33ac4ff71f07ec8c59f9d53e4760
+- card_id: ikoma_takakura
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: ikoma_takakura.jpg
+    sha256: b06aec607bab173c7edd8ac59db8b21c0886286fee218c9df0eaef102be11c4a
+- card_id: incapacitated
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: incapacitated.jpg
+    sha256: fcf1f04de8ed97b9a6ecaebd3abc2cf3dfc2fd9787e773e21e2ad7f22003345d
+- card_id: iron_mine
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: iron_mine.jpg
+    sha256: bc95436fe24ff3e4bf04607ab588392ba1360692bd429fef3f177aa97a923a44
+- card_id: kaiu_gorobei
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: kaiu_gorobei.jpg
+    sha256: 0fdfc982e2c33103fc76f3ec968ab9f07aee0dd017e766bc9a5e29bd99736db3
+- card_id: kikage_zumi_initiates
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: kikage_zumi_initiates.jpg
+    sha256: f530168dd6f36b8847a01ab6165b9af78f5112103a0518526fe7cb400e4c2839
+- card_id: light_infantry
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: light_infantry.jpg
+    sha256: fa4e5fe725d3461f7cfa1f695a77dab05ef6e099f0022fb2b3a16227a42b72db
+- card_id: marshal_your_strength
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: marshal_your_strength.jpg
+    sha256: 712344e3c2669dcdd5a5ee5d0c806ab37c829b55cb005839412e346adffc0685
+- card_id: matsu_agai
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: matsu_agai.jpg
+    sha256: f2e5606a1ead4cfcfd4e309f44af6be69612d2ffcaeb2a30749084f9eea0ad73
+- card_id: medium_infantry
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: medium_infantry.jpg
+    sha256: 85ff8ffff7e4d457483231418a936327c028f917892e72109a3ba712720a71a1
+- card_id: minikui_no_oni
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: minikui_no_oni.jpg
+    sha256: 52eacde4de92285d88241b39fbfc54ad99884489e115431b97daece935a06167
+- card_id: naga_remnants
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: naga_remnants.jpg
+    sha256: 8602e30cb374f337484146aac6f0510c36957eb06cc98f6794c602ca62cde51a
+- card_id: outnumbered
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: outnumbered.jpg
+    sha256: 61ca26f3e6f4a30ff5e49ec991115587d7fc9aeb40f2a9c553a6d105a0a13b58
+- card_id: rice_farmer
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: rice_farmer.jpg
+    sha256: 922adf8f42e5ce36ef391ffb016e4cd66fc59f9ecc87ff24e5febda3d0deb36a
+- card_id: rice_paddy
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: rice_paddy.jpg
+    sha256: 2c025e1eee31c7f44b5a181dda14d5ebb26383b7b2ba052763501ad1d03ef19e
+- card_id: ritual_preparation
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: ritual_preparation.jpg
+    sha256: 045b168c13622a80b626b5c42924eeef929dbbf9a83a229c1a6e77fc16d52c20
+- card_id: spearmen
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: spearmen.jpg
+    sha256: 3de982d5881263d12fa634dcd981c0b8a0f65ed4a1162d37b065db68dad4c6b7
+- card_id: strength_of_my_father
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: strength_of_my_father.jpg
+    sha256: 04927dbc1aabaa429c88b1554412b639e13ba95c3b86d1af744ebce544697659
+- card_id: suffer_the_consequences
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: suffer_the_consequences.jpg
+    sha256: c9b059c68afd991b0dfb48112ab9699e68c5eac527308086d6afdff1da49595e
+- card_id: tactical_setback
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: tactical_setback.jpg
+    sha256: 3da6bab472bae706578f3e280c26b830431c5db7b8b47609512df51f3cfa578e
+- card_id: temple_of_tengen
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: temple_of_tengen.jpg
+    sha256: beee28cf03f05e94040a40b8287ad8f58a627c6c7987a48d55eda9e95790e86f
+- card_id: the_breeding_ground
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: the_breeding_ground.jpg
+    sha256: 60785d5f38c7a2f958251a9fa27a5ead9c0c4db11fa133ee66890acce19e92f9
+- card_id: the_honorable_garrison_of_the_lion
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: the_honorable_garrison_of_the_lion.jpg
+    sha256: 87c0a2732ca0c0865cd4ffa6f3d48a0bfa0713cf01b8bd3a1661e08085719fa3
+  - role: back
+    file: the_honorable_garrison_of_the_lion__back.jpg
+    sha256: 2d46f93bca4c28eb0b926af1c7e47482c55608a696385109d48392f32891fcc0
+- card_id: the_impregnable_fortress_of_the_crab
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: the_impregnable_fortress_of_the_crab.jpg
+    sha256: 2de3433d2518a2b209a493844ff93f5e7c29e1ba37482bc7646bd4968463fdec
+  - role: back
+    file: the_impregnable_fortress_of_the_crab__back.jpg
+    sha256: b7c7a54bbaa028c101948631223f398965608a0b33b98a86191585784bf81a85
+- card_id: the_lost_colossus
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: the_lost_colossus.jpg
+    sha256: f3d61ca5bc77ff9fdaaf36d95922974d9a991eb29083dc10d417bf577ef40ffd
+- card_id: treachery_and_deceit
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: treachery_and_deceit.jpg
+    sha256: 7dd80804de087f88868db5f08946fdfe255e74f0596837a0ea6afec0fd379f53
+- card_id: well_defended_farm
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: well_defended_farm.jpg
+    sha256: 0fdddccce9b842baaaf5a7f985a7bfc270c52e56b20ece0577c59ad2dfa49050

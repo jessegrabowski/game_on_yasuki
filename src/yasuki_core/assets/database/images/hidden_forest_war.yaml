@@ -1,0 +1,80 @@
+set: Hidden Forest War
+images:
+- card_id: bhaya
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: bhaya.jpg
+    sha256: e0454f573e8516b4cdcfd7f04b9fc840afbc96d4788e56f4c8eb416960a37d1f
+- card_id: bisala
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: bisala.jpg
+    sha256: 4bf3e0548889212ba062422f659144b801e480e66ae63dcb7d59e46260751188
+- card_id: drutata
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: drutata.jpg
+    sha256: 0878bd9e677420143da2e990a949b8ad4f48a496da399399bd8645dc4dd7a327
+- card_id: fall_back
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: fall_back.jpg
+    sha256: 11b2d9e83d70e7187d7535fd965dcb746c049f01df7da2baa5a5d8bf9f47dffe
+- card_id: hattaya
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: hattaya.jpg
+    sha256: 02ff4ae159ed8e6733e49e4dbe1c76a708ecc58254364706ce09ecd2f0132e1f
+- card_id: khumti
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: khumti.jpg
+    sha256: e6e84a997b09ada0d70f5921c08679bf9380c05749df50bb783d752c7152c5b6
+- card_id: naga_shugenja
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: naga_shugenja.jpg
+    sha256: 46ef3ac2320f949e30e5d30accfd7e859f179e5bd70664b1d4367d8b3903fc3a
+- card_id: naga_warlord
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: naga_warlord.jpg
+    sha256: f44bc496945ced9fb5d01139337f595ec89d91be3883ad98a375acf88dbc3eec
+- card_id: prasthana
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: prasthana.jpg
+    sha256: c94015fa691db85bc9793100956b9802f9a4c0b804cc2f42f16ee680a9b6b2ff
+- card_id: sahaya
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: sahaya.jpg
+    sha256: e4afb7a73ae5e7d0634a3440bfbcd96244732267c76fabfb685ef76a38c272dd
+- card_id: secret_grove
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: secret_grove.jpg
+    sha256: 791e86139d9582981cd13cb45a9a8d5bf2732e5239540b0837d6d0e30f961227
+- card_id: sisya
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: sisya.jpg
+    sha256: 1abd79a6fa6e0310cddea5492049999c289739e3b6b9f5f2855a425838040d89
+- card_id: tirandaja
+  printing_id: hidden_forest_war
+  files:
+  - role: front
+    file: tirandaja.jpg
+    sha256: ea94e8cf2ea6f14ff7c893eed90a0338c5a7657b59847f8c84f8828b2d44039b

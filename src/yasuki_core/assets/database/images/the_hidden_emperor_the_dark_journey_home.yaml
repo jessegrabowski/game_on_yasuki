@@ -1,0 +1,920 @@
+set: 'The Hidden Emperor: The Dark Journey Home'
+images:
+- card_id: a_dark_moment
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: a_dark_moment.jpg
+    sha256: 2bc5ab8324419e98259870f5c40aa6e425403ee96e95645cc5a695ebb3264c0e
+- card_id: a_glimpse_beyond
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: a_glimpse_beyond.jpg
+    sha256: b70a3142f1e704391cac64e5f71948850f568e6710ff2060afce21440498b87b
+- card_id: a_kolat_revealed
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: a_kolat_revealed.jpg
+    sha256: d2c1bd537d73f607528cda601abb1103f36f70f724dde530a0988e4a852de866
+- card_id: agasha_gennai_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: agasha_gennai_experienced.jpg
+    sha256: 9363a4c5e9ba10794c21c14bf3ee55a9c07196e95a52a1e67e7839d077009896
+- card_id: agasha_kusabi
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: agasha_kusabi.jpg
+    sha256: b7b38757318e37c06626d910009ef8199e497becb8b01bb7556a2e7bf3f845db
+- card_id: aka_mizu_umi
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: aka_mizu_umi.jpg
+    sha256: ebff6dce79a49b5074c0582a240d09da67625f18f292d2d456307c59b5847e4a
+- card_id: ambition
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ambition.jpg
+    sha256: 1d7f75fc09256369601f9d8958712a39a896b4ae479e0fa6fac6a343466cf076
+- card_id: arrow_of_the_four_winds
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: arrow_of_the_four_winds.jpg
+    sha256: 477bc4665e507717c971462a2913983c38e52a76eca56bf779f304cd3513ba0c
+- card_id: arrowroot_tattoo
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: arrowroot_tattoo.jpg
+    sha256: 71d194a65595a5e6f92a75afcc98351255246a258c95e4c1da60c53f129edbdc
+- card_id: asahina_dorai
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: asahina_dorai.jpg
+    sha256: 0ed9e573c776d4ea8be7b00f33ff515b32d019f3b6c125fe41b077953bb589ef
+- card_id: ashigaru_archers
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ashigaru_archers.jpg
+    sha256: d31a67d1b1089f9366e6048153cbb757e7b3affc715821297d38620004c30ee5
+- card_id: ashigaru_spearmen
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ashigaru_spearmen.jpg
+    sha256: 487b22494167d7c5a9ccc3c5ffa7d3e08dba31b0c9ba1080d3f30c08fc719190
+- card_id: assassins
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: assassins.jpg
+    sha256: d23f69cd489887c5c7cf2fe076e9793a742b48ce474b3e2d122d1f8bdf5194eb
+- card_id: balash_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: balash_experienced.jpg
+    sha256: 2c08bfb8a32268375014a2e9c2c2ab0de24baf14370607260c87d59736c68011
+- card_id: battlements
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: battlements.jpg
+    sha256: a1ec3efdf1d7d0917934ec6eaea5829560a57f1b5d5b9eb2c2af25ab94dbe782
+- card_id: bayushi_areru
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: bayushi_areru.jpg
+    sha256: 0a367276057dd725756d39dc5b85e7d15f7ab82ec1f7820545c4a117d76264a8
+- card_id: bells_of_the_dead
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: bells_of_the_dead.jpg
+    sha256: f292681c4a4133397fa6ced8be9d57d8ab22195e0646943a1cb058164e0e62ac
+- card_id: black_finger_river
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: black_finger_river.jpg
+    sha256: 5043c0bfc40e799e8733cba6cfd3ab1d416d392dc3a3cf11ab36831f283a6b09
+- card_id: blessings_of_isawa
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: blessings_of_isawa.jpg
+    sha256: 4aeb97c0aa20da73aa511d77691ac40f6d24d6caf5977f228c1845e940982d2b
+- card_id: blood_arrows_of_yajinden
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: blood_arrows_of_yajinden.jpg
+    sha256: c9e8bfe7a37ff6df6e2044ddd0e6f34113a02303e23f37082d52568b63ec92ce
+- card_id: bonsai_garden
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: bonsai_garden.jpg
+    sha256: f13c94c581cd5cb58b645d0db48f920cbb1d0c392c04d05573203366a8582753
+- card_id: centipede_tattoo
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: centipede_tattoo.jpg
+    sha256: 9dfa8a2e3c478212b3c553ed4e8a864ee1ecb4ac576649029ddfeda6a5baf4cb
+- card_id: chochu
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: chochu.jpg
+    sha256: d6f5781ed5c3be7dd17a5038c27fffb26e21d3487b702b46207daa64903ce51f
+- card_id: clay_horse
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: clay_horse.jpg
+    sha256: 9bec1fbe003ec6e8f1660692b37e977fde6e617eaa22c12015fd784231efa0cd
+- card_id: contemplation
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: contemplation.jpg
+    sha256: 7f4d0a6d2415024ba3566b4bbab6a091c863dfe8cfd565a26eea8af611a99149
+- card_id: contested_holding
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: contested_holding.jpg
+    sha256: 2c0fe11f5b5e61cd87de411b0630c052342ca8c60a2c20d2f105836fa93c2ec6
+- card_id: crane_tattoo
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: crane_tattoo.jpg
+    sha256: cfc421405eb9aa8ec4fa6a78c5774a1c24ece571ee67145c791353e3813c17bb
+- card_id: creating_the_monkey_clan
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: creating_the_monkey_clan.jpg
+    sha256: fc49320b59eb8f448f38557f3ef0f5ccb89c6ee6886a2c5816a7e1a6b85577ac
+- card_id: crystal_nagamaki
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: crystal_nagamaki.jpg
+    sha256: a5a7aab4665c68e504618b70af1cff90e072fe6d77cdee89108bf0bbd9114b67
+- card_id: daidoji_rekai_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: daidoji_rekai_experienced.jpg
+    sha256: df10fa90b32320b14b21eab3f0659a831f3b4ee53d0f33ced111151d67d76335
+- card_id: dangai
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: dangai.jpg
+    sha256: f59d15d84def40229309f0f49cd8c89a061d7b560d81b56e777917468f45ccae
+- card_id: deeds_not_words
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: deeds_not_words.jpg
+    sha256: 2166f6f43657fa0bd72a0784d62b2b27576209a7706471eae060f839966aa3b9
+- card_id: disgraced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: disgraced.jpg
+    sha256: 14d1d89071af9daff614c61bcaebb3bd3b526f5f5f1a83a53234a1f2e2e0b4a7
+- card_id: disobedience
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: disobedience.jpg
+    sha256: 9d0c96e6a6207907874afad0bdbec0882feb05d8bf8be7248a292473b23b49cb
+- card_id: dragon_tattoo
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: dragon_tattoo.jpg
+    sha256: a44238bf7a3e320ae63d7956da4f77c4a2e528fae7818b8d47950af9cae6532a
+- card_id: dragonfly_tattoo
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: dragonfly_tattoo.jpg
+    sha256: f53f219119c0db93ef2f68491851b6f65376896572356acdbceeceaa6a8bc060
+- card_id: dragons_tail_star
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: dragons_tail_star.jpg
+    sha256: e0d3665434e80c67bbd3f83619f06e0cc14bd96046a22f195251c3b893ead640
+- card_id: emergence_of_the_masters
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: emergence_of_the_masters.jpg
+    sha256: 1ad15b62ead6a90e468bcb4fba1cbf794f95590d9b38a52ead265821ee86edd1
+- card_id: eternal_halls_of_the_shiba
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: eternal_halls_of_the_shiba.jpg
+    sha256: 9d6f6b3ef21e88dba54e5f1021bf55918eea159b559f40f645d80a0899d2f87a
+- card_id: falling_star_strike
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: falling_star_strike.jpg
+    sha256: ac23c9cf8b9c6f08a5a7589b37223d6d9961e82a6e25f81d70bbea9fcc7a5fc2
+- card_id: final_haiku
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: final_haiku.jpg
+    sha256: b30bf8997bc69185881d346e0991793250bcdb22764a80eb493106bbdc9f3377
+- card_id: firebird_falls
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: firebird_falls.jpg
+    sha256: 790c35b4561630101b6e90ab2b2d25a2ed4121d0323a1d4415561de051f98395
+- card_id: full_moon_tattoo
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: full_moon_tattoo.jpg
+    sha256: 519be65ad39c084ad2995c840d63495c641cb4155aa265402ff5d5ab1160e0b3
+- card_id: glimpse_of_kage
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: glimpse_of_kage.jpg
+    sha256: ef861956f515101b87e4002e9c15270b93b67fa34e7e1692847339d324693901
+- card_id: goju_adorai
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: goju_adorai.jpg
+    sha256: ba24905ab3890f4279974c52b3f031ab7a3e1fda8e49e6aabc06c07b91fa2b62
+- card_id: golden_sun_plain
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: golden_sun_plain.jpg
+    sha256: 9056ee7542d4d3bcb222abf276487d54bb8cb02a5ab9cd5ac65194945d71a0bf
+- card_id: heavy_ground
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: heavy_ground.jpg
+    sha256: 7f44280be817d1cccbd01ee096568df43a6d53b7f8d5f0f5fee7ee597ddf3ec2
+- card_id: held_terrain
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: held_terrain.jpg
+    sha256: 6c0089854bbe11e579c4a32731f15bc5f2a3169543f0b50f851b809676809880
+- card_id: heroic_opportunities
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: heroic_opportunities.jpg
+    sha256: 929682ae3834577acebce39b290d1e4ab8ffe003728970fa99cb1b18ed6e49fe
+- card_id: hida_rohiteki
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: hida_rohiteki.jpg
+    sha256: 1c2a9ddba3c0e5d27bbf8c3ee38235398d8bc98f98c3226a4da97ab7335508a2
+- card_id: hiruma_osuno_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: hiruma_osuno_experienced.jpg
+    sha256: e8d56b8a4124dc825014181eed13833475252a806bc405956e82de47af004824
+- card_id: hitomi_dajan
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: hitomi_dajan.jpg
+    sha256: 3913702d401d798eb740dacd8c892fc19523df862504ef11af6f6be0bd647580
+- card_id: hitomi_iyojin
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: hitomi_iyojin.jpg
+    sha256: 1bec81ace868e30d2daec2fb84c0f5662a63cfecbf5b3338612031dcbdc16f41
+- card_id: hitomi_juppun
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: hitomi_juppun.jpg
+    sha256: a18c56c81e88cb9aef16376d0f89d21781f6002570ac64c8a44e4cfade8d8f46
+- card_id: hitomi_nakuso
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: hitomi_nakuso.jpg
+    sha256: 9b0ad790c8ab9a1ea254578fd929ff816e8d34e605d4c0a92e97bd6689d7b2d3
+- card_id: hoshi_maseru_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: hoshi_maseru_experienced.jpg
+    sha256: 75a0c58b03b8425fc66a0b4eb1164cb010a84626c60e07c782e91d1a20e13bde
+- card_id: hunted
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: hunted.jpg
+    sha256: d93130e8c8b4f468fae39a9cde6ba430bdab2a737333b216b0fc099017e4b995
+- card_id: ikoma_gunjin
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ikoma_gunjin.jpg
+    sha256: 5b2e4004bf8087a5323d00fc9c714ae440faaa71ea6ec47b16612054ad2bccdb
+- card_id: isawa_hochiu
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: isawa_hochiu.jpg
+    sha256: 8645ac03c6501804920e83bd5bfa0d2ab36b6ee112e0bd08f0470969d35deab3
+- card_id: isawa_kaede_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: isawa_kaede_experienced.jpg
+    sha256: 63e07ae477119be36d1af20dc976d91d86527b4416dcac796c5e66d798368c52
+- card_id: isawa_taeruko
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: isawa_taeruko.jpg
+    sha256: a7fe28f9cc9a56726d66a7b44660ab8ea6ef25fa74a7d5847174493ae0f67ccc
+- card_id: kage_experienced_3
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: kage_experienced_3.jpg
+    sha256: 2d6c5d92c8af33fc83d113ae7ac9636b3e58d4755f479ef937d6e8cede684ad0
+- card_id: kharma
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: kharma.jpg
+    sha256: b092cda5dfbb5d6e9cb85c3567629130c4620d9ec93f90fbd8ace0f983c07b3c
+- card_id: kitsu_sanako
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: kitsu_sanako.jpg
+    sha256: 130aacf4534d137c65ea08d918dacbb553c4149ec883068dc43cb4238bf3f7c9
+- card_id: kitsuki_iyekao
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: kitsuki_iyekao.jpg
+    sha256: f361a7b9777b040991bfc02bb798d5f76215cd961ea4dd2d341ce77742e38279
+- card_id: kitsukis_coin
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: kitsukis_coin.jpg
+    sha256: 5874287ad3b727d388f4e8944e70afd165e9952ce547cb0f14f6a29ce37fcfa6
+- card_id: kolat_agent
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: kolat_agent.jpg
+    sha256: dbea4cb77e5810e346b35960fa32b2149e96ed661f2b862cff408b68e3e38559
+- card_id: kolat_recruiter
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: kolat_recruiter.jpg
+    sha256: f25e31d022a8b2aa4342ed9d2229c8a803491ae2fb0510560f468cf34293fe75
+- card_id: let_him_escape
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: let_him_escape.jpg
+    sha256: 2d5945a36ed68b80fa7c6ecaac0ba933a3f450507f62228cea3ccda6e901cb3f
+- card_id: lion_tattoo
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: lion_tattoo.jpg
+    sha256: e0b4edad63d2bb9cc8c2d9271da4d5dd871446fb3a279f1aac6b7e0f8fdadb15
+- card_id: lions_pride
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: lions_pride.jpg
+    sha256: c8091f275f981567369f9008fd5146981ba37d90d4d0df99a42b922368a60d02
+- card_id: lord_moons_blood
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: lord_moons_blood.jpg
+    sha256: 75cffb0eb6abf92c674e283c819d8950fa478cf18c8bac261c6b17d0a696e63f
+- card_id: loss_of_face
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: loss_of_face.jpg
+    sha256: 93dcfc917a8c28cd708288b004938326fd254eee9f058eaeb09582244001aa60
+- card_id: magic_mud
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: magic_mud.jpg
+    sha256: a277eea460f0425ddc2b70b419d09e5f9c66f6686ccb1f07d4d0bc200641ea90
+- card_id: maho_tsukai
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: maho_tsukai.jpg
+    sha256: d56a4119f43761da23d069f34498db69ada3845d3be400901c58f30c54b19036
+- card_id: mamoru_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: mamoru_experienced.jpg
+    sha256: e01ed1b72c89652a29303a8de584d91e8ec62bdea0eb4f6ee80b4d659dab46e3
+- card_id: mantis_house_guard
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: mantis_house_guard.jpg
+    sha256: 7312331ed3c6a6f9d9399597fc421b5c360e6484255303389d5beef5b0ac3b7e
+- card_id: mantle_of_the_jade_champion
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: mantle_of_the_jade_champion.jpg
+    sha256: e9daf7b28b5b6816adb28a1ba5436595f27374b051d04ede5bef14d6fe099367
+- card_id: master_of_destiny
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: master_of_destiny.jpg
+    sha256: a35afe34a79616ea9ce69cfa03f3974cd27a15eea8e479689d7db14b5ad8dafc
+- card_id: matsu_toki
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: matsu_toki.jpg
+    sha256: 3c0df5a39f6e8e7c6eb7e32b4a0a076e01759f603bd0eb991154de36e86845f4
+- card_id: moshi_hito
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: moshi_hito.jpg
+    sha256: fef20745b7f6ff845935cc2ecf82966376826ad207dc57414b7cde748b92192e
+- card_id: moto_amadare
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: moto_amadare.jpg
+    sha256: 083a24331910d05e9fcae3fea782add2ca1a3e1bb62c9a787337531ffc44bc66
+- card_id: moto_fanatics
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: moto_fanatics.jpg
+    sha256: dfec7b5e5f9838ff2d1b3bd61353248b4ecb9fbe03addcb2c7563d0a3340444d
+- card_id: mountain_tattoo
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: mountain_tattoo.jpg
+    sha256: 73c0ad4e4f07e95ae5bec2498f271fd0ae342fd06b461399b57d850833e822b3
+- card_id: nightmares_of_iuchiban
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: nightmares_of_iuchiban.jpg
+    sha256: c273d130d7012a421b0bc2eb3294be43de59c0ee5071b068885502349a142e41
+- card_id: ninja_infiltrator_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ninja_infiltrator_experienced.jpg
+    sha256: 1749c8fdb63e15bce329eeade5bf25c1cef8d7e6aa8fac7ea9a72f180845bb88
+- card_id: ninja_questioner
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ninja_questioner.jpg
+    sha256: c00e3f40d643545366ee6e16623c19c23b062260e32981153f4073f0c6c44f98
+- card_id: ninja_shadow_walker
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ninja_shadow_walker.jpg
+    sha256: 216d29b22785daf898f937172fe47b27c717d583f349ca6df2ed23391555739b
+- card_id: ninja_tricks
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ninja_tricks.jpg
+    sha256: 30119495a46371f56c8464fccc7190f63139474fcd9b9ac506ab18e0c544bd76
+- card_id: ninube_ogoku
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ninube_ogoku.jpg
+    sha256: a75c85c282397fcc7013ad726693be7776aa087e56803dad8bba704c38fe307b
+- card_id: osari_plains
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: osari_plains.jpg
+    sha256: 0e82997f46fd77e67b4c25fb47609ebd27260655b8be4340829eb34f3c2f21e7
+- card_id: phoenix_tattoo
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: phoenix_tattoo.jpg
+    sha256: 4edc0783826856e560cf00365419632018235d748081e60c068448ea359f40e4
+- card_id: pillaging
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: pillaging.jpg
+    sha256: 6c9073b5f73b6e8f32f128fe30f2848282b576fc21c515900c3a82f9e088b6fe
+- card_id: plain_of_desperate_evil
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: plain_of_desperate_evil.jpg
+    sha256: b5cdda5f1d66dbed8717433d2fee64a766b8f10224d03a85227c06591b180dbf
+- card_id: poison_dartgun
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: poison_dartgun.jpg
+    sha256: 1ca899a2ebefc393a5e6f6fb8a71a223bcba2997868377ed20ebbf8a986fcb56
+- card_id: pride
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: pride.jpg
+    sha256: ea6edf38ef43fbbd283b2586eaf62e4265a0715e6b636715d39b9d4f88a7324d
+- card_id: proud_words
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: proud_words.jpg
+    sha256: ed8769ae51e2be7881376314c43a55f16afd2948c54dcedabb138f4c802e0c97
+- card_id: purity_of_spirit
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: purity_of_spirit.jpg
+    sha256: 4d9e582bfb081a7b7ac89c951ed09848cdae8298826a74b28f8127ba5aaea71f
+- card_id: ratling_scout
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ratling_scout.jpg
+    sha256: 19beb529f721c1fe4b49432e06b979376e70daba2cf29e5ed36faaff5f2fa348
+- card_id: rebuilding_the_temples
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: rebuilding_the_temples.jpg
+    sha256: a1bb6a1bab2bf16f707455a8d26132d747fa5994458842bc679657503d26a55a
+- card_id: retired_advisor
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: retired_advisor.jpg
+    sha256: 94b83441206692940f3dbfa7c8a2620e85dba91dc01167ad55f340eafa6b87cb
+- card_id: rise_from_the_ashes
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: rise_from_the_ashes.jpg
+    sha256: a5bf191cba5b1e33aba41de4f049428c7adbf21f3586539f1a3fa5dbc367780f
+- card_id: river_of_the_dark_moon
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: river_of_the_dark_moon.jpg
+    sha256: 9a65f670bfacc3659731635058876eb48b2aef3245e25fe0c59cd6d8a5cdd193
+- card_id: river_of_the_last_stand
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: river_of_the_last_stand.jpg
+    sha256: f2d7adda605c8b8df28ed397a780fcd7b6e7b8aebbb1986b74f6b3e9d70b594f
+- card_id: ropptchtch
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: ropptchtch.jpg
+    sha256: 57482f41c7ef743794e891445daba19db052dba3e08c62f2e7722fd8da6550d1
+- card_id: seppun_toshiken
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: seppun_toshiken.jpg
+    sha256: cef0678cd206cb579062d3d4b42fc635a7fd1732d27083246bc8d4a341cce13b
+- card_id: shadow_brand
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shadow_brand.jpg
+    sha256: 0b1ec37cb83b912ceea5330966bc19f588b6a5fb9de8dd5535b1dcb87ff65cba
+- card_id: shadowlands_contagion
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shadowlands_contagion.jpg
+    sha256: a1de718b1a49f62d051730c8c603dd39e8bc34341f91900e5068d0b9f70016c4
+- card_id: shadowlands_marsh
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shadowlands_marsh.jpg
+    sha256: 0d80c1c1db39d4da2904bb00f83c08bf2ca9d89ddedfe0b4374c7185ac7f14fe
+- card_id: shiba_gensui
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shiba_gensui.jpg
+    sha256: f2997f92482695bc77c17a16e980859e10d2d80976cf8e3bfe6907a34b832ff9
+- card_id: shiba_tetsu_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shiba_tetsu_experienced.jpg
+    sha256: 1bb09d0e51954db10ae0c088af8a0d6ed2b1dba1650957d0e0ff8ff23c913ba7
+- card_id: shiba_tsukune_experienced_2
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shiba_tsukune_experienced_2.jpg
+    sha256: 9ce0fa4cccd2307f47f31a3e636c2dc902fd32f71177e05759980531347adaab
+- card_id: shinko_kamiko_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shinko_kamiko_experienced.jpg
+    sha256: f0406c7d9059686f04b3aaf40e722a7b917c2c6e4a64d5939d2ee15d859ffd80
+- card_id: shiryo_no_goju
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shiryo_no_goju.jpg
+    sha256: 6d703c5e2cb354509b1746b11716270f961048353fa0698ef3613a6b10d26d82
+- card_id: shiryo_no_kuni
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shiryo_no_kuni.jpg
+    sha256: cd1da277e30c5ca886417e60554aadde95e20bcad61f72edf977b5d89ead45a2
+- card_id: shiryo_no_yurei
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shiryo_no_yurei.jpg
+    sha256: 34262ace73c11bcddab5e8cb328e6b3d6b21b501bf824501fe26bfa57960be17
+- card_id: shosuro_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shosuro_experienced.jpg
+    sha256: 2e72f415a3360444480361636ba7174034c317b305af256ab290df7491774784
+- card_id: shotai
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: shotai.jpg
+    sha256: 3434b6bb995cb2847cbe13123981a176953b40837fc6dd90b14e06142e980168
+- card_id: siege
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: siege.jpg
+    sha256: 1ffd11926caee1116ed09c8c605c0e947dde31586d74aebf810d78bab24ac06e
+- card_id: slidge
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: slidge.jpg
+    sha256: 113c446a0e51b8965995f62d6c2b2adfa048feb2cb5f2b2c846add476513e1f3
+- card_id: smoke_and_mirrors
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: smoke_and_mirrors.jpg
+    sha256: 824ae3ea040ca3966812d2f33de1f6360bb4e736f86770f4bb7c6f5697bb65cb
+- card_id: stagnation
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: stagnation.jpg
+    sha256: d76888579f913bb8047b0192d254ce14a47bb2aefd8436df2b552982e1330cd7
+- card_id: stand_together
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: stand_together.jpg
+    sha256: 8f180987ef4a6f1fa59c29df1fc246cb13b2df48b42cc0504b929b7addf5601e
+- card_id: steep_terrain
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: steep_terrain.jpg
+    sha256: 12e4b42490681ab197bf5541fc41ef4ca821c6ef55bb2d840ce6b68f0a54ed62
+- card_id: strike_of_silent_waters
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: strike_of_silent_waters.jpg
+    sha256: 05805e1bdd0aa1c17c556e21c2be1a5d95d67c765c9953f3d88f57b7a46bcbab
+- card_id: tattooed
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: tattooed.jpg
+    sha256: cd83d71c33d88802be2194435397b544390dab2af9e02c05539a0c2c615d4d04
+- card_id: tausha
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: tausha.jpg
+    sha256: 149adb614e01ba505d9661565f4bf2cf87732cdf806051f0f72a458d958fd1e2
+- card_id: test_of_the_jade_champion
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: test_of_the_jade_champion.jpg
+    sha256: e995a896f534c2d808a1cc427e5211cdd11c657e9eb679537bab75f4743fce5e
+- card_id: the_agasha_join_the_phoenix
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: the_agasha_join_the_phoenix.jpg
+    sha256: 5cea3b9d395c283ea0369bd73b8b1bfa9e388a39cbbbf81d81db9f1fd60c8983
+- card_id: the_agasha_libraries
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: the_agasha_libraries.jpg
+    sha256: df63d40095db490764f4e236118803baefcacc05243cf26de233f0fd4d199b26
+- card_id: the_age_of_man
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: the_age_of_man.jpg
+    sha256: 7ba455f2aa057178fd1076c50c53f906aa74ac3f4eb3de40d1d9fd784188c4a0
+- card_id: the_daimyos_command
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: the_daimyos_command.jpg
+    sha256: 72164652d43a5aa24d2d2f9930de3d444f35402adf962374469ddd02da0909bc
+- card_id: the_dark_path_of_shadow
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: the_dark_path_of_shadow.jpg
+    sha256: 68d787bd1944ec03319a8b8edbb38d3501e422cb35b4a2ee1d66f5e1b7e66b4a
+- card_id: the_edge_of_shinomen_forest
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: the_edge_of_shinomen_forest.jpg
+    sha256: 473742efbe90fe9b67749927db37c24d03ac6c6372c55c3b5ddb93b55fe6cfd2
+- card_id: the_palace_of_otosan_uchi
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: the_palace_of_otosan_uchi.jpg
+    sha256: ee6ac1a22c3db226369d6edd3a7b43e8955426871ebbabaa959eddc100e8d5ea
+- card_id: the_path_not_taken
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: the_path_not_taken.jpg
+    sha256: 90fc4b4da10c9219ee0c328ec94acb29f888509a4d527b0c941dc3348f5c9cee
+- card_id: the_wave_men
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: the_wave_men.jpg
+    sha256: ba336638d205034e4aeb653ce36a1649b3173fc8772199d703187d855d1e460d
+- card_id: threat
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: threat.jpg
+    sha256: 45cb8f066710df45d87bd6112a6d68361b3c02f4670ee47cc7bb6deea37ded64
+- card_id: tiger_tattoo
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: tiger_tattoo.jpg
+    sha256: aa25247d7b6f3747653c3bc403c2587c1ff1265ccdeb508a44ee616361e84c8d
+- card_id: toku_experienced_2
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: toku_experienced_2.jpg
+    sha256: 001f28e5115cd74feb5311f5352cd74fd9760568db02456e4123e48c1491b5d9
+- card_id: toritaka_genzo_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: toritaka_genzo_experienced.jpg
+    sha256: 5c37a121972a4d7652ef53edf2af5afb6a15bf76b84ce3b06d7299404f74aff2
+- card_id: toturi_the_first_experienced_3
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: toturi_the_first_experienced_3.jpg
+    sha256: 1def311f681474609626f5ec41f1f6c30bbb4f6508e1516480c1a74adcd9ba23
+- card_id: toturis_return
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: toturis_return.jpg
+    sha256: fc4e3964056164c2abaf9ae9624880f801c2f25251c7d263577ba93db8850550
+- card_id: touch_the_lands
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: touch_the_lands.jpg
+    sha256: 3753c506db5034be1f54e7780b3c22ada447c76a28c30c0598d667fe45ad506f
+- card_id: treacherous_pass
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: treacherous_pass.jpg
+    sha256: 7bf71bf50e0bcc3ff36b4b1023757d4617aa9e4287e1364c7ef39e421c66e6a4
+- card_id: tsuruchi_experienced
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: tsuruchi_experienced.jpg
+    sha256: 57d24b244860fb19847054064eba80d808bfe23549d3547b26c2d99a2de2259a
+- card_id: twilight_mountains
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: twilight_mountains.jpg
+    sha256: 7d3aefff37c2cc2ea053b653f194585ed723bb5c7e637b65b4582c63feeb194c
+- card_id: twisting_ravine
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: twisting_ravine.jpg
+    sha256: 86697f20faf02c1fae8130f40afd33fdd04cb499a87a3074120d65f84b2229b1
+- card_id: tzurui
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: tzurui.jpg
+    sha256: c15ccb959743ac2c96621cfbb3800398caa9e708b81e156ed54f221892035a39
+- card_id: virtuous_heart
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: virtuous_heart.jpg
+    sha256: 467e876ce634fee6b03d654c95a4d8576ac044a5690b0b4bee3d97a101ffdd8b
+- card_id: war_stained_fields
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: war_stained_fields.jpg
+    sha256: 509ba49d0d584c360d40d016d5647d104f4e4d963f40fdba8ab0875bb729a96a
+- card_id: winds_and_fortunes
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: winds_and_fortunes.jpg
+    sha256: 64fb0332cfff2044cab878229895a80dfcaa6718786b527055d8ce895974fdf7
+- card_id: yotsu_seou
+  printing_id: the_hidden_emperor_the_dark_journey_home
+  files:
+  - role: front
+    file: yotsu_seou.jpg
+    sha256: af07d7e236639328a4de3b641136b69c887f9c63e79719fe83e87bf449c6cc30

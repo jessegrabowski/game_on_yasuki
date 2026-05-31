@@ -1,0 +1,944 @@
+set: Reign of Blood
+images:
+- card_id: acolytes_of_air
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: acolytes_of_air.jpg
+    sha256: 8789598dba7461a0c7b5160e176852f5785708491c3c8866a2ec3355464bbf88
+- card_id: agasha_chieh_experienced
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: agasha_chieh_experienced.jpg
+    sha256: aa152869a26b7225158674f8c31e296b9094a9e40e4f40358d2a9400aba49a3c
+- card_id: akodo_ieshige
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: akodo_ieshige.jpg
+    sha256: b6cb325ee451184096a46ca0e31dcdfe4056e9ee1b3c27fc7858d7dc96562ad6
+- card_id: akodo_maiko
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: akodo_maiko.jpg
+    sha256: 29e75534347ff858d8a2b618312cbb4d1569aba3cbb40df24caab395342f111e
+- card_id: asahina_nahomi
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: asahina_nahomi.jpg
+    sha256: ee9fb89bcef9bbd0a431a3c3751a1046265dd3c882f3d1c9eb1a9aa61d5e2615
+- card_id: asahina_nizomi
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: asahina_nizomi.jpg
+    sha256: 642127addfdfc4cfad488f3ad2411010f3088cab2b5fcc632a0ee9711d7e084d
+- card_id: asako_genjo
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: asako_genjo.jpg
+    sha256: 83ecc42e36af3ae7542449269d51222765a33573c6d78fa9c3886c9dd2eee127
+- card_id: asako_katsuhito
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: asako_katsuhito.jpg
+    sha256: b22404024395d1c7ab78a3a3d4d8939af15ce3e4a170419611a3b0fd84a5d9ba
+- card_id: barley_farm
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: barley_farm.jpg
+    sha256: 80056c44e2e49c0918b2b62d4740f48a6b604773e946394eb4ac099c47d87552
+- card_id: battle_hardened_2
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: battle_hardened_2.jpg
+    sha256: 8613b63f74f9062bb229b176c30d7733c0ff040645beb868b55e659efd4870f1
+- card_id: bayushi_atsuki_experienced
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: bayushi_atsuki_experienced.jpg
+    sha256: 852179da0c95ed5396e3a5c194a93f972b3483764cb1ea20f0864fa431e2c5c9
+- card_id: bayushi_shintaro
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: bayushi_shintaro.jpg
+    sha256: ac4955e69269048eac599816491103c8cdf0a1d14fdcd5e8682eb08fd2b924c7
+- card_id: birth_and_death
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: birth_and_death.jpg
+    sha256: b1428597a580a8e21c9c63dcfe157cf25bd112db059d3b343c55b1786706aecb
+- card_id: blade_of_penance
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: blade_of_penance.jpg
+    sha256: fe6d6da2f459df61ab3794da43186baad51f99b7919c24e69cd0c3e3fbd76a8a
+- card_id: bleak_portents
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: bleak_portents.jpg
+    sha256: adfac17cc96315f4ca47ae08d8307e90734a514cb93c667618cdfa26a37e729a
+- card_id: blessing_of_the_dragon
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: blessing_of_the_dragon.jpg
+    sha256: 34967ea1ee1e8741fcfd888e7376c340d511f9f6008aa26595d0e502bda1439b
+- card_id: blood_and_chaos
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: blood_and_chaos.jpg
+    sha256: df511c403c81fdabc53670d9a324741b8bc0b59afa073c0c644acd60a38f5127
+- card_id: blood_armor
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: blood_armor.jpg
+    sha256: 6b7432f01858bfd2b917c1d19ae89e473b36b64bd3e023b42e8455362557d17d
+- card_id: blood_command
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: blood_command.jpg
+    sha256: 66fe6e2da91d1bf8dfcfaf897499bc7cb82bc4ab38fe4aadbad8bb2fcd713b46
+- card_id: blood_pact
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: blood_pact.jpg
+    sha256: 3a3bb6e38f44516cace8e41f867a4d4ec1e61b26e90877ed2dde9ba80a39698b
+- card_id: blood_soaked_ground
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: blood_soaked_ground.jpg
+    sha256: ea0cf915c669b837fe632d4579cb1366682e7428e26b5f830c118de7d304cd4f
+- card_id: bloodspeaker_sanctum
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: bloodspeaker_sanctum.jpg
+    sha256: 289cf4aaf1beb371eae5c2cd6e94a38dd374c79ae48908c3bbe1247fa0ec6e6a
+- card_id: bloodspeaker_students
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: bloodspeaker_students.jpg
+    sha256: 94dad502d18868cc31d524d04476f0cd3cd059210047dc999bb150540cc1508d
+- card_id: bloodspeakers_tools
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: bloodspeakers_tools.jpg
+    sha256: bf701601fae9191011e9f676f7626aeb0f0053225b2124aa9f0a6003634d0ab7
+- card_id: bloodstained_peasants
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: bloodstained_peasants.jpg
+    sha256: 0f09f8ae2557f15f6bf2aff79fd8e8e3398f1e76458229e61395100f41888655
+- card_id: bones_of_the_fallen
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: bones_of_the_fallen.jpg
+    sha256: 3d9db1f450e86c4ab46ff0549e3b4d36b869200db427e14cbe178d1a62de01df
+- card_id: break_the_line
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: break_the_line.jpg
+    sha256: 5048f0746974487543355f321679de15ed63e6d6a204f2aed16d5d3cc96a298f
+- card_id: burning_blood
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: burning_blood.jpg
+    sha256: 789b432c06889bb014d4b8c99693636ed7e735406797c1248bcbc7c64fd4d372
+- card_id: calculate_strength
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: calculate_strength.jpg
+    sha256: 9377d88a8afd77e176cf11707789cc3eae12bb3c633583232d808fc4c3002ae9
+- card_id: chuda_agent
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: chuda_agent.jpg
+    sha256: e236394e462a10e3cca85759e69526ffef17890be3846496b054e766b7fbad14
+- card_id: ciphered_scroll
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: ciphered_scroll.jpg
+    sha256: 821b6ac648fdc255da2d42da9ad6d144918ea99919cd51f13f2ec121ab6c0b15
+- card_id: city_of_remembrance
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: city_of_remembrance.jpg
+    sha256: 53a4a3e1b838ea6ab04eece6962f1f9d33e8f8e9d826f77b3fde637dc5d6e88e
+- card_id: cloud_the_soul
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: cloud_the_soul.jpg
+    sha256: 490fb70a6080a4110d7a370af75b32c3b7a7312ed5a438dbc4aa3e6d68b5d1d2
+- card_id: corrupt_officials
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: corrupt_officials.jpg
+    sha256: 4a60465fc05a276fcb6bf9ada2111e59b9a8be9dc86a49d1bd23dd85e91385c9
+- card_id: crystal_mine
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: crystal_mine.jpg
+    sha256: b2ed6bc19e4a9e323fafd43dc9cd8328b850aaeb803aebd4867706c485161a90
+- card_id: curse
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: curse.jpg
+    sha256: 9a468331c9fa87cd40debc91bbfc0e6bbcb69d73e093d9ea5c111567c004bcc3
+- card_id: daidoji_sabaru
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: daidoji_sabaru.jpg
+    sha256: bcf5df957f0604d5020d4ffd804855db86c54a408aaa4a9e571cd3b014a6ba86
+- card_id: deaths_caress
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: deaths_caress.jpg
+    sha256: f363df651340376734b6fc822c25c3a4af949165b59d496392e8f2d3dde5b700
+- card_id: ebb_and_flow
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: ebb_and_flow.jpg
+    sha256: 29d5daf1ef747dec421721e76fe69bcd48bd790ab4f49c246a71521f28315d75
+- card_id: essence_of_gaki_do
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: essence_of_gaki_do.jpg
+    sha256: 115faf2858510178c85ea3e713c4afb179387dd0f3ee559aa58dc160ed09ea4a
+- card_id: eye_of_iuchiban
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: eye_of_iuchiban.jpg
+    sha256: 7de16cc91958ba353367bceb6fb053b174cde8cc639f1b38b74be0d9b65f999c
+- card_id: fan_of_the_grand_master
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: fan_of_the_grand_master.jpg
+    sha256: 6902e5d32ebe24da456a79da64740b778d97938e9e703b5f5206040abdc5cf17
+- card_id: fires_of_dishonor
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: fires_of_dishonor.jpg
+    sha256: 3b2bfa6f77c5f97b7e3da9edec212a16216bd8051e08f5258616d84f84f0521d
+- card_id: from_every_side
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: from_every_side.jpg
+    sha256: b13c5365f68c2b91d5f83f7468907ae7fd530c2ae38e705670d75d2963a52a0c
+- card_id: hakai
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: hakai.jpg
+    sha256: 9dfc33f6ce76555eb6ccc84df6ef22df75961e690aa451f836df091026238e36
+- card_id: harsh_crossing
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: harsh_crossing.jpg
+    sha256: 5f8ce581dcd853e79c3a5625a739b9d17904b337ca8cd3ec282ea06a75b3675b
+- card_id: harvest_of_death
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: harvest_of_death.jpg
+    sha256: 8c409793f844545f7ed26e14b51eaca82c6ad63da2fc9e82e122c0e140cca5f1
+- card_id: heavens_wrath
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: heavens_wrath.jpg
+    sha256: 2396133df765319c391a0775f3f0425c69704d783241b8ee5382788eee93950e
+- card_id: heros_grave
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: heros_grave.jpg
+    sha256: d8434467e0a8f624ae8907af97cc0a4cab94f4ab919c566d907e39790b4ed391
+- card_id: hida_katai
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: hida_katai.jpg
+    sha256: 51192a8527aa4f68c4c4b2fc026d21e8dbd3c1d3c1090ca9f9501b5572f66050
+- card_id: hida_soh
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: hida_soh.jpg
+    sha256: db74652c90b69b073bada6f9c418618b82b89a6c14519306c9eb96a58535ab7c
+- card_id: hidden_retreat
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: hidden_retreat.jpg
+    sha256: 8d03021114efa14d4aee0c445ce0275151db8819383712cfff56e5003aa17932
+- card_id: hiruma_rikiya
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: hiruma_rikiya.jpg
+    sha256: 1bdd640b7a2dc6392ea69bfd145fc6c910815ae9ba9810765cb518997b9e0d04
+- card_id: hitomi_dojo
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: hitomi_dojo.jpg
+    sha256: cc963f230b29cb274ec9a3781d36c02afc8d39c5b39ca4962cf7725291e591f5
+- card_id: honor_and_glory
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: honor_and_glory.jpg
+    sha256: 47ef534489a943c252e8e890b26e1173cb3620e3710ff76641aba50665fba291
+- card_id: honors_gift
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: honors_gift.jpg
+    sha256: 67833086c457c3c35fee354bdb4bb0ea843f5402773a739143bdc35ac0f35e96
+- card_id: hope_in_shadows
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: hope_in_shadows.jpg
+    sha256: a0d7ebed704a0af8cd001e0ed61ef196f60c9d8ea4b19d2df27a6482612fd89a
+- card_id: horsemaster
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: horsemaster.jpg
+    sha256: 506c5444c8025fd02b85de0c3032207c4183e6bdc6a19c26405adef6282600ad
+- card_id: ide_haichang
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: ide_haichang.jpg
+    sha256: b6d27827859456192fb678015e09bf1304a5c88bd9306f435e03224372158962
+- card_id: inazuma_blade
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: inazuma_blade.jpg
+    sha256: fd257126a2d322864ff4413e41fcb8dc8b880742a46932cdf53a2ab33f5e750f
+- card_id: inexorable_march
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: inexorable_march.jpg
+    sha256: 4ec98c487d9d6599e3dbaeb056cf9183038ff41d0426301347ceca5f06fe086e
+- card_id: inkyo_teacher
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: inkyo_teacher.jpg
+    sha256: fcd84f53951f714c1d4c679d8a44147e4fdc83e581b7c7f8fe5634c3ca8f8630
+- card_id: inkyos_jingasa
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: inkyos_jingasa.jpg
+    sha256: a31a4d93a7fa2945c0d033b82b4296100ce8be8aa9df2ba989f802d571565758
+- card_id: isawa_jun
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: isawa_jun.jpg
+    sha256: ec02224f43f436706b3bccb53a11474afc5135a71986a462e632592514a63734
+- card_id: isawa_ochiai
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: isawa_ochiai.jpg
+    sha256: 45c492e2e0fc3897b0c7f730aafdf981ff8f3ff5296edbf464c254962e8364dc
+- card_id: iuchi_katsumi
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: iuchi_katsumi.jpg
+    sha256: 4f1e0983afd3e561478c8ed5303a9b2dc05c50120f4f36a9c44edc0a7d6ec74c
+- card_id: iuchi_tudev
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: iuchi_tudev.jpg
+    sha256: 93e05b8ba77b4e08c627a577c0a75752a2056e72b4ce9154e67f7a319293e86f
+- card_id: jade_shortage
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: jade_shortage.jpg
+    sha256: 31fae80e08eb78adae6bc34799f14d4f79619cf1a2f25cf59be647a04b13731c
+- card_id: jigokus_rage
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: jigokus_rage.jpg
+    sha256: 204702f8badf151aa303268765a7e9f961128301df285b41aaa0533a39250a11
+- card_id: kakita_matabei
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: kakita_matabei.jpg
+    sha256: 0e160d75fdabbbe26ff1c27752389e91c590d03d590bcb7480afded776168585
+- card_id: kakita_nichira
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: kakita_nichira.jpg
+    sha256: aa94fde2b0079bacacb9800ad537bef4f00854d8aed0e6d89afe434a6fbd7e5c
+- card_id: kitsu_tomoe
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: kitsu_tomoe.jpg
+    sha256: 835b12bcb031e2202ede60189f0be172013249c3647214c025dcc4b0b797d4ec
+- card_id: kouken_blade
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: kouken_blade.jpg
+    sha256: 453e6d86d8ed02a074ec0a74d61dcaaab01d5ee52a9d2a9e3916eaeeae257c8d
+- card_id: kuni_jiyuna
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: kuni_jiyuna.jpg
+    sha256: 50109cbd2ed2df42a2d0f7258a2635e8a77c9f4640ee394aa2ca1d2d7cf8de40
+- card_id: kuroiban_advisor
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: kuroiban_advisor.jpg
+    sha256: 86f5f3490a53283f1729209076bc2c30b6864c964016a71bf4a318953c9acbaf
+- card_id: mark_of_the_ninth_kami
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: mark_of_the_ninth_kami.jpg
+    sha256: 166802227509b6d337ad460c3179f381345d2da6bd0f7bae2c8f3ebd32a4fee1
+- card_id: matsu_takenao
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: matsu_takenao.jpg
+    sha256: 90107035981d5138126c945b9705364e5e98fb47f2a3cff4a811cc18774b56cb
+- card_id: matsu_taniko
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: matsu_taniko.jpg
+    sha256: 4db9b16eef48696b74df5aa37b612c5d5c3fbc9c36cd8960c8263a92a3413aa2
+- card_id: migawari
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: migawari.jpg
+    sha256: b17b61e3ac2e074f47c4a56d4318c97d1164875a3929237e9f5540d87c38dd1c
+- card_id: mirumoto_kenzo
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: mirumoto_kenzo.jpg
+    sha256: 2aee7e7b146412c1966fe673558de116a3d8693a5820e330fc59df041c75d8c7
+- card_id: mirumoto_mareshi
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: mirumoto_mareshi.jpg
+    sha256: daf115484ee09ea48e445ea50140aaf034f1b7b23e4fad0f12e39a3c7df08f8a
+- card_id: moshi_kekiesu
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: moshi_kekiesu.jpg
+    sha256: 2a8a160509d449ba2db1c3bc893e5a32a21185e97915f6287aa8ecbecd0e0053
+- card_id: moto_najmudin
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: moto_najmudin.jpg
+    sha256: 3116c497f83fb6c558e031bd45855311b57bea48810195483c88b8fc9dad0b63
+- card_id: move_the_earth
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: move_the_earth.jpg
+    sha256: 6b5f421211f00cb1dc95a6474614487aea00d11028a1a64dded25f3acbabe054
+- card_id: nemuranai_arms
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: nemuranai_arms.jpg
+    sha256: b1feb4401136d6b1a9c7ab5c9389b32d1a27d3142c754495bfdc918bf914ac24
+- card_id: omen_experienced
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: omen_experienced.jpg
+    sha256: 523ce5a9120d4891329d79c22c0b8d019d9db33713b4b21255e9c137eb5b615f
+- card_id: our_darkest_hour
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: our_darkest_hour.jpg
+    sha256: 80ed3e9aa3b85988c83efe4e109b81b6ee93e7b3c664e2ae0ff08d4276e0ace0
+- card_id: pit_of_blood
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: pit_of_blood.jpg
+    sha256: 12115efce94aa3759c9429f4fb9f7ba1dbf54f10296b42e0c02f52508f016154
+- card_id: poison_the_land
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: poison_the_land.jpg
+    sha256: b1c842d0194d3c3a53df44233bfaf1421a796effdfbcc9fad18c7c75b2850d72
+- card_id: poisoned_kiss
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: poisoned_kiss.jpg
+    sha256: 4f97b311d66f9069556777b26740c0230f64817f08be8fd9f680ea7c6bec03aa
+- card_id: political_interference
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: political_interference.jpg
+    sha256: 9a51a9087865b2d5107aaa20129e5c5e90d25c39345833733bb4bb26c56d8b87
+- card_id: purification_rob
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: purification_rob.jpg
+    sha256: 4ef6fa820f1ed83b4c345b95acbb1e62aa2bf8288af35571b94a41e2436e5d4d
+- card_id: purity_of_the_heavens
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: purity_of_the_heavens.jpg
+    sha256: 9ea6f7d6694c8d00bce22403f3199f4b8ba35f2e3db8a9f4c53d1eb986ffbd6a
+- card_id: quarantined
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: quarantined.jpg
+    sha256: 1dd6b236a979772827d4c2708e163252707642a61749df9a0bf8e8bbe049437b
+- card_id: rain_of_blood
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: rain_of_blood.jpg
+    sha256: 05efd136b3a05264e9171ba4594a6e65b261cc5c0ae13197ddf45129c75feebc
+- card_id: reflect_the_spirit
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: reflect_the_spirit.jpg
+    sha256: ffcd0fd7b2fde97b9c8befb7121c8d07b76164a5bdda222a2c74d744dbb84c1f
+- card_id: reichins_helm
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: reichins_helm.jpg
+    sha256: b8fbe88442379f2f524119f1556aaad3b598b689930d1bc32615add12432c34e
+- card_id: reinforced_cavalry
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: reinforced_cavalry.jpg
+    sha256: eac1d27258243a0956aaa5a447825f906121752a248749d0897a31f47113742a
+- card_id: reinforced_infantry
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: reinforced_infantry.jpg
+    sha256: 84d945ae0d2dfde7fdda261c1696f3aa3958cc13d392f8d339f75b9d60d90497
+- card_id: reinforcements
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: reinforcements.jpg
+    sha256: 3ef475a3e5c3c53bee907ff0dd3f8c32d549349b0992fb89fcc8e498d7725de9
+- card_id: renewed_energy
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: renewed_energy.jpg
+    sha256: aa2cca3691507b21cfa403bb8dc9b2470cc69d6ed5aaa2d74ebccf753a8e05e9
+- card_id: ride_the_way
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: ride_the_way.jpg
+    sha256: 02c5078bd5071098d2860e43202232026825b8d203bdbb327d75dd9809676531
+- card_id: rising_shadows
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: rising_shadows.jpg
+    sha256: df5469309d517a2259ca2d9d20d0e0e42744b5626238b438a77da35c06f5fd4d
+- card_id: rising_terror
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: rising_terror.jpg
+    sha256: 3db0a162561890826149a62d6195f2b77075132ef0ef9929623bfbfae0fc21ec
+- card_id: search_for_advantage
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: search_for_advantage.jpg
+    sha256: f7a0b6ea8085998e78bfb74d6e8d4f807ead9df47451e79312959073601b0364
+- card_id: sezarus_gift
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: sezarus_gift.jpg
+    sha256: fe84cde7d94cdecd5e8f3c1f652d74b0b7845a6edcccad6196e5d0893bc4f781
+- card_id: shadowed_terrain
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: shadowed_terrain.jpg
+    sha256: 63f9400cd6f6c9f1e5408525bd590dfd2288cc05b5872562cab66caf6a979343
+- card_id: shield_of_blood
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: shield_of_blood.jpg
+    sha256: 791e7d1088f8c42989d47a372f63c462a24f634d722ee5a499852f2166cd6004
+- card_id: shinden_horiuchi
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: shinden_horiuchi.jpg
+    sha256: 14d479bca3425e17c9d31128f7345bdc5d4fad3d137368c544659aff4ca4ae4e
+- card_id: shirasu_no_shiryo
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: shirasu_no_shiryo.jpg
+    sha256: 452d6a62926d6e54426934d67b78aa259d52215e40c35a57bae8458a9865c3db
+- card_id: shosuro_haru
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: shosuro_haru.jpg
+    sha256: 92fa8c6e50e97ff7fc5127e20b1ec44e8b96d17b4a31d9853d0e11ef0dcc4407
+- card_id: shrine_of_fu_leng
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: shrine_of_fu_leng.jpg
+    sha256: 84f98da991bd2e7e98e34e293272d5cfa0ba0bc4f37bcc8f889abd6e2e6cdecd
+- card_id: shrine_of_humility
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: shrine_of_humility.jpg
+    sha256: bcc09a4753f984da6cdd4c21b316dac6948e24c4b13eff564e5304c1ba9a9bb8
+- card_id: shrine_of_the_eternal
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: shrine_of_the_eternal.jpg
+    sha256: 9a3e2b22c7b7425ec335dc524d22fa39b4c12332431ecff323ef0ff9903cf16c
+- card_id: shukumei
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: shukumei.jpg
+    sha256: e98b2efecc1c0a18c185d8836788f3c07434fb613e8d3a5f9cb54f1874f9d388
+- card_id: silence_the_future
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: silence_the_future.jpg
+    sha256: 7b91609e62490ff1422e887931e51e168597f0c928b424830bb8eda7674f281c
+- card_id: skub
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: skub.jpg
+    sha256: 327614481f22a323a1aec98a5af5c28a825ebf5661714d9158d93ee22965d6d9
+- card_id: smite_the_blood
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: smite_the_blood.jpg
+    sha256: d36a70953ce37aac5a378ef8529389f6afbdb31d789045ba4aa9b917485ac9e7
+- card_id: soshi_uidori
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: soshi_uidori.jpg
+    sha256: 0e68e580106d3339d01172a3a2fda79a44068c14e052aeb7d6a04335913f6d3f
+- card_id: speed_of_the_plains
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: speed_of_the_plains.jpg
+    sha256: 65f59fe1916c8961c00c786313eda4b671a7c02d28a72e1c0666053b99cbf215
+- card_id: spirit_drums
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: spirit_drums.jpg
+    sha256: 32e71c61dc098e7b270736a9fd2d14a690c889d1e8681bd8bbbc1736e6e53ef6
+- card_id: steel_on_steel
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: steel_on_steel.jpg
+    sha256: a2362edac2552bd5482ad8442a05783c15fda38e4f3ba6caca437f3b0dba364e
+- card_id: strange_alliance
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: strange_alliance.jpg
+    sha256: 4ef4fd7f653c8be4a11e8d7650631b1e8c35dd1ed4be4c9b86b7a309d443213d
+- card_id: strategic_crossroad
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: strategic_crossroad.jpg
+    sha256: 63079102e6e08e45b5abf40fa21a3945004400de6b5b5f6f028be8f48092baaa
+- card_id: strength_in_numbers
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: strength_in_numbers.jpg
+    sha256: f0a24fd44ad97132e93b9c125f383eb0d15cf719b58e3ff3a8e3a81eb6d99d55
+- card_id: stymied
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: stymied.jpg
+    sha256: c3f60278710b20023ad9c7351a82373160026cb940370826c643b77a87dc7bce
+- card_id: suchiro_no_oni
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: suchiro_no_oni.jpg
+    sha256: be8d294733641acdae0e56725b84eafe62c5a6b82a8a91e0be2a6cb79f210bd9
+- card_id: suitengus_uncertainty
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: suitengus_uncertainty.jpg
+    sha256: 9df81b168bd4a0b131881f2e471e39c053f1e38c3735c9e8a14305b874311eb3
+- card_id: swift_as_the_wind
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: swift_as_the_wind.jpg
+    sha256: 0a54b757586c35ec903acb44c1ea149260461d3515f7ebd893ab22eb59917791
+- card_id: taint_the_land
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: taint_the_land.jpg
+    sha256: 2616a447391f75c9ceb19416e91bc9847627e5184212b6bd67471177b49dfeec
+- card_id: talented_apprentice
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: talented_apprentice.jpg
+    sha256: ef1ee47d3804a55646c08f8ae932f61a19f76d3d92309e9d8294c4dba39a1d57
+- card_id: tamori_nobuyoki
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: tamori_nobuyoki.jpg
+    sha256: 250871711c7ead07108ffa91d439e639ede5b8930c1b429bb478afd86a1587a9
+- card_id: tamoris_furnace
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: tamoris_furnace.jpg
+    sha256: 5c3ef726a36070c644548c850160392f6d58b98079d11133dfef81561ffc47dd
+- card_id: tchrikch
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: tchrikch.jpg
+    sha256: 7ca172f6a0bfafd2d052116511a59f14e24f7bec88cf2c4e799ed48b6d868f99
+- card_id: temples_of_the_snake
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: temples_of_the_snake.jpg
+    sha256: 8d58a3697812874e49b347ea268fe2cc8f5fd71046d1e6941727c7dcb9ca43e7
+- card_id: test_of_magic
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: test_of_magic.jpg
+    sha256: 16db822eccda074cc7128ecc46201d31d22bfd4bc8817b5d1159f3d8172e834c
+- card_id: the_death_of_tadaji
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: the_death_of_tadaji.jpg
+    sha256: 8410308575c5d8ce5a2ab191a8e453fe93dac011c95d2a3a0d18ddd4d0c3c44d
+- card_id: the_temple_of_hoshi
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: the_temple_of_hoshi.jpg
+    sha256: be4686eaf9e80592eea8383e4304d2a688479b03e3431f76b2f4b4588b8c9d3f
+- card_id: the_voices_command
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: the_voices_command.jpg
+    sha256: 1382a294a05da12e29592a98897f64d1e7ef6cecf75026c8aee3d813e4147d08
+- card_id: togashi_oki
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: togashi_oki.jpg
+    sha256: a00b27e6fff2094f8723a4054fc76ed3ac414aad9c9345c63af9ec262f894964
+- card_id: togashi_shozo
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: togashi_shozo.jpg
+    sha256: 1d589dbfe24b48b3a48123bec9b42ff369642a762646c5e96427f74802b9a68a
+- card_id: tsuruchi_amane
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: tsuruchi_amane.jpg
+    sha256: fe926d7714bb50f2225cc8f73e55f310a8383460f23bda50b5de9fdf79ff4b85
+- card_id: tsuruchi_fusako
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: tsuruchi_fusako.jpg
+    sha256: 339c7306da67d5aa2fb88964246616571f0cb05e73ee9b9c76e4459e27e02840
+- card_id: tsuruchis_flame
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: tsuruchis_flame.jpg
+    sha256: 50f58e07e7640ec716d3093dc0aa3a9e2d0e74391064dd3cd2777b8f5ce649df
+- card_id: two_souls_one_destiny
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: two_souls_one_destiny.jpg
+    sha256: a1b8442f65082d353d7b0bf66b53d69871ecc26fdff2b159f8d46661aca5ebdf
+- card_id: utaku_xiulian
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: utaku_xiulian.jpg
+    sha256: 41e5f9a33ace50f1f87459bc18f255e71816c177e40a332890be10ffcaf823af
+- card_id: vigilant_witch_hunter
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: vigilant_witch_hunter.jpg
+    sha256: d7cafb1950c2e675de845fc7173a9f82d6ed164bdbbe04cb6bd68ea2e6016fae
+- card_id: way_of_the_willow
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: way_of_the_willow.jpg
+    sha256: a8572df6257cc4b822dce5cd68f01290c0c72d98078432429502ad038e9da6ed
+- card_id: where_the_kami_walk
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: where_the_kami_walk.jpg
+    sha256: 67a9c6152c9afdd30e159d8152a1cccc9c28dd3875c4b06764b8546761104655
+- card_id: witch_hunters_amulet
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: witch_hunters_amulet.jpg
+    sha256: 3ca4e98ee931ed3ff364f0ed7c334f2e6e07cb6cc621a862a995ab413eafa384
+- card_id: woodlands
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: woodlands.jpg
+    sha256: 693a633ae991264158e5a079e0bc1c35be4797a5b284341e4b533d8a38aedac6
+- card_id: worthy_gift
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: worthy_gift.jpg
+    sha256: b9e8a9c8990cfbdbb9b3880199e689a9edd451560436ada421262db57cdffbc0
+- card_id: yajinden
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: yajinden.jpg
+    sha256: eee1b21c1b8b3ce36951830656bdf8347961660e67278f7ff20a3eb52afb6040
+- card_id: yasuki_trader
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: yasuki_trader.jpg
+    sha256: ff9dbd929e5e033daf2e8bd8edacf0f0c84cc4a2b4055ffa2f3f03b21332844c
+- card_id: yogo_hiroji
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: yogo_hiroji.jpg
+    sha256: 8183a4a2768930b4b912abcb8d78bbf8d0aca532a2cf12fa72a9339b1ad4ca7f
+- card_id: yoritomo_kitao_experienced_2
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: yoritomo_kitao_experienced_2.jpg
+    sha256: 032dd258ef8edeb310fa5f92673698487ac6b5b5ee83100ef3d3b5ad18968ea8
+- card_id: yoritomo_utemaro
+  printing_id: reign_of_blood
+  files:
+  - role: front
+    file: yoritomo_utemaro.jpg
+    sha256: ab0b8996fbfc45ac951c9af8dceaf94126b6989c5ed10b37c9981411db39a452

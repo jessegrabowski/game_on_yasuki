@@ -1,0 +1,1052 @@
+set: The Harbinger
+images:
+- card_id: a_cleansing_death
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: a_cleansing_death.jpg
+    sha256: 9fb0e99ceb0ccf9c45b617176728ac3f8a46caa20431d24ae884df977d5313b9
+- card_id: advanced_spellcraft
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: advanced_spellcraft.jpg
+    sha256: aa45f0b504614ee6392f5b279fe84077246527302662dafd0c5030433e098562
+- card_id: agasha_kusadao
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: agasha_kusadao.jpg
+    sha256: 5af11ecbaec0cd575ccf0b69db27bebedc24c38b811c0622daa6f05b1e0dbd2d
+- card_id: akodo_kin
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: akodo_kin.jpg
+    sha256: 91cf795838193768ce619224e207d9afa8f6e5e1151be11851a6bf1a083dafc3
+- card_id: akodo_ryozo
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: akodo_ryozo.jpg
+    sha256: c846d91d216ed4d926b17406f87f2e5222a86b1210fadf553da71f9acf7148ba
+- card_id: akodo_senichi
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: akodo_senichi.jpg
+    sha256: 1d073abf5e87ef63b8cec4221b7a734e222da59a434c8b6cf4156f99f646f54d
+- card_id: akodo_senzo
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: akodo_senzo.jpg
+    sha256: f9e2a6593d867b3c9702aaed7e8b9fa133bd5b4bc3410398f478e0a7a81ab21f
+- card_id: akodo_shigo
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: akodo_shigo.jpg
+    sha256: 0ec4f593073d0cf616b27ba4d19fed128abe1c74775a55e312a346f41a690357
+- card_id: alert_the_guard
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: alert_the_guard.jpg
+    sha256: 48a83b2a2831c0a4f9d6ff9cf0c7f020c0cf9b00a4d372fe2dc4221a7ac17d68
+- card_id: allure_of_jigoku
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: allure_of_jigoku.jpg
+    sha256: 5e9a1575e73ff0703a93fff33727df1bcaf7c93e6f1ac26ca2b213408304e4c0
+- card_id: apprehending_the_villain
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: apprehending_the_villain.jpg
+    sha256: ecae7edf2b1362019bda7cd1d0c5117f10f0f80914483dfec125a177baed01e5
+- card_id: arjuna_singh
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: arjuna_singh.jpg
+    sha256: 848038260ef981e998145be7ca877d19b701608b0ae72e1fca90bb2852f06466
+- card_id: arranged_guilt
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: arranged_guilt.jpg
+    sha256: 286bc48afeed2cb6bfd4c013aae187422b910235bacd9b217173830db0eb4612
+- card_id: arrows_do_not_falter
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: arrows_do_not_falter.jpg
+    sha256: a74f17bc9266e21b613a6df191c65d3968b745c831e9999ceef5790abc800607
+- card_id: asahina_ekei_experienced
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: asahina_ekei_experienced.jpg
+    sha256: 19a43fb6d43aab312b307017ff3bf630c1e44b3514116480bc736b68b144a734
+- card_id: asako_mokichi
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: asako_mokichi.jpg
+    sha256: 69c7893d46ce303187341f0822c4317419ca1f7e5f133bb09c5a36018f670b71
+- card_id: assaults_without_finesse
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: assaults_without_finesse.jpg
+    sha256: aef28d56ebede7382c9062d49e30a88037f1fcf2ad71ac7ade74b82bea78c1f1
+- card_id: aura_of_malice
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: aura_of_malice.jpg
+    sha256: 83d320a21243740294e3e7fc4a84b2f750f819777df134cdf95e93b3df842c9a
+- card_id: bakemono_pups
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: bakemono_pups.jpg
+    sha256: 7a559263a60260503f95b18a2abcc7ca74d6cb055ec207a269653eaa8cd18781
+- card_id: banish_all_doubt
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: banish_all_doubt.jpg
+    sha256: 3790becb451a7935c28005136374153f58bd2975887de5f0a30c0faebddae5d7
+- card_id: bayushi_hikoko
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: bayushi_hikoko.jpg
+    sha256: b607ceb8a16edaa103d721b57036bafddec9c104a47ed4bac5c86d680f280a74
+- card_id: bayushi_kindebu
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: bayushi_kindebu.jpg
+    sha256: 3d9cc7db721cb8cac24260823ed4bcbba7ec170910f3eddeb37c1e35bf9a5fcc
+- card_id: bayushi_mago
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: bayushi_mago.jpg
+    sha256: 61959ab6aeef2af9c4c68b9f2f8240cad85e5861870bc35245bc214412011534
+- card_id: bayushi_momochi
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: bayushi_momochi.jpg
+    sha256: 6777bc007842930b5d8d33d6da31749cc29163ed00844c39fae2b938810f66df
+- card_id: bayushi_suboru
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: bayushi_suboru.jpg
+    sha256: 3d7379f85073de9540c5c80eeaa3351c57985b36182a37c8e7c53c0632d5daec
+- card_id: blades_of_the_fallen_phoenix
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: blades_of_the_fallen_phoenix.jpg
+    sha256: 36781d37cd8228b436c4127197e70f79722caadaab5f608648869b25ce0cf794
+- card_id: border_pass
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: border_pass.jpg
+    sha256: 785cdfa9fe777f26b3286880f5b173bf353cd5294fb271f4033c34121f926155
+- card_id: brnn
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: brnn.jpg
+    sha256: 854c0e0459caf470a6281b32cd7c4022d458987656db05614e7783db1145240d
+- card_id: burn_the_village
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: burn_the_village.jpg
+    sha256: ad13124dfcfd7c402ede6adfcac386f729f9ceabfa1a62b46fad026b38c0de06
+- card_id: chain_and_sword
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: chain_and_sword.jpg
+    sha256: c6246dc125676900dbcb869785ecd53a2e86d27ac9c044a2af33fe0000bb05ee
+- card_id: chikara
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: chikara.jpg
+    sha256: 88ece9e2e72ffdfd9113bd06fea6e3e28e04aa88400bb255fb73aaba27ced073
+- card_id: chuda_atsuro
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: chuda_atsuro.jpg
+    sha256: 14d1d048fb3983c50dea707269965d2fea7ade6c2af8973007cf13cdbb79e2bf
+- card_id: civility
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: civility.jpg
+    sha256: 4068a46b1d6a77238d7f73511c627562799cf9f33c68d3f007b9e906b553c2e2
+- card_id: cowed_by_wisdom
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: cowed_by_wisdom.jpg
+    sha256: e6128f869b8c0854cceafe5d11b654f74519b94eb2add89f670301dcff940188
+- card_id: daidoji_botan
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: daidoji_botan.jpg
+    sha256: 7b208463148e8ab05f31e0636ede3888c8a23e871a35d677b5a1b6366669012a
+- card_id: daidoji_yuki
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: daidoji_yuki.jpg
+    sha256: 1c4965e16405879b39b89053908c3d7d30bdf29f4ff7d646782c12ec25827273
+- card_id: daigotsu_azuma
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: daigotsu_azuma.jpg
+    sha256: caa28cf460e084e3f38077282a71360704687f57a9160594d0193f1690f3fcb1
+- card_id: daigotsu_koneru
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: daigotsu_koneru.jpg
+    sha256: 79d6ce212c7fc3cce148a05bb07f4b0a430e9977749494b121b8a2f800046a73
+- card_id: daigotsu_yuhmi_experienced
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: daigotsu_yuhmi_experienced.jpg
+    sha256: 3b2e0c26741ecefaa95fc53614245dda2f33ba33419040a70dd21a651275c124
+- card_id: dance_of_blades
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: dance_of_blades.jpg
+    sha256: f1b1ebdfba80b84ffa490040d4eca95f0e1018bca0bab73307831381cc0602bb
+- card_id: deceit_and_subterfuge
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: deceit_and_subterfuge.jpg
+    sha256: acda3dd50e69b2d3f5daa064cdc61f59eac1c9b5cbbd0874e05d6d2ef6d076fc
+- card_id: determined_force
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: determined_force.jpg
+    sha256: 2e77426b263945158280ca4c4f79734bcf34f18b6225deb345cbbc12605054c1
+- card_id: doji_kazuo
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: doji_kazuo.jpg
+    sha256: c24108cb2b23da0bc130c5b93e460fe8a7a63f70d4ec01065d1dbb7012dc7865
+- card_id: doji_nenkai
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: doji_nenkai.jpg
+    sha256: 285b592e6a8ae3083e1a28d97df0f717c0d3d9890528127e923806258b0a8397
+- card_id: dutiful_cavalry
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: dutiful_cavalry.jpg
+    sha256: 0df62402f2123d39687082ae7ab561d1b237381192e0c1c9ff468a98d055a42b
+- card_id: elite_guard
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: elite_guard.jpg
+    sha256: 00951d2d78deeaae1019dfad827bf9d3a9acc3d4ded815a141d98212273daa57
+- card_id: emma_os_guidance
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: emma_os_guidance.jpg
+    sha256: 38488869a4b64f589579f8878a8ed0e454f7b79c423b7791e0aab7f7a8f3de5c
+- card_id: enticement
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: enticement.jpg
+    sha256: 5813908bf68a550eab81848d3da675d0ba038c6f7fa3dd3e61be84b54b630f52
+- card_id: extensive_training
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: extensive_training.jpg
+    sha256: 8a4569ad6f735306a8b5620f4a22cdeb11d256d516e2f0cc0109e8abf0d92145
+- card_id: farmland_conscripts
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: farmland_conscripts.jpg
+    sha256: 94b2db7b6e529d713c764c9ee17b9bc35baba0eacc8fe4bf4043805c56a7481e
+- card_id: flash_of_bright_wings
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: flash_of_bright_wings.jpg
+    sha256: fbb6fdd4dfbc727dd239ba3c617cf06203056b355fa23a7ae50e9bac8afd2d6f
+- card_id: flashy_technique
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: flashy_technique.jpg
+    sha256: 664e6ed750e84d45dcbc3e590e1fdc0b7eb06a4799f747427087ae54e4c21aa6
+- card_id: flawless_assassin
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: flawless_assassin.jpg
+    sha256: 347a3847169494631d799a3f93569695c3bb197b06384e9bb149a016e2fe8972
+- card_id: fortitude
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: fortitude.jpg
+    sha256: 548edb21e5d7e531dd4d63f6e9f3a8f24732117bc79fc501bb6a134e630f5438
+- card_id: fudo
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: fudo.jpg
+    sha256: 2cc5e0f0669f259b1425f4cf53f8924645fa77ce170c20910df1665f33015665
+- card_id: furumaro
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: furumaro.jpg
+    sha256: 325f751addc4c4c01f2fbc5d918a74c152b14574e0df57ea8fce773b302ee6a3
+- card_id: generosity
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: generosity.jpg
+    sha256: 9e66be88317493617ed401bc3c13d9a5f91f410dc61aa61d63dbd9bb71cedfff
+- card_id: groves_of_stone
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: groves_of_stone.jpg
+    sha256: ab7fe2688a14be1f64a8733b1f22bda7e9cc934ebabae0a3d6a7334156edb618
+- card_id: heavens_tears
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: heavens_tears.jpg
+    sha256: b3218fc333df70af4c4b1a1ef34634fd7182397428e9d1c6be8ecabaf1d6960f
+- card_id: heavy_elite
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: heavy_elite.jpg
+    sha256: 52359b13904de81224ab1f5c2c509342ef8840f24cc3d8236acef1bcd495312f
+- card_id: hida_harou
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: hida_harou.jpg
+    sha256: a97334bc87696492f1f2dd6ff11815627107c29ee8b0a0355456b179247df60b
+- card_id: hida_hebi
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: hida_hebi.jpg
+    sha256: d7274c7e04d3af946e58a0e72ad84cfe8cd3062bd4fd7babbf8e404579816066
+- card_id: hida_kosho_experienced
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: hida_kosho_experienced.jpg
+    sha256: 93e5a9d392b976f153a5015ce5303e39ab17291934f7ff09c0ade29f07ec6786
+- card_id: hiruma_gondo
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: hiruma_gondo.jpg
+    sha256: 06298efcbc2080c1e369f95ddd55d1114eb8a5d51fe056b4bf2fa2bc4e0a6784
+- card_id: hiruma_shigeo
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: hiruma_shigeo.jpg
+    sha256: 8ee00b921ff42f14b1414897acf828755aaed75fd5facdd373e00825fea30890
+- card_id: hiruma_toshio
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: hiruma_toshio.jpg
+    sha256: f15eb5addaecbf33dd8d0b430a5ea4decba3c4147e01052ea983d190bde71a84
+- card_id: hold_them_off
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: hold_them_off.jpg
+    sha256: ffa59d2d6d5336f58e716e6160f321af55083fe210c39bee3ecb8410193e2eab
+- card_id: hope_against_hope
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: hope_against_hope.jpg
+    sha256: ab0c0a2d90dee49cfa28ce7410d356f931b26bd32c6489f2ac160ed8946c7f82
+- card_id: imperial_outpost
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: imperial_outpost.jpg
+    sha256: a73a11a4d2b044f96879e35f2134bd342ad7b6fb75b888a2aea4e99ad15faa31
+- card_id: in_aikunes_name
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: in_aikunes_name.jpg
+    sha256: 082a1cdcd8e3c2693a64715b24d0adfac2a1d02133039c05bdf632f78f267277
+- card_id: intimidating_stance
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: intimidating_stance.jpg
+    sha256: 38556cc971d0e98598b71d5b8a33bf3deffeca4507d4ffc2dddd0fa91ff80782
+- card_id: isawa_mitsuko
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: isawa_mitsuko.jpg
+    sha256: 2b335839c507504b77e50d20e9f48dbc9705dcb51972e0501c749c88cfc76daa
+- card_id: isawa_takashi
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: isawa_takashi.jpg
+    sha256: 21d998db432fa8594fa643d217738aa1b4219d9f3e73e5d82a44c2182dce18ec
+- card_id: isawa_takino
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: isawa_takino.jpg
+    sha256: a9bef2f45ba3b177a7870834232f9e6d7184c8d6c9717fea30a8c9c70084e83d
+- card_id: junghar_legion
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: junghar_legion.jpg
+    sha256: 9be2b00e84ed75b58fb0e36f9dcb2c29e12baeeafb6f624cd1cdcc00721316c3
+- card_id: kakita_kado
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: kakita_kado.jpg
+    sha256: 3637c25151749454a7aa8bbac2e533781125bc452a5f981f1717de2070bae0e2
+- card_id: kakita_reisei
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: kakita_reisei.jpg
+    sha256: 06ea6518d5c8a0bbccb39ab72ef7163f0314100eca730d6e52800b65a2a779aa
+- card_id: ki_rin_tattoo
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: ki_rin_tattoo.jpg
+    sha256: 780c82ec3bb3de9bc2f49fb92ddac4f14fc7a90b6840591a1a4e3886377696d6
+- card_id: kitsuki_suiha
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: kitsuki_suiha.jpg
+    sha256: d613e22c4d40a3faafd08bcff468efa9a91f55cc036aa9412094b55e9d14a108
+- card_id: knowledge_from_within
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: knowledge_from_within.jpg
+    sha256: cbd9bcc987458a1bac6e3f0521dfb7bcbd7977dfa38d2a6612f4fa438dda0eb0
+- card_id: last_line_of_defense
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: last_line_of_defense.jpg
+    sha256: 5aab61b7f99e16de3c13e81e337f7ec6a9408a1a28d376b82cefa201cfac41c9
+- card_id: last_step_castle
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: last_step_castle.jpg
+    sha256: 973862f7c236a1978f887c7d8007baaec2145aaa7a5419007d0759318e4068c4
+- card_id: learn_by_doing
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: learn_by_doing.jpg
+    sha256: b4e1fe4ddeaf960dc7654fb8d9b60f3ed795e1e1006e5481b2dba111d160973d
+- card_id: let_none_draw_near
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: let_none_draw_near.jpg
+    sha256: 2e74b20ca43ac1afad0b334fbfd04b98d3241c6f77e2a53053055038a319cb90
+- card_id: masakazu_experienced
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: masakazu_experienced.jpg
+    sha256: 05bb238bebb98b0dbc3e6b1d2e13d2ff9c8f4fdf97833c66936bec414e55dc9f
+- card_id: maseru_no_oni
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: maseru_no_oni.jpg
+    sha256: e59ca872a4cc919bd48415bfb57706501a37296bb695be1b7d31b59ed4fa9a59
+- card_id: matsu_akuto
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: matsu_akuto.jpg
+    sha256: 3881e9dccef8008135428ebff7b0a29176af9f9aa328cfa3832e9a4409e44789
+- card_id: matsu_kita
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: matsu_kita.jpg
+    sha256: 30a7d082a66c06c89f62d7b59c6a4b32d5fe833dcecec9f71ac747be0e2c98f0
+- card_id: maws_of_stone
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: maws_of_stone.jpg
+    sha256: 6394d7c1b8b35db3ef7306f0db872efaea1c3ff812271d797dd97cfb4a78de7d
+- card_id: mirumoto_bokusui
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: mirumoto_bokusui.jpg
+    sha256: ed5ee6fa62d37e4602112c2a9bf908681f028affcf42d3e9ae9268db234ebe36
+- card_id: mirumoto_dakotsu
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: mirumoto_dakotsu.jpg
+    sha256: 55b6a3c427c4475a417255d5bd32c3f47230d8a7fbe274e494e6240b0ed35d40
+- card_id: mirumoto_ichizo_experienced
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: mirumoto_ichizo_experienced.jpg
+    sha256: c6bc972b3b21f29de2b8af73d0bf4641cf375a76ab6fea21bcb346430d3e860f
+- card_id: mirumoto_meisetsu
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: mirumoto_meisetsu.jpg
+    sha256: 3fe2afc92d278f116f618aaee4ca38b51cc57c8d6c947c477b5859478f3c1aa6
+- card_id: mirumoto_shiki
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: mirumoto_shiki.jpg
+    sha256: ff889463eb4f2c79e3a3ec81ed5a3356fa58ec06df48f538305dc7fa40380c3a
+- card_id: morru
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: morru.jpg
+    sha256: f11fe92836ad23230e700080b939806753256ebdd3a8510cab432ad87200ebfb
+- card_id: moshi_kazue
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: moshi_kazue.jpg
+    sha256: affa450081a51e9eb0d0e385b8f39c24c0c83a384afd61fdf5f3a384ad6ebc11
+- card_id: moshi_sayoko_experienced
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: moshi_sayoko_experienced.jpg
+    sha256: 440ade401252dd15ab2471e721f41682e4ff443d191c0d4eb4f8900930c7d984
+- card_id: moto_chuluun
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: moto_chuluun.jpg
+    sha256: e763ed7f9117b033ad6d56333a02714cb7537c7f4dcc1dd1c644fa5c09d9d365
+- card_id: moto_kang_experienced
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: moto_kang_experienced.jpg
+    sha256: 051201a412d742dcd42fd40cddb21ee7eb2c50cb173b25bbeb2a53e0b333751b
+- card_id: moto_kushi
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: moto_kushi.jpg
+    sha256: 0358e07f8453ab12c8d98ab91ab9b0b36c8116e9a9b3753bc204042930067106
+- card_id: naggru
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: naggru.jpg
+    sha256: 404d11502f5793431fdc67993cef5c6caece3996750b59e08f999bc675862803
+- card_id: negotiations_at_court
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: negotiations_at_court.jpg
+    sha256: 72e0be132e448e7798820894d5441a2200df9baa70dea6f578e7230f23f944b6
+- card_id: newly_discovered_mine
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: newly_discovered_mine.jpg
+    sha256: e4a2640c0189b73ed715629cc15c05f8adcc0f21a4b1018d5cd926499531613f
+- card_id: no_hope
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: no_hope.jpg
+    sha256: 4ed42f26921aea9a329c77984aca7a01fe5922551d69e8beb13fccdac5283ca7
+- card_id: offices_of_the_emerald_magistrates
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: offices_of_the_emerald_magistrates.jpg
+    sha256: cdc6b943e7f70c90711c08505831972ecf2e6165447cfd0852f8325f8dce2e72
+- card_id: one_with_the_flame
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: one_with_the_flame.jpg
+    sha256: 831e19df530316e59830dc9bc20f02bbfd8a6c4b8ac68eccb28f7cde489f7d83
+- card_id: oyo_seido
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: oyo_seido.jpg
+    sha256: 0e288504e72d2e386ba5ff2cee991f6a822b20278a6400bdaacc487b29496ad1
+- card_id: pacify
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: pacify.jpg
+    sha256: abfcd341906949ba5ec7b73af7f028c402ab043c940a23f7336029d6c04d2859
+- card_id: pawn_of_corruption
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: pawn_of_corruption.jpg
+    sha256: cd3ba192a4db4844a6f72df6dbda4beb4cdaa6f3cef50507ff1faa91f0dfa9aa
+- card_id: peasant_armor
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: peasant_armor.jpg
+    sha256: 137bdf0d881c755fd65db1aa23a9e70440296a171316ec5415172687daa64f0a
+- card_id: phantom_blade
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: phantom_blade.jpg
+    sha256: 0700ec2ce4707aac69e9548fa0d429fc64b0c1d1c04d3cd303b9b6e4c6bfb4c6
+- card_id: pinned_down
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: pinned_down.jpg
+    sha256: fe25271682aa8ac0c20f78ebf0b9cb45e176b8c8e97b16f15f5de1db7592ae86
+- card_id: poorly_chosen_allies
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: poorly_chosen_allies.jpg
+    sha256: 36056bf6b72c0e07cc2556433e52f522252a581986cc50def06f3e357a589444
+- card_id: prayer_to_hotei
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: prayer_to_hotei.jpg
+    sha256: 38d5e6bd3a3ede710fc0aaeb9891a7855e241d609e841a5ba1d57aaef9b4d8e8
+- card_id: prepare_for_the_worst
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: prepare_for_the_worst.jpg
+    sha256: e432412c7bbd9425d9fdd4e1657e6f8989349ed13e4785065358bf7addfd3812
+- card_id: preserving_what_was_lost
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: preserving_what_was_lost.jpg
+    sha256: d8d7df740c6be3b3a90470e44f038822979136755d23d03004b4b580b5c13827
+- card_id: reinforce_the_line
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: reinforce_the_line.jpg
+    sha256: e66d5b7ee96666a98d39baf9239753301e741dcf2c137c42d4fb8c4abc4df144
+- card_id: riding_in_harmony
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: riding_in_harmony.jpg
+    sha256: 15d8fba68f23f0903befab34efec39d04dc2e2703a4128141df168892baa00c3
+- card_id: roaring_sky
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: roaring_sky.jpg
+    sha256: 9ed2db24ae2d222538262a80a31b323e9e5fee7ee1b260a1fa49cc9fc8cc71d2
+- card_id: sadamune_blade
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: sadamune_blade.jpg
+    sha256: fe2964d9cb248021124b373e452b844268c9c7149ddcd9890eb87c6e6c9a4e8a
+- card_id: saving_kazumasa
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: saving_kazumasa.jpg
+    sha256: 89f7189c90e45d33baddd83ae363e8e5df165be7b0ac2b8548b522a62a4f0e4a
+- card_id: scout_armor
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: scout_armor.jpg
+    sha256: 1cd8596c8fd745cff08a07096a9553c1adc2321080f6ea141a0796c944285ac9
+- card_id: search_for_survivors
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: search_for_survivors.jpg
+    sha256: ed27efa848c102f1aef1c11cdce42cd1e4b48095d64f104e019fb2a98138ca82
+- card_id: senseki_province
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: senseki_province.jpg
+    sha256: 82bda97b88930d50375f8b4d72b341caef3e89864b810f5597bd53b4722c0d03
+- card_id: seppun_tashime_experienced
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: seppun_tashime_experienced.jpg
+    sha256: c160f399ecbbbc5be2ef85d3b32820c61e252070c58a743898dd0b72b4236bc5
+- card_id: shadow_plays
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: shadow_plays.jpg
+    sha256: 1ab07efed8f977c1ec93b20fbe05ffede64c64925bd84aa0c239e9ed667d9674
+- card_id: shiba_allies
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: shiba_allies.jpg
+    sha256: 5444c59d5e5a73d5a9ea5bbf64705a93504a470c50614febdb3fbd19dde7c488
+- card_id: shiba_ikuko
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: shiba_ikuko.jpg
+    sha256: 51d1ec9bc15451a7aca096b1ef55dcfcf593630c284cc0e870ad2dafc3f5dc5b
+- card_id: shinjo_emiko
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: shinjo_emiko.jpg
+    sha256: aadfe78d43a78f6b6135beb3c3d8ed7d9c44ee6204366d83a3e373abfe90c0c0
+- card_id: shinjo_yamauchi
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: shinjo_yamauchi.jpg
+    sha256: 3cc497f2e1e9fdcd4af3e0915b080dccef6c7c6bcfd604f6df84443531a806a5
+- card_id: shosuro_akemi
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: shosuro_akemi.jpg
+    sha256: 78a2f39795dd01799cb666f61182613a72cf98b753d829830aa76af6a609cd7c
+- card_id: sister_of_the_sun
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: sister_of_the_sun.jpg
+    sha256: bfbf3ef273566af7d075afbba2455ed2d96192764bfee789239333ecc5e59d79
+- card_id: snow_swept_summit
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: snow_swept_summit.jpg
+    sha256: f94c4f1d146ed85b77720e8bfa5a534bb4a828c9578b286862ebb5a7b4df3e13
+- card_id: soshi_miroki
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: soshi_miroki.jpg
+    sha256: f34e16246ba2c0638f3528ca138a0c6abc168e96bcba390222ed9e049f7b9f08
+- card_id: spider_cultist
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: spider_cultist.jpg
+    sha256: f395429c24dcb190ec535d91da4a9ab93b0a42cc0bf880541ee98b86161ab5a0
+- card_id: spinning_heel_kick
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: spinning_heel_kick.jpg
+    sha256: 1d57a3d553fe93dc8ceb15afdc21ad620d6a9fb0a72bce96ae1ec864d85db9d5
+- card_id: spirit_of_maigo_no_musha
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: spirit_of_maigo_no_musha.jpg
+    sha256: a4b918cf19bf1215eaf30fed83ddb21d78fa042a6c640febd8e29a3e3dfcc64d
+- card_id: stand_down
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: stand_down.jpg
+    sha256: 2ff8552af6af9ce1b966dbcf8e51bd6d21708248f76568d858621b568f382bb1
+- card_id: stolen_property
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: stolen_property.jpg
+    sha256: 208d2d52cc310f643eb5a0c4fc56182cc56e4937a6b4a19e21e170968a0100c2
+- card_id: storm_forged_blade
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: storm_forged_blade.jpg
+    sha256: 26caf0a931e0d16e731b451fd22a50e7e119a1892cf1637ae43c07a09ae389e8
+- card_id: strengthening_protection
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: strengthening_protection.jpg
+    sha256: 2d83e862a429644736d5e7ea68258bb965c87f737bbf2ed84bbfc409f7e3efdb
+- card_id: strike_from_the_shadows
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: strike_from_the_shadows.jpg
+    sha256: b6c8185b60e747ee0cac0f8c84a0a71812711d1b754b3c8ff2bab704220987fa
+- card_id: subtle_sting
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: subtle_sting.jpg
+    sha256: 971dbd748757510fb0df96078edaffbe1c43fe10c4d6129b9ec215f136a69f32
+- card_id: talisman_of_maigo_no_musha
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: talisman_of_maigo_no_musha.jpg
+    sha256: 6d05d60d25640e5a4955bdc16d8260ac44fa49745c6f08ec9acdea30a1c01abd
+- card_id: talisman_of_toshigoku
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: talisman_of_toshigoku.jpg
+    sha256: 32abb909e736ced25c2c311538933c73bc0865d77878365e3c29318dde7088b4
+- card_id: tamago_experienced_2
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: tamago_experienced_2.jpg
+    sha256: 75342ea25503264b4448a1ef3bdb9dbda1406a668a5ddbcfaad3f3f19608e11c
+- card_id: temporary_truce
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: temporary_truce.jpg
+    sha256: 4f27ad00894f6e4b8877c8b59d686f4a59fc0a4aa7d315731831f8584020a05f
+- card_id: the_badgers_live
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: the_badgers_live.jpg
+    sha256: 58aa8b137ee884541d94b908c8cdc44a86d424f60cf4c462c0c21dd23d451f8e
+- card_id: the_dead_do_not_rest
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: the_dead_do_not_rest.jpg
+    sha256: 8b5b4d9c16d246c793476b2651a07033b1d823a679daef45983fb4131d3fa148
+- card_id: the_dread_kar
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: the_dread_kar.jpg
+    sha256: 96b36d891ccbe629aefbe7aa9f2f4191204ab08ef7510292c662ae8372de7ac6
+- card_id: the_eighth_legion
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: the_eighth_legion.jpg
+    sha256: a839db41b561a51d5621c8ae67d982d13ed02333f8274762f6cad013bb41565f
+- card_id: the_light_of_justice
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: the_light_of_justice.jpg
+    sha256: 852d9002143397d72173a11c93c70b271e2cdca1e651b0cb862284191c7462c5
+- card_id: the_thriving_light
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: the_thriving_light.jpg
+    sha256: 80b3cbb66e10c4850e4079855d207c04e15aa117330d8fdbcf78ceee2920816b
+- card_id: the_walking_dead
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: the_walking_dead.jpg
+    sha256: 692fb11db03def6f727c98c9a61821f51d3820b53caa0730b0eb500450c792c9
+- card_id: the_wrath_of_kali_ma
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: the_wrath_of_kali_ma.jpg
+    sha256: 7aa75ba0194432c0e1b3cb3942480ddfbfd76d73109f5821f4f25edf65eb0b36
+- card_id: thunder_dragon_bay
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: thunder_dragon_bay.jpg
+    sha256: fcdcb7a9bb02bf3a047affb475e62408f49e2a9e9aa7be537ff2de4ed31f5273
+- card_id: togashi_kyoshi
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: togashi_kyoshi.jpg
+    sha256: ae448a69716f93a667f3359804559a6bf63afb8ea58c6775c38604ea8a147194
+- card_id: toritaka_okabe
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: toritaka_okabe.jpg
+    sha256: dec241502552e3d41f163aee52ef612ef80a78cbe8a3c907cb84a8abd3c5dafe
+- card_id: travel_swiftly
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: travel_swiftly.jpg
+    sha256: e91cb642eddfa8acaa1c726ff135ca44a3241bf9a6eeb6e34a981385cc1876e8
+- card_id: tsuruchi_gosho
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: tsuruchi_gosho.jpg
+    sha256: e0e1b50f62dd65be95bac307e0b4f4c31fadbc2cd807b64673dcba6c95e6f8ec
+- card_id: twin_soul_temple
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: twin_soul_temple.jpg
+    sha256: 6a9897d1f9ceb444a0df8a64acac9091bcc8cc37ee7d5434f0a58697428a7100
+- card_id: utaku_gunso
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: utaku_gunso.jpg
+    sha256: 5fc2c2a6b660e638f8ada472345fd6c463eea427bb6a880085c2894b9ed5f0e9
+- card_id: utaku_tairu
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: utaku_tairu.jpg
+    sha256: b6e1a2f6cb705b4d5b8cea58f8a08f67ef057593ce26a55904c883e63bf720cd
+- card_id: utaku_toshie
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: utaku_toshie.jpg
+    sha256: 8b7d6b5f938a91832db7b2260b34dfda268d0bccacfc0b8c4c184646f2542ddc
+- card_id: utogu_no_oni
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: utogu_no_oni.jpg
+    sha256: 5b5d3c5ca37862701a5b4cbcccb9569b1d79a1f5c53d209a2ab592b0dc637c49
+- card_id: vigilant_eyes
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: vigilant_eyes.jpg
+    sha256: 6db655d82ab72c6d03c56e5959c7e7d4d965aa2f3cc5e6e0efb6b1010c4c0c9f
+- card_id: wander_among_the_stars
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: wander_among_the_stars.jpg
+    sha256: 5a7583e84737656b2e3918cfaa412ffb1d6ef26b6ad3ee975d4226510e0b56c6
+- card_id: wanyudo
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: wanyudo.jpg
+    sha256: 73970c6ceec0ca1eeb8c41a4d2a03a0bdfbf1b4a0e783cb5fda851d9f63fbd70
+- card_id: wartime_allies
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: wartime_allies.jpg
+    sha256: 8314306e387a147fd15c9bcb25b6b4c6904f09ad26ca23e91ef50bd42c0dc698
+- card_id: wind_borne_aid
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: wind_borne_aid.jpg
+    sha256: dbd7be256d5210372dd0ec48f953a8ae2861abead5e770a006483325adfe79d4
+- card_id: yojimbos_glory
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: yojimbos_glory.jpg
+    sha256: 90f990a50c586b27569c38a9f80c0ebcc182c2676884980c1c625fe33b8e29dd
+- card_id: yoritomo_eita
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: yoritomo_eita.jpg
+    sha256: e7a7972d0a3567be11a61613db5ba710e541ff3148635882da3a0c26953b0a82
+- card_id: yoritomo_takara
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: yoritomo_takara.jpg
+    sha256: 84cc65bfea81575d0e0cba699160561ac40b373f6f5084daeebee05f9364f4f1
+- card_id: yoritomo_tatsuhiko
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: yoritomo_tatsuhiko.jpg
+    sha256: 3a24f5a4cd0e86ad21a255525186f894069de5e04e67499065eff25fb0ef4d73
+- card_id: yuhmi_no_oni
+  printing_id: the_harbinger
+  files:
+  - role: front
+    file: yuhmi_no_oni.jpg
+    sha256: 90cd879a35f5e391f028740862ee599c3cc8103e036e8e60202ecd0c0b54a450

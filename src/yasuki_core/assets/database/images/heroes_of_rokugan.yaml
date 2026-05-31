@@ -1,0 +1,164 @@
+set: Heroes of Rokugan
+images:
+- card_id: anvil_of_despair
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: anvil_of_despair.jpg
+    sha256: 5663e0a2993c7e65bd0633f77b7da0e974b310d8d77e8b32f6059a8f3062dd1b
+- card_id: atarasis_armor
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: atarasis_armor.jpg
+    sha256: a66d7c64e1f8a19ca78729489fc42405c4e1eda383470edc2c427771b20ecc23
+- card_id: celestial_dragon
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: celestial_dragon.jpg
+    sha256: 3140ef906b9d34785f92ab2ba91417d544a22550080ec2f37ee1c2b8ae4ae4b7
+- card_id: cherry_blossom_festival
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: cherry_blossom_festival.jpg
+    sha256: 1fb863499eeae9731502c543f05cde245dbe0c8b573fee376212d83ff661423b
+- card_id: goju_yume
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: goju_yume.jpg
+    sha256: 7004073cfc57034a913c893da9ba0379b7c2c72e0f8b542f7429fbe1eca6f84d
+- card_id: gusai
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: gusai.jpg
+    sha256: f4e3f68f11f5e1eae10ff64d0dca4937f783e923f82c1e0e7d596a5bf74b8105
+- card_id: hida_osano_wo
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: hida_osano_wo.jpg
+    sha256: 22385fdf9425324a35c202b612f2ff8cf4570fd5dd5730ecc6c382d0e1566acd
+- card_id: isawa_ijime
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: isawa_ijime.jpg
+    sha256: de8981539812c6a0ab30e2fefe5175a6b0d64c9bf40329b16a3ec23d3da6c039
+- card_id: judgment
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: judgment.jpg
+    sha256: e488e38daa0a63aa14599154002002004b37b3670aad7b8fd2dcadaa24e71491
+- card_id: kakita_rensei
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: kakita_rensei.jpg
+    sha256: 479c72d564906cb74c86313b503006638abb5b525b79126299b1645546d37dc1
+- card_id: land_of_the_dead
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: land_of_the_dead.jpg
+    sha256: f0937559c0d788058c45e52f4ee8782e4c14aa7bc3e8dbac86427ccf529755d4
+- card_id: matsu_hitomi
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: matsu_hitomi.jpg
+    sha256: 99a6c0c6b97be056bd5725c8d96a9287fbd2ac8f0bd8cd157f153fcb688bfa39
+- card_id: mirumoto_tokeru
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: mirumoto_tokeru.jpg
+    sha256: 8efc18f0ceb7a4a695678ca92a7e1145bf3a36e8df73e576a175394b1d5f9cb7
+- card_id: miya_mashigai
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: miya_mashigai.jpg
+    sha256: 98c2391861145e54821f0edb8e6454a026c4f96bf41d448830cea9d9cbf7c2cc
+- card_id: one_virtue_and_seventy_faults
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: one_virtue_and_seventy_faults.jpg
+    sha256: d357068557bc7301de0fbe253b1b16741986e7d46f5d6dfa55f9b0bdb089c222
+- card_id: otaku_shiko
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: otaku_shiko.jpg
+    sha256: bd3c10f04c3241dce0cad9f227f7e3e348ded8efb504759538948aace06338d3
+- card_id: qatol
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: qatol.jpg
+    sha256: d207f8eb751d5753ccf543906e8d041f7714c323760176c7a16b1fa1d70cb784
+- card_id: revealing_the_ancient_wisdom
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: revealing_the_ancient_wisdom.jpg
+    sha256: 8a32bcefaea903020982975b3ac229d420721a8cbbd57352375cbcc421cb40e8
+- card_id: rezan
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: rezan.jpg
+    sha256: 4f34354b85b80175e363e3334aacb14316c8d712274cd709caf8f262ee3affa8
+- card_id: seppun_murayasu
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: seppun_murayasu.jpg
+    sha256: 20fd927848c9c3f1f3322f7cad92a3b9348ab4c7e656cf706374db773caae594
+- card_id: shinseis_riddle
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: shinseis_riddle.jpg
+    sha256: 6d96eb8981f44d8b52f7ece7fb80652be903e581b54438cd791df5402f152456
+- card_id: shosuro_furuyari
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: shosuro_furuyari.jpg
+    sha256: 6bd9e76a15857e8d71cbb73c73ad0f6c41a4a4e6498844e66d889470849a6451
+- card_id: someisa
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: someisa.jpg
+    sha256: 4ff9182224254d32924d2a9200536194a3c50c8fedafb9ed295501c577c7f5a3
+- card_id: spirit_legion
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: spirit_legion.jpg
+    sha256: af1dfe0e393c87eab79cb8c97360e47a40e58ebbc64175d9370444d41475e627
+- card_id: the_first_oni
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: the_first_oni.jpg
+    sha256: 20e4d82330ad8b19cdf573bc9cb1de9bfc6f2a601965e15b7f3af4479b4fadc0
+- card_id: warrens_of_the_nezumi
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: warrens_of_the_nezumi.jpg
+    sha256: 8ceebbb1828141e875580e07a10e708ec591b9d6bae4404167d335d256725002
+- card_id: yasuki_kaneko
+  printing_id: heroes_of_rokugan
+  files:
+  - role: front
+    file: yasuki_kaneko.jpg
+    sha256: 8148e40243b7ab575e83a1ba897248d503acf5ea0dd3c0f1eb4c9fad006acaad

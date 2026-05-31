@@ -1,0 +1,1166 @@
+set: Spirit Wars
+images:
+- card_id: akodo_ginawa_experienced_4
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: akodo_ginawa_experienced_4.jpg
+    sha256: e3ee0b20921e5ec437f7d4b5172fccc6dd0ecc1d17012f6691a8cea0e5405cef
+- card_id: akodo_ijiasu
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: akodo_ijiasu.jpg
+    sha256: c38fe681f2dc2b6e7a02ef2a7741653a71a5d735d865c78fe4a9b332916994be
+- card_id: akodo_quehao
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: akodo_quehao.jpg
+    sha256: a9457ddf84b59aa22351529438a23d3a646e7196b25fc79381c668fc94464a04
+- card_id: akodo_sensei
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: akodo_sensei.jpg
+    sha256: fe4a8946600745c1d4a4d2f54de2c53cdcb979bfd0fad882b0413433c23e6f4a
+- card_id: amaterasus_furnace
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: amaterasus_furnace.jpg
+    sha256: 38820bc67dfce2332909227604dc03b139bfdf8fe448e66f7f142cbcc1f0f783
+- card_id: ancestral_dictate
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: ancestral_dictate.jpg
+    sha256: 5f4960306387757f0c8192a564eafc39cc6810264127153b0c5aaed32faebde2
+- card_id: ancestral_protection
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: ancestral_protection.jpg
+    sha256: 4ea14e51e10a72dba3b0b6eb83a8f6b3366b98faaeeb6cee80dbba8fc1a97dde
+- card_id: ancient_knowledge
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: ancient_knowledge.jpg
+    sha256: 10389f13a765aa745a207bdba943cb340fcabfd2e3120d1730b83597423cbca0
+- card_id: arriving_at_the_imperial_gates
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: arriving_at_the_imperial_gates.jpg
+    sha256: 5ceccbdad137ce48a7ed5e0a7dd5b58dc01dc5dac798c1268b22b5dd45e6b020
+- card_id: asako_misao
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: asako_misao.jpg
+    sha256: 078951bc5cd69edaa5ed36a1b8582781ffa8338a140f0612a237c0d2fc884239
+- card_id: asako_riders
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: asako_riders.jpg
+    sha256: 930e7f25fa831f05e46c853b74931d3eb4b4cbeb08c1ce621f54009a5d1890cc
+- card_id: back_banner
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: back_banner.jpg
+    sha256: e082505ea34a19bfa71f827eeae14fded932fde3aa80cb8ede9bac187c106495
+- card_id: battle_at_white_shore_plain
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: battle_at_white_shore_plain.jpg
+    sha256: 1e64690be2be14b563b8d7e6ae8cdfff6282f4ec58a85c42d775a509ce29d3fc
+- card_id: battle_of_drowned_honor
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: battle_of_drowned_honor.jpg
+    sha256: c3f41be6cf8e5311f05d83fc3e567af8dadc3654f646fa091a3bb4cbe960f56d
+- card_id: battle_of_quiet_winds
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: battle_of_quiet_winds.jpg
+    sha256: 1c22ef1255bf806e9db3ade86a0250234cb42471a90497cb784103c9b5c4585b
+- card_id: battle_of_shallow_waters
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: battle_of_shallow_waters.jpg
+    sha256: d730b5ef48937346b2b5e422155dfaab19ce27bcf12cc059d51cd459e0bfbd83
+- card_id: bayushi_baku_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: bayushi_baku_experienced.jpg
+    sha256: 410126c3a0c381b7ea928fcae1f7bfe162d6a80a7731adb6b2d1bf63b5ee3089
+- card_id: bayushi_paneki
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: bayushi_paneki.jpg
+    sha256: 941d398a94a9f2873ff6857236aecc8dc496ab1f1ef00f9762e7627c50d61897
+- card_id: bayushi_yojiro_experienced_2
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: bayushi_yojiro_experienced_2.jpg
+    sha256: aabbbc18cf8044488fd5656c562f9a703a0da31afa09633acb2c72b594529f4c
+- card_id: beginning_and_end
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: beginning_and_end.jpg
+    sha256: 8df0e9a93502d5b6d155ab54b9aac7fd325eb631449d9a34e9670ccfae94c103
+- card_id: birth_of_the_anvil
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: birth_of_the_anvil.jpg
+    sha256: 9bffeec721ecc9d04aed52875c1432ef1a2fd8e8fadbb6ac4626e249f48da886
+- card_id: birth_of_the_sword
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: birth_of_the_sword.jpg
+    sha256: dc207d01c5811bc43751ba1a6640d3c44af65f4b35af24cec8722797996a063f
+- card_id: birth_of_the_wolf
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: birth_of_the_wolf.jpg
+    sha256: 2c8cd06a35ab3e0ffa64b5b6a249aedff8c1c9a7adc3778e804913c7292ee96e
+- card_id: bitter
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: bitter.jpg
+    sha256: 7b1b70bdd62984974d6ca1039d85cc8db02dd0ca29bdd536ba505f0752b88fc3
+- card_id: call_the_spirit
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: call_the_spirit.jpg
+    sha256: 56b152d489d2a3dfbe17bc3cd400295f137f7039b55faca8114e9f1e3fe567e2
+- card_id: chou_sin
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: chou_sin.jpg
+    sha256: e583a222ecd535d93d77031b10748e168828cdcb6f764db5bcfc1346fc26ac1c
+- card_id: clay_soldiers
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: clay_soldiers.jpg
+    sha256: daf199031985442369a065f535677e99431bbb94ca4997a8b90307c022fbb788
+- card_id: cliffs_of_golden_tears
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: cliffs_of_golden_tears.jpg
+    sha256: 1aa569168792d68ad1858e1e217376434c0956f162a8b24df3cdad3c7b530700
+- card_id: crab_tattoo
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: crab_tattoo.jpg
+    sha256: a9a9c6231a934d49b6253b01b60efd43d7b42fe6515cc860ab6564c9ca6c6b0b
+- card_id: cursed_ground
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: cursed_ground.jpg
+    sha256: 06dd89ddf4b8c8258432b55cb65370d4338387a0f207aa97b2d99ba074582e15
+- card_id: daidoji_hachi
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: daidoji_hachi.jpg
+    sha256: 78bc1e9fdf35971bf30fc89a481a0eb98a18af38bc290c5c76872f9fa28d3a23
+- card_id: dark_secrets
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: dark_secrets.jpg
+    sha256: f6621faf9fb1b4a8a1423deaec9deaae0fc4e76470e4d217574684e01647f248
+- card_id: devastation_of_beiden_pass
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: devastation_of_beiden_pass.jpg
+    sha256: 3a577c8d0eebc01e0bc8448f84fbbcde53646e0da140ebb3472c2264a0a5010e
+- card_id: doji_kurohito
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: doji_kurohito.jpg
+    sha256: a2fff21a32030f2845b743d0a205fb192d69ba967b082ebcd4e3c73ddf676fd6
+- card_id: doji_meihu
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: doji_meihu.jpg
+    sha256: 70019a084958ff44986cc61cbb6d4121fb6f663250163515c276b9272ef587c0
+- card_id: doji_reju_experienced_2
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: doji_reju_experienced_2.jpg
+    sha256: 7d59fa73277b88c3f630549c8c67892956b9dc3846228b3e0ff46c1f434e1064
+- card_id: dragon_dancers
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: dragon_dancers.jpg
+    sha256: 6b2c5605274aa0dfde0511e81a858c59b6223ee35c8174b6427e4b6ec496b207
+- card_id: earthquake_at_otosan_uchi
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: earthquake_at_otosan_uchi.jpg
+    sha256: 1abf34bbcb2fc1f4e0c23ee9d37408c3bde70a7682ff4b926f8bb0479ae03054
+- card_id: east_wall_of_otosan_uchi_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: east_wall_of_otosan_uchi_experienced.jpg
+    sha256: 0df9aee7eafa9e9a6f6bbacc78fba3a048fa9a8dd6efb58eb1539d3ada35e2fc
+- card_id: emperors_favor
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: emperors_favor.jpg
+    sha256: f704d18a4bf08a09915a66e9e15891e6785ba723ecd93a81878e6ff06e30d349
+- card_id: emperors_under_hand
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: emperors_under_hand.jpg
+    sha256: 9fea9926f4afed918d475dc2dd17a6f168abb0113279d6a96ed5db352e78ce37
+- card_id: empresss_guard
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: empresss_guard.jpg
+    sha256: 9df03248cefc2e1048febdce38ba4dbc23943e37c44d3aa96dc50b41e397d1f4
+- card_id: fall_of_the_alliance
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: fall_of_the_alliance.jpg
+    sha256: 9527366991f3ed4e1e1f7ef37fbca0395452a781ea8fed5c3c5c7d92d2151d48
+- card_id: fall_on_your_knees
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: fall_on_your_knees.jpg
+    sha256: 1430274e1ef62e51809d49306a909a707eeb7bae87a48ccbc1d2ace3a733c7f4
+- card_id: fallen_ground
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: fallen_ground.jpg
+    sha256: 6298d949bdb7cc35b5d44df0a373fe34fff0146f0e53f1e5ff8557528044f25a
+- card_id: fallen_legion
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: fallen_legion.jpg
+    sha256: 058eaabfdcb017a8b76db5fce69e32bd5c9383e7d471dd7dcb2e7c332b4e8f85
+- card_id: fields_of_darkness
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: fields_of_darkness.jpg
+    sha256: 18f8c845b19288a815c035fd54f5aad9d817326943dd7ccee2b0d6e4a9202b4e
+- card_id: fields_of_the_sun
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: fields_of_the_sun.jpg
+    sha256: cc6a9ea60b349505067187552d544aae9ef7ad8ab3868596ec16b0e7dc0ba322
+- card_id: fushiki_no_oni
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: fushiki_no_oni.jpg
+    sha256: 19da91d3704168201f0c1838a67102daaad3b6bb2f6bb17cdbb3fc72c4c2fb66
+- card_id: giuniko
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: giuniko.jpg
+    sha256: a13120bdbf53efc505f2f4c5c0fc6bec55d01df95c293dccb10cecfa5dd6a5bb
+- card_id: great_crater
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: great_crater.jpg
+    sha256: 40ee31c0544064cad5af9ef0dc759598cdc592d6e1ade480bdf3259188b65011
+- card_id: guard_the_house
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: guard_the_house.jpg
+    sha256: 64b6019958bdb82713553279117829270b5a6d3f699c3046eb047e98ef9aee36
+- card_id: hantei_xvi
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: hantei_xvi.jpg
+    sha256: 8dafe0659fb3313babf7b74068aa3ddaeaa51f24230040f77eff7f09df9faa15
+- card_id: hesitation
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: hesitation.jpg
+    sha256: 8c818706306870dba2f2b64f4a08e0f2cd107e701e660157f9449c7a48065371
+- card_id: hida_hio
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: hida_hio.jpg
+    sha256: 33e5ec99a45e8ab520b1667a1f0c65ad1ba8ba2aafab816f431e1532e9ecc521
+- card_id: hida_kuon
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: hida_kuon.jpg
+    sha256: 641bcc586cb7d8c2cbae9f3dbb2027a95b7383cce859c40c78cac9e77c16f762
+- card_id: hida_kuroda
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: hida_kuroda.jpg
+    sha256: 5ff8aecb1bdd5f1cbed5e5bb56527649b8e59fbf711b3096cb86e8a472a6798c
+- card_id: hida_sukune_experienced_2
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: hida_sukune_experienced_2.jpg
+    sha256: d8826a7f5a488e52070f6f67b1c2c4e84492ec2d9e30bd7a9f9292963636923b
+- card_id: hida_tsuneo
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: hida_tsuneo.jpg
+    sha256: 75e618d8ec25d7b3cbfe7cb30ffd7d5288954fc26338bab1dda5555a507ffe46
+- card_id: hitomis_glare
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: hitomis_glare.jpg
+    sha256: cf367ca505fff025b8c7cf36d5d419c0efcdd0e3973febcce9f8dfd98d248daa
+- card_id: honorable
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: honorable.jpg
+    sha256: b614d12b7feab9a218de51594b06ad271d4a7cc0287314622e18d7a96b4cbc38
+- card_id: ide_gokun
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: ide_gokun.jpg
+    sha256: b95720335c579d25d1543606b5072c36de2d7e4b6f6ba33de9225e88147bb2cb
+- card_id: ikoma_tsai
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: ikoma_tsai.jpg
+    sha256: 4147423f02e0a0e68f7d6dd7e5ebb51430cba133586577b42d867d3d3ebf3fe7
+- card_id: imperial_census
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: imperial_census.jpg
+    sha256: 9427fe471d2eb0391a121a17b7eaaf63648c1508cb8a33de6cf20856a2b554a4
+- card_id: infantry_charge
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: infantry_charge.jpg
+    sha256: 4a8c3cc11e3a0b7263832338a8c54cea6870165063060d6c54bf98d05e94fe80
+- card_id: inkyo
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: inkyo.jpg
+    sha256: 402bd3cc874374051c0b04f36edc499ff1698d53cc6924857cbdf8ab7c978218
+- card_id: intelligence_agent
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: intelligence_agent.jpg
+    sha256: 7cf57fa2ab92a0c63d16da4da43f61e90123eff510bc5d0765ddc957c27392fc
+- card_id: interruption
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: interruption.jpg
+    sha256: bef67e9643a55ff4efb45df0bdd438026d41328e8fc8c7f51c81fced72307316
+- card_id: iron_mempo
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: iron_mempo.jpg
+    sha256: cce2eb6a85a8131b4c68fbb86e0b90dc92a1bd8b1c3e1af157372f9e1da7cf8f
+- card_id: isawa_metigaru
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: isawa_metigaru.jpg
+    sha256: 78bf84b321faa9179d8fe81f3ff4f471e262388c6778db80b5c55d44cee64559
+- card_id: isawa_nakamuro
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: isawa_nakamuro.jpg
+    sha256: 9331b488122b474ba5106e5c1952e73fa254479152409a569f54e12f77ea96a3
+- card_id: kaiu_sensei
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: kaiu_sensei.jpg
+    sha256: 421d8b87204c739e218c185f4d60dc2297268dd1c7d5211ec67206c77aaed1b4
+- card_id: kakita_kaiten_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: kakita_kaiten_experienced.jpg
+    sha256: 38fa3b233900c314f470e0e7d538beff9b87058262a16af727b0faeee25ca63d
+- card_id: kamokos_constellation
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: kamokos_constellation.jpg
+    sha256: e56a709fa0ef0d9dece469c3480006f7a1a9874a923d1165bd53076d8658b12d
+- card_id: kitsu_dejiko
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: kitsu_dejiko.jpg
+    sha256: a64b23fc07e66f403d9d5771599b13aaf09153e974daf591d98b55bba44eced9
+- card_id: kitsune
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: kitsune.jpg
+    sha256: d009639fb0b11b22ed6cad59af2b08c6fb05cca6db7ce883ad1af7106eff0bb8
+- card_id: knowing_lands_and_giving_trees
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: knowing_lands_and_giving_trees.jpg
+    sha256: cdc32c191237dc99a052d143e5a0264f9c868f1de83266bd026e3a6543b08ad3
+- card_id: kohuri
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: kohuri.jpg
+    sha256: 7e2eb2c00103b604bb28c422a240ece08f73255e0b693a7dbd805f820005704c
+- card_id: kuni_utagu_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: kuni_utagu_experienced.jpg
+    sha256: c66012b64a0110566c977251d44cbf30d2b10bc7aa781185b3ccf1668a0a4834
+- card_id: lady_of_the_forest_sensei
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: lady_of_the_forest_sensei.jpg
+    sha256: f38f50b620b51719ed0df5e812f08df089368810559e7fc5aece02b623a958dd
+- card_id: lalesha
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: lalesha.jpg
+    sha256: a3484afdff805cd3bc0d6a0ca452954d9bbad27dd1444d9fdeb5b7d036c15d93
+- card_id: last_gift
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: last_gift.jpg
+    sha256: c28d9f149d550a93f39bf32c63addb679cf4787576be2754904a4e02342684fb
+- card_id: lay_the_blame
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: lay_the_blame.jpg
+    sha256: 1c48b39abdc86a41876535f997c0868bbade0b506c308d4939b8ea0b4f4cd5c0
+- card_id: let_the_spirit_move_you
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: let_the_spirit_move_you.jpg
+    sha256: e4833baf19a7d19c35d0dc9f89159e90536842b497de9ac728903114fa67e0b4
+- card_id: lsinyuan
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: lsinyuan.jpg
+    sha256: 8f6d9e15d50986d9956dd8e1c47c9ae51fbfaaa46d02af24f827654d4985eb29
+- card_id: luring_tactics
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: luring_tactics.jpg
+    sha256: 2c0c537c6d6916c56d022817f19dec8c8613a666b62f8bfc2f293c15ae39bf91
+- card_id: maras_farewell
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: maras_farewell.jpg
+    sha256: ffc92b1df1c7d9907ae2b23e8cda021629a22cec71651c1f35f2590a8bec18d0
+- card_id: master_smith_ascends
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: master_smith_ascends.jpg
+    sha256: 6ca782fe55d64f4bb976fffadc857e6d8d2e327e5c13b936d86109f34bff3c6f
+- card_id: mirumoto_ukira
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: mirumoto_ukira.jpg
+    sha256: ce5cca88f5fb516770ecce4d1b78f3609cc261c22e63a5f6722b66ea7bf1fd72
+- card_id: mirumoto_uso_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: mirumoto_uso_experienced.jpg
+    sha256: 95abf3e3c58e4ffe07804ba7d7fa07b42a703f69b1eefefa2cee439e4aa8702c
+- card_id: miya_dosonu
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: miya_dosonu.jpg
+    sha256: a79c509cfcf7cce522be6ebfe1c6f1197d82dd240519fcef06b141e6dfc58627
+- card_id: miya_sensei
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: miya_sensei.jpg
+    sha256: 402ec8dd02e79852ecb42c88b88fee90d3742ce56e88fac99116c28ad08513c3
+- card_id: miya_yemi
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: miya_yemi.jpg
+    sha256: cd780e7513ab586e9f574e7e14dbeeff83187b9e4bc7b19e2f076227f4a3ad30
+- card_id: mizuichi
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: mizuichi.jpg
+    sha256: 7a1ec19af0273774613bd457210ba267e442dc5c374f65212cf90180e2316e0e
+- card_id: mokoto
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: mokoto.jpg
+    sha256: 026f783fbe087a50b577d185241b627013570d16bdd1b2bf5af487b16e60badf
+- card_id: morito_experienced_2
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: morito_experienced_2.jpg
+    sha256: e1751fa6da3813a534f9420df23e7eb4f59fe460a7f12e68c1a541d1f0229f34
+- card_id: mortal_flesh
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: mortal_flesh.jpg
+    sha256: b6c88290d1ef6b4324e935af73daf0d5ce7a2be3bcd254c3cf8ae84f05142957
+- card_id: moshi_shanegon
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: moshi_shanegon.jpg
+    sha256: 15c3a702d80dbd523e27c0e557280f4880fcf06431fe41bb5ec5fb542a68c308
+- card_id: moto_hideyo
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: moto_hideyo.jpg
+    sha256: fb078d01e4141fe8b2acc03e5a8a8c4f30a0c785be61e5db572b3ac38afeecc9
+- card_id: moto_technique
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: moto_technique.jpg
+    sha256: 876e1a818058701cb1cf659ec55a39e850c56c371bfee9c50b1c3b7ba69a12a3
+- card_id: moto_vordu
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: moto_vordu.jpg
+    sha256: 4727112ea9ed7735ce800facde5e1708561205e10fd95f52fc7c09a154931e15
+- card_id: moving_the_wind
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: moving_the_wind.jpg
+    sha256: e766fe63efd4349dbf0dabe5712d3d2fc6de1069432e778fd9bf4e2fc15355f7
+- card_id: nage_yari
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: nage_yari.jpg
+    sha256: 7d0f7ee9a23f3ee6850cb98a77fde4c346fc30ceb5c8410fc0df15da14f0849e
+- card_id: new_kimono
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: new_kimono.jpg
+    sha256: 905d9fb6c3b317c128957799b068a5d104a4837c3d21998138ae0f5b47e970a7
+- card_id: nightmare
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: nightmare.jpg
+    sha256: 91fa101b0ffa0739877c15148aae80eee677621bd86876f05001e8de40e53369
+- card_id: noekam
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: noekam.jpg
+    sha256: a3a8b930fd36eed252ac1c649742f95cd78f9714aeca552e8ef7c3a3843ad70e
+- card_id: north_wall_of_otosan_uchi_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: north_wall_of_otosan_uchi_experienced.jpg
+    sha256: e31bd552a8a3e1391143c19eea352ad2d2e38d810017d13e0fce0e673cd6ae0f
+- card_id: obsidian_statues
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: obsidian_statues.jpg
+    sha256: cfc4a52fa24e3b383c0663ce3fa3a0441c424b87fa48d0815619765cfa9f0430
+- card_id: old_debts
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: old_debts.jpg
+    sha256: d192c0d34ab1b80e8510b3cd9323aa3ac07ffe1ff901b20e29b9e3b54c40344e
+- card_id: oni_spawn
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: oni_spawn.jpg
+    sha256: f64fcfe2a40c9d588847ad0505415e87c3ad2295b7dc9f3cd2a16739b572e8b5
+- card_id: otomo_dsichi
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: otomo_dsichi.jpg
+    sha256: 103fdf3d0be68276dff93eef5e1326cda9502ae91c03d96ef00786d2e752928e
+- card_id: otomo_hoketuhime
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: otomo_hoketuhime.jpg
+    sha256: 9f8aaca4fd18ca557b8802c477842525f445c4b599b9103408690250c76be16f
+- card_id: personal_sacrifice
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: personal_sacrifice.jpg
+    sha256: c6b9fbd3ec0b85617c4d9d5c93128de485cf0c041482cd84ed73b2b68acffde7
+- card_id: poorly_placed_garden
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: poorly_placed_garden.jpg
+    sha256: d35e608a66db5198df8ed61259cff2d3ee90e43fafb9c24c028bbf43dc4a7fa8
+- card_id: quiet_tombs
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: quiet_tombs.jpg
+    sha256: 77cfecf8f64ee08088b269832caf80be35fa7fb6bd5ac63ff7c7c5ce500d7eaa
+- card_id: ratling_scroungers
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: ratling_scroungers.jpg
+    sha256: d683ffd1e3134ddf9de1cff314b3e78ad09532b2fbd171e3c7e7d63a80a7b10a
+- card_id: return_for_training
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: return_for_training.jpg
+    sha256: 0628eacd7c076cadc4ac0603dc69ff8f288ad8343d52536877c6aee9782616b1
+- card_id: revealing_the_bastard
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: revealing_the_bastard.jpg
+    sha256: f6fe5a1c135e2eb7befbe611c6338ace2b529da7791a1d12d16ccc871157c035
+- card_id: revering_the_past
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: revering_the_past.jpg
+    sha256: cc187ce5f9db500399ea423c139469255485c9ce1a233c00adaa23aed8cdfeb6
+- card_id: right_to_rule
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: right_to_rule.jpg
+    sha256: cad62f4b379bda3a61a5a07fe531762f0245625f96b56e035030e49781ddae45
+- card_id: roshungi_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: roshungi_experienced.jpg
+    sha256: 1b1309e1cbf6c54c7372030816ac47d12bb0bb8349d5fe20cb75790c0851f8d5
+- card_id: ruin_and_devastation
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: ruin_and_devastation.jpg
+    sha256: bcb1400e3931ad9e190a0177cd7935aeec866f1f3f6baf8444beb3dbff9f8641
+- card_id: saigorei_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: saigorei_experienced.jpg
+    sha256: 99d968869b1e798ed65fa0d34750557a8fde2fdccb59043413ada5f4fa55a0e6
+- card_id: scaring_the_masses
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: scaring_the_masses.jpg
+    sha256: d163f9bfbaefce69fd873dd000a1612193b98120732a0539f21820acf076fa1b
+- card_id: scholarship
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: scholarship.jpg
+    sha256: db9cb4910585d6ad5435614842715b34f7917142ab1ad5a48ae85d1874158415
+- card_id: shasyahkar_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shasyahkar_experienced.jpg
+    sha256: 432e33994bdd602fc4136274176927d6282271539e72c706cb5ba841a202574b
+- card_id: shaunasea
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shaunasea.jpg
+    sha256: b2e96fe2242d69c384009676ef1cf794e8b78c07d2f35efda7c119763197ee0c
+- card_id: shiba_aikune
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shiba_aikune.jpg
+    sha256: ee9dcf87798cfb6ea8a2e2292861aeade5e6b12c7c565b3443b66302aedc9fdd
+- card_id: shiba_ningen_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shiba_ningen_experienced.jpg
+    sha256: 584bfb8d8dd25a91eafe0c1a53ae4f33e2599dd6dbacb8d1a7db792ffc84236e
+- card_id: shinjo_shono_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shinjo_shono_experienced.jpg
+    sha256: 83f8acc79745a239d50af67ab14ee23be770715961578fe4a7d00cb90940dfb9
+- card_id: shiryo_no_chi
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shiryo_no_chi.jpg
+    sha256: 3bf05adb722346c345f9de0eb2dfadcef98a7d0f40baceb2fd2cb31dbf26b0a7
+- card_id: shiryo_no_hotei
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shiryo_no_hotei.jpg
+    sha256: 14c6aab04bb16e271bab86302344282227fbff2628174b0e4b4539da5aac2006
+- card_id: shiryo_no_nyoko
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shiryo_no_nyoko.jpg
+    sha256: 70e45ee3f8f341133b9fbfae4ba73f98e6f9ce78a2fa6690fe995705fe749471
+- card_id: shiryo_no_shoju
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shiryo_no_shoju.jpg
+    sha256: b72526ded6e6ed64300e11076844a1adbfa7cf3b5f765bd187c810b4992989e7
+- card_id: shiryo_no_taisa
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shiryo_no_taisa.jpg
+    sha256: 4793cec4cc011e47a6a9093313aebe8f12663f21b16b0fc41542f54e2e9c9ff9
+- card_id: shiryo_no_ujik_hai
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shiryo_no_ujik_hai.jpg
+    sha256: abed4976ea2623f8f49688d07b096952dd37bed876a7fa61b535b3ea124c816e
+- card_id: shosuro_chian_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shosuro_chian_experienced.jpg
+    sha256: ebef56ff4f645b85093cc08094cd94984b96032f081ed0668efa0e25de40d116
+- card_id: shrine_of_the_evening_star
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shrine_of_the_evening_star.jpg
+    sha256: 1d2ceb58f180b2f084dbf08d3c68163632582f0f414b253fd0836ce47b32b13f
+- card_id: shrine_of_the_spirits
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shrine_of_the_spirits.jpg
+    sha256: 4a155c7a36993f0a42aa801b7a06101207296715531bc88da7699deb24b80c3f
+- card_id: shuriken
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: shuriken.jpg
+    sha256: d94d614426614c32fcc4ad80777dd7c9993372f011bf658f663c86e69340d7a6
+- card_id: sign_of_weakness
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: sign_of_weakness.jpg
+    sha256: a8ee2af3fdc9b0705d45d9be174e4785e329f6ca708192a6de71b61ed1d4ebfc
+- card_id: signal_corps
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: signal_corps.jpg
+    sha256: 4cbe9dfb90564e30771afceb13e791b2b91f6c381f0fdb708d59c8f63f783b0b
+- card_id: simple_huts
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: simple_huts.jpg
+    sha256: 4b288e8a72455ad7afbb555c9a34d1f59cb006367c5f38098796e62e578241b6
+- card_id: snow_crane_tattoo
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: snow_crane_tattoo.jpg
+    sha256: ac8d5cb1e85ae20ee2aa66af10d51d9201feaba7608dd9673fcffb55757b2315
+- card_id: sodegarami
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: sodegarami.jpg
+    sha256: 8f4d810273cfbddf5df87e614a4f6276a827b054f235641028fb5904a40276ad
+- card_id: soshi_angai
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: soshi_angai.jpg
+    sha256: eed553bbf5ea8bc8bfa957b2e8a16d4cfc0046f05fab2b6c1fae17e3874cfc94
+- card_id: soul_sword
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: soul_sword.jpg
+    sha256: 5cc8658a545d90628cba3c9b6adff0f517118b3c29b12c4b44c33e8f18761a8c
+- card_id: south_wall_of_otosan_uchi_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: south_wall_of_otosan_uchi_experienced.jpg
+    sha256: 43811c805244002b58585a1414828577dd1c80531694c8cae7c321c43c3fadcf
+- card_id: spirit_bells
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: spirit_bells.jpg
+    sha256: 33ea96b1ecdbcfd1c4b45735c9828631a336793a0317807e9defc5d1629eca9e
+- card_id: spirit_hounds
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: spirit_hounds.jpg
+    sha256: cc31641410ad96a283eb902d507262776c3ea37632ae1ba54eb17cd0bcb13899
+- card_id: star_filled_steel
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: star_filled_steel.jpg
+    sha256: 7c20c50b667f58263ced85fb6a2accc05689e2b414a5efebd63ea32641c6a1e5
+- card_id: sumai_match
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: sumai_match.jpg
+    sha256: ebebc06abec18ef9bbe895e777842a933911511e20c1e2f063ec4765c53926ad
+- card_id: suzume_roshi
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: suzume_roshi.jpg
+    sha256: 52457a0b414fa20911a33bde5edfd09d8e4a85b45781ee7e990661a5fbc7240d
+- card_id: suzume_sensei
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: suzume_sensei.jpg
+    sha256: b0f78fdb525ac7d6c27f4bf2a15af5805995e8d34e3a8d9c2028b19e36a52a01
+- card_id: taikon
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: taikon.jpg
+    sha256: 0da8ff3bb3ef8d9084ca1eb9db96b495c1b7949e63eca5a481baeeb64dc0fa6a
+- card_id: tamori_chosai
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: tamori_chosai.jpg
+    sha256: 8a823712668cb90344794bb0508cc923c24b4e094596a34df6ede93c482d1c6f
+- card_id: tamori_shaitung
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: tamori_shaitung.jpg
+    sha256: b41efa3bb4b6dec56ec3ff438395ce7ec0b34a691712e98f89b407df5ee1ae6a
+- card_id: temptation
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: temptation.jpg
+    sha256: 96c0eb3bea44b4e2ce3dffdb1239d0ff103588cd07c651e383e84db1124e4df0
+- card_id: tetikkir
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: tetikkir.jpg
+    sha256: d72ed595580a78cb3ff8353c7ebdf7503dcadc2b5a19e5eb20939dbcb6fc5579
+- card_id: the_noble_halls_of_the_akodo
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: the_noble_halls_of_the_akodo.jpg
+    sha256: d1dae72ffa2c83b5e37afe9a02813936b77f0b44647bee62eaf3d9b0d4333dfd
+- card_id: three_stone_river
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: three_stone_river.jpg
+    sha256: 11cb76d62fb93f9731a1d03e1d15ae544618133b69a7560131afd65c80e248c7
+- card_id: through_the_flames
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: through_the_flames.jpg
+    sha256: 9f29575ec237c1423f3a5931eae13391b7e8bbf2180ec8a352d067a9afcda32a
+- card_id: togashi_mio
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: togashi_mio.jpg
+    sha256: 32df34a6eb3d41eeec2ea3084884cfef361117552ab3a96e2843becad15f66bc
+- card_id: torii_arch
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: torii_arch.jpg
+    sha256: 4a264e67aa66b174971e068251a8b7da2dcfbc7d7909897f21424203380d8281
+- card_id: torii_tattoo
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: torii_tattoo.jpg
+    sha256: 3c16b8c046786747689ed5e4279330882ed277fdab51fc8637e5ccd4e93fa809
+- card_id: towers_of_the_asako
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: towers_of_the_asako.jpg
+    sha256: 353020cd74b5ec5c59695444a88d3af4da072acd59c3dc0176ed2459861c9af6
+- card_id: treaty
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: treaty.jpg
+    sha256: c8e14f59bf4917a68c115578af59e2c860b57c6c8061f9eefe5afd288974f278
+- card_id: tsuko_sensei
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: tsuko_sensei.jpg
+    sha256: cdeb47e2789b208f883302d09ead1ce265c6e013df4c3a845bb8bedf7dbd9a77
+- card_id: tsukos_heart
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: tsukos_heart.jpg
+    sha256: 8c8bdb18b43db23328af55f66171562b1f0e4c8d3c90c04dd313d51a75f97f7d
+- card_id: tsuruchi_okame
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: tsuruchi_okame.jpg
+    sha256: 6e1e0301f29e3da465b366139304fa378e5635488f1a43d6376c5c5348734e66
+- card_id: turn_of_fate
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: turn_of_fate.jpg
+    sha256: 6e3dd127ac5f41c9e430f6538a9a1782ec05b4b758e2a4f5082665e0cc4153c0
+- card_id: uidori
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: uidori.jpg
+    sha256: dd1f7344d5263bb4cc863489d8ccf44d3e509df33fa6ca024d750c3181f0a6ba
+- card_id: undead_legion
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: undead_legion.jpg
+    sha256: 97e099ea98af85668729135f4a94abedf978921a3f31473e149172f2d36c6791
+- card_id: uona_sensei
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: uona_sensei.jpg
+    sha256: cf773d83a8048b14e8e7ef6ddd61cbc13a3ae51c1ece472c06e75977c31faf2e
+- card_id: usagi_gohei
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: usagi_gohei.jpg
+    sha256: 9829ad71f9dd6a63c530f971634ea40e3982708fab05599d4f373db50ed1410a
+- card_id: utaku_yu_pan
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: utaku_yu_pan.jpg
+    sha256: 1ae7f77af8faf5e1a7e18eff465979019d49ebba386a0e6dd27985c3f0d7544d
+- card_id: wall_of_bones
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: wall_of_bones.jpg
+    sha256: 4bbb3cce0014a54939e84320c8d48c211fd443e1c92247783f37e34181648935
+- card_id: war_paints
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: war_paints.jpg
+    sha256: b4e12c52b240776c35072f2b1fdc295da211b530b06e93cdbc9b028876ed4e16
+- card_id: warriors_of_the_great_climb
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: warriors_of_the_great_climb.jpg
+    sha256: c0b89e2c540a26ee2557d9fc4e7c0834c1e543a9f5c1b9f0e80cd8bd9c734626
+- card_id: wasp_sensei
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: wasp_sensei.jpg
+    sha256: 58d8a6fca9eefaac50785382047a371b08d0550ed1e334c180a0240d10192f03
+- card_id: weapons_cache
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: weapons_cache.jpg
+    sha256: 41b41efefd68b0b64578994ae53f5b6d6b2cb1c151185052a17deecf164db965
+- card_id: west_wall_of_otosan_uchi_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: west_wall_of_otosan_uchi_experienced.jpg
+    sha256: 9b4b02e26f2fce186ee41cd5bda33f117f7f400a2d5c9a1f1910576cf8d0232d
+- card_id: where_tsanuri_fell
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: where_tsanuri_fell.jpg
+    sha256: 2d1d3c81fbc8aed699038d5dd8eb9925ec82e5e91f63b7f0bad7fe5f75b80ac6
+- card_id: witch_hunt
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: witch_hunt.jpg
+    sha256: 44efe1d73b0237c07fd8f58d8f543f3ff186027ebcab5bf43b2668625a6686c9
+- card_id: witch_hunters_accusation
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: witch_hunters_accusation.jpg
+    sha256: e64c3e5e4da0f8853f6862e2b750cd6b2e51c738fd2aa97e88bbf48165d482de
+- card_id: wutho
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: wutho.jpg
+    sha256: eb42813da8aec9f3f7210f4cd45a7b9d4785bcccf10930d5f28edb9b433ed6f3
+- card_id: yakamos_smile
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: yakamos_smile.jpg
+    sha256: 76370a911ef233282f009a0b47c03ee5421308d9f12d4586c348fdab335ff883
+- card_id: yamaso_no_oni
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: yamaso_no_oni.jpg
+    sha256: 7d117b9220512d4445666a8da96c3b18ba2148c30c5ee66fc6a14c02bc38ae61
+- card_id: yeiseo
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: yeiseo.jpg
+    sha256: 39c0fdb6f87cb6a90c30bbd93c97662365ab67962aceb0ae5dfde3f75a5d0852
+- card_id: yoeetrr
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: yoeetrr.jpg
+    sha256: c896f13976cdbd848752946e536ab058e14fdb17114fb7943c255a1e5df0e7d4
+- card_id: yokai_no_mizushai
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: yokai_no_mizushai.jpg
+    sha256: fa9064fdbb7313c9afe25b8b734cf6d82785dfa54fd4c9f38a3c8b3e5f98f429
+- card_id: yoritomo_aramasu_experienced_3
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: yoritomo_aramasu_experienced_3.jpg
+    sha256: 086a1c1d6f0cd036390db02056d8cccba6e1d4fb9bcc8a448f0d9319946a733d
+- card_id: yoritomo_kitao
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: yoritomo_kitao.jpg
+    sha256: 7cb18d4a86bf3632b65a6366fbec6617570d64dc587009b4ab14f4c70c1a007f
+- card_id: yoritomo_yukue_experienced
+  printing_id: spirit_wars
+  files:
+  - role: front
+    file: yoritomo_yukue_experienced.jpg
+    sha256: 67353146e678522ac985a7a7a975be355ecd279b2f375ea4470e98e5c8a28600

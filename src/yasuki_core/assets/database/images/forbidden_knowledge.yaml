@@ -1,0 +1,890 @@
+set: Forbidden Knowledge
+images:
+- card_id: a_black_scroll_is_opened
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: a_black_scroll_is_opened.jpg
+    sha256: baa34f20f51dc1fd9b8a982c8c06434bc5c962b25659bbaba8d919ffcd831da6
+- card_id: a_terrible_oath
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: a_terrible_oath.jpg
+    sha256: c12465a44e078c11741583e5fc5b8ab0ac44f24b0fc3ac94502041d359a38df0
+- card_id: akiyoshi
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: akiyoshi.jpg
+    sha256: d58cd62a6be52a31fae1b05da0205d4ec88f75ccafcffaeeb489732506d82adb
+- card_id: akodo_godaigo
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: akodo_godaigo.jpg
+    sha256: a8d6de45d266ba756c43a3bfae9b7559cad54eca28c96e0cdf05e0c386811491
+- card_id: an_untold_cost
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: an_untold_cost.jpg
+    sha256: b060c02f97a17e13805777e046a314b7728172f2d5aba7e3ba4d999b6af6cf97
+- card_id: armor_of_earth
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: armor_of_earth.jpg
+    sha256: 9cc0c41313e85b697bd609f9527b2fff393206dbca4bf6f8395ec03965968b07
+- card_id: artificer
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: artificer.jpg
+    sha256: 50e65ce69723ecc68aaf4f9ef807f34196d2133c2de8e51a600b3f5379805625
+- card_id: asako_oyo
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: asako_oyo.jpg
+    sha256: 54bf0552242e93ab335336dbe21e8bce1bc404568790b3657cc3201f39b14648
+- card_id: bandit_hideout
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: bandit_hideout.jpg
+    sha256: c5dd41c454a4afb07652a84ad188f5662442380c028f32abcd359964356bdf75
+- card_id: bayushi_baku
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: bayushi_baku.jpg
+    sha256: 58f98dc9b0a22616e06aa5ce4d767c075d67a714f27ed31deb49b8529ad23182
+- card_id: bayushi_shoju
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: bayushi_shoju.jpg
+    sha256: 13cc33ed2ae404ccef5ddd317cae51fd147d09f595e12b67bdac5edd84699a5e
+- card_id: beiden_pass
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: beiden_pass.jpg
+    sha256: 10f380fde8405031697c882aa6dce960852a6a7d0098c8b0b8f886f1fb5b0c9b
+- card_id: black_market
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: black_market.jpg
+    sha256: d1a4f4f7717f1d029f959c443d11342dcf1dd83ba14a0c017c958297fbcb3166
+- card_id: black_wind_from_the_soul
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: black_wind_from_the_soul.jpg
+    sha256: b5fbc94e6a907032b6c3a436db521c832e22b62344485fad79b1e7758af9e2e0
+- card_id: bog_hag
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: bog_hag.jpg
+    sha256: 6b22f59013ade0a6be01039fc2b764d4f0e752803ff1985f530f43e6f9ec3f5d
+- card_id: brash_hero
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: brash_hero.jpg
+    sha256: e6dd982c4c5733668009bd6a0fd05d1c97cbdd9ea3e47c0387ff99dcffe9fc7a
+- card_id: bribery
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: bribery.jpg
+    sha256: 912a68562d07f74ca82544360ab614091609929258e2ccbe5444a802803e1368
+- card_id: bushi_dojo
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: bushi_dojo.jpg
+    sha256: 8375fb5c7b1fa92a8d65c5f4ea2211ef3c6482be000bc3f3499dcd175a8dfbab
+- card_id: calling_the_elements
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: calling_the_elements.jpg
+    sha256: 623a2eb14a54196734ceac64d7583ac13ddfee550d8117c0de483588b59fbc3e
+- card_id: chasing_the_wind
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: chasing_the_wind.jpg
+    sha256: fc1de0d654525fb332869a43ffb7e5e555bc5d4dafbe13f7e81fa948156d75dd
+- card_id: courage_of_the_seven_thunders
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: courage_of_the_seven_thunders.jpg
+    sha256: 3e082a5922caae4e030d9f2dcf0fe0e9ff6a67da19ed0c4516b1f07861f337f3
+- card_id: crossroads
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: crossroads.jpg
+    sha256: c97266eee01573ccf0ebff2e8d09c5b817a56c08d9575f8426fb1e6283249b98
+- card_id: crushing_attack
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: crushing_attack.jpg
+    sha256: 1db536ca16cf9a82ba99f7357d0ad85d1758d1936c1b9905a3c183432828ff23
+- card_id: dairya_experienced
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: dairya_experienced.jpg
+    sha256: c106d7f480e26917aa10cc65e74566e9d404e3a910843d448bd9b61c1f5e07df
+- card_id: dark_daughter_of_fu_leng
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: dark_daughter_of_fu_leng.jpg
+    sha256: 8d650fd7f19772c35e9cfcbd48d7e15f416a2886d46dc378fe28aaf432f02785
+- card_id: dealing_with_shadows
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: dealing_with_shadows.jpg
+    sha256: 9342b6d700c0b3535a7f1fb027d5c1eed5ef5453eca44c310fb1fb1f29a71d24
+- card_id: delicate_calculations
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: delicate_calculations.jpg
+    sha256: 9db4c41b3cf34dfe9703e1cced480c089bbc601fbc476392159f6a4fcef06651
+- card_id: disharmony
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: disharmony.jpg
+    sha256: 48c6d7f58e62c6506850d9c1c06feaee9a2517935cb915c6f617a9fca19792df
+- card_id: diversionary_tactics
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: diversionary_tactics.jpg
+    sha256: 6d0f3b0985c560c5d6cb02d525cf04cfe83c767575062b7d0be5a2c83c3eeece
+- card_id: doji_kuwanan
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: doji_kuwanan.jpg
+    sha256: 5e5a73d27f2fa6feac9f155d3c5f9bc91350d03a385affc76235718f3217dfa2
+- card_id: dragon_sword_is_broken
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: dragon_sword_is_broken.jpg
+    sha256: a4e15161f1b0a5ed19faab3781e249dd0df2dafb8f84833b7857704050e9e63f
+- card_id: dripping_poison
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: dripping_poison.jpg
+    sha256: e3e47680aa072f9db05aa9daf76352d8f0cc07608f945050d6aa735ee6b42a05
+- card_id: enlightenment
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: enlightenment.jpg
+    sha256: b4069fe555da1700dc0e95657b425324e148a2b7598498c00e12a0cbe3bfdf09
+- card_id: family_loyalty
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: family_loyalty.jpg
+    sha256: 9704f046afd51149ad1404c7dd3202d31cc94005e9ffcd0019c1100a7efadc19
+- card_id: farmlands
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: farmlands.jpg
+    sha256: c9cdca1f05428c35840e66461f2bfa8a78103ccab16f242266923b2f673722f3
+- card_id: fearful_populace
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: fearful_populace.jpg
+    sha256: c17748b8a8883bb1ab542e7ecebe79f354f99c6eb7202bb9c4545243e7a9ff29
+- card_id: flatlands
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: flatlands.jpg
+    sha256: c413f38d33220f74b229f74b080d7311487d1dafb55633989e14890fb2939020
+- card_id: fu_lengs_steeds
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: fu_lengs_steeds.jpg
+    sha256: 25b03ac4b9bdf8c7bbc6381c61ae62d804d872ffe53d0c96d75725bc2c0569e5
+- card_id: fusaki
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: fusaki.jpg
+    sha256: 778b96be7ce08d9c09bcea4ab2e1a9480b9a57442956508bfaffcfcf7bcc3f05
+- card_id: garrote
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: garrote.jpg
+    sha256: babfb2b24eaa4990d42e23bfc5237bf9a1d481467858c16d08781fab1c1b71d9
+- card_id: goblin_berserkers
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: goblin_berserkers.jpg
+    sha256: 7c6e155defb325c4f705bbbf4ba4054404fec6b610d9ad3d523807bc86dc8f85
+- card_id: gunsen_of_water
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: gunsen_of_water.jpg
+    sha256: 1cf55d6d30544fc20f70533f3ffd5b22df84b8dba994438da0d399eaea8d0a7a
+- card_id: hazardous_ground
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: hazardous_ground.jpg
+    sha256: 59a290a185c107ca4d6e62d33e443608bd69d801c243bf7f1c8e95762b4c5b8f
+- card_id: higher_ground
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: higher_ground.jpg
+    sha256: 9dc7956aee06ce8c2b464dad8c9929e1a9da10d98cc90a3a073d3e5f259f5d46
+- card_id: ide_daikoku
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: ide_daikoku.jpg
+    sha256: 5a26ba0a990608517063523b5c948530559587831478f9b3a213795185a6510c
+- card_id: ikoma_tsanuri
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: ikoma_tsanuri.jpg
+    sha256: 2759bf9377aaf244629377427c2fd1c4e5d8ba276dcdde6ce23ffb1a0b2f52ac
+- card_id: ikoma_ujiaki_experienced
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: ikoma_ujiaki_experienced.jpg
+    sha256: 0b4520792c5fa5646e9b10dfc44d4b0fd7898b56aa3b9e2d569cbf0d7bebdf3a
+- card_id: imperial_funeral
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: imperial_funeral.jpg
+    sha256: c7b5f60f6c0d7b81f6e3ebb0051a8be0a5fe7d3d4b24e6989538664b392a9cf8
+- card_id: isawa_natsune
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: isawa_natsune.jpg
+    sha256: 50239444617ff7959bc78ac07a798f90aa25e3467ec1a15fdf2c3c6fd78b20b4
+- card_id: isawa_uona_experienced
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: isawa_uona_experienced.jpg
+    sha256: 3672c1ee02725657175c32cbd72e64897eb809e096f2d9d495b8a97562de8e2c
+- card_id: jade_strike
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: jade_strike.jpg
+    sha256: a8420831c17bdc20334a6bd7601e42e8a292771b6a6ccbc1764f77583d4d37a1
+- card_id: kaiu_kenru
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: kaiu_kenru.jpg
+    sha256: c1c184a33ffdf96b2479a1255a791f4ae5758cb612112e02f6377be93b315bbc
+- card_id: kaiu_suman
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: kaiu_suman.jpg
+    sha256: c166d169a8938ba0a6457c98d3da7f9a2c6adc21c055a0d5560a2c70ad44cfa5
+- card_id: kakita_foruku
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: kakita_foruku.jpg
+    sha256: 6d64115e1ea7361ca6770269937a305c2e7c9f21f5ed808067773cd420c9001b
+- card_id: kakita_toshimoko_experienced
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: kakita_toshimoko_experienced.jpg
+    sha256: f34b4d84a03c9b95f633b08343436e8b6a83ac62aff9a7d563b76e76f0049815
+- card_id: katana_of_fire
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: katana_of_fire.jpg
+    sha256: 248f9ad19498121ee91b5b4cbd31d36cfa4fca373bd40f3b4d1b57517812d9b2
+- card_id: kemmei
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: kemmei.jpg
+    sha256: edd0ad558bb7253e7efd5c1dec050664ae86926caa347873686454ebfc4bb1dd
+- card_id: kolat_saboteur
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: kolat_saboteur.jpg
+    sha256: 89c3a6bc9ce6cbbab203c04ac33ced0a69d7f7e8cb6982eceba343373ddff69c
+- card_id: kolat_whisperer
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: kolat_whisperer.jpg
+    sha256: b4c1e93d9d1514fcfe720253ffe35396415aeb44dcc7cec16577eec396de4443
+- card_id: kotaro
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: kotaro.jpg
+    sha256: 69d8b0f7175eb6cfa8c9e5485f08a22c49e2d93248f5134db0c6ff5c2343f79b
+- card_id: kuni_wastelands
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: kuni_wastelands.jpg
+    sha256: 6014296ddbd657d31c391a899f5b12b6276266760ebdda60fc883cab623bfef6
+- card_id: kuni_yori_experienced
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: kuni_yori_experienced.jpg
+    sha256: 39451da2c4b848181aec9cff7350f83fea707f665efebcf3fa7d9036f238a62c
+- card_id: lesser_oni
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: lesser_oni.jpg
+    sha256: 4fae874f7a0d374ed588a8692287a5912be3311e1e0853e57cec3339f7572360
+- card_id: mantis_budoka
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: mantis_budoka.jpg
+    sha256: 5ef04cecd47c3787cc0e1735161de4bc4a7c120801910bdc3d316cefa467ab2b
+- card_id: mantis_samurai
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: mantis_samurai.jpg
+    sha256: ae61bd7f213d7710e64c4ddff47179c41f2d4fe29608922cd9f4fa562d2d4808
+- card_id: matsu_toshiro
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: matsu_toshiro.jpg
+    sha256: 209559a4975c3b010bf9f13fa07b3a0d6c205c5ca9fbdded1fa2841370c71681
+- card_id: mempo_of_the_void
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: mempo_of_the_void.jpg
+    sha256: 95f152a20c96a5ee19ea6d02765066cd517995ae3df80f53ae17efada1a03f35
+- card_id: merchant_caravan
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: merchant_caravan.jpg
+    sha256: 35768c5fe94222e749feb743530467db0e6900f9849f8b655dd3d69cc9f424ca
+- card_id: mirumoto_daini_experienced
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: mirumoto_daini_experienced.jpg
+    sha256: fe2fd4d5966433e6140e93ccb0b123ba1c8c7bdc3dbd14987b917cfee251f2fe
+- card_id: mountain_pass
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: mountain_pass.jpg
+    sha256: ebed31d9c11fbef584281fa00f222a53e79532d6b5d14d37ac044254c145aede
+- card_id: moving_the_shadow
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: moving_the_shadow.jpg
+    sha256: fbdef8d3d54e527f633067f850b0513c526b1ea9b3cd0ed3ec8bce035d994d35
+- card_id: nemesis
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: nemesis.jpg
+    sha256: 79cbeef57ed7dd3cc7e77dbde78c4e80aaab62fd5401f71ab093dcac47fc95c8
+- card_id: ningyo
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: ningyo.jpg
+    sha256: 62dfc51bae32fa22878756d48859f2435e5ca78602996839a00d112eff3ce82f
+- card_id: ninja_kidnapper
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: ninja_kidnapper.jpg
+    sha256: 44171aa3c7ffe35a4a127e943003c8014b5003382a39ef611b6974e9cfd2574c
+- card_id: no_dachi
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: no_dachi.jpg
+    sha256: a7aa94d02031bb87dd30794e685b036ce74a06ba8fd26a86a363816bd99a47e1
+- card_id: not_this_day
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: not_this_day.jpg
+    sha256: 5f259d6b697c8c0f5676ea9613f7bcdf655e2e609033bb6c88f6ac716652014f
+- card_id: ogre_warriors
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: ogre_warriors.jpg
+    sha256: 1ea48034ce82c922c3a69cc6815feb89e3d002a6451c14ec75eb9952580ebfbd
+- card_id: oni_no_akeru
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: oni_no_akeru.jpg
+    sha256: aee265c970badf35f8ecbfe92064af4852070caa544471276c1b01d82b066dff
+- card_id: oni_no_jimen
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: oni_no_jimen.jpg
+    sha256: 38273acb655a82f10a170a4e06640343a8c0fbca90343f0f0de655e32aac2b51
+- card_id: oni_no_kaze
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: oni_no_kaze.jpg
+    sha256: 2c29f0b866961be8e765a8d2295a1c6cbe6f4dc58040be209eac1daefaca7554
+- card_id: oni_no_mizu
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: oni_no_mizu.jpg
+    sha256: f174570dffe0beb696bdad53f972adbb9954c7479ff1022f4e585e5305485b4a
+- card_id: oni_no_seiryoku
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: oni_no_seiryoku.jpg
+    sha256: 91f8be50545c48e3b3f7868abeb6df918d9c769209e8b921227ac892381ec679
+- card_id: oni_no_taki_bi
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: oni_no_taki_bi.jpg
+    sha256: 522a34a98bfca59463eb4e15437c58b325bf55afa343f360285fb3d6c3aa5a0a
+- card_id: passing_on_the_soul
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: passing_on_the_soul.jpg
+    sha256: 28dd503ad167c96d2e49bbfc522bb30514b06f82b61a82d317ba3003fc09b079
+- card_id: pearl_of_wisdom
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: pearl_of_wisdom.jpg
+    sha256: 117ffd1ba5f0a0aaade8463ee901d8c84608a365c223b0f0b812af841384109b
+- card_id: personal_standard
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: personal_standard.jpg
+    sha256: 6dcee63dae561ab1b403fc941cf9f3cd88079824a9f1945303633d77c0c3b414
+- card_id: pikemen
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: pikemen.jpg
+    sha256: 524bc12faf1963075bb320477c4b5065ff5c3926cca85895e49142d93b7b95ce
+- card_id: purity_of_the_seven_thunders
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: purity_of_the_seven_thunders.jpg
+    sha256: ec10ad6d1230073bfebc00a91565e540635c29239a32f9e9f6c37478f97545f0
+- card_id: qarash
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: qarash.jpg
+    sha256: dd3c119d597d0d65eab9709f35f04ec8834df061b717f99f8a4080f82e9bddf5
+- card_id: ramash
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: ramash.jpg
+    sha256: 8411afaead396bf050ca5590afc8cd75cfb6884a6b43a0a7b00310be9ebcd50c
+- card_id: reserve_movement
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: reserve_movement.jpg
+    sha256: 8e1c6cfd3a27b8283bc394c3638daa82b31f12e6514afb34d42f6a6ae559abad
+- card_id: return_of_the_fallen_lord
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: return_of_the_fallen_lord.jpg
+    sha256: 15a12844aca4deab5d350aa5cfd9ddd439595f4d1b365811791b3b708fece063
+- card_id: reversal_of_fortunes
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: reversal_of_fortunes.jpg
+    sha256: dd85a54af05383443e5e06b505936e2f1736d720f6dcc657851b4c35b3a2c1a8
+- card_id: ride_until_dawn
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: ride_until_dawn.jpg
+    sha256: 1f846b3c16b7eb3c425a305f784dc33ffe5b7369850cea74a2884ff2c2a30166
+- card_id: scorn
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: scorn.jpg
+    sha256: 0e620258bef013aafd807e46ed21f7ef2e0d839c5b97bd0c4cd2a712f056d895
+- card_id: seize_the_day
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: seize_the_day.jpg
+    sha256: 29bb87b2df232b2b345be141453a4883ed3af9825c5565e8afe27bef7f18b619
+- card_id: shahadet_experienced
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: shahadet_experienced.jpg
+    sha256: 2dc96e47dc9b5e8af12805541d87a0de0fcd565b13bb4c1eadb8c86601aab557
+- card_id: sharing_the_strength_of_many
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: sharing_the_strength_of_many.jpg
+    sha256: c802d62af3e12c2e7f2e93fa7d83d4c3e8056e8503fe66567a98f6df9efed806
+- card_id: shield_wall
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: shield_wall.jpg
+    sha256: 8e9f1b81f66772624eaf831c6c84597a6b54b5b71f29ec02fd51a7ae45d26aad
+- card_id: shinjo_mosaku
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: shinjo_mosaku.jpg
+    sha256: 6c2778f96fef07f223fcadc56928aaa972419e454f4f54e4e692ee7a39ce5e95
+- card_id: shinjo_sadato
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: shinjo_sadato.jpg
+    sha256: c32a3f81732e2b441dff8a630a1069bdbe82079ef8ffc61663d40d8215dd88cd
+- card_id: spoils_of_war
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: spoils_of_war.jpg
+    sha256: 12a4ea31a29782db3503c451077eb7bc1d4730a30325705c73d326b38ff28bc4
+- card_id: strength_of_the_earth
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: strength_of_the_earth.jpg
+    sha256: acee6f0a7a07e7cb91249d6f83fb0bddb1c944ece6afe0e7e17a77c80770bd2b
+- card_id: strike_at_the_roots
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: strike_at_the_roots.jpg
+    sha256: d08228ab3d3cf18f1f737201c40d040b0e9a08f171c6f36077d53348e8758517
+- card_id: strike_with_no_thought
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: strike_with_no_thought.jpg
+    sha256: 639232f1fa33587a3e2a043ce8fc465c31acde622a6353f19cbc8aeafef120bf
+- card_id: swamplands
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: swamplands.jpg
+    sha256: ef56f3ebae5e05a7c0ff3b066440030251ba719795645abc54b218d9adfcc443
+- card_id: the_ancestral_sword_of_hantei
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_ancestral_sword_of_hantei.jpg
+    sha256: 4122909402f3f50b1358837f7b72906fe167d761f33f54bcbe7c0843d9e859da
+- card_id: the_arrow_knows_the_way
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_arrow_knows_the_way.jpg
+    sha256: c477aa7bb236a5b15ae84f110ec640ddea34baa413f7609e0c04588e27d1bf57
+- card_id: the_battlements_of_matsu_castle
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_battlements_of_matsu_castle.jpg
+    sha256: a1ffe8b41ccf202b086640344dd8f0763cabcbc2bc4a336c03083258e01f7374
+- card_id: the_cowards_way
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_cowards_way.jpg
+    sha256: 25aa0bdd2934e03b7905a5ebaa097dc636321ffe3b354f7b55c3777901523dea
+- card_id: the_doji_plains
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_doji_plains.jpg
+    sha256: 0a855039c10f65da6c16a8e1dbf10ff0e9b80c2eef686b94ed9296c5fa80365d
+- card_id: the_elements_fury
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_elements_fury.jpg
+    sha256: 3d9cada6f4c0ce931b9eb08bfa77cdb7ccbedc62c92e4712b5b5cc32f3a36798
+- card_id: the_emerald_armor
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_emerald_armor.jpg
+    sha256: 3576e69572c06274ef983ab65dda6402d17659ea938e3d2e0566f8df440cd945
+- card_id: the_eye_of_shorihotsu
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_eye_of_shorihotsu.jpg
+    sha256: a1c058980d74dad60f2966977ff206b6c301220e7ed2b7544ea2d6c635c205a2
+- card_id: the_final_breath
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_final_breath.jpg
+    sha256: 6f4dfc5db84be7a54e557c161ed3e09902f60d0e09c701f57d9622d5bb6f468a
+- card_id: the_fires_that_cleanse
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_fires_that_cleanse.jpg
+    sha256: d4fb9f783b8abb8e59b86113596cf44a8c123459d585ac401c66e5580df9ca05
+- card_id: the_first_shout
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_first_shout.jpg
+    sha256: 3772714fa6c34f57c1650b97aa65b7256e90ff2e6b1ec5ca229e7d83ce8b51c6
+- card_id: the_gates_of_hida_castle
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_gates_of_hida_castle.jpg
+    sha256: f1f31c783e958a318e1ba70aeb0df56149745da6e83e1157fa7d71f4b98d257a
+- card_id: the_imperial_standard
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_imperial_standard.jpg
+    sha256: abdf26bd622baa1f22dd79b61f4066f18ed6b0635301f7bf6d42717da42f41df
+- card_id: the_iron_citadel
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_iron_citadel.jpg
+    sha256: e59b4d3ef19b7bb5cc6827f98b241af5efc7dd061d40830fe4f7f280e42c33e7
+- card_id: the_isawa_woodlands
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_isawa_woodlands.jpg
+    sha256: 4b8756bd6dfa085d929e9aaf84c627d58201cb7ff1ad4a2c009ae463f76e791b
+- card_id: the_kaiu_walls
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_kaiu_walls.jpg
+    sha256: 5bee0086532ad1cc6128c986439f0ad953f02cc6edb0951573cec9f4608e6007
+- card_id: the_kakita_palisades
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_kakita_palisades.jpg
+    sha256: cfa93be7605bcf853583046e254e4047cf0c2d9413ed85f7ea81d9f5e07ebeb7
+- card_id: the_path_to_inner_peace
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_path_to_inner_peace.jpg
+    sha256: 8d36a510afdb4c957b204e343e67e3a60210dbc8cbbc04e4c1bf565159945301
+- card_id: the_peoples_expense
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_peoples_expense.jpg
+    sha256: 14c28982431f2e05eb74a8e3dc195aec83cf9bd69186497749e4f77b82993f37
+- card_id: the_price_of_war
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_price_of_war.jpg
+    sha256: 4e73ca53d608b3054bc74526c3ae09f0045f181b46d9e0e61d60b25c7dac4a2c
+- card_id: the_ruined_keep_of_fu_leng
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_ruined_keep_of_fu_leng.jpg
+    sha256: f38b2a93fd22d5c3532900489d6b954f110d5d9322a4a16505f169efe607a5d0
+- card_id: the_second_shout
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_second_shout.jpg
+    sha256: e075505e4103b74c2c075a29f4f8767d29de60155e13a454ecc133333f744a4f
+- card_id: the_shinjo_parade_grounds
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_shinjo_parade_grounds.jpg
+    sha256: bcaa5d50140cfcafed4ab9937e9ef9e8bea82717ea2ef3a2b1554bec477679ba
+- card_id: the_third_shout
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_third_shout.jpg
+    sha256: 0e0296d8fceff230df05e1c270842fd989fd4f42a80d3bdef235d3a0dfee66a2
+- card_id: the_togashi_bastion
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_togashi_bastion.jpg
+    sha256: 2e339cfa1b51cc0804ccc059233550b1f04bbf0e8273a3a4a29bd5749d8af90c
+- card_id: the_towers_of_isawa_castle
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_towers_of_isawa_castle.jpg
+    sha256: b0e34cd4b0b502def9a1174fee0ecc87368e0f057374954846535f418087441a
+- card_id: the_walking_horror_of_fu_leng
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_walking_horror_of_fu_leng.jpg
+    sha256: f9c84a47802fab6f99e6e6e6f154b66cc9c31ae010fa48c8a90dd176ff7f6dae
+- card_id: the_wasting_disease
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: the_wasting_disease.jpg
+    sha256: 87ad176e3aebab1d5d199abe2e4b77f4d9eb4d7c6fa3b2dcfb525e35b6ac780b
+- card_id: those_who_stand_alone
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: those_who_stand_alone.jpg
+    sha256: 59c4294c67a92937d6dd1b380d78c40101ee7d8437a51c15c8f50f07c3303c56
+- card_id: tides_of_battle
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: tides_of_battle.jpg
+    sha256: ce57578bf7b1e88b904e75006a3fac4df4c85a0e0f305c0b476e0e79ac8fc752
+- card_id: togashi_mikoto
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: togashi_mikoto.jpg
+    sha256: 4cf597eae9b11881729b047828e5fd2d192a1cb34d60b0b0b1e47c9ab73c605b
+- card_id: togashi_rinjin
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: togashi_rinjin.jpg
+    sha256: 4cf6aaa35fb2c8acfa65e57ff787890bc96c2784f2feb0db7eab95877d75deee
+- card_id: tsuruchi
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: tsuruchi.jpg
+    sha256: e94c9ac73944a840defad41f2b3c4feafd56f2ad7889e88e66412c96819b9a58
+- card_id: unfettered_attack
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: unfettered_attack.jpg
+    sha256: 4f633d4170a9c987103f060c47e7535d5dc5c2579d9aff5d4a8463c3f806dbec
+- card_id: virtues_of_command
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: virtues_of_command.jpg
+    sha256: 189591a0d51eb63259980d4aa7bcb296cb48b79718384d1e4b74d4bc37c3ca89
+- card_id: wheel_of_fate
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: wheel_of_fate.jpg
+    sha256: 7bc59cca2bee81c2787baa1dc887598072c8a7fc3658bf1a52758fb51d62e0ec
+- card_id: whispering_winds
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: whispering_winds.jpg
+    sha256: 086346f44dc8b0f8876c95fa7b969803410cd21cd1a5b807a8a503efcd4f44e2
+- card_id: wind_borne_slumbers
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: wind_borne_slumbers.jpg
+    sha256: 23dd242a3da4eb8807118fb98c10ebe39f8d2f105624862d5c113effc6a3fe89
+- card_id: yari_of_air
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: yari_of_air.jpg
+    sha256: b0bf20d4bb347ef938d65c0413110d0bb09be0a2856d0f0fa2e7e2cd8a4adfa8
+- card_id: yogo_asami
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: yogo_asami.jpg
+    sha256: fc045177ef34b2b69a4c871ebe38efd1be3012b433975fdfb8ab02150530f3cc
+- card_id: yogo_junzo_experienced
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: yogo_junzo_experienced.jpg
+    sha256: fe9dcc433933b737c358f27ad2f46bbf15c5a59ed2949cab9337d3cfa09f1e48
+- card_id: your_life_is_mine
+  printing_id: forbidden_knowledge
+  files:
+  - role: front
+    file: your_life_is_mine.jpg
+    sha256: 1418bfb8ef080ea48a5f3f201e8cf9ac430b14329ae1b6f0dd743f49739ae8a2

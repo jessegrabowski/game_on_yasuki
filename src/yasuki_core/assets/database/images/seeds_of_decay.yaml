@@ -1,0 +1,986 @@
+set: Seeds of Decay
+images:
+- card_id: advanced_intelligence
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: advanced_intelligence.jpg
+    sha256: 2b43a4588fb0e983e45b1808db8d701b6b8b799d84898a3dd21aff30251f2e3d
+- card_id: aka_beko
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: aka_beko.jpg
+    sha256: 3d8bc3f6ced31036171f1b386a714e7ffd1ea4d6642a454c1598f448fa249370
+- card_id: akodo_hotaka
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: akodo_hotaka.jpg
+    sha256: 8bdb867ab6e2abd1d0b8547a97cd302439d5469d32a6528d9b358794e42d3b32
+- card_id: akodo_michitsu
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: akodo_michitsu.jpg
+    sha256: 8e6cafa8a56c47ab7eba4881e250bccb62ca72ead2c755fafe90fa94b059cadc
+- card_id: akumas_power
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: akumas_power.jpg
+    sha256: 709d038f911109ec6e0711bec9b2b0936f151fa8c72a02d8f68542395adbf1a1
+- card_id: an_insult_answered
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: an_insult_answered.jpg
+    sha256: 062d18d44fb881146d3c9eb56f5eea24f0c3dc77679abc5afb36b5c02487e263
+- card_id: aramasus_legacy
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: aramasus_legacy.jpg
+    sha256: 290875e28d62e7f3711136649ce4e58322ff3de006d0b48f36c095e8a25e97cd
+- card_id: asahina_akikusa
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: asahina_akikusa.jpg
+    sha256: 98c0c5c6219527f00f500abc3eb58ac9311d713c8cadd62fb8156e242abd9435
+- card_id: asahina_tsugio
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: asahina_tsugio.jpg
+    sha256: c44d2882eea88d2beed01d4e1f59de74eac2c4ece24f543cfae233dde5b0ea07
+- card_id: asako_chukage_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: asako_chukage_experienced.jpg
+    sha256: 35b8a07ca22fae4003f4c6c4743614dc6f0e9618f56e73648d06bfe1a612ac6c
+- card_id: asako_jukko
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: asako_jukko.jpg
+    sha256: 8d3b69fd6e2743b1e58fccaa32781301b152636842ddaeb5fb6577cbbdaf135a
+- card_id: asako_kijo
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: asako_kijo.jpg
+    sha256: 025623110e1f7236162902dba94482391c2149eb8ca0d2641257f1f4cfef45b3
+- card_id: asako_rikate_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: asako_rikate_experienced.jpg
+    sha256: 46c0cb8a3a45b83a5d824cd9fb630cc3f1cda7199848f79e7bf3ffae52e8b474
+- card_id: bayushi_makubesu
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: bayushi_makubesu.jpg
+    sha256: ec69411d4b0388674a616bdbd77d7e446fc8ee0707db6376d2886248c69fba97
+- card_id: bayushi_mugoshi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: bayushi_mugoshi.jpg
+    sha256: 088f032f14d5cdcaf33899e745783ab798b93ed41bf17b49ad2dd448c9133340
+- card_id: bayushi_shibata_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: bayushi_shibata_experienced.jpg
+    sha256: 1afb8b23890de7c87f6239400978ec20d30ce183bb89130a4c667728e9fb6449
+- card_id: black_marketeering
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: black_marketeering.jpg
+    sha256: 4b69f4732a6f617d41c9b77e8f7b1ac25bd674421525f9a5ff0ad17a4a9dd70d
+- card_id: brotherhood_schism
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: brotherhood_schism.jpg
+    sha256: 3685f1399bf4ea2d0f13e110bb6bf4f37a2bfddd45f12367d378407be06a6836
+- card_id: cavalry_detachment
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: cavalry_detachment.jpg
+    sha256: b703d456a24e9547f70b8ee8761ce629dd97d9dc129eb2cc096a4a2f43e7283a
+- card_id: ceaseless_vigil
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: ceaseless_vigil.jpg
+    sha256: 8f2e133cf21f4d3992c1d4d158c0b86edd940bcd9f0f4abb5cf7ac59b1738511
+- card_id: celestial_sword_of_the_dragon_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: celestial_sword_of_the_dragon_experienced.jpg
+    sha256: 3431778e3822bacc30b10e21fde4f534b153c5caaba30a1317b915d2cb6ab40e
+- card_id: celestial_sword_of_the_mantis_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: celestial_sword_of_the_mantis_experienced.jpg
+    sha256: 61d21d3c303a912f47153882c346eaf4f1724c921f868e7c4b0bb7f3a2e6de3f
+- card_id: celestial_sword_of_the_scorpion_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: celestial_sword_of_the_scorpion_experienced.jpg
+    sha256: 6dff6193f5970133b4d14a7d41dfe6843ec433a8566d99d2b3df69e5d7165b05
+- card_id: chuda_seki
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: chuda_seki.jpg
+    sha256: 9de07ecb9131ff67bd082615288ecd66d993ba5836ee55219085e63a2380ee6c
+- card_id: courting_trouble
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: courting_trouble.jpg
+    sha256: a39a57debe48eedcbac1a6e19b137eef8035a2cebde4e9e53db56f2c8e0943d0
+- card_id: daidoji_kitahime
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: daidoji_kitahime.jpg
+    sha256: 5f2af9dde0f90b7f49e6d529ab9d7c5e5010cbc275691029ff3643f35bf3fe9f
+- card_id: daigotsu_yamato
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: daigotsu_yamato.jpg
+    sha256: 68c927b7fa7f7a920b20bb26d4466bc93e332058dbb9fd13db83e274b1df27cd
+- card_id: daigotsu_yutaka
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: daigotsu_yutaka.jpg
+    sha256: 81f4511397d4d8ed3c3e184d1c9c8df120fc4312f04afe950b13ebca950a341b
+- card_id: dark_experiments
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: dark_experiments.jpg
+    sha256: 5e7c487f954713c8099414aad8d3058651e12075c3ccafc0f5536f35318ce907
+- card_id: deafening_thunder
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: deafening_thunder.jpg
+    sha256: 665254ec7f8d5818ba94c0f66a86904173211f91c3a587350e9f3edb1de4591b
+- card_id: debt_to_the_kaiu
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: debt_to_the_kaiu.jpg
+    sha256: aeff87353befcc2f38cd2f10779bb9d275f911368db1da0fc51cfdeed09c2d88
+- card_id: defensive_blockade
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: defensive_blockade.jpg
+    sha256: 2da8fd212d540803815782741d8e30ad22bb69b4ef3eac3c990a0a652b5a4dd2
+- card_id: detached_personality
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: detached_personality.jpg
+    sha256: 3d7502b18f05c1f0df3c00c6a93fa0835bd13607bbdc1807605563c0d7138095
+- card_id: determined_challenge
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: determined_challenge.jpg
+    sha256: b63ff0500a751a090ad4fcc841f4ba875b49172288d48813a00047458c17b3e4
+- card_id: doji_mitsuru
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: doji_mitsuru.jpg
+    sha256: b37280e74d0124b370597b9388231708983d085c75b3168374e25f941a8c38e3
+- card_id: doji_yuka
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: doji_yuka.jpg
+    sha256: b5a3f83e19c5cb4d8c9325a98361f9332fa731cbab236a6fa82dbba206955734
+- card_id: dragon_tattoo_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: dragon_tattoo_experienced.jpg
+    sha256: 7a06f8d0f95f5b9f1642ab15905e3c8b88203a68be7fa85ced382a6df862ca75
+- card_id: dubious_resources
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: dubious_resources.jpg
+    sha256: 7189aaae0961cc2d62dbfaac675ee3e79796b30af9b26773e1d151d3eab720ab
+- card_id: embracing_battle
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: embracing_battle.jpg
+    sha256: fe71eb85f84550c59333a78a169e0a7cd576dda0f88f194da1297f07d5894d16
+- card_id: exchange_of_letters
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: exchange_of_letters.jpg
+    sha256: 1e91f714288c4e4f0eb00adfa123932e4ee06d244fe78a6681cc84f7b0135270
+- card_id: exquisite_gifts
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: exquisite_gifts.jpg
+    sha256: 19ea8d2d95f0619b049eb326503988b3544971371a55e80be48acef6251d107e
+- card_id: extend_the_souls_boundaries
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: extend_the_souls_boundaries.jpg
+    sha256: 76f1dec4155dbc8d38d92e7b2a9f15b368339be963aa044cbf389375d910fb40
+- card_id: fair_warning
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: fair_warning.jpg
+    sha256: f78a59f2913dc45aab1ea2828180a22094b42bc2f5f8d4c2510d640bd74c7450
+- card_id: farmers_market
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: farmers_market.jpg
+    sha256: fbfd5ba0ff7373381c79887ad2a1242ed842badc79add136656fa83ffc62c99a
+- card_id: goju_asuka
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: goju_asuka.jpg
+    sha256: ebb9058e1480792034eb3417fb3afb07f154af9d227adf2be2bc83710afaae18
+- card_id: goju_yurishi_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: goju_yurishi_experienced.jpg
+    sha256: efbf6839c5060e8a660141876690d629d8e1eb4f7cd48ca902316d140a6fd0c5
+- card_id: grappling_the_snake
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: grappling_the_snake.jpg
+    sha256: 91a8398a50b9924621fdd869945f8b147900ffff822dbcc9dc0d124deb748feb
+- card_id: hachis_revenge
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: hachis_revenge.jpg
+    sha256: 490500181f111ddd9d1d626648bca128aec25bad0e8cd6b1d0c2b78d8f9b75e4
+- card_id: harsh_taskmaster
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: harsh_taskmaster.jpg
+    sha256: 377494e1b4d46e764a0c8d8c8661e8926af5b2b59c552206db3b0bfad247fafe
+- card_id: hato_gurama
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: hato_gurama.jpg
+    sha256: 74886321641819748a1127e9076b6fee1aecb5e53afaa608e74b93f2114b040b
+- card_id: hida_kaiji
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: hida_kaiji.jpg
+    sha256: 4ee982288b0ed384ba4a2aeaba4d86213a468139ea7f154269b24b48595820e1
+- card_id: hiruma_nitani_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: hiruma_nitani_experienced.jpg
+    sha256: 1663c564842e7e8704c6fc50a5e9ba0b13f26c46b682ad761fa38e6c1f2ada1d
+- card_id: hiruma_sawai
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: hiruma_sawai.jpg
+    sha256: 8503157ad25070a5df1b9908111fca9ef716a5c156b15ed6a637ce95cfd8170a
+- card_id: horseback_warriors
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: horseback_warriors.jpg
+    sha256: b7d23a1c128de3abb6c20f3ac1db2f1891faa3828659df761496ebd50cde7228
+- card_id: ikoma_aimi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: ikoma_aimi.jpg
+    sha256: e788d4757236437bb77809b902a6d0b7b54c4be2c5c273a53c2c62304cb92431
+- card_id: ikoma_masumi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: ikoma_masumi.jpg
+    sha256: 0f22fc4a6eb06f72b3182f8da2b6fd5a25adbb70affd6e93071a7f98692d0289
+- card_id: immolation
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: immolation.jpg
+    sha256: 66d8413ffc571bf24fb8445ee63fab43ae9f645685c76cfd825c31db8fffcc13
+- card_id: imperial_protection
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: imperial_protection.jpg
+    sha256: 1484fb531e92b05466e3ee1b738025683917642a36fea66b79382a83ec41ef4d
+- card_id: incense_mill
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: incense_mill.jpg
+    sha256: 240f93163fab8402490344bff08d136c3579da85e19e48cf3b22a090e3cab525
+- card_id: incredible_tragedy
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: incredible_tragedy.jpg
+    sha256: ea906dc3fc26a8e0a46a3fea436c31a8c6221f180ff199342f7b6f12966bd15f
+- card_id: incriminating_testimony
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: incriminating_testimony.jpg
+    sha256: fc2a8c9e36e7ae3417af027d46f555ee0fe80f9e21bb780f7b2127f3bd23de14
+- card_id: ingenuity
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: ingenuity.jpg
+    sha256: c905ac52842bc563a506d882300260de0679e75ab7da89ae5615c76ccaad7013
+- card_id: isawa_momoko
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: isawa_momoko.jpg
+    sha256: 3ce720e13da443cc4f9e406006d1598c6cf6ba78d13f6b3ac09d28ea97eee5df
+- card_id: kaiu_okaru
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: kaiu_okaru.jpg
+    sha256: d6f411c59ff084c1c03fc9a914c99f171f9e005f09fd80f9468271a246845f38
+- card_id: kakita_yusugi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: kakita_yusugi.jpg
+    sha256: 433d2901bd36fce556b952da3a3ae78c3e69a84a939e387d2d6e0e3b72e1abc7
+- card_id: kama
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: kama.jpg
+    sha256: 55adcd3af122aab94c579489486055129f5a4527cdd99bd8f1b6e34959eb6912
+- card_id: ki_uso
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: ki_uso.jpg
+    sha256: 454f8c933db7688743ddd43db64ca33d31d3d0950e7c009a8d9adc82e41ecdd3
+- card_id: kitsu_kouki
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: kitsu_kouki.jpg
+    sha256: 34a1b1744f7edc5787c5c7296fc6e3ae6cab150268cfe79b18b14972a595051c
+- card_id: kitsuki_minori
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: kitsuki_minori.jpg
+    sha256: 84dfe657dcb0861faac4e8b364b66aeb36eba7c463c893ab15b1258a6ffc0f04
+- card_id: kitsune_merihiko
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: kitsune_merihiko.jpg
+    sha256: 515f1d717cc138d728ffbc0036db372234fba234220cdcd45c2523c29c3202c4
+- card_id: learning
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: learning.jpg
+    sha256: 34d83eebd1461400885aa8500f6c5f22a09dbee67d1f8157139b225fe5cb2fdb
+- card_id: light_armor
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: light_armor.jpg
+    sha256: 96ef98fdfa775e5c27dbe929d49b16f31ecb91be044ef92f39de0345f03df234
+- card_id: manipulate_energies
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: manipulate_energies.jpg
+    sha256: ec766b460988e6f7e60b4a47844c78ff8aa6bdebd0148ffbd75fa84a8a9e43a1
+- card_id: martial_manipulation
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: martial_manipulation.jpg
+    sha256: a31d914964441fb84afc622b038500cd15051c9e59369b0a6cb05467592ed135
+- card_id: masayoshi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: masayoshi.jpg
+    sha256: 4d1b759c4c7bfedb48e1684d2bd4ea9ed61b2072763cba3fb8623b326f0bd47b
+- card_id: masayoshis_blade
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: masayoshis_blade.jpg
+    sha256: 35d0817094355c590b2dd343873cb12ea5801ab74221006f7233db243eb3362a
+- card_id: master_of_beasts
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: master_of_beasts.jpg
+    sha256: 504dee594366f6b30317c250b4231e0048d79a8a0b4a743726abd2ef55c606f2
+- card_id: matsu_koyama_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: matsu_koyama_experienced.jpg
+    sha256: f377f1347e4d56724c012f40269ab3bbad5138963d6a5b73ff34a0cd4eb6f99a
+- card_id: megumis_guidance
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: megumis_guidance.jpg
+    sha256: d77f70424d0e1d0b7abd7b92872e9d1c2f914c822e071cdedbdc64c5272fd755
+- card_id: merihikos_swarm
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: merihikos_swarm.jpg
+    sha256: 16ed91b99de760fab157bdff8823c42e3018b13081141e44907fa2fd1f00b76d
+- card_id: metsubushi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: metsubushi.jpg
+    sha256: 02797c800e36035f339525a2af3ba5468d22e195d77c9cecab05a9befff07249
+- card_id: military_promotion
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: military_promotion.jpg
+    sha256: 290ef9c22d966e7b83742f7712f25011a506708cb4b3bdf1614356ad703f0032
+- card_id: mining_apparatus
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: mining_apparatus.jpg
+    sha256: c5a56803147d7bdb936f6abca6cadb7d78a13372726225986a08b857a844adae
+- card_id: mirumoto_houken_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: mirumoto_houken_experienced.jpg
+    sha256: 2597b52fe9f1632bf827655c30e7648c28d8d37cdf97cf7cfc903397f12b7d8f
+- card_id: mirumoto_michi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: mirumoto_michi.jpg
+    sha256: 69a80f4dafcd80218b040058b03ff0acaaf7593766204559d8dfa00545026a4d
+- card_id: moksha_patam
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: moksha_patam.jpg
+    sha256: 8c9cc9fa2174c0214d1aa3bbfaaa90c7e38420e8f6fe9fe0b21aac93e5c0e131
+- card_id: monastery_of_new_thought
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: monastery_of_new_thought.jpg
+    sha256: 26a13e4fc106e2b79a1d7cf15ec39375da18cef39ada4dab4909e6e84079ee26
+- card_id: moshi_ino
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: moshi_ino.jpg
+    sha256: 91bfd24c7acaa42e62deb0af64bf14c54e623512c149f694fbcdb0468b94cdf7
+- card_id: moto_aoi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: moto_aoi.jpg
+    sha256: 31644205a9c224da5ba50dd3ca7f82e3701445b8672e54078d1b106c9ccb170b
+- card_id: moto_miyu
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: moto_miyu.jpg
+    sha256: 8f9855139add4d8caf5673295886f758b18a6fea1536ba8d6acd7a70b762e4f6
+- card_id: moto_taigo
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: moto_taigo.jpg
+    sha256: 7fdcdd93c8ef7ac281c02a2b2ede3c0d52b5193307fd9990b7d9adaa611ba5dc
+- card_id: mukudori
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: mukudori.jpg
+    sha256: 06f87888a56c107247954122bc157d28434add57e9eab4b5ddec2c645e86e2f4
+- card_id: my_lords_favor
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: my_lords_favor.jpg
+    sha256: bdedcba5574abae5930ffffaa4a2e868b5b6f211fa0abf3e8bb3d8576f84685f
+- card_id: naka_mahatsu_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: naka_mahatsu_experienced.jpg
+    sha256: 0da06e1c2e17e80159cec003aaa0e5fe7dc23d2ac81a5278017295c7decd5947
+- card_id: natures_wrath
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: natures_wrath.jpg
+    sha256: 51a4f7dd5d2465988859bee57e1d90c9c1a04eeaee4a8265ee129e3bc683c349
+- card_id: ninja
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: ninja.jpg
+    sha256: 9b49c6e4c1e8f4303ef317476dfd26dc98fa60c5e6c178f7769f9e8b31baf7e7
+- card_id: ninube_hajime
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: ninube_hajime.jpg
+    sha256: 2bb45c03e033f5af6822b4e26d461378a829a28148eaf302f7e6857a76ee5dc7
+- card_id: o_yoroi_troops
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: o_yoroi_troops.jpg
+    sha256: 35b22b9f6e8607ba00b77f6bfab700ccbee20b5982b3c622d599cedf9615eeee
+- card_id: offering_reverence
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: offering_reverence.jpg
+    sha256: 340c994f8cedb49b809cb45b8b99b895d608c267402104e6d947652b7039a743
+- card_id: okesa_goma
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: okesa_goma.jpg
+    sha256: 2977812dfa86d2b47ffe1949840078a11a3f8c55672060f2fee4cf3dcf07cf4e
+- card_id: only_a_shadow
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: only_a_shadow.jpg
+    sha256: f4f86a41df40ca675b2b9026927c9c63807fee4e9f83a72477888461ca393524
+- card_id: otomo_suikihime
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: otomo_suikihime.jpg
+    sha256: 377d184128decc78fe56f7db83b27f4c5de2ca3cdc9e95cc7338899dab3d44c8
+- card_id: out_of_my_sight
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: out_of_my_sight.jpg
+    sha256: 7798b50313e38b7575fe83f8d84448eb49cca7a54a3a15c762ad3bb94b1aa084
+- card_id: overlooked_palace
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: overlooked_palace.jpg
+    sha256: 572dd025f69d1f6ec7665bee596739799666b6f12ee53d77f85609f217071ff9
+- card_id: peace_of_the_kami
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: peace_of_the_kami.jpg
+    sha256: f6f143eedfb86aa109856708787f6dc8143c5b202cd3b0a05a391966125bc2be
+- card_id: requesting_reinforcements
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: requesting_reinforcements.jpg
+    sha256: 92366d3f551e044cd0d51d184abc837aa92f248df384270c466c045cb93eab68
+- card_id: ronin_ambushers
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: ronin_ambushers.jpg
+    sha256: c8bd66adb2ac630ee0fb821a50efbb7c4d807f530d8fa4f838d6a6f5df8d2701
+- card_id: ronin_follower
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: ronin_follower.jpg
+    sha256: e19da34f20250feec36666ed0619bddb92115d0efadcece483fdf5addcc49681
+- card_id: ruthless_onslaught
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: ruthless_onslaught.jpg
+    sha256: 1479fe811f262194d75c1b7bc5562b6bd0ae830ab7999a50001fb92ac63b33cb
+- card_id: sandalwood_incense
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: sandalwood_incense.jpg
+    sha256: 3887476a4e58bc7d2ea1d557fb8a024650ff33e4494fde5a04b40d8471da4fb5
+- card_id: scent_of_dishonor
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: scent_of_dishonor.jpg
+    sha256: 105d707d2a72b3110e7de3dc120fbf8823a34670e24b33b68a9587aa59d1428f
+- card_id: second_city_port
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: second_city_port.jpg
+    sha256: e8a417c7a9fa2f58b7770ffed393b2970f630cff286a264f2186d083db3029fd
+- card_id: sentinel_spirit
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: sentinel_spirit.jpg
+    sha256: 1c3d7d02f2d4341320ff3dcc2d0c476df99a28fd5f9eabc9e0bde86602530f60
+- card_id: seppun_nagi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: seppun_nagi.jpg
+    sha256: 0ae09e74a5358cdb513177ee494d4d1db3129e96d6f2850526e21b1f2645b6c1
+- card_id: sharing_gossip
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: sharing_gossip.jpg
+    sha256: 3bc8d3cecdcd8df0108c0eda939a1bb10c9bb8ee263fbf365544e33f46e6fcf1
+- card_id: shiba_iaimiko
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: shiba_iaimiko.jpg
+    sha256: c71bc294735f16374cf326bcf010451c372c3b06331a25c3cd47d2808200a251
+- card_id: shield_formation
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: shield_formation.jpg
+    sha256: 8e742ac3f66f98913ed956136d37706c7f1438ca59c56bb854424841d5a944f9
+- card_id: shifting_terrain
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: shifting_terrain.jpg
+    sha256: 39157747bed979f90e461e6b749572e97676fbcf44e210912cde3d9349b6727e
+- card_id: shinjo_katsuo
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: shinjo_katsuo.jpg
+    sha256: b5ab1c798c80227b092578c8da0f14632a1d25f3d766dfee36020044b8fb093a
+- card_id: shosuro_hawado_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: shosuro_hawado_experienced.jpg
+    sha256: 958a56270d0aa8b430aac1bc8e21da622d1d6b4880edb524510e41d7b6c1132f
+- card_id: small_library
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: small_library.jpg
+    sha256: 4e14d3c67dc5e0ef38366e91ba18e8d7ef55fd152e268129f5bebd307a84ead5
+- card_id: soshi_kodanshi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: soshi_kodanshi.jpg
+    sha256: bc3f417b4860ebadfdea950f18545a45349a287ff600234e34b65ab05b7e3dc2
+- card_id: sound_the_retreat
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: sound_the_retreat.jpg
+    sha256: dd12f3f2082d359ba598146e92952b17077a401493d23e73d73f2a3298e6f94d
+- card_id: starting_on_the_path
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: starting_on_the_path.jpg
+    sha256: 3d052b4f101e37f13f912fca0eed2f2a4b71b57978d4adc523199055daef5693
+- card_id: step_through_the_void
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: step_through_the_void.jpg
+    sha256: 685e18bea5cac67196d2da2420997c4751c0bd6306f4436f16fa3feec27d532d
+- card_id: sticks_and_stones
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: sticks_and_stones.jpg
+    sha256: 87f124d5be8655a1aeee8f869e5d3ca9acc62a6dcea7dc666f3310b165100bdb
+- card_id: suitengus_path
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: suitengus_path.jpg
+    sha256: 60bd54527bc62be4cea9ffb14dbc0e0b638c633e3197b590ca1d87669b4c1d74
+- card_id: tamori_takeshi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: tamori_takeshi.jpg
+    sha256: 5650cd9504a91387287d6bf03dd6c1ab4de8106b92735189dacbe553f737cbaf
+- card_id: tamori_tamoko
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: tamori_tamoko.jpg
+    sha256: 037d3763a7766f968814e780869ad931b009018ae124beb053d91c74afc1cc66
+- card_id: tanemono
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: tanemono.jpg
+    sha256: a3c065e82ce34acabbc18b076b17559d9c088fed1a696d923495e3fee6b484d2
+- card_id: temple_to_fudo
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: temple_to_fudo.jpg
+    sha256: e31ddfe324cf03cdae24584dc576e97dd8f5e7ef44c0e2733ffbd507bfec2b7f
+- card_id: tested_land
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: tested_land.jpg
+    sha256: 3376c387a4c2dfa20a1e7b4953bbc460ed848a30feb6cf6a063d7e81a5005af1
+- card_id: testimony
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: testimony.jpg
+    sha256: 8ae3af145755d748cfa8489c0af843643097cad62cfd87bd595b2276c8dba414
+- card_id: the_arrows_eye
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: the_arrows_eye.jpg
+    sha256: c0b371acc7d74a96b855161a61bbc24aa4b4b99fee5a7743ee92a41335cc8efc
+- card_id: the_castle_of_order
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: the_castle_of_order.jpg
+    sha256: ec10785da9b98a84129b2f829a7a0dabd40a4ef1d75e723d1c516b0976cf83f9
+- card_id: the_deciding_moment
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: the_deciding_moment.jpg
+    sha256: ad1985d52b63cb67678db7b4cc004379b634e5cf04187985d8c1e18c2d1fdb62
+- card_id: the_earths_strength
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: the_earths_strength.jpg
+    sha256: 257e32c968b394106771c34a92c64614204cb710c279f4ecb63e14131d3509a0
+- card_id: thunder_dragon_experienced_2
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: thunder_dragon_experienced_2.jpg
+    sha256: 39727477080345d2898a1cab5ec03029c1b02fab7d475d977c0a20ae23103f12
+- card_id: togashi_hiroto
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: togashi_hiroto.jpg
+    sha256: 06f2299f851d2936c16663e105cbec91b04d321f10df8efa6c1714c4a24357c7
+- card_id: togashi_noboru
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: togashi_noboru.jpg
+    sha256: 224f68fbfd476ba1ea0938c0752408ce874f73c5ff3e0908f20cc6b1f81b8bc5
+- card_id: tsuruchi_kohrogi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: tsuruchi_kohrogi.jpg
+    sha256: f46c038da0408aa20e803cc66867cc72e0b633e2d98c4e88e816730abc574c3e
+- card_id: tsuruchi_nobukatsu_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: tsuruchi_nobukatsu_experienced.jpg
+    sha256: a97de2ce0615132fe738712d66ca78e6c316eeeeb2c185b88f54d2787eeed4c8
+- card_id: turning_away
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: turning_away.jpg
+    sha256: ad54730e9b0e718573e50abf557e99b281de5eb74c0de24bb1cea82640bf8e02
+- card_id: turning_the_story
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: turning_the_story.jpg
+    sha256: 0c77d88d3e97b3ed2105f97f80b02de3a3ae761f918eb6425828fa42539a2704
+- card_id: two_hands
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: two_hands.jpg
+    sha256: 4b87764202d390e40031421584f0f9d23e5b7f5f81ba329615ad09eef3cd1fe0
+- card_id: two_stings
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: two_stings.jpg
+    sha256: d979b92845ffc1797393f4b8836c241a100a65aa5d0237f078dce21e2f5c45ce
+- card_id: unexpected_obstacle
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: unexpected_obstacle.jpg
+    sha256: 13ef59a2928a82e7ebaf35a30b85b9a486ce04998dc5d8512ba2b9b03e6b600c
+- card_id: unparalleled_sword
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: unparalleled_sword.jpg
+    sha256: 04134a930eb6bff1222ac0d9d60697b65c5369d3fb842b338efb1701fd49ee83
+- card_id: unsettling_doubts
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: unsettling_doubts.jpg
+    sha256: d1ca25ef89e399524cf4746e626eca737096f8ac12e6f7a1821120c60f22ba60
+- card_id: urgency
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: urgency.jpg
+    sha256: 0c7fb7090c78a0454036b857003e38d02ba8f005bb9ad940989a883f72580ef4
+- card_id: utaku_chikako
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: utaku_chikako.jpg
+    sha256: 9744547220fd5d3a8b8500eb682c234ddc927b17f2b0b04af6cece59d54564f1
+- card_id: utaku_hirononri
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: utaku_hirononri.jpg
+    sha256: 582f27e8d13d5f5e898f50bd66bb6f5edbba320777e97fce7a5a5f07956d9433
+- card_id: vengeful_dismissal
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: vengeful_dismissal.jpg
+    sha256: cf1a71c4402a1d18b5c4859045fa8c778f346180d58b8ec04495f8b159f8699b
+- card_id: virtuous_charity
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: virtuous_charity.jpg
+    sha256: ae62a9224dca198fa78bfc5929387cf22500d49c856e76960fadf35ca7e714dd
+- card_id: water_spider_adept
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: water_spider_adept.jpg
+    sha256: ed00e80b4c13094401913c5025e14f86ee32a5224f8f3f2d06f12ab1d9b376b1
+- card_id: wide_valley
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: wide_valley.jpg
+    sha256: 5e12a45391ac483460147838d0522489b779244f91653c85858e0aedbc2eb5b2
+- card_id: yasuki_baiko
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: yasuki_baiko.jpg
+    sha256: 36a385563c2025ceee1a145ba6cde2b26993f6b13b9144a5afad6ca062736d66
+- card_id: yasuki_tsujiken_experienced
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: yasuki_tsujiken_experienced.jpg
+    sha256: db7270dfbbd3e1b98eeb6d28d58e6d824a066a83176e5a9300ad100b631dca36
+- card_id: yogo_heijin
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: yogo_heijin.jpg
+    sha256: 24a21a91592fa11fd761c4c76d79abb93eb3feac35aa3e2f532ea925af7f4898
+- card_id: yogo_ugimori
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: yogo_ugimori.jpg
+    sha256: b8a1950e3af695eb9d6fbbf77a072cb5b5b6f6b9868aeb2893d587a85c4a584c
+- card_id: yoritomo_akukiho
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: yoritomo_akukiho.jpg
+    sha256: 8f104e301ef8127d03a1ff85b50dc694266f093dce8a07f3cba774a1900130a6
+- card_id: yoritomo_iwashi
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: yoritomo_iwashi.jpg
+    sha256: ace92c84e21c4f67e80d5772aa89d6d5b21bedf94194db0a9e3fcacf4a38d4cb
+- card_id: your_name_is_mine
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: your_name_is_mine.jpg
+    sha256: 59698921574092c26843f8ba2bd7c7b2689738a01647bfe2a8c738b03f00a7b5
+- card_id: zansho
+  printing_id: seeds_of_decay
+  files:
+  - role: front
+    file: zansho.jpg
+    sha256: 973d589929ffd6d81e1f006b261017d29cae73b47efab090d38e4a25e20093a9

@@ -1,0 +1,368 @@
+set: The L5R Experience
+images:
+- card_id: archers
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: archers.jpg
+    sha256: 1478372db1e8c8939353cfa5357bdf35facbae50bd31fc1952e522a8c07a1c5f
+- card_id: armory
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: armory.jpg
+    sha256: 2cca9803acbf5e093078e07738e496783b56a1ed772bef0c846e7aeab9c71959
+- card_id: asahina_handen
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: asahina_handen.jpg
+    sha256: 10527f4f7b7801de825aa489a0d97aa6e62b5fae7bf30b160195488a6f11df88
+- card_id: asahina_kimita
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: asahina_kimita.jpg
+    sha256: e66507d596599c8dc9bbcd3a04eaa0e7826f0c24f1e0bfb5c858cf6165383979
+- card_id: ashigaru_archers
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: ashigaru_archers.jpg
+    sha256: 1ff30d43f3d30dc95edef1e09a5ef08b8d1603108b7bf4d5a8643c09de54c2e0
+- card_id: bayushi_churai
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: bayushi_churai.jpg
+    sha256: 49256de512c251cdbd399f77320f290a557eaacbf2179827aa3f8f216e8504b8
+- card_id: bayushi_kwanchai
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: bayushi_kwanchai.jpg
+    sha256: 40b2583b86235e93525c1f66ba2ef103327a63daa6a30fe5c706717eb3a276ac
+- card_id: bayushi_paneki
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: bayushi_paneki.jpg
+    sha256: 3f551248c402c9ea3389fa5029bf118752adc3e13b9d0aa0569cf43be7663663
+- card_id: bayushi_shixiang
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: bayushi_shixiang.jpg
+    sha256: a1e55c5518a043c189969f0f544081e7059c523089a7aae14f09273480bae649
+- card_id: bayushi_tai
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: bayushi_tai.jpg
+    sha256: 642671a7d6a75f26d10cdaaabd285f6877de771e9fa65f29c93b94931c80a3fb
+- card_id: block_supply_lines
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: block_supply_lines.jpg
+    sha256: 719d6a83c420ce4aa9b385083f67edb09133e4ee00f80e6d78fa1118cf3d22f5
+- card_id: charge
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: charge.jpg
+    sha256: 88fcb56bca9b6672fa34b1b89ea420eb14633cc39338f014de99c8bcd7d5ee25
+- card_id: contentious_terrain
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: contentious_terrain.jpg
+    sha256: 783f871e5a63c3d750992844e450740ed0e7995b1bd035209c7a48eba113c7eb
+- card_id: dai_tsuchi
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: dai_tsuchi.jpg
+    sha256: 17b8c4c031082cf776ecfbf08dcdf7213689d4c025294e54b310c9c9e83a0391
+- card_id: daidoji_enai
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: daidoji_enai.jpg
+    sha256: 35123ec1d5a7170d656a5a546bc7ef6b06b931c3b9352e8c7d80828658d4034b
+- card_id: daidoji_gudeta
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: daidoji_gudeta.jpg
+    sha256: 5a43677627669760f5b56f0251797203ad331ffbe4ffac6d9c7ede761dbdc3e2
+- card_id: diversionary_tactics
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: diversionary_tactics.jpg
+    sha256: 2bfed32c2f7d6c4a58531a2e46b23d86d9a1557b403793b1fc46d12e1302adf1
+- card_id: doji_nagori
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: doji_nagori.jpg
+    sha256: 4f476a8d93ec97cef359b0d36fa7d980710d08fd47293357f76d13449d71e884
+- card_id: doji_yasuyo
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: doji_yasuyo.jpg
+    sha256: e239193db8fca3eca33410b00d29e8b3bda5fe7c6ffd2729be32ad2826a40905
+- card_id: dragons_claw_katana
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: dragons_claw_katana.jpg
+    sha256: dc7f9a04d5f28e2d7982dfc13c1c22977a744c55322ab77052bceba36e8387d4
+- card_id: duty_to_the_clan
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: duty_to_the_clan.jpg
+    sha256: 351f0ec55b6e284d19640c0bab6e702c9b1446644f39e2623a1f83c6a5e4723d
+- card_id: elite_spearmen
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: elite_spearmen.jpg
+    sha256: 04796e5068c9e90875b37bb774a044c40230fa216403a2567120018d4c5d1062
+- card_id: encircled_terrain
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: encircled_terrain.jpg
+    sha256: afd224c37b282bcf26081c4af1a2eb1104b8c037ff925f063c4dd1cc2dabb05d
+- card_id: entrapping_terrain
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: entrapping_terrain.jpg
+    sha256: ca7ba2b7bf8be877668061a80e9080d68d4d711a498d78a59d8a2ec0e598e925
+- card_id: geisha_house
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: geisha_house.jpg
+    sha256: fbe364bedf4357a1ae4335ee57b8eda210263f5e3652188edcb83e5a93a5a4a3
+- card_id: glimpse_of_the_unicorn
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: glimpse_of_the_unicorn.jpg
+    sha256: 8abc0b45c4f78a9d6fa8fe07b79b2bfbd70c4065391bc667ec469a36a961b170
+- card_id: heavy_infantry
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: heavy_infantry.jpg
+    sha256: c743dca42c2e2f94ad2da8c30eb7a732236bb18eea389e249bd118047ab3f5dd
+- card_id: high_morale
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: high_morale.jpg
+    sha256: dc7b570fd67c8b4a54889f86d2341cf1d79ac4ec66a984f84184e303ae02901a
+- card_id: hitsu_do
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: hitsu_do.jpg
+    sha256: b0242e27a240a2ed65205080d81c3a54a8f651ab75371a4d009e8287b076dc1e
+- card_id: iaijutsu_challenge
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: iaijutsu_challenge.jpg
+    sha256: c54e9e229179874027d6777a6b5a8da2b3380085d525fef053c7aa14f081a751
+- card_id: iaijutsu_duel
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: iaijutsu_duel.jpg
+    sha256: 408ba3005a0539db6e1d51f61d7a8b375ae778c51f5758a9c22bbfce52867ccd
+- card_id: in_time_of_war
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: in_time_of_war.jpg
+    sha256: b22665c8bfaa0abaeb8db8173ff94dc16ffc6151ddfb7827c19c88e3c3a5a9bf
+- card_id: jade_bow
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: jade_bow.jpg
+    sha256: f21710355cf96c8a38f3e2361f13cbb3df7a882e3caa4dd83cc1b873b4f05d07
+- card_id: jade_works
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: jade_works.jpg
+    sha256: 915166d9c19174f64ab4e29371db0a5d3e9b0bfd750247a6fe3ae9df9a676b49
+- card_id: kabuki_theater_troupe
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: kabuki_theater_troupe.jpg
+    sha256: 3174d0e0caa33846bc755ba3644a08735264897a09ff68b06b97ed40cf7cf89d
+- card_id: kaze_do
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: kaze_do.jpg
+    sha256: 0cdd8da21bc2237179f2fe6d715406f585308d47f50eb69f6a653e252a90a355
+- card_id: kolat_assassin
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: kolat_assassin.jpg
+    sha256: 1e3d9e5ff656812c7ebebf6989ac8ab8b23dc0fe14986842e2c37e4ede2ee93b
+- card_id: kosaten_shiro
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: kosaten_shiro.jpg
+    sha256: df7fb1553cb0f354798705581d983f62e7f71853b50dc70f77ae1e842e976956
+- card_id: light_infantry
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: light_infantry.jpg
+    sha256: 223c2af36a5c751d380bc24130c05877bb2d92044a4024ae53d98fe20de8e0b3
+- card_id: marketplace
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: marketplace.jpg
+    sha256: b866547d5d41ad51b310f111373b61c73a9f7c19050ba320cee2d4b47ae75ecb
+- card_id: medium_infantry
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: medium_infantry.jpg
+    sha256: 0c70fe3ab01cf600005ac4606cb5da9dd85daa750d33a7acc073770abed52f55
+- card_id: port
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: port.jpg
+    sha256: 2929b5938a00ede174b4e782a41c578b7933436222c3ab85b23d35a5e031aa82
+- card_id: provision_storehouse
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: provision_storehouse.jpg
+    sha256: eb4733f0cfe6535340dc285009ef82a1e8f76d613daf3128bef2cc6b6aed9a37
+- card_id: purity_of_spirit
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: purity_of_spirit.jpg
+    sha256: 4a8e49e4d9fba89fb8cec6f59bba17c705d828443104bdc17d8d4bd335a74f38
+- card_id: rallying_cry
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: rallying_cry.jpg
+    sha256: a8adb82564db2fba12905c0cbbdfbdd2e1928aef4ba5e56c8648517f03cbddcd
+- card_id: remember_the_mountain
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: remember_the_mountain.jpg
+    sha256: 7da2e53d62098691683764545ad1666b81f250fddc118659751d586df4468fbd
+- card_id: sanctified_temple
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: sanctified_temple.jpg
+    sha256: 916630e2da22fd47866ae86b194def665818037a1edab8fd8fb7526449c36bb9
+- card_id: silk_works
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: silk_works.jpg
+    sha256: 42a8ac161deb206650f38a9c64102d4dbf1bcd9b3131a83e828cbe1eefa77581
+- card_id: slander
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: slander.jpg
+    sha256: 682a20be5e8654ea4bba85b2082498e19199b534e558dba18ea991e7500fcca2
+- card_id: small_farm
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: small_farm.jpg
+    sha256: 1392659645de8da2049634db79b8b35933b11c253d24f3a27441479b984dad78
+- card_id: soshi_angai
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: soshi_angai.jpg
+    sha256: f4e2a6c2d0d9f712bfc6515edecb73b014922dda28e44670d0164c9335d76c63
+- card_id: spearmen
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: spearmen.jpg
+    sha256: 108f4d23699745c7082d21f1ced34e81649feb838d4afa0811a7a185b29b4efd
+- card_id: strength_of_my_ancestors
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: strength_of_my_ancestors.jpg
+    sha256: c3cdfdce7dbb17e26193524d843e35339bb4a1f5d4dfd2bb0aee0791c5eca3e4
+- card_id: test_of_might
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: test_of_might.jpg
+    sha256: 3bd91b9e645ab24085a62450f5449a39631f9d2726906d5bdc8042b82d351b57
+- card_id: the_hiruma_dojo
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: the_hiruma_dojo.jpg
+    sha256: 0d852944344d82a4df899902bee6f4f85e0d61ed63a7aba4c21df559070a3812
+- card_id: the_towers_of_the_yogo
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: the_towers_of_the_yogo.jpg
+    sha256: 58e237a5e28d3b714cdc442396c62e51ce75fde1150b7bfd898748dbe6bdb874
+- card_id: toturi_sezaru
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: toturi_sezaru.jpg
+    sha256: 86065316e618d0b6a7dcd8fcd47373ebc43fa1cd56aeae2acf413a2a00539826
+- card_id: wakizashi
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: wakizashi.jpg
+    sha256: 1f04327b8b19314429836705cde4e479b7d489bead21c1e20d618d8dc9e7d527
+- card_id: yasuki_hachi
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: yasuki_hachi.jpg
+    sha256: 97930c886b1b9cbbc2001636332b3a2fb75b59e2011117bba00caf98f0f09464
+- card_id: you_are_the_crane_clan
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: you_are_the_crane_clan.jpg
+    sha256: 9de5c35621fd1a5dd27670558bbcff88193b1a89ea322e3b1967ffbeed794272
+- card_id: you_are_the_scorpion_clan
+  printing_id: the_l5r_experience
+  files:
+  - role: front
+    file: you_are_the_scorpion_clan.jpg
+    sha256: ef3d437dda207718e04f9780de1765207b813ba72de18056603e0bc5307370a8

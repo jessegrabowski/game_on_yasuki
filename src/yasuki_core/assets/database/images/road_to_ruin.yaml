@@ -1,0 +1,938 @@
+set: Road to Ruin
+images:
+- card_id: a_memento
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: a_memento.jpg
+    sha256: 6a7ac41662333f1bf7a8d36ee7968ee5c40608d5a3215bca16ededa7938376f3
+- card_id: aanadi
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: aanadi.jpg
+    sha256: 06433a125c2706f204fd40bd167801c3e7ba9542e0af3a6f62ecc3738f98d454
+- card_id: akashic_purification
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: akashic_purification.jpg
+    sha256: fbd2be66fcc8775ae5469bc998869707c7e2c481f721ed69001075ff4793085c
+- card_id: akodo_eirasu_the_irredeemable_experienced
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: akodo_eirasu_the_irredeemable_experienced.jpg
+    sha256: eb8b6c40c590a77775a464c8af353cf82e26fc93e05c8422ab8ea7d277cb3d3b
+- card_id: ambitious_scout
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: ambitious_scout.jpg
+    sha256: d5f25295d27c798521a7aab1e428a79335d8f4596ba2d5291bfaaa95d76ca7e2
+- card_id: asahina_tsienko
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: asahina_tsienko.jpg
+    sha256: fe85d4634c9df6f620802b5f5584cb32fe6a01f04f9288848953e5d7fb9947cb
+- card_id: asako_dotari
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: asako_dotari.jpg
+    sha256: 7a7fbc7dacd9cb62f968c3adb6ad6d5e0b09725759956d6d525f88cb489bdcb8
+- card_id: asako_miyabi_master_of_water
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: asako_miyabi_master_of_water.jpg
+    sha256: 247a03c15d7d373d19a54c21f575e992d71a9cf8ace877d1153bdadd93e2db09
+- card_id: battle_of_the_second_city
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: battle_of_the_second_city.jpg
+    sha256: 49984e500fc7fbdbce860bdaa10d151b30ac1fc02ec1fcf498d89ae809627727
+- card_id: bayushi_aiga
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: bayushi_aiga.jpg
+    sha256: 8a67bc7384ba8bde75d47ba8af2d69ddec3409fe466a41310221c0689aa4cbec
+- card_id: bayushi_nomen_experienced_3
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: bayushi_nomen_experienced_3.jpg
+    sha256: a5f833904d445ec17758a2e085cd797df3a7e5494613a862473a887ac503cd33
+- card_id: bayushi_sotaro
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: bayushi_sotaro.jpg
+    sha256: 00c0030ade5e3b7b30233d3deda30709c2f63a47442e5f60ebe61b1b6c5bc187
+- card_id: beiko_sensei
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: beiko_sensei.jpg
+    sha256: 2362278f3703e5c8c5893ac89a7a579157bfd9a9ce2abb3d07b880ca6614982f
+- card_id: black_powder_tactics
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: black_powder_tactics.jpg
+    sha256: 6b34ee311dacffc43b95ddab0d6adb8e7f4a3c9afcb23915b4cd1913b3e1a50c
+- card_id: bonded_by_battle
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: bonded_by_battle.jpg
+    sha256: df850994adcd620cc80dddcab5dca688438722799416100758b7c7f7fd265520
+- card_id: bring_it_down
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: bring_it_down.jpg
+    sha256: 911a9972a8dd56c0478bdbd80b1b1c9129a260a301aaae521d4161d8bb1fb5bc
+- card_id: call_the_inferno
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: call_the_inferno.jpg
+    sha256: 3da94e41374993753d1d55ed223548e53039872c7224c26b378d0b75eca88d07
+- card_id: caress_of_fu_leng
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: caress_of_fu_leng.jpg
+    sha256: 5a6c522342328f69721a712c8d2d1ccea1e2b8a508c900b3c4df43fd105b06d5
+- card_id: carry_forth
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: carry_forth.jpg
+    sha256: 8cb430f81e7819e32615352444c14c78d716ab409369626df5e7db5db1b9f072
+- card_id: choked_streets
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: choked_streets.jpg
+    sha256: ddd9f3472e0103611b289eb29ed15041030b45958e243e59bf1b2a34d735798c
+- card_id: chosen_ground
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: chosen_ground.jpg
+    sha256: d1f9b79a49aa397df07ec42b8e1d93c7977b4e6507f2d909c306674a21e28e62
+- card_id: chuda_niko
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: chuda_niko.jpg
+    sha256: 22beefa5b94f7b327d9b79718afc0562793f6604626edbd9a3a7060c88280fe5
+- card_id: chuda_shidare
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: chuda_shidare.jpg
+    sha256: 0c71f355e7fcff8e9fc4b73682728ef06465a64e2314460431418ae023f40fcb
+- card_id: cleave_the_chaff
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: cleave_the_chaff.jpg
+    sha256: d7a02664035643dc4468c93be11b5ba206b574e1695cfeb49238407a91cf4ca9
+- card_id: clever_strategist
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: clever_strategist.jpg
+    sha256: cd95521966e784d641a60d899e08007d1fdaf5d9418fc611520e1c040cf5020e
+- card_id: commanding_favor
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: commanding_favor.jpg
+    sha256: bdc2b87844c2beb171bfc5d0c3348724397ddbc6049d266edf85157fd623ba5b
+- card_id: consequences
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: consequences.jpg
+    sha256: b521ad007089a66bf18d890966671d1a6aa5ed47d5bfb419b64faf0144c66d2b
+- card_id: consumed_by_darkness
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: consumed_by_darkness.jpg
+    sha256: 2a2de9006aa0c3382dbd04b93e4777766b213b2706e962d5553415a4fb847a0f
+- card_id: cracks_appear
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: cracks_appear.jpg
+    sha256: 1b8b8cd21d0bed9c781b01c4c97da5907cbce1ba3fe66bf295f6cf70c7e31586
+- card_id: cross_blades
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: cross_blades.jpg
+    sha256: 2f539cadb480311d70cd39f1acbe2e636c083f3f85da87d8ae37df6412333f2a
+- card_id: daidoji_oiko
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: daidoji_oiko.jpg
+    sha256: de0fab758b9e8f6f69bacd07ca60bfd1f5206bcc2d574964da1671d1c325bacc
+- card_id: daigotsu_atsushi_experienced_2
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: daigotsu_atsushi_experienced_2.jpg
+    sha256: 7e885a4babeebfa0822b750b0ccc6141ce471f73059dfc4a23c1d32073356d9e
+- card_id: daigotsu_shikenuro_the_silk_fever_experienced
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: daigotsu_shikenuro_the_silk_fever_experienced.jpg
+    sha256: c9cffed76858015097243ef81626fc5aff1aa1c74a44295211e7d42ad6c67c87
+- card_id: danna_sama
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: danna_sama.jpg
+    sha256: b460f6a7cb9e79b157692bee54336ce46f3319e022fca230ec84a360649bd058
+- card_id: death_priest_advisor
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: death_priest_advisor.jpg
+    sha256: 8fccc960a4605b11789d24fe66051c3fb8266e36c993d4d4462f11c97d309b86
+- card_id: defiant_ground
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: defiant_ground.jpg
+    sha256: 16a1fc6c03f5e3b8dd735f1ccd76e9ee1d2a821bd4fb9da693865598ed8747b5
+- card_id: desperate_melee
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: desperate_melee.jpg
+    sha256: 529791202bd8420660f824cae14389af0b8087e2bd1df3a570c347efce41fcc5
+- card_id: doji_motoi
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: doji_motoi.jpg
+    sha256: b3b5214d24fb22efa410701bfa77522520d09bc63d6fa6c3d242eba8d7f4db6b
+- card_id: doji_natsuyo_experienced_2
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: doji_natsuyo_experienced_2.jpg
+    sha256: f9f24e0af515a51f2c42772878d33684b264b29f48764e413d4e6545a10a70e9
+- card_id: dull_tanto
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: dull_tanto.jpg
+    sha256: b11bf506a69ce72df8b4dcad0e350b19eb3760c18ff36e812e4495e26b362a7a
+- card_id: echoing_infinity
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: echoing_infinity.jpg
+    sha256: be25f5e5e048588506c708ffb1e201c941ab11f9ad31f03593458bd5bac17422
+- card_id: eye_of_nasata_karo
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: eye_of_nasata_karo.jpg
+    sha256: b215767b9cad624210a2c27d8524c06e5dfbc315d10fef6b11196acf079232d9
+- card_id: fine_silk_merchant
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: fine_silk_merchant.jpg
+    sha256: ca747ac4edbd180393369d16c595d5b0c30f098d887173d639fe46b48ea492b3
+- card_id: forgotten_storage
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: forgotten_storage.jpg
+    sha256: d42e198cc30a37237f806ffad25152f226024de84769caed4298203b37a3e4e2
+- card_id: friendly_sparring
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: friendly_sparring.jpg
+    sha256: 5c2785e44b55fc2813e4b75d7aee1e39afc9eb0ceeb83ed6c442694433ff6da9
+- card_id: from_your_friend
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: from_your_friend.jpg
+    sha256: 2e0df2c727462e2d2168cce0826ec833c04c1d14ef53e158d126621820c349c1
+- card_id: grim_reality
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: grim_reality.jpg
+    sha256: 6593cf9b1a0b2c0c4bae9b05e28afb6500172e69e7ed9dce52b98fcff3678275
+- card_id: guests_of_honor
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: guests_of_honor.jpg
+    sha256: 13115cbaee16b501f242834e02b497f3e29f98e0f0bc97945f6afe4f9b6b4eb1
+- card_id: heaven_has_no_justice
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: heaven_has_no_justice.jpg
+    sha256: da5ee4dc954db6282ccdaedc44337cb188a515a8b114654bb60d47ff0f2386db
+- card_id: helpful_suggestion
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: helpful_suggestion.jpg
+    sha256: 5377f3626b48eabbea1ad814b99c875f7d289d0b79a0fda41971fa52f6c8e9d4
+- card_id: hida_kurabi_vanguard_of_the_damned_experienced
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: hida_kurabi_vanguard_of_the_damned_experienced.jpg
+    sha256: e1fd77b9212232a7f61e4938729a1235c24d476b3dd18bcec026ec782b6d7df4
+- card_id: hida_osuro
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: hida_osuro.jpg
+    sha256: 7510feb4c152ad8acf5fa4ec7d53489402d316a7b574f022d27b5d041f3f58f0
+- card_id: hida_ryusei
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: hida_ryusei.jpg
+    sha256: 4b4908f2d2c6fa1f97e6cd30dd2fb027a2d3bb81d64c730d81a1c0f2d2e15260
+- card_id: hiruma_tensin_experienced
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: hiruma_tensin_experienced.jpg
+    sha256: 537ef937d3b1e55a119ca825981436a30d6944bd13cf30a2a629cd2cc130c31e
+- card_id: hone_no_ikimono
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: hone_no_ikimono.jpg
+    sha256: d79db3e87c22689c226e2c5e17301f0e1c5436936c9a7f5a482ae39fddf72e1b
+- card_id: houhou_experienced
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: houhou_experienced.jpg
+    sha256: 9c1daeb054e00519a7efe4c581b393bf10f9f80a71cc6b1c5fe9b74a0bafcdb3
+- card_id: hygyu_no_oni
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: hygyu_no_oni.jpg
+    sha256: 756254792f1b01ff799077327b6ebe919cc48b7175819f36195e1b4d561bc2ee
+- card_id: igi_tessen
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: igi_tessen.jpg
+    sha256: 83198be61a87490723400cd896c7740a00e802709dceb56434319241e7edfe63
+- card_id: ijathilu
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: ijathilu.jpg
+    sha256: 53662e2b105c5bfbb538ff4e385a52d510cb0b052a471c95ff772ea6c1955296
+- card_id: ikoma_warden
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: ikoma_warden.jpg
+    sha256: ff7c14ffa58278df28deaca129db9276d2dc9b3b2e66cef30c4354a81829f2ae
+- card_id: imperial_assessor
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: imperial_assessor.jpg
+    sha256: 0696861b35f5f8a91af596aa31389e3bee2d2a3d37777468bbf37cd2cd3803dc
+- card_id: is_that_all
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: is_that_all.jpg
+    sha256: b8933505ac80fbbdaec7c887afd30f517dd312c6d2a879dffefeb51033b35b73
+- card_id: isawa_kunie
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: isawa_kunie.jpg
+    sha256: 117e8f624abd9cc622e080054f60abe1f0ef8bcfb95f41f5030c83d9a0e410e5
+- card_id: isawa_noda
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: isawa_noda.jpg
+    sha256: 8b3dd0e8ace11690e10408b7be9f7e6105bc1ea6354ac2c4f0c57ae47b6c5805
+- card_id: it_calls_to_me
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: it_calls_to_me.jpg
+    sha256: abb56fd8753572b0c520a4a8d828a0f19c4b62042cdcea9a2a1fc5e7d8485e76
+- card_id: ivory_khanda
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: ivory_khanda.jpg
+    sha256: b469c2fe847762335416027a0a1e52deb12a3ce0ce37f4c32c0c0c878b2e78e9
+- card_id: iweko_ayameko_the_iron_empress_experienced
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: iweko_ayameko_the_iron_empress_experienced.jpg
+    sha256: 3464a8813d3d6a8067eb8b2d8b20aa3558a3676778af1e8ac57fa3ed0c163f3d
+- card_id: jayas
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: jayas.jpg
+    sha256: 7ad9e000c3171c5590d875b12ebfccae5845ebb1af397f2f65f890e913fdba57
+- card_id: kaiu_gorobei_master_of_the_engines_experienced
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: kaiu_gorobei_master_of_the_engines_experienced.jpg
+    sha256: 99c1fa92a36fd9f58dbd46571d5c6056e4df300870a9441254e3e54dc453bab7
+- card_id: kaius_heart
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: kaius_heart.jpg
+    sha256: e5d20fd12579b6e84f6c8cece88d79f4cff7f9d363394de1315a19b8eb47360e
+- card_id: kakita_harudei_drunkard
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: kakita_harudei_drunkard.jpg
+    sha256: 076e2b2bc58d37f0fbaeb384d24a84fad78999eb076a1746d54fdcc7d078c9af
+- card_id: kakita_misaki
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: kakita_misaki.jpg
+    sha256: e1f5a777bd848e0d092bc5877c279c66ea0d660b3a47671286a1bb4b89e34b97
+- card_id: kitsu_fujihito
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: kitsu_fujihito.jpg
+    sha256: 3a7dfcd2cb0b1e8465d34838acbd82f86197ac573197e2b97eff1b5eabb6970b
+- card_id: kitsuki_kohaku
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: kitsuki_kohaku.jpg
+    sha256: f5ec2a74a9da8cbfb3256036e9e3bfe67e3df794c5540278da444022faf3312b
+- card_id: kitsune_rumiko
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: kitsune_rumiko.jpg
+    sha256: cfbf47e9d1a2d3a320a27f63d3808127bce1585628eb6005d8662e60d4c4a0bc
+- card_id: kitsune_toson
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: kitsune_toson.jpg
+    sha256: 13d1066b09ff77989e74c77968b5585e8d04ab98c156c077616f1cf592306bd7
+- card_id: kitsune_yayuko
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: kitsune_yayuko.jpg
+    sha256: bd496b30f264065268f17277b768d56730353603b45b005ef7b687cba3a3bff3
+- card_id: legacy_of_thunder
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: legacy_of_thunder.jpg
+    sha256: 457c5e517df4de4f6490cb18188913df4ef64bdd9abb19bae025d257195b061a
+- card_id: levied_refugees
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: levied_refugees.jpg
+    sha256: fa30814bd0ccec4d545f68c55e5d6a4ef09b45222d6aee8e4214781b27428dc7
+- card_id: like_a_twig
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: like_a_twig.jpg
+    sha256: b6721f5dd21eb97f337fb5e27faa6d9f396d520cf287e567dbfd6d218e70d895
+- card_id: lone_gunso
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: lone_gunso.jpg
+    sha256: 8657614cba1bba0eb8e696f1cd7669569c037a2d19f7a664e519294fdf1ba1a9
+- card_id: matsu_jun_kei
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: matsu_jun_kei.jpg
+    sha256: 276e41f26497dc7599d338f33796fe7bdb18011fe4755bebd0d3b1ffbc29f611
+- card_id: matsu_odo
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: matsu_odo.jpg
+    sha256: 9c00537938bbdf128bbfc134927a8a103b7d660727adc56146fd0aaf4555ee75
+- card_id: matsu_tayuko_experienced_2
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: matsu_tayuko_experienced_2.jpg
+    sha256: 71b124deb0f59b60e2755effa1eb2ca6d632f3289025c817e694d6c4e48edf76
+- card_id: mirumoto_osakaro
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: mirumoto_osakaro.jpg
+    sha256: d41b4618f6b21f63442123f301667c5ab012117f7598f70bde070000905e9c63
+- card_id: moment_of_mercy
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: moment_of_mercy.jpg
+    sha256: 3b0f5874cf78cb7e553feb41d2128058190611d63aeb598d62a730afbba5df29
+- card_id: moto_ajinai
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: moto_ajinai.jpg
+    sha256: b73db094081d901aa6d3e6676579a690aeecbc6437a0427971d55e509d3854ae
+- card_id: moto_kyung_won
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: moto_kyung_won.jpg
+    sha256: 310b73317cfc39e537293affce8b7e7f2ac523be1e22f4c6b708cc91bb2ffcad
+- card_id: moto_oyuun
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: moto_oyuun.jpg
+    sha256: 533069d99bfccb37f1cef8157af2a36cef69b57e783fe97544d712fbc4b5e739
+- card_id: moto_yesui
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: moto_yesui.jpg
+    sha256: 4957c52362c69471192a5877639fc0eb77c089767c8574ff421e057596ed0b5c
+- card_id: moto_zi_feng_villain
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: moto_zi_feng_villain.jpg
+    sha256: 41884e67516076add072e24f27c122741df00fb8946ca78e02e86308a5124504
+- card_id: muzakas_kiss
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: muzakas_kiss.jpg
+    sha256: 82e31c6c47b81b7176ed6c4b57391d705ae168380c37c19df7f9cbf773964a6e
+- card_id: naga_attach
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: naga_attach.jpg
+    sha256: 7c281b67915e83f765bcf0b9e7825b2d6dd304ed6a51dfc61187baa2cc7c4910
+- card_id: oblivious_scout
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: oblivious_scout.jpg
+    sha256: 673895da97f3b080002dd493eebdbd04c7d340a8064dda7d782de39c8a033e72
+- card_id: okui
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: okui.jpg
+    sha256: c5df44bd6480ebd63f35400edd6e60dce7e2bd6756614c72ed5e6f26e1021879
+- card_id: otomo_suikihime_second_city_governor_experienced_2
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: otomo_suikihime_second_city_governor_experienced_2.jpg
+    sha256: 1ffc7dfcbb6403414366c8fefbb923fb1c9707323de5cfb29f25fe1891976a8b
+- card_id: outlying_farms
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: outlying_farms.jpg
+    sha256: e2672b73b44e82f899ee0ce38d81fc6997171c25bd7f39a14ce83585c429d46b
+- card_id: path_of_the_stream
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: path_of_the_stream.jpg
+    sha256: 157aaf5660f223d12befc43a29f00813bbaf2e8403d52beb459a6d419bafd924
+- card_id: profitable_losses
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: profitable_losses.jpg
+    sha256: 9659da952f363add4240e3dde58c1cabc3ee4927eb7197b35ddc3ceaf3b14037
+- card_id: purging_touch_of_tamon
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: purging_touch_of_tamon.jpg
+    sha256: 70f31fe5994cafc2c1c25e5cea8385182c417c699cb804a109c1c5d32a6c7530
+- card_id: reborn_in_flames
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: reborn_in_flames.jpg
+    sha256: 42460448fc6ed21837fdd4768218da1ed96dd7309a3af9f9ab7d3e5fbe802c31
+- card_id: reflecting_waters
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: reflecting_waters.jpg
+    sha256: f91ac761afa72f882ed4ee923009d0fa0654b5c1331fe3c291fa5c08b2b630fb
+- card_id: reliable_blade
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: reliable_blade.jpg
+    sha256: 0e13e0718cf9805108097bc34c41b16cb9b8cdea8b4e5006f84dec873da5057f
+- card_id: repairing_the_ruins
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: repairing_the_ruins.jpg
+    sha256: 55f1872f9fae22eb473bb5807d65a3d472227ceed4f4adf5eee9f5bb50ec8fc8
+- card_id: requisition_supplies
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: requisition_supplies.jpg
+    sha256: 1f29a24d9e4beb6f688734d642a372037700954695387fc111cda4a5b5a249bc
+- card_id: scouting_position
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: scouting_position.jpg
+    sha256: 6f2a7bd009237f38d2bdb1abc64726bbec0f0df360e8b0d65b61e2ed44bea6b4
+- card_id: second_city_guards
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: second_city_guards.jpg
+    sha256: dfd136029b5332c3e8022e4ea66dd6b3dc37329187cda8f5f74a5487ec085da8
+- card_id: seize_the_moment
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: seize_the_moment.jpg
+    sha256: dfad0f179a39abb376633bd41fc0d1878b9ccb538b581f3417a810c5136e1285
+- card_id: send_a_message
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: send_a_message.jpg
+    sha256: fb3cc33f9109342e13fd664d25c2afb2149441db7b31a3507b14123eeb945e8d
+- card_id: seska
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: seska.jpg
+    sha256: 1228c0111d0cfab86a444aa289f3b722989efd97327d92d018837720496b87c1
+- card_id: seven_silks
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: seven_silks.jpg
+    sha256: dae6d0913cbe1cbc34bbf22855cc8ee18b1ac8fa6864f7f9d29458181ff63d39
+- card_id: severing_maneuver
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: severing_maneuver.jpg
+    sha256: 8b21eca788396edaab41f1ecc3e74610db84af41d3e0704c7cf10c1698d5366f
+- card_id: shiba_tetsunori_revered_sensei
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: shiba_tetsunori_revered_sensei.jpg
+    sha256: 48035b89402d3b97b99677671bdba57fa883f74926f67d93a48e56e51716d892
+- card_id: shinjo_sosuke
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: shinjo_sosuke.jpg
+    sha256: 5b3a2c6b0d2871f48dc4043c06d448dd8fd1728385d5ae70df77c20192e46db0
+- card_id: shosuro_hotaka_governors_advisor_experienced
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: shosuro_hotaka_governors_advisor_experienced.jpg
+    sha256: 0ad52b934811eca6503e9bc2e4bef5589ccdbd5bf769c52dfaa480d0ee2b86d7
+- card_id: siege_of_the_great_wall
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: siege_of_the_great_wall.jpg
+    sha256: 7571f6e52053156bf1bc0f787f699d10eab55f557c13db2518e994dba83e2b44
+- card_id: sikari_acolyte
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: sikari_acolyte.jpg
+    sha256: 38e62e4e6d404c8ec0d933477c72cddfffaeac027363dca72521a26521442dc0
+- card_id: silent_assault
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: silent_assault.jpg
+    sha256: 8f00ab0f242c20de599750dc40e777ca6fd4f2274888649eaa0e736bb6c97a4a
+- card_id: soli_izumo
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: soli_izumo.jpg
+    sha256: 76985b195b91fdb0e11faab204f8be7cd0e9f8686013f7600423425541c81184
+- card_id: soshi_mitichi
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: soshi_mitichi.jpg
+    sha256: b4a3bb333791f484c7b2fb45facd97e967b2632e85cd451601260b279f3f8a01
+- card_id: striking_tactics
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: striking_tactics.jpg
+    sha256: dc3461c7268031fbf1a0e64f4b00503ac4dd8b79c63e2ceb87c49c249e9136b8
+- card_id: suikihimes_domain
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: suikihimes_domain.jpg
+    sha256: 77e68db53555014a33682c5ab6766477016daeba29c67c00c00b8fc38e9761e9
+- card_id: sushel
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: sushel.jpg
+    sha256: 6c64520846960433dec1b83a7edafb88d1eab2e98957b37c78a77dccf2950261
+- card_id: takao_sensei
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: takao_sensei.jpg
+    sha256: 1b53fd0baf6f879bd16a20d9bc72d0b1b437fabc036ead1c8cfbb4b610f09c03
+- card_id: tamori_josuke
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: tamori_josuke.jpg
+    sha256: 90bf4ba0de385e55c986e62ca23f6c4ea07bd70631e8f87a3ce2af0f749fdc86
+- card_id: tamori_junya_experienced
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: tamori_junya_experienced.jpg
+    sha256: d364ab719da5f32c57197a7288f4cefe286a3165fecd9bfb811599f352053e78
+- card_id: tao_defenders
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: tao_defenders.jpg
+    sha256: 0927811bd3ef03bd7ab75fb79de2c134600d21999dadd9bb3fd54c60fa16acc7
+- card_id: teskath_experienced
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: teskath_experienced.jpg
+    sha256: 0b9d7a9647251f1c60ae4ee5982474af2214108609eee8363caa47c9a5210c61
+- card_id: the_dead_eyed
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: the_dead_eyed.jpg
+    sha256: 81bb5cc0d52842e4c162c745f25f1db6301e5cc90c9c200be9e361c8efa100d5
+- card_id: the_forgotten
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: the_forgotten.jpg
+    sha256: 19eba3abdad49e382b7ad57bd6e78d9c56ab0ecb0676b929cb019a4c41e4f299
+- card_id: the_hida_ryokans
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: the_hida_ryokans.jpg
+    sha256: 0efba854761431f8eef815be3919a45757d97d4e939dd4c39bfaf6f8c425e167
+- card_id: the_line_must_be_drawn_here
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: the_line_must_be_drawn_here.jpg
+    sha256: a08e51ba163d30bb894f9cac644ba588c2a3dc6388ff7ab0ffa040c986cc8c21
+- card_id: the_little_bear_experienced_3
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: the_little_bear_experienced_3.jpg
+    sha256: 3e6a3dc3004c117c2957e62eff791e6592bd952a779fe5ab3501d4e3a8634692
+- card_id: the_relentless_earth
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: the_relentless_earth.jpg
+    sha256: 07fc5564136ae5069f2ee71a1ad72e396b6fde72993efc5f91f308be5f19aaab
+- card_id: the_souls_forge
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: the_souls_forge.jpg
+    sha256: e96af86c2fa8f918f73e3229c079866df2689d3b49ba04c02061c1275fdf064f
+- card_id: the_spirit_ascends
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: the_spirit_ascends.jpg
+    sha256: 7c7929b3962eeb445486944ed583c3bd632ffda0a349b6d220402ed24678a0d3
+- card_id: the_unicorn_expedition
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: the_unicorn_expedition.jpg
+    sha256: d02fe3ffd1af2f20f08dbbfb4d59a9970907a420c04b6f8ba7ef3c8ed34c829f
+- card_id: the_vipers_teeth
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: the_vipers_teeth.jpg
+    sha256: 8173abc2839491708c6f5265f2ad229f9a646a463ade364fd7a4e289056f0049
+- card_id: to_the_bitter_end
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: to_the_bitter_end.jpg
+    sha256: 1718199ee983c2f2f98eec627599fabbded85e76150191093b724edbb4873241
+- card_id: togashi_jin
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: togashi_jin.jpg
+    sha256: 9b1639a053e50c4957e3da1dfa4385940ce4c2aff3fa380a7b0c2a43963cfd41
+- card_id: togashi_toa
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: togashi_toa.jpg
+    sha256: 5304dbab2e791d6027d7255f9f31f14b0058d0771f8e3f39045d41372d9a47aa
+- card_id: unity_of_spirit
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: unity_of_spirit.jpg
+    sha256: 32b223a34778fd04ebe112b2447c0b22a13710976448204b49bef9612076e68f
+- card_id: unyielding_stance
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: unyielding_stance.jpg
+    sha256: b55871eea986587c796df96a74363e59de959cf449f30fc3c2cd0f47278bc2bd
+- card_id: utaku_sakiko_experienced_2
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: utaku_sakiko_experienced_2.jpg
+    sha256: a20a8ca22e61b7f5ed617d8c72852028f75b3e1fe85ff06993f8ad30cb123c6b
+- card_id: verdant_wilds
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: verdant_wilds.jpg
+    sha256: 1dbdb8160e0851884c09440d5448e35ca4b12899173961902990ad654d5656e6
+- card_id: veteran_gunso
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: veteran_gunso.jpg
+    sha256: c8b27cabb03fb8624f72ec8485cb9d5381188ba0887e2081eb63ca46c0a0f7d5
+- card_id: wall_of_the_sky
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: wall_of_the_sky.jpg
+    sha256: 8a19a6a7830385e57b18c69c2d6051fa3e39fda454a5200d55c832954fd13b12
+- card_id: ward_of_disruption
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: ward_of_disruption.jpg
+    sha256: 8686b4e8cdb06b0125b72812344df1a74c6fd4b0ff930f272d7c89a8874c0a76
+- card_id: ward_of_transcendence
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: ward_of_transcendence.jpg
+    sha256: 0052c221ec7f9c8cd576f783aae4f7a406bb5d6df1e1aa167b81a02b5cbd5ac6
+- card_id: wasps_vow
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: wasps_vow.jpg
+    sha256: b28201996238e1202df62bc5c9a41fe919d706298fe21c9b8089529b91554cc2
+- card_id: yama_no_kamis_pyre
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: yama_no_kamis_pyre.jpg
+    sha256: d61880bfdb28f8e33def81745cf49e38d4686abfed28a5ea9ac83a37de60fa5d
+- card_id: yasuki_kaiketsu
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: yasuki_kaiketsu.jpg
+    sha256: 98fe498576091a781ce19b159c6885e0fae7064ed914697e1efe7186511d790b
+- card_id: yasukis_smile
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: yasukis_smile.jpg
+    sha256: 433b4cbce6eb245c551d07db939f600d6b1b4c3a48d388df007f57976502e9fe
+- card_id: yogo_inoue
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: yogo_inoue.jpg
+    sha256: 97a2fdff6b37365796b5207946c7261b5d69d0ee23b645b60f152933af87561c
+- card_id: young_kohai
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: young_kohai.jpg
+    sha256: 588cae21b4c2b812d19dc84ecbef638c823e7009c10f17ba4a3b97e06ad45072
+- card_id: zokujin_burrows
+  printing_id: road_to_ruin
+  files:
+  - role: front
+    file: zokujin_burrows.jpg
+    sha256: 02d6d8f6057e614dc9f924830ed2c897483e25565301fdfac0ff94ba14c6345e

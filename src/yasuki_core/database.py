@@ -450,6 +450,22 @@ def query_all_decks() -> list[str]:
             return results
 
 
+def get_card_backs() -> dict[tuple[str, str], str]:
+    """
+    Fetch the generic card backs.
+
+    Returns
+    -------
+    backs : dict mapping (deck, era) to str
+        Image path for each ``(deck, era)`` back, where era is one of ``'old'``, ``'new'``,
+        ``'token'``.
+    """
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT deck::text AS deck, era, image_path FROM card_backs")
+            return {(row["deck"], row["era"]): row["image_path"] for row in cur.fetchall()}
+
+
 def query_all_clans() -> list[str]:
     """
     Fetch all unique clans.

@@ -1,0 +1,926 @@
+set: Drums of War
+images:
+- card_id: agasha_chisuzu
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: agasha_chisuzu.jpg
+    sha256: 764f33f2b7bf87811c43ceb15eb4d6a39d85c771bec2d234f17ee682b3f0ba1d
+- card_id: all_things_have_a_price
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: all_things_have_a_price.jpg
+    sha256: 5090c277b6e16781e93c2948a5c0e54006bd286df1bc91f6e7d0906b79fbeb73
+- card_id: arms_smugglers
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: arms_smugglers.jpg
+    sha256: b9e4688a584c489a68f667e5a21984cf5f1ff3455a7b824f281b221c69197fd1
+- card_id: asahina_hira_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: asahina_hira_experienced.jpg
+    sha256: cd5611fa347139ba50e74a0a06908d0d30891d24337af485ee6266e0fb654183
+- card_id: asahina_sekawa_experienced_3
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: asahina_sekawa_experienced_3.jpg
+    sha256: 21e63a64baabb42a896a2a64a596d582187f644f4055681aa6dd43fbfae89738
+- card_id: asako_meisuru
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: asako_meisuru.jpg
+    sha256: 806258afddfe2af930be7e81363c7df617d68de064ec4a837d6d785244c006d0
+- card_id: awaken_the_sins
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: awaken_the_sins.jpg
+    sha256: ecdd499b97769d37d4934e3dd98cdf59419ed81bc3925d5d2dede16ac85166e7
+- card_id: back_to_back
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: back_to_back.jpg
+    sha256: 6e2ef374c8c3c31b8b83ef5cb42f102d080ae915ef2fb62cd74a59114325c065
+- card_id: bayushi_lineage
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: bayushi_lineage.jpg
+    sha256: 13c5f9dadc796e0126ebe84239a0a1ae931aa561a5f5df25fb8ea2c851a6ba4f
+- card_id: bayushi_muhito_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: bayushi_muhito_experienced.jpg
+    sha256: 6519243f2af5179cabe24aa4f80606bfec7dc4e78dd96a3d2ac1226ab65ec9f6
+- card_id: blade_of_hubris
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: blade_of_hubris.jpg
+    sha256: c47bf7983fdbb0f97f903c66986cdad3b3f3c42c64eb24e8b76440658a5b922d
+- card_id: blessed_yumi
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: blessed_yumi.jpg
+    sha256: 253615d73d7e4f51a9808c6e9f42b82d021d1da195b052b9633217b888e24a55
+- card_id: border_conflict
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: border_conflict.jpg
+    sha256: 9e9bc875f968f5a5853af9a43aece86fb88e23ea8639352353f5a85a5b92fe59
+- card_id: broad_front
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: broad_front.jpg
+    sha256: 9f21a0850f4da84784add8c7ea84803f6ccd4c3dcb6c16c99a3f5b15302ce1e4
+- card_id: broken_shinbone_warren
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: broken_shinbone_warren.jpg
+    sha256: b8b0cf637ca7b032112c9c8218787a8a331c15183d364729be5ea04ec034b3cb
+- card_id: buying_time
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: buying_time.jpg
+    sha256: 57fd88bd314dd902f7bdb43abdc3b7727b5cc3fcbc54761a97392bdf2bfa01fa
+- card_id: city_of_the_rich_frog
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: city_of_the_rich_frog.jpg
+    sha256: 445beae99811d444b5f11a6d97bbf080b16a583ab05df6c31884c7d18ad0a4fc
+- card_id: corrupt_jade_vein
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: corrupt_jade_vein.jpg
+    sha256: 2aa50d4a3db5d0733c274a05eb797d29eb432585beeca7e237ed6f591b6d8e1e
+- card_id: crane_detachment
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: crane_detachment.jpg
+    sha256: 79938fee1dff4aaa58763c0784d7858c3f06ef9d5d165c2114f1957fb27adfa0
+- card_id: crippling_cut
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: crippling_cut.jpg
+    sha256: 5cbab873f8fb939393c9acfc81841387cb78c4ea1a4e008824cb34e58805b876
+- card_id: crossroads_of_destiny
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: crossroads_of_destiny.jpg
+    sha256: 03920fcf6d6d72cf2116d403c7133d6dc3e295d20fd392612457b26b9f15562d
+- card_id: daigotsu_kaikou
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: daigotsu_kaikou.jpg
+    sha256: e41c12a656aff91ff2fc98820aee003a96450fe9e82d0a4c10843e5908a49f2a
+- card_id: daigotsu_masami
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: daigotsu_masami.jpg
+    sha256: e4fa754d2025953f8494fe85e09559ea1c3a04c6e576e426d032a5bead8414e2
+- card_id: daigotsu_rekai_experienced_3
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: daigotsu_rekai_experienced_3.jpg
+    sha256: c87537de1c832eb14753c458e7b3ddf5ca98fe469c1c12f144ea732a330b2544
+- card_id: dark_moto_steed
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: dark_moto_steed.jpg
+    sha256: 820fc8f99851fd9fad119860b0d59584ec9d7cd90fc9e2aac8671ba30622e4d3
+- card_id: deadly_melee
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: deadly_melee.jpg
+    sha256: dd62f4ed01f38f69d7008896612a8ff58dabc96d90456f7e1d4f0441c644cfd9
+- card_id: doji_chieri
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: doji_chieri.jpg
+    sha256: 718c6aa084e68892155955b68cc04794cb81662c7e1cf55f72b1b44835343268
+- card_id: doji_lineage
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: doji_lineage.jpg
+    sha256: 3d4891ce00d25888c893082f16fb89021f187f6290bbee6c9dfd065f2fa9ea30
+- card_id: dragons_heart_dojo
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: dragons_heart_dojo.jpg
+    sha256: 50bf597e5096ae4057f69746cf32e53ad562707a1f62720b247826e30314a3d6
+- card_id: eager_to_fight
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: eager_to_fight.jpg
+    sha256: 22fa7cf9624237043e1587971ef390c925f7188ace50967cf4a1e45ee46e9773
+- card_id: embrace_the_darkness
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: embrace_the_darkness.jpg
+    sha256: ff6d25840f29c3b5725a157333a2ae2f972fc75a7cfa8f5a905ba52f7f7a144d
+- card_id: exchange_destiny
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: exchange_destiny.jpg
+    sha256: be94a62f3702c303f1125ffbc198187fd0db34620ca41101ddcb923e8a0fa5a0
+- card_id: face_to_face
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: face_to_face.jpg
+    sha256: 2a8e20bc695929bc8760ef0c82e624bca691215f97b959551dbd2788f9375307
+- card_id: fields_of_mercy
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: fields_of_mercy.jpg
+    sha256: ddf7d5aa86bd8877b90e137d2638d7ee29438aabbd09ccdf289fbc9c315a6bee
+- card_id: flying_leap
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: flying_leap.jpg
+    sha256: 6874e8c8a661c821a6e176f9b98bbb1291495f5ec8d452a8461122565b4738f7
+- card_id: forest_thickets
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: forest_thickets.jpg
+    sha256: b845f10b0b7661e0577dbb0cd487c528b254baf11bd36aa06d8c1bd643a865a1
+- card_id: gates_of_jigoku
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: gates_of_jigoku.jpg
+    sha256: b21176e3fe779ae6f7a5e805758cb891713c3306e94de75283e475eef57abddf
+- card_id: goblin_healer
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: goblin_healer.jpg
+    sha256: 9db984127783bafbb8905b05d643516661f0dc6ec0691459bbe65d80811391ec
+- card_id: goblin_sapper
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: goblin_sapper.jpg
+    sha256: e1c47acbdafda16eb26f931e5e87bd56552cf938e7ae0fe5a45c1aef4a97c054
+- card_id: gozoku_distraction
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: gozoku_distraction.jpg
+    sha256: 03b1bda8aa31acf4178bd15c726ff40a8d6bcfd7e61c5838162b867ba7e3f5e9
+- card_id: gozoku_meddling
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: gozoku_meddling.jpg
+    sha256: a61d881cdee61f8957f26560f1cc689ad5c0382210da416c6d5a0b7b65ae37b8
+- card_id: gozoku_strategies
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: gozoku_strategies.jpg
+    sha256: f6b1dfa53c94740b074f4e7ec07dadb6b6841a4864679565a0e8c998933dbeae
+- card_id: grasp_destiny
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: grasp_destiny.jpg
+    sha256: 62ee9745041bcbe6219c4783b4ff9acf6edb79cc63130b625152b68921e3355c
+- card_id: guarded_by_chi
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: guarded_by_chi.jpg
+    sha256: aaa93b795f8b2db7134efd5712beea7881f11ca33c7c1489136d5111df607ec6
+- card_id: heigai_experienced_5
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: heigai_experienced_5.jpg
+    sha256: f04c736a5b79c203b7d7b332cfbdd2913773ff40c5a7fde7dd283066193b3fb4
+- card_id: heroic_feat
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: heroic_feat.jpg
+    sha256: 6937db0d96b3883c221889fc01475092b6bfa1c8c7c92b10419e280f5fc30376
+- card_id: hida_daizu_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: hida_daizu_experienced.jpg
+    sha256: 6557362a4d6bf41be7ede2b10959f492458068b846f54cfe2c18b7eba966aeae
+- card_id: hida_haruo
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: hida_haruo.jpg
+    sha256: 1c04c4af193532326ed20040405e1b1c7fc7cfeecb03b9336fc32cc82c6196d8
+- card_id: hida_kaihei
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: hida_kaihei.jpg
+    sha256: 4dee10fe796feff139fb9f328a5683d1ff15cd73e8fc8746868901ccb580fcb7
+- card_id: hida_kengo
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: hida_kengo.jpg
+    sha256: 78c5096dd1cc5fde06f2587e4ea26a26f3400b46491fc7a4f9ba51980f8a1e65
+- card_id: hida_nichie
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: hida_nichie.jpg
+    sha256: d507eed6b9dcac64f69180697c1f397ec6a3b6a1ccafea99a1f6668ede90b517
+- card_id: hida_students
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: hida_students.jpg
+    sha256: d889954aaed9909b4e0f45b919005536ca47313f56f3049b94f82b49ec3e9432
+- card_id: hitomi_mineyo
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: hitomi_mineyo.jpg
+    sha256: 84c6509ec8070b7330fa136dbd9f4448dc83a11593e52c426c943921b18f3e6a
+- card_id: hitomi_suguhara_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: hitomi_suguhara_experienced.jpg
+    sha256: ed0981333d823ffc196988b0987a85892f3b37b6b927acfd54b4fca872631edf
+- card_id: hitomi_tatsumi
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: hitomi_tatsumi.jpg
+    sha256: 2b247f80fbb02d89d801a34943498793430264220191eb944cd9a223695e05e2
+- card_id: hitomi_tsubo
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: hitomi_tsubo.jpg
+    sha256: 3592f2c944bc03b70330a85b84c5dd47806ef4f9360ab56f7e1faa8c54f4971a
+- card_id: horiuchi_wakiza
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: horiuchi_wakiza.jpg
+    sha256: 188666d322283efe74a886d0761518a251d72e6a26667aacd551211f288db41e
+- card_id: ichiro_kihongo_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: ichiro_kihongo_experienced.jpg
+    sha256: 0e829cf31890b6b97b6b733c64539b59213f1651da62ef50b0f83f16c4e9a17c
+- card_id: ikoma_fujimaro_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: ikoma_fujimaro_experienced.jpg
+    sha256: 1b27c2db56713e62ef0e96e54f8fe0f36031bd98d92a1dc9b7841fa979ebd79a
+- card_id: ikuei
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: ikuei.jpg
+    sha256: 60c1ad9b73745feb069698242119dae6ab2c5ba9af3300882736fe8b9325f5df
+- card_id: immobile_stance
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: immobile_stance.jpg
+    sha256: 4252833e323fbcf1054380d2d1a6c12babaf2e23e25211ca635f6961c47a097f
+- card_id: isawa_aiya
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: isawa_aiya.jpg
+    sha256: 3795fcbb13331403da158bff39af901e5140347aa56e5647a31518809628faf5
+- card_id: joy_of_plunder
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: joy_of_plunder.jpg
+    sha256: 3a6e491270b48e3632e7fb35d190daaa9a72f0f3d3e8b372d51e78b41112c9db
+- card_id: junghar_encampment
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: junghar_encampment.jpg
+    sha256: 3fc77588357b01b301dc75938b06c2ccff7a621b254d3b0b5069b19cc24a7e00
+- card_id: kakita_daiki
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: kakita_daiki.jpg
+    sha256: d13f0ea8f8e5c4d75210f7ddce5c955c43302174818fb6fde47c3b448b2ef59e
+- card_id: kakita_korihime_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: kakita_korihime_experienced.jpg
+    sha256: d748767a23d404cd77440f1cbcb67c4d04704a6c4f26a4731c8aaeb542dc2a9f
+- card_id: kanekas_conflict
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: kanekas_conflict.jpg
+    sha256: 02560688c356eb6164f760b8e21baf5d2979057ba636fec5d05a2c5d3ab78d3d
+- card_id: kitsu_fukashi
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: kitsu_fukashi.jpg
+    sha256: a9168f821b21256bc2ed962230599e17986dad957e327ed59fae740ffa42051e
+- card_id: kitsu_katsuko
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: kitsu_katsuko.jpg
+    sha256: 444ff64ba5ca7f3277ce41cc9972c3318677af8613b5ef305919b99576f0ef60
+- card_id: kitsu_lineage
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: kitsu_lineage.jpg
+    sha256: 7043e362c12c27cf95b149624564e28e2ce96cc9f4a16b803c6e9c1da5e79678
+- card_id: kitsuki_orika
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: kitsuki_orika.jpg
+    sha256: da1ad4e13dfcb5cb1b900133c58f7759f5fe2c23a7331c838667349005d07862
+- card_id: kokujins_daisho_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: kokujins_daisho_experienced.jpg
+    sha256: 63a10f8b81e386310da2c40491cac6beef4aee0a66e56b6809103ea8a012779c
+- card_id: kyofu_experienced_2
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: kyofu_experienced_2.jpg
+    sha256: f1dbad8d662a91c29205f916ecdeaec6d0fe0a0174f623daf6f81dafd59f7818
+- card_id: lady_moons_prophecy
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: lady_moons_prophecy.jpg
+    sha256: 2b4f733b9f12bf20d06dc433f2086a4e74b5dfbb2e22f07e8bc2c3de888891f2
+- card_id: lateral_maneuver
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: lateral_maneuver.jpg
+    sha256: fb53b4c60ad9ce412449cffae658404f9878964f27c16768c65e933f666279aa
+- card_id: lion_detachment
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: lion_detachment.jpg
+    sha256: 3222a2e3e3ad6239ec7d413b3599a5bc599e30e3ecde912d3ca32531573397eb
+- card_id: mantis_detachment
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: mantis_detachment.jpg
+    sha256: 41abc3e4bff7c758e7c3debc1a517a5cbacdc7b0ab39a2cd72b70eb19237fdb1
+- card_id: mark_of_the_taint
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: mark_of_the_taint.jpg
+    sha256: 4af83ad35bdc4e563d5ea806161750a42cdb2abb42fa3ce36bc9f8436fb454b1
+- card_id: matsu_benika
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: matsu_benika.jpg
+    sha256: 9d0b6324fe2e916a09311a1ca9deb3d3f633a68552c547953f74ca7643f49281
+- card_id: matsu_lineage
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: matsu_lineage.jpg
+    sha256: 8bd3a2b7f163b6f000b65499bccf1c0a2e1d1aae6470e31b6c7acc3308e8d3f9
+- card_id: matsu_yokuya
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: matsu_yokuya.jpg
+    sha256: ebbe90ad4c0f544e998fc40b3e233a6c7299c4d1b6fbd8d8d891accc1ce159ac
+- card_id: memories_of_the_lost
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: memories_of_the_lost.jpg
+    sha256: 179ebf909b14e0d04ae0fee6f61425c8d52480291bbe1aefe6ea1db7e4bdcafa
+- card_id: mockery
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: mockery.jpg
+    sha256: 2444c50ce61f133daf3ee8b0e8ee1f4dad2dc737e91e15290c469f14c2a56332
+- card_id: moto_wasaka
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: moto_wasaka.jpg
+    sha256: cad40c544ea71c5b2049f959ed5fb05dbb4be15bd6f5f3dfb7063b033cc6554e
+- card_id: municipal_roads
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: municipal_roads.jpg
+    sha256: d957112a3db9423b308e3c369b1c0b6e4783747110d9753cf738bd1274b8d1a2
+- card_id: naserus_conflict
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: naserus_conflict.jpg
+    sha256: cbaa48f6a79b05fb091bd0cba3065100ab999e3566df2972a3b5b654c91562b4
+- card_id: nintai_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: nintai_experienced.jpg
+    sha256: 15cb652bd75e3428804ffa2f89fdf08f6de2f54fc5a2a5d3e3076242c5253548
+- card_id: omoni_experienced_2
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: omoni_experienced_2.jpg
+    sha256: e297b3074ee30e5655dd3491b806e3b98b56d44cd76c8346a776d07e3097a205
+- card_id: path_of_jigoku
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: path_of_jigoku.jpg
+    sha256: 321025d4597c6dbdd95eb1572e2042e30696411073c4f7751e0cc4c07202c123
+- card_id: phoenix_detachment
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: phoenix_detachment.jpg
+    sha256: b73b1cec379ef6e3334bc440e40f6a5cc82184238f63f84bd742af1af0804ab5
+- card_id: porcelain_mask_of_fu_leng_experienced_2
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: porcelain_mask_of_fu_leng_experienced_2.jpg
+    sha256: f844075fa380911cdf4181d4006c4d918880b7080f2947c7a8e7c6abcc340cce
+- card_id: precise_strike
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: precise_strike.jpg
+    sha256: 5eb464f747d0816a473dec7f2d2346b23ca3f5465b5a9e3863d4e84321c993db
+- card_id: re_outfitting
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: re_outfitting.jpg
+    sha256: bbfdb7804bd8ce61f8aeebcd40cea9e53ed09d969db08ca5393b89f16544f932
+- card_id: reckless_pursuit
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: reckless_pursuit.jpg
+    sha256: f2b14a878e44126c297db8d5505dd68391a0c5be7d83356de14610f354a8abb4
+- card_id: reinforcements_arrive
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: reinforcements_arrive.jpg
+    sha256: 52ce3ee10f3cedc39d8f54f9dc98df427d8f3cb2a10d840289c35391b893d333
+- card_id: relief_troops
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: relief_troops.jpg
+    sha256: c7b220e36e555f19baf1c142e542318b0d1f391d1c9bddeb0df3ea885c6d9ea6
+- card_id: run_or_die
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: run_or_die.jpg
+    sha256: 872e4ab73da06368d7c5f9bd0d23e04138a80880b337cef801e70fe4f332a147
+- card_id: second_doom_of_the_lion
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: second_doom_of_the_lion.jpg
+    sha256: 80f50f2cf86993b65dcb947960347458e64fb9bc78e6b5c48ef49bd1137aec2c
+- card_id: second_doom_of_the_phoenix
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: second_doom_of_the_phoenix.jpg
+    sha256: 3cf0a6dc2a43230883abc03040a3ad79cd4f80766714a64ce34d0c930ae46c16
+- card_id: serene_patrol
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: serene_patrol.jpg
+    sha256: af278a59fa80779e4cd94e780a0e21a1c85a4cb3e6bfe7382a605045a9663165
+- card_id: settchchet
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: settchchet.jpg
+    sha256: e73ff21cbe5624917e83b691fbb2e54d19cb0c0abd476c1efe22f3dedab9ead7
+- card_id: sezarus_burden
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: sezarus_burden.jpg
+    sha256: ca6607fd360c73886848840a99b85fd688bd321d0826c37e23a228335d1e357c
+- card_id: sezarus_conflict
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: sezarus_conflict.jpg
+    sha256: fadbf6202b479f99519c58d1a214a8026b6c68c8af8e0f4e53850a6f8c0c996b
+- card_id: shadow_on_the_court
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shadow_on_the_court.jpg
+    sha256: 50f06082a130df84b1eb6286d1112d900dbd7df1b2326d388e422733c81c7565
+- card_id: shadowed_path_to_victory
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shadowed_path_to_victory.jpg
+    sha256: 34e979adda3be321e0cbe0d05b81a994ee4ff6ffd7a18564ce5d82f57ac214a6
+- card_id: shamed_by_valor
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shamed_by_valor.jpg
+    sha256: b7c2a22dfb2714894ef14e033ed8dd869442a199597652f126b97a71c35f89d3
+- card_id: shattered_defenses
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shattered_defenses.jpg
+    sha256: 89f7a24cd42efd80f2ab0d9406ef32fe515b812ee1d4c04d04580623ae402b9b
+- card_id: shiba_danjuro_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shiba_danjuro_experienced.jpg
+    sha256: 259502f4ee9a654f7572b024861d216dde10c269940f4ff9af45b27b7cb329d2
+- card_id: shiba_gyousei
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shiba_gyousei.jpg
+    sha256: ad43fba546ddcec6d37606e250699886bc62f192644f9ad1b623b324d88b5726
+- card_id: shibas_promise
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shibas_promise.jpg
+    sha256: 9c4f328712e9b1ca807d800d9c487ddd2f256578d6b532432a2ec3fb9ad4478a
+- card_id: shinbone_pack
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shinbone_pack.jpg
+    sha256: 7f3b8fe0ab43c3d11c97eb1da0c470d35ca04db54c7ebb3f9095a59d4acfbe92
+- card_id: shinbone_warrior
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shinbone_warrior.jpg
+    sha256: 5f57953b0b3acf477f192714f9473edad90d36f55ca2088589324e0f534155db
+- card_id: shinjo_dun
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shinjo_dun.jpg
+    sha256: 4d6e010e88d48631459545001f90798b069369796d20111901a034a8b82ffad7
+- card_id: shinjo_shono_experienced_3
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shinjo_shono_experienced_3.jpg
+    sha256: 82aca40f64690c680bc691cbcf38800b493f3e5280ca4099ccd6ea4034d19e39
+- card_id: shinseis_crow
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shinseis_crow.jpg
+    sha256: 46594ecdbe2808a39bae2da4fc97671f09dd6730762cb1178b025bd14e0c7cc4
+- card_id: shosuro_maru_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shosuro_maru_experienced.jpg
+    sha256: 48617d6bd7db256b2c2b69409f2755232303e53d6ae786977cf2aa6968eb7a02
+- card_id: shosuro_nakako
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shosuro_nakako.jpg
+    sha256: 20927ff45c0e37dc23545fac51c58401836884fb99901ac2fb18439b377812ab
+- card_id: shosuro_rishou
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shosuro_rishou.jpg
+    sha256: 4c045f19887f72f68bd4774a988aeccb42dcdfe78167c0c8fdbf61865e58e3f9
+- card_id: shosuro_yudoka_experienced_2
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shosuro_yudoka_experienced_2.jpg
+    sha256: 8111a7d36284dd0cdff0080b0142d381347d5b47f129983892bc0af73c805298
+- card_id: shoulder_to_shoulder
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: shoulder_to_shoulder.jpg
+    sha256: ae00da612ccea260fff4f1d461445e88134fd585178d7f07dd473d8ecadbf7dd
+- card_id: silent_kill
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: silent_kill.jpg
+    sha256: e3e12fa249a306122f22ead6f5c22fb2f87bcd3fe2201dc85977421df54d3b7a
+- card_id: smuggler_agent
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: smuggler_agent.jpg
+    sha256: 78031437ab7413e629062eab249b0192526d14a78a1b4efb1f45ec645de71fcb
+- card_id: song_of_steel
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: song_of_steel.jpg
+    sha256: c7eb0c74fee689287212b34ea697c85868de1929cd3345ec4fc4cf06d4950580
+- card_id: soshi_shuuko
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: soshi_shuuko.jpg
+    sha256: 83a0577de313a7630188ee72de1373f64cedbb392d73ced630af9abe2478e2af
+- card_id: spiked_tetsubo
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: spiked_tetsubo.jpg
+    sha256: fcc2c1264929f88572e6d71b5d7e593d8a0f70846ed1095ac2c663a77d7a69c0
+- card_id: supply_smugglers
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: supply_smugglers.jpg
+    sha256: d4b856f5185cac7b55dc41146e5283014fb001d3dbcee7dfb11d6f86fdd8e332
+- card_id: tanuki_spirit
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: tanuki_spirit.jpg
+    sha256: 2893696d8bccb3d570a7e25afa30f057b5e59eab85c14a7588accebe204b9ba1
+- card_id: tawagoto_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: tawagoto_experienced.jpg
+    sha256: 217e3ccfeaccc94dd30904ebf86b5239d494b4e6f5e49ff4514c61a04aa4b4b7
+- card_id: tchtek
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: tchtek.jpg
+    sha256: 8038273f5b5cb0f0ed2c5755dc23453dc86d217e25f9794772d43af48560d531
+- card_id: the_hall_of_ancestors
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: the_hall_of_ancestors.jpg
+    sha256: b809ad81ba8bcc732423aae737d4c11778c5c33c909ca45ace8b5362d0dedce5
+- card_id: the_shoguns_guard
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: the_shoguns_guard.jpg
+    sha256: 5234eed2ef8889eec8f5ca016da8201c42e16bea3941e87200dea6cedc40a8a8
+- card_id: togashi_mitsu_experienced_3
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: togashi_mitsu_experienced_3.jpg
+    sha256: 8c329736625204b0a8ffeddc205f60ca98b4b51ee2b37bf0c9f758d0588748db
+- card_id: toturi_miyako_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: toturi_miyako_experienced.jpg
+    sha256: 5d1a34416b163cdb59042c367a6220dc923dc532167d9cd57cc944460d4fa22e
+- card_id: toturis_battle_standard_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: toturis_battle_standard_experienced.jpg
+    sha256: 3a79199c567f6836c76a43f5925af81752ef8591dd872e5d30d00efc8c7585ee
+- card_id: tsukuri
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: tsukuri.jpg
+    sha256: 7b942e0939895dfb10d37201cfaf37279780e3127896e9f9e1f8d2cfce75f4ec
+- card_id: tsuruchi_chikuma
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: tsuruchi_chikuma.jpg
+    sha256: a2e156f895dd993736c714845e7db1584ddbe0d03d2de9868e3cfe28fde29996
+- card_id: tsuruchi_jougo
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: tsuruchi_jougo.jpg
+    sha256: 1f9c28525d6c0d879e20e7bc7d839b27fbeaa67934cbd5ec11388a964c106958
+- card_id: turn_the_tide
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: turn_the_tide.jpg
+    sha256: 114462824a8eec219e575420ff448bd81283ef629324ea11a26f23a398874b58
+- card_id: unexpected_resources
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: unexpected_resources.jpg
+    sha256: cf1cb66013017bd155b7e6efb5b677b64153f21d40ba511dee01244870abb3ed
+- card_id: unstoppable_force
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: unstoppable_force.jpg
+    sha256: d4333d5e30fa27d7c9999d5412d935ef3adadb0fc280828b4407f894518400f0
+- card_id: utaku_uzuki
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: utaku_uzuki.jpg
+    sha256: b7e610993921605eec0d86309460debf4f30dd79359a5397988f8e1b640912dd
+- card_id: utaku_yasuha
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: utaku_yasuha.jpg
+    sha256: b004d35f830581036bdff6b19d93e2ba8c6619b8d02daca31ffb6a17c6fbc8fa
+- card_id: vengeance_cannot_wait
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: vengeance_cannot_wait.jpg
+    sha256: f33b7b62544369971d09cf10561ae965de3f19fb56b659aff8669d60ecd8c5b2
+- card_id: visions_of_doom
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: visions_of_doom.jpg
+    sha256: a2fccb1a314e4f53fb5465540fbbc77ffaf3537b9cc1bac1ae2009f08a16833f
+- card_id: void_dragon_experienced_2
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: void_dragon_experienced_2.jpg
+    sha256: 07513ae4cdec7847d3677ad541cc088ded2a2dbcad267c1e507f5c3b2e536698
+- card_id: water_is_my_steed
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: water_is_my_steed.jpg
+    sha256: edcd6d873318e12408c321fd7006f21c68ed7eaf66417a6b98a74ff5149b1ece
+- card_id: weighted_yari
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: weighted_yari.jpg
+    sha256: d33f96fe2d5134b3410915a461f14003a9cc953ee077c5a81e6e027850e82c66
+- card_id: yasuki_gakuto
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: yasuki_gakuto.jpg
+    sha256: a7659bba786518bab54342767461a1114ecc148b65ae9797d0b8f5cd9768467a
+- card_id: yoeetrr_experienced
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: yoeetrr_experienced.jpg
+    sha256: 46a8d558aa6cfe21825d9b26560f4d60f83ff56f7743e9f8502652547b47541e
+- card_id: yoritomo_bunmei
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: yoritomo_bunmei.jpg
+    sha256: 26eeca951739d81ed9cc3d62100737e0a094503cb4d44dad1e2b24815c4a9c49
+- card_id: yoritomo_hanayo
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: yoritomo_hanayo.jpg
+    sha256: 94c254a0cf810f73911cd493cfa9c19a732a0810b7ebb5b885199964489abf4f
+- card_id: yoritomo_kitao_experienced_3
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: yoritomo_kitao_experienced_3.jpg
+    sha256: 70ef24040d9b52eb59bc72b3b641bd62b64a53d1b97f161828e4c24f52fe6869
+- card_id: yoritomo_yashinko
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: yoritomo_yashinko.jpg
+    sha256: 1888fa8925a687eb795bce9bc5b94bb83687905dbb34f4b1e9b11e0497b3fa11
+- card_id: yotsu_dojo
+  printing_id: drums_of_war
+  files:
+  - role: front
+    file: yotsu_dojo.jpg
+    sha256: b2a9e303b82a46465f8d26f9ef9571ec3f9da1f11596f9ed76c85cb75550446d
