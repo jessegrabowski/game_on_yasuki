@@ -1,2739 +1,3658 @@
 set: A Perfect Cut
 cards:
-  - title: The Great Climb
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Terrain
-    gold_cost: 0
-    focus: 1
-    text: 'Before this battle''s resolution: Take any number of additional Ranged Attack Battle actions from your cards at the
-      current battlefield. You may ignore these actions'' costs of bow cards (if any) when taking these actions, but each different
-      action may only be taken once.Battle: If there are no Terrains at the current battlefield: Put this card into play there.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Jeff Reitz
-    flavor: '"The Shiba pursued our archers into the mountainous terrain... to their sorrow." - Tonbo Dayu'
-    number: 1
-
-  - title: Blood Madness
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Limited: Bow and destroy your target performing Shadowlands Personality to straighten another of your target Shadowlands
-      cards. It will not straighten again before your next turn begins.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Ramon Perez
-    flavor: '"By the Fortunes, don''t stop and watch. Run!" -Hiruma Todori'
-    number: 2
-
-  - title: Iaijutsu Lesson
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Iaijutsu
-    gold_cost: 0
-    focus: 2
-    text: 'Iaijutsu Limited: Your target performing unbowed Personality challenges another player''s target Personality. He
-      may refuse; if he did, draw two cards. During the challenge and duel, negate bonuses, penalties, and new effects from
-      the Personalities'' Items and their modifiers are ignored. The winner gains 3 Honor. Bow the loser.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Common
-    artist: Tony Moseley
-    flavor: '"Welcome back, Ukira-sama."'
-    number: 3
-
-  - title: Acquiring Favor
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Political
-    gold_cost: 0
-    focus: 3
-    text: 'Reaction: When paying a cost of discarding the Imperial Favor, bow your Stronghold: This action pays that cost instead.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Al Skaar
-    flavor: '"The offer is a simple one, Lord Kaneka. Give the Scorpion our vengeance upon the traitor Aramasu, and we shall
-      give you the aid of a truly Great Clan." - The Death of Aramasu, Part V'
-    number: 4
-
-  - title: Contingency Planning
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Reaction: After one of your units moves home from a battlefield, target another of your unbowed units that has not
-      been assigned to a battlefield this turn: Move it to that battlefield.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: John Cadice
-    flavor: '"Remain here, Kuroda, and defend the Wall. I shall take a detachment of out troops and see to Kurohito personally."
-      - Daughter of the Bear, Part I'
-    number: 6
-
-  - title: Defensive Duty
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'Battle: If you are the Defender and even if you control no units at the current battlefield: Search your Dynasty
-      deck for a Personality and put it face-up in the current battlefield''s province, discarding any cards already there.
-      Give the province a strength bonus equal to the Personality''s Force. Discard the Personality after the battle ends.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Val Mayerik
-    number: 7
-
-  - title: Persuasion
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Political
-    gold_cost: 3
-    focus: 1
-    text: 'Limited: Target a player: He discards a card. Lose 2 honor.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Justin Norman
-    flavor: '"A gift, Mantis, from my lord Paneki. And now that I have your attention, I have a proposition..." - The Death
-      of Aramasu, Part I'
-    number: 8
-
-  - title: Tsudao's Challenge
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Terrain
-    gold_cost: 0
-    focus: 1
-    text: 'Before this battle''s resolution: Personalities add their Chi instead of their Force to their army''s total Force
-      (bowed Personalities still do not contribute, regardless of changing the stat that is added).Battle: If you are either
-      a defending player or your current army is opposed, and if there are no Terrains at the current battlefield: Put this
-      card into play there.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Justin Norman
-    flavor: '"I may not be Empress, but I stand for the Empire, Mirumoto. Set aside your War and join us in our fight... or
-      die upon my blade." "Impudent girl," Junnosuke whispered, reaching for his swords.'
-    number: 9
-
-  - title: Interesting Sticks
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle/Open: Target a non-Stronghold Ratling card: Bow it.Limited: Bow your performing Personality: Draw a card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Michael Phillippi
-    flavor: '"Each year, the Rememberer of each tribe takes up the memory sticks and tells the tales of those who have passed
-      into Dream. So long as the Rememberers tell these tales, no Nezumi ever truly dies." - Hida Hio'
-    number: 12
-
-  - title: Needed at the Wall
-    type: Strategy
-    deck: Fate
-    focus: 3
-    text: 'Battle: Bow your target unbowed Fortification at this battlefield. Move home a target enemy Personality. Bow his
-      unit as it moves.'
-    legality:
-    - A Brother's Destiny (Twenty Festivals)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - War of the Seals (Onyx Edition)
-    rarity: Uncommon
-    artist: John Cadice
-    flavor: '"I will remain here, Kuon, as Mother would have wished," Kuroda said gravely. "Find Kurohito, and reap vengeance
-      for us both." - Daughter of the Bear, Part III'
-    number: 14
-
-  - title: No One Wins
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Political
-    focus: 3
-    text: 'This card''s ability costs 2 less Gold if you are a Scorpion Clan player.Reaction: Before Honor is gained for destroying
-      cards during battle resolution: Negate the gain.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Mark Pennington
-    flavor: '"Few Scorpion survived Kitao''s vengeance, but it was as we planned. The Lady of the Mantis thinks us defeated,
-      her pawns. As it should be." - Bayushi Kamnan, the Death of Aramasu, part X'
-    number: 15
-
-  - title: Outmaneuvered by Force
-    type: Strategy
-    deck: Fate
-    focus: 3
-    text: 'Political Interrupt: Negate the action if it is Political and taken by a player whose total Force of all units at
-      home is now less than your total Force of all units at home (bowed cards count).'
-    legality:
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    - War of the Seals (Onyx Edition)
-    rarity: Uncommon
-    artist: Mark Evans
-    flavor: '"An Emperor cannot lead if no one follows him, Kaneka-sama. I would give you an army, and you deny me?" - The Death
-      of Aramasu, Part III'
-    number: 17
-
-  - title: Outmaneuvered in Court
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Political
-    gold_cost: 0
-    focus: 4
-    text: 'Reaction: After an attack is declared, target a Personality controlled by a player who controls fewer Courtiers than
-      you: That Personality''s controller may bow his Stronghold. If he did not, the target may not be assigned and will not
-      move to battlefields during this Attack Phase.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Uncommon
-    artist: Mark Evans
-    flavor: Aramasu turned to the harbor, watching in horror as his vessel sank in flames. Akodo Kaneka said nothing, showing
-      favor to neither Scorpion nor Mantis. - The Death of Aramasu, Part VI
-    number: 18
-
-  - title: Political Warfare
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Favor
-    - Political
-    gold_cost: 0
-    focus: 3
-    text: 'Favor Political Reaction: Before a Political action resolves, discard the Imperial Favor to negate the action''s
-      effects.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Michael Phillippi
-    flavor: '"I shall not be undone by this... harlot," the Crane howled, spittle flecking his lips. As a shocked silence overcame
-      the court, he realized he had only succeeded in coloring himself a fool.'
-    number: 19
-
-  - title: Prepared for the Enemy
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Reaction: After your army wins a battle: Permanently give each Personality in it +1F.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Brian Snoddy
-    flavor: '"Age and treachery are more than a match for youth and talent, my dear..."'
-    number: 20
-
-  - title: Reassert One's Mettle
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'Limited: If you control 3 or more Personalities without your Clan alignment, target your unbowed Personality with
-      your Clan alignment who has not been targeted by Reassert One''s Mettle this game: Permanently give him +2F/+2C.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Quinton Hoover
-    flavor: '"Though Kitao had arrived to late to save Aramasu, she was not too late to take vengeance upon those who had slain
-      him." - The Death of Aramasu, Part IX'
-    number: 21
-
-  - title: Show of Strength
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Political
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: If you have not passed or taken a Battle action yet this battle: If you destroy this battlefield''s province
-      during resolution, take the Imperial Favor and until your next turn begins, the Defender may not Lobby and he and all
-      his cards and effects are ignored while other players are lobbying.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Quinton Hoover
-    flavor: '"Some wondered whether Kitao''s late arrival was truly an accident..." - The Death of Aramasu, part VIII'
-    number: 22
-
-  - title: Snowy Fields
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Terrain
-    gold_cost: 0
-    focus: 1
-    text: 'No player may take more actions than the number of units he controls at this battlefield; only actions taken while
-      this Terrain is in play count against this limit.Battle: If there are no Terrains at the current battlefield: Put this
-      card into play there.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Ken Meyer Jr.
-    flavor: '"Shaitung screamed. The earth opened..." Snow and Fire VII'
-    number: 23
-
-  - title: Stand Your Ground
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'Battle/Open: Target a Samurai Personality who must be unbowed if he is yours: Give him a Yu bonus equal to his Personal
-      Honor, +2 if the Personality is Crab Clan.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Kirk Van Wormer
-    flavor: '"As the Lion ralled against the Tsuno forces, the beasts unexpectedly fled toward the Hall of Ancestors. Tsudao''s
-      Legions moved to intercept, but found themselves cut off by an army of Dragon led by Mirumoto Junnosuke."'
-    number: 24
-
-  - title: Standing Tall
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Battle: Target a defending Personality who must be unbowed if he is yours: While his is the only defending unit in
-      an army, he has +4F.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Mark Evans
-    flavor: '"So be it. If Kaneka does not value my position. Then I do not value him. We do not need your aid, Akodo." - The
-      Death of Aramasu, Part VII'
-    number: 25
-
-  - title: The Enemy You Deserve
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Limited: Target a Shadowlands Personality and a non-Shadowlands Personality controlled by the same player: Take control
-      of the Shadowlands Personality, who then duels the other. You control the Shadowlands Personality until the duel ends
-      or is negated. Destroy the duel''s loser.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Paul (Prof.) Herbert
-    flavor: '"Tsuno. Why do they hunt us? Why now, of all times?"'
-    number: 26
-
-  - title: The Wolf Speaks
-    type: Strategy
-    deck: Fate
-    gold_cost: 5
-    focus: 3
-    text: 'This card''s ability does not cost Gold if you bow your Stronghold as a cost instead.Battle: Target two units led
-      by unbowed Personalities, both of which are in armies and controlled by the same player, other than you: Switch their
-      locations; these units are not considered to be moving.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Anthony Hightower
-    flavor: '"I care not for your war, Crane. My soul dwells upon weightier matters." - Toturi Sezaru'
-    number: 27
-
-  - title: Preparing the Edge
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Limited: Target a Weapon Item or an Item with "Claw" in its title: Until the game ends, the Item has an additional
-      +2F/+3C while its Personality is facing a Shadowlands cards in a duel or opposing one in battle.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Ben Peck
-    flavor: '"My death was my finest hour, Scorpion. Yours, I fear, will not be quite so memorable." - Yasuki Nokatsu, Dark
-      Oracle of Earth'
-    number: 28
-
-  - title: Too Much Too Soon
-    type: Strategy
-    deck: Fate
-    gold_cost: 1
-    focus: 3
-    text: 'Reaction: After a target Shugenja attaches a Spell: The Spell''s controller must either destroy the Spell or bow
-      the Shugenja.Battle/Open: Target a Shugenja: Destroy any Spell whose action that Shugenja performs (this turn).'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Ramon Perez
-    flavor: '"Truth is too valuable to be given to the fool hat dares ask for it." - The New Tao'
-    number: 29
-
-  - title: Unavoidable Destiny
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: Until your second turn from now begins, Events' effects will not be negated.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: April Lee
-    flavor: '"Your place is not here, Soul of Shiba," the Thunderer said, his voice shaking the sky. "I shall lead you to your
-      destiny, if you have the courage to follow."'
-    number: 30
-
-  - title: A Desperate Act
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'Battle: Bow and destroy your target performing Personality with 2 or more Chi to give -1F to each Personality and
-      Follower that was opposing him immediately before his destruction.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Michael Kaluta
-    flavor: '"The Crab were unprepared for the sudden appearance of Kurohito''s forces, or for the sabotage of their fleet by
-      Mantis mercenaries."'
-    number: 31
-
-  - title: Tampako no Shiryo
-    type: Ancestor
-    clan: Crab
-    deck: Fate
-    keywords:
-    - Unique
-    - Crab Clan
-    force: 0
-    chi: 0
-    gold_cost: 0
-    honor_requirement: 1
-    focus: 3
-    text: While this Personality is a Samurai, he has a Yu bonus equal to his Personal Honor plus printed Force.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Justin Norman
-    flavor: '"You are only as good as your last failure. He who dares nothing is not worthy of honor."'
-    number: 32
-
-  - title: Yogoso no Shiryo
-    type: Ancestor
-    clan: Crane
-    deck: Fate
-    keywords:
-    - Unique
-    - Crane Clan
-    force: 0
-    chi: 1
-    gold_cost: 0
-    honor_requirement: 2
-    focus: 3
-    text: 'Political Repeatable Reaction: Before another player gains Honor from Proclaiming, bow this Personality to negate
-      the gain. Lose Honor equal to the amount negated.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Justin Norman
-    flavor: '"Even in death, he whispers shameful tales of the weakness of others. Shameful, entertaining tales."'
-    number: 33
-
-  - title: Taiko no Shiryo
-    type: Ancestor
-    clan: Lion
-    deck: Fate
-    keywords:
-    - Unique
-    - Lion Clan
-    force: 1
-    chi: 0
-    gold_cost: 0
-    honor_requirement: 2
-    focus: 3
-    text: 'Repeatable Reaction, w: After a Lion Clan Personality in this Ancestor''s army is destroyed, permanently give this
-      Personality +1F/+1C.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Anthony Hightower
-    flavor: '"Tsuno? The answer lies before you, Dejiko. You need but seek the appropriate question."'
-    number: 34
-
-  - title: Dairu no Shiryo
-    type: Ancestor
-    clan: Scorpion
-    deck: Fate
-    keywords:
-    - Unique
-    - Scorpion Clan
-    force: 0
-    chi: 1
-    gold_cost: 0
-    honor_requirement: 1
-    focus: 3
-    text: 'This Ancestor is considered Bayushi Dairu for deck construction and checking the Unique restriction.Repeatable Battle:
-      If this action has not targeted any of the target''s controller''s Personalities this turn, target an enemy Personality.
-      His controller must discard a card from his hand. Lose 2 Honor.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Audrey Corman
-    number: 35
-
-  - title: A Matter of Pride
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, each
-      player loses Honor equal to three times the number of Shadowlands cards he controls. These losses may not be given to
-      another player instead, and if an effect negates such a loss, it is halved instead, rounding up.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Paul Herbert
-    flavor: When the first Tsuno fell to Dejiko's blade, the Lion roared in truimph. Though their foes were unknown, one thing
-      was familiar - they could die.
-    number: 36
-
-  - title: In Light of Darkness
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
-      your next turn begins, all Human Shugenja Personalities in and out of play have +1C.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Mark Evans
-    flavor: Though his siblings could make little of the visions painted in the sky, Sezaru understood his future perfectly.
-      However, clarity of vision hardly bestowed peace upon his tortured mind.
-    number: 37
-
-  - title: Thunder Calls to Fortune
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Thunder
-    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
-      your next turn begins, all Personalities in and out of play with a printed Gold Cost of 10 or higher have +2F/+2C.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Ben Peck
-    flavor: '"Shiba Tsukune." Osano-wo''s voice rumbled across the Phoenix plains. "Your time has come."'
-    number: 40
-
-  - title: While the Empire Watches
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: Until your next turn begins, after each time a Political action resolves, the player who took it loses 2 Honor.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Justin Norman
-    flavor: To Tsudao's surprise the Tsuno gathered their wounded as they fled from the wrath of her armies. Not a single beast's
-      corpse was left upon the field.
-    number: 41
-
-  - title: Diplomatic Apprentice
-    type: Follower
-    deck: Fate
-    force: 0
-    chi: 0
-    gold_cost: 5
-    focus: 3
-    text: Crane Clan and Scorpion Clan players Equip this Follower for 2 less Gold. Before your Political action bows this Personality,
-      you may bow this Follower instead, which fulfills the action's costs and conditions of bowing.
-    legality:
-    - A Brother's Destiny (Twenty Festivals)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    - War of the Seals (Onyx Edition)
-    rarity: Common
-    artist: Malcolm McClinton
-    flavor: '"A skilled politician surrounds herself with experts and informants, seeking their advice in all things." - Otomo
-      Madoko, Subtley of the Court'
-    number: 43
-
-  - title: The Hand of Thunder
-    type: Follower
-    deck: Fate
-    keywords:
-    - Unique
-    - Shugenja
-    - Thunder
-    force: 2
-    chi: 0
-    gold_cost: 8
-    honor_requirement: 1
-    focus: 1
-    text: 'Will only attach to a Shugenja.Repeatable Thunder Battle, w: Bow all Personalities and Followers at this battlefield
-      with 1 or lower Force.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Jim Pavelec
-    flavor: '"Even the Tamori were unprepared for the onslaught of magical power unleashed by the newest servants of the Elemental
-      Council..." - Snow and Fire I'
-    number: 44
-
-  - title: Sohei
-    type: Follower
-    deck: Fate
-    keywords:
-    - Tattooed
-    force: 2
-    chi: 0
-    gold_cost: 6
-    honor_requirement: 1
-    focus: 2
-    text: 'Attaches to a Tattooed Personality paying 1 less Gold.Battle: Once per battle, target an enemy unit: Give this card
-      a Force bonus equal to the number of Followers in that unit.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Anthony Hightower
-    flavor: '"Not all followers of Shinsei are men of peace."'
-    number: 45
-
-  - title: Mujina Gang
-    type: Follower
-    deck: Fate
-    keywords:
-    - Cavalry
-    - Mujina
-    - Nonhuman
-    force: 3
-    chi: 0
-    gold_cost: 3
-    honor_requirement: 0
-    focus: 2
-    text: 'After this card enters play: Lose 3 Honor and discard a card in this Personality''s unit.'
-    legality:
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    rarity: Common
-    artist: Sean Murray
-    flavor: '"Only the Nezumi are immune to their pranks. The shamans say they have come to an understanding with these spirits."
-      - Hida Hio'
-    number: 46
-
-  - title: Strong Guard
-    type: Follower
-    deck: Fate
-    force: 2
-    chi: 0
-    gold_cost: 5
-    honor_requirement: 2
-    focus: 2
-    text: 'Reaction: Any number of times per turn, before this unit moves home from a battlefield, bow this card and dishonor
-      this Personality: Negate the movement.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Bryant Griffin
-    flavor: '"I do not know what these Tsuno are. I do not need to know. I need only do my duty, and protect the Hall of Ancestors."
-      - Matsu Domotai'
-    number: 47
-
-  - title: Tainted Bushi
-    type: Follower
-    deck: Fate
-    keywords:
-    - Bushi
-    - Shadowlands
-    force: 3
-    chi: 0
-    gold_cost: 5
-    honor_requirement: 0
-    focus: 1
-    text: 'Will only attach to a Human Personality. After this card enters play: Lose 2 Honor and dishonor this Personality.
-      This Personality will not be rehonored.Fear Battle: Fear 1.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Ramon Perez
-    number: 48
-
-  - title: Tsuno Ravagers
-    type: Follower
-    deck: Fate
-    keywords:
-    - Cavalry
-    - Nonhuman
-    - Shadowlands
-    - Tsuno
-    force: 1
-    chi: 0
-    gold_cost: 7
-    honor_requirement: 0
-    focus: 1
-    text: 'Will only attach to a Shadowlands Personality. After this Follower enters play, lose 4 Honor.This Follower has +2
-      Force while attacking.Repeatable Battle, w: Destroy a target Region attached to this battlefield''s Province.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Ben Peck
-    number: 49
-
-  - title: Tsuno Squad
-    type: Follower
-    deck: Fate
-    keywords:
-    - Cavalry
-    - Nonhuman
-    - Shadowlands
-    - Tsuno
-    force: 1
-    chi: 0
-    gold_cost: 3
-    honor_requirement: 0
-    focus: 1
-    text: 'Will only attach to a Shadowlands Personality. After this card enters play: Lose 2 Honor. This card has +1F while
-      attacking.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Malcolm McClinton
-    flavor: '"Revenge is fodder for lesser beasts. We shall feast on justice!" - Tsuno Kurushimi'
-    number: 50
-
-  - title: Banner Guard
-    type: Follower
-    deck: Fate
-    keywords:
-    - Cavalry
-    force: 2
-    chi: 0
-    gold_cost: 8
-    honor_requirement: 2
-    focus: 3
-    text: 'Battle, w: If the enemy leader has more Family Honor and more Provinces than you, this battle''s resolution will
-      not bow your units in this army.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Heather Bruton
-    flavor: '"To be a symbol of the clan''s honor is a heavy burden."'
-    number: 51
-
-  - title: Connecting Walls
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Fortification
-    gold_cost: 4
-    text: This Province and adjacent Provinces have +2 strength.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Justin Norman
-    flavor: '"The greatest Kaiu engineers can build a wall without mortar, fitting one stone into another as if building a mountain."'
-    number: 52
-
-  - title: Guard House
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Fortification
-    gold_cost: 4
-    text: 'While this Holding is unbowed, this Province has +1 strength for each other Fortification it has attached.Repeatable
-      Battle, w: Ranged 2 Attack.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Paul (Prof.) Herbert
-    flavor: '"The Unicorn have not simply stood idle since the Naga''s slumber. Soon, the entire Empire shall see." - Moto Chagatai'
-    number: 53
-
-  - title: Memorial
-    type: Holding
-    deck: Dynasty
-    gold_cost: 2
-    text: 'Reaction: Twice per turn, after your Human Personality is destroyed, gain 1 Honor.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Ken Meyer Jr.
-    flavor: Miyako finished her prayer and rose. Her father was the next to pray at Tzuru's grave, but his words to his departed
-      friend were his own.
-    number: 54
-
-  - title: Plum Tree Training Ground
-    type: Holding
-    deck: Dynasty
-    gold_cost: 2
-    text: 'w: When paying for a Samurai, produce 2 Gold which may only pay for that card.Repeatable Limited, w: Permanently
-      give your target Samurai Personality who has not been targeted by any copy of Plum Tree Training Grounds this game +1
-      Yu if he has Yu, or Yu 1 if he does not.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Tony Moseley
-    flavor: '"The Unicorn train constantly, almost without rest. I find it rather strange that a clan with no enemies should
-      focus overmuch on combat... strange indeed." - Kaeru Tomaru'
-    number: 55
-
-  - title: Tea House
-    type: Holding
-    deck: Dynasty
-    gold_cost: 1
-    text: 'w: Produce 1 Gold. Battle/Open, w: Target your Personality. Negate all current and future (this turn) Chi penalties
-      on him from other players'' cards, and tokens they created.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - War of the Seals (Onyx Edition)
-    rarity: Common
-    artist: Kirk Van Wormer
-    flavor: '"Come within, brave samurai, and rest. Surely the war will go on without you."'
-    number: 57
-
-  - title: Training Dojo
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Dojo
-    gold_cost: 3
-    text: 'Repeatable Limited, w: Give your target Bushi, Tsuno, or Samurai Personality without a Training Dojo token a Training
-      Dojo token with the trait, "This Personality has +1F/+1C while in an army with another Personality who has a Training
-      Dojo token."'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Quinton Hoover
-    number: 58
-
-  - title: Dairya's Cackling Skull
-    type: Item
-    deck: Fate
-    keywords:
-    - Unique
-    - Weapon
-    - Shadowlands
-    force: 1
-    chi: 2
-    gold_cost: 3
-    focus: 1
-    text: 'After this Item enters play, lose 3 Honor.Repeatable Battle/Open, w: Straighten a target Follower in this unit.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Brian Snoddy
-    flavor: '"His corpse was never found. The bakemono say his soul is trapped within that club." - Hiruma Todori'
-    number: 59
-
-  - title: Taijikku
-    type: Item
-    deck: Fate
-    keywords:
-    - Weapon
-    force: 1
-    chi: 1
-    gold_cost: 4
-    focus: 3
-    text: 'Battle/Open: Reactions may not be announced during a challenge or duel involving this Personality.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: John Cadice
-    flavor: '"A gift, great Taeruko-sama," the Ox said, bowing deeply. "A blade fit to be wielded only by an Elemental Master."'
-    number: 60
-
-  - title: Yoshi's Fan
-    type: Item
-    deck: Fate
-    keywords:
-    - Unique
-    force: 0
-    chi: 1
-    gold_cost: 2
-    focus: 2
-    text: This Personality has +1PH and Courtier.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Rare
-    artist: April Lee
-    flavor: Naseru lifted the fan with quiet reverence, as if in hopes that some shadow of the soul that once wielded it might
-      be relfected in his own.
-    number: 61
-
-  - title: Thuk-Kigi's War Machine
-    type: Item
-    deck: Fate
-    keywords:
-    - Unique
-    - Shadowlands
-    force: 4
-    chi: 0
-    gold_cost: 7
-    focus: 1
-    text: 'Will only attach to a Shadowlands Personality.This Personality will not challenge or be challenged while in an army.This
-      card adds no Force to this Personality while bowed.After a Terrain enters play at this battlefield: Bow this card.Reaction:
-      After the Resolution Segment begins for a battle where this unit is attacking: Destroy a Fortification attached to this
-      battlefield''s province.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Rare
-    artist: Paul (Prof.) Herbert
-    number: 62
-
-  - title: Anekkusai's Feathers
-    type: Item
-    deck: Fate
-    keywords:
-    - Nemuranai
-    force: 0
-    chi: 0
-    gold_cost: 2
-    focus: 2
-    text: Before bowing this Personality as a cost of performing a Ranged Attack action on his card, you may bow this Item to
-      pay the cost instead; if you did, you may not use that Ranged Attack ability again this battle.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Anthony Hightower
-    number: 63
-
-  - title: Spyglass
-    type: Item
-    deck: Fate
-    force: 0
-    chi: 0
-    focus: 2
-    text: 'Enters play paying 2 less Gold if you are a Unicorn Clan player.Battle: Any number of times per turn, target an enemy
-      Tactician Personality: Remove Tactician from him until the end of the battle.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Justin Norman
-    flavor: '"Never underestimate a Unicorn."'
-    number: 64
-
-  - title: Kokoro
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Kiho
-    gold_cost: 0
-    focus: 3
-    text: 'Limited: Bow your performing Monk: The player (or players) with the fewest cards in his hand draws a card. Draw a
-      card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Randy Asplund-Faith
-    flavor: '"The center is everything. Find the center. All else proceeds naturally from there." - The Tao of Shinsei'
-    number: 65
-
-  - title: Speed of the Waterfall
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Kiho
-    gold_cost: 0
-    focus: 2
-    text: 'Battle: Bow your performing Monk or Shugenja and target a unit that was moved home from the current battlefield:
-      Straighten it. Move it to the current battlefield.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Augie Pagan
-    flavor: '"The last thing either Crab or Crane expected to see was the arrival of the Unicorn shugenja and troops. Both sides
-      paused warily, waiting to see whom the newcomers would aid."'
-    number: 66
-
-  - title: Elemental Shock
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Elemental
-    - Kiho
-    gold_cost: 0
-    focus: 3
-    text: 'Battle/Open: Bow your performing Monk or Shugenja and target a Monk or Shugenja: Bow him.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Steve Snyder
-    flavor: '"As surely as water douses fire, fire boils water." Hochiu said. "All is a matter of perspective and timing, Shaitung.
-      I am surprised you have survived this long not knowing that." -Snow and Fire IV'
-    number: 67
-
-  - title: Shinsei's Smile
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Kiho
-    gold_cost: 0
-    focus: 4
-    text: 'Open: Bow your performing Monk or Shugenja and target a Personality with Chi less than or equal to the performer''s:
-      Until the turn ends, the Personality may assign even if bowed and he contributes Force even while bowed.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Val Mayerik
-    flavor: '"Don''t ask the Moto what it means. They might show you."'
-    number: 68
-
-  - title: The Power of Nothing
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Kiho
-    - Void
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: If you are the Attacker or Defender, and you control no units at the current battlefield, bow your performing
-      Monk: Until this battle ends, units will not move to the current battlefield, and players with units at the current battlefield
-      may not take actions except those whose effects remove one or more of their cards or tokens from the battlefield.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Val Mayerik
-    number: 70
-
-  - title: Kukan-do
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Kiho
-    gold_cost: 0
-    focus: 3
-    text: 'Reaction: Before a target Personality gains a Force bonus, bow your performing Monk opposing him and target an unbowed
-      Personality in the Monk''s army: Give him an equal bonus. Negate the original bonus.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Justin Norman
-    flavor: '"I did not choose this fight, Shiba Kai. Do not force my hand again." - Hoshi Wayan'
-    number: 71
-
-  - title: Hida Kuon
-    extended_title: Hida Kuon • Experienced
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Double Chi
-    - Unique
-    - Yu 5
-    - Crab Clan
-    - Experienced
-    - General
-    - Samurai
-    force: 5
-    chi: 4
-    gold_cost: 11
-    honor_requirement: 8
-    personal_honor: 2
-    text: Followers with 2 or more Force attached to your Crab Clan Personalities have +1F.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Fixed
-    artist: Paul (Prof.) Herbert
-    flavor: '"I failed to avenge my father. I shall not fail my mother as well."'
-    number: 72
-
-  - title: Hida Kagore
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Crab Clan
-    - Samurai
-    force: 4
-    chi: 2
-    gold_cost: 7
-    honor_requirement: 0
-    personal_honor: 2
-    text: 'Battle: Once per battle, transfer your target a Follower attached to another of your Crab Clan Personalities to Kagore.Battle:
-      Once per battle, transfer one of Kagore''s target Followers to another of your target Crab Clan Personalities.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Anthony Hightower
-    flavor: '"Some frown upon the Moto for their lack of mercy. I think they set a good example."'
-    number: 73
-
-  - title: Hida Reiha
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Yu 4
-    - Crab Clan
-    - Samurai
-    force: 3
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 2
-    personal_honor: 1
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Malcolm McClinton
-    flavor: '"For eleven centuries we have stood against the darkness and received nothing but mockery and betrayal. When the
-      time comes, I shall step away from the Wall and let our treacherous cousins see exactly what we have protected them from."'
-    number: 74
-
-  - title: Kaiu Hosaru
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Crab Clan
-    - Engineer
-    - Samurai
-    force: 1
-    chi: 1
-    gold_cost: 3
-    honor_requirement: 5
-    personal_honor: 2
-    text: 'Repeatable Limited, w: Put an Engineering token on one of your Provinces. This token has the trait, "Samurai defending
-      this Province have Yu with a value equal to the number of Engineering tokens on it."'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Dennis Calero
-    flavor: '"No wall stands forever. Only duty stands forever. The Carpenter Wall is built of duty. The rest is only stones."'
-    number: 75
-
-  - title: Yasuki Heikichi
-    type: Personality
-    clan: Crane
-    deck: Dynasty
-    keywords:
-    - Crane Clan
-    - Governor
-    force: 2
-    chi: 2
-    gold_cost: 8
-    honor_requirement: 8
-    personal_honor: 2
-    text: 'After Heikichi enters play from a province: You may straighten one of your Holdings.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: April Lee
-    flavor: '"I may have been born a Crab, but now and forevermore I am Crane. Yasuki Hachi is a noble man, and he is my daimyo."'
-    number: 76
-
-  - title: Doji Kurohito
-    extended_title: Doji Kurohito • Experienced
-    type: Personality
-    clan: Crane
-    deck: Dynasty
-    keywords:
-    - Double Chi
-    - Loyal
-    - Unique
-    - Clan Champion
-    - Crane Clan
-    - Experienced
-    - Samurai
-    force: 4
-    chi: 4
-    gold_cost: 10
-    honor_requirement: 10
-    personal_honor: 4
-    text: 'Political Battle, : Kurohito challenges a target enemy Personality. His controller may discard three cards to have
-      him refuse. Destroy the loser.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Fixed
-    artist: William O'Connor
-    number: 77
-
-  - title: Daidoji Megumi
-    type: Personality
-    clan: Crane
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Crane Clan
-    - Novice
-    - Samurai
-    force: 2
-    chi: 2
-    gold_cost: 5
-    honor_requirement: 8
-    personal_honor: 2
-    text: After Megumi enters a duel, give her +3C until the duel ends or either player focuses.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Tony Moseley
-    flavor: '"She was born blind, but has never needed eyes to see. Her blade strikes true enough." - Kakita Noritoshi'
-    number: 78
-
-  - title: Mirumoto Taiu
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Dragon Clan
-    - Samurai
-    force: 1
-    chi: 2
-    gold_cost: 7
-    honor_requirement: 0
-    personal_honor: 1
-    text: 'Battle: Once per battle, Ranged 2 Attack.Repeatable Battle, w: Ranged 4 Attack.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Steve Snyder
-    flavor: '"I had never seen one of the Lion''s copper goblins - the zokujin - before today. Now our abandoned mountains crawl
-      with them."'
-    number: 79
-
-  - title: Mirumoto Junnosuke
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Dragon Clan
-    - Samurai
-    force: 3
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 6
-    personal_honor: 2
-    text: 'Battle/Open: Bow your performing Monk or Shugenja and target one of Junnosuke''s Weapons or Armors: If the target
-      was a Weapon, give it a Chi bonus equal to Junnosuke''s Personal Honor, or if it was an Armor, give it a Force bonus of
-      that amount.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Malcolm McClinton
-    flavor: '"I do not care about the beasts that attack the Lion. I have come to punish Dejiko for her alliance with our enemies."'
-    number: 80
-
-  - title: Tamori Chieko
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Dragon Clan
-    - Shugenja
-    - Tattooed
-    force: 1
-    chi: 3
-    gold_cost: 5
-    honor_requirement: 2
-    personal_honor: 2
-    text: 'After Chieko enters play: You may discard a card; if you did, draw a card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Common
-    artist: Rob Hinds
-    flavor: '"Her magic soothes the soul and calms the kami, but her music is even more potent." - Tamori Chosai'
-    number: 81
-
-  - title: Togashi Satsu
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Dragon Clan
-    - Monk
-    - Tattooed
-    force: 4
-    chi: 5
-    gold_cost: 8
-    honor_requirement: 2
-    personal_honor: 3
-    text: Satsu may not assign, and will not move, into an attacking army.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Michael Phillippi
-    flavor: '"Yoshune carries two names. Like his father he lives in two worlds. Now that his parents have retired to explore
-      the mysteries of the kami, it falls upon him alone to decide which path he will travel."'
-    number: 82
-
-  - title: Togashi Iroshi
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Dragon Clan
-    - Monk
-    - Tattoo Artist Apprentice
-    - Tattooed
-    force: 1
-    chi: 2
-    gold_cost: 7
-    honor_requirement: 3
-    personal_honor: 1
-    text: 'Limited: Any number of times per turn, bow Iroshi: Look at the top 5 cards of your Fate deck. If one is a Tattoo
-      card, you may discard a card; if you did, show the Tattoo card, put it in your hand, and place the remaining cards on
-      the bottom of your deck.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Mark Evans
-    flavor: '"There are at least ten spirit realms, including the one we live in. Who can say what wonders shall emerge from
-      them?"'
-    number: 83
-
-  - title: Akodo Setai
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Deathseeker
-    - Lion Clan
-    - Samurai
-    force: 3
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 8
-    personal_honor: 3
-    text: 'Battle: Target an enemy Personality with lower Force than Setai''s Personal Honor, and bow and destroy Setai: Destroy
-      the target.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    card_notes: Misnumbered as card 84
-    rarity: Common
-    artist: Brian Snoddy
-    flavor: '"He speaks nothing of his past. He has no hope for the future. He has one foot buried in the Realm of Slaughter,
-      and I do not wish to face him again." - Mirumoto Taiu'
-    number: 85
-
-  - title: Matsu Domotai
-    extended_title: Matsu Domotai • Experienced
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Tactician
-    - Unique
-    - Experienced
-    - Lion Clan
-    - Samurai
-    force: 2
-    chi: 3
-    gold_cost: 8
-    honor_requirement: 8
-    personal_honor: 3
-    text: 'Domotai will not defend.Battle: Once per battle, give Domotai a Force bonus equal to the number of other Matsu Family
-      Personalities in his army.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Paul (Prof.) Herbert
-    flavor: '"Drive the Tsuno from the Halls, but leave their leader to me."'
-    number: 86
-
-  - title: Matsu Kenji
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Tactician
-    - Unique
-    - Lion Clan
-    - Samurai
-    - Taisa
-    force: 5
-    chi: 4
-    gold_cost: 10
-    honor_requirement: 8
-    personal_honor: 3
-    text: Negate Fear effects upon cards in Kenji's army in units with Matsu Family Personalities (including this unit).
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Rare
-    artist: Michael Kaluta
-    flavor: '"Fear is a burden for lesser men. We are not lesser men. We are Lion."'
-    number: 87
-
-  - title: Matsu Kenseiko
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Lion Clan
-    - Lion's Pride Chui
-    - Samurai
-    force: 3
-    chi: 2
-    gold_cost: 6
-    honor_requirement: 5
-    personal_honor: 2
-    text: Kenseiko has Yu with a value equal to the number of Followers she has attached.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Anthony Grabski
-    flavor: '"Domotai means well, but he is inexperienced. He should know well enough to leave command in the hands of those
-      who can wield it."'
-    number: 88
-
-  - title: Isawa Hochiu
-    extended_title: Isawa Hochiu • Experienced
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Elemental Master
-    - Experienced
-    - Fire
-    - Phoenix Clan
-    - Shugenja
-    force: 2
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 8
-    personal_honor: 3
-    text: 'Hochiu has +2C while facing a Shadowlands Personality in a duel.Before Hochiu is destroyed as the consequence of
-      a duel, if he was the challenger and you did not use his printed ability upon his entering it, negate his destruction.Fire
-      Repeatable Tireless Reaction: After Hochiu enters a duel, you may focus one additional time before the duel begins.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    story: 2000 World Champion - Justin Walsh
-    rarity: Rare
-    artist: Steve Snyder
-    flavor: '"The Master of Fire fears no man."'
-    number: 89
-
-  - title: Isawa Nodotai
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Phoenix Clan
-    - Shugenja
-    force: 2
-    chi: 5
-    gold_cost: 9
-    honor_requirement: 6
-    personal_honor: 2
-    text: 'After a turn ends, remove all Charge tokens from Nodotai.After a player who controls a unit opposing Nodotai resolves
-      an action during a battle at Nodotai''s battlefield, place a Charge token on him.Repeatable Battle, w: Remove all Charge
-      tokens on Nodotai to make Ranged Attack with a strength equal to twice the number of Charge tokens this removed.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Malcolm McClinton
-    number: 90
-
-  - title: Isawa Nakamuro
-    extended_title: Isawa Nakamuro • Experienced
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Air
-    - Elemental Master
-    - Experienced
-    - Phoenix Clan
-    - Shugenja
-    force: 1
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 4
-    personal_honor: 2
-    text: 'Air Reaction, w: When a Ranged Attack or Spell effect would target a card in Nakamuro''s army, it targets another
-      card at his battlefield of your choice instead, if legal, but ignoring any restriction that the target be an "enemy" card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Joachim Gmoser
-    flavor: '"He has fallen from the Council''s favor. Master or no, I have no time for a man who cannot release his past."
-      - Isawa Hochiu'
-    number: 91
-
-  - title: Shiba Unasagi
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Phoenix Clan
-    - Samurai
-    force: 2
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 6
-    personal_honor: 1
-    text: 'Battle: Any number of times per turn, bow your performing Shugenja: Give all copies of Shiba Unasagi +1F.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Monika Livingstone
-    flavor: '"Only the finest samurai of the Phoenix are invited to join the brotherhood of Heaven''s Wing. Only those who have
-      been among their number truly understand what they have become." - Shiba Mirabu'
-    number: 92
-
-  - title: Shiba Mirabu
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Double Chi
-    - Loyal
-    - Unique
-    - Phoenix Clan
-    - Samurai
-    - Yojimbo
-    force: 4
-    chi: 4
-    gold_cost: 10
-    honor_requirement: 12
-    personal_honor: 3
-    text: 'Enters play paying 2 less Gold if you control a Phoenix Clan Clan Champion.Limited: Once per game, bow Mirabu: Search
-      your Dynasty deck for a Clan Champion Personality. Remove him, show him, and, after shuffling, put him on top of the deck.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Stefano Gaudiano
-    flavor: '"Protect Aikune, Mirabu. He needs you." - Shiba Tsukune'
-    number: 93
-
-  - title: Bayushi Tasogare
-    type: Personality
-    clan: Scorpion
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Master Spy
-    - Samurai
-    - Scorpion Clan
-    - Spy
-    force: 2
-    chi: 4
-    gold_cost: 8
-    personal_honor: 1
-    text: 'Political Reaction: Any number of times per turn, after a player draws a card, target him and bow Tasogare: Look
-      at the card. You may pay 3 Gold; if you did, the target places the card at the bottom of his Fate deck and draws another.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Fixed
-    artist: William O'Connor
-    flavor: '"Let the Mantis have their victory. Kitao''s debts will be repaid in time."'
-    number: 94
-
-  - title: Shosuro Higatsuku
-    type: Personality
-    clan: Scorpion
-    deck: Dynasty
-    keywords:
-    - Courtier
-    - Instigator
-    - Scorpion Clan
-    force: 3
-    chi: 2
-    gold_cost: 7
-    personal_honor: 1
-    text: 'Political Battle: Bow Higatsuku and target an enemy Personality with higher Chi than Higatsuku: He challenges Higatsuku
-      to a duel which may be refused. Destroy the duel''s loser.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Uncommon
-    artist: Michael Kaluta
-    flavor: '"Clearly the son of Toturi is unimpressed by your churlish manner, Aramasu-sama. Perhaps I can make an offer he
-      will find more interesting?" - The Death of Aramasu, Part IV'
-    number: 95
-
-  - title: Shosuro Yasuko
-    type: Personality
-    clan: Scorpion
-    deck: Dynasty
-    keywords:
-    - Courtier
-    - Scorpion Clan
-    force: 0
-    chi: 3
-    gold_cost: 5
-    personal_honor: 1
-    text: 'Political Reaction: Any number of times per turn, after a player declares an attack, bow Yasuko and target one of
-      that player''s Samurai with Personal Honor equal to or lower than Yasuko''s: He may not be assigned to attacking armies
-      this turn.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Michael Phillippi
-    flavor: '"Sleep, my lord. This shall remain our secret."'
-    number: 96
-
-  - title: Soshi Tishi
-    type: Personality
-    clan: Scorpion
-    deck: Dynasty
-    keywords:
-    - Samurai
-    - Scorpion Clan
-    force: 3
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 0
-    personal_honor: 2
-    text: 'Reaction: Any number of times per turn, after another player''s Battle action resolves: Give Tishi +1F/-1C until
-      the battle ends.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Ben Peck
-    flavor: '"The Scorpion are not merely of subtlety. When the time for subtlety is done, I am always waiting."'
-    number: 97
-
-  - title: Omoni
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Goblin
-    - Nonhuman
-    - Sculptor of Flesh
-    - Shadowlands
-    force: 3
-    chi: 2
-    gold_cost: 5
-    personal_honor: 0
-    text: 'After Omoni enters play: Lose 4 Honor.Fear actions performed by Omoni have +1 strength for every two Goblin Followers
-      attached to him.Fear Battle: Fear 2.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Jim Pavelec
-    flavor: '"The bakemono are not the laughable creatures they once were. They have been recreated. They are my masterpiece!"'
-    number: 98
-
-  - title: Hyakute no Oni
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    force: 2
-    chi: 2
-    gold_cost: 5
-    personal_honor: 0
-    text: 'After Hyakute enters play, lose 4 HonorWill not attach non-Oni Followers.Items attaching to Hyakute will not have
-      their costs reduced.May attach any number of Weapons.Battle: Fear 1 plus the number of Weapons Hyakute has attached.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Monika Livingstone
-    number: 99
-
-  - title: Kayobun
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Nonhuman
-    - Ogre
-    - Overlord
-    - Shadowlands
-    force: 3
-    chi: 1
-    gold_cost: 7
-    personal_honor: 0
-    text: After Kayobun enters play, lose 6 Honor and permanently give him +1/+1 for each dead Personality in your discard pile.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Michael Phillippi
-    flavor: '"Fu Leng saw us as cumbersome brutes to be enslaved. Daigotsu sees us as brothers. We do not serve him. We simply
-      kill by his side."'
-    number: 100
-
-  - title: Osoreru no Oni
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    force: 0
-    chi: 2
-    gold_cost: 2
-    personal_honor: 0
-    text: 'After Osoreru enters play: Lose 4 Honor.Fear Battle: Fear 3.Reaction: When a Fear effect is produced by a card in
-      Osereru no Oni''s army, the Fear also affects Followers which are immune to or unaffected by Fear.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Monika Livingstone
-    flavor: '"Once we were slaves, bound to the names of mortals. Daigotsu has changed us; now we are one with their stolen
-      souls."'
-    number: 101
-
-  - title: Ide Michisuna
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Courtier
-    - Unicorn Clan
-    force: 1
-    chi: 2
-    gold_cost: 3
-    honor_requirement: 7
-    personal_honor: 2
-    text: 'Repeatable Reaction, w: Before a Personality is rehonored, target him. Negate the rehonoring, even if it was from
-      seppuku.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Lisa Hunt
-    flavor: '"Indeed the City of Lies may be a place of deception and treachery, but it is also a place of great beauty. Sit
-      and listen to my tale..."'
-    number: 102
-
-  - title: Moto Chen
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Tactician
-    - Unique
-    - Junghar
-    - Unicorn Clan
-    force: 4
-    chi: 3
-    gold_cost: 9
-    honor_requirement: 0
-    personal_honor: 3
-    text: Chen may attach two Weapons.Chen may not Lobby.Being dishonorable does not give Chen 0 maximum Personal Honor.
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Pia Guerra
-    flavor: '"The Moto divide the Unicorn forces into three great armies, and only the Baraunghar, the smallest, come to aid
-      us. Moto Chagatai''s Khol and Moto Chen''s Junghar simply wait..." - Hida Kuroda'
-    number: 103
-
-  - title: Moto Reijiro
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Bushi
-    - Unicorn Clan
-    force: 2
-    chi: 3
-    gold_cost: 8
-    honor_requirement: 2
-    personal_honor: 1
-    text: Reijiro has +2F/+2C while at a battlefield associated with a player's leftmost or rightmost Province.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Uncommon
-    artist: Jeff Reitz
-    flavor: '"The Shinomen has been unquiet of late. Something prowls the darkness, and I do not think it is the beast that
-      slew the Emperor."'
-    number: 104
-
-  - title: Shinjo Sanraku
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Samurai
-    - Shinjo Border Guard
-    - Unicorn Clan
-    force: 2
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 4
-    personal_honor: 1
-    text: 'Battle: Move this unit to a battlefield where there is a defending army.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Dennis Calero
-    flavor: '"The Seikitsu belong to the Unicorn. The Pass is closed. Turn around now, or I will turn you around."'
-    number: 105
-
-  - title: Utaku Mu Dan
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Battle Maiden
-    - Samurai
-    - Unicorn Clan
-    force: 2
-    chi: 3
-    gold_cost: 8
-    honor_requirement: 9
-    personal_honor: 2
-    text: Mu Dan has +3F while she is opposed.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Monika Livingstone
-    flavor: '"I thank you for your assistance, Unicorn," Kuroda nodded. "Do not thank us yet," the Utaku smiled as she charged
-      the spearmen of the Crane.'
-    number: 106
-
-  - title: Shallow Graves
-    type: Region
-    deck: Dynasty
-    keywords:
-    - Shadowlands
-    text: 'Battle: Even if you do not control this card, once per battle per player, target your Personality whose unit contains
-      an Undead card: Create a 2F Shadowlands • Undead Follower and attach it to him.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Mark Pennington
-    flavor: '"In the Shadowlands, even a shallow grave is more than most can hope for."'
-    number: 107
-
-  - title: Traitor's Grove
-    type: Region
-    deck: Dynasty
-    keywords:
-    - Singular
-    text: 'Limited: Destroy a target Personality who has your Clan Alignment and does not have his controller''s Clan Alignment.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    rarity: Rare
-    artist: John Cadice
-    flavor: '"You have had your blood, Scorpion, just as we arranged," Kitao whispered, "but I shall have my victory as well."
-      With that, she buried her blade in the Scorpion''s throat. - The Death of Aramasu, part IX'
-    number: 108
-
-  - title: Mapped Region
-    type: Region
-    deck: Dynasty
-    keywords:
-    - Singular
-    text: Before you announce an action during a battle at this Province's battlefield, once per battle, you may search your
-      Fate deck for a Terrain card and play it as if it was in your hand.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Common
-    artist: Ken Meyer Jr.
-    flavor: '"The Maps of the Emperor are the eyes of the Emperor, Unicorn. To say that the maps are wrong is to say that the
-      Emperor is wrong. You say that you have found a city in this crater that is not on the Emperor''s maps? Then I say that
-      you are wrong." - Asako Misao'
-    number: 109
-
-  - title: Endless Deluge
-    type: Spell
-    deck: Fate
-    keywords:
-    - Elemental
-    - Ritual
-    gold_cost: 6
-    focus: 3
-    text: 'Limited: Bow this Shugenja and zero or more of your other performing Shugenja, destroy this card, and target a Stronghold
-      whose base Province Strength is lower than the performers'' total Chi: Until your next turn begins, abilities on the target
-      may not be used.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Mark Evans
-    flavor: '"In barely a moment, Shaitung and the Masters were gone." - Snow and Fire IX'
-    number: 110
-
-  - title: Contemplation of Osano-Wo
-    type: Spell
-    deck: Fate
-    gold_cost: 4
-    focus: 1
-    text: 'Battle/Open: Any number of times per turn, bow this Shugenja: You choose whether all players draw a card or all players
-      discard a card. Permanently give this Shugenja -2 Chi.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Anthony Hightower
-    flavor: '"We are the Phoenix, Shaitung," Hochiu countered. "Unlike you, we do not stand alone." At that, Taeruko and Ningen
-      appeared and added their power to the Master of Fire''s. - Snow and Fire VI'
-    number: 111
-
-  - title: Fortify
-    type: Spell
-    deck: Fate
-    gold_cost: 2
-    focus: 3
-    text: 'Battle/Open: Any number of times per turn, bow this Shugenja and target a Samurai Personality: Give him a Yu bonus
-      equal to this Shugenja''s Chi.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Steve Snyder
-    flavor: '"The Dragon fought with the ferocity born of desperation. he Phoenix fought with the righteous anger of the just.
-      Who can win in such a conflict?" - Satoshi'
-    number: 112
-
-  - title: Cast Down the Meek
-    type: Spell
-    deck: Fate
-    gold_cost: 1
-    focus: 3
-    text: 'Battle: Any number of times per turn, bow this Shugenja and target an enemy unit: Bow all Followers in it with Force
-      less than this Shugenja''s Chi.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Mark Evans
-    flavor: '"For those who wonder at their place in the world, wonder no more. I will set aside a place for those with the
-      courage to seize it." - Daigotsu'
-    number: 113
-
-  - title: Summoning the Gale
-    type: Spell
-    deck: Fate
-    keywords:
-    - Air
-    gold_cost: 3
-    focus: 2
-    text: 'Battle/Open: Any number of times per turn, bow this Shugenja: All Ranged Attacks have -1 strength.Battle: Any number
-      of times per turn, bow this Shugenja: All Ranged Attacks have -2 strength until this battle ends.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Jim Pavelec
-    flavor: '"Nakamuro''s storm cast aside the arrows of our finest archers. Even the Tamori were awed by his power." - Snow
-      and Fire II'
-    number: 114
-
-  - title: Fukurokujin Seido
-    type: Region
-    deck: Dynasty
-    text: This card will not enter play if you are a Shadowlands Horde player.After this card enters play, name a Family. Until
-      the game ends, Personalities with that Family Name have -1 Gold Cost and 1 less Honor Requirement while face-up in, and
-      entering play from, this Province.Personalities with a Clan Alignment other than your own will not enter play from this
-      Province.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Tony Moseley
-    flavor: '"The Dragon honor the Fortune of Wisdom above all. They shall need his blessings, I think." - Morito'
-    number: 115
-
-  - title: Asahina Handen
-    type: Personality
-    clan: Crane
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Crane Clan
-    - Shugenja
-    force: 1
-    chi: 3
-    gold_cost: 8
-    honor_requirement: 6
-    personal_honor: 3
-    text: 'Reaction: Any number of times per turn, when paying a Gold cost, bow Handen and one of your Gold-producing Holdings:
-      Produce 5 Gold.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: April Lee
-    flavor: '"The industrious man makes note of all opportunities."'
-    number: 117
-
-  - title: Family Tactics
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Battle: Name a family. Each Personality in your army that is a member of that family gains +1F.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Brian Snoddy
-    flavor: '"If the Crane believe we would not fight them to win back the Yasuki, they are mistaken. A Fortune, a Kami, and
-      the Sun itself share our bloodline. Only fools stand against the Hida." - Hida O-Ushi'
-    number: 118
-
-  - title: Furious Strike
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Battle: Bow your performing Human Personality and target zero or more other unbowed Personalities in the same army
-      up to his Personal Honor or Force, whichever is lower: Give them +2F.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Bryant Griffin
-    flavor: '"O-Ushi''s forces struck with savagery the Crane could not withstand, driving them to the sea. It seemed as if
-      the battle was over. Then Kurohito, Champion of the Crane, arrived."'
-    number: 119
-
-  - title: Rain of Emeralds
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, give
-      all Human Courtier Personalities +2PH and the ability, "Repeatable Political Limited, w: Gain 1 Honor" until your next
-      turn begins.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Jonathan Hunt
-    flavor: '"While Tsudao saw only tragedy and Kaneka opportunity, to Naseru the omens foretold his own greatness. Of that
-      he was already certain."'
-    number: 120
-
-  - title: Yoritomo Kitao
-    extended_title: Yoritomo Kitao • Experienced
-    type: Personality
-    clan: Mantis
-    deck: Dynasty
-    keywords:
-    - Naval
-    - Unique
-    - Clan Champion
-    - Experienced
-    - Mantis Clan
-    - Samurai
-    force: 4
-    chi: 4
-    gold_cost: 10
-    honor_requirement: 3
-    personal_honor: 2
-    text: 'After Kitao enters play, discard from play all copies of Bayushi Aramasu and Yoritomo Aramasu.Bayushi Aramasu and
-      Yoritomo Aramasu will not enter play.Repeatable Open, : A target Personality may targeted by the rulebook Cavalry player
-      ability.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Dev Madan
-    number: 122
-
-  - title: Twenty Goblin Winter
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Goblin
-    - Winter
-    text: Until your next turn begins, all Human Followers in and out of play have +1F.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Ben Peck
-    flavor: '"Come to the wall, ronin of Rokugan, and test your mettle. Any samurai who enters the Shadowlands and returns with
-      the heads of twenty bakemono shall have fealty with the Hida. No questions asked." - Hida Kuroda'
-    number: 123
-
-  - title: Returned to the Pit
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, choose
-      and destroy a Shadowlands Personality.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Pia Guerra
-    flavor: '"You are powerful, yes, but you do not know obediance. I have taken what I need from you, Kyoso. Now return to
-      the hellish realm that spawned you." - Daigotsu'
-    number: 124
-
-  - title: Tsuno Kurushimi
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Nonhuman
-    - Pack Leader
-    - Shadowlands
-    - Tsuno
-    force: 2
-    chi: 3
-    gold_cost: 5
-    personal_honor: 0
-    text: 'After Kurushimi enters play: Lose 5 Honor.Kurushimi may not assign, and will not move, into a defending army.Kurushimi
-      has +2F/+2C while opposed by a Lion Clan Personality or facing one in a duel.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: William O'Connor
-    flavor: '"How quickly these Lion forget. By the time they realize what we have done, our mission will be complete."'
-    number: 125
-
-  - title: Hiruma Todori
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Crab Clan
-    - Samurai
-    - Scout
-    force: 2
-    chi: 4
-    gold_cost: 7
-    honor_requirement: 3
-    personal_honor: 2
-    text: 'Reaction: Once per battle, after a Follower in Todori''s army bows: Straighten it.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Common
-    artist: William O'Connor
-    flavor: '"A witless Hirumo is a dead Hiruma. The Kuni, Kaiu, and Hida have the Wall to shield them from their mistakes.
-      We can afford to make none."'
-    number: 126
-
-  - title: Kakita Gosha
-    type: Personality
-    clan: Crane
-    deck: Dynasty
-    keywords:
-    - Courtier
-    - Crane Clan
-    force: 1
-    chi: 3
-    gold_cost: 6
-    honor_requirement: 9
-    personal_honor: 2
-    text: 'Political Repeatable Reaction, w: Before a player loses Honor, negate the loss. If the player was not you, gain 1
-      Honor. If it was, lose 1 Honor.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Uncommon
-    artist: William O'Connor
-    flavor: '"A Nezumi? In the Imperial Court? Absurd."'
-    number: 127
-
-  - title: Bayushi Tai
-    type: Personality
-    clan: Scorpion
-    deck: Dynasty
-    keywords:
-    - Samurai
-    - Scorpion Clan
-    - Spy
-    force: 3
-    chi: 4
-    gold_cost: 8
-    personal_honor: 1
-    text: 'Limited: Target a province: Turn any face-down cards in the province face-up. If there are any Personality cards
-      in it, give it a strength penalty equal to their total Personal Honor. When the turn ends, bow Tai.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Uncommon
-    artist: Justin Norman
-    flavor: '"I have been watching her, Paneki-sama. I think you shall find this interesting..."'
-    number: 128
-
-  - title: Kitsune Taro
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Bushi
-    - Fox Clan
-    force: 2
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 3
-    personal_honor: 2
-    text: 'While the Defender controls a Forest, cards in Taro''s unit may not be targeted by Ranged Attacks.Repeatable Battle,
-      w: Ranged 3 Attack.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Malcolm McClinton
-    flavor: '"I do not know where our Lady has gone. Wherever she is, I pray that the spirits keep her safe."'
-    number: 130
-
-  - title: Miya Heikichi
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Courtier
-    force: 0
-    chi: 1
-    gold_cost: 3
-    honor_requirement: 8
-    personal_honor: 2
-    text: 'Political Repeatable Battle/Open, w: Bow a target Courtier.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Dev Madan
-    flavor: '"I have the scroll you seek, Remata-san. The study of lineage is always intriguing, especially so with an individual
-      with a history as... colorful as Lord Kaneka. I think you shall find the contents most illuminating."'
-    number: 131
-
-  - title: Kaeru Kenko
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Ronin
-    - Samurai
-    force: 2
-    chi: 3
-    gold_cost: 6
-    personal_honor: 1
-    text: 'Repeatable Reaction, w: After a Maneuvers Segment ends, if Kenko was assigned during it, move him home, dishonor
-      him, lose 2 Honor.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Malcolm McClinton
-    flavor: '"The City of the Rich Frog is off limits, Scorpion." the ronin snarled. "Perhaps we can reach an agreement?" said
-      Paneki with a faint grin.'
-    number: 132
-
-  - title: Seppun Isei
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Bodyguard
-    - Imperial
-    force: 1
-    chi: 3
-    gold_cost: 5
-    honor_requirement: 2
-    personal_honor: 2
-    text: 'Reaction: Any number of times per turn, when another player''s action would target one of your Courtiers, bow Isei:
-      The action targets him instead, even if illegal.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Dev Madan
-    flavor: '"I have already died for the Emperor once. What makes you think I would not die for his son?"'
-    number: 133
-
-  - title: Tachi
-    type: Item
-    deck: Fate
-    keywords:
-    - Weapon
-    - Sword
-    - Two-Handed
-    force: 3
-    chi: 3
-    gold_cost: 7
-    focus: 1
-    text: Negate this Personality's Force and Chi bonuses (Modifiers from Items are not bonuses).
-    legality:
-    - A Brother's Destiny (Twenty Festivals)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - War of the Seals (Onyx Edition)
-    rarity: Uncommon
-    artist: Christina Wald
-    flavor: '"Even a good blade is nothing in the hands of a fool, Junnosuke." - Mirumoto Temoru'
-    number: 135
-
-  - title: Shosuro Gardens
-    type: Stronghold
-    clan: Scorpion
-    deck: Pre-Game
-    province_strength: 6
-    gold_production: 4
-    starting_honor: 3
-    text: 'Political Repeatable Reaction, w: When a non-Kiho Strategy''s action would target one of your cards, it targets another
-      one of your cards, if legal.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Fixed
-    artist: Malcolm McClinton
-    number: 136
-
-  - title: Kyuden Hida
-    type: Stronghold
-    clan: Crab
-    deck: Pre-Game
-    province_strength: 8
-    gold_production: 4
-    starting_honor: 3
-    text: 'Reaction: After a Follower enters play from your hand, draw a card.'
-    legality:
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Michael Phillippi
-    number: 137
-
-  - title: Mining Foreman
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Retainer
-    gold_cost: 1
-    text: 'Repeatable Reaction, w: When bowing a Mine to produce Gold, it produces 3 additional Gold.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Jonathon and Lisa Hunt
-    flavor: '"Something stirs, deep in the earth. We must seek it out, though even we cannot say why." - Krcklg, Zokujin Speaker'
-    number: 139
-
-  - title: Unexpected Assault
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: Show the top card of your Dynasty Deck. If it is a Personality, he enters play ignoring Gold cost and requirements,
-      and duels another Personality of your choice. Destroy the duel's loser. Discard the card immediately if it is not a Personality
-      or, if it is, after the duel ends.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Randy Asplund-Faith
-    flavor: Hirota looked up with only a moment to spare. Ozaki had warned him that this day would come, when the Hare's enemies
-      would return to finish what they had begun.
-    number: 140
-
-  - title: Fire and Air
-    type: Spell
-    deck: Fate
-    keywords:
-    - Air
-    - Fire
-    gold_cost: 2
-    focus: 2
-    text: 'Fire Battle: Bow this Shugenja to make a Ranged 2 Attack. (Destroy a target enemy Follower, or Personality without
-      Followers, with 2 or lower Force.)Air Battle: Move this Shugenja to an adjacent, unresolved battlefield or move him home.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    rarity: Common
-    artist: Ben Peck
-    flavor: '"Peasant magic," Shaitung laughed, casting Nakamuro''s storm aside with a wave of her hand. Riake whispered the
-      words of summoning once more, but Shaitung knocked the Master of Water senseless with a simple gesture. - Snow and Fire
-      III'
-    number: 141
-
-  - title: Advance Scout
-    type: Follower
-    deck: Fate
-    keywords:
-    - Scout
-    force: 0
-    chi: 0
-    gold_cost: 5
-    honor_requirement: 1
-    focus: 2
-    text: 'Repeatable Reaction, w: Before a Terrain enters play, negate its effects other than entering play.Repeatable Battle,
-      w: Give this Personality +2F.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Malcolm McClinton
-    flavor: '"I do not care what the Anvil''s sycophants say. I am a Yasuki. I was born a Crab, and I shall die one."'
-    number: 142
-
-  - title: Hunter
-    type: Follower
-    deck: Fate
-    force: 2
-    chi: 0
-    gold_cost: 3
-    honor_requirement: 1
-    focus: 1
-    text: 'Battle: Once per battle, if there is a Nonhuman Personality in the enemy army: Give this card +2F.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Malcolm McClinton
-    flavor: '"A wise hunter does not face the bear in his cave. The Crane would not have started this war if they did not have
-      a plan."'
-    number: 143
-
-  - title: Crab Recruiter
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Retainer
-    gold_cost: 3
-    text: 'w: Produce 2 Gold.w: When paying to Equip an Infantry Follower from your hand to your Crab Clan Personality, produce
-      5 Gold which may only pay for that card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Monika Livingstone
-    flavor: '"So you once killed peasents for the bandit-lord Hayato? Excellent. Now you can kill Crane for lord Kuroda."'
-    number: 144
-
-  - title: Crane Tradesman
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Retainer
-    gold_cost: 3
-    text: 'w: Produce 2 Gold.Repeatable Battle/Open, w: Bow your target performing Crane Clan Personality to straighten a target
-      Holding.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Eric Ren
-    flavor: '"The Crane have lost much political ground to the Scorpion in recent decades. The wealth of the Yasuki will do
-      much to restore that loss, and save the Empire from Bayushi deception."'
-    number: 145
-
-  - title: Temple of the Dragon
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Temple
-    gold_cost: 3
-    text: 'w: Produce 2 Gold.Repeatable Reaction, w: After your Tattoo action resolves that targeted or was performed by your
-      Dragon Clan Personality, draw a card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Theresa Brandon
-    flavor: '"The monks that worship Lord Hoshi move their temples from place to place overnight. Their mumbled prophecies and
-      strange blessings cloud my mind. They are strange, even for Dragon."'
-    number: 146
-
-  - title: The Greatest Cost
-    type: Spell
-    deck: Fate
-    gold_cost: 1
-    focus: 1
-    text: 'Limited: Any number of times per turn, bow this Shugenja and target a Personality: Give him a +1F token. Permanently
-      give this Shugenja -1C and Shadowlands.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Uncommon
-    artist: Jim Pavelec
-    flavor: '"Yes," Nokatsu whispered through tortured lips. "Yes, make the pain stop." "Of course, my friend," Daigotsu said,
-      his voice sympathetic.'
-    number: 147
-
-  - title: Nagamaki
-    type: Item
-    deck: Fate
-    keywords:
-    - Weapon
-    force: 0
-    chi: 1
-    gold_cost: 5
-    focus: 2
-    text: 'Reaction: Once per battle, after another player''s action resolves: Give this card +2F/+1C until the battle ends.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Anthony Grabski
-    flavor: '"The Scorpion destroyed Aramasu''s home in Otosan Uchi, and through it all Kaneka said nothing. Kamnan''s blade
-      took the traitor''s life, as a cry went up from Golden Sun Bay." - The Death of Aramasu, Part VIII'
-    number: 148
-
-  - title: Phoenix Library
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Unique
-    gold_cost: 3
-    text: 'w: Produce 2 Gold.Repeatable Reaction, w: After you attach a Spell from your hand to one of your Phoenix Clan Personalities,
-      draw a card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Rare
-    artist: Jim Pavelec
-    flavor: '"The Dragon and Phoenix once shared the libraries of Izaku. These days, the Phoenix keep their secrets to themselves."'
-    number: 149
-
-  - title: Minor Illusions
-    type: Spell
-    deck: Fate
-    gold_cost: 1
-    focus: 3
-    text: 'Reaction: Any number of times per turn, after a Holding bows as a cost of one of its traits or actions, bow this
-      Shugenja: Negate all effects of that trait or action other than Gold production.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Rare
-    artist: Lisa Hunt
-    flavor: '"...I could have sworn this was jade."'
-    number: 150
-
-  - title: Scorpion Distracter
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Retainer
-    gold_cost: 3
-    text: 'w: Produce 2 Gold.Political Repeatable Reaction, w: Before a Political action resolves, bow your target unbowed performing
-      Scorpion Clan Personality. If this bowed him, the player taking the action may pay an amount of Gold greater than twice
-      your performer''s Chi; if he does not, negate the action''s effects.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Rare
-    artist: Anthony Hightower
-    flavor: '"As the Mantis split the Scorpion treasures, none noticed the men stealing aboard Aramasu''s vessel." - The Death
-      of Aramasu, Part II'
-    number: 151
-
-  - title: Shadowlands Bastion
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Shadowlands
-    gold_cost: 3
-    text: 'After this Holding enters play, lose 4 Honor.w: Produce 2 Gold.w: When paying for a Shadowlands card, produce 4 Gold
-      which may only pay for that card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Rare
-    artist: Tony Moseley
-    flavor: '"Daigotsu has many names, many faces. The creatures known as Onisu are more than his nightmare minions. They are
-      nightmares. And they are him... occasionally." - Shahai'
-    number: 152
-
-  - title: Lion Scout
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Retainer
-    gold_cost: 3
-    text: 'w: Produce 2 Gold.Repeatable Reaction, w: After your Lion Clan Personality performs a Tactical action during a battle,
-      the Personality may perform one more Tactical action this battle, which may not be the same action whose performance triggered
-      this Reaction.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Rare
-    artist: Val Mayerik
-    number: 153
-
-  - title: Open Arms
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Political
-    gold_cost: 0
-    focus: 2
-    text: 'Reaction: After bringing a Human Personality without your Clan alignment into play during your Dynasty Phase: Gain
-      Honor equal to his Personal Honor. Permanently increase the Family Honor required for an Honor Victory by an amount equal
-      to the amount you gained for all players.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    rarity: Common
-    artist: Val Mayerik
-    flavor: '"If you would serve me, then you must have a fitting name. Rise, Toturi Miyako, and serve as your father served
-      mine."'
-    number: 155
-
-  - title: Kakita Dueling Academy
-    type: Stronghold
-    clan: Crane
-    deck: Pre-Game
-    province_strength: 7
-    gold_production: 4
-    starting_honor: 5
-    text: 'Repeatable Political Limited, w: Search your Fate deck for an Iaijutsu Strategy, show it, and put it to your hand.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Ellym Sirac
-    number: 156
+- cardid: 16
+  title: A Desperate Act
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Bow and destroy your target performing Personality with 2 or more Chi to give -1F
+    to each Personality and Follower that was opposing him immediately before his destruction.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Michael Kaluta
+  flavor_text: <i>"The Crab were unprepared for the sudden appearance of Kurohito's forces, or for the
+    sabotage of their fleet by Mantis mercenaries."</i>
+  collector_number: '31'
+- cardid: 50
+  title: A Matter of Pride
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, each player loses Honor equal to three times the number of Shadowlands cards he controls.
+    These losses may not be given to another player instead, and if an effect negates such a loss, it
+    is halved instead, rounding up.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Paul Herbert
+  flavor_text: <i>When the first Tsuno fell to Dejiko's blade, the Lion roared in truimph. Though their
+    foes were unknown, one thing was familiar - they could die.</i>
+  collector_number: '36'
+- cardid: 63
+  title: A Plague Spreads
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Plague
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, target a Personality controlled by the player on your left. Give him -2C until your next
+    turn begins.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Stefano Gaudiano
+  flavor_text: <i>Chieko frowned. "I can do little but make you more comfortable, old one," she said gravely,
+    "and pray that the Fortunes show mercy." "That will be enough," the old man said, and the light went
+    from his eyes.</i>
+  collector_number: '138'
+- cardid: 115
+  title: Acquiring Favor
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Political
+  text: '<b>Reaction:</b> When paying a cost of discarding the Imperial Favor, bow your Stronghold: This
+    action pays that cost instead.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Al Skaar
+  flavor_text: <i>"The offer is a simple one, Lord Kaneka. Give the Scorpion our vengeance upon the traitor
+    Aramasu, and we shall give you the aid of a truly Great Clan." - The Death of Aramasu, Part V</i>
+  collector_number: '4'
+- cardid: 120
+  title: Advance Scout
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Scout
+  text: <b>Repeatable Reaction, :bow::</b> Before a Terrain enters play, negate its effects other than
+    entering play.<br><b>Repeatable Battle, :bow::</b> Give this Personality +2F.
+  gold_cost: 5
+  focus: 2
+  force: 0
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Malcolm McClinton
+  flavor_text: <i>"I do not care what the Anvil's sycophants say. I am a Yasuki. I was born a Crab, and
+    I shall die one."</i>
+  collector_number: '142'
+- cardid: 278
+  title: Akodo Setai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Deathseeker
+  - Lion Clan
+  - Samurai
+  text: '<b>Battle:</b> Target an enemy Personality with lower Force than Setai''s Personal Honor, and
+    bow and destroy Setai: Destroy the target.'
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 8
+  personal_honor: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  notes: Misnumbered as card 84
+  printing_id: '1'
+  rarity: Common
+  artist: Brian Snoddy
+  flavor_text: <i>"He speaks nothing of his past. He has no hope for the future. He has one foot buried
+    in the Realm of Slaughter, and I do not wish to face him again." - Mirumoto Taiu</i>
+  collector_number: '85'
+- cardid: 404
+  title: Anekkusai's Feathers
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Nemuranai
+  text: Before bowing this Personality as a cost of performing a Ranged Attack action on his card, you
+    may bow this Item to pay the cost instead; if you did, you may not use that Ranged Attack ability
+    again this battle.
+  gold_cost: 2
+  focus: 2
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Anthony Hightower
+  collector_number: '63'
+- cardid: 491
+  title: Asahina Handen
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Unique
+  - Crane Clan
+  - Shugenja
+  text: '<b>Reaction:</b> Any number of times per turn, when paying a Gold cost, bow Handen and one of
+    your Gold-producing Holdings: Produce 5 Gold.'
+  gold_cost: 8
+  force: 1
+  chi: 3
+  honor_requirement: 6
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: April Lee
+  flavor_text: <i>"The industrious man makes note of all opportunities."</i>
+  collector_number: '117'
+- cardid: 692
+  title: Banner Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Cavalry
+  text: <b>Battle, :bow::</b> If the enemy leader has more Family Honor and more Provinces than you, this
+    battle's resolution will not bow your units in this army.
+  gold_cost: 8
+  focus: 3
+  force: 2
+  chi: 0
+  honor_requirement: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Heather Bruton
+  flavor_text: <i>"To be a symbol of the clan's honor is a heavy burden."</i>
+  collector_number: '51'
+- cardid: 902
+  title: Bayushi Tai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Scorpion
+  keywords:
+  - Samurai
+  - Scorpion Clan
+  - Spy
+  text: '<b>Limited:</b> Target a province: Turn any face-down cards in the province face-up. If there
+    are any Personality cards in it, give it a strength penalty equal to their total Personal Honor. When
+    the turn ends, bow Tai.'
+  gold_cost: 8
+  force: 3
+  chi: 4
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Uncommon
+  artist: Justin Norman
+  flavor_text: <i>"I have been watching her, Paneki-sama. I think you shall find this interesting..."</i>
+  collector_number: '128'
+- cardid: 906
+  title: Bayushi Tasogare
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Scorpion
+  keywords:
+  - Unique
+  - Master Spy
+  - Samurai
+  - Scorpion Clan
+  - Spy
+  text: '<b>Political Reaction:</b> Any number of times per turn, after a player draws a card, target
+    him and bow Tasogare: Look at the card. You may pay 3 Gold; if you did, the target places the card
+    at the bottom of his Fate deck and draws another.'
+  gold_cost: 8
+  force: 2
+  chi: 4
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"Let the Mantis have their victory. Kitao's debts will be repaid in time."</i>
+  collector_number: '94'
+- cardid: 1023
+  title: Blazing Sun
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until your next turn begins, human Samurai Personalities have +1F.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Anthony Hightower
+  flavor_text: <i>As the strange lights burned in the sky, each of the Winds saw a different destiny.
+    Tsudao saw a great flame, with herself at the heart of it. A dull pain burned in her heart at the
+    sight. She said nothing, for now.</i>
+  collector_number: '38'
+- cardid: 1056
+  title: Blood Madness
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Limited:</b> Bow and destroy your target performing Shadowlands Personality to straighten another
+    of your target Shadowlands cards. It will not straighten again before your next turn begins.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Ramon Perez
+  flavor_text: <i>"By the Fortunes, don't stop and watch. Run!" -Hiruma Todori</i>
+  collector_number: '2'
+- cardid: 1133
+  title: Breaking Concentration
+  types:
+  - Spell
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Any number of times per turn, bow this Shugenja: While he remains bowed, you
+    may negate his straightening, and players may not declare a strike in duels if they have not yet focused
+    in that duel, unless they cannot legally focus.'
+  gold_cost: 4
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Talon Dunning
+  flavor_text: <i>"Shaitung faltered but did not fall. The Masters gathered for their vengeance, but Shaitung
+    was not finished..." - Snow and Fire VII</i>
+  collector_number: '116'
+- cardid: 1195
+  title: By Will of the Wind
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Favor
+  - Political
+  text: <b>Favor Political Open:</b> Discard the Imperial Favor or bow your Stronghold to target a face-up
+    Personality in a Province. His Honor Requirement is ignored <i>(this turn)</i>.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: April Lee
+  flavor_text: <i>"Consider it a favor to my dear brother, Remata-san. Only a Kitsuki could posses both
+    the wisdom and discretion to unravel the threads of his tangled heritage." - Hantei Naseru</i>
+  collector_number: '11'
+- cardid: 1226
+  title: Cast Down the Meek
+  types:
+  - Spell
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Any number of times per turn, bow this Shugenja and target an enemy unit: Bow
+    all Followers in it with Force less than this Shugenja''s Chi.'
+  gold_cost: 1
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Mark Evans
+  flavor_text: <i>"For those who wonder at their place in the world, wonder no more. I will set aside
+    a place for those with the courage to seize it." - Daigotsu</i>
+  collector_number: '113'
+- cardid: 1435
+  title: Command Group
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Bow your target performing Samurai to give one or two of your other target unbowed
+    Personalities a Force bonus equal to the Samurai's Force.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Pia Guerra
+  flavor_text: <i>"The commanders of the Legion were the finest in the Empire, and yet Tsudao felt that
+    they were somehow incomplete."</i>
+  collector_number: '5'
+- cardid: 1474
+  title: Contemplation of Osano-Wo
+  types:
+  - Spell
+  decks:
+  - Fate
+  text: '<b>Battle/Open:</b> Any number of times per turn, bow this Shugenja: You choose whether all players
+    draw a card or all players discard a card. Permanently give this Shugenja -2 Chi.'
+  gold_cost: 4
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Anthony Hightower
+  flavor_text: <i>"We are the Phoenix, Shaitung," Hochiu countered. "Unlike you, we do not stand alone."
+    At that, Taeruko and Ningen appeared and added their power to the Master of Fire's. - Snow and Fire
+    VI</i>
+  collector_number: '111'
+- cardid: 1483
+  title: Contingency Planning
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> After one of your units moves home from a battlefield, target another of your
+    unbowed units that has not been assigned to a battlefield this turn: Move it to that battlefield.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: John Cadice
+  flavor_text: <i>"Remain here, Kuroda, and defend the Wall. I shall take a detachment of out troops and
+    see to Kurohito personally." - Daughter of the Bear, Part I</i>
+  collector_number: '6'
+- cardid: 1552
+  title: Crab Recruiter
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Retainer
+  text: ':bow:: Produce 2 Gold.<br>:bow:: When paying to Equip an Infantry Follower from your hand to
+    your Crab Clan Personality, produce 5 Gold which may only pay for that card.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Monika Livingstone
+  flavor_text: <i>"So you once killed peasents for the bandit-lord Hayato? Excellent. Now you can kill
+    Crane for lord Kuroda."</i>
+  collector_number: '144'
+- cardid: 1556
+  title: Crane Tradesman
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Retainer
+  text: ':bow:: Produce 2 Gold.<br><b>Repeatable Battle/Open, :bow::</b> Bow your target performing Crane
+    Clan Personality to straighten a target Holding.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Eric Ren
+  flavor_text: <i>"The Crane have lost much political ground to the Scorpion in recent decades. The wealth
+    of the Yasuki will do much to restore that loss, and save the Empire from Bayushi deception."</i>
+  collector_number: '145'
+- cardid: 1654
+  title: Daidoji Megumi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Duelist
+  - Crane Clan
+  - Novice
+  - Samurai
+  text: After Megumi enters a duel, give her +3C until the duel ends or either player focuses.
+  gold_cost: 5
+  force: 2
+  chi: 2
+  honor_requirement: 8
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Tony Moseley
+  flavor_text: <i>"She was born blind, but has never needed eyes to see. Her blade strikes true enough."
+    - Kakita Noritoshi</i>
+  collector_number: '78'
+- cardid: 1795
+  title: Dairu no Shiryo
+  types:
+  - Ancestor
+  decks:
+  - Fate
+  clans:
+  - Scorpion
+  keywords:
+  - Unique
+  - Scorpion Clan
+  text: This Ancestor is considered Bayushi Dairu for deck construction and checking the Unique restriction.<br><b>Repeatable
+    Battle:</b> If this action has not targeted any of the target's controller's Personalities this turn,
+    target an enemy Personality. His controller must discard a card from his hand. Lose 2 Honor.
+  gold_cost: 0
+  focus: 3
+  force: '+0'
+  chi: '+1'
+  honor_requirement: 1
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Audrey Corman
+  collector_number: '35'
+- cardid: 1800
+  title: Dairya's Cackling Skull
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Weapon
+  - Shadowlands
+  text: After this Item enters play, lose 3 Honor.<br><b>Repeatable Battle/Open, :bow::</b> Straighten
+    a target Follower in this unit.
+  gold_cost: 3
+  focus: 1
+  force: '+1'
+  chi: '+2'
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Brian Snoddy
+  flavor_text: <i>"His corpse was never found. The bakemono say his soul is trapped within that club."
+    - Hiruma Todori</i>
+  collector_number: '59'
+- cardid: 1932
+  title: Defensive Duty
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> If you are the Defender and even if you control no units at the current battlefield:
+    Search your Dynasty deck for a Personality and put it face-up in the current battlefield''s province,
+    discarding any cards already there. Give the province a strength bonus equal to the Personality''s
+    Force. Discard the Personality after the battle ends.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Val Mayerik
+  collector_number: '7'
+- cardid: 2000
+  title: Diplomatic Apprentice
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: Crane Clan and Scorpion Clan players Equip this Follower for 2 less Gold. Before your Political
+    action bows this Personality, you may bow this Follower instead, which fulfills the action's costs
+    and conditions of bowing.
+  gold_cost: 5
+  focus: 3
+  force: 0
+  chi: 0
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  printing_id: '2'
+  rarity: Common
+  artist: Malcolm McClinton
+  flavor_text: <i>"A skilled politician surrounds herself with experts and informants, seeking their advice
+    in all things." - Otomo Madoko, Subtley of the Court</i>
+  collector_number: '43'
+- cardid: 2111
+  title: Doji Kurohito
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Doji Kurohito • Experienced
+  clans:
+  - Crane
+  keywords:
+  - Double Chi
+  - Loyal
+  - Unique
+  - Clan Champion
+  - Crane Clan
+  - Experienced
+  - Samurai
+  text: <b>Political Battle, :g4::</b> Kurohito challenges a target enemy Personality. His controller
+    may discard three cards to have him refuse. Destroy the loser.
+  gold_cost: 10
+  force: 4
+  chi: 4
+  honor_requirement: 10
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: William O'Connor
+  collector_number: '77'
+- cardid: 2295
+  title: Elemental Shock
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Elemental
+  - Kiho
+  text: '<b>Battle/Open:</b> Bow your performing Monk or Shugenja and target a Monk or Shugenja: Bow him.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Steve Snyder
+  flavor_text: <i>"As surely as water douses fire, fire boils water." Hochiu said. "All is a matter of
+    perspective and timing, Shaitung. I am surprised you have survived this long not knowing that." -Snow
+    and Fire IV</i>
+  collector_number: '67'
+- cardid: 2333
+  title: Endless Deluge
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Elemental
+  - Ritual
+  text: '<b>Limited:</b> Bow this Shugenja and zero or more of your other performing Shugenja, destroy
+    this card, and target a Stronghold whose base Province Strength is lower than the performers'' total
+    Chi: Until your next turn begins, abilities on the target may not be used.'
+  gold_cost: 6
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Mark Evans
+  flavor_text: <i>"In barely a moment, Shaitung and the Masters were gone." - Snow and Fire IX</i>
+  collector_number: '110'
+- cardid: 2466
+  title: Family Tactics
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Name a family. Each Personality in your army that is a member of that family gains
+    +1F.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Brian Snoddy
+  flavor_text: <i>"If the Crane believe we would not fight them to win back the Yasuki, they are mistaken.
+    A Fortune, a Kami, and the Sun itself share our bloodline. Only fools stand against the Hida." - Hida
+    O-Ushi</i>
+  collector_number: '118'
+- cardid: 2557
+  title: Fire and Air
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Air
+  - Fire
+  text: <b>Fire Battle:</b> Bow this Shugenja to make a Ranged 2 Attack. <i>(Destroy a target enemy Follower,
+    or Personality without Followers, with 2 or lower Force.)</i><br><b>Air Battle:</b> Move this Shugenja
+    to an adjacent, unresolved battlefield or move him home.
+  gold_cost: 2
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Common
+  artist: Ben Peck
+  flavor_text: <i>"Peasant magic," Shaitung laughed, casting Nakamuro's storm aside with a wave of her
+    hand. Riake whispered the words of summoning once more, but Shaitung knocked the Master of Water senseless
+    with a simple gesture. - Snow and Fire III</i>
+  collector_number: '141'
+- cardid: 2670
+  title: Fortify
+  types:
+  - Spell
+  decks:
+  - Fate
+  text: '<b>Battle/Open:</b> Any number of times per turn, bow this Shugenja and target a Samurai Personality:
+    Give him a Yu bonus equal to this Shugenja''s Chi.'
+  gold_cost: 2
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Steve Snyder
+  flavor_text: <i>"The Dragon fought with the ferocity born of desperation. he Phoenix fought with the
+    righteous anger of the just. Who can win in such a conflict?" - Satoshi</i>
+  collector_number: '112'
+- cardid: 2726
+  title: Fukurokujin Seido
+  types:
+  - Region
+  decks:
+  - Dynasty
+  text: This card will not enter play if you are a Shadowlands Horde player.<br>After this card enters
+    play, name a Family. Until the game ends, Personalities with that Family Name have -1 Gold Cost and
+    1 less Honor Requirement while face-up in, and entering play from, this Province.<br>Personalities
+    with a Clan Alignment other than your own will not enter play from this Province.
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Tony Moseley
+  flavor_text: <i>"The Dragon honor the Fortune of Wisdom above all. They shall need his blessings, I
+    think." - Morito</i>
+  collector_number: '115'
+- cardid: 2735
+  title: Furious Strike
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Bow your performing Human Personality and target zero or more other unbowed Personalities
+    in the same army up to his Personal Honor or Force, whichever is lower: Give them +2F.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Bryant Griffin
+  flavor_text: <i>"O-Ushi's forces struck with savagery the Crane could not withstand, driving them to
+    the sea. It seemed as if the battle was over. Then Kurohito, Champion of the Crane, arrived."</i>
+  collector_number: '119'
+- cardid: 2912
+  title: Guard House
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Fortification
+  text: While this Holding is unbowed, this Province has +1 strength for each other Fortification it has
+    attached.<br><b>Repeatable Battle, :bow::</b> Ranged 2 Attack.
+  gold_cost: 4
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Paul (Prof.) Herbert
+  flavor_text: <i>"The Unicorn have not simply stood idle since the Naga's slumber. Soon, the entire Empire
+    shall see." - Moto Chagatai</i>
+  collector_number: '53'
+- cardid: 3116
+  title: Hida Kagore
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Crab Clan
+  - Samurai
+  text: <b>Battle:</b> Once per battle, transfer your target a Follower attached to another of your Crab
+    Clan Personalities to Kagore.<br><b>Battle:</b> Once per battle, transfer one of Kagore's target Followers
+    to another of your target Crab Clan Personalities.
+  gold_cost: 7
+  force: 4
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Anthony Hightower
+  flavor_text: <i>"Some frown upon the Moto for their lack of mercy. I think they set a good example."</i>
+  collector_number: '73'
+- cardid: 3141
+  title: Hida Kuon
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hida Kuon • Experienced
+  clans:
+  - Crab
+  keywords:
+  - Double Chi
+  - Unique
+  - Yu 5
+  - Crab Clan
+  - Experienced
+  - General
+  - Samurai
+  text: Followers with 2 or more Force attached to your Crab Clan Personalities have +1F.
+  gold_cost: 11
+  force: 5
+  chi: 4
+  honor_requirement: 8
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Paul (Prof.) Herbert
+  flavor_text: <i>"I failed to avenge my father. I shall not fail my mother as well."</i>
+  collector_number: '72'
+- cardid: 3167
+  title: Hida Reiha
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Yu 4
+  - Crab Clan
+  - Samurai
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 2
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Malcolm McClinton
+  flavor_text: <i>"For eleven centuries we have stood against the darkness and received nothing but mockery
+    and betrayal. When the time comes, I shall step away from the Wall and let our treacherous cousins
+    see exactly what we have protected them from."</i>
+  collector_number: '74'
+- cardid: 3333
+  title: Hiruma Todori
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Crab Clan
+  - Samurai
+  - Scout
+  text: '<b>Reaction:</b> Once per battle, after a Follower in Todori''s army bows: Straighten it.'
+  gold_cost: 7
+  force: 2
+  chi: 4
+  honor_requirement: 3
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Common
+  artist: William O'Connor
+  flavor_text: <i>"A witless Hirumo is a dead Hiruma. The Kuni, Kaiu, and Hida have the Wall to shield
+    them from their mistakes. We can afford to make none."</i>
+  collector_number: '126'
+- cardid: 3521
+  title: Hunter
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Once per battle, if there is a Nonhuman Personality in the enemy army: Give this
+    card +2F.'
+  gold_cost: 3
+  focus: 1
+  force: 2
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Malcolm McClinton
+  flavor_text: <i>"A wise hunter does not face the bear in his cave. The Crane would not have started
+    this war if they did not have a plan."</i>
+  collector_number: '143'
+- cardid: 3532
+  title: Hyakute no Oni
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: After Hyakute enters play, lose 4 Honor<br>Will not attach non-Oni Followers.<br>Items attaching
+    to Hyakute will not have their costs reduced.<br>May attach any number of Weapons.<br><b>Battle:</b>
+    Fear 1 plus the number of Weapons Hyakute has attached.
+  gold_cost: 5
+  force: 2
+  chi: 2
+  personal_honor: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Monika Livingstone
+  collector_number: '99'
+- cardid: 3549
+  title: Iaijutsu Lesson
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Iaijutsu
+  text: <b>Iaijutsu Limited:</b> Your target performing unbowed Personality challenges another player's
+    target Personality. He may refuse; if he did, draw two cards. During the challenge and duel, negate
+    bonuses, penalties, and new effects from the Personalities' Items and their modifiers are ignored.
+    The winner gains 3 Honor. Bow the loser.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Common
+  artist: Tony Moseley
+  flavor_text: <i>"Welcome back, Ukira-sama."</i>
+  collector_number: '3'
+- cardid: 3571
+  title: Ide Michisuna
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unicorn
+  keywords:
+  - Unique
+  - Courtier
+  - Unicorn Clan
+  text: <b>Repeatable Reaction, :bow::</b> Before a Personality is rehonored, target him. Negate the rehonoring,
+    even if it was from seppuku.
+  gold_cost: 3
+  force: 1
+  chi: 2
+  honor_requirement: 7
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Lisa Hunt
+  flavor_text: <i>"Indeed the City of Lies may be a place of deception and treachery, but it is also a
+    place of great beauty. Sit and listen to my tale..."</i>
+  collector_number: '102'
+- cardid: 3722
+  title: In Light of Darkness
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until your next turn begins, all Human Shugenja Personalities in and out of play have
+    +1C.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Mark Evans
+  flavor_text: <i>Though his siblings could make little of the visions painted in the sky, Sezaru understood
+    his future perfectly. However, clarity of vision hardly bestowed peace upon his tortured mind.</i>
+  collector_number: '37'
+- cardid: 3762
+  title: Inside Agent
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Target another player: Look at his hand, except for one card of his choice. Lose
+    2 Honor.<br><b>Limited:</b> Destroy your performing Personality and target another player: He targets
+    and bows one of his unbowed Personalities.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Michael Phillippi
+  flavor_text: <i>"My sources indictate that the Lion are weak toward the west, lord Junnosuke." - Hantei
+    Naseru</i>
+  collector_number: '10'
+- cardid: 3783
+  title: Interesting Sticks
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle/Open:</b> Target a non-Stronghold Ratling card: Bow it.<br><b>Limited:</b> Bow your
+    performing Personality: Draw a card.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Michael Phillippi
+  flavor_text: <i>"Each year, the Rememberer of each tribe takes up the memory sticks and tells the tales
+    of those who have passed into Dream. So long as the Rememberers tell these tales, no Nezumi ever truly
+    dies." - Hida Hio</i>
+  collector_number: '12'
+- cardid: 3830
+  title: Isawa Hochiu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Isawa Hochiu • Experienced
+  clans:
+  - Phoenix
+  keywords:
+  - Unique
+  - Elemental Master
+  - Experienced
+  - Fire
+  - Phoenix Clan
+  - Shugenja
+  text: Hochiu has +2C while facing a Shadowlands Personality in a duel.<br>Before Hochiu is destroyed
+    as the consequence of a duel, if he was the challenger and you did not use his printed ability upon
+    his entering it, negate his destruction.<br><b>Fire Repeatable Tireless Reaction:</b> After Hochiu
+    enters a duel, you may focus one additional time before the duel begins.
+  gold_cost: 7
+  force: 2
+  chi: 3
+  honor_requirement: 8
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  story: 2000 World Champion - Justin Walsh
+  printing_id: '1'
+  rarity: Rare
+  artist: Steve Snyder
+  flavor_text: <i>"The Master of Fire fears no man."</i>
+  collector_number: '89'
+- cardid: 3872
+  title: Isawa Nakamuro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Isawa Nakamuro • Experienced
+  clans:
+  - Phoenix
+  keywords:
+  - Unique
+  - Air
+  - Elemental Master
+  - Experienced
+  - Phoenix Clan
+  - Shugenja
+  text: <b>Air Reaction, :bow::</b> When a Ranged Attack or Spell effect would target a card in Nakamuro's
+    army, it targets another card at his battlefield of your choice instead, if legal, but ignoring any
+    restriction that the target be an "enemy" card.
+  gold_cost: 8
+  force: 1
+  chi: 4
+  honor_requirement: 4
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Joachim Gmoser
+  flavor_text: <i>"He has fallen from the Council's favor. Master or no, I have no time for a man who
+    cannot release his past." - Isawa Hochiu</i>
+  collector_number: '91'
+- cardid: 3875
+  title: Isawa Nodotai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Phoenix Clan
+  - Shugenja
+  text: After a turn ends, remove all Charge tokens from Nodotai.<br>After a player who controls a unit
+    opposing Nodotai resolves an action during a battle at Nodotai's battlefield, place a <b>Charge</b>
+    token on him.<br><b>Repeatable Battle, :bow::</b> Remove all Charge tokens on Nodotai to make Ranged
+    Attack with a strength equal to twice the number of Charge tokens this removed.
+  gold_cost: 9
+  force: 2
+  chi: 5
+  honor_requirement: 6
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Malcolm McClinton
+  collector_number: '90'
+- cardid: 4093
+  title: Kaeru Kenko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Ronin
+  - Samurai
+  text: <b>Repeatable Reaction, :bow::</b> After a Maneuvers Segment ends, if Kenko was assigned during
+    it, move him home, dishonor him, lose 2 Honor.
+  gold_cost: 6
+  force: 2
+  chi: 3
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Malcolm McClinton
+  flavor_text: <i>"The City of the Rich Frog is off limits, Scorpion." the ronin snarled. "Perhaps we
+    can reach an agreement?" said Paneki with a faint grin.</i>
+  collector_number: '132'
+- cardid: 4117
+  title: Kaiu Hosaru
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Crab Clan
+  - Engineer
+  - Samurai
+  text: <b>Repeatable Limited, :bow::</b> Put an <b>Engineering </b>token on one of your Provinces. This
+    token has the trait, "Samurai defending this Province have <b>Yu </b>with a value equal to the number
+    of Engineering tokens on it."
+  gold_cost: 3
+  force: 1
+  chi: 1
+  honor_requirement: 5
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Dennis Calero
+  flavor_text: <i>"No wall stands forever. Only duty stands forever. The Carpenter Wall is built of duty.
+    The rest is only stones."</i>
+  collector_number: '75'
+- cardid: 4161
+  title: Kakita Dueling Academy
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  text: <b>Repeatable Political Limited, :bow::</b> Search your Fate deck for an Iaijutsu Strategy, show
+    it, and put it to your hand.
+  province_strength: 7
+  starting_honor: 5
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Ellym Sirac
+- cardid: 4168
+  title: Kakita Gosha
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Courtier
+  - Crane Clan
+  text: <b>Political Repeatable Reaction, :bow::</b> Before a player loses Honor, negate the loss. If
+    the player was not you, gain 1 Honor. If it was, lose 1 Honor.
+  gold_cost: 6
+  force: 1
+  chi: 3
+  honor_requirement: 9
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Uncommon
+  artist: William O'Connor
+  flavor_text: <i>"A Nezumi? In the Imperial Court? Absurd."</i>
+  collector_number: '127'
+- cardid: 4300
+  title: Kayobun
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Nonhuman
+  - Ogre
+  - Overlord
+  - Shadowlands
+  text: After Kayobun enters play, lose 6 Honor and permanently give him +1/+1 for each dead Personality
+    in your discard pile.
+  gold_cost: 7
+  force: 3
+  chi: 1
+  personal_honor: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Michael Phillippi
+  flavor_text: <i>"Fu Leng saw us as cumbersome brutes to be enslaved. Daigotsu sees us as brothers. We
+    do not serve him. We simply kill by his side."</i>
+  collector_number: '100'
+- cardid: 4473
+  title: Kitsune Taro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Bushi
+  - Fox Clan
+  text: While the Defender controls a Forest, cards in Taro's unit may not be targeted by Ranged Attacks.<br><b>Repeatable
+    Battle, :bow::</b> Ranged 3 Attack.
+  gold_cost: 7
+  force: 2
+  chi: 3
+  honor_requirement: 3
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Malcolm McClinton
+  flavor_text: <i>"I do not know where our Lady has gone. Wherever she is, I pray that the spirits keep
+    her safe."</i>
+  collector_number: '130'
+- cardid: 4503
+  title: Kokoro
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Limited:</b> Bow your performing Monk: The player <i>(or players)</i> with the fewest cards
+    in his hand draws a card. Draw a card.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Randy Asplund-Faith
+  flavor_text: <i>"The center is everything. Find the center. All else proceeds naturally from there."
+    - The Tao of Shinsei</i>
+  collector_number: '65'
+- cardid: 4562
+  title: Kukan-do
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Reaction:</b> Before a target Personality gains a Force bonus, bow your performing Monk opposing
+    him and target an unbowed Personality in the Monk''s army: Give him an equal bonus. Negate the original
+    bonus.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Justin Norman
+  flavor_text: <i>"I did not choose this fight, Shiba Kai. Do not force my hand again." - Hoshi Wayan</i>
+  collector_number: '71'
+- cardid: 4637
+  title: Kyuden Hida
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: <b>Reaction:</b> After a Follower enters play from your hand, draw a card.
+  province_strength: 8
+  starting_honor: 3
+  legality:
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Michael Phillippi
+  collector_number: '137'
+- cardid: 4748
+  title: Lion Scout
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Retainer
+  text: ':bow:: Produce 2 Gold.<br><b>Repeatable Reaction, :bow::</b> After your Lion Clan Personality
+    performs a Tactical action during a battle, the Personality may perform one more Tactical action this
+    battle, which may not be the same action whose performance triggered this Reaction.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Rare
+  artist: Val Mayerik
+  collector_number: '153'
+- cardid: 4829
+  title: Mapped Region
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  text: Before you announce an action during a battle at this Province's battlefield, once per battle,
+    you may search your Fate deck for a Terrain card and play it as if it was in your hand.
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Common
+  artist: Ken Meyer Jr.
+  flavor_text: <i>"The Maps of the Emperor are the eyes of the Emperor, Unicorn. To say that the maps
+    are wrong is to say that the Emperor is wrong. You say that you have found a city in this crater that
+    is not on the Emperor's maps? Then I say that you are wrong." - Asako Misao</i>
+  collector_number: '109'
+- cardid: 4904
+  title: Matsu Domotai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Matsu Domotai • Experienced
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Unique
+  - Experienced
+  - Lion Clan
+  - Samurai
+  text: Domotai will not defend.<br><b>Battle:</b> Once per battle, give Domotai a Force bonus equal to
+    the number of other Matsu Family Personalities in his army.
+  gold_cost: 8
+  force: 2
+  chi: 3
+  honor_requirement: 8
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Paul (Prof.) Herbert
+  flavor_text: <i>"Drive the Tsuno from the Halls, but leave their leader to me."</i>
+  collector_number: '86'
+- cardid: 4928
+  title: Matsu Hyun
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Poet
+  - Samurai
+  text: <b>Battle/Open, :bow::</b> Straighten a target Tactician.
+  gold_cost: 4
+  force: 2
+  chi: 3
+  honor_requirement: 6
+  personal_honor: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '2'
+  rarity: Common
+  artist: Bryant Griffin
+  flavor_text: <i>"The Tsuno reatreat toward the Tombs with such speed... I wonder if their true intent
+    was to attack the Hall of Ancestors at all, Dejiko-sama."</i>
+  collector_number: '84'
+- cardid: 4938
+  title: Matsu Kenji
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Unique
+  - Lion Clan
+  - Samurai
+  - Taisa
+  text: Negate Fear effects upon cards in Kenji's army in units with Matsu Family Personalities <i>(including
+    this unit)</i>.
+  gold_cost: 10
+  force: 5
+  chi: 4
+  honor_requirement: 8
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Rare
+  artist: Michael Kaluta
+  flavor_text: <i>"Fear is a burden for lesser men. We are not lesser men. We are Lion."</i>
+  collector_number: '87'
+- cardid: 4940
+  title: Matsu Kenseiko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Lion's Pride Chui
+  - Samurai
+  text: Kenseiko has <b>Yu</b> with a value equal to the number of Followers she has attached.
+  gold_cost: 6
+  force: 3
+  chi: 2
+  honor_requirement: 5
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Anthony Grabski
+  flavor_text: <i>"Domotai means well, but he is inexperienced. He should know well enough to leave command
+    in the hands of those who can wield it."</i>
+  collector_number: '88'
+- cardid: 5021
+  title: Memorial
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: <b>Reaction:</b> Twice per turn, after your Human Personality is destroyed, gain 1 Honor.
+  gold_cost: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Ken Meyer Jr.
+  flavor_text: <i>Miyako finished her prayer and rose. Her father was the next to pray at Tzuru's grave,
+    but his words to his departed friend were his own.</i>
+  collector_number: '54'
+- cardid: 5060
+  title: Mining Foreman
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Retainer
+  text: <b>Repeatable Reaction, :bow::</b> When bowing a Mine to produce Gold, it produces 3 additional
+    Gold.
+  gold_cost: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Jonathon and Lisa Hunt
+  flavor_text: <i>"Something stirs, deep in the earth. We must seek it out, though even we cannot say
+    why." - Krcklg, Zokujin Speaker</i>
+  collector_number: '139'
+- cardid: 5062
+  title: Minor Illusions
+  types:
+  - Spell
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> Any number of times per turn, after a Holding bows as a cost of one of its traits
+    or actions, bow this Shugenja: Negate all effects of that trait or action other than Gold production.'
+  gold_cost: 1
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Lisa Hunt
+  flavor_text: <i>"...I could have sworn this was jade."</i>
+  collector_number: '150'
+- cardid: 5109
+  title: Mirumoto Junnosuke
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Samurai
+  text: '<b>Battle/Open:</b> Bow your performing Monk or Shugenja and target one of Junnosuke''s Weapons
+    or Armors: If the target was a Weapon, give it a Chi bonus equal to Junnosuke''s Personal Honor, or
+    if it was an Armor, give it a Force bonus of that amount.'
+  gold_cost: 8
+  force: 3
+  chi: 4
+  honor_requirement: 6
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Malcolm McClinton
+  flavor_text: <i>"I do not care about the beasts that attack the Lion. I have come to punish Dejiko for
+    her alliance with our enemies."</i>
+  collector_number: '80'
+- cardid: 5158
+  title: Mirumoto Taiu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Samurai
+  text: <b>Battle:</b> Once per battle, Ranged 2 Attack.<br><b>Repeatable Battle, :bow::</b> Ranged 4
+    Attack.
+  gold_cost: 7
+  force: 1
+  chi: 2
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Steve Snyder
+  flavor_text: <i>"I had never seen one of the Lion's copper goblins - the zokujin - before today. Now
+    our abandoned mountains crawl with them."</i>
+  collector_number: '79'
+- cardid: 5197
+  title: Miya Heikichi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Courtier
+  text: <b>Political Repeatable Battle/Open, :bow::</b> Bow a target Courtier.
+  gold_cost: 3
+  force: 0
+  chi: 1
+  honor_requirement: 8
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Dev Madan
+  flavor_text: <i>"I have the scroll you seek, Remata-san. The study of lineage is always intriguing,
+    especially so with an individual with a history as... colorful as Lord Kaneka. I think you shall find
+    the contents most illuminating."</i>
+  collector_number: '131'
+- cardid: 5308
+  title: Moto Chen
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Tactician
+  - Unique
+  - Junghar
+  - Unicorn Clan
+  text: Chen may attach two Weapons.<br>Chen may not Lobby.<br>Being dishonorable does not give Chen 0
+    maximum Personal Honor.
+  gold_cost: 9
+  force: 4
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '2'
+  rarity: Rare
+  artist: Pia Guerra
+  flavor_text: <i>"The Moto divide the Unicorn forces into three great armies, and only the Baraunghar,
+    the smallest, come to aid us. Moto Chagatai's Khol and Moto Chen's Junghar simply wait..." - Hida
+    Kuroda</i>
+  collector_number: '103'
+- cardid: 5362
+  title: Moto Reijiro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Bushi
+  - Unicorn Clan
+  text: Reijiro has +2F/+2C while at a battlefield associated with a player's leftmost or rightmost Province.
+  gold_cost: 8
+  force: 2
+  chi: 3
+  honor_requirement: 2
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Uncommon
+  artist: Jeff Reitz
+  flavor_text: <i>"The Shinomen has been unquiet of late. Something prowls the darkness, and I do not
+    think it is the beast that slew the Emperor."</i>
+  collector_number: '104'
+- cardid: 5431
+  title: Mujina Gang
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Cavalry
+  - Mujina
+  - Nonhuman
+  text: 'After this card enters play: Lose 3 Honor and discard a card in this Personality''s unit.'
+  gold_cost: 3
+  focus: 2
+  force: 3
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  printing_id: '2'
+  rarity: Common
+  artist: Sean Murray
+  flavor_text: <i>"Only the Nezumi are immune to their pranks. The shamans say they have come to an understanding
+    with these spirits." - Hida Hio</i>
+  collector_number: '46'
+- cardid: 5490
+  title: Nagamaki
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Weapon
+  text: '<b>Reaction:</b> Once per battle, after another player''s action resolves: Give this card +2F/+1C
+    until the battle ends.'
+  gold_cost: 5
+  focus: 2
+  force: '+0'
+  chi: '+1'
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Anthony Grabski
+  flavor_text: <i>"The Scorpion destroyed Aramasu's home in Otosan Uchi, and through it all Kaneka said
+    nothing. Kamnan's blade took the traitor's life, as a cry went up from Golden Sun Bay." - The Death
+    of Aramasu, Part VIII</i>
+  collector_number: '148'
+- cardid: 5527
+  title: Needed at the Wall
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Bow your target unbowed Fortification at this battlefield. Move home a target enemy
+    Personality. Bow his unit as it moves.
+  focus: 3
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  printing_id: '1'
+  rarity: Uncommon
+  artist: John Cadice
+  flavor_text: <i>"I will remain here, Kuon, as Mother would have wished," Kuroda said gravely. "Find
+    Kurohito, and reap vengeance for us both." - Daughter of the Bear, Part III</i>
+  collector_number: '14'
+- cardid: 5603
+  title: No One Wins
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Political
+  text: 'This card''s ability costs 2 less Gold if you are a Scorpion Clan player.<br><b>Reaction:</b>
+    Before Honor is gained for destroying cards during battle resolution: Negate the gain.'
+  gold_cost: 2*
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Mark Pennington
+  flavor_text: <i>"Few Scorpion survived Kitao's vengeance, but it was as we planned. The Lady of the
+    Mantis thinks us defeated, her pawns. As it should be." - Bayushi Kamnan, the Death of Aramasu, part
+    X</i>
+  collector_number: '15'
+- cardid: 5699
+  title: Omoni
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Goblin
+  - Nonhuman
+  - Sculptor of Flesh
+  - Shadowlands
+  text: 'After Omoni enters play: Lose 4 Honor.<br>Fear actions performed by Omoni have +1 strength for
+    every two Goblin Followers attached to him.<br><b>Fear Battle:</b> Fear 2.'
+  gold_cost: 5
+  force: 3
+  chi: 2
+  personal_honor: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Jim Pavelec
+  flavor_text: <i>"The bakemono are not the laughable creatures they once were. They have been recreated.
+    They are my masterpiece!"</i>
+  collector_number: '98'
+- cardid: 5759
+  title: Open Arms
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Political
+  text: '<b>Reaction:</b> After bringing a Human Personality without your Clan alignment into play during
+    your Dynasty Phase: Gain Honor equal to his Personal Honor. Permanently increase the Family Honor
+    required for an Honor Victory by an amount equal to the amount you gained for all players.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Val Mayerik
+  flavor_text: <i>"If you would serve me, then you must have a fitting name. Rise, Toturi Miyako, and
+    serve as your father served mine."</i>
+  collector_number: '155'
+- cardid: 5794
+  title: Osoreru no Oni
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: 'After Osoreru enters play: Lose 4 Honor.<br><b>Fear Battle:</b> Fear 3.<br><b>Reaction:</b> When
+    a Fear effect is produced by a card in Osereru no Oni''s army, the Fear also affects Followers which
+    are immune to or unaffected by Fear.'
+  gold_cost: 2
+  force: 0
+  chi: 2
+  personal_honor: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Monika Livingstone
+  flavor_text: <i>"Once we were slaves, bound to the names of mortals. Daigotsu has changed us; now we
+    are one with their stolen souls."</i>
+  collector_number: '101'
+- cardid: 5832
+  title: Outmaneuvered by Force
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Political Interrupt:</b> Negate the action if it is Political and taken by a player whose total
+    Force of all units at home is now less than your total Force of all units at home <i>(bowed cards
+    count)</i>.
+  focus: 3
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  printing_id: '2'
+  rarity: Uncommon
+  artist: Mark Evans
+  flavor_text: <i>"An Emperor cannot lead if no one follows him, Kaneka-sama. I would give you an army,
+    and you deny me?" - The Death of Aramasu, Part III</i>
+  collector_number: '17'
+- cardid: 5834
+  title: Outmaneuvered in Court
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Political
+  text: '<b>Reaction:</b> After an attack is declared, target a Personality controlled by a player who
+    controls fewer Courtiers than you: That Personality''s controller may bow his Stronghold. If he did
+    not, the target may not be assigned and will not move to battlefields during this Attack Phase.'
+  gold_cost: 0
+  focus: 4
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Uncommon
+  artist: Mark Evans
+  flavor_text: <i>Aramasu turned to the harbor, watching in horror as his vessel sank in flames. Akodo
+    Kaneka said nothing, showing favor to neither Scorpion nor Mantis. - The Death of Aramasu, Part VI</i>
+  collector_number: '18'
+- cardid: 5935
+  title: Persuasion
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Political
+  text: '<b>Limited:</b> Target a player: He discards a card. Lose 2 honor.'
+  gold_cost: 3
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Justin Norman
+  flavor_text: <i>"A gift, Mantis, from my lord Paneki. And now that I have your attention, I have a proposition..."
+    - The Death of Aramasu, Part I</i>
+  collector_number: '8'
+- cardid: 5945
+  title: Phoenix Library
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: ':bow:: Produce 2 Gold.<br><b>Repeatable Reaction, :bow::</b> After you attach a Spell from your
+    hand to one of your Phoenix Clan Personalities, draw a card.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Rare
+  artist: Jim Pavelec
+  flavor_text: <i>"The Dragon and Phoenix once shared the libraries of Izaku. These days, the Phoenix
+    keep their secrets to themselves."</i>
+  collector_number: '149'
+- cardid: 5987
+  title: Plum Tree Training Ground
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: ':bow:: When paying for a Samurai, produce 2 Gold which may only pay for that card.<br><b>Repeatable
+    Limited, :bow::</b> Permanently give your target Samurai Personality who has not been targeted by
+    any copy of Plum Tree Training Grounds this game +1 Yu if he has Yu, or <b>Yu 1</b> if he does not.'
+  gold_cost: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Tony Moseley
+  flavor_text: <i>"The Unicorn train constantly, almost without rest. I find it rather strange that a
+    clan with no enemies should focus overmuch on combat... strange indeed." - Kaeru Tomaru</i>
+  collector_number: '55'
+- cardid: 6018
+  title: Political Warfare
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Favor
+  - Political
+  text: <b>Favor Political Reaction:</b> Before a Political action resolves, discard the Imperial Favor
+    to negate the action's effects.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Michael Phillippi
+  flavor_text: <i>"I shall not be undone by this... harlot," the Crane howled, spittle flecking his lips.
+    As a shocked silence overcame the court, he realized he had only succeeded in coloring himself a fool.</i>
+  collector_number: '19'
+- cardid: 6052
+  title: Prepared for the Enemy
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> After your army wins a battle: Permanently give each Personality in it +1F.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Brian Snoddy
+  flavor_text: <i>"Age and treachery are more than a match for youth and talent, my dear..."</i>
+  collector_number: '20'
+- cardid: 6056
+  title: Preparing the Edge
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Target a Weapon Item or an Item with "Claw" in its title: Until the game ends,
+    the Item has an additional +2F/+3C while its Personality is facing a Shadowlands cards in a duel or
+    opposing one in battle.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Ben Peck
+  flavor_text: <i>"My death was my finest hour, Scorpion. Yours, I fear, will not be quite so memorable."
+    - Yasuki Nokatsu, Dark Oracle of Earth</i>
+  collector_number: '28'
+- cardid: 6145
+  title: Rain of Emeralds
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, give all Human Courtier Personalities +2PH and the ability, "<b>Repeatable Political
+    Limited, :bow::</b> Gain 1 Honor" until your next turn begins.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Jonathan Hunt
+  flavor_text: <i>"While Tsudao saw only tragedy and Kaneka opportunity, to Naseru the omens foretold
+    his own greatness. Of that he was already certain."</i>
+  collector_number: '120'
+- cardid: 6197
+  title: Reassert One's Mettle
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> If you control 3 or more Personalities without your Clan alignment, target your
+    unbowed Personality with your Clan alignment who has not been targeted by Reassert One''s Mettle this
+    game: Permanently give him +2F/+2C.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Quinton Hoover
+  flavor_text: <i>"Though Kitao had arrived to late to save Aramasu, she was not too late to take vengeance
+    upon those who had slain him." - The Death of Aramasu, Part IX</i>
+  collector_number: '21'
+- cardid: 6286
+  title: Retired Sohei
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Retainer
+  text: <b>Repeatable Battle, :bow::</b> Give a target Personality +2C.
+  gold_cost: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Paul (Prof.) Herbert
+  flavor_text: <i>"One cannot define a color using coarse words. So it is with enlightenment." - The New
+    Tao</i>
+  collector_number: '56'
+- cardid: 6298
+  title: Returned to the Pit
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, choose and destroy a Shadowlands Personality.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Pia Guerra
+  flavor_text: <i>"You are powerful, yes, but you do not know obediance. I have taken what I need from
+    you, Kyoso. Now return to the hellish realm that spawned you." - Daigotsu</i>
+  collector_number: '124'
+- cardid: 6377
+  title: Ronin at the Wall
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Ronin
+  text: Attaches to a Crab Clan Personality paying 1 less Gold. <br>This card has +3F while defending.
+  gold_cost: 7
+  focus: 1
+  force: 3
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Michael Phillippi
+  flavor_text: <i>Any ronin willing to stand and fight the Shadowlands will be welcomed by the Crab. Few
+    survive the ordeal, but those that do will win the Hida's respect.</i>
+  collector_number: '42'
+- cardid: 6499
+  title: Scorpion Distracter
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Retainer
+  text: ':bow:: Produce 2 Gold.<br><b>Political Repeatable Reaction, :bow::</b> Before a Political action
+    resolves, bow your target unbowed performing Scorpion Clan Personality. If this bowed him, the player
+    taking the action may pay an amount of Gold greater than twice your performer''s Chi; if he does not,
+    negate the action''s effects.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Rare
+  artist: Anthony Hightower
+  flavor_text: <i>"As the Mantis split the Scorpion treasures, none noticed the men stealing aboard Aramasu's
+    vessel." - The Death of Aramasu, Part II</i>
+  collector_number: '151'
+- cardid: 6601
+  title: Seppun Isei
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Bodyguard
+  - Imperial
+  text: '<b>Reaction:</b> Any number of times per turn, when another player''s action would target one
+    of your Courtiers, bow Isei: The action targets him instead, even if illegal.'
+  gold_cost: 5
+  force: 1
+  chi: 3
+  honor_requirement: 2
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Dev Madan
+  flavor_text: <i>"I have already died for the Emperor once. What makes you think I would not die for
+    his son?"</i>
+  collector_number: '133'
+- cardid: 6670
+  title: Shadowlands Bastion
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Shadowlands
+  text: 'After this Holding enters play, lose 4 Honor.<br>:bow:: Produce 2 Gold.<br>:bow:: When paying
+    for a Shadowlands card, produce 4 Gold which may only pay for that card.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Rare
+  artist: Tony Moseley
+  flavor_text: <i>"Daigotsu has many names, many faces. The creatures known as Onisu are more than his
+    nightmare minions. They are nightmares. And they are him... occasionally." - Shahai</i>
+  collector_number: '152'
+- cardid: 6689
+  title: Shallow Graves
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Shadowlands
+  text: '<b>Battle:</b> Even if you do not control this card, once per battle per player, target your
+    Personality whose unit contains an Undead card: Create a 2F <b>Shadowlands • Undead</b> Follower and
+    attach it to him.'
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Mark Pennington
+  flavor_text: <i>"In the Shadowlands, even a shallow grave is more than most can hope for."</i>
+  collector_number: '107'
+- cardid: 6781
+  title: Shiba Mirabu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Double Chi
+  - Loyal
+  - Unique
+  - Phoenix Clan
+  - Samurai
+  - Yojimbo
+  text: 'Enters play paying 2 less Gold if you control a Phoenix Clan Clan Champion.<br><b>Limited:</b>
+    Once per game, bow Mirabu: Search your Dynasty deck for a Clan Champion Personality. Remove him, show
+    him, and, after shuffling, put him on top of the deck.'
+  gold_cost: 10
+  force: 4
+  chi: 4
+  honor_requirement: 12
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Stefano Gaudiano
+  flavor_text: <i>"Protect Aikune, Mirabu. He needs you." - Shiba Tsukune</i>
+  collector_number: '93'
+- cardid: 6826
+  title: Shiba Unasagi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Phoenix Clan
+  - Samurai
+  text: '<b>Battle:</b> Any number of times per turn, bow your performing Shugenja: Give all copies of
+    Shiba Unasagi +1F.'
+  gold_cost: 7
+  force: 2
+  chi: 3
+  honor_requirement: 6
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Monika Livingstone
+  flavor_text: <i>"Only the finest samurai of the Phoenix are invited to join the brotherhood of Heaven's
+    Wing. Only those who have been among their number truly understand what they have become." - Shiba
+    Mirabu</i>
+  collector_number: '92'
+- cardid: 6933
+  title: Shinjo Sanraku
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Samurai
+  - Shinjo Border Guard
+  - Unicorn Clan
+  text: <b>Battle:</b> Move this unit to a battlefield where there is a defending army.
+  gold_cost: 8
+  force: 2
+  chi: 4
+  honor_requirement: 4
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Dennis Calero
+  flavor_text: <i>"The Seikitsu belong to the Unicorn. The Pass is closed. Turn around now, or I will
+    turn you around."</i>
+  collector_number: '105'
+- cardid: 6993
+  title: Shinsei's Smile
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Open:</b> Bow your performing Monk or Shugenja and target a Personality with Chi less than
+    or equal to the performer''s: Until the turn ends, the Personality may assign even if bowed and he
+    contributes Force even while bowed.'
+  gold_cost: 0
+  focus: 4
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '2'
+  rarity: Rare
+  artist: Val Mayerik
+  flavor_text: <i>"Don't ask the Moto what it means. They might show you."</i>
+  collector_number: '68'
+- cardid: 7099
+  title: Shosuro Gardens
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Scorpion
+  text: <b>Political Repeatable Reaction, :bow::</b> When a non-Kiho Strategy's action would target one
+    of your cards, it targets another one of your cards, if legal.
+  province_strength: 6
+  starting_honor: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  collector_number: '136'
+- cardid: 7104
+  title: Shosuro Higatsuku
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Scorpion
+  keywords:
+  - Courtier
+  - Instigator
+  - Scorpion Clan
+  text: '<b>Political Battle:</b> Bow Higatsuku and target an enemy Personality with higher Chi than Higatsuku:
+    He challenges Higatsuku to a duel which may be refused. Destroy the duel''s loser.'
+  gold_cost: 7
+  force: 3
+  chi: 2
+  personal_honor: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Uncommon
+  artist: Michael Kaluta
+  flavor_text: <i>"Clearly the son of Toturi is unimpressed by your churlish manner, Aramasu-sama. Perhaps
+    I can make an offer he will find more interesting?" - The Death of Aramasu, Part IV</i>
+  collector_number: '95'
+- cardid: 7183
+  title: Shosuro Yasuko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Scorpion
+  keywords:
+  - Courtier
+  - Scorpion Clan
+  text: '<b>Political Reaction:</b> Any number of times per turn, after a player declares an attack, bow
+    Yasuko and target one of that player''s Samurai with Personal Honor equal to or lower than Yasuko''s:
+    He may not be assigned to attacking armies this turn.'
+  gold_cost: 5
+  force: 0
+  chi: 3
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Michael Phillippi
+  flavor_text: <i>"Sleep, my lord. This shall remain our secret."</i>
+  collector_number: '96'
+- cardid: 7198
+  title: Show of Strength
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Political
+  text: '<b>Battle:</b> If you have not passed or taken a Battle action yet this battle: If you destroy
+    this battlefield''s province during resolution, take the Imperial Favor and until your next turn begins,
+    the Defender may not Lobby and he and all his cards and effects are ignored while other players are
+    lobbying.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Quinton Hoover
+  flavor_text: <i>"Some wondered whether Kitao's late arrival was truly an accident..." - The Death of
+    Aramasu, part VIII</i>
+  collector_number: '22'
+- cardid: 7319
+  title: Snowy Fields
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'No player may take more actions than the number of units he controls at this battlefield; only
+    actions taken while this Terrain is in play count against this limit.<br><b>Battle:</b> If there are
+    no Terrains at the current battlefield: Put this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Ken Meyer Jr.
+  flavor_text: <i>"Shaitung screamed. The earth opened..." Snow and Fire VII</i>
+  collector_number: '23'
+- cardid: 7324
+  title: Sohei
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Tattooed
+  text: 'Attaches to a Tattooed Personality paying 1 less Gold.<br><b>Battle:</b> Once per battle, target
+    an enemy unit: Give this card a Force bonus equal to the number of Followers in that unit.'
+  gold_cost: 6
+  focus: 2
+  force: 2
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Anthony Hightower
+  flavor_text: <i>"Not all followers of Shinsei are men of peace."</i>
+  collector_number: '45'
+- cardid: 7366
+  title: Soshi Tishi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Scorpion
+  keywords:
+  - Samurai
+  - Scorpion Clan
+  text: '<b>Reaction:</b> Any number of times per turn, after another player''s Battle action resolves:
+    Give Tishi +1F/-1C until the battle ends.'
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Ben Peck
+  flavor_text: <i>"The Scorpion are not merely of subtlety. When the time for subtlety is done, I am always
+    waiting."</i>
+  collector_number: '97'
+- cardid: 7405
+  title: Speed of the Waterfall
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Battle:</b> Bow your performing Monk or Shugenja and target a unit that was moved home from
+    the current battlefield: Straighten it. Move it to the current battlefield.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Augie Pagan
+  flavor_text: <i>"The last thing either Crab or Crane expected to see was the arrival of the Unicorn
+    shugenja and troops. Both sides paused warily, waiting to see whom the newcomers would aid."</i>
+  collector_number: '66'
+- cardid: 7440
+  title: Spyglass
+  types:
+  - Item
+  decks:
+  - Fate
+  text: 'Enters play paying 2 less Gold if you are a Unicorn Clan player.<br><b>Battle:</b> Any number
+    of times per turn, target an enemy Tactician Personality: Remove <b>Tactician </b>from him until the
+    end of the battle.'
+  gold_cost: 2*
+  focus: 2
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Justin Norman
+  flavor_text: <i>"Never underestimate a Unicorn."</i>
+  collector_number: '64'
+- cardid: 7458
+  title: Stand As Stone
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Target a Tattooed Personality: Permanently give him +2F, +2C, or +2PH.'
+  gold_cost: 3
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Anthony Hightower
+  flavor_text: <i>"All fires die, Hochiu," Shaitung smiled in reply. "We are the mountain, and mountains
+    do not crumble." - Snow and Fire V</i>
+  collector_number: '69'
+- cardid: 7465
+  title: Stand Your Ground
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle/Open:</b> Target a Samurai Personality who must be unbowed if he is yours: Give him
+    a Yu bonus equal to his Personal Honor, +2 if the Personality is Crab Clan.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Kirk Van Wormer
+  flavor_text: <i>"As the Lion ralled against the Tsuno forces, the beasts unexpectedly fled toward the
+    Hall of Ancestors. Tsudao's Legions moved to intercept, but found themselves cut off by an army of
+    Dragon led by Mirumoto Junnosuke."</i>
+  collector_number: '24'
+- cardid: 7469
+  title: Standing Tall
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target a defending Personality who must be unbowed if he is yours: While his is
+    the only defending unit in an army, he has +4F.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Mark Evans
+  flavor_text: <i>"So be it. If Kaneka does not value my position. Then I do not value him. We do not
+    need your aid, Akodo." - The Death of Aramasu, Part VII</i>
+  collector_number: '25'
+- cardid: 7590
+  title: Strong Guard
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> Any number of times per turn, before this unit moves home from a battlefield,
+    bow this card and dishonor this Personality: Negate the movement.'
+  gold_cost: 5
+  focus: 2
+  force: 2
+  chi: 0
+  honor_requirement: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Bryant Griffin
+  flavor_text: <i>"I do not know what these Tsuno are. I do not need to know. I need only do my duty,
+    and protect the Hall of Ancestors." - Matsu Domotai</i>
+  collector_number: '47'
+- cardid: 7640
+  title: Summoning the Gale
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Air
+  text: '<b>Battle/Open:</b> Any number of times per turn, bow this Shugenja: All Ranged Attacks have
+    -1 strength.<br><b>Battle:</b> Any number of times per turn, bow this Shugenja: All Ranged Attacks
+    have -2 strength until this battle ends.'
+  gold_cost: 3
+  focus: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Jim Pavelec
+  flavor_text: <i>"Nakamuro's storm cast aside the arrows of our finest archers. Even the Tamori were
+    awed by his power." - Snow and Fire II</i>
+  collector_number: '114'
+- cardid: 7714
+  title: Tachi
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Weapon
+  - Sword
+  - Two-Handed
+  text: Negate this Personality's Force and Chi bonuses <i>(Modifiers from Items are not bonuses)</i>.
+  gold_cost: 7
+  focus: 1
+  force: '+3'
+  chi: '+3'
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Christina Wald
+  flavor_text: <i>"Even a good blade is nothing in the hands of a fool, Junnosuke." - Mirumoto Temoru</i>
+  collector_number: '135'
+- cardid: 7726
+  title: Taijikku
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Weapon
+  text: <b>Battle/Open:</b> Reactions may not be announced during a challenge or duel involving this Personality.
+  gold_cost: 4
+  focus: 3
+  force: '+1'
+  chi: '+1'
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: John Cadice
+  flavor_text: <i>"A gift, great Taeruko-sama," the Ox said, bowing deeply. "A blade fit to be wielded
+    only by an Elemental Master."</i>
+  collector_number: '60'
+- cardid: 7727
+  title: Taiko no Shiryo
+  types:
+  - Ancestor
+  decks:
+  - Fate
+  clans:
+  - Lion
+  keywords:
+  - Unique
+  - Lion Clan
+  text: <b>Repeatable Reaction, :bow::</b> After a Lion Clan Personality in this Ancestor's army is destroyed,
+    permanently give this Personality +1F/+1C.
+  gold_cost: 0
+  focus: 3
+  force: '+1'
+  chi: 0
+  honor_requirement: 2
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Anthony Hightower
+  flavor_text: <i>"Tsuno? The answer lies before you, Dejiko. You need but seek the appropriate question."</i>
+  collector_number: '34'
+- cardid: 7730
+  title: Tainted Bushi
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Bushi
+  - Shadowlands
+  text: 'Will only attach to a Human Personality. <br>After this card enters play: Lose 2 Honor and dishonor
+    this Personality. <br>This Personality will not be rehonored.<br><b>Fear Battle:</b> Fear 1.'
+  gold_cost: 5
+  focus: 1
+  force: 3
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Ramon Perez
+  collector_number: '48'
+- cardid: 7771
+  title: Tamori Chieko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Shugenja
+  - Tattooed
+  text: 'After Chieko enters play: You may discard a card; if you did, draw a card.'
+  gold_cost: 5
+  force: 1
+  chi: 3
+  honor_requirement: 2
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Common
+  artist: Rob Hinds
+  flavor_text: <i>"Her magic soothes the soul and calms the kami, but her music is even more potent."
+    - Tamori Chosai</i>
+  collector_number: '81'
+- cardid: 7809
+  title: Tampako no Shiryo
+  types:
+  - Ancestor
+  decks:
+  - Fate
+  clans:
+  - Crab
+  keywords:
+  - Unique
+  - Crab Clan
+  text: While this Personality is a Samurai, he has a Yu bonus equal to his Personal Honor plus printed
+    Force.
+  gold_cost: 0
+  focus: 3
+  force: 0
+  chi: 0
+  honor_requirement: 1
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Justin Norman
+  flavor_text: <i>"You are only as good as your last failure. He who dares nothing is not worthy of honor."</i>
+  collector_number: '32'
+- cardid: 7852
+  title: Tea House
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: <b>:bow::</b> Produce 1 Gold. <br><b>Battle/Open, :bow::</b> Target your Personality. Negate all
+    current and future <i>(this turn)</i> Chi penalties on him from other players' cards, and tokens they
+    created.
+  gold_cost: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  printing_id: '1'
+  rarity: Common
+  artist: Kirk Van Wormer
+  flavor_text: <i>"Come within, brave samurai, and rest. Surely the war will go on without you."</i>
+  collector_number: '57'
+- cardid: 7883
+  title: Temple of the Dragon
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Temple
+  text: ':bow:: Produce 2 Gold.<br><b>Repeatable Reaction, :bow::</b> After your Tattoo action resolves
+    that targeted or was performed by your Dragon Clan Personality, draw a card.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Theresa Brandon
+  flavor_text: <i>"The monks that worship Lord Hoshi move their temples from place to place overnight.
+    Their mumbled prophecies and strange blessings cloud my mind. They are strange, even for Dragon."</i>
+  collector_number: '146'
+- cardid: 8064
+  title: The Enemy You Deserve
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Target a Shadowlands Personality and a non-Shadowlands Personality controlled
+    by the same player: Take control of the Shadowlands Personality, who then duels the other. You control
+    the Shadowlands Personality until the duel ends or is negated. Destroy the duel''s loser.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Paul (Prof.) Herbert
+  flavor_text: <i>"Tsuno. Why do they hunt us? Why now, of all times?"</i>
+  collector_number: '26'
+- cardid: 8109
+  title: The Great Climb
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'Before this battle''s resolution: Take any number of additional Ranged Attack Battle actions
+    from your cards at the current battlefield. You may ignore these actions'' costs of bow cards <i>(if
+    any)</i> when taking these actions, but each different action may only be taken once.<br><b>Battle:</b>
+    If there are no Terrains at the current battlefield: Put this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Jeff Reitz
+  flavor_text: <i>"The Shiba pursued our archers into the mountainous terrain... to their sorrow." - Tonbo
+    Dayu</i>
+  collector_number: '1'
+- cardid: 8114
+  title: The Greatest Cost
+  types:
+  - Spell
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Any number of times per turn, bow this Shugenja and target a Personality: Give
+    him a +1F token. Permanently give this Shugenja -1C and Shadowlands.'
+  gold_cost: 1
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Jim Pavelec
+  flavor_text: <i>"Yes," Nokatsu whispered through tortured lips. "Yes, make the pain stop." "Of course,
+    my friend," Daigotsu said, his voice sympathetic.</i>
+  collector_number: '147'
+- cardid: 8120
+  title: The Hand of Thunder
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Shugenja
+  - Thunder
+  text: Will only attach to a Shugenja.<br><b>Repeatable Thunder Battle, :bow::</b> Bow all Personalities
+    and Followers at this battlefield with 1 or lower Force.
+  gold_cost: 8
+  focus: 1
+  force: 2
+  chi: 0
+  honor_requirement: 1
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Jim Pavelec
+  flavor_text: <i>"Even the Tamori were unprepared for the onslaught of magical power unleashed by the
+    newest servants of the Elemental Council..." - Snow and Fire I</i>
+  collector_number: '44'
+- cardid: 8264
+  title: The Power of Nothing
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  - Void
+  text: '<b>Battle:</b> If you are the Attacker or Defender, and you control no units at the current battlefield,
+    bow your performing Monk: Until this battle ends, units will not move to the current battlefield,
+    and players with units at the current battlefield may not take actions except those whose effects
+    remove one or more of their cards or tokens from the battlefield.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Val Mayerik
+  collector_number: '70'
+- cardid: 8433
+  title: The Wolf Speaks
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: 'This card''s ability does not cost Gold if you bow your Stronghold as a cost instead.<br><b>Battle:</b>
+    Target two units led by unbowed Personalities, both of which are in armies and controlled by the same
+    player, other than you: Switch their locations; these units are not considered to be moving.'
+  gold_cost: 5
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Anthony Hightower
+  flavor_text: <i>"I care not for your war, Crane. My soul dwells upon weightier matters." - Toturi Sezaru</i>
+  collector_number: '27'
+- cardid: 8465
+  title: Thuk-Kigi's War Machine
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Shadowlands
+  text: 'Will only attach to a Shadowlands Personality.<br>This Personality will not challenge or be challenged
+    while in an army.<br>This card adds no Force to this Personality while bowed.<br>After a Terrain enters
+    play at this battlefield: Bow this card.<br><b>Reaction:</b> After the Resolution Segment begins for
+    a battle where this unit is attacking: Destroy a Fortification attached to this battlefield''s province.'
+  gold_cost: 7
+  focus: 1
+  force: '+4'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Rare
+  artist: Paul (Prof.) Herbert
+  collector_number: '62'
+- cardid: 8467
+  title: Thunder Calls to Fortune
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Thunder
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until your next turn begins, all Personalities in and out of play with a printed Gold
+    Cost of 10 or higher have +2F/+2C.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Ben Peck
+  flavor_text: <i>"Shiba Tsukune." Osano-wo's voice rumbled across the Phoenix plains. "Your time has
+    come."</i>
+  collector_number: '40'
+- cardid: 8528
+  title: Togashi Iroshi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Monk
+  - Tattoo Artist Apprentice
+  - Tattooed
+  text: '<b>Limited:</b> Any number of times per turn, bow Iroshi: Look at the top 5 cards of your Fate
+    deck. If one is a Tattoo card, you may discard a card; if you did, show the Tattoo card, put it in
+    your hand, and place the remaining cards on the bottom of your deck.'
+  gold_cost: 7
+  force: 1
+  chi: 2
+  honor_requirement: 3
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Mark Evans
+  flavor_text: <i>"There are at least ten spirit realms, including the one we live in. Who can say what
+    wonders shall emerge from them?"</i>
+  collector_number: '83'
+- cardid: 8571
+  title: Togashi Satsu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Unique
+  - Dragon Clan
+  - Monk
+  - Tattooed
+  text: Satsu may not assign, and will not move, into an attacking army.
+  gold_cost: 8
+  force: 4
+  chi: 5
+  honor_requirement: 2
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Michael Phillippi
+  flavor_text: <i>"Yoshune carries two names. Like his father he lives in two worlds. Now that his parents
+    have retired to explore the mysteries of the kami, it falls upon him alone to decide which path he
+    will travel."</i>
+  collector_number: '82'
+- cardid: 8635
+  title: Too Much Too Soon
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> After a target Shugenja attaches a Spell: The Spell''s controller must either
+    destroy the Spell or bow the Shugenja.<br><b>Battle/Open:</b> Target a Shugenja: Destroy any Spell
+    whose action that Shugenja performs <i>(this turn)</i>.'
+  gold_cost: 1
+  focus: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Ramon Perez
+  flavor_text: <i>"Truth is too valuable to be given to the fool hat dares ask for it." - The New Tao</i>
+  collector_number: '29'
+- cardid: 8715
+  title: Training Dojo
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Dojo
+  text: <b>Repeatable Limited, :bow::</b> Give your target Bushi, Tsuno, or Samurai Personality without
+    a Training Dojo token a <b>Training Dojo </b>token with the trait, "This Personality has +1F/+1C while
+    in an army with another Personality who has a Training Dojo token."
+  gold_cost: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Quinton Hoover
+  collector_number: '58'
+- cardid: 8716
+  title: Training Exercises
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'Before this battle''s resolution: Straighten all Followers at the current battlefield.<br><b>Battle:</b>
+    If there are no Terrains at the current battlefield: Put this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Audrey Corman
+  flavor_text: <i>"We have prepared long for this. Our leaders are more skilled than theirs, our politicians
+    more adept. The Crab are mighty, but they cannot fight a war they cannot afford." - Yasuki Hachi</i>
+  collector_number: '13'
+- cardid: 8719
+  title: Traitor's Grove
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  text: <b>Limited:</b> Destroy a target Personality who has your Clan Alignment and does not have his
+    controller's Clan Alignment.
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  printing_id: '2'
+  rarity: Rare
+  artist: John Cadice
+  flavor_text: <i>"You have had your blood, Scorpion, just as we arranged," Kitao whispered, "but I shall
+    have my victory as well." With that, she buried her blade in the Scorpion's throat. - The Death of
+    Aramasu, part IX</i>
+  collector_number: '108'
+- cardid: 8774
+  title: Tsudao's Challenge
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'Before this battle''s resolution: Personalities add their Chi instead of their Force to their
+    army''s total Force <i>(bowed Personalities still do not contribute, regardless of changing the stat
+    that is added)</i>.<br><b>Battle:</b> If you are either a defending player or your current army is
+    opposed, and if there are no Terrains at the current battlefield: Put this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Justin Norman
+  flavor_text: <i>"I may not be Empress, but I stand for the Empire, Mirumoto. Set aside your War and
+    join us in our fight... or die upon my blade." "Impudent girl," Junnosuke whispered, reaching for
+    his swords.</i>
+  collector_number: '9'
+- cardid: 8798
+  title: Tsuno Kurushimi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Cavalry
+  - Nonhuman
+  - Pack Leader
+  - Shadowlands
+  - Tsuno
+  text: 'After Kurushimi enters play: Lose 5 Honor.<br>Kurushimi may not assign, and will not move, into
+    a defending army.<br>Kurushimi has +2F/+2C while opposed by a Lion Clan Personality or facing one
+    in a duel.'
+  gold_cost: 5
+  force: 2
+  chi: 3
+  personal_honor: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: William O'Connor
+  flavor_text: <i>"How quickly these Lion forget. By the time they realize what we have done, our mission
+    will be complete."</i>
+  collector_number: '125'
+- cardid: 8800
+  title: Tsuno Ravagers
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Cavalry
+  - Nonhuman
+  - Shadowlands
+  - Tsuno
+  text: Will only attach to a Shadowlands Personality. <br>After this Follower enters play, lose 4 Honor.<br>This
+    Follower has +2 Force while attacking.<br><b>Repeatable Battle, :bow::</b> Destroy a target Region
+    attached to this battlefield's Province.
+  gold_cost: 7
+  focus: 1
+  force: 1
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Ben Peck
+  collector_number: '49'
+- cardid: 8803
+  title: Tsuno Squad
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Cavalry
+  - Nonhuman
+  - Shadowlands
+  - Tsuno
+  text: 'Will only attach to a Shadowlands Personality. <br>After this card enters play: Lose 2 Honor.
+    <br>This card has +1F while attacking.'
+  gold_cost: 3
+  focus: 1
+  force: 1
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Malcolm McClinton
+  flavor_text: <i>"Revenge is fodder for lesser beasts. We shall feast on justice!" - Tsuno Kurushimi</i>
+  collector_number: '50'
+- cardid: 8911
+  title: Twenty Goblin Winter
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Goblin
+  - Winter
+  text: Until your next turn begins, all Human Followers in and out of play have +1F.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Ben Peck
+  flavor_text: <i>"Come to the wall, ronin of Rokugan, and test your mettle. Any samurai who enters the
+    Shadowlands and returns with the heads of twenty bakemono shall have fealty with the Hida. No questions
+    asked." - Hida Kuroda</i>
+  collector_number: '123'
+- cardid: 8945
+  title: Unavoidable Destiny
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: Until your second turn from now begins, Events' effects will not be negated.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: April Lee
+  flavor_text: <i>"Your place is not here, Soul of Shiba," the Thunderer said, his voice shaking the sky.
+    "I shall lead you to your destiny, if you have the courage to follow."</i>
+  collector_number: '30'
+- cardid: 8967
+  title: Unexpected Assault
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: Show the top card of your Dynasty Deck. If it is a Personality, he enters play ignoring Gold cost
+    and requirements, and duels another Personality of your choice. Destroy the duel's loser. Discard
+    the card immediately if it is not a Personality or, if it is, after the duel ends.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Randy Asplund-Faith
+  flavor_text: <i>Hirota looked up with only a moment to spare. Ozaki had warned him that this day would
+    come, when the Hare's enemies would return to finish what they had begun.</i>
+  collector_number: '140'
+- cardid: 8969
+  title: Unexpected Confrontation
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: Starting with you and proceeding in turn order, each player discards the top card of his Fate
+    deck. He targets a Ranged Attack with strength equal to the discard's Focus Value; this attack may
+    target a card in the home of the player to the left of the player targeting the attack as if all that
+    player's units were in the current enemy army.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '2'
+  rarity: Rare
+  artist: Malcolm McClinton
+  flavor_text: <i>"So you have come to the Shadowlands seeking a nightmare? Well, you have found one,
+    little fox-maiden." - Kokujin</i>
+  collector_number: '39'
+- cardid: 8986
+  title: Unicorn Marketeer
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Retainer
+  text: ':bow:: Produce 2 Gold.<br><b>Repeatable Reaction, :bow::</b> After you Equip an Item from your
+    hand to one of your Unicorn Clan Personalities, draw a card.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Rare
+  artist: Dennis Calero
+  flavor_text: <i>"I am a busy man. Buy something or leave."</i>
+  collector_number: '154'
+- cardid: 9015
+  title: Unspeakable Preparations
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Target your unbowed non-Shadowlands Personality: Permanently give him <b>Shadowlands
+    </b>and, until your next turn begins, negate his straightening and give him -2F/-1C. After your next
+    turn begins, permanently give him +2F. Lose 2 Honor.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Ramon Perez
+  flavor_text: <i>"Twenty years it has taken to break your will, Yasuki. Now, we shall both reap the rewards."
+    - Daigotsu</i>
+  collector_number: '121'
+- cardid: 9040
+  title: Usagi Kashira
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Hare Clan
+  - Samurai
+  gold_cost: 3
+  force: 2
+  chi: 1
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Malcolm McClinton
+  flavor_text: <i>"Kashira is as brave as his father, and twice as quick. He has escaped Bunrakuken's
+    cultists three times; what he has learned about fighting the maho-tsukai arms us against them. Ozaki-sama
+    approves." - Ujina Tomo</i>
+  collector_number: '134'
+- cardid: 9089
+  title: Utaku Mu Dan
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Battle Maiden
+  - Samurai
+  - Unicorn Clan
+  text: Mu Dan has +3F while she is opposed.
+  gold_cost: 8
+  force: 2
+  chi: 3
+  honor_requirement: 9
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: Monika Livingstone
+  flavor_text: <i>"I thank you for your assistance, Unicorn," Kuroda nodded. "Do not thank us yet," the
+    Utaku smiled as she charged the spearmen of the Crane.</i>
+  collector_number: '106'
+- cardid: 9311
+  title: While the Empire Watches
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: Until your next turn begins, after each time a Political action resolves, the player who took
+    it loses 2 Honor.
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Uncommon
+  artist: Justin Norman
+  flavor_text: <i>To Tsudao's surprise the Tsuno gathered their wounded as they fled from the wrath of
+    her armies. Not a single beast's corpse was left upon the field.</i>
+  collector_number: '41'
+- cardid: 9442
+  title: Yasuki Heikichi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Crane Clan
+  - Governor
+  text: 'After Heikichi enters play from a province: You may straighten one of your Holdings.'
+  gold_cost: 8
+  force: 2
+  chi: 2
+  honor_requirement: 8
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Common
+  artist: April Lee
+  flavor_text: <i>"I may have been born a Crab, but now and forevermore I am Crane. Yasuki Hachi is a
+    noble man, and he is my daimyo."</i>
+  collector_number: '76'
+- cardid: 9458
+  title: Yasuki Palaces
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: This Stronghold produces 1 less Gold when paying for a Personality or Follower.
+  province_strength: 5
+  starting_honor: 5
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '2'
+  rarity: Rare
+  artist: Justin Norman
+  collector_number: '129'
+- cardid: 9506
+  title: Yogoso no Shiryo
+  types:
+  - Ancestor
+  decks:
+  - Fate
+  clans:
+  - Crane
+  keywords:
+  - Unique
+  - Crane Clan
+  text: <b>Political Repeatable Reaction:</b> Before another player gains Honor from Proclaiming, bow
+    this Personality to negate the gain. Lose Honor equal to the amount negated.
+  gold_cost: 0
+  focus: 3
+  force: '+0'
+  chi: '+1'
+  honor_requirement: 2
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Justin Norman
+  flavor_text: <i>"Even in death, he whispers shameful tales of the weakness of others. Shameful, entertaining
+    tales."</i>
+  collector_number: '33'
+- cardid: 9590
+  title: Yoritomo Kitao
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Yoritomo Kitao • Experienced
+  clans:
+  - Mantis
+  keywords:
+  - Naval
+  - Unique
+  - Clan Champion
+  - Experienced
+  - Mantis Clan
+  - Samurai
+  text: After Kitao enters play, discard from play all copies of Bayushi Aramasu and Yoritomo Aramasu.<br>Bayushi
+    Aramasu and Yoritomo Aramasu will not enter play.<br><b>Repeatable Open, :g3::</b> A target Personality
+    may targeted by the rulebook Cavalry player ability.
+  gold_cost: 10
+  force: 4
+  chi: 4
+  honor_requirement: 3
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  printing_id: '1'
+  rarity: Rare
+  artist: Dev Madan
+  collector_number: '122'
+- cardid: 9669
+  title: Yoshi's Fan
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: This Personality has +1PH and <b>Courtier</b>.
+  gold_cost: 2
+  focus: 2
+  force: '+0'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Rare
+  artist: April Lee
+  flavor_text: <i>Naseru lifted the fan with quiet reverence, as if in hopes that some shadow of the soul
+    that once wielded it might be relfected in his own.</i>
+  collector_number: '61'

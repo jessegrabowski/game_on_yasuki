@@ -1,1946 +1,2281 @@
 set: Training Grounds
 cards:
-  - title: Birth of the Sword
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, in turn
-      order, starting with you, each player gains 2 Honor and may draw a card.
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Beth Trott
-    flavor: '"After Toturi Tsudao drove the Dark Lord from Otosan Uchi, the Lion destroyed what was left. The Swords of Yotsu
-      patrol the Imperial City now, fighting the shadowy things that remain."'
-    number: 1
-    collector_number: Lion 08
-
-  - title: Boastful Proclamation
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, if any
-      other player controls a Personality, then at the start of your next turn, if this Province still exists, permanently give
-      it +3 strength and gain 3 Honor, and until then, after battle resolution destroys this Province, give each Personality
-      in the attacking army a +1F token and the Attacker may draw a card.
-    legality:
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    rarity: Fixed
-    artist: Mark Symlie
-    number: 2
-    collector_number: Lion 42
-
-  - title: Doom of the Dark Lord
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: 'Each player draws an additional card at the end of his turn. After each time a player must draw a card but cannot
-      because his deck is empty, destroy his rightmost Province.Open: Put this Event into play.'
-    legality:
-    - A Brother's Destiny (Twenty Festivals)
-    - Clan Wars (Imperial)
-    - Legacy
-    - Rain of Blood (Diamond)
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Ben Peck
-    number: 3
-    collector_number: Lion 43
-
-  - title: Far from the Empire
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
-      the game ends, after a player discards the Imperial Favor for a Favor aciton, permanently raise by 3 the amount of Family
-      Honor required for that player to win an Honor Victory.
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Drew Baker
-    number: 4
-    collector_number: Shadowlands 43
-
-  - title: Proposal of Peace
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
-      your second turn from now begins, negate all Honor gains from Proclaiming.
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Anthony Hightower
-    flavor: '"Once this city is ours, Lord Iuchiban will oppose the Empire on both sides. Rokugan will know no peace..."'
-    number: 5
-    collector_number: Shadowlands 18
-
-  - title: Run For Your Lives!
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
-      your turn two turns from now begins, all Fear actions have the additional effect, "If this action's Fear strength is greater
-      than or equal to the target's Personality's Force, move the unit home."
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Malcolm McClinton
-    flavor: '"To me!" Hyun shouted to the peasants.'
-    number: 6
-    collector_number: Shadowlands 13
-
-  - title: Akodo's Grave
-    type: Holding
-    deck: Dynasty
-    gold_cost: 2
-    text: 'w: Produce 2 Gold. Battle, w: Destroy this Holding to destroy a target Terrain.'
-    legality:
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Joachim Gmoser
-    flavor: '"Do not mourn that I die, Aoiko," Yobi whispered. "Mourn that Voitagi lives. Avenge me.",Aoiko put a torch to the
-      blanket that lay over Yobi''s body and gathered his swords.'
-    number: 7
-    collector_number: Shadowlands 02,Shadowlands 30
-
-  - title: Ashigaru Fort
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Farm
-    gold_cost: 2
-    text: 'w: Produce 2 Gold. Open: If it is not your turn, target a Personality. Straighten his unit. Destroy this Holding.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Tony Moseley
-    number: 8
-    collector_number: Lion 10,Lion 17,Lion 27,Shadowlands 20,Shadowlands 36,Shadowlands 40
-
-  - title: Copper Mine
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Mine
-    gold_cost: 2
-    text: 'w: Produce 2 Gold, or 3 Gold if you are a Lion Clan player.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Joseph Phillips
-    flavor: '"Our Ancestors watch over us always," Shigetoshi said. "We cannot allow their deeds to be forgotten.","The demon
-      is dead," Yotsu Iemitsu said with a relieved sigh, "but I regret to report that it is only one of many."'
-    number: 9
-    collector_number: Lion 03,Lion 14,Lion 37
-
-  - title: Corrupted Dojo (WoC)
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Dojo
-    - Shadowlands
-    gold_cost: 2
-    text: 'After this Holding enters play, lose 3 Honor.w: Produce 2 Gold and lose 2 Honor.w: When paying for a Personality,
-      produce 3 Gold which may only pay for him and lose 2 Honor.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    card_notes: This is a distinct card from the Fire and Shadow card of the same name.
-    rarity: Fixed
-    artist: Tony Moseley
-    number: 10
-    collector_number: Shadowlands 05,Shadowlands 17,Shadowlands 34
-
-  - title: Dragon Dancers
-    type: Holding
-    deck: Dynasty
-    gold_cost: 3
-    text: 'w: Produce 2 Gold.w: Destroy this Holding to produce 4 Gold.'
-    legality:
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: David Martin
-    flavor: '"Draw bows and fire!" Tadenori commanded, pointing toward the ronin with his fan.,"Take Aoiko and any twenty of
-      my warriors, Shigetoshi," the Lion Champion commanded. "Search Otosan Uchi for any histories that remain.","Three Swords
-      of Yotsu ran from the alley, one wounded so badly that he leaned upon another. When the ronin saw the warriors of the
-      Lion Clan, their eyes filled with hope.'
-    number: 11
-    collector_number: Lion 05,Lion 31,Lion 34
-
-  - title: Gifts and Favors
-    type: Holding
-    deck: Dynasty
-    gold_cost: 2
-    text: 'After your Dynasty Phase ends, if this copy of this Holding is not in play and you put no Gold-producing Holdings
-      into play this turn, you may bow your Stronghold to search your Dynasty deck, then face-down Provinces, for a card titled
-      "Gifts and Favors" and put the first one you find into play (bowed), ignoring costs. If you find none, you are eliminated
-      from the game.w: Produce 2 Gold.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Edward Fetterman
-    number: 12
-    collector_number: Lion 32,Lion 40,Shadowlands 28,Shadowlands 38
-
-  - title: Oblivion's Gate
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Shadowlands
-    gold_cost: 3
-    text: 'After this Holding enters play, lose 4 Honor.w: Produce 2 Gold.Favor Repeatable Battle, w: You may discard the Imperial
-      Favor. If this discarded the Favor or you control Black Heart of the Empire, destroy a target Follower.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Tony Moseley
-    flavor: '"Death is no barrier to those who serve Jigoku. So long as our corruption stains the earth, Fu Leng can restore
-      his loyal servants."'
-    number: 13
-    collector_number: Shadowlands 23
-
-  - title: Obsidian Mine
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Mine
-    - Obsidian
-    - Shadowlands
-    gold_cost: 3
-    text: 'After this Holding enters play, lose 3 Honor.w: Lose 3 Honor and produce 4 Gold.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Malcolm McClinton
-    flavor: '"Here, in the place of Toturi''s greatest victory, Voitagi. Here, we shall remake the Empire." - Seppun Jin,"If
-      we die here," Akodo Shigetoshi said to his warriors, "let us give these damned souls a battle to remember.",Jin looked
-      upon the bloodstained, corrupted jade with a faint smile. There was a certain sense of pride in a job well done.'
-    number: 14
-    collector_number: Shadowlands 01,Shadowlands 08,Shadowlands 12
-
-  - title: Rice Paddy
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Farm
-    gold_cost: 2
-    text: 'w: Produce 2 Gold.Battle, w: Bow a target enemy attacking Follower. Destroy this Holding.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Conquest (Emperor)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Christopher Appel
-    flavor: The Lion archers fired true, past the fleeing ronin and into the mighty demon that hounded them.,The nearby farmers
-      would come to watch the Lion work, from time to time. Their eyes were hollow and haunted, as if wondering if the samurai
-      would bring battle to their lives again.,Though once lush and pure, the Emperor's gardens were now brown and dead. Nothing
-      would grow here again.
-    number: 15
-    collector_number: Lion 22,Lion 29,Lion 33
-
-  - title: Sanctified Temple
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Temple
-    gold_cost: 4
-    text: 'w: Produce 2 Gold.Repeatable Limited, w, : Gain 2 Honor.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    card_notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment,Some of the War
-      of Spirits versions of this card were printed with a Fate back
-    rarity: Fixed
-    artist: Pia Guerra
-    flavor: '"All the same, Tadenori, they shall be defeated," Aoiko replied.,"This city makes me feel unclean," Tadenori hissed.
-      "It stinks of corruption, and of failure.","We do not know the nature of our enemy," Tadenori said. "We do not know their
-      number, we do not know their purpose."'
-    number: 16
-    collector_number: Lion 20,Lion 44,Lion 45
-
-  - title: Shackled Oni
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Oni
-    - Retainer
-    - Shadowlands
-    gold_cost: 4
-    text: 'After this Holding enters play, lose 3 Honor.w: Produce 3 Gold.Battle/Open, w: Destroy this Holding to give a target
-      Shadowlands card +2F.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    card_notes: The Dark Allies version of this card was misprinted without the Gold kanji.
-    rarity: Fixed
-    artist: Jim Pavelec
-    number: 17
-    collector_number: Shadowlands 25,Shadowlands 32,Shadowlands 39
-
-  - title: Shadowlands Bastion
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Shadowlands
-    gold_cost: 3
-    text: 'After this Holding enters play, lose 4 Honor.w: Produce 2 Gold.w: When paying for a Shadowlands card, produce 4 Gold
-      which may only pay for that card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Tony Moseley
-    flavor: '"Here, with blood and Tainted jade, we shall reopen doorway Fu Leng created. We shall create a new Festering Pit."'
-    number: 18
-    collector_number: Shadowlands 26
-
-  - title: Shrine to Daikoku
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Singular
-    - Temple
-    gold_cost: 2
-    text: 'After this Holding enters play, target one of your bowed Gold-producing Holdings and, while this Holding remains
-      in play, the target has +1 Gold Production.w: Produce 2 Gold.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Tony Moseley
-    number: 19
-    collector_number: Lion 09
-
-  - title: Shrine to Fukurokujin
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Singular
-    - Temple
-    gold_cost: 2
-    text: 'w: Produce 2 Gold.Limited, w: Choose your performing Personality. Show the top card of your Fate deck. If its Focus
-      Value is greater than or equal to your Personality''s printed Chi, discard the card. Otherwise, draw it.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Tony Moseley
-    number: 20
-    collector_number: Lion 02,Shadowlands 21
-
-  - title: Akodo Kurako
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Tactician
-    - Lion Clan
-    - Samurai
-    - Soul of Ikoma Tsanuri
-    force: 3
-    chi: 3
-    gold_cost: 9
-    honor_requirement: 8
-    personal_honor: 3
-    text: Other players may not play Terrains while Kurako is at the current battlefield.
-    legality:
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: beet
-    flavor: '"We owe you our lives, Shigetoshi-sama," Iemitsu said. "The Sword of Yotsu shall defend the city beside you.",A
-      song came to Matsu Hyun''s lips, a tale of heroes past, inspiring her brethren to greatness.'
-    number: 21
-    collector_number: Lion 33,Lion 39,Lion 49
-
-  - title: Akodo Shigetoshi
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Lion Clan
-    - Samurai
-    - Soul of Seppun Hotaitaka
-    force: 3
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 7
-    personal_honor: 2
-    text: 'Reaction: After you attach a Follower to Shigetoshi from your hand: Draw an additional card during your next End
-      Phase.'
-    legality:
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Chris Seaman
-    flavor: '"Be on your guard, all of you," Shigetoshi said firmly. "Even after all this time, the Dark Lord''s minions may
-      still skulk through these streets.","Digging is peasant''s work," Aoiko said bitterly."You would trust a peasant with
-      your grandfather''s legacy?" Shigetoshi replied.'
-    number: 22
-    collector_number: Lion 18,Lion 25
-
-  - title: Akodo Tadenori
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Tactician
-    - Campaigner
-    - Lion Clan
-    - Samurai
-    - Soul of Ikoma Gunjin
-    force: 0
-    chi: 4
-    gold_cost: 6
-    honor_requirement: 4
-    personal_honor: 3
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Ben Peck
-    flavor: '"You survey the city as if it were a battlefield," Shigetoshi said with an amused grin."Everything is a battlefield,
-      my lord," the old general replied.,A thunderous roar shook the ruined city. "Oni," Tadenori said, slowly drawing his battle
-      fan.,As the search continued, Tadenori only grew more dour. The old general could sense trouble coming, like a farmer
-      can smell a storm.'
-    number: 23
-    collector_number: Lion 23,Lion 30,Lion 7
-
-  - title: Akodo Yobi
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Tactician
-    - Lion Clan
-    - Samurai
-    force: 1
-    chi: 3
-    gold_cost: 8
-    honor_requirement: 5
-    personal_honor: 3
-    text: 'Tactical Reaction: After a Terrain enters play from your hand: Draw a card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    story: '1999 Name a Personality: California - Ash Thomason'
-    rarity: Fixed
-    artist: Kevin Wasden
-    flavor: '"I agree with Aoiko," Yobi added. "We cannot allow Otosan Uchi''s grave to be defiled.","Neither can we charge
-      into combat without preperation, Yobi," Tadenori warned.,"Then let me take three Lion," Yobi said. "We shall scout the
-      extent of the enemy."'
-    number: 24
-    collector_number: Lion 46,Lion 47,Lion 48
-
-  - title: Matsu Aoiko
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Lion Clan
-    - Samurai
-    - Soul of Matsu Gohei
-    force: 1
-    chi: 3
-    gold_cost: 5
-    honor_requirement: 6
-    personal_honor: 3
-    text: Aoiko has +2F while attacking.
-    legality:
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: William O'Connor
-    flavor: Fearless as she was, Aoiko still clutched her grandfather's trident just a bit closer when she saw the bleak ruins
-      of the Imperial City for the first time.
-    number: 25
-    collector_number: Lion 12,Lion 4
-
-  - title: Matsu Ferishi
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Lion Clan
-    - Samurai
-    force: 3
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 5
-    personal_honor: 2
-    text: 'Political Battle: Bow a target enemy non-Unique Follower.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: William O'Connor
-    flavor: '"We have searched for days, Ferishi, and found nothing," Aoiko said."Then we must search harder."'
-    number: 26
-    collector_number: Lion 11,Lion 13,Lion 28
-
-  - title: Matsu Hyun
-    extended_title: Matsu Hyun • Experienced
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Deathseeker
-    - Experienced
-    - Lion Clan
-    - Poet
-    - Samurai
-    force: 2
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 10
-    personal_honor: 3
-    text: 'Repeatable Reaction, w: Before one of your Tactician Personalities is destroyed by another player''s card''s effect
-      or by battle resolution, target him and negate the destruction.'
-    legality:
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Ben Peck
-    number: 27
-    collector_number: Lion 16
-
-  - title: Matsu Kenji
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Tactician
-    - Unique
-    - Lion Clan
-    - Samurai
-    - Taisa
-    force: 5
-    chi: 4
-    gold_cost: 10
-    honor_requirement: 8
-    personal_honor: 3
-    text: Negate Fear effects upon cards in Kenji's army in units with Matsu Family Personalities (including this unit).
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Michael Kulta
-    flavor: '"Do not allow emotions to override your sense, Aoiko. Your soul is like a blade, and must be kept sheathed lets
-      it become rusted and dull."'
-    number: 28
-    collector_number: Lion 15
-
-  - title: Matsu Mabuchi
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Lion Clan
-    - Samurai
-    - Soul of Matsu Turi
-    force: 4
-    chi: 3
-    gold_cost: 8
-    honor_requirement: 0
-    personal_honor: 2
-    text: Favor and Lobby actions cannot target Mabuchi.
-    legality:
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Michael Kulta
-    flavor: The demon was terrifyingly powerful, but he was no match for the Lion's finest samurai.
-    number: 29
-    collector_number: Lion 26,Lion 36,Lion 6
-
-  - title: Matsu Reishiko
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Lion Clan
-    - Samurai
-    force: 4
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 5
-    personal_honor: 2
-    text: After a Personality with less Chi than Reishiko moves into a defending army opposing her, the Personality's controller
-      discards a card.
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: William O'Connor
-    number: 30
-    collector_number: Lion 19,Lion 21,Lion 24
-
-  - title: Ashura
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Ashura
-    - Nonhuman
-    - Shadowlands
-    force: 5
-    chi: 5
-    gold_cost: 10
-    personal_honor: 0
-    text: 'After Ashura enters play, lose 5 Honor.After Ashura is destroyed while at a battlefield, target and destroy a Follower,
-      or Personality without Followers, at that battlefield.Battle: Fear 4.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Thomas Manning
-    flavor: Deathseeker's Shrine survived the night, and the Lion gave thanks for their good fortune.
-    number: 31
-    collector_number: Shadowlands 37
-
-  - title: Bawaru no Oni
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    force: 4
-    chi: 4
-    gold_cost: 7
-    personal_honor: 0
-    text: After Bawaru enters play, lose 4 Honor.After battle resolution begins, if there are any unbowed enemy Personalities
-      at Bawaru's battlefield, straighten Bawaru.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Thomas Manning
-    flavor: '"Here they come," Tadenori hissed.,"Tear down the walls! Destroy Deathseeker''s Shrine!" the demon roared.'
-    number: 32
-    collector_number: Shadowlands 06,Shadowlands 11
-
-  - title: Chuda Masaru
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Bloodspeaker
-    - Shadowlands
-    - Shugenja
-    - Soul of Kitsu Gongson
-    force: 4
-    chi: 4
-    gold_cost: 7
-    personal_honor: 0
-    text: After Masaru enters play, lose 3 Honor.
-    legality:
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Christopher Appel
-    flavor: '"Continue with the ritual," Jin ordered. "The gateway to Jogoku may yet be closed, if we are not diligent.",Masaru
-      winced in pain as the blade slit his arm. Focusing on the blood, he added his power to Jin''s.'
-    number: 33
-    collector_number: Shadowlands 44,Shadowlands 45
-
-  - title: Fushiki no Oni
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Fire
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    force: 5
-    chi: 4
-    gold_cost: 8
-    personal_honor: 0
-    text: 'After Fushiki enters play, lose 4 Honor.Fire Battle: Destroy a target Fortification at this battlefield with Gold
-      Cost lower than Fushiki''s Force. Give Fushiki a +1F token.'
-    legality:
-    - A Brother's Destiny (Twenty Festivals)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: William O'Connor
-    number: 34
-    collector_number: Shadowlands 24,Shadowlands 33
-
-  - title: Gekido no Oni
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    force: 3
-    chi: 3
-    gold_cost: 6
-    personal_honor: 0
-    text: 'After you Recruit Gekido, lose 3 Honor. Cannot attach Followers or Items. Battle/Open: Give Gekido +2F/+3C until
-      this phase ends. After the phase ends, give Gekido -2F/-2C until your next turn ends.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Thomas Manning
-    flavor: The peasants of the outlying villages had been in hiding, waiting for someone to lead them against the Horde. They
-      rallied to Hyun's side.
-    number: 35
-    collector_number: Shadowlands 09,Shadowlands 27
-
-  - title: Kukanchi
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Elemental Terror
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    - Void
-    force: 1
-    chi: 2
-    gold_cost: 4
-    personal_honor: 0
-    text: 'After Kukanchi enters play, lose 4 Honor.Cannot attach Followers or Items.Repeatable Battle/Open: Discard a card
-      to give Kukanchi +1F.Repeatable Battle/Open: Discard a card to give Kukanchi +1C.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Lisa Hunt
-    number: 36
-    collector_number: Shadowlands 46,Shadowlands 47
-
-  - title: Kyoso no Oni
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    force: 5
-    chi: 5
-    gold_cost: 7
-    personal_honor: 0
-    text: 'After Kyoso enters play, lose 3 Honor and destroy one of your Holdings.Will not attach Followers or Items.Battle,
-      w: Ranged 7 Attack.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Malcolm McClinton
-    number: 37
-    collector_number: Shadowlands 29,Shadowlands 35
-
-  - title: Ogre Bushi
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Nonhuman
-    - Ogre
-    - Shadowlands
-    force: 6
-    chi: 4
-    gold_cost: 9
-    personal_honor: 0
-    text: Cannot attach Armor or Followers.
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Jim Callahan
-    flavor: The ogres lifted their clubs, circling Hyun warily. These beasts were no fools - strong, intelligent, and deadly.
-      The poet held her blade in both hands and prepared to die.
-    number: 38
-    collector_number: Shadowlands 10,Shadowlands 16
-
-  - title: Seppun Jin
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Shadowlands
-    - Shugenja
-    - Soul of Kuni Yori Experienced 3
-    - Undead
-    force: 3
-    chi: 4
-    gold_cost: 10
-    personal_honor: 0
-    text: 'Maho Limited: Any number of times per turn, bow Jin, discard a card, and target a dead Personality: If Jin''s Chi
-      and the discard''s Focus Value are both greater than or equal to the Personality''s Chi, bring the Personality into play
-      (under your control), ignoring costs and restrictions. Permanently give him Shadowlands • Undead. Lose 3 Honor.'
-    legality:
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Jim Pavelec
-    number: 39
-    collector_number: Shadowlands 04
-
-  - title: Voitagi
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Samurai
-    - Shadowlands
-    - Soul of Uragirimono
-    - Undead
-    force: 3
-    chi: 2
-    gold_cost: 3
-    personal_honor: 0
-    text: 'After Voitagi enters play, lose 3 Honor.Battle: Fear 3 (Bow a target enemy Follower or Personality without Followers
-      with 3 or lower Force).'
-    legality:
-    - A Brother's Destiny (Twenty Festivals)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    flavor: '"Not all those who once followed Toturi are heroes." - Seppun Jin,In the days when the Emperor was possessed by
-      the Dark God, even the heroes doubted if they would triumph. Some made pacts with evil for their own safety...,Voitagi
-      was to assassinate Toturi before the Day of Thunder. Yobi robbed him of his moment of glory and left him in a shallow
-      grave.'
-    number: 40
-
-  - title: Voitagi
-    extended_title: Voitagi • Experienced
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Experienced
-    - Samurai
-    - Shadowlands
-    - Undead
-    force: 4
-    chi: 3
-    gold_cost: 7
-    personal_honor: 0
-    text: 'After Voitagi enters play: Lose 5 Honor.Voitagi has +2F/+2C while opposed by a Samurai or facing one in a duel.Fear
-      Battle: Fear 4.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Ben Peck
-    number: 41
-    collector_number: Shadowlands 07
-
-  - title: Yosuchi
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Air
-    - Elemental Terror
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    - Shugenja
-    force: 3
-    chi: 3
-    gold_cost: 8
-    personal_honor: 0
-    text: 'After Yosuchi enters play: Lose 4 Honor.Will not attach Followers or Items.Battle/Open: Twice per turn: Give Yosuchi
-      +1F or +1C.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Thomas Manning
-    number: 42
-    collector_number: Shadowlands 48,Shadowlands 49
-
-  - title: 700 Soldier Plain
-    type: Region
-    deck: Dynasty
-    keywords:
-    - Singular
-    text: 'Battle: Twice per battle, bow your target performing defending Personality''s unit to make the Attacker target and
-      bow two attacking Personalities and/or Followers.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Tony Moseley
-    flavor: '"The time has come for the Lion to fight," Shigetoshi said.'
-    number: 43
-    collector_number: Lion 41
-
-  - title: Farmlands
-    type: Region
-    deck: Dynasty
-    keywords:
-    - Singular
-    - Farm
-    text: 'Limited, : Create a 1F Follower and attach it to your target Personality.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Tony Moseley
-    flavor: With a peasant's borrowed steed, Hyun galloped across the countryside.
-    number: 44
-    collector_number: Shadowlands 41
-
-  - title: Shadowlands Marsh
-    type: Region
-    deck: Dynasty
-    keywords:
-    - Singular
-    - Shadowlands
-    text: 'After this card enters play: Lose 10 Honor.Non-Shadowlands Personalities and Followers have -2F while at this province''s
-      battlefield.'
-    legality:
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Michael Phillips
-    number: 45
-    collector_number: Shadowlands 42
-
-  - title: Temples of the New Tao
-    type: Region
-    deck: Dynasty
-    keywords:
-    - Singular
-    - Temple
-    text: Only Monk and Samurai Personalities may assign to defending armies at this Province's battlefield.Monks and Samurai
-      have +3F while defending at this Province's battlefield.
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: David Deitrick
-    number: 46
-    collector_number: Lion 01
-
-  - title: Violence Behind Courtliness City
-    type: Region
-    deck: Dynasty
-    keywords:
-    - Singular
-    - City
-    - Imperial
-    text: 'Reaction: After one or more Personalities assign to a attack at this Province''s battlefield, straighten your target
-      Personality''s unit.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    story: 2003 Heart of the Empire - Paul Heaver
-    rarity: Fixed
-    artist: Christopher Appel
-    flavor: '"Hyun, ride for help as swiftly as you are able. Nimuro must know what has happened here."'
-    number: 47
-    collector_number: Lion 38
-
-  - title: Gunso
-    type: Follower
-    deck: Fate
-    keywords:
-    - Gunso
-    force: 2
-    chi: 0
-    gold_cost: 3
-    focus: 2
-    text: All other Followers in this unit have +1F. After this Follower is destroyed, give -1F to all Followers in its former
-      unit.
-    legality:
-    - A Brother's Destiny (Twenty Festivals)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Eric Polak
-    number: 48
-    collector_number: Lion 07,Lion 22,Lion 29
-
-  - title: Hideo Spawn
-    type: Follower
-    deck: Fate
-    keywords:
-    - Nonhuman
-    - Shadowlands
-    force: 4
-    chi: 0
-    gold_cost: 5
-    honor_requirement: 0
-    focus: 2
-    text: 'After this card enters play: Lose 3 Honor. After this card is destroyed: Destroy another card in the unit it was
-      in immediately before its destruction.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Malcolm McClinton
-    number: 49
-    collector_number: Shadowlands 02,Shadowlands 37,Shadowlands 40
-
-  - title: Kirei
-    type: Follower
-    deck: Fate
-    keywords:
-    - Nonhuman
-    - Shadowlands
-    force: 1
-    chi: 0
-    gold_cost: 2
-    honor_requirement: 0
-    focus: 2
-    text: 'After this card enters play: Lose 2 Honor.Fear Battle: Fear 5.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Luis Vazquez
-    number: 50
-    collector_number: Shadowlands 05,Shadowlands 19,Shadowlands 35
-
-  - title: Omoidasu
-    type: Follower
-    deck: Fate
-    force: 2
-    chi: 0
-    gold_cost: 4
-    honor_requirement: 2
-    focus: 3
-    text: 'Attaches to a Lion Clan Personality paying 1 less Gold.Political Reaction: After a duel ends that this Personality
-      won, or after a battle resolution ends where this card is in your current army and you destroyed a province and/or enemy
-      army, bow this card: Either gain 2 Honor or permanently give this Personality +1PH.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: William O'Connor
-    number: 51
-    collector_number: Lion 02,Lion 15,Lion 28
-
-  - title: Oni Horde
-    type: Follower
-    deck: Fate
-    keywords:
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    force: 3
-    chi: 0
-    gold_cost: 5
-    honor_requirement: 0
-    focus: 2
-    text: 'Will only attach to an Oni.May attach to a Personality ignoring restrictions on the Personality.After this card enters
-      play: Lose 5 Honor. Fear Battle: Fear 4.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Malcolm McClinton
-    number: 52
-    collector_number: Shadowlands 44,Shadowlands 45
-
-  - title: Parasitic Oni
-    type: Follower
-    deck: Fate
-    keywords:
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    force: 2
-    chi: 2
-    gold_cost: 3
-    honor_requirement: 0
-    focus: 2
-    text: 'After this card enters play: Lose 2 Honor.After this card is destroyed: Destroy the Personality it was attached to
-      immediately before its destruction.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Thomas Manning
-    number: 53
-    collector_number: Shadowlands 01,Shadowlands 10
-
-  - title: Shireikan
-    type: Follower
-    deck: Fate
-    force: 2
-    chi: 0
-    gold_cost: 3
-    honor_requirement: 1
-    focus: 3
-    text: 'Reaction: Before this Personality is destroyed: Create a 1F/1C/1PH Bushi Personality with your Clan alignment at
-      this card''s location. Transfer all cards from this Personality to the Bushi. Remove this card from the game.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Monte Moore
-    number: 54
-    collector_number: Lion 44,Lion 45
-
-  - title: Spearmen
-    type: Follower
-    deck: Fate
-    force: 2
-    chi: 0
-    gold_cost: 3
-    focus: 2
-    text: 'Battle, w: Ranged 2 Attack (Destroy a target enemy Follower, or Personality without Followers, with 2 or lower Force).'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    card_notes: Some variants of the Battle of Beiden Pass version of this card were printed with an alternate flavor text.
-    rarity: Fixed
-    artist: William O'Connor
-    flavor: Aoiko frowned as she saw a band of Yotsu swordsmen flee from the oni. She turned to Yobi but his face was grim -
-      there was nothing they could do to save them.
-    number: 55
-    collector_number: Lion 21,Lion 31,Lion 40
-
-  - title: Steadfast Bushi
-    type: Follower
-    deck: Fate
-    keywords:
-    - Bushi
-    force: 2
-    chi: 0
-    gold_cost: 3
-    honor_requirement: 1
-    focus: 3
-    text: 'After the resolution of an action that straightened this Personality: Straighten this card.'
-    legality:
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Anthony Grabski
-    flavor: The beast followed Hyun into the depths, and she collapsed the doorway on its massive shoulders. With the creature
-      immobile, she turned and raised her blade."
-    number: 56
-    collector_number: Lion 19,Lion 25,Lion 34
-
-  - title: Veteran Bushi
-    type: Follower
-    deck: Fate
-    force: 2
-    chi: 0
-    gold_cost: 4
-    honor_requirement: 2
-    focus: 3
-    text: This card has +1F while this Personality is a Tactician.
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Chris Seaman
-    number: 57
-    collector_number: Lion 09,Lion 12,Lion 37
-
-  - title: Armor of Earth
-    type: Item
-    deck: Fate
-    keywords:
-    - Armor
-    - Unique
-    - Earth
-    force: 1
-    chi: 2
-    gold_cost: 8
-    focus: 3
-    text: 'While you control an Earth Ring, Armor of Earth has an additional +2F/+1C.Earth Repeatable Reaction: Before an action
-      moves this Personality from a battlefield to which he assigned this Attack Phase, negate the action''s effects.'
-    legality:
-    - Clan Wars (Imperial)
-    - Legacy
-    - Rain of Blood (Diamond)
-    errata_text: Removal of cost reduction trait via contemporary erratum.
-    rarity: Fixed
-    artist: Bryan Heyboer
-    number: 58
-    collector_number: Shadowlands 23
-
-  - title: Blackened Claws
-    type: Item
-    deck: Fate
-    keywords:
-    - Shadowlands
-    force: 1
-    chi: 1
-    gold_cost: 4
-    focus: 2
-    text: 'Will only attach to a Shadowlands Personality without Blackened Claws.May attach to a Personality ignoring restrictions
-      on the Personality.This card will not be transferred.Reaction: Any number of times per turn, but only once per duel, after
-      this Personality enters a duel, bow this card: Give two -1C Corruption tokens to the other Personality in the duel.'
-    legality:
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Ramos Perez
-    number: 59
-    collector_number: Shadowlands 26,Shadowlands 30
-
-  - title: Blade of Secrets
-    type: Item
-    deck: Fate
-    keywords:
-    - Unique
-    - Weapon
-    force: 0
-    chi: 0
-    gold_cost: 7
-    focus: 3
-    text: 'After this card enters play: You may discard a Fate card; if you did, permanently set this card''s Force and Chi
-      bonuses to equal the discarded card''s Focus Value.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Jon Hodgson
-    flavor: The lowly bakemono scuttled back into the shadows, the greater part of the army defeated.
-    number: 60
-    collector_number: Shadowlands 41
-
-  - title: Corrupted Jade Sliver
-    type: Item
-    deck: Fate
-    keywords:
-    - Jade
-    - Shadowlands
-    force: 0
-    chi: 0
-    gold_cost: 3
-    focus: 1
-    text: 'Battle/Open: Three times per turn: Give this Personality +1F/-2C and Shadowlands.Battle/Open: Three times per turn,
-      if this Personality has 2 or higher Force: Give him -2F/+2C and Shadowlands.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Luis Vazquez
-    number: 61
-    collector_number: Shadowlands 06,Shadowlands 21
-
-  - title: Gunsen of Water
-    type: Item
-    deck: Fate
-    keywords:
-    - Unique
-    - Weapon
-    - Water
-    force: 1
-    chi: 2
-    gold_cost: 9
-    focus: 3
-    text: 'While you control a Water Ring, Gunsen of Water has an additional +2F/+1C.Repeatable Battle, w: Move this unit to
-      a battlefield or home. This action has Absent and Remote if you move this unit to the current battlefield.'
-    legality:
-    - Clan Wars (Imperial)
-    - Legacy
-    - Rain of Blood (Diamond)
-    errata_text: 'Errata''d via the internet: Removal of cost reduction trait via contemporary erratum; erratum of ability to
-      modernize via Oracle.'
-    rarity: Fixed
-    artist: Britt Martin
-    number: 62
-    collector_number: Lion 26
-
-  - title: Lessons from Kuro
-    type: Item
-    deck: Fate
-    force: 0
-    chi: 0
-    gold_cost: 4
-    focus: 3
-    text: 'Limited: If this Personality''s Chi is 4 or greater, bow him: Draw a card.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Monte Moore
-    number: 63
-    collector_number: Lion 41
-
-  - title: Tsuno Blade
-    type: Item
-    deck: Fate
-    keywords:
-    - Weapon
-    - Shadowlands
-    force: 2
-    chi: 1
-    gold_cost: 3
-    focus: 2
-    text: 'Will only attach to a Personality with 4 or higher Force or a Tsuno.Repeatable Battle, w: Permanently remove Cavalry
-      from a target enemy card.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Jeremy Jarvis
-    number: 64
-    collector_number: Shadowlands 17,Shadowlands 33,Shadowlands 38
-
-  - title: Ring of Earth
-    type: Ring
-    deck: Fate
-    keywords:
-    - Unique
-    - Earth
-    focus: 4
-    text: 'Play after a battle resolves at your Province, if it was not destroyed and any enemy units were ever at its battlefield.
-      You may discard this Ring from your hand to use its ability without cost.Earth Repeatable Interrupt, w: The Battle action
-      cannot move Personalities.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Randy Asplund-Faith
-    number: 65
-    collector_number: Lion 23,Shadowlands 28
-
-  - title: Ring of Water
-    type: Ring
-    deck: Fate
-    keywords:
-    - Unique
-    - Water
-    focus: 4
-    text: 'Play after a battle resolves in which you played a Terrain, destroyed a Terrain, and destroyed any cards or provinces
-      during resolution. You may discard this Ring from your hand to use its ability without cost.Water Absent Repeatable Battle,
-      w: Move your target Personality home or, if he would be opposed, move your target Personality at any location to the current
-      battlefield.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Randy Asplund-Faith
-    number: 66
-    collector_number: Lion 08
-
-  - title: Along the Coast at Midnight
-    type: Strategy
-    deck: Fate
-    focus: 2
-    text: 'This card''s Gold Cost equals the number of unbowed Personalities you control. Open: Give Cavalry to all of your
-      Personalities and Followers.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Tony Moseley
-    flavor: The Deathless set out as fast as it could, with Kitsu magic filling its sails.
-    number: 67
-    collector_number: Shadowlands 08,Shadowlands 29
-
-  - title: Battlefield of Shallow Graves
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Terrain
-    gold_cost: 0
-    focus: 1
-    text: 'Before the enemy leader gains Honor: Double the gain.Before this battle''s resolution: Reduce the Force of each Personality
-      in the enemy army to half his Force at that time, rounded up.Battle: If there are no Terrains at the current battlefield:
-      Put this card into play there.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    rarity: Fixed
-    artist: Al Eremin
-    number: 68
-    collector_number: Lion 48,Lion 49
-
-  - title: Deathseeker's Glory
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Bow and destroy your target performing honorable Samurai to destroy a target enemy Personality with 0 Personal
-      Honor.'
-    legality:
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Ben Peck
-    number: 69
-    collector_number: Lion 06,Lion 18,Lion 27
-
-  - title: Diversionary Tactics
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Battle: Target a Terrain: Destroy it.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Mark A.W. Jackson
-    number: 70
-    collector_number: Shadowlands 46,Shadowlands 47
-
-  - title: For the Empire
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Limited: Target a Samurai Personality and a Shadowlands Personality, one of which is your unbowed performer: Your
-      Personality duels the other. If the winner is a Shadowlands Samurai, his controller chooses only one of the two following
-      conditional effects to apply to him. If the Samurai wins, permanently give him +1PH and his controller gains 3 Honor.
-      If the Shadowlands Personality wins, permanently give him +1F/+1C. Destroy the duel''s loser.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Michael Phillips
-    number: 71
-    collector_number: Shadowlands 12,Shadowlands 31
-
-  - title: Officers' Council
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'Limited: Bow your performing Personality who must be a Tactician unless you control the Right Hand of the Emperor
-      and target zero or more of your other Personalities up to the performer''s Chi: Give them the ability, "Battle: Bow this
-      Personality and target an enemy card without unbowed attachments: Bow it."'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Llyn Hunter
-    number: 72
-    collector_number: Lion 16,Lion 30
-
-  - title: Peasant Vengeance
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Battle: Bow your performing Follower and target an enemy Personality without attachments: Destroy him.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Mike Jackson
-    flavor: Aoiko rushed to Yobi, but corrupted spearmen blocked her path.
-    number: 73
-    collector_number: Lion 17,Lion 33
-
-  - title: Primal Rage
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'As a Focus Effect: If this Personality is Shadowlands or Nonhuman, set this card''s Focus Value equal to the Personality''s
-      base Force plus 2.'
-    legality:
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Kyri Komotou
-    flavor: No oni could stand against Aoiko, until at last she faced Voitagi.
-    number: 74
-    collector_number: Shadowlands 09,Shadowlands 16
-
-  - title: Retribution
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 4
-    text: 'Reaction: After the end of an Attack Phase in which you were the Defender: Declare an additional Attack Phase against
-      that phase''s Attacker, in which neither player may invite allies and you may only assign one Personality. Give the Personality
-      and each Follower in his unit +1F after he assigns.'
-    legality:
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    card_notes: The Promotional version of this card is legal upon release,The Promotional version of this card was released
-      to the 2011 Winner's Choice, Name a Card, Level 10, Level 15, Level 20, and Jewel Event participants
-    rarity: Fixed
-    artist: Ed Cox
-    flavor: Jin sensed a change. More samurai had arrived.
-    number: 75
-    collector_number: Lion 13,Lion 38,Shadowlands 04,Shadowlands 15
-
-  - title: Sneak Attack
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Engage: The Attacker has the first opportunity to take a Battle action or pass in this battle.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    - Shattered Empire
-    - War of the Seals (Onyx Edition)
-    mrp: Is now an Engage action.
-    rarity: Fixed
-    artist: John Cadice
-    flavor: '"To Deathseeker''s Shrine!" Hyun shouted.'
-    number: 76
-    collector_number: Shadowlands 22,Shadowlands 34
-
-  - title: Spearhead
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Reaction: After a battle resolution ends, target your unit at that battlefield: Straighten it. It will not bow from
-      the battle''s resolution.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Destroyer War (Celestial)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: beet
-    flavor: '"Yobi!" Aoiko shouted, pushing the peasants aside and lunging at Voitagi with her trident.'
-    number: 77
-    collector_number: Lion 35
-
-  - title: Strength of Purity
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Battle: Choose your performing Personality with 3 or higher Personal Honor: Give him +3F.'
-    legality:
-    - Age of Conquest (Emperor)
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    mrp: No longer gives a Chi bonus
-    rarity: Fixed
-    artist: Pia Guerra
-    flavor: Aoiko did not volunteer to accompany Yobi - there was no need to prove sincerity with words. All knew she would
-      wish to be the first to see the enemy.
-    number: 78
-    collector_number: Lion 01,Lion 04
-
-  - title: Superior Strategist
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Tactical
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Choose your performing Tactician: Search your Fate deck for a Battle Strategy. You may take an additional
-      Battle action to use one of its Battle abilities; if you do not, discard it.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Ellym Sirac
-    number: 79
-    collector_number: Lion 46,Lion 47
-
-  - title: Test of Might
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'Battle: Choose your performing unbowed Personality and target an enemy Personality: Your Personality duels the target.
-      Both Personalities use their Force as their duel stat. The winner''s controller gains 3 Honor. Bow the loser.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Eric Polak
-    number: 80
-    collector_number: Shadowlands 07,Shadowlands 18,Shadowlands 27
-
-  - title: The Face of Fear
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Reaction: After you announce a Fear action from one of your cards: The effects of the action affect Personalities
-      in the same way as they affect Followers.'
-    legality:
-    - Clan Wars (Imperial)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Tim Gerstmar
-    number: 81
-    collector_number: Shadowlands 03,Shadowlands 32
-
-  - title: Tireless Assault
-    type: Strategy
-    deck: Fate
-    gold_cost: 2
-    focus: 1
-    text: 'Battle: Target your unit in your home: Straighten it and move it to the current battlefield.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Jonathan Hunt
-    number: 82
-    collector_number: Lion 24,Lion 32,Shadowlands 14,Shadowlands 24
-
-  - title: Volcanic Fields
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Terrain
-    gold_cost: 0
-    focus: 1
-    text: 'Before this battle''s resolution: Each player, starting with you, targets and destroys one Follower or Personality
-      without Followers at this battlefield controlled by the player to his left.Battle: If there are no Terrains at the current
-      battlefield: Put this card into play there.'
-    legality:
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Al Eremin
-    number: 83
-    collector_number: Lion 10,Lion 36
-
-  - title: Wanton Destruction
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'Battle: Choose your performing unbowed Shadowlands Personality and target two enemy Personalities: Your Personality
-      duels each target, one at a time, in the order of your choice. All Personalities in both duels use Force as their duel
-      stat. Give your Personality -4F after the first duel ends. Destroy both duels'' losers.'
-    legality:
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Ben Peck
-    number: 84
-    collector_number: Shadowlands 11,Shadowlands 25,Shadowlands 36
-
-  - title: White Shore Plain
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Terrain
-    gold_cost: 0
-    focus: 3
-    text: 'While at the current battlefield, each of your Tacticians has the ability, "Tactical Reaction: Before this battle''s
-      resolution: Give this Tactician a Force bonus equal to his Chi."Battle: If there are no Terrains at the current battlefield:
-      Put this card into play there.'
-    legality:
-    - Age of Conquest (Emperor)
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Modern
-    - Rain of Blood (Diamond)
-    mrp: This card's Focus Value is now 3, returning it to its original, Fire & Shadow printing
-    rarity: Fixed
-    artist: Pamela Shanteau
-    flavor: '"Fortify that shrine," Tadenori commanded. "This will be our headquarters.","Retreat!" Aoiko shouted, heaving Yobi
-      over one shoulder.'
-    number: 85
-    collector_number: Lion 05,Lion 39
-
-  - title: Kenson Gakka
-    type: Stronghold
-    clan: Lion
-    deck: Pre-Game
-    province_strength: 7
-    gold_production: 3
-    starting_honor: 6
-    text: Terrains you own in and out of play have a minimum Focus Value of 3.Your non-Tactician Lion Clan Samurai with 3 or
-      higher Chi have Tactician while in armies and have their new Force bonuses from the Rulebook Tactical Advantage action
-      and Tactical actions negated.
-    legality:
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Jon Hodgson
-    number: 86
-    collector_number: Lion 00
-
-  - title: The Spawning Ground
-    type: Stronghold
-    clan: Shadowlands
-    deck: Pre-Game
-    province_strength: 7
-    gold_production: 3
-    starting_honor: -19
-    text: You do not gain or lose Honor; this is not negation.You may not take Political actions or actions that cause other
-      players unconditional Honor losses.Negate all Fear effects upon your cards.Ogre, Oni, and Troll Personalities you own,
-      in and out of play, have +1F/+1C.
-    legality:
-    - Four Winds (Gold)
-    - Hidden Emperor (Jade)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Malcolm McClinton
-    number: 87
-    collector_number: Shadowlands 00
-
-  - title: Black Heart of the Empire
-    type: Wind
-    deck: Pre-Game
-    text: 'For you, the Lobby ability is not Political, and it bows your target Shadowlands Personality instead (even if his
-      Personal Honor is 0).For the purposes of any player Lobbying, your Family Honor is considered, before bonuses or penalties,
-      to equal the total printed Force of all Personalities you control if it is higher than each other player''s. Favor Repeatable
-      Battle: Discard the Imperial Favor to target a Personality. Reduce the Force of each card in his unit to 0. Permanently
-      give him Shadowlands.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Four Winds (Gold)
-    - Legacy
-    - Rain of Blood (Diamond)
-    rarity: Fixed
-    artist: Ben Peck
-    number: 88
-    collector_number: Shadowlands 00
+- cardid: 2
+  title: 700 Soldier Plain
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  text: <b>Battle:</b> Twice per battle, bow your target performing defending Personality's unit to make
+    the Attacker target and bow two attacking Personalities and/or Followers.
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Tony Moseley
+  flavor_text: <i>"The time has come for the Lion to fight," Shigetoshi said.</i>
+  collector_number: Lion 41
+- cardid: 237
+  title: Akodo Kurako
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Lion Clan
+  - Samurai
+  - Soul of Ikoma Tsanuri
+  text: Other players may not play Terrains while Kurako is at the current battlefield.
+  gold_cost: 9
+  force: 3
+  chi: 3
+  honor_requirement: 8
+  personal_honor: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: beet
+  flavor_text: <i>"We owe you our lives, Shigetoshi-sama," Iemitsu said. "The Sword of Yotsu shall defend
+    the city beside you."</i>
+  collector_number: Lion 33
+- cardid: 279
+  title: Akodo Shigetoshi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Samurai
+  - Soul of Seppun Hotaitaka
+  text: '<b>Reaction:</b> After you attach a Follower to Shigetoshi from your hand: Draw an additional
+    card during your next End Phase.'
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 7
+  personal_honor: 2
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Chris Seaman
+  flavor_text: <i>"Be on your guard, all of you," Shigetoshi said firmly. "Even after all this time, the
+    Dark Lord's minions may still skulk through these streets."</i>
+  collector_number: Lion 18
+- cardid: 291
+  title: Akodo Tadenori
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Campaigner
+  - Lion Clan
+  - Samurai
+  - Soul of Ikoma Gunjin
+  gold_cost: 6
+  force: 0
+  chi: 4
+  honor_requirement: 4
+  personal_honor: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Ben Peck
+  flavor_text: <i>"You survey the city as if it were a battlefield," Shigetoshi said with an amused grin.<br>"Everything
+    is a battlefield, my lord," the old general replied.</i>
+  collector_number: Lion 23
+- cardid: 307
+  title: Akodo Yobi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Lion Clan
+  - Samurai
+  text: '<b>Tactical Reaction:</b> After a Terrain enters play from your hand: Draw a card.'
+  gold_cost: 8
+  force: 1
+  chi: 3
+  honor_requirement: 5
+  personal_honor: 3
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  story: '1999 Name a Personality: California - Ash Thomason'
+  printing_id: '3'
+  rarity: Fixed
+  artist: Kevin Wasden
+  flavor_text: <i>"I agree with Aoiko," Yobi added. "We cannot allow Otosan Uchi's grave to be defiled."</i>
+  collector_number: Lion 46
+- cardid: 309
+  title: Akodo's Grave
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: ':bow:: Produce 2 Gold. <br><b>Battle, :bow::</b> Destroy this Holding to destroy a target Terrain.'
+  gold_cost: 2
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '7'
+  rarity: Fixed
+  artist: Joachim Gmoser
+  flavor_text: <i>"Do not mourn that I die, Aoiko," Yobi whispered. "Mourn that Voitagi lives. Avenge
+    me."</i>
+  collector_number: Shadowlands 02
+- cardid: 335
+  title: Along the Coast at Midnight
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: This card's Gold Cost equals the number of unbowed Personalities you control. <br><b>Open:</b>
+    Give <b>Cavalry</b> to all of your Personalities and Followers.
+  gold_cost: '*'
+  focus: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '6'
+  rarity: Fixed
+  artist: Tony Moseley
+  flavor_text: <i>The Deathless set out as fast as it could, with Kitsu magic filling its sails.</i>
+  collector_number: Shadowlands 08
+- cardid: 438
+  title: Armor of Earth
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Armor
+  - Unique
+  - Earth
+  text: While you control an Earth Ring, Armor of Earth has an additional +2F/+1C.<br><b>Earth Repeatable
+    Reaction:</b> Before an action moves this Personality from a battlefield to which he assigned this
+    Attack Phase, negate the action's effects.
+  gold_cost: 8
+  focus: 3
+  force: '+1'
+  chi: '+2'
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Legacy
+  - Rain of Blood (Diamond)
+  errata_text: Removal of cost reduction trait via contemporary erratum.
+  printing_id: '3'
+  rarity: Fixed
+  artist: Bryan Heyboer
+  collector_number: Shadowlands 23
+- cardid: 614
+  title: Ashigaru Fort
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  text: <b>:bow::</b> Produce 2 Gold. <br><b>Open:</b> If it is not your turn, target a Personality. Straighten
+    his unit. Destroy this Holding.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Tony Moseley
+  collector_number: Lion 10
+- cardid: 622
+  title: Ashura
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Cavalry
+  - Ashura
+  - Nonhuman
+  - Shadowlands
+  text: After Ashura enters play, lose 5 Honor.<br>After Ashura is destroyed while at a battlefield, target
+    and destroy a Follower, or Personality without Followers, at that battlefield.<br><b>Battle:</b> Fear
+    4.
+  gold_cost: 10
+  force: 5
+  chi: 5
+  personal_honor: 0
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Thomas Manning
+  flavor_text: <i>Deathseeker's Shrine survived the night, and the Lion gave thanks for their good fortune.</i>
+  collector_number: Shadowlands 37
+- cardid: 730
+  title: Battlefield of Shallow Graves
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'Before the enemy leader gains Honor: Double the gain.<br>Before this battle''s resolution: Reduce
+    the Force of each Personality in the enemy army to half his Force at that time, rounded up.<br><b>Battle:</b>
+    If there are no Terrains at the current battlefield: Put this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '5'
+  rarity: Fixed
+  artist: Al Eremin
+  collector_number: Lion 48
+- cardid: 733
+  title: Bawaru no Oni
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: After Bawaru enters play, lose 4 Honor.<br>After battle resolution begins, if there are any unbowed
+    enemy Personalities at Bawaru's battlefield, straighten Bawaru.
+  gold_cost: 7
+  force: 4
+  chi: 4
+  personal_honor: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Thomas Manning
+  flavor_text: <i>"Here they come," Tadenori hissed.</i>
+  collector_number: Shadowlands 06
+- cardid: 977
+  title: Birth of the Sword
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, in turn order, starting with you, each player gains 2 Honor and may draw a card.
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Beth Trott
+  flavor_text: <i>"After Toturi Tsudao drove the Dark Lord from Otosan Uchi, the Lion destroyed what was
+    left. The Swords of Yotsu patrol the Imperial City now, fighting the shadowy things that remain."</i>
+  collector_number: Lion 08
+- cardid: 989
+  title: Black Heart of the Empire
+  types:
+  - Wind
+  decks:
+  - Pre-Game
+  text: For you, the Lobby ability is not Political, and it bows your target Shadowlands Personality instead
+    <i>(even if his Personal Honor is 0)</i>.<br>For the purposes of any player Lobbying, your Family
+    Honor is considered, before bonuses or penalties, to equal the total printed Force of all Personalities
+    you control if it is higher than each other player's. <br><b>Favor Repeatable Battle:</b> Discard
+    the Imperial Favor to target a Personality. Reduce the Force of each card in his unit to 0. Permanently
+    give him <b>Shadowlands</b>.
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Ben Peck
+  collector_number: Shadowlands 00
+- cardid: 996
+  title: Blackened Claws
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Shadowlands
+  text: 'Will only attach to a Shadowlands Personality without Blackened Claws.<br>May attach to a Personality
+    ignoring restrictions on the Personality.<br>This card will not be transferred.<br><b>Reaction:</b>
+    Any number of times per turn, but only once per duel, after this Personality enters a duel, bow this
+    card: Give two -1C <b>Corruption </b>tokens to the other Personality in the duel.'
+  gold_cost: 4
+  focus: 2
+  force: '+1'
+  chi: '+1'
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Ramos Perez
+  collector_number: Shadowlands 26
+- cardid: 1011
+  title: Blade of Secrets
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Weapon
+  text: 'After this card enters play: You may discard a Fate card; if you did, permanently set this card''s
+    Force and Chi bonuses to equal the discarded card''s Focus Value.'
+  gold_cost: 7
+  focus: 3
+  force: '+0'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Jon Hodgson
+  flavor_text: <i>The lowly bakemono scuttled back into the shadows, the greater part of the army defeated.</i>
+  collector_number: Shadowlands 41
+- cardid: 1086
+  title: Boastful Proclamation
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, if any other player controls a Personality, then at the start of your next turn, if this
+    Province still exists, permanently give it +3 strength and gain 3 Honor, and until then, after battle
+    resolution destroys this Province, give each Personality in the attacking army a +1F token and the
+    Attacker may draw a card.
+  is_unique: true
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  printing_id: '5'
+  rarity: Fixed
+  artist: Mark Symlie
+  collector_number: Lion 42
+- cardid: 1358
+  title: Chuda Masaru
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Bloodspeaker
+  - Shadowlands
+  - Shugenja
+  - Soul of Kitsu Gongson
+  text: After Masaru enters play, lose 3 Honor.
+  gold_cost: 7
+  force: 4
+  chi: 4
+  personal_honor: 0
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Christopher Appel
+  flavor_text: <i>"Continue with the ritual," Jin ordered. "The gateway to Jogoku may yet be closed, if
+    we are not diligent."</i>
+  collector_number: Shadowlands 44
+- cardid: 1497
+  title: Copper Mine
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Mine
+  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if you are a Lion Clan player.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  printing_id: '15'
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: <i>"Our Ancestors watch over us always," Shigetoshi said. "We cannot allow their deeds
+    to be forgotten."</i>
+  collector_number: Lion 03
+- cardid: 1511
+  title: Corrupted Dojo (WoC)
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Dojo
+  - Shadowlands
+  text: 'After this Holding enters play, lose 3 Honor.<br>:bow:: Produce 2 Gold and lose 2 Honor.<br>:bow::
+    When paying for a Personality, produce 3 Gold which may only pay for him and lose 2 Honor.'
+  gold_cost: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  notes: This is a distinct card from the Fire and Shadow card of the same name.
+  printing_id: '2'
+  rarity: Fixed
+  artist: Tony Moseley
+  collector_number: Shadowlands 05
+- cardid: 1515
+  title: Corrupted Jade Sliver
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Jade
+  - Shadowlands
+  text: '<b>Battle/Open:</b> Three times per turn: Give this Personality +1F/-2C and <b>Shadowlands</b>.<br><b>Battle/Open:</b>
+    Three times per turn, if this Personality has 2 or higher Force: Give him -2F/+2C and <b>Shadowlands</b>.'
+  gold_cost: 3
+  focus: 1
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Luis Vazquez
+  collector_number: Shadowlands 06
+- cardid: 1903
+  title: Deathseeker's Glory
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Bow and destroy your target performing honorable Samurai to destroy a target enemy
+    Personality with 0 Personal Honor.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ben Peck
+  collector_number: Lion 06
+- cardid: 2043
+  title: Diversionary Tactics
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target a Terrain: Destroy it.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '8'
+  rarity: Fixed
+  artist: Mark A.W. Jackson
+  collector_number: Shadowlands 46
+- cardid: 2191
+  title: Doom of the Dark Lord
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: Each player draws an additional card at the end of his turn. After each time a player must draw
+    a card but cannot because his deck is empty, destroy his rightmost Province.<br><b>Open:</b> Put this
+    Event into play.
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Legacy
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Ben Peck
+  collector_number: Lion 43
+- cardid: 2211
+  title: Dragon Dancers
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: ':bow:: Produce 2 Gold.<br>:bow:: Destroy this Holding to produce 4 Gold.'
+  gold_cost: 3
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '4'
+  rarity: Fixed
+  artist: David Martin
+  flavor_text: <i>"Draw bows and fire!" Tadenori commanded, pointing toward the ronin with his fan.</i>
+  collector_number: Lion 05
+- cardid: 2305
+  title: Elite Spearmen
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: <b>Battle:</b> Ranged 2 Attack <i>(Destroy a target enemy Follower or Personality without Followers
+    with 2 or lower Force)</i>.
+  gold_cost: 4
+  focus: 3
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  printing_id: '4'
+  rarity: Fixed
+  artist: Joachim Gmoser
+  collector_number: Lion 42
+- cardid: 2477
+  title: Far from the Empire
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until the game ends, after a player discards the Imperial Favor for a Favor aciton, permanently
+    raise by 3 the amount of Family Honor required for that player to win an Honor Victory.
+  is_unique: true
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Drew Baker
+  collector_number: Shadowlands 43
+- cardid: 2478
+  title: Farmlands
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  - Farm
+  text: <b>Limited, :g2::</b> Create a 1F <b>Follower </b>and attach it to your target Personality.
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  printing_id: '10'
+  rarity: Fixed
+  artist: Tony Moseley
+  flavor_text: <i>With a peasant's borrowed steed, Hyun galloped across the countryside.</i>
+  collector_number: Shadowlands 41
+- cardid: 2503
+  title: Feign Death
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Interrupt:</b> Target your Personality. After the action resolves, if it destroyed him, bring
+    him into play in your home, ignoring costs and Honor Requirement, then bow him, dishonor him, and
+    lose 2 Honor.
+  focus: 2
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  printing_id: '6'
+  rarity: Fixed
+  artist: Franz Vohwinkel
+  collector_number: Shadowlands 48
+- cardid: 2633
+  title: For the Empire
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Target a Samurai Personality and a Shadowlands Personality, one of which is your
+    unbowed performer: Your Personality duels the other. If the winner is a Shadowlands Samurai, his controller
+    chooses only one of the two following conditional effects to apply to him. If the Samurai wins, permanently
+    give him +1PH and his controller gains 3 Honor. If the Shadowlands Personality wins, permanently give
+    him +1F/+1C. Destroy the duel''s loser.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '4'
+  rarity: Fixed
+  artist: Michael Phillips
+  collector_number: Shadowlands 12
+- cardid: 2749
+  title: Fushiki no Oni
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Fire
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: After Fushiki enters play, lose 4 Honor.<br><b>Fire Battle:</b> Destroy a target Fortification
+    at this battlefield with Gold Cost lower than Fushiki's Force. Give Fushiki a +1F token.
+  gold_cost: 8
+  force: 5
+  chi: 4
+  personal_honor: 0
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  printing_id: '3'
+  rarity: Fixed
+  artist: William O'Connor
+  collector_number: Shadowlands 24
+- cardid: 2807
+  title: Gifts and Favors
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: 'After your Dynasty Phase ends, if this copy of this Holding is not in play and you put no Gold-producing
+    Holdings into play this turn, you may bow your Stronghold to search your Dynasty deck, then face-down
+    Provinces, for a card titled "Gifts and Favors" and put the first one you find into play <i>(bowed)</i>,
+    ignoring costs. If you find none, you are eliminated from the game.<br>:bow:: Produce 2 Gold.'
+  gold_cost: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '5'
+  rarity: Fixed
+  artist: Edward Fetterman
+  collector_number: Lion 32
+- cardid: 2835
+  title: Goblin Slingers
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Goblin
+  - Nonhuman
+  - Shadowlands
+  text: After this Follower enters play, lose 3 Honor.<br><b>Repeatable Battle, :bow::</b> Ranged 3 Attack.<br><b>Repeatable
+    Battle, :bow::</b> Ranged 2 Attack. Ranged 2 Attack that must target a card in the same unit as the
+    previous Ranged Attack's target.
+  gold_cost: 4
+  focus: 1
+  force: 1
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  collector_number: Shadowlands 42
+- cardid: 2923
+  title: Gunsen of Water
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Weapon
+  - Water
+  text: While you control a Water Ring, Gunsen of Water has an additional +2F/+1C.<br><b>Repeatable Battle,
+    :bow::</b> Move this unit to a battlefield or home. This action has <b>Absent</b> and <b>Remote</b>
+    if you move this unit to the current battlefield.
+  gold_cost: 9
+  focus: 3
+  force: '+1'
+  chi: '+2'
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Legacy
+  - Rain of Blood (Diamond)
+  errata_text: 'Errata''d via the internet: Removal of cost reduction trait via contemporary erratum;
+    erratum of ability to modernize via Oracle.'
+  printing_id: '3'
+  rarity: Fixed
+  artist: Britt Martin
+  collector_number: Lion 26
+- cardid: 2925
+  title: Gunso
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Gunso
+  text: All other Followers in this unit have +1F. After this Follower is destroyed, give -1F to all Followers
+    in its former unit.
+  gold_cost: 3
+  focus: 2
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  printing_id: '4'
+  rarity: Fixed
+  artist: Eric Polak
+  collector_number: Lion 07
+- cardid: 3269
+  title: Hideo Spawn
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Nonhuman
+  - Shadowlands
+  text: 'After this card enters play: Lose 3 Honor. <br>After this card is destroyed: Destroy another
+    card in the unit it was in immediately before its destruction.'
+  gold_cost: 5
+  focus: 2
+  force: 4
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  collector_number: Shadowlands 02
+- cardid: 4327
+  title: Kenson Gakka
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: Terrains you own in and out of play have a minimum Focus Value of 3.<br>Your non-Tactician Lion
+    Clan Samurai with 3 or higher Chi have <b>Tactician </b>while in armies and have their new Force bonuses
+    from the Rulebook Tactical Advantage action and Tactical actions negated.
+  province_strength: 7
+  starting_honor: 6
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Jon Hodgson
+  collector_number: Lion 00
+- cardid: 4360
+  title: Kirei
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Nonhuman
+  - Shadowlands
+  text: 'After this card enters play: Lose 2 Honor.<br><b>Fear Battle:</b> Fear 5.'
+  gold_cost: 2
+  focus: 2
+  force: 1
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Luis Vazquez
+  collector_number: Shadowlands 05
+- cardid: 4563
+  title: Kukanchi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Elemental Terror
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  - Void
+  text: After Kukanchi enters play, lose 4 Honor.<br>Cannot attach Followers or Items.<br><b>Repeatable
+    Battle/Open:</b> Discard a card to give Kukanchi +1F.<br><b>Repeatable Battle/Open:</b> Discard a
+    card to give Kukanchi +1C.
+  gold_cost: 4
+  force: 1
+  chi: 2
+  personal_honor: 0
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Lisa Hunt
+  collector_number: Shadowlands 46
+- cardid: 4626
+  title: Kyoso no Oni
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: After Kyoso enters play, lose 3 Honor and destroy one of your Holdings.<br>Will not attach Followers
+    or Items.<br><b>Battle, :bow::</b> Ranged 7 Attack.
+  gold_cost: 7
+  force: 5
+  chi: 5
+  personal_honor: 0
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  printing_id: '9'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  collector_number: Shadowlands 29
+- cardid: 4711
+  title: Lessons from Kuro
+  types:
+  - Item
+  decks:
+  - Fate
+  text: '<b>Limited:</b> If this Personality''s Chi is 4 or greater, bow him: Draw a card.'
+  gold_cost: 4
+  focus: 3
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Monte Moore
+  collector_number: Lion 41
+- cardid: 4785
+  title: Luring Tactics
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Tactical
+  text: '<b>Battle:</b> Choose your performing Tactician at the current battlefield and target a Personality
+    opposing him: Move them to an adjacent battlefield.'
+  gold_cost: 0
+  focus: 4
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Theodor Black
+  collector_number: Lion 11
+- cardid: 4890
+  title: Matsu Aoiko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Samurai
+  - Soul of Matsu Gohei
+  text: Aoiko has +2F while attacking.
+  gold_cost: 5
+  force: 1
+  chi: 3
+  honor_requirement: 6
+  personal_honor: 3
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>Fearless as she was, Aoiko still clutched her grandfather's trident just a bit closer
+    when she saw the bleak ruins of the Imperial City for the first time.</i>
+  collector_number: Lion 12
+- cardid: 4906
+  title: Matsu Ferishi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Samurai
+  text: <b>Political Battle:</b> Bow a target enemy non-Unique Follower.
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 5
+  personal_honor: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"We have searched for days, Ferishi, and found nothing," Aoiko said.<br>"Then we must
+    search harder."</i>
+  collector_number: Lion 11
+- cardid: 4929
+  title: Matsu Hyun
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Matsu Hyun • Experienced
+  clans:
+  - Lion
+  keywords:
+  - Unique
+  - Deathseeker
+  - Experienced
+  - Lion Clan
+  - Poet
+  - Samurai
+  text: <b>Repeatable Reaction, :bow::</b> Before one of your Tactician Personalities is destroyed by
+    another player's card's effect or by battle resolution, target him and negate the destruction.
+  gold_cost: 8
+  force: 2
+  chi: 4
+  honor_requirement: 10
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ben Peck
+  collector_number: Lion 16
+- cardid: 4938
+  title: Matsu Kenji
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Unique
+  - Lion Clan
+  - Samurai
+  - Taisa
+  text: Negate Fear effects upon cards in Kenji's army in units with Matsu Family Personalities <i>(including
+    this unit)</i>.
+  gold_cost: 10
+  force: 5
+  chi: 4
+  honor_requirement: 8
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Michael Kulta
+  flavor_text: <i>"Do not allow emotions to override your sense, Aoiko. Your soul is like a blade, and
+    must be kept sheathed lets it become rusted and dull."</i>
+  collector_number: Lion 15
+- cardid: 4946
+  title: Matsu Mabuchi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Samurai
+  - Soul of Matsu Turi
+  text: Favor and Lobby actions cannot target Mabuchi.
+  gold_cost: 8
+  force: 4
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Michael Kulta
+  flavor_text: <i>The demon was terrifyingly powerful, but he was no match for the Lion's finest samurai.</i>
+  collector_number: Lion 26
+- cardid: 4971
+  title: Matsu Reishiko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Lion Clan
+  - Samurai
+  text: After a Personality with less Chi than Reishiko moves into a defending army opposing her, the
+    Personality's controller discards a card.
+  gold_cost: 8
+  force: 4
+  chi: 4
+  honor_requirement: 5
+  personal_honor: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: William O'Connor
+  collector_number: Lion 19
+- cardid: 5497
+  title: Nairu no Oni
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: After Nairu enters play, lose 4 Honor.<br><b>Repeatable Battle, :bow::</b> Move another target
+    Oni Personality at any battlefield to another battlefield.
+  gold_cost: 6
+  force: 2
+  chi: 2
+  personal_honor: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Thomas Manning
+  flavor_text: <i>Wave after wave," Kenji said, firing another arrow. "Is there no end?"</i>
+  collector_number: Shadowlands 19
+- cardid: 5647
+  title: Oblivion's Gate
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Shadowlands
+  text: 'After this Holding enters play, lose 4 Honor.<br>:bow:: Produce 2 Gold.<br><b>Favor Repeatable
+    Battle, :bow::</b> You may discard the Imperial Favor. If this discarded the Favor or you control
+    Black Heart of the Empire, destroy a target Follower.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Tony Moseley
+  flavor_text: <i>"Death is no barrier to those who serve Jigoku. So long as our corruption stains the
+    earth, Fu Leng can restore his loyal servants."</i>
+  collector_number: Shadowlands 23
+- cardid: 5660
+  title: Obsidian Mine
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Mine
+  - Obsidian
+  - Shadowlands
+  text: 'After this Holding enters play, lose 3 Honor.<br>:bow:: Lose 3 Honor and produce 4 Gold.'
+  gold_cost: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '4'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: <i>"Here, in the place of Toturi's greatest victory, Voitagi. Here, we shall remake the
+    Empire." - Seppun Jin</i>
+  collector_number: Shadowlands 01
+- cardid: 5672
+  title: Officers' Council
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Bow your performing Personality who must be a Tactician unless you control the
+    Right Hand of the Emperor and target zero or more of your other Personalities up to the performer''s
+    Chi: Give them the ability, "<b>Battle:</b> Bow this Personality and target an enemy card without
+    unbowed attachments: Bow it."'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Llyn Hunter
+  collector_number: Lion 16
+- cardid: 5675
+  title: Ogre Bushi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Nonhuman
+  - Ogre
+  - Shadowlands
+  text: Cannot attach Armor or Followers.
+  gold_cost: 9
+  force: 6
+  chi: 4
+  personal_honor: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '10'
+  rarity: Fixed
+  artist: Jim Callahan
+  flavor_text: <i>The ogres lifted their clubs, circling Hyun warily. These beasts were no fools - strong,
+    intelligent, and deadly. The poet held her blade in both hands and prepared to die.</i>
+  collector_number: Shadowlands 10
+- cardid: 5698
+  title: Omoidasu
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: 'Attaches to a Lion Clan Personality paying 1 less Gold.<br><b>Political Reaction:</b> After a
+    duel ends that this Personality won, or after a battle resolution ends where this card is in your
+    current army and you destroyed a province and/or enemy army, bow this card: Either gain 2 Honor or
+    permanently give this Personality +1PH.'
+  gold_cost: 4
+  focus: 3
+  force: 2
+  chi: 0
+  honor_requirement: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: William O'Connor
+  collector_number: Lion 02
+- cardid: 5725
+  title: Oni Horde
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: 'Will only attach to an Oni.<br>May attach to a Personality ignoring restrictions on the Personality.<br>After
+    this card enters play: Lose 5 Honor. <br><b>Fear Battle:</b> Fear 4.'
+  gold_cost: 5
+  focus: 2
+  force: 3
+  chi: 0
+  honor_requirement: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '4'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  collector_number: Shadowlands 44
+- cardid: 5875
+  title: Parasitic Oni
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: 'After this card enters play: Lose 2 Honor.<br>After this card is destroyed: Destroy the Personality
+    it was attached to immediately before its destruction.'
+  gold_cost: 3
+  focus: 2
+  force: '+2'
+  chi: '+2'
+  honor_requirement: 0
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Thomas Manning
+  collector_number: Shadowlands 01
+- cardid: 5915
+  title: Peasant Vengeance
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Bow your performing Follower and target an enemy Personality without attachments:
+    Destroy him.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  printing_id: '6'
+  rarity: Fixed
+  artist: Mike Jackson
+  flavor_text: <i>Aoiko rushed to Yobi, but corrupted spearmen blocked her path.</i>
+  collector_number: Lion 17
+- cardid: 6066
+  title: Primal Rage
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: 'As a Focus Effect: If this Personality is Shadowlands or Nonhuman, set this card''s Focus Value
+    equal to the Personality''s base Force plus 2.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Kyri Komotou
+  flavor_text: <i>No oni could stand against Aoiko, until at last she faced Voitagi.</i>
+  collector_number: Shadowlands 09
+- cardid: 6084
+  title: Proposal of Peace
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until your second turn from now begins, negate all Honor gains from Proclaiming.
+  is_unique: true
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  printing_id: '9'
+  rarity: Fixed
+  artist: Anthony Hightower
+  flavor_text: <i>"Once this city is ours, Lord Iuchiban will oppose the Empire on both sides. Rokugan
+    will know no peace..."</i>
+  collector_number: Shadowlands 18
+- cardid: 6290
+  title: Retribution
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> After the end of an Attack Phase in which you were the Defender: Declare an
+    additional Attack Phase against that phase''s Attacker, in which neither player may invite allies
+    and you may only assign one Personality. Give the Personality and each Follower in his unit +1F after
+    he assigns.'
+  gold_cost: 0
+  focus: 4
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  notes: The Promotional version of this card is legal upon release
+  printing_id: '7'
+  rarity: Fixed
+  artist: Ed Cox
+  flavor_text: <i>Jin sensed a change. More samurai had arrived.</i>
+  collector_number: Lion 13
+- cardid: 6314
+  title: Rice Paddy
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Farm
+  text: <b>:bow::</b> Produce 2 Gold.<br><b>Battle, :bow::</b> Bow a target enemy attacking Follower.
+    Destroy this Holding.
+  gold_cost: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Christopher Appel
+  flavor_text: <i>The Lion archers fired true, past the fleeing ronin and into the mighty demon that hounded
+    them.</i>
+  collector_number: Lion 22
+- cardid: 6324
+  title: Right Hand of the Emperor
+  types:
+  - Wind
+  decks:
+  - Pre-Game
+  text: <b>Favor Political Repeatable Battle:</b> If you control an opposed Personality at the current
+    battlefield, discard the Imperial Favor to move your target Personality at any location there.<br><b>Political
+    Limited:</b> Target your Personality, and target zero or more face-up non-Personality cards in your
+    Provinces. Discard a card to put them at the bottom of your deck and refill the Provinces face-up.
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Christopher Appel
+  collector_number: Lion 00
+- cardid: 6334
+  title: Ring of Earth
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Earth
+  text: Play after a battle resolves at your Province, if it was not destroyed and any enemy units were
+    ever at its battlefield. You may discard this Ring from your hand to use its ability without cost.<br><b>Earth
+    Repeatable Interrupt, :bow::</b> The Battle action cannot move Personalities.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '16'
+  rarity: Fixed
+  artist: Randy Asplund-Faith
+  collector_number: Lion 23
+- cardid: 6339
+  title: Ring of Water
+  types:
+  - Ring
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Water
+  text: Play after a battle resolves in which you played a Terrain, destroyed a Terrain, and destroyed
+    any cards or provinces during resolution. You may discard this Ring from your hand to use its ability
+    without cost.<br><b>Water Absent Repeatable Battle, :bow::</b> Move your target Personality home or,
+    if he would be opposed, move your target Personality at any location to the current battlefield.
+  focus: 4
+  is_unique: true
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '16'
+  rarity: Fixed
+  artist: Randy Asplund-Faith
+  collector_number: Lion 08
+- cardid: 6408
+  title: Run For Your Lives!
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until your turn two turns from now begins, all Fear actions have the additional effect,
+    "If this action's Fear strength is greater than or equal to the target's Personality's Force, move
+    the unit home."
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: <i>"To me!" Hyun shouted to the peasants.</i>
+  collector_number: Shadowlands 13
+- cardid: 6464
+  title: Sanctified Temple
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Temple
+  text: ':bow:: Produce 2 Gold.<br><b>Repeatable Limited, :bow:, :g2::</b> Gain 2 Honor.'
+  gold_cost: 4
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+  printing_id: '12'
+  rarity: Fixed
+  artist: Pia Guerra
+  flavor_text: <i>"All the same, Tadenori, they shall be defeated," Aoiko replied.</i>
+  collector_number: Lion 20
+- cardid: 6602
+  title: Seppun Jin
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Shadowlands
+  - Shugenja
+  - Soul of Kuni Yori Experienced 3
+  - Undead
+  text: '<b>Maho Limited:</b> Any number of times per turn, bow Jin, discard a card, and target a dead
+    Personality: If Jin''s Chi and the discard''s Focus Value are both greater than or equal to the Personality''s
+    Chi, bring the Personality into play <i>(under your control)</i>, ignoring costs and restrictions.
+    Permanently give him <b>Shadowlands • Undead</b>. Lose 3 Honor.'
+  gold_cost: 10
+  force: 3
+  chi: 4
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Jim Pavelec
+  collector_number: Shadowlands 04
+- cardid: 6647
+  title: Shackled Oni
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Oni
+  - Retainer
+  - Shadowlands
+  text: 'After this Holding enters play, lose 3 Honor.<br>:bow:: Produce 3 Gold.<br><b>Battle/Open, :bow::</b>
+    Destroy this Holding to give a target Shadowlands card +2F.'
+  gold_cost: 4
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  notes: The Dark Allies version of this card was misprinted without the Gold kanji.
+  printing_id: '3'
+  rarity: Fixed
+  artist: Jim Pavelec
+  collector_number: Shadowlands 25
+- cardid: 6670
+  title: Shadowlands Bastion
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Shadowlands
+  text: 'After this Holding enters play, lose 4 Honor.<br>:bow:: Produce 2 Gold.<br>:bow:: When paying
+    for a Shadowlands card, produce 4 Gold which may only pay for that card.'
+  gold_cost: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Tony Moseley
+  flavor_text: <i>"Here, with blood and Tainted jade, we shall reopen doorway Fu Leng created. We shall
+    create a new Festering Pit."</i>
+  collector_number: Shadowlands 26
+- cardid: 6673
+  title: Shadowlands Marsh
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  - Shadowlands
+  text: 'After this card enters play: Lose 10 Honor.<br>Non-Shadowlands Personalities and Followers have
+    -2F while at this province''s battlefield.'
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '6'
+  rarity: Fixed
+  artist: Michael Phillips
+  collector_number: Shadowlands 42
+- cardid: 7007
+  title: Shireikan
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> Before this Personality is destroyed: Create a 1F/1C/1PH <b>Bushi</b> Personality
+    with your Clan alignment at this card''s location. Transfer all cards from this Personality to the
+    Bushi. Remove this card from the game.'
+  gold_cost: 3
+  focus: 3
+  force: 2
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '4'
+  rarity: Fixed
+  artist: Monte Moore
+  collector_number: Lion 44
+- cardid: 7220
+  title: Shrine to Daikoku
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  - Temple
+  text: 'After this Holding enters play, target one of your bowed Gold-producing Holdings and, while this
+    Holding remains in play, the target has +1 Gold Production.<br>:bow:: Produce 2 Gold.'
+  gold_cost: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Tony Moseley
+  collector_number: Lion 09
+- cardid: 7222
+  title: Shrine to Fukurokujin
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  - Temple
+  text: ':bow:: Produce 2 Gold.<br><b>Limited, :bow::</b> Choose your performing Personality. Show the
+    top card of your Fate deck. If its Focus Value is greater than or equal to your Personality''s printed
+    Chi, discard the card. Otherwise, draw it.'
+  gold_cost: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  printing_id: '4'
+  rarity: Fixed
+  artist: Tony Moseley
+  collector_number: Lion 02
+- cardid: 7311
+  title: Sneak Attack
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Engage:</b> The Attacker has the first opportunity to take a Battle action or pass in this
+    battle.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '14'
+  rarity: Fixed
+  artist: John Cadice
+  flavor_text: <i>"To Deathseeker's Shrine!" Hyun shouted.</i>
+  collector_number: Shadowlands 22
+- cardid: 7398
+  title: Spearhead
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> After a battle resolution ends, target your unit at that battlefield: Straighten
+    it. It will not bow from the battle''s resolution.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  printing_id: '7'
+  rarity: Fixed
+  artist: beet
+  flavor_text: <i>"Yobi!" Aoiko shouted, pushing the peasants aside and lunging at Voitagi with her trident.</i>
+  collector_number: Lion 35
+- cardid: 7399
+  title: Spearmen
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: <b>Battle, :bow::</b> Ranged 2 Attack <i>(Destroy a target enemy Follower, or Personality without
+    Followers, with 2 or lower Force)</i>.
+  gold_cost: 3
+  focus: 2
+  force: 2
+  chi: 0
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  notes: Some variants of the Battle of Beiden Pass version of this card were printed with an alternate
+    flavor text.
+  printing_id: '14'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>Aoiko frowned as she saw a band of Yotsu swordsmen flee from the oni. She turned to
+    Yobi but his face was grim - there was nothing they could do to save them.</i>
+  collector_number: Lion 21
+- cardid: 7476
+  title: Steadfast Bushi
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Bushi
+  text: 'After the resolution of an action that straightened this Personality: Straighten this card.'
+  gold_cost: 3
+  focus: 3
+  force: 2
+  chi: 0
+  honor_requirement: 1
+  legality:
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Anthony Grabski
+  flavor_text: <i>The beast followed Hyun into the depths, and she collapsed the doorway on its massive
+    shoulders. With the creature immobile, she turned and raised her blade."</i>
+  collector_number: Lion 19
+- cardid: 7546
+  title: Strength of Purity
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing Personality with 3 or higher Personal Honor: Give him +3F.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  printing_id: '11'
+  rarity: Fixed
+  artist: Pia Guerra
+  flavor_text: <i>Aoiko did not volunteer to accompany Yobi - there was no need to prove sincerity with
+    words. All knew she would wish to be the first to see the enemy.</i>
+  collector_number: Lion 01
+- cardid: 7658
+  title: Superior Strategist
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Tactical
+  text: '<b>Battle:</b> Choose your performing Tactician: Search your Fate deck for a Battle Strategy.
+    You may take an additional Battle action to use one of its Battle abilities; if you do not, discard
+    it.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  printing_id: '6'
+  rarity: Fixed
+  artist: Ellym Sirac
+  collector_number: Lion 46
+- cardid: 7900
+  title: Temples of the New Tao
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  - Temple
+  text: Only Monk and Samurai Personalities may assign to defending armies at this Province's battlefield.<br>Monks
+    and Samurai have +3F while defending at this Province's battlefield.
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '5'
+  rarity: Fixed
+  artist: David Deitrick
+  collector_number: Lion 01
+- cardid: 7929
+  title: Test of Might
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing unbowed Personality and target an enemy Personality: Your
+    Personality duels the target. Both Personalities use their Force as their duel stat. The winner''s
+    controller gains 3 Honor. Bow the loser.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '8'
+  rarity: Fixed
+  artist: Eric Polak
+  collector_number: Shadowlands 07
+- cardid: 8068
+  title: The Face of Fear
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> After you announce a Fear action from one of your cards: The effects of the
+    action affect Personalities in the same way as they affect Followers.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '5'
+  rarity: Fixed
+  artist: Tim Gerstmar
+  collector_number: Shadowlands 03
+- cardid: 8348
+  title: The Spawning Ground
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Shadowlands
+  text: You do not gain or lose Honor; this is not negation.<br>You may not take Political actions or
+    actions that cause other players unconditional Honor losses.<br>Negate all Fear effects upon your
+    cards.<br>Ogre, Oni, and Troll Personalities you own, in and out of play, have +1F/+1C.
+  province_strength: 7
+  starting_honor: -19
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '6'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  collector_number: Shadowlands 00
+- cardid: 8495
+  title: Tireless Assault
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target your unit in your home: Straighten it and move it to the current battlefield.'
+  gold_cost: 2
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Jonathan Hunt
+  collector_number: Lion 24
+- cardid: 8795
+  title: Tsuno Blade
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Weapon
+  - Shadowlands
+  text: Will only attach to a Personality with 4 or higher Force or a Tsuno.<br><b>Repeatable Battle,
+    :bow::</b> Permanently remove <b>Cavalry</b> from a target enemy card.
+  gold_cost: 3
+  focus: 2
+  force: '+2'
+  chi: '+1'
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Jeremy Jarvis
+  collector_number: Shadowlands 17
+- cardid: 9145
+  title: Veteran Bushi
+  types:
+  - Follower
+  decks:
+  - Fate
+  text: This card has +1F while this Personality is a Tactician.
+  gold_cost: 4
+  focus: 3
+  force: 2
+  chi: 0
+  honor_requirement: 2
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Chris Seaman
+  collector_number: Lion 09
+- cardid: 9164
+  title: Violence Behind Courtliness City
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  - City
+  - Imperial
+  text: <b>Reaction:</b> After one or more Personalities assign to a attack at this Province's battlefield,
+    straighten your target Personality's unit.
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  story: 2003 Heart of the Empire - Paul Heaver
+  printing_id: '3'
+  rarity: Fixed
+  artist: Christopher Appel
+  flavor_text: <i>"Hyun, ride for help as swiftly as you are able. Nimuro must know what has happened
+    here."</i>
+  collector_number: Lion 38
+- cardid: 9182
+  title: Voitagi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Samurai
+  - Shadowlands
+  - Soul of Uragirimono
+  - Undead
+  text: After Voitagi enters play, lose 3 Honor.<br><b>Battle:</b> Fear 3 <i>(Bow a target enemy Follower
+    or Personality without Followers with 3 or lower Force)</i>.
+  gold_cost: 3
+  force: 3
+  chi: 2
+  personal_honor: 0
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Four Winds (Gold)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Sean Murray
+  flavor_text: <i>"Not all those who once followed Toturi are heroes." - Seppun Jin</i>
+  collector_number: Shadowlands 03
+- cardid: 9183
+  title: Voitagi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Voitagi • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Experienced
+  - Samurai
+  - Shadowlands
+  - Undead
+  text: 'After Voitagi enters play: Lose 5 Honor.<br>Voitagi has +2F/+2C while opposed by a Samurai or
+    facing one in a duel.<br><b>Fear Battle:</b> Fear 4.'
+  gold_cost: 7
+  force: 4
+  chi: 3
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Ben Peck
+  collector_number: Shadowlands 07
+- cardid: 9184
+  title: Volcanic Fields
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'Before this battle''s resolution: Each player, starting with you, targets and destroys one Follower
+    or Personality without Followers at this battlefield controlled by the player to his left.<br><b>Battle:</b>
+    If there are no Terrains at the current battlefield: Put this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Four Winds (Gold)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Al Eremin
+  collector_number: Lion 10
+- cardid: 9209
+  title: Wanton Destruction
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing unbowed Shadowlands Personality and target two enemy Personalities:
+    Your Personality duels each target, one at a time, in the order of your choice. All Personalities
+    in both duels use Force as their duel stat. Give your Personality -4F after the first duel ends. Destroy
+    both duels'' losers.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ben Peck
+  collector_number: Shadowlands 11
+- cardid: 9323
+  title: White Shore Plain
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'While at the current battlefield, each of your Tacticians has the ability, "<b>Tactical Reaction:</b>
+    Before this battle''s resolution: Give this Tactician a Force bonus equal to his Chi."<br><b>Battle:</b>
+    If there are no Terrains at the current battlefield: Put this card into play there.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Conquest (Emperor)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  printing_id: '6'
+  rarity: Fixed
+  artist: Pamela Shanteau
+  flavor_text: <i>"Fortify that shrine," Tadenori commanded. "This will be our headquarters."</i>
+  collector_number: Lion 05
+- cardid: 9672
+  title: Yosuchi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Air
+  - Elemental Terror
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  - Shugenja
+  text: 'After Yosuchi enters play: Lose 4 Honor.<br>Will not attach Followers or Items.<br><b>Battle/Open:</b>
+    Twice per turn: Give Yosuchi +1F or +1C.'
+  gold_cost: 8
+  force: 3
+  chi: 3
+  personal_honor: 0
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '3'
+  rarity: Fixed
+  artist: Thomas Manning
+  collector_number: Shadowlands 48

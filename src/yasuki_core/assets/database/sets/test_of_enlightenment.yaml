@@ -1,2629 +1,3427 @@
 set: Test of Enlightenment
 cards:
-  - title: A Quest Abandoned
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, discard
-      any Rings you control, you permanently will not put Rings into play, and, beginning with the player on your left and proceeding
-      in turn order, each player may destroy his rightmost Province. If any player does not, he permanently may not win an Enlightenment
-      Victory.
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Ed Cox
-    flavor: '"Enough games. The throne cannot remain unprotected."'
-    number: 1
-
-  - title: Curfew Declared
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, it enters
-      play in your home.Limited: Discard this Event from play to name "Follower", "Item", or "Spell". Bow all cards of the named
-      type. Cards of that type will not straighten until your next turn begins.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: John Donahue
-    flavor: '"All loyal citizens shall remain in their homes after sunset, for their own protection." - Magistrate''s Decree'
-    number: 2
-
-  - title: Festival of Inari
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Festival
-    text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
-      your next turn ends, Unaligned Human Personalities have +2F; also, Farm, Ashigaru, and Peasant cards in and out of play
-      have their Gold Costs reduced to 1, and have the trait, "w: Produce 1 Gold."'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Malcolm McClinton
-    flavor: '"War or peace, all that matters to the peasants is that they have a harvest that pays taxes and feeds their children."'
-    number: 3
-
-  - title: Seeking Enlightenment
-    type: Event
-    deck: Dynasty
-    keywords:
-    - Unique
-    text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in one of them, until
-      the game ends, all players have the ability, "Limited: Bow your performing Personality to put a Ring in your discard pile
-      into your hand."'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Edwin David
-    flavor: '"You are not who you claim to be, human," the Naga said, "but your quest is pure."'
-    number: 4
-
-  - title: Divining Pool
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Singular
-    gold_cost: 2
-    text: 'w: Produce 2 Gold.Battle/Open: Turn a face-down card in a Province or in play face-up. (This does not target.)'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Steve Argyle
-    flavor: '"All the secrets of this world and beyond," Ruri whispered, "if only one has the courage to look."'
-    number: 6
-
-  - title: Eager Students
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Retainer
-    gold_cost: 2
-    text: 'w: Produce 2 Gold.Battle/Open: Target two Personalities controlled by the same player. Transfer one or more attachments
-      from one Personality to the other. Straighten each that transferred. If you transferred another player''s cards, destroy
-      this Holding.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Malcolm McClinton
-    flavor: '"As eager to please as they are to learn. They scurry about like helpful little rabbits!" - Doji Seishiro'
-    number: 7
-
-  - title: Monastery Classroom
-    type: Holding
-    deck: Dynasty
-    gold_cost: 2
-    text: 'w: Produce 2 Gold.w: When paying for an Enlightened Personality, produce 3 Gold which may only pay for him.Battle/Open,
-      w: Raise the Chi and Personal Honor of a target Enlightened Personality to 5.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: John Donahue
-    flavor: '"Is Enlightenment hidden atop some remote mountain? Or is it merely hiding in plain sight, where none of us look
-      anymore?" - The Mystic'
-    number: 8
-
-  - title: Mystic Waterfall
-    type: Holding
-    deck: Dynasty
-    gold_cost: 2
-    text: 'w: Produce 2 Gold.w: When paying for an Enlightened Personality, produce 4 Gold which may only pay for him.Tireless
-      Reaction: After your Enlightened Personality is targeted by another player''s action, draw a card.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Edwin David
-    flavor: '"Would that I had such freedom." - The Wanderer'
-    number: 9
-
-  - title: Sumotori Arena
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Singular
-    gold_cost: 3
-    text: 'Limited, w: Bow your target performing Human Personality to have him challenge another player''s target Personality.
-      He may refuse; if he does, dishonor him and his controller loses 2 Honor. Bow the loser. The winner gains 4 Honor.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Chuck Lukacs
-    flavor: In such uncertain times, diversion for the masses is extremely important.
-    number: 10
-
-  - title: Tuftuf Sake House
-    type: Holding
-    deck: Dynasty
-    keywords:
-    - Sake House
-    gold_cost: 2
-    text: 'After this Holding enters play, lose 3 Honor.w: Produce 3 Gold and lose 1 Honor.w: When paying for a non-Shadowlands
-      Human Personality, produce 4 Gold which may only pay for them; after they enter play, dishonor them, permanently give
-      them Shadowlands, and lose 1 Honor.Battle/Open: Give Cavalry to a target Shadowlands Human Personality and each of their
-      Followers.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Drew Baker
-    flavor: '"Black Water Sake is the finest in all the land!"'
-    number: 11
-
-  - title: Akifumi
-    type: Personality
-    clan: Brotherhood of Shinsei,Unaligned
-    deck: Dynasty
-    keywords:
-    - Ashigaru
-    - Monk
-    force: 0
-    chi: 2
-    gold_cost: 3
-    personal_honor: 2
-    text: 'Limited: Target a Personality. Give him Enlightened, or remove Enlightened from him.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Amandine LaBarre
-    flavor: '"I have seen my share of fools, and my share of sages. If it is wisdom you seek, I shall tell you what little I
-      know."'
-    number: 12
-
-  - title: Hida Nari
-    extended_title: Hida Nari • Experienced
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Bushi
-    - Crab Clan
-    - Experienced
-    force: 6
-    chi: 2
-    gold_cost: 8
-    personal_honor: 2
-    text: 'Nari may not be targeted with Elemental actions or actions with an element keyword.Repeatable Battle, : Target a
-      Personality in Nari''s army. Equip a Follower to him from your discard pile.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Steve Ellis
-    flavor: '"Is this all there is for me? Is violence my only destiny?"'
-    number: 13
-
-  - title: Hida Sosuke
-    extended_title: Hida Sosuke • Experienced
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Yu 5
-    - Bushi
-    - Crab Clan
-    - Experienced
-    - Hero
-    force: 5
-    chi: 3
-    gold_cost: 8
-    personal_honor: 1
-    text: 'Battle: Take an additional action to play a Strategy from your discard pile for one of its Heroic Battle abilities.
-      If you control any Rings, the action may target a Personality ignoring its restrictions. After it resolves, remove the
-      Strategy from the game.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Paul Heaver
-    rarity: Fixed
-    artist: Heather V. Kreiter
-    flavor: '"The elements speak to me... of victory!" he laughed.'
-    number: 14
-
-  - title: Hida Sozen
-    extended_title: Hida Sozen • Experienced
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Crab Clan
-    - Experienced
-    - Hero
-    - Samurai
-    force: 5
-    chi: 4
-    gold_cost: 9
-    honor_requirement: 0
-    personal_honor: 2
-    text: Negate Sozen's destruction from other players' actions.
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    story: 2006 Kotei Winner - Jon Oakes
-    rarity: Fixed
-    artist: Nate Barnes
-    flavor: '"He left the Dragon because Enlightenment did not interest him. The irony was not lost upon him." - Kaiu Sugimoto'
-    number: 15
-
-  - title: Hiruma Oda
-    extended_title: Hiruma Oda • Experienced
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Crab Clan
-    - Experienced
-    - Samurai
-    force: 6
-    chi: 3
-    gold_cost: 8
-    honor_requirement: 0
-    personal_honor: 2
-    text: 'After Oda enters play: You may search your hand, then deck, then discard pile for the Ring of Earth and put it into
-      play.It does not count for Enlightenment while in play.Followers in Oda''s army have the ability, "Reaction: Before this
-      card bows or is destroyed to pay a cost: Ignore that cost."'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Andreas Stavropoulos
-    rarity: Fixed
-    artist: Ben Peck
-    number: 16
-
-  - title: Kaiu Haku
-    extended_title: Kaiu Haku • Experienced
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Battlemaster
-    - Crab Clan
-    - Experienced
-    - Samurai
-    force: 6
-    chi: 3
-    gold_cost: 9
-    personal_honor: 1
-    text: 'After Haku overlays, permanently copy to him all traits from the card he overlayed.Limited: Search your deck, then
-      discard pile, for a Follower, show it, put it in your hand, and discard a Follower from your hand.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Miguel Coimbra
-    flavor: '"Enlightenment means nothing. Duty is all I need."'
-    number: 17
-
-  - title: Kuni Okichi
-    extended_title: Kuni Okichi • Experienced
-    type: Personality
-    clan: Crab
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Yu 3
-    - Bloodspeaker
-    - Crab Clan
-    - Experienced
-    - Shugenja
-    force: 4
-    chi: 3
-    gold_cost: 8
-    personal_honor: 1
-    text: 'Battle: Target an enemy Follower or Personality without Followers, or if you are a Crab Clan player and have a Ring
-      in play or choose to discard one from your hand, target any enemy Personality: Destroy the target.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Lars Bodach
-    rarity: Fixed
-    artist: Ben Peck
-    flavor: '"He found secrets in the shadows, but what else?"'
-    number: 18
-
-  - title: Asahina Yoshino
-    extended_title: Asahina Yoshino • Experienced
-    type: Personality
-    clan: Crane
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Air
-    - Crane Clan
-    - Experienced
-    - Shugenja
-    force: 1
-    chi: 4
-    gold_cost: 9
-    honor_requirement: 5
-    personal_honor: 3
-    text: 'Reaction: After your Action Phase ends, target two non-Holding, non-Stronghold cards: Straighten them.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - David Winner
-    rarity: Fixed
-    artist: Jason Engle
-    flavor: '"There is more to Enlightenment than temples and contemplation. The world cannot be understood at a distance!"'
-    number: 19
-
-  - title: Daidoji Setsuko
-    extended_title: Daidoji Setsuko • Experienced
-    type: Personality
-    clan: Crane
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Crane Clan
-    - Experienced
-    - Harrier
-    - Samurai
-    force: 4
-    chi: 4
-    gold_cost: 10
-    honor_requirement: 0
-    personal_honor: 3
-    text: 'Battle: Bow your target performing Courtier at any location, or target your Ring, to move Setsuko to a battlefield
-      where there are any enemy units. This ability has Absent and Remote if you move her to, or the performing Courtier is
-      at, the current battlefield. You may take an additional Battle action.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Tuomas Poikela
-    rarity: Fixed
-    artist: Chris Seaman
-    flavor: '"Certainty is truth. Purity of purpose is purity of spirit."'
-    number: 21
-
-  - title: Doji Saori
-    extended_title: Doji Saori • Experienced
-    type: Personality
-    clan: Crane
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Enlightened
-    - Unique
-    - Courtier
-    - Crane Clan
-    - Experienced
-    - Samurai
-    force: 2
-    chi: 4
-    gold_cost: 8
-    personal_honor: 2
-    text: 'Elemental Reaction: After Saori wins a duel: Destroy the duel''s loser. Search your discard pile for a Dark Virtue
-      Strategy, and put it in your hand.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - LeAnn Dennis
-    rarity: Fixed
-    artist: Drew Baker
-    flavor: '"Those who think duels are a method to ''honorably resolve disputes'' are fools. Duels are the means to eliminate
-      otherwise inconvenient opposition."'
-    number: 22
-
-  - title: Kakita Funaki
-    extended_title: Kakita Funaki • Experienced
-    type: Personality
-    clan: Crane
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Enlightened
-    - Unique
-    - Courtier
-    - Crane Clan
-    - Experienced
-    - Samurai
-    force: 3
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 6
-    personal_honor: 3
-    text: 'Elemental Political Limited: Another player''s target Personality may challenge Funaki. If he does not, remove all
-      text in his text box except keywords until your next turn begins; you may bow a Ring you control to make this effect''s
-      duration permanent instead. Destroy the loser.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Christian Zoli
-    rarity: Fixed
-    artist: Ed Cox
-    number: 24
-
-  - title: Doji Seo
-    extended_title: Doji Seo • Experienced
-    type: Personality
-    clan: Crane
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Enlightened
-    - Unique
-    - Crane Clan
-    - Experienced
-    - Samurai
-    force: 5
-    chi: 4
-    gold_cost: 10
-    honor_requirement: 6
-    personal_honor: 3
-    text: 'Challenges Seo issues while she is in an army will not be refused.Battle: Target a Personality, who may be at another
-      battlefield if you bow or discard a Ring you own: Seo duels him. Destroy the duel''s loser.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Alexander Magoulas
-    rarity: Fixed
-    artist: Edwin David
-    number: 25
-
-  - title: Hitomi Kazu
-    extended_title: Hitomi Kazu • Experienced
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Dragon Clan
-    - Experienced
-    - Monk
-    force: 2
-    chi: 5
-    gold_cost: 8
-    honor_requirement: 4
-    personal_honor: 2
-    text: 'Elemental Reaction: After Kazu assigns, target another Personality. Give Kazu +3F/-3C. Give the target''s lower printed
-      stat between Force and Chi a bonus equal to the difference between their printed values, and give his other stat an equal
-      penalty. If you control a Ring, gain 2 Honor.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Howard Hooven
-    rarity: Fixed
-    artist: William O'Connor
-    flavor: '"He claims Lady Moon has opened his eyes. All I know is that he is more dangerous than ever." - Daidoji Kikaze'
-    number: 25
-
-  - title: Hoshi Masote
-    extended_title: Hoshi Masote • Experienced
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Enlightened
-    - Unique
-    - Dragon Clan
-    - Experienced
-    - Monk
-    - Tattooed
-    force: 5
-    chi: 4
-    gold_cost: 9
-    personal_honor: 2
-    text: During the first duel each turn involving Masote, other players will not gain Honor, the duel's loser is destroyed,
-      and other players may not take Reactions that trigger if their Personality wins the duel.
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - John Seals
-    rarity: Fixed
-    artist: Edwin David
-    flavor: '"What happens when a man gains the only thing he desires?" - Mirumoto Mareshi'
-    number: 26
-
-  - title: Mirumoto Bokkai
-    extended_title: Mirumoto Bokkai • Experienced
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Enlightened
-    - Unique
-    - Dragon Clan
-    - Experienced
-    - Samurai
-    force: 4
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 0
-    personal_honor: 3
-    text: 'Reaction: After Bokkai wins a duel during a battle, target a Personality in your discard pile or attached to one
-      of your Provinces. Bring him into play at the current battlefield, ignoring costs. Remove the Personality from the game
-      after the battle ends.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Brandon Flake
-    rarity: Fixed
-    artist: Anthony Francisco
-    number: 27
-
-  - title: Mirumoto Gonkuro
-    extended_title: Mirumoto Gonkuro • Experienced
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Enlightened
-    - Unique
-    - Dragon Clan
-    - Experienced
-    - Samurai
-    force: 4
-    chi: 4
-    gold_cost: 7
-    personal_honor: 3
-    text: 'Limited: Put the top card of your Fate deck under your Stronghold.Limited: Straighten a Ring.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Steve Fazio
-    rarity: Fixed
-    artist: Malcolm McClinton
-    flavor: Gonkuro charged at the Crane line, bellowing a war cry and laughing. He was outnumbered six to one, and yet he returned
-      alone.
-    number: 28
-
-  - title: Mirumoto Hakahime
-    extended_title: Mirumoto Hakahime • Experienced
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Dragon Clan
-    - Experienced
-    - Samurai
-    force: 4
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 5
-    personal_honor: 3
-    text: 'Reaction: Before removing a Personality from the game after a battle ends, attach that personality face-down to one
-      of your Provinces instead.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Jesus Mera
-    rarity: Fixed
-    artist: Mark Poole
-    flavor: '"This ''Wanderer'' is to be allowed to travel anywhere he wishes in Dragon lands, without restraint. How odd."'
-    number: 29
-
-  - title: Togashi Nyima
-    extended_title: Togashi Nyima • Experienced
-    type: Personality
-    clan: Dragon
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Dragon Clan
-    - Experienced
-    - Monk
-    - Tattooed
-    force: 4
-    chi: 3
-    gold_cost: 7
-    personal_honor: 1
-    text: 'Reaction: After the end of an Attack Phase in which you were the Defender: Put a Ring in your discard pile into your
-      hand. Declare an additional Attack Phase against that phase''s Attacker, in which neither player may invite allies and
-      you may only assign Nyima.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Michael Habel
-    rarity: Fixed
-    artist: Joachim Gmoser
-    flavor: '"Rage and brutality are weaknesses."'
-    number: 30
-
-  - title: Akodo Bakin
-    extended_title: Akodo Bakin • Experienced
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Tactician
-    - Unique
-    - Experienced
-    - Lion Clan
-    - Samurai
-    force: 3
-    chi: 2
-    gold_cost: 7
-    honor_requirement: 4
-    personal_honor: 3
-    text: 'Elemental Battle: Bow a target enemy Personality''s unit. You may discard a Ring you own to destroy all attachments
-      in the unit.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Chris Fossum
-    rarity: Fixed
-    artist: Michael Kaluta
-    flavor: '"We are more than stones on a board. Each life has meaning and purpose."'
-    number: 32
-
-  - title: Akodo Kuemon
-    extended_title: Akodo Kuemon • Experienced
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Tactician
-    - Unique
-    - Experienced
-    - Lion Clan
-    - Samurai
-    force: 3
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 0
-    personal_honor: 3
-    text: 'Reaction: After an action that moved a unit to the current battlefield resolves, bow or straighten the unit''s Personality.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Joachim Gmoser
-    flavor: '"He longs to seek Enlightenment, but knows that his duty must come first. He is the essence of all that is Akodo."
-      - Akodo Setai'
-    number: 33
-
-  - title: Akodo Natsu
-    extended_title: Akodo Natsu • Experienced
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Tactician
-    - Unique
-    - Experienced
-    - Lion Clan
-    - Samurai
-    force: 3
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 5
-    personal_honor: 3
-    text: 'Reaction: After engaging, the Attacker has the first opportunity to take a Battle action or pass during this battle.
-      Play proceeds in turn order from him after that.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Kevin Wasden
-    flavor: '"These false paths will lead to ruin for all who seek them. Better to die a warrior''s death than a fool''s."'
-    number: 34
-
-  - title: Akodo Rokuro
-    extended_title: Akodo Rokuro • Experienced
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Tactician
-    - Unique
-    - Experienced
-    - Lion Clan
-    - Samurai
-    force: 3
-    chi: 3
-    gold_cost: 7
-    honor_requirement: 0
-    personal_honor: 3
-    text: 'Reaction: Before a Lion Clan Personality bows: Negate the bowing. If the bowing is a cost, ignore it.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Amandine LaBarre
-    flavor: '"Enlightenment is the business of monks and priests!" he shouted. "We are soldiers! We need nothing but an enemy!"'
-    number: 35
-
-  - title: Ikoma Kosaku
-    extended_title: Ikoma Kosaku • Experienced
-    type: Personality
-    clan: Lion
-    deck: Dynasty
-    keywords:
-    - Tactician
-    - Unique
-    - Experienced
-    - Lion Clan
-    - Samurai
-    force: 4
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 6
-    personal_honor: 3
-    text: 'Reaction, : Once per battle, after Kosaku is assigned or moves to a battlefield, Recruit a target face-up Personality
-      in one of your Provinces into play in Kosaku''s army, paying less Gold equal to the number of Lion Clan Personalities
-      in Kosaku''s army.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Chuck Lukacs
-    flavor: '"I have no time for games. My calling is war!"'
-    number: 36
-
-  - title: Moshi Amika
-    extended_title: Moshi Amika • Experienced
-    type: Personality
-    clan: Mantis
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Naval
-    - Unique
-    - Experienced
-    - Fire
-    - Mantis Clan
-    - Shugenja
-    - Water
-    force: 3
-    chi: 4
-    gold_cost: 7
-    personal_honor: 1
-    text: 'Fire Water Battle: Ranged 6 Attack.Fire Water Tireless Battle: Bow or discard a Ring you own to make a Ranged 6 Attack.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Richard Chan
-    rarity: Fixed
-    artist: Franz Vohwinkel
-    number: 37
-
-  - title: Moshi Kekiesu
-    extended_title: Moshi Kekiesu • Experienced
-    type: Personality
-    clan: Mantis
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Naval
-    - Unique
-    - Experienced
-    - Mantis Clan
-    - Shugenja
-    force: 3
-    chi: 3
-    gold_cost: 8
-    personal_honor: 1
-    text: 'Maho Battle: Ranged 4 Attack or two consecutive Ranged 2 Attacks. The Ranged Attacks compare to Personalities'' Chi,
-      and may target Personalities with attached Followers. They will not be modified unless you control a Ring, and may not
-      be combined.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - David Campos
-    rarity: Fixed
-    artist: Llyn Hunter
-    flavor: '"She knows many frightening things," Sayoko mused. "Perhaps too many."'
-    number: 38
-
-  - title: Tsuruchi Arishia
-    extended_title: Tsuruchi Arishia • Experienced
-    type: Personality
-    clan: Mantis
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Naval
-    - Unique
-    - Experienced
-    - Mantis Clan
-    - Samurai
-    - Scout
-    force: 4
-    chi: 3
-    gold_cost: 9
-    personal_honor: 2
-    text: 'Recon Battle/Open: Target a province: You have Reconnaissance at its battlefields. Ranged Attacks performed by your
-      attacking Mantis Clan Human Personalities at that province''s battlefields may target cards even if they are in the Defender''s
-      home.Battle: Bow Arishia: Ranged 5 Attack.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Richard Chan
-    rarity: Fixed
-    artist: Franz Vohwinkel
-    flavor: '"End battles quickly, decisively. That is how we preserve lives."'
-    number: 39
-
-  - title: Tsuruchi Terao
-    extended_title: Tsuruchi Terao • Experienced
-    type: Personality
-    clan: Mantis
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Naval
-    - Unique
-    - Experienced
-    - Mantis Clan
-    - Samurai
-    force: 3
-    chi: 4
-    gold_cost: 8
-    personal_honor: 1
-    text: 'Fire Battle: Even if Terao is bowed: Ranged 4 Attack. You may bow or discard a Ring you own as a cost to perform
-      two more consecutive Ranged 4 Attacks, which may be combined together.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Jack Eddy
-    rarity: Fixed
-    artist: Mark Poole
-    flavor: '"Death?" he laughed. "Death only comes for those who fear it!"'
-    number: 40
-
-  - title: Yoritomo Chimori
-    extended_title: Yoritomo Chimori • Experienced
-    type: Personality
-    clan: Mantis
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Naval
-    - Unique
-    - Experienced
-    - Mantis Clan
-    - Samurai
-    force: 3
-    chi: 3
-    gold_cost: 7
-    personal_honor: 1
-    text: 'Battle/Open: Give all your Mantis Clan Human Personalities +1F. If you control any Rings, Mantis Clan Personalities
-      have +4F while opposed.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Eric Gardiner
-    rarity: Fixed
-    artist: Jonathan Hunt
-    flavor: '"The Empire believed him dead. In his second life, perhaps he will find something he believes in." - Komori'
-    number: 41
-
-  - title: Yoritomo Iongi
-    extended_title: Yoritomo Iongi • Experienced
-    type: Personality
-    clan: Mantis
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Naval
-    - Unique
-    - Experienced
-    - Mantis Clan
-    - Pirate
-    force: 5
-    chi: 3
-    gold_cost: 9
-    personal_honor: 1
-    text: 'Battle: Bow your Ring, discard a Ring from your hand, or bow Iongi, and target a unit: Your actions may target the
-      Personality in that unit as if he had no attached cards.Battle: Even if Iongi is bowed: Ranged 5 Attack.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Juan Palomo
-    rarity: Fixed
-    artist: John Donahue
-    flavor: '"I free others from the burden of possessions, that they might find understanding."'
-    number: 42
-
-  - title: Qolsa
-    type: Personality
-    clan: Naga,Unaligned
-    deck: Dynasty
-    keywords:
-    - Constrictor
-    - Naga
-    - Nonhuman
-    - Shugenja
-    - Vedic
-    force: 4
-    chi: 4
-    gold_cost: 6
-    honor_requirement: 0
-    personal_honor: 1
-    text: 'Battle/Open: Target an enemy Personality with less Force than Qolsa, a Ring, or an Enlightened Personality: Bow it.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Edwin David
-    flavor: '"A second Constrictor has awakened!" Akasha said breathlessly. "After so long with so few, what can this mean for
-      the Naga?"'
-    number: 43
-
-  - title: Agasha Miyoshi
-    extended_title: Agasha Miyoshi • Experienced
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Enlightened
-    - Unique
-    - Experienced
-    - Fire
-    - Phoenix Clan
-    - Shugenja
-    force: 3
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 6
-    personal_honor: 4
-    text: 'Fire Battle/Open, w: Bow a Ring you control to search your discard pile for a Nonhuman Dragon Personality and Recruit
-      it, ignoring costs and requirements. Negate Miyoshi''s straightening until your next turn begins. When this turn ends,
-      remove the Dragon from the game.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Bryan Reese
-    rarity: Fixed
-    artist: Chris Seaman
-    flavor: '"I know not why I have been chosen, but I will not fail."'
-    number: 44
-
-  - title: Asako Takakazu
-    extended_title: Asako Takakazu • Experienced
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Air
-    - Experienced
-    - Phoenix Clan
-    - Shugenja
-    force: 2
-    chi: 4
-    gold_cost: 7
-    personal_honor: 3
-    text: 'Battle/Open: Even if he is not at the current battlefield: Attach a Spell to Takakazu from your hand, paying all
-      costs. If you used this ability as a Battle action, you may take an additional Battle action.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    rarity: Fixed
-    artist: Heather V. Kreiter
-    flavor: '"One cannot research one''s way to Enlightenment, but if it were possible, Takakazu would be the first." - Asako
-      Toshi'
-    number: 45
-
-  - title: Isawa Kimi
-    extended_title: Isawa Kimi • Experienced
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Experienced
-    - Phoenix Clan
-    - Shugenja
-    - Void
-    force: 3
-    chi: 4
-    gold_cost: 7
-    honor_requirement: 4
-    personal_honor: 2
-    text: 'Void Reaction: Even if Kimi is dead, after a turn begins, give your Phoenix Clan Personalities the element keywords
-      of all Rings you control.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Bryan Reese
-    rarity: Fixed
-    artist: Ed Cox
-    flavor: '"When my day comes," Ningen smiled, "you shall stand in my place."'
-    number: 46
-
-  - title: Isawa Sawao
-    extended_title: Isawa Sawao • Experienced
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Enlightened
-    - Unique
-    - Experienced
-    - Fire
-    - Phoenix Clan
-    - Shugenja
-    force: 1
-    chi: 4
-    gold_cost: 6
-    honor_requirement: 6
-    personal_honor: 2
-    text: 'Battle: Any number of times per turn, bow or discard a Ring you own and target an attachment: Destroy it.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Bryan Reese
-    rarity: Fixed
-    artist: Miguel Coimbra
-    flavor: '"There can be no growth without loss, no healing without pain. All answers can be found within the flames."'
-    number: 47
-
-  - title: Shiba Denbe
-    extended_title: Shiba Denbe • Experienced
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Experienced
-    - Phoenix Clan
-    - Samurai
-    - Yojimbo
-    force: 3
-    chi: 4
-    gold_cost: 8
-    honor_requirement: 5
-    personal_honor: 3
-    text: 'Battle/Open: Put a Ring you control into your hand.Battle/Open: Put a Ring into play from your hand. While it remains
-      in play, it has no abilities, it does not count towards an Enlightenment Victory, and your Personalities have its element
-      keyword.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - regan O'Niell
-    rarity: Fixed
-    artist: Edwin David
-    flavor: '"I fear his discoveries may have shaken his mind." - Shiba Danjuro'
-    number: 48
-
-  - title: Shiba Yoshimi
-    extended_title: Shiba Yoshimi • Experienced
-    type: Personality
-    clan: Phoenix
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Enlightened
-    - Unique
-    - Experienced
-    - Phoenix Clan
-    - Samurai
-    - Yojimbo
-    force: 3
-    chi: 4
-    gold_cost: 7
-    honor_requirement: 4
-    personal_honor: 3
-    text: 'While there is an Earth Shugenja in Yoshimi''s army, targeting a Shugenja in Yoshimi''s army has the additional cost,
-      "Discard a card" for other players.Elemental Air Reaction: When another player''s action would target a Personality in
-      Yoshimi''s army, choose your performing Air Shugenja in your army: The action targets another legal Personality in his
-      army of your choice.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Jeff Hardee
-    rarity: Fixed
-    artist: Mark Poole
-    number: 49
-
-  - title: Achirin
-    extended_title: Achirin • Experienced
-    type: Personality
-    clan: Ratling
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Loyal
-    - Unique
-    - Experienced
-    - Nonhuman
-    - Ratling
-    - Shugenja
-    - Third Whisker Tribe
-    force: 1
-    chi: 4
-    gold_cost: 7
-    personal_honor: 0
-    text: 'Achirin''s base ability will not be copied.Limited: Once per game, remove a Ring you control from the game to choose
-      a unit. Remove it from the game.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Charel Thoss
-    rarity: Fixed
-    artist: Llyn Hunter
-    flavor: '"I have seen Tomorrow. We fear it, but it fears us!"'
-    number: 50
-
-  - title: Chikka-tek
-    extended_title: Chikka-tek • Experienced
-    type: Personality
-    clan: Ratling
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Experienced
-    - Grasping Paw Tribe
-    - Nonhuman
-    - Ratling
-    force: 3
-    chi: 2
-    gold_cost: 6
-    personal_honor: 1
-    text: 'Reaction: After a player draws one or more cards from his own card''s effect, discard a card: That player must discard
-      a number of cards equal to the number drawn.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Storn A. Cook
-    flavor: '"When I take Enlightenment from humans, they pay much to get it back! Then all respect the One Tribe!"'
-    number: 51
-
-  - title: Ep'kee
-    extended_title: Ep'kee • Experienced
-    type: Personality
-    clan: Ratling
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Bushi
-    - Experienced
-    - General
-    - Green-Green-White Tribe
-    - Nonhuman
-    - Ratling
-    force: 4
-    chi: 2
-    gold_cost: 6
-    personal_honor: 0
-    text: 'Elemental Reaction: Before a Personality gains a Force bonus, target a Ring you own in play or in your discard pile,
-      or show a Ring from your hand: Ep''kee gains the bonus instead.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Joe Torrez
-    rarity: Fixed
-    artist: David Esbri
-    number: 52
-
-  - title: Gran-otik
-    extended_title: Gran-otik • Experienced
-    type: Personality
-    clan: Ratling
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Loyal
-    - Unique
-    - Experienced
-    - Nonhuman
-    - Ratling
-    - Scout
-    force: 1
-    chi: 3
-    gold_cost: 6
-    personal_honor: 0
-    text: 'Reaction: Before engaging, if Gran-otik is at the current battlefield, bow him: Ranged 4 Attack, a number of consecutive
-      times equal to one plus the number of Rings in play and in discard piles.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Jan Ang
-    rarity: Fixed
-    artist: Britt Martin
-    flavor: '"To have no clan, a terrible thing. Still, Gran-otik will find no home until his spirit learns to rest." - K''mee'
-    number: 53
-
-  - title: K'mee
-    extended_title: K'mee • Experienced
-    type: Personality
-    clan: Ratling
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Loyal
-    - Unique
-    - Experienced
-    - Nonhuman
-    - Ratling
-    - Shugenja
-    - Third Whisker Tribe
-    force: 2
-    chi: 3
-    gold_cost: 5
-    personal_honor: 1
-    text: 'K''mee attaches cards with "Jingasa" in their titles ignoring Gold cost.Limited, w: Put a Ring in any player''s discard
-      pile into play under your control. While it remains in play, it does not count toward an Enlightenment Victory. After
-      the next time this game K''mee leaves play, destroy the Ring.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Seng Huat Lim
-    rarity: Fixed
-    artist: Jonathan Hunt
-    flavor: '"Not all humans fools after all."'
-    number: 54
-
-  - title: Z'chkir
-    extended_title: Z'chkir • Experienced
-    type: Personality
-    clan: Ratling
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Experienced
-    - Nonhuman
-    - Ratling
-    - Shugneja
-    - Third Whisker Tribe
-    force: 4
-    chi: 4
-    gold_cost: 8
-    personal_honor: 1
-    text: 'Reaction: After you create a Ratling Personality, discard a card: Create another, identical Ratling Personality at
-      the same location. If you discarded a Ring, you may create one more such Personality.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Grzegorz Rak
-    rarity: Fixed
-    artist: Veronica V. Jones
-    flavor: '"One day, other tribes understand what Third Whisker seeking all these Yesterdays. That day, One Tribe finally
-      complete."'
-    number: 55
-
-  - title: Bayushi Adachi
-    extended_title: Bayushi Adachi • Experienced
-    type: Personality
-    clan: Scorpion
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Experienced
-    - Magistrate
-    - Samurai
-    - Scorpion Clan
-    force: 4
-    chi: 4
-    gold_cost: 7
-    personal_honor: 1
-    text: 'Elemental Battle: Target an enemy dishonorable Personality, and you may bow or discard your Ring: Move him home if
-      you did not bow or discard a Ring; otherwise, destroy him.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Eugene Earnshaw-Whyte
-    rarity: Fixed
-    artist: April Lee
-    flavor: '"Why would this Mystic go to such lengths to conceal his identity? What secrets does he hide?"'
-    number: 56
-
-  - title: Bayushi Bokatsu
-    extended_title: Bayushi Bokatsu • Experienced
-    type: Personality
-    clan: Scorpion
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Courtier
-    - Experienced
-    - Magistrate
-    - Scorpion Clan
-    force: 3
-    chi: 4
-    gold_cost: 7
-    personal_honor: 1
-    text: 'Limited: Bow Bokatsu, target two Personalities controlled by the same player, at least one of whom is dishonorable,
-      and rehonor one of the dishonorable targets even if you do not control him: The other target''s controller may choose
-      to destroy him; if he is not destroyed, dishonor him, bow him, he will not straighten while Bokatsu remains bowed, and
-      you may negate Bokatsu''s straightening while Bokatsu remains bowed.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Jacques Goldcher
-    rarity: Fixed
-    artist: Edwin David
-    number: 57
-
-  - title: Bayushi Kan
-    extended_title: Bayushi Kan • Experienced
-    type: Personality
-    clan: Ninja,Scorpion
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Ninjutsu 2
-    - Unique
-    - Experienced
-    - Ninja
-    - Samurai
-    - Scorpion Clan
-    force: 4
-    chi: 4
-    gold_cost: 8
-    personal_honor: 0
-    text: 'Elemental Battle/Open: Target your Personality and target another player. After this action ends, the target player
-      is considered to have targeted your Personality with an action.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Savvas Themistocles
-    rarity: Fixed
-    artist: April Lee
-    flavor: '"She counters her inner darkness with outer light, and somehow finds balance in between." - Shosuro Maru'
-    number: 58
-
-  - title: Bayushi Saya
-    extended_title: Bayushi Saya • Experienced
-    type: Personality
-    clan: Scorpion
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Courtier
-    - Experienced
-    - Samurai
-    - Scorpion Clan
-    force: 3
-    chi: 4
-    gold_cost: 8
-    personal_honor: 1
-    text: 'Elemental Reaction: After a Personality becomes dishonorable, target him and bow or discard a Ring you own: Destroy
-      the Personality.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Tim Wiinkainen
-    rarity: Fixed
-    artist: Amandine LaBarre
-    flavor: '"It is time for a new game, I think. Perhaps the Lion and the Unicorn will prove more interesting the second time."'
-    number: 59
-
-  - title: Bayushi Shinzo
-    extended_title: Bayushi Shinzo • Experienced
-    type: Personality
-    clan: Ninja,Scorpion
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Enlightened
-    - Ninjutsu 2
-    - Unique
-    - Experienced
-    - Ninja
-    - Scorpion Clan
-    force: 3
-    chi: 4
-    gold_cost: 8
-    personal_honor: 0
-    text: 'Elemental Reaction: After Shinzo is targeted by another player''s action, bow or discard a Ring you own and target
-      a Personality controlled by the action''s player: Shinzo duels him. If the other Personality loses, take control of him,
-      straighten him, and permanently give him Ninja. If Shinzo loses, destroy him.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Walbert Ibarra
-    rarity: Fixed
-    artist: Steve Argyle
-    number: 60
-
-  - title: Shosuro Dazai
-    extended_title: Shosuro Dazai • Experienced
-    type: Personality
-    clan: Scorpion
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Air
-    - Courtier
-    - Experienced
-    - Scorpion Clan
-    - Shugenja
-    force: 2
-    chi: 4
-    gold_cost: 7
-    personal_honor: 1
-    text: Twice per turn, you may ignore the cost of bowing Dazai, if it is the cost of a Political action or an action on a
-      Spell.
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Matthew Maddocks
-    rarity: Fixed
-    artist: Drew Baker
-    flavor: '"The spirits whisper to me truths about these ''Wanderers''. Interesting truths indeed!"'
-    number: 61
-
-  - title: Chuda Ruri
-    extended_title: Chuda Ruri • Experienced
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Bloodspeaker
-    - Experienced
-    - Shadowlands
-    - Shugenja
-    force: 3
-    chi: 4
-    gold_cost: 8
-    personal_honor: 0
-    text: 'After Ruri enters play: Lose 4 Honor.Fear Battle: Fear 5.Limited: Bow Ruri or bow your Ring, and target a Personality:
-      If the target has the non-base Shadowlands keyword, give him a -4C token after your next turn begins; otherwise, give
-      him Shadowlands.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Josh Griffis
-    rarity: Fixed
-    artist: Steve Argyle
-    number: 62
-
-  - title: Daigotsu Fumiaki
-    extended_title: Daigotsu Fumiaki • Experienced
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Experienced
-    - Lost
-    - Samurai
-    - Shadowlands
-    force: 7
-    chi: 3
-    gold_cost: 6
-    personal_honor: 0
-    text: 'After Fumiaki enters play, lose 4 Honor.Battle/Open: Target a Personality. His abilities may not be used.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Drew Baker
-    flavor: '"I care nothing for your lies, Ruri!" he snarled. "I serve a god, and you serve yourself. Keep your distance or
-      I shall end your blasphemy."'
-    number: 63
-
-  - title: Daigotsu Soetsu
-    extended_title: Daigotsu Soetsu • Experienced
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Enlightened
-    - Unique
-    - Experienced
-    - Lost
-    - Samurai
-    - Shadowlands
-    - Undead
-    force: 4
-    chi: 4
-    gold_cost: 7
-    personal_honor: 1
-    text: 'After Soetsu enters play: Lose 4 Honor.Elemental Battle: Bow Soetsu or bow or discard a Ring you own, and target
-      zero to three enemy units with total Force lower than Soetsu''s Force plus Chi: Destroy the targets.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Sean Donnelly
-    rarity: Fixed
-    artist: Jason Engle
-    flavor: '"I understand well the pain of loss, Tanitsu-san," he said. "The question is how to channel that pain."'
-    number: 64
-
-  - title: Kyoso no Oni
-    extended_title: Kyoso no Oni • Experienced 3
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Experienced 3
-    - Unique
-    - Nonhuman
-    - Oni
-    - Shadowlands
-    force: 13
-    chi: 6
-    gold_cost: 13
-    personal_honor: 0
-    text: 'After Kyoso enters play, lose 8 Honor.After the first time this game Kyoso enters play, destroy a Personality you
-      control; if this destroyed him, you may target and destroy another Personality with equal or lower Gold Cost than his.Limited:
-      Target a Ring and a Shadowlands Personality. Destroy both targets.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    story: 2006 Kotei Winner - Daniel Sales
-    rarity: Fixed
-    artist: Steve Argyle
-    number: 65
-
-  - title: Moshangoru
-    extended_title: Moshangoru • Experienced
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Enlightened
-    - Unique
-    - Bandit
-    - Experienced
-    - Nonhuman
-    - Ogre
-    - Shadowlands
-    force: 8
-    chi: 3
-    gold_cost: 7
-    personal_honor: 0
-    text: 'After Moshangoru enters play, lose 4 Honor.Elemental Battle: Moshangoru challenges a target enemy Personality. His
-      controller may pay 5 Gold or bow a Ring he controls to have the target refuse. Both Personalities use their Force as their
-      duel stat. Destroy the loser.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Stephen LaFolette
-    rarity: Fixed
-    artist: Eric Lofgren
-    flavor: '"I bring news, great Kyoso," the ogre rumbled. "News of a human called the Wanderer."'
-    number: 66
-
-  - title: Muketsu
-    extended_title: Muketsu • Experienced
-    type: Personality
-    clan: Spider
-    deck: Dynasty
-    keywords:
-    - Unique
-    - Experienced
-    - Monk
-    - Shadowlands
-    - Spider Clan
-    force: 7
-    chi: 4
-    gold_cost: 8
-    personal_honor: 0
-    text: 'After Muketsu enters play, lose 5 Honor.Tireless Reaction: After a Ring bows, give a target Personality a -2C token.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    rarity: Fixed
-    artist: Chris Seaman
-    flavor: '"Do you think you understand pain, demon? You know nothing. Let me enlighten you."'
-    number: 67
-
-  - title: Itsume
-    type: Personality
-    clan: Spirit,Unaligned
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Kenku
-    - Nonhuman
-    - Spirit
-    - Trickster
-    force: 1
-    chi: 4
-    gold_cost: 6
-    personal_honor: 2
-    text: 'Limited: Target a Ring and a Personality controlled by the same player. Itsume challenges the Personality. Bow the
-      loser. If Itsume wins, take control of the Ring. After the next time this game the player triggers that Ring''s printed
-      trait that would put it into play from his hand, he may bow his Monk or Shugenja to take control of the Ring.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Veronica V. Jones
-    number: 68
-
-  - title: Nagisa
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Ronin
-    - Samurai
-    force: 2
-    chi: 4
-    gold_cost: 2
-    personal_honor: 2
-    text: 'All players have the ability, "Elemental Open: If you control more Rings than Nagisa''s controller, take control
-      of Nagisa."'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Britt Martin
-    flavor: '"I am on warrior pilgramage, my friend. Kindly stand out of my way, or shall be my next test."'
-    number: 70
-
-  - title: The Mystic
-    extended_title: The Mystic • Experienced
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Experienced Isawa Sezaru
-    - Unique
-    - Fire
-    - Ronin
-    - Shugenja
-    - Void
-    force: 6
-    chi: 7
-    gold_cost: 15
-    personal_honor: 3
-    text: 'Targeting the Mystic has the additional cost, "Pay 10 Gold or discard a Spell or Kiho Strategy" for other players.Battle:
-      If there are enemy units at the current battlefield, bow a Ring you control and target your discarded Personality: Bring
-      him into play in your current army, ignoring costs.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Michael Komarck
-    number: 71
-
-  - title: The Ronin
-    extended_title: The Ronin • Experienced
-    type: Personality
-    clan: Unaligned
-    deck: Dynasty
-    keywords:
-    - Duelist
-    - Experienced Kaneka
-    - Tactician
-    - Unique
-    - Ronin
-    - Samurai
-    - Shogun
-    force: 9
-    chi: 7
-    gold_cost: 15
-    personal_honor: 3
-    text: 'Targeting the Ronin has the additional cost, "Pay 10 Gold or discard a Battle Strategy" for other players.Battle:
-      Bow any number of Rings you control: Give each Personality in the current enemy army -2F for each Ring you bowed.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Michael Komarck
-    number: 72
-
-  - title: Iuchi Umeka
-    extended_title: Iuchi Umeka • Experienced
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Enlightened
-    - Unique
-    - Baraunghar
-    - Experienced
-    - Shugenja
-    - Unicorn Clan
-    force: 4
-    chi: 4
-    gold_cost: 9
-    honor_requirement: 4
-    personal_honor: 4
-    text: 'Actions on cards straightened by Umeka''s printed abilities may be used one additional time per turn. Open: Bow a
-      Spell or Ring you control: Straighten a target Samurai. Open: Bow a Samurai you control: Straighten a target Ring or Spell.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Aaron Boyhan
-    rarity: Fixed
-    artist: Lisa Hunt
-    number: 74
-
-  - title: Moto Akikazu
-    extended_title: Moto Akikazu • Experienced
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Enlightened
-    - Unique
-    - Experienced
-    - Shugenja
-    - Unicorn Clan
-    force: 5
-    chi: 4
-    gold_cost: 10
-    personal_honor: 0
-    text: 'Akikazu has a Force bonus equal to the highest number of dead Personalities in any one discard pile.Elemental Battle/Open:
-      Bow your Ring to target a Personality. His controller must bow a Ring he controls and owns, or discard a Ring he owns,
-      to assign or move the target to battlefields (this turn).'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    errata_text: Clarified that the ability's effect only refers to the targeted Personality.
-    story: 2006 Kotei Winner - Sean Raycraft
-    rarity: Fixed
-    artist: Anthony Grabski
-    flavor: '"Death awaits within the heart of a ruby."'
-    number: 75
-
-  - title: Moto Rumiko
-    extended_title: Moto Rumiko • Experienced
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Enlightened
-    - Unique
-    - Experienced
-    - Samurai
-    - Unicorn Clan
-    force: 5
-    chi: 3
-    gold_cost: 9
-    honor_requirement: 0
-    personal_honor: 3
-    text: 'After Rumiko enters play, you may search your hand, then deck, then discard pile, for the Ring of Air and put it
-      into play. While it remains in play, it does not count toward an Enlightenment Victory.Personalities in Rumiko''s army
-      have the ability, "Battle: Bow a Follower in this unit or a Ring you control to bow a target enemy card with no attachments."'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Aaron Boyhan
-    rarity: Fixed
-    artist: Edwin David
-    number: 76
-
-  - title: Shinjo Wei
-    extended_title: Shinjo Wei • Experienced
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Enlightened
-    - Unique
-    - Experienced
-    - Junghar
-    - Samurai
-    - Scout
-    - Unicorn Clan
-    force: 3
-    chi: 3
-    gold_cost: 8
-    personal_honor: 1
-    text: 'Recon Battle/Open: Target a province: You have Reconnaissance at its battlefields. During battles at that province''s
-      battlefields, your Junghar Personalities have the ability, "Battle: Ranged 4 Attack."'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Galuleu Paolo
-    rarity: Fixed
-    artist: Steve Argyle
-    flavor: '"The Khan prepares for a second offensive, Lord Shono," Wei said. "What are your orders?"'
-    number: 77
-
-  - title: Utaku Keyo
-    extended_title: Utaku Keyo • Experienced
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Enlightened
-    - Unique
-    - Battle Maiden
-    - Experienced
-    - Junghar
-    - Samurai
-    - Unicorn Clan
-    force: 4
-    chi: 3
-    gold_cost: 9
-    honor_requirement: 4
-    personal_honor: 3
-    text: 'Reaction: After an attack is declared with you as the Defender, even if Keyo is bowed, target a number of units equal
-      to one plus the number of Rings you own in play and in your discard pile: Straighten the targets.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Francisco Briano
-    rarity: Fixed
-    artist: Edwin David
-    flavor: '"More death, more war, more suffering." She looked to the stars. "Guide me, Kamoko-sama."'
-    number: 78
-
-  - title: Utaku Tarako
-    extended_title: Utaku Tarako • Experienced
-    type: Personality
-    clan: Unicorn
-    deck: Dynasty
-    keywords:
-    - Cavalry
-    - Enlightened
-    - Unique
-    - Battle Maiden
-    - Experienced
-    - Samurai
-    - Scout
-    - Unicorn Clan
-    force: 5
-    chi: 3
-    gold_cost: 10
-    honor_requirement: 4
-    personal_honor: 4
-    text: 'After Tarako enters play, you may search your hand, then deck, then discard pile, for the Ring of Water and put it
-      into play. While it remains in play, it does not count towards an Enlightenment Victory.Recon Battle/Open: Bow your Region
-      to target a Province. You have Reconnaissance at its battlefields. Other players'' actions will not move Personalities
-      to its battlefields.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    story: 2006 Kotei Winner - Frederic Capbert
-    rarity: Fixed
-    artist: Ed Cox
-    number: 79
-
-  - title: Sacred Hillside
-    type: Region
-    deck: Dynasty
-    keywords:
-    - Singular
-    text: 'This province has +1 strength for each of Ring you control.Open: Target a Ring: Straighten it.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Amandine LaBarre
-    flavor: '"An honest man was once blessed by the Fortunes here. Many seek to honor his memory. Reverence, or greed?" - The
-      Ronin'
-    number: 81
-
-  - title: Snow-Blocked Pass
-    type: Region
-    deck: Dynasty
-    keywords:
-    - Singular
-    text: Before battle resolution at this Province's battlefield, bow all units there with 4 or lower total Force.
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Malcolm McClinton
-    flavor: '"The other clans have become accustomed to winter crippling their wars. They allow their guard to drop." - Moto
-      Chagatai'
-    number: 82
-
-  - title: A Clan Divided
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle/Open: Target a Personality with an Honor Requirement of 0 or more and another Personality with an Honor Requirement
-      of "-". After the next time this game one of those Personalities moves or assigns to a battlefield, the other one straightens
-      and moves to the same location.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Franz Vohwinkel
-    flavor: '"I do not wish to disobey Lady Shinjo, but I fear the Khan''s ambition will undo us all." - Shinjo Shono'
-    number: 83
-
-  - title: A Long Journey
-    type: Strategy
-    deck: Fate
-    gold_cost: 1
-    focus: 3
-    text: 'Reaction, : After a Personality enters play in your home, he may not be targeted by other players'' actions, or assign
-      to armies, until your next turn begins.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: William O'Connor
-    flavor: '"So few options remaining. Why do I deny the one possibility my spirit tells me is the truth?" - The Wanderer'
-    number: 85
-
-  - title: A Sage's Counsel
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Limited: Bow your Ring and target a Personality: Give him Enlightened.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Edwin David
-    flavor: '"Why is it so hard to see the simple wisdom in life unless you change your perspective?" - The Wanderer'
-    number: 86
-
-  - title: A Scorpion's Wisdom
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Political
-    gold_cost: 0
-    focus: 4
-    text: 'As a Focus Effect: If one Personality in this duel is dishonorable, you may rehonor him and dishonor the other Personality.Battle/Open:
-      Target two Personalities: Give one +2PH. Give the other -2PH.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: John Donahue
-    flavor: '"I do not doubt Kisada''s wisdom. I doubt his ability to see anyone as being wiser." - Bayushi Paneki'
-    number: 87
-
-  - title: Aikido Demonstration
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'As a Focus Effect, this duel''s loser bows, other effects of the duel on the loser are negated, and the winner gains
-      3 Honor (in addition to any other results for winning). Battle: Bow your target performing Personality to move home a
-      target enemy Personality with lower Personal Honor.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: William O'Connor
-    flavor: '"Size does not matter. Strength does not matter. Only leverage matters."'
-    number: 88
-
-  - title: Banzai Cry
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Fear
-    gold_cost: 0
-    focus: 2
-    text: 'Battle: Fear 4, which also bows Personalities with Chi less than or equal to its strength.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Steve Ellis
-    flavor: '"Now!" Matsu Yoshino screamed. "Now! Make them suffer for the death of our brothers! Of my father! Banzai!"'
-    number: 89
-
-  - title: Destined Enemies
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Target your performing unbowed Daimyo Personality, Enlightened Personality, or Personality with "Champion"
-      as part of any of his keywords, or target your performing unbowed Personality and target your Ring, to have your Personality
-      challenge a target enemy Personality. If the target has "Champion" as part of any of his keywords, or has Daimyo or Enlightened,
-      the winner''s controller gains 5 Honor. Destroy the loser.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Patrick McEvoy
-    flavor: '"One day soon, little Lion. I will reunite you with your precious father." - Moto Chagatai'
-    number: 91
-
-  - title: Gift of Rice
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Open: Target a Holding: Straighten it. Until your next turn begins, all Personalities controlled by other players
-      have +1F. If you control the Holding, negate its straightening until after your next Straighten Phase ends.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    errata_text: Errata'd via the internet.
-    rarity: Fixed
-    artist: Amandine LaBarre
-    flavor: '"In times of war, it is easy for samurai to forget the peasants. A simple gift can win their loyalty." - Kokujin'
-    number: 92
-
-  - title: Hard Pressed
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Terrain
-    gold_cost: 0
-    focus: 1
-    text: 'Before this battle''s resolution: Move a unit home from the current battlefield. You may bow it.Battle: If there
-      are no Terrains at the current battlefield: Put this card into play there.'
-    legality:
-    - Age of Conquest (Emperor)
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    - Modern
-    rarity: Fixed
-    artist: Paul (Prof.) Herbert
-    flavor: The Nezumi hissed. "No-name humans die!" The ninja sneered. "I will not die to vermin."
-    number: 93
-
-  - title: Inspiring Leadership
-    type: Strategy
-    deck: Fate
-    focus: 3
-    text: 'This card''s Gold Cost equals the number of unbowed non-Tactician Personalities you control.Battle/Open: Permanently
-      give all your Personalities Tactician.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Lisa Hunt
-    flavor: '"Think for yourself!" Tawagoto encouraged. "Act on your own! Your will belongs to no one, despite what they may
-      tell you!"'
-    number: 94
-
-  - title: Journey's Beginning
-    type: Strategy
-    deck: Fate
-    focus: 2
-    text: 'Reaction: After your Personality moves to a battlefield, target one or more of your other Personalities at the location
-      from which he moved and pay an equal amount of Gold: Move them to the battlefield.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Llyn Hunter
-    flavor: '"Go," the Khan ordered. "Return victorious, or not at all."'
-    number: 95
-
-  - title: Journey's End
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 2
-    text: 'Absent Interrupt: After the Battle action resolves, if it moved your Personality to a battlefield, then take an additional
-      action.'
-    legality:
-    - A Brother's Destiny (Ivory Edition)
-    - A Brother's Destiny (Twenty Festivals)
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    - Modern
-    errata_text: Tech erratum via Oracle.
-    rarity: Fixed
-    artist: Llyn Hunter
-    flavor: '"More Unicorn have been sighted, Yoshino-sama," Fujimaro reported. "What are your orders?"'
-    number: 96
-
-  - title: Reckless Charge
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Heroic
-    gold_cost: 0
-    focus: 1
-    text: 'Battle/Open: Choose your performing Human Personality: Give him +2F. He will not be destroyed by other player''s
-      card effects. After the next Attack Phase ends, destroy him.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: William O'Connor
-    flavor: '"The front line shall break their defenses. You shall stand with your fathers in Yomi tonight!" - Matsu Yoshino'
-    number: 97
-
-  - title: Strength of the Crane
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Target your performing Crane Clan Personality. Ranged Attack with a strength equal to their Personal Honor.
-      Gain 2 Honor.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: April Lee
-    flavor: Perfection.
-    number: 99
-
-  - title: Strength of the Dragon
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Choose your performing unbowed Dragon Clan Personality, target an enemy Personality, and bow your Ring: Your
-      Personality challenges the target. He may refuse if his controller discards from play a Ring he controls. Destroy the
-      duel''s loser.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Steve Argyle
-    flavor: Wisdom.
-    number: 100
-
-  - title: Strength of the Lion
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Choose your performing opposed Lion Clan Personality: Give him +4F. You may take an additional Battle action.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Chris Seaman
-    flavor: Tradition.
-    number: 101
-
-  - title: Strength of the Mantis
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Choose your performing opposed Mantis Clan Personality and target a Holding: Give the Personality +2F. Increase
-      the Holding''s Gold production by 2.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Anthony Grabski
-    flavor: Ingenuity.
-    number: 102
-
-  - title: Strength of the Phoenix
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Choose your performing opposed Phoenix Clan Personality: Give him +1F for each different element keyword
-      in his army. Give him +1C.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Ed Cox
-    flavor: Knowledge.
-    number: 103
-
-  - title: Strength of the Nezumi
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Choose your performing Ratling Personality and target a Follower or Item in a discard pile: Attach it to
-      the Ratling, paying less Gold equal to the Ratling''s Gold Cost.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Corene Werhane
-    flavor: Survival.
-    number: 104
-
-  - title: Strength of the Scorpion
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Choose your performing Scorpion Clan Personality and target another player''s Personality, each with one
-      or more abilities: Your Personality switches either Force or abilities with the other.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: April Lee
-    flavor: Secrets.
-    number: 105
-
-  - title: Strength of the Shadowlands
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Fear
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Choose your performing Shadowlands Personality: Fear with strength equal to your Personality''s Chi which
-      affects Personalities as if they were Followers.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Drew Baker
-    flavor: Fear.
-    number: 106
-
-  - title: Strength of the Unicorn
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Battle: Target up to three cards in units led by opposed Unicorn Clan Personalities who did not assign during Cavalry
-      Maneuvers this attack: Give each target +3F.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Steve Argyle
-    flavor: Mobility.
-    number: 107
-
-  - title: Test of Enlightenment
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 3
-    text: 'Limited: Choose your performing unbowed Personality and target another player''s Personality: Your Personality challenges
-      him. He may refuse; if he did, dishonor him. Bow the duel''s loser. The winner''s controller may search his deck, then
-      discard pile, for a Ring, show it, and put it in his hand.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Mark Poole
-    flavor: '"Tell me what you''ve learned," the Wanderer said. Sawao smiled. "I can only show you."'
-    number: 108
-
-  - title: Unexpected Find
-    type: Strategy
-    deck: Fate
-    gold_cost: 0
-    focus: 1
-    text: 'Reaction: After you produce more Gold for a cost than you are paying, put this card into play in your home bowed,
-      and you may not spend the excess Gold. Before your next turn ends, draw a card. Reaction: If this card is in play, when
-      bowing a Holding to produce Gold, bow and discard this card from your home to produce 1 Gold.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    errata_text: Eratta'd via internet
-    rarity: Fixed
-    artist: Britt Martin
-    flavor: '"Humans think these very valuable. We trade for lots of treasures with these."'
-    number: 109
-
-  - title: Boisterous Soldiers
-    type: Follower
-    deck: Fate
-    keywords:
-    - Unique
-    force: 4
-    chi: 0
-    gold_cost: 4
-    honor_requirement: 1
-    focus: 1
-    text: After this Follower is destroyed, once per game, you may Equip it to one of your Personalities, ignoring all costs
-      and restrictions.
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Slawomir Maniak
-    flavor: '"Nothing like a quick drink to put you in the mood for a good scap, eh boys?"'
-    number: 110
-
-  - title: Sisters of the Elements
-    type: Follower
-    deck: Fate
-    keywords:
-    - Unique
-    - Air
-    - Earth
-    - Fire
-    - Monk
-    - Void
-    - Water
-    force: 1
-    chi: 1
-    gold_cost: 4
-    honor_requirement: 0
-    focus: 1
-    text: 'Will only attach to a Monk, Shugenja, or Enlightened Personality.Before bowing this Personality to pay the cost of
-      a Kiho action he is performing: Once per turn, you may bow this card to pay the cost instead.Limited: Remove two cards
-      in your hand from the game: Put an Elemental Fate card or a Fate card with an element keyword from your discard pile into
-      your hand.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Lisa Hunt
-    flavor: '"A small order, but wise." - Tanrai'
-    number: 112
-
-  - title: Wandering Pilgrim
-    type: Follower
-    deck: Fate
-    keywords:
-    - Unique
-    force: 3
-    chi: 0
-    gold_cost: 3
-    honor_requirement: 2
-    focus: 3
-    text: 'Attaches to an unaligned Samurai paying 2 less Gold.Reaction: After a Bushido Virtue action resolves: If it is an
-      Attack Phase, move this Personality to any location. If it is not, gain 1 Honor.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Thomas Denmark
-    flavor: '"A bowl of soup is all the thanks I need, friend Dragon."'
-    number: 113
-
-  - title: Fragrant Waters
-    type: Item
-    deck: Fate
-    keywords:
-    - Unique
-    force: 0
-    chi: 0
-    gold_cost: 3
-    focus: 2
-    text: 'Will not attach to a Crab Clan or Nonhuman Personality.This Personality has +1PH.Limited: Once per game, if this
-      Personality has ever been opposed in a Combat Segment with this attached: Gain 5 Honor.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Drew Baker
-    flavor: '"So wonderful, so relaxing. Does it not put you at ease?"'
-    number: 114
-
-  - title: Gaijin Writings
-    type: Item
-    deck: Fate
-    keywords:
-    - Unique
-    force: 0
-    chi: 0
-    gold_cost: 4
-    focus: 1
-    text: 'Limited: Remove this card from the game and target a player with 11 or more Family Honor or target a Personality
-      with 6 or more Force or target both: The player (if any) loses 4 Honor. The Personality (if any) permanently receives
-      -4F. Lose 4 Honor.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Kevin Wasden
-    flavor: '"These scrolls are bound with dead flesh! Disgusting!" - Miya Nishio'
-    number: 115
-
-  - title: Teaching Stick
-    type: Item
-    deck: Fate
-    keywords:
-    - Weapon
-    force: 0
-    chi: 0
-    gold_cost: 2
-    focus: 3
-    text: 'This Personality loses and will not gain Duelist. After this Personality enters a duel, if he has 4 or less Force:
-      Both Personalities use Force as their duel stat.Battle/Open: Give this card +2F.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Britt Martin
-    number: 116
-
-  - title: Writ of the Elements
-    type: Item
-    deck: Fate
-    keywords:
-    - Writ
-    force: 0
-    chi: 0
-    gold_cost: 1
-    focus: 3
-    text: 'After this card enters play: Name an element keyword. While this card remains attached to this Personality, he has
-      Enlightened and the named keyword.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Mark Poole
-    flavor: '"They hold great power, if you are but willing to spend your entire life learning their secrets."'
-    number: 117
-
-  - title: Elemental Arrow
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Fire
-    - Kiho
-    gold_cost: 0
-    focus: 3
-    text: 'Fire Kiho Reaction: Before a Ranged Attack action performed by a card in your current army resolves, target your
-      performing Monk, Shugenja, or Enlightened Personality in that army to give one of the action''s Ranged Attacks +3 strength.
-      After that action resolves, you may make a Ranged Attack with strength equal to the one this action was chosen to modify.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: April Lee
-    flavor: '"I could kill you easily," Akagi said, "but I have no wish to."'
-    number: 118
-
-  - title: The Darkened Path
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Kiho
-    - Maho
-    gold_cost: 0
-    focus: 3
-    text: 'Battle/Open: Bow your performing Monk or Enlightened Personality and target a number of Rings up to his Chi: Until
-      your next turn begins, the targets are treated as if they are not in the game (this effect beginning and ending does not
-      count as any of the targets leaving or returning to play, nor will it end any durations based upon the targets remaining
-      in play or under control). Lose 3 Honor.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Franz Vohwinkel
-    flavor: '"What''s the matter beast? Do you fear yourself?" Kokujin laughed.'
-    number: 119
-
-  - title: The Way of Will
-    type: Strategy
-    deck: Fate
-    keywords:
-    - Kiho
-    gold_cost: 0
-    focus: 1
-    text: 'Battle/Open: Choose your performing Monk or Enlightened Personality and target zero or more Personalities up to the
-      number of Rings you have in play: Give the performer and each target +2F.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Ed Cox
-    flavor: '"The enlightened soul can be harnessed and used as a weapon. But what price does a soul pay for such squandered
-      potential?"'
-    number: 120
-
-  - title: Rosoku Sensei
-    type: Sensei
-    deck: Pre-Game
-    keywords:
-    - All Clans
-    province_strength: -1
-    gold_production: 0
-    starting_honor: 0
-    text: This Sensei counts as a Ring for actions on non-Stronghold cards.After one of your actions put cards into your hand,
-      until this phase ends, negate further such effects from your actions.
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    errata_text: Errata'd via internet August 30th, 2006
-    rarity: Fixed
-    artist: Ed Cox
-    flavor: '"Is his legacy a blessing or a curse?" - Asahina Sekawa'
-    number: 121
-
-  - title: Mantle of Flame
-    type: Spell
-    deck: Fate
-    keywords:
-    - Unique
-    gold_cost: 3
-    focus: 3
-    text: 'May attach to and be performed by an Enlightened Personality as if he were a Shugenja.You may negate this Personality''s
-      straightening during the Straighten Phase.Battle/Open: Bow this Shugenja and target your Personality: While this Shugenja
-      remains bowed, targeting the Personality or choosing him as a performer costs 4 Gold in addition to any other costs.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Slawomir Maniak
-    number: 122
-
-  - title: Partake of the Fire
-    type: Spell
-    deck: Fate
-    keywords:
-    - Fire
-    - Water
-    gold_cost: 4
-    focus: 3
-    text: 'Battle, w: Ranged 4 Attack. You may destroy a Terrain, Region, or Formation at this Personality''s battlefield. You
-      may move this Personality home.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Patrick McEvoy
-    flavor: '"It smells like poison. The morning after you drink it, it feels like poison as well." - Yoritomo Iongi'
-    number: 123
-
-  - title: The Dragons' Talons
-    type: Spell
-    deck: Fate
-    keywords:
-    - Fire
-    - Ritual
-    gold_cost: 3
-    focus: 3
-    text: 'Battle: Destroy this Shugenja and zero or more of your other performing Shugenja: You may target a number of enemy
-      cards, which must either be bowed or have no unbowed cards attached at the time they are targeted, up to a number equal
-      to the number of Shugenja destroyed by this action''s cost. Destroy each target after it is chosen, before choosing the
-      next target.'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    rarity: Fixed
-    artist: Edwin David
-    flavor: '"I do not wish to harm you," Miyoshi said. "Please, come no farther."'
-    number: 124
-
-  - title: Brothers in Arms
-    extended_title: Brothers in Arms • Experienced
-    type: Follower
-    deck: Fate
-    keywords:
-    - Unique
-    - Experienced
-    force: 3
-    chi: 0
-    gold_cost: 3
-    honor_requirement: 1
-    focus: 3
-    text: 'Can only attach to a Samurai.Your cards titled "Brothers in Arms" have the ability, "Battle, w: Bow a target enemy
-      card with no attachments."'
-    legality:
-    - Age of Enlightenment (Lotus)
-    - Legacy
-    - Modern
-    - Race for the Throne (Samurai)
-    rarity: Fixed
-    artist: Malcolm McClinton
-    flavor: '"Only through the efforts of our loyal allies was the peasant rebellion thwarted." - Miya Hatori'
-    number: 125
+- cardid: 10
+  title: A Clan Divided
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle/Open:</b> Target a Personality with an Honor Requirement of 0 or more and another Personality
+    with an Honor Requirement of "-". After the next time this game one of those Personalities moves or
+    assigns to a battlefield, the other one straightens and moves to the same location.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Franz Vohwinkel
+  flavor_text: <i>"I do not wish to disobey Lady Shinjo, but I fear the Khan's ambition will undo us all."
+    - Shinjo Shono</i>
+  collector_number: '83'
+- cardid: 11
+  title: A Clan United
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> If you control two Personalities with the same Clan Alignment but different Family
+    Names in this battle, target your performing unbowed Personality to have him challenge an enemy Personalty.
+    Both participants use Force, Chi, or Personal Honor as their duel stat <i>(you choose)</i>. Destroy
+    the loser.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Chris Seaman
+  flavor_text: <i>"On this day, Matsu Yoshino has earned his father's blade." Otemi proclaimed. "All hail
+    Yoshino, Champion of the Lion!"</i>
+  collector_number: '84'
+- cardid: 46
+  title: A Long Journey
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Reaction, :g1::</b> After a Personality enters play in your home, he may not be targeted by
+    other players' actions, or assign to armies, until your next turn begins.
+  gold_cost: 1
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"So few options remaining. Why do I deny the one possibility my spirit tells me is the
+    truth?" - The Wanderer</i>
+  collector_number: '85'
+- cardid: 69
+  title: A Quest Abandoned
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, discard any Rings you control, you permanently will not put Rings into play, and, beginning
+    with the player on your left and proceeding in turn order, each player may destroy his rightmost Province.
+    If any player does not, he permanently may not win an Enlightenment Victory.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ed Cox
+  flavor_text: <i>"Enough games. The throne cannot remain unprotected."</i>
+  collector_number: '1'
+- cardid: 72
+  title: A Sage's Counsel
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Bow your Ring and target a Personality: Give him <b>Enlightened</b>.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  flavor_text: <i>"Why is it so hard to see the simple wisdom in life unless you change your perspective?"
+    - The Wanderer</i>
+  collector_number: '86'
+- cardid: 77
+  title: A Scorpion's Wisdom
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Political
+  text: 'As a Focus Effect: If one Personality in this duel is dishonorable, you may rehonor him and dishonor
+    the other Personality.<br><b>Battle/Open:</b> Target two Personalities: Give one +2PH. Give the other
+    -2PH.'
+  gold_cost: 0
+  focus: 4
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: John Donahue
+  flavor_text: <i>"I do not doubt Kisada's wisdom. I doubt his ability to see anyone as being wiser."
+    - Bayushi Paneki</i>
+  collector_number: '87'
+- cardid: 112
+  title: Achirin
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Achirin • Experienced
+  clans:
+  - Ratling
+  keywords:
+  - Enlightened
+  - Loyal
+  - Unique
+  - Experienced
+  - Nonhuman
+  - Ratling
+  - Shugenja
+  - Third Whisker Tribe
+  text: Achirin's base ability will not be copied.<br><b>Limited:</b> Once per game, remove a Ring you
+    control from the game to choose a unit. Remove it from the game.
+  gold_cost: 7
+  force: 1
+  chi: 4
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Charel Thoss
+  printing_id: '1'
+  rarity: Fixed
+  artist: Llyn Hunter
+  flavor_text: <i>"I have seen Tomorrow. We fear it, but it fears us!"</i>
+  collector_number: '50'
+- cardid: 149
+  title: Agasha Miyoshi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Agasha Miyoshi • Experienced
+  clans:
+  - Phoenix
+  keywords:
+  - Cavalry
+  - Enlightened
+  - Unique
+  - Experienced
+  - Fire
+  - Phoenix Clan
+  - Shugenja
+  text: <b>Fire Battle/Open, :bow::</b> Bow a Ring you control to search your discard pile for a Nonhuman
+    Dragon Personality and Recruit it, ignoring costs and requirements. Negate Miyoshi's straightening
+    until your next turn begins. When this turn ends, remove the Dragon from the game.
+  gold_cost: 8
+  force: 3
+  chi: 4
+  honor_requirement: 6
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Bryan Reese
+  printing_id: '1'
+  rarity: Fixed
+  artist: Chris Seaman
+  flavor_text: <i>"I know not why I have been chosen, but I will not fail."</i>
+  collector_number: '44'
+- cardid: 172
+  title: Aikido Demonstration
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: As a Focus Effect, this duel's loser bows, other effects of the duel on the loser are negated,
+    and the winner gains 3 Honor <i>(in addition to any other results for winning)</i>. <br><b>Battle:</b>
+    Bow your target performing Personality to move home a target enemy Personality with lower Personal
+    Honor.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"Size does not matter. Strength does not matter. Only leverage matters."</i>
+  collector_number: '88'
+- cardid: 186
+  title: Akifumi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Brotherhood of Shinsei
+  - Unaligned
+  keywords:
+  - Ashigaru
+  - Monk
+  text: <b>Limited:</b> Target a Personality. Give him <b>Enlightened</b>, or remove <b>Enlightened</b>
+    from him.
+  gold_cost: 3
+  force: 0
+  chi: 2
+  personal_honor: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Amandine LaBarre
+  flavor_text: <i>"I have seen my share of fools, and my share of sages. If it is wisdom you seek, I shall
+    tell you what little I know."</i>
+  collector_number: '12'
+- cardid: 191
+  title: Akodo Anshiro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Akodo Anshiro • Experienced
+  clans:
+  - Lion
+  keywords:
+  - Duelist
+  - Enlightened
+  - Tactician
+  - Unique
+  - Experienced
+  - Lion Clan
+  - Samurai
+  text: <b>Elemental Absent Remote Battle:</b> Discard a Tactical card to target one Personality at any
+    location, or discard a Ring to target zero to two (<i>you may not choose zero if you are using this
+    ability Absent and/or Remote</i>). Move the targets to the current battlefield.
+  gold_cost: 7
+  force: 3
+  chi: 4
+  honor_requirement: 6
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Jim Werner
+  printing_id: '1'
+  rarity: Fixed
+  artist: Mark Poole
+  flavor_text: <i>"Our enemy does not understand. Ignore his flanking maneuver and continue. All will
+    be as it should."</i>
+  collector_number: '31'
+- cardid: 196
+  title: Akodo Bakin
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Akodo Bakin • Experienced
+  clans:
+  - Lion
+  keywords:
+  - Enlightened
+  - Tactician
+  - Unique
+  - Experienced
+  - Lion Clan
+  - Samurai
+  text: <b>Elemental Battle:</b> Bow a target enemy Personality's unit. You may discard a Ring you own
+    to destroy all attachments in the unit.
+  gold_cost: 7
+  force: 3
+  chi: 2
+  honor_requirement: 4
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Chris Fossum
+  printing_id: '1'
+  rarity: Fixed
+  artist: Michael Kaluta
+  flavor_text: <i>"We are more than stones on a board. Each life has meaning and purpose."</i>
+  collector_number: '32'
+- cardid: 235
+  title: Akodo Kuemon
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Akodo Kuemon • Experienced
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Unique
+  - Experienced
+  - Lion Clan
+  - Samurai
+  text: <b>Reaction:</b> After an action that moved a unit to the current battlefield resolves, bow or
+    straighten the unit's Personality.
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Joachim Gmoser
+  flavor_text: <i>"He longs to seek Enlightenment, but knows that his duty must come first. He is the
+    essence of all that is Akodo." - Akodo Setai</i>
+  collector_number: '33'
+- cardid: 257
+  title: Akodo Natsu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Akodo Natsu • Experienced
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Unique
+  - Experienced
+  - Lion Clan
+  - Samurai
+  text: <b>Reaction:</b> After engaging, the Attacker has the first opportunity to take a Battle action
+    or pass during this battle. Play proceeds in turn order from him after that.
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 5
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Kevin Wasden
+  flavor_text: <i>"These false paths will lead to ruin for all who seek them. Better to die a warrior's
+    death than a fool's."</i>
+  collector_number: '34'
+- cardid: 265
+  title: Akodo Rokuro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Akodo Rokuro • Experienced
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Unique
+  - Experienced
+  - Lion Clan
+  - Samurai
+  text: '<b>Reaction:</b> Before a Lion Clan Personality bows: Negate the bowing. If the bowing is a cost,
+    ignore it.'
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Amandine LaBarre
+  flavor_text: <i>"Enlightenment is the business of monks and priests!" he shouted. "We are soldiers!
+    We need nothing but an enemy!"</i>
+  collector_number: '35'
+- cardid: 523
+  title: Asahina Yoshino
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Asahina Yoshino • Experienced
+  clans:
+  - Crane
+  keywords:
+  - Enlightened
+  - Unique
+  - Air
+  - Crane Clan
+  - Experienced
+  - Shugenja
+  text: '<b>Reaction:</b> After your Action Phase ends, target two non-Holding, non-Stronghold cards:
+    Straighten them.'
+  gold_cost: 9
+  force: 1
+  chi: 4
+  honor_requirement: 5
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - David Winner
+  printing_id: '1'
+  rarity: Fixed
+  artist: Jason Engle
+  flavor_text: <i>"There is more to Enlightenment than temples and contemplation. The world cannot be
+    understood at a distance!"</i>
+  collector_number: '19'
+- cardid: 587
+  title: Asako Takakazu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Asako Takakazu • Experienced
+  clans:
+  - Phoenix
+  keywords:
+  - Unique
+  - Air
+  - Experienced
+  - Phoenix Clan
+  - Shugenja
+  text: '<b>Battle/Open:</b> Even if he is not at the current battlefield: Attach a Spell to Takakazu
+    from your hand, paying all costs. If you used this ability as a Battle action, you may take an additional
+    Battle action.'
+  gold_cost: 7
+  force: 2
+  chi: 4
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Heather V. Kreiter
+  flavor_text: <i>"One cannot research one's way to Enlightenment, but if it were possible, Takakazu would
+    be the first." - Asako Toshi</i>
+  collector_number: '45'
+- cardid: 695
+  title: Banzai Cry
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Fear
+  text: <b>Battle:</b> Fear 4, which also bows Personalities with Chi less than or equal to its strength.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Steve Ellis
+  flavor_text: <i>"Now!" Matsu Yoshino screamed. "Now! Make them suffer for the death of our brothers!
+    Of my father! Banzai!"</i>
+  collector_number: '89'
+- cardid: 734
+  title: Bay of Green Coral
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  text: Personalities and Followers in units assigned to defend your Provinces have <b>Naval</b>.<br><b>Open:</b>
+    Destroy this Region to destroy a target Region.
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"A peaceful place. A place of beauty. Legend holds that the first Hantei spent a week
+    here when searching for his bride."</i>
+  collector_number: '80'
+- cardid: 737
+  title: Bayushi Adachi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Bayushi Adachi • Experienced
+  clans:
+  - Scorpion
+  keywords:
+  - Enlightened
+  - Unique
+  - Experienced
+  - Magistrate
+  - Samurai
+  - Scorpion Clan
+  text: '<b>Elemental Battle:</b> Target an enemy dishonorable Personality, and you may bow or discard
+    your Ring: Move him home if you did not bow or discard a Ring; otherwise, destroy him.'
+  gold_cost: 7
+  force: 4
+  chi: 4
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Eugene Earnshaw-Whyte
+  printing_id: '1'
+  rarity: Fixed
+  artist: April Lee
+  flavor_text: <i>"Why would this Mystic go to such lengths to conceal his identity? What secrets does
+    he hide?"</i>
+  collector_number: '56'
+- cardid: 757
+  title: Bayushi Bokatsu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Bayushi Bokatsu • Experienced
+  clans:
+  - Scorpion
+  keywords:
+  - Enlightened
+  - Unique
+  - Courtier
+  - Experienced
+  - Magistrate
+  - Scorpion Clan
+  text: '<b>Limited:</b> Bow Bokatsu, target two Personalities controlled by the same player, at least
+    one of whom is dishonorable, and rehonor one of the dishonorable targets even if you do not control
+    him: The other target''s controller may choose to destroy him; if he is not destroyed, dishonor him,
+    bow him, he will not straighten while Bokatsu remains bowed, and you may negate Bokatsu''s straightening
+    while Bokatsu remains bowed.'
+  gold_cost: 7
+  force: 3
+  chi: 4
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Jacques Goldcher
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  collector_number: '57'
+- cardid: 812
+  title: Bayushi Kan
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Bayushi Kan • Experienced
+  clans:
+  - Ninja
+  - Scorpion
+  keywords:
+  - Enlightened
+  - Ninjutsu 2
+  - Unique
+  - Experienced
+  - Ninja
+  - Samurai
+  - Scorpion Clan
+  text: <b>Elemental Battle/Open:</b> Target your Personality and target another player. After this action
+    ends, the target player is considered to have targeted your Personality with an action.
+  gold_cost: 8
+  force: 4
+  chi: 4
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Savvas Themistocles
+  printing_id: '1'
+  rarity: Fixed
+  artist: April Lee
+  flavor_text: <i>"She counters her inner darkness with outer light, and somehow finds balance in between."
+    - Shosuro Maru</i>
+  collector_number: '58'
+- cardid: 875
+  title: Bayushi Saya
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Bayushi Saya • Experienced
+  clans:
+  - Scorpion
+  keywords:
+  - Enlightened
+  - Unique
+  - Courtier
+  - Experienced
+  - Samurai
+  - Scorpion Clan
+  text: '<b>Elemental Reaction:</b> After a Personality becomes dishonorable, target him and bow or discard
+    a Ring you own: Destroy the Personality.'
+  gold_cost: 8
+  force: 3
+  chi: 4
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Tim Wiinkainen
+  printing_id: '1'
+  rarity: Fixed
+  artist: Amandine LaBarre
+  flavor_text: <i>"It is time for a new game, I think. Perhaps the Lion and the Unicorn will prove more
+    interesting the second time."</i>
+  collector_number: '59'
+- cardid: 886
+  title: Bayushi Shinzo
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Bayushi Shinzo • Experienced
+  clans:
+  - Ninja
+  - Scorpion
+  keywords:
+  - Duelist
+  - Enlightened
+  - Ninjutsu 2
+  - Unique
+  - Experienced
+  - Ninja
+  - Scorpion Clan
+  text: '<b>Elemental Reaction:</b> After Shinzo is targeted by another player''s action, bow or discard
+    a Ring you own and target a Personality controlled by the action''s player: Shinzo duels him. If the
+    other Personality loses, take control of him, straighten him, and permanently give him <b>Ninja</b>.
+    If Shinzo loses, destroy him.'
+  gold_cost: 8
+  force: 3
+  chi: 4
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Walbert Ibarra
+  printing_id: '1'
+  rarity: Fixed
+  artist: Steve Argyle
+  collector_number: '60'
+- cardid: 1088
+  title: Boisterous Soldiers
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: After this Follower is destroyed, once per game, you may Equip it to one of your Personalities,
+    ignoring all costs and restrictions.
+  gold_cost: 4
+  focus: 1
+  force: 4
+  chi: 0
+  honor_requirement: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Slawomir Maniak
+  flavor_text: <i>"Nothing like a quick drink to put you in the mood for a good scap, eh boys?"</i>
+  collector_number: '110'
+- cardid: 1163
+  title: Brothers in Arms
+  types:
+  - Follower
+  decks:
+  - Fate
+  extended_title: Brothers in Arms • Experienced
+  keywords:
+  - Unique
+  - Experienced
+  text: Can only attach to a Samurai.<br>Your cards titled "Brothers in Arms" have the ability, "<b>Battle,
+    :bow::</b> Bow a target enemy card with no attachments."
+  gold_cost: 3
+  focus: 3
+  force: 3
+  chi: 0
+  honor_requirement: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: <i>"Only through the efforts of our loyal allies was the peasant rebellion thwarted." -
+    Miya Hatori</i>
+- cardid: 1241
+  title: Cautious Escort
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Limited:</b> Bow your target performing Personality to create a 1F <b>Ashigaru • Cavalry •
+    Naval</b> Follower and attach it to another player's target Personality. While the Follower remains
+    attached to him, gain 3 Honor after the first time each attack his controller assigns or moves him.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ed Cox
+  flavor_text: <i>"Stockpile every grain of rice you can," the Khan ordered.</i>
+  collector_number: '90'
+- cardid: 1322
+  title: Chikka-tek
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Chikka-tek • Experienced
+  clans:
+  - Ratling
+  keywords:
+  - Unique
+  - Experienced
+  - Grasping Paw Tribe
+  - Nonhuman
+  - Ratling
+  text: '<b>Reaction:</b> After a player draws one or more cards from his own card''s effect, discard
+    a card: That player must discard a number of cards equal to the number drawn.'
+  gold_cost: 6
+  force: 3
+  chi: 2
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Storn A. Cook
+  flavor_text: <i>"When I take Enlightenment from humans, they pay much to get it back! Then all respect
+    the One Tribe!"</i>
+  collector_number: '51'
+- cardid: 1368
+  title: Chuda Ruri
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Chuda Ruri • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Enlightened
+  - Unique
+  - Bloodspeaker
+  - Experienced
+  - Shadowlands
+  - Shugenja
+  text: 'After Ruri enters play: Lose 4 Honor.<br><b>Fear Battle:</b> Fear 5.<br><b>Limited:</b> Bow Ruri
+    or bow your Ring, and target a Personality: If the target has the non-base Shadowlands keyword, give
+    him a -4C token after your next turn begins; otherwise, give him <b>Shadowlands</b>.'
+  gold_cost: 8
+  force: 3
+  chi: 4
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Josh Griffis
+  printing_id: '1'
+  rarity: Fixed
+  artist: Steve Argyle
+  collector_number: '62'
+- cardid: 1598
+  title: Curfew Declared
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, it enters play in your home.<br><b>Limited:</b> Discard this Event from play to name
+    "Follower", "Item", or "Spell". Bow all cards of the named type. Cards of that type will not straighten
+    until your next turn begins.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: John Donahue
+  flavor_text: <i>"All loyal citizens shall remain in their homes after sunset, for their own protection."
+    - Magistrate's Decree</i>
+  collector_number: '2'
+- cardid: 1620
+  title: Daidoji Akagi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Daidoji Akagi • Experienced
+  clans:
+  - Crane
+  keywords:
+  - Enlightened
+  - Unique
+  - Crane Clan
+  - Experienced
+  - Harrier
+  - Samurai
+  text: 'Ranged Attacks performed by your Harrier Personalities have +2 strength for each Ring you control.<br><b>Battle:</b>
+    Ranged 3 Attack.<br><b>Reaction:</b> After a Ranged Attack action resolves that a Personality performed,
+    target him, and dishonor Akagi or bow a Ring you control: Straighten the target or move him home.'
+  gold_cost: 7
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Faber Van Kraanen
+  printing_id: '1'
+  rarity: Fixed
+  artist: Christopher Appel
+  collector_number: '20'
+- cardid: 1676
+  title: Daidoji Setsuko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Daidoji Setsuko • Experienced
+  clans:
+  - Crane
+  keywords:
+  - Enlightened
+  - Unique
+  - Crane Clan
+  - Experienced
+  - Harrier
+  - Samurai
+  text: <b>Battle:</b> Bow your target performing Courtier at any location, or target your Ring, to move
+    Setsuko to a battlefield where there are any enemy units. This ability has <b>Absent</b> and <b>Remote</b>
+    if you move her to, or the performing Courtier is at, the current battlefield. You may take an additional
+    Battle action.
+  gold_cost: 10
+  force: 4
+  chi: 4
+  honor_requirement: 0
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Tuomas Poikela
+  printing_id: '1'
+  rarity: Fixed
+  artist: Chris Seaman
+  flavor_text: <i>"Certainty is truth. Purity of purpose is purity of spirit."</i>
+  collector_number: '21'
+- cardid: 1716
+  title: Daigotsu Fumiaki
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Daigotsu Fumiaki • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Unique
+  - Experienced
+  - Lost
+  - Samurai
+  - Shadowlands
+  text: After Fumiaki enters play, lose 4 Honor.<br><b>Battle/Open:</b> Target a Personality. His abilities
+    may not be used.
+  gold_cost: 6
+  force: 7
+  chi: 3
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Drew Baker
+  flavor_text: <i>"I care nothing for your lies, Ruri!" he snarled. "I serve a god, and you serve yourself.
+    Keep your distance or I shall end your blasphemy."</i>
+  collector_number: '63'
+- cardid: 1770
+  title: Daigotsu Soetsu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Daigotsu Soetsu • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Duelist
+  - Enlightened
+  - Unique
+  - Experienced
+  - Lost
+  - Samurai
+  - Shadowlands
+  - Undead
+  text: 'After Soetsu enters play: Lose 4 Honor.<br><b>Elemental Battle:</b> Bow Soetsu or bow or discard
+    a Ring you own, and target zero to three enemy units with total Force lower than Soetsu''s Force plus
+    Chi: Destroy the targets.'
+  gold_cost: 7
+  force: 4
+  chi: 4
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Sean Donnelly
+  printing_id: '1'
+  rarity: Fixed
+  artist: Jason Engle
+  flavor_text: <i>"I understand well the pain of loss, Tanitsu-san," he said. "The question is how to
+    channel that pain."</i>
+  collector_number: '64'
+- cardid: 1981
+  title: Destined Enemies
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Target your performing unbowed Daimyo Personality, Enlightened Personality, or
+    Personality with "Champion" as part of any of his keywords, or target your performing unbowed Personality
+    and target your Ring, to have your Personality challenge a target enemy Personality. If the target
+    has "Champion" as part of any of his keywords, or has Daimyo or Enlightened, the winner's controller
+    gains 5 Honor. Destroy the loser.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Patrick McEvoy
+  flavor_text: <i>"One day soon, little Lion. I will reunite you with your precious father." - Moto Chagatai</i>
+  collector_number: '91'
+- cardid: 2048
+  title: Divining Pool
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  text: ':bow:: Produce 2 Gold.<br><b>Battle/Open:</b> Turn a face-down card in a Province or in play
+    face-up. <i>(This does not target.)</i>'
+  gold_cost: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Steve Argyle
+  flavor_text: <i>"All the secrets of this world and beyond," Ruri whispered, "if only one has the courage
+    to look."</i>
+  collector_number: '6'
+- cardid: 2145
+  title: Doji Saori
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Doji Saori • Experienced
+  clans:
+  - Crane
+  keywords:
+  - Duelist
+  - Enlightened
+  - Unique
+  - Courtier
+  - Crane Clan
+  - Experienced
+  - Samurai
+  text: '<b>Elemental Reaction:</b> After Saori wins a duel: Destroy the duel''s loser. Search your discard
+    pile for a Dark Virtue Strategy, and put it in your hand.'
+  gold_cost: 8
+  force: 2
+  chi: 4
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - LeAnn Dennis
+  printing_id: '1'
+  rarity: Fixed
+  artist: Drew Baker
+  flavor_text: <i>"Those who think duels are a method to 'honorably resolve disputes' are fools. Duels
+    are the means to eliminate otherwise inconvenient opposition."</i>
+  collector_number: '22'
+- cardid: 2150
+  title: Doji Seo
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Doji Seo • Experienced
+  clans:
+  - Crane
+  keywords:
+  - Duelist
+  - Enlightened
+  - Unique
+  - Crane Clan
+  - Experienced
+  - Samurai
+  text: 'Challenges Seo issues while she is in an army will not be refused.<br><b>Battle:</b> Target a
+    Personality, who may be at another battlefield if you bow or discard a Ring you own: Seo duels him.
+    Destroy the duel''s loser.'
+  gold_cost: 10
+  force: 5
+  chi: 4
+  honor_requirement: 6
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Alexander Magoulas
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  collector_number: '25'
+- cardid: 2255
+  title: Eager Students
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Retainer
+  text: ':bow:: Produce 2 Gold.<br><b>Battle/Open:</b> Target two Personalities controlled by the same
+    player. Transfer one or more attachments from one Personality to the other. Straighten each that transferred.
+    If you transferred another player''s cards, destroy this Holding.'
+  gold_cost: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: <i>"As eager to please as they are to learn. They scurry about like helpful little rabbits!"
+    - Doji Seishiro</i>
+  collector_number: '7'
+- cardid: 2291
+  title: Elemental Arrow
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Fire
+  - Kiho
+  text: <b>Fire Kiho Reaction:</b> Before a Ranged Attack action performed by a card in your current army
+    resolves, target your performing Monk, Shugenja, or Enlightened Personality in that army to give one
+    of the action's Ranged Attacks +3 strength. After that action resolves, you may make a Ranged Attack
+    with strength equal to the one this action was chosen to modify.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: April Lee
+  flavor_text: <i>"I could kill you easily," Akagi said, "but I have no wish to."</i>
+  collector_number: '118'
+- cardid: 2358
+  title: Ep'kee
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Ep'kee • Experienced
+  clans:
+  - Ratling
+  keywords:
+  - Enlightened
+  - Unique
+  - Bushi
+  - Experienced
+  - General
+  - Green-Green-White Tribe
+  - Nonhuman
+  - Ratling
+  text: '<b>Elemental Reaction:</b> Before a Personality gains a Force bonus, target a Ring you own in
+    play or in your discard pile, or show a Ring from your hand: Ep''kee gains the bonus instead.'
+  gold_cost: 6
+  force: 4
+  chi: 2
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Joe Torrez
+  printing_id: '1'
+  rarity: Fixed
+  artist: David Esbri
+  collector_number: '52'
+- cardid: 2514
+  title: Festival of Inari
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  - Festival
+  text: 'After you reveal cards in your Provinces at the start of your turn, if this Event is face-up
+    in one of them, until your next turn ends, Unaligned Human Personalities have +2F; also, Farm, Ashigaru,
+    and Peasant cards in and out of play have their Gold Costs reduced to 1, and have the trait, ":bow::
+    Produce 1 Gold."'
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: <i>"War or peace, all that matters to the peasants is that they have a harvest that pays
+    taxes and feeds their children."</i>
+  collector_number: '3'
+- cardid: 2692
+  title: Fragrant Waters
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: 'Will not attach to a Crab Clan or Nonhuman Personality.<br>This Personality has +1PH.<br><b>Limited:</b>
+    Once per game, if this Personality has ever been opposed in a Combat Segment with this attached: Gain
+    5 Honor.'
+  gold_cost: 3
+  focus: 2
+  force: '+0'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Drew Baker
+  flavor_text: <i>"So wonderful, so relaxing. Does it not put you at ease?"</i>
+  collector_number: '114'
+- cardid: 2757
+  title: Gaijin Writings
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: '<b>Limited:</b> Remove this card from the game and target a player with 11 or more Family Honor
+    or target a Personality with 6 or more Force or target both: The player <i>(if any)</i> loses 4 Honor.
+    The Personality <i>(if any)</i> permanently receives -4F. Lose 4 Honor.'
+  gold_cost: 4
+  focus: 1
+  force: '+0'
+  chi: '+0'
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Kevin Wasden
+  flavor_text: <i>"These scrolls are bound with dead flesh! Disgusting!" - Miya Nishio</i>
+  collector_number: '115'
+- cardid: 2800
+  title: Gift of Rice
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Open:</b> Target a Holding: Straighten it. Until your next turn begins, all Personalities
+    controlled by other players have +1F. If you control the Holding, negate its straightening until after
+    your next Straighten Phase ends.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  errata_text: Errata'd via the internet.
+  printing_id: '1'
+  rarity: Fixed
+  artist: Amandine LaBarre
+  flavor_text: <i>"In times of war, it is easy for samurai to forget the peasants. A simple gift can win
+    their loyalty." - Kokujin</i>
+  collector_number: '92'
+- cardid: 2891
+  title: Gran-otik
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Gran-otik • Experienced
+  clans:
+  - Ratling
+  keywords:
+  - Enlightened
+  - Loyal
+  - Unique
+  - Experienced
+  - Nonhuman
+  - Ratling
+  - Scout
+  text: '<b>Reaction:</b> Before engaging, if Gran-otik is at the current battlefield, bow him: Ranged
+    4 Attack, a number of consecutive times equal to one plus the number of Rings in play and in discard
+    piles.'
+  gold_cost: 6
+  force: 1
+  chi: 3
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Jan Ang
+  printing_id: '1'
+  rarity: Fixed
+  artist: Britt Martin
+  flavor_text: <i>"To have no clan, a terrible thing. Still, Gran-otik will find no home until his spirit
+    learns to rest." - K'mee</i>
+  collector_number: '53'
+- cardid: 2972
+  title: Hard Pressed
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'Before this battle''s resolution: Move a unit home from the current battlefield. You may bow
+    it.<br><b>Battle:</b> If there are no Terrains at the current battlefield: Put this card into play
+    there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  printing_id: '2'
+  rarity: Fixed
+  artist: Paul (Prof.) Herbert
+  flavor_text: <i>The Nezumi hissed. "No-name humans die!" The ninja sneered. "I will not die to vermin."</i>
+  collector_number: '93'
+- cardid: 3155
+  title: Hida Nari
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hida Nari • Experienced
+  clans:
+  - Crab
+  keywords:
+  - Unique
+  - Bushi
+  - Crab Clan
+  - Experienced
+  text: Nari may not be targeted with Elemental actions or actions with an element keyword.<br><b>Repeatable
+    Battle, :gstar::</b> Target a Personality in Nari's army. Equip a Follower to him from your discard
+    pile.
+  gold_cost: 8
+  force: 6
+  chi: 2
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Steve Ellis
+  flavor_text: <i>"Is this all there is for me? Is violence my only destiny?"</i>
+  collector_number: '13'
+- cardid: 3188
+  title: Hida Sosuke
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hida Sosuke • Experienced
+  clans:
+  - Crab
+  keywords:
+  - Enlightened
+  - Unique
+  - Yu 5
+  - Bushi
+  - Crab Clan
+  - Experienced
+  - Hero
+  text: <b>Battle:</b> Take an additional action to play a Strategy from your discard pile for one of
+    its Heroic Battle abilities. If you control any Rings, the action may target a Personality ignoring
+    its restrictions. After it resolves, remove the Strategy from the game.
+  gold_cost: 8
+  force: 5
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Paul Heaver
+  printing_id: '1'
+  rarity: Fixed
+  artist: Heather V. Kreiter
+  flavor_text: <i>"The elements speak to me... of victory!" he laughed.</i>
+  collector_number: '14'
+- cardid: 3191
+  title: Hida Sozen
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hida Sozen • Experienced
+  clans:
+  - Crab
+  keywords:
+  - Enlightened
+  - Unique
+  - Crab Clan
+  - Experienced
+  - Hero
+  - Samurai
+  text: Negate Sozen's destruction from other players' actions.
+  gold_cost: 9
+  force: 5
+  chi: 4
+  honor_requirement: 0
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  story: 2006 Kotei Winner - Jon Oakes
+  printing_id: '2'
+  rarity: Fixed
+  artist: Nate Barnes
+  flavor_text: <i>"He left the Dragon because Enlightenment did not interest him. The irony was not lost
+    upon him." - Kaiu Sugimoto</i>
+  collector_number: '15'
+- cardid: 3313
+  title: Hiruma Oda
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hiruma Oda • Experienced
+  clans:
+  - Crab
+  keywords:
+  - Enlightened
+  - Unique
+  - Crab Clan
+  - Experienced
+  - Samurai
+  text: 'After Oda enters play: You may search your hand, then deck, then discard pile for the Ring of
+    Earth and put it into play.<br>It does not count for Enlightenment while in play.<br>Followers in
+    Oda''s army have the ability, "<b>Reaction:</b> Before this card bows or is destroyed to pay a cost:
+    Ignore that cost."'
+  gold_cost: 8
+  force: 6
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Andreas Stavropoulos
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ben Peck
+  collector_number: '16'
+- cardid: 3373
+  title: Hitomi Kazu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hitomi Kazu • Experienced
+  clans:
+  - Dragon
+  keywords:
+  - Enlightened
+  - Unique
+  - Dragon Clan
+  - Experienced
+  - Monk
+  text: <b>Elemental Reaction:</b> After Kazu assigns, target another Personality. Give Kazu +3F/-3C.
+    Give the target's lower printed stat between Force and Chi a bonus equal to the difference between
+    their printed values, and give his other stat an equal penalty. If you control a Ring, gain 2 Honor.
+  gold_cost: 8
+  force: 2
+  chi: 5
+  honor_requirement: 4
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Howard Hooven
+  printing_id: '1'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"He claims Lady Moon has opened his eyes. All I know is that he is more dangerous than
+    ever." - Daidoji Kikaze</i>
+  collector_number: '25'
+- cardid: 3471
+  title: Hoshi Masote
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Hoshi Masote • Experienced
+  clans:
+  - Dragon
+  keywords:
+  - Duelist
+  - Enlightened
+  - Unique
+  - Dragon Clan
+  - Experienced
+  - Monk
+  - Tattooed
+  text: During the first duel each turn involving Masote, other players will not gain Honor, the duel's
+    loser is destroyed, and other players may not take Reactions that trigger if their Personality wins
+    the duel.
+  gold_cost: 9
+  force: 5
+  chi: 4
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - John Seals
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  flavor_text: <i>"What happens when a man gains the only thing he desires?" - Mirumoto Mareshi</i>
+  collector_number: '26'
+- cardid: 3620
+  title: Ikoma Kosaku
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Ikoma Kosaku • Experienced
+  clans:
+  - Lion
+  keywords:
+  - Tactician
+  - Unique
+  - Experienced
+  - Lion Clan
+  - Samurai
+  text: <b>Reaction, :gstar::</b> Once per battle, after Kosaku is assigned or moves to a battlefield,
+    Recruit a target face-up Personality in one of your Provinces into play in Kosaku's army, paying less
+    Gold equal to the number of Lion Clan Personalities in Kosaku's army.
+  gold_cost: 8
+  force: 4
+  chi: 4
+  honor_requirement: 6
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Chuck Lukacs
+  flavor_text: <i>"I have no time for games. My calling is war!"</i>
+  collector_number: '36'
+- cardid: 3777
+  title: Inspiring Leadership
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: This card's Gold Cost equals the number of unbowed non-Tactician Personalities you control.<br><b>Battle/Open:</b>
+    Permanently give all your Personalities <b>Tactician</b>.
+  gold_cost: '*'
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Lisa Hunt
+  flavor_text: <i>"Think for yourself!" Tawagoto encouraged. "Act on your own! Your will belongs to no
+    one, despite what they may tell you!"</i>
+  collector_number: '94'
+- cardid: 3848
+  title: Isawa Kimi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Isawa Kimi • Experienced
+  clans:
+  - Phoenix
+  keywords:
+  - Enlightened
+  - Unique
+  - Experienced
+  - Phoenix Clan
+  - Shugenja
+  - Void
+  text: <b>Void Reaction:</b> Even if Kimi is dead, after a turn begins, give your Phoenix Clan Personalities
+    the element keywords of all Rings you control.
+  gold_cost: 7
+  force: 3
+  chi: 4
+  honor_requirement: 4
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Bryan Reese
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ed Cox
+  flavor_text: <i>"When my day comes," Ningen smiled, "you shall stand in my place."</i>
+  collector_number: '46'
+- cardid: 3896
+  title: Isawa Sawao
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Isawa Sawao • Experienced
+  clans:
+  - Phoenix
+  keywords:
+  - Duelist
+  - Enlightened
+  - Unique
+  - Experienced
+  - Fire
+  - Phoenix Clan
+  - Shugenja
+  text: '<b>Battle:</b> Any number of times per turn, bow or discard a Ring you own and target an attachment:
+    Destroy it.'
+  gold_cost: 6
+  force: 1
+  chi: 4
+  honor_requirement: 6
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Bryan Reese
+  printing_id: '1'
+  rarity: Fixed
+  artist: Miguel Coimbra
+  flavor_text: <i>"There can be no growth without loss, no healing without pain. All answers can be found
+    within the flames."</i>
+  collector_number: '47'
+- cardid: 3973
+  title: Itsume
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Spirit
+  - Unaligned
+  keywords:
+  - Duelist
+  - Kenku
+  - Nonhuman
+  - Spirit
+  - Trickster
+  text: <b>Limited:</b> Target a Ring and a Personality controlled by the same player. Itsume challenges
+    the Personality. Bow the loser. If Itsume wins, take control of the Ring. After the next time this
+    game the player triggers that Ring's printed trait that would put it into play from his hand, he may
+    bow his Monk or Shugenja to take control of the Ring.
+  gold_cost: 6
+  force: 1
+  chi: 4
+  personal_honor: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Veronica V. Jones
+  collector_number: '68'
+- cardid: 4007
+  title: Iuchi Umeka
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Iuchi Umeka • Experienced
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Enlightened
+  - Unique
+  - Baraunghar
+  - Experienced
+  - Shugenja
+  - Unicorn Clan
+  text: 'Actions on cards straightened by Umeka''s printed abilities may be used one additional time per
+    turn. <br><b>Open:</b> Bow a Spell or Ring you control: Straighten a target Samurai. <br><b>Open:</b>
+    Bow a Samurai you control: Straighten a target Ring or Spell.'
+  gold_cost: 9
+  force: 4
+  chi: 4
+  honor_requirement: 4
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Aaron Boyhan
+  printing_id: '1'
+  rarity: Fixed
+  artist: Lisa Hunt
+  collector_number: '74'
+- cardid: 4057
+  title: Journey's Beginning
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Reaction:</b> After your Personality moves to a battlefield, target one or more of your other
+    Personalities at the location from which he moved and pay an equal amount of Gold: Move them to the
+    battlefield.'
+  gold_cost: '*'
+  focus: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Llyn Hunter
+  flavor_text: <i>"Go," the Khan ordered. "Return victorious, or not at all."</i>
+  collector_number: '95'
+- cardid: 4058
+  title: Journey's End
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Absent Interrupt:</b> After the Battle action resolves, if it moved your Personality to a battlefield,
+    then take an additional action.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  errata_text: Tech erratum via Oracle.
+  printing_id: '1'
+  rarity: Fixed
+  artist: Llyn Hunter
+  flavor_text: <i>"More Unicorn have been sighted, Yoshino-sama," Fujimaro reported. "What are your orders?"</i>
+  collector_number: '96'
+- cardid: 4076
+  title: K'mee
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: K'mee • Experienced
+  clans:
+  - Ratling
+  keywords:
+  - Enlightened
+  - Loyal
+  - Unique
+  - Experienced
+  - Nonhuman
+  - Ratling
+  - Shugenja
+  - Third Whisker Tribe
+  text: K'mee attaches cards with "Jingasa" in their titles ignoring Gold cost.<br><b>Limited, :bow::</b>
+    Put a Ring in any player's discard pile into play under your control. While it remains in play, it
+    does not count toward an Enlightenment Victory. After the next time this game K'mee leaves play, destroy
+    the Ring.
+  gold_cost: 5
+  force: 2
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Seng Huat Lim
+  printing_id: '1'
+  rarity: Fixed
+  artist: Jonathan Hunt
+  flavor_text: <i>"Not all humans fools after all."</i>
+  collector_number: '54'
+- cardid: 4114
+  title: Kaiu Haku
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Kaiu Haku • Experienced
+  clans:
+  - Crab
+  keywords:
+  - Unique
+  - Battlemaster
+  - Crab Clan
+  - Experienced
+  - Samurai
+  text: After Haku overlays, permanently copy to him all traits from the card he overlayed.<br><b>Limited:</b>
+    Search your deck, then discard pile, for a Follower, show it, put it in your hand, and discard a Follower
+    from your hand.
+  gold_cost: 9
+  force: 6
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Miguel Coimbra
+  flavor_text: <i>"Enlightenment means nothing. Duty is all I need."</i>
+  collector_number: '17'
+- cardid: 4164
+  title: Kakita Funaki
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Kakita Funaki • Experienced
+  clans:
+  - Crane
+  keywords:
+  - Duelist
+  - Enlightened
+  - Unique
+  - Courtier
+  - Crane Clan
+  - Experienced
+  - Samurai
+  text: <b>Elemental Political Limited:</b> Another player's target Personality may challenge Funaki.
+    If he does not, remove all text in his text box except keywords until your next turn begins; you may
+    bow a Ring you control to make this effect's duration permanent instead. Destroy the loser.
+  gold_cost: 8
+  force: 3
+  chi: 4
+  honor_requirement: 6
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Christian Zoli
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ed Cox
+  collector_number: '24'
+- cardid: 4536
+  title: Komori Junsaku
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Bat Clan
+  - Shugenja
+  text: 'Junsaku may not perform Spell or Kiho actions during battles.<br><b>Battle/Open:</b> Target your
+    Personality and your honorably dead Personality: Set the first target''s Force, Chi, or Personal Honor
+    to equal the same stat of the second.'
+  gold_cost: 4
+  force: 1
+  chi: 3
+  personal_honor: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Patrick McEvoy
+  flavor_text: <i>The Bat Clan are summoners of creatures and spirits. Their spirit allies carry a message
+    across the Empire in days.</i>
+  collector_number: '69'
+- cardid: 4581
+  title: Kuni Okichi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Kuni Okichi • Experienced
+  clans:
+  - Crab
+  keywords:
+  - Enlightened
+  - Unique
+  - Yu 3
+  - Bloodspeaker
+  - Crab Clan
+  - Experienced
+  - Shugenja
+  text: '<b>Battle:</b> Target an enemy Follower or Personality without Followers, or if you are a Crab
+    Clan player and have a Ring in play or choose to discard one from your hand, target any enemy Personality:
+    Destroy the target.'
+  gold_cost: 8
+  force: 4
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Lars Bodach
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ben Peck
+  flavor_text: <i>"He found secrets in the shadows, but what else?"</i>
+  collector_number: '18'
+- cardid: 4628
+  title: Kyoso no Oni
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Kyoso no Oni • Experienced 3
+  clans:
+  - Unaligned
+  keywords:
+  - Enlightened
+  - Experienced 3
+  - Unique
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  text: After Kyoso enters play, lose 8 Honor.<br>After the first time this game Kyoso enters play, destroy
+    a Personality you control; if this destroyed him, you may target and destroy another Personality with
+    equal or lower Gold Cost than his.<br><b>Limited:</b> Target a Ring and a Shadowlands Personality.
+    Destroy both targets.
+  gold_cost: 13
+  force: 13
+  chi: 6
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  story: 2006 Kotei Winner - Daniel Sales
+  printing_id: '2'
+  rarity: Fixed
+  artist: Steve Argyle
+  collector_number: '65'
+- cardid: 4825
+  title: Mantle of Flame
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: 'May attach to and be performed by an Enlightened Personality as if he were a Shugenja.<br>You
+    may negate this Personality''s straightening during the Straighten Phase.<br><b>Battle/Open:</b> Bow
+    this Shugenja and target your Personality: While this Shugenja remains bowed, targeting the Personality
+    or choosing him as a performer costs 4 Gold in addition to any other costs.'
+  gold_cost: 3
+  focus: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Slawomir Maniak
+  collector_number: '122'
+- cardid: 5075
+  title: Mirumoto Bokkai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Mirumoto Bokkai • Experienced
+  clans:
+  - Dragon
+  keywords:
+  - Duelist
+  - Enlightened
+  - Unique
+  - Dragon Clan
+  - Experienced
+  - Samurai
+  text: <b>Reaction:</b> After Bokkai wins a duel during a battle, target a Personality in your discard
+    pile or attached to one of your Provinces. Bring him into play at the current battlefield, ignoring
+    costs. Remove the Personality from the game after the battle ends.
+  gold_cost: 8
+  force: 4
+  chi: 4
+  honor_requirement: 0
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Brandon Flake
+  printing_id: '1'
+  rarity: Fixed
+  artist: Anthony Francisco
+  collector_number: '27'
+- cardid: 5089
+  title: Mirumoto Gonkuro
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Mirumoto Gonkuro • Experienced
+  clans:
+  - Dragon
+  keywords:
+  - Duelist
+  - Enlightened
+  - Unique
+  - Dragon Clan
+  - Experienced
+  - Samurai
+  text: <b>Limited:</b> Put the top card of your Fate deck under your Stronghold.<br><b>Limited:</b> Straighten
+    a Ring.
+  gold_cost: 7
+  force: 4
+  chi: 4
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Steve Fazio
+  printing_id: '1'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: <i>Gonkuro charged at the Crane line, bellowing a war cry and laughing. He was outnumbered
+    six to one, and yet he returned alone.</i>
+  collector_number: '28'
+- cardid: 5092
+  title: Mirumoto Hakahime
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Mirumoto Hakahime • Experienced
+  clans:
+  - Dragon
+  keywords:
+  - Enlightened
+  - Unique
+  - Dragon Clan
+  - Experienced
+  - Samurai
+  text: <b>Reaction:</b> Before removing a Personality from the game after a battle ends, attach that
+    personality face-down to one of your Provinces instead.
+  gold_cost: 8
+  force: 4
+  chi: 4
+  honor_requirement: 5
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Jesus Mera
+  printing_id: '1'
+  rarity: Fixed
+  artist: Mark Poole
+  flavor_text: <i>"This 'Wanderer' is to be allowed to travel anywhere he wishes in Dragon lands, without
+    restraint. How odd."</i>
+  collector_number: '29'
+- cardid: 5223
+  title: Monastery Classroom
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: ':bow:: Produce 2 Gold.<br>:bow:: When paying for an Enlightened Personality, produce 3 Gold which
+    may only pay for him.<br><b>Battle/Open, :bow::</b> Raise the Chi and Personal Honor of a target Enlightened
+    Personality to 5.'
+  gold_cost: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: John Donahue
+  flavor_text: <i>"Is Enlightenment hidden atop some remote mountain? Or is it merely hiding in plain
+    sight, where none of us look anymore?" - The Mystic</i>
+  collector_number: '8'
+- cardid: 5247
+  title: Moshangoru
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Moshangoru • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Enlightened
+  - Unique
+  - Bandit
+  - Experienced
+  - Nonhuman
+  - Ogre
+  - Shadowlands
+  text: After Moshangoru enters play, lose 4 Honor.<br><b>Elemental Battle:</b> Moshangoru challenges
+    a target enemy Personality. His controller may pay 5 Gold or bow a Ring he controls to have the target
+    refuse. Both Personalities use their Force as their duel stat. Destroy the loser.
+  gold_cost: 7
+  force: 8
+  chi: 3
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Stephen LaFolette
+  printing_id: '1'
+  rarity: Fixed
+  artist: Eric Lofgren
+  flavor_text: <i>"I bring news, great Kyoso," the ogre rumbled. "News of a human called the Wanderer."</i>
+  collector_number: '66'
+- cardid: 5250
+  title: Moshi Amika
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Moshi Amika • Experienced
+  clans:
+  - Mantis
+  keywords:
+  - Enlightened
+  - Naval
+  - Unique
+  - Experienced
+  - Fire
+  - Mantis Clan
+  - Shugenja
+  - Water
+  text: <b>Fire Water Battle:</b> Ranged 6 Attack.<br><b>Fire Water Tireless Battle:</b> Bow or discard
+    a Ring you own to make a Ranged 6 Attack.
+  gold_cost: 7
+  force: 3
+  chi: 4
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Richard Chan
+  printing_id: '1'
+  rarity: Fixed
+  artist: Franz Vohwinkel
+  collector_number: '37'
+- cardid: 5268
+  title: Moshi Kekiesu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Moshi Kekiesu • Experienced
+  clans:
+  - Mantis
+  keywords:
+  - Enlightened
+  - Naval
+  - Unique
+  - Experienced
+  - Mantis Clan
+  - Shugenja
+  text: <b>Maho Battle:</b> Ranged 4 Attack or two consecutive Ranged 2 Attacks. The Ranged Attacks compare
+    to Personalities' Chi, and may target Personalities with attached Followers. They will not be modified
+    unless you control a Ring, and may not be combined.
+  gold_cost: 8
+  force: 3
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - David Campos
+  printing_id: '1'
+  rarity: Fixed
+  artist: Llyn Hunter
+  flavor_text: <i>"She knows many frightening things," Sayoko mused. "Perhaps too many."</i>
+  collector_number: '38'
+- cardid: 5296
+  title: Moto Akikazu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Moto Akikazu • Experienced
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Enlightened
+  - Unique
+  - Experienced
+  - Shugenja
+  - Unicorn Clan
+  text: Akikazu has a Force bonus equal to the highest number of dead Personalities in any one discard
+    pile.<br><b>Elemental Battle/Open:</b> Bow your Ring to target a Personality. His controller must
+    bow a Ring he controls and owns, or discard a Ring he owns, to assign or move the target to battlefields
+    <i>(this turn)</i>.
+  gold_cost: 10
+  force: 5
+  chi: 4
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  errata_text: Clarified that the ability's effect only refers to the targeted Personality.
+  story: 2006 Kotei Winner - Sean Raycraft
+  printing_id: '1'
+  rarity: Fixed
+  artist: Anthony Grabski
+  flavor_text: <i>"Death awaits within the heart of a ruby."</i>
+  collector_number: '75'
+- cardid: 5366
+  title: Moto Rumiko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Moto Rumiko • Experienced
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Enlightened
+  - Unique
+  - Experienced
+  - Samurai
+  - Unicorn Clan
+  text: After Rumiko enters play, you may search your hand, then deck, then discard pile, for the Ring
+    of Air and put it into play. While it remains in play, it does not count toward an Enlightenment Victory.<br>Personalities
+    in Rumiko's army have the ability, "<b>Battle:</b> Bow a Follower in this unit or a Ring you control
+    to bow a target enemy card with no attachments."
+  gold_cost: 9
+  force: 5
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Aaron Boyhan
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  collector_number: '76'
+- cardid: 5438
+  title: Muketsu
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Muketsu • Experienced
+  clans:
+  - Spider
+  keywords:
+  - Unique
+  - Experienced
+  - Monk
+  - Shadowlands
+  - Spider Clan
+  text: After Muketsu enters play, lose 5 Honor.<br><b>Tireless Reaction:</b> After a Ring bows, give
+    a target Personality a -2C token.
+  gold_cost: 8
+  force: 7
+  chi: 4
+  personal_honor: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  printing_id: '2'
+  rarity: Fixed
+  artist: Chris Seaman
+  flavor_text: <i>"Do you think you understand pain, demon? You know nothing. Let me enlighten you."</i>
+  collector_number: '67'
+- cardid: 5472
+  title: Mystic Waterfall
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  text: ':bow:: Produce 2 Gold.<br>:bow:: When paying for an Enlightened Personality, produce 4 Gold which
+    may only pay for him.<br><b>Tireless Reaction:</b> After your Enlightened Personality is targeted
+    by another player''s action, draw a card.'
+  gold_cost: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  flavor_text: <i>"Would that I had such freedom." - The Wanderer</i>
+  collector_number: '9'
+- cardid: 5496
+  title: Nagisa
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unaligned
+  keywords:
+  - Ronin
+  - Samurai
+  text: All players have the ability, "<b>Elemental Open:</b> If you control more Rings than Nagisa's
+    controller, take control of Nagisa."
+  gold_cost: 2
+  force: 2
+  chi: 4
+  personal_honor: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Britt Martin
+  flavor_text: <i>"I am on warrior pilgramage, my friend. Kindly stand out of my way, or shall be my next
+    test."</i>
+  collector_number: '70'
+- cardid: 5878
+  title: Partake of the Fire
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Fire
+  - Water
+  text: <b>Battle, :bow::</b> Ranged 4 Attack. You may destroy a Terrain, Region, or Formation at this
+    Personality's battlefield. You may move this Personality home.
+  gold_cost: 4
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Patrick McEvoy
+  flavor_text: <i>"It smells like poison. The morning after you drink it, it feels like poison as well."
+    - Yoritomo Iongi</i>
+  collector_number: '123'
+- cardid: 6122
+  title: Qolsa
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Naga
+  - Unaligned
+  keywords:
+  - Constrictor
+  - Naga
+  - Nonhuman
+  - Shugenja
+  - Vedic
+  text: '<b>Battle/Open:</b> Target an enemy Personality with less Force than Qolsa, a Ring, or an Enlightened
+    Personality: Bow it.'
+  gold_cost: 6
+  force: 4
+  chi: 4
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  flavor_text: <i>"A second Constrictor has awakened!" Akasha said breathlessly. "After so long with so
+    few, what can this mean for the Naga?"</i>
+  collector_number: '43'
+- cardid: 6207
+  title: Reckless Charge
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Heroic
+  text: '<b>Battle/Open:</b> Choose your performing Human Personality: Give him +2F. He will not be destroyed
+    by other player''s card effects. After the next Attack Phase ends, destroy him.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"The front line shall break their defenses. You shall stand with your fathers in Yomi
+    tonight!" - Matsu Yoshino</i>
+  collector_number: '97'
+- cardid: 6388
+  title: Rosoku Sensei
+  types:
+  - Sensei
+  decks:
+  - Pre-Game
+  keywords:
+  - All Clans
+  text: This Sensei counts as a Ring for actions on non-Stronghold cards.<br>After one of your actions
+    put cards into your hand, until this phase ends, negate further such effects from your actions.
+  province_strength: -1
+  starting_honor: '+0'
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  errata_text: Errata'd via internet August 30th, 2006
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ed Cox
+  flavor_text: <i>"Is his legacy a blessing or a curse?" - Asahina Sekawa</i>
+  collector_number: '121'
+- cardid: 6436
+  title: Sacred Hillside
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  text: 'This province has +1 strength for each of Ring you control.<br><b>Open:</b> Target a Ring: Straighten
+    it.'
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Amandine LaBarre
+  flavor_text: <i>"An honest man was once blessed by the Fortunes here. Many seek to honor his memory.
+    Reverence, or greed?" - The Ronin</i>
+  collector_number: '81'
+- cardid: 6560
+  title: Seeking Enlightenment
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: After you reveal cards in your Provinces at the start of your turn, if this Event is face-up in
+    one of them, until the game ends, all players have the ability, "<b>Limited:</b> Bow your performing
+    Personality to put a Ring in your discard pile into your hand."
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  flavor_text: <i>"You are not who you claim to be, human," the Naga said, "but your quest is pure."</i>
+  collector_number: '4'
+- cardid: 6747
+  title: Shiba Denbe
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Shiba Denbe • Experienced
+  clans:
+  - Phoenix
+  keywords:
+  - Enlightened
+  - Unique
+  - Experienced
+  - Phoenix Clan
+  - Samurai
+  - Yojimbo
+  text: <b>Battle/Open:</b> Put a Ring you control into your hand.<br><b>Battle/Open:</b> Put a Ring into
+    play from your hand. While it remains in play, it has no abilities, it does not count towards an Enlightenment
+    Victory, and your Personalities have its element keyword.
+  gold_cost: 8
+  force: 3
+  chi: 4
+  honor_requirement: 5
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - regan O'Niell
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  flavor_text: <i>"I fear his discoveries may have shaken his mind." - Shiba Danjuro</i>
+  collector_number: '48'
+- cardid: 6833
+  title: Shiba Yoshimi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Shiba Yoshimi • Experienced
+  clans:
+  - Phoenix
+  keywords:
+  - Duelist
+  - Enlightened
+  - Unique
+  - Experienced
+  - Phoenix Clan
+  - Samurai
+  - Yojimbo
+  text: 'While there is an Earth Shugenja in Yoshimi''s army, targeting a Shugenja in Yoshimi''s army
+    has the additional cost, "Discard a card" for other players.<br><b>Elemental Air Reaction:</b> When
+    another player''s action would target a Personality in Yoshimi''s army, choose your performing Air
+    Shugenja in your army: The action targets another legal Personality in his army of your choice.'
+  gold_cost: 7
+  force: 3
+  chi: 4
+  honor_requirement: 4
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Jeff Hardee
+  printing_id: '1'
+  rarity: Fixed
+  artist: Mark Poole
+  collector_number: '49'
+- cardid: 6961
+  title: Shinjo Wei
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Shinjo Wei • Experienced
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Enlightened
+  - Unique
+  - Experienced
+  - Junghar
+  - Samurai
+  - Scout
+  - Unicorn Clan
+  text: '<b>Recon Battle/Open:</b> Target a province: You have Reconnaissance at its battlefields. During
+    battles at that province''s battlefields, your Junghar Personalities have the ability, "<b>Battle:</b>
+    Ranged 4 Attack."'
+  gold_cost: 8
+  force: 3
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Galuleu Paolo
+  printing_id: '1'
+  rarity: Fixed
+  artist: Steve Argyle
+  flavor_text: <i>"The Khan prepares for a second offensive, Lord Shono," Wei said. "What are your orders?"</i>
+  collector_number: '77'
+- cardid: 7096
+  title: Shosuro Dazai
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Shosuro Dazai • Experienced
+  clans:
+  - Scorpion
+  keywords:
+  - Enlightened
+  - Unique
+  - Air
+  - Courtier
+  - Experienced
+  - Scorpion Clan
+  - Shugenja
+  text: Twice per turn, you may ignore the cost of bowing Dazai, if it is the cost of a Political action
+    or an action on a Spell.
+  gold_cost: 7
+  force: 2
+  chi: 4
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Matthew Maddocks
+  printing_id: '1'
+  rarity: Fixed
+  artist: Drew Baker
+  flavor_text: <i>"The spirits whisper to me truths about these 'Wanderers'. Interesting truths indeed!"</i>
+  collector_number: '61'
+- cardid: 7278
+  title: Sisters of the Elements
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  - Air
+  - Earth
+  - Fire
+  - Monk
+  - Void
+  - Water
+  text: 'Will only attach to a Monk, Shugenja, or Enlightened Personality.<br>Before bowing this Personality
+    to pay the cost of a Kiho action he is performing: Once per turn, you may bow this card to pay the
+    cost instead.<br><b>Limited:</b> Remove two cards in your hand from the game: Put an Elemental Fate
+    card or a Fate card with an element keyword from your discard pile into your hand.'
+  gold_cost: 4
+  focus: 1
+  force: 1
+  chi: '+1'
+  honor_requirement: 0
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Lisa Hunt
+  flavor_text: <i>"A small order, but wise." - Tanrai</i>
+  collector_number: '112'
+- cardid: 7315
+  title: Snow-Blocked Pass
+  types:
+  - Region
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  text: Before battle resolution at this Province's battlefield, bow all units there with 4 or lower total
+    Force.
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Malcolm McClinton
+  flavor_text: <i>"The other clans have become accustomed to winter crippling their wars. They allow their
+    guard to drop." - Moto Chagatai</i>
+  collector_number: '82'
+- cardid: 7548
+  title: Strength of the Crab
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing opposed Crab Clan Personality: Give him +4F. Until the
+    battle ends, targeting him has the additional cost, "Discard two cards" for enemy players.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Drew Baker
+  flavor_text: <i>Duty.</i>
+  collector_number: '98'
+- cardid: 7549
+  title: Strength of the Crane
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Target your performing Crane Clan Personality. Ranged Attack with a strength equal
+    to their Personal Honor. Gain 2 Honor.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: April Lee
+  flavor_text: <i>Perfection.</i>
+  collector_number: '99'
+- cardid: 7552
+  title: Strength of the Dragon
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing unbowed Dragon Clan Personality, target an enemy Personality,
+    and bow your Ring: Your Personality challenges the target. He may refuse if his controller discards
+    from play a Ring he controls. Destroy the duel''s loser.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Steve Argyle
+  flavor_text: <i>Wisdom.</i>
+  collector_number: '100'
+- cardid: 7555
+  title: Strength of the Lion
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing opposed Lion Clan Personality: Give him +4F. You may take
+    an additional Battle action.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Chris Seaman
+  flavor_text: <i>Tradition.</i>
+  collector_number: '101'
+- cardid: 7556
+  title: Strength of the Mantis
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing opposed Mantis Clan Personality and target a Holding: Give
+    the Personality +2F. Increase the Holding''s Gold production by 2.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Anthony Grabski
+  flavor_text: <i>Ingenuity.</i>
+  collector_number: '102'
+- cardid: 7558
+  title: Strength of the Nezumi
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing Ratling Personality and target a Follower or Item in a
+    discard pile: Attach it to the Ratling, paying less Gold equal to the Ratling''s Gold Cost.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Corene Werhane
+  flavor_text: <i>Survival.</i>
+  collector_number: '104'
+- cardid: 7559
+  title: Strength of the Phoenix
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing opposed Phoenix Clan Personality: Give him +1F for each
+    different element keyword in his army. Give him +1C.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ed Cox
+  flavor_text: <i>Knowledge.</i>
+  collector_number: '103'
+- cardid: 7560
+  title: Strength of the Scorpion
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing Scorpion Clan Personality and target another player''s
+    Personality, each with one or more abilities: Your Personality switches either Force or abilities
+    with the other.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: April Lee
+  flavor_text: <i>Secrets.</i>
+  collector_number: '105'
+- cardid: 7561
+  title: Strength of the Shadowlands
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Fear
+  text: '<b>Battle:</b> Choose your performing Shadowlands Personality: Fear with strength equal to your
+    Personality''s Chi which affects Personalities as if they were Followers.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Drew Baker
+  flavor_text: <i>Fear.</i>
+  collector_number: '106'
+- cardid: 7563
+  title: Strength of the Unicorn
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target up to three cards in units led by opposed Unicorn Clan Personalities who
+    did not assign during Cavalry Maneuvers this attack: Give each target +3F.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Steve Argyle
+  flavor_text: <i>Mobility.</i>
+  collector_number: '107'
+- cardid: 7643
+  title: Sumotori Arena
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Singular
+  text: <b>Limited, :bow::</b> Bow your target performing Human Personality to have him challenge another
+    player's target Personality. He may refuse; if he does, dishonor him and his controller loses 2 Honor.
+    Bow the loser. The winner gains 4 Honor.
+  gold_cost: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Chuck Lukacs
+  flavor_text: <i>In such uncertain times, diversion for the masses is extremely important.</i>
+  collector_number: '10'
+- cardid: 7854
+  title: Teaching Stick
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Weapon
+  text: 'This Personality loses and will not gain <b>Duelist</b>. <br>After this Personality enters a
+    duel, if he has 4 or less Force: Both Personalities use Force as their duel stat.<br><b>Battle/Open:</b>
+    Give this card +2F.'
+  gold_cost: 2
+  focus: 3
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Britt Martin
+  collector_number: '116'
+- cardid: 7920
+  title: Test of Enlightenment
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Limited:</b> Choose your performing unbowed Personality and target another player''s Personality:
+    Your Personality challenges him. He may refuse; if he did, dishonor him. Bow the duel''s loser. The
+    winner''s controller may search his deck, then discard pile, for a Ring, show it, and put it in his
+    hand.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Mark Poole
+  flavor_text: <i>"Tell me what you've learned," the Wanderer said. Sawao smiled. "I can only show you."</i>
+  collector_number: '108'
+- cardid: 8015
+  title: The Darkened Path
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  - Maho
+  text: '<b>Battle/Open:</b> Bow your performing Monk or Enlightened Personality and target a number of
+    Rings up to his Chi: Until your next turn begins, the targets are treated as if they are not in the
+    game <i>(this effect beginning and ending does not count as any of the targets leaving or returning
+    to play, nor will it end any durations based upon the targets remaining in play or under control)</i>.
+    Lose 3 Honor.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Franz Vohwinkel
+  flavor_text: <i>"What's the matter beast? Do you fear yourself?" Kokujin laughed.</i>
+  collector_number: '119'
+- cardid: 8034
+  title: The Dragons' Talons
+  types:
+  - Spell
+  decks:
+  - Fate
+  keywords:
+  - Fire
+  - Ritual
+  text: '<b>Battle:</b> Destroy this Shugenja and zero or more of your other performing Shugenja: You
+    may target a number of enemy cards, which must either be bowed or have no unbowed cards attached at
+    the time they are targeted, up to a number equal to the number of Shugenja destroyed by this action''s
+    cost. Destroy each target after it is chosen, before choosing the next target.'
+  gold_cost: 3
+  focus: 3
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  flavor_text: <i>"I do not wish to harm you," Miyoshi said. "Please, come no farther."</i>
+  collector_number: '124'
+- cardid: 8230
+  title: The Mystic
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: The Mystic • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Experienced Isawa Sezaru
+  - Unique
+  - Fire
+  - Ronin
+  - Shugenja
+  - Void
+  text: 'Targeting the Mystic has the additional cost, "Pay 10 Gold or discard a Spell or Kiho Strategy"
+    for other players.<br><b>Battle:</b> If there are enemy units at the current battlefield, bow a Ring
+    you control and target your discarded Personality: Bring him into play in your current army, ignoring
+    costs.'
+  gold_cost: 15
+  force: 6
+  chi: 7
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Michael Komarck
+  collector_number: '71'
+- cardid: 8287
+  title: The Ronin
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: The Ronin • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Duelist
+  - Experienced Kaneka
+  - Tactician
+  - Unique
+  - Ronin
+  - Samurai
+  - Shogun
+  text: 'Targeting the Ronin has the additional cost, "Pay 10 Gold or discard a Battle Strategy" for other
+    players.<br><b>Battle:</b> Bow any number of Rings you control: Give each Personality in the current
+    enemy army -2F for each Ring you bowed.'
+  gold_cost: 15
+  force: 9
+  chi: 7
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Michael Komarck
+  collector_number: '72'
+- cardid: 8412
+  title: The Wanderer
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: The Wanderer • Experienced
+  clans:
+  - Unaligned
+  keywords:
+  - Experienced Emperor Toturi III
+  - Unique
+  - Courtier
+  - Ronin
+  - Samurai
+  text: 'Targeting the Wanderer has the additional cost, "Pay 10 Gold or discard a Political Strategy"
+    for other players.<br><b>Political Battle:</b> Bow one or more Rings you control and choose your performing
+    opposed Personality: For each Ring you bowed, gain 4 Honor and give your chosen performer +4F.'
+  gold_cost: 15
+  force: 5
+  chi: 7
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Michael Komarck
+  collector_number: '73'
+- cardid: 8424
+  title: The Way of Will
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Battle/Open:</b> Choose your performing Monk or Enlightened Personality and target zero or
+    more Personalities up to the number of Rings you have in play: Give the performer and each target
+    +2F.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ed Cox
+  flavor_text: <i>"The enlightened soul can be harnessed and used as a weapon. But what price does a soul
+    pay for such squandered potential?"</i>
+  collector_number: '120'
+- cardid: 8561
+  title: Togashi Nyima
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Togashi Nyima • Experienced
+  clans:
+  - Dragon
+  keywords:
+  - Enlightened
+  - Unique
+  - Dragon Clan
+  - Experienced
+  - Monk
+  - Tattooed
+  text: '<b>Reaction:</b> After the end of an Attack Phase in which you were the Defender: Put a Ring
+    in your discard pile into your hand. Declare an additional Attack Phase against that phase''s Attacker,
+    in which neither player may invite allies and you may only assign Nyima.'
+  gold_cost: 7
+  force: 4
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Michael Habel
+  printing_id: '1'
+  rarity: Fixed
+  artist: Joachim Gmoser
+  flavor_text: <i>"Rage and brutality are weaknesses."</i>
+  collector_number: '30'
+- cardid: 8816
+  title: Tsuruchi Arishia
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Tsuruchi Arishia • Experienced
+  clans:
+  - Mantis
+  keywords:
+  - Enlightened
+  - Naval
+  - Unique
+  - Experienced
+  - Mantis Clan
+  - Samurai
+  - Scout
+  text: '<b>Recon Battle/Open:</b> Target a province: You have Reconnaissance at its battlefields. Ranged
+    Attacks performed by your attacking Mantis Clan Human Personalities at that province''s battlefields
+    may target cards even if they are in the Defender''s home.<br><b>Battle:</b> Bow Arishia: Ranged 5
+    Attack.'
+  gold_cost: 9
+  force: 4
+  chi: 3
+  personal_honor: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Richard Chan
+  printing_id: '1'
+  rarity: Fixed
+  artist: Franz Vohwinkel
+  flavor_text: <i>"End battles quickly, decisively. That is how we preserve lives."</i>
+  collector_number: '39'
+- cardid: 8891
+  title: Tsuruchi Terao
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Tsuruchi Terao • Experienced
+  clans:
+  - Mantis
+  keywords:
+  - Enlightened
+  - Naval
+  - Unique
+  - Experienced
+  - Mantis Clan
+  - Samurai
+  text: '<b>Fire Battle:</b> Even if Terao is bowed: Ranged 4 Attack. You may bow or discard a Ring you
+    own as a cost to perform two more consecutive Ranged 4 Attacks, which may be combined together.'
+  gold_cost: 8
+  force: 3
+  chi: 4
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Jack Eddy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Mark Poole
+  flavor_text: <i>"Death?" he laughed. "Death only comes for those who fear it!"</i>
+  collector_number: '40'
+- cardid: 8905
+  title: Tuftuf Sake House
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Sake House
+  text: 'After this Holding enters play, lose 3 Honor.<br>:bow:: Produce 3 Gold and lose 1 Honor.<br>:bow::
+    When paying for a non-Shadowlands Human Personality, produce 4 Gold which may only pay for them, dishonor
+    them, permanently give them Shadowlands, and lose 1 Honor.<br><b>Battle/Open:</b> Give <b>Cavalry</b>
+    to a target Shadowlands Human Personality and each of their Followers.'
+  gold_cost: 2
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  notes: The effects of giving Shadowlands and dishonoring the Personality occur immediately after the
+    Gold is produced, before the Personality enters play.
+  printing_id: '1'
+  rarity: Fixed
+  artist: Drew Baker
+  flavor_text: <i>"Black Water Sake is the finest in all the land!"</i>
+  collector_number: '11'
+- cardid: 8970
+  title: Unexpected Find
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Reaction:</b> After you produce more Gold for a cost than you are paying, put this card into
+    play in your home bowed, and you may not spend the excess Gold. Before your next turn ends, draw a
+    card. <br><b>Reaction:</b> If this card is in play, when bowing a Holding to produce Gold, bow and
+    discard this card from your home to produce 1 Gold.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  errata_text: Eratta'd via internet
+  printing_id: '1'
+  rarity: Fixed
+  artist: Britt Martin
+  flavor_text: <i>"Humans think these very valuable. We trade for lots of treasures with these."</i>
+  collector_number: '109'
+- cardid: 9076
+  title: Utaku Keyo
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Utaku Keyo • Experienced
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Enlightened
+  - Unique
+  - Battle Maiden
+  - Experienced
+  - Junghar
+  - Samurai
+  - Unicorn Clan
+  text: '<b>Reaction:</b> After an attack is declared with you as the Defender, even if Keyo is bowed,
+    target a number of units equal to one plus the number of Rings you own in play and in your discard
+    pile: Straighten the targets.'
+  gold_cost: 9
+  force: 4
+  chi: 3
+  honor_requirement: 4
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Francisco Briano
+  printing_id: '1'
+  rarity: Fixed
+  artist: Edwin David
+  flavor_text: <i>"More death, more war, more suffering." She looked to the stars. "Guide me, Kamoko-sama."</i>
+  collector_number: '78'
+- cardid: 9104
+  title: Utaku Tarako
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Utaku Tarako • Experienced
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Enlightened
+  - Unique
+  - Battle Maiden
+  - Experienced
+  - Samurai
+  - Scout
+  - Unicorn Clan
+  text: After Tarako enters play, you may search your hand, then deck, then discard pile, for the Ring
+    of Water and put it into play. While it remains in play, it does not count towards an Enlightenment
+    Victory.<br><b>Recon Battle/Open:</b> Bow your Region to target a Province. You have Reconnaissance
+    at its battlefields. Other players' actions will not move Personalities to its battlefields.
+  gold_cost: 10
+  force: 5
+  chi: 3
+  honor_requirement: 4
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Frederic Capbert
+  printing_id: '1'
+  rarity: Fixed
+  artist: Ed Cox
+  collector_number: '79'
+- cardid: 9201
+  title: Wanderers Revealed
+  types:
+  - Event
+  decks:
+  - Dynasty
+  keywords:
+  - Unique
+  text: Target a Unique card. It permanently loses all keywords, traits, and abilities.
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Michael Komarck
+  flavor_text: <i>"The time has come to put aside deception," Naseru said. "I cannot find what I seek
+    with a lie."</i>
+  collector_number: '5'
+- cardid: 9204
+  title: Wandering Pilgrim
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Unique
+  text: 'Attaches to an unaligned Samurai paying 2 less Gold.<br><b>Reaction:</b> After a Bushido Virtue
+    action resolves: If it is an Attack Phase, move this Personality to any location. If it is not, gain
+    1 Honor.'
+  gold_cost: 3
+  focus: 3
+  force: 3
+  chi: 0
+  honor_requirement: 2
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Thomas Denmark
+  flavor_text: <i>"A bowl of soup is all the thanks I need, friend Dragon."</i>
+  collector_number: '113'
+- cardid: 9407
+  title: Writ of the Elements
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Writ
+  text: 'After this card enters play: Name an element keyword. While this card remains attached to this
+    Personality, he has <b>Enlightened </b>and the named keyword.'
+  gold_cost: 1
+  focus: 3
+  force: '+0'
+  chi: '+0'
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Mark Poole
+  flavor_text: <i>"They hold great power, if you are but willing to spend your entire life learning their
+    secrets."</i>
+  collector_number: '117'
+- cardid: 9535
+  title: Yoritomo Chimori
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Yoritomo Chimori • Experienced
+  clans:
+  - Mantis
+  keywords:
+  - Enlightened
+  - Naval
+  - Unique
+  - Experienced
+  - Mantis Clan
+  - Samurai
+  text: <b>Battle/Open:</b> Give all your Mantis Clan Human Personalities +1F. If you control any Rings,
+    Mantis Clan Personalities have +4F while opposed.
+  gold_cost: 7
+  force: 3
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Eric Gardiner
+  printing_id: '1'
+  rarity: Fixed
+  artist: Jonathan Hunt
+  flavor_text: <i>"The Empire believed him dead. In his second life, perhaps he will find something he
+    believes in." - Komori</i>
+  collector_number: '41'
+- cardid: 9567
+  title: Yoritomo Iongi
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Yoritomo Iongi • Experienced
+  clans:
+  - Mantis
+  keywords:
+  - Enlightened
+  - Naval
+  - Unique
+  - Experienced
+  - Mantis Clan
+  - Pirate
+  text: '<b>Battle:</b> Bow your Ring, discard a Ring from your hand, or bow Iongi, and target a unit:
+    Your actions may target the Personality in that unit as if he had no attached cards.<br><b>Battle:</b>
+    Even if Iongi is bowed: Ranged 5 Attack.'
+  gold_cost: 9
+  force: 5
+  chi: 3
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Juan Palomo
+  printing_id: '1'
+  rarity: Fixed
+  artist: John Donahue
+  flavor_text: <i>"I free others from the burden of possessions, that they might find understanding."</i>
+  collector_number: '42'
+- cardid: 9699
+  title: Z'chkir
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  extended_title: Z'chkir • Experienced
+  clans:
+  - Ratling
+  keywords:
+  - Enlightened
+  - Unique
+  - Experienced
+  - Nonhuman
+  - Ratling
+  - Shugneja
+  - Third Whisker Tribe
+  text: '<b>Reaction:</b> After you create a Ratling Personality, discard a card: Create another, identical
+    Ratling Personality at the same location. If you discarded a Ring, you may create one more such Personality.'
+  gold_cost: 8
+  force: 4
+  chi: 4
+  personal_honor: 1
+  is_unique: true
+  legality:
+  - Age of Enlightenment (Lotus)
+  - Legacy
+  story: 2006 Kotei Winner - Grzegorz Rak
+  printing_id: '2'
+  rarity: Fixed
+  artist: Veronica V. Jones
+  flavor_text: <i>"One day, other tribes understand what Third Whisker seeking all these Yesterdays. That
+    day, One Tribe finally complete."</i>
+  collector_number: '55'

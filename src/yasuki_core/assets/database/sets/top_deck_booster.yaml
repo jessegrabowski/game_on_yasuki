@@ -1,0 +1,487 @@
+set: Top Deck Booster
+cards:
+- cardid: 475
+  title: Arrows from the Woods
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Ranged 2 Attack.<br><b>Reaction:</b> After you target another player''s card with
+    a Ranged Attack: Increase that Ranged Attack''s strength by 2.'
+  gold_cost: 0
+  focus: 3
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Shattered Empire
+  notes: The Pearl Edition version was misprinted with a 7 Gold Cost.
+  printing_id: '8'
+  rarity: Fixed
+  artist: Ernie Chan
+  flavor_text: <i>"Strike first, strike hard, and vanish." - Shosuro Yudoka</i>
+- cardid: 1217
+  title: Careful Planning
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle/Open:</b> Target a Personality, who must be unbowed if he is yours: Give him +1F/+1C.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '11'
+  rarity: Fixed
+  artist: Mark A.W. Jackson
+  flavor_text: <i>"There is fear in the unexpected. If you do not anticipate your enemies' moves, they
+    will seize the moment and take advantage of it to gain victory." - Isawa Sze</i>
+- cardid: 1298
+  title: Charge
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target an attacking Personality: Give him +2F, or +3F if he is Lion Clan <i>(until
+    the turn ends)</i>.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - War of the Seals (Onyx Edition)
+  printing_id: '14'
+  rarity: Fixed
+  artist: Sean Murray
+  flavor_text: <i>Ketsui nodded as Kamoko rode her horse into the enemy troops. " I'm impressed," Ketsui
+    said.</i>
+- cardid: 1475
+  title: Contentious Terrain
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: Your Personalities at this battlefield have +1F. <br><b>Battle:</b> Destroy a Terrain <i>(if able)</i>.
+    Put this Terrain into play.
+  gold_cost: 0
+  focus: 1
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  printing_id: '10'
+  rarity: Fixed
+  artist: KC Lancaster
+  flavor_text: <i>"Where you fight is as important as how you fight." - Otaku Kamoko</i>
+- cardid: 1882
+  title: Deadly Ground
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Terrain
+  text: 'Players may not take actions during this battle unless the action will destroy this Terrain.<br><b>Battle:</b>
+    If there are no Terrains at the current battlefield: Put this card into play there.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '12'
+  rarity: Fixed
+  artist: Bob Hobbs
+  flavor_text: <i>"When your enemies do not fear death, you must make them fear you." - Shosuro Yudoka</i>
+- cardid: 2043
+  title: Diversionary Tactics
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target a Terrain: Destroy it.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Rain of Blood (Diamond)
+  printing_id: '10'
+  rarity: Fixed
+  artist: Bob Hobbs
+  flavor_text: <i>"If my enemies do not know the field of battle, then they cannot defeat me." - Matsu
+    Ketsui</i>
+- cardid: 2114
+  title: Doji Kuwanan
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Crane Clan
+  - Samurai
+  gold_cost: 8
+  force: 3
+  chi: 4
+  honor_requirement: 5
+  personal_honor: 3
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '4'
+  rarity: Fixed
+  artist: Mike Raabe
+  flavor_text: '<i>"He is as elegant as any Crane, but do not let his fine clothes fool you: he is a deadly
+    swordsman." - Matsu Ketsui</i>'
+- cardid: 2586
+  title: Fist of the Earth
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Earth
+  - Kiho
+  text: <b>Earth Kiho Battle:</b> Bow your target unbowed Monk or Shugenja. Bow a target enemy Follower
+    or Personality without Followers.
+  focus: 3
+  legality:
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  - War of the Seals (Onyx Edition)
+  printing_id: '6'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"His eyes locked on my own, and the next thing I knew, I was flat on my back." - Doji
+    Kuwanan</i>
+- cardid: 3203
+  title: Hida Tampako
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crab
+  keywords:
+  - Crab Clan
+  - Samurai
+  text: Tampako has +2F while defending.
+  gold_cost: 6
+  force: 2
+  chi: 1
+  personal_honor: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '5'
+  rarity: Fixed
+  artist: Brian Snoddy
+  flavor_text: <i>I have spent my life defending Rokugan from the horrors of the Shadowlands. Years of
+    bitter fighting have shown me how to win.</i>
+- cardid: 3362
+  title: Hitomi Dajan
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Dragon
+  keywords:
+  - Dragon Clan
+  - Monk
+  - Tattooed
+  text: Will not join a Brotherhood of Shinsei player.<br><b>Battle:</b> Once per player per battle, target
+    a player who controls a unit at the current battlefield. Give Dajan +1F/+1C for each Ring that player
+    controls until the battle ends.
+  gold_cost: 6
+  force: 3
+  chi: 3
+  honor_requirement: 0
+  personal_honor: 1
+  legality:
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '2'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"They say he is tattooed with dragon's blood. I think it is true, for his tattoos seem
+    to crawl over his skin." - Shosuro Yudoka</i>
+- cardid: 3548
+  title: Iaijutsu Duel
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Iaijutsu
+  text: <b>Iaijutsu Battle:</b> Your target performing unbowed Personality challenges a target enemy Personality.
+    The winner gains 5 Honor. Destroy the loser.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '13'
+  rarity: Fixed
+  artist: Joseph Phillips
+  flavor_text: <i>"When dueling a Crane, don't blink." - Hitomi Dajan
+- cardid: 3909
+  title: Isawa Sze
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Phoenix
+  keywords:
+  - Phoenix Clan
+  - Shugenja
+  text: <b>Tireless Reaction:</b> After an action from a Spell Sze cast resolves, straighten him. Give
+    him a -1C <b>Exhaustion </b>token.
+  gold_cost: 6
+  force: 1
+  chi: 2
+  honor_requirement: 4
+  personal_honor: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '1'
+  rarity: Fixed
+  artist: Carl Frank
+  flavor_text: <i>"He is small, but he has the tenacity of a Crab." - Hida Tampako</i>
+- cardid: 4941
+  title: Matsu Ketsui
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Lion
+  keywords:
+  - Double Chi
+  - Unique
+  - Daimyo
+  - Lion Clan
+  - Samurai
+  gold_cost: 9
+  force: 4
+  chi: 3
+  honor_requirement: 5
+  personal_honor: 3
+  is_unique: true
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '4'
+  rarity: Fixed
+  artist: Anson Maddocks
+  flavor_text: <i>"In my sword, the wind. In my heart, courage. In my eyes, death. I am Matsu." - from
+    Kakita Morushijin's play, No Man's Bride
+- cardid: 5801
+  title: Otaku Kamoko
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Unicorn
+  keywords:
+  - Cavalry
+  - Battle Maiden
+  - Samurai
+  - Unicorn Clan
+  text: Will not attach non-Cavalry Followers.<br>Kamoko has +1F while attacking.
+  gold_cost: 7
+  force: 3
+  chi: 2
+  honor_requirement: 4
+  personal_honor: 3
+  legality:
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '8'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"When in doubt, attack." - Unicorn Clan maxim
+- cardid: 5831
+  title: Outflank
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Target a defending Personality who must be unbowed if he is yours: Give him +3F.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '9'
+  rarity: Fixed
+  artist: Pete Garcia
+  flavor_text: <i>"All samurai fight. Crab samurai win." - Hida Tampako</i>
+- cardid: 7185
+  title: Shosuro Yudoka
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Ninja
+  - Scorpion
+  keywords:
+  - Tactician
+  - Ninja
+  - Scorpion Clan
+  text: 'After Yudoka enters play: Lose 2 Honor.<br><b>Battle:</b> Any number of times per turn, bow Yudoka
+    and target a Terrain: Destroy it.'
+  gold_cost: 6
+  force: 0
+  chi: 3
+  personal_honor: 1
+  legality:
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  printing_id: '3'
+  rarity: Fixed
+  artist: William O'Connor
+  flavor_text: <i>"What do you call your weapon, samurai?" the ronin asked him. "Pincers and Tail," the
+    Scorpion replied, then showed him why.</i>
+- cardid: 7542
+  title: Strength of My Ancestors
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  text: '<b>Battle/Open:</b> Bow your performing Monk or Shugenja and target your unbowed Personality:
+    Give him +2F/+2C.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+  printing_id: '7'
+  rarity: Fixed
+  artist: Jeff Reitz
+  flavor_text: <i>"Never underestimate the weight of a hundred generations watching you." - Isawa Sze</i>
+- cardid: 7546
+  title: Strength of Purity
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: '<b>Battle:</b> Choose your performing Personality with 3 or higher Personal Honor: Give him +3F.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Age of Conquest (Emperor)
+  - Clan Wars (Imperial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Rain of Blood (Diamond)
+  printing_id: '12'
+  rarity: Fixed
+  artist: Christina Wald
+  flavor_text: <i>"Honor is your sword. Keep it clean, and you cannot be defeated." - Crane Clan maxim</i>
+- cardid: 8440
+  title: The Wrath of Osano-Wo
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Kiho
+  - Thunder
+  text: <b>Kiho Thunder Battle:</b> Bow your target unbowed Monk or Shugenja. Ranged Attack with strength
+    equal to his Chi.
+  gold_cost: 0
+  focus: 3
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Clan Wars (Imperial)
+  - Destroyer War (Celestial)
+  - Four Winds (Gold)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  notes: Some of the Hidden Emperor versions of this card were printed with a different text alignment
+  printing_id: '8'
+  rarity: Fixed
+  artist: Wackwitz & Daily
+  flavor_text: <i>"To tempt the wrath of the Fortunes is not courageous or bold. It is simply foolish.
+    " - Hitomi Dajan</i>
+- cardid: 9380
+  title: Wounded in Battle
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: <b>Battle:</b> Target a Personality who has not been targeted by a Wounded in Battle this turn.
+    Until the battle ends, if he is a Samurai, he is not destroyed for having 0 Chi. Give him -2C.
+  gold_cost: 0
+  focus: 2
+  legality:
+  - A Brother's Destiny (Ivory Edition)
+  - A Brother's Destiny (Twenty Festivals)
+  - Age of Enlightenment (Lotus)
+  - Clan Wars (Imperial)
+  - Hidden Emperor (Jade)
+  - Legacy
+  - Modern
+  - Race for the Throne (Samurai)
+  - Rain of Blood (Diamond)
+  - Shattered Empire
+  - War of the Seals (Onyx Edition)
+  notes: Ivory Edition Promo version released in the 2014 L5R Tournament Draft Kit
+  printing_id: '8'
+  rarity: Fixed
+  artist: Bryon Wackwitz
+  flavor_text: <i>"The Hida family has defended the wall for a thousand years. I will not fail their memory."
+    - Hida Tampako</i>
