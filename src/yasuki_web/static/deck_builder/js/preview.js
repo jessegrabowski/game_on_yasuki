@@ -9,6 +9,7 @@ let _currentCard = null;
 let _cardBacks = null;
 let _frontSrc = null;
 let _backSrc = null;
+let _onPrintChange = () => {};
 
 const DEFAULT_BY_TYPE = {
   celestial: 'defaults/generic_celestial.jpg',
@@ -50,9 +51,10 @@ function backSrc(card, print) {
   return path ? `${_imgBase}/${path}` : null;
 }
 
-export function initPreview(imgBase) {
+export function initPreview(imgBase, onPrintChange) {
   _imgBase = imgBase;
   _cardBacks = null;
+  if (onPrintChange) _onPrintChange = onPrintChange;
 }
 
 // Front and back image URLs for the print currently shown, in the order the flip button toggles.
@@ -202,6 +204,8 @@ function nextPrint() {
 function updatePreviewPrint() {
   const print = currentPrints[currentPrintIndex];
   if (!print) return;
+
+  if (_currentCard) _onPrintChange(_currentCard, print.print_id, print.set_name || '');
 
   _flipped = false;
   _frontSrc = print.image_path

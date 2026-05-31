@@ -3,6 +3,7 @@ import { $, displayName, deckSide, primaryDeck } from './helpers.js';
 let allResults = [];
 let hasMore = false;
 let selectedCard = null;
+const printChoices = new Map();
 
 const scrollObserver = new IntersectionObserver(
   (entries) => {
@@ -51,6 +52,26 @@ export function isFetching() {
   return _fetching;
 }
 
+export function getPrintChoice(cardId) {
+  return printChoices.get(cardId);
+}
+
+export function recordPrintChoice(card, printId, setName) {
+  printChoices.set(card.card_id, { printId, setName });
+  for (const el of $('cardList').querySelectorAll('.card-list-item')) {
+    if (el._cardId === card.card_id) {
+      el.children[0].textContent = cardLabel(card);
+      break;
+    }
+  }
+}
+
+function cardLabel(card) {
+  const choice = printChoices.get(card.card_id);
+  const name = displayName(card);
+  return choice && choice.setName ? `${name} [${choice.setName}]` : name;
+}
+
 export function renderCardList() {
   const el = $('cardList');
   el.innerHTML = '';
@@ -61,7 +82,7 @@ export function renderCardList() {
       (selectedCard && selectedCard.card_id === card.card_id ? ' selected' : '');
     div._cardId = card.card_id;
     const nameSpan = document.createElement('span');
-    nameSpan.textContent = displayName(card);
+    nameSpan.textContent = cardLabel(card);
     const sideSpan = document.createElement('span');
     sideSpan.className = 'side-tag ' + deckSide(card).toLowerCase();
     sideSpan.textContent = primaryDeck(card) || '?';

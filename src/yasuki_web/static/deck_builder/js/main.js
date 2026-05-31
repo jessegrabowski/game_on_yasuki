@@ -12,6 +12,8 @@ import {
   setSelectedCard,
   selectCard,
   getAllResults,
+  recordPrintChoice,
+  getPrintChoice,
 } from './card-list.js';
 import {
   initDeckList,
@@ -44,10 +46,10 @@ async function init() {
     $('totalDbCount').textContent = '?';
   }
 
-  initPreview(IMG);
+  initPreview(IMG, recordPrintChoice);
 
   initCardList({
-    onSelect: (card) => showPreview(card, null, API),
+    onSelect: (card) => showPreview(card, getPrintChoice(card.card_id)?.printId ?? null, API),
     onDblClick: () => doAddSelectedToDeck(),
     onLoadMore: () => {
       offset += LIMIT;

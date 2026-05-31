@@ -10,6 +10,9 @@ import {
   setSelectedCard,
   setFetching,
   renderCardList,
+  selectCard,
+  recordPrintChoice,
+  getPrintChoice,
 } from '../../../src/yasuki_web/static/deck_builder/js/card-list.js';
 
 beforeEach(() => {
@@ -34,6 +37,21 @@ describe('card-list state', () => {
     updateResults([makeCard({ card_id: 'c1' })], true, false);
     updateResults([makeCard({ card_id: 'c2' })], false, true);
     assert.equal(getAllResults().length, 2);
+  });
+});
+
+describe('print choice', () => {
+  it('labels a card with its chosen printing set, persisting across re-renders', () => {
+    const card = makeCard({ card_id: 'refugees', name: 'Refugees', extended_title: 'Refugees' });
+    recordPrintChoice(card, 42, 'Lotus Edition');
+    assert.equal(getPrintChoice('refugees').printId, 42);
+
+    updateResults([card], false, false);
+    renderCardList();
+    const item = document
+      .getElementById('cardList')
+      .children.find((el) => el._cardId === 'refugees');
+    assert.equal(item.children[0].textContent, 'Refugees [Lotus Edition]');
   });
 });
 
