@@ -67,8 +67,7 @@ class Installer:
             logger.info("Skipping set metadata import")
 
         if not self.cfg.skip_cards:
-            logger.info("Loading cards (this will take a while)")
-            logger.info("Image paths are automatically populated during card import")
+            logger.info("Loading cards")
             yaml_to_sql.load_cards(self.cfg.cards_path, self.cfg.dsn)
         else:
             logger.info("Skipping card import")
