@@ -40,6 +40,25 @@ describe('card-list state', () => {
   });
 });
 
+describe('selectCard', () => {
+  it('reloads the preview only when switching cards, so re-selecting keeps the chosen print', () => {
+    const reloaded = [];
+    initCardList({
+      onSelect: (c) => reloaded.push(c.card_id),
+      onLoadMore: () => {},
+      onDblClick: () => {},
+    });
+    setSelectedCard(null);
+
+    selectCard(makeCard({ card_id: 'a' })); // new card -> reload
+    selectCard(makeCard({ card_id: 'a' })); // same card -> no reload (preserve navigated print)
+    selectCard(makeCard({ card_id: 'b' })); // switch -> reload
+    selectCard(makeCard({ card_id: 'a' })); // switch back -> reload
+
+    assert.deepEqual(reloaded, ['a', 'b', 'a']);
+  });
+});
+
 describe('print choice', () => {
   it('labels a card with its chosen printing set, persisting across re-renders', () => {
     const card = makeCard({ card_id: 'refugees', name: 'Refugees', extended_title: 'Refugees' });
