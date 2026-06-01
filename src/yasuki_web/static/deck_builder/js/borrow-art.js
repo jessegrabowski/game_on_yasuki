@@ -1,6 +1,13 @@
 import { $, esc, debounce, displayName } from './helpers.js';
 import { fetchJSON } from './api.js';
-import { artRect, compositeArt, customPrintId, loadImage } from './art.js';
+import {
+  artRect,
+  compositeArt,
+  customPrintId,
+  loadImage,
+  loadMonOverlays,
+  loadOverlays,
+} from './art.js';
 
 // Modal to borrow a donor card's art onto the recipient print, compositing entirely in the browser.
 // On "Use", calls onUse(customPrint) with a print object to drop into the recipient's print cycle.
@@ -9,6 +16,7 @@ export function openBorrowArt({ recipientCard, recipientPrint, imgBase, api, onU
   let donorPrints = [];
   let donorIndex = 0;
   let recipientImg = null;
+  let recipientOverlays = [];
   let lastDataUrl = null;
 
   const overlay = document.createElement('div');
@@ -86,6 +94,14 @@ export function openBorrowArt({ recipientCard, recipientPrint, imgBase, api, onU
 
   loadImage(`${imgBase}/${recipientPrint.image_path}`).then((img) => {
     recipientImg = img;
+    if (donorCard) renderComposite();
+  });
+  // Recipient frame elements re-stamped over the borrowed art: holding flair + keyword mons.
+  Promise.all([
+    loadOverlays(recipientPrint.era, recipientPrint.layout_type, imgBase),
+    loadMonOverlays(recipientCard.keywords, recipientPrint.era, imgBase),
+  ]).then(([flair, mons]) => {
+    recipientOverlays = [...flair, ...mons];
     if (donorCard) renderComposite();
   });
 
@@ -195,6 +211,7 @@ export function openBorrowArt({ recipientCard, recipientPrint, imgBase, api, onU
       donorImg,
       artRect(recipientPrint.era, recipientPrint.layout_type),
       artRect(donor.era, donor.layout_type),
+      recipientOverlays,
     );
     lastDataUrl = canvas.toDataURL('image/jpeg', 0.92);
     const preview = $('borrowPreview');

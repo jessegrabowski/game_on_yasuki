@@ -26,6 +26,46 @@ export function artRect(era, layoutType) {
   );
 }
 
+// Frame-element overlays ({asset, rect}) stamped over the donor art for an (era, layoutType), or
+// empty. Mirrors core overlays_for; assets are served from `${imgBase}/overlays/<asset>`.
+export function overlaysFor(era, layoutType) {
+  return (_layout.overlays || {})[`${era}|${layoutType}`] || [];
+}
+
+// Load the overlay assets for an (era, layoutType) as [{img, rect}] ready for compositeArt.
+export async function loadOverlays(era, layoutType, imgBase) {
+  return Promise.all(
+    overlaysFor(era, layoutType).map(async (o) => ({
+      img: await loadImage(`${imgBase}/overlays/${o.asset}`),
+      rect: o.rect,
+    })),
+  );
+}
+
+// Keyword "mons" for a card: present mon keywords in alphabetical order down stacked slots, each
+// the same size and left, at centers cy0 + i*pitch. Modern frame only. Mirrors core mon_overlays.
+export function monOverlaysFor(keywords, era) {
+  const cfg = _layout.mons;
+  if (!cfg || era !== cfg.era) return [];
+  const present = (keywords || []).filter((k) => cfg.assets[k]).sort();
+  return present.map((kw, i) => {
+    const cy = cfg.cy0 + i * cfg.pitch;
+    return {
+      asset: cfg.assets[kw],
+      rect: [cfg.left, cy - cfg.height / 2, cfg.left + cfg.width, cy + cfg.height / 2],
+    };
+  });
+}
+
+export async function loadMonOverlays(keywords, era, imgBase) {
+  return Promise.all(
+    monOverlaysFor(keywords, era).map(async (o) => ({
+      img: await loadImage(`${imgBase}/overlays/${o.asset}`),
+      rect: o.rect,
+    })),
+  );
+}
+
 function box(width, height, rect) {
   const [l, t, r, b] = rect;
   return [Math.round(l * width), Math.round(t * height), Math.round(r * width), Math.round(b * height)];
@@ -50,8 +90,10 @@ export function coverCrop(crop, targetW, targetH) {
 }
 
 // Composite donorImg's art (its cut rect) into recipientImg's window, on a canvas at the recipient's
-// native size. recipientRect/donorRect are fractional [l, t, r, b] from artRect(). Browser-only.
-export function compositeArt(recipientImg, donorImg, recipientRect, donorRect) {
+// native size. recipientRect/donorRect are fractional [l, t, r, b] from artRect(). overlays are
+// [{img, rect}] frame elements stamped over the art (each with baked transparent holes so
+// card-specific elements underneath show through). Browser-only.
+export function compositeArt(recipientImg, donorImg, recipientRect, donorRect, overlays = []) {
   const canvas = document.createElement('canvas');
   canvas.width = recipientImg.naturalWidth;
   canvas.height = recipientImg.naturalHeight;
@@ -67,6 +109,11 @@ export function compositeArt(recipientImg, donorImg, recipientRect, donorRect) {
     targetH,
   );
   ctx.drawImage(donorImg, sl, st, sr - sl, sb - st, wl, wt, targetW, targetH);
+
+  for (const { img, rect } of overlays) {
+    const [ol, ot, or, ob] = box(canvas.width, canvas.height, rect);
+    ctx.drawImage(img, ol, ot, or - ol, ob - ot);
+  }
   return canvas;
 }
 
@@ -83,15 +130,18 @@ export function customPrintId(recipe) {
 // Composite a recipe's art and return a JPEG data URL for display/PDF. spec carries each side's
 // image path + (era, layout_type) — all from the annotated prints API.
 export async function buildCompositeDataURL(spec, imgBase) {
-  const [recipient, donor] = await Promise.all([
+  const [recipient, donor, flair, mons] = await Promise.all([
     loadImage(`${imgBase}/${spec.recipientImagePath}`),
     loadImage(`${imgBase}/${spec.donorImagePath}`),
+    loadOverlays(spec.recipientEra, spec.recipientLayout, imgBase),
+    loadMonOverlays(spec.recipientKeywords, spec.recipientEra, imgBase),
   ]);
   const canvas = compositeArt(
     recipient,
     donor,
     artRect(spec.recipientEra, spec.recipientLayout),
     artRect(spec.donorEra, spec.donorLayout),
+    [...flair, ...mons],
   );
   return canvas.toDataURL('image/jpeg', 0.92);
 }

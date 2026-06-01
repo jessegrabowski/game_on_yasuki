@@ -21,6 +21,13 @@ ERA_BANDS = [
 ]
 DEFAULT_ERA = _LAYOUT["default_era"]
 DEFAULT_LAYOUT = _LAYOUT["default_layout"]
+# Frame elements (e.g. the holding flair) stamped back over the donor art after compositing, keyed
+# "era|layout". Each asset is pre-baked with any transparent holes so card-specific elements under
+# it (the gold-cost coin) show through. Sparse: most layouts have none.
+OVERLAYS = _LAYOUT.get("overlays", {})
+# Keyword "mons" stamped down the upper-left of the modern frame: present keywords in alphabetical
+# order, one per slot, all the same size and left-aligned at evenly-spaced slot centers.
+MONS = _LAYOUT.get("mons", {})
 
 # The redesigned card back debuted with Gold Edition (2001-06); earlier printings use the old back.
 BACK_NEW_FROM = datetime.date(2001, 6, 1)
@@ -94,6 +101,43 @@ def art_rect(key: tuple[str, str]) -> tuple[float, float, float, float]:
         or ART_RECTS.get((era, DEFAULT_LAYOUT))
         or ART_RECTS[(DEFAULT_ERA, DEFAULT_LAYOUT)]
     )
+
+
+def overlays_for(key: tuple[str, str]) -> list[dict]:
+    """Frame-element overlays to stamp over the donor art for an (era, layout) key; empty if none.
+
+    Each overlay is a dict with ``asset`` (filename under the bundled overlays dir) and ``rect``
+    (its placement on the full card as left, top, right, bottom fractions)."""
+    return OVERLAYS.get("|".join(key), [])
+
+
+def mon_overlays(keywords: list[str], era: str) -> list[dict]:
+    """Mon overlays for a card's keywords on the modern frame; empty off-era or with no mon keywords.
+
+    The card's mon keywords are stamped in alphabetical order down stacked slots, each the same size
+    and left, at centers :math:`cy0 + i \\cdot pitch`. Returns a list of dicts with ``asset`` and
+    ``rect`` (left, top, right, bottom fractions of the card), one per present mon."""
+    if not MONS or era != MONS["era"]:
+        return []
+    assets = MONS["assets"]
+    present = sorted(k for k in (keywords or []) if k in assets)
+    left, width, height, cy0, pitch = (
+        MONS["left"],
+        MONS["width"],
+        MONS["height"],
+        MONS["cy0"],
+        MONS["pitch"],
+    )
+    overlays = []
+    for i, keyword in enumerate(present):
+        cy = cy0 + i * pitch
+        overlays.append(
+            {
+                "asset": assets[keyword],
+                "rect": [left, cy - height / 2, left + width, cy + height / 2],
+            }
+        )
+    return overlays
 
 
 def cover_crop(

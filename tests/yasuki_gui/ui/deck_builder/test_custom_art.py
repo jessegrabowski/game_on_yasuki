@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 from PIL import Image
 
-from yasuki_core.card_art import CustomPrint, custom_print_id
+from yasuki_core.card_art import CustomPrint, custom_print_id, overlays_for
 from yasuki_gui.ui.deck_builder.custom_art import (
     composite_art,
     custom_print_record,
@@ -12,9 +12,13 @@ from yasuki_gui.ui.deck_builder.custom_art import (
 
 RECIPIENT = Path("sets/rise_of_jigoku/a_collision_of_wills.jpg")
 DONOR = Path("sets/a_perfect_cut/a_desperate_act.jpg")
+HOLDING = Path("sets/chaos_reigns_part_ii/millet_farm.jpg")
 
 _needs_images = pytest.mark.skipif(
     not (RECIPIENT.exists() and DONOR.exists()), reason="card images not present locally"
+)
+_needs_holding = pytest.mark.skipif(
+    not (HOLDING.exists() and DONOR.exists()), reason="card images not present locally"
 )
 
 
@@ -69,3 +73,28 @@ def test_donor_layout_changes_crop():
             RECIPIENT, DONOR, ("2016+", "Strategy"), ("2000-04", "Personality")
         ).tobytes()
     )
+
+
+def test_overlays_for_modern_holding_only():
+    overlays = overlays_for(("2016+", "Holding"))
+    assert len(overlays) == 1
+    assert overlays[0]["asset"] == "holding_flair.png"
+    assert overlays_for(("2016+", "Personality")) == []
+
+
+@_needs_holding
+def test_holding_swap_stamps_the_flair_over_the_art(monkeypatch):
+    keys = (("2016+", "Holding"), ("2000-04", "Strategy"))
+    with_flair = composite_art(HOLDING, DONOR, *keys)
+    monkeypatch.setattr("yasuki_gui.ui.deck_builder.custom_art.overlays_for", lambda key: [])
+    without_flair = composite_art(HOLDING, DONOR, *keys)
+    assert with_flair.tobytes() != without_flair.tobytes()
+
+
+@_needs_holding
+def test_holding_coin_shows_through_the_flair_hole():
+    out = composite_art(HOLDING, DONOR, ("2016+", "Holding"), ("2000-04", "Strategy"))
+    recipient = Image.open(HOLDING).convert("RGB")
+    w, h = recipient.size
+    coin_center = (round(0.503 * w), round(0.564 * h))
+    assert out.getpixel(coin_center) == recipient.getpixel(coin_center)

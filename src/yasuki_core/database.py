@@ -150,6 +150,8 @@ _CARD_SELECT = """
             AS types,
         (SELECT array_agg(clan ORDER BY clan) FROM card_clans cl WHERE cl.card_id = c.card_id)
             AS clans,
+        (SELECT array_agg(keyword ORDER BY keyword) FROM card_keywords k WHERE k.card_id = c.card_id)
+            AS keywords,
         c.rules_text AS text,
         c.gold_cost, c.focus, c.force, c.chi,
         c.honor_requirement, c.personal_honor, c.gold_production,

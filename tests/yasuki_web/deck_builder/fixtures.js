@@ -9,6 +9,7 @@ export function makeCard(overrides = {}) {
     decks: ['Dynasty'],
     types: ['Personality'],
     clans: ['Crane'],
+    keywords: [],
     image_path: 'sets/imperial_edition/doji_hoturi.jpg',
     is_unique: false,
     ...overrides,
