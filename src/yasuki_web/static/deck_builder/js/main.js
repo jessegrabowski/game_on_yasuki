@@ -1,4 +1,4 @@
-import { $, debounce, titleCase, scrollToSelected, deckSide } from './helpers.js';
+import { $, debounce, titleCase, scrollToSelected, deckSide, stripUnique } from './helpers.js';
 import { fetchJSON } from './api.js';
 import {
   addCard,
@@ -335,8 +335,8 @@ async function doImportDeck(text) {
   const allEntries = [...parsed.pre_game, ...parsed.dynasty, ...parsed.fate];
   const names = new Set();
   allEntries.forEach((e) => {
-    names.add(e.name);
-    if (e.art?.donorName) names.add(e.art.donorName); // resolve donors for custom prints too
+    names.add(stripUnique(e.name)); // a hand-edited deck may carry the ◆ unique marker
+    if (e.art?.donorName) names.add(stripUnique(e.art.donorName));
   });
   const uniqueNames = [...names];
   if (uniqueNames.length === 0) return;
@@ -367,7 +367,7 @@ async function doImportDeck(text) {
   })) {
     const side = SIDE_MAP[section];
     for (const entry of entries) {
-      const card = cardsByName[entry.name.toLowerCase()];
+      const card = cardsByName[stripUnique(entry.name).toLowerCase()];
       if (!card) {
         unresolved.push(entry.name);
         continue;
@@ -402,7 +402,7 @@ async function doImportDeck(text) {
 // prints' era/layout, recompose the art client-side. Returns true on success, false to fall back to
 // a plain print.
 async function addImportedCustom(side, recipientCard, recipientPrint, entry, cardsByName, unresolved) {
-  const donorCard = cardsByName[(entry.art.donorName || '').toLowerCase()];
+  const donorCard = cardsByName[stripUnique(entry.art.donorName || '').toLowerCase()];
   if (!recipientPrint || !donorCard) {
     unresolved.push(entry.art.donorName || '(art donor)');
     return false;

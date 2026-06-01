@@ -8,7 +8,19 @@ import {
   esc,
   deckSide,
   primaryDeck,
+  stripUnique,
 } from '../../../src/yasuki_web/static/deck_builder/js/helpers.js';
+
+describe('stripUnique', () => {
+  it('drops the unique marker so a display name resolves to the stored name', () => {
+    assert.equal(stripUnique('◆ Anvil of Earth'), 'Anvil of Earth');
+    assert.equal(stripUnique(displayName({ name: 'Anvil of Earth', is_unique: true })), 'Anvil of Earth');
+  });
+  it('leaves a plain name untouched', () => {
+    assert.equal(stripUnique('Ambush'), 'Ambush');
+    assert.equal(stripUnique(''), '');
+  });
+});
 
 describe('displayName', () => {
   it('returns name for non-unique card', () => {

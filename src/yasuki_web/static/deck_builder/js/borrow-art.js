@@ -234,7 +234,8 @@ export function openBorrowArt({ recipientCard, recipientPrint, imgBase, api, onU
       print_id: customPrintId(recipe),
       set_name: recipientPrint.set_name || '',
       isCustom: true,
-      art: { donorName: displayName(donorCard), donorSet: donor.set_name || '' },
+      // Plain name (no unique marker) so the deck YAML round-trips through name lookup.
+      art: { donorName: donorCard.extended_title || donorCard.name, donorSet: donor.set_name || '' },
       recipe,
       dataUrl: lastDataUrl,
       recipientPrint, // kept so the art button can re-borrow onto the same base print

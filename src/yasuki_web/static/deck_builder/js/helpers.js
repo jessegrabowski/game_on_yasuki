@@ -14,6 +14,12 @@ export function displayName(card) {
   return card.is_unique ? '\u25C6 ' + title : title;
 }
 
+// Strip the unique marker (the \u25C6 displayName prepends) from a name, so a display string round-trips
+// to the stored card name for lookup.
+export function stripUnique(name) {
+  return (name || '').replace(/^[\u25C6\u2022]\s*/, '');
+}
+
 // The deck-builder bucket a card belongs to: FATE, DYNASTY, or PRE_GAME (strongholds, senseis,
 // anything not in the Fate or Dynasty deck). Derived from the card's `decks` array.
 export function deckSide(card) {
