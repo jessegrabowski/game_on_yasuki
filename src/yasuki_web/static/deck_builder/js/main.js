@@ -524,7 +524,11 @@ function navigateDeckList(listId, dir) {
   const item = items[idx];
   setSelectedDeckCard({ side: item.side, id: item.id, printId: item.printId });
   setSelectedCard(item.card);
-  showPreview(item.card, item.printId, API);
+  // A custom print's synthetic id isn't in the prints API; render its cached composite directly,
+  // mirroring the click handler.
+  const printData = item.printId != null ? getDeck()[item.side]?.[item.id]?.prints?.[item.printId] : null;
+  if (printData?.isCustom) showCustomPreview(item.card, printData);
+  else showPreview(item.card, item.printId, API);
   renderDeckLists();
   renderCardList();
   scrollToSelected(listId, '.deck-item.selected, .deck-sub-item.selected');
