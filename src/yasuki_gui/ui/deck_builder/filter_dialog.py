@@ -1140,9 +1140,8 @@ class FilterDialog:
             format_name = self._get_selected_format()
 
             if format_name:
-                # Get sets for the selected format with selected statuses
-                statuses = self._get_selected_statuses()
-                sets = query_sets_by_format(format_name, statuses if statuses else None)
+                # Sets holding a card legal in the format (status is not a set-level dimension).
+                sets = query_sets_by_format(format_name)
             else:
                 # No format selected, show all sets
                 sets = query_all_sets()
