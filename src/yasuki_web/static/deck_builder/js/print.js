@@ -9,7 +9,8 @@ const PER_PAGE = 8;
 
 // Ordered image source per card copy: sides in play order, cards by name, each print expanded by
 // quantity. Custom art-swap prints use their pre-composited data URL; real prints resolve through
-// printImageMap (print_id -> served path), falling back to the card's default image.
+// printImageMap (print_id -> {front, back} served paths), falling back to the card's default image.
+// A double-sided print (a real, non-default back) contributes both faces so it can be proxied.
 export function buildImageList(deck, imgBase, printImageMap) {
   const images = [];
   for (const side of SIDE_ORDER) {
@@ -18,14 +19,18 @@ export function buildImageList(deck, imgBase, printImageMap) {
     for (const entry of entries) {
       for (const printId in entry.prints) {
         const print = entry.prints[printId];
-        let src;
+        const faces = [];
         if (print.isCustom) {
-          src = print.dataUrl;
+          if (print.dataUrl) faces.push(print.dataUrl);
+          const back = print.recipientPrint?.back_image_path;
+          if (back) faces.push(`${imgBase}/${back}`);
         } else {
-          const path = printImageMap.get(parseInt(printId)) || entry.card.image_path;
-          src = path ? `${imgBase}/${path}` : null;
+          const rec = printImageMap.get(parseInt(printId)) || {};
+          const front = rec.front || entry.card.image_path;
+          if (front) faces.push(`${imgBase}/${front}`);
+          if (rec.back) faces.push(`${imgBase}/${rec.back}`);
         }
-        if (src) for (let i = 0; i < print.qty; i++) images.push(src);
+        for (const src of faces) for (let i = 0; i < print.qty; i++) images.push(src);
       }
     }
   }
@@ -50,7 +55,9 @@ async function resolvePrintImages(deck, api) {
   }
   for (const key in cards) {
     for (const print of cards[key].prints || []) {
-      if (print.image_path) map.set(print.print_id, print.image_path);
+      if (print.image_path) {
+        map.set(print.print_id, { front: print.image_path, back: print.back_image_path || null });
+      }
     }
   }
   return map;

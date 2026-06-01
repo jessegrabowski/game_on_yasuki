@@ -352,11 +352,14 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
             card_ids = [c["card_id"] for c in cards]
             cur.execute(
                 """
-                SELECT p.print_id, p.card_id, s.set_name, pi.path AS image_path, p.flavor_text
+                SELECT p.print_id, p.card_id, s.set_name, pi.path AS image_path,
+                    back.path AS back_image_path, p.flavor_text
                 FROM prints p
                 JOIN l5r_sets s ON s.set_id = p.set_id
                 LEFT JOIN print_images pi
                     ON pi.print_id = p.print_id AND pi.role = 'front' AND pi.size = 'master'
+                LEFT JOIN print_images back
+                    ON back.print_id = p.print_id AND back.role = 'back' AND back.size = 'master'
                 WHERE p.card_id = ANY(%s)
                 ORDER BY p.print_id
                 """,

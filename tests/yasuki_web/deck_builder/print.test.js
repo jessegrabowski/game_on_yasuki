@@ -25,10 +25,10 @@ describe('buildImageList', () => {
       },
     };
     const map = new Map([
-      [1, 'sets/x/beta.jpg'],
-      [2, 'sets/x/zeta.jpg'],
-      [3, 'sets/x/alpha.jpg'],
-      [4, 'sets/x/omega.jpg'],
+      [1, { front: 'sets/x/beta.jpg' }],
+      [2, { front: 'sets/x/zeta.jpg' }],
+      [3, { front: 'sets/x/alpha.jpg' }],
+      [4, { front: 'sets/x/omega.jpg' }],
     ]);
 
     assert.deepEqual(buildImageList(deck, IMG, map), [
@@ -49,10 +49,25 @@ describe('buildImageList', () => {
         }),
       },
     };
-    const map = new Map([[5, 'sets/x/a.jpg']]);
+    const map = new Map([[5, { front: 'sets/x/a.jpg' }]]);
     assert.deepEqual(buildImageList(deck, IMG, map), [
       '/images/sets/x/a.jpg',
       'data:image/jpeg;base64,ZZZ',
+    ]);
+  });
+
+  it('includes both faces of a double-sided print, each expanded by quantity', () => {
+    const deck = {
+      FATE: {
+        a: entry(makeCard({ card_id: 'a', name: 'A' }), { 5: { qty: 2, set_name: 'S' } }),
+      },
+    };
+    const map = new Map([[5, { front: 'sets/x/a.jpg', back: 'sets/x/a__back.jpg' }]]);
+    assert.deepEqual(buildImageList(deck, IMG, map), [
+      '/images/sets/x/a.jpg',
+      '/images/sets/x/a.jpg',
+      '/images/sets/x/a__back.jpg',
+      '/images/sets/x/a__back.jpg',
     ]);
   });
 
