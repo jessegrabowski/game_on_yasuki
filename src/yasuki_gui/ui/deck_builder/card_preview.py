@@ -71,6 +71,14 @@ def front_image_source(card: dict, print_info: dict, repository):
     return DEFAULT_BY_TYPE.get(ctype)
 
 
+def back_image_source(print_info: dict):
+    """The printable back of a double-sided print (its real, non-default back face) as a Path, or
+    None for a single-sided print. Used by the deck-PDF export to include both faces."""
+    path = print_info.get("back_image_path")
+    resolved = resolve_set_image_path(path) if path else None
+    return resolved if resolved and resolved.exists() else None
+
+
 def _extract_base_name(full_name: str) -> str:
     """
     Extract base personality name without subtitle.

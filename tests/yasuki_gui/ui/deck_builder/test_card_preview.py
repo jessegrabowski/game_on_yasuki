@@ -5,6 +5,7 @@ import pytest
 
 from yasuki_gui.ui.deck_builder.card_preview import (
     DEFAULT_BY_TYPE,
+    back_image_source,
     format_card_display_name,
     front_image_source,
     CardPreviewController,
@@ -15,6 +16,11 @@ def test_front_image_source_falls_back_to_type_default_when_image_missing():
     card = {"types": ["Strategy"]}
     print_info = {"image_path": "sets/nope/missing.jpg"}
     assert front_image_source(card, print_info, repository=None) == DEFAULT_BY_TYPE["strategy"]
+
+
+def test_back_image_source_none_for_single_sided_print():
+    assert back_image_source({"image_path": "sets/x/a.jpg", "back_image_path": None}) is None
+    assert back_image_source({"image_path": "sets/x/a.jpg"}) is None
 
 
 def test_format_card_display_name_simple():

@@ -5,7 +5,11 @@ from collections.abc import Callable
 from yasuki_core.card_art import CustomPrint, classify
 from yasuki_gui.ui.deck_builder.art_swap import BorrowArtDialog
 from yasuki_gui.ui.deck_builder.components import CardStatsPanel, PrintSelector
-from yasuki_gui.ui.deck_builder.card_preview import CardPreviewController, front_image_source
+from yasuki_gui.ui.deck_builder.card_preview import (
+    CardPreviewController,
+    back_image_source,
+    front_image_source,
+)
 from yasuki_gui.ui.deck_builder.deck_data import DeckBuilderRepository, DeckState
 from yasuki_gui.ui.deck_builder.deck_components import FilteredCardList, DeckCardList
 from yasuki_gui.ui.deck_builder.deck_io import serialize_deck, import_deck_yaml
@@ -276,7 +280,8 @@ class DeckBuilderWindow:
     _SIDE_ORDER = {"SETUP": 0, "DYNASTY": 1, "FATE": 2}
 
     def _collect_deck_images(self) -> list:
-        """One printable front per card copy, ordered setup -> dynasty -> fate, then by name."""
+        """Printable faces per card copy (both sides for a double-sided print), ordered
+        setup -> dynasty -> fate, then by name."""
         cards = self._repository.cards_by_id
 
         def order_key(card_id: str) -> tuple[int, str]:
@@ -294,6 +299,9 @@ class DeckBuilderWindow:
                 source = front_image_source(card, info, self._repository) if info else None
                 if source is not None:
                     images.extend([source] * count)
+                    back = back_image_source(info) if info else None
+                    if back is not None:  # double-sided: include both faces
+                        images.extend([back] * count)
         return images
 
     def _print_deck(self) -> None:
