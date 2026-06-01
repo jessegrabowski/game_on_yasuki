@@ -122,7 +122,7 @@
       0.054,
       0.124,
       0.952,
-      0.478
+      0.525
     ],
     "1995-99|Follower": [
       0.111,
@@ -370,5 +370,38 @@
       0.95,
       0.526
     ]
+  },
+  "overlays": {
+    "2016+|Holding": [
+      {
+        "asset": "holding_flair.png",
+        "rect": [
+          0.3058,
+          0.4735,
+          0.6942,
+          0.5864
+        ]
+      }
+    ]
+  },
+  "mons": {
+    "era": "2016+",
+    "assets": {
+      "Air": "air.png",
+      "Earth": "earth.png",
+      "Fire": "fire.png",
+      "Jade": "jade.png",
+      "Maho": "maho.png",
+      "Pearl": "pearl.png",
+      "Shadowlands": "shadowlands.png",
+      "Thunder": "thunder.png",
+      "Void": "void.png",
+      "Water": "water.png"
+    },
+    "left": 0.0075,
+    "width": 0.111,
+    "height": 0.074,
+    "cy0": 0.178,
+    "pitch": 0.0774
   }
 }

@@ -38,6 +38,9 @@ def test_list_cards_shape(client):
         assert isinstance(card["decks"], list)
         assert isinstance(card["types"], list)
         assert card["clans"] is None or isinstance(card["clans"], list)
+        assert card["keywords"] is None or isinstance(
+            card["keywords"], list
+        )  # mon overlays read this
         assert "image_path" in card  # str path or None
 
 

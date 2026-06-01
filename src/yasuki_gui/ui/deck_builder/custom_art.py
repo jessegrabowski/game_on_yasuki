@@ -2,8 +2,16 @@ from pathlib import Path
 
 from PIL import Image
 
-from yasuki_core.card_art import CustomPrint, art_rect, classify, cover_crop, custom_print_id
-from yasuki_core.paths import resolve_set_image_path
+from yasuki_core.card_art import (
+    CustomPrint,
+    art_rect,
+    classify,
+    cover_crop,
+    custom_print_id,
+    mon_overlays,
+    overlays_for,
+)
+from yasuki_core.paths import OVERLAYS_DIR, resolve_set_image_path
 
 
 def _box(image: Image.Image, rect: tuple[float, float, float, float]) -> tuple[int, int, int, int]:
@@ -17,11 +25,13 @@ def composite_art(
     donor_path: Path,
     recipient_key: tuple[str, str],
     donor_key: tuple[str, str],
+    recipient_keywords: list[str] = (),
 ) -> Image.Image:
     """Crop the donor's art (its layout's cut rect) into the recipient's art window.
 
     The donor crop is reduced to the window's aspect ratio before scaling, so the art fills the
-    window edge-to-edge without distortion (a thin strip of the donor's outer edge is trimmed)."""
+    window edge-to-edge without distortion (a thin strip of the donor's outer edge is trimmed). The
+    recipient's frame overlays (holding flair) and keyword mons are stamped back over the new art."""
     recipient = Image.open(recipient_path).convert("RGB")
     donor = Image.open(donor_path).convert("RGB")
     window = _box(recipient, art_rect(recipient_key))
@@ -30,7 +40,21 @@ def composite_art(
     art = donor.crop(source).resize((target_w, target_h), Image.LANCZOS)
     out = recipient.copy()
     out.paste(art, (window[0], window[1]))
+    overlays = overlays_for(recipient_key) + mon_overlays(recipient_keywords, recipient_key[0])
+    _stamp_overlays(out, overlays)
     return out
+
+
+def _stamp_overlays(card: Image.Image, overlays: list[dict]) -> None:
+    """Stamp frame overlays (holding flair, keyword mons) over the donor art.
+
+    Each overlay carries a baked transparent hole where a card-specific element (the gold-cost coin)
+    sits, so that element shows through unaltered."""
+    for overlay in overlays:
+        left, top, right, bottom = _box(card, overlay["rect"])
+        asset = Image.open(OVERLAYS_DIR / overlay["asset"]).convert("RGBA")
+        asset = asset.resize((right - left, bottom - top), Image.LANCZOS)
+        card.paste(asset, (left, top), asset)
 
 
 def custom_print_record(recipe: CustomPrint, repository) -> dict:
@@ -68,7 +92,9 @@ def render_custom_image(recipe: CustomPrint, repository) -> Image.Image | None:
 
     recipient_key = classify(recipient_card, recipient_print.get("set_name", ""))
     donor_key = classify(donor_card, donor_print.get("set_name", ""))
-    return composite_art(recipient_path, donor_path, recipient_key, donor_key)
+    return composite_art(
+        recipient_path, donor_path, recipient_key, donor_key, recipient_card.get("keywords") or []
+    )
 
 
 def _find_print(repository, card_id: str, print_id: int) -> dict | None:

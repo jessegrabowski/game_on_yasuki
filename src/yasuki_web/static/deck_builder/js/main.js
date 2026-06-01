@@ -436,6 +436,7 @@ async function addImportedCustom(side, recipientCard, recipientPrint, entry, car
         recipientImagePath: rp.image_path,
         recipientEra: rp.era,
         recipientLayout: rp.layout_type,
+        recipientKeywords: recipientCard.keywords,
         donorImagePath: dp.image_path,
         donorEra: dp.era,
         donorLayout: dp.layout_type,

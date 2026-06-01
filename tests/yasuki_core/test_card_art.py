@@ -9,7 +9,25 @@ from yasuki_core.card_art import (
     custom_print_id,
     era_for_date,
     load_art_layout,
+    mon_overlays,
 )
+
+
+def test_mon_overlays_stacks_present_keywords_alphabetically():
+    overlays = mon_overlays(["Void", "Earth", "Charge", "Fire"], "2016+")
+    # Non-mon keyword (Charge) dropped; rest in alphabetical order.
+    assert [o["asset"] for o in overlays] == ["earth.png", "fire.png", "void.png"]
+    # Same size + left for every mon; centers march down by a fixed pitch.
+    assert len({round(o["rect"][2] - o["rect"][0], 6) for o in overlays}) == 1
+    assert len({round(o["rect"][0], 6) for o in overlays}) == 1
+    centers = [round((o["rect"][1] + o["rect"][3]) / 2, 6) for o in overlays]
+    gaps = {round(b - a, 4) for a, b in zip(centers, centers[1:])}
+    assert len(gaps) == 1  # evenly spaced slots
+
+
+def test_mon_overlays_modern_frame_only():
+    assert mon_overlays(["Fire"], "2005-09") == []
+    assert mon_overlays([], "2016+") == []
 
 
 def test_layout_asset_is_loaded_and_well_formed():
