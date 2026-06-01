@@ -6,17 +6,20 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 # Actual card size and sheet layout, measured from the reference print sheet: cards print at
-# 63.5 x 90 mm, 4 columns x 2 rows on landscape US Letter. This spec is the single source of truth
-# for both the desktop print-deck export and the web one.
+# 63.5 x 90 mm, 4 columns x 2 rows on landscape US Letter, with a 3 mm gutter between cards to cut
+# along for proxies. This spec is the single source of truth for both the desktop and web exports.
 CARD_W = 63.5 * mm
 CARD_H = 90.0 * mm
+GUTTER = 3.0 * mm
 COLS = 4
 ROWS = 2
 PER_PAGE = COLS * ROWS
 PAGE_W, PAGE_H = landscape(letter)
 
-_MARGIN_X = (PAGE_W - COLS * CARD_W) / 2
-_MARGIN_Y = (PAGE_H - ROWS * CARD_H) / 2
+_GRID_W = COLS * CARD_W + (COLS - 1) * GUTTER
+_GRID_H = ROWS * CARD_H + (ROWS - 1) * GUTTER
+_MARGIN_X = (PAGE_W - _GRID_W) / 2
+_MARGIN_Y = (PAGE_H - _GRID_H) / 2
 
 
 def slot_position(index: int) -> tuple[int, float, float]:
@@ -25,8 +28,8 @@ def slot_position(index: int) -> tuple[int, float, float]:
     The grid is centered on the page and filled left-to-right, top-to-bottom."""
     page, slot = divmod(index, PER_PAGE)
     col, row = slot % COLS, slot // COLS
-    x = _MARGIN_X + col * CARD_W
-    y = PAGE_H - _MARGIN_Y - (row + 1) * CARD_H
+    x = _MARGIN_X + col * (CARD_W + GUTTER)
+    y = PAGE_H - _MARGIN_Y - row * (CARD_H + GUTTER) - CARD_H
     return page, x, y
 
 

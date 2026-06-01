@@ -5,6 +5,7 @@ from yasuki_core.deck_pdf import (
     CARD_H,
     CARD_W,
     COLS,
+    GUTTER,
     PAGE_H,
     PAGE_W,
     PER_PAGE,
@@ -17,8 +18,8 @@ from yasuki_core.deck_pdf import (
 def test_spec_matches_measured_card_size_and_fits_the_page():
     assert PER_PAGE == COLS * ROWS == 8
     assert (CARD_W, CARD_H) == (63.5 * mm, 90.0 * mm)
-    assert COLS * CARD_W <= PAGE_W
-    assert ROWS * CARD_H <= PAGE_H
+    assert COLS * CARD_W + (COLS - 1) * GUTTER <= PAGE_W
+    assert ROWS * CARD_H + (ROWS - 1) * GUTTER <= PAGE_H
 
 
 def test_slot_position_advances_grid_and_paginates():

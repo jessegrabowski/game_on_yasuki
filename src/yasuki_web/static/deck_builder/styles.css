@@ -609,8 +609,8 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
 .deck-sub-item.custom > span:last-child { color: var(--accent-glow); font-style: italic; }
 
 /* Print sheet: built off-screen so its images load, then swapped in as the only visible content
-   when printing. Cards print at actual size (63.5 x 90 mm), 8 per landscape Letter page, flush in a
-   centered 4-wide grid, matching the desktop deck_pdf export. */
+   when printing. Cards print at actual size (63.5 x 90 mm), 8 per landscape Letter page, in a
+   centered 4-wide grid with a 3 mm gutter between cards to cut along for proxies. */
 #printSheet {
   position: absolute;
   left: -10000px;
@@ -620,7 +620,9 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
   display: grid;
   grid-template-columns: repeat(4, 63.5mm);
   grid-auto-rows: 90mm;
+  gap: 3mm;
   justify-content: center;
+  align-content: center;
 }
 .print-card {
   width: 63.5mm;
