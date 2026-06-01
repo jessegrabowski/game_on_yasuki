@@ -852,9 +852,9 @@ def _build_card_filter(
             elif property_name == "clans":
                 if value:
                     conditions.append(
-                        "c.card_id IN (SELECT card_id FROM card_clans WHERE clan = ANY(%s))"
+                        "c.card_id IN (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"
                     )
-                    params.append(value)
+                    params.append([c.lower() for c in value])
             elif property_name == "rarities":
                 if value:
                     rarity_conditions = []

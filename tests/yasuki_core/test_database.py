@@ -180,6 +180,12 @@ class TestSQLFiltering:
         assert len(cards) > 0
         assert all("Crane" in (c["clans"] or []) for c in cards)
 
+    def test_filter_by_clan_is_case_insensitive(self):
+        """clan:crane should match the same cards as clan:Crane."""
+        lower = {c["card_id"] for c in query_cards_filtered(filter_options={"clans": ["crane"]})}
+        proper = {c["card_id"] for c in query_cards_filtered(filter_options={"clans": ["Crane"]})}
+        assert lower and lower == proper
+
     def test_filter_by_type(self):
         """Should filter by card type."""
         cards = query_cards_filtered(filter_options={"types": ["Personality"]})
