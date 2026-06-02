@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# Make the src packages importable at runtime. The editable install is built from a stub before the
+# source is copied (Dockerfile layer-cache trick), so its resolution is unreliable for ad-hoc
+# commands like the db-init below; src on PYTHONPATH is deterministic and matches the test config.
+export PYTHONPATH="/app/src${PYTHONPATH:+:$PYTHONPATH}"
+
 if [ -n "$YASUKI_DATABASE_URL" ]; then
     DB_URL="$YASUKI_DATABASE_URL"
 elif [ -n "$DATABASE_URL" ]; then
