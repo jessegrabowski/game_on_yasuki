@@ -9,7 +9,7 @@ import {
   nextCardAfterRemoval,
   getDeckNavItems,
 } from './deck-state.js';
-import { getDeckName, setDeckName, serializeDeck, parseDeckYaml } from './deck-io.js';
+import { getDeckName, setDeckName, setDeckAuthor, serializeDeck, parseDeckYaml } from './deck-io.js';
 import { buildCompositeDataURL, customPrintId, loadArtLayout } from './art.js';
 import { openBorrowArt } from './borrow-art.js';
 import { printDeck } from './print.js';
@@ -318,6 +318,7 @@ function doExportDeck() {
     return;
   }
   setDeckName(name);
+  setDeckAuthor($('deckAuthorInput').value.trim());
   const yaml = serializeDeck(getDeck());
   const filename = name.toLowerCase().replace(/[^a-z0-9]+/g, '_') + '.yaml';
   const blob = new Blob([yaml], { type: 'text/yaml' });
@@ -390,6 +391,8 @@ async function doImportDeck(text) {
 
   setDeckName(parsed.name);
   $('deckNameInput').value = parsed.name;
+  setDeckAuthor(parsed.author);
+  $('deckAuthorInput').value = parsed.author;
   renderDeckLists();
   renderCardList();
 

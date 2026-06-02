@@ -105,11 +105,15 @@ header .counts { font-size: 0.85rem; color: var(--text-dim); font-style: italic;
 }
 .btn-small:hover { background: var(--accent-dark); color: var(--text); }
 .deck-name-row {
+  display: flex;
+  gap: 6px;
   padding: 6px 8px;
   flex-shrink: 0;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
 }
+#deckNameInput { flex: 1; }
+#deckAuthorInput { flex: 0 0 34%; }
 .deck-name-row input {
   width: 100%;
   background: var(--bg);

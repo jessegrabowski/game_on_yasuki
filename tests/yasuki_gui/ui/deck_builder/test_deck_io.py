@@ -163,9 +163,26 @@ class TestSerializeDeck:
         yaml = serialize_deck(DeckState(), repo, deck_name="Deck: Return")
         assert '"Deck: Return"' in yaml
 
-    def test_empty_deck_is_name_only(self, repo):
-        yaml = serialize_deck(DeckState(), repo, deck_name="Empty")
-        assert yaml == "name: Empty\n"
+    def test_empty_deck_is_name_and_date(self, repo):
+        yaml = serialize_deck(DeckState(), repo, deck_name="Empty", today="2026-06-01")
+        assert yaml == "name: Empty\ndate: 2026-06-01\n"
+
+    def test_author_written_when_set_and_round_trips(self, repo):
+        state = DeckState().add_card("ambush", 10)
+        yaml = serialize_deck(state, repo, deck_name="A", deck_author="Ada", today="2026-06-01")
+        assert "author: Ada" in yaml and "date: 2026-06-01" in yaml
+        assert parse_deck_yaml(yaml)["author"] == "Ada"
+
+    def test_author_omitted_when_empty(self, repo):
+        yaml = serialize_deck(DeckState().add_card("ambush", 10), repo, deck_name="A")
+        assert "author:" not in yaml
+
+    def test_section_grouped_by_type_with_counts(self, repo):
+        state = DeckState().add_card("kuni_yori", 1).add_card("kuni_yori", 1)
+        yaml = serialize_deck(state, repo, deck_name="G")
+        # Section header with total; a type subheader. Both are comments the parser skips.
+        assert "Dynasty: # (2)" in yaml
+        assert len(parse_deck_yaml(yaml)["dynasty"]) == 1
 
     def test_empty_name_still_serializes(self, repo):
         yaml = serialize_deck(DeckState(), repo)
@@ -174,9 +191,9 @@ class TestSerializeDeck:
     def test_omits_empty_sections(self, repo):
         state = DeckState().add_card("ambush", 10)
         yaml = serialize_deck(state, repo)
-        assert "fate:" in yaml
-        assert "dynasty:" not in yaml
-        assert "pre_game:" not in yaml
+        assert "Fate:" in yaml
+        assert "Dynasty:" not in yaml
+        assert "Pre-Game:" not in yaml
 
     def test_includes_count_prefix_for_multiples(self, repo):
         state = DeckState().add_card("ambush", 10).add_card("ambush", 10)
@@ -186,7 +203,7 @@ class TestSerializeDeck:
     def test_setup_cards_in_pre_game_section(self, repo):
         state = DeckState().add_card("kyuden_hida", 20)
         yaml = serialize_deck(state, repo)
-        assert "pre_game:" in yaml
+        assert "Pre-Game:" in yaml
         assert "Kyuden Hida" in yaml
 
     def test_skips_unknown_card_ids(self, repo):
@@ -224,7 +241,7 @@ class TestSerializeDeck:
 class TestImportDeckYaml:
     def test_imports_simple_deck(self, repo):
         yaml = "name: Test\nfate:\n  - Ambush [Imperial Edition]"
-        state, name, unresolved = import_deck_yaml(yaml, repo)
+        state, name, _author, unresolved = import_deck_yaml(yaml, repo)
         assert name == "Test"
         assert unresolved == []
         assert "ambush" in state.cards
@@ -232,12 +249,12 @@ class TestImportDeckYaml:
 
     def test_imports_with_count(self, repo):
         yaml = "name: T\nfate:\n  - 3x Ambush [Lotus Edition]"
-        state, _, _ = import_deck_yaml(yaml, repo)
+        state, _, _, _ = import_deck_yaml(yaml, repo)
         assert state.cards["ambush"] == [(11, 3)]
 
     def test_imports_multiple_prints_of_same_card(self, repo):
         yaml = "name: T\nfate:\n  - Ambush [Imperial Edition]\n  - 2x Ambush [Lotus Edition]"
-        state, _, unresolved = import_deck_yaml(yaml, repo)
+        state, _, _author, unresolved = import_deck_yaml(yaml, repo)
         assert unresolved == []
         prints = state.cards["ambush"]
         assert (10, 1) in prints
@@ -245,7 +262,7 @@ class TestImportDeckYaml:
 
     def test_imports_setup_cards(self, repo):
         yaml = "name: T\npre_game:\n  - Kyuden Hida [Gold Edition]"
-        state, _, unresolved = import_deck_yaml(yaml, repo)
+        state, _, _author, unresolved = import_deck_yaml(yaml, repo)
         assert unresolved == []
         assert "kyuden_hida" in state.cards
 
@@ -255,30 +272,30 @@ class TestImportDeckYaml:
             "  - Kuni Yori [Imperial Edition]\n"
             "  - Kuni Yori \u2022 Experienced [Pearl Edition]"
         )
-        state, _, unresolved = import_deck_yaml(yaml, repo)
+        state, _, _author, unresolved = import_deck_yaml(yaml, repo)
         assert unresolved == []
         assert "kuni_yori" in state.cards
         assert "kuni_yori_experienced" in state.cards
 
     def test_unresolved_names_reported(self, repo):
         yaml = "name: T\nfate:\n  - Nonexistent Card"
-        state, _, unresolved = import_deck_yaml(yaml, repo)
+        state, _, _author, unresolved = import_deck_yaml(yaml, repo)
         assert unresolved == ["Nonexistent Card"]
         assert state.cards == {}
 
     def test_falls_back_to_first_print_without_set(self, repo):
         yaml = "name: T\nfate:\n  - Ambush"
-        state, _, _ = import_deck_yaml(yaml, repo)
+        state, _, _, _ = import_deck_yaml(yaml, repo)
         assert state.cards["ambush"] == [(10, 1)]
 
     def test_mismatched_set_falls_back_to_first_print(self, repo):
         yaml = "name: T\nfate:\n  - Ambush [Nonexistent Set]"
-        state, _, unresolved = import_deck_yaml(yaml, repo)
+        state, _, _author, unresolved = import_deck_yaml(yaml, repo)
         assert unresolved == []
         assert state.cards["ambush"] == [(10, 1)]
 
     def test_import_empty_input(self, repo):
-        state, name, unresolved = import_deck_yaml("", repo)
+        state, name, _author, unresolved = import_deck_yaml("", repo)
         assert state.cards == {}
         assert unresolved == []
         assert name == "Imported Deck"
@@ -295,7 +312,7 @@ class TestImportDeckYaml:
             .add_card("kyuden_hida", 20)
         )
         yaml = serialize_deck(original, repo, deck_name="Full Trip")
-        reimported, name, unresolved = import_deck_yaml(yaml, repo)
+        reimported, name, _author, unresolved = import_deck_yaml(yaml, repo)
 
         assert name == "Full Trip"
         assert unresolved == []
@@ -328,7 +345,7 @@ class TestCustomPrintIO:
         yaml = serialize_deck(DeckState().add_card("ambush", custom_id), repo)
 
         fresh = MockRepository()
-        reimported, _, unresolved = import_deck_yaml(yaml, fresh)
+        reimported, _, _author, unresolved = import_deck_yaml(yaml, fresh)
 
         assert unresolved == []
         ((pid, count),) = reimported.cards["ambush"]
@@ -338,7 +355,7 @@ class TestCustomPrintIO:
 
     def test_unresolvable_donor_falls_back_to_plain_print(self, repo):
         yaml = "name: T\nfate:\n  - Ambush [Imperial Edition] {art: Ghost Card [Nowhere]}"
-        state, _, unresolved = import_deck_yaml(yaml, repo)
+        state, _, _author, unresolved = import_deck_yaml(yaml, repo)
         assert unresolved == ["Ghost Card"]
         assert state.cards["ambush"] == [(10, 1)]
 
@@ -350,7 +367,7 @@ class TestCustomPrintIO:
         assert "Ambush [Lotus Edition] {art: Kuni Yori [Pearl Edition]}" in yaml
 
         fresh = MockRepository()
-        reimported, _, unresolved = import_deck_yaml(yaml, fresh)
+        reimported, _, _author, unresolved = import_deck_yaml(yaml, fresh)
         assert unresolved == []
         ((pid, _),) = reimported.cards["ambush"]
         assert fresh.get_custom_print(pid) == recipe

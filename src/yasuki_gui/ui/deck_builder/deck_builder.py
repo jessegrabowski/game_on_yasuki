@@ -44,6 +44,7 @@ class DeckBuilderWindow:
         self._repository = DeckBuilderRepository()
         self._deck_state = DeckState()
         self._deck_name = tk.StringVar(value="")
+        self._deck_author = tk.StringVar(value="")
         self._updating_lists = False
         self._filter_options = FilterOptions()
         self._search_debounce_id = None
@@ -105,6 +106,10 @@ class DeckBuilderWindow:
         tk.Label(name_frame, text="Deck:").pack(side="left")
         self._name_entry = tk.Entry(name_frame, textvariable=self._deck_name)
         self._name_entry.pack(side="left", fill="x", expand=True, padx=(6, 4))
+        tk.Label(name_frame, text="By:").pack(side="left")
+        tk.Entry(name_frame, textvariable=self._deck_author, width=14).pack(
+            side="left", padx=(6, 4)
+        )
         tk.Button(name_frame, text="Import", command=self._import_deck).pack(side="left", padx=2)
         tk.Button(name_frame, text="Export", command=self._export_deck).pack(side="left")
 
@@ -332,7 +337,12 @@ class DeckBuilderWindow:
         if not name:
             self._flash_name_entry()
             return
-        yaml = serialize_deck(self._deck_state, self._repository, deck_name=name)
+        yaml = serialize_deck(
+            self._deck_state,
+            self._repository,
+            deck_name=name,
+            deck_author=self._deck_author.get().strip(),
+        )
         default_filename = name.lower()
         default_filename = "".join(c if c.isalnum() else "_" for c in default_filename)
         path = filedialog.asksaveasfilename(
@@ -372,9 +382,10 @@ class DeckBuilderWindow:
         with open(path, encoding="utf-8") as f:
             text = f.read()
 
-        new_state, deck_name, unresolved = import_deck_yaml(text, self._repository)
+        new_state, deck_name, deck_author, unresolved = import_deck_yaml(text, self._repository)
         self._deck_state = new_state
         self._deck_name.set(deck_name)
+        self._deck_author.set(deck_author)
         self._refresh_deck_lists()
 
         if unresolved:
