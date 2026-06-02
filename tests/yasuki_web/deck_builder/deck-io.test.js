@@ -1,12 +1,13 @@
 import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { getDeckName, setDeckName, serializeDeck, parseDeckYaml } from '../../../src/yasuki_web/static/deck_builder/js/deck-io.js';
+import { getDeckName, setDeckName, setDeckAuthor, serializeDeck, parseDeckYaml } from '../../../src/yasuki_web/static/deck_builder/js/deck-io.js';
 import { addCard, clearDeck, getDeck } from '../../../src/yasuki_web/static/deck_builder/js/deck-state.js';
 import { makeCard } from './fixtures.js';
 const CARD_PERS = makeCard({ card_id: 'doji_hoturi', name: 'Doji Hoturi', types: ['Personality'], decks: ['Dynasty'] });
+const CARD_HOLD = makeCard({ card_id: 'kobune_port', name: 'Kobune Port', types: ['Holding'], decks: ['Dynasty'] });
 const CARD_STR  = makeCard({ card_id: 'ambush', name: 'Ambush', extended_title: 'Ambush', types: ['Strategy'], decks: ['Fate'] });
 const CARD_SH   = makeCard({ card_id: 'kyuden_doji', name: 'Kyuden Doji', extended_title: 'Kyuden Doji', types: ['Stronghold'], decks: ['Pre-Game'] });
-beforeEach(() => { clearDeck(); setDeckName(''); });
+beforeEach(() => { clearDeck(); setDeckName(''); setDeckAuthor(''); });
 describe('parseDeckYaml', () => {
   it('parses deck name', () => {
     assert.equal(parseDeckYaml('name: My Crane Deck').name, 'My Crane Deck');
@@ -119,9 +120,9 @@ describe('serializeDeck', () => {
   it('omits empty sections', () => {
     addCard('ambush', 'FATE', CARD_STR, 10, 'Imperial Edition');
     const yaml = serializeDeck(getDeck());
-    assert.ok(!yaml.includes('dynasty:'));
-    assert.ok(!yaml.includes('pre_game:'));
-    assert.ok(yaml.includes('fate:'));
+    assert.ok(!yaml.includes('Dynasty:'));
+    assert.ok(!yaml.includes('Pre-Game:'));
+    assert.ok(yaml.includes('Fate:'));
   });
   it('omits count prefix when count is 1', () => {
     addCard('ambush', 'FATE', CARD_STR, 10, 'Imperial Edition');
@@ -137,10 +138,35 @@ describe('serializeDeck', () => {
     assert.equal(parsed.dynasty[0].count, 1);
     assert.equal(parsed.dynasty[0].setName, 'Diamond Edition');
   });
-  it('serializes empty deck as name only', () => {
+  it('serializes empty deck as name + date', () => {
     setDeckName('Empty');
-    const yaml = serializeDeck(getDeck());
-    assert.equal(yaml, 'name: Empty\n');
+    assert.equal(serializeDeck(getDeck(), '2026-06-01'), 'name: Empty\ndate: 2026-06-01\n');
+  });
+  it('writes author when set, and round-trips it', () => {
+    setDeckName('Authored');
+    setDeckAuthor('Ada');
+    addCard('ambush', 'FATE', CARD_STR, 10, 'Imperial Edition');
+    const yaml = serializeDeck(getDeck(), '2026-06-01');
+    assert.ok(yaml.includes('author: Ada'));
+    assert.ok(yaml.includes('date: 2026-06-01'));
+    assert.equal(parseDeckYaml(yaml).author, 'Ada');
+  });
+  it('omits the author line when unset', () => {
+    setDeckName('Anon');
+    addCard('ambush', 'FATE', CARD_STR, 10, 'Imperial Edition');
+    assert.ok(!serializeDeck(getDeck()).includes('author:'));
+  });
+  it('groups a section by card type with counted subheaders', () => {
+    setDeckName('Grouped');
+    addCard('doji_hoturi', 'DYNASTY', CARD_PERS, 10, 'Imperial Edition');
+    addCard('doji_hoturi', 'DYNASTY', CARD_PERS, 10, 'Imperial Edition');
+    addCard('kobune_port', 'DYNASTY', CARD_HOLD, 11, 'Imperial Edition');
+    const yaml = serializeDeck(getDeck(), '2026-06-01');
+    assert.ok(yaml.includes('Dynasty: # (3)'));
+    assert.ok(yaml.includes('  # Holdings (1)'));
+    assert.ok(yaml.includes('  # Personalities (2)'));
+    // Subheaders are comments; the parser still recovers the cards.
+    assert.equal(parseDeckYaml(yaml).dynasty.length, 2);
   });
   it('ends with a single newline', () => {
     addCard('ambush', 'FATE', CARD_STR, 10, 'Imperial Edition');

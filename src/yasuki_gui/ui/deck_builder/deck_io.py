@@ -1,3 +1,4 @@
+import datetime
 import re
 
 from yasuki_core.card_art import CustomPrint
@@ -8,6 +9,13 @@ YAML_SECTIONS = [
     ("dynasty", "DYNASTY"),
     ("fate", "FATE"),
 ]
+SECTION_LABEL = {"pre_game": "Pre-Game", "dynasty": "Dynasty", "fate": "Fate"}
+
+
+def _pluralize(word: str) -> str:
+    """Title-case-preserving plural for type subheaders (Holding -> Holdings, Strategy -> Strategies)."""
+    return word[:-1] + "ies" if word.endswith("y") else word + "s"
+
 
 _NEEDS_QUOTE = re.compile(r"[:#\[\]{},&*?|<>=!%@`]")
 _COUNT_PREFIX = re.compile(r"^(\d+)[x×]\s+", re.IGNORECASE)
@@ -19,25 +27,41 @@ def serialize_deck(
     deck_state,
     repository,
     deck_name: str = "",
+    deck_author: str = "",
+    today: str | None = None,
 ) -> str:
     """
     Serialize a DeckState to the portable YAML decklist format.
 
+    Each deck section is grouped by card type with ``# Type (n)`` subheaders and counts (comments,
+    skipped on import); name/author/date metadata heads the file.
+
     Parameters
     ----------
     deck_state : DeckState
-        Current deck composition
+        Current deck composition.
     repository : DeckBuilderRepository
-        Card data lookup
+        Card data lookup.
     deck_name : str
-        Deck name to embed in the file
+        Deck name to embed in the file. Default ''.
+    deck_author : str
+        Deck author; omitted from the file when empty. Default ''.
+    today : str, optional
+        ISO date for the ``date:`` line. Defaults to today.
 
     Returns
     -------
     yaml : str
-        YAML-formatted decklist
+        YAML-formatted decklist.
     """
-    lines = [f"name: {_quote_value(deck_name)}", ""]
+    if today is None:
+        today = datetime.date.today().isoformat()
+
+    lines = [f"name: {_quote_value(deck_name)}"]
+    if deck_author:
+        lines.append(f"author: {_quote_value(deck_author)}")
+    lines.append(f"date: {today}")
+    lines.append("")
 
     cards_by_id = repository.cards_by_id
 
@@ -46,11 +70,20 @@ def serialize_deck(
         if not entries:
             continue
 
-        lines.append(f"{section_key}:")
-        for display_name, set_name, art_suffix, count in sorted(entries):
-            count_prefix = f"{count}x " if count > 1 else ""
-            set_suffix = f" [{set_name}]" if set_name else ""
-            lines.append(f"  - {count_prefix}{display_name}{set_suffix}{art_suffix}")
+        by_type: dict[str, list] = {}
+        for entry in entries:
+            by_type.setdefault(entry[0], []).append(entry)
+
+        lines.append(f"{SECTION_LABEL[section_key]}: # ({sum(e[4] for e in entries)})")
+        for i, type_name in enumerate(sorted(by_type)):
+            if i > 0:
+                lines.append("")  # blank line between type blocks
+            group = sorted(by_type[type_name], key=lambda e: (e[1], e[2] or "", e[3]))
+            lines.append(f"  # {_pluralize(type_name)} ({sum(e[4] for e in group)})")
+            for _type, display_name, set_name, art_suffix, count in group:
+                count_prefix = f"{count}x " if count > 1 else ""
+                set_suffix = f" [{set_name}]" if set_name else ""
+                lines.append(f"  - {count_prefix}{display_name}{set_suffix}{art_suffix}")
         lines.append("")
 
     return "\n".join(lines).rstrip() + "\n"
@@ -67,6 +100,7 @@ def _collect_side_entries(deck_state, cards_by_id, repository, side):
             continue
 
         display_name = card.get("extended_title") or card.get("name", card_id)
+        type_name = (card.get("types") or ["Other"])[0]
 
         for print_id, count in print_list:
             prints = repository.get_prints(card_id)
@@ -76,7 +110,7 @@ def _collect_side_entries(deck_state, cards_by_id, repository, side):
             else:
                 set_name = print_info.get("set_name") if print_info else None
                 art_suffix = ""
-            entries.append((display_name, set_name, art_suffix, count))
+            entries.append((type_name, display_name, set_name, art_suffix, count))
 
     return entries
 
@@ -117,7 +151,14 @@ def parse_deck_yaml(text: str) -> dict:
         ``fate`` (list). Each list contains dicts with ``name`` (str),
         ``count`` (int), ``set_name`` (str or None).
     """
-    result = {"name": "Imported Deck", "pre_game": [], "dynasty": [], "fate": []}
+    result = {
+        "name": "Imported Deck",
+        "author": "",
+        "date": "",
+        "pre_game": [],
+        "dynasty": [],
+        "fate": [],
+    }
     current_section = None
 
     for raw_line in text.split("\n"):
@@ -126,19 +167,28 @@ def parse_deck_yaml(text: str) -> dict:
         if not trimmed or trimmed.startswith("#"):
             continue
 
-        name_match = re.match(r"^name:\s*(.+)$", trimmed)
-        if name_match:
-            val = name_match.group(1).strip()
+        meta_match = re.match(r"^(name|author):\s*(.+)$", trimmed)
+        if meta_match:
+            val = meta_match.group(2).strip()
             if (val.startswith('"') and val.endswith('"')) or (
                 val.startswith("'") and val.endswith("'")
             ):
                 val = val[1:-1]
-            result["name"] = val
+            result[meta_match.group(1)] = val
             continue
 
-        section_match = re.match(r"^(pre_game|dynasty|fate):\s*$", trimmed)
+        date_match = re.match(r"^date:\s*(.+)$", trimmed)
+        if date_match:
+            result["date"] = date_match.group(1).strip()
+            continue
+
+        # Accept the pretty keys (Dynasty:, Fate:, Pre-Game:) and the old lowercase ones.
+        section_match = re.match(
+            r"^(pre[-_ ]?game|dynasty|fate):\s*(#.*)?$", trimmed, re.IGNORECASE
+        )
         if section_match:
-            current_section = section_match.group(1)
+            norm = re.sub(r"[-_ ]", "", section_match.group(1).lower())
+            current_section = "pre_game" if norm == "pregame" else norm
             continue
 
         if current_section and re.match(r"^\s*-\s", line):
@@ -195,8 +245,8 @@ def import_deck_yaml(
 
     Returns
     -------
-    result : tuple of (DeckState, str, list of str)
-        (new deck state, deck name, list of unresolved card names)
+    result : tuple of (DeckState, str, str, list of str)
+        (new deck state, deck name, deck author, list of unresolved card names)
     """
     from yasuki_gui.ui.deck_builder.deck_data import DeckState
 
@@ -246,7 +296,7 @@ def import_deck_yaml(
             for _ in range(entry["count"]):
                 state = state.add_card(card_id, print_id)
 
-    return state, parsed["name"], unresolved
+    return state, parsed["name"], parsed["author"], unresolved
 
 
 def _resolve_custom_print(recipient_card_id, recipient_print_id, art, cards_by_ext, repository):

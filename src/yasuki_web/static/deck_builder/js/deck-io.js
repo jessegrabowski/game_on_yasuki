@@ -1,4 +1,5 @@
 let _deckName = '';
+let _deckAuthor = '';
 
 export function getDeckName() {
   return _deckName;
@@ -8,41 +9,76 @@ export function setDeckName(name) {
   _deckName = name;
 }
 
+export function getDeckAuthor() {
+  return _deckAuthor;
+}
+
+export function setDeckAuthor(author) {
+  _deckAuthor = author || '';
+}
+
 const SECTIONS = [
   ['pre_game', 'PRE_GAME'],
   ['dynasty', 'DYNASTY'],
   ['fate', 'FATE'],
 ];
+const SECTION_LABEL = { pre_game: 'Pre-Game', dynasty: 'Dynasty', fate: 'Fate' };
 
-export function serializeDeck(deck) {
+// Title-case-preserving plural for the type subheaders (Holding -> Holdings, Strategy -> Strategies).
+function pluralType(type) {
+  return type.endsWith('y') ? type.slice(0, -1) + 'ies' : type + 's';
+}
+
+function entryQty(entry) {
+  return Object.values(entry.prints).reduce((sum, p) => sum + p.qty, 0);
+}
+
+// Render the decklist as YAML: name/author/date metadata, then each deck section grouped by card
+// type with `# Type (n)` subheaders and counts (comments — purely for reading; the parser skips
+// them). Card lines keep the `<n>x Name [Set] {art: Donor [Set]}` grammar.
+export function serializeDeck(deck, dateStr = new Date().toISOString().slice(0, 10)) {
   const needsQuote = (s) => /[:#\[\]{},&*?|<>=!%@`]/.test(s) || s.startsWith(' ') || s.endsWith(' ');
   const quoteValue = (s) => (needsQuote(s) ? `"${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"` : s);
 
-  const lines = [`name: ${quoteValue(_deckName)}`, ''];
+  const lines = [`name: ${quoteValue(_deckName)}`];
+  if (_deckAuthor) lines.push(`author: ${quoteValue(_deckAuthor)}`);
+  lines.push(`date: ${dateStr}`, '');
 
   for (const [sectionKey, bucketKey] of SECTIONS) {
-    const bucket = deck[bucketKey] || {};
-    const entries = Object.values(bucket);
+    const entries = Object.values(deck[bucketKey] || {});
     if (entries.length === 0) continue;
 
-    lines.push(`${sectionKey}:`);
-    entries
-      .sort((a, b) =>
-        (a.card.extended_title || a.card.name).localeCompare(b.card.extended_title || b.card.name),
-      )
-      .forEach((entry) => {
-        const name = entry.card.extended_title || entry.card.name;
-        Object.entries(entry.prints)
-          .sort((a, b) => (a[1].set_name || '').localeCompare(b[1].set_name || ''))
-          .forEach(([, printData]) => {
-            const countPrefix = printData.qty > 1 ? `${printData.qty}x ` : '';
-            const setSuffix = printData.set_name ? ` [${printData.set_name}]` : '';
-            const art = printData.art;
-            const artSuffix = art
-              ? ` {art: ${art.donorName}${art.donorSet ? ` [${art.donorSet}]` : ''}}`
-              : '';
-            lines.push(`  - ${countPrefix}${name}${setSuffix}${artSuffix}`);
-          });
+    const byType = {};
+    for (const entry of entries) {
+      const type = (entry.card.types || [])[0] || 'Other';
+      (byType[type] ||= []).push(entry);
+    }
+
+    const total = entries.reduce((sum, e) => sum + entryQty(e), 0);
+    lines.push(`${SECTION_LABEL[sectionKey]}: # (${total})`);
+
+    Object.keys(byType)
+      .sort()
+      .forEach((type, i) => {
+        if (i > 0) lines.push(''); // blank line between type blocks
+        const group = byType[type].sort((a, b) =>
+          (a.card.extended_title || a.card.name).localeCompare(b.card.extended_title || b.card.name),
+        );
+        lines.push(`  # ${pluralType(type)} (${group.reduce((sum, e) => sum + entryQty(e), 0)})`);
+        for (const entry of group) {
+          const name = entry.card.extended_title || entry.card.name;
+          Object.entries(entry.prints)
+            .sort((a, b) => (a[1].set_name || '').localeCompare(b[1].set_name || ''))
+            .forEach(([, printData]) => {
+              const countPrefix = printData.qty > 1 ? `${printData.qty}x ` : '';
+              const setSuffix = printData.set_name ? ` [${printData.set_name}]` : '';
+              const art = printData.art;
+              const artSuffix = art
+                ? ` {art: ${art.donorName}${art.donorSet ? ` [${art.donorSet}]` : ''}}`
+                : '';
+              lines.push(`  - ${countPrefix}${name}${setSuffix}${artSuffix}`);
+            });
+        }
       });
     lines.push('');
   }
@@ -51,8 +87,9 @@ export function serializeDeck(deck) {
 }
 
 export function parseDeckYaml(text) {
-  const result = { name: 'Imported Deck', pre_game: [], dynasty: [], fate: [] };
+  const result = { name: 'Imported Deck', author: '', date: '', pre_game: [], dynasty: [], fate: [] };
   let currentSection = null;
+  const unquote = (s) => s.trim().replace(/^["']|["']$/g, '');
 
   for (const rawLine of text.split('\n')) {
     const line = rawLine.trimEnd();
@@ -61,13 +98,25 @@ export function parseDeckYaml(text) {
 
     const nameMatch = trimmed.match(/^name:\s*(.+)$/);
     if (nameMatch) {
-      result.name = nameMatch[1].trim().replace(/^["']|["']$/g, '');
+      result.name = unquote(nameMatch[1]);
+      continue;
+    }
+    const authorMatch = trimmed.match(/^author:\s*(.+)$/);
+    if (authorMatch) {
+      result.author = unquote(authorMatch[1]);
+      continue;
+    }
+    const dateMatch = trimmed.match(/^date:\s*(.+)$/);
+    if (dateMatch) {
+      result.date = dateMatch[1].trim();
       continue;
     }
 
-    const sectionMatch = trimmed.match(/^(pre_game|dynasty|fate):\s*$/);
+    // Accept the pretty keys (Dynasty:, Fate:, Pre-Game:) and the old lowercase ones.
+    const sectionMatch = trimmed.match(/^(pre[-_ ]?game|dynasty|fate):\s*(#.*)?$/i);
     if (sectionMatch) {
-      currentSection = sectionMatch[1];
+      const norm = sectionMatch[1].toLowerCase().replace(/[-_ ]/g, '');
+      currentSection = norm === 'pregame' ? 'pre_game' : norm;
       continue;
     }
 
