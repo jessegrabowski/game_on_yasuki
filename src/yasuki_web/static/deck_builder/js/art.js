@@ -66,6 +66,24 @@ export async function loadMonOverlays(keywords, era, imgBase) {
   );
 }
 
+// Recipient patches ({rect, mask?}) re-stamped from the recipient itself after the donor art covers
+// them, keyed "era|layout". A masked patch keeps only the silhouette (stat icons); an unmasked one
+// restores the whole rect (banner corners, frame edges). Pixels come from the recipient scan, so
+// printed values and clan colours survive with no font. Mirrors core patches_for.
+export function patchesFor(era, layoutType) {
+  return (_layout.patches || {})[`${era}|${layoutType}`] || [];
+}
+
+// Resolve patches to [{rect, mask|null}] with mask assets loaded, ready for compositeArt.
+export async function loadPatches(era, layoutType, imgBase) {
+  return Promise.all(
+    patchesFor(era, layoutType).map(async (p) => ({
+      rect: p.rect,
+      mask: p.mask ? await loadImage(`${imgBase}/overlays/${p.mask}`) : null,
+    })),
+  );
+}
+
 function box(width, height, rect) {
   const [l, t, r, b] = rect;
   return [Math.round(l * width), Math.round(t * height), Math.round(r * width), Math.round(b * height)];
@@ -93,7 +111,14 @@ export function coverCrop(crop, targetW, targetH) {
 // native size. recipientRect/donorRect are fractional [l, t, r, b] from artRect(). overlays are
 // [{img, rect}] frame elements stamped over the art (each with baked transparent holes so
 // card-specific elements underneath show through). Browser-only.
-export function compositeArt(recipientImg, donorImg, recipientRect, donorRect, overlays = []) {
+export function compositeArt(
+  recipientImg,
+  donorImg,
+  recipientRect,
+  donorRect,
+  overlays = [],
+  patches = [],
+) {
   const canvas = document.createElement('canvas');
   canvas.width = recipientImg.naturalWidth;
   canvas.height = recipientImg.naturalHeight;
@@ -114,6 +139,27 @@ export function compositeArt(recipientImg, donorImg, recipientRect, donorRect, o
     const [ol, ot, or, ob] = box(canvas.width, canvas.height, rect);
     ctx.drawImage(img, ol, ot, or - ol, ob - ot);
   }
+
+  // Re-stamp recipient patches over the donor art: harvest each region from the pristine recipient.
+  // A masked patch keeps only the silhouette (stat icons); an unmasked one restores the whole rect.
+  for (const { rect, mask } of patches) {
+    const [il, it, ir, ib] = box(canvas.width, canvas.height, rect);
+    const w = ir - il;
+    const h = ib - it;
+    if (w < 1 || h < 1) continue;
+    if (mask) {
+      const off = document.createElement('canvas');
+      off.width = w;
+      off.height = h;
+      const octx = off.getContext('2d');
+      octx.drawImage(recipientImg, il, it, w, h, 0, 0, w, h);
+      octx.globalCompositeOperation = 'destination-in';
+      octx.drawImage(mask, 0, 0, w, h); // keep only inside the silhouette (mask alpha)
+      ctx.drawImage(off, il, it);
+    } else {
+      ctx.drawImage(recipientImg, il, it, w, h, il, it, w, h); // restore the whole rect
+    }
+  }
   return canvas;
 }
 
@@ -130,11 +176,12 @@ export function customPrintId(recipe) {
 // Composite a recipe's art and return a JPEG data URL for display/PDF. spec carries each side's
 // image path + (era, layout_type) — all from the annotated prints API.
 export async function buildCompositeDataURL(spec, imgBase) {
-  const [recipient, donor, flair, mons] = await Promise.all([
+  const [recipient, donor, flair, mons, patches] = await Promise.all([
     loadImage(`${imgBase}/${spec.recipientImagePath}`),
     loadImage(`${imgBase}/${spec.donorImagePath}`),
     loadOverlays(spec.recipientEra, spec.recipientLayout, imgBase),
     loadMonOverlays(spec.recipientKeywords, spec.recipientEra, imgBase),
+    loadPatches(spec.recipientEra, spec.recipientLayout, imgBase),
   ]);
   const canvas = compositeArt(
     recipient,
@@ -142,6 +189,7 @@ export async function buildCompositeDataURL(spec, imgBase) {
     artRect(spec.recipientEra, spec.recipientLayout),
     artRect(spec.donorEra, spec.donorLayout),
     [...flair, ...mons],
+    patches,
   );
   return canvas.toDataURL('image/jpeg', 0.92);
 }

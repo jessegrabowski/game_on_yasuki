@@ -10,6 +10,7 @@ from yasuki_core.card_art import (
     custom_print_id,
     mon_overlays,
     overlays_for,
+    patches_for,
 )
 from yasuki_core.paths import OVERLAYS_DIR, resolve_set_image_path
 
@@ -42,6 +43,7 @@ def composite_art(
     out.paste(art, (window[0], window[1]))
     overlays = overlays_for(recipient_key) + mon_overlays(recipient_keywords, recipient_key[0])
     _stamp_overlays(out, overlays)
+    _stamp_patches(out, recipient, recipient_key)
     return out
 
 
@@ -55,6 +57,27 @@ def _stamp_overlays(card: Image.Image, overlays: list[dict]) -> None:
         asset = Image.open(OVERLAYS_DIR / overlay["asset"]).convert("RGBA")
         asset = asset.resize((right - left, bottom - top), Image.LANCZOS)
         card.paste(asset, (left, top), asset)
+
+
+def _stamp_patches(card: Image.Image, recipient: Image.Image, key: tuple[str, str]) -> None:
+    """Re-stamp recipient patches (stat icons, banner corners, frame edges) over the donor art.
+
+    Each region is harvested from the pristine ``recipient`` at its rect. A masked patch keeps only
+    the silhouette shape (the stat icons, so the donor art shows around them); an unmasked patch
+    restores the whole rect (banner corners, frame edges). The recipient's own pixels — printed
+    values and clan colours — survive the swap with no font and no per-clan assets."""
+    for patch in patches_for(key):
+        left, top, right, bottom = _box(card, patch["rect"])
+        if right - left < 1 or bottom - top < 1:
+            continue
+        crop = recipient.crop((left, top, right, bottom))
+        mask_asset = patch.get("mask")
+        if mask_asset:
+            mask = Image.open(OVERLAYS_DIR / mask_asset).convert("RGBA")
+            mask = mask.resize((right - left, bottom - top), Image.LANCZOS)
+            card.paste(crop, (left, top), mask.getchannel("A"))
+        else:
+            card.paste(crop, (left, top))
 
 
 def custom_print_record(recipe: CustomPrint, repository) -> dict:
