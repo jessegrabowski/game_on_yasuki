@@ -5,6 +5,7 @@ import {
   coverCrop,
   monOverlaysFor,
   overlaysFor,
+  patchesFor,
   setArtLayout,
 } from '../../../src/yasuki_web/static/deck_builder/js/art.js';
 
@@ -27,6 +28,12 @@ setArtLayout({
     height: 0.074,
     cy0: 0.178,
     pitch: 0.0774,
+  },
+  patches: {
+    '2016+|Personality': [
+      { mask: 'gold_coin.png', rect: [0.4408, 0.5623, 0.5584, 0.6397] },
+      { rect: [0.0333, 0.1072, 0.0683, 0.1235] },
+    ],
   },
 });
 
@@ -67,6 +74,21 @@ describe('monOverlaysFor', () => {
   it('is empty off the modern frame or with no mon keywords', () => {
     assert.deepEqual(monOverlaysFor(['Fire'], '2005-09'), []);
     assert.deepEqual(monOverlaysFor([], '2016+'), []);
+  });
+});
+
+describe('patchesFor', () => {
+  it('returns masked + unmasked patches for a key that has them', () => {
+    const p = patchesFor('2016+', 'Personality');
+    assert.equal(p.length, 2);
+    assert.equal(p[0].mask, 'gold_coin.png');
+    assert.deepEqual(p[0].rect, [0.4408, 0.5623, 0.5584, 0.6397]);
+    assert.equal(p[1].mask, undefined);
+    assert.deepEqual(p[1].rect, [0.0333, 0.1072, 0.0683, 0.1235]);
+  });
+  it('is empty for a key with no patches', () => {
+    assert.deepEqual(patchesFor('2005-09', 'Personality'), []);
+    assert.deepEqual(patchesFor('2016+', 'Holding'), []);
   });
 });
 
