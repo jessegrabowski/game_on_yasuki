@@ -42,8 +42,8 @@ def composite_art(
     out = recipient.copy()
     out.paste(art, (window[0], window[1]))
     overlays = overlays_for(recipient_key) + mon_overlays(recipient_keywords, recipient_key[0])
-    _stamp_overlays(out, overlays)
     _stamp_patches(out, recipient, recipient_key)
+    _stamp_overlays(out, overlays)  # last, so the mons sit on top of any patch
     return out
 
 
