@@ -73,14 +73,21 @@ export function patchesFor(era, layoutType) {
   return (_layout.patches || {})[`${era}|${layoutType}`] || [];
 }
 
-// Resolve patches to [{rect, mask|null}] with mask assets loaded, ready for compositeArt.
+// Resolve patches to [{rect, mask|null}] with mask assets loaded, ready for compositeArt. A patch
+// whose mask asset fails to load is dropped rather than rejecting the whole composite, so the
+// unmasked patches (which need no asset) still apply when a mask is missing from the image host.
 export async function loadPatches(era, layoutType, imgBase) {
-  return Promise.all(
-    patchesFor(era, layoutType).map(async (p) => ({
-      rect: p.rect,
-      mask: p.mask ? await loadImage(`${imgBase}/overlays/${p.mask}`) : null,
-    })),
+  const loaded = await Promise.all(
+    patchesFor(era, layoutType).map(async (p) => {
+      if (!p.mask) return { rect: p.rect, mask: null };
+      try {
+        return { rect: p.rect, mask: await loadImage(`${imgBase}/overlays/${p.mask}`) };
+      } catch {
+        return null;
+      }
+    }),
   );
+  return loaded.filter(Boolean);
 }
 
 function box(width, height, rect) {
