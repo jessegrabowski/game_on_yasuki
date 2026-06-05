@@ -135,11 +135,6 @@ export function compositeArt(
   );
   ctx.drawImage(donorImg, sl, st, sr - sl, sb - st, wl, wt, targetW, targetH);
 
-  for (const { img, rect } of overlays) {
-    const [ol, ot, or, ob] = box(canvas.width, canvas.height, rect);
-    ctx.drawImage(img, ol, ot, or - ol, ob - ot);
-  }
-
   // Re-stamp recipient patches over the donor art: harvest each region from the pristine recipient.
   // A masked patch keeps only the silhouette (stat icons); an unmasked one restores the whole rect.
   for (const { rect, mask } of patches) {
@@ -157,8 +152,14 @@ export function compositeArt(
       octx.drawImage(mask, 0, 0, w, h); // keep only inside the silhouette (mask alpha)
       ctx.drawImage(off, il, it);
     } else {
-      ctx.drawImage(recipientImg, il, it, w, h, il, it, w, h); // restore the whole rect
+      ctx.drawImage(recipientImg, il, it, w, h, il, it, w, h);
     }
+  }
+
+  // Frame overlays (holding flair, keyword mons) last, so the mons sit on top of any patch.
+  for (const { img, rect } of overlays) {
+    const [ol, ot, or, ob] = box(canvas.width, canvas.height, rect);
+    ctx.drawImage(img, ol, ot, or - ol, ob - ot);
   }
   return canvas;
 }
