@@ -28,10 +28,8 @@ OVERLAYS = _LAYOUT.get("overlays", {})
 # Keyword "mons" stamped down the upper-left of the modern frame: present keywords in alphabetical
 # order, one per slot, all the same size and left-aligned at evenly-spaced slot centers.
 MONS = _LAYOUT.get("mons", {})
-# Recipient patches: regions re-stamped from the recipient itself after the donor art covers them,
-# keyed "era|layout" (like overlays). Each is a rect; an optional mask names a silhouette asset that
-# limits the stamp to that shape (the stat icons). Without a mask the whole rect is restored (banner
-# corners, frame edges). Preserves the recipient's own pixels — stats, clan colours — with no font.
+# Recipient patches re-stamped from the recipient over the donor art, keyed "era|layout". Each is a
+# {rect} or {rect, mask}; a mask limits the stamp to that silhouette (the stat icons). Sparse.
 PATCHES = _LAYOUT.get("patches", {})
 
 # The redesigned card back debuted with Gold Edition (2001-06); earlier printings use the old back.
@@ -149,10 +147,8 @@ def patches_for(key: tuple[str, str]) -> list[dict]:
     """Recipient patches to re-stamp over the donor art for an (era, layout) key; empty if none.
 
     Each dict has ``rect`` (left, top, right, bottom fractions) and an optional ``mask`` (a silhouette
-    asset under the overlays dir). The renderer crops the recipient's own pixels at the rect; with a
-    mask it keeps only that shape (stat icons), without one it restores the whole rect (banner
-    corners, frame edges). The pixels come from the recipient scan, so stats and clan colours survive
-    an art swap with no font. New types/eras just add a ``"era|layout"`` key to the patches table."""
+    asset under the overlays dir). With a mask the renderer keeps only that shape (stat icons),
+    without one it restores the whole rect (banner corners, frame edges)."""
     return PATCHES.get("|".join(key), [])
 
 

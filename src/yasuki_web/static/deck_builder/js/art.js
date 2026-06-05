@@ -66,10 +66,9 @@ export async function loadMonOverlays(keywords, era, imgBase) {
   );
 }
 
-// Recipient patches ({rect, mask?}) re-stamped from the recipient itself after the donor art covers
-// them, keyed "era|layout". A masked patch keeps only the silhouette (stat icons); an unmasked one
-// restores the whole rect (banner corners, frame edges). Pixels come from the recipient scan, so
-// printed values and clan colours survive with no font. Mirrors core patches_for.
+// Recipient patches ({rect, mask?}) re-stamped from the recipient over the donor art, keyed
+// "era|layout". A masked patch keeps only the silhouette (stat icons); an unmasked one restores the
+// whole rect (banner corners, frame edges). Mirrors core patches_for.
 export function patchesFor(era, layoutType) {
   return (_layout.patches || {})[`${era}|${layoutType}`] || [];
 }

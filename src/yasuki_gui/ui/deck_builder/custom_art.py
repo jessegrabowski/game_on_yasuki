@@ -64,8 +64,7 @@ def _stamp_patches(card: Image.Image, recipient: Image.Image, key: tuple[str, st
 
     Each region is harvested from the pristine ``recipient`` at its rect. A masked patch keeps only
     the silhouette shape (the stat icons, so the donor art shows around them); an unmasked patch
-    restores the whole rect (banner corners, frame edges). The recipient's own pixels — printed
-    values and clan colours — survive the swap with no font and no per-clan assets."""
+    restores the whole rect (banner corners, frame edges)."""
     for patch in patches_for(key):
         left, top, right, bottom = _box(card, patch["rect"])
         if right - left < 1 or bottom - top < 1:
