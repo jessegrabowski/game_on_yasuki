@@ -996,7 +996,8 @@ def query_cards_page(
     offset : int
         Number of rows to skip (default 0)
     sort : str
-        Column to order by, one of the keys in ``_SORT_COLUMNS``. An unknown key falls back to name.
+        Column to order by; one of name, force, chi, gold_cost, focus, personal_honor,
+        honor_requirement, or province_strength. An unknown value falls back to name.
         Default 'name'.
     order : str
         Sort direction, ``'asc'`` or ``'desc'``. Default 'asc'.

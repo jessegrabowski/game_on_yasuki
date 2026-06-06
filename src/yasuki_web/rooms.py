@@ -104,7 +104,8 @@ async def delete_room(request: Request, room_id: str, x_delete_token: str = Head
     Delete a room.
 
     Requires the room's delete token in the ``X-Delete-Token`` header (returned at room creation).
-    Typically called when a game ends or by admin for cleanup; all connected players are disconnected.
+    Typically called when a game ends or by admin for cleanup; all connected players are
+    disconnected.
     """
     if room_id not in rooms:
         raise HTTPException(status_code=404, detail=f"Room '{room_id}' not found")

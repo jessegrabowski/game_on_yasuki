@@ -180,8 +180,8 @@ class Installer:
 
         Driven by ``POSTGRES_RO_USER`` / ``POSTGRES_RO_PASSWORD``; a no-op when either is unset, so
         existing single-role setups are unaffected. The role gets only CONNECT + schema USAGE +
-        SELECT (current and future tables) — the API read path needs nothing more. Idempotent:
-        re-running refreshes the password and re-applies the grants.
+        SELECT (current and future tables). Idempotent: re-running refreshes the password and
+        re-applies the grants.
         """
         ro_user = os.environ.get("POSTGRES_RO_USER")
         ro_password = os.environ.get("POSTGRES_RO_PASSWORD")
@@ -213,9 +213,8 @@ class Installer:
         logger.info("Provisioned read-only role '%s'", ro_user)
 
     def _reset_schema(self, cur) -> None:
-        # The connecting role owns the schema it recreates, so it keeps full rights without an
-        # explicit grant. We deliberately do not re-grant to PUBLIC: a read-only role (provisioned
-        # separately) should receive only USAGE + SELECT, not schema-wide privileges.
+        # The role that recreates the schema owns it, so no grant is needed. PUBLIC is intentionally
+        # left without privileges; a read-only role gets scoped USAGE + SELECT separately.
         print("Existing schema detected. Dropping public schema …")
         cur.execute("DROP SCHEMA IF EXISTS public CASCADE;")
         cur.execute("CREATE SCHEMA public;")
