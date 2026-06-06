@@ -42,9 +42,19 @@ Dependency direction: `yasuki_core ← yasuki_web`, `yasuki_core ← yasuki_gui`
 | [Setup](docs/setup.md) | Installation — PostgreSQL, Pixi, database seeding, card images |
 | [Running](docs/running.md) | Launch the GUI, start the API server, configuration |
 | [Docker](docs/docker.md) | Run PostgreSQL and the API in containers |
-| [Development](docs/development.md) | Tests, linting, project structure, contributing |
+| [Development](docs/development.md) | Tests, linting, project structure |
 | [Search syntax](docs/search-syntax.md) | Scryfall-style card search query language |
 | [API reference](docs/api.md) | REST endpoints and WebSocket protocol |
+
+## Contributing
+
+This is a personal, educational project, but interest is welcome. To contribute:
+
+1. Fork the repo and create a feature branch
+2. Install dependencies and hooks: `pixi install && pre-commit install`
+3. Make your changes and add tests
+4. Run `pixi run test` and `pre-commit run --all`
+5. Open a pull request
 
 ## License
 
