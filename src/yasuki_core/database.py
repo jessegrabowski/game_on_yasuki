@@ -61,8 +61,10 @@ def get_connection_string() -> str:
     Checks YASUKI_DATABASE_URL first, then DATABASE_URL (used by Railway and
     other PaaS providers), then falls back to localhost.
 
-    Appends ``sslmode=require`` automatically for non-private hosts
-    (i.e. public cloud databases) when no sslmode is already set.
+    For non-private hosts (public cloud databases) with no sslmode already set, append
+    ``sslmode=verify-full`` plus the CA bundle when ``YASUKI_DB_SSL_ROOT_CERT`` points at one —
+    verifying the server certificate and hostname — otherwise fall back to ``sslmode=require``
+    (encrypted but unauthenticated). Private/loopback hosts are left untouched.
 
     Returns
     -------
@@ -74,7 +76,11 @@ def get_connection_string() -> str:
     )
     if "sslmode" not in dsn and not _is_private_dsn(dsn):
         separator = "&" if "?" in dsn else "?"
-        dsn += f"{separator}sslmode=require"
+        root_cert = os.environ.get("YASUKI_DB_SSL_ROOT_CERT")
+        if root_cert:
+            dsn += f"{separator}sslmode=verify-full&sslrootcert={root_cert}"
+        else:
+            dsn += f"{separator}sslmode=require"
     return dsn
 
 

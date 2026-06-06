@@ -3,7 +3,7 @@ from typing import Literal
 
 
 class JoinRequest(BaseModel):
-    name: str
+    name: str = Field(min_length=1, max_length=50)
 
 
 class Action(BaseModel):
@@ -15,12 +15,13 @@ class Action(BaseModel):
         "PASS",
     ]
     seed: int | None = None
-    card: str | None = None
+    card: str | None = Field(None, max_length=200)
+    deck_type: str | None = Field(None, max_length=20)
 
 
 class ClientMessage(BaseModel):
     type: Literal["JOIN", "ACTION", "PING"]
-    room: str
+    room: str = Field(max_length=64)
     join: JoinRequest | None = None
     action: Action | None = None
     since_seq: int | None = None

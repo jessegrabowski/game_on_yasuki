@@ -1,10 +1,14 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import asyncio
-import json
 import logging
+import time
 from datetime import datetime, timezone, timedelta
+from urllib.parse import urlparse
 
-from yasuki_web.schemas import ServerHello, ServerState, ServerError
+from pydantic import ValidationError
+
+from yasuki_web.config import allowed_origins
+from yasuki_web.schemas import ClientMessage, ServerHello, ServerState, ServerError
 from yasuki_web.rooms import rooms
 
 logger = logging.getLogger(__name__)
@@ -167,9 +171,40 @@ async def evict_stale_rooms():
 
 MAX_WS_MESSAGE_SIZE = 4096
 
+# Per-connection message throttle: a token bucket that holds WS_MSG_BURST messages and refills at
+# WS_MSG_REFILL_PER_SEC. Generous for turn-based play, but a flooding client drains it and is closed.
+WS_MSG_BURST = 20
+WS_MSG_REFILL_PER_SEC = 2
+
+ALLOWED_WS_ORIGINS = frozenset(allowed_origins())
+
+
+def _origin_allowed(websocket: WebSocket) -> bool:
+    """Reject cross-origin browser handshakes from sites not on the allowlist (CSWSH defense).
+
+    A missing Origin header (native clients) and same-origin requests (the page that opened the
+    socket is served by this app) are allowed; browsers always send Origin on cross-site connects.
+    """
+    origin = websocket.headers.get("origin")
+    if not origin:
+        return True
+    if origin in ALLOWED_WS_ORIGINS:
+        return True
+    host = websocket.headers.get("host")
+    return bool(host) and urlparse(origin).netloc == host
+
+
+def _refill(tokens: float, last: float) -> tuple[float, float]:
+    now = time.monotonic()
+    return min(WS_MSG_BURST, tokens + (now - last) * WS_MSG_REFILL_PER_SEC), now
+
 
 @router.websocket("/{room_id}")
 async def websocket_endpoint(websocket: WebSocket, room_id: str):
+    if not _origin_allowed(websocket):
+        await websocket.close(code=4403, reason="Origin not allowed")
+        return
+
     if room_id not in rooms:
         await websocket.close(code=4004, reason="Room not found")
         return
@@ -193,26 +228,42 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
     game_room = active_game_rooms[room_id]
     player_name = None
 
+    tokens = float(WS_MSG_BURST)
+    last_refill = time.monotonic()
+
     try:
         while True:
             data = await websocket.receive_text()
             if len(data) > MAX_WS_MESSAGE_SIZE:
                 await websocket.close(code=1009, reason="Message too large")
                 return
-            message = json.loads(data)
 
-            msg_type = message.get("type")
+            tokens, last_refill = _refill(tokens, last_refill)
+            if tokens < 1:
+                await websocket.close(code=1008, reason="Rate limit exceeded")
+                return
+            tokens -= 1
 
-            if msg_type == "JOIN":
-                join_data = message.get("join", {})
-                player_name = join_data.get("name", "Anonymous")
+            try:
+                message = ClientMessage.model_validate_json(data)
+            except ValidationError:
+                await websocket.close(code=1003, reason="Invalid message")
+                return
+
+            if message.type == "JOIN":
+                if message.join is None:
+                    await websocket.close(code=1003, reason="JOIN requires a name")
+                    return
+                player_name = message.join.name
                 await game_room.add_player(websocket, player_name)
 
-            elif msg_type == "ACTION":
-                action = message.get("action", {})
-                await game_room.handle_action(websocket, action)
+            elif message.type == "ACTION":
+                if message.action is not None:
+                    await game_room.handle_action(
+                        websocket, message.action.model_dump(exclude_none=True)
+                    )
 
-            elif msg_type == "PING":
+            elif message.type == "PING":
                 await websocket.send_json({"type": "PONG"})
 
     except WebSocketDisconnect:

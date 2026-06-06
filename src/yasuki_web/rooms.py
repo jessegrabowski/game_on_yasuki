@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Query, Request
+from fastapi import APIRouter, Header, HTTPException, Request
 from pydantic import BaseModel, Field
 import secrets
 import logging
@@ -17,7 +17,9 @@ def public_room(room: dict) -> dict:
 
 
 class CreateRoomRequest(BaseModel):
-    room_name: str | None = Field(None, description="Optional custom name for the room")
+    room_name: str | None = Field(
+        None, max_length=60, description="Optional custom name for the room"
+    )
     max_players: int = Field(2, ge=2, le=4, description="Maximum number of players (2-4)")
 
 
@@ -97,16 +99,16 @@ async def get_room(room_id: str):
 
 @router.delete("/rooms/{room_id}")
 @limiter.limit("10/minute")
-async def delete_room(request: Request, room_id: str, token: str = Query(...)):
+async def delete_room(request: Request, room_id: str, x_delete_token: str = Header(...)):
     """
     Delete a room.
 
-    Typically called when game ends or by admin for cleanup.
-    All connected players will be disconnected.
+    Requires the room's delete token in the ``X-Delete-Token`` header (returned at room creation).
+    Typically called when a game ends or by admin for cleanup; all connected players are disconnected.
     """
     if room_id not in rooms:
         raise HTTPException(status_code=404, detail=f"Room '{room_id}' not found")
-    if rooms[room_id].get("delete_token") != token:
+    if not secrets.compare_digest(rooms[room_id].get("delete_token", ""), x_delete_token):
         raise HTTPException(status_code=403, detail="Forbidden")
 
     room_name = rooms[room_id]["name"]
