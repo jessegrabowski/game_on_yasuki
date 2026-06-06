@@ -64,14 +64,47 @@ function tileHTML(card) {
   const onError = fb && primary !== fb
     ? `this.onerror=null;this.src='${esc(fb)}'`
     : `this.onerror=null;this.closest('.card-tile').classList.add('placeholder');this.remove()`;
-  const href = card.image_path ? `${imgBase}/${card.image_path}` : primary;
+  const full = card.image_path ? `${imgBase}/${card.image_path}` : primary;
 
   return (
-    `<a class="card-tile" href="${esc(href)}" target="_blank" rel="noopener" title="${name}">` +
+    `<div class="card-tile" role="button" tabindex="0" title="${name}" ` +
+    `data-full="${esc(full)}" data-name="${name}">` +
     `<img src="${esc(primary)}" alt="${name}" loading="lazy" onerror="${onError}">` +
     `<span class="card-tile-name">${name}</span>` +
-    `</a>`
+    `</div>`
   );
+}
+
+let lightbox;
+let lightboxImg;
+
+function closeLightbox() {
+  if (lightbox) lightbox.classList.remove('open');
+  document.removeEventListener('keydown', onLightboxKey);
+}
+
+function onLightboxKey(e) {
+  if (e.key === 'Escape') closeLightbox();
+}
+
+// Enlarge a card over a dim backdrop; clicking the backdrop (anywhere but the card) or pressing
+// Escape dismisses it. The overlay is built once and reused.
+function openLightbox(src, alt) {
+  if (!lightbox) {
+    lightbox = document.createElement('div');
+    lightbox.className = 'lightbox';
+    lightboxImg = document.createElement('img');
+    lightboxImg.className = 'lightbox-img';
+    lightbox.appendChild(lightboxImg);
+    document.body.appendChild(lightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+  }
+  lightboxImg.src = src;
+  lightboxImg.alt = alt || '';
+  lightbox.classList.add('open');
+  document.addEventListener('keydown', onLightboxKey);
 }
 
 function renderMeta() {
@@ -131,6 +164,17 @@ function init() {
   const resubmit = () => document.getElementById('searchForm').submit();
   sortSelect.addEventListener('change', resubmit);
   orderSelect.addEventListener('change', resubmit);
+
+  const zoomFromEvent = (e) => {
+    const tile = e.target.closest('.card-tile');
+    if (!tile || !tile.dataset.full) return false;
+    openLightbox(tile.dataset.full, tile.dataset.name);
+    return true;
+  };
+  grid.addEventListener('click', zoomFromEvent);
+  grid.addEventListener('keydown', (e) => {
+    if ((e.key === 'Enter' || e.key === ' ') && zoomFromEvent(e)) e.preventDefault();
+  });
 
   fetch('/api/config')
     .then((r) => r.json())
