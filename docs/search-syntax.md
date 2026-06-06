@@ -1,162 +1,78 @@
 # Search Query Language
 
-The deck builder now includes a powerful Scryfall-inspired search query language that allows you to quickly filter cards using a concise syntax.
+The deck builder search box accepts a Scryfall-inspired query syntax. Type a query
+to filter cards in real time; click the **?** button next to the box for inline help.
 
 ## Quick Start
 
-Just type in the search box:
-- `Doji` - Find cards with "Doji" in name or text
-- `clan:Crane type:personality` - Crane personalities
-- `force>3 is:unique` - Unique cards with Force > 3
+| Query | Finds |
+|-------|-------|
+| `Doji` | Cards with "Doji" in the name or text |
+| `clan:Crane type:personality` | Crane personalities |
+| `force>3 is:unique` | Unique cards with Force greater than 3 |
 
-Click the **?** button next to the search box for full syntax help.
+## Field Search
 
-## Features
+| Field | Aliases | Example |
+|-------|---------|---------|
+| `name:` | — | `name:Hoturi` |
+| `text:` | `o:` (oracle) | `o:battle` |
+| `type:` | `t:` | `t:personality` |
+| `clan:` | `c:` | `c:Crane` |
+| `set:` | `s:` | `s:"Imperial Edition"` |
+| `rarity:` | `r:` | `r:rare` |
+| `deck:` | `side:` | `deck:fate` |
+| `format:` | — | `format:"Ivory Edition"` |
 
-### Field-Specific Search
-Search specific card properties:
-- `name:Hoturi` - Card name
-- `text:battle` or `o:battle` - Rules text (o = oracle)
-- `type:personality` or `t:personality` - Card type
-- `clan:Crane` or `c:Crane` - Clan
-- `deck:fate` or `side:fate` - Deck side (FATE/DYNASTY)
-- `set:"Imperial Edition"` - Set name
-- `rarity:rare` or `r:rare` - Rarity
-- `format:"Ivory Edition"` - Format legality
+Values with spaces need quotes: `set:"Imperial Edition"`.
 
-### Numeric Comparisons
-Use operators for numeric searches:
-- `force>3` - Greater than
-- `force>=3` - Greater than or equal
-- `chi<2` - Less than
-- `gold<=3` - Less than or equal (gold = gold_cost)
-- `focus:2` or `focus=2` - Exactly equal
+## Numeric Fields
 
-Supported numeric fields:
-- `force`, `chi`, `focus`, `gold` (cost)
-- `ph` (personal honor), `province` (strength)
-- `startinghonor`, `honor_requirement`
+`force` (`f`), `chi`, `focus`, `gold` (cost), `ph` (personal honor),
+`province` (strength), `startinghonor`, `honor_requirement`.
 
-### Special Filters
-- `is:unique` - Only unique cards
-- `is:experienced` - Cards with "experienced" keyword
-- `is:cavalry` - Cards with "cavalry" keyword
-- `is:kenshi` - Cards with "kenshi" keyword
-- `is:<keyword>` - Any card keyword
+| Operator | Meaning | Example |
+|----------|---------|---------|
+| `:` or `=` | Equals | `focus:2` |
+| `>` | Greater than | `force>3` |
+| `>=` | Greater or equal | `force>=4` |
+| `<` | Less than | `chi<2` |
+| `<=` | Less or equal | `gold<=3` |
 
-### Combining Terms
-Multiple terms use AND by default:
+## Keyword Filters
+
+`is:<keyword>` (alias `has:`) matches any card keyword: `is:unique`,
+`is:experienced`, `is:cavalry`, `is:kenshi`, `is:shugenja`, and so on. Multiple
+keyword filters use AND — cards must have all of them:
+
 ```
-clan:Crane type:personality force>3
+is:shugenja is:shadowlands
 ```
 
-Use OR for alternatives:
+## Combining Terms
+
+Terms are ANDed by default. Use `OR` for alternatives, `-` to exclude, and quotes
+for an exact phrase:
+
 ```
-clan:Crane OR clan:Lion
+clan:Crane type:personality force>3      # all three (AND)
+clan:Crane OR clan:Lion                   # either clan
+clan:Crane -type:event                    # Crane, excluding events
+"Doji Hoturi"                             # exact phrase
 ```
 
-### Negation
-Use `-` to exclude:
-```
-clan:Crane -type:event
-```
-
-### Exact Match
-Use quotes for exact phrases:
-```
-"Doji Hoturi"
-```
+Queries are case-insensitive (`clan:crane` = `clan:Crane`).
 
 ## Examples
 
-Find powerful Crane personalities:
 ```
-c:Crane t:personality f>=4
-```
-
-Find cheap non-holding cards:
-```
-gold<=2 -type:holding
-```
-
-Find Experienced cards from specific clans:
-```
-name:Experienced (c:Dragon OR c:Phoenix)
+c:Crane t:personality f>=4                # powerful Crane personalities
+gold<=2 -type:holding                     # cheap non-holdings
+name:Experienced (c:Dragon OR c:Phoenix)  # experienced Dragon or Phoenix
+is:unique t:personality chi>=2            # unique personalities, high chi
+is:cavalry clan:Unicorn force>=3          # Unicorn cavalry rush
+t:personality gold<=2 -is:unique          # cheap spam
 ```
 
-Find unique personalities with high chi:
-```
-is:unique t:personality chi>=2
-```
-
-Find cavalry personalities:
-```
-is:cavalry t:personality
-```
-
-Find experienced Crane cards:
-```
-is:experienced clan:Crane
-```
-
-## Integration with Filter Dialog
-
-The search query language works alongside the filter dialog. Filters from both sources are combined:
-- Search box queries parse in real-time
-- Filter dialog provides GUI-based filtering
-- Both can be used together for maximum control
-
-## Implementation Details
-
-### Parser Architecture
-- **Tokenizer**: Handles quoted strings and field:value pairs
-- **Parser**: Converts tokens to SearchTerm objects with field, operator, value
-- **Filter Builder**: Converts parsed terms to database query format
-- **Integration**: Merges with FilterOptions from dialog
-
-### Files
-- `parse_search.py` - Core parser implementation
-- `search_help.py` - Help dialog
-- `deck_components.py` - Integration with FilteredCardList
-- `test_parse_search.py` - Comprehensive test suite (48 tests)
-
-### Field Aliases
-
-Short aliases for quick typing:
-
-| Alias | Full Field | Example |
-|-------|------------|---------|
-| `o` | `text` | `o:battle` |
-| `t` | `type` | `t:personality` |
-| `c` | `clan` | `c:Crane` |
-| `f` | `force` | `f>3` |
-| `s` | `set` | `s:IE` |
-| `r` | `rarity` | `r:rare` |
-| `gold` | `gold_cost` | `gold<=3` |
-| `ph` | `personal_honor` | `ph>=2` |
-| `province` | `province_strength` | `province>5` |
-
-## Testing
-
-Run tests:
-```bash
-pytest tests/gui/ui/deck_builder/test_parse_search.py -v
-```
-
-All 48 parser tests cover:
-- Field normalization and aliases
-- Tokenization (including quoted strings)
-- Token parsing (operators, negation, special fields)
-- Query parsing (AND/OR logic)
-- Filter building (conversion to database format)
-- End-to-end integration tests
-
-## Future Enhancements
-
-Potential additions:
-- Regex support: `/pattern/`
-- Keywords search: `keyword:cavalry`
-- Full-text search operators
-- Saved search queries
-- Search history
-- Auto-complete suggestions
+The search box and the filter dialog combine — queries parse alongside any active
+dialog filters.
