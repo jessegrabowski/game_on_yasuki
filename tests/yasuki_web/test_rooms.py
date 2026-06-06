@@ -11,7 +11,7 @@ def client():
 
 def test_delete_requires_token_header(client):
     rid = client.post("/api/rooms", json={"max_players": 2}).json()["room_id"]
-    # No X-Delete-Token header at all -> 422 (required header missing).
+    # Missing a required header is a 422, not a 403.
     assert client.delete(f"/api/rooms/{rid}").status_code == 422
 
 
@@ -26,7 +26,6 @@ def test_delete_accepts_correct_token(client):
     rid, token = created["room_id"], created["delete_token"]
     r = client.delete(f"/api/rooms/{rid}", headers={"X-Delete-Token": token})
     assert r.status_code == 200
-    # Room is gone afterwards.
     assert client.get(f"/api/rooms/{rid}").status_code == 404
 
 

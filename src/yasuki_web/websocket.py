@@ -171,8 +171,8 @@ async def evict_stale_rooms():
 
 MAX_WS_MESSAGE_SIZE = 4096
 
-# Per-connection message throttle: a token bucket that holds WS_MSG_BURST messages and refills at
-# WS_MSG_REFILL_PER_SEC. Generous for turn-based play, but a flooding client drains it and is closed.
+# Per-connection message throttle (token bucket): generous for turn-based play, but a flooding
+# client drains it and gets closed.
 WS_MSG_BURST = 20
 WS_MSG_REFILL_PER_SEC = 2
 
