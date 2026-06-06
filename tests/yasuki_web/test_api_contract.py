@@ -44,6 +44,28 @@ def test_list_cards_shape(client):
         assert "image_path" in card  # str path or None
 
 
+def test_sort_orders_results(client):
+    # The card-search page drives sort/order through these params; force ordering must actually flip.
+    def forces(order):
+        cards = client.get(f"/api/cards?search=type:personality&sort=force&order={order}").json()[
+            "cards"
+        ]
+        return [c["force"] for c in cards if c["force"] is not None]
+
+    desc = forces("desc")
+    asc = forces("asc")
+    assert desc == sorted(desc, reverse=True)
+    assert asc == sorted(asc)
+    assert desc[0] >= asc[0]
+
+
+def test_unknown_sort_is_safe(client):
+    # An out-of-whitelist sort key must fall back to name order, not error or inject SQL.
+    body = client.get("/api/cards?sort=DROP+TABLE+cards&order=sideways&limit=5").json()
+    names = [c["name"] for c in body["cards"]]
+    assert names == sorted(names)
+
+
 def test_card_detail_shape(client):
     card_id = client.get("/api/cards?limit=1").json()["cards"][0]["card_id"]
     body = client.get(f"/api/cards/{card_id}").json()

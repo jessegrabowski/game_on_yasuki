@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game on, Yasuki!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site/site.css">
+</head>
+<body>
+
+<header class="ribbon">
+  <a class="ribbon-mark" href="/"><span class="torii">&#x26E9;</span> Game on, Yasuki!</a>
+  <nav class="ribbon-nav">
+    <a href="/card-search">Card Search</a>
+    <a href="/deck-builder/">Deck Builder</a>
+    <a href="/play-online">Play Online</a>
+  </nav>
+</header>
+
+<main class="hero">
+  <h1 class="wordmark"><span class="torii">&#x26E9;</span> Game on, Yasuki!</h1>
+  <p class="tagline">a legend of the five rings card index</p>
+
+  <form class="search-form" action="/card-search" method="get" role="search">
+    <input type="text" name="q" autofocus autocomplete="off" spellcheck="false"
+           placeholder="Search the Empire&hellip;  clan:Crane type:personality force&gt;3">
+    <button type="submit" aria-label="Search">&#x2192;</button>
+  </form>
+
+  <p class="hero-hint">
+    Try <code>is:shadowlands is:shugenja</code> or <code>c:Crab f&gt;=4</code>
+  </p>
+</main>
+
+</body>
+</html>

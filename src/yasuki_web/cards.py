@@ -41,6 +41,10 @@ async def list_cards(
     format: Annotated[
         str | None, Query(description="Filter by format legality (e.g., Ivory Edition)")
     ] = None,
+    sort: Annotated[
+        str, Query(description="Sort column: name, force, chi, gold_cost, focus, etc.")
+    ] = "name",
+    order: Annotated[str, Query(description="Sort direction: asc or desc")] = "asc",
     limit: Annotated[int, Query(ge=1, le=1000, description="Maximum number of results")] = 100,
     offset: Annotated[int, Query(ge=0, description="Offset for pagination")] = 0,
 ):
@@ -82,6 +86,8 @@ async def list_cards(
             filter_options=filter_options if filter_options else None,
             limit=limit,
             offset=offset,
+            sort=sort,
+            order=order,
         )
 
         return {

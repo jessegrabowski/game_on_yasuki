@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Search &mdash; Game on, Yasuki!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site/site.css">
+</head>
+<body>
+
+<header class="ribbon">
+  <a class="ribbon-mark" href="/"><span class="torii">&#x26E9;</span> Game on, Yasuki!</a>
+  <nav class="ribbon-nav">
+    <a href="/card-search" class="active">Card Search</a>
+    <a href="/deck-builder/">Deck Builder</a>
+    <a href="/play-online">Play Online</a>
+  </nav>
+</header>
+
+<div class="search-page-bar">
+  <form id="searchForm" class="search-form" action="/card-search" method="get" role="search">
+    <input type="text" id="q" name="q" autocomplete="off" spellcheck="false"
+           placeholder="clan:Crane type:personality force&gt;3 is:shadowlands &hellip;">
+    <button type="submit" aria-label="Search">&#x2192;</button>
+  </form>
+  <div class="sort-row">
+    <span class="sort-label">Sorted by</span>
+    <select id="sort" name="sort" form="searchForm">
+      <option value="name">Name</option>
+      <option value="force">Force</option>
+      <option value="chi">Chi</option>
+      <option value="gold_cost">Gold Cost</option>
+      <option value="focus">Focus</option>
+      <option value="personal_honor">Personal Honor</option>
+      <option value="province_strength">Province Strength</option>
+      <option value="honor_requirement">Honor Requirement</option>
+    </select>
+    <select id="order" name="order" form="searchForm">
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+  </div>
+  <details class="syntax">
+    <summary>Query syntax</summary>
+    <div class="syntax-body">
+      <b>Fields:</b> <code>name:</code> <code>type:</code> <code>clan:</code> <code>deck:</code>
+      <code>text:</code> <code>set:</code> <code>rarity:</code><br>
+      <b>Shortcuts:</b> <code>t:</code> <code>c:</code> <code>f:</code> <code>o:</code>
+      <code>s:</code> <code>r:</code><br>
+      <b>Numeric:</b> <code>force&gt;3</code> <code>chi&gt;=2</code> <code>gold&lt;=3</code>
+      <code>focus:2</code><br>
+      <b>Keywords:</b> <code>is:shadowlands</code> <code>is:cavalry</code> <code>is:unique</code>
+      <code>is:experienced</code><br>
+      <b>Negation:</b> <code>-type:event</code> &nbsp; <b>OR:</b> <code>clan:Crane OR clan:Lion</code>
+      &nbsp; <b>Exact:</b> <code>"Doji Hoturi"</code>
+    </div>
+  </details>
+</div>
+
+<div class="result-meta" id="resultMeta"></div>
+<div class="results-grid" id="grid"></div>
+<div class="sentinel" id="sentinel"></div>
+<div class="status-line" id="status"></div>
+
+<script type="module" src="/site/card-search.js"></script>
+</body>
+</html>
