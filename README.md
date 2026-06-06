@@ -43,9 +43,8 @@ Dependency direction: `yasuki_core ← yasuki_web`, `yasuki_core ← yasuki_gui`
 | [Running](docs/running.md) | Launch the GUI, start the API server, configuration |
 | [Docker](docs/docker.md) | Run PostgreSQL and the API in containers |
 | [Development](docs/development.md) | Tests, linting, project structure, contributing |
-| [Deployment](docs/deployment.md) | Deploy to Railway + Cloudflare R2, multiplayer roadmap |
 | [Search syntax](docs/search-syntax.md) | Scryfall-style card search query language |
-| [Search quick reference](docs/search-quick-reference.md) | Cheat sheet for search operators |
+| [API reference](docs/api.md) | REST endpoints and WebSocket protocol |
 
 ## License
 
