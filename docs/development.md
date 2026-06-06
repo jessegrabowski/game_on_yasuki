@@ -74,12 +74,3 @@ No dependency between web and gui.
 1. Place set images in `sets/<set_name>/` (one `.png` per card)
 2. Add set metadata to `src/yasuki_core/assets/database/set_info.json`
 3. Run `pixi run install-db --force` to re-seed
-
-## Contributing
-
-1. Fork the repo and create a feature branch
-2. Install dev dependencies: `pixi install`
-3. Install pre-commit hooks: `pre-commit install`
-4. Make your changes and add tests
-5. Run `pixi run test` and `pre-commit run --all`
-6. Open a pull request
