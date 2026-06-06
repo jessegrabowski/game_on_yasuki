@@ -1,4 +1,5 @@
 import argparse
+import os
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -6,6 +7,7 @@ from collections.abc import Iterable
 import shutil
 
 import psycopg
+from psycopg import sql as pgsql
 
 from yasuki_core import DATABASE_DIR
 from yasuki_core.database import get_connection_string, mask_dsn
@@ -34,6 +36,7 @@ class InstallerConfig:
     force: bool
     skip_sets: bool
     skip_cards: bool
+    ensure_readonly_role: bool = False
 
 
 class InstallerError(RuntimeError):
@@ -45,6 +48,12 @@ class Installer:
         self.cfg = cfg
 
     def run(self) -> None:
+        # A standalone, schema-free path so the role can be (re)provisioned on an already-seeded
+        # database without re-running the installer.
+        if self.cfg.ensure_readonly_role:
+            self._provision_readonly_role()
+            return
+
         self._validate_prerequisites()
         self._validate_files()
         self._ensure_database_exists()
@@ -76,6 +85,8 @@ class Installer:
             images_to_sql.seed_card_backs(self.cfg.dsn)
         else:
             logger.info("Skipping card import")
+
+        self._provision_readonly_role()
 
         logger.info("Database installation complete")
 
@@ -164,11 +175,50 @@ class Installer:
         sql = self.cfg.schema_path.read_text(encoding="utf-8")
         cur.execute(sql)
 
+    def _provision_readonly_role(self) -> None:
+        """Create or update a least-privilege read-only login role, if configured.
+
+        Driven by ``POSTGRES_RO_USER`` / ``POSTGRES_RO_PASSWORD``; a no-op when either is unset, so
+        existing single-role setups are unaffected. The role gets only CONNECT + schema USAGE +
+        SELECT (current and future tables) — the API read path needs nothing more. Idempotent:
+        re-running refreshes the password and re-applies the grants.
+        """
+        ro_user = os.environ.get("POSTGRES_RO_USER")
+        ro_password = os.environ.get("POSTGRES_RO_PASSWORD")
+        if not (ro_user and ro_password):
+            return
+
+        db_name = self._extract_db_name_from_dsn(self.cfg.dsn)
+        role = pgsql.Identifier(ro_user)
+        with psycopg.connect(self.cfg.dsn, autocommit=True) as conn, conn.cursor() as cur:
+            cur.execute("SELECT 1 FROM pg_roles WHERE rolname = %s", (ro_user,))
+            action = "ALTER" if cur.fetchone() else "CREATE"
+            cur.execute(
+                pgsql.SQL("{} ROLE {} WITH LOGIN PASSWORD {}").format(
+                    pgsql.SQL(action), role, pgsql.Literal(ro_password)
+                )
+            )
+            cur.execute(
+                pgsql.SQL("GRANT CONNECT ON DATABASE {} TO {}").format(
+                    pgsql.Identifier(db_name), role
+                )
+            )
+            cur.execute(pgsql.SQL("GRANT USAGE ON SCHEMA public TO {}").format(role))
+            cur.execute(pgsql.SQL("GRANT SELECT ON ALL TABLES IN SCHEMA public TO {}").format(role))
+            cur.execute(
+                pgsql.SQL(
+                    "ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO {}"
+                ).format(role)
+            )
+        logger.info("Provisioned read-only role '%s'", ro_user)
+
     def _reset_schema(self, cur) -> None:
+        # The connecting role owns the schema it recreates, so it keeps full rights without an
+        # explicit grant. We deliberately do not re-grant to PUBLIC: a read-only role (provisioned
+        # separately) should receive only USAGE + SELECT, not schema-wide privileges.
         print("Existing schema detected. Dropping public schema …")
         cur.execute("DROP SCHEMA IF EXISTS public CASCADE;")
         cur.execute("CREATE SCHEMA public;")
-        cur.execute("GRANT ALL ON SCHEMA public TO public;")
 
 
 def parse_args(argv: list[str]) -> InstallerConfig:
@@ -207,6 +257,11 @@ def parse_args(argv: list[str]) -> InstallerConfig:
     )
     parser.add_argument("--skip-sets", action="store_true", help="Skip loading set metadata")
     parser.add_argument("--skip-cards", action="store_true", help="Skip loading card data")
+    parser.add_argument(
+        "--ensure-readonly-role",
+        action="store_true",
+        help="Only provision the read-only role from POSTGRES_RO_USER/PASSWORD, then exit",
+    )
     args = parser.parse_args(argv)
 
     return InstallerConfig(
@@ -218,6 +273,7 @@ def parse_args(argv: list[str]) -> InstallerConfig:
         force=args.force,
         skip_sets=args.skip_sets,
         skip_cards=args.skip_cards,
+        ensure_readonly_role=args.ensure_readonly_role,
     )
 
 

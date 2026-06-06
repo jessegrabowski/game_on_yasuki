@@ -24,6 +24,14 @@ from yasuki_web.rate_limit import limiter
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
+# Baseline per-IP throttle for the read endpoints that hit the database. The search endpoint keeps a
+# tighter limit and the name-lookup a looser one; everything else shares this default.
+_READ_RATE_LIMIT = "120/minute"
+
+# The deck_type enum values; used to reject unknown deck filters with a 422 rather than letting the
+# Postgres enum cast fail as a 500.
+_VALID_DECKS = {"Fate", "Dynasty", "Pre-Game", "Other"}
+
 
 @router.get("/cards")
 @limiter.limit("60/minute")
@@ -147,7 +155,9 @@ def _prints_with_layout(card: dict, card_id: str) -> list[dict]:
 
 
 @router.get("/cards/{card_id}")
+@limiter.limit(_READ_RATE_LIMIT)
 async def get_card(
+    request: Request,
     card_id: Annotated[str, Path(max_length=200, pattern=r"^[\w\s\-\.\,\'\!\(\)]+$")],
 ):
     """
@@ -176,7 +186,8 @@ async def get_card(
 
 
 @router.get("/sets")
-async def list_sets():
+@limiter.limit(_READ_RATE_LIMIT)
+async def list_sets(request: Request):
     """
     List all card sets available in the database.
 
@@ -211,7 +222,8 @@ OTHER_ORDER = ["Modern", "Legacy", "Not Legal (Proxy)", "Unreleased"]
 
 
 @router.get("/formats")
-async def list_formats():
+@limiter.limit(_READ_RATE_LIMIT)
+async def list_formats(request: Request):
     """
     List all game formats in chronological order.
 
@@ -234,7 +246,8 @@ async def list_formats():
 
 
 @router.get("/decks")
-async def list_deck_types():
+@limiter.limit(_READ_RATE_LIMIT)
+async def list_deck_types(request: Request):
     """
     List available deck types (Dynasty, Fate).
 
@@ -252,7 +265,8 @@ async def list_deck_types():
 
 
 @router.get("/clans")
-async def list_clans():
+@limiter.limit(_READ_RATE_LIMIT)
+async def list_clans(request: Request):
     """List all clans available in the card database."""
     try:
         clans = await to_thread(query_all_clans)
@@ -263,7 +277,8 @@ async def list_clans():
 
 
 @router.get("/card-backs")
-async def list_card_backs():
+@limiter.limit(_READ_RATE_LIMIT)
+async def list_card_backs(request: Request):
     """
     List the generic card backs, nested as ``{deck: {era: image_path}}``.
 
@@ -281,7 +296,8 @@ async def list_card_backs():
 
 
 @router.get("/art-layout")
-async def art_layout():
+@limiter.limit(_READ_RATE_LIMIT)
+async def art_layout(request: Request):
     """The art-swap layout data (rects, era bands, layout map) shared with the browser canvas.
 
     Serving it from the same JSON the Python renderers read keeps the GUI and web composites in
@@ -290,7 +306,8 @@ async def art_layout():
 
 
 @router.get("/card-types")
-async def list_card_types():
+@limiter.limit(_READ_RATE_LIMIT)
+async def list_card_types(request: Request):
     """List all card types (Personality, Holding, Event, etc.)."""
     try:
         types = await to_thread(query_all_types)
@@ -301,22 +318,29 @@ async def list_card_types():
 
 
 @router.get("/card-types-by-deck")
+@limiter.limit(_READ_RATE_LIMIT)
 async def list_card_types_by_deck(
+    request: Request,
     deck: Annotated[
         str, Query(description="Deck type to filter card types by (e.g. DYNASTY, FATE)")
     ],
 ):
     """List card types available for a specific deck type."""
+    deck_title = deck.title()
+    if deck_title not in _VALID_DECKS:
+        raise HTTPException(status_code=422, detail=f"Unknown deck type: {deck}")
     try:
-        types = await to_thread(query_types_by_deck, [deck.title()])
-        return {"card_types": types, "deck": deck.title(), "count": len(types)}
+        types = await to_thread(query_types_by_deck, [deck_title])
+        return {"card_types": types, "deck": deck_title, "count": len(types)}
     except Exception as e:
         logger.error(f"Error listing card types by deck: {e}")
         raise HTTPException(status_code=500, detail="Failed to retrieve card types")
 
 
 @router.get("/cards/random/{count}")
+@limiter.limit(_READ_RATE_LIMIT)
 async def random_cards(
+    request: Request,
     count: Annotated[int, Path(ge=1, le=50, description="Number of random cards to return")],
     deck: Annotated[str | None, Query(description="Limit random cards to specific deck")] = None,
 ):

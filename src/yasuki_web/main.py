@@ -12,6 +12,7 @@ import asyncio
 import logging
 import os
 from yasuki_web import cards, rooms, websocket
+from yasuki_web.config import allowed_origins
 from yasuki_web.rate_limit import limiter
 from yasuki_web.websocket import evict_stale_rooms
 from yasuki_core.database import close_pool
@@ -35,24 +36,37 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-_default_origins = ["http://localhost:5173", "http://localhost:3000", "http://localhost:8080"]
-_cors_origins = (
-    [o.strip() for o in os.environ.get("CORS_ORIGINS", "").split(",") if o.strip()]
-    if os.environ.get("CORS_ORIGINS")
-    else _default_origins
-)
-if "*" in _cors_origins:
-    raise ValueError(
-        "CORS_ORIGINS must not contain '*' when allow_credentials=True. "
-        "List explicit origins instead."
-    )
+_cors_origins = allowed_origins()
 
+# Reject oversized request bodies before they reach a route. Starlette buffers the whole body before
+# Pydantic validates it, so without this a large POST is read into memory first. 64 KiB comfortably
+# covers every JSON body the API accepts (the largest is a room-create payload).
+MAX_REQUEST_BODY_BYTES = 64 * 1024
+
+
+class BodySizeLimitMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        content_length = request.headers.get("content-length")
+        if content_length is not None:
+            try:
+                declared = int(content_length)
+            except ValueError:
+                return Response("Invalid Content-Length", status_code=400)
+            if declared > MAX_REQUEST_BODY_BYTES:
+                return Response("Request body too large", status_code=413)
+        return await call_next(request)
+
+
+app.add_middleware(BodySizeLimitMiddleware)
+
+# allow_credentials is False: the API uses no cookies/sessions, so browsers never need to send
+# credentials cross-origin. Revisit if a cookie/token auth flow is added.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
-    allow_headers=["Content-Type", "Authorization"],
+    allow_headers=["Content-Type", "Authorization", "X-Delete-Token"],
 )
 
 
