@@ -1,4 +1,5 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from fastapi.responses import FileResponse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from fastapi.middleware.cors import CORSMiddleware
@@ -55,6 +56,22 @@ app.add_middleware(
 )
 
 
+# Card images come from the R2 CDN (https://*.r2.dev) or the local /images mount; fonts from Google.
+# All page CSS and JS is served from same-origin static files, so styles and scripts stay 'self'.
+_CONTENT_SECURITY_POLICY = (
+    "default-src 'self'; "
+    "img-src 'self' https://*.r2.dev data:; "
+    "style-src 'self' https://fonts.googleapis.com; "
+    "font-src https://fonts.gstatic.com; "
+    "script-src 'self' 'unsafe-inline'; "
+    "connect-src 'self'"
+)
+
+# Public HTML pages and their static assets that the CSP applies to. The landing page lives at "/"
+# (matched exactly), the rest by path prefix.
+_CSP_PREFIXES = ("/deck-builder", "/site", "/card-search", "/play-online")
+
+
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         response: Response = await call_next(request)
@@ -67,21 +84,19 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
             response.headers["Strict-Transport-Security"] = (
                 "max-age=63072000; includeSubDomains; preload"
             )
-        if request.url.path.startswith("/deck-builder"):
-            response.headers["Content-Security-Policy"] = (
-                "default-src 'self'; "
-                "img-src 'self' https://*.r2.dev data:; "
-                "style-src 'self' https://fonts.googleapis.com; "
-                "font-src https://fonts.gstatic.com; "
-                "script-src 'self' 'unsafe-inline'; "
-                "connect-src 'self'"
-            )
+        path = request.url.path
+        if path == "/" or path.startswith(_CSP_PREFIXES):
+            response.headers["Content-Security-Policy"] = _CONTENT_SECURITY_POLICY
         return response
 
 
 app.add_middleware(SecurityHeadersMiddleware)
 
 DECK_BUILDER_DIR = Path(__file__).parent / "static" / "deck_builder"
+SITE_DIR = Path(__file__).parent / "static" / "site"
+
+if SITE_DIR.exists():
+    app.mount("/site", StaticFiles(directory=SITE_DIR), name="site")
 
 if SETS_DIR.exists():
     app.mount("/images/sets", StaticFiles(directory=SETS_DIR), name="sets")
@@ -100,8 +115,18 @@ app.include_router(rooms.router, prefix="/api", tags=["rooms"])
 app.include_router(websocket.router, prefix="/ws", tags=["websocket"])
 
 
+def _site_page(filename: str) -> FileResponse:
+    page = SITE_DIR / filename
+    if not page.exists():
+        raise HTTPException(status_code=404, detail="Page not found")
+    return FileResponse(page)
+
+
 @app.get("/")
 async def root():
+    index = SITE_DIR / "index.html"
+    if index.exists():
+        return FileResponse(index)
     return {
         "message": "Game on, Yasuki! API Server",
         "version": "1.0.0",
@@ -113,6 +138,16 @@ async def root():
             "websocket": "/ws/{room_id}",
         },
     }
+
+
+@app.get("/card-search")
+async def card_search():
+    return _site_page("card-search.html")
+
+
+@app.get("/play-online")
+async def play_online():
+    return _site_page("play-online.html")
 
 
 @app.get("/api/config")

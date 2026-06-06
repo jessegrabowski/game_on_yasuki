@@ -936,12 +936,42 @@ def query_cards_filtered(
             return results
 
 
+# Whitelist of sortable card columns. Keys are the public sort identifiers accepted by the API;
+# values are the qualified SQL columns. Restricting ORDER BY to this map keeps the sort key
+# injection-safe even though it is interpolated into the query string.
+_SORT_COLUMNS = {
+    "name": "c.name",
+    "force": "c.force",
+    "chi": "c.chi",
+    "gold_cost": "c.gold_cost",
+    "focus": "c.focus",
+    "personal_honor": "c.personal_honor",
+    "honor_requirement": "c.honor_requirement",
+    "province_strength": "c.province_strength",
+}
+
+
+def _order_by_clause(sort: str, order: str) -> str:
+    """Build a safe ``ORDER BY`` clause from a whitelisted sort key and direction.
+
+    Numeric stats sort NULLs last (cards without the stat fall to the end in both directions) with a
+    name tiebreaker for a stable order; an unknown key falls back to name.
+    """
+    column = _SORT_COLUMNS.get(sort, "c.name")
+    direction = "DESC" if str(order).lower() == "desc" else "ASC"
+    if column == "c.name":
+        return f"ORDER BY c.name {direction}"
+    return f"ORDER BY {column} {direction} NULLS LAST, c.name ASC"
+
+
 def query_cards_page(
     text_query: str = "",
     filter_options: dict | None = None,
     *,
     limit: int = 100,
     offset: int = 0,
+    sort: str = "name",
+    order: str = "asc",
 ) -> tuple[list[dict], int]:
     """
     Query a single page of cards with SQL-level pagination.
@@ -959,18 +989,23 @@ def query_cards_page(
         Maximum rows to return (default 100)
     offset : int
         Number of rows to skip (default 0)
+    sort : str
+        Column to order by, one of the keys in ``_SORT_COLUMNS``. An unknown key falls back to name.
+        Default 'name'.
+    order : str
+        Sort direction, ``'asc'`` or ``'desc'``. Default 'asc'.
 
     Returns
     -------
     cards : list of dict
-        One page of card records, sorted by name
+        One page of card records, ordered by the requested sort
     total : int
         Total number of cards matching the filters (for pagination metadata)
     """
     where_clause, params = _build_card_filter(text_query, filter_options)
 
     count_sql = f"SELECT COUNT(*) AS n FROM cards c {where_clause}"
-    data_sql = f"{_CARD_SELECT} {where_clause} ORDER BY c.name LIMIT %s OFFSET %s"
+    data_sql = f"{_CARD_SELECT} {where_clause} {_order_by_clause(sort, order)} LIMIT %s OFFSET %s"
     data_params = params + [limit, offset]
 
     with get_db_connection() as conn:
