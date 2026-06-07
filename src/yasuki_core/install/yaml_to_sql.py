@@ -247,6 +247,7 @@ def _insert_all(
           card_id, printing_id, set_id, rarity, flavor_text, artist, designer,
           collector_number_raw, publisher, publisher_url, doublesided, legal_date
         ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (card_id, printing_id) DO NOTHING
         """,
         print_rows,
     )
@@ -254,11 +255,17 @@ def _insert_all(
     print_ids = {
         (card_id, printing_id): print_id for print_id, card_id, printing_id in cur.fetchall()
     }
+    affected = [print_ids[key] for key in number_map if key in print_ids]
     number_rows = [
         (print_ids[key], subset, value, position)
         for key, numbers in number_map.items()
+        if key in print_ids
         for position, (subset, value) in enumerate(numbers)
     ]
+    # print_numbers has no natural key, so a plain insert would duplicate every row on re-run.
+    # Clear these prints' numbers first so the load stays idempotent (it re-runs on each deploy).
+    if affected:
+        cur.execute("DELETE FROM print_numbers WHERE print_id = ANY(%s)", (affected,))
     if number_rows:
         cur.executemany(
             "INSERT INTO print_numbers (print_id, subset, number_int, position) "
