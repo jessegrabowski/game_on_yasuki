@@ -10,7 +10,7 @@ from yasuki_core.database import (
     get_prints_by_card_id,
     get_cards_by_names,
     query_all_sets,
-    query_all_formats,
+    query_formats_ordered,
     query_all_decks,
     query_all_clans,
     query_all_types,
@@ -204,20 +204,8 @@ async def list_sets(request: Request):
         raise HTTPException(status_code=500, detail="Failed to retrieve sets")
 
 
-ARC_ORDER = [
-    "Clan Wars (Imperial)",
-    "Hidden Emperor (Jade)",
-    "Four Winds (Gold)",
-    "Rain of Blood (Diamond)",
-    "Age of Enlightenment (Lotus)",
-    "Race for the Throne (Samurai)",
-    "Destroyer War (Celestial)",
-    "Age of Conquest (Emperor)",
-    "A Brother's Destiny (Twenty Festivals)",
-    "War of the Seals (Onyx Edition)",
-    "Shattered Empire",
-]
-
+# The cross-arc formats that sit outside the storyline timeline (no legal_from), in display order.
+# Unlike the arcs — which are ordered by the database — this short set is fixed and never grows.
 OTHER_ORDER = ["Modern", "Legacy", "Not Legal (Proxy)", "Unreleased"]
 
 
@@ -231,9 +219,10 @@ async def list_formats(request: Request):
     cross-arc formats like Modern and Legacy.
     """
     try:
-        all_formats = set(await to_thread(query_all_formats))
-        arcs = [f for f in ARC_ORDER if f in all_formats]
-        other = [f for f in OTHER_ORDER if f in all_formats]
+        rows = await to_thread(query_formats_ordered)
+        arcs = [r["name"] for r in rows if r["legal_from"] is not None]
+        present = {r["name"] for r in rows}
+        other = [f for f in OTHER_ORDER if f in present]
         return {
             "formats": arcs + other,
             "arcs": arcs,

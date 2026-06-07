@@ -12,6 +12,7 @@ from psycopg import sql as pgsql
 from yasuki_core import DATABASE_DIR
 from yasuki_core.database import get_connection_string, mask_dsn
 from yasuki_core.install import images_to_sql, sets_to_sql, yaml_to_sql
+from yasuki_core.install.format_metadata import populate_format_metadata
 import logging
 
 
@@ -37,6 +38,7 @@ class InstallerConfig:
     skip_sets: bool
     skip_cards: bool
     ensure_readonly_role: bool = False
+    format_metadata_only: bool = False
 
 
 class InstallerError(RuntimeError):
@@ -52,6 +54,12 @@ class Installer:
         # database without re-running the installer.
         if self.cfg.ensure_readonly_role:
             self._provision_readonly_role()
+            return
+
+        if self.cfg.format_metadata_only:
+            with psycopg.connect(self.cfg.dsn, autocommit=True) as conn, conn.cursor() as cur:
+                populate_format_metadata(cur)
+            logger.info("Populated format metadata (arc, block, legal_from)")
             return
 
         self._validate_prerequisites()
@@ -261,6 +269,11 @@ def parse_args(argv: list[str]) -> InstallerConfig:
         action="store_true",
         help="Only provision the read-only role from POSTGRES_RO_USER/PASSWORD, then exit",
     )
+    parser.add_argument(
+        "--format-metadata",
+        action="store_true",
+        help="Only (re)populate formats.arc/block/legal_from on an existing database, then exit",
+    )
     args = parser.parse_args(argv)
 
     return InstallerConfig(
@@ -273,6 +286,7 @@ def parse_args(argv: list[str]) -> InstallerConfig:
         skip_sets=args.skip_sets,
         skip_cards=args.skip_cards,
         ensure_readonly_role=args.ensure_readonly_role,
+        format_metadata_only=args.format_metadata,
     )
 
 
