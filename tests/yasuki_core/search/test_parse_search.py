@@ -202,6 +202,28 @@ class TestFilterBuilding:
         text_query, filters = build_filter_options(parsed)
         assert filters["decks"] == ["FATE"]
 
+    # The parser emits format terms verbatim as (operator, value) specs; resolving aliases and
+    # timeline inequalities happens in SQL (see the DB-backed tests in test_api_contract.py).
+    def test_format_exact_emits_spec(self):
+        _, filters = parse_and_build_query("format:diamond")
+        assert filters["format_filters"] == [(":", "diamond")]
+
+    def test_format_inequality_emits_operator(self):
+        _, filters = parse_and_build_query("format>diamond")
+        assert filters["format_filters"] == [(">", "diamond")]
+
+    def test_format_quoted_full_name_strips_quotes(self):
+        _, filters = parse_and_build_query('format:"Rain of Blood (Diamond)"')
+        assert filters["format_filters"] == [(":", "Rain of Blood (Diamond)")]
+
+    def test_format_multiple_terms_kept_in_order(self):
+        _, filters = parse_and_build_query("format>diamond format<emperor")
+        assert filters["format_filters"] == [(">", "diamond"), ("<", "emperor")]
+
+    def test_format_negation_dropped(self):
+        _, filters = parse_and_build_query("-format:diamond")
+        assert "format_filters" not in filters
+
     def test_is_unique(self):
         parsed = ParsedQuery(
             terms=[SearchTerm(field="is", operator=":", value="unique", negated=False)]
@@ -307,7 +329,7 @@ class TestFilterBuilding:
             terms=[SearchTerm(field="format", operator=":", value="Ivory Edition", negated=False)]
         )
         text_query, filters = build_filter_options(parsed)
-        assert filters["legality"] == ("Ivory Edition", ["legal"])
+        assert filters["format_filters"] == [(":", "Ivory Edition")]
 
     def test_combined_filters(self):
         parsed = ParsedQuery(

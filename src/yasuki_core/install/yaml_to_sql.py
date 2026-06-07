@@ -7,6 +7,7 @@ import psycopg
 import yaml
 from psycopg.types.json import Json
 
+from yasuki_core.install.format_metadata import populate_format_metadata
 from yasuki_core.install.sets_to_sql import coerce_date
 from yasuki_core.install.utils import normalize_name
 
@@ -272,6 +273,9 @@ def _insert_all(
             "VALUES (%s, %s, %s, %s)",
             number_rows,
         )
+
+    # Sets are already loaded, so each format's arc and chronological legal_from can be resolved now.
+    populate_format_metadata(cur)
 
 
 if __name__ == "__main__":

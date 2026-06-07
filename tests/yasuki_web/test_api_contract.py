@@ -66,6 +66,32 @@ def test_unknown_sort_is_safe(client):
     assert names == sorted(names)
 
 
+def _total(client, search):
+    return client.get("/api/cards", params={"search": search, "limit": 1}).json()["total"]
+
+
+def test_format_short_alias_resolves_in_sql(client):
+    # `format:diamond` resolves via formats.block to the same cards as the full name.
+    assert _total(client, "format:diamond") > 0
+    assert _total(client, "format:diamond") == _total(client, 'format:"Rain of Blood (Diamond)"')
+
+
+def test_format_inequality_uses_legal_from(client):
+    gt = _total(client, "format>diamond")
+    ge = _total(client, "format>=diamond")
+    exact = _total(client, "format:diamond")
+    assert ge > gt  # >= includes Diamond itself
+    assert ge >= exact
+
+
+def test_formats_endpoint_is_chronological(client):
+    # Ordering comes from formats.legal_from, not a hardcoded list.
+    body = client.get("/api/formats").json()
+    assert body["arcs"][0] == "Clan Wars (Imperial)"
+    assert body["arcs"][-1] == "Shattered Empire"
+    assert body["other"][0] == "Modern"
+
+
 def test_card_detail_shape(client):
     card_id = client.get("/api/cards?limit=1").json()["cards"][0]["card_id"]
     body = client.get(f"/api/cards/{card_id}").json()

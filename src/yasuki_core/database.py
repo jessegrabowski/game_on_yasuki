@@ -399,6 +399,20 @@ def query_all_formats() -> list[str]:
             return results
 
 
+def query_formats_ordered() -> list[dict]:
+    """Fetch formats with their chronological ``legal_from``, arcs oldest-first then non-arc formats.
+
+    Returns
+    -------
+    formats : list of dict
+        Each row has ``name`` and ``legal_from`` (None for formats outside the storyline timeline,
+        which sort last).
+    """
+    with get_db_connection() as conn, conn.cursor() as cur:
+        cur.execute("SELECT name, legal_from FROM formats ORDER BY legal_from NULLS LAST, name")
+        return cur.fetchall()
+
+
 def query_cards_by_legality(format_name: str) -> list[str]:
     """
     Fetch the ids of cards legal in a format.
@@ -791,6 +805,12 @@ _NUMERIC_STATS = (
 )
 
 
+# Comparison operators allowed in a `format>diamond`-style search, mapped to the SQL they emit. The
+# map both whitelists the operator (keeping it injection-safe when interpolated) and excludes the
+# exact operators, which take a different code path.
+_FORMAT_OPS = {">": ">", ">=": ">=", "<": "<", "<=": "<="}
+
+
 def _build_card_filter(
     text_query: str = "",
     filter_options: dict | None = None,
@@ -831,12 +851,36 @@ def _build_card_filter(
     if filter_options:
         for property_name, value in filter_options.items():
             if property_name == "legality":
-                format_name, _statuses = value
-                if format_name:
+                formats, _statuses = value
+                if isinstance(formats, str):
+                    formats = [formats]
+                if formats:
                     conditions.append(
-                        "c.card_id IN (SELECT card_id FROM card_legalities WHERE format_name = %s)"
+                        "c.card_id IN (SELECT card_id FROM card_legalities"
+                        " WHERE format_name = ANY(%s))"
                     )
-                    params.append(format_name)
+                    params.append(list(formats))
+            elif property_name == "format_filters":
+                # Each (operator, value) resolves the value against a format's name or short block
+                # alias. Exact operators match that one format; inequalities compare every format's
+                # legal_from to the reference format's, selecting one side of the arc timeline.
+                for op, format_value in value:
+                    if op in (":", "="):
+                        conditions.append(
+                            "c.card_id IN (SELECT cl.card_id FROM card_legalities cl"
+                            " JOIN formats f ON f.name = cl.format_name"
+                            " WHERE lower(f.name) = lower(%s) OR lower(f.block) = lower(%s))"
+                        )
+                        params.extend([format_value, format_value])
+                    elif op in _FORMAT_OPS:
+                        conditions.append(
+                            "c.card_id IN (SELECT cl.card_id FROM card_legalities cl"
+                            " JOIN formats f ON f.name = cl.format_name"
+                            f" WHERE f.legal_from {_FORMAT_OPS[op]} (SELECT legal_from FROM formats"
+                            " WHERE (lower(name) = lower(%s) OR lower(block) = lower(%s))"
+                            " AND legal_from IS NOT NULL LIMIT 1))"
+                        )
+                        params.extend([format_value, format_value])
             elif property_name == "sets":
                 if value:
                     conditions.append(
