@@ -947,6 +947,14 @@ def _build_card_filter(
                             " WHERE lower(keyword) = lower(%s))"
                         )
                         params.append(keyword)
+            elif property_name == "keywords_or":
+                # `is:a|b` — cards carrying any one of the keywords.
+                if value:
+                    conditions.append(
+                        "c.card_id IN (SELECT card_id FROM card_keywords"
+                        " WHERE lower(keyword) = ANY(%s))"
+                    )
+                    params.append([k.lower() for k in value])
             elif property_name in _NUMERIC_STATS:
                 if isinstance(value, tuple) and len(value) == 2:
                     min_val, max_val = value
