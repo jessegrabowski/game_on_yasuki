@@ -941,6 +941,24 @@ def _build_card_filter(
                         "c.card_id IN (SELECT card_id FROM prints"
                         f" WHERE {' OR '.join(rarity_conditions)})"
                     )
+            elif property_name == "artist":
+                for artist in value:
+                    conditions.append(
+                        "c.card_id IN (SELECT card_id FROM prints"
+                        " WHERE artist ILIKE %s ESCAPE '\\')"
+                    )
+                    params.append(f"%{_escape_like(artist)}%")
+            elif property_name == "flavor":
+                for flavor in value:
+                    conditions.append(
+                        "c.card_id IN (SELECT card_id FROM prints"
+                        " WHERE flavor_text ILIKE %s ESCAPE '\\')"
+                    )
+                    params.append(f"%{_escape_like(flavor)}%")
+            elif property_name == "story":
+                for story in value:
+                    conditions.append("c.story ILIKE %s ESCAPE '\\'")
+                    params.append(f"%{_escape_like(story)}%")
             elif property_name == "keywords":
                 if value:
                     for keyword in value:

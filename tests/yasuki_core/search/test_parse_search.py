@@ -264,6 +264,25 @@ class TestFilterBuilding:
         _, filters = parse_and_build_query("include:bogus")
         assert "include" not in filters
 
+    def test_artist_alias_and_field(self):
+        _, by_alias = parse_and_build_query("a:Hara")
+        _, by_name = parse_and_build_query("artist:Hara")
+        assert by_alias["artist"] == ["Hara"] == by_name["artist"]
+
+    def test_flavor_alias_strips_quotes(self):
+        _, filters = parse_and_build_query('ft:"a moment of honor"')
+        assert filters["flavor"] == ["a moment of honor"]
+
+    def test_story_field(self):
+        _, filters = parse_and_build_query('story:"Paul Ashman"')
+        assert filters["story"] == ["Paul Ashman"]
+
+    def test_is_banned(self):
+        _, filters = parse_and_build_query("is:banned")
+        assert filters["is_banned"] is True
+        _, negated = parse_and_build_query("-is:banned")
+        assert negated["is_banned"] is False
+
     def test_is_unique(self):
         parsed = ParsedQuery(
             terms=[SearchTerm(field="is", operator=":", value="unique", negated=False)]

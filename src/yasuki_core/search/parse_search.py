@@ -54,6 +54,8 @@ FIELD_ALIASES = {
     "format": "format",
     "arc": "format",
     "r": "rarity",
+    "a": "artist",
+    "ft": "flavor",
     "side": "deck",
     "gold": "gold_cost",
     "ph": "personal_honor",
@@ -61,6 +63,10 @@ FIELD_ALIASES = {
     "startinghonor": "starting_honor",
     "has": "is",
 }
+
+# `is:` values that toggle a boolean card column rather than match a keyword/trait.
+IS_BOOLEAN_FIELDS = {"unique": "is_unique", "banned": "is_banned"}
+
 
 # Non-deck cards (proxies, tokens, bio cards, …) are hidden by default. `include:tokens` brings the
 # token/non-deck cards back; `include:all` shows everything.
@@ -356,9 +362,9 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                         if "keywords" not in filter_options:
                             filter_options["keywords"] = []
                         filter_options["keywords"].extend(keywords)
-                elif keyword_value == "unique":
-                    # Special case for is_unique boolean field
-                    filter_options["is_unique"] = not term.negated
+                elif keyword_value in IS_BOOLEAN_FIELDS:
+                    # Boolean card flags (is:unique, is:banned) rather than keyword traits.
+                    filter_options[IS_BOOLEAN_FIELDS[keyword_value]] = not term.negated
                 else:
                     # Single keyword (implicit AND when multiple is: terms)
                     if not term.negated:
@@ -377,6 +383,15 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                     filter_options["clans"] = [v for v in values]
                 elif field == "rarity":
                     filter_options["rarities"] = [v for v in values]
+        elif field in ("artist", "flavor", "story"):
+            # Free-text partial matches: artist/flavor on the print, story on the card credit.
+            values = [
+                term.value.strip('"').strip()
+                for term in terms_list
+                if not term.negated and term.value.strip('"').strip()
+            ]
+            if values:
+                filter_options[field] = values
         elif field == "set":
             # Set by full name or short code, resolved in the database. Like format, emit each
             # (operator, value); the operator may be exact or an inequality against set release dates.

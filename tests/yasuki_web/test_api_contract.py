@@ -137,6 +137,25 @@ def test_keyword_or_matches_union_not_everything(client):
     assert either < everything
 
 
+def test_story_credit_search(client):
+    # Story credits are searchable; the documented example must return its known matches.
+    assert _total(client, 'story:"Paul Ashman"') == 6
+
+
+def test_artist_and_flavor_search(client):
+    everything = _total(client, "include:all")
+    assert 0 < _total(client, "a:Hara") < everything  # print artist, via the a: alias
+    assert 0 < _total(client, "ft:honor") < everything  # flavor text, via the ft: alias
+
+
+def test_is_banned_filter(client):
+    banned = _total(client, "is:banned")
+    everything = _total(client, "include:all")
+    assert 0 < banned < everything
+    # Negation flips it: not-banned plus banned covers the (visible) catalog with no overlap.
+    assert _total(client, "-is:banned") + banned == _total(client, "")
+
+
 def test_card_detail_shape(client):
     card_id = client.get("/api/cards?limit=1").json()["cards"][0]["card_id"]
     body = client.get(f"/api/cards/{card_id}").json()
