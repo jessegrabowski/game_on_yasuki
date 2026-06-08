@@ -35,6 +35,7 @@
     <a href="#keywords">Keywords</a>
     <a href="#format">Format</a>
     <a href="#sets">Sets</a>
+    <a href="#extras">Extras</a>
     <a href="#combining">Combining</a>
   </nav>
 
@@ -162,6 +163,23 @@
       <a class="example">set:GE</a>
       <a class="example">set:"Gold Edition" is:unique</a>
       <a class="example">set>=GE set<=DE</a>
+    </div>
+  </section>
+
+  <hr class="doc-divider">
+
+  <section class="doc-section" id="extras">
+    <div class="doc-text">
+      <h2>Non-deck cards</h2>
+      <p>
+        Proxies, tokens, bio cards, and other non-deck printings are hidden by default.
+        <code>include:tokens</code> brings the token and other "Other" cards into the results;
+        <code>include:all</code> shows absolutely everything.
+      </p>
+    </div>
+    <div class="doc-examples">
+      <a class="example">type:follower include:tokens</a>
+      <a class="example">is:cavalry include:all</a>
     </div>
   </section>
 

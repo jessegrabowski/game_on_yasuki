@@ -115,9 +115,16 @@ def test_two_sided_format_range(client):
 
 def test_unknown_field_does_not_match_everything(client):
     # An unsupported field must not silently drop and return the whole catalog.
-    everything = client.get("/api/cards?limit=1").json()["total"]
+    everything = _total(client, "include:all")
     assert _total(client, "bogusfield:xyzzy") < everything
     assert _total(client, "arc:lotus") < everything  # aliases to format:lotus
+
+
+def test_non_deck_cards_hidden_by_default(client):
+    default = client.get("/api/cards?limit=1").json()["total"]
+    with_tokens = _total(client, "include:tokens")
+    everything = _total(client, "include:all")
+    assert default < with_tokens <= everything
 
 
 def test_keyword_or_matches_union_not_everything(client):

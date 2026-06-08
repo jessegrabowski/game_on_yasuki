@@ -256,6 +256,14 @@ class TestFilterBuilding:
         assert text == "scorpion"
         assert filters == {}
 
+    def test_include_tokens(self):
+        _, filters = parse_and_build_query("include:tokens")
+        assert filters["include"] == {"tokens"}
+
+    def test_include_unknown_category_ignored(self):
+        _, filters = parse_and_build_query("include:bogus")
+        assert "include" not in filters
+
     def test_is_unique(self):
         parsed = ParsedQuery(
             terms=[SearchTerm(field="is", operator=":", value="unique", negated=False)]
