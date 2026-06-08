@@ -64,17 +64,24 @@
       <p>
         Filter by a field with <code>field:value</code>. Available fields:
         <code>name:</code> <code>type:</code> <code>clan:</code> <code>deck:</code>
-        <code>text:</code> <code>set:</code> <code>rarity:</code>.
+        <code>text:</code> <code>set:</code> <code>rarity:</code> <code>artist:</code>
+        <code>flavor:</code> <code>story:</code>.
       </p>
       <p>
         Most have a one-letter shortcut: <code>t:</code> type, <code>c:</code> clan,
-        <code>o:</code> text, <code>s:</code> set, <code>r:</code> rarity, <code>f:</code> force.
+        <code>o:</code> text, <code>s:</code> set, <code>r:</code> rarity, <code>f:</code> force,
+        <code>a:</code> artist, <code>ft:</code> flavor.
+      </p>
+      <p>
+        <code>artist:</code> and <code>flavor:</code> match the printed art credit and flavour
+        text; <code>story:</code> matches the storyline/design credit (e.g. a Kotei winner).
       </p>
     </div>
     <div class="doc-examples">
       <a class="example">type:holding</a>
       <a class="example">c:Crane t:personality</a>
-      <a class="example">o:cavalry</a>
+      <a class="example">a:Hara ft:honor</a>
+      <a class="example">story:"Paul Ashman"</a>
     </div>
   </section>
 
@@ -107,8 +114,8 @@
       <h2>Keywords &amp; traits</h2>
       <p>
         <code>is:</code> (or <code>has:</code>) matches any keyword or trait &mdash;
-        <code>is:shugenja</code>, <code>is:shadowlands</code>, <code>is:cavalry</code>,
-        <code>is:unique</code>, and the rest.
+        <code>is:shugenja</code>, <code>is:shadowlands</code>, <code>is:cavalry</code>, and the
+        rest. Two flags are special: <code>is:unique</code> and <code>is:banned</code>.
       </p>
       <p>
         Combine inside one term: <code>is:a|b</code> for either, <code>is:a&amp;b</code> for both.
@@ -117,7 +124,7 @@
     <div class="doc-examples">
       <a class="example">is:shugenja is:shadowlands</a>
       <a class="example">is:cavalry|naval</a>
-      <a class="example">is:unique force>=5</a>
+      <a class="example">is:banned</a>
     </div>
   </section>
 
