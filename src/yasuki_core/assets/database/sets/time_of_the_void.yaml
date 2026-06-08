@@ -2632,6 +2632,7 @@ cards:
   extended_title: Moshi Wakiza • Experienced
   clans:
   - Mantis
+  - Centipede
   keywords:
   - Unique
   - Centipede Clan
@@ -3604,6 +3605,8 @@ cards:
   - Ancestor
   decks:
   - Fate
+  clans:
+  - Scorpion
   keywords:
   - Unique
   - Scorpion Clan

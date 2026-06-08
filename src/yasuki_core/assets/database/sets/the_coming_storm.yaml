@@ -130,6 +130,12 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Lion
+  - Mantis
+  - Spider
+  - Unicorn
   keywords:
   - Crab
   - Lion
@@ -3241,6 +3247,11 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
+  - Dragon
+  - Phoenix
+  - Scorpion
   keywords:
   - Crane
   - Dragon

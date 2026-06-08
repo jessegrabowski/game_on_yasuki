@@ -1902,6 +1902,8 @@ cards:
   - Follower
   decks:
   - Fate
+  clans:
+  - Bat
   keywords:
   - Cavalry
   - Bat Clan
@@ -1928,6 +1930,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Lion
   keywords:
   - Ancestor
   - Lion Clan

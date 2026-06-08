@@ -926,11 +926,17 @@ def _build_card_filter(
                     )
                     params.append([t.title() for t in value])
             elif property_name == "clans":
+                # Clan affiliation is materialised into card_clans for every card (the loader infers
+                # it from keywords for senseis, holdings, and minor clans). `clan:all` is shorthand
+                # for the "All Clans" senseis that any clan may lead.
                 if value:
+                    wanted = [c.lower() for c in value]
+                    if "all" in wanted:
+                        wanted.append("all clans")
                     conditions.append(
                         "c.card_id IN (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"
                     )
-                    params.append([c.lower() for c in value])
+                    params.append(wanted)
             elif property_name == "rarities":
                 if value:
                     rarity_conditions = []

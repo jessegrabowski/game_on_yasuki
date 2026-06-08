@@ -654,6 +654,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Tortoise
   keywords:
   - Courtier
   - Merchant
@@ -758,6 +759,7 @@ cards:
   extended_title: Kitsune Yamazaru • Experienced
   clans:
   - Naga
+  - Fox
   keywords:
   - Fox Clan
   - Scout
@@ -1117,6 +1119,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Mantis
   keywords:
   - Mantis Clan
   text: Your Wind must be House of Suikihime. Your Raid Attacks' resolutions do not bow your Merchants.

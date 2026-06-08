@@ -931,6 +931,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: You may not play this Sensei if you have a Wind.<br><b>Favor Gozoku Political Repeatable Open:</b>
@@ -1362,6 +1364,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Non-Bloodspeaker Personalities you own in and out of play have +1 Gold Cost.<br>When your Stronghold
@@ -1425,6 +1429,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Shadowlands
   keywords:
   - Shadowlands Horde
   text: After revealing this Sensei, search your deck for zero to nine non-Unique Oni Personalities and
@@ -1793,6 +1799,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
   keywords:
   - Crane Clan
   text: Before the first time each turn you gain Honor from a Holding or Region, negate the gain.<br>After
@@ -2267,6 +2275,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Lion
   keywords:
   - Lion Clan
   text: Before your non-Deathseeker Personality enters play, either dishonor him and permanently give
@@ -2465,6 +2475,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Mantis
   keywords:
   - Mantis Clan
   text: After you lose Honor from one of your other cards, lose 2 Honor.<br>Your Ranged Attacks may not
@@ -2601,6 +2613,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Dragon
   keywords:
   - Dragon Clan
   text: Shugenja will not join you.<br>If you control no Shadowlands cards, you may ignore Honor Requirements
@@ -2790,6 +2804,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Unicorn
   keywords:
   - Unicorn Clan
   text: Personalities with a printed Personal Honor of 1 or less will not join you.<br>After a battle's
@@ -2886,6 +2902,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
   keywords:
   - Crab Clan
   text: Personalities you own in and out of play lose <b>Yu</b> and will not gain it.<br>Your Berserkers
@@ -2979,6 +2997,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Scorpion
   keywords:
   - Scorpion Clan
   text: Your Honor gains have a maximum value of 1.<br>Ninja you own in and out of play have +1C.<br><b>Battle/Open:</b>
@@ -3396,6 +3416,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Phoenix
   keywords:
   - Phoenix Clan
   text: If your Family Honor is 11 or greater, negate your Honor gains except those during battles and

@@ -1029,6 +1029,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: <b>Limited:</b> Once per game, target another player. You, then the other player, each name a
@@ -1627,6 +1629,13 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Dragon
+  - Lion
+  - Phoenix
+  - Shadowlands
+  - Toturi's Army
   keywords:
   - Brotherhood of Shinsei
   - Dragon Clan
@@ -1675,6 +1684,7 @@ cards:
   - Dynasty
   clans:
   - Mantis
+  - Fox
   keywords:
   - Fox Clan
   - Gunso
@@ -1700,6 +1710,7 @@ cards:
   - Dynasty
   clans:
   - Mantis
+  - Fox
   keywords:
   - Fox Clan
   - Mantis Clan
@@ -2750,6 +2761,7 @@ cards:
   extended_title: Ryosei • Experienced 2
   clans:
   - Mantis
+  - Fox
   keywords:
   - Experienced 2
   - Unique
@@ -2835,6 +2847,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Followers will not attach to Personalities with lower Chi than the Follower's Force.<br>Your Personalities
@@ -2876,6 +2890,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: You may not take actions whose effects will or might cause other players to lose Honor.<br>Your
@@ -3316,6 +3332,12 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Crab
+  - Crane
+  - Mantis
+  - Scorpion
   keywords:
   - Brotherhood of Shinsei
   - Crab Clan
@@ -3412,6 +3434,11 @@ cards:
   - Pre-Game
   clans:
   - Ninja
+  - Brotherhood of Shinsei
+  - Lion
+  - Naga
+  - Phoenix
+  - Unicorn
   keywords:
   - Brotherhood of Shinsei
   - Lion Clan
@@ -3493,6 +3520,7 @@ cards:
   - Dynasty
   clans:
   - Crab
+  - Falcon
   keywords:
   - Chui
   - Crab Clan
@@ -3554,6 +3582,7 @@ cards:
   extended_title: Tsuruchi • Experienced 2
   clans:
   - Mantis
+  - Wasp
   keywords:
   - Experienced 2
   - Unique
@@ -3582,6 +3611,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Hare
   keywords:
   - Hare Clan
   - Samurai

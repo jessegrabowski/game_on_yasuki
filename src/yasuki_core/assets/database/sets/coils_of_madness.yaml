@@ -1354,6 +1354,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Badger
   keywords:
   - Unique
   - Badger Clan
@@ -1770,6 +1771,7 @@ cards:
   - Dynasty
   clans:
   - Crab
+  - Tortoise
   keywords:
   - Unique
   - Crab Clan
@@ -2058,6 +2060,7 @@ cards:
   - Dynasty
   clans:
   - Unicorn
+  - Bat
   keywords:
   - Unique
   - Air
@@ -2275,6 +2278,7 @@ cards:
   - Dynasty
   clans:
   - Lion
+  - Ox
   keywords:
   - Cavalry
   - Unique
@@ -3124,6 +3128,7 @@ cards:
   - Dynasty
   clans:
   - Crane
+  - Sparrow
   keywords:
   - Duelist
   - Unique
@@ -3538,6 +3543,7 @@ cards:
   - Dynasty
   clans:
   - Mantis
+  - Boar
   keywords:
   - Unique
   - Boar Clan
@@ -3637,6 +3643,7 @@ cards:
   - Dynasty
   clans:
   - Spider
+  - Monkey
   keywords:
   - Kensai
   - Unique
@@ -3667,6 +3674,7 @@ cards:
   - Dynasty
   clans:
   - Phoenix
+  - Dragonfly
   keywords:
   - Unique
   - Dragonfly Clan
@@ -3697,6 +3705,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Oriole
   keywords:
   - Unique
   - Artisan
@@ -3758,6 +3767,7 @@ cards:
   extended_title: Tsuruchi • Inexperienced
   clans:
   - Mantis
+  - Wasp
   keywords:
   - Unique
   - Daimyo
@@ -3837,6 +3847,7 @@ cards:
   - Dynasty
   clans:
   - Dragon
+  - Hare
   keywords:
   - Unique
   - Dragon Clan

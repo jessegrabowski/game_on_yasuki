@@ -586,6 +586,7 @@ cards:
   clans:
   - Crane
   - Scorpion
+  - Tanuki
   keywords:
   - Samurai
   - Tanuki Clan
@@ -1531,6 +1532,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Unicorn
   keywords:
   - Unicorn
   text: Your Personalities with 3 or higher Personal Honor have <b>Paragon</b>.<br>You may not use the
@@ -2045,6 +2048,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
   keywords:
   - Crab
   text: Your Siege Personalities have +1PH.<br><b>Engage:</b> Target your opposed or attacking Siege Personality.
@@ -2130,6 +2135,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Dragon
   keywords:
   - Dragon
   text: 'After your Kiho with an element keyword targets your Monk, once per phase, give them a +1F/+1C
@@ -2256,6 +2263,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Phoenix
   keywords:
   - Phoenix
   text: 'You may not play :shadowlands: cards. :ranged: and Honor gains from your Shugenja and Spells
@@ -2608,6 +2617,8 @@ cards:
   - Holding
   decks:
   - Dynasty
+  clans:
+  - Tanuki
   keywords:
   - Bandit
   - Retainer
@@ -2630,6 +2641,9 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
+  - Scorpion
   keywords:
   - Crane
   - Scorpion
@@ -2704,6 +2718,10 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Lion
+  - Mantis
+  - Spider
   keywords:
   - Lion
   - Mantis
@@ -2877,6 +2895,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Monkey
   keywords:
   - Miko
   - Monkey Clan
@@ -3085,6 +3104,7 @@ cards:
   extended_title: Waietto, Tanuki Clan Champion • Experienced
   clans:
   - Unaligned
+  - Tanuki
   keywords:
   - Samurai
   - Tanuki Clan

@@ -2222,6 +2222,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Mantis
   keywords:
   - Mantis Clan
   - Orochi
@@ -3148,6 +3150,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Monkey
   keywords:
   - Hero
   - Magistrate
@@ -3304,6 +3307,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Hare
   keywords:
   - Hare Clan
   - Oni-Slayer

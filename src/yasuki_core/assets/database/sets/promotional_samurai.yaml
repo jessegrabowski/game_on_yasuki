@@ -762,6 +762,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Crab
   keywords:
   - Crab Clan
   - Samurai
@@ -801,6 +803,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Crane
   keywords:
   - Crane Clan
   - Samurai
@@ -1241,6 +1245,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Dragon
   keywords:
   - Dragon Clan
   - Samurai
@@ -1985,6 +1991,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Lion
   keywords:
   - Lion Clan
   - Samurai
@@ -2598,6 +2606,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Lion
   keywords:
   - Lion Clan
   - Samurai
@@ -2637,6 +2647,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Mantis
   keywords:
   - Mantis Clan
   - Samurai
@@ -3334,6 +3346,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Phoenix
   keywords:
   - Phoenix Clan
   - Samurai
@@ -3353,6 +3367,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Phoenix
   keywords:
   - Phoenix Clan
   - Samurai
@@ -3736,6 +3752,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Scorpion
   keywords:
   - Samurai
   - Scorpion Clan
@@ -4186,6 +4204,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Spider
   keywords:
   - Samurai
   - Spider Clan
@@ -4362,6 +4382,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Unicorn
   keywords:
   - Samurai
   - Unicorn Clan
@@ -4401,6 +4423,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Scorpion
   keywords:
   - Apprentice
   - Courtier
@@ -5235,6 +5259,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Unicorn
   keywords:
   - Samurai
   - Unicorn Clan

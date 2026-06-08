@@ -1709,6 +1709,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Bat
   keywords:
   - Bat Clan
   - Shugenja
@@ -2224,6 +2225,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: This Sensei counts as a Ring for actions on non-Stronghold cards.<br>After one of your actions

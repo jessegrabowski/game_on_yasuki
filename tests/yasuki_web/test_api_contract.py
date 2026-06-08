@@ -156,6 +156,33 @@ def test_is_banned_filter(client):
     assert _total(client, "-is:banned") + banned == _total(client, "")
 
 
+def test_clan_matches_senseis(client):
+    # Senseis carry clan as a keyword, not a clan field; the loader materialises it into card_clans
+    # so clan: reaches them. (Previously every clan: query missed all senseis.)
+    assert _total(client, "clan:Phoenix type:sensei include:all") > 0
+
+
+def test_clan_all_marks_all_clans_senseis(client):
+    # "All Clans" senseis are tagged with a single marker, searchable as clan:all.
+    assert _total(client, "clan:all type:sensei include:all") > 0
+
+
+def test_minor_clan_search(client):
+    # Minor clans (Fox, etc.) live only as "<X> Clan" keywords and now resolve through card_clans.
+    assert _total(client, "clan:Fox include:all") > 0
+
+
+def test_clan_does_not_match_elemental_dragons(client):
+    # A bare "Dragon" keyword on a non-sensei is an elemental dragon, not the Dragon Clan.
+    dragon = _total(client, "clan:Dragon include:all")
+    everything = _total(client, "include:all")
+    assert dragon < everything
+    cards = client.get(
+        "/api/cards", params={"search": "clan:Dragon include:all", "limit": 200}
+    ).json()["cards"]
+    assert "Fire Dragon" not in {c["name"] for c in cards}
+
+
 def test_card_detail_shape(client):
     card_id = client.get("/api/cards?limit=1").json()["cards"][0]["card_id"]
     body = client.get(f"/api/cards/{card_id}").json()

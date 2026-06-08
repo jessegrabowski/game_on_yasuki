@@ -1245,6 +1245,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: You may include four copies of each non-Unique Ashigaru Personality in your deck. Your non-Ashigaru
@@ -1267,6 +1269,10 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
+  - Mantis
+  - Phoenix
   keywords:
   - Crane
   - Mantis
@@ -1316,6 +1322,12 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Dragon
+  - Lion
+  - Scorpion
+  - Unicorn
   keywords:
   - Crab
   - Dragon
@@ -3678,6 +3690,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Spider
   keywords:
   - Spider
   text: You may only Recruit Shadowlands Personalities. You do not lose Honor from your Shadowlands Followers

@@ -1993,6 +1993,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Fox
   keywords:
   - Fox Clan
   - Shugenja
@@ -2243,6 +2244,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Centipede
   keywords:
   - Centipede Clan
   - Shugenja
@@ -3597,6 +3599,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Wasp
   keywords:
   - Scout
   - Wasp Clan

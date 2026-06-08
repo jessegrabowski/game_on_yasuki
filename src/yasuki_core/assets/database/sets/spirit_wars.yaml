@@ -89,6 +89,10 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
+  - Dragon
+  - Lion
   keywords:
   - Crane Clan
   - Dragon Clan
@@ -1573,6 +1577,12 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Naga
+  - Ratling
+  - Scorpion
+  - Shadowlands
   keywords:
   - Crab Clan
   - Naga
@@ -1762,6 +1772,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Your Fox Clan Personalities in and out of play have your Clan Alignment.<br>After a Nonhuman or
@@ -2023,6 +2035,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: All players' Human Personalities, in and out of play, who do not have their owners' printed Clan
@@ -2092,6 +2106,7 @@ cards:
   - Dynasty
   clans:
   - Toturi's Army
+  - Monkey
   keywords:
   - Magistrate
   - Monkey Clan
@@ -2119,6 +2134,7 @@ cards:
   extended_title: Morito • Experienced 2
   clans:
   - Unaligned
+  - Ox
   keywords:
   - Cavalry
   - Experienced 2 Shinjo Morito
@@ -3393,6 +3409,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Sparrow
   keywords:
   - Bushi
   - Sparrow Clan
@@ -3415,6 +3432,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Your Sparrow Clan Personalities in and out of play have your Clan Alignment.<br>After an Ashigaru
@@ -3698,6 +3717,10 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Lion
+  - Mantis
+  - Unicorn
   keywords:
   - Lion Clan
   - Mantis Clan
@@ -3745,6 +3768,7 @@ cards:
   - Dynasty
   clans:
   - Mantis
+  - Wasp
   keywords:
   - Mantis Clan
   - Samurai
@@ -3828,6 +3852,11 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Crane
+  - Dragon
+  - Phoenix
   keywords:
   - Brotherhood of Shinsei
   - Crane Clan
@@ -3852,6 +3881,7 @@ cards:
   - Dynasty
   clans:
   - Spirit
+  - Hare
   keywords:
   - Hare Clan
   - Samurai
@@ -3962,6 +3992,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Your Wasp Clan Personalities in and out of play have your Clan Alignment.<br>Human Followers with

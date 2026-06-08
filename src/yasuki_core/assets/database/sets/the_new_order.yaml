@@ -468,6 +468,11 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Dragon
+  - Phoenix
+  - Spider
+  - Unicorn
   keywords:
   - Dragon
   - Phoenix
@@ -2640,6 +2645,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Your Love Letter Personalities in and out of play have your Clan Alignment and you ignore their
@@ -2743,6 +2750,12 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Crane
+  - Lion
+  - Mantis
+  - Scorpion
   keywords:
   - Crab
   - Crane
