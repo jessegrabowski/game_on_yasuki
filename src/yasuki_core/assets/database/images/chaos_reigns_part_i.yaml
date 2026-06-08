@@ -227,7 +227,7 @@ images:
   files:
   - role: front
     file: mrika_experienced_2.jpg
-    sha256: 5785023343673a078395296d79b4cebab0e6169490a2199696d8845d79240a88
+    sha256: 22bfb4effbccbb205c0441c572eac20432a55a122cfe3a16d00857be39da8dc2
 - card_id: only_the_wind
   printing_id: chaos_reigns_part_i
   files:
