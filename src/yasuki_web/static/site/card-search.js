@@ -68,15 +68,20 @@ function tileHTML(card) {
 
   return (
     `<div class="card-tile" role="button" tabindex="0" title="${name}" ` +
-    `data-full="${esc(full)}" data-name="${name}">` +
+    `data-full="${esc(full)}" data-name="${name}" data-card-id="${esc(card.card_id)}" ` +
+    `data-default-print-id="${esc(card.default_print_id ?? '')}">` +
     `<img src="${esc(primary)}" alt="${name}" loading="lazy" onerror="${onError}">` +
     `<span class="card-tile-name">${name}</span>` +
     `</div>`
   );
 }
 
-let lightbox;
-let lightboxImg;
+// The enlarged-card overlay doubles as a print viewer: it cycles a card's printings (oldest first,
+// matching the detail endpoint) and flips double-faced cards. Built once and reused; `viewer` holds
+// the open card's state, and `openToken` discards a slow detail fetch when a newer card is opened.
+let lightbox, lightboxImg, lightboxCaption, lightboxPrev, lightboxNext, lightboxFlip;
+const viewer = { card: null, prints: [], index: 0, flipped: false, name: '', fallback: '' };
+let openToken = 0;
 
 function closeLightbox() {
   if (lightbox) lightbox.classList.remove('open');
@@ -85,26 +90,110 @@ function closeLightbox() {
 
 function onLightboxKey(e) {
   if (e.key === 'Escape') closeLightbox();
+  else if (e.key === 'ArrowLeft') stepPrint(-1);
+  else if (e.key === 'ArrowRight') stepPrint(1);
+  else if (e.key === 'f' || e.key === 'F') flipCard();
 }
 
-// Enlarge a card over a dim backdrop; clicking the backdrop (anywhere but the card) or pressing
-// Escape dismisses it. The overlay is built once and reused.
-function openLightbox(src, alt) {
-  if (!lightbox) {
-    lightbox = document.createElement('div');
-    lightbox.className = 'lightbox';
-    lightboxImg = document.createElement('img');
-    lightboxImg.className = 'lightbox-img';
-    lightbox.appendChild(lightboxImg);
-    document.body.appendChild(lightbox);
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-  }
-  lightboxImg.src = src;
-  lightboxImg.alt = alt || '';
+function stepPrint(delta) {
+  const n = viewer.prints.length;
+  if (n <= 1) return;
+  viewer.index = (viewer.index + delta + n) % n;
+  viewer.flipped = false; // a fresh printing always opens on its front
+  renderViewer();
+}
+
+function flipCard() {
+  if (!viewer.prints[viewer.index]?.back_image_path) return;
+  viewer.flipped = !viewer.flipped;
+  renderViewer();
+}
+
+function renderViewer() {
+  const print = viewer.prints[viewer.index];
+  const back = print?.back_image_path ? `${imgBase}/${print.back_image_path}` : null;
+  const front = print?.image_path
+    ? `${imgBase}/${print.image_path}`
+    : viewer.fallback || (viewer.card && fallbackSrc(viewer.card)) || '';
+  const showingBack = viewer.flipped && back;
+
+  lightboxImg.src = showingBack ? back : front;
+  lightboxImg.alt = viewer.name;
+
+  const n = viewer.prints.length;
+  const setName = print?.set_name ? ` &mdash; ${esc(print.set_name)}` : '';
+  const counter = n > 1 ? ` (${viewer.index + 1}/${n})` : '';
+  lightboxCaption.innerHTML = `${esc(viewer.name)}${setName}${counter}`;
+
+  lightboxPrev.hidden = lightboxNext.hidden = n <= 1;
+  lightboxFlip.hidden = !back;
+  lightboxFlip.setAttribute('aria-pressed', String(!!showingBack));
+}
+
+function buildLightbox() {
+  lightbox = document.createElement('div');
+  lightbox.className = 'lightbox';
+  lightbox.innerHTML =
+    '<button class="lb-nav lb-prev" type="button" aria-label="Previous printing">&#x2039;</button>' +
+    '<figure class="lb-figure">' +
+    '<img class="lightbox-img" alt="">' +
+    '<button class="lb-flip" type="button" aria-label="Flip card">&#x21BB;</button>' +
+    '<figcaption class="lb-caption"></figcaption>' +
+    '</figure>' +
+    '<button class="lb-nav lb-next" type="button" aria-label="Next printing">&#x203A;</button>';
+  document.body.appendChild(lightbox);
+
+  lightboxImg = lightbox.querySelector('.lightbox-img');
+  lightboxCaption = lightbox.querySelector('.lb-caption');
+  lightboxPrev = lightbox.querySelector('.lb-prev');
+  lightboxNext = lightbox.querySelector('.lb-next');
+  lightboxFlip = lightbox.querySelector('.lb-flip');
+
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+  lightboxPrev.addEventListener('click', (e) => (e.stopPropagation(), stepPrint(-1)));
+  lightboxNext.addEventListener('click', (e) => (e.stopPropagation(), stepPrint(1)));
+  lightboxFlip.addEventListener('click', (e) => (e.stopPropagation(), flipCard()));
+}
+
+// Enlarge a card over a dim backdrop, painting the tile's art immediately, then hydrate the print
+// list from the detail endpoint so the viewer can cycle and flip. Clicking the backdrop or pressing
+// Escape dismisses it.
+async function openLightbox(tile) {
+  if (!lightbox) buildLightbox();
+  const token = ++openToken;
+
+  viewer.card = null;
+  viewer.prints = [];
+  viewer.index = 0;
+  viewer.flipped = false;
+  viewer.name = tile.dataset.name || '';
+  viewer.fallback = tile.dataset.full || '';
+
+  lightboxImg.src = viewer.fallback;
+  lightboxImg.alt = viewer.name;
+  lightboxCaption.textContent = viewer.name;
+  lightboxPrev.hidden = lightboxNext.hidden = lightboxFlip.hidden = true;
   lightbox.classList.add('open');
   document.addEventListener('keydown', onLightboxKey);
+
+  const cardId = tile.dataset.cardId;
+  if (!cardId) return;
+  try {
+    const res = await fetch(`/api/cards/${encodeURIComponent(cardId)}`);
+    if (!res.ok || token !== openToken) return; // superseded by a newer open, or closed
+    const body = await res.json();
+    if (token !== openToken) return;
+    viewer.card = body.card;
+    viewer.prints = body.prints || [];
+    const want = Number(tile.dataset.defaultPrintId);
+    const idx = viewer.prints.findIndex((p) => p.print_id === want);
+    viewer.index = idx >= 0 ? idx : 0;
+    renderViewer();
+  } catch (_) {
+    /* keep the static tile art if the detail fetch fails */
+  }
 }
 
 function renderMeta() {
@@ -168,7 +257,7 @@ function init() {
   const zoomFromEvent = (e) => {
     const tile = e.target.closest('.card-tile');
     if (!tile || !tile.dataset.full) return false;
-    openLightbox(tile.dataset.full, tile.dataset.name);
+    openLightbox(tile);
     return true;
   };
   grid.addEventListener('click', zoomFromEvent);
