@@ -150,8 +150,8 @@ a { color: inherit; text-decoration: none; }
 
 /* A clickable "try this" example; fills the search box and runs on click/Enter. */
 .search-suggestion {
-  width: min(640px, 100%);
-  margin: 10px auto 0;
+  max-width: 1000px;
+  margin: 8px auto 0;
   font-size: 0.8rem;
   color: var(--muted);
 }
@@ -181,29 +181,39 @@ a { color: inherit; text-decoration: none; }
 .search-suggestion a { color: var(--accent); text-decoration: none; }
 .search-suggestion a:hover { text-decoration: underline; }
 
-.sort-row {
-  width: min(640px, 100%);
-  margin: 12px auto 0;
+/* Search bar and the sort controls share one horizontal row; the search field flexes to fill it. */
+.search-controls {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
-  font-size: 0.82rem;
+  gap: 8px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.search-controls .search-form {
+  flex: 1 1 340px;
+  margin: 0;
+}
+.sort-label {
+  margin-left: 4px;
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
   color: var(--muted);
 }
-.sort-label { letter-spacing: 0.04em; }
-.sort-row select {
+.search-controls select {
   font-family: inherit;
   font-size: 0.82rem;
   color: var(--ink);
   background: var(--paper-2);
   border: 1px solid var(--line-strong);
-  border-radius: 7px;
-  padding: 6px 10px;
+  border-radius: 999px;
+  padding: 11px 16px;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s;
 }
-.sort-row select:hover { border-color: var(--accent); }
-.sort-row select:focus {
+.search-controls select:hover { border-color: var(--accent); }
+.search-controls select:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--focus);
