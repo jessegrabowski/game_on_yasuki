@@ -149,12 +149,6 @@ a { color: inherit; text-decoration: none; }
 }
 
 /* A clickable "try this" example; fills the search box and runs on click/Enter. */
-.search-suggestion {
-  max-width: 1000px;
-  margin: 8px auto 0;
-  font-size: 0.8rem;
-  color: var(--muted);
-}
 .suggestion {
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
@@ -178,8 +172,6 @@ a { color: inherit; text-decoration: none; }
   z-index: 5;
 }
 .search-page-bar .search-form { margin-top: 0; }
-.search-suggestion a { color: var(--accent); text-decoration: none; }
-.search-suggestion a:hover { text-decoration: underline; }
 
 /* Search bar and the sort controls share one horizontal row; the search field flexes to fill it. */
 .search-controls {
