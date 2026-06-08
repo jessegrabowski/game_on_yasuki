@@ -204,6 +204,11 @@ def parse_token(token: str) -> SearchTerm:
         elif operator == "=<":
             operator = "<="
 
+        # A quoted field value (o:"take control", name:"Doji Hoturi") keeps its quotes through the
+        # regex; strip a surrounding pair so the phrase searches as text, like a bare "quoted" term.
+        if len(value) >= 2 and value[0] == '"' and value[-1] == '"':
+            value = value[1:-1]
+
         field_normalized = normalize_field_name(field)
 
         # Handle special "is:" and "has:" fields (has is an alias for is)
