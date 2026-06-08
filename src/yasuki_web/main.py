@@ -83,7 +83,7 @@ _CONTENT_SECURITY_POLICY = (
 
 # Public HTML pages and their static assets that the CSP applies to. The landing page lives at "/"
 # (matched exactly), the rest by path prefix.
-_CSP_PREFIXES = ("/deck-builder", "/site", "/card-search", "/play-online")
+_CSP_PREFIXES = ("/deck-builder", "/site", "/card-search", "/play-online", "/syntax")
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -162,6 +162,11 @@ async def card_search():
 @app.get("/play-online")
 async def play_online():
     return _site_page("play-online.html")
+
+
+@app.get("/syntax")
+async def syntax():
+    return _site_page("syntax.html")
 
 
 @app.get("/api/config")

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Search Syntax &mdash; Game on, Yasuki!</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site/site.css">
+</head>
+<body>
+
+<header class="ribbon">
+  <a class="ribbon-mark" href="/"><span class="torii">&#x26E9;</span> Game on, Yasuki!</a>
+  <nav class="ribbon-nav">
+    <a href="/card-search">Card Search</a>
+    <a href="/syntax" class="active">Syntax</a>
+    <a href="/deck-builder/">Deck Builder</a>
+    <a href="/play-online">Play Online</a>
+  </nav>
+</header>
+
+<main class="doc">
+  <h1>Search syntax</h1>
+  <p class="doc-lead">
+    Combine any of the below. Terms are ANDed together unless you write <code>OR</code>; prefix a
+    term with <code>-</code> to negate it. Click any example to run it.
+  </p>
+
+  <nav class="doc-toc">
+    <a href="#text">Text</a>
+    <a href="#fields">Fields</a>
+    <a href="#numbers">Numbers</a>
+    <a href="#keywords">Keywords</a>
+    <a href="#format">Format</a>
+    <a href="#sets">Sets</a>
+    <a href="#combining">Combining</a>
+  </nav>
+
+  <hr class="doc-divider">
+
+  <section class="doc-section" id="text">
+    <div class="doc-text">
+      <h2>Plain text</h2>
+      <p>
+        Bare words match the card <b>name</b> and <b>rules text</b>. Wrap a phrase in quotes for an
+        exact match, or prefix it with <code>!</code> to exclude it.
+      </p>
+    </div>
+    <div class="doc-examples">
+      <a class="example">honor</a>
+      <a class="example">"Doji Hoturi"</a>
+      <a class="example">!"unique"</a>
+    </div>
+  </section>
+
+  <hr class="doc-divider">
+
+  <section class="doc-section" id="fields">
+    <div class="doc-text">
+      <h2>Fields</h2>
+      <p>
+        Filter by a field with <code>field:value</code>. Available fields:
+        <code>name:</code> <code>type:</code> <code>clan:</code> <code>deck:</code>
+        <code>text:</code> <code>set:</code> <code>rarity:</code>.
+      </p>
+      <p>
+        Most have a one-letter shortcut: <code>t:</code> type, <code>c:</code> clan,
+        <code>o:</code> text, <code>s:</code> set, <code>r:</code> rarity, <code>f:</code> force.
+      </p>
+    </div>
+    <div class="doc-examples">
+      <a class="example">type:holding</a>
+      <a class="example">c:Crane t:personality</a>
+      <a class="example">o:cavalry</a>
+    </div>
+  </section>
+
+  <hr class="doc-divider">
+
+  <section class="doc-section" id="numbers">
+    <div class="doc-text">
+      <h2>Numbers</h2>
+      <p>
+        Compare any stat with <code>:</code> (equals), <code>&gt;</code>, <code>&gt;=</code>,
+        <code>&lt;</code>, or <code>&lt;=</code>.
+      </p>
+      <p>
+        Stats: <code>force</code> <code>chi</code> <code>gold</code> <code>focus</code>
+        <code>ph</code> (personal honor) <code>province</code> <code>honor_requirement</code>
+        <code>starting_honor</code>.
+      </p>
+    </div>
+    <div class="doc-examples">
+      <a class="example">force>=4</a>
+      <a class="example">chi>=2 gold<=3</a>
+      <a class="example">ph>=3 clan:Lion</a>
+    </div>
+  </section>
+
+  <hr class="doc-divider">
+
+  <section class="doc-section" id="keywords">
+    <div class="doc-text">
+      <h2>Keywords &amp; traits</h2>
+      <p>
+        <code>is:</code> (or <code>has:</code>) matches any keyword or trait &mdash;
+        <code>is:shugenja</code>, <code>is:shadowlands</code>, <code>is:cavalry</code>,
+        <code>is:unique</code>, and the rest.
+      </p>
+      <p>
+        Combine inside one term: <code>is:a|b</code> for either, <code>is:a&amp;b</code> for both.
+      </p>
+    </div>
+    <div class="doc-examples">
+      <a class="example">is:shugenja is:shadowlands</a>
+      <a class="example">is:cavalry|naval</a>
+      <a class="example">is:unique force>=5</a>
+    </div>
+  </section>
+
+  <hr class="doc-divider">
+
+  <section class="doc-section" id="format">
+    <div class="doc-text">
+      <h2>Format (legality)</h2>
+      <p>
+        Cards legal in a format, by short arc name or full name &mdash; <code>format:diamond</code>
+        is the same as <code>format:"Rain of Blood (Diamond)"</code>.
+      </p>
+      <p>
+        Aliases: <code>imperial</code> <code>jade</code> <code>gold</code> <code>diamond</code>
+        <code>lotus</code> <code>samurai</code> <code>celestial</code> <code>emperor</code>
+        <code>ivory</code> <code>onyx</code> <code>shattered</code> &middot; <code>modern</code>
+        <code>legacy</code>. Compare along the timeline with <code>&gt;</code> <code>&gt;=</code>
+        <code>&lt;</code> <code>&lt;=</code>.
+      </p>
+    </div>
+    <div class="doc-examples">
+      <a class="example">format:diamond</a>
+      <a class="example">format>celestial</a>
+      <a class="example">format>=gold format<=diamond</a>
+    </div>
+  </section>
+
+  <hr class="doc-divider">
+
+  <section class="doc-section" id="sets">
+    <div class="doc-text">
+      <h2>Sets</h2>
+      <p>
+        A set by its code or full name &mdash; <code>set:GE</code> is the same as
+        <code>set:"Gold Edition"</code>.
+      </p>
+      <p>
+        Compare by release date for ranges: <code>set&gt;=GE</code>, <code>set&lt;=DE</code>, or
+        both for a window.
+      </p>
+    </div>
+    <div class="doc-examples">
+      <a class="example">set:GE</a>
+      <a class="example">set:"Gold Edition" is:unique</a>
+      <a class="example">set>=GE set<=DE</a>
+    </div>
+  </section>
+
+  <hr class="doc-divider">
+
+  <section class="doc-section" id="combining">
+    <div class="doc-text">
+      <h2>Combining</h2>
+      <p>
+        Stack terms to narrow a search; everything is ANDed. Negate with <code>-</code>, or branch
+        with <code>OR</code>.
+      </p>
+    </div>
+    <div class="doc-examples">
+      <a class="example">clan:Crane OR clan:Lion</a>
+      <a class="example">-type:event is:shugenja</a>
+      <a class="example">c:Crab f>=4 format:diamond</a>
+    </div>
+  </section>
+</main>
+
+<script type="module" src="/site/syntax.js"></script>
+</body>
+</html>
