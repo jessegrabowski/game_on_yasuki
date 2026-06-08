@@ -113,6 +113,16 @@ def test_two_sided_format_range(client):
     assert 0 < bounded < _total(client, "format>=gold")
 
 
+def test_keyword_or_matches_union_not_everything(client):
+    # is:a|b must match cards with EITHER keyword, not silently fall through to the whole catalog.
+    either = _total(client, "is:cavalry|naval")
+    cavalry = _total(client, "is:cavalry")
+    naval = _total(client, "is:naval")
+    everything = client.get("/api/cards?limit=1").json()["total"]
+    assert max(cavalry, naval) <= either <= cavalry + naval
+    assert either < everything
+
+
 def test_card_detail_shape(client):
     card_id = client.get("/api/cards?limit=1").json()["cards"][0]["card_id"]
     body = client.get(f"/api/cards/{card_id}").json()
