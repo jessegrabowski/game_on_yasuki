@@ -74,6 +74,7 @@ def load_l5r_sets(set_info_path: Path, dsn: str) -> None:
                 (
                     name,
                     set_slug(name),
+                    entry.get("code"),
                     arc["name"],
                     coerce_date(entry.get("release_date")),
                     bool(entry.get("digital", False)),
@@ -85,14 +86,16 @@ def load_l5r_sets(set_info_path: Path, dsn: str) -> None:
             )
 
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
+        # Self-migrate so the loader populates the column on databases created before it was added.
+        cur.execute("ALTER TABLE l5r_sets ADD COLUMN IF NOT EXISTS code TEXT")
         cur.executemany(
             """
             INSERT INTO l5r_sets
-              (set_name, set_slug, arc, release_date, digital, featured_factions,
+              (set_name, set_slug, code, arc, release_date, digital, featured_factions,
                size_raw, border, notes)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (set_name) DO UPDATE SET
-              set_slug = EXCLUDED.set_slug, arc = EXCLUDED.arc,
+              set_slug = EXCLUDED.set_slug, code = EXCLUDED.code, arc = EXCLUDED.arc,
               release_date = EXCLUDED.release_date, digital = EXCLUDED.digital,
               featured_factions = EXCLUDED.featured_factions, size_raw = EXCLUDED.size_raw,
               border = EXCLUDED.border, notes = EXCLUDED.notes

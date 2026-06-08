@@ -805,10 +805,10 @@ _NUMERIC_STATS = (
 )
 
 
-# Comparison operators allowed in a `format>diamond`-style search, mapped to the SQL they emit. The
-# map both whitelists the operator (keeping it injection-safe when interpolated) and excludes the
-# exact operators, which take a different code path.
-_FORMAT_OPS = {">": ">", ">=": ">=", "<": "<", "<=": "<="}
+# Comparison operators allowed in a `format>diamond` or `set>=ge`-style search, mapped to the SQL
+# they emit. The map both whitelists the operator (keeping it injection-safe when interpolated) and
+# excludes the exact operators, which take a different code path.
+_RANGE_OPS = {">": ">", ">=": ">=", "<": "<", "<=": "<="}
 
 
 def _build_card_filter(
@@ -872,15 +872,36 @@ def _build_card_filter(
                             " WHERE lower(f.name) = lower(%s) OR lower(f.block) = lower(%s))"
                         )
                         params.extend([format_value, format_value])
-                    elif op in _FORMAT_OPS:
+                    elif op in _RANGE_OPS:
                         conditions.append(
                             "c.card_id IN (SELECT cl.card_id FROM card_legalities cl"
                             " JOIN formats f ON f.name = cl.format_name"
-                            f" WHERE f.legal_from {_FORMAT_OPS[op]} (SELECT legal_from FROM formats"
+                            f" WHERE f.legal_from {_RANGE_OPS[op]} (SELECT legal_from FROM formats"
                             " WHERE (lower(name) = lower(%s) OR lower(block) = lower(%s))"
                             " AND legal_from IS NOT NULL LIMIT 1))"
                         )
                         params.extend([format_value, format_value])
+            elif property_name == "set_filters":
+                # Each (operator, value) resolves the value against a set's full name or short code.
+                # Exact operators match that set; inequalities compare every set's release_date to the
+                # reference set's, selecting cards printed on one side of that release.
+                for op, set_value in value:
+                    if op in (":", "="):
+                        conditions.append(
+                            "c.card_id IN (SELECT p.card_id FROM prints p"
+                            " JOIN l5r_sets s ON s.set_id = p.set_id"
+                            " WHERE lower(s.set_name) = lower(%s) OR lower(s.code) = lower(%s))"
+                        )
+                        params.extend([set_value, set_value])
+                    elif op in _RANGE_OPS:
+                        conditions.append(
+                            "c.card_id IN (SELECT p.card_id FROM prints p"
+                            " JOIN l5r_sets s ON s.set_id = p.set_id"
+                            f" WHERE s.release_date {_RANGE_OPS[op]} (SELECT release_date"
+                            " FROM l5r_sets WHERE (lower(set_name) = lower(%s) OR lower(code) ="
+                            " lower(%s)) AND release_date IS NOT NULL ORDER BY release_date LIMIT 1))"
+                        )
+                        params.extend([set_value, set_value])
             elif property_name == "sets":
                 if value:
                     conditions.append(

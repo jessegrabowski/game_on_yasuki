@@ -80,6 +80,7 @@ CREATE TABLE l5r_sets (
   set_id            SERIAL PRIMARY KEY,
   set_name          TEXT NOT NULL UNIQUE,
   set_slug          TEXT NOT NULL UNIQUE,
+  code              TEXT,                   -- short set identifier, e.g. 'GE' (Gold Edition)
   arc               TEXT,
   release_date      DATE,
   digital           BOOLEAN NOT NULL DEFAULT FALSE,
