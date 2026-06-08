@@ -92,6 +92,27 @@ def test_formats_endpoint_is_chronological(client):
     assert body["other"][0] == "Modern"
 
 
+def test_set_code_matches_full_name(client):
+    # `set:GE` (code) resolves to the same cards as the full set name.
+    assert _total(client, "set:GE") > 0
+    assert _total(client, "set:GE") == _total(client, 'set:"Gold Edition"')
+
+
+def test_set_inequality_uses_release_date(client):
+    assert _total(client, "set>=GE") > _total(client, "set>GE")  # >= includes Gold Edition itself
+
+
+def test_two_sided_set_range(client):
+    # A range bounded on both sides is the intersection of the two inequalities.
+    bounded = _total(client, "set>=GE set<=DE")
+    assert 0 < bounded < _total(client, "set>=GE")
+
+
+def test_two_sided_format_range(client):
+    bounded = _total(client, "format>=gold format<=diamond")
+    assert 0 < bounded < _total(client, "format>=gold")
+
+
 def test_card_detail_shape(client):
     card_id = client.get("/api/cards?limit=1").json()["cards"][0]["card_id"]
     body = client.get(f"/api/cards/{card_id}").json()

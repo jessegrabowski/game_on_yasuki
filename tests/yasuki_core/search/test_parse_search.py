@@ -224,6 +224,24 @@ class TestFilterBuilding:
         _, filters = parse_and_build_query("-format:diamond")
         assert "format_filters" not in filters
 
+    # `set` terms emit the same (operator, value) specs; resolution by name/code and release-date
+    # inequalities happen in SQL.
+    def test_set_exact_emits_spec(self):
+        _, filters = parse_and_build_query("set:GE")
+        assert filters["set_filters"] == [(":", "GE")]
+
+    def test_set_inequality_emits_operator(self):
+        _, filters = parse_and_build_query("set>=GE")
+        assert filters["set_filters"] == [(">=", "GE")]
+
+    def test_set_quoted_full_name(self):
+        _, filters = parse_and_build_query('set:"Gold Edition"')
+        assert filters["set_filters"] == [(":", "Gold Edition")]
+
+    def test_set_two_sided_range(self):
+        _, filters = parse_and_build_query("set>=GE set<=DE")
+        assert filters["set_filters"] == [(">=", "GE"), ("<=", "DE")]
+
     def test_is_unique(self):
         parsed = ParsedQuery(
             terms=[SearchTerm(field="is", operator=":", value="unique", negated=False)]

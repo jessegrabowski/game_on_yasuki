@@ -359,7 +359,7 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                         if "keywords" not in filter_options:
                             filter_options["keywords"] = []
                         filter_options["keywords"].append(keyword_value)
-        elif field in ("deck", "type", "clan", "set", "rarity"):
+        elif field in ("deck", "type", "clan", "rarity"):
             # Categorical filters
             values = [term.value for term in terms_list if not term.negated]
             if values:
@@ -369,10 +369,18 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                     filter_options["types"] = [v.lower() for v in values]
                 elif field == "clan":
                     filter_options["clans"] = [v for v in values]
-                elif field == "set":
-                    filter_options["sets"] = [v for v in values]
                 elif field == "rarity":
                     filter_options["rarities"] = [v for v in values]
+        elif field == "set":
+            # Set by full name or short code, resolved in the database. Like format, emit each
+            # (operator, value); the operator may be exact or an inequality against set release dates.
+            specs = [
+                (term.operator, term.value.strip('"').strip())
+                for term in terms_list
+                if not term.negated and term.value.strip('"').strip()
+            ]
+            if specs:
+                filter_options["set_filters"] = specs
         elif field == "format":
             # Legality by format, resolved in the database against formats.block / legal_from. Emit
             # each (operator, value) verbatim: the value may be a short alias (`diamond`) or a full
