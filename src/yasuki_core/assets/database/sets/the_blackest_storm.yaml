@@ -74,6 +74,11 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
+  - Lion
+  - Phoenix
+  - Scorpion
   keywords:
   - Crane
   - Lion
@@ -95,6 +100,13 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Dragon
+  - Mantis
+  - Naga
+  - Spider
+  - Unicorn
   keywords:
   - Crab
   - Dragon
@@ -603,6 +615,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: You Personalities and Followers in and out of play have Shadowlands.
@@ -3609,6 +3623,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Your Stronghold has a maximum GP of 3. You do not lose Honor from your cards. You cannot gain

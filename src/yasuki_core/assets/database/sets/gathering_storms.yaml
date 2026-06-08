@@ -457,6 +457,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Mantis
   keywords:
   - Mantis Clan
   text: 'Your Wind must be The Kanpeki Dynasty.<br><b>Raid Engage, :bow:: </b> Create a 2F/1C/1PH Pirate
@@ -629,6 +631,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Mantis
   keywords:
   - Mantis Clan
   text: Your Wind must be Kano's Alliance. Resolution of your Raid battles does not bow your Naval Personalities'

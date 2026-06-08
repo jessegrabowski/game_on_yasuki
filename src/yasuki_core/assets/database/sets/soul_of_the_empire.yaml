@@ -429,6 +429,7 @@ cards:
   - Dynasty
   clans:
   - Toturi's Army
+  - Monkey
   keywords:
   - Cavalry
   - Braggart
@@ -1472,6 +1473,11 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Dragon
+  - Naga
+  - Scorpion
   keywords:
   - Brotherhood of Shinsei
   - Dragon Clan
@@ -1523,6 +1529,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Provinces created after the game began will not hold Dynasty cards.
@@ -1892,6 +1900,7 @@ cards:
   - Dynasty
   clans:
   - Mantis
+  - Tortoise
   keywords:
   - Naval
   - Chui
@@ -2297,6 +2306,7 @@ cards:
   extended_title: Moto Gaheris • Experienced
   clans:
   - Unicorn
+  - Moto
   keywords:
   - Cavalry
   - Double Chi
@@ -2372,6 +2382,7 @@ cards:
   extended_title: Mukami • Experienced 2
   clans:
   - Mantis
+  - Wasp
   keywords:
   - Experienced 2
   - Unique
@@ -2603,6 +2614,11 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Lion
+  - Mantis
+  - Ratling
   keywords:
   - Crab Clan
   - Lion Clan
@@ -2799,6 +2815,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Before one of your cards enters either of your discard piles, remove it from the game instead.<br><b>Repeatable
@@ -3616,6 +3634,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: <b>Absent Battle:</b> Bow your Stronghold and remove this card from the game to move home all
@@ -3931,6 +3951,7 @@ cards:
   extended_title: Toku • Experienced 3
   clans:
   - Toturi's Army
+  - Monkey
   keywords:
   - Experienced 3
   - Unique
@@ -4261,6 +4282,13 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Crane
+  - Dragon
+  - Lion
+  - Scorpion
+  - Unicorn
   keywords:
   - Brotherhood of Shinsei
   - Crane Clan

@@ -1952,6 +1952,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Badger
   keywords:
   - Unique
   - Advisor from the Shogun
@@ -3511,6 +3512,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Hare
   keywords:
   - Hare Clan
   - Shugenja
@@ -3565,6 +3567,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Hare
   keywords:
   - Cavalry
   - Hare Clan

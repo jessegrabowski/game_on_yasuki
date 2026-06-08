@@ -175,6 +175,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
   keywords:
   - Crane Clan
   text: Reduce your Honor gains from Holdings by 1.<br><b>Absent Battle, :bow::</b> Move your target Scout
@@ -197,6 +199,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Unicorn
   keywords:
   - Unicorn Clan
   text: <b>Battle, :bow::</b> Target a dead Personality. Fear with strength equal to his Force.
@@ -2890,6 +2894,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Mantis
   keywords:
   - Mantis Clan
   text: <b>Interrupt, :bow::</b> One of the action's Ranged Attacks may be combined with one Ranged Attack
@@ -3583,6 +3589,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Dragon
   keywords:
   - Dragon Clan
   text: <b>Interrupt, :bow::</b> Challenges created by the action and issued by your Personality with
@@ -4472,6 +4480,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Scorpion
   keywords:
   - Scorpion Clan
   text: Your Samurai have +1F while opposing a dishonorable Personality.
@@ -4891,6 +4901,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Bat
   keywords:
   - Air
   - Bat Clan
@@ -5111,6 +5122,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: <b>Limited, :bow::</b> Bow your Stronghold to search your discard pile and Fate deck for a Ring,
@@ -6510,6 +6523,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Phoenix
   keywords:
   - Phoenix Clan
   text: Actions on your Spells have <b>Home </b>if you target your Samurai with them.
@@ -7012,6 +7027,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Lion
   keywords:
   - Lion Clan
   text: <b>Battle, :bow::</b> Target your non-Unique Samurai face-up in a Province. Give him <b>Reserve</b>.
@@ -8325,6 +8342,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Spider
   keywords:
   - Spider Clan
   text: <b>Limited, :bow::</b> Give <b>Conqueror</b> to your target Personality with a Weapon <i>(A Conqueror's

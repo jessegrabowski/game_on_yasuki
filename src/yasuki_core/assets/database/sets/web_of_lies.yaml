@@ -2812,6 +2812,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Scorpion
   keywords:
   - Scorpion Clan
   text: You may take only one Political action per turn.<br><b>Reaction:</b> Once per battle, after an
@@ -3220,6 +3222,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
   keywords:
   - Crab Clan
   text: Negate new Force bonuses from cards to your Personalities with no Followers attached.<br>You may
@@ -3239,6 +3243,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Dragon
   keywords:
   - Dragon Clan
   text: Your Personalities may not issue challenges during your Action Phase.<br>Actions that create duels

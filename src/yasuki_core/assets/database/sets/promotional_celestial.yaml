@@ -1996,6 +1996,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Phoenix
   keywords:
   - Phoenix Clan
   - Samurai
@@ -2796,6 +2798,8 @@ cards:
   - Holding
   decks:
   - Dynasty
+  clans:
+  - Oriole
   keywords:
   - Oriole Clan
   - Retainer
@@ -2887,6 +2891,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Unicorn
   keywords:
   - Cavalry
   - Samurai

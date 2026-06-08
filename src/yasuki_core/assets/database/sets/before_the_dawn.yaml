@@ -1234,6 +1234,7 @@ cards:
   - Other
   clans:
   - Ninja
+  - Spider
   keywords:
   - Ninja
   - Shadowlands
@@ -1871,6 +1872,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Bat
   keywords:
   - Air
   - Bat Clan
@@ -2261,6 +2263,8 @@ cards:
   - Proxy
   decks:
   - Other
+  clans:
+  - Lion
   keywords:
   - Deathseeker
   - Lion Clan

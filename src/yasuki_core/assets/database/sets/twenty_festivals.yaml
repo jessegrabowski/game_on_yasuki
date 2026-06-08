@@ -511,6 +511,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Scorpion
   keywords:
   - Scorpion Clan
   text: Iaijutsu actions you take are Ninja instead. Reduce your Honor losses from your Ninja cards by
@@ -1286,6 +1288,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Phoenix
   keywords:
   - Phoenix Clan
   text: You Equip non-Water Spells for 1 more Gold. After your Water card moves a Personality, give your
@@ -1308,6 +1312,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Mantis
   keywords:
   - Mantis Clan
   text: Your Stronghold has no abilities.<br><b>Limited, :bow::</b> Target your unbowed Thunder Personality.
@@ -1574,6 +1580,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
   keywords:
   - Crab Clan
   text: You may not bring Shadowlands cards into play.<br><b>Interrupt, :bow::</b> If the action targeted
@@ -1896,6 +1904,11 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
+  - Dragon
+  - Phoenix
+  - Scorpion
   keywords:
   - Crane
   - Dragon
@@ -3233,6 +3246,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
   keywords:
   - Crane Clan
   text: Your Stronghold has no abilities. Your Magistrates have +1F while opposing any dishonorable Personalities.
@@ -4500,6 +4515,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Your Stronghold has no abilities. When Recruiting Dragons, you may Proclaim them, and may compare
@@ -4957,6 +4974,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: <b>Limited, :bow::</b> Bow your Stronghold to search your discard pile and Fate deck for a Ring,
@@ -6602,6 +6621,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Spider
   keywords:
   - Spider Clan
   text: Reduce your Honor losses from your Duelists by 2.<br><b>Interrupt, :bow::</b> If the action creates
@@ -6803,6 +6824,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Lion
   keywords:
   - Lion Clan
   text: <b>Interrupt, :bow::</b> If the action is Battle and creates a duel, after your Personality wins
@@ -7681,6 +7704,12 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Lion
+  - Mantis
+  - Spider
+  - Unicorn
   keywords:
   - Crab
   - Lion
@@ -8625,6 +8654,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Dragonfly
   keywords:
   - Naval
   - Dragonfly Clan
@@ -8706,6 +8736,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Unicorn
   keywords:
   - Unicorn Clan
   text: <b>Open, :bow::</b> Bow your target unbowed Magistrate. Rehonor and bow another player's target
@@ -9229,6 +9261,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Dragon
   keywords:
   - Dragon Clan
   text: Your Stronghold has no abilities.<br>After your action dishonors another player's Personality,

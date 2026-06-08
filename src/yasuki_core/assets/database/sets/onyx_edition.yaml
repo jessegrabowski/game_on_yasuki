@@ -656,6 +656,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Akasha
   keywords:
   - Akasha Clan
   text: Your Personalities will not attach non-Naga Followers. You may only copy abilities from Naga Commanders
@@ -1067,6 +1069,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Scorpion
   keywords:
   - Scorpion Clan
   - Air
@@ -2760,6 +2764,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Spider
   keywords:
   - Spider Clan
   - Shadowlands
@@ -3181,6 +3187,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
   keywords:
   - Crane Clan
   text: You may not use the rulebook Honor ability or gain Honor from Holdings. After your Personality
@@ -3454,6 +3462,7 @@ cards:
   extended_title: Heichi Tadama, Favored by the Celestial Dragon • Experienced
   clans:
   - Crab
+  - Boar
   keywords:
   - Berserker
   - Boar Clan
@@ -3832,6 +3841,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Phoenix
   keywords:
   - Phoenix Clan
   text: Your Spells in and out of play have +1FV.<br><b>Battle:</b> Target your Yojimbo, and discard a
@@ -3907,6 +3918,9 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Lion
+  - Phoenix
   keywords:
   - Akasha
   - Lion
@@ -4218,6 +4232,13 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Crane
+  - Dragon
+  - Scorpion
+  - Spider
+  - Unicorn
   keywords:
   - Crab
   - Crane
@@ -4642,6 +4663,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Lion
   keywords:
   - Lion Clan
   text: Your Stronghold has no abilities. Your attacking Shugenja have +1F while there is an Ancestor
@@ -5370,6 +5393,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: <b>Limited, :bow::</b> Bow your Stronghold to search your discard pile and Fate deck for a Ring,
@@ -5458,6 +5483,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
   keywords:
   - Crab Clan
   text: 'When using the rulebook Courage ability, you may banish a Courage Follower from your discard
@@ -6051,6 +6078,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Centipede
   keywords:
   - Centipede Clan
   - Shugenja
@@ -6079,6 +6107,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Centipede
   keywords:
   - Centipede Clan
   - Shugenja
@@ -6919,6 +6948,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Unicorn
   keywords:
   - Unicorn Clan
   text: 'Your Personalities become dead after you discard them from a Province. Your Personalities out
@@ -8998,6 +9029,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Dragon
   keywords:
   - Dragon Clan
   text: Your Monks have <b>Duelist</b> while they have no Armor or Weapons.<br><b>Response, :bow::</b>

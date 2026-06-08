@@ -232,6 +232,7 @@ cards:
   - Dynasty
   clans:
   - Scorpion
+  - Tanuki
   keywords:
   - Champion
   - Samurai
@@ -469,6 +470,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: 'Your deck may not include a Wind, :shadowlands: cards, non-Tanuki Clan Unique Personalities,
@@ -804,6 +807,7 @@ cards:
   extended_title: Hida O-Win • Experienced
   clans:
   - Crab
+  - Tanuki
   keywords:
   - Samurai
   - Tanuki Clan
@@ -1218,6 +1222,7 @@ cards:
   extended_title: Kitsune Kohaki • Experienced
   clans:
   - Naga
+  - Fox
   keywords:
   - Fox Clan
   - Nonhuman
@@ -1707,6 +1712,7 @@ cards:
   clans:
   - Ninja
   - Scorpion
+  - Tanuki
   keywords:
   - Ninja
   - Shugenja
@@ -2365,6 +2371,8 @@ cards:
   extended_title: Tsuruchi Yurio • Experienced
   clans:
   - Unaligned
+  - Tanuki
+  - Wasp
   keywords:
   - Scout
   - Tanuki Clan
@@ -2515,6 +2523,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Akasha
   keywords:
   - Akasha Clan
   text: You begin the game with three Provinces.<br><b>Open, :bow::</b> If it is your turn, create a bowed

@@ -1406,6 +1406,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: <b>Repeatable Limited:</b> Bow your Stronghold to search your deck and discard pile for a Ring,
@@ -1506,6 +1508,12 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Crane
+  - Dragon
+  - Naga
+  - Toturi's Army
   keywords:
   - Crab Clan
   - Crane Clan
@@ -2511,6 +2519,11 @@ cards:
   - Pre-Game
   clans:
   - Ninja
+  - Brotherhood of Shinsei
+  - Crab
+  - Mantis
+  - Scorpion
+  - Shadowlands
   keywords:
   - Brotherhood of Shinsei
   - Crab Clan
@@ -3154,6 +3167,12 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
+  - Dragon
+  - Mantis
+  - Toturi's Army
+  - Unicorn
   keywords:
   - Crane Clan
   - Dragon Clan
@@ -3177,6 +3196,13 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Lion
+  - Mantis
+  - Naga
+  - Phoenix
+  - Toturi's Army
   keywords:
   - Brotherhood of Shinsei
   - Lion Clan
@@ -3257,6 +3283,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: <b>Absent Battle:</b> Target your unbowed Personality with 3 or higher Chi at another battlefield.
@@ -3481,6 +3509,12 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Lion
+  - Scorpion
+  - Shadowlands
+  - Unicorn
   keywords:
   - Crab Clan
   - Lion Clan
@@ -3502,6 +3536,13 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Dragon
+  - Lion
+  - Naga
+  - Phoenix
+  - Scorpion
   keywords:
   - Brotherhood of Shinsei
   - Dragon Clan

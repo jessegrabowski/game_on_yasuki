@@ -588,6 +588,7 @@ cards:
   - Dynasty
   clans:
   - Mantis
+  - Firefly
   keywords:
   - Commander
   - Firefly Clan
@@ -695,6 +696,7 @@ cards:
   extended_title: Isawa Taisho • Experienced
   clans:
   - Phoenix
+  - Tanuki
   keywords:
   - Shugenja
   - Tanuki Clan
@@ -799,6 +801,7 @@ cards:
   - Dynasty
   clans:
   - Naga
+  - Fox
   keywords:
   - Daimyo
   - Fox Clan
@@ -1414,6 +1417,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Sparrow
   keywords:
   - Paragon
   - Samurai
@@ -1440,6 +1444,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Sparrow
   keywords:
   - Paragon
   - Samurai
@@ -1672,6 +1677,10 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Mantis
+  - Sparrow
+  - Spider
   keywords:
   - Mantis
   - Sparrow

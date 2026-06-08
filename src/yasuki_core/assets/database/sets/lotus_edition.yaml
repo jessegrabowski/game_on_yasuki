@@ -4996,6 +4996,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Phoenix
   keywords:
   - Phoenix Clan
   text: Nonhuman Personalities you own in and out of play have +2 Gold Cost.<br>Your Shugenja have the
@@ -5401,6 +5403,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
   keywords:
   - Crab Clan
   text: Your Personalities have a maximum Force of 4 while they have no Followers.<br><b>Tireless Battle:</b>
@@ -5734,6 +5738,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Dragon
   keywords:
   - Dragon Clan
   text: After a Weapon attaches to your Dragon Clan Samurai with no Weapons, create a +0F/+0C <b>Wakizashi
@@ -6349,6 +6355,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Shadowlands
   keywords:
   - Shadowlands Horde
   text: Non-Goblin Personalities you own in and out of play have +2 Gold Cost.<br><b>Reaction:</b> Twice
@@ -6367,6 +6375,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Mantis
   keywords:
   - Mantis Clan
   - Orochi
@@ -9021,6 +9031,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Scorpion
   keywords:
   - Scorpion Clan
   text: Non-Courtier Personalities you own in and out of play have +1 Gold Cost.<br><b>Reaction:</b> Before

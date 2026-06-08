@@ -339,6 +339,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Lion
   keywords:
   - Lion Clan
   text: Your Personalities cannot Equip Shadowlands Followers. <br><b>Battle/Engage, :bow::</b> Fear equal
@@ -425,6 +427,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
   keywords:
   - Crane Clan
   text: Before you gain Honor, reduce the gain to 1. Your Artisans have -5HR.<br><b>Political Interrupt,
@@ -1108,6 +1112,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Spider
   keywords:
   - Spider Clan
   text: Reduce your Honor losses from your Ninja cards by 2. You Recruit non-Ninja Personalities for 1
@@ -1217,6 +1223,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Scorpion
   keywords:
   - Scorpion Clan
   text: You may not take Political Actions. After your Bitter Lies Personality Equips a Weapon, if it
@@ -1237,6 +1245,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
   keywords:
   - Crab Clan
   text: Negate your current and new Province Strength bonuses unless a Cavalry unit is attacking the Province
@@ -1259,6 +1269,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Your Stronghold has a maximum of 3GP. Your Oni may attach Shadowlands Followers. You do not lose
@@ -1488,6 +1500,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Phoenix
   keywords:
   - Phoenix Clan
   text: <b>Open :bow::</b> <i>You suspect a secret most foul!</i> Another player's target Personality
@@ -1508,6 +1522,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Dragon
   keywords:
   - Dragon Clan
   text: The Ring you start with must be Earth.<br><b>Interrupt, :bow:, :g*::</b> After the action Equips
@@ -2143,6 +2159,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Unicorn
   keywords:
   - Unicorn Clan
   text: Your Personalities will not move to battlefields without enemy units. You gain 1 more Honor for
@@ -2163,6 +2181,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Mantis
   keywords:
   - Mantis Clan
   text: Your Stronghold has no abilities. Your Peasant Weapons do not dishonor Personalities for attaching

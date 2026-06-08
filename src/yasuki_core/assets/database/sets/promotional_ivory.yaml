@@ -443,6 +443,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: 'Your Starting Family Honor is 0. Your maximum Province Strength is 0. You Recruit Fallen Personalities
@@ -932,6 +934,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Your Starting Family Honor is 0. <br><b>Limited:</b> Bow your Stronghold to search your discard

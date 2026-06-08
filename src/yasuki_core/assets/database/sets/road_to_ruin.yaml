@@ -351,6 +351,9 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Unicorn
   keywords:
   - Akasha
   - Crab
@@ -1759,6 +1762,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Fox
   keywords:
   - Fox Clan
   - Kitsune
@@ -1788,6 +1792,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Fox
   keywords:
   - Fox Clan
   - Shugenja
@@ -1816,6 +1821,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Fox
   keywords:
   - Fox Clan
   - Shugenja
@@ -2916,6 +2922,13 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crane
+  - Dragon
+  - Lion
+  - Phoenix
+  - Scorpion
+  - Spider
   keywords:
   - Crane
   - Dragon

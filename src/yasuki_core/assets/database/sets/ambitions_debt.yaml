@@ -173,6 +173,14 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Crab
+  - Mantis
+  - Naga
+  - Scorpion
+  - Shadowlands
+  - Unicorn
   keywords:
   - Brotherhood of Shinsei
   - Crab Clan
@@ -1090,6 +1098,14 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Crab
+  - Crane
+  - Naga
+  - Phoenix
+  - Shadowlands
+  - Toturi's Army
   keywords:
   - Brotherhood of Shinsei
   - Crab Clan
@@ -1178,6 +1194,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Badger
   keywords:
   - Elite
   - Badger Clan
@@ -1230,6 +1247,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: While a card with "Technique" in its title is checking your Clan Alignment, you are considered
@@ -1534,6 +1553,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Your Kolat Personalities in and out of play have your Clan Alignment.<br>Your Kolat Personalities
@@ -1597,6 +1618,7 @@ cards:
   extended_title: Kitsune Diro • Experienced
   clans:
   - Mantis
+  - Fox
   keywords:
   - Unique
   - Experienced
@@ -1666,6 +1688,12 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Lion
+  - Mantis
+  - Phoenix
+  - Toturi's Army
   keywords:
   - Brotherhood of Shinsei
   - Lion Clan
@@ -1932,6 +1960,11 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Crab
+  - Naga
+  - Phoenix
+  - Shadowlands
   keywords:
   - Crab Clan
   - Naga
@@ -1954,6 +1987,14 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Dragon
+  - Lion
+  - Mantis
+  - Phoenix
+  - Scorpion
+  - Toturi's Army
+  - Unicorn
   keywords:
   - Dragon Clan
   - Lion Clan
@@ -3261,6 +3302,7 @@ cards:
   - Dynasty
   clans:
   - Unaligned
+  - Dragonfly
   keywords:
   - Dragonfly Clan
   - Sage
@@ -3616,6 +3658,11 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - Brotherhood of Shinsei
+  - Crab
+  - Mantis
+  - Shadowlands
   keywords:
   - Brotherhood of Shinsei
   - Crab Clan
@@ -3686,6 +3733,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Your Gold-producing Holdings enter play for you for 1 less Gold, to a minimum of 1.<br>When bowing
@@ -3734,6 +3783,8 @@ cards:
   - Sensei
   decks:
   - Pre-Game
+  clans:
+  - All Clans
   keywords:
   - All Clans
   text: Honor gains from Proclaiming have a maximum value of 1.<br>Honor losses from your cards' effects
