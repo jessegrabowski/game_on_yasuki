@@ -74,7 +74,8 @@ async function init() {
   initPreview(IMG, recordPrintChoice, onBorrowArt);
 
   initCardList({
-    onSelect: (card) => showPreview(card, getPrintChoice(card.card_id)?.printId ?? null, API),
+    onSelect: (card) =>
+      showPreview(card, getPrintChoice(card.card_id)?.printId ?? card.default_print_id ?? null, API),
     onDblClick: () => doAddSelectedToDeck(),
     onLoadMore: () => {
       offset += LIMIT;

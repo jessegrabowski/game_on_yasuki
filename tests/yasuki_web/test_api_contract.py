@@ -42,6 +42,8 @@ def test_list_cards_shape(client):
             card["keywords"], list
         )  # mon overlays read this
         assert "image_path" in card  # str path or None
+        # int print_id of the default art, or None; the deck builder opens the preview on it.
+        assert card["default_print_id"] is None or isinstance(card["default_print_id"], int)
 
 
 def test_sort_orders_results(client):
@@ -181,6 +183,30 @@ def test_clan_does_not_match_elemental_dragons(client):
         "/api/cards", params={"search": "clan:Dragon include:all", "limit": 200}
     ).json()["cards"]
     assert "Fire Dragon" not in {c["name"] for c in cards}
+
+
+def _refugees(client, search):
+    cards = client.get("/api/cards", params={"search": search, "limit": 25}).json()["cards"]
+    return next(c for c in cards if c["name"] == "Refugees")
+
+
+def test_default_print_is_arc_aware(client):
+    # The default art follows the active arc: arc:shattered surfaces the Shattered Empire printing,
+    # while no filter falls back to the earliest printing.
+    base = _refugees(client, "name:Refugees")
+    shattered = _refugees(client, "name:Refugees arc:shattered")
+    assert base["default_print_id"] != shattered["default_print_id"]
+
+    prints = client.get(f"/api/cards/{shattered['card_id']}").json()["prints"]
+    shattered_print = next(p for p in prints if p["set_name"] == "Shattered Empire")
+    assert shattered["default_print_id"] == shattered_print["print_id"]
+
+
+def test_prints_listed_chronologically(client):
+    # Prints come back oldest-first by set release date; Refugees' first printing is Anvil of Despair.
+    card_id = _refugees(client, "name:Refugees")["card_id"]
+    prints = client.get(f"/api/cards/{card_id}").json()["prints"]
+    assert prints[0]["set_name"] == "Anvil of Despair"
 
 
 def test_card_detail_shape(client):
