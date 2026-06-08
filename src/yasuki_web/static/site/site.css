@@ -148,6 +148,26 @@ a { color: inherit; text-decoration: none; }
   color: var(--accent-ink);
 }
 
+/* A clickable "try this" example; fills the search box and runs on click/Enter. */
+.search-suggestion {
+  width: min(640px, 100%);
+  margin: 10px auto 0;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+.suggestion {
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+.suggestion:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.suggestion:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 /* ── Card search page ─────────────────────────────────────────────────── */
 .search-page-bar {
   padding: 22px 26px 14px;

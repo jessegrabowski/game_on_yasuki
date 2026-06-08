@@ -1,3 +1,5 @@
+import { wireSuggestion } from './suggestions.js';
+
 const PAGE_SIZE = 60;
 
 // Type-keyed default art, mirroring the deck builder's preview fallbacks, for cards whose print has
@@ -161,9 +163,13 @@ function init() {
 
   // Changing the sort reloads the page through the search form, keeping the URL canonical and
   // shareable rather than re-sorting only the cards already fetched.
-  const resubmit = () => document.getElementById('searchForm').submit();
+  const searchForm = document.getElementById('searchForm');
+  const resubmit = () => searchForm.submit();
   sortSelect.addEventListener('change', resubmit);
   orderSelect.addEventListener('change', resubmit);
+
+  const suggestionEl = document.getElementById('suggestion');
+  if (suggestionEl) wireSuggestion(suggestionEl, queryInput, searchForm);
 
   const zoomFromEvent = (e) => {
     const tile = e.target.closest('.card-tile');
