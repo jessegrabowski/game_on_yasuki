@@ -113,6 +113,13 @@ def test_two_sided_format_range(client):
     assert 0 < bounded < _total(client, "format>=gold")
 
 
+def test_unknown_field_does_not_match_everything(client):
+    # An unsupported field must not silently drop and return the whole catalog.
+    everything = client.get("/api/cards?limit=1").json()["total"]
+    assert _total(client, "bogusfield:xyzzy") < everything
+    assert _total(client, "arc:lotus") < everything  # aliases to format:lotus
+
+
 def test_keyword_or_matches_union_not_everything(client):
     # is:a|b must match cards with EITHER keyword, not silently fall through to the whole catalog.
     either = _total(client, "is:cavalry|naval")

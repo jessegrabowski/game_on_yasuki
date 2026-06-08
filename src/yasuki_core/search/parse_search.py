@@ -46,11 +46,13 @@ class ParsedQuery:
 FIELD_ALIASES = {
     "o": "text",
     "oracle": "text",
+    "title": "name",
     "t": "type",
     "c": "clan",
     "s": "set",
     "f": "force",
     "format": "format",
+    "arc": "format",
     "r": "rarity",
     "side": "deck",
     "gold": "gold_cost",
@@ -424,6 +426,12 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
             # Store as tuple (min, max) format expected by database
             if field_min is not None or field_max is not None:
                 filter_options[field] = (field_min, field_max)
+        else:
+            # Unknown field (a typo or unsupported key): fall back to plain text so the term still
+            # narrows the search instead of being dropped — which would silently match every card.
+            for term in terms_list:
+                if not term.negated:
+                    text_query_parts.append(term.value)
 
     text_query = " ".join(text_query_parts)
     return text_query, filter_options
