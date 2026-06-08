@@ -242,6 +242,20 @@ class TestFilterBuilding:
         _, filters = parse_and_build_query("set>=GE set<=DE")
         assert filters["set_filters"] == [(">=", "GE"), ("<=", "DE")]
 
+    def test_title_aliases_to_name(self):
+        text, _ = parse_and_build_query("title:hida")
+        assert text == "hida"
+
+    def test_arc_aliases_to_format(self):
+        _, filters = parse_and_build_query("arc:lotus")
+        assert filters["format_filters"] == [(":", "lotus")]
+
+    def test_unknown_field_falls_back_to_text(self):
+        # An unrecognised field must narrow as text, never drop out and match the whole catalog.
+        text, filters = parse_and_build_query("bogusfield:scorpion")
+        assert text == "scorpion"
+        assert filters == {}
+
     def test_is_unique(self):
         parsed = ParsedQuery(
             terms=[SearchTerm(field="is", operator=":", value="unique", negated=False)]
