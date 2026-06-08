@@ -277,6 +277,13 @@ class TestFilterBuilding:
         _, filters = parse_and_build_query('story:"Paul Ashman"')
         assert filters["story"] == ["Paul Ashman"]
 
+    def test_quoted_field_value_strips_quotes(self):
+        # A quoted phrase on a text field must search as the phrase, not the quoted literal.
+        text, _ = parse_and_build_query('o:"take control"')
+        assert text == "take control"
+        text, _ = parse_and_build_query('name:"Doji Hoturi"')
+        assert text == "Doji Hoturi"
+
     def test_is_banned(self):
         _, filters = parse_and_build_query("is:banned")
         assert filters["is_banned"] is True
