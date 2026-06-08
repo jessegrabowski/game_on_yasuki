@@ -850,7 +850,9 @@ def _build_card_filter(
 
     if filter_options:
         for property_name, value in filter_options.items():
-            if property_name == "legality":
+            if property_name == "include":
+                continue  # consumed by the default-visibility filter below, not a column condition
+            elif property_name == "legality":
                 formats, _statuses = value
                 if isinstance(formats, str):
                     formats = [formats]
@@ -973,6 +975,17 @@ def _build_card_filter(
                     continue
                 conditions.append(f"c.{property_name} = %s")
                 params.append(value)
+
+    # Non-deck cards — proxies and everything filed under the "Other" deck (tokens, bio cards,
+    # deckbackers, …) — are hidden by default. `include:tokens` brings the "Other" cards back
+    # (proxies that are also tokens come with them); `include:all` shows everything.
+    token = "EXISTS (SELECT 1 FROM card_decks d WHERE d.card_id = c.card_id AND d.deck = 'Other')"
+    includes = filter_options.get("include", ()) if filter_options else ()
+    if "all" not in includes:
+        if "tokens" in includes:
+            conditions.append(f"(NOT c.is_proxy OR {token})")
+        else:
+            conditions.append(f"(NOT c.is_proxy AND NOT {token})")
 
     where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
     return where_clause, params

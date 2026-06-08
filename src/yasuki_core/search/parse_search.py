@@ -62,6 +62,10 @@ FIELD_ALIASES = {
     "has": "is",
 }
 
+# Non-deck cards (proxies, tokens, bio cards, …) are hidden by default. `include:tokens` brings the
+# token/non-deck cards back; `include:all` shows everything.
+INCLUDE_CATEGORIES = {"tokens", "all"}
+
 
 NUMERIC_FIELDS = {
     "gold_cost",
@@ -426,6 +430,15 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
             # Store as tuple (min, max) format expected by database
             if field_min is not None or field_max is not None:
                 filter_options[field] = (field_min, field_max)
+        elif field == "include":
+            # Opt non-deck cards back into the results; unknown categories are ignored.
+            valid = {
+                term.value.lower()
+                for term in terms_list
+                if not term.negated and term.value.lower() in INCLUDE_CATEGORIES
+            }
+            if valid:
+                filter_options["include"] = valid
         else:
             # Unknown field (a typo or unsupported key): fall back to plain text so the term still
             # narrows the search instead of being dropped — which would silently match every card.
