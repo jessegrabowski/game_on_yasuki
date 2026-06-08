@@ -143,9 +143,8 @@ def get_db_connection() -> Generator[psycopg.Connection, None, None]:
         yield conn
 
 
-# Shared card SELECT: card-level columns, multi-valued clan/type/deck as text arrays, and the front
-# image path from the card's first printing (NULL until print images are materialized).
-_CARD_SELECT = """
+# Shared card columns: card-level fields plus multi-valued clan/type/deck/keyword text arrays.
+_CARD_COLUMNS = """
     SELECT
         c.card_id,
         c.name,
@@ -163,22 +162,64 @@ _CARD_SELECT = """
         c.honor_requirement, c.personal_honor, c.gold_production,
         c.province_strength, c.starting_honor,
         c.is_unique, c.is_proxy, c.is_banned, c.extra,
-        img.image_path
-    FROM cards c
+        img.image_path, img.default_print_id
+    FROM cards c"""
+
+
+def _card_select(active_format: str | None = None) -> tuple[str, list]:
+    """
+    Build the shared card SELECT and its leading parameters.
+
+    The default print — the one supplying ``image_path`` / ``default_print_id`` — is the card's
+    representative printing. With an active arc/format filter, it is the earliest printing whose set
+    belongs to that arc; otherwise (no match, or no filter) it is simply the earliest printing by
+    release date. ``print_id`` is the final stable tiebreaker.
+
+    Parameters
+    ----------
+    active_format : str, optional
+        Format name or its short block alias (e.g. ``"shattered"``) whose arc the default print
+        should prefer. When omitted, the default print is chosen by release date alone.
+
+    Returns
+    -------
+    sql : str
+        The SELECT up to and including the lateral image join, ready to append a WHERE clause to.
+    select_params : list
+        Positional parameters for the lateral join, to be prepended to the WHERE-clause params.
+    """
+    if active_format:
+        # Prefer a printing from the active format's arc (FALSE sorts before TRUE), then fall to the
+        # earliest printing overall. The arc is resolved in-query against the format's name or block
+        # alias, matching whatever the search parser emitted.
+        order_clause = (
+            "ORDER BY (s.arc IS DISTINCT FROM (SELECT f.arc FROM formats f"
+            " WHERE lower(f.name) = lower(%s) OR lower(f.block) = lower(%s) LIMIT 1)),"
+            " s.release_date NULLS LAST, p.print_id, pi.image_index"
+        )
+        select_params = [active_format, active_format]
+    else:
+        order_clause = "ORDER BY s.release_date NULLS LAST, p.print_id, pi.image_index"
+        select_params = []
+
+    sql = f"""{_CARD_COLUMNS}
     LEFT JOIN LATERAL (
-        SELECT pi.path AS image_path
+        SELECT pi.path AS image_path, p.print_id AS default_print_id
         FROM prints p
         JOIN print_images pi ON pi.print_id = p.print_id AND pi.role = 'front'
+        LEFT JOIN l5r_sets s ON s.set_id = p.set_id
         WHERE p.card_id = c.card_id
-        ORDER BY p.print_id, pi.image_index
+        {order_clause}
         LIMIT 1
     ) img ON true"""
+    return sql, select_params
 
 
 def query_all_cards() -> list[dict]:
     """Fetch every card with its multi-valued attributes and front image, ordered by name."""
+    select_sql, _ = _card_select()
     with get_db_connection() as conn, conn.cursor() as cur:
-        cur.execute(f"{_CARD_SELECT} ORDER BY c.name")
+        cur.execute(f"{select_sql} ORDER BY c.name")
         return cur.fetchall()
 
 
@@ -214,9 +255,10 @@ def search_cards(query: str = "", deck_filter: str | None = None) -> list[dict]:
 
     where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
 
+    select_sql, _ = _card_select()
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(f"{_CARD_SELECT} {where_clause} ORDER BY c.name", params)
+            cur.execute(f"{select_sql} {where_clause} ORDER BY c.name", params)
             return cur.fetchall()
 
 
@@ -280,9 +322,10 @@ def get_card_by_id(card_id: str) -> dict | None:
     card : dict or None
         Card record or None if not found
     """
+    select_sql, _ = _card_select()
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(f"{_CARD_SELECT} WHERE c.card_id = %s", (card_id,))
+            cur.execute(f"{select_sql} WHERE c.card_id = %s", (card_id,))
             return cur.fetchone()
 
 
@@ -314,7 +357,7 @@ def get_prints_by_card_id(card_id: str) -> list[dict]:
                 LEFT JOIN print_images back
                     ON back.print_id = p.print_id AND back.role = 'back' AND back.size = 'master'
                 WHERE p.card_id = %s
-                ORDER BY s.set_name
+                ORDER BY s.release_date NULLS LAST, p.print_id
             """,
                 (card_id,),
             )
@@ -342,10 +385,11 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
     if not names:
         return []
     lower_names = [n.lower() for n in names]
+    select_sql, _ = _card_select()
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(
-                f"{_CARD_SELECT} "
+                f"{select_sql} "
                 "WHERE lower(c.name) = ANY(%s) OR lower(c.extended_title) = ANY(%s) "
                 "ORDER BY c.name",
                 (lower_names, lower_names),
@@ -367,7 +411,7 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
                 LEFT JOIN print_images back
                     ON back.print_id = p.print_id AND back.role = 'back' AND back.size = 'master'
                 WHERE p.card_id = ANY(%s)
-                ORDER BY p.print_id
+                ORDER BY s.release_date NULLS LAST, p.print_id
                 """,
                 (card_ids,),
             )
@@ -811,6 +855,34 @@ _NUMERIC_STATS = (
 _RANGE_OPS = {">": ">", ">=": ">=", "<": "<", "<=": "<="}
 
 
+def _active_format(filter_options: dict | None) -> str | None:
+    """
+    Resolve the single active format whose arc should bias default-print selection.
+
+    An exact ``format:``/``arc:`` search token or the deck-builder format dropdown pins one format;
+    inequality ranges, multiple specs, or no format filter leave it unresolved.
+
+    Parameters
+    ----------
+    filter_options : dict or None
+        The filter dictionary passed to ``_build_card_filter``.
+
+    Returns
+    -------
+    active_format : str or None
+        A format name or block alias, or None when no single format is in effect.
+    """
+    if not filter_options:
+        return None
+    specs = filter_options.get("format_filters")
+    if specs and len(specs) == 1 and specs[0][0] in (":", "="):
+        return specs[0][1]
+    legality = filter_options.get("legality")
+    if legality and legality[0]:
+        return legality[0]
+    return None
+
+
 def _build_card_filter(
     text_query: str = "",
     filter_options: dict | None = None,
@@ -1041,7 +1113,9 @@ def query_cards_filtered(
         Card records matching all filter criteria, sorted by name
     """
     where_clause, params = _build_card_filter(text_query, filter_options)
-    sql = f"{_CARD_SELECT} {where_clause} ORDER BY c.name"
+    select_sql, select_params = _card_select(_active_format(filter_options))
+    sql = f"{select_sql} {where_clause} ORDER BY c.name"
+    params = select_params + params
 
     logger.debug(f"Executing filtered query with {len(params)} params")
     with get_db_connection() as conn:
@@ -1120,10 +1194,11 @@ def query_cards_page(
         Total number of cards matching the filters (for pagination metadata)
     """
     where_clause, params = _build_card_filter(text_query, filter_options)
+    select_sql, select_params = _card_select(_active_format(filter_options))
 
     count_sql = f"SELECT COUNT(*) AS n FROM cards c {where_clause}"
-    data_sql = f"{_CARD_SELECT} {where_clause} {_order_by_clause(sort, order)} LIMIT %s OFFSET %s"
-    data_params = params + [limit, offset]
+    data_sql = f"{select_sql} {where_clause} {_order_by_clause(sort, order)} LIMIT %s OFFSET %s"
+    data_params = select_params + params + [limit, offset]
 
     with get_db_connection() as conn:
         with conn.cursor() as cur:
@@ -1204,7 +1279,8 @@ def query_random_cards(
 
     where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
 
-    sql = f"{_CARD_SELECT} {where_clause} ORDER BY RANDOM() LIMIT %s"
+    select_sql, _ = _card_select()
+    sql = f"{select_sql} {where_clause} ORDER BY RANDOM() LIMIT %s"
     params.append(count)
 
     with get_db_connection() as conn:
