@@ -142,8 +142,10 @@ jobs:
   upload-coverage:
     runs-on: ubuntu-latest
     name: "Upload coverage"
-    needs: [all-checks]
-    if: ${{ needs.all-checks.result == 'success' }}
+    needs: [all-checks, docker-test]
+    # docker-test contributes the yasuki_web coverage; it is skipped on non-PR feature-branch pushes,
+    # so tolerate that (skipped != failure) rather than block the upload.
+    if: ${{ always() && needs.all-checks.result == 'success' && needs.docker-test.result != 'failure' }}
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
@@ -237,7 +239,7 @@ jobs:
   docker-test:
     name: "Docker integration test"
     needs: [all-checks]
-    if: github.event_name == 'pull_request'
+    if: ${{ github.event_name == 'pull_request' || github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
 
     services:
@@ -273,4 +275,13 @@ jobs:
       - name: Run tests
         env:
           YASUKI_DATABASE_URL: postgresql://yasuki:yasuki@localhost:5432/yasuki
-        run: pixi run pytest tests/ --ignore=tests/yasuki_gui/
+        run: |
+          pixi run pytest tests/ --ignore=tests/yasuki_gui/ \
+            --cov=yasuki_core --cov=yasuki_web \
+            --cov-report=xml:coverage/coverage-web.xml --no-cov-on-fail
+
+      - name: Upload coverage file
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: coverage-web
+          path: coverage/coverage-web.xml
