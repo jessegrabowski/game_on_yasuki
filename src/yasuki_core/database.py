@@ -1054,7 +1054,13 @@ def _build_card_filter(
                     )
                     params.append([k.lower() for k in value])
             elif property_name in _NUMERIC_STATS:
-                if isinstance(value, tuple) and len(value) == 2:
+                # A dash stat — one the card doesn't print — is stored as NULL. The whitelisted
+                # column name is interpolation-safe (it is a key of _NUMERIC_STATS).
+                if value == "isnull":
+                    conditions.append(f"c.{property_name} IS NULL")
+                elif value == "notnull":
+                    conditions.append(f"c.{property_name} IS NOT NULL")
+                elif isinstance(value, tuple) and len(value) == 2:
                     min_val, max_val = value
                     if min_val is not None and max_val is not None:
                         conditions.append(f"c.{property_name} >= %s AND c.{property_name} <= %s")

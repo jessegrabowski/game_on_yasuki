@@ -59,6 +59,7 @@ FIELD_ALIASES = {
     "side": "deck",
     "gold": "gold_cost",
     "ph": "personal_honor",
+    "hr": "honor_requirement",
     "province": "province_strength",
     "startinghonor": "starting_honor",
     "has": "is",
@@ -419,19 +420,23 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
             if specs:
                 filter_options["format_filters"] = specs
         elif field in NUMERIC_FIELDS:
-            # Numeric comparison filters
-            # Track min/max separately, then combine into tuple
+            # Numeric comparison filters tracked as a (min, max) pair. A bare "-" matches the dash
+            # stat — one the card simply doesn't print, stored as NULL — and negation flips it to
+            # "has any value".
             field_min = None
             field_max = None
+            dash = None  # True => stat is NULL, False => stat is NOT NULL
 
             for term in terms_list:
+                if term.value.strip() == "-" and term.operator in (":", "="):
+                    dash = not term.negated
+                    continue
                 if term.negated:
                     continue
 
                 try:
                     value = int(term.value)
 
-                    # Map operators to min/max values
                     if term.operator in (":", "="):
                         field_min = value
                         field_max = value
@@ -444,11 +449,11 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                     elif term.operator == "<=":
                         field_max = value
                 except ValueError:
-                    # Invalid numeric value, skip
                     pass
 
-            # Store as tuple (min, max) format expected by database
-            if field_min is not None or field_max is not None:
+            if dash is not None:
+                filter_options[field] = "isnull" if dash else "notnull"
+            elif field_min is not None or field_max is not None:
                 filter_options[field] = (field_min, field_max)
         elif field == "include":
             # Opt non-deck cards back into the results; unknown categories are ignored.

@@ -92,18 +92,20 @@
       <h2>Numbers</h2>
       <p>
         Compare any stat with <code>:</code> (equals), <code>&gt;</code>, <code>&gt;=</code>,
-        <code>&lt;</code>, or <code>&lt;=</code>.
+        <code>&lt;</code>, or <code>&lt;=</code>. Use <code>:-</code> to match the dash stat a
+        card doesn&rsquo;t print (e.g. <code>hr:-</code> for no honor requirement).
       </p>
       <p>
         Stats: <code>force</code> <code>chi</code> <code>gold</code> <code>focus</code>
-        <code>ph</code> (personal honor) <code>province</code> <code>honor_requirement</code>
-        <code>starting_honor</code>.
+        <code>ph</code> (personal honor) <code>hr</code> (honor requirement)
+        <code>province</code> <code>starting_honor</code>.
       </p>
     </div>
     <div class="doc-examples">
       <a class="example">force>=4</a>
       <a class="example">chi>=2 gold<=3</a>
       <a class="example">ph>=3 clan:Lion</a>
+      <a class="example">hr:- t:personality</a>
     </div>
   </section>
 

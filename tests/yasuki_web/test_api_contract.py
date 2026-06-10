@@ -158,6 +158,17 @@ def test_is_banned_filter(client):
     assert _total(client, "-is:banned") + banned == _total(client, "")
 
 
+def test_dash_stat_search(client):
+    # `hr:-` matches the dash honor requirement (NULL), a different set from hr:0, and its negation
+    # plus itself partition the catalog.
+    dash = _total(client, "hr:- include:all")
+    not_dash = _total(client, "-hr:- include:all")
+    everything = _total(client, "include:all")
+    assert dash > 0
+    assert dash != _total(client, "hr:0 include:all")  # the dash stat is not zero
+    assert dash + not_dash == everything
+
+
 def test_clan_matches_senseis(client):
     # Senseis carry clan as a keyword, not a clan field; the loader materialises it into card_clans
     # so clan: reaches them. (Previously every clan: query missed all senseis.)

@@ -23,6 +23,7 @@ class TestFieldNormalization:
         assert normalize_field_name("side") == "deck"
         assert normalize_field_name("gold") == "gold_cost"
         assert normalize_field_name("ph") == "personal_honor"
+        assert normalize_field_name("hr") == "honor_requirement"
         assert normalize_field_name("province") == "province_strength"
 
     def test_normalize_case_insensitive(self):
@@ -283,6 +284,17 @@ class TestFilterBuilding:
         assert text == "take control"
         text, _ = parse_and_build_query('name:"Doji Hoturi"')
         assert text == "Doji Hoturi"
+
+    def test_dash_stat_matches_null(self):
+        # `hr:-` finds cards with no honor requirement (the dash stat), distinct from hr:0.
+        _, filters = parse_and_build_query("hr:-")
+        assert filters["honor_requirement"] == "isnull"
+        _, zero = parse_and_build_query("hr:0")
+        assert zero["honor_requirement"] == (0, 0)
+
+    def test_negated_dash_stat_matches_non_null(self):
+        _, filters = parse_and_build_query("-f:-")
+        assert filters["force"] == "notnull"
 
     def test_is_banned(self):
         _, filters = parse_and_build_query("is:banned")
