@@ -158,11 +158,12 @@ _CARD_COLUMNS = """
         (SELECT array_agg(keyword ORDER BY keyword) FROM card_keywords k WHERE k.card_id = c.card_id)
             AS keywords,
         c.rules_text AS text,
+        c.story,
         c.gold_cost, c.focus, c.force, c.chi,
         c.honor_requirement, c.personal_honor, c.gold_production,
         c.province_strength, c.starting_honor,
         c.is_unique, c.is_proxy, c.is_banned, c.extra,
-        img.image_path, img.default_print_id
+        img.image_path, img.default_print_id, img.default_set_slug
     FROM cards c"""
 
 
@@ -204,7 +205,7 @@ def _card_select(active_format: str | None = None) -> tuple[str, list]:
 
     sql = f"""{_CARD_COLUMNS}
     LEFT JOIN LATERAL (
-        SELECT pi.path AS image_path, p.print_id AS default_print_id
+        SELECT pi.path AS image_path, p.print_id AS default_print_id, s.set_slug AS default_set_slug
         FROM prints p
         JOIN print_images pi ON pi.print_id = p.print_id AND pi.role = 'front'
         LEFT JOIN l5r_sets s ON s.set_id = p.set_id
@@ -348,7 +349,7 @@ def get_prints_by_card_id(card_id: str) -> list[dict]:
             cur.execute(
                 """
                 SELECT
-                    p.print_id, p.card_id, s.set_name, p.rarity, p.artist,
+                    p.print_id, p.card_id, s.set_name, s.set_slug, p.rarity, p.artist,
                     front.path AS image_path, back.path AS back_image_path, p.flavor_text
                 FROM prints p
                 JOIN l5r_sets s ON s.set_id = p.set_id

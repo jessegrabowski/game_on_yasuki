@@ -1,5 +1,5 @@
-from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException, Path as PathParam
+from fastapi.responses import FileResponse, HTMLResponse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from fastapi.middleware.cors import CORSMiddleware
@@ -11,12 +11,15 @@ from pathlib import Path
 import asyncio
 import logging
 import os
+import re
 from yasuki_web import cards, rooms, websocket
 from yasuki_web.config import allowed_origins
 from yasuki_web.rate_limit import limiter
 from yasuki_web.websocket import evict_stale_rooms
-from yasuki_core.database import close_pool
+from yasuki_core.database import close_pool, get_card_by_id, get_prints_by_card_id
 from yasuki_core.paths import BUNDLED_IMAGES_DIR, SETS_DIR
+from html import escape as html_escape
+from typing import Annotated
 
 
 logger = logging.getLogger(__name__)
@@ -83,7 +86,7 @@ _CONTENT_SECURITY_POLICY = (
 
 # Public HTML pages and their static assets that the CSP applies to. The landing page lives at "/"
 # (matched exactly), the rest by path prefix.
-_CSP_PREFIXES = ("/deck-builder", "/site", "/card-search", "/play-online", "/syntax")
+_CSP_PREFIXES = ("/deck-builder", "/site", "/card-search", "/card/", "/play-online", "/syntax")
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -167,6 +170,76 @@ async def play_online():
 @app.get("/syntax")
 async def syntax():
     return _site_page("syntax.html")
+
+
+_SLUG = r"^[a-z0-9_-]+$"
+_CardId = Annotated[str, PathParam(max_length=120, pattern=_SLUG)]
+_SetSlug = Annotated[str, PathParam(max_length=120, pattern=_SLUG)]
+
+
+def _absolute_image_url(image_path: str, request: Request) -> str:
+    """Build an absolute URL for a card image, for crawler-readable og:image tags.
+
+    ``IMAGE_BASE_URL`` is already absolute in production (the R2 CDN); locally it is the relative
+    ``/images`` mount, so join it onto the request's own origin.
+    """
+    if IMAGE_BASE_URL.startswith("http"):
+        return f"{IMAGE_BASE_URL}/{image_path}"
+    return f"{str(request.base_url).rstrip('/')}{IMAGE_BASE_URL}/{image_path}"
+
+
+def _card_meta_tags(card: dict, print_: dict | None, canonical: str, request: Request) -> str:
+    name = card["name"]
+    descriptor = " · ".join(
+        b for b in (" · ".join(card.get("types") or []), " · ".join(card.get("clans") or [])) if b
+    )
+    # Rules text carries simple inline markup (<b>, <br>); strip it for a clean unfurl snippet.
+    rules = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", card.get("text") or "")).strip()
+    description = (f"{descriptor}. {rules}" if descriptor and rules else descriptor or rules)[:200]
+    e = html_escape
+    tags = [
+        f"<title>{e(name)} &mdash; Game on, Yasuki!</title>",
+        f'<link rel="canonical" href="{e(canonical)}">',
+        '<meta property="og:type" content="website">',
+        f'<meta property="og:url" content="{e(canonical)}">',
+        f'<meta property="og:title" content="{e(name)}">',
+        f'<meta name="description" content="{e(description)}">',
+        f'<meta property="og:description" content="{e(description)}">',
+        '<meta name="twitter:card" content="summary_large_image">',
+    ]
+    if print_ and print_.get("image_path"):
+        image = _absolute_image_url(print_["image_path"], request)
+        tags.append(f'<meta property="og:image" content="{e(image)}">')
+        tags.append(f'<meta name="twitter:image" content="{e(image)}">')
+    return "\n".join(tags)
+
+
+async def _render_card_page(card_id: str, set_slug: str | None, request: Request) -> HTMLResponse:
+    card = await asyncio.to_thread(get_card_by_id, card_id)
+    if not card:
+        raise HTTPException(status_code=404, detail=f"Card '{card_id}' not found")
+    prints = await asyncio.to_thread(get_prints_by_card_id, card_id)
+
+    selected = next((p for p in prints if p["set_slug"] == set_slug), None) if set_slug else None
+    if selected is None:
+        selected = prints[0] if prints else None
+
+    canonical_path = f"/card/{card_id}/{selected['set_slug']}" if selected else f"/card/{card_id}"
+    canonical = f"{str(request.base_url).rstrip('/')}{canonical_path}"
+
+    shell = (SITE_DIR / "card.html").read_text(encoding="utf-8")
+    html = shell.replace("<!--META-->", _card_meta_tags(card, selected, canonical, request))
+    return HTMLResponse(html)
+
+
+@app.get("/card/{card_id}")
+async def card_page(request: Request, card_id: _CardId):
+    return await _render_card_page(card_id, None, request)
+
+
+@app.get("/card/{card_id}/{set_slug}")
+async def card_page_print(request: Request, card_id: _CardId, set_slug: _SetSlug):
+    return await _render_card_page(card_id, set_slug, request)
 
 
 @app.get("/api/config")

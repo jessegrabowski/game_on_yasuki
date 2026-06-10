@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--META-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/site/site.css">
+<link rel="stylesheet" href="/site/card.css">
+</head>
+<body>
+
+<header class="ribbon">
+  <a class="ribbon-mark" href="/"><span class="torii">&#x26E9;</span> Game on, Yasuki!</a>
+  <nav class="ribbon-nav">
+    <a href="/card-search">Card Search</a>
+    <a href="/syntax">Syntax</a>
+    <a href="/deck-builder/">Deck Builder</a>
+    <a href="/play-online">Play Online</a>
+  </nav>
+</header>
+
+<main class="card-page" id="cardPage" hidden>
+  <div class="card-cols">
+    <section class="card-art">
+      <figure class="art-figure">
+        <img id="cardArt" alt="">
+      </figure>
+      <div class="face-label" id="cardFace" hidden></div>
+      <div class="art-controls">
+        <button id="artPrev" type="button" class="art-btn" aria-label="Previous printing">&#x2039; Prev</button>
+        <button id="artFlip" type="button" class="art-btn" hidden>&#x21BB; Flip</button>
+        <button id="artNext" type="button" class="art-btn" aria-label="Next printing">Next &#x203A;</button>
+      </div>
+    </section>
+
+    <section class="card-info">
+      <h1 id="cardName"></h1>
+      <div id="cardTypeline" class="typeline"></div>
+      <dl id="cardStats" class="stat-grid"></dl>
+      <div id="cardKeywords" class="keywords"></div>
+      <div id="cardText" class="rules"></div>
+      <p id="cardFlavor" class="flavor"></p>
+      <p id="cardArtist" class="artist"></p>
+      <p id="cardStory" class="story"></p>
+    </section>
+
+    <aside class="card-prints">
+      <h2>Printings</h2>
+      <ul id="printsList"></ul>
+    </aside>
+  </div>
+</main>
+
+<div class="card-missing" id="cardMissing" hidden>
+  Card not found. <a href="/card-search">Back to search</a>.
+</div>
+
+<div class="zoom" id="zoom" hidden>
+  <span class="zoom-face" id="zoomFace" hidden></span>
+  <img class="zoom-img" id="zoomImg" alt="">
+  <button class="zoom-flip" id="zoomFlip" type="button" aria-label="Flip card" hidden>&#x21BB;</button>
+</div>
+
+<script type="module" src="/site/card.js"></script>
+</body>
+</html>
