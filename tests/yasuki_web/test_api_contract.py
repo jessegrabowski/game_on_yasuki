@@ -229,11 +229,28 @@ def test_card_detail_shape(client):
     for print_ in body["prints"]:
         assert isinstance(print_["print_id"], int)
         assert "set_name" in print_
+        assert isinstance(print_["set_slug"], str)  # slug pins the printing in /card/{id}/{slug}
         assert "image_path" in print_  # served as sets/<slug>/<file> or None
         assert "back_image_path" in print_  # back face for double-sided prints, else None
         assert isinstance(print_["era"], str)  # art-swap era band, e.g. "2016+"
         assert isinstance(print_["layout_type"], str)  # art-swap layout, e.g. "Personality"
         assert print_["back_era"] in ("old", "new")  # which generic card back to flip to
+
+
+def test_card_page_renders_og_tags(client):
+    # The shareable /card page server-renders OpenGraph tags so links unfurl in chat. The set_slug in
+    # the path pins which printing's art the tags point at; an unknown card is a 404.
+    html = client.get("/card/refugees").text
+    assert 'property="og:title" content="Refugees"' in html
+    assert (
+        'property="og:image"' in html and "sets/anvil_of_despair/refugees.jpg" in html
+    )  # earliest
+    assert 'name="twitter:card" content="summary_large_image"' in html
+
+    pinned = client.get("/card/refugees/shattered_empire").text
+    assert "sets/shattered_empire/refugees.jpg" in pinned
+
+    assert client.get("/card/no_such_card_zzz").status_code == 404
 
 
 def test_card_backs_shape(client):

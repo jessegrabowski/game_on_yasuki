@@ -1,0 +1,270 @@
+.card-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 26px 80px;
+}
+
+.card-cols {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr) minmax(220px, 300px);
+  gap: 32px;
+  align-items: start;
+}
+
+/* Left: the art and its cycle/flip controls. */
+.card-art {
+  position: sticky;
+  top: 20px;
+}
+.art-figure {
+  margin: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.22);
+}
+.art-figure img {
+  display: block;
+  width: 100%;
+  cursor: zoom-in; /* click to enlarge */
+}
+.face-label {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.face-label[hidden] {
+  display: none;
+}
+.art-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+.art-btn {
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+  color: var(--ink);
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.art-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.art-btn[hidden] {
+  display: none;
+}
+.art-btn[aria-pressed='true'] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* Center: name, type line, stats, rules text. */
+.card-info h1 {
+  margin: 0 0 6px;
+  font-size: 1.9rem;
+  line-height: 1.15;
+}
+.card-info .typeline {
+  color: var(--muted);
+  font-size: 0.95rem;
+  margin-bottom: 18px;
+}
+.stat-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 22px;
+  margin: 0 0 20px;
+}
+.stat-grid div {
+  display: flex;
+  flex-direction: column;
+}
+.stat-grid dt {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.stat-grid dd {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+.keywords {
+  font-weight: 600;
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+.keywords[hidden] {
+  display: none;
+}
+.rules {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.08rem;
+  line-height: 1.5;
+}
+.rules p {
+  margin: 0 0 0.7em;
+}
+.flavor {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-style: italic;
+  color: var(--muted);
+  border-left: 3px solid var(--line-strong);
+  padding-left: 12px;
+  margin: 4px 0 16px;
+}
+.artist {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 4px;
+}
+.story {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin: 0 0 18px;
+}
+.story[hidden] {
+  display: none;
+}
+
+/* Right: every printing, the selected one highlighted. */
+.card-prints h2 {
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin: 0 0 12px;
+}
+.card-prints ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.print-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+.print-row:hover {
+  background: var(--paper);
+}
+.print-row.selected {
+  background: var(--paper);
+  border-color: var(--accent);
+}
+.print-row img,
+.print-thumb-empty {
+  width: 34px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 4px;
+  flex: 0 0 auto;
+  background: var(--line);
+}
+.print-meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.print-set {
+  font-size: 0.9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.print-rarity {
+  font-size: 0.74rem;
+  color: var(--muted);
+}
+
+.card-missing {
+  max-width: 1180px;
+  margin: 60px auto;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* Full-screen art zoom: a dim backdrop with the enlarged current face. Cycling stays on the page;
+   the overlay only embiggens, with its own flip mirroring the page's shared face state. */
+.zoom {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 4vw;
+  background: rgba(13, 10, 7, 0.8);
+  cursor: zoom-out;
+}
+.zoom[hidden] {
+  display: none;
+}
+.zoom-img {
+  max-height: 92vh;
+  max-width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+  cursor: default;
+}
+.zoom-face {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.55);
+  color: #f0e9dd;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.zoom-face[hidden] {
+  display: none;
+}
+.zoom-flip {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  color: #f0e9dd;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.zoom-flip:hover,
+.zoom-flip[aria-pressed='true'] {
+  background: var(--accent);
+}
+.zoom-flip[hidden] {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .card-cols {
+    grid-template-columns: 1fr;
+  }
+  .card-art {
+    position: static;
+    max-width: 360px;
+  }
+}
