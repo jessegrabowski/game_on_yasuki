@@ -172,38 +172,49 @@ def _card_select(active_format: str | None = None) -> tuple[str, list]:
     Build the shared card SELECT and its leading parameters.
 
     The default print — the one supplying ``image_path`` / ``default_print_id`` — is the card's
-    representative printing. With an active arc/format filter, it is the earliest printing whose set
-    belongs to that arc; otherwise (no match, or no filter) it is simply the earliest printing by
-    release date. ``print_id`` is the final stable tiebreaker.
+    representative printing. With an active arc/format filter, it is the earliest printing from that
+    format's arc; for a card carried into the format by rotation with no printing in that arc, it is
+    the most recent printing whose own arc was already legal as of the format. Without a filter, or
+    for a format with no era (Legacy/Modern), it is the earliest printing by release date.
+    ``print_id`` is the final stable tiebreaker.
 
     Parameters
     ----------
     active_format : str, optional
-        Format name or its short block alias (e.g. ``"shattered"``) whose arc the default print
-        should prefer. When omitted, the default print is chosen by release date alone.
+        Format name or its short block alias (e.g. ``"shattered"``) whose arc and era the default
+        print should reflect. When omitted, the default print is chosen by release date alone.
 
     Returns
     -------
     sql : str
         The SELECT up to and including the lateral image join, ready to append a WHERE clause to.
     select_params : list
-        Positional parameters for the lateral join, to be prepended to the WHERE-clause params.
+        Positional parameters for the format-resolution join, to be prepended to the WHERE-clause
+        params.
     """
     if active_format:
-        # Prefer a printing from the active format's arc (FALSE sorts before TRUE), then fall to the
-        # earliest printing overall. The arc is resolved in-query against the format's name or block
-        # alias, matching whatever the search parser emitted.
+        # Resolve the active format once (by name or block alias, matching whatever the search
+        # parser emitted) so the print ordering below can reference its arc and era.
+        format_join = (
+            "\n    LEFT JOIN LATERAL (SELECT f.arc, f.legal_from FROM formats f"
+            " WHERE lower(f.name) = lower(%s) OR lower(f.block) = lower(%s) LIMIT 1) af ON true"
+        )
+        # Keys: in-arc first; earliest in-arc / newest in-era otherwise; future-arc prints last.
         order_clause = (
-            "ORDER BY (s.arc IS DISTINCT FROM (SELECT f.arc FROM formats f"
-            " WHERE lower(f.name) = lower(%s) OR lower(f.block) = lower(%s) LIMIT 1)),"
-            " s.release_date NULLS LAST, p.print_id, pi.image_index"
+            "ORDER BY (s.arc IS DISTINCT FROM af.arc),"
+            " CASE WHEN s.arc IS NOT DISTINCT FROM af.arc OR af.legal_from IS NULL"
+            " THEN s.release_date END ASC NULLS LAST,"
+            " (COALESCE((SELECT min(f2.legal_from) FROM formats f2 WHERE f2.arc = s.arc),"
+            " '-infinity'::date) > af.legal_from),"
+            " s.release_date DESC NULLS LAST, p.print_id, pi.image_index"
         )
         select_params = [active_format, active_format]
     else:
+        format_join = ""
         order_clause = "ORDER BY s.release_date NULLS LAST, p.print_id, pi.image_index"
         select_params = []
 
-    sql = f"""{_CARD_COLUMNS}
+    sql = f"""{_CARD_COLUMNS}{format_join}
     LEFT JOIN LATERAL (
         SELECT pi.path AS image_path, p.print_id AS default_print_id, s.set_slug AS default_set_slug
         FROM prints p
