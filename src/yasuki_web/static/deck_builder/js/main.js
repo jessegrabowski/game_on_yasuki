@@ -9,7 +9,7 @@ import {
   nextCardAfterRemoval,
   getDeckNavItems,
 } from './deck-state.js';
-import { setDeckName, setDeckAuthor, serializeDeck, parseDeckYaml } from './deck-io.js';
+import { serializeDeck, parseDeckYaml, deckSnapshot } from './deck-io.js';
 import { saveDeckSnapshot, loadDeckSnapshot, clearDeckSnapshot } from './deck-storage.js';
 import { buildCompositeDataURL, customPrintId, loadArtLayout } from './art.js';
 import { openBorrowArt } from './borrow-art.js';
@@ -261,16 +261,13 @@ async function fetchCards() {
   }
 }
 
-function deckHasCards() {
-  return Object.values(getDeck()).some((bucket) => Object.keys(bucket).length > 0);
-}
-
-// Snapshot the live deck (and name/author) to localStorage so it survives navigation, storing the
-// same YAML that Export produces and restoring it on load through the import path.
+// Snapshot the live deck to localStorage so it survives navigation, storing the same YAML that
+// Export produces and restoring it on load through the import path.
 function persistDeck() {
-  setDeckName($('deckNameInput').value.trim());
-  setDeckAuthor($('deckAuthorInput').value.trim());
-  if (deckHasCards()) saveDeckSnapshot(serializeDeck(getDeck()));
+  const name = $('deckNameInput').value.trim();
+  const author = $('deckAuthorInput').value.trim();
+  const snapshot = deckSnapshot(getDeck(), name, author);
+  if (snapshot) saveDeckSnapshot(snapshot);
   else clearDeckSnapshot();
 }
 
@@ -349,9 +346,8 @@ function doExportDeck() {
     row.classList.add('shake');
     return;
   }
-  setDeckName(name);
-  setDeckAuthor($('deckAuthorInput').value.trim());
-  const yaml = serializeDeck(getDeck());
+  const author = $('deckAuthorInput').value.trim();
+  const yaml = serializeDeck(getDeck(), { name, author });
   const filename = name.toLowerCase().replace(/[^a-z0-9]+/g, '_') + '.yaml';
   const blob = new Blob([yaml], { type: 'text/yaml' });
   const url = URL.createObjectURL(blob);
@@ -421,9 +417,7 @@ async function doImportDeck(text, { silent = false } = {}) {
     }
   }
 
-  setDeckName(parsed.name);
   $('deckNameInput').value = parsed.name;
-  setDeckAuthor(parsed.author);
   $('deckAuthorInput').value = parsed.author;
   renderDeckLists();
   renderCardList();

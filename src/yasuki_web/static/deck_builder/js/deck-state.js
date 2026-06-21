@@ -61,6 +61,10 @@ export function clearDeck() {
   Object.keys(deck).forEach((k) => (deck[k] = {}));
 }
 
+export function deckHasCards(deck) {
+  return Object.values(deck).some((bucket) => Object.keys(bucket).length > 0);
+}
+
 export function deckEntryTotal(entry) {
   return Object.values(entry.prints).reduce((s, p) => s + p.qty, 0);
 }
