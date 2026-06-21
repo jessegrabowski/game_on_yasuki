@@ -196,16 +196,16 @@ def test_clan_does_not_match_elemental_dragons(client):
     assert "Fire Dragon" not in {c["name"] for c in cards}
 
 
-def _refugees(client, search):
-    cards = client.get("/api/cards", params={"search": search, "limit": 25}).json()["cards"]
-    return next(c for c in cards if c["name"] == "Refugees")
+def _named(client, search, name):
+    cards = client.get("/api/cards", params={"search": search, "limit": 50}).json()["cards"]
+    return next(c for c in cards if c["name"] == name)
 
 
 def test_default_print_is_arc_aware(client):
     # The default art follows the active arc: arc:shattered surfaces the Shattered Empire printing,
     # while no filter falls back to the earliest printing.
-    base = _refugees(client, "name:Refugees")
-    shattered = _refugees(client, "name:Refugees arc:shattered")
+    base = _named(client, "name:Refugees", "Refugees")
+    shattered = _named(client, "name:Refugees arc:shattered", "Refugees")
     assert base["default_print_id"] != shattered["default_print_id"]
 
     prints = client.get(f"/api/cards/{shattered['card_id']}").json()["prints"]
@@ -213,9 +213,20 @@ def test_default_print_is_arc_aware(client):
     assert shattered["default_print_id"] == shattered_print["print_id"]
 
 
+def test_default_print_rotated_in_card_uses_recent_printing(client):
+    # A card legal in the active format only by rotation (no printing in that format's own arc) must
+    # default to its most recent in-era printing, not its oldest. The Future is Unwritten is legal
+    # in Shattered via its Onyx reprint; it must not fall back to the 2003 Gold art.
+    name = "The Future is Unwritten"
+    card = _named(client, f'name:"{name}" arc:shattered', name)
+    prints = client.get(f"/api/cards/{card['card_id']}").json()["prints"]
+    onyx = next(p for p in prints if p["set_name"] == "Rise of Otosan Uchi")
+    assert card["default_print_id"] == onyx["print_id"]
+
+
 def test_prints_listed_chronologically(client):
     # Prints come back oldest-first by set release date; Refugees' first printing is Anvil of Despair.
-    card_id = _refugees(client, "name:Refugees")["card_id"]
+    card_id = _named(client, "name:Refugees", "Refugees")["card_id"]
     prints = client.get(f"/api/cards/{card_id}").json()["prints"]
     assert prints[0]["set_name"] == "Anvil of Despair"
 
