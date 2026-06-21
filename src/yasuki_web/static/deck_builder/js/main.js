@@ -9,7 +9,8 @@ import {
   nextCardAfterRemoval,
   getDeckNavItems,
 } from './deck-state.js';
-import { getDeckName, setDeckName, setDeckAuthor, serializeDeck, parseDeckYaml } from './deck-io.js';
+import { setDeckName, setDeckAuthor, serializeDeck, parseDeckYaml } from './deck-io.js';
+import { saveDeckSnapshot, loadDeckSnapshot, clearDeckSnapshot } from './deck-storage.js';
 import { buildCompositeDataURL, customPrintId, loadArtLayout } from './art.js';
 import { openBorrowArt } from './borrow-art.js';
 import { printDeck } from './print.js';
@@ -118,9 +119,12 @@ async function init() {
   $('exportBtn').addEventListener('click', doExportDeck);
   $('printBtn').addEventListener('click', () => printDeck(getDeck(), IMG, API));
   $('importBtn').addEventListener('click', () => $('importFileInput').click());
+  const persistDeckMeta = debounce(persistDeck, 400);
   $('deckNameInput').addEventListener('input', () => {
     $('deckNameInput').closest('.deck-name-row').classList.remove('shake');
+    persistDeckMeta();
   });
+  $('deckAuthorInput').addEventListener('input', persistDeckMeta);
   $('importFileInput').addEventListener('change', (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -130,6 +134,17 @@ async function init() {
 
   await populateFilters();
   searchCards();
+
+  // Restore an in-progress deck saved before the user navigated away. Runs through the import path
+  // (re-resolving cards and recompositing custom art) now that the card DB is reachable.
+  const saved = loadDeckSnapshot();
+  if (saved) {
+    try {
+      await doImportDeck(saved, { silent: true });
+    } catch (e) {
+      console.error('Failed to restore saved deck:', e);
+    }
+  }
 }
 
 function toggleHelp() {
@@ -246,6 +261,19 @@ async function fetchCards() {
   }
 }
 
+function deckHasCards() {
+  return Object.values(getDeck()).some((bucket) => Object.keys(bucket).length > 0);
+}
+
+// Snapshot the live deck (and name/author) to localStorage so it survives navigation, storing the
+// same YAML that Export produces and restoring it on load through the import path.
+function persistDeck() {
+  setDeckName($('deckNameInput').value.trim());
+  setDeckAuthor($('deckAuthorInput').value.trim());
+  if (deckHasCards()) saveDeckSnapshot(serializeDeck(getDeck()));
+  else clearDeckSnapshot();
+}
+
 function doAddSelectedToDeck() {
   const card = getSelectedCard();
   if (!card) return;
@@ -263,6 +291,7 @@ function doAddSelectedToDeck() {
     addCard(card.card_id, side, card, getCurrentPrintId() || 0, getCurrentSetName());
   }
   renderDeckLists();
+  persistDeck();
 }
 
 function onBorrowArt(card, recipientPrint) {
@@ -299,12 +328,14 @@ function doRemoveSelectedFromDeck() {
 
   renderDeckLists();
   renderCardList();
+  persistDeck();
 }
 
 function doClearDeck() {
   clearDeck();
   setSelectedDeckCard(null);
   renderDeckLists();
+  clearDeckSnapshot();
 }
 
 function doExportDeck() {
@@ -331,7 +362,7 @@ function doExportDeck() {
   URL.revokeObjectURL(url);
 }
 
-async function doImportDeck(text) {
+async function doImportDeck(text, { silent = false } = {}) {
   const parsed = parseDeckYaml(text);
 
   const allEntries = [...parsed.pre_game, ...parsed.dynasty, ...parsed.fate];
@@ -396,8 +427,9 @@ async function doImportDeck(text) {
   $('deckAuthorInput').value = parsed.author;
   renderDeckLists();
   renderCardList();
+  persistDeck();
 
-  if (unresolved.length > 0) {
+  if (unresolved.length > 0 && !silent) {
     alert(`Import complete.\n\nCould not find ${unresolved.length} card(s):\n${unresolved.join('\n')}`);
   }
 }
