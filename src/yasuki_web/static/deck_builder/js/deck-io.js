@@ -1,21 +1,4 @@
-let _deckName = '';
-let _deckAuthor = '';
-
-export function getDeckName() {
-  return _deckName;
-}
-
-export function setDeckName(name) {
-  _deckName = name;
-}
-
-export function getDeckAuthor() {
-  return _deckAuthor;
-}
-
-export function setDeckAuthor(author) {
-  _deckAuthor = author || '';
-}
+import { deckHasCards } from './deck-state.js';
 
 const SECTIONS = [
   ['pre_game', 'PRE_GAME'],
@@ -36,12 +19,13 @@ function entryQty(entry) {
 // Render the decklist as YAML: name/author/date metadata, then each deck section grouped by card
 // type with `# Type (n)` subheaders and counts (comments — purely for reading; the parser skips
 // them). Card lines keep the `<n>x Name [Set] {art: Donor [Set]}` grammar.
-export function serializeDeck(deck, dateStr = new Date().toISOString().slice(0, 10)) {
+export function serializeDeck(deck, { name = '', author = '', date } = {}) {
+  const dateStr = date ?? new Date().toISOString().slice(0, 10);
   const needsQuote = (s) => /[:#\[\]{},&*?|<>=!%@`]/.test(s) || s.startsWith(' ') || s.endsWith(' ');
   const quoteValue = (s) => (needsQuote(s) ? `"${s.replace(/\\/g, '\\\\').replace(/"/g, '\\"')}"` : s);
 
-  const lines = [`name: ${quoteValue(_deckName)}`];
-  if (_deckAuthor) lines.push(`author: ${quoteValue(_deckAuthor)}`);
+  const lines = [`name: ${quoteValue(name)}`];
+  if (author) lines.push(`author: ${quoteValue(author)}`);
   lines.push(`date: ${dateStr}`, '');
 
   for (const [sectionKey, bucketKey] of SECTIONS) {
@@ -84,6 +68,12 @@ export function serializeDeck(deck, dateStr = new Date().toISOString().slice(0, 
   }
 
   return lines.join('\n').trimEnd() + '\n';
+}
+
+// The localStorage snapshot for the live deck: its serialized YAML when it holds cards, or null to
+// signal the snapshot should be cleared so an emptied deck never resurrects on reload.
+export function deckSnapshot(deck, name, author) {
+  return deckHasCards(deck) ? serializeDeck(deck, { name, author }) : null;
 }
 
 export function parseDeckYaml(text) {

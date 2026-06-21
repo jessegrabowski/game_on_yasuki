@@ -8,6 +8,7 @@ import {
   addCustomPrint,
   removeCard,
   clearDeck,
+  deckHasCards,
   deckEntryTotal,
   nextCardAfterRemoval,
   getDeckNavItems,
@@ -25,6 +26,16 @@ const CARD_SH = makeCard({
 });
 
 beforeEach(() => clearDeck());
+
+describe('deckHasCards', () => {
+  it('is false for an empty deck', () => {
+    assert.equal(deckHasCards(getDeck()), false);
+  });
+  it('is true when only the pre-game bucket is populated', () => {
+    addCard('card_sh', 'PRE_GAME', CARD_SH, 1, 'Imperial Edition');
+    assert.equal(deckHasCards(getDeck()), true);
+  });
+});
 
 describe('addCard', () => {
   it('adds a new card with one print', () => {
