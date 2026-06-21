@@ -301,6 +301,16 @@ def parse_search_query(query: str) -> ParsedQuery:
     return ParsedQuery(terms=terms, logic=logic)
 
 
+def _scope_text_field(terms_list: list, prefix: str, filter_options: dict) -> None:
+    """Record a field's terms as ``<prefix>_contains`` / ``<prefix>_excludes`` ILIKE filters."""
+    included = [term.value for term in terms_list if not term.negated]
+    excluded = [term.value for term in terms_list if term.negated]
+    if included:
+        filter_options[f"{prefix}_contains"] = included
+    if excluded:
+        filter_options[f"{prefix}_excludes"] = excluded
+
+
 def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
     """
     Convert parsed query to database filter options.
@@ -325,25 +335,30 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
     text_query_parts = []
     filter_options = {}
 
-    # Group terms by field for aggregation
+    # Group terms by field for aggregation. Bare words (field None) get their own group so they keep
+    # the broad name+id+rules-text behavior, while explicit name:/text: scope to a single column.
     field_groups = {}
     for term in parsed.terms:
-        field = term.field or "text"
+        field = term.field if term.field is not None else "_bare"
         if field not in field_groups:
             field_groups[field] = []
         field_groups[field].append(term)
 
     for field, terms_list in field_groups.items():
-        if field == "text":
-            # General text search
+        if field == "_bare":
+            # Bare words: broad search across name, card id, and rules text.
             for term in terms_list:
                 if not term.negated:
                     text_query_parts.append(term.value)
         elif field == "name":
-            # Name search - add to text query
-            for term in terms_list:
-                if not term.negated:
-                    text_query_parts.append(term.value)
+            # name:/title: — match the card name only.
+            _scope_text_field(terms_list, "name", filter_options)
+        elif field == "text":
+            # text:/o:/oracle: — match the rules text only.
+            _scope_text_field(terms_list, "rules_text", filter_options)
+        elif field == "all":
+            # The canonical "match every card" predicate — adds no constraints.
+            filter_options["all"] = True
         elif field == "is":
             # Special "is:" filters
             # Handle both is_unique and keywords with AND/OR logic
@@ -465,13 +480,14 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
             if valid:
                 filter_options["include"] = valid
         else:
-            # Unknown field (a typo or unsupported key): fall back to plain text so the term still
-            # narrows the search instead of being dropped — which would silently match every card.
-            for term in terms_list:
-                if not term.negated:
-                    text_query_parts.append(term.value)
+            # Unrecognized field (typo or unsupported key): mark the query unsatisfiable rather than
+            # text-searching the value (which matches nonsense) or dropping it (which matches all).
+            filter_options.setdefault("_unknown_fields", []).append(field)
 
     text_query = " ".join(text_query_parts)
+    if not parsed.terms:
+        # A blank search resolves to the explicit all: predicate, so every query carries one.
+        filter_options["all"] = True
     return text_query, filter_options
 
 

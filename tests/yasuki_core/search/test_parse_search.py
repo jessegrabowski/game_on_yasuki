@@ -176,11 +176,13 @@ class TestFilterBuilding:
         assert len(filters) == 0
 
     def test_name_search(self):
+        # name: scopes to the card name only, not the broad name+text query.
         parsed = ParsedQuery(
             terms=[SearchTerm(field="name", operator=":", value="Hoturi", negated=False)]
         )
         text_query, filters = build_filter_options(parsed)
-        assert "Hoturi" in text_query
+        assert text_query == ""
+        assert filters["name_contains"] == ["Hoturi"]
 
     def test_clan_filter(self):
         parsed = ParsedQuery(
@@ -244,18 +246,19 @@ class TestFilterBuilding:
         assert filters["set_filters"] == [(">=", "GE"), ("<=", "DE")]
 
     def test_title_aliases_to_name(self):
-        text, _ = parse_and_build_query("title:hida")
-        assert text == "hida"
+        _, filters = parse_and_build_query("title:hida")
+        assert filters["name_contains"] == ["hida"]
 
     def test_arc_aliases_to_format(self):
         _, filters = parse_and_build_query("arc:lotus")
         assert filters["format_filters"] == [(":", "lotus")]
 
-    def test_unknown_field_falls_back_to_text(self):
-        # An unrecognised field must narrow as text, never drop out and match the whole catalog.
+    def test_unknown_field_is_unsatisfiable(self):
+        # An unrecognised field must NOT be silently text-searched (that returned nonsense, e.g.
+        # gc>5 matching cards containing "5"); the query becomes unsatisfiable instead.
         text, filters = parse_and_build_query("bogusfield:scorpion")
-        assert text == "scorpion"
-        assert filters == {}
+        assert text == ""
+        assert filters["_unknown_fields"] == ["bogusfield"]
 
     def test_include_tokens(self):
         _, filters = parse_and_build_query("include:tokens")
@@ -279,11 +282,11 @@ class TestFilterBuilding:
         assert filters["story"] == ["Paul Ashman"]
 
     def test_quoted_field_value_strips_quotes(self):
-        # A quoted phrase on a text field must search as the phrase, not the quoted literal.
-        text, _ = parse_and_build_query('o:"take control"')
-        assert text == "take control"
-        text, _ = parse_and_build_query('name:"Doji Hoturi"')
-        assert text == "Doji Hoturi"
+        # A quoted phrase on a text/name field searches as the phrase, scoped to that field.
+        _, filters = parse_and_build_query('o:"take control"')
+        assert filters["rules_text_contains"] == ["take control"]
+        _, filters = parse_and_build_query('name:"Doji Hoturi"')
+        assert filters["name_contains"] == ["Doji Hoturi"]
 
     def test_dash_stat_matches_null(self):
         # `hr:-` finds cards with no honor requirement (the dash stat), distinct from hr:0.
@@ -418,7 +421,7 @@ class TestFilterBuilding:
             ]
         )
         text_query, filters = build_filter_options(parsed)
-        assert "Doji" in text_query
+        assert filters["name_contains"] == ["Doji"]
         assert filters["clans"] == ["Crane"]
         assert filters["force"] == (4, None)
 
@@ -429,12 +432,12 @@ class TestEndToEnd:
         assert "Doji" in text
 
     def test_text_search(self):
-        text, filters = parse_and_build_query("text:battle")
-        assert "battle" in text
+        _, filters = parse_and_build_query("text:battle")
+        assert filters["rules_text_contains"] == ["battle"]
 
     def test_oracle_search(self):
-        text, filters = parse_and_build_query("o:honor")
-        assert "honor" in text
+        _, filters = parse_and_build_query("o:honor")
+        assert filters["rules_text_contains"] == ["honor"]
 
     def test_field_specific_search(self):
         text, filters = parse_and_build_query("clan:Crane type:personality")
@@ -448,7 +451,7 @@ class TestEndToEnd:
 
     def test_complex_query(self):
         text, filters = parse_and_build_query("name:Doji clan:Crane force>3 is:unique")
-        assert "Doji" in text
+        assert filters["name_contains"] == ["Doji"]
         assert filters["clans"] == ["Crane"]
         assert filters["force"] == (4, None)
         assert filters["is_unique"] is True
@@ -489,3 +492,31 @@ class TestEndToEnd:
         assert filters["keywords"] == ["cavalry"]
         assert filters["clans"] == ["Unicorn"]
         assert filters["force"] == (4, None)
+
+    def test_blank_search_defaults_to_all_predicate(self):
+        text, filters = parse_and_build_query("   ")
+        assert text == ""
+        assert filters == {"all": True}
+
+    def test_all_predicate_is_recognized(self):
+        # all: is a real predicate, not an unknown field — no _unknown_fields, no nonsense.
+        _, filters = parse_and_build_query("all:cards")
+        assert filters == {"all": True}
+
+    def test_name_scopes_to_name_not_rules_text(self):
+        _, filters = parse_and_build_query("name:caravan")
+        assert filters == {"name_contains": ["caravan"]}
+
+    def test_oracle_scopes_to_rules_text_not_name(self):
+        _, filters = parse_and_build_query("o:caravan")
+        assert filters == {"rules_text_contains": ["caravan"]}
+
+    def test_negated_oracle_excludes_rules_text(self):
+        _, filters = parse_and_build_query("-o:bow")
+        assert filters == {"rules_text_excludes": ["bow"]}
+
+    def test_unknown_stat_inequality_is_unsatisfiable(self):
+        # The reported bug: gc>5 used to dump "5" into a text search; it must not.
+        text, filters = parse_and_build_query("gc>5")
+        assert text == ""
+        assert filters["_unknown_fields"] == ["gc"]
