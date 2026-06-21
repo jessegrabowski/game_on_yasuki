@@ -7,7 +7,7 @@ name = "game-on-yasuki"
 dynamic = ["version"]
 description = "Online client for playing classic L5R"
 authors = [{ name = "Jesse Grabowski" , email = "jessegrabowski@gmail.com"}]
-requires-python = ">=3.12"
+requires-python = ">=3.12,<3.14"
 dependencies = [
   "psycopg>=3.1",
   "psycopg-pool>=3.1",
@@ -51,7 +51,7 @@ platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
 requires-pixi = ">=0.63.2"
 
 [tool.pixi.dependencies]
-python = ">=3.12"
+python = ">=3.12,<3.14"
 psycopg = ">=3.1"
 psycopg-pool = ">=3.1"
 psycopg-c = ">=3.1"
