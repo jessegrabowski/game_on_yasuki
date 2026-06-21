@@ -14,6 +14,13 @@
 .hidden { display: none !important; }
 
 html, body { height: 100%; }
+/* Reserve the scrollbar gutter so the ribbon doesn't shift between scrolling and non-scrolling
+   pages, and slim the scrollbar so the reserved gutter matches the deck builder's. */
+html { scrollbar-gutter: stable; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--line-strong); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   background: var(--paper);
