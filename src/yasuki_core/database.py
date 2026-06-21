@@ -936,6 +936,24 @@ def _build_card_filter(
         for property_name, value in filter_options.items():
             if property_name == "include":
                 continue  # consumed by the default-visibility filter below, not a column condition
+            elif property_name == "all":
+                continue  # the match-everything predicate adds no constraints
+            elif property_name == "_unknown_fields":
+                # An unrecognized search field makes the query unsatisfiable rather than silently
+                # matching everything or text-searching the value.
+                logger.warning("Unknown search field(s), returning no results: %s", value)
+                conditions.append("FALSE")
+            elif property_name in (
+                "name_contains",
+                "name_excludes",
+                "rules_text_contains",
+                "rules_text_excludes",
+            ):
+                column = "c.name" if property_name.startswith("name") else "c.rules_text"
+                op = "NOT ILIKE" if property_name.endswith("excludes") else "ILIKE"
+                for needle in value:
+                    conditions.append(f"{column} {op} %s ESCAPE '\\'")
+                    params.append(f"%{_escape_like(needle)}%")
             elif property_name == "legality":
                 formats, _statuses = value
                 if isinstance(formats, str):
