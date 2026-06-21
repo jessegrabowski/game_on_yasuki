@@ -126,8 +126,19 @@ jobs:
         with:
           node-version: "22"
 
-      - name: Run JS tests
-        run: node --test tests/yasuki_web/deck_builder/*.test.js
+      - name: Run JS tests with coverage
+        run: |
+          mkdir -p coverage
+          node --test --experimental-test-coverage --test-coverage-exclude='tests/**' \
+            --test-reporter=spec --test-reporter-destination=stdout \
+            --test-reporter=lcov --test-reporter-destination=coverage/coverage-js.lcov \
+            tests/yasuki_web/deck_builder/*.test.js
+
+      - name: Upload coverage file
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: coverage-js
+          path: coverage/coverage-js.lcov
 
   all-checks:
     if: ${{ always() }}
@@ -167,11 +178,28 @@ jobs:
           path: coverage
           merge-multiple: true
 
-      - name: Upload coverage to Codecov
+      # Move the JS lcov out so the Python upload's directory search sees only cobertura XMLs.
+      - name: Separate JS coverage from Python reports
+        run: |
+          mkdir -p coverage-js
+          mv coverage/coverage-js.lcov coverage-js/
+
+      - name: Upload Python coverage to Codecov
         uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           slug: jessegrabowski/game_on_yasuki
+          directory: coverage
+          flags: python
+
+      - name: Upload JS coverage to Codecov
+        uses: codecov/codecov-action@fb8b3582c8e4def4969c97caa2f19720cb33a72f # v7.0.0
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: jessegrabowski/game_on_yasuki
+          files: coverage-js/coverage-js.lcov
+          disable_search: true
+          flags: javascript
 
   docker:
     name: "Docker build"
