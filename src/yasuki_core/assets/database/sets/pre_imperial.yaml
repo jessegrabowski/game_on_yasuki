@@ -841,6 +841,7 @@ cards:
   text: <b>:bow::</b> Produce 3 Gold. <br><b>:bow::</b> Produce 5 Gold, which can only pay for a single
     Jade card.
   gold_cost: 3
+  gold_production: 3
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

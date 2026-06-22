@@ -978,6 +978,7 @@ cards:
   text: After you Recruit this Holding from a Province, refill the Province face-up.<br><b>:bow::</b>
     Produce 2 Gold.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

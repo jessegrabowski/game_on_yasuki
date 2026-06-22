@@ -395,6 +395,7 @@ cards:
     <b>Tactician</b>.<br><b>Battle:</b> Give your target opposed Personality a Force bonus equal to their
     Personal Honor.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -411,6 +412,7 @@ cards:
   - Dynasty
   text: ':bow:: Produce 2 Gold. <br><b>Battle, :bow::</b> Destroy this Holding to destroy a target Terrain.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Age of Conquest (Emperor)
   - Age of Enlightenment (Lotus)
@@ -576,6 +578,7 @@ cards:
   text: <b>:bow::</b> Produce 2 Gold. <br><b>Open:</b> If it is not your turn, target a Personality. Straighten
     his unit. Destroy this Holding.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -1443,6 +1446,7 @@ cards:
   - Dynasty
   text: <b>:bow::</b> Produce 2 Gold. <br><b>Open:</b> Give a Province +3 strength. Destroy this Holding.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -1468,6 +1472,7 @@ cards:
   text: 'Enters play for 1 less Gold if you are a Lion Clan player.<br>:bow:: Produce 5 Gold.<br><b>Limited,
     :bow::</b> Create a 1F <b>Ashigaru </b> Follower and attach it to your target Personality.'
   gold_cost: 6
+  gold_production: 5
   legality:
   - Age of Conquest (Emperor)
   - Legacy
@@ -1550,6 +1555,7 @@ cards:
   text: <b>:bow::</b> Produce 3 Gold.<br><b>Tireless Open:</b> Discard a Kiho or a Spell to straighten
     this Holding. <i>(Tireless actions may be taken even while bowed.)</i>
   gold_cost: 3
+  gold_production: 3
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -2180,6 +2186,7 @@ cards:
   text: <b>:bow::</b> Produce 1 Gold. <br><b>:bow::</b> When paying for a Holding, it enters play for
     2 less Gold.
   gold_cost: 1
+  gold_production: 1
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -2222,6 +2229,7 @@ cards:
   text: <i>(Fortifications attach to the Province from which they entered play.)</i><br>This Fortification
     enters play bowed. This Province has +2 strength.<br><b>:bow::</b> Produce 2 Gold.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -2344,6 +2352,7 @@ cards:
     2 Gold.<br><b>Open, :bow::</b> Transfer a Masterwork token from this Holding to a target Armor or
     Weapon without a Masterwork token.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -2884,6 +2893,7 @@ cards:
   text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited:</b> Discard a face-up card from one of your Provinces.
     Refill the Province with your target discarded <i>(not dead)</i> Personality. Destroy this Holding.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -2911,6 +2921,7 @@ cards:
   text: After you Recruit this Holding from a Province, refill the Province face-up.<br><b>:bow::</b>
     Produce 2 Gold.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -3695,6 +3706,7 @@ cards:
   text: May only be Recruited by a Crab Clan player.<br><b>Battle, :bow::</b> Give your target Personality
     +2F, or +4F if they are defending or outnumbered. You may take an additional action.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -4052,6 +4064,7 @@ cards:
   - Singular
   text: <b>Open:</b> If you have Compassion, draw a card.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -4393,6 +4406,7 @@ cards:
     Look at the top three cards of your Fate deck. You may take an additional action to Equip or discard
     one of them that is a Spell.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -4509,6 +4523,7 @@ cards:
   text: 'Courtesy: After you Recruit this Holding from a Province, refill the Province face-up. <i>(Courtesy
     traits do not take effect if you went first.)</i><br><b>:bow::</b> Produce 4 Gold.'
   gold_cost: 5
+  gold_production: 4
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -4533,6 +4548,7 @@ cards:
   text: <b>:bow::</b> Produce 3 Gold. <br><b>:bow::</b> Produce 5 Gold, which can only pay for a single
     Jade card.
   gold_cost: 3
+  gold_production: 3
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -4613,6 +4629,7 @@ cards:
   - Dynasty
   text: <b>:bow::</b> Produce 2 Gold. <br><b>Open, :bow::</b> Straighten your target Courtier.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -4838,6 +4855,7 @@ cards:
   text: May only be Recruited by a Crane Clan player.<br><b>Open, :bow::</b> Bow your target Personality
     to bow another player's target Personality with lower Chi.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -5245,6 +5263,7 @@ cards:
   - Shadowlands
   text: After you Recruit this Holding, lose 1 Honor.<br><b>:bow::</b> Produce 2 Gold and lose 1 Honor.
   gold_cost: 1
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -5451,6 +5470,7 @@ cards:
   text: <b>Battle, :g2::</b> A number of times per turn equal to the number of Retainers you control,
     give your target Follower or Personality +1F.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -5769,6 +5789,7 @@ cards:
   text: ':bow:: Produce 2 Gold.<br><b>Limited, :bow::</b> Create a 0F Follower and attach it to your target
     Personality.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Legacy
   - Modern
@@ -6058,6 +6079,7 @@ cards:
   text: <b>:bow::</b> Produce 1 Gold.<br><b>Open, :bow::</b> A target player shows a random card in his
     hand.<br><b>Open, :bow::</b> Turn a target card in another player's Province face-up.
   gold_cost: 1
+  gold_production: 1
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -6751,6 +6773,7 @@ cards:
     you Recruit this Holding, look at the top three cards of your Fate deck. Place zero to two of them
     at the bottom of your deck.
   gold_cost: 3
+  gold_production: 3
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -6800,6 +6823,7 @@ cards:
   text: <i>(Fortifications attach to the Province from which they entered play.)</i><br>Enters play unbowed.
     <br><b>Limited, :bow::</b> Gain 2 Honor.
   gold_cost: 5
+  gold_production: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -6826,6 +6850,7 @@ cards:
   text: <i>(<b>Repeatable Limited, :g2::</b> Discard a Kharmic card from your Province and refill it face-up.)</i><br><b>:bow::</b>
     Produce 4 Gold.
   gold_cost: 4
+  gold_production: 4
   legality:
   - A Brother's Destiny (Ivory Edition)
   - Age of Conquest (Emperor)
@@ -6933,6 +6958,7 @@ cards:
   - Legacy
   text: You must have at least 16 Holdings in your deck construction.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -7090,6 +7116,7 @@ cards:
   text: <b>:bow::</b> Produce 1 Gold.<br><b>Open, :bow::</b> Search your Fate deck for a Ring. Show it.
     Put it into your hand. Discard a card. Destroy this Holding.
   gold_cost: 1
+  gold_production: 1
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -7350,6 +7377,7 @@ cards:
   text: <b>:bow::</b> Produce 2 Gold. <br><b>Battle, :bow::</b> Target another player's Personality at
     any location who was moved home from the current battlefield. Straighten his unit and move him there.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -7479,6 +7507,7 @@ cards:
   text: '<b>Tireless Dynasty, :X::</b> Equip a target Follower from your hand to a target Personality
     you Recruited this turn, paying :g2: less.'
   gold_cost: 3
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -7784,6 +7813,7 @@ cards:
   text: You are considered to have +5 Family Honor when Lobbying checks Honor.<br><b>:bow::</b> Produce
     1 Gold.<br><b>Open, :bow::</b> Straighten a target Personality who Lobbied this turn.
   gold_cost: 1
+  gold_production: 1
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -7816,6 +7846,7 @@ cards:
     Personality home. As they move, straighten their unit and you may give a target Follower or Personality
     -3F.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -8009,6 +8040,7 @@ cards:
   text: <b>:bow::</b> Produce 5 Gold. <br><b>Political Limited, :bow::</b> If you control a Courtier or
     Magistrate, dishonor a target Personality.
   gold_cost: 6
+  gold_production: 5
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -8221,6 +8253,7 @@ cards:
   - Dynasty
   text: <b>:bow::</b> Produce 3 Gold.<br><b>Open, :bow::</b> Straighten a target Sensei.
   gold_cost: 3
+  gold_production: 3
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -8340,6 +8373,7 @@ cards:
     1 Honor.<br><b>Open, :bow::</b> Target a Personality. They contribute their Chi instead of their Force
     to their army's Force.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -8414,6 +8448,7 @@ cards:
   text: <b>:bow::</b> Produce 5 Gold. <br><b>Open:</b> Give your target Monk or Shugenja <b>Air</b>, <b>Earth</b>,
     <b>Fire</b>, or <b>Water</b>.
   gold_cost: 6
+  gold_production: 5
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -8742,6 +8777,7 @@ cards:
     <i>(if able)</i>. You may Recruit this Holding as a <b>Political Open</b> action.<br><b>:bow::</b>
     Produce 2 Gold.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -9116,6 +9152,7 @@ cards:
     Show the top card of your Fate deck. If its Focus Value is less than your target's Chi, draw it. Otherwise,
     put it at the bottom of your deck.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -9195,6 +9232,7 @@ cards:
     the action Recruits this Holding, give a Sincerity token to a Sincerity card without tokens in your
     Province.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -9586,6 +9624,7 @@ cards:
   - Retainer
   text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if it is not your turn.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

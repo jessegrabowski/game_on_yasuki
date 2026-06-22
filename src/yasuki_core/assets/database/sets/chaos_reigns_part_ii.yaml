@@ -417,6 +417,7 @@ cards:
     action was yours and Recruited a Fortification, bow this Holding or target your Siege Personality
     to give that Fortification a +1GP Wealth token.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -489,6 +490,7 @@ cards:
     transfer a Fortification attached to that Province to one of your other Provinces. If your Personality
     is Siege, straighten them.'
   gold_cost: 4
+  gold_production: 4
   is_unique: true
   legality:
   - Shattered Empire
@@ -868,6 +870,7 @@ cards:
   text: After this Holding enters play, put zero to four cards in your Provinces at the bottom of your
     deck, refilling the Provinces face-up.<br>This Holding has +1GP if your Wind is Kano's Alliance.
   gold_cost: 3
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -913,6 +916,7 @@ cards:
   - Farm
   text: <b>Open, :bow::</b> Give your target Farm Holding +2GP.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -1024,6 +1028,7 @@ cards:
   text: After your action discards a card from another player's hand or banishes a card from their discard
     pile, once per turn, give this Holding a +1GP Wealth token.
   gold_cost: 2
+  gold_production: 1
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -1114,6 +1119,7 @@ cards:
   text: This Holding will not have more than four Wealth tokens.<br>After your turn begins, give this
     Holding a +1GP Wealth token.
   gold_cost: 2
+  gold_production: 0
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -1918,6 +1924,7 @@ cards:
   - Farm
   text: After this Holding enters play, give zero to two other Farm Holdings a +1GP Wealth token.
   gold_cost: 3
+  gold_production: 2
   legality:
   - Shattered Empire
   rarity: Fixed

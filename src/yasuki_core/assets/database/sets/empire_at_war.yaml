@@ -782,6 +782,7 @@ cards:
   text: ':bow:: Produce 2 Gold, plus 1 Gold if you control one or more Ports, plus 1 Gold if you control
     one or more other Markets.'
   gold_cost: 3
+  gold_production: 2
   legality:
   - Destroyer War (Celestial)
   - Legacy

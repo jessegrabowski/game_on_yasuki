@@ -344,6 +344,7 @@ cards:
   - Dynasty
   text: ':bow:: Produce 2 Gold. <br><b>Battle, :bow::</b> Destroy this Holding to destroy a target Terrain.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Age of Conquest (Emperor)
   - Age of Enlightenment (Lotus)
@@ -3103,6 +3104,7 @@ cards:
   text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited:</b> Discard a face-up card from one of your Provinces.
     Refill the Province with your target discarded <i>(not dead)</i> Personality. Destroy this Holding.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -9497,6 +9499,7 @@ cards:
     the top four cards of your Fate deck. You may show one of those cards that is of the type you named,
     then put it in your hand.'
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Age of Conquest (Emperor)

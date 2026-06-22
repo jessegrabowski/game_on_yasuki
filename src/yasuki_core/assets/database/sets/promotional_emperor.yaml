@@ -827,6 +827,7 @@ cards:
   text: 'Enters play for 1 less Gold if you are a Lion Clan player.<br>:bow:: Produce 5 Gold.<br><b>Limited,
     :bow::</b> Create a 1F <b>Ashigaru </b> Follower and attach it to your target Personality.'
   gold_cost: 6
+  gold_production: 5
   legality:
   - Age of Conquest (Emperor)
   - Legacy
@@ -2588,6 +2589,7 @@ cards:
   - Dynasty
   text: <b>:bow::</b> Produce 2 Gold. <br><b>Open, :bow::</b> Straighten your target Courtier.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

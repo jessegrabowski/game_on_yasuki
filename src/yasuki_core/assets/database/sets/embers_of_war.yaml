@@ -3329,6 +3329,7 @@ cards:
   text: <b>:bow::</b> Produce 5 Gold. <br><b>Open:</b> Give your target Monk or Shugenja <b>Air</b>, <b>Earth</b>,
     <b>Fire</b>, or <b>Water</b>.
   gold_cost: 6
+  gold_production: 5
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

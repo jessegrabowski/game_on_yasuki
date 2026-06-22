@@ -363,6 +363,7 @@ cards:
   - Kharmic
   text: May not be Recruited if you have a Wind.
   gold_cost: 6
+  gold_production: 6
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -566,6 +567,7 @@ cards:
     with your Clan Alignment.<br><b>Tireless Response:</b> After the action Recruits this Holding, bow
     your target Courtier to make a target player gain or lose 1 Honor.'
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -585,6 +587,7 @@ cards:
     <b>Expendable</b> Personality. Until the game ends, if this Holding is ever unbowed, banish the Personality.
     Lose 1 Honor.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1212,6 +1215,7 @@ cards:
   text: <b>Engage, :bow::</b> The Attacker must target and bow one of their unbowed Personalities. You
     may target your Naga Personality to straighten this Holding.
   gold_cost: 4
+  gold_production: 4
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1369,6 +1373,7 @@ cards:
     controlled the Personalities when they were destroyed gains 1 Honor <i>(including you if any were
     yours)</i>.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1567,6 +1572,7 @@ cards:
     their Fate deck for a Follower and cannot choose to have the search fail. If they find one, they must
     show it, and you choose if it is discarded or put in their hand.
   gold_cost: 3
+  gold_production: 3
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1642,6 +1648,7 @@ cards:
   text: <b>Open, :bow::</b> Destroy this Holding to draw a card. If you <i>(now)</i> have fewer cards
     in your hand than all other players or control any Rings, you may draw an additional card.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2576,6 +2583,7 @@ cards:
     hand.<br><b>Open, :bow::</b> Discard a card to draw an additional card at the end of the turn, or
     two if you control any :shadowlands: Rings.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2669,6 +2677,7 @@ cards:
     paid for this trait.<br><b>Engage, :bow::</b> Give this Province a strength bonus equal to the number
     of Wealth tokens on this Holding.'
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2706,6 +2715,7 @@ cards:
   text: <b>Political Open, :bow:, :g3::</b> Look at the top card of any player's Fate deck. Draw it if
     it is yours; otherwise, discard it. Lose 1 Honor unless your Wind is House of Suikihime.
   gold_cost: 3
+  gold_production: 3
   is_unique: true
   legality:
   - Shattered Empire
@@ -2786,6 +2796,7 @@ cards:
   text: <b>Battle, :bow::</b> Give <b>Expendable</b> to a target Personality or to one or two target Followers.
     Each player who controls the targets loses 1 Honor.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2976,6 +2987,7 @@ cards:
     :g4: :</b> Destroy this Holding and lose 2 Honor to create a 3F/1C/0PH :shadowlands: • Nonhuman •
     Oni Personality with this Holding''s <b>Battle</b> ability.'
   gold_cost: 3
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3029,6 +3041,7 @@ cards:
   text: 'This Holding counts as a Ring for actions while in play.<br><b>Open:</b> Give this Holding :air:,
     :earth:, :fire:, :void:, or :water: <i>(until the end of the turn).</i>'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3584,6 +3597,7 @@ cards:
   text: '<b>Engage, :X: : </b> Recruit this Holding.<br><b>Tireless Response:</b> After the action Recruits
     this Holding, the player who controls :favor: discards it.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)

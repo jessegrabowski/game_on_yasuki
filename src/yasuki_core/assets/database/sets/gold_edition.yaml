@@ -5218,6 +5218,7 @@ cards:
   text: <b>:bow::</b> Produce 3 Gold. <br><b>:bow::</b> Produce 5 Gold, which can only pay for a single
     Jade card.
   gold_cost: 3
+  gold_production: 3
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -7778,6 +7779,7 @@ cards:
   text: <i>(Fortifications attach to the Province from which they entered play.)</i><br>Enters play unbowed.
     <br><b>Limited, :bow::</b> Gain 2 Honor.
   gold_cost: 5
+  gold_production: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

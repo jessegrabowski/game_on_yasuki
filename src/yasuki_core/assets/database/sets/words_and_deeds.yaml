@@ -2211,6 +2211,7 @@ cards:
   text: ':bow:: Produce 2 Gold.<br><b>Limited, :bow::</b> Create a 0F Follower and attach it to your target
     Personality.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Legacy
   - Modern

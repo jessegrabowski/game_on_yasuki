@@ -6241,6 +6241,7 @@ cards:
   text: 'Invest :g2:: Give this Holding two +1GP Wealth tokens. <i>(Entering play, permanently increase
     the Gold Cost by the Invest cost to get the effect.)</i>'
   gold_cost: 1
+  gold_production: 1
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
