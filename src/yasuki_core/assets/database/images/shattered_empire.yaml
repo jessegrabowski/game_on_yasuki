@@ -2382,3 +2382,27 @@ images:
   - role: front
     file: zenathaar.jpg
     sha256: 29f40b56d0bfc1222f3bb6798642deea94a5a7def1d3c01a210b7e69f90455c1
+- card_id: weapon_artist
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: weapon_artist.jpg
+    sha256: 753f2d11021f1a102e7e2f3fd000adfe118c3a689a56eead80688f827dc79d3a
+- card_id: black_riders
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: black_riders.jpg
+    sha256: 56216b8f93fab2c2e0e4c015cbcca5cc424193ae6642fe5d5a8f746e44b331bd
+- card_id: a_paragons_strength
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: a_paragons_strength.jpg
+    sha256: 38068a938c44ea88a9f9805c6b1c2ce28f5c35dd2270ebd3df442127e004907e
+- card_id: rend_the_soul
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: rend_the_soul.jpg
+    sha256: b29d69e8868cf866fc73c5fe7a5043aa2e92f9482f4526c93156461a84bdbf23

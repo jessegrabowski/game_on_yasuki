@@ -3264,3 +3264,49 @@ cards:
   collector_number: '125'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Ancestral Sword of Hantei
+  extended_title: The Ancestral Sword of Hantei • Experienced 2
+  types:
+  - Item
+  decks:
+  - Fate
+  keywords:
+  - Imperial
+  - Sword
+  - Two-Handed
+  - Experienced 2
+  - Unique
+  - Weapon
+  text: 'May only be controlled by a player whose Wind is The Kanpeki Dynasty. This Item has +1F/+2C while you control
+    :favor:. Battle, :bow:: Destroy a target enemy card with a lower Gold Cost. If it was a Personality, take :favor:.'
+  gold_cost: 7
+  focus: 4
+  force: '+2'
+  chi: '+1'
+  is_unique: true
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  collector_number: '91'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Poisoned Weapon
+  extended_title: Poisoned Weapon • Experienced
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Ninja
+  - Experienced
+  text: 'As a Focus Effect, give the Personality facing yours in the duel two -1F/-1C Poison tokens and lose 3 Honor.
+    Battle: Bow your target Ninja to give a target enemy Personality two -1F/-1C Poison tokens and lose 3 Honor.'
+  gold_cost: 0
+  focus: 1
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: A simple scratch. The rest is silence.
+  collector_number: '117'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home

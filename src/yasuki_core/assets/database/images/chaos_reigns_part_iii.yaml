@@ -798,3 +798,15 @@ images:
   - role: front
     file: zealotry.jpg
     sha256: a3b04a2da84cba25df553d935c8196829cf5d6f33eb3561cc65650406ded8927
+- card_id: the_ancestral_sword_of_hantei_experienced_2
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: the_ancestral_sword_of_hantei_experienced_2.jpg
+    sha256: 94b613389212f7695059b810af7167ebeebe8e0ae7e3812e60644b4b04a04cb4
+- card_id: poisoned_weapon_experienced
+  printing_id: chaos_reigns_part_iii
+  files:
+  - role: front
+    file: poisoned_weapon_experienced.jpg
+    sha256: f09df6eeeb804c7b3b321f66c822e4a271bb304ecc0f95f46122228db1db3266

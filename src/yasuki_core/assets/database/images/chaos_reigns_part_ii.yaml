@@ -483,3 +483,15 @@ images:
   - role: front
     file: yumi_of_the_void.jpg
     sha256: 914a51e00b36c1eaa2abb31b06eec6a82cc78067528e0bdd3b6c0af94947dc76
+- card_id: asahina_akikusa_experienced
+  printing_id: chaos_reigns_part_ii
+  files:
+  - role: front
+    file: asahina_akikusa_experienced.jpg
+    sha256: 9958e486c3d6c02d7e0689a0181b912b7eeb7fde48b28f37a0fa996a0b711158
+- card_id: kichigai
+  printing_id: chaos_reigns_part_ii
+  files:
+  - role: front
+    file: kichigai.jpg
+    sha256: aa0b48dcb90a6c101d24f3fcc7c9ff958c18a7531618d2a33cad1ae82ea50310
