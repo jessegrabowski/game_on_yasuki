@@ -26,6 +26,15 @@ class TestFieldNormalization:
         assert normalize_field_name("hr") == "honor_requirement"
         assert normalize_field_name("province") == "province_strength"
 
+    def test_normalize_stat_abbreviations(self):
+        assert normalize_field_name("gc") == "gold_cost"
+        assert normalize_field_name("gp") == "gold_production"
+        assert normalize_field_name("fc") == "focus"
+        assert normalize_field_name("ch") == "chi"
+        assert normalize_field_name("ps") == "province_strength"
+        assert normalize_field_name("sh") == "starting_honor"
+        assert normalize_field_name("fh") == "starting_honor"
+
     def test_normalize_case_insensitive(self):
         assert normalize_field_name("FORCE") == "force"
         assert normalize_field_name("Force") == "force"
@@ -516,7 +525,14 @@ class TestEndToEnd:
         assert filters == {"rules_text_excludes": ["bow"]}
 
     def test_unknown_stat_inequality_is_unsatisfiable(self):
-        # The reported bug: gc>5 used to dump "5" into a text search; it must not.
+        # The reported bug: an unknown field inequality used to dump the value into a text search
+        # (xyz>5 matching cards containing "5"); it must become unsatisfiable instead.
+        text, filters = parse_and_build_query("xyz>5")
+        assert text == ""
+        assert filters["_unknown_fields"] == ["xyz"]
+
+    def test_stat_abbreviation_inequality(self):
+        # gc is now a real alias for gold_cost, so gc>5 is a proper numeric filter, not unknown.
         text, filters = parse_and_build_query("gc>5")
         assert text == ""
-        assert filters["_unknown_fields"] == ["gc"]
+        assert filters["gold_cost"] == (6, None)
