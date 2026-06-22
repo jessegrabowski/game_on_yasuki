@@ -2032,3 +2032,54 @@ cards:
   collector_number: '64'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Asahina Akikusa
+  extended_title: Asahina Akikusa • Experienced
+  types:
+  - Personality
+  decks:
+  - Dynasty
+  clans:
+  - Crane
+  keywords:
+  - Courtier
+  - Daimyo
+  - Shugenja
+  - Experienced
+  - Loyal
+  - Unique
+  text: 'Before a battle''s resolution, if Akikusa is in your current defending army, the resolution will not destroy
+    your other Personalities (attachments are still destroyed). Unstoppable Battle: Destroy Akikusa to move home
+    one or two target attacking Personalities with lower Personal Honor.'
+  gold_cost: 8
+  force: 2
+  chi: 4
+  honor_requirement: 8
+  personal_honor: 4
+  is_unique: true
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  collector_number: '18'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Kichigai
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Berserker
+  text: 'Invest :gc1:: Permanently give this Follower Cavalry. After Kichigai enters play, lose 1 Honor unless it
+    is attached to a Berserker. While Kichigai is opposed at the current battlefield, after you pass your opportunity
+    to take a Battle action, give its :melee: +1 strength to a maximum of 3 and give it +1F. Battle, :bow::melee:
+    2.'
+  gold_cost: 3
+  focus: 1
+  force: 2
+  chi: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  collector_number: '55'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home

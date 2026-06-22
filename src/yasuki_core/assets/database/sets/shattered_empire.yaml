@@ -10174,3 +10174,79 @@ cards:
   collector_number: '68'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Weapon Artist
+  types:
+  - Holding
+  decks:
+  - Dynasty
+  keywords:
+  - Mine
+  - Retainer
+  text: 'Open, :bow:: Create a +2F/+1C One-Handed Sword Weapon item and Equip it to your target Personality.'
+  gold_cost: 7
+  gold_production: 6
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: '"I have no use for poems, paintings, or sculptures. I cannot dance or sing. But I can make steel
+    that could draw blood from the air itself."'
+  collector_number: '53'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Black Riders
+  types:
+  - Follower
+  decks:
+  - Fate
+  keywords:
+  - Cavalry
+  text: 'Open: Straighten another player''s target Holding with Gold Cost equal to or lower than this Follower''s
+    Force. You, and not its controller, may use its Gold Production (this turn) as if you controlled it.'
+  gold_cost: 5
+  focus: 3
+  force: 2
+  chi: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  collector_number: '211'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: A Paragon's Strength
+  types:
+  - Strategy
+  decks:
+  - Fate
+  keywords:
+  - Bushido Virtue
+  - Dark Virtue
+  text: 'Battle: Target your unbowed Paragon. Make a :ranged: with strength equal to their Force. Lose 4 Honor.
+    Battle: Target your unbowed Paragon. Move home a target enemy Personality with equal or lower Personal Honor.
+    Gain 2 Honor.'
+  gold_cost: 0
+  focus: 2
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: '"Perhaps in another lifetime."'
+  collector_number: '283'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: Rend the Soul
+  types:
+  - Strategy
+  decks:
+  - Fate
+  text: 'As a Focus Effect, raise this card''s Focus Value to 5, and if you win this duel, you lose instead (the
+    other player still also loses). Battle: Give your target Personality +5F. This Attack Phase, you cannot destroy
+    Provinces, and during battle resolution, if your target is in the winning army, the battle is tied instead.'
+  gold_cost: 0
+  focus: 0
+  legality:
+  - Shattered Empire
+  rarity: Fixed
+  flavor_text: His heart convulsed as the forces within him tore at the very fibers of his being. All he could do
+    was scream.
+  collector_number: '331'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
