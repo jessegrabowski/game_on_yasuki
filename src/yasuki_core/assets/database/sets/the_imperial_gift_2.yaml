@@ -270,6 +270,7 @@ cards:
   - Dynasty
   text: <b>:bow::</b> Produce 2 Gold. <br><b>Open:</b> Give a Province +3 strength. Destroy this Holding.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

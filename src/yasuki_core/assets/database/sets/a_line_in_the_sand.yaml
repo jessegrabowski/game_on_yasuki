@@ -2490,6 +2490,7 @@ cards:
   text: <b>:bow::</b> Produce 1 Gold.<br><b>Open, :bow::</b> A target player shows a random card in his
     hand.<br><b>Open, :bow::</b> Turn a target card in another player's Province face-up.
   gold_cost: 1
+  gold_production: 1
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -4053,6 +4054,7 @@ cards:
     <i>(if able)</i>. You may Recruit this Holding as a <b>Political Open</b> action.<br><b>:bow::</b>
     Produce 2 Gold.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

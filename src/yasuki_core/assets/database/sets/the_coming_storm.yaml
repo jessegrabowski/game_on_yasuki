@@ -912,6 +912,7 @@ cards:
   text: <i>(Fortifications attach to the Province from which they entered play.)</i><br>This Fortification
     enters play bowed. This Province has +2 strength.<br><b>:bow::</b> Produce 2 Gold.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -2924,6 +2925,7 @@ cards:
   text: You are considered to have +5 Family Honor when Lobbying checks Honor.<br><b>:bow::</b> Produce
     1 Gold.<br><b>Open, :bow::</b> Straighten a target Personality who Lobbied this turn.
   gold_cost: 1
+  gold_production: 1
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -3279,6 +3281,7 @@ cards:
   - Dynasty
   text: <b>:bow::</b> Produce 3 Gold.<br><b>Open, :bow::</b> Straighten a target Sensei.
   gold_cost: 3
+  gold_production: 3
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

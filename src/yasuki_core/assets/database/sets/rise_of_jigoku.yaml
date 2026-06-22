@@ -48,6 +48,7 @@ cards:
   text: <br><b>Battle, :bow::</b> Give a target enemy Follower or Personality -2F. If you targeted a Personality,
     their controller may bow one of the target's attachments to destroy this Holding.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -806,6 +807,7 @@ cards:
     during resolution even if bowed)</i>. After the target is moved or destroyed by another player's action
     during this Combat Segment, destroy this Holding.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -888,6 +890,7 @@ cards:
     Personality.<br><b>Tireless Battle, :X::</b> Destroy this Holding to Equip a target attachment from
     your discard pile to your target Personality, paying :g2: less if it is an Item.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -971,6 +974,7 @@ cards:
   - Farm
   text: <br><b>Open, :bow::</b> Destroy this Holding to give your other Farm Holdings +1GP <i>(this turn)</i>.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1014,6 +1018,7 @@ cards:
     <i>(this turn)</i>. Move them there. If they are now opposed, give them a Force bonus equal to their
     Personal Honor. Destroy this Holding.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1214,6 +1219,7 @@ cards:
     the current battlefield. Target your Personality at home. If they would be opposed, move them to the
     current battlefield. If they are a Berserker, negate their current and new Force penalties.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1772,6 +1778,7 @@ cards:
     they did not choose this, remove the target''s abilities <i>(this turn; Gold Production is not an
     ability)</i>.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1862,6 +1869,7 @@ cards:
   text: This Province has +3PS. Before this Province is destroyed, banish this card to distribute three
     +1PS tokens among your other Provinces.
   gold_cost: 6
+  gold_production: 6
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2007,6 +2015,7 @@ cards:
   text: <br><b>Open, :bow:, :X::</b> Target a Holding in your Province and give it <b>Renew</b> if it
     is a Farm. Recruit the target. You may destroy this Holding to straighten the target.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2377,6 +2386,7 @@ cards:
   text: 'You may bow your target Naga Personality to pay this Holding''s Invest cost.<br>Invest :g3::
     Create a :pearl: Strategy.'
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2476,6 +2486,7 @@ cards:
     token.<br><b>Tireless Open:</b> Remove a Wealth token from this Holding to straighten your target
     Farm that has not produced Gold this turn.
   gold_cost: 1
+  gold_production: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2494,6 +2505,7 @@ cards:
   text: <b>Open:</b> If it is your turn, bow your target unbowed Personality and destroy your target Farm.
     Draw a card. If the total Gold cost of your targeted cards was 7 or lower, discard a card.
   gold_cost: 6
+  gold_production: 5
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2514,6 +2526,7 @@ cards:
     two or more tokens, give this Holding a +1GP Wealth token.<br>When paying for a single Item only,
     this Holding has +1GP, and an additional +1GP if the Item costs 6 or more.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2621,6 +2634,7 @@ cards:
   text: <b>Open, :bow::</b> Give your target Personality <b>Cavalry.</b> You may destroy this Holding
     to create and Equip a 1F <b>Cavalry</b> Follower to the target.
   gold_cost: 3
+  gold_production: 3
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2989,6 +3003,7 @@ cards:
   text: <br>After this Holding is discarded from a Kharmic action, you may refill this Province with your
     target discarded <i>(not dead)</i> Personality.
   gold_cost: 3
+  gold_production: 3
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3009,6 +3024,7 @@ cards:
     the top four cards of your Fate deck. You may show one of those cards that is of the type you named,
     then put it in your hand.'
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Age of Conquest (Emperor)
@@ -3683,6 +3699,7 @@ cards:
     before it destroys your target Holding or Personality, it destroys this Holding instead. Discard a
     card unless the target is a Farm.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)

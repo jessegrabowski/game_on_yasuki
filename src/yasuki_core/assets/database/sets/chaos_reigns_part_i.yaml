@@ -251,6 +251,7 @@ cards:
   text: <b>Response:</b> If the action was yours and discarded a Fate card, give this Holding a +1GP Wealth
     token if it has fewer than 3.
   gold_cost: 4
+  gold_production: 3
   legality:
   - Shattered Empire
   errata_text: 'Functional errata to add an explicit condition to the <b>Response</b> trigger: <a target="_new"
@@ -332,6 +333,7 @@ cards:
     choose)</i>, to a maximum of 2.<br><b>Open: :bow::</b> Destroy this Holding to dishonor or rehonor
     a target Personality.'
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -411,6 +413,7 @@ cards:
   text: After this Holding enters play, discard the top card of your Fate deck to give this Holding one
     +1GP Wealth token, or two if the Focus Value of the discard was odd.
   gold_cost: 3
+  gold_production: 2
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -689,6 +692,7 @@ cards:
     remains bowed, the target cannot assign or be targeted by actions, abilities from cards in their unit
     cannot be taken, and after your turn begins, give the Personality a +1F/+1C token.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -1201,6 +1205,7 @@ cards:
   - Legacy
   text: Your Stronghold's printed abilities have <b>Tireless</b> while this Holding is unbowed.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   rarity: Fixed

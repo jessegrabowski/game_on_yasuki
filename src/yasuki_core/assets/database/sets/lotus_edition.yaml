@@ -366,6 +366,7 @@ cards:
   - Dynasty
   text: ':bow:: Produce 2 Gold. <br><b>Battle, :bow::</b> Destroy this Holding to destroy a target Terrain.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Age of Conquest (Emperor)
   - Age of Enlightenment (Lotus)

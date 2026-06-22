@@ -507,6 +507,7 @@ cards:
   text: <b>Open, :bow::</b> Target a player, who must target and bow one of their unbowed Personalities.
     Lose 2 Honor.
   gold_cost: 4
+  gold_production: 3
   is_unique: true
   legality:
   - Shattered Empire
@@ -534,6 +535,7 @@ cards:
     :bow::</b> If the action was from another player's Holding, target two of their Holdings and give
     each a -1GP token. Lose 2 Honor.
   gold_cost: 4
+  gold_production: 3
   is_unique: true
   legality:
   - Shattered Empire
@@ -561,6 +563,7 @@ cards:
     player takes an action that targets a card in one of their units, or is from such a card, which also
     targets one of your cards, banish a card without attachments in that player's unit. Lose 2 Honor.
   gold_cost: 4
+  gold_production: 3
   is_unique: true
   legality:
   - Shattered Empire
@@ -588,6 +591,7 @@ cards:
     After each time you pass your opportunity to take a Battle action during battle at a target Province,
     you may target and give your attacking Personality there +1F, or +3F if they are opposed.
   gold_cost: 4
+  gold_production: 3
   is_unique: true
   legality:
   - Shattered Empire
@@ -1125,6 +1129,7 @@ cards:
   text: <b>Open, :bow::</b> Target your Follower with 1 or more Force or, if your Sensei is Seiki Allegiance,
     your Wealth token. Destroy the target to draw a card.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   story: A New Alliance 2024 Top Mantis – Jonny Hinkle
@@ -1396,6 +1401,7 @@ cards:
     Personality that did not attack this turn.<br><b>Political Open, :bow:, :favor: :</b> Discard a face-up
     card in a target Province and refill it face-up.'
   gold_cost: 4
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -1421,6 +1427,7 @@ cards:
   text: 'Your deck may not include :shadowlands: Oracles. Your Provinces have +1 strength while this Holding
     is unbowed.<br><b>Interrupt, :bow::</b> If you are the Defender, negate the action''s effects.'
   gold_cost: 5
+  gold_production: 4
   is_unique: true
   legality:
   - Shattered Empire
@@ -1447,6 +1454,7 @@ cards:
     able)</i>.<br><b>Interrupt, :bow::</b> If the action creates a challenge, Focus Effects do not resolve
     during it.'
   gold_cost: 4
+  gold_production: 3
   is_unique: true
   legality:
   - Shattered Empire
@@ -1473,6 +1481,7 @@ cards:
     able)</i>. Create and put into play a :water: Terrain Strategy with the trait "This Province has -1PS
     for each of your opposed Personalities."'
   gold_cost: 5
+  gold_production: 4
   is_unique: true
   legality:
   - Shattered Empire
@@ -1796,6 +1805,7 @@ cards:
     Effects from or upon it are treated as if you have Compassion.<br><b>Interrupt, :bow::</b> You have
     Compassion while the action is resolving and, if it brings any cards into play, until after they enter.'
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -1820,6 +1830,7 @@ cards:
   text: '<b>Interrupt, :bow::</b> If the action has any :fear: effects, give one such effect +2 or -2
     strength. This is considered to be the rulebook Courage ability.'
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -1842,6 +1853,7 @@ cards:
   text: 'Courtesy: This Holding has -3GC and <b>Legacy</b>.<br><b>Open, :bow::</b> Banish this Holding
     to turn your Stronghold over.'
   gold_cost: 4
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -1866,6 +1878,7 @@ cards:
   text: <b>Interrupt, :bow::</b> If the action is the rulebook Duty ability, ignore discarding a card
     for it.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -1887,6 +1900,7 @@ cards:
   text: <b>Interrupt, :bow::</b> If the action has an Honesty effect which will resolve, you may resolve
     that effect an additional time <i>(if possible)</i>.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -1908,6 +1922,7 @@ cards:
   text: <b>Interrupt, :bow::</b> If the action has any Honor gains or losses, increase or reduce one such
     gain or loss by 1. This is considered to be the rulebook Honor ability.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -1930,6 +1945,7 @@ cards:
     it.<br><b>Dynasty, :bow::</b> Give a Sincerity token to a Sincerity card in your Province with no
     Sincerity tokens.
   gold_cost: 2
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire

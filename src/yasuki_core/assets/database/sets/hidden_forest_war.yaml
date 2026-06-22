@@ -270,6 +270,7 @@ cards:
     refill it face-up. If this discarded a Forest, you may instead refill the Province with a discarded
     <i>(not dead)</i> non-Shadowlands Nonhuman Personality in your discard pile.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Shattered Empire

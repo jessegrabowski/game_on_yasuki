@@ -200,6 +200,7 @@ cards:
   text: ':bow:: Produce 2 Gold.<br>:bow:: When paying for a Follower, Unaligned Samurai, or Toturi''s
     Army Personality, if you are a Toturi''s Army player, produce 4 Gold which may only pay for that card.'
   gold_cost: 3
+  gold_production: 2
   legality:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)

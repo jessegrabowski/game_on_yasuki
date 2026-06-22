@@ -3650,6 +3650,7 @@ cards:
   - Retainer
   text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if it is not your turn.
   gold_cost: 2
+  gold_production: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

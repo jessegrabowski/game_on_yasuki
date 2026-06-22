@@ -48,6 +48,7 @@ cards:
     while you control :favor:. Actions from your non-variable cost Strategies cost :g1: less, to a minimum
     of :g1:.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   errata_text: 'Errata to add minimum of :g1: to the cost reduction: <a target="_new" href="https://sites.google.com/view/the-onyx-lives-project/errata-and-updates/april-2026-errata-and-new-community-contributor-art">10
@@ -569,6 +570,7 @@ cards:
     that player. Before this turn ends, if they did not assign any Personalities to attack you this turn,
     they lose 3 Honor.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -701,6 +703,7 @@ cards:
   text: 'This Holding enters play for :g1: less if your Wind is The Kanpeki Dynasty.<br><b>Open:</b> If
     it is your turn, target your Personality. <i>They tour the gardens.</i> Give them +1C. Gain 1 Honor.'
   gold_cost: 3
+  gold_production: 2
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -903,6 +906,7 @@ cards:
   text: May only be Recruited by a player whose Wind is The Kanpeki Dynasty.<br><b>Open:</b> If it is
     your turn, take :favor:.<br><b>Dynasty:</b> Gain 1 Honor.
   gold_cost: 1
+  gold_production: 1
   is_unique: true
   legality:
   - Shattered Empire
@@ -1519,6 +1523,7 @@ cards:
     a 1F Nonhuman • Undead • :shadowlands: Follower and attach it to your target Personality. Lose 5 Honor
     if the target is not :shadowlands:.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -1564,6 +1569,7 @@ cards:
     from your discard pile.<br><b>Tireless Response:</b> If the action attached a Fortification, give
     its Province a +1PS token.
   gold_cost: 3
+  gold_production: 3
   is_unique: true
   legality:
   - Shattered Empire
@@ -1982,6 +1988,7 @@ cards:
   text: 'This Holding enters play for :g1: less Gold if you control another Merchant Caravan.<br><b>Open,
     :bow: :</b> Draw a card.'
   gold_cost: 5
+  gold_production: 5
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -2120,6 +2127,7 @@ cards:
     all enemy Personalities at this battlefield -2F. You may move your target Personality at any location
     home or to this battlefield.'
   gold_cost: 5
+  gold_production: 4
   is_unique: true
   legality:
   - Shattered Empire
@@ -2391,6 +2399,7 @@ cards:
     effect failed because they already had the chosen keyword, straighten them or create a 1F <b>Cavalry</b>
     Follower with that keyword and attach it to them.
   gold_cost: 3
+  gold_production: 3
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -2627,6 +2636,7 @@ cards:
     more.<br><b>Open, :bow::</b> A target player with more cards in their hand than you must discard a
     card.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -2929,6 +2939,7 @@ cards:
   text: <b>Open :</b> Destroy this Holding to search your Dynasty deck and discard pile for an Event.
     You may refill your target Province with it, face-up, discarding any card currently there.
   gold_cost: 3
+  gold_production: 3
   is_unique: true
   legality:
   - Shattered Empire

@@ -1028,6 +1028,7 @@ cards:
   text: Fine Silk Merchant has +1GP for each action you have resolved this turn from your Retainers, to
     a maximum of +2GP.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1046,6 +1047,7 @@ cards:
   text: <b>Battle, :bow::</b> If you are the Defender, destroy this Holding to straighten your target
     Personality's unit.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1102,6 +1104,7 @@ cards:
   text: <b>Interrupt, :bow:, :g2::</b> If the action is from a Personality, lose 2 Honor and destroy this
     Holding to negate its effects.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1427,6 +1430,7 @@ cards:
   text: '<b>Economic Battle, :bow::</b> Bow a target enemy card without attachments. That card''s controller
     may pay :g4: or discard :favor: to straighten it as a <b>Response</b> to this action.'
   gold_cost: 3
+  gold_production: 3
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1857,6 +1861,7 @@ cards:
   text: <b>Battle/Engage:</b> Reshuffle this Holding into your Dynasty deck to put a target Follower or
     Item from your discard pile into your hand.
   gold_cost: 1
+  gold_production: 1
   legality:
   - War of the Seals (Onyx Edition)
   - Shattered Empire
@@ -2332,6 +2337,7 @@ cards:
   text: Before this Holding bows to produce Gold, you may give it +2GP; if you did, destroy it after it
     bows.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2505,6 +2511,7 @@ cards:
   text: ':ranged: from your Followers and Personalities have +1 strength while you are the Defender, to
     a maximum of +3 <i>(from this effect).</i>'
   gold_cost: 3
+  gold_production: 3
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2611,6 +2618,7 @@ cards:
     and they are being Proclaimed, their controller may choose to give them <b>Renew</b> and reduce the
     Honor gain to 0; if they did not choose this, the Personality enters play bowed.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2880,6 +2888,7 @@ cards:
   text: After this Holding is discarded from a Kharmic action, bow a target card without attachments in
     a unit.
   gold_cost: 3
+  gold_production: 3
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3122,6 +3131,7 @@ cards:
     Follower from your hand to your target opposed Personality, paying :g2: less if if the Follower has
     Courage or the Personality has another Courage Follower attached.'
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3164,6 +3174,7 @@ cards:
     have -1 strength.<br><b>Open, :bow::</b> Banish a target Experienced or Unique Personality in a Province
     and refill it, face-up. Destroy this Holding if you did not own the target.'
   gold_cost: 3
+  gold_production: 2
   is_unique: true
   legality:
   - Shattered Empire
@@ -3424,6 +3435,7 @@ cards:
   text: <b>Tireless Response:</b> After the action Recruits this Holding, straighten your target Personality's
     unit.<br><b>Open, :bow::</b> Straighten your target card.
   gold_cost: 6
+  gold_production: 5
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3442,6 +3454,7 @@ cards:
   text: <b>Tireless Open:</b> Turn a face-down Honesty card in your hand face-up.<br><b>Battle, :bow::</b>
     Negate your target Personality's current Force penalties.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3645,6 +3658,7 @@ cards:
   text: <b>Tireless Response:</b> If the action was from your Retainer Holding during a battle, straighten
     that Holding.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3662,6 +3676,7 @@ cards:
   - Mine
   text: Before this Holding bows to produce Gold, you may bow another of your Mines to give this one +3GP.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)

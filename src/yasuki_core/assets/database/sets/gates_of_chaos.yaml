@@ -2541,6 +2541,7 @@ cards:
   text: <i>(<b>Repeatable Limited, :g2::</b> Discard a Kharmic card from your Province and refill it face-up.)</i><br><b>:bow::</b>
     Produce 4 Gold.
   gold_cost: 4
+  gold_production: 4
   legality:
   - A Brother's Destiny (Ivory Edition)
   - Age of Conquest (Emperor)

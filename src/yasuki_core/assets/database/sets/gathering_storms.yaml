@@ -39,6 +39,7 @@ cards:
   - Unique
   text: This Holding has +1GP while another player's Stronghold has higher Gold Production than yours.
   gold_cost: 3
+  gold_production: 3
   is_unique: true
   legality:
   - Shattered Empire
@@ -178,6 +179,7 @@ cards:
   text: ':bow:: Produce 2 Gold, plus 1 Gold if you control one or more Ports, plus 1 Gold if you control
     one or more other Markets.'
   gold_cost: 3
+  gold_production: 2
   legality:
   - Destroyer War (Celestial)
   - Legacy
@@ -426,6 +428,7 @@ cards:
   text: After an Attack Phase is created, straighten this Holding and give it -1GP. Bow it after that
     phase ends.
   gold_cost: 3
+  gold_production: 3
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -444,6 +447,7 @@ cards:
   text: <b>Economic Open:</b> Banish a card from the top of your Fate deck to give your target Port Holding
     +1GP <i>(this turn)</i>.
   gold_cost: 1
+  gold_production: 1
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -680,6 +684,7 @@ cards:
   text: <b>Tireless Open:</b> Destroy this Holding to draw a card and give your target Market Holding
     a +1GP Wealth token.
   gold_cost: 2
+  gold_production: 2
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -743,6 +748,7 @@ cards:
   text: 'Invest :g2:: Give this Holding two +1GP Wealth tokens. <i>(Entering play, permanently increase
     the Gold Cost by the Invest cost to get the effect.)</i>'
   gold_cost: 1
+  gold_production: 1
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
