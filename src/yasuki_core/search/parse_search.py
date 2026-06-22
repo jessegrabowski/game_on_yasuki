@@ -57,11 +57,20 @@ FIELD_ALIASES = {
     "a": "artist",
     "ft": "flavor",
     "side": "deck",
+    # Stat abbreviations. The single-letter namespace is taken (t/c/s/f/r/a), so every stat gets a
+    # two-letter code; force keeps its established "f".
     "gold": "gold_cost",
+    "gc": "gold_cost",
+    "gp": "gold_production",
+    "fc": "focus",
+    "ch": "chi",
     "ph": "personal_honor",
     "hr": "honor_requirement",
     "province": "province_strength",
+    "ps": "province_strength",
     "startinghonor": "starting_honor",
+    "sh": "starting_honor",
+    "fh": "starting_honor",
     "has": "is",
 }
 
