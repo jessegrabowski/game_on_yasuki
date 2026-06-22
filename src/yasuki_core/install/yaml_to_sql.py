@@ -24,6 +24,7 @@ STAT_FIELDS = (
     "personal_honor",
     "province_strength",
     "starting_honor",
+    "gold_production",
 )
 
 
@@ -73,7 +74,7 @@ def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[tuple
         stats["personal_honor"],
         stats["province_strength"],
         stats["starting_honor"],
-        None,  # gold_production: no source field
+        stats["gold_production"],
         bool(entry.get("is_unique")),
         bool(entry.get("is_proxy")),
         bool(entry.get("is_banned")),
