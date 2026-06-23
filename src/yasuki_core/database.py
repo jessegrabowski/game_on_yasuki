@@ -362,17 +362,23 @@ def get_prints_by_card_id(card_id: str) -> list[dict]:
                 """
                 SELECT
                     p.print_id, p.card_id, s.set_name, s.set_slug, p.rarity, p.artist,
-                    front.path AS image_path, back.path AS back_image_path,
-                    p.flavor_text, bp.flavor_text AS back_flavor_text
+                    front.path AS image_path,
+                    COALESCE(back.path, pback.path) AS back_image_path,
+                    p.flavor_text,
+                    COALESCE(bp.flavor_text, p.back_flavor) AS back_flavor_text,
+                    p.back_title
                 FROM prints p
                 JOIN l5r_sets s ON s.set_id = p.set_id
                 JOIN cards c ON c.card_id = p.card_id
                 LEFT JOIN print_images front
                     ON front.print_id = p.print_id AND front.role = 'front' AND front.size = 'master'
-                -- A double-faced card's back image/flavor live on the back card's matching printing.
+                -- A flip card's back image/flavor live on the back card's matching printing; a
+                -- printing's own special back (scroll / clan mon) is a role='back' image on it.
                 LEFT JOIN prints bp ON bp.card_id = c.back_card_id AND bp.printing_id = p.printing_id
                 LEFT JOIN print_images back
                     ON back.print_id = bp.print_id AND back.role = 'front' AND back.size = 'master'
+                LEFT JOIN print_images pback
+                    ON pback.print_id = p.print_id AND pback.role = 'back' AND pback.size = 'master'
                 WHERE p.card_id = %s
                 ORDER BY s.release_date NULLS LAST, p.print_id
             """,
@@ -421,7 +427,7 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
             cur.execute(
                 """
                 SELECT p.print_id, p.card_id, s.set_name, pi.path AS image_path,
-                    back.path AS back_image_path, p.flavor_text
+                    COALESCE(back.path, pback.path) AS back_image_path, p.flavor_text
                 FROM prints p
                 JOIN l5r_sets s ON s.set_id = p.set_id
                 JOIN cards c ON c.card_id = p.card_id
@@ -430,6 +436,8 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
                 LEFT JOIN prints bp ON bp.card_id = c.back_card_id AND bp.printing_id = p.printing_id
                 LEFT JOIN print_images back
                     ON back.print_id = bp.print_id AND back.role = 'front' AND back.size = 'master'
+                LEFT JOIN print_images pback
+                    ON pback.print_id = p.print_id AND pback.role = 'back' AND pback.size = 'master'
                 WHERE p.card_id = ANY(%s)
                 ORDER BY s.release_date NULLS LAST, p.print_id
                 """,
@@ -1076,9 +1084,10 @@ def _build_card_filter(
                     params.append(f"%{_escape_like(artist)}%")
             elif property_name == "flavor":
                 for flavor in value:
+                    # A printing's special back (story scroll) keeps its prose in back_flavor.
                     conditions.append(
                         "c.card_id IN (SELECT card_id FROM prints"
-                        " WHERE flavor_text ILIKE %s ESCAPE '\\')"
+                        " WHERE (flavor_text || ' ' || COALESCE(back_flavor, '')) ILIKE %s ESCAPE '\\')"
                     )
                     params.append(f"%{_escape_like(flavor)}%")
             elif property_name == "story":

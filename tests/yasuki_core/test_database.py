@@ -487,6 +487,33 @@ def test_double_faced_flip_image_from_back_card():
         assert p["image_path"].rsplit("/", 1)[0] == p["back_image_path"].rsplit("/", 1)[0]
 
 
+def test_printing_level_special_back():
+    # A printing can carry its own special back (a role='back' image), distinct from a flip face.
+    # Iron Mountain's Soul of the Empire printing flips to the "Hitomi's Last Gift" story scroll
+    # (back art + back_title + back_flavor); its Promotional - Jade printing is a clan card-back
+    # (back art only, no title or prose).
+    prints = get_prints_by_card_id("iron_mountain")
+    scroll = next(p for p in prints if p["set_name"] == "Soul of the Empire")
+    assert scroll["back_image_path"].endswith("__back.jpg")
+    assert scroll["back_title"] == "Hitomi's Last Gift"
+    assert "Togashi Hoshi" in scroll["back_flavor_text"]
+
+    clan = next(p for p in prints if p["set_name"] == "Promotional – Jade")
+    assert clan["back_image_path"].endswith("__back.jpg")
+    assert clan["back_title"] is None and clan["back_flavor_text"] is None
+
+
+def test_scroll_prose_searchable_via_flavor():
+    # A scroll's prose lives in back_flavor and is reachable through flavor: like printed flavor.
+    ids = {
+        c["card_id"]
+        for c in query_cards_filtered(
+            filter_options={"flavor": ["Togashi Hoshi led the Dragon army"]}
+        )
+    }
+    assert "iron_mountain" in ids
+
+
 class TestPrivateDsnDetection:
     @pytest.mark.parametrize(
         "dsn",
