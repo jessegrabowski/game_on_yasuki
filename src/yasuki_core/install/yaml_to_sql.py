@@ -46,7 +46,11 @@ def parse_collector_numbers(raw: str | None) -> list[tuple[str | None, int]]:
     return entries
 
 
-def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[tuple, dict]:
+# Index of back_card_id in the row built by _card_columns; the link pass fills it in afterwards.
+_BACK_CARD_ID_COL = 15
+
+
+def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[list, dict]:
     """Build the cards-table row for an entry, plus the `extra` payload for non-integer stats."""
     title = entry["title"]
     extra: dict[str, str] = {}
@@ -59,7 +63,7 @@ def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[tuple
             stats[col] = None
             if value is not None:
                 extra[f"{col}_raw"] = str(value)
-    row = (
+    row = [
         card_id,
         card_slug(extended_title),
         title,
@@ -75,6 +79,8 @@ def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[tuple
         stats["province_strength"],
         stats["starting_honor"],
         stats["gold_production"],
+        None,  # back_card_id — filled in by _link_and_validate_back_faces
+        bool(entry.get("is_back")),
         bool(entry.get("is_unique")),
         bool(entry.get("is_proxy")),
         bool(entry.get("is_banned")),
@@ -82,8 +88,26 @@ def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[tuple
         entry.get("story"),
         entry.get("notes"),
         Json(extra),
-    )
+    ]
     return row, extra
+
+
+def _link_and_validate_back_faces(cards: dict, card_names: dict, back_ids: set) -> None:
+    """Point each front row at its back face. Every is_back card must have a front (is_back=False)
+    card of the same name — the link is derived from that shared name, so its absence is a fatal
+    data error, not something to paper over."""
+    front_names = {card_names[c] for c in cards if c not in back_ids}
+    for back_id in back_ids:
+        name = card_names[back_id]
+        if name not in front_names:
+            raise ValueError(
+                f"Back-face card {back_id!r} ({name!r}) has no front (is_back=False) card "
+                "of the same name"
+            )
+        front_id = back_id.removesuffix("__back")
+        if front_id not in cards:
+            raise ValueError(f"Back-face card {back_id!r} has no front card {front_id!r}")
+        cards[front_id][_BACK_CARD_ID_COL] = back_id
 
 
 def load_cards(cards_dir: Path, dsn: str) -> None:
@@ -105,7 +129,9 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     if not yaml_files:
         raise ValueError(f"No YAML files found in {cards_dir}")
 
-    cards: dict[str, tuple] = {}
+    cards: dict[str, list] = {}
+    card_names: dict[str, str] = {}
+    back_ids: set[str] = set()
     clan_links: set[tuple[str, str]] = set()
     type_links: set[tuple[str, str]] = set()
     deck_links: set[tuple[str, str]] = set()
@@ -133,9 +159,14 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             for entry in data.get("cards", []):
                 extended_title = entry.get("extended_title") or entry["title"]
                 card_id = entry.get("id") or card_slug(extended_title)
+                if entry.get("is_back"):
+                    card_id += "__back"
 
                 if card_id not in cards:
                     cards[card_id], _ = _card_columns(card_id, extended_title, entry)
+                    card_names[card_id] = entry["title"]
+                    if entry.get("is_back"):
+                        back_ids.add(card_id)
                     clan_links.update((card_id, c) for c in entry.get("clans", []))
                     type_links.update((card_id, t) for t in entry.get("types", []))
                     deck_links.update((card_id, d) for d in entry.get("decks", []))
@@ -168,6 +199,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                 )
                 number_map[(card_id, printing_id)] = parse_collector_numbers(collector)
 
+        _link_and_validate_back_faces(cards, card_names, back_ids)
         _insert_all(
             cur,
             cards,
@@ -214,9 +246,9 @@ def _insert_all(
         INSERT INTO cards (
           card_id, slug, name, extended_title, name_normalized, rules_text,
           gold_cost, focus, force, chi, honor_requirement, personal_honor,
-          province_strength, starting_honor, gold_production,
+          province_strength, starting_honor, gold_production, back_card_id, is_back,
           is_unique, is_proxy, is_banned, errata_text, story, notes, extra
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
                   %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (card_id) DO NOTHING
         """,

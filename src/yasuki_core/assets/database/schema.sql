@@ -32,6 +32,11 @@ CREATE TABLE cards (
   starting_honor    INTEGER,
   gold_production   INTEGER,
 
+  -- Double-faced cards (flip strongholds): the front row points at the back via back_card_id; the
+  -- back row is flagged is_back. The FK is deferred so a front can be inserted before its back.
+  back_card_id      TEXT REFERENCES cards(card_id) DEFERRABLE INITIALLY DEFERRED,
+  is_back           BOOLEAN NOT NULL DEFAULT FALSE,
+
   is_unique         BOOLEAN NOT NULL DEFAULT FALSE, -- from keywords
   is_proxy          BOOLEAN NOT NULL DEFAULT FALSE, -- has the 'Proxy' type
   is_banned         BOOLEAN NOT NULL DEFAULT FALSE,
