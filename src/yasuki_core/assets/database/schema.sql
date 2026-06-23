@@ -124,6 +124,11 @@ CREATE TABLE prints (
 
   rarity               TEXT,
   flavor_text          TEXT,
+  -- Some printings carry a special back -- a story scroll or a clan card-back -- instead of the
+  -- generic one. The art is a role='back' print_image; back_flavor holds a scroll's prose and
+  -- back_title its name (both usually null). Distinct from cards.back_card_id, which is a flip face.
+  back_title           TEXT,
+  back_flavor          TEXT,
   artist               TEXT,
   designer             TEXT,
   collector_number_raw TEXT,

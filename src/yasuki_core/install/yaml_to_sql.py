@@ -188,6 +188,8 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                         set_id,
                         entry.get("rarity"),
                         entry.get("flavor_text"),
+                        entry.get("back_title"),
+                        entry.get("back_flavor"),
                         entry.get("artist"),
                         entry.get("designer"),
                         collector,
@@ -278,9 +280,9 @@ def _insert_all(
     cur.executemany(
         """
         INSERT INTO prints (
-          card_id, printing_id, set_id, rarity, flavor_text, artist, designer,
+          card_id, printing_id, set_id, rarity, flavor_text, back_title, back_flavor, artist, designer,
           collector_number_raw, publisher, publisher_url, doublesided, legal_date
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (card_id, printing_id) DO NOTHING
         """,
         print_rows,
