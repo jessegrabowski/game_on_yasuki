@@ -3,7 +3,13 @@ import datetime
 import pytest
 
 from yasuki_core.install.sets_to_sql import coerce_date
-from yasuki_core.install.yaml_to_sql import card_slug, parse_collector_numbers, _card_columns
+from yasuki_core.install.yaml_to_sql import (
+    card_slug,
+    parse_collector_numbers,
+    _BACK_CARD_ID_COL,
+    _card_columns,
+    _link_and_validate_back_faces,
+)
 
 
 @pytest.mark.parametrize(
@@ -62,3 +68,24 @@ def test_integer_stats_fill_columns_not_extra():
 def test_non_integer_stats_go_to_extra():
     _, extra = _card_columns("x", "X", {"title": "X", "force": "+2", "chi": "*"})
     assert extra == {"force_raw": "+2", "chi_raw": "*"}
+
+
+def _row(card_id, title, is_back=False):
+    row, _ = _card_columns(card_id, title, {"title": title, "is_back": is_back})
+    return row
+
+
+def test_back_face_links_to_its_front():
+    cards = {
+        "dark_capital": _row("dark_capital", "The Dark Capital"),
+        "dark_capital__back": _row("dark_capital__back", "The Dark Capital", is_back=True),
+    }
+    names = {"dark_capital": "The Dark Capital", "dark_capital__back": "The Dark Capital"}
+    _link_and_validate_back_faces(cards, names, {"dark_capital__back"})
+    assert cards["dark_capital"][_BACK_CARD_ID_COL] == "dark_capital__back"
+
+
+def test_back_face_without_matching_front_raises():
+    cards = {"orphan__back": _row("orphan__back", "Orphan", is_back=True)}
+    with pytest.raises(ValueError, match="no front"):
+        _link_and_validate_back_faces(cards, {"orphan__back": "Orphan"}, {"orphan__back"})
