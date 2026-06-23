@@ -447,6 +447,46 @@ def test_keyword_and_unique_filters(filter_options):
             assert card.get("is_unique") is True
 
 
+def test_double_faced_search_matches_back_returns_front():
+    # The Dark Capital of the Spider's back face says "lose 2 Honor less" (the front says "1 Honor
+    # less"). A rules search for the back's text must still return the front card, never a back row.
+    ids = {
+        c["card_id"] for c in query_cards_filtered("", {"rules_text_contains": ["2 Honor less"]})
+    }
+    assert "the_dark_capital_of_the_spider" in ids
+    assert not any(i.endswith("__back") for i in ids)
+
+
+def test_double_faced_stat_matches_either_face():
+    # Dark Capital's province_strength is 7 on the front, 9 on the back; ps:9 must find it via the
+    # back and return the front.
+    ids = {c["card_id"] for c in query_cards_filtered("", {"province_strength": (9, 9)})}
+    assert "the_dark_capital_of_the_spider" in ids
+    assert not any(i.endswith("__back") for i in ids)
+
+
+def test_cross_face_filter_works_through_pagination_and_count():
+    # A numeric filter yields a cross-face condition referencing the joined `back` row; the paginated
+    # data query and both COUNT queries must include that join (regression: COUNT used a bare FROM
+    # cards c and 500'd on `back.<col>`).
+    options = {"province_strength": (9, 9)}
+    cards, total = query_cards_page("", options, limit=60, offset=0)
+    ids = {c["card_id"] for c in cards}
+    assert "the_dark_capital_of_the_spider" in ids
+    assert not any(i.endswith("__back") for i in ids)
+    assert count_cards_filtered("", options) == total
+
+
+def test_double_faced_flip_image_from_back_card():
+    # The flip image resolves from the back card's matching printing (role='front' on the back's
+    # print), not a role='back' image on the front print — and stays within the same printing's set.
+    prints = get_prints_by_card_id("the_dark_capital_of_the_spider")
+    assert prints
+    for p in prints:
+        assert p["back_image_path"] and p["back_image_path"].endswith("__back.jpg")
+        assert p["image_path"].rsplit("/", 1)[0] == p["back_image_path"].rsplit("/", 1)[0]
+
+
 class TestPrivateDsnDetection:
     @pytest.mark.parametrize(
         "dsn",
