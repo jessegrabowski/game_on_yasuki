@@ -466,9 +466,8 @@ def test_double_faced_stat_matches_either_face():
 
 
 def test_cross_face_filter_works_through_pagination_and_count():
-    # A numeric filter yields a cross-face condition referencing the joined `back` row; the paginated
-    # data query and both COUNT queries must include that join (regression: COUNT used a bare FROM
-    # cards c and 500'd on `back.<col>`).
+    # A numeric filter yields a cross-face condition referencing the joined `back` row, so the
+    # paginated data query and both COUNT queries must carry that join and agree on the total.
     options = {"province_strength": (9, 9)}
     cards, total = query_cards_page("", options, limit=60, offset=0)
     ids = {c["card_id"] for c in cards}

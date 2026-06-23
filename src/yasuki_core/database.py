@@ -166,6 +166,10 @@ _CARD_COLUMNS = """
         img.image_path, img.default_print_id, img.default_set_slug
     FROM cards c"""
 
+# Joins each card to its back face so cross-face search predicates can reach the back's columns. The
+# COUNT queries must carry the same join as the data select, or a `back.<col>` predicate 500s.
+_CROSS_FACE_JOIN = "LEFT JOIN cards back ON back.card_id = c.back_card_id"
+
 
 def _card_select(active_format: str | None = None) -> tuple[str, list]:
     """
@@ -224,7 +228,7 @@ def _card_select(active_format: str | None = None) -> tuple[str, list]:
         {order_clause}
         LIMIT 1
     ) img ON true
-    LEFT JOIN cards back ON back.card_id = c.back_card_id"""
+    {_CROSS_FACE_JOIN}"""
     return sql, select_params
 
 
@@ -1121,20 +1125,21 @@ def _build_card_filter(
                     # Range matches consider the back face too, so a stat that differs per face
                     # (e.g. province_strength) matches when either side satisfies it.
                     min_val, max_val = value
-                    ors, range_params = [], []
+                    range_predicates, range_params = [], []
                     for alias in ("c", "back"):
                         col = f"{alias}.{property_name}"
                         if min_val is not None and max_val is not None:
-                            ors.append(f"{col} >= %s AND {col} <= %s")
+                            range_predicates.append(f"{col} >= %s AND {col} <= %s")
                             range_params.extend([min_val, max_val])
                         elif min_val is not None:
-                            ors.append(f"{col} >= %s")
+                            range_predicates.append(f"{col} >= %s")
                             range_params.append(min_val)
                         elif max_val is not None:
-                            ors.append(f"{col} <= %s")
+                            range_predicates.append(f"{col} <= %s")
                             range_params.append(max_val)
-                    if ors:
-                        conditions.append("(" + " OR ".join(f"({o})" for o in ors) + ")")
+                    if range_predicates:
+                        joined = " OR ".join(f"({predicate})" for predicate in range_predicates)
+                        conditions.append(f"({joined})")
                         params.extend(range_params)
             elif value is not None:
                 if property_name not in _ALLOWED_COLUMNS:
@@ -1267,7 +1272,7 @@ def query_cards_page(
     where_clause, params = _build_card_filter(text_query, filter_options)
     select_sql, select_params = _card_select(_active_format(filter_options))
 
-    count_sql = f"SELECT COUNT(*) AS n FROM cards c LEFT JOIN cards back ON back.card_id = c.back_card_id {where_clause}"
+    count_sql = f"SELECT COUNT(*) AS n FROM cards c {_CROSS_FACE_JOIN} {where_clause}"
     data_sql = f"{select_sql} {where_clause} {_order_by_clause(sort, order)} LIMIT %s OFFSET %s"
     data_params = select_params + params + [limit, offset]
 
@@ -1312,7 +1317,7 @@ def count_cards_filtered(
         Number of matching cards
     """
     where_clause, params = _build_card_filter(text_query, filter_options)
-    sql = f"SELECT COUNT(*) AS n FROM cards c LEFT JOIN cards back ON back.card_id = c.back_card_id {where_clause}"
+    sql = f"SELECT COUNT(*) AS n FROM cards c {_CROSS_FACE_JOIN} {where_clause}"
 
     with get_db_connection() as conn:
         with conn.cursor() as cur:
