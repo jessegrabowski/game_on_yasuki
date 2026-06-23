@@ -24,6 +24,7 @@ function safeRules(text) {
 
 let imgBase = '/images';
 let card = null;
+let back = null; // the other face of a double-faced card, if any
 let prints = [];
 let index = 0;
 let flipped = false;
@@ -79,33 +80,37 @@ function renderArt() {
 
 function renderInfo() {
   const print = prints[index];
-  $('cardName').textContent = card.extended_title || card.name;
-  $('cardTypeline').textContent = [(card.types || []).join(' · '), (card.clans || []).join(' · ')]
+  // Flipped to a double-faced card's back: the panel shows the back card's stats/text, and flavor
+  // comes from the back face of this printing.
+  const face = flipped && back ? back : card;
+  $('cardName').textContent = face.extended_title || face.name;
+  $('cardTypeline').textContent = [(face.types || []).join(' · '), (face.clans || []).join(' · ')]
     .filter(Boolean)
     .join(' — ');
 
-  $('cardStats').innerHTML = STAT_LABELS.filter(([key]) => card[key] != null)
-    .map(([key, label]) => `<div><dt>${label}</dt><dd>${esc(card[key])}</dd></div>`)
+  $('cardStats').innerHTML = STAT_LABELS.filter(([key]) => face[key] != null)
+    .map(([key, label]) => `<div><dt>${label}</dt><dd>${esc(face[key])}</dd></div>`)
     .join('');
 
-  const keywords = [...new Set(card.keywords || [])]; // the array can repeat a keyword
+  const keywords = [...new Set(face.keywords || [])]; // the array can repeat a keyword
   const kw = $('cardKeywords');
   kw.textContent = keywords.join(' · ');
   kw.hidden = keywords.length === 0;
 
-  $('cardText').innerHTML = safeRules(card.text || '');
+  $('cardText').innerHTML = safeRules(face.text || '');
 
+  const flavorText = flipped && back ? print?.back_flavor_text : print?.flavor_text;
   const flavor = $('cardFlavor');
-  flavor.innerHTML = print?.flavor_text ? safeRules(print.flavor_text) : '';
-  flavor.hidden = !print?.flavor_text;
+  flavor.innerHTML = flavorText ? safeRules(flavorText) : '';
+  flavor.hidden = !flavorText;
 
   const artist = $('cardArtist');
   artist.textContent = print?.artist ? `Illustrated by ${print.artist}` : '';
   artist.hidden = !print?.artist;
 
   const story = $('cardStory');
-  story.textContent = card.story ? `Story: ${card.story}` : '';
-  story.hidden = !card.story;
+  story.textContent = face.story ? `Story: ${face.story}` : '';
+  story.hidden = !face.story;
 }
 
 function renderPrints() {
@@ -145,6 +150,7 @@ function toggleFlip() {
   if (!prints[index]?.back_image_path) return;
   flipped = !flipped;
   renderArt();
+  renderInfo();
 }
 
 function openZoom() {
@@ -170,6 +176,7 @@ async function init() {
   }
 
   card = body.card;
+  back = body.back || null;
   prints = body.prints || [];
   document.title = `${card.name} — Game on, Yasuki!`;
 

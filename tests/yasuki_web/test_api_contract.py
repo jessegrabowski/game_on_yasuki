@@ -274,13 +274,13 @@ def test_double_sided_card_exposes_back_image(client):
     import yasuki_core.database as db
 
     with db.get_db_connection() as conn, conn.cursor() as cur:
-        cur.execute(
-            "SELECT p.card_id FROM print_images i JOIN prints p ON p.print_id = i.print_id"
-            " WHERE i.role = 'back' LIMIT 1"
-        )
+        cur.execute("SELECT card_id FROM cards WHERE back_card_id IS NOT NULL LIMIT 1")
         card_id = cur.fetchone()["card_id"]
-    prints = client.get(f"/api/cards/{card_id}").json()["prints"]
-    assert any(p["back_image_path"] for p in prints)
+    body = client.get(f"/api/cards/{card_id}").json()
+    # The flip image resolves from the back card's printing, and the back face's data is exposed so
+    # the page can flip the stats/text panel too.
+    assert any(p["back_image_path"] for p in body["prints"])
+    assert body["back"] and body["back"]["card_id"].endswith("__back")
 
 
 def test_deck_types_are_title_case(client):
