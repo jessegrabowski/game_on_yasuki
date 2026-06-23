@@ -80,6 +80,25 @@ function renderArt() {
 
 function renderInfo() {
   const print = prints[index];
+
+  // A printing's special back that carries its own text (a story scroll) — show its title and prose,
+  // with no stats or rules. A bare clan card-back has no text, so we leave the front's panel as-is
+  // and only flip the image.
+  if (flipped && !back && (print?.back_title || print?.back_flavor_text)) {
+    $('cardName').textContent = print.back_title || 'Card Back';
+    $('cardTypeline').textContent = '';
+    $('cardStats').innerHTML = '';
+    $('cardKeywords').hidden = true;
+    $('cardText').innerHTML = '';
+    const scroll = print.back_flavor_text;
+    const flavor = $('cardFlavor');
+    flavor.innerHTML = scroll ? safeRules(scroll) : '';
+    flavor.hidden = !scroll;
+    $('cardArtist').hidden = true;
+    $('cardStory').hidden = true;
+    return;
+  }
+
   // Flipped to a double-faced card's back: the panel shows the back card's stats/text, and flavor
   // comes from the back face of this printing.
   const face = flipped && back ? back : card;
