@@ -1049,9 +1049,8 @@ cards:
   - Pre-Game
   clans:
   - Phoenix
-  text: <b>Reaction:</b> Once per copy per Kiho per game, after your Kiho Strategy action resolves, put
-    the Strategy in your hand face-up and discard a card; you may use actions on the Strategy an additional
-    time this turn.
+  text: <b>Reaction:</b> Once per copy per Kiho per game, after your Kiho Strategy action resolves, put the Strategy
+    in your hand face-up and discard a card; you may use actions on the Strategy an additional time this turn.
   province_strength: 5
   starting_honor: 7
   legality:
@@ -1061,6 +1060,43 @@ cards:
   rarity: Uncommon
   artist: Chris Arneson
   flavor_text: <i></i>
+  back_title: The Broken Blade
+  back_flavor: 'Tsukune turned the wakizashi in her hands, marveling at its magnificent detail. Ryoshun had left
+    it in her care, to protect the Empire. It had stolen many lives and bloodied many hands.
+
+
+    The five Elemental Masters stood near, their eyes darting from her hands to the blade, waiting for her to lift
+    her mind from Ambition''s sheen. So many had fallen already.
+
+
+    "The Tenth Kami left this with us for a reason," Hoichu said.
+
+
+    "It must be guarded. Protected." Tamoko.
+
+
+    "Dark secrets must be contained if they cannot be destroyed," Tomo said, his voice resonating with the wisdom
+    of Jigoku.
+
+
+    "They must be locked away and forgotten. This lesson scarred the Phoenix once. Let us remember it now."
+
+
+    Even young Ningen looked worried, and he gently tugged the Phoenix Champion''s sleeve. "Let it go, Tsukune-sama.
+    Let it rest."
+
+
+    It took great effort to comply, to fight the power that the blade held over the mortal part of her soul. With
+    shaking fingers, Tsukune lowered the blade back into its sheath. "It is not my place to care for it," she whispered.
+    "Let the Elemental Masters take it, and let a great spell be cast upon its resting place."
+
+
+    Her companions nodded. They were equals now, as it should have been since Shiba first came to the city of Isawa.
+    Kneeling to lift the fractured saya from the ground, the Master of Air spoke.
+
+
+    "Twice has it drawn the blood of an Emperor. Now let the Phoenix bear the burden of its hunger. Let it sleep
+    forever, away from mortal hands. It shall harm the Empire no more."'
 - title: Eyes Shall Not See
   types:
   - Spell
@@ -1661,8 +1697,8 @@ cards:
   - Dragon
   keywords:
   - Mountain
-  text: While you are the Defender, players may not move Personalities using the rulebook Cavalry player
-    ability.<br><b>Repeatable Limited, :bow::</b> Permanently give your target Personality Tattooed.
+  text: While you are the Defender, players may not move Personalities using the rulebook Cavalry player ability.<br><b>Repeatable
+    Limited, :bow::</b> Permanently give your target Personality Tattooed.
   province_strength: 6
   starting_honor: 5
   legality:
@@ -1672,6 +1708,37 @@ cards:
   rarity: Uncommon
   artist: Ken Meyer Jr.
   flavor_text: <i></i>
+  back_title: Hitomi's Last Gift
+  back_flavor: 'Togashi Hoshi led the Dragon army toward Volturnum''s great stone gates. Darkness thundered around
+    them, the sound echoing from their marching feet. They were the first to the city''s gate, where they saw a
+    hundred thousand more of the Shadow, some bearing the faces of their ancestors—spirits stolen from Jigoku and
+    turned to Goju''s will.
+
+
+    "Let me drive them from the walls," growled Hitomi Iyojin. "This is the duty for which we were born. This is
+    the reason our lady left us behind. We will not fail her—or you."
+
+
+    Hoshi nodded, and the last of Hitomi''s chosen charged.
+
+
+    A whisper of wind pushed aside the clouds, and a momentary shaft of moonlight gleamed upon the arch. As the
+    light touched the ancient stone, the Dragon smashed the gate open. Some mystic force, drawn from their hands
+    and from the moonlight, crushed the stone.
+
+
+    The Darkness gathered its strength once more. The ise zumi tore at it, falling one by one. As they fell, their
+    bodies flared into brilliant light, forcing the Shadow to retreat. It was Hitomi''s last gift, her clan''s last
+    weapon against Goju and his servants. They were driving back the Shadow at last.
+
+
+    As the Empire''s armies burst into cheers and flooded into the city, the Dragon legions raised a mighty war
+    cry. With the Crab and Lion armies, they drove the Goju before them, shattering the Shadow''s hold. But as they
+    neared the ancient archway to Jigoku, Hoshi heard a bitter, echoing laugh. The Darkness swarmed around Oblivion''s
+    Gate, whispering like the buzz of stinging flies.
+
+
+    "You may capture my city," the First Goju smiled, "but you cannot rebuild what I have already destroyed."'
 - title: Isawa Tomo
   types:
   - Personality
@@ -2008,8 +2075,8 @@ cards:
   - Pre-Game
   clans:
   - Crane
-  text: Gold- and Honor-producing Holdings enter play for you for 1 less Gold, to a minimum of 1, but
-    will not have their costs changed in any other way.
+  text: Gold- and Honor-producing Holdings enter play for you for 1 less Gold, to a minimum of 1, but will not have
+    their costs changed in any other way.
   province_strength: 5
   starting_honor: 6
   legality:
@@ -2020,6 +2087,31 @@ cards:
   rarity: Fixed
   artist: Eric Ren
   flavor_text: <i></i>
+  back_title: Rise of Honor
+  back_flavor: 'Toshimoko leapt from his grey steed into the heart of the Crane unit, shouting down their fear.
+    Though wounded, he struck at the Shadow, carving bone from featureless faces with the swipe of a crystal sword.
+
+
+    "You are Crane!" he roared, throwing his helmet to the ground. "Even in death you cannot be defeated!" Across
+    the battlefield, a horn sounded, and a white-haired spearman raised his weapon in salute to the old warrior.
+    Even with a battlefield between them, they fought as a pair.
+
+
+    One by one, the Crane fell in the Shadow''s onslaught, their pale faces bloodied by the Darkness of Volturnum''s
+    guardians. They marched beside Toturi''s legions, gaining strength as their numbers failed, but even with the
+    whirling blade of the old sensei beside them, the last of Kuwanan''s samurai fell.
+
+
+    At last, only one ronin fought beside the old Crane, his single eye gleaming with hatred. Turning as the last
+    of the fighters fell, the ronin shouted to his enemy, venom hanging from his words.
+
+
+    "Ten years ago you took my eye, but we never finished our fight, old man! If I am to die, then I would die knowing
+    which of us would have won. Your blade or mine, Toshimoko? And to Jigoku with the Shadow! It will not take our
+    souls!"
+
+
+    Dropping his crystal weapon, the ronin drew his sword in a single stroke ....'
 - title: Kyoso no Oni
   types:
   - Personality
@@ -2057,8 +2149,8 @@ cards:
   clans:
   - Mantis
   text: Fox and Fox Clan Personalities enter play paying 2 less Gold for you.<br>Your Shugenja have +1C.<br>When
-    choosing the battlefield at which to fight the next battle, if you are the Defender, you choose instead
-    of the Attacker.
+    choosing the battlefield at which to fight the next battle, if you are the Defender, you choose instead of the
+    Attacker.
   province_strength: 5
   starting_honor: 6
   legality:
@@ -2067,6 +2159,37 @@ cards:
   errata_text: There is no longer a restriction on bringing Mantis Clan personalities into play.
   rarity: Uncommon
   artist: Theresa Brandon
+  back_title: Son of my Heart
+  back_flavor: 'The Water Dragon moved among the Mantis isles, its sinuous body rising with each gust of wind that
+    churned the waves. It coiled, then lifted its massive head. The sea began to part.
+
+
+    Come, son of Osano-Wo, it called, and the roar of the waves echoed in its voice. It no more spoke with words
+    than the sky could shout a battle-cry, yet its voice echoed within the Celestial Heavens and resounded through
+    Kyuden Gotei, home of the Mantis Clan. Come, son of Gusai and of Yoshitsune. Give me your twenty strongest samurai,
+    and I will take them to Volturnum to fight the Shadow.
+
+
+    Your twenty strongest samurai. Yoritomo removed his helm, looking across his lands'' battered beaches. The last
+    few Mantis samurai—wearily, bloodied, and beaten by the Phoenix—turned their eyes toward him. They were prepared
+    to fight once more—and to die, if he but asked them. Twenty bushi to save the Empire … and if they went to war
+    now, Yoritomo knew, they would never return from Volturnum and the Shadowlands. Without samurai, the Mantis
+    would fall—his clan, his loyal bushi, and all of his accomplishments.
+
+
+    His clan. His twenty strongest samurai.
+
+    He could not let them go.
+
+
+    Yoritomo turned to the Dragon, lifting his kamas from their sheaths. "I am my twenty strongest samurai!" he
+    roared. "Take me, and I will show you how the Son of Storms faces death!"
+
+
+    The Dragon rolled through sea foam and salt tears, prepared to work its magic, when another voice echoed from
+    beside the Mantis general. Aramasu, Bayushi no more, stood at his father''s side.
+
+    "And I am twenty-one."'
 - title: Lessons of Honor
   types:
   - Strategy
@@ -2595,9 +2718,9 @@ cards:
   - Pre-Game
   clans:
   - Unicorn
-  text: ':bow:: When paying for a Cavalry Follower, produce 7 Gold that may only pay for it.<br><b>Repeatable
-    Tireless Battle:</b> Target your two unbowed Cavalry Personalities that this action has not targeted
-    this turn, one of whom may be at any location. Switch their locations.'
+  text: ':bow:: When paying for a Cavalry Follower, produce 7 Gold that may only pay for it.<br><b>Repeatable Tireless
+    Battle:</b> Target your two unbowed Cavalry Personalities that this action has not targeted this turn, one of
+    whom may be at any location. Switch their locations.'
   province_strength: 7
   starting_honor: 4
   legality:
@@ -2609,6 +2732,42 @@ cards:
   rarity: Fixed
   artist: Michael Phillippi
   flavor_text: <i></i>
+  back_title: Dealing with Darkness
+  back_flavor: '"Now!" Kamoko gasped, gripping the Moto general''s bone wrists and ignoring the lancing pain through
+    her chest. Pulling herself up and tightening her grip, she felt his steel slide further through her body. She
+    opened her eyes resolutely. "Fulfill your bargain!"
+
+
+    Tsume''s skull was empty, uncomprehending, until he saw a darker presence move within Kamoko''s soul. Kamoko
+    was not speaking to him. A voice wailed, and the Taint began to slide from Kamoko''s body into his. Tendrils
+    of Darkness clutched his bone arms, wrapping fleshy tentacles around his chest. Squeezing. Destroying.
+
+
+    "The Taint you feel is not hers, but mine. She is still pure," a voice whispered. "I protected her in exchange
+    for this moment –the moment when I could destroy you."
+
+
+    Tsume snarled and tried to break free, but Kamoko''s grip was as solid as the stone of the mountains around
+    them.
+
+
+    "Akuma has gone to his death at the Lion''s hands," the oni overlord continued, "but your end will not be so
+    simple. The skull of Fu Leng should have been mine from the beginning." The Kyoso materialized out of Kamoko,
+    sinking her fangs into his rotted flesh and drawing out his power. "Now I shall claim my place at his side."
+
+
+    Tsume''s skull flared once, twice, shining a ghastly green light across the war-torn plain. As Tsume''s essence
+    dissolved into the oni''s growing body, Kamoko sank to the ground. Tsume''s screams faded into nothingness,
+    and the Kyoso allowed the body to fall before her vessel''s kneeling form.
+
+
+    "You have fulfilled our bargain," Kyoso no Oni hissed.
+
+    "But I offer you another, Kamoko-san. Join us . . . and live." She extended her clawed hand, offering a Tainted
+    immortality.
+
+    The Unicorn Thunder shook her head. Death stood at her heart. When the end came, Kamoko met it with courageous
+    silence.'
 - title: O-Ushi Sensei
   types:
   - Sensei
@@ -3595,10 +3754,10 @@ cards:
   - Brotherhood of Shinsei
   keywords:
   - Temple
-  text: You may include sleeved non-Personality Sensei in your Fate deck, which must also be fully sleeved
-    identically; these Sensei act as Fate cards whenever not in play and do not count toward your minimum
-    deck size.<br><b>Repeatable Limited, :bow::</b> Discard your target non-Personality Sensei to search
-    your Fate deck, then hand, for a Sensei and put it into play.
+  text: You may include sleeved non-Personality Sensei in your Fate deck, which must also be fully sleeved identically;
+    these Sensei act as Fate cards whenever not in play and do not count toward your minimum deck size.<br><b>Repeatable
+    Limited, :bow::</b> Discard your target non-Personality Sensei to search your Fate deck, then hand, for a Sensei
+    and put it into play.
   province_strength: 6
   starting_honor: 4
   legality:
@@ -3608,6 +3767,39 @@ cards:
   rarity: Uncommon
   artist: Ellym Sirac
   flavor_text: <i></i>
+  back_title: Seven Dragons
+  back_flavor: 'The sky flared, and seven great forms rose, carrying the last of Rokugan''s greatest heroes toward
+    Volturnum''s gates. In the monastery, faint chants began. To the far south, a Shadow boiled, blocking the moon''s
+    faint light.
+
+
+    "The Shadow . . . ," Hizuka whispered, afraid. Takao stood at the temple gate and watched the Darkness move.
+    To the north, a brilliant flame fell from the sky, its light washing across the land. "And the Sun," Takao added.
+
+
+    In the temple, the Brotherhood gathered their weapons and prayer beads for the final attack. Takao held out
+    his hand, and the bell at the top of the Mountain of the Seven Thunders began to ring. It would not stop until
+    the Sun''s rebirth . . . or the Darkness''s consumption of the world.
+
+
+    "The Shadow must be named," the Lady Moon''s voice came to Takao now, as he had known it would. "If it is defined,
+    we can destroy it."
+
+
+    "Destroy?" Takao smiled. "Destruction only clears the path for new evil, Hitomi. You know that."
+
+
+    "A name must be chosen, to give it form."
+
+
+    Into the pause that followed, Takao whispered a single word, unheard under the ringing of the temple bell. A
+    stunned moment of enlightenment passed, then came a rush of agreement. The Shadow would receive its answer—a
+    simple answer—and would be prevented from opening itself to all things. It would receive the name that would
+    shape its existence forever after. No name would be taken from the heavens, nor would its form be stolen from
+    the Kami or from the Fortunes.
+
+
+    Takao smiled. The answer had come, as all things must, from mortal destiny.'
 - title: Temples of the New Tao
   types:
   - Region
@@ -3656,8 +3848,8 @@ cards:
   - Pre-Game
   clans:
   - Crab
-  text: <b>Repeatable Battle, :bow::</b> Double the Force of your target defending Crab Clan Personality.
-    Destroy him after this battle ends.
+  text: <b>Repeatable Battle, :bow::</b> Double the Force of your target defending Crab Clan Personality. Destroy
+    him after this battle ends.
   province_strength: 7
   starting_honor: 3
   legality:
@@ -3667,6 +3859,37 @@ cards:
   rarity: Uncommon
   artist: Chris Arneson
   flavor_text: <i></i>
+  back_title: My Life for Yours
+  back_flavor: 'When the Empire''s armies met the Shadowlands forces, the Crab Champion roared into the fray beside
+    Yasamura''s Hida riders. O-Ushi smashed all enemies who dared approach her hammer "Where is your wall, oni?"
+    she yelled. "Where is your cresting wave? We have kept you at bay for a thousand years! Can you not hold us
+    for one day?"
+
+
+    The Shadowlands beasts fled, howling as the Crab legions slaughtered them. Blackened and bruised, O-Ushi turned
+    to see a massive oni claw apart Yasamura''s steed. Yasamura landed hard, reeling.
+
+
+    "No!" O-Ushi shouted, sweeping her hammer toward the beast. She battered its tough carapace, which tore her
+    skin. When she gained the upper hand, she raised her hammer for the finishing blow—but the oni twisted aside
+    just as she struck. The hammer''s handle shattered and lodged into O-Ushi''s thigh. Screaming, she fell to the
+    ground. Blood ran down her leg as she pushed herself to her feet. She would not die on her knees.
+
+
+    The oni plunged its claws into her neck. O-Ushi felt sharp pain, and then, suddenly, the creature fell, steel
+    bursting through its throat from behind. Yasamura''s blade had impaled it. Yasamura helped O-Ushi stand. "I
+    owe you my life," he murmured.
+
+
+    "You once saved me," she said matter-of-factly. "We are even."
+
+
+    "No. You are worth a thousand deaths." Yasamura held her shoulder a second longer, then let go. "Without you,
+    I would march south, as Hida did, and give my life to defeat your enemies."
+
+
+    O-Ushi smiled with fierce mischief. "You are right—we are not even," she said, eyes shining. "You have saved
+    two lives this day."'
 - title: The Dark Path of Shadow
   types:
   - Stronghold
@@ -3674,11 +3897,10 @@ cards:
   - Pre-Game
   clans:
   - Ninja
-  text: You pay 2 less Gold for your non-Personality Ninja cards and your Ninja Strategy actions.<br>You
-    do not lose Honor from other players' cards' effects nor from your Ninja cards; this is not negation.<br><b>Absent
-    Repeatable Tireless Battle:</b> Even if you cannot take actions during the current battle, if the
-    current army attacking your Province has 9 or less total Chi, move all its units home, and bow them
-    as they move.
+  text: You pay 2 less Gold for your non-Personality Ninja cards and your Ninja Strategy actions.<br>You do not
+    lose Honor from other players' cards' effects nor from your Ninja cards; this is not negation.<br><b>Absent
+    Repeatable Tireless Battle:</b> Even if you cannot take actions during the current battle, if the current army
+    attacking your Province has 9 or less total Chi, move all its units home, and bow them as they move.
   province_strength: 0
   starting_honor: 0
   legality:
@@ -3687,6 +3909,34 @@ cards:
   rarity: Uncommon
   artist: Bryon Wackwitz
   flavor_text: <i></i>
+  back_title: Death Lies Waiting
+  back_flavor: 'Volturnum''s wide gates lay upon the ground, charred by ancient flames and devastated by the ravages
+    of time. Within, the city''s strange streets twisted through thick Darkness—Darkness that moved, that churned.
+    Darkness whose empty face contorted in hideous laughter.
+
+
+    The troops of the Empire marched before the city in pitiful numbers, raising shining swords of light.
+
+
+    How amusing. How pathetic. Goju laughed. Black lightning arched through the Darkness, illuminating nothing.
+
+
+    The Lion charged, but tides of Darkness tore apart Motso''s army. The creatures within the Darkness howled in
+    glee. Only a shred of the Lion''s numbers remained standing when the wave of Shadow ebbed.
+
+
+    The Crab charged next, but Goju caught their general in an immense hand and broke him in two with a single squeeze.
+    A girl screamed and plunged her crystal weapon into the Goju''s side, but the katana passed through him, spilling
+    no blood.
+
+
+    "Did you truly think it would be so easy?" he asked, hurling her aside. "We control the gate; we control the
+    destiny of all who have ever died for your Empire. Your heroes, your failures—all will be forgotten, wiped away
+    by the Shadow. Take a final look at your ancestors, samurai, for your fall begins with their deaths."
+
+
+    The Goju raised his arms once more, and red light cascaded from the heavens. From behind the gate screams began,
+    and Jigoku burst into black flames.'
 - title: The Emperor Returns
   types:
   - Strategy
@@ -3742,10 +3992,10 @@ cards:
   - Pre-Game
   clans:
   - Lion
-  text: Lion Clan Shugenja you own in and out of play have Shadowlands.<br>You may ignore Honor Requirements
-    when bringing Shadowlands Personalities into play.<br><b>Repeatable Reaction:</b> Before paying for
-    bringing an Oni into play, bow your target performing Human Shugenja to ignore all of the Oni's non-Gold
-    costs for entering play and negate its entering-play effects.
+  text: Lion Clan Shugenja you own in and out of play have Shadowlands.<br>You may ignore Honor Requirements when
+    bringing Shadowlands Personalities into play.<br><b>Repeatable Reaction:</b> Before paying for bringing an Oni
+    into play, bow your target performing Human Shugenja to ignore all of the Oni's non-Gold costs for entering
+    play and negate its entering-play effects.
   province_strength: 6
   starting_honor: 1
   legality:
@@ -3756,6 +4006,42 @@ cards:
   rarity: Uncommon
   artist: Lissanne Lake
   flavor_text: <i></i>
+  back_title: A Thousand Lion
+  back_flavor: 'Creatures swarmed through the Shadowlands, engaging the Empire''s armies with blackened claws and
+    poison fangs.
+
+    The Lion held their ground, but it was not enough: the armies must continue marching to the Shadow''s city,
+    or lose the Empire.
+
+    Tsanuri frowned, looking at the maps. "It will take your small group only three days to reach the city. The
+    armies can follow. If we lose more time, the Shadow will destroy the gate before we arrive and all will be for
+    nothing."
+
+    Kitsu Motso''s voice rumbled beneath the battle cries, "Someone must hold the Horde here."
+
+    Steel shone in Tsanuri''s eyes. "While you go, we will attack from this flank"—she pointed to the map—"giving
+    you time to make it to that pass."
+
+    Motso nodded. "Are you certain I should lead that unit?"
+
+    Tsanuri stared into his eyes. "They need someone they can trust. We both know the Lion do not trust me—any more
+    than you do."
+
+    "Oni no Akuma has a hundred thousand beasts at his command. If you stay, you will die."
+
+    "Do not question my command, Motso-san." Her voice was calm despite the screams that echoed over the plain.
+
+    For a moment, the two commanders stood, silent in the battle''s chaos. A flicker of respect passed between them.
+    Then Motso bowed. Tsanuri nodded, replaced her helmet, and grasped her father''s sword. "The Ikoma troops will
+    not falter. You will have three days—but no more." She turned back toward the Lion legions.
+
+    Motso watched her go.
+
+    "We are Lion," he said, saluting as she faded into the mist.
+
+    "We will not fail."
+
+    But Akuma already knew the Lion''s plans.'
 - title: The New Akasha
   types:
   - Stronghold
@@ -3763,10 +4049,10 @@ cards:
   - Pre-Game
   clans:
   - Naga
-  text: Crab Clan Personalities enter play for you for 2 less Gold, but will not have their Gold cost
-    further reduced.<br>If you control no Shadowlands cards, you may ignore Honor Requirements when bringing
-    Crab Clan Personalities and Naga cards into play.<br>While you have Crab Clan and Naga Personalities
-    in the same army, each such Personality has +1F/+1C.<br>Negate all Fear effects upon your Naga cards.
+  text: Crab Clan Personalities enter play for you for 2 less Gold, but will not have their Gold cost further reduced.<br>If
+    you control no Shadowlands cards, you may ignore Honor Requirements when bringing Crab Clan Personalities and
+    Naga cards into play.<br>While you have Crab Clan and Naga Personalities in the same army, each such Personality
+    has +1F/+1C.<br>Negate all Fear effects upon your Naga cards.
   province_strength: 6
   starting_honor: 2
   legality:
@@ -3775,6 +4061,41 @@ cards:
   rarity: Uncommon
   artist: Chris Arneson
   flavor_text: <i></i>
+  back_title: The Enemy of My Enemy
+  back_flavor: 'O-Ushi raised her hammer. Beside her, the Crab tensed for battle against an army of Naga gathered
+    at the Shadowlands'' edge.
+
+
+    "Your people have betrayed us." O-Ushi bit the words off sharply, her distaste apparent. Behind her, her honor
+    guard shifted. "Leave our lands, Naga. We do not need your poison to win this war."
+
+
+    Behind his Qatol, one of the Asp slowly drew forth an arrow. His bow tensed.
+
+
+    "O-Ushi!" a Crab shouted, throwing his body before hers as the Asp released his shaft. He was too late. The
+    arrow passed through O-Ushi''s arm and sank into the chest of a man behind her. The man fell, black blood oozing
+    from his wound. As his life ebbed, his features slid into nothing and a Tainted black blade fell from his grasp.
+
+
+    O-Ushi''s guard stared at their fallen comrade. They had fought with this man, lived with him, known his family.
+    And yet . . . he was a Goju.
+
+
+    "They control our actions, even now," O-Ushi said softly. She turned to the Naga archer, who had lowered his
+    bow. "You shot through me."
+
+
+    "He was behind you," the archer hissed. "I did not want the arrow to fail." He tested his bowstring, and it
+    hummed faintly in the thin air. "Had I missed, you would have died at the Goju''s hand, and your Crab would
+    have attacked. None of us would have lived to see the true battle. I know where my enemies are." The Naga pointed
+    into the Shadowlands.
+
+
+    O-Ushi nodded. Before the archer could go, she said, "I thought Naga arrows never miss."
+
+
+    The Naga smiled thinly, displaying his fangs, and said nothing. Then Balash turned and was gone.'
 - title: The Spawning Ground
   types:
   - Stronghold
@@ -3782,9 +4103,9 @@ cards:
   - Pre-Game
   clans:
   - Shadowlands
-  text: You do not gain or lose Honor; this is not negation.<br>You may not take Political actions or
-    actions that cause other players unconditional Honor losses.<br>Negate all Fear effects upon your
-    cards.<br>Ogre, Oni, and Troll Personalities you own, in and out of play, have +1F/+1C.
+  text: You do not gain or lose Honor; this is not negation.<br>You may not take Political actions or actions that
+    cause other players unconditional Honor losses.<br>Negate all Fear effects upon your cards.<br>Ogre, Oni, and
+    Troll Personalities you own, in and out of play, have +1F/+1C.
   province_strength: 7
   starting_honor: -19
   legality:
@@ -3795,6 +4116,31 @@ cards:
   rarity: Uncommon
   artist: Paul Carrick
   flavor_text: <i></i>
+  back_title: Death of the Last Thunder
+  back_flavor: 'Kamoko''s blade cut into Tsume''s armor, tearing the rotted lacings and slashing toughened tendon
+    and bone.
+
+
+    "Too late," Tsume hissed, his own weapon leaping toward her throat. "Even if you destroy me, the Shadowlands
+    have claimed you. You have the Master''s Taint."
+
+
+    Parrying the undead Moto''s savage slash, the battle maiden felt something dark move within her, its Taint responding
+    to Tsume''s own. Kamoko''s katana shattered. She fell to her knees, which sank into churned earth. With the
+    sweep of Tsume''s sword rising above her, Kamoko looked up through blood and sweat.
+
+
+    "No, Tsume," she growled. "I would do anything to save my clan from the Darkness you offer them, but you are
+    wrong. The only Taint in my soul is the Taint I chose to bear."
+
+
+    "Then die for them!" Tsume roared, stabbing through her chest with a furious thrust of his katana. "And may
+    your last sight be of our victory!"
+
+
+    Tainted blood pouring from her wound, the Unicorn Thunder gripped Tsume''s wrists with her last strength. Around
+    her, undead Moto cut through the Unicorn with rusted blades and sharp cries of victory. Tsume''s mad laughter
+    echoed from the Twilight Mountains'' high cliffs.'
 - title: The Sun Returns
   types:
   - Strategy
@@ -3822,8 +4168,8 @@ cards:
   - Pre-Game
   clans:
   - Scorpion
-  text: Each of your Scorpion Clan Personalities has the ability, "<b>Battle, :bow::</b> Bow a target
-    enemy Follower or Personality without Followers."
+  text: Each of your Scorpion Clan Personalities has the ability, "<b>Battle, :bow::</b> Bow a target enemy Follower
+    or Personality without Followers."
   province_strength: 7
   starting_honor: 1
   legality:
@@ -3836,6 +4182,40 @@ cards:
   rarity: Uncommon
   artist: Ellym Sirac
   flavor_text: <i></i>
+  back_title: A Small Price
+  back_flavor: 'Around the Empire''s camped legions, tremendous bays of flame burned. Creatures scurried past. Guardians
+    stood at every corner, their raised spears shining in the bonfires'' brilliant light. In the darkness of the
+    Shadowlands'' edge, an army prepared for dawn.
+
+
+    Saigorei was the name of the one chosen to lead the small force that would race toward Volturnum when dawn arrived.
+    He was the last of Toturi''s faithful, ready to die in service to his lord.
+
+
+    He heard a disturbance outside his tent and looked out, squinting into the encampment''s brightness. "Who comes?"
+    he asked the guard.
+
+
+    "The Scorpion," came the quietly reply.
+
+
+    Yojiro and Aramoro. Aramoro remained behind his champion, his eyes dead and cold. A small army stood by, each
+    samurai bearing a huge pack. "We wish to parlay," Yojiro said.
+
+
+    "On the eve of battle?"
+
+
+    "There will be no battle," Yojiro said. "You cannot fight the Shadow. Your courage does the Emperor honor, but
+    your foolishness will destroy the very thing you fight to save. Hitomi has brought you knowledge of the Goju,
+    but she has not armed you for this war." Yojiro raised his hand, and the Scorpion army laid down their packs
+    and threw them open to reveal a hundred thousand katana, nagamaki, naginata, and arrows—all of purest crystal.
+    The weapons reflected the blazing firelight. "The Scorpion will arm the Empire''s clans, because if we do not,
+    you will all die in Volturnum. In return, we request only that the clans know that you live not because of their
+    honor . . . but because of ours." Yojiro smiled, and the trap was set.
+
+
+    The Emperor''s servant nodded, and the deal was made.'
 - title: Thunder Dragon
   types:
   - Personality
@@ -4104,6 +4484,24 @@ cards:
   rarity: Fixed
   artist: Ellym Sirac
   flavor_text: <i></i>
+  back_title: Death of a Ronin
+  back_flavor: 'The Shadow roared from Volturnum''s fallen gates, its Darkness growing and white heat rippling through
+    the tortured air. Suddenly, arrows and tremendous breaths of wind tore apart the last of Toturi''s faithful.
+    They fought beasts with their own faces, and more than one samurai died, betrayed, on a companion''s sword.
+
+
+    Dairya plunged through the Shadow-creatures, slashing frantically across the shifting terrain. When he regained
+    his footing, he saw nothing but carnage—and a single, grey-clad figure. "The Crane . . .," he cursed, throwing
+    down his crystal weapon. Dairya reached for his katana, and the Crane did the same. Around them, the Goju''s
+    faceless minions clustered, ready to finish their assault. With a shout, Dairya drew, and his blade struck flesh.
+    Yet he felt no pain. His blow had not been returned.
+
+
+    The Crane stood, bleeding, as he watched the Shadow close around the ronin. It swirled and howled, eager to
+    consume Dairya''s soul and wipe his face as empty as the sky.
+
+
+    With a smile, the old Crane died, and the waiting Darkness swallowed the ronin''s shout of betrayal and fury.'
 - title: Void Dragon
   types:
   - Personality

@@ -3889,11 +3889,35 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
-    the Emerald Edition border.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition
+    border.
   rarity: Uncommon
   artist: Nicola Leonard
+  back_title: Tsuko and Rokugan
+  back_flavor: 'When Toturi''s army approached Otosan Uchi, two Lion armies were there. One, led by Ikoma Tsanuri,
+    carried the banner of the Emperor, ready to fulfill their oaths to protect the Emperor at all costs. The other,
+    led by Kitsu Motso, carried the banner of the Lion, ready to kill or die for the empire.
+
+
+    As he watched, the armies charged at each other with a thunderous cry. Discipline quickly descended into disorder.
+    and Lion fought Lion, regardless of family or allegiance.
+
+
+    No longer able to stomach the bloodshed between the members of his former clan, Toturi charged his army into
+    the midst of the battle as Junzo''s army simply watched and laughed. Toturi''s battle cry erupted from the middle
+    of the fighting and a deep silence fell across the battlefield.
+
+
+    About to engage each other, Tsanuri and Motso both turned to look at Toturi, and the thousands of bloody Lions
+    waited for a command – any command. Toturi raised his sword high and pointed it at Junzo.
+
+
+    "For Matsu Tsuko, and for Rokugan!"
+
+
+    Behind the the feral smiles of their three commanders, a single army turned towards the army of Yogo Junzo and
+    the battle cry of ten thousand Lions, old and new, echoed through the walls of Otosan Uchi.'
 - title: The Brotherhood of Shinsei
   types:
   - Stronghold
@@ -3901,20 +3925,43 @@ cards:
   - Pre-Game
   clans:
   - Brotherhood of Shinsei
-  text: <b>Repeatable Reaction, :bow::</b> Before you would trigger a Ring's printed trait that would
-    put it into play, or if you ever meet the conditions for a Ring's printed action which would put it
-    into play, search your Fate deck for that Ring, show it, and put it into your hand. <i>(If Reacting
-    to meeting a trait's trigger, you then have a chance to trigger that trait after taking this action.)</i>
+  text: <b>Repeatable Reaction, :bow::</b> Before you would trigger a Ring's printed trait that would put it into
+    play, or if you ever meet the conditions for a Ring's printed action which would put it into play, search your
+    Fate deck for that Ring, show it, and put it into your hand. <i>(If Reacting to meeting a trait's trigger, you
+    then have a chance to trigger that trait after taking this action.)</i>
   province_strength: 6
   starting_honor: 4
   legality:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes.
   rarity: Uncommon
   artist: Ellym Sirac
+  back_title: The 12th Scroll is Opened
+  back_flavor: 'When Togashi’s heart was nothing but a dried husk, Hitomi cast it aside and broke the seal on the
+    last black scroll, releasing the last remainder of Fu Leng’s soul. His triumphant laughter filled the room and
+    he called out to the Thunders.
+
+
+    "Do what you will! My power is now complete! A thousand years ago, your descendants died to trap me in those
+    scrolls. Look at you now. Look at me! My power is a thousand times greater than what it was. My victory is complete!"
+
+
+    But from the shadows, a different laughter was heard. Its owner stepped from the darkness, clapping his hands
+    and nodding his hooded head. "You are right, dark one. Your power is greater than ever before. But there is
+    one thing you did not count on. One thing that I have known, and my father, and his father, and even the first
+    Shinsei you killed a thousand years ago. You see, now that your soul is fully released, it is also fully bonded
+    into the body of the last Hantei."
+
+
+    As Fu Leng realized what Shinsei said, his eyes began to dim with the darkness of fear.
+
+
+    "That’s right, Fu Leng," Shinsei said, his face twisting into a smile.
+
+    "You are mortal."'
 - title: The Darkest Magics
   types:
   - Event
@@ -3946,11 +3993,45 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
-    the Emerald Edition border.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition
+    border.
   rarity: Uncommon
   artist: David Martin
+  back_title: Hoturi's Last Request
+  back_flavor: 'After their fateful duel with Fu Leng, Bayushi Kachiko knelt with the head of the dying Crane Champion
+    on her lap. His blood flowed freely from his wound and his cough was wet and painful. With only moments of life
+    left in his body, he whispered, "Take my hand." She did.
+
+
+    "That was a foolish thing to do, Hoturi," she said to him. "After all the pain I''ve caused you. After everything
+    I''ve taken from you. Your family, your clan..." her fingers touched the black braid tied to his belt. "...your
+    wife."
+
+
+    The strength in his fingers was fading. She held them tighter. "Why?" she asked, her whisper filled with confusion
+    and rage. "You should have let me..."
+
+
+    "Someone once told me life is too short for regrets." He coughed again. "And revenge." He struggled to see across
+    the dim lit room. "I saw your courage, lady. It saved my best friend''s life." She put her fingers on his lips,
+    but he shook his head. The pain in his chest stole more of his breath and she told him to rest. "No. I must
+    say this." He looked deep in her eyes. "Take off your mask," he said. She did not protest. Hoturi smiled. "I
+    forgive you," he whispered. "Pray, forgive me so I may pass in peace."
+
+
+    With her mask set aside, she nodded. "I forgive you, Hoturi."
+
+
+    He bit his blood-spangled lip and his eyes squeezed shut. Kachiko took the braid from his belt and slipped it
+    into his hand. "I''m certain she forgives you, too."
+
+
+    "Remember this day, lady," he said, his voice fading away. "Remember me."
+
+
+    Just before the void came to claim him, Hoturi felt a single tear fall on his cheek and her voice softly whispering,
+    "I will."'
 - title: The Great Walls of Kaiu
   types:
   - Stronghold
@@ -4039,20 +4120,45 @@ cards:
   keywords:
   - Naga
   - Temple
-  text: You will not win an Honor Victory.<br>Negate all Fear effects upon your Naga cards.<br>If you
-    control no Shadowlands cards, you may ignore Honor Requirements when bringing Naga cards into play.<br><b>Repeatable
-    Limited, :bow::</b> Target any player's Naga Personality. Create a 1F <b>Nonhuman • Naga</b> Follower
-    and attach it to him.
+  text: You will not win an Honor Victory.<br>Negate all Fear effects upon your Naga cards.<br>If you control no
+    Shadowlands cards, you may ignore Honor Requirements when bringing Naga cards into play.<br><b>Repeatable Limited,
+    :bow::</b> Target any player's Naga Personality. Create a 1F <b>Nonhuman • Naga</b> Follower and attach it to
+    him.
   province_strength: 6
   starting_honor: 2
   legality:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes.
   rarity: Uncommon
   artist: Kevin Ward
+  back_title: The Qamar
+  back_flavor: 'As Junzo’s reinforcements approached the Imperial Palace, they suddenly found themselves riddled
+    with arrows and fire. Daini and Qamar charged into the undead army with a battalion of Phoenix, led by Shiba
+    Tsukune. The samurai-ko charged ahead quickly when she and Daini saw the Necromancer leading the army begin
+    casting spells. Qamar and Daini charged into the mass of armies while Isha led the archers in a volley of arrows
+    to support their charge.
+
+
+    Tsukune cut down the Necromancer, but she didn’t make her cut in time. The dark energy fired out and found the
+    Naga Champion. His skin and eyes turned black and gray, then it peeled away from his bones and he dropped the
+    ancient pearl Spear to the ground …
+
+
+    Isha dropped his bow and picked up the Spear.
+
+
+    When the battle was over and the bodies were thrown into a great pyre, Daini called to Isha, but the bowman
+    corrected him. “I am the Isha no longer. Now, I am the Qamar,” he said. Daini bowed with reverence and understanding.
+    Tsukune followed his example, even though she did not understand. “I must go and tell the Clans of our success,”
+    she told the new Qamar.
+
+
+    “Very well. Shashakar will send you.” The Naga shugenja nodded, crushed a pearl in his fingers and before she
+    could thank them, Tsukune was in the midst of the battle at Otosan Uchi, watching her lord and master fall from
+    the walls of the Imperial Palace as his body burned with black fire …'
 - title: The Light of Amaterasu
   types:
   - Spell
@@ -4093,19 +4199,43 @@ cards:
   - Pre-Game
   clans:
   - Dragon
-  text: After one of your Provinces is destroyed, permanently give each of your remaining Provinces +2
-    strength.
+  text: After one of your Provinces is destroyed, permanently give each of your remaining Provinces +2 strength.
   province_strength: 5
   starting_honor: 4
   legality:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
-    the Emerald Edition border.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition
+    border.
   rarity: Uncommon
   artist: Tom Biondolillo
+  back_title: Hitomi's Last Test
+  back_flavor: 'As the Thunders prepared to enter the Throne Room, Togashi Yokuni stepped before them. "You all
+    know your destiny. Deny it at your own risk." Then he turned to Hitomi. "Yours is the darkest path. Walk it
+    with care. More rests on your shoulders than you know."
+
+
+    Then, he turned and entered the Throne Room, removing his helmet and his armor. "I am here, Fu Leng!" he cried
+    out and the Thunders winced from hearing the name spoken. "I am here to show them that you can bleed!"
+
+
+    Suddenly, the Dragon Champion transformed before their eyes. His skin turned to scales and his legs and arms
+    grew long as his body twisted and shifted until his true form was revealed to all.
+
+
+    "It is me!" he cried out. "It is your brother Togashi! Face me now if you dare!"
+
+
+    Another dragon appeared, this one made of smoke and shadow. The battle of the two brothers was swift and certain.
+    Togashi''s teeth drew blood from Fu Leng, but the dark one twisted his brother''s body in his arms, snapping
+    his back. Then, he threw the broken dragon at the feet of the Thunders and laughed.
+
+
+    Hitomi knelt down before Togashi, her obsidian hand glowing with a hungry light. She plunged it into the dragon''s
+    chest and pulled out both his heart and the lost twelfth black scroll. Then, she squeezed his still-beating
+    heart, stealing his strength, making it her own.'
 - title: The Path of Wisdom
   types:
   - Strategy
@@ -4156,11 +4286,32 @@ cards:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
-    the Emerald Edition border.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition
+    border.
   rarity: Uncommon
   artist: Bryon Wackwitz
+  back_title: The First to Fall
+  back_flavor: 'At the Imperial Palace, Shinjo Yokatsu arrived with his army of peasants and horsemen. Leading the
+    charge was Otaku Kamoko and her battalion of battle maidens. When Junzo retreated from his doomed army, Kamoko
+    charged after him. The undead shugenja turned back on the battle maiden, pulling black scrolls into his hands,
+    summoning his dark lord''s power. With naught but a whisper from his mistress, Kamoko’s horse burst into a sudden
+    blur of speed and Junzo’s body was crushed by her steed’s mighty strides.
+
+
+    With Junzo broken under the hooves of the Unicorn, the undead army of the Emperor had no will to guide it. Together
+    with the Crab and Lion armies, Kamoko destroyed the remainder of the porcelain-masked creatures while Yokatsu
+    waited behind, blocking any possible reinforcements from coming to the doomed army’s aid. Then she watched as
+    the Phoenix destroyed themselves and met Bayushi Kachiko at the gate.
+
+
+    Finally, the Thunders were assembled. They entered the palace, and saw the death of Togashi Yokuni as Mirumoto
+    Hitomi opened the last black scroll.
+
+
+    Watching the power of the dark lord grow, Kamoko could stand by no longer. The descendant of Shinsei tried to
+    hold her back, but she shrugged him off and charged at the Emperor, with her Clan’s sword in her hand and a
+    wild battle cry in her heart …'
 - title: The Ruined Fortress of the Scorpion
   types:
   - Stronghold
@@ -4168,17 +4319,34 @@ cards:
   - Pre-Game
   clans:
   - Scorpion
-  text: You will not lose, or be eliminated, by Dishonor.<br>You will not win an Honor Victory.<br>Once
-    per game, if your Family Honor is ever -20 or below, permanently give your Provinces -11 strength.
+  text: You will not lose, or be eliminated, by Dishonor.<br>You will not win an Honor Victory.<br>Once per game,
+    if your Family Honor is ever -20 or below, permanently give your Provinces -11 strength.
   province_strength: 11
   starting_honor: 0
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes.
   rarity: Uncommon
   artist: Daren Bader
+  back_title: Kachiko's Bluff
+  back_flavor: 'Shadows moved along the hallways of the Imperial Palace preparing for the arrival of the army of
+    the Seven Thunders. The Emperor stormed about the palace as all of his own preparations met with failure. Everywhere
+    he turned, his guards were dead or missing. The gates were open and drawbridges dropped. He threw open a panel
+    and found his wife and seized her by her kimono, lifting her high in the air. "You! You are the cause of all
+    of this! I will kill you!"
+
+
+    She smiled. "You cannot. Only when the Thunders are assembled can you kill us. Every creature in the world has
+    rules it must follow and you are no exception." She looked the Emperor, her gaze turning poison. "Killing me
+    now violates laws that are greater than even your power."
+
+
+    The Emperor''s fists clenched, his eyes burst with black fire and his voice rattled the foundations of the palace.
+    He threw her to the floor and stormed away. Kachiko was still for a moment, then her body began to shudder from
+    the strain of hiding her fear. "You were right about that, Yokuni," she whispered. "I pray you are wrong about
+    the rest."'
 - title: The Ruins of Isawa Castle
   types:
   - Stronghold
@@ -4209,20 +4377,38 @@ cards:
   - Phoenix
   keywords:
   - Temple
-  text: ':bow:: When paying for a Spell or Shugenja, produce 5 Gold which may only pay for that card.
-    <br>:bow:: When paying for a Spell or Shugenja, produce 7 Gold which may only pay for that card and
-    if the latter, you may not Proclaim him; after the Shugenja attaches the Spell or enters play, permanently
-    give him <b>Shadowlands</b>.'
+  text: ':bow:: When paying for a Spell or Shugenja, produce 5 Gold which may only pay for that card. <br>:bow::
+    When paying for a Spell or Shugenja, produce 7 Gold which may only pay for that card and if the latter, you
+    may not Proclaim him; after the Shugenja attaches the Spell or enters play, permanently give him <b>Shadowlands</b>.'
   province_strength: 5
   starting_honor: 6
   legality:
   - Clan Wars (Imperial)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
-    the Emerald Edition border.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition
+    border.
   rarity: Uncommon
   artist: Tom Biondolillo
+  back_title: The Last Master
+  back_flavor: 'On the night before the assault on Otosan Uchi, Isawa Kaede, filled with visions of doom and dark
+    prophesy, fled from the camp into the night. She spoke to Tadaka for only a moment, and she told him of her
+    dreams and visions. “He is calling me,” she told him. When Tadaka asked her who was calling her, all Kaede could
+    say was, “The Oracle. He calls me, Tadaka. He calls me.”
+
+
+    On the walls of Otosan Uchi, the Master of Fire waited for his brothers and sisters. His mind finally eaten
+    away by the corruption in his blood, he hurled black fire down upon his former Clan. The Elemental Masters,
+    incomplete as they were, tried to stop his assault, but one by one they fell under the corrupt power of his
+    fire. Only Isawa Tadaka had the strength to withstand the pain of his fire, and while the Master of Earth’s
+    magic distracted his cousin, Shiba Ujimitsu was able to strike down the Fire Master.
+
+
+    Tsuke’s blood was as black as midnight and burned Ujimitsu like flaming pitch. The Phoenix Champion screamed
+    as he fell from the walls like a comet. He clung to life just long enough to whisper seven words to Shiba Tsukune,
+    and put the Clan sword in her hands. Then he died. With a new-found fire in her eyes, she and Isawa Osugi lifted
+    the bloody and burned Isawa Tadaka to his feet. They could only pray the Phoenix Thunder had the strength to
+    hold on to life long enough to face the Dark Emperor within.'
 - title: The Scorpion's Sting
   types:
   - Strategy
@@ -4248,10 +4434,10 @@ cards:
   - Pre-Game
   clans:
   - Shadowlands
-  text: You do not gain or lose Honor; this is not negation.<br>You may not take Political actions or
-    actions that cause other players unconditional Honor losses.<br>You may not be invited as an ally,
-    or invite allies.<br>Negate all Fear effects upon your cards.<br><b>Repeatable Reaction, :bow::</b>
-    When paying for a Shadowlands card, lower the card's Gold Cost by 4 until it is paid.
+  text: You do not gain or lose Honor; this is not negation.<br>You may not take Political actions or actions that
+    cause other players unconditional Honor losses.<br>You may not be invited as an ally, or invite allies.<br>Negate
+    all Fear effects upon your cards.<br><b>Repeatable Reaction, :bow::</b> When paying for a Shadowlands card,
+    lower the card's Gold Cost by 4 until it is paid.
   province_strength: 5
   starting_honor: -19
   legality:
@@ -4259,10 +4445,36 @@ cards:
   - Four Winds (Gold)
   - Hidden Emperor (Jade)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes.
   rarity: Uncommon
   artist: Douglas Shuler
+  back_title: And so they fall...
+  back_flavor: 'Fu Leng''s grip held fast about Kachiko''s throat. Doji Hoturi charged again, but the Dark Lord
+    put his hand through the Crane''s chest and watched the Crane fall back, his eyes full of pain and surprise.
+
+
+    Tadaka sent arrows of jade at the dark lord, who reflected them back at the Master of Earth, riddling his tainted
+    body with purity.
+
+
+    Toturi was next. The dark lord caught Toturi''s blade in his grip, and twisted it until Toturi lost his grip.
+    Fu Leng smacked the ronin with the katana''s pommel sending him back into the darkness.
+
+
+    Yakamo screamed out of the shadows of the throne room and ran forward, but Fu Leng changed the darkness about
+    the hero into chains and bound Yakamo to the floor. At the door, Hitomi watched with the last black scroll and
+    her obsidian hand ... and did nothing.
+
+
+    "You have failed, Scorpion," Fu Leng whispered to Kachiko. "I will kill your comrades and keep you as a trophy."
+
+
+    "Then take a good look at your trophy, dark one," she said. "For its the last look you''ll get."
+
+
+    Only then did Fu Leng notice her black hair flowing freely over her shoulders. He looked down and saw the long
+    needle hair pins in her hands ...'
 - title: The Sight of Death
   types:
   - Strategy
@@ -4355,11 +4567,35 @@ cards:
   - Age of Enlightenment (Lotus)
   - Clan Wars (Imperial)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with
-    the Emerald Edition border.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes. They were also printed as fixed cards in Obsidian Edition with the Emerald Edition
+    border.
   rarity: Uncommon
   artist: William O'Connor
+  back_title: The Two Deaths of Yakamo
+  back_flavor: 'When the armies of the Clans finally united under Yakamo and Toturi, the Crab Hero charged into
+    the fray, his tetsubo and jade hand killing and crushing enemies as he went. Finally, his body bruised and bloodied,
+    he saw the oni that stole his name. Yakamo kept his fury in check as he advanced on the creature, but when it
+    turned to look at him with his own face and eyes, he could contain himself no longer.
+
+
+    The duel was deadly and swift, and just when it seemed Yakamo had the upper hand, the oni''s acrid blood sprayed
+    into his eyes, blinding the hero with pain. He stumbled backward, swinging his tetsubo blindly, hoping to keep
+    the oni at bay until he could recover. He heard the oni cry out in pain ad when his vision cleared, he saw Mirumoto
+    Hitomi crushing the oni''s head with her obsidian hand.
+
+
+    Yakamo stood, his body aching with every movement. Hitomi waited. Yakamo shook his head, "I cannot afford the
+    luxury of killing you."
+
+
+    "I thought you were Kisada''s son," she whispered, her voice filled with hate. "I suppose he is the coward I
+    always suspected him to be."
+
+
+    Hitomi''s taunt was successful. Yakamo charged her, but the fresh Dragon was too quick for the wounded Crab.
+    His tetsubo was on the ground and her blade was at his throat in a moment. "I won''t kill you now, but you''ll
+    always remember that I could have."'
 - title: The Yoritomo Alliance
   types:
   - Stronghold
@@ -4367,20 +4603,67 @@ cards:
   - Pre-Game
   clans:
   - Mantis
-  text: <b>Repeatable Reaction:</b> Before bowing this Stronghold to produce Gold, if your Family Honor
-    is 0 or higher, lose any amount of Honor from 0 up to your current Family Honor total to have this
-    Stronghold produce additional Gold equal to the amount of Honor you lost which may only pay for one
-    cost; you cannot give to another player, negate, substitute, increase, or decrease this Honor loss.
+  text: <b>Repeatable Reaction:</b> Before bowing this Stronghold to produce Gold, if your Family Honor is 0 or
+    higher, lose any amount of Honor from 0 up to your current Family Honor total to have this Stronghold produce
+    additional Gold equal to the amount of Honor you lost which may only pay for one cost; you cannot give to another
+    player, negate, substitute, increase, or decrease this Honor loss.
   province_strength: 6
   starting_honor: 2
   legality:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes.
   rarity: Uncommon
   artist: Mike Kimble
+  back_title: The Son of Storms
+  back_flavor: 'The army of the Son of Storms returned to Otosan Uchi from its victory against Yogo Junzo''s reinforcements
+    to find Junzo''s armies routed and crushed by the armies of the Thunders. Content with his victory, he approached
+    Hoturi, Yakamo and Toturi with his lieutenants at his side. This time – unlike a thousand times before–Yoritomo
+    did not kneel, only bowed.
+
+
+    "We have routed the reinforcements," he told them. "And now my army stands ready."
+
+
+    "Ready?" Toturi asked.
+
+
+    "Yes. Ready to crush your own."
+
+
+    Kakita Toshimoko, standing close to Doji Hoturi, put his hand on his blade, but his Champion shook his head.
+
+
+    "Explain yourself, Stormson."
+
+
+    Yoritomo removed his helmet. "My army is ready to attack. We will fail. Destiny cannot be denied. But we are
+    ready to attack you now and die if it is necessary."
+
+
+    "To what purpose?" Toturi asked.
+
+
+    "To prove we are willing to die to prove we are worthy."
+
+
+    Yoritomo''s eyes gave them no hint of feint or bluff. "I will send my lieutenants back and you will kill me
+    here for my disobedience." He snapped his fingers and the two lieutenants retreated and he knelt with his head
+    bowed.
+
+
+    Hida Yakamo''s laughter could be heard across the battlefield. "By the Fortunes, I like this man!"
+
+
+    Toturi nodded. "As do I. Call back your lieutenants, Son of Storms."
+
+
+    "But you had better have your army pray," Hoturi told him. "If we fail, your new status will be short-lived."
+
+
+    Yoritomo replaced his helmet. "Then don''t fail."'
 - title: To Save an Empire
   types:
   - Event
@@ -4563,18 +4846,40 @@ cards:
   - Pre-Game
   clans:
   - Toturi's Army
-  text: You may ignore Honor Requirements when bringing Unaligned Human Personalities or Toturi's Army
-    Personalities into play.<br>Your deck is not legal if it includes three or more Shadowlands cards.
+  text: You may ignore Honor Requirements when bringing Unaligned Human Personalities or Toturi's Army Personalities
+    into play.<br>Your deck is not legal if it includes three or more Shadowlands cards.
   province_strength: 6
   starting_honor: 2
   legality:
   - Clan Wars (Imperial)
   - Hidden Emperor (Jade)
   - Legacy
-  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and
-    on the back of the starter deck boxes.
+  notes: Before Obsidian Edition, the stronghold cards weren't printed with the deck, but as promos and on the back
+    of the starter deck boxes.
   rarity: Uncommon
   artist: Randy Gallegos
+  back_title: The Thunders Attack
+  back_flavor: 'In the darkness of the Throne room, Toturi watched Kamoko charge Fu Leng and could do nothing as
+    Fu Leng swat her aside like an inconsequential insect. The jade fire that erupted beside him came from Yakamo’s
+    hand and the eyes of the wounded Master of Earth.
+
+
+    Yakamo charged Fu Leng, with Tadaki’s magic shrouding him in holy light. Black fire blasted from the Dark Lord’s
+    palms, but Tadaki’s jade aura protected the Crab Thunder as Yakamo’s father’s sword drew black, corrupt blood.
+
+
+    Doji Hoturi was just behind Yakamo, his own Clan sword held high over his head. Both Thunders sliced at Fu Leng’s
+    mortal body again before the dark lord expelled them from his presence with an unholy wind. Toturi looked about
+    quickly, then turned to Tadaki. “The Throne, Tadaki! The Emerald Throne!” The Master of Earth nodded and with
+    his chants the chair rose high into the air. Before Fu Leng could move, Tadaki dropped the Emperor’s Throne
+    on the dark lord.
+
+
+    Toturi charged the Emperor then, raising his sword, but Fu Leng recovered too quickly. He grabbed Toturi’s throat
+    with his death-cold grip and smiled through bloody teeth. “Now you are mine, Lion!” Toturi felt the inhuman
+    grip squeeze … then release. He opened his eyes to see Kachiko ripping at the dark lord’s eyes. He was dropped
+    to the floor as black blood poured out of the Dark One’s wounds, but his fist clenched about Kachiko’s slender
+    throat …'
 - title: Toturi's Battle Standard
   types:
   - Item

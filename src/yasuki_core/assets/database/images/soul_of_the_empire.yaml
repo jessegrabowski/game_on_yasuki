@@ -293,6 +293,9 @@ images:
   files:
   - role: front
     file: eternal_halls_of_the_shiba.jpg
+    sha256: 38bd5871007ee0a3c7c03b1d35f6e5f4ae7a9b9ef89d3cea0442f9ad36852d69
+  - role: back
+    file: eternal_halls_of_the_shiba__back.jpg
     sha256: e69d4acff8b6fc29895eff19dcedb5c5fc48d9aae7bc76f76c144ff35ae82d4e
 - card_id: eyes_shall_not_see
   printing_id: soul_of_the_empire
@@ -468,6 +471,9 @@ images:
   - role: front
     file: iron_mountain.jpg
     sha256: 6809ee7fb5eee663694a28ac12aacc62880fc0add7cbaac9871e1c60bd32b6a1
+  - role: back
+    file: iron_mountain__back.jpg
+    sha256: 6130e29ae27e3409522323abe5f891ba24f882d6d64696ea79dd2bd7ec2d5044
 - card_id: isawa_tomo_experienced_2
   printing_id: soul_of_the_empire
   files:
@@ -557,6 +563,9 @@ images:
   files:
   - role: front
     file: kosaten_shiro.jpg
+    sha256: 18b1fa51fe587d274a839071f250a23ffdcc80ad9c4b80d344e74d2e3121b3be
+  - role: back
+    file: kosaten_shiro__back.jpg
     sha256: 3e08b7fb1e8a6a52a85c43c701f39f3523a8772b280ca622aa8ab9e54374adb2
 - card_id: kyoso_no_oni_experienced_2
   printing_id: soul_of_the_empire
@@ -570,6 +579,9 @@ images:
   - role: front
     file: kyuden_kitsune.jpg
     sha256: 8ae9ba0105b64305548f2cb1772626e7ac4ab0708f01c82310000ab1534f72ee
+  - role: back
+    file: kyuden_kitsune__back.jpg
+    sha256: d26a8207b90baf7fb200aff1679ac0970cde65db589a66199a70b3f0c3c7977d
 - card_id: lessons_of_honor
   printing_id: soul_of_the_empire
   files:
@@ -707,6 +719,9 @@ images:
   files:
   - role: front
     file: northern_provinces_of_the_moto.jpg
+    sha256: 174fdfeec43089cce44d10b2489e08fc8ef09f227ff1460b468cc68dbcd7b673
+  - role: back
+    file: northern_provinces_of_the_moto__back.jpg
     sha256: 4ed50348e324a01dcd7fad40e8e42923671027cefe5aa4b8f9bd6d488f7a9c10
 - card_id: o_ushi_sensei
   printing_id: soul_of_the_empire
@@ -990,6 +1005,9 @@ images:
   - role: front
     file: temples_of_the_crow.jpg
     sha256: c5c66a3a1f6a60cf0fdba2e89e5e7cbda7c112a1a16f6d7283ad8b1eeafdde8c
+  - role: back
+    file: temples_of_the_crow__back.jpg
+    sha256: c0fd9be51b175d94c06f28ec5285850295e677d2ff952ff27d10a1e67f2a7b47
 - card_id: temples_of_the_new_tao
   printing_id: soul_of_the_empire
   files:
@@ -1008,12 +1026,18 @@ images:
   - role: front
     file: the_citadel_of_the_hiruma.jpg
     sha256: 93624a1c44f6f81420ecc5893069da8ad86ca64ffb4bd4991a0bae8d62ecc296
+  - role: back
+    file: the_citadel_of_the_hiruma__back.jpg
+    sha256: 0b2ef2e734d67309a0914c3b7f4a79cf4f6acd5c541f51934af88181bd727038
 - card_id: the_dark_path_of_shadow
   printing_id: soul_of_the_empire
   files:
   - role: front
     file: the_dark_path_of_shadow.jpg
     sha256: ca2e7cd24db1d544a4839b9cc5049ceea8c2e266a99519ab44a59a1e28cb1103
+  - role: back
+    file: the_dark_path_of_shadow__back.jpg
+    sha256: 32c0343933a79395c518e475750cb744b783c9aa0cc9fa40764e85d36c4cb9e1
 - card_id: the_emperor_returns
   printing_id: soul_of_the_empire
   files:
@@ -1031,6 +1055,9 @@ images:
   files:
   - role: front
     file: the_kitsu_tombs.jpg
+    sha256: 6b9aa8a2fc1a829659203a387843f8e4bddee5f6e6f3274ff37db05512e3c5fb
+  - role: back
+    file: the_kitsu_tombs__back.jpg
     sha256: cc20201d52243015a80a2a845d0bdacbe333efe0bf64485ce47bc87fd771a968
 - card_id: the_new_akasha
   printing_id: soul_of_the_empire
@@ -1038,12 +1065,18 @@ images:
   - role: front
     file: the_new_akasha.jpg
     sha256: 9c24ca3ae2069e7b8b734f4179c4ec4aa23d01e00c14d8724ee31cea07b1dbfa
+  - role: back
+    file: the_new_akasha__back.jpg
+    sha256: 430fb99236d5d5d3f03980a54dbe826252e5ae83de564fc63cd149edae8e8ccc
 - card_id: the_spawning_ground
   printing_id: soul_of_the_empire
   files:
   - role: front
     file: the_spawning_ground.jpg
     sha256: 0eaa91b367794e83b7f1a1f84f671874a7d858336aad44bdee8606164cbd58f7
+  - role: back
+    file: the_spawning_ground__back.jpg
+    sha256: 76c2dfa923b2e5b451d1813d3d7ad38d71bacf83ab7389341082bb7d5031e3bd
 - card_id: the_sun_returns
   printing_id: soul_of_the_empire
   files:
@@ -1055,6 +1088,9 @@ images:
   files:
   - role: front
     file: the_towers_of_the_yogo.jpg
+    sha256: 46f214bc03cc8ea89630ce26a41ab353af75208d044878c00bb00da87b920af1
+  - role: back
+    file: the_towers_of_the_yogo__back.jpg
     sha256: 548cb64d1b21a66019046a0fb6fd8802aa4447527742bcadeb4e4b6fd697e331
 - card_id: thunder_dragon_experienced
   printing_id: soul_of_the_empire
@@ -1122,6 +1158,9 @@ images:
   - role: front
     file: vigilant_keep_of_the_monkey.jpg
     sha256: 63fabfeaa4562f5fa78963469186c6bd5ed46a8d4105a854bb472cf49b0e1684
+  - role: back
+    file: vigilant_keep_of_the_monkey__back.jpg
+    sha256: b9775603cedb9a2d73cac2360822b808e7f12d21eb8ecd6b3d01d67c23755dbe
 - card_id: void_dragon_experienced
   printing_id: soul_of_the_empire
   files:

@@ -611,6 +611,9 @@ images:
   files:
   - role: front
     file: the_mountain_keep_of_the_dragon.jpg
+    sha256: d22887d84ab0772aa801eb3d5193d209a8b4bc130ef12cae8e05b8db2193c061
+  - role: back
+    file: the_mountain_keep_of_the_dragon__back.jpg
     sha256: 96c93813f2f3b394f2788301cf6dd97ae1a24989f4955f33e5416d2a5af07063
 - card_id: the_rising_sun
   printing_id: battle_of_beiden_pass
@@ -629,6 +632,9 @@ images:
   files:
   - role: front
     file: the_war_fortress_of_the_crab.jpg
+    sha256: c71efe0dfd61dc82a658d2ee3d67d91f8c9a4f27d295e53b70bcf2ccfa019670
+  - role: back
+    file: the_war_fortress_of_the_crab__back.jpg
     sha256: 5d97896300e951f5dba3070a3737ef77611fbc317aeabf47889d5915a561687a
 - card_id: togashi_rinjin
   printing_id: battle_of_beiden_pass
