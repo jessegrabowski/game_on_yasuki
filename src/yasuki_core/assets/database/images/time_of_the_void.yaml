@@ -1067,12 +1067,18 @@ images:
   files:
   - role: front
     file: the_ancestral_home_of_the_lion.jpg
+    sha256: a158b522283722ee7b26a4804c8bb1a3e2abcee67b8c344c161cf7be5d64366a
+  - role: back
+    file: the_ancestral_home_of_the_lion__back.jpg
     sha256: d356187a5f6762951929720cb4e4b6a4dedff00a5b046eeb7690de180206958c
 - card_id: the_brotherhood_of_shinsei
   printing_id: time_of_the_void
   files:
   - role: front
     file: the_brotherhood_of_shinsei.jpg
+    sha256: 7cc5f73acc1bdad04e7aa600984ec3ef4913c89b3bed0b8ca4c8135231fe5571
+  - role: back
+    file: the_brotherhood_of_shinsei__back.jpg
     sha256: 4f942c851db10b6770e453be3239a49277ce02009d9471792985d4cff10c64c3
 - card_id: the_darkest_magics
   printing_id: time_of_the_void
@@ -1086,6 +1092,9 @@ images:
   - role: front
     file: the_esteemed_house_of_the_crane.jpg
     sha256: 1d11404052473a82340ed3979bc1a78f9003f836ad40f64f0a5ed3a91c73dd92
+  - role: back
+    file: the_esteemed_house_of_the_crane__back.jpg
+    sha256: e2d1d5da0087b318ac4621143d327a995a6a7e17215f8c8adfafeecf539f7446
 - card_id: the_great_walls_of_kaiu
   printing_id: time_of_the_void
   files:
@@ -1115,6 +1124,9 @@ images:
   files:
   - role: front
     file: the_hidden_temples_of_the_naga.jpg
+    sha256: eafc8c276e43ab769043c68aba15e0b1fb4febdbf446d92f38bd857fd30afbc0
+  - role: back
+    file: the_hidden_temples_of_the_naga__back.jpg
     sha256: 883e6804b6544262d1f0327c40bc950aeea99b8d6ee250c6d9c265f797f809c6
 - card_id: the_light_of_amaterasu
   printing_id: time_of_the_void
@@ -1134,6 +1146,9 @@ images:
   - role: front
     file: the_mountain_keep_of_the_dragon.jpg
     sha256: f113e6ad0a16bc0c8891f3f19d090564febb70925d473d7737046a7b47f9a04e
+  - role: back
+    file: the_mountain_keep_of_the_dragon__back.jpg
+    sha256: 1aa2d8d709209db2ecada633c99adaaae4c825de08464e7f279a455ab4e8222a
 - card_id: the_path_of_wisdom
   printing_id: time_of_the_void
   files:
@@ -1151,6 +1166,9 @@ images:
   files:
   - role: front
     file: the_provincial_estate_of_the_unicorn.jpg
+    sha256: 67c70dee220e7f8271d6ecbcbd860b593ccc1f21e741297ce2287a753bc0aa55
+  - role: back
+    file: the_provincial_estate_of_the_unicorn__back.jpg
     sha256: 94fb53ec6caf8e0ed1fe856e3d5cd7778357ba49dd2f5cd1dbedd796a886abcf
 - card_id: the_ruined_fortress_of_the_scorpion
   printing_id: time_of_the_void
@@ -1158,6 +1176,9 @@ images:
   - role: front
     file: the_ruined_fortress_of_the_scorpion.jpg
     sha256: 34ee1fd981add2101aba34495219086f5ed0711a885081d84c2574a7c4493424
+  - role: back
+    file: the_ruined_fortress_of_the_scorpion__back.jpg
+    sha256: 1c914225e2a373b1066b248f1652bb35902b1fdb4478aaa53a14534660217f58
 - card_id: the_ruins_of_isawa_castle
   printing_id: time_of_the_void
   files:
@@ -1170,6 +1191,9 @@ images:
   - role: front
     file: the_sacred_temple_of_the_phoenix.jpg
     sha256: aff19c7b4b7b3d2670504b0a1e3a81c35349d8d32ad1bfe0d9cb2383a6119534
+  - role: back
+    file: the_sacred_temple_of_the_phoenix__back.jpg
+    sha256: c05dc82adcbb3325dc6127a717e92064a0c3b2706aae6ae3f119f47608541e8a
 - card_id: the_scorpions_sting
   printing_id: time_of_the_void
   files:
@@ -1181,6 +1205,9 @@ images:
   files:
   - role: front
     file: the_shadowlands_horde.jpg
+    sha256: d7e903804def8532a54069657ccb4dc68d24c65e5d4c73ae790872f097ca60b7
+  - role: back
+    file: the_shadowlands_horde__back.jpg
     sha256: 8605ea8c5e6626f337df2267b5cfd1324b559b0b00613fc68944ec89f6e65068
 - card_id: the_sight_of_death
   printing_id: time_of_the_void
@@ -1211,12 +1238,18 @@ images:
   files:
   - role: front
     file: the_war_fortress_of_the_crab.jpg
+    sha256: c366f6f62109a02ccc45bfadc2786cde9e1b7f4c9f695d4267fdf19fcb448d8d
+  - role: back
+    file: the_war_fortress_of_the_crab__back.jpg
     sha256: 7a6c457bbe15c514a75ebc6ced958ed331057508b6a140667d08b42361fc37db
 - card_id: the_yoritomo_alliance
   printing_id: time_of_the_void
   files:
   - role: front
     file: the_yoritomo_alliance.jpg
+    sha256: 5a9f2d874afa95d4856fab52ea177a6696efecc349eecf277bc524317462d974
+  - role: back
+    file: the_yoritomo_alliance__back.jpg
     sha256: 67350a6aab43ce402a44359cdb2949db6f76313fa785feee402699944e3cea1f
 - card_id: to_save_an_empire
   printing_id: time_of_the_void
@@ -1266,6 +1299,9 @@ images:
   - role: front
     file: toturis_army.jpg
     sha256: 2f0c2d2013d00bcfe5f06ebfc1979f2e4ba8b3c3cda16c58d721bdc4dde7d307
+  - role: back
+    file: toturis_army__back.jpg
+    sha256: 761ce52506c93f457be9560bf44db7776a5cef1f05214c364dfba0f7d49fcad6
 - card_id: toturis_battle_standard
   printing_id: time_of_the_void
   files:

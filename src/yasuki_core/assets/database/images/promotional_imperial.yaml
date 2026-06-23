@@ -72,17 +72,26 @@ images:
   - role: front
     file: the_ancestral_home_of_the_lion.jpg
     sha256: cd2eb0a63372d6119f4b7f2e38a5c4d3a4584ea1c0164275cb64de6a7a1c264c
+  - role: back
+    file: the_ancestral_home_of_the_lion__back.jpg
+    sha256: 839c2fb06bba987a62d8df83f53e4107376c6ee0b088988689da80c9c0e017e7
 - card_id: the_brotherhood_of_shinsei
   printing_id: promotional_imperial
   files:
   - role: front
     file: the_brotherhood_of_shinsei.jpg
     sha256: 2a1798f5b037e7c56f44063e75f14b48be917e35f55c78397cc5f1e434008cf8
+  - role: back
+    file: the_brotherhood_of_shinsei__back.jpg
+    sha256: 921d1e035b2438549597abec3ffc3e6737a531652473892ff0f3717fa75a4fcb
 - card_id: the_esteemed_house_of_the_crane
   printing_id: promotional_imperial
   files:
   - role: front
     file: the_esteemed_house_of_the_crane.jpg
+    sha256: a729b1903cb4bf1e72a98a11d5b079d72bb5446bd1a22767c2786467aab69e37
+  - role: back
+    file: the_esteemed_house_of_the_crane__back.jpg
     sha256: 8f8a3f9393dcff9454c12800fa08b9c96ee268d7250997f6eb9165ee70872c6b
 - card_id: the_false_hoturi
   printing_id: promotional_imperial
@@ -101,12 +110,18 @@ images:
   files:
   - role: front
     file: the_hidden_temples_of_the_naga.jpg
+    sha256: 889c9559c91e92ee7899d863aecf00dfe4380d53d9b4053f0b4c0f9a47379522
+  - role: back
+    file: the_hidden_temples_of_the_naga__back.jpg
     sha256: f6cb0d8122e3782748d717808c3f360595c4fc740a5e196657447e2b3926143e
 - card_id: the_mountain_keep_of_the_dragon
   printing_id: promotional_imperial
   files:
   - role: front
     file: the_mountain_keep_of_the_dragon.jpg
+    sha256: f8a55309d7b0e490082740d22cea072b03b4828a12e5af6fbdd999bf71b66f0b
+  - role: back
+    file: the_mountain_keep_of_the_dragon__back.jpg
     sha256: 94e579fdec4b1aa8cea3e6edfbc04fc0cdc83c9c778bb531cfe70174d8be406c
 - card_id: the_provincial_estate_of_the_unicorn
   printing_id: promotional_imperial
@@ -114,35 +129,53 @@ images:
   - role: front
     file: the_provincial_estate_of_the_unicorn.jpg
     sha256: 3386448fb479c25655596fd60876fff2d0c3b17ed11bbb5cd8350ea208a033a1
+  - role: back
+    file: the_provincial_estate_of_the_unicorn__back.jpg
+    sha256: fe3886336edd7a4b279ffc3fa8215136e893067d8174005e33f7d6ec6f42a8cf
 - card_id: the_ruined_fortress_of_the_scorpion
   printing_id: promotional_imperial
   files:
   - role: front
     file: the_ruined_fortress_of_the_scorpion.jpg
+    sha256: f03a6be4af407bdac001ba761f08f2e559d5c1d34b10acebceb8501d515921d9
+  - role: back
+    file: the_ruined_fortress_of_the_scorpion__back.jpg
     sha256: 03b5bbfd9e7c1097de61a84ae2d998e168cae996061a7adf629df6ddbe132ce7
 - card_id: the_sacred_temple_of_the_phoenix
   printing_id: promotional_imperial
   files:
   - role: front
     file: the_sacred_temple_of_the_phoenix.jpg
+    sha256: 58f9194209e599a43c4b4c3266bfcf94dfe4000f8adc1aec93a7ea55cfb90de0
+  - role: back
+    file: the_sacred_temple_of_the_phoenix__back.jpg
     sha256: 9d6a955da0b9ec64b00c10cc25884a525de3f696d533036b63734d7c5772c97d
 - card_id: the_shadowlands_horde
   printing_id: promotional_imperial
   files:
   - role: front
     file: the_shadowlands_horde.jpg
+    sha256: 164e9365044063c2d7cd470774a89a11e571836a9830ebb05abc20950011215d
+  - role: back
+    file: the_shadowlands_horde__back.jpg
     sha256: 21a6ee4d68728b3f2ed230da1a96841533545c985fca2e4ddaa7ff0a3c2cde81
 - card_id: the_war_fortress_of_the_crab
   printing_id: promotional_imperial
   files:
   - role: front
     file: the_war_fortress_of_the_crab.jpg
+    sha256: 6f2c272e1be089b9f8092245c9cd0f6896000b99cc8c53d4eecd96ec671e808e
+  - role: back
+    file: the_war_fortress_of_the_crab__back.jpg
     sha256: f904f2d618d50c73d89f9f005b07bc9c1fb7830090351a31867575ab280b096b
 - card_id: the_yoritomo_alliance
   printing_id: promotional_imperial
   files:
   - role: front
     file: the_yoritomo_alliance.jpg
+    sha256: 4d2c6156f4b08a6acb45135ec6a7340b92b16b94a4ea4a437936f27bb9eabd9b
+  - role: back
+    file: the_yoritomo_alliance__back.jpg
     sha256: 0e9e02864374ffef5cdcd881afa9f42721c36a034e9694a23415c4011f3e1a14
 - card_id: time_of_the_void
   printing_id: promotional_imperial
@@ -156,3 +189,6 @@ images:
   - role: front
     file: toturis_army.jpg
     sha256: d8caacd6a26edbf231a0ca517778b2b0089cfb66227bf1b07019ca5d466ff0ae
+  - role: back
+    file: toturis_army__back.jpg
+    sha256: c08a78a0759651ec7b6bc0f492a5ecdd92d7c0dc0f9ffceb9d478ed9d2f3b6d8
