@@ -48,7 +48,7 @@ addopts = "-q"
 [tool.pixi.workspace]
 channels = ["conda-forge"]
 platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
-requires-pixi = ">=0.63.2"
+requires-pixi = ">=0.70.2"
 
 [tool.pixi.dependencies]
 python = ">=3.12,<3.14"
