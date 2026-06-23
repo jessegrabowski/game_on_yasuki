@@ -236,7 +236,7 @@ def query_all_cards() -> list[dict]:
     """Fetch every card with its multi-valued attributes and front image, ordered by name."""
     select_sql, _ = _card_select()
     with get_db_connection() as conn, conn.cursor() as cur:
-        cur.execute(f"{select_sql} WHERE NOT c.is_back ORDER BY c.name")
+        cur.execute(f"{select_sql} WHERE NOT c.is_back ORDER BY {_NAME_TIEBREAK}")
         return cur.fetchall()
 
 
@@ -275,7 +275,7 @@ def search_cards(query: str = "", deck_filter: str | None = None) -> list[dict]:
     select_sql, _ = _card_select()
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(f"{select_sql} {where_clause} ORDER BY c.name", params)
+            cur.execute(f"{select_sql} {where_clause} ORDER BY {_NAME_TIEBREAK}", params)
             return cur.fetchall()
 
 
@@ -419,7 +419,7 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
                 f"{select_sql} "
                 "WHERE (lower(c.name) = ANY(%s) OR lower(c.extended_title) = ANY(%s)) "
                 "AND NOT c.is_back "
-                "ORDER BY c.name",
+                "ORDER BY split_part(c.name, ',', 1) ASC, c.experience ASC, c.extended_title ASC",
                 (lower_names, lower_names),
             )
             cards = cur.fetchall()
@@ -1217,17 +1217,25 @@ _SORT_COLUMNS = {
 }
 
 
+# An experience version can wear an epithet ("Bayushi Kachiko, Seven Thunder"), so sorting on the
+# base name (before the first comma) keeps a character's versions together; experience then orders
+# them (Inexperienced, base, Exp, Exp2, ...) and extended_title stabilises one level's set variants.
+_NAME_SORT = "split_part(c.name, ',', 1)"
+_NAME_TIEBREAK = f"{_NAME_SORT} ASC, c.experience ASC, c.extended_title ASC"
+
+
 def _order_by_clause(sort: str, order: str) -> str:
     """Build a safe ``ORDER BY`` clause from a whitelisted sort key and direction.
 
-    Numeric stats sort NULLs last (cards without the stat fall to the end in both directions) with a
-    name tiebreaker for a stable order; an unknown key falls back to name.
+    Numeric stats sort NULLs last (cards without the stat fall to the end in both directions); every
+    sort then tiebreaks by base name, experience level, and extended_title for a stable, intuitive
+    order. An unknown key falls back to name.
     """
     column = _SORT_COLUMNS.get(sort, "c.name")
     direction = "DESC" if str(order).lower() == "desc" else "ASC"
     if column == "c.name":
-        return f"ORDER BY c.name {direction}"
-    return f"ORDER BY {column} {direction} NULLS LAST, c.name ASC"
+        return f"ORDER BY {_NAME_SORT} {direction}, c.experience ASC, c.extended_title ASC"
+    return f"ORDER BY {column} {direction} NULLS LAST, {_NAME_TIEBREAK}"
 
 
 def query_cards_page(

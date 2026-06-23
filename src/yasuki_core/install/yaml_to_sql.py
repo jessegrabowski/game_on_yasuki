@@ -46,8 +46,50 @@ def parse_collector_numbers(raw: str | None) -> list[tuple[str | None, int]]:
     return entries
 
 
-# Index of back_card_id in the row built by _card_columns; the link pass fills it in afterwards.
-_BACK_CARD_ID_COL = 15
+# Cards-table column order. The row _card_columns builds matches it positionally, and the INSERT is
+# generated from it, so the back_card_id position the link pass writes to is derived here rather than
+# hand-counted.
+_CARD_COLUMN_NAMES = (
+    "card_id",
+    "slug",
+    "name",
+    "extended_title",
+    "name_normalized",
+    "rules_text",
+    "gold_cost",
+    "focus",
+    "force",
+    "chi",
+    "honor_requirement",
+    "personal_honor",
+    "province_strength",
+    "starting_honor",
+    "gold_production",
+    "back_card_id",
+    "is_back",
+    "is_unique",
+    "is_proxy",
+    "is_banned",
+    "errata_text",
+    "story",
+    "notes",
+    "extra",
+    "experience",
+)
+_BACK_CARD_ID_COL = _CARD_COLUMN_NAMES.index("back_card_id")
+
+
+def _experience_level(extended_title: str) -> int:
+    """Rank a personality's experience version for ordering within a name: Inexperienced (-1), base
+    (0), Experienced (1), Experienced 2 (2), ... A set-code variant (e.g. 'Experienced 2CW') shares
+    its number's rank."""
+    lowered = extended_title.lower()
+    if "inexperienced" in lowered:
+        return -1
+    match = re.search(r"experienced\s*(\d*)", lowered)
+    if match:
+        return int(match.group(1)) if match.group(1) else 1
+    return 0
 
 
 def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[list, dict]:
@@ -88,6 +130,7 @@ def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[list,
         entry.get("story"),
         entry.get("notes"),
         Json(extra),
+        _experience_level(extended_title),
     ]
     return row, extra
 
@@ -243,15 +286,11 @@ def _insert_all(
         "INSERT INTO keywords (keyword) VALUES (%s) ON CONFLICT DO NOTHING",
         [(k,) for k in keywords],
     )
+    columns = ", ".join(_CARD_COLUMN_NAMES)
+    placeholders = ", ".join(["%s"] * len(_CARD_COLUMN_NAMES))
     cur.executemany(
-        """
-        INSERT INTO cards (
-          card_id, slug, name, extended_title, name_normalized, rules_text,
-          gold_cost, focus, force, chi, honor_requirement, personal_honor,
-          province_strength, starting_honor, gold_production, back_card_id, is_back,
-          is_unique, is_proxy, is_banned, errata_text, story, notes, extra
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-                  %s, %s, %s, %s, %s, %s, %s)
+        f"""
+        INSERT INTO cards ({columns}) VALUES ({placeholders})
         ON CONFLICT (card_id) DO NOTHING
         """,
         list(cards.values()),

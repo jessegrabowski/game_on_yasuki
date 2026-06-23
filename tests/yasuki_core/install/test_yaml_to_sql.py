@@ -8,8 +8,25 @@ from yasuki_core.install.yaml_to_sql import (
     parse_collector_numbers,
     _BACK_CARD_ID_COL,
     _card_columns,
+    _experience_level,
     _link_and_validate_back_faces,
 )
+
+
+@pytest.mark.parametrize(
+    "extended_title, expected",
+    [
+        ("Bayushi Kachiko", 0),
+        ("Bayushi Kachiko • Inexperienced", -1),
+        ("Bayushi Kachiko • Experienced", 1),
+        ("Bayushi Kachiko • ExperiencedCoM", 1),
+        ("Bayushi Kachiko • Experienced 2", 2),
+        ("Bayushi Kachiko, Seven Thunder • Experienced 2CW", 2),
+        ("Hantei Kachiko • Experienced 3KYD", 3),
+    ],
+)
+def test_experience_level(extended_title, expected):
+    assert _experience_level(extended_title) == expected
 
 
 @pytest.mark.parametrize(

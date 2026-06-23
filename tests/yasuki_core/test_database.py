@@ -513,6 +513,26 @@ def test_scroll_prose_searchable_via_flavor():
     assert "iron_mountain" in ids
 
 
+def test_name_sort_groups_experience_versions_by_base_name():
+    # A character's experience versions sort together by base name (an epithet like "Seven Thunder"
+    # must not split the line), then by experience: Inexperienced < base < Exp < Exp2 < Exp3 — so the
+    # "Experienced 2CW" epithet version lands between Exp2 and Exp3, not after Exp3.
+    cards, _ = query_cards_page(
+        text_query="Bayushi Kachiko", filter_options={"types": ["Personality"]}
+    )
+    titles = [c["extended_title"] for c in cards]
+    line = [
+        "Bayushi Kachiko • Inexperienced",
+        "Bayushi Kachiko",
+        "Bayushi Kachiko • Experienced",
+        "Bayushi Kachiko • Experienced 2",
+        "Bayushi Kachiko, Seven Thunder • Experienced 2CW",
+        "Bayushi Kachiko • Experienced 3",
+    ]
+    positions = [titles.index(t) for t in line]
+    assert positions == sorted(positions)
+
+
 class TestPrivateDsnDetection:
     @pytest.mark.parametrize(
         "dsn",

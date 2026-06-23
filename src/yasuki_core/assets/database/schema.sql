@@ -18,6 +18,9 @@ CREATE TABLE cards (
   slug              TEXT NOT NULL,                  -- display / URL only
   name              TEXT NOT NULL,                  -- title
   extended_title    TEXT NOT NULL,                  -- formattedtitle (experience-disambiguated)
+  -- Experience rank parsed from extended_title, for ordering a name's versions: Inexperienced (-1),
+  -- base (0), Experienced (1), Experienced 2 (2), ... Set-code variants share their number's rank.
+  experience        INTEGER NOT NULL DEFAULT 0,
   name_normalized   TEXT NOT NULL,                  -- ASCII-folded lowercase, for search/sort
 
   rules_text        TEXT NOT NULL DEFAULT '',       -- entity-decoded
@@ -194,6 +197,9 @@ CREATE INDEX idx_cards_name             ON cards (name);
 CREATE INDEX idx_cards_name_normalized  ON cards (name_normalized);
 CREATE INDEX idx_cards_lower_name       ON cards (lower(name));
 CREATE INDEX idx_cards_lower_ext_title  ON cards (lower(extended_title));
+-- Backs the default card ordering (base name, then experience version) with an index scan instead
+-- of a full sort. Must match _NAME_TIEBREAK in database.py.
+CREATE INDEX idx_cards_sort             ON cards (split_part(name, ',', 1), experience, extended_title);
 
 -- Numeric stat filters.
 CREATE INDEX idx_cards_gold_cost        ON cards (gold_cost);
