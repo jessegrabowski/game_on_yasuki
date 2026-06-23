@@ -997,9 +997,9 @@ cards:
   - Pre-Game
   clans:
   - Unaligned
-  text: <i>(This card has +1PS and +2GP if you didn't go first.)</i><br><b>Limited, :g4::</b> Gain 2 Honor.
-    <br><b>Tireless Battle:</b> Discard a card to make a Fear effect with strength equal to the card's
-    Focus Value. <i>(Tireless actions may be taken even while bowed.)</i>
+  text: '(This has +1PS and +2GP if you didn''t go first.) Limited, :g4: Gain 2 Honor. Tireless Battle: Discard
+    a card to make a Fear effect with strength equal to the card''s Focus Value. (Tireless actions may be taken
+    even while bowed.)'
   province_strength: 7
   starting_honor: 8
   legality:
@@ -1013,6 +1013,7 @@ cards:
   flavor_text: Opportunity, and treachery, await within.
   collector_number: '46'
   doublesided: true
+  gold_production: 8
 - title: Goblin Follower
   types:
   - Proxy
@@ -4792,3 +4793,22 @@ cards:
   rarity: Premium
   artist: Sam Flegal
   collector_number: '33'
+
+- title: Gates of the Second City
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unaligned
+  text: '(This has -1PS and -2GP if you went first.) Limited, :g4: : Gain 2 Honor. Tireless Battle: Discard a card
+    to make a Fear effect with strength equal to the card''s Focus Value. (Tireless actions may be taken even while
+    bowed.)'
+  province_strength: 8
+  gold_production: 10
+  starting_honor: 8
+  rarity: Premium
+  artist: Noah Bradley
+  collector_number: '46'
+  flavor_text: '"This is where honor dies." – Kuni Renyu'

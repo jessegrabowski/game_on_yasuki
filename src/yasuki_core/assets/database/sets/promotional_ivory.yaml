@@ -723,9 +723,9 @@ cards:
   - Pre-Game
   clans:
   - Unaligned
-  text: <i>(This card has +1PS and +2GP if you didn't go first.)</i><br><b>Limited, :g4::</b> Gain 2 Honor.
-    <br><b>Tireless Battle:</b> Discard a card to make a Fear effect with strength equal to the card's
-    Focus Value. <i>(Tireless actions may be taken even while bowed.)</i>
+  text: '(This has +1PS and +2GP if you didn''t go first.) Limited, :g4: Gain 2 Honor. Tireless Battle: Discard
+    a card to make a Fear effect with strength equal to the card''s Focus Value. (Tireless actions may be taken
+    even while bowed.)'
   province_strength: 7
   starting_honor: 8
   legality:
@@ -736,9 +736,9 @@ cards:
   story: Chris Medico
   rarity: Promo
   artist: Noah Bradley
-  flavor_text: '"Let us see what sort of man the Shogun is, then." -<br>Otomo Suikihime, Imperial Governor
-    of the Colonies'
+  flavor_text: '"Let us see what sort of man the Shogun is, then." – Otomo Suikihime, Imperial Governor of the Colonies'
   doublesided: true
+  gold_production: 8
 - title: Heavy Cavalry
   types:
   - Follower
@@ -1268,10 +1268,8 @@ cards:
   - Phoenix
   keywords:
   - Temple
-  text: <b>Limited:</b> Bow your target unbowed Shugenja. Look at the top three cards of your Fate deck.
-    If one of them is a Kiho or Spell, you may show it, put it into your hand, and then discard a card.<br><i>(This
-    Stronghold has +1 Province Strength and does not need to discard a card to its ability when going
-    second)</i>
+  text: 'Limited: Bow your target unbowed Shugenja. Look at the top three cards of your Fate deck. If one of them
+    is a Kiho or Spell, you may show it, put it into your hand, and then discard a card.'
   province_strength: 6
   starting_honor: 6
   legality:
@@ -1282,9 +1280,9 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Promo
   artist: Alayna Lemmer
-  flavor_text: '"If I am to master myself, I must first serve another. Lord Shiba knew this." - Shiba
-    Tsukimi'
+  flavor_text: '"If I am to master myself, I must first serve another. Lord Shiba knew this." – Shiba Tsukimi'
   doublesided: true
+  gold_production: 4
 - title: The Exquisite Palace of the Crane
   types:
   - Stronghold
@@ -1292,9 +1290,8 @@ cards:
   - Pre-Game
   clans:
   - Crane
-  text: <b>Limited:</b> Target a Holding. Until the phase ends, either give it +1 Gold Production, or
-    increase Honor gains from its abilities by 1.<br><i>(This Stronghold has +1 Province Strength and
-    +5 Family Honor when Lobbying when going second)</i>
+  text: 'Limited: Target a Holding. Either give it +1 Gold Production, or increase Honor gains from its abilities
+    by 1 (this turn).'
   province_strength: 6
   starting_honor: 6
   legality:
@@ -1305,9 +1302,9 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Promo
   artist: Alayna Lemmer
-  flavor_text: '"My ancestor, Lady Doji, understood that a life without beauty is not a life at all."
-    - Doji Makoto'
+  flavor_text: '"My ancestor, Lady Doji, understood that a life without beauty is not a life at all." – Doji Makoto'
   doublesided: true
+  gold_production: 4
 - title: The Fruitful Port of the Mantis
   types:
   - Stronghold
@@ -1317,8 +1314,7 @@ cards:
   - Mantis
   keywords:
   - Port
-  text: <b>Limited, :g3::</b> Draw a card.<br><i>(When going second, you may, once per game, produce 2
-    Gold)</i>
+  text: 'Limited, :g3:: Draw a card.'
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -1326,9 +1322,12 @@ cards:
   - Modern
   rarity: Promo
   artist: Alayna Lemmer
-  flavor_text: '"Insult us with snide comments if you wish, but first consider… where did this food I
-    eat come from?" - Yoritomo Hiromi'
+  flavor_text: '"Insult us with snide comments if you wish, but first consider... where did this food I eat come
+    from?" – Yoritomo Hiromi'
   doublesided: true
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 2
 - title: The Golden Plains of the Unicorn
   types:
   - Stronghold
@@ -1336,9 +1335,8 @@ cards:
   - Pre-Game
   clans:
   - Unicorn
-  text: <b>Battle/Engage:</b> If he would be opposed, move to the current battlefield your target unbowed
-    Personality in a Cavalry unit at any location.<br><i>(This Stronghold has +1 Province Strength and
-    you may use the Cycle player ability an additional time on your first turn when going second)</i>
+  text: 'Battle/Engage: If he would be opposed, move to the current battlefield your target unbowed Personality
+    in a Cavalry unit at any location.'
   province_strength: 7
   starting_honor: 4
   legality:
@@ -1348,8 +1346,9 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Promo
   artist: Alayna Lemmer
-  flavor_text: '"No lavish decoration can compare to the beauty of an open horizon." - Moto Naleesh'
+  flavor_text: '"No lavish decoration can compare to the beauty of an open horizon." – Moto Naleesh'
   doublesided: true
+  gold_production: 5
 - title: The Honorable Garrison of the Lion
   types:
   - Stronghold
@@ -1357,8 +1356,7 @@ cards:
   - Pre-Game
   clans:
   - Lion
-  text: <b>Battle:</b> Give your target opposed Lion Clan Samurai a Force bonus equal to his Personal
-    Honor <i>(this turn)</i>.<br><i>(This Stronghold has +2 Province Strength when going second)</i>
+  text: 'Battle: Give your target opposed Lion Clan Samurai a Force bonus equal to his Personal Honor (this turn).'
   province_strength: 7
   starting_honor: 7
   legality:
@@ -1368,9 +1366,10 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Promo
   artist: Alayna Lemmer
-  flavor_text: '"True peace of mind can only be achieved when one''s enemies know, without question, that
-    you cannot be defeated." - Akodo Dairuko'
+  flavor_text: '"True peace of mind can only be achieved when one''s enemies know, without question, that you cannot
+    be defeated." – Akodo Dairuko'
   doublesided: true
+  gold_production: 3
 - title: The Impregnable Fortress of the Crab
   types:
   - Stronghold
@@ -1378,8 +1377,7 @@ cards:
   - Pre-Game
   clans:
   - Crab
-  text: Your Crab Clan Personalities have +1F while opposed.<br><i><i>(This Stronghold has +2 Province
-    Strength when going second)</i></i>
+  text: Your Crab Clan Personalities have +1F while opposed.
   province_strength: 7
   starting_honor: 3
   legality:
@@ -1389,9 +1387,10 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Promo
   artist: Alayna Lemmer
-  flavor_text: '"If some fool wishes to break himself against our gates, let him. He will be neither the
-    first or last." - Hida Kisada'
+  flavor_text: '"If some fool wishes to break himself against our gates, let him. He will be neither the first or
+    last." — Hida Kisada'
   doublesided: true
+  gold_production: 4
 - title: The Remote Monastery of the Dragon
   types:
   - Stronghold
@@ -1401,9 +1400,8 @@ cards:
   - Dragon
   keywords:
   - Temple
-  text: You cannot Recruit Monks with another Clan Alignment. After all players reveal Strongholds, search
-    your Fate deck for a non-Fudo, non-Void Ring. Put it into play. <br><i><i>(This Stronghold has +1
-    Province Strength, +1 Starting Hand Size, and +1 Maximum Hand Size when going second)</i></i>
+  text: You cannot Recruit Monks with another Clan Alignment. After all players reveal Strongholds, search your
+    Fate deck for a non-Fudo, non-Void Ring. Put it into play.
   province_strength: 6
   starting_honor: 5
   legality:
@@ -1412,8 +1410,9 @@ cards:
   - Modern
   rarity: Promo
   artist: Alayna Lemmer
-  flavor_text: '"One cannot find himself amidst the clutter of the world." - Mirumoto Shikei'
+  flavor_text: '"One cannot find himself amidst the clutter of the world." – Mirumoto Shikei'
   doublesided: true
+  gold_production: 4
 - title: The Shadowed Estate of the Scorpion
   types:
   - Stronghold
@@ -1421,9 +1420,8 @@ cards:
   - Pre-Game
   clans:
   - Scorpion
-  text: <b>Tireless Open:</b> Name a Fate card, or name a Dynasty card in play. Negate the effects of
-    the next action from a card with that title.<br><i>(When going second, you get +1PS and other players
-    have -1 maximum hand size)</i>
+  text: 'Tireless Open: Name a Fate card, or name a Dynasty card in play. Negate the effects of the next action
+    from a card with that title.'
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -1432,9 +1430,12 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Promo
   artist: Alayna Lemmer
-  flavor_text: '"Underestimate us. Dismiss us. Insult us. Your anguish will be all the sweeter for it."
-    - Bayushi Nitoshi'
+  flavor_text: '"Underestimate us. Dismiss us. Insult us. Your anguish will be all the sweeter for it." – Bayushi
+    Nitoshi'
   doublesided: true
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 1
 - title: The Sinister Citadel of the Spider
   types:
   - Stronghold
@@ -1442,9 +1443,7 @@ cards:
   - Pre-Game
   clans:
   - Spider
-  text: '<b>Battle:</b> Fear 3.<br><i>(This Stronghold has +1 Province Strength, its ability gains Tireless,
-    and it gains the ability, "Tireless Dynasty: If any of your Provinces have been destroyed this game,
-    turn a card in one of your Provinces face-up" when going second)</i>'
+  text: 'Battle: :fear: 3.'
   province_strength: 7
   starting_honor: 0
   legality:
@@ -1454,9 +1453,10 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Promo
   artist: Alayna Lemmer
-  flavor_text: '"What do the Spider care for decoration and art? My allies and enemies alike look upon
-    us with fear. I need nothing else." - Daigotsu Kanpeki'
+  flavor_text: '"What do the Spider care for decoration and art? My allies and enemies alike look upon us with fear.
+    I need nothing else." — Daigotsu Kanpeki'
   doublesided: true
+  gold_production: 4
 - title: War
   types:
   - Strategy
@@ -1539,3 +1539,173 @@ cards:
   rarity: Promo
   artist: Sam Flegal
   flavor_text: <i>The Colonies or the court? An easy choice.</i>
+
+- title: Gates of the Second City
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unaligned
+  text: '(This has -1PS and -2GP if you went first.) Limited, :g4: : Gain 2 Honor. Tireless Battle: Discard a card
+    to make a Fear effect with strength equal to the card''s Focus Value. (Tireless actions may be taken even while
+    bowed.)'
+  province_strength: 8
+  gold_production: 10
+  starting_honor: 8
+  rarity: Promo
+  artist: Noah Bradley
+  flavor_text: '"This land is preposterous. The Governor is a madwoman. I want none of it." – Moto Taigo, Shogun
+    of the Empire'
+- title: The Eternal Temple of the Phoenix
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Phoenix
+  keywords:
+  - Temple
+  text: 'Limited: Bow your target unbowed Shugenja. Look at the top three cards of your Fate deck. If one of them
+    is a Kiho or Spell, you may show it and put it into your hand.'
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 6
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"Our vassals do great work, and ask little. We must protect them always." – Shiba Tsukimi'
+- title: The Exquisite Palace of the Crane
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  text: 'You are considered to have +5 Family Honor when Lobbying checks Honor. Limited: Target a Holding. Either
+    give it +1 Gold Production, or increase Honor gains from its abilities by 1 (this turn).'
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 6
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"Savor each day as the treasure it is." – Doji Makoto'
+- title: The Fruitful Port of the Mantis
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  keywords:
+  - Port
+  text: 'Once per game, produce 2 Gold. Limited, :g3:: Draw a card.'
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 2
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"To deny a distant land''s wealth because it is ''unclean'' is the hallmark of a fool." — Yoritomo
+    Hiromi'
+- title: The Golden Plains of the Unicorn
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unicorn
+  text: 'You may use the Cycle player ability twice in your first turn. Battle/Engage: If he would be opposed, move
+    to the current battlefield your target unbowed Personality in a Cavalry unit at any location.'
+  province_strength: 8
+  gold_production: 5
+  starting_honor: 4
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"There is great beauty in every culture. Do not be so foolish as to dismiss it." – Moto Naleesh'
+- title: The Honorable Garrison of the Lion
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: 'Battle: Give your target opposed Lion Clan Samurai a Force bonus equal to his Personal Honor (this turn).'
+  province_strength: 9
+  gold_production: 3
+  starting_honor: 7
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"Ten thousand legions have gone before, and ten thousand more shall follow." — Akodo Dairuko'
+- title: The Impregnable Fortress of the Crab
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: Your Crab Clan Personalities have +1F while opposed.
+  province_strength: 9
+  gold_production: 4
+  starting_honor: 3
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"We have held back the tide of darkness for over a thousand years. Do you believe your steel is
+    sufficient?" – Hida Kisada'
+- title: The Remote Monastery of the Dragon
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Dragon
+  keywords:
+  - Temple
+  text: You cannot Recruit Monks with another Clan Alignment. You have +1 maximum and starting hand size. After
+    all players reveal Strongholds, search your Fate deck for a non-Fudo, non-Void Ring. Put it into play.
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 5
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"Dwell upon the mountain and know serenity." – Mirumoto Shikei'
+- title: The Shadowed Estate of the Scorpion
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Scorpion
+  text: 'Other players have -1 maximum hand size. Tireless Open: Name a Fate card, or name a Dynasty card in play.
+    Negate the effects of the next action from a card with that title.'
+  province_strength: 8
+  gold_production: 4
+  starting_honor: 1
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"Fools believe sharp words are our greatest weapon. They have never tasted our moonlit steel." —
+    Bayushi Nitoshi'
+- title: The Sinister Citadel of the Spider
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Spider
+  text: 'Tireless Dynasty: If any of your Provinces have been destroyed this game, turn a card in one of your Provinces
+    face-up. Tireless Battle: :fear: 3.'
+  province_strength: 8
+  gold_production: 4
+  starting_honor: 0
+  rarity: Promo
+  artist: Alayna Lemmer
+  flavor_text: '"Any other would not survive here. Only the Spider Clan is strong enough to claim it." – Daigotsu
+    Kanpeki'

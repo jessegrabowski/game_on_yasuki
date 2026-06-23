@@ -294,9 +294,6 @@ images:
   - role: front
     file: the_esteemed_palace_of_the_crane.jpg
     sha256: c9b101a7f4fe81942643d7741b004c06f51090a1ed5f552d143ba5c2ebd54a03
-  - role: back
-    file: the_esteemed_palace_of_the_crane__back.jpg
-    sha256: 4f2f713ffe5ab25c4cd885f5911f196ae2c00453d6b8bfadcaacbf8a8358eecd
 - card_id: the_eternal_chase
   printing_id: the_currency_of_war
   files:
@@ -308,9 +305,6 @@ images:
   files:
   - role: front
     file: the_fruitful_port_of_the_mantis.jpg
-    sha256: 592df3c73949f059aa5703cf7edf5c66efa2aef675d76c98acc54893ce34f65e
-  - role: back
-    file: the_fruitful_port_of_the_mantis__back.jpg
     sha256: 406f3dcf7bea6a67418f82aaa08c175cfe7bd73144048ca2584d802d917781f8
 - card_id: tsuruchi_jinrai
   printing_id: the_currency_of_war
@@ -348,3 +342,15 @@ images:
   - role: front
     file: yoritomo_yakuwa.jpg
     sha256: 133073aeb2d3ce7886f7ad48815d398a9ac204ee331acc3c9fac4da2bc695a34
+- card_id: the_esteemed_palace_of_the_crane__back
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: the_esteemed_palace_of_the_crane__back.jpg
+    sha256: 4f2f713ffe5ab25c4cd885f5911f196ae2c00453d6b8bfadcaacbf8a8358eecd
+- card_id: the_fruitful_port_of_the_mantis__back
+  printing_id: the_currency_of_war
+  files:
+  - role: front
+    file: the_fruitful_port_of_the_mantis__back.jpg
+    sha256: 592df3c73949f059aa5703cf7edf5c66efa2aef675d76c98acc54893ce34f65e

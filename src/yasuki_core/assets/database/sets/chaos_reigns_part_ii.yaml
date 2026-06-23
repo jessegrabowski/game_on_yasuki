@@ -1600,8 +1600,9 @@ cards:
   keywords:
   - Farm
   - Experienced Kyuden Suzume
-  text: 'Your play deck must include Three Clan Alliance Sensei. Your Farms enter play for :g1: less,
-    to a minimum of 1. After you resolve a Bushido Virtue or Dark Virtue action, gain 1 Honor.'
+  text: 'Your play deck must include Three Clan Alliance Sensei. The first Farm you Recruit each turn enters play
+    for :g1: less, to a minimum of 1, and has Renew. After you resolve a Bushido Virtue or Dark Virtue action, once
+    per turn, gain 1 Honor.'
   province_strength: 7
   starting_honor: 3
   legality:
@@ -1612,6 +1613,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 2
 - title: The First Kengun
   types:
   - Follower
@@ -2088,5 +2090,28 @@ cards:
   - Shattered Empire
   rarity: Fixed
   collector_number: '55'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+
+- title: The Austere Valley of the Sparrow
+  extended_title: The Austere Valley of the Sparrow • Experienced
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unaligned
+  keywords:
+  - Farm
+  - Experienced Kyuden Suzume
+  text: 'Your play deck must include Three Clan Alliance Sensei. Your Farms enter play for :g1: less, to a minimum
+    of 1. After you resolve a Bushido Virtue or Dark Virtue action, gain 1 Honor.'
+  province_strength: 7
+  gold_production: 2
+  starting_honor: 3
+  rarity: Fixed
+  artist: Ilus Tony Moseley
+  collector_number: '82'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home

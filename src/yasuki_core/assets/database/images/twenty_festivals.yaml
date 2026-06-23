@@ -731,9 +731,6 @@ images:
   files:
   - role: front
     file: gates_of_the_second_city.jpg
-    sha256: 903e6db4d5fad6f289641834bbe4b018b81eadfe0072cfa22d96ac87c363d05e
-  - role: back
-    file: gates_of_the_second_city__back.jpg
     sha256: ed97342de555356c251494c3eb9c22bc305be056241d3ac42f6dd88ccfe76b77
 - card_id: gempukku
   printing_id: twenty_festivals
@@ -1947,18 +1944,12 @@ images:
   - role: front
     file: the_endless_plains_of_the_unicorn.jpg
     sha256: 067e6c7c02e7520c55a285e42e5b3c861c1e99f9a828d930e698f9c59f7aac79
-  - role: back
-    file: the_endless_plains_of_the_unicorn__back.jpg
-    sha256: 0a4ea535c061ad0b65f061091b4cd6a2c89e6ec44e7781c4cc478b97a8c93b4a
 - card_id: the_esteemed_palace_of_the_crane
   printing_id: twenty_festivals
   files:
   - role: front
     file: the_esteemed_palace_of_the_crane.jpg
     sha256: 63982f76c557ba55e1ef1850e1e4e2d6455edd6234b41b9df680e047c66a1f80
-  - role: back
-    file: the_esteemed_palace_of_the_crane__back.jpg
-    sha256: 9b4098e9ac60e0a7478dcbf89ddcf8022df48223ea8c9d862206b70137449caf
 - card_id: the_eternal_rainbows
   printing_id: twenty_festivals
   files:
@@ -1971,27 +1962,18 @@ images:
   - role: front
     file: the_fortified_monastery_of_the_dragon.jpg
     sha256: 392dd9e4e95996f5406cc9ac8e85fa483f3ba8865d2435d3d12e219adbc7af59
-  - role: back
-    file: the_fortified_monastery_of_the_dragon__back.jpg
-    sha256: 71b9adc448e7b94127bddd059f7d4781995592a2f713630973545beeb2637e2d
 - card_id: the_fruitful_port_of_the_mantis
   printing_id: twenty_festivals
   files:
   - role: front
     file: the_fruitful_port_of_the_mantis.jpg
     sha256: 8d5529904fcb780f0fc9e0d46503af4f0c9dcdbbf205b9369affad03452d0f4b
-  - role: back
-    file: the_fruitful_port_of_the_mantis__back.jpg
-    sha256: a481ff46bf09861daaf7eaeba4d3110792fa951ae9dccbcd68d9b3411a602bfe
 - card_id: the_grand_halls_of_the_lion
   printing_id: twenty_festivals
   files:
   - role: front
     file: the_grand_halls_of_the_lion.jpg
     sha256: 1a163b2d263e6b1a22f7507f076ee35e3f2d6d5e7c26ce00cf496668d232411b
-  - role: back
-    file: the_grand_halls_of_the_lion__back.jpg
-    sha256: 72217e495917c8f37bbdbab324efd1b9b5f38f9075b89f76cc26eb369f6efc06
 - card_id: the_heavens_are_watching
   printing_id: twenty_festivals
   files:
@@ -2004,18 +1986,12 @@ images:
   - role: front
     file: the_hidden_bastion_of_the_spider.jpg
     sha256: c8f3cecc3c97d721e6aef170392d21909200b7bb13568f5e33b30f891beb5356
-  - role: back
-    file: the_hidden_bastion_of_the_spider__back.jpg
-    sha256: 403494642f76499a2e20a5c6c4985977674b2079f714c3816112fe8a165e2701
 - card_id: the_majestic_temple_of_the_phoenix
   printing_id: twenty_festivals
   files:
   - role: front
     file: the_majestic_temple_of_the_phoenix.jpg
     sha256: 0d334eea179cbe020f6e2eaf963944b0792e9f74737ce53c19d9ed3aaa6d8608
-  - role: back
-    file: the_majestic_temple_of_the_phoenix__back.jpg
-    sha256: c01ac906a4f5d41f279325c1263e408d9f87489d2ed5bd02737f94f95bfacbc9
 - card_id: the_mountains_feet
   printing_id: twenty_festivals
   files:
@@ -2046,9 +2022,6 @@ images:
   - role: front
     file: the_shadowed_estate_of_the_scorpion.jpg
     sha256: a72c574232ddeab76dd6cfd7dca11865d96a5d601f6954bc2026091b70fecacc
-  - role: back
-    file: the_shadowed_estate_of_the_scorpion__back.jpg
-    sha256: cc0bc9da8e210bad0001ef82368424b3012387737b0183a734eec82b390745b8
 - card_id: the_thunder_resounds
   printing_id: twenty_festivals
   files:
@@ -2067,9 +2040,6 @@ images:
   - role: front
     file: the_unassailable_fortress_of_the_crab.jpg
     sha256: a77fe8c437b805872ad42300ece7d5c7510f12682940a27ead923e4c3503a7b9
-  - role: back
-    file: the_unassailable_fortress_of_the_crab__back.jpg
-    sha256: 22f3ab4d4d88d12121a267c6523ebce05939ec2ccce0eb4269ead777a564d610
 - card_id: the_unquiet_moto
   printing_id: twenty_festivals
   files:
@@ -2346,3 +2316,63 @@ images:
   - role: front
     file: zaiko.jpg
     sha256: 9275c0a37a59a1708ec5b388f211d63b9ae6363cb57aabfd3291a6f31fb25dfb
+- card_id: gates_of_the_second_city__back
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: gates_of_the_second_city__back.jpg
+    sha256: 903e6db4d5fad6f289641834bbe4b018b81eadfe0072cfa22d96ac87c363d05e
+- card_id: the_endless_plains_of_the_unicorn__back
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_endless_plains_of_the_unicorn__back.jpg
+    sha256: 0a4ea535c061ad0b65f061091b4cd6a2c89e6ec44e7781c4cc478b97a8c93b4a
+- card_id: the_esteemed_palace_of_the_crane__back
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_esteemed_palace_of_the_crane__back.jpg
+    sha256: 9b4098e9ac60e0a7478dcbf89ddcf8022df48223ea8c9d862206b70137449caf
+- card_id: the_fortified_monastery_of_the_dragon__back
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_fortified_monastery_of_the_dragon__back.jpg
+    sha256: 71b9adc448e7b94127bddd059f7d4781995592a2f713630973545beeb2637e2d
+- card_id: the_fruitful_port_of_the_mantis__back
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_fruitful_port_of_the_mantis__back.jpg
+    sha256: a481ff46bf09861daaf7eaeba4d3110792fa951ae9dccbcd68d9b3411a602bfe
+- card_id: the_grand_halls_of_the_lion__back
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_grand_halls_of_the_lion__back.jpg
+    sha256: 72217e495917c8f37bbdbab324efd1b9b5f38f9075b89f76cc26eb369f6efc06
+- card_id: the_hidden_bastion_of_the_spider__back
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_hidden_bastion_of_the_spider__back.jpg
+    sha256: 403494642f76499a2e20a5c6c4985977674b2079f714c3816112fe8a165e2701
+- card_id: the_majestic_temple_of_the_phoenix__back
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_majestic_temple_of_the_phoenix__back.jpg
+    sha256: c01ac906a4f5d41f279325c1263e408d9f87489d2ed5bd02737f94f95bfacbc9
+- card_id: the_shadowed_estate_of_the_scorpion__back
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_shadowed_estate_of_the_scorpion__back.jpg
+    sha256: cc0bc9da8e210bad0001ef82368424b3012387737b0183a734eec82b390745b8
+- card_id: the_unassailable_fortress_of_the_crab__back
+  printing_id: twenty_festivals
+  files:
+  - role: front
+    file: the_unassailable_fortress_of_the_crab__back.jpg
+    sha256: 22f3ab4d4d88d12121a267c6523ebce05939ec2ccce0eb4269ead777a564d610

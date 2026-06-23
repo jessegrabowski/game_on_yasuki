@@ -1117,8 +1117,7 @@ cards:
   - Pre-Game
   clans:
   - Crane
-  text: <b>Political Open, :bow::</b> If you control a Personality, gain 2 Honor.<br><i>(When going second,
-    you get +1PS and a +5 Lobby bonus)</i>
+  text: 'Political Open, :bow:: If you control a Personality, gain 2 Honor.'
   province_strength: 6
   starting_honor: 6
   legality:
@@ -1127,10 +1126,11 @@ cards:
   - Modern
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: '"It is unfortunate that the Mantis have chosen to force our hand in this matter. We will
-    have no choice but to teach them a lesson." - Doji Makoto'
+  flavor_text: '"It is unfortunate that the Mantis have chosen to force our hand in this matter. We will have no
+    choice but to teach them a lesson." — Doji Makoto'
   collector_number: '56'
   doublesided: true
+  gold_production: 4
 - title: The Eternal Chase
   types:
   - Strategy
@@ -1161,8 +1161,7 @@ cards:
   - Mantis
   keywords:
   - Port
-  text: <b>Limited, :g3::</b> Draw a card.<br><i>(When going second, you may, once per game, produce 2
-    Gold)</i>
+  text: 'Limited, :g3:: Draw a card.'
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -1170,10 +1169,13 @@ cards:
   - Modern
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: '"Let the Empire look down upon commerce all they wish. When the Mantis can fund an army
-    to defeat any foe, they will reconsider their ludicrous ideas." - Yoritomo Hiromi'
+  flavor_text: '"Let the Empire look down upon commerce all they wish. When the Mantis can fund an army to defeat
+    any foe, they will reconsider their ludicrous ideas." – Yoritomo Hiromi'
   collector_number: '58'
   doublesided: true
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 2
 - title: Tsuruchi Jinrai
   types:
   - Personality
@@ -1345,3 +1347,41 @@ cards:
     more of a problem than we anticipated," he muttered.
   collector_number: '27'
   designer: Julien
+
+- title: The Esteemed Palace of the Crane
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  text: 'You have a +5 Lobby Bonus. Political Open, :bow:: If you control a Personality, gain 2 Honor.'
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 6
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '56'
+  flavor_text: The Crane believe that any pursuit worth starting must also be worthy of a lifetime of study. Every
+    breath, every motion, every thought, must be elevated to the form of art. Grace, elegance, poise. These are
+    the essence of the Crane Clan.
+- title: The Fruitful Port of the Mantis
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  keywords:
+  - Port
+  text: 'Once per game, produce 2 Gold. Limited, :g3:: Draw a card.'
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 2
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '58'
+  flavor_text: Unlike most clans, the Mantis Clan holds ambition as a virtue. Opportunities must be seized. Confidence,
+    vision, practicality. These are the essence of the Mantis Clan.

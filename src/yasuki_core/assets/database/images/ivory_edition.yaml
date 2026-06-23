@@ -701,9 +701,6 @@ images:
   files:
   - role: front
     file: gates_of_the_second_city.jpg
-    sha256: 67d80a89e4a8eaba4eded7c249f9e21471fa40a861c8adb6e83377313a7b586a
-  - role: back
-    file: gates_of_the_second_city__back.jpg
     sha256: d09be1435719e8beb0a90ee894c60b62ea000bdd3c7c1c5b116c734a6b4cef85
 - card_id: geisha_house
   printing_id: ivory_edition
@@ -2043,18 +2040,12 @@ images:
   - role: front
     file: the_eternal_temple_of_the_phoenix.jpg
     sha256: 41a3b7aca996f716c048e573be45b039506453a471e0a692bd2a9ca4dea2f947
-  - role: back
-    file: the_eternal_temple_of_the_phoenix__back.jpg
-    sha256: 735b088208603cc6fe0fd2309f7f00cd19ead538663f7ff1d3a0453a045d52af
 - card_id: the_exquisite_palace_of_the_crane
   printing_id: ivory_edition
   files:
   - role: front
     file: the_exquisite_palace_of_the_crane.jpg
     sha256: 6013e01e7c60c3871bdd0d2353d2f42198d9704a0523097e2051d072c91b19c6
-  - role: back
-    file: the_exquisite_palace_of_the_crane__back.jpg
-    sha256: 721f6aab04660c5c72e29e4d6907b36168021924d73ca1e7bc71925aae4bfd86
 - card_id: the_false_nimuro_experienced_2_2
   printing_id: ivory_edition
   files:
@@ -2066,18 +2057,12 @@ images:
   files:
   - role: front
     file: the_fruitful_port_of_the_mantis.jpg
-    sha256: 34f4aaa4c9acad2ad1383ca4828ba9a3221fcd42f02b0f98a5680c91c5b85344
-  - role: back
-    file: the_fruitful_port_of_the_mantis__back.jpg
     sha256: 6d4e689a04ce79168b1210321d2977211f5f9ff63a5d3c5e9c5c0f8c8583f0eb
 - card_id: the_golden_plains_of_the_unicorn
   printing_id: ivory_edition
   files:
   - role: front
     file: the_golden_plains_of_the_unicorn.jpg
-    sha256: c1a0e6e50372c7671f2de45f28ebd476779710b21d8bc28215f33c3e6ee1e289
-  - role: back
-    file: the_golden_plains_of_the_unicorn__back.jpg
     sha256: f0a029f1150057d6227eea7dbe73f720391d6eb25d449aec87b594deeada36ed
 - card_id: the_greater_threat
   printing_id: ivory_edition
@@ -2090,9 +2075,6 @@ images:
   files:
   - role: front
     file: the_honorable_garrison_of_the_lion.jpg
-    sha256: 258e4de1f8d8f08d1c34eb92e2c1be8be55c610e8c121f5e4935071662a47d71
-  - role: back
-    file: the_honorable_garrison_of_the_lion__back.jpg
     sha256: 6e57f4dafa9b2827c90cdd561eee01639ddfb14ec6686dd5c2e104a6036db84e
 - card_id: the_imperial_favor
   printing_id: ivory_edition
@@ -2105,36 +2087,24 @@ images:
   files:
   - role: front
     file: the_impregnable_fortress_of_the_crab.jpg
-    sha256: 94355be8db20b4d679fbb88c59887422e6b673ae849bfa51f4fac1344c0e9c6a
-  - role: back
-    file: the_impregnable_fortress_of_the_crab__back.jpg
     sha256: 0ce743021b66ef679b60387548216d61266d02f01d3ccdbf26b47f33e5874f15
 - card_id: the_remote_monastery_of_the_dragon
   printing_id: ivory_edition
   files:
   - role: front
     file: the_remote_monastery_of_the_dragon.jpg
-    sha256: f33034b33f0e8b1753943c8d6b68ecac1aa6a116554aa758e2be3d6eef6f73c8
-  - role: back
-    file: the_remote_monastery_of_the_dragon__back.jpg
     sha256: 88d997d90332f6c7dce012ca57580e93d16b014d580a21b0fa2e190ee12ebfc8
 - card_id: the_shadowed_estate_of_the_scorpion
   printing_id: ivory_edition
   files:
   - role: front
     file: the_shadowed_estate_of_the_scorpion.jpg
-    sha256: 5daba363f3ac1b8158e5f83c69ebd95654a6405b36df55ff5d819f781fdf9db3
-  - role: back
-    file: the_shadowed_estate_of_the_scorpion__back.jpg
     sha256: 1d1d6d82644e43e9bd0572cf88e9e9b654e937897d5439e009813580a7bfe989
 - card_id: the_sinister_citadel_of_the_spider
   printing_id: ivory_edition
   files:
   - role: front
     file: the_sinister_citadel_of_the_spider.jpg
-    sha256: 0d0c01f4ba09396909e56c4785b33fac46e0d7d570cff00b519e7425f57eb799
-  - role: back
-    file: the_sinister_citadel_of_the_spider__back.jpg
     sha256: 7b59d1b7a0d7558424e5dea8472414dfebf6a2a57211846465291717414e608d
 - card_id: the_sun_returns
   printing_id: ivory_edition
@@ -2478,3 +2448,63 @@ images:
   - role: front
     file: zombie.jpg
     sha256: f32a67be31708e376f1cf39af76762157390fd4b8dc13df3e77337f73ff64cf8
+- card_id: gates_of_the_second_city__back
+  printing_id: ivory_edition
+  files:
+  - role: front
+    file: gates_of_the_second_city__back.jpg
+    sha256: 67d80a89e4a8eaba4eded7c249f9e21471fa40a861c8adb6e83377313a7b586a
+- card_id: the_eternal_temple_of_the_phoenix__back
+  printing_id: ivory_edition
+  files:
+  - role: front
+    file: the_eternal_temple_of_the_phoenix__back.jpg
+    sha256: 735b088208603cc6fe0fd2309f7f00cd19ead538663f7ff1d3a0453a045d52af
+- card_id: the_exquisite_palace_of_the_crane__back
+  printing_id: ivory_edition
+  files:
+  - role: front
+    file: the_exquisite_palace_of_the_crane__back.jpg
+    sha256: 721f6aab04660c5c72e29e4d6907b36168021924d73ca1e7bc71925aae4bfd86
+- card_id: the_fruitful_port_of_the_mantis__back
+  printing_id: ivory_edition
+  files:
+  - role: front
+    file: the_fruitful_port_of_the_mantis__back.jpg
+    sha256: 34f4aaa4c9acad2ad1383ca4828ba9a3221fcd42f02b0f98a5680c91c5b85344
+- card_id: the_golden_plains_of_the_unicorn__back
+  printing_id: ivory_edition
+  files:
+  - role: front
+    file: the_golden_plains_of_the_unicorn__back.jpg
+    sha256: c1a0e6e50372c7671f2de45f28ebd476779710b21d8bc28215f33c3e6ee1e289
+- card_id: the_honorable_garrison_of_the_lion__back
+  printing_id: ivory_edition
+  files:
+  - role: front
+    file: the_honorable_garrison_of_the_lion__back.jpg
+    sha256: 258e4de1f8d8f08d1c34eb92e2c1be8be55c610e8c121f5e4935071662a47d71
+- card_id: the_impregnable_fortress_of_the_crab__back
+  printing_id: ivory_edition
+  files:
+  - role: front
+    file: the_impregnable_fortress_of_the_crab__back.jpg
+    sha256: 94355be8db20b4d679fbb88c59887422e6b673ae849bfa51f4fac1344c0e9c6a
+- card_id: the_remote_monastery_of_the_dragon__back
+  printing_id: ivory_edition
+  files:
+  - role: front
+    file: the_remote_monastery_of_the_dragon__back.jpg
+    sha256: f33034b33f0e8b1753943c8d6b68ecac1aa6a116554aa758e2be3d6eef6f73c8
+- card_id: the_shadowed_estate_of_the_scorpion__back
+  printing_id: ivory_edition
+  files:
+  - role: front
+    file: the_shadowed_estate_of_the_scorpion__back.jpg
+    sha256: 5daba363f3ac1b8158e5f83c69ebd95654a6405b36df55ff5d819f781fdf9db3
+- card_id: the_sinister_citadel_of_the_spider__back
+  printing_id: ivory_edition
+  files:
+  - role: front
+    file: the_sinister_citadel_of_the_spider__back.jpg
+    sha256: 0d0c01f4ba09396909e56c4785b33fac46e0d7d570cff00b519e7425f57eb799

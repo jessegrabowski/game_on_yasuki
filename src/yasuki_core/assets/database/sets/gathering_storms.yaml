@@ -926,11 +926,9 @@ cards:
   clans:
   - Mantis
   keywords:
-  - Market
   - Port
-  text: <b>Open:</b> Create a Raid Attack whose resolution does not bow your Naval Personalities. After
-    the battle ends, if you won it, give your target Holding a +1GP Wealth token.<br><i>(When going second,
-    you get +1PS and the Market keyword)</i>
+  text: 'Open: Create a Raid Attack whose resolution does not bow your Naval Personalities. After the battle ends,
+    if you won it, give your target Holding a +1GP Wealth token.'
   province_strength: 7
   starting_honor: 2
   legality:
@@ -938,11 +936,12 @@ cards:
   notes: Renamed when reprinted in the Shattered Empire base set.
   rarity: Fixed
   artist: (FFG) Chris Ostrowski - Fantasy Flight Games
-  flavor_text: <i>"The sun sets to rise again." – Tao of Shinsei</i>
+  flavor_text: '"The sun sets to rise again." – Tao of Shinsei'
   collector_number: '52'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 3
 - title: Togashi Ogai
   types:
   - Personality
@@ -1253,5 +1252,27 @@ cards:
   rarity: Fixed
   flavor_text: <i>"Ichido forgets he's not the only one who was at the Scouring. I'm keen to remind him."</i>
   collector_number: '26'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+
+- title: The Shattered Stormfront of the Mantis
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  keywords:
+  - Market
+  - Port
+  text: 'Open: Create a Raid Attack whose resolution does not bow your Naval Personalities. After the battle ends,
+    if you won it, give your target Holding a +1GP Wealth token.'
+  province_strength: 8
+  gold_production: 3
+  starting_honor: 2
+  rarity: Fixed
+  artist: (FFG) Chris Ostrowski - Fantasy Flight Games
+  collector_number: '52'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home

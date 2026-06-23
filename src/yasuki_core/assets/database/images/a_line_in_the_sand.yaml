@@ -258,9 +258,6 @@ images:
   - role: front
     file: gates_of_the_second_city.jpg
     sha256: c4d486297e9b9e62958339304de704f18eb4e169cc83c4ab2e85a8a67a73c544
-  - role: back
-    file: gates_of_the_second_city__back.jpg
-    sha256: 18e406f54d6e49a48c16dbe61b79cbc708bf04cf5d21248505ff13315b5f4ac1
 - card_id: goblin_follower
   printing_id: a_line_in_the_sand
   files:
@@ -1179,3 +1176,9 @@ images:
   - role: front
     file: zombie.jpg
     sha256: 5787c44d6af2ed079d4f5891049fd8aea609dce5bfb8996144dd7683bc6415be
+- card_id: gates_of_the_second_city__back
+  printing_id: a_line_in_the_sand
+  files:
+  - role: front
+    file: gates_of_the_second_city__back.jpg
+    sha256: 18e406f54d6e49a48c16dbe61b79cbc708bf04cf5d21248505ff13315b5f4ac1

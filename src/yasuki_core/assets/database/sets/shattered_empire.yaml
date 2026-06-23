@@ -8288,9 +8288,9 @@ cards:
   - Pre-Game
   clans:
   - Lion
-  text: Your attacking Lion Clan Personalities have +1F.<br><b>Battle, :bow::</b> Move home a target enemy
-    defending Personality. Gain 1 Honor.
-  province_strength: 8
+  text: 'Battle, :bow:: Move home a target enemy defending Personality. You may target your Personality with higher
+    Personal Honor to straighten this Stronghold and gain 1 Honor.'
+  province_strength: 7
   starting_honor: 7
   legality:
   - Shattered Empire
@@ -8301,6 +8301,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 3
 - title: The Boundless Plains of the Unicorn
   types:
   - Stronghold
@@ -8308,10 +8309,9 @@ cards:
   - Pre-Game
   clans:
   - Unicorn
-  text: <b>Battle/Engage:</b> Target your Personality in a Cavalry unit, or any Personality if this is
-    a Battle, at any location. You may move them home, or, if they would be opposed, you may move them
-    to the current battlefield. If the target is not yours, straighten their unit as they move.
-  province_strength: 9
+  text: 'Battle/Engage: Target your Personality in a Cavalry unit at any location. You may move them home, or, if
+    they would be opposed, you may move them to the current battlefield.'
+  province_strength: 7
   starting_honor: 4
   legality:
   - Shattered Empire
@@ -8322,6 +8322,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 4
 - title: The Crystal Tears
   types:
   - Strategy
@@ -8355,10 +8356,9 @@ cards:
   - Pre-Game
   clans:
   - Spider
-  text: 'Your lose 2 Honor less from your cards.<br><b>Tireless Battle/Open:</b> Give a target Personality
-    :shadowlands:. If they are yours and this is a Battle, :fear: equal to their Force. Otherwise, take
-    an additional action.'
-  province_strength: 9
+  text: 'You lose 1 Honor less from your cards. Tireless Battle: Give a target Personality :shadowlands:. If they
+    are yours, :fear: equal to their Force, Otherwise, take an additional action.'
+  province_strength: 7
   starting_honor: 0
   legality:
   - Shattered Empire
@@ -8369,6 +8369,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 4
 - title: The Desiccated
   types:
   - Follower
@@ -8409,10 +8410,10 @@ cards:
   - Dragon
   keywords:
   - Temple
-  text: <b>Tireless Battle/Interrupt/Open:</b> Take an additional Battle, Interrupt, or Open, whichever
-    this was taken as, from your target Ring in play or your discard pile, ignoring bow costs. If the
-    Ring was in the discard pile, reshuffle it into your Fate deck.
-  province_strength: 8
+  text: 'Tireless Battle/Interrupt: Take an additional Battle or Interrupt, whichever this was taken as, from your
+    target Ring in play or your discard pile, ignoring bow costs. If the Ring was in the discard pile, reshuffle
+    it into your Fate deck.'
+  province_strength: 7
   starting_honor: 5
   legality:
   - Shattered Empire
@@ -8422,6 +8423,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 4
 - title: The Eternal Well of the Akasha
   types:
   - Stronghold
@@ -8431,11 +8433,10 @@ cards:
   - Naga
   keywords:
   - Forest
-  text: 'You may not play :maho: or :shadowlands: cards. Your Personalities will not gain :shadowlands:.<br><b>Tireless
-    Battle:</b> Copy a Battle ability from a target Naga in your discard pile to your target opposed Naga
-    of the same card type. Look at the top two cards of your Dynasty deck. You may discard one of them.
+  text: 'You may not play :maho: or :shadowlands: cards. Your Personalities will not gain :shadowlands:. Battle:
+    Copy a Battle ability from a target Naga in your discard pile to your target opposed Naga of the same card type.
     Put the first target at the bottom of your deck. Take an additional action to use the copied ability.'
-  province_strength: 8
+  province_strength: 7
   starting_honor: 2
   legality:
   - Shattered Empire
@@ -8448,6 +8449,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 4
 - title: The Fearless
   types:
   - Follower
@@ -8479,10 +8481,9 @@ cards:
   - Pre-Game
   clans:
   - Scorpion
-  text: Before the Action Phase ends, you may take an additional action. Reduce other players' Honor gains
-    from Proclaiming by 1.<br><b>Tireless Open:</b> Give another player's target Personality a minimum
-    of 1 Chi and -2F/-2C <i>(this turn)</i>. This is a Ninja action.
-  province_strength: 9
+  text: 'Tireless Open: Give another player''s target Personality a minimum of 1 Chi and -2F/-2C (this turn). This
+    is a Ninja action.'
+  province_strength: 7
   starting_honor: 1
   legality:
   - Shattered Empire
@@ -8493,6 +8494,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 4
 - title: The Indomitable Fortress of the Crab
   types:
   - Stronghold
@@ -8500,10 +8502,9 @@ cards:
   - Pre-Game
   clans:
   - Crab
-  text: The first time each turn you Recruit a Fortification, refill its Province face-up.<br><b>Tireless
-    Battle:</b> Straighten your target opposed Personality. Straighten their attachments if your current
-    army is outnumbered.
-  province_strength: 10
+  text: 'This Stronghold''s ability has Tireless if you bow your Fortification when announcing it. Battle: Straighten
+    your target opposed Personality. Straighten their attachments if your current army is outnumbered.'
+  province_strength: 8
   starting_honor: 3
   legality:
   - Shattered Empire
@@ -8514,6 +8515,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 4
 - title: The Ivory Courtroom
   types:
   - Holding
@@ -8585,9 +8587,8 @@ cards:
   - Crane
   keywords:
   - Market
-  text: 'Your Favor actions have <b>Repeatable.</b> You have a +5 Lobby bonus.<br><b>Political Tireless
-    Response:</b> If you paid the action''s :favor: cost, take :favor:.'
-  province_strength: 7
+  text: 'Political Response: If you paid the action''s :favor: cost, take :favor:.'
+  province_strength: 6
   starting_honor: 6
   legality:
   - Shattered Empire
@@ -8598,6 +8599,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 4
 - title: The Sacred Ground of the Phoenix
   types:
   - Stronghold
@@ -8607,9 +8609,9 @@ cards:
   - Phoenix
   keywords:
   - Temple
-  text: <b>Open:</b> The next time <i>(this turn)</i> you use the rulebook Kharmic ability, you may use
-    it without cost, and you may use it on a non-Kharmic card <i>(face-up if in a Province)</i>.
-  province_strength: 8
+  text: 'Open: The next time (this turn) you use the rulebook Kharmic ability, you may use it on a Kharmic card
+    without cost, or you may use it on a non-Kharmic card (face-up if in a Province).'
+  province_strength: 6
   starting_honor: 6
   legality:
   - Shattered Empire
@@ -8620,6 +8622,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 4
 - title: The Shattered Stormfront of the Mantis
   types:
   - Stronghold
@@ -8628,11 +8631,9 @@ cards:
   clans:
   - Mantis
   keywords:
-  - Market
   - Port
-  text: <b>Open:</b> Create a Raid Attack whose resolution does not bow your Naval Personalities. After
-    the battle ends, if you won it, give your target Holding a +1GP Wealth token.<br><i>(When going second,
-    you get +1PS and the Market keyword)</i>
+  text: 'Open: Create a Raid Attack whose resolution does not bow your Naval Personalities. After the battle ends,
+    if you won it, give your target Holding a +1GP Wealth token.'
   province_strength: 7
   starting_honor: 2
   legality:
@@ -8644,6 +8645,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
   doublesided: true
+  gold_production: 3
 - title: The Sky's Barrier
   types:
   - Spell
@@ -10293,5 +10295,201 @@ cards:
   flavor_text: His heart convulsed as the forces within him tore at the very fibers of his being. All he could do
     was scream.
   collector_number: '331'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+
+- title: The Ancient Castle of the Lion
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: 'Your attacking Lion Clan Personalities have +1F. Battle, :bow:: Move home a target enemy defending Personality.
+    Gain 1 Honor.'
+  province_strength: 8
+  gold_production: 3
+  starting_honor: 7
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '382'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Boundless Plains of the Unicorn
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unicorn
+  text: 'Battle/Engage: Target your Personality in a Cavalry unit, or any Personality if this is a Battle, at any
+    location. You may move them home, or, if they would be opposed, you may move them to the current battlefield.
+    If the target is not yours, straighten their unit as they move.'
+  province_strength: 9
+  gold_production: 4
+  starting_honor: 4
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '387'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Dark Capital of the Spider
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Spider
+  text: 'You lose 2 Honor less from your cards. Tireless Battle/Open: Give a target Personality :shadowlands:. If
+    they are yours and this is a Battle, :fear: equal to their Force. Otherwise, take an additional action.'
+  province_strength: 9
+  gold_production: 4
+  starting_honor: 0
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '386'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Enlightened Path of the Dragon
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Dragon
+  keywords:
+  - Temple
+  text: 'Tireless Battle/Interrupt/Open: Take an additional Battle, Interrupt, or Open, whichever this was taken
+    as, from your target Ring in play or your discard pile, ignoring bow costs. If the Ring was in the discard pile,
+    reshuffle it into your Fate deck.'
+  province_strength: 8
+  gold_production: 4
+  starting_honor: 5
+  rarity: Fixed
+  artist: (FFG) Nele Diel - Fantasy Flight Games
+  collector_number: '381'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Eternal Well of the Akasha
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Naga
+  keywords:
+  - Forest
+  text: 'You may not play :maho: or :shadowlands: cards. Your Personalities will not gain :shadowlands:. Battle:
+    Copy a Battle ability from a target Naga in your discard pile to your target opposed Naga of the same card type.
+    Look at the top two cards of your Dynasty deck. You may discard one of them. Put the first target at the bottom
+    of your deck. Take an additional action to use the copied ability.'
+  province_strength: 8
+  gold_production: 4
+  starting_honor: 2
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '378'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Hidden School of the Scorpion
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Scorpion
+  text: 'Before the Action Phase ends, you may take an additional action. Tireless Open: Give another player''s
+    target Personality a minimum of 1 Chi and -2F/-2C (this turn). This is a Ninja action.'
+  province_strength: 9
+  gold_production: 4
+  starting_honor: 1
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '385'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Indomitable Fortress of the Crab
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: 'The first time each turn you Recruit a Fortification, refill its Province face-up. Tireless Battle: Straighten
+    your target opposed Personality. Straighten their attachments if your current army is outnumbered.'
+  province_strength: 10
+  gold_production: 4
+  starting_honor: 3
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '379'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Palatial Estate of the Crane
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  keywords:
+  - Market
+  text: 'Your Favor actions have Repeatable. You have a +5 Lobby bonus. Political Tireless Response: If you paid
+    the action''s :favor: cost, take :favor:.'
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 6
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '380'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Sacred Ground of the Phoenix
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Phoenix
+  keywords:
+  - Temple
+  text: 'Open: The next time (this turn) you use the rulebook Kharmic ability, you may use it without cost, and
+    you may use it on a non-Kharmic card (face-up if in a Province).'
+  province_strength: 8
+  gold_production: 4
+  starting_honor: 6
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '384'
+  publisher: Onyx Lives
+  publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+- title: The Shattered Stormfront of the Mantis
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  keywords:
+  - Market
+  - Port
+  text: 'Open: Create a Raid Attack whose resolution does not bow your Naval Personalities. After the battle ends,
+    if you won it, give your target Holding a +1GP Wealth token.'
+  province_strength: 8
+  gold_production: 3
+  starting_honor: 2
+  rarity: Fixed
+  artist: Charles Urbach
+  collector_number: '383'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home

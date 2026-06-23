@@ -299,9 +299,6 @@ images:
   files:
   - role: front
     file: the_honorable_garrison_of_the_lion.jpg
-    sha256: 87c0a2732ca0c0865cd4ffa6f3d48a0bfa0713cf01b8bd3a1661e08085719fa3
-  - role: back
-    file: the_honorable_garrison_of_the_lion__back.jpg
     sha256: 2d46f93bca4c28eb0b926af1c7e47482c55608a696385109d48392f32891fcc0
 - card_id: the_impregnable_fortress_of_the_crab
   printing_id: a_matter_of_honor
@@ -309,9 +306,6 @@ images:
   - role: front
     file: the_impregnable_fortress_of_the_crab.jpg
     sha256: 2de3433d2518a2b209a493844ff93f5e7c29e1ba37482bc7646bd4968463fdec
-  - role: back
-    file: the_impregnable_fortress_of_the_crab__back.jpg
-    sha256: b7c7a54bbaa028c101948631223f398965608a0b33b98a86191585784bf81a85
 - card_id: the_lost_colossus
   printing_id: a_matter_of_honor
   files:
@@ -330,3 +324,15 @@ images:
   - role: front
     file: well_defended_farm.jpg
     sha256: 0fdddccce9b842baaaf5a7f985a7bfc270c52e56b20ece0577c59ad2dfa49050
+- card_id: the_honorable_garrison_of_the_lion__back
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: the_honorable_garrison_of_the_lion__back.jpg
+    sha256: 87c0a2732ca0c0865cd4ffa6f3d48a0bfa0713cf01b8bd3a1661e08085719fa3
+- card_id: the_impregnable_fortress_of_the_crab__back
+  printing_id: a_matter_of_honor
+  files:
+  - role: front
+    file: the_impregnable_fortress_of_the_crab__back.jpg
+    sha256: b7c7a54bbaa028c101948631223f398965608a0b33b98a86191585784bf81a85
