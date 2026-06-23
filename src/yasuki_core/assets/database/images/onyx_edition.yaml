@@ -1926,18 +1926,12 @@ images:
   - role: front
     file: the_ancient_castle_of_the_lion.jpg
     sha256: 77c8725b4be1835666ad244f742f0ee79b804ec87a4b6475d753772abe9c4612
-  - role: back
-    file: the_ancient_castle_of_the_lion__back.jpg
-    sha256: 14bdb046643e88520ae7e639b42d107b7a32bb3dbfe3578b636d7a23574653b8
 - card_id: the_boundless_plains_of_the_unicorn
   printing_id: onyx_edition
   files:
   - role: front
     file: the_boundless_plains_of_the_unicorn.jpg
     sha256: a9afbd8fd190ca92ed008ad018f89e2f8351f14ed3d39dd754c305a856409fac
-  - role: back
-    file: the_boundless_plains_of_the_unicorn__back.jpg
-    sha256: 038910fe2f17b9d156b3dcfaafbc9dc37c31899a3b0a565e988228cb06c14ad3
 - card_id: the_crystal_tears
   printing_id: onyx_edition
   files:
@@ -1950,9 +1944,6 @@ images:
   - role: front
     file: the_dark_capital_of_the_spider.jpg
     sha256: 98e0c55ff39009fad6612b781399830f50ad929dbff8d827e6872e3b203f040b
-  - role: back
-    file: the_dark_capital_of_the_spider__back.jpg
-    sha256: 3ad9b8865530e4d5a9b7399c89a554729678f5fe503478cc3b3e9b344b24242b
 - card_id: the_desiccated
   printing_id: onyx_edition
   files:
@@ -1965,18 +1956,12 @@ images:
   - role: front
     file: the_esoteric_enigma_of_the_dragon.jpg
     sha256: 88fddb46f1b3472a26419f124658d61f6f42a8d284b7caf345dce4db1ecfbc9d
-  - role: back
-    file: the_esoteric_enigma_of_the_dragon__back.jpg
-    sha256: c34933246077490f1bbe3c3bbc86b3e508fd247f8ee1d36a0aec8fca69ce4a1b
 - card_id: the_eternal_well_of_the_akasha
   printing_id: onyx_edition
   files:
   - role: front
     file: the_eternal_well_of_the_akasha.jpg
     sha256: 52997e9daacaa45e1de6ed25e148a71a882a9c32e48a8b3013741df389a9af1b
-  - role: back
-    file: the_eternal_well_of_the_akasha__back.jpg
-    sha256: 42a6b1ebecb954511085b7c96e12df468074f9c0a8c090b2ad3663ad1b180cd8
 - card_id: the_fearless
   printing_id: onyx_edition
   files:
@@ -1995,18 +1980,12 @@ images:
   - role: front
     file: the_hidden_school_of_the_scorpion.jpg
     sha256: d2a723d3ee912c9f9124c1e821a9d1923507a2bbbd0c95eb7a6935b0cc2286b1
-  - role: back
-    file: the_hidden_school_of_the_scorpion__back.jpg
-    sha256: 4df6846d30fadf75a0ba3a745799a7decb76fce87adf3b269a92f7279ffd58f4
 - card_id: the_indomitable_fortress_of_the_crab
   printing_id: onyx_edition
   files:
   - role: front
     file: the_indomitable_fortress_of_the_crab.jpg
     sha256: 924e2a387935ed5bf78467c8391647851e00f7fe6491b03f3be10e3b1752cc6d
-  - role: back
-    file: the_indomitable_fortress_of_the_crab__back.jpg
-    sha256: e15b84f4db2070d9735326cd10c477bf4045a7399098cbb1023b4d501947d3ab
 - card_id: the_ivory_courtroom
   printing_id: onyx_edition
   files:
@@ -2025,18 +2004,12 @@ images:
   - role: front
     file: the_palatial_estate_of_the_crane.jpg
     sha256: d0471ba0194330e4819ec10a0cd7b08e786a931dc1a5f3301948bc3efbb32860
-  - role: back
-    file: the_palatial_estate_of_the_crane__back.jpg
-    sha256: 0ba1dbc4d936d70b86f3a7a754bd481f8b5ae9965c35a9154065108577de533b
 - card_id: the_sacred_ground_of_the_phoenix
   printing_id: onyx_edition
   files:
   - role: front
     file: the_sacred_ground_of_the_phoenix.jpg
     sha256: f4e0f656c2a9e729cccd002b92ac5b41feefe0347a08a1715ec9b5be735eaba1
-  - role: back
-    file: the_sacred_ground_of_the_phoenix__back.jpg
-    sha256: f718f48939210cc1dcb31a2a598a994a5b2d2023cd2557dec6e4fa2d6e41d025
 - card_id: the_skys_barrier
   printing_id: onyx_edition
   files:
@@ -2331,3 +2304,57 @@ images:
   - role: front
     file: zenko_soul_of_zanaru.jpg
     sha256: 16687e5a476a6fdf44f40b7767d285eaa80879fb648ebee872d08ba4a4edded0
+- card_id: the_ancient_castle_of_the_lion__back
+  printing_id: onyx_edition
+  files:
+  - role: front
+    file: the_ancient_castle_of_the_lion__back.jpg
+    sha256: 14bdb046643e88520ae7e639b42d107b7a32bb3dbfe3578b636d7a23574653b8
+- card_id: the_boundless_plains_of_the_unicorn__back
+  printing_id: onyx_edition
+  files:
+  - role: front
+    file: the_boundless_plains_of_the_unicorn__back.jpg
+    sha256: 038910fe2f17b9d156b3dcfaafbc9dc37c31899a3b0a565e988228cb06c14ad3
+- card_id: the_dark_capital_of_the_spider__back
+  printing_id: onyx_edition
+  files:
+  - role: front
+    file: the_dark_capital_of_the_spider__back.jpg
+    sha256: 3ad9b8865530e4d5a9b7399c89a554729678f5fe503478cc3b3e9b344b24242b
+- card_id: the_esoteric_enigma_of_the_dragon__back
+  printing_id: onyx_edition
+  files:
+  - role: front
+    file: the_esoteric_enigma_of_the_dragon__back.jpg
+    sha256: c34933246077490f1bbe3c3bbc86b3e508fd247f8ee1d36a0aec8fca69ce4a1b
+- card_id: the_eternal_well_of_the_akasha__back
+  printing_id: onyx_edition
+  files:
+  - role: front
+    file: the_eternal_well_of_the_akasha__back.jpg
+    sha256: 42a6b1ebecb954511085b7c96e12df468074f9c0a8c090b2ad3663ad1b180cd8
+- card_id: the_hidden_school_of_the_scorpion__back
+  printing_id: onyx_edition
+  files:
+  - role: front
+    file: the_hidden_school_of_the_scorpion__back.jpg
+    sha256: 4df6846d30fadf75a0ba3a745799a7decb76fce87adf3b269a92f7279ffd58f4
+- card_id: the_indomitable_fortress_of_the_crab__back
+  printing_id: onyx_edition
+  files:
+  - role: front
+    file: the_indomitable_fortress_of_the_crab__back.jpg
+    sha256: e15b84f4db2070d9735326cd10c477bf4045a7399098cbb1023b4d501947d3ab
+- card_id: the_palatial_estate_of_the_crane__back
+  printing_id: onyx_edition
+  files:
+  - role: front
+    file: the_palatial_estate_of_the_crane__back.jpg
+    sha256: 0ba1dbc4d936d70b86f3a7a754bd481f8b5ae9965c35a9154065108577de533b
+- card_id: the_sacred_ground_of_the_phoenix__back
+  printing_id: onyx_edition
+  files:
+  - role: front
+    file: the_sacred_ground_of_the_phoenix__back.jpg
+    sha256: f718f48939210cc1dcb31a2a598a994a5b2d2023cd2557dec6e4fa2d6e41d025

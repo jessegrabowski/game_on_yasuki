@@ -378,9 +378,6 @@ images:
   - role: front
     file: the_austere_valley_of_the_sparrow_experienced.jpg
     sha256: 7d0d0831461f568c9636d6a123dc2ea69571dfa23e677195e34526a891d3dd51
-  - role: back
-    file: the_austere_valley_of_the_sparrow_experienced__back.jpg
-    sha256: 232946cfae00cdae1d224f605be628daa215f8fd4acbb4cafad17bdf5299c446
 - card_id: the_first_kengun
   printing_id: chaos_reigns_part_ii
   files:
@@ -495,3 +492,9 @@ images:
   - role: front
     file: kichigai.jpg
     sha256: aa0b48dcb90a6c101d24f3fcc7c9ff958c18a7531618d2a33cad1ae82ea50310
+- card_id: the_austere_valley_of_the_sparrow_experienced__back
+  printing_id: chaos_reigns_part_ii
+  files:
+  - role: front
+    file: the_austere_valley_of_the_sparrow_experienced__back.jpg
+    sha256: 232946cfae00cdae1d224f605be628daa215f8fd4acbb4cafad17bdf5299c446

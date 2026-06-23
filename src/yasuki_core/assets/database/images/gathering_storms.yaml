@@ -246,9 +246,6 @@ images:
   - role: front
     file: the_shattered_stormfront_of_the_mantis.jpg
     sha256: 9eb57b66061c7413331c47f8497198dad97845aa3417cde56ee5c5ef6df4fa2b
-  - role: back
-    file: the_shattered_stormfront_of_the_mantis__back.jpg
-    sha256: ec4f95a5f4486a777d61948b01ea6468e89d59989cad527a0e87430139a1f116
 - card_id: togashi_ogai
   printing_id: gathering_storms
   files:
@@ -321,3 +318,9 @@ images:
   - role: front
     file: yoritomo_yusako_hiromis_legacy_captain.jpg
     sha256: 2b1ec538f56d88002e919ce49a8db255bd779727a84df2281429155256889c8d
+- card_id: the_shattered_stormfront_of_the_mantis__back
+  printing_id: gathering_storms
+  files:
+  - role: front
+    file: the_shattered_stormfront_of_the_mantis__back.jpg
+    sha256: ec4f95a5f4486a777d61948b01ea6468e89d59989cad527a0e87430139a1f116

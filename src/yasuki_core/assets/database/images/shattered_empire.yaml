@@ -1884,18 +1884,12 @@ images:
   - role: front
     file: the_ancient_castle_of_the_lion.jpg
     sha256: 19bdbd14cc2247499e1c28cc44698d1033708144ef24ab9609f9d59f1ee5e874
-  - role: back
-    file: the_ancient_castle_of_the_lion__back.jpg
-    sha256: a853ec51674dfcdd6d7e8d726b5438c344e286b195ff729958fe7d695c4f940e
 - card_id: the_boundless_plains_of_the_unicorn
   printing_id: shattered_empire
   files:
   - role: front
     file: the_boundless_plains_of_the_unicorn.jpg
     sha256: e8a3e45384c7afcdbed0e03e99e0c726604de6c1157411c9f968e70faf425c3a
-  - role: back
-    file: the_boundless_plains_of_the_unicorn__back.jpg
-    sha256: 129a6773a63f2375bb8db094e910d1b1ab64012de5e07355d8250c3035dc0aac
 - card_id: the_crystal_tears
   printing_id: shattered_empire
   files:
@@ -1908,9 +1902,6 @@ images:
   - role: front
     file: the_dark_capital_of_the_spider.jpg
     sha256: e1e14bc118d5f01c76e76548dc1c42eaa52a8703adbbcd759f77240e22aad719
-  - role: back
-    file: the_dark_capital_of_the_spider__back.jpg
-    sha256: 2c2b24a49ddbc668ce9da3bd0a3eed9fc9e436545d1c624c26651081a0d7107e
 - card_id: the_desiccated
   printing_id: shattered_empire
   files:
@@ -1923,18 +1914,12 @@ images:
   - role: front
     file: the_enlightened_path_of_the_dragon.jpg
     sha256: 9b292ae6163554ada1efafb44e4692ad5bf01dde49b984594b68f4b78d80b105
-  - role: back
-    file: the_enlightened_path_of_the_dragon__back.jpg
-    sha256: 1efd42e1aedc22a831dad1921347061c0bc03c1ba6dc41fb3f4b86fd651ba5a7
 - card_id: the_eternal_well_of_the_akasha
   printing_id: shattered_empire
   files:
   - role: front
     file: the_eternal_well_of_the_akasha.jpg
     sha256: 972f3dc01264830e9a7f9b294fa52f63a29a9d66157587fd9da1ad3870c44666
-  - role: back
-    file: the_eternal_well_of_the_akasha__back.jpg
-    sha256: 0b8ef685dcca7bc2e04959bd0c7f0f755ed205c3237eb9924e0c0179659d7dea
 - card_id: the_fearless
   printing_id: shattered_empire
   files:
@@ -1947,18 +1932,12 @@ images:
   - role: front
     file: the_hidden_school_of_the_scorpion.jpg
     sha256: 86d1934e1613f1f189eb7d39c658607c4d4d919138953985e3734d5e4a120413
-  - role: back
-    file: the_hidden_school_of_the_scorpion__back.jpg
-    sha256: 7d2bcc0d9e54405e81730be79356afc5a0f4e9187dc7338f015928b3ff506de2
 - card_id: the_indomitable_fortress_of_the_crab
   printing_id: shattered_empire
   files:
   - role: front
     file: the_indomitable_fortress_of_the_crab.jpg
     sha256: dd78dc485e5ebe2c47c058c4a62be471bca3e485794892fbb868563763f49a8d
-  - role: back
-    file: the_indomitable_fortress_of_the_crab__back.jpg
-    sha256: 2c1dbe624bd605bc93aed6290a0c56da12b40ee16ef89895ef6156a01cf27a5b
 - card_id: the_ivory_courtroom
   printing_id: shattered_empire
   files:
@@ -1983,27 +1962,18 @@ images:
   - role: front
     file: the_palatial_estate_of_the_crane.jpg
     sha256: 23c9639df22b994818cda5880f1096fc9af78cacf07efd979ce508b2b19a84c7
-  - role: back
-    file: the_palatial_estate_of_the_crane__back.jpg
-    sha256: 48f554957333a601517d59116e9f10bb77526ee80628f6d642feee417f16fc6b
 - card_id: the_sacred_ground_of_the_phoenix
   printing_id: shattered_empire
   files:
   - role: front
     file: the_sacred_ground_of_the_phoenix.jpg
     sha256: 1c75fb65d99484bddecfbec83a8ffbd2789a633c3e1140eebaa149b320ac3878
-  - role: back
-    file: the_sacred_ground_of_the_phoenix__back.jpg
-    sha256: 1724f4c65587a9fc0454ea80bb068a17aa642a4572eb575e080b08d9fea89680
 - card_id: the_shattered_stormfront_of_the_mantis
   printing_id: shattered_empire
   files:
   - role: front
     file: the_shattered_stormfront_of_the_mantis.jpg
     sha256: 9c87120826a5feae82b4a2f8a35446439535941525c001c31c50d1cf5de800a4
-  - role: back
-    file: the_shattered_stormfront_of_the_mantis__back.jpg
-    sha256: 1a360bb6b2223ee8caa52dd09c74ff6b8707eaf42a9aa91fe9733bd3ed37f9e0
 - card_id: the_skys_barrier
   printing_id: shattered_empire
   files:
@@ -2406,3 +2376,63 @@ images:
   - role: front
     file: rend_the_soul.jpg
     sha256: b29d69e8868cf866fc73c5fe7a5043aa2e92f9482f4526c93156461a84bdbf23
+- card_id: the_ancient_castle_of_the_lion__back
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: the_ancient_castle_of_the_lion__back.jpg
+    sha256: a853ec51674dfcdd6d7e8d726b5438c344e286b195ff729958fe7d695c4f940e
+- card_id: the_boundless_plains_of_the_unicorn__back
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: the_boundless_plains_of_the_unicorn__back.jpg
+    sha256: 129a6773a63f2375bb8db094e910d1b1ab64012de5e07355d8250c3035dc0aac
+- card_id: the_dark_capital_of_the_spider__back
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: the_dark_capital_of_the_spider__back.jpg
+    sha256: 2c2b24a49ddbc668ce9da3bd0a3eed9fc9e436545d1c624c26651081a0d7107e
+- card_id: the_enlightened_path_of_the_dragon__back
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: the_enlightened_path_of_the_dragon__back.jpg
+    sha256: 1efd42e1aedc22a831dad1921347061c0bc03c1ba6dc41fb3f4b86fd651ba5a7
+- card_id: the_eternal_well_of_the_akasha__back
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: the_eternal_well_of_the_akasha__back.jpg
+    sha256: 0b8ef685dcca7bc2e04959bd0c7f0f755ed205c3237eb9924e0c0179659d7dea
+- card_id: the_hidden_school_of_the_scorpion__back
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: the_hidden_school_of_the_scorpion__back.jpg
+    sha256: 7d2bcc0d9e54405e81730be79356afc5a0f4e9187dc7338f015928b3ff506de2
+- card_id: the_indomitable_fortress_of_the_crab__back
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: the_indomitable_fortress_of_the_crab__back.jpg
+    sha256: 2c1dbe624bd605bc93aed6290a0c56da12b40ee16ef89895ef6156a01cf27a5b
+- card_id: the_palatial_estate_of_the_crane__back
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: the_palatial_estate_of_the_crane__back.jpg
+    sha256: 48f554957333a601517d59116e9f10bb77526ee80628f6d642feee417f16fc6b
+- card_id: the_sacred_ground_of_the_phoenix__back
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: the_sacred_ground_of_the_phoenix__back.jpg
+    sha256: 1724f4c65587a9fc0454ea80bb068a17aa642a4572eb575e080b08d9fea89680
+- card_id: the_shattered_stormfront_of_the_mantis__back
+  printing_id: shattered_empire
+  files:
+  - role: front
+    file: the_shattered_stormfront_of_the_mantis__back.jpg
+    sha256: 1a360bb6b2223ee8caa52dd09c74ff6b8707eaf42a9aa91fe9733bd3ed37f9e0

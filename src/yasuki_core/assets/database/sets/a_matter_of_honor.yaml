@@ -1190,8 +1190,7 @@ cards:
   - Pre-Game
   clans:
   - Lion
-  text: <b>Battle:</b> Give your target opposed Lion Clan Samurai a Force bonus equal to his Personal
-    Honor <i>(this turn)</i>.<br><i>(This Stronghold has +2 Province Strength when going second)</i>
+  text: 'Battle: Give your target opposed Lion Clan Samurai a Force bonus equal to his Personal Honor (this turn).'
   province_strength: 7
   starting_honor: 7
   legality:
@@ -1201,11 +1200,11 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Fixed
   artist: Chris Ostrowski
-  flavor_text: '"The Crab stand on a wall and slay stupid beasts and twisted demons every day. They practice
-    brutal, relentless violence, and think that they understand war. They are brutes playing at a civilized
-    art. They have no notion of what they face." - Akodo Dairuko'
+  flavor_text: A soldier of the Lion Clan is trained in the dojo, where his every waking moment is prepared for
+    the inevitable moment of battle. To the Lion, there is no greater honor.
   collector_number: '57'
   doublesided: true
+  gold_production: 3
 - title: The Impregnable Fortress of the Crab
   types:
   - Stronghold
@@ -1213,8 +1212,7 @@ cards:
   - Pre-Game
   clans:
   - Crab
-  text: Your Crab Clan Personalities have +1F while opposed.<br><i><i>(This Stronghold has +2 Province
-    Strength when going second)</i></i>
+  text: Your Crab Clan Personalities have +1F while opposed.
   province_strength: 7
   starting_honor: 3
   legality:
@@ -1224,11 +1222,11 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Fixed
   artist: Chris Ostrowski
-  flavor_text: '"The Lion think that they understand war. They read their scrolls and study their maps
-    and practice their kata. They have no understanding of what true war is. We shall show them." - Hida
-    Kisada'
+  flavor_text: A soldier of the Crab Clan is trained upon the Carpenter Wall, where he lives every waking moment
+    in vigilance against the terrible beasts of the south. For the Crab, battle is the reality of every sunrise.
   collector_number: '55'
   doublesided: true
+  gold_production: 4
 - title: The Lost Colossus
   types:
   - Personality
@@ -1301,3 +1299,39 @@ cards:
     if we must."'
   collector_number: '14'
   designer: Loki
+
+- title: The Honorable Garrison of the Lion
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: 'Battle: Give your target opposed Lion Clan Samurai a Force bonus equal to his Personal Honor (this turn).'
+  province_strength: 9
+  gold_production: 3
+  starting_honor: 7
+  rarity: Fixed
+  artist: Chris Ostrowski
+  collector_number: '57'
+  flavor_text: '"The Crab stand on a wall and slay stupid beasts and twisted demons every day. They practice brutal,
+    relentless violence, and think that they understand war. They are brutes playing at a civilized art. They have
+    no notion of what they face." – Akodo Dairuko'
+- title: The Impregnable Fortress of the Crab
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: Your Crab Clan Personalities have +1F while opposed.
+  province_strength: 9
+  gold_production: 4
+  starting_honor: 3
+  rarity: Fixed
+  artist: Chris Ostrowski
+  collector_number: '55'
+  flavor_text: '"The Lion think that they understand war. They read their scrolls and study their maps and practice
+    their kata. They have no understanding of what true war is. We shall show them." – Hida Kisada'

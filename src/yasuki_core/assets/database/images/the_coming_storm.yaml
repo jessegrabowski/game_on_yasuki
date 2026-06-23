@@ -300,9 +300,6 @@ images:
   - role: front
     file: gates_of_the_second_city.jpg
     sha256: 153e97c865165886ec14595a0353b982afb69b58dcb1e7cb3e06d0da4ad7c66f
-  - role: back
-    file: gates_of_the_second_city__back.jpg
-    sha256: 81ec3ddc9716123ddafc2e3e17163d870301e62d966160b5a8e3078c6c22fb6b
 - card_id: goblin_follower
   printing_id: the_coming_storm
   files:
@@ -1113,3 +1110,9 @@ images:
   - role: front
     file: zombie.jpg
     sha256: f86481cb5f99c781d44e83520d9fdef53102cc501083069bc08189f35cbc8c86
+- card_id: gates_of_the_second_city__back
+  printing_id: the_coming_storm
+  files:
+  - role: front
+    file: gates_of_the_second_city__back.jpg
+    sha256: 81ec3ddc9716123ddafc2e3e17163d870301e62d966160b5a8e3078c6c22fb6b

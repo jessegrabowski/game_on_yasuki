@@ -2965,9 +2965,9 @@ cards:
   - Pre-Game
   clans:
   - Unaligned
-  text: <i>(This card has +1PS and +2GP if you didn't go first.)</i><br><b>Limited, :g4::</b> Gain 2 Honor.
-    <br><b>Tireless Battle:</b> Discard a card to make a Fear effect with strength equal to the card's
-    Focus Value. <i>(Tireless actions may be taken even while bowed.)</i>
+  text: '(This has +1PS and +2GP if you didn''t go first.) Limited, :g4: Gain 2 Honor. Tireless Battle: Discard
+    a card to make a Fear effect with strength equal to the card''s Focus Value. (Tireless actions may be taken
+    even while bowed.)'
   province_strength: 7
   starting_honor: 8
   legality:
@@ -2978,11 +2978,12 @@ cards:
   story: Chris Medico
   rarity: Premium
   artist: Noah Bradley
-  flavor_text: <i>"As long as the gates of my beloved Second City stand, the city itself will persevere
-    forever." - Otomo Suikihime
+  flavor_text: '"Not even an attack by the Dark Naga could destroy the gates. Sadly, much in the city was not as
+    strongly built." – Shinjo Tselu'
   collector_number: '391'
   designer: Bryan
   doublesided: true
+  gold_production: 8
 - title: Gempukku
   types:
   - Strategy
@@ -8052,9 +8053,8 @@ cards:
   - Pre-Game
   clans:
   - Unicorn
-  text: This Stronghold produces 4 Gold on your first turn.<br><b>Battle/Engage:</b> If he would be opposed,
-    move your target unbowed Personality in a Cavalry unit at any location to the current battlefield.<br><i>(When
-    going second, you get +1PS and a second use of Cycle on any turn)</i>
+  text: 'This Stronghold produces 4 Gold on your first turn. Battle/Engage: If he would be opposed, move your target
+    unbowed Personality in a Cavalry unit at any location to the current battlefield.'
   province_strength: 7
   starting_honor: 4
   legality:
@@ -8063,10 +8063,10 @@ cards:
   - Modern
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: <i>"No one who threatens this place can be allowed to live. We stand to lose too much."
-    - Shinjo Min-hee</i>
+  flavor_text: '"No one who threatens this place can be allowed to live. We stand to lose too much." – Shinjo Min-hee'
   collector_number: '372'
   doublesided: true
+  gold_production: 5
 - title: The Esteemed Palace of the Crane
   types:
   - Stronghold
@@ -8074,8 +8074,7 @@ cards:
   - Pre-Game
   clans:
   - Crane
-  text: <b>Political Open, :bow::</b> If you control a Personality, gain 2 Honor.<br><i>(When going second,
-    you get +1PS and a +5 Lobby bonus)</i>
+  text: 'Political Open, :bow:: If you control a Personality, gain 2 Honor.'
   province_strength: 6
   starting_honor: 6
   legality:
@@ -8084,10 +8083,11 @@ cards:
   - Modern
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: <i>The Crane excel at many things. One among them is the gift of finding beauty and exploiting
-    it for political advantage.</i>
+  flavor_text: The Crane excel at many things. One among them is the gift of finding beauty and exploiting it for
+    political advantage.
   collector_number: '365'
   doublesided: true
+  gold_production: 4
 - title: The Eternal Rainbows
   types:
   - Strategy
@@ -8120,9 +8120,8 @@ cards:
   - Pre-Game
   clans:
   - Dragon
-  text: After all players reveal Strongholds, search your Fate deck for a non-Void Ring, and put it into
-    play; Sensei effects that remove abilities also remove this trait.<br><i>(When going second, you get
-    +1PS, +1 maximum hand size, and begin with an extra card in your hand.)</i>
+  text: After all players reveal Strongholds, search your Fate deck for a non-Void Ring, and put it into play; Sensei
+    effects that remove abilities also remove this trait.
   province_strength: 6
   starting_honor: 5
   legality:
@@ -8132,10 +8131,11 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: <i>Many think of the Dragon as being cold and impassive, like the mountains. But both have
-    warmth and beauty undreamt of.</i>
+  flavor_text: Many think of the Dragon as being cold and impassive, like the mountains. But both have warmth and
+    beauty undreamt of.
   collector_number: '366'
   doublesided: true
+  gold_production: 4
 - title: The Fruitful Port of the Mantis
   types:
   - Stronghold
@@ -8145,8 +8145,7 @@ cards:
   - Mantis
   keywords:
   - Port
-  text: <b>Limited, :g3::</b> Draw a card.<br><i>(When going second, you may, once per game, produce 2
-    Gold)</i>
+  text: 'Limited, :g3:: Draw a card.'
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -8154,10 +8153,13 @@ cards:
   - Modern
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: '"My brother''s temperament notwithstanding, the best way to ensure that we are not crossed
-    is to ensure that no clan can afford to alienate our mercantile interests." - Yoritomo Harumi'
+  flavor_text: '"My brother''s temperament notwithstanding, the best way to ensure that we are not crossed is to
+    ensure that no clan can afford to alienate our mercantile interests." – Yoritomo Harumi'
   collector_number: '368'
   doublesided: true
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 2
 - title: The Grand Halls of the Lion
   types:
   - Stronghold
@@ -8165,8 +8167,7 @@ cards:
   - Pre-Game
   clans:
   - Lion
-  text: <b>Battle:</b> Give your target opposed Samurai a Force bonus equal to his Personal Honor.<br><i>(When
-    going second, you get +2PS and your Stronghold ability gains Tireless)</i>
+  text: 'Battle: Give your target opposed Samurai a Force bonus equal to his Personal Honor.'
   province_strength: 7
   starting_honor: 7
   legality:
@@ -8175,11 +8176,12 @@ cards:
   - Modern
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: <i>The samurai of the Lion Clan do not press the issue that theirs is the greatest and
-    most glorious army in the Empire. They assume that all others know and accept this. Only when it is
-    called into question is the wrath of the Lion unleashed.</i>
+  flavor_text: The samurai of the Lion Clan do not press the issue that theirs is the greatest and most glorious
+    army in the Empire. They assume that all others know and accept this. Only when it is called into question is
+    the wrath of the Lion unleashed.
   collector_number: '367'
   doublesided: true
+  gold_production: 3
 - title: The Heavens Are Watching
   types:
   - Event
@@ -8204,10 +8206,8 @@ cards:
   - Pre-Game
   clans:
   - Spider
-  text: <b>Tireless Battle:</b> Fear 3. <i>(Bow a target enemy Follower or Personality without Followers
-    with 3 or lower Force)</i><br><i>(When going second, you have +1 Province Strength, your Fear has
-    +1 strength, and you may, if any of your Provinces have been destroyed, refill the first Province
-    during your Dynasty Phase face-up)</i>
+  text: 'Tireless Battle: :fear: 3 (Bow a target enemy Follower or Personality without Followers with 3 or lower
+    Force).'
   province_strength: 8
   starting_honor: 0
   legality:
@@ -8216,11 +8216,12 @@ cards:
   - Modern
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: <i>"A new Emperor will soon sit upon the throne, and we shall see what promises are kept
-    and what promises are broken. The Empire should remember that they are not the only ones with promises
-    to keep, however." - Daigotsu Kanpeki</i>
+  flavor_text: '"A new Emperor will soon sit upon the throne, and we shall see what promises are kept and what promises
+    are broken. The Empire should remember that they are not the only ones with promises to keep, however." – Daigotsu
+    Kanpeki'
   collector_number: '371'
   doublesided: true
+  gold_production: 4
 - title: The Majestic Temple of the Phoenix
   types:
   - Stronghold
@@ -8230,9 +8231,8 @@ cards:
   - Phoenix
   keywords:
   - Temple
-  text: <b>Dynasty, :g*::</b> Recruit your target dead <i>(not discarded)</i> Phoenix Clan Personality;
-    you may Proclaim him. Gain 1 Honor.<br><i>(When going second, you get +1PS and Personalities you Proclaim
-    enter play for two less Gold.)</i>
+  text: 'Dynasty, :gstar:: Recruit your target dead (not discarded) Phoenix Clan Personality; you may Proclaim him.
+    Gain 1 Honor.'
   province_strength: 6
   starting_honor: 6
   legality:
@@ -8241,10 +8241,11 @@ cards:
   - Modern
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: <i>"There is no death or life in this world. We are but spirits who pass from one realm
-    to the next before finding our ultimate home." - Phoenix teaching</i>
+  flavor_text: '"There is no death or life in this world. We are but spirits who pass from one realm to the next
+    before finding our ultimate home." – Phoenix teaching'
   collector_number: '369'
   doublesided: true
+  gold_production: 4
 - title: The Mountain's Feet
   types:
   - Spell
@@ -8337,9 +8338,8 @@ cards:
   - Pre-Game
   clans:
   - Scorpion
-  text: <b>Tireless Open:</b> Name a Fate card, or name a Dynasty card in play. Negate the effects of
-    the next action from a card with that title.<br><i>(When going second, you get +1PS and other players
-    have -1 maximum hand size)</i>
+  text: 'Tireless Open: Name a Fate card, or name a Dynasty card in play. Negate the effects of the next action
+    from a card with that title.'
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -8348,10 +8348,13 @@ cards:
   notes: This Stronghold may not be used in Twenty Festivals Extended formats.
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: '"Welcome our guests. Provide all that they need. Learn everything you can. They will be
-    ours." - Bayushi Nitoshi'
+  flavor_text: '"Welcome our guests. Provide all that they need. Learn everything you can. They will be ours." —
+    Bayushi Nitoshi'
   collector_number: '370'
   doublesided: true
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 1
 - title: The Thunder Resounds
   types:
   - Spell
@@ -8406,9 +8409,8 @@ cards:
   - Pre-Game
   clans:
   - Crab
-  text: <b>Battle:</b> Straighten your target opposed Personality. Straighten his attachments if your
-    army has fewer units than the opposing army.<br><i>(When going second, you get +2PS and your Stronghold
-    ability gains Tireless)</i>
+  text: 'Battle: Straighten your target opposed Personality. Straighten his attachments if your army has fewer units
+    than the opposing army.'
   province_strength: 7
   starting_honor: 3
   legality:
@@ -8417,10 +8419,11 @@ cards:
   - Modern
   rarity: Fixed
   artist: Alayna Lemmer
-  flavor_text: <i>What was once merely a watchtower has grown in size and scope. Now it truly stands watch
-    over the Crab lands, like a sentry that never falters.</i>
+  flavor_text: What was once merely a watchtower has grown in size and scope. Now it truly stands watch over the
+    Crab lands, like a sentry that never falters.
   collector_number: '364'
   doublesided: true
+  gold_production: 4
 - title: The Unquiet Moto
   types:
   - Follower
@@ -9599,3 +9602,188 @@ cards:
   flavor_text: <i>"Well done, my friend." - Matsu Chizuki</i>
   collector_number: '215'
   designer: Loki
+
+- title: Gates of the Second City
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unaligned
+  text: '(This has -1PS and -2GP if you went first.) Limited, :g4: : Gain 2 Honor. Tireless Battle: Discard a card
+    to make a Fear effect with strength equal to the card''s Focus Value. (Tireless actions may be taken even while
+    bowed.)'
+  province_strength: 8
+  gold_production: 10
+  starting_honor: 8
+  rarity: Premium
+  artist: Noah Bradley
+  designer: Bryan
+  collector_number: '391'
+  flavor_text: '"As long as the gates of my beloved Second City stand, the city itself will persevere forever."
+    – Otomo Suikihime'
+- title: The Endless Plains of the Unicorn
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Unicorn
+  text: 'This Stronghold produces 4 Gold on your first turn. You may Cycle one additional time per game on any turn.
+    Battle/Engage: If he would be opposed, move your target unbowed Personality in a Cavalry unit at any location
+    to the current battlefield.'
+  province_strength: 8
+  gold_production: 5
+  starting_honor: 4
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '372'
+  flavor_text: '"This is why we fight with such ferocity. Because we protect so beautiful a home." — Moto Naleesh'
+- title: The Esteemed Palace of the Crane
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crane
+  text: 'You have a +5 Lobby Bonus. Political Open, :bow:: If you control a Personality, gain 2 Honor.'
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 6
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '365'
+  flavor_text: '"Still the hearts of your enemies with the tranquility of a calm sea, and victory is assured." –
+    Crane proverb'
+- title: The Fortified Monastery of the Dragon
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Dragon
+  text: After all players reveal Strongholds, search your Fate deck for a non-Void Ring, and put it into play; Sensei
+    effects that remove abilities also remove this trait. You start with 1 additional card in hand and have +1 maximum
+    hand size.
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 5
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '366'
+  flavor_text: Few clans benefit from monastic insight in the same way as the Dragon.
+- title: The Fruitful Port of the Mantis
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Mantis
+  keywords:
+  - Port
+  text: 'Once per game, produce 2 Gold. Limited, :g3:: Draw a card.'
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 2
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '368'
+  flavor_text: Every day, dozens or hundreds of ships pass through the harbor, all laden with goods and coins that
+    ultimately benefit the Mantis Clan.
+- title: The Grand Halls of the Lion
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Lion
+  text: 'Tireless Battle: Give your target opposed Samurai a Force bonus equal to his Personal Honor. (Tireless
+    actions may be taken even while bowed.)'
+  province_strength: 9
+  gold_production: 3
+  starting_honor: 7
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '367'
+  flavor_text: '"My Champion, if you wish victory over the Scorpion, it is a simple matter. Release me to do what
+    I must, and you shall have it." – Matsu Chizuki'
+- title: The Hidden Bastion of the Spider
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Spider
+  text: 'If any of your Provinces have been destroyed this game, refill the first Province during your Dynasty Phase
+    face-up. Tireless Battle: :fear: 4 (Bow a target enemy Follower or Personality without Followers with 4 or lower
+    Force).'
+  province_strength: 9
+  gold_production: 4
+  starting_honor: 0
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '371'
+  flavor_text: '"We shall be ready, my lord," Kendo said with a smile. "We shall march in an instant upon your order."'
+- title: The Majestic Temple of the Phoenix
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Phoenix
+  keywords:
+  - Temple
+  text: 'Personalities you Proclaim enter play for two less Gold. Dynasty, :gstar:: Recruit your target dead (not
+    discarded) Phoenix Clan Personality; you may Proclaim him. Gain 1 Honor.'
+  province_strength: 7
+  gold_production: 4
+  starting_honor: 6
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '369'
+  flavor_text: '"True power lies in harmony with the universe, in understanding one''s place, and in the fulfillment
+    of wisdom." – Phoenix teaching'
+- title: The Shadowed Estate of the Scorpion
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Scorpion
+  text: 'Other players have -1 maximum hand size. Tireless Open: Name a Fate card, or name a Dynasty card in play.
+    Negate the effects of the next action from a card with that title.'
+  province_strength: 8
+  gold_production: 4
+  starting_honor: 1
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '370'
+  flavor_text: Guests of the Scorpion Clan will find their every want or need taken care of. The price for such
+    things comes only much later.
+- title: The Unassailable Fortress of the Crab
+  is_back: true
+  types:
+  - Stronghold
+  decks:
+  - Pre-Game
+  clans:
+  - Crab
+  text: 'Tireless Battle: Straighten your target opposed Personality. Straighten his attachments if your army has
+    fewer units than the opposing army. (Tireless actions may be taken even while bowed.)'
+  province_strength: 9
+  gold_production: 4
+  starting_honor: 3
+  rarity: Fixed
+  artist: Alayna Lemmer
+  collector_number: '364'
+  flavor_text: The sons of Hida are never exactly what is expected of them. Their strengths are more varied than
+    most realize.
