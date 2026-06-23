@@ -172,10 +172,16 @@ async def get_card(
 
         prints = await to_thread(_prints_with_layout, card, card_id)
 
+        # The other face of a double-faced card, so the page can flip to its stats/text.
+        back = None
+        if card.get("back_card_id"):
+            back = await to_thread(get_card_by_id, card["back_card_id"])
+
         return {
             "card": card,
             "prints": prints,
             "print_count": len(prints),
+            "back": back,
         }
 
     except HTTPException:
