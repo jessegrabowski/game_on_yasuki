@@ -161,7 +161,7 @@ _CARD_COLUMNS = """
         c.story,
         c.gold_cost, c.focus, c.force, c.chi,
         c.honor_requirement, c.personal_honor, c.gold_production,
-        c.province_strength, c.starting_honor,
+        c.province_strength, c.starting_honor, c.back_card_id,
         c.is_unique, c.is_proxy, c.is_banned, c.extra,
         img.image_path, img.default_print_id, img.default_set_slug
     FROM cards c"""
@@ -223,7 +223,8 @@ def _card_select(active_format: str | None = None) -> tuple[str, list]:
         WHERE p.card_id = c.card_id
         {order_clause}
         LIMIT 1
-    ) img ON true"""
+    ) img ON true
+    LEFT JOIN cards back ON back.card_id = c.back_card_id"""
     return sql, select_params
 
 
@@ -231,7 +232,7 @@ def query_all_cards() -> list[dict]:
     """Fetch every card with its multi-valued attributes and front image, ordered by name."""
     select_sql, _ = _card_select()
     with get_db_connection() as conn, conn.cursor() as cur:
-        cur.execute(f"{select_sql} ORDER BY c.name")
+        cur.execute(f"{select_sql} WHERE NOT c.is_back ORDER BY c.name")
         return cur.fetchall()
 
 
@@ -361,13 +362,17 @@ def get_prints_by_card_id(card_id: str) -> list[dict]:
                 """
                 SELECT
                     p.print_id, p.card_id, s.set_name, s.set_slug, p.rarity, p.artist,
-                    front.path AS image_path, back.path AS back_image_path, p.flavor_text
+                    front.path AS image_path, back.path AS back_image_path,
+                    p.flavor_text, bp.flavor_text AS back_flavor_text
                 FROM prints p
                 JOIN l5r_sets s ON s.set_id = p.set_id
+                JOIN cards c ON c.card_id = p.card_id
                 LEFT JOIN print_images front
                     ON front.print_id = p.print_id AND front.role = 'front' AND front.size = 'master'
+                -- A double-faced card's back image/flavor live on the back card's matching printing.
+                LEFT JOIN prints bp ON bp.card_id = c.back_card_id AND bp.printing_id = p.printing_id
                 LEFT JOIN print_images back
-                    ON back.print_id = p.print_id AND back.role = 'back' AND back.size = 'master'
+                    ON back.print_id = bp.print_id AND back.role = 'front' AND back.size = 'master'
                 WHERE p.card_id = %s
                 ORDER BY s.release_date NULLS LAST, p.print_id
             """,
@@ -402,7 +407,8 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
         with conn.cursor() as cur:
             cur.execute(
                 f"{select_sql} "
-                "WHERE lower(c.name) = ANY(%s) OR lower(c.extended_title) = ANY(%s) "
+                "WHERE (lower(c.name) = ANY(%s) OR lower(c.extended_title) = ANY(%s)) "
+                "AND NOT c.is_back "
                 "ORDER BY c.name",
                 (lower_names, lower_names),
             )
@@ -418,10 +424,12 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
                     back.path AS back_image_path, p.flavor_text
                 FROM prints p
                 JOIN l5r_sets s ON s.set_id = p.set_id
+                JOIN cards c ON c.card_id = p.card_id
                 LEFT JOIN print_images pi
                     ON pi.print_id = p.print_id AND pi.role = 'front' AND pi.size = 'master'
+                LEFT JOIN prints bp ON bp.card_id = c.back_card_id AND bp.printing_id = p.printing_id
                 LEFT JOIN print_images back
-                    ON back.print_id = p.print_id AND back.role = 'back' AND back.size = 'master'
+                    ON back.print_id = bp.print_id AND back.role = 'front' AND back.size = 'master'
                 WHERE p.card_id = ANY(%s)
                 ORDER BY s.release_date NULLS LAST, p.print_id
                 """,
@@ -923,11 +931,15 @@ def _build_card_filter(
     conditions: list[str] = []
     params: list = []
 
+    # A back face is never a standalone result; a search reaches it through its front via the
+    # cross-face conditions below, which consult the joined `back` row.
+    conditions.append("NOT c.is_back")
+
     if text_query:
         conditions.append(
             "(c.name ILIKE %s ESCAPE '\\'"
             " OR c.card_id ILIKE %s ESCAPE '\\'"
-            " OR c.rules_text ILIKE %s ESCAPE '\\')"
+            " OR (c.rules_text || ' ' || COALESCE(back.rules_text, '')) ILIKE %s ESCAPE '\\')"
         )
         search_pattern = f"%{_escape_like(text_query)}%"
         params.extend([search_pattern, search_pattern, search_pattern])
@@ -949,7 +961,13 @@ def _build_card_filter(
                 "rules_text_contains",
                 "rules_text_excludes",
             ):
-                column = "c.name" if property_name.startswith("name") else "c.rules_text"
+                # Rules text matches either face (the back has its own text); name is identical
+                # across faces, so it stays single-column.
+                column = (
+                    "c.name"
+                    if property_name.startswith("name")
+                    else "(c.rules_text || ' ' || COALESCE(back.rules_text, ''))"
+                )
                 op = "NOT ILIKE" if property_name.endswith("excludes") else "ILIKE"
                 for needle in value:
                     conditions.append(f"{column} {op} %s ESCAPE '\\'")
@@ -1091,16 +1109,24 @@ def _build_card_filter(
                 elif value == "notnull":
                     conditions.append(f"c.{property_name} IS NOT NULL")
                 elif isinstance(value, tuple) and len(value) == 2:
+                    # Range matches consider the back face too, so a stat that differs per face
+                    # (e.g. province_strength) matches when either side satisfies it.
                     min_val, max_val = value
-                    if min_val is not None and max_val is not None:
-                        conditions.append(f"c.{property_name} >= %s AND c.{property_name} <= %s")
-                        params.extend([min_val, max_val])
-                    elif min_val is not None:
-                        conditions.append(f"c.{property_name} >= %s")
-                        params.append(min_val)
-                    elif max_val is not None:
-                        conditions.append(f"c.{property_name} <= %s")
-                        params.append(max_val)
+                    ors, range_params = [], []
+                    for alias in ("c", "back"):
+                        col = f"{alias}.{property_name}"
+                        if min_val is not None and max_val is not None:
+                            ors.append(f"{col} >= %s AND {col} <= %s")
+                            range_params.extend([min_val, max_val])
+                        elif min_val is not None:
+                            ors.append(f"{col} >= %s")
+                            range_params.append(min_val)
+                        elif max_val is not None:
+                            ors.append(f"{col} <= %s")
+                            range_params.append(max_val)
+                    if ors:
+                        conditions.append("(" + " OR ".join(f"({o})" for o in ors) + ")")
+                        params.extend(range_params)
             elif value is not None:
                 if property_name not in _ALLOWED_COLUMNS:
                     logger.warning(f"Ignoring unknown filter column: {property_name}")
@@ -1232,7 +1258,7 @@ def query_cards_page(
     where_clause, params = _build_card_filter(text_query, filter_options)
     select_sql, select_params = _card_select(_active_format(filter_options))
 
-    count_sql = f"SELECT COUNT(*) AS n FROM cards c {where_clause}"
+    count_sql = f"SELECT COUNT(*) AS n FROM cards c LEFT JOIN cards back ON back.card_id = c.back_card_id {where_clause}"
     data_sql = f"{select_sql} {where_clause} {_order_by_clause(sort, order)} LIMIT %s OFFSET %s"
     data_params = select_params + params + [limit, offset]
 
@@ -1277,7 +1303,7 @@ def count_cards_filtered(
         Number of matching cards
     """
     where_clause, params = _build_card_filter(text_query, filter_options)
-    sql = f"SELECT COUNT(*) AS n FROM cards c {where_clause}"
+    sql = f"SELECT COUNT(*) AS n FROM cards c LEFT JOIN cards back ON back.card_id = c.back_card_id {where_clause}"
 
     with get_db_connection() as conn:
         with conn.cursor() as cur:
@@ -1304,7 +1330,7 @@ def query_random_cards(
     cards : list of dict
         Randomly selected card records
     """
-    conditions: list[str] = []
+    conditions: list[str] = ["NOT c.is_back"]
     params: list = []
 
     if deck_filter:
@@ -1313,7 +1339,7 @@ def query_random_cards(
         )
         params.append(deck_filter)
 
-    where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
+    where_clause = "WHERE " + " AND ".join(conditions)
 
     select_sql, _ = _card_select()
     sql = f"{select_sql} {where_clause} ORDER BY RANDOM() LIMIT %s"
