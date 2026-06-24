@@ -30,6 +30,15 @@ export function renderPlayers(listEl, players, you) {
     .join('');
 }
 
+export function appendChatMessage(logEl, sender, text) {
+  logEl.innerHTML += `<li><span class="chat-sender">${esc(sender)}</span> ${esc(text)}</li>`;
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
+export function chatFrame(room, text) {
+  return { type: 'CHAT', room, chat: { text } };
+}
+
 // The delete token is the only way to reclaim a room you created, so stash it client-side. Losing
 // it (private mode, quota) just forgoes cleanup, never blocks play.
 function rememberDeleteToken(roomId, token) {
@@ -59,9 +68,13 @@ function init() {
   const playerList = document.getElementById('playerList');
   const roomStatus = document.getElementById('roomStatus');
   const leaveButton = document.getElementById('leaveRoom');
+  const chatLog = document.getElementById('chatLog');
+  const chatForm = document.getElementById('chatForm');
+  const chatInput = document.getElementById('chatInput');
 
   let client = null;
   let myName = null;
+  let currentRoom = null;
 
   const setStatus = (msg) => {
     if (lobbyStatus) lobbyStatus.textContent = msg;
@@ -86,6 +99,7 @@ function init() {
   function leaveRoom() {
     client?.close();
     client = null;
+    currentRoom = null;
     if (roomView) roomView.hidden = true;
     if (lobbyView) lobbyView.hidden = false;
     loadRooms();
@@ -99,6 +113,8 @@ function init() {
       setStatus('Enter a name first.');
       return;
     }
+    currentRoom = id;
+    if (chatLog) chatLog.innerHTML = '';
     setStatus(`Joining ${id}…`);
     client = connectRoom(id, myName);
     client.events.addEventListener('HELLO', (e) => {
@@ -109,12 +125,23 @@ function init() {
     client.events.addEventListener('STATE', (e) => {
       renderPlayers(playerList, Object.keys(e.detail.state?.player_states ?? {}), myName);
     });
+    client.events.addEventListener('CHAT', (e) => {
+      appendChatMessage(chatLog, e.detail.from, e.detail.text);
+    });
     client.events.addEventListener('disconnected', () => {
       if (roomStatus) roomStatus.textContent = 'Disconnected from the room.';
     });
   }
 
   leaveButton?.addEventListener('click', leaveRoom);
+
+  chatForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const text = chatInput?.value.trim();
+    if (!text || !client || !currentRoom) return;
+    client.send(chatFrame(currentRoom, text));
+    chatInput.value = '';
+  });
 
   createForm?.addEventListener('submit', async (e) => {
     e.preventDefault();

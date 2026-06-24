@@ -99,6 +99,35 @@
   font-family: monospace;
 }
 
+.chat-log {
+  list-style: none;
+  padding: 0.5rem;
+  margin: 0.5rem 0;
+  height: 12rem;
+  overflow-y: auto;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+}
+
+.chat-log li {
+  padding: 0.15rem 0;
+}
+
+.chat-sender {
+  font-weight: 600;
+}
+
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.chat-form input {
+  flex: 1;
+  padding: 0.5rem;
+  font: inherit;
+}
+
 .status-line {
   min-height: 1.2em;
   opacity: 0.8;

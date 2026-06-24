@@ -7,7 +7,12 @@ import { makeRoom } from './fixtures.js';
 globalThis.fetch = mock.fn();
 
 import { listRooms, createRoom } from '../../../src/yasuki_web/static/site/rooms-api.js';
-import { renderRooms, renderPlayers } from '../../../src/yasuki_web/static/site/top-secret.js';
+import {
+  renderRooms,
+  renderPlayers,
+  appendChatMessage,
+  chatFrame,
+} from '../../../src/yasuki_web/static/site/top-secret.js';
 
 function mockJSON(body) {
   fetch.mock.mockImplementation(() =>
@@ -96,5 +101,27 @@ describe('renderPlayers', () => {
     const list = document.getElementById('playerList');
     renderPlayers(list, ['<script>x</script>'], null);
     assert.doesNotMatch(list.innerHTML, /<script>/);
+  });
+});
+
+describe('appendChatMessage', () => {
+  it('appends a line with the sender wrapped and the text shown', () => {
+    const log = document.getElementById('chatLog');
+    appendChatMessage(log, 'Ada', 'hello');
+    assert.match(log.innerHTML, /class="chat-sender">Ada</);
+    assert.match(log.innerHTML, /hello/);
+  });
+
+  it('escapes markup in the sender and text', () => {
+    const log = document.getElementById('chatLog');
+    appendChatMessage(log, '<b>x</b>', '<script>y</script>');
+    assert.doesNotMatch(log.innerHTML, /<script>/);
+    assert.doesNotMatch(log.innerHTML, /<b>/);
+  });
+});
+
+describe('chatFrame', () => {
+  it('builds a CHAT client message for the room', () => {
+    assert.deepEqual(chatFrame('r1', 'hi'), { type: 'CHAT', room: 'r1', chat: { text: 'hi' } });
   });
 });
