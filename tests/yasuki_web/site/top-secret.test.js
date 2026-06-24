@@ -7,7 +7,7 @@ import { makeRoom } from './fixtures.js';
 globalThis.fetch = mock.fn();
 
 import { listRooms, createRoom } from '../../../src/yasuki_web/static/site/rooms-api.js';
-import { renderRooms } from '../../../src/yasuki_web/static/site/top-secret.js';
+import { renderRooms, renderPlayers } from '../../../src/yasuki_web/static/site/top-secret.js';
 
 function mockJSON(body) {
   fetch.mock.mockImplementation(() =>
@@ -79,5 +79,22 @@ describe('renderRooms', () => {
     const list = document.getElementById('roomList');
     renderRooms(list, [makeRoom({ max_players: 4, players: ['Ada', 'Kenji'] })]);
     assert.match(list.innerHTML, /2\/4/);
+  });
+});
+
+describe('renderPlayers', () => {
+  it('lists each player and marks the local one', () => {
+    const list = document.getElementById('playerList');
+    renderPlayers(list, ['Ada', 'Kenji'], 'Ada');
+    assert.match(list.innerHTML, /Ada/);
+    assert.match(list.innerHTML, /Kenji/);
+    assert.match(list.innerHTML, /Ada <span class="you">\(you\)<\/span>/);
+    assert.doesNotMatch(list.innerHTML, /Kenji <span class="you">/);
+  });
+
+  it('escapes player names', () => {
+    const list = document.getElementById('playerList');
+    renderPlayers(list, ['<script>x</script>'], null);
+    assert.doesNotMatch(list.innerHTML, /<script>/);
   });
 });
