@@ -1,6 +1,5 @@
-// WebSocket client for a play room. Opens /ws/{roomId} (wss when the page is https), sends JOIN on
-// connect, dispatches each inbound server message as an event named after its `type`, and retries
-// the connection once if it drops unexpectedly.
+// WebSocket client for a play room: connects to /ws/{roomId} (wss when the page is https) and
+// retries the connection once if it drops unexpectedly.
 
 function roomSocketUrl(roomId) {
   const loc = globalThis.location;
