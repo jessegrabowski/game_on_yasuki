@@ -137,7 +137,12 @@ else:
     logger.warning(f"Bundled images directory not found at {BUNDLED_IMAGES_DIR}")
 
 app.include_router(cards.router, prefix="/api", tags=["cards"])
-app.include_router(rooms.router, prefix="/api", tags=["rooms"])
+# Rooms are the WIP play backend; gate the whole router behind the shared password until launch so
+# the API isn't open to anyone who knows the protocol, not just the page. The WS handshake is gated
+# separately in websocket.py.
+app.include_router(
+    rooms.router, prefix="/api", tags=["rooms"], dependencies=[Depends(require_wip_access)]
+)
 app.include_router(websocket.router, prefix="/ws", tags=["websocket"])
 
 

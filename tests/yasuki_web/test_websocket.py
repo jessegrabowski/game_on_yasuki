@@ -7,8 +7,12 @@ from yasuki_web.websocket import WS_MSG_BURST
 
 
 @pytest.fixture
-def client():
-    return TestClient(app)
+def client(wip_auth_header):
+    # The rooms API and WS handshake are behind the WIP password gate. The default headers set here
+    # are merged into both REST requests and the WebSocket upgrade.
+    c = TestClient(app)
+    c.headers.update(wip_auth_header)
+    return c
 
 
 def _make_room(client) -> str:
