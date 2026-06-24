@@ -6,6 +6,10 @@ class JoinRequest(BaseModel):
     name: str = Field(min_length=1, max_length=50)
 
 
+class ChatRequest(BaseModel):
+    text: str = Field(min_length=1, max_length=500)
+
+
 class Action(BaseModel):
     kind: Literal[
         "SHUFFLE",
@@ -20,10 +24,11 @@ class Action(BaseModel):
 
 
 class ClientMessage(BaseModel):
-    type: Literal["JOIN", "ACTION", "PING"]
+    type: Literal["JOIN", "ACTION", "CHAT", "PING"]
     room: str = Field(max_length=64)
     join: JoinRequest | None = None
     action: Action | None = None
+    chat: ChatRequest | None = None
     since_seq: int | None = None
 
 
@@ -48,7 +53,15 @@ class ServerError(BaseModel):
     message: str
 
 
-ServerMessage = ServerHello | ServerState | ServerError
+class ServerChat(BaseModel):
+    type: Literal["CHAT"] = "CHAT"
+    room: str
+    # ``from`` is a Python keyword, so the field is ``sender`` and serializes to "from" on the wire.
+    sender: str = Field(serialization_alias="from")
+    text: str
+
+
+ServerMessage = ServerHello | ServerState | ServerError | ServerChat
 
 
 class Player(BaseModel):
