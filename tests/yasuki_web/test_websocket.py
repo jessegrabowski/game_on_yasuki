@@ -1,19 +1,8 @@
 import pytest
-from fastapi.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 
 from yasuki_web import websocket as ws_module
-from yasuki_web.main import app
 from yasuki_web.websocket import WS_MSG_BURST, _origin_allowed
-
-
-@pytest.fixture
-def client(wip_auth_header):
-    # The rooms API and WS handshake are behind the WIP password gate. The default headers set here
-    # are merged into both REST requests and the WebSocket upgrade.
-    c = TestClient(app)
-    c.headers.update(wip_auth_header)
-    return c
 
 
 def _make_room(client) -> str:

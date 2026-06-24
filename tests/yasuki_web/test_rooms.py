@@ -1,17 +1,3 @@
-import pytest
-from fastapi.testclient import TestClient
-
-from yasuki_web.main import app
-
-
-@pytest.fixture
-def client(wip_auth_header):
-    # The rooms router is behind the WIP password gate; authenticate by default.
-    c = TestClient(app)
-    c.headers.update(wip_auth_header)
-    return c
-
-
 def test_delete_requires_token_header(client):
     rid = client.post("/api/rooms", json={"max_players": 2}).json()["room_id"]
     # Missing a required header is a 422, not a 403.
