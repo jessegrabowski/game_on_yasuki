@@ -82,7 +82,7 @@ prod = { solve-group = "default" }
 [tool.pixi.tasks]
 play = "python play.py"
 test = "pytest tests/"
-test-js = "node --test tests/yasuki_web/deck_builder/*.test.js"
+test-js = "node --test tests/yasuki_web/deck_builder/*.test.js tests/yasuki_web/site/*.test.js"
 install-db = "python -m yasuki_core.install.install_db"
 ensure-ro-role = "python -m yasuki_core.install.install_db --ensure-readonly-role"
 format-metadata = "python -m yasuki_core.install.install_db --format-metadata"
