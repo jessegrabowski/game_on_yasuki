@@ -1,19 +1,18 @@
-// INTERIM (PR03): a flat, fully-public battlefield with no ownership or hidden info, replaced by
-// the authoritative TableState protocol in PR07.
-//
-// Shared battlefield rendering for a play room. Cards are absolutely-positioned DOM elements built
-// via createElement/CSSOM rather than innerHTML: the page CSP (style-src 'self') blocks inline
-// style attributes, and property assignment needs no manual escaping.
+// Shared battlefield rendering and interaction for a play room. Cards are absolutely-positioned DOM
+// elements built via createElement/CSSOM rather than innerHTML: the page CSP (style-src 'self')
+// blocks inline style attributes, and property assignment needs no manual escaping.
 
 function cardElement(card, imgBase) {
   const el = document.createElement('div');
   el.className = 'board-card';
   if (card.bowed) el.classList.add('bowed');
   el.dataset.cardId = card.id;
+  el.dataset.bowed = card.bowed ? '1' : '';
   el.style.left = `${card.x}px`;
   el.style.top = `${card.y}px`;
 
-  if (card.face_up === false) {
+  // A hidden stub (a card this viewer may not identify) or an explicitly face-down card shows a back.
+  if (card.hidden || card.face_up === false) {
     el.classList.add('face-down');
   } else {
     const img = document.createElement('img');
@@ -28,18 +27,17 @@ export function renderBoard(boardEl, cards, imgBase) {
   boardEl.replaceChildren(...cards.map((card) => cardElement(card, imgBase)));
 }
 
-export const boardFrame = (room, action) => ({ type: 'BOARD', room, board: action });
+// Client messages, with `room` injected by the caller. Card manipulation goes through real game
+// intents; spawn/remove are separate messages the server turns into SpawnCard/RemoveCard intents.
+export const intentMessage = (intent) => ({ type: 'INTENT', intent });
+export const spawnMessage = (spawn) => ({ type: 'SPAWN', spawn });
+export const removeMessage = (id) => ({ type: 'REMOVE', remove: { id } });
 
-export function addCardFrame(room, card) {
-  return boardFrame(room, {
-    kind: 'ADD_CARD',
-    id: card.id,
-    name: card.name,
-    img: card.img,
-    x: card.x,
-    y: card.y,
-  });
-}
+export const moveIntent = (id, x, y) => intentMessage({ op: 'SET_CARD_POS', card_id: id, x, y });
+export const flipIntent = (id) => intentMessage({ op: 'FLIP', card_ids: [id] });
+// BOW/UNBOW are explicit ops, so a "Bow / Unbow" toggle picks the one that changes the card.
+export const bowIntent = (id, bowed) =>
+  intentMessage({ op: bowed ? 'UNBOW' : 'BOW', card_ids: [id] });
 
 // Card footprint, matching .board-card in play.css.
 const CARD_W = 90;
@@ -57,10 +55,6 @@ export function dragPosition(clientX, clientY, boardRect, grab, card = { w: CARD
   };
 }
 
-export const moveAction = (id, x, y) => ({ kind: 'SET_CARD_POS', id, x, y });
-export const flagAction = (id, flag) => ({ kind: 'CARD_FLAG', id, flag });
-export const removeAction = (id) => ({ kind: 'REMOVE_CARD', id });
-
 let activeMenu = null;
 
 function closeMenu() {
@@ -68,7 +62,7 @@ function closeMenu() {
   activeMenu = null;
 }
 
-function openMenu(boardEl, cardId, clientX, clientY, sendBoardAction) {
+function openMenu(boardEl, cardId, bowed, clientX, clientY, send) {
   closeMenu();
   const rect = boardEl.getBoundingClientRect();
   const menu = document.createElement('ul');
@@ -77,15 +71,15 @@ function openMenu(boardEl, cardId, clientX, clientY, sendBoardAction) {
   menu.style.top = `${clientY - rect.top}px`;
 
   const items = [
-    ['Flip', flagAction(cardId, 'face_up')],
-    ['Bow / Unbow', flagAction(cardId, 'bowed')],
-    ['Remove', removeAction(cardId)],
+    ['Flip', flipIntent(cardId)],
+    ['Bow / Unbow', bowIntent(cardId, bowed)],
+    ['Remove', removeMessage(cardId)],
   ];
-  for (const [label, action] of items) {
+  for (const [label, message] of items) {
     const li = document.createElement('li');
     li.textContent = label;
     li.addEventListener('click', () => {
-      sendBoardAction(action);
+      send(message);
       closeMenu();
     });
     menu.appendChild(li);
@@ -106,8 +100,8 @@ function openMenu(boardEl, cardId, clientX, clientY, sendBoardAction) {
 }
 
 // Wire pointer-drag and the right-click menu once; delegation on the board survives the full
-// re-render that every STATE triggers. `sendBoardAction` receives a board action object.
-export function initBoardInteractions(boardEl, sendBoardAction) {
+// re-render that every SNAPSHOT triggers. `send` receives a room-less client message.
+export function initBoardInteractions(boardEl, send) {
   let drag = null;
   let lastSent = 0;
 
@@ -138,14 +132,14 @@ export function initBoardInteractions(boardEl, sendBoardAction) {
     const now = Date.now();
     if (now - lastSent > DRAG_SEND_MS) {
       lastSent = now;
-      sendBoardAction(moveAction(drag.id, pos.x, pos.y));
+      send(moveIntent(drag.id, pos.x, pos.y));
     }
   });
 
   const endDrag = (e) => {
     if (!drag) return;
     const pos = dragPosition(e.clientX, e.clientY, rectOf(), { x: drag.grabX, y: drag.grabY });
-    sendBoardAction(moveAction(drag.id, pos.x, pos.y));
+    send(moveIntent(drag.id, pos.x, pos.y));
     drag = null;
   };
   boardEl.addEventListener('pointerup', endDrag);
@@ -157,6 +151,7 @@ export function initBoardInteractions(boardEl, sendBoardAction) {
     const cardEl = cardUnder(e.target);
     if (!cardEl) return;
     e.preventDefault();
-    openMenu(boardEl, cardEl.dataset.cardId, e.clientX, e.clientY, sendBoardAction);
+    const bowed = cardEl.dataset.bowed === '1';
+    openMenu(boardEl, cardEl.dataset.cardId, bowed, e.clientX, e.clientY, send);
   });
 }

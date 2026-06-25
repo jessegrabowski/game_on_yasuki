@@ -4,7 +4,7 @@
 import { esc, fetchImageBase } from './card-common.js';
 import { listRooms, createRoom, deleteRoom } from './rooms-api.js';
 import { connectRoom } from './ws-client.js';
-import { renderBoard, addCardFrame, boardFrame, initBoardInteractions } from './board.js';
+import { renderBoard, spawnMessage, initBoardInteractions } from './board.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -195,9 +195,13 @@ export function init() {
       renderPlayers(playerList, e.detail.players, myName);
       if (roomStatus) roomStatus.textContent = '';
     });
-    client.events.addEventListener('STATE', (e) => {
-      renderPlayers(playerList, Object.keys(e.detail.state?.player_states ?? {}), myName);
-      renderBoard(battlefield, e.detail.state?.cards ?? [], imgBase);
+    client.events.addEventListener('SNAPSHOT', (e) => {
+      const seats = e.detail.snapshot?.seats ?? {};
+      const present = Object.values(seats)
+        .filter((seat) => seat.connected)
+        .map((seat) => seat.name);
+      renderPlayers(playerList, present, myName);
+      renderBoard(battlefield, e.detail.snapshot?.battlefield ?? [], imgBase);
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
@@ -221,8 +225,8 @@ export function init() {
   });
 
   if (battlefield) {
-    initBoardInteractions(battlefield, (action) => {
-      if (client && currentRoom) client.send(boardFrame(currentRoom, action));
+    initBoardInteractions(battlefield, (message) => {
+      if (client && currentRoom) client.send({ ...message, room: currentRoom });
     });
   }
 
@@ -272,15 +276,16 @@ export function init() {
       const { cards } = await (await fetch('/api/cards/random/1')).json();
       const picked = cards?.[0];
       if (!picked) return;
-      client.send(
-        addCardFrame(currentRoom, {
-          id: `${picked.card_id}-${Date.now()}-${Math.floor(Math.random() * 1e6)}`,
+      // The server assigns the card id; spawn just carries what to put down.
+      client.send({
+        ...spawnMessage({
           name: picked.name,
           img: picked.image_path,
           x: 20 + Math.floor(Math.random() * 220),
           y: 20 + Math.floor(Math.random() * 220),
         }),
-      );
+        room: currentRoom,
+      });
     } catch (_) {
       if (roomStatus) roomStatus.textContent = 'Could not spawn a card.';
     }

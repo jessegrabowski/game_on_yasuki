@@ -308,7 +308,7 @@ async function joinedRoom() {
   document.getElementById('roomList')._emit('click', { target: { dataset: { roomId: 'r1' } } });
   const ws = FakeWebSocket.instances.at(-1);
   ws.accept();
-  ws.deliver({ type: 'HELLO', room: 'r1', players: ['Ada'] });
+  ws.deliver({ type: 'HELLO', room: 'r1', your_seat: 'P1', players: ['Ada'] });
   return ws;
 }
 
@@ -327,13 +327,17 @@ describe('init (room client wiring)', () => {
     assert.match(document.getElementById('playerList').innerHTML, /Ada/);
   });
 
-  it('routes inbound STATE, CHAT, and LOG frames to the panes', async () => {
+  it('routes inbound SNAPSHOT, CHAT, and LOG frames to the panes', async () => {
     const ws = await joinedRoom();
     ws.deliver({
-      type: 'STATE',
-      state: {
-        player_states: { Ada: {}, Kenji: {} },
-        cards: [{ id: 'c1', name: 'X', img: 'a.jpg', x: 1, y: 2, face_up: true }],
+      type: 'SNAPSHOT',
+      room: 'r1',
+      snapshot: {
+        seats: {
+          P1: { name: 'Ada', honor: 0, ready: false, connected: true },
+          P2: { name: 'Kenji', honor: 0, ready: false, connected: true },
+        },
+        battlefield: [{ id: 'c1', name: 'X', img: 'a.jpg', x: 1, y: 2, face_up: true, hidden: false }],
       },
     });
     ws.deliver({ type: 'CHAT', from: 'Ada', text: 'hello there' });
@@ -359,10 +363,13 @@ describe('init (room client wiring)', () => {
     assert.equal(input.value, '');
   });
 
-  it('forwards a board drag as a BOARD frame', async () => {
+  it('forwards a board drag as an INTENT frame with the room injected', async () => {
     const ws = await joinedRoom();
     const board = document.getElementById('battlefield');
-    const cardEl = { dataset: { cardId: 'c1' }, getBoundingClientRect: () => ({ left: 0, top: 0 }) };
+    const cardEl = {
+      dataset: { cardId: 'c1' },
+      getBoundingClientRect: () => ({ left: 0, top: 0 }),
+    };
     board._emit('pointerdown', {
       button: 0,
       pointerId: 1,
@@ -372,19 +379,20 @@ describe('init (room client wiring)', () => {
     });
     board._emit('pointerup', { clientX: 20, clientY: 20 });
 
-    const boardFrame = ws.sent.find((m) => m.type === 'BOARD');
-    assert.equal(boardFrame.room, 'r1');
-    assert.equal(boardFrame.board.kind, 'SET_CARD_POS');
+    const intent = ws.sent.find((m) => m.type === 'INTENT');
+    assert.equal(intent.room, 'r1');
+    assert.equal(intent.intent.op, 'SET_CARD_POS');
   });
 
-  it('spawns a random card as an ADD_CARD frame', async () => {
+  it('spawns a random card as a SPAWN frame', async () => {
     const ws = await joinedRoom();
     document.getElementById('spawnCard')._emit('click', {});
     await flush();
 
-    const add = ws.sent.find((m) => m.type === 'BOARD' && m.board.kind === 'ADD_CARD');
-    assert.ok(add, 'an ADD_CARD frame is sent');
-    assert.equal(add.board.name, 'Spy');
+    const spawn = ws.sent.find((m) => m.type === 'SPAWN');
+    assert.ok(spawn, 'a SPAWN frame is sent');
+    assert.equal(spawn.room, 'r1');
+    assert.equal(spawn.spawn.name, 'Spy');
   });
 
   it('creates a room, stores its delete token, and joins it', async () => {
