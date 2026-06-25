@@ -59,6 +59,70 @@ def test_battlefield_card_carries_art_and_position():
     assert (placed["x"], placed["y"]) == (12.0, 34.0)
 
 
+def test_double_faced_card_shows_the_active_face_and_flip_link():
+    table = TableState.empty_two_seat()
+    back = L5RCard(
+        id="sh__back", name="Defiled", side=Side.STRONGHOLD, image_front=Path("sets/x/b.jpg")
+    )
+    card = L5RCard(
+        id="sh",
+        name="Stronghold",
+        side=Side.STRONGHOLD,
+        owner=None,
+        face_up=True,
+        image_front=Path("sets/x/a.jpg"),
+        back_card_id="sh__back",
+        back=back,
+        showing_back=True,
+    )
+    table.battlefield.cards.append(card)
+    table.positions["sh"] = BoardPos(0.0, 0.0)
+    table.cards_by_id["sh"] = card
+
+    placed = _serialized(table, P1)["battlefield"][0]
+
+    assert placed["name"] == "Defiled"  # the presented (back) face
+    assert placed["img"] == "sets/x/b.jpg"
+    assert placed["back_card_id"] == "sh__back"
+    assert placed["showing_back"] is True
+
+
+def test_link_only_card_shows_the_front_but_still_signals_the_flip():
+    # back_card_id set without a resolved back: the front art is sent, but the flip signals let the
+    # client fetch and show the other face by id.
+    table = TableState.empty_two_seat()
+    card = L5RCard(
+        id="sh",
+        name="Front",
+        side=Side.STRONGHOLD,
+        face_up=True,
+        image_front=Path("sets/x/a.jpg"),
+        back_card_id="sh__back",
+        showing_back=True,
+    )
+    table.battlefield.cards.append(card)
+    table.positions["sh"] = BoardPos(0.0, 0.0)
+    table.cards_by_id["sh"] = card
+
+    placed = _serialized(table, P1)["battlefield"][0]
+
+    assert placed["name"] == "Front"  # no nested back, so the front art is sent
+    assert placed["back_card_id"] == "sh__back"
+    assert placed["showing_back"] is True
+
+
+def test_single_faced_card_omits_the_flip_keys():
+    table = TableState.empty_two_seat()
+    card = L5RCard(id="t1", name="Token", side=Side.DYNASTY, face_up=True)
+    table.battlefield.cards.append(card)
+    table.positions["t1"] = BoardPos(0.0, 0.0)
+    table.cards_by_id["t1"] = card
+
+    placed = _serialized(table, P1)["battlefield"][0]
+
+    assert "back_card_id" not in placed and "showing_back" not in placed
+
+
 def test_deck_reports_count_only_when_face_down():
     table = TableState.empty_two_seat()
     deck = table.decks[DeckKey(P1, Side.FATE)]

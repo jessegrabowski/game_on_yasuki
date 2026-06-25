@@ -179,6 +179,7 @@ class IntentOp(str, Enum):
     BOW = "BOW"
     UNBOW = "UNBOW"
     FLIP = "FLIP"
+    FLIP_FACE = "FLIP_FACE"
     INVERT = "INVERT"
     REVEAL = "REVEAL"
     HIDE = "HIDE"
@@ -253,6 +254,13 @@ class Unbow(CardFlagIntent):
 @dataclass(frozen=True, slots=True)
 class Flip(CardFlagIntent):
     op: ClassVar[IntentOp] = IntentOp.FLIP
+
+
+@dataclass(frozen=True, slots=True)
+class FlipFace(CardFlagIntent):
+    """Turn a double-faced card to its other face; a no-op for single-faced cards."""
+
+    op: ClassVar[IntentOp] = IntentOp.FLIP_FACE
 
 
 @dataclass(frozen=True, slots=True)
@@ -373,6 +381,7 @@ Intent = (
     | Bow
     | Unbow
     | Flip
+    | FlipFace
     | Invert
     | Reveal
     | Hide
@@ -546,6 +555,13 @@ def _flip_card(card: L5RCard) -> bool:
     return True
 
 
+def _flip_face_card(card: L5RCard) -> bool:
+    if card.back_card_id is None:
+        return False
+    card.flip_face()
+    return True
+
+
 def _invert_card(card: L5RCard) -> bool:
     if card.inverted:
         card.uninvert()
@@ -572,6 +588,7 @@ _FLAG_MUTATORS = {
     IntentOp.BOW: _bow_card,
     IntentOp.UNBOW: _unbow_card,
     IntentOp.FLIP: _flip_card,
+    IntentOp.FLIP_FACE: _flip_face_card,
     IntentOp.INVERT: _invert_card,
     IntentOp.REVEAL: _reveal_card,
     IntentOp.HIDE: _hide_card,
@@ -746,6 +763,7 @@ _HANDLERS = {
     IntentOp.BOW: _apply_flag,
     IntentOp.UNBOW: _apply_flag,
     IntentOp.FLIP: _apply_flag,
+    IntentOp.FLIP_FACE: _apply_flag,
     IntentOp.INVERT: _apply_flag,
     IntentOp.REVEAL: _apply_flag,
     IntentOp.HIDE: _apply_flag,

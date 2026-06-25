@@ -21,6 +21,7 @@ from yasuki_core.engine.table import (
     Bow,
     Unbow,
     Flip,
+    FlipFace,
     Invert,
     Reveal,
     Hide,
@@ -47,7 +48,14 @@ from yasuki_core.game_pieces.dynasty import (
     DynastyRegion,
     DynastyCelestial,
 )
-from yasuki_core.game_pieces.fate import FateCard, FateAction, FateAttachment, FateRing
+from yasuki_core.game_pieces.fate import (
+    FateCard,
+    FateAction,
+    FateAttachment,
+    FateRing,
+    FateAncestor,
+)
+from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
 
 
 @dataclass(frozen=True, slots=True)
@@ -268,6 +276,10 @@ _CARD_REGISTRY: dict[str, type[L5RCard]] = {
         DynastyEvent,
         DynastyRegion,
         DynastyCelestial,
+        FateAncestor,
+        StrongholdCard,
+        SenseiCard,
+        WindCard,
     )
 }
 
@@ -275,6 +287,7 @@ _FLAG_CLASSES: dict[IntentOp, type[CardFlagIntent]] = {
     IntentOp.BOW: Bow,
     IntentOp.UNBOW: Unbow,
     IntentOp.FLIP: Flip,
+    IntentOp.FLIP_FACE: FlipFace,
     IntentOp.INVERT: Invert,
     IntentOp.REVEAL: Reveal,
     IntentOp.HIDE: Hide,
@@ -292,6 +305,8 @@ def _encode_value(value):
         return {"__path__": str(value)}
     if isinstance(value, tuple):
         return {"__tuple__": [_encode_value(item) for item in value]}
+    if isinstance(value, L5RCard):
+        return {"__card__": _encode_card(value)}
     raise TypeError(f"cannot serialize card field of type {type(value).__name__}")
 
 
@@ -303,6 +318,8 @@ def _decode_value(value):
             return Path(value["__path__"])
         if "__tuple__" in value:
             return tuple(_decode_value(item) for item in value["__tuple__"])
+        if "__card__" in value:
+            return _decode_card(value["__card__"])
     return value
 
 
@@ -369,6 +386,7 @@ def encode_intent(intent: Intent) -> dict:
             IntentOp.BOW
             | IntentOp.UNBOW
             | IntentOp.FLIP
+            | IntentOp.FLIP_FACE
             | IntentOp.INVERT
             | IntentOp.REVEAL
             | IntentOp.HIDE
@@ -419,6 +437,7 @@ def decode_intent(payload: dict) -> Intent:
             IntentOp.BOW
             | IntentOp.UNBOW
             | IntentOp.FLIP
+            | IntentOp.FLIP_FACE
             | IntentOp.INVERT
             | IntentOp.REVEAL
             | IntentOp.HIDE

@@ -14,19 +14,25 @@ def _deck_key_str(key: DeckKey) -> str:
 
 def _card(view: L5RCard | HiddenCard) -> dict:
     """Encode a viewer's card as the client renders it. A ``HiddenCard`` becomes a back stub carrying
-    no identity; a full card carries its name, art, and flags."""
+    no identity; a full card carries the presented face's name and art plus its flags. A double-faced
+    card also carries its back link and which face is showing, so the client can render the flip."""
     if isinstance(view, HiddenCard):
         return {"id": view.card_id, "side": view.side.value, "hidden": True}
-    return {
+    face = view.active_face
+    card = {
         "id": view.id,
-        "name": view.name,
-        "img": view.image_front.as_posix() if view.image_front is not None else None,
-        "side": view.side.value,
+        "name": face.name,
+        "img": face.image_front.as_posix() if face.image_front is not None else None,
+        "side": face.side.value,
         "bowed": view.bowed,
         "face_up": view.face_up,
         "inverted": view.inverted,
         "hidden": False,
     }
+    if view.back_card_id is not None:
+        card["back_card_id"] = view.back_card_id
+        card["showing_back"] = view.showing_back
+    return card
 
 
 def serialize_snapshot(snapshot: ViewSnapshot) -> dict:
