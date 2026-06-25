@@ -63,6 +63,9 @@ import {
   appendChatMessage,
   appendLogMessage,
   chatFrame,
+  loadDeckFrame,
+  readyFrame,
+  resetFrame,
   initSeparator,
   readDeleteTokens,
   rememberDeleteToken,
@@ -225,6 +228,36 @@ describe('appendLogMessage', () => {
 describe('chatFrame', () => {
   it('builds a CHAT client message for the room', () => {
     assert.deepEqual(chatFrame('r1', 'hi'), { type: 'CHAT', room: 'r1', chat: { text: 'hi' } });
+  });
+});
+
+describe('setup frames', () => {
+  it('wraps deck YAML in a LOAD_DECK frame', () => {
+    assert.deepEqual(loadDeckFrame('r1', 'name: D'), {
+      type: 'LOAD_DECK',
+      room: 'r1',
+      load_deck: { yaml: 'name: D' },
+    });
+  });
+
+  it('defaults READY to a two-player ready', () => {
+    assert.deepEqual(readyFrame('r1'), {
+      type: 'READY',
+      room: 'r1',
+      ready: { ready: true, solo: false },
+    });
+  });
+
+  it('marks a goldfish READY as solo', () => {
+    assert.deepEqual(readyFrame('r1', { solo: true }), {
+      type: 'READY',
+      room: 'r1',
+      ready: { ready: true, solo: true },
+    });
+  });
+
+  it('builds a parameterless RESET frame', () => {
+    assert.deepEqual(resetFrame('r1'), { type: 'RESET', room: 'r1' });
   });
 });
 
@@ -392,6 +425,31 @@ describe('init (room client wiring)', () => {
       chat: { text: 'gg' },
     });
     assert.equal(input.value, '');
+  });
+
+  it('sends READY, goldfish READY, and RESET from the room buttons', async () => {
+    const ws = await joinedRoom();
+    document.getElementById('readyButton')._emit('click', {});
+    document.getElementById('goldfishButton')._emit('click', {});
+    document.getElementById('newGameButton')._emit('click', {});
+
+    assert.ok(ws.sent.some((m) => m.type === 'READY' && m.ready.solo === false));
+    assert.ok(ws.sent.some((m) => m.type === 'READY' && m.ready.solo === true));
+    assert.deepEqual(ws.sent.find((m) => m.type === 'RESET'), { type: 'RESET', room: 'r1' });
+  });
+
+  it('sends LOAD_DECK with the chosen file contents', async () => {
+    const ws = await joinedRoom();
+    const input = document.getElementById('deckFileInput');
+    input.files = [{ text: () => Promise.resolve('name: D') }];
+    input._emit('change', { target: input });
+    await flush();
+
+    assert.deepEqual(ws.sent.find((m) => m.type === 'LOAD_DECK'), {
+      type: 'LOAD_DECK',
+      room: 'r1',
+      load_deck: { yaml: 'name: D' },
+    });
   });
 
   it('forwards a board drag as an INTENT frame with the room injected', async () => {

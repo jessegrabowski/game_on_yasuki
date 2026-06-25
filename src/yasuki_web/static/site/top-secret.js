@@ -65,6 +65,25 @@ export function chatFrame(room, text) {
   return { type: 'CHAT', room, chat: { text } };
 }
 
+export function loadDeckFrame(room, yaml) {
+  return { type: 'LOAD_DECK', room, load_deck: { yaml } };
+}
+
+export function readyFrame(room, { solo = false } = {}) {
+  return { type: 'READY', room, ready: { ready: true, solo } };
+}
+
+export function resetFrame(room) {
+  return { type: 'RESET', room };
+}
+
+// File-picker options for loading a deck. The id lets the browser reopen the picker at the last
+// directory used for this same id, across sessions.
+const DECK_PICKER_OPTIONS = {
+  id: 'yasuki-deck-load',
+  types: [{ description: 'Deck YAML', accept: { 'application/yaml': ['.yaml', '.yml'] } }],
+};
+
 // Wire a draggable separator: pointer-drag calls onPointer; arrow keys call onKey, which returns
 // true when it handled the event (so the default scroll is suppressed).
 export function initSeparator(handle, { onPointer, onKey }) {
@@ -139,6 +158,11 @@ export function init() {
   const actionLog = document.getElementById('actionLog');
   const battlefield = document.getElementById('battlefield');
   const spawnButton = document.getElementById('spawnCard');
+  const loadDeckButton = document.getElementById('loadDeckButton');
+  const deckFileInput = document.getElementById('deckFileInput');
+  const readyButton = document.getElementById('readyButton');
+  const goldfishButton = document.getElementById('goldfishButton');
+  const newGameButton = document.getElementById('newGameButton');
 
   let client = null;
   let myName = null;
@@ -221,6 +245,9 @@ export function init() {
     client.events.addEventListener('LOG', (e) => {
       appendLogMessage(actionLog, e.detail.parts);
     });
+    client.events.addEventListener('ERROR', (e) => {
+      if (roomStatus) roomStatus.textContent = e.detail?.message ?? 'Something went wrong.';
+    });
     client.events.addEventListener('disconnected', () => {
       if (roomStatus) roomStatus.textContent = 'Disconnected from the room.';
     });
@@ -236,10 +263,44 @@ export function init() {
     chatInput.value = '';
   });
 
+  const sendToRoom = (frame) => {
+    if (client && currentRoom) client.send(frame);
+  };
+
+  const submitDeck = (yaml) => {
+    const text = yaml?.trim();
+    if (!text) return;
+    sendToRoom(loadDeckFrame(currentRoom, text));
+    if (roomStatus) roomStatus.textContent = 'Deck loaded — ready up to begin.';
+  };
+
+  // Prefer the File System Access picker (it remembers the last directory via DECK_PICKER_OPTIONS.id);
+  // fall back to a hidden file input where it is unsupported, mirroring the deck builder's import.
+  loadDeckButton?.addEventListener('click', async () => {
+    if (typeof globalThis.showOpenFilePicker === 'function') {
+      try {
+        const [handle] = await globalThis.showOpenFilePicker(DECK_PICKER_OPTIONS);
+        submitDeck(await (await handle.getFile()).text());
+      } catch (e) {
+        if (e?.name !== 'AbortError' && roomStatus) roomStatus.textContent = 'Could not load deck.';
+      }
+    } else {
+      deckFileInput?.click();
+    }
+  });
+
+  deckFileInput?.addEventListener('change', (e) => {
+    const file = e.target.files?.[0];
+    if (file) file.text().then(submitDeck);
+    e.target.value = '';
+  });
+
+  readyButton?.addEventListener('click', () => sendToRoom(readyFrame(currentRoom)));
+  goldfishButton?.addEventListener('click', () => sendToRoom(readyFrame(currentRoom, { solo: true })));
+  newGameButton?.addEventListener('click', () => sendToRoom(resetFrame(currentRoom)));
+
   if (battlefield) {
-    initBoardInteractions(battlefield, (message) => {
-      if (client && currentRoom) client.send({ ...message, room: currentRoom });
-    });
+    initBoardInteractions(battlefield, (message) => sendToRoom({ ...message, room: currentRoom }));
   }
 
   actionLog?.addEventListener('click', (e) => {
