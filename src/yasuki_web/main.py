@@ -7,6 +7,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import Response
 from fastapi.staticfiles import StaticFiles
+from contextlib import asynccontextmanager
 from pathlib import Path
 import asyncio
 import logging
@@ -29,12 +30,27 @@ IMAGE_BASE_URL = os.environ.get("IMAGE_BASE_URL", "/images")
 
 _is_production = os.environ.get("ENVIRONMENT") == "production"
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    eviction = asyncio.create_task(evict_stale_rooms())
+    logger.info("Game on, Yasuki! API starting up...")
+    logger.info("API Documentation available at: /docs")
+    try:
+        yield
+    finally:
+        eviction.cancel()
+        close_pool()
+        logger.info("Game on, Yasuki! API shutting down...")
+
+
 app = FastAPI(
     title="Game on, Yasuki! API",
     description="Online L5R card game server with WebSocket support for real-time multiplayer",
     version="1.0.0",
     docs_url=None if _is_production else "/docs",
     redoc_url=None if _is_production else "/redoc",
+    lifespan=lifespan,
 )
 
 app.state.limiter = limiter
@@ -277,16 +293,3 @@ if DECK_BUILDER_DIR.exists():
 @app.get("/health")
 async def health():
     return {"status": "healthy", "service": "game-on-yasuki"}
-
-
-@app.on_event("startup")
-async def startup_event():
-    asyncio.create_task(evict_stale_rooms())
-    logger.info("Game on, Yasuki! API starting up...")
-    logger.info("API Documentation available at: /docs")
-
-
-@app.on_event("shutdown")
-async def shutdown_event():
-    close_pool()
-    logger.info("Game on, Yasuki! API shutting down...")
