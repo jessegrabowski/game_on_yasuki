@@ -22,3 +22,29 @@ def test_chat_text_length_bounds(length, valid):
 def test_server_chat_serializes_sender_as_from():
     payload = ServerChat(room="r1", sender="Ada", text="hi").model_dump(by_alias=True)
     assert payload == {"type": "CHAT", "room": "r1", "from": "Ada", "text": "hi"}
+
+
+def test_board_action_parses():
+    msg = ClientMessage.model_validate(
+        {
+            "type": "BOARD",
+            "room": "r1",
+            "board": {
+                "kind": "ADD_CARD",
+                "id": "c1",
+                "name": "X",
+                "img": "a.jpg",
+                "x": 10,
+                "y": 20,
+            },
+        }
+    )
+    assert msg.board.kind == "ADD_CARD"
+    assert msg.board.id == "c1"
+
+
+def test_board_action_rejects_unknown_kind():
+    with pytest.raises(ValidationError):
+        ClientMessage.model_validate(
+            {"type": "BOARD", "room": "r1", "board": {"kind": "HACK", "id": "c1"}}
+        )

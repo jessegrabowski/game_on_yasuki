@@ -23,12 +23,25 @@ class Action(BaseModel):
     deck_type: str | None = Field(None, max_length=20)
 
 
+class BoardAction(BaseModel):
+    # INTERIM (PR03): a flat, fully-public battlefield, replaced by the authoritative TableState
+    # protocol in PR07.
+    kind: Literal["ADD_CARD", "SET_CARD_POS", "CARD_FLAG", "REMOVE_CARD"]
+    id: str = Field(max_length=64)
+    name: str | None = Field(None, max_length=120)
+    img: str | None = Field(None, max_length=200)
+    x: int | None = None
+    y: int | None = None
+    flag: Literal["bowed", "face_up"] | None = None
+
+
 class ClientMessage(BaseModel):
-    type: Literal["JOIN", "ACTION", "CHAT", "PING"]
+    type: Literal["JOIN", "ACTION", "CHAT", "BOARD", "PING"]
     room: str = Field(max_length=64)
     join: JoinRequest | None = None
     action: Action | None = None
     chat: ChatRequest | None = None
+    board: BoardAction | None = None
     since_seq: int | None = None
 
 

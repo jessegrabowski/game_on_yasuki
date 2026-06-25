@@ -35,6 +35,8 @@ class GameRoom:
             "turn": 0,
             "phase": "setup",
             "player_states": {},
+            # INTERIM (PR03): a flat, fully-public card list, replaced by TableState in PR07.
+            "cards": [],
         }
         self.seq = 0
 
@@ -154,6 +156,47 @@ class GameRoom:
             return
         msg = ServerChat(room=self.room_id, sender=sender, text=text)
         await self._broadcast(msg.model_dump(by_alias=True))
+
+    def _find_card(self, card_id: str) -> dict | None:
+        return next((c for c in self.game_state["cards"] if c["id"] == card_id), None)
+
+    async def handle_board_action(self, ws: WebSocket, action: dict):
+        """Apply a board action to the shared, fully-public card list and rebroadcast.
+
+        No ownership or hidden information — any joined player may move any card.
+        """
+        # INTERIM (PR03): replaced by the authoritative, redacted TableState protocol in PR07.
+        if ws not in self.players:
+            return
+
+        kind = action["kind"]
+        if kind == "ADD_CARD":
+            self.game_state["cards"].append(
+                {
+                    "id": action["id"],
+                    "name": action.get("name"),
+                    "img": action.get("img"),
+                    "x": action.get("x", 0),
+                    "y": action.get("y", 0),
+                    "bowed": False,
+                    "face_up": True,
+                }
+            )
+        elif kind == "SET_CARD_POS":
+            card = self._find_card(action["id"])
+            if card:
+                card["x"] = action.get("x", card["x"])
+                card["y"] = action.get("y", card["y"])
+        elif kind == "CARD_FLAG":
+            card = self._find_card(action["id"])
+            if card and action.get("flag") in ("bowed", "face_up"):
+                card[action["flag"]] = not card[action["flag"]]
+        elif kind == "REMOVE_CARD":
+            self.game_state["cards"] = [
+                c for c in self.game_state["cards"] if c["id"] != action["id"]
+            ]
+
+        await self.broadcast_state()
 
 
 active_game_rooms: dict[str, GameRoom] = {}
@@ -280,6 +323,12 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
             elif message.type == "CHAT":
                 if message.chat is not None:
                     await game_room.handle_chat(websocket, message.chat.text)
+
+            elif message.type == "BOARD":
+                if message.board is not None:
+                    await game_room.handle_board_action(
+                        websocket, message.board.model_dump(exclude_none=True)
+                    )
 
             elif message.type == "PING":
                 await websocket.send_json({"type": "PONG"})
