@@ -36,10 +36,16 @@ def test_spawn_injects_a_public_card_logs_and_broadcasts():
     card = room.state.battlefield.cards[0]
     assert card.owner is None and card.face_up is True
     assert room.action_log.entries[-1].intent.op is IntentOp.SPAWN_CARD  # a real logged intent
-    snapshot = ws.sent[-1]
-    assert snapshot["type"] == "SNAPSHOT"
+    snapshot = [m for m in ws.sent if m["type"] == "SNAPSHOT"][-1]
     placed = snapshot["snapshot"]["battlefield"][0]
     assert placed["name"] == "Hida" and (placed["x"], placed["y"]) == (10, 20)
+
+
+def test_spawn_logs_a_linked_card():
+    room, ws = _room_with_seat()
+    _spawn(room, ws)
+    log = [m for m in ws.sent if m["type"] == "LOG"][-1]
+    assert log["parts"][-1] == {"card_id": room.state.battlefield.cards[0].id, "name": "Hida"}
 
 
 def test_spawn_assigns_a_distinct_server_id_each_time():

@@ -34,10 +34,10 @@ def test_server_chat_serializes_sender_as_from():
 
 
 def test_server_log_serializes():
-    assert ServerLog(room="r1", text="Ada joined").model_dump() == {
+    assert ServerLog(room="r1", parts=[{"text": "Ada joined"}]).model_dump() == {
         "type": "LOG",
         "room": "r1",
-        "text": "Ada joined",
+        "parts": [{"text": "Ada joined"}],
     }
 
 

@@ -113,7 +113,8 @@ class ServerChat(BaseModel):
 class ServerLog(BaseModel):
     type: Literal["LOG"] = "LOG"
     room: str
-    text: str
+    # Ordered segments: {"text": str} for prose, {"card_id": str, "name": str} for a card link.
+    parts: list[dict]
 
 
 ServerMessage = ServerHello | ServerSnapshot | ServerError | ServerChat | ServerLog

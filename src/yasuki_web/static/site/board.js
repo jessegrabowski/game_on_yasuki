@@ -27,6 +27,16 @@ export function renderBoard(boardEl, cards, imgBase) {
   boardEl.replaceChildren(...cards.map((card) => cardElement(card, imgBase)));
 }
 
+const HIGHLIGHT_MS = 1200;
+
+// Briefly flash the board card a log link points at. A no-op if the card is not on the board.
+export function highlightCard(boardEl, cardId) {
+  const el = boardEl.querySelector(`[data-card-id="${CSS.escape(cardId)}"]`);
+  if (!el) return;
+  el.classList.add('highlight');
+  setTimeout(() => el.classList.remove('highlight'), HIGHLIGHT_MS);
+}
+
 // Client messages, with `room` injected by the caller. Card manipulation goes through real game
 // intents; spawn/remove are separate messages the server turns into SpawnCard/RemoveCard intents.
 export const intentMessage = (intent) => ({ type: 'INTENT', intent });

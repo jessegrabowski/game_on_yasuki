@@ -86,8 +86,9 @@ def test_accepted_intent_mutates_logs_and_broadcasts_to_both(room):
 
     assert room.state.seats[PlayerId.P1].honor == 20
     assert len(room.action_log.entries) == before + 1
-    assert ada.sent[-1]["type"] == "SNAPSHOT"
-    assert kenji.sent[-1]["snapshot"]["seats"]["P1"]["honor"] == 20
+    assert kenji.sent[-1]["type"] == "LOG"
+    assert kenji.sent[-1]["parts"] == [{"text": "Ada "}, {"text": "set their honor to 20"}]
+    assert any(m["type"] == "SNAPSHOT" for m in kenji.sent)
 
 
 def test_opponent_targeting_intent_is_rejected_and_unlogged(room):

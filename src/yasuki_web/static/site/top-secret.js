@@ -4,7 +4,7 @@
 import { esc, fetchImageBase } from './card-common.js';
 import { listRooms, createRoom, deleteRoom } from './rooms-api.js';
 import { connectRoom } from './ws-client.js';
-import { renderBoard, spawnMessage, initBoardInteractions } from './board.js';
+import { renderBoard, spawnMessage, initBoardInteractions, highlightCard } from './board.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -42,9 +42,21 @@ export function appendChatMessage(logEl, sender, text) {
   logEl.scrollTop = logEl.scrollHeight;
 }
 
-export function appendLogMessage(logEl, text) {
+// Render a game-log line from its segments: prose as plain spans, each referenced card as a link
+// (data-card-id) the room wires up to highlight the card on the board.
+export function appendLogMessage(logEl, parts) {
   const li = document.createElement('li');
-  li.textContent = text;
+  for (const part of parts) {
+    const span = document.createElement('span');
+    if (part.card_id) {
+      span.className = 'log-card-link';
+      span.dataset.cardId = part.card_id;
+      span.textContent = part.name;
+    } else {
+      span.textContent = part.text;
+    }
+    li.appendChild(span);
+  }
   logEl.appendChild(li);
   logEl.scrollTop = logEl.scrollHeight;
 }
@@ -207,7 +219,7 @@ export function init() {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
     });
     client.events.addEventListener('LOG', (e) => {
-      appendLogMessage(actionLog, e.detail.text);
+      appendLogMessage(actionLog, e.detail.parts);
     });
     client.events.addEventListener('disconnected', () => {
       if (roomStatus) roomStatus.textContent = 'Disconnected from the room.';
@@ -229,6 +241,11 @@ export function init() {
       if (client && currentRoom) client.send({ ...message, room: currentRoom });
     });
   }
+
+  actionLog?.addEventListener('click', (e) => {
+    const link = e.target?.closest?.('.log-card-link');
+    if (link && battlefield) highlightCard(battlefield, link.dataset.cardId);
+  });
 
   const rail = document.getElementById('rail');
   const roomBody = document.querySelector('.room-body');
