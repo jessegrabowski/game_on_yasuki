@@ -1,19 +1,8 @@
 import pytest
-from fastapi.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 
 from yasuki_web import websocket as ws_module
-from yasuki_web.main import app
 from yasuki_web.websocket import WS_MSG_BURST, _origin_allowed
-
-
-@pytest.fixture
-def client(wip_auth_header):
-    # The rooms API and WS handshake are behind the WIP password gate. The default headers set here
-    # are merged into both REST requests and the WebSocket upgrade.
-    c = TestClient(app)
-    c.headers.update(wip_auth_header)
-    return c
 
 
 def _make_room(client) -> str:
@@ -111,3 +100,30 @@ def test_origin_allowed_permits_same_origin(monkeypatch):
 def test_origin_allowed_permits_missing_origin():
     # Native (non-browser) clients send no Origin header.
     assert _origin_allowed(_OriginWS(host="play.example")) is True
+
+
+def test_full_room_rejects_further_connections(client):
+    room_id = _make_room(client)  # max_players=2
+    with (
+        client.websocket_connect(f"/ws/{room_id}") as ada,
+        client.websocket_connect(f"/ws/{room_id}") as kenji,
+    ):
+        ada.send_json({"type": "JOIN", "room": room_id, "join": {"name": "Ada"}})
+        ada.receive_json()  # HELLO
+        ada.receive_json()  # STATE
+        kenji.send_json({"type": "JOIN", "room": room_id, "join": {"name": "Kenji"}})
+        kenji.receive_json()  # HELLO
+        kenji.receive_json()  # STATE
+        with pytest.raises(WebSocketDisconnect) as exc:
+            with client.websocket_connect(f"/ws/{room_id}"):
+                pass
+        assert exc.value.code == 4003
+
+
+def test_oversized_frame_closes_the_connection(client):
+    room_id = _make_room(client)
+    with client.websocket_connect(f"/ws/{room_id}") as ws:
+        ws.send_text("x" * (4096 + 1))
+        with pytest.raises(WebSocketDisconnect) as exc:
+            ws.receive_json()
+        assert exc.value.code == 1009

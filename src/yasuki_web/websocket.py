@@ -8,7 +8,7 @@ from urllib.parse import urlparse
 from pydantic import ValidationError
 
 from yasuki_web.config import allowed_origins
-from yasuki_web.schemas import ClientMessage, ServerHello, ServerState, ServerError
+from yasuki_web.schemas import ClientMessage, ServerHello, ServerState, ServerError, ServerChat
 from yasuki_web.rooms import rooms
 from yasuki_web.wip_gate import websocket_access_ok
 
@@ -129,24 +129,31 @@ class GameRoom:
         self.seq += 1
         await self.broadcast_state()
 
-    async def broadcast_state(self):
-        """Send current game state to all connected players."""
-        state_msg = ServerState(
-            room=self.room_id,
-            seq=self.seq,
-            state=self.game_state,
-        )
-
+    async def _broadcast(self, payload: dict):
+        """Send a JSON payload to every connected player, evicting any that fail."""
         disconnected = []
-        for ws in self.players.keys():
+        for ws in self.players:
             try:
-                await ws.send_json(state_msg.model_dump())
+                await ws.send_json(payload)
             except Exception as e:
-                logger.error(f"Failed to send state to player: {e}")
+                logger.error(f"Failed to send to player: {e}")
                 disconnected.append(ws)
 
         for ws in disconnected:
             await self.remove_player(ws)
+
+    async def broadcast_state(self):
+        """Send current game state to all connected players."""
+        state_msg = ServerState(room=self.room_id, seq=self.seq, state=self.game_state)
+        await self._broadcast(state_msg.model_dump())
+
+    async def handle_chat(self, ws: WebSocket, text: str):
+        """Broadcast a chat line from a joined player to the whole room."""
+        sender = self.players.get(ws)
+        if not sender:
+            return
+        msg = ServerChat(room=self.room_id, sender=sender, text=text)
+        await self._broadcast(msg.model_dump(by_alias=True))
 
 
 active_game_rooms: dict[str, GameRoom] = {}
@@ -269,6 +276,10 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
                     await game_room.handle_action(
                         websocket, message.action.model_dump(exclude_none=True)
                     )
+
+            elif message.type == "CHAT":
+                if message.chat is not None:
+                    await game_room.handle_chat(websocket, message.chat.text)
 
             elif message.type == "PING":
                 await websocket.send_json({"type": "PONG"})

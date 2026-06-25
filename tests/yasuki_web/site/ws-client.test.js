@@ -39,6 +39,10 @@ class FakeWebSocket {
     this._emit('message', { data: JSON.stringify(message) });
   }
 
+  deliverRaw(data) {
+    this._emit('message', { data });
+  }
+
   drop() {
     this._emit('close', {});
   }
@@ -80,6 +84,17 @@ describe('connectRoom', () => {
     latest().acceptConnection();
     latest().deliver({ type: 'HELLO', you: 'Ada', players: ['Ada'] });
     assert.deepEqual(received, { type: 'HELLO', you: 'Ada', players: ['Ada'] });
+  });
+
+  it('ignores a malformed inbound frame without dispatching or throwing', () => {
+    const client = connectRoom('room1', 'Ada');
+    let dispatched = false;
+    client.events.addEventListener('HELLO', () => {
+      dispatched = true;
+    });
+    latest().acceptConnection();
+    latest().deliverRaw('not json at all');
+    assert.equal(dispatched, false);
   });
 
   it('reconnects once after an unexpected drop, then gives up', () => {
