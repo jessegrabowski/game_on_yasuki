@@ -1,9 +1,10 @@
 // WIP online-play lobby, served at the unlinked, password-gated /top-secret.html route until
 // launch.
 
-import { esc } from './card-common.js';
+import { esc, fetchImageBase } from './card-common.js';
 import { listRooms, createRoom } from './rooms-api.js';
 import { connectRoom } from './ws-client.js';
+import { renderBoard, addCardFrame } from './board.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -71,10 +72,16 @@ function init() {
   const chatLog = document.getElementById('chatLog');
   const chatForm = document.getElementById('chatForm');
   const chatInput = document.getElementById('chatInput');
+  const battlefield = document.getElementById('battlefield');
+  const spawnButton = document.getElementById('spawnCard');
 
   let client = null;
   let myName = null;
   let currentRoom = null;
+  let imgBase = '/images';
+  fetchImageBase().then((base) => {
+    imgBase = base;
+  });
 
   const setStatus = (msg) => {
     if (lobbyStatus) lobbyStatus.textContent = msg;
@@ -124,6 +131,7 @@ function init() {
     });
     client.events.addEventListener('STATE', (e) => {
       renderPlayers(playerList, Object.keys(e.detail.state?.player_states ?? {}), myName);
+      renderBoard(battlefield, e.detail.state?.cards ?? [], imgBase);
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
@@ -141,6 +149,26 @@ function init() {
     if (!text || !client || !currentRoom) return;
     client.send(chatFrame(currentRoom, text));
     chatInput.value = '';
+  });
+
+  spawnButton?.addEventListener('click', async () => {
+    if (!client || !currentRoom) return;
+    try {
+      const { cards } = await (await fetch('/api/cards/random/1')).json();
+      const picked = cards?.[0];
+      if (!picked) return;
+      client.send(
+        addCardFrame(currentRoom, {
+          id: `${picked.card_id}-${Date.now()}-${Math.floor(Math.random() * 1e6)}`,
+          name: picked.name,
+          img: picked.image_path,
+          x: 20 + Math.floor(Math.random() * 220),
+          y: 20 + Math.floor(Math.random() * 220),
+        }),
+      );
+    } catch (_) {
+      if (roomStatus) roomStatus.textContent = 'Could not spawn a card.';
+    }
   });
 
   createForm?.addEventListener('submit', async (e) => {
