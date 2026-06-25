@@ -74,6 +74,28 @@ class LogEntry:
     rng_seed: int | None = None
 
 
+@dataclass(frozen=True, slots=True)
+class ChatEntry:
+    """One chat message on the tape — a record that does not change game state.
+
+    Carried on the same tape as ``LogEntry`` so a replay surfaces each message at the moment it was
+    sent, interleaved with the moves. ``replay()`` skips these when folding state.
+
+    Attributes
+    ----------
+    ts : float
+        Server wall-clock time the message was sent, as a POSIX timestamp.
+    sender : str
+        The display name of the player who sent it.
+    text : str
+        The message body.
+    """
+
+    ts: float
+    sender: str
+    text: str
+
+
 @dataclass(slots=True)
 class InitialRecord:
     """The pre-game start configuration that seeds a replay.
@@ -123,28 +145,33 @@ class InitialRecord:
 
 @dataclass(slots=True)
 class ActionLog:
-    """An append-only record of a game: an initial snapshot at the head, then ordered entries.
+    """An append-only record of a game: an initial snapshot at the head, then one ordered tape of
+    both game intents and chat messages.
 
     Attributes
     ----------
     initial : InitialRecord
-        The start configuration the entries fold onto.
-    entries : list of LogEntry
-        Accepted intents in application order, with non-decreasing ``seq``.
+        The start configuration the intents fold onto.
+    entries : list of LogEntry or ChatEntry
+        The tape, in send order: accepted intents (``LogEntry``, with non-decreasing ``seq``) and
+        chat messages (``ChatEntry``) interleaved. Replay folds the intents and surfaces the chat.
     """
 
     initial: InitialRecord
-    entries: list[LogEntry] = field(default_factory=list)
+    entries: list[LogEntry | ChatEntry] = field(default_factory=list)
 
-    def append(self, entry: LogEntry) -> None:
-        """Append ``entry``, enforcing non-decreasing ``seq``. Raise ``ValueError`` on a seq
-        regression, which would mean an out-of-order or duplicated record."""
-        if self.entries and entry.seq < self.entries[-1].seq:
-            raise ValueError(f"log seq regressed: {entry.seq} after {self.entries[-1].seq}")
+    def append(self, entry: LogEntry | ChatEntry) -> None:
+        """Append ``entry`` to the tape. For an intent entry, enforce non-decreasing ``seq`` against
+        the prior intent (raising ``ValueError`` on a regression — an out-of-order or duplicated
+        record); chat entries carry no seq and append freely."""
+        if isinstance(entry, LogEntry):
+            last = next((e for e in reversed(self.entries) if isinstance(e, LogEntry)), None)
+            if last is not None and entry.seq < last.seq:
+                raise ValueError(f"log seq regressed: {entry.seq} after {last.seq}")
         self.entries.append(entry)
 
     def replay(self) -> TableState:
-        """Rebuild the table by folding every entry onto a fresh copy of the initial state."""
+        """Rebuild the table by folding the tape's intents onto a fresh copy of the initial state."""
         return replay(self.initial, self.entries)
 
 
@@ -197,26 +224,27 @@ def build_initial_state(initial: InitialRecord) -> TableState:
     return state
 
 
-def replay(initial: InitialRecord, entries: Sequence[LogEntry]) -> TableState:
-    """Deterministically rebuild a table from its start and log.
+def replay(initial: InitialRecord, entries: Sequence[LogEntry | ChatEntry]) -> TableState:
+    """Deterministically rebuild a table from its start and tape.
 
-    Fold each entry's intent through ``apply_intent`` onto a fresh state built from ``initial``,
-    reproducing the live state bit-for-bit, deck order included.
+    Fold each intent entry through ``apply_intent`` onto a fresh state built from ``initial``,
+    reproducing the live state bit-for-bit, deck order included. Chat entries on the tape are skipped
+    — they carry no state — but their position records when each message was sent.
 
     Parameters
     ----------
     initial : InitialRecord
         The start configuration to fold onto.
-    entries : sequence of LogEntry
-        The ordered intents to apply.
+    entries : sequence of LogEntry or ChatEntry
+        The ordered tape to fold; only the intent entries apply.
     """
     state = build_initial_state(initial)
     for entry in entries:
-        apply_intent(state, entry.seat, entry.intent)
+        if isinstance(entry, LogEntry):
+            apply_intent(state, entry.seat, entry.intent)
     return state
 
 
-# --- Serialization (persistence seam) ----------------------------------------------------------
 # Plain-dict (JSON-ready) round-trip for the whole log, so a future DB/object-store sink can persist
 # a game without reshaping it. No live sink ships; FlushSink below is the attach point.
 
@@ -322,7 +350,9 @@ def _decode_move_dest(payload: dict):
     return _decode_zone_key(payload["zone"])
 
 
-def _encode_intent(intent: Intent) -> dict:
+def encode_intent(intent: Intent) -> dict:
+    """Encode an ``Intent`` to JSON-ready plain data (op + targets). The canonical intent wire shape,
+    shared by the persisted log and the live wire protocol."""
     payload: dict = {"op": intent.op.value}
     match intent.op:
         case IntentOp.MOVE_CARD:
@@ -358,7 +388,10 @@ def _encode_intent(intent: Intent) -> dict:
     return payload
 
 
-def _decode_intent(payload: dict) -> Intent:
+def decode_intent(payload: dict) -> Intent:
+    """Rebuild an ``Intent`` from the plain data produced by ``encode_intent``. Raises ``KeyError`` /
+    ``ValueError`` on a malformed payload; callers handling untrusted input should validate the
+    envelope first and treat a raised error as a rejected message."""
     op = IntentOp(payload["op"])
     match op:
         case IntentOp.MOVE_CARD:
@@ -412,22 +445,27 @@ def _decode_seat(payload: dict) -> SeatInfo:
     return SeatInfo(**payload)
 
 
-def _encode_entry(entry: LogEntry) -> dict:
+def _encode_entry(entry: LogEntry | ChatEntry) -> dict:
+    if isinstance(entry, ChatEntry):
+        return {"kind": "chat", "ts": entry.ts, "sender": entry.sender, "text": entry.text}
     return {
+        "kind": "intent",
         "seq": entry.seq,
         "ts": entry.ts,
         "seat": entry.seat.name,
-        "intent": _encode_intent(entry.intent),
+        "intent": encode_intent(entry.intent),
         "rng_seed": entry.rng_seed,
     }
 
 
-def _decode_entry(payload: dict) -> LogEntry:
+def _decode_entry(payload: dict) -> LogEntry | ChatEntry:
+    if payload.get("kind") == "chat":
+        return ChatEntry(ts=payload["ts"], sender=payload["sender"], text=payload["text"])
     return LogEntry(
         seq=payload["seq"],
         ts=payload["ts"],
         seat=PlayerId[payload["seat"]],
-        intent=_decode_intent(payload["intent"]),
+        intent=decode_intent(payload["intent"]),
         rng_seed=payload.get("rng_seed"),
     )
 
