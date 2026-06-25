@@ -4,7 +4,53 @@ import assert from 'node:assert/strict';
 import { resetDOM } from '../deck_builder/dom-shim.js';
 import { makeRoom } from './fixtures.js';
 
+class FakeWebSocket {
+  static OPEN = 1;
+  static instances = [];
+  constructor(url) {
+    this.url = url;
+    this.readyState = 0;
+    this.sent = [];
+    this._listeners = {};
+    FakeWebSocket.instances.push(this);
+  }
+  addEventListener(type, fn) {
+    (this._listeners[type] ||= []).push(fn);
+  }
+  send(data) {
+    this.sent.push(JSON.parse(data));
+  }
+  close() {
+    this.readyState = 3;
+  }
+  _emit(type, event) {
+    (this._listeners[type] || []).forEach((fn) => fn(event));
+  }
+  accept() {
+    this.readyState = FakeWebSocket.OPEN;
+    this._emit('open', {});
+  }
+  deliver(message) {
+    this._emit('message', { data: JSON.stringify(message) });
+  }
+}
+
+function fakeLocalStorage() {
+  const store = {};
+  return {
+    getItem: (k) => (k in store ? store[k] : null),
+    setItem: (k, v) => {
+      store[k] = String(v);
+    },
+    removeItem: (k) => {
+      delete store[k];
+    },
+  };
+}
+
 globalThis.fetch = mock.fn();
+globalThis.WebSocket = FakeWebSocket;
+globalThis.location = { protocol: 'http:', host: 'testserver' };
 
 import {
   listRooms,
@@ -17,6 +63,12 @@ import {
   appendChatMessage,
   appendLogMessage,
   chatFrame,
+  initSeparator,
+  readDeleteTokens,
+  rememberDeleteToken,
+  forgetDeleteToken,
+  ownedRoomIds,
+  init,
 } from '../../../src/yasuki_web/static/site/top-secret.js';
 
 function mockJSON(body) {
@@ -25,9 +77,14 @@ function mockJSON(body) {
   );
 }
 
+const ok = (body) => Promise.resolve({ ok: true, json: () => Promise.resolve(body) });
+
 beforeEach(() => {
   resetDOM();
   fetch.mock.resetCalls();
+  fetch.mock.restore();
+  FakeWebSocket.instances = [];
+  globalThis.localStorage = fakeLocalStorage();
 });
 
 describe('rooms-api', () => {
@@ -158,5 +215,286 @@ describe('appendLogMessage', () => {
 describe('chatFrame', () => {
   it('builds a CHAT client message for the room', () => {
     assert.deepEqual(chatFrame('r1', 'hi'), { type: 'CHAT', room: 'r1', chat: { text: 'hi' } });
+  });
+});
+
+describe('initSeparator', () => {
+  function wire() {
+    const handle = document.getElementById('separator');
+    const dragged = [];
+    initSeparator(handle, {
+      onPointer: (e) => dragged.push(e.clientX),
+      onKey: (e) => e.key === 'ArrowLeft',
+    });
+    return { handle, dragged };
+  }
+
+  it('forwards pointer moves only while a drag is in progress', () => {
+    const { handle, dragged } = wire();
+    handle._emit('pointermove', { clientX: 1 });
+    assert.deepEqual(dragged, [], 'no drag yet');
+
+    handle._emit('pointerdown', { pointerId: 1 });
+    handle._emit('pointermove', { clientX: 2 });
+    handle._emit('pointerup', {});
+    handle._emit('pointermove', { clientX: 3 });
+    assert.deepEqual(dragged, [2], 'only the move between down and up');
+  });
+
+  it('stops dragging on pointercancel', () => {
+    const { handle, dragged } = wire();
+    handle._emit('pointerdown', { pointerId: 1 });
+    handle._emit('pointercancel', {});
+    handle._emit('pointermove', { clientX: 9 });
+    assert.deepEqual(dragged, []);
+  });
+
+  it('suppresses the default only for keys onKey claims', () => {
+    const { handle } = wire();
+    let prevented = 0;
+    const press = (key) => handle._emit('keydown', { key, preventDefault: () => (prevented += 1) });
+    press('ArrowLeft');
+    press('ArrowRight');
+    assert.equal(prevented, 1);
+  });
+});
+
+describe('delete-token persistence', () => {
+  it('remembers, reads back, and exposes owned room ids', () => {
+    rememberDeleteToken('r1', 'tok1');
+    assert.deepEqual(readDeleteTokens(), { r1: 'tok1' });
+    assert.deepEqual([...ownedRoomIds()], ['r1']);
+  });
+
+  it('forgets a token', () => {
+    rememberDeleteToken('r1', 'tok1');
+    forgetDeleteToken('r1');
+    assert.deepEqual(readDeleteTokens(), {});
+  });
+
+  it('reads empty when storage is unavailable', () => {
+    globalThis.localStorage = undefined;
+    assert.deepEqual(readDeleteTokens(), {});
+    assert.deepEqual([...ownedRoomIds()], []);
+  });
+
+  it('survives corrupt stored JSON', () => {
+    globalThis.localStorage.setItem('yasuki.play.deleteTokens.v1', 'not json');
+    assert.deepEqual(readDeleteTokens(), {});
+  });
+});
+
+const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
+
+function installRouter(overrides = {}) {
+  const routes = {
+    'GET /api/config': () => ok({ image_base_url: '/images' }),
+    'GET /api/rooms': () => ok({ rooms: [makeRoom({ id: 'r1', name: 'Crab Table' })] }),
+    'POST /api/rooms': () => ok({ room_id: 'r2', delete_token: 'tok', websocket_url: '/ws/r2' }),
+    'GET /api/cards/random/1': () =>
+      ok({ cards: [{ card_id: 'c9', name: 'Spy', image_path: 'a.jpg' }] }),
+    ...overrides,
+  };
+  fetch.mock.mockImplementation((url, options) =>
+    (routes[`${options?.method ?? 'GET'} ${url}`] || (() => ok({})))(),
+  );
+}
+
+async function joinedRoom() {
+  installRouter();
+  init();
+  await flush();
+  document.getElementById('playerName').value = 'Ada';
+  document.getElementById('roomList')._emit('click', { target: { dataset: { roomId: 'r1' } } });
+  const ws = FakeWebSocket.instances.at(-1);
+  ws.accept();
+  ws.deliver({ type: 'HELLO', room: 'r1', players: ['Ada'] });
+  return ws;
+}
+
+describe('init (room client wiring)', () => {
+  it('loads and renders the open rooms on start', async () => {
+    installRouter();
+    init();
+    await flush();
+    assert.match(document.getElementById('roomList').innerHTML, /Crab Table/);
+  });
+
+  it('joins a room from the list and connects a WebSocket', async () => {
+    const ws = await joinedRoom();
+    assert.equal(ws.url, 'ws://testserver/ws/r1');
+    assert.equal(document.getElementById('roomView').hidden, false);
+    assert.match(document.getElementById('playerList').innerHTML, /Ada/);
+  });
+
+  it('routes inbound STATE, CHAT, and LOG frames to the panes', async () => {
+    const ws = await joinedRoom();
+    ws.deliver({
+      type: 'STATE',
+      state: {
+        player_states: { Ada: {}, Kenji: {} },
+        cards: [{ id: 'c1', name: 'X', img: 'a.jpg', x: 1, y: 2, face_up: true }],
+      },
+    });
+    ws.deliver({ type: 'CHAT', from: 'Ada', text: 'hello there' });
+    ws.deliver({ type: 'LOG', text: 'Kenji joined' });
+
+    assert.match(document.getElementById('playerList').innerHTML, /Kenji/);
+    assert.equal(document.getElementById('battlefield').children.length, 1);
+    assert.match(document.getElementById('chatLog').innerHTML, /hello there/);
+    assert.equal(document.getElementById('actionLog').children.at(-1).textContent, 'Kenji joined');
+  });
+
+  it('sends a CHAT frame on chat submit and clears the input', async () => {
+    const ws = await joinedRoom();
+    const input = document.getElementById('chatInput');
+    input.value = 'gg';
+    document.getElementById('chatForm')._emit('submit', { preventDefault() {} });
+
+    assert.deepEqual(ws.sent.find((m) => m.type === 'CHAT'), {
+      type: 'CHAT',
+      room: 'r1',
+      chat: { text: 'gg' },
+    });
+    assert.equal(input.value, '');
+  });
+
+  it('forwards a board drag as a BOARD frame', async () => {
+    const ws = await joinedRoom();
+    const board = document.getElementById('battlefield');
+    const cardEl = { dataset: { cardId: 'c1' }, getBoundingClientRect: () => ({ left: 0, top: 0 }) };
+    board._emit('pointerdown', {
+      button: 0,
+      pointerId: 1,
+      clientX: 10,
+      clientY: 10,
+      target: { closest: (s) => (s === '.board-card' ? cardEl : null) },
+    });
+    board._emit('pointerup', { clientX: 20, clientY: 20 });
+
+    const boardFrame = ws.sent.find((m) => m.type === 'BOARD');
+    assert.equal(boardFrame.room, 'r1');
+    assert.equal(boardFrame.board.kind, 'SET_CARD_POS');
+  });
+
+  it('spawns a random card as an ADD_CARD frame', async () => {
+    const ws = await joinedRoom();
+    document.getElementById('spawnCard')._emit('click', {});
+    await flush();
+
+    const add = ws.sent.find((m) => m.type === 'BOARD' && m.board.kind === 'ADD_CARD');
+    assert.ok(add, 'an ADD_CARD frame is sent');
+    assert.equal(add.board.name, 'Spy');
+  });
+
+  it('creates a room, stores its delete token, and joins it', async () => {
+    installRouter();
+    init();
+    await flush();
+    document.getElementById('playerName').value = 'Ada';
+    document.getElementById('createForm')._emit('submit', { preventDefault() {} });
+    await flush();
+
+    assert.equal(readDeleteTokens().r2, 'tok');
+    assert.equal(FakeWebSocket.instances.at(-1).url, 'ws://testserver/ws/r2');
+  });
+
+  it('leaves a room, closing the client and returning to the lobby', async () => {
+    const ws = await joinedRoom();
+    document.getElementById('leaveRoom')._emit('click', {});
+
+    assert.equal(ws.readyState, 3, 'client socket closed');
+    assert.equal(document.getElementById('roomView').hidden, true);
+    assert.equal(document.getElementById('lobbyView').hidden, false);
+  });
+
+  it('joins a room by typed id from the join form', async () => {
+    installRouter();
+    init();
+    await flush();
+    document.getElementById('playerName').value = 'Ada';
+    document.getElementById('joinRoomId').value = 'r1';
+    document.getElementById('joinForm')._emit('submit', { preventDefault() {} });
+
+    assert.equal(FakeWebSocket.instances.at(-1).url, 'ws://testserver/ws/r1');
+  });
+
+  it('prompts for a name before joining', async () => {
+    installRouter();
+    init();
+    await flush();
+    document.getElementById('roomList')._emit('click', { target: { dataset: { roomId: 'r1' } } });
+
+    assert.equal(FakeWebSocket.instances.length, 0, 'no connection without a name');
+    assert.match(document.getElementById('lobbyStatus').textContent, /name/i);
+  });
+
+  it('closes an owned room via its Close control', async () => {
+    rememberDeleteToken('r1', 'tok');
+    let deleted = null;
+    installRouter({
+      'DELETE /api/rooms/r1': () => {
+        deleted = 'r1';
+        return ok({ message: 'gone' });
+      },
+    });
+    init();
+    await flush();
+    document.getElementById('roomList')._emit('click', { target: { dataset: { closeId: 'r1' } } });
+    await flush();
+
+    assert.equal(deleted, 'r1');
+    assert.deepEqual(readDeleteTokens(), {}, 'token forgotten after close');
+  });
+
+  it('reports a status when the room list fails to load', async () => {
+    installRouter({
+      'GET /api/rooms': () => Promise.resolve({ ok: false, status: 503, statusText: 'Down' }),
+    });
+    init();
+    await flush();
+
+    assert.match(document.getElementById('lobbyStatus').textContent, /Could not load rooms/);
+  });
+
+  it('resizes the rail and the log panes within their bounds', async () => {
+    await joinedRoom();
+    const roomBody = document.querySelector('.room-body');
+    const rail = document.getElementById('rail');
+
+    // roomBody right is 200; a pointer at x=50 wants a 150px rail, clamped up to the 240px minimum.
+    document.getElementById('railResizer')._emit('pointerdown', { pointerId: 1 });
+    document.getElementById('railResizer')._emit('pointermove', { clientX: 50 });
+    assert.match(roomBody.style.gridTemplateColumns, /240px$/);
+
+    // rail height is 200, so the log pane's max is 200-200=0 and it clamps to the 120px minimum.
+    document.getElementById('railSplitter')._emit('pointerdown', { pointerId: 1 });
+    document.getElementById('railSplitter')._emit('pointermove', { clientY: 150 });
+    assert.match(rail.style.gridTemplateRows, /^120px/);
+  });
+
+  it('resizes via the keyboard and suppresses the arrow-key scroll', async () => {
+    await joinedRoom();
+    let prevented = 0;
+    const press = (id, key) =>
+      document.getElementById(id)._emit('keydown', { key, preventDefault: () => (prevented += 1) });
+
+    press('railResizer', 'ArrowLeft');
+    press('railSplitter', 'ArrowUp');
+    press('railResizer', 'PageUp'); // unhandled key: no preventDefault
+
+    assert.equal(prevented, 2);
+    assert.match(document.querySelector('.room-body').style.gridTemplateColumns, /px$/);
+  });
+
+  it('prompts for a name before creating a room', async () => {
+    installRouter();
+    init();
+    await flush();
+    document.getElementById('createForm')._emit('submit', { preventDefault() {} });
+
+    assert.match(document.getElementById('lobbyStatus').textContent, /name/i);
+    const posts = fetch.mock.calls.filter((c) => c.arguments[1]?.method === 'POST');
+    assert.equal(posts.length, 0, 'no room is created');
   });
 });

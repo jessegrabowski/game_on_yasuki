@@ -55,7 +55,7 @@ export function chatFrame(room, text) {
 
 // Wire a draggable separator: pointer-drag calls onPointer; arrow keys call onKey, which returns
 // true when it handled the event (so the default scroll is suppressed).
-function initSeparator(handle, { onPointer, onKey }) {
+export function initSeparator(handle, { onPointer, onKey }) {
   let dragging = false;
   handle.addEventListener('pointerdown', (e) => {
     dragging = true;
@@ -76,7 +76,7 @@ function initSeparator(handle, { onPointer, onKey }) {
 
 // The delete token is the only way to close a room you created, so stash it client-side. Access is
 // best-effort: private mode and quota throw, and losing a token only forgoes cleanup of that room.
-function readDeleteTokens() {
+export function readDeleteTokens() {
   try {
     return JSON.parse(globalThis.localStorage?.getItem(DELETE_TOKENS_KEY) || '{}');
   } catch (_) {
@@ -92,21 +92,21 @@ function writeDeleteTokens(tokens) {
   }
 }
 
-function rememberDeleteToken(roomId, token) {
+export function rememberDeleteToken(roomId, token) {
   const tokens = readDeleteTokens();
   tokens[roomId] = token;
   writeDeleteTokens(tokens);
 }
 
-function forgetDeleteToken(roomId) {
+export function forgetDeleteToken(roomId) {
   const tokens = readDeleteTokens();
   delete tokens[roomId];
   writeDeleteTokens(tokens);
 }
 
-const ownedRoomIds = () => new Set(Object.keys(readDeleteTokens()));
+export const ownedRoomIds = () => new Set(Object.keys(readDeleteTokens()));
 
-function init() {
+export function init() {
   const playerName = document.getElementById('playerName');
   const roomList = document.getElementById('roomList');
   const lobbyStatus = document.getElementById('lobbyStatus');
