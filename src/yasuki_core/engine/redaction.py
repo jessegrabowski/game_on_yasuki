@@ -88,6 +88,25 @@ def _zone_card_visible(card: L5RCard, viewer: PlayerId, role: ZoneRole) -> bool:
     return card.face_up or card.revealed
 
 
+def card_identity_public(state: TableState, card_id: str) -> bool:
+    """Return whether both seats may currently see this card's identity, given where it sits and its
+    face. True for a battlefield or province card that is face up or revealed, and for any card in a
+    public discard or banish; False for a card in a hand, a deck, or one lying face down."""
+    card = state.cards_by_id.get(card_id)
+    if card is None:
+        return False
+    if any(held is card for held in state.battlefield.cards):
+        return card.face_up or card.revealed
+    for key, zone in state.zones.items():
+        if any(held is card for held in zone.cards):
+            if key.role in _PUBLIC_ROLES:
+                return True
+            if key.role is ZoneRole.HAND:
+                return card.revealed
+            return card.face_up or card.revealed
+    return False  # in a deck or otherwise unlocated — hidden
+
+
 def _project(card: L5RCard, visible: bool) -> CardView:
     return card if visible else _hide(card)
 

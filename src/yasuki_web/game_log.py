@@ -8,6 +8,7 @@ from yasuki_core.engine.table import (
     MoveDest,
     BATTLEFIELD,
 )
+from yasuki_core.engine.redaction import card_identity_public
 
 _FLAG_VERB = {
     IntentOp.BOW: "bowed",
@@ -30,17 +31,10 @@ _ZONE_DEST = {
 
 
 def _card_segment(state: TableState, card_id: str) -> dict:
-    """Reference a card by a clickable link when it is publicly visible on the battlefield, else by
-    the unlinked words "a card" — so a card the opponent may not see is never named in a shared log
-    line.
-    """
-    card = state.cards_by_id.get(card_id)
-    if (
-        card is not None
-        and (card.face_up or card.revealed)
-        and any(held is card for held in state.battlefield.cards)
-    ):
-        return {"card_id": card_id, "name": card.name}
+    """Reference a card by a clickable, named link when its identity is public to both seats, else by
+    the unlinked words "a card" — so a shared log line never names a card the opponent cannot see."""
+    if card_identity_public(state, card_id):
+        return {"card_id": card_id, "name": state.cards_by_id[card_id].name}
     return {"text": "a card"}
 
 
