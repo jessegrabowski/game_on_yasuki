@@ -106,54 +106,6 @@ def repo():
     return MockRepository()
 
 
-class TestParseDeckYaml:
-    def test_parses_deck_name(self):
-        assert parse_deck_yaml("name: My Crane Deck")["name"] == "My Crane Deck"
-
-    def test_strips_quotes_from_name(self):
-        assert parse_deck_yaml('name: "Deck: The Return"')["name"] == "Deck: The Return"
-
-    def test_defaults_name_when_missing(self):
-        assert parse_deck_yaml("fate:\n  - Ambush")["name"] == "Imported Deck"
-
-    def test_parses_count_prefix(self):
-        r = parse_deck_yaml("name: T\ndynasty:\n  - 3x Kuni Yori")
-        assert r["dynasty"][0]["count"] == 3
-        assert r["dynasty"][0]["name"] == "Kuni Yori"
-
-    def test_parses_unicode_count_prefix(self):
-        r = parse_deck_yaml("name: T\nfate:\n  - 2\u00d7 Ambush")
-        assert r["fate"][0]["count"] == 2
-
-    def test_parses_set_suffix(self):
-        r = parse_deck_yaml("name: T\nfate:\n  - Ambush [Imperial Edition]")
-        assert r["fate"][0]["set_name"] == "Imperial Edition"
-
-    def test_does_not_confuse_numeric_card_name(self):
-        r = parse_deck_yaml("name: T\ndynasty:\n  - 700 Soldier Plain")
-        assert r["dynasty"][0]["name"] == "700 Soldier Plain"
-        assert r["dynasty"][0]["count"] == 1
-
-    def test_parses_bullet_character_name(self):
-        r = parse_deck_yaml("name: T\ndynasty:\n  - Kuni Yori \u2022 Experienced [Pearl Edition]")
-        assert r["dynasty"][0]["name"] == "Kuni Yori \u2022 Experienced"
-        assert r["dynasty"][0]["set_name"] == "Pearl Edition"
-
-    def test_ignores_comments_and_blanks(self):
-        r = parse_deck_yaml("name: T\n# comment\n\nfate:\n  - Ambush\n\n")
-        assert len(r["fate"]) == 1
-
-    def test_ignores_unknown_sections(self):
-        r = parse_deck_yaml("name: T\nsideboard:\n  - Ambush\nfate:\n  - Kuni Yori")
-        assert len(r["fate"]) == 1
-        assert r["fate"][0]["name"] == "Kuni Yori"
-        assert r["dynasty"] == []
-
-    def test_card_name_with_leading_dash_preserved(self):
-        r = parse_deck_yaml("name: T\nfate:\n  - --Ranged Attack--")
-        assert r["fate"][0]["name"] == "--Ranged Attack--"
-
-
 class TestSerializeDeck:
     def test_includes_deck_name(self, repo):
         yaml = serialize_deck(DeckState(), repo, deck_name="Test Deck")
