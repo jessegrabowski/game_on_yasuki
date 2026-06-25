@@ -4,7 +4,7 @@
 import { esc, fetchImageBase } from './card-common.js';
 import { listRooms, createRoom } from './rooms-api.js';
 import { connectRoom } from './ws-client.js';
-import { renderBoard, addCardFrame } from './board.js';
+import { renderBoard, addCardFrame, boardFrame, initBoardInteractions } from './board.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -38,6 +38,27 @@ export function appendChatMessage(logEl, sender, text) {
 
 export function chatFrame(room, text) {
   return { type: 'CHAT', room, chat: { text } };
+}
+
+// Wire a draggable separator: pointer-drag calls onPointer; arrow keys call onKey, which returns
+// true when it handled the event (so the default scroll is suppressed).
+function initSeparator(handle, { onPointer, onKey }) {
+  let dragging = false;
+  handle.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    handle.setPointerCapture(e.pointerId);
+  });
+  handle.addEventListener('pointermove', (e) => {
+    if (dragging) onPointer(e);
+  });
+  const stop = () => {
+    dragging = false;
+  };
+  handle.addEventListener('pointerup', stop);
+  handle.addEventListener('pointercancel', stop);
+  handle.addEventListener('keydown', (e) => {
+    if (onKey(e)) e.preventDefault();
+  });
 }
 
 // The delete token is the only way to reclaim a room you created, so stash it client-side. Losing
@@ -150,6 +171,52 @@ function init() {
     client.send(chatFrame(currentRoom, text));
     chatInput.value = '';
   });
+
+  if (battlefield) {
+    initBoardInteractions(battlefield, (action) => {
+      if (client && currentRoom) client.send(boardFrame(currentRoom, action));
+    });
+  }
+
+  const rail = document.getElementById('rail');
+  const roomBody = document.querySelector('.room-body');
+  const railResizer = document.getElementById('railResizer');
+  if (roomBody && railResizer) {
+    const setRailWidth = (width) => {
+      const rect = roomBody.getBoundingClientRect();
+      const clamped = Math.max(240, Math.min(rect.width - 360, width));
+      roomBody.style.gridTemplateColumns = `1fr 8px ${clamped}px`;
+    };
+    initSeparator(railResizer, {
+      onPointer: (e) => setRailWidth(roomBody.getBoundingClientRect().right - e.clientX),
+      onKey: (e) => {
+        const width = rail?.getBoundingClientRect().width ?? 340;
+        if (e.key === 'ArrowLeft') setRailWidth(width + 24);
+        else if (e.key === 'ArrowRight') setRailWidth(width - 24);
+        else return false;
+        return true;
+      },
+    });
+  }
+
+  const railSplitter = document.getElementById('railSplitter');
+  if (rail && railSplitter) {
+    const setLogHeight = (height) => {
+      const max = rail.getBoundingClientRect().height - 200;
+      const clamped = Math.max(120, Math.min(max, height));
+      rail.style.gridTemplateRows = `${clamped}px 10px 1fr`;
+    };
+    initSeparator(railSplitter, {
+      onPointer: (e) => setLogHeight(e.clientY - rail.getBoundingClientRect().top),
+      onKey: (e) => {
+        const logHeight = rail.querySelector('.pane')?.getBoundingClientRect().height ?? 200;
+        if (e.key === 'ArrowUp') setLogHeight(logHeight - 24);
+        else if (e.key === 'ArrowDown') setLogHeight(logHeight + 24);
+        else return false;
+        return true;
+      },
+    });
+  }
 
   spawnButton?.addEventListener('click', async () => {
     if (!client || !currentRoom) return;
