@@ -8,7 +8,14 @@ from urllib.parse import urlparse
 from pydantic import ValidationError
 
 from yasuki_web.config import allowed_origins
-from yasuki_web.schemas import ClientMessage, ServerHello, ServerState, ServerError, ServerChat
+from yasuki_web.schemas import (
+    ClientMessage,
+    ServerHello,
+    ServerState,
+    ServerError,
+    ServerChat,
+    ServerLog,
+)
 from yasuki_web.rooms import rooms
 from yasuki_web.wip_gate import websocket_access_ok
 
@@ -18,6 +25,7 @@ router = APIRouter()
 connections: dict[str, set[WebSocket]] = {}
 ip_connections: dict[str, int] = {}
 MAX_CONNECTIONS_PER_IP = 5
+HISTORY_LIMIT = 200
 
 
 class GameRoom:
@@ -35,11 +43,17 @@ class GameRoom:
             "turn": 0,
             "phase": "setup",
             "player_states": {},
+            # INTERIM (PR03): a flat, fully-public card list, replaced by TableState in PR07.
+            "cards": [],
         }
         self.seq = 0
+        # Chat and log persist for the room's lifetime so a player who joins (or rejoins) sees what
+        # came before. Capped to the most recent HISTORY_LIMIT of each.
+        self.chat_history: list[dict] = []
+        self.log_history: list[dict] = []
 
     async def add_player(self, ws: WebSocket, player_name: str):
-        """Add a player to the room and initialize their game state."""
+        """Add a player, replay the room's chat and log history to them, and announce the join."""
         self.players[ws] = player_name
         self.game_state["player_states"][player_name] = {
             "hand": [],
@@ -61,12 +75,18 @@ class GameRoom:
         )
         await ws.send_json(hello.model_dump())
 
+        for entry in self.log_history:
+            await ws.send_json(entry)
+        for entry in self.chat_history:
+            await ws.send_json(entry)
+
         logger.info(f"Player {player_name} joined room {self.room_id}")
 
         await self.broadcast_state()
+        await self.log(f"{player_name} joined")
 
     async def remove_player(self, ws: WebSocket):
-        """Remove a player from the room when they disconnect."""
+        """Remove a player when they disconnect and announce the departure."""
         if ws in self.players:
             player_name = self.players.pop(ws)
             if player_name in self.game_state["player_states"]:
@@ -79,6 +99,7 @@ class GameRoom:
             logger.info(f"Player {player_name} left room {self.room_id}")
 
             await self.broadcast_state()
+            await self.log(f"{player_name} left")
 
     async def handle_action(self, ws: WebSocket, action: dict):
         """
@@ -147,13 +168,67 @@ class GameRoom:
         state_msg = ServerState(room=self.room_id, seq=self.seq, state=self.game_state)
         await self._broadcast(state_msg.model_dump())
 
+    @staticmethod
+    def _append_capped(history: list[dict], entry: dict):
+        history.append(entry)
+        if len(history) > HISTORY_LIMIT:
+            del history[:-HISTORY_LIMIT]
+
     async def handle_chat(self, ws: WebSocket, text: str):
-        """Broadcast a chat line from a joined player to the whole room."""
+        """Store and broadcast a chat line from a joined player to the whole room."""
         sender = self.players.get(ws)
         if not sender:
             return
-        msg = ServerChat(room=self.room_id, sender=sender, text=text)
-        await self._broadcast(msg.model_dump(by_alias=True))
+        payload = ServerChat(room=self.room_id, sender=sender, text=text).model_dump(by_alias=True)
+        self._append_capped(self.chat_history, payload)
+        await self._broadcast(payload)
+
+    async def log(self, text: str):
+        """Store and broadcast a game-log line to the whole room."""
+        payload = ServerLog(room=self.room_id, text=text).model_dump()
+        self._append_capped(self.log_history, payload)
+        await self._broadcast(payload)
+
+    def _find_card(self, card_id: str) -> dict | None:
+        return next((c for c in self.game_state["cards"] if c["id"] == card_id), None)
+
+    async def handle_board_action(self, ws: WebSocket, action: dict):
+        """Apply a board action to the shared, fully-public card list and rebroadcast.
+
+        No ownership or hidden information — any joined player may move any card.
+        """
+        # INTERIM (PR03): replaced by the authoritative, redacted TableState protocol in PR07.
+        if ws not in self.players:
+            return
+
+        kind = action["kind"]
+        if kind == "ADD_CARD":
+            self.game_state["cards"].append(
+                {
+                    "id": action["id"],
+                    "name": action.get("name"),
+                    "img": action.get("img"),
+                    "x": action.get("x", 0),
+                    "y": action.get("y", 0),
+                    "bowed": False,
+                    "face_up": True,
+                }
+            )
+        elif kind == "SET_CARD_POS":
+            card = self._find_card(action["id"])
+            if card:
+                card["x"] = action.get("x", card["x"])
+                card["y"] = action.get("y", card["y"])
+        elif kind == "CARD_FLAG":
+            card = self._find_card(action["id"])
+            if card and action.get("flag") in ("bowed", "face_up"):
+                card[action["flag"]] = not card[action["flag"]]
+        elif kind == "REMOVE_CARD":
+            self.game_state["cards"] = [
+                c for c in self.game_state["cards"] if c["id"] != action["id"]
+            ]
+
+        await self.broadcast_state()
 
 
 active_game_rooms: dict[str, GameRoom] = {}
@@ -179,10 +254,11 @@ async def evict_stale_rooms():
 
 MAX_WS_MESSAGE_SIZE = 4096
 
-# Per-connection message throttle (token bucket): generous for turn-based play, but a flooding
-# client drains it and gets closed.
-WS_MSG_BURST = 20
-WS_MSG_REFILL_PER_SEC = 2
+# Per-connection message throttle (token bucket). The refill must exceed the drag send rate
+# (board.js DRAG_SEND_MS) or dragging a card drains the bucket and the server closes the socket; a
+# genuine flood far above the refill still drains the burst and gets closed.
+WS_MSG_BURST = 60
+WS_MSG_REFILL_PER_SEC = 30
 
 ALLOWED_WS_ORIGINS = frozenset(allowed_origins())
 
@@ -280,6 +356,12 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
             elif message.type == "CHAT":
                 if message.chat is not None:
                     await game_room.handle_chat(websocket, message.chat.text)
+
+            elif message.type == "BOARD":
+                if message.board is not None:
+                    await game_room.handle_board_action(
+                        websocket, message.board.model_dump(exclude_none=True)
+                    )
 
             elif message.type == "PING":
                 await websocket.send_json({"type": "PONG"})

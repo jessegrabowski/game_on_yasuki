@@ -6,11 +6,16 @@ import { makeRoom } from './fixtures.js';
 
 globalThis.fetch = mock.fn();
 
-import { listRooms, createRoom } from '../../../src/yasuki_web/static/site/rooms-api.js';
+import {
+  listRooms,
+  createRoom,
+  deleteRoom,
+} from '../../../src/yasuki_web/static/site/rooms-api.js';
 import {
   renderRooms,
   renderPlayers,
   appendChatMessage,
+  appendLogMessage,
   chatFrame,
 } from '../../../src/yasuki_web/static/site/top-secret.js';
 
@@ -57,6 +62,15 @@ describe('rooms-api', () => {
     const { body } = fetch.mock.calls[0].arguments[1];
     assert.deepEqual(JSON.parse(body), { max_players: 2 });
   });
+
+  it('deletes a room with its delete token', async () => {
+    mockJSON({ message: 'gone', room_id: 'r1' });
+    await deleteRoom('r1', 'secret-token');
+    const [url, options] = fetch.mock.calls[0].arguments;
+    assert.equal(url, '/api/rooms/r1');
+    assert.equal(options.method, 'DELETE');
+    assert.equal(options.headers['X-Delete-Token'], 'secret-token');
+  });
 });
 
 describe('renderRooms', () => {
@@ -66,6 +80,18 @@ describe('renderRooms', () => {
     assert.match(list.innerHTML, /Crab Table/);
     assert.match(list.innerHTML, /1\/2/);
     assert.match(list.innerHTML, /data-room-id="abc"/);
+  });
+
+  it('shows a Close control only for rooms you own', () => {
+    const list = document.getElementById('roomList');
+    renderRooms(list, [makeRoom({ id: 'mine' })], new Set(['mine']));
+    assert.match(list.innerHTML, /data-close-id="mine"/);
+  });
+
+  it('omits Close for rooms you do not own', () => {
+    const list = document.getElementById('roomList');
+    renderRooms(list, [makeRoom({ id: 'theirs' })]);
+    assert.doesNotMatch(list.innerHTML, /close-id/);
   });
 
   it('escapes room-supplied text', () => {
@@ -117,6 +143,15 @@ describe('appendChatMessage', () => {
     appendChatMessage(log, '<b>x</b>', '<script>y</script>');
     assert.doesNotMatch(log.innerHTML, /<script>/);
     assert.doesNotMatch(log.innerHTML, /<b>/);
+  });
+});
+
+describe('appendLogMessage', () => {
+  it('appends a log line as inert text', () => {
+    const log = document.getElementById('actionLog');
+    appendLogMessage(log, 'Ada joined');
+    assert.equal(log.children.length, 1);
+    assert.equal(log.children[0].textContent, 'Ada joined');
   });
 });
 

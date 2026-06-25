@@ -1,26 +1,33 @@
 // WIP online-play lobby, served at the unlinked, password-gated /top-secret.html route until
 // launch.
 
-import { esc } from './card-common.js';
-import { listRooms, createRoom } from './rooms-api.js';
+import { esc, fetchImageBase } from './card-common.js';
+import { listRooms, createRoom, deleteRoom } from './rooms-api.js';
 import { connectRoom } from './ws-client.js';
+import { renderBoard, addCardFrame, boardFrame, initBoardInteractions } from './board.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
-export function roomItemHTML(room) {
+export function roomItemHTML(room, ownedIds = new Set()) {
   const players = (room.players || []).length;
+  const closeButton = ownedIds.has(room.id)
+    ? `<button class="close-btn" data-close-id="${esc(room.id)}">Close</button>`
+    : '';
   return (
     `<li>` +
     `<span class="room-name">${esc(room.name)}</span>` +
     `<span class="room-meta">${players}/${room.max_players} · ${esc(room.id)}</span>` +
+    `<span class="room-buttons">` +
     `<button class="join-btn" data-room-id="${esc(room.id)}">Join</button>` +
+    closeButton +
+    `</span>` +
     `</li>`
   );
 }
 
-export function renderRooms(listEl, rooms) {
+export function renderRooms(listEl, rooms, ownedIds = new Set()) {
   listEl.innerHTML = rooms.length
-    ? rooms.map(roomItemHTML).join('')
+    ? rooms.map((room) => roomItemHTML(room, ownedIds)).join('')
     : '<li class="empty">No open rooms yet — create one.</li>';
 }
 
@@ -35,23 +42,69 @@ export function appendChatMessage(logEl, sender, text) {
   logEl.scrollTop = logEl.scrollHeight;
 }
 
+export function appendLogMessage(logEl, text) {
+  const li = document.createElement('li');
+  li.textContent = text;
+  logEl.appendChild(li);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
 export function chatFrame(room, text) {
   return { type: 'CHAT', room, chat: { text } };
 }
 
-// The delete token is the only way to reclaim a room you created, so stash it client-side. Losing
-// it (private mode, quota) just forgoes cleanup, never blocks play.
-function rememberDeleteToken(roomId, token) {
+// Wire a draggable separator: pointer-drag calls onPointer; arrow keys call onKey, which returns
+// true when it handled the event (so the default scroll is suppressed).
+function initSeparator(handle, { onPointer, onKey }) {
+  let dragging = false;
+  handle.addEventListener('pointerdown', (e) => {
+    dragging = true;
+    handle.setPointerCapture(e.pointerId);
+  });
+  handle.addEventListener('pointermove', (e) => {
+    if (dragging) onPointer(e);
+  });
+  const stop = () => {
+    dragging = false;
+  };
+  handle.addEventListener('pointerup', stop);
+  handle.addEventListener('pointercancel', stop);
+  handle.addEventListener('keydown', (e) => {
+    if (onKey(e)) e.preventDefault();
+  });
+}
+
+// The delete token is the only way to close a room you created, so stash it client-side. Access is
+// best-effort: private mode and quota throw, and losing a token only forgoes cleanup of that room.
+function readDeleteTokens() {
   try {
-    const store = globalThis.localStorage;
-    if (!store) return;
-    const tokens = JSON.parse(store.getItem(DELETE_TOKENS_KEY) || '{}');
-    tokens[roomId] = token;
-    store.setItem(DELETE_TOKENS_KEY, JSON.stringify(tokens));
+    return JSON.parse(globalThis.localStorage?.getItem(DELETE_TOKENS_KEY) || '{}');
   } catch (_) {
-    /* persistence is best-effort */
+    return {};
   }
 }
+
+function writeDeleteTokens(tokens) {
+  try {
+    globalThis.localStorage?.setItem(DELETE_TOKENS_KEY, JSON.stringify(tokens));
+  } catch (_) {
+    /* best-effort */
+  }
+}
+
+function rememberDeleteToken(roomId, token) {
+  const tokens = readDeleteTokens();
+  tokens[roomId] = token;
+  writeDeleteTokens(tokens);
+}
+
+function forgetDeleteToken(roomId) {
+  const tokens = readDeleteTokens();
+  delete tokens[roomId];
+  writeDeleteTokens(tokens);
+}
+
+const ownedRoomIds = () => new Set(Object.keys(readDeleteTokens()));
 
 function init() {
   const playerName = document.getElementById('playerName');
@@ -71,10 +124,17 @@ function init() {
   const chatLog = document.getElementById('chatLog');
   const chatForm = document.getElementById('chatForm');
   const chatInput = document.getElementById('chatInput');
+  const actionLog = document.getElementById('actionLog');
+  const battlefield = document.getElementById('battlefield');
+  const spawnButton = document.getElementById('spawnCard');
 
   let client = null;
   let myName = null;
   let currentRoom = null;
+  let imgBase = '/images';
+  fetchImageBase().then((base) => {
+    imgBase = base;
+  });
 
   const setStatus = (msg) => {
     if (lobbyStatus) lobbyStatus.textContent = msg;
@@ -83,10 +143,22 @@ function init() {
   async function loadRooms() {
     try {
       const { rooms } = await listRooms();
-      renderRooms(roomList, rooms);
+      renderRooms(roomList, rooms, ownedRoomIds());
       setStatus('');
     } catch (_) {
       setStatus('Could not load rooms.');
+    }
+  }
+
+  async function closeRoom(roomId) {
+    const token = readDeleteTokens()[roomId];
+    if (!token) return;
+    try {
+      await deleteRoom(roomId, token);
+      forgetDeleteToken(roomId);
+      loadRooms();
+    } catch (_) {
+      setStatus('Could not close the room.');
     }
   }
 
@@ -115,6 +187,7 @@ function init() {
     }
     currentRoom = id;
     if (chatLog) chatLog.innerHTML = '';
+    if (actionLog) actionLog.innerHTML = '';
     setStatus(`Joining ${id}…`);
     client = connectRoom(id, myName);
     client.events.addEventListener('HELLO', (e) => {
@@ -124,9 +197,13 @@ function init() {
     });
     client.events.addEventListener('STATE', (e) => {
       renderPlayers(playerList, Object.keys(e.detail.state?.player_states ?? {}), myName);
+      renderBoard(battlefield, e.detail.state?.cards ?? [], imgBase);
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
+    });
+    client.events.addEventListener('LOG', (e) => {
+      appendLogMessage(actionLog, e.detail.text);
     });
     client.events.addEventListener('disconnected', () => {
       if (roomStatus) roomStatus.textContent = 'Disconnected from the room.';
@@ -141,6 +218,72 @@ function init() {
     if (!text || !client || !currentRoom) return;
     client.send(chatFrame(currentRoom, text));
     chatInput.value = '';
+  });
+
+  if (battlefield) {
+    initBoardInteractions(battlefield, (action) => {
+      if (client && currentRoom) client.send(boardFrame(currentRoom, action));
+    });
+  }
+
+  const rail = document.getElementById('rail');
+  const roomBody = document.querySelector('.room-body');
+  const railResizer = document.getElementById('railResizer');
+  if (roomBody && railResizer) {
+    const setRailWidth = (width) => {
+      const rect = roomBody.getBoundingClientRect();
+      const clamped = Math.max(240, Math.min(rect.width - 360, width));
+      roomBody.style.gridTemplateColumns = `1fr 8px ${clamped}px`;
+    };
+    initSeparator(railResizer, {
+      onPointer: (e) => setRailWidth(roomBody.getBoundingClientRect().right - e.clientX),
+      onKey: (e) => {
+        const width = rail?.getBoundingClientRect().width ?? 340;
+        if (e.key === 'ArrowLeft') setRailWidth(width + 24);
+        else if (e.key === 'ArrowRight') setRailWidth(width - 24);
+        else return false;
+        return true;
+      },
+    });
+  }
+
+  const railSplitter = document.getElementById('railSplitter');
+  if (rail && railSplitter) {
+    const setLogHeight = (height) => {
+      const max = rail.getBoundingClientRect().height - 200;
+      const clamped = Math.max(120, Math.min(max, height));
+      rail.style.gridTemplateRows = `${clamped}px 10px 1fr`;
+    };
+    initSeparator(railSplitter, {
+      onPointer: (e) => setLogHeight(e.clientY - rail.getBoundingClientRect().top),
+      onKey: (e) => {
+        const logHeight = rail.querySelector('.pane')?.getBoundingClientRect().height ?? 200;
+        if (e.key === 'ArrowUp') setLogHeight(logHeight - 24);
+        else if (e.key === 'ArrowDown') setLogHeight(logHeight + 24);
+        else return false;
+        return true;
+      },
+    });
+  }
+
+  spawnButton?.addEventListener('click', async () => {
+    if (!client || !currentRoom) return;
+    try {
+      const { cards } = await (await fetch('/api/cards/random/1')).json();
+      const picked = cards?.[0];
+      if (!picked) return;
+      client.send(
+        addCardFrame(currentRoom, {
+          id: `${picked.card_id}-${Date.now()}-${Math.floor(Math.random() * 1e6)}`,
+          name: picked.name,
+          img: picked.image_path,
+          x: 20 + Math.floor(Math.random() * 220),
+          y: 20 + Math.floor(Math.random() * 220),
+        }),
+      );
+    } catch (_) {
+      if (roomStatus) roomStatus.textContent = 'Could not spawn a card.';
+    }
   });
 
   createForm?.addEventListener('submit', async (e) => {
@@ -164,6 +307,11 @@ function init() {
   });
 
   roomList?.addEventListener('click', (e) => {
+    const closeId = e.target?.dataset?.closeId;
+    if (closeId) {
+      closeRoom(closeId);
+      return;
+    }
     const id = e.target?.dataset?.roomId;
     if (id) joinRoom(id);
   });

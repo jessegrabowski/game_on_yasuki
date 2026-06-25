@@ -100,12 +100,9 @@ async def get_room(room_id: str):
 @router.delete("/rooms/{room_id}")
 @limiter.limit("10/minute")
 async def delete_room(request: Request, room_id: str, x_delete_token: str = Header(...)):
-    """
-    Delete a room.
+    """Delete a room, removing it from the listing and dropping its in-memory game state.
 
     Requires the room's delete token in the ``X-Delete-Token`` header (returned at room creation).
-    Typically called when a game ends or by admin for cleanup; all connected players are
-    disconnected.
     """
     if room_id not in rooms:
         raise HTTPException(status_code=404, detail=f"Room '{room_id}' not found")
@@ -114,6 +111,11 @@ async def delete_room(request: Request, room_id: str, x_delete_token: str = Head
 
     room_name = rooms[room_id]["name"]
     del rooms[room_id]
+
+    # Imported lazily: websocket.py imports this module at load, so a top-level import would cycle.
+    from yasuki_web.websocket import active_game_rooms
+
+    active_game_rooms.pop(room_id, None)
 
     logger.info(f"Deleted room {room_id}: {room_name}")
 

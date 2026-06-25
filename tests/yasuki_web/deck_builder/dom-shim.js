@@ -29,6 +29,7 @@ function makeElement(tag) {
     style: {},
     classList: makeClassList(),
     appendChild(child) { children.push(child); return child; },
+    replaceChildren(...nodes) { children.length = 0; children.push(...nodes); },
     addEventListener(evt, fn) {
       if (!listeners[evt]) listeners[evt] = [];
       listeners[evt].push(fn);

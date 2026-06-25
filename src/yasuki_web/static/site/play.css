@@ -61,15 +61,13 @@
   font: inherit;
 }
 
-.rooms-header,
-.room-bar {
+.rooms-header {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
 }
 
-.room-list,
-.player-list {
+.room-list {
   list-style: none;
   padding: 0;
   margin: 0.5rem 0;
@@ -90,46 +88,425 @@
   font-size: 0.9rem;
 }
 
-.player-list li {
-  padding: 0.4rem 0;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-}
-
-.room-id {
-  font-family: monospace;
-}
-
-.chat-log {
-  list-style: none;
-  padding: 0.5rem;
-  margin: 0.5rem 0;
-  height: 12rem;
-  overflow-y: auto;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 6px;
-}
-
-.chat-log li {
-  padding: 0.15rem 0;
-}
-
-.chat-sender {
-  font-weight: 600;
-}
-
-.chat-form {
+.room-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
-.chat-form input {
-  flex: 1;
-  padding: 0.5rem;
-  font: inherit;
+.close-btn {
+  color: #9c4a35;
+  border-color: rgba(156, 74, 53, 0.4);
 }
 
 .status-line {
   min-height: 1.2em;
   opacity: 0.8;
   font-size: 0.9rem;
+}
+
+/* ── Room: a game client laid out like a table — large board, linked log/chat rail ────────────── */
+
+.room {
+  --r-panel: #fbf7ef;
+  --r-surface: #f4edde;
+  --r-bg: #e8e0d0;
+  --r-ink: #2c2620;
+  --r-ink-dim: #7c7160;
+  --r-line: rgba(60, 48, 28, 0.16);
+  --r-line-soft: rgba(60, 48, 28, 0.08);
+  --r-gold: #9a7b3f;
+  --r-gold-soft: rgba(154, 123, 63, 0.16);
+  --r-warn: #9c4a35;
+
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  background: var(--r-bg);
+  color: var(--r-ink);
+}
+
+/* Source order matters: this must follow the display:flex rule to win when [hidden] is present. */
+.room[hidden] {
+  display: none;
+}
+
+.room-topbar {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 0.6rem 1.25rem;
+  background: var(--r-panel);
+  border-bottom: 1px solid var(--r-line);
+}
+
+.room-ident {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.room-ident .torii {
+  color: var(--r-gold);
+  font-size: 1.15rem;
+}
+
+.room-kicker {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.7rem;
+  color: var(--r-ink-dim);
+}
+
+.room .room-id {
+  font-family: ui-monospace, "SFMono-Regular", monospace;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.seats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.seats li {
+  padding: 0.2rem 0.7rem;
+  border: 1px solid var(--r-line);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.5);
+  font-size: 0.92rem;
+}
+
+.seats .you {
+  color: var(--r-gold);
+  font-style: italic;
+}
+
+.room-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.room .btn {
+  font: 500 0.92rem/1 "EB Garamond", serif;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--r-line);
+  border-radius: 7px;
+  background: #fff;
+  color: var(--r-ink);
+  cursor: pointer;
+  transition: border-color 0.12s, background 0.12s, color 0.12s;
+}
+
+.room .btn:hover {
+  border-color: var(--r-gold);
+}
+
+.room .btn:focus-visible {
+  outline: 2px solid var(--r-gold-soft);
+  outline-offset: 1px;
+}
+
+.room .btn-gold {
+  background: var(--r-gold);
+  border-color: var(--r-gold);
+  color: #fff;
+}
+
+.room .btn-gold:hover {
+  background: #876b34;
+}
+
+.room .btn-ghost {
+  background: transparent;
+}
+
+.room .btn-ghost:hover {
+  border-color: var(--r-warn);
+  color: var(--r-warn);
+}
+
+.room-body {
+  min-height: 0;
+  display: grid;
+  /* Rail starts narrow; the vertical resizer widens it (min 240px, board keeps >= 360px). */
+  grid-template-columns: 1fr 8px 280px;
+  background: var(--r-panel);
+}
+
+.rail-resizer {
+  display: grid;
+  place-items: center;
+  cursor: col-resize;
+  background: var(--r-panel);
+  border-left: 1px solid var(--r-line);
+}
+
+.rail-resizer::before {
+  content: "";
+  width: 3px;
+  height: 2.5rem;
+  border-radius: 3px;
+  background: var(--r-line);
+}
+
+.rail-resizer:hover::before,
+.rail-resizer:focus-visible::before {
+  background: var(--r-gold);
+}
+
+.rail-resizer:focus-visible {
+  outline: 2px solid var(--r-gold-soft);
+  outline-offset: -2px;
+}
+
+.board-stage {
+  position: relative;
+  min-width: 0;
+}
+
+.battlefield {
+  position: relative;
+  height: 100%;
+  background: radial-gradient(120% 100% at 50% 0%, #f7f0e2, var(--r-surface));
+  box-shadow: inset 0 0 90px rgba(60, 48, 28, 0.05);
+  overflow: hidden;
+}
+
+/* A faint gold midline divides the two players' halves of the table. */
+.battlefield::after {
+  content: "";
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--r-gold-soft), transparent);
+  pointer-events: none;
+}
+
+.board-card {
+  position: absolute;
+  width: 90px;
+  height: 128px;
+  border: 1px solid rgba(60, 48, 28, 0.35);
+  border-radius: 6px;
+  background: #efe7d6;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: box-shadow 0.12s;
+}
+
+.board-card:hover {
+  box-shadow: 0 2px 9px rgba(0, 0, 0, 0.22);
+}
+
+.board-card:active {
+  cursor: grabbing;
+  box-shadow: 0 7px 18px rgba(0, 0, 0, 0.3);
+}
+
+.board-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.board-card.bowed {
+  transform: rotate(90deg);
+}
+
+.board-card.face-down {
+  background: linear-gradient(135deg, #7a5a36, #5e421f);
+  border-color: #46330f;
+}
+
+.board-card.face-down::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 6px;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 240, 210, 0.1), transparent 48%);
+}
+
+.board-menu {
+  position: absolute;
+  z-index: 20;
+  min-width: 9rem;
+  margin: 0;
+  padding: 0.3rem 0;
+  list-style: none;
+  background: var(--r-panel);
+  color: var(--r-ink);
+  border: 1px solid var(--r-line);
+  border-radius: 7px;
+  box-shadow: 0 8px 20px rgba(40, 30, 15, 0.22);
+  font-size: 0.92rem;
+}
+
+.board-menu li {
+  padding: 0.35rem 0.95rem;
+  cursor: pointer;
+}
+
+.board-menu li:hover {
+  background: var(--r-gold-soft);
+}
+
+.room-status {
+  position: absolute;
+  left: 1.6rem;
+  bottom: 1.6rem;
+  margin: 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--r-ink-dim);
+  pointer-events: none;
+}
+
+.room-status:empty {
+  display: none;
+}
+
+.rail {
+  display: grid;
+  grid-template-rows: 1fr 10px minmax(180px, 1fr);
+  min-height: 0;
+  background: var(--r-panel);
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 0.75rem 0.9rem;
+}
+
+.pane-title {
+  margin: 0 0 0.5rem;
+  font: 600 0.74rem/1 "EB Garamond", serif;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: var(--r-gold);
+}
+
+.action-log,
+.chat-log {
+  flex: 1;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+}
+
+.action-log li {
+  padding: 0.22rem 0;
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--r-ink-dim);
+  border-bottom: 1px solid var(--r-line-soft);
+}
+
+.pane-empty {
+  border-bottom: none !important;
+  opacity: 0.75;
+}
+
+.chat-log li {
+  padding: 0.22rem 0;
+  font-size: 0.95rem;
+}
+
+.chat-sender {
+  margin-right: 0.3rem;
+  font-weight: 600;
+  color: var(--r-gold);
+}
+
+.chat-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.chat-form input {
+  flex: 1;
+  padding: 0.5rem 0.6rem;
+  font: inherit;
+  border: 1px solid var(--r-line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.chat-form input:focus-visible {
+  outline: none;
+  border-color: var(--r-gold);
+  box-shadow: 0 0 0 2px var(--r-gold-soft);
+}
+
+.rail-splitter {
+  display: grid;
+  place-items: center;
+  cursor: row-resize;
+  background: var(--r-panel);
+  border-top: 1px solid var(--r-line);
+  border-bottom: 1px solid var(--r-line);
+}
+
+.rail-splitter::before {
+  content: "";
+  width: 2.5rem;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--r-line);
+}
+
+.rail-splitter:hover::before,
+.rail-splitter:focus-visible::before {
+  background: var(--r-gold);
+}
+
+.rail-splitter:focus-visible {
+  outline: 2px solid var(--r-gold-soft);
+  outline-offset: -2px;
+}
+
+@media (max-width: 860px) {
+  .room-body {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+  }
+
+  .rail-resizer {
+    display: none;
+  }
+
+  .board-stage {
+    min-height: 60vh;
+  }
+
+  .rail {
+    border-left: none;
+    border-top: 1px solid var(--r-line);
+    grid-template-rows: 200px 10px 260px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room .btn,
+  .board-card {
+    transition: none;
+  }
 }
