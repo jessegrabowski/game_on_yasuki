@@ -13,6 +13,13 @@ class ChatRequest(BaseModel):
     text: str = Field(min_length=1, max_length=500)
 
 
+class LoadDeckRequest(BaseModel):
+    # The deck-builder export YAML, parsed server-side into dynasty/fate/pre-game name lists. The cap
+    # is well above a full decklist (~3-4 KiB) but still bounded; the WS read loop allows a larger
+    # frame for this message than for realtime intents (see MAX_WS_MESSAGE_SIZE).
+    yaml: str = Field(min_length=1, max_length=16384)
+
+
 class IntentEnvelope(BaseModel):
     """A game intent on the wire: an op plus whichever targets that op needs. The same shape the
     action log persists (see ``encode_intent``); the server maps it to a core ``Intent`` and applies
@@ -71,13 +78,14 @@ class RemoveRequest(BaseModel):
 
 
 class ClientMessage(BaseModel):
-    type: Literal["JOIN", "INTENT", "SPAWN", "REMOVE", "CHAT", "PING"]
+    type: Literal["JOIN", "INTENT", "SPAWN", "REMOVE", "CHAT", "LOAD_DECK", "PING"]
     room: str = Field(max_length=64)
     join: JoinRequest | None = None
     intent: IntentEnvelope | None = None
     spawn: SpawnRequest | None = None
     remove: RemoveRequest | None = None
     chat: ChatRequest | None = None
+    load_deck: LoadDeckRequest | None = None
     since_seq: int | None = None
 
 

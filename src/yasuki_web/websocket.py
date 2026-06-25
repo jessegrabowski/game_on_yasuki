@@ -29,6 +29,7 @@ from yasuki_core.engine.table import TableState, BoardPos, Intent, Event, SpawnC
 from yasuki_core.engine.action_log import ActionLog, InitialRecord, ChatEntry, apply_and_log
 from yasuki_core.engine.redaction import redact
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.decklist import parse_deck_yaml
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -55,6 +56,8 @@ class GameRoom:
         self.state = TableState.empty_two_seat()
         self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
         self._spawn_count = 0
+        # Parsed decklists awaiting setup, keyed by seat.
+        self.pending_decks: dict[PlayerId, dict] = {}
         # Chat and log persist for the room's lifetime so a player who joins (or rejoins) sees what
         # came before. Capped to the most recent HISTORY_LIMIT of each.
         self.chat_history: list[dict] = []
@@ -166,6 +169,23 @@ class GameRoom:
             await self.broadcast_snapshots()
             await self._log_intent(seat, intent, events[0])
 
+    async def handle_load_deck(self, ws: WebSocket, yaml_text: str):
+        """Parse a deck-builder export YAML for the acting seat and stash its dynasty/fate/pre-game
+        name lists for setup. A decklist that yields no recognizable cards is rejected with `ERROR`
+        and nothing is stashed."""
+        seat = self.seats.get(ws)
+        if seat is None:
+            return
+        parsed = parse_deck_yaml(yaml_text)
+        if not (parsed["pre_game"] or parsed["dynasty"] or parsed["fate"]):
+            await ws.send_json(
+                ServerError(
+                    room=self.room_id, message="Deck has no recognizable cards"
+                ).model_dump()
+            )
+            return
+        self.pending_decks[seat] = parsed
+
     async def broadcast_snapshots(self):
         """Send each seated player its own redacted `SNAPSHOT`. This is the per-viewer leak fix:
         the opponent's hand and face-down cards are stubs in the bytes that reach the wrong client."""
@@ -243,7 +263,10 @@ async def evict_stale_rooms():
             logger.info(f"Evicted stale room {rid}")
 
 
-MAX_WS_MESSAGE_SIZE = 4096
+# Sized for the largest legitimate frame, a LOAD_DECK carrying a full decklist YAML (~3-4 KiB of
+# content, capped at 16 KiB by LoadDeckRequest). Realtime intents are tiny; the token-bucket
+# throttle below — not this per-frame cap — is what bounds a flood.
+MAX_WS_MESSAGE_SIZE = 32768
 
 # Per-connection message throttle (token bucket). The refill must exceed the drag send rate
 # (board.js DRAG_SEND_MS) or dragging a card drains the bucket and the server closes the socket; a
@@ -353,6 +376,10 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
             elif message.type == "CHAT":
                 if message.chat is not None:
                     await game_room.handle_chat(websocket, message.chat.text)
+
+            elif message.type == "LOAD_DECK":
+                if message.load_deck is not None:
+                    await game_room.handle_load_deck(websocket, message.load_deck.yaml)
 
             elif message.type == "PING":
                 await websocket.send_json({"type": "PONG"})
