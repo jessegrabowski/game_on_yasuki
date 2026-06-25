@@ -20,6 +20,7 @@ function makeElement(tag) {
     tagName: tag.toUpperCase(),
     children,
     childNodes: children,
+    parentNode: null,
     className: '',
     id: '',
     textContent: '',
@@ -28,17 +29,29 @@ function makeElement(tag) {
     dataset: {},
     style: {},
     classList: makeClassList(),
-    appendChild(child) { children.push(child); return child; },
+    appendChild(child) { child.parentNode = el; children.push(child); return child; },
     replaceChildren(...nodes) { children.length = 0; children.push(...nodes); },
+    remove() {
+      const siblings = el.parentNode?.children;
+      if (siblings) {
+        const i = siblings.indexOf(el);
+        if (i >= 0) siblings.splice(i, 1);
+      }
+      el.parentNode = null;
+    },
     addEventListener(evt, fn) {
       if (!listeners[evt]) listeners[evt] = [];
       listeners[evt].push(fn);
     },
     _listeners: listeners,
+    _emit(evt, event) { (listeners[evt] || []).forEach((fn) => fn(event)); },
+    setPointerCapture() {},
     querySelector(sel) { return null; },
     querySelectorAll(sel) { return []; },
     scrollIntoView() {},
-    getBoundingClientRect() { return { width: 200, height: 200, top: 0, left: 0 }; },
+    getBoundingClientRect() {
+      return { width: 200, height: 200, top: 0, left: 0, right: 200, bottom: 200 };
+    },
     get value() { return this._value || ''; },
     set value(v) { this._value = v; },
   };
@@ -52,12 +65,18 @@ globalThis.document = {
     if (!_elements[id]) _elements[id] = makeElement('div');
     return _elements[id];
   },
+  querySelector(sel) {
+    if (!_elements[sel]) _elements[sel] = makeElement('div');
+    return _elements[sel];
+  },
   createElement(tag) { return makeElement(tag); },
   querySelectorAll() { return []; },
   addEventListener() {},
   get activeElement() { return null; },
   get body() { return makeElement('body'); },
 };
+
+globalThis.CSS ??= { escape: (s) => String(s) };
 
 globalThis.IntersectionObserver = class {
   constructor() {}
