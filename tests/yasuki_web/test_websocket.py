@@ -2,7 +2,7 @@ import pytest
 from starlette.websockets import WebSocketDisconnect
 
 from yasuki_web import websocket as ws_module
-from yasuki_web.websocket import WS_MSG_BURST, _origin_allowed
+from yasuki_web.websocket import WS_MSG_BURST, MAX_WS_MESSAGE_SIZE, _origin_allowed
 
 
 def _make_room(client) -> str:
@@ -124,7 +124,7 @@ def test_full_room_rejects_further_connections(client):
 def test_oversized_frame_closes_the_connection(client):
     room_id = _make_room(client)
     with client.websocket_connect(f"/ws/{room_id}") as ws:
-        ws.send_text("x" * (4096 + 1))
+        ws.send_text("x" * (MAX_WS_MESSAGE_SIZE + 1))
         with pytest.raises(WebSocketDisconnect) as exc:
             ws.receive_json()
         assert exc.value.code == 1009
