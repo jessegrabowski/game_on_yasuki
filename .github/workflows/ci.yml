@@ -132,7 +132,7 @@ jobs:
           node --test --experimental-test-coverage --test-coverage-exclude='tests/**' \
             --test-reporter=spec --test-reporter-destination=stdout \
             --test-reporter=lcov --test-reporter-destination=coverage/coverage-js.lcov \
-            tests/yasuki_web/deck_builder/*.test.js
+            tests/yasuki_web/deck_builder/*.test.js tests/yasuki_web/site/*.test.js
 
       - name: Upload coverage file
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
