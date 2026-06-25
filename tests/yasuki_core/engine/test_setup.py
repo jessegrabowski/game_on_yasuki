@@ -4,7 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyCard
 from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
 from yasuki_core.game_pieces.factory import ResolvedDeck
 
 
@@ -79,6 +79,23 @@ def test_hand_discards_and_banishes_start_empty():
 
 def test_shuffle_order_is_reproducible_for_a_seed():
     assert _dynasty_order(_setup(dynasty_seed=7)) == _dynasty_order(_setup(dynasty_seed=7))
+
+
+def test_pre_game_cards_are_dealt_face_up_to_the_battlefield():
+    state = TableState.empty_two_seat()
+    resolved = _resolved()
+    stronghold = StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1)
+    sensei = SenseiCard(id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1)
+    resolved.pre_game.extend([stronghold, sensei])
+
+    setup_seat(state, PlayerId.P1, resolved, dynasty_seed=1, fate_seed=2)
+
+    assert stronghold in state.battlefield.cards and sensei in state.battlefield.cards
+    assert stronghold.face_up and sensei.face_up
+    assert all(card.id in state.positions for card in (stronghold, sensei))
+    deck_cards = [card for deck in state.decks.values() for card in deck.cards]
+    assert stronghold not in deck_cards and sensei not in deck_cards
+    state.validate()  # raises on any structural violation
 
 
 def test_the_table_validates_after_setup():
