@@ -22,6 +22,7 @@ class DynastyPersonality(DynastyCard):
     force: int = 0
     chi: int = 0
     personal_honor: int = 0
+    honor_requirement: int = 0
     image_front: Path | None = DEFAULT_PERSONALITY
 
 

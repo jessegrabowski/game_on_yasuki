@@ -13,6 +13,7 @@ class L5RCard:
     keywords: tuple[str, ...] = ()
     traits: tuple[str, ...] = ()
     text: str = ""
+    is_unique: bool = False
     bowed: bool = False
     face_up: bool = True
     inverted: bool = False
