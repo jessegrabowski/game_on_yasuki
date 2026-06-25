@@ -115,7 +115,7 @@ cards:
   rarity: Promo
   artist: Diego Gisbert Llorens
   flavor_text: <i>"A Lion's duty is always foremost, but duty changes over time."</i>
-  legal_date: Upon Release
+  legal_date: 2012-12-01
 - title: Akodo Dairuko
   types: *id001
   decks: *id002
@@ -166,7 +166,7 @@ cards:
   artist: Jeff Hill
   flavor_text: <i>He traveled across the Empire after his gempukku. After a year passed, he asked permission
     to continue his musha shugyo… and his journey continues to this day.</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Akodo Kamina
   types:
   - Personality
@@ -194,7 +194,7 @@ cards:
   artist: Jason Engle
   flavor_text: <i>"We are the unrivaled masters of war. It has been proven time and time again, and we
     will show anyone who would challenge our might."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Ambush
   types:
   - Strategy
@@ -224,7 +224,7 @@ cards:
   rarity: Promo
   artist: Conceptopolis
   flavor_text: <i>"I could have sworn I heard something..."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Ambush Pass
   types:
   - Region
@@ -320,7 +320,7 @@ cards:
   artist: Patrick McEvoy
   flavor_text: <i>The family is widely known for their pacifism. Many have set their beliefs aside since
     the Destroyer War, intent on protecting their loved ones with all of their talents.</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Asahina Michiru
   types:
   - Personality
@@ -347,7 +347,7 @@ cards:
   rarity: Promo
   artist: Jorge Matar
   flavor_text: <i>"I will cause no harm to our enemies, but I will not allow harm to come to you either."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Asako Heiwa
   types:
   - Personality
@@ -376,7 +376,7 @@ cards:
   artist: Manuel Calderon
   flavor_text: <i>"The Dark Fire has waned and the people of the Phoenix can rest again. It is my responsibility
     to soothe our wounds. It is the Shiba's to rejoin the southern front."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Asako House Guard
   types:
   - Follower
@@ -400,7 +400,7 @@ cards:
   rarity: Promo
   artist: Patrick McEvoy
   flavor_text: <i>"The Asako were once thought of as unimportant. Never again." </i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Asako Moeru
   types:
   - Personality
@@ -428,7 +428,7 @@ cards:
   rarity: Promo
   artist: Lake Hurwitz
   flavor_text: <i>"No! Your status is nothing to me! You, and your students, shall not escape judgment."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Bandit's Sanctuary
   types:
   - Holding
@@ -554,7 +554,7 @@ cards:
   rarity: Promo
   artist: Conceptopolis
   flavor_text: <i>"Soon, old crimes shall be avenged."</i>
-  legal_date: Upon Release
+  legal_date: 2012-12-01
 - title: Bayushi Nitoshi
   types: *id006
   decks: *id007
@@ -609,7 +609,7 @@ cards:
   artist: Steve Argyle
   flavor_text: <i>"Tasu helped stop Shoju when he rose. His grandson Tenzan hopes to do the same with
     Paneki." - Bayushi Keirei</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Bayushi Waru
   types:
   - Personality
@@ -637,7 +637,7 @@ cards:
   artist: Gemma Tegelaers
   flavor_text: <i>"No! I will not hear more of your lies! You insulted my master, and for that you will
     suffer unspeakably!"</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Bokken of the Ruby Champion
   types:
   - Item
@@ -725,7 +725,7 @@ cards:
   artist: Conceptopolis
   flavor_text: <i>"Guard the left, brother, and you the right. I shall take the center. Together, we cannot
     be overcome."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Carpenter Castle
   types:
   - Stronghold
@@ -873,7 +873,7 @@ cards:
   rarity: Promo
   artist: Britt Martin
   flavor_text: <i>"Finding men is an art all its own, and as a Crane it is my duty to excel in an art."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Daifuke
   types:
   - Follower
@@ -923,7 +923,7 @@ cards:
   artist: Edwin David
   flavor_text: <i>"Do nothing yet. Wait for the whelps that carry the Tao. We act only when they have
     made their choice."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Daigotsu Hirose
   types:
   - Personality
@@ -985,7 +985,7 @@ cards:
   rarity: Promo
   artist: Conceptopolis
   flavor_text: <i>"Bow before me, or fall before me."</i>
-  legal_date: Upon Release
+  legal_date: 2012-12-01
 - title: Daigotsu Kanpeki
   types: *id011
   decks: *id012
@@ -1035,7 +1035,7 @@ cards:
   artist: Franz Vohwinkel
   flavor_text: <i>"There is no point in holding back our potential. Give us freedom to run rampant upon
     our enemies!"</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Dark Naga Scouts
   types:
   - Follower
@@ -1149,7 +1149,7 @@ cards:
   artist: Rebekah Norris
   flavor_text: <i>“All the strings of power in the Empire run towards the Imperial Palace. And I intend
     to have my hand on all of them.”</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Doji Genshin
   types:
   - Personality
@@ -1175,7 +1175,7 @@ cards:
   artist: Gemma Tegelaers
   flavor_text: <i>"They think I will not be able to discover who is guilty. They think I will not be able
     to find them. They think I can be frightened or bought off. They think they can best me in a duel."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Doji Makoto
   types: &id016
   - Personality
@@ -1206,7 +1206,7 @@ cards:
   rarity: Promo
   artist: Conceptopolis
   flavor_text: <i>"I am lord of the Crane. I will allow no one to harm my clan."</i>
-  legal_date: Upon Release
+  legal_date: 2012-12-01
 - title: Doji Makoto
   types: *id016
   decks: *id017
@@ -1299,7 +1299,7 @@ cards:
   rarity: Promo
   artist: IFS
   flavor_text: <i>"There is no escape for you!"</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Enigma
   types:
   - Personality
@@ -1857,7 +1857,7 @@ cards:
   rarity: Promo
   artist: Patrick McEvoy
   flavor_text: <i>"Your lair will remain unknown, master." </i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Goju Yurishi
   types:
   - Personality
@@ -1887,7 +1887,7 @@ cards:
   rarity: Promo
   artist: Manuel Calderon
   flavor_text: <i>Though they would never admit it, even the other Goju fear him.</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Govern the Land
   types:
   - Strategy
@@ -2097,7 +2097,7 @@ cards:
   rarity: Promo
   artist: Shen Fei
   flavor_text: <i>"Grant me wisdom, great-grandfather. Show me the path."</i>
-  legal_date: Upon Release
+  legal_date: 2012-12-01
 - title: Hida Kisada (Emperor)
   types: *id021
   decks: *id022
@@ -2146,7 +2146,7 @@ cards:
   artist: Caio Cacau
   flavor_text: <i>The Empire faced no wars as it recovered from the devastating push from Kali-Ma's forces.
     The Crab continued to train, fight, and wait.</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Hidden Falls Dojo
   types:
   - Stronghold
@@ -2231,7 +2231,7 @@ cards:
   artist: Fares Maese
   flavor_text: <i>"With the Spider, we clutch a serpent to our breast. Our vigil must never waver. Their
     sickness can never become ours."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Hofukushu's Vengeance
   types:
   - Celestial
@@ -2300,7 +2300,7 @@ cards:
   rarity: Promo
   artist: Patrick McEvoy
   flavor_text: <i>Since the first days, the Ikoma have stood guard. </i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Ikoma Shinju
   types:
   - Personality
@@ -2326,7 +2326,7 @@ cards:
   artist: Héctor Herrera
   flavor_text: <i>"When possible, choose the terrain on which to fight. When not possible, destroy the
     terrain your opponent has chosen."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Imminent Victory
   types:
   - Strategy
@@ -2506,7 +2506,7 @@ cards:
   artist: Matthew Starbuck
   flavor_text: <i>"The kami of water are always willing to assist. The challenge is remaining dry after
     receiving their attentions."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: It Was a Cat
   types:
   - Strategy
@@ -2559,7 +2559,7 @@ cards:
   artist: Matt Zeilinger
   flavor_text: <i>"She was born an Utaku, but her training with the Iuchi proved her of such exceptional
     ability that she was wed into the daimyo's extended family and took their name." - Moto Chen </i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Jade Embrace
   types:
   - Spell
@@ -2687,7 +2687,7 @@ cards:
   artist: Luis NCT
   flavor_text: <i>"Some men are great leaders because of their innate brilliance. Others, because of a
     terrible cruelty." - Kaiu Kawachi</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Kaiu House Guard
   types:
   - Follower
@@ -2711,7 +2711,7 @@ cards:
   rarity: Promo
   artist: Patrick McEvoy
   flavor_text: <i>"You don't believe the efficacy of our machines? Let me show you."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Kakita Izumiko
   types:
   - Personality
@@ -2905,7 +2905,7 @@ cards:
   rarity: Promo
   artist: Matt Zeilinger
   flavor_text: <i>"With your help I shall avenge your death, brother."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Kitsuki Daisuke
   types:
   - Personality
@@ -2934,7 +2934,7 @@ cards:
   flavor_text: <i>"By questioning my evidence, you question my methods. By questioning my methods, you
     question my school. By questioning my school, you question my honor. I demand an opportunity to respond
     to your slight."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Kitsune Tokoru
   types:
   - Personality
@@ -2962,7 +2962,7 @@ cards:
   rarity: Promo
   artist: Mike Capprotti
   flavor_text: <i>"I trust you, of course, but my friend has doubts about your intentions in our forest."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Know No Fear
   types:
   - Strategy
@@ -2984,7 +2984,7 @@ cards:
   rarity: Promo
   artist: Héctor Herrera
   flavor_text: <i>“I fear nothing, not even death. That is why death shall not claim me today.”</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Koshin Keep
   types:
   - Stronghold
@@ -3368,7 +3368,7 @@ cards:
   artist: Mario Wibisono
   flavor_text: <i>"No matter how benign the Naga were once, if they are eager to leap onto my swords,
     I am happy to oblige them."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Mirumoto Shikei
   types: &id026
   - Personality
@@ -3402,7 +3402,7 @@ cards:
   rarity: Promo
   artist: Heather Kreiter
   flavor_text: <i>"My bloodline? I am Dragon. I will not be defined by you."</i>
-  legal_date: Upon Release
+  legal_date: 2012-12-01
 - title: Mirumoto Shikei
   types: *id026
   decks: *id027
@@ -3479,7 +3479,7 @@ cards:
   artist: Tony Foti
   flavor_text: <i>"These lands belong to the Mantis, and the interlopers sent by Iweko are not needed
     or wanted."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Moto House Guard
   types:
   - Follower
@@ -3503,7 +3503,7 @@ cards:
   rarity: Promo
   artist: Patrick McEvoy
   flavor_text: <i>"Our Champion leads us, and the Khan marshals our armies. We protect both." </i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Moto Isul
   types:
   - Personality
@@ -3529,7 +3529,7 @@ cards:
   artist: Aurelien Hubert
   flavor_text: <i>After the Unicorn caravan from the Colonies was attacked, Naleesh's distrust cast a
     wide net</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Moto Naleesh
   types: &id031
   - Personality
@@ -3565,7 +3565,7 @@ cards:
   rarity: Promo
   artist: Drew Baker
   flavor_text: <i>The Living Goddess leads her Clan with grace and cunning.</i>
-  legal_date: Upon Release
+  legal_date: 2012-12-01
 - title: Moto Naleesh
   types: *id031
   decks: *id032
@@ -3613,7 +3613,7 @@ cards:
   artist: Conceptopolis
   flavor_text: <i>“Hah!” the others laughed. “Cannot hold his drink, that one!” The assassin smiled in
     the shadows. By the time the truth was uncovered, he would be a province away.</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Omigawa
   types:
   - Personality
@@ -3642,7 +3642,7 @@ cards:
   rarity: Promo
   artist: Edwin David
   flavor_text: <i>"Do you see your brothers in my face, samurai? When the Destroyers fall, you are next!"</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: One With All
   types:
   - Strategy
@@ -4052,7 +4052,7 @@ cards:
   rarity: Promo
   artist: Conceptopolis
   flavor_text: <i>“The day has come, villain! Today my father shall be avenged!”</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Rice Farmer
   types:
   - Follower
@@ -4526,7 +4526,7 @@ cards:
   artist: Glen Osterberger
   flavor_text: <i>"Earth is strong in him and keeps his Fire steady," Sanetomo said. "He will serve the
     clan well in our unfortunate disagreements with the Lion Clan."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Shiba Tsukimi
   types: &id036
   - Personality
@@ -4561,7 +4561,7 @@ cards:
   - Modern
   rarity: Promo
   artist: Charles Urbach
-  legal_date: Upon Release
+  legal_date: 2012-12-01
 - title: Shiba Tsukimi
   types: *id036
   decks: *id037
@@ -4633,7 +4633,7 @@ cards:
   artist: Edwin David
   flavor_text: <i>"Our duty is to secure the land route to the Colonies, and we will not falter. Be proud,
     brothers! We are the guardians of the Empire!" </i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Shiro Chugo
   types:
   - Stronghold
@@ -4695,7 +4695,7 @@ cards:
   artist: Wen Juinn
   flavor_text: <i>"The Scorpion thrive on weakness and vice. They enjoy nothing more than bringing ruin
     upon the righteous." - Akodo Kano</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Shosuro Konishi
   types:
   - Personality
@@ -4721,7 +4721,7 @@ cards:
   flavor_text: <i>Before being taught the subtle arts, some Scorpion shinobi are taught acrobatics, exotic
     weaponry, and other esoteric skills. The hope is that the foolish will die in the performance of their
     duties, so that only the sensible remain to learn the true secrets of the clan.</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Shrine to Hofukushu
   types:
   - Holding
@@ -4875,7 +4875,7 @@ cards:
   rarity: Promo
   artist: Shen Fei
   flavor_text: <i>The old tricks are the best.</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Soshi House Guard
   types:
   - Follower
@@ -4899,7 +4899,7 @@ cards:
   rarity: Promo
   artist: Patrick McEvoy
   flavor_text: <i>They fight their enemies on the battlefield and court - wherever they may be found.</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Steel Soul Dojo
   types:
   - Stronghold
@@ -4940,7 +4940,7 @@ cards:
   artist: IFS
   flavor_text: <i>The ninja’s speed countered the monk’s power. The two circled one another, looking for
     any weakness. Both knew only one would survive the encounter.</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Suitengu's Blessing
   types:
   - Celestial
@@ -5099,7 +5099,7 @@ cards:
   artist: Patrick McEvoy
   flavor_text: <i>They delve deeper and deeper into the heart of the volcano to improve their connection
     to the elements.</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Tamori Potion
   types:
   - Strategy
@@ -5143,7 +5143,7 @@ cards:
   artist: Albert Tavira
   flavor_text: <i>"As always, they insist that their paths are their own, and that no others are fit to
     judge their conduct. Their secrecy and eccentricity raise unsettling questions." - Isawa Mitsuko</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Taufrique
   types:
   - Follower
@@ -5538,7 +5538,7 @@ cards:
   rarity: Promo
   artist: Lee Smith
   flavor_text: <i>“Arrows? You hope to stop me with arrows? Fools! You face the Crab!”</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: The Isha's Yumi
   types:
   - Item
@@ -6164,7 +6164,7 @@ cards:
   rarity: Promo
   artist: Britt Martin
   flavor_text: <i>"My enlightenment shall be found in battle, on the bodies of my victims."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Tonbo Jotsu
   types:
   - Personality
@@ -6257,7 +6257,7 @@ cards:
   artist: Patrick McEvoy
   flavor_text: <i>"The forests of the Colonies may have their dangers, but we have learned to protect
     ourselves from the predators."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Tsuruchi Nishima
   types:
   - Personality
@@ -6313,7 +6313,7 @@ cards:
   artist: Troy Graham
   flavor_text: <i>"I never dreamed to find myself in a land such as this, with wonders such as these.
     If this is my duty, then truly I have been blessed."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Unfavorable Tides
   types:
   - Spell
@@ -6414,7 +6414,7 @@ cards:
   rarity: Promo
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"The betrothal of Unicorn and Dragon Champions is a matter of increasing debate."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Utaku Sang-Ju
   types:
   - Personality
@@ -6482,7 +6482,7 @@ cards:
   artist: Diego Gisbert Llorens
   flavor_text: <i>“Shoot me if you wish. Stab me if you must. You will have to do better than that to
     kill me, and as long as I live, this village will not be touched by you.”</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: War Elephant
   types:
   - Personality
@@ -6644,7 +6644,7 @@ cards:
   rarity: Promo
   artist: Stu Barnes
   flavor_text: <i>"What is this pittance? Come back when you are serious."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Yoritomo Hiromi
   types: &id041
   - Personality
@@ -6676,7 +6676,7 @@ cards:
   rarity: Promo
   artist: Adam Schumpert
   flavor_text: <i>His brooding rage has given him the name Growing Storm.</i>
-  legal_date: Upon Release
+  legal_date: 2012-12-01
 - title: Yoritomo Hiromi
   types: *id041
   decks: *id042
@@ -6727,7 +6727,7 @@ cards:
   rarity: Promo
   artist: MuYoung Kim
   flavor_text: <i>"There is a profit to be made here. Enough for the clan, and enough for me as well."</i>
-  legal_date: Upon Release
+  legal_date: 2012-06-01
 - title: Yozo's Inspiration
   types:
   - Event
