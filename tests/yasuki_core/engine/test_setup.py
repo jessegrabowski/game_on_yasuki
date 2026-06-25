@@ -98,6 +98,33 @@ def test_pre_game_cards_are_dealt_face_up_to_the_battlefield():
     state.validate()  # raises on any structural violation
 
 
+def _setup_with_pregame(*pre_game):
+    state = TableState.empty_two_seat()
+    resolved = _resolved()
+    resolved.pre_game.extend(pre_game)
+    setup_seat(state, PlayerId.P1, resolved, dynasty_seed=1, fate_seed=2)
+    return state
+
+
+def test_starting_honor_sums_stronghold_and_sensei():
+    state = _setup_with_pregame(
+        StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10),
+        SenseiCard(id="se", name="Sensei", side=Side.FATE, starting_honor=5),
+    )
+    assert state.seats[PlayerId.P1].honor == 15
+
+
+def test_starting_honor_from_a_stronghold_alone_is_its_base():
+    state = _setup_with_pregame(
+        StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10)
+    )
+    assert state.seats[PlayerId.P1].honor == 10
+
+
+def test_a_deck_without_a_stronghold_starts_at_zero_honor():
+    assert _setup().seats[PlayerId.P1].honor == 0
+
+
 def test_the_table_validates_after_setup():
     state = _setup()
     state.validate()  # raises on any structural violation
