@@ -4,7 +4,18 @@
 import { esc, fetchImageBase } from './card-common.js';
 import { listRooms, createRoom, deleteRoom } from './rooms-api.js';
 import { connectRoom } from './ws-client.js';
-import { renderBoard, spawnMessage, initBoardInteractions, highlightCard } from './board.js';
+import {
+  renderBoard,
+  renderTableau,
+  renderHand,
+  renderPanel,
+  spawnMessage,
+  drawIntent,
+  initBoardInteractions,
+  highlightCard,
+  deckAnchor,
+  placePregameCards,
+} from './board.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -157,6 +168,12 @@ export function init() {
   const chatInput = document.getElementById('chatInput');
   const actionLog = document.getElementById('actionLog');
   const battlefield = document.getElementById('battlefield');
+  const opponentTableau = document.getElementById('opponentTableau');
+  const selfTableau = document.getElementById('selfTableau');
+  const opponentHand = document.getElementById('opponentHand');
+  const selfHand = document.getElementById('selfHand');
+  const opponentPanel = document.getElementById('opponentPanel');
+  const selfPanel = document.getElementById('selfPanel');
   const spawnButton = document.getElementById('spawnCard');
   const loadDeckButton = document.getElementById('loadDeckButton');
   const deckFileInput = document.getElementById('deckFileInput');
@@ -232,12 +249,32 @@ export function init() {
       if (roomStatus) roomStatus.textContent = '';
     });
     client.events.addEventListener('SNAPSHOT', (e) => {
-      const seats = e.detail.snapshot?.seats ?? {};
+      const snapshot = e.detail.snapshot ?? {};
+      const seats = snapshot.seats ?? {};
       const present = Object.values(seats)
         .filter((seat) => seat.connected)
         .map((seat) => seat.name);
       renderPlayers(playerList, present, myName);
-      renderBoard(battlefield, e.detail.snapshot?.battlefield ?? [], imgBase);
+      const you = snapshot.your_seat;
+      if (!you) {
+        renderBoard(battlefield, snapshot.battlefield ?? [], imgBase);
+        return;
+      }
+      const opponent = you === 'P1' ? 'P2' : 'P1';
+      const handOf = (seat) => snapshot.zones?.[`${seat}:hand`] ?? [];
+      // Tableaus first so the dynasty decks exist to anchor each seat's loose pre-game cards against.
+      renderTableau(selfTableau, you, snapshot, imgBase);
+      renderTableau(opponentTableau, opponent, snapshot, imgBase);
+      const anchorFor = (owner, isViewer) =>
+        deckAnchor(isViewer ? selfTableau : opponentTableau, battlefield, isViewer);
+      const onTable = placePregameCards(snapshot.battlefield ?? [], you, anchorFor);
+      renderBoard(battlefield, onTable, imgBase);
+      renderHand(selfHand, handOf(you), imgBase);
+      renderHand(opponentHand, handOf(opponent), imgBase);
+      if (selfHand) selfHand.dataset.owner = you;
+      if (opponentHand) opponentHand.dataset.owner = opponent;
+      renderPanel(selfPanel, seats[you] ?? {});
+      renderPanel(opponentPanel, seats[opponent] ?? {});
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
@@ -266,6 +303,12 @@ export function init() {
   const sendToRoom = (frame) => {
     if (client && currentRoom) client.send(frame);
   };
+
+  // Double-click one of your decks to draw its top card; the server routes where it lands.
+  selfTableau?.addEventListener('dblclick', (e) => {
+    const deck = e.target.closest?.('.deck');
+    if (deck) sendToRoom({ ...drawIntent(deck.dataset.owner, deck.dataset.side), room: currentRoom });
+  });
 
   const submitDeck = (yaml) => {
     const text = yaml?.trim();
@@ -299,13 +342,17 @@ export function init() {
   goldfishButton?.addEventListener('click', () => sendToRoom(readyFrame(currentRoom, { solo: true })));
   newGameButton?.addEventListener('click', () => sendToRoom(resetFrame(currentRoom)));
 
-  if (battlefield) {
-    initBoardInteractions(battlefield, (message) => sendToRoom({ ...message, room: currentRoom }));
+  const boardStage = document.getElementById('boardStage');
+  if (boardStage && battlefield) {
+    initBoardInteractions(boardStage, battlefield, (message) =>
+      sendToRoom({ ...message, room: currentRoom }),
+    );
   }
 
   actionLog?.addEventListener('click', (e) => {
     const link = e.target?.closest?.('.log-card-link');
-    if (link && battlefield) highlightCard(battlefield, link.dataset.cardId);
+    // Search the whole stage, not just the battlefield: a named card may be in a province or discard.
+    if (link && boardStage) highlightCard(boardStage, link.dataset.cardId);
   });
 
   const rail = document.getElementById('rail');

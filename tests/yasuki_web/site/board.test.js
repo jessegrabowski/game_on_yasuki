@@ -4,6 +4,9 @@ import assert from 'node:assert/strict';
 import { resetDOM } from '../deck_builder/dom-shim.js';
 import {
   renderBoard,
+  renderTableau,
+  renderHand,
+  renderPanel,
   dragPosition,
   intentMessage,
   spawnMessage,
@@ -11,40 +14,63 @@ import {
   moveIntent,
   flipIntent,
   bowIntent,
+  drawIntent,
   initBoardInteractions,
   highlightCard,
+  placePregameCards,
 } from '../../../src/yasuki_web/static/site/board.js';
 
 beforeEach(() => {
   resetDOM();
 });
 
-// A pointer/context event as initBoardInteractions reads it: cardUnder() resolves the target via
-// closest('.board-card'); the card element exposes its geometry and bowed flag (read for the menu).
-function eventOnCard(cardId, { clientX = 30, clientY = 50, button = 0, pointerId = 1, bowed = false } = {}) {
-  const cardEl = {
-    dataset: { cardId, bowed: bowed ? '1' : '' },
+// A fake card element as the drag handler reads it: a dataset, a settable style, a classList, and
+// geometry. onBattlefield decides whether a battlefield drop repositions or plays the card.
+function fakeCard(id, { bowed = false, onBattlefield = true } = {}) {
+  const classes = new Set([onBattlefield ? 'board-card' : 'zone-card']);
+  return {
+    dataset: { cardId: id, bowed: bowed ? '1' : '' },
+    style: {},
+    classList: {
+      add: (c) => classes.add(c),
+      remove: (c) => classes.delete(c),
+      contains: (c) => classes.has(c),
+    },
     getBoundingClientRect: () => ({ left: 10, top: 20 }),
   };
+}
+
+// A pointer/context event whose target resolves to `card` for the card selector.
+function onCard(card, overrides = {}) {
   let prevented = false;
   return {
-    button,
-    pointerId,
-    clientX,
-    clientY,
-    target: { closest: (sel) => (sel === '.board-card' ? cardEl : null) },
+    button: 0,
+    clientX: 30,
+    clientY: 50,
+    target: { closest: (sel) => (sel === '[data-card-id]' ? card : null) },
     preventDefault: () => {
       prevented = true;
     },
     get defaultPrevented() {
       return prevented;
     },
+    ...overrides,
   };
 }
 
-const eventOnEmptySpace = (overrides = {}) => ({
+// A pointer-up event over a drop zone described by `attrs` (the zone element's dataset).
+function onZone(attrs, overrides = {}) {
+  const el = { dataset: attrs };
+  return {
+    clientX: 120,
+    clientY: 140,
+    target: { closest: (sel) => (sel === '[data-zone]' ? el : null) },
+    ...overrides,
+  };
+}
+
+const offCard = (overrides = {}) => ({
   button: 0,
-  pointerId: 1,
   clientX: 5,
   clientY: 5,
   target: { closest: () => null },
@@ -103,6 +129,79 @@ describe('renderBoard', () => {
   });
 });
 
+// A representative redacted snapshot for seat P1: two decks with counts, a two-card hand, four
+// provinces (the first holding a face-down card), and an opponent whose hand is a back stub.
+function seatSnapshot() {
+  return {
+    your_seat: 'P1',
+    seats: {
+      P1: { name: 'Ada', honor: 10, connected: true },
+      P2: { name: 'Kenji', honor: 8, connected: true },
+    },
+    decks: {
+      'P1:dynasty': { count: 38, top: null },
+      'P1:fate': { count: 39, top: null },
+    },
+    zones: {
+      'P1:hand': [card({ id: 'h1' }), card({ id: 'h2' })],
+      'P1:province:0': [{ id: 'pv0', hidden: true }],
+      'P1:province:1': [],
+      'P1:province:2': [],
+      'P1:province:3': [],
+      'P2:hand': [{ id: 'oh1', hidden: true }],
+    },
+    battlefield: [],
+  };
+}
+
+describe('renderTableau', () => {
+  // The tableau is [left decks, provinces, right decks]; pre-game cards are loose on the battlefield.
+  it('places the drawable dynasty deck and its count on the left', () => {
+    const area = document.createElement('div');
+    renderTableau(area, 'P1', seatSnapshot(), '/images');
+    const dynasty = area.children[0].children[0];
+    assert.ok(dynasty.className.includes('deck'));
+    assert.equal(dynasty.dataset.owner, 'P1');
+    assert.equal(dynasty.dataset.side, 'DYNASTY');
+    assert.equal(dynasty.children[0].textContent, '38'); // face-down deck: count then label
+  });
+
+  it('lays out four provinces in the centre and the fate deck on the right', () => {
+    const area = document.createElement('div');
+    renderTableau(area, 'P1', seatSnapshot(), '/images');
+    assert.equal(area.children[1].children.length, 4);
+    const fate = area.children[2].children[1];
+    assert.ok(fate.className.includes('deck'));
+    assert.equal(fate.dataset.side, 'FATE');
+  });
+});
+
+describe('renderHand', () => {
+  it('renders the hand face up for the owner', () => {
+    const hand = document.createElement('div');
+    renderHand(hand, [card({ id: 'h1' }), card({ id: 'h2' })], '/images');
+    assert.equal(hand.children.length, 2);
+    assert.equal(hand.children[0].children[0].src, '/images/sets/imperial_edition/hida_kisada.jpg');
+  });
+
+  it('renders a hidden hand card as a back, never reaching for art', () => {
+    const hand = document.createElement('div');
+    renderHand(hand, [{ id: 'oh1', hidden: true }], '/images');
+    assert.ok(hand.children[0].classList.contains('face-down'));
+    assert.equal(hand.children[0].children.length, 0);
+  });
+});
+
+describe('renderPanel', () => {
+  it('shows the avatar initials, name, and honor', () => {
+    const panel = document.createElement('div');
+    renderPanel(panel, { name: 'Ada Crane', honor: 10, connected: true });
+    assert.equal(panel.children[0].textContent, 'AC');
+    assert.equal(panel.children[1].children[0].textContent, 'Ada Crane');
+    assert.equal(panel.children[1].children[1].textContent, '10');
+  });
+});
+
 describe('message builders', () => {
   it('wrap a SET_CARD_POS / FLIP / BOW intent', () => {
     assert.deepEqual(moveIntent('c1', 5, 6), {
@@ -115,6 +214,13 @@ describe('message builders', () => {
   it('pick BOW or UNBOW from the card current state', () => {
     assert.equal(bowIntent('c1', false).intent.op, 'BOW');
     assert.equal(bowIntent('c1', true).intent.op, 'UNBOW');
+  });
+
+  it('builds a DRAW intent for a seat deck', () => {
+    assert.deepEqual(drawIntent('P1', 'FATE'), {
+      type: 'INTENT',
+      intent: { op: 'DRAW', deck: { owner: 'P1', side: 'FATE' } },
+    });
   });
 
   it('build SPAWN and REMOVE messages', () => {
@@ -139,7 +245,47 @@ describe('dragPosition', () => {
 
   it('clamps a card so it stays fully on the board', () => {
     assert.deepEqual(dragPosition(0, 0, board, { x: 50, y: 50 }), { x: 0, y: 0 });
-    assert.deepEqual(dragPosition(9999, 9999, board, { x: 0, y: 0 }), { x: 410, y: 272 });
+    // 500 - 81 wide, 400 - 115 tall — a full card stays on the board.
+    assert.deepEqual(dragPosition(9999, 9999, board, { x: 0, y: 0 }), { x: 419, y: 285 });
+  });
+});
+
+describe('placePregameCards', () => {
+  const anchorFor = (owner) => (owner === 'P1' ? { x: 20, y: 300 } : { x: 30, y: 40 });
+
+  it('fans an owner\'s unplaced pre-game cards out from their anchor', () => {
+    const cards = [
+      { id: 'sh', pregame: true, owner: 'P1', x: -1, y: -1 },
+      { id: 'se', pregame: true, owner: 'P1', x: -1, y: -1 },
+    ];
+    const placed = placePregameCards(cards, 'P1', anchorFor);
+    assert.deepEqual(placed[0], { id: 'sh', pregame: true, owner: 'P1', x: 20, y: 300 });
+    assert.deepEqual(placed[1], { id: 'se', pregame: true, owner: 'P1', x: 40, y: 300 });
+  });
+
+  it('leaves a moved pre-game card (x >= 0) and non-pre-game cards untouched', () => {
+    const moved = { id: 'sh', pregame: true, owner: 'P1', x: 120, y: 90 };
+    const loose = { id: 'c1', pregame: false, owner: 'P1', x: 5, y: 5 };
+    const placed = placePregameCards([moved, loose], 'P1', anchorFor);
+    assert.deepEqual(placed, [moved, loose]);
+  });
+
+  it('fans each owner from their own anchor, counting independently', () => {
+    const cards = [
+      { id: 'p1a', pregame: true, owner: 'P1', x: -1, y: -1 },
+      { id: 'p2a', pregame: true, owner: 'P2', x: -1, y: -1 },
+      { id: 'p1b', pregame: true, owner: 'P1', x: -1, y: -1 },
+    ];
+    const placed = placePregameCards(cards, 'P1', anchorFor);
+    assert.deepEqual([placed[0].x, placed[0].y], [20, 300]); // P1 first, no offset
+    assert.deepEqual([placed[1].x, placed[1].y], [30, 40]); // P2 first, no offset
+    assert.deepEqual([placed[2].x, placed[2].y], [40, 300]); // P1 second, one step
+  });
+
+  it('keeps a card unplaced when its owner has no anchor yet', () => {
+    const cards = [{ id: 'sh', pregame: true, owner: 'P1', x: -1, y: -1 }];
+    const placed = placePregameCards(cards, 'P1', () => null);
+    assert.equal(placed[0].x, -1);
   });
 });
 
@@ -168,49 +314,43 @@ describe('highlightCard', () => {
 });
 
 describe('initBoardInteractions — dragging', () => {
+  let root;
   let board;
   let sent;
 
   beforeEach(() => {
+    root = document.getElementById('boardStage');
     board = document.getElementById('battlefield');
     sent = [];
-    initBoardInteractions(board, (message) => sent.push(message));
+    initBoardInteractions(root, board, (message) => sent.push(message));
   });
 
   it('ignores a non-left button press', () => {
-    board.setPointerCapture = () => {};
-    board._emit('pointerdown', eventOnCard('c1', { button: 2 }));
-    board._emit('pointermove', { clientX: 99, clientY: 99 });
+    root._emit('pointerdown', onCard(fakeCard('c1'), { button: 2 }));
+    root._emit('pointermove', { clientX: 99, clientY: 99 });
     assert.equal(sent.length, 0);
   });
 
   it('ignores a press that lands off any card', () => {
-    board._emit('pointerdown', eventOnEmptySpace());
-    board._emit('pointermove', { clientX: 99, clientY: 99 });
+    root._emit('pointerdown', offCard());
+    root._emit('pointermove', { clientX: 99, clientY: 99 });
     assert.equal(sent.length, 0);
   });
 
-  it('captures the pointer and sends a throttled SET_CARD_POS intent on drag', () => {
-    let captured = null;
-    board.setPointerCapture = (id) => {
-      captured = id;
-    };
-    const moving = { style: {} };
-    board.querySelector = () => moving;
-
+  it('sends a throttled SET_CARD_POS while dragging a battlefield card', () => {
+    const cardEl = fakeCard('c1', { onBattlefield: true });
     const realNow = Date.now;
     Date.now = () => 1000;
     try {
-      board._emit('pointerdown', eventOnCard('c1', { pointerId: 7 }));
-      board._emit('pointermove', { clientX: 60, clientY: 70 });
-      board._emit('pointermove', { clientX: 80, clientY: 90 }); // same tick → throttled out
+      root._emit('pointerdown', onCard(cardEl));
+      root._emit('pointermove', { clientX: 60, clientY: 70 });
+      root._emit('pointermove', { clientX: 80, clientY: 90 }); // same tick → throttled out
     } finally {
       Date.now = realNow;
     }
 
     // grab offset is (30-10, 50-20) = (20, 30); board origin is (0, 0).
-    assert.equal(captured, 7);
-    assert.equal(moving.style.left, '60px'); // second move still repositions locally, though unsent
+    assert.equal(cardEl.style.left, '60px'); // last move still repositions locally, though unsent
     assert.equal(sent.length, 1);
     assert.deepEqual(sent[0], {
       type: 'INTENT',
@@ -219,41 +359,72 @@ describe('initBoardInteractions — dragging', () => {
   });
 
   it('does nothing on pointermove when no drag is active', () => {
-    board._emit('pointermove', { clientX: 60, clientY: 70 });
+    root._emit('pointermove', { clientX: 60, clientY: 70 });
     assert.equal(sent.length, 0);
   });
 
-  it('sends a final position on pointerup and ends the drag', () => {
-    board._emit('pointerdown', eventOnCard('c1'));
-    board._emit('pointerup', { clientX: 120, clientY: 140 });
+  it('repositions on a drop onto the battlefield, then ends the drag', () => {
+    root._emit('pointerdown', onCard(fakeCard('c1', { onBattlefield: true })));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
     assert.equal(sent.at(-1).intent.op, 'SET_CARD_POS');
 
     sent.length = 0;
-    board._emit('pointermove', { clientX: 200, clientY: 200 });
+    root._emit('pointermove', { clientX: 200, clientY: 200 });
     assert.equal(sent.length, 0, 'drag ended, later moves are ignored');
   });
 
+  it('plays a hand card onto the battlefield as a MOVE_CARD with a position', () => {
+    root._emit('pointerdown', onCard(fakeCard('h1', { onBattlefield: false })));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    const move = sent.at(-1).intent;
+    assert.equal(move.op, 'MOVE_CARD');
+    assert.deepEqual(move.to, { kind: 'battlefield' });
+    assert.ok(Array.isArray(move.position));
+  });
+
+  it('moves a card onto a deck as a MOVE_CARD', () => {
+    root._emit('pointerdown', onCard(fakeCard('c1')));
+    root._emit('pointerup', onZone({ zone: 'deck', owner: 'P1', side: 'FATE' }));
+    assert.deepEqual(sent.at(-1).intent, {
+      op: 'MOVE_CARD',
+      card_id: 'c1',
+      to: { kind: 'deck', deck: { owner: 'P1', side: 'FATE' } },
+      position: null,
+    });
+  });
+
+  it('moves a card into a province as a MOVE_CARD', () => {
+    root._emit('pointerdown', onCard(fakeCard('c1', { onBattlefield: false })));
+    root._emit('pointerup', onZone({ zone: 'province', owner: 'P1', idx: '2' }));
+    assert.deepEqual(sent.at(-1).intent.to, {
+      kind: 'zone',
+      zone: { owner: 'P1', role: 'province', idx: 2 },
+    });
+  });
+
   it('cancels a drag on pointercancel', () => {
-    board._emit('pointerdown', eventOnCard('c1'));
-    board._emit('pointercancel', {});
-    board._emit('pointermove', { clientX: 200, clientY: 200 });
+    root._emit('pointerdown', onCard(fakeCard('c1')));
+    root._emit('pointercancel', {});
+    root._emit('pointermove', { clientX: 200, clientY: 200 });
     assert.equal(sent.length, 0);
   });
 });
 
 describe('initBoardInteractions — context menu', () => {
+  let root;
   let board;
   let sent;
 
   beforeEach(() => {
+    root = document.getElementById('boardStage');
     board = document.getElementById('battlefield');
     sent = [];
-    initBoardInteractions(board, (message) => sent.push(message));
+    initBoardInteractions(root, board, (message) => sent.push(message));
   });
 
   it('opens a Flip/Bow/Remove menu on a card and suppresses the native menu', () => {
-    const event = eventOnCard('c1');
-    board._emit('contextmenu', event);
+    const event = onCard(fakeCard('c1'));
+    root._emit('contextmenu', event);
 
     assert.equal(event.defaultPrevented, true);
     const menu = activeMenu(board);
@@ -265,18 +436,18 @@ describe('initBoardInteractions — context menu', () => {
   });
 
   it('does not open a menu on empty space', () => {
-    const event = eventOnEmptySpace({
+    const event = offCard({
       preventDefault() {
         this._p = true;
       },
     });
-    board._emit('contextmenu', event);
+    root._emit('contextmenu', event);
     assert.equal(activeMenu(board), undefined);
     assert.equal(event._p, undefined);
   });
 
   it('sends a REMOVE message and closes the menu on item click', () => {
-    board._emit('contextmenu', eventOnCard('c1'));
+    root._emit('contextmenu', onCard(fakeCard('c1')));
     activeMenu(board).children[2]._emit('click', {});
 
     assert.deepEqual(sent, [{ type: 'REMOVE', remove: { id: 'c1' } }]);
@@ -284,14 +455,14 @@ describe('initBoardInteractions — context menu', () => {
   });
 
   it('sends UNBOW for a card that is already bowed', () => {
-    board._emit('contextmenu', eventOnCard('c1', { bowed: true }));
+    root._emit('contextmenu', onCard(fakeCard('c1', { bowed: true })));
     activeMenu(board).children[1]._emit('click', {}); // Bow / Unbow
     assert.equal(sent[0].intent.op, 'UNBOW');
   });
 
   it('replaces a previously open menu rather than stacking', () => {
-    board._emit('contextmenu', eventOnCard('c1'));
-    board._emit('contextmenu', eventOnCard('c2'));
+    root._emit('contextmenu', onCard(fakeCard('c1')));
+    root._emit('contextmenu', onCard(fakeCard('c2')));
     assert.equal(board.children.filter((c) => c.className === 'board-menu').length, 1);
   });
 });

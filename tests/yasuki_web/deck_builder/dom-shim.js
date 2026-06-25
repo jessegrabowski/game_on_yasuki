@@ -30,6 +30,7 @@ function makeElement(tag) {
     style: {},
     classList: makeClassList(),
     appendChild(child) { child.parentNode = el; children.push(child); return child; },
+    append(...nodes) { for (const child of nodes) { child.parentNode = el; children.push(child); } },
     replaceChildren(...nodes) { children.length = 0; children.push(...nodes); },
     remove() {
       const siblings = el.parentNode?.children;
