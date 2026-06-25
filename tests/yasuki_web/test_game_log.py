@@ -10,12 +10,14 @@ from yasuki_core.engine.table import (
     MoveCard,
     SetCardPos,
     Bow,
+    Flip,
     Draw,
     Shuffle,
     SetHonor,
     SpawnCard,
     RemoveCard,
 )
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_web.game_log import describe_intent
@@ -76,6 +78,31 @@ def test_a_face_up_card_off_the_battlefield_is_not_named():
     parts = _describe(table, Bow(("f1",)), ("f1",))
     assert {"text": "a card"} in parts
     assert all("name" not in part for part in parts)
+
+
+def test_a_face_up_card_in_a_province_is_named():
+    # Flipping a province card face up makes its identity public, so the log names it.
+    table = TableState.empty_two_seat()
+    card = L5RCard(id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=True)
+    table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[card])
+    table.cards_by_id["d1"] = card
+
+    assert {"card_id": "d1", "name": "Gold Mine"} in _describe(table, Flip(("d1",)), ("d1",))
+
+
+def test_move_to_a_public_discard_names_the_card():
+    table = TableState.empty_two_seat()
+    card = L5RCard(id="f1", name="Ancestral Armor", side=Side.FATE, owner=P1, face_up=True)
+    table.zones[ZoneKey(P1, ZoneRole.FATE_DISCARD)].cards.append(card)
+    table.cards_by_id["f1"] = card
+
+    intent = MoveCard("f1", ZoneKey(P1, ZoneRole.FATE_DISCARD))
+    assert _describe(table, intent, ("f1",)) == [
+        {"text": "Ada "},
+        {"text": "moved "},
+        {"card_id": "f1", "name": "Ancestral Armor"},
+        {"text": " to the fate discard"},
+    ]
 
 
 def test_batch_flag_links_each_card():
