@@ -4,7 +4,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import ResolvedDeck
-from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
 
 # Pre-game permanents are dealt face-up into a horizontal row, one row per seat; the client refines
 # the final table layout.
@@ -24,9 +24,9 @@ def setup_seat(
 
     Load the dynasty and fate cards into their decks face-down, shuffling each with the given seed,
     open the stronghold's provinces as empty zones, deal the pre-game permanents (stronghold, sensei,
-    wind) face-up onto the battlefield, and register every card in the table's identity map. The
-    hand, discards, and banishes stay empty — players draw and fill provinces manually — and no deck
-    legality is enforced (a manual sandbox).
+    wind) face-up onto the battlefield, set the seat's starting honor from its stronghold and sensei,
+    and register every card in the table's identity map. The hand, discards, and banishes stay empty
+    — players draw and fill provinces manually — and no deck legality is enforced (a manual sandbox).
 
     Parameters
     ----------
@@ -46,6 +46,7 @@ def setup_seat(
     for idx in range(_province_count(resolved)):
         state.zones[ZoneKey(seat, ZoneRole.PROVINCE, idx)] = ProvinceZone(owner=seat)
     _place_pregame(state, seat, resolved.pre_game)
+    state.seats[seat].honor = _starting_honor(resolved)
 
 
 def _province_count(resolved: ResolvedDeck) -> int:
@@ -55,6 +56,14 @@ def _province_count(resolved: ResolvedDeck) -> int:
     if stronghold is not None:
         return stronghold.province_count
     return StrongholdCard.__dataclass_fields__["province_count"].default
+
+
+def _starting_honor(resolved: ResolvedDeck) -> int:
+    return sum(
+        card.starting_honor
+        for card in resolved.pre_game
+        if isinstance(card, (StrongholdCard, SenseiCard))
+    )
 
 
 def _place_pregame(state: TableState, seat: PlayerId, cards: list[L5RCard]) -> None:
