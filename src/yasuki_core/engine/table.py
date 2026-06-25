@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
 from typing import NamedTuple, ClassVar, Literal, Final
 from collections.abc import Iterator
 
@@ -189,6 +190,8 @@ class IntentOp(str, Enum):
     DISCARD_PROVINCE = "DISCARD_PROVINCE"
     CREATE_PROVINCE = "CREATE_PROVINCE"
     SET_HONOR = "SET_HONOR"
+    SPAWN_CARD = "SPAWN_CARD"
+    REMOVE_CARD = "REMOVE_CARD"
 
 
 # Sentinel destination for the shared battlefield in MOVE_CARD, distinct from any owned ZoneKey or
@@ -340,6 +343,30 @@ class SetHonor:
             raise ValueError("SetHonor requires exactly one of delta or value")
 
 
+@dataclass(frozen=True, slots=True)
+class SpawnCard:
+    """Put a new public, face-up card on the shared battlefield (tokens, copies, sandbox pieces).
+
+    The card id is assigned by the caller and recorded, so a replay reproduces the same card. The
+    card is unowned (public), so either seat may then move or remove it.
+    """
+
+    card_id: str
+    name: str
+    side: Side
+    image: str | None
+    position: BoardPos
+    op: ClassVar[IntentOp] = IntentOp.SPAWN_CARD
+
+
+@dataclass(frozen=True, slots=True)
+class RemoveCard:
+    """Take a card off the table entirely, wherever it sits."""
+
+    card_id: str
+    op: ClassVar[IntentOp] = IntentOp.REMOVE_CARD
+
+
 Intent = (
     MoveCard
     | SetCardPos
@@ -357,6 +384,8 @@ Intent = (
     | DiscardProvince
     | CreateProvince
     | SetHonor
+    | SpawnCard
+    | RemoveCard
 )
 
 
@@ -684,6 +713,33 @@ def _set_honor(state: TableState, seat: PlayerId, intent: SetHonor) -> list[Even
     return [Event(state.seq, seat, intent)]
 
 
+def _spawn_card(state: TableState, seat: PlayerId, intent: SpawnCard) -> list[Event]:
+    if intent.card_id in state.cards_by_id:
+        return []
+    card = L5RCard(
+        id=intent.card_id,
+        name=intent.name,
+        side=intent.side,
+        owner=None,
+        face_up=True,
+        image_front=Path(intent.image) if intent.image else None,
+    )
+    state.cards_by_id[card.id] = card
+    state.battlefield.add(card)
+    state.positions[card.id] = intent.position
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
+def _remove_card(state: TableState, seat: PlayerId, intent: RemoveCard) -> list[Event]:
+    if not owns_card(state, seat, intent.card_id):
+        return []
+    card = state.cards_by_id.pop(intent.card_id)
+    _remove_from_location(state, card)
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (intent.card_id,))]
+
+
 _HANDLERS = {
     IntentOp.MOVE_CARD: _move_card,
     IntentOp.SET_CARD_POS: _set_card_pos,
@@ -701,6 +757,8 @@ _HANDLERS = {
     IntentOp.DISCARD_PROVINCE: _discard_province,
     IntentOp.CREATE_PROVINCE: _create_province,
     IntentOp.SET_HONOR: _set_honor,
+    IntentOp.SPAWN_CARD: _spawn_card,
+    IntentOp.REMOVE_CARD: _remove_card,
 }
 
 

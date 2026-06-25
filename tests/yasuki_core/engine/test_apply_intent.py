@@ -24,6 +24,8 @@ from yasuki_core.engine.table import (
     DiscardProvince,
     CreateProvince,
     SetHonor,
+    SpawnCard,
+    RemoveCard,
     apply_intent,
 )
 from yasuki_core.engine.zones import ProvinceZone
@@ -45,9 +47,6 @@ def _on_battlefield(table: TableState, card: L5RCard, pos: BoardPos = BoardPos(0
     table.cards_by_id[card.id] = card
     table.battlefield.add(card)
     table.positions[card.id] = pos
-
-
-# --- MOVE_CARD ---------------------------------------------------------------------------------
 
 
 def test_move_card_battlefield_to_hand_goes_face_down():
@@ -178,9 +177,6 @@ def test_move_card_into_opponents_deck_rejected():
     assert card in table.battlefield.cards
 
 
-# --- SET_CARD_POS ------------------------------------------------------------------------------
-
-
 def test_set_card_pos_updates_position():
     table = TableState.empty_two_seat()
     card = _fate("f1")
@@ -224,9 +220,6 @@ def test_set_card_pos_rejects_opponents_card():
 
     assert events == []
     assert table.positions["f1"] == BoardPos(1.0, 1.0)
-
-
-# --- FLAG OPS ----------------------------------------------------------------------------------
 
 
 def test_bow_sets_flag_and_bumps_seq():
@@ -327,9 +320,6 @@ def test_batch_flag_applies_to_all_owned():
     assert table.seq == 1
 
 
-# --- DRAW --------------------------------------------------------------------------------------
-
-
 def test_draw_fate_goes_to_hand_face_up():
     table = TableState.empty_two_seat()
     card = _fate("f1")
@@ -391,9 +381,6 @@ def test_draw_from_opponents_deck_rejected():
     assert card in table.decks[DeckKey(PlayerId.P2, Side.FATE)].cards
 
 
-# --- SHUFFLE / SEARCH --------------------------------------------------------------------------
-
-
 def test_shuffle_rejects_opponents_deck():
     table = TableState.empty_two_seat()
     events = apply_intent(table, PlayerId.P1, Shuffle(DeckKey(PlayerId.P2, Side.FATE), seed=1))
@@ -412,9 +399,6 @@ def test_search_deck_rejects_opponents_deck():
     table = TableState.empty_two_seat()
     events = apply_intent(table, PlayerId.P1, SearchDeck(DeckKey(PlayerId.P2, Side.DYNASTY)))
     assert events == []
-
-
-# --- PROVINCE LIFECYCLE ------------------------------------------------------------------------
 
 
 def test_fill_province_draws_dynasty_face_down():
@@ -522,9 +506,6 @@ def test_create_province_allocates_next_index():
     assert table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].owner is PlayerId.P1
 
 
-# --- SET_HONOR ---------------------------------------------------------------------------------
-
-
 def test_set_honor_by_delta():
     table = TableState.empty_two_seat()
     table.seats[PlayerId.P1].honor = 10
@@ -576,6 +557,55 @@ def test_rejected_intent_leaves_state_unchanged(intent):
 
     assert events == []
     assert table.seq == before_seq
+
+
+def test_spawn_card_creates_a_public_face_up_battlefield_card():
+    table = TableState.empty_two_seat()
+    intent = SpawnCard("tok1", "Bushi Token", Side.DYNASTY, "sets/x/a.jpg", BoardPos(5.0, 6.0))
+
+    events = apply_intent(table, PlayerId.P1, intent)
+
+    assert table.seq == 1 and events[0].cards == ("tok1",)
+    card = table.cards_by_id["tok1"]
+    assert card.owner is None and card.face_up is True
+    assert card in table.battlefield.cards
+    assert table.positions["tok1"] == BoardPos(5.0, 6.0)
+    table.validate()
+
+
+def test_spawn_card_rejects_a_duplicate_id():
+    table = TableState.empty_two_seat()
+    intent = SpawnCard("tok1", "X", Side.FATE, None, BoardPos(0.0, 0.0))
+    apply_intent(table, PlayerId.P1, intent)
+
+    assert apply_intent(table, PlayerId.P1, intent) == []
+
+
+def test_remove_card_takes_a_public_card_off_the_table():
+    table = TableState.empty_two_seat()
+    apply_intent(table, PlayerId.P1, SpawnCard("tok1", "X", Side.FATE, None, BoardPos(0.0, 0.0)))
+
+    events = apply_intent(table, PlayerId.P2, RemoveCard("tok1"))  # public → either seat may remove
+
+    assert events[0].cards == ("tok1",)
+    assert "tok1" not in table.cards_by_id
+    assert table.battlefield.cards == []
+    assert "tok1" not in table.positions
+    table.validate()
+
+
+def test_remove_card_rejects_an_opponents_card():
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=PlayerId.P2)
+    _on_battlefield(table, card)
+
+    assert apply_intent(table, PlayerId.P1, RemoveCard("f1")) == []
+    assert "f1" in table.cards_by_id
+
+
+def test_remove_card_rejects_an_unknown_id():
+    table = TableState.empty_two_seat()
+    assert apply_intent(table, PlayerId.P1, RemoveCard("ghost")) == []
 
 
 def test_table_invariants_hold_after_a_sequence_of_intents():
