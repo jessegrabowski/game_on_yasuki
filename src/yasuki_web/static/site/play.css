@@ -88,6 +88,16 @@
   font-size: 0.9rem;
 }
 
+.room-buttons {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.close-btn {
+  color: #9c4a35;
+  border-color: rgba(156, 74, 53, 0.4);
+}
+
 .status-line {
   min-height: 1.2em;
   opacity: 0.8;

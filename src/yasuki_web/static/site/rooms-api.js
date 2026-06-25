@@ -20,3 +20,10 @@ export function createRoom({ name, maxPlayers = 2 } = {}) {
     body: JSON.stringify(body),
   });
 }
+
+export function deleteRoom(roomId, deleteToken) {
+  return requestJSON(`/api/rooms/${encodeURIComponent(roomId)}`, {
+    method: 'DELETE',
+    headers: { 'X-Delete-Token': deleteToken },
+  });
+}

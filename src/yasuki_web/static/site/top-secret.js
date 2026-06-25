@@ -2,26 +2,32 @@
 // launch.
 
 import { esc, fetchImageBase } from './card-common.js';
-import { listRooms, createRoom } from './rooms-api.js';
+import { listRooms, createRoom, deleteRoom } from './rooms-api.js';
 import { connectRoom } from './ws-client.js';
 import { renderBoard, addCardFrame, boardFrame, initBoardInteractions } from './board.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
-export function roomItemHTML(room) {
+export function roomItemHTML(room, ownedIds = new Set()) {
   const players = (room.players || []).length;
+  const closeButton = ownedIds.has(room.id)
+    ? `<button class="close-btn" data-close-id="${esc(room.id)}">Close</button>`
+    : '';
   return (
     `<li>` +
     `<span class="room-name">${esc(room.name)}</span>` +
     `<span class="room-meta">${players}/${room.max_players} · ${esc(room.id)}</span>` +
+    `<span class="room-buttons">` +
     `<button class="join-btn" data-room-id="${esc(room.id)}">Join</button>` +
+    closeButton +
+    `</span>` +
     `</li>`
   );
 }
 
-export function renderRooms(listEl, rooms) {
+export function renderRooms(listEl, rooms, ownedIds = new Set()) {
   listEl.innerHTML = rooms.length
-    ? rooms.map(roomItemHTML).join('')
+    ? rooms.map((room) => roomItemHTML(room, ownedIds)).join('')
     : '<li class="empty">No open rooms yet — create one.</li>';
 }
 
@@ -68,19 +74,37 @@ function initSeparator(handle, { onPointer, onKey }) {
   });
 }
 
-// The delete token is the only way to reclaim a room you created, so stash it client-side. Losing
-// it (private mode, quota) just forgoes cleanup, never blocks play.
-function rememberDeleteToken(roomId, token) {
+// The delete token is the only way to close a room you created, so stash it client-side. Access is
+// best-effort: private mode and quota throw, and losing a token only forgoes cleanup of that room.
+function readDeleteTokens() {
   try {
-    const store = globalThis.localStorage;
-    if (!store) return;
-    const tokens = JSON.parse(store.getItem(DELETE_TOKENS_KEY) || '{}');
-    tokens[roomId] = token;
-    store.setItem(DELETE_TOKENS_KEY, JSON.stringify(tokens));
+    return JSON.parse(globalThis.localStorage?.getItem(DELETE_TOKENS_KEY) || '{}');
   } catch (_) {
-    /* persistence is best-effort */
+    return {};
   }
 }
+
+function writeDeleteTokens(tokens) {
+  try {
+    globalThis.localStorage?.setItem(DELETE_TOKENS_KEY, JSON.stringify(tokens));
+  } catch (_) {
+    /* best-effort */
+  }
+}
+
+function rememberDeleteToken(roomId, token) {
+  const tokens = readDeleteTokens();
+  tokens[roomId] = token;
+  writeDeleteTokens(tokens);
+}
+
+function forgetDeleteToken(roomId) {
+  const tokens = readDeleteTokens();
+  delete tokens[roomId];
+  writeDeleteTokens(tokens);
+}
+
+const ownedRoomIds = () => new Set(Object.keys(readDeleteTokens()));
 
 function init() {
   const playerName = document.getElementById('playerName');
@@ -119,10 +143,22 @@ function init() {
   async function loadRooms() {
     try {
       const { rooms } = await listRooms();
-      renderRooms(roomList, rooms);
+      renderRooms(roomList, rooms, ownedRoomIds());
       setStatus('');
     } catch (_) {
       setStatus('Could not load rooms.');
+    }
+  }
+
+  async function closeRoom(roomId) {
+    const token = readDeleteTokens()[roomId];
+    if (!token) return;
+    try {
+      await deleteRoom(roomId, token);
+      forgetDeleteToken(roomId);
+      loadRooms();
+    } catch (_) {
+      setStatus('Could not close the room.');
     }
   }
 
@@ -271,6 +307,11 @@ function init() {
   });
 
   roomList?.addEventListener('click', (e) => {
+    const closeId = e.target?.dataset?.closeId;
+    if (closeId) {
+      closeRoom(closeId);
+      return;
+    }
     const id = e.target?.dataset?.roomId;
     if (id) joinRoom(id);
   });
