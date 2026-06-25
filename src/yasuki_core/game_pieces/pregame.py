@@ -12,6 +12,7 @@ class StrongholdCard(L5RCard):
     starting_honor: int = 0
     gold_production: int = 0
     province_strength: int = 0
+    province_count: int = 4
     image_front: Path | None = DEFAULT_STRONGHOLD
 
 

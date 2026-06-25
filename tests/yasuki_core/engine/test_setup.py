@@ -1,0 +1,86 @@
+from yasuki_core.engine.setup import setup_seat
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.dynasty import DynastyCard
+from yasuki_core.game_pieces.fate import FateCard
+from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.game_pieces.factory import ResolvedDeck
+
+
+def _resolved(owner=PlayerId.P1, dynasty_n=5, fate_n=4):
+    dynasty = [
+        DynastyCard(id=f"{owner.name}-d{i}", name=f"D{i}", side=Side.DYNASTY, owner=owner)
+        for i in range(dynasty_n)
+    ]
+    fate = [
+        FateCard(id=f"{owner.name}-f{i}", name=f"F{i}", side=Side.FATE, owner=owner)
+        for i in range(fate_n)
+    ]
+    return ResolvedDeck(dynasty=dynasty, fate=fate)
+
+
+def _setup(owner=PlayerId.P1, dynasty_seed=1, fate_seed=2):
+    state = TableState.empty_two_seat()
+    setup_seat(state, owner, _resolved(owner), dynasty_seed=dynasty_seed, fate_seed=fate_seed)
+    return state
+
+
+def _provinces(state, owner=PlayerId.P1):
+    return [
+        zone
+        for key, zone in state.zones.items()
+        if key.owner == owner and key.role is ZoneRole.PROVINCE
+    ]
+
+
+def _dynasty_order(state):
+    return [card.id for card in state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards]
+
+
+def test_decks_are_loaded_face_down_and_registered():
+    state = _setup()
+    dynasty = state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
+    fate = state.decks[DeckKey(PlayerId.P1, Side.FATE)]
+
+    assert len(dynasty.cards) == 5 and len(fate.cards) == 4
+    assert all(not card.face_up for card in dynasty.cards + fate.cards)
+    assert all(card.id in state.cards_by_id for card in dynasty.cards + fate.cards)
+
+
+def test_a_deck_without_a_stronghold_opens_the_default_four_provinces():
+    state = _setup()
+    provinces = _provinces(state)
+    assert len(provinces) == 4
+    assert all(province.cards == [] for province in provinces)
+
+
+def test_province_count_comes_from_the_stronghold():
+    state = TableState.empty_two_seat()
+    resolved = _resolved()
+    resolved.pre_game.append(
+        StrongholdCard(id="sh", name="Wall", side=Side.STRONGHOLD, province_count=5)
+    )
+    setup_seat(state, PlayerId.P1, resolved, dynasty_seed=1, fate_seed=2)
+    assert len(_provinces(state)) == 5
+
+
+def test_hand_discards_and_banishes_start_empty():
+    state = _setup()
+    for role in (
+        ZoneRole.HAND,
+        ZoneRole.FATE_DISCARD,
+        ZoneRole.FATE_BANISH,
+        ZoneRole.DYNASTY_DISCARD,
+        ZoneRole.DYNASTY_BANISH,
+    ):
+        assert state.zones[ZoneKey(PlayerId.P1, role)].cards == []
+
+
+def test_shuffle_order_is_reproducible_for_a_seed():
+    assert _dynasty_order(_setup(dynasty_seed=7)) == _dynasty_order(_setup(dynasty_seed=7))
+
+
+def test_the_table_validates_after_setup():
+    state = _setup()
+    state.validate()  # raises on any structural violation
