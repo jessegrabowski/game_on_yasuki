@@ -74,7 +74,13 @@ class ServerChat(BaseModel):
     text: str
 
 
-ServerMessage = ServerHello | ServerState | ServerError | ServerChat
+class ServerLog(BaseModel):
+    type: Literal["LOG"] = "LOG"
+    room: str
+    text: str
+
+
+ServerMessage = ServerHello | ServerState | ServerError | ServerChat | ServerLog
 
 
 class Player(BaseModel):

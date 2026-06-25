@@ -10,6 +10,7 @@ def _join(ws, room_id, name):
     ws.send_json({"type": "JOIN", "room": room_id, "join": {"name": name}})
     ws.receive_json()  # HELLO
     ws.receive_json()  # STATE
+    ws.receive_json()  # LOG "<name> joined"
 
 
 class _FakeWS:
@@ -83,3 +84,65 @@ def test_oversize_chat_closes_the_connection(client):
         with pytest.raises(WebSocketDisconnect) as exc:
             ws.receive_json()
         assert exc.value.code == 1003
+
+
+def test_handle_chat_appends_to_history():
+    async def scenario():
+        room = GameRoom("r1")
+        ws = _FakeWS()
+        room.players = {ws: "Ada"}
+        await room.handle_chat(ws, "hello")
+        return room.chat_history
+
+    assert asyncio.run(scenario()) == [
+        {"type": "CHAT", "room": "r1", "from": "Ada", "text": "hello"}
+    ]
+
+
+def test_log_stores_and_broadcasts():
+    async def scenario():
+        room = GameRoom("r1")
+        ws = _FakeWS()
+        room.players = {ws: "Ada"}
+        await room.log("the daimyo arrives")
+        return room.log_history, ws.sent
+
+    history, sent = asyncio.run(scenario())
+    expected = {"type": "LOG", "room": "r1", "text": "the daimyo arrives"}
+    assert history == [expected]
+    assert sent == [expected]
+
+
+def test_leaving_logs_to_the_remaining_players():
+    async def scenario():
+        room = GameRoom("r1")
+        ada, kenji = _FakeWS(), _FakeWS()
+        room.players = {ada: "Ada", kenji: "Kenji"}
+        room.game_state["player_states"] = {"Ada": {}, "Kenji": {}}
+        await room.remove_player(ada)
+        return kenji.sent
+
+    sent = asyncio.run(scenario())
+    assert any(m.get("type") == "LOG" and m.get("text") == "Ada left" for m in sent)
+
+
+def test_chat_and_join_logs_replay_to_a_new_player(client):
+    room_id = client.post("/api/rooms", json={"max_players": 4}).json()["room_id"]
+    with client.websocket_connect(f"/ws/{room_id}") as ada:
+        ada.send_json({"type": "JOIN", "room": room_id, "join": {"name": "Ada"}})
+        ada.receive_json()  # HELLO
+        ada.receive_json()  # STATE
+        ada.receive_json()  # LOG "Ada joined"
+        ada.send_json({"type": "CHAT", "room": room_id, "chat": {"text": "hello"}})
+        ada.receive_json()  # own CHAT echo
+
+        with client.websocket_connect(f"/ws/{room_id}") as kenji:
+            kenji.send_json({"type": "JOIN", "room": room_id, "join": {"name": "Kenji"}})
+            # HELLO, replayed LOG (Ada joined), replayed CHAT (hello), STATE, LOG (Kenji joined).
+            received = [kenji.receive_json() for _ in range(5)]
+
+    assert any(
+        m["type"] == "CHAT" and m["from"] == "Ada" and m["text"] == "hello" for m in received
+    )
+    assert any(m["type"] == "LOG" and m["text"] == "Ada joined" for m in received)
+    assert any(m["type"] == "LOG" and m["text"] == "Kenji joined" for m in received)

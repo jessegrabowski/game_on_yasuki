@@ -82,6 +82,7 @@ def test_board_action_round_trips_over_the_socket(client):
         ws.send_json({"type": "JOIN", "room": room_id, "join": {"name": "Ada"}})
         ws.receive_json()  # HELLO
         ws.receive_json()  # STATE
+        ws.receive_json()  # LOG "Ada joined"
         ws.send_json(
             {
                 "type": "BOARD",

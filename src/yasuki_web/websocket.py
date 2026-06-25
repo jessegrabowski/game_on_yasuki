@@ -8,7 +8,14 @@ from urllib.parse import urlparse
 from pydantic import ValidationError
 
 from yasuki_web.config import allowed_origins
-from yasuki_web.schemas import ClientMessage, ServerHello, ServerState, ServerError, ServerChat
+from yasuki_web.schemas import (
+    ClientMessage,
+    ServerHello,
+    ServerState,
+    ServerError,
+    ServerChat,
+    ServerLog,
+)
 from yasuki_web.rooms import rooms
 from yasuki_web.wip_gate import websocket_access_ok
 
@@ -18,6 +25,7 @@ router = APIRouter()
 connections: dict[str, set[WebSocket]] = {}
 ip_connections: dict[str, int] = {}
 MAX_CONNECTIONS_PER_IP = 5
+HISTORY_LIMIT = 200
 
 
 class GameRoom:
@@ -39,9 +47,13 @@ class GameRoom:
             "cards": [],
         }
         self.seq = 0
+        # Chat and log persist for the room's lifetime so a player who joins (or rejoins) sees what
+        # came before. Capped to the most recent HISTORY_LIMIT of each.
+        self.chat_history: list[dict] = []
+        self.log_history: list[dict] = []
 
     async def add_player(self, ws: WebSocket, player_name: str):
-        """Add a player to the room and initialize their game state."""
+        """Add a player, replay the room's chat and log history to them, and announce the join."""
         self.players[ws] = player_name
         self.game_state["player_states"][player_name] = {
             "hand": [],
@@ -63,12 +75,18 @@ class GameRoom:
         )
         await ws.send_json(hello.model_dump())
 
+        for entry in self.log_history:
+            await ws.send_json(entry)
+        for entry in self.chat_history:
+            await ws.send_json(entry)
+
         logger.info(f"Player {player_name} joined room {self.room_id}")
 
         await self.broadcast_state()
+        await self.log(f"{player_name} joined")
 
     async def remove_player(self, ws: WebSocket):
-        """Remove a player from the room when they disconnect."""
+        """Remove a player when they disconnect and announce the departure."""
         if ws in self.players:
             player_name = self.players.pop(ws)
             if player_name in self.game_state["player_states"]:
@@ -81,6 +99,7 @@ class GameRoom:
             logger.info(f"Player {player_name} left room {self.room_id}")
 
             await self.broadcast_state()
+            await self.log(f"{player_name} left")
 
     async def handle_action(self, ws: WebSocket, action: dict):
         """
@@ -149,13 +168,26 @@ class GameRoom:
         state_msg = ServerState(room=self.room_id, seq=self.seq, state=self.game_state)
         await self._broadcast(state_msg.model_dump())
 
+    @staticmethod
+    def _append_capped(history: list[dict], entry: dict):
+        history.append(entry)
+        if len(history) > HISTORY_LIMIT:
+            del history[:-HISTORY_LIMIT]
+
     async def handle_chat(self, ws: WebSocket, text: str):
-        """Broadcast a chat line from a joined player to the whole room."""
+        """Store and broadcast a chat line from a joined player to the whole room."""
         sender = self.players.get(ws)
         if not sender:
             return
-        msg = ServerChat(room=self.room_id, sender=sender, text=text)
-        await self._broadcast(msg.model_dump(by_alias=True))
+        payload = ServerChat(room=self.room_id, sender=sender, text=text).model_dump(by_alias=True)
+        self._append_capped(self.chat_history, payload)
+        await self._broadcast(payload)
+
+    async def log(self, text: str):
+        """Store and broadcast a game-log line to the whole room."""
+        payload = ServerLog(room=self.room_id, text=text).model_dump()
+        self._append_capped(self.log_history, payload)
+        await self._broadcast(payload)
 
     def _find_card(self, card_id: str) -> dict | None:
         return next((c for c in self.game_state["cards"] if c["id"] == card_id), None)

@@ -11,6 +11,7 @@ import {
   renderRooms,
   renderPlayers,
   appendChatMessage,
+  appendLogMessage,
   chatFrame,
 } from '../../../src/yasuki_web/static/site/top-secret.js';
 
@@ -117,6 +118,15 @@ describe('appendChatMessage', () => {
     appendChatMessage(log, '<b>x</b>', '<script>y</script>');
     assert.doesNotMatch(log.innerHTML, /<script>/);
     assert.doesNotMatch(log.innerHTML, /<b>/);
+  });
+});
+
+describe('appendLogMessage', () => {
+  it('appends a log line as inert text', () => {
+    const log = document.getElementById('actionLog');
+    appendLogMessage(log, 'Ada joined');
+    assert.equal(log.children.length, 1);
+    assert.equal(log.children[0].textContent, 'Ada joined');
   });
 });
 

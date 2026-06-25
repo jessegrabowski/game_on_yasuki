@@ -36,6 +36,13 @@ export function appendChatMessage(logEl, sender, text) {
   logEl.scrollTop = logEl.scrollHeight;
 }
 
+export function appendLogMessage(logEl, text) {
+  const li = document.createElement('li');
+  li.textContent = text;
+  logEl.appendChild(li);
+  logEl.scrollTop = logEl.scrollHeight;
+}
+
 export function chatFrame(room, text) {
   return { type: 'CHAT', room, chat: { text } };
 }
@@ -93,6 +100,7 @@ function init() {
   const chatLog = document.getElementById('chatLog');
   const chatForm = document.getElementById('chatForm');
   const chatInput = document.getElementById('chatInput');
+  const actionLog = document.getElementById('actionLog');
   const battlefield = document.getElementById('battlefield');
   const spawnButton = document.getElementById('spawnCard');
 
@@ -143,6 +151,7 @@ function init() {
     }
     currentRoom = id;
     if (chatLog) chatLog.innerHTML = '';
+    if (actionLog) actionLog.innerHTML = '';
     setStatus(`Joining ${id}…`);
     client = connectRoom(id, myName);
     client.events.addEventListener('HELLO', (e) => {
@@ -156,6 +165,9 @@ function init() {
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
+    });
+    client.events.addEventListener('LOG', (e) => {
+      appendLogMessage(actionLog, e.detail.text);
     });
     client.events.addEventListener('disconnected', () => {
       if (roomStatus) roomStatus.textContent = 'Disconnected from the room.';

@@ -50,6 +50,7 @@ def test_unknown_action_kind_rejected(client):
         ws.send_json({"type": "JOIN", "room": room_id, "join": {"name": "Ada"}})
         ws.receive_json()  # HELLO
         ws.receive_json()  # STATE broadcast
+        ws.receive_json()  # LOG "Ada joined"
         ws.send_json({"type": "ACTION", "room": room_id, "action": {"kind": "HACK"}})
         with pytest.raises(WebSocketDisconnect) as exc:
             ws.receive_json()
