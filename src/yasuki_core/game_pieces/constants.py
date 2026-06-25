@@ -41,6 +41,19 @@ class DynastyType(str, Enum):
 
 class FateType(str, Enum):
     STRATEGY = "Strategy"
-    ATTACHMENT = "Attachment"
-    SENSEI = "Sensei"
     RING = "Ring"
+    ANCESTOR = "Ancestor"
+    ITEM = "Item"
+    FOLLOWER = "Follower"
+    SPELL = "Spell"
+
+
+class PreGameType(str, Enum):
+    STRONGHOLD = "Stronghold"
+    SENSEI = "Sensei"
+    WIND = "Wind"
+
+
+class SpecialType(str, Enum):
+    CLOCK = "Clock"
+    TERRITORY = "Territory"

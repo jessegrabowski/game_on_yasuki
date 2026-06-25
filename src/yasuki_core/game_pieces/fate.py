@@ -44,3 +44,8 @@ class FateAttachment(FateCard):
 class FateRing(FateCard):
     element: Element = Element.VOID
     image_front: Path | None = DEFAULT_RING
+
+
+@dataclass(frozen=True, slots=True)
+class FateAncestor(FateCard):
+    pass
