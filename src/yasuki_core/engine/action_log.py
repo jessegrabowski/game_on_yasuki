@@ -5,6 +5,7 @@ from typing import Protocol, runtime_checkable
 from collections.abc import Sequence
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.table import (
     TableState,
     SeatInfo,
@@ -108,49 +109,61 @@ class ChatEntry:
 
 @dataclass(slots=True)
 class InitialRecord:
-    """The pre-game start configuration that seeds a replay.
+    """A complete table snapshot that seeds a replay.
 
-    Captures the table the instant decks are loaded and before any cards leave them: the seats and
-    each seat's two ordered decklists. Every later change — shuffles, the opening draw, filling
-    provinces — is a logged intent, so this record plus the log fully reconstructs the game.
+    Captures the full state at the log head — seats, every owned zone and deck with its ordered
+    contents, and the battlefield with positions — so a replay rebuilds the table exactly and then
+    folds the recorded intents onto it.
 
     Attributes
     ----------
     seats : dict mapping PlayerId to SeatInfo
-        Each seat's starting status (name, honor, ready, connected).
+        Each seat's status (name, honor, ready, connected).
     decklists : dict mapping DeckKey to list of L5RCard
-        The ordered contents of each fate and dynasty deck at the start.
+        The ordered contents of each fate and dynasty deck.
+    zones : dict mapping ZoneKey to list of L5RCard
+        The contents of every owned zone, including provinces.
+    battlefield : list of L5RCard
+        The shared battlefield's cards.
+    positions : dict mapping str to BoardPos
+        Battlefield card positions, keyed by card id.
     setup_seeds : dict mapping str to int
-        Named RNG seeds used during setup that are not carried by a logged intent. Empty in the
-        common case where every shuffle is an explicit ``SHUFFLE`` intent.
+        Named RNG seeds used during setup that no logged intent carries.
     """
 
     seats: dict[PlayerId, SeatInfo]
     decklists: dict[DeckKey, list[L5RCard]]
+    zones: dict[ZoneKey, list[L5RCard]] = field(default_factory=dict)
+    battlefield: list[L5RCard] = field(default_factory=list)
+    positions: dict[str, BoardPos] = field(default_factory=dict)
     setup_seeds: dict[str, int] = field(default_factory=dict)
 
     @classmethod
     def from_state(
         cls, state: TableState, setup_seeds: dict[str, int] | None = None
     ) -> "InitialRecord":
-        """Snapshot a freshly loaded ``state`` into an initial record.
-
-        Call before any card leaves the decks; cards already dealt into zones, provinces, or the
-        battlefield are not captured. Cards are deep-copied so later in-place mutation of the live
-        table never touches the snapshot.
+        """Snapshot ``state`` into an initial record, deep-copying every card so later in-place
+        mutation of the live table never touches the snapshot.
 
         Parameters
         ----------
         state : TableState
-            The loaded-but-undealt table to capture.
+            The table to capture.
         setup_seeds : dict mapping str to int, optional
             Named setup seeds to record. Default empty.
         """
-        seats = {pid: replace(info) for pid, info in state.seats.items()}
-        decklists = {
-            key: [replace(card) for card in deck.cards] for key, deck in state.decks.items()
-        }
-        return cls(seats=seats, decklists=decklists, setup_seeds=dict(setup_seeds or {}))
+        return cls(
+            seats={pid: replace(info) for pid, info in state.seats.items()},
+            decklists={
+                key: [replace(card) for card in deck.cards] for key, deck in state.decks.items()
+            },
+            zones={
+                key: [replace(card) for card in zone.cards] for key, zone in state.zones.items()
+            },
+            battlefield=[replace(card) for card in state.battlefield.cards],
+            positions=dict(state.positions),
+            setup_seeds=dict(setup_seeds or {}),
+        )
 
 
 @dataclass(slots=True)
@@ -220,18 +233,30 @@ def apply_and_log(
 
 
 def build_initial_state(initial: InitialRecord) -> TableState:
-    """Construct a fresh ``TableState`` from an initial record: empty zones, the recorded seats, and
-    the decklists loaded into their decks. Cards are deep-copied so the record stays pristine and
+    """Rebuild a full ``TableState`` from an initial record: the recorded seats, decks, zones,
+    battlefield, and positions, with every card deep-copied so the record stays pristine and
     repeated builds are independent."""
     state = TableState.empty_two_seat()
     for pid, info in initial.seats.items():
         state.seats[pid] = replace(info)
     for key, cards in initial.decklists.items():
-        loaded = [replace(card) for card in cards]
-        state.decks[key].cards = loaded
-        for card in loaded:
-            state.cards_by_id[card.id] = card
+        state.decks[key].cards = _restore_cards(state, cards)
+    for key, cards in initial.zones.items():
+        zone = state.zones.get(key)
+        if zone is None:
+            zone = ProvinceZone(owner=key.owner)  # provinces are the only on-demand zone
+            state.zones[key] = zone
+        zone.cards = _restore_cards(state, cards)
+    state.battlefield.cards = _restore_cards(state, initial.battlefield)
+    state.positions = dict(initial.positions)
     return state
+
+
+def _restore_cards(state: TableState, cards: list[L5RCard]) -> list[L5RCard]:
+    copied = [replace(card) for card in cards]
+    for card in copied:
+        state.cards_by_id[card.id] = card
+    return copied
 
 
 def replay(initial: InitialRecord, entries: Sequence[LogEntry | ChatEntry]) -> TableState:
@@ -520,6 +545,12 @@ def _encode_initial(initial: InitialRecord) -> dict:
             {"deck": _encode_deck_key(key), "cards": [_encode_card(card) for card in cards]}
             for key, cards in initial.decklists.items()
         ],
+        "zones": [
+            {"zone": _encode_zone_key(key), "cards": [_encode_card(card) for card in cards]}
+            for key, cards in initial.zones.items()
+        ],
+        "battlefield": [_encode_card(card) for card in initial.battlefield],
+        "positions": {card_id: [pos.x, pos.y] for card_id, pos in initial.positions.items()},
         "setup_seeds": dict(initial.setup_seeds),
     }
 
@@ -530,7 +561,20 @@ def _decode_initial(payload: dict) -> InitialRecord:
         _decode_deck_key(item["deck"]): [_decode_card(card) for card in item["cards"]]
         for item in payload["decklists"]
     }
-    return InitialRecord(seats=seats, decklists=decklists, setup_seeds=dict(payload["setup_seeds"]))
+    zones = {
+        _decode_zone_key(item["zone"]): [_decode_card(card) for card in item["cards"]]
+        for item in payload["zones"]
+    }
+    battlefield = [_decode_card(card) for card in payload["battlefield"]]
+    positions = {card_id: BoardPos(*xy) for card_id, xy in payload["positions"].items()}
+    return InitialRecord(
+        seats=seats,
+        decklists=decklists,
+        zones=zones,
+        battlefield=battlefield,
+        positions=positions,
+        setup_seeds=dict(payload["setup_seeds"]),
+    )
 
 
 def action_log_to_dict(log: ActionLog) -> dict:
