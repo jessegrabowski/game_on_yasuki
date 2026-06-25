@@ -33,12 +33,15 @@ from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyPersonality, Dyn
 from yasuki_core.game_pieces.fate import FateCard, FateAction, FateAttachment, FateRing
 from yasuki_core.engine.action_log import (
     LogEntry,
+    ChatEntry,
     InitialRecord,
     ActionLog,
     apply_and_log,
     build_initial_state,
     action_log_to_dict,
     action_log_from_dict,
+    encode_intent,
+    decode_intent,
     flush,
 )
 
@@ -126,9 +129,6 @@ def _script(state: TableState, log: ActionLog) -> None:
     apply_and_log(state, log, PlayerId.P1, SetCardPos(card_id, 40.0, 50.0), ts + 3.0)
 
 
-# --- LogEntry + ActionLog ----------------------------------------------------------------------
-
-
 def test_append_preserves_order_and_holds_initial_at_head():
     initial = InitialRecord.from_state(_start_state())
     log = ActionLog(initial=initial)
@@ -152,9 +152,6 @@ def test_append_rejects_seq_regression():
     log.append(LogEntry(seq=5, ts=1.0, seat=PlayerId.P1, intent=CreateProvince()))
     with pytest.raises(ValueError, match="seq regressed"):
         log.append(LogEntry(seq=4, ts=2.0, seat=PlayerId.P1, intent=CreateProvince()))
-
-
-# --- Record on apply ---------------------------------------------------------------------------
 
 
 def test_apply_and_log_records_only_accepted_intents():
@@ -202,9 +199,6 @@ def test_apply_and_log_entries_match_the_full_run():
     assert len(search) == 1
 
 
-# --- Deterministic replay ----------------------------------------------------------------------
-
-
 def test_build_initial_state_round_trips_the_start():
     start = _start_state()
     rebuilt = build_initial_state(InitialRecord.from_state(start))
@@ -235,9 +229,6 @@ def test_replay_is_independent_of_the_live_table():
     # Mutating the live table after the fact must not bleed into the replay's start record.
     apply_intent(state, PlayerId.P1, SetHonor(value=0))
     assert log.replay() == rebuilt
-
-
-# --- Persistence seam --------------------------------------------------------------------------
 
 
 def test_serialized_log_is_json_safe():
@@ -316,6 +307,56 @@ def test_card_subclass_fields_survive_serialization():
     assert isinstance(bushi, DynastyPersonality) and bushi.force == 3 and bushi.chi == 2
     ring = rebuilt["p1_fr"]
     assert isinstance(ring, FateRing) and ring.element is Element.FIRE
+
+
+def test_public_intent_codec_round_trips():
+    intent = MoveCard("c1", DeckKey(PlayerId.P1, Side.FATE))
+    assert decode_intent(json.loads(json.dumps(encode_intent(intent)))) == intent
+
+
+def test_chat_interleaves_with_intents_in_send_order():
+    state = _start_state()
+    log = ActionLog(initial=InitialRecord.from_state(state))
+
+    apply_and_log(state, log, PlayerId.P1, CreateProvince(), ts=1.0)
+    log.append(ChatEntry(ts=1.5, sender="Ada", text="nice"))
+    apply_and_log(state, log, PlayerId.P2, CreateProvince(), ts=2.0)
+
+    is_chat = [isinstance(entry, ChatEntry) for entry in log.entries]
+    assert is_chat == [False, True, False]
+    assert log.entries[1].text == "nice"
+
+
+def test_replay_skips_chat_but_reproduces_state():
+    state = _start_state()
+    log = ActionLog(initial=InitialRecord.from_state(state))
+    _script(state, log)
+    # Drop a chat line into the middle of the tape.
+    log.entries.insert(len(log.entries) // 2, ChatEntry(ts=0.5, sender="Kenji", text="gg"))
+
+    assert log.replay() == state  # chat does not perturb the folded state
+
+
+def test_chat_does_not_break_intent_seq_monotonicity():
+    log = ActionLog(initial=InitialRecord.from_state(_start_state()))
+    log.append(LogEntry(seq=5, ts=1.0, seat=PlayerId.P1, intent=CreateProvince()))
+    log.append(ChatEntry(ts=1.5, sender="Ada", text="hi"))
+    # A regression is still caught across an interposed chat entry.
+    with pytest.raises(ValueError, match="seq regressed"):
+        log.append(LogEntry(seq=4, ts=2.0, seat=PlayerId.P1, intent=CreateProvince()))
+
+
+def test_chat_survives_serialization_round_trip():
+    state = _start_state()
+    log = ActionLog(initial=InitialRecord.from_state(state))
+    apply_and_log(state, log, PlayerId.P1, CreateProvince(), ts=1.0)
+    log.append(ChatEntry(ts=1.5, sender="Ada", text="hello <there>"))
+
+    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+
+    assert restored.entries == log.entries
+    assert restored.entries[1] == ChatEntry(ts=1.5, sender="Ada", text="hello <there>")
+    assert restored.replay() == state
 
 
 def test_flush_hands_serialized_payload_to_sink():
