@@ -512,6 +512,10 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
         or not zone_accepts(zone, card)
     ):
         return []
+    # Dropping a card onto the zone it already occupies — e.g. re-arranging within the hand — changes
+    # nothing, so it produces no event and never reaches the log.
+    if any(held is card for held in zone.cards):
+        return []
     _remove_from_location(state, card)
     if dest.role is ZoneRole.HAND:
         # The hand is private by ownership (redaction hides it from the opponent regardless), so a
