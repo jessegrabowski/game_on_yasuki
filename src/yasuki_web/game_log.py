@@ -13,6 +13,7 @@ _FLAG_VERB = {
     IntentOp.BOW: "bowed",
     IntentOp.UNBOW: "unbowed",
     IntentOp.FLIP: "flipped",
+    IntentOp.FLIP_FACE: "turned over",
     IntentOp.INVERT: "inverted",
     IntentOp.REVEAL: "revealed",
     IntentOp.HIDE: "hid",

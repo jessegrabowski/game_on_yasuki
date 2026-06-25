@@ -21,6 +21,12 @@ class L5RCard:
     image_back: Path | None = None
     owner: PlayerId | None = None
     revealed: bool = False
+    # Double-faced cards (e.g. flip strongholds): back_card_id links the other face, back holds it as
+    # a resolved card when available, and showing_back selects which face is presented. Distinct from
+    # face_up, which conceals a card behind its generic deck back.
+    back_card_id: str | None = None
+    back: "L5RCard | None" = None
+    showing_back: bool = False
 
     def __post_init__(self):
         # Normalize collections to tuples for consistent immutability
@@ -64,3 +70,14 @@ class L5RCard:
     def hide(self) -> None:
         if self.revealed:
             object.__setattr__(self, "revealed", False)
+
+    def flip_face(self) -> None:
+        if self.back_card_id is not None:
+            object.__setattr__(self, "showing_back", not self.showing_back)
+
+    @property
+    def active_face(self) -> "L5RCard":
+        """The face currently presented: the back card when flipped to it, otherwise this card."""
+        if self.showing_back and self.back is not None:
+            return self.back
+        return self

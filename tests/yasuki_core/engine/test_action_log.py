@@ -15,6 +15,7 @@ from yasuki_core.engine.table import (
     Bow,
     Unbow,
     Flip,
+    FlipFace,
     Invert,
     Reveal,
     Hide,
@@ -33,6 +34,7 @@ from yasuki_core.engine.table import (
 from yasuki_core.game_pieces.constants import Side, Element, Timing
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyPersonality, DynastyHolding
 from yasuki_core.game_pieces.fate import FateCard, FateAction, FateAttachment, FateRing
+from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_core.engine.action_log import (
     LogEntry,
     ChatEntry,
@@ -291,6 +293,7 @@ def test_round_trip_serialize_then_replay_matches():
         Bow(("a", "b")),
         Unbow(("a",)),
         Flip(("a",)),
+        FlipFace(("a",)),
         Invert(("a",)),
         Reveal(("a",)),
         Hide(("a",)),
@@ -338,6 +341,20 @@ def test_card_subclass_fields_survive_serialization():
     assert isinstance(bushi, DynastyPersonality) and bushi.force == 3 and bushi.chi == 2
     ring = rebuilt["p1_fr"]
     assert isinstance(ring, FateRing) and ring.element is Element.FIRE
+
+
+def test_nested_back_face_survives_serialization():
+    back = StrongholdCard(id="kk__back", name="Defiled", side=Side.STRONGHOLD, starting_honor=8)
+    front = StrongholdCard(
+        id="kk", name="Kyuden Kuni", side=Side.STRONGHOLD, back_card_id="kk__back", back=back
+    )
+    key = DeckKey(PlayerId.P1, Side.DYNASTY)
+    log = ActionLog(initial=InitialRecord(seats={}, decklists={key: [front]}))
+
+    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+
+    rebuilt = restored.initial.decklists[key][0]
+    assert rebuilt == front  # dataclass eq compares the nested back face recursively
 
 
 def test_public_intent_codec_round_trips():

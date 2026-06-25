@@ -13,6 +13,7 @@ from yasuki_core.engine.table import (
     Bow,
     Unbow,
     Flip,
+    FlipFace,
     Invert,
     Reveal,
     Hide,
@@ -267,6 +268,44 @@ def test_flip_toggles_face():
     apply_intent(table, PlayerId.P1, Flip(("f1",)))
     assert card.face_up is True
     assert table.seq == 2
+
+
+def test_flip_face_toggles_a_double_faced_card():
+    table = TableState.empty_two_seat()
+    back = L5RCard(id="sh__back", name="Back", side=Side.STRONGHOLD)
+    card = L5RCard(id="sh", name="Front", side=Side.STRONGHOLD, back_card_id="sh__back", back=back)
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, FlipFace(("sh",)))
+    assert card.showing_back is True
+    assert card.active_face is back
+    apply_intent(table, PlayerId.P1, FlipFace(("sh",)))
+    assert card.showing_back is False
+    assert table.seq == 2
+
+
+def test_flip_face_is_rejected_for_a_single_faced_card():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")  # no back_card_id
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, FlipFace(("f1",)))
+
+    assert events == []
+    assert card.showing_back is False
+    assert table.seq == 0
+
+
+def test_flip_face_toggles_with_only_the_back_link():
+    # The common runtime case: the server has the back link but not the resolved back face.
+    table = TableState.empty_two_seat()
+    card = L5RCard(id="sh", name="Front", side=Side.STRONGHOLD, back_card_id="sh__back")
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, FlipFace(("sh",)))
+
+    assert card.showing_back is True
+    assert table.seq == 1
 
 
 def test_invert_toggles_both_directions():
