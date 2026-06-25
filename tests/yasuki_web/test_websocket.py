@@ -2,13 +2,18 @@ import pytest
 from fastapi.testclient import TestClient
 from starlette.websockets import WebSocketDisconnect
 
+from yasuki_web import websocket as ws_module
 from yasuki_web.main import app
-from yasuki_web.websocket import WS_MSG_BURST
+from yasuki_web.websocket import WS_MSG_BURST, _origin_allowed
 
 
 @pytest.fixture
-def client():
-    return TestClient(app)
+def client(wip_auth_header):
+    # The rooms API and WS handshake are behind the WIP password gate. The default headers set here
+    # are merged into both REST requests and the WebSocket upgrade.
+    c = TestClient(app)
+    c.headers.update(wip_auth_header)
+    return c
 
 
 def _make_room(client) -> str:
@@ -79,3 +84,30 @@ def test_cross_origin_handshake_rejected(client):
         with client.websocket_connect(f"/ws/{room_id}", headers={"origin": "https://evil.example"}):
             pass
     assert exc.value.code == 4403
+
+
+class _OriginWS:
+    def __init__(self, **headers):
+        self.headers = headers
+
+
+def test_origin_allowed_accepts_configured_origin(monkeypatch):
+    monkeypatch.setattr(ws_module, "ALLOWED_WS_ORIGINS", frozenset({"https://play.example"}))
+    assert _origin_allowed(_OriginWS(origin="https://play.example", host="play.example")) is True
+
+
+def test_origin_allowed_rejects_unlisted_origin(monkeypatch):
+    monkeypatch.setattr(ws_module, "ALLOWED_WS_ORIGINS", frozenset({"https://play.example"}))
+    assert _origin_allowed(_OriginWS(origin="https://evil.example", host="play.example")) is False
+
+
+def test_origin_allowed_permits_same_origin(monkeypatch):
+    # The page that opened the socket is served by this app, so its Origin matches the Host even when
+    # it isn't on the explicit allowlist.
+    monkeypatch.setattr(ws_module, "ALLOWED_WS_ORIGINS", frozenset())
+    assert _origin_allowed(_OriginWS(origin="https://play.example", host="play.example")) is True
+
+
+def test_origin_allowed_permits_missing_origin():
+    # Native (non-browser) clients send no Origin header.
+    assert _origin_allowed(_OriginWS(host="play.example")) is True

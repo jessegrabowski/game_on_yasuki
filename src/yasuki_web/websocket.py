@@ -10,6 +10,7 @@ from pydantic import ValidationError
 from yasuki_web.config import allowed_origins
 from yasuki_web.schemas import ClientMessage, ServerHello, ServerState, ServerError
 from yasuki_web.rooms import rooms
+from yasuki_web.wip_gate import websocket_access_ok
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -203,6 +204,12 @@ def _refill(tokens: float, last: float) -> tuple[float, float]:
 async def websocket_endpoint(websocket: WebSocket, room_id: str):
     if not _origin_allowed(websocket):
         await websocket.close(code=4403, reason="Origin not allowed")
+        return
+
+    # WIP gate: the socket carries the page's cached Basic credentials. Closed unless they match (or
+    # entirely when no password is configured). Dropped at the launch cutover.
+    if not websocket_access_ok(websocket):
+        await websocket.close(code=4401, reason="Unauthorized")
         return
 
     if room_id not in rooms:

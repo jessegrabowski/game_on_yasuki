@@ -1,4 +1,26 @@
+import base64
+
 import pytest
+
+from yasuki_web.wip_gate import WIP_USERNAME
+
+# A fixed password for the WIP gate so the rooms API and WS handshake are reachable in tests. The
+# gate fails closed when unset, so without this every gated route would 404/close.
+WIP_TEST_PASSWORD = "test-wip-password"
+WIP_AUTH_HEADER = {
+    "Authorization": "Basic "
+    + base64.b64encode(f"{WIP_USERNAME}:{WIP_TEST_PASSWORD}".encode()).decode()
+}
+
+
+@pytest.fixture(autouse=True)
+def _set_wip_password(monkeypatch):
+    monkeypatch.setenv("WIP_PLAY_PASSWORD", WIP_TEST_PASSWORD)
+
+
+@pytest.fixture
+def wip_auth_header():
+    return dict(WIP_AUTH_HEADER)
 
 
 @pytest.fixture(autouse=True)

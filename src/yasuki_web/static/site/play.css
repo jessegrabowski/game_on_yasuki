@@ -1,0 +1,106 @@
+/* Lobby + room shell for the WIP online-play page. Layered on top of site.css. */
+
+.wip-tag {
+  font-style: italic;
+  opacity: 0.7;
+  align-self: center;
+}
+
+.play-view {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.play-panel {
+  background: var(--panel, #fbf7ef);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  padding: 1.5rem;
+}
+
+.play-panel h1 {
+  margin-top: 0;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.field span {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.field input {
+  padding: 0.5rem;
+  font: inherit;
+}
+
+.lobby-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.create-form,
+.join-form {
+  display: flex;
+  gap: 0.5rem;
+  flex: 1 1 280px;
+}
+
+.create-form input,
+.join-form input {
+  flex: 1;
+  padding: 0.5rem;
+  font: inherit;
+}
+
+.rooms-header,
+.room-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.room-list,
+.player-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0;
+}
+
+.room-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.room-list .room-meta {
+  opacity: 0.7;
+  font-size: 0.9rem;
+}
+
+.player-list li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.room-id {
+  font-family: monospace;
+}
+
+.status-line {
+  min-height: 1.2em;
+  opacity: 0.8;
+  font-size: 0.9rem;
+}

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, Path as PathParam
+from fastapi import Depends, FastAPI, HTTPException, Path as PathParam
 from fastapi.responses import FileResponse, HTMLResponse
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -15,6 +15,7 @@ import re
 from yasuki_web import cards, rooms, websocket
 from yasuki_web.config import allowed_origins
 from yasuki_web.rate_limit import limiter
+from yasuki_web.wip_gate import require_wip_access
 from yasuki_web.websocket import evict_stale_rooms
 from yasuki_core.database import close_pool, get_card_by_id, get_prints_by_card_id
 from yasuki_core.paths import BUNDLED_IMAGES_DIR, SETS_DIR
@@ -86,7 +87,15 @@ _CONTENT_SECURITY_POLICY = (
 
 # Public HTML pages and their static assets that the CSP applies to. The landing page lives at "/"
 # (matched exactly), the rest by path prefix.
-_CSP_PREFIXES = ("/deck-builder", "/site", "/card-search", "/card/", "/play-online", "/syntax")
+_CSP_PREFIXES = (
+    "/deck-builder",
+    "/site",
+    "/card-search",
+    "/card/",
+    "/play-online",
+    "/top-secret",
+    "/syntax",
+)
 
 
 class SecurityHeadersMiddleware(BaseHTTPMiddleware):
@@ -128,7 +137,12 @@ else:
     logger.warning(f"Bundled images directory not found at {BUNDLED_IMAGES_DIR}")
 
 app.include_router(cards.router, prefix="/api", tags=["cards"])
-app.include_router(rooms.router, prefix="/api", tags=["rooms"])
+# Rooms are the WIP play backend; gate the whole router behind the shared password until launch so
+# the API isn't open to anyone who knows the protocol, not just the page. The WS handshake is gated
+# separately in websocket.py.
+app.include_router(
+    rooms.router, prefix="/api", tags=["rooms"], dependencies=[Depends(require_wip_access)]
+)
 app.include_router(websocket.router, prefix="/ws", tags=["websocket"])
 
 
@@ -165,6 +179,13 @@ async def card_search():
 @app.get("/play-online")
 async def play_online():
     return _site_page("play-online.html")
+
+
+# The real online-play UI lives here, behind the shared WIP password and unlinked from the public
+# site, until it is ready to take over /play-online at launch.
+@app.get("/top-secret.html", dependencies=[Depends(require_wip_access)])
+async def top_secret():
+    return _site_page("top-secret.html")
 
 
 @app.get("/syntax")
