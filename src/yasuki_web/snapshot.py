@@ -1,6 +1,9 @@
 from yasuki_core.engine.redaction import ViewSnapshot, HiddenCard
 from yasuki_core.engine.table import ZoneKey, DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
+
+_PREGAME_TYPES = (StrongholdCard, SenseiCard, WindCard)
 
 
 def _zone_key_str(key: ZoneKey) -> str:
@@ -24,6 +27,8 @@ def _card(view: L5RCard | HiddenCard) -> dict:
         "name": face.name,
         "img": face.image_front.as_posix() if face.image_front is not None else None,
         "side": face.side.value,
+        "owner": view.owner.name if view.owner is not None else None,
+        "pregame": isinstance(view, _PREGAME_TYPES),
         "bowed": view.bowed,
         "face_up": view.face_up,
         "inverted": view.inverted,

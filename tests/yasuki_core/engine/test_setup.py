@@ -1,4 +1,4 @@
-from yasuki_core.engine.setup import setup_seat
+from yasuki_core.engine.setup import setup_seat, PREGAME_UNPLACED
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.constants import Side
@@ -81,7 +81,7 @@ def test_shuffle_order_is_reproducible_for_a_seed():
     assert _dynasty_order(_setup(dynasty_seed=7)) == _dynasty_order(_setup(dynasty_seed=7))
 
 
-def test_pre_game_cards_are_dealt_face_up_to_the_battlefield():
+def test_pre_game_cards_are_dealt_face_up_as_loose_battlefield_cards():
     state = TableState.empty_two_seat()
     resolved = _resolved()
     stronghold = StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1)
@@ -92,7 +92,8 @@ def test_pre_game_cards_are_dealt_face_up_to_the_battlefield():
 
     assert stronghold in state.battlefield.cards and sensei in state.battlefield.cards
     assert stronghold.face_up and sensei.face_up
-    assert all(card.id in state.positions for card in (stronghold, sensei))
+    # The client lays each one out beside the dynasty deck, so they start at the unplaced sentinel.
+    assert state.positions["sh"] == PREGAME_UNPLACED and state.positions["se"] == PREGAME_UNPLACED
     deck_cards = [card for deck in state.decks.values() for card in deck.cards]
     assert stronghold not in deck_cards and sensei not in deck_cards
     state.validate()  # raises on any structural violation

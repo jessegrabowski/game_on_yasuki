@@ -6,10 +6,10 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import ResolvedDeck
 from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
 
-# Pre-game permanents are dealt face-up into a horizontal row, one row per seat; the client refines
-# the final table layout.
-_PREGAME_CARD_GAP = 110.0
-_PREGAME_ROW_Y = {PlayerId.P1: 0.0, PlayerId.P2: 220.0}
+# Pre-game permanents start as loose, face-up battlefield cards at a negative sentinel position; the
+# client recognises an unplaced pre-game card and lays it out next to that seat's dynasty deck, after
+# which a drag gives it a real on-board position.
+PREGAME_UNPLACED = BoardPos(-1.0, -1.0)
 
 
 def setup_seat(
@@ -24,9 +24,10 @@ def setup_seat(
 
     Load the dynasty and fate cards into their decks face-down, shuffling each with the given seed,
     open the stronghold's provinces as empty zones, deal the pre-game permanents (stronghold, sensei,
-    wind) face-up onto the battlefield, set the seat's starting honor from its stronghold and sensei,
-    and register every card in the table's identity map. The hand, discards, and banishes stay empty
-    — players draw and fill provinces manually — and no deck legality is enforced (a manual sandbox).
+    wind) face-up onto the battlefield as loose cards, set the seat's starting honor from its
+    stronghold and sensei, and register every card in the table's identity map. The hand, discards,
+    and banishes stay empty — players draw and fill provinces manually — and no deck legality is
+    enforced (a manual sandbox).
 
     Parameters
     ----------
@@ -67,12 +68,11 @@ def _starting_honor(resolved: ResolvedDeck) -> int:
 
 
 def _place_pregame(state: TableState, seat: PlayerId, cards: list[L5RCard]) -> None:
-    row_y = _PREGAME_ROW_Y[seat]
-    for idx, card in enumerate(cards):
+    for card in cards:
         card.turn_face_up()
         state.cards_by_id[card.id] = card
         state.battlefield.add(card)
-        state.positions[card.id] = BoardPos(idx * _PREGAME_CARD_GAP, row_y)
+        state.positions[card.id] = PREGAME_UNPLACED
 
 
 def _load_deck(state: TableState, key: DeckKey, cards: list[L5RCard], seed: int) -> None:

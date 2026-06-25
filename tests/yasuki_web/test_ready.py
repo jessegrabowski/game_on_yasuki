@@ -169,5 +169,6 @@ def test_setup_snapshot_holds_redaction_and_honor(room):
     assert snapshot["seats"]["P1"]["honor"] == 10  # from the stronghold
     # The face-down deck never leaks identities — count only, no top card.
     assert snapshot["decks"]["P1:dynasty"] == {"count": 2, "top": None}
-    # The stronghold is a public, face-up pre-game permanent.
-    assert "Kyuden Hida" in [card.get("name") for card in snapshot["battlefield"]]
+    # The stronghold is a public, face-up loose pre-game card on the battlefield.
+    stronghold = next(c for c in snapshot["battlefield"] if c.get("name") == "Kyuden Hida")
+    assert stronghold["pregame"] is True

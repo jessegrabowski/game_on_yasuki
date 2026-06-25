@@ -393,11 +393,11 @@ describe('init (room client wiring)', () => {
     assert.equal(lastLog.children[0].textContent, 'Kenji joined');
   });
 
-  it('highlights the referenced board card when a log link is clicked', async () => {
+  it('highlights the referenced card anywhere on the stage when a log link is clicked', async () => {
     await joinedRoom();
-    const battlefield = document.getElementById('battlefield');
+    const boardStage = document.getElementById('boardStage');
     const cardEl = document.createElement('div');
-    battlefield.querySelector = () => cardEl;
+    boardStage.querySelector = () => cardEl;
 
     const link = { dataset: { cardId: 'c1' } };
     const realSetTimeout = globalThis.setTimeout;
@@ -452,21 +452,39 @@ describe('init (room client wiring)', () => {
     });
   });
 
+  it('draws from a deck on double-click', async () => {
+    const ws = await joinedRoom();
+    document.getElementById('selfTableau')._emit('dblclick', {
+      target: { closest: (s) => (s === '.deck' ? { dataset: { owner: 'P1', side: 'FATE' } } : null) },
+    });
+    assert.deepEqual(ws.sent.find((m) => m.type === 'INTENT'), {
+      type: 'INTENT',
+      room: 'r1',
+      intent: { op: 'DRAW', deck: { owner: 'P1', side: 'FATE' } },
+    });
+  });
+
   it('forwards a board drag as an INTENT frame with the room injected', async () => {
     const ws = await joinedRoom();
-    const board = document.getElementById('battlefield');
+    const stage = document.getElementById('boardStage');
+    const classes = new Set(['board-card']);
     const cardEl = {
       dataset: { cardId: 'c1' },
+      style: {},
+      classList: { add: (c) => classes.add(c), remove: (c) => classes.delete(c), contains: (c) => classes.has(c) },
       getBoundingClientRect: () => ({ left: 0, top: 0 }),
     };
-    board._emit('pointerdown', {
+    stage._emit('pointerdown', {
       button: 0,
-      pointerId: 1,
       clientX: 10,
       clientY: 10,
-      target: { closest: (s) => (s === '.board-card' ? cardEl : null) },
+      target: { closest: (s) => (s === '[data-card-id]' ? cardEl : null) },
     });
-    board._emit('pointerup', { clientX: 20, clientY: 20 });
+    stage._emit('pointerup', {
+      clientX: 20,
+      clientY: 20,
+      target: { closest: (s) => (s === '[data-zone]' ? { dataset: { zone: 'battlefield' } } : null) },
+    });
 
     const intent = ws.sent.find((m) => m.type === 'INTENT');
     assert.equal(intent.room, 'r1');
