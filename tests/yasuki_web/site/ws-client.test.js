@@ -43,8 +43,8 @@ class FakeWebSocket {
     this._emit('message', { data });
   }
 
-  drop() {
-    this._emit('close', {});
+  drop(code = 1006) {
+    this._emit('close', { code });
   }
 }
 
@@ -111,6 +111,18 @@ describe('connectRoom', () => {
 
     latest().drop();
     assert.equal(FakeWebSocket.instances.length, 2, 'no second reconnect');
+    assert.equal(disconnected, true);
+  });
+
+  it('does not reconnect after a policy close', () => {
+    const client = connectRoom('room1', 'Ada');
+    let disconnected = false;
+    client.events.addEventListener('disconnected', () => {
+      disconnected = true;
+    });
+    latest().acceptConnection();
+    latest().drop(1008); // rate limit
+    assert.equal(FakeWebSocket.instances.length, 1, 'no reconnect on a policy close');
     assert.equal(disconnected, true);
   });
 

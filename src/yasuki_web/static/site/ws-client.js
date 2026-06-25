@@ -38,9 +38,11 @@ export function connectRoom(roomId, playerName) {
       }
     });
 
-    socket.addEventListener('close', () => {
+    socket.addEventListener('close', (e) => {
       if (closedByCaller) return;
-      if (reconnectsLeft > 0) {
+      // Retry only a genuine network drop (1006). Server policy closes — rate limit, gate, room
+      // full — would just fail again, so surface them as a disconnect instead of reconnecting.
+      if (e.code === 1006 && reconnectsLeft > 0) {
         reconnectsLeft -= 1;
         open();
       } else {

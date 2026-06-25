@@ -254,10 +254,11 @@ async def evict_stale_rooms():
 
 MAX_WS_MESSAGE_SIZE = 4096
 
-# Per-connection message throttle (token bucket): generous for turn-based play, but a flooding
-# client drains it and gets closed.
-WS_MSG_BURST = 20
-WS_MSG_REFILL_PER_SEC = 2
+# Per-connection message throttle (token bucket). The refill must exceed the drag send rate
+# (board.js DRAG_SEND_MS) or dragging a card drains the bucket and the server closes the socket; a
+# genuine flood far above the refill still drains the burst and gets closed.
+WS_MSG_BURST = 60
+WS_MSG_REFILL_PER_SEC = 30
 
 ALLOWED_WS_ORIGINS = frozenset(allowed_origins())
 
