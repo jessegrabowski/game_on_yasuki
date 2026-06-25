@@ -10,14 +10,24 @@ from pydantic import ValidationError
 from yasuki_web.config import allowed_origins
 from yasuki_web.schemas import (
     ClientMessage,
+    IntentEnvelope,
+    SpawnRequest,
+    intent_from_envelope,
     ServerHello,
-    ServerState,
+    ServerSnapshot,
     ServerError,
     ServerChat,
     ServerLog,
 )
+from yasuki_web.snapshot import serialize_snapshot
 from yasuki_web.rooms import rooms
 from yasuki_web.wip_gate import websocket_access_ok
+
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.table import TableState, BoardPos, SpawnCard, RemoveCard
+from yasuki_core.engine.action_log import ActionLog, InitialRecord, ChatEntry, apply_and_log
+from yasuki_core.engine.redaction import redact
+from yasuki_core.game_pieces.constants import Side
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -29,49 +39,52 @@ HISTORY_LIMIT = 200
 
 
 class GameRoom:
-    """
-    Manages game state and player connections for a multiplayer room.
+    """Authoritative game state and connections for one room.
 
-    This is where the actual game logic lives. Currently a simple state
-    broadcaster, but you'll integrate your game engine here.
+    Owns a `TableState` (the truth) and an `ActionLog` (the durable tape of intents and chat). Each
+    connection is bound to a seat (P1/P2); every accepted intent is applied through the core,
+    recorded on the tape, and broadcast as a **per-viewer redacted** `SNAPSHOT` so a player never
+    receives a card they are not entitled to see.
     """
 
     def __init__(self, room_id: str):
         self.room_id = room_id
         self.players: dict[WebSocket, str] = {}
-        self.game_state = {
-            "turn": 0,
-            "phase": "setup",
-            "player_states": {},
-            # INTERIM (PR03): a flat, fully-public card list, replaced by TableState in PR07.
-            "cards": [],
-        }
-        self.seq = 0
+        self.seats: dict[WebSocket, PlayerId] = {}
+        self.state = TableState.empty_two_seat()
+        self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
+        self._spawn_count = 0
         # Chat and log persist for the room's lifetime so a player who joins (or rejoins) sees what
         # came before. Capped to the most recent HISTORY_LIMIT of each.
         self.chat_history: list[dict] = []
         self.log_history: list[dict] = []
 
-    async def add_player(self, ws: WebSocket, player_name: str):
-        """Add a player, replay the room's chat and log history to them, and announce the join."""
-        self.players[ws] = player_name
-        self.game_state["player_states"][player_name] = {
-            "hand": [],
-            "battlefield": [],
-            "provinces": [],
-            "dynasty_deck_size": 40,
-            "fate_deck_size": 40,
-            "honor": 10,
-            "ready": False,
-        }
+    def _free_seat(self) -> PlayerId | None:
+        return next((s for s in PlayerId if s not in self.seats.values()), None)
 
+    async def add_player(self, ws: WebSocket, player_name: str):
+        """Seat a joining player (P1/P2), replay the room's chat and log history, and announce them.
+
+        A connection with no free seat (a backstop behind the room's max-players cap) is told the
+        table is full and left unseated.
+        """
+        seat = self._free_seat()
+        if seat is None:
+            await ws.send_json(ServerError(room=self.room_id, message="Table is full").model_dump())
+            return
+
+        self.seats[ws] = seat
+        self.players[ws] = player_name
+        self.state.seats[seat].name = player_name
+        self.state.seats[seat].connected = True
         rooms[self.room_id]["players"].append(player_name)
 
         hello = ServerHello(
             room=self.room_id,
             you=player_name,
+            your_seat=seat.name,
             players=list(self.players.values()),
-            seq=self.seq,
+            seq=self.state.seq,
         )
         await ws.send_json(hello.model_dump())
 
@@ -80,93 +93,97 @@ class GameRoom:
         for entry in self.chat_history:
             await ws.send_json(entry)
 
-        logger.info(f"Player {player_name} joined room {self.room_id}")
+        logger.info(f"Player {player_name} took seat {seat.name} in room {self.room_id}")
 
-        await self.broadcast_state()
+        await self.broadcast_snapshots()
         await self.log(f"{player_name} joined")
 
     async def remove_player(self, ws: WebSocket):
-        """Remove a player when they disconnect and announce the departure."""
-        if ws in self.players:
-            player_name = self.players.pop(ws)
-            if player_name in self.game_state["player_states"]:
-                del self.game_state["player_states"][player_name]
+        """Free a player's seat on disconnect and announce the departure."""
+        seat = self.seats.pop(ws, None)
+        player_name = self.players.pop(ws, None)
+        if seat is not None:
+            self.state.seats[seat].connected = False
 
-            if self.room_id in rooms:
-                if player_name in rooms[self.room_id]["players"]:
-                    rooms[self.room_id]["players"].remove(player_name)
-
+        if player_name:
+            if self.room_id in rooms and player_name in rooms[self.room_id]["players"]:
+                rooms[self.room_id]["players"].remove(player_name)
             logger.info(f"Player {player_name} left room {self.room_id}")
-
-            await self.broadcast_state()
+            await self.broadcast_snapshots()
             await self.log(f"{player_name} left")
 
-    async def handle_action(self, ws: WebSocket, action: dict):
-        """
-        Process a game action from a player.
-
-        TODO: Integrate with your actual game engine (app/engine/).
-        For now, just updates state and broadcasts.
-        """
-        player_name = self.players.get(ws)
-        if not player_name:
+    async def handle_intent(self, ws: WebSocket, envelope: IntentEnvelope):
+        """Apply one intent for the acting seat through the authoritative core, record it, and
+        broadcast. A malformed or unauthorized intent is rejected with `ERROR`, state unchanged."""
+        seat = self.seats.get(ws)
+        if seat is None:
+            return
+        try:
+            intent = intent_from_envelope(envelope)
+        except (KeyError, ValueError, TypeError):
+            await ws.send_json(
+                ServerError(room=self.room_id, message="Invalid intent").model_dump()
+            )
             return
 
-        action_type = action.get("kind")
+        events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
+        if not events:
+            await ws.send_json(
+                ServerError(room=self.room_id, message="Intent rejected").model_dump()
+            )
+            return
+        await self.broadcast_snapshots()
 
-        if action_type == "PLAY_CARD":
-            card_id = action.get("card")
-            logger.info(f"{player_name} played card {card_id}")
-            self.game_state["last_action"] = {
-                "player": player_name,
-                "action": action_type,
-                "card": card_id,
-            }
+    async def handle_spawn(self, ws: WebSocket, spawn: SpawnRequest):
+        """Create a public, face-up card on the battlefield (tokens/copies/sandbox pieces) as a real
+        logged `SpawnCard` intent. The server assigns the card id so a replay reproduces it."""
+        seat = self.seats.get(ws)
+        if seat is None:
+            return
+        self._spawn_count += 1
+        intent = SpawnCard(
+            card_id=f"spawn-{self._spawn_count}",
+            name=spawn.name,
+            side=Side(spawn.side),
+            image=spawn.img,
+            position=BoardPos(float(spawn.x), float(spawn.y)),
+        )
+        if apply_and_log(self.state, self.action_log, seat, intent, ts=time.time()):
+            await self.broadcast_snapshots()
 
-        elif action_type == "DRAW":
-            logger.info(f"{player_name} drew a card")
-            self.game_state["last_action"] = {
-                "player": player_name,
-                "action": action_type,
-            }
+    async def handle_remove(self, ws: WebSocket, card_id: str):
+        """Remove a card from the table as a real logged `RemoveCard` intent."""
+        seat = self.seats.get(ws)
+        if seat is None:
+            return
+        if apply_and_log(self.state, self.action_log, seat, RemoveCard(card_id), ts=time.time()):
+            await self.broadcast_snapshots()
 
-        elif action_type == "PASS":
-            logger.info(f"{player_name} passed")
-            self.game_state["turn"] += 1
-            self.game_state["last_action"] = {
-                "player": player_name,
-                "action": action_type,
-            }
-
-        elif action_type == "SHUFFLE":
-            deck_type = action.get("deck_type", "dynasty")
-            logger.info(f"{player_name} shuffled {deck_type} deck")
-            self.game_state["last_action"] = {
-                "player": player_name,
-                "action": action_type,
-                "deck_type": deck_type,
-            }
-
-        self.seq += 1
-        await self.broadcast_state()
+    async def broadcast_snapshots(self):
+        """Send each seated player its own redacted `SNAPSHOT`. This is the per-viewer leak fix:
+        the opponent's hand and face-down cards are stubs in the bytes that reach the wrong client."""
+        disconnected = []
+        for ws, seat in list(self.seats.items()):
+            view = serialize_snapshot(redact(self.state, seat))
+            try:
+                await ws.send_json(ServerSnapshot(room=self.room_id, snapshot=view).model_dump())
+            except Exception as e:
+                logger.error(f"Failed to send snapshot: {e}")
+                disconnected.append(ws)
+        for ws in disconnected:
+            await self.remove_player(ws)
 
     async def _broadcast(self, payload: dict):
-        """Send a JSON payload to every connected player, evicting any that fail."""
+        """Send one shared JSON payload (chat/log) to every connected player, evicting any that fail."""
         disconnected = []
-        for ws in self.players:
+        for ws in list(self.players):
             try:
                 await ws.send_json(payload)
             except Exception as e:
                 logger.error(f"Failed to send to player: {e}")
                 disconnected.append(ws)
-
         for ws in disconnected:
             await self.remove_player(ws)
-
-    async def broadcast_state(self):
-        """Send current game state to all connected players."""
-        state_msg = ServerState(room=self.room_id, seq=self.seq, state=self.game_state)
-        await self._broadcast(state_msg.model_dump())
 
     @staticmethod
     def _append_capped(history: list[dict], entry: dict):
@@ -175,10 +192,11 @@ class GameRoom:
             del history[:-HISTORY_LIMIT]
 
     async def handle_chat(self, ws: WebSocket, text: str):
-        """Store and broadcast a chat line from a joined player to the whole room."""
+        """Record a chat line on the durable tape and broadcast it to the whole room."""
         sender = self.players.get(ws)
         if not sender:
             return
+        self.action_log.append(ChatEntry(ts=time.time(), sender=sender, text=text))
         payload = ServerChat(room=self.room_id, sender=sender, text=text).model_dump(by_alias=True)
         self._append_capped(self.chat_history, payload)
         await self._broadcast(payload)
@@ -188,47 +206,6 @@ class GameRoom:
         payload = ServerLog(room=self.room_id, text=text).model_dump()
         self._append_capped(self.log_history, payload)
         await self._broadcast(payload)
-
-    def _find_card(self, card_id: str) -> dict | None:
-        return next((c for c in self.game_state["cards"] if c["id"] == card_id), None)
-
-    async def handle_board_action(self, ws: WebSocket, action: dict):
-        """Apply a board action to the shared, fully-public card list and rebroadcast.
-
-        No ownership or hidden information — any joined player may move any card.
-        """
-        # INTERIM (PR03): replaced by the authoritative, redacted TableState protocol in PR07.
-        if ws not in self.players:
-            return
-
-        kind = action["kind"]
-        if kind == "ADD_CARD":
-            self.game_state["cards"].append(
-                {
-                    "id": action["id"],
-                    "name": action.get("name"),
-                    "img": action.get("img"),
-                    "x": action.get("x", 0),
-                    "y": action.get("y", 0),
-                    "bowed": False,
-                    "face_up": True,
-                }
-            )
-        elif kind == "SET_CARD_POS":
-            card = self._find_card(action["id"])
-            if card:
-                card["x"] = action.get("x", card["x"])
-                card["y"] = action.get("y", card["y"])
-        elif kind == "CARD_FLAG":
-            card = self._find_card(action["id"])
-            if card and action.get("flag") in ("bowed", "face_up"):
-                card[action["flag"]] = not card[action["flag"]]
-        elif kind == "REMOVE_CARD":
-            self.game_state["cards"] = [
-                c for c in self.game_state["cards"] if c["id"] != action["id"]
-            ]
-
-        await self.broadcast_state()
 
 
 active_game_rooms: dict[str, GameRoom] = {}
@@ -347,21 +324,21 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
                 player_name = message.join.name
                 await game_room.add_player(websocket, player_name)
 
-            elif message.type == "ACTION":
-                if message.action is not None:
-                    await game_room.handle_action(
-                        websocket, message.action.model_dump(exclude_none=True)
-                    )
+            elif message.type == "INTENT":
+                if message.intent is not None:
+                    await game_room.handle_intent(websocket, message.intent)
+
+            elif message.type == "SPAWN":
+                if message.spawn is not None:
+                    await game_room.handle_spawn(websocket, message.spawn)
+
+            elif message.type == "REMOVE":
+                if message.remove is not None:
+                    await game_room.handle_remove(websocket, message.remove.id)
 
             elif message.type == "CHAT":
                 if message.chat is not None:
                     await game_room.handle_chat(websocket, message.chat.text)
-
-            elif message.type == "BOARD":
-                if message.board is not None:
-                    await game_room.handle_board_action(
-                        websocket, message.board.model_dump(exclude_none=True)
-                    )
 
             elif message.type == "PING":
                 await websocket.send_json({"type": "PONG"})
