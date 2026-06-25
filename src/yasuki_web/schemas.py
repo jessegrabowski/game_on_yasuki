@@ -13,6 +13,11 @@ class ChatRequest(BaseModel):
     text: str = Field(min_length=1, max_length=500)
 
 
+class ReadyRequest(BaseModel):
+    ready: bool = True
+    solo: bool = False  # deal a one-seat goldfish table instead of waiting for an opponent
+
+
 class LoadDeckRequest(BaseModel):
     # The deck-builder export YAML, parsed server-side into dynasty/fate/pre-game name lists. The cap
     # is well above a full decklist (~3-4 KiB) but still bounded; the WS read loop allows a larger
@@ -78,7 +83,9 @@ class RemoveRequest(BaseModel):
 
 
 class ClientMessage(BaseModel):
-    type: Literal["JOIN", "INTENT", "SPAWN", "REMOVE", "CHAT", "LOAD_DECK", "PING"]
+    type: Literal[
+        "JOIN", "INTENT", "SPAWN", "REMOVE", "CHAT", "LOAD_DECK", "READY", "RESET", "PING"
+    ]
     room: str = Field(max_length=64)
     join: JoinRequest | None = None
     intent: IntentEnvelope | None = None
@@ -86,6 +93,7 @@ class ClientMessage(BaseModel):
     remove: RemoveRequest | None = None
     chat: ChatRequest | None = None
     load_deck: LoadDeckRequest | None = None
+    ready: ReadyRequest | None = None
     since_seq: int | None = None
 
 

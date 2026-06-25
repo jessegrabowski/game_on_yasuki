@@ -1,6 +1,7 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
 import asyncio
 import logging
+import random
 import time
 from datetime import datetime, timezone, timedelta
 from urllib.parse import urlparse
@@ -28,8 +29,11 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, BoardPos, Intent, Event, SpawnCard, RemoveCard
 from yasuki_core.engine.action_log import ActionLog, InitialRecord, ChatEntry, apply_and_log
 from yasuki_core.engine.redaction import redact
+from yasuki_core.engine.setup import setup_seat
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.factory import resolve_decklist
 from yasuki_core.decklist import parse_deck_yaml
+from yasuki_core.database import get_cards_by_names
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -58,6 +62,9 @@ class GameRoom:
         self._spawn_count = 0
         # Parsed decklists awaiting setup, keyed by seat.
         self.pending_decks: dict[PlayerId, dict] = {}
+        self.setup_done = False
+        # Seats that have voted for a new game; the table clears once every seated player has.
+        self.reset_votes: set[PlayerId] = set()
         # Chat and log persist for the room's lifetime so a player who joins (or rejoins) sees what
         # came before. Capped to the most recent HISTORY_LIMIT of each.
         self.chat_history: list[dict] = []
@@ -108,6 +115,7 @@ class GameRoom:
         player_name = self.players.pop(ws, None)
         if seat is not None:
             self.state.seats[seat].connected = False
+            self.reset_votes.discard(seat)
 
         if player_name:
             if self.room_id in rooms and player_name in rooms[self.room_id]["players"]:
@@ -185,6 +193,80 @@ class GameRoom:
             )
             return
         self.pending_decks[seat] = parsed
+
+    async def handle_ready(self, ws: WebSocket, ready: bool, solo: bool = False):
+        """Set the acting seat's ready flag and deal the opening table once everyone seated is ready.
+
+        Readying requires a loaded deck. A normal ready waits for both seats; `solo` deals a
+        one-seat goldfish table for the lone player. Setup runs at most once — start a fresh game
+        with `RESET`."""
+        seat = self.seats.get(ws)
+        if seat is None:
+            return
+        if ready and seat not in self.pending_decks:
+            await ws.send_json(
+                ServerError(room=self.room_id, message="Load a deck before readying").model_dump()
+            )
+            return
+        self.state.seats[seat].ready = ready
+        if ready and not self.setup_done and self._ready_to_deal(solo):
+            await self._run_setup()
+            self.setup_done = True
+        await self.broadcast_snapshots()
+
+    def _ready_to_deal(self, solo: bool) -> bool:
+        """Both seats ready, or one ready player who opted to goldfish solo."""
+        seated = list(self.seats.values())
+        if not seated or not all(self.state.seats[seat].ready for seat in seated):
+            return False
+        return len(seated) == len(PlayerId) or solo
+
+    async def handle_reset(self, ws: WebSocket):
+        """Record the acting seat's vote for a new game. The table clears only once every seated
+        player has agreed — a lone goldfisher's vote is unanimous on its own — keeping seats and
+        loaded decks so players can ready up again immediately."""
+        seat = self.seats.get(ws)
+        if seat is None:
+            return
+        self.reset_votes.add(seat)
+        if self.reset_votes >= set(self.seats.values()):
+            self._clear_table()
+            self.reset_votes.clear()
+            await self.broadcast_snapshots()
+            await self.log([{"text": "A new game begins"}])
+        else:
+            await self.log([{"text": f"{self.players[ws]} wants a new game"}])
+
+    def _clear_table(self):
+        names = {seat: info.name for seat, info in self.state.seats.items()}
+        self.state = TableState.empty_two_seat(names[PlayerId.P1], names[PlayerId.P2])
+        for seat in self.seats.values():
+            self.state.seats[seat].connected = True
+        self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
+        self.setup_done = False
+
+    async def _run_setup(self):
+        """Resolve both seats' decks and deal the opening table, then re-seed the action log so the
+        post-setup state is the replay head."""
+        names = sorted(
+            {
+                entry["name"]
+                for parsed in self.pending_decks.values()
+                for section in ("pre_game", "dynasty", "fate")
+                for entry in parsed[section]
+            }
+        )
+        records = await asyncio.to_thread(get_cards_by_names, names)
+        for seat, parsed in self.pending_decks.items():
+            resolved = resolve_decklist(parsed, records, seat)
+            setup_seat(
+                self.state,
+                seat,
+                resolved,
+                dynasty_seed=random.getrandbits(31),
+                fate_seed=random.getrandbits(31),
+            )
+        self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
 
     async def broadcast_snapshots(self):
         """Send each seated player its own redacted `SNAPSHOT`. This is the per-viewer leak fix:
@@ -380,6 +462,13 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
             elif message.type == "LOAD_DECK":
                 if message.load_deck is not None:
                     await game_room.handle_load_deck(websocket, message.load_deck.yaml)
+
+            elif message.type == "READY":
+                if message.ready is not None:
+                    await game_room.handle_ready(websocket, message.ready.ready, message.ready.solo)
+
+            elif message.type == "RESET":
+                await game_room.handle_reset(websocket)
 
             elif message.type == "PING":
                 await websocket.send_json({"type": "PONG"})
