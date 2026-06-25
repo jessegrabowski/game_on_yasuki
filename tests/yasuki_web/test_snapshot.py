@@ -1,0 +1,90 @@
+from pathlib import Path
+
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos
+from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.engine.redaction import redact
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
+from yasuki_web.snapshot import serialize_snapshot
+
+P1, P2 = PlayerId.P1, PlayerId.P2
+
+
+def _serialized(table, viewer):
+    return serialize_snapshot(redact(table, viewer))
+
+
+def test_opponent_hand_card_is_a_back_stub_with_no_identity():
+    table = TableState.empty_two_seat("Ada", "Kenji")
+    card = L5RCard(id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=False)
+    table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
+    table.cards_by_id["f1"] = card
+
+    hand = _serialized(table, P2)["zones"]["P1:hand"]
+
+    assert hand[0] == {"id": "f1", "side": "FATE", "hidden": True}
+    assert "name" not in hand[0]
+
+
+def test_owner_sees_their_own_hand_card_in_full():
+    table = TableState.empty_two_seat()
+    card = L5RCard(id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=False)
+    table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
+    table.cards_by_id["f1"] = card
+
+    hand = _serialized(table, P1)["zones"]["P1:hand"]
+
+    assert hand[0]["name"] == "Secret" and hand[0]["hidden"] is False
+
+
+def test_battlefield_card_carries_art_and_position():
+    table = TableState.empty_two_seat()
+    card = L5RCard(
+        id="t1",
+        name="Token",
+        side=Side.DYNASTY,
+        owner=None,
+        face_up=True,
+        image_front=Path("sets/x/token.jpg"),
+    )
+    table.battlefield.cards.append(card)
+    table.positions["t1"] = BoardPos(12.0, 34.0)
+    table.cards_by_id["t1"] = card
+
+    placed = _serialized(table, P1)["battlefield"][0]
+
+    assert placed["name"] == "Token"
+    assert placed["img"] == "sets/x/token.jpg"
+    assert (placed["x"], placed["y"]) == (12.0, 34.0)
+
+
+def test_deck_reports_count_only_when_face_down():
+    table = TableState.empty_two_seat()
+    deck = table.decks[DeckKey(P1, Side.FATE)]
+    for i in range(3):
+        card = L5RCard(id=f"f{i}", name=f"f{i}", side=Side.FATE, owner=P1, face_up=False)
+        deck.cards.append(card)
+        table.cards_by_id[card.id] = card
+
+    view = _serialized(table, P2)["decks"]["P1:fate"]
+
+    assert view == {"count": 3, "top": None}
+
+
+def test_seats_are_public():
+    table = TableState.empty_two_seat("Ada", "Kenji")
+    table.seats[P1].honor = 14
+    table.seats[P2].ready = True
+
+    seats = _serialized(table, P2)["seats"]
+
+    assert seats["P1"] == {"name": "Ada", "honor": 14, "ready": False, "connected": False}
+    assert seats["P2"]["ready"] is True
+
+
+def test_province_key_serializes_with_its_index():
+    table = TableState.empty_two_seat()
+    table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 2)] = ProvinceZone(owner=P1)
+
+    assert "P1:province:2" in _serialized(table, P1)["zones"]

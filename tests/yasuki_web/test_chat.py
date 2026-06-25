@@ -4,12 +4,13 @@ import pytest
 from starlette.websockets import WebSocketDisconnect
 
 from yasuki_web.websocket import GameRoom
+from yasuki_core.engine.players import PlayerId
 
 
 def _join(ws, room_id, name):
     ws.send_json({"type": "JOIN", "room": room_id, "join": {"name": name}})
     ws.receive_json()  # HELLO
-    ws.receive_json()  # STATE
+    ws.receive_json()  # SNAPSHOT
     ws.receive_json()  # LOG "<name> joined"
 
 
@@ -118,7 +119,7 @@ def test_leaving_logs_to_the_remaining_players():
         room = GameRoom("r1")
         ada, kenji = _FakeWS(), _FakeWS()
         room.players = {ada: "Ada", kenji: "Kenji"}
-        room.game_state["player_states"] = {"Ada": {}, "Kenji": {}}
+        room.seats = {ada: PlayerId.P1, kenji: PlayerId.P2}
         await room.remove_player(ada)
         return kenji.sent
 
