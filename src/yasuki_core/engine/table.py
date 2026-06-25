@@ -514,7 +514,11 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
         return []
     _remove_from_location(state, card)
     if dest.role is ZoneRole.HAND:
-        card.turn_face_down()
+        # The hand is private by ownership (redaction hides it from the opponent regardless), so a
+        # card enters it upright and face up — the owner reads their own hand, matching a fresh draw.
+        card.turn_face_up()
+        card.unbow()
+        card.uninvert()
     elif dest.role is ZoneRole.PROVINCE:
         card.unbow()
     zone.add(card)

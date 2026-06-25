@@ -50,10 +50,13 @@ def _on_battlefield(table: TableState, card: L5RCard, pos: BoardPos = BoardPos(0
     table.positions[card.id] = pos
 
 
-def test_move_card_battlefield_to_hand_goes_face_down():
+def test_move_card_battlefield_to_hand_lands_upright_and_face_up():
     table = TableState.empty_two_seat()
     card = _fate("f1")
     _on_battlefield(table, card)
+    card.turn_face_up()
+    card.bow()
+    card.invert()
 
     events = apply_intent(table, PlayerId.P1, MoveCard("f1", ZoneKey(PlayerId.P1, ZoneRole.HAND)))
 
@@ -62,7 +65,10 @@ def test_move_card_battlefield_to_hand_goes_face_down():
     assert card in table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
     assert card not in table.battlefield.cards
     assert "f1" not in table.positions
-    assert card.face_up is False
+    # The owner reads their own hand: a card enters it face up, unbowed, and uninverted, like a draw.
+    assert card.face_up is True
+    assert card.bowed is False
+    assert card.inverted is False
 
 
 def test_move_card_to_battlefield_sets_position():
