@@ -71,6 +71,21 @@ def test_move_card_battlefield_to_hand_lands_upright_and_face_up():
     assert card.inverted is False
 
 
+def test_move_card_within_the_same_hand_is_a_no_op():
+    table = TableState.empty_two_seat()
+    hand = ZoneKey(PlayerId.P1, ZoneRole.HAND)
+    card = _fate("f1")
+    table.cards_by_id["f1"] = card
+    table.zones[hand].add(card)
+
+    events = apply_intent(table, PlayerId.P1, MoveCard("f1", hand))
+
+    # Re-arranging within the hand changes nothing and must not produce a loggable event.
+    assert events == []
+    assert table.seq == 0
+    assert table.zones[hand].cards == [card]
+
+
 def test_move_card_to_battlefield_sets_position():
     table = TableState.empty_two_seat()
     card = _fate("f1")
