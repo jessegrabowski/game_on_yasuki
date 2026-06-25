@@ -35,6 +35,7 @@ from yasuki_core.game_pieces.constants import Side, Element, Timing
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyPersonality, DynastyHolding
 from yasuki_core.game_pieces.fate import FateCard, FateAction, FateAttachment, FateRing
 from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.action_log import (
     LogEntry,
     ChatEntry,
@@ -207,6 +208,34 @@ def test_build_initial_state_round_trips_the_start():
     start = _start_state()
     rebuilt = build_initial_state(InitialRecord.from_state(start))
     assert rebuilt == start
+
+
+def _post_setup_state() -> TableState:
+    """A start state plus a filled province and a face-up battlefield permanent with a position."""
+    state = _start_state()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    holding = DynastyCard(
+        id="prov0", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1, face_up=False
+    )
+    state.zones[province] = ProvinceZone(owner=PlayerId.P1, cards=[holding])
+    stronghold = StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1)
+    state.battlefield.cards.append(stronghold)
+    state.positions["sh"] = BoardPos(5.0, 6.0)
+    state.cards_by_id.update({"prov0": holding, "sh": stronghold})
+    state.validate()
+    return state
+
+
+def test_full_snapshot_round_trips_provinces_battlefield_and_positions():
+    state = _post_setup_state()
+    assert build_initial_state(InitialRecord.from_state(state)) == state
+
+
+def test_full_snapshot_survives_serialization():
+    state = _post_setup_state()
+    log = ActionLog(initial=InitialRecord.from_state(state))
+    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    assert restored.replay() == state
 
 
 def test_replay_reproduces_live_state_bit_for_bit():
