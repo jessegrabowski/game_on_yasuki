@@ -55,3 +55,11 @@ class L5RCard:
     def uninvert(self) -> None:
         if self.inverted:
             object.__setattr__(self, "inverted", False)
+
+    def reveal(self) -> None:
+        if not self.revealed:
+            object.__setattr__(self, "revealed", True)
+
+    def hide(self) -> None:
+        if self.revealed:
+            object.__setattr__(self, "revealed", False)
