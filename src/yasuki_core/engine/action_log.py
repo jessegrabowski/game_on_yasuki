@@ -32,6 +32,8 @@ from yasuki_core.engine.table import (
     DiscardProvince,
     CreateProvince,
     SetHonor,
+    SpawnCard,
+    RemoveCard,
     Event,
     apply_intent,
 )
@@ -383,6 +385,16 @@ def encode_intent(intent: Intent) -> dict:
             pass
         case IntentOp.SET_HONOR:
             payload |= {"delta": intent.delta, "value": intent.value}
+        case IntentOp.SPAWN_CARD:
+            payload |= {
+                "card_id": intent.card_id,
+                "name": intent.name,
+                "side": intent.side.value,
+                "image": intent.image,
+                "position": [intent.position.x, intent.position.y],
+            }
+        case IntentOp.REMOVE_CARD:
+            payload["card_id"] = intent.card_id
         case _:
             raise ValueError(f"unhandled intent op: {intent.op}")
     return payload
@@ -428,6 +440,16 @@ def decode_intent(payload: dict) -> Intent:
             return CreateProvince()
         case IntentOp.SET_HONOR:
             return SetHonor(delta=payload["delta"], value=payload["value"])
+        case IntentOp.SPAWN_CARD:
+            return SpawnCard(
+                payload["card_id"],
+                payload["name"],
+                Side(payload["side"]),
+                payload["image"],
+                BoardPos(*payload["position"]),
+            )
+        case IntentOp.REMOVE_CARD:
+            return RemoveCard(payload["card_id"])
         case _:
             raise ValueError(f"unhandled intent op: {op}")
 

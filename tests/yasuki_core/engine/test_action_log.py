@@ -26,6 +26,8 @@ from yasuki_core.engine.table import (
     DiscardProvince,
     CreateProvince,
     SetHonor,
+    SpawnCard,
+    RemoveCard,
     apply_intent,
 )
 from yasuki_core.game_pieces.constants import Side, Element, Timing
@@ -219,6 +221,32 @@ def test_replay_reproduces_live_state_bit_for_bit():
         assert [c.id for c in rebuilt.decks[key].cards] == [c.id for c in state.decks[key].cards]
 
 
+def test_replay_reproduces_spawned_and_removed_cards():
+    state = _start_state()
+    log = ActionLog(initial=InitialRecord.from_state(state))
+    apply_and_log(
+        state,
+        log,
+        PlayerId.P1,
+        SpawnCard("t1", "A", Side.FATE, "a.jpg", BoardPos(1.0, 2.0)),
+        ts=1.0,
+    )
+    apply_and_log(
+        state,
+        log,
+        PlayerId.P2,
+        SpawnCard("t2", "B", Side.DYNASTY, None, BoardPos(3.0, 4.0)),
+        ts=2.0,
+    )
+    apply_and_log(state, log, PlayerId.P1, RemoveCard("t1"), ts=3.0)
+
+    rebuilt = log.replay()
+
+    assert rebuilt == state
+    assert "t1" not in rebuilt.cards_by_id
+    assert rebuilt.cards_by_id["t2"].name == "B"
+
+
 def test_replay_is_independent_of_the_live_table():
     state = _start_state()
     initial = InitialRecord.from_state(state)
@@ -275,6 +303,9 @@ def test_round_trip_serialize_then_replay_matches():
         CreateProvince(),
         SetHonor(delta=3),
         SetHonor(value=-1),
+        SpawnCard("tok1", "Token", Side.DYNASTY, "sets/x/a.jpg", BoardPos(5.0, 6.0)),
+        SpawnCard("tok2", "Token", Side.FATE, None, BoardPos(0.0, 0.0)),
+        RemoveCard("tok1"),
     ],
 )
 def test_each_intent_survives_a_serialization_round_trip(intent):
