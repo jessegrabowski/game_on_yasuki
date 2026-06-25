@@ -204,11 +204,21 @@ describe('appendChatMessage', () => {
 });
 
 describe('appendLogMessage', () => {
-  it('appends a log line as inert text', () => {
+  it('renders prose as text and a card segment as a link', () => {
     const log = document.getElementById('actionLog');
-    appendLogMessage(log, 'Ada joined');
-    assert.equal(log.children.length, 1);
-    assert.equal(log.children[0].textContent, 'Ada joined');
+    appendLogMessage(log, [{ text: 'Ada bowed ' }, { card_id: 'c1', name: 'Hida Kisada' }]);
+
+    const segments = log.children[0].children;
+    assert.equal(segments[0].textContent, 'Ada bowed ');
+    assert.equal(segments[1].className, 'log-card-link');
+    assert.equal(segments[1].dataset.cardId, 'c1');
+    assert.equal(segments[1].textContent, 'Hida Kisada');
+  });
+
+  it('renders an unknown card ("a card") as plain text, not a link', () => {
+    const log = document.getElementById('actionLog');
+    appendLogMessage(log, [{ text: 'Ada drew a card' }]);
+    assert.equal(log.children[0].children[0].className, '');
   });
 });
 
@@ -341,12 +351,33 @@ describe('init (room client wiring)', () => {
       },
     });
     ws.deliver({ type: 'CHAT', from: 'Ada', text: 'hello there' });
-    ws.deliver({ type: 'LOG', text: 'Kenji joined' });
+    ws.deliver({ type: 'LOG', room: 'r1', parts: [{ text: 'Kenji joined' }] });
 
     assert.match(document.getElementById('playerList').innerHTML, /Kenji/);
     assert.equal(document.getElementById('battlefield').children.length, 1);
     assert.match(document.getElementById('chatLog').innerHTML, /hello there/);
-    assert.equal(document.getElementById('actionLog').children.at(-1).textContent, 'Kenji joined');
+    const lastLog = document.getElementById('actionLog').children.at(-1);
+    assert.equal(lastLog.children[0].textContent, 'Kenji joined');
+  });
+
+  it('highlights the referenced board card when a log link is clicked', async () => {
+    await joinedRoom();
+    const battlefield = document.getElementById('battlefield');
+    const cardEl = document.createElement('div');
+    battlefield.querySelector = () => cardEl;
+
+    const link = { dataset: { cardId: 'c1' } };
+    const realSetTimeout = globalThis.setTimeout;
+    globalThis.setTimeout = () => 0;
+    try {
+      document.getElementById('actionLog')._emit('click', {
+        target: { closest: (sel) => (sel === '.log-card-link' ? link : null) },
+      });
+    } finally {
+      globalThis.setTimeout = realSetTimeout;
+    }
+
+    assert.ok(cardEl.classList.contains('highlight'));
   });
 
   it('sends a CHAT frame on chat submit and clears the input', async () => {

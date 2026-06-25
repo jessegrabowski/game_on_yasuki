@@ -12,6 +12,7 @@ import {
   flipIntent,
   bowIntent,
   initBoardInteractions,
+  highlightCard,
 } from '../../../src/yasuki_web/static/site/board.js';
 
 beforeEach(() => {
@@ -139,6 +140,30 @@ describe('dragPosition', () => {
   it('clamps a card so it stays fully on the board', () => {
     assert.deepEqual(dragPosition(0, 0, board, { x: 50, y: 50 }), { x: 0, y: 0 });
     assert.deepEqual(dragPosition(9999, 9999, board, { x: 0, y: 0 }), { x: 410, y: 272 });
+  });
+});
+
+describe('highlightCard', () => {
+  it('flashes the matching board card', () => {
+    const board = document.getElementById('battlefield');
+    const cardEl = document.createElement('div');
+    board.querySelector = () => cardEl;
+
+    const realSetTimeout = globalThis.setTimeout;
+    globalThis.setTimeout = () => 0; // do not schedule the removal during the test
+    try {
+      highlightCard(board, 'c1');
+    } finally {
+      globalThis.setTimeout = realSetTimeout;
+    }
+
+    assert.ok(cardEl.classList.contains('highlight'));
+  });
+
+  it('is a no-op when the card is not on the board', () => {
+    const board = document.getElementById('battlefield');
+    board.querySelector = () => null;
+    highlightCard(board, 'ghost'); // must not throw
   });
 });
 

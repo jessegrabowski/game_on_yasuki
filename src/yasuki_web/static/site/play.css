@@ -419,6 +419,34 @@
   border-bottom: 1px solid var(--r-line-soft);
 }
 
+.log-card-link {
+  color: var(--r-gold);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-style: normal;
+}
+
+.log-card-link:hover {
+  color: var(--r-gold-soft);
+}
+
+.board-card.highlight {
+  animation: board-card-flash 1.2s ease-out;
+  z-index: 10;
+}
+
+@keyframes board-card-flash {
+  0% {
+    box-shadow:
+      0 0 0 3px var(--r-gold),
+      0 0 18px 6px var(--r-gold-soft);
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
 .pane-empty {
   border-bottom: none !important;
   opacity: 0.75;

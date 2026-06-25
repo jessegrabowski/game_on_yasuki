@@ -105,11 +105,11 @@ def test_log_stores_and_broadcasts():
         room = GameRoom("r1")
         ws = _FakeWS()
         room.players = {ws: "Ada"}
-        await room.log("the daimyo arrives")
+        await room.log([{"text": "the daimyo arrives"}])
         return room.log_history, ws.sent
 
     history, sent = asyncio.run(scenario())
-    expected = {"type": "LOG", "room": "r1", "text": "the daimyo arrives"}
+    expected = {"type": "LOG", "room": "r1", "parts": [{"text": "the daimyo arrives"}]}
     assert history == [expected]
     assert sent == [expected]
 
@@ -124,7 +124,7 @@ def test_leaving_logs_to_the_remaining_players():
         return kenji.sent
 
     sent = asyncio.run(scenario())
-    assert any(m.get("type") == "LOG" and m.get("text") == "Ada left" for m in sent)
+    assert any(m.get("type") == "LOG" and m["parts"] == [{"text": "Ada left"}] for m in sent)
 
 
 def test_chat_and_join_logs_replay_to_a_new_player(client):
@@ -145,5 +145,5 @@ def test_chat_and_join_logs_replay_to_a_new_player(client):
     assert any(
         m["type"] == "CHAT" and m["from"] == "Ada" and m["text"] == "hello" for m in received
     )
-    assert any(m["type"] == "LOG" and m["text"] == "Ada joined" for m in received)
-    assert any(m["type"] == "LOG" and m["text"] == "Kenji joined" for m in received)
+    assert any(m["type"] == "LOG" and m["parts"] == [{"text": "Ada joined"}] for m in received)
+    assert any(m["type"] == "LOG" and m["parts"] == [{"text": "Kenji joined"}] for m in received)

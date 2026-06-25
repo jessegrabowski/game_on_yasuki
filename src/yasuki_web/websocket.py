@@ -20,11 +20,12 @@ from yasuki_web.schemas import (
     ServerLog,
 )
 from yasuki_web.snapshot import serialize_snapshot
+from yasuki_web.game_log import describe_intent
 from yasuki_web.rooms import rooms
 from yasuki_web.wip_gate import websocket_access_ok
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, BoardPos, SpawnCard, RemoveCard
+from yasuki_core.engine.table import TableState, BoardPos, Intent, Event, SpawnCard, RemoveCard
 from yasuki_core.engine.action_log import ActionLog, InitialRecord, ChatEntry, apply_and_log
 from yasuki_core.engine.redaction import redact
 from yasuki_core.game_pieces.constants import Side
@@ -96,7 +97,7 @@ class GameRoom:
         logger.info(f"Player {player_name} took seat {seat.name} in room {self.room_id}")
 
         await self.broadcast_snapshots()
-        await self.log(f"{player_name} joined")
+        await self.log([{"text": f"{player_name} joined"}])
 
     async def remove_player(self, ws: WebSocket):
         """Free a player's seat on disconnect and announce the departure."""
@@ -110,7 +111,7 @@ class GameRoom:
                 rooms[self.room_id]["players"].remove(player_name)
             logger.info(f"Player {player_name} left room {self.room_id}")
             await self.broadcast_snapshots()
-            await self.log(f"{player_name} left")
+            await self.log([{"text": f"{player_name} left"}])
 
     async def handle_intent(self, ws: WebSocket, envelope: IntentEnvelope):
         """Apply one intent for the acting seat through the authoritative core, record it, and
@@ -133,6 +134,7 @@ class GameRoom:
             )
             return
         await self.broadcast_snapshots()
+        await self._log_intent(seat, intent, events[0])
 
     async def handle_spawn(self, ws: WebSocket, spawn: SpawnRequest):
         """Create a public, face-up card on the battlefield (tokens/copies/sandbox pieces) as a real
@@ -148,16 +150,21 @@ class GameRoom:
             image=spawn.img,
             position=BoardPos(float(spawn.x), float(spawn.y)),
         )
-        if apply_and_log(self.state, self.action_log, seat, intent, ts=time.time()):
+        events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
+        if events:
             await self.broadcast_snapshots()
+            await self._log_intent(seat, intent, events[0])
 
     async def handle_remove(self, ws: WebSocket, card_id: str):
         """Remove a card from the table as a real logged `RemoveCard` intent."""
         seat = self.seats.get(ws)
         if seat is None:
             return
-        if apply_and_log(self.state, self.action_log, seat, RemoveCard(card_id), ts=time.time()):
+        intent = RemoveCard(card_id)
+        events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
+        if events:
             await self.broadcast_snapshots()
+            await self._log_intent(seat, intent, events[0])
 
     async def broadcast_snapshots(self):
         """Send each seated player its own redacted `SNAPSHOT`. This is the per-viewer leak fix:
@@ -201,11 +208,18 @@ class GameRoom:
         self._append_capped(self.chat_history, payload)
         await self._broadcast(payload)
 
-    async def log(self, text: str):
-        """Store and broadcast a game-log line to the whole room."""
-        payload = ServerLog(room=self.room_id, text=text).model_dump()
+    async def log(self, parts: list[dict]):
+        """Store and broadcast a game-log line (text and card-link segments) to the whole room."""
+        payload = ServerLog(room=self.room_id, parts=parts).model_dump()
         self._append_capped(self.log_history, payload)
         await self._broadcast(payload)
+
+    async def _log_intent(self, seat: PlayerId, intent: Intent, event: Event):
+        """Append a human-readable game-log line for an accepted intent, unless it is one not shown
+        (card repositioning)."""
+        parts = describe_intent(self.state, self.state.seats[seat].name, intent, event)
+        if parts:
+            await self.log(parts)
 
 
 active_game_rooms: dict[str, GameRoom] = {}
