@@ -47,17 +47,11 @@ def _hidden(view) -> bool:
     return isinstance(view, HiddenCard)
 
 
-# --- HiddenCard stub ---------------------------------------------------------------------------
-
-
 def test_hidden_card_exposes_no_identity():
     stub = HiddenCard(card_id="f1", side=Side.FATE)
     assert (stub.card_id, stub.side, stub.face) == ("f1", Side.FATE, "back")
     for identity_field in ("name", "text", "image_front", "image_back"):
         assert not hasattr(stub, identity_field)
-
-
-# --- Redaction rules ---------------------------------------------------------------------------
 
 
 def test_owner_sees_own_hand_opponent_sees_backs():
@@ -127,9 +121,6 @@ def test_seats_are_public_to_both_viewers():
     assert snap.seats[P2].ready is True
 
 
-# --- Decks -------------------------------------------------------------------------------------
-
-
 def test_deck_shows_count_only_when_top_is_face_down():
     table = TableState.empty_two_seat()
     deck = table.decks[DeckKey(P1, Side.FATE)]
@@ -150,9 +141,6 @@ def test_deck_exposes_a_flipped_top_card():
     assert view.top is not None and view.top.id == "top"
 
 
-# --- Stable ids --------------------------------------------------------------------------------
-
-
 def test_card_ids_survive_redaction_in_both_views():
     card = _card("f1", owner=P1, face_up=False)
     table = TableState.empty_two_seat()
@@ -165,9 +153,6 @@ def test_card_ids_survive_redaction_in_both_views():
 
     assert owner_view.id == "f1"  # owner gets the full card
     assert _hidden(opp_view) and opp_view.card_id == "f1"  # opponent gets a stub with the same id
-
-
-# --- No-leak property --------------------------------------------------------------------------
 
 
 def _random_table(rng):
