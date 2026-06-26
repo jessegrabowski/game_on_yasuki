@@ -275,6 +275,8 @@
   position: relative;
   min-width: 0;
   min-height: 0;
+  /* The board is a drag surface, never a text one: stop a press-drag from selecting deck labels etc. */
+  user-select: none;
   display: grid;
   /* Opponent zones, the shared battlefield, your zones. */
   grid-template-rows: auto minmax(0, 1fr) auto;
