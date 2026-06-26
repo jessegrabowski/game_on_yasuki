@@ -699,10 +699,12 @@ describe('initBoardInteractions — selection', () => {
     assert.ok(fresh.classList.contains('selected'));
   });
 
-  // Build a two-card selection (click c1, Ctrl-click c2) and return the elements.
-  const selectTwo = () => {
-    const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1' });
-    const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1' });
+  // Build a two-card selection (click c1, Ctrl-click c2) and return the elements. Per-card overrides
+  // (e.g. a side) let a test exercise the mixed-selection routing. Its pointer-up drops each emit a
+  // SET_CARD_POS, so a test that asserts on a later menu action should clear `sent` first.
+  const selectTwo = (opts1 = {}, opts2 = {}) => {
+    const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1', ...opts1 });
+    const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1', ...opts2 });
     board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2] : []);
     root._emit('pointerdown', onCard(c1));
     root._emit('pointerup', onZone({ zone: 'battlefield' }));
@@ -713,6 +715,7 @@ describe('initBoardInteractions — selection', () => {
 
   it('applies a context-menu flag op to the whole selection when a selected card is clicked', () => {
     const [c1] = selectTwo();
+    sent.length = 0;
     root._emit('contextmenu', rightClick({ card: c1 }));
     clickMenuItem(root, 'Flip');
     assert.deepEqual(sent.at(-1).intent, { op: 'FLIP', card_ids: ['c1', 'c2'] });
@@ -724,6 +727,59 @@ describe('initBoardInteractions — selection', () => {
     root._emit('contextmenu', rightClick({ card: c3 }));
     clickMenuItem(root, 'Flip');
     assert.deepEqual(sent.at(-1).intent, { op: 'FLIP', card_ids: ['c3'] });
+  });
+
+  it('fans "Send to Hand" out over the whole selection, one MOVE_CARD per card', () => {
+    root.dataset.viewerSeat = 'P1';
+    const [c1] = selectTwo();
+    sent.length = 0;
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Send to Hand');
+    assert.deepEqual(
+      sent.map((m) => [m.intent.op, m.intent.card_id, m.intent.to.zone.role]),
+      [
+        ['MOVE_CARD', 'c1', 'hand'],
+        ['MOVE_CARD', 'c2', 'hand'],
+      ],
+    );
+  });
+
+  it("routes a mixed-side selection to each card's own discard", () => {
+    root.dataset.viewerSeat = 'P1';
+    const [c1] = selectTwo({ side: 'FATE' }, { side: 'DYNASTY' });
+    sent.length = 0;
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Send to Discard');
+    assert.deepEqual(
+      sent.map((m) => [m.intent.card_id, m.intent.to.zone.role]),
+      [
+        ['c1', 'fate_discard'],
+        ['c2', 'dynasty_discard'],
+      ],
+    );
+  });
+
+  it('skips a sideless card when a side-routed action fans out over the selection', () => {
+    root.dataset.viewerSeat = 'P1';
+    const [c1] = selectTwo({ side: 'FATE' }, { side: '' }); // c2 is a sideless token
+    sent.length = 0;
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Send to Discard');
+    assert.deepEqual(
+      sent.map((m) => [m.intent.card_id, m.intent.to.zone.role]),
+      [['c1', 'fate_discard']],
+    );
+  });
+
+  it('removes every selected card from a group "Remove"', () => {
+    const [c1] = selectTwo();
+    sent.length = 0;
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Remove');
+    assert.deepEqual(sent, [
+      { type: 'REMOVE', remove: { id: 'c1' } },
+      { type: 'REMOVE', remove: { id: 'c2' } },
+    ]);
   });
 });
 
