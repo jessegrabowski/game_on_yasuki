@@ -52,9 +52,12 @@ function fakeCard(
     shown = false,
     peeked = false,
     province = null,
+    img = null,
   } = {},
 ) {
   const classes = new Set([onBattlefield ? 'board-card' : 'zone-card']);
+  if (bowed) classes.add('bowed');
+  if (!faceUp || hidden) classes.add('face-down');
   const dataset = {
     cardId: id,
     bowed: bowed ? '1' : '',
@@ -78,6 +81,7 @@ function fakeCard(
     },
     getBoundingClientRect: () => ({ left: 10, top: 20 }),
     closest: (sel) => (sel === '[data-zone="province"]' && province ? province : null),
+    querySelector: (sel) => (sel === 'img' && img ? { src: img } : null),
   };
 }
 
@@ -125,8 +129,9 @@ function onDeck(attrs, overrides = {}) {
   const el = {
     dataset: attrs,
     style: {},
-    classList: { add() {}, remove() {} },
+    classList: { add() {}, remove() {}, contains: () => false },
     getBoundingClientRect: () => ({ left: 0, top: 0 }),
+    querySelector: () => null,
   };
   return {
     button: 0,
@@ -686,6 +691,103 @@ describe('initBoardInteractions — dragging', () => {
     assert.equal(move.op, 'MOVE_CARD');
     assert.deepEqual(move.to, { kind: 'battlefield' });
     assert.ok(Array.isArray(move.position));
+  });
+
+  it('drags a face-up hand card with a ghost showing its front art', () => {
+    root._emit(
+      'pointerdown',
+      onCard(fakeCard('h1', { onBattlefield: false, img: '/images/foo.jpg' })),
+    );
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    const ghost = board.children.find((c) => c.className?.includes('dragging'));
+    assert.ok(ghost, 'a ghost follows the dragged hand card');
+    assert.equal(ghost.style.pointerEvents, 'none', 'the ghost must not intercept the drop');
+    assert.equal(ghost.children[0]?.src, '/images/foo.jpg', 'the ghost mirrors the card front');
+    assert.ok(!ghost.classList.contains('face-down'));
+  });
+
+  it('drags a face-down province card with a face-down ghost, not its art', () => {
+    const province = { dataset: { zone: 'province', owner: 'P1', idx: '0' } };
+    root._emit(
+      'pointerdown',
+      onCard(fakeCard('p1', { onBattlefield: false, faceUp: false, province })),
+    );
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    const ghost = board.children.find((c) => c.className?.includes('dragging'));
+    assert.ok(ghost.classList.contains('face-down'), 'a face-down card drags a back');
+    assert.equal(ghost.children.length, 0, 'no front art leaks from a face-down card');
+  });
+
+  it('hides the source card once its ghost appears', () => {
+    const handCard = fakeCard('h1', { onBattlefield: false });
+    root._emit('pointerdown', onCard(handCard));
+    assert.notEqual(handCard.style.visibility, 'hidden', 'a plain press leaves it visible');
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    assert.equal(handCard.style.visibility, 'hidden', 'the source vanishes once the ghost appears');
+  });
+
+  it('mirrors the orientation of a bowed card onto its ghost', () => {
+    root._emit(
+      'pointerdown',
+      onCard(fakeCard('h1', { onBattlefield: false, bowed: true, img: '/images/foo.jpg' })),
+    );
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    const ghost = board.children.find((c) => c.className?.includes('dragging'));
+    assert.ok(ghost.classList.contains('bowed'), 'the ghost is bowed like the card it stands in for');
+  });
+
+  it('keeps a dragged battlefield card visible — it is the moving element, not a ghost', () => {
+    const boardCard = fakeCard('c1', { onBattlefield: true });
+    root._emit('pointerdown', onCard(boardCard));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    assert.notEqual(boardCard.style.visibility, 'hidden');
+    assert.ok(!board.children.some((c) => c.className?.includes('dragging')), 'no ghost on the board');
+  });
+
+  it('restores the source if the drag is cancelled before a drop', () => {
+    const handCard = fakeCard('h1', { onBattlefield: false });
+    root._emit('pointerdown', onCard(handCard));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    root._emit('pointercancel', {});
+    assert.equal(handCard.style.visibility, '', 'a cancelled drag leaves the card visible');
+  });
+
+  it('keeps the source hidden after a committed drop, letting the snapshot rebuild it', () => {
+    const handCard = fakeCard('h1', { onBattlefield: false });
+    root._emit('pointerdown', onCard(handCard));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.equal(handCard.style.visibility, 'hidden', 'no flash back into the source zone');
+  });
+
+  it('restores the source when a drop commits no move', () => {
+    const handCard = fakeCard('h1', { onBattlefield: false });
+    root._emit('pointerdown', onCard(handCard));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    root._emit('pointerup', { clientX: 300, clientY: 300, target: { closest: () => null } });
+    assert.equal(handCard.style.visibility, '', 'a drop onto nothing brings the card back');
+  });
+
+  it('keeps the source hidden when committed to a zone destination, not just the battlefield', () => {
+    const handCard = fakeCard('h1', { onBattlefield: false });
+    root._emit('pointerdown', onCard(handCard));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    root._emit('pointerup', onZone({ zone: 'deck', owner: 'P1', side: 'FATE' }));
+    assert.equal(sent.at(-1).intent.op, 'MOVE_CARD');
+    assert.equal(handCard.style.visibility, 'hidden', 'a zone-dest drop commits too');
+  });
+
+  it('drags a discard top card with a ghost and drops it as a MOVE_CARD', () => {
+    // A discard pile's top renders as a zone-card, so it drags through the same ghost path as a hand
+    // or province card.
+    const discardTop = fakeCard('d1', { onBattlefield: false, img: '/images/bar.jpg' });
+    root._emit('pointerdown', onCard(discardTop));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    const ghost = board.children.find((c) => c.className?.includes('dragging'));
+    assert.equal(ghost.children[0]?.src, '/images/bar.jpg');
+    assert.equal(discardTop.style.visibility, 'hidden');
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.equal(sent.at(-1).intent.op, 'MOVE_CARD');
   });
 
   it('moves a card onto a deck as a MOVE_CARD', () => {
