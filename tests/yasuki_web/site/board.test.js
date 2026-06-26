@@ -19,10 +19,13 @@ import {
   highlightCard,
   placePregameCards,
   clampMenuPosition,
+  setBackArt,
+  backArtBySide,
 } from '../../../src/yasuki_web/static/site/board.js';
 
 beforeEach(() => {
   resetDOM();
+  setBackArt({});
 });
 
 // A fake card element as the drag and context-menu handlers read it: a dataset matching what tagCard
@@ -201,6 +204,91 @@ describe('renderBoard', () => {
     renderBoard(board, [card({ bowed: true, inverted: true })], '/images');
     assert.ok(board.children[0].classList.contains('bowed'));
     assert.ok(board.children[0].classList.contains('inverted'));
+  });
+
+  it('draws the side-specific back for a face-down card, strongholds using the dynasty back', () => {
+    setBackArt({
+      FATE: '/img/sets/backs/fate_new.jpg',
+      DYNASTY: '/img/sets/backs/dynasty_new.jpg',
+      STRONGHOLD: '/img/sets/backs/dynasty_new.jpg',
+    });
+    const board = document.getElementById('battlefield');
+    renderBoard(
+      board,
+      [
+        { id: 'f', hidden: true, side: 'FATE', x: 0, y: 0 },
+        { id: 'd', hidden: true, side: 'DYNASTY', x: 0, y: 0 },
+        { id: 'sh', hidden: true, side: 'STRONGHOLD', x: 0, y: 0 },
+      ],
+      '/images',
+    );
+    assert.equal(board.children[0].children[0].src, '/img/sets/backs/fate_new.jpg');
+    assert.equal(board.children[1].children[0].src, '/img/sets/backs/dynasty_new.jpg');
+    assert.equal(board.children[2].children[0].src, '/img/sets/backs/dynasty_new.jpg');
+  });
+
+  it('draws the token back for a face-down spawned token', () => {
+    setBackArt({
+      DYNASTY: '/img/sets/backs/dynasty_new.jpg',
+      TOKEN: '/img/sets/backs/dynasty_token.jpg',
+    });
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [{ id: 'spawn-3', hidden: true, side: 'DYNASTY', x: 0, y: 0 }], '/images');
+    assert.equal(board.children[0].children[0].src, '/img/sets/backs/dynasty_token.jpg');
+  });
+
+  it('draws the side back for a known card lying face-down, not its front art', () => {
+    setBackArt({ DYNASTY: '/img/sets/backs/dynasty_new.jpg' });
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ side: 'DYNASTY', face_up: false })], '/images');
+    assert.equal(board.children[0].children[0].src, '/img/sets/backs/dynasty_new.jpg');
+  });
+
+  it('falls back to the gradient when no back art is loaded for the side', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [{ id: 'f', hidden: true, side: 'FATE', x: 0, y: 0 }], '/images');
+    assert.ok(board.children[0].classList.contains('face-down'));
+    assert.equal(board.children[0].children.length, 0);
+  });
+
+  it('renders the active (back) face of a flipped double-faced card via the normal art path', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(
+      board,
+      [card({ img: 'sets/x/sh__back.jpg', back_card_id: 'sh__back', showing_back: true })],
+      '/images',
+    );
+    assert.equal(board.children[0].children[0].src, '/images/sets/x/sh__back.jpg');
+    assert.equal(board.children[0].dataset.doubleFaced, '1');
+  });
+});
+
+describe('backArtBySide', () => {
+  const backs = {
+    Fate: { old: 'sets/backs/fate_old.jpg', new: 'sets/backs/fate_new.jpg' },
+    Dynasty: {
+      old: 'sets/backs/dynasty_old.jpg',
+      new: 'sets/backs/dynasty_new.jpg',
+      token: 'sets/backs/dynasty_token.jpg',
+    },
+  };
+
+  it('maps each side to its canonical generic back, strongholds to dynasty and tokens to the token back', () => {
+    assert.deepEqual(backArtBySide(backs, '/img'), {
+      FATE: '/img/sets/backs/fate_new.jpg',
+      DYNASTY: '/img/sets/backs/dynasty_new.jpg',
+      STRONGHOLD: '/img/sets/backs/dynasty_new.jpg',
+      TOKEN: '/img/sets/backs/dynasty_token.jpg',
+    });
+  });
+
+  it('leaves a key undefined when its back is absent', () => {
+    assert.deepEqual(backArtBySide({}, '/img'), {
+      FATE: undefined,
+      DYNASTY: undefined,
+      STRONGHOLD: undefined,
+      TOKEN: undefined,
+    });
   });
 });
 
@@ -540,9 +628,18 @@ describe('initBoardInteractions — context menu', () => {
     assert.deepEqual(labels.slice(-3), ['Fill', 'Discard', 'Destroy']);
   });
 
-  it('adds Turn Over for a double-faced card', () => {
+  it('flips a double-faced card to its other face (FLIP_FACE), with no separate Turn Over', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1', doubleFaced: true }) }));
-    assert.ok(menuLabels(root).includes('Turn Over'));
+    const labels = menuLabels(root);
+    assert.ok(labels.includes('Flip') && !labels.includes('Turn Over'));
+    clickMenuItem(root, 'Flip');
+    assert.deepEqual(sent[0].intent, { op: 'FLIP_FACE', card_ids: ['c1'] });
+  });
+
+  it('flips a single-faced card between its front and back (FLIP)', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
+    clickMenuItem(root, 'Flip');
+    assert.deepEqual(sent[0].intent, { op: 'FLIP', card_ids: ['c1'] });
   });
 
   it('omits the Send-to group on an opponent card', () => {
