@@ -14,7 +14,7 @@ import {
   initBoardInteractions,
   highlightCard,
   deckAnchor,
-  placePregameCards,
+  placeUnplacedCards,
   setBackArt,
   backArtBySide,
 } from './board.js';
@@ -283,7 +283,7 @@ export function init() {
       renderTableau(opponentTableau, opponent, snapshot, imgBase);
       const anchorFor = (owner, isViewer) =>
         deckAnchor(isViewer ? selfTableau : opponentTableau, battlefield, isViewer);
-      const onTable = placePregameCards(snapshot.battlefield ?? [], you, anchorFor);
+      const onTable = placeUnplacedCards(snapshot.battlefield ?? [], you, anchorFor);
       renderBoard(battlefield, onTable, imgBase);
       renderHand(selfHand, handOf(you), imgBase);
       renderHand(opponentHand, handOf(opponent), imgBase);

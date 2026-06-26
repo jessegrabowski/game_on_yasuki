@@ -17,7 +17,7 @@ import {
   drawIntent,
   initBoardInteractions,
   highlightCard,
-  placePregameCards,
+  placeUnplacedCards,
   clampMenuPosition,
   setBackArt,
   backArtBySide,
@@ -428,7 +428,7 @@ describe('dragPosition', () => {
   });
 });
 
-describe('placePregameCards', () => {
+describe('placeUnplacedCards', () => {
   const anchorFor = (owner) => (owner === 'P1' ? { x: 20, y: 300 } : { x: 30, y: 40 });
 
   it('fans an owner\'s unplaced pre-game cards out from their anchor', () => {
@@ -436,16 +436,22 @@ describe('placePregameCards', () => {
       { id: 'sh', pregame: true, owner: 'P1', x: -1, y: -1 },
       { id: 'se', pregame: true, owner: 'P1', x: -1, y: -1 },
     ];
-    const placed = placePregameCards(cards, 'P1', anchorFor);
+    const placed = placeUnplacedCards(cards, 'P1', anchorFor);
     assert.deepEqual(placed[0], { id: 'sh', pregame: true, owner: 'P1', x: 20, y: 300 });
     assert.deepEqual(placed[1], { id: 'se', pregame: true, owner: 'P1', x: 40, y: 300 });
   });
 
-  it('leaves a moved pre-game card (x >= 0) and non-pre-game cards untouched', () => {
+  it('leaves already-placed cards (x >= 0) untouched, pre-game or not', () => {
     const moved = { id: 'sh', pregame: true, owner: 'P1', x: 120, y: 90 };
     const loose = { id: 'c1', pregame: false, owner: 'P1', x: 5, y: 5 };
-    const placed = placePregameCards([moved, loose], 'P1', anchorFor);
+    const placed = placeUnplacedCards([moved, loose], 'P1', anchorFor);
     assert.deepEqual(placed, [moved, loose]);
+  });
+
+  it('lays out an unplaced non-pre-game card (a dynasty draw with full provinces)', () => {
+    const drawn = { id: 'd9', pregame: false, owner: 'P1', x: -1, y: -1 };
+    const placed = placeUnplacedCards([drawn], 'P1', anchorFor);
+    assert.deepEqual(placed[0], { id: 'd9', pregame: false, owner: 'P1', x: 20, y: 300 });
   });
 
   it('fans each owner from their own anchor, counting independently', () => {
@@ -454,7 +460,7 @@ describe('placePregameCards', () => {
       { id: 'p2a', pregame: true, owner: 'P2', x: -1, y: -1 },
       { id: 'p1b', pregame: true, owner: 'P1', x: -1, y: -1 },
     ];
-    const placed = placePregameCards(cards, 'P1', anchorFor);
+    const placed = placeUnplacedCards(cards, 'P1', anchorFor);
     assert.deepEqual([placed[0].x, placed[0].y], [20, 300]); // P1 first, no offset
     assert.deepEqual([placed[1].x, placed[1].y], [30, 40]); // P2 first, no offset
     assert.deepEqual([placed[2].x, placed[2].y], [40, 300]); // P1 second, one step
@@ -462,7 +468,7 @@ describe('placePregameCards', () => {
 
   it('keeps a card unplaced when its owner has no anchor yet', () => {
     const cards = [{ id: 'sh', pregame: true, owner: 'P1', x: -1, y: -1 }];
-    const placed = placePregameCards(cards, 'P1', () => null);
+    const placed = placeUnplacedCards(cards, 'P1', () => null);
     assert.equal(placed[0].x, -1);
   });
 });

@@ -200,8 +200,12 @@ class IntentOp(str, Enum):
 # DeckKey. A card moved here also carries a BoardPos.
 BATTLEFIELD: Final = "battlefield"
 
-# Where a card lands on the battlefield when no position is supplied; the client lays it out.
+# Where a card lands on the battlefield when no position is supplied.
 _DEFAULT_BOARD_POS: Final = BoardPos(0.0, 0.0)
+
+# A dynasty card drawn while every province is full lands here: a negative sentinel the client
+# recognises and lays out next to the owner's dynasty deck, like an unplaced pre-game permanent.
+_UNPLACED_BOARD_POS: Final = BoardPos(-1.0, -1.0)
 
 MoveDest = ZoneKey | DeckKey | Literal["battlefield"]
 
@@ -658,7 +662,7 @@ def _draw(state: TableState, seat: PlayerId, intent: Draw) -> list[Event]:
         if dest == BATTLEFIELD:
             card.turn_face_down()
             state.battlefield.add(card)
-            position = _DEFAULT_BOARD_POS
+            position = _UNPLACED_BOARD_POS
             state.positions[card.id] = position
     state.seq += 1
     return [Event(state.seq, seat, MoveCard(card.id, dest, position), (card.id,))]
