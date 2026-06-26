@@ -9,6 +9,7 @@ import {
   renderTableau,
   renderHand,
   renderPanel,
+  initPanelHonor,
   spawnMessage,
   drawIntent,
   initBoardInteractions,
@@ -170,6 +171,7 @@ export function init() {
   const chatInput = document.getElementById('chatInput');
   const actionLog = document.getElementById('actionLog');
   const battlefield = document.getElementById('battlefield');
+  let boardInteractions = null;
   const opponentTableau = document.getElementById('opponentTableau');
   const selfTableau = document.getElementById('selfTableau');
   const opponentHand = document.getElementById('opponentHand');
@@ -285,12 +287,14 @@ export function init() {
         deckAnchor(isViewer ? selfTableau : opponentTableau, battlefield, isViewer);
       const onTable = placeUnplacedCards(snapshot.battlefield ?? [], you, anchorFor);
       renderBoard(battlefield, onTable, imgBase);
+      // The re-render rebuilt every card element, so reattach the selection outline by card id.
+      boardInteractions?.markSelection();
       renderHand(selfHand, handOf(you), imgBase);
       renderHand(opponentHand, handOf(opponent), imgBase);
       if (selfHand) selfHand.dataset.owner = you;
       if (opponentHand) opponentHand.dataset.owner = opponent;
-      renderPanel(selfPanel, seats[you] ?? {});
-      renderPanel(opponentPanel, seats[opponent] ?? {});
+      renderPanel(selfPanel, seats[you] ?? {}, { editable: true });
+      renderPanel(opponentPanel, seats[opponent] ?? {}, { editable: false });
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
@@ -360,9 +364,14 @@ export function init() {
 
   const boardStage = document.getElementById('boardStage');
   if (boardStage && battlefield) {
-    initBoardInteractions(boardStage, battlefield, (message) =>
+    boardInteractions = initBoardInteractions(boardStage, battlefield, (message) =>
       sendToRoom({ ...message, room: currentRoom }),
     );
+  }
+
+  // Only the local panel is wired, so the opponent's honor stays read-only.
+  if (selfPanel) {
+    initPanelHonor(selfPanel, (message) => sendToRoom({ ...message, room: currentRoom }));
   }
 
   actionLog?.addEventListener('click', (e) => {

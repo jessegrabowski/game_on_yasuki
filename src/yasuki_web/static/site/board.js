@@ -2,7 +2,7 @@
 // elements built via createElement/CSSOM rather than innerHTML: the page CSP (style-src 'self')
 // blocks inline style attributes, and property assignment needs no manual escaping.
 
-function node(tag, className, text) {
+export function node(tag, className, text) {
   const el = document.createElement(tag);
   if (className) el.className = className;
   if (text != null) el.textContent = text;
@@ -185,14 +185,14 @@ function initials(name) {
   );
 }
 
-// A seat's identity: avatar, name, and current honor.
-export function renderPanel(container, info) {
+// A seat's identity: avatar, name, and current honor. `editable` marks the honor with the local
+// seat's editable cue; the opponent's gets the read-only cue instead.
+export function renderPanel(container, info, { editable = false } = {}) {
   const avatar = node('div', 'avatar', initials(info.name));
   const meta = node('div', 'panel-meta');
-  meta.append(
-    node('span', 'panel-name', info.name ?? ''),
-    node('span', 'panel-honor', String(info.honor ?? 0)),
-  );
+  const honor = node('span', 'panel-honor', String(info.honor ?? 0));
+  honor.classList.add(editable ? 'is-editable' : 'read-only');
+  meta.append(node('span', 'panel-name', info.name ?? ''), honor);
   container.replaceChildren(avatar, meta);
   container.classList.toggle('is-away', info.connected === false);
 }
@@ -214,15 +214,16 @@ export const spawnMessage = (spawn) => ({ type: 'SPAWN', spawn });
 export const removeMessage = (id) => ({ type: 'REMOVE', remove: { id } });
 
 export const moveIntent = (id, x, y) => intentMessage({ op: 'SET_CARD_POS', card_id: id, x, y });
-export const flipIntent = (id) => intentMessage({ op: 'FLIP', card_ids: [id] });
+// The flag ops apply to a whole batch atomically; each builder takes one id or an array of them.
+export const flipIntent = (ids) => intentMessage({ op: 'FLIP', card_ids: [].concat(ids) });
 // BOW and UNBOW are distinct ops, so the toggle picks whichever one actually changes the card.
-export const bowIntent = (id, bowed) =>
-  intentMessage({ op: bowed ? 'UNBOW' : 'BOW', card_ids: [id] });
-export const invertIntent = (id) => intentMessage({ op: 'INVERT', card_ids: [id] });
-export const revealIntent = (id) => intentMessage({ op: 'REVEAL', card_ids: [id] });
-export const hideIntent = (id) => intentMessage({ op: 'HIDE', card_ids: [id] });
+export const bowIntent = (ids, bowed) =>
+  intentMessage({ op: bowed ? 'UNBOW' : 'BOW', card_ids: [].concat(ids) });
+export const invertIntent = (ids) => intentMessage({ op: 'INVERT', card_ids: [].concat(ids) });
+export const revealIntent = (ids) => intentMessage({ op: 'REVEAL', card_ids: [].concat(ids) });
+export const hideIntent = (ids) => intentMessage({ op: 'HIDE', card_ids: [].concat(ids) });
 // Turn a double-faced card (a flip stronghold) to its other printed face.
-export const flipFaceIntent = (id) => intentMessage({ op: 'FLIP_FACE', card_ids: [id] });
+export const flipFaceIntent = (ids) => intentMessage({ op: 'FLIP_FACE', card_ids: [].concat(ids) });
 // Draw the top card of a seat's deck; the server routes it (fate → hand, dynasty → province).
 export const drawIntent = (owner, side) => intentMessage({ op: 'DRAW', deck: { owner, side } });
 // The 31-bit space the client samples a shuffle seed from, matching the server's getrandbits(31).
@@ -257,6 +258,8 @@ export const moveCardIntent = (id, to, position = null, toBottom = false) =>
     position,
     ...(toBottom ? { to_bottom: true } : {}),
   });
+// Adjust the acting seat's honor by a signed amount; the server clamps the bounds.
+export const honorIntent = (delta) => intentMessage({ op: 'SET_HONOR', delta });
 
 // Build a MOVE_CARD destination from a drop target's data attributes (set on each drop zone).
 function zoneDest(el) {
@@ -285,11 +288,12 @@ const deckDest = (owner, side) => ({ kind: 'deck', deck: { owner, side } });
 
 const SEP = { separator: true };
 
-// The card branch of the menu. Items come from the card's dataset: "Flip" turns a card to its other
-// side — the other face of a double-faced card, or front↔deck-back for any other; a face-down card
-// offers reveal/hide instead of a bow toggle it cannot evaluate; and "Send to…" appears only on a
-// card the viewer owns. The server re-checks every gate.
-function cardMenuItems(el, viewer) {
+// The card branch of the menu. Items come from the clicked card's dataset: "Flip" turns a card to its
+// other side — the other face of a double-faced card, or front↔deck-back for any other; a face-down
+// card offers reveal/hide instead of a bow toggle it cannot evaluate; and "Send to…" appears only on a
+// card the viewer owns. The flag ops apply to `targetIds` — the whole selection when the clicked card
+// is part of one — while Send to…/Remove act on the clicked card alone. The server re-checks every gate.
+function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId]) {
   const id = el.dataset.cardId;
   const side = el.dataset.side || '';
   const owner = el.dataset.owner || '';
@@ -300,13 +304,14 @@ function cardMenuItems(el, viewer) {
   const mine = owner === '' || owner === viewer;
   const seat = owner || viewer;
 
-  const items = [{ label: 'Flip', message: doubleFaced ? flipFaceIntent(id) : flipIntent(id) }];
+  const flip = doubleFaced ? flipFaceIntent(targetIds) : flipIntent(targetIds);
+  const items = [{ label: 'Flip', message: flip }];
   // Bowing a card sitting in a province is meaningless, matching the desktop client's gate.
-  if (!inProvince) items.push({ label: bowed ? 'Unbow' : 'Bow', message: bowIntent(id, bowed) });
-  items.push({ label: 'Invert', message: invertIntent(id) });
+  if (!inProvince) items.push({ label: bowed ? 'Unbow' : 'Bow', message: bowIntent(targetIds, bowed) });
+  items.push({ label: 'Invert', message: invertIntent(targetIds) });
   if (faceDown) {
-    items.push({ label: 'Reveal', message: revealIntent(id) });
-    items.push({ label: 'Hide', message: hideIntent(id) });
+    items.push({ label: 'Reveal', message: revealIntent(targetIds) });
+    items.push({ label: 'Hide', message: hideIntent(targetIds) });
   }
   if (mine) {
     items.push(SEP, { label: 'Send to Hand', message: moveCardIntent(id, handDest(seat)) });
@@ -365,6 +370,18 @@ export function dragPosition(clientX, clientY, boardRect, grab, card = { w: CARD
     y: Math.round(clamp(clientY - boardRect.top - grab.y, 0, boardRect.height - card.h)),
   };
 }
+
+// A normalized rectangle (top-left + size) spanning two battlefield-local corner points.
+const rectBetween = (sx, sy, cx, cy) => ({
+  x: Math.min(sx, cx),
+  y: Math.min(sy, cy),
+  w: Math.abs(cx - sx),
+  h: Math.abs(cy - sy),
+});
+
+// Does a card footprint at (x, y) overlap the rectangle `r`?
+const cardInRect = (r, x, y) =>
+  x < r.x + r.w && x + CARD_W > r.x && y < r.y + r.h && y + CARD_H > r.y;
 
 // Horizontal step between an owner's fanned-out pre-game cards, and the vertical gap between that fan
 // and the dynasty deck, both in pixels.
@@ -470,7 +487,7 @@ function openMenu(container, items, clientX, clientY, send) {
 // Choose the menu for a right-click: a deck pile shows deck actions (even though its top card carries
 // a card id); an occupied province shows the card's menu plus the province lifecycle ops; an empty
 // province shows just those ops; any other card shows the card menu. Returns [] for an empty target.
-function menuItemsFor(target, viewer) {
+function menuItemsFor(target, viewer, targetIds) {
   const zoneEl = target?.closest?.('[data-zone]');
   const zone = zoneEl?.dataset.zone;
   const cardEl = target?.closest?.('[data-card-id]');
@@ -478,22 +495,45 @@ function menuItemsFor(target, viewer) {
   if (zone === 'province') {
     const province = provinceMenuItems(zoneEl.dataset.owner, Number(zoneEl.dataset.idx), viewer);
     if (!cardEl) return province;
-    const card = cardMenuItems(cardEl, viewer);
+    const card = cardMenuItems(cardEl, viewer, targetIds);
     return province.length ? [...card, SEP, ...province] : card;
   }
-  if (cardEl) return cardMenuItems(cardEl, viewer);
+  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds);
   return [];
 }
 
-// Wire dragging and the right-click menu once on the table `root` (which spans the battlefield and
-// every seat zone), so delegation survives the full re-render each SNAPSHOT triggers. A card can be
-// picked up anywhere and dropped on any zone: a drop on the battlefield repositions (SET_CARD_POS)
-// or plays a card there, a drop on another zone is a MOVE_CARD. `boardEl` is the battlefield, used
-// for position maths; `send` receives a room-less client message.
+// Wire dragging, selection, and the right-click menu once on the table `root` (which spans the
+// battlefield and every seat zone), so delegation survives the full re-render each SNAPSHOT does.
+// A card can be picked up anywhere and dropped on any zone: a drop on the battlefield repositions
+// (SET_CARD_POS) or plays a card there, a drop on another zone is a MOVE_CARD. Clicking a
+// battlefield card selects it; Ctrl/Cmd-click toggles it in a multi-selection; a marquee dragged
+// across empty table picks every card it covers; dragging a card that is part of a multi-selection
+// moves the whole group together. `boardEl` is the battlefield, used for position maths; `send`
+// receives a room-less client message. Returns `{ markSelection }` so the caller can re-apply the
+// selection outline after the board re-renders.
 export function initBoardInteractions(root, boardEl, send) {
   let drag = null;
+  let marquee = null;
   let lastSent = 0;
+  // Selection is keyed by card id so it survives the element churn of each SNAPSHOT re-render.
+  const selected = new Set();
   const battleRect = () => boardEl.getBoundingClientRect();
+  // Battlefield-local top-left of a card element, read from its inline position.
+  const cardX = (el) => parseFloat(el.style.left) || 0;
+  const cardY = (el) => parseFloat(el.style.top) || 0;
+  // A group-drag member's clamped position after shifting its origin by the pointer delta.
+  const memberPos = (member, dx, dy, rect) => ({
+    x: clamp(Math.round(member.originX + dx), 0, rect.width - CARD_W),
+    y: clamp(Math.round(member.originY + dy), 0, rect.height - CARD_H),
+  });
+
+  // Paint the `.selected` outline onto the battlefield cards in the current selection. Idempotent,
+  // so the caller re-runs it after every re-render to reattach the outline to the fresh elements.
+  const markSelection = () => {
+    for (const el of boardEl.querySelectorAll('.board-card')) {
+      el.classList.toggle('selected', selected.has(el.dataset.cardId));
+    }
+  };
 
   const release = () => {
     if (!drag) return;
@@ -502,25 +542,91 @@ export function initBoardInteractions(root, boardEl, send) {
     drag = null;
   };
 
+  const dropMarquee = () => {
+    marquee?.box?.remove();
+    marquee = null;
+  };
+
   root.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
     const cardEl = e.target?.closest?.('[data-card-id]');
-    if (!cardEl) return;
+    if (!cardEl) {
+      // A press on the open table (not a real drop zone) starts a marquee and, on release without a
+      // drag, clears the selection.
+      const zoneEl = e.target?.closest?.('[data-zone]');
+      if (zoneEl && zoneEl.dataset.zone !== 'battlefield') return;
+      const rect = battleRect();
+      marquee = {
+        startX: e.clientX - rect.left,
+        startY: e.clientY - rect.top,
+        moved: false,
+        box: null,
+      };
+      return;
+    }
     const rect = cardEl.getBoundingClientRect();
+    const id = cardEl.dataset.cardId;
+    const onBattlefield = cardEl.classList.contains('board-card');
     drag = {
-      id: cardEl.dataset.cardId,
+      id,
       el: cardEl,
-      onBattlefield: cardEl.classList.contains('board-card'),
+      onBattlefield,
       grabX: e.clientX - rect.left,
       grabY: e.clientY - rect.top,
+      moved: false,
+      additive: e.ctrlKey || e.metaKey,
     };
+    // Grabbing a card that is already part of a multi-selection drags the whole group by one delta.
+    if (onBattlefield && selected.size > 1 && selected.has(id)) {
+      drag.startX = e.clientX;
+      drag.startY = e.clientY;
+      drag.members = [];
+      for (const el of boardEl.querySelectorAll('.board-card')) {
+        if (selected.has(el.dataset.cardId)) {
+          drag.members.push({ id: el.dataset.cardId, el, originX: cardX(el), originY: cardY(el) });
+        }
+      }
+    }
     // Lift the card out of hit-testing so a drop lands on the zone beneath, not the card itself.
     cardEl.style.pointerEvents = 'none';
     cardEl.classList.add('dragging');
   });
 
   root.addEventListener('pointermove', (e) => {
-    if (!drag || !drag.onBattlefield) return;
+    if (marquee) {
+      marquee.moved = true;
+      const rect = battleRect();
+      const cx = clamp(e.clientX - rect.left, 0, rect.width);
+      const cy = clamp(e.clientY - rect.top, 0, rect.height);
+      const box = rectBetween(marquee.startX, marquee.startY, cx, cy);
+      if (!marquee.box) {
+        marquee.box = node('div', 'marquee');
+        boardEl.appendChild(marquee.box);
+      }
+      marquee.box.style.left = `${box.x}px`;
+      marquee.box.style.top = `${box.y}px`;
+      marquee.box.style.width = `${box.w}px`;
+      marquee.box.style.height = `${box.h}px`;
+      return;
+    }
+    if (!drag) return;
+    drag.moved = true;
+    if (drag.members) {
+      const rect = battleRect();
+      const dx = e.clientX - drag.startX;
+      const dy = e.clientY - drag.startY;
+      const now = Date.now();
+      const flush = now - lastSent > DRAG_SEND_MS;
+      for (const member of drag.members) {
+        const { x, y } = memberPos(member, dx, dy, rect);
+        member.el.style.left = `${x}px`;
+        member.el.style.top = `${y}px`;
+        if (flush) send(moveIntent(member.id, x, y));
+      }
+      if (flush) lastSent = now;
+      return;
+    }
+    if (!drag.onBattlefield) return;
     const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: drag.grabX, y: drag.grabY });
     drag.el.style.left = `${pos.x}px`;
     drag.el.style.top = `${pos.y}px`;
@@ -532,12 +638,48 @@ export function initBoardInteractions(root, boardEl, send) {
   });
 
   root.addEventListener('pointerup', (e) => {
+    if (marquee) {
+      const rect = battleRect();
+      if (marquee.moved) {
+        const cx = clamp(e.clientX - rect.left, 0, rect.width);
+        const cy = clamp(e.clientY - rect.top, 0, rect.height);
+        const box = rectBetween(marquee.startX, marquee.startY, cx, cy);
+        selected.clear();
+        for (const el of boardEl.querySelectorAll('.board-card')) {
+          if (cardInRect(box, cardX(el), cardY(el))) selected.add(el.dataset.cardId);
+        }
+      } else {
+        selected.clear();
+      }
+      markSelection();
+      dropMarquee();
+      return;
+    }
     if (!drag) return;
     const card = drag;
     release();
+    // A press that never moved is a click: (de)select the card rather than treating it as a drop.
+    if (!card.moved && card.onBattlefield) {
+      if (card.additive) {
+        if (selected.has(card.id)) selected.delete(card.id);
+        else selected.add(card.id);
+      } else {
+        selected.clear();
+        selected.add(card.id);
+      }
+      markSelection();
+    }
     const target = e.target?.closest?.('[data-zone]');
     const zone = target?.dataset.zone;
-    if (zone === 'battlefield' || (!zone && card.onBattlefield)) {
+    if (card.members) {
+      const rect = battleRect();
+      const dx = e.clientX - card.startX;
+      const dy = e.clientY - card.startY;
+      for (const member of card.members) {
+        const { x, y } = memberPos(member, dx, dy, rect);
+        send(moveIntent(member.id, x, y));
+      }
+    } else if (zone === 'battlefield' || (!zone && card.onBattlefield)) {
       const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: card.grabX, y: card.grabY });
       if (card.onBattlefield) send(moveIntent(card.id, pos.x, pos.y));
       else send(moveCardIntent(card.id, { kind: 'battlefield' }, [pos.x, pos.y]));
@@ -547,19 +689,49 @@ export function initBoardInteractions(root, boardEl, send) {
     }
   });
 
-  root.addEventListener('pointercancel', release);
+  root.addEventListener('pointercancel', () => {
+    release();
+    dropMarquee();
+  });
 
   // A pointer released or cancelled outside the table never reaches the handlers above; this net
-  // restores a dragged card to hit-testing so it can never get stuck mid-drag.
+  // restores a dragged card to hit-testing and drops any in-flight marquee so nothing gets stuck.
   if (typeof window !== 'undefined' && window.addEventListener) {
-    window.addEventListener('pointerup', release);
-    window.addEventListener('pointercancel', release);
+    const reset = () => {
+      release();
+      dropMarquee();
+    };
+    window.addEventListener('pointerup', reset);
+    window.addEventListener('pointercancel', reset);
   }
 
   root.addEventListener('contextmenu', (e) => {
-    const items = menuItemsFor(e.target, root.dataset.viewerSeat || '');
+    // Right-clicking a card that is part of a multi-selection targets the whole selection;
+    // otherwise the menu defaults to just the clicked card.
+    const id = e.target?.closest?.('[data-card-id]')?.dataset.cardId;
+    const targetIds = id && selected.size > 1 && selected.has(id) ? [...selected] : undefined;
+    const items = menuItemsFor(e.target, root.dataset.viewerSeat || '', targetIds);
     if (!items.length) return;
     e.preventDefault();
     openMenu(root, items, e.clientX, e.clientY, send);
   });
+
+  return { markSelection };
+}
+
+// Wire the local seat's honor as a stepper, bound once on the persistent `panel` container so it
+// survives the inner-DOM swap each SNAPSHOT does. Binding only the local panel is what keeps the
+// opponent's honor read-only. `send` receives a room-less client message.
+export function initPanelHonor(panel, send) {
+  const adjust = (e, delta) => {
+    if (!e.target?.closest?.('.panel-honor')) return;
+    e.preventDefault?.();
+    send(honorIntent(delta));
+  };
+  panel.addEventListener('click', (e) => adjust(e, 1));
+  panel.addEventListener('contextmenu', (e) => adjust(e, -1));
+  panel.addEventListener('auxclick', (e) => {
+    if (e.button === 1) adjust(e, -1);
+  });
+  panel.addEventListener('wheel', (e) => adjust(e, e.deltaY < 0 ? 1 : -1));
 }

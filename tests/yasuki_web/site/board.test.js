@@ -15,7 +15,9 @@ import {
   flipIntent,
   bowIntent,
   drawIntent,
+  honorIntent,
   initBoardInteractions,
+  initPanelHonor,
   highlightCard,
   placeUnplacedCards,
   clampMenuPosition,
@@ -61,6 +63,7 @@ function fakeCard(
       add: (c) => classes.add(c),
       remove: (c) => classes.delete(c),
       contains: (c) => classes.has(c),
+      toggle: (c, force) => (force ? classes.add(c) : classes.delete(c)),
     },
     getBoundingClientRect: () => ({ left: 10, top: 20 }),
     closest: (sel) => (sel === '[data-zone="province"]' && province ? province : null),
@@ -378,6 +381,15 @@ describe('renderPanel', () => {
     assert.equal(panel.children[1].children[0].textContent, 'Ada Crane');
     assert.equal(panel.children[1].children[1].textContent, '10');
   });
+
+  it('marks the local honor editable and the opponent honor read-only', () => {
+    const self = document.createElement('div');
+    const opp = document.createElement('div');
+    renderPanel(self, { name: 'Ada', honor: 10 }, { editable: true });
+    renderPanel(opp, { name: 'Kenji', honor: 8 }, { editable: false });
+    assert.ok(self.children[1].children[1].classList.contains('is-editable'));
+    assert.ok(opp.children[1].children[1].classList.contains('read-only'));
+  });
 });
 
 describe('message builders', () => {
@@ -399,6 +411,11 @@ describe('message builders', () => {
       type: 'INTENT',
       intent: { op: 'DRAW', deck: { owner: 'P1', side: 'FATE' } },
     });
+  });
+
+  it('wraps a signed SET_HONOR delta', () => {
+    assert.deepEqual(honorIntent(1), { type: 'INTENT', intent: { op: 'SET_HONOR', delta: 1 } });
+    assert.deepEqual(honorIntent(-1), { type: 'INTENT', intent: { op: 'SET_HONOR', delta: -1 } });
   });
 
   it('build SPAWN and REMOVE messages', () => {
@@ -594,6 +611,151 @@ describe('initBoardInteractions — dragging', () => {
   });
 });
 
+// Position a fake battlefield card by its inline style, as renderBoard does, so the marquee and
+// group-drag maths can read it back.
+function placedCard(id, x, y) {
+  const el = fakeCard(id, { onBattlefield: true });
+  el.style.left = `${x}px`;
+  el.style.top = `${y}px`;
+  return el;
+}
+
+describe('initBoardInteractions — selection', () => {
+  let root;
+  let board;
+  let sent;
+  let interactions;
+
+  beforeEach(() => {
+    root = document.getElementById('boardStage');
+    board = document.getElementById('battlefield');
+    sent = [];
+    interactions = initBoardInteractions(root, board, (message) => sent.push(message));
+  });
+
+  it('selects a battlefield card on a plain click and clears it on an empty click', () => {
+    const c1 = fakeCard('c1', { onBattlefield: true });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1] : []);
+
+    root._emit('pointerdown', onCard(c1));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.ok(c1.classList.contains('selected'));
+
+    root._emit('pointerdown', offCard());
+    root._emit('pointerup', offCard());
+    assert.ok(!c1.classList.contains('selected'), 'an empty click clears the selection');
+  });
+
+  it('adds a second card with Ctrl-click and keeps the first', () => {
+    const c1 = fakeCard('c1', { onBattlefield: true });
+    const c2 = fakeCard('c2', { onBattlefield: true });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2] : []);
+
+    root._emit('pointerdown', onCard(c1));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    root._emit('pointerdown', onCard(c2, { ctrlKey: true }));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+
+    assert.ok(c1.classList.contains('selected'));
+    assert.ok(c2.classList.contains('selected'));
+  });
+
+  it('reattaches the outline to fresh elements after a re-render via markSelection', () => {
+    const c1 = fakeCard('c1', { onBattlefield: true });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1] : []);
+    root._emit('pointerdown', onCard(c1));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+
+    // A SNAPSHOT re-render rebuilds the card element; the id-keyed selection must survive it.
+    const fresh = fakeCard('c1', { onBattlefield: true });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [fresh] : []);
+    interactions.markSelection();
+    assert.ok(fresh.classList.contains('selected'));
+  });
+
+  // Build a two-card selection (click c1, Ctrl-click c2) and return the elements.
+  const selectTwo = () => {
+    const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1' });
+    const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1' });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2] : []);
+    root._emit('pointerdown', onCard(c1));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    root._emit('pointerdown', onCard(c2, { ctrlKey: true }));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    return [c1, c2];
+  };
+
+  it('applies a context-menu flag op to the whole selection when a selected card is clicked', () => {
+    const [c1] = selectTwo();
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Flip');
+    assert.deepEqual(sent.at(-1).intent, { op: 'FLIP', card_ids: ['c1', 'c2'] });
+  });
+
+  it('targets only the clicked card when it is not part of the selection', () => {
+    selectTwo();
+    const c3 = fakeCard('c3', { onBattlefield: true, owner: 'P1' });
+    root._emit('contextmenu', rightClick({ card: c3 }));
+    clickMenuItem(root, 'Flip');
+    assert.deepEqual(sent.at(-1).intent, { op: 'FLIP', card_ids: ['c3'] });
+  });
+});
+
+describe('initBoardInteractions — marquee and group drag', () => {
+  let root;
+  let board;
+  let sent;
+
+  beforeEach(() => {
+    root = document.getElementById('boardStage');
+    board = document.getElementById('battlefield');
+    sent = [];
+    initBoardInteractions(root, board, (message) => sent.push(message));
+  });
+
+  it('selects every card a marquee covers and skips those outside it', () => {
+    const inside = placedCard('in', 50, 50);
+    const outside = placedCard('out', 400, 400);
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [inside, outside] : []);
+
+    // The fake battlefield is 200×200; this marquee from (0,0) to (150,150) covers only `inside`.
+    root._emit('pointerdown', offCard({ clientX: 0, clientY: 0 }));
+    root._emit('pointermove', { clientX: 150, clientY: 150, target: { closest: () => null } });
+    root._emit('pointerup', offCard({ clientX: 150, clientY: 150 }));
+
+    assert.ok(inside.classList.contains('selected'));
+    assert.ok(!outside.classList.contains('selected'));
+  });
+
+  it('moves the whole selection together, fanning out one SET_CARD_POS per card', () => {
+    const c1 = placedCard('c1', 0, 0);
+    const c2 = placedCard('c2', 50, 0);
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2] : []);
+
+    root._emit('pointerdown', onCard(c1));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    root._emit('pointerdown', onCard(c2, { ctrlKey: true }));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+
+    sent.length = 0;
+    const realNow = Date.now;
+    Date.now = () => 1000;
+    try {
+      root._emit('pointerdown', onCard(c1)); // c1 is part of the multi-selection → group drag
+      root._emit('pointermove', { clientX: 60, clientY: 50 });
+    } finally {
+      Date.now = realNow;
+    }
+
+    const moves = sent.filter((m) => m.intent.op === 'SET_CARD_POS');
+    assert.equal(moves.length, 2, 'one position update per selected card');
+    assert.deepEqual(
+      moves.map((m) => m.intent.card_id).sort(),
+      ['c1', 'c2'],
+    );
+  });
+});
+
 describe('initBoardInteractions — context menu', () => {
   let root;
   let board;
@@ -762,5 +924,74 @@ describe('clampMenuPosition', () => {
 
   it('never pushes a menu past the top-left when it is larger than the stage', () => {
     assert.deepEqual(clampMenuPosition(0, 0, 300, 300, 200, 200), { left: 4, top: 4 });
+  });
+});
+
+describe('initPanelHonor', () => {
+  let panel;
+  let honorEl;
+  let sent;
+
+  // An event whose target resolves to the real rendered `.panel-honor` span, as the handler reads it.
+  const onHonor = (overrides = {}) => {
+    let prevented = false;
+    return {
+      target: { closest: (sel) => (sel === '.panel-honor' ? honorEl : null) },
+      preventDefault: () => {
+        prevented = true;
+      },
+      get defaultPrevented() {
+        return prevented;
+      },
+      ...overrides,
+    };
+  };
+
+  beforeEach(() => {
+    panel = document.getElementById('selfPanel');
+    renderPanel(panel, { name: 'Ada', honor: 10 }, { editable: true });
+    honorEl = panel.children[1].children[1];
+    sent = [];
+    initPanelHonor(panel, (message) => sent.push(message));
+  });
+
+  it('adds honor on a left click', () => {
+    const event = onHonor();
+    panel._emit('click', event);
+    assert.equal(event.defaultPrevented, true);
+    assert.deepEqual(sent, [{ type: 'INTENT', intent: { op: 'SET_HONOR', delta: 1 } }]);
+  });
+
+  it('removes honor on a right click', () => {
+    panel._emit('contextmenu', onHonor());
+    assert.deepEqual(sent, [{ type: 'INTENT', intent: { op: 'SET_HONOR', delta: -1 } }]);
+  });
+
+  it('removes honor on a middle click', () => {
+    panel._emit('auxclick', onHonor({ button: 1 }));
+    assert.equal(sent.at(-1).intent.delta, -1);
+  });
+
+  it('adds honor scrolling up, removes it scrolling down', () => {
+    panel._emit('wheel', onHonor({ deltaY: -3 }));
+    panel._emit('wheel', onHonor({ deltaY: 3 }));
+    assert.deepEqual(
+      sent.map((m) => m.intent.delta),
+      [1, -1],
+    );
+  });
+
+  it('ignores clicks away from the honor span', () => {
+    panel._emit('click', { target: { closest: () => null }, preventDefault() {} });
+    assert.equal(sent.length, 0);
+  });
+
+  it('leaves a read-only opponent panel inert (no handlers wired)', () => {
+    const opponent = document.getElementById('opponentPanel');
+    renderPanel(opponent, { name: 'Kenji', honor: 8 }, { editable: false });
+    let fired = false;
+    opponent._emit('click', { target: { closest: () => true }, preventDefault: () => (fired = true) });
+    assert.equal(fired, false);
+    assert.equal(sent.length, 0);
   });
 });
