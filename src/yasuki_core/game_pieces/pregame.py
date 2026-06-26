@@ -7,12 +7,14 @@ from yasuki_core.paths import DEFAULT_STRONGHOLD, DEFAULT_SENSEI, DEFAULT_WIND
 @dataclass(frozen=True, slots=True)
 class StrongholdCard(L5RCard):
     """A stronghold, placed face-up at setup; ``starting_honor`` is the honor the player begins
-    the game with."""
+    the game with and ``starting_hand_size`` is the number of fate cards drawn into the opening
+    hand."""
 
     starting_honor: int = 0
     gold_production: int = 0
     province_strength: int = 0
     province_count: int = 4
+    starting_hand_size: int = 5
     image_front: Path | None = DEFAULT_STRONGHOLD
 
 

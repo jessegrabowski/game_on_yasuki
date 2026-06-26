@@ -1,4 +1,8 @@
-from yasuki_core.engine.setup import setup_seat, PREGAME_UNPLACED
+from yasuki_core.engine.setup import (
+    setup_seat,
+    flip_second_player_stronghold,
+    PREGAME_UNPLACED,
+)
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.constants import Side
@@ -8,7 +12,7 @@ from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard
 from yasuki_core.game_pieces.factory import ResolvedDeck
 
 
-def _resolved(owner=PlayerId.P1, dynasty_n=5, fate_n=4):
+def _resolved(owner=PlayerId.P1, dynasty_n=10, fate_n=10):
     dynasty = [
         DynastyCard(id=f"{owner.name}-d{i}", name=f"D{i}", side=Side.DYNASTY, owner=owner)
         for i in range(dynasty_n)
@@ -43,16 +47,18 @@ def test_decks_are_loaded_face_down_and_registered():
     dynasty = state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
     fate = state.decks[DeckKey(PlayerId.P1, Side.FATE)]
 
-    assert len(dynasty.cards) == 5 and len(fate.cards) == 4
+    # Ten of each, less the four dealt to provinces and the five drawn to the opening hand.
+    assert len(dynasty.cards) == 6 and len(fate.cards) == 5
     assert all(not card.face_up for card in dynasty.cards + fate.cards)
     assert all(card.id in state.cards_by_id for card in dynasty.cards + fate.cards)
 
 
-def test_a_deck_without_a_stronghold_opens_the_default_four_provinces():
+def test_a_deck_without_a_stronghold_opens_and_fills_the_default_four_provinces():
     state = _setup()
     provinces = _provinces(state)
     assert len(provinces) == 4
-    assert all(province.cards == [] for province in provinces)
+    # Every province starts full, face-down, from the dynasty deck.
+    assert all(len(province.cards) == 1 and not province.cards[0].face_up for province in provinces)
 
 
 def test_province_count_comes_from_the_stronghold():
@@ -65,16 +71,33 @@ def test_province_count_comes_from_the_stronghold():
     assert len(_provinces(state)) == 5
 
 
-def test_hand_discards_and_banishes_start_empty():
+def test_discards_and_banishes_start_empty():
     state = _setup()
     for role in (
-        ZoneRole.HAND,
         ZoneRole.FATE_DISCARD,
         ZoneRole.FATE_BANISH,
         ZoneRole.DYNASTY_DISCARD,
         ZoneRole.DYNASTY_BANISH,
     ):
         assert state.zones[ZoneKey(PlayerId.P1, role)].cards == []
+
+
+def test_the_opening_hand_is_drawn_face_up():
+    state = _setup()
+    hand = state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    # The default starting hand is five fate cards, dealt face up to their owner.
+    assert len(hand.cards) == 5
+    assert all(card.side is Side.FATE and card.face_up for card in hand.cards)
+
+
+def test_starting_hand_size_comes_from_the_stronghold():
+    state = TableState.empty_two_seat()
+    resolved = _resolved()
+    resolved.pre_game.append(
+        StrongholdCard(id="sh", name="Wall", side=Side.STRONGHOLD, starting_hand_size=3)
+    )
+    setup_seat(state, PlayerId.P1, resolved, dynasty_seed=1, fate_seed=2)
+    assert len(state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards) == 3
 
 
 def test_shuffle_order_is_reproducible_for_a_seed():
@@ -129,3 +152,50 @@ def test_a_deck_without_a_stronghold_starts_at_zero_honor():
 def test_the_table_validates_after_setup():
     state = _setup()
     state.validate()  # raises on any structural violation
+
+
+def _two_seat_table(p1_honor, p2_honor, *, p2_has_back=True):
+    state = TableState.empty_two_seat()
+    state.seats[PlayerId.P1].honor = p1_honor
+    state.seats[PlayerId.P2].honor = p2_honor
+    p1_sh = StrongholdCard(
+        id="p1sh", name="Front1", side=Side.STRONGHOLD, owner=PlayerId.P1, back_card_id="p1sh__back"
+    )
+    p2_sh = StrongholdCard(
+        id="p2sh",
+        name="Front2",
+        side=Side.STRONGHOLD,
+        owner=PlayerId.P2,
+        back_card_id="p2sh__back" if p2_has_back else None,
+    )
+    for card in (p1_sh, p2_sh):
+        state.battlefield.add(card)
+        state.cards_by_id[card.id] = card
+    return state, p1_sh, p2_sh
+
+
+def test_lower_honor_player_goes_second_and_their_stronghold_flips():
+    state, p1_sh, p2_sh = _two_seat_table(10, 4)
+
+    second = flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2))
+
+    assert second is PlayerId.P2  # lower honor → second
+    assert p2_sh.showing_back is True
+    assert p1_sh.showing_back is False  # the first player's stronghold stays front-up
+
+
+def test_an_honor_tie_flips_no_stronghold():
+    state, p1_sh, p2_sh = _two_seat_table(7, 7)
+
+    assert flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2)) is None
+    assert p1_sh.showing_back is False and p2_sh.showing_back is False
+
+
+def test_a_single_faced_second_player_stronghold_is_dealt_front_up():
+    # The lower-honor seat goes second, but a stronghold with no back face is left front-up.
+    state, _, p2_sh = _two_seat_table(10, 4, p2_has_back=False)
+
+    second = flip_second_player_stronghold(state, (PlayerId.P1, PlayerId.P2))
+
+    assert second is PlayerId.P2
+    assert p2_sh.showing_back is False
