@@ -185,6 +185,7 @@ class IntentOp(str, Enum):
     HIDE = "HIDE"
     DRAW = "DRAW"
     SHUFFLE = "SHUFFLE"
+    FLIP_DECK_TOP = "FLIP_DECK_TOP"
     SEARCH_DECK = "SEARCH_DECK"
     FILL_PROVINCE = "FILL_PROVINCE"
     DESTROY_PROVINCE = "DESTROY_PROVINCE"
@@ -210,12 +211,14 @@ class MoveCard:
     """Move one card to a zone, deck, or the shared battlefield.
 
     The universal mover behind hand↔battlefield↔zone↔deck transfers. ``position`` is set only when
-    ``to`` is the battlefield, giving the card its table coordinates.
+    ``to`` is the battlefield, giving the card its table coordinates. ``to_bottom`` applies only to
+    a deck destination: True slides the card under the deck instead of onto its top.
     """
 
     card_id: str
     to: MoveDest
     position: BoardPos | None = None
+    to_bottom: bool = False
     op: ClassVar[IntentOp] = IntentOp.MOVE_CARD
 
 
@@ -293,6 +296,14 @@ class Shuffle:
     deck: DeckKey
     seed: int
     op: ClassVar[IntentOp] = IntentOp.SHUFFLE
+
+
+@dataclass(frozen=True, slots=True)
+class FlipDeckTop:
+    """Flip a deck's top card face up or down in place, revealing it without drawing."""
+
+    deck: DeckKey
+    op: ClassVar[IntentOp] = IntentOp.FLIP_DECK_TOP
 
 
 @dataclass(frozen=True, slots=True)
@@ -387,6 +398,7 @@ Intent = (
     | Hide
     | Draw
     | Shuffle
+    | FlipDeckTop
     | SearchDeck
     | FillProvince
     | DestroyProvince
@@ -500,9 +512,14 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
         card.turn_face_down()
         card.unbow()
         card.uninvert()
-        state.decks[dest].add_to_top([card])
+        if intent.to_bottom:
+            state.decks[dest].add_to_bottom([card])
+        else:
+            state.decks[dest].add_to_top([card])
         state.seq += 1
-        return [Event(state.seq, seat, MoveCard(card.id, dest), (card.id,))]
+        return [
+            Event(state.seq, seat, MoveCard(card.id, dest, to_bottom=intent.to_bottom), (card.id,))
+        ]
 
     zone = state.zones.get(dest)
     if (
@@ -655,6 +672,18 @@ def _shuffle(state: TableState, seat: PlayerId, intent: Shuffle) -> list[Event]:
     return [Event(state.seq, seat, intent)]
 
 
+def _flip_deck_top(state: TableState, seat: PlayerId, intent: FlipDeckTop) -> list[Event]:
+    if not owns_deck(state, seat, intent.deck):
+        return []
+    cards = state.decks[intent.deck].cards
+    if not cards:
+        return []
+    top = cards[-1]
+    top.flip()
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (top.id,))]
+
+
 def _search_deck(state: TableState, seat: PlayerId, intent: SearchDeck) -> list[Event]:
     # Read-only: the owner receives the ordered deck (wired in PR07); state and seq are untouched.
     if not owns_deck(state, seat, intent.deck):
@@ -777,6 +806,7 @@ _HANDLERS = {
     IntentOp.HIDE: _apply_flag,
     IntentOp.DRAW: _draw,
     IntentOp.SHUFFLE: _shuffle,
+    IntentOp.FLIP_DECK_TOP: _flip_deck_top,
     IntentOp.SEARCH_DECK: _search_deck,
     IntentOp.FILL_PROVINCE: _fill_province,
     IntentOp.DESTROY_PROVINCE: _destroy_province,

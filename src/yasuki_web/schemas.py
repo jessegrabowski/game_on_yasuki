@@ -36,6 +36,7 @@ class IntentEnvelope(BaseModel):
     card_id: str | None = Field(None, max_length=64)
     card_ids: list[Annotated[str, Field(max_length=64)]] | None = Field(None, max_length=128)
     to: dict | None = None
+    to_bottom: bool = False
     position: list[float] | None = Field(None, max_length=2)
     deck: dict | None = None
     zone: dict | None = None
@@ -57,6 +58,7 @@ def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
             "card_id": envelope.card_id,
             "card_ids": envelope.card_ids,
             "to": envelope.to,
+            "to_bottom": envelope.to_bottom,
             "position": envelope.position,
             "deck": envelope.deck,
             "zone": envelope.zone,
