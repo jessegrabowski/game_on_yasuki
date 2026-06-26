@@ -19,6 +19,7 @@ import {
   setBackArt,
   backArtBySide,
 } from './board.js';
+import { openDeckDialog } from './deck-dialog.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -188,6 +189,9 @@ export function init() {
   let client = null;
   let myName = null;
   let currentRoom = null;
+  // SEARCH_DECK carries no limit on the wire; the "top N" choice from the deck-menu flyout is held
+  // here between the request and the DECK_CONTENTS reply, then caps the dialog (null = whole deck).
+  let pendingDeckLimit = null;
   let imgBase = '/images';
   fetchImageBase().then((base) => {
     imgBase = base;
@@ -302,6 +306,15 @@ export function init() {
     client.events.addEventListener('LOG', (e) => {
       appendLogMessage(actionLog, e.detail.parts);
     });
+    client.events.addEventListener('DECK_CONTENTS', (e) => {
+      openDeckDialog({
+        deck: e.detail.deck,
+        cards: e.detail.cards ?? [],
+        imgBase,
+        limit: pendingDeckLimit,
+        send: (frame) => sendToRoom({ ...frame, room: currentRoom }),
+      });
+    });
     client.events.addEventListener('ERROR', (e) => {
       if (roomStatus) roomStatus.textContent = e.detail?.message ?? 'Something went wrong.';
     });
@@ -364,9 +377,12 @@ export function init() {
 
   const boardStage = document.getElementById('boardStage');
   if (boardStage && battlefield) {
-    boardInteractions = initBoardInteractions(boardStage, battlefield, (message) =>
-      sendToRoom({ ...message, room: currentRoom }),
-    );
+    // The deck menu's Search flyout carries a client-only `limit` hint on the frame; capture it for
+    // the DECK_CONTENTS reply, then strip it so only the bare intent reaches the room.
+    boardInteractions = initBoardInteractions(boardStage, battlefield, ({ limit, ...message }) => {
+      if (message.intent?.op === 'SEARCH_DECK') pendingDeckLimit = limit ?? null;
+      sendToRoom({ ...message, room: currentRoom });
+    });
   }
 
   // Only the local panel is wired, so the opponent's honor stays read-only.

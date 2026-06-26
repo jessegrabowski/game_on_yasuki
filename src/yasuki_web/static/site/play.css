@@ -839,3 +839,191 @@
     transition: none;
   }
 }
+
+/* ── Deck-search dialog: the owner's deck (top-first), filterable by title, with a small preview. ── */
+.deck-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(30, 22, 10, 0.45);
+}
+
+.deck-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: min(560px, 92vw);
+  max-height: 80vh;
+  padding: 0.9rem;
+  background: var(--r-panel);
+  color: var(--r-ink);
+  border: 1px solid var(--r-line);
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(40, 30, 15, 0.3);
+}
+
+.deck-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.deck-dialog-title {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.deck-dialog-close {
+  border: none;
+  background: none;
+  color: var(--r-ink-dim);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.deck-dialog-close:hover {
+  color: var(--r-ink);
+}
+
+.deck-dialog-filter {
+  width: 100%;
+  padding: 0.4rem 0.6rem;
+  font: inherit;
+  border: 1px solid var(--r-line);
+  border-radius: 5px;
+}
+
+.deck-dialog-body {
+  display: flex;
+  gap: 0.8rem;
+  min-height: 0;
+}
+
+.deck-dialog-list {
+  flex: 1 1 auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  border: 1px solid var(--r-line);
+  border-radius: 5px;
+}
+
+.deck-dialog-name {
+  padding: 0.3rem 0.6rem;
+  border-bottom: 1px solid var(--r-line-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.deck-dialog-name:hover {
+  background: var(--r-gold-soft);
+}
+
+.deck-dialog-name.selected {
+  background: var(--r-gold-soft);
+  box-shadow: inset 3px 0 0 var(--r-gold);
+}
+
+.deck-dialog-preview {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 150px;
+}
+
+.deck-dialog-preview-img {
+  width: 150px;
+  height: 210px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.deck-dialog-preview-img.is-empty {
+  visibility: hidden;
+}
+
+.deck-dialog-pull {
+  width: 100%;
+  padding: 0.4rem;
+  font: inherit;
+  color: var(--r-ink);
+  background: #fff;
+  border: 1px solid var(--r-line);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: border-color 0.12s;
+}
+
+.deck-dialog-pull:hover:not(:disabled) {
+  border-color: var(--r-gold);
+}
+
+.deck-dialog-pull:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.deck-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--r-line);
+}
+
+.deck-dialog-btn,
+.deck-scope-btn {
+  padding: 0.4rem 0.8rem;
+  font: inherit;
+  color: var(--r-ink);
+  background: #fff;
+  border: 1px solid var(--r-line);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: border-color 0.12s;
+}
+
+.deck-dialog-btn:hover,
+.deck-scope-btn:hover {
+  border-color: var(--r-gold);
+}
+
+/* The deck-menu "Search…" chooser: a centered card asking for the top N or the whole deck. */
+.deck-scope {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: min(320px, 90vw);
+  padding: 0.9rem;
+  background: var(--r-panel);
+  color: var(--r-ink);
+  border: 1px solid var(--r-line);
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(40, 30, 15, 0.3);
+}
+
+.deck-scope-row {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.deck-scope-row .deck-scope-btn {
+  flex: 1 1 auto;
+}
+
+.deck-scope-input {
+  width: 4rem;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  border: 1px solid var(--r-line);
+  border-radius: 5px;
+}

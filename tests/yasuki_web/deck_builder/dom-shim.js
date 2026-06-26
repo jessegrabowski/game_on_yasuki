@@ -47,6 +47,7 @@ function makeElement(tag) {
     _listeners: listeners,
     _emit(evt, event) { (listeners[evt] || []).forEach((fn) => fn(event)); },
     setPointerCapture() {},
+    removeAttribute(name) { delete el[name]; },
     querySelector(sel) { return null; },
     querySelectorAll(sel) { return []; },
     scrollIntoView() {},

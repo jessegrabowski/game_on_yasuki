@@ -852,7 +852,44 @@ describe('initBoardInteractions — context menu', () => {
   it("opens the deck menu on the owner's deck, not the top card's menu", () => {
     const deck = { zone: 'deck', owner: 'P1', side: 'DYNASTY' };
     root._emit('contextmenu', rightClick({ zone: deck, card: fakeCard('top') }));
-    assert.deepEqual(menuLabels(root), ['Draw', 'Shuffle', 'Flip Top', 'Search', 'Create Province']);
+    assert.deepEqual(menuLabels(root), [
+      'Draw',
+      'Shuffle',
+      'Flip Top',
+      'Search…',
+      'Create Province',
+    ]);
+  });
+
+  // The Search chooser mounts in `.room`, not the board stage; its modal is overlay > .deck-scope >
+  // [header, row(input, "Search top N"), "Whole deck"].
+  const searchScope = () =>
+    document.querySelector('.room').children.find((c) => c.className === 'deck-dialog-overlay');
+
+  it('opens the Search chooser, whose "Whole deck" requests the entire deck', () => {
+    root._emit('contextmenu', rightClick({ zone: { zone: 'deck', owner: 'P1', side: 'FATE' } }));
+    clickMenuItem(root, 'Search…');
+    const overlay = searchScope();
+    assert.ok(overlay, 'the Search item opens a chooser instead of sending immediately');
+    overlay.children[0].children[2]._emit('click', {}); // "Whole deck"
+    assert.deepEqual(sent[0], {
+      type: 'INTENT',
+      intent: { op: 'SEARCH_DECK', deck: { owner: 'P1', side: 'FATE' } },
+      limit: null,
+    });
+  });
+
+  it('requests the top N from the Search chooser on Enter', () => {
+    root._emit('contextmenu', rightClick({ zone: { zone: 'deck', owner: 'P1', side: 'FATE' } }));
+    clickMenuItem(root, 'Search…');
+    const input = searchScope().children[0].children[1].children[0];
+    input.value = '5';
+    input._emit('keydown', { key: 'Enter' });
+    assert.deepEqual(sent[0], {
+      type: 'INTENT',
+      intent: { op: 'SEARCH_DECK', deck: { owner: 'P1', side: 'FATE' } },
+      limit: 5,
+    });
   });
 
   it('emits FLIP_DECK_TOP from the deck menu', () => {
