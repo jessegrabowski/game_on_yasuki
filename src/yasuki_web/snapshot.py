@@ -45,6 +45,20 @@ def _card(view: L5RCard | HiddenCard) -> dict:
     return card
 
 
+def serialize_deck_cards(cards: list[L5RCard]) -> list[dict]:
+    """Serialize a deck's cards for delivery to its owner, top of deck first.
+
+    Only the deck's owner ever receives this, so each card is encoded at full identity (no
+    redaction). Index 0 is the top card, the next one drawn.
+
+    Parameters
+    ----------
+    cards : list of L5RCard
+        The deck's cards, bottom-first as stored on the table.
+    """
+    return [_card(card) for card in reversed(cards)]
+
+
 def serialize_snapshot(snapshot: ViewSnapshot) -> dict:
     """Serialize a redacted ``ViewSnapshot`` to the JSON-ready shape the board client renders from.
 

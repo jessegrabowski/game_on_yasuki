@@ -689,7 +689,8 @@ def _flip_deck_top(state: TableState, seat: PlayerId, intent: FlipDeckTop) -> li
 
 
 def _search_deck(state: TableState, seat: PlayerId, intent: SearchDeck) -> list[Event]:
-    # Read-only: the owner receives the ordered deck (wired in PR07); state and seq are untouched.
+    # Read-only: the accepted event signals the web layer to ship the ordered deck to its owner
+    # alone; state and seq are untouched. A non-owner is rejected here and receives nothing.
     if not owns_deck(state, seat, intent.deck):
         return []
     return [Event(state.seq, seat, intent)]

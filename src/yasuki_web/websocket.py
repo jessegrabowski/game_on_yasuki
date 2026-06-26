@@ -19,14 +19,23 @@ from yasuki_web.schemas import (
     ServerError,
     ServerChat,
     ServerLog,
+    ServerDeckContents,
 )
-from yasuki_web.snapshot import serialize_snapshot
+from yasuki_web.snapshot import serialize_snapshot, serialize_deck_cards
 from yasuki_web.game_log import describe_intent
 from yasuki_web.rooms import rooms
 from yasuki_web.wip_gate import websocket_access_ok
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, BoardPos, Intent, Event, SpawnCard, RemoveCard
+from yasuki_core.engine.table import (
+    TableState,
+    BoardPos,
+    Intent,
+    Event,
+    SpawnCard,
+    RemoveCard,
+    SearchDeck,
+)
 from yasuki_core.engine.action_log import ActionLog, InitialRecord, ChatEntry, apply_and_log
 from yasuki_core.engine.redaction import redact
 from yasuki_core.engine.setup import setup_seat
@@ -146,6 +155,25 @@ class GameRoom:
             return
         await self.broadcast_snapshots()
         await self._log_intent(seat, intent, events[0])
+        if isinstance(intent, SearchDeck):
+            await self._send_deck_contents(ws, intent)
+
+    async def _send_deck_contents(self, ws: WebSocket, intent: SearchDeck):
+        """Deliver the searched deck's ordered cards to the requesting owner alone.
+
+        The intent is owner-gated upstream (``_search_deck`` rejects a non-owner before this runs),
+        so the deck named by ``intent.deck`` belongs to the player on ``ws``. The cards go only to
+        ``ws`` — never broadcast — so deck order stays private to its owner.
+        """
+        deck = self.state.decks.get(intent.deck)
+        if deck is None:
+            return
+        message = ServerDeckContents(
+            room=self.room_id,
+            deck={"owner": intent.deck.owner.name, "side": intent.deck.side.value},
+            cards=serialize_deck_cards(deck.cards),
+        )
+        await ws.send_json(message.model_dump())
 
     async def handle_spawn(self, ws: WebSocket, spawn: SpawnRequest):
         """Create a public, face-up card on the battlefield (tokens/copies/sandbox pieces) as a real

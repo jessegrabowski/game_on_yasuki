@@ -135,4 +135,21 @@ class ServerLog(BaseModel):
     parts: list[dict]
 
 
-ServerMessage = ServerHello | ServerSnapshot | ServerError | ServerChat | ServerLog
+class ServerDeckContents(BaseModel):
+    """A deck's full ordered contents, delivered to its owner alone in response to a SEARCH_DECK.
+
+    The normal SNAPSHOT redacts deck order, so this is the one message that reveals a deck's cards —
+    and only ever to the player who owns it. ``cards`` is top-of-deck first: index 0 is the card that
+    would be drawn next. ``deck`` carries the owning seat and side (e.g. ``{"owner": "P1", "side":
+    "FATE"}``) so the client can label the dialog and route a pulled card.
+    """
+
+    type: Literal["DECK_CONTENTS"] = "DECK_CONTENTS"
+    room: str
+    deck: dict
+    cards: list[dict]
+
+
+ServerMessage = (
+    ServerHello | ServerSnapshot | ServerError | ServerChat | ServerLog | ServerDeckContents
+)
