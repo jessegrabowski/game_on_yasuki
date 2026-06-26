@@ -9,10 +9,50 @@ function node(tag, className, text) {
   return el;
 }
 
-// Show a card's face: its art, or a back for a hidden stub / explicitly face-down card.
+// A decorative, alt-less back image that fills its parent card or pile tile.
+function backImage(src, className) {
+  const img = node('img', className);
+  img.src = src;
+  img.alt = '';
+  return img;
+}
+
+// The generic card back to draw per card side while a card is face-down, as absolute image URLs.
+// Empty until the lobby loads /api/card-backs; an unset side falls back to the CSS gradient.
+let backArt = {};
+
+export function setBackArt(map) {
+  backArt = map ?? {};
+}
+
+// Map the /api/card-backs payload ({deck: {era: path}}) to a back-image lookup as absolute URLs. A
+// face-down card's era is itself hidden, so each deck side gets one canonical generic back; strongholds
+// use the dynasty back (they are dynasty-side permanents, never tokens), and spawned tokens — keyed
+// under TOKEN — use the dynasty token back.
+export function backArtBySide(backs, imgBase) {
+  const url = (path) => (path ? `${imgBase}/${path}` : undefined);
+  return {
+    FATE: url(backs?.Fate?.new),
+    DYNASTY: url(backs?.Dynasty?.new),
+    STRONGHOLD: url(backs?.Dynasty?.new),
+    TOKEN: url(backs?.Dynasty?.token),
+  };
+}
+
+// The back to draw for a face-down card: the token back for a spawned token (the server ids these
+// "spawn-…"), otherwise the generic back for the card's side.
+function backFor(card) {
+  return card.id?.startsWith('spawn-') ? backArt.TOKEN : backArt[card.side];
+}
+
+// Show a card's face: its front art, or — while face-down — the generic back for its side. A hidden
+// stub carries no front and a known card lying face-down must not reveal one, so both draw the back;
+// with no back art loaded the CSS gradient stands in.
 function applyFace(el, card, imgBase) {
   if (card.hidden || card.face_up === false) {
     el.classList.add('face-down');
+    const back = backFor(card);
+    if (back) el.appendChild(backImage(back));
     return;
   }
   const img = document.createElement('img');
@@ -239,21 +279,22 @@ const deckDest = (owner, side) => ({ kind: 'deck', deck: { owner, side } });
 
 const SEP = { separator: true };
 
-// The card branch of the menu. Items come from the card's dataset: a face-down card offers
-// reveal/hide instead of a bow toggle it cannot evaluate, a double-faced card adds "Turn Over", and
-// "Send to…" appears only on a card the viewer owns. The server re-checks every gate.
+// The card branch of the menu. Items come from the card's dataset: "Flip" turns a card to its other
+// side — the other face of a double-faced card, or front↔deck-back for any other; a face-down card
+// offers reveal/hide instead of a bow toggle it cannot evaluate; and "Send to…" appears only on a
+// card the viewer owns. The server re-checks every gate.
 function cardMenuItems(el, viewer) {
   const id = el.dataset.cardId;
   const side = el.dataset.side || '';
   const owner = el.dataset.owner || '';
   const faceDown = el.dataset.hidden === '1' || el.dataset.faceUp !== '1';
   const bowed = el.dataset.bowed === '1';
+  const doubleFaced = el.dataset.doubleFaced === '1';
   const inProvince = !!el.closest?.('[data-zone="province"]');
   const mine = owner === '' || owner === viewer;
   const seat = owner || viewer;
 
-  const items = [{ label: 'Flip', message: flipIntent(id) }];
-  if (el.dataset.doubleFaced) items.push({ label: 'Turn Over', message: flipFaceIntent(id) });
+  const items = [{ label: 'Flip', message: doubleFaced ? flipFaceIntent(id) : flipIntent(id) }];
   // Bowing a card sitting in a province is meaningless, matching the desktop client's gate.
   if (!inProvince) items.push({ label: bowed ? 'Unbow' : 'Bow', message: bowIntent(id, bowed) });
   items.push({ label: 'Invert', message: invertIntent(id) });

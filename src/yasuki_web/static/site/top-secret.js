@@ -15,6 +15,8 @@ import {
   highlightCard,
   deckAnchor,
   placePregameCards,
+  setBackArt,
+  backArtBySide,
 } from './board.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
@@ -187,7 +189,18 @@ export function init() {
   let imgBase = '/images';
   fetchImageBase().then((base) => {
     imgBase = base;
+    loadCardBacks(base);
   });
+
+  // Load the generic per-side card backs so face-down cards render a real back, not a flat gradient.
+  async function loadCardBacks(base) {
+    try {
+      const { backs } = await (await fetch('/api/card-backs')).json();
+      setBackArt(backArtBySide(backs, base));
+    } catch (_) {
+      // Leave the gradient fallback in place when the backs can't be fetched.
+    }
+  }
 
   const setStatus = (msg) => {
     if (lobbyStatus) lobbyStatus.textContent = msg;
