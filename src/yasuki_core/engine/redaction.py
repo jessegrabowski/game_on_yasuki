@@ -16,11 +16,12 @@ from yasuki_core.game_pieces.constants import Side
 @dataclass(frozen=True, slots=True)
 class HiddenCard:
     """A card the viewer may not identify, carrying only a stable id, its side (which back art to
-    draw), and a constant ``face`` marker. The real name, text, and front image never reach this
-    viewer's snapshot."""
+    draw), its owner (whose card it is — public; only the face is secret), and a constant ``face``
+    marker. The real name, text, and front image never reach this viewer's snapshot."""
 
     card_id: str
     side: Side
+    owner: PlayerId | None = None
     face: str = "back"
 
 
@@ -74,7 +75,7 @@ _PUBLIC_ROLES: Final = frozenset(
 
 
 def _hide(card: L5RCard) -> HiddenCard:
-    return HiddenCard(card_id=card.id, side=card.side)
+    return HiddenCard(card_id=card.id, side=card.side, owner=card.owner)
 
 
 def _zone_card_visible(card: L5RCard, viewer: PlayerId, role: ZoneRole) -> bool:

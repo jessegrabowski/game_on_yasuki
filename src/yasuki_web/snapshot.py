@@ -20,7 +20,12 @@ def _card(view: L5RCard | HiddenCard) -> dict:
     no identity; a full card carries the presented face's name and art plus its flags. A double-faced
     card also carries its back link and which face is showing, so the client can render the flip."""
     if isinstance(view, HiddenCard):
-        return {"id": view.card_id, "side": view.side.value, "hidden": True}
+        return {
+            "id": view.card_id,
+            "side": view.side.value,
+            "owner": view.owner.name if view.owner is not None else None,
+            "hidden": True,
+        }
     face = view.active_face
     card = {
         "id": view.id,
