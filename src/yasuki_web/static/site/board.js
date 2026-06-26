@@ -660,6 +660,28 @@ function menuItemsFor(target, viewer, targetIds, lookup) {
   return [];
 }
 
+// A pointer-following clone shown while dragging a source that stays put in its zone (a deck top, or
+// a hand/province card). It mirrors the card's current face — front art when face-up, the generic
+// back when face-down — and its orientation, so the player drags a faithful image of what they are
+// moving rather than a blank placeholder.
+function dragGhost(sourceEl) {
+  const ghost = node('div', 'board-card dragging');
+  ghost.style.pointerEvents = 'none';
+  for (const cls of ['face-down', 'bowed', 'inverted']) {
+    if (sourceEl.classList.contains(cls)) ghost.classList.add(cls);
+  }
+  const face = sourceEl.querySelector('img');
+  if (face) {
+    const ghostFace = node('img');
+    ghostFace.src = face.src;
+    ghostFace.alt = '';
+    ghost.appendChild(ghostFace);
+  } else {
+    ghost.classList.add('face-down');
+  }
+  return ghost;
+}
+
 // Wire dragging, selection, and the right-click menu once on the table `root` (which spans the
 // battlefield and every seat zone), so delegation survives the full re-render each SNAPSHOT does.
 // A card can be picked up anywhere and dropped on any zone: a drop on the battlefield repositions
@@ -708,9 +730,13 @@ export function initBoardInteractions(root, boardEl, send) {
     }
   };
 
-  const release = () => {
+  // End the drag and clear its visuals. A committed ghost move keeps its hidden source hidden: the
+  // card has "left", and the incoming SNAPSHOT rebuilds the source zone, so restoring it here would
+  // only flash the card back in place for the server round-trip. Cancels and no-op drops restore it.
+  const release = (restoreSource = true) => {
     if (!drag) return;
     drag.el.style.pointerEvents = '';
+    if (restoreSource) drag.el.style.visibility = '';
     drag.el.classList.remove('dragging');
     drag.ghost?.remove();
     drag = null;
@@ -805,9 +831,12 @@ export function initBoardInteractions(root, boardEl, send) {
       drag.moved = true;
       // First real move (not a click/double-click): lift the dragged card out of hit-testing so the
       // drop lands on the zone beneath it. Deferring past pointerdown keeps clicks/double-clicks live.
+      // A card moved by ghost (one that stays in its zone) is hidden so the ghost reads as the card
+      // itself lifting off; a battlefield card is the moving element, so it stays visible.
       if (!drag.deck) {
         drag.el.style.pointerEvents = 'none';
         drag.el.classList.add('dragging');
+        if (!drag.onBattlefield) drag.el.style.visibility = 'hidden';
       }
     }
     if (drag.members) {
@@ -829,13 +858,12 @@ export function initBoardInteractions(root, boardEl, send) {
       }
       return;
     }
-    if (drag.deck) {
-      // The deck's top card is hidden, so drag a face-down ghost to make the move visible and aimable.
+    if (drag.deck || !drag.onBattlefield) {
+      // A deck top or a hand/province card stays put in its zone, so follow the pointer with a ghost
+      // that mirrors its face. The ghost is transparent to hit-testing so the drop resolves to the
+      // zone beneath it — release() detaches it before we read e.target's zone.
       if (!drag.ghost) {
-        drag.ghost = node('div', 'board-card face-down dragging');
-        // Transparent to hit-testing so the drop resolves to the zone beneath (esp. the battlefield),
-        // not the ghost — which release() detaches before we read e.target's zone.
-        drag.ghost.style.pointerEvents = 'none';
+        drag.ghost = dragGhost(drag.el);
         boardEl.appendChild(drag.ghost);
       }
       const ghostPos = dragPosition(e.clientX, e.clientY, battleRect(), { x: drag.grabX, y: drag.grabY });
@@ -843,7 +871,6 @@ export function initBoardInteractions(root, boardEl, send) {
       drag.ghost.style.top = `${ghostPos.y}px`;
       return;
     }
-    if (!drag.onBattlefield) return;
     const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: drag.grabX, y: drag.grabY });
     drag.el.style.left = `${pos.x}px`;
     drag.el.style.top = `${pos.y}px`;
@@ -874,7 +901,14 @@ export function initBoardInteractions(root, boardEl, send) {
     }
     if (!drag) return;
     const card = drag;
-    release();
+    const target = e.target?.closest?.('[data-zone]');
+    const zone = target?.dataset.zone;
+    const dest = zone && zone !== 'battlefield' ? zoneDest(target) : null;
+    // A ghost-moved source (a hidden hand/province/discard card) stays hidden when the drop actually
+    // commits a move — the SNAPSHOT will rebuild its zone — and reappears on a no-op drop or cancel.
+    const commitsGhostMove =
+      card.moved && !card.onBattlefield && !card.deck && (zone === 'battlefield' || !!dest);
+    release(!commitsGhostMove);
     // A press that never moved is a click: (de)select the card rather than treating it as a drop.
     if (!card.moved && card.onBattlefield) {
       if (card.additive) {
@@ -891,8 +925,6 @@ export function initBoardInteractions(root, boardEl, send) {
         send(raiseIntent(card.id));
       }
     }
-    const target = e.target?.closest?.('[data-zone]');
-    const zone = target?.dataset.zone;
     if (card.deck) {
       // A deck-top drag fires only on a real move, resolving the drop the same way a card move does.
       if (card.moved) {
@@ -928,9 +960,8 @@ export function initBoardInteractions(root, boardEl, send) {
         const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: card.grabX, y: card.grabY });
         send(moveCardIntent(card.id, { kind: 'battlefield' }, [pos.x, pos.y]));
       }
-    } else if (zone) {
-      const dest = zoneDest(target);
-      if (dest) send(moveCardIntent(card.id, dest));
+    } else if (dest) {
+      send(moveCardIntent(card.id, dest));
     }
   });
 
