@@ -118,6 +118,10 @@ class ServerError(BaseModel):
     type: Literal["ERROR"] = "ERROR"
     room: str
     message: str
+    # A debug-level error (e.g. a rejected intent) the client only surfaces when its debug flag is
+    # on; the authoritative SNAPSHOT revert is the player's real feedback. Default false means
+    # user-facing.
+    debug: bool = False
 
 
 class ServerChat(BaseModel):

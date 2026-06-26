@@ -143,14 +143,14 @@ class GameRoom:
             intent = intent_from_envelope(envelope)
         except (KeyError, ValueError, TypeError):
             await ws.send_json(
-                ServerError(room=self.room_id, message="Invalid intent").model_dump()
+                ServerError(room=self.room_id, message="Invalid intent", debug=True).model_dump()
             )
             return
 
         events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
         if not events:
             await ws.send_json(
-                ServerError(room=self.room_id, message="Intent rejected").model_dump()
+                ServerError(room=self.room_id, message="Intent rejected", debug=True).model_dump()
             )
             return
         await self.broadcast_snapshots()

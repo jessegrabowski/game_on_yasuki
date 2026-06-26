@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 
 globalThis.fetch = mock.fn();
 
-const { displayName, fallbackSrc, fetchImageBase } = await import(
+const { displayName, fallbackSrc, fetchImageBase, fetchConfig } = await import(
   '../../../src/yasuki_web/static/site/card-common.js'
 );
 
@@ -63,5 +63,26 @@ describe('fetchImageBase', () => {
   it('defaults to the local mount when the request fails', async () => {
     fetch.mock.mockImplementation(() => Promise.reject(new Error('offline')));
     assert.equal(await fetchImageBase(), '/images');
+  });
+});
+
+describe('fetchConfig', () => {
+  it('returns the image base and debug flag from config', async () => {
+    fetch.mock.mockImplementation(() =>
+      Promise.resolve({
+        json: () => Promise.resolve({ image_base_url: 'https://cdn.example/r2', debug: true }),
+      }),
+    );
+    assert.deepEqual(await fetchConfig(), { imageBase: 'https://cdn.example/r2', debug: true });
+  });
+
+  it('defaults debug off and to the local mount when config is empty', async () => {
+    fetch.mock.mockImplementation(() => Promise.resolve({ json: () => Promise.resolve({}) }));
+    assert.deepEqual(await fetchConfig(), { imageBase: '/images', debug: false });
+  });
+
+  it('defaults debug off when the request fails', async () => {
+    fetch.mock.mockImplementation(() => Promise.reject(new Error('offline')));
+    assert.deepEqual(await fetchConfig(), { imageBase: '/images', debug: false });
   });
 });
