@@ -338,6 +338,7 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
   const bowed = el.dataset.bowed === '1';
   const doubleFaced = el.dataset.doubleFaced === '1';
   const inProvince = !!el.closest?.('[data-zone="province"]');
+  const inHand = !!el.closest?.('[data-zone="hand"]');
   const mine = owner === '' || owner === viewer;
 
   const dataFor = (cardId) => (cardId === id ? el.dataset : lookup(cardId) ?? el.dataset);
@@ -349,33 +350,45 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
     }
   };
 
-  const items = [{ label: 'Flip', message: flipIntentFor(doubleFaced, targetIds) }];
-  // Bowing a card sitting in a province is meaningless, matching the desktop client's gate.
-  if (!inProvince) items.push({ label: bowed ? 'Unbow' : 'Bow', message: bowIntent(targetIds, bowed) });
-  items.push({ label: 'Invert', message: invertIntent(targetIds) });
-  // Show is owner-gated: reveal your own card to your opponent (toggle Show/Stop showing). Peek is
-  // open to anyone — offered on a card the viewer cannot yet see (face-down/hidden), toggled to
-  // "Stop peeking" once they are. Both carry the clicked card's single id, not the batch.
+  const items = [];
+  // Append a separator-led group, but only when it has items and something precedes it — so the menu
+  // never opens with a stray separator or doubles one up.
+  const pushGroup = (group) => {
+    if (!group.length) return;
+    if (items.length) items.push(SEP);
+    items.push(...group);
+  };
+
+  // Flip, Bow, and Invert manipulate a card in play; a card in hand is played, not turned in place.
+  if (!inHand) {
+    items.push({ label: 'Flip', message: flipIntentFor(doubleFaced, targetIds) });
+    // Bowing a card sitting in a province is meaningless, matching the desktop client's gate.
+    if (!inProvince) items.push({ label: bowed ? 'Unbow' : 'Bow', message: bowIntent(targetIds, bowed) });
+    items.push({ label: 'Invert', message: invertIntent(targetIds) });
+  }
+  // Show reveals to the opponent a card they cannot already see — one in your hand or lying face-down.
+  // A face-up card on the shared board is already visible, so it only offers the toggle-off once shown.
   if (mine) {
-    items.push(
-      shown
-        ? { label: 'Stop showing', message: unshowIntent(id) }
-        : { label: 'Show opponent', message: showIntent(id) },
-    );
+    if (shown) items.push({ label: 'Stop showing', message: unshowIntent(id) });
+    else if (inHand || faceDown) items.push({ label: 'Show opponent', message: showIntent(id) });
   }
-  if (peeked) {
-    items.push({ label: 'Stop peeking', message: unpeekIntent(id) });
-  } else if (faceDown) {
-    items.push({ label: 'Peek', message: peekIntent(id) });
-  }
+  // Peek is open to anyone, on a card the viewer cannot yet see, toggling to "Stop peeking" once they
+  // can. Show and Peek carry the clicked card's single id, not the batch.
+  if (peeked) items.push({ label: 'Stop peeking', message: unpeekIntent(id) });
+  else if (faceDown) items.push({ label: 'Peek', message: peekIntent(id) });
+
   if (mine) {
     const seatOf = (d) => d.owner || viewer;
-    items.push(SEP, {
-      label: 'Send to Hand',
-      onClick: (e, send) => fanOut(send, (cid, d) => moveCardIntent(cid, handDest(seatOf(d)))),
-    });
+    const sendItems = [];
+    // Only fate cards live in a hand, and a card already there is never routed back to it.
+    if (side === 'FATE' && !inHand) {
+      sendItems.push({
+        label: 'Send to Hand',
+        onClick: (e, send) => fanOut(send, (cid, d) => moveCardIntent(cid, handDest(seatOf(d)))),
+      });
+    }
     if (side) {
-      items.push(
+      sendItems.push(
         {
           label: 'Send to Discard',
           onClick: (e, send) =>
@@ -393,10 +406,11 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
         },
       );
     }
+    pushGroup(sendItems);
   }
   // Only tokens can be removed: a real card from a deck/zone belongs to the game state, not the table.
   if (el.dataset.token === '1') {
-    items.push(SEP, { label: 'Remove', onClick: (e, send) => fanOut(send, (cid) => removeMessage(cid)) });
+    pushGroup([{ label: 'Remove', onClick: (e, send) => fanOut(send, (cid) => removeMessage(cid)) }]);
   }
   return items;
 }
