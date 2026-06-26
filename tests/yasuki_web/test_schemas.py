@@ -7,6 +7,7 @@ from yasuki_web.schemas import (
     IntentEnvelope,
     intent_from_envelope,
     ServerChat,
+    ServerDeckContents,
     ServerLog,
     ServerSnapshot,
 )
@@ -75,3 +76,17 @@ def test_spawn_message_parses():
 def test_server_snapshot_wraps_the_view():
     payload = ServerSnapshot(room="r1", snapshot={"seq": 3}).model_dump()
     assert payload == {"type": "SNAPSHOT", "room": "r1", "snapshot": {"seq": 3}}
+
+
+def test_server_deck_contents_serializes_top_first():
+    payload = ServerDeckContents(
+        room="r1",
+        deck={"owner": "P1", "side": "FATE"},
+        cards=[{"id": "t3", "name": "Card t3"}, {"id": "b1", "name": "Card b1"}],
+    ).model_dump()
+    assert payload == {
+        "type": "DECK_CONTENTS",
+        "room": "r1",
+        "deck": {"owner": "P1", "side": "FATE"},
+        "cards": [{"id": "t3", "name": "Card t3"}, {"id": "b1", "name": "Card b1"}],
+    }
