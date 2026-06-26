@@ -1079,6 +1079,142 @@ describe('initBoardInteractions — double-click shortcuts', () => {
   });
 });
 
+describe('initBoardInteractions — keyboard shortcuts', () => {
+  let root;
+  let board;
+  let sent;
+
+  beforeEach(() => {
+    root = document.getElementById('boardStage');
+    root.dataset.viewerSeat = 'P1';
+    board = document.getElementById('battlefield');
+    sent = [];
+    initBoardInteractions(root, board, (message) => sent.push(message));
+  });
+
+  // Hover an element (sets the hotkey target), then press a key as a non-typing keydown on the
+  // document. Returns the event so callers can assert its default was (or wasn't) consumed.
+  const press = (key, hoverTarget, keyTarget = { tagName: 'DIV' }) => {
+    root._emit('pointermove', { target: hoverTarget });
+    const event = { key, target: keyTarget, defaultPrevented: false, preventDefault() { this.defaultPrevented = true; } };
+    document._emit('keydown', event);
+    return event;
+  };
+  // A pointer target whose `closest` resolves to a card (with its dataset) but not a deck.
+  const overCard = (opts) => {
+    const card = fakeCard('c1', opts);
+    return { closest: (sel) => (sel === '[data-card-id]' ? card : null) };
+  };
+  const overDeck = (owner, side) => ({
+    closest: (sel) => (sel === '[data-zone="deck"]' ? { dataset: { owner, side } } : null),
+  });
+
+  it('F flips, B bows, I inverts the hovered card you own', () => {
+    press('f', overCard({ owner: 'P1', faceUp: false }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'FLIP', card_ids: ['c1'] });
+    press('b', overCard({ owner: 'P1', faceUp: true }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'BOW', card_ids: ['c1'] });
+    press('i', overCard({ owner: 'P1', faceUp: true }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'INVERT', card_ids: ['c1'] });
+  });
+
+  it('B unbows a bowed card and is case-insensitive', () => {
+    press('B', overCard({ owner: 'P1', faceUp: true, bowed: true }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'UNBOW', card_ids: ['c1'] });
+  });
+
+  it('F flips a double-faced card by its face, not as a hidden card', () => {
+    press('f', overCard({ owner: 'P1', faceUp: false, doubleFaced: true }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'FLIP_FACE', card_ids: ['c1'] });
+  });
+
+  it('ignores a card hotkey on a card sitting on a deck', () => {
+    const card = fakeCard('c1', { owner: 'P1', faceUp: true });
+    card.closest = (sel) => (sel === '[data-zone="deck"]' ? { dataset: {} } : null);
+    press('f', { closest: (sel) => (sel === '[data-card-id]' ? card : null) });
+    assert.equal(sent.length, 0);
+  });
+
+  it('lets modifier combos through so browser shortcuts still work', () => {
+    root._emit('pointermove', { target: overCard({ owner: 'P1', faceUp: false }) });
+    const event = { key: 'f', target: { tagName: 'DIV' }, ctrlKey: true, defaultPrevented: false, preventDefault() { this.defaultPrevented = true; } };
+    document._emit('keydown', event);
+    assert.equal(sent.length, 0);
+    assert.equal(event.defaultPrevented, false);
+  });
+
+  it('D draws from the hovered deck you own', () => {
+    press('d', overDeck('P1', 'FATE'));
+    assert.deepEqual(sent.at(-1).intent, { op: 'DRAW', deck: { owner: 'P1', side: 'FATE' } });
+  });
+
+  it('S opens the search chooser for the hovered deck', () => {
+    press('s', overDeck('P1', 'DYNASTY'));
+    const overlay = document
+      .querySelector('.room')
+      .children.find((c) => c.className === 'deck-dialog-overlay');
+    assert.ok(overlay, 'the search chooser opened');
+  });
+
+  it('consumes the keystroke so S does not leak into the chooser input', () => {
+    const event = press('s', overDeck('P1', 'DYNASTY'));
+    assert.equal(event.defaultPrevented, true);
+  });
+
+  it('leaves the keystroke alone when no hotkey applies', () => {
+    const event = press('d', overDeck('P2', 'FATE'));
+    assert.equal(event.defaultPrevented, false);
+  });
+
+  it('ignores a card hotkey on an opponent card', () => {
+    press('b', overCard({ owner: 'P2', faceUp: true }));
+    assert.equal(sent.length, 0);
+  });
+
+  it('ignores a deck hotkey on the opponent deck', () => {
+    press('d', overDeck('P2', 'FATE'));
+    assert.equal(sent.length, 0);
+  });
+
+  it('stays out of the way while typing in an input', () => {
+    press('b', overCard({ owner: 'P1', faceUp: true }), { tagName: 'INPUT' });
+    assert.equal(sent.length, 0);
+  });
+
+  it('does nothing when the pointer is not over a card or deck', () => {
+    press('f', { closest: () => null });
+    assert.equal(sent.length, 0);
+  });
+
+  it('skips bowing a face-up card in a province', () => {
+    const province = { dataset: { zone: 'province', owner: 'P1', idx: '0' } };
+    const card = fakeCard('c1', { owner: 'P1', faceUp: true, province });
+    press('b', { closest: (sel) => (sel === '[data-card-id]' ? card : null) });
+    assert.equal(sent.length, 0);
+  });
+
+  it('applies a card hotkey to the whole selection when the hovered card is selected', () => {
+    const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1', faceUp: true });
+    const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1', faceUp: true });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2] : []);
+    root._emit('pointerdown', onCard(c1));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    root._emit('pointerdown', onCard(c2, { ctrlKey: true }));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    sent.length = 0;
+
+    press('b', { closest: (sel) => (sel === '[data-card-id]' ? c1 : null) });
+    assert.deepEqual(sent.at(-1).intent, { op: 'BOW', card_ids: ['c1', 'c2'] });
+  });
+
+  it('forgets its target once the pointer leaves the board', () => {
+    root._emit('pointermove', { target: overCard({ owner: 'P1', faceUp: true }) });
+    root._emit('pointerleave', {});
+    document._emit('keydown', { key: 'b', target: { tagName: 'DIV' } });
+    assert.equal(sent.length, 0);
+  });
+});
+
 describe('initBoardInteractions — context menu', () => {
   let root;
   let board;
