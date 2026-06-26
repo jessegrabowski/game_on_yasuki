@@ -21,13 +21,25 @@ function applyFace(el, card, imgBase) {
   el.appendChild(img);
 }
 
+// Stamp the card state the context menu reads back off the DOM: identity, side and owner for routing
+// "Send to…" intents and gating them by ownership, and the flags whose toggle label depends on the
+// current value. A hidden stub carries only id + side, so its other fields stay empty.
+function tagCard(el, card) {
+  el.dataset.cardId = card.id;
+  el.dataset.bowed = card.bowed ? '1' : '';
+  el.dataset.side = card.side ?? '';
+  el.dataset.owner = card.owner ?? '';
+  el.dataset.hidden = card.hidden ? '1' : '';
+  el.dataset.faceUp = card.face_up ? '1' : '';
+  if (card.back_card_id) el.dataset.doubleFaced = '1';
+}
+
 // An absolutely-positioned battlefield card.
 function cardElement(card, imgBase) {
   const el = node('div', 'board-card');
   if (card.bowed) el.classList.add('bowed');
   if (card.inverted) el.classList.add('inverted');
-  el.dataset.cardId = card.id;
-  el.dataset.bowed = card.bowed ? '1' : '';
+  tagCard(el, card);
   el.style.left = `${card.x}px`;
   el.style.top = `${card.y}px`;
   applyFace(el, card, imgBase);
@@ -39,7 +51,7 @@ function zoneCard(card, imgBase) {
   const el = node('div', 'zone-card');
   if (card.bowed) el.classList.add('bowed');
   if (card.inverted) el.classList.add('inverted');
-  el.dataset.cardId = card.id;
+  tagCard(el, card);
   applyFace(el, card, imgBase);
   return el;
 }
@@ -157,14 +169,48 @@ export const removeMessage = (id) => ({ type: 'REMOVE', remove: { id } });
 
 export const moveIntent = (id, x, y) => intentMessage({ op: 'SET_CARD_POS', card_id: id, x, y });
 export const flipIntent = (id) => intentMessage({ op: 'FLIP', card_ids: [id] });
-// BOW/UNBOW are explicit ops, so a "Bow / Unbow" toggle picks the one that changes the card.
+// BOW and UNBOW are distinct ops, so the toggle picks whichever one actually changes the card.
 export const bowIntent = (id, bowed) =>
   intentMessage({ op: bowed ? 'UNBOW' : 'BOW', card_ids: [id] });
+export const invertIntent = (id) => intentMessage({ op: 'INVERT', card_ids: [id] });
+export const revealIntent = (id) => intentMessage({ op: 'REVEAL', card_ids: [id] });
+export const hideIntent = (id) => intentMessage({ op: 'HIDE', card_ids: [id] });
+// Turn a double-faced card (a flip stronghold) to its other printed face.
+export const flipFaceIntent = (id) => intentMessage({ op: 'FLIP_FACE', card_ids: [id] });
 // Draw the top card of a seat's deck; the server routes it (fate → hand, dynasty → province).
 export const drawIntent = (owner, side) => intentMessage({ op: 'DRAW', deck: { owner, side } });
-// Move a card to a zone/deck/battlefield destination (position set only for the battlefield).
-export const moveCardIntent = (id, to, position = null) =>
-  intentMessage({ op: 'MOVE_CARD', card_id: id, to, position });
+// The 31-bit space the client samples a shuffle seed from, matching the server's getrandbits(31).
+const SHUFFLE_SEED_SPACE = 2 ** 31;
+// The client picks the shuffle seed so the resulting order is reproducible from the action log; the
+// server reshuffles with it and the opponent only learns that a shuffle happened.
+export const shuffleIntent = (owner, side) =>
+  intentMessage({
+    op: 'SHUFFLE',
+    deck: { owner, side },
+    seed: Math.floor(Math.random() * SHUFFLE_SEED_SPACE),
+  });
+export const flipDeckTopIntent = (owner, side) =>
+  intentMessage({ op: 'FLIP_DECK_TOP', deck: { owner, side } });
+export const searchDeckIntent = (owner, side) =>
+  intentMessage({ op: 'SEARCH_DECK', deck: { owner, side } });
+const provinceZone = (owner, idx) => ({ owner, role: 'province', idx });
+export const fillProvinceIntent = (owner, idx) =>
+  intentMessage({ op: 'FILL_PROVINCE', zone: provinceZone(owner, idx) });
+export const destroyProvinceIntent = (owner, idx) =>
+  intentMessage({ op: 'DESTROY_PROVINCE', zone: provinceZone(owner, idx) });
+export const discardProvinceIntent = (owner, idx) =>
+  intentMessage({ op: 'DISCARD_PROVINCE', zone: provinceZone(owner, idx) });
+export const createProvinceIntent = () => intentMessage({ op: 'CREATE_PROVINCE' });
+// Move a card to a zone/deck/battlefield destination (position set only for the battlefield;
+// to_bottom only for a deck, sliding the card under it instead of onto the top).
+export const moveCardIntent = (id, to, position = null, toBottom = false) =>
+  intentMessage({
+    op: 'MOVE_CARD',
+    card_id: id,
+    to,
+    position,
+    ...(toBottom ? { to_bottom: true } : {}),
+  });
 
 // Build a MOVE_CARD destination from a drop target's data attributes (set on each drop zone).
 function zoneDest(el) {
@@ -181,6 +227,80 @@ function zoneDest(el) {
     default:
       return null;
   }
+}
+
+// MOVE_CARD destinations for the "Send to…" menu items.
+const handDest = (owner) => ({ kind: 'zone', zone: { owner, role: 'hand', idx: null } });
+const discardDest = (owner, side) => ({
+  kind: 'zone',
+  zone: { owner, role: side === 'FATE' ? 'fate_discard' : 'dynasty_discard', idx: null },
+});
+const deckDest = (owner, side) => ({ kind: 'deck', deck: { owner, side } });
+
+const SEP = { separator: true };
+
+// The card branch of the menu. Items come from the card's dataset: a face-down card offers
+// reveal/hide instead of a bow toggle it cannot evaluate, a double-faced card adds "Turn Over", and
+// "Send to…" appears only on a card the viewer owns. The server re-checks every gate.
+function cardMenuItems(el, viewer) {
+  const id = el.dataset.cardId;
+  const side = el.dataset.side || '';
+  const owner = el.dataset.owner || '';
+  const faceDown = el.dataset.hidden === '1' || el.dataset.faceUp !== '1';
+  const bowed = el.dataset.bowed === '1';
+  const inProvince = !!el.closest?.('[data-zone="province"]');
+  const mine = owner === '' || owner === viewer;
+  const seat = owner || viewer;
+
+  const items = [{ label: 'Flip', message: flipIntent(id) }];
+  if (el.dataset.doubleFaced) items.push({ label: 'Turn Over', message: flipFaceIntent(id) });
+  // Bowing a card sitting in a province is meaningless, matching the desktop client's gate.
+  if (!inProvince) items.push({ label: bowed ? 'Unbow' : 'Bow', message: bowIntent(id, bowed) });
+  items.push({ label: 'Invert', message: invertIntent(id) });
+  if (faceDown) {
+    items.push({ label: 'Reveal', message: revealIntent(id) });
+    items.push({ label: 'Hide', message: hideIntent(id) });
+  }
+  if (mine) {
+    items.push(SEP, { label: 'Send to Hand', message: moveCardIntent(id, handDest(seat)) });
+    if (side) {
+      const deck = deckDest(seat, side);
+      items.push(
+        { label: 'Send to Discard', message: moveCardIntent(id, discardDest(seat, side)) },
+        { label: 'Send to Deck (top)', message: moveCardIntent(id, deck) },
+        { label: 'Send to Deck (bottom)', message: moveCardIntent(id, deck, null, true) },
+      );
+    }
+  }
+  items.push(SEP, { label: 'Remove', message: removeMessage(id) });
+  return items;
+}
+
+// The deck branch of the menu: draw, shuffle, reveal the top card in place, search the ordered deck,
+// and spin up a fresh province. Only the deck's owner may act, so a non-owner gets no menu.
+function deckMenuItems(el, viewer) {
+  const owner = el.dataset.owner;
+  const side = el.dataset.side;
+  if (owner !== viewer) return [];
+  return [
+    { label: 'Draw', message: drawIntent(owner, side) },
+    { label: 'Shuffle', message: shuffleIntent(owner, side) },
+    { label: 'Flip Top', message: flipDeckTopIntent(owner, side) },
+    { label: 'Search', message: searchDeckIntent(owner, side) },
+    SEP,
+    { label: 'Create Province', message: createProvinceIntent() },
+  ];
+}
+
+// The province branch: fill an empty province from the dynasty deck, or discard/destroy the province.
+// When the slot holds a card the card's own menu opens instead, with these appended after a separator.
+function provinceMenuItems(owner, idx, viewer) {
+  if (owner !== viewer) return [];
+  return [
+    { label: 'Fill', message: fillProvinceIntent(owner, idx) },
+    { label: 'Discard', message: discardProvinceIntent(owner, idx) },
+    { label: 'Destroy', message: destroyProvinceIntent(owner, idx) },
+  ];
 }
 
 // Card footprint, matching --card-w/--card-h in play.css.
@@ -241,7 +361,9 @@ function closeMenu() {
   activeMenu = null;
 }
 
-function openMenu(boardEl, cardId, bowed, clientX, clientY, send) {
+// Open the context menu at the click point with a prebuilt item list. Each item is either a separator
+// or `{label, message}`; clicking an item sends its message and closes the menu.
+function openMenu(boardEl, items, clientX, clientY, send) {
   closeMenu();
   const rect = boardEl.getBoundingClientRect();
   const menu = document.createElement('ul');
@@ -249,18 +371,17 @@ function openMenu(boardEl, cardId, bowed, clientX, clientY, send) {
   menu.style.left = `${clientX - rect.left}px`;
   menu.style.top = `${clientY - rect.top}px`;
 
-  const items = [
-    ['Flip', flipIntent(cardId)],
-    ['Bow / Unbow', bowIntent(cardId, bowed)],
-    ['Remove', removeMessage(cardId)],
-  ];
-  for (const [label, message] of items) {
+  for (const item of items) {
     const li = document.createElement('li');
-    li.textContent = label;
-    li.addEventListener('click', () => {
-      send(message);
-      closeMenu();
-    });
+    if (item.separator) {
+      li.className = 'menu-sep';
+    } else {
+      li.textContent = item.label;
+      li.addEventListener('click', () => {
+        send(item.message);
+        closeMenu();
+      });
+    }
     menu.appendChild(li);
   }
 
@@ -276,6 +397,24 @@ function openMenu(boardEl, cardId, bowed, clientX, clientY, send) {
       { once: true },
     );
   }, 0);
+}
+
+// Choose the menu for a right-click: a deck pile shows deck actions (even though its top card carries
+// a card id); an occupied province shows the card's menu plus the province lifecycle ops; an empty
+// province shows just those ops; any other card shows the card menu. Returns [] for an empty target.
+function menuItemsFor(target, viewer) {
+  const zoneEl = target?.closest?.('[data-zone]');
+  const zone = zoneEl?.dataset.zone;
+  const cardEl = target?.closest?.('[data-card-id]');
+  if (zone === 'deck') return deckMenuItems(zoneEl, viewer);
+  if (zone === 'province') {
+    const province = provinceMenuItems(zoneEl.dataset.owner, Number(zoneEl.dataset.idx), viewer);
+    if (!cardEl) return province;
+    const card = cardMenuItems(cardEl, viewer);
+    return province.length ? [...card, SEP, ...province] : card;
+  }
+  if (cardEl) return cardMenuItems(cardEl, viewer);
+  return [];
 }
 
 // Wire dragging and the right-click menu once on the table `root` (which spans the battlefield and
@@ -350,9 +489,9 @@ export function initBoardInteractions(root, boardEl, send) {
   }
 
   root.addEventListener('contextmenu', (e) => {
-    const cardEl = e.target?.closest?.('[data-card-id]');
-    if (!cardEl) return;
+    const items = menuItemsFor(e.target, root.dataset.viewerSeat || '');
+    if (!items.length) return;
     e.preventDefault();
-    openMenu(boardEl, cardEl.dataset.cardId, cardEl.dataset.bowed === '1', e.clientX, e.clientY, send);
+    openMenu(boardEl, items, e.clientX, e.clientY, send);
   });
 }

@@ -256,6 +256,9 @@ export function init() {
         .map((seat) => seat.name);
       renderPlayers(playerList, present, myName);
       const you = snapshot.your_seat;
+      // The context menu reads the viewer's seat off the board root to gate "Send to…"/deck/province
+      // actions to the cards and zones this player owns.
+      if (boardStage) boardStage.dataset.viewerSeat = you ?? '';
       if (!you) {
         renderBoard(battlefield, snapshot.battlefield ?? [], imgBase);
         return;
