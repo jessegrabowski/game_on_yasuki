@@ -532,10 +532,15 @@ describe('init (room client wiring)', () => {
     assert.equal(ws.sent.find((m) => m.type === 'LOAD_DECK').load_deck.filename, 'Crab Rush');
   });
 
-  it('draws from a deck on double-click', async () => {
+  it('draws from a deck on double-click, with the room injected', async () => {
     const ws = await joinedRoom();
-    document.getElementById('selfTableau')._emit('dblclick', {
-      target: { closest: (s) => (s === '.deck' ? { dataset: { owner: 'P1', side: 'FATE' } } : null) },
+    const stage = document.getElementById('boardStage');
+    stage.dataset.viewerSeat = 'P1';
+    stage._emit('dblclick', {
+      target: {
+        closest: (s) =>
+          s === '[data-zone="deck"]' ? { dataset: { zone: 'deck', owner: 'P1', side: 'FATE' } } : null,
+      },
     });
     assert.deepEqual(ws.sent.find((m) => m.type === 'INTENT'), {
       type: 'INTENT',

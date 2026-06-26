@@ -11,7 +11,6 @@ import {
   renderPanel,
   initPanelHonor,
   spawnMessage,
-  drawIntent,
   initBoardInteractions,
   highlightCard,
   deckAnchor,
@@ -356,12 +355,6 @@ export function init() {
   const sendToRoom = (frame) => {
     if (client && currentRoom) client.send(frame);
   };
-
-  // Double-click one of your decks to draw its top card; the server routes where it lands.
-  selfTableau?.addEventListener('dblclick', (e) => {
-    const deck = e.target.closest?.('.deck');
-    if (deck) sendToRoom({ ...drawIntent(deck.dataset.owner, deck.dataset.side), room: currentRoom });
-  });
 
   const submitDeck = (yaml, filename = null) => {
     const text = yaml?.trim();

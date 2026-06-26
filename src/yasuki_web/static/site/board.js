@@ -950,6 +950,24 @@ export function initBoardInteractions(root, boardEl, send) {
     openMenu(root, items, e.clientX, e.clientY, send);
   });
 
+  // Double-click shortcuts on the viewer's own cards/decks. A face-up card in a province is left
+  // alone — bowing one there is meaningless, matching the menu's gate.
+  root.addEventListener('dblclick', (e) => {
+    const deckEl = e.target?.closest?.('[data-zone="deck"]');
+    if (deckEl) {
+      if (ownsDeck(deckEl)) send(drawIntent(deckEl.dataset.owner, deckEl.dataset.side));
+      return;
+    }
+    const cardEl = e.target?.closest?.('[data-card-id]');
+    if (!cardEl || !ownsCard(cardEl)) return;
+    const id = cardEl.dataset.cardId;
+    if (isFaceDown(cardEl)) {
+      send(flipIntentFor(cardEl.dataset.doubleFaced === '1', id));
+    } else if (!cardEl.closest?.('[data-zone="province"]')) {
+      send(bowIntent(id, cardEl.dataset.bowed === '1'));
+    }
+  });
+
   return { markSelection };
 }
 
