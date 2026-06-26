@@ -167,6 +167,9 @@ class GameRoom:
             await ws.send_json(
                 ServerError(room=self.room_id, message="Intent rejected", debug=True).model_dump()
             )
+            # Re-send the authoritative view so any optimistic local change the client made for this
+            # move (a hidden drag source, a card nudged to its drop point) snaps back.
+            await self._send_snapshot(ws, seat)
             return
         await self.broadcast_snapshots()
         await self._log_intent(seat, intent, events[0])
@@ -323,14 +326,18 @@ class GameRoom:
             flip_second_player_stronghold(self.state, seats)
         self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
 
+    async def _send_snapshot(self, ws: WebSocket, seat: PlayerId):
+        """Send one seated player its own redacted `SNAPSHOT`."""
+        view = serialize_snapshot(redact(self.state, seat))
+        await ws.send_json(ServerSnapshot(room=self.room_id, snapshot=view).model_dump())
+
     async def broadcast_snapshots(self):
         """Send each seated player its own redacted `SNAPSHOT`. This is the per-viewer leak fix:
         the opponent's hand and face-down cards are stubs in the bytes that reach the wrong client."""
         disconnected = []
         for ws, seat in list(self.seats.items()):
-            view = serialize_snapshot(redact(self.state, seat))
             try:
-                await ws.send_json(ServerSnapshot(room=self.room_id, snapshot=view).model_dump())
+                await self._send_snapshot(ws, seat)
             except Exception as e:
                 logger.error(f"Failed to send snapshot: {e}")
                 disconnected.append(ws)

@@ -100,9 +100,9 @@ def test_opponent_targeting_intent_is_rejected_and_unlogged(room):
 
     asyncio.run(room.handle_intent(ada, IntentEnvelope(op=IntentOp.FLIP, card_ids=["f1"])))
 
-    assert ada.sent[-1]["type"] == "ERROR"
+    assert any(m["type"] == "ERROR" for m in ada.sent)
     assert len(room.action_log.entries) == before  # nothing recorded
-    assert kenji.sent == []  # a rejected intent broadcasts nothing
+    assert kenji.sent == []  # a rejected intent broadcasts nothing to the other seat
 
 
 def test_move_deck_top_routes_through_the_websocket(room):
