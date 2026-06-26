@@ -580,6 +580,8 @@
   border: 1px solid var(--r-line);
   background: var(--r-surface);
   overflow: hidden;
+  /* Own stacking context so the label can sit behind the pile's card/back (see .pile-label). */
+  isolation: isolate;
 }
 
 .pile.is-back {
@@ -608,6 +610,8 @@
   text-align: center;
   font-size: 0.55rem;
   color: var(--r-ink-dim);
+  /* Lowest in the pile: a card or back covers the label, which shows only on an empty zone. */
+  z-index: -1;
 }
 
 .pile.is-back .pile-label {
