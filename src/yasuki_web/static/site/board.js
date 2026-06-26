@@ -132,8 +132,8 @@ function discard(label, cards, owner, role, imgBase) {
 
 // A seat's tableau laid out on the battlefield like the desktop table: dynasty deck + discard at the
 // left, the four provinces in the centre, fate discard + deck at the right. The stronghold/sensei/
-// wind are not part of the tableau — they are loose battlefield cards the client lays out beside the
-// dynasty deck (see placeUnplacedCards).
+// wind are not part of the tableau — they are loose battlefield cards the client lays out by the
+// dynasty discard (see placeUnplacedCards).
 export function renderTableau(container, seatName, snapshot, imgBase) {
   const zones = snapshot.zones ?? {};
   const decks = snapshot.decks ?? {};
@@ -388,16 +388,16 @@ const rectBetween = (sx, sy, cx, cy) => ({
 const cardInRect = (r, x, y) =>
   x < r.x + r.w && x + CARD_W > r.x && y < r.y + r.h && y + CARD_H > r.y;
 
-// Horizontal step between an owner's fanned-out pre-game cards, and the vertical gap between that fan
-// and the dynasty deck, both in pixels.
+// Horizontal step between an owner's fanned-out loose battlefield cards, and the vertical gap a
+// deck-anchored card leaves between itself and its deck, both in pixels.
 const PREGAME_FAN = 20;
 const PREGAME_DECK_GAP = 10;
 
-// Battlefield-local top-left next to a seat's dynasty deck, or null if the tableau is not laid out
-// yet. The pre-game cards sit just inboard of the deck — above it for the bottom (viewer) seat, below
-// it for the top seat — so they read as "by the dynasty deck" without covering it.
-export function deckAnchor(tableau, battlefield, above) {
-  const deckEl = tableau?.querySelector?.('.pile.deck[data-side="DYNASTY"]');
+// Battlefield-local top-left next to a seat's `side` deck (FATE or DYNASTY), or null if the tableau is
+// not laid out yet. The cards sit just inboard of the deck — above it for the bottom (viewer) seat,
+// below it for the top seat — so they read as "by the deck" without covering it.
+export function deckAnchor(tableau, battlefield, above, side) {
+  const deckEl = tableau?.querySelector?.(`.pile.deck[data-side="${side}"]`);
   if (!deckEl) return null;
   const d = deckEl.getBoundingClientRect();
   const b = battlefield.getBoundingClientRect();
@@ -408,19 +408,42 @@ export function deckAnchor(tableau, battlefield, above) {
   };
 }
 
-// Give each unplaced battlefield card (server x < 0 — a pre-game permanent, or a dynasty card drawn
-// while every province was full) a position fanned out from its owner's dynasty deck. Cards already
-// placed (x >= 0) keep their server position. `anchorFor(owner, isViewer)` returns the owner's
-// anchor or null. Returns a new array.
+// Battlefield-local top-left for a seat's loose pre-game permanents (stronghold/sensei/wind): one card
+// width inboard of the dynasty discard so they start toward the centre of the play area, kept clear of
+// the discard row by the same gap as a deck-anchored card — above it for the bottom (viewer) seat,
+// below it for the top seat. Null if the tableau is not laid out yet.
+export function pregameAnchor(tableau, battlefield, above) {
+  const discardEl = tableau?.querySelector?.('.pile[data-role="dynasty_discard"]');
+  if (!discardEl) return null;
+  const d = discardEl.getBoundingClientRect();
+  const b = battlefield.getBoundingClientRect();
+  const discardY = d.top - b.top;
+  return {
+    x: d.left - b.left + CARD_W,
+    y: above ? discardY - CARD_H - PREGAME_DECK_GAP : discardY + CARD_H + PREGAME_DECK_GAP,
+  };
+}
+
+// Give each unplaced battlefield card (server x < 0 — a pre-game permanent, an overflow dynasty draw,
+// or a card pulled from a deck search) a fanned-out position in one of three groups: a pre-game
+// permanent (any side) starts by the dynasty discard with the others; otherwise a fate card anchors
+// to the fate deck and a dynasty card to the dynasty deck. Cards already placed (x >= 0) keep their
+// server position. `anchorFor(owner, isViewer, group)` returns that group's anchor or null. Each group
+// fans toward the centre of the board — rightward off the left-hung dynasty side, leftward off the
+// right-hung fate deck — so a growing stack stays on the play space instead of running off the edge.
+// The groups fan independently so they don't overlap. Returns a new array.
 export function placeUnplacedCards(cards, viewerSeat, anchorFor) {
-  const placedPerOwner = {};
+  const placedPerStack = {};
   return cards.map((card) => {
     if (card.x >= 0) return card;
-    const anchor = anchorFor(card.owner, card.owner === viewerSeat);
+    const group = card.pregame ? 'PREGAME' : card.side === 'FATE' ? 'FATE' : 'DYNASTY';
+    const anchor = anchorFor(card.owner, card.owner === viewerSeat, group);
     if (!anchor) return card;
-    const index = placedPerOwner[card.owner] ?? 0;
-    placedPerOwner[card.owner] = index + 1;
-    return { ...card, x: anchor.x + index * PREGAME_FAN, y: anchor.y };
+    const stack = `${card.owner}:${group}`;
+    const index = placedPerStack[stack] ?? 0;
+    placedPerStack[stack] = index + 1;
+    const step = group === 'FATE' ? -PREGAME_FAN : PREGAME_FAN;
+    return { ...card, x: anchor.x + index * step, y: anchor.y };
   });
 }
 
