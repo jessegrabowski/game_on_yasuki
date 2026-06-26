@@ -61,6 +61,7 @@ function makeElement(tag) {
 }
 
 const _elements = {};
+const _docListeners = {};
 
 globalThis.document = {
   getElementById(id) {
@@ -73,7 +74,11 @@ globalThis.document = {
   },
   createElement(tag) { return makeElement(tag); },
   querySelectorAll() { return []; },
-  addEventListener() {},
+  addEventListener(evt, fn) { (_docListeners[evt] ||= []).push(fn); },
+  removeEventListener(evt, fn) {
+    _docListeners[evt] = (_docListeners[evt] || []).filter((f) => f !== fn);
+  },
+  _emit(evt, event) { (_docListeners[evt] || []).forEach((fn) => fn(event)); },
   get activeElement() { return null; },
   get body() { return makeElement('body'); },
 };
@@ -88,4 +93,5 @@ globalThis.IntersectionObserver = class {
 
 export function resetDOM() {
   for (const key of Object.keys(_elements)) delete _elements[key];
+  for (const evt of Object.keys(_docListeners)) delete _docListeners[evt];
 }

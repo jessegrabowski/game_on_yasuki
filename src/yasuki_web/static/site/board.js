@@ -242,6 +242,9 @@ export const flipFaceIntent = (ids) => intentMessage({ op: 'FLIP_FACE', card_ids
 const flipIntentFor = (doubleFaced, ids) => (doubleFaced ? flipFaceIntent(ids) : flipIntent(ids));
 // A card the viewer currently sees as a back: an explicit hidden stub, or simply face-down.
 const isFaceDown = (el) => el.dataset.hidden === '1' || el.dataset.faceUp !== '1';
+// Whether a keystroke is the user typing into a field, where board hotkeys must stay out of the way.
+const isTypingTarget = (el) =>
+  !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
 // Draw the top card of a seat's deck; the server routes it (fate → hand, dynasty → province).
 export const drawIntent = (owner, side) => intentMessage({ op: 'DRAW', deck: { owner, side } });
 // The 31-bit space the client samples a shuffle seed from, matching the server's getrandbits(31).
@@ -667,6 +670,8 @@ export function initBoardInteractions(root, boardEl, send) {
   let drag = null;
   let marquee = null;
   let lastSent = 0;
+  // The element last under the pointer, so a hover-driven hotkey knows which card/deck it targets.
+  let hovered = null;
   // Selection is keyed by card id so it survives the element churn of each SNAPSHOT re-render.
   const selected = new Set();
   const battleRect = () => boardEl.getBoundingClientRect();
@@ -775,6 +780,7 @@ export function initBoardInteractions(root, boardEl, send) {
   });
 
   root.addEventListener('pointermove', (e) => {
+    hovered = e.target;
     if (marquee) {
       marquee.moved = true;
       const rect = battleRect();
@@ -966,6 +972,43 @@ export function initBoardInteractions(root, boardEl, send) {
     } else if (!cardEl.closest?.('[data-zone="province"]')) {
       send(bowIntent(id, cardEl.dataset.bowed === '1'));
     }
+  });
+
+  // Leaving the board clears the hover target so a hotkey can't act on a card the pointer has left.
+  root.addEventListener('pointerleave', () => {
+    hovered = null;
+  });
+
+  // Hover-driven hotkeys on the card/deck under the pointer, gated to the viewer's own pieces and
+  // suppressed while typing: F flip, B bow/unbow, I invert (cards); D draw, S search (decks). A card
+  // flag op applies to the whole selection when the hovered card is part of one, like its menu item.
+  const DECK_HOTKEYS = new Set(['d', 's']);
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey || e.metaKey || e.altKey || isTypingTarget(e.target)) return;
+    const key = e.key.toLowerCase();
+    if (!hovered) return;
+    const deckEl = hovered.closest?.('[data-zone="deck"]');
+    if (DECK_HOTKEYS.has(key)) {
+      if (!deckEl || !ownsDeck(deckEl)) return;
+      const { owner, side } = deckEl.dataset;
+      // Consume the keystroke so opening the search prompt doesn't also type the key into its
+      // freshly-focused input.
+      e.preventDefault();
+      if (key === 'd') send(drawIntent(owner, side));
+      else openDeckSearchPrompt(owner, side, send);
+      return;
+    }
+    if (key !== 'f' && key !== 'b' && key !== 'i') return;
+    const cardEl = hovered.closest?.('[data-card-id]');
+    if (!cardEl || cardEl.closest?.('[data-zone="deck"]') || !ownsCard(cardEl)) return;
+    e.preventDefault();
+    const id = cardEl.dataset.cardId;
+    const ids = selected.size > 1 && selected.has(id) ? [...selected] : [id];
+    if (key === 'f') send(flipIntentFor(cardEl.dataset.doubleFaced === '1', ids));
+    else if (key === 'i') send(invertIntent(ids));
+    // Bowing a card in a province is meaningless, so B no-ops there, matching the menu's gate.
+    else if (!cardEl.closest?.('[data-zone="province"]'))
+      send(bowIntent(ids, cardEl.dataset.bowed === '1'));
   });
 
   return { markSelection };
