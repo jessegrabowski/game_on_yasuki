@@ -238,6 +238,10 @@ export const peekIntent = (id) => intentMessage({ op: 'PEEK', card_id: id });
 export const unpeekIntent = (id) => intentMessage({ op: 'UNPEEK', card_id: id });
 // Turn a double-faced card (a flip stronghold) to its other printed face.
 export const flipFaceIntent = (ids) => intentMessage({ op: 'FLIP_FACE', card_ids: [].concat(ids) });
+// The flip a card wants: a double-faced card turns its printed face, anything else front↔deck-back.
+const flipIntentFor = (doubleFaced, ids) => (doubleFaced ? flipFaceIntent(ids) : flipIntent(ids));
+// A card the viewer currently sees as a back: an explicit hidden stub, or simply face-down.
+const isFaceDown = (el) => el.dataset.hidden === '1' || el.dataset.faceUp !== '1';
 // Draw the top card of a seat's deck; the server routes it (fate → hand, dynasty → province).
 export const drawIntent = (owner, side) => intentMessage({ op: 'DRAW', deck: { owner, side } });
 // The 31-bit space the client samples a shuffle seed from, matching the server's getrandbits(31).
@@ -322,7 +326,7 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
   const id = el.dataset.cardId;
   const side = el.dataset.side || '';
   const owner = el.dataset.owner || '';
-  const faceDown = el.dataset.hidden === '1' || el.dataset.faceUp !== '1';
+  const faceDown = isFaceDown(el);
   const shown = el.dataset.shown === '1';
   const peeked = el.dataset.peeked === '1';
   const bowed = el.dataset.bowed === '1';
@@ -339,8 +343,7 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
     }
   };
 
-  const flip = doubleFaced ? flipFaceIntent(targetIds) : flipIntent(targetIds);
-  const items = [{ label: 'Flip', message: flip }];
+  const items = [{ label: 'Flip', message: flipIntentFor(doubleFaced, targetIds) }];
   // Bowing a card sitting in a province is meaningless, matching the desktop client's gate.
   if (!inProvince) items.push({ label: bowed ? 'Unbow' : 'Bow', message: bowIntent(targetIds, bowed) });
   items.push({ label: 'Invert', message: invertIntent(targetIds) });
@@ -676,6 +679,8 @@ export function initBoardInteractions(root, boardEl, send) {
     const owner = el?.dataset?.owner || '';
     return !owner || owner === (root.dataset.viewerSeat || '');
   };
+  // A deck always has an owner, so (unlike a card) ownerless never means shared.
+  const ownsDeck = (el) => el.dataset.owner === (root.dataset.viewerSeat || '');
   // Id of the topmost battlefield card (last in render/z order), or null when the board is empty.
   const topmostId = () => {
     const cards = boardEl.querySelectorAll('.board-card');
@@ -713,7 +718,7 @@ export function initBoardInteractions(root, boardEl, send) {
     // only the deck's owner may, and the drop resolves to a MOVE_DECK_TOP keyed by the deck.
     const deckEl = e.target?.closest?.('[data-zone="deck"]');
     if (deckEl) {
-      if (deckEl.dataset.owner !== (root.dataset.viewerSeat || '')) return;
+      if (!ownsDeck(deckEl)) return;
       const rect = deckEl.getBoundingClientRect();
       drag = {
         deck: { owner: deckEl.dataset.owner, side: deckEl.dataset.side },
