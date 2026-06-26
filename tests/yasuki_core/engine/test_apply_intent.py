@@ -19,6 +19,7 @@ from yasuki_core.engine.table import (
     Hide,
     Draw,
     Shuffle,
+    FlipDeckTop,
     SearchDeck,
     FillProvince,
     DestroyProvince,
@@ -132,6 +133,75 @@ def test_move_card_to_own_deck_resets_flags():
     assert card.face_up is False
     assert card.bowed is False
     assert card.inverted is False
+
+
+def test_move_card_to_deck_top_by_default():
+    table = TableState.empty_two_seat()
+    deck = table.decks[DeckKey(PlayerId.P1, Side.FATE)]
+    deck.cards.extend([_fate("a"), _fate("b")])
+    card = _fate("f1")
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, MoveCard("f1", DeckKey(PlayerId.P1, Side.FATE)))
+
+    assert deck.cards[-1] is card
+
+
+def test_move_card_to_deck_bottom_slides_under():
+    table = TableState.empty_two_seat()
+    deck = table.decks[DeckKey(PlayerId.P1, Side.FATE)]
+    deck.cards.extend([_fate("a"), _fate("b")])
+    card = _fate("f1")
+    _on_battlefield(table, card)
+
+    events = apply_intent(
+        table, PlayerId.P1, MoveCard("f1", DeckKey(PlayerId.P1, Side.FATE), to_bottom=True)
+    )
+
+    assert deck.cards[0] is card
+    assert events[0].intent.to_bottom is True
+
+
+def test_flip_deck_top_reveals_the_top_card_in_place():
+    table = TableState.empty_two_seat()
+    deck = table.decks[DeckKey(PlayerId.P1, Side.FATE)]
+    under, top = _fate("a"), _fate("b")
+    top.turn_face_down()
+    deck.cards.extend([under, top])
+
+    events = apply_intent(table, PlayerId.P1, FlipDeckTop(DeckKey(PlayerId.P1, Side.FATE)))
+
+    assert top.face_up is True
+    assert deck.cards[-1] is top
+    assert events[0].cards == ("b",)
+    assert table.seq == 1
+
+
+def test_flip_deck_top_toggles_back_to_face_down():
+    table = TableState.empty_two_seat()
+    deck = table.decks[DeckKey(PlayerId.P1, Side.FATE)]
+    card = _fate("b")
+    card.turn_face_up()
+    deck.cards.append(card)
+
+    apply_intent(table, PlayerId.P1, FlipDeckTop(DeckKey(PlayerId.P1, Side.FATE)))
+
+    assert card.face_up is False
+
+
+def test_flip_deck_top_on_empty_deck_is_a_no_op():
+    table = TableState.empty_two_seat()
+    events = apply_intent(table, PlayerId.P1, FlipDeckTop(DeckKey(PlayerId.P1, Side.FATE)))
+    assert events == []
+    assert table.seq == 0
+
+
+def test_flip_deck_top_rejects_opponents_deck():
+    table = TableState.empty_two_seat()
+    table.decks[DeckKey(PlayerId.P2, Side.FATE)].cards.append(_fate("b", owner=PlayerId.P2))
+    events = apply_intent(table, PlayerId.P1, FlipDeckTop(DeckKey(PlayerId.P2, Side.FATE)))
+    assert events == []
+    assert table.seq == 0
 
 
 def test_move_card_rejects_opponents_card():

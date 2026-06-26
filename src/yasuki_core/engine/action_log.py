@@ -28,6 +28,7 @@ from yasuki_core.engine.table import (
     Hide,
     Draw,
     Shuffle,
+    FlipDeckTop,
     SearchDeck,
     FillProvince,
     DestroyProvince,
@@ -405,6 +406,7 @@ def encode_intent(intent: Intent) -> dict:
             payload["position"] = (
                 None if intent.position is None else [intent.position.x, intent.position.y]
             )
+            payload["to_bottom"] = intent.to_bottom
         case IntentOp.SET_CARD_POS:
             payload |= {"card_id": intent.card_id, "x": intent.x, "y": intent.y}
         case (
@@ -422,6 +424,8 @@ def encode_intent(intent: Intent) -> dict:
         case IntentOp.SHUFFLE:
             payload["deck"] = _encode_deck_key(intent.deck)
             payload["seed"] = intent.seed
+        case IntentOp.FLIP_DECK_TOP:
+            payload["deck"] = _encode_deck_key(intent.deck)
         case IntentOp.FILL_PROVINCE | IntentOp.DESTROY_PROVINCE | IntentOp.DISCARD_PROVINCE:
             payload["zone"] = _encode_zone_key(intent.zone)
         case IntentOp.CREATE_PROVINCE:
@@ -455,6 +459,7 @@ def decode_intent(payload: dict) -> Intent:
                 payload["card_id"],
                 _decode_move_dest(payload["to"]),
                 None if position is None else BoardPos(*position),
+                to_bottom=payload.get("to_bottom", False),
             )
         case IntentOp.SET_CARD_POS:
             return SetCardPos(payload["card_id"], payload["x"], payload["y"])
@@ -474,6 +479,8 @@ def decode_intent(payload: dict) -> Intent:
             return SearchDeck(_decode_deck_key(payload["deck"]))
         case IntentOp.SHUFFLE:
             return Shuffle(_decode_deck_key(payload["deck"]), payload["seed"])
+        case IntentOp.FLIP_DECK_TOP:
+            return FlipDeckTop(_decode_deck_key(payload["deck"]))
         case IntentOp.FILL_PROVINCE:
             return FillProvince(_decode_zone_key(payload["zone"]))
         case IntentOp.DESTROY_PROVINCE:

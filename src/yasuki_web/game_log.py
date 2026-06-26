@@ -99,6 +99,8 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
             return [lead, {"text": "drew a card"}]
         case IntentOp.SHUFFLE:
             return [lead, {"text": f"shuffled {_deck_desc(intent.deck)}"}]
+        case IntentOp.FLIP_DECK_TOP:
+            return [lead, {"text": f"flipped the top of {_deck_desc(intent.deck)}"}]
         case IntentOp.SEARCH_DECK:
             return [lead, {"text": f"searched {_deck_desc(intent.deck)}"}]
         case IntentOp.FILL_PROVINCE:
