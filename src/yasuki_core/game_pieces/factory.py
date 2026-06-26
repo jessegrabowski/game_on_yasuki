@@ -1,4 +1,4 @@
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from yasuki_core.engine.players import PlayerId
@@ -137,9 +137,12 @@ def _build_card(
     owner: PlayerId,
     card_id: str,
 ) -> L5RCard:
-    """Build the front face, nesting the back face when the card is double-faced and its back record
-    is on hand (else only the ``back_card_id`` link is carried)."""
+    """Build the front face of a card. For a double-faced card, nest its back face: the fully built
+    back when its record is on hand, else one synthesised from the front carrying the back art the
+    front's print records, so a flip shows the other side. With neither, only the ``back_card_id``
+    link is carried."""
     back_card_id = record.get("back_card_id")
+    front_print = _select_print(record, set_name)
     back = None
     if back_card_id and back_card_id in by_id:
         back_record = by_id[back_card_id]
@@ -152,15 +155,28 @@ def _build_card(
             back_card_id=None,
             back=None,
         )
-    return _construct_face(
+    front = _construct_face(
         record,
-        _select_print(record, set_name),
+        front_print,
         section,
         owner=owner,
         card_id=card_id,
         back_card_id=back_card_id,
         back=back,
     )
+    # The back-face row is excluded from deck queries (is_back), so there is usually no back record
+    # to nest. The front's print still records the back art, so synthesise a back face from the
+    # front carrying that art — the only field the manual table needs to draw the flipped side.
+    if back is None and back_card_id and front_print and front_print.get("back_image_path"):
+        synthetic_back = replace(
+            front,
+            id=back_card_id,
+            image_front=Path(front_print["back_image_path"]),
+            back_card_id=None,
+            back=None,
+        )
+        front = replace(front, back=synthetic_back)
+    return front
 
 
 def _construct_face(

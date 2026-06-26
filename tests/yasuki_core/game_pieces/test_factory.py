@@ -241,6 +241,28 @@ def test_double_faced_card_keeps_only_the_link_when_back_record_is_absent():
     assert sh.back is None
 
 
+def test_double_faced_card_synthesises_its_back_from_the_front_print_back_art():
+    front = {
+        **FLIP_FRONT,
+        "prints": [
+            {
+                "print_id": 70,
+                "set_name": "Gates of Chaos",
+                "image_path": "sets/goc/kk_a.png",
+                "back_image_path": "sets/goc/kk_b.png",
+            }
+        ],
+    }
+    deck = parse_deck_yaml("name: T\nPre-Game:\n  - Kyuden Kuni")
+    sh = resolve_decklist(deck, [front], PlayerId.P1).pre_game[0]
+    assert sh.back is not None
+    assert sh.back.id == "kyuden_kuni__back"
+    assert sh.back.image_front.as_posix() == "sets/goc/kk_b.png"
+    assert sh.back.back is None
+    sh.flip_face()
+    assert sh.active_face.image_front.as_posix() == "sets/goc/kk_b.png"
+
+
 def test_two_seats_get_disjoint_card_ids():
     p1 = _resolve(owner=PlayerId.P1)
     p2 = _resolve(owner=PlayerId.P2)
