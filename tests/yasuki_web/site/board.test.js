@@ -622,6 +622,14 @@ describe('initBoardInteractions — dragging', () => {
     assert.equal(sent.length, 0);
   });
 
+  it('lifts a card out of hit-testing only once it moves, so a plain press stays clickable', () => {
+    const cardEl = fakeCard('c1', { onBattlefield: true });
+    root._emit('pointerdown', onCard(cardEl));
+    assert.notEqual(cardEl.style.pointerEvents, 'none', 'a press alone leaves the card interactive');
+    root._emit('pointermove', { clientX: 80, clientY: 90 });
+    assert.equal(cardEl.style.pointerEvents, 'none', 'a real drag lifts it out of hit-testing');
+  });
+
   it('sends a throttled SET_CARD_POS while dragging a battlefield card', () => {
     const cardEl = fakeCard('c1', { onBattlefield: true });
     const realNow = Date.now;
@@ -718,6 +726,14 @@ describe('initBoardInteractions — deck top, ownership, raise', () => {
     assert.deepEqual(move.deck, { owner: 'P1', side: 'FATE' });
     assert.deepEqual(move.to, { kind: 'battlefield' });
     assert.ok(Array.isArray(move.position));
+  });
+
+  it('drags a face-down ghost that is non-interactive, so the drop hits the zone beneath', () => {
+    root._emit('pointerdown', onDeck({ owner: 'P1', side: 'FATE' }));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    const ghost = board.children.find((c) => c.className?.includes('dragging'));
+    assert.ok(ghost, 'a ghost appears while dragging the deck top');
+    assert.equal(ghost.style.pointerEvents, 'none', 'the ghost must not intercept the drop');
   });
 
   it('drops a deck top onto another zone as a MOVE_DECK_TOP with no position', () => {

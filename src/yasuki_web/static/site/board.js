@@ -704,6 +704,7 @@ export function initBoardInteractions(root, boardEl, send) {
     if (!drag) return;
     drag.el.style.pointerEvents = '';
     drag.el.classList.remove('dragging');
+    drag.ghost?.remove();
     drag = null;
   };
 
@@ -771,9 +772,6 @@ export function initBoardInteractions(root, boardEl, send) {
         }
       }
     }
-    // Lift the card out of hit-testing so a drop lands on the zone beneath, not the card itself.
-    cardEl.style.pointerEvents = 'none';
-    cardEl.classList.add('dragging');
   });
 
   root.addEventListener('pointermove', (e) => {
@@ -794,7 +792,15 @@ export function initBoardInteractions(root, boardEl, send) {
       return;
     }
     if (!drag) return;
-    drag.moved = true;
+    if (!drag.moved) {
+      drag.moved = true;
+      // First real move (not a click/double-click): lift the dragged card out of hit-testing so the
+      // drop lands on the zone beneath it. Deferring past pointerdown keeps clicks/double-clicks live.
+      if (!drag.deck) {
+        drag.el.style.pointerEvents = 'none';
+        drag.el.classList.add('dragging');
+      }
+    }
     if (drag.members) {
       const rect = battleRect();
       const dx = e.clientX - drag.startX;
@@ -808,6 +814,20 @@ export function initBoardInteractions(root, boardEl, send) {
         if (flush) send(moveIntent(member.id, x, y));
       }
       if (flush) lastSent = now;
+      return;
+    }
+    if (drag.deck) {
+      // The deck's top card is hidden, so drag a face-down ghost to make the move visible and aimable.
+      if (!drag.ghost) {
+        drag.ghost = node('div', 'board-card face-down dragging');
+        // Transparent to hit-testing so the drop resolves to the zone beneath (esp. the battlefield),
+        // not the ghost — which release() detaches before we read e.target's zone.
+        drag.ghost.style.pointerEvents = 'none';
+        boardEl.appendChild(drag.ghost);
+      }
+      const ghostPos = dragPosition(e.clientX, e.clientY, battleRect(), { x: drag.grabX, y: drag.grabY });
+      drag.ghost.style.left = `${ghostPos.x}px`;
+      drag.ghost.style.top = `${ghostPos.y}px`;
       return;
     }
     if (!drag.onBattlefield) return;
