@@ -35,12 +35,17 @@ export function fallbackSrc(card, imgBase) {
   return path ? `${imgBase}/${path}` : null;
 }
 
-// The image origin is config-driven (R2 CDN in production, the local /images mount otherwise).
-export async function fetchImageBase() {
+// Server runtime config: the image origin (R2 CDN in production, the local /images mount otherwise)
+// and the debug flag that gates debug-level server errors in the game log.
+export async function fetchConfig() {
   try {
     const config = await (await fetch('/api/config')).json();
-    return config.image_base_url || '/images';
+    return { imageBase: config.image_base_url || '/images', debug: !!config.debug };
   } catch (_) {
-    return '/images';
+    return { imageBase: '/images', debug: false };
   }
+}
+
+export async function fetchImageBase() {
+  return (await fetchConfig()).imageBase;
 }

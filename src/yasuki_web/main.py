@@ -30,6 +30,10 @@ IMAGE_BASE_URL = os.environ.get("IMAGE_BASE_URL", "/images")
 
 _is_production = os.environ.get("ENVIRONMENT") == "production"
 
+# Truthy DEBUG (uvicorn launches via the pixi `api` task, so there is no custom CLI flag) tells the
+# client to surface debug-level server errors such as rejected intents in the game log.
+_debug = os.environ.get("DEBUG", "").lower() in ("1", "true", "yes", "on")
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -281,7 +285,7 @@ async def card_page_print(request: Request, card_id: _CardId, set_slug: _SetSlug
 
 @app.get("/api/config")
 async def config():
-    return {"image_base_url": IMAGE_BASE_URL}
+    return {"image_base_url": IMAGE_BASE_URL, "debug": _debug}
 
 
 if DECK_BUILDER_DIR.exists():
