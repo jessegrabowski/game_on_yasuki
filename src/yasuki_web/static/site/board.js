@@ -328,8 +328,10 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId]) {
   return items;
 }
 
-// The deck branch of the menu: draw, shuffle, reveal the top card in place, search the ordered deck,
-// and spin up a fresh province. Only the deck's owner may act, so a non-owner gets no menu.
+// The deck branch of the menu: draw, shuffle, reveal the top card in place, search the deck (a centered
+// chooser picks the top N or the whole deck), and spin up a fresh province. Only the deck's owner may
+// act, so a non-owner gets no menu. Search sends SEARCH_DECK — the only message that reveals deck
+// order, and only to the owner — opening the deck dialog on the server's DECK_CONTENTS reply.
 function deckMenuItems(el, viewer) {
   const owner = el.dataset.owner;
   const side = el.dataset.side;
@@ -338,7 +340,7 @@ function deckMenuItems(el, viewer) {
     { label: 'Draw', message: drawIntent(owner, side) },
     { label: 'Shuffle', message: shuffleIntent(owner, side) },
     { label: 'Flip Top', message: flipDeckTopIntent(owner, side) },
-    { label: 'Search', message: searchDeckIntent(owner, side) },
+    { label: 'Search…', onClick: (e, send) => openDeckSearchPrompt(owner, side, send) },
     SEP,
     { label: 'Create Province', message: createProvinceIntent() },
   ];
@@ -435,8 +437,9 @@ export function clampMenuPosition(left, top, menuW, menuH, containerW, container
   };
 }
 
-// Open the context menu at the click point with a prebuilt item list. Each item is either a separator
-// or `{label, message}`; clicking an item sends its message and closes the menu. The menu mounts on
+// Open the context menu at the click point with a prebuilt item list. Each item is a separator, a
+// `{label, message}` (clicking sends the message), or a `{label, onClick}` (clicking runs the handler
+// with the click event, `send`, and the container — used to open a flyout). The menu mounts on
 // `container` — the whole board stage, not the battlefield, whose `overflow: hidden` would clip it and
 // whose stacking layer sits below the hand strip — then clampMenuPosition shifts it to stay on screen.
 function openMenu(container, items, clientX, clientY, send) {
@@ -451,9 +454,10 @@ function openMenu(container, items, clientX, clientY, send) {
       li.className = 'menu-sep';
     } else {
       li.textContent = item.label;
-      li.addEventListener('click', () => {
-        send(item.message);
+      li.addEventListener('click', (e) => {
         closeMenu();
+        if (item.onClick) item.onClick(e, send, container);
+        else send(item.message);
       });
     }
     menu.appendChild(li);
@@ -482,6 +486,64 @@ function openMenu(container, items, clientX, clientY, send) {
       { once: true },
     );
   }, 0);
+}
+
+// The deck-menu "Search…" prompt: a centered chooser for how much of the deck to reveal — the top N
+// (typed) or all of it. Both send a SEARCH_DECK carrying a client-only `limit` hint (top-secret strips
+// it before the wire and uses it to cap the dialog the server's DECK_CONTENTS reply opens). Mounts
+// inside `.room` for the board palette, and closes on a choice, the backdrop, the × button, or Escape.
+function openDeckSearchPrompt(owner, side, send) {
+  const overlay = node('div', 'deck-dialog-overlay');
+  const modal = node('div', 'deck-scope');
+
+  const close = () => {
+    document.removeEventListener?.('keydown', onKey);
+    overlay.remove();
+  };
+  const onKey = (e) => {
+    if (e.key === 'Escape') close();
+  };
+  const choose = (limit) => {
+    send({ ...searchDeckIntent(owner, side), limit });
+    close();
+  };
+
+  const closeBtn = node('button', 'deck-dialog-close', '×');
+  closeBtn.type = 'button';
+  closeBtn.title = 'Close';
+  closeBtn.addEventListener('click', close);
+  const header = node('div', 'deck-dialog-header');
+  header.append(node('h2', 'deck-dialog-title', 'Search deck'), closeBtn);
+
+  const input = node('input', 'deck-scope-input');
+  input.type = 'number';
+  input.min = '1';
+  input.placeholder = 'N';
+  const searchTop = () => {
+    const n = Number.parseInt(input.value, 10);
+    if (n > 0) choose(n);
+  };
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') searchTop();
+  });
+  const topBtn = node('button', 'deck-scope-btn', 'Search top N');
+  topBtn.type = 'button';
+  topBtn.addEventListener('click', searchTop);
+  const topRow = node('div', 'deck-scope-row');
+  topRow.append(input, topBtn);
+
+  const whole = node('button', 'deck-scope-btn', 'Whole deck');
+  whole.type = 'button';
+  whole.addEventListener('click', () => choose(null));
+
+  modal.append(header, topRow, whole);
+  overlay.append(modal);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+  (document.querySelector('.room') ?? document.body).appendChild(overlay);
+  document.addEventListener?.('keydown', onKey);
+  input.focus?.();
 }
 
 // Choose the menu for a right-click: a deck pile shows deck actions (even though its top card carries
