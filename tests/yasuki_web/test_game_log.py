@@ -11,11 +11,17 @@ from yasuki_core.engine.table import (
     SetCardPos,
     Bow,
     Flip,
+    Show,
+    Unshow,
+    Peek,
+    Unpeek,
     Draw,
     Shuffle,
     SetHonor,
     SpawnCard,
     RemoveCard,
+    SearchDeck,
+    MoveDeckTop,
 )
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
@@ -58,14 +64,67 @@ def test_a_face_down_card_is_never_named():
     assert all("name" not in part for part in parts)
 
 
-def test_a_revealed_face_down_card_is_named():
+def test_showing_a_fate_card_in_hand_names_it():
+    # A hand card the owner already reads, shown to the opponent, is public to all — so it is named.
     table = TableState.empty_two_seat()
-    card = L5RCard(id="c1", name="Hida Kisada", side=Side.DYNASTY, owner=None, face_up=False)
-    card.reveal()
-    table.battlefield.add(card)
-    table.cards_by_id["c1"] = card
+    card = L5RCard(id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=True, shown=True)
+    table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
+    table.cards_by_id["f1"] = card
 
-    assert {"card_id": "c1", "name": "Hida Kisada"} in _describe(table, Bow(("c1",)), ("c1",))
+    assert _describe(table, Show("f1"), ("f1",)) == [
+        {"text": "Ada "},
+        {"text": "shows "},
+        {"card_id": "f1", "name": "Secret"},
+    ]
+
+
+def test_showing_a_face_down_dynasty_card_stays_generic():
+    # The owner still sees a back, so the card is not public to all; naming it would leak it.
+    table = TableState.empty_two_seat()
+    card = L5RCard(
+        id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=False, shown=True
+    )
+    table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[card])
+    table.cards_by_id["d1"] = card
+
+    parts = _describe(table, Show("d1"), ("d1",))
+    assert parts == [{"text": "Ada "}, {"text": "shows a dynasty card"}]
+    assert all("name" not in part for part in parts)
+
+
+def test_unshow_is_generic():
+    table = TableState.empty_two_seat()
+    card = L5RCard(id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=False)
+    table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[card])
+    table.cards_by_id["d1"] = card
+
+    assert _describe(table, Unshow("d1"), ("d1",)) == [
+        {"text": "Ada "},
+        {"text": "stops showing a dynasty card"},
+    ]
+
+
+def test_peek_is_always_generic():
+    table = TableState.empty_two_seat()
+    card = L5RCard(id="f1", name="Secret", side=Side.FATE, owner=P1, face_up=False)
+    table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
+    table.cards_by_id["f1"] = card
+
+    parts = _describe(table, Peek("f1"), ("f1",))
+    assert parts == [{"text": "Ada "}, {"text": "peeks at a fate card"}]
+    assert all("name" not in part for part in parts)
+
+
+def test_unpeek_is_generic():
+    table = TableState.empty_two_seat()
+    card = L5RCard(id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=False)
+    table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[card])
+    table.cards_by_id["d1"] = card
+
+    assert _describe(table, Unpeek("d1"), ("d1",)) == [
+        {"text": "Ada "},
+        {"text": "stops peeking at a dynasty card"},
+    ]
 
 
 def test_a_face_up_card_off_the_battlefield_is_not_named():
@@ -137,16 +196,23 @@ def test_move_to_battlefield_links_card_and_names_destination():
     ]
 
 
-def test_move_off_the_battlefield_names_the_destination():
-    # A card that left the battlefield is no longer nameable, and the deck destination is described.
+def test_move_to_a_deck_top_describes_the_destination():
+    # A card moved onto a deck reads as "put ... on the top of their <side> deck"; off the
+    # battlefield it is no longer nameable, so it reads as "a card".
     table = TableState.empty_two_seat()
     intent = MoveCard("f1", DeckKey(P1, Side.FATE))
     assert _describe(table, intent, ("f1",)) == [
         {"text": "Ada "},
-        {"text": "moved "},
+        {"text": "put "},
         {"text": "a card"},
-        {"text": " to their fate deck"},
+        {"text": " on the top of their fate deck"},
     ]
+
+
+def test_move_to_a_deck_bottom_says_bottom():
+    table = TableState.empty_two_seat()
+    intent = MoveCard("f1", DeckKey(P1, Side.DYNASTY), to_bottom=True)
+    assert _describe(table, intent, ("f1",))[-1] == {"text": " on the bottom of their dynasty deck"}
 
 
 def test_draw_and_shuffle_phrasing():
@@ -173,4 +239,32 @@ def test_remove_is_unlinked():
     assert _describe(table, RemoveCard("gone"), ("gone",)) == [
         {"text": "Ada "},
         {"text": "removed a card"},
+    ]
+
+
+def test_search_whole_deck_phrasing():
+    table = TableState.empty_two_seat()
+    assert _describe(table, SearchDeck(DeckKey(P1, Side.FATE))) == [
+        {"text": "Ada "},
+        {"text": "searched their fate deck"},
+    ]
+
+
+def test_search_top_n_phrasing():
+    table = TableState.empty_two_seat()
+    assert _describe(table, SearchDeck(DeckKey(P1, Side.DYNASTY), limit=3)) == [
+        {"text": "Ada "},
+        {"text": "searched the top 3 cards of their dynasty deck"},
+    ]
+
+
+def test_move_deck_top_to_battlefield_is_described_as_a_move():
+    table = TableState.empty_two_seat()
+    _board_card(table, "c1", "Token", face_up=True)
+    intent = MoveDeckTop(DeckKey(P1, Side.DYNASTY), BATTLEFIELD, BoardPos(0.0, 0.0))
+    assert _describe(table, intent, ("c1",)) == [
+        {"text": "Ada "},
+        {"text": "moved "},
+        {"card_id": "c1", "name": "Token"},
+        {"text": " to the battlefield"},
     ]

@@ -8,10 +8,24 @@ from yasuki_web.schemas import (
     intent_from_envelope,
     ServerChat,
     ServerDeckContents,
+    ServerError,
     ServerLog,
     ServerSnapshot,
 )
-from yasuki_core.engine.table import IntentOp, MoveCard, BATTLEFIELD, BoardPos
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.table import (
+    IntentOp,
+    MoveCard,
+    MoveDeckTop,
+    Raise,
+    SearchDeck,
+    DeckKey,
+    ZoneKey,
+    ZoneRole,
+    BATTLEFIELD,
+    BoardPos,
+)
+from yasuki_core.game_pieces.constants import Side
 
 
 def test_chat_client_message_parses():
@@ -32,6 +46,20 @@ def test_chat_text_length_bounds(length, valid):
 def test_server_chat_serializes_sender_as_from():
     payload = ServerChat(room="r1", sender="Ada", text="hi").model_dump(by_alias=True)
     assert payload == {"type": "CHAT", "room": "r1", "from": "Ada", "text": "hi"}
+
+
+def test_server_error_defaults_to_user_facing():
+    assert ServerError(room="r1", message="Table is full").model_dump() == {
+        "type": "ERROR",
+        "room": "r1",
+        "message": "Table is full",
+        "debug": False,
+    }
+
+
+def test_server_error_carries_a_debug_flag():
+    payload = ServerError(room="r1", message="Intent rejected", debug=True).model_dump()
+    assert payload["debug"] is True
 
 
 def test_server_log_serializes():
@@ -60,6 +88,44 @@ def test_intent_from_envelope_builds_a_core_intent():
         op=IntentOp.MOVE_CARD, card_id="c1", to={"kind": "battlefield"}, position=[3.0, 4.0]
     )
     assert intent_from_envelope(env) == MoveCard("c1", BATTLEFIELD, BoardPos(3.0, 4.0))
+
+
+def test_move_deck_top_envelope_builds_a_core_intent():
+    env = IntentEnvelope(
+        op=IntentOp.MOVE_DECK_TOP,
+        deck={"owner": "P1", "side": "FATE"},
+        to={"kind": "battlefield"},
+        position=[1.0, 2.0],
+    )
+    assert intent_from_envelope(env) == MoveDeckTop(
+        DeckKey(PlayerId.P1, Side.FATE), BATTLEFIELD, BoardPos(1.0, 2.0)
+    )
+
+
+def test_move_deck_top_to_a_zone_destination():
+    env = IntentEnvelope(
+        op=IntentOp.MOVE_DECK_TOP,
+        deck={"owner": "P2", "side": "DYNASTY"},
+        to={"kind": "zone", "zone": {"owner": "P2", "role": "province", "idx": 0}},
+    )
+    assert intent_from_envelope(env) == MoveDeckTop(
+        DeckKey(PlayerId.P2, Side.DYNASTY), ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0), None
+    )
+
+
+def test_raise_envelope_builds_a_core_intent():
+    env = IntentEnvelope(op=IntentOp.RAISE, card_id="c1")
+    assert intent_from_envelope(env) == Raise("c1")
+
+
+def test_search_deck_value_decodes_to_limit():
+    env = IntentEnvelope(op=IntentOp.SEARCH_DECK, deck={"owner": "P1", "side": "DYNASTY"}, value=4)
+    assert intent_from_envelope(env) == SearchDeck(DeckKey(PlayerId.P1, Side.DYNASTY), limit=4)
+
+
+def test_search_deck_without_value_searches_the_whole_deck():
+    env = IntentEnvelope(op=IntentOp.SEARCH_DECK, deck={"owner": "P1", "side": "FATE"})
+    assert intent_from_envelope(env) == SearchDeck(DeckKey(PlayerId.P1, Side.FATE), limit=None)
 
 
 def test_spawn_message_parses():

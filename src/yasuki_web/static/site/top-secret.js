@@ -1,7 +1,7 @@
 // WIP online-play lobby, served at the unlinked, password-gated /top-secret.html route until
 // launch.
 
-import { esc, fetchImageBase } from './card-common.js';
+import { esc, fetchConfig } from './card-common.js';
 import { listRooms, createRoom, deleteRoom } from './rooms-api.js';
 import { connectRoom } from './ws-client.js';
 import {
@@ -81,8 +81,11 @@ export function chatFrame(room, text) {
   return { type: 'CHAT', room, chat: { text } };
 }
 
-export function loadDeckFrame(room, yaml) {
-  return { type: 'LOAD_DECK', room, load_deck: { yaml } };
+// `filename` is a fallback human label only — the server prefers the deck name inside the YAML.
+export function loadDeckFrame(room, yaml, filename = null) {
+  const load_deck = { yaml };
+  if (filename) load_deck.filename = filename;
+  return { type: 'LOAD_DECK', room, load_deck };
 }
 
 export function readyFrame(room, { solo = false } = {}) {
@@ -166,12 +169,13 @@ export function init() {
   const roomView = document.getElementById('roomView');
   const roomIdLabel = document.getElementById('roomIdLabel');
   const playerList = document.getElementById('playerList');
-  const roomStatus = document.getElementById('roomStatus');
   const leaveButton = document.getElementById('leaveRoom');
   const chatLog = document.getElementById('chatLog');
   const chatForm = document.getElementById('chatForm');
   const chatInput = document.getElementById('chatInput');
   const actionLog = document.getElementById('actionLog');
+  // Surface a system notice (connection drop, a rejected action) as a line in the game log.
+  const logSystem = (text) => actionLog && appendLogMessage(actionLog, [{ text }]);
   const battlefield = document.getElementById('battlefield');
   let boardInteractions = null;
   const opponentTableau = document.getElementById('opponentTableau');
@@ -190,13 +194,15 @@ export function init() {
   let client = null;
   let myName = null;
   let currentRoom = null;
-  // SEARCH_DECK carries no limit on the wire; the "top N" choice from the deck-menu flyout is held
-  // here between the request and the DECK_CONTENTS reply, then caps the dialog (null = whole deck).
+  // SEARCH_DECK carries its "top N" inside the intent as `value`; mirror it here between the request
+  // and the DECK_CONTENTS reply so it can cap the dialog (null = whole deck).
   let pendingDeckLimit = null;
   let imgBase = '/images';
-  fetchImageBase().then((base) => {
-    imgBase = base;
-    loadCardBacks(base);
+  let debug = false;
+  fetchConfig().then((config) => {
+    imgBase = config.imageBase;
+    debug = config.debug;
+    loadCardBacks(imgBase);
   });
 
   // Load the generic per-side card backs so face-down cards render a real back, not a flat gradient.
@@ -266,7 +272,6 @@ export function init() {
     client.events.addEventListener('HELLO', (e) => {
       showRoom(e.detail.room);
       renderPlayers(playerList, e.detail.players, myName);
-      if (roomStatus) roomStatus.textContent = '';
     });
     client.events.addEventListener('SNAPSHOT', (e) => {
       const snapshot = e.detail.snapshot ?? {};
@@ -275,6 +280,10 @@ export function init() {
         .filter((seat) => seat.connected)
         .map((seat) => seat.name);
       renderPlayers(playerList, present, myName);
+      // Decks only carry cards once setup deals the table; an empty table is the pre-game/reset
+      // state. Resolve the pending toggles off that: dealt clears Ready, cleared clears New game.
+      const dealt = Object.values(snapshot.decks ?? {}).some((deck) => deck.count > 0 || deck.top);
+      (dealt ? readyButton : newGameButton)?.classList.remove('btn-gold');
       const you = snapshot.your_seat;
       // The context menu reads the viewer's seat off the board root to gate "Send to…"/deck/province
       // actions to the cards and zones this player owns.
@@ -320,10 +329,17 @@ export function init() {
       });
     });
     client.events.addEventListener('ERROR', (e) => {
-      if (roomStatus) roomStatus.textContent = e.detail?.message ?? 'Something went wrong.';
+      const msg = e.detail?.message ?? 'Something went wrong.';
+      // A debug-level error (a rejected intent) is silent in prod — the SNAPSHOT revert is the
+      // player's feedback — and tagged when the debug flag is on. Other errors always show.
+      if (e.detail?.debug) {
+        if (debug) logSystem(`[debug] ${msg}`);
+        return;
+      }
+      logSystem(msg);
     });
     client.events.addEventListener('disconnected', () => {
-      if (roomStatus) roomStatus.textContent = 'Disconnected from the room.';
+      logSystem('Disconnected from the room.');
     });
   }
 
@@ -347,12 +363,14 @@ export function init() {
     if (deck) sendToRoom({ ...drawIntent(deck.dataset.owner, deck.dataset.side), room: currentRoom });
   });
 
-  const submitDeck = (yaml) => {
+  const submitDeck = (yaml, filename = null) => {
     const text = yaml?.trim();
     if (!text) return;
-    sendToRoom(loadDeckFrame(currentRoom, text));
-    if (roomStatus) roomStatus.textContent = 'Deck loaded — ready up to begin.';
+    sendToRoom(loadDeckFrame(currentRoom, text, filename));
   };
+
+  // Strip the extension off a chosen file's name to use as the fallback deck label.
+  const deckLabel = (name) => name?.replace(/\.[^./]+$/, '') || null;
 
   // Prefer the File System Access picker (it remembers the last directory via DECK_PICKER_OPTIONS.id);
   // fall back to a hidden file input where it is unsupported, mirroring the deck builder's import.
@@ -360,9 +378,10 @@ export function init() {
     if (typeof globalThis.showOpenFilePicker === 'function') {
       try {
         const [handle] = await globalThis.showOpenFilePicker(DECK_PICKER_OPTIONS);
-        submitDeck(await (await handle.getFile()).text());
+        const file = await handle.getFile();
+        submitDeck(await file.text(), deckLabel(file.name));
       } catch (e) {
-        if (e?.name !== 'AbortError' && roomStatus) roomStatus.textContent = 'Could not load deck.';
+        if (e?.name !== 'AbortError') logSystem('Could not load the deck file.');
       }
     } else {
       deckFileInput?.click();
@@ -371,20 +390,29 @@ export function init() {
 
   deckFileInput?.addEventListener('change', (e) => {
     const file = e.target.files?.[0];
-    if (file) file.text().then(submitDeck);
+    if (file) file.text().then((text) => submitDeck(text, deckLabel(file.name)));
     e.target.value = '';
   });
 
-  readyButton?.addEventListener('click', () => sendToRoom(readyFrame(currentRoom)));
+  // Ready and New game glow gold the moment they're clicked to show the request is in flight, then
+  // revert to white when the SNAPSHOT confirms it resolved (a dealt table clears Ready; a cleared
+  // table clears New game — see the SNAPSHOT handler).
+  readyButton?.addEventListener('click', () => {
+    readyButton.classList.add('btn-gold');
+    sendToRoom(readyFrame(currentRoom));
+  });
   goldfishButton?.addEventListener('click', () => sendToRoom(readyFrame(currentRoom, { solo: true })));
-  newGameButton?.addEventListener('click', () => sendToRoom(resetFrame(currentRoom)));
+  newGameButton?.addEventListener('click', () => {
+    newGameButton.classList.add('btn-gold');
+    sendToRoom(resetFrame(currentRoom));
+  });
 
   const boardStage = document.getElementById('boardStage');
   if (boardStage && battlefield) {
-    // The deck menu's Search flyout carries a client-only `limit` hint on the frame; capture it for
-    // the DECK_CONTENTS reply, then strip it so only the bare intent reaches the room.
-    boardInteractions = initBoardInteractions(boardStage, battlefield, ({ limit, ...message }) => {
-      if (message.intent?.op === 'SEARCH_DECK') pendingDeckLimit = limit ?? null;
+    // A SEARCH_DECK intent carries its top-N as `intent.value`; mirror it into pendingDeckLimit to
+    // cap the DECK_CONTENTS dialog, but pass the message through untouched so the server logs it.
+    boardInteractions = initBoardInteractions(boardStage, battlefield, (message) => {
+      if (message.intent?.op === 'SEARCH_DECK') pendingDeckLimit = message.intent.value ?? null;
       sendToRoom({ ...message, room: currentRoom });
     });
   }
@@ -457,7 +485,7 @@ export function init() {
         room: currentRoom,
       });
     } catch (_) {
-      if (roomStatus) roomStatus.textContent = 'Could not spawn a card.';
+      logSystem('Could not spawn a card.');
     }
   });
 

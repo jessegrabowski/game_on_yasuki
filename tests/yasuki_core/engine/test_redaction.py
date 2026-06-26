@@ -12,16 +12,21 @@ from yasuki_core.game_pieces.constants import Side
 P1, P2 = PlayerId.P1, PlayerId.P2
 
 
-def _card(card_id, side=Side.FATE, owner=P1, face_up=False, revealed=False) -> L5RCard:
+def _card(card_id, side=Side.FATE, owner=P1, face_up=False, shown=False, peekers=frozenset()):
     return L5RCard(
         id=card_id,
         name=f"name-{card_id}",
         side=side,
         owner=owner,
         face_up=face_up,
-        revealed=revealed,
+        shown=shown,
+        peekers=peekers,
         text="secret",
     )
+
+
+def _opponent(seat):
+    return P2 if seat is P1 else P1
 
 
 def _view_in_zone(role, card, viewer, owner=P1):
@@ -67,8 +72,10 @@ def test_hidden_stub_carries_its_public_owner():
     assert stub.owner == P1
 
 
-def test_revealed_hand_card_is_visible_to_opponent():
-    card = _card("f1", owner=P1, revealed=True)
+def test_shown_hand_card_is_visible_to_opponent():
+    # A fate card the owner already reads, shown to the opponent, becomes public to both.
+    card = _card("f1", owner=P1, shown=True)
+    assert not _hidden(_view_in_zone(ZoneRole.HAND, card, P1))
     assert not _hidden(_view_in_zone(ZoneRole.HAND, card, P2))
 
 
@@ -90,10 +97,40 @@ def test_face_up_battlefield_is_visible_to_everyone(viewer):
     assert not _hidden(_view_on_battlefield(card, viewer))
 
 
-@pytest.mark.parametrize("viewer", [P1, P2])
-def test_revealed_face_down_battlefield_is_visible_to_everyone(viewer):
-    card = _card("d1", side=Side.DYNASTY, owner=P1, face_up=False, revealed=True)
-    assert not _hidden(_view_on_battlefield(card, viewer))
+def test_shown_face_down_battlefield_is_visible_to_opponent_only():
+    # A face-down card the owner shows: the opponent gains sight, the owner still sees a back.
+    card = _card("d1", side=Side.DYNASTY, owner=P1, face_up=False, shown=True)
+    assert _hidden(_view_on_battlefield(card, P1))
+    assert not _hidden(_view_on_battlefield(card, P2))
+
+
+def test_peeked_card_is_visible_to_the_peeker_only():
+    card = _card("d1", side=Side.DYNASTY, owner=P1, face_up=False, peekers=frozenset({P2}))
+    # Only the peeker (P2) may identify it; the owner still sees a face-down back.
+    assert not _hidden(_view_on_battlefield(card, P2))
+    assert _hidden(_view_on_battlefield(card, P1))
+
+
+def test_peek_records_the_id_only_for_the_peeker():
+    card = _card("d1", side=Side.DYNASTY, owner=P1, face_up=False, peekers=frozenset({P2}))
+    table = TableState.empty_two_seat()
+    table.battlefield.cards.append(card)
+    table.positions[card.id] = BoardPos(1.0, 2.0)
+    table.cards_by_id[card.id] = card
+
+    assert redact(table, P2).peeked_ids == frozenset({"d1"})
+    assert redact(table, P1).peeked_ids == frozenset()
+
+
+def test_a_card_seen_by_default_is_not_flagged_peeked():
+    # A face-up card the viewer already sees, also in their peekers, is not "peeked-only".
+    card = _card("d1", side=Side.DYNASTY, owner=P1, face_up=True, peekers=frozenset({P1}))
+    table = TableState.empty_two_seat()
+    table.battlefield.cards.append(card)
+    table.positions[card.id] = BoardPos(0.0, 0.0)
+    table.cards_by_id[card.id] = card
+
+    assert redact(table, P1).peeked_ids == frozenset()
 
 
 @pytest.mark.parametrize("viewer", [P1, P2])
@@ -173,12 +210,14 @@ def _random_table(rng):
     placements = {}  # card_id -> ("zone", ZoneKey) | ("battlefield", None) | ("deck", DeckKey)
 
     for i in range(rng.randint(0, 18)):
+        peekers = frozenset(s for s in (P1, P2) if rng.random() < 0.3)
         card = _card(
             f"c{i}",
             side=rng.choice([Side.FATE, Side.DYNASTY]),
             owner=rng.choice([P1, P2, None]),
             face_up=rng.random() < 0.5,
-            revealed=rng.random() < 0.3,
+            shown=rng.random() < 0.3,
+            peekers=peekers,
         )
         originals[card.id] = card
         table.cards_by_id[card.id] = card
@@ -203,18 +242,20 @@ def _random_table(rng):
 def _expected_visible(card, viewer, location):
     kind, key = location
     if kind == "battlefield":
-        return card.face_up or card.revealed
-    role = key.role
-    if role in (
+        default = card.face_up
+    elif key.role in (
         ZoneRole.FATE_DISCARD,
         ZoneRole.FATE_BANISH,
         ZoneRole.DYNASTY_DISCARD,
         ZoneRole.DYNASTY_BANISH,
     ):
-        return True
-    if role is ZoneRole.HAND:
-        return card.owner == viewer or card.revealed
-    return card.face_up or card.revealed
+        default = True
+    elif key.role is ZoneRole.HAND:
+        default = card.owner == viewer
+    else:
+        default = card.face_up
+    shown_to_opponent = card.shown and card.owner is not None and viewer == _opponent(card.owner)
+    return default or shown_to_opponent or viewer in card.peekers
 
 
 def _assert_projection(view, original, expected):

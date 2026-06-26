@@ -240,6 +240,18 @@ describe('setup frames', () => {
     });
   });
 
+  it('carries a filename label when one is given', () => {
+    assert.deepEqual(loadDeckFrame('r1', 'name: D', 'Crab Rush'), {
+      type: 'LOAD_DECK',
+      room: 'r1',
+      load_deck: { yaml: 'name: D', filename: 'Crab Rush' },
+    });
+  });
+
+  it('omits filename when it is falsy', () => {
+    assert.deepEqual(loadDeckFrame('r1', 'name: D', null).load_deck, { yaml: 'name: D' });
+  });
+
   it('defaults READY to a two-player ready', () => {
     assert.deepEqual(readyFrame('r1'), {
       type: 'READY',
@@ -343,8 +355,8 @@ function installRouter(overrides = {}) {
   );
 }
 
-async function joinedRoom() {
-  installRouter();
+async function joinedRoom(overrides = {}) {
+  installRouter(overrides);
   init();
   await flush();
   document.getElementById('playerName').value = 'Ada';
@@ -354,6 +366,11 @@ async function joinedRoom() {
   ws.deliver({ type: 'HELLO', room: 'r1', your_seat: 'P1', players: ['Ada'] });
   return ws;
 }
+
+const logText = () =>
+  [...document.getElementById('actionLog').children]
+    .map((li) => [...li.children].map((span) => span.textContent).join(''))
+    .join('\n');
 
 describe('init (room client wiring)', () => {
   it('loads and renders the open rooms on start', async () => {
@@ -391,6 +408,25 @@ describe('init (room client wiring)', () => {
     assert.match(document.getElementById('chatLog').innerHTML, /hello there/);
     const lastLog = document.getElementById('actionLog').children.at(-1);
     assert.equal(lastLog.children[0].textContent, 'Kenji joined');
+  });
+
+  it('suppresses a debug-level ERROR when the client debug flag is off', async () => {
+    const ws = await joinedRoom();
+    ws.deliver({ type: 'ERROR', room: 'r1', message: 'Intent rejected', debug: true });
+    assert.doesNotMatch(logText(), /Intent rejected/);
+  });
+
+  it('shows a debug-level ERROR with a [debug] tag when the client debug flag is on', async () => {
+    const ws = await joinedRoom({ 'GET /api/config': () => ok({ image_base_url: '/images', debug: true }) });
+    ws.deliver({ type: 'ERROR', room: 'r1', message: 'Intent rejected', debug: true });
+    assert.match(logText(), /\[debug\] Intent rejected/);
+  });
+
+  it('always shows a user-facing (non-debug) ERROR', async () => {
+    const ws = await joinedRoom();
+    ws.deliver({ type: 'ERROR', room: 'r1', message: 'Table is full' });
+    assert.match(logText(), /Table is full/);
+    assert.doesNotMatch(logText(), /\[debug\]/);
   });
 
   it('highlights the referenced card anywhere on the stage when a log link is clicked', async () => {
@@ -438,6 +474,40 @@ describe('init (room client wiring)', () => {
     assert.deepEqual(ws.sent.find((m) => m.type === 'RESET'), { type: 'RESET', room: 'r1' });
   });
 
+  it('lights Ready gold on click and clears it when the table is dealt', async () => {
+    const ws = await joinedRoom();
+    const readyButton = document.getElementById('readyButton');
+    readyButton._emit('click', {});
+    assert.ok(readyButton.classList.contains('btn-gold'), 'gold while the ready is pending');
+
+    // A pre-game snapshot (no dealt decks) leaves Ready pending.
+    ws.deliver({ type: 'SNAPSHOT', room: 'r1', snapshot: { seats: {}, decks: {} } });
+    assert.ok(readyButton.classList.contains('btn-gold'), 'still pending before the deal');
+
+    ws.deliver({
+      type: 'SNAPSHOT',
+      room: 'r1',
+      snapshot: { seats: {}, decks: { 'P1:dynasty': { count: 39, top: null } } },
+    });
+    assert.ok(!readyButton.classList.contains('btn-gold'), 'cleared once the table is dealt');
+  });
+
+  it('lights New game gold on click and clears it when the table resets to pre-game', async () => {
+    const ws = await joinedRoom();
+    const newGameButton = document.getElementById('newGameButton');
+    // A dealt table: New game stays pending until the reset clears the table.
+    ws.deliver({
+      type: 'SNAPSHOT',
+      room: 'r1',
+      snapshot: { seats: {}, decks: { 'P1:dynasty': { count: 39, top: null } } },
+    });
+    newGameButton._emit('click', {});
+    assert.ok(newGameButton.classList.contains('btn-gold'), 'gold while the reset is pending');
+
+    ws.deliver({ type: 'SNAPSHOT', room: 'r1', snapshot: { seats: {}, decks: {} } });
+    assert.ok(!newGameButton.classList.contains('btn-gold'), 'cleared once the table is empty');
+  });
+
   it('sends LOAD_DECK with the chosen file contents', async () => {
     const ws = await joinedRoom();
     const input = document.getElementById('deckFileInput');
@@ -450,6 +520,16 @@ describe('init (room client wiring)', () => {
       room: 'r1',
       load_deck: { yaml: 'name: D' },
     });
+  });
+
+  it('labels LOAD_DECK with the file name, extension stripped', async () => {
+    const ws = await joinedRoom();
+    const input = document.getElementById('deckFileInput');
+    input.files = [{ name: 'Crab Rush.yaml', text: () => Promise.resolve('name: D') }];
+    input._emit('change', { target: input });
+    await flush();
+
+    assert.equal(ws.sent.find((m) => m.type === 'LOAD_DECK').load_deck.filename, 'Crab Rush');
   });
 
   it('draws from a deck on double-click', async () => {
@@ -480,9 +560,12 @@ describe('init (room client wiring)', () => {
       clientY: 10,
       target: { closest: (s) => (s === '[data-card-id]' ? cardEl : null) },
     });
+    // A genuine drag (a real pointermove, not just a press-release) so it sends SET_CARD_POS rather
+    // than a select-only RAISE; the point of this test is that top-secret injects `room`.
+    stage._emit('pointermove', { clientX: 80, clientY: 80 });
     stage._emit('pointerup', {
-      clientX: 20,
-      clientY: 20,
+      clientX: 80,
+      clientY: 80,
       target: { closest: (s) => (s === '[data-zone]' ? { dataset: { zone: 'battlefield' } } : null) },
     });
 

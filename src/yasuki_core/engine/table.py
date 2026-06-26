@@ -175,14 +175,18 @@ class TableState:
 
 class IntentOp(str, Enum):
     MOVE_CARD = "MOVE_CARD"
+    MOVE_DECK_TOP = "MOVE_DECK_TOP"
     SET_CARD_POS = "SET_CARD_POS"
+    RAISE = "RAISE"
     BOW = "BOW"
     UNBOW = "UNBOW"
     FLIP = "FLIP"
     FLIP_FACE = "FLIP_FACE"
     INVERT = "INVERT"
-    REVEAL = "REVEAL"
-    HIDE = "HIDE"
+    SHOW = "SHOW"
+    UNSHOW = "UNSHOW"
+    PEEK = "PEEK"
+    UNPEEK = "UNPEEK"
     DRAW = "DRAW"
     SHUFFLE = "SHUFFLE"
     FLIP_DECK_TOP = "FLIP_DECK_TOP"
@@ -227,6 +231,20 @@ class MoveCard:
 
 
 @dataclass(frozen=True, slots=True)
+class MoveDeckTop:
+    """Pop a deck's top card and move it to a zone, deck, or the shared battlefield.
+
+    The deck-sourced counterpart to ``MoveCard`` — for dragging a deck's top card onto the table.
+    ``position`` is honored only for a battlefield destination. Owner-gated on the deck.
+    """
+
+    deck: DeckKey
+    to: MoveDest
+    position: BoardPos | None = None
+    op: ClassVar[IntentOp] = IntentOp.MOVE_DECK_TOP
+
+
+@dataclass(frozen=True, slots=True)
 class SetCardPos:
     """Reposition one card freely on the shared battlefield."""
 
@@ -234,6 +252,14 @@ class SetCardPos:
     x: float
     y: float
     op: ClassVar[IntentOp] = IntentOp.SET_CARD_POS
+
+
+@dataclass(frozen=True, slots=True)
+class Raise:
+    """Bring one battlefield card to the top of the stacking order without moving it. Owner-gated."""
+
+    card_id: str
+    op: ClassVar[IntentOp] = IntentOp.RAISE
 
 
 @dataclass(frozen=True, slots=True)
@@ -276,13 +302,38 @@ class Invert(CardFlagIntent):
 
 
 @dataclass(frozen=True, slots=True)
-class Reveal(CardFlagIntent):
-    op: ClassVar[IntentOp] = IntentOp.REVEAL
+class Show:
+    """Show one of your own cards to your opponent. Owner-gated. A face-down card stays a back to its
+    owner while the opponent gains sight of it; a hand card the owner already reads becomes public to
+    both seats."""
+
+    card_id: str
+    op: ClassVar[IntentOp] = IntentOp.SHOW
 
 
 @dataclass(frozen=True, slots=True)
-class Hide(CardFlagIntent):
-    op: ClassVar[IntentOp] = IntentOp.HIDE
+class Unshow:
+    """Stop showing one of your own cards to your opponent. Owner-gated."""
+
+    card_id: str
+    op: ClassVar[IntentOp] = IntentOp.UNSHOW
+
+
+@dataclass(frozen=True, slots=True)
+class Peek:
+    """Privately peek at one card — your own face-down card or an opponent's. Not owner-gated: any
+    seat may peek any card, and the public "peeks at a … card" log is the safeguard."""
+
+    card_id: str
+    op: ClassVar[IntentOp] = IntentOp.PEEK
+
+
+@dataclass(frozen=True, slots=True)
+class Unpeek:
+    """Stop peeking at one card, removing the acting seat from its peekers. Not owner-gated."""
+
+    card_id: str
+    op: ClassVar[IntentOp] = IntentOp.UNPEEK
 
 
 @dataclass(frozen=True, slots=True)
@@ -312,10 +363,11 @@ class FlipDeckTop:
 
 @dataclass(frozen=True, slots=True)
 class SearchDeck:
-    """Request the deck's full ordered contents; the owner alone receives them. Pulling a card is a
-    follow-up ``MoveCard``."""
+    """Request a deck's ordered contents; the owner alone receives them. ``limit`` bounds the look to
+    the top N cards (None searches the whole deck). Pulling a card is a follow-up ``MoveCard``."""
 
     deck: DeckKey
+    limit: int | None = None
     op: ClassVar[IntentOp] = IntentOp.SEARCH_DECK
 
 
@@ -392,14 +444,18 @@ class RemoveCard:
 
 Intent = (
     MoveCard
+    | MoveDeckTop
     | SetCardPos
+    | Raise
     | Bow
     | Unbow
     | Flip
     | FlipFace
     | Invert
-    | Reveal
-    | Hide
+    | Show
+    | Unshow
+    | Peek
+    | Unpeek
     | Draw
     | Shuffle
     | FlipDeckTop
@@ -546,9 +602,33 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
         card.uninvert()
     elif dest.role is ZoneRole.PROVINCE:
         card.unbow()
+    elif dest.role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD):
+        # A discard pile is always public: a card landing there is revealed to both seats.
+        card.turn_face_up()
     zone.add(card)
     state.seq += 1
     return [Event(state.seq, seat, MoveCard(card.id, dest), (card.id,))]
+
+
+def _move_deck_top(state: TableState, seat: PlayerId, intent: MoveDeckTop) -> list[Event]:
+    # Source the deck's top card, then route it exactly like a MoveCard — the deck owner alone may
+    # do this, and the card carries the owner's id so the delegated ownership gate passes.
+    if not owns_deck(state, seat, intent.deck):
+        return []
+    cards = state.decks[intent.deck].cards
+    if not cards:
+        return []
+    return _move_card(state, seat, MoveCard(cards[-1].id, intent.to, intent.position))
+
+
+def _bring_to_top(state: TableState, card: L5RCard) -> None:
+    """Move ``card`` to the end of the battlefield list (the top of the stack the client renders)."""
+    cards = state.battlefield.cards
+    for i, held in enumerate(cards):
+        if held is card:
+            if i != len(cards) - 1:
+                cards.append(cards.pop(i))
+            return
 
 
 def _set_card_pos(state: TableState, seat: PlayerId, intent: SetCardPos) -> list[Event]:
@@ -561,6 +641,20 @@ def _set_card_pos(state: TableState, seat: PlayerId, intent: SetCardPos) -> list
     if state.positions.get(card.id) == new_pos:
         return []
     state.positions[card.id] = new_pos
+    # Moving a card on the battlefield also raises it to the top of the stack.
+    _bring_to_top(state, card)
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
+def _raise(state: TableState, seat: PlayerId, intent: Raise) -> list[Event]:
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None or not owns_card(state, seat, intent.card_id):
+        return []
+    cards = state.battlefield.cards
+    if not cards or cards[-1] is card or not any(held is card for held in cards):
+        return []
+    _bring_to_top(state, card)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
@@ -599,28 +693,12 @@ def _invert_card(card: L5RCard) -> bool:
     return True
 
 
-def _reveal_card(card: L5RCard) -> bool:
-    if card.revealed:
-        return False
-    card.reveal()
-    return True
-
-
-def _hide_card(card: L5RCard) -> bool:
-    if not card.revealed:
-        return False
-    card.hide()
-    return True
-
-
 _FLAG_MUTATORS = {
     IntentOp.BOW: _bow_card,
     IntentOp.UNBOW: _unbow_card,
     IntentOp.FLIP: _flip_card,
     IntentOp.FLIP_FACE: _flip_face_card,
     IntentOp.INVERT: _invert_card,
-    IntentOp.REVEAL: _reveal_card,
-    IntentOp.HIDE: _hide_card,
 }
 
 
@@ -637,6 +715,44 @@ def _apply_flag(state: TableState, seat: PlayerId, intent: CardFlagIntent) -> li
         return []
     state.seq += 1
     return [Event(state.seq, seat, intent, changed)]
+
+
+def _show(state: TableState, seat: PlayerId, intent: Show) -> list[Event]:
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None or not owns_card(state, seat, intent.card_id) or card.shown:
+        return []
+    card.show()
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
+def _unshow(state: TableState, seat: PlayerId, intent: Unshow) -> list[Event]:
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None or not owns_card(state, seat, intent.card_id) or not card.shown:
+        return []
+    card.unshow()
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
+def _peek(state: TableState, seat: PlayerId, intent: Peek) -> list[Event]:
+    # Not owner-gated: any seat may peek any card. The card's peekers gain private sight; the public
+    # log only reports that a peek happened.
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None or seat in card.peekers:
+        return []
+    card.add_peeker(seat)
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
+def _unpeek(state: TableState, seat: PlayerId, intent: Unpeek) -> list[Event]:
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None or seat not in card.peekers:
+        return []
+    card.remove_peeker(seat)
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
 
 
 def _draw(state: TableState, seat: PlayerId, intent: Draw) -> list[Event]:
@@ -782,6 +898,7 @@ def _spawn_card(state: TableState, seat: PlayerId, intent: SpawnCard) -> list[Ev
         owner=None,
         face_up=True,
         image_front=Path(intent.image) if intent.image else None,
+        is_token=True,
     )
     state.cards_by_id[card.id] = card
     state.battlefield.add(card)
@@ -793,7 +910,12 @@ def _spawn_card(state: TableState, seat: PlayerId, intent: SpawnCard) -> list[Ev
 def _remove_card(state: TableState, seat: PlayerId, intent: RemoveCard) -> list[Event]:
     if not owns_card(state, seat, intent.card_id):
         return []
-    card = state.cards_by_id.pop(intent.card_id)
+    card = state.cards_by_id[intent.card_id]
+    # Only spawned tokens may leave the table outright; a real card from a deck or zone is never
+    # destroyable — it must be moved to a discard or banish instead.
+    if not card.is_token:
+        return []
+    del state.cards_by_id[intent.card_id]
     _remove_from_location(state, card)
     state.seq += 1
     return [Event(state.seq, seat, intent, (intent.card_id,))]
@@ -801,14 +923,18 @@ def _remove_card(state: TableState, seat: PlayerId, intent: RemoveCard) -> list[
 
 _HANDLERS = {
     IntentOp.MOVE_CARD: _move_card,
+    IntentOp.MOVE_DECK_TOP: _move_deck_top,
     IntentOp.SET_CARD_POS: _set_card_pos,
+    IntentOp.RAISE: _raise,
     IntentOp.BOW: _apply_flag,
     IntentOp.UNBOW: _apply_flag,
     IntentOp.FLIP: _apply_flag,
     IntentOp.FLIP_FACE: _apply_flag,
     IntentOp.INVERT: _apply_flag,
-    IntentOp.REVEAL: _apply_flag,
-    IntentOp.HIDE: _apply_flag,
+    IntentOp.SHOW: _show,
+    IntentOp.UNSHOW: _unshow,
+    IntentOp.PEEK: _peek,
+    IntentOp.UNPEEK: _unpeek,
     IntentOp.DRAW: _draw,
     IntentOp.SHUFFLE: _shuffle,
     IntentOp.FLIP_DECK_TOP: _flip_deck_top,

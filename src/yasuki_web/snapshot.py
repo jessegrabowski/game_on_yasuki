@@ -15,15 +15,28 @@ def _deck_key_str(key: DeckKey) -> str:
     return f"{key.owner.name}:{key.side.value.lower()}"
 
 
-def _card(view: L5RCard | HiddenCard) -> dict:
+def _card(view: L5RCard | HiddenCard, peeked_ids: frozenset[str] = frozenset()) -> dict:
     """Encode a viewer's card as the client renders it. A ``HiddenCard`` becomes a back stub carrying
     no identity; a full card carries the presented face's name and art plus its flags. A double-faced
-    card also carries its back link and which face is showing, so the client can render the flip."""
+    card also carries its back link and which face is showing, so the client can render the flip.
+
+    The ``shown`` flag marks a card the owner has made public-facing (render a public indicator); the
+    ``peeked`` flag, set from ``peeked_ids``, marks one this viewer sees only through their own peek
+    (render the private-peek cue). A hidden stub carries neither — the viewer cannot see it at all.
+
+    Parameters
+    ----------
+    view : L5RCard or HiddenCard
+        The card or back stub to encode.
+    peeked_ids : frozenset of str, optional
+        Ids the viewer sees solely by peeking, from the snapshot. Default empty.
+    """
     if isinstance(view, HiddenCard):
         return {
             "id": view.card_id,
             "side": view.side.value,
             "owner": view.owner.name if view.owner is not None else None,
+            "token": False,
             "hidden": True,
         }
     face = view.active_face
@@ -34,9 +47,12 @@ def _card(view: L5RCard | HiddenCard) -> dict:
         "side": face.side.value,
         "owner": view.owner.name if view.owner is not None else None,
         "pregame": isinstance(view, _PREGAME_TYPES),
+        "token": view.is_token,
         "bowed": view.bowed,
         "face_up": view.face_up,
         "inverted": view.inverted,
+        "shown": view.shown,
+        "peeked": view.id in peeked_ids,
         "hidden": False,
     }
     if view.back_card_id is not None:
@@ -79,7 +95,7 @@ def serialize_snapshot(snapshot: ViewSnapshot) -> dict:
             for seat, view in snapshot.seats.items()
         },
         "zones": {
-            _zone_key_str(key): [_card(card) for card in zone.cards]
+            _zone_key_str(key): [_card(card, snapshot.peeked_ids) for card in zone.cards]
             for key, zone in snapshot.zones.items()
         },
         "decks": {
@@ -90,7 +106,7 @@ def serialize_snapshot(snapshot: ViewSnapshot) -> dict:
             for key, deck in snapshot.decks.items()
         },
         "battlefield": [
-            {**_card(entry.card), "x": entry.pos.x, "y": entry.pos.y}
+            {**_card(entry.card, snapshot.peeked_ids), "x": entry.pos.x, "y": entry.pos.y}
             for entry in snapshot.battlefield
         ],
     }

@@ -62,8 +62,9 @@ function applyFace(el, card, imgBase) {
 }
 
 // Stamp the card state the context menu reads back off the DOM: identity, side and owner for routing
-// "Send to…" intents and gating them by ownership, and the flags whose toggle label depends on the
-// current value. A hidden stub carries only id + side, so its other fields stay empty.
+// "Send to…" intents and gating them by ownership, the token flag that gates the "Remove" item, and
+// the flags whose toggle label depends on the current value. A hidden stub carries only id + side, so
+// its other fields stay empty.
 function tagCard(el, card) {
   el.dataset.cardId = card.id;
   el.dataset.bowed = card.bowed ? '1' : '';
@@ -71,6 +72,11 @@ function tagCard(el, card) {
   el.dataset.owner = card.owner ?? '';
   el.dataset.hidden = card.hidden ? '1' : '';
   el.dataset.faceUp = card.face_up ? '1' : '';
+  el.dataset.token = card.token ? '1' : '';
+  // shown: the card is public-facing (the menu offers "Stop showing"); peeked: this viewer sees it
+  // only through their own private peek (rendered at reduced opacity, the menu offers "Stop peeking").
+  el.dataset.shown = card.shown ? '1' : '';
+  el.dataset.peeked = card.peeked ? '1' : '';
   if (card.back_card_id) el.dataset.doubleFaced = '1';
 }
 
@@ -79,6 +85,8 @@ function cardElement(card, imgBase) {
   const el = node('div', 'board-card');
   if (card.bowed) el.classList.add('bowed');
   if (card.inverted) el.classList.add('inverted');
+  if (card.shown) el.classList.add('shown');
+  if (card.peeked) el.classList.add('peeked');
   tagCard(el, card);
   el.style.left = `${card.x}px`;
   el.style.top = `${card.y}px`;
@@ -91,6 +99,8 @@ function zoneCard(card, imgBase) {
   const el = node('div', 'zone-card');
   if (card.bowed) el.classList.add('bowed');
   if (card.inverted) el.classList.add('inverted');
+  if (card.shown) el.classList.add('shown');
+  if (card.peeked) el.classList.add('peeked');
   tagCard(el, card);
   applyFace(el, card, imgBase);
   return el;
@@ -220,8 +230,12 @@ export const flipIntent = (ids) => intentMessage({ op: 'FLIP', card_ids: [].conc
 export const bowIntent = (ids, bowed) =>
   intentMessage({ op: bowed ? 'UNBOW' : 'BOW', card_ids: [].concat(ids) });
 export const invertIntent = (ids) => intentMessage({ op: 'INVERT', card_ids: [].concat(ids) });
-export const revealIntent = (ids) => intentMessage({ op: 'REVEAL', card_ids: [].concat(ids) });
-export const hideIntent = (ids) => intentMessage({ op: 'HIDE', card_ids: [].concat(ids) });
+// Show/peek act on a single card: show is owner-gated (reveal your own card to your opponent), peek
+// is not (any player may privately peek any card). Each carries one card id, not a batch.
+export const showIntent = (id) => intentMessage({ op: 'SHOW', card_id: id });
+export const unshowIntent = (id) => intentMessage({ op: 'UNSHOW', card_id: id });
+export const peekIntent = (id) => intentMessage({ op: 'PEEK', card_id: id });
+export const unpeekIntent = (id) => intentMessage({ op: 'UNPEEK', card_id: id });
 // Turn a double-faced card (a flip stronghold) to its other printed face.
 export const flipFaceIntent = (ids) => intentMessage({ op: 'FLIP_FACE', card_ids: [].concat(ids) });
 // Draw the top card of a seat's deck; the server routes it (fate → hand, dynasty → province).
@@ -238,8 +252,14 @@ export const shuffleIntent = (owner, side) =>
   });
 export const flipDeckTopIntent = (owner, side) =>
   intentMessage({ op: 'FLIP_DECK_TOP', deck: { owner, side } });
-export const searchDeckIntent = (owner, side) =>
-  intentMessage({ op: 'SEARCH_DECK', deck: { owner, side } });
+// Reveal the deck to its owner: `value` carries the top-N count to log (null for a whole-deck search).
+export const searchDeckIntent = (owner, side, value = null) =>
+  intentMessage({ op: 'SEARCH_DECK', deck: { owner, side }, value });
+// Bring a battlefield card to the top of the z-stack server-side, persisting a select-without-move.
+export const raiseIntent = (id) => intentMessage({ op: 'RAISE', card_id: id });
+// Move a seat's hidden deck top to a destination, keyed by the deck (its top carries no card id).
+export const moveDeckTopIntent = (deck, to, position = null) =>
+  intentMessage({ op: 'MOVE_DECK_TOP', deck, to, position });
 const provinceZone = (owner, idx) => ({ owner, role: 'province', idx });
 export const fillProvinceIntent = (owner, idx) =>
   intentMessage({ op: 'FILL_PROVINCE', zone: provinceZone(owner, idx) });
@@ -303,6 +323,8 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
   const side = el.dataset.side || '';
   const owner = el.dataset.owner || '';
   const faceDown = el.dataset.hidden === '1' || el.dataset.faceUp !== '1';
+  const shown = el.dataset.shown === '1';
+  const peeked = el.dataset.peeked === '1';
   const bowed = el.dataset.bowed === '1';
   const doubleFaced = el.dataset.doubleFaced === '1';
   const inProvince = !!el.closest?.('[data-zone="province"]');
@@ -322,9 +344,20 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
   // Bowing a card sitting in a province is meaningless, matching the desktop client's gate.
   if (!inProvince) items.push({ label: bowed ? 'Unbow' : 'Bow', message: bowIntent(targetIds, bowed) });
   items.push({ label: 'Invert', message: invertIntent(targetIds) });
-  if (faceDown) {
-    items.push({ label: 'Reveal', message: revealIntent(targetIds) });
-    items.push({ label: 'Hide', message: hideIntent(targetIds) });
+  // Show is owner-gated: reveal your own card to your opponent (toggle Show/Stop showing). Peek is
+  // open to anyone — offered on a card the viewer cannot yet see (face-down/hidden), toggled to
+  // "Stop peeking" once they are. Both carry the clicked card's single id, not the batch.
+  if (mine) {
+    items.push(
+      shown
+        ? { label: 'Stop showing', message: unshowIntent(id) }
+        : { label: 'Show opponent', message: showIntent(id) },
+    );
+  }
+  if (peeked) {
+    items.push({ label: 'Stop peeking', message: unpeekIntent(id) });
+  } else if (faceDown) {
+    items.push({ label: 'Peek', message: peekIntent(id) });
   }
   if (mine) {
     const seatOf = (d) => d.owner || viewer;
@@ -352,7 +385,10 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
       );
     }
   }
-  items.push(SEP, { label: 'Remove', onClick: (e, send) => fanOut(send, (cid) => removeMessage(cid)) });
+  // Only tokens can be removed: a real card from a deck/zone belongs to the game state, not the table.
+  if (el.dataset.token === '1') {
+    items.push(SEP, { label: 'Remove', onClick: (e, send) => fanOut(send, (cid) => removeMessage(cid)) });
+  }
   return items;
 }
 
@@ -540,9 +576,9 @@ function openMenu(container, items, clientX, clientY, send) {
 }
 
 // The deck-menu "Search…" prompt: a centered chooser for how much of the deck to reveal — the top N
-// (typed) or all of it. Both send a SEARCH_DECK carrying a client-only `limit` hint (top-secret strips
-// it before the wire and uses it to cap the dialog the server's DECK_CONTENTS reply opens). Mounts
-// inside `.room` for the board palette, and closes on a choice, the backdrop, the × button, or Escape.
+// (typed) or all of it. Both send a SEARCH_DECK whose `value` carries the top-N count (null for the
+// whole deck); the server logs it and caps the dialog its DECK_CONTENTS reply opens. Mounts inside
+// `.room` for the board palette, and closes on a choice, the backdrop, the × button, or Escape.
 function openDeckSearchPrompt(owner, side, send) {
   const overlay = node('div', 'deck-dialog-overlay');
   const modal = node('div', 'deck-scope');
@@ -554,8 +590,8 @@ function openDeckSearchPrompt(owner, side, send) {
   const onKey = (e) => {
     if (e.key === 'Escape') close();
   };
-  const choose = (limit) => {
-    send({ ...searchDeckIntent(owner, side), limit });
+  const choose = (value) => {
+    send(searchDeckIntent(owner, side, value));
     close();
   };
 
@@ -634,6 +670,17 @@ export function initBoardInteractions(root, boardEl, send) {
   // Battlefield-local top-left of a card element, read from its inline position.
   const cardX = (el) => parseFloat(el.style.left) || 0;
   const cardY = (el) => parseFloat(el.style.top) || 0;
+  // The viewer may only move cards they own; a card with no owner (neutral/token) is everyone's. The
+  // gate lives at the source so an opponent's card never mutates locally ahead of the server reject.
+  const ownsCard = (el) => {
+    const owner = el?.dataset?.owner || '';
+    return !owner || owner === (root.dataset.viewerSeat || '');
+  };
+  // Id of the topmost battlefield card (last in render/z order), or null when the board is empty.
+  const topmostId = () => {
+    const cards = boardEl.querySelectorAll('.board-card');
+    return cards.length ? cards[cards.length - 1].dataset.cardId : null;
+  };
   // A group-drag member's clamped position after shifting its origin by the pointer delta.
   const memberPos = (member, dx, dy, rect) => ({
     x: clamp(Math.round(member.originX + dx), 0, rect.width - CARD_W),
@@ -662,6 +709,22 @@ export function initBoardInteractions(root, boardEl, send) {
 
   root.addEventListener('pointerdown', (e) => {
     if (e.button !== 0) return;
+    // A press that starts on a deck pile grabs that deck's hidden top card (no card id to move by);
+    // only the deck's owner may, and the drop resolves to a MOVE_DECK_TOP keyed by the deck.
+    const deckEl = e.target?.closest?.('[data-zone="deck"]');
+    if (deckEl) {
+      if (deckEl.dataset.owner !== (root.dataset.viewerSeat || '')) return;
+      const rect = deckEl.getBoundingClientRect();
+      drag = {
+        deck: { owner: deckEl.dataset.owner, side: deckEl.dataset.side },
+        el: deckEl,
+        onBattlefield: false,
+        grabX: e.clientX - rect.left,
+        grabY: e.clientY - rect.top,
+        moved: false,
+      };
+      return;
+    }
     const cardEl = e.target?.closest?.('[data-card-id]');
     if (!cardEl) {
       // A press on the open table (not a real drop zone) starts a marquee and, on release without a
@@ -677,6 +740,8 @@ export function initBoardInteractions(root, boardEl, send) {
       };
       return;
     }
+    // Block a drag (and therefore any move) on a card the viewer does not own, at the source.
+    if (!ownsCard(cardEl)) return;
     const rect = cardEl.getBoundingClientRect();
     const id = cardEl.dataset.cardId;
     const onBattlefield = cardEl.classList.contains('board-card');
@@ -695,7 +760,8 @@ export function initBoardInteractions(root, boardEl, send) {
       drag.startY = e.clientY;
       drag.members = [];
       for (const el of boardEl.querySelectorAll('.board-card')) {
-        if (selected.has(el.dataset.cardId)) {
+        // A marquee can sweep an opponent's card into the selection; never move one in a group drag.
+        if (selected.has(el.dataset.cardId) && ownsCard(el)) {
           drag.members.push({ id: el.dataset.cardId, el, originX: cardX(el), originY: cardY(el) });
         }
       }
@@ -781,10 +847,29 @@ export function initBoardInteractions(root, boardEl, send) {
         selected.add(card.id);
       }
       markSelection();
+      // Persist the raise a pure selection implies — only for the viewer's own card and only when it
+      // is not already on top. A drag instead raises via the SET_CARD_POS it sends, so don't double up.
+      if (selected.has(card.id) && !card.members && ownsCard(card.el) && topmostId() !== card.id) {
+        send(raiseIntent(card.id));
+      }
     }
     const target = e.target?.closest?.('[data-zone]');
     const zone = target?.dataset.zone;
-    if (card.members) {
+    if (card.deck) {
+      // A deck-top drag fires only on a real move, resolving the drop the same way a card move does.
+      if (card.moved) {
+        let to = null;
+        let position = null;
+        if (zone === 'battlefield') {
+          const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: card.grabX, y: card.grabY });
+          to = { kind: 'battlefield' };
+          position = [pos.x, pos.y];
+        } else if (zone) {
+          to = zoneDest(target);
+        }
+        if (to) send(moveDeckTopIntent(card.deck, to, position));
+      }
+    } else if (card.members) {
       const rect = battleRect();
       const dx = e.clientX - card.startX;
       const dy = e.clientY - card.startY;
@@ -793,9 +878,17 @@ export function initBoardInteractions(root, boardEl, send) {
         send(moveIntent(member.id, x, y));
       }
     } else if (zone === 'battlefield' || (!zone && card.onBattlefield)) {
-      const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: card.grabX, y: card.grabY });
-      if (card.onBattlefield) send(moveIntent(card.id, pos.x, pos.y));
-      else send(moveCardIntent(card.id, { kind: 'battlefield' }, [pos.x, pos.y]));
+      // A battlefield card only re-sends its position when it actually moved (the raise above covers a
+      // pure selection); a card played from elsewhere lands on the board even without a drag.
+      if (card.onBattlefield) {
+        if (card.moved) {
+          const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: card.grabX, y: card.grabY });
+          send(moveIntent(card.id, pos.x, pos.y));
+        }
+      } else {
+        const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: card.grabX, y: card.grabY });
+        send(moveCardIntent(card.id, { kind: 'battlefield' }, [pos.x, pos.y]));
+      }
     } else if (zone) {
       const dest = zoneDest(target);
       if (dest) send(moveCardIntent(card.id, dest));

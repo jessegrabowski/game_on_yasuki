@@ -23,6 +23,8 @@ class LoadDeckRequest(BaseModel):
     # is well above a full decklist (~3-4 KiB) but still bounded; the WS read loop allows a larger
     # frame for this message than for realtime intents (see MAX_WS_MESSAGE_SIZE).
     yaml: str = Field(min_length=1, max_length=16384)
+    # Source filename the client loaded from, a fallback deck label when the YAML carries no name.
+    filename: str | None = Field(None, max_length=200)
 
 
 class IntentEnvelope(BaseModel):

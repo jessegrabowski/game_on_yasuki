@@ -6,7 +6,7 @@ from yasuki_web.websocket import GameRoom
 from yasuki_web.schemas import IntentEnvelope
 from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import IntentOp, ZoneKey, ZoneRole
+from yasuki_core.engine.table import IntentOp, ZoneKey, ZoneRole, DeckKey, BoardPos
 from yasuki_core.engine.action_log import ChatEntry
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -76,7 +76,7 @@ def test_each_seat_receives_its_own_redacted_snapshot(room):
     kenji_hand = kenji.sent[-1]["snapshot"]["zones"]["P1:hand"][0]
     assert ada_hand["name"] == "Secret"  # owner sees their own card
     # The opponent gets a stub: the public owner, but no identity.
-    assert kenji_hand == {"id": "f1", "side": "FATE", "owner": "P1", "hidden": True}
+    assert kenji_hand == {"id": "f1", "side": "FATE", "owner": "P1", "token": False, "hidden": True}
 
 
 def test_accepted_intent_mutates_logs_and_broadcasts_to_both(room):
@@ -103,6 +103,31 @@ def test_opponent_targeting_intent_is_rejected_and_unlogged(room):
     assert ada.sent[-1]["type"] == "ERROR"
     assert len(room.action_log.entries) == before  # nothing recorded
     assert kenji.sent == []  # a rejected intent broadcasts nothing
+
+
+def test_move_deck_top_routes_through_the_websocket(room):
+    ada, _ = _seat_two(room)
+    deck = room.state.decks[DeckKey(PlayerId.P1, Side.FATE)]
+    top = L5RCard(id="t1", name="Top", side=Side.FATE, owner=PlayerId.P1, face_up=False)
+    deck.cards.append(top)
+    room.state.cards_by_id["t1"] = top
+
+    asyncio.run(
+        room.handle_intent(
+            ada,
+            IntentEnvelope(
+                op=IntentOp.MOVE_DECK_TOP,
+                deck={"owner": "P1", "side": "FATE"},
+                to={"kind": "battlefield"},
+                position=[4.0, 5.0],
+            ),
+        )
+    )
+
+    assert top in room.state.battlefield.cards
+    assert room.state.positions["t1"] == BoardPos(4.0, 5.0)
+    assert deck.cards == []
+    assert any(m["type"] == "SNAPSHOT" for m in ada.sent)  # the accepted move was broadcast
 
 
 def test_chat_is_recorded_on_the_durable_tape(room):

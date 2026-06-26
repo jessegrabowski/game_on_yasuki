@@ -15,12 +15,16 @@ from yasuki_core.engine.table import (
     Flip,
     FlipFace,
     Invert,
-    Reveal,
-    Hide,
+    Show,
+    Unshow,
+    Peek,
+    Unpeek,
     Draw,
     Shuffle,
     FlipDeckTop,
     SearchDeck,
+    MoveDeckTop,
+    Raise,
     FillProvince,
     DestroyProvince,
     DiscardProvince,
@@ -269,6 +273,90 @@ def test_move_card_into_opponents_deck_rejected():
     assert card in table.battlefield.cards
 
 
+def test_move_card_into_a_discard_turns_it_face_up():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    card.turn_face_down()
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, MoveCard("f1", ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)))
+
+    assert card in table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards
+    # A discard pile is always public, so the card lands face up regardless of how it arrived.
+    assert card.face_up is True
+
+
+def test_move_card_into_dynasty_discard_turns_it_face_up():
+    table = TableState.empty_two_seat()
+    card = _dynasty("d1")
+    card.turn_face_down()
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, MoveCard("d1", ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)))
+
+    assert table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards[0].face_up is True
+
+
+def test_move_deck_top_to_battlefield_pops_the_top_card():
+    table = TableState.empty_two_seat()
+    deck = table.decks[DeckKey(PlayerId.P1, Side.FATE)]
+    under, top = _fate("under"), _fate("top")
+    for card in (under, top):
+        table.cards_by_id[card.id] = card
+    deck.cards.extend([under, top])
+
+    events = apply_intent(
+        table,
+        PlayerId.P1,
+        MoveDeckTop(DeckKey(PlayerId.P1, Side.FATE), BATTLEFIELD, BoardPos(2.0, 3.0)),
+    )
+
+    assert top in table.battlefield.cards
+    assert table.positions["top"] == BoardPos(2.0, 3.0)
+    assert deck.cards == [under]
+    assert events[0].cards == ("top",)
+
+
+def test_move_deck_top_into_a_zone_routes_like_a_move():
+    table = TableState.empty_two_seat()
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=PlayerId.P1)
+    deck = table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
+    card = _dynasty("d1")
+    table.cards_by_id["d1"] = card
+    deck.cards.append(card)
+
+    apply_intent(
+        table,
+        PlayerId.P1,
+        MoveDeckTop(DeckKey(PlayerId.P1, Side.DYNASTY), ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)),
+    )
+
+    assert card in table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
+    assert deck.cards == []
+
+
+def test_move_deck_top_rejects_opponents_deck():
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=PlayerId.P2)
+    table.cards_by_id["f1"] = card
+    table.decks[DeckKey(PlayerId.P2, Side.FATE)].cards.append(card)
+
+    events = apply_intent(
+        table, PlayerId.P1, MoveDeckTop(DeckKey(PlayerId.P2, Side.FATE), BATTLEFIELD)
+    )
+
+    assert events == []
+    assert card in table.decks[DeckKey(PlayerId.P2, Side.FATE)].cards
+
+
+def test_move_deck_top_on_empty_deck_is_a_no_op():
+    table = TableState.empty_two_seat()
+    events = apply_intent(
+        table, PlayerId.P1, MoveDeckTop(DeckKey(PlayerId.P1, Side.FATE), BATTLEFIELD)
+    )
+    assert events == [] and table.seq == 0
+
+
 def test_set_card_pos_updates_position():
     table = TableState.empty_two_seat()
     card = _fate("f1")
@@ -410,15 +498,44 @@ def test_invert_toggles_both_directions():
     assert card.inverted is False
 
 
-def test_reveal_and_hide():
+def test_show_and_unshow_are_owner_gated():
     table = TableState.empty_two_seat()
-    card = _fate("f1")
+    card = _fate("f1", owner=PlayerId.P1)
     _on_battlefield(table, card)
 
-    apply_intent(table, PlayerId.P1, Reveal(("f1",)))
-    assert card.revealed is True
-    apply_intent(table, PlayerId.P1, Hide(("f1",)))
-    assert card.revealed is False
+    # The opponent cannot show another seat's card.
+    assert apply_intent(table, PlayerId.P2, Show("f1")) == []
+    assert card.shown is False
+
+    assert apply_intent(table, PlayerId.P1, Show("f1")) != []
+    assert card.shown is True
+    # Showing an already-shown card is a no-op (no event, seq unchanged).
+    assert apply_intent(table, PlayerId.P1, Show("f1")) == []
+
+    assert apply_intent(table, PlayerId.P2, Unshow("f1")) == []
+    assert card.shown is True
+    assert apply_intent(table, PlayerId.P1, Unshow("f1")) != []
+    assert card.shown is False
+
+
+def test_peek_and_unpeek_are_not_owner_gated():
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=PlayerId.P1)
+    _on_battlefield(table, card)
+
+    # Either seat may peek; each peek tracks only the acting seat.
+    assert apply_intent(table, PlayerId.P2, Peek("f1")) != []
+    assert card.peekers == frozenset({PlayerId.P2})
+    # A second peek by the same seat changes nothing.
+    assert apply_intent(table, PlayerId.P2, Peek("f1")) == []
+
+    assert apply_intent(table, PlayerId.P1, Peek("f1")) != []
+    assert card.peekers == frozenset({PlayerId.P1, PlayerId.P2})
+
+    # Unpeek removes only the acting seat.
+    assert apply_intent(table, PlayerId.P2, Unpeek("f1")) != []
+    assert card.peekers == frozenset({PlayerId.P1})
+    assert apply_intent(table, PlayerId.P2, Unpeek("f1")) == []
 
 
 def test_batch_flag_is_atomic_and_rejected_if_any_unowned():
@@ -699,6 +816,7 @@ def test_spawn_card_creates_a_public_face_up_battlefield_card():
     assert table.seq == 1 and events[0].cards == ("tok1",)
     card = table.cards_by_id["tok1"]
     assert card.owner is None and card.face_up is True
+    assert card.is_token is True  # spawned pieces are tokens, the only removable cards
     assert card in table.battlefield.cards
     assert table.positions["tok1"] == BoardPos(5.0, 6.0)
     table.validate()
@@ -737,6 +855,75 @@ def test_remove_card_rejects_an_opponents_card():
 def test_remove_card_rejects_an_unknown_id():
     table = TableState.empty_two_seat()
     assert apply_intent(table, PlayerId.P1, RemoveCard("ghost")) == []
+
+
+def test_remove_card_rejects_a_real_non_token_card():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")  # a real card, not a spawned token
+    _on_battlefield(table, card)
+
+    assert apply_intent(table, PlayerId.P1, RemoveCard("f1")) == []
+    assert "f1" in table.cards_by_id  # a real card is never destroyed outright
+    assert table.seq == 0
+
+
+def test_raise_brings_a_battlefield_card_to_the_top_of_the_stack():
+    table = TableState.empty_two_seat()
+    bottom, middle, top = _fate("b"), _fate("m"), _fate("t")
+    for card in (bottom, middle, top):
+        _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, Raise("b"))
+
+    # The raised card moves to the end of the list (rendered last = on top); others keep order.
+    assert [c.id for c in table.battlefield.cards] == ["m", "t", "b"]
+    assert events[0].cards == ("b",) and table.seq == 1
+
+
+def test_raise_a_card_already_on_top_is_a_no_op():
+    table = TableState.empty_two_seat()
+    a, b = _fate("a"), _fate("b")
+    _on_battlefield(table, a)
+    _on_battlefield(table, b)
+
+    events = apply_intent(table, PlayerId.P1, Raise("b"))  # b is already last
+
+    assert events == [] and table.seq == 0
+
+
+def test_raise_rejects_opponents_card():
+    table = TableState.empty_two_seat()
+    mine = _fate("f1")
+    theirs = _fate("f2", owner=PlayerId.P2)
+    _on_battlefield(table, mine)
+    _on_battlefield(table, theirs)
+
+    assert apply_intent(table, PlayerId.P1, Raise("f2")) == []
+    assert [c.id for c in table.battlefield.cards] == ["f1", "f2"]  # unchanged
+
+
+def test_set_card_pos_raises_the_moved_card_to_the_top():
+    table = TableState.empty_two_seat()
+    a, b = _fate("a"), _fate("b")
+    _on_battlefield(table, a, BoardPos(1.0, 1.0))
+    _on_battlefield(table, b, BoardPos(2.0, 2.0))
+
+    apply_intent(table, PlayerId.P1, SetCardPos("a", 9.0, 9.0))
+
+    assert [c.id for c in table.battlefield.cards] == ["b", "a"]
+
+
+def test_moving_a_card_onto_the_battlefield_puts_it_on_top():
+    table = TableState.empty_two_seat()
+    sitting = _fate("sitting")
+    _on_battlefield(table, sitting)
+    coming = _fate("coming")
+    table.cards_by_id["coming"] = coming
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(coming)
+
+    apply_intent(table, PlayerId.P1, MoveCard("coming", BATTLEFIELD, BoardPos(5.0, 5.0)))
+
+    assert [c.id for c in table.battlefield.cards] == ["sitting", "coming"]
 
 
 def test_table_invariants_hold_after_a_sequence_of_intents():

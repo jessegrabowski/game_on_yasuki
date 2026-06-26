@@ -16,8 +16,6 @@ _FLAG_VERB = {
     IntentOp.FLIP: "flipped",
     IntentOp.FLIP_FACE: "turned over",
     IntentOp.INVERT: "inverted",
-    IntentOp.REVEAL: "revealed",
-    IntentOp.HIDE: "hid",
 }
 
 _ZONE_DEST = {
@@ -45,6 +43,12 @@ def _card_segments(state: TableState, card_ids: tuple[str, ...]) -> list[dict]:
             segments.append({"text": ", "})
         segments.append(_card_segment(state, card_id))
     return segments
+
+
+def _side_word(state: TableState, card_id: str) -> str:
+    """The card's side as a lowercase word ("fate"/"dynasty") for a generic, non-leaking reference."""
+    card = state.cards_by_id.get(card_id)
+    return card.side.value.lower() if card is not None else "card"
 
 
 def _deck_desc(deck: DeckKey) -> str:
@@ -78,7 +82,8 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
         The event it produced, whose ``cards`` name the affected cards.
     """
     op = intent.op
-    if op is IntentOp.SET_CARD_POS:
+    # Cosmetic-only ops (free repositioning, stacking-order raise) are not surfaced in the log.
+    if op in (IntentOp.SET_CARD_POS, IntentOp.RAISE):
         return []
 
     lead = {"text": f"{actor} "}
@@ -87,14 +92,34 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
         return [lead, {"text": f"{_FLAG_VERB[op]} "}, *_card_segments(state, event.cards)]
 
     match op:
-        case IntentOp.MOVE_CARD:
-            card_id = event.cards[0] if event.cards else intent.card_id
+        case IntentOp.MOVE_CARD | IntentOp.MOVE_DECK_TOP:
+            card_id = event.cards[0] if event.cards else getattr(intent, "card_id", "")
+            if isinstance(intent.to, DeckKey):
+                where = "bottom" if getattr(intent, "to_bottom", False) else "top"
+                return [
+                    lead,
+                    {"text": "put "},
+                    _card_segment(state, card_id),
+                    {"text": f" on the {where} of {_deck_desc(intent.to)}"},
+                ]
             return [
                 lead,
                 {"text": "moved "},
                 _card_segment(state, card_id),
                 {"text": f" to {_dest_desc(intent.to)}"},
             ]
+        case IntentOp.SHOW:
+            # Named only when the card is public to ALL seats after the show (a fate card from hand);
+            # a shown face-down card stays hidden from its owner, so it must read generically.
+            if card_identity_public(state, intent.card_id):
+                return [lead, {"text": "shows "}, _card_segment(state, intent.card_id)]
+            return [lead, {"text": f"shows a {_side_word(state, intent.card_id)} card"}]
+        case IntentOp.UNSHOW:
+            return [lead, {"text": f"stops showing a {_side_word(state, intent.card_id)} card"}]
+        case IntentOp.PEEK:
+            return [lead, {"text": f"peeks at a {_side_word(state, intent.card_id)} card"}]
+        case IntentOp.UNPEEK:
+            return [lead, {"text": f"stops peeking at a {_side_word(state, intent.card_id)} card"}]
         case IntentOp.DRAW:
             return [lead, {"text": "drew a card"}]
         case IntentOp.SHUFFLE:
@@ -102,6 +127,11 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
         case IntentOp.FLIP_DECK_TOP:
             return [lead, {"text": f"flipped the top of {_deck_desc(intent.deck)}"}]
         case IntentOp.SEARCH_DECK:
+            if intent.limit is not None and intent.limit > 0:
+                return [
+                    lead,
+                    {"text": f"searched the top {intent.limit} cards of {_deck_desc(intent.deck)}"},
+                ]
             return [lead, {"text": f"searched {_deck_desc(intent.deck)}"}]
         case IntentOp.FILL_PROVINCE:
             return [lead, {"text": "filled a province"}]

@@ -84,6 +84,36 @@ def test_load_deck_from_an_unseated_socket_is_a_noop(room):
     assert room.pending_decks == {}
 
 
+def test_loading_a_deck_announces_it_with_its_name(room):
+    ws = _seat(room)
+    asyncio.run(room.handle_load_deck(ws, DECK_YAML))
+
+    log = ws.sent[-1]
+    assert log["type"] == "LOG"
+    assert log["parts"] == [{"text": "Ada loaded "}, {"text": "Crab Beats"}]
+
+
+def test_a_nameless_deck_announces_the_client_filename(room):
+    ws = _seat(room)
+    asyncio.run(room.handle_load_deck(ws, "Fate:\n  - Ambush\n", filename="crab-beats.yaml"))
+
+    assert ws.sent[-1]["parts"] == [{"text": "Ada loaded "}, {"text": "crab-beats.yaml"}]
+
+
+def test_a_nameless_deck_with_no_filename_falls_back_to_a_generic_label(room):
+    ws = _seat(room)
+    asyncio.run(room.handle_load_deck(ws, "Fate:\n  - Ambush\n"))
+
+    assert ws.sent[-1]["parts"] == [{"text": "Ada loaded "}, {"text": "a deck"}]
+
+
+def test_a_rejected_deck_is_not_announced(room):
+    ws = _seat(room)
+    asyncio.run(room.handle_load_deck(ws, "not a decklist at all"))
+
+    assert all(m["type"] != "LOG" or "loaded" not in m["parts"][0].get("text", "") for m in ws.sent)
+
+
 def test_each_seat_stashes_its_own_deck(room):
     ada = _seat(room, "Ada")
     kenji = _seat(room, "Kenji")
