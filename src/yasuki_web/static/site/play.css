@@ -373,6 +373,20 @@
   pointer-events: none;
 }
 
+/* Disclosure cues, shared by battlefield and zone cards. A shown card is public-facing: a gold frame,
+   read as "info revealed", kept distinct from the cyan selection ring. A peeked card is one this
+   viewer alone sees, through their own private peek: drawn face up but dimmed to read as provisional. */
+.board-card.shown,
+.zone-card.shown {
+  outline: 2px solid var(--r-gold);
+  outline-offset: -2px;
+}
+
+.board-card.peeked,
+.zone-card.peeked {
+  opacity: 0.5;
+}
+
 /* The drag-to-select rubber band, drawn in battlefield-local coordinates. */
 .marquee {
   position: absolute;
@@ -415,21 +429,6 @@
 
 .board-menu li.menu-sep:hover {
   background: none;
-}
-
-.room-status {
-  position: absolute;
-  left: 1.6rem;
-  bottom: 1.6rem;
-  margin: 0;
-  font-size: 0.85rem;
-  font-style: italic;
-  color: var(--r-ink-dim);
-  pointer-events: none;
-}
-
-.room-status:empty {
-  display: none;
 }
 
 /* ── Table layout: seat bars (avatar + honor + hand) frame the battlefield; each seat's decks,
@@ -595,6 +594,9 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Drop out of hit-testing so grabbing a face-down deck top starts our pointer-drag (MOVE_DECK_TOP)
+     instead of the browser's native image drag, which would hijack it. Mirrors .zone-card img. */
+  pointer-events: none;
 }
 
 .province {

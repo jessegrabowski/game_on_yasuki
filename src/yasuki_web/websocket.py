@@ -38,7 +38,7 @@ from yasuki_core.engine.table import (
 )
 from yasuki_core.engine.action_log import ActionLog, InitialRecord, ChatEntry, apply_and_log
 from yasuki_core.engine.redaction import redact
-from yasuki_core.engine.setup import setup_seat
+from yasuki_core.engine.setup import setup_seat, flip_second_player_stronghold
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import resolve_decklist
 from yasuki_core.decklist import parse_deck_yaml
@@ -51,6 +51,21 @@ connections: dict[str, set[WebSocket]] = {}
 ip_connections: dict[str, int] = {}
 MAX_CONNECTIONS_PER_IP = 5
 HISTORY_LIMIT = 200
+
+# parse_deck_yaml's placeholder when the export carries no `name:` line; treated as "unnamed" so the
+# client-supplied filename can stand in.
+_DEFAULT_DECK_NAME = "Imported Deck"
+# Final fallback label when a deck has neither a name nor a client filename.
+_UNNAMED_DECK_LABEL = "a deck"
+
+
+def _deck_display_name(parsed: dict, filename: str | None) -> str:
+    """Pick the label for a loaded deck: the parsed deck name, else the client filename, else a
+    generic fallback."""
+    name = (parsed.get("name") or "").strip()
+    if name and name != _DEFAULT_DECK_NAME:
+        return name
+    return (filename or "").strip() or _UNNAMED_DECK_LABEL
 
 
 class GameRoom:
@@ -168,10 +183,14 @@ class GameRoom:
         deck = self.state.decks.get(intent.deck)
         if deck is None:
             return
+        # A bounded search reveals only the top N cards (stored top-last), not the whole deck.
+        cards = deck.cards
+        if intent.limit is not None and intent.limit > 0:
+            cards = cards[-intent.limit :]
         message = ServerDeckContents(
             room=self.room_id,
             deck={"owner": intent.deck.owner.name, "side": intent.deck.side.value},
-            cards=serialize_deck_cards(deck.cards),
+            cards=serialize_deck_cards(cards),
         )
         await ws.send_json(message.model_dump())
 
@@ -205,10 +224,10 @@ class GameRoom:
             await self.broadcast_snapshots()
             await self._log_intent(seat, intent, events[0])
 
-    async def handle_load_deck(self, ws: WebSocket, yaml_text: str):
-        """Parse a deck-builder export YAML for the acting seat and stash its dynasty/fate/pre-game
-        name lists for setup. A decklist that yields no recognizable cards is rejected with `ERROR`
-        and nothing is stashed."""
+    async def handle_load_deck(self, ws: WebSocket, yaml_text: str, filename: str | None = None):
+        """Parse a deck-builder export YAML for the acting seat, stash its dynasty/fate/pre-game
+        name lists for setup, and announce the load. A decklist that yields no recognizable cards
+        is rejected with `ERROR` and nothing is stashed."""
         seat = self.seats.get(ws)
         if seat is None:
             return
@@ -221,6 +240,8 @@ class GameRoom:
             )
             return
         self.pending_decks[seat] = parsed
+        deck_name = _deck_display_name(parsed, filename)
+        await self.log([{"text": f"{self.players[ws]} loaded "}, {"text": deck_name}])
 
     async def handle_ready(self, ws: WebSocket, ready: bool, solo: bool = False):
         """Set the acting seat's ready flag and deal the opening table once everyone seated is ready.
@@ -294,6 +315,12 @@ class GameRoom:
                 dynasty_seed=random.getrandbits(31),
                 fate_seed=random.getrandbits(31),
             )
+        # In a two-player game the lower-honor seat goes second, its stronghold flipped to its back
+        # face (when it has one). A goldfish/solo table (one seat) and an honor tie leave both
+        # fronts.
+        seats = tuple(self.pending_decks)
+        if len(seats) == 2:
+            flip_second_player_stronghold(self.state, seats)
         self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
 
     async def broadcast_snapshots(self):
@@ -489,7 +516,9 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
 
             elif message.type == "LOAD_DECK":
                 if message.load_deck is not None:
-                    await game_room.handle_load_deck(websocket, message.load_deck.yaml)
+                    await game_room.handle_load_deck(
+                        websocket, message.load_deck.yaml, message.load_deck.filename
+                    )
 
             elif message.type == "READY":
                 if message.ready is not None:

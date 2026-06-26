@@ -14,6 +14,10 @@ import {
   moveIntent,
   flipIntent,
   bowIntent,
+  showIntent,
+  unshowIntent,
+  peekIntent,
+  unpeekIntent,
   drawIntent,
   honorIntent,
   initBoardInteractions,
@@ -43,6 +47,9 @@ function fakeCard(
     faceUp = true,
     hidden = false,
     doubleFaced = false,
+    token = false,
+    shown = false,
+    peeked = false,
     province = null,
   } = {},
 ) {
@@ -54,6 +61,9 @@ function fakeCard(
     owner,
     faceUp: faceUp ? '1' : '',
     hidden: hidden ? '1' : '',
+    token: token ? '1' : '',
+    shown: shown ? '1' : '',
+    peeked: peeked ? '1' : '',
   };
   if (doubleFaced) dataset.doubleFaced = '1';
   return {
@@ -107,6 +117,24 @@ const offCard = (overrides = {}) => ({
   preventDefault() {},
   ...overrides,
 });
+
+// A pointer-down on a deck pile: `attrs` is the deck tile's dataset (owner + side). The pile shows a
+// hidden back, so it resolves as a [data-zone="deck"] with no [data-card-id] beneath the pointer.
+function onDeck(attrs, overrides = {}) {
+  const el = {
+    dataset: attrs,
+    style: {},
+    classList: { add() {}, remove() {} },
+    getBoundingClientRect: () => ({ left: 0, top: 0 }),
+  };
+  return {
+    button: 0,
+    clientX: 30,
+    clientY: 50,
+    target: { closest: (sel) => (sel === '[data-zone="deck"]' ? el : null) },
+    ...overrides,
+  };
+}
 
 // The menu mounts on the board stage (the root), not the battlefield, so it floats above the hand.
 const activeMenu = (stage) => stage.children.find((c) => c.className === 'board-menu');
@@ -193,6 +221,29 @@ describe('renderBoard', () => {
     renderBoard(board, [card({ bowed: true })], '/images');
     assert.ok(board.children[0].classList.contains('bowed'));
     assert.equal(board.children[0].dataset.bowed, '1');
+  });
+
+  it('tags a token card so the menu can gate Remove on it, and a real card as non-token', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'tok', token: true }), card({ id: 'real' })], '/images');
+    assert.equal(board.children[0].dataset.token, '1');
+    assert.equal(board.children[1].dataset.token, '');
+  });
+
+  it('tags and classes a shown card so the public indicator and menu can read it', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ shown: true })], '/images');
+    assert.ok(board.children[0].classList.contains('shown'));
+    assert.equal(board.children[0].dataset.shown, '1');
+    assert.equal(board.children[0].dataset.peeked, '');
+  });
+
+  it('tags and classes a peeked card so the private-peek cue and menu can read it', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ peeked: true })], '/images');
+    assert.ok(board.children[0].classList.contains('peeked'));
+    assert.equal(board.children[0].dataset.peeked, '1');
+    assert.equal(board.children[0].dataset.shown, '');
   });
 
   it('marks inverted cards', () => {
@@ -406,6 +457,13 @@ describe('message builders', () => {
     assert.equal(bowIntent('c1', true).intent.op, 'UNBOW');
   });
 
+  it('builds single-card SHOW/UNSHOW/PEEK/UNPEEK intents', () => {
+    assert.deepEqual(showIntent('c1'), { type: 'INTENT', intent: { op: 'SHOW', card_id: 'c1' } });
+    assert.deepEqual(unshowIntent('c1'), { type: 'INTENT', intent: { op: 'UNSHOW', card_id: 'c1' } });
+    assert.deepEqual(peekIntent('c1'), { type: 'INTENT', intent: { op: 'PEEK', card_id: 'c1' } });
+    assert.deepEqual(unpeekIntent('c1'), { type: 'INTENT', intent: { op: 'UNPEEK', card_id: 'c1' } });
+  });
+
   it('builds a DRAW intent for a seat deck', () => {
     assert.deepEqual(drawIntent('P1', 'FATE'), {
       type: 'INTENT',
@@ -592,6 +650,7 @@ describe('initBoardInteractions — dragging', () => {
 
   it('repositions on a drop onto the battlefield, then ends the drag', () => {
     root._emit('pointerdown', onCard(fakeCard('c1', { onBattlefield: true })));
+    root._emit('pointermove', { clientX: 70, clientY: 80 });
     root._emit('pointerup', onZone({ zone: 'battlefield' }));
     assert.equal(sent.at(-1).intent.op, 'SET_CARD_POS');
 
@@ -637,6 +696,96 @@ describe('initBoardInteractions — dragging', () => {
   });
 });
 
+describe('initBoardInteractions — deck top, ownership, raise', () => {
+  let root;
+  let board;
+  let sent;
+
+  beforeEach(() => {
+    root = document.getElementById('boardStage');
+    root.dataset.viewerSeat = 'P1';
+    board = document.getElementById('battlefield');
+    sent = [];
+    initBoardInteractions(root, board, (message) => sent.push(message));
+  });
+
+  it('drags a deck top onto the battlefield as a MOVE_DECK_TOP with a position', () => {
+    root._emit('pointerdown', onDeck({ owner: 'P1', side: 'FATE' }));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    const move = sent.at(-1).intent;
+    assert.equal(move.op, 'MOVE_DECK_TOP');
+    assert.deepEqual(move.deck, { owner: 'P1', side: 'FATE' });
+    assert.deepEqual(move.to, { kind: 'battlefield' });
+    assert.ok(Array.isArray(move.position));
+  });
+
+  it('drops a deck top onto another zone as a MOVE_DECK_TOP with no position', () => {
+    root._emit('pointerdown', onDeck({ owner: 'P1', side: 'DYNASTY' }));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    root._emit('pointerup', onZone({ zone: 'discard', owner: 'P1', role: 'dynasty_discard' }));
+    assert.deepEqual(sent.at(-1), {
+      type: 'INTENT',
+      intent: {
+        op: 'MOVE_DECK_TOP',
+        deck: { owner: 'P1', side: 'DYNASTY' },
+        to: { kind: 'zone', zone: { owner: 'P1', role: 'dynasty_discard', idx: null } },
+        position: null,
+      },
+    });
+  });
+
+  it('does not let a player drag the opponent deck top', () => {
+    root._emit('pointerdown', onDeck({ owner: 'P2', side: 'FATE' }));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.equal(sent.length, 0);
+  });
+
+  it('does not start a drag — and so sends nothing — for an opponent card', () => {
+    root._emit('pointerdown', onCard(fakeCard('c1', { onBattlefield: true, owner: 'P2' })));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.equal(sent.length, 0);
+  });
+
+  it('still moves a neutral (ownerless) card', () => {
+    root._emit('pointerdown', onCard(fakeCard('tok', { onBattlefield: true, owner: '' })));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.equal(sent.at(-1).intent.op, 'SET_CARD_POS');
+  });
+
+  it('raises an owned card on a select-without-move when it is not already topmost', () => {
+    const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1' });
+    const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1' });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2] : []);
+    root._emit('pointerdown', onCard(c1)); // c1 is below c2 in z-order
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.deepEqual(sent, [{ type: 'INTENT', intent: { op: 'RAISE', card_id: 'c1' } }]);
+  });
+
+  it('does not raise a select on the already-topmost card', () => {
+    const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1' });
+    const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1' });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2] : []);
+    root._emit('pointerdown', onCard(c2)); // c2 is topmost
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.equal(sent.length, 0);
+  });
+
+  it('raises via SET_CARD_POS on a real drag, not a separate RAISE', () => {
+    const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1' });
+    const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1' });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2] : []);
+    root._emit('pointerdown', onCard(c1));
+    root._emit('pointermove', { clientX: 90, clientY: 90 });
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.ok(sent.every((m) => m.intent.op !== 'RAISE'), 'a drag does not emit RAISE');
+    assert.equal(sent.at(-1).intent.op, 'SET_CARD_POS');
+  });
+});
+
 // Position a fake battlefield card by its inline style, as renderBoard does, so the marquee and
 // group-drag maths can read it back.
 function placedCard(id, x, y) {
@@ -654,6 +803,7 @@ describe('initBoardInteractions — selection', () => {
 
   beforeEach(() => {
     root = document.getElementById('boardStage');
+    root.dataset.viewerSeat = 'P1';
     board = document.getElementById('battlefield');
     sent = [];
     interactions = initBoardInteractions(root, board, (message) => sent.push(message));
@@ -700,8 +850,8 @@ describe('initBoardInteractions — selection', () => {
   });
 
   // Build a two-card selection (click c1, Ctrl-click c2) and return the elements. Per-card overrides
-  // (e.g. a side) let a test exercise the mixed-selection routing. Its pointer-up drops each emit a
-  // SET_CARD_POS, so a test that asserts on a later menu action should clear `sent` first.
+  // (e.g. a side) let a test exercise the mixed-selection routing. The selecting clicks emit a RAISE
+  // for the owned non-topmost card, so a test that asserts on a later menu action should clear `sent`.
   const selectTwo = (opts1 = {}, opts2 = {}) => {
     const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1', ...opts1 });
     const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1', ...opts2 });
@@ -772,7 +922,7 @@ describe('initBoardInteractions — selection', () => {
   });
 
   it('removes every selected card from a group "Remove"', () => {
-    const [c1] = selectTwo();
+    const [c1] = selectTwo({ token: true }, { token: true });
     sent.length = 0;
     root._emit('contextmenu', rightClick({ card: c1 }));
     clickMenuItem(root, 'Remove');
@@ -856,16 +1006,26 @@ describe('initBoardInteractions — context menu', () => {
     root._emit('contextmenu', event);
 
     assert.equal(event.defaultPrevented, true);
+    // A face-up own card: it offers "Show opponent" (not yet shown), no Peek (already visible), and
+    // there is no "Remove" (only tokens remove).
     assert.deepEqual(menuLabels(root), [
       'Flip',
       'Bow',
       'Invert',
+      'Show opponent',
       'Send to Hand',
       'Send to Discard',
       'Send to Deck (top)',
       'Send to Deck (bottom)',
-      'Remove',
     ]);
+  });
+
+  it('offers "Stop showing" on an already-shown own card', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1', shown: true }) }));
+    const labels = menuLabels(root);
+    assert.ok(labels.includes('Stop showing') && !labels.includes('Show opponent'));
+    clickMenuItem(root, 'Stop showing');
+    assert.deepEqual(sent[0].intent, { op: 'UNSHOW', card_id: 'c1' });
   });
 
   it('opens a hand card menu mounted on the stage, not the clipped battlefield', () => {
@@ -880,17 +1040,39 @@ describe('initBoardInteractions — context menu', () => {
     assert.ok(menuLabels(root).includes('Flip'));
   });
 
-  it('offers reveal/hide on a face-down card and omits the bow toggle in a province', () => {
+  it('offers Show opponent and Peek on an own face-down card and omits the bow toggle in a province', () => {
     const province = { dataset: { zone: 'province', owner: 'P1', idx: '0' } };
     const card = fakeCard('c1', { side: 'DYNASTY', owner: 'P1', faceUp: false, province });
     // Right-clicking the province card resolves both the card and its province ancestor.
     root._emit('contextmenu', rightClick({ zone: province.dataset, card }));
 
     const labels = menuLabels(root);
-    assert.ok(labels.includes('Reveal') && labels.includes('Hide'));
+    // Own card: it can be shown to the opponent; face-down to the viewer, it can also be peeked.
+    assert.ok(labels.includes('Show opponent') && !labels.includes('Stop showing'));
+    assert.ok(labels.includes('Peek') && !labels.includes('Stop peeking'), 'face-down offers Peek');
     assert.ok(!labels.includes('Bow') && !labels.includes('Unbow'), 'no bow toggle in a province');
     // The province lifecycle ops are appended after the card menu.
     assert.deepEqual(labels.slice(-3), ['Fill', 'Discard', 'Destroy']);
+  });
+
+  it('peeks an opponent card cross-owner: no Show, but Peek is offered and sends one id', () => {
+    // A hidden opponent card: the viewer does not own it, so no show, but anyone may peek it.
+    const card = fakeCard('c1', { side: 'DYNASTY', owner: 'P2', hidden: true });
+    root._emit('contextmenu', rightClick({ card }));
+    const labels = menuLabels(root);
+    assert.ok(!labels.includes('Show opponent') && !labels.includes('Stop showing'));
+    assert.ok(labels.includes('Peek'));
+    clickMenuItem(root, 'Peek');
+    assert.deepEqual(sent[0].intent, { op: 'PEEK', card_id: 'c1' });
+  });
+
+  it('offers "Stop peeking" on a card the viewer is peeking, sending UNPEEK', () => {
+    const card = fakeCard('c1', { side: 'DYNASTY', owner: 'P2', faceUp: false, peeked: true });
+    root._emit('contextmenu', rightClick({ card }));
+    const labels = menuLabels(root);
+    assert.ok(labels.includes('Stop peeking') && !labels.includes('Peek'));
+    clickMenuItem(root, 'Stop peeking');
+    assert.deepEqual(sent[0].intent, { op: 'UNPEEK', card_id: 'c1' });
   });
 
   it('flips a double-faced card to its other face (FLIP_FACE), with no separate Turn Over', () => {
@@ -907,10 +1089,11 @@ describe('initBoardInteractions — context menu', () => {
     assert.deepEqual(sent[0].intent, { op: 'FLIP', card_ids: ['c1'] });
   });
 
-  it('omits the Send-to group on an opponent card', () => {
+  it('omits the Send-to group, show, and peek on a visible opponent (non-token) card', () => {
+    // A face-up opponent card: not owned (no show), already visible (no peek), not a token (no remove).
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P2' }) }));
     const labels = menuLabels(root);
-    assert.deepEqual(labels, ['Flip', 'Bow', 'Invert', 'Remove']);
+    assert.deepEqual(labels, ['Flip', 'Bow', 'Invert']);
   });
 
   it('sends MOVE_CARD to the bottom of the deck from "Send to Deck (bottom)"', () => {
@@ -956,8 +1139,7 @@ describe('initBoardInteractions — context menu', () => {
     overlay.children[0].children[2]._emit('click', {}); // "Whole deck"
     assert.deepEqual(sent[0], {
       type: 'INTENT',
-      intent: { op: 'SEARCH_DECK', deck: { owner: 'P1', side: 'FATE' } },
-      limit: null,
+      intent: { op: 'SEARCH_DECK', deck: { owner: 'P1', side: 'FATE' }, value: null },
     });
   });
 
@@ -969,8 +1151,7 @@ describe('initBoardInteractions — context menu', () => {
     input._emit('keydown', { key: 'Enter' });
     assert.deepEqual(sent[0], {
       type: 'INTENT',
-      intent: { op: 'SEARCH_DECK', deck: { owner: 'P1', side: 'FATE' } },
-      limit: 5,
+      intent: { op: 'SEARCH_DECK', deck: { owner: 'P1', side: 'FATE' }, value: 5 },
     });
   });
 
@@ -1006,12 +1187,19 @@ describe('initBoardInteractions — context menu', () => {
     assert.equal(event._p, undefined);
   });
 
-  it('sends a REMOVE message and closes the menu on item click', () => {
-    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
+  it('sends a REMOVE message and closes the menu on a token item click', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1', token: true }) }));
     clickMenuItem(root, 'Remove');
 
     assert.deepEqual(sent, [{ type: 'REMOVE', remove: { id: 'c1' } }]);
     assert.equal(activeMenu(root), undefined, 'menu is removed after a selection');
+  });
+
+  it('offers Remove only on a token, never on a real card', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('real', { owner: 'P1' }) }));
+    assert.ok(!menuLabels(root).includes('Remove'), 'a real card cannot be removed');
+    root._emit('contextmenu', rightClick({ card: fakeCard('tok', { owner: 'P1', token: true }) }));
+    assert.ok(menuLabels(root).includes('Remove'), 'a token can be removed');
   });
 
   it('sends UNBOW for a card that is already bowed', () => {

@@ -45,8 +45,10 @@ def _stock_deck(room, seat, side, card_ids):
     return deck
 
 
-def _search(owner, side):
-    return IntentEnvelope(op=IntentOp.SEARCH_DECK, deck={"owner": owner, "side": side.value})
+def _search(owner, side, value=None):
+    return IntentEnvelope(
+        op=IntentOp.SEARCH_DECK, deck={"owner": owner, "side": side.value}, value=value
+    )
 
 
 def test_owner_search_delivers_ordered_deck_to_actor_only(room):
@@ -66,6 +68,18 @@ def test_owner_search_delivers_ordered_deck_to_actor_only(room):
     assert msg["cards"][0]["name"] == "Card t3"
     # The opponent receives the normal snapshot/log but never the deck order.
     assert all(m["type"] != "DECK_CONTENTS" for m in kenji.sent)
+
+
+def test_bounded_search_delivers_only_the_top_n_cards(room):
+    ada, _ = _seat_two(room)
+    _stock_deck(room, PlayerId.P1, Side.FATE, ["b1", "m2", "t3"])  # t3 is the top
+    ada.sent.clear()
+
+    asyncio.run(room.handle_intent(ada, _search("P1", Side.FATE, value=2)))
+
+    msg = next(m for m in ada.sent if m["type"] == "DECK_CONTENTS")
+    # Only the top two cards are revealed, top-first.
+    assert [card["id"] for card in msg["cards"]] == ["t3", "m2"]
 
 
 def test_non_owner_search_receives_no_contents(room):

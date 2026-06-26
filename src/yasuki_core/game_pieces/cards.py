@@ -20,13 +20,21 @@ class L5RCard:
     image_front: Path | None = None
     image_back: Path | None = None
     owner: PlayerId | None = None
-    revealed: bool = False
+    # Two distinct disclosures, both narrower than turning the card face up. ``shown`` marks a card the
+    # owner has revealed to their opponent: a face-down card the opponent may then identify while its
+    # owner still sees a back, or a hand card made public to all. ``peekers`` holds the seats privately
+    # peeking at the card — each may identify it, nobody else learns what they saw.
+    shown: bool = False
+    peekers: frozenset[PlayerId] = frozenset()
     # Double-faced cards (e.g. flip strongholds): back_card_id links the other face, back holds it as
     # a resolved card when available, and showing_back selects which face is presented. Distinct from
     # face_up, which conceals a card behind its generic deck back.
     back_card_id: str | None = None
     back: "L5RCard | None" = None
     showing_back: bool = False
+    # A sandbox piece spawned onto the table (SpawnCard), not a card drawn from a deck. Only tokens
+    # may be removed from the table; a real card is never destroyed outright.
+    is_token: bool = False
 
     def __post_init__(self):
         # Normalize collections to tuples for consistent immutability
@@ -34,6 +42,8 @@ class L5RCard:
             object.__setattr__(self, "keywords", tuple(self.keywords))
         if not isinstance(self.traits, tuple):
             object.__setattr__(self, "traits", tuple(self.traits))
+        if not isinstance(self.peekers, frozenset):
+            object.__setattr__(self, "peekers", frozenset(self.peekers))
 
     # State transitions
     def bow(self) -> None:
@@ -63,13 +73,21 @@ class L5RCard:
         if self.inverted:
             object.__setattr__(self, "inverted", False)
 
-    def reveal(self) -> None:
-        if not self.revealed:
-            object.__setattr__(self, "revealed", True)
+    def show(self) -> None:
+        if not self.shown:
+            object.__setattr__(self, "shown", True)
 
-    def hide(self) -> None:
-        if self.revealed:
-            object.__setattr__(self, "revealed", False)
+    def unshow(self) -> None:
+        if self.shown:
+            object.__setattr__(self, "shown", False)
+
+    def add_peeker(self, seat: PlayerId) -> None:
+        if seat not in self.peekers:
+            object.__setattr__(self, "peekers", self.peekers | {seat})
+
+    def remove_peeker(self, seat: PlayerId) -> None:
+        if seat in self.peekers:
+            object.__setattr__(self, "peekers", self.peekers - {seat})
 
     def flip_face(self) -> None:
         if self.back_card_id is not None:

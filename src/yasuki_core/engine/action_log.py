@@ -17,15 +17,19 @@ from yasuki_core.engine.table import (
     IntentOp,
     Intent,
     MoveCard,
+    MoveDeckTop,
     SetCardPos,
+    Raise,
     CardFlagIntent,
     Bow,
     Unbow,
     Flip,
     FlipFace,
     Invert,
-    Reveal,
-    Hide,
+    Show,
+    Unshow,
+    Peek,
+    Unpeek,
     Draw,
     Shuffle,
     FlipDeckTop,
@@ -315,8 +319,14 @@ _FLAG_CLASSES: dict[IntentOp, type[CardFlagIntent]] = {
     IntentOp.FLIP: Flip,
     IntentOp.FLIP_FACE: FlipFace,
     IntentOp.INVERT: Invert,
-    IntentOp.REVEAL: Reveal,
-    IntentOp.HIDE: Hide,
+}
+
+# Single-card intents whose only payload is the target card id.
+_CARD_ID_CLASSES: dict[IntentOp, type] = {
+    IntentOp.SHOW: Show,
+    IntentOp.UNSHOW: Unshow,
+    IntentOp.PEEK: Peek,
+    IntentOp.UNPEEK: Unpeek,
 }
 
 
@@ -331,6 +341,8 @@ def _encode_value(value):
         return {"__path__": str(value)}
     if isinstance(value, tuple):
         return {"__tuple__": [_encode_value(item) for item in value]}
+    if isinstance(value, frozenset):
+        return {"__frozenset__": [_encode_value(item) for item in value]}
     if isinstance(value, L5RCard):
         return {"__card__": _encode_card(value)}
     raise TypeError(f"cannot serialize card field of type {type(value).__name__}")
@@ -344,6 +356,8 @@ def _decode_value(value):
             return Path(value["__path__"])
         if "__tuple__" in value:
             return tuple(_decode_value(item) for item in value["__tuple__"])
+        if "__frozenset__" in value:
+            return frozenset(_decode_value(item) for item in value["__frozenset__"])
         if "__card__" in value:
             return _decode_card(value["__card__"])
     return value
@@ -407,20 +421,25 @@ def encode_intent(intent: Intent) -> dict:
                 None if intent.position is None else [intent.position.x, intent.position.y]
             )
             payload["to_bottom"] = intent.to_bottom
+        case IntentOp.MOVE_DECK_TOP:
+            payload["deck"] = _encode_deck_key(intent.deck)
+            payload["to"] = _encode_move_dest(intent.to)
+            payload["position"] = (
+                None if intent.position is None else [intent.position.x, intent.position.y]
+            )
         case IntentOp.SET_CARD_POS:
             payload |= {"card_id": intent.card_id, "x": intent.x, "y": intent.y}
-        case (
-            IntentOp.BOW
-            | IntentOp.UNBOW
-            | IntentOp.FLIP
-            | IntentOp.FLIP_FACE
-            | IntentOp.INVERT
-            | IntentOp.REVEAL
-            | IntentOp.HIDE
-        ):
+        case IntentOp.RAISE:
+            payload["card_id"] = intent.card_id
+        case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
             payload["card_ids"] = list(intent.card_ids)
-        case IntentOp.DRAW | IntentOp.SEARCH_DECK:
+        case IntentOp.SHOW | IntentOp.UNSHOW | IntentOp.PEEK | IntentOp.UNPEEK:
+            payload["card_id"] = intent.card_id
+        case IntentOp.DRAW:
             payload["deck"] = _encode_deck_key(intent.deck)
+        case IntentOp.SEARCH_DECK:
+            payload["deck"] = _encode_deck_key(intent.deck)
+            payload["value"] = intent.limit
         case IntentOp.SHUFFLE:
             payload["deck"] = _encode_deck_key(intent.deck)
             payload["seed"] = intent.seed
@@ -461,22 +480,25 @@ def decode_intent(payload: dict) -> Intent:
                 None if position is None else BoardPos(*position),
                 to_bottom=payload.get("to_bottom", False),
             )
+        case IntentOp.MOVE_DECK_TOP:
+            position = payload.get("position")
+            return MoveDeckTop(
+                _decode_deck_key(payload["deck"]),
+                _decode_move_dest(payload["to"]),
+                None if position is None else BoardPos(*position),
+            )
         case IntentOp.SET_CARD_POS:
             return SetCardPos(payload["card_id"], payload["x"], payload["y"])
-        case (
-            IntentOp.BOW
-            | IntentOp.UNBOW
-            | IntentOp.FLIP
-            | IntentOp.FLIP_FACE
-            | IntentOp.INVERT
-            | IntentOp.REVEAL
-            | IntentOp.HIDE
-        ):
+        case IntentOp.RAISE:
+            return Raise(payload["card_id"])
+        case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
             return _FLAG_CLASSES[op](tuple(payload["card_ids"]))
+        case IntentOp.SHOW | IntentOp.UNSHOW | IntentOp.PEEK | IntentOp.UNPEEK:
+            return _CARD_ID_CLASSES[op](payload["card_id"])
         case IntentOp.DRAW:
             return Draw(_decode_deck_key(payload["deck"]))
         case IntentOp.SEARCH_DECK:
-            return SearchDeck(_decode_deck_key(payload["deck"]))
+            return SearchDeck(_decode_deck_key(payload["deck"]), limit=payload.get("value"))
         case IntentOp.SHUFFLE:
             return Shuffle(_decode_deck_key(payload["deck"]), payload["seed"])
         case IntentOp.FLIP_DECK_TOP:
