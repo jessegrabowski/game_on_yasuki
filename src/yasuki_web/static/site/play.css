@@ -951,7 +951,7 @@
   visibility: hidden;
 }
 
-.deck-dialog-pull {
+.deck-dialog-deal {
   width: 100%;
   padding: 0.4rem;
   font: inherit;
@@ -963,11 +963,11 @@
   transition: border-color 0.12s;
 }
 
-.deck-dialog-pull:hover:not(:disabled) {
+.deck-dialog-deal:hover:not(:disabled) {
   border-color: var(--r-gold);
 }
 
-.deck-dialog-pull:disabled {
+.deck-dialog-deal:disabled {
   opacity: 0.4;
   cursor: default;
 }
