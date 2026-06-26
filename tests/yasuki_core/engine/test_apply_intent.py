@@ -10,6 +10,7 @@ from yasuki_core.engine.table import (
     BATTLEFIELD,
     MoveCard,
     SetCardPos,
+    SetCardPositions,
     Bow,
     Unbow,
     Flip,
@@ -400,6 +401,49 @@ def test_set_card_pos_rejects_opponents_card():
 
     assert events == []
     assert table.positions["f1"] == BoardPos(1.0, 1.0)
+
+
+def test_set_card_positions_moves_a_group_in_one_event():
+    table = TableState.empty_two_seat()
+    _on_battlefield(table, _fate("f1"), BoardPos(0.0, 0.0))
+    _on_battlefield(table, _fate("f2"), BoardPos(0.0, 0.0))
+
+    events = apply_intent(
+        table, PlayerId.P1, SetCardPositions((("f1", 5.0, 6.0), ("f2", 7.0, 8.0)))
+    )
+
+    assert table.positions["f1"] == BoardPos(5.0, 6.0)
+    assert table.positions["f2"] == BoardPos(7.0, 8.0)
+    assert table.seq == 1
+    assert len(events) == 1
+    assert set(events[0].cards) == {"f1", "f2"}
+
+
+def test_set_card_positions_skips_unowned_and_unchanged_members():
+    table = TableState.empty_two_seat()
+    _on_battlefield(table, _fate("mine"), BoardPos(0.0, 0.0))
+    _on_battlefield(table, _fate("stay"), BoardPos(3.0, 3.0))
+    _on_battlefield(table, _fate("theirs", owner=PlayerId.P2), BoardPos(1.0, 1.0))
+
+    events = apply_intent(
+        table,
+        PlayerId.P1,
+        SetCardPositions((("mine", 9.0, 9.0), ("stay", 3.0, 3.0), ("theirs", 4.0, 4.0))),
+    )
+
+    assert table.positions["mine"] == BoardPos(9.0, 9.0)
+    assert table.positions["theirs"] == BoardPos(1.0, 1.0)
+    assert events[0].cards == ("mine",)
+
+
+def test_set_card_positions_no_op_when_nothing_changes():
+    table = TableState.empty_two_seat()
+    _on_battlefield(table, _fate("f1"), BoardPos(2.0, 2.0))
+
+    events = apply_intent(table, PlayerId.P1, SetCardPositions((("f1", 2.0, 2.0),)))
+
+    assert events == []
+    assert table.seq == 0
 
 
 def test_bow_sets_flag_and_bumps_seq():

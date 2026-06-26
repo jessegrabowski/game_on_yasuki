@@ -224,6 +224,9 @@ export const spawnMessage = (spawn) => ({ type: 'SPAWN', spawn });
 export const removeMessage = (id) => ({ type: 'REMOVE', remove: { id } });
 
 export const moveIntent = (id, x, y) => intentMessage({ op: 'SET_CARD_POS', card_id: id, x, y });
+// Reposition a whole group in one message; sending one SET_CARD_POS per member instead would
+// multiply the wire rate by the group size and trip the server's per-connection throttle.
+export const moveGroupIntent = (moves) => intentMessage({ op: 'SET_CARD_POSITIONS', moves });
 // The flag ops apply to a whole batch atomically; each builder takes one id or an array of them.
 export const flipIntent = (ids) => intentMessage({ op: 'FLIP', card_ids: [].concat(ids) });
 // BOW and UNBOW are distinct ops, so the toggle picks whichever one actually changes the card.
@@ -813,13 +816,17 @@ export function initBoardInteractions(root, boardEl, send) {
       const dy = e.clientY - drag.startY;
       const now = Date.now();
       const flush = now - lastSent > DRAG_SEND_MS;
+      const moves = flush ? [] : null;
       for (const member of drag.members) {
         const { x, y } = memberPos(member, dx, dy, rect);
         member.el.style.left = `${x}px`;
         member.el.style.top = `${y}px`;
-        if (flush) send(moveIntent(member.id, x, y));
+        moves?.push({ id: member.id, x, y });
       }
-      if (flush) lastSent = now;
+      if (flush) {
+        send(moveGroupIntent(moves));
+        lastSent = now;
+      }
       return;
     }
     if (drag.deck) {
@@ -904,10 +911,11 @@ export function initBoardInteractions(root, boardEl, send) {
       const rect = battleRect();
       const dx = e.clientX - card.startX;
       const dy = e.clientY - card.startY;
-      for (const member of card.members) {
+      const moves = card.members.map((member) => {
         const { x, y } = memberPos(member, dx, dy, rect);
-        send(moveIntent(member.id, x, y));
-      }
+        return { id: member.id, x, y };
+      });
+      send(moveGroupIntent(moves));
     } else if (zone === 'battlefield' || (!zone && card.onBattlefield)) {
       // A battlefield card only re-sends its position when it actually moved (the raise above covers a
       // pure selection); a card played from elsewhere lands on the board even without a drag.

@@ -83,7 +83,7 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
     """
     op = intent.op
     # Cosmetic-only ops (free repositioning, stacking-order raise) are not surfaced in the log.
-    if op in (IntentOp.SET_CARD_POS, IntentOp.RAISE):
+    if op in (IntentOp.SET_CARD_POS, IntentOp.SET_CARD_POSITIONS, IntentOp.RAISE):
         return []
 
     lead = {"text": f"{actor} "}

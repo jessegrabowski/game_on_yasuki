@@ -177,6 +177,7 @@ class IntentOp(str, Enum):
     MOVE_CARD = "MOVE_CARD"
     MOVE_DECK_TOP = "MOVE_DECK_TOP"
     SET_CARD_POS = "SET_CARD_POS"
+    SET_CARD_POSITIONS = "SET_CARD_POSITIONS"
     RAISE = "RAISE"
     BOW = "BOW"
     UNBOW = "UNBOW"
@@ -252,6 +253,16 @@ class SetCardPos:
     x: float
     y: float
     op: ClassVar[IntentOp] = IntentOp.SET_CARD_POS
+
+
+@dataclass(frozen=True, slots=True)
+class SetCardPositions:
+    """Reposition several battlefield cards in one message, the wire form of a group drag. Each
+    member is gated independently, so cards the seat does not own or that have left the battlefield
+    are skipped rather than failing the whole move."""
+
+    moves: tuple[tuple[str, float, float], ...]
+    op: ClassVar[IntentOp] = IntentOp.SET_CARD_POSITIONS
 
 
 @dataclass(frozen=True, slots=True)
@@ -446,6 +457,7 @@ Intent = (
     MoveCard
     | MoveDeckTop
     | SetCardPos
+    | SetCardPositions
     | Raise
     | Bow
     | Unbow
@@ -645,6 +657,26 @@ def _set_card_pos(state: TableState, seat: PlayerId, intent: SetCardPos) -> list
     _bring_to_top(state, card)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
+
+
+def _set_card_positions(state: TableState, seat: PlayerId, intent: SetCardPositions) -> list[Event]:
+    changed = []
+    for card_id, x, y in intent.moves:
+        card = state.cards_by_id.get(card_id)
+        if card is None or not owns_card(state, seat, card_id):
+            continue
+        if not any(held is card for held in state.battlefield.cards):
+            continue
+        new_pos = BoardPos(x, y)
+        if state.positions.get(card.id) == new_pos:
+            continue
+        state.positions[card.id] = new_pos
+        _bring_to_top(state, card)
+        changed.append(card.id)
+    if not changed:
+        return []
+    state.seq += 1
+    return [Event(state.seq, seat, intent, tuple(changed))]
 
 
 def _raise(state: TableState, seat: PlayerId, intent: Raise) -> list[Event]:
@@ -925,6 +957,7 @@ _HANDLERS = {
     IntentOp.MOVE_CARD: _move_card,
     IntentOp.MOVE_DECK_TOP: _move_deck_top,
     IntentOp.SET_CARD_POS: _set_card_pos,
+    IntentOp.SET_CARD_POSITIONS: _set_card_positions,
     IntentOp.RAISE: _raise,
     IntentOp.BOW: _apply_flag,
     IntentOp.UNBOW: _apply_flag,
