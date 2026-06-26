@@ -476,6 +476,12 @@ const cardInRect = (r, x, y) =>
 // deck-anchored card leaves between itself and its deck, both in pixels.
 const PREGAME_FAN = 20;
 const PREGAME_DECK_GAP = 10;
+// Successive hand cards played by double-click fan across this many slots before wrapping, so a flurry
+// of plays spreads out instead of stacking yet never marches off the board.
+const HAND_PLAY_FAN_SLOTS = 8;
+// Fraction of the board height at which a double-clicked hand card lands — into the viewer's half,
+// high enough above the bottom edge to clear the provinces that line it.
+const HAND_PLAY_ROW = 0.6;
 
 // Battlefield-local top-left next to a seat's `side` deck (FATE or DYNASTY), or null if the tableau is
 // not laid out yet. The cards sit just inboard of the deck — above it for the bottom (viewer) seat,
@@ -711,6 +717,8 @@ export function initBoardInteractions(root, boardEl, send) {
   let lastSent = 0;
   // The element last under the pointer, so a hover-driven hotkey knows which card/deck it targets.
   let hovered = null;
+  // Counts hand cards played by double-click, to fan each across the board instead of stacking them.
+  let handPlays = 0;
   // Selection is keyed by card id so it survives the element churn of each SNAPSHOT re-render.
   const selected = new Set();
   const battleRect = () => boardEl.getBoundingClientRect();
@@ -1020,7 +1028,14 @@ export function initBoardInteractions(root, boardEl, send) {
     const cardEl = e.target?.closest?.('[data-card-id]');
     if (!cardEl || !ownsCard(cardEl)) return;
     const id = cardEl.dataset.cardId;
-    if (isFaceDown(cardEl)) {
+    if (cardEl.closest?.('[data-zone="hand"]')) {
+      // Successive plays fan rightward, like dealing off a deck, so a flurry spreads instead of stacking.
+      const rect = battleRect();
+      const fan = (handPlays++ % HAND_PLAY_FAN_SLOTS) * PREGAME_FAN;
+      const x = clamp(Math.round((rect.width - CARD_W) / 2) + fan, 0, rect.width - CARD_W);
+      const y = Math.round(rect.height * HAND_PLAY_ROW - CARD_H / 2);
+      send(moveCardIntent(id, { kind: 'battlefield' }, [x, y]));
+    } else if (isFaceDown(cardEl)) {
       send(flipIntentFor(cardEl.dataset.doubleFaced === '1', id));
     } else if (!cardEl.closest?.('[data-zone="province"]')) {
       send(bowIntent(id, cardEl.dataset.bowed === '1'));

@@ -1190,6 +1190,37 @@ describe('initBoardInteractions — double-click shortcuts', () => {
     assert.equal(sent.length, 0);
   });
 
+  it('plays a hand card into the viewer half, clear of the provinces, on double-click', () => {
+    const card = fakeCard('h1', { owner: 'P1', onBattlefield: false, inHand: true });
+    root._emit('dblclick', dblClick({ card }));
+    const move = sent.at(-1).intent;
+    assert.equal(move.op, 'MOVE_CARD');
+    assert.deepEqual(move.to, { kind: 'battlefield' });
+    // 200×200 board: centred horizontally, set above the bottom-edge provinces.
+    assert.deepEqual(move.position, [60, 63]);
+  });
+
+  it('fans successive hand plays so they do not land in a perfect stack', () => {
+    const play = (cardId) =>
+      root._emit('dblclick', dblClick({ card: fakeCard(cardId, { owner: 'P1', inHand: true }) }));
+    play('h1');
+    play('h2');
+    play('h3');
+    const xs = sent.map((m) => m.intent.position[0]);
+    assert.deepEqual(xs, [60, 80, 100], 'each play steps one fan slot right');
+  });
+
+  it('keeps fanned plays on the board no matter how many are played', () => {
+    const play = (n) =>
+      root._emit('dblclick', dblClick({ card: fakeCard(`h${n}`, { owner: 'P1', inHand: true }) }));
+    for (let n = 0; n < 15; n++) play(n);
+    const maxX = 200 - 81; // board width − card width (CARD_W) on the 200×200 fixture
+    assert.ok(
+      sent.every((m) => m.intent.position[0] >= 0 && m.intent.position[0] <= maxX),
+      'the fan never runs off the board',
+    );
+  });
+
   it("ignores a double-click on an opponent's card", () => {
     root._emit('dblclick', dblClick({ card: fakeCard('c1', { owner: 'P2', faceUp: true }) }));
     assert.equal(sent.length, 0);
