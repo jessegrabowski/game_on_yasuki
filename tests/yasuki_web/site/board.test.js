@@ -12,6 +12,7 @@ import {
   spawnMessage,
   removeMessage,
   moveIntent,
+  moveGroupIntent,
   flipIntent,
   bowIntent,
   showIntent,
@@ -450,6 +451,17 @@ describe('message builders', () => {
       intent: { op: 'SET_CARD_POS', card_id: 'c1', x: 5, y: 6 },
     });
     assert.deepEqual(flipIntent('c1'), { type: 'INTENT', intent: { op: 'FLIP', card_ids: ['c1'] } });
+  });
+
+  it('wraps a batched SET_CARD_POSITIONS group move', () => {
+    const moves = [
+      { id: 'c1', x: 5, y: 6 },
+      { id: 'c2', x: 7, y: 8 },
+    ];
+    assert.deepEqual(moveGroupIntent(moves), {
+      type: 'INTENT',
+      intent: { op: 'SET_CARD_POSITIONS', moves },
+    });
   });
 
   it('pick BOW or UNBOW from the card current state', () => {
@@ -975,7 +987,7 @@ describe('initBoardInteractions — marquee and group drag', () => {
     assert.ok(!outside.classList.contains('selected'));
   });
 
-  it('moves the whole selection together, fanning out one SET_CARD_POS per card', () => {
+  it('moves the whole selection together in a single batched intent', () => {
     const c1 = placedCard('c1', 0, 0);
     const c2 = placedCard('c2', 50, 0);
     board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2] : []);
@@ -995,10 +1007,12 @@ describe('initBoardInteractions — marquee and group drag', () => {
       Date.now = realNow;
     }
 
-    const moves = sent.filter((m) => m.intent.op === 'SET_CARD_POS');
-    assert.equal(moves.length, 2, 'one position update per selected card');
+    // One message regardless of group size: per-member messages would multiply the wire rate and
+    // trip the server's connection throttle.
+    assert.equal(sent.length, 1, 'a group move is one message, not one per card');
+    assert.equal(sent[0].intent.op, 'SET_CARD_POSITIONS');
     assert.deepEqual(
-      moves.map((m) => m.intent.card_id).sort(),
+      sent[0].intent.moves.map((m) => m.id).sort(),
       ['c1', 'c2'],
     );
   });

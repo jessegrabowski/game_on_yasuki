@@ -27,6 +27,13 @@ class LoadDeckRequest(BaseModel):
     filename: str | None = Field(None, max_length=200)
 
 
+class CardMove(BaseModel):
+    # One card's target battlefield position within a SET_CARD_POSITIONS group move.
+    id: str = Field(max_length=64)
+    x: float
+    y: float
+
+
 class IntentEnvelope(BaseModel):
     """A game intent on the wire: an op plus whichever targets that op needs. The same shape the
     action log persists (see ``encode_intent``); the server maps it to a core ``Intent`` and applies
@@ -37,6 +44,7 @@ class IntentEnvelope(BaseModel):
     op: IntentOp
     card_id: str | None = Field(None, max_length=64)
     card_ids: list[Annotated[str, Field(max_length=64)]] | None = Field(None, max_length=128)
+    moves: list[CardMove] | None = Field(None, max_length=128)
     to: dict | None = None
     to_bottom: bool = False
     position: list[float] | None = Field(None, max_length=2)
@@ -59,6 +67,7 @@ def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
             "op": envelope.op.value,
             "card_id": envelope.card_id,
             "card_ids": envelope.card_ids,
+            "moves": None if envelope.moves is None else [[m.id, m.x, m.y] for m in envelope.moves],
             "to": envelope.to,
             "to_bottom": envelope.to_bottom,
             "position": envelope.position,

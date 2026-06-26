@@ -8,6 +8,7 @@ from yasuki_core.engine.table import (
     IntentOp,
     MoveCard,
     SetCardPos,
+    SetCardPositions,
     Bow,
     Unbow,
     Flip,
@@ -33,6 +34,7 @@ from yasuki_core.game_pieces.constants import Side
     [
         (MoveCard(card_id="d1", to=ZoneKey(PlayerId.P1, ZoneRole.HAND)), IntentOp.MOVE_CARD),
         (SetCardPos(card_id="d1", x=1.0, y=2.0), IntentOp.SET_CARD_POS),
+        (SetCardPositions(moves=(("d1", 1.0, 2.0),)), IntentOp.SET_CARD_POSITIONS),
         (Bow(card_ids=("a",)), IntentOp.BOW),
         (Unbow(card_ids=("a",)), IntentOp.UNBOW),
         (Flip(card_ids=("a",)), IntentOp.FLIP),
