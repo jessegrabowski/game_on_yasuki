@@ -23,7 +23,8 @@ def test_opponent_hand_card_is_a_back_stub_with_no_identity():
 
     hand = _serialized(table, P2)["zones"]["P1:hand"]
 
-    assert hand[0] == {"id": "f1", "side": "FATE", "hidden": True}
+    # The stub carries the public owner (whose card it is) but no identity.
+    assert hand[0] == {"id": "f1", "side": "FATE", "owner": "P1", "hidden": True}
     assert "name" not in hand[0]
 
 

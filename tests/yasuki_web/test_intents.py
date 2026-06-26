@@ -75,7 +75,8 @@ def test_each_seat_receives_its_own_redacted_snapshot(room):
     ada_hand = ada.sent[-1]["snapshot"]["zones"]["P1:hand"][0]
     kenji_hand = kenji.sent[-1]["snapshot"]["zones"]["P1:hand"][0]
     assert ada_hand["name"] == "Secret"  # owner sees their own card
-    assert kenji_hand == {"id": "f1", "side": "FATE", "hidden": True}  # opponent gets a stub
+    # The opponent gets a stub: the public owner, but no identity.
+    assert kenji_hand == {"id": "f1", "side": "FATE", "owner": "P1", "hidden": True}
 
 
 def test_accepted_intent_mutates_logs_and_broadcasts_to_both(room):

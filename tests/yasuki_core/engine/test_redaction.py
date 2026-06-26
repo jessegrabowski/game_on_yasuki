@@ -60,6 +60,13 @@ def test_owner_sees_own_hand_opponent_sees_backs():
     assert _hidden(_view_in_zone(ZoneRole.HAND, card, P2))
 
 
+def test_hidden_stub_carries_its_public_owner():
+    card = _card("f1", owner=P1)
+    stub = _view_in_zone(ZoneRole.HAND, card, P2)
+    assert isinstance(stub, HiddenCard)
+    assert stub.owner == P1
+
+
 def test_revealed_hand_card_is_visible_to_opponent():
     card = _card("f1", owner=P1, revealed=True)
     assert not _hidden(_view_in_zone(ZoneRole.HAND, card, P2))
