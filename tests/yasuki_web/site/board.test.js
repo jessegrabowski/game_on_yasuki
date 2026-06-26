@@ -1004,6 +1004,81 @@ describe('initBoardInteractions — marquee and group drag', () => {
   });
 });
 
+describe('initBoardInteractions — double-click shortcuts', () => {
+  let root;
+  let board;
+  let sent;
+
+  beforeEach(() => {
+    root = document.getElementById('boardStage');
+    root.dataset.viewerSeat = 'P1';
+    board = document.getElementById('battlefield');
+    sent = [];
+    initBoardInteractions(root, board, (message) => sent.push(message));
+  });
+
+  // A double-click event whose target resolves to a deck pile or a card, as the handler reads them.
+  const dblClick = ({ card = null, deck = null } = {}) => ({
+    target: {
+      closest: (sel) => {
+        if (sel === '[data-zone="deck"]') return deck;
+        if (sel === '[data-card-id]') return card;
+        return null;
+      },
+    },
+  });
+  const deckTile = (owner, side) => ({ dataset: { zone: 'deck', owner, side } });
+
+  it('draws the top card when you double-click your own deck', () => {
+    root._emit('dblclick', dblClick({ deck: deckTile('P1', 'FATE') }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'DRAW', deck: { owner: 'P1', side: 'FATE' } });
+  });
+
+  it("ignores a double-click on the opponent's deck", () => {
+    root._emit('dblclick', dblClick({ deck: deckTile('P2', 'FATE') }));
+    assert.equal(sent.length, 0);
+  });
+
+  it('flips a face-down card you own up, in a province too', () => {
+    root._emit('dblclick', dblClick({ card: fakeCard('c1', { owner: 'P1', faceUp: false }) }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'FLIP', card_ids: ['c1'] });
+
+    const province = { dataset: { zone: 'province', owner: 'P1', idx: '0' } };
+    root._emit('dblclick', dblClick({ card: fakeCard('c2', { owner: 'P1', faceUp: false, province }) }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'FLIP', card_ids: ['c2'] });
+  });
+
+  it('flips a face-down double-faced card to its other face (FLIP_FACE)', () => {
+    const card = fakeCard('c1', { owner: 'P1', faceUp: false, doubleFaced: true });
+    root._emit('dblclick', dblClick({ card }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'FLIP_FACE', card_ids: ['c1'] });
+  });
+
+  it('bows a face-up card you own, and unbows a bowed one', () => {
+    root._emit('dblclick', dblClick({ card: fakeCard('c1', { owner: 'P1', faceUp: true }) }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'BOW', card_ids: ['c1'] });
+
+    root._emit('dblclick', dblClick({ card: fakeCard('c2', { owner: 'P1', faceUp: true, bowed: true }) }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'UNBOW', card_ids: ['c2'] });
+  });
+
+  it('leaves a face-up card in a province alone (bowing there is meaningless)', () => {
+    const province = { dataset: { zone: 'province', owner: 'P1', idx: '0' } };
+    root._emit('dblclick', dblClick({ card: fakeCard('c1', { owner: 'P1', faceUp: true, province }) }));
+    assert.equal(sent.length, 0);
+  });
+
+  it("ignores a double-click on an opponent's card", () => {
+    root._emit('dblclick', dblClick({ card: fakeCard('c1', { owner: 'P2', faceUp: true }) }));
+    assert.equal(sent.length, 0);
+  });
+
+  it('acts on a neutral (ownerless) card, bowing it like one of your own', () => {
+    root._emit('dblclick', dblClick({ card: fakeCard('c1', { owner: '', faceUp: true }) }));
+    assert.deepEqual(sent.at(-1).intent, { op: 'BOW', card_ids: ['c1'] });
+  });
+});
+
 describe('initBoardInteractions — context menu', () => {
   let root;
   let board;
