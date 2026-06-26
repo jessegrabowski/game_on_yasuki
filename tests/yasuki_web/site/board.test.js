@@ -18,6 +18,7 @@ import {
   initBoardInteractions,
   highlightCard,
   placePregameCards,
+  clampMenuPosition,
 } from '../../../src/yasuki_web/static/site/board.js';
 
 beforeEach(() => {
@@ -101,16 +102,17 @@ const offCard = (overrides = {}) => ({
   ...overrides,
 });
 
-const activeMenu = (board) => board.children.find((c) => c.className === 'board-menu');
+// The menu mounts on the board stage (the root), not the battlefield, so it floats above the hand.
+const activeMenu = (stage) => stage.children.find((c) => c.className === 'board-menu');
 
 // The non-separator menu labels, in order.
-const menuLabels = (board) =>
-  activeMenu(board)
+const menuLabels = (stage) =>
+  activeMenu(stage)
     .children.filter((li) => li.className !== 'menu-sep')
     .map((li) => li.textContent);
 
-function clickMenuItem(board, label) {
-  activeMenu(board)
+function clickMenuItem(stage, label) {
+  activeMenu(stage)
     .children.find((li) => li.textContent === label)
     ._emit('click', {});
 }
@@ -501,7 +503,7 @@ describe('initBoardInteractions — context menu', () => {
     root._emit('contextmenu', event);
 
     assert.equal(event.defaultPrevented, true);
-    assert.deepEqual(menuLabels(board), [
+    assert.deepEqual(menuLabels(root), [
       'Flip',
       'Bow',
       'Invert',
@@ -513,13 +515,25 @@ describe('initBoardInteractions — context menu', () => {
     ]);
   });
 
+  it('opens a hand card menu mounted on the stage, not the clipped battlefield', () => {
+    const event = rightClick({
+      zone: { zone: 'hand', owner: 'P1' },
+      card: fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false }),
+    });
+    root._emit('contextmenu', event);
+
+    assert.ok(activeMenu(root), 'menu mounts on the board stage');
+    assert.equal(activeMenu(board), undefined, 'menu is not trapped in the battlefield');
+    assert.ok(menuLabels(root).includes('Flip'));
+  });
+
   it('offers reveal/hide on a face-down card and omits the bow toggle in a province', () => {
     const province = { dataset: { zone: 'province', owner: 'P1', idx: '0' } };
     const card = fakeCard('c1', { side: 'DYNASTY', owner: 'P1', faceUp: false, province });
     // Right-clicking the province card resolves both the card and its province ancestor.
     root._emit('contextmenu', rightClick({ zone: province.dataset, card }));
 
-    const labels = menuLabels(board);
+    const labels = menuLabels(root);
     assert.ok(labels.includes('Reveal') && labels.includes('Hide'));
     assert.ok(!labels.includes('Bow') && !labels.includes('Unbow'), 'no bow toggle in a province');
     // The province lifecycle ops are appended after the card menu.
@@ -528,18 +542,18 @@ describe('initBoardInteractions — context menu', () => {
 
   it('adds Turn Over for a double-faced card', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1', doubleFaced: true }) }));
-    assert.ok(menuLabels(board).includes('Turn Over'));
+    assert.ok(menuLabels(root).includes('Turn Over'));
   });
 
   it('omits the Send-to group on an opponent card', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P2' }) }));
-    const labels = menuLabels(board);
+    const labels = menuLabels(root);
     assert.deepEqual(labels, ['Flip', 'Bow', 'Invert', 'Remove']);
   });
 
   it('sends MOVE_CARD to the bottom of the deck from "Send to Deck (bottom)"', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P1' }) }));
-    clickMenuItem(board, 'Send to Deck (bottom)');
+    clickMenuItem(root, 'Send to Deck (bottom)');
     assert.deepEqual(sent[0].intent, {
       op: 'MOVE_CARD',
       card_id: 'c1',
@@ -551,31 +565,31 @@ describe('initBoardInteractions — context menu', () => {
 
   it('sends a discard routed to the card side', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'DYNASTY', owner: 'P1' }) }));
-    clickMenuItem(board, 'Send to Discard');
+    clickMenuItem(root, 'Send to Discard');
     assert.equal(sent[0].intent.to.zone.role, 'dynasty_discard');
   });
 
   it("opens the deck menu on the owner's deck, not the top card's menu", () => {
     const deck = { zone: 'deck', owner: 'P1', side: 'DYNASTY' };
     root._emit('contextmenu', rightClick({ zone: deck, card: fakeCard('top') }));
-    assert.deepEqual(menuLabels(board), ['Draw', 'Shuffle', 'Flip Top', 'Search', 'Create Province']);
+    assert.deepEqual(menuLabels(root), ['Draw', 'Shuffle', 'Flip Top', 'Search', 'Create Province']);
   });
 
   it('emits FLIP_DECK_TOP from the deck menu', () => {
     root._emit('contextmenu', rightClick({ zone: { zone: 'deck', owner: 'P1', side: 'FATE' } }));
-    clickMenuItem(board, 'Flip Top');
+    clickMenuItem(root, 'Flip Top');
     assert.deepEqual(sent[0].intent, { op: 'FLIP_DECK_TOP', deck: { owner: 'P1', side: 'FATE' } });
   });
 
   it('shows no deck menu for the opponent deck', () => {
     root._emit('contextmenu', rightClick({ zone: { zone: 'deck', owner: 'P2', side: 'FATE' } }));
-    assert.equal(activeMenu(board), undefined);
+    assert.equal(activeMenu(root), undefined);
   });
 
   it('opens the province menu on an empty province slot', () => {
     root._emit('contextmenu', rightClick({ zone: { zone: 'province', owner: 'P1', idx: '2' } }));
-    assert.deepEqual(menuLabels(board), ['Fill', 'Discard', 'Destroy']);
-    clickMenuItem(board, 'Fill');
+    assert.deepEqual(menuLabels(root), ['Fill', 'Discard', 'Destroy']);
+    clickMenuItem(root, 'Fill');
     assert.deepEqual(sent[0].intent, {
       op: 'FILL_PROVINCE',
       zone: { owner: 'P1', role: 'province', idx: 2 },
@@ -589,27 +603,46 @@ describe('initBoardInteractions — context menu', () => {
       },
     });
     root._emit('contextmenu', event);
-    assert.equal(activeMenu(board), undefined);
+    assert.equal(activeMenu(root), undefined);
     assert.equal(event._p, undefined);
   });
 
   it('sends a REMOVE message and closes the menu on item click', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
-    clickMenuItem(board, 'Remove');
+    clickMenuItem(root, 'Remove');
 
     assert.deepEqual(sent, [{ type: 'REMOVE', remove: { id: 'c1' } }]);
-    assert.equal(activeMenu(board), undefined, 'menu is removed after a selection');
+    assert.equal(activeMenu(root), undefined, 'menu is removed after a selection');
   });
 
   it('sends UNBOW for a card that is already bowed', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1', bowed: true }) }));
-    clickMenuItem(board, 'Unbow');
+    clickMenuItem(root, 'Unbow');
     assert.equal(sent[0].intent.op, 'UNBOW');
   });
 
   it('replaces a previously open menu rather than stacking', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
     root._emit('contextmenu', rightClick({ card: fakeCard('c2', { owner: 'P1' }) }));
-    assert.equal(board.children.filter((c) => c.className === 'board-menu').length, 1);
+    assert.equal(root.children.filter((c) => c.className === 'board-menu').length, 1);
+  });
+});
+
+describe('clampMenuPosition', () => {
+  // 80x100 menu inside a 200x200 stage, 4px margin.
+  it('leaves a menu that fits where it was asked to open', () => {
+    assert.deepEqual(clampMenuPosition(30, 40, 80, 100, 200, 200), { left: 30, top: 40 });
+  });
+
+  it('pulls a menu back from the right edge', () => {
+    assert.deepEqual(clampMenuPosition(180, 40, 80, 100, 200, 200), { left: 116, top: 40 });
+  });
+
+  it('pulls a menu up from the bottom edge so its options are not cut off', () => {
+    assert.deepEqual(clampMenuPosition(30, 190, 80, 100, 200, 200), { left: 30, top: 96 });
+  });
+
+  it('never pushes a menu past the top-left when it is larger than the stage', () => {
+    assert.deepEqual(clampMenuPosition(0, 0, 300, 300, 200, 200), { left: 4, top: 4 });
   });
 });
