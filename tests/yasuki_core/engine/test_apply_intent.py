@@ -488,7 +488,8 @@ def test_draw_dynasty_with_no_province_goes_to_battlefield():
     events = apply_intent(table, PlayerId.P1, Draw(DeckKey(PlayerId.P1, Side.DYNASTY)))
 
     assert card in table.battlefield.cards
-    assert table.positions["d1"] == BoardPos(0.0, 0.0)
+    # The unplaced sentinel (negative): the client lays it out next to the dynasty deck.
+    assert table.positions["d1"] == BoardPos(-1.0, -1.0)
     assert events[0].intent.to == BATTLEFIELD
 
 

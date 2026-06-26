@@ -133,7 +133,7 @@ function discard(label, cards, owner, role, imgBase) {
 // A seat's tableau laid out on the battlefield like the desktop table: dynasty deck + discard at the
 // left, the four provinces in the centre, fate discard + deck at the right. The stronghold/sensei/
 // wind are not part of the tableau — they are loose battlefield cards the client lays out beside the
-// dynasty deck (see placePregameCards).
+// dynasty deck (see placeUnplacedCards).
 export function renderTableau(container, seatName, snapshot, imgBase) {
   const zones = snapshot.zones ?? {};
   const decks = snapshot.decks ?? {};
@@ -386,13 +386,14 @@ export function deckAnchor(tableau, battlefield, above) {
   };
 }
 
-// Give each unplaced pre-game card (server x < 0) a position fanned out from its owner's dynasty
-// deck. Cards already dragged keep their server position; non-pre-game cards pass through untouched.
-// `anchorFor(owner, isViewer)` returns the owner's anchor or null. Returns a new array.
-export function placePregameCards(cards, viewerSeat, anchorFor) {
+// Give each unplaced battlefield card (server x < 0 — a pre-game permanent, or a dynasty card drawn
+// while every province was full) a position fanned out from its owner's dynasty deck. Cards already
+// placed (x >= 0) keep their server position. `anchorFor(owner, isViewer)` returns the owner's
+// anchor or null. Returns a new array.
+export function placeUnplacedCards(cards, viewerSeat, anchorFor) {
   const placedPerOwner = {};
   return cards.map((card) => {
-    if (!card.pregame || card.x >= 0) return card;
+    if (card.x >= 0) return card;
     const anchor = anchorFor(card.owner, card.owner === viewerSeat);
     if (!anchor) return card;
     const index = placedPerOwner[card.owner] ?? 0;
