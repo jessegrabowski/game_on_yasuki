@@ -294,9 +294,11 @@ const SEP = { separator: true };
 // The card branch of the menu. Items come from the clicked card's dataset: "Flip" turns a card to its
 // other side — the other face of a double-faced card, or front↔deck-back for any other; a face-down
 // card offers reveal/hide instead of a bow toggle it cannot evaluate; and "Send to…" appears only on a
-// card the viewer owns. The flag ops apply to `targetIds` — the whole selection when the clicked card
-// is part of one — while Send to…/Remove act on the clicked card alone. The server re-checks every gate.
-function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId]) {
+// card the viewer owns. Every action applies to `targetIds` — the whole selection when the clicked card
+// is part of one, else the clicked card alone. Flag ops go as a single batch intent; Send to…/Remove
+// fan out one message per card, each routed by that card's own owner and side (`lookup` resolves a
+// selected id to its dataset; the clicked card uses its own). The server re-checks every gate.
+function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () => null) {
   const id = el.dataset.cardId;
   const side = el.dataset.side || '';
   const owner = el.dataset.owner || '';
@@ -305,7 +307,15 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId]) {
   const doubleFaced = el.dataset.doubleFaced === '1';
   const inProvince = !!el.closest?.('[data-zone="province"]');
   const mine = owner === '' || owner === viewer;
-  const seat = owner || viewer;
+
+  const dataFor = (cardId) => (cardId === id ? el.dataset : lookup(cardId) ?? el.dataset);
+  // Send `build(id, dataset)` for each selected card, skipping any the builder declines (returns null).
+  const fanOut = (send, build) => {
+    for (const cardId of targetIds) {
+      const message = build(cardId, dataFor(cardId));
+      if (message) send(message);
+    }
+  };
 
   const flip = doubleFaced ? flipFaceIntent(targetIds) : flipIntent(targetIds);
   const items = [{ label: 'Flip', message: flip }];
@@ -317,17 +327,32 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId]) {
     items.push({ label: 'Hide', message: hideIntent(targetIds) });
   }
   if (mine) {
-    items.push(SEP, { label: 'Send to Hand', message: moveCardIntent(id, handDest(seat)) });
+    const seatOf = (d) => d.owner || viewer;
+    items.push(SEP, {
+      label: 'Send to Hand',
+      onClick: (e, send) => fanOut(send, (cid, d) => moveCardIntent(cid, handDest(seatOf(d)))),
+    });
     if (side) {
-      const deck = deckDest(seat, side);
       items.push(
-        { label: 'Send to Discard', message: moveCardIntent(id, discardDest(seat, side)) },
-        { label: 'Send to Deck (top)', message: moveCardIntent(id, deck) },
-        { label: 'Send to Deck (bottom)', message: moveCardIntent(id, deck, null, true) },
+        {
+          label: 'Send to Discard',
+          onClick: (e, send) =>
+            fanOut(send, (cid, d) => d.side && moveCardIntent(cid, discardDest(seatOf(d), d.side))),
+        },
+        {
+          label: 'Send to Deck (top)',
+          onClick: (e, send) =>
+            fanOut(send, (cid, d) => d.side && moveCardIntent(cid, deckDest(seatOf(d), d.side))),
+        },
+        {
+          label: 'Send to Deck (bottom)',
+          onClick: (e, send) =>
+            fanOut(send, (cid, d) => d.side && moveCardIntent(cid, deckDest(seatOf(d), d.side), null, true)),
+        },
       );
     }
   }
-  items.push(SEP, { label: 'Remove', message: removeMessage(id) });
+  items.push(SEP, { label: 'Remove', onClick: (e, send) => fanOut(send, (cid) => removeMessage(cid)) });
   return items;
 }
 
@@ -575,7 +600,7 @@ function openDeckSearchPrompt(owner, side, send) {
 // Choose the menu for a right-click: a deck pile shows deck actions (even though its top card carries
 // a card id); an occupied province shows the card's menu plus the province lifecycle ops; an empty
 // province shows just those ops; any other card shows the card menu. Returns [] for an empty target.
-function menuItemsFor(target, viewer, targetIds) {
+function menuItemsFor(target, viewer, targetIds, lookup) {
   const zoneEl = target?.closest?.('[data-zone]');
   const zone = zoneEl?.dataset.zone;
   const cardEl = target?.closest?.('[data-card-id]');
@@ -583,10 +608,10 @@ function menuItemsFor(target, viewer, targetIds) {
   if (zone === 'province') {
     const province = provinceMenuItems(zoneEl.dataset.owner, Number(zoneEl.dataset.idx), viewer);
     if (!cardEl) return province;
-    const card = cardMenuItems(cardEl, viewer, targetIds);
+    const card = cardMenuItems(cardEl, viewer, targetIds, lookup);
     return province.length ? [...card, SEP, ...province] : card;
   }
-  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds);
+  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup);
   return [];
 }
 
@@ -798,7 +823,10 @@ export function initBoardInteractions(root, boardEl, send) {
     // otherwise the menu defaults to just the clicked card.
     const id = e.target?.closest?.('[data-card-id]')?.dataset.cardId;
     const targetIds = id && selected.size > 1 && selected.has(id) ? [...selected] : undefined;
-    const items = menuItemsFor(e.target, root.dataset.viewerSeat || '', targetIds);
+    // Resolve a selected card id to its dataset so per-card Send to…/Remove route by each card's side.
+    const datasets = [...boardEl.querySelectorAll('.board-card')].map((cardEl) => cardEl.dataset);
+    const lookup = (cardId) => datasets.find((d) => d.cardId === cardId) ?? null;
+    const items = menuItemsFor(e.target, root.dataset.viewerSeat || '', targetIds, lookup);
     if (!items.length) return;
     e.preventDefault();
     openMenu(root, items, e.clientX, e.clientY, send);
