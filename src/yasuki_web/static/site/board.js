@@ -25,6 +25,7 @@ function applyFace(el, card, imgBase) {
 function cardElement(card, imgBase) {
   const el = node('div', 'board-card');
   if (card.bowed) el.classList.add('bowed');
+  if (card.inverted) el.classList.add('inverted');
   el.dataset.cardId = card.id;
   el.dataset.bowed = card.bowed ? '1' : '';
   el.style.left = `${card.x}px`;
@@ -37,6 +38,7 @@ function cardElement(card, imgBase) {
 function zoneCard(card, imgBase) {
   const el = node('div', 'zone-card');
   if (card.bowed) el.classList.add('bowed');
+  if (card.inverted) el.classList.add('inverted');
   el.dataset.cardId = card.id;
   applyFace(el, card, imgBase);
   return el;
