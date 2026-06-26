@@ -99,8 +99,18 @@ def test_rejected_intent_sends_error_and_is_not_logged():
 
     asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.FLIP, card_ids=["ghost"])))
 
-    assert ws.sent[-1]["type"] == "ERROR"
+    assert any(m["type"] == "ERROR" for m in ws.sent)
     assert len(room.action_log.entries) == before
+
+
+def test_rejected_intent_reverts_the_sender_with_a_snapshot():
+    # The error tells the client the move failed; the trailing snapshot reverts any optimistic local
+    # change (a hidden drag source, a card nudged to its drop point) to the authoritative view.
+    room, ws = _room_with_seat()
+
+    asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.FLIP, card_ids=["ghost"])))
+
+    assert ws.sent[-1]["type"] == "SNAPSHOT"
 
 
 def test_malformed_intent_sends_error():

@@ -90,4 +90,4 @@ def test_non_owner_search_receives_no_contents(room):
     asyncio.run(room.handle_intent(ada, _search("P2", Side.FATE)))
 
     assert all(m["type"] != "DECK_CONTENTS" for m in ada.sent)
-    assert ada.sent[-1]["type"] == "ERROR"  # the ownership gate rejects the intent outright
+    assert any(m["type"] == "ERROR" for m in ada.sent)  # the ownership gate rejects the intent
