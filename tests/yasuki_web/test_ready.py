@@ -6,7 +6,7 @@ from yasuki_web import websocket as ws_module
 from yasuki_web.websocket import GameRoom
 from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 
 # Card records shaped like database.get_cards_by_names output; the fetch is faked in the room fixture.
@@ -38,8 +38,10 @@ RECORDS = [
     },
 ]
 
+# Decks sized to outlast the opening deal (4 provinces + 5-card starting hand): dynasty keeps
+# 10 - 4 = 6 and fate keeps 10 - 5 = 5.
 DECK_YAML = (
-    "name: D\nPre-Game:\n  - Kyuden Hida\nDynasty:\n  - 2x Kuni Yori\nFate:\n  - 2x Ambush\n"
+    "name: D\nPre-Game:\n  - Kyuden Hida\nDynasty:\n  - 10x Kuni Yori\nFate:\n  - 10x Ambush\n"
 )
 
 
@@ -86,7 +88,7 @@ def test_solo_ready_deals_a_one_seat_goldfish_table(room):
     asyncio.run(room.handle_ready(ada, True, solo=True))
 
     assert room.setup_done
-    assert len(room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards) == 2
+    assert len(room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards) == 6
     assert room.state.decks[DeckKey(PlayerId.P2, Side.DYNASTY)].cards == []  # no opponent dealt
 
 
@@ -116,7 +118,7 @@ def test_reset_needs_every_seated_player_to_agree(room):
     asyncio.run(room.handle_ready(ada, True))
     asyncio.run(room.handle_ready(kenji, True))
     assert room.setup_done
-    assert len(room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards) == 2
+    assert len(room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards) == 6
 
 
 def test_a_solo_goldfisher_resets_on_their_own(room):
@@ -136,9 +138,26 @@ def test_both_ready_deals_the_table_and_broadcasts(room):
     asyncio.run(room.handle_ready(kenji, True))
 
     assert room.setup_done
-    assert len(room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards) == 2
-    assert len(room.state.decks[DeckKey(PlayerId.P2, Side.FATE)].cards) == 2
+    assert len(room.state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards) == 6
+    assert len(room.state.decks[DeckKey(PlayerId.P2, Side.FATE)].cards) == 5
     assert ada.sent[-1]["type"] == "SNAPSHOT"
+
+
+def test_the_deal_fills_provinces_and_draws_the_starting_hand(room):
+    ada, kenji = _both_loaded(room)
+    asyncio.run(room.handle_ready(ada, True))
+    asyncio.run(room.handle_ready(kenji, True))
+
+    # The deck-count tests only prove cards left the decks; assert where they landed.
+    hand = room.state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    assert len(hand.cards) == 5  # Kyuden Hida's default starting_hand_size
+    provinces = [
+        zone
+        for key, zone in room.state.zones.items()
+        if key.owner is PlayerId.P1 and key.role is ZoneRole.PROVINCE
+    ]
+    assert len(provinces) == 4
+    assert all(len(province.cards) == 1 for province in provinces)
 
 
 def test_readying_without_a_deck_is_rejected(room):
@@ -168,7 +187,7 @@ def test_setup_snapshot_holds_redaction_and_honor(room):
     assert snapshot["your_seat"] == "P1"
     assert snapshot["seats"]["P1"]["honor"] == 10  # from the stronghold
     # The face-down deck never leaks identities — count only, no top card.
-    assert snapshot["decks"]["P1:dynasty"] == {"count": 2, "top": None}
+    assert snapshot["decks"]["P1:dynasty"] == {"count": 6, "top": None}
     # The stronghold is a public, face-up loose pre-game card on the battlefield.
     stronghold = next(c for c in snapshot["battlefield"] if c.get("name") == "Kyuden Hida")
     assert stronghold["pregame"] is True
