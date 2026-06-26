@@ -109,8 +109,14 @@ function pile(label, count, topCard, imgBase, deck) {
     tile.dataset.owner = deck.owner;
     tile.dataset.side = deck.side;
   }
-  if (topCard) tile.append(zoneCard(topCard, imgBase));
-  else if (deck && count > 0) tile.classList.add('is-back');
+  if (topCard) {
+    tile.append(zoneCard(topCard, imgBase));
+  } else if (deck && count > 0) {
+    // A non-empty deck shows its side's card back; the gradient stands in until the backs load.
+    const back = backArt[deck.side];
+    if (back) tile.append(backImage(back, 'pile-back'));
+    else tile.classList.add('is-back');
+  }
   tile.append(node('span', 'pile-count', String(count)), node('span', 'pile-label', label));
   return tile;
 }

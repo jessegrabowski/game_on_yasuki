@@ -337,6 +337,21 @@ describe('renderTableau', () => {
     assert.ok(fate.className.includes('deck'));
     assert.equal(fate.dataset.side, 'FATE');
   });
+
+  it("shows each deck's side card back when its backs are loaded", () => {
+    setBackArt({
+      DYNASTY: '/img/sets/backs/dynasty_new.jpg',
+      FATE: '/img/sets/backs/fate_new.jpg',
+    });
+    const area = document.createElement('div');
+    renderTableau(area, 'P1', seatSnapshot(), '/images');
+    // The back image is the pile's first child, ahead of the count and label spans.
+    const dynastyBack = area.children[0].children[0].children[0];
+    const fateBack = area.children[2].children[1].children[0];
+    assert.equal(dynastyBack.className, 'pile-back');
+    assert.equal(dynastyBack.src, '/img/sets/backs/dynasty_new.jpg');
+    assert.equal(fateBack.src, '/img/sets/backs/fate_new.jpg');
+  });
 });
 
 describe('renderHand', () => {
