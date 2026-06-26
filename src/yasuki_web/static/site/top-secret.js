@@ -15,6 +15,7 @@ import {
   initBoardInteractions,
   highlightCard,
   deckAnchor,
+  pregameAnchor,
   placeUnplacedCards,
   setBackArt,
   backArtBySide,
@@ -287,8 +288,11 @@ export function init() {
       // Tableaus first so the dynasty decks exist to anchor each seat's loose pre-game cards against.
       renderTableau(selfTableau, you, snapshot, imgBase);
       renderTableau(opponentTableau, opponent, snapshot, imgBase);
-      const anchorFor = (owner, isViewer) =>
-        deckAnchor(isViewer ? selfTableau : opponentTableau, battlefield, isViewer);
+      const anchorFor = (owner, isViewer, group) => {
+        const tableau = isViewer ? selfTableau : opponentTableau;
+        if (group === 'PREGAME') return pregameAnchor(tableau, battlefield, isViewer);
+        return deckAnchor(tableau, battlefield, isViewer, group);
+      };
       const onTable = placeUnplacedCards(snapshot.battlefield ?? [], you, anchorFor);
       renderBoard(battlefield, onTable, imgBase);
       // The re-render rebuilt every card element, so reattach the selection outline by card id.

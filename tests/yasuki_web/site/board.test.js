@@ -488,6 +488,32 @@ describe('placeUnplacedCards', () => {
     const placed = placeUnplacedCards(cards, 'P1', () => null);
     assert.equal(placed[0].x, -1);
   });
+
+  it('anchors a fate card to the fate deck and fans the two sides independently', () => {
+    const anchorBySide = (owner, isViewer, side) =>
+      side === 'FATE' ? { x: 100, y: 200 } : { x: 20, y: 300 };
+    const cards = [
+      { id: 'f1', owner: 'P1', side: 'FATE', x: -1, y: -1 },
+      { id: 'd1', owner: 'P1', side: 'DYNASTY', x: -1, y: -1 },
+      { id: 'f2', owner: 'P1', side: 'FATE', x: -1, y: -1 },
+    ];
+    const placed = placeUnplacedCards(cards, 'P1', anchorBySide);
+    assert.deepEqual([placed[0].x, placed[0].y], [100, 200]); // fate, first
+    assert.deepEqual([placed[1].x, placed[1].y], [20, 300]); // dynasty, first — fans right
+    assert.deepEqual([placed[2].x, placed[2].y], [80, 200]); // fate, second — fans left, toward centre
+  });
+
+  it('groups a pre-game card by its pre-game role, not its side (a fate sensei)', () => {
+    const anchorByGroup = (owner, isViewer, group) =>
+      ({ PREGAME: { x: 200, y: 50 }, FATE: { x: 100, y: 200 }, DYNASTY: { x: 20, y: 300 } })[group];
+    const cards = [
+      { id: 'sensei', pregame: true, side: 'FATE', owner: 'P1', x: -1, y: -1 },
+      { id: 'stronghold', pregame: true, side: 'DYNASTY', owner: 'P1', x: -1, y: -1 },
+    ];
+    const placed = placeUnplacedCards(cards, 'P1', anchorByGroup);
+    assert.deepEqual([placed[0].x, placed[0].y], [200, 50]); // fate sensei → pre-game stack, first
+    assert.deepEqual([placed[1].x, placed[1].y], [220, 50]); // stronghold → same stack, fans right
+  });
 });
 
 describe('highlightCard', () => {
