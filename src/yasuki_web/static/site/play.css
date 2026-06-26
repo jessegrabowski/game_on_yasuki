@@ -380,6 +380,17 @@
   background: var(--r-gold-soft);
 }
 
+.board-menu li.menu-sep {
+  margin: 0.3rem 0;
+  padding: 0;
+  border-top: 1px solid var(--r-line);
+  cursor: default;
+}
+
+.board-menu li.menu-sep:hover {
+  background: none;
+}
+
 .room-status {
   position: absolute;
   left: 1.6rem;
