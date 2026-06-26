@@ -1,20 +1,21 @@
 // The deck-search dialog: the owner's deck in shuffled (top-first) order, filterable by card title,
-// with a small preview of the selected card and a Pull button that deals it to the battlefield above
-// the owner's dynasty deck (face-down, like a draw). Built with createElement (no innerHTML, no inline
-// styles) so it stays CSP-safe under the page's style-src 'self'.
-// It stays open after a pull so several cards can be taken in one sitting; the pulled card leaves the
-// list and the rest keep their order. A footer closes the dialog, optionally shuffling the deck first
-// to re-randomize the order the search just exposed.
+// with a small preview of the selected card and three ways to take it — Pull it face-down to the
+// battlefield by its deck, Discard it, or send it to the Bottom of the deck. Built with createElement
+// (no innerHTML, no inline styles) so it stays CSP-safe under the page's style-src 'self'. It stays
+// open after a deal so several cards can be taken in one sitting; the dealt card leaves the list and
+// the rest keep their order. A footer closes the dialog, optionally shuffling the deck first to
+// re-randomize the order the search just exposed.
 
-import { moveCardIntent, node, shuffleIntent } from './board.js';
+import {
+  deckDest,
+  discardDest,
+  moveCardIntent,
+  node,
+  shuffleIntent,
+  UNPLACED_POSITION,
+} from './board.js';
 
 const SIDE_LABELS = { FATE: 'Fate', DYNASTY: 'Dynasty' };
-
-// Deal a deck card to the battlefield above its owner's dynasty deck — the negative sentinel position
-// the client lays out there — face-down, exactly like an overflow draw.
-function pullIntent(cardId) {
-  return moveCardIntent(cardId, { kind: 'battlefield' }, [-1, -1]);
-}
 
 const matchesTitle = (card, query) => (card.name ?? '').toLowerCase().includes(query);
 
@@ -60,11 +61,23 @@ export function openDeckDialog({ deck, cards, imgBase, limit = null, send, onClo
 
   const list = node('ul', 'deck-dialog-list');
   const previewImg = node('img', 'deck-dialog-preview-img');
-  const pull = node('button', 'deck-dialog-pull', 'Pull');
-  pull.type = 'button';
-  pull.addEventListener('click', onPull);
+
+  // Pull deals the card face-down to the battlefield via the unplaced sentinel, which the client
+  // routes to the fate or dynasty deck by the card's side; Discard and Bottom use plain
+  // destinations. Each deal removes the card from the list and keeps the dialog open.
+  const dealActions = [
+    { label: 'Pull', dest: { kind: 'battlefield' }, position: UNPLACED_POSITION },
+    { label: 'Discard', dest: discardDest(deck.owner, deck.side) },
+    { label: 'Bottom', dest: deckDest(deck.owner, deck.side), toBottom: true },
+  ];
+  const dealButtons = dealActions.map(({ label, dest, position = null, toBottom = false }) => {
+    const btn = node('button', 'deck-dialog-deal', label);
+    btn.type = 'button';
+    btn.addEventListener('click', () => deal((id) => moveCardIntent(id, dest, position, toBottom)));
+    return btn;
+  });
   const preview = node('div', 'deck-dialog-preview');
-  preview.append(previewImg, pull);
+  preview.append(previewImg, ...dealButtons);
   const body = node('div', 'deck-dialog-body');
   body.append(list, preview);
 
@@ -120,15 +133,15 @@ export function openDeckDialog({ deck, cards, imgBase, limit = null, send, onClo
       previewImg.removeAttribute('src');
     }
     previewImg.classList.toggle('is-empty', !selectedCard?.img);
-    pull.disabled = !selectedCard;
+    for (const btn of dealButtons) btn.disabled = !selectedCard;
   }
 
-  function onPull() {
+  function deal(makeIntent) {
     if (!selectedId) return;
-    send(pullIntent(selectedId));
+    send(makeIntent(selectedId));
     const idx = pool.findIndex((card) => card.id === selectedId);
     if (idx >= 0) pool.splice(idx, 1);
-    // Keep the reading position: select whatever card slid into the pulled one's slot, else the last.
+    // Keep the reading position: select whatever card slid into the dealt one's slot, else the last.
     selectedId = pool[Math.min(idx, pool.length - 1)]?.id ?? null;
     renderTitle();
     renderList();

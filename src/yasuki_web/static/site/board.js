@@ -258,6 +258,9 @@ export const moveCardIntent = (id, to, position = null, toBottom = false) =>
     position,
     ...(toBottom ? { to_bottom: true } : {}),
   });
+// Negative-sentinel battlefield position for a card dealt without real coordinates; placeUnplacedCards
+// recognizes x < 0 and lays the card out by the owner's deck (mirrors the server's _UNPLACED_BOARD_POS).
+export const UNPLACED_POSITION = [-1, -1];
 // Adjust the acting seat's honor by a signed amount; the server clamps the bounds.
 export const honorIntent = (delta) => intentMessage({ op: 'SET_HONOR', delta });
 
@@ -278,13 +281,13 @@ function zoneDest(el) {
   }
 }
 
-// MOVE_CARD destinations for the "Send to…" menu items.
+// MOVE_CARD destinations for the "Send to…" menu items and the deck-search deal buttons.
 const handDest = (owner) => ({ kind: 'zone', zone: { owner, role: 'hand', idx: null } });
-const discardDest = (owner, side) => ({
+export const discardDest = (owner, side) => ({
   kind: 'zone',
   zone: { owner, role: side === 'FATE' ? 'fate_discard' : 'dynasty_discard', idx: null },
 });
-const deckDest = (owner, side) => ({ kind: 'deck', deck: { owner, side } });
+export const deckDest = (owner, side) => ({ kind: 'deck', deck: { owner, side } });
 
 const SEP = { separator: true };
 

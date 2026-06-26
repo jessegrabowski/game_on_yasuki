@@ -84,6 +84,31 @@ describe('openDeckDialog', () => {
     ]);
   });
 
+  it('discards the selected card to the matching discard pile', () => {
+    const { handle, sent } = open();
+    listOf(handle.el).children[1]._emit('click', {}); // select Mid Card
+    previewOf(handle.el).children[2]._emit('click', {}); // Discard
+    assert.deepEqual(sent[0].intent, {
+      op: 'MOVE_CARD',
+      card_id: 'm2',
+      to: { kind: 'zone', zone: { owner: 'P1', role: 'fate_discard', idx: null } },
+      position: null,
+    });
+    assert.deepEqual(names(handle.el), ['t3', 'b1'], 'the discarded card leaves the list');
+  });
+
+  it('sends the selected card to the bottom of the deck', () => {
+    const { handle, sent } = open();
+    previewOf(handle.el).children[3]._emit('click', {}); // Bottom (top card selected)
+    assert.deepEqual(sent[0].intent, {
+      op: 'MOVE_CARD',
+      card_id: 't3',
+      to: { kind: 'deck', deck: { owner: 'P1', side: 'FATE' } },
+      position: null,
+      to_bottom: true,
+    });
+  });
+
   it('drops the pulled card from the list, advances selection, and stays open', () => {
     let closed = 0;
     const { handle } = open({ onClose: () => (closed += 1) });
