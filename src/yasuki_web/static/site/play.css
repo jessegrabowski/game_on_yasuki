@@ -335,6 +335,14 @@
   transform: rotate(90deg);
 }
 
+.board-card.inverted {
+  transform: rotate(180deg);
+}
+
+.board-card.bowed.inverted {
+  transform: rotate(270deg);
+}
+
 .board-card.face-down {
   background: linear-gradient(135deg, #7a5a36, #5e421f);
   border-color: #46330f;
@@ -595,6 +603,14 @@
 
 .zone-card.bowed {
   transform: rotate(90deg);
+}
+
+.zone-card.inverted {
+  transform: rotate(180deg);
+}
+
+.zone-card.bowed.inverted {
+  transform: rotate(270deg);
 }
 
 .zone-card.face-down {

@@ -89,6 +89,7 @@ const card = (overrides = {}) => ({
   bowed: false,
   face_up: true,
   hidden: false,
+  inverted: false,
   ...overrides,
 });
 
@@ -126,6 +127,20 @@ describe('renderBoard', () => {
     renderBoard(board, [card({ bowed: true })], '/images');
     assert.ok(board.children[0].classList.contains('bowed'));
     assert.equal(board.children[0].dataset.bowed, '1');
+  });
+
+  it('marks inverted cards', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ inverted: true })], '/images');
+    assert.ok(board.children[0].classList.contains('inverted'));
+    assert.ok(!board.children[0].classList.contains('bowed'));
+  });
+
+  it('marks a card that is both bowed and inverted', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ bowed: true, inverted: true })], '/images');
+    assert.ok(board.children[0].classList.contains('bowed'));
+    assert.ok(board.children[0].classList.contains('inverted'));
   });
 });
 
