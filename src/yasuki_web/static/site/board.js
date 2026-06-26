@@ -361,15 +361,24 @@ function closeMenu() {
   activeMenu = null;
 }
 
+// Container-local top-left for the menu, pulled back from any right/bottom edge it would overflow so
+// the whole menu stays on screen; never pushed past the top/left. `margin` holds it off the edge.
+export function clampMenuPosition(left, top, menuW, menuH, containerW, containerH, margin = 4) {
+  return {
+    left: Math.max(margin, Math.min(left, containerW - menuW - margin)),
+    top: Math.max(margin, Math.min(top, containerH - menuH - margin)),
+  };
+}
+
 // Open the context menu at the click point with a prebuilt item list. Each item is either a separator
-// or `{label, message}`; clicking an item sends its message and closes the menu.
-function openMenu(boardEl, items, clientX, clientY, send) {
+// or `{label, message}`; clicking an item sends its message and closes the menu. The menu mounts on
+// `container` — the whole board stage, not the battlefield, whose `overflow: hidden` would clip it and
+// whose stacking layer sits below the hand strip — then clampMenuPosition shifts it to stay on screen.
+function openMenu(container, items, clientX, clientY, send) {
   closeMenu();
-  const rect = boardEl.getBoundingClientRect();
+  const rect = container.getBoundingClientRect();
   const menu = document.createElement('ul');
   menu.className = 'board-menu';
-  menu.style.left = `${clientX - rect.left}px`;
-  menu.style.top = `${clientY - rect.top}px`;
 
   for (const item of items) {
     const li = document.createElement('li');
@@ -385,7 +394,18 @@ function openMenu(boardEl, items, clientX, clientY, send) {
     menu.appendChild(li);
   }
 
-  boardEl.appendChild(menu);
+  container.appendChild(menu);
+  const menuRect = menu.getBoundingClientRect();
+  const { left, top } = clampMenuPosition(
+    clientX - rect.left,
+    clientY - rect.top,
+    menuRect.width,
+    menuRect.height,
+    rect.width,
+    rect.height,
+  );
+  menu.style.left = `${left}px`;
+  menu.style.top = `${top}px`;
   activeMenu = menu;
   // Defer so the contextmenu's own pointer event doesn't close the menu we just opened.
   setTimeout(() => {
@@ -492,6 +512,6 @@ export function initBoardInteractions(root, boardEl, send) {
     const items = menuItemsFor(e.target, root.dataset.viewerSeat || '');
     if (!items.length) return;
     e.preventDefault();
-    openMenu(boardEl, items, e.clientX, e.clientY, send);
+    openMenu(root, items, e.clientX, e.clientY, send);
   });
 }
