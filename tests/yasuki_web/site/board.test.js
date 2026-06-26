@@ -52,9 +52,11 @@ function fakeCard(
     shown = false,
     peeked = false,
     province = null,
+    inHand = false,
     img = null,
   } = {},
 ) {
+  const hand = inHand ? { dataset: { zone: 'hand', owner } } : null;
   const classes = new Set([onBattlefield ? 'board-card' : 'zone-card']);
   if (bowed) classes.add('bowed');
   if (!faceUp || hidden) classes.add('face-down');
@@ -80,7 +82,11 @@ function fakeCard(
       toggle: (c, force) => (force ? classes.add(c) : classes.delete(c)),
     },
     getBoundingClientRect: () => ({ left: 10, top: 20 }),
-    closest: (sel) => (sel === '[data-zone="province"]' && province ? province : null),
+    closest: (sel) => {
+      if (sel === '[data-zone="province"]') return province;
+      if (sel === '[data-zone="hand"]') return hand;
+      return null;
+    },
     querySelector: (sel) => (sel === 'img' && img ? { src: img } : null),
   };
 }
@@ -1011,7 +1017,7 @@ describe('initBoardInteractions — selection', () => {
 
   it('fans "Send to Hand" out over the whole selection, one MOVE_CARD per card', () => {
     root.dataset.viewerSeat = 'P1';
-    const [c1] = selectTwo();
+    const [c1] = selectTwo({ side: 'FATE' }, { side: 'FATE' });
     sent.length = 0;
     root._emit('contextmenu', rightClick({ card: c1 }));
     clickMenuItem(root, 'Send to Hand');
@@ -1349,13 +1355,12 @@ describe('initBoardInteractions — context menu', () => {
     root._emit('contextmenu', event);
 
     assert.equal(event.defaultPrevented, true);
-    // A face-up own card: it offers "Show opponent" (not yet shown), no Peek (already visible), and
-    // there is no "Remove" (only tokens remove).
+    // A face-up own card on the board: the opponent already sees it, so no "Show opponent" and no
+    // Peek; no "Remove" either (only tokens remove).
     assert.deepEqual(menuLabels(root), [
       'Flip',
       'Bow',
       'Invert',
-      'Show opponent',
       'Send to Hand',
       'Send to Discard',
       'Send to Deck (top)',
@@ -1374,13 +1379,23 @@ describe('initBoardInteractions — context menu', () => {
   it('opens a hand card menu mounted on the stage, not the clipped battlefield', () => {
     const event = rightClick({
       zone: { zone: 'hand', owner: 'P1' },
-      card: fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false }),
+      card: fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false, inHand: true }),
     });
     root._emit('contextmenu', event);
 
     assert.ok(activeMenu(root), 'menu mounts on the board stage');
     assert.equal(activeMenu(board), undefined, 'menu is not trapped in the battlefield');
-    assert.ok(menuLabels(root).includes('Flip'));
+  });
+
+  it('trims a hand card menu: no in-play manipulation, no Send to Hand, but reveal and disposal', () => {
+    const card = fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false, inHand: true });
+    root._emit('contextmenu', rightClick({ zone: { zone: 'hand', owner: 'P1' }, card }));
+    assert.deepEqual(menuLabels(root), [
+      'Show opponent', // a hand card is hidden from the opponent, so reveal is offered
+      'Send to Discard',
+      'Send to Deck (top)',
+      'Send to Deck (bottom)',
+    ]);
   });
 
   it('offers Show opponent and Peek on an own face-down card and omits the bow toggle in a province', () => {
@@ -1430,6 +1445,13 @@ describe('initBoardInteractions — context menu', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
     clickMenuItem(root, 'Flip');
     assert.deepEqual(sent[0].intent, { op: 'FLIP', card_ids: ['c1'] });
+  });
+
+  it('omits "Send to Hand" on a dynasty card, which never lives in a hand', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'DYNASTY', owner: 'P1' }) }));
+    const labels = menuLabels(root);
+    assert.ok(!labels.includes('Send to Hand'), 'dynasty cards do not go to hand');
+    assert.ok(labels.includes('Send to Discard'), 'but they can still be discarded');
   });
 
   it('omits the Send-to group, show, and peek on a visible opponent (non-token) card', () => {
