@@ -242,43 +242,73 @@ function discard(label, cards, owner, role, imgBase) {
   return tile;
 }
 
-// A seat's tableau laid out on the battlefield like the desktop table: dynasty deck + discard at the
-// left, the four provinces in the centre, fate discard + deck at the right. The stronghold/sensei/
-// wind are not part of the tableau — they are loose battlefield cards the client lays out by the
-// dynasty discard (see placeUnplacedCards).
+// A seat's persistent tableau frame: the three layout columns plus a registry of province slots,
+// built once per container so the province slots — and the cards reconciled into them — keep their
+// elements across renders.
+const tableauFrames = new WeakMap();
+
+function tableauFrame(container) {
+  let frame = tableauFrames.get(container);
+  if (!frame) {
+    frame = {
+      left: node('div', 'tableau-decks'),
+      provinces: node('div', 'provinces'),
+      right: node('div', 'tableau-decks'),
+      slots: new Map(), // province key -> { el, view }, reconciled into `provinces`
+    };
+    container.replaceChildren(frame.left, frame.provinces, frame.right);
+    tableauFrames.set(container, frame);
+  }
+  return frame;
+}
+
+// A seat's tableau laid out like the desktop table: dynasty deck + discard at the left, the four
+// provinces in the centre, fate discard + deck at the right. The stronghold/sensei/wind are not part
+// of the tableau — they are loose battlefield cards the client lays out by the dynasty discard (see
+// placeUnplacedCards). Decks and discards are piles — a count plus an at-most-one shown card, not a
+// card list — so they are rebuilt cheaply each render; the provinces are card-list zones, reconciled.
 export function renderTableau(container, seatName, snapshot, imgBase) {
   const zones = snapshot.zones ?? {};
   const decks = snapshot.decks ?? {};
   const zone = (role) => zones[`${seatName}:${role}`] ?? [];
   const deck = (side) => decks[`${seatName}:${side}`] ?? { count: 0, top: null };
+  const frame = tableauFrame(container);
 
-  const left = node('div', 'tableau-decks');
   const dynasty = deck('dynasty');
-  left.append(
+  frame.left.replaceChildren(
     pile('Dynasty', dynasty.count, dynasty.top, imgBase, { owner: seatName, side: 'DYNASTY' }),
     discard('Discard', zone('dynasty_discard'), seatName, 'dynasty_discard', imgBase),
   );
 
-  const provinces = node('div', 'provinces');
-  for (const key of Object.keys(zones)
-    .filter((k) => k.startsWith(`${seatName}:province:`))
-    .sort()) {
-    const slot = node('div', 'province');
-    slot.dataset.zone = 'province';
-    slot.dataset.owner = seatName;
-    slot.dataset.idx = key.split(':')[2];
-    for (const card of zones[key]) slot.append(zoneCard(card, imgBase));
-    provinces.append(slot);
-  }
-
-  const right = node('div', 'tableau-decks');
   const fate = deck('fate');
-  right.append(
+  frame.right.replaceChildren(
     discard('Discard', zone('fate_discard'), seatName, 'fate_discard', imgBase),
     pile('Fate', fate.count, fate.top, imgBase, { owner: seatName, side: 'FATE' }),
   );
 
-  container.replaceChildren(left, provinces, right);
+  renderProvinces(frame, seatName, zones, imgBase);
+}
+
+// Reconcile the province slots (keyed by zone key) into the persistent provinces column, then
+// reconcile each slot's cards (keyed by id) so a province card keeps its element across renders.
+function renderProvinces(frame, seatName, zones, imgBase) {
+  const keys = Object.keys(zones)
+    .filter((key) => key.startsWith(`${seatName}:province:`))
+    .sort();
+  const slotViews = keys.map((key) => ({ id: key, idx: key.split(':')[2] }));
+  reconcile(frame.provinces, slotViews, frame.slots, {
+    create: (slot) => {
+      const el = node('div', 'province');
+      el.dataset.zone = 'province';
+      el.dataset.owner = seatName;
+      el.dataset.idx = slot.idx;
+      return el;
+    },
+    patch: () => {}, // slot dataset is fixed at creation
+  });
+  for (const key of keys) {
+    renderCards(frame.slots.get(key).el, zones[key], imgBase, 'zone-card');
+  }
 }
 
 // A seat's hand as a strip of full-size cards.

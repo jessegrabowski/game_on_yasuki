@@ -527,6 +527,20 @@ describe('renderTableau', () => {
     assert.equal(dynastyBack.src, '/img/sets/backs/dynasty_new.jpg');
     assert.equal(fateBack.src, '/img/sets/backs/fate_new.jpg');
   });
+
+  it('reuses a province card element across renders, patching it in place', () => {
+    const area = document.createElement('div');
+    const snap = seatSnapshot();
+    const slot = () => area.children[1].children[1]; // provinces wrapper -> province idx 1
+    snap.zones['P1:province:1'] = [card({ id: 'pv1' })];
+    renderTableau(area, 'P1', snap, '/images');
+    const first = slot().children[0];
+    snap.zones['P1:province:1'] = [card({ id: 'pv1', bowed: true })];
+    renderTableau(area, 'P1', snap, '/images');
+    assert.equal(area.children[1].children.length, 4, 'still four provinces after re-render');
+    assert.equal(slot().children[0], first, 'same element reused');
+    assert.ok(first.classList.contains('bowed'), 'patched in place');
+  });
 });
 
 describe('renderHand', () => {
