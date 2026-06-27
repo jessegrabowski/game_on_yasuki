@@ -410,6 +410,27 @@ describe('init (room client wiring)', () => {
     assert.equal(lastLog.children[0].textContent, 'Kenji joined');
   });
 
+  it('renders the seated view — hand and board — from a SNAPSHOT for your seat', async () => {
+    const ws = await joinedRoom();
+    ws.deliver({
+      type: 'SNAPSHOT',
+      room: 'r1',
+      snapshot: {
+        your_seat: 'P1',
+        seats: {
+          P1: { name: 'Ada', honor: 0, ready: false, connected: true },
+          P2: { name: 'Kenji', honor: 0, ready: false, connected: true },
+        },
+        decks: {},
+        zones: { 'P1:hand': [{ id: 'h1', name: 'In Hand', img: 'h.jpg', face_up: true }] },
+        battlefield: [{ id: 'b1', name: 'On Board', img: 'b.jpg', x: 5, y: 5, face_up: true }],
+      },
+    });
+
+    assert.equal(document.getElementById('selfHand').children.length, 1, 'the hand renders');
+    assert.equal(document.getElementById('battlefield').children.length, 1, 'the board renders');
+  });
+
   it('suppresses a debug-level ERROR when the client debug flag is off', async () => {
     const ws = await joinedRoom();
     ws.deliver({ type: 'ERROR', room: 'r1', message: 'Intent rejected', debug: true });
