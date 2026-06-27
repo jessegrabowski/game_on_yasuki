@@ -8,6 +8,8 @@ import {
   renderHand,
   renderPanel,
   dragPosition,
+  dragVisualPosition,
+  handDropIndex,
   intentMessage,
   spawnMessage,
   removeMessage,
@@ -529,6 +531,32 @@ describe('dragPosition', () => {
   });
 });
 
+describe('dragVisualPosition', () => {
+  const board = { left: 0, top: 0, width: 500, height: 400 };
+
+  it('clamps x and the top but leaves the bottom free, so a card can head for the hand', () => {
+    // Far below the board: y follows the pointer (unclamped), x still pinned on-board.
+    assert.deepEqual(dragVisualPosition(9999, 600, board, { x: 0, y: 0 }), { x: 419, y: 600 });
+    assert.deepEqual(dragVisualPosition(0, -50, board, { x: 0, y: 0 }), { x: 0, y: 0 });
+  });
+});
+
+describe('handDropIndex', () => {
+  // Three 80px-wide hand cards at x = 0, 100, 200 (centres 40, 140, 240).
+  const handCard = (id, left) => ({ dataset: { cardId: id }, getBoundingClientRect: () => ({ left, width: 80 }) });
+  const hand = { children: [handCard('a', 0), handCard('b', 100), handCard('c', 200)] };
+
+  it('counts the cards whose centre the pointer has crossed', () => {
+    assert.equal(handDropIndex(hand, 30, 'x'), 0); // left of every centre
+    assert.equal(handDropIndex(hand, 150, 'x'), 2); // past a and b
+    assert.equal(handDropIndex(hand, 999, 'x'), 3); // past all → the end
+  });
+
+  it('skips the dragged card so the slot is relative to the others', () => {
+    assert.equal(handDropIndex(hand, 250, 'b'), 2); // a, then c — b excluded
+  });
+});
+
 describe('placeUnplacedCards', () => {
   const anchorFor = (owner) => (owner === 'P1' ? { x: 20, y: 300 } : { x: 30, y: 40 });
 
@@ -656,25 +684,20 @@ describe('initBoardInteractions — dragging', () => {
     assert.equal(cardEl.style.pointerEvents, 'none', 'a real drag lifts it out of hit-testing');
   });
 
-  it('sends a throttled SET_CARD_POS while dragging a battlefield card', () => {
+  it('moves a battlefield card locally during the drag without streaming, committing on drop', () => {
     const cardEl = fakeCard('c1', { onBattlefield: true });
-    const realNow = Date.now;
-    Date.now = () => 1000;
-    try {
-      root._emit('pointerdown', onCard(cardEl));
-      root._emit('pointermove', { clientX: 60, clientY: 70 });
-      root._emit('pointermove', { clientX: 80, clientY: 90 }); // same tick → throttled out
-    } finally {
-      Date.now = realNow;
-    }
+    root._emit('pointerdown', onCard(cardEl));
+    root._emit('pointermove', { clientX: 60, clientY: 70 });
+    root._emit('pointermove', { clientX: 80, clientY: 90 });
 
-    // grab offset is (30-10, 50-20) = (20, 30); board origin is (0, 0).
-    assert.equal(cardEl.style.left, '60px'); // last move still repositions locally, though unsent
-    assert.equal(sent.length, 1);
-    assert.deepEqual(sent[0], {
-      type: 'INTENT',
-      intent: { op: 'SET_CARD_POS', card_id: 'c1', x: 40, y: 40 },
-    });
+    // grab offset is (30-10, 50-20) = (20, 30); the card follows locally but nothing is sent yet —
+    // streaming would echo a snapshot that snaps it back from the hand it may be crossing into.
+    assert.equal(cardEl.style.left, '60px');
+    assert.equal(sent.length, 0, 'no live stream during the drag');
+
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.equal(sent.length, 1, 'the move is sent once, on drop');
+    assert.equal(sent[0].intent.op, 'SET_CARD_POS');
   });
 
   it('does nothing on pointermove when no drag is active', () => {
@@ -713,6 +736,13 @@ describe('initBoardInteractions — dragging', () => {
     assert.equal(ghost.style.pointerEvents, 'none', 'the ghost must not intercept the drop');
     assert.equal(ghost.children[0]?.src, '/images/foo.jpg', 'the ghost mirrors the card front');
     assert.ok(!ghost.classList.contains('face-down'));
+  });
+
+  it('lets a ghost-dragged card follow the pointer below the board edge too', () => {
+    root._emit('pointerdown', onCard(fakeCard('h1', { onBattlefield: false, side: 'FATE', img: '/images/foo.jpg' })));
+    root._emit('pointermove', { clientX: 90, clientY: 300 }); // below the 200-tall fixture board
+    const ghost = board.children.find((c) => c.className?.includes('dragging'));
+    assert.equal(ghost.style.top, '270px', 'the ghost crosses the board edge like a battlefield card');
   });
 
   it('drags a face-down province card with a face-down ghost, not its art', () => {
@@ -784,6 +814,167 @@ describe('initBoardInteractions — dragging', () => {
     root._emit('pointerup', onZone({ zone: 'deck', owner: 'P1', side: 'FATE' }));
     assert.equal(sent.at(-1).intent.op, 'MOVE_CARD');
     assert.equal(handCard.style.visibility, 'hidden', 'a zone-dest drop commits too');
+  });
+
+  // A fake hand strip: a Set-backed classList for the drop-target glow, ordered children, and the
+  // insertBefore the gap logic reorders by.
+  const fakeHand = (owner, cards = []) => {
+    const classes = new Set();
+    const children = [...cards];
+    const hand = {
+      dataset: { zone: 'hand', owner },
+      classList: { add: (c) => classes.add(c), remove: (c) => classes.delete(c), has: (c) => classes.has(c) },
+      get children() {
+        return children;
+      },
+      insertBefore(child, ref) {
+        const from = children.indexOf(child);
+        if (from >= 0) children.splice(from, 1);
+        children.splice(ref ? children.indexOf(ref) : children.length, 0, child);
+        child.parentNode = hand;
+      },
+    };
+    return hand;
+  };
+  const handCardEl = (id, left) => ({
+    dataset: { cardId: id },
+    getBoundingClientRect: () => ({ left, width: 80 }),
+  });
+  const overHand = (hand, clientY = 300) => ({
+    target: { closest: (s) => (s === '[data-zone="hand"]' ? hand : null) },
+    clientX: 90,
+    clientY,
+  });
+
+  it('lets a board card follow the pointer below the board edge, toward the hand', () => {
+    const cardEl = fakeCard('c1', { onBattlefield: true, side: 'FATE' });
+    root._emit('pointerdown', onCard(cardEl));
+    root._emit('pointermove', { clientX: 90, clientY: 300 }); // far below the 200-tall fixture board
+    assert.equal(cardEl.style.top, '270px', 'the card follows the pointer down past the board edge');
+    assert.equal(sent.length, 0, 'nothing is streamed mid-drag to snap it back');
+  });
+
+  it('lifts the board clip while dragging so a card can cross into the hand, restoring it on drop', () => {
+    root._emit('pointerdown', onCard(fakeCard('c1', { onBattlefield: true, side: 'FATE' })));
+    assert.ok(!board.classList.contains('is-dragging'), 'a plain press does not lift the clip');
+    root._emit('pointermove', { clientX: 90, clientY: 300 });
+    assert.ok(board.classList.contains('is-dragging'), 'a real drag lifts it');
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.ok(!board.classList.contains('is-dragging'), 'and it is restored on release');
+  });
+
+  it('drops a board card into the hand as a MOVE_CARD landing at the previewed slot', () => {
+    root._emit('pointerdown', onCard(fakeCard('c1', { onBattlefield: true, side: 'FATE' })));
+    root._emit('pointermove', { clientX: 90, clientY: 300 });
+    root._emit('pointerup', onZone({ zone: 'hand', owner: 'P1' }));
+    assert.deepEqual(sent.at(-1).intent, {
+      op: 'MOVE_CARD',
+      card_id: 'c1',
+      to: { kind: 'zone', zone: { owner: 'P1', role: 'hand', idx: null } },
+      position: null,
+      value: 0, // an empty drop target → slot 0
+    });
+  });
+
+  it('opens a placeholder gap for an incoming card so the hand makes room', () => {
+    root.dataset.viewerSeat = 'P1';
+    const handEl = fakeHand('P1', [handCardEl('h1', 0), handCardEl('h3', 200)]);
+    root._emit('pointerdown', onCard(fakeCard('b1', { onBattlefield: true, side: 'FATE' })));
+    root._emit('pointermove', { clientX: 250, clientY: 300, target: { closest: () => handEl } });
+    const gap = handEl.children.find((c) => c.className?.includes('hand-gap'));
+    assert.ok(gap, 'a placeholder gap opens in the hand');
+    assert.equal(handEl.children.indexOf(gap), 2, 'at the landing slot, past both cards');
+  });
+
+  it('lands an incoming card at the previewed slot, not just the end', () => {
+    root.dataset.viewerSeat = 'P1';
+    const handEl = fakeHand('P1', [handCardEl('h1', 0), handCardEl('h3', 200)]);
+    root._emit('pointerdown', onCard(fakeCard('b1', { onBattlefield: true, side: 'FATE' })));
+    root._emit('pointermove', { clientX: 150, clientY: 300, target: { closest: () => handEl } });
+    root._emit('pointerup', { clientX: 150, clientY: 140, target: { closest: () => handEl } });
+    assert.deepEqual(sent.at(-1).intent, {
+      op: 'MOVE_CARD',
+      card_id: 'b1',
+      to: { kind: 'zone', zone: { owner: 'P1', role: 'hand', idx: null } },
+      position: null,
+      value: 1, // between h1 and h3
+    });
+  });
+
+  it('removes the incoming-card placeholder when the drag is abandoned', () => {
+    root.dataset.viewerSeat = 'P1';
+    const handEl = fakeHand('P1', [handCardEl('h1', 0), handCardEl('h3', 200)]);
+    root._emit('pointerdown', onCard(fakeCard('b1', { onBattlefield: true, side: 'FATE' })));
+    root._emit('pointermove', { clientX: 150, clientY: 300, target: { closest: () => handEl } });
+    assert.ok(handEl.children.some((c) => c.className?.includes('hand-gap')), 'the gap opened');
+    root._emit('pointercancel', {});
+    assert.ok(!handEl.children.some((c) => c.className?.includes('hand-gap')), 'and is gone on cancel');
+  });
+
+  it('glows the viewer hand as a drop target while a card is over it, clearing on release', () => {
+    root.dataset.viewerSeat = 'P1';
+    const hand = fakeHand('P1');
+    root._emit('pointerdown', onCard(fakeCard('c1', { onBattlefield: true, side: 'FATE' })));
+    root._emit('pointermove', overHand(hand));
+    assert.ok(hand.classList.has('drop-active'), 'the hand glows while hovered');
+    root._emit('pointermove', { clientX: 90, clientY: 90 }); // back over the board
+    assert.ok(!hand.classList.has('drop-active'), 'and stops glowing once the card leaves it');
+    root._emit('pointermove', overHand(hand));
+    root._emit('pointerup', onZone({ zone: 'hand', owner: 'P1' }));
+    assert.ok(!hand.classList.has('drop-active'), 'and on release');
+  });
+
+  it('never glows the opponent hand, which is not a valid drop target', () => {
+    root.dataset.viewerSeat = 'P1';
+    const hand = fakeHand('P2');
+    root._emit('pointerdown', onCard(fakeCard('c1', { onBattlefield: true, side: 'FATE' })));
+    root._emit('pointermove', overHand(hand));
+    assert.ok(!hand.classList.has('drop-active'));
+  });
+
+  it('reorders a hand card within the hand instead of re-moving it to the zone it occupies', () => {
+    root.dataset.viewerSeat = 'P1';
+    const handEl = fakeHand('P1', [handCardEl('h1', 0), handCardEl('h2', 100), handCardEl('h3', 200)]);
+    const dragged = fakeCard('h2', { onBattlefield: false, side: 'FATE', inHand: true });
+    root._emit('pointerdown', onCard(dragged));
+    root._emit('pointermove', { clientX: 250, clientY: 300 });
+    root._emit('pointerup', { clientX: 250, clientY: 140, target: { closest: () => handEl } });
+    // Dropped past h3 with h2 itself skipped → slot 2 (the end).
+    assert.deepEqual(sent.at(-1).intent, { op: 'REORDER_HAND', card_id: 'h2', value: 2 });
+  });
+
+  it('slides the hidden source to the landing slot, opening a gap while re-arranging', () => {
+    root.dataset.viewerSeat = 'P1';
+    const dragged = fakeCard('h2', { onBattlefield: false, side: 'FATE', inHand: true });
+    const handEl = fakeHand('P1', [handCardEl('h1', 0), dragged, handCardEl('h3', 200)]);
+    dragged.parentNode = handEl;
+    root._emit('pointerdown', onCard(dragged));
+    root._emit('pointermove', { clientX: 250, clientY: 300, target: { closest: () => handEl } });
+    assert.equal(handEl.children.indexOf(dragged), 2, 'the gap follows the pointer to the end slot');
+  });
+
+  it('returns a re-arranged hand card to its home slot if the drag is abandoned', () => {
+    root.dataset.viewerSeat = 'P1';
+    const dragged = fakeCard('h2', { onBattlefield: false, side: 'FATE', inHand: true });
+    const handEl = fakeHand('P1', [handCardEl('h1', 0), dragged, handCardEl('h3', 200)]);
+    dragged.parentNode = handEl;
+    root._emit('pointerdown', onCard(dragged));
+    root._emit('pointermove', { clientX: 250, clientY: 300, target: { closest: () => handEl } });
+    assert.equal(handEl.children.indexOf(dragged), 2, 'the gap opened at the end');
+    root._emit('pointercancel', {});
+    assert.equal(handEl.children.indexOf(dragged), 1, 'the source snaps back home on cancel');
+  });
+
+  it('barriers a dynasty card from the hand — no glow, stays clamped, settles on the board', () => {
+    root.dataset.viewerSeat = 'P1';
+    const hand = fakeHand('P1');
+    const card = fakeCard('c1', { onBattlefield: true, side: 'DYNASTY' });
+    root._emit('pointerdown', onCard(card));
+    root._emit('pointermove', overHand(hand)); // far below the board, over the hand
+    assert.ok(!hand.classList.has('drop-active'), 'a dynasty card never lights the hand');
+    assert.equal(card.style.top, '85px', 'it stays clamped to the board, bumping the hand edge');
+    root._emit('pointerup', onZone({ zone: 'hand', owner: 'P1' }));
+    assert.equal(sent.at(-1).intent.op, 'SET_CARD_POS', 'it settles on the board, not into the hand');
   });
 
   it('drags a discard top card with a ghost and drops it as a MOVE_CARD', () => {

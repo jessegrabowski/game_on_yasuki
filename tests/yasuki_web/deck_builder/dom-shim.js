@@ -39,6 +39,14 @@ function makeElement(tag) {
     classList: makeClassList(),
     appendChild(child) { child.parentNode = el; children.push(child); return child; },
     append(...nodes) { for (const child of nodes) { child.parentNode = el; children.push(child); } },
+    insertBefore(child, ref) {
+      const from = child.parentNode?.children;
+      if (from) { const i = from.indexOf(child); if (i >= 0) from.splice(i, 1); }
+      child.parentNode = el;
+      const at = ref ? children.indexOf(ref) : children.length;
+      children.splice(at < 0 ? children.length : at, 0, child);
+      return child;
+    },
     replaceChildren(...nodes) { children.length = 0; children.push(...nodes); },
     remove() {
       const siblings = el.parentNode?.children;
