@@ -302,6 +302,16 @@
   pointer-events: none;
 }
 
+/* Fold each card's border into its --card-w × --card-h footprint so a card renders at exactly the
+   declared size the board geometry maths (CARD_W/CARD_H in board.js) assume, and fits a fixed-height
+   slot like the hand strip without spilling. */
+.board-card,
+.zone-card,
+.pile,
+.province {
+  box-sizing: border-box;
+}
+
 .board-card {
   position: absolute;
   width: var(--card-w);
@@ -524,12 +534,16 @@
 
 .hand-strip {
   display: flex;
+  align-items: center;
   gap: 0.35rem;
   flex: 1 1 auto;
   min-width: 0;
-  /* Reserve a full card's height from the start so the strip doesn't jump taller on the first draw. */
-  min-height: var(--card-h);
+  /* Fixed height a little over one card (not min-height) so an empty and a full hand stay the same
+     size, with headroom — and an explicit overflow-y — so a horizontal scrollbar or sub-pixel
+     rounding can never force a vertical scrollbar. The hand only ever scrolls sideways. */
+  height: calc(var(--card-h) + 0.5rem);
   overflow-x: auto;
+  overflow-y: hidden;
   padding: 0.2rem 0;
 }
 
