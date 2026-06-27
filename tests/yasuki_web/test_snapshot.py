@@ -1,3 +1,4 @@
+import re
 from pathlib import Path
 
 from yasuki_core.engine.players import PlayerId
@@ -269,3 +270,38 @@ def test_province_key_serializes_with_its_index():
     table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 2)] = ProvinceZone(owner=P1)
 
     assert "P1:province:2" in _serialized(table, P1)["zones"]
+
+
+def test_card_fields_covers_every_serialized_key():
+    # The client's CARD_FIELDS (board.js) must list every key _card emits, or a newly serialized field
+    # would silently never re-patch its card on the board. Anchor the JS list to the real serializer.
+    table = TableState.empty_two_seat()
+    back = L5RCard(id="c1__back", name="Back", side=Side.DYNASTY, image_front=Path("sets/x/b.jpg"))
+    card = L5RCard(
+        id="c1",
+        name="Full",
+        side=Side.DYNASTY,
+        owner=None,
+        face_up=True,
+        image_front=Path("sets/x/a.jpg"),
+        art_swap={"donor_img": "d.png", "era": "x", "layout": "y", "keywords": []},
+        note="dead",
+        back_card_id="c1__back",
+        back=back,
+        showing_back=False,
+    )
+    table.battlefield.cards.append(card)
+    table.positions["c1"] = BoardPos(1.0, 2.0)
+    table.cards_by_id["c1"] = card
+
+    serialized = set(_serialized(table, P1)["battlefield"][0].keys())
+    # Self-check: the fixture must exercise every conditional key, or the guard below is hollow.
+    assert {"back_card_id", "showing_back", "art", "note", "x", "y"} <= serialized
+
+    board_js = Path(__file__).resolve().parents[2] / "src/yasuki_web/static/site/board.js"
+    match = re.search(r"CARD_FIELDS = \[(.*?)\]", board_js.read_text(), re.DOTALL)
+    assert match, "CARD_FIELDS not found in board.js"
+    card_fields = set(re.findall(r"'([^']+)'", match.group(1)))
+
+    missing = serialized - {"id"} - card_fields
+    assert not missing, f"board.js CARD_FIELDS is missing serialized keys: {sorted(missing)}"
