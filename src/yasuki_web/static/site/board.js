@@ -341,6 +341,10 @@ export const moveCardIntent = (id, to, position = null, toBottom = false, index 
 // Move a card already in the owner's hand to slot `index`, reordering the hand.
 export const reorderHandIntent = (id, index) =>
   intentMessage({ op: 'REORDER_HAND', card_id: id, value: index });
+// Move a card within the owner's own deck or discard to top-first slot `index`, reordering the pile.
+// `pile` is a deckDest/discardDest target.
+export const reorderPileIntent = (pile, id, index) =>
+  intentMessage({ op: 'REORDER_PILE', to: pile, card_id: id, value: index });
 // Negative-sentinel battlefield position for a card dealt without real coordinates; placeUnplacedCards
 // recognizes x < 0 and lays the card out by the owner's deck (mirrors the server's _UNPLACED_BOARD_POS).
 export const UNPLACED_POSITION = [-1, -1];
@@ -380,6 +384,20 @@ export function handDropIndex(handEl, clientX, draggedId) {
     if (!id || id === draggedId) continue; // skip the gap placeholder and the dragged card itself
     const rect = cardEl.getBoundingClientRect();
     if (clientX < rect.left + rect.width / 2) break;
+    index += 1;
+  }
+  return index;
+}
+
+// The insertion slot for a card dragged to `clientY` within a vertical list (the deck/discard search
+// dialog), as an index into the list excluding the dragged item. The vertical analog of handDropIndex.
+export function listDropIndex(listEl, clientY, draggedId) {
+  let index = 0;
+  for (const itemEl of listEl.children ?? []) {
+    const id = itemEl.dataset?.cardId;
+    if (!id || id === draggedId) continue;
+    const rect = itemEl.getBoundingClientRect();
+    if (clientY < rect.top + rect.height / 2) break;
     index += 1;
   }
   return index;

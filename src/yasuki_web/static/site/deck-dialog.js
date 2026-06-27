@@ -9,8 +9,10 @@
 import {
   deckDest,
   discardDest,
+  listDropIndex,
   moveCardIntent,
   node,
+  reorderPileIntent,
   shuffleIntent,
   UNPLACED_POSITION,
 } from './board.js';
@@ -34,6 +36,11 @@ export function openDeckDialog({
   canPull = true,
 }) {
   const isDiscard = kind === 'discard';
+  // Reordering writes to the pile, so it's offered only on one's own — always for a deck (its search
+  // is owner-only), and for a discard when `canPull` says it's the viewer's. The target is the pile's
+  // own dest, and the reorder index is the top-first slot the dialog shows.
+  const canReorder = isDiscard ? canPull : true;
+  const pileDest = isDiscard ? discardDest(deck.owner, deck.side) : deckDest(deck.owner, deck.side);
   // The working list, capped to the chosen limit and kept top-first; a pulled card is spliced out.
   let pool = (cards ?? []).slice(0, limit ?? (cards ?? []).length);
   let query = '';
@@ -120,6 +127,37 @@ export function openDeckDialog({
 
   const visible = () => (query ? pool.filter((card) => matchesTitle(card, query)) : pool);
 
+  // Drag-to-reorder the pile, offered only on the full (unfiltered) list of one's own pile. The
+  // dragged row follows the pointer slot-by-slot; on release the new top-first index is sent and the
+  // pool is reordered to match. listDropIndex gives the slot among the other rows.
+  let reorderId = null;
+  const reorderable = () => canReorder && !query;
+  const onReorderMove = (e) => {
+    const item = [...list.children].find((li) => li.dataset.cardId === reorderId);
+    if (!item) return;
+    const others = [...list.children].filter((li) => li !== item);
+    list.insertBefore(item, others[listDropIndex(list, e.clientY, reorderId)] ?? null);
+  };
+  const onReorderEnd = (e) => {
+    document.removeEventListener?.('pointermove', onReorderMove);
+    document.removeEventListener?.('pointerup', onReorderEnd);
+    const id = reorderId;
+    reorderId = null;
+    if (id == null) return;
+    const from = pool.findIndex((card) => card.id === id);
+    const index = listDropIndex(list, e.clientY, id);
+    if (from < 0 || index === from) return renderList(); // no move — restore the canonical order
+    const [card] = pool.splice(from, 1);
+    pool.splice(index, 0, card);
+    send(reorderPileIntent(pileDest, id, index));
+    renderList();
+  };
+  const startReorder = (id) => {
+    reorderId = id;
+    document.addEventListener?.('pointermove', onReorderMove);
+    document.addEventListener?.('pointerup', onReorderEnd);
+  };
+
   function renderTitle() {
     const side = SIDE_LABELS[deck.side] ?? deck.side ?? '';
     title.textContent = `${side} ${isDiscard ? 'discard' : 'deck'} — ${pool.length} cards`.trim();
@@ -137,6 +175,10 @@ export function openDeckDialog({
           selectedId = card.id;
           renderList();
         });
+        if (reorderable()) {
+          li.classList.add('reorderable');
+          li.addEventListener('pointerdown', () => startReorder(card.id));
+        }
         return li;
       }),
     );

@@ -22,6 +22,7 @@ from yasuki_core.engine.table import (
     RemoveCard,
     SearchDeck,
     MoveDeckTop,
+    ReorderPile,
 )
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
@@ -255,6 +256,18 @@ def test_search_top_n_phrasing():
     assert _describe(table, SearchDeck(DeckKey(P1, Side.DYNASTY), limit=3)) == [
         {"text": "Ada "},
         {"text": "searched the top 3 cards of their dynasty deck"},
+    ]
+
+
+def test_reorder_pile_is_logged_without_revealing_the_card_or_order():
+    table = TableState.empty_two_seat()
+    assert _describe(table, ReorderPile(DeckKey(P1, Side.FATE), "c1", 0)) == [
+        {"text": "Ada "},
+        {"text": "reordered their fate deck"},
+    ]
+    assert _describe(table, ReorderPile(ZoneKey(P1, ZoneRole.DYNASTY_DISCARD), "c1", 2)) == [
+        {"text": "Ada "},
+        {"text": "reordered their dynasty discard"},
     ]
 
 

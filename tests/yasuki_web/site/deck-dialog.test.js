@@ -208,3 +208,49 @@ describe('openDeckDialog — discard mode', () => {
     assert.equal(previewOf(handle.el).children[1].disabled, true);
   });
 });
+
+describe('openDeckDialog — drag to reorder', () => {
+  it('marks own-pile rows reorderable and sends REORDER_PILE on a drag', () => {
+    const { handle, sent } = open(); // own fate deck
+    const rows = listOf(handle.el).children;
+    assert.ok(rows[0].classList.contains('reorderable'));
+    rows[0]._emit('pointerdown', {}); // grab the top card (t3)
+    document._emit('pointerup', { clientY: 999 }); // drop at the bottom
+    assert.deepEqual(
+      sent.find((frame) => frame.intent.op === 'REORDER_PILE').intent,
+      {
+        op: 'REORDER_PILE',
+        to: { kind: 'deck', deck: { owner: 'P1', side: 'FATE' } },
+        card_id: 't3',
+        value: 2,
+      },
+    );
+  });
+
+  it('sends no reorder when a row is released at its own slot (a tap)', () => {
+    const { handle, sent } = open();
+    listOf(handle.el).children[0]._emit('pointerdown', {});
+    document._emit('pointerup', { clientY: 5 }); // released at the top — no move
+    assert.ok(!sent.some((frame) => frame.intent.op === 'REORDER_PILE'));
+  });
+
+  it('does not offer reorder on an opponent discard', () => {
+    const handle = openDeckDialog({
+      kind: 'discard',
+      deck: { owner: 'P2', side: 'FATE' },
+      cards: deckContents().cards,
+      imgBase: '/images',
+      canPull: false,
+      send: () => {},
+    });
+    assert.ok(!listOf(handle.el).children[0].classList.contains('reorderable'));
+  });
+
+  it('disables reorder while a filter is active', () => {
+    const { handle } = open();
+    const filter = filterOf(handle.el);
+    filter.value = 'card';
+    filter._emit('input', {});
+    assert.ok(!listOf(handle.el).children[0].classList.contains('reorderable'));
+  });
+});

@@ -179,6 +179,7 @@ class IntentOp(str, Enum):
     SET_CARD_POS = "SET_CARD_POS"
     SET_CARD_POSITIONS = "SET_CARD_POSITIONS"
     REORDER_HAND = "REORDER_HAND"
+    REORDER_PILE = "REORDER_PILE"
     RAISE = "RAISE"
     BOW = "BOW"
     UNBOW = "UNBOW"
@@ -276,6 +277,18 @@ class ReorderHand:
     card_id: str
     index: int
     op: ClassVar[IntentOp] = IntentOp.REORDER_HAND
+
+
+@dataclass(frozen=True, slots=True)
+class ReorderPile:
+    """Move a card within the acting seat's own deck or discard pile to a new slot. ``index`` is the
+    target position in the top-first order the owner sees (the deck's next-drawn card, or the discard's
+    top, is index 0). The index is clamped; a no-op move produces no event. Owner-gated."""
+
+    pile: "DeckKey | ZoneKey"
+    card_id: str
+    index: int
+    op: ClassVar[IntentOp] = IntentOp.REORDER_PILE
 
 
 @dataclass(frozen=True, slots=True)
@@ -472,6 +485,7 @@ Intent = (
     | SetCardPos
     | SetCardPositions
     | ReorderHand
+    | ReorderPile
     | Raise
     | Bow
     | Unbow
@@ -712,6 +726,35 @@ def _reorder_hand(state: TableState, seat: PlayerId, intent: ReorderHand) -> lis
     cards.insert(index, card)
     if index == current:
         return []  # re-inserted at its own slot — the order is unchanged
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
+def _reorder_pile(state: TableState, seat: PlayerId, intent: ReorderPile) -> list[Event]:
+    pile = intent.pile
+    if getattr(pile, "owner", None) != seat:
+        return []
+    if isinstance(pile, DeckKey):
+        holder = state.decks.get(pile)
+    elif isinstance(pile, ZoneKey):
+        holder = state.zones.get(pile)
+    else:
+        return []
+    cards = holder.cards if holder is not None else None
+    if not cards:
+        return []
+    # The owner orders the pile top-first (the engine list keeps the top last), so apply the move in
+    # that view and write it back. Mirrors _reorder_hand: pop the card, clamp, re-insert, no-op stays so.
+    view = list(reversed(cards))
+    current = next((i for i, held in enumerate(view) if held.id == intent.card_id), None)
+    if current is None:
+        return []
+    card = view.pop(current)
+    index = max(0, min(intent.index, len(view)))
+    view.insert(index, card)
+    if index == current:
+        return []
+    cards[:] = reversed(view)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
@@ -996,6 +1039,7 @@ _HANDLERS = {
     IntentOp.SET_CARD_POS: _set_card_pos,
     IntentOp.SET_CARD_POSITIONS: _set_card_positions,
     IntentOp.REORDER_HAND: _reorder_hand,
+    IntentOp.REORDER_PILE: _reorder_pile,
     IntentOp.RAISE: _raise,
     IntentOp.BOW: _apply_flag,
     IntentOp.UNBOW: _apply_flag,
