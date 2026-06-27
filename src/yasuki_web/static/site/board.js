@@ -138,32 +138,60 @@ function tagCard(el, card) {
   el.dataset.img = card.img ?? '';
   // pregame (stronghold/sensei/wind) cards are setup pieces tied to a seat — they cannot change hands.
   el.dataset.pregame = card.pregame ? '1' : '';
-  if (card.back_card_id) el.dataset.doubleFaced = '1';
+  el.dataset.doubleFaced = card.back_card_id ? '1' : '';
+}
+
+// Every field of a serialized card whose change must re-patch its element, mirroring snapshot.py
+// `_card` plus the battlefield x/y. `id` is excluded — it keys the element, it never changes.
+// Exported so the reconcile diff and the shape-drift guard key off the same list.
+export const CARD_FIELDS = [
+  'name', 'img', 'side', 'owner', 'pregame', 'token', 'bowed', 'face_up', 'inverted',
+  'shown', 'peeked', 'hidden', 'back_card_id', 'showing_back', 'art', 'note', 'x', 'y',
+];
+
+// Fields that change a card's drawn face (front/back image, peek/show disclosure, note); when none of
+// these moved, a re-patch keeps the existing <img> and its cached art-swap composite.
+const FACE_FIELDS = ['hidden', 'face_up', 'peeked', 'shown', 'img', 'name', 'side', 'art', 'note'];
+
+function faceChanged(prev, view) {
+  return FACE_FIELDS.some((field) =>
+    field === 'art'
+      ? JSON.stringify(prev.art ?? null) !== JSON.stringify(view.art ?? null)
+      : prev[field] !== view[field],
+  );
+}
+
+// Apply a card's full visual state to its element, idempotently. `prev` is the view the element last
+// held (null on first build); given it, the face is rebuilt only when a face field changed, so an
+// unchanged card keeps its image across renders. A battlefield card carries an x; a zone card
+// (hand/province/pile) does not and stays flow-positioned.
+export function patchCard(el, view, prev, imgBase) {
+  el.classList.toggle('bowed', !!view.bowed);
+  el.classList.toggle('inverted', !!view.inverted);
+  el.classList.toggle('shown', !!view.shown);
+  el.classList.toggle('peeked', !!view.peeked);
+  tagCard(el, view);
+  if (view.x !== undefined) {
+    el.style.left = `${view.x}px`;
+    el.style.top = `${view.y}px`;
+  }
+  if (!prev || faceChanged(prev, view)) {
+    el.replaceChildren();
+    applyFace(el, view, imgBase);
+  }
 }
 
 // An absolutely-positioned battlefield card.
 function cardElement(card, imgBase) {
   const el = node('div', 'board-card');
-  if (card.bowed) el.classList.add('bowed');
-  if (card.inverted) el.classList.add('inverted');
-  if (card.shown) el.classList.add('shown');
-  if (card.peeked) el.classList.add('peeked');
-  tagCard(el, card);
-  el.style.left = `${card.x}px`;
-  el.style.top = `${card.y}px`;
-  applyFace(el, card, imgBase);
+  patchCard(el, card, null, imgBase);
   return el;
 }
 
 // A card laid out in a zone (hand, province, pile) — flow-positioned, no x/y.
 function zoneCard(card, imgBase) {
   const el = node('div', 'zone-card');
-  if (card.bowed) el.classList.add('bowed');
-  if (card.inverted) el.classList.add('inverted');
-  if (card.shown) el.classList.add('shown');
-  if (card.peeked) el.classList.add('peeked');
-  tagCard(el, card);
-  applyFace(el, card, imgBase);
+  patchCard(el, card, null, imgBase);
   return el;
 }
 

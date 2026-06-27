@@ -32,6 +32,7 @@ import {
   initPanelHonor,
   highlightCard,
   placeUnplacedCards,
+  patchCard,
   canonicalToView,
   viewToCanonical,
   clampMenuPosition,
@@ -691,6 +692,43 @@ describe('listDropIndex', () => {
 
   it('skips the dragged row so the slot is relative to the others', () => {
     assert.equal(listDropIndex(list, 250, 'b'), 2); // a, then c — b excluded
+  });
+});
+
+describe('patchCard', () => {
+  const view = (over = {}) => ({
+    id: 'c1', name: 'Hida', img: 'a.jpg', side: 'DYNASTY', owner: 'P1',
+    bowed: false, inverted: false, face_up: true, shown: false, peeked: false,
+    hidden: false, token: false, pregame: false, ...over,
+  });
+
+  it('applies classes, dataset, and a single face on first build', () => {
+    const el = document.createElement('div');
+    patchCard(el, view({ bowed: true }), null, '/img');
+    assert.ok(el.classList.contains('bowed'));
+    assert.equal(el.dataset.cardId, 'c1');
+    assert.equal(el.dataset.name, 'Hida');
+    assert.equal(el.children.length, 1, 'exactly one face child');
+  });
+
+  it('re-patching with the same view does not duplicate the face', () => {
+    const el = document.createElement('div');
+    const v = view();
+    patchCard(el, v, null, '/img');
+    patchCard(el, v, v, '/img');
+    assert.equal(el.children.length, 1);
+  });
+
+  it('clears a flag that goes false and swaps the face in place on a state change', () => {
+    setBackArt({ DYNASTY: '/back.jpg' });
+    const el = document.createElement('div');
+    const up = view({ bowed: true });
+    patchCard(el, up, null, '/img');
+    patchCard(el, view({ bowed: false, face_up: false }), up, '/img');
+    assert.equal(el.dataset.bowed, '', 'bowed dataset cleared');
+    assert.ok(!el.classList.contains('bowed'), 'bowed class cleared');
+    assert.ok(el.classList.contains('face-down'), 'now face-down');
+    assert.equal(el.children.length, 1, 'face replaced, not appended');
   });
 });
 
