@@ -9,6 +9,7 @@ import {
   renderPanel,
   dragPosition,
   dragVisualPosition,
+  grabOffset,
   handDropIndex,
   intentMessage,
   spawnMessage,
@@ -565,6 +566,25 @@ describe('dragPosition', () => {
     assert.deepEqual(dragPosition(0, 0, board, { x: 50, y: 50 }), { x: 0, y: 0 });
     // 500 - 81 wide, 400 - 115 tall — a full card stays on the board.
     assert.deepEqual(dragPosition(9999, 9999, board, { x: 0, y: 0 }), { x: 419, y: 285 });
+  });
+});
+
+describe('grabOffset', () => {
+  it('measures from the box top-left for an upright card (rect equals box)', () => {
+    assert.deepEqual(grabOffset({ left: 100, top: 200, width: 81, height: 115 }, 120, 230), {
+      x: 20,
+      y: 30,
+    });
+  });
+
+  it('compensates for a bowed card whose bounding rect has swapped axes', () => {
+    // A bowed card's rect is 115x81, centred on the same point as its unrotated 81x115 box, whose
+    // top-left is therefore (117, 183). A pointer at (137, 213) is offset (20, 30) into that box, so
+    // the drag (which sets style.left/top on the unrotated box) keeps it under the pointer — no pop.
+    assert.deepEqual(grabOffset({ left: 100, top: 200, width: 115, height: 81 }, 137, 213), {
+      x: 20,
+      y: 30,
+    });
   });
 });
 

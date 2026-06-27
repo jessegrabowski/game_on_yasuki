@@ -537,6 +537,18 @@ const DRAG_SEND_MS = 40;
 
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 
+// The pointer's offset within a card's untransformed box at grab time. Derived from the box centre,
+// which is invariant under the bow/invert rotations, rather than the bounding rect's top-left: a
+// bowed card is rotated 90°, so getBoundingClientRect reports a swapped-axis box, and a rect-relative
+// offset would pop the card sideways the instant the drag repositions it via style.left/top (which
+// address the unrotated box). Upright cards are unaffected, since their rect equals their box.
+export function grabOffset(rect, clientX, clientY) {
+  return {
+    x: clientX - (rect.left + rect.width / 2 - CARD_W / 2),
+    y: clientY - (rect.top + rect.height / 2 - CARD_H / 2),
+  };
+}
+
 // Top-left position for a card being dragged, in battlefield-local coordinates, clamped so the card
 // stays fully on the board. `grab` is the pointer's offset within the card at grab time.
 export function dragPosition(clientX, clientY, boardRect, grab, card = { w: CARD_W, h: CARD_H }) {
@@ -1042,7 +1054,7 @@ export function initBoardInteractions(root, boardEl, send) {
       id,
       el: cardEl,
       onBattlefield,
-      grab: { x: e.clientX - rect.left, y: e.clientY - rect.top },
+      grab: grabOffset(rect, e.clientX, e.clientY),
       moved: false,
       additive: e.ctrlKey || e.metaKey,
       // Only fate cards live in a hand, so only they cross its boundary; others bump against it.
