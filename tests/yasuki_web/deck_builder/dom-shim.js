@@ -23,7 +23,15 @@ function makeElement(tag) {
     parentNode: null,
     className: '',
     id: '',
-    textContent: '',
+    _textContent: '',
+    // Mirror the DOM: reading textContent concatenates descendant text; setting it replaces children.
+    get textContent() {
+      return children.length ? children.map((c) => c.textContent ?? '').join('') : this._textContent;
+    },
+    set textContent(value) {
+      this._textContent = value;
+      children.length = 0;
+    },
     innerHTML: '',
     disabled: false,
     dataset: {},

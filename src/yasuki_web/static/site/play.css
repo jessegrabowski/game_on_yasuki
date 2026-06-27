@@ -432,6 +432,11 @@
   background: var(--r-gold-soft);
 }
 
+/* The single underlined letter is the item's keyboard accelerator while the menu is open. */
+.board-menu .menu-key {
+  text-decoration: underline;
+}
+
 .board-menu li.menu-sep {
   margin: 0.3rem 0;
   padding: 0;
