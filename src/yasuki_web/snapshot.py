@@ -60,6 +60,8 @@ def _card(view: L5RCard | HiddenCard, peeked_ids: frozenset[str] = frozenset()) 
         card["showing_back"] = view.showing_back
     if face.art_swap is not None:
         card["art"] = face.art_swap
+    if face.note:
+        card["note"] = face.note
     return card
 
 

@@ -13,6 +13,7 @@ from yasuki_core.engine.table import (
     SetCardPositions,
     ReorderHand,
     ReorderPile,
+    SetNote,
     Bow,
     Unbow,
     Flip,
@@ -211,6 +212,51 @@ def test_reorder_pile_cannot_touch_an_opponents_deck():
     events = apply_intent(table, PlayerId.P1, ReorderPile(deck, "x", 0))
 
     assert events == [] and table.seq == 0
+
+
+def test_set_note_sets_strips_and_clears():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, SetNote("f1", "  dead  "))
+    assert card.note == "dead"  # surrounding whitespace trimmed
+
+    events = apply_intent(table, PlayerId.P1, SetNote("f1", ""))  # an empty note removes it
+    assert card.note is None and len(events) == 1
+
+
+def test_set_note_is_rejected_on_a_face_down_card():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    card.turn_face_down()
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, SetNote("f1", "secret"))
+
+    assert events == [] and card.note is None
+
+
+def test_set_note_to_the_same_value_is_a_no_op():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    card.set_note("dead")
+    _on_battlefield(table, card)
+
+    assert apply_intent(table, PlayerId.P1, SetNote("f1", "dead")) == []
+
+
+def test_a_note_rides_a_card_into_the_discard_but_clears_in_a_deck():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    card.set_note("dead")
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, MoveCard("f1", ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)))
+    assert card.note == "dead"  # the discard is public — the marker stays
+
+    apply_intent(table, PlayerId.P1, MoveCard("f1", DeckKey(PlayerId.P1, Side.FATE)))
+    assert card.note is None  # shuffled back into the deck — the marker is gone
 
 
 def test_move_card_into_the_hand_lands_at_the_given_slot():

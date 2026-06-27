@@ -55,6 +55,8 @@ class IntentEnvelope(BaseModel):
     seed: int | None = None
     delta: int | None = None
     value: int | None = None
+    # A card's free-text note (SET_NOTE); bounded so a note stays a short label, not a payload.
+    text: str | None = Field(None, max_length=200)
 
 
 def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
@@ -78,6 +80,7 @@ def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
             "seed": envelope.seed,
             "delta": envelope.delta,
             "value": envelope.value,
+            "text": envelope.text,
         }
     )
 

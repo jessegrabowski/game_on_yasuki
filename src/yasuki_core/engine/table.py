@@ -199,6 +199,7 @@ class IntentOp(str, Enum):
     DISCARD_PROVINCE = "DISCARD_PROVINCE"
     CREATE_PROVINCE = "CREATE_PROVINCE"
     SET_HONOR = "SET_HONOR"
+    SET_NOTE = "SET_NOTE"
     SPAWN_CARD = "SPAWN_CARD"
     REMOVE_CARD = "REMOVE_CARD"
 
@@ -297,6 +298,16 @@ class Raise:
 
     card_id: str
     op: ClassVar[IntentOp] = IntentOp.RAISE
+
+
+@dataclass(frozen=True, slots=True)
+class SetNote:
+    """Set or clear a free-text annotation on a face-up card; an empty note removes it. Either player
+    may note any card whose face is public — the note is a shared marker, not an owned action."""
+
+    card_id: str
+    note: str | None
+    op: ClassVar[IntentOp] = IntentOp.SET_NOTE
 
 
 @dataclass(frozen=True, slots=True)
@@ -487,6 +498,7 @@ Intent = (
     | ReorderHand
     | ReorderPile
     | Raise
+    | SetNote
     | Bow
     | Unbow
     | Flip
@@ -612,6 +624,7 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
         card.turn_face_down()
         card.unbow()
         card.uninvert()
+        card.set_note(None)  # a card shuffled back into a deck loses its annotation
         if intent.to_bottom:
             state.decks[dest].add_to_bottom([card])
         else:
@@ -767,6 +780,18 @@ def _raise(state: TableState, seat: PlayerId, intent: Raise) -> list[Event]:
     if not cards or cards[-1] is card or not any(held is card for held in cards):
         return []
     _bring_to_top(state, card)
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
+def _set_note(state: TableState, seat: PlayerId, intent: SetNote) -> list[Event]:
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None or not card.face_up:
+        return []
+    note = (intent.note or "").strip() or None
+    if note == card.note:
+        return []
+    card.set_note(note)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
@@ -1041,6 +1066,7 @@ _HANDLERS = {
     IntentOp.REORDER_HAND: _reorder_hand,
     IntentOp.REORDER_PILE: _reorder_pile,
     IntentOp.RAISE: _raise,
+    IntentOp.SET_NOTE: _set_note,
     IntentOp.BOW: _apply_flag,
     IntentOp.UNBOW: _apply_flag,
     IntentOp.FLIP: _apply_flag,

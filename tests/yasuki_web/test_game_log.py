@@ -23,6 +23,7 @@ from yasuki_core.engine.table import (
     SearchDeck,
     MoveDeckTop,
     ReorderPile,
+    SetNote,
 )
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
@@ -45,6 +46,11 @@ def _describe(table, intent, cards=()):
 
 def test_set_card_pos_is_not_logged():
     assert _describe(TableState.empty_two_seat(), SetCardPos("c1", 1.0, 2.0), ("c1",)) == []
+
+
+def test_setting_a_note_is_not_logged():
+    # A note is a private annotation; surfacing it would leak the text and clutter the log.
+    assert _describe(TableState.empty_two_seat(), SetNote("c1", "dead"), ("c1",)) == []
 
 
 def test_bow_links_a_public_battlefield_card():
