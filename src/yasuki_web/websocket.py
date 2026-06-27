@@ -68,6 +68,13 @@ def _deck_display_name(parsed: dict, filename: str | None) -> str:
     return (filename or "").strip() or _UNNAMED_DECK_LABEL
 
 
+def _entry_names(entry: dict):
+    """The card names a decklist entry references: its own, plus its art-swap donor's when present."""
+    yield entry["name"]
+    if entry.get("art"):
+        yield entry["art"]["name"]
+
+
 class GameRoom:
     """Authoritative game state and connections for one room.
 
@@ -300,12 +307,15 @@ class GameRoom:
     async def _run_setup(self):
         """Resolve both seats' decks and deal the opening table, then re-seed the action log so the
         post-setup state is the replay head."""
+        # Fetch the recipients and any art-swap donors (a borrowed printing's card may not otherwise
+        # be in either deck), so the resolver can recomposite custom art.
         names = sorted(
             {
-                entry["name"]
+                name
                 for parsed in self.pending_decks.values()
                 for section in ("pre_game", "dynasty", "fate")
                 for entry in parsed[section]
+                for name in _entry_names(entry)
             }
         )
         records = await asyncio.to_thread(get_cards_by_names, names)

@@ -30,6 +30,7 @@ import {
   clampMenuPosition,
   setBackArt,
   backArtBySide,
+  artSpec,
 } from '../../../src/yasuki_web/static/site/board.js';
 
 beforeEach(() => {
@@ -438,6 +439,42 @@ describe('renderHand', () => {
     renderHand(hand, [{ id: 'oh1', hidden: true }], '/images');
     assert.ok(hand.children[0].classList.contains('face-down'));
     assert.equal(hand.children[0].children.length, 0);
+  });
+
+  it('renders the base print for a card with borrowed art (the swap composites best-effort)', () => {
+    const hand = document.createElement('div');
+    const swapped = card({ id: 'h1', art: { donor_img: 'sets/le/ambush.png', era: '2016+', layout: 'Personality', keywords: [], donor_era: '1995-99', donor_layout: 'Strategy' } });
+    renderHand(hand, [swapped], '/images');
+    // The base printing shows immediately; the canvas recomposite (untestable in the fake DOM) only
+    // upgrades the src later, so the render never blocks on it.
+    assert.equal(hand.children[0].children[0].src, '/images/sets/imperial_edition/hida_kisada.jpg');
+  });
+});
+
+// artSpec is the pure data seam: a snapshot card + its art donor payload → the compositor's spec.
+// The canvas itself is browser-only and deliberately not exercised through the fake DOM.
+describe('artSpec', () => {
+  it('maps a card and its donor payload to the deck-builder compositor spec', () => {
+    const c = {
+      img: 'sets/pe/kuni_yori.png',
+      art: {
+        donor_img: 'sets/le/ambush.png',
+        era: '2016+',
+        layout: 'Personality',
+        keywords: ['Shadowlands', 'Berserker'],
+        donor_era: '1995-99',
+        donor_layout: 'Strategy',
+      },
+    };
+    assert.deepEqual(artSpec(c), {
+      recipientImagePath: 'sets/pe/kuni_yori.png',
+      recipientEra: '2016+',
+      recipientLayout: 'Personality',
+      recipientKeywords: ['Shadowlands', 'Berserker'],
+      donorImagePath: 'sets/le/ambush.png',
+      donorEra: '1995-99',
+      donorLayout: 'Strategy',
+    });
   });
 });
 

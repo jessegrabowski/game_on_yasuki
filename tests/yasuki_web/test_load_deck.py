@@ -3,7 +3,7 @@ import asyncio
 import pytest
 from pydantic import ValidationError
 
-from yasuki_web.websocket import GameRoom
+from yasuki_web.websocket import GameRoom, _entry_names
 from yasuki_web.schemas import ClientMessage, LoadDeckRequest
 from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
@@ -122,3 +122,16 @@ def test_each_seat_stashes_its_own_deck(room):
 
     assert room.pending_decks[PlayerId.P1]["name"] == "Crab Beats"
     assert room.pending_decks[PlayerId.P2]["name"] == "Crane"
+
+
+def test_entry_names_includes_the_art_swap_donor():
+    # The donor's card must be fetched alongside the recipient, or its borrowed art can't resolve.
+    assert list(_entry_names({"name": "Ambush", "art": {"name": "Doji Hoturi"}})) == [
+        "Ambush",
+        "Doji Hoturi",
+    ]
+
+
+def test_entry_names_is_just_the_card_without_an_art_swap():
+    assert list(_entry_names({"name": "Ambush"})) == ["Ambush"]
+    assert list(_entry_names({"name": "Ambush", "art": None})) == ["Ambush"]
