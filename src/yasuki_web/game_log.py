@@ -4,6 +4,7 @@ from yasuki_core.engine.table import (
     Event,
     IntentOp,
     DeckKey,
+    ZoneKey,
     ZoneRole,
     MoveDest,
     BATTLEFIELD,
@@ -53,6 +54,14 @@ def _side_word(state: TableState, card_id: str) -> str:
 
 def _deck_desc(deck: DeckKey) -> str:
     return f"their {deck.side.value.lower()} deck"
+
+
+def _pile_desc(pile: DeckKey | ZoneKey) -> str:
+    """An own-pile description for the reorder log, hiding the card and the new order. The reorder is
+    owner-gated, so a deck reads "their fate deck" and a discard "their fate discard"."""
+    if isinstance(pile, DeckKey):
+        return _deck_desc(pile)
+    return f"their {pile.role.value.split('_')[0]} discard"
 
 
 def _dest_desc(to: MoveDest) -> str:
@@ -129,6 +138,8 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
             return [lead, {"text": "drew a card"}]
         case IntentOp.SHUFFLE:
             return [lead, {"text": f"shuffled {_deck_desc(intent.deck)}"}]
+        case IntentOp.REORDER_PILE:
+            return [lead, {"text": f"reordered {_pile_desc(intent.pile)}"}]
         case IntentOp.FLIP_DECK_TOP:
             return [lead, {"text": f"flipped the top of {_deck_desc(intent.deck)}"}]
         case IntentOp.SEARCH_DECK:

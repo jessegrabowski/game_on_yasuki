@@ -12,6 +12,7 @@ from yasuki_core.engine.table import (
     SetCardPos,
     SetCardPositions,
     ReorderHand,
+    ReorderPile,
     Bow,
     Unbow,
     Flip,
@@ -149,6 +150,67 @@ def test_reorder_hand_cannot_touch_the_opponents_hand():
 
     assert events == [] and table.seq == 0
     assert table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards == [card]
+
+
+# The owner sees a pile top-first; the engine list keeps the top last, so these helpers translate.
+def _stock_deck(table, side, *top_first_ids):
+    deck_key = DeckKey(PlayerId.P1, side)
+    cards = []
+    for card_id in top_first_ids:
+        card = _fate(card_id)
+        table.cards_by_id[card_id] = card
+        cards.append(card)
+    table.decks[deck_key].cards[:] = list(reversed(cards))
+    return deck_key
+
+
+def _top_first(cards):
+    return [card.id for card in reversed(cards)]
+
+
+def test_reorder_pile_moves_a_deck_card_to_the_top():
+    table = TableState.empty_two_seat()
+    deck = _stock_deck(table, Side.FATE, "a", "b", "c")  # owner sees a (top), b, c
+
+    events = apply_intent(table, PlayerId.P1, ReorderPile(deck, "c", 0))
+
+    assert _top_first(table.decks[deck].cards) == ["c", "a", "b"]
+    assert table.seq == 1 and len(events) == 1
+
+
+def test_reorder_pile_reorders_a_discard_in_the_owners_view():
+    table = TableState.empty_two_seat()
+    pile = ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)
+    cards = [_fate("a"), _fate("b"), _fate("c")]
+    for card in cards:
+        table.cards_by_id[card.id] = card
+    table.zones[pile].cards[:] = list(reversed(cards))  # owner sees a (top), b, c
+
+    apply_intent(table, PlayerId.P1, ReorderPile(pile, "a", 2))
+
+    assert _top_first(table.zones[pile].cards) == ["b", "c", "a"]
+
+
+def test_reorder_pile_clamps_and_no_ops_at_the_same_slot():
+    table = TableState.empty_two_seat()
+    deck = _stock_deck(table, Side.FATE, "a", "b", "c")
+
+    assert apply_intent(table, PlayerId.P1, ReorderPile(deck, "b", 1)) == []  # b already at slot 1
+    apply_intent(table, PlayerId.P1, ReorderPile(deck, "a", 99))  # clamps to the bottom
+    assert _top_first(table.decks[deck].cards) == ["b", "c", "a"]
+
+
+def test_reorder_pile_cannot_touch_an_opponents_deck():
+    table = TableState.empty_two_seat()
+    deck = DeckKey(PlayerId.P2, Side.FATE)
+    cards = [_fate("x", owner=PlayerId.P2), _fate("y", owner=PlayerId.P2)]
+    for card in cards:
+        table.cards_by_id[card.id] = card
+    table.decks[deck].cards[:] = cards
+
+    events = apply_intent(table, PlayerId.P1, ReorderPile(deck, "x", 0))
+
+    assert events == [] and table.seq == 0
 
 
 def test_move_card_into_the_hand_lands_at_the_given_slot():

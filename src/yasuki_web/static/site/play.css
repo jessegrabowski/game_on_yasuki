@@ -1030,6 +1030,14 @@
   box-shadow: inset 3px 0 0 var(--r-gold);
 }
 
+/* Rows of one's own pile can be dragged to reorder it; suppress text selection so a drag up or down
+   doesn't highlight the card names it passes over. */
+.deck-dialog-name.reorderable {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
 .deck-dialog-preview {
   display: flex;
   flex: 0 0 auto;

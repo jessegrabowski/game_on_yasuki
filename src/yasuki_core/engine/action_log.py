@@ -21,6 +21,7 @@ from yasuki_core.engine.table import (
     SetCardPos,
     SetCardPositions,
     ReorderHand,
+    ReorderPile,
     Raise,
     CardFlagIntent,
     Bow,
@@ -436,6 +437,12 @@ def encode_intent(intent: Intent) -> dict:
             payload["moves"] = [[card_id, x, y] for card_id, x, y in intent.moves]
         case IntentOp.REORDER_HAND:
             payload |= {"card_id": intent.card_id, "value": intent.index}
+        case IntentOp.REORDER_PILE:
+            payload |= {
+                "to": _encode_move_dest(intent.pile),
+                "card_id": intent.card_id,
+                "value": intent.index,
+            }
         case IntentOp.RAISE:
             payload["card_id"] = intent.card_id
         case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
@@ -501,6 +508,10 @@ def decode_intent(payload: dict) -> Intent:
             return SetCardPositions(tuple((m[0], m[1], m[2]) for m in payload["moves"]))
         case IntentOp.REORDER_HAND:
             return ReorderHand(payload["card_id"], payload["value"])
+        case IntentOp.REORDER_PILE:
+            return ReorderPile(
+                _decode_move_dest(payload["to"]), payload["card_id"], payload["value"]
+            )
         case IntentOp.RAISE:
             return Raise(payload["card_id"])
         case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:

@@ -11,6 +11,9 @@ import {
   dragVisualPosition,
   grabOffset,
   handDropIndex,
+  listDropIndex,
+  reorderPileIntent,
+  deckDest,
   intentMessage,
   spawnMessage,
   removeMessage,
@@ -507,6 +510,15 @@ describe('message builders', () => {
     assert.deepEqual(flipIntent('c1'), { type: 'INTENT', intent: { op: 'FLIP', card_ids: ['c1'] } });
   });
 
+  it('wraps a REORDER_PILE carrying the pile dest and top-first index', () => {
+    assert.deepEqual(reorderPileIntent(deckDest('P1', 'FATE'), 'c1', 2).intent, {
+      op: 'REORDER_PILE',
+      to: { kind: 'deck', deck: { owner: 'P1', side: 'FATE' } },
+      card_id: 'c1',
+      value: 2,
+    });
+  });
+
   it('wraps a batched SET_CARD_POSITIONS group move', () => {
     const moves = [
       { id: 'c1', x: 5, y: 6 },
@@ -611,6 +623,22 @@ describe('handDropIndex', () => {
 
   it('skips the dragged card so the slot is relative to the others', () => {
     assert.equal(handDropIndex(hand, 250, 'b'), 2); // a, then c — b excluded
+  });
+});
+
+describe('listDropIndex', () => {
+  // Three 20px-tall rows at y = 0, 100, 200 (centres 10, 110, 210).
+  const row = (id, top) => ({ dataset: { cardId: id }, getBoundingClientRect: () => ({ top, height: 20 }) });
+  const list = { children: [row('a', 0), row('b', 100), row('c', 200)] };
+
+  it('counts the rows whose centre the pointer has crossed', () => {
+    assert.equal(listDropIndex(list, 5, 'x'), 0); // above every centre
+    assert.equal(listDropIndex(list, 150, 'x'), 2); // past a and b
+    assert.equal(listDropIndex(list, 999, 'x'), 3); // past all → the end
+  });
+
+  it('skips the dragged row so the slot is relative to the others', () => {
+    assert.equal(listDropIndex(list, 250, 'b'), 2); // a, then c — b excluded
   });
 });
 
