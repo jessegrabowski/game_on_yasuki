@@ -71,6 +71,7 @@ import {
   rememberDeleteToken,
   forgetDeleteToken,
   ownedRoomIds,
+  discardSearchProps,
   init,
 } from '../../../src/yasuki_web/static/site/top-secret.js';
 
@@ -270,6 +271,37 @@ describe('setup frames', () => {
 
   it('builds a parameterless RESET frame', () => {
     assert.deepEqual(resetFrame('r1'), { type: 'RESET', room: 'r1' });
+  });
+});
+
+describe('discardSearchProps', () => {
+  const snapshot = {
+    your_seat: 'P1',
+    zones: {
+      'P1:fate_discard': [{ id: 'a' }, { id: 'b' }, { id: 'c' }],
+      'P2:dynasty_discard': [{ id: 'x' }],
+    },
+  };
+
+  it('lists own fate discard top-first and allows pulling', () => {
+    const props = discardSearchProps(snapshot, 'P1', 'fate_discard');
+    assert.deepEqual(props.deck, { owner: 'P1', side: 'FATE' });
+    assert.deepEqual(
+      props.cards.map((card) => card.id),
+      ['c', 'b', 'a'], // bottom-first snapshot reversed to most-recent-first
+    );
+    assert.equal(props.canPull, true);
+  });
+
+  it('derives the dynasty side and forbids pulling from the opponent pile', () => {
+    const props = discardSearchProps(snapshot, 'P2', 'dynasty_discard');
+    assert.equal(props.deck.side, 'DYNASTY');
+    assert.equal(props.canPull, false);
+  });
+
+  it('yields an empty list for a missing snapshot or pile', () => {
+    assert.deepEqual(discardSearchProps(null, 'P1', 'fate_discard').cards, []);
+    assert.deepEqual(discardSearchProps(snapshot, 'P1', 'dynasty_discard').cards, []);
   });
 });
 
