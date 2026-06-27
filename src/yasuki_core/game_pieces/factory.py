@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
+from yasuki_core.card_art import classify
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side, AttachmentType
@@ -95,6 +96,8 @@ def resolve_decklist(parsed: dict, records: list[dict], owner: PlayerId) -> Reso
                         by_id,
                         owner=owner,
                         card_id=f"{owner.name}-{next_id}",
+                        art=entry.get("art"),
+                        name_index=index,
                     )
                 )
                 next_id += 1
@@ -128,6 +131,33 @@ def _select_print(record: dict, set_name: str | None) -> dict | None:
     return prints[0] if prints else None
 
 
+def _art_swap(
+    record: dict, front_print: dict, art: dict, name_index: dict[str, dict]
+) -> dict | None:
+    """The client-side art-swap payload for a card whose deck entry borrows another printing's art.
+
+    Carries the donor print's image and both frames' (era, layout) plus the recipient's keywords —
+    everything the browser canvas needs to recomposite the borrowed art onto the recipient frame.
+    Returns None when the donor card or a usable donor print is absent, leaving the recipient's own
+    art to stand."""
+    donor_record = name_index.get(art["name"].lower())
+    if donor_record is None:
+        return None
+    donor_print = _select_print(donor_record, art.get("set_name"))
+    if not (donor_print and donor_print.get("image_path")):
+        return None
+    era, layout = classify(record, front_print.get("set_name"))
+    donor_era, donor_layout = classify(donor_record, donor_print.get("set_name"))
+    return {
+        "donor_img": donor_print["image_path"],
+        "donor_era": donor_era,
+        "donor_layout": donor_layout,
+        "era": era,
+        "layout": layout,
+        "keywords": list(record.get("keywords") or ()),
+    }
+
+
 def _build_card(
     record: dict,
     set_name: str | None,
@@ -136,6 +166,8 @@ def _build_card(
     *,
     owner: PlayerId,
     card_id: str,
+    art: dict | None = None,
+    name_index: dict[str, dict] | None = None,
 ) -> L5RCard:
     """Build the front face of a card. For a double-faced card, nest its back face: the fully built
     back when its record is on hand, else one synthesised from the front carrying the back art the
@@ -176,6 +208,10 @@ def _build_card(
             back=None,
         )
         front = replace(front, back=synthetic_back)
+    if art and front_print and name_index is not None:
+        art_swap = _art_swap(record, front_print, art, name_index)
+        if art_swap is not None:
+            front = replace(front, art_swap=art_swap)
     return front
 
 

@@ -205,6 +205,54 @@ def test_entry_without_a_set_uses_the_first_print():
     assert r.dynasty[0].image_front.as_posix() == "sets/ie/kuni_yori.png"
 
 
+def test_art_swap_carries_the_donor_print_and_both_frames():
+    yaml = "name: T\nDynasty:\n  - Kuni Yori [Pearl Edition] {art: Ambush [Lotus Edition]}"
+    card = resolve_decklist(parse_deck_yaml(yaml), RECORDS, PlayerId.P1).dynasty[0]
+    # The recipient still renders its own printing; the swap rides alongside for the browser canvas.
+    assert card.image_front.as_posix() == "sets/pe/kuni_yori.png"
+    swap = card.art_swap
+    assert swap["donor_img"] == "sets/le/ambush.png"
+    assert swap["layout"] == "Personality"
+    assert swap["donor_layout"] == "Strategy"
+    assert swap["keywords"] == ["Shadowlands", "Berserker"]
+    assert swap["era"] and swap["donor_era"]
+
+
+def test_entry_without_art_has_no_art_swap():
+    assert _resolve().dynasty[0].art_swap is None
+
+
+def test_art_swap_is_dropped_when_the_donor_card_is_unknown():
+    yaml = "name: T\nDynasty:\n  - Kuni Yori {art: Phantom Card}"
+    card = resolve_decklist(parse_deck_yaml(yaml), RECORDS, PlayerId.P1).dynasty[0]
+    assert card.art_swap is None
+
+
+def test_art_swap_is_dropped_when_the_donor_print_has_no_image():
+    records = [
+        {
+            "card_id": "recipient",
+            "name": "Recipient",
+            "extended_title": "Recipient",
+            "types": ["Strategy"],
+            "decks": ["Fate"],
+            "prints": [{"print_id": 1, "set_name": "S", "image_path": "sets/r.png"}],
+        },
+        {
+            "card_id": "donor",
+            "name": "Donor",
+            "extended_title": "Donor",
+            "types": ["Strategy"],
+            "decks": ["Fate"],
+            "prints": [{"print_id": 2, "set_name": "S", "image_path": None}],
+        },
+    ]
+    card = resolve_decklist(
+        parse_deck_yaml("name: T\nFate:\n  - Recipient {art: Donor}"), records, PlayerId.P1
+    ).fate[0]
+    assert card.art_swap is None
+
+
 def test_a_print_without_art_yields_no_front_image():
     record = {
         "card_id": "no_art",

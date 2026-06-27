@@ -2,6 +2,8 @@
 // elements built via createElement/CSSOM rather than innerHTML: the page CSP (style-src 'self')
 // blocks inline style attributes, and property assignment needs no manual escaping.
 
+import { buildCompositeDataURL, loadArtLayout } from '../deck_builder/js/art.js';
+
 export function node(tag, className, text) {
   const el = document.createElement(tag);
   if (className) el.className = className;
@@ -59,6 +61,53 @@ function applyFace(el, card, imgBase) {
   img.src = `${imgBase}/${card.img}`;
   img.alt = card.name;
   el.appendChild(img);
+  if (card.art) swapArt(img, card, imgBase);
+}
+
+// The art-swap spec the deck-builder canvas consumes, assembled from a card's own print (the
+// recipient) and the snapshot's `art` donor payload.
+export function artSpec(card) {
+  const art = card.art;
+  return {
+    recipientImagePath: card.img,
+    recipientEra: art.era,
+    recipientLayout: art.layout,
+    recipientKeywords: art.keywords,
+    donorImagePath: art.donor_img,
+    donorEra: art.donor_era,
+    donorLayout: art.donor_layout,
+  };
+}
+
+// Recomposites of borrowed art are expensive (two image loads + a canvas), so cache each by recipe
+// across the many SNAPSHOT re-renders that rebuild the same cards.
+const artComposites = new Map();
+
+// Swap a card's borrowed art in over its base print once the canvas composite is ready, reusing the
+// cached build for repeat renders. The base print stays if compositing fails (e.g. art not yet
+// CORS-served) — best-effort, never blocking the render.
+async function swapArt(img, card, imgBase) {
+  const spec = artSpec(card);
+  const key = [
+    spec.recipientImagePath,
+    spec.donorImagePath,
+    spec.recipientEra,
+    spec.recipientLayout,
+    spec.donorEra,
+    spec.donorLayout,
+  ].join('|');
+  let composite = artComposites.get(key);
+  if (!composite) {
+    composite = loadArtLayout((url) => fetch(url).then((r) => r.json())).then(() =>
+      buildCompositeDataURL(spec, imgBase),
+    );
+    artComposites.set(key, composite);
+  }
+  try {
+    img.src = await composite;
+  } catch {
+    artComposites.delete(key); // let a later render retry once the source art is reachable
+  }
 }
 
 // Stamp the card state the context menu reads back off the DOM: identity, side and owner for routing

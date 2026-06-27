@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.engine.players import PlayerId
@@ -35,6 +35,10 @@ class L5RCard:
     # A sandbox piece spawned onto the table (SpawnCard), not a card drawn from a deck. Only tokens
     # may be removed from the table; a real card is never destroyed outright.
     is_token: bool = False
+    # An art-swap payload when the deck entry borrows another printing's art for the front: the donor
+    # image and both frames' (era, layout) plus the recipient keywords, all the browser canvas needs to
+    # recomposite it. Pure client-render metadata, so it stays out of card identity (compare=False).
+    art_swap: dict | None = field(default=None, compare=False)
 
     def __post_init__(self):
         # Normalize collections to tuples for consistent immutability

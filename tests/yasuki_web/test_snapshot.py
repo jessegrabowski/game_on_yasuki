@@ -39,6 +39,32 @@ def test_owner_sees_their_own_hand_card_in_full():
     assert hand[0]["name"] == "Secret" and hand[0]["hidden"] is False
 
 
+def test_a_visible_card_carries_its_art_swap_payload_to_the_client():
+    table = TableState.empty_two_seat()
+    swap = {
+        "donor_img": "sets/le/ambush.png",
+        "era": "2016+",
+        "layout": "Personality",
+        "keywords": ["Shadowlands"],
+        "donor_era": "1995-99",
+        "donor_layout": "Strategy",
+    }
+    card = L5RCard(id="f1", name="Kuni Yori", side=Side.FATE, owner=P1, art_swap=swap)
+    table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
+    table.cards_by_id["f1"] = card
+
+    assert _serialized(table, P1)["zones"]["P1:hand"][0]["art"] == swap
+
+
+def test_a_card_without_an_art_swap_omits_the_art_key():
+    table = TableState.empty_two_seat()
+    card = L5RCard(id="f1", name="Plain", side=Side.FATE, owner=P1)
+    table.zones[ZoneKey(P1, ZoneRole.HAND)].cards.append(card)
+    table.cards_by_id["f1"] = card
+
+    assert "art" not in _serialized(table, P1)["zones"]["P1:hand"][0]
+
+
 def test_battlefield_card_carries_art_and_position():
     table = TableState.empty_two_seat()
     card = L5RCard(
