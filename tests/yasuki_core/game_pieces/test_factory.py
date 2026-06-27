@@ -1,3 +1,7 @@
+import psycopg
+import pytest
+
+from yasuki_core.database import get_connection_string
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.game_pieces.factory import resolve_decklist
 from yasuki_core.engine.players import PlayerId
@@ -205,7 +209,18 @@ def test_entry_without_a_set_uses_the_first_print():
     assert r.dynasty[0].image_front.as_posix() == "sets/ie/kuni_yori.png"
 
 
+def _db_available():
+    try:
+        conn = psycopg.connect(get_connection_string())
+        conn.close()
+        return True
+    except psycopg.OperationalError:
+        return False
+
+
+@pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
 def test_art_swap_carries_the_donor_print_and_both_frames():
+    # Building the swap classifies both prints' eras, which reads set release dates from the database.
     yaml = "name: T\nDynasty:\n  - Kuni Yori [Pearl Edition] {art: Ambush [Lotus Edition]}"
     card = resolve_decklist(parse_deck_yaml(yaml), RECORDS, PlayerId.P1).dynasty[0]
     # The recipient still renders its own printing; the swap rides alongside for the browser canvas.
