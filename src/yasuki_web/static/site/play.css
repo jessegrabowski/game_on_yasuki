@@ -470,7 +470,8 @@
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.4rem 0.8rem;
+  /* Trimmed to offset the hand-strip's scrollbar headroom — keep the pair in sync so the row's height holds. */
+  padding: 0.25rem 0.8rem;
   background: var(--r-panel);
   /* Reserve a full card plus padding so the hand row is its final height from the first render, not
      only after the first card lands — and so the empty hand is always a real drop target. */
@@ -554,19 +555,26 @@
 
 .hand-strip {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 0.35rem;
   flex: 1 1 auto;
   min-width: 0;
-  /* Fixed height a little over one card (not min-height) so an empty and a full hand stay the same
-     size, with headroom — and an explicit overflow-y — so a horizontal scrollbar or sub-pixel
-     rounding can never force a vertical scrollbar. The hand only ever scrolls sideways. */
-  height: calc(var(--card-h) + 0.5rem);
+  /* Fixed height (not min-height) so an empty and a full hand stay the same size. The headroom over one
+     card hosts the horizontal scrollbar: cards pin to the top and the bar sits in the strip below them,
+     so the card shows full height and never shifts when the bar appears. scrollbar-width: thin (Firefox)
+     and the 6px ::-webkit-scrollbar (Chrome/Safari) keep that bar slim enough to fit the headroom; the
+     seat-bar sheds matching padding so the hand's total footprint is unchanged. */
+  height: calc(var(--card-h) + 0.75rem);
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 0.2rem 0;
+  scrollbar-width: thin;
+  padding: 0;
   border-radius: 6px;
   transition: box-shadow 0.12s, background 0.12s;
+}
+
+.hand-strip::-webkit-scrollbar {
+  height: 6px;
 }
 
 /* A card dragged over the hand glows it as the drop target. */
