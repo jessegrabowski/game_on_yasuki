@@ -1,25 +1,11 @@
 import logging
 import tkinter as tk
 from collections.abc import Callable
-from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.fate import FateCard, FateAction, FateAttachment, FateRing
-from yasuki_core.game_pieces.dynasty import (
-    DynastyCard,
-    DynastyPersonality,
-    DynastyHolding,
-    DynastyEvent,
-)
-from yasuki_core.game_pieces.deck import Deck
+
 from yasuki_gui.field_view import FieldView
 from yasuki_gui.config import load_hotkeys, DEBUG_MODE as GUI_DEBUG_MODE
-from yasuki_gui.constants import CARD_W, CARD_H, MIN_HONOR, MAX_HONOR
-from yasuki_core.engine.zones import (
-    HandZone,
-    ProvinceZone,
-    FateDiscardZone,
-    DynastyDiscardZone,
-    BattlefieldZone,
-)
+from yasuki_gui.constants import MIN_HONOR, MAX_HONOR
+from yasuki_gui.session import build_demo_state
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_core.engine.players import PlayerId
 
@@ -33,8 +19,6 @@ except Exception:  # pragma: no cover
     ImageTk = None  # type: ignore
 
 LOCAL_DEBUG_OVERRIDE = False
-# Choose which player is local on startup; if P2, rotate board 180° before showing
-STARTING_PLAYER: PlayerId = PlayerId.P1
 
 
 class PlayerPanel(tk.Frame):
@@ -196,180 +180,27 @@ def main() -> None:
         except Exception:
             pass
 
-    # Set the acting local player (starts as configured)
-    field.local_player = STARTING_PLAYER
-
-    # Battlefield is public/shared
-    battlefield = BattlefieldZone()  # owner=None => shared
-    field.set_battlefield_zone(battlefield)
-
-    # Helper to add a player's layout (decks, discards, provinces, hand)
-    def setup_player(
-        owner: PlayerId, dynasty_x: int, fate_x: int, y_line: int, hand_y: int
-    ) -> dict:
-        # Hand zone spans most of the content width
-        hand_tag = field.add_zone(HandZone(owner=owner), x=CW // 2, y=hand_y, w=CW - 200, h=120)
-        # Build decks with concrete subtypes so defaults include front art
-        dynasty_cards: list[DynastyCard] = []
-        for i in range(1, 11):
-            if i % 2 == 0:
-                dynasty_cards.append(
-                    DynastyHolding(
-                        id=f"d{owner.value}-H{i}", name=f"Holding {i}", side=Side.DYNASTY
-                    )
-                )
-            elif i % 3 == 0:
-                dynasty_cards.append(
-                    DynastyEvent(id=f"d{owner.value}-E{i}", name=f"Event {i}", side=Side.DYNASTY)
-                )
-            else:
-                dynasty_cards.append(
-                    DynastyPersonality(
-                        id=f"d{owner.value}-P{i}", name=f"Personality {i}", side=Side.DYNASTY
-                    )
-                )
-        fate_cards: list[FateCard] = []
-        for i in range(1, 11):
-            if i % 3 == 1:
-                fate_cards.append(
-                    FateAction(id=f"f{owner.value}-A{i}", name=f"Strategy {i}", side=Side.FATE)
-                )
-            elif i % 3 == 2:
-                fate_cards.append(
-                    FateAttachment(id=f"f{owner.value}-I{i}", name=f"Item {i}", side=Side.FATE)
-                )
-            else:
-                fate_cards.append(
-                    FateRing(id=f"f{owner.value}-R{i}", name=f"Ring {i}", side=Side.FATE)
-                )
-        dynasty_deck = Deck.build(dynasty_cards)
-        fate_deck = Deck.build(fate_cards)
-        d_tag = field.add_deck(dynasty_deck, x=dynasty_x, y=y_line, label="Dynasty Deck")
-        f_tag = field.add_deck(fate_deck, x=fate_x, y=y_line, label="Fate Deck")
-        # Assign deck ownership on visuals
-        field._decks[d_tag].owner = owner
-        field._decks[f_tag].owner = owner
-
-        # Discards adjacent to decks (use content width for right-side)
-        sign = -1 if owner == PlayerId.P1 else 1
-        field.add_zone(
-            DynastyDiscardZone(owner=owner),
-            x=max(60, dynasty_x + sign * 120),
-            y=y_line,
-            w=CARD_W,
-            h=CARD_H,
-        )
-        field.add_zone(
-            FateDiscardZone(owner=owner),
-            x=max(60, min(CW - 60, fate_x - sign * 120)),
-            y=y_line,
-            w=CARD_W,
-            h=CARD_H,
-        )
-
-        # Provinces centered between decks (use content width center)
-        centers = [
-            int(CW // 2 - 1.5 * CARD_W),
-            int(CW // 2 - 0.5 * CARD_W),
-            int(CW // 2 + 0.5 * CARD_W),
-            int(CW // 2 + 1.5 * CARD_W),
-        ]
-        centers = centers if owner == PlayerId.P1 else list(reversed(centers))
-        for i, cx in enumerate(centers, start=1):
-            field.add_zone(
-                ProvinceZone(name=f"Province {i}", owner=owner), x=cx, y=y_line, w=CARD_W, h=CARD_H
-            )
-        return {
-            "owner": owner,
-            "hand_tag": hand_tag,
-            "fate_deck_tag": f_tag,
-            "dynasty_deck_tag": d_tag,
-        }
-
-    # Player 2 at top (use content width for deck positions)
-    p2 = setup_player(
-        owner=PlayerId.P2,
-        dynasty_x=CW - 200,  # swapped so after rotation dynasty is left
-        fate_x=200,  # swapped so after rotation fate is right
-        y_line=200,
-        hand_y=60,
-    )
-    # Player 1 at bottom
-    p1 = setup_player(
-        owner=PlayerId.P1,
-        dynasty_x=200,
-        fate_x=CW - 200,
-        y_line=CH - 200,
-        hand_y=CH - 60,
-    )
-
-    # After setup: shuffle all decks
-    for dv in field._decks.values():
-        dv.deck.shuffle()
-
-    # Draw 5 Fate cards into each player's hand
-    for pdata in (p1, p2):
-        ftag = pdata["fate_deck_tag"]
-        htag = pdata["hand_tag"]
-        owner = pdata["owner"]
-        dv = field._decks.get(ftag)
-        hv = field._hands.get(htag)
-        if not dv or not hv:
-            continue
-        for _ in range(5):
-            card = dv.deck.draw_one()
-            if card is None:
-                break
-            # Assign ownership and show face up in hand (opponent will still see back per HandVisual)
-            if getattr(card, "owner", None) != owner:
-                try:
-                    object.__setattr__(card, "owner", owner)
-                except Exception:
-                    pass
-            card.turn_face_up()
-            hv.zone.add(card)
-        # Redraw visuals
-        field.redraw_deck(ftag)
-        field.redraw_zone(htag)
-
-    # Ensure the active player is on the bottom on startup
-    root.update_idletasks()
-    if field.local_player == PlayerId.P2 and hasattr(field, "flip_orientation"):
-        field.flip_orientation()
-        if hasattr(field, "redraw_all"):
-            field.redraw_all()
-
-    # Demo cards (tracked on battlefield, shared) placed relative to content width/height
-    # Use concrete subtypes so default fronts are available
-    from yasuki_core.game_pieces.fate import FateAction as _DemoFate
-    from yasuki_core.game_pieces.dynasty import DynastyPersonality as _DemoDyn
-
-    field.add_card(
-        _DemoFate(id="demo-1", name="Sample Fate", side=Side.FATE), x=CW // 2 - 100, y=CH // 2 - 50
-    )
-    field.add_card(
-        _DemoDyn(id="demo-2", name="Sample Dynasty", side=Side.DYNASTY),
-        x=CW // 2 + 100,
-        y=CH // 2 - 50,
-    )
+    # Build the table from placeholder decks (DB-free) and render it from the human's seat.
+    state, human_seat = build_demo_state()
+    field.load_state(state, human_seat)
 
     # Players in the left sidebar: create with owners and gate honor edits
     def get_lp() -> PlayerId:
-        return field.local_player
+        return field.seat
 
     top_panel = PlayerPanel(
         sidebar,
-        username="Top Player (P2)",
+        username=state.seats[PlayerId.P2].name,
         owner=PlayerId.P2,
         get_local_player=get_lp,
-        initial_honor=10,
+        initial_honor=state.seats[PlayerId.P2].honor,
     )
     bottom_panel = PlayerPanel(
         sidebar,
-        username="Bottom Player (P1)",
+        username=state.seats[PlayerId.P1].name,
         owner=PlayerId.P1,
         get_local_player=get_lp,
-        initial_honor=10,
+        initial_honor=state.seats[PlayerId.P1].honor,
     )
 
     def restack_panels() -> None:

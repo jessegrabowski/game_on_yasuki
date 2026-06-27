@@ -3,8 +3,9 @@ import gc
 import pytest
 import tkinter as tk
 
-from yasuki_gui.field_view import FieldView
 from yasuki_gui.config import Hotkeys
+from yasuki_gui.field_view import FieldView
+from yasuki_gui.session import build_demo_state
 
 
 @pytest.fixture(autouse=True)
@@ -39,6 +40,20 @@ def field(root):
     root.update()
     f.configure_hotkeys(Hotkeys())
     return f
+
+
+@pytest.fixture
+def loaded(root):
+    """A FieldView with a full demo TableState loaded, viewed from the human seat (P1). Sized large
+    enough that the two seats' rows do not collapse onto each other."""
+    f = FieldView(root, width=1000, height=800)
+    f.pack()
+    root.update_idletasks()
+    root.update()
+    f.configure_hotkeys(Hotkeys())
+    state, seat = build_demo_state()
+    f.load_state(state, seat)
+    return f, state
 
 
 class DummyEventNamespace(tk.Event):

@@ -1,123 +1,55 @@
 import tkinter as tk
-from typing import Protocol, Any
-from collections.abc import Mapping
 
-from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.engine.zones import HandZone
-from yasuki_gui.constants import CARD_W, CARD_H
-from yasuki_gui.services.drag import DragKind, Drag
-from yasuki_gui.services.hittest import (
-    resolve_drop_target as hittest_resolve_drop_target,
-    bounds_contains as hittest_bounds_contains,
-)
-from yasuki_gui.services.permissions import tag_owner, can_interact
-from yasuki_gui.visuals import MarqueeBoxVisual
-from yasuki_gui.config import Hotkeys, DEFAULT_HOTKEYS
 import yasuki_gui.config as gui_config
-from yasuki_gui.ui.images import load_image as _li, load_back_image as _lbi
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.table import (
+    BATTLEFIELD,
+    DeckKey,
+    MoveCard,
+    MoveDeckTop,
+    ReorderHand,
+    SetCardPos,
+    SetCardPositions,
+    ZoneKey,
+    ZoneRole,
+)
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
+from yasuki_gui.constants import CARD_H, CARD_W
+from yasuki_gui.layout import from_canvas
 from yasuki_gui.services.actions import (
-    build_menu as build_actions_menu,
     REGISTRY as ACTIONS,
     ActionContext,
-    HasView,
-    FieldActions,
+    build_menu as build_actions_menu,
 )
-from yasuki_core.engine.players import PlayerId
-
-
-def _card_in_any_province(view, card) -> bool:
-    from yasuki_core.engine.zones import ProvinceZone
-
-    for _, zv in view.zones.items():
-        try:
-            if isinstance(zv.zone, ProvinceZone) and card in zv.zone.cards:
-                return True
-        except Exception:
-            pass
-    return False
-
-
-class FieldView(HasView, Protocol):
-    # Event binding and focus
-    def bind(self, sequence: str, func): ...
-    def bind_all(self, sequence: str, func): ...
-    def unbind_all(self, sequence: str): ...
-    def focus_set(self) -> None: ...
-
-    # Hit resolution
-    def resolve_tag_at(self, event: tk.Event) -> str | None: ...
-
-    # Drawing primitives (for marquee)
-    def create_rectangle(self, *args, **kwargs): ...
-    def coords(self, *args, **kwargs): ...
-    def itemconfig(self, *args, **kwargs): ...
-    def tag_raise(self, *args, **kwargs): ...
-    def delete(self, *args, **kwargs): ...
-
-    # Geometry helpers
-    def bbox_for_deck(self, dtag: str) -> tuple[int, int, int, int]: ...
-    def bbox_for_zone(self, ztag: str) -> tuple[int, int, int, int]: ...
-
-    # Visual/model APIs
-    def add_card(self, card: L5RCard, x: int, y: int) -> str: ...
-    def redraw_deck(self, dtag: str) -> None: ...
-    def redraw_zone(self, ztag: str) -> None: ...
-
-    # Apply redraws from actions
-    def apply_redraw(self, rd): ...
-
-    # Exposed collections
-    @property
-    def decks(self) -> Mapping[str, Any]: ...  # {tag: DeckVisual}
-
-    @property
-    def zones(self) -> Mapping[str, Any]: ...  # {tag: ZoneVisual}
-
-    @property
-    def hands(self) -> Mapping[str, Any]: ...  # {tag: HandVisual}
-
-    @property
-    def sprites(self) -> Mapping[str, Any]: ...  # {tag: CardSpriteVisual}
-
-    # Selection helpers kept in the view (draw-only updates)
-    def _set_selection(self, tags: set[str]) -> None: ...
-    def _clear_selection(self) -> None: ...
-
-    # Drop helpers (still implemented in the view for now)
-    def _drop_sprite_into_zone(self, tag: str, ztag: str) -> None: ...
-    def _drop_sprite_into_deck(self, tag: str, dtag: str) -> None: ...
-
-    # Zone helpers used by actions via controller shortcuts
-    def _zone_flip_up(self, ztag: str) -> None: ...
-    def _zone_flip_down(self, ztag: str) -> None: ...
-    def _zone_fill(self, ztag: str) -> None: ...
-    def _zone_destroy(self, ztag: str) -> None: ...
+from yasuki_gui.services.drag import Drag, DragKind
+from yasuki_gui.services.hittest import (
+    bounds_contains as hittest_bounds_contains,
+    resolve_drop_target as hittest_resolve_drop_target,
+)
+from yasuki_gui.services.permissions import can_interact
+from yasuki_gui.tags import card_tag
+from yasuki_gui.ui.images import load_back_image as _lbi, load_image as _li
+from yasuki_gui.visuals import MarqueeBoxVisual
 
 
 class FieldController:
-    def __init__(self, view: FieldView) -> None:
+    def __init__(self, view) -> None:
         self.view = view
-        self.actions = FieldActions(view)
         self.drag: Drag = Drag()
         self._hotkeys: Hotkeys = DEFAULT_HOTKEYS
-        # Hover state owned here
         self._hover_card_tag: str | None = None
         self._hover_zone_tag: str | None = None
         self._hover_deck_tag: str | None = None
-        # Context menu owned here
         self._context_menu = tk.Menu(None, tearoff=0)
         self._context_tag: str | None = None
-        # Marquee state (rectangle drawn by view)
         self._marquee_start: tuple[int, int] | None = None
         self._marquee_rect: int | None = None
-        # Visible hand-drag ghost (now rendered as full card image)
         self._hand_ghost_id: int | None = None
         self._hand_ghost_photo: object | None = None
-        # Group-drag state: initial positions of selected sprites and mouse
         self._group_drag_init: dict[str, tuple[int, int]] = {}
         self._group_mouse_start: tuple[int, int] | None = None
 
-        # Bind events to controller
         v = self.view
         v.bind("<Button-1>", self.on_press)
         v.bind("<B1-Motion>", self.on_motion)
@@ -128,13 +60,10 @@ class FieldController:
         v.bind("<Button-3>", self.on_context)
         v.bind("<Control-Button-1>", self.on_context)
         v.bind("<KeyPress-Escape>", self.on_escape)
-        # Bind Ctrl+T always; handler will check debug flag
         v.bind_all("<Control-t>", self.on_toggle_player)
 
-    # Public: allow view to pass through hotkey configuration
     def configure_hotkeys(self, hotkeys: Hotkeys) -> None:
-        # Unbind previous
-        for key in {
+        old = {
             self._hotkeys.bow,
             self._hotkeys.flip,
             self._hotkeys.invert,
@@ -143,14 +72,13 @@ class FieldController:
             self._hotkeys.draw,
             self._hotkeys.shuffle,
             self._hotkeys.inspect,
-        }:
-            if key:
-                try:
-                    self.view.unbind_all(f"<KeyPress-{key}>")
-                except Exception:
-                    pass
+        }
+        for key in {k for k in old if k}:
+            try:
+                self.view.unbind_all(f"<KeyPress-{key}>")
+            except tk.TclError:
+                pass
         self._hotkeys = hotkeys
-        # Bind new
         keys = {
             hotkeys.bow,
             hotkeys.flip,
@@ -163,6 +91,19 @@ class FieldController:
         }
         for k in {k for k in keys if k}:
             self.view.bind_all(f"<KeyPress-{k}>", self.on_key)
+
+    # ----- helpers ----------------------------------------------------------
+
+    def _owner_of(self, tag: str) -> PlayerId | None:
+        if tag.startswith("card:"):
+            sp = self.view.sprites.get(tag)
+            return sp.card.owner if sp else None
+        key = self.view.key_for_tag(tag)
+        return key.owner if key is not None else None
+
+    def _from_canvas(self, x: int, y: int):
+        w, h = self.view._canvas_size()
+        return from_canvas(x, y, flipped=self.view._flipped, canvas_w=w, canvas_h=h)
 
     def _update_hover(self, e: tk.Event) -> None:
         tag = self.view.resolve_tag_at(e)
@@ -187,58 +128,34 @@ class FieldController:
         x0, y0 = self._marquee_start
         self.view.coords(self._marquee_rect, x0, y0, x, y)
         self.view.tag_raise(self._marquee_rect)
-        sel_rect = (min(x0, x), min(y0, y), max(x0, x), max(y0, y))
-        rect_visual = MarqueeBoxVisual(sel_rect)
-        new_sel: set[str] = set()
-        for tag, sprite in self.view.sprites.items():
-            if sprite.intersects(rect_visual):
-                new_sel.add(tag)
+        rect_visual = MarqueeBoxVisual((min(x0, x), min(y0, y), max(x0, x), max(y0, y)))
+        new_sel = {tag for tag, sp in self.view.sprites.items() if sp.intersects(rect_visual)}
         self.view._set_selection(new_sel)
 
     def _end_marquee(self) -> None:
         self._marquee_start = None
         if self._marquee_rect is not None:
-            try:
-                self.view.delete(self._marquee_rect)
-            except Exception:
-                pass
+            self.view.delete(self._marquee_rect)
             self._marquee_rect = None
 
     def _clear_hand_ghost(self) -> None:
         if self._hand_ghost_id is not None:
-            try:
-                self.view.delete(self._hand_ghost_id)
-            except Exception:
-                pass
+            self.view.delete(self._hand_ghost_id)
             self._hand_ghost_id = None
-        # drop reference to image so Tk can GC
         self._hand_ghost_photo = None
 
     def _draw_hand_ghost(self, card: L5RCard, x: int, y: int) -> None:
-        """Draw the full card art while dragging within the hand.
-        Opponent viewing: show back unless card.revealed is True.
-        """
-        # Remove previous
         self._clear_hand_ghost()
-        viewer = getattr(self.view, "local_player", None)
-        owner = getattr(card, "owner", None)
-        show_front = True
-        if (
-            owner is not None
-            and viewer is not None
-            and owner != viewer
-            and not getattr(card, "revealed", False)
-        ):
-            show_front = False
-        # Load image
+        viewer = self.view.seat
+        owner = card.owner
+        show_front = not (owner is not None and owner != viewer and not card.shown)
         photo = (
             _li(card.image_front, card.bowed, card.inverted, master=self.view)
             if show_front
             else _lbi(card.side, card.bowed, card.inverted, card.image_back, master=self.view)
         )
         if photo is None:
-            # Fallback rectangle with simple outline if image not available
-            w, h = (CARD_H, CARD_W) if getattr(card, "bowed", False) else (CARD_W, CARD_H)
+            w, h = (CARD_H, CARD_W) if card.bowed else (CARD_W, CARD_H)
             self._hand_ghost_id = self.view.create_rectangle(
                 x - w // 2,
                 y - h // 2,
@@ -249,60 +166,37 @@ class FieldController:
                 width=2,
                 tags=("hand-ghost",),
             )
-            self._hand_ghost_photo = None
             return
-        # Keep strong ref to prevent GC
         self._hand_ghost_photo = photo
         self._hand_ghost_id = self.view.create_image(x, y, image=photo, tags=("hand-ghost",))
+
+    # ----- press / motion / release -----------------------------------------
 
     def on_press(self, e: tk.Event) -> None:
         self.view.focus_set()
         tag = self.view.resolve_tag_at(e)
-
         if not tag:
-            # background: start marquee and clear selection
             self.view._clear_selection()
             self._start_marquee(e.x, e.y)
-            self.drag = Drag()  # no drag yet
+            self.drag = Drag()
             return
 
-        # Determine owner from tag or underlying model
-        owner = tag_owner(tag)
-        if owner is None:
-            if tag.startswith("card:"):
-                sp = self.view.sprites.get(tag)
-                owner = getattr(sp.card, "owner", None) if sp else None
-            elif tag.startswith("deck:"):
-                dv = self.view.decks.get(tag)
-                owner = getattr(dv, "owner", None) if dv else None
-            elif tag.startswith("zone:"):
-                zv = self.view.zones.get(tag)
-                if zv is not None:
-                    owner = getattr(zv.zone, "owner", None)
-                else:
-                    hv = self.view.hands.get(tag)
-                    owner = getattr(hv.zone, "owner", None) if hv else None
+        owner = self._owner_of(tag)
+        if not can_interact(self.view, owner):
+            self.drag = Drag()
+            return
 
-        if tag.startswith(("card:", "p1:card", "p2:card")):
-            if not can_interact(self.view, owner):
-                self.drag = Drag()
-                return
-            # ensure single selection on press of a new card
+        if tag.startswith("card:"):
             sel = getattr(self.view, "_selected", set())
             if tag not in sel:
                 self.view._set_selection({tag})
                 sel = {tag}
-            # If dragging a selected card and multiple are selected, prepare group-drag
-            if sel and tag in sel and len(sel) > 1:
-                self._group_drag_init = {}
-                for t in sel:
-                    sp_sel = self.view.sprites.get(t)
-                    if not sp_sel:
-                        continue
-                    # Only include sprites the local player may interact with
-                    if not can_interact(self.view, getattr(sp_sel.card, "owner", None)):
-                        continue
-                    self._group_drag_init[t] = (sp_sel.x, sp_sel.y)
+            if len(sel) > 1:
+                self._group_drag_init = {
+                    t: (sp.x, sp.y)
+                    for t in sel
+                    if (sp := self.view.sprites.get(t)) and can_interact(self.view, sp.card.owner)
+                }
                 self._group_mouse_start = (e.x, e.y)
             else:
                 self._group_drag_init = {}
@@ -317,219 +211,176 @@ class FieldController:
                     offset=(e.x - sp.x, e.y - sp.y),
                 )
             return
-        if tag.startswith(("deck:", "p1:deck", "p2:deck")):
-            if not can_interact(self.view, owner):
-                self.drag = Drag()
-                return
-            # arm a deck drag; draw happens when cursor leaves deck bbox
-            dv = self.view.decks[tag]
-            self.drag = Drag(
-                kind=DragKind.DECK_ARMED,
-                src_tag=tag,
-                src_bbox=dv.bbox,
-                offset=(0, 0),
-            )
-            return
-        if tag.startswith(("zone:", "p1:zone", "p2:zone")):
-            if not can_interact(self.view, owner):
-                self.drag = Drag()
-                return
 
-            # If hand zone: prepare for reordering/drag-out
+        if tag.startswith("deck:"):
+            dv = self.view.decks.get(tag)
+            if dv is not None:
+                self.drag = Drag(kind=DragKind.DECK_ARMED, src_tag=tag, src_bbox=dv.bbox)
+            return
+
+        if tag.startswith("zone:"):
             hv = self.view.hands.get(tag)
-            if hv is not None and isinstance(hv.zone, HandZone):
+            if hv is not None:
                 idx = hv.index_at(e.x)
                 if idx is None or idx >= len(hv.zone.cards):
                     return
-                card = hv.zone.cards.pop(idx)
-                self.view.redraw_zone(tag)
+                card = hv.zone.cards[idx]
                 self.drag = Drag(
                     kind=DragKind.HAND,
                     src_tag=tag,
                     card=card,
                     src_bbox=hv.bbox,
                     hand_origin_index=idx,
-                    offset=(CARD_W // 2, CARD_H // 2),  # center offset for ghost/sprite
+                    offset=(CARD_W // 2, CARD_H // 2),
                 )
-                # Draw a simple ghost so the user sees what's being dragged within the hand
                 self._draw_hand_ghost(card, e.x, e.y)
-                return
-            # Other zones: no-op on press for now
-            self.drag = Drag()
             return
 
     def on_motion(self, e: tk.Event) -> None:
         d = self.drag
         if self._marquee_start is not None:
             self._update_marquee(e.x, e.y)
-        # Group-drag handling: move all prepared sprites together
         if d.kind is DragKind.CARD and self._group_mouse_start and self._group_drag_init:
-            dx = e.x - self._group_mouse_start[0]
-            dy = e.y - self._group_mouse_start[1]
-            for t, (x0, y0) in self._group_drag_init.items():
-                sp = self.view.sprites.get(t)
-                if not sp:
-                    continue
-                sp.move_to(self.view, x0 + dx, y0 + dy)
+            self._drag_group(e)
             return
-        # Update hand ghost while dragging within the hand bbox
-        if d.kind is DragKind.HAND and d.src_tag and not d.left_source(e.x, e.y) and d.card:
-            self._draw_hand_ghost(d.card, e.x, e.y)
-        # Deck: convert to sprite once cursor leaves deck bbox
+        if d.kind is DragKind.HAND and d.src_tag and d.card:
+            if d.left_source(e.x, e.y):
+                self._lift_hand_card_to_battlefield(e)
+            else:
+                self._draw_hand_ghost(d.card, e.x, e.y)
+            return
         if d.kind is DragKind.DECK_ARMED and d.src_tag and d.left_source(e.x, e.y):
-            dv = self.view.decks[d.src_tag]
-            card = dv.deck.draw_one()
-            if card is None:
-                self.drag = Drag()
-                return
-            card.turn_face_down()
-            # start a card sprite at current location
-            tag = self.view.add_card(card, e.x, e.y)
-            self.view.redraw_deck(d.src_tag)
-            self.drag = Drag(
-                kind=DragKind.CARD,
-                src_tag=d.src_tag,
-                sprite_tag=tag,
-                card=card,
-                offset=(0, 0),
-            )
+            self._draw_deck_top_to_battlefield(e)
             return
-
-        # Hand drag: if leaves hand bbox, convert to battlefield sprite
-        if d.kind is DragKind.HAND and d.src_tag and d.left_source(e.x, e.y) and d.card:
-            # Clear hand ghost and convert to sprite
-            self._clear_hand_ghost()
-            tag = self.view.add_card(d.card, e.x, e.y)
-            self.drag = Drag(
-                kind=DragKind.CARD,
-                src_tag=d.src_tag,
-                sprite_tag=tag,
-                card=d.card,
-                offset=(0, 0),
-            )
-            return
-
-        # Move sprite visually
-        if d.kind in (DragKind.CARD,) and d.sprite_tag:
+        if d.kind is DragKind.CARD and d.sprite_tag:
             sp = self.view.sprites.get(d.sprite_tag)
             if sp:
                 sp.move_to(self.view, e.x - d.offset[0], e.y - d.offset[1])
 
     def on_move(self, e: tk.Event) -> None:
-        # Group drag support for on_move as well
-        if self.drag.kind is DragKind.CARD and self._group_mouse_start and self._group_drag_init:
-            dx = e.x - self._group_mouse_start[0]
-            dy = e.y - self._group_mouse_start[1]
-            for t, (x0, y0) in self._group_drag_init.items():
-                sp = self.view.sprites.get(t)
-                if not sp:
-                    continue
-                sp.move_to(self.view, x0 + dx, y0 + dy)
-            # No hover/marquee updates while group dragging
+        d = self.drag
+        if d.kind is DragKind.CARD and self._group_mouse_start and self._group_drag_init:
+            self._drag_group(e)
             return
-        # If dragging from hand and we leave the hand bbox, convert to sprite (some tests use on_move)
-        if (
-            self.drag.kind is DragKind.HAND
-            and self.drag.src_tag
-            and self.drag.left_source(e.x, e.y)
-            and self.drag.card
-        ):
-            self._clear_hand_ghost()
-            tag = self.view.add_card(self.drag.card, e.x, e.y)
-            self.drag = Drag(
-                kind=DragKind.CARD,
-                src_tag=self.drag.src_tag,
-                sprite_tag=tag,
-                card=self.drag.card,
-                offset=(0, 0),
-            )
+        if d.kind is DragKind.HAND and d.src_tag and d.card:
+            if d.left_source(e.x, e.y):
+                self._lift_hand_card_to_battlefield(e)
+            else:
+                self._draw_hand_ghost(d.card, e.x, e.y)
             return
-        if self.drag.kind is DragKind.HAND and self.drag.card and self.drag.src_tag:
-            self._draw_hand_ghost(self.drag.card, e.x, e.y)
-        # hover and marquee updates when not actively dragging
         self._update_hover(e)
-        dragging = self.drag.kind is not DragKind.NONE
-        if self._marquee_start is not None and not dragging:
+        if self._marquee_start is not None and d.kind is DragKind.NONE:
             self._update_marquee(e.x, e.y)
-        if self.drag.kind is DragKind.CARD and self.drag.sprite_tag and not self._group_drag_init:
-            sp = self.view.sprites.get(self.drag.sprite_tag)
+        if d.kind is DragKind.CARD and d.sprite_tag and not self._group_drag_init:
+            sp = self.view.sprites.get(d.sprite_tag)
             if sp:
-                sp.move_to(self.view, e.x - self.drag.offset[0], e.y - self.drag.offset[1])
+                sp.move_to(self.view, e.x - d.offset[0], e.y - d.offset[1])
+
+    def _drag_group(self, e: tk.Event) -> None:
+        dx = e.x - self._group_mouse_start[0]
+        dy = e.y - self._group_mouse_start[1]
+        for t, (x0, y0) in self._group_drag_init.items():
+            sp = self.view.sprites.get(t)
+            if sp:
+                sp.move_to(self.view, x0 + dx, y0 + dy)
+
+    def _draw_deck_top_to_battlefield(self, e: tk.Event) -> None:
+        key = self.view.key_for_tag(self.drag.src_tag)
+        if not isinstance(key, DeckKey):
+            self.drag = Drag()
+            return
+        events = self.view.dispatch(
+            MoveDeckTop(key, BATTLEFIELD, position=self._from_canvas(e.x, e.y))
+        )
+        self.drag = self._grab_moved_sprite(events)
+
+    def _lift_hand_card_to_battlefield(self, e: tk.Event) -> None:
+        self._clear_hand_ghost()
+        card = self.drag.card
+        events = self.view.dispatch(
+            MoveCard(card.id, BATTLEFIELD, position=self._from_canvas(e.x, e.y))
+        )
+        self.drag = self._grab_moved_sprite(events)
+
+    def _grab_moved_sprite(self, events: list) -> Drag:
+        """Pick up the sprite a deck/hand drag-out just created so the gesture keeps dragging it."""
+        for event in events:
+            intent = event.intent
+            if isinstance(intent, MoveCard) and intent.to == BATTLEFIELD:
+                tag = card_tag(intent.card_id)
+                sp = self.view.sprites.get(tag)
+                if sp:
+                    return Drag(kind=DragKind.CARD, src_tag=tag, sprite_tag=tag, card=sp.card)
+        return Drag()
 
     def on_release(self, e: tk.Event) -> None:
-        # finish marquee if active
         if self._marquee_start is not None:
             self._end_marquee()
         d = self.drag
         self.drag = Drag()
-        # Always clear any hand ghost
         self._clear_hand_ghost()
-        # Clear group-drag state
+        group_init = self._group_drag_init
         self._group_drag_init = {}
         self._group_mouse_start = None
-        # Hand reinsert
+
         if d.kind is DragKind.HAND and d.src_tag and d.card:
             hv = self.view.hands.get(d.src_tag)
             if hv and hittest_bounds_contains(hv.bbox, e.x, e.y):
-                idx = hv.index_at(e.x) or len(hv.zone.cards)
-                hv.zone.cards.insert(idx, d.card)
-                self.view.redraw_zone(d.src_tag)
+                idx = hv.index_at(e.x)
+                if idx is None:
+                    idx = len(hv.zone.cards)
+                self.view.dispatch(ReorderHand(d.card.id, idx))
             return
-        # Card drop handling (primary sprite)
-        if d.kind is DragKind.CARD and d.sprite_tag and d.card:
-            sp = self.view.sprites.get(d.sprite_tag)
-            if not sp:
-                return
-            drop = hittest_resolve_drop_target(self.view, sp.x, sp.y)
-            if drop and drop.startswith("zone:"):
-                rd = self.actions.drop_sprite_into_zone(d.sprite_tag, drop)
-                self.view.apply_redraw(rd)
-                return
-            if drop and drop.startswith("deck:"):
-                rd = self.actions.drop_sprite_into_deck(d.sprite_tag, drop)
-                self.view.apply_redraw(rd)
-                return
-            # else leave on battlefield
+
+        if d.kind is not DragKind.CARD or not d.sprite_tag:
+            return
+        sp = self.view.sprites.get(d.sprite_tag)
+        if not sp:
+            return
+        if group_init:
+            moves = tuple(
+                (self.view.card_id_for_tag(t), *self._from_canvas(s.x, s.y))
+                for t in group_init
+                if (s := self.view.sprites.get(t))
+            )
+            self.view.dispatch(SetCardPositions(moves))
+            return
+        drop = hittest_resolve_drop_target(self.view, sp.x, sp.y)
+        key = self.view.key_for_tag(drop) if drop else None
+        if isinstance(key, (ZoneKey, DeckKey)):
+            self.view.dispatch(MoveCard(d.card.id, key))
+            return
+        pos = self._from_canvas(sp.x, sp.y)
+        self.view.dispatch(SetCardPos(d.card.id, pos.x, pos.y))
+
+    # ----- double click / context / keys ------------------------------------
 
     def on_double_click(self, e: tk.Event) -> None:
         tag = self.view.resolve_tag_at(e)
         if not tag:
             return
-
-        # deck: draw
         if tag.startswith("deck:"):
-            dv = self.view.decks.get(tag)
-            owner = getattr(dv, "owner", None) if dv else None
-            ctx = ActionContext(deck_tag=tag, event=e, owner=owner)
+            ctx = ActionContext(deck_tag=tag, event=e, owner=self._owner_of(tag))
             act = ACTIONS["deck.draw"]
-            if act.when(self.view, ctx):
-                rd = FieldActions(self.view).deck_draw(tag)
-                self.view.apply_redraw(rd)
-            return
-
-        # zone: move top card to battlefield (except hand)
-        if tag.startswith("zone:"):
-            zv = self.view.zones.get(tag)
-            if zv is None or isinstance(zv.zone, HandZone) or not zv.zone.cards:
-                return
-            card = zv.zone.cards.pop()
-            self.view.add_card(card, zv.x, zv.y)
-            self.view.redraw_zone(tag)
-            return
-
-        # card: toggle bow
-        if tag.startswith("card:"):
-            sp = self.view.sprites.get(tag)
-            if not sp:
-                return
-            if _card_in_any_province(self.view, sp.card):
-                return
-            owner = getattr(sp.card, "owner", None)
-            ctx = ActionContext(card_tag=tag, event=e, owner=owner)
-            act = ACTIONS["card.toggle_bow"]
             if act.when(self.view, ctx):
                 act.run(self.view, ctx)
             return
+        if tag.startswith("zone:"):
+            key = self.view.key_for_tag(tag)
+            zone = self.view.state.zones.get(key) if isinstance(key, ZoneKey) else None
+            if zone is None or key.role is ZoneRole.HAND or not zone.cards:
+                return
+            if not can_interact(self.view, key.owner):
+                return
+            zv = self.view.zones.get(tag)
+            pos = self._from_canvas(zv.x, zv.y) if zv else None
+            self.view.dispatch(MoveCard(zone.cards[-1].id, BATTLEFIELD, position=pos))
+            return
+        if tag.startswith("card:"):
+            ctx = ActionContext(card_tag=tag, event=e, owner=self._owner_of(tag))
+            act = ACTIONS["card.toggle_bow"]
+            if act.when(self.view, ctx):
+                act.run(self.view, ctx)
 
     def on_context(self, e: tk.Event) -> None:
         self.view.focus_set()
@@ -538,273 +389,144 @@ class FieldController:
             return
         self._context_menu.delete(0, "end")
         self._context_tag = tag
-        # derive owner from model object when available
-        owner = None
+        owner = self._owner_of(tag)
         if tag.startswith("card:"):
-            sp = self.view.sprites.get(tag)
-            owner = getattr(sp.card, "owner", None) if sp else None
-        elif tag.startswith("zone:"):
-            zv = self.view.zones.get(tag)
-            owner = getattr(zv.zone, "owner", None) if zv else None
-        elif tag.startswith("deck:"):
-            dv = self.view.decks.get(tag)
-            owner = getattr(dv, "owner", None) if dv else None
-        ctx = ActionContext(
-            card_tag=tag if tag.startswith("card:") else None,
-            zone_tag=tag if tag.startswith("zone:") else None,
-            deck_tag=tag if tag.startswith("deck:") else None,
-            event=e,
-            owner=owner,
-        )
-        if tag.startswith("card:"):
-            # ensure single selection on right-click if not part of selection
             sel = getattr(self.view, "_selected", set())
             if tag not in sel:
                 self.view._set_selection({tag})
-            sp = self.view.sprites[tag]
-            # Dynamic labels with hotkeys
-            b = self._hotkeys.bow
-            f = self._hotkeys.flip
-            d = self._hotkeys.invert
-            if sp.card.bowed:
-                self._context_menu.add_command(
-                    label=f"Unbow ({b})",
-                    command=lambda: ACTIONS["card.toggle_bow"].run(self.view, ctx),
-                    state="normal"
-                    if ACTIONS["card.toggle_bow"].when(self.view, ctx)
-                    else "disabled",
-                )
-            else:
-                self._context_menu.add_command(
-                    label=f"Bow ({b})",
-                    command=lambda: ACTIONS["card.toggle_bow"].run(self.view, ctx),
-                    state="normal"
-                    if ACTIONS["card.toggle_bow"].when(self.view, ctx)
-                    else "disabled",
-                )
-            if sp.card.inverted:
-                self._context_menu.add_command(
-                    label=f"Uninvert ({d})",
-                    command=lambda: ACTIONS["card.toggle_invert"].run(self.view, ctx),
-                    state="normal"
-                    if ACTIONS["card.toggle_invert"].when(self.view, ctx)
-                    else "disabled",
-                )
-            else:
-                self._context_menu.add_command(
-                    label=f"Invert ({d})",
-                    command=lambda: ACTIONS["card.toggle_invert"].run(self.view, ctx),
-                    state="normal"
-                    if ACTIONS["card.toggle_invert"].when(self.view, ctx)
-                    else "disabled",
-                )
-            if sp.card.face_up:
-                self._context_menu.add_command(
-                    label=f"Flip Down ({f})",
-                    command=lambda: ACTIONS["card.toggle_flip"].run(self.view, ctx),
-                    state="normal"
-                    if ACTIONS["card.toggle_flip"].when(self.view, ctx)
-                    else "disabled",
-                )
-            else:
-                self._context_menu.add_command(
-                    label=f"Flip Up ({f})",
-                    command=lambda: ACTIONS["card.toggle_flip"].run(self.view, ctx),
-                    state="normal"
-                    if ACTIONS["card.toggle_flip"].when(self.view, ctx)
-                    else "disabled",
-                )
-            # Send to submenu using actions
-            send_menu = tk.Menu(self._context_menu, tearoff=0)
-            send_actions = [
-                ACTIONS["card.send_hand"],
-                ACTIONS["card.send_fate_disc"],
-                ACTIONS["card.send_dynasty_disc"],
-                ACTIONS["card.send_deck_top"],
-                ACTIONS["card.send_deck_bottom"],
-            ]
-            build_actions_menu(send_menu, self.view, ctx, send_actions)
-            self._context_menu.add_cascade(label="Send to", menu=send_menu)
+            self._build_card_menu(tag, e, owner)
         elif tag.startswith("zone:"):
-            # owner derivation should support hand zones as well
-            zv = self.view.zones.get(tag)
-            if zv is None:
-                hv = self.view.hands.get(tag)
-                owner = getattr(hv.zone, "owner", None) if hv else None
-            else:
-                owner = getattr(zv.zone, "owner", None)
             ctx = ActionContext(zone_tag=tag, event=e, owner=owner)
-            actions = [
-                ACTIONS["zone.toggle_flip"],
-                ACTIONS["zone.fill"],
-                ACTIONS["zone.destroy"],
-                ACTIONS["zone.discard"],
-            ]
-            build_actions_menu(self._context_menu, self.view, ctx, actions)
+            build_actions_menu(
+                self._context_menu,
+                self.view,
+                ctx,
+                [
+                    ACTIONS[a]
+                    for a in ("zone.toggle_flip", "zone.fill", "zone.destroy", "zone.discard")
+                ],
+            )
         elif tag.startswith("deck:"):
-            actions = [
-                ACTIONS["deck.draw"],
-                ACTIONS["deck.shuffle"],
-                ACTIONS["deck.flip_top"],
-                ACTIONS["deck.inspect"],
-                ACTIONS["deck.create_province"],
-            ]
-            build_actions_menu(self._context_menu, self.view, ctx, actions)
+            ctx = ActionContext(deck_tag=tag, event=e, owner=owner)
+            build_actions_menu(
+                self._context_menu,
+                self.view,
+                ctx,
+                [
+                    ACTIONS[a]
+                    for a in (
+                        "deck.draw",
+                        "deck.shuffle",
+                        "deck.flip_top",
+                        "deck.inspect",
+                        "deck.create_province",
+                    )
+                ],
+            )
         try:
             self._context_menu.tk_popup(e.x_root, e.y_root)
         finally:
             self._context_menu.grab_release()
             self._context_tag = None
 
-    def _shortcut_card(self, keysym: str) -> None:
-        # Simulate key press for card actions on context
-        self.on_key(type("E", (), {"keysym": keysym})())  # simple event-like
+    def _build_card_menu(self, tag: str, e: tk.Event, owner: PlayerId | None) -> None:
+        ctx = ActionContext(card_tag=tag, event=e, owner=owner)
+        sp = self.view.sprites[tag]
+        hk = self._hotkeys
+        menu = self._context_menu
 
-    def _zone_shortcut(self, ztag: str, keysym: str) -> None:
-        fa = self.actions
+        def add(label: str, action_id: str) -> None:
+            act = ACTIONS[action_id]
+            menu.add_command(
+                label=label,
+                command=lambda: act.run(self.view, ctx),
+                state="normal" if act.when(self.view, ctx) else "disabled",
+            )
 
-        if keysym == self._hotkeys.flip:
-            zv = self.view.zones.get(ztag)
-            if zv and zv.zone.cards:
-                if zv.zone.cards[-1].face_up:
-                    rd = fa.zone_flip_down(ztag)
-                else:
-                    rd = fa.zone_flip_up(ztag)
-                self.view.apply_redraw(rd)
-
-        elif keysym == self._hotkeys.fill:
-            rd = fa.zone_fill(ztag)
-            self.view.apply_redraw(rd)
-
-        elif keysym == self._hotkeys.destroy:
-            rd = fa.zone_destroy(ztag)
-            self.view.apply_redraw(rd)
+        add(f"Unbow ({hk.bow})" if sp.card.bowed else f"Bow ({hk.bow})", "card.toggle_bow")
+        add(
+            f"Uninvert ({hk.invert})" if sp.card.inverted else f"Invert ({hk.invert})",
+            "card.toggle_invert",
+        )
+        add(
+            f"Flip Down ({hk.flip})" if sp.card.face_up else f"Flip Up ({hk.flip})",
+            "card.toggle_flip",
+        )
+        send_menu = tk.Menu(menu, tearoff=0)
+        build_actions_menu(
+            send_menu,
+            self.view,
+            ctx,
+            [
+                ACTIONS[a]
+                for a in (
+                    "card.send_hand",
+                    "card.send_fate_disc",
+                    "card.send_dynasty_disc",
+                    "card.send_deck_top",
+                    "card.send_deck_bottom",
+                )
+            ],
+        )
+        menu.add_cascade(label="Send to", menu=send_menu)
 
     def on_escape(self, e: tk.Event) -> None:
         self.view._clear_selection()
 
     def on_key(self, e: tk.Event) -> None:
         key = getattr(e, "keysym", "").lower()
+        hk = self._hotkeys
 
-        # Deck hotkeys via actions
-        if self._hover_deck_tag and key in {
-            self._hotkeys.draw,
-            self._hotkeys.shuffle,
-            self._hotkeys.flip,
-            self._hotkeys.inspect,
-        }:
-            dv = self.view.decks.get(self._hover_deck_tag)
+        if self._hover_deck_tag and key in {hk.draw, hk.shuffle, hk.flip, hk.inspect}:
             ctx = ActionContext(
-                deck_tag=self._hover_deck_tag,
-                event=e,
-                owner=(getattr(dv, "owner", None) if dv else None),
+                deck_tag=self._hover_deck_tag, event=e, owner=self._owner_of(self._hover_deck_tag)
             )
-            if key == self._hotkeys.draw:
-                act = ACTIONS["deck.draw"]
-                if act.when(self.view, ctx):
-                    act.run(self.view, ctx)
-            elif key == self._hotkeys.shuffle:
-                act = ACTIONS["deck.shuffle"]
-                if act.when(self.view, ctx):
-                    act.run(self.view, ctx)
-            elif key == self._hotkeys.flip:
-                act = ACTIONS["deck.flip_top"]
-                if act.when(self.view, ctx):
-                    act.run(self.view, ctx)
-            elif key == self._hotkeys.inspect:
-                act = ACTIONS["deck.inspect"]
-                if act.when(self.view, ctx):
-                    act.run(self.view, ctx)
+            action_id = {
+                hk.draw: "deck.draw",
+                hk.shuffle: "deck.shuffle",
+                hk.flip: "deck.flip_top",
+                hk.inspect: "deck.inspect",
+            }[key]
+            self._run_if_enabled(action_id, ctx)
             return
 
-        # Zone hotkeys via actions
-        if self._hover_zone_tag and key in {
-            self._hotkeys.flip,
-            self._hotkeys.fill,
-            self._hotkeys.destroy,
-            self._hotkeys.invert,
-        }:
-            zv = self.view.zones.get(self._hover_zone_tag)
+        if self._hover_zone_tag and key in {hk.flip, hk.fill, hk.destroy, hk.invert}:
             ctx = ActionContext(
-                zone_tag=self._hover_zone_tag,
-                event=e,
-                owner=(getattr(zv.zone, "owner", None) if zv else None),
+                zone_tag=self._hover_zone_tag, event=e, owner=self._owner_of(self._hover_zone_tag)
             )
-            if key == self._hotkeys.flip:
-                act = ACTIONS["zone.toggle_flip"]
-                if act.when(self.view, ctx):
-                    act.run(self.view, ctx)
-            elif key == self._hotkeys.fill:
-                act = ACTIONS["zone.fill"]
-                if act.when(self.view, ctx):
-                    act.run(self.view, ctx)
-            elif key == self._hotkeys.destroy:
-                act = ACTIONS["zone.destroy"]
-                if act.when(self.view, ctx):
-                    act.run(self.view, ctx)
-            elif key == self._hotkeys.invert:
-                act = ACTIONS["zone.discard"]
-                if act.when(self.view, ctx):
-                    act.run(self.view, ctx)
+            action_id = {
+                hk.flip: "zone.toggle_flip",
+                hk.fill: "zone.fill",
+                hk.destroy: "zone.destroy",
+                hk.invert: "zone.discard",
+            }[key]
+            self._run_if_enabled(action_id, ctx)
             return
 
-        # Card hotkeys (selection or hovered)
         sel = getattr(self.view, "_selected", set())
         target_tag = next(iter(sel)) if sel else self._hover_card_tag
         if not target_tag:
             return
-        sp = self.view.sprites.get(target_tag)
-        ctx = ActionContext(
-            card_tag=target_tag, event=e, owner=(getattr(sp.card, "owner", None) if sp else None)
-        )
-        if key == self._hotkeys.bow:
-            act = ACTIONS["card.toggle_bow"]
-            if act.when(self.view, ctx):
-                act.run(self.view, ctx)
-        elif key == self._hotkeys.flip:
-            act = ACTIONS["card.toggle_flip"]
-            if act.when(self.view, ctx):
-                act.run(self.view, ctx)
-        elif key == self._hotkeys.invert:
-            act = ACTIONS["card.toggle_invert"]
-            if act.when(self.view, ctx):
-                act.run(self.view, ctx)
+        ctx = ActionContext(card_tag=target_tag, event=e, owner=self._owner_of(target_tag))
+        action_id = {
+            hk.bow: "card.toggle_bow",
+            hk.flip: "card.toggle_flip",
+            hk.invert: "card.toggle_invert",
+        }.get(key)
+        if action_id:
+            self._run_if_enabled(action_id, ctx)
+
+    def _run_if_enabled(self, action_id: str, ctx: ActionContext) -> None:
+        act = ACTIONS[action_id]
+        if act.when(self.view, ctx):
+            act.run(self.view, ctx)
 
     def on_toggle_player(self, e: tk.Event) -> None:
-        """Toggle the active local player between P1 and P2 (debug only)."""
+        """Switch the viewing/acting seat (debug only), flipping the board to that seat's view."""
         if not getattr(gui_config, "DEBUG_MODE", False):
             return
-        cur = getattr(self.view, "local_player", None)
-        if cur == PlayerId.P1:
-            self.view.local_player = PlayerId.P2
-            # rotate so P2 appears on bottom
-            if hasattr(self.view, "flip_orientation"):
-                self.view.flip_orientation()
-        else:
-            self.view.local_player = PlayerId.P1
-            # rotate back so P1 appears on bottom
-            if hasattr(self.view, "flip_orientation"):
-                self.view.flip_orientation()
-        # Inform UI about local player change (restack panels, update gating)
+        self.view.seat = PlayerId.P2 if self.view.seat is PlayerId.P1 else PlayerId.P1
+        self.view.reconcile_all()
         cb = getattr(self.view, "on_local_player_changed", None)
         if callable(cb):
-            try:
-                cb()
-                # Force idle update so panel re-pack happens immediately
-                try:
-                    self.view.winfo_toplevel().update_idletasks()
-                except Exception:
-                    pass
-            except Exception:
-                pass
-        # After switching perspective, redraw everything to update private views
-        if hasattr(self.view, "redraw_all"):
-            try:
-                self.view.redraw_all()
-            except Exception:
-                for z in list(self.view.zones.keys()):
-                    self.view.redraw_zone(z)
-                for h in list(self.view.hands.keys()):
-                    self.view.redraw_zone(h)
-                for d in list(self.view.decks.keys()):
-                    self.view.redraw_deck(d)
+            cb()
