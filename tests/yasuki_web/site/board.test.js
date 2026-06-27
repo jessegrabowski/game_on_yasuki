@@ -53,10 +53,12 @@ function fakeCard(
     peeked = false,
     province = null,
     inHand = false,
+    inDiscard = false,
     img = null,
   } = {},
 ) {
   const hand = inHand ? { dataset: { zone: 'hand', owner } } : null;
+  const discard = inDiscard ? { dataset: { zone: 'discard', owner } } : null;
   const classes = new Set([onBattlefield ? 'board-card' : 'zone-card']);
   if (bowed) classes.add('bowed');
   if (!faceUp || hidden) classes.add('face-down');
@@ -85,6 +87,7 @@ function fakeCard(
     closest: (sel) => {
       if (sel === '[data-zone="province"]') return province;
       if (sel === '[data-zone="hand"]') return hand;
+      if (sel === '[data-zone="discard"]') return discard;
       return null;
     },
     querySelector: (sel) => (sel === 'img' && img ? { src: img } : null),
@@ -1381,6 +1384,14 @@ describe('initBoardInteractions — context menu', () => {
     initBoardInteractions(root, board, (message) => sent.push(message));
   });
 
+  // The underlined accelerator letter of the open menu's item labelled `label`.
+  const accelOf = (label) =>
+    activeMenu(root)
+      .children.find((li) => li.textContent === label)
+      .children.find((c) => c.className === 'menu-key').textContent;
+
+  const pressKey = (key) => document._emit('keydown', { key, preventDefault() {} });
+
   it("opens the full card menu on the viewer's own face-up card and suppresses the native menu", () => {
     const event = rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P1' }) });
     root._emit('contextmenu', event);
@@ -1485,6 +1496,15 @@ describe('initBoardInteractions — context menu', () => {
     assert.ok(labels.includes('Send to Discard'), 'but they can still be discarded');
   });
 
+  it('omits "Send to Discard" on a card already in a discard pile', () => {
+    const discard = { dataset: { zone: 'discard', owner: 'P1', role: 'fate_discard' } };
+    const card = fakeCard('c1', { side: 'FATE', owner: 'P1', inDiscard: true });
+    root._emit('contextmenu', rightClick({ zone: discard.dataset, card }));
+    const labels = menuLabels(root);
+    assert.ok(!labels.includes('Send to Discard'), 'it is already in the discard');
+    assert.ok(labels.includes('Send to Deck (top)'), 'but it can still go back to the deck');
+  });
+
   it('omits the Send-to group, show, and peek on a visible opponent (non-token) card', () => {
     // A face-up opponent card: not owned (no show), already visible (no peek), not a token (no remove).
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P2' }) }));
@@ -1520,6 +1540,13 @@ describe('initBoardInteractions — context menu', () => {
       'Search…',
       'Create Province',
     ]);
+  });
+
+  it('keeps Draw and Search on D and S, matching the bare deck hover hotkeys', () => {
+    root._emit('contextmenu', rightClick({ zone: { zone: 'deck', owner: 'P1', side: 'FATE' } }));
+    assert.equal(accelOf('Draw'), 'D');
+    assert.equal(accelOf('Search…'), 'S');
+    assert.equal(accelOf('Shuffle'), 'h', 'Shuffle yields S to Search and takes its second letter');
   });
 
   // The Search chooser mounts in `.room`, not the board stage; its modal is overlay > .deck-scope >
@@ -1608,6 +1635,61 @@ describe('initBoardInteractions — context menu', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
     root._emit('contextmenu', rightClick({ card: fakeCard('c2', { owner: 'P1' }) }));
     assert.equal(root.children.filter((c) => c.className === 'board-menu').length, 1);
+  });
+
+  it('fires a menu item by its underlined accelerator and closes the menu', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
+    pressKey('f');
+    assert.deepEqual(sent[0].intent, { op: 'FLIP', card_ids: ['c1'] });
+    assert.equal(activeMenu(root), undefined, 'the menu closes once an accelerator fires');
+  });
+
+  it('reaches a destructive action by accelerator, running its onClick', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P1' }) }));
+    pressKey('t'); // Send to Deck (top), an onClick item rather than a plain message
+    assert.equal(sent[0].intent.op, 'MOVE_CARD');
+    assert.deepEqual(sent[0].intent.to, { kind: 'deck', deck: { owner: 'P1', side: 'FATE' } });
+  });
+
+  it('lets a modifier combo through, never firing a menu accelerator', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
+    document._emit('keydown', { key: 'f', ctrlKey: true, preventDefault() {} });
+    assert.equal(sent.length, 0);
+    assert.ok(activeMenu(root), 'the menu stays open');
+  });
+
+  it('underlines the existing hover-hotkey letters and falls back when a letter is taken', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P1' }) }));
+    assert.equal(accelOf('Flip'), 'F', 'F coincides with the bare flip hotkey');
+    assert.equal(accelOf('Send to Deck (top)'), 't');
+    assert.equal(accelOf('Send to Deck (bottom)'), 'o', "bottom's first letter B is taken by Bow");
+  });
+
+  it('dismisses the menu on Escape without acting', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
+    pressKey('Escape');
+    assert.equal(activeMenu(root), undefined);
+    assert.equal(sent.length, 0);
+  });
+
+  it('keeps every accelerator unique across a province card combined menu', () => {
+    const province = { dataset: { zone: 'province', owner: 'P1', idx: '0' } };
+    const card = fakeCard('c1', { side: 'DYNASTY', owner: 'P1', faceUp: false, province });
+    root._emit('contextmenu', rightClick({ zone: province.dataset, card }));
+    const keys = activeMenu(root)
+      .children.filter((li) => li.className !== 'menu-sep')
+      .map((li) => li.children.find((c) => c.className === 'menu-key')?.textContent?.toLowerCase());
+    assert.ok(keys.every(Boolean), 'every item has an accelerator');
+    assert.equal(new Set(keys).size, keys.length, 'no two items share one');
+  });
+
+  it('suppresses hover hotkeys while a menu is open, so a key fires only the menu item', () => {
+    const card = fakeCard('c1', { owner: 'P1', faceUp: false });
+    root._emit('pointermove', { target: { closest: (s) => (s === '[data-card-id]' ? card : null) } });
+    root._emit('contextmenu', rightClick({ card }));
+    sent.length = 0;
+    pressKey('f'); // both the hover hotkey and the menu accelerator are F; only the menu may act
+    assert.equal(sent.length, 1, 'one flip, from the menu accelerator, not also the hover hotkey');
   });
 });
 

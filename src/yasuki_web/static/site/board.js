@@ -339,6 +339,7 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
   const doubleFaced = el.dataset.doubleFaced === '1';
   const inProvince = !!el.closest?.('[data-zone="province"]');
   const inHand = !!el.closest?.('[data-zone="hand"]');
+  const inDiscard = !!el.closest?.('[data-zone="discard"]');
   const mine = owner === '' || owner === viewer;
 
   const dataFor = (cardId) => (cardId === id ? el.dataset : lookup(cardId) ?? el.dataset);
@@ -361,21 +362,23 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
 
   // Flip, Bow, and Invert manipulate a card in play; a card in hand is played, not turned in place.
   if (!inHand) {
-    items.push({ label: 'Flip', message: flipIntentFor(doubleFaced, targetIds) });
+    items.push({ label: '&Flip', message: flipIntentFor(doubleFaced, targetIds) });
     // Bowing a card sitting in a province is meaningless, matching the desktop client's gate.
-    if (!inProvince) items.push({ label: bowed ? 'Unbow' : 'Bow', message: bowIntent(targetIds, bowed) });
-    items.push({ label: 'Invert', message: invertIntent(targetIds) });
+    if (!inProvince) {
+      items.push({ label: bowed ? 'Un&bow' : '&Bow', message: bowIntent(targetIds, bowed) });
+    }
+    items.push({ label: '&Invert', message: invertIntent(targetIds) });
   }
   // Show reveals to the opponent a card they cannot already see — one in your hand or lying face-down.
   // A face-up card on the shared board is already visible, so it only offers the toggle-off once shown.
   if (mine) {
-    if (shown) items.push({ label: 'Stop showing', message: unshowIntent(id) });
-    else if (inHand || faceDown) items.push({ label: 'Show opponent', message: showIntent(id) });
+    if (shown) items.push({ label: 'Stop &showing', message: unshowIntent(id) });
+    else if (inHand || faceDown) items.push({ label: '&Show opponent', message: showIntent(id) });
   }
   // Peek is open to anyone, on a card the viewer cannot yet see, toggling to "Stop peeking" once they
   // can. Show and Peek carry the clicked card's single id, not the batch.
-  if (peeked) items.push({ label: 'Stop peeking', message: unpeekIntent(id) });
-  else if (faceDown) items.push({ label: 'Peek', message: peekIntent(id) });
+  if (peeked) items.push({ label: 'Stop &peeking', message: unpeekIntent(id) });
+  else if (faceDown) items.push({ label: '&Peek', message: peekIntent(id) });
 
   if (mine) {
     const seatOf = (d) => d.owner || viewer;
@@ -383,24 +386,27 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
     // Only fate cards live in a hand, and a card already there is never routed back to it.
     if (side === 'FATE' && !inHand) {
       sendItems.push({
-        label: 'Send to Hand',
+        label: 'Send to &Hand',
         onClick: (e, send) => fanOut(send, (cid, d) => moveCardIntent(cid, handDest(seatOf(d)))),
       });
     }
     if (side) {
-      sendItems.push(
-        {
-          label: 'Send to Discard',
+      // A card already in a discard pile has nowhere to be discarded to.
+      if (!inDiscard) {
+        sendItems.push({
+          label: 'Send to &Discard',
           onClick: (e, send) =>
             fanOut(send, (cid, d) => d.side && moveCardIntent(cid, discardDest(seatOf(d), d.side))),
-        },
+        });
+      }
+      sendItems.push(
         {
-          label: 'Send to Deck (top)',
+          label: 'Send to Deck (&top)',
           onClick: (e, send) =>
             fanOut(send, (cid, d) => d.side && moveCardIntent(cid, deckDest(seatOf(d), d.side))),
         },
         {
-          label: 'Send to Deck (bottom)',
+          label: 'Send to Deck (b&ottom)',
           onClick: (e, send) =>
             fanOut(send, (cid, d) => d.side && moveCardIntent(cid, deckDest(seatOf(d), d.side), null, true)),
         },
@@ -410,7 +416,7 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
   }
   // Only tokens can be removed: a real card from a deck/zone belongs to the game state, not the table.
   if (el.dataset.token === '1') {
-    pushGroup([{ label: 'Remove', onClick: (e, send) => fanOut(send, (cid) => removeMessage(cid)) }]);
+    pushGroup([{ label: '&Remove', onClick: (e, send) => fanOut(send, (cid) => removeMessage(cid)) }]);
   }
   return items;
 }
@@ -423,13 +429,14 @@ function deckMenuItems(el, viewer) {
   const owner = el.dataset.owner;
   const side = el.dataset.side;
   if (owner !== viewer) return [];
+  // Shuffle takes its second letter so Draw and Search keep the D/S keys their bare hover hotkeys use.
   return [
-    { label: 'Draw', message: drawIntent(owner, side) },
-    { label: 'Shuffle', message: shuffleIntent(owner, side) },
-    { label: 'Flip Top', message: flipDeckTopIntent(owner, side) },
-    { label: 'Search…', onClick: (e, send) => openDeckSearchPrompt(owner, side, send) },
+    { label: '&Draw', message: drawIntent(owner, side) },
+    { label: 'S&huffle', message: shuffleIntent(owner, side) },
+    { label: '&Flip Top', message: flipDeckTopIntent(owner, side) },
+    { label: '&Search…', onClick: (e, send) => openDeckSearchPrompt(owner, side, send) },
     SEP,
-    { label: 'Create Province', message: createProvinceIntent() },
+    { label: '&Create Province', message: createProvinceIntent() },
   ];
 }
 
@@ -437,10 +444,12 @@ function deckMenuItems(el, viewer) {
 // When the slot holds a card the card's own menu opens instead, with these appended after a separator.
 function provinceMenuItems(owner, idx, viewer) {
   if (owner !== viewer) return [];
+  // Standalone, Fill and Discard take F and D; Destroy falls to E since Discard already took D.
+  // Appended to a card's menu, the resolver shifts any that collide with the card's keys.
   return [
-    { label: 'Fill', message: fillProvinceIntent(owner, idx) },
-    { label: 'Discard', message: discardProvinceIntent(owner, idx) },
-    { label: 'Destroy', message: destroyProvinceIntent(owner, idx) },
+    { label: '&Fill', message: fillProvinceIntent(owner, idx) },
+    { label: '&Discard', message: discardProvinceIntent(owner, idx) },
+    { label: '&Destroy', message: destroyProvinceIntent(owner, idx) },
   ];
 }
 
@@ -538,10 +547,47 @@ export function placeUnplacedCards(cards, viewerSeat, anchorFor) {
 }
 
 let activeMenu = null;
+let menuKeyHandler = null;
 
 function closeMenu() {
+  if (menuKeyHandler) {
+    document.removeEventListener?.('keydown', menuKeyHandler);
+    menuKeyHandler = null;
+  }
   activeMenu?.remove();
   activeMenu = null;
+}
+
+// Split a label's "&" mnemonic into the clean display text and the preferred accelerator: the letter
+// after the "&", at that position. No "&" means no preference (the first free letter is used instead).
+function parseMnemonic(label) {
+  const amp = label.indexOf('&');
+  if (amp < 0 || amp === label.length - 1) return { text: label, key: null, at: -1 };
+  const text = label.slice(0, amp) + label.slice(amp + 1);
+  return { text, key: text[amp].toLowerCase(), at: amp };
+}
+
+// Give each item a unique single-key accelerator: its mnemonic letter when still free, else the first
+// free letter of its label. Returns the display text and the underlined position alongside each item,
+// so a combined menu (a province card's actions plus the province's own) never doubles up a key.
+function assignAccelerators(items) {
+  const used = new Set();
+  return items.map((item) => {
+    if (item.separator) return { item };
+    const { text, key, at } = parseMnemonic(item.label);
+    if (key && !used.has(key)) {
+      used.add(key);
+      return { item, text, key, at };
+    }
+    for (let i = 0; i < text.length; i++) {
+      const ch = text[i].toLowerCase();
+      if (ch >= 'a' && ch <= 'z' && !used.has(ch)) {
+        used.add(ch);
+        return { item, text, key: ch, at: i };
+      }
+    }
+    return { item, text, key: null, at: -1 };
+  });
 }
 
 // Container-local top-left for the menu, pulled back from any right/bottom edge it would overflow so
@@ -564,20 +610,42 @@ function openMenu(container, items, clientX, clientY, send) {
   const menu = document.createElement('ul');
   menu.className = 'board-menu';
 
-  for (const item of items) {
+  const trigger = (item, e) => {
+    closeMenu();
+    if (item.onClick) item.onClick(e, send, container);
+    else send(item.message);
+  };
+  const byKey = new Map();
+
+  for (const { item, text, key, at } of assignAccelerators(items)) {
     const li = document.createElement('li');
     if (item.separator) {
       li.className = 'menu-sep';
     } else {
-      li.textContent = item.label;
-      li.addEventListener('click', (e) => {
-        closeMenu();
-        if (item.onClick) item.onClick(e, send, container);
-        else send(item.message);
-      });
+      if (at >= 0) {
+        if (at > 0) li.appendChild(node('span', null, text.slice(0, at)));
+        li.appendChild(node('span', 'menu-key', text[at]));
+        if (at + 1 < text.length) li.appendChild(node('span', null, text.slice(at + 1)));
+      } else {
+        li.textContent = text;
+      }
+      li.addEventListener('click', (e) => trigger(item, e));
+      if (key) byKey.set(key, item);
     }
     menu.appendChild(li);
   }
+
+  // A single key fires its underlined item; Escape dismisses. Accelerators reach even the "destructive"
+  // actions, but only once the menu is open — they are never bare hover hotkeys.
+  menuKeyHandler = (e) => {
+    if (e.key === 'Escape') return closeMenu();
+    if (e.ctrlKey || e.metaKey || e.altKey) return;
+    const item = byKey.get(e.key.toLowerCase());
+    if (!item) return;
+    e.preventDefault();
+    trigger(item, e);
+  };
+  document.addEventListener?.('keydown', menuKeyHandler);
 
   container.appendChild(menu);
   const menuRect = menu.getBoundingClientRect();
@@ -1052,6 +1120,8 @@ export function initBoardInteractions(root, boardEl, send) {
   // flag op applies to the whole selection when the hovered card is part of one, like its menu item.
   const DECK_HOTKEYS = new Set(['d', 's']);
   document.addEventListener('keydown', (e) => {
+    // An open context menu owns the keyboard: its accelerators take over and the hover hotkeys yield.
+    if (activeMenu) return;
     if (e.ctrlKey || e.metaKey || e.altKey || isTypingTarget(e.target)) return;
     const key = e.key.toLowerCase();
     if (!hovered) return;
