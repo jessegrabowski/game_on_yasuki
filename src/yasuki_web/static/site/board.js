@@ -284,6 +284,7 @@ export const flipIntent = (ids) => intentMessage({ op: 'FLIP', card_ids: [].conc
 // BOW and UNBOW are distinct ops, so the toggle picks whichever one actually changes the card.
 export const bowIntent = (ids, bowed) =>
   intentMessage({ op: bowed ? 'UNBOW' : 'BOW', card_ids: [].concat(ids) });
+export const unbowIntent = (ids) => intentMessage({ op: 'UNBOW', card_ids: [].concat(ids) });
 export const invertIntent = (ids) => intentMessage({ op: 'INVERT', card_ids: [].concat(ids) });
 // Show/peek act on a single card: show is owner-gated (reveal your own card to your opponent), peek
 // is not (any player may privately peek any card). Each carries one card id, not a batch.
@@ -1017,7 +1018,27 @@ function menuItemsFor(target, viewer, targetIds, lookup, { onSearchDiscard } = {
     return province.length ? [...card, SEP, ...province] : card;
   }
   if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup);
+  if (zone === 'battlefield') return battlefieldMenuItems(viewer);
   return [];
+}
+
+// The menu for a right-click on empty battlefield. Unbow all squares up every bowed card the viewer
+// may act on (their own and owner-less ones), batched into one UNBOW so the rate limiter sees one
+// message — and so the server's all-or-nothing ownership gate never rejects the batch.
+function battlefieldMenuItems(viewer) {
+  // An owner-less ('') card is public and actionable by anyone, mirroring the server's owns_card.
+  const ownedByViewer = (el) => !el.dataset.owner || el.dataset.owner === viewer;
+  return [
+    {
+      label: 'Unbo&w all',
+      onClick: (e, send, container) => {
+        const ids = [...(container.querySelectorAll?.('.board-card') ?? [])]
+          .filter((el) => el.dataset.bowed === '1' && ownedByViewer(el))
+          .map((el) => el.dataset.cardId);
+        if (ids.length) send(unbowIntent(ids));
+      },
+    },
+  ];
 }
 
 // A pointer-following clone shown while dragging a source that stays put in its zone (a deck top, or

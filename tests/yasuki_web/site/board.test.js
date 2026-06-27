@@ -2117,6 +2117,33 @@ describe('initBoardInteractions — context menu', () => {
     pressKey('f'); // both the hover hotkey and the menu accelerator are F; only the menu may act
     assert.equal(sent.length, 1, 'one flip, from the menu accelerator, not also the hover hotkey');
   });
+
+  it('offers Unbow all on the empty battlefield, on the W accelerator', () => {
+    root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
+    assert.deepEqual(menuLabels(root), ['Unbow all']);
+    assert.equal(accelOf('Unbow all'), 'w');
+  });
+
+  it('unbows only the viewer own and owner-less bowed cards, never the opponent batch', () => {
+    const cards = [
+      { dataset: { cardId: 'mine', bowed: '1', owner: 'P1' } },
+      { dataset: { cardId: 'fresh', bowed: '', owner: 'P1' } },
+      { dataset: { cardId: 'theirs', bowed: '1', owner: 'P2' } },
+      { dataset: { cardId: 'token', bowed: '1', owner: '' } },
+    ];
+    root.querySelectorAll = (sel) => (sel === '.board-card' ? cards : []);
+    root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
+    clickMenuItem(root, 'Unbow all');
+    assert.deepEqual(sent.at(-1).intent, { op: 'UNBOW', card_ids: ['mine', 'token'] });
+  });
+
+  it('sends nothing from Unbow all when no own card is bowed', () => {
+    root.querySelectorAll = () => [{ dataset: { cardId: 'theirs', bowed: '1', owner: 'P2' } }];
+    root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
+    sent.length = 0;
+    clickMenuItem(root, 'Unbow all');
+    assert.equal(sent.length, 0);
+  });
 });
 
 describe('initBoardInteractions — discard search', () => {
