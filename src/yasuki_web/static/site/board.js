@@ -3,6 +3,7 @@
 // blocks inline style attributes, and property assignment needs no manual escaping.
 
 import { buildCompositeDataURL, loadArtLayout } from '../deck_builder/js/art.js';
+import { reconcile } from './reconcile.js';
 
 export function node(tag, className, text) {
   const el = document.createElement(tag);
@@ -181,13 +182,6 @@ export function patchCard(el, view, prev, imgBase) {
   }
 }
 
-// An absolutely-positioned battlefield card.
-function cardElement(card, imgBase) {
-  const el = node('div', 'board-card');
-  patchCard(el, card, null, imgBase);
-  return el;
-}
-
 // A card laid out in a zone (hand, province, pile) — flow-positioned, no x/y.
 function zoneCard(card, imgBase) {
   const el = node('div', 'zone-card');
@@ -195,8 +189,22 @@ function zoneCard(card, imgBase) {
   return el;
 }
 
+// Per-board reconcile state: a card keeps its element across the snapshots that re-render the board,
+// so an in-flight art-swap and the selection outline survive instead of being rebuilt each time.
+// Keyed weakly by the board element so it clears if the board is ever discarded.
+const boardRegistries = new WeakMap();
+
+// A new card starts as a bare element that patchCard then fills (and patches on later renders).
 export function renderBoard(boardEl, cards, imgBase) {
-  boardEl.replaceChildren(...cards.map((card) => cardElement(card, imgBase)));
+  let registry = boardRegistries.get(boardEl);
+  if (!registry) {
+    registry = new Map();
+    boardRegistries.set(boardEl, registry);
+  }
+  reconcile(boardEl, cards, registry, {
+    create: () => node('div', 'board-card'),
+    patch: (el, view, prev) => patchCard(el, view, prev, imgBase),
+  });
 }
 
 // A card-sized pile (deck or discard) showing its top card or a back, with a count overlaid.

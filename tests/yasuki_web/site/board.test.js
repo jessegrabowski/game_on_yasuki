@@ -234,6 +234,53 @@ describe('renderBoard', () => {
     assert.equal(board.children[0].style.left, '10px');
   });
 
+  it('reuses a card element across renders instead of rebuilding it', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'a', x: 10 })], '/images');
+    const first = board.children[0];
+    renderBoard(board, [card({ id: 'a', x: 99, bowed: true })], '/images');
+    assert.equal(board.children[0], first, 'same element instance reused');
+    assert.equal(first.style.left, '99px', 'patched in place');
+    assert.ok(first.classList.contains('bowed'));
+  });
+
+  it('keeps each card element when only the order changes', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'a' }), card({ id: 'b' }), card({ id: 'c' })], '/images');
+    const elA = board.children[0];
+    const elC = board.children[2];
+    renderBoard(board, [card({ id: 'c' }), card({ id: 'a' }), card({ id: 'b' })], '/images');
+    assert.deepEqual(
+      board.children.map((el) => el.dataset.cardId),
+      ['c', 'a', 'b'],
+    );
+    assert.equal(board.children[0], elC, 'the moved card keeps its element');
+    assert.equal(board.children[1], elA, 'reused, not rebuilt');
+  });
+
+  it('drops a departed card and adds a new one', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'a' }), card({ id: 'b' })], '/images');
+    renderBoard(board, [card({ id: 'a' }), card({ id: 'd' })], '/images');
+    assert.deepEqual(
+      board.children.map((el) => el.dataset.cardId),
+      ['a', 'd'],
+    );
+  });
+
+  it('reuses the element but strips the front identity when a card becomes a hidden stub', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'a' })], '/images');
+    const el = board.children[0];
+    const front = el.children[0]?.src;
+    assert.equal(el.dataset.name, 'Hida Kisada');
+    renderBoard(board, [{ id: 'a', side: 'DYNASTY', hidden: true, x: 10, y: 20 }], '/images');
+    assert.equal(board.children[0], el, 'same element reused');
+    assert.ok(el.classList.contains('face-down'));
+    assert.equal(el.dataset.name, '', 'no stale front identity on the reused element');
+    assert.ok(!el.children.some((c) => c.src === front), 'the front image is gone');
+  });
+
   it('shows the front image when face up', () => {
     const board = document.getElementById('battlefield');
     renderBoard(board, [card()], '/images');
