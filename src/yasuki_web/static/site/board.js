@@ -438,10 +438,12 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
   items.push({ label: '&View', onClick: () => viewCard(el) });
 
   // Flip, Bow, and Invert manipulate a card in play; a card in hand is played, not turned in place.
+  // A discard pile is always public and squared up, so it offers neither flip nor bow there — only
+  // invert, to mark a dishonourable death.
   if (!inHand) {
-    items.push({ label: '&Flip', message: flipIntentFor(doubleFaced, targetIds) });
-    // Bowing a card sitting in a province is meaningless, matching the desktop client's gate.
-    if (!inProvince) {
+    if (!inDiscard) items.push({ label: '&Flip', message: flipIntentFor(doubleFaced, targetIds) });
+    // Bowing a card is meaningless in a province too, matching the desktop client's gate.
+    if (!inProvince && !inDiscard) {
       items.push({ label: bowed ? 'Un&bow' : '&Bow', message: bowIntent(targetIds, bowed) });
     }
     items.push({ label: '&Invert', message: invertIntent(targetIds) });
@@ -1356,10 +1358,13 @@ export function initBoardInteractions(root, boardEl, send) {
     e.preventDefault();
     const id = cardEl.dataset.cardId;
     const ids = selected.size > 1 && selected.has(id) ? [...selected] : [id];
-    if (key === 'f') send(flipIntentFor(cardEl.dataset.doubleFaced === '1', ids));
-    else if (key === 'i') send(invertIntent(ids));
-    // Bowing a card in a province is meaningless, so B no-ops there, matching the menu's gate.
-    else if (!cardEl.closest?.('[data-zone="province"]'))
+    // A discard pile is public and squared up: no flip (face-down) or bow there, only invert. Bowing
+    // is likewise meaningless in a province. Both gates mirror the menu's, so F and B no-op there.
+    const inDiscard = !!cardEl.closest?.('[data-zone="discard"]');
+    if (key === 'f') {
+      if (!inDiscard) send(flipIntentFor(cardEl.dataset.doubleFaced === '1', ids));
+    } else if (key === 'i') send(invertIntent(ids));
+    else if (!inDiscard && !cardEl.closest?.('[data-zone="province"]'))
       send(bowIntent(ids, cardEl.dataset.bowed === '1'));
   });
 

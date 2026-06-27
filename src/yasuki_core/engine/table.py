@@ -629,8 +629,10 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
     elif dest.role is ZoneRole.PROVINCE:
         card.unbow()
     elif dest.role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD):
-        # A discard pile is always public: a card landing there is revealed to both seats.
+        # A discard pile is always public and squared up: a card landing there is revealed to both
+        # seats and unbowed.
         card.turn_face_up()
+        card.unbow()
     if dest.role is ZoneRole.HAND and intent.index is not None:
         # zone_accepts already gated the side and the hand has no capacity limit, so insert directly.
         zone.cards.insert(max(0, min(intent.index, len(zone.cards))), card)
