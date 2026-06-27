@@ -2006,12 +2006,21 @@ describe('initBoardInteractions — context menu', () => {
     assert.ok(labels.includes('Invert'), 'invert still marks a dishonourable death');
   });
 
-  it('omits the Send-to group, show, and peek on a visible opponent (non-token) card', () => {
-    // A face-up opponent card: not owned (no show), already visible (no peek), not a token (no remove).
+  it('trims a visible opponent card to just View and Duplicate', () => {
+    // Manipulating a card you don't control is server-rejected, so an opponent's face-up card offers
+    // only the two owner-agnostic actions: View (look) and Duplicate (make your own token copy).
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P2' }) }));
+    assert.deepEqual(menuLabels(root), ['View', 'Duplicate']);
+  });
+
+  it('keeps the in-play actions on an owner-less public card (anyone may manipulate it)', () => {
+    // A public token is shared, so the server lets either seat flip/bow/invert and note it.
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: '' }) }));
     const labels = menuLabels(root);
-    // Note and Duplicate work on any face-up battlefield card, owned or not.
-    assert.deepEqual(labels, ['View', 'Flip', 'Bow', 'Invert', 'Add note…', 'Duplicate']);
+    for (const action of ['Flip', 'Bow', 'Invert', 'Add note…']) {
+      assert.ok(labels.includes(action), `public card keeps ${action}`);
+    }
+    assert.ok(!labels.includes('Give control'), 'but a public card has no controller to give away');
   });
 
   it('sends MOVE_CARD to the bottom of the deck from "Send to Deck (bottom)"', () => {

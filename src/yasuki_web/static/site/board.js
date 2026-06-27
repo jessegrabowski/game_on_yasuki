@@ -492,8 +492,9 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
 
   // Flip, Bow, and Invert manipulate a card in play; a card in hand is played, not turned in place.
   // A discard pile is always public and squared up, so it offers neither flip nor bow there — only
-  // invert, to mark a dishonourable death.
-  if (!inHand) {
+  // invert, to mark a dishonourable death. The server rejects these on a card you don't control, so
+  // they're offered only on your own (or an owner-less public) card.
+  if (!inHand && mine) {
     if (!inDiscard) items.push({ label: '&Flip', message: flipIntentFor(doubleFaced, targetIds) });
     // Bowing a card is meaningless in a province too, matching the desktop client's gate.
     if (!inProvince && !inDiscard) {
@@ -501,13 +502,16 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
     }
     items.push({ label: '&Invert', message: invertIntent(targetIds) });
   }
-  // A note is a shared annotation on a face-up battlefield card (e.g. marking a unit dead). Editing
-  // opens a small text box; "Add note" becomes "Edit note" once one exists.
+  // A note annotates a face-up battlefield card (e.g. marking a unit dead), offered only on your own
+  // (or an owner-less public) card. Editing opens a small text box; "Add note" becomes "Edit note"
+  // once one exists. Duplicate makes your own token copy of any visible card, owned or not.
   if (onBattlefield && !faceDown) {
-    items.push({
-      label: el.dataset.note ? 'Edit &note…' : 'Add &note…',
-      onClick: (e, send) => openNotePrompt(el, send),
-    });
+    if (mine) {
+      items.push({
+        label: el.dataset.note ? 'Edit &note…' : 'Add &note…',
+        onClick: (e, send) => openNotePrompt(el, send),
+      });
+    }
     items.push({ label: 'Du&plicate', onClick: (e, send) => send(duplicateMessage(el)) });
     // Give control hands the card to the opponent, so it's offered only on a card the viewer owns
     // (not an owner-less public one, which belongs to neither seat) and never on a pregame piece
