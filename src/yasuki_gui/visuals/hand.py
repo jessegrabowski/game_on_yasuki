@@ -95,17 +95,12 @@ class HandVisual(Visual):
         # Determine viewer and ownership
         viewer = getattr(canvas, "local_player", None)
         owner = getattr(self.zone, "owner", None)
-        # Draw cards; opponents' hand cards show back unless revealed
+        # Draw cards; an opponent's hand card shows its back unless its owner has shown it.
         for i, card in enumerate(self.zone.cards):
             cx, cy = self.center_for_index(i)
-            show_front = True
-            if (
-                owner is not None
-                and viewer is not None
-                and owner != viewer
-                and not getattr(card, "revealed", False)
-            ):
-                show_front = False
+            show_front = not (
+                owner is not None and viewer is not None and owner != viewer and not card.shown
+            )
             if self.images is not None:
                 if show_front:
                     photo = self.images.front(card.image_front, card.bowed, card.inverted)
