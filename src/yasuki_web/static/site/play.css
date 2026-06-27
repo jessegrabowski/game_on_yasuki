@@ -116,6 +116,7 @@
   --r-line-soft: rgba(60, 48, 28, 0.08);
   --r-gold: #9a7b3f;
   --r-gold-soft: rgba(154, 123, 63, 0.16);
+  --r-reveal: #2563eb;
   --r-warn: #9c4a35;
 
   position: fixed;
@@ -395,13 +396,14 @@
   pointer-events: none;
 }
 
-/* Disclosure cues, shared by battlefield and zone cards. A shown card is public-facing: a gold frame,
-   read as "info revealed", kept distinct from the cyan selection ring. A peeked card is one this
-   viewer alone sees, through their own private peek: drawn face up but dimmed to read as provisional. */
+/* Disclosure cues, shared by battlefield and zone cards. A shown card — one whose private state you've
+   deliberately revealed to the opponent — wears a thick blue border, drawn inside its footprint so it
+   never bleeds over neighbouring cards, and distinct from the cyan selection ring. A peeked card is one
+   this viewer alone sees, through their own private peek: drawn face up but dimmed to read as provisional. */
 .board-card.shown,
 .zone-card.shown {
-  outline: 2px solid var(--r-gold);
-  outline-offset: -2px;
+  outline: 5px solid var(--r-reveal);
+  outline-offset: -5px;
 }
 
 .board-card.peeked,
