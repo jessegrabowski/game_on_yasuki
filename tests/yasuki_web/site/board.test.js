@@ -1597,6 +1597,21 @@ describe('initBoardInteractions — keyboard shortcuts', () => {
     assert.equal(sent.length, 0);
   });
 
+  it('skips bowing a card in a discard pile', () => {
+    const card = fakeCard('c1', { owner: 'P1', faceUp: true, inDiscard: true });
+    press('b', { closest: (sel) => (sel === '[data-card-id]' ? card : null) });
+    assert.equal(sent.length, 0);
+  });
+
+  it('skips flipping a card in a discard pile but still inverts it', () => {
+    const card = fakeCard('c1', { owner: 'P1', faceUp: true, inDiscard: true });
+    const hover = { closest: (sel) => (sel === '[data-card-id]' ? card : null) };
+    press('f', hover);
+    assert.equal(sent.length, 0);
+    press('i', hover);
+    assert.deepEqual(sent.at(-1).intent, { op: 'INVERT', card_ids: ['c1'] });
+  });
+
   it('applies a card hotkey to the whole selection when the hovered card is selected', () => {
     const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1', faceUp: true });
     const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1', faceUp: true });
@@ -1823,6 +1838,18 @@ describe('initBoardInteractions — context menu', () => {
     const labels = menuLabels(root);
     assert.ok(!labels.includes('Send to Discard'), 'it is already in the discard');
     assert.ok(labels.includes('Send to Deck (top)'), 'but it can still go back to the deck');
+  });
+
+  it('offers only invert (no flip or bow) on a card in a discard pile', () => {
+    // A discard is always public and squared up, so flip and bow are gone; invert stays to mark a
+    // dishonourable death.
+    const discard = { dataset: { zone: 'discard', owner: 'P1', role: 'fate_discard' } };
+    const card = fakeCard('c1', { side: 'FATE', owner: 'P1', inDiscard: true, bowed: true });
+    root._emit('contextmenu', rightClick({ zone: discard.dataset, card }));
+    const labels = menuLabels(root);
+    assert.ok(!labels.includes('Flip'), 'no flip in a public discard');
+    assert.ok(!labels.includes('Bow') && !labels.includes('Unbow'), 'no bow toggle in a discard');
+    assert.ok(labels.includes('Invert'), 'invert still marks a dishonourable death');
   });
 
   it('omits the Send-to group, show, and peek on a visible opponent (non-token) card', () => {

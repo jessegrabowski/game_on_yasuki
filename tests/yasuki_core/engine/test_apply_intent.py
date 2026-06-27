@@ -390,6 +390,18 @@ def test_move_card_into_dynasty_discard_turns_it_face_up():
     assert table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards[0].face_up is True
 
 
+def test_move_card_into_a_discard_unbows():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    card.bow()
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, MoveCard("f1", ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)))
+
+    assert card in table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards
+    assert card.bowed is False
+
+
 def test_move_deck_top_to_battlefield_pops_the_top_card():
     table = TableState.empty_two_seat()
     deck = table.decks[DeckKey(PlayerId.P1, Side.FATE)]
