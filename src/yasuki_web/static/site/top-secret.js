@@ -267,6 +267,55 @@ export function init() {
     loadRooms();
   }
 
+  // Draw a snapshot into every board zone. Whether to apply a snapshot at all is the caller's
+  // decision (the seq gate); this only draws.
+  function renderSnapshot(snapshot) {
+    const seats = snapshot.seats ?? {};
+    const present = Object.values(seats)
+      .filter((seat) => seat.connected)
+      .map((seat) => seat.name);
+    renderPlayers(playerList, present, myName);
+    // Decks only carry cards once setup deals the table; an empty table is the pre-game/reset state.
+    // Resolve the pending toggles off that: dealt clears Ready, cleared clears New game.
+    const dealt = Object.values(snapshot.decks ?? {}).some((deck) => deck.count > 0 || deck.top);
+    (dealt ? readyButton : newGameButton)?.classList.remove('btn-gold');
+    const you = snapshot.your_seat;
+    // The context menu reads the viewer's seat off the board root to gate "Send to…"/deck/province
+    // actions to the cards and zones this player owns.
+    if (boardStage) boardStage.dataset.viewerSeat = you ?? '';
+    if (!you) {
+      renderBoard(battlefield, snapshot.battlefield ?? [], imgBase);
+      return;
+    }
+    const opponent = you === 'P1' ? 'P2' : 'P1';
+    const handOf = (seat) => snapshot.zones?.[`${seat}:hand`] ?? [];
+    // Render every seat-bar and tableau zone first, so the board's battlefield-relative anchors are
+    // measured against fully settled layout. A hand fills its seat bar and can resize the battlefield;
+    // measuring before that lands would anchor the loose pre-game cards to a stale position, so the
+    // stronghold would jump on the next render.
+    renderTableau(selfTableau, you, snapshot, imgBase);
+    renderTableau(opponentTableau, opponent, snapshot, imgBase);
+    renderHand(selfHand, handOf(you), imgBase);
+    renderHand(opponentHand, handOf(opponent), imgBase);
+    if (selfHand) selfHand.dataset.owner = you;
+    if (opponentHand) opponentHand.dataset.owner = opponent;
+    renderPanel(selfPanel, seats[you] ?? {}, { editable: true });
+    renderPanel(opponentPanel, seats[opponent] ?? {}, { editable: false });
+    const anchorFor = (owner, isViewer, group) => {
+      const tableau = isViewer ? selfTableau : opponentTableau;
+      if (group === 'PREGAME') return pregameAnchor(tableau, battlefield, isViewer);
+      return deckAnchor(tableau, battlefield, isViewer, group);
+    };
+    const onTable = placeUnplacedCards(
+      snapshot.battlefield ?? [],
+      you,
+      anchorFor,
+      battlefield.clientWidth,
+      battlefield.clientHeight,
+    );
+    renderBoard(battlefield, onTable, imgBase);
+  }
+
   function joinRoom(roomId) {
     const id = (roomId || '').trim();
     if (!id) return;
@@ -296,50 +345,7 @@ export function init() {
         lastSeq = seq;
       }
       lastSnapshot = snapshot;
-      const seats = snapshot.seats ?? {};
-      const present = Object.values(seats)
-        .filter((seat) => seat.connected)
-        .map((seat) => seat.name);
-      renderPlayers(playerList, present, myName);
-      // Decks only carry cards once setup deals the table; an empty table is the pre-game/reset
-      // state. Resolve the pending toggles off that: dealt clears Ready, cleared clears New game.
-      const dealt = Object.values(snapshot.decks ?? {}).some((deck) => deck.count > 0 || deck.top);
-      (dealt ? readyButton : newGameButton)?.classList.remove('btn-gold');
-      const you = snapshot.your_seat;
-      // The context menu reads the viewer's seat off the board root to gate "Send to…"/deck/province
-      // actions to the cards and zones this player owns.
-      if (boardStage) boardStage.dataset.viewerSeat = you ?? '';
-      if (!you) {
-        renderBoard(battlefield, snapshot.battlefield ?? [], imgBase);
-        return;
-      }
-      const opponent = you === 'P1' ? 'P2' : 'P1';
-      const handOf = (seat) => snapshot.zones?.[`${seat}:hand`] ?? [];
-      // Render every seat-bar and tableau zone first, so the board's battlefield-relative anchors are
-      // measured against fully settled layout. A hand fills its seat bar and can resize the battlefield;
-      // measuring before that lands would anchor the loose pre-game cards to a stale position, so the
-      // stronghold would jump on the next render.
-      renderTableau(selfTableau, you, snapshot, imgBase);
-      renderTableau(opponentTableau, opponent, snapshot, imgBase);
-      renderHand(selfHand, handOf(you), imgBase);
-      renderHand(opponentHand, handOf(opponent), imgBase);
-      if (selfHand) selfHand.dataset.owner = you;
-      if (opponentHand) opponentHand.dataset.owner = opponent;
-      renderPanel(selfPanel, seats[you] ?? {}, { editable: true });
-      renderPanel(opponentPanel, seats[opponent] ?? {}, { editable: false });
-      const anchorFor = (owner, isViewer, group) => {
-        const tableau = isViewer ? selfTableau : opponentTableau;
-        if (group === 'PREGAME') return pregameAnchor(tableau, battlefield, isViewer);
-        return deckAnchor(tableau, battlefield, isViewer, group);
-      };
-      const onTable = placeUnplacedCards(
-        snapshot.battlefield ?? [],
-        you,
-        anchorFor,
-        battlefield.clientWidth,
-        battlefield.clientHeight,
-      );
-      renderBoard(battlefield, onTable, imgBase);
+      renderSnapshot(snapshot);
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
