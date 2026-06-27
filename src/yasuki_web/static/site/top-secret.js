@@ -279,6 +279,7 @@ export function init() {
     if (chatLog) chatLog.innerHTML = '';
     if (actionLog) actionLog.innerHTML = '';
     setStatus(`Joining ${id}…`);
+    let lastSeq = -1; // highest applied snapshot seq this room
     client = connectRoom(id, myName);
     client.events.addEventListener('HELLO', (e) => {
       showRoom(e.detail.room);
@@ -286,6 +287,14 @@ export function init() {
     });
     client.events.addEventListener('SNAPSHOT', (e) => {
       const snapshot = e.detail.snapshot ?? {};
+      // The server stamps a monotonic seq per accepted intent; drop a snapshot that arrives strictly
+      // older than the last applied one. Equal seq still applies — some broadcasts (seat metadata)
+      // reuse the seq without bumping it, and reconcile is idempotent so re-applying is harmless.
+      const seq = snapshot.seq;
+      if (typeof seq === 'number') {
+        if (seq < lastSeq) return;
+        lastSeq = seq;
+      }
       lastSnapshot = snapshot;
       const seats = snapshot.seats ?? {};
       const present = Object.values(seats)

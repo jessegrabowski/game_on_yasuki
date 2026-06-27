@@ -461,6 +461,33 @@ describe('init (room client wiring)', () => {
     assert.equal(document.getElementById('battlefield').children.length, 1, 'the board renders');
   });
 
+  it('drops a snapshot that arrives out of order (strictly older seq)', async () => {
+    const ws = await joinedRoom();
+    const seated = (seq, cardId) => ({
+      type: 'SNAPSHOT',
+      room: 'r1',
+      snapshot: {
+        seq,
+        your_seat: 'P1',
+        seats: {
+          P1: { name: 'Ada', honor: 0, ready: false, connected: true },
+          P2: { name: 'Kenji', honor: 0, ready: false, connected: true },
+        },
+        decks: {},
+        zones: {},
+        battlefield: [{ id: cardId, name: 'C', img: 'c.jpg', x: 5, y: 5, face_up: true }],
+      },
+    });
+    const boardCardId = () => document.getElementById('battlefield').children[0]?.dataset.cardId;
+
+    ws.deliver(seated(2, 'fresh'));
+    assert.equal(boardCardId(), 'fresh');
+    ws.deliver(seated(1, 'stale'));
+    assert.equal(boardCardId(), 'fresh', 'an older snapshot is ignored');
+    ws.deliver(seated(3, 'newer'));
+    assert.equal(boardCardId(), 'newer', 'a newer snapshot still applies');
+  });
+
   it('suppresses a debug-level ERROR when the client debug flag is off', async () => {
     const ws = await joinedRoom();
     ws.deliver({ type: 'ERROR', room: 'r1', message: 'Intent rejected', debug: true });
