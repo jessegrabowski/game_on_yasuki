@@ -64,6 +64,9 @@ class L5RCard:
     def set_note(self, text: str | None) -> None:
         object.__setattr__(self, "note", text or None)
 
+    def set_owner(self, owner: PlayerId | None) -> None:
+        object.__setattr__(self, "owner", owner)
+
     def turn_face_up(self) -> None:
         if not self.face_up:
             object.__setattr__(self, "face_up", True)

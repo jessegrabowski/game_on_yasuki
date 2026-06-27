@@ -43,6 +43,7 @@ from yasuki_core.engine.table import (
     CreateProvince,
     SetHonor,
     SetNote,
+    GiveControl,
     SpawnCard,
     RemoveCard,
     Event,
@@ -331,6 +332,7 @@ _CARD_ID_CLASSES: dict[IntentOp, type] = {
     IntentOp.UNSHOW: Unshow,
     IntentOp.PEEK: Peek,
     IntentOp.UNPEEK: Unpeek,
+    IntentOp.GIVE_CONTROL: GiveControl,
 }
 
 
@@ -450,7 +452,13 @@ def encode_intent(intent: Intent) -> dict:
             payload |= {"card_id": intent.card_id, "text": intent.note}
         case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
             payload["card_ids"] = list(intent.card_ids)
-        case IntentOp.SHOW | IntentOp.UNSHOW | IntentOp.PEEK | IntentOp.UNPEEK:
+        case (
+            IntentOp.SHOW
+            | IntentOp.UNSHOW
+            | IntentOp.PEEK
+            | IntentOp.UNPEEK
+            | IntentOp.GIVE_CONTROL
+        ):
             payload["card_id"] = intent.card_id
         case IntentOp.DRAW:
             payload["deck"] = _encode_deck_key(intent.deck)
@@ -521,7 +529,13 @@ def decode_intent(payload: dict) -> Intent:
             return SetNote(payload["card_id"], payload.get("text"))
         case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
             return _FLAG_CLASSES[op](tuple(payload["card_ids"]))
-        case IntentOp.SHOW | IntentOp.UNSHOW | IntentOp.PEEK | IntentOp.UNPEEK:
+        case (
+            IntentOp.SHOW
+            | IntentOp.UNSHOW
+            | IntentOp.PEEK
+            | IntentOp.UNPEEK
+            | IntentOp.GIVE_CONTROL
+        ):
             return _CARD_ID_CLASSES[op](payload["card_id"])
         case IntentOp.DRAW:
             return Draw(_decode_deck_key(payload["deck"]))

@@ -200,6 +200,7 @@ class IntentOp(str, Enum):
     CREATE_PROVINCE = "CREATE_PROVINCE"
     SET_HONOR = "SET_HONOR"
     SET_NOTE = "SET_NOTE"
+    GIVE_CONTROL = "GIVE_CONTROL"
     SPAWN_CARD = "SPAWN_CARD"
     REMOVE_CARD = "REMOVE_CARD"
 
@@ -308,6 +309,16 @@ class SetNote:
     card_id: str
     note: str | None
     op: ClassVar[IntentOp] = IntentOp.SET_NOTE
+
+
+@dataclass(frozen=True, slots=True)
+class GiveControl:
+    """Hand control of a face-up battlefield card to the opponent: the card's owner becomes the other
+    seat. Owner-gated — only a card you control may be given away, and only from the shared battlefield,
+    where a card's owner is free to differ from its zone."""
+
+    card_id: str
+    op: ClassVar[IntentOp] = IntentOp.GIVE_CONTROL
 
 
 @dataclass(frozen=True, slots=True)
@@ -499,6 +510,7 @@ Intent = (
     | ReorderPile
     | Raise
     | SetNote
+    | GiveControl
     | Bow
     | Unbow
     | Flip
@@ -796,6 +808,24 @@ def _set_note(state: TableState, seat: PlayerId, intent: SetNote) -> list[Event]
     return [Event(state.seq, seat, intent, (card.id,))]
 
 
+def _give_control(state: TableState, seat: PlayerId, intent: GiveControl) -> list[Event]:
+    card = state.cards_by_id.get(intent.card_id)
+    # Only the controller may give a face-up card away, matching the client gate: a public (owner-less)
+    # card has no controller to transfer, so it is refused as well.
+    if card is None or not card.face_up or card.owner != seat:
+        return []
+    # Only a card on the shared battlefield may change hands; reassigning one held in an owned zone
+    # (hand, deck, province) would break the zone/owner invariant the table validates.
+    if not any(held is card for held in state.battlefield.cards):
+        return []
+    opponent = next((other for other in state.seats if other != seat), None)
+    if opponent is None:
+        return []
+    card.set_owner(opponent)
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
 def _bow_card(card: L5RCard) -> bool:
     if card.bowed:
         return False
@@ -1067,6 +1097,7 @@ _HANDLERS = {
     IntentOp.REORDER_PILE: _reorder_pile,
     IntentOp.RAISE: _raise,
     IntentOp.SET_NOTE: _set_note,
+    IntentOp.GIVE_CONTROL: _give_control,
     IntentOp.BOW: _apply_flag,
     IntentOp.UNBOW: _apply_flag,
     IntentOp.FLIP: _apply_flag,

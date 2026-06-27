@@ -24,6 +24,7 @@ from yasuki_core.engine.table import (
     MoveDeckTop,
     ReorderPile,
     SetNote,
+    GiveControl,
 )
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
@@ -182,6 +183,14 @@ def test_batch_flag_links_each_card():
         {"text": ", "},
         {"card_id": "c2", "name": "Sun Tao"},
     ]
+
+
+def test_give_control_names_the_battlefield_card():
+    table = TableState.empty_two_seat()
+    _board_card(table, "c1", "Hida Kisada")
+    segments = _describe(table, GiveControl("c1"), ("c1",))
+    assert segments[1] == {"text": "gave control of "}
+    assert segments[-1] == {"card_id": "c1", "name": "Hida Kisada"}
 
 
 def test_spawn_links_the_new_card():
