@@ -215,6 +215,7 @@ describe('openDeckDialog — drag to reorder', () => {
     const rows = listOf(handle.el).children;
     assert.ok(rows[0].classList.contains('reorderable'));
     rows[0]._emit('pointerdown', {}); // grab the top card (t3)
+    document._emit('pointermove', { clientY: 999 }); // drag down
     document._emit('pointerup', { clientY: 999 }); // drop at the bottom
     assert.deepEqual(
       sent.find((frame) => frame.intent.op === 'REORDER_PILE').intent,
@@ -227,11 +228,15 @@ describe('openDeckDialog — drag to reorder', () => {
     );
   });
 
-  it('sends no reorder when a row is released at its own slot (a tap)', () => {
+  it('treats a press without a drag as a click: no reorder, rows left in place to select', () => {
     const { handle, sent } = open();
-    listOf(handle.el).children[0]._emit('pointerdown', {});
-    document._emit('pointerup', { clientY: 5 }); // released at the top — no move
-    assert.ok(!sent.some((frame) => frame.intent.op === 'REORDER_PILE'));
+    const row = listOf(handle.el).children[1];
+    row._emit('pointerdown', {});
+    document._emit('pointerup', { clientY: 5 }); // released without a pointermove
+    assert.ok(!sent.some((frame) => frame.intent.op === 'REORDER_PILE'), 'a click sends no reorder');
+    // The same <li> survives, so its click handler can still select (the regression: a rebuild here
+    // detached the row before the browser's click landed).
+    assert.strictEqual(listOf(handle.el).children[1], row, 'the rows were not rebuilt');
   });
 
   it('does not offer reorder on an opponent discard', () => {
