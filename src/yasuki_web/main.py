@@ -108,7 +108,7 @@ _CONTENT_SECURITY_POLICY = (
 # Public HTML pages and their static assets that the CSP applies to. The landing page lives at "/"
 # (matched exactly), the rest by path prefix.
 _CSP_PREFIXES = (
-    "/deck-builder",
+    "/deck_builder",
     "/site",
     "/card-search",
     "/card/",
@@ -182,7 +182,7 @@ async def root():
         "message": "Game on, Yasuki! API Server",
         "version": "1.0.0",
         "docs": "/docs",
-        "deck_builder": "/deck-builder",
+        "deck_builder": "/deck_builder",
         "endpoints": {
             "cards": "/api/cards",
             "rooms": "/api/rooms",
@@ -290,7 +290,7 @@ async def config():
 
 if DECK_BUILDER_DIR.exists():
     app.mount(
-        "/deck-builder", StaticFiles(directory=DECK_BUILDER_DIR, html=True), name="deck-builder"
+        "/deck_builder", StaticFiles(directory=DECK_BUILDER_DIR, html=True), name="deck_builder"
     )
 
 
