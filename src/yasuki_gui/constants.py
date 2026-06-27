@@ -30,6 +30,7 @@ ART_TAG = "art"
 BORDER_TAG = "border"
 SELECT_TAG = "select"
 LABEL_TAG = "label"
+NOTE_TAG = "note"
 
 # Honor counter limits
 MIN_HONOR = -20

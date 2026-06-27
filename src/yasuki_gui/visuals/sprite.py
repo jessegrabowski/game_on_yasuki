@@ -10,6 +10,7 @@ from yasuki_gui.constants import (
     BORDER_TAG,
     SELECT_TAG,
     LABEL_TAG,
+    NOTE_TAG,
 )
 from yasuki_gui.ui.images import load_image, load_back_image, ImageProvider
 from yasuki_gui.visuals.visual import Visual
@@ -56,16 +57,19 @@ class CardSpriteVisual(Visual):
         inverted = self.card.inverted
         face_up = self.card.face_up
 
+        # The presented art is the active face: a double-faced card flipped to its back shows that
+        # back's front art, while a single-faced card is its own active face.
+        front_art = self.card.active_face.image_front
         img = None
         if self.images is not None:
             if face_up:
-                img = self.images.front(self.card.image_front, bowed, inverted)
+                img = self.images.front(front_art, bowed, inverted)
             else:
                 img = self.images.back(self.card.side, bowed, inverted, self.card.image_back)
         else:
             # fallback no-cache path
             img = (
-                load_image(self.card.image_front, bowed, inverted, master=canvas)
+                load_image(front_art, bowed, inverted, master=canvas)
                 if face_up
                 else load_back_image(
                     self.card.side, bowed, inverted, self.card.image_back, master=canvas
@@ -119,6 +123,21 @@ class CardSpriteVisual(Visual):
             tags=(self.tag, CARD_TAG, self._subtag(BORDER_TAG)),
         )
 
+    def _draw_note(self, canvas: tk.Canvas) -> None:
+        if not (self.card.note and self.card.face_up):
+            return
+        x, y = self.x, self.y
+        w, h = self.size
+        canvas.create_text(
+            x,
+            y + h // 2 - 12,
+            text=self.card.note,
+            fill="#ffffff",
+            font=("TkDefaultFont", 9, "bold"),
+            width=w - 6,
+            tags=(self.tag, CARD_TAG, self._subtag(NOTE_TAG)),
+        )
+
     def _draw_selection(self, canvas: tk.Canvas, selected: bool) -> None:
         canvas.delete(self._subtag(SELECT_TAG))
         if not selected:
@@ -140,6 +159,7 @@ class CardSpriteVisual(Visual):
 
         self._draw_art(canvas)
         self._draw_border(canvas)
+        self._draw_note(canvas)
         self._draw_selection(canvas, selected)
 
         canvas.tag_raise(self._subtag(SELECT_TAG))
@@ -167,10 +187,12 @@ class CardSpriteVisual(Visual):
         canvas.delete(self._subtag(ART_TAG))
         canvas.delete(self._subtag(BORDER_TAG))
         canvas.delete(self._subtag(LABEL_TAG))
+        canvas.delete(self._subtag(NOTE_TAG))
         canvas.delete(self._subtag(SELECT_TAG))
         # Redraw art and border
         self._draw_art(canvas)
         self._draw_border(canvas)
+        self._draw_note(canvas)
         # Recreate selection overlay if it was present
         if had_selection:
             self._draw_selection(canvas, True)
