@@ -70,6 +70,8 @@ function makeElement(tag) {
     getBoundingClientRect() {
       return { width: 200, height: 200, top: 0, left: 0, right: 200, bottom: 200 };
     },
+    offsetWidth: 200,
+    offsetHeight: 200,
     get value() { return this._value || ''; },
     set value(v) { this._value = v; },
   };
