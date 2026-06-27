@@ -72,6 +72,7 @@ slowapi = ">=0.1.9"
 [tool.pixi.feature.dev.dependencies]
 pytest = "*"
 pytest-cov = "*"
+pytest-playwright = "*"
 pre-commit = "*"
 ruff = "*"
 
@@ -81,8 +82,12 @@ prod = { solve-group = "default" }
 
 [tool.pixi.tasks]
 play = "python play.py"
-test = "pytest tests/"
+# The pytest-playwright plugin (greenlet) aborts in-process alongside the tkinter/PIL GUI tests, so
+# disable it for the unit suite; the e2e task below loads it on its own.
+test = "pytest tests/ --ignore=tests/e2e -p no:playwright"
 test-js = "node --test tests/yasuki_web/deck_builder/*.test.js tests/yasuki_web/site/*.test.js"
+test-e2e = "pytest tests/e2e"
+e2e-setup = "playwright install chromium"
 install-db = "python -m yasuki_core.install.install_db"
 ensure-ro-role = "python -m yasuki_core.install.install_db --ensure-readonly-role"
 format-metadata = "python -m yasuki_core.install.install_db --format-metadata"
