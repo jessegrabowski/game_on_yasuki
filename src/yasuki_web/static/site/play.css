@@ -908,6 +908,32 @@
   background: rgba(30, 22, 10, 0.45);
 }
 
+/* A card-sized preview floated next to a card on the board (board.js positions it). It's
+   pointer-transparent so it never blocks play; the next key or pointer action dismisses it, fading
+   out once `closing` is set — the listener removes it when that transition ends. */
+.card-view {
+  position: absolute;
+  z-index: 60;
+  width: 400px;
+  aspect-ratio: 81 / 115;
+  border-radius: 10px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, 0.55);
+  pointer-events: none;
+  animation: card-view-in 0.12s ease-out;
+  transition: opacity 0.14s ease;
+}
+
+.card-view.closing {
+  opacity: 0;
+}
+
+@keyframes card-view-in {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+}
+
 .deck-dialog {
   display: flex;
   flex-direction: column;
