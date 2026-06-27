@@ -129,6 +129,10 @@ function tagCard(el, card) {
   el.dataset.shown = card.shown ? '1' : '';
   el.dataset.peeked = card.peeked ? '1' : '';
   el.dataset.note = card.note ?? '';
+  // name and img let the menu duplicate a card as a token; a hidden stub the viewer can't see carries
+  // neither, so the duplicate option is gated on the card being face-up anyway.
+  el.dataset.name = card.name ?? '';
+  el.dataset.img = card.img ?? '';
   if (card.back_card_id) el.dataset.doubleFaced = '1';
 }
 
@@ -274,6 +278,19 @@ export function highlightCard(boardEl, cardId) {
 export const intentMessage = (intent) => ({ type: 'INTENT', intent });
 export const spawnMessage = (spawn) => ({ type: 'SPAWN', spawn });
 export const removeMessage = (id) => ({ type: 'REMOVE', remove: { id } });
+
+// Spawn a token copy of a face-up battlefield card, dropped down-right of the original so it doesn't
+// hide it. Name, img and side come off the card's dataset; its board-local position off its inline
+// geometry. The server assigns the new id and marks it a token.
+const DUPLICATE_OFFSET_PX = 18;
+export const duplicateMessage = (el) =>
+  spawnMessage({
+    name: el.dataset.name,
+    img: el.dataset.img || null,
+    side: el.dataset.side,
+    x: Math.round(parseFloat(el.style.left) || 0) + DUPLICATE_OFFSET_PX,
+    y: Math.round(parseFloat(el.style.top) || 0) + DUPLICATE_OFFSET_PX,
+  });
 
 export const moveIntent = (id, x, y) => intentMessage({ op: 'SET_CARD_POS', card_id: id, x, y });
 // Reposition a whole group in one message; sending one SET_CARD_POS per member instead would
@@ -483,6 +500,7 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
       label: el.dataset.note ? 'Edit &note…' : 'Add &note…',
       onClick: (e, send) => openNotePrompt(el, send),
     });
+    items.push({ label: 'Du&plicate', onClick: (e, send) => send(duplicateMessage(el)) });
   }
   // Show reveals to the opponent a card they cannot already see — one in your hand or lying face-down.
   // A face-up card on the shared board is already visible, so it only offers the toggle-off once shown.
