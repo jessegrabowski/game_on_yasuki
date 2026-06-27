@@ -64,6 +64,9 @@ function fakeCard(
     inDiscard = false,
     img = null,
     note = '',
+    name = '',
+    x = null,
+    y = null,
   } = {},
 ) {
   const hand = inHand ? { dataset: { zone: 'hand', owner } } : null;
@@ -82,11 +85,16 @@ function fakeCard(
     shown: shown ? '1' : '',
     peeked: peeked ? '1' : '',
     note,
+    name,
+    img: img ?? '',
   };
   if (doubleFaced) dataset.doubleFaced = '1';
+  const style = {};
+  if (x != null) style.left = `${x}px`;
+  if (y != null) style.top = `${y}px`;
   return {
     dataset,
-    style: {},
+    style,
     classList: {
       add: (c) => classes.add(c),
       remove: (c) => classes.delete(c),
@@ -1791,11 +1799,35 @@ describe('initBoardInteractions — context menu', () => {
       'Bow',
       'Invert',
       'Add note…',
+      'Duplicate',
       'Send to Hand',
       'Send to Discard',
       'Send to Deck (top)',
       'Send to Deck (bottom)',
     ]);
+  });
+
+  it('duplicates a face-up battlefield card as a token dropped down-right of the original', () => {
+    const cardEl = fakeCard('c1', {
+      owner: 'P1',
+      side: 'DYNASTY',
+      name: 'Hida Kisada',
+      img: 'sets/hk.jpg',
+      x: 10,
+      y: 20,
+    });
+    root._emit('contextmenu', rightClick({ card: cardEl }));
+    assert.equal(accelOf('Duplicate'), 'p');
+    clickMenuItem(root, 'Duplicate');
+    assert.deepEqual(sent.at(-1), {
+      type: 'SPAWN',
+      spawn: { name: 'Hida Kisada', img: 'sets/hk.jpg', side: 'DYNASTY', x: 28, y: 38 },
+    });
+  });
+
+  it('omits Duplicate on a face-down battlefield card', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1', faceUp: false }) }));
+    assert.ok(!menuLabels(root).includes('Duplicate'));
   });
 
   it("labels the note action 'Add note' with no note and 'Edit note' once one exists", () => {
@@ -1934,8 +1966,8 @@ describe('initBoardInteractions — context menu', () => {
     // A face-up opponent card: not owned (no show), already visible (no peek), not a token (no remove).
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P2' }) }));
     const labels = menuLabels(root);
-    // The note is a shared marker, so it's offered on any face-up battlefield card, owned or not.
-    assert.deepEqual(labels, ['View', 'Flip', 'Bow', 'Invert', 'Add note…']);
+    // Note and Duplicate work on any face-up battlefield card, owned or not.
+    assert.deepEqual(labels, ['View', 'Flip', 'Bow', 'Invert', 'Add note…', 'Duplicate']);
   });
 
   it('sends MOVE_CARD to the bottom of the deck from "Send to Deck (bottom)"', () => {
