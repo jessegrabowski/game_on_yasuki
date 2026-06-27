@@ -1,10 +1,10 @@
-// The deck-search dialog: the owner's deck in shuffled (top-first) order, filterable by card title,
-// with a small preview of the selected card and three ways to take it — Pull it face-down to the
-// battlefield by its deck, Discard it, or send it to the Bottom of the deck. Built with createElement
-// (no innerHTML, no inline styles) so it stays CSP-safe under the page's style-src 'self'. It stays
-// open after a deal so several cards can be taken in one sitting; the dealt card leaves the list and
-// the rest keep their order. A footer closes the dialog, optionally shuffling the deck first to
-// re-randomize the order the search just exposed.
+// The search dialog for a deck or a discard pile: the cards top-first, filterable by card title, with
+// a small preview of the selected one and buttons to take it. A deck (private) offers Pull to the
+// battlefield, Discard, or Bottom, and a footer that can shuffle on close to re-randomize the order
+// the search exposed. A discard (public, either player may search it) offers only Pull — and only
+// from one's own pile (`canPull`). Built with createElement (no innerHTML, no inline styles) so it
+// stays CSP-safe under the page's style-src 'self'. It stays open after a deal so several cards can be
+// taken in one sitting; the dealt card leaves the list and the rest keep their order.
 
 import {
   deckDest,
@@ -19,10 +19,21 @@ const SIDE_LABELS = { FATE: 'Fate', DYNASTY: 'Dynasty' };
 
 const matchesTitle = (card, query) => (card.name ?? '').toLowerCase().includes(query);
 
-// Open the dialog over the page. `cards` is the deck top-first; `limit` caps the list to the top N
-// (null = whole deck). `send` receives a room-less client message. Returns { el, close }. Closes on
-// the overlay, the × or footer buttons, or Escape.
-export function openDeckDialog({ deck, cards, imgBase, limit = null, send, onClose }) {
+// Open the dialog over the page. `cards` is top-first; `limit` caps the list to the top N (null =
+// whole pile). `kind` is 'deck' (default) or 'discard', which trims to Pull-only with no shuffle.
+// `canPull` gates the Pull button — false for an opponent's discard. `send` receives a room-less
+// client message. Returns { el, close }. Closes on the overlay, the × or footer buttons, or Escape.
+export function openDeckDialog({
+  deck,
+  cards,
+  imgBase,
+  limit = null,
+  send,
+  onClose,
+  kind = 'deck',
+  canPull = true,
+}) {
+  const isDiscard = kind === 'discard';
   // The working list, capped to the chosen limit and kept top-first; a pulled card is spliced out.
   let pool = (cards ?? []).slice(0, limit ?? (cards ?? []).length);
   let query = '';
@@ -62,36 +73,44 @@ export function openDeckDialog({ deck, cards, imgBase, limit = null, send, onClo
   const list = node('ul', 'deck-dialog-list');
   const previewImg = node('img', 'deck-dialog-preview-img');
 
-  // Pull deals the card face-down to the battlefield via the unplaced sentinel, which the client
-  // routes to the fate or dynasty deck by the card's side; Discard and Bottom use plain
-  // destinations. Each deal removes the card from the list and keeps the dialog open.
-  const dealActions = [
-    { label: 'Pull', dest: { kind: 'battlefield' }, position: UNPLACED_POSITION },
-    { label: 'Discard', dest: discardDest(deck.owner, deck.side) },
-    { label: 'Bottom', dest: deckDest(deck.owner, deck.side), toBottom: true },
-  ];
-  const dealButtons = dealActions.map(({ label, dest, position = null, toBottom = false }) => {
-    const btn = node('button', 'deck-dialog-deal', label);
+  // Pull deals the card to the battlefield via the unplaced sentinel, which the client routes to the
+  // fate or dynasty side; Discard and Bottom (deck only) use plain destinations. Each deal removes the
+  // card from the list and keeps the dialog open. A discard offers Pull alone, gated by `canPull`.
+  const dealActions = isDiscard
+    ? [{ label: 'Pull', dest: { kind: 'battlefield' }, position: UNPLACED_POSITION, enabled: canPull }]
+    : [
+        { label: 'Pull', dest: { kind: 'battlefield' }, position: UNPLACED_POSITION },
+        { label: 'Discard', dest: discardDest(deck.owner, deck.side) },
+        { label: 'Bottom', dest: deckDest(deck.owner, deck.side), toBottom: true },
+      ];
+  const dealButtons = dealActions.map((action) => {
+    const btn = node('button', 'deck-dialog-deal', action.label);
     btn.type = 'button';
-    btn.addEventListener('click', () => deal((id) => moveCardIntent(id, dest, position, toBottom)));
-    return btn;
+    btn.addEventListener('click', () =>
+      deal((id) => moveCardIntent(id, action.dest, action.position ?? null, action.toBottom ?? false)),
+    );
+    return { btn, enabled: action.enabled !== false };
   });
   const preview = node('div', 'deck-dialog-preview');
-  preview.append(previewImg, ...dealButtons);
+  preview.append(previewImg, ...dealButtons.map((d) => d.btn));
   const body = node('div', 'deck-dialog-body');
   body.append(list, preview);
 
   const footerClose = node('button', 'deck-dialog-btn', 'Close');
   footerClose.type = 'button';
   footerClose.addEventListener('click', close);
-  const footerShuffle = node('button', 'deck-dialog-btn', 'Close and shuffle');
-  footerShuffle.type = 'button';
-  footerShuffle.addEventListener('click', () => {
-    send(shuffleIntent(deck.owner, deck.side));
-    close();
-  });
   const footer = node('div', 'deck-dialog-footer');
-  footer.append(footerClose, footerShuffle);
+  footer.append(footerClose);
+  // Only a deck re-randomizes on close; a discard has no hidden order to restore.
+  if (!isDiscard) {
+    const footerShuffle = node('button', 'deck-dialog-btn', 'Close and shuffle');
+    footerShuffle.type = 'button';
+    footerShuffle.addEventListener('click', () => {
+      send(shuffleIntent(deck.owner, deck.side));
+      close();
+    });
+    footer.append(footerShuffle);
+  }
 
   modal.append(header, filterInput, body, footer);
   overlay.appendChild(modal);
@@ -103,7 +122,7 @@ export function openDeckDialog({ deck, cards, imgBase, limit = null, send, onClo
 
   function renderTitle() {
     const side = SIDE_LABELS[deck.side] ?? deck.side ?? '';
-    title.textContent = `${side} deck — ${pool.length} cards`.trim();
+    title.textContent = `${side} ${isDiscard ? 'discard' : 'deck'} — ${pool.length} cards`.trim();
   }
 
   function renderList() {
@@ -133,7 +152,7 @@ export function openDeckDialog({ deck, cards, imgBase, limit = null, send, onClo
       previewImg.removeAttribute('src');
     }
     previewImg.classList.toggle('is-empty', !selectedCard?.img);
-    for (const btn of dealButtons) btn.disabled = !selectedCard;
+    for (const { btn, enabled } of dealButtons) btn.disabled = !enabled || !selectedCard;
   }
 
   function deal(makeIntent) {

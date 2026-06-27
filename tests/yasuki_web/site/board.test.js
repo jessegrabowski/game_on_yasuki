@@ -2040,6 +2040,43 @@ describe('initBoardInteractions — context menu', () => {
   });
 });
 
+describe('initBoardInteractions — discard search', () => {
+  let root;
+  let searches;
+
+  beforeEach(() => {
+    root = document.getElementById('boardStage');
+    root.dataset.viewerSeat = 'P1';
+    searches = [];
+    initBoardInteractions(root, document.getElementById('battlefield'), () => {}, {
+      onSearchDiscard: (owner, role) => searches.push([owner, role]),
+    });
+  });
+
+  const discardZone = (owner) => ({ zone: 'discard', owner, role: 'fate_discard' });
+
+  it('offers Search on an empty discard and routes it to onSearchDiscard', () => {
+    root._emit('contextmenu', rightClick({ zone: discardZone('P1') }));
+    assert.deepEqual(menuLabels(root), ['Search…']);
+    clickMenuItem(root, 'Search…');
+    assert.deepEqual(searches, [['P1', 'fate_discard']]);
+  });
+
+  it('lets a player search the opponent discard too', () => {
+    root._emit('contextmenu', rightClick({ zone: discardZone('P2') }));
+    clickMenuItem(root, 'Search…');
+    assert.deepEqual(searches, [['P2', 'fate_discard']]);
+  });
+
+  it('keeps the top card menu and adds Search on a non-empty discard', () => {
+    const card = fakeCard('c1', { side: 'FATE', owner: 'P1', inDiscard: true });
+    root._emit('contextmenu', rightClick({ zone: discardZone('P1'), card }));
+    const labels = menuLabels(root);
+    assert.ok(labels.includes('View'), 'the top card menu is still there');
+    assert.ok(labels.includes('Search…'), 'and Search is appended');
+  });
+});
+
 describe('clampMenuPosition', () => {
   // 80x100 menu inside a 200x200 stage, 4px margin.
   it('leaves a menu that fits where it was asked to open', () => {

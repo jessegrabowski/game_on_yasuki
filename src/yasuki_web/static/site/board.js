@@ -894,13 +894,23 @@ function openDeckSearchPrompt(owner, side, send) {
 }
 
 // Choose the menu for a right-click: a deck pile shows deck actions (even though its top card carries
-// a card id); an occupied province shows the card's menu plus the province lifecycle ops; an empty
-// province shows just those ops; any other card shows the card menu. Returns [] for an empty target.
-function menuItemsFor(target, viewer, targetIds, lookup) {
+// a card id); a discard pile shows Search (either player may search either pile) plus the top card's
+// menu; an occupied province shows the card's menu plus the province lifecycle ops; an empty province
+// shows just those ops; any other card shows the card menu. Returns [] for an empty target.
+function menuItemsFor(target, viewer, targetIds, lookup, { onSearchDiscard } = {}) {
   const zoneEl = target?.closest?.('[data-zone]');
   const zone = zoneEl?.dataset.zone;
   const cardEl = target?.closest?.('[data-card-id]');
   if (zone === 'deck') return deckMenuItems(zoneEl, viewer);
+  if (zone === 'discard') {
+    const { owner, role } = zoneEl.dataset;
+    const search = onSearchDiscard
+      ? [{ label: '&Search…', onClick: () => onSearchDiscard(owner, role) }]
+      : [];
+    if (!cardEl) return search;
+    const card = cardMenuItems(cardEl, viewer, targetIds, lookup);
+    return search.length ? [...card, SEP, ...search] : card;
+  }
   if (zone === 'province') {
     const province = provinceMenuItems(zoneEl.dataset.owner, Number(zoneEl.dataset.idx), viewer);
     if (!cardEl) return province;
@@ -942,7 +952,7 @@ function dragGhost(sourceEl) {
 // moves the whole group together. `boardEl` is the battlefield, used for position maths; `send`
 // receives a room-less client message. Returns `{ markSelection }` so the caller can re-apply the
 // selection outline after the board re-renders.
-export function initBoardInteractions(root, boardEl, send) {
+export function initBoardInteractions(root, boardEl, send, { onSearchDiscard } = {}) {
   let drag = null;
   let marquee = null;
   let lastSent = 0;
@@ -1286,7 +1296,9 @@ export function initBoardInteractions(root, boardEl, send) {
     // Resolve a selected card id to its dataset so per-card Send to…/Remove route by each card's side.
     const datasets = [...boardEl.querySelectorAll('.board-card')].map((cardEl) => cardEl.dataset);
     const lookup = (cardId) => datasets.find((d) => d.cardId === cardId) ?? null;
-    const items = menuItemsFor(e.target, root.dataset.viewerSeat || '', targetIds, lookup);
+    const items = menuItemsFor(e.target, root.dataset.viewerSeat || '', targetIds, lookup, {
+      onSearchDiscard,
+    });
     if (!items.length) return;
     e.preventDefault();
     openMenu(root, items, e.clientX, e.clientY, send);

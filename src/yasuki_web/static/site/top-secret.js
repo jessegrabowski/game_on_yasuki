@@ -155,6 +155,18 @@ export function forgetDeleteToken(roomId) {
 
 export const ownedRoomIds = () => new Set(Object.keys(readDeleteTokens()));
 
+// The openDeckDialog props for searching a discard pile from a snapshot. The pile (`owner:role`, e.g.
+// `P1:fate_discard`) is public, so its cards come straight from the snapshot — listed top-first (the
+// snapshot is bottom-first) and pullable only from one's own pile.
+export function discardSearchProps(snapshot, owner, role) {
+  const cards = snapshot?.zones?.[`${owner}:${role}`] ?? [];
+  return {
+    deck: { owner, side: role.startsWith('fate') ? 'FATE' : 'DYNASTY' },
+    cards: [...cards].reverse(),
+    canPull: owner === snapshot?.your_seat,
+  };
+}
+
 export function init() {
   const playerName = document.getElementById('playerName');
   const roomList = document.getElementById('roomList');
@@ -177,6 +189,8 @@ export function init() {
   const logSystem = (text) => actionLog && appendLogMessage(actionLog, [{ text }]);
   const battlefield = document.getElementById('battlefield');
   let boardInteractions = null;
+  // The latest snapshot, kept so a discard-pile search can list that public pile without a round-trip.
+  let lastSnapshot = null;
   const opponentTableau = document.getElementById('opponentTableau');
   const selfTableau = document.getElementById('selfTableau');
   const opponentHand = document.getElementById('opponentHand');
@@ -274,6 +288,7 @@ export function init() {
     });
     client.events.addEventListener('SNAPSHOT', (e) => {
       const snapshot = e.detail.snapshot ?? {};
+      lastSnapshot = snapshot;
       const seats = snapshot.seats ?? {};
       const present = Object.values(seats)
         .filter((seat) => seat.connected)
@@ -403,14 +418,31 @@ export function init() {
     sendToRoom(resetFrame(currentRoom));
   });
 
+  // Open the search dialog over a discard pile, fed from the latest snapshot (the pile is public, so
+  // no server reveal is needed). The server also rejects a move of an opponent's card, backing the
+  // per-pile Pull gate.
+  const openDiscardSearch = (owner, role) => {
+    openDeckDialog({
+      kind: 'discard',
+      ...discardSearchProps(lastSnapshot, owner, role),
+      imgBase,
+      send: (frame) => sendToRoom({ ...frame, room: currentRoom }),
+    });
+  };
+
   const boardStage = document.getElementById('boardStage');
   if (boardStage && battlefield) {
     // A SEARCH_DECK intent carries its top-N as `intent.value`; mirror it into pendingDeckLimit to
     // cap the DECK_CONTENTS dialog, but pass the message through untouched so the server logs it.
-    boardInteractions = initBoardInteractions(boardStage, battlefield, (message) => {
-      if (message.intent?.op === 'SEARCH_DECK') pendingDeckLimit = message.intent.value ?? null;
-      sendToRoom({ ...message, room: currentRoom });
-    });
+    boardInteractions = initBoardInteractions(
+      boardStage,
+      battlefield,
+      (message) => {
+        if (message.intent?.op === 'SEARCH_DECK') pendingDeckLimit = message.intent.value ?? null;
+        sendToRoom({ ...message, room: currentRoom });
+      },
+      { onSearchDiscard: openDiscardSearch },
+    );
   }
 
   // Only the local panel is wired, so the opponent's honor stays read-only.

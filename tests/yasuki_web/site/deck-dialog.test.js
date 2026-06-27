@@ -160,3 +160,51 @@ describe('openDeckDialog', () => {
     assert.equal(closed, 1);
   });
 });
+
+describe('openDeckDialog — discard mode', () => {
+  const openDiscard = (overrides = {}) => {
+    const sent = [];
+    const handle = openDeckDialog({
+      kind: 'discard',
+      deck: { owner: 'P1', side: 'FATE' },
+      cards: deckContents().cards,
+      imgBase: '/images',
+      send: (frame) => sent.push(frame),
+      ...overrides,
+    });
+    return { handle, sent };
+  };
+  const titleOf = (overlay) => modalOf(overlay).children[0].children[0];
+
+  it('offers only Pull and a plain Close footer (no Discard, Bottom, or shuffle)', () => {
+    const { handle } = openDiscard();
+    assert.deepEqual(
+      previewOf(handle.el).children.slice(1).map((b) => b.textContent),
+      ['Pull'],
+    );
+    assert.deepEqual(
+      modalOf(handle.el).children[3].children.map((b) => b.textContent),
+      ['Close'],
+    );
+  });
+
+  it('titles the dialog as a discard', () => {
+    assert.match(titleOf(openDiscard().handle.el).textContent, /Fate discard — 3 cards/);
+  });
+
+  it('pulls the selected card from one own discard to the battlefield', () => {
+    const { handle, sent } = openDiscard();
+    previewOf(handle.el).children[1]._emit('click', {}); // Pull (top card selected)
+    assert.deepEqual(sent[0].intent, {
+      op: 'MOVE_CARD',
+      card_id: 't3',
+      to: { kind: 'battlefield' },
+      position: [-1, -1],
+    });
+  });
+
+  it('disables Pull on an opponent discard (canPull false)', () => {
+    const { handle } = openDiscard({ canPull: false });
+    assert.equal(previewOf(handle.el).children[1].disabled, true);
+  });
+});
