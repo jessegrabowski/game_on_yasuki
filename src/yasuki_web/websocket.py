@@ -33,7 +33,13 @@ from yasuki_core.engine.table import (
     Event,
     SearchDeck,
 )
-from yasuki_core.engine.action_log import ActionLog, InitialRecord, ChatEntry, apply_and_log
+from yasuki_core.engine.action_log import (
+    ActionLog,
+    InitialRecord,
+    ChatEntry,
+    SessionEntry,
+    apply_and_log,
+)
 from yasuki_core.engine.redaction import redact
 from yasuki_core.engine.setup import setup_seat, flip_second_player_stronghold
 from yasuki_core.game_pieces.factory import resolve_decklist
@@ -134,6 +140,9 @@ class GameRoom:
 
         logger.info(f"Player {player_name} took seat {seat.name} in room {self.room_id}")
 
+        self.action_log.append(
+            SessionEntry(ts=time.time(), seat=seat, name=player_name, event="join")
+        )
         await self.broadcast_snapshots()
         await self.log([{"text": f"{player_name} joined"}])
 
@@ -150,6 +159,9 @@ class GameRoom:
             if self.room_id in rooms and player_name in rooms[self.room_id]["players"]:
                 rooms[self.room_id]["players"].remove(player_name)
             logger.info(f"Player {player_name} left room {self.room_id}")
+            self.action_log.append(
+                SessionEntry(ts=time.time(), seat=seat, name=player_name, event="leave")
+            )
             await self.broadcast_snapshots()
             await self.log([{"text": f"{player_name} left"}])
 
@@ -242,6 +254,14 @@ class GameRoom:
             return
         self.state.seats[seat].ready = ready
         self.state.bump_version()
+        self.action_log.append(
+            SessionEntry(
+                ts=time.time(),
+                seat=seat,
+                name=self.state.seats[seat].name,
+                event="ready" if ready else "unready",
+            )
+        )
         if ready and not self.setup_done and self._ready_to_deal(solo):
             await self._run_setup()
             self.setup_done = True

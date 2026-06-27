@@ -49,6 +49,7 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.engine.action_log import (
     LogEntry,
     ChatEntry,
+    SessionEntry,
     InitialRecord,
     ActionLog,
     apply_and_log,
@@ -318,6 +319,21 @@ def test_round_trip_serialize_then_replay_matches():
 
     assert restored.replay() == state
     assert restored.entries == log.entries
+
+
+def test_session_entries_ride_the_tape_but_are_skipped_by_replay():
+    state = _start_state()
+    log = ActionLog(initial=InitialRecord.from_state(state))
+    log.append(SessionEntry(ts=1.0, seat=PlayerId.P1, name="Ada", event="join"))
+    apply_and_log(state, log, PlayerId.P1, CreateProvince(), ts=2.0)
+    log.append(SessionEntry(ts=3.0, seat=None, name="Kenji", event="leave"))
+
+    # Session events carry no game state, so the fold ignores them.
+    assert log.replay() == state
+    # They survive the JSON round-trip alongside the rest of the tape.
+    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    assert restored.entries == log.entries
+    assert restored.replay() == state
 
 
 @pytest.mark.parametrize(

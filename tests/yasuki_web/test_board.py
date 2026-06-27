@@ -7,6 +7,7 @@ from yasuki_web.rooms import rooms
 from yasuki_web.schemas import IntentEnvelope
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import IntentOp, BoardPos
+from yasuki_core.engine.action_log import SessionEntry
 
 
 @pytest.fixture
@@ -178,6 +179,15 @@ def test_seat_metadata_changes_advance_the_view_version(registered_room):
     assert 0 < after_join_1 < after_join_2 < after_leave
 
 
+def test_join_and_leave_are_recorded_on_the_session_tape(registered_room):
+    room = registered_room
+    ada = _FakeWS()
+    asyncio.run(room.add_player(ada, "Ada"))
+    asyncio.run(room.remove_player(ada))
+    sessions = [(e.name, e.event) for e in room.action_log.entries if isinstance(e, SessionEntry)]
+    assert sessions == [("Ada", "join"), ("Ada", "leave")]
+
+
 def test_reset_carries_the_view_version_forward(registered_room):
     room = registered_room
     ada = _FakeWS()
@@ -185,3 +195,14 @@ def test_reset_carries_the_view_version_forward(registered_room):
     before = room.state.seq
     asyncio.run(room.handle_reset(ada))  # a lone seated player's vote is unanimous
     assert room.state.seq > before
+
+
+def test_ready_advances_version_and_records_a_session_event(registered_room):
+    room = registered_room
+    ada = _FakeWS()
+    asyncio.run(room.add_player(ada, "Ada"))
+    room.pending_decks[PlayerId.P1] = {}  # past the "load a deck first" gate; one seat won't deal
+    before = room.state.seq
+    asyncio.run(room.handle_ready(ada, True))
+    assert room.state.seq > before
+    assert any(isinstance(e, SessionEntry) and e.event == "ready" for e in room.action_log.entries)
