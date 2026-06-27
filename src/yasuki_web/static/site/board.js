@@ -280,14 +280,18 @@ export const discardProvinceIntent = (owner, idx) =>
 export const createProvinceIntent = () => intentMessage({ op: 'CREATE_PROVINCE' });
 // Move a card to a zone/deck/battlefield destination (position set only for the battlefield;
 // to_bottom only for a deck, sliding the card under it instead of onto the top).
-export const moveCardIntent = (id, to, position = null, toBottom = false) =>
+export const moveCardIntent = (id, to, position = null, toBottom = false, index = null) =>
   intentMessage({
     op: 'MOVE_CARD',
     card_id: id,
     to,
     position,
     ...(toBottom ? { to_bottom: true } : {}),
+    ...(index == null ? {} : { value: index }),
   });
+// Move a card already in the owner's hand to slot `index`, reordering the hand.
+export const reorderHandIntent = (id, index) =>
+  intentMessage({ op: 'REORDER_HAND', card_id: id, value: index });
 // Negative-sentinel battlefield position for a card dealt without real coordinates; placeUnplacedCards
 // recognizes x < 0 and lays the card out by the owner's deck (mirrors the server's _UNPLACED_BOARD_POS).
 export const UNPLACED_POSITION = [-1, -1];
@@ -309,6 +313,27 @@ function zoneDest(el) {
     default:
       return null;
   }
+}
+
+// Move `el` to slot `index` among its siblings (counting only the others), reordering in place.
+function insertAt(parent, el, index) {
+  const ref = [...(parent.children ?? [])].filter((c) => c !== el)[index] ?? null;
+  parent.insertBefore(el, ref);
+}
+
+// The slot a card dropped at `clientX` lands in among a hand strip's cards — one past every card
+// whose centre the pointer has crossed. The dragged card is skipped so the index is relative to the
+// others, matching the server's reorder (which removes the card before inserting at the slot).
+export function handDropIndex(handEl, clientX, draggedId) {
+  let index = 0;
+  for (const cardEl of handEl.children ?? []) {
+    const id = cardEl.dataset?.cardId;
+    if (!id || id === draggedId) continue; // skip the gap placeholder and the dragged card itself
+    const rect = cardEl.getBoundingClientRect();
+    if (clientX < rect.left + rect.width / 2) break;
+    index += 1;
+  }
+  return index;
 }
 
 // MOVE_CARD destinations for the "Send to…" menu items and the deck-search deal buttons.
@@ -466,6 +491,17 @@ export function dragPosition(clientX, clientY, boardRect, grab, card = { w: CARD
   return {
     x: Math.round(clamp(clientX - boardRect.left - grab.x, 0, boardRect.width - card.w)),
     y: Math.round(clamp(clientY - boardRect.top - grab.y, 0, boardRect.height - card.h)),
+  };
+}
+
+// The position to render a drag at, which leaves the bottom edge un-clamped so a card can be dragged
+// down off the board toward the hand strip below it (the board's overflow clips the overhang, so it
+// reads as the card tucking under the hand). A committed board drop still uses dragPosition, so a
+// card released on the board never rests partly under the hand.
+export function dragVisualPosition(clientX, clientY, boardRect, grab) {
+  return {
+    x: Math.round(clamp(clientX - boardRect.left - grab.x, 0, boardRect.width - CARD_W)),
+    y: Math.round(Math.max(0, clientY - boardRect.top - grab.y)),
   };
 }
 
@@ -785,6 +821,14 @@ export function initBoardInteractions(root, boardEl, send) {
   let lastSent = 0;
   // The element last under the pointer, so a hover-driven hotkey knows which card/deck it targets.
   let hovered = null;
+  // The viewer's hand strip while a draggable card hovers it, glowing as a drop target.
+  let handTarget = null;
+  const setHandTarget = (el) => {
+    if (handTarget === el) return;
+    handTarget?.classList.remove('drop-active');
+    handTarget = el;
+    handTarget?.classList.add('drop-active');
+  };
   // Counts hand cards played by double-click, to fan each across the board instead of stacking them.
   let handPlays = 0;
   // Selection is keyed by card id so it survives the element churn of each SNAPSHOT re-render.
@@ -799,8 +843,8 @@ export function initBoardInteractions(root, boardEl, send) {
     const owner = el?.dataset?.owner || '';
     return !owner || owner === (root.dataset.viewerSeat || '');
   };
-  // A deck always has an owner, so (unlike a card) ownerless never means shared.
-  const ownsDeck = (el) => el.dataset.owner === (root.dataset.viewerSeat || '');
+  // An owned zone (a deck or a hand) always has an owner, so — unlike a card — ownerless never shares.
+  const ownsZone = (el) => el.dataset.owner === (root.dataset.viewerSeat || '');
   // Id of the topmost battlefield card (last in render/z order), or null when the board is empty.
   const topmostId = () => {
     const cards = boardEl.querySelectorAll('.board-card');
@@ -824,7 +868,13 @@ export function initBoardInteractions(root, boardEl, send) {
   // card has "left", and the incoming SNAPSHOT rebuilds the source zone, so restoring it here would
   // only flash the card back in place for the server round-trip. Cancels and no-op drops restore it.
   const release = (restoreSource = true) => {
+    setHandTarget(null);
+    boardEl.classList.remove('is-dragging');
     if (!drag) return;
+    drag.handGap?.remove(); // the incoming-card gap placeholder, if any
+    // Return a re-arranged hand card to its home slot; the SNAPSHOT after a committed reorder/move
+    // re-renders the hand anyway, so this only matters for an abandoned drag.
+    if (drag.handParent) insertAt(drag.handParent, drag.el, drag.handHome);
     drag.el.style.pointerEvents = '';
     if (restoreSource) drag.el.style.visibility = '';
     drag.el.classList.remove('dragging');
@@ -843,15 +893,15 @@ export function initBoardInteractions(root, boardEl, send) {
     // only the deck's owner may, and the drop resolves to a MOVE_DECK_TOP keyed by the deck.
     const deckEl = e.target?.closest?.('[data-zone="deck"]');
     if (deckEl) {
-      if (!ownsDeck(deckEl)) return;
+      if (!ownsZone(deckEl)) return;
       const rect = deckEl.getBoundingClientRect();
       drag = {
         deck: { owner: deckEl.dataset.owner, side: deckEl.dataset.side },
         el: deckEl,
         onBattlefield: false,
-        grabX: e.clientX - rect.left,
-        grabY: e.clientY - rect.top,
+        grab: { x: e.clientX - rect.left, y: e.clientY - rect.top },
         moved: false,
+        canEnterHand: deckEl.dataset.side === 'FATE',
       };
       return;
     }
@@ -879,11 +929,19 @@ export function initBoardInteractions(root, boardEl, send) {
       id,
       el: cardEl,
       onBattlefield,
-      grabX: e.clientX - rect.left,
-      grabY: e.clientY - rect.top,
+      grab: { x: e.clientX - rect.left, y: e.clientY - rect.top },
       moved: false,
       additive: e.ctrlKey || e.metaKey,
+      // Only fate cards live in a hand, so only they cross its boundary; others bump against it.
+      canEnterHand: cardEl.dataset.side === 'FATE',
+      fromHand: !!cardEl.closest?.('[data-zone="hand"]'),
     };
+    // Remember a hand card's home slot so its gap can slide as it's re-arranged and snap back if the
+    // drag is abandoned.
+    if (drag.fromHand) {
+      drag.handParent = cardEl.parentNode;
+      drag.handHome = [...(cardEl.parentNode?.children ?? [])].indexOf(cardEl);
+    }
     // Grabbing a card that is already part of a multi-selection drags the whole group by one delta.
     if (onBattlefield && selected.size > 1 && selected.has(id)) {
       drag.startX = e.clientX;
@@ -917,16 +975,39 @@ export function initBoardInteractions(root, boardEl, send) {
       return;
     }
     if (!drag) return;
+    // Glow the viewer's own hand when a card that can enter it is dragged over, as a drop target.
+    const handUnder = drag.members || !drag.canEnterHand ? null : e.target?.closest?.('[data-zone="hand"]');
+    setHandTarget(handUnder && ownsZone(handUnder) ? handUnder : null);
+    // Over the hand, open a gap at the slot the card will land in so the others make room: a card
+    // already in the hand slides its own hidden source there; an incoming card opens a placeholder.
+    if (drag.canEnterHand && handTarget) {
+      const index = handDropIndex(handTarget, e.clientX, drag.id);
+      if (index !== drag.handIndex) {
+        drag.handIndex = index;
+        if (drag.fromHand) {
+          insertAt(handTarget, drag.el, index);
+        } else {
+          drag.handGap ??= node('div', 'hand-gap');
+          insertAt(handTarget, drag.handGap, index);
+        }
+      }
+    }
+    // On the first real move, pick the element that will follow the pointer (`drag.mover`) and lift it
+    // so the drop lands on the zone beneath. A deck top or a card resting in a zone stays put while a
+    // face-mirroring ghost moves instead; a battlefield card moves itself. Stop clipping the board so
+    // the mover can cross the bottom edge into the hand strip below.
     if (!drag.moved) {
       drag.moved = true;
-      // First real move (not a click/double-click): lift the dragged card out of hit-testing so the
-      // drop lands on the zone beneath it. Deferring past pointerdown keeps clicks/double-clicks live.
-      // A card moved by ghost (one that stays in its zone) is hidden so the ghost reads as the card
-      // itself lifting off; a battlefield card is the moving element, so it stays visible.
-      if (!drag.deck) {
+      boardEl.classList.add('is-dragging');
+      if (drag.deck || !drag.onBattlefield) {
+        drag.ghost = dragGhost(drag.el);
+        boardEl.appendChild(drag.ghost);
+        if (!drag.deck) drag.el.style.visibility = 'hidden'; // hide the source so the ghost is the card
+        drag.mover = drag.ghost;
+      } else {
         drag.el.style.pointerEvents = 'none';
         drag.el.classList.add('dragging');
-        if (!drag.onBattlefield) drag.el.style.visibility = 'hidden';
+        drag.mover = drag.el;
       }
     }
     if (drag.members) {
@@ -948,27 +1029,14 @@ export function initBoardInteractions(root, boardEl, send) {
       }
       return;
     }
-    if (drag.deck || !drag.onBattlefield) {
-      // A deck top or a hand/province card stays put in its zone, so follow the pointer with a ghost
-      // that mirrors its face. The ghost is transparent to hit-testing so the drop resolves to the
-      // zone beneath it — release() detaches it before we read e.target's zone.
-      if (!drag.ghost) {
-        drag.ghost = dragGhost(drag.el);
-        boardEl.appendChild(drag.ghost);
-      }
-      const ghostPos = dragPosition(e.clientX, e.clientY, battleRect(), { x: drag.grabX, y: drag.grabY });
-      drag.ghost.style.left = `${ghostPos.x}px`;
-      drag.ghost.style.top = `${ghostPos.y}px`;
-      return;
-    }
-    const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: drag.grabX, y: drag.grabY });
-    drag.el.style.left = `${pos.x}px`;
-    drag.el.style.top = `${pos.y}px`;
-    const now = Date.now();
-    if (now - lastSent > DRAG_SEND_MS) {
-      lastSent = now;
-      send(moveIntent(drag.id, pos.x, pos.y));
-    }
+    // Move the mover locally and commit only on drop, never streaming each step. Streaming would echo
+    // back a SNAPSHOT that re-renders the card at its clamped board position, snapping it back from the
+    // hand it was crossing into. The drop sends the final move. A card that cannot enter the hand stays
+    // clamped to the board, so it bumps against the hand's edge instead of crossing it.
+    const place = drag.canEnterHand ? dragVisualPosition : dragPosition;
+    const pos = place(e.clientX, e.clientY, battleRect(), drag.grab);
+    drag.mover.style.left = `${pos.x}px`;
+    drag.mover.style.top = `${pos.y}px`;
   });
 
   root.addEventListener('pointerup', (e) => {
@@ -993,7 +1061,12 @@ export function initBoardInteractions(root, boardEl, send) {
     const card = drag;
     const target = e.target?.closest?.('[data-zone]');
     const zone = target?.dataset.zone;
-    const dest = zone && zone !== 'battlefield' ? zoneDest(target) : null;
+    // The hand only accepts a card that can live there; a barriered card has no hand destination.
+    const dropsInHand = zone === 'hand' && card.canEnterHand;
+    const dest = zone && zone !== 'battlefield' && (zone !== 'hand' || dropsInHand) ? zoneDest(target) : null;
+    // The clamped board position to land on, computed lazily so a drop that needs no coordinates
+    // (a card sent to a zone, a deck top onto a pile) skips the layout read.
+    const dropPos = () => dragPosition(e.clientX, e.clientY, battleRect(), card.grab);
     // A ghost-moved source (a hidden hand/province/discard card) stays hidden when the drop actually
     // commits a move — the SNAPSHOT will rebuild its zone — and reappears on a no-op drop or cancel.
     const commitsGhostMove =
@@ -1021,7 +1094,7 @@ export function initBoardInteractions(root, boardEl, send) {
         let to = null;
         let position = null;
         if (zone === 'battlefield') {
-          const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: card.grabX, y: card.grabY });
+          const pos = dropPos();
           to = { kind: 'battlefield' };
           position = [pos.x, pos.y];
         } else if (zone) {
@@ -1038,18 +1111,25 @@ export function initBoardInteractions(root, boardEl, send) {
         return { id: member.id, x, y };
       });
       send(moveGroupIntent(moves));
-    } else if (zone === 'battlefield' || (!zone && card.onBattlefield)) {
-      // A battlefield card only re-sends its position when it actually moved (the raise above covers a
-      // pure selection); a card played from elsewhere lands on the board even without a drag.
+    } else if (zone === 'battlefield' || (card.onBattlefield && !dest)) {
+      // A battlefield card re-sends its position when it actually moved (the raise above covers a pure
+      // selection), including when it's dropped on a zone it cannot enter, so it settles on the board
+      // rather than vanishing; a card played from elsewhere lands on the board even without a drag.
       if (card.onBattlefield) {
         if (card.moved) {
-          const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: card.grabX, y: card.grabY });
+          const pos = dropPos();
           send(moveIntent(card.id, pos.x, pos.y));
         }
       } else {
-        const pos = dragPosition(e.clientX, e.clientY, battleRect(), { x: card.grabX, y: card.grabY });
+        const pos = dropPos();
         send(moveCardIntent(card.id, { kind: 'battlefield' }, [pos.x, pos.y]));
       }
+    } else if (dropsInHand) {
+      // Land the card at the slot the gap previewed: reorder a card already in the hand, or move an
+      // incoming one straight into that slot (the server no-ops a move onto a zone it already holds).
+      const index = card.handIndex ?? handDropIndex(target, e.clientX, card.id);
+      if (card.fromHand) send(reorderHandIntent(card.id, index));
+      else send(moveCardIntent(card.id, dest, null, false, index));
     } else if (dest) {
       send(moveCardIntent(card.id, dest));
     }
@@ -1090,7 +1170,7 @@ export function initBoardInteractions(root, boardEl, send) {
   root.addEventListener('dblclick', (e) => {
     const deckEl = e.target?.closest?.('[data-zone="deck"]');
     if (deckEl) {
-      if (ownsDeck(deckEl)) send(drawIntent(deckEl.dataset.owner, deckEl.dataset.side));
+      if (ownsZone(deckEl)) send(drawIntent(deckEl.dataset.owner, deckEl.dataset.side));
       return;
     }
     const cardEl = e.target?.closest?.('[data-card-id]');
@@ -1127,7 +1207,7 @@ export function initBoardInteractions(root, boardEl, send) {
     if (!hovered) return;
     const deckEl = hovered.closest?.('[data-zone="deck"]');
     if (DECK_HOTKEYS.has(key)) {
-      if (!deckEl || !ownsDeck(deckEl)) return;
+      if (!deckEl || !ownsZone(deckEl)) return;
       const { owner, side } = deckEl.dataset;
       // Consume the keystroke so opening the search prompt doesn't also type the key into its
       // freshly-focused input.
