@@ -279,7 +279,10 @@
   /* The board is a drag surface, never a text one: stop a press-drag from selecting deck labels etc. */
   user-select: none;
   display: grid;
-  /* Opponent zones, the shared battlefield, your zones. */
+  /* Opponent zones, the shared battlefield, your zones. The single column is pinned to minmax(0, 1fr):
+     an implicit `auto` column grows to max-content, so a full hand would balloon the seat-bar past the
+     viewport and shove the rail off-screen instead of letting the hand strip scroll. */
+  grid-template-columns: minmax(0, 1fr);
   grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
