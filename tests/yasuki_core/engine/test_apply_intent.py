@@ -11,6 +11,7 @@ from yasuki_core.engine.table import (
     MoveCard,
     SetCardPos,
     SetCardPositions,
+    ReorderHand,
     Bow,
     Unbow,
     Flip,
@@ -90,6 +91,97 @@ def test_move_card_within_the_same_hand_is_a_no_op():
     assert events == []
     assert table.seq == 0
     assert table.zones[hand].cards == [card]
+
+
+def _stock_hand(table, *card_ids):
+    hand = ZoneKey(PlayerId.P1, ZoneRole.HAND)
+    for card_id in card_ids:
+        card = _fate(card_id)
+        table.cards_by_id[card_id] = card
+        table.zones[hand].add(card)
+    return hand
+
+
+def test_reorder_hand_moves_a_card_to_a_new_slot():
+    table = TableState.empty_two_seat()
+    hand = _stock_hand(table, "a", "b", "c")
+
+    events = apply_intent(table, PlayerId.P1, ReorderHand("c", 0))
+
+    assert [card.id for card in table.zones[hand].cards] == ["c", "a", "b"]
+    assert table.seq == 1 and len(events) == 1
+
+
+def test_reorder_hand_clamps_an_out_of_range_index():
+    table = TableState.empty_two_seat()
+    hand = _stock_hand(table, "a", "b", "c")
+
+    apply_intent(table, PlayerId.P1, ReorderHand("a", 99))
+
+    assert [card.id for card in table.zones[hand].cards] == ["b", "c", "a"]
+
+
+def test_reorder_hand_to_the_same_slot_is_a_no_op():
+    table = TableState.empty_two_seat()
+    _stock_hand(table, "a", "b", "c")
+
+    events = apply_intent(table, PlayerId.P1, ReorderHand("b", 1))
+
+    assert events == [] and table.seq == 0
+
+
+def test_reorder_hand_ignores_a_card_not_in_the_hand():
+    table = TableState.empty_two_seat()
+    _stock_hand(table, "a", "b")
+
+    events = apply_intent(table, PlayerId.P1, ReorderHand("ghost", 0))
+
+    assert events == [] and table.seq == 0
+
+
+def test_reorder_hand_cannot_touch_the_opponents_hand():
+    table = TableState.empty_two_seat()
+    card = _fate("theirs", owner=PlayerId.P2)
+    table.cards_by_id["theirs"] = card
+    table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].add(card)
+
+    events = apply_intent(table, PlayerId.P1, ReorderHand("theirs", 0))
+
+    assert events == [] and table.seq == 0
+    assert table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards == [card]
+
+
+def test_move_card_into_the_hand_lands_at_the_given_slot():
+    table = TableState.empty_two_seat()
+    hand = _stock_hand(table, "a", "b", "c")
+    card = _fate("new")
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, MoveCard("new", hand, index=1))
+
+    assert [held.id for held in table.zones[hand].cards] == ["a", "new", "b", "c"]
+
+
+def test_move_card_into_the_hand_without_an_index_appends():
+    table = TableState.empty_two_seat()
+    hand = _stock_hand(table, "a", "b")
+    card = _fate("new")
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, MoveCard("new", hand))
+
+    assert [held.id for held in table.zones[hand].cards] == ["a", "b", "new"]
+
+
+def test_move_card_into_the_hand_clamps_an_out_of_range_index():
+    table = TableState.empty_two_seat()
+    hand = _stock_hand(table, "a", "b")
+    card = _fate("new")
+    _on_battlefield(table, card)
+
+    apply_intent(table, PlayerId.P1, MoveCard("new", hand, index=99))
+
+    assert [held.id for held in table.zones[hand].cards] == ["a", "b", "new"]
 
 
 def test_move_card_to_battlefield_sets_position():

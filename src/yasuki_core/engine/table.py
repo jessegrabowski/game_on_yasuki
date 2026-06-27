@@ -178,6 +178,7 @@ class IntentOp(str, Enum):
     MOVE_DECK_TOP = "MOVE_DECK_TOP"
     SET_CARD_POS = "SET_CARD_POS"
     SET_CARD_POSITIONS = "SET_CARD_POSITIONS"
+    REORDER_HAND = "REORDER_HAND"
     RAISE = "RAISE"
     BOW = "BOW"
     UNBOW = "UNBOW"
@@ -221,13 +222,15 @@ class MoveCard:
 
     The universal mover behind hand↔battlefield↔zone↔deck transfers. ``position`` is set only when
     ``to`` is the battlefield, giving the card its table coordinates. ``to_bottom`` applies only to
-    a deck destination: True slides the card under the deck instead of onto its top.
+    a deck destination: True slides the card under the deck instead of onto its top. ``index`` applies
+    only to a hand destination: the slot the card lands in, clamped into range; None appends it.
     """
 
     card_id: str
     to: MoveDest
     position: BoardPos | None = None
     to_bottom: bool = False
+    index: int | None = None
     op: ClassVar[IntentOp] = IntentOp.MOVE_CARD
 
 
@@ -263,6 +266,16 @@ class SetCardPositions:
 
     moves: tuple[tuple[str, float, float], ...]
     op: ClassVar[IntentOp] = IntentOp.SET_CARD_POSITIONS
+
+
+@dataclass(frozen=True, slots=True)
+class ReorderHand:
+    """Move a card already in the acting seat's own hand to a new slot. The index is clamped into
+    range, and a move that leaves the order unchanged produces no event."""
+
+    card_id: str
+    index: int
+    op: ClassVar[IntentOp] = IntentOp.REORDER_HAND
 
 
 @dataclass(frozen=True, slots=True)
@@ -458,6 +471,7 @@ Intent = (
     | MoveDeckTop
     | SetCardPos
     | SetCardPositions
+    | ReorderHand
     | Raise
     | Bow
     | Unbow
@@ -617,7 +631,11 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
     elif dest.role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD):
         # A discard pile is always public: a card landing there is revealed to both seats.
         card.turn_face_up()
-    zone.add(card)
+    if dest.role is ZoneRole.HAND and intent.index is not None:
+        # zone_accepts already gated the side and the hand has no capacity limit, so insert directly.
+        zone.cards.insert(max(0, min(intent.index, len(zone.cards))), card)
+    else:
+        zone.add(card)
     state.seq += 1
     return [Event(state.seq, seat, MoveCard(card.id, dest), (card.id,))]
 
@@ -677,6 +695,23 @@ def _set_card_positions(state: TableState, seat: PlayerId, intent: SetCardPositi
         return []
     state.seq += 1
     return [Event(state.seq, seat, intent, tuple(changed))]
+
+
+def _reorder_hand(state: TableState, seat: PlayerId, intent: ReorderHand) -> list[Event]:
+    hand = state.zones.get(ZoneKey(seat, ZoneRole.HAND))
+    if hand is None:
+        return []
+    cards = hand.cards
+    current = next((i for i, held in enumerate(cards) if held.id == intent.card_id), None)
+    if current is None:
+        return []
+    card = cards.pop(current)
+    index = max(0, min(intent.index, len(cards)))
+    cards.insert(index, card)
+    if index == current:
+        return []  # re-inserted at its own slot — the order is unchanged
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
 
 
 def _raise(state: TableState, seat: PlayerId, intent: Raise) -> list[Event]:
@@ -958,6 +993,7 @@ _HANDLERS = {
     IntentOp.MOVE_DECK_TOP: _move_deck_top,
     IntentOp.SET_CARD_POS: _set_card_pos,
     IntentOp.SET_CARD_POSITIONS: _set_card_positions,
+    IntentOp.REORDER_HAND: _reorder_hand,
     IntentOp.RAISE: _raise,
     IntentOp.BOW: _apply_flag,
     IntentOp.UNBOW: _apply_flag,

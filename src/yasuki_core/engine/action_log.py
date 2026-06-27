@@ -20,6 +20,7 @@ from yasuki_core.engine.table import (
     MoveDeckTop,
     SetCardPos,
     SetCardPositions,
+    ReorderHand,
     Raise,
     CardFlagIntent,
     Bow,
@@ -422,6 +423,7 @@ def encode_intent(intent: Intent) -> dict:
                 None if intent.position is None else [intent.position.x, intent.position.y]
             )
             payload["to_bottom"] = intent.to_bottom
+            payload["value"] = intent.index  # the hand-slot index, when landing in a hand
         case IntentOp.MOVE_DECK_TOP:
             payload["deck"] = _encode_deck_key(intent.deck)
             payload["to"] = _encode_move_dest(intent.to)
@@ -432,6 +434,8 @@ def encode_intent(intent: Intent) -> dict:
             payload |= {"card_id": intent.card_id, "x": intent.x, "y": intent.y}
         case IntentOp.SET_CARD_POSITIONS:
             payload["moves"] = [[card_id, x, y] for card_id, x, y in intent.moves]
+        case IntentOp.REORDER_HAND:
+            payload |= {"card_id": intent.card_id, "value": intent.index}
         case IntentOp.RAISE:
             payload["card_id"] = intent.card_id
         case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
@@ -482,6 +486,7 @@ def decode_intent(payload: dict) -> Intent:
                 _decode_move_dest(payload["to"]),
                 None if position is None else BoardPos(*position),
                 to_bottom=payload.get("to_bottom", False),
+                index=payload.get("value"),
             )
         case IntentOp.MOVE_DECK_TOP:
             position = payload.get("position")
@@ -494,6 +499,8 @@ def decode_intent(payload: dict) -> Intent:
             return SetCardPos(payload["card_id"], payload["x"], payload["y"])
         case IntentOp.SET_CARD_POSITIONS:
             return SetCardPositions(tuple((m[0], m[1], m[2]) for m in payload["moves"]))
+        case IntentOp.REORDER_HAND:
+            return ReorderHand(payload["card_id"], payload["value"])
         case IntentOp.RAISE:
             return Raise(payload["card_id"])
         case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
