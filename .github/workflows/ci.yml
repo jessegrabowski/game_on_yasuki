@@ -102,8 +102,10 @@ jobs:
           sleep 1
 
       - name: Run tests
+        # -p no:playwright: the pytest-playwright plugin (greenlet) can abort in-process alongside
+        # the tkinter/PIL GUI tests, and these subsets never use it. The e2e job loads it on its own.
         run: |
-          pixi run pytest -vv --cache-clear --cov=yasuki_core --cov=yasuki_web --cov=yasuki_gui --cov-report=xml:coverage/coverage-${MATRIX_ID}.xml --no-cov-on-fail --cov-report term $TEST_SUBSET --durations=50
+          pixi run pytest -vv --cache-clear --cov=yasuki_core --cov=yasuki_web --cov=yasuki_gui --cov-report=xml:coverage/coverage-${MATRIX_ID}.xml --no-cov-on-fail --cov-report term $TEST_SUBSET --durations=50 -p no:playwright
         env:
           MATRIX_ID: ${{ steps.matrix-id.outputs.id }}
           DISPLAY: ":99"
@@ -140,14 +142,36 @@ jobs:
           name: coverage-js
           path: coverage/coverage-js.lcov
 
+  e2e-test:
+    name: "Board E2E (Playwright)"
+    needs: [pre-commit]
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -leo pipefail {0}
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
+
+      - uses: prefix-dev/setup-pixi@5185adfbffb4bd703da3010310260805d89ebb11 # v0.9.6
+        with:
+          pixi-version: v0.70.2
+          cache: true
+
+      # --with-deps pulls the OS libraries Chromium needs on a bare ubuntu runner.
+      - name: Install Playwright browser
+        run: pixi run -- playwright install --with-deps chromium
+
+      - name: Run board e2e tests
+        run: pixi run test-e2e
+
   all-checks:
     if: ${{ always() }}
     runs-on: ubuntu-latest
     name: "All tests"
-    needs: [test, js-test]
+    needs: [test, js-test, e2e-test]
     steps:
       - name: Check build matrix status
-        if: ${{ needs.test.result != 'success' || needs.js-test.result != 'success' }}
+        if: ${{ needs.test.result != 'success' || needs.js-test.result != 'success' || needs.e2e-test.result != 'success' }}
         run: exit 1
 
   upload-coverage:
@@ -304,7 +328,7 @@ jobs:
         env:
           YASUKI_DATABASE_URL: postgresql://yasuki:yasuki@localhost:5432/yasuki
         run: |
-          pixi run pytest tests/ --ignore=tests/yasuki_gui/ \
+          pixi run pytest tests/ --ignore=tests/yasuki_gui/ --ignore=tests/e2e -p no:playwright \
             --cov=yasuki_core --cov=yasuki_web \
             --cov-report=xml:coverage/coverage-web.xml --no-cov-on-fail
 
