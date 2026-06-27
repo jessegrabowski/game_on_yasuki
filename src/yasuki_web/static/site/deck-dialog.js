@@ -131,8 +131,10 @@ export function openDeckDialog({
   // dragged row follows the pointer slot-by-slot; on release the new top-first index is sent and the
   // pool is reordered to match. listDropIndex gives the slot among the other rows.
   let reorderId = null;
+  let reorderMoved = false;
   const reorderable = () => canReorder && !query;
   const onReorderMove = (e) => {
+    reorderMoved = true;
     const item = [...list.children].find((li) => li.dataset.cardId === reorderId);
     if (!item) return;
     const others = [...list.children].filter((li) => li !== item);
@@ -142,11 +144,15 @@ export function openDeckDialog({
     document.removeEventListener?.('pointermove', onReorderMove);
     document.removeEventListener?.('pointerup', onReorderEnd);
     const id = reorderId;
+    const moved = reorderMoved;
     reorderId = null;
-    if (id == null) return;
+    reorderMoved = false;
+    // A press without a drag is a plain click; bail untouched so the row's click handler can still
+    // select the card — rebuilding here would detach the <li> before the click lands.
+    if (id == null || !moved) return;
     const from = pool.findIndex((card) => card.id === id);
     const index = listDropIndex(list, e.clientY, id);
-    if (from < 0 || index === from) return renderList(); // no move — restore the canonical order
+    if (from < 0 || index === from) return renderList(); // dragged back to its slot — restore the order
     const [card] = pool.splice(from, 1);
     pool.splice(index, 0, card);
     send(reorderPileIntent(pileDest, id, index));
@@ -154,6 +160,7 @@ export function openDeckDialog({
   };
   const startReorder = (id) => {
     reorderId = id;
+    reorderMoved = false;
     document.addEventListener?.('pointermove', onReorderMove);
     document.addEventListener?.('pointerup', onReorderEnd);
   };
