@@ -65,6 +65,7 @@ function fakeCard(
     img = null,
     note = '',
     name = '',
+    pregame = false,
     x = null,
     y = null,
   } = {},
@@ -87,6 +88,7 @@ function fakeCard(
     note,
     name,
     img: img ?? '',
+    pregame: pregame ? '1' : '',
   };
   if (doubleFaced) dataset.doubleFaced = '1';
   const style = {};
@@ -1800,6 +1802,7 @@ describe('initBoardInteractions — context menu', () => {
       'Invert',
       'Add note…',
       'Duplicate',
+      'Give control',
       'Send to Hand',
       'Send to Discard',
       'Send to Deck (top)',
@@ -1823,6 +1826,30 @@ describe('initBoardInteractions — context menu', () => {
       type: 'SPAWN',
       spawn: { name: 'Hida Kisada', img: 'sets/hk.jpg', side: 'DYNASTY', x: 28, y: 38 },
     });
+  });
+
+  it('gives control of an own card to the opponent via the menu and accelerator g', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
+    assert.equal(accelOf('Give control'), 'G');
+    pressKey('g');
+    assert.deepEqual(sent.at(-1).intent, { op: 'GIVE_CONTROL', card_id: 'c1' });
+  });
+
+  it('omits Give control on the opponent\'s card', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P2' }) }));
+    assert.ok(!menuLabels(root).includes('Give control'));
+  });
+
+  it('omits Give control on a public (owner-less) card', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: '' }) }));
+    assert.ok(!menuLabels(root).includes('Give control'));
+  });
+
+  it('omits Give control on an own pregame card (stronghold/sensei/wind)', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1', pregame: true }) }));
+    const labels = menuLabels(root);
+    assert.ok(!labels.includes('Give control'));
+    assert.ok(labels.includes('Duplicate'), 'other face-up actions still appear');
   });
 
   it('omits Duplicate on a face-down battlefield card', () => {

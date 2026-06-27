@@ -133,6 +133,8 @@ function tagCard(el, card) {
   // neither, so the duplicate option is gated on the card being face-up anyway.
   el.dataset.name = card.name ?? '';
   el.dataset.img = card.img ?? '';
+  // pregame (stronghold/sensei/wind) cards are setup pieces tied to a seat — they cannot change hands.
+  el.dataset.pregame = card.pregame ? '1' : '';
   if (card.back_card_id) el.dataset.doubleFaced = '1';
 }
 
@@ -314,6 +316,8 @@ export const showIntent = (id) => intentMessage({ op: 'SHOW', card_id: id });
 export const unshowIntent = (id) => intentMessage({ op: 'UNSHOW', card_id: id });
 export const peekIntent = (id) => intentMessage({ op: 'PEEK', card_id: id });
 export const unpeekIntent = (id) => intentMessage({ op: 'UNPEEK', card_id: id });
+// Hand a card to the opponent: the server flips its owner to the other seat.
+export const giveControlIntent = (id) => intentMessage({ op: 'GIVE_CONTROL', card_id: id });
 // Turn a double-faced card (a flip stronghold) to its other printed face.
 export const flipFaceIntent = (ids) => intentMessage({ op: 'FLIP_FACE', card_ids: [].concat(ids) });
 // The flip a card wants: a double-faced card turns its printed face, anything else front↔deck-back.
@@ -454,6 +458,7 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
   const shown = el.dataset.shown === '1';
   const peeked = el.dataset.peeked === '1';
   const bowed = el.dataset.bowed === '1';
+  const pregame = el.dataset.pregame === '1';
   const doubleFaced = el.dataset.doubleFaced === '1';
   const inProvince = !!el.closest?.('[data-zone="province"]');
   const inHand = !!el.closest?.('[data-zone="hand"]');
@@ -501,6 +506,12 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
       onClick: (e, send) => openNotePrompt(el, send),
     });
     items.push({ label: 'Du&plicate', onClick: (e, send) => send(duplicateMessage(el)) });
+    // Give control hands the card to the opponent, so it's offered only on a card the viewer owns
+    // (not an owner-less public one, which belongs to neither seat) and never on a pregame piece
+    // (stronghold/sensei/wind), which is bound to its seat.
+    if (owner && owner === viewer && !pregame) {
+      items.push({ label: '&Give control', onClick: (e, send) => send(giveControlIntent(id)) });
+    }
   }
   // Show reveals to the opponent a card they cannot already see — one in your hand or lying face-down.
   // A face-up card on the shared board is already visible, so it only offers the toggle-off once shown.

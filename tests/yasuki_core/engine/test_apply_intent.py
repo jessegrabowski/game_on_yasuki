@@ -14,6 +14,7 @@ from yasuki_core.engine.table import (
     ReorderHand,
     ReorderPile,
     SetNote,
+    GiveControl,
     Bow,
     Unbow,
     Flip,
@@ -257,6 +258,59 @@ def test_a_note_rides_a_card_into_the_discard_but_clears_in_a_deck():
 
     apply_intent(table, PlayerId.P1, MoveCard("f1", DeckKey(PlayerId.P1, Side.FATE)))
     assert card.note is None  # shuffled back into the deck — the marker is gone
+
+
+def test_give_control_hands_a_battlefield_card_to_the_opponent():
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=PlayerId.P1)
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, GiveControl("f1"))
+
+    assert card.owner == PlayerId.P2 and len(events) == 1
+
+
+def test_give_control_is_rejected_on_the_opponents_card():
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=PlayerId.P2)
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, GiveControl("f1"))
+
+    assert events == [] and card.owner == PlayerId.P2
+
+
+def test_give_control_is_rejected_on_a_face_down_card():
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=PlayerId.P1)
+    card.turn_face_down()
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, GiveControl("f1"))
+
+    assert events == [] and card.owner == PlayerId.P1
+
+
+def test_give_control_is_rejected_on_a_public_card():
+    # A public (owner-less) card has no controller to transfer; only a card you own may be given away.
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=None)
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, GiveControl("f1"))
+
+    assert events == [] and card.owner is None
+
+
+def test_give_control_is_rejected_off_the_battlefield():
+    # Reassigning a card held in an owned zone would break the zone/owner invariant, so it's refused.
+    table = TableState.empty_two_seat()
+    hand = _stock_hand(table, "a")
+    card = table.zones[hand].cards[0]
+
+    events = apply_intent(table, PlayerId.P1, GiveControl(card.id))
+
+    assert events == [] and card.owner == PlayerId.P1
 
 
 def test_move_card_into_the_hand_lands_at_the_given_slot():

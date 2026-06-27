@@ -163,6 +163,8 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
                 return [lead, {"text": f"set their honor to {intent.value}"}]
             verb = "gained" if intent.delta > 0 else "lost"
             return [lead, {"text": f"{verb} {abs(intent.delta)} honor"}]
+        case IntentOp.GIVE_CONTROL:
+            return [lead, {"text": "gave control of "}, _card_segment(state, intent.card_id)]
         case IntentOp.SPAWN_CARD:
             return [lead, {"text": "spawned "}, _card_segment(state, intent.card_id)]
         case IntentOp.REMOVE_CARD:
