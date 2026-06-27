@@ -324,7 +324,13 @@ export function init() {
         if (group === 'PREGAME') return pregameAnchor(tableau, battlefield, isViewer);
         return deckAnchor(tableau, battlefield, isViewer, group);
       };
-      const onTable = placeUnplacedCards(snapshot.battlefield ?? [], you, anchorFor);
+      const onTable = placeUnplacedCards(
+        snapshot.battlefield ?? [],
+        you,
+        anchorFor,
+        battlefield.clientWidth,
+        battlefield.clientHeight,
+      );
       renderBoard(battlefield, onTable, imgBase);
       // The re-render rebuilt every card element, so reattach the selection outline by card id.
       boardInteractions?.markSelection();

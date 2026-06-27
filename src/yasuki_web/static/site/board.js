@@ -295,14 +295,18 @@ export const removeMessage = (id) => intentMessage({ op: 'REMOVE_CARD', card_id:
 // hide it. Name, img and side come off the card's dataset; its board-local position off its inline
 // geometry. The server assigns the new id and marks it a token.
 const DUPLICATE_OFFSET_PX = 18;
-export const duplicateMessage = (el) =>
-  spawnMessage({
+export const duplicateMessage = (el, toCanon) => {
+  const left = (parseFloat(el.style.left) || 0) + DUPLICATE_OFFSET_PX;
+  const top = (parseFloat(el.style.top) || 0) + DUPLICATE_OFFSET_PX;
+  const pos = toCanon(left, top);
+  return spawnMessage({
     name: el.dataset.name,
     img: el.dataset.img || null,
     side: el.dataset.side,
-    x: Math.round(parseFloat(el.style.left) || 0) + DUPLICATE_OFFSET_PX,
-    y: Math.round(parseFloat(el.style.top) || 0) + DUPLICATE_OFFSET_PX,
+    x: pos.x,
+    y: pos.y,
   });
+};
 
 export const moveIntent = (id, x, y) => intentMessage({ op: 'SET_CARD_POS', card_id: id, x, y });
 // Reposition a whole group in one message; sending one SET_CARD_POS per member instead would
@@ -460,7 +464,7 @@ const SEP = { separator: true };
 // is part of one, else the clicked card alone. Flag ops go as a single batch intent; Send to…/Remove
 // fan out one message per card, each routed by that card's own owner and side (`lookup` resolves a
 // selected id to its dataset; the clicked card uses its own). The server re-checks every gate.
-function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () => null) {
+function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () => null, toCanon) {
   const id = el.dataset.cardId;
   const side = el.dataset.side || '';
   const owner = el.dataset.owner || '';
@@ -519,7 +523,7 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
         onClick: (e, send) => openNotePrompt(el, send),
       });
     }
-    items.push({ label: 'Du&plicate', onClick: (e, send) => send(duplicateMessage(el)) });
+    items.push({ label: 'Du&plicate', onClick: (e, send) => send(duplicateMessage(el, toCanon)) });
     // Give control hands the card to the opponent, so it's offered only on a card the viewer owns
     // (not an owner-less public one, which belongs to neither seat) and never on a pregame piece
     // (stronghold/sensei/wind), which is bound to its seat.
@@ -651,6 +655,23 @@ export function dragVisualPosition(clientX, clientY, boardRect, grab) {
   };
 }
 
+// Battlefield positions are stored canonically as normalized card-CENTRE fractions in P1's frame.
+// Each client renders them into its own (differently sized) board, and the player who is not P1 sees
+// the table rotated 180° so the local player is always at the bottom — matching the desktop client's
+// flip_orientation. These two pure functions are exact inverses; the board size cancels out, so two
+// windows of any size agree on where a card sits.
+export function canonicalToView(x, y, viewerIsP1, boardW, boardH) {
+  const fx = viewerIsP1 ? x : 1 - x;
+  const fy = viewerIsP1 ? y : 1 - y;
+  return { x: Math.round(fx * boardW - CARD_W / 2), y: Math.round(fy * boardH - CARD_H / 2) };
+}
+
+export function viewToCanonical(left, top, viewerIsP1, boardW, boardH) {
+  const fx = (left + CARD_W / 2) / boardW;
+  const fy = (top + CARD_H / 2) / boardH;
+  return { x: viewerIsP1 ? fx : 1 - fx, y: viewerIsP1 ? fy : 1 - fy };
+}
+
 // A normalized rectangle (top-left + size) spanning two battlefield-local corner points.
 const rectBetween = (sx, sy, cx, cy) => ({
   x: Math.min(sx, cx),
@@ -713,10 +734,13 @@ export function pregameAnchor(tableau, battlefield, above) {
 // fans toward the centre of the board — rightward off the left-hung dynasty side, leftward off the
 // right-hung fate deck — so a growing stack stays on the play space instead of running off the edge.
 // The groups fan independently so they don't overlap. Returns a new array.
-export function placeUnplacedCards(cards, viewerSeat, anchorFor) {
+export function placeUnplacedCards(cards, viewerSeat, anchorFor, boardW, boardH) {
   const placedPerStack = {};
+  const viewerIsP1 = viewerSeat !== 'P2';
   return cards.map((card) => {
-    if (card.x >= 0) return card;
+    if (card.x >= 0) {
+      return { ...card, ...canonicalToView(card.x, card.y, viewerIsP1, boardW, boardH) };
+    }
     const group = card.pregame ? 'PREGAME' : card.side === 'FATE' ? 'FATE' : 'DYNASTY';
     const anchor = anchorFor(card.owner, card.owner === viewerSeat, group);
     if (!anchor) return card;
@@ -1041,7 +1065,13 @@ function openNotePrompt(cardEl, send) {
 // a card id); a discard pile shows Search (either player may search either pile) plus the top card's
 // menu; an occupied province shows the card's menu plus the province lifecycle ops; an empty province
 // shows just those ops; any other card shows the card menu. Returns [] for an empty target.
-function menuItemsFor(target, viewer, targetIds, lookup, { onSearchDiscard, onCreateToken, spawnAt } = {}) {
+function menuItemsFor(
+  target,
+  viewer,
+  targetIds,
+  lookup,
+  { onSearchDiscard, onCreateToken, spawnAt, toCanon } = {},
+) {
   const zoneEl = target?.closest?.('[data-zone]');
   const zone = zoneEl?.dataset.zone;
   const cardEl = target?.closest?.('[data-card-id]');
@@ -1052,16 +1082,16 @@ function menuItemsFor(target, viewer, targetIds, lookup, { onSearchDiscard, onCr
       ? [{ label: '&Search…', onClick: () => onSearchDiscard(owner, role) }]
       : [];
     if (!cardEl) return search;
-    const card = cardMenuItems(cardEl, viewer, targetIds, lookup);
+    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon);
     return search.length ? [...card, SEP, ...search] : card;
   }
   if (zone === 'province') {
     const province = provinceMenuItems(zoneEl.dataset.owner, Number(zoneEl.dataset.idx), viewer);
     if (!cardEl) return province;
-    const card = cardMenuItems(cardEl, viewer, targetIds, lookup);
+    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon);
     return province.length ? [...card, SEP, ...province] : card;
   }
-  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup);
+  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon);
   if (zone === 'battlefield') return battlefieldMenuItems(viewer, onCreateToken, spawnAt);
   return [];
 }
@@ -1138,6 +1168,13 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
   // Selection is keyed by card id so it survives the element churn of each SNAPSHOT re-render.
   const selected = new Set();
   const battleRect = () => boardEl.getBoundingClientRect();
+  // Convert a card's view-pixel top-left to the stored canonical position (a normalized card-centre
+  // fraction in P1's frame), so a drop is recorded in the seat-symmetric frame every viewer reads.
+  const toCanon = (left, top) => {
+    const rect = battleRect();
+    const viewerIsP1 = root.dataset.viewerSeat !== 'P2';
+    return viewToCanonical(left, top, viewerIsP1, rect.width, rect.height);
+  };
   // Battlefield-local top-left of a card element, read from its inline position.
   const cardX = (el) => parseFloat(el.style.left) || 0;
   const cardY = (el) => parseFloat(el.style.top) || 0;
@@ -1325,7 +1362,7 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
         const { x, y } = memberPos(member, dx, dy, rect);
         member.el.style.left = `${x}px`;
         member.el.style.top = `${y}px`;
-        moves?.push({ id: member.id, x, y });
+        moves?.push({ id: member.id, ...toCanon(x, y) });
       }
       if (flush) {
         send(moveGroupIntent(moves));
@@ -1399,8 +1436,9 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
         let position = null;
         if (zone === 'battlefield') {
           const pos = dropPos();
+          const canon = toCanon(pos.x, pos.y);
           to = { kind: 'battlefield' };
-          position = [pos.x, pos.y];
+          position = [canon.x, canon.y];
         } else if (zone) {
           to = zoneDest(target);
         }
@@ -1412,7 +1450,7 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
       const dy = e.clientY - card.startY;
       const moves = card.members.map((member) => {
         const { x, y } = memberPos(member, dx, dy, rect);
-        return { id: member.id, x, y };
+        return { id: member.id, ...toCanon(x, y) };
       });
       send(moveGroupIntent(moves));
     } else if (zone === 'battlefield' || (card.onBattlefield && !dest)) {
@@ -1422,11 +1460,13 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
       if (card.onBattlefield) {
         if (card.moved) {
           const pos = dropPos();
-          send(moveIntent(card.id, pos.x, pos.y));
+          const canon = toCanon(pos.x, pos.y);
+          send(moveIntent(card.id, canon.x, canon.y));
         }
       } else {
         const pos = dropPos();
-        send(moveCardIntent(card.id, { kind: 'battlefield' }, [pos.x, pos.y]));
+        const canon = toCanon(pos.x, pos.y);
+        send(moveCardIntent(card.id, { kind: 'battlefield' }, [canon.x, canon.y]));
       }
     } else if (dropsInHand) {
       // Land the card at the slot the gap previewed: reorder a card already in the hand, or move an
@@ -1463,13 +1503,15 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     // Resolve a selected card id to its dataset so per-card Send to…/Remove route by each card's side.
     const datasets = [...boardEl.querySelectorAll('.board-card')].map((cardEl) => cardEl.dataset);
     const lookup = (cardId) => datasets.find((d) => d.cardId === cardId) ?? null;
-    // A token created from the empty-board menu spawns where the right-click landed (board-local).
+    // A token created from the empty-board menu spawns where the right-click landed, recorded in the
+    // canonical frame so the opponent sees it mirrored to their side like any other card.
     const board = battleRect();
-    const spawnAt = { x: Math.round(e.clientX - board.left), y: Math.round(e.clientY - board.top) };
+    const spawnAt = toCanon(e.clientX - board.left, e.clientY - board.top);
     const items = menuItemsFor(e.target, root.dataset.viewerSeat || '', targetIds, lookup, {
       onSearchDiscard,
       onCreateToken,
       spawnAt,
+      toCanon,
     });
     if (!items.length) return;
     e.preventDefault();
@@ -1493,7 +1535,8 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
       const fan = (handPlays++ % HAND_PLAY_FAN_SLOTS) * PREGAME_FAN;
       const x = clamp(Math.round((rect.width - CARD_W) / 2) + fan, 0, rect.width - CARD_W);
       const y = Math.round(rect.height * HAND_PLAY_ROW - CARD_H / 2);
-      send(moveCardIntent(id, { kind: 'battlefield' }, [x, y]));
+      const canon = toCanon(x, y);
+      send(moveCardIntent(id, { kind: 'battlefield' }, [canon.x, canon.y]));
     } else if (isFaceDown(cardEl)) {
       send(flipIntentFor(cardEl.dataset.doubleFaced === '1', id));
     } else if (!cardEl.closest?.('[data-zone="province"]')) {

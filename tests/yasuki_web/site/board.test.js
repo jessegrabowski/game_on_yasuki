@@ -32,6 +32,8 @@ import {
   initPanelHonor,
   highlightCard,
   placeUnplacedCards,
+  canonicalToView,
+  viewToCanonical,
   clampMenuPosition,
   setBackArt,
   backArtBySide,
@@ -705,11 +707,14 @@ describe('placeUnplacedCards', () => {
     assert.deepEqual(placed[1], { id: 'se', pregame: true, owner: 'P1', x: 40, y: 300 });
   });
 
-  it('leaves already-placed cards (x >= 0) untouched, pre-game or not', () => {
-    const moved = { id: 'sh', pregame: true, owner: 'P1', x: 120, y: 90 };
-    const loose = { id: 'c1', pregame: false, owner: 'P1', x: 5, y: 5 };
-    const placed = placeUnplacedCards([moved, loose], 'P1', anchorFor);
-    assert.deepEqual(placed, [moved, loose]);
+  it('converts an already-placed card (x >= 0) from canonical to this viewer\'s pixels', () => {
+    const W = 800;
+    const H = 600;
+    const card = { id: 'c1', pregame: false, owner: 'P1', x: 0.4, y: 0.7 };
+    const [asP1] = placeUnplacedCards([card], 'P1', anchorFor, W, H);
+    const [asP2] = placeUnplacedCards([card], 'P2', anchorFor, W, H);
+    assert.deepEqual(asP1, { ...card, ...canonicalToView(0.4, 0.7, true, W, H) });
+    assert.deepEqual(asP2, { ...card, ...canonicalToView(0.4, 0.7, false, W, H) });
   });
 
   it('lays out an unplaced non-pre-game card (a dynasty draw with full provinces)', () => {
@@ -760,6 +765,41 @@ describe('placeUnplacedCards', () => {
     const placed = placeUnplacedCards(cards, 'P1', anchorByGroup);
     assert.deepEqual([placed[0].x, placed[0].y], [200, 50]); // fate sensei → pre-game stack, first
     assert.deepEqual([placed[1].x, placed[1].y], [220, 50]); // stronghold → same stack, fans right
+  });
+});
+
+describe('battlefield perspective transform', () => {
+  const W = 1000;
+  const H = 800;
+
+  it('round-trips a drop back to the same pixels for each seat', () => {
+    for (const viewerIsP1 of [true, false]) {
+      const canon = viewToCanonical(300, 240, viewerIsP1, W, H);
+      const back = canonicalToView(canon.x, canon.y, viewerIsP1, W, H);
+      assert.ok(Math.abs(back.x - 300) <= 1 && Math.abs(back.y - 240) <= 1);
+    }
+  });
+
+  it('shows P2 the 180°-rotated view of a canonical position', () => {
+    const p2px = canonicalToView(0.3, 0.25, false, W, H);
+    const inP1Frame = viewToCanonical(p2px.x, p2px.y, true, W, H);
+    assert.ok(Math.abs(inP1Frame.x - 0.7) < 0.02 && Math.abs(inP1Frame.y - 0.75) < 0.02);
+  });
+
+  it('puts a low canonical card on opposite halves for the two seats', () => {
+    const canon = { x: 0.2, y: 0.9 };
+    const p1 = canonicalToView(canon.x, canon.y, true, W, H);
+    const p2 = canonicalToView(canon.x, canon.y, false, W, H);
+    assert.ok(p1.y > H / 2, 'P1 (canonical) sees it low');
+    assert.ok(p2.y < H / 2, 'P2 sees the same card mirrored to the top');
+  });
+
+  it('is size-independent: the same canonical position maps to the same fraction on any board', () => {
+    const small = canonicalToView(0.6, 0.4, true, 400, 300);
+    const large = canonicalToView(0.6, 0.4, true, 1600, 1200);
+    const fracSmall = viewToCanonical(small.x, small.y, true, 400, 300);
+    const fracLarge = viewToCanonical(large.x, large.y, true, 1600, 1200);
+    assert.ok(Math.abs(fracSmall.x - fracLarge.x) < 0.01 && Math.abs(fracSmall.y - fracLarge.y) < 0.01);
   });
 });
 
@@ -1525,8 +1565,10 @@ describe('initBoardInteractions — double-click shortcuts', () => {
     const move = sent.at(-1).intent;
     assert.equal(move.op, 'MOVE_CARD');
     assert.deepEqual(move.to, { kind: 'battlefield' });
-    // 200×200 board: centred horizontally, set above the bottom-edge provinces.
-    assert.deepEqual(move.position, [60, 63]);
+    // A normalized canonical position (centre fraction, P1 frame) in the viewer's lower half. Exact
+    // geometry is covered by the real-browser e2e; the fake DOM only checks the decision.
+    const [x, y] = move.position;
+    assert.ok(x > 0 && x < 1 && y > 0.5 && y < 1);
   });
 
   it('fans successive hand plays so they do not land in a perfect stack', () => {
@@ -1536,7 +1578,7 @@ describe('initBoardInteractions — double-click shortcuts', () => {
     play('h2');
     play('h3');
     const xs = sent.map((m) => m.intent.position[0]);
-    assert.deepEqual(xs, [60, 80, 100], 'each play steps one fan slot right');
+    assert.ok(xs[0] < xs[1] && xs[1] < xs[2], 'each play steps one fan slot right');
   });
 
   it('keeps fanned plays on the board no matter how many are played', () => {
@@ -1837,16 +1879,12 @@ describe('initBoardInteractions — context menu', () => {
     root._emit('contextmenu', rightClick({ card: cardEl }));
     assert.equal(accelOf('Duplicate'), 'p');
     clickMenuItem(root, 'Duplicate');
-    assert.deepEqual(sent.at(-1), {
-      type: 'INTENT',
-      intent: {
-        op: 'SPAWN_CARD',
-        name: 'Hida Kisada',
-        img: 'sets/hk.jpg',
-        side: 'DYNASTY',
-        position: [28, 38],
-      },
-    });
+    const dup = sent.at(-1).intent;
+    assert.equal(dup.op, 'SPAWN_CARD');
+    assert.deepEqual([dup.name, dup.img, dup.side], ['Hida Kisada', 'sets/hk.jpg', 'DYNASTY']);
+    // Spawned at a canonical centre fraction down-right of the original; exact geometry is e2e's job.
+    const [x, y] = dup.position;
+    assert.ok(x > 0 && x < 1 && y > 0 && y < 1);
   });
 
   it('gives control of an own card to the opponent via the menu and accelerator g', () => {
@@ -2294,7 +2332,10 @@ describe('initBoardInteractions — create token', () => {
     root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
     assert.ok(menuLabels(root).includes('Create token…'));
     clickMenuItem(root, 'Create token…');
-    assert.deepEqual(created, [{ x: 30, y: 50 }]); // rightClick's clientX/Y, board rect at 0,0
+    // The click point is recorded as a canonical centre fraction; exact geometry is covered by e2e.
+    assert.equal(created.length, 1);
+    const { x, y } = created[0];
+    assert.ok(x > 0 && x < 1 && y > 0 && y < 1);
   });
 });
 
