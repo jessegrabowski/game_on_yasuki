@@ -601,12 +601,15 @@ describe('message builders', () => {
     assert.deepEqual(honorIntent(-1), { type: 'INTENT', intent: { op: 'SET_HONOR', delta: -1 } });
   });
 
-  it('build SPAWN and REMOVE messages', () => {
-    assert.deepEqual(spawnMessage({ name: 'X', img: 'a.jpg', x: 1, y: 2 }), {
-      type: 'SPAWN',
-      spawn: { name: 'X', img: 'a.jpg', x: 1, y: 2 },
+  it('build SPAWN_CARD and REMOVE_CARD intents', () => {
+    assert.deepEqual(spawnMessage({ name: 'X', img: 'a.jpg', side: 'FATE', x: 1, y: 2 }), {
+      type: 'INTENT',
+      intent: { op: 'SPAWN_CARD', name: 'X', img: 'a.jpg', side: 'FATE', position: [1, 2] },
     });
-    assert.deepEqual(removeMessage('c1'), { type: 'REMOVE', remove: { id: 'c1' } });
+    assert.deepEqual(removeMessage('c1'), {
+      type: 'INTENT',
+      intent: { op: 'REMOVE_CARD', card_id: 'c1' },
+    });
     assert.deepEqual(intentMessage({ op: 'FLIP', card_ids: ['c1'] }).type, 'INTENT');
   });
 });
@@ -1389,8 +1392,8 @@ describe('initBoardInteractions — selection', () => {
     root._emit('contextmenu', rightClick({ card: c1 }));
     clickMenuItem(root, 'Remove');
     assert.deepEqual(sent, [
-      { type: 'REMOVE', remove: { id: 'c1' } },
-      { type: 'REMOVE', remove: { id: 'c2' } },
+      { type: 'INTENT', intent: { op: 'REMOVE_CARD', card_id: 'c1' } },
+      { type: 'INTENT', intent: { op: 'REMOVE_CARD', card_id: 'c2' } },
     ]);
   });
 });
@@ -1835,8 +1838,14 @@ describe('initBoardInteractions — context menu', () => {
     assert.equal(accelOf('Duplicate'), 'p');
     clickMenuItem(root, 'Duplicate');
     assert.deepEqual(sent.at(-1), {
-      type: 'SPAWN',
-      spawn: { name: 'Hida Kisada', img: 'sets/hk.jpg', side: 'DYNASTY', x: 28, y: 38 },
+      type: 'INTENT',
+      intent: {
+        op: 'SPAWN_CARD',
+        name: 'Hida Kisada',
+        img: 'sets/hk.jpg',
+        side: 'DYNASTY',
+        position: [28, 38],
+      },
     });
   });
 
@@ -2125,7 +2134,7 @@ describe('initBoardInteractions — context menu', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1', token: true }) }));
     clickMenuItem(root, 'Remove');
 
-    assert.deepEqual(sent, [{ type: 'REMOVE', remove: { id: 'c1' } }]);
+    assert.deepEqual(sent, [{ type: 'INTENT', intent: { op: 'REMOVE_CARD', card_id: 'c1' } }]);
     assert.equal(activeMenu(root), undefined, 'menu is removed after a selection');
   });
 

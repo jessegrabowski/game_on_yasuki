@@ -278,11 +278,18 @@ export function highlightCard(boardEl, cardId) {
   setTimeout(() => el.classList.remove('highlight'), HIGHLIGHT_MS);
 }
 
-// Client messages, with `room` injected by the caller. Card manipulation goes through real game
-// intents; spawn/remove are separate messages the server turns into SpawnCard/RemoveCard intents.
+// Client messages, with `room` injected by the caller. Every card action is a game intent; spawn and
+// remove are SPAWN_CARD/REMOVE_CARD intents (the server mints the spawn's card id).
 export const intentMessage = (intent) => ({ type: 'INTENT', intent });
-export const spawnMessage = (spawn) => ({ type: 'SPAWN', spawn });
-export const removeMessage = (id) => ({ type: 'REMOVE', remove: { id } });
+export const spawnMessage = (spawn) =>
+  intentMessage({
+    op: 'SPAWN_CARD',
+    name: spawn.name,
+    img: spawn.img,
+    side: spawn.side,
+    position: [spawn.x, spawn.y],
+  });
+export const removeMessage = (id) => intentMessage({ op: 'REMOVE_CARD', card_id: id });
 
 // Spawn a token copy of a face-up battlefield card, dropped down-right of the original so it doesn't
 // hide it. Name, img and side come off the card's dataset; its board-local position off its inline

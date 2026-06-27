@@ -70,8 +70,14 @@ describe('openTokenSearch', () => {
     createBtnOf(handle.el)._emit('click', {});
     assert.deepEqual(sent, [
       {
-        type: 'SPAWN',
-        spawn: { name: 'Hida Kisada', img: 'sets/c1.jpg', side: 'DYNASTY', x: 12, y: 34 },
+        type: 'INTENT',
+        intent: {
+          op: 'SPAWN_CARD',
+          name: 'Hida Kisada',
+          img: 'sets/c1.jpg',
+          side: 'DYNASTY',
+          position: [12, 34],
+        },
       },
     ]);
   });
@@ -83,7 +89,16 @@ describe('openTokenSearch', () => {
 
     listOf(handle.el).children[1]._emit('dblclick', {}); // Ambush, a fate card
     assert.deepEqual(sent, [
-      { type: 'SPAWN', spawn: { name: 'Ambush', img: 'sets/c2.jpg', side: 'FATE', x: 12, y: 34 } },
+      {
+        type: 'INTENT',
+        intent: {
+          op: 'SPAWN_CARD',
+          name: 'Ambush',
+          img: 'sets/c2.jpg',
+          side: 'FATE',
+          position: [12, 34],
+        },
+      },
     ]);
   });
 

@@ -12,7 +12,6 @@ from yasuki_web.config import allowed_origins
 from yasuki_web.schemas import (
     ClientMessage,
     IntentEnvelope,
-    SpawnRequest,
     intent_from_envelope,
     ServerHello,
     ServerSnapshot,
@@ -29,17 +28,14 @@ from yasuki_web.wip_gate import websocket_access_ok
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
     TableState,
-    BoardPos,
     Intent,
+    IntentOp,
     Event,
-    SpawnCard,
-    RemoveCard,
     SearchDeck,
 )
 from yasuki_core.engine.action_log import ActionLog, InitialRecord, ChatEntry, apply_and_log
 from yasuki_core.engine.redaction import redact
 from yasuki_core.engine.setup import setup_seat, flip_second_player_stronghold
-from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import resolve_decklist
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.database import get_cards_by_names
@@ -161,6 +157,11 @@ class GameRoom:
         seat = self.seats.get(ws)
         if seat is None:
             return
+        if envelope.op is IntentOp.SPAWN_CARD and not envelope.card_id:
+            # The server mints spawn ids so a replay reproduces the same card; the client never sends
+            # one.
+            self._spawn_count += 1
+            envelope = envelope.model_copy(update={"card_id": f"spawn-{self._spawn_count}"})
         try:
             intent = intent_from_envelope(envelope)
         except (KeyError, ValueError, TypeError):
@@ -203,36 +204,6 @@ class GameRoom:
             cards=serialize_deck_cards(cards),
         )
         await ws.send_json(message.model_dump())
-
-    async def handle_spawn(self, ws: WebSocket, spawn: SpawnRequest):
-        """Create a public, face-up card on the battlefield (tokens/copies/sandbox pieces) as a real
-        logged `SpawnCard` intent. The server assigns the card id so a replay reproduces it."""
-        seat = self.seats.get(ws)
-        if seat is None:
-            return
-        self._spawn_count += 1
-        intent = SpawnCard(
-            card_id=f"spawn-{self._spawn_count}",
-            name=spawn.name,
-            side=Side(spawn.side),
-            image=spawn.img,
-            position=BoardPos(float(spawn.x), float(spawn.y)),
-        )
-        events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
-        if events:
-            await self.broadcast_snapshots()
-            await self._log_intent(seat, intent, events[0])
-
-    async def handle_remove(self, ws: WebSocket, card_id: str):
-        """Remove a card from the table as a real logged `RemoveCard` intent."""
-        seat = self.seats.get(ws)
-        if seat is None:
-            return
-        intent = RemoveCard(card_id)
-        events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
-        if events:
-            await self.broadcast_snapshots()
-            await self._log_intent(seat, intent, events[0])
 
     async def handle_load_deck(self, ws: WebSocket, yaml_text: str, filename: str | None = None):
         """Parse a deck-builder export YAML for the acting seat, stash its dynasty/fate/pre-game
@@ -518,14 +489,6 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
             elif message.type == "INTENT":
                 if message.intent is not None:
                     await game_room.handle_intent(websocket, message.intent)
-
-            elif message.type == "SPAWN":
-                if message.spawn is not None:
-                    await game_room.handle_spawn(websocket, message.spawn)
-
-            elif message.type == "REMOVE":
-                if message.remove is not None:
-                    await game_room.handle_remove(websocket, message.remove.id)
 
             elif message.type == "CHAT":
                 if message.chat is not None:

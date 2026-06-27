@@ -57,6 +57,11 @@ class IntentEnvelope(BaseModel):
     value: int | None = None
     # A card's free-text note (SET_NOTE); bounded so a note stays a short label, not a payload.
     text: str | None = Field(None, max_length=200)
+    # SPAWN_CARD targets: a brand-new public card's print. The server assigns the card_id (the client
+    # leaves it unset), so a replay reproduces the same card.
+    name: str | None = Field(None, max_length=120)
+    img: str | None = Field(None, max_length=200)
+    side: Literal["FATE", "DYNASTY", "STRONGHOLD"] | None = None
 
 
 def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
@@ -81,32 +86,18 @@ def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
             "delta": envelope.delta,
             "value": envelope.value,
             "text": envelope.text,
+            "name": envelope.name,
+            "image": envelope.img,
+            "side": envelope.side,
         }
     )
 
 
-class SpawnRequest(BaseModel):
-    # The wire form of a spawn; the server turns it into a logged SpawnCard intent (assigning the id).
-    name: str = Field(max_length=120)
-    img: str | None = Field(None, max_length=200)
-    side: Literal["FATE", "DYNASTY", "STRONGHOLD"] = "FATE"
-    x: int = 0
-    y: int = 0
-
-
-class RemoveRequest(BaseModel):
-    id: str = Field(max_length=64)
-
-
 class ClientMessage(BaseModel):
-    type: Literal[
-        "JOIN", "INTENT", "SPAWN", "REMOVE", "CHAT", "LOAD_DECK", "READY", "RESET", "PING"
-    ]
+    type: Literal["JOIN", "INTENT", "CHAT", "LOAD_DECK", "READY", "RESET", "PING"]
     room: str = Field(max_length=64)
     join: JoinRequest | None = None
     intent: IntentEnvelope | None = None
-    spawn: SpawnRequest | None = None
-    remove: RemoveRequest | None = None
     chat: ChatRequest | None = None
     load_deck: LoadDeckRequest | None = None
     ready: ReadyRequest | None = None
