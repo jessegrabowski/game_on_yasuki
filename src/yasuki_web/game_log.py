@@ -97,6 +97,7 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
         IntentOp.SET_CARD_POSITIONS,
         IntentOp.REORDER_HAND,
         IntentOp.RAISE,
+        IntentOp.SET_NOTE,
     ):
         return []
 

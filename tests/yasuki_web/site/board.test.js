@@ -21,6 +21,7 @@ import {
   moveGroupIntent,
   flipIntent,
   bowIntent,
+  setNoteIntent,
   showIntent,
   unshowIntent,
   peekIntent,
@@ -62,6 +63,7 @@ function fakeCard(
     inHand = false,
     inDiscard = false,
     img = null,
+    note = '',
   } = {},
 ) {
   const hand = inHand ? { dataset: { zone: 'hand', owner } } : null;
@@ -79,6 +81,7 @@ function fakeCard(
     token: token ? '1' : '',
     shown: shown ? '1' : '',
     peeked: peeked ? '1' : '',
+    note,
   };
   if (doubleFaced) dataset.doubleFaced = '1';
   return {
@@ -243,6 +246,20 @@ describe('renderBoard', () => {
     renderBoard(board, [card({ bowed: true })], '/images');
     assert.ok(board.children[0].classList.contains('bowed'));
     assert.equal(board.children[0].dataset.bowed, '1');
+  });
+
+  it('overlays a note over a face-up card, verbatim', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ note: 'dead' })], '/images');
+    const noteEl = board.children[0].children.find((c) => c.className === 'card-note');
+    assert.equal(noteEl?.textContent, 'dead');
+    assert.equal(board.children[0].dataset.note, 'dead');
+  });
+
+  it('draws no note on a face-down card (its front, and the note, stay hidden)', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ face_up: false, note: 'dead' })], '/images');
+    assert.ok(!board.children[0].children.some((c) => c.className === 'card-note'));
   });
 
   it('tags a token card so the menu can gate Remove on it, and a real card as non-token', () => {
@@ -508,6 +525,14 @@ describe('message builders', () => {
       intent: { op: 'SET_CARD_POS', card_id: 'c1', x: 5, y: 6 },
     });
     assert.deepEqual(flipIntent('c1'), { type: 'INTENT', intent: { op: 'FLIP', card_ids: ['c1'] } });
+  });
+
+  it('wraps a SET_NOTE carrying the card id and text', () => {
+    assert.deepEqual(setNoteIntent('c1', 'dead').intent, {
+      op: 'SET_NOTE',
+      card_id: 'c1',
+      text: 'dead',
+    });
   });
 
   it('wraps a REORDER_PILE carrying the pile dest and top-first index', () => {
@@ -1765,11 +1790,36 @@ describe('initBoardInteractions — context menu', () => {
       'Flip',
       'Bow',
       'Invert',
+      'Add note…',
       'Send to Hand',
       'Send to Discard',
       'Send to Deck (top)',
       'Send to Deck (bottom)',
     ]);
+  });
+
+  it("labels the note action 'Add note' with no note and 'Edit note' once one exists", () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
+    assert.ok(menuLabels(root).includes('Add note…'));
+    root._emit('contextmenu', rightClick({ card: fakeCard('c2', { owner: 'P1', note: 'dead' }) }));
+    assert.ok(menuLabels(root).includes('Edit note…'));
+  });
+
+  it('omits the note action on a face-down battlefield card', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1', faceUp: false }) }));
+    assert.ok(!menuLabels(root).some((label) => label.startsWith('Add note') || label.startsWith('Edit note')));
+  });
+
+  it('opens a note box from the menu and saves the typed text as a SET_NOTE', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1' }) }));
+    clickMenuItem(root, 'Add note…');
+    const overlay = document
+      .querySelector('.room')
+      .children.find((child) => child.className === 'deck-dialog-overlay');
+    const modal = overlay.children[0]; // [header, textarea, footer]
+    modal.children[1].value = 'dead';
+    modal.children[2].children[0]._emit('click', {}); // footer > Save
+    assert.deepEqual(sent.at(-1).intent, { op: 'SET_NOTE', card_id: 'c1', text: 'dead' });
   });
 
   it('offers "Stop showing" on an already-shown own card', () => {
@@ -1884,7 +1934,8 @@ describe('initBoardInteractions — context menu', () => {
     // A face-up opponent card: not owned (no show), already visible (no peek), not a token (no remove).
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P2' }) }));
     const labels = menuLabels(root);
-    assert.deepEqual(labels, ['View', 'Flip', 'Bow', 'Invert']);
+    // The note is a shared marker, so it's offered on any face-up battlefield card, owned or not.
+    assert.deepEqual(labels, ['View', 'Flip', 'Bow', 'Invert', 'Add note…']);
   });
 
   it('sends MOVE_CARD to the bottom of the deck from "Send to Deck (bottom)"', () => {

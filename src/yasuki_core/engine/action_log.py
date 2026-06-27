@@ -42,6 +42,7 @@ from yasuki_core.engine.table import (
     DiscardProvince,
     CreateProvince,
     SetHonor,
+    SetNote,
     SpawnCard,
     RemoveCard,
     Event,
@@ -445,6 +446,8 @@ def encode_intent(intent: Intent) -> dict:
             }
         case IntentOp.RAISE:
             payload["card_id"] = intent.card_id
+        case IntentOp.SET_NOTE:
+            payload |= {"card_id": intent.card_id, "text": intent.note}
         case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
             payload["card_ids"] = list(intent.card_ids)
         case IntentOp.SHOW | IntentOp.UNSHOW | IntentOp.PEEK | IntentOp.UNPEEK:
@@ -514,6 +517,8 @@ def decode_intent(payload: dict) -> Intent:
             )
         case IntentOp.RAISE:
             return Raise(payload["card_id"])
+        case IntentOp.SET_NOTE:
+            return SetNote(payload["card_id"], payload.get("text"))
         case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
             return _FLAG_CLASSES[op](tuple(payload["card_ids"]))
         case IntentOp.SHOW | IntentOp.UNSHOW | IntentOp.PEEK | IntentOp.UNPEEK:

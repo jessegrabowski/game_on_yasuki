@@ -399,6 +399,32 @@
   pointer-events: none;
 }
 
+/* A player's note, drawn boldly across the bottom half of a face-up card so it's the first thing read
+   (e.g. marking a unit dead) while the art above stays visible. pre-wrap shows the text as typed;
+   word-break keeps a long word in. */
+.card-note {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 3px;
+  background: rgba(18, 12, 5, 0.58);
+  color: #fdf6e6;
+  font-size: 0.85rem;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: hidden;
+  pointer-events: none;
+  border-radius: 0 0 6px 6px;
+}
+
 /* Disclosure cues, shared by battlefield and zone cards. A shown card — one whose private state you've
    deliberately revealed to the opponent — wears a thick blue border, drawn inside its footprint so it
    never bleeds over neighbouring cards, and distinct from the cyan selection ring. A peeked card is one
@@ -1133,4 +1159,29 @@
   font: inherit;
   border: 1px solid var(--r-line);
   border-radius: 5px;
+}
+
+.note-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  width: min(320px, 90vw);
+  padding: 0.9rem;
+  background: var(--r-panel);
+  color: var(--r-ink);
+  border: 1px solid var(--r-line);
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(40, 30, 15, 0.3);
+}
+
+.note-dialog-input {
+  width: 100%;
+  min-height: 4rem;
+  resize: vertical;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  border: 1px solid var(--r-line);
+  border-radius: 5px;
+  background: var(--r-surface);
+  color: var(--r-ink);
 }

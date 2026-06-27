@@ -39,6 +39,9 @@ class L5RCard:
     # image and both frames' (era, layout) plus the recipient keywords, all the browser canvas needs to
     # recomposite it. Pure client-render metadata, so it stays out of card identity (compare=False).
     art_swap: dict | None = field(default=None, compare=False)
+    # A free-text annotation a player wrote on the face-up card (e.g. "dead"), shown over its art. It
+    # rides along while the card stays public — including into a discard — and clears on entering a deck.
+    note: str | None = field(default=None, compare=False)
 
     def __post_init__(self):
         # Normalize collections to tuples for consistent immutability
@@ -57,6 +60,9 @@ class L5RCard:
     def unbow(self) -> None:
         if self.bowed:
             object.__setattr__(self, "bowed", False)
+
+    def set_note(self, text: str | None) -> None:
+        object.__setattr__(self, "note", text or None)
 
     def turn_face_up(self) -> None:
         if not self.face_up:

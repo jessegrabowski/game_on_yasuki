@@ -62,6 +62,8 @@ function applyFace(el, card, imgBase) {
   img.alt = card.name;
   el.appendChild(img);
   if (card.art) swapArt(img, card, imgBase);
+  // A note rides any face-up card (battlefield or a public discard); textContent keeps it CSP-safe.
+  if (card.note) el.appendChild(node('div', 'card-note', card.note));
 }
 
 // The art-swap spec the deck-builder canvas consumes, assembled from a card's own print (the
@@ -126,6 +128,7 @@ function tagCard(el, card) {
   // only through their own private peek (rendered at reduced opacity, the menu offers "Stop peeking").
   el.dataset.shown = card.shown ? '1' : '';
   el.dataset.peeked = card.peeked ? '1' : '';
+  el.dataset.note = card.note ?? '';
   if (card.back_card_id) el.dataset.doubleFaced = '1';
 }
 
@@ -284,6 +287,11 @@ export const bowIntent = (ids, bowed) =>
 export const invertIntent = (ids) => intentMessage({ op: 'INVERT', card_ids: [].concat(ids) });
 // Show/peek act on a single card: show is owner-gated (reveal your own card to your opponent), peek
 // is not (any player may privately peek any card). Each carries one card id, not a batch.
+// Cap a note's length; mirror schemas.py IntentEnvelope.text, which the server rejects beyond.
+export const NOTE_MAX = 200;
+// Set (or clear, with an empty note) a card's free-text annotation.
+export const setNoteIntent = (id, note) =>
+  intentMessage({ op: 'SET_NOTE', card_id: id, text: note });
 export const showIntent = (id) => intentMessage({ op: 'SHOW', card_id: id });
 export const unshowIntent = (id) => intentMessage({ op: 'UNSHOW', card_id: id });
 export const peekIntent = (id) => intentMessage({ op: 'PEEK', card_id: id });
@@ -432,6 +440,7 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
   const inProvince = !!el.closest?.('[data-zone="province"]');
   const inHand = !!el.closest?.('[data-zone="hand"]');
   const inDiscard = !!el.closest?.('[data-zone="discard"]');
+  const onBattlefield = el.classList?.contains?.('board-card');
   const mine = owner === '' || owner === viewer;
 
   const dataFor = (cardId) => (cardId === id ? el.dataset : lookup(cardId) ?? el.dataset);
@@ -465,6 +474,14 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
       items.push({ label: bowed ? 'Un&bow' : '&Bow', message: bowIntent(targetIds, bowed) });
     }
     items.push({ label: '&Invert', message: invertIntent(targetIds) });
+  }
+  // A note is a shared annotation on a face-up battlefield card (e.g. marking a unit dead). Editing
+  // opens a small text box; "Add note" becomes "Edit note" once one exists.
+  if (onBattlefield && !faceDown) {
+    items.push({
+      label: el.dataset.note ? 'Edit &note…' : 'Add &note…',
+      onClick: (e, send) => openNotePrompt(el, send),
+    });
   }
   // Show reveals to the opponent a card they cannot already see — one in your hand or lying face-down.
   // A face-up card on the shared board is already visible, so it only offers the toggle-off once shown.
@@ -902,6 +919,70 @@ function openDeckSearchPrompt(owner, side, send) {
   whole.addEventListener('click', () => choose(null));
 
   modal.append(header, topRow, whole);
+  overlay.append(modal);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+  (document.querySelector('.room') ?? document.body).appendChild(overlay);
+  document.addEventListener?.('keydown', onKey);
+  input.focus?.();
+}
+
+// Edit a card's note in a small text box: Save sends the new text, Remove (offered only when a note
+// exists) clears it. Reads the current note off the card's dataset; mounts in `.room` and closes on
+// Save/Remove, the × or backdrop, or Escape. Ctrl/Cmd+Enter saves; a bare Enter keeps a newline.
+function openNotePrompt(cardEl, send) {
+  const id = cardEl.dataset.cardId;
+  const current = cardEl.dataset.note || '';
+
+  const overlay = node('div', 'deck-dialog-overlay');
+  const modal = node('div', 'note-dialog');
+  const close = () => {
+    document.removeEventListener?.('keydown', onKey);
+    overlay.remove();
+  };
+  const onKey = (e) => {
+    if (e.key === 'Escape') close();
+  };
+
+  const closeBtn = node('button', 'deck-dialog-close', '×');
+  closeBtn.type = 'button';
+  closeBtn.title = 'Close';
+  closeBtn.addEventListener('click', close);
+  const header = node('div', 'deck-dialog-header');
+  header.append(node('h2', 'deck-dialog-title', current ? 'Edit note' : 'Add note'), closeBtn);
+
+  const input = node('textarea', 'note-dialog-input');
+  input.value = current;
+  input.maxLength = NOTE_MAX;
+  input.placeholder = 'Note…';
+  const save = () => {
+    send(setNoteIntent(id, input.value));
+    close();
+  };
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+      e.preventDefault();
+      save();
+    }
+  });
+
+  const saveBtn = node('button', 'deck-dialog-btn', 'Save');
+  saveBtn.type = 'button';
+  saveBtn.addEventListener('click', save);
+  const footer = node('div', 'deck-dialog-footer');
+  footer.append(saveBtn);
+  if (current) {
+    const removeBtn = node('button', 'deck-dialog-btn', 'Remove note');
+    removeBtn.type = 'button';
+    removeBtn.addEventListener('click', () => {
+      send(setNoteIntent(id, ''));
+      close();
+    });
+    footer.append(removeBtn);
+  }
+
+  modal.append(header, input, footer);
   overlay.append(modal);
   overlay.addEventListener('click', (e) => {
     if (e.target === overlay) close();

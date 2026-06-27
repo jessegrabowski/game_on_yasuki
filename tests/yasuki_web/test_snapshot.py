@@ -65,6 +65,20 @@ def test_a_card_without_an_art_swap_omits_the_art_key():
     assert "art" not in _serialized(table, P1)["zones"]["P1:hand"][0]
 
 
+def test_a_visible_card_carries_its_note_and_an_unnoted_one_omits_it():
+    table = TableState.empty_two_seat()
+    noted = L5RCard(id="f1", name="Doomed", side=Side.FATE, owner=P1, note="dead")
+    plain = L5RCard(id="f2", name="Plain", side=Side.FATE, owner=P1)
+    hand = table.zones[ZoneKey(P1, ZoneRole.HAND)]
+    for card in (noted, plain):
+        hand.cards.append(card)
+        table.cards_by_id[card.id] = card
+
+    serialized = _serialized(table, P1)["zones"]["P1:hand"]
+    assert serialized[0]["note"] == "dead"
+    assert "note" not in serialized[1]
+
+
 def test_battlefield_card_carries_art_and_position():
     table = TableState.empty_two_seat()
     card = L5RCard(
