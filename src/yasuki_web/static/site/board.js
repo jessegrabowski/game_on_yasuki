@@ -522,10 +522,11 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
     if (shown) items.push({ label: 'Stop &showing', message: unshowIntent(id) });
     else if (inHand || faceDown) items.push({ label: '&Show opponent', message: showIntent(id) });
   }
-  // Peek is open to anyone, on a card the viewer cannot yet see, toggling to "Stop peeking" once they
-  // can. Show and Peek carry the clicked card's single id, not the batch.
+  // Peek privately reveals one of your own (or a public) face-down cards to you; you cannot peek the
+  // opponent's, which they expose with Show instead. Stop peeking stays open so a peek already held
+  // can always be dropped (e.g. after handing the card over). Both carry the clicked id, not the batch.
   if (peeked) items.push({ label: 'Stop &peeking', message: unpeekIntent(id) });
-  else if (faceDown) items.push({ label: '&Peek', message: peekIntent(id) });
+  else if (faceDown && mine) items.push({ label: '&Peek', message: peekIntent(id) });
 
   if (mine) {
     const seatOf = (d) => d.owner || viewer;
