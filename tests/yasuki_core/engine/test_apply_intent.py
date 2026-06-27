@@ -828,24 +828,34 @@ def test_show_and_unshow_are_owner_gated():
     assert card.shown is False
 
 
-def test_peek_and_unpeek_are_not_owner_gated():
+def test_peek_is_owner_gated_to_your_own_hidden_card():
     table = TableState.empty_two_seat()
     card = _fate("f1", owner=PlayerId.P1)
     _on_battlefield(table, card)
 
-    # Either seat may peek; each peek tracks only the acting seat.
-    assert apply_intent(table, PlayerId.P2, Peek("f1")) != []
-    assert card.peekers == frozenset({PlayerId.P2})
-    # A second peek by the same seat changes nothing.
+    # The opponent cannot peek your hidden card — they must wait for you to Show it.
     assert apply_intent(table, PlayerId.P2, Peek("f1")) == []
+    assert card.peekers == frozenset()
 
+    # You may privately peek your own; a repeat is a no-op, and unpeek clears you again.
     assert apply_intent(table, PlayerId.P1, Peek("f1")) != []
-    assert card.peekers == frozenset({PlayerId.P1, PlayerId.P2})
-
-    # Unpeek removes only the acting seat.
-    assert apply_intent(table, PlayerId.P2, Unpeek("f1")) != []
     assert card.peekers == frozenset({PlayerId.P1})
-    assert apply_intent(table, PlayerId.P2, Unpeek("f1")) == []
+    assert apply_intent(table, PlayerId.P1, Peek("f1")) == []
+    assert apply_intent(table, PlayerId.P1, Unpeek("f1")) != []
+    assert card.peekers == frozenset()
+
+
+def test_unpeek_drops_a_peek_even_after_control_passes_to_the_opponent():
+    # Unpeek is not owner-gated: whoever holds a peek may always drop it, even once the card has
+    # changed hands — so a stale peek never lingers after a Give control.
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=PlayerId.P1)
+    _on_battlefield(table, card)
+    apply_intent(table, PlayerId.P1, Peek("f1"))
+
+    card.set_owner(PlayerId.P2)
+    assert apply_intent(table, PlayerId.P1, Unpeek("f1")) != []
+    assert card.peekers == frozenset()
 
 
 def test_batch_flag_is_atomic_and_rejected_if_any_unowned():

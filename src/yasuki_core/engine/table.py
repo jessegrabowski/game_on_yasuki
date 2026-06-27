@@ -380,8 +380,8 @@ class Unshow:
 
 @dataclass(frozen=True, slots=True)
 class Peek:
-    """Privately peek at one card — your own face-down card or an opponent's. Not owner-gated: any
-    seat may peek any card, and the public "peeks at a … card" log is the safeguard."""
+    """Privately peek at one of your own face-down cards (or an owner-less public one). Owner-gated:
+    you cannot peek a card the opponent holds — they reveal those to you with Show."""
 
     card_id: str
     op: ClassVar[IntentOp] = IntentOp.PEEK
@@ -903,10 +903,10 @@ def _unshow(state: TableState, seat: PlayerId, intent: Unshow) -> list[Event]:
 
 
 def _peek(state: TableState, seat: PlayerId, intent: Peek) -> list[Event]:
-    # Not owner-gated: any seat may peek any card. The card's peekers gain private sight; the public
-    # log only reports that a peek happened.
+    # Owner-gated: you may privately peek only your own (or an owner-less public) hidden card. Seeing a
+    # card the opponent holds requires them to Show it; you cannot reach across and look yourself.
     card = state.cards_by_id.get(intent.card_id)
-    if card is None or seat in card.peekers:
+    if card is None or not owns_card(state, seat, intent.card_id) or seat in card.peekers:
         return []
     card.add_peeker(seat)
     state.seq += 1

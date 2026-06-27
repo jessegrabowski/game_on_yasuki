@@ -1939,19 +1939,24 @@ describe('initBoardInteractions — context menu', () => {
     assert.deepEqual(labels.slice(-3), ['Fill', 'Discard', 'Destroy']);
   });
 
-  it('peeks an opponent card cross-owner: no Show, but Peek is offered and sends one id', () => {
-    // A hidden opponent card: the viewer does not own it, so no show, but anyone may peek it.
+  it('offers no Peek on an opponent hidden card — you cannot look at their cards', () => {
+    // A hidden opponent card: not yours to peek (they must Show it), and not yours to show either.
     const card = fakeCard('c1', { side: 'DYNASTY', owner: 'P2', hidden: true });
     root._emit('contextmenu', rightClick({ card }));
     const labels = menuLabels(root);
+    assert.ok(!labels.includes('Peek'), 'no peeking the opponent');
     assert.ok(!labels.includes('Show opponent') && !labels.includes('Stop showing'));
-    assert.ok(labels.includes('Peek'));
+  });
+
+  it('peeks your own hidden card, sending one PEEK id', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'DYNASTY', owner: 'P1', hidden: true }) }));
+    assert.ok(menuLabels(root).includes('Peek'));
     clickMenuItem(root, 'Peek');
     assert.deepEqual(sent[0].intent, { op: 'PEEK', card_id: 'c1' });
   });
 
   it('offers "Stop peeking" on a card the viewer is peeking, sending UNPEEK', () => {
-    const card = fakeCard('c1', { side: 'DYNASTY', owner: 'P2', faceUp: false, peeked: true });
+    const card = fakeCard('c1', { side: 'DYNASTY', owner: 'P1', faceUp: false, peeked: true });
     root._emit('contextmenu', rightClick({ card }));
     const labels = menuLabels(root);
     assert.ok(labels.includes('Stop peeking') && !labels.includes('Peek'));
