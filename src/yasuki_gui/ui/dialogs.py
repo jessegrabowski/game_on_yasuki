@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 from collections.abc import Callable
 
+from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.visuals import DeckVisual
 from yasuki_gui.constants import CARD_W, CARD_H
@@ -102,6 +103,37 @@ class Dialogs:
             btn = tk.Button(cell, text="Draw", command=lambda i=idx_in_deck: draw_card_at_index(i))
             btn.pack(pady=4)
         win._images = keep  # type: ignore[attr-defined]
+
+    def create_token(self, on_create: Callable[[str, Side], None]) -> None:
+        """Prompt for a token name and side, then call ``on_create`` with them."""
+        win = tk.Toplevel(self.toplevel)
+        win.title("Create Token")
+        win.transient(self.toplevel)
+        win.grab_set()
+        frm = tk.Frame(win, padx=12, pady=12)
+        frm.pack(fill="both", expand=True)
+
+        tk.Label(frm, text="Name:").grid(row=0, column=0, sticky="e", padx=(0, 8))
+        name_var = tk.StringVar(value="Token")
+        name_entry = tk.Entry(frm, textvariable=name_var, width=24)
+        name_entry.grid(row=0, column=1, sticky="w")
+
+        tk.Label(frm, text="Side:").grid(row=1, column=0, sticky="e", padx=(0, 8), pady=(8, 0))
+        side_var = tk.StringVar(value=Side.DYNASTY.value)
+        side_menu = tk.OptionMenu(frm, side_var, Side.DYNASTY.value, Side.FATE.value)
+        side_menu.grid(row=1, column=1, sticky="w", pady=(8, 0))
+
+        def create_close() -> None:
+            try:
+                on_create(name_var.get() or "Token", Side(side_var.get()))
+            finally:
+                win.destroy()
+
+        btns = tk.Frame(frm)
+        btns.grid(row=2, column=0, columnspan=2, pady=(12, 0))
+        tk.Button(btns, text="Cancel", command=win.destroy).pack(side="right", padx=(8, 0))
+        tk.Button(btns, text="Create", command=create_close).pack(side="right")
+        name_entry.focus_set()
 
     def deck_reveal_top(self, dv: DeckVisual) -> None:
         # Minimal stub for future reveal logic

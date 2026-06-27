@@ -3,6 +3,7 @@ from types import MappingProxyType
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
+    BoardPos,
     DeckKey,
     Event,
     Intent,
@@ -18,6 +19,7 @@ from yasuki_gui.controller import FieldController
 from yasuki_gui.layout import (
     deck_pos,
     discard_pos,
+    from_canvas,
     hand_box,
     province_positions,
     to_canvas,
@@ -117,6 +119,11 @@ class FieldView(tk.Canvas):
 
     def key_for_tag(self, tag: str) -> ZoneKey | DeckKey | None:
         return self._tag_to_key.get(tag)
+
+    def canonical_pos(self, x: int, y: int) -> BoardPos:
+        """Turn a canvas pixel into the seat-neutral battlefield position the engine stores."""
+        w, h = self._canvas_size()
+        return from_canvas(x, y, flipped=self._flipped, canvas_w=w, canvas_h=h)
 
     @staticmethod
     def card_id_for_tag(tag: str) -> str | None:

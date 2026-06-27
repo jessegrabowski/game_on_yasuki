@@ -2,6 +2,7 @@ import random
 import tkinter as tk
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
+from tkinter import simpledialog
 from typing import Literal, Protocol
 
 from yasuki_core.engine.players import PlayerId
@@ -17,9 +18,13 @@ from yasuki_core.engine.table import (
     FillProvince,
     Flip,
     FlipDeckTop,
+    FlipFace,
     Invert,
     MoveCard,
+    RemoveCard,
+    SetNote,
     Shuffle,
+    SpawnCard,
     Unbow,
     ZoneKey,
     ZoneRole,
@@ -30,6 +35,9 @@ from yasuki_gui.config import DEFAULT_HOTKEYS as HK
 from yasuki_gui.ui.dialogs import Dialogs
 from yasuki_gui.ui.images import ImageProvider
 
+# A duplicated or token card lands a little down-right of its source so it does not hide it.
+_SPAWN_OFFSET = 24
+
 # A card pulled from a deck search lands unplaced, parked beside its deck until the player drags it.
 _UNPLACED = BoardPos(-1.0, -1.0)
 
@@ -38,7 +46,6 @@ class HasView(Protocol):
     """The slice of FieldView an action needs: the table, the acting seat, and dispatch."""
 
     seat: PlayerId
-    local_player: PlayerId
 
     def dispatch(self, intent) -> list: ...
     def key_for_tag(self, tag: str): ...
@@ -125,11 +132,6 @@ def _card_owner(view: HasView, ctx: ActionContext) -> PlayerId | None:
 def _deck_owner(view: HasView, ctx: ActionContext) -> PlayerId | None:
     key = view.key_for_tag(ctx.deck_tag or "")
     return ctx.owner if ctx.owner is not None else (key.owner if isinstance(key, DeckKey) else None)
-
-
-def _zone_owner(view: HasView, ctx: ActionContext) -> PlayerId | None:
-    key = view.key_for_tag(ctx.zone_tag or "")
-    return ctx.owner if ctx.owner is not None else (key.owner if isinstance(key, ZoneKey) else None)
 
 
 # ----- card actions ---------------------------------------------------------
@@ -392,3 +394,116 @@ def province_discard() -> Action:
             view.dispatch(DiscardProvince(key))
 
     return Action("zone.discard", "Discard", HK.invert, when, run, "zone")
+
+
+# ----- tokens and annotations -----------------------------------------------
+# These split the decision logic (build and dispatch the intent) from the dialogs that gather input,
+# so the intent path is unit-testable without driving Tk.
+
+
+def fresh_token_id(state) -> str:
+    """The lowest ``token-N`` id not already on the table."""
+    i = 0
+    while f"token-{i}" in state.cards_by_id:
+        i += 1
+    return f"token-{i}"
+
+
+def spawn_token(view: HasView, name: str, side: Side, pos: BoardPos) -> None:
+    view.dispatch(SpawnCard(fresh_token_id(view.state), name, side, None, pos))
+
+
+def duplicate_card(view: HasView, card_id: str) -> None:
+    """Spawn a token copy of a card's visible face, offset down-right of the original."""
+    card = view.state.cards_by_id.get(card_id)
+    if card is None:
+        return
+    face = card.active_face
+    origin = view.state.positions.get(card_id) or BoardPos(0.0, 0.0)
+    pos = BoardPos(origin.x + _SPAWN_OFFSET, origin.y + _SPAWN_OFFSET)
+    image = str(face.image_front) if face.image_front else None
+    view.dispatch(SpawnCard(fresh_token_id(view.state), card.name, card.side, image, pos))
+
+
+def apply_note(view: HasView, card_id: str, text: str | None) -> None:
+    view.dispatch(SetNote(card_id, text))
+
+
+@_register
+def card_flip_face() -> Action:
+    def when(view, ctx):
+        card = _card(view, ctx.card_tag)
+        return (
+            card is not None
+            and card.back_card_id is not None
+            and _may(view, _card_owner(view, ctx))
+        )
+
+    def run(view, ctx):
+        card = _card(view, ctx.card_tag)
+        if card is not None:
+            view.dispatch(FlipFace((card.id,)))
+
+    return Action("card.flip_face", "Flip Face", when=when, run=run, group="card")
+
+
+@_register
+def card_set_note() -> Action:
+    def when(view, ctx):
+        card = _card(view, ctx.card_tag)
+        return card is not None and card.face_up
+
+    def run(view, ctx):
+        card = _card(view, ctx.card_tag)
+        if card is None:
+            return
+        master = view.winfo_toplevel()
+        text = simpledialog.askstring(
+            "Card note", "Note:", initialvalue=card.note or "", parent=master
+        )
+        if text is not None:
+            apply_note(view, card.id, text)
+
+    return Action("card.set_note", "Note…", when=when, run=run, group="card")
+
+
+@_register
+def card_duplicate() -> Action:
+    def when(view, ctx):
+        card = _card(view, ctx.card_tag)
+        return card is not None and card.face_up
+
+    def run(view, ctx):
+        card = _card(view, ctx.card_tag)
+        if card is not None:
+            duplicate_card(view, card.id)
+
+    return Action("card.duplicate", "Duplicate", when=when, run=run, group="card")
+
+
+@_register
+def card_remove() -> Action:
+    def when(view, ctx):
+        card = _card(view, ctx.card_tag)
+        return card is not None and card.is_token and _may(view, _card_owner(view, ctx))
+
+    def run(view, ctx):
+        card = _card(view, ctx.card_tag)
+        if card is not None:
+            view.dispatch(RemoveCard(card.id))
+
+    return Action("card.remove", "Remove", when=when, run=run, group="card")
+
+
+@_register
+def table_create_token() -> Action:
+    def run(view, ctx):
+        if ctx.event is None:
+            return
+        pos = view.canonical_pos(ctx.event.x, ctx.event.y)
+        master = view.winfo_toplevel()
+        Dialogs(master, ImageProvider(master)).create_token(
+            lambda name, side: spawn_token(view, name, side, pos)
+        )
+
+    return Action("table.create_token", "Create Token…", run=run, group="table")

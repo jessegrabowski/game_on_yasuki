@@ -16,7 +16,6 @@ from yasuki_core.engine.table import (
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
 from yasuki_gui.constants import CARD_H, CARD_W
-from yasuki_gui.layout import from_canvas
 from yasuki_gui.services.actions import (
     REGISTRY as ACTIONS,
     ActionContext,
@@ -102,8 +101,7 @@ class FieldController:
         return key.owner if key is not None else None
 
     def _from_canvas(self, x: int, y: int):
-        w, h = self.view._canvas_size()
-        return from_canvas(x, y, flipped=self.view._flipped, canvas_w=w, canvas_h=h)
+        return self.view.canonical_pos(x, y)
 
     def _update_hover(self, e: tk.Event) -> None:
         tag = self.view.resolve_tag_at(e)
@@ -385,10 +383,17 @@ class FieldController:
     def on_context(self, e: tk.Event) -> None:
         self.view.focus_set()
         tag = self.view.resolve_tag_at(e)
-        if not tag:
-            return
         self._context_menu.delete(0, "end")
         self._context_tag = tag
+        if not tag:
+            build_actions_menu(
+                self._context_menu,
+                self.view,
+                ActionContext(event=e),
+                [ACTIONS["table.create_token"]],
+            )
+            self._popup(e)
+            return
         owner = self._owner_of(tag)
         if tag.startswith("card:"):
             sel = getattr(self.view, "_selected", set())
@@ -423,6 +428,9 @@ class FieldController:
                     )
                 ],
             )
+        self._popup(e)
+
+    def _popup(self, e: tk.Event) -> None:
         try:
             self._context_menu.tk_popup(e.x_root, e.y_root)
         finally:
@@ -469,6 +477,13 @@ class FieldController:
             ],
         )
         menu.add_cascade(label="Send to", menu=send_menu)
+        menu.add_separator()
+        if sp.card.back_card_id is not None:
+            add("Flip Face", "card.flip_face")
+        add("Note…", "card.set_note")
+        add("Duplicate", "card.duplicate")
+        if sp.card.is_token:
+            add("Remove", "card.remove")
 
     def on_escape(self, e: tk.Event) -> None:
         self.view._clear_selection()
