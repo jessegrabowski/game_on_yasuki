@@ -115,6 +115,7 @@ class GameRoom:
         self.players[ws] = player_name
         self.state.seats[seat].name = player_name
         self.state.seats[seat].connected = True
+        self.state.bump_version()
         rooms[self.room_id]["players"].append(player_name)
 
         hello = ServerHello(
@@ -142,6 +143,7 @@ class GameRoom:
         player_name = self.players.pop(ws, None)
         if seat is not None:
             self.state.seats[seat].connected = False
+            self.state.bump_version()
             self.reset_votes.discard(seat)
 
         if player_name:
@@ -239,6 +241,7 @@ class GameRoom:
             )
             return
         self.state.seats[seat].ready = ready
+        self.state.bump_version()
         if ready and not self.setup_done and self._ready_to_deal(solo):
             await self._run_setup()
             self.setup_done = True
@@ -269,7 +272,11 @@ class GameRoom:
 
     def _clear_table(self):
         names = {seat: info.name for seat, info in self.state.seats.items()}
+        prev_seq = self.state.seq
         self.state = TableState.empty_two_seat(names[PlayerId.P1], names[PlayerId.P2])
+        # Carry the view version across the reset so seq stays strictly increasing for the room's
+        # life; a client never sees it go backwards on a new game.
+        self.state.seq = prev_seq + 1
         for seat in self.seats.values():
             self.state.seats[seat].connected = True
         self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))

@@ -1,9 +1,21 @@
 import asyncio
 
+import pytest
+
 from yasuki_web.websocket import GameRoom
+from yasuki_web.rooms import rooms
 from yasuki_web.schemas import IntentEnvelope
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import IntentOp, BoardPos
+
+
+@pytest.fixture
+def registered_room():
+    rooms["r1"] = {"players": [], "max_players": 2}
+    try:
+        yield GameRoom("r1")
+    finally:
+        rooms.pop("r1", None)
 
 
 class _FakeWS:
@@ -151,3 +163,25 @@ def test_spawn_round_trips_over_the_socket(client):
         snapshot = ws.receive_json()
         assert snapshot["type"] == "SNAPSHOT"
         assert snapshot["snapshot"]["battlefield"][0]["name"] == "X"
+
+
+def test_seat_metadata_changes_advance_the_view_version(registered_room):
+    room = registered_room
+    ada, kenji = _FakeWS(), _FakeWS()
+    asyncio.run(room.add_player(ada, "Ada"))
+    after_join_1 = room.state.seq
+    asyncio.run(room.add_player(kenji, "Kenji"))
+    after_join_2 = room.state.seq
+    asyncio.run(room.remove_player(kenji))
+    after_leave = room.state.seq
+    # Each non-intent metadata broadcast carries a strictly newer seq than the last.
+    assert 0 < after_join_1 < after_join_2 < after_leave
+
+
+def test_reset_carries_the_view_version_forward(registered_room):
+    room = registered_room
+    ada = _FakeWS()
+    asyncio.run(room.add_player(ada, "Ada"))
+    before = room.state.seq
+    asyncio.run(room.handle_reset(ada))  # a lone seated player's vote is unanimous
+    assert room.state.seq > before
