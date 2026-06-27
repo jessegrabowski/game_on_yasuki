@@ -927,7 +927,10 @@
 .card-view {
   position: absolute;
   z-index: 60;
-  width: 400px;
+  /* Cap the width so the aspect-derived height (~1.42x) can never exceed the viewport; otherwise a
+     full-size preview of a hand card is taller than the screen and hangs off the bottom even after
+     board.js clamps it. 60dvh of width keeps the height around 85dvh, leaving room for the margin. */
+  width: min(400px, 60dvh);
   aspect-ratio: 81 / 115;
   border-radius: 10px;
   box-shadow: 0 10px 34px rgba(0, 0, 0, 0.55);

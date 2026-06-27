@@ -85,7 +85,7 @@ function fakeCard(
       contains: (c) => classes.has(c),
       toggle: (c, force) => (force ? classes.add(c) : classes.delete(c)),
     },
-    getBoundingClientRect: () => ({ left: 10, top: 20 }),
+    getBoundingClientRect: () => ({ left: 10, top: 20, width: 81, height: 115, right: 91, bottom: 135 }),
     closest: (sel) => {
       if (sel === '[data-zone="province"]') return province;
       if (sel === '[data-zone="hand"]') return hand;

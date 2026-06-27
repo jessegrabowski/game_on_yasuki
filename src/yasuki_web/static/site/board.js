@@ -629,20 +629,15 @@ function viewCard(cardEl) {
 function placeCardView(preview, cardEl, room) {
   const cardRect = cardEl.getBoundingClientRect();
   const roomRect = room.getBoundingClientRect();
-  const previewRect = preview.getBoundingClientRect();
+  // Measure the layout box, not getBoundingClientRect: the open animation scales the preview, and a
+  // transformed rect would under-report its size so the clamp reserves too little and it spills off.
+  const previewW = preview.offsetWidth;
+  const previewH = preview.offsetHeight;
   const gap = 10;
   let left = cardRect.right - roomRect.left + gap;
-  if (left + previewRect.width > roomRect.width)
-    left = cardRect.left - roomRect.left - gap - previewRect.width;
-  const top = cardRect.top - roomRect.top + cardRect.height / 2 - previewRect.height / 2;
-  const placed = clampMenuPosition(
-    left,
-    top,
-    previewRect.width,
-    previewRect.height,
-    roomRect.width,
-    roomRect.height,
-  );
+  if (left + previewW > roomRect.width) left = cardRect.left - roomRect.left - gap - previewW;
+  const top = cardRect.top - roomRect.top + cardRect.height / 2 - previewH / 2;
+  const placed = clampMenuPosition(left, top, previewW, previewH, roomRect.width, roomRect.height);
   preview.style.left = `${placed.left}px`;
   preview.style.top = `${placed.top}px`;
 }
