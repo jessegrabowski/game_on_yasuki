@@ -287,12 +287,24 @@ describe('renderBoard', () => {
     assert.equal(board.children[0].dataset.peeked, '');
   });
 
-  it('tags and classes a peeked card so the private-peek cue and menu can read it', () => {
+  it('reveals the front of a peeked face-down card, tagged with the private-peek cue', () => {
     const board = document.getElementById('battlefield');
-    renderBoard(board, [card({ peeked: true })], '/images');
-    assert.ok(board.children[0].classList.contains('peeked'));
-    assert.equal(board.children[0].dataset.peeked, '1');
-    assert.equal(board.children[0].dataset.shown, '');
+    renderBoard(board, [card({ face_up: false, peeked: true })], '/images');
+    const el = board.children[0];
+    assert.ok(el.classList.contains('peeked'));
+    assert.equal(el.dataset.peeked, '1');
+    assert.equal(el.dataset.shown, '');
+    // The viewer peeked it, so they privately see the front (at reduced opacity), not a back.
+    assert.ok(!el.classList.contains('face-down'));
+    assert.equal(el.children[0]?.src, '/images/sets/imperial_edition/hida_kisada.jpg');
+  });
+
+  it('reveals the front of a face-down card shown to this viewer', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ face_up: false, shown: true })], '/images');
+    const el = board.children[0];
+    assert.ok(!el.classList.contains('face-down'), 'the opponent may identify a shown card');
+    assert.equal(el.children[0]?.src, '/images/sets/imperial_edition/hida_kisada.jpg');
   });
 
   it('marks inverted cards', () => {

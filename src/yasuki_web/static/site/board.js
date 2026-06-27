@@ -48,10 +48,13 @@ function backFor(card) {
 }
 
 // Show a card's face: its front art, or — while face-down — the generic back for its side. A hidden
-// stub carries no front and a known card lying face-down must not reveal one, so both draw the back;
-// with no back art loaded the CSS gradient stands in.
+// stub carries no front, and a face-down card draws its back too — unless this viewer has been let in
+// to identify it (their own peek, or the owner showing it to them), in which case the redaction sends
+// the front and we draw it, with the peek/show cue riding as a class. No back art loaded falls back to
+// the CSS gradient.
 function applyFace(el, card, imgBase) {
-  if (card.hidden || card.face_up === false) {
+  const disclosed = card.peeked || card.shown;
+  if (card.hidden || (card.face_up === false && !disclosed)) {
     el.classList.add('face-down');
     const back = backFor(card);
     if (back) el.appendChild(backImage(back));
