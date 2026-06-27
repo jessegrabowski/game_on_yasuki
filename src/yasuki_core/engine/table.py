@@ -87,7 +87,9 @@ class TableState:
     cards_by_id : dict mapping str to L5RCard
         Identity map over every card on the table, for fast intent lookup.
     seq : int
-        Monotonic version stamp; every accepted mutation increments it.
+        Monotonic view version, bumped on every state change: by ``apply_intent`` for game intents
+        and by :meth:`bump_version` for non-intent seat metadata, so no two distinct broadcasts share
+        a ``seq``. The action log records only intents, so logged ``seq`` values may skip the bumps.
     """
 
     seats: dict[PlayerId, SeatInfo]
@@ -125,6 +127,11 @@ class TableState:
             decks[DeckKey(seat, Side.FATE)] = FateDeck(cards=[])
             decks[DeckKey(seat, Side.DYNASTY)] = DynastyDeck(cards=[])
         return cls(seats=seats, zones=zones, decks=decks, battlefield=BattlefieldZone())
+
+    def bump_version(self) -> None:
+        """Advance :attr:`seq` for a state change made outside ``apply_intent`` (seat metadata), so
+        every broadcast that changed the view carries a strictly newer ``seq`` than the last."""
+        self.seq += 1
 
     def iter_all_cards(self) -> Iterator[L5RCard]:
         """Yield every card located on the table, across all zones, decks, and the battlefield."""

@@ -19,6 +19,7 @@ from yasuki_core.engine.table import (
     MoveDeckTop,
     Raise,
     SearchDeck,
+    SpawnCard,
     DeckKey,
     ZoneKey,
     ZoneRole,
@@ -128,15 +129,26 @@ def test_search_deck_without_value_searches_the_whole_deck():
     assert intent_from_envelope(env) == SearchDeck(DeckKey(PlayerId.P1, Side.FATE), limit=None)
 
 
-def test_spawn_message_parses():
+def test_spawn_card_intent_parses_and_builds_with_a_minted_id():
     msg = ClientMessage.model_validate(
         {
-            "type": "SPAWN",
+            "type": "INTENT",
             "room": "r1",
-            "spawn": {"name": "X", "img": "a.jpg", "side": "DYNASTY", "x": 1, "y": 2},
+            "intent": {
+                "op": "SPAWN_CARD",
+                "name": "X",
+                "img": "a.jpg",
+                "side": "DYNASTY",
+                "position": [1, 2],
+            },
         }
     )
-    assert msg.spawn.name == "X" and msg.spawn.side == "DYNASTY"
+    assert msg.intent.name == "X" and msg.intent.side == "DYNASTY"
+    # The server mints the card id; supplying one, the envelope decodes to a core SpawnCard intent.
+    env = msg.intent.model_copy(update={"card_id": "spawn-1"})
+    assert intent_from_envelope(env) == SpawnCard(
+        "spawn-1", "X", Side.DYNASTY, "a.jpg", BoardPos(1.0, 2.0)
+    )
 
 
 def test_server_snapshot_wraps_the_view():

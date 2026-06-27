@@ -7,7 +7,7 @@ from yasuki_web.schemas import IntentEnvelope
 from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import IntentOp, ZoneKey, ZoneRole, DeckKey, BoardPos
-from yasuki_core.engine.action_log import ChatEntry
+from yasuki_core.engine.action_log import ChatEntry, SessionEntry
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 
@@ -145,6 +145,10 @@ def test_chat_and_intents_share_one_ordered_tape(room):
     asyncio.run(room.handle_chat(ada, "made a province"))
     asyncio.run(room.handle_intent(ada, IntentEnvelope(op=IntentOp.SET_HONOR, value=5)))
 
-    # The chat lands between the two intents on a single tape.
-    is_chat = [isinstance(entry, ChatEntry) for entry in room.action_log.entries]
-    assert is_chat == [False, True, False]
+    # Ignoring the session (join) entries, the chat lands between the two intents on one tape.
+    kinds = [
+        "chat" if isinstance(entry, ChatEntry) else "intent"
+        for entry in room.action_log.entries
+        if not isinstance(entry, SessionEntry)
+    ]
+    assert kinds == ["intent", "chat", "intent"]

@@ -1,9 +1,22 @@
 import asyncio
 
+import pytest
+
 from yasuki_web.websocket import GameRoom
-from yasuki_web.schemas import IntentEnvelope, SpawnRequest
+from yasuki_web.rooms import rooms
+from yasuki_web.schemas import IntentEnvelope
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import IntentOp, BoardPos
+from yasuki_core.engine.action_log import SessionEntry
+
+
+@pytest.fixture
+def registered_room():
+    rooms["r1"] = {"players": [], "max_players": 2}
+    try:
+        yield GameRoom("r1")
+    finally:
+        rooms.pop("r1", None)
 
 
 class _FakeWS:
@@ -24,8 +37,8 @@ def _room_with_seat():
 
 
 def _spawn(room, ws, **overrides):
-    spawn = SpawnRequest(name="Hida", img="a.jpg", side="DYNASTY", x=10, y=20, **overrides)
-    asyncio.run(room.handle_spawn(ws, spawn))
+    fields = {"name": "Hida", "img": "a.jpg", "side": "DYNASTY", "position": [10, 20], **overrides}
+    asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.SPAWN_CARD, **fields)))
     return room.state.battlefield.cards[-1].id
 
 
@@ -59,7 +72,7 @@ def test_spawn_assigns_a_distinct_server_id_each_time():
 def test_remove_drops_the_card_and_logs():
     room, ws = _room_with_seat()
     card_id = _spawn(room, ws)
-    asyncio.run(room.handle_remove(ws, card_id))
+    asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.REMOVE_CARD, card_id=card_id)))
     assert room.state.battlefield.cards == []
     assert card_id not in room.state.cards_by_id
     assert room.action_log.entries[-1].intent.op is IntentOp.REMOVE_CARD
@@ -68,7 +81,8 @@ def test_remove_drops_the_card_and_logs():
 def test_spawn_ignored_from_an_unseated_socket():
     room = GameRoom("r1")
     room.seats = {_FakeWS(): PlayerId.P1}
-    asyncio.run(room.handle_spawn(_FakeWS(), SpawnRequest(name="X", side="FATE")))
+    env = IntentEnvelope(op=IntentOp.SPAWN_CARD, name="X", side="FATE", position=[0, 0])
+    asyncio.run(room.handle_intent(_FakeWS(), env))
     assert room.state.battlefield.cards == []
 
 
@@ -136,11 +150,59 @@ def test_spawn_round_trips_over_the_socket(client):
         ws.receive_json()  # LOG "Ada joined"
         ws.send_json(
             {
-                "type": "SPAWN",
+                "type": "INTENT",
                 "room": room_id,
-                "spawn": {"name": "X", "img": "a.jpg", "side": "FATE", "x": 1, "y": 2},
+                "intent": {
+                    "op": "SPAWN_CARD",
+                    "name": "X",
+                    "img": "a.jpg",
+                    "side": "FATE",
+                    "position": [1, 2],
+                },
             }
         )
         snapshot = ws.receive_json()
         assert snapshot["type"] == "SNAPSHOT"
         assert snapshot["snapshot"]["battlefield"][0]["name"] == "X"
+
+
+def test_seat_metadata_changes_advance_the_view_version(registered_room):
+    room = registered_room
+    ada, kenji = _FakeWS(), _FakeWS()
+    asyncio.run(room.add_player(ada, "Ada"))
+    after_join_1 = room.state.seq
+    asyncio.run(room.add_player(kenji, "Kenji"))
+    after_join_2 = room.state.seq
+    asyncio.run(room.remove_player(kenji))
+    after_leave = room.state.seq
+    # Each non-intent metadata broadcast carries a strictly newer seq than the last.
+    assert 0 < after_join_1 < after_join_2 < after_leave
+
+
+def test_join_and_leave_are_recorded_on_the_session_tape(registered_room):
+    room = registered_room
+    ada = _FakeWS()
+    asyncio.run(room.add_player(ada, "Ada"))
+    asyncio.run(room.remove_player(ada))
+    sessions = [(e.name, e.event) for e in room.action_log.entries if isinstance(e, SessionEntry)]
+    assert sessions == [("Ada", "join"), ("Ada", "leave")]
+
+
+def test_reset_carries_the_view_version_forward(registered_room):
+    room = registered_room
+    ada = _FakeWS()
+    asyncio.run(room.add_player(ada, "Ada"))
+    before = room.state.seq
+    asyncio.run(room.handle_reset(ada))  # a lone seated player's vote is unanimous
+    assert room.state.seq > before
+
+
+def test_ready_advances_version_and_records_a_session_event(registered_room):
+    room = registered_room
+    ada = _FakeWS()
+    asyncio.run(room.add_player(ada, "Ada"))
+    room.pending_decks[PlayerId.P1] = {}  # past the "load a deck first" gate; one seat won't deal
+    before = room.state.seq
+    asyncio.run(room.handle_ready(ada, True))
+    assert room.state.seq > before
+    assert any(isinstance(e, SessionEntry) and e.event == "ready" for e in room.action_log.entries)

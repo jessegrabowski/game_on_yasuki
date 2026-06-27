@@ -12,7 +12,6 @@ from yasuki_web.config import allowed_origins
 from yasuki_web.schemas import (
     ClientMessage,
     IntentEnvelope,
-    SpawnRequest,
     intent_from_envelope,
     ServerHello,
     ServerSnapshot,
@@ -29,17 +28,20 @@ from yasuki_web.wip_gate import websocket_access_ok
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
     TableState,
-    BoardPos,
     Intent,
+    IntentOp,
     Event,
-    SpawnCard,
-    RemoveCard,
     SearchDeck,
 )
-from yasuki_core.engine.action_log import ActionLog, InitialRecord, ChatEntry, apply_and_log
+from yasuki_core.engine.action_log import (
+    ActionLog,
+    InitialRecord,
+    ChatEntry,
+    SessionEntry,
+    apply_and_log,
+)
 from yasuki_core.engine.redaction import redact
 from yasuki_core.engine.setup import setup_seat, flip_second_player_stronghold
-from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.factory import resolve_decklist
 from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.database import get_cards_by_names
@@ -119,6 +121,7 @@ class GameRoom:
         self.players[ws] = player_name
         self.state.seats[seat].name = player_name
         self.state.seats[seat].connected = True
+        self.state.bump_version()
         rooms[self.room_id]["players"].append(player_name)
 
         hello = ServerHello(
@@ -137,6 +140,9 @@ class GameRoom:
 
         logger.info(f"Player {player_name} took seat {seat.name} in room {self.room_id}")
 
+        self.action_log.append(
+            SessionEntry(ts=time.time(), seat=seat, name=player_name, event="join")
+        )
         await self.broadcast_snapshots()
         await self.log([{"text": f"{player_name} joined"}])
 
@@ -146,12 +152,16 @@ class GameRoom:
         player_name = self.players.pop(ws, None)
         if seat is not None:
             self.state.seats[seat].connected = False
+            self.state.bump_version()
             self.reset_votes.discard(seat)
 
         if player_name:
             if self.room_id in rooms and player_name in rooms[self.room_id]["players"]:
                 rooms[self.room_id]["players"].remove(player_name)
             logger.info(f"Player {player_name} left room {self.room_id}")
+            self.action_log.append(
+                SessionEntry(ts=time.time(), seat=seat, name=player_name, event="leave")
+            )
             await self.broadcast_snapshots()
             await self.log([{"text": f"{player_name} left"}])
 
@@ -161,6 +171,11 @@ class GameRoom:
         seat = self.seats.get(ws)
         if seat is None:
             return
+        if envelope.op is IntentOp.SPAWN_CARD and not envelope.card_id:
+            # The server mints spawn ids so a replay reproduces the same card; the client never sends
+            # one.
+            self._spawn_count += 1
+            envelope = envelope.model_copy(update={"card_id": f"spawn-{self._spawn_count}"})
         try:
             intent = intent_from_envelope(envelope)
         except (KeyError, ValueError, TypeError):
@@ -204,36 +219,6 @@ class GameRoom:
         )
         await ws.send_json(message.model_dump())
 
-    async def handle_spawn(self, ws: WebSocket, spawn: SpawnRequest):
-        """Create a public, face-up card on the battlefield (tokens/copies/sandbox pieces) as a real
-        logged `SpawnCard` intent. The server assigns the card id so a replay reproduces it."""
-        seat = self.seats.get(ws)
-        if seat is None:
-            return
-        self._spawn_count += 1
-        intent = SpawnCard(
-            card_id=f"spawn-{self._spawn_count}",
-            name=spawn.name,
-            side=Side(spawn.side),
-            image=spawn.img,
-            position=BoardPos(float(spawn.x), float(spawn.y)),
-        )
-        events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
-        if events:
-            await self.broadcast_snapshots()
-            await self._log_intent(seat, intent, events[0])
-
-    async def handle_remove(self, ws: WebSocket, card_id: str):
-        """Remove a card from the table as a real logged `RemoveCard` intent."""
-        seat = self.seats.get(ws)
-        if seat is None:
-            return
-        intent = RemoveCard(card_id)
-        events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
-        if events:
-            await self.broadcast_snapshots()
-            await self._log_intent(seat, intent, events[0])
-
     async def handle_load_deck(self, ws: WebSocket, yaml_text: str, filename: str | None = None):
         """Parse a deck-builder export YAML for the acting seat, stash its dynasty/fate/pre-game
         name lists for setup, and announce the load. A decklist that yields no recognizable cards
@@ -268,6 +253,15 @@ class GameRoom:
             )
             return
         self.state.seats[seat].ready = ready
+        self.state.bump_version()
+        self.action_log.append(
+            SessionEntry(
+                ts=time.time(),
+                seat=seat,
+                name=self.state.seats[seat].name,
+                event="ready" if ready else "unready",
+            )
+        )
         if ready and not self.setup_done and self._ready_to_deal(solo):
             await self._run_setup()
             self.setup_done = True
@@ -298,7 +292,11 @@ class GameRoom:
 
     def _clear_table(self):
         names = {seat: info.name for seat, info in self.state.seats.items()}
+        prev_seq = self.state.seq
         self.state = TableState.empty_two_seat(names[PlayerId.P1], names[PlayerId.P2])
+        # Carry the view version across the reset so seq stays strictly increasing for the room's
+        # life; a client never sees it go backwards on a new game.
+        self.state.seq = prev_seq + 1
         for seat in self.seats.values():
             self.state.seats[seat].connected = True
         self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
@@ -518,14 +516,6 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
             elif message.type == "INTENT":
                 if message.intent is not None:
                     await game_room.handle_intent(websocket, message.intent)
-
-            elif message.type == "SPAWN":
-                if message.spawn is not None:
-                    await game_room.handle_spawn(websocket, message.spawn)
-
-            elif message.type == "REMOVE":
-                if message.remove is not None:
-                    await game_room.handle_remove(websocket, message.remove.id)
 
             elif message.type == "CHAT":
                 if message.chat is not None:

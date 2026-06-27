@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field, fields, replace
 from enum import Enum
 from pathlib import Path
-from typing import Protocol, runtime_checkable
+from typing import Literal, Protocol, runtime_checkable
 from collections.abc import Sequence
 
 from yasuki_core.engine.players import PlayerId
@@ -117,6 +117,31 @@ class ChatEntry:
     text: str
 
 
+@dataclass(frozen=True, slots=True)
+class SessionEntry:
+    """One session/lifecycle event on the tape — a player joining, leaving, or (un)readying.
+
+    Like ``ChatEntry``, it records who and when without changing game state, so ``replay()`` skips it
+    when folding.
+
+    Attributes
+    ----------
+    ts : float
+        Server wall-clock time of the event, as a POSIX timestamp.
+    seat : PlayerId or None
+        The seat involved, or None if the event is not seat-bound.
+    name : str
+        The player's display name at the time of the event.
+    event : {'join', 'leave', 'ready', 'unready'}
+        The lifecycle event.
+    """
+
+    ts: float
+    seat: PlayerId | None
+    name: str
+    event: Literal["join", "leave", "ready", "unready"]
+
+
 @dataclass(slots=True)
 class InitialRecord:
     """A complete table snapshot that seeds a replay.
@@ -179,24 +204,25 @@ class InitialRecord:
 @dataclass(slots=True)
 class ActionLog:
     """An append-only record of a game: an initial snapshot at the head, then one ordered tape of
-    both game intents and chat messages.
+    game intents, chat messages, and session events.
 
     Attributes
     ----------
     initial : InitialRecord
         The start configuration the intents fold onto.
-    entries : list of LogEntry or ChatEntry
-        The tape, in send order: accepted intents (``LogEntry``, with non-decreasing ``seq``) and
-        chat messages (``ChatEntry``) interleaved. Replay folds the intents and surfaces the chat.
+    entries : list of LogEntry or ChatEntry or SessionEntry
+        The tape, in send order: accepted intents (``LogEntry``, with non-decreasing ``seq``), chat
+        messages (``ChatEntry``), and session events (``SessionEntry``) interleaved. Replay folds the
+        intents and skips the rest.
     """
 
     initial: InitialRecord
-    entries: list[LogEntry | ChatEntry] = field(default_factory=list)
+    entries: list[LogEntry | ChatEntry | SessionEntry] = field(default_factory=list)
 
-    def append(self, entry: LogEntry | ChatEntry) -> None:
+    def append(self, entry: LogEntry | ChatEntry | SessionEntry) -> None:
         """Append ``entry`` to the tape. For an intent entry, enforce non-decreasing ``seq`` against
         the prior intent (raising ``ValueError`` on a regression — an out-of-order or duplicated
-        record); chat entries carry no seq and append freely."""
+        record); chat and session entries carry no seq and append freely."""
         if isinstance(entry, LogEntry):
             last = next((e for e in reversed(self.entries) if isinstance(e, LogEntry)), None)
             if last is not None and entry.seq < last.seq:
@@ -269,18 +295,20 @@ def _restore_cards(state: TableState, cards: list[L5RCard]) -> list[L5RCard]:
     return copied
 
 
-def replay(initial: InitialRecord, entries: Sequence[LogEntry | ChatEntry]) -> TableState:
+def replay(
+    initial: InitialRecord, entries: Sequence[LogEntry | ChatEntry | SessionEntry]
+) -> TableState:
     """Deterministically rebuild a table from its start and tape.
 
     Fold each intent entry through ``apply_intent`` onto a fresh state built from ``initial``,
-    reproducing the live state bit-for-bit, deck order included. Chat entries on the tape are skipped
-    — they carry no state — but their position records when each message was sent.
+    reproducing the live state bit-for-bit, deck order included. Chat and session entries on the tape
+    are skipped — they carry no game state — but their position records when each occurred.
 
     Parameters
     ----------
     initial : InitialRecord
         The start configuration to fold onto.
-    entries : sequence of LogEntry or ChatEntry
+    entries : sequence of LogEntry or ChatEntry or SessionEntry
         The ordered tape to fold; only the intent entries apply.
     """
     state = build_initial_state(initial)
@@ -582,9 +610,17 @@ def _decode_seat(payload: dict) -> SeatInfo:
     return SeatInfo(**payload)
 
 
-def _encode_entry(entry: LogEntry | ChatEntry) -> dict:
+def _encode_entry(entry: LogEntry | ChatEntry | SessionEntry) -> dict:
     if isinstance(entry, ChatEntry):
         return {"kind": "chat", "ts": entry.ts, "sender": entry.sender, "text": entry.text}
+    if isinstance(entry, SessionEntry):
+        return {
+            "kind": "session",
+            "ts": entry.ts,
+            "seat": None if entry.seat is None else entry.seat.name,
+            "name": entry.name,
+            "event": entry.event,
+        }
     return {
         "kind": "intent",
         "seq": entry.seq,
@@ -595,9 +631,17 @@ def _encode_entry(entry: LogEntry | ChatEntry) -> dict:
     }
 
 
-def _decode_entry(payload: dict) -> LogEntry | ChatEntry:
+def _decode_entry(payload: dict) -> LogEntry | ChatEntry | SessionEntry:
     if payload.get("kind") == "chat":
         return ChatEntry(ts=payload["ts"], sender=payload["sender"], text=payload["text"])
+    if payload.get("kind") == "session":
+        seat = payload["seat"]
+        return SessionEntry(
+            ts=payload["ts"],
+            seat=None if seat is None else PlayerId[seat],
+            name=payload["name"],
+            event=payload["event"],
+        )
     return LogEntry(
         seq=payload["seq"],
         ts=payload["ts"],
