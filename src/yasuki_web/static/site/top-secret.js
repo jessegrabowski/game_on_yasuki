@@ -188,7 +188,6 @@ export function init() {
   // Surface a system notice (connection drop, a rejected action) as a line in the game log.
   const logSystem = (text) => actionLog && appendLogMessage(actionLog, [{ text }]);
   const battlefield = document.getElementById('battlefield');
-  let boardInteractions = null;
   // The latest snapshot, kept so a discard-pile search can list that public pile without a round-trip.
   let lastSnapshot = null;
   const opponentTableau = document.getElementById('opponentTableau');
@@ -332,8 +331,6 @@ export function init() {
         battlefield.clientHeight,
       );
       renderBoard(battlefield, onTable, imgBase);
-      // The re-render rebuilt every card element, so reattach the selection outline by card id.
-      boardInteractions?.markSelection();
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
@@ -448,7 +445,7 @@ export function init() {
   if (boardStage && battlefield) {
     // A SEARCH_DECK intent carries its top-N as `intent.value`; mirror it into pendingDeckLimit to
     // cap the DECK_CONTENTS dialog, but pass the message through untouched so the server logs it.
-    boardInteractions = initBoardInteractions(
+    initBoardInteractions(
       boardStage,
       battlefield,
       (message) => {

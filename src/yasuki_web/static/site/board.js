@@ -1183,8 +1183,8 @@ function dragGhost(sourceEl) {
 // battlefield card selects it; Ctrl/Cmd-click toggles it in a multi-selection; a marquee dragged
 // across empty table picks every card it covers; dragging a card that is part of a multi-selection
 // moves the whole group together. `boardEl` is the battlefield, used for position maths; `send`
-// receives a room-less client message. Returns `{ markSelection }` so the caller can re-apply the
-// selection outline after the board re-renders.
+// receives a room-less client message. The selection outline rides on the card elements, which the
+// reconciling render reuses across snapshots, so it survives a re-render without re-applying.
 export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, onCreateToken } = {}) {
   let drag = null;
   let marquee = null;
@@ -1631,7 +1631,6 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
       send(bowIntent(ids, cardEl.dataset.bowed === '1'));
   });
 
-  return { markSelection };
 }
 
 // Wire the local seat's honor as a stepper, bound once on the persistent `panel` container so it

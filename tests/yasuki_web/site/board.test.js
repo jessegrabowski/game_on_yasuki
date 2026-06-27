@@ -281,6 +281,16 @@ describe('renderBoard', () => {
     assert.ok(!el.children.some((c) => c.src === front), 'the front image is gone');
   });
 
+  it('keeps the .selected outline on a card across a reconciling re-render', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'a' })], '/images');
+    const el = board.children[0];
+    el.classList.add('selected'); // as a user selection would
+    renderBoard(board, [card({ id: 'a', x: 99 })], '/images');
+    assert.equal(board.children[0], el, 'same element reused');
+    assert.ok(el.classList.contains('selected'), 'selection survives without re-applying it');
+  });
+
   it('shows the front image when face up', () => {
     const board = document.getElementById('battlefield');
     renderBoard(board, [card()], '/images');
@@ -1389,14 +1399,13 @@ describe('initBoardInteractions — selection', () => {
   let root;
   let board;
   let sent;
-  let interactions;
 
   beforeEach(() => {
     root = document.getElementById('boardStage');
     root.dataset.viewerSeat = 'P1';
     board = document.getElementById('battlefield');
     sent = [];
-    interactions = initBoardInteractions(root, board, (message) => sent.push(message));
+    initBoardInteractions(root, board, (message) => sent.push(message));
   });
 
   it('selects a battlefield card on a plain click and clears it on an empty click', () => {
@@ -1424,19 +1433,6 @@ describe('initBoardInteractions — selection', () => {
 
     assert.ok(c1.classList.contains('selected'));
     assert.ok(c2.classList.contains('selected'));
-  });
-
-  it('reattaches the outline to fresh elements after a re-render via markSelection', () => {
-    const c1 = fakeCard('c1', { onBattlefield: true });
-    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1] : []);
-    root._emit('pointerdown', onCard(c1));
-    root._emit('pointerup', onZone({ zone: 'battlefield' }));
-
-    // A SNAPSHOT re-render rebuilds the card element; the id-keyed selection must survive it.
-    const fresh = fakeCard('c1', { onBattlefield: true });
-    board.querySelectorAll = (sel) => (sel === '.board-card' ? [fresh] : []);
-    interactions.markSelection();
-    assert.ok(fresh.classList.contains('selected'));
   });
 
   // Build a two-card selection (click c1, Ctrl-click c2) and return the elements. Per-card overrides
