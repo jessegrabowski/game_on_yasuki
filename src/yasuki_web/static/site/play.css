@@ -1185,3 +1185,119 @@
   background: var(--r-surface);
   color: var(--r-ink);
 }
+
+.token-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  width: min(640px, 94vw);
+  max-height: 80vh;
+  padding: 0.9rem;
+  background: var(--r-panel);
+  color: var(--r-ink);
+  border: 1px solid var(--r-line);
+  border-radius: 8px;
+  box-shadow: 0 12px 40px rgba(40, 30, 15, 0.3);
+}
+
+.token-search-input {
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  font: inherit;
+  border: 1px solid var(--r-line);
+  border-radius: 5px;
+  background: var(--r-surface);
+  color: var(--r-ink);
+}
+
+.token-search-body {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 0.8rem;
+  min-height: 0;
+}
+
+.token-search-list {
+  flex: 1 1 auto;
+  min-height: 12rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  border: 1px solid var(--r-line);
+  border-radius: 5px;
+}
+
+.token-search-result {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.4rem;
+  cursor: pointer;
+  border-bottom: 1px solid var(--r-line-soft);
+  user-select: none;
+}
+
+.token-search-result:hover {
+  background: var(--r-gold-soft);
+}
+
+.token-search-result.selected {
+  background: var(--r-gold-soft);
+  box-shadow: inset 3px 0 0 var(--r-gold);
+}
+
+.token-search-thumb {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.token-search-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.token-search-preview {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: 200px;
+}
+
+.token-search-preview-img {
+  width: 200px;
+  height: 280px;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.token-search-preview-img.is-empty {
+  visibility: hidden;
+}
+
+.token-search-create {
+  width: 100%;
+  padding: 0.45rem;
+  font: inherit;
+  color: var(--r-ink);
+  background: #fff;
+  border: 1px solid var(--r-line);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: border-color 0.12s;
+}
+
+.token-search-create:hover:not(:disabled) {
+  border-color: var(--r-gold);
+}
+
+.token-search-create:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
