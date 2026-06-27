@@ -385,6 +385,9 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
     items.push(...group);
   };
 
+  // View is a local zoom of whatever face the card shows, available on any card the viewer can see.
+  items.push({ label: '&View', onClick: () => viewCard(el) });
+
   // Flip, Bow, and Invert manipulate a card in play; a card in hand is played, not turned in place.
   if (!inHand) {
     items.push({ label: '&Flip', message: flipIntentFor(doubleFaced, targetIds) });
@@ -584,6 +587,7 @@ export function placeUnplacedCards(cards, viewerSeat, anchorFor) {
 
 let activeMenu = null;
 let menuKeyHandler = null;
+let activeCardView = null;
 
 function closeMenu() {
   if (menuKeyHandler) {
@@ -592,6 +596,71 @@ function closeMenu() {
   }
   activeMenu?.remove();
   activeMenu = null;
+}
+
+// Float a card-sized preview of the card's current face next to it on the board. The preview is
+// non-modal — pointer-transparent and dismissed by the next key or pointer action anywhere — so it
+// never blocks play. Viewing reads only what the card already renders, so it shows a face-down
+// card's back, never its hidden front.
+function viewCard(cardEl) {
+  const face = cardEl?.querySelector?.('img');
+  if (!face?.src) return;
+  closeCardView();
+  const room = document.querySelector('.room') ?? document.body;
+  const preview = node('img', 'card-view');
+  preview.src = face.src;
+  preview.alt = face.alt ?? '';
+  room.appendChild(preview);
+  placeCardView(preview, cardEl, room);
+
+  // Identity-guard the dismiss: a stale listener from a superseded preview must not close the
+  // current one. Re-pressing V over another card replaces the preview rather than closing it.
+  const token = {};
+  const dismiss = () => {
+    if (activeCardView?.token === token) closeCardView();
+  };
+  document.addEventListener?.('keydown', dismiss, { capture: true });
+  document.addEventListener?.('pointerdown', dismiss, { capture: true });
+  activeCardView = { preview, token, dismiss };
+}
+
+// Place the preview beside the card, flipping to its left side when it would overflow the room's
+// right edge and clamping to stay fully on screen. Coordinates are room-local, matching the menu.
+function placeCardView(preview, cardEl, room) {
+  const cardRect = cardEl.getBoundingClientRect();
+  const roomRect = room.getBoundingClientRect();
+  const previewRect = preview.getBoundingClientRect();
+  const gap = 10;
+  let left = cardRect.right - roomRect.left + gap;
+  if (left + previewRect.width > roomRect.width)
+    left = cardRect.left - roomRect.left - gap - previewRect.width;
+  const top = cardRect.top - roomRect.top + cardRect.height / 2 - previewRect.height / 2;
+  const placed = clampMenuPosition(
+    left,
+    top,
+    previewRect.width,
+    previewRect.height,
+    roomRect.width,
+    roomRect.height,
+  );
+  preview.style.left = `${placed.left}px`;
+  preview.style.top = `${placed.top}px`;
+}
+
+function closeCardView() {
+  if (!activeCardView) return;
+  const { preview, dismiss } = activeCardView;
+  document.removeEventListener?.('keydown', dismiss, { capture: true });
+  document.removeEventListener?.('pointerdown', dismiss, { capture: true });
+  activeCardView = null;
+  preview.classList.add('closing');
+  let timer;
+  const drop = () => {
+    clearTimeout(timer);
+    preview.remove();
+  };
+  preview.addEventListener('transitionend', drop, { once: true });
+  timer = setTimeout(drop, 250); // fall back if the fade-out transition never fires
 }
 
 // Split a label's "&" mnemonic into the clean display text and the preferred accelerator: the letter
@@ -1201,10 +1270,19 @@ export function initBoardInteractions(root, boardEl, send) {
   const DECK_HOTKEYS = new Set(['d', 's']);
   document.addEventListener('keydown', (e) => {
     // An open context menu owns the keyboard: its accelerators take over and the hover hotkeys yield.
+    // An open card preview does not — any hotkey still acts and the preview's own listener dismisses it.
     if (activeMenu) return;
     if (e.ctrlKey || e.metaKey || e.altKey || isTypingTarget(e.target)) return;
     const key = e.key.toLowerCase();
     if (!hovered) return;
+    // View enlarges any card under the pointer, owned or not — it only reveals what's already shown.
+    if (key === 'v') {
+      const cardEl = hovered.closest?.('[data-card-id]');
+      if (!cardEl) return;
+      e.preventDefault();
+      viewCard(cardEl);
+      return;
+    }
     const deckEl = hovered.closest?.('[data-zone="deck"]');
     if (DECK_HOTKEYS.has(key)) {
       if (!deckEl || !ownsZone(deckEl)) return;

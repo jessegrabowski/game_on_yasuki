@@ -1562,6 +1562,76 @@ describe('initBoardInteractions — keyboard shortcuts', () => {
   });
 });
 
+describe('initBoardInteractions — card view', () => {
+  beforeEach(() => {
+    const root = document.getElementById('boardStage');
+    const board = document.getElementById('battlefield');
+    initBoardInteractions(root, board, () => {});
+  });
+
+  const overCard = (opts) => {
+    const cardEl = fakeCard('c1', opts);
+    return { closest: (sel) => (sel === '[data-card-id]' ? cardEl : null) };
+  };
+  // Hover a card, then press V to open its preview.
+  const viewByHotkey = (opts) => {
+    const root = document.getElementById('boardStage');
+    root._emit('pointermove', { target: overCard(opts) });
+    document._emit('keydown', { key: 'v', target: { tagName: 'DIV' }, preventDefault() {} });
+  };
+  const previews = () =>
+    document.querySelector('.room').children.filter((c) => c.className === 'card-view');
+
+  it('V opens a card-sized preview of the hovered card face', () => {
+    viewByHotkey({ img: '/images/foo.jpg' });
+    const [preview] = previews();
+    assert.ok(preview);
+    assert.equal(preview.src, '/images/foo.jpg');
+  });
+
+  it('opens the same preview from the View menu item', () => {
+    const card = fakeCard('c1', { owner: 'P1', img: '/images/foo.jpg' });
+    const root = document.getElementById('boardStage');
+    root.dataset.viewerSeat = 'P1';
+    root._emit('contextmenu', rightClick({ card }));
+    clickMenuItem(root, 'View');
+    const [preview] = previews();
+    assert.ok(preview);
+    assert.equal(preview.src, '/images/foo.jpg');
+  });
+
+  it('does not open a preview for a card with no rendered face', () => {
+    viewByHotkey({});
+    assert.equal(previews().length, 0);
+  });
+
+  it('dismisses smoothly on the next keypress: fades, then removes on transition end', () => {
+    viewByHotkey({ img: '/images/foo.jpg' });
+    const [preview] = previews();
+    document._emit('keydown', { key: 'x', target: { tagName: 'DIV' }, preventDefault() {} });
+    assert.ok(preview.classList.contains('closing'));
+    assert.equal(previews().length, 1, 'stays mounted while fading out');
+    preview._emit('transitionend');
+    assert.equal(previews().length, 0);
+  });
+
+  it('dismisses on the next pointer action', () => {
+    viewByHotkey({ img: '/images/foo.jpg' });
+    const [preview] = previews();
+    document._emit('pointerdown', {});
+    assert.ok(preview.classList.contains('closing'));
+  });
+
+  it('re-pressing V over another card supersedes the previous preview', () => {
+    viewByHotkey({ img: '/images/a.jpg' });
+    viewByHotkey({ img: '/images/b.jpg' });
+    const live = previews().find((c) => !c.classList.contains('closing'));
+    assert.ok(live);
+    assert.equal(live.src, '/images/b.jpg');
+    assert.ok(previews().find((c) => c.src === '/images/a.jpg').classList.contains('closing'));
+  });
+});
+
 describe('initBoardInteractions — context menu', () => {
   let root;
   let board;
@@ -1591,6 +1661,7 @@ describe('initBoardInteractions — context menu', () => {
     // A face-up own card on the board: the opponent already sees it, so no "Show opponent" and no
     // Peek; no "Remove" either (only tokens remove).
     assert.deepEqual(menuLabels(root), [
+      'View',
       'Flip',
       'Bow',
       'Invert',
@@ -1624,6 +1695,7 @@ describe('initBoardInteractions — context menu', () => {
     const card = fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false, inHand: true });
     root._emit('contextmenu', rightClick({ zone: { zone: 'hand', owner: 'P1' }, card }));
     assert.deepEqual(menuLabels(root), [
+      'View', // available on every card
       'Show opponent', // a hand card is hidden from the opponent, so reveal is offered
       'Send to Discard',
       'Send to Deck (top)',
@@ -1700,7 +1772,7 @@ describe('initBoardInteractions — context menu', () => {
     // A face-up opponent card: not owned (no show), already visible (no peek), not a token (no remove).
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { side: 'FATE', owner: 'P2' }) }));
     const labels = menuLabels(root);
-    assert.deepEqual(labels, ['Flip', 'Bow', 'Invert']);
+    assert.deepEqual(labels, ['View', 'Flip', 'Bow', 'Invert']);
   });
 
   it('sends MOVE_CARD to the bottom of the deck from "Send to Deck (bottom)"', () => {
