@@ -378,8 +378,6 @@ function installRouter(overrides = {}) {
     'GET /api/config': () => ok({ image_base_url: '/images' }),
     'GET /api/rooms': () => ok({ rooms: [makeRoom({ id: 'r1', name: 'Crab Table' })] }),
     'POST /api/rooms': () => ok({ room_id: 'r2', delete_token: 'tok', websocket_url: '/ws/r2' }),
-    'GET /api/cards/random/1': () =>
-      ok({ cards: [{ card_id: 'c9', name: 'Spy', image_path: 'a.jpg' }] }),
     ...overrides,
   };
   fetch.mock.mockImplementation((url, options) =>
@@ -630,17 +628,6 @@ describe('init (room client wiring)', () => {
     const intent = ws.sent.find((m) => m.type === 'INTENT');
     assert.equal(intent.room, 'r1');
     assert.equal(intent.intent.op, 'SET_CARD_POS');
-  });
-
-  it('spawns a random card as a SPAWN frame', async () => {
-    const ws = await joinedRoom();
-    document.getElementById('spawnCard')._emit('click', {});
-    await flush();
-
-    const spawn = ws.sent.find((m) => m.type === 'SPAWN');
-    assert.ok(spawn, 'a SPAWN frame is sent');
-    assert.equal(spawn.room, 'r1');
-    assert.equal(spawn.spawn.name, 'Spy');
   });
 
   it('creates a room, stores its delete token, and joins it', async () => {

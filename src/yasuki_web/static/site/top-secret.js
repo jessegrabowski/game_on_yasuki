@@ -10,7 +10,6 @@ import {
   renderHand,
   renderPanel,
   initPanelHonor,
-  spawnMessage,
   initBoardInteractions,
   highlightCard,
   deckAnchor,
@@ -20,6 +19,7 @@ import {
   backArtBySide,
 } from './board.js';
 import { openDeckDialog } from './deck-dialog.js';
+import { openTokenSearch } from './token-search.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -197,7 +197,6 @@ export function init() {
   const selfHand = document.getElementById('selfHand');
   const opponentPanel = document.getElementById('opponentPanel');
   const selfPanel = document.getElementById('selfPanel');
-  const spawnButton = document.getElementById('spawnCard');
   const loadDeckButton = document.getElementById('loadDeckButton');
   const deckFileInput = document.getElementById('deckFileInput');
   const readyButton = document.getElementById('readyButton');
@@ -430,6 +429,15 @@ export function init() {
     });
   };
 
+  // Open the card search and spawn the chosen card as a token at the right-click point.
+  const onCreateToken = (position) => {
+    openTokenSearch({
+      imgBase,
+      position,
+      send: (frame) => sendToRoom({ ...frame, room: currentRoom }),
+    });
+  };
+
   const boardStage = document.getElementById('boardStage');
   if (boardStage && battlefield) {
     // A SEARCH_DECK intent carries its top-N as `intent.value`; mirror it into pendingDeckLimit to
@@ -441,7 +449,7 @@ export function init() {
         if (message.intent?.op === 'SEARCH_DECK') pendingDeckLimit = message.intent.value ?? null;
         sendToRoom({ ...message, room: currentRoom });
       },
-      { onSearchDiscard: openDiscardSearch },
+      { onSearchDiscard: openDiscardSearch, onCreateToken },
     );
   }
 
@@ -495,27 +503,6 @@ export function init() {
       },
     });
   }
-
-  spawnButton?.addEventListener('click', async () => {
-    if (!client || !currentRoom) return;
-    try {
-      const { cards } = await (await fetch('/api/cards/random/1')).json();
-      const picked = cards?.[0];
-      if (!picked) return;
-      // The server assigns the card id; spawn just carries what to put down.
-      client.send({
-        ...spawnMessage({
-          name: picked.name,
-          img: picked.image_path,
-          x: 20 + Math.floor(Math.random() * 220),
-          y: 20 + Math.floor(Math.random() * 220),
-        }),
-        room: currentRoom,
-      });
-    } catch (_) {
-      logSystem('Could not spawn a card.');
-    }
-  });
 
   createForm?.addEventListener('submit', async (e) => {
     e.preventDefault();

@@ -2183,6 +2183,27 @@ describe('initBoardInteractions — discard search', () => {
   });
 });
 
+describe('initBoardInteractions — create token', () => {
+  let root;
+  let created;
+
+  beforeEach(() => {
+    root = document.getElementById('boardStage');
+    root.dataset.viewerSeat = 'P1';
+    created = [];
+    initBoardInteractions(root, document.getElementById('battlefield'), () => {}, {
+      onCreateToken: (position) => created.push(position),
+    });
+  });
+
+  it('offers Create token on the empty battlefield, passing the board-local click point', () => {
+    root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
+    assert.ok(menuLabels(root).includes('Create token…'));
+    clickMenuItem(root, 'Create token…');
+    assert.deepEqual(created, [{ x: 30, y: 50 }]); // rightClick's clientX/Y, board rect at 0,0
+  });
+});
+
 describe('clampMenuPosition', () => {
   // 80x100 menu inside a 200x200 stage, 4px margin.
   it('leaves a menu that fits where it was asked to open', () => {

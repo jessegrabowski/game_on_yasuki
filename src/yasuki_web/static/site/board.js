@@ -997,7 +997,7 @@ function openNotePrompt(cardEl, send) {
 // a card id); a discard pile shows Search (either player may search either pile) plus the top card's
 // menu; an occupied province shows the card's menu plus the province lifecycle ops; an empty province
 // shows just those ops; any other card shows the card menu. Returns [] for an empty target.
-function menuItemsFor(target, viewer, targetIds, lookup, { onSearchDiscard } = {}) {
+function menuItemsFor(target, viewer, targetIds, lookup, { onSearchDiscard, onCreateToken, spawnAt } = {}) {
   const zoneEl = target?.closest?.('[data-zone]');
   const zone = zoneEl?.dataset.zone;
   const cardEl = target?.closest?.('[data-card-id]');
@@ -1018,17 +1018,18 @@ function menuItemsFor(target, viewer, targetIds, lookup, { onSearchDiscard } = {
     return province.length ? [...card, SEP, ...province] : card;
   }
   if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup);
-  if (zone === 'battlefield') return battlefieldMenuItems(viewer);
+  if (zone === 'battlefield') return battlefieldMenuItems(viewer, onCreateToken, spawnAt);
   return [];
 }
 
 // The menu for a right-click on empty battlefield. Unbow all squares up every bowed card the viewer
 // may act on (their own and owner-less ones), batched into one UNBOW so the rate limiter sees one
-// message — and so the server's all-or-nothing ownership gate never rejects the batch.
-function battlefieldMenuItems(viewer) {
+// message — and so the server's all-or-nothing ownership gate never rejects the batch. Create token
+// (when wired) opens a card search and spawns the choice as a token at the click point.
+function battlefieldMenuItems(viewer, onCreateToken, spawnAt) {
   // An owner-less ('') card is public and actionable by anyone, mirroring the server's owns_card.
   const ownedByViewer = (el) => !el.dataset.owner || el.dataset.owner === viewer;
-  return [
+  const items = [
     {
       label: 'Unbo&w all',
       onClick: (e, send, container) => {
@@ -1039,6 +1040,8 @@ function battlefieldMenuItems(viewer) {
       },
     },
   ];
+  if (onCreateToken) items.push({ label: 'Create &token…', onClick: () => onCreateToken(spawnAt) });
+  return items;
 }
 
 // A pointer-following clone shown while dragging a source that stays put in its zone (a deck top, or
@@ -1072,7 +1075,7 @@ function dragGhost(sourceEl) {
 // moves the whole group together. `boardEl` is the battlefield, used for position maths; `send`
 // receives a room-less client message. Returns `{ markSelection }` so the caller can re-apply the
 // selection outline after the board re-renders.
-export function initBoardInteractions(root, boardEl, send, { onSearchDiscard } = {}) {
+export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, onCreateToken } = {}) {
   let drag = null;
   let marquee = null;
   let lastSent = 0;
@@ -1416,8 +1419,13 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard } =
     // Resolve a selected card id to its dataset so per-card Send to…/Remove route by each card's side.
     const datasets = [...boardEl.querySelectorAll('.board-card')].map((cardEl) => cardEl.dataset);
     const lookup = (cardId) => datasets.find((d) => d.cardId === cardId) ?? null;
+    // A token created from the empty-board menu spawns where the right-click landed (board-local).
+    const board = battleRect();
+    const spawnAt = { x: Math.round(e.clientX - board.left), y: Math.round(e.clientY - board.top) };
     const items = menuItemsFor(e.target, root.dataset.viewerSeat || '', targetIds, lookup, {
       onSearchDiscard,
+      onCreateToken,
+      spawnAt,
     });
     if (!items.length) return;
     e.preventDefault();
