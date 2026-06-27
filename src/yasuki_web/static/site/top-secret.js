@@ -293,9 +293,18 @@ export function init() {
       }
       const opponent = you === 'P1' ? 'P2' : 'P1';
       const handOf = (seat) => snapshot.zones?.[`${seat}:hand`] ?? [];
-      // Tableaus first so the dynasty decks exist to anchor each seat's loose pre-game cards against.
+      // Render every seat-bar and tableau zone first, so the board's battlefield-relative anchors are
+      // measured against fully settled layout. A hand fills its seat bar and can resize the battlefield;
+      // measuring before that lands would anchor the loose pre-game cards to a stale position, so the
+      // stronghold would jump on the next render.
       renderTableau(selfTableau, you, snapshot, imgBase);
       renderTableau(opponentTableau, opponent, snapshot, imgBase);
+      renderHand(selfHand, handOf(you), imgBase);
+      renderHand(opponentHand, handOf(opponent), imgBase);
+      if (selfHand) selfHand.dataset.owner = you;
+      if (opponentHand) opponentHand.dataset.owner = opponent;
+      renderPanel(selfPanel, seats[you] ?? {}, { editable: true });
+      renderPanel(opponentPanel, seats[opponent] ?? {}, { editable: false });
       const anchorFor = (owner, isViewer, group) => {
         const tableau = isViewer ? selfTableau : opponentTableau;
         if (group === 'PREGAME') return pregameAnchor(tableau, battlefield, isViewer);
@@ -305,12 +314,6 @@ export function init() {
       renderBoard(battlefield, onTable, imgBase);
       // The re-render rebuilt every card element, so reattach the selection outline by card id.
       boardInteractions?.markSelection();
-      renderHand(selfHand, handOf(you), imgBase);
-      renderHand(opponentHand, handOf(opponent), imgBase);
-      if (selfHand) selfHand.dataset.owner = you;
-      if (opponentHand) opponentHand.dataset.owner = opponent;
-      renderPanel(selfPanel, seats[you] ?? {}, { editable: true });
-      renderPanel(opponentPanel, seats[opponent] ?? {}, { editable: false });
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
