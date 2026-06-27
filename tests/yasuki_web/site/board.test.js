@@ -552,6 +552,18 @@ describe('renderHand', () => {
     // upgrades the src later, so the render never blocks on it.
     assert.equal(hand.children[0].children[0].src, '/images/sets/imperial_edition/hida_kisada.jpg');
   });
+
+  it('reuses a hand card element across renders and reorders it in place', () => {
+    const hand = document.createElement('div');
+    renderHand(hand, [card({ id: 'h1' }), card({ id: 'h2' })], '/images');
+    const h1 = hand.children[0];
+    renderHand(hand, [card({ id: 'h2' }), card({ id: 'h1' })], '/images');
+    assert.deepEqual(
+      hand.children.map((el) => el.dataset.cardId),
+      ['h2', 'h1'],
+    );
+    assert.equal(hand.children[1], h1, 'h1 keeps its element after the reorder');
+  });
 });
 
 // artSpec is the pure data seam: a snapshot card + its art donor payload → the compositor's spec.

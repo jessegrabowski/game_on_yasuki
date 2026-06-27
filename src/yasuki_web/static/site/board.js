@@ -189,22 +189,27 @@ function zoneCard(card, imgBase) {
   return el;
 }
 
-// Per-board reconcile state: a card keeps its element across the snapshots that re-render the board,
-// so an in-flight art-swap and the selection outline survive instead of being rebuilt each time.
-// Keyed weakly by the board element so it clears if the board is ever discarded.
-const boardRegistries = new WeakMap();
+// Per-container reconcile state: a card keeps its element across the snapshots that re-render its
+// container, so an in-flight art-swap (and, on the battlefield, the selection outline) survive
+// instead of being rebuilt. Keyed weakly by the container so it clears if the container is discarded.
+const cardRegistries = new WeakMap();
 
-// A new card starts as a bare element that patchCard then fills (and patches on later renders).
-export function renderBoard(boardEl, cards, imgBase) {
-  let registry = boardRegistries.get(boardEl);
+// Reconcile a flat card list into `container`. A new card is a bare element that patchCard fills;
+// `cardClass` is 'board-card' (absolute) or 'zone-card' (flow).
+function renderCards(container, cards, imgBase, cardClass) {
+  let registry = cardRegistries.get(container);
   if (!registry) {
     registry = new Map();
-    boardRegistries.set(boardEl, registry);
+    cardRegistries.set(container, registry);
   }
-  reconcile(boardEl, cards, registry, {
-    create: () => node('div', 'board-card'),
+  reconcile(container, cards, registry, {
+    create: () => node('div', cardClass),
     patch: (el, view, prev) => patchCard(el, view, prev, imgBase),
   });
+}
+
+export function renderBoard(boardEl, cards, imgBase) {
+  renderCards(boardEl, cards, imgBase, 'board-card');
 }
 
 // A card-sized pile (deck or discard) showing its top card or a back, with a count overlaid.
@@ -278,7 +283,7 @@ export function renderTableau(container, seatName, snapshot, imgBase) {
 
 // A seat's hand as a strip of full-size cards.
 export function renderHand(container, cards, imgBase) {
-  container.replaceChildren(...(cards ?? []).map((card) => zoneCard(card, imgBase)));
+  renderCards(container, cards ?? [], imgBase, 'zone-card');
 }
 
 function initials(name) {
