@@ -168,24 +168,34 @@ class FieldController:
 
     # ----- press / motion / release -----------------------------------------
 
-    def _toggle_discard_at(self, tag: str | None, e: tk.Event) -> None:
-        """While discarding, a click on one of your own hand cards toggles its selection; clicks
-        elsewhere are ignored."""
-        if not tag or not tag.startswith("zone:"):
-            return
-        hv = self.view.hands.get(tag)
-        if hv is None or hv.owner is not self.view.seat:
-            return
-        idx = hv.index_at(e.x)
-        if idx is None or idx >= len(hv.cards):
-            return
-        self.view.toggle_discard_card(hv.cards[idx].id)
+    def _toggle_selection_at(self, tag: str | None, e: tk.Event) -> None:
+        """While the engine awaits a choice, a click on a candidate card toggles its selection
+        (the field ignores non-candidates); clicks elsewhere do nothing."""
+        card_id = self._card_at(tag, e)
+        if card_id is not None:
+            self.view.toggle_selection(card_id)
+
+    def _card_at(self, tag: str | None, e: tk.Event) -> str | None:
+        """The id of the card clicked — a battlefield sprite or one of your own hand cards."""
+        if not tag:
+            return None
+        if tag.startswith("card:"):
+            return self.view.card_id_for_tag(tag)
+        if tag.startswith("zone:"):
+            hv = self.view.hands.get(tag)
+            if hv is None or hv.owner is not self.view.seat:
+                return None
+            idx = hv.index_at(e.x)
+            if idx is None or idx >= len(hv.cards):
+                return None
+            return hv.cards[idx].id
+        return None
 
     def on_press(self, e: tk.Event) -> None:
         self.view.focus_set()
         tag = self.view.resolve_tag_at(e)
-        if self.view.discard_needed is not None:
-            self._toggle_discard_at(tag, e)
+        if self.view.selecting:
+            self._toggle_selection_at(tag, e)
             return
         if not tag:
             self.view._clear_selection()

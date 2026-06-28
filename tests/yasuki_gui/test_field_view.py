@@ -102,24 +102,26 @@ class TestRulesModeRender:
         assert field.dispatch(Bow(("P2-bf",))) == []
 
 
-class TestInlineDiscard:
-    def test_toggle_tracks_selection_and_notifies(self, loaded):
+class TestDecisionSelection:
+    def test_toggle_tracks_candidates_and_notifies(self, loaded):
         field, _ = loaded
         changes = []
-        field.on_discard_selection_changed = lambda: changes.append(1)
+        field.on_selection_changed = lambda: changes.append(1)
 
-        field.begin_discard(2)
-        assert field.discard_needed == 2
-        field.toggle_discard_card("c1")
-        field.toggle_discard_card("c2")
-        assert field.discard_selection == frozenset({"c1", "c2"})
-        field.toggle_discard_card("c1")  # clicking again deselects
-        assert field.discard_selection == frozenset({"c2"})
-        assert len(changes) == 3  # one notification per toggle
+        field.begin_selection(["c1", "c2"])
+        assert field.selecting is True
+        field.toggle_selection("c1")
+        field.toggle_selection("c2")
+        assert field.selection == frozenset({"c1", "c2"})
+        field.toggle_selection("c1")  # clicking again deselects
+        assert field.selection == frozenset({"c2"})
+        field.toggle_selection("nope")  # a non-candidate is ignored, no notification
+        assert field.selection == frozenset({"c2"})
+        assert len(changes) == 3  # one notification per accepted toggle
 
-        field.end_discard()
-        assert field.discard_needed is None
-        assert field.discard_selection == frozenset()
+        field.end_selection()
+        assert field.selecting is False
+        assert field.selection == frozenset()
 
     def test_selection_reaches_the_human_hand_visual(self, loaded):
         field, _ = loaded
@@ -127,8 +129,8 @@ class TestInlineDiscard:
         hand_tag = zone_tag(ZoneKey(PlayerId.P1, ZoneRole.HAND))
         card_id = field.hands[hand_tag].cards[0].id
 
-        field.begin_discard(1)
-        field.toggle_discard_card(card_id)
+        field.begin_selection([card_id])
+        field.toggle_selection(card_id)
         field.reconcile_all()
 
         # The field feeds the selection to the hand it renders, so the border can be drawn.

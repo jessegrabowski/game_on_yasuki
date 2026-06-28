@@ -101,8 +101,8 @@ class TestHotkeys:
         assert len(hand.cards) == before + 1
 
 
-class TestDiscardSelection:
-    def test_clicking_a_hand_card_in_discard_mode_toggles_it(self, loaded):
+class TestDecisionSelection:
+    def test_clicking_a_candidate_hand_card_toggles_it(self, loaded):
         field, _ = loaded
         field.dispatch(Draw(DeckKey(PlayerId.P1, Side.FATE)))  # ensure a card in hand
         hand_tag = zone_tag(ZoneKey(PlayerId.P1, ZoneRole.HAND))
@@ -110,10 +110,29 @@ class TestDiscardSelection:
         card_id = hv.cards[0].id
         cx, cy = hv.center_for_index(0)
 
-        field.begin_discard(1)
+        field.begin_selection([card_id])
         _at(field, hand_tag)
         field._controller.on_press(DummyEventNamespace(x=cx, y=cy))
-        assert card_id in field.discard_selection
+        assert card_id in field.selection
 
         field._controller.on_press(DummyEventNamespace(x=cx, y=cy))  # click again to deselect
-        assert card_id not in field.discard_selection
+        assert card_id not in field.selection
+
+    def test_clicking_a_candidate_battlefield_card_toggles_it(self, loaded):
+        # Board targets are selectable the same way as hand cards (readiness for ChooseTarget).
+        field, _ = loaded
+        sp = field.sprites[card_tag("P1-SH")]
+
+        field.begin_selection(["P1-SH"])
+        _at(field, card_tag("P1-SH"))
+        field._controller.on_press(DummyEventNamespace(x=sp.x, y=sp.y))
+        assert "P1-SH" in field.selection
+
+    def test_non_candidate_click_is_ignored_while_selecting(self, loaded):
+        field, _ = loaded
+        sp = field.sprites[card_tag("P1-SH")]
+
+        field.begin_selection(["other-id"])  # P1-SH is not a candidate
+        _at(field, card_tag("P1-SH"))
+        field._controller.on_press(DummyEventNamespace(x=sp.x, y=sp.y))
+        assert field.selection == frozenset()

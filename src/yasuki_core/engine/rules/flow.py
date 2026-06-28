@@ -63,7 +63,8 @@ def _end_turn(game: GameState) -> None:
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
     excess = len(hand.cards) - MAX_HAND_SIZE
     if excess > 0:
-        game.pending = DiscardToHandSize(seat, count=excess)
+        candidates = tuple(card.id for card in hand.cards)
+        game.pending = DiscardToHandSize(seat, candidates, count=excess)
         return
     _begin_next_turn(game)
 

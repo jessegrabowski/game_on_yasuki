@@ -50,7 +50,7 @@ def test_spend_gold_deducts_only_when_the_pool_covers_it():
 
 def test_awaiting_decision_tracks_the_pending_request():
     game = _game()
-    game.pending = DiscardToHandSize(PlayerId.P1, count=1)
+    game.pending = DiscardToHandSize(PlayerId.P1, ("c1",), count=1)
     assert game.awaiting_decision is True
 
 

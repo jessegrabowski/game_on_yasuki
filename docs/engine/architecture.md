@@ -231,8 +231,31 @@ replay driver — which directly answers "can it be the foundation for a fuller 
 - **KD6** ✅ stat-derived abilities are generic; only *printed* abilities are authored.
 - **KD7** ✅ reuse `action_log`/`redaction` as the persistence/replay/projection foundation (§6).
 
-Still to settle when we build: the exact `Decision`/`DecisionRequest` taxonomy, and whether the shared
-serialization is lifted into its own module or stays in `action_log`.
+Still to settle when we build: the exact `Decision`/`DecisionRequest` taxonomy. (Shared serialization
+is now lifted into `serialization.py` + `snapshot.py`.)
+
+### Decision lifecycle — the concrete contract (built)
+
+Every decision flows the same way, so adding one is data, not new plumbing:
+
+1. **Request carries its options.** A `DecisionRequest` (closed union; `DiscardToHandSize`, then
+   `ChoosePayment`, `ChooseTarget`, …) holds `seat`, `candidates` (the legal option ids — KD3's
+   "legal options"), and `accepts(response)` — structural validity *drawn from the candidates*.
+   `flow` populates `candidates` when it emits the request onto `GameState.pending`.
+2. **One submit, one log.** `EngineSession.submit(seat, DecisionResponse(choices))` validates (seat +
+   `accepts`) and dispatches to a per-type apply-handler in `flow.submit`; the input is logged and
+   replayable. This path is decision-type-agnostic.
+3. **A uniform `Agent` answers (KD3).** Bots (`AutoAgent` now, real AI later, `test`) implement
+   `decide(request, view) -> DecisionResponse` — `AutoAgent` is generic, returning the shortest
+   prefix of `candidates` its `accepts` allows. The **human is the non-blocking GUI presenter**, not
+   a `decide()` call.
+4. **Generic GUI presenter.** `runner.pending` (any request) → the prompt box shows a description +
+   a Confirm gated by `request.accepts(selection)` → the board enters selection over
+   `request.candidates` (clicking a candidate toggles a selection border) → `runner.submit`. The
+   only per-decision GUI code is one line mapping the request to its prompt text + button label.
+
+So a new decision = a `DecisionRequest` subclass (candidates + `accepts`) + a `flow.submit` arm +
+the one-line prompt label. No new submit, log, replay, selection, or agent code.
 
 ## Appendix — prior-art research (why)
 

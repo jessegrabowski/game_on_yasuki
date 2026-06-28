@@ -85,7 +85,10 @@ def test_overfull_hand_pauses_for_discard_then_resumes():
     _advance_to_end_of_turn(game)
 
     assert game.awaiting_decision
-    assert game.pending == DiscardToHandSize(PlayerId.P1, count=1)
+    assert isinstance(game.pending, DiscardToHandSize) and game.pending.count == 1
+    # The request offers the whole hand as candidates.
+    hand_cards = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
+    assert set(game.pending.candidates) == {card.id for card in hand_cards}
     assert game.turn == 1 and game.active is PlayerId.P1  # turn not yet passed
 
     hand = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]

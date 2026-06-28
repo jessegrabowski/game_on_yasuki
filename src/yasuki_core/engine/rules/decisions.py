@@ -33,21 +33,25 @@ class DecisionRequest(ABC):
     ----------
     seat : PlayerId
         The seat that must answer.
+    candidates : tuple of str
+        The ids the seat may choose among — the request's legal options. A client renders these as
+        the selectable cards, and a well-formed answer draws only from them.
     """
 
     seat: PlayerId
+    candidates: tuple[str, ...]
 
     @abstractmethod
     def accepts(self, response: DecisionResponse) -> bool:
-        """Return whether ``response`` is a structurally well-formed answer to this request. A
-        well-formed answer may still be illegal against the game state; the rules layer makes that
-        check separately."""
+        """Return whether ``response`` is a structurally well-formed answer to this request — the
+        right shape, drawn from :attr:`candidates`. A well-formed answer may still be illegal
+        against the game state; the rules layer makes that check separately."""
 
 
 @dataclass(frozen=True, slots=True)
 class DiscardToHandSize(DecisionRequest):
     """The seat must discard ``count`` cards from hand to reach the maximum hand size, taken at the
-    end of its turn.
+    end of its turn. The candidates are the seat's current hand.
 
     Attributes
     ----------
@@ -58,4 +62,9 @@ class DiscardToHandSize(DecisionRequest):
     count: int
 
     def accepts(self, response: DecisionResponse) -> bool:
-        return len(response.choices) == self.count and len(set(response.choices)) == self.count
+        chosen = set(response.choices)
+        return (
+            len(response.choices) == self.count
+            and len(chosen) == self.count
+            and chosen <= set(self.candidates)
+        )

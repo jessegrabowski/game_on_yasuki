@@ -49,18 +49,26 @@ def test_status_names_whose_turn_and_clears_actions_on_the_opponents_turn(root):
     assert _buttons(box) == []
 
 
-def test_discard_prompt_enables_confirm_only_at_the_exact_count(root):
+def test_decision_prompt_shows_label_and_gates_confirm(root):
     confirmed = []
     box = PromptBox(root, lambda action: None)
     view = _view(PlayerId.P1)
 
-    box.prompt_discard(view, needed=2, selected=1, on_confirm=lambda: confirmed.append(1))
+    box.prompt_decision(
+        view, "discard 2 card(s)", "Discard", can_confirm=False, on_confirm=confirmed.append
+    )
     discard = _buttons(box)[0]
     assert discard.cget("text") == "Discard"
-    assert "discard 2" in box._status.cget("text").lower()
-    assert str(discard.cget("state")) == "disabled"  # 1 of 2 chosen
+    assert "discard 2 card(s)" in box._status.cget("text").lower()
+    assert str(discard.cget("state")) == "disabled"  # selection not yet valid
 
-    box.prompt_discard(view, needed=2, selected=2, on_confirm=lambda: confirmed.append(1))
+    box.prompt_decision(
+        view,
+        "discard 2 card(s)",
+        "Discard",
+        can_confirm=True,
+        on_confirm=lambda: confirmed.append(1),
+    )
     discard = _buttons(box)[0]
     assert str(discard.cget("state")) == "normal"
     discard.invoke()

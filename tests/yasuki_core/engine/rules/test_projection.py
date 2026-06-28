@@ -31,9 +31,10 @@ def test_rules_fields_are_public_to_both_seats():
 
 def test_pending_decision_reaches_only_the_answerer():
     game = _game()
-    game.pending = DiscardToHandSize(PlayerId.P1, count=2)
+    request = DiscardToHandSize(PlayerId.P1, ("a", "b", "c"), count=2)
+    game.pending = request
 
-    assert project(game, PlayerId.P1).pending == DiscardToHandSize(PlayerId.P1, count=2)
+    assert project(game, PlayerId.P1).pending == request
     assert project(game, PlayerId.P2).pending is None
 
 

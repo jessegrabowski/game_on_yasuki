@@ -1,5 +1,5 @@
 import tkinter as tk
-from collections.abc import Callable
+from collections.abc import Callable, Iterable
 from types import MappingProxyType
 
 from yasuki_core.engine.players import PlayerId
@@ -76,15 +76,15 @@ class FieldView(tk.Canvas):
         self._marquee_start: tuple[int, int] | None = None
         self._marquee_rect: int | None = None
 
-        # Inline discard: when a discard is owed, the hand becomes selectable. _discard_needed is
-        # the count to discard (None when not discarding); _discard_selected holds the chosen ids.
-        self._discard_needed: int | None = None
-        self._discard_selected: set[str] = set()
+        # Decision selection: when the engine awaits a choice, _selectable holds the candidate ids
+        # (None when not choosing) and _selection the chosen subset, both rendered on the board.
+        self._selectable: frozenset[str] | None = None
+        self._selection: set[str] = set()
 
         # Optional UI callbacks the host app installs; each fires with no arguments.
         self.on_local_player_changed: Callable[[], None] | None = None
         self.apply_profile_to_panels: Callable[[], None] | None = None
-        self.on_discard_selection_changed: Callable[[], None] | None = None
+        self.on_selection_changed: Callable[[], None] | None = None
 
         self._controller = FieldController(self)
         self._images = ImageProvider(self)
@@ -141,33 +141,35 @@ class FieldView(tk.Canvas):
         self.seat = seat
         self.reconcile_all()
 
-    # ----- inline discard selection -----------------------------------------
+    # ----- decision selection (cards chosen on the board for a pending decision) ---------
 
     @property
-    def discard_needed(self) -> int | None:
-        """How many cards the player must select to discard, or None when not discarding."""
-        return self._discard_needed
+    def selecting(self) -> bool:
+        """Whether the board is in selection mode, awaiting a choice from the player."""
+        return self._selectable is not None
 
     @property
-    def discard_selection(self) -> frozenset[str]:
-        """The card ids currently selected for the pending discard."""
-        return frozenset(self._discard_selected)
+    def selection(self) -> frozenset[str]:
+        """The ids currently selected for the pending decision."""
+        return frozenset(self._selection)
 
-    def begin_discard(self, count: int) -> None:
-        """Enter discard mode: the hand becomes selectable until ``count`` cards are chosen."""
-        self._discard_needed = count
-        self._discard_selected.clear()
+    def begin_selection(self, candidates: Iterable[str]) -> None:
+        """Enter selection mode: only ``candidates`` are selectable, none chosen yet."""
+        self._selectable = frozenset(candidates)
+        self._selection.clear()
 
-    def end_discard(self) -> None:
-        """Leave discard mode and clear the selection."""
-        self._discard_needed = None
-        self._discard_selected.clear()
+    def end_selection(self) -> None:
+        """Leave selection mode and clear the selection."""
+        self._selectable = None
+        self._selection.clear()
 
-    def toggle_discard_card(self, card_id: str) -> None:
-        """Add or remove ``card_id`` from the discard selection and notify the listener."""
-        self._discard_selected ^= {card_id}
-        if self.on_discard_selection_changed is not None:
-            self.on_discard_selection_changed()
+    def toggle_selection(self, card_id: str) -> None:
+        """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener."""
+        if self._selectable is None or card_id not in self._selectable:
+            return
+        self._selection ^= {card_id}
+        if self.on_selection_changed is not None:
+            self.on_selection_changed()
 
     def configure_hotkeys(self, hotkeys: Hotkeys) -> None:
         self._hotkeys = hotkeys
@@ -346,7 +348,7 @@ class FieldView(tk.Canvas):
             if key.role is ZoneRole.HAND:
                 wanted_hands.add(tag)
                 bx, by, bw, bh = hand_box(w, h, seat_at_bottom=seat_at_bottom)
-                selected = self.discard_selection if key.owner is self.seat else frozenset()
+                selected = self.selection if key.owner is self.seat else frozenset()
                 hv = self._hands.get(tag)
                 if hv is None:
                     hv = HandVisual(cards, key.owner, bx, by, bw, bh, tag, images=self._images)
@@ -392,7 +394,7 @@ class FieldView(tk.Canvas):
                 sp = CardSpriteVisual(rc, x, y, tag, images=self._images)
                 self._sprites[tag] = sp
             sp.card, sp.x, sp.y = rc, x, y
-            sp.draw(self, selected=tag in self._selected)
+            sp.draw(self, selected=tag in self._selected or rc.id in self._selection)
         for tag in set(self._sprites) - wanted:
             self._sprites.pop(tag, None)
             self._selected.discard(tag)

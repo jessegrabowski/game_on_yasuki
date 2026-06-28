@@ -67,7 +67,9 @@ def test_pending_decision_blocks_actions_and_reaches_its_answerer():
     # A pending decision suspends free actions for everyone.
     assert session.legal_actions(PlayerId.P1) == []
     # Only the answerer sees the request.
-    assert session.project(PlayerId.P1).pending == DiscardToHandSize(PlayerId.P1, count=1)
+    pending = session.project(PlayerId.P1).pending
+    assert isinstance(pending, DiscardToHandSize) and pending.seat is PlayerId.P1
+    assert pending.count == 1
     assert session.project(PlayerId.P2).pending is None
     # Only the answerer may answer it.
     with pytest.raises(ValueError):

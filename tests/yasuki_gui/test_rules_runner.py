@@ -63,14 +63,15 @@ def test_human_discard_is_left_pending_then_resolved():
     for _ in range(3):
         runner.act(PASS)
 
-    assert runner.pending_discard == DiscardToHandSize(PlayerId.P1, count=1)
+    pending = runner.pending
+    assert isinstance(pending, DiscardToHandSize) and pending.count == 1
     assert not runner.is_opponent_turn  # still the human's turn while the discard is owed
     assert runner.legal_actions() == []  # no free action offered until it is answered
 
     hand = runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
-    runner.resolve_discard([hand[0].id])
+    runner.submit([hand[0].id])
 
-    assert runner.pending_discard is None
+    assert runner.pending is None
     assert runner.is_opponent_turn  # the turn has passed; the caller now runs the opponent
     runner.run_opponent()
     assert runner.view().active is PlayerId.P1 and runner.view().turn == 3
@@ -94,7 +95,7 @@ def test_opponents_overfull_turn_auto_discards_without_prompting():
     runner.run_opponent()  # P2's overfull turn auto-passes and auto-discards
 
     assert runner.view().active is PlayerId.P1 and runner.view().turn == 3
-    assert runner.pending_discard is None  # the opponent's discard resolved without a prompt
+    assert runner.pending is None  # the opponent's discard resolved without a prompt
     p2_after = runner.session.game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards
     assert len(p2_after) == flow.MAX_HAND_SIZE  # 8 held + 1 drawn = 9, auto-trimmed to 8
 
@@ -104,7 +105,7 @@ def test_runner_inputs_stay_replayable():
     for _ in range(3):
         runner.act(PASS)
     hand = runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
-    runner.resolve_discard([hand[0].id])
+    runner.submit([hand[0].id])
     runner.run_opponent()
 
     assert replay(runner.session.log) == runner.session.game

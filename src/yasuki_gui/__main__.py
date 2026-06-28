@@ -3,6 +3,7 @@ import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.intents import SetHonor
+from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse, DiscardToHandSize
 from yasuki_core.engine.session import EngineSession, LegalAction
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
@@ -26,6 +27,14 @@ LOCAL_DEBUG_OVERRIDE = False
 
 # How long the board lingers on "Opponent's turn" before the opponent's (AI-less) turn auto-runs.
 OPPONENT_TURN_DELAY_MS = 700
+
+
+def _describe_decision(request: DecisionRequest) -> tuple[str, str]:
+    """A pending decision's prompt text and confirm-button label for the prompt box. Raise on an
+    unmapped decision so a new request type can't ship without its prompt."""
+    if isinstance(request, DiscardToHandSize):
+        return f"discard {request.count} card(s)", "Discard"
+    raise ValueError(f"no prompt defined for {type(request).__name__}")
 
 
 class PlayerPanel(tk.Frame):
@@ -197,11 +206,11 @@ def main() -> None:
         view = runner.view()
         field.render_snapshot(view.table, human_seat)
         phase_bar.refresh(view)
-        pending = runner.pending_discard
+        pending = runner.pending
         if pending is not None:
-            prompt_box.prompt_discard(
-                view, pending.count, len(field.discard_selection), confirm_discard
-            )
+            prompt, button_label = _describe_decision(pending)
+            can_confirm = pending.accepts(DecisionResponse(tuple(field.selection)))
+            prompt_box.prompt_decision(view, prompt, button_label, can_confirm, confirm_decision)
         else:
             prompt_box.refresh(view, runner.legal_actions())
         opponent_panel.refresh()
@@ -212,25 +221,25 @@ def main() -> None:
         refresh()
 
     def after_human_action() -> None:
-        pending = runner.pending_discard
+        pending = runner.pending
         if pending is not None:
-            field.begin_discard(pending.count)  # the hand becomes selectable for the discard
+            field.begin_selection(pending.candidates)  # its candidates become selectable
         refresh()
         if pending is None and runner.is_opponent_turn:
             # The board already shows "Opponent's turn"; run it after a beat so the hand-off shows.
             root.after(OPPONENT_TURN_DELAY_MS, run_opponent)
 
-    def confirm_discard() -> None:
-        runner.resolve_discard(field.discard_selection)
-        field.end_discard()
+    def confirm_decision() -> None:
+        runner.submit(field.selection)
+        field.end_selection()
         after_human_action()
 
     def on_action(action: LegalAction) -> None:
         runner.act(action)
         after_human_action()
 
-    # Re-render (board borders + Discard button state) as the player toggles hand cards.
-    field.on_discard_selection_changed = refresh
+    # Re-render (board borders + confirm-button state) as the player toggles candidates.
+    field.on_selection_changed = refresh
 
     phase_bar = PhaseBar(content)
     phase_bar.pack(side="bottom", fill="x")
