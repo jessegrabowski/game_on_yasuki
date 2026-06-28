@@ -32,6 +32,22 @@ def test_email_index_requires_a_pepper(monkeypatch):
         crypto.email_blind_index("ada@example.com")
 
 
+def test_sub_index_is_deterministic_and_distinguishes_subjects():
+    assert crypto.sub_blind_index("google-123") == crypto.sub_blind_index("google-123")
+    assert crypto.sub_blind_index("google-123") != crypto.sub_blind_index("google-456")
+
+
+def test_sub_and_email_indexes_of_the_same_string_differ():
+    # Distinct HMAC inputs must not collide across the two banlist columns.
+    assert crypto.sub_blind_index("ada@example.com") != crypto.email_blind_index("ada@example.com")
+
+
+def test_sub_index_requires_a_pepper(monkeypatch):
+    monkeypatch.delenv("YASUKI_EMAIL_HMAC_PEPPER", raising=False)
+    with pytest.raises(RuntimeError):
+        crypto.sub_blind_index("google-123")
+
+
 def test_session_token_hash_is_deterministic_and_not_the_raw_token():
     token = crypto.new_session_token()
     assert crypto.hash_session_token(token) == crypto.hash_session_token(token)
