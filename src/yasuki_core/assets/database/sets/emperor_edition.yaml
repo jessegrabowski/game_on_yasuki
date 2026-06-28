@@ -216,6 +216,8 @@ cards:
     other. His honor comes through service and he lives that service constantly.
   rarity: Fixed
 - title: Akodo Kano
+  creates:
+  - token_master
   types:
   - Personality
   decks:
@@ -284,6 +286,8 @@ cards:
     confrontation.
   rarity: Fixed
 - title: Akodo Makotai
+  creates:
+  - infantry_follower
   types:
   - Personality
   decks:
@@ -894,6 +898,8 @@ cards:
   flavor_text: <i>"I refuse to die! I will not die! I will stoop to any evil to cling on to this life!"</i>
   collector_number: '271'
 - title: Awed Witness
+  creates:
+  - witness
   types:
   - Strategy
   decks:
@@ -1554,6 +1560,8 @@ cards:
   artist: Jason Juta
   collector_number: '28'
 - title: Breath of the Heavens
+  creates:
+  - token_fire
   types:
   - Strategy
   decks:
@@ -1733,6 +1741,8 @@ cards:
   artist: Heather V. Kreiter
   collector_number: '247'
 - title: Chrysanthemum Blossom
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -3572,6 +3582,8 @@ cards:
   flavor_text: <i>"Your lair will remain unknown, master."</i>
   collector_number: '211'
 - title: Goju Kobashi
+  creates:
+  - kobashis_spawn
   types:
   - Personality
   decks:
@@ -4985,6 +4997,8 @@ cards:
     nothing for political clout. To Nakano, the beauty of stone is all that matters.
   rarity: Fixed
 - title: Kaiu Village
+  creates:
+  - kaiu_armor
   types:
   - Region
   decks:
@@ -5276,6 +5290,9 @@ cards:
   flavor_text: <i>"They are in all things, thus all things need be honored."</i>
   collector_number: '111'
 - title: Kitsu Tamasine
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -5388,6 +5405,8 @@ cards:
   flavor_text: <i>"The protocol is obvious, as are the obligations of the challenged in this instance."</i>
   collector_number: '89'
 - title: Kitsune Denhei
+  creates:
+  - denheis_snake
   types:
   - Personality
   decks:
@@ -5416,6 +5435,9 @@ cards:
     the guilty. I will provide them their solace."</i>
   collector_number: '117'
 - title: Kitsune Gina
+  creates:
+  - ginas_fox
+  - hisanos_guide
   types:
   - Personality
   decks:
@@ -5675,6 +5697,8 @@ cards:
   flavor_text: <i>"We are never alone." - Mantra of the Kitsune</i>
   collector_number: '410'
 - title: Kyuden Otomo
+  creates:
+  - token_favor
   types:
   - Stronghold
   decks:
@@ -6259,6 +6283,8 @@ cards:
   flavor_text: <i>"That… is a very strange weapon."<br>"I have faced very strange opponents."</i>
   collector_number: '236'
 - title: Moneylender
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -8265,6 +8291,13 @@ cards:
     one day proving his strength to the Mantis in honorable combat.
   rarity: Fixed
 - title: Shinjo Ki-Chang
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -8539,6 +8572,8 @@ cards:
     often hinge on the words of those in power.</i>
   collector_number: '158'
 - title: Shosuro Rokuta
+  creates:
+  - rokutas_apprentice
   types:
   - Personality
   decks:
@@ -9123,6 +9158,8 @@ cards:
     there is a stipend for his capture?"</i>
   collector_number: '23'
 - title: Suiteiru no Oni
+  creates:
+  - suiteirus_podling
   types:
   - Personality
   decks:
@@ -9755,6 +9792,8 @@ cards:
     May we never see its like again." - The Miya Histories</i>'
   collector_number: '364'
 - title: The Golden Plains
+  creates:
+  - plain_of_gold
   types:
   - Stronghold
   decks:
@@ -10408,6 +10447,9 @@ cards:
     declines politely. She has a greater duty to the Dragon Clan.
   rarity: Fixed
 - title: Togashi Torazu
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -11119,6 +11161,17 @@ cards:
     a misspoken word in court can be."</i>
   collector_number: '386'
 - title: Venerable Master
+  creates:
+  - crab_master
+  - crane_master
+  - dragon_master
+  - lion_master
+  - mantis_master
+  - phoenix_master
+  - scorpion_master
+  - spider_master
+  - unicorn_master
+  - venerated_sensei
   types:
   - Holding
   decks:

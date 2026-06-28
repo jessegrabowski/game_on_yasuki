@@ -952,6 +952,8 @@ cards:
   flavor_text: <i>He tore the air to ribbons, and from the mountains of the Dragon I saw the smoke and
     fire of the Kaiu Wall. "Fear not," he hissed. "There is more than one way to defeat the Darkness."</i>
 - title: Gift of the Maker
+  creates:
+  - token_plus1f_minus1c
   types:
   - Spell
   decks:
@@ -1224,6 +1226,8 @@ cards:
   flavor_text: <i>For centuries he protected the pale body of the Star. How could he refuse to follow
     her, when she called his name? No matter to what land he travels, he will always remember her face.</i>
 - title: Hoshi Wayan
+  creates:
+  - token_tattoo
   types:
   - Personality
   decks:
@@ -2432,6 +2436,8 @@ cards:
   flavor_text: <i>He stood by Toshiken as the court was condemned, and now, listening to Toturi's whispers
     and accusations, he prays to the Fortunes for release.</i>
 - title: Sepulcher of Bone
+  creates:
+  - undead
   types:
   - Stronghold
   decks:
@@ -3074,6 +3080,8 @@ cards:
   rarity: Fixed
   artist: Ellym Sirac
 - title: The Unquiet Grave of Hida Amoro
+  creates:
+  - undead
   types:
   - Region
   decks:

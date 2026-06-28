@@ -170,6 +170,10 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Aid Has Arrived
+  creates:
+  - courtier_0_3_2
+  - samurai_yojimbo_2_2_2
+  - shugenja_2_2_2
   types:
   - Strategy
   decks:
@@ -1465,6 +1469,10 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Colonial Farm
+  creates:
+  - ashigaru_2
+  - ashigaru_defender
+  - peasant
   types:
   - Holding
   decks:
@@ -1724,6 +1732,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daidoji Shimizu
+  creates:
+  - token_guard
   types:
   - Personality
   decks:
@@ -2049,6 +2059,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daigotsu Shinobu
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -2344,6 +2356,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Developed Quarry
+  creates:
+  - token_plus1f
   types:
   - Holding
   decks:
@@ -2544,6 +2558,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Doji Kaishime, Soul of Doji Shikatsu
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -3611,6 +3627,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hida Toraike
+  creates:
+  - courage_follower_1f
   types:
   - Personality
   decks:
@@ -3668,6 +3686,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hida Toranosuke
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -4573,6 +4594,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Jhara
+  creates:
+  - pearl_strategy
+  - token_sincerity
   types:
   - Personality
   decks:
@@ -4684,6 +4708,9 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kagako's Second Lesson
   gold_production: 0
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Sensei
   decks:
@@ -4874,6 +4901,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kakita Koutetsu Soul of Doji Hayaku
+  creates:
+  - token_plus1ph
   types:
   - Personality
   decks:
@@ -5097,6 +5126,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsu Hayako
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -5204,6 +5236,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsu Suzaki, Child of Prophecy
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -5234,6 +5269,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Yoshioka
+  creates:
+  - yoshiokas_elephant
   types:
   - Personality
   decks:
@@ -5794,6 +5831,11 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Militia Training Ground
+  creates:
+  - disposable_troops
+  - light_follower
+  - men_at_arms
+  - militia_recruit
   types:
   - Holding
   decks:
@@ -6394,6 +6436,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Nasan
+  creates:
+  - token_rage
   types:
   - Personality
   decks:
@@ -6422,6 +6466,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Nergui
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -8131,6 +8177,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Spearmen of the Akasha
+  creates:
+  - naga
   types:
   - Follower
   decks:
@@ -8344,6 +8392,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tamori Tsushima
+  creates:
+  - dragon_yojimbo_personality_2_2_2
   types:
   - Personality
   decks:
@@ -9020,6 +9070,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Hiyoku
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:
@@ -9238,6 +9290,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Training Court
+  creates:
+  - token_sincerity
+  - token_wealth
   types:
   - Holding
   decks:
@@ -9470,6 +9525,13 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Utaku Gorou, Stablemaster
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -9910,6 +9972,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yogo Ikinaru
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:

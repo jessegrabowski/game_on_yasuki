@@ -173,6 +173,8 @@ cards:
     than those who make a habit of breaking it?" - Kitsuki Hanbei</i>
   collector_number: '32'
 - title: Bayushi Tsubaki
+  creates:
+  - token_poison
   types:
   - Personality
   decks:

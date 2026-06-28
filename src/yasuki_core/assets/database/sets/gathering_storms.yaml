@@ -296,6 +296,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Gusai Mikka
+  creates:
+  - pirate_naval_personality
   types:
   - Personality
   decks:
@@ -321,6 +323,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Gusai Natsuko
+  creates:
+  - pirate_naval_personality
   types:
   - Personality
   decks:
@@ -458,6 +462,8 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Ichido Allegiance
   gold_production: 0
+  creates:
+  - pirate_naval_personality
   types:
   - Sensei
   decks:
@@ -633,6 +639,9 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Minoko Allegiance
   gold_production: 0
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Sensei
   decks:
@@ -677,6 +686,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Otokoshi District
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -740,6 +751,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Questionable Market
+  creates:
+  - token_plus1gp
+  - token_wealth
   types:
   - Holding
   decks:
@@ -921,6 +935,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Shattered Stormfront of the Mantis
+  creates:
+  - token_wealth
   types:
   - Stronghold
   decks:
@@ -945,6 +961,9 @@ cards:
   doublesided: true
   gold_production: 3
 - title: Togashi Ogai
+  creates:
+  - token_flow
+  - token_wealth
   types:
   - Personality
   decks:

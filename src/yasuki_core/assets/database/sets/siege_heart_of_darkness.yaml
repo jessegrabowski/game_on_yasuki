@@ -186,6 +186,8 @@ cards:
   flavor_text: <i>The Dark Naga leads an army. His determination would never allow anything less.</i>
   collector_number: '31'
 - title: Gathering
+  creates:
+  - asp_warrior
   types:
   - Strategy
   decks:

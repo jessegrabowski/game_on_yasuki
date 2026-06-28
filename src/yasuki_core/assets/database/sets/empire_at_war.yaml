@@ -566,6 +566,8 @@ cards:
     the path for me."</i>
   collector_number: '19'
 - title: Daidoji Yaichiro
+  creates:
+  - infantry_follower
   types:
   - Personality
   decks:
@@ -1233,6 +1235,8 @@ cards:
     heart."</i>
   collector_number: '100'
 - title: Flood the Earth
+  creates:
+  - flooded_terrain
   types:
   - Spell
   decks:
@@ -1700,6 +1704,8 @@ cards:
     push forward. No longer. I will either free them, or know their fate."</i>
   collector_number: '16'
 - title: Honorable Death
+  creates:
+  - token_fury
   types:
   - Strategy
   decks:
@@ -2455,6 +2461,8 @@ cards:
     to a calculating, efficient warrior. Already the Yobanjin fear his name." - Mirumoto Kenzo</i>
   collector_number: '28'
 - title: Mirumoto Kenzo
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -2912,6 +2920,9 @@ cards:
     as well.</i>
   collector_number: '80'
 - title: Savagery
+  creates:
+  - improvised_weapon
+  - token_minus3f
   types:
   - Strategy
   decks:
@@ -3378,6 +3389,10 @@ cards:
     The Yobanjin will feel their power, to be sure." - Isawa Emori</i>
   collector_number: '152'
 - title: Takaikabe Mura
+  creates:
+  - disposable_troops
+  - light_follower
+  - men_at_arms
   types:
   - Region
   decks:
@@ -3418,6 +3433,8 @@ cards:
     Kiyoshi</i>
   collector_number: '97'
 - title: Tamori Kuroko
+  creates:
+  - kurokos_creation
   types:
   - Personality
   decks:

@@ -61,6 +61,8 @@ cards:
   artist: Steve Argyle
   collector_number: '33'
 - title: Akodo Mirotai
+  creates:
+  - infantry_follower
   types:
   - Personality
   decks:
@@ -858,6 +860,8 @@ cards:
   artist: beet
   collector_number: '37'
 - title: Hatsu Suru no Oni
+  creates:
+  - oni_hatchling
   types:
   - Personality
   decks:
@@ -1157,6 +1161,8 @@ cards:
   artist: Jon Hodgson
   collector_number: '98'
 - title: Isawa's Scrolls
+  creates:
+  - token_scroll
   types:
   - Spell
   decks:
@@ -2316,6 +2322,8 @@ cards:
     the First Emperor's heart - Mioko, the simple daughter of a Crane fisherman.</i>
   collector_number: '6'
 - title: The Lying Darkness
+  creates:
+  - token_minus1c
   types:
   - Follower
   decks:

@@ -636,6 +636,8 @@ cards:
     No clan was left untouched.</i>
   collector_number: '61'
 - title: Daigotsu Meguro
+  creates:
+  - token_minus3f
   types:
   - Personality
   decks:
@@ -945,6 +947,8 @@ cards:
   flavor_text: <i>"This cannot be natural!" the samurai cursed.</i>
   collector_number: '92'
 - title: Estate Halls
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -1748,6 +1752,8 @@ cards:
   flavor_text: <i>"I want to know more about the Mantis," Naoharu said. "I want to know... everything."</i>
   collector_number: '100'
 - title: Kimogen
+  creates:
+  - token_valor
   types:
   - Personality
   decks:
@@ -3212,6 +3218,8 @@ cards:
     place."</i>
   collector_number: '30'
 - title: Transcendence of Flesh
+  creates:
+  - token_plus4f_minus1c
   types:
   - Spell
   decks:

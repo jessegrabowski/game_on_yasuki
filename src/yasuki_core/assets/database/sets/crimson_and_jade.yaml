@@ -1373,6 +1373,8 @@ cards:
   flavor_text: <i>Once worn by a legendary samurai, the helm was said to bring even the boldest samurai
     to his knees with tears in his eyes and blood in his ears.</i>
 - title: Kitsu Motso
+  creates:
+  - token_master
   types:
   - Personality
   decks:
@@ -1603,6 +1605,8 @@ cards:
   flavor_text: <i>The overseer raised his whip again and again, but the scuttling horde decided that they
     had enough...</i>
 - title: Mitsu
+  creates:
+  - token_fire
   types:
   - Personality
   decks:
@@ -2125,6 +2129,8 @@ cards:
   rarity: Rare
   artist: Ellym Sirac
 - title: Shabura
+  creates:
+  - token_change
   types:
   - Personality
   decks:

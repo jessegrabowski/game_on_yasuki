@@ -1430,6 +1430,8 @@ cards:
     We must find a way to match them." - Ikoma Otemi</i>
   collector_number: '264'
 - title: Chuda Mishime
+  creates:
+  - the_walking_dead
   types:
   - Personality
   decks:
@@ -2107,6 +2109,8 @@ cards:
     alone.</i>
   collector_number: '230'
 - id: depths_of_the_shinomen
+  creates:
+  - ratling_token
   title: Depths of the Shinomen
   types:
   - Stronghold
@@ -7457,6 +7461,8 @@ cards:
     Master Tiger</i>
   collector_number: '32'
 - title: Secluded Waystation
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -7566,6 +7572,8 @@ cards:
   flavor_text: <i>"The worse the odds, the fiercer the Hida." - Iuchi Lixue</i>
   collector_number: '273'
 - title: Shiba Hayama
+  creates:
+  - undead
   types:
   - Personality
   decks:

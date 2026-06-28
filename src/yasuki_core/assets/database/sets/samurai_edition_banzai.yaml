@@ -806,6 +806,8 @@ cards:
   artist: Franz Vohwinkel
   flavor_text: <i>"Allow your enemy to waste his strength, exert yourself only when you must."</i>
 - title: Hiromasa
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1012,6 +1014,8 @@ cards:
   artist: Thomas Denmark
   collector_number: '74'
 - title: Inspire Excellence
+  creates:
+  - token_plus2ph
   types:
   - Strategy
   decks:
@@ -1829,6 +1833,8 @@ cards:
   artist: Eric Lofgren
   collector_number: '38'
 - title: Shosuro Kyuichi
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -1904,6 +1910,8 @@ cards:
   artist: IFS
   collector_number: '87'
 - title: Soul Jar
+  creates:
+  - token_plus2f_minus1c
   types:
   - Item
   decks:
@@ -1997,6 +2005,8 @@ cards:
   artist: Leonardo Borazio
   collector_number: '91'
 - title: Strength in Shadow Style
+  creates:
+  - token_poison
   types:
   - Strategy
   decks:
@@ -2134,6 +2144,8 @@ cards:
   artist: Patrick McEvoy
   collector_number: '97'
 - title: The Quelsaurth
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:

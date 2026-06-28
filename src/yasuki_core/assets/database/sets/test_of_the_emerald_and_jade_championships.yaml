@@ -1088,6 +1088,8 @@ cards:
   artist: Chris Seaman
   collector_number: '30'
 - title: The Mikado
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:

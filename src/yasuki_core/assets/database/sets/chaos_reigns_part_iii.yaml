@@ -115,6 +115,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - id: aulus_2
+  creates:
+  - gaijin_yodotai_follower_1f
   title: Aulus
   types:
   - Personality
@@ -395,6 +397,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Channel the Fire Dragon
+  creates:
+  - token_fire
   types:
   - Strategy
   decks:
@@ -460,6 +464,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daigotsu Rai
+  creates:
+  - zombie_follower
   types:
   - Personality
   decks:
@@ -754,6 +760,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Flock of Blood
+  creates:
+  - token_plus1f_minus1c
   types:
   - Spell
   decks:
@@ -870,6 +878,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Gusai Kazuko
+  creates:
+  - token_wealth
   types:
   - Personality
   decks:
@@ -1111,6 +1121,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Ijathilu Zealots
+  creates:
+  - naga_zealot_personality_2_2_1
   types:
   - Follower
   decks:
@@ -1199,6 +1211,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Interesting Stick
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -1248,6 +1262,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Isawa Tsumaro, Master of Air
+  creates:
+  - tsumaros_illusion
   types:
   - Personality
   decks:
@@ -1511,6 +1527,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kengun Grounds
+  creates:
+  - zombie_follower
   types:
   - Holding
   decks:
@@ -1556,6 +1574,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - id: kisadas_shrine_2
+  creates:
+  - token_plus1ps
   title: Kisada's Shrine
   types:
   - Holding
@@ -1841,6 +1861,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Minor Illness
+  creates:
+  - token_poison
   types:
   - Strategy
   decks:
@@ -1922,6 +1944,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Ikarichi, Bloodseeker
+  creates:
+  - undead_cavalry_follower_2f
   types:
   - Personality
   decks:
@@ -1948,6 +1972,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Ogaru, Realmborn of Chikushudo
+  creates:
+  - panda_berserker_follower_2f
   types:
   - Personality
   decks:
@@ -1999,6 +2025,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Needles of Dust
+  creates:
+  - token_minus1f
   types:
   - Spell
   decks:
@@ -2093,6 +2121,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Open the Way
+  creates:
+  - token_plus1f_plus1c
   types:
   - Spell
   decks:
@@ -2142,6 +2172,8 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Order of the Shattered Star
   gold_production: 0
+  creates:
+  - token_plus1f_plus1c
   types:
   - Sensei
   decks:
@@ -2215,6 +2247,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Renyu, Apocalypse
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -2292,6 +2326,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Sarassa
+  creates:
+  - orochi_follower_3f
   types:
   - Personality
   decks:
@@ -2324,6 +2360,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Sarpal
+  creates:
+  - naga_zealot_personality_2_2_1
   types:
   - Personality
   decks:
@@ -2393,6 +2431,13 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shuyo Dojo
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Holding
   decks:
@@ -2470,6 +2515,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Soshi Aoto, Master Assassin
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -2578,6 +2625,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tanegashima
+  creates:
+  - token_minus1f
   types:
   - Item
   decks:
@@ -2675,6 +2724,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Dark Horseman, Obsidian Legion
+  creates:
+  - undead_cavalry_follower_2f_fear2
   types:
   - Personality
   decks:
@@ -2820,6 +2871,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Kyo
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -2957,6 +3011,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Twentieth Legion
+  creates:
+  - token_plus1f
   types:
   - Follower
   decks:
@@ -3114,6 +3170,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Waietto, Tanuki Clan Champion
+  creates:
+  - tanuki_samurai_personality_2_2_2
   types:
   - Personality
   decks:
@@ -3145,6 +3203,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Walk with Tengoku
+  creates:
+  - fushicho_personality_3_2_3
   types:
   - Spell
   decks:
@@ -3262,6 +3322,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Zealotry
+  creates:
+  - naga_zealot_personality_2_2_1
   types:
   - Strategy
   decks:
@@ -3308,6 +3370,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Poisoned Weapon
+  creates:
+  - token_poison
   extended_title: Poisoned Weapon • Experienced
   types:
   - Strategy

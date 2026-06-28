@@ -403,6 +403,8 @@ cards:
   artist: Chris Pritchard
   collector_number: '112'
 - title: Bayushi Azumamoru
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -517,6 +519,8 @@ cards:
     is. Until then, watch him." - Shosuro Jimen</i>
   collector_number: '57'
 - title: Bestial Rage
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -596,6 +600,8 @@ cards:
   flavor_text: <i>"Show me the coin and a target."</i>
   collector_number: '85'
 - title: Chuda Inisi
+  creates:
+  - the_walking_dead
   types:
   - Personality
   decks:
@@ -742,6 +748,9 @@ cards:
   flavor_text: <i>Winter stops all wars. Yet all sides plot on, preparing for the inevitable spring.</i>
   collector_number: '118'
 - title: Croplands
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Strategy
   decks:
@@ -976,6 +985,8 @@ cards:
   flavor_text: <i>"Such a fascinating comment, Bayushi-san. I am sure it will rivet all who hear of it."</i>
   collector_number: '22'
 - title: Doji Shikatsu
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1039,6 +1050,8 @@ cards:
   flavor_text: <i>"There is so much beyond the world that mortals know," Kimi whispered.</i>
   collector_number: '103'
 - title: Ekibyogami's Spite
+  creates:
+  - token_minus1c
   types:
   - Celestial
   decks:
@@ -1287,6 +1300,9 @@ cards:
     ground."</i>
   collector_number: '12'
 - title: Hida Desora
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -1644,6 +1660,8 @@ cards:
   flavor_text: <i>"It is moving."</i>
   collector_number: '51'
 - title: Isawa Kuniki
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1872,6 +1890,8 @@ cards:
   flavor_text: <i>"This war is a chance for us to erase the stain upon the Khol's name." - Moto Chen</i>
   collector_number: '87'
 - title: Kitsuki Bokuko
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -2114,6 +2134,8 @@ cards:
     samurai-ko I have ever met, and she seems wholly unaware of her own importance." - Moto Jin-sahn</i>
   collector_number: '38'
 - title: Matsu Sako
+  creates:
+  - infantry_follower
   types:
   - Personality
   decks:
@@ -2783,6 +2805,8 @@ cards:
   flavor_text: <i>"Their leader is exposed. Kill him."</i>
   collector_number: '71'
 - title: Shinjo Meng-Do
+  creates:
+  - unicorn_scout
   types:
   - Personality
   decks:
@@ -3300,6 +3324,8 @@ cards:
     I pray that the Lords of Death will reward you well." - Mirumoto Washizuka</i>
   collector_number: '155'
 - title: Togashi Okamoto
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -3550,6 +3576,9 @@ cards:
     from afar."</i>
   collector_number: '43'
 - title: Ujisato
+  creates:
+  - token_haunted
+  - token_soul
   types:
   - Personality
   decks:

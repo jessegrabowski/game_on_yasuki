@@ -21,6 +21,8 @@ cards:
     is a poor time to be a criminal." - Doji Hakuseki, First Magistrate</i>
   collector_number: '102'
 - title: A Quiet Transaction
+  creates:
+  - token_minus2gp
   types:
   - Strategy
   decks:
@@ -290,6 +292,8 @@ cards:
     your ear. I said you may not pass."</i>
   collector_number: '106'
 - title: Basic Lesson
+  creates:
+  - questionable_resources
   types:
   - Strategy
   decks:
@@ -415,6 +419,8 @@ cards:
   artist: Asier Martinez Lopez
   collector_number: '1'
 - title: Bo of Water
+  creates:
+  - water_bo
   types:
   - Spell
   decks:
@@ -1577,6 +1583,8 @@ cards:
   flavor_text: <i>"Only through art do the deeds of heroes shine for a thousand years."</i>
   collector_number: '25'
 - title: Katana of Fire
+  creates:
+  - flame_katana
   types:
   - Spell
   decks:
@@ -1716,6 +1724,8 @@ cards:
     will prevail…"</i>
   collector_number: '26'
 - title: Kitsune Ohsuki
+  creates:
+  - ohsukis_sparrow
   types:
   - Personality
   decks:
@@ -2160,6 +2170,8 @@ cards:
     then that is what I will do."</i>
   collector_number: '66'
 - title: Nakanu Technique
+  creates:
+  - nakanus_creations
   types:
   - Strategy
   decks:
@@ -2517,6 +2529,8 @@ cards:
     a euphemism." - Yoritomo Emoto</i>
   collector_number: '73'
 - title: Shiba Kudome
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:

@@ -1958,6 +1958,8 @@ cards:
   flavor_text: <i>"Let their fields wither and fear gnaw at their empty bellies." - Iuchiban</i>
   collector_number: '134'
 - title: Poisoned Kiss
+  creates:
+  - token_minus1c
   types:
   - Spell
   decks:
@@ -2365,6 +2367,8 @@ cards:
   artist: Lisa Hunt
   collector_number: '157'
 - title: Shosuro Haru
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -3132,6 +3136,8 @@ cards:
     to test their strength against the Lion again. This was their moment.</i>
   collector_number: '73'
 - title: Vigilant Witch Hunter
+  creates:
+  - token_taint
   types:
   - Holding
   decks:

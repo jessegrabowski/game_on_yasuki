@@ -2625,6 +2625,8 @@ cards:
   flavor_text: <i>"Though the Empire has been salted, the land destroyed, we shall bring it back again
     to prosperity." - Hoshi Maseru</i>
 - title: Ninja Mystic
+  creates:
+  - token_shadow
   types:
   - Personality
   decks:
@@ -3074,6 +3076,8 @@ cards:
   rarity: Uncommon
   artist: Anthony Grabski
 - title: Political Favors
+  creates:
+  - token_favor
   types:
   - Holding
   decks:
@@ -3426,6 +3430,13 @@ cards:
   artist: April Lee
   flavor_text: <i>"Walk with faith, not by sight, and we shall win the day."</i>
 - title: Shinjo Hanari
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -4279,6 +4290,8 @@ cards:
     Akuma's deah, Kitsu Okura saved the Lion general and freed her clan from the oni's curse. At the end,
     she was a Lion." - from Death of Honor, Part III</i>
 - title: Togashi Mitsu
+  creates:
+  - token_fire
   types:
   - Personality
   decks:
@@ -4337,6 +4350,8 @@ cards:
   flavor_text: <i> "The Lady of the Moon taught me all I need to know of strength, and Lord Hoshi has
     taught me much of honor. Against the Shadow, I will need both."</i>
 - title: Toku
+  creates:
+  - token_exhaustion
   types:
   - Personality
   decks:

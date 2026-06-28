@@ -63,6 +63,8 @@ cards:
     Clans." - The Chronicles of Empress Iweko, Part II</i>
   collector_number: '2'
 - title: A Walking Death
+  creates:
+  - token_plague
   types:
   - Event
   decks:
@@ -280,6 +282,8 @@ cards:
     before the Right Hand of the Empress?"</i>
   collector_number: '93'
 - title: Akodo Shigetoshi
+  creates:
+  - infantry_follower
   types:
   - Personality
   decks:
@@ -799,6 +803,8 @@ cards:
   flavor_text: <i>"Indeed, Cranes are useful friends. But I can offer you so much more...."</i>
   collector_number: '134'
 - title: Bayushi Kurumi
+  creates:
+  - token_minus1f_minus1c
   types:
   - Personality
   decks:
@@ -1059,6 +1065,8 @@ cards:
     Ayano</i>
   collector_number: '339'
 - title: Blowdarts
+  creates:
+  - token_poison
   types:
   - Item
   decks:
@@ -1309,6 +1317,8 @@ cards:
     done is unleash us."</i>
   collector_number: '143'
 - title: Chuda Shuzo
+  creates:
+  - the_walking_dead
   types:
   - Personality
   decks:
@@ -1644,6 +1654,9 @@ cards:
     full strength against the Crane."</i>
   collector_number: '66'
 - title: Daidoji Yaichiro
+  creates:
+  - infantry_follower
+  - yaichiros_men
   types:
   - Personality
   decks:
@@ -2454,6 +2467,8 @@ cards:
   flavor_text: <i>"I have had enough of your lies!"</i>
   collector_number: '225'
 - title: Essence of Gaki-do
+  creates:
+  - spirit_of_gaki_do
   types:
   - Spell
   decks:
@@ -2650,6 +2665,8 @@ cards:
     "Ah, Shinjo-san. Crane and Scorpion: together they create the dance of the court."</i>'
   collector_number: '8'
 - title: Fields of the Dead (CE)
+  creates:
+  - the_walking_dead
   types:
   - Stronghold
   decks:
@@ -5128,6 +5145,8 @@ cards:
     would admit the latter." - Miya Shoin, the Imperial Herald</i>
   collector_number: '44'
 - title: Master Saleh
+  creates:
+  - the_walking_dead
   types:
   - Personality
   decks:
@@ -7058,6 +7077,8 @@ cards:
     no mortal has ever seen, save perhaps for the insidious members of the Spider Clan.</i>
   collector_number: '50'
 - title: Shio no Oni
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -7531,6 +7552,8 @@ cards:
     you." - Kuronada</i>
   collector_number: '285'
 - title: Summon Maseru no Oni
+  creates:
+  - maseru_no_oni
   types:
   - Spell
   decks:
@@ -8138,6 +8161,8 @@ cards:
     because of their abilities.</i>
   collector_number: '296'
 - title: Toshi Ranbo
+  creates:
+  - toshi_ranbo_guard
   types:
   - Region
   decks:
@@ -8778,6 +8803,13 @@ cards:
   flavor_text: <i>"Sisters, charge with me!"</i>
   collector_number: '167'
 - title: Utaku Meadows
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Region
   decks:
@@ -9012,6 +9044,10 @@ cards:
     and make use of your yari." - Akodo Shigetoshi</i>
   collector_number: '335'
 - title: We Stand Ready
+  creates:
+  - disposable_troops
+  - light_follower
+  - men_at_arms
   types:
   - Strategy
   decks:

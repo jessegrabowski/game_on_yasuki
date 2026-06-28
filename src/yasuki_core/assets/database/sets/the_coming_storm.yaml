@@ -176,6 +176,8 @@ cards:
   artist: Gong Studios
   collector_number: '31'
 - title: Arrival of the Ivory Champion
+  creates:
+  - ivory_champion
   types:
   - Strategy
   decks:
@@ -308,6 +310,8 @@ cards:
   artist: IFS
   collector_number: '8'
 - title: Battle Attendants
+  creates:
+  - armor
   types:
   - Follower
   decks:
@@ -581,6 +585,8 @@ cards:
   collector_number: '117'
   designer: Jeremy
 - title: Bookkeeper
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -1316,6 +1322,9 @@ cards:
   collector_number: '73'
   designer: Loki
 - title: Ide Kosaka
+  creates:
+  - salvage
+  - small_holding
   types:
   - Personality
   decks:
@@ -1889,6 +1898,9 @@ cards:
   collector_number: '41'
   designer: Randy
 - title: Kitsu Leiko
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -1944,6 +1956,8 @@ cards:
   collector_number: '32'
   designer: Randy
 - title: Kitsune Beiko
+  creates:
+  - beikos_bear
   types:
   - Personality
   decks:
@@ -2157,6 +2171,8 @@ cards:
   artist: J. Edwin Stevens
   collector_number: '14'
 - title: Matsu Marii
+  creates:
+  - lion_follower
   types:
   - Personality
   decks:
@@ -2320,6 +2336,8 @@ cards:
   collector_number: '34'
   designer: Randy
 - title: Mobile Troops
+  creates:
+  - token_plus1f
   types:
   - Follower
   decks:
@@ -2608,6 +2626,8 @@ cards:
   artist: Veronica V. Jones
   collector_number: '5'
 - title: Patairaku no Oni
+  creates:
+  - goblin_follower
   types:
   - Personality
   decks:
@@ -3021,6 +3041,8 @@ cards:
   collector_number: '60'
   designer: Jeremy
 - title: Shosuro Sadao
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -3094,6 +3116,8 @@ cards:
   collector_number: '108'
   designer: Trevor
 - title: Singing Blade
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -3548,6 +3572,8 @@ cards:
   collector_number: '100'
   designer: Jeremy
 - title: The Blessing
+  creates:
+  - token_wealth
   types:
   - Event
   decks:
@@ -3590,6 +3616,8 @@ cards:
   collector_number: '109'
   designer: Randy
 - title: The Dragon's Talon
+  creates:
+  - token_plus1f
   types:
   - Spell
   decks:
@@ -3656,6 +3684,8 @@ cards:
   collector_number: '111'
   designer: Jeremy
 - title: Thousand Year Rivalry
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -3928,6 +3958,8 @@ cards:
   artist: Gong Studios
   collector_number: '32'
 - title: Unsanctioned Strike
+  creates:
+  - token_minus1f_minus1c
   types:
   - Strategy
   decks:

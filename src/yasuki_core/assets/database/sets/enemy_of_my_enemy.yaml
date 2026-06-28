@@ -2748,6 +2748,13 @@ cards:
   flavor_text: <i>The Khan's new wall is well patrolled.</i>
   collector_number: '73'
 - title: Shinjo Tsuyoshi
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -2796,6 +2803,9 @@ cards:
   artist: Brad Williams
   collector_number: '155'
 - title: Shosuro Adeiko
+  creates:
+  - token_minus1c
+  - token_minus3f_minus1c
   types:
   - Personality
   decks:

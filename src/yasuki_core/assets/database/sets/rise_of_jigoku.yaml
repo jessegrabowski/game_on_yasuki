@@ -106,6 +106,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Ahuja
+  creates:
+  - pearl_strategy
   types:
   - Personality
   decks:
@@ -777,6 +779,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Earth's Yearning Clasp
+  creates:
+  - token_minus1f
   types:
   - Spell
   decks:
@@ -1105,6 +1109,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hida Izo
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1556,6 +1562,8 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kagami Sensei
   gold_production: -1
+  creates:
+  - crane_courtier_personality_0_2_3
   types:
   - Sensei
   decks:
@@ -1712,6 +1720,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsu Miro
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -1865,6 +1876,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Makeshift Fortifications
+  creates:
+  - token_plus1ps
   types:
   - Holding
   decks:
@@ -1985,6 +1998,8 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Mishime Sensei
   gold_production: -1
+  creates:
+  - oni_personality_variable_chi
   types:
   - Sensei
   decks:
@@ -2087,6 +2102,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Khedai
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -2116,6 +2133,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Maral
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -2330,6 +2349,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Radakast
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -2383,6 +2404,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Resplendent Pearl Cache
+  creates:
+  - pearl_strategy
   types:
   - Holding
   decks:
@@ -2482,6 +2505,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Rural Market
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -2522,6 +2547,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Sapphire Mine
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -2542,6 +2569,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Seven Heavens Strike
+  creates:
+  - token_fire
   types:
   - Strategy
   decks:
@@ -2631,6 +2660,13 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shinjo Fields
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Holding
   decks:
@@ -3052,6 +3088,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Crimson Mountain Oni
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -3172,6 +3210,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Realms Merge
+  creates:
+  - the_walking_dead
+  - zombie
   types:
   - Event
   decks:
@@ -3333,6 +3374,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tsuruchi Kinuyo
+  creates:
+  - token_arrow
   types:
   - Personality
   decks:
@@ -3791,6 +3834,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yobanjin Raids
+  creates:
+  - yobanjin_cavalry_personality_4_2
   types:
   - Strategy
   decks:
@@ -3862,6 +3907,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Zaiberu's Trinket
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:

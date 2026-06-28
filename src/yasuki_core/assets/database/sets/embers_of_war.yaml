@@ -342,6 +342,9 @@ cards:
   collector_number: '110'
   designer: Bryan
 - title: Celestial Sword of the Lion
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Item
   decks:
@@ -640,6 +643,8 @@ cards:
   collector_number: '90'
   designer: Bryan
 - title: Deadly Discipline
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -1521,6 +1526,9 @@ cards:
   collector_number: '46'
   designer: Bryan
 - title: Isawa Mina
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1808,6 +1816,9 @@ cards:
   collector_number: '121'
   designer: Duncan
 - title: Kitsu Miro
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -1901,6 +1912,8 @@ cards:
   collector_number: '26'
   designer: Loki
 - title: Kitsune Haruki
+  creates:
+  - harukis_deer
   types:
   - Personality
   decks:
@@ -2308,6 +2321,8 @@ cards:
   collector_number: '123'
   designer: Bryan
 - title: Perplexing Guests
+  creates:
+  - guest
   types:
   - Strategy
   decks:
@@ -3416,6 +3431,8 @@ cards:
   collector_number: '145'
   designer: Loki
 - title: The Cycle of Vengeance
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:

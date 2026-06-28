@@ -2412,6 +2412,9 @@ cards:
   artist: William O'Connor
   collector_number: '29'
 - title: Togashi Meiyu
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:

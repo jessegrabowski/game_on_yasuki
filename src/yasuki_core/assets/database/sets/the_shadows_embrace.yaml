@@ -305,6 +305,8 @@ cards:
   collector_number: '157'
   designer: Bryan
 - id: blood_of_the_preserver
+  creates:
+  - token_plus1f
   title: Blood of the Preserver
   types:
   - Item
@@ -1490,6 +1492,9 @@ cards:
   collector_number: '37'
   designer: Thomas
 - title: Kitsu Sorano
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -2009,6 +2014,8 @@ cards:
   collector_number: '128'
   designer: Loki
 - title: Niiro no Oni
+  creates:
+  - token_minus5f
   types:
   - Personality
   decks:
@@ -2098,6 +2105,9 @@ cards:
   collector_number: '129'
   designer: Thomas
 - title: Our Ancestor's Call
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Spell
   decks:
@@ -2452,6 +2462,8 @@ cards:
   collector_number: '11'
   designer: Thomas
 - title: Shiba Kudome
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -2620,6 +2632,8 @@ cards:
   collector_number: '139'
   designer: Bryan
 - title: Shosuro Keirei
+  creates:
+  - token_minus1f_minus1c
   types:
   - Personality
   decks:
@@ -3305,6 +3319,9 @@ cards:
   collector_number: '158'
   designer: Bryan
 - title: Two-Fold Virtue
+  creates:
+  - imposter
+  - imposter_2
   types:
   - Strategy
   decks:

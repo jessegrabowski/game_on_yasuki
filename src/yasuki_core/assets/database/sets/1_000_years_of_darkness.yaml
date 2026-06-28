@@ -235,6 +235,8 @@ cards:
     a better offer."</i>
   collector_number: '6'
 - title: Burial Mound
+  creates:
+  - token_corpse
   types:
   - Holding
   decks:
@@ -1901,6 +1903,8 @@ cards:
   flavor_text: <i>As Hoturi fell, the Hooded Ronin vanished with a mournful sigh.</i>
   collector_number: '5'
 - title: Togashi Mitsu
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:

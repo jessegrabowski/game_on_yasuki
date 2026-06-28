@@ -73,6 +73,8 @@ cards:
   flavor_text: <i>"Earth and sky, fire and water, Empire and the Kingdoms... all are the same if you but
     know how to look." - Isawa Kimi</i>
 - title: Alone with One's Thoughts
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -216,6 +218,8 @@ cards:
   artist: Edwin David
   flavor_text: <i>"Their songs can rouse the soul to war, or placate the fires within." - Asahina Beniha</i>
 - title: Blue Tanuki Bar
+  creates:
+  - token_sake
   types:
   - Holding
   decks:
@@ -235,6 +239,8 @@ cards:
   flavor_text: <i>"It is a den of sin and iniquity," said Akodo Shigetoshi. "But for the less disciplined
     samurai, it offers a night of respite from the war."
 - title: Blue Tanuki Serving Girl
+  creates:
+  - token_sake
   types:
   - Personality
   decks:
@@ -260,6 +266,8 @@ cards:
   flavor_text: <i>"This is one of the Lord Kincho's favorite blends, sama. I am certain you will enjoy
     it."</i>
 - title: Bottled Fire
+  creates:
+  - token_sake
   types:
   - Item
   decks:
@@ -455,6 +463,8 @@ cards:
   - Other
   rarity: Promo
 - title: Cultist Infiltrator
+  creates:
+  - token_minus1c
   types:
   - Follower
   decks:
@@ -985,6 +995,8 @@ cards:
   artist: IFS
   flavor_text: <i>"Who was Fudo really? None can say." - Tanari</i>
 - title: Heart of Fudo
+  creates:
+  - fudo
   types:
   - Item
   decks:
@@ -1497,6 +1509,8 @@ cards:
   - Other
   rarity: Promo
 - title: Liquid Courage
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -1818,6 +1832,9 @@ cards:
   flavor_text: <i>"Place a man upon a horse and you double his tactical value. If he is actually trained
     for such tactics, then his worth it twice that again." -Akodo Shigetoshi</i>
 - title: Nakadai
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -2023,6 +2040,8 @@ cards:
     Isawa Ochiai, Master of Fire</i>
   collector_number: '4'
 - title: Plague of Flesh
+  creates:
+  - zombie_peasant
   types:
   - Follower
   decks:
@@ -2090,6 +2109,8 @@ cards:
   rarity: Promo
   artist: David Horne
 - title: Rallying the Recruits
+  creates:
+  - token_recruiter
   types:
   - Strategy
   decks:
@@ -2129,6 +2150,8 @@ cards:
     To serve is my lot, and I embrace it with all that is in me." - Mirumoto Satobe</i>
   collector_number: '7'
 - title: Recruitment Center
+  creates:
+  - token_recruiter
   types:
   - Holding
   decks:
@@ -2803,6 +2826,8 @@ cards:
   flavor_text: <i>"He moves through the forest like a shadow. With his assistance, the Legion's ability
     to gather intelligence has increased tenfold." - The journals of Utagawa
 - title: Tsi Mokotsu
+  creates:
+  - tsi_weapon
   types:
   - Holding
   decks:
@@ -2824,6 +2849,8 @@ cards:
   flavor_text: <i>"Perhaps it will be used for display, or carried by a great warrior. I never know for
     certain, but I will find its true form regardless."</i>
 - title: Tsubo the Drunk
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:

@@ -1241,6 +1241,8 @@ cards:
     the heimin celebrated the Seven Fortunes, only the Kami of disease seemed to hear their prayers. -
     III.II
 - title: Shabura
+  creates:
+  - token_change
   types:
   - Personality
   decks:

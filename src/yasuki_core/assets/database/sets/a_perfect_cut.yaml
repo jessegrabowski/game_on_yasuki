@@ -1048,6 +1048,8 @@ cards:
     cannot release his past." - Isawa Hochiu</i>
   collector_number: '91'
 - title: Isawa Nodotai
+  creates:
+  - token_charge
   types:
   - Personality
   decks:
@@ -1097,6 +1099,8 @@ cards:
     can reach an agreement?" said Paneki with a faint grin.</i>
   collector_number: '132'
 - title: Kaiu Hosaru
+  creates:
+  - token_engineering
   types:
   - Personality
   decks:
@@ -2698,6 +2702,8 @@ cards:
     Dayu</i>
   collector_number: '1'
 - title: The Greatest Cost
+  creates:
+  - token_plus1f
   types:
   - Spell
   decks:
@@ -2894,6 +2900,8 @@ cards:
   flavor_text: <i>"Truth is too valuable to be given to the fool hat dares ask for it." - The New Tao</i>
   collector_number: '29'
 - title: Training Dojo
+  creates:
+  - token_training_dojo
   types:
   - Holding
   decks:

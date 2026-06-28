@@ -215,6 +215,8 @@ cards:
   collector_number: '46'
   designer: Loki
 - title: Band of Brothers
+  creates:
+  - little_brother
   types:
   - Follower
   decks:
@@ -313,6 +315,8 @@ cards:
   collector_number: '52'
   designer: Loki
 - title: Bayushi Jin-e
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -586,6 +590,8 @@ cards:
   collector_number: '79'
   designer: Thomas
 - title: Dagger of Crystal Wind
+  creates:
+  - token_obsession
   types:
   - Item
   decks:
@@ -642,6 +648,8 @@ cards:
   collector_number: '23'
   designer: Thomas
 - title: Daidoji Tametaka
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -1244,6 +1252,10 @@ cards:
   collector_number: '17'
   designer: Thomas
 - title: Hiruma Koru
+  creates:
+  - disposable_troops
+  - light_follower
+  - men_at_arms
   types:
   - Personality
   decks:
@@ -1743,6 +1755,9 @@ cards:
   collector_number: '90'
   designer: Bryan
 - title: Kitsu Tamao
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -1801,6 +1816,8 @@ cards:
   collector_number: '28'
   designer: Bryan
 - title: Kitsune Kichi
+  creates:
+  - kichis_shadow_badger
   types:
   - Personality
   decks:
@@ -1870,6 +1887,8 @@ cards:
   collector_number: '40'
   designer: Bryan
 - title: Kitsune Yamazaru
+  creates:
+  - yamazarus_monkey
   types:
   - Personality
   decks:
@@ -1899,6 +1918,8 @@ cards:
   collector_number: '41'
   designer: Bryan
 - title: Knowledge and Power
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -2380,6 +2401,8 @@ cards:
   collector_number: '49'
   designer: Loki
 - title: Never Without a Weapon
+  creates:
+  - unexpected_weapon
   types:
   - Strategy
   decks:
@@ -3095,6 +3118,8 @@ cards:
   collector_number: '8'
   designer: Bryan
 - title: The Broken Man
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -3271,6 +3296,8 @@ cards:
   collector_number: '3'
   designer: Loki
 - title: The Wind's Champion
+  creates:
+  - major_illusion
   types:
   - Spell
   decks:
@@ -3696,6 +3723,8 @@ cards:
   collector_number: '21'
   designer: Thomas
 - title: Yojimbo of Earth
+  creates:
+  - clay_yojimbo
   types:
   - Spell
   decks:
@@ -3718,6 +3747,8 @@ cards:
   collector_number: '109'
   designer: Duncan
 - title: Yoritomo Toganin
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:

@@ -3954,6 +3954,8 @@ cards:
   artist: Anthony Grabski
   collector_number: '125'
 - title: Isawa Oharu
+  creates:
+  - token_exhaustion
   types:
   - Personality
   decks:
@@ -4610,6 +4612,8 @@ cards:
   artist: IFS
   collector_number: '359'
 - title: Koutetsu Mukei
+  creates:
+  - token_plus2f
   types:
   - Item
   decks:
@@ -5641,6 +5645,8 @@ cards:
   flavor_text: <i>The mountains hide their secrets well.</i>
   collector_number: '262'
 - title: Muketsu
+  creates:
+  - token_minus2c
   types:
   - Personality
   decks:
@@ -7573,6 +7579,8 @@ cards:
     who do pay well enough to ensure that some small number of smugglers remain in operation.</i>
   collector_number: '50'
 - title: Sword of Victory
+  creates:
+  - token_plus2f
   types:
   - Item
   decks:

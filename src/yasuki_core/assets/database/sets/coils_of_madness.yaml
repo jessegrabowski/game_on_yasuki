@@ -173,6 +173,8 @@ cards:
   collector_number: '5'
   designer: Duncan
 - title: Armor of the Mad
+  creates:
+  - token_madness
   types:
   - Item
   decks:
@@ -360,6 +362,8 @@ cards:
   collector_number: '28'
   designer: Thomas
 - title: Bamboo Harvesters
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -1032,6 +1036,8 @@ cards:
   collector_number: '114'
   designer: Thomas
 - title: Foothold of the Mad
+  creates:
+  - token_madness
   types:
   - Stronghold
   decks:
@@ -1616,6 +1622,8 @@ cards:
   collector_number: '83'
   designer: Bryan
 - title: Iuchi Takaki
+  creates:
+  - token_madness
   types:
   - Personality
   decks:
@@ -1700,6 +1708,8 @@ cards:
   collector_number: '100'
   designer: Loki
 - title: Kakita Hideo, the Fallen Keeper
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -2056,6 +2066,8 @@ cards:
   collector_number: '74'
   designer: Duncan
 - title: Komori Miyano, the Shadow Wing
+  creates:
+  - bat
   types:
   - Personality
   decks:
@@ -2088,6 +2100,9 @@ cards:
     without the unpleasant price they pay."</i>
   collector_number: '84'
 - title: Kuni Renyu
+  creates:
+  - kiba
+  - renyus_dog
   types:
   - Personality
   decks:
@@ -2190,6 +2205,9 @@ cards:
   collector_number: '92'
   designer: Loki
 - title: Matsu Nimuro
+  creates:
+  - the_false_nimuro_experienced_2
+  - the_false_nimuro_experienced_2_2
   types:
   - Personality
   decks:
@@ -2626,6 +2644,8 @@ cards:
   collector_number: '129'
   designer: Thomas
 - title: P'an Ku
+  creates:
+  - token_madness
   types:
   - Personality
   decks:
@@ -2661,6 +2681,8 @@ cards:
   collector_number: '76'
   designer: Bryan
 - title: P'an Ku's Madness
+  creates:
+  - token_madness
   types:
   - Celestial
   decks:
@@ -3230,6 +3252,8 @@ cards:
   collector_number: '133'
   designer: Bryan
 - title: Temple of Madness
+  creates:
+  - token_madness
   types:
   - Holding
   decks:
@@ -3572,6 +3596,8 @@ cards:
     people one last time before we all disappear from the world."</i>
   collector_number: '48'
 - title: Togashi Mitsu
+  creates:
+  - token_fire
   types:
   - Personality
   decks:
@@ -3764,6 +3790,8 @@ cards:
   collector_number: '88'
   designer: Thomas
 - title: Tsuruchi
+  creates:
+  - token_arrow
   types:
   - Personality
   decks:

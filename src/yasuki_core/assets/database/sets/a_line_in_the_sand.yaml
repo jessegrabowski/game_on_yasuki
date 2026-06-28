@@ -82,6 +82,8 @@ cards:
   collector_number: '1'
   designer: Julien
 - title: Agasha Beiru
+  creates:
+  - token_wall
   types:
   - Personality
   decks:
@@ -664,6 +666,8 @@ cards:
   collector_number: '93'
   designer: Julien
 - title: Daidoji Hirota
+  creates:
+  - token_wealth
   types:
   - Personality
   decks:
@@ -692,6 +696,8 @@ cards:
   collector_number: '25'
   designer: Trevor
 - title: Daidoji Natsuki
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:
@@ -1336,6 +1342,8 @@ cards:
   collector_number: '8'
   designer: Loki
 - title: House of Loose Silk
+  creates:
+  - token_conspiracy
   types:
   - Holding
   decks:
@@ -1405,6 +1413,8 @@ cards:
   collector_number: '83'
   designer: Loki
 - title: Ide Ryou
+  creates:
+  - token_wealth
   types:
   - Personality
   decks:
@@ -1567,6 +1577,8 @@ cards:
   collector_number: '50'
   designer: Julien
 - title: Isawa Orinoko
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:
@@ -1681,6 +1693,9 @@ cards:
   collector_number: '23'
 - title: Kagako Sensei
   gold_production: 0
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Sensei
   decks:
@@ -1915,6 +1930,8 @@ cards:
   collector_number: '41'
   designer: Loki
 - title: Kitsune Nakumi
+  creates:
+  - nakumis_fox
   types:
   - Personality
   decks:
@@ -1974,6 +1991,8 @@ cards:
   designer: Jeremy
 - title: Kobi Sensei
   gold_production: 0
+  creates:
+  - token_conspiracy
   types:
   - Sensei
   decks:
@@ -2075,6 +2094,8 @@ cards:
   designer: Loki
 - title: Kuroko Sensei
   gold_production: -1
+  creates:
+  - token_clout
   types:
   - Sensei
   decks:
@@ -2737,6 +2758,8 @@ cards:
   collector_number: '134'
   designer: Julien
 - title: Oboro, the Liar
+  creates:
+  - token_conspiracy
   types:
   - Personality
   decks:
@@ -2768,6 +2791,8 @@ cards:
   collector_number: '71'
   designer: Jeremy
 - title: Official Sanction
+  creates:
+  - token_favor
   types:
   - Item
   decks:
@@ -3182,6 +3207,8 @@ cards:
   collector_number: '113'
   designer: Loki
 - title: Shiba Tuoko
+  creates:
+  - asako_ontaiko
   types:
   - Personality
   decks:
@@ -3586,6 +3613,8 @@ cards:
   collector_number: '101'
   designer: Loki
 - title: Startling Lessons
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -3655,6 +3684,8 @@ cards:
   collector_number: '102'
   designer: Bryan
 - title: Stones of Purity
+  creates:
+  - token_plus1f
   types:
   - Spell
   decks:
@@ -3787,6 +3818,8 @@ cards:
   collector_number: '115'
   designer: Randy
 - title: Susumu Jaru
+  creates:
+  - token_clout
   types:
   - Personality
   decks:
@@ -3816,6 +3849,8 @@ cards:
   collector_number: '64'
   designer: Jeremy
 - title: Susumu Tanjin
+  creates:
+  - token_clout
   types:
   - Personality
   decks:
@@ -3843,6 +3878,8 @@ cards:
   collector_number: '65'
   designer: Jeremy
 - title: Suzune, the Coy
+  creates:
+  - kikuchiyo
   types:
   - Personality
   decks:
@@ -3895,6 +3932,8 @@ cards:
   collector_number: '162'
 - title: Takeru Sensei
   gold_production: 0
+  creates:
+  - token_wealth
   types:
   - Sensei
   decks:
@@ -3998,6 +4037,9 @@ cards:
   collector_number: '34'
   designer: Bryan
 - title: Tamori Wataru
+  creates:
+  - token_addiction
+  - watarus_potion
   types:
   - Personality
   decks:
@@ -4196,6 +4238,8 @@ cards:
   collector_number: '36'
   designer: Bryan
 - title: Toshigoku's Blade
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -4654,6 +4698,8 @@ cards:
   collector_number: '24'
   designer: Randy
 - title: Yogo Gingo
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:

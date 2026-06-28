@@ -681,6 +681,13 @@ cards:
   flavor_text: <i>"Suddenly, Retsuko spun and plunged a blade into our lord's belly, then disappeared
     into the shadows while our lord breathed his last." - Shiba Kyo</i>
 - title: Shinjo Yokatsu
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:

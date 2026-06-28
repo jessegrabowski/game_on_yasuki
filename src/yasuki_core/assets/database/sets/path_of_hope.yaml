@@ -1007,6 +1007,8 @@ cards:
   flavor_text: <i>"Drive the filthy beast from the forest," the Unicorn ordered.</i>
   collector_number: '116'
 - title: Forest Killer Cavern
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:

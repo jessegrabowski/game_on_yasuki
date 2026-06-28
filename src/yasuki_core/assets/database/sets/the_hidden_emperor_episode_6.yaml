@@ -408,6 +408,8 @@ cards:
   rarity: Uncommon
   artist: Ron Chironna
 - title: Hoshi Wayan
+  creates:
+  - token_tattoo
   types:
   - Personality
   decks:

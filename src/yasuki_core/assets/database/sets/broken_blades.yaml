@@ -369,6 +369,8 @@ cards:
   flavor_text: <i>"Aikune has found what?" - Isawa Taeruko</i>
   collector_number: '87'
 - title: Blessed Ward
+  creates:
+  - token_ward
   types:
   - Strategy
   decks:
@@ -2497,6 +2499,13 @@ cards:
   flavor_text: <i>"If you stand against the shogun, Crane, then you will stand no more."</i>
   collector_number: '148'
 - title: Shinjo Noriyori
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -2942,6 +2951,8 @@ cards:
   flavor_text: <i>"Kitao? Kumiko? Whats the difference?" - Moshi Kalani</i>
   collector_number: '102'
 - title: Traveling Merchants
+  creates:
+  - token_merchant
   types:
   - Event
   decks:

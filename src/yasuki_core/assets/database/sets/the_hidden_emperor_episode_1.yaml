@@ -407,6 +407,8 @@ cards:
   flavor_text: <i>"When you were born, you cried and the world rejoiced. Live so that when you die, the
     world cries and you rejoice."</i>
 - title: Journey to the Burning Sands
+  creates:
+  - token_plus1f_plus1c
   types:
   - Strategy
   decks:

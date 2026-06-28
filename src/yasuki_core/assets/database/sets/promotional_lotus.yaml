@@ -287,6 +287,8 @@ cards:
   artist: Chris Seaman
   flavor_text: <i>The Shogun's rikugunshokan is among the most respected commanders in the Empire.</i>
 - title: Dark Divination
+  creates:
+  - token_corruption
   types:
   - Spell
   decks:

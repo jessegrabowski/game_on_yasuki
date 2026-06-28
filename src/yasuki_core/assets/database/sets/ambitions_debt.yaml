@@ -77,6 +77,8 @@ cards:
   flavor_text: <i>Though his wound was still covered in blood, Dorai smiled through his pain. "You cannot
     imagine the things I have seen," he whispered.</i>
 - title: Asahina Tsukiyoka
+  creates:
+  - token_nemuranai
   types:
   - Personality
   decks:
@@ -774,6 +776,8 @@ cards:
   flavor_text: <i>"Three are found, but one is missing... lost somewhere beyond the Empire's borders."
     - Rodrigo</i>
 - title: Family Shrine
+  creates:
+  - token_shrine
   types:
   - Holding
   decks:
@@ -961,6 +965,8 @@ cards:
   flavor_text: <i>He stands alone, his divine blood calling for succor as the gateway to Jigoku tears
     and the spirits die.</i>
 - title: Gyosho
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:
@@ -1553,6 +1559,8 @@ cards:
   artist: Lissanne Lake
 - title: Kage Sensei
   gold_production: 0
+  creates:
+  - token_sleeper
   types:
   - Sensei
   decks:
@@ -1738,6 +1746,8 @@ cards:
   artist: Mike Raabe
   flavor_text: <i>Four Masters-yet one empty chair stands above the wrath of the sea.</i>
 - title: Large Shrine
+  creates:
+  - token_shrine
   types:
   - Holding
   decks:
@@ -2781,6 +2791,8 @@ cards:
   flavor_text: <i>"What do you call your weapon, samurai?" the ronin asked him. "Pincers and Tail," the
     Scorpion replied, then showed him why.</i>
 - title: Shugenja Students
+  creates:
+  - token_fire
   types:
   - Follower
   decks:

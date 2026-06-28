@@ -1738,6 +1738,8 @@ cards:
   rarity: Uncommon
   artist: Jerry Tiritilli
 - title: Nightmares of Iuchiban
+  creates:
+  - token_nightmare
   types:
   - Strategy
   decks:
@@ -2880,6 +2882,8 @@ cards:
   rarity: Uncommon
   artist: Matthew Cavotta
 - title: Toku
+  creates:
+  - token_exhaustion
   types:
   - Personality
   decks:
@@ -3170,6 +3174,8 @@ cards:
   flavor_text: <i>"Bad luck and bad winds! Why do I play this game? ...Ah, hand me the dice, and let me
     roll again..." - Yoritomo Nodoteki</i>
 - title: Yotsu Seou
+  creates:
+  - token_shuriken
   types:
   - Personality
   decks:

@@ -550,6 +550,8 @@ cards:
   collector_number: '76'
   designer: Thomas
 - title: Calling the Darkness
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -811,6 +813,9 @@ cards:
   collector_number: '59'
   designer: Bryan
 - title: Daigotsu Hashibei
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -1108,6 +1113,8 @@ cards:
   collector_number: '93'
   designer: Bryan
 - title: Eye of the Sword
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -1854,6 +1861,8 @@ cards:
   collector_number: '126'
   designer: Loki
 - title: Kitsune Yuribara
+  creates:
+  - yuribaras_butterflies
   types:
   - Personality
   decks:
@@ -2582,6 +2591,8 @@ cards:
   collector_number: '133'
   designer: Thomas
 - title: Recruitment Effort
+  creates:
+  - hired_samurai
   types:
   - Strategy
   decks:
@@ -3031,6 +3042,8 @@ cards:
   collector_number: '88'
   designer: Bryan
 - title: Suck the Marrow
+  creates:
+  - token_poison
   types:
   - Strategy
   decks:

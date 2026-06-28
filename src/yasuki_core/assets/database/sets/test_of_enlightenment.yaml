@@ -726,6 +726,8 @@ cards:
     the One Tribe!"</i>
   collector_number: '51'
 - title: Chuda Ruri
+  creates:
+  - token_minus4c
   types:
   - Personality
   decks:

@@ -4824,6 +4824,8 @@ cards:
     wastes. If we could discover why, we could strike a great blow against our ancient enemy." - The Journal
     of Kuni Mokuna</i>
 - title: Ratling Conscripts
+  creates:
+  - token_plus1f
   types:
   - Follower
   decks:
@@ -5154,6 +5156,8 @@ cards:
   rarity: Rare
   artist: Ron Chironna
 - title: River Delta
+  creates:
+  - naga
   types:
   - Region
   decks:
@@ -6274,6 +6278,8 @@ cards:
   rarity: Fixed
   artist: KC Lancaster
 - title: The Hidden Temples of the Naga
+  creates:
+  - naga
   types:
   - Stronghold
   decks:
@@ -6635,6 +6641,8 @@ cards:
   rarity: Fixed
   artist: Wackwitz & Daily
 - title: Toku
+  creates:
+  - token_exhaustion
   types:
   - Personality
   decks:

@@ -966,6 +966,8 @@ cards:
   flavor_text: <i>"Tales of valor strengthen the will."</i>
   collector_number: '127'
 - title: Earth Becomes Sky
+  creates:
+  - token_minus5f_minus2c
   types:
   - Spell
   decks:
@@ -1701,6 +1703,8 @@ cards:
   artist: Edwin David
   collector_number: '103'
 - title: Kokujin Akae
+  creates:
+  - token_minus1f_minus1c
   types:
   - Personality
   decks:
@@ -1828,6 +1832,8 @@ cards:
   artist: David Horne
   collector_number: '7'
 - title: Kyoden's Technique
+  creates:
+  - token_minus2f_minus2c
   types:
   - Strategy
   decks:
@@ -2198,6 +2204,9 @@ cards:
   artist: Britt Martin
   collector_number: '51'
 - title: One-Sided Melee
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Strategy
   decks:
@@ -2320,6 +2329,8 @@ cards:
   flavor_text: <i>"Come then!" Hirotsugu roared. "Come and take me!"</i>
   collector_number: '146'
 - title: Perfection
+  creates:
+  - token_plus2f_plus1c
   types:
   - Strategy
   decks:
@@ -2718,6 +2729,8 @@ cards:
   flavor_text: <i>Kaigen's Island has treacherous slopes on all sides.</i>
   collector_number: '114'
 - title: Strength
+  creates:
+  - token_plus2f
   types:
   - Strategy
   decks:
@@ -3145,6 +3158,8 @@ cards:
     to employ their own.</i>
   collector_number: '53'
 - title: Toku Butaka
+  creates:
+  - token_minus1c
   types:
   - Personality
   decks:

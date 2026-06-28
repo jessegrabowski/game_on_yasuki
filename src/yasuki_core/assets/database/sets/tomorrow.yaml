@@ -251,6 +251,8 @@ cards:
   artist: Paul (Prof.) Herbert
   flavor_text: <i>"Without One Tribe, Transcendants fall before Tomorrow."</i>
 - title: Essence of Jigoku
+  creates:
+  - token_corruption
   types:
   - Spell
   decks:
@@ -434,6 +436,8 @@ cards:
   flavor_text: <i>Within it, see the truth.</i>
   collector_number: '6'
 - title: Kakita's Edge
+  creates:
+  - token_edge
   types:
   - Strategy
   decks:
@@ -902,6 +906,8 @@ cards:
   flavor_text: <i>"I go to sail the seas of Heaven, Amika-sama. The Unicorn would be honored to have a
     Mantis on this voyage." - Horiuchi Rikako</i>
 - title: The Blasted Lands
+  creates:
+  - token_minus1f_minus1c
   types:
   - Region
   decks:
@@ -1043,6 +1049,8 @@ cards:
   rarity: Fixed
   artist: Janine Johnston
 - title: Togashi's Devoted
+  creates:
+  - token_plus2f
   types:
   - Follower
   decks:
@@ -1187,6 +1195,8 @@ cards:
   artist: Charles Urbach
   flavor_text: <i>"The Sword of Yotsu stands watch over Kyuden Otomo."</i>
 - title: Z'chkir
+  creates:
+  - ratling_token
   types:
   - Personality
   decks:
