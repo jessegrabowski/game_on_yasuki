@@ -14,6 +14,8 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from starlette.responses import RedirectResponse
 from starlette.websockets import WebSocket
 
+from yasuki_web.rate_limit import limiter
+
 from yasuki_core.accounts import oauth_state, sessions, users
 from yasuki_core.accounts.db import get_accounts_connection
 
@@ -197,6 +199,7 @@ async def user_for_websocket(websocket: WebSocket) -> dict | None:
 
 
 @router.get("/auth/login")
+@limiter.limit("30/minute")
 async def login(request: Request):
     config = _require_config()
     state = secrets.token_urlsafe(32)
