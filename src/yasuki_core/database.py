@@ -473,6 +473,19 @@ def get_cards_by_names(names: list[str]) -> list[dict]:
             return cards
 
 
+def all_card_ids() -> set[str]:
+    """Every card id in the card database — the valid-id universe for deck-storage integrity checks.
+
+    Returns
+    -------
+    card_ids : set of str
+        All ids in ``cards``, including back faces, so any id that genuinely exists counts as known.
+    """
+    with get_db_connection() as conn, conn.cursor() as cur:
+        cur.execute("SELECT card_id FROM cards")
+        return {row["card_id"] for row in cur.fetchall()}
+
+
 def query_all_formats() -> list[str]:
     """
     Fetch all format names from database.
