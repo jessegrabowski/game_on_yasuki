@@ -1,0 +1,1923 @@
+set: Tokens
+cards:
+- id: token_addiction
+  title: Addiction Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_affection
+  title: Affection Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_arrow
+  title: Arrow Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_aura
+  title: Aura Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_blood
+  title: Blood Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_change
+  title: Change Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -2
+  chi: 3
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_charge
+  title: Charge Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_charging
+  title: Charging Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_chi
+  title: Chi Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_cloud
+  title: Cloud Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_clout
+  title: Clout Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_conspiracy
+  title: Conspiracy Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_corpse
+  title: Corpse Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_corruption
+  title: Corruption Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_counter
+  title: Counter Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: Unnamed counters used purely as a tally (e.g. Secrets on the Wind banks tokens equal to Chi, spent
+    later). (Token — attach for its modifier; not deckable)
+- id: token_curse
+  title: Curse Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_doom
+  title: Doom Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_doom_of_the_dragon
+  title: Doom of the Dragon Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_edge
+  title: Edge Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_engineering
+  title: Engineering Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_erosion
+  title: Erosion Token
+  types:
+  - Token
+  decks:
+  - Other
+  province_strength: -1
+  gold_cost: 0
+  is_proxy: true
+  text: -1 Province Strength on the host Province. (Token — attach for its modifier; not deckable)
+- id: token_exhaustion
+  title: Exhaustion Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_explosive
+  title: Explosive Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: Marks an enemy Personality; enables payoff effects against tokened targets. (Token — attach for
+    its modifier; not deckable)
+- id: token_favor
+  title: Favor Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_fire
+  title: Fire Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: +1 Force. Often accumulated then spent (e.g. destroyed for a melee burst). (Token — attach for
+    its modifier; not deckable)
+- id: token_flow
+  title: Flow Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: +1 Chi to the host Personality. (Token — attach for its modifier; not deckable)
+- id: token_frenzy
+  title: Frenzy Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_fury
+  title: Fury Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_glass
+  title: Glass Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_goblet
+  title: Goblet Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_guard
+  title: Guard Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: No stat modifier on its own; cards key off having Guard tokens (e.g. Elite at 2+). (Token — attach
+    for its modifier; not deckable)
+- id: token_haunted
+  title: Haunted Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_hunted
+  title: Hunted Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_infamy
+  title: Infamy Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_influence
+  title: Influence Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: 'Alternate win condition: begin a turn with 50+ Influence tokens to win the game. (Token — attach
+    for its modifier; not deckable)'
+- id: token_jade
+  title: Jade Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_lesson
+  title: Lesson Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: +1 Force; several cards scale an effect by their number of Lesson tokens. (Token — attach for
+    its modifier; not deckable)
+- id: token_madness
+  title: Madness Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_maho
+  title: Maho Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_master
+  title: Master Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_mastery
+  title: Mastery Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_merchant
+  title: Merchant Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus1c
+  title: -1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus1f
+  title: -1F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus1f_minus1c
+  title: -1F/-1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus1gp
+  title: -1GP Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_production: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus1ps
+  title: -1PS Token
+  types:
+  - Token
+  decks:
+  - Other
+  province_strength: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus2c
+  title: -2C Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus2f
+  title: -2F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus2f_minus2c
+  title: -2F/-2C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -2
+  chi: -2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus2gp
+  title: -2GP Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_production: -2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus3f
+  title: -3F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -3
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus3f_minus1c
+  title: -3F/-1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -3
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus4c
+  title: -4C Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -4
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus4f
+  title: -4F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -4
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus5f
+  title: -5F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -5
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_minus5f_minus2c
+  title: -5F/-2C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -5
+  chi: -2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_mountain
+  title: Mountain Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_nemuranai
+  title: Nemuranai Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_nightmare
+  title: Nightmare Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_oath
+  title: Oath Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_obsession
+  title: Obsession Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_omen
+  title: Omen Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_pearl
+  title: Pearl Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plague
+  title: Plague Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus1c
+  title: +1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus1f
+  title: +1F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus1f_minus1c
+  title: +1F/-1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus1f_plus1c
+  title: +1F/+1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus1f_plus1c_plus1ph
+  title: +1F/+1C/+1PH Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus1gp
+  title: +1GP Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_production: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus1ph
+  title: +1PH Token
+  types:
+  - Token
+  decks:
+  - Other
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus1ps
+  title: +1PS Token
+  types:
+  - Token
+  decks:
+  - Other
+  province_strength: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus2f
+  title: +2F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus2f_minus1c
+  title: +2F/-1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 2
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus2f_plus1c
+  title: +2F/+1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 2
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus2f_plus2c
+  title: +2F/+2C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 2
+  chi: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus2ph
+  title: +2PH Token
+  types:
+  - Token
+  decks:
+  - Other
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus3f
+  title: +3F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 3
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_plus4f_minus1c
+  title: +4F/-1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 4
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_poison
+  title: Poison Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: -1 Force and -1 Chi to the host Personality. Reducing Chi to 0 can be lethal. (Token — attach
+    for its modifier; not deckable)
+- id: token_porcelain
+  title: Porcelain Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_power
+  title: Power Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_prophecy
+  title: Prophecy Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_rage
+  title: Rage Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: No stat modifier; effects scale by the number of Rage tokens. (Token — attach for its modifier;
+    not deckable)
+- id: token_recruit
+  title: Recruit Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: +1 Force; Obsidian Legion Followers scale strength by Recruit tokens. (Token — attach for its
+    modifier; not deckable)
+- id: token_recruiter
+  title: Recruiter Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_remembrance
+  title: Remembrance Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_revenge
+  title: Revenge Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_sake
+  title: Sake Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_scroll
+  title: Scroll Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_seduction
+  title: Seduction Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_sensei
+  title: Sensei Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_shadow
+  title: Shadow Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_shrine
+  title: Shrine Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_shuriken
+  title: Shuriken Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_sincerity
+  title: Sincerity Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: Spent to pay for Sincerity cards; many 'Sincerity:' abilities trigger off removing tokens. (Token
+    — attach for its modifier; not deckable)
+- id: token_sleep
+  title: Sleep Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: While present, the host straightens by removing a Sleep token instead of untapping. (Token — attach
+    for its modifier; not deckable)
+- id: token_sleeper
+  title: Sleeper Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_sling
+  title: Sling Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_soul
+  title: Soul Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_spirit
+  title: Spirit Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_storage
+  title: Storage Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_structure
+  title: Structure Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: Placed on a Province; removed to swing its strength +2PS or -2PS. (Token — attach for its modifier;
+    not deckable)
+- id: token_tactician
+  title: Tactician Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_taint
+  title: Taint Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_tattoo
+  title: Tattoo Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_tidal
+  title: Tidal Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_training_dojo
+  title: Training Dojo Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_unstitched
+  title: Unstitched Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_valor
+  title: Valor Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_venom
+  title: Venom Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_vial
+  title: Vial Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_victory
+  title: Victory Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_void
+  title: Void Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_wall
+  title: Wall Token
+  types:
+  - Token
+  decks:
+  - Other
+  province_strength: 1
+  gold_cost: 0
+  is_proxy: true
+  text: +1 Province Strength (printed as '+1 strength') on the host Province. (Token — attach for its
+    modifier; not deckable)
+- id: token_wanted
+  title: Wanted Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_ward
+  title: Ward Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_wasting
+  title: Wasting Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_wealth
+  title: Wealth Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_production: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Raises the host Holding's Gold Production by 1. Pirate/Raid economy fuel; many effects spend (destroy)
+    it. (Token — attach for its modifier; not deckable)
+- id: token_web
+  title: Web Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: token_worker
+  title: Worker Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — attach for its modifier; not deckable)
+- id: ancestor_yojimbo_follower_0f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ancestor
+  - Spirit
+  - Yojimbo
+  - Expendable
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: armor_item_plus2f
+  title: Item Token
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Armor
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: berserker_cavalry_follower_1f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Berserker
+  - Cavalry
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: blossom_oni_follower_1f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Blossom
+  - Nonhuman
+  - Oni
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: courage_follower_1f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Courage
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: courage_follower_2f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Courage
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: courtier_0_3_2
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Courtier
+  force: 0
+  chi: 3
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: courtier_expendable_personality_0_2_2
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Courtier
+  - Expendable
+  force: 0
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: 'Political Open, bow: a target player gains or loses 1 Honor. (Token — created in play; not deckable)'
+- id: courtier_personality_0_2_2
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Courtier
+  force: 0
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: crane_courtier_personality_0_2_3
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Crane
+  keywords:
+  - Courtier
+  force: 0
+  chi: 2
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: Before your turn ends, banish it to gain 2 Honor. (Token — created in play; not deckable)
+- id: dragon_yojimbo_personality_2_2_2
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Dragon
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: earth_fire_terrain_strategy
+  title: Strategy Token
+  types:
+  - Strategy
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Terrain
+  - Earth
+  - Fire
+  gold_cost: 0
+  is_proxy: true
+  text: 'Grants the controller: Repeatable Battle: Bow your target Ring or Earth Personality to make a
+    ranged 3. Put into play. (Token — created in play; not deckable)'
+- id: expendable_personality_0_2_1
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Expendable
+  force: 0
+  chi: 2
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: fushicho_personality_3_2_3
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Fushicho
+  - Nonhuman
+  - Cavalry
+  - Fire
+  force: 3
+  chi: 2
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: Banished at end of turn. (Token — created in play; not deckable)
+- id: gaijin_yodotai_follower_1f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Gaijin
+  - Yodotai
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: goose_spirit_personality_1_2_3
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Goose
+  - Nonhuman
+  - Spirit
+  force: 1
+  chi: 2
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: horror_shadowlands_personality
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Horror
+  - Nonhuman
+  - Shadowlands
+  gold_cost: 0
+  is_proxy: true
+  text: Gold Cost / Force / Chi equal to the targets' totals. (Token — created in play; not deckable)
+- id: mantis_samurai_naval_personality_2_1_2
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Mantis
+  keywords:
+  - Samurai
+  - Naval
+  force: 2
+  chi: 1
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: mercenary_ronin_personality_2_2_1
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Mercenary
+  - Ronin
+  - Samurai
+  force: 2
+  chi: 2
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: moth_spirit_follower_0f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Moth
+  - Nonhuman
+  - Spirit
+  - Cavalry
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+  text: 'Yu: Gain 2 Honor. (Token — created in play; not deckable)'
+- id: naga_zealot_personality_2_2_1
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Naga
+  - Nonhuman
+  - Zealot
+  force: 2
+  chi: 2
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: oni_personality_2_1
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  force: 2
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Created in home. (Token — created in play; not deckable)
+- id: oni_personality_3_1_0
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  force: 3
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: oni_personality_variable_chi
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  - Oni
+  chi: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Force equal to the target's Chi. (Token — created in play; not deckable)
+- id: orochi_follower_2f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Orochi
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: orochi_follower_3f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Orochi
+  force: 3
+  gold_cost: 0
+  is_proxy: true
+  text: 'Battle: ranged 3. (Token — created in play; not deckable)'
+- id: ox_spirit_personality_6_2_3
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ox
+  - Nonhuman
+  - Spirit
+  force: 6
+  chi: 2
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: panda_berserker_follower_2f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Berserker
+  - Nonhuman
+  - Panda
+  - Spirit
+  - Cavalry
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Banished after the phase ends. (Token — created in play; not deckable)
+- id: pearl_strategy
+  title: Strategy Token
+  types:
+  - Strategy
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Pearl
+  gold_cost: 0
+  is_proxy: true
+  text: Put into play. (Token — created in play; not deckable)
+- id: pirate_naval_personality
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Mantis
+  keywords:
+  - Pirate
+  - Naval
+  force: 2
+  chi: 1
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Usually banished at end of turn. (Token — created in play; not deckable)
+- id: ram_spirit_personality_3_1_3
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ram
+  - Nonhuman
+  - Spirit
+  - Cavalry
+  force: 3
+  chi: 1
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: 'Battle, bow: melee 2. (Token — created in play; not deckable)'
+- id: ratling_scout_follower_1f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  - Scout
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: ratling_scout_personality_1_1_1
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  - Scout
+  force: 1
+  chi: 1
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Created bowed. (Token — created in play; not deckable)
+- id: ronin_samurai_personality_4_4_4
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Paragon
+  - Ronin
+  - Samurai
+  - Duelist
+  - Tactician
+  force: 4
+  chi: 4
+  personal_honor: 4
+  gold_cost: 0
+  is_proxy: true
+  text: Banished after the battle resolves. (Token — created in play; not deckable)
+- id: samurai_yojimbo_2_2_2
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: scorpion_yojimbo_personality_2_2_0
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Scorpion
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: 'Yu: A target player loses 2 Honor. (Token — created in play; not deckable)'
+- id: shugenja_2_2_2
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shugenja
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: tanuki_samurai_personality_2_2_2
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Tanuki Clan
+  - Samurai
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Created in home. (Token — created in play; not deckable)
+- id: undead_cavalry_follower_2f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Undead
+  - Cavalry
+  - Shadowlands
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: undead_cavalry_follower_2f_fear2
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Undead
+  - Cavalry
+  - Shadowlands
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: 'Battle: fear 2. (Token — created in play; not deckable)'
+- id: undead_follower_2f
+  title: Follower Token
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Undead
+  - Shadowlands
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: victim_personality_0_3_0
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Victim
+  force: 0
+  chi: 3
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: weapon_item_claw_plus1f
+  title: Item Token
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Claw
+  - One-Handed
+  - Weapon
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: weapon_item_sword_plus1f
+  title: Item Token
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - One-Handed
+  - Sword
+  - Weapon
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: weapon_item_sword_plus2f_plus1c
+  title: Item Token
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - One-Handed
+  - Sword
+  - Weapon
+  force: 2
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: yobanjin_cavalry_personality_4_2
+  title: Personality Token
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Yobanjin
+  - Cavalry
+  force: 4
+  chi: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
