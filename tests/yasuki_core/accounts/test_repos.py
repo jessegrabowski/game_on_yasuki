@@ -2,7 +2,7 @@ from datetime import timedelta
 
 import pytest
 
-from yasuki_core.accounts import oauth_state, sessions, users
+from yasuki_core.accounts import banlist, oauth_state, sessions, users
 
 
 @pytest.fixture(autouse=True)
@@ -74,6 +74,95 @@ def test_delete_user_sessions_revokes_every_session(accounts_conn):
     sessions.delete_user_sessions(accounts_conn, user["id"])
     assert sessions.resolve_session(accounts_conn, first) is None
     assert sessions.resolve_session(accounts_conn, second) is None
+
+
+def _give_user_a_deck(accounts_conn, user_id: int) -> int:
+    with accounts_conn.cursor() as cur:
+        cur.execute(
+            "INSERT INTO decks (slug, owner_id, name) VALUES ('s', %s, 'D') RETURNING id",
+            (user_id,),
+        )
+        deck_id = cur.fetchone()["id"]
+        cur.execute(
+            "INSERT INTO deck_cards (deck_id, card_id, card_name, side, quantity) "
+            "VALUES (%s, 'c', 'C', 'dynasty', 1)",
+            (deck_id,),
+        )
+        return deck_id
+
+
+def test_delete_account_erases_the_user_and_cascades_sessions_and_decks(accounts_conn):
+    user = users.upsert_user(accounts_conn, "sub", "ada@example.com", True, "Ada")
+    sessions.create_session(accounts_conn, user["id"], timedelta(days=1))
+    deck_id = _give_user_a_deck(accounts_conn, user["id"])
+
+    assert users.delete_account(accounts_conn, user["id"]) is True
+    assert users.get_user(accounts_conn, user["id"]) is None
+    with accounts_conn.cursor() as cur:
+        for table, column in (("sessions", "user_id"), ("decks", "owner_id")):
+            cur.execute(f"SELECT count(*) AS n FROM {table} WHERE {column} = %s", (user["id"],))
+            assert cur.fetchone()["n"] == 0
+        cur.execute("SELECT count(*) AS n FROM deck_cards WHERE deck_id = %s", (deck_id,))
+        assert cur.fetchone()["n"] == 0
+
+
+def test_deleting_a_user_in_good_standing_leaves_no_tombstone(accounts_conn):
+    user = users.upsert_user(accounts_conn, "clean", "clean@example.com", True, "Clean")
+    users.delete_account(accounts_conn, user["id"])
+    assert banlist.is_banned(accounts_conn, "clean", "clean@example.com") is False
+
+
+def test_a_retained_tombstone_blocks_a_banned_identity_after_deletion(accounts_conn):
+    user = users.upsert_user(accounts_conn, "bad", "bad@example.com", True, "Bad")
+    users.ban_user(accounts_conn, user["id"], "spam")
+    users.delete_account(accounts_conn, user["id"])
+    assert users.get_user(accounts_conn, user["id"]) is None
+    assert banlist.is_banned(accounts_conn, "bad", "bad@example.com") is True
+
+
+def test_ban_user_flags_revokes_sessions_and_tombstones(accounts_conn):
+    user = users.upsert_user(accounts_conn, "bad", "bad@example.com", True, "Bad")
+    token = sessions.create_session(accounts_conn, user["id"], timedelta(days=1))
+    assert users.ban_user(accounts_conn, user["id"], "cheating") is True
+    assert sessions.resolve_session(accounts_conn, token) is None
+    assert banlist.is_banned(accounts_conn, "bad", "bad@example.com") is True
+
+
+def test_ban_user_rolls_back_when_tombstoning_fails(accounts_conn, monkeypatch):
+    user = users.upsert_user(accounts_conn, "bad", "bad@example.com", True, "Bad")
+    token = sessions.create_session(accounts_conn, user["id"], timedelta(days=1))
+
+    def boom(*args, **kwargs):
+        raise RuntimeError("tombstone exploded")
+
+    monkeypatch.setattr(banlist, "tombstone", boom)
+    with pytest.raises(RuntimeError):
+        users.ban_user(accounts_conn, user["id"], "spam")
+
+    # The whole flow rolled back: the user is not half-banned and their session still resolves.
+    assert users.get_user(accounts_conn, user["id"])["is_banned"] is False
+    assert sessions.resolve_session(accounts_conn, token) is not None
+
+
+def test_banlist_blocks_a_new_google_account_on_a_banned_email(accounts_conn):
+    user = users.upsert_user(accounts_conn, "old-sub", "ban@example.com", True, "B")
+    users.ban_user(accounts_conn, user["id"])
+    assert banlist.is_banned(accounts_conn, "a-brand-new-sub", "ban@example.com") is True
+
+
+def test_banlist_blocks_the_same_google_account_on_a_new_email(accounts_conn):
+    user = users.upsert_user(accounts_conn, "same-sub", "first@example.com", True, "S")
+    users.ban_user(accounts_conn, user["id"])
+    assert banlist.is_banned(accounts_conn, "same-sub", "moved@example.com") is True
+
+
+def test_banlist_misses_an_unrelated_identity(accounts_conn):
+    assert banlist.is_banned(accounts_conn, "nobody", "nobody@example.com") is False
+
+
+def test_delete_account_and_ban_report_false_for_an_unknown_user(accounts_conn):
+    assert users.delete_account(accounts_conn, 999999) is False
+    assert users.ban_user(accounts_conn, 999999) is False
 
 
 def test_oauth_login_state_is_single_use(accounts_conn):

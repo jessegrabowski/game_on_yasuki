@@ -1,5 +1,6 @@
 import psycopg
 
+from yasuki_core.accounts import banlist, sessions
 from yasuki_core.accounts.crypto import email_blind_index
 
 # Returned on every user lookup — the non-sensitive identity the web layer needs to seat a player
@@ -65,3 +66,61 @@ def get_user(conn: psycopg.Connection, user_id: int) -> dict | None:
     with conn.cursor() as cur:
         cur.execute(f"SELECT {_USER_COLUMNS} FROM users WHERE id = %s", (user_id,))
         return cur.fetchone()
+
+
+def ban_user(conn: psycopg.Connection, user_id: int, reason: str | None = None) -> bool:
+    """Ban a live user: flag the row, revoke every session, and tombstone the identity.
+
+    The tombstone means the ban survives even if the user later deletes their account. Return
+    whether a user was there to ban.
+
+    Parameters
+    ----------
+    conn : psycopg.Connection
+        An open accounts-database connection.
+    user_id : int
+        The user to ban.
+    reason : str, optional
+        A free-text ban reason, kept on the row and the tombstone. Default None.
+    """
+    with conn.transaction(), conn.cursor() as cur:
+        cur.execute(
+            "UPDATE users SET is_banned = true, banned_at = now(), ban_reason = %s "
+            "WHERE id = %s RETURNING google_sub, email_hmac",
+            (reason, user_id),
+        )
+        row = cur.fetchone()
+        if row is None:
+            return False
+        banlist.tombstone(conn, row["google_sub"], row["email_hmac"], reason)
+        sessions.delete_user_sessions(conn, user_id)
+    return True
+
+
+def delete_account(conn: psycopg.Connection, user_id: int) -> bool:
+    """Erase a user (GDPR right to erasure), cascading their sessions and decks.
+
+    A banned user's pepper'd sub/email tombstone is retained first, so erasure cannot reopen the
+    door to a banned identity; a user in good standing leaves nothing behind. The row's deletion
+    cascades to sessions, decks, and deck cards via their foreign keys. Return whether a user was
+    there to delete.
+
+    Parameters
+    ----------
+    conn : psycopg.Connection
+        An open accounts-database connection.
+    user_id : int
+        The user to erase.
+    """
+    with conn.transaction(), conn.cursor() as cur:
+        cur.execute(
+            "SELECT google_sub, email_hmac, is_banned, ban_reason FROM users WHERE id = %s",
+            (user_id,),
+        )
+        row = cur.fetchone()
+        if row is None:
+            return False
+        if row["is_banned"]:
+            banlist.tombstone(conn, row["google_sub"], row["email_hmac"], row["ban_reason"])
+        cur.execute("DELETE FROM users WHERE id = %s", (user_id,))
+    return True
