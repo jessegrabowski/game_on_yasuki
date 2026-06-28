@@ -1,13 +1,18 @@
 // Locally predict the outcome of the toggles whose result is fully determined by the current
 // snapshot, so the board can update before the server's confirming snapshot arrives. Each toggle
 // mirrors its server-side flag mutator (yasuki_core table.py): BOW/UNBOW set bowed, INVERT toggles
-// it, SHOW/UNSHOW set shown.
+// it, SHOW/UNSHOW set shown, FLIP turns the card over. A toggle returns null for a card it cannot
+// predict, leaving that card for the authoritative snapshot.
 const TOGGLES = {
   BOW: (card) => ({ ...card, bowed: true }),
   UNBOW: (card) => ({ ...card, bowed: false }),
   INVERT: (card) => ({ ...card, inverted: !card.inverted }),
   SHOW: (card) => ({ ...card, shown: true }),
   UNSHOW: (card) => ({ ...card, shown: false }),
+  // A face-down card the viewer cannot identify is a redacted stub with no front, so turning it up
+  // would fabricate a face — leave it for the server. (FLIP_FACE is absent here for the same reason:
+  // a double-faced card's other printed face is not in the snapshot, so its turn is never predicted.)
+  FLIP: (card) => (card.hidden ? null : { ...card, face_up: !card.face_up }),
 };
 
 // Return a new snapshot with `intent` applied to its target cards, or null for an intent we do not
@@ -22,8 +27,10 @@ export function predictSnapshot(snapshot, intent) {
   const toggleMatches = (cards) =>
     cards.map((card) => {
       if (!targets.has(card.id)) return card;
+      const next = toggle(card);
+      if (next === null) return card;
       changed = true;
-      return toggle(card);
+      return next;
     });
 
   const battlefield = snapshot.battlefield
