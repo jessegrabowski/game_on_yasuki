@@ -486,6 +486,33 @@ def all_card_ids() -> set[str]:
         return {row["card_id"] for row in cur.fetchall()}
 
 
+def card_display_names(card_ids: set[str]) -> dict[str, str]:
+    """Map each card id to its display name (extended title, else name).
+
+    Used to re-label art-swap donors when rendering a stored deck back to YAML, since deck_cards
+    keeps a donor's id but not its name.
+
+    Parameters
+    ----------
+    card_ids : set of str
+        The ids to resolve. An empty set yields an empty map without touching the database.
+
+    Returns
+    -------
+    names : dict mapping str to str
+        Card id to display name, omitting any id absent from the card database.
+    """
+    if not card_ids:
+        return {}
+    with get_db_connection() as conn, conn.cursor() as cur:
+        cur.execute(
+            "SELECT card_id, COALESCE(extended_title, name) AS display "
+            "FROM cards WHERE card_id = ANY(%s)",
+            (list(card_ids),),
+        )
+        return {row["card_id"]: row["display"] for row in cur.fetchall()}
+
+
 def query_all_formats() -> list[str]:
     """
     Fetch all format names from database.
