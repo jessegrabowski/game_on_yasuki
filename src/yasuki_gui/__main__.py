@@ -14,6 +14,7 @@ from yasuki_gui.ui.dialogs import Dialogs
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
+from yasuki_gui.ui.prompt_box import PromptBox
 
 logger = logging.getLogger(__name__)
 
@@ -162,6 +163,11 @@ def main() -> None:
     sidebar_w = 220
     sidebar = tk.Frame(container, width=sidebar_w, bg=theme.PANEL)
     sidebar.pack(side="left", fill="y")
+    sidebar.grid_propagate(False)  # hold the fixed width; rows split the height by weight
+    sidebar.grid_columnconfigure(0, weight=1)
+    sidebar.grid_rowconfigure(0, weight=1)  # opponent seat (~20%)
+    sidebar.grid_rowconfigure(1, weight=3)  # prompt box (~60%)
+    sidebar.grid_rowconfigure(2, weight=1)  # your seat (~20%)
     content = tk.Frame(container)
     content.pack(side="left", fill="both", expand=True)
 
@@ -193,7 +199,8 @@ def main() -> None:
     def refresh() -> None:
         view = runner.view()
         field.render_snapshot(view.table, human_seat)
-        phase_bar.refresh(view, runner.legal_actions())
+        phase_bar.refresh(view)
+        prompt_box.refresh(view, runner.legal_actions())
         opponent_panel.refresh()
         human_panel.refresh()
 
@@ -227,27 +234,29 @@ def main() -> None:
         runner.act(action)
         after_human_action()
 
-    phase_bar = PhaseBar(content, on_action)
+    phase_bar = PhaseBar(content)
     phase_bar.pack(side="bottom", fill="x")
     field.pack(side="top", fill="both", expand=True)
     field.configure_hotkeys(hotkeys)
 
-    # The human seat sits at the bottom, the AI-reserved opponent across the top.
+    # The left column runs opponent / prompt / you, top to bottom.
     opponent_panel = PlayerPanel(sidebar, field, PlayerId.P2)
     human_panel = PlayerPanel(sidebar, field, PlayerId.P1)
+    prompt_box = PromptBox(sidebar, on_action)
+    prompt_box.grid(row=1, column=0, sticky="nsew")
 
     def relayout_panels() -> None:
-        """Place the seat being played on the bottom and refresh both panels. Driven by the debug
-        seat toggle; with no toggle the human stays on the bottom for the whole game."""
-        for panel in (opponent_panel, human_panel):
-            panel.pack_forget()
-        bottom, top = (
-            (human_panel, opponent_panel)
+        """Place the seat being played at the bottom of the column and refresh both panels. Driven
+        by the debug seat toggle; with no toggle the human stays at the bottom all game."""
+        opponent_panel.grid_forget()
+        human_panel.grid_forget()
+        top, bottom = (
+            (opponent_panel, human_panel)
             if field.seat is PlayerId.P1
-            else (opponent_panel, human_panel)
+            else (human_panel, opponent_panel)
         )
-        top.pack(side="top", fill="x")
-        bottom.pack(side="bottom", fill="x")
+        top.grid(row=0, column=0, sticky="new")
+        bottom.grid(row=2, column=0, sticky="sew")
         opponent_panel.refresh()
         human_panel.refresh()
 
