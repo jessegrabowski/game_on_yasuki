@@ -4,7 +4,7 @@ import tkinter as tk
 
 from PIL import Image, ImageTk
 
-from yasuki_core.paths import FATE_BACK, DYNASTY_BACK
+from yasuki_core.paths import FATE_BACK, DYNASTY_BACK, resolve_set_image_path
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.constants import CARD_W, CARD_H
 from functools import lru_cache
@@ -23,7 +23,11 @@ def load_image(
     """
     if Image is None or ImageTk is None or not path:
         return None
-    path_str = str(path)
+    # Card records store set-relative paths ("sets/.../card.jpg"); bundled defaults are absolute.
+    resolved = path if Path(path).is_absolute() else resolve_set_image_path(str(path))
+    if resolved is None:
+        return None
+    path_str = str(resolved)
     try:
         img = Image.open(path_str)
         target = (CARD_W, CARD_H)
