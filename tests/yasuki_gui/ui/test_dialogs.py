@@ -73,6 +73,28 @@ class TestDialogs:
         submit_btn.invoke()
         assert submitted == [("h0",)]
 
+    def test_discard_dialog_caps_selection_and_allows_deselect(self, dialogs):
+        cards = []
+        for cid, name in (("h0", "Alpha"), ("h1", "Beta")):
+            card = Mock()
+            card.id = cid
+            card.name = name
+            cards.append(card)
+        dialogs.discard_to_hand_size(cards, 1, lambda ids: None)
+
+        win = [w for w in dialogs.toplevel.winfo_children() if isinstance(w, tk.Toplevel)][-1]
+        buttons = _all_buttons(win)
+        alpha = next(b for b in buttons if b.cget("text") == "Alpha")
+        beta = next(b for b in buttons if b.cget("text") == "Beta")
+        submit = next(b for b in buttons if b.cget("text") == "Discard")
+
+        alpha.invoke()
+        assert str(submit.cget("state")) == "normal"
+        beta.invoke()  # already at the cap of one, so this selection is ignored
+        assert str(submit.cget("state")) == "normal"
+        alpha.invoke()  # deselecting drops back below the count
+        assert str(submit.cget("state")) == "disabled"
+
     def test_preferences(self, dialogs):
         on_apply = Mock()
 

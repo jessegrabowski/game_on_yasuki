@@ -76,6 +76,28 @@ def test_human_discard_is_left_pending_then_resolved():
     assert runner.view().active is PlayerId.P1 and runner.view().turn == 3
 
 
+def test_opponents_overfull_turn_auto_discards_without_prompting():
+    state = TableState.empty_two_seat()
+    for seat in PlayerId:
+        state.decks[DeckKey(seat, Side.FATE)].cards = [
+            _register(state, FateCard(id=f"{seat.name}-fd", name="F", side=Side.FATE, owner=seat))
+        ]
+    p2_hand = state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)]
+    for i in range(flow.MAX_HAND_SIZE):
+        p2_hand.add(
+            _register(state, FateCard(id=f"P2-h{i}", name="H", side=Side.FATE, owner=PlayerId.P2))
+        )
+    runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
+
+    for _ in range(3):  # P1's quiet turn ends, then P2's overfull turn auto-runs
+        runner.advance()
+
+    assert runner.view().active is PlayerId.P1 and runner.view().turn == 3
+    assert runner.pending_discard is None  # the opponent's discard resolved without a prompt
+    p2_after = runner.session.game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards
+    assert len(p2_after) == flow.MAX_HAND_SIZE  # 8 held + 1 drawn = 9, auto-trimmed to 8
+
+
 def test_runner_inputs_stay_replayable():
     runner = _runner(p1_hand=flow.MAX_HAND_SIZE)
     for _ in range(3):
