@@ -1,3 +1,7 @@
+from pathlib import Path
+
+from yasuki_core.database import get_cards_by_names
+from yasuki_core.decklist import parse_deck_yaml
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.setup import setup_seat
 from yasuki_core.engine.table import TableState
@@ -8,9 +12,16 @@ from yasuki_core.game_pieces.dynasty import (
     DynastyHolding,
     DynastyPersonality,
 )
-from yasuki_core.game_pieces.factory import ResolvedDeck
+from yasuki_core.game_pieces.factory import ResolvedDeck, resolve_decklist
 from yasuki_core.game_pieces.fate import FateAction, FateAttachment, FateCard, FateRing
 from yasuki_core.game_pieces.pregame import StrongholdCard
+
+# The deck dealt to both seats on launch. Bundled in the repo so the desktop has a real board out of
+# the box; rendering its art needs the set images on disk (SETS_DIR / YASUKI_SETS_DIR).
+DEMO_DECK_PATH = Path(__file__).parent / "assets" / "decks" / "spider_oni_control.yaml"
+
+# Per-seat (dynasty, fate) shuffle seeds, so a fresh launch deals a reproducible board.
+_SEEDS = {PlayerId.P1: (1001, 2001), PlayerId.P2: (1002, 2002)}
 
 # A placeholder deck large enough to fill four provinces and draw an opening hand with cards to
 # spare. Real decks will come from the database once campaign loading lands; this keeps the client
@@ -63,9 +74,8 @@ def build_demo_state() -> tuple[TableState, PlayerId]:
     populated on both sides. Shuffles use fixed seeds, so a fresh launch is reproducible.
     """
     state = TableState.empty_two_seat("You", "Opponent")
-    seeds = {PlayerId.P1: (1001, 2001), PlayerId.P2: (1002, 2002)}
     for seat in PlayerId:
-        dynasty_seed, fate_seed = seeds[seat]
+        dynasty_seed, fate_seed = _SEEDS[seat]
         setup_seat(
             state,
             seat,
@@ -73,5 +83,36 @@ def build_demo_state() -> tuple[TableState, PlayerId]:
             dynasty_seed=dynasty_seed,
             fate_seed=fate_seed,
         )
+    state.validate()
+    return state, PlayerId.P1
+
+
+def _deck_card_names(parsed: dict) -> list[str]:
+    """Every card name a decklist references, including donor cards named by art-swap entries."""
+    names: list[str] = []
+    for section in ("pre_game", "dynasty", "fate"):
+        for entry in parsed.get(section, []):
+            names.append(entry["name"])
+            art = entry.get("art")
+            if art:
+                names.append(art["name"])
+    return names
+
+
+def build_state_from_deck(
+    deck_path: Path | str = DEMO_DECK_PATH, p1_name: str = "You", p2_name: str = "Opponent"
+) -> tuple[TableState, PlayerId]:
+    """Build a two-seat table from a decklist file, dealing the same deck to both seats.
+
+    Resolves the decklist's cards against the database, so it needs a reachable database. P2 is the
+    AI-reserved opponent dealt the mirror of the human's deck. Returns the table and the human seat.
+    """
+    parsed = parse_deck_yaml(Path(deck_path).read_text())
+    records = get_cards_by_names(_deck_card_names(parsed))
+    state = TableState.empty_two_seat(p1_name, p2_name)
+    for seat in PlayerId:
+        dynasty_seed, fate_seed = _SEEDS[seat]
+        resolved = resolve_decklist(parsed, records, seat)
+        setup_seat(state, seat, resolved, dynasty_seed=dynasty_seed, fate_seed=fate_seed)
     state.validate()
     return state, PlayerId.P1

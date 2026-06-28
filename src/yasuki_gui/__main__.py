@@ -5,7 +5,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import SetHonor
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
-from yasuki_gui.session import build_demo_state
+from yasuki_gui.session import build_demo_state, build_state_from_deck
 from yasuki_gui.ui.menus import build_menubar
 
 logger = logging.getLogger(__name__)
@@ -151,8 +151,13 @@ def main() -> None:
 
         gui_config.DEBUG_MODE = True
 
-    # Build the table from placeholder decks (DB-free) and render it from the human's seat.
-    state, human_seat = build_demo_state()
+    # Deal the bundled deck (needs the database); fall back to the DB-free placeholder deck so the
+    # client still launches without a database or card images.
+    try:
+        state, human_seat = build_state_from_deck()
+    except Exception as exc:
+        logger.warning("Could not load the bundled deck, using the placeholder deck: %s", exc)
+        state, human_seat = build_demo_state()
     field.load_state(state, human_seat)
 
     # The human seat sits at the bottom, the AI-reserved opponent across the top.
