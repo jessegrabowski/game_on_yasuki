@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 from collections.abc import Callable
 
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui import theme
 from yasuki_gui.ui.images import ImageProvider
@@ -14,9 +15,9 @@ class Dialogs:
         self.toplevel = toplevel
         self.images = image_provider
 
-    def deck_inspect(self, dv: DeckVisual) -> None:
+    def deck_inspect(self, cards: list[L5RCard], label: str) -> None:
         win = tk.Toplevel(self.toplevel)
-        win.title(f"Inspect - {dv.label}")
+        win.title(f"Inspect - {label}")
         canvas = tk.Canvas(win, width=800, height=260, bg=theme.PANEL)
         hscroll = tk.Scrollbar(win, orient="horizontal", command=canvas.xview)
         canvas.configure(xscrollcommand=hscroll.set)
@@ -24,7 +25,7 @@ class Dialogs:
         canvas.create_window((0, 0), window=frame, anchor="nw")
         keep: list[object] = []
         pad = 10
-        for idx, card in enumerate(dv.deck.cards):
+        for idx, card in enumerate(cards):
             bowed = card.bowed
             face_up = card.face_up
             photo = (
@@ -56,19 +57,20 @@ class Dialogs:
 
     def deck_search(
         self,
-        dv: DeckVisual,
+        cards: list[L5RCard],
+        label: str,
         draw_cb: Callable[[int], None],
         n: int | None = None,
     ) -> None:
         win = tk.Toplevel(self.toplevel)
-        title = f"Search Top {n} - {dv.label}" if n else f"Search - {dv.label}"
+        title = f"Search Top {n} - {label}" if n else f"Search - {label}"
         win.title(title)
         list_frame = tk.Frame(win, bg=theme.PANEL)
         list_frame.pack(fill="both", expand=True)
         keep: list[object] = []
         # Determine slice of deck to show
-        cards = dv.deck.cards[-n:] if n else dv.deck.cards[:]
-        if not cards:
+        shown = cards[-n:] if n else cards[:]
+        if not shown:
             return
 
         def draw_card_at_index(idx_in_deck: int) -> None:
@@ -80,9 +82,9 @@ class Dialogs:
                 except Exception:
                     pass
 
-        for col, card in enumerate(cards):
+        for col, card in enumerate(shown):
             # Map displayed index to actual deck index
-            idx_in_deck = (len(dv.deck.cards) - len(cards)) + col if n else col
+            idx_in_deck = (len(cards) - len(shown)) + col if n else col
             bowed = card.bowed
             face_up = card.face_up
             photo = (

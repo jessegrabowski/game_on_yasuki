@@ -285,10 +285,12 @@ def deck_flip_top_card() -> Action:
 def deck_inspect() -> Action:
     def run(view, ctx):
         dv = view.decks.get(ctx.deck_tag)
-        if dv is None:
+        key = _deck_key(view, ctx)
+        if dv is None or key is None:
             return
         master = view.winfo_toplevel() if hasattr(view, "winfo_toplevel") else view
-        Dialogs(master, ImageProvider(master)).deck_inspect(dv)
+        cards = view.state.decks[key].cards
+        Dialogs(master, ImageProvider(master)).deck_inspect(cards, dv.label)
 
     return Action("deck.inspect", "Inspect", HK.inspect, _deck_when, run, "deck")
 
@@ -307,7 +309,8 @@ def deck_search_action() -> Action:
             if 0 <= idx_in_deck < len(cards):
                 view.dispatch(MoveCard(cards[idx_in_deck].id, BATTLEFIELD, position=_UNPLACED))
 
-        Dialogs(master, ImageProvider(master)).deck_search(dv, draw_cb, n=None)
+        cards = view.state.decks[key].cards
+        Dialogs(master, ImageProvider(master)).deck_search(cards, dv.label, draw_cb, n=None)
 
     return Action("deck.search", "Search", when=_deck_when, run=run, group="deck")
 

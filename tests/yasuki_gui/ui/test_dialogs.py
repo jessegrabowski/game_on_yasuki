@@ -32,25 +32,11 @@ class TestDialogs:
         assert dialogs.images is image_provider
 
     def test_deck_inspect(self, dialogs, root):
-        mock_deck = Mock()
-        mock_deck.cards = []
-
-        mock_deck_visual = Mock()
-        mock_deck_visual.label = "Test Deck"
-        mock_deck_visual.deck = mock_deck
-
-        dialogs.deck_inspect(mock_deck_visual)
+        dialogs.deck_inspect([], "Test Deck")
 
     def test_deck_search_empty(self, dialogs):
-        mock_deck = Mock()
-        mock_deck.cards = []
-
-        mock_deck_visual = Mock()
-        mock_deck_visual.label = "Test Deck"
-        mock_deck_visual.deck = mock_deck
-
         draw_cb = Mock()
-        dialogs.deck_search(mock_deck_visual, draw_cb)
+        dialogs.deck_search([], "Test Deck", draw_cb)
 
     def test_deck_search_with_cards(self, dialogs):
         card1 = Mock()
@@ -60,15 +46,8 @@ class TestDialogs:
         card1.inverted = False
         card1.image_front = None
 
-        mock_deck = Mock()
-        mock_deck.cards = [card1]
-
-        mock_deck_visual = Mock()
-        mock_deck_visual.label = "Test Deck"
-        mock_deck_visual.deck = mock_deck
-
         draw_cb = Mock()
-        dialogs.deck_search(mock_deck_visual, draw_cb, n=1)
+        dialogs.deck_search([card1], "Test Deck", draw_cb, n=1)
 
     def test_deck_reveal_top(self, dialogs):
         mock_deck_visual = Mock()
