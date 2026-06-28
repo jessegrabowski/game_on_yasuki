@@ -21,7 +21,6 @@ import {
 import { openDeckDialog } from './deck-dialog.js';
 import { openTokenSearch } from './token-search.js';
 import { predictSnapshot } from './optimistic.js';
-import { flip } from './flip.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -347,9 +346,7 @@ export function init() {
         lastSeq = seq;
       }
       lastSnapshot = snapshot;
-      // Animate the moves this snapshot brings — an opponent's play, a confirmed drag. Toggles and
-      // the initial deal produce no movement, so flip is a no-op there.
-      flip(boardStage, () => renderSnapshot(snapshot));
+      renderSnapshot(snapshot);
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
