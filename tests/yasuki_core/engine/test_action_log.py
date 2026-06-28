@@ -29,14 +29,13 @@ from yasuki_core.engine.action_log import (
     LogEntry,
     ChatEntry,
     SessionEntry,
-    InitialRecord,
     ActionLog,
     apply_and_log,
-    build_initial_state,
     action_log_to_dict,
     action_log_from_dict,
     flush,
 )
+from yasuki_core.engine.snapshot import InitialRecord, build_initial_state
 
 
 def _fate_deck(owner: PlayerId) -> list[FateCard]:

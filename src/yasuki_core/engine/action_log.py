@@ -1,32 +1,17 @@
-from dataclasses import dataclass, field, replace
+from dataclasses import dataclass, field
 from typing import Literal, Protocol, runtime_checkable
 from collections.abc import Sequence
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.table import (
-    TableState,
-    SeatInfo,
-    ZoneKey,
-    DeckKey,
-    BoardPos,
-)
+from yasuki_core.engine.table import TableState
 from yasuki_core.engine.intents import Intent, Shuffle, Event, apply_intent
-from yasuki_core.engine.serialization import (
-    encode_card,
-    decode_card,
-    encode_zone_key,
-    decode_zone_key,
-    encode_deck_key,
-    decode_deck_key,
-    encode_seat,
-    decode_seat,
-    encode_intent,
-    decode_intent,
-    encode_attach_target,
-    decode_attach_target,
+from yasuki_core.engine.serialization import encode_intent, decode_intent
+from yasuki_core.engine.snapshot import (
+    InitialRecord,
+    build_initial_state,
+    encode_initial,
+    decode_initial,
 )
-from yasuki_core.game_pieces.cards import L5RCard
 
 
 @dataclass(frozen=True, slots=True)
@@ -103,69 +88,6 @@ class SessionEntry:
 
 
 @dataclass(slots=True)
-class InitialRecord:
-    """A complete table snapshot that seeds a replay.
-
-    Captures the full state at the log head — seats, every owned zone and deck with its ordered
-    contents, and the battlefield with positions — so a replay rebuilds the table exactly and then
-    folds the recorded intents onto it.
-
-    Attributes
-    ----------
-    seats : dict mapping PlayerId to SeatInfo
-        Each seat's status (name, honor, ready, connected).
-    decklists : dict mapping DeckKey to list of L5RCard
-        The ordered contents of each fate and dynasty deck.
-    zones : dict mapping ZoneKey to list of L5RCard
-        The contents of every owned zone, including provinces.
-    battlefield : list of L5RCard
-        The shared battlefield's cards.
-    positions : dict mapping str to BoardPos
-        Battlefield card positions, keyed by card id.
-    attachments : dict mapping str to (str or ZoneKey)
-        The attachment graph, keyed by attached card id, mapping to a parent card id or province.
-    setup_seeds : dict mapping str to int
-        Named RNG seeds used during setup that no logged intent carries.
-    """
-
-    seats: dict[PlayerId, SeatInfo]
-    decklists: dict[DeckKey, list[L5RCard]]
-    zones: dict[ZoneKey, list[L5RCard]] = field(default_factory=dict)
-    battlefield: list[L5RCard] = field(default_factory=list)
-    positions: dict[str, BoardPos] = field(default_factory=dict)
-    attachments: dict[str, str | ZoneKey] = field(default_factory=dict)
-    setup_seeds: dict[str, int] = field(default_factory=dict)
-
-    @classmethod
-    def from_state(
-        cls, state: TableState, setup_seeds: dict[str, int] | None = None
-    ) -> "InitialRecord":
-        """Snapshot ``state`` into an initial record, deep-copying every card so later in-place
-        mutation of the live table never touches the snapshot.
-
-        Parameters
-        ----------
-        state : TableState
-            The table to capture.
-        setup_seeds : dict mapping str to int, optional
-            Named setup seeds to record. Default empty.
-        """
-        return cls(
-            seats={pid: replace(info) for pid, info in state.seats.items()},
-            decklists={
-                key: [replace(card) for card in deck.cards] for key, deck in state.decks.items()
-            },
-            zones={
-                key: [replace(card) for card in zone.cards] for key, zone in state.zones.items()
-            },
-            battlefield=[replace(card) for card in state.battlefield.cards],
-            positions=dict(state.positions),
-            attachments=dict(state.attachments),
-            setup_seeds=dict(setup_seeds or {}),
-        )
-
-
-@dataclass(slots=True)
 class ActionLog:
     """An append-only record of a game: an initial snapshot at the head, then one ordered tape of
     game intents, chat messages, and session events.
@@ -232,34 +154,6 @@ def apply_and_log(
     return events
 
 
-def build_initial_state(initial: InitialRecord) -> TableState:
-    """Rebuild a full ``TableState`` from an initial record: the recorded seats, decks, zones,
-    battlefield, and positions, with every card deep-copied so the record stays pristine and
-    repeated builds are independent."""
-    state = TableState.empty_two_seat()
-    for pid, info in initial.seats.items():
-        state.seats[pid] = replace(info)
-    for key, cards in initial.decklists.items():
-        state.decks[key].cards = _restore_cards(state, cards)
-    for key, cards in initial.zones.items():
-        zone = state.zones.get(key)
-        if zone is None:
-            zone = ProvinceZone(owner=key.owner)  # provinces are the only on-demand zone
-            state.zones[key] = zone
-        zone.cards = _restore_cards(state, cards)
-    state.battlefield.cards = _restore_cards(state, initial.battlefield)
-    state.positions = dict(initial.positions)
-    state.attachments = dict(initial.attachments)
-    return state
-
-
-def _restore_cards(state: TableState, cards: list[L5RCard]) -> list[L5RCard]:
-    copied = [replace(card) for card in cards]
-    for card in copied:
-        state.cards_by_id[card.id] = card
-    return copied
-
-
 def replay(
     initial: InitialRecord, entries: Sequence[LogEntry | ChatEntry | SessionEntry]
 ) -> TableState:
@@ -284,8 +178,8 @@ def replay(
 
 
 # Plain-dict (JSON-ready) round-trip for the whole log, so a future DB/object-store sink can persist
-# a game without reshaping it. The entry/initial wrappers below compose the shared value codecs from
-# serialization.py; FlushSink is the attach point.
+# a game without reshaping it. The entry wrappers below compose the shared codecs from
+# serialization.py and snapshot.py; FlushSink is the attach point.
 
 
 def _encode_entry(entry: LogEntry | ChatEntry | SessionEntry) -> dict:
@@ -329,60 +223,10 @@ def _decode_entry(payload: dict) -> LogEntry | ChatEntry | SessionEntry:
     )
 
 
-def _encode_initial(initial: InitialRecord) -> dict:
-    return {
-        "seats": [
-            {"seat": pid.name, "info": encode_seat(info)} for pid, info in initial.seats.items()
-        ],
-        "decklists": [
-            {"deck": encode_deck_key(key), "cards": [encode_card(card) for card in cards]}
-            for key, cards in initial.decklists.items()
-        ],
-        "zones": [
-            {"zone": encode_zone_key(key), "cards": [encode_card(card) for card in cards]}
-            for key, cards in initial.zones.items()
-        ],
-        "battlefield": [encode_card(card) for card in initial.battlefield],
-        "positions": {card_id: [pos.x, pos.y] for card_id, pos in initial.positions.items()},
-        "attachments": {
-            card_id: encode_attach_target(target)
-            for card_id, target in initial.attachments.items()
-        },
-        "setup_seeds": dict(initial.setup_seeds),
-    }
-
-
-def _decode_initial(payload: dict) -> InitialRecord:
-    seats = {PlayerId[item["seat"]]: decode_seat(item["info"]) for item in payload["seats"]}
-    decklists = {
-        decode_deck_key(item["deck"]): [decode_card(card) for card in item["cards"]]
-        for item in payload["decklists"]
-    }
-    zones = {
-        decode_zone_key(item["zone"]): [decode_card(card) for card in item["cards"]]
-        for item in payload["zones"]
-    }
-    battlefield = [decode_card(card) for card in payload["battlefield"]]
-    positions = {card_id: BoardPos(*xy) for card_id, xy in payload["positions"].items()}
-    attachments = {
-        card_id: decode_attach_target(target)
-        for card_id, target in payload.get("attachments", {}).items()
-    }
-    return InitialRecord(
-        seats=seats,
-        decklists=decklists,
-        zones=zones,
-        battlefield=battlefield,
-        positions=positions,
-        attachments=attachments,
-        setup_seeds=dict(payload["setup_seeds"]),
-    )
-
-
 def action_log_to_dict(log: ActionLog) -> dict:
     """Serialize a whole ``ActionLog`` — initial record and entries — to JSON-ready plain data."""
     return {
-        "initial": _encode_initial(log.initial),
+        "initial": encode_initial(log.initial),
         "entries": [_encode_entry(entry) for entry in log.entries],
     }
 
@@ -390,7 +234,7 @@ def action_log_to_dict(log: ActionLog) -> dict:
 def action_log_from_dict(payload: dict) -> ActionLog:
     """Reconstruct an ``ActionLog`` from the plain data produced by ``action_log_to_dict``."""
     return ActionLog(
-        initial=_decode_initial(payload["initial"]),
+        initial=decode_initial(payload["initial"]),
         entries=[_decode_entry(entry) for entry in payload["entries"]],
     )
 
