@@ -4,7 +4,7 @@ import tkinter as tk
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.intents import SetHonor
-from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.session import EngineSession, LegalAction
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
@@ -25,6 +25,9 @@ except Exception:  # pragma: no cover
     ImageTk = None  # type: ignore
 
 LOCAL_DEBUG_OVERRIDE = False
+
+# How long the board lingers on "Opponent's turn" before the opponent's (AI-less) turn auto-runs.
+OPPONENT_TURN_DELAY_MS = 700
 
 
 class PlayerPanel(tk.Frame):
@@ -190,9 +193,21 @@ def main() -> None:
     def refresh() -> None:
         view = runner.view()
         field.render_snapshot(view.table, human_seat)
-        phase_bar.refresh(view)
+        phase_bar.refresh(view, runner.legal_actions())
         opponent_panel.refresh()
         human_panel.refresh()
+
+    def run_opponent() -> None:
+        runner.run_opponent()
+        refresh()
+
+    def after_human_action() -> None:
+        refresh()
+        if runner.pending_discard is not None:
+            prompt_discard()
+        elif runner.is_opponent_turn:
+            # The board already shows "Opponent's turn"; run it after a beat so the hand-off shows.
+            root.after(OPPONENT_TURN_DELAY_MS, run_opponent)
 
     def prompt_discard() -> None:
         pending = runner.pending_discard
@@ -202,19 +217,18 @@ def main() -> None:
 
         def on_submit(card_ids: tuple[str, ...]) -> None:
             runner.resolve_discard(card_ids)
-            refresh()
+            after_human_action()
 
         Dialogs(root, ImageProvider(root)).discard_to_hand_size(
             list(hand), pending.count, on_submit
         )
 
-    def on_advance() -> None:
-        runner.advance()
-        refresh()
-        prompt_discard()
+    def on_action(action: LegalAction) -> None:
+        runner.act(action)
+        after_human_action()
 
-    phase_bar = PhaseBar(content, on_advance)
-    phase_bar.pack(side="top", fill="x")
+    phase_bar = PhaseBar(content, on_action)
+    phase_bar.pack(side="bottom", fill="x")
     field.pack(side="top", fill="both", expand=True)
     field.configure_hotkeys(hotkeys)
 

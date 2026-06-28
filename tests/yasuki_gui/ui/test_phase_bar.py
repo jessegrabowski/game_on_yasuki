@@ -5,7 +5,7 @@ import pytest
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.state import Phase
-from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.session import EngineSession, LegalAction
 from yasuki_gui.ui.phase_bar import PhaseBar
 
 
@@ -17,26 +17,36 @@ def root():
     r.destroy()
 
 
-def _view(phase: Phase):
+def _view(active: PlayerId, phase: Phase = Phase.ACTION):
     session = EngineSession.start(TableState.empty_two_seat(), PlayerId.P1)
+    session.game.active = active
     session.game.phase = phase
     return session.project(PlayerId.P1)
 
 
-def test_advance_button_invokes_the_callback(root):
-    calls = []
-    bar = PhaseBar(root, lambda: calls.append(1))
-    bar._advance.invoke()
-    assert calls == [1]
+def _buttons(bar: PhaseBar) -> list[tk.Button]:
+    return [w for w in bar._actions.winfo_children() if isinstance(w, tk.Button)]
 
 
-def test_refresh_shows_turn_and_contextual_button_label(root):
-    bar = PhaseBar(root, lambda: None)
+def test_legal_actions_render_as_buttons_that_invoke_the_callback(root):
+    chosen = []
+    bar = PhaseBar(root, chosen.append)
+    bar.refresh(_view(PlayerId.P1), [LegalAction.PASS])
 
-    bar.refresh(_view(Phase.ACTION))
+    buttons = _buttons(bar)
+    assert [b.cget("text") for b in buttons] == ["Pass"]
+    buttons[0].invoke()
+    assert chosen == [LegalAction.PASS]
+
+
+def test_no_buttons_and_opponent_label_when_it_is_not_your_turn(root):
+    bar = PhaseBar(root, lambda action: None)
+
+    bar.refresh(_view(PlayerId.P1), [LegalAction.PASS])
     assert bar._turn.cget("text") == "Turn 1"
-    assert "Next Phase" in bar._advance.cget("text")
+    assert bar._whose.cget("text") == "Your turn"
+    assert _buttons(bar)  # actions offered on your turn
 
-    # On the last phase the button reads as ending the turn.
-    bar.refresh(_view(Phase.DYNASTY))
-    assert "End Turn" in bar._advance.cget("text")
+    bar.refresh(_view(PlayerId.P2), [])  # opponent holds the turn, no legal actions
+    assert bar._whose.cget("text") == "Opponent's turn"
+    assert _buttons(bar) == []
