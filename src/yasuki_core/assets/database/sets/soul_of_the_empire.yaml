@@ -179,6 +179,8 @@ cards:
   types:
   - Follower
   - Proxy
+  keywords:
+  - Ashigaru
   decks:
   - Other
   text: May not be included in decks.
