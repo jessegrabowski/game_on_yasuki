@@ -6,8 +6,10 @@ from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.log import replay
-from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.session import EngineSession, LegalAction
 from yasuki_gui.rules_runner import GameRunner
+
+PASS = LegalAction.PASS
 
 
 def _register(state, card):
@@ -34,45 +36,43 @@ def _runner(p1_hand: int = 0) -> GameRunner:
     return GameRunner(session, PlayerId.P1)
 
 
-def test_advance_walks_the_human_through_the_phases():
+def test_passing_walks_the_human_through_the_phases():
     runner = _runner()
     assert runner.view().phase is Phase.ACTION
-    runner.advance()
+    runner.act(PASS)
     assert runner.view().phase is Phase.ATTACK
-    runner.advance()
+    runner.act(PASS)
     assert runner.view().phase is Phase.DYNASTY
 
 
-def test_ending_a_quiet_turn_auto_runs_the_opponent_back_to_the_human():
+def test_passing_through_a_quiet_turn_hands_off_then_back():
     runner = _runner(p1_hand=0)  # no discard for either seat
     for _ in range(3):  # Action -> Attack -> Dynasty -> end of P1's turn
-        runner.advance()
+        runner.act(PASS)
+
+    assert runner.is_opponent_turn  # control rests with the opponent, not yet run
+    runner.run_opponent()
 
     view = runner.view()
-    # P2's empty turn ran automatically; it is the human's turn again on turn 3.
-    assert view.active is PlayerId.P1
-    assert view.turn == 3
-    assert view.phase is Phase.ACTION
-    assert runner.pending_discard is None
+    assert view.active is PlayerId.P1 and view.turn == 3 and view.phase is Phase.ACTION
+    assert not runner.is_opponent_turn
 
 
 def test_human_discard_is_left_pending_then_resolved():
     runner = _runner(p1_hand=flow.MAX_HAND_SIZE)  # 8 held + 1 drawn = 9 at end of turn
     for _ in range(3):
-        runner.advance()
+        runner.act(PASS)
 
-    pending = runner.pending_discard
-    assert pending == DiscardToHandSize(PlayerId.P1, count=1)
-    assert runner.view().turn == 1  # turn not passed while the discard is owed
-
-    # Advancing is blocked until the discard is answered.
-    runner.advance()
-    assert runner.pending_discard is not None
+    assert runner.pending_discard == DiscardToHandSize(PlayerId.P1, count=1)
+    assert not runner.is_opponent_turn  # still the human's turn while the discard is owed
+    assert runner.legal_actions() == []  # no free action offered until it is answered
 
     hand = runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
     runner.resolve_discard([hand[0].id])
 
     assert runner.pending_discard is None
+    assert runner.is_opponent_turn  # the turn has passed; the caller now runs the opponent
+    runner.run_opponent()
     assert runner.view().active is PlayerId.P1 and runner.view().turn == 3
 
 
@@ -89,8 +89,9 @@ def test_opponents_overfull_turn_auto_discards_without_prompting():
         )
     runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
 
-    for _ in range(3):  # P1's quiet turn ends, then P2's overfull turn auto-runs
-        runner.advance()
+    for _ in range(3):  # end P1's quiet turn
+        runner.act(PASS)
+    runner.run_opponent()  # P2's overfull turn auto-passes and auto-discards
 
     assert runner.view().active is PlayerId.P1 and runner.view().turn == 3
     assert runner.pending_discard is None  # the opponent's discard resolved without a prompt
@@ -101,8 +102,9 @@ def test_opponents_overfull_turn_auto_discards_without_prompting():
 def test_runner_inputs_stay_replayable():
     runner = _runner(p1_hand=flow.MAX_HAND_SIZE)
     for _ in range(3):
-        runner.advance()
+        runner.act(PASS)
     hand = runner.session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards
     runner.resolve_discard([hand[0].id])
+    runner.run_opponent()
 
     assert replay(runner.session.log) == runner.session.game

@@ -15,7 +15,7 @@ class LegalAction(Enum):
     """A free action a seat may take when no decision is pending. The vocabulary grows with the
     rules — gold production and Recruit join it at Steps 1 and 2."""
 
-    ADVANCE = "advance"
+    PASS = "pass"
 
 
 @dataclass(slots=True)
@@ -61,16 +61,22 @@ class EngineSession:
 
     def legal_actions(self, seat: PlayerId) -> list[LegalAction]:
         """Return the free actions ``seat`` may take right now. Empty while a decision is pending
-        (the seat must answer it) and for any seat but the active one."""
+        (the seat must answer it) and for any seat but the active one. In Step 0 the only action is
+        to pass, which ends the current phase."""
         if self.game.awaiting_decision or seat is not self.game.active:
             return []
-        return [LegalAction.ADVANCE]
+        return [LegalAction.PASS]
 
-    def advance(self, seat: PlayerId) -> None:
-        """Advance the active seat's turn and record it. Raise ``ValueError`` if ``seat`` is not the
-        active seat; ``flow`` rejects advancing while a decision is pending."""
-        if seat is not self.game.active:
-            raise ValueError(f"{seat.name} cannot advance on {self.game.active.name}'s turn")
+    def act(self, seat: PlayerId, action: LegalAction) -> None:
+        """Perform ``action`` for ``seat``. Raise ``ValueError`` if it is not currently legal for
+        that seat. Passing ends the current phase."""
+        if action not in self.legal_actions(seat):
+            raise ValueError(f"{action} is not legal for {seat.name} right now")
+        if action is LegalAction.PASS:
+            self._advance(seat)
+
+    def _advance(self, seat: PlayerId) -> None:
+        # The phase-advance mechanic a pass triggers; the active seat is guaranteed by act().
         advance_and_log(self.game, self.log)
 
     def submit(self, seat: PlayerId, response: DecisionResponse) -> None:

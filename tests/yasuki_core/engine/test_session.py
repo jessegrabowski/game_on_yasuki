@@ -33,7 +33,7 @@ def _dealt_table() -> TableState:
 
 def _to_pending_discard(session: EngineSession) -> None:
     for _ in range(3):  # Action -> Attack -> Dynasty -> end of turn (pauses for discard)
-        session.advance(PlayerId.P1)
+        session.act(PlayerId.P1, LegalAction.PASS)
 
 
 def test_start_opens_a_playable_first_turn():
@@ -45,18 +45,19 @@ def test_start_opens_a_playable_first_turn():
     assert view.pending is None
 
 
-def test_legal_actions_offers_advance_to_the_active_seat_only():
+def test_legal_actions_offers_pass_to_the_active_seat_only():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
-    assert session.legal_actions(PlayerId.P1) == [LegalAction.ADVANCE]
+    assert session.legal_actions(PlayerId.P1) == [LegalAction.PASS]
     assert session.legal_actions(PlayerId.P2) == []
 
 
-def test_advance_moves_the_phase_and_rejects_the_inactive_seat():
+def test_act_pass_moves_the_phase_and_rejects_an_illegal_actor():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
-    session.advance(PlayerId.P1)
+    session.act(PlayerId.P1, LegalAction.PASS)
     assert session.project(PlayerId.P1).phase is Phase.ATTACK
+    # The inactive seat has no legal action, so acting raises.
     with pytest.raises(ValueError):
-        session.advance(PlayerId.P2)
+        session.act(PlayerId.P2, LegalAction.PASS)
 
 
 def test_pending_decision_blocks_actions_and_reaches_its_answerer():

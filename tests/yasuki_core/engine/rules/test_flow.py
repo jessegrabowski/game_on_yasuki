@@ -59,6 +59,8 @@ def test_advance_past_dynasty_draws_fate_and_passes_the_turn():
     assert game.active is PlayerId.P2
     assert game.phase is Phase.ACTION
     assert len(game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards) == 1
+    # Only the active player draws at their turn-end; the opponent's hand is untouched.
+    assert game.table.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].cards == []
 
 
 def test_empty_fate_deck_draws_nothing_and_still_passes_the_turn():
