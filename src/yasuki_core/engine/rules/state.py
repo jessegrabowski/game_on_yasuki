@@ -3,6 +3,7 @@ from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
+from yasuki_core.engine.rules.decisions import DecisionRequest
 
 
 class Phase(Enum):
@@ -47,6 +48,9 @@ class GameState:
         ...), keyed by a caller-chosen string. Default empty.
     seed : int
         The master RNG seed recorded for deterministic replay. Default 0.
+    pending : DecisionRequest or None
+        The decision the engine is paused on, awaiting an answer from one seat, or None when the
+        engine is free to advance. Default None.
     """
 
     table: TableState
@@ -58,6 +62,12 @@ class GameState:
     favor_holder: PlayerId | None = None
     once_per: set[str] = field(default_factory=set)
     seed: int = 0
+    pending: DecisionRequest | None = None
+
+    @property
+    def awaiting_decision(self) -> bool:
+        """Whether the engine is paused on a pending decision."""
+        return self.pending is not None
 
     @classmethod
     def start(cls, table: TableState, first_player: PlayerId, *, seed: int = 0) -> "GameState":

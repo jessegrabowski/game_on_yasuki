@@ -1,6 +1,7 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.decisions import DiscardToHandSize
 
 
 def _game(seed: int = 0) -> GameState:
@@ -17,6 +18,8 @@ def test_start_opens_first_players_action_phase_with_empty_pools():
     assert game.favor_holder is None
     assert game.once_per == set()
     assert game.seed == 42
+    assert game.pending is None
+    assert game.awaiting_decision is False
 
 
 def test_gold_accumulates_then_clears_per_phase():
@@ -43,6 +46,12 @@ def test_spend_gold_deducts_only_when_the_pool_covers_it():
     # Spending the exact remainder is allowed and drains the pool.
     assert game.spend_gold(PlayerId.P1, 1) is True
     assert game.gold[PlayerId.P1] == 0
+
+
+def test_awaiting_decision_tracks_the_pending_request():
+    game = _game()
+    game.pending = DiscardToHandSize(PlayerId.P1, count=1)
+    assert game.awaiting_decision is True
 
 
 def test_use_once_is_claimed_exactly_once():
