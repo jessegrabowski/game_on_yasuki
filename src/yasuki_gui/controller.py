@@ -218,9 +218,9 @@ class FieldController:
             hv = self.view.hands.get(tag)
             if hv is not None:
                 idx = hv.index_at(e.x)
-                if idx is None or idx >= len(hv.zone.cards):
+                if idx is None or idx >= len(hv.cards):
                     return
-                card = hv.zone.cards[idx]
+                card = hv.cards[idx]
                 self.drag = Drag(
                     kind=DragKind.HAND,
                     src_tag=tag,
@@ -324,7 +324,7 @@ class FieldController:
             if hv and hittest_bounds_contains(hv.bbox, e.x, e.y):
                 idx = hv.index_at(e.x)
                 if idx is None:
-                    idx = len(hv.zone.cards)
+                    idx = len(hv.cards)
                 self.view.dispatch(ReorderHand(d.card.id, idx))
             return
 

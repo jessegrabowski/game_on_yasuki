@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_gui.visuals.cardface import RenderCard
 from yasuki_gui import theme
 from yasuki_gui.constants import (
     CARD_W,
@@ -19,7 +19,7 @@ import tkinter as tk
 
 @dataclass
 class CardSpriteVisual(Visual):
-    card: L5RCard
+    card: RenderCard
     x: int
     y: int
     tag: str

@@ -22,10 +22,24 @@ from yasuki_gui.services.hittest import resolve_tag_at as hittest_resolve_tag_at
 from yasuki_gui.tags import card_id_for_tag, card_tag, deck_tag, zone_tag
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.visuals import CardSpriteVisual, DeckVisual, HandVisual, ZoneVisual
+from yasuki_gui.visuals.cardface import to_render_card
 
 
 def _deck_label(key: DeckKey) -> str:
     return "Dynasty Deck" if key.side is Side.DYNASTY else "Fate Deck"
+
+
+_ZONE_LABELS: dict[ZoneRole, str] = {
+    ZoneRole.PROVINCE: "Province",
+    ZoneRole.FATE_DISCARD: "Fate Discard",
+    ZoneRole.FATE_BANISH: "Fate Banish",
+    ZoneRole.DYNASTY_DISCARD: "Dynasty Discard",
+    ZoneRole.DYNASTY_BANISH: "Dynasty Banish",
+}
+
+
+def _zone_label(key: ZoneKey) -> str:
+    return _ZONE_LABELS.get(key.role, key.role.value)
 
 
 class FieldView(tk.Canvas):
@@ -221,11 +235,13 @@ class FieldView(tk.Canvas):
             tag = deck_tag(key)
             wanted.add(tag)
             x, y = deck_pos(w, h, key, seat_at_bottom=key.owner is self.seat)
+            count = len(deck.cards)
+            top = to_render_card(deck.cards[-1]) if deck.cards else None
             dv = self._decks.get(tag)
             if dv is None:
-                dv = DeckVisual(deck, x, y, tag, label=_deck_label(key), images=self._images)
+                dv = DeckVisual(count, top, x, y, tag, label=_deck_label(key), images=self._images)
                 self._decks[tag] = dv
-            dv.deck, dv.x, dv.y = deck, x, y
+            dv.count, dv.top, dv.x, dv.y = count, top, x, y
             dv.owner = key.owner
             self._tag_to_key[tag] = key
             dv.draw(self)
@@ -242,29 +258,34 @@ class FieldView(tk.Canvas):
             tag = zone_tag(key)
             self._tag_to_key[tag] = key
             seat_at_bottom = key.owner is self.seat
+            cards = [to_render_card(card) for card in zone.cards]
             if key.role is ZoneRole.HAND:
                 wanted_hands.add(tag)
                 bx, by, bw, bh = hand_box(w, h, seat_at_bottom=seat_at_bottom)
                 hv = self._hands.get(tag)
                 if hv is None:
-                    hv = HandVisual(zone, bx, by, bw, bh, tag, images=self._images)
+                    hv = HandVisual(cards, key.owner, bx, by, bw, bh, tag, images=self._images)
                     self._hands[tag] = hv
-                hv.zone, hv.x, hv.y, hv.w, hv.h = zone, bx, by, bw, bh
+                hv.cards, hv.owner = cards, key.owner
+                hv.x, hv.y, hv.w, hv.h = bx, by, bw, bh
                 hv.draw(self)
                 continue
             wanted_zones.add(tag)
-            if key.role is ZoneRole.PROVINCE:
+            is_province = key.role is ZoneRole.PROVINCE
+            if is_province:
                 ordered = province_keys[key.owner]
                 positions = province_positions(w, h, len(ordered), seat_at_bottom=seat_at_bottom)
                 px, py = positions[ordered.index(key)]
                 bx, by, bw, bh = px, py, CARD_W, CARD_H
             else:
                 bx, by, bw, bh = discard_pos(w, h, key, seat_at_bottom=seat_at_bottom)
+            label = _zone_label(key)
             zv = self._zones.get(tag)
             if zv is None:
-                zv = ZoneVisual(zone, bx, by, bw, bh, tag, images=self._images)
+                zv = ZoneVisual(cards, is_province, label, bx, by, bw, bh, tag, images=self._images)
                 self._zones[tag] = zv
-            zv.zone, zv.x, zv.y, zv.w, zv.h = zone, bx, by, bw, bh
+            zv.cards, zv.is_province, zv.name = cards, is_province, label
+            zv.x, zv.y, zv.w, zv.h = bx, by, bw, bh
             zv.draw(self)
         for tag in set(self._zones) - wanted_zones:
             self._zones.pop(tag, None)
@@ -277,14 +298,15 @@ class FieldView(tk.Canvas):
         w, h = self._canvas_size()
         wanted: set[str] = set()
         for card in self.state.battlefield.cards:
-            tag = card_tag(card.id)
+            rc = to_render_card(card)
+            tag = card_tag(rc.id)
             wanted.add(tag)
-            x, y = self._sprite_xy(card, w, h)
+            x, y = self._sprite_xy(rc, w, h)
             sp = self._sprites.get(tag)
             if sp is None:
-                sp = CardSpriteVisual(card, x, y, tag, images=self._images)
+                sp = CardSpriteVisual(rc, x, y, tag, images=self._images)
                 self._sprites[tag] = sp
-            sp.card, sp.x, sp.y = card, x, y
+            sp.card, sp.x, sp.y = rc, x, y
             sp.draw(self, selected=tag in self._selected)
         for tag in set(self._sprites) - wanted:
             self._sprites.pop(tag, None)

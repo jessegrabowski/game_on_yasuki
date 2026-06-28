@@ -1,16 +1,18 @@
 import tkinter as tk
 
-from yasuki_core.engine.zones import HandZone
+from yasuki_core.engine.players import PlayerId
 from yasuki_gui import theme
 from yasuki_gui.constants import CARD_W, CARD_H, HAND_GAP, HAND_PADDING
 from yasuki_gui.ui.images import ImageProvider, load_image as _li, load_back_image as _lbi
+from yasuki_gui.visuals.cardface import RenderCard
 from yasuki_gui.visuals.visual import Visual
 
 
 class HandVisual(Visual):
     def __init__(
         self,
-        zone: HandZone,
+        cards: list[RenderCard],
+        owner: PlayerId | None,
         x: int,
         y: int,
         w: int,
@@ -18,7 +20,8 @@ class HandVisual(Visual):
         tag: str,
         images: ImageProvider | None = None,
     ):
-        self.zone = zone
+        self.cards = cards
+        self.owner = owner
         self.x = x
         self.y = y
         self.w = w
@@ -37,7 +40,7 @@ class HandVisual(Visual):
 
     def _start_x(self) -> int:
         # Center-justify cards within the inner padded width when possible; otherwise left-align.
-        n = len(self.zone.cards)
+        n = len(self.cards)
         inner_left = self.x - self.w // 2 + HAND_PADDING
         inner_right = self.x + self.w // 2 - HAND_PADDING
         inner_width = max(0, inner_right - inner_left)
@@ -64,14 +67,14 @@ class HandVisual(Visual):
         return (self._start_x() + idx * self._step(), self.y)
 
     def index_at(self, x: int) -> int | None:
-        if not self.zone.cards:
+        if not self.cards:
             return None
         x0 = self._start_x()
         step = self._step()
         # compute nearest index by division
         rel = x - x0
         idx = round(rel / step)
-        if idx < 0 or idx >= len(self.zone.cards):
+        if idx < 0 or idx >= len(self.cards):
             return None
         # Also ensure the x is not too far from the index center: allow half step
         center_x = x0 + idx * step
@@ -93,9 +96,9 @@ class HandVisual(Visual):
             tags=(self.tag, "zone", "hand"),
         )
         viewer = getattr(canvas, "local_player", None)
-        owner = getattr(self.zone, "owner", None)
+        owner = self.owner
         # An opponent's hand card shows its back unless its owner has shown it.
-        for i, card in enumerate(self.zone.cards):
+        for i, card in enumerate(self.cards):
             cx, cy = self.center_for_index(i)
             show_front = not (
                 owner is not None and viewer is not None and owner != viewer and not card.shown

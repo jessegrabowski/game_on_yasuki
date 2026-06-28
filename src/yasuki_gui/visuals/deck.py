@@ -2,9 +2,8 @@ import tkinter as tk
 
 from yasuki_gui import theme
 from yasuki_gui.ui.images import ImageProvider
-from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.deck import Deck
 from yasuki_gui.constants import CARD_W, CARD_H
+from yasuki_gui.visuals.cardface import RenderCard
 from yasuki_gui.visuals.visual import Visual, draw_count_pill
 from yasuki_core.engine.players import PlayerId
 
@@ -12,14 +11,16 @@ from yasuki_core.engine.players import PlayerId
 class DeckVisual(Visual):
     def __init__(
         self,
-        deck: Deck[L5RCard],
+        count: int,
+        top: RenderCard | None,
         x: int,
         y: int,
         tag: str,
         label: str = "Deck",
         images: ImageProvider | None = None,
     ):
-        self.deck = deck
+        self.count = count
+        self.top = top
         self.x = x
         self.y = y
         self.tag = tag
@@ -41,13 +42,11 @@ class DeckVisual(Visual):
         x, y = self.x, self.y
         w, h = self.size
         x0, y0, x1, y1 = x - w // 2, y - h // 2, x + w // 2, y + h // 2
-        count = len(self.deck.cards)
-        top = self.deck.peek(1)
+        count = self.count
         photo = None
-        if top and self.images is not None:
-            top_card = top[0]
+        if self.top is not None and self.images is not None:
             photo = self.images.back(
-                top_card.side, bowed=False, inverted=False, image_back=top_card.image_back
+                self.top.side, bowed=False, inverted=False, image_back=self.top.image_back
             )
         if photo is not None:
             canvas.create_image(x, y, image=photo, tags=(self.tag, "deck"))

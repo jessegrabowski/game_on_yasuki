@@ -1,14 +1,16 @@
 import tkinter as tk
-from yasuki_core.engine.zones import Zone, ProvinceZone
 from yasuki_gui import theme
 from yasuki_gui.ui.images import ImageProvider, load_image as _li, load_back_image as _lbi
+from yasuki_gui.visuals.cardface import RenderCard
 from yasuki_gui.visuals.visual import Visual, draw_count_pill
 
 
 class ZoneVisual(Visual):
     def __init__(
         self,
-        zone: Zone,
+        cards: list[RenderCard],
+        is_province: bool,
+        name: str,
         x: int,
         y: int,
         w: int,
@@ -16,7 +18,9 @@ class ZoneVisual(Visual):
         tag: str,
         images: ImageProvider | None = None,
     ):
-        self.zone = zone
+        self.cards = cards
+        self.is_province = is_province
+        self.name = name
         self.x = x
         self.y = y
         self.w = w
@@ -36,10 +40,9 @@ class ZoneVisual(Visual):
     def draw(self, canvas: tk.Canvas) -> None:
         x, y = self.x, self.y
         w, h = self.size
-        zone = self.zone
-        is_province = isinstance(zone, ProvinceZone)
+        is_province = self.is_province
         x0, y0, x1, y1 = x - w // 2, y - h // 2, x + w // 2, y + h // 2
-        top = zone.cards[-1] if zone.cards else None
+        top = self.cards[-1] if self.cards else None
         if top is not None:
             # Province cards always sit upright; a pile's top shows however it was placed.
             bowed = False if is_province else top.bowed
@@ -83,8 +86,8 @@ class ZoneVisual(Visual):
             canvas.create_rectangle(
                 x0, y0, x1, y1, outline=theme.CARD_BORDER, width=1, tags=(self.tag, "zone")
             )
-            if not is_province and len(zone) > 1:
-                draw_count_pill(canvas, x1, y1, len(zone), self.tag)
+            if not is_province and len(self.cards) > 1:
+                draw_count_pill(canvas, x1, y1, len(self.cards), self.tag)
             return
         # Empty: a dashed parchment slot for a province, a solid one for a pile, with a faint label.
         canvas.create_rectangle(
@@ -101,7 +104,7 @@ class ZoneVisual(Visual):
         canvas.create_text(
             x,
             y,
-            text=zone.name,
+            text=self.name,
             fill=theme.INK_DIM,
             font=theme.serif(8),
             width=w - 8,
