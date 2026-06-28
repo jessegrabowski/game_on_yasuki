@@ -1,7 +1,7 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 
-import { flipDeltas } from '../../../src/yasuki_web/static/site/flip.js';
+import { flipDeltas, flip } from '../../../src/yasuki_web/static/site/flip.js';
 
 const rects = (entries) => new Map(entries.map(([id, left, top]) => [id, { left, top }]));
 const byId = (deltas) => [...deltas].sort((a, b) => a.id.localeCompare(b.id));
@@ -38,5 +38,25 @@ describe('flipDeltas', () => {
       { id: 'a', dx: -5, dy: 0 },
       { id: 'c', dx: 0, dy: -5 },
     ]);
+  });
+});
+
+describe('flip', () => {
+  it('still runs the render under reduced motion', () => {
+    const original = globalThis.matchMedia;
+    globalThis.matchMedia = () => ({ matches: true });
+    try {
+      let rendered = false;
+      flip({}, () => (rendered = true));
+      assert.ok(rendered, 'the board still draws when animation is suppressed');
+    } finally {
+      globalThis.matchMedia = original;
+    }
+  });
+
+  it('runs the render on the normal path when nothing moved', () => {
+    let rendered = false;
+    flip({ querySelectorAll: () => [] }, () => (rendered = true));
+    assert.ok(rendered);
   });
 });

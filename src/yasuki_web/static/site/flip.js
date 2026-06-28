@@ -18,3 +18,41 @@ export function flipDeltas(before, after) {
   }
   return deltas;
 }
+
+const FLIP_MS = 180;
+
+// Animate the position changes a render produces: record where each tracked card sits, run `mutate`
+// (which reconciles the board), then glide every survivor from its old position to its new one. The
+// move is keyed by card id, not element identity, so a card that crosses containers (hand -> board)
+// animates correctly even though reconcile rebuilds it there. Cards that appear, vanish, or stay put
+// render normally. A no-op under prefers-reduced-motion, and inert where there is no layout to measure
+// (the rects collapse to zero delta), so the caller can always route a render through it.
+export function flip(stage, mutate) {
+  if (!stage || prefersReducedMotion()) {
+    mutate();
+    return;
+  }
+  const before = rectsById(stage);
+  mutate();
+  const after = rectsById(stage);
+  for (const { id, dx, dy } of flipDeltas(before, after)) {
+    const el = stage.querySelector(`[data-card-id="${CSS.escape(id)}"]`);
+    el?.animate(
+      [{ transform: `translate(${dx}px, ${dy}px)` }, { transform: 'none' }],
+      { duration: FLIP_MS, easing: 'ease-out' },
+    );
+  }
+}
+
+function rectsById(stage) {
+  const rects = new Map();
+  for (const el of stage.querySelectorAll('[data-card-id]')) {
+    const { left, top } = el.getBoundingClientRect();
+    rects.set(el.dataset.cardId, { left, top });
+  }
+  return rects;
+}
+
+function prefersReducedMotion() {
+  return globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
+}
