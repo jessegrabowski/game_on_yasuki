@@ -153,6 +153,7 @@ cards:
   rarity: Promo
 - title: Benika's Pride
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -620,6 +621,7 @@ cards:
   flavor_text: <i>"The Empire needs you for now, samurai. When this war is over, I will have blood."</i>
 - title: Disposable Troops
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -690,6 +692,7 @@ cards:
     Jinn-Kuen</i>
 - title: Emerald Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1045,6 +1048,7 @@ cards:
   rarity: Promo
 - title: Hideshi's Guardian
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1225,6 +1229,7 @@ cards:
     but has significant shortcomings on the battlefield." -Hida Fubatsu</i>
 - title: Infantry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1978,6 +1983,7 @@ cards:
   rarity: Promo
 - title: Phoenix Yojimbo
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2088,6 +2094,7 @@ cards:
     your ancestors weep for joy, for today you are a samurai! To war!"</i>
 - title: Readied Blade
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -2415,6 +2422,7 @@ cards:
   rarity: Promo
 - title: Spirit of the Bear
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2726,6 +2734,7 @@ cards:
   artist: Carl Frank
 - title: The Walking Dead
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2867,6 +2876,7 @@ cards:
   rarity: Promo
 - title: Unicorn Scout
   types:
+  - Personality
   - Proxy
   decks:
   - Other

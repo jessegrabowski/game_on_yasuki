@@ -733,6 +733,7 @@ cards:
   collector_number: '116'
 - title: Disposable Troops
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -946,6 +947,7 @@ cards:
   collector_number: '119'
 - title: Earthen Armor (+3F)
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -965,6 +967,7 @@ cards:
   collector_number: '5'
 - title: Earthen Armor (+4F)
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -1251,6 +1254,7 @@ cards:
   collector_number: '101'
 - title: Flooded Terrain
   types:
+  - Strategy
   - Proxy
   decks:
   - Other
@@ -1870,6 +1874,7 @@ cards:
   collector_number: '131'
 - title: Improvised Weapon
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -1914,6 +1919,7 @@ cards:
   collector_number: '132'
 - title: Infantry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2245,6 +2251,7 @@ cards:
   collector_number: '18'
 - title: Kuroko's Creation
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -2266,6 +2273,7 @@ cards:
 - id: lion_ancestor
   title: Lion Ancestor
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2827,6 +2835,7 @@ cards:
   collector_number: '139'
 - title: Readied Blade
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -4078,6 +4087,7 @@ cards:
   collector_number: '46'
 - title: Zombie Peasant
   types:
+  - Follower
   - Proxy
   decks:
   - Other

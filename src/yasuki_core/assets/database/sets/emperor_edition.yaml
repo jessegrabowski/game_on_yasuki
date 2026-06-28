@@ -2449,6 +2449,7 @@ cards:
   collector_number: '3'
 - title: Dak-ho's Men
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2570,6 +2571,7 @@ cards:
   collector_number: '16'
 - title: Denhei's Snake
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2863,6 +2865,7 @@ cards:
   collector_number: '289'
 - title: Dutiful Cavalry
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3120,6 +3123,7 @@ cards:
   collector_number: '33'
 - title: Farmlands Conscripts
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3417,6 +3421,7 @@ cards:
   collector_number: '233'
 - title: Gina's Fox
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4521,6 +4526,7 @@ cards:
   collector_number: '313'
 - title: Infantry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -4840,6 +4846,7 @@ cards:
   collector_number: '425'
 - title: Kaiu Armor
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -5487,6 +5494,7 @@ cards:
   collector_number: '316'
 - title: Kobashi's Spawn
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5618,6 +5626,7 @@ cards:
   collector_number: '394'
 - title: Kyuden Hida Scout
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5779,6 +5788,7 @@ cards:
 - id: lion_ancestor
   title: Lion Ancestor
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -6569,6 +6579,7 @@ cards:
   rarity: Fixed
 - title: Mounted Ashigaru
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -6656,6 +6667,7 @@ cards:
   collector_number: '321'
 - title: Nakanu's Creations
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -7086,6 +7098,7 @@ cards:
   collector_number: '402'
 - title: Plain of Gold
   types:
+  - Strategy
   - Proxy
   decks:
   - Other
@@ -7595,6 +7608,7 @@ cards:
   flavor_text: <i>Choosing battle sites was one of the few advantages the Empire's defenders had.</i>
 - title: Rokuta's Apprentice
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -9129,6 +9143,7 @@ cards:
   collector_number: '184'
 - title: Suiteiru's Podling
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -9282,6 +9297,7 @@ cards:
   collector_number: '24'
 - title: Swamp Spirit
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -10272,6 +10288,7 @@ cards:
   rarity: Fixed
 - title: The Walking Dead
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -10602,6 +10619,7 @@ cards:
   collector_number: '101'
 - title: Tsi Weapon
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -11115,6 +11133,7 @@ cards:
   collector_number: '55'
 - title: Venerated Sensei
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -11449,6 +11468,7 @@ cards:
   collector_number: '25'
 - title: Witness
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -11589,6 +11609,7 @@ cards:
   collector_number: '71'
 - title: Yasunori's Gift
   types:
+  - Item
   - Proxy
   decks:
   - Other

@@ -381,6 +381,7 @@ cards:
   designer: Bryan
 - title: Bat
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1473,6 +1474,7 @@ cards:
 - id: imposter
   title: Imposter
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2776,6 +2778,7 @@ cards:
   designer: Duncan
 - title: Renyu's Dog
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3341,6 +3344,7 @@ cards:
 - id: the_false_nimuro_experienced_2
   title: The False Nimuro
   types:
+  - Personality
   - Proxy
   decks:
   - Other

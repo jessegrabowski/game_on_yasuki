@@ -715,6 +715,7 @@ cards:
   collector_number: '149'
 - title: Chikara
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1056,6 +1057,7 @@ cards:
   collector_number: '23'
 - title: Dutiful Cavalry
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1154,6 +1156,7 @@ cards:
   collector_number: '101'
 - title: Farmland Conscripts
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1257,6 +1260,7 @@ cards:
   collector_number: '103'
 - title: Fudo
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2000,6 +2004,7 @@ cards:
   collector_number: '52'
 - title: Maseru no Oni
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2583,6 +2588,7 @@ cards:
   collector_number: '114'
 - title: Pawn of Corruption
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2629,6 +2635,7 @@ cards:
   collector_number: '150'
 - title: Phantom Blade
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -2966,6 +2973,7 @@ cards:
   collector_number: '123'
 - title: Shiba Allies
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3222,6 +3230,7 @@ cards:
   collector_number: '125'
 - title: Spirit of Maigo no Musha
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3597,6 +3606,7 @@ cards:
   collector_number: '134'
 - title: The Walking Dead
   types:
+  - Personality
   - Proxy
   decks:
   - Other

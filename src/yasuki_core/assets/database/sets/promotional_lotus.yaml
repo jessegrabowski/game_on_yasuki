@@ -922,6 +922,7 @@ cards:
   flavor_text: <i>"There is no greater testament to the strength of the wave men."</i>
 - title: Ninja Token
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1054,6 +1055,7 @@ cards:
   flavor_text: <i>Cleanse the spirit, and the flesh will follow.</i>
 - title: Ratling Token
   types:
+  - Personality
   - Proxy
   decks:
   - Other

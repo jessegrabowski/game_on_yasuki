@@ -832,6 +832,7 @@ cards:
   designer: Bryan
 - title: Detached Personality
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1857,6 +1858,7 @@ cards:
   designer: Bryan
 - title: Masayoshi's Blade
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -1953,6 +1955,7 @@ cards:
   designer: Duncan
 - title: Merihiko's Swarm
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2372,6 +2375,7 @@ cards:
   designer: Duncan
 - title: Ninja
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2649,6 +2653,7 @@ cards:
   designer: Loki
 - title: Ronin Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3967,6 +3972,7 @@ cards:
   designer: Duncan
 - title: Your Name is Mine
   types:
+  - Personality
   - Proxy
   decks:
   - Other

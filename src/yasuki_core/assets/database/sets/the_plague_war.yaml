@@ -175,6 +175,7 @@ cards:
   collector_number: '62'
 - title: Ao-bozu's Blade
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -934,6 +935,7 @@ cards:
   collector_number: '25'
 - title: Dutiful Cavalry
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -975,6 +977,7 @@ cards:
   collector_number: '2'
 - title: Earthen Tetsubo
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -1045,6 +1048,7 @@ cards:
   collector_number: '94'
 - title: Farmland Conscripts
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1232,6 +1236,7 @@ cards:
   collector_number: '76'
 - title: Hariya's Blade
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -1655,6 +1660,7 @@ cards:
   collector_number: '130'
 - title: Infantry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2995,6 +3001,7 @@ cards:
   collector_number: '10'
 - title: Spirit of Gaki-do
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3465,6 +3472,7 @@ cards:
   collector_number: '157'
 - title: The Walking Dead
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3600,6 +3608,7 @@ cards:
   collector_number: '32'
 - title: Toshi Ranbo Guard
   types:
+  - Follower
   - Proxy
   decks:
   - Other
