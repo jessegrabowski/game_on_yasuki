@@ -161,6 +161,26 @@ body {
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
 .btn-small:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-small.btn-danger { color: var(--accent); border-color: var(--accent-soft); }
+
+.account-status {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-family: var(--sans);
+  padding: 4px 2px 0;
+}
+
+.my-decks-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 2px;
+  max-height: 220px;
+  overflow-y: auto;
+}
+.my-decks-row { display: flex; gap: 4px; }
+.my-decks-row .btn-small:first-child { flex: 1; text-align: left; }
+.my-decks-empty { font-size: 0.75rem; color: var(--muted); font-family: var(--sans); margin: 0; }
 .deck-name-row {
   display: flex;
   gap: 6px;

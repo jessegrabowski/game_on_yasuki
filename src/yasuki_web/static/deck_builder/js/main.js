@@ -11,6 +11,7 @@ import {
 } from './deck-state.js';
 import { serializeDeck, parseDeckYaml, deckSnapshot } from './deck-io.js';
 import { saveDeckSnapshot, loadDeckSnapshot, clearDeckSnapshot } from './deck-storage.js';
+import { getMe, saveDeck, listMyDecks, deleteDeck, fetchSharedDeck } from './account.js';
 import { buildCompositeDataURL, customPrintId, loadArtLayout } from './art.js';
 import { openBorrowArt } from './borrow-art.js';
 import { printDeck } from './print.js';
@@ -119,6 +120,8 @@ async function init() {
   $('exportBtn').addEventListener('click', doExportDeck);
   $('printBtn').addEventListener('click', () => printDeck(getDeck(), IMG, API));
   $('importBtn').addEventListener('click', () => $('importFileInput').click());
+  $('saveOnlineBtn').addEventListener('click', doSaveOnline);
+  $('myDecksBtn').addEventListener('click', doToggleMyDecks);
   const persistDeckMeta = debounce(persistDeck, 400);
   $('deckNameInput').addEventListener('input', () => {
     $('deckNameInput').closest('.deck-name-row').classList.remove('shake');
@@ -145,10 +148,115 @@ async function init() {
       console.error('Failed to restore saved deck:', e);
     }
   }
+
+  refreshAccount();
 }
 
 function toggleHelp() {
   $('searchHelp').classList.toggle('hidden');
+}
+
+// Account-backed deck storage. The deck always autosaves to localStorage (the anonymous path);
+// signing in adds the option to keep a deck on the account and pull it back on any device.
+let currentUser = null;
+
+function setAccountStatus(text) {
+  $('accountStatus').textContent = text;
+}
+
+async function refreshAccount() {
+  currentUser = await getMe();
+  if (currentUser) {
+    setAccountStatus(`Signed in as ${currentUser.display_name} · autosaved locally`);
+  } else {
+    setAccountStatus('Autosaved locally · sign in to save decks to your account');
+  }
+}
+
+// The same YAML the Export and autosave paths produce, or null with a nudge if the deck is unnamed
+// (a saved deck must be findable by name).
+function currentDeckYaml() {
+  const name = requireDeckName();
+  if (!name) return null;
+  return { name, yaml: serializeDeck(getDeck(), { name, author: $('deckAuthorInput').value.trim() }) };
+}
+
+async function doSaveOnline() {
+  if (!currentUser) {
+    window.location.href = '/auth/login';
+    return;
+  }
+  const deck = currentDeckYaml();
+  if (!deck) return;
+  setAccountStatus('Saving to your account…');
+  const result = await saveDeck({ name: deck.name, yaml: deck.yaml });
+  setAccountStatus(result.ok ? `Saved to your account as “${result.deck.name}”` : result.error);
+}
+
+async function doToggleMyDecks() {
+  const panel = $('myDecksPanel');
+  if (!panel.classList.contains('hidden')) {
+    panel.classList.add('hidden');
+    return;
+  }
+  if (!currentUser) {
+    window.location.href = '/auth/login';
+    return;
+  }
+  renderMyDecksPanel(await listMyDecks());
+  panel.classList.remove('hidden');
+}
+
+function renderMyDecksPanel(decks) {
+  const panel = $('myDecksPanel');
+  panel.replaceChildren();
+  if (decks.length === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'my-decks-empty';
+    empty.textContent = 'No saved decks yet — save one with “Save online”.';
+    panel.append(empty);
+    return;
+  }
+  for (const deck of decks) {
+    panel.append(myDeckRow(deck));
+  }
+}
+
+function myDeckRow(deck) {
+  const row = document.createElement('div');
+  row.className = 'my-decks-row';
+
+  const load = document.createElement('button');
+  load.className = 'btn-small';
+  load.textContent = `${deck.name} (${deck.dynasty_count}D / ${deck.fate_count}F)`;
+  load.title = 'Load this deck into the builder';
+  load.addEventListener('click', () => loadMyDeck(deck.slug));
+
+  const remove = document.createElement('button');
+  remove.className = 'btn-small btn-danger';
+  remove.textContent = '✕';
+  remove.title = 'Delete this saved deck';
+  remove.addEventListener('click', () => removeMyDeck(deck.slug));
+
+  row.append(load, remove);
+  return row;
+}
+
+async function loadMyDeck(slug) {
+  const shared = await fetchSharedDeck(slug);
+  if (!shared) {
+    setAccountStatus('Could not load that deck');
+    return;
+  }
+  await doImportDeck(shared.yaml);
+  $('myDecksPanel').classList.add('hidden');
+  setAccountStatus(`Loaded “${shared.deck.name}” from your account`);
+}
+
+async function removeMyDeck(slug) {
+  if (await deleteDeck(slug)) {
+    renderMyDecksPanel(await listMyDecks());
+  }
 }
 
 let allTypes = [];
@@ -335,17 +443,22 @@ function doClearDeck() {
   clearDeckSnapshot();
 }
 
-function doExportDeck() {
+// The trimmed deck name, or null after nudging the (required) name field when it's empty.
+function requireDeckName() {
   const input = $('deckNameInput');
   const name = input.value.trim();
-  if (!name) {
-    input.focus();
-    const row = input.closest('.deck-name-row');
-    row.classList.remove('shake');
-    void row.offsetWidth;
-    row.classList.add('shake');
-    return;
-  }
+  if (name) return name;
+  input.focus();
+  const row = input.closest('.deck-name-row');
+  row.classList.remove('shake');
+  void row.offsetWidth;
+  row.classList.add('shake');
+  return null;
+}
+
+function doExportDeck() {
+  const name = requireDeckName();
+  if (!name) return;
   const author = $('deckAuthorInput').value.trim();
   const yaml = serializeDeck(getDeck(), { name, author });
   const filename = name.toLowerCase().replace(/[^a-z0-9]+/g, '_') + '.yaml';
