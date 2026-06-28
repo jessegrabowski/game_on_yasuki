@@ -1,14 +1,5 @@
-from yasuki_core.engine.table import (
-    TableState,
-    Intent,
-    Event,
-    IntentOp,
-    DeckKey,
-    ZoneKey,
-    ZoneRole,
-    MoveDest,
-    BATTLEFIELD,
-)
+from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole, MoveDest, BATTLEFIELD
+from yasuki_core.engine.intents import Intent, Event, IntentOp
 from yasuki_core.engine.redaction import card_identity_public
 
 _FLAG_VERB = {

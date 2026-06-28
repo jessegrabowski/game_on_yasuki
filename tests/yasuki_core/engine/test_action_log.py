@@ -3,13 +3,8 @@ import json
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import (
-    TableState,
-    ZoneKey,
-    ZoneRole,
-    DeckKey,
-    BoardPos,
-    BATTLEFIELD,
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos, BATTLEFIELD
+from yasuki_core.engine.intents import (
     MoveCard,
     SetCardPos,
     SetCardPositions,

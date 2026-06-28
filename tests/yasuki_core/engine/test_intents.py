@@ -1,10 +1,8 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import (
-    ZoneKey,
-    ZoneRole,
-    DeckKey,
+from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey
+from yasuki_core.engine.intents import (
     IntentOp,
     MoveCard,
     SetCardPos,

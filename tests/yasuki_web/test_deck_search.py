@@ -6,7 +6,8 @@ from yasuki_web.websocket import GameRoom
 from yasuki_web.schemas import IntentEnvelope
 from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import IntentOp, DeckKey
+from yasuki_core.engine.table import DeckKey
+from yasuki_core.engine.intents import IntentOp
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 
