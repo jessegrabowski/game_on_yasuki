@@ -239,24 +239,25 @@ class FieldView(tk.Canvas):
 
     def _render_decks(self):
         if self._snapshot is not None:
-            for key, dv in self._snapshot.decks.items():
-                yield key, dv.count, to_render_card(dv.top) if dv.top is not None else None
+            for key, deck_view in self._snapshot.decks.items():
+                top = to_render_card(deck_view.top) if deck_view.top is not None else None
+                yield key, deck_view.count, top
         else:
             for key, deck in self.state.decks.items():
                 yield key, len(deck.cards), to_render_card(deck.cards[-1]) if deck.cards else None
 
     def _render_zones(self):
         if self._snapshot is not None:
-            for key, zv in self._snapshot.zones.items():
-                yield key, [to_render_card(cv) for cv in zv.cards]
+            for key, zone_view in self._snapshot.zones.items():
+                yield key, [to_render_card(card_view) for card_view in zone_view.cards]
         else:
             for key, zone in self.state.zones.items():
                 yield key, [to_render_card(card) for card in zone.cards]
 
     def _render_battlefield(self):
         if self._snapshot is not None:
-            for bcv in self._snapshot.battlefield:
-                yield to_render_card(bcv.card), bcv.pos
+            for bf_view in self._snapshot.battlefield:
+                yield to_render_card(bf_view.card), bf_view.pos
         else:
             for card in self.state.battlefield.cards:
                 yield to_render_card(card), self.state.positions.get(card.id)
