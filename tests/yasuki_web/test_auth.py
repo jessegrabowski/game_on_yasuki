@@ -141,6 +141,29 @@ def test_callback_rejects_a_banned_account(client, monkeypatch, accounts_conn, r
     assert resp.status_code == 403
 
 
+def test_callback_rejects_a_banlisted_identity_after_account_deletion(
+    client, monkeypatch, accounts_conn, rsa_key
+):
+    # Ban then delete the account so only the banlist tombstone remains; the returning identity
+    # (default sub/email minted by _login_and_callback) must still be refused.
+    user = users.upsert_user(accounts_conn, "google-sub-1", "ada@example.com", True, "Ada")
+    users.ban_user(accounts_conn, user["id"], "spam")
+    users.delete_account(accounts_conn, user["id"])
+    resp = _login_and_callback(client, monkeypatch, rsa_key)
+    assert resp.status_code == 403
+
+
+def test_delete_me_erases_the_account_and_clears_the_session(client, monkeypatch, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    assert client.get("/api/me").json()["user"] is not None
+    assert client.delete("/api/me").status_code == 200
+    assert client.get("/api/me").json() == {"user": None}
+
+
+def test_delete_me_requires_a_session(client):
+    assert client.delete("/api/me").status_code == 401
+
+
 def test_callback_rejects_a_token_signed_by_the_wrong_key(client, monkeypatch, other_rsa_key):
     resp = _login_and_callback(client, monkeypatch, other_rsa_key)
     assert resp.status_code == 400

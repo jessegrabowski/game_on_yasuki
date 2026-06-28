@@ -11,12 +11,12 @@ from urllib.parse import urlencode
 import httpx
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Request
-from starlette.responses import RedirectResponse
+from starlette.responses import JSONResponse, RedirectResponse
 from starlette.websockets import WebSocket
 
 from yasuki_web.rate_limit import limiter
 
-from yasuki_core.accounts import oauth_state, sessions, users
+from yasuki_core.accounts import banlist, oauth_state, sessions, users
 from yasuki_core.accounts.db import get_accounts_connection
 
 logger = logging.getLogger(__name__)
@@ -149,8 +149,14 @@ def _pop_login(state: str) -> dict | None:
 
 
 def _complete_login(claims: dict) -> str | None:
-    """Upsert the authenticated user and return a new session token, or None if they are banned."""
+    """Upsert the authenticated user and return a new session token, or None if they are banned.
+
+    A banlist tombstone is checked before any row is created, so a banned identity cannot slip back
+    in by having deleted its account; the live ``is_banned`` flag is the second guard.
+    """
     with get_accounts_connection() as conn:
+        if banlist.is_banned(conn, claims["sub"], claims["email"]):
+            return None
         user = users.upsert_user(
             conn,
             claims["sub"],
@@ -167,6 +173,11 @@ def _complete_login(claims: dict) -> str | None:
 def _logout(token: str) -> None:
     with get_accounts_connection() as conn:
         sessions.delete_session(conn, token)
+
+
+def _delete_account(user_id: int) -> None:
+    with get_accounts_connection() as conn:
+        users.delete_account(conn, user_id)
 
 
 async def current_user_optional(request: Request) -> dict | None:
@@ -293,3 +304,14 @@ async def me(user: dict | None = Depends(current_user_optional)):
             "avatar_url": user["avatar_url"],
         }
     }
+
+
+@router.delete("/api/me")
+async def delete_me(request: Request, user: dict = Depends(current_user)):
+    """Erase the signed-in user's account (decks and sessions included) and clear the cookie."""
+    await asyncio.to_thread(_delete_account, user["id"])
+    response = JSONResponse({"deleted": True})
+    response.delete_cookie(
+        SESSION_COOKIE, path="/", httponly=True, secure=_is_secure(request), samesite="lax"
+    )
+    return response
