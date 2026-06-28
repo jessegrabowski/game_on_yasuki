@@ -9,6 +9,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 
+from tests.yasuki_web._support import account
+
 # Card records shaped like database.get_cards_by_names output; the fetch is faked in the room fixture.
 RECORDS = [
     {
@@ -65,7 +67,7 @@ def room(monkeypatch):
 
 def _seat(room, name):
     ws = _FakeWS()
-    asyncio.run(room.add_player(ws, name))
+    asyncio.run(room.add_player(ws, account(name)))
     return ws
 
 

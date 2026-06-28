@@ -12,6 +12,7 @@ import httpx
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Request
 from starlette.responses import RedirectResponse
+from starlette.websockets import WebSocket
 
 from yasuki_core.accounts import oauth_state, sessions, users
 from yasuki_core.accounts.db import get_accounts_connection
@@ -180,6 +181,19 @@ async def current_user(request: Request) -> dict:
     if user is None:
         raise HTTPException(status_code=401, detail="Authentication required")
     return user
+
+
+async def user_for_websocket(websocket: WebSocket) -> dict | None:
+    """The user behind the session cookie on a WebSocket handshake, or None.
+
+    Browsers send the session cookie on the upgrade request, so the same cookie that authenticates
+    HTTP routes also identifies the socket. The play surface is login-required, so a None result is
+    the signal to close the handshake.
+    """
+    token = websocket.cookies.get(SESSION_COOKIE)
+    if not token:
+        return None
+    return await asyncio.to_thread(_resolve_user, token)
 
 
 @router.get("/auth/login")

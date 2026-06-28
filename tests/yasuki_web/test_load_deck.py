@@ -8,6 +8,8 @@ from yasuki_web.schemas import ClientMessage, LoadDeckRequest
 from yasuki_web.rooms import rooms
 from yasuki_core.engine.players import PlayerId
 
+from tests.yasuki_web._support import account
+
 DECK_YAML = """\
 name: Crab Beats
 
@@ -41,7 +43,7 @@ def room():
 
 def _seat(room, name="Ada"):
     ws = _FakeWS()
-    asyncio.run(room.add_player(ws, name))
+    asyncio.run(room.add_player(ws, account(name)))
     return ws
 
 

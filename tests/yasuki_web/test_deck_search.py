@@ -11,6 +11,8 @@ from yasuki_core.engine.intents import IntentOp
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 
+from tests.yasuki_web._support import account
+
 
 class _FakeWS:
     def __init__(self):
@@ -31,8 +33,8 @@ def room():
 
 def _seat_two(room):
     ada, kenji = _FakeWS(), _FakeWS()
-    asyncio.run(room.add_player(ada, "Ada"))
-    asyncio.run(room.add_player(kenji, "Kenji"))
+    asyncio.run(room.add_player(ada, account("Ada")))
+    asyncio.run(room.add_player(kenji, account("Kenji")))
     return ada, kenji
 
 
