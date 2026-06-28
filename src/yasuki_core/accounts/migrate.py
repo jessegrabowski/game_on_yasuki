@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from importlib import resources
 
 import psycopg
+from psycopg.rows import tuple_row
 
 from yasuki_core.accounts.db import accounts_connection_string
 from yasuki_core.database import mask_dsn
@@ -54,7 +55,9 @@ def apply_migrations(conn: psycopg.Connection) -> list[str]:
     applied : list of str
         The versions applied by this call, in order. Empty when the database is already current.
     """
-    with conn.cursor() as cur:
+    # tuple_row so the bookkeeping read works regardless of the connection's default row factory
+    # (the production pool yields dict rows).
+    with conn.cursor(row_factory=tuple_row) as cur:
         cur.execute(_TRACKING_DDL)
         cur.execute("SELECT version FROM schema_migrations")
         recorded = {row[0] for row in cur.fetchall()}
