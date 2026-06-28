@@ -6,7 +6,7 @@ CREATE TYPE deck_type AS ENUM ('Fate', 'Dynasty', 'Pre-Game', 'Other');
 CREATE TYPE card_type AS ENUM (
   'Ancestor', 'Celestial', 'Clock', 'Event', 'Follower', 'Holding', 'Item', 'Other',
   'Personality', 'Proxy', 'Region', 'Ring', 'Sensei', 'Spell', 'Strategy', 'Stronghold',
-  'Territory', 'Wind'
+  'Territory', 'Token', 'Wind'
 );
 
 
@@ -79,6 +79,15 @@ CREATE TABLE card_keywords (
   card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
   keyword TEXT NOT NULL REFERENCES keywords(keyword) ON DELETE CASCADE,
   PRIMARY KEY (card_id, keyword)
+);
+
+-- Tokens a card creates in play. Both sides are cards: `created_card_id` is the token's own card
+-- row (a marker Token card, or a created-card proxy).
+CREATE TABLE card_creates (
+  creator_card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
+  created_card_id TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
+  PRIMARY KEY (creator_card_id, created_card_id),
+  CHECK (creator_card_id <> created_card_id)
 );
 
 
@@ -215,6 +224,7 @@ CREATE INDEX idx_card_clans_clan        ON card_clans (clan) INCLUDE (card_id);
 CREATE INDEX idx_card_card_types_type   ON card_card_types (type) INCLUDE (card_id);
 CREATE INDEX idx_card_decks_deck        ON card_decks (deck) INCLUDE (card_id);
 CREATE INDEX idx_card_keywords_lower_kw ON card_keywords (lower(keyword)) INCLUDE (card_id);
+CREATE INDEX idx_card_creates_created   ON card_creates (created_card_id) INCLUDE (creator_card_id);
 CREATE INDEX idx_card_legalities_format ON card_legalities (format_name);
 CREATE INDEX idx_print_legalities_format ON print_legalities (format_name);
 
