@@ -35,6 +35,16 @@ def test_session_round_trip_resolves_to_its_user(accounts_conn):
     assert sessions.resolve_session(accounts_conn, token)["id"] == user["id"]
 
 
+def test_resolved_session_carries_the_identity_the_web_layer_seats_by(accounts_conn):
+    # The WS handshake seats players by the resolved session's id and display_name; pin those keys
+    # against the real query so a rename can't break seating while the web tests fake the resolver.
+    user = users.upsert_user(accounts_conn, "g", "ada@example.com", True, "Ada")
+    token = sessions.create_session(accounts_conn, user["id"], timedelta(days=1))
+    resolved = sessions.resolve_session(accounts_conn, token)
+    assert resolved["id"] == user["id"]
+    assert resolved["display_name"] == "Ada"
+
+
 def test_expired_session_does_not_resolve(accounts_conn):
     user = users.upsert_user(accounts_conn, "g", "e@example.com", True, "E")
     token = sessions.create_session(accounts_conn, user["id"], timedelta(seconds=-1))
