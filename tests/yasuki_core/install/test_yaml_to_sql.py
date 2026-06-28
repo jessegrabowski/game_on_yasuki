@@ -17,6 +17,7 @@ from yasuki_core.install.yaml_to_sql import (
     _revision_baseline,
     _RULES_TEXT_COL,
     _STAT_COL,
+    _validate_creates,
 )
 
 # The prints INSERT column order in yaml_to_sql._insert_all; the row tuple from _print_columns is
@@ -251,3 +252,18 @@ def test_print_columns_absent_print_text_is_null():
     # card's own `text` field must not leak onto the printing.
     row = dict(zip(_PRINT_COLS, _print_columns({"text": "card canonical"}, "cid", "some_set", 7)))
     assert row["rules_text"] is None
+
+
+def test_creates_edges_with_known_endpoints_pass():
+    cards = {"akodo_kage": None, "token_plus1f": None}
+    _validate_creates(cards, {("akodo_kage", "token_plus1f")})
+
+
+def test_creates_edge_with_unknown_id_raises():
+    with pytest.raises(ValueError, match="unknown card ids"):
+        _validate_creates({"akodo_kage": None}, {("akodo_kage", "token_ghost")})
+
+
+def test_self_referential_create_raises():
+    with pytest.raises(ValueError, match="self-referential"):
+        _validate_creates({"akodo_kage": None}, {("akodo_kage", "akodo_kage")})
