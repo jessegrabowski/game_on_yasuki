@@ -710,3 +710,8 @@ arcs:
     size: 77
     code: S:CW
     notes: Another Siege variant. Yogo Junzo deck includes new cards with no arc legality; the three pre-constructed decks include cards legal throughout the 20F Arc, from Ivory Edition through Evil Portents, 9 new cards and one reprinted card, Productive Mine, with Onyx legality only. Also contains Clock and Territory card types, which are only relevant to the Siege format.
+- name: Tokens
+  sets:
+  - set_name: Tokens
+    digital: true
+    notes: Synthetic home for created-card and marker token proxies; not a real product.
