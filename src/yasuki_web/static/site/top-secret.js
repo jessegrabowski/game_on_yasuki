@@ -20,6 +20,7 @@ import {
 } from './board.js';
 import { openDeckDialog } from './deck-dialog.js';
 import { openTokenSearch } from './token-search.js';
+import { predictSnapshot } from './optimistic.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -465,6 +466,13 @@ export function init() {
       battlefield,
       (message) => {
         if (message.intent?.op === 'SEARCH_DECK') pendingDeckLimit = message.intent.value ?? null;
+        // Optimism: a toggle whose outcome we can compute draws immediately. The confirming snapshot
+        // reconciles to identical DOM; a rejected one is re-sent at the same seq and reverts it.
+        const predicted = predictSnapshot(lastSnapshot, message.intent);
+        if (predicted) {
+          lastSnapshot = predicted;
+          renderSnapshot(predicted);
+        }
         sendToRoom({ ...message, room: currentRoom });
       },
       { onSearchDiscard: openDiscardSearch, onCreateToken },
