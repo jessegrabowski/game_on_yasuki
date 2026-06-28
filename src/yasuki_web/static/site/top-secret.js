@@ -20,6 +20,7 @@ import {
 } from './board.js';
 import { openDeckDialog } from './deck-dialog.js';
 import { openTokenSearch } from './token-search.js';
+import { predictSnapshot } from './optimistic.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -188,7 +189,6 @@ export function init() {
   // Surface a system notice (connection drop, a rejected action) as a line in the game log.
   const logSystem = (text) => actionLog && appendLogMessage(actionLog, [{ text }]);
   const battlefield = document.getElementById('battlefield');
-  let boardInteractions = null;
   // The latest snapshot, kept so a discard-pile search can list that public pile without a round-trip.
   let lastSnapshot = null;
   const opponentTableau = document.getElementById('opponentTableau');
@@ -268,6 +268,55 @@ export function init() {
     loadRooms();
   }
 
+  // Draw a snapshot into every board zone. Whether to apply a snapshot at all is the caller's
+  // decision (the seq gate); this only draws.
+  function renderSnapshot(snapshot) {
+    const seats = snapshot.seats ?? {};
+    const present = Object.values(seats)
+      .filter((seat) => seat.connected)
+      .map((seat) => seat.name);
+    renderPlayers(playerList, present, myName);
+    // Decks only carry cards once setup deals the table; an empty table is the pre-game/reset state.
+    // Resolve the pending toggles off that: dealt clears Ready, cleared clears New game.
+    const dealt = Object.values(snapshot.decks ?? {}).some((deck) => deck.count > 0 || deck.top);
+    (dealt ? readyButton : newGameButton)?.classList.remove('btn-gold');
+    const you = snapshot.your_seat;
+    // The context menu reads the viewer's seat off the board root to gate "Send to…"/deck/province
+    // actions to the cards and zones this player owns.
+    if (boardStage) boardStage.dataset.viewerSeat = you ?? '';
+    if (!you) {
+      renderBoard(battlefield, snapshot.battlefield ?? [], imgBase);
+      return;
+    }
+    const opponent = you === 'P1' ? 'P2' : 'P1';
+    const handOf = (seat) => snapshot.zones?.[`${seat}:hand`] ?? [];
+    // Render every seat-bar and tableau zone first, so the board's battlefield-relative anchors are
+    // measured against fully settled layout. A hand fills its seat bar and can resize the battlefield;
+    // measuring before that lands would anchor the loose pre-game cards to a stale position, so the
+    // stronghold would jump on the next render.
+    renderTableau(selfTableau, you, snapshot, imgBase);
+    renderTableau(opponentTableau, opponent, snapshot, imgBase);
+    renderHand(selfHand, handOf(you), imgBase);
+    renderHand(opponentHand, handOf(opponent), imgBase);
+    if (selfHand) selfHand.dataset.owner = you;
+    if (opponentHand) opponentHand.dataset.owner = opponent;
+    renderPanel(selfPanel, seats[you] ?? {}, { editable: true });
+    renderPanel(opponentPanel, seats[opponent] ?? {}, { editable: false });
+    const anchorFor = (owner, isViewer, group) => {
+      const tableau = isViewer ? selfTableau : opponentTableau;
+      if (group === 'PREGAME') return pregameAnchor(tableau, battlefield, isViewer);
+      return deckAnchor(tableau, battlefield, isViewer, group);
+    };
+    const onTable = placeUnplacedCards(
+      snapshot.battlefield ?? [],
+      you,
+      anchorFor,
+      battlefield.clientWidth,
+      battlefield.clientHeight,
+    );
+    renderBoard(battlefield, onTable, imgBase);
+  }
+
   function joinRoom(roomId) {
     const id = (roomId || '').trim();
     if (!id) return;
@@ -280,6 +329,7 @@ export function init() {
     if (chatLog) chatLog.innerHTML = '';
     if (actionLog) actionLog.innerHTML = '';
     setStatus(`Joining ${id}…`);
+    let lastSeq = -1; // highest applied snapshot seq this room
     client = connectRoom(id, myName);
     client.events.addEventListener('HELLO', (e) => {
       showRoom(e.detail.room);
@@ -287,53 +337,16 @@ export function init() {
     });
     client.events.addEventListener('SNAPSHOT', (e) => {
       const snapshot = e.detail.snapshot ?? {};
-      lastSnapshot = snapshot;
-      const seats = snapshot.seats ?? {};
-      const present = Object.values(seats)
-        .filter((seat) => seat.connected)
-        .map((seat) => seat.name);
-      renderPlayers(playerList, present, myName);
-      // Decks only carry cards once setup deals the table; an empty table is the pre-game/reset
-      // state. Resolve the pending toggles off that: dealt clears Ready, cleared clears New game.
-      const dealt = Object.values(snapshot.decks ?? {}).some((deck) => deck.count > 0 || deck.top);
-      (dealt ? readyButton : newGameButton)?.classList.remove('btn-gold');
-      const you = snapshot.your_seat;
-      // The context menu reads the viewer's seat off the board root to gate "Send to…"/deck/province
-      // actions to the cards and zones this player owns.
-      if (boardStage) boardStage.dataset.viewerSeat = you ?? '';
-      if (!you) {
-        renderBoard(battlefield, snapshot.battlefield ?? [], imgBase);
-        return;
+      // The server stamps a monotonic seq per accepted intent; drop a snapshot that arrives strictly
+      // older than the last applied one. Equal seq still applies — some broadcasts (seat metadata)
+      // reuse the seq without bumping it, and reconcile is idempotent so re-applying is harmless.
+      const seq = snapshot.seq;
+      if (typeof seq === 'number') {
+        if (seq < lastSeq) return;
+        lastSeq = seq;
       }
-      const opponent = you === 'P1' ? 'P2' : 'P1';
-      const handOf = (seat) => snapshot.zones?.[`${seat}:hand`] ?? [];
-      // Render every seat-bar and tableau zone first, so the board's battlefield-relative anchors are
-      // measured against fully settled layout. A hand fills its seat bar and can resize the battlefield;
-      // measuring before that lands would anchor the loose pre-game cards to a stale position, so the
-      // stronghold would jump on the next render.
-      renderTableau(selfTableau, you, snapshot, imgBase);
-      renderTableau(opponentTableau, opponent, snapshot, imgBase);
-      renderHand(selfHand, handOf(you), imgBase);
-      renderHand(opponentHand, handOf(opponent), imgBase);
-      if (selfHand) selfHand.dataset.owner = you;
-      if (opponentHand) opponentHand.dataset.owner = opponent;
-      renderPanel(selfPanel, seats[you] ?? {}, { editable: true });
-      renderPanel(opponentPanel, seats[opponent] ?? {}, { editable: false });
-      const anchorFor = (owner, isViewer, group) => {
-        const tableau = isViewer ? selfTableau : opponentTableau;
-        if (group === 'PREGAME') return pregameAnchor(tableau, battlefield, isViewer);
-        return deckAnchor(tableau, battlefield, isViewer, group);
-      };
-      const onTable = placeUnplacedCards(
-        snapshot.battlefield ?? [],
-        you,
-        anchorFor,
-        battlefield.clientWidth,
-        battlefield.clientHeight,
-      );
-      renderBoard(battlefield, onTable, imgBase);
-      // The re-render rebuilt every card element, so reattach the selection outline by card id.
-      boardInteractions?.markSelection();
+      lastSnapshot = snapshot;
+      renderSnapshot(snapshot);
     });
     client.events.addEventListener('CHAT', (e) => {
       appendChatMessage(chatLog, e.detail.from, e.detail.text);
@@ -448,11 +461,18 @@ export function init() {
   if (boardStage && battlefield) {
     // A SEARCH_DECK intent carries its top-N as `intent.value`; mirror it into pendingDeckLimit to
     // cap the DECK_CONTENTS dialog, but pass the message through untouched so the server logs it.
-    boardInteractions = initBoardInteractions(
+    initBoardInteractions(
       boardStage,
       battlefield,
       (message) => {
         if (message.intent?.op === 'SEARCH_DECK') pendingDeckLimit = message.intent.value ?? null;
+        // Optimism: a toggle whose outcome we can compute draws immediately. The confirming snapshot
+        // reconciles to identical DOM; a rejected one is re-sent at the same seq and reverts it.
+        const predicted = predictSnapshot(lastSnapshot, message.intent);
+        if (predicted) {
+          lastSnapshot = predicted;
+          renderSnapshot(predicted);
+        }
         sendToRoom({ ...message, room: currentRoom });
       },
       { onSearchDiscard: openDiscardSearch, onCreateToken },

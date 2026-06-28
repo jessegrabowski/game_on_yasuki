@@ -32,6 +32,7 @@ import {
   initPanelHonor,
   highlightCard,
   placeUnplacedCards,
+  patchCard,
   canonicalToView,
   viewToCanonical,
   clampMenuPosition,
@@ -231,6 +232,63 @@ describe('renderBoard', () => {
     assert.equal(board.children.length, 2);
     assert.equal(board.children[0].dataset.cardId, 'a');
     assert.equal(board.children[0].style.left, '10px');
+  });
+
+  it('reuses a card element across renders instead of rebuilding it', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'a', x: 10 })], '/images');
+    const first = board.children[0];
+    renderBoard(board, [card({ id: 'a', x: 99, bowed: true })], '/images');
+    assert.equal(board.children[0], first, 'same element instance reused');
+    assert.equal(first.style.left, '99px', 'patched in place');
+    assert.ok(first.classList.contains('bowed'));
+  });
+
+  it('keeps each card element when only the order changes', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'a' }), card({ id: 'b' }), card({ id: 'c' })], '/images');
+    const elA = board.children[0];
+    const elC = board.children[2];
+    renderBoard(board, [card({ id: 'c' }), card({ id: 'a' }), card({ id: 'b' })], '/images');
+    assert.deepEqual(
+      board.children.map((el) => el.dataset.cardId),
+      ['c', 'a', 'b'],
+    );
+    assert.equal(board.children[0], elC, 'the moved card keeps its element');
+    assert.equal(board.children[1], elA, 'reused, not rebuilt');
+  });
+
+  it('drops a departed card and adds a new one', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'a' }), card({ id: 'b' })], '/images');
+    renderBoard(board, [card({ id: 'a' }), card({ id: 'd' })], '/images');
+    assert.deepEqual(
+      board.children.map((el) => el.dataset.cardId),
+      ['a', 'd'],
+    );
+  });
+
+  it('reuses the element but strips the front identity when a card becomes a hidden stub', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'a' })], '/images');
+    const el = board.children[0];
+    const front = el.children[0]?.src;
+    assert.equal(el.dataset.name, 'Hida Kisada');
+    renderBoard(board, [{ id: 'a', side: 'DYNASTY', hidden: true, x: 10, y: 20 }], '/images');
+    assert.equal(board.children[0], el, 'same element reused');
+    assert.ok(el.classList.contains('face-down'));
+    assert.equal(el.dataset.name, '', 'no stale front identity on the reused element');
+    assert.ok(!el.children.some((c) => c.src === front), 'the front image is gone');
+  });
+
+  it('keeps the .selected outline on a card across a reconciling re-render', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'a' })], '/images');
+    const el = board.children[0];
+    el.classList.add('selected'); // as a user selection would
+    renderBoard(board, [card({ id: 'a', x: 99 })], '/images');
+    assert.equal(board.children[0], el, 'same element reused');
+    assert.ok(el.classList.contains('selected'), 'selection survives without re-applying it');
   });
 
   it('shows the front image when face up', () => {
@@ -469,6 +527,20 @@ describe('renderTableau', () => {
     assert.equal(dynastyBack.src, '/img/sets/backs/dynasty_new.jpg');
     assert.equal(fateBack.src, '/img/sets/backs/fate_new.jpg');
   });
+
+  it('reuses a province card element across renders, patching it in place', () => {
+    const area = document.createElement('div');
+    const snap = seatSnapshot();
+    const slot = () => area.children[1].children[1]; // provinces wrapper -> province idx 1
+    snap.zones['P1:province:1'] = [card({ id: 'pv1' })];
+    renderTableau(area, 'P1', snap, '/images');
+    const first = slot().children[0];
+    snap.zones['P1:province:1'] = [card({ id: 'pv1', bowed: true })];
+    renderTableau(area, 'P1', snap, '/images');
+    assert.equal(area.children[1].children.length, 4, 'still four provinces after re-render');
+    assert.equal(slot().children[0], first, 'same element reused');
+    assert.ok(first.classList.contains('bowed'), 'patched in place');
+  });
 });
 
 describe('renderHand', () => {
@@ -493,6 +565,18 @@ describe('renderHand', () => {
     // The base printing shows immediately; the canvas recomposite (untestable in the fake DOM) only
     // upgrades the src later, so the render never blocks on it.
     assert.equal(hand.children[0].children[0].src, '/images/sets/imperial_edition/hida_kisada.jpg');
+  });
+
+  it('reuses a hand card element across renders and reorders it in place', () => {
+    const hand = document.createElement('div');
+    renderHand(hand, [card({ id: 'h1' }), card({ id: 'h2' })], '/images');
+    const h1 = hand.children[0];
+    renderHand(hand, [card({ id: 'h2' }), card({ id: 'h1' })], '/images');
+    assert.deepEqual(
+      hand.children.map((el) => el.dataset.cardId),
+      ['h2', 'h1'],
+    );
+    assert.equal(hand.children[1], h1, 'h1 keeps its element after the reorder');
   });
 });
 
@@ -691,6 +775,43 @@ describe('listDropIndex', () => {
 
   it('skips the dragged row so the slot is relative to the others', () => {
     assert.equal(listDropIndex(list, 250, 'b'), 2); // a, then c — b excluded
+  });
+});
+
+describe('patchCard', () => {
+  const view = (over = {}) => ({
+    id: 'c1', name: 'Hida', img: 'a.jpg', side: 'DYNASTY', owner: 'P1',
+    bowed: false, inverted: false, face_up: true, shown: false, peeked: false,
+    hidden: false, token: false, pregame: false, ...over,
+  });
+
+  it('applies classes, dataset, and a single face on first build', () => {
+    const el = document.createElement('div');
+    patchCard(el, view({ bowed: true }), null, '/img');
+    assert.ok(el.classList.contains('bowed'));
+    assert.equal(el.dataset.cardId, 'c1');
+    assert.equal(el.dataset.name, 'Hida');
+    assert.equal(el.children.length, 1, 'exactly one face child');
+  });
+
+  it('re-patching with the same view does not duplicate the face', () => {
+    const el = document.createElement('div');
+    const v = view();
+    patchCard(el, v, null, '/img');
+    patchCard(el, v, v, '/img');
+    assert.equal(el.children.length, 1);
+  });
+
+  it('clears a flag that goes false and swaps the face in place on a state change', () => {
+    setBackArt({ DYNASTY: '/back.jpg' });
+    const el = document.createElement('div');
+    const up = view({ bowed: true });
+    patchCard(el, up, null, '/img');
+    patchCard(el, view({ bowed: false, face_up: false }), up, '/img');
+    assert.equal(el.dataset.bowed, '', 'bowed dataset cleared');
+    assert.ok(!el.classList.contains('bowed'), 'bowed class cleared');
+    assert.ok(el.classList.contains('face-down'), 'now face-down');
+    assert.equal(el.children.length, 1, 'face replaced, not appended');
   });
 });
 
@@ -1304,14 +1425,13 @@ describe('initBoardInteractions — selection', () => {
   let root;
   let board;
   let sent;
-  let interactions;
 
   beforeEach(() => {
     root = document.getElementById('boardStage');
     root.dataset.viewerSeat = 'P1';
     board = document.getElementById('battlefield');
     sent = [];
-    interactions = initBoardInteractions(root, board, (message) => sent.push(message));
+    initBoardInteractions(root, board, (message) => sent.push(message));
   });
 
   it('selects a battlefield card on a plain click and clears it on an empty click', () => {
@@ -1339,19 +1459,6 @@ describe('initBoardInteractions — selection', () => {
 
     assert.ok(c1.classList.contains('selected'));
     assert.ok(c2.classList.contains('selected'));
-  });
-
-  it('reattaches the outline to fresh elements after a re-render via markSelection', () => {
-    const c1 = fakeCard('c1', { onBattlefield: true });
-    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1] : []);
-    root._emit('pointerdown', onCard(c1));
-    root._emit('pointerup', onZone({ zone: 'battlefield' }));
-
-    // A SNAPSHOT re-render rebuilds the card element; the id-keyed selection must survive it.
-    const fresh = fakeCard('c1', { onBattlefield: true });
-    board.querySelectorAll = (sel) => (sel === '.board-card' ? [fresh] : []);
-    interactions.markSelection();
-    assert.ok(fresh.classList.contains('selected'));
   });
 
   // Build a two-card selection (click c1, Ctrl-click c2) and return the elements. Per-card overrides

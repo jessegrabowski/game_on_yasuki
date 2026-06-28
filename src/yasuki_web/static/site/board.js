@@ -3,6 +3,7 @@
 // blocks inline style attributes, and property assignment needs no manual escaping.
 
 import { buildCompositeDataURL, loadArtLayout } from '../deck_builder/js/art.js';
+import { reconcile } from './reconcile.js';
 
 export function node(tag, className, text) {
   const el = document.createElement(tag);
@@ -138,37 +139,77 @@ function tagCard(el, card) {
   el.dataset.img = card.img ?? '';
   // pregame (stronghold/sensei/wind) cards are setup pieces tied to a seat — they cannot change hands.
   el.dataset.pregame = card.pregame ? '1' : '';
-  if (card.back_card_id) el.dataset.doubleFaced = '1';
+  el.dataset.doubleFaced = card.back_card_id ? '1' : '';
 }
 
-// An absolutely-positioned battlefield card.
-function cardElement(card, imgBase) {
-  const el = node('div', 'board-card');
-  if (card.bowed) el.classList.add('bowed');
-  if (card.inverted) el.classList.add('inverted');
-  if (card.shown) el.classList.add('shown');
-  if (card.peeked) el.classList.add('peeked');
-  tagCard(el, card);
-  el.style.left = `${card.x}px`;
-  el.style.top = `${card.y}px`;
-  applyFace(el, card, imgBase);
-  return el;
+// Every field of a serialized card whose change must re-patch its element, mirroring snapshot.py
+// `_card` plus the battlefield x/y. `id` is excluded — it keys the element, it never changes.
+// Exported so the reconcile diff and the shape-drift guard key off the same list.
+export const CARD_FIELDS = [
+  'name', 'img', 'side', 'owner', 'pregame', 'token', 'bowed', 'face_up', 'inverted',
+  'shown', 'peeked', 'hidden', 'back_card_id', 'showing_back', 'art', 'note', 'x', 'y',
+];
+
+// Fields that change a card's drawn face (front/back image, peek/show disclosure, note); when none of
+// these moved, a re-patch keeps the existing <img> and its cached art-swap composite.
+const FACE_FIELDS = ['hidden', 'face_up', 'peeked', 'shown', 'img', 'name', 'side', 'art', 'note'];
+
+function faceChanged(prev, view) {
+  return FACE_FIELDS.some((field) =>
+    field === 'art'
+      ? JSON.stringify(prev.art ?? null) !== JSON.stringify(view.art ?? null)
+      : prev[field] !== view[field],
+  );
+}
+
+// Apply a card's full visual state to its element, idempotently. `prev` is the view the element last
+// held (null on first build); given it, the face is rebuilt only when a face field changed, so an
+// unchanged card keeps its image across renders. A battlefield card carries an x; a zone card
+// (hand/province/pile) does not and stays flow-positioned.
+export function patchCard(el, view, prev, imgBase) {
+  el.classList.toggle('bowed', !!view.bowed);
+  el.classList.toggle('inverted', !!view.inverted);
+  el.classList.toggle('shown', !!view.shown);
+  el.classList.toggle('peeked', !!view.peeked);
+  tagCard(el, view);
+  if (view.x !== undefined) {
+    el.style.left = `${view.x}px`;
+    el.style.top = `${view.y}px`;
+  }
+  if (!prev || faceChanged(prev, view)) {
+    el.replaceChildren();
+    applyFace(el, view, imgBase);
+  }
 }
 
 // A card laid out in a zone (hand, province, pile) — flow-positioned, no x/y.
 function zoneCard(card, imgBase) {
   const el = node('div', 'zone-card');
-  if (card.bowed) el.classList.add('bowed');
-  if (card.inverted) el.classList.add('inverted');
-  if (card.shown) el.classList.add('shown');
-  if (card.peeked) el.classList.add('peeked');
-  tagCard(el, card);
-  applyFace(el, card, imgBase);
+  patchCard(el, card, null, imgBase);
   return el;
 }
 
+// Per-container reconcile state: a card keeps its element across the snapshots that re-render its
+// container, so an in-flight art-swap (and, on the battlefield, the selection outline) survive
+// instead of being rebuilt. Keyed weakly by the container so it clears if the container is discarded.
+const cardRegistries = new WeakMap();
+
+// Reconcile a flat card list into `container`. A new card is a bare element that patchCard fills;
+// `cardClass` is 'board-card' (absolute) or 'zone-card' (flow).
+function renderCards(container, cards, imgBase, cardClass) {
+  let registry = cardRegistries.get(container);
+  if (!registry) {
+    registry = new Map();
+    cardRegistries.set(container, registry);
+  }
+  reconcile(container, cards, registry, {
+    create: () => node('div', cardClass),
+    patch: (el, view, prev) => patchCard(el, view, prev, imgBase),
+  });
+}
+
 export function renderBoard(boardEl, cards, imgBase) {
-  boardEl.replaceChildren(...cards.map((card) => cardElement(card, imgBase)));
+  renderCards(boardEl, cards, imgBase, 'board-card');
 }
 
 // A card-sized pile (deck or discard) showing its top card or a back, with a count overlaid.
@@ -201,48 +242,78 @@ function discard(label, cards, owner, role, imgBase) {
   return tile;
 }
 
-// A seat's tableau laid out on the battlefield like the desktop table: dynasty deck + discard at the
-// left, the four provinces in the centre, fate discard + deck at the right. The stronghold/sensei/
-// wind are not part of the tableau — they are loose battlefield cards the client lays out by the
-// dynasty discard (see placeUnplacedCards).
+// A seat's persistent tableau frame: the three layout columns plus a registry of province slots,
+// built once per container so the province slots — and the cards reconciled into them — keep their
+// elements across renders.
+const tableauFrames = new WeakMap();
+
+function tableauFrame(container) {
+  let frame = tableauFrames.get(container);
+  if (!frame) {
+    frame = {
+      left: node('div', 'tableau-decks'),
+      provinces: node('div', 'provinces'),
+      right: node('div', 'tableau-decks'),
+      slots: new Map(), // province key -> { el, view }, reconciled into `provinces`
+    };
+    container.replaceChildren(frame.left, frame.provinces, frame.right);
+    tableauFrames.set(container, frame);
+  }
+  return frame;
+}
+
+// A seat's tableau laid out like the desktop table: dynasty deck + discard at the left, the four
+// provinces in the centre, fate discard + deck at the right. The stronghold/sensei/wind are not part
+// of the tableau — they are loose battlefield cards the client lays out by the dynasty discard (see
+// placeUnplacedCards). Decks and discards are piles — a count plus an at-most-one shown card, not a
+// card list — so they are rebuilt cheaply each render; the provinces are card-list zones, reconciled.
 export function renderTableau(container, seatName, snapshot, imgBase) {
   const zones = snapshot.zones ?? {};
   const decks = snapshot.decks ?? {};
   const zone = (role) => zones[`${seatName}:${role}`] ?? [];
   const deck = (side) => decks[`${seatName}:${side}`] ?? { count: 0, top: null };
+  const frame = tableauFrame(container);
 
-  const left = node('div', 'tableau-decks');
   const dynasty = deck('dynasty');
-  left.append(
+  frame.left.replaceChildren(
     pile('Dynasty', dynasty.count, dynasty.top, imgBase, { owner: seatName, side: 'DYNASTY' }),
     discard('Discard', zone('dynasty_discard'), seatName, 'dynasty_discard', imgBase),
   );
 
-  const provinces = node('div', 'provinces');
-  for (const key of Object.keys(zones)
-    .filter((k) => k.startsWith(`${seatName}:province:`))
-    .sort()) {
-    const slot = node('div', 'province');
-    slot.dataset.zone = 'province';
-    slot.dataset.owner = seatName;
-    slot.dataset.idx = key.split(':')[2];
-    for (const card of zones[key]) slot.append(zoneCard(card, imgBase));
-    provinces.append(slot);
-  }
-
-  const right = node('div', 'tableau-decks');
   const fate = deck('fate');
-  right.append(
+  frame.right.replaceChildren(
     discard('Discard', zone('fate_discard'), seatName, 'fate_discard', imgBase),
     pile('Fate', fate.count, fate.top, imgBase, { owner: seatName, side: 'FATE' }),
   );
 
-  container.replaceChildren(left, provinces, right);
+  renderProvinces(frame, seatName, zones, imgBase);
+}
+
+// Reconcile the province slots (keyed by zone key) into the persistent provinces column, then
+// reconcile each slot's cards (keyed by id) so a province card keeps its element across renders.
+function renderProvinces(frame, seatName, zones, imgBase) {
+  const keys = Object.keys(zones)
+    .filter((key) => key.startsWith(`${seatName}:province:`))
+    .sort();
+  const slotViews = keys.map((key) => ({ id: key, idx: key.split(':')[2] }));
+  reconcile(frame.provinces, slotViews, frame.slots, {
+    create: (slot) => {
+      const el = node('div', 'province');
+      el.dataset.zone = 'province';
+      el.dataset.owner = seatName;
+      el.dataset.idx = slot.idx;
+      return el;
+    },
+    patch: () => {}, // slot dataset is fixed at creation
+  });
+  for (const key of keys) {
+    renderCards(frame.slots.get(key).el, zones[key], imgBase, 'zone-card');
+  }
 }
 
 // A seat's hand as a strip of full-size cards.
 export function renderHand(container, cards, imgBase) {
-  container.replaceChildren(...(cards ?? []).map((card) => zoneCard(card, imgBase)));
+  renderCards(container, cards ?? [], imgBase, 'zone-card');
 }
 
 function initials(name) {
@@ -1147,8 +1218,8 @@ function dragGhost(sourceEl) {
 // battlefield card selects it; Ctrl/Cmd-click toggles it in a multi-selection; a marquee dragged
 // across empty table picks every card it covers; dragging a card that is part of a multi-selection
 // moves the whole group together. `boardEl` is the battlefield, used for position maths; `send`
-// receives a room-less client message. Returns `{ markSelection }` so the caller can re-apply the
-// selection outline after the board re-renders.
+// receives a room-less client message. The selection outline rides on the card elements, which the
+// reconciling render reuses across snapshots, so it survives a re-render without re-applying.
 export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, onCreateToken } = {}) {
   let drag = null;
   let marquee = null;
@@ -1595,7 +1666,6 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
       send(bowIntent(ids, cardEl.dataset.bowed === '1'));
   });
 
-  return { markSelection };
 }
 
 // Wire the local seat's honor as a stepper, bound once on the persistent `panel` container so it

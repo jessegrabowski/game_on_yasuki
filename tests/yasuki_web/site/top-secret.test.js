@@ -461,6 +461,108 @@ describe('init (room client wiring)', () => {
     assert.equal(document.getElementById('battlefield').children.length, 1, 'the board renders');
   });
 
+  it('drops a snapshot that arrives out of order (strictly older seq)', async () => {
+    const ws = await joinedRoom();
+    const seated = (seq, cardId) => ({
+      type: 'SNAPSHOT',
+      room: 'r1',
+      snapshot: {
+        seq,
+        your_seat: 'P1',
+        seats: {
+          P1: { name: 'Ada', honor: 0, ready: false, connected: true },
+          P2: { name: 'Kenji', honor: 0, ready: false, connected: true },
+        },
+        decks: {},
+        zones: {},
+        battlefield: [{ id: cardId, name: 'C', img: 'c.jpg', x: 5, y: 5, face_up: true }],
+      },
+    });
+    const boardCardId = () => document.getElementById('battlefield').children[0]?.dataset.cardId;
+
+    ws.deliver(seated(2, 'fresh'));
+    assert.equal(boardCardId(), 'fresh');
+    ws.deliver(seated(1, 'stale'));
+    assert.equal(boardCardId(), 'fresh', 'an older snapshot is ignored');
+    ws.deliver(seated(3, 'newer'));
+    assert.equal(boardCardId(), 'newer', 'a newer snapshot still applies');
+  });
+
+  it('bows a card optimistically on double-click, then reverts when the server rejects', async () => {
+    const ws = await joinedRoom();
+    const seated = () => ({
+      type: 'SNAPSHOT',
+      room: 'r1',
+      snapshot: {
+        seq: 5,
+        your_seat: 'P1',
+        seats: {
+          P1: { name: 'Ada', honor: 0, ready: false, connected: true },
+          P2: { name: 'Kenji', honor: 0, ready: false, connected: true },
+        },
+        decks: {},
+        zones: {},
+        battlefield: [{ id: 'b1', name: 'C', img: 'c.jpg', x: 5, y: 5, face_up: true, owner: 'P1' }],
+      },
+    });
+    const boardCard = () =>
+      document.getElementById('battlefield').children.find((el) => el.dataset.cardId === 'b1');
+    ws.deliver(seated());
+    assert.equal(boardCard().classList.contains('bowed'), false);
+
+    // Double-click a face-up card the viewer owns: the board predicts the bow before any reply.
+    const cardEl = {
+      dataset: { cardId: 'b1', owner: 'P1', bowed: '', faceUp: '1', hidden: '' },
+      closest: () => null,
+    };
+    document.getElementById('boardStage')._emit('dblclick', {
+      target: { closest: (sel) => (sel === '[data-card-id]' ? cardEl : null) },
+    });
+    assert.ok(boardCard().classList.contains('bowed'), 'bowed before any snapshot arrives');
+    assert.ok(ws.sent.some((m) => m.intent?.op === 'BOW'), 'and the intent was still sent');
+
+    // A rejected intent: the server re-sends the authoritative (unbowed) state at the same seq.
+    ws.deliver(seated());
+    assert.equal(boardCard().classList.contains('bowed'), false, 'reverted on the corrective snapshot');
+  });
+
+  it('keeps the optimistic bow and reuses the node when the server confirms', async () => {
+    const ws = await joinedRoom();
+    const seated = (seq, bowed) => ({
+      type: 'SNAPSHOT',
+      room: 'r1',
+      snapshot: {
+        seq,
+        your_seat: 'P1',
+        seats: {
+          P1: { name: 'Ada', honor: 0, ready: false, connected: true },
+          P2: { name: 'Kenji', honor: 0, ready: false, connected: true },
+        },
+        decks: {},
+        zones: {},
+        battlefield: [{ id: 'b1', name: 'C', img: 'c.jpg', x: 5, y: 5, face_up: true, owner: 'P1', bowed }],
+      },
+    });
+    const boardCard = () =>
+      document.getElementById('battlefield').children.find((el) => el.dataset.cardId === 'b1');
+    ws.deliver(seated(5, false));
+
+    const cardEl = {
+      dataset: { cardId: 'b1', owner: 'P1', bowed: '', faceUp: '1', hidden: '' },
+      closest: () => null,
+    };
+    document.getElementById('boardStage')._emit('dblclick', {
+      target: { closest: (sel) => (sel === '[data-card-id]' ? cardEl : null) },
+    });
+    const el = boardCard();
+    assert.ok(el.classList.contains('bowed'), 'bowed optimistically');
+
+    // The server confirms: the authoritative snapshot lands at a newer seq, already bowed.
+    ws.deliver(seated(6, true));
+    assert.equal(boardCard(), el, 'same element reused — no rebuild, no flicker');
+    assert.ok(boardCard().classList.contains('bowed'), 'bow confirmed');
+  });
+
   it('suppresses a debug-level ERROR when the client debug flag is off', async () => {
     const ws = await joinedRoom();
     ws.deliver({ type: 'ERROR', room: 'r1', message: 'Intent rejected', debug: true });
