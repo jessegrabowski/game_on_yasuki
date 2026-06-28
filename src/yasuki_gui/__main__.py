@@ -2,12 +2,18 @@ import logging
 import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.intents import SetHonor
+from yasuki_core.engine.session import EngineSession
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
+from yasuki_gui.rules_runner import GameRunner
 from yasuki_gui.session import build_demo_state, build_state_from_deck
+from yasuki_gui.ui.dialogs import Dialogs
+from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.menus import build_menubar
+from yasuki_gui.ui.phase_bar import PhaseBar
 
 logger = logging.getLogger(__name__)
 
@@ -160,9 +166,6 @@ def main() -> None:
     win_w, win_h = root.winfo_width(), root.winfo_height()
     canvas_w, canvas_h = max(400, win_w - sidebar_w), max(300, win_h)
 
-    field = FieldView(content, width=canvas_w, height=canvas_h)
-    field.pack(fill="both", expand=True)
-    field.configure_hotkeys(hotkeys)
     if debug_enabled:
         import yasuki_gui.config as gui_config
 
@@ -175,7 +178,45 @@ def main() -> None:
     except Exception as exc:
         logger.warning("Could not load the bundled deck, using the placeholder deck: %s", exc)
         state, human_seat = build_demo_state()
-    field.load_state(state, human_seat)
+
+    session = EngineSession.start(state, human_seat)
+    runner = GameRunner(session, human_seat)
+
+    field = FieldView(content, width=canvas_w, height=canvas_h)
+    # The table backs panel and dialog reads; the board itself renders from the redacted projection.
+    field.state = session.game.table
+    field.seat = human_seat
+
+    def refresh() -> None:
+        view = runner.view()
+        field.render_snapshot(view.table, human_seat)
+        phase_bar.refresh(view)
+        opponent_panel.refresh()
+        human_panel.refresh()
+
+    def prompt_discard() -> None:
+        pending = runner.pending_discard
+        if pending is None:
+            return
+        hand = session.game.table.zones[ZoneKey(human_seat, ZoneRole.HAND)].cards
+
+        def on_submit(card_ids: tuple[str, ...]) -> None:
+            runner.resolve_discard(card_ids)
+            refresh()
+
+        Dialogs(root, ImageProvider(root)).discard_to_hand_size(
+            list(hand), pending.count, on_submit
+        )
+
+    def on_advance() -> None:
+        runner.advance()
+        refresh()
+        prompt_discard()
+
+    phase_bar = PhaseBar(content, on_advance)
+    phase_bar.pack(side="top", fill="x")
+    field.pack(side="top", fill="both", expand=True)
+    field.configure_hotkeys(hotkeys)
 
     # The human seat sits at the bottom, the AI-reserved opponent across the top.
     opponent_panel = PlayerPanel(sidebar, field, PlayerId.P2)
@@ -198,6 +239,7 @@ def main() -> None:
 
     field.on_local_player_changed = relayout_panels
     relayout_panels()
+    refresh()  # render the opening projection and phase bar
 
     menubar = build_menubar(root, field)
     root.config(menu=menubar)
