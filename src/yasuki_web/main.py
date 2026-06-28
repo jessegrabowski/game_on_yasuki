@@ -14,7 +14,7 @@ import logging
 import os
 import re
 import psycopg
-from yasuki_web import auth, cards, rooms, websocket
+from yasuki_web import auth, cards, rooms, saved_decks, websocket
 from yasuki_web.config import allowed_origins
 from yasuki_web.rate_limit import limiter
 from yasuki_web.wip_gate import require_wip_access
@@ -170,6 +170,10 @@ else:
     logger.warning(f"Bundled images directory not found at {BUNDLED_IMAGES_DIR}")
 
 app.include_router(cards.router, prefix="/api", tags=["cards"])
+# Saved decks are part of the public deck-builder surface, not the WIP play backend, so they carry no
+# WIP gate; owner routes (/api/me/decks) require a session, public reads (/api/decks/{slug}) are
+# visibility-checked.
+app.include_router(saved_decks.router, prefix="/api", tags=["decks"])
 # Rooms are the WIP play backend; gate the whole router behind the shared password until launch so
 # the API isn't open to anyone who knows the protocol, not just the page. The WS handshake is gated
 # separately in websocket.py.
