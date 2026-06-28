@@ -1,8 +1,11 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Bow, DestroyProvince, Draw, FlipDeckTop, MoveCard
+from yasuki_core.engine.session import EngineSession
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.tags import card_tag, deck_tag, zone_tag
+from yasuki_gui.visuals.cardface import HiddenFace
 
 
 def _province_keys(state, seat):
@@ -71,6 +74,32 @@ class TestDispatchReconcile:
         empty = DeckKey(PlayerId.P1, Side.FATE)
         state.decks[empty].cards.clear()
         assert field.dispatch(FlipDeckTop(empty)) == []
+
+
+class TestRulesModeRender:
+    def _rules_field(self, loaded):
+        """Switch the loaded field into rules mode rendering a small game with a face-down P2 card
+        on the battlefield, projected for P1."""
+        field, _ = loaded
+        state = TableState.empty_two_seat()
+        secret = L5RCard(id="P2-bf", name="Ambush", side=Side.DYNASTY, owner=PlayerId.P2)
+        secret.turn_face_down()
+        state.cards_by_id["P2-bf"] = secret
+        state.battlefield.add(secret)
+        state.positions["P2-bf"] = BoardPos(10.0, 10.0)
+        session = EngineSession.start(state, PlayerId.P1)
+        field.render_snapshot(session.project(PlayerId.P1).table, PlayerId.P1)
+        return field
+
+    def test_projection_renders_the_opponent_card_as_hidden(self, loaded):
+        field = self._rules_field(loaded)
+        tag = card_tag("P2-bf")
+        assert tag in field.sprites  # the card still renders so it can be animated
+        assert isinstance(field.sprites[tag].card, HiddenFace)  # but as a back to P1
+
+    def test_dispatch_is_a_noop_in_rules_mode(self, loaded):
+        field = self._rules_field(loaded)
+        assert field.dispatch(Bow(("P2-bf",))) == []
 
 
 class TestDebugSeatFlip:

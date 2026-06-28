@@ -4,6 +4,7 @@ from types import MappingProxyType
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Event, Intent, apply_intent
+from yasuki_core.engine.redaction import ViewSnapshot
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
@@ -58,6 +59,9 @@ class FieldView(tk.Canvas):
         self._ch = height
 
         self.state: TableState | None = None
+        # When set (rules mode), the board renders from this redacted projection instead of the raw
+        # table; the manual sandbox leaves it None and renders the full TableState directly.
+        self._snapshot: ViewSnapshot | None = None
         self.seat: PlayerId = PlayerId.P1
 
         self._sprites: dict[str, CardSpriteVisual] = {}
@@ -109,13 +113,22 @@ class FieldView(tk.Canvas):
         self.reconcile_all()
 
     def dispatch(self, intent: Intent) -> list[Event]:
-        """Apply ``intent`` as the acting seat, reconcile the visuals, and return the events."""
-        if self.state is None:
+        """Apply ``intent`` as the acting seat, reconcile the visuals, and return the events.
+
+        A no-op in rules mode (a projection is set): the rules engine owns mutations there, so the
+        sandbox intent path is disabled to keep the engine authoritative."""
+        if self.state is None or self._snapshot is not None:
             return []
         events = apply_intent(self.state, self.seat, intent)
         if events:
             self.reconcile_all()
         return events
+
+    def render_snapshot(self, snapshot: ViewSnapshot, seat: PlayerId) -> None:
+        """Render the board from a redacted projection (rules mode), viewed from ``seat``."""
+        self._snapshot = snapshot
+        self.seat = seat
+        self.reconcile_all()
 
     def configure_hotkeys(self, hotkeys: Hotkeys) -> None:
         self._hotkeys = hotkeys
@@ -213,13 +226,47 @@ class FieldView(tk.Canvas):
         self.reconcile_all()
 
     def reconcile_all(self) -> None:
-        if self.state is None:
+        if self.state is None and self._snapshot is None:
             return
         self.delete("all")
         self._draw_table()
         self._reconcile_decks()
         self._reconcile_zones()
         self._reconcile_sprites()
+
+    # The render source is the redacted projection in rules mode, else the raw sandbox table. These
+    # accessors yield uniform render-data from whichever is active, so reconcile is source-agnostic.
+
+    def _render_decks(self):
+        if self._snapshot is not None:
+            for key, dv in self._snapshot.decks.items():
+                yield key, dv.count, to_render_card(dv.top) if dv.top is not None else None
+        else:
+            for key, deck in self.state.decks.items():
+                yield key, len(deck.cards), to_render_card(deck.cards[-1]) if deck.cards else None
+
+    def _render_zones(self):
+        if self._snapshot is not None:
+            for key, zv in self._snapshot.zones.items():
+                yield key, [to_render_card(cv) for cv in zv.cards]
+        else:
+            for key, zone in self.state.zones.items():
+                yield key, [to_render_card(card) for card in zone.cards]
+
+    def _render_battlefield(self):
+        if self._snapshot is not None:
+            for bcv in self._snapshot.battlefield:
+                yield to_render_card(bcv.card), bcv.pos
+        else:
+            for card in self.state.battlefield.cards:
+                yield to_render_card(card), self.state.positions.get(card.id)
+
+    def _render_seats(self):
+        return self._snapshot.seats if self._snapshot is not None else self.state.seats
+
+    def _zone_keys(self):
+        source = self._snapshot.zones if self._snapshot is not None else self.state.zones
+        return source.keys()
 
     def _draw_table(self) -> None:
         """A faint gold midline splitting the two seats' halves, drawn behind every card."""
@@ -231,12 +278,10 @@ class FieldView(tk.Canvas):
     def _reconcile_decks(self) -> None:
         w, h = self._canvas_size()
         wanted: set[str] = set()
-        for key, deck in self.state.decks.items():
+        for key, count, top in self._render_decks():
             tag = deck_tag(key)
             wanted.add(tag)
             x, y = deck_pos(w, h, key, seat_at_bottom=key.owner is self.seat)
-            count = len(deck.cards)
-            top = to_render_card(deck.cards[-1]) if deck.cards else None
             dv = self._decks.get(tag)
             if dv is None:
                 dv = DeckVisual(count, top, x, y, tag, label=_deck_label(key), images=self._images)
@@ -254,11 +299,10 @@ class FieldView(tk.Canvas):
         province_keys = self._province_keys_by_owner()
         wanted_zones: set[str] = set()
         wanted_hands: set[str] = set()
-        for key, zone in self.state.zones.items():
+        for key, cards in self._render_zones():
             tag = zone_tag(key)
             self._tag_to_key[tag] = key
             seat_at_bottom = key.owner is self.seat
-            cards = [to_render_card(card) for card in zone.cards]
             if key.role is ZoneRole.HAND:
                 wanted_hands.add(tag)
                 bx, by, bw, bh = hand_box(w, h, seat_at_bottom=seat_at_bottom)
@@ -297,11 +341,10 @@ class FieldView(tk.Canvas):
     def _reconcile_sprites(self) -> None:
         w, h = self._canvas_size()
         wanted: set[str] = set()
-        for card in self.state.battlefield.cards:
-            rc = to_render_card(card)
+        for rc, pos in self._render_battlefield():
             tag = card_tag(rc.id)
             wanted.add(tag)
-            x, y = self._sprite_xy(rc, w, h)
+            x, y = self._sprite_xy(rc, pos, w, h)
             sp = self._sprites.get(tag)
             if sp is None:
                 sp = CardSpriteVisual(rc, x, y, tag, images=self._images)
@@ -312,8 +355,7 @@ class FieldView(tk.Canvas):
             self._sprites.pop(tag, None)
             self._selected.discard(tag)
 
-    def _sprite_xy(self, card, w: int, h: int) -> tuple[int, int]:
-        pos = self.state.positions.get(card.id)
+    def _sprite_xy(self, card, pos: BoardPos | None, w: int, h: int) -> tuple[int, int]:
         if pos is None or pos.x < 0 or pos.y < 0:
             side = Side.FATE if card.side is Side.FATE else Side.DYNASTY
             return unplaced_battlefield_pos(
@@ -322,8 +364,8 @@ class FieldView(tk.Canvas):
         return to_canvas(pos, flipped=self._flipped, canvas_w=w, canvas_h=h)
 
     def _province_keys_by_owner(self) -> dict[PlayerId, list[ZoneKey]]:
-        by_owner: dict[PlayerId, list[ZoneKey]] = {seat: [] for seat in self.state.seats}
-        for key in self.state.zones:
+        by_owner: dict[PlayerId, list[ZoneKey]] = {seat: [] for seat in self._render_seats()}
+        for key in self._zone_keys():
             if key.role is ZoneRole.PROVINCE:
                 by_owner.setdefault(key.owner, []).append(key)
         for keys in by_owner.values():
