@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Annotated, Literal
 
 from yasuki_core.engine.intents import Intent, IntentOp
-from yasuki_core.engine.action_log import decode_intent
+from yasuki_core.engine.serialization import decode_intent
 
 
 class JoinRequest(BaseModel):
