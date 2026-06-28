@@ -1,6 +1,7 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
 
@@ -37,6 +38,23 @@ def advance(game: GameState) -> None:
         game.phase = following
         return
     _end_turn(game)
+
+
+def perform(game: GameState, action: Action) -> None:
+    """Apply a chosen action: pass to end the phase, or produce gold from a card. The single
+    action-apply dispatch, mirroring :func:`submit` for decisions."""
+    match action:
+        case Pass():
+            advance(game)
+        case ProduceGold(card_id=card_id):
+            produce_gold(game, card_id)
+
+
+def produce_gold(game: GameState, card_id: str) -> None:
+    """Bow the card and add its ``gold_production`` to its owner's pool (KD6, stat-derived)."""
+    card = game.table.cards_by_id[card_id]
+    card.bow()
+    game.add_gold(card.owner, card.gold_production)
 
 
 def submit(game: GameState, response: DecisionResponse) -> None:

@@ -7,8 +7,10 @@ from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.actions import Pass, ProduceGold
 from yasuki_core.engine.rules.log import replay
-from yasuki_core.engine.session import EngineSession, LegalAction
+from yasuki_core.engine.session import EngineSession
+from yasuki_core.game_pieces.dynasty import DynastyHolding
 
 
 def _register(state: TableState, card):
@@ -33,7 +35,7 @@ def _dealt_table() -> TableState:
 
 def _to_pending_discard(session: EngineSession) -> None:
     for _ in range(3):  # Action -> Attack -> Dynasty -> end of turn (pauses for discard)
-        session.act(PlayerId.P1, LegalAction.PASS)
+        session.act(PlayerId.P1, Pass())
 
 
 def test_start_opens_a_playable_first_turn():
@@ -47,17 +49,53 @@ def test_start_opens_a_playable_first_turn():
 
 def test_legal_actions_offers_pass_to_the_active_seat_only():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
-    assert session.legal_actions(PlayerId.P1) == [LegalAction.PASS]
+    assert session.legal_actions(PlayerId.P1) == [Pass()]
     assert session.legal_actions(PlayerId.P2) == []
+
+
+def _gold_source(state, card_id: str, amount: int, owner=PlayerId.P1) -> DynastyHolding:
+    holding = _register(
+        state,
+        DynastyHolding(
+            id=card_id, name="Gold Mine", side=Side.DYNASTY, owner=owner, gold_production=amount
+        ),
+    )
+    state.battlefield.add(holding)
+    return holding
+
+
+def test_legal_actions_offers_produce_gold_for_each_unbowed_gold_source():
+    state = _dealt_table()
+    _gold_source(state, "P1-mine", 3)
+    _gold_source(state, "P1-farm", 2)
+    _gold_source(state, "P2-mine", 4, owner=PlayerId.P2)  # the opponent's source is not offered
+    session = EngineSession.start(state, PlayerId.P1)
+
+    offered = session.legal_actions(PlayerId.P1)
+    assert ProduceGold("P1-mine", 3) in offered
+    assert ProduceGold("P1-farm", 2) in offered
+    assert ProduceGold("P2-mine", 4) not in offered
+
+
+def test_producing_gold_fills_the_pool_and_bows_the_source():
+    state = _dealt_table()
+    _gold_source(state, "P1-mine", 3)
+    session = EngineSession.start(state, PlayerId.P1)
+
+    session.act(PlayerId.P1, ProduceGold("P1-mine", 3))
+
+    assert session.project(PlayerId.P1).gold[PlayerId.P1] == 3
+    # A bowed source can no longer produce, so the action drops off the legal list.
+    assert ProduceGold("P1-mine", 3) not in session.legal_actions(PlayerId.P1)
 
 
 def test_act_pass_moves_the_phase_and_rejects_an_illegal_actor():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
-    session.act(PlayerId.P1, LegalAction.PASS)
+    session.act(PlayerId.P1, Pass())
     assert session.project(PlayerId.P1).phase is Phase.ATTACK
     # The inactive seat has no legal action, so acting raises.
     with pytest.raises(ValueError):
-        session.act(PlayerId.P2, LegalAction.PASS)
+        session.act(PlayerId.P2, Pass())
 
 
 def test_pending_decision_blocks_actions_and_reaches_its_answerer():

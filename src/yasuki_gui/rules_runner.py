@@ -1,10 +1,11 @@
 from collections.abc import Iterable
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.agents import Agent, AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.session import EngineSession, LegalAction
+from yasuki_core.engine.session import EngineSession
 
 
 class GameRunner:
@@ -31,7 +32,7 @@ class GameRunner:
         """Return the human's projection — what the board, phase bar, and panels render."""
         return self.session.project(self.human)
 
-    def legal_actions(self) -> list[LegalAction]:
+    def legal_actions(self) -> list[Action]:
         """Return the actions the human may take right now (empty when it is not their turn)."""
         return self.session.legal_actions(self.human)
 
@@ -46,7 +47,7 @@ class GameRunner:
         pending = self.session.game.pending
         return pending if pending is not None and pending.seat is self.human else None
 
-    def act(self, action: LegalAction) -> None:
+    def act(self, action: Action) -> None:
         """Perform the human's chosen action. Does not run the opponent — the caller checks
         :attr:`is_opponent_turn` afterwards and runs it so the turn change stays visible."""
         self.session.act(self.human, action)
@@ -65,4 +66,4 @@ class GameRunner:
                 response = self._opponent.decide(pending, self.session.project(pending.seat))
                 self.session.submit(pending.seat, response)
             else:
-                self.session.act(game.active, LegalAction.PASS)
+                self.session.act(game.active, Pass())

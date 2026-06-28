@@ -81,10 +81,11 @@ class FieldView(tk.Canvas):
         self._selectable: frozenset[str] | None = None
         self._selection: set[str] = set()
 
-        # Optional UI callbacks the host app installs; each fires with no arguments.
+        # Optional UI callbacks the host app installs.
         self.on_local_player_changed: Callable[[], None] | None = None
         self.apply_profile_to_panels: Callable[[], None] | None = None
         self.on_selection_changed: Callable[[], None] | None = None
+        self.on_card_activated: Callable[[str], None] | None = None
 
         self._controller = FieldController(self)
         self._images = ImageProvider(self)
@@ -140,6 +141,12 @@ class FieldView(tk.Canvas):
         self._snapshot = snapshot
         self.seat = seat
         self.reconcile_all()
+
+    @property
+    def rules_mode(self) -> bool:
+        """Whether the board is engine-driven (a projection is set), so clicks act on cards rather
+        than dragging the sandbox."""
+        return self._snapshot is not None
 
     # ----- decision selection (cards chosen on the board for a pending decision) ---------
 

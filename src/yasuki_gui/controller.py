@@ -191,11 +191,21 @@ class FieldController:
             return hv.cards[idx].id
         return None
 
+    def _activate_card_at(self, tag: str | None, e: tk.Event) -> None:
+        """In rules mode, a click on a card invokes its ability (e.g. produce gold); the host
+        resolves which action that card offers."""
+        card_id = self._card_at(tag, e)
+        if card_id is not None and self.view.on_card_activated is not None:
+            self.view.on_card_activated(card_id)
+
     def on_press(self, e: tk.Event) -> None:
         self.view.focus_set()
         tag = self.view.resolve_tag_at(e)
         if self.view.selecting:
             self._toggle_selection_at(tag, e)
+            return
+        if self.view.rules_mode:
+            self._activate_card_at(tag, e)
             return
         if not tag:
             self.view._clear_selection()

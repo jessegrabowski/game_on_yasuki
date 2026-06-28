@@ -9,10 +9,11 @@ from yasuki_core.engine.snapshot import InitialRecord, encode_initial
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.actions import Pass
 from yasuki_core.engine.rules.log import (
     GameLog,
     build_game,
-    advance_and_log,
+    act_and_log,
     submit_and_log,
     replay,
     game_log_to_dict,
@@ -51,12 +52,12 @@ def _discard_top_of_hand(game: GameState, log: GameLog) -> None:
 
 def _play_three_turns(game: GameState, log: GameLog) -> None:
     for _ in range(3):  # P1 turn 1: into the end-of-turn discard
-        advance_and_log(game, log)
+        act_and_log(game, log, Pass())
     _discard_top_of_hand(game, log)
     for _ in range(3):  # P2 turn 2: small hand, no discard
-        advance_and_log(game, log)
+        act_and_log(game, log, Pass())
     for _ in range(3):  # P1 turn 3: discards again
-        advance_and_log(game, log)
+        act_and_log(game, log, Pass())
     _discard_top_of_hand(game, log)
 
 

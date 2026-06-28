@@ -7,19 +7,21 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.snapshot import InitialRecord
+from yasuki_core.engine.rules.actions import Pass, ProduceGold
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.log import (
     GameLog,
-    Advance,
+    Act,
     Answer,
     build_game,
-    advance_and_log,
+    act_and_log,
     submit_and_log,
     replay,
     game_log_to_dict,
     game_log_from_dict,
 )
+from yasuki_core.game_pieces.dynasty import DynastyHolding
 
 
 def _register(state: TableState, card):
@@ -48,9 +50,9 @@ def _played_game_and_log() -> tuple:
     recording every input to the log."""
     log = GameLog(initial=InitialRecord.from_state(_dealt_table()), first_player=PlayerId.P1)
     game = build_game(log)
-    advance_and_log(game, log)  # Action -> Attack
-    advance_and_log(game, log)  # Attack -> Dynasty
-    advance_and_log(game, log)  # Dynasty -> end of turn, pauses for discard
+    act_and_log(game, log, Pass())  # Action -> Attack
+    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Pass())  # Dynasty -> end of turn, pauses for discard
     victim = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards[0].id
     submit_and_log(game, log, DecisionResponse((victim,)))
     return game, log
@@ -63,8 +65,27 @@ def test_replay_reproduces_the_played_game():
 
 def test_log_records_each_input_in_order():
     _, log = _played_game_and_log()
-    assert [type(entry) for entry in log.entries] == [Advance, Advance, Advance, Answer]
+    assert [type(entry) for entry in log.entries] == [Act, Act, Act, Answer]
     assert all(entry.seat is PlayerId.P1 for entry in log.entries)
+
+
+def test_produce_gold_action_replays_and_round_trips():
+    state = _dealt_table()
+    state.battlefield.add(
+        _register(
+            state,
+            DynastyHolding(
+                id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=5
+            ),
+        )
+    )
+    log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
+    game = build_game(log)
+    act_and_log(game, log, ProduceGold("P1-mine", 5))
+
+    assert game.gold[PlayerId.P1] == 5
+    restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
+    assert restored.replay().gold[PlayerId.P1] == 5
 
 
 def test_serialization_round_trips_then_replays():
@@ -78,7 +99,7 @@ def test_submit_and_log_does_not_record_a_rejected_answer():
     log = GameLog(initial=InitialRecord.from_state(_dealt_table()), first_player=PlayerId.P1)
     game = build_game(log)
     for _ in range(3):
-        advance_and_log(game, log)
+        act_and_log(game, log, Pass())
     entries_before = len(log.entries)
 
     with pytest.raises(ValueError):  # must discard exactly one card
@@ -92,7 +113,7 @@ def test_replay_rejects_a_desynced_tape():
     log = GameLog(
         initial=InitialRecord.from_state(_dealt_table()),
         first_player=PlayerId.P1,
-        entries=[Advance(PlayerId.P2)],  # P1 starts, so an opening P2 advance is impossible
+        entries=[Act(PlayerId.P2, Pass())],  # P1 starts, so an opening P2 act is impossible
     )
     with pytest.raises(ValueError, match="out of step"):
         replay(log)

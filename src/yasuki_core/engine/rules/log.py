@@ -8,21 +8,25 @@ from yasuki_core.engine.snapshot import (
     decode_initial,
 )
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow
 
 
 @dataclass(frozen=True, slots=True)
-class Advance:
-    """Tape entry: the active player advanced the turn — a phase step or the end of the turn.
+class Act:
+    """Tape entry: the active player took an action — a pass or a card action.
 
     Attributes
     ----------
     seat : PlayerId
-        The seat that advanced, recorded so replay can verify the log stays in step with the engine.
+        The seat that acted, recorded so replay can verify the log stays in step with the engine.
+    action : Action
+        The action taken.
     """
 
     seat: PlayerId
+    action: Action
 
 
 @dataclass(frozen=True, slots=True)
@@ -41,7 +45,7 @@ class Answer:
     response: DecisionResponse
 
 
-GameInput = Advance | Answer
+GameInput = Act | Answer
 
 
 @dataclass(slots=True)
@@ -58,7 +62,7 @@ class GameLog:
         The seat that takes the first turn.
     seed : int
         The master RNG seed for deterministic replay. Default 0.
-    entries : list of Advance or Answer
+    entries : list of Act or Answer
         The ordered tape of engine inputs. Default empty.
     """
 
@@ -80,12 +84,12 @@ def build_game(log: GameLog) -> GameState:
     return game
 
 
-def advance_and_log(game: GameState, log: GameLog) -> None:
-    """Advance the turn and record it. The acting seat is captured before the advance, since the
-    advance may pass the turn to the other seat."""
+def act_and_log(game: GameState, log: GameLog, action: Action) -> None:
+    """Perform ``action`` for the active seat and record it. The acting seat is captured first, since
+    a pass may hand the turn to the other seat."""
     seat = game.active
-    flow.advance(game)
-    log.entries.append(Advance(seat))
+    flow.perform(game, action)
+    log.entries.append(Act(seat, action))
 
 
 def submit_and_log(game: GameState, log: GameLog, response: DecisionResponse) -> None:
@@ -113,12 +117,12 @@ def replay(log: GameLog) -> GameState:
 
 def _apply(game: GameState, entry: GameInput) -> None:
     match entry:
-        case Advance(seat=seat):
+        case Act(seat=seat, action=action):
             if game.active is not seat:
                 raise ValueError(
-                    f"log out of step: {seat.name} advanced but {game.active.name} is active"
+                    f"log out of step: {seat.name} acted but {game.active.name} is active"
                 )
-            flow.advance(game)
+            flow.perform(game, action)
         case Answer(seat=seat, response=response):
             pending = game.pending
             if pending is None or pending.seat is not seat:
@@ -147,12 +151,24 @@ def game_log_from_dict(payload: dict) -> GameLog:
 
 
 def _encode_input(entry: GameInput) -> dict:
-    if isinstance(entry, Advance):
-        return {"kind": "advance", "seat": entry.seat.name}
+    if isinstance(entry, Act):
+        return {"kind": "act", "seat": entry.seat.name, "action": _encode_action(entry.action)}
     return {"kind": "answer", "seat": entry.seat.name, "choices": list(entry.response.choices)}
 
 
 def _decode_input(payload: dict) -> GameInput:
-    if payload["kind"] == "advance":
-        return Advance(PlayerId[payload["seat"]])
+    if payload["kind"] == "act":
+        return Act(PlayerId[payload["seat"]], _decode_action(payload["action"]))
     return Answer(PlayerId[payload["seat"]], DecisionResponse(tuple(payload["choices"])))
+
+
+def _encode_action(action: Action) -> dict:
+    if isinstance(action, Pass):
+        return {"kind": "pass"}
+    return {"kind": "produce_gold", "card_id": action.card_id, "amount": action.amount}
+
+
+def _decode_action(payload: dict) -> Action:
+    if payload["kind"] == "pass":
+        return Pass()
+    return ProduceGold(payload["card_id"], payload["amount"])

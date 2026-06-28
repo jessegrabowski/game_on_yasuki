@@ -3,8 +3,9 @@ import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.intents import SetHonor
+from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold
 from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse, DiscardToHandSize
-from yasuki_core.engine.session import EngineSession, LegalAction
+from yasuki_core.engine.session import EngineSession
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
@@ -35,6 +36,13 @@ def _describe_decision(request: DecisionRequest) -> tuple[str, str]:
     if isinstance(request, DiscardToHandSize):
         return f"discard {request.count} card(s)", "Discard"
     raise ValueError(f"no prompt defined for {type(request).__name__}")
+
+
+def _action_button_label(action: Action) -> str:
+    """The prompt-box button label for a non-card action. Raise on an unmapped one."""
+    if isinstance(action, Pass):
+        return "Pass"
+    raise ValueError(f"no button label for {type(action).__name__}")
 
 
 class PlayerPanel(tk.Frame):
@@ -210,9 +218,16 @@ def main() -> None:
         if pending is not None:
             prompt, button_label = _describe_decision(pending)
             can_confirm = pending.accepts(DecisionResponse(tuple(field.selection)))
-            prompt_box.prompt_decision(view, prompt, button_label, can_confirm, confirm_decision)
+            prompt_box.show(view, prompt, [(button_label, confirm_decision, can_confirm)])
         else:
-            prompt_box.refresh(view, runner.legal_actions())
+            whose = "Your turn" if view.active is view.viewer else "Opponent's turn"
+            # Non-card actions are buttons; card actions (produce gold) are invoked on the board.
+            buttons = [
+                (_action_button_label(action), lambda chosen=action: on_action(chosen), True)
+                for action in runner.legal_actions()
+                if isinstance(action, Pass)
+            ]
+            prompt_box.show(view, whose, buttons)
         opponent_panel.refresh()
         human_panel.refresh()
 
@@ -234,12 +249,25 @@ def main() -> None:
         field.end_selection()
         after_human_action()
 
-    def on_action(action: LegalAction) -> None:
+    def on_action(action: Action) -> None:
         runner.act(action)
         after_human_action()
 
+    def on_card_activated(card_id: str) -> None:
+        action = next(
+            (
+                a
+                for a in runner.legal_actions()
+                if isinstance(a, ProduceGold) and a.card_id == card_id
+            ),
+            None,
+        )
+        if action is not None:
+            on_action(action)
+
     # Re-render (board borders + confirm-button state) as the player toggles candidates.
     field.on_selection_changed = refresh
+    field.on_card_activated = on_card_activated
 
     phase_bar = PhaseBar(content)
     phase_bar.pack(side="bottom", fill="x")
@@ -249,7 +277,7 @@ def main() -> None:
     # The left column runs opponent / prompt / you, top to bottom.
     opponent_panel = PlayerPanel(sidebar, field, PlayerId.P2)
     human_panel = PlayerPanel(sidebar, field, PlayerId.P1)
-    prompt_box = PromptBox(sidebar, on_action)
+    prompt_box = PromptBox(sidebar)
     prompt_box.grid(row=1, column=0, sticky="nsew")
 
     def relayout_panels() -> None:

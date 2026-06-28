@@ -1,21 +1,14 @@
 from dataclasses import dataclass
-from enum import Enum
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import projection
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.log import GameLog, build_game, advance_and_log, submit_and_log
-
-
-class LegalAction(Enum):
-    """A free action a seat may take when no decision is pending. The vocabulary grows with the
-    rules — gold production and Recruit join it at Steps 1 and 2."""
-
-    PASS = "pass"
+from yasuki_core.engine.rules.log import GameLog, build_game, act_and_log, submit_and_log
 
 
 @dataclass(slots=True)
@@ -59,25 +52,24 @@ class EngineSession:
         """Return the view ``seat`` is entitled to."""
         return projection.project(self.game, seat)
 
-    def legal_actions(self, seat: PlayerId) -> list[LegalAction]:
-        """Return the free actions ``seat`` may take right now. Empty while a decision is pending
-        (the seat must answer it) and for any seat but the active one. In Step 0 the only action is
-        to pass, which ends the current phase."""
+    def legal_actions(self, seat: PlayerId) -> list[Action]:
+        """Return the free actions ``seat`` may take right now: always a pass, plus a gold-production
+        action for each unbowed gold-producer it controls in play (KD6, stat-derived). Empty while a
+        decision is pending and for any seat but the active one."""
         if self.game.awaiting_decision or seat is not self.game.active:
             return []
-        return [LegalAction.PASS]
+        actions: list[Action] = [Pass()]
+        for card in self.game.table.battlefield.cards:
+            if getattr(card, "gold_production", 0) > 0 and card.owner is seat and not card.bowed:
+                actions.append(ProduceGold(card.id, card.gold_production))
+        return actions
 
-    def act(self, seat: PlayerId, action: LegalAction) -> None:
-        """Perform ``action`` for ``seat``. Raise ``ValueError`` if it is not currently legal for
-        that seat. Passing ends the current phase."""
+    def act(self, seat: PlayerId, action: Action) -> None:
+        """Perform ``action`` for ``seat`` and record it. Raise ``ValueError`` if it is not
+        currently legal for that seat."""
         if action not in self.legal_actions(seat):
             raise ValueError(f"{action} is not legal for {seat.name} right now")
-        if action is LegalAction.PASS:
-            self._advance(seat)
-
-    def _advance(self, seat: PlayerId) -> None:
-        # The phase-advance mechanic a pass triggers; the active seat is guaranteed by act().
-        advance_and_log(self.game, self.log)
+        act_and_log(self.game, self.log, action)
 
     def submit(self, seat: PlayerId, response: DecisionResponse) -> None:
         """Answer the pending decision and record it. Raise ``RuntimeError`` if no decision is

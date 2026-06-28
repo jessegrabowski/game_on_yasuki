@@ -63,6 +63,7 @@ def _resolved_demo_deck(seat: PlayerId) -> ResolvedDeck:
         side=Side.STRONGHOLD,
         owner=seat,
         starting_honor=10,
+        gold_production=8,
     )
     return ResolvedDeck(pre_game=[stronghold], dynasty=dynasty, fate=fate)
 
