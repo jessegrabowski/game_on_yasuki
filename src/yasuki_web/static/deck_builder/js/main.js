@@ -11,7 +11,14 @@ import {
 } from './deck-state.js';
 import { serializeDeck, parseDeckYaml, deckSnapshot } from './deck-io.js';
 import { saveDeckSnapshot, loadDeckSnapshot, clearDeckSnapshot } from './deck-storage.js';
-import { getMe, saveDeck, listMyDecks, deleteDeck, fetchSharedDeck } from './account.js';
+import {
+  getMe,
+  saveDeck,
+  listMyDecks,
+  deleteDeck,
+  deleteAccount,
+  fetchSharedDeck,
+} from './account.js';
 import { buildCompositeDataURL, customPrintId, loadArtLayout } from './art.js';
 import { openBorrowArt } from './borrow-art.js';
 import { printDeck } from './print.js';
@@ -122,6 +129,7 @@ async function init() {
   $('importBtn').addEventListener('click', () => $('importFileInput').click());
   $('saveOnlineBtn').addEventListener('click', doSaveOnline);
   $('myDecksBtn').addEventListener('click', doToggleMyDecks);
+  $('deleteAccountBtn').addEventListener('click', doDeleteAccount);
   const persistDeckMeta = debounce(persistDeck, 400);
   $('deckNameInput').addEventListener('input', () => {
     $('deckNameInput').closest('.deck-name-row').classList.remove('shake');
@@ -166,11 +174,20 @@ function setAccountStatus(text) {
 
 async function refreshAccount() {
   currentUser = await getMe();
+  $('deleteAccountBtn').classList.toggle('hidden', !currentUser);
   if (currentUser) {
     setAccountStatus(`Signed in as ${currentUser.display_name} · autosaved locally`);
   } else {
     setAccountStatus('Autosaved locally · sign in to save decks to your account');
   }
+}
+
+async function doDeleteAccount() {
+  const ok = window.confirm(
+    'Delete your account? This erases your profile, saved decks, and sessions. This cannot be undone.',
+  );
+  if (!ok) return;
+  if (await deleteAccount()) window.location.reload();
 }
 
 // The same YAML the Export and autosave paths produce, or null with a nudge if the deck is unnamed
