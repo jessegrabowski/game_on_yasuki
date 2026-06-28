@@ -4,6 +4,7 @@
 import { esc, fetchConfig } from './card-common.js';
 import { listRooms, createRoom, deleteRoom } from './rooms-api.js';
 import { connectRoom } from './ws-client.js';
+import { fetchMyDecks, fetchDeckYaml, openSavedDeckPicker } from './saved-decks.js';
 import {
   renderBoard,
   renderTableau,
@@ -198,6 +199,7 @@ export function init() {
   const opponentPanel = document.getElementById('opponentPanel');
   const selfPanel = document.getElementById('selfPanel');
   const loadDeckButton = document.getElementById('loadDeckButton');
+  const myDecksButton = document.getElementById('myDecksButton');
   const deckFileInput = document.getElementById('deckFileInput');
   const readyButton = document.getElementById('readyButton');
   const goldfishButton = document.getElementById('goldfishButton');
@@ -421,6 +423,24 @@ export function init() {
     const file = e.target.files?.[0];
     if (file) file.text().then((text) => submitDeck(text, deckLabel(file.name)));
     e.target.value = '';
+  });
+
+  // Load a deck saved to the account: list them, and on pick fetch that deck's YAML and submit it
+  // exactly as a file load would. A null list means the player isn't signed in.
+  myDecksButton?.addEventListener('click', async () => {
+    const decks = await fetchMyDecks();
+    if (decks === null) {
+      logSystem('Sign in on the deck builder to use your saved decks.');
+      return;
+    }
+    openSavedDeckPicker({
+      decks,
+      onPick: async (slug) => {
+        const yaml = await fetchDeckYaml(slug);
+        if (yaml) submitDeck(yaml);
+        else logSystem('Could not load that deck.');
+      },
+    });
   });
 
   // Ready and New game glow gold the moment they're clicked to show the request is in flight, then
