@@ -83,10 +83,13 @@ def new_player(browser, live_server):
     contexts = []
 
     def _open(viewport: dict):
+        # Suppress the FLIP move animation so position assertions read the settled rect, not a card
+        # mid-glide.
         context = browser.new_context(
             base_url=live_server,
             viewport=viewport,
             http_credentials={"username": WIP_USERNAME, "password": WIP_PASSWORD},
+            reduced_motion="reduce",
         )
         contexts.append(context)
         page = context.new_page()
