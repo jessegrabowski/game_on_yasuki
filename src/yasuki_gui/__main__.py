@@ -2,7 +2,6 @@ import logging
 import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.intents import SetHonor
 from yasuki_core.engine.session import EngineSession, LegalAction
 from yasuki_gui import theme
@@ -10,8 +9,6 @@ from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
 from yasuki_gui.rules_runner import GameRunner
 from yasuki_gui.session import build_demo_state, build_state_from_deck
-from yasuki_gui.ui.dialogs import Dialogs
-from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
 from yasuki_gui.ui.prompt_box import PromptBox
@@ -200,7 +197,13 @@ def main() -> None:
         view = runner.view()
         field.render_snapshot(view.table, human_seat)
         phase_bar.refresh(view)
-        prompt_box.refresh(view, runner.legal_actions())
+        pending = runner.pending_discard
+        if pending is not None:
+            prompt_box.prompt_discard(
+                view, pending.count, len(field.discard_selection), confirm_discard
+            )
+        else:
+            prompt_box.refresh(view, runner.legal_actions())
         opponent_panel.refresh()
         human_panel.refresh()
 
@@ -209,30 +212,25 @@ def main() -> None:
         refresh()
 
     def after_human_action() -> None:
+        pending = runner.pending_discard
+        if pending is not None:
+            field.begin_discard(pending.count)  # the hand becomes selectable for the discard
         refresh()
-        if runner.pending_discard is not None:
-            prompt_discard()
-        elif runner.is_opponent_turn:
+        if pending is None and runner.is_opponent_turn:
             # The board already shows "Opponent's turn"; run it after a beat so the hand-off shows.
             root.after(OPPONENT_TURN_DELAY_MS, run_opponent)
 
-    def prompt_discard() -> None:
-        pending = runner.pending_discard
-        if pending is None:
-            return
-        hand = session.game.table.zones[ZoneKey(human_seat, ZoneRole.HAND)].cards
-
-        def on_submit(card_ids: tuple[str, ...]) -> None:
-            runner.resolve_discard(card_ids)
-            after_human_action()
-
-        Dialogs(root, ImageProvider(root)).discard_to_hand_size(
-            list(hand), pending.count, on_submit
-        )
+    def confirm_discard() -> None:
+        runner.resolve_discard(field.discard_selection)
+        field.end_discard()
+        after_human_action()
 
     def on_action(action: LegalAction) -> None:
         runner.act(action)
         after_human_action()
+
+    # Re-render (board borders + Discard button state) as the player toggles hand cards.
+    field.on_discard_selection_changed = refresh
 
     phase_bar = PhaseBar(content)
     phase_bar.pack(side="bottom", fill="x")

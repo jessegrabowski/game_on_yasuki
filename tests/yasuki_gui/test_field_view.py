@@ -102,6 +102,39 @@ class TestRulesModeRender:
         assert field.dispatch(Bow(("P2-bf",))) == []
 
 
+class TestInlineDiscard:
+    def test_toggle_tracks_selection_and_notifies(self, loaded):
+        field, _ = loaded
+        changes = []
+        field.on_discard_selection_changed = lambda: changes.append(1)
+
+        field.begin_discard(2)
+        assert field.discard_needed == 2
+        field.toggle_discard_card("c1")
+        field.toggle_discard_card("c2")
+        assert field.discard_selection == frozenset({"c1", "c2"})
+        field.toggle_discard_card("c1")  # clicking again deselects
+        assert field.discard_selection == frozenset({"c2"})
+        assert len(changes) == 3  # one notification per toggle
+
+        field.end_discard()
+        assert field.discard_needed is None
+        assert field.discard_selection == frozenset()
+
+    def test_selection_reaches_the_human_hand_visual(self, loaded):
+        field, _ = loaded
+        field.dispatch(Draw(DeckKey(PlayerId.P1, Side.FATE)))  # a real card in hand
+        hand_tag = zone_tag(ZoneKey(PlayerId.P1, ZoneRole.HAND))
+        card_id = field.hands[hand_tag].cards[0].id
+
+        field.begin_discard(1)
+        field.toggle_discard_card(card_id)
+        field.reconcile_all()
+
+        # The field feeds the selection to the hand it renders, so the border can be drawn.
+        assert card_id in field.hands[hand_tag].selected_ids
+
+
 class TestDebugSeatFlip:
     def test_flip_renders_from_other_seat(self, loaded):
         field, _ = loaded

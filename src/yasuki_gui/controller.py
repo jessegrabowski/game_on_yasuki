@@ -168,9 +168,25 @@ class FieldController:
 
     # ----- press / motion / release -----------------------------------------
 
+    def _toggle_discard_at(self, tag: str | None, e: tk.Event) -> None:
+        """While discarding, a click on one of your own hand cards toggles its selection; clicks
+        elsewhere are ignored."""
+        if not tag or not tag.startswith("zone:"):
+            return
+        hv = self.view.hands.get(tag)
+        if hv is None or hv.owner is not self.view.seat:
+            return
+        idx = hv.index_at(e.x)
+        if idx is None or idx >= len(hv.cards):
+            return
+        self.view.toggle_discard_card(hv.cards[idx].id)
+
     def on_press(self, e: tk.Event) -> None:
         self.view.focus_set()
         tag = self.view.resolve_tag_at(e)
+        if self.view.discard_needed is not None:
+            self._toggle_discard_at(tag, e)
+            return
         if not tag:
             self.view._clear_selection()
             self._start_marquee(e.x, e.y)
@@ -540,6 +556,5 @@ class FieldController:
             return
         self.view.seat = PlayerId.P2 if self.view.seat is PlayerId.P1 else PlayerId.P1
         self.view.reconcile_all()
-        cb = getattr(self.view, "on_local_player_changed", None)
-        if callable(cb):
-            cb()
+        if self.view.on_local_player_changed is not None:
+            self.view.on_local_player_changed()

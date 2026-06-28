@@ -19,6 +19,7 @@ class HandVisual(Visual):
         h: int,
         tag: str,
         images: ImageProvider | None = None,
+        selected_ids: frozenset[str] = frozenset(),
     ):
         self.cards = cards
         self.owner = owner
@@ -28,6 +29,7 @@ class HandVisual(Visual):
         self.h = h
         self.tag = tag
         self.images = images
+        self.selected_ids = selected_ids
 
     @property
     def size(self) -> tuple[int, int]:
@@ -140,12 +142,13 @@ class HandVisual(Visual):
                         justify="center",
                         tags=(self.tag, "zone", "hand"),
                     )
+            selected = card.id in self.selected_ids
             canvas.create_rectangle(
                 cx - cw // 2,
                 cy - ch // 2,
                 cx + cw // 2,
                 cy + ch // 2,
-                outline=theme.CARD_BORDER,
-                width=1,
+                outline=theme.SELECT if selected else theme.CARD_BORDER,
+                width=3 if selected else 1,
                 tags=(self.tag, "zone", "hand"),
             )

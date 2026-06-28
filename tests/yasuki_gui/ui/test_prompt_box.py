@@ -47,3 +47,21 @@ def test_status_names_whose_turn_and_clears_actions_on_the_opponents_turn(root):
     box.refresh(_view(PlayerId.P2), [])  # opponent holds the turn, no legal actions
     assert "Opponent's turn" in box._status.cget("text")
     assert _buttons(box) == []
+
+
+def test_discard_prompt_enables_confirm_only_at_the_exact_count(root):
+    confirmed = []
+    box = PromptBox(root, lambda action: None)
+    view = _view(PlayerId.P1)
+
+    box.prompt_discard(view, needed=2, selected=1, on_confirm=lambda: confirmed.append(1))
+    discard = _buttons(box)[0]
+    assert discard.cget("text") == "Discard"
+    assert "discard 2" in box._status.cget("text").lower()
+    assert str(discard.cget("state")) == "disabled"  # 1 of 2 chosen
+
+    box.prompt_discard(view, needed=2, selected=2, on_confirm=lambda: confirmed.append(1))
+    discard = _buttons(box)[0]
+    assert str(discard.cget("state")) == "normal"
+    discard.invoke()
+    assert confirmed == [1]

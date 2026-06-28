@@ -30,12 +30,23 @@ class PromptBox(tk.Frame):
         or a decision is owed)."""
         whose = "Your turn" if view.active is view.viewer else "Opponent's turn"
         self._status.configure(text=f"Turn {view.turn} — {whose}")
+        self._set_buttons(
+            (_ACTION_LABELS[action], "normal", lambda chosen=action: self._on_action(chosen))
+            for action in actions
+        )
+
+    def prompt_discard(
+        self, view: GameView, needed: int, selected: int, on_confirm: Callable[[], None]
+    ) -> None:
+        """Ask the player to discard ``needed`` cards (selected on the board); the Discard button is
+        enabled only once exactly that many are chosen."""
+        self._status.configure(text=f"Turn {view.turn} — discard {needed} card(s)")
+        state = "normal" if selected == needed else "disabled"
+        self._set_buttons([("Discard", state, on_confirm)])
+
+    def _set_buttons(self, specs: Iterable[tuple[str, str, Callable[[], None]]]) -> None:
         for child in self._actions.winfo_children():
             child.destroy()
-        for action in actions:
-            button = tk.Button(
-                self._actions,
-                text=_ACTION_LABELS[action],
-                command=lambda chosen=action: self._on_action(chosen),
-            )
+        for text, state, command in specs:
+            button = tk.Button(self._actions, text=text, state=state, command=command)
             button.pack(side="top", fill="x", pady=2)

@@ -107,55 +107,6 @@ class Dialogs:
             btn.pack(pady=4)
         win._images = keep  # type: ignore[attr-defined]
 
-    def discard_to_hand_size(
-        self,
-        cards: list[L5RCard],
-        count: int,
-        on_submit: Callable[[tuple[str, ...]], None],
-    ) -> None:
-        """Prompt the player to choose exactly ``count`` cards from ``cards`` to discard, then call
-        ``on_submit`` with the chosen ids. A modal grab so the turn cannot proceed until it is
-        answered."""
-        win = tk.Toplevel(self.toplevel)
-        win.title(f"Discard {count}")
-        win.transient(self.toplevel)
-        win.grab_set()
-        tk.Label(
-            win,
-            text=f"Discard {count} card(s) down to your hand size.",
-            bg=theme.PANEL,
-            fg=theme.INK,
-            padx=12,
-            pady=8,
-        ).pack(fill="x")
-
-        row = tk.Frame(win, bg=theme.PANEL)
-        row.pack(padx=12, pady=8)
-        selected: set[str] = set()
-        submit = tk.Button(win, text="Discard", state="disabled")
-
-        def toggle(card_id: str, button: tk.Button) -> None:
-            if card_id in selected:
-                selected.discard(card_id)
-                button.configure(relief="raised")
-            elif len(selected) < count:
-                selected.add(card_id)
-                button.configure(relief="sunken")
-            submit.configure(state="normal" if len(selected) == count else "disabled")
-
-        for col, card in enumerate(cards):
-            btn = tk.Button(row, text=card.name, width=14, wraplength=110)
-            btn.configure(command=lambda c=card.id, b=btn: toggle(c, b))
-            btn.grid(row=0, column=col, padx=4, pady=4)
-
-        def confirm() -> None:
-            chosen = tuple(selected)
-            win.destroy()
-            on_submit(chosen)
-
-        submit.configure(command=confirm)
-        submit.pack(pady=(0, 12))
-
     def create_token(self, on_create: Callable[[str, Side], None]) -> None:
         """Prompt for a token name and side, then call ``on_create`` with them."""
         win = tk.Toplevel(self.toplevel)

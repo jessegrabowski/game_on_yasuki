@@ -2,7 +2,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Draw
 from yasuki_core.game_pieces.constants import Side
-from yasuki_gui.tags import card_tag, deck_tag
+from yasuki_gui.tags import card_tag, deck_tag, zone_tag
 
 from tests.yasuki_gui.conftest import DummyEventNamespace
 
@@ -99,3 +99,21 @@ class TestHotkeys:
         field._controller._hover_deck_tag = deck_tag(DeckKey(PlayerId.P1, Side.FATE))
         field._controller.on_key(DummyEventNamespace(keysym=field._controller._hotkeys.draw))
         assert len(hand.cards) == before + 1
+
+
+class TestDiscardSelection:
+    def test_clicking_a_hand_card_in_discard_mode_toggles_it(self, loaded):
+        field, _ = loaded
+        field.dispatch(Draw(DeckKey(PlayerId.P1, Side.FATE)))  # ensure a card in hand
+        hand_tag = zone_tag(ZoneKey(PlayerId.P1, ZoneRole.HAND))
+        hv = field.hands[hand_tag]
+        card_id = hv.cards[0].id
+        cx, cy = hv.center_for_index(0)
+
+        field.begin_discard(1)
+        _at(field, hand_tag)
+        field._controller.on_press(DummyEventNamespace(x=cx, y=cy))
+        assert card_id in field.discard_selection
+
+        field._controller.on_press(DummyEventNamespace(x=cx, y=cy))  # click again to deselect
+        assert card_id not in field.discard_selection
