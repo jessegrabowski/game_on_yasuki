@@ -677,15 +677,16 @@ def _unpeek(state: TableState, seat: PlayerId, intent: Unpeek) -> list[Event]:
 def _draw(state: TableState, seat: PlayerId, intent: Draw) -> list[Event]:
     if not owns_deck(state, seat, intent.deck):
         return []
-    card = state.decks[intent.deck].draw_one()
-    if card is None:
-        return []
     if intent.deck.side is Side.FATE:
-        card.turn_face_up()
-        state.zones[ZoneKey(seat, ZoneRole.HAND)].add(card)
+        card = ops.draw_to_hand(state, seat)
+        if card is None:
+            return []
         dest: MoveDest = ZoneKey(seat, ZoneRole.HAND)
         position = None
     else:
+        card = state.decks[intent.deck].draw_one()
+        if card is None:
+            return []
         dest = BATTLEFIELD
         position = None
         for key, zone in state.zones.items():

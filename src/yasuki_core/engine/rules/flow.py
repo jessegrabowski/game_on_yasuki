@@ -1,7 +1,6 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import ZoneKey, ZoneRole, DeckKey
-from yasuki_core.game_pieces.constants import Side
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
 
@@ -60,7 +59,7 @@ def submit(game: GameState, response: DecisionResponse) -> None:
 
 def _end_turn(game: GameState) -> None:
     seat = game.active
-    _draw_fate(game, seat)
+    ops.draw_to_hand(game.table, seat)
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
     excess = len(hand.cards) - MAX_HAND_SIZE
     if excess > 0:
@@ -77,22 +76,8 @@ def _begin_next_turn(game: GameState) -> None:
 
 
 def _begin_turn(game: GameState) -> None:
-    seat = game.active
-    for card in game.table.battlefield.cards:
-        if card.owner == seat:
-            card.unbow()
-    for key, zone in game.table.zones.items():
-        if key.owner == seat and key.role is ZoneRole.PROVINCE:
-            for card in zone.cards:
-                card.turn_face_up()
-
-
-def _draw_fate(game: GameState, seat: PlayerId) -> None:
-    card = game.table.decks[DeckKey(seat, Side.FATE)].draw_one()
-    if card is None:
-        return
-    card.turn_face_up()
-    game.table.zones[ZoneKey(seat, ZoneRole.HAND)].add(card)
+    ops.straighten(game.table, game.active)
+    ops.reveal_provinces(game.table, game.active)
 
 
 def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:

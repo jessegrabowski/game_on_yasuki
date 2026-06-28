@@ -192,6 +192,16 @@ def fill_province(state: TableState, seat: PlayerId, zone: ProvinceZone) -> L5RC
     return card
 
 
+def draw_to_hand(state: TableState, seat: PlayerId) -> L5RCard | None:
+    """Draw the seat's top fate card into their hand face-up; None if the fate deck is empty."""
+    card = state.decks[DeckKey(seat, Side.FATE)].draw_one()
+    if card is None:
+        return None
+    card.turn_face_up()
+    state.zones[ZoneKey(seat, ZoneRole.HAND)].add(card)
+    return card
+
+
 def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> list[str]:
     """Discard a province's contents face-up and remove the province, then send each card attached to
     it (fortifications, regions) to its own side's discard — the owner's pile if it has one, else the
@@ -241,6 +251,28 @@ def create_province(state: TableState, seat: PlayerId) -> ZoneKey:
     key = ZoneKey(seat, ZoneRole.PROVINCE, idx)
     state.zones[key] = ProvinceZone(owner=seat)
     return key
+
+
+def straighten(state: TableState, seat: PlayerId) -> list[str]:
+    """Unbow every card ``seat`` controls on the battlefield; returns the straightened card ids."""
+    straightened = []
+    for card in state.battlefield.cards:
+        if card.owner == seat and card.bowed:
+            card.unbow()
+            straightened.append(card.id)
+    return straightened
+
+
+def reveal_provinces(state: TableState, seat: PlayerId) -> list[str]:
+    """Turn every face-down card in ``seat``'s provinces face-up; returns the revealed card ids."""
+    revealed = []
+    for key, zone in state.zones.items():
+        if key.owner == seat and key.role is ZoneRole.PROVINCE:
+            for card in zone.cards:
+                if not card.face_up:
+                    card.turn_face_up()
+                    revealed.append(card.id)
+    return revealed
 
 
 def spawn_token(

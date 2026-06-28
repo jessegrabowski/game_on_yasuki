@@ -116,22 +116,30 @@ def test_submit_rejects_a_malformed_or_illegal_answer():
     assert game.awaiting_decision  # both rejections leave the game paused
 
 
-def test_begin_game_straightens_and_reveals_the_active_board():
+def _bowed_on_battlefield(state: TableState, seat: PlayerId, card_id: str):
+    card = _register(state, DynastyCard(id=card_id, name="B", side=Side.DYNASTY, owner=seat))
+    card.bow()
+    state.battlefield.add(card)
+    return card
+
+
+def _facedown_in_province(state: TableState, seat: PlayerId, card_id: str):
+    card = _register(state, DynastyCard(id=card_id, name="P", side=Side.DYNASTY, owner=seat))
+    card.turn_face_down()
+    state.zones[ops.create_province(state, seat)].add(card)
+    return card
+
+
+def test_begin_game_straightens_and_reveals_only_the_active_board():
     state = TableState.empty_two_seat()
-    bowed = _register(
-        state, DynastyCard(id="P1-bf", name="B", side=Side.DYNASTY, owner=PlayerId.P1)
-    )
-    bowed.bow()
-    state.battlefield.add(bowed)
-    province = ops.create_province(state, PlayerId.P1)
-    facedown = _register(
-        state, DynastyCard(id="P1-pv", name="P", side=Side.DYNASTY, owner=PlayerId.P1)
-    )
-    facedown.turn_face_down()
-    state.zones[province].add(facedown)
+    mine_bowed = _bowed_on_battlefield(state, PlayerId.P1, "P1-bf")
+    mine_facedown = _facedown_in_province(state, PlayerId.P1, "P1-pv")
+    foe_bowed = _bowed_on_battlefield(state, PlayerId.P2, "P2-bf")
+    foe_facedown = _facedown_in_province(state, PlayerId.P2, "P2-pv")
 
     game = GameState.start(state, PlayerId.P1)
     flow.begin_game(game)
 
-    assert bowed.bowed is False
-    assert facedown.face_up is True
+    assert mine_bowed.bowed is False and mine_facedown.face_up is True
+    # The opponent's board is untouched at the active player's start of turn.
+    assert foe_bowed.bowed is True and foe_facedown.face_up is False
