@@ -4,6 +4,8 @@ from starlette.websockets import WebSocketDisconnect
 from yasuki_web import websocket as ws_module
 from yasuki_web.websocket import WS_MSG_BURST, MAX_WS_MESSAGE_SIZE, _origin_allowed
 
+from tests.yasuki_web._support import as_user
+
 
 def _make_room(client) -> str:
     return client.post("/api/rooms", json={"max_players": 2}).json()["room_id"]
@@ -106,8 +108,8 @@ def test_origin_allowed_permits_missing_origin():
 def test_full_room_rejects_further_connections(client):
     room_id = _make_room(client)  # max_players=2
     with (
-        client.websocket_connect(f"/ws/{room_id}") as ada,
-        client.websocket_connect(f"/ws/{room_id}") as kenji,
+        client.websocket_connect(f"/ws/{room_id}", headers=as_user("Ada")) as ada,
+        client.websocket_connect(f"/ws/{room_id}", headers=as_user("Kenji")) as kenji,
     ):
         ada.send_json({"type": "JOIN", "room": room_id, "join": {"name": "Ada"}})
         ada.receive_json()  # HELLO

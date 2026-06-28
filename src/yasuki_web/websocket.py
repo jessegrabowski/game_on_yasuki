@@ -8,6 +8,7 @@ from urllib.parse import urlparse
 
 from pydantic import ValidationError
 
+from yasuki_web import auth
 from yasuki_web.config import allowed_origins
 from yasuki_web.schemas import (
     ClientMessage,
@@ -90,6 +91,11 @@ class GameRoom:
         self.room_id = room_id
         self.players: dict[WebSocket, str] = {}
         self.seats: dict[WebSocket, PlayerId] = {}
+        # The authenticated identity behind each connection, and the seat each user holds. Seating
+        # binds to user_id, not to a connection, so a player's second tab attaches to their existing
+        # seat instead of consuming another one.
+        self.user_by_ws: dict[WebSocket, int] = {}
+        self.seat_by_user: dict[int, PlayerId] = {}
         self.state = TableState.empty_two_seat()
         self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
         self._spawn_count = 0
@@ -106,29 +112,41 @@ class GameRoom:
     def _free_seat(self) -> PlayerId | None:
         return next((s for s in PlayerId if s not in self.seats.values()), None)
 
-    async def add_player(self, ws: WebSocket, player_name: str):
+    async def add_player(self, ws: WebSocket, user: dict):
         """Seat a joining player (P1/P2), replay the room's chat and log history, and announce them.
 
-        A connection with no free seat (a backstop behind the room's max-players cap) is told the
-        table is full and left unseated.
+        Seating binds to ``user["id"]``: a player already holding a seat (a second tab) attaches the
+        new connection to that seat and is brought up to date privately, rather than taking another
+        seat or re-announcing a join. A genuinely new player with no free seat (a backstop behind
+        the room's max-players cap) is told the table is full and left unseated.
         """
-        seat = self._free_seat()
+        user_id = user["id"]
+        name = user["display_name"]
+        seat = self.seat_by_user.get(user_id)
+        rejoining = seat is not None
+
         if seat is None:
-            await ws.send_json(ServerError(room=self.room_id, message="Table is full").model_dump())
-            return
+            seat = self._free_seat()
+            if seat is None:
+                msg = ServerError(room=self.room_id, message="Table is full")
+                await ws.send_json(msg.model_dump())
+                return
+            self.seat_by_user[user_id] = seat
+            self.state.seats[seat].name = name
+            self.state.seats[seat].connected = True
+            self.state.bump_version()
+            rooms[self.room_id]["players"].append(name)
 
         self.seats[ws] = seat
-        self.players[ws] = player_name
-        self.state.seats[seat].name = player_name
-        self.state.seats[seat].connected = True
-        self.state.bump_version()
-        rooms[self.room_id]["players"].append(player_name)
+        self.players[ws] = name
+        self.user_by_ws[ws] = user_id
 
         hello = ServerHello(
             room=self.room_id,
-            you=player_name,
+            you=name,
             your_seat=seat.name,
-            players=list(self.players.values()),
+            # A player's multiple tabs repeat one name; dedup so the roster lists each player once.
+            players=list(dict.fromkeys(self.players.values())),
             seq=self.state.seq,
         )
         await ws.send_json(hello.model_dump())
@@ -138,22 +156,32 @@ class GameRoom:
         for entry in self.chat_history:
             await ws.send_json(entry)
 
-        logger.info(f"Player {player_name} took seat {seat.name} in room {self.room_id}")
+        logger.info(f"Player {name} took seat {seat.name} in room {self.room_id}")
 
-        self.action_log.append(
-            SessionEntry(ts=time.time(), seat=seat, name=player_name, event="join")
-        )
+        if rejoining:
+            # The seat, roster, and tape are unchanged; only this new tab needs the current view.
+            await self._send_snapshot(ws, seat)
+            return
+
+        self.action_log.append(SessionEntry(ts=time.time(), seat=seat, name=name, event="join"))
         await self.broadcast_snapshots()
-        await self.log([{"text": f"{player_name} joined"}])
+        await self.log([{"text": f"{name} joined"}])
 
     async def remove_player(self, ws: WebSocket):
-        """Free a player's seat on disconnect and announce the departure."""
+        """Drop one connection, freeing its seat and announcing the departure only when it was the
+        player's last tab — another open tab keeps the seat live for an uninterrupted game."""
         seat = self.seats.pop(ws, None)
         player_name = self.players.pop(ws, None)
-        if seat is not None:
-            self.state.seats[seat].connected = False
-            self.state.bump_version()
-            self.reset_votes.discard(seat)
+        user_id = self.user_by_ws.pop(ws, None)
+        # A surviving connection on the same seat means the player still has another tab open.
+        seat_vacated = seat is not None and seat not in self.seats.values()
+        if not seat_vacated:
+            return
+
+        self.state.seats[seat].connected = False
+        self.state.bump_version()
+        self.reset_votes.discard(seat)
+        self.seat_by_user.pop(user_id, None)
 
         if player_name:
             if self.room_id in rooms and player_name in rooms[self.room_id]["players"]:
@@ -449,6 +477,11 @@ def _refill(tokens: float, last: float) -> tuple[float, float]:
     return min(WS_MSG_BURST, tokens + (now - last) * WS_MSG_REFILL_PER_SEC), now
 
 
+async def _authenticate(websocket: WebSocket) -> dict | None:
+    """The authenticated account behind the handshake, or None."""
+    return await auth.user_for_websocket(websocket)
+
+
 @router.websocket("/{room_id}")
 async def websocket_endpoint(websocket: WebSocket, room_id: str):
     if not _origin_allowed(websocket):
@@ -459,6 +492,12 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
     # entirely when no password is configured). Dropped at the launch cutover.
     if not websocket_access_ok(websocket):
         await websocket.close(code=4401, reason="Unauthorized")
+        return
+
+    # Play is login-required: an anonymous handshake (no valid session cookie) is refused.
+    user = await _authenticate(websocket)
+    if user is None:
+        await websocket.close(code=4401, reason="Authentication required")
         return
 
     if room_id not in rooms:
@@ -510,8 +549,10 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
                 if message.join is None:
                     await websocket.close(code=1003, reason="JOIN requires a name")
                     return
-                player_name = message.join.name
-                await game_room.add_player(websocket, player_name)
+                # Identity comes from the authenticated account, not the client frame; the JOIN name
+                # is vestigial and ignored.
+                player_name = user["display_name"]
+                await game_room.add_player(websocket, user)
 
             elif message.type == "INTENT":
                 if message.intent is not None:

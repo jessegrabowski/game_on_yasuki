@@ -9,6 +9,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import IntentOp, BoardPos
 from yasuki_core.engine.action_log import SessionEntry
 
+from tests.yasuki_web._support import account
+
 
 @pytest.fixture
 def registered_room():
@@ -169,9 +171,9 @@ def test_spawn_round_trips_over_the_socket(client):
 def test_seat_metadata_changes_advance_the_view_version(registered_room):
     room = registered_room
     ada, kenji = _FakeWS(), _FakeWS()
-    asyncio.run(room.add_player(ada, "Ada"))
+    asyncio.run(room.add_player(ada, account("Ada")))
     after_join_1 = room.state.seq
-    asyncio.run(room.add_player(kenji, "Kenji"))
+    asyncio.run(room.add_player(kenji, account("Kenji")))
     after_join_2 = room.state.seq
     asyncio.run(room.remove_player(kenji))
     after_leave = room.state.seq
@@ -182,7 +184,7 @@ def test_seat_metadata_changes_advance_the_view_version(registered_room):
 def test_join_and_leave_are_recorded_on_the_session_tape(registered_room):
     room = registered_room
     ada = _FakeWS()
-    asyncio.run(room.add_player(ada, "Ada"))
+    asyncio.run(room.add_player(ada, account("Ada")))
     asyncio.run(room.remove_player(ada))
     sessions = [(e.name, e.event) for e in room.action_log.entries if isinstance(e, SessionEntry)]
     assert sessions == [("Ada", "join"), ("Ada", "leave")]
@@ -191,7 +193,7 @@ def test_join_and_leave_are_recorded_on_the_session_tape(registered_room):
 def test_reset_carries_the_view_version_forward(registered_room):
     room = registered_room
     ada = _FakeWS()
-    asyncio.run(room.add_player(ada, "Ada"))
+    asyncio.run(room.add_player(ada, account("Ada")))
     before = room.state.seq
     asyncio.run(room.handle_reset(ada))  # a lone seated player's vote is unanimous
     assert room.state.seq > before
@@ -200,7 +202,7 @@ def test_reset_carries_the_view_version_forward(registered_room):
 def test_ready_advances_version_and_records_a_session_event(registered_room):
     room = registered_room
     ada = _FakeWS()
-    asyncio.run(room.add_player(ada, "Ada"))
+    asyncio.run(room.add_player(ada, account("Ada")))
     room.pending_decks[PlayerId.P1] = {}  # past the "load a deck first" gate; one seat won't deal
     before = room.state.seq
     asyncio.run(room.handle_ready(ada, True))

@@ -11,6 +11,8 @@ from yasuki_core.engine.action_log import ChatEntry, SessionEntry
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 
+from tests.yasuki_web._support import account
+
 
 class _FakeWS:
     def __init__(self):
@@ -31,8 +33,8 @@ def room():
 
 def _seat_two(room):
     ada, kenji = _FakeWS(), _FakeWS()
-    asyncio.run(room.add_player(ada, "Ada"))
-    asyncio.run(room.add_player(kenji, "Kenji"))
+    asyncio.run(room.add_player(ada, account("Ada")))
+    asyncio.run(room.add_player(kenji, account("Kenji")))
     return ada, kenji
 
 
@@ -53,7 +55,7 @@ def test_first_two_players_get_distinct_seats(room):
 def test_third_player_is_rejected_as_table_full(room):
     _seat_two(room)
     third = _FakeWS()
-    asyncio.run(room.add_player(third, "Shiro"))
+    asyncio.run(room.add_player(third, account("Shiro")))
     assert third not in room.seats
     assert third.sent[-1]["type"] == "ERROR"
 
@@ -62,7 +64,7 @@ def test_leaving_frees_the_seat_for_a_new_player(room):
     ada, _ = _seat_two(room)
     asyncio.run(room.remove_player(ada))
     shiro = _FakeWS()
-    asyncio.run(room.add_player(shiro, "Shiro"))
+    asyncio.run(room.add_player(shiro, account("Shiro")))
     assert room.seats[shiro] is PlayerId.P1  # P1 reopened
 
 

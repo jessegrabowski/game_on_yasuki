@@ -6,6 +6,8 @@ from starlette.websockets import WebSocketDisconnect
 from yasuki_web.websocket import GameRoom
 from yasuki_core.engine.players import PlayerId
 
+from tests.yasuki_web._support import as_user
+
 
 def _join(ws, room_id, name):
     ws.send_json({"type": "JOIN", "room": room_id, "join": {"name": name}})
@@ -129,7 +131,7 @@ def test_leaving_logs_to_the_remaining_players():
 
 def test_chat_and_join_logs_replay_to_a_new_player(client):
     room_id = client.post("/api/rooms", json={"max_players": 4}).json()["room_id"]
-    with client.websocket_connect(f"/ws/{room_id}") as ada:
+    with client.websocket_connect(f"/ws/{room_id}", headers=as_user("Ada")) as ada:
         ada.send_json({"type": "JOIN", "room": room_id, "join": {"name": "Ada"}})
         ada.receive_json()  # HELLO
         ada.receive_json()  # STATE
@@ -137,7 +139,7 @@ def test_chat_and_join_logs_replay_to_a_new_player(client):
         ada.send_json({"type": "CHAT", "room": room_id, "chat": {"text": "hello"}})
         ada.receive_json()  # own CHAT echo
 
-        with client.websocket_connect(f"/ws/{room_id}") as kenji:
+        with client.websocket_connect(f"/ws/{room_id}", headers=as_user("Kenji")) as kenji:
             kenji.send_json({"type": "JOIN", "room": room_id, "join": {"name": "Kenji"}})
             # HELLO, replayed LOG (Ada joined), replayed CHAT (hello), STATE, LOG (Kenji joined).
             received = [kenji.receive_json() for _ in range(5)]
