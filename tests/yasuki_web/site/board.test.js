@@ -578,6 +578,17 @@ describe('renderHand', () => {
     );
     assert.equal(hand.children[1], h1, 'h1 keeps its element after the reorder');
   });
+
+  it('clears a drag-hidden source when its card is reconciled back into the zone', () => {
+    const hand = document.createElement('div');
+    renderHand(hand, [card({ id: 'h1' }), card({ id: 'h2' })], '/images');
+    // A dragged card's source is hidden while its ghost follows the pointer; the next render reuses
+    // that same node, so it must come back visible.
+    hand.children[0].style.visibility = 'hidden';
+    renderHand(hand, [card({ id: 'h2' }), card({ id: 'h1' })], '/images');
+    const reused = hand.children.find((el) => el.dataset.cardId === 'h1');
+    assert.equal(reused.style.visibility, '', 'the reused element is visible again, not vanished');
+  });
 });
 
 // artSpec is the pure data seam: a snapshot card + its art donor payload → the compositor's spec.

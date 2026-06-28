@@ -167,6 +167,9 @@ function faceChanged(prev, view) {
 // unchanged card keeps its image across renders. A battlefield card carries an x; a zone card
 // (hand/province/pile) does not and stays flow-positioned.
 export function patchCard(el, view, prev, imgBase) {
+  // Drop transient drag-hide: a ghost-moved source is hidden while its ghost follows the pointer, and
+  // a drop back into its own zone re-patches that same reused node, which would otherwise stay hidden.
+  el.style.visibility = '';
   el.classList.toggle('bowed', !!view.bowed);
   el.classList.toggle('inverted', !!view.inverted);
   el.classList.toggle('shown', !!view.shown);
