@@ -1049,6 +1049,12 @@
   background: var(--r-gold-soft);
 }
 
+.deck-dialog-empty {
+  padding: 0.6rem;
+  color: var(--r-ink-dim);
+  text-align: center;
+}
+
 .deck-dialog-name.selected {
   background: var(--r-gold-soft);
   box-shadow: inset 3px 0 0 var(--r-gold);
