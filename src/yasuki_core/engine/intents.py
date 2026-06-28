@@ -1,15 +1,14 @@
 from dataclasses import dataclass
 from enum import Enum
-from pathlib import Path
 from typing import ClassVar
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.engine import ops
 from yasuki_core.engine.table import (
     BATTLEFIELD,
-    DEFAULT_BOARD_POS,
     UNPLACED_BOARD_POS,
     BoardPos,
     DeckKey,
@@ -396,18 +395,6 @@ class Event:
     cards: tuple[str, ...] = ()
 
 
-def _remove_from_location(state: TableState, card: L5RCard) -> None:
-    """Remove ``card`` (by identity) from whatever zone, deck, or the battlefield holds it, and drop
-    any battlefield position."""
-    for container in (*state.zones.values(), *state.decks.values(), state.battlefield):
-        cards = container.cards
-        for i, held in enumerate(cards):
-            if held is card:
-                del cards[i]
-                state.positions.pop(card.id, None)
-                return
-
-
 def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
     if card is None or not owns_card(state, seat, intent.card_id):
@@ -415,25 +402,15 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
     dest = intent.to
 
     if dest == BATTLEFIELD:
-        pos = intent.position or state.positions.get(card.id) or DEFAULT_BOARD_POS
-        _remove_from_location(state, card)
-        state.battlefield.add(card)
-        state.positions[card.id] = pos
+        ops.move_card(state, card, BATTLEFIELD, position=intent.position)
         state.seq += 1
+        pos = state.positions[card.id]
         return [Event(state.seq, seat, MoveCard(card.id, BATTLEFIELD, pos), (card.id,))]
 
     if isinstance(dest, DeckKey):
         if not owns_deck(state, seat, dest) or dest.side is not card.side:
             return []
-        _remove_from_location(state, card)
-        card.turn_face_down()
-        card.unbow()
-        card.uninvert()
-        card.set_note(None)  # a card shuffled back into a deck loses its annotation
-        if intent.to_bottom:
-            state.decks[dest].add_to_bottom([card])
-        else:
-            state.decks[dest].add_to_top([card])
+        ops.move_card(state, card, dest, to_bottom=intent.to_bottom)
         state.seq += 1
         return [
             Event(state.seq, seat, MoveCard(card.id, dest, to_bottom=intent.to_bottom), (card.id,))
@@ -447,29 +424,9 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
         or not zone_accepts(zone, card)
     ):
         return []
-    # Dropping a card onto the zone it already occupies — e.g. re-arranging within the hand — changes
-    # nothing, so it produces no event and never reaches the log.
-    if any(held is card for held in zone.cards):
+    # Dropping a card onto the zone it already occupies changes nothing, so it produces no event.
+    if not ops.move_card(state, card, dest, index=intent.index):
         return []
-    _remove_from_location(state, card)
-    if dest.role is ZoneRole.HAND:
-        # The hand is private by ownership (redaction hides it from the opponent regardless), so a
-        # card enters it upright and face up — the owner reads their own hand, matching a fresh draw.
-        card.turn_face_up()
-        card.unbow()
-        card.uninvert()
-    elif dest.role is ZoneRole.PROVINCE:
-        card.unbow()
-    elif dest.role in (ZoneRole.FATE_DISCARD, ZoneRole.DYNASTY_DISCARD):
-        # A discard pile is always public and squared up: a card landing there is revealed to both
-        # seats and unbowed.
-        card.turn_face_up()
-        card.unbow()
-    if dest.role is ZoneRole.HAND and intent.index is not None:
-        # zone_accepts already gated the side and the hand has no capacity limit, so insert directly.
-        zone.cards.insert(max(0, min(intent.index, len(zone.cards))), card)
-    else:
-        zone.add(card)
     state.seq += 1
     return [Event(state.seq, seat, MoveCard(card.id, dest), (card.id,))]
 
@@ -485,28 +442,14 @@ def _move_deck_top(state: TableState, seat: PlayerId, intent: MoveDeckTop) -> li
     return _move_card(state, seat, MoveCard(cards[-1].id, intent.to, intent.position))
 
 
-def _bring_to_top(state: TableState, card: L5RCard) -> None:
-    """Move ``card`` to the end of the battlefield list (the top of the stack the client renders)."""
-    cards = state.battlefield.cards
-    for i, held in enumerate(cards):
-        if held is card:
-            if i != len(cards) - 1:
-                cards.append(cards.pop(i))
-            return
-
-
 def _set_card_pos(state: TableState, seat: PlayerId, intent: SetCardPos) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
     if card is None or not owns_card(state, seat, intent.card_id):
         return []
     if not any(held is card for held in state.battlefield.cards):
         return []
-    new_pos = BoardPos(intent.x, intent.y)
-    if state.positions.get(card.id) == new_pos:
+    if not ops.set_position(state, card, intent.x, intent.y):
         return []
-    state.positions[card.id] = new_pos
-    # Moving a card on the battlefield also raises it to the top of the stack.
-    _bring_to_top(state, card)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
@@ -519,12 +462,8 @@ def _set_card_positions(state: TableState, seat: PlayerId, intent: SetCardPositi
             continue
         if not any(held is card for held in state.battlefield.cards):
             continue
-        new_pos = BoardPos(x, y)
-        if state.positions.get(card.id) == new_pos:
-            continue
-        state.positions[card.id] = new_pos
-        _bring_to_top(state, card)
-        changed.append(card.id)
+        if ops.set_position(state, card, x, y):
+            changed.append(card.id)
     if not changed:
         return []
     state.seq += 1
@@ -532,49 +471,19 @@ def _set_card_positions(state: TableState, seat: PlayerId, intent: SetCardPositi
 
 
 def _reorder_hand(state: TableState, seat: PlayerId, intent: ReorderHand) -> list[Event]:
-    hand = state.zones.get(ZoneKey(seat, ZoneRole.HAND))
-    if hand is None:
+    if not ops.reorder_in_hand(state, seat, intent.card_id, intent.index):
         return []
-    cards = hand.cards
-    current = next((i for i, held in enumerate(cards) if held.id == intent.card_id), None)
-    if current is None:
-        return []
-    card = cards.pop(current)
-    index = max(0, min(intent.index, len(cards)))
-    cards.insert(index, card)
-    if index == current:
-        return []  # re-inserted at its own slot — the order is unchanged
     state.seq += 1
-    return [Event(state.seq, seat, intent, (card.id,))]
+    return [Event(state.seq, seat, intent, (intent.card_id,))]
 
 
 def _reorder_pile(state: TableState, seat: PlayerId, intent: ReorderPile) -> list[Event]:
-    pile = intent.pile
-    if getattr(pile, "owner", None) != seat:
+    if getattr(intent.pile, "owner", None) != seat:
         return []
-    if isinstance(pile, DeckKey):
-        holder = state.decks.get(pile)
-    elif isinstance(pile, ZoneKey):
-        holder = state.zones.get(pile)
-    else:
+    if not ops.reorder_in_pile(state, intent.pile, intent.card_id, intent.index):
         return []
-    cards = holder.cards if holder is not None else None
-    if not cards:
-        return []
-    # The owner orders the pile top-first (the engine list keeps the top last), so apply the move in
-    # that view and write it back. Mirrors _reorder_hand: pop the card, clamp, re-insert, no-op stays so.
-    view = list(reversed(cards))
-    current = next((i for i, held in enumerate(view) if held.id == intent.card_id), None)
-    if current is None:
-        return []
-    card = view.pop(current)
-    index = max(0, min(intent.index, len(view)))
-    view.insert(index, card)
-    if index == current:
-        return []
-    cards[:] = reversed(view)
     state.seq += 1
-    return [Event(state.seq, seat, intent, (card.id,))]
+    return [Event(state.seq, seat, intent, (intent.card_id,))]
 
 
 def _raise(state: TableState, seat: PlayerId, intent: Raise) -> list[Event]:
@@ -584,7 +493,7 @@ def _raise(state: TableState, seat: PlayerId, intent: Raise) -> list[Event]:
     cards = state.battlefield.cards
     if not cards or cards[-1] is card or not any(held is card for held in cards):
         return []
-    _bring_to_top(state, card)
+    ops.bring_to_top(state, card)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
@@ -782,12 +691,9 @@ def _fill_province(state: TableState, seat: PlayerId, intent: FillProvince) -> l
         return []
     if not zone.has_capacity():
         return []
-    card = state.decks[DeckKey(seat, Side.DYNASTY)].draw_one()
+    card = ops.fill_province(state, seat, zone)
     if card is None:
         return []
-    card.unbow()
-    card.turn_face_down()
-    zone.add(card)
     state.seq += 1
     return [Event(state.seq, seat, MoveCard(card.id, intent.zone), (card.id,))]
 
@@ -800,14 +706,7 @@ def _destroy_province(state: TableState, seat: PlayerId, intent: DestroyProvince
         or not owns_zone(state, seat, intent.zone)
     ):
         return []
-    discard = state.zones[ZoneKey(seat, ZoneRole.DYNASTY_DISCARD)]
-    moved = []
-    while zone.cards:
-        card = zone.cards.pop()
-        card.turn_face_up()
-        discard.add(card)
-        moved.append(card.id)
-    del state.zones[intent.zone]
+    moved = ops.destroy_province(state, seat, intent.zone)
     state.seq += 1
     return [Event(state.seq, seat, intent, tuple(moved))]
 
@@ -820,30 +719,22 @@ def _discard_province(state: TableState, seat: PlayerId, intent: DiscardProvince
         or not owns_zone(state, seat, intent.zone)
     ):
         return []
-    if not zone.cards:
+    card = ops.discard_province(state, seat, zone)
+    if card is None:
         return []
-    card = zone.cards.pop()
-    card.turn_face_up()
-    state.zones[ZoneKey(seat, ZoneRole.DYNASTY_DISCARD)].add(card)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
 
 def _create_province(state: TableState, seat: PlayerId, intent: CreateProvince) -> list[Event]:
-    idx = 0
-    while ZoneKey(seat, ZoneRole.PROVINCE, idx) in state.zones:
-        idx += 1
-    state.zones[ZoneKey(seat, ZoneRole.PROVINCE, idx)] = ProvinceZone(owner=seat)
+    ops.create_province(state, seat)
     state.seq += 1
     return [Event(state.seq, seat, intent)]
 
 
 def _set_honor(state: TableState, seat: PlayerId, intent: SetHonor) -> list[Event]:
-    seat_info = state.seats[seat]
-    new_honor = seat_info.honor + intent.delta if intent.delta is not None else intent.value
-    if new_honor == seat_info.honor:
+    if not ops.set_honor(state, seat, delta=intent.delta, value=intent.value):
         return []
-    seat_info.honor = new_honor
     state.seq += 1
     return [Event(state.seq, seat, intent)]
 
@@ -851,18 +742,9 @@ def _set_honor(state: TableState, seat: PlayerId, intent: SetHonor) -> list[Even
 def _spawn_card(state: TableState, seat: PlayerId, intent: SpawnCard) -> list[Event]:
     if intent.card_id in state.cards_by_id:
         return []
-    card = L5RCard(
-        id=intent.card_id,
-        name=intent.name,
-        side=intent.side,
-        owner=None,
-        face_up=True,
-        image_front=Path(intent.image) if intent.image else None,
-        is_token=True,
+    card = ops.spawn_token(
+        state, intent.card_id, intent.name, intent.side, intent.image, intent.position
     )
-    state.cards_by_id[card.id] = card
-    state.battlefield.add(card)
-    state.positions[card.id] = intent.position
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
@@ -875,8 +757,7 @@ def _remove_card(state: TableState, seat: PlayerId, intent: RemoveCard) -> list[
     # destroyable — it must be moved to a discard or banish instead.
     if not card.is_token:
         return []
-    del state.cards_by_id[intent.card_id]
-    _remove_from_location(state, card)
+    ops.remove_card(state, card)
     state.seq += 1
     return [Event(state.seq, seat, intent, (intent.card_id,))]
 
