@@ -68,6 +68,8 @@ game-on-yasuki = { path = ".", editable = true }
 fastapi = ">=0.115"
 uvicorn = ">=0.30"
 slowapi = ">=0.1.9"
+pyjwt = { version = ">=2.8", extras = ["crypto"] }
+httpx = ">=0.27"
 
 [tool.pixi.feature.dev.dependencies]
 pytest = "*"
