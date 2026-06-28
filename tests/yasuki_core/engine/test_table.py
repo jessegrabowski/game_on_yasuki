@@ -1,13 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import (
-    TableState,
-    ZoneKey,
-    ZoneRole,
-    DeckKey,
-    BoardPos,
-)
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, BoardPos
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side

@@ -6,7 +6,8 @@ from yasuki_web.websocket import GameRoom
 from yasuki_web.rooms import rooms
 from yasuki_web.schemas import IntentEnvelope
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import IntentOp, BoardPos
+from yasuki_core.engine.table import BoardPos
+from yasuki_core.engine.intents import IntentOp
 from yasuki_core.engine.action_log import SessionEntry
 
 

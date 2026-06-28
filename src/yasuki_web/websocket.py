@@ -26,13 +26,8 @@ from yasuki_web.rooms import rooms
 from yasuki_web.wip_gate import websocket_access_ok
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import (
-    TableState,
-    Intent,
-    IntentOp,
-    Event,
-    SearchDeck,
-)
+from yasuki_core.engine.table import TableState
+from yasuki_core.engine.intents import Intent, IntentOp, Event, SearchDeck
 from yasuki_core.engine.action_log import (
     ActionLog,
     InitialRecord,

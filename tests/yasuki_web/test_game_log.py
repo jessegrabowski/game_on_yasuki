@@ -1,12 +1,7 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import (
-    TableState,
+from yasuki_core.engine.table import TableState, BoardPos, BATTLEFIELD, ZoneKey, ZoneRole, DeckKey
+from yasuki_core.engine.intents import (
     Event,
-    BoardPos,
-    BATTLEFIELD,
-    ZoneKey,
-    ZoneRole,
-    DeckKey,
     MoveCard,
     SetCardPos,
     Bow,

@@ -14,6 +14,8 @@ from yasuki_core.engine.table import (
     DeckKey,
     BoardPos,
     BATTLEFIELD,
+)
+from yasuki_core.engine.intents import (
     IntentOp,
     Intent,
     MoveCard,
