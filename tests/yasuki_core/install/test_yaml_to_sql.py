@@ -10,6 +10,7 @@ from yasuki_core.install.yaml_to_sql import (
     _card_columns,
     _experience_level,
     _link_and_validate_back_faces,
+    _validate_creates,
 )
 
 
@@ -106,3 +107,18 @@ def test_back_face_without_matching_front_raises():
     cards = {"orphan__back": _row("orphan__back", "Orphan", is_back=True)}
     with pytest.raises(ValueError, match="no front"):
         _link_and_validate_back_faces(cards, {"orphan__back": "Orphan"}, {"orphan__back"})
+
+
+def test_creates_edges_with_known_endpoints_pass():
+    cards = {"akodo_kage": None, "token_plus1f": None}
+    _validate_creates(cards, {("akodo_kage", "token_plus1f")})
+
+
+def test_creates_edge_with_unknown_id_raises():
+    with pytest.raises(ValueError, match="unknown card ids"):
+        _validate_creates({"akodo_kage": None}, {("akodo_kage", "token_ghost")})
+
+
+def test_self_referential_create_raises():
+    with pytest.raises(ValueError, match="self-referential"):
+        _validate_creates({"akodo_kage": None}, {("akodo_kage", "akodo_kage")})

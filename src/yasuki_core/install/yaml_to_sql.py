@@ -135,6 +135,20 @@ def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[list,
     return row, extra
 
 
+def _validate_creates(cards: dict, creates_links: set[tuple[str, str]]) -> None:
+    """Check every `creates:` edge before inserting it. Both endpoints must be loaded cards and a
+    card may not create itself; a dangling id is a curation error in the source YAML, so fail loudly
+    rather than silently dropping the edge."""
+    dangling = {
+        cid for creator, created in creates_links for cid in (creator, created) if cid not in cards
+    }
+    if dangling:
+        raise ValueError(f"`creates:` references unknown card ids: {sorted(dangling)}")
+    self_edges = {creator for creator, created in creates_links if creator == created}
+    if self_edges:
+        raise ValueError(f"`creates:` has self-referential edges: {sorted(self_edges)}")
+
+
 def _link_and_validate_back_faces(cards: dict, card_names: dict, back_ids: set) -> None:
     """Point each front row at its back face. Every is_back card must have a front (is_back=False)
     card of the same name — the link is derived from that shared name, so its absence is a fatal
@@ -180,6 +194,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     deck_links: set[tuple[str, str]] = set()
     keywords: set[str] = set()
     keyword_links: set[tuple[str, str]] = set()
+    creates_links: set[tuple[str, str]] = set()
     formats: set[str] = set()
     legality_links: set[tuple[str, str]] = set()
     print_rows: list[tuple] = []
@@ -220,6 +235,10 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                         formats.add(fmt)
                         legality_links.add((card_id, fmt))
 
+                # `creates:` is card-level but unioned across printings so it loads regardless of
+                # which printing entry carries it.
+                creates_links.update((card_id, tok) for tok in entry.get("creates", []))
+
                 n = printings_seen.get(card_id, 0)
                 printings_seen[card_id] = n + 1
                 printing_id = set_slug if n == 0 else f"{set_slug}_{n + 1}"
@@ -245,6 +264,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                 number_map[(card_id, printing_id)] = parse_collector_numbers(collector)
 
         _link_and_validate_back_faces(cards, card_names, back_ids)
+        _validate_creates(cards, creates_links)
         _insert_all(
             cur,
             cards,
@@ -253,6 +273,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             deck_links,
             keywords,
             keyword_links,
+            creates_links,
             formats,
             legality_links,
             print_rows,
@@ -273,6 +294,7 @@ def _insert_all(
     deck_links,
     keywords,
     keyword_links,
+    creates_links,
     formats,
     legality_links,
     print_rows,
@@ -314,6 +336,11 @@ def _insert_all(
     cur.executemany(
         "INSERT INTO card_legalities (card_id, format_name) VALUES (%s, %s) ON CONFLICT DO NOTHING",
         list(legality_links),
+    )
+    cur.executemany(
+        "INSERT INTO card_creates (creator_card_id, created_card_id) VALUES (%s, %s) "
+        "ON CONFLICT DO NOTHING",
+        list(creates_links),
     )
 
     cur.executemany(
