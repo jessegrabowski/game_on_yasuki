@@ -609,15 +609,13 @@
   box-shadow: inset 0 0 0 2px var(--r-gold);
 }
 
-/* The empty slot an incoming card opens in the hand, showing where it will land. */
+/* The empty slot an incoming card opens in the hand, reserving where it will land — a blank gap, like
+   the one a within-hand reorder opens by sliding its own hidden source aside. */
 .hand-gap {
   box-sizing: border-box; /* --card-w/h is the full footprint, matching a real card */
   flex: 0 0 auto;
   width: var(--card-w);
   height: var(--card-h);
-  border: 2px dashed var(--r-gold);
-  border-radius: 6px;
-  background: none;
   pointer-events: none;
 }
 
