@@ -989,6 +989,7 @@ cards:
   collector_number: '81'
 - title: Flame Katana
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -1927,6 +1928,7 @@ cards:
 - id: lion_ancestor
   title: Lion Ancestor
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2222,6 +2224,7 @@ cards:
   collector_number: '88'
 - title: Ohsuki's Sparrow
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2306,6 +2309,7 @@ cards:
   collector_number: '77'
 - title: Questionable Resources
   types:
+  - Holding
   - Proxy
   decks:
   - Other
@@ -3420,6 +3424,7 @@ cards:
   collector_number: '32'
 - title: Tokoru's Bear
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3638,6 +3643,7 @@ cards:
   collector_number: '7'
 - title: Water Bo
   types:
+  - Item
   - Proxy
   decks:
   - Other

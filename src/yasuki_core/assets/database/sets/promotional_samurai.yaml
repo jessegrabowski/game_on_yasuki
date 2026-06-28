@@ -216,6 +216,7 @@ cards:
     The revolutionaries are preparing to charge."</i>
 - title: Ashigaru Defender
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -375,6 +376,7 @@ cards:
   flavor_text: <i>"Fudo was a great prophet, and a student of the Tao without compare."</i>
 - title: Benika's Pride
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -566,6 +568,7 @@ cards:
   flavor_text: <i>"Never enter a battle without accurate knowledge of the terrain." -Ikoma Otemi</i>
 - title: Cavalry Token
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -759,6 +762,7 @@ cards:
   flavor_text: <i>"The Kitsune have requested aid, Hideo." -Kitsuki Taiko</i>
 - title: Crab Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -781,6 +785,7 @@ cards:
     death in the name of Hida."<i>
 - title: Crane Levies
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -800,6 +805,7 @@ cards:
   flavor_text: <i>The coffers of the Crane can purchase the skills the clan requires.</i>
 - title: Crane Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1010,6 +1016,7 @@ cards:
   flavor_text: <i>"Rise, my children. Rise, and serve."</i>
 - title: Dayu's Troops
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1242,6 +1249,7 @@ cards:
   flavor_text: <i>"Ungrateful wretches! You should be thanking us!"</i>
 - title: Dragon Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1389,6 +1397,7 @@ cards:
   flavor_text: <i>"Fools with no stamina have no business enjoying a man's drink." -Hida Takeo</i>
 - title: Farmer
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1988,6 +1997,7 @@ cards:
     to the Great Cycle!"</i>
 - title: Ikoma Reinforcements
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2436,6 +2446,7 @@ cards:
     escapes them, I will render to ash."</i>
 - title: Kurimoko's Recruits
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2603,6 +2614,7 @@ cards:
     are crowded with anxious people who pray that the link will be restored.</i>
 - title: Lion Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2644,6 +2656,7 @@ cards:
     The Khan sneered. "No, to join him."</i>
 - title: Mantis Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2771,6 +2784,7 @@ cards:
   artist: Glen Osterberger
 - title: Men at Arms
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2788,6 +2802,7 @@ cards:
   flavor_text: <i>"There are always those who stand ready when a time of trial is upon us." - Miya Shoin</i>
 - title: Militia Recruit
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3135,6 +3150,7 @@ cards:
     mine. All praise the Son of Heaven, the Divine Emperor." -Hida Kisada, Son of Kuon</i>
 - title: New Recruit
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3343,6 +3359,7 @@ cards:
   artist: Steve Argyle
 - title: Phoenix Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3364,6 +3381,7 @@ cards:
   flavor_text: <i>To combine the touch of the kami with the purity of bushido is the mark of a true master.</i>
 - title: Phoenix Warrior
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3749,6 +3767,7 @@ cards:
     - Mirumoto Kei</i>
 - title: Scorpion Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4201,6 +4220,7 @@ cards:
   flavor_text: <i>"She draws attention away from Tezuko. They are a potent team." - Soshi Yukimi
 - title: Spider Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4258,6 +4278,7 @@ cards:
   artist: IFS
 - title: Sturdy Katana
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -4379,6 +4400,7 @@ cards:
     them on their way." - Ikoma Bugoro</i>
 - title: Swift Troops
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4420,6 +4442,7 @@ cards:
     what we do." - Ikoma Otemi</i>
 - title: Takuro's Apprentice
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -5087,6 +5110,7 @@ cards:
   flavor_text: <i>One of many worn by the Kami, now it waits for a new legend to bear it.</i>
 - title: Toshi Ranbo Guard
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5256,6 +5280,7 @@ cards:
   flavor_text: <i>"It brings an end to one's days." - Crab saying</i>
 - title: Unicorn Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -5466,6 +5491,7 @@ cards:
   artist: IFS
 - title: Yaichiro's Men
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5620,6 +5646,7 @@ cards:
     Fox. His word is law."</i>
 - title: Young Defender
   types:
+  - Follower
   - Proxy
   decks:
   - Other

@@ -516,6 +516,7 @@ cards:
   collector_number: '107'
 - title: Bird of Prey
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1147,6 +1148,7 @@ cards:
   collector_number: '119'
 - title: Fledgling Ashigaru
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1229,6 +1231,7 @@ cards:
   collector_number: '82'
 - title: Goju Genin
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1950,6 +1953,7 @@ cards:
   collector_number: '154'
 - title: Kyuden Hida Survivor
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2260,6 +2264,7 @@ cards:
   collector_number: '126'
 - title: Oathsworn Deathseeker
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3554,6 +3559,7 @@ cards:
   collector_number: '5'
 - title: Tsi Weapon
   types:
+  - Item
   - Proxy
   decks:
   - Other

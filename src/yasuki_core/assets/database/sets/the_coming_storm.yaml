@@ -160,6 +160,7 @@ cards:
   designer: Bryan
 - title: Armor
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -199,6 +200,7 @@ cards:
   designer: Bryan
 - title: Ashalan
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -286,6 +288,7 @@ cards:
   designer: Randy
 - title: Baraunghar Scout
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -442,6 +445,7 @@ cards:
   designer: Jeremy
 - title: Beiko's Bear
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -664,6 +668,7 @@ cards:
   designer: Trevor
 - title: Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -685,6 +690,7 @@ cards:
   collector_number: '10'
 - title: Clay Yojimbo
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1167,6 +1173,7 @@ cards:
   gold_production: 8
 - title: Goblin Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1580,6 +1587,7 @@ cards:
   designer: Loki
 - title: Ivory Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1787,6 +1795,7 @@ cards:
   designer: Bryan
 - title: Kiba
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1806,6 +1815,7 @@ cards:
   collector_number: '24'
 - title: Kichi's Shadow Badger
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2023,6 +2033,7 @@ cards:
   designer: Trevor
 - title: Light Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2039,6 +2050,7 @@ cards:
   collector_number: '25'
 - title: Lion Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2058,6 +2070,7 @@ cards:
   collector_number: '26'
 - title: Little Elephant
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2123,6 +2136,7 @@ cards:
   designer: Bryan
 - title: Major Illusion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2171,6 +2185,7 @@ cards:
   designer: Randy
 - title: Medium Cavalry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2189,6 +2204,7 @@ cards:
   collector_number: '28'
 - title: Medium Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2225,6 +2241,7 @@ cards:
   designer: Julien
 - title: Minor Illusion
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2475,6 +2492,7 @@ cards:
   designer: Bryan
 - title: Oni Hatchling
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2496,6 +2514,7 @@ cards:
   collector_number: '16'
 - title: Onyx Oni
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2567,6 +2586,7 @@ cards:
   designer: Julien
 - title: Parumba's Boar
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2618,6 +2638,7 @@ cards:
   designer: Jeremy
 - title: Peasant
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3099,6 +3120,7 @@ cards:
   designer: Bryan
 - title: Small Holding
   types:
+  - Holding
   - Proxy
   decks:
   - Other
@@ -3715,6 +3737,7 @@ cards:
   designer: Trevor
 - title: Tower Guard
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3762,6 +3785,7 @@ cards:
   designer: Trevor
 - title: Tsumaro's Illusion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3864,6 +3888,7 @@ cards:
   designer: Bryan
 - title: Undead Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3885,6 +3910,7 @@ cards:
   collector_number: '20'
 - title: Unexpected Weapon
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -4207,6 +4233,7 @@ cards:
   designer: Jeremy
 - title: Yamazaru's Monkey
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4423,6 +4450,7 @@ cards:
   designer: Randy
 - title: Zombie
   types:
+  - Personality
   - Proxy
   decks:
   - Other

@@ -194,6 +194,7 @@ cards:
   designer: Jeremy
 - title: Armor
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -210,6 +211,7 @@ cards:
   collector_number: '43'
 - title: Asako Ontaiko
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -230,6 +232,7 @@ cards:
   collector_number: '17'
 - title: Ashalan
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -275,6 +278,7 @@ cards:
   designer: Trevor
 - title: Baraunghar Scout
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -353,6 +357,7 @@ cards:
   designer: Julien
 - title: Beiko's Bear
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -483,6 +488,7 @@ cards:
   designer: Trevor
 - title: Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -504,6 +510,7 @@ cards:
   collector_number: '21'
 - title: Clay Yojimbo
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1016,6 +1023,7 @@ cards:
   gold_production: 8
 - title: Goblin Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1649,6 +1657,7 @@ cards:
   designer: Randy
 - title: Ivory Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1784,6 +1793,7 @@ cards:
   designer: Bryan
 - title: Kiba
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1803,6 +1813,7 @@ cards:
   collector_number: '36'
 - title: Kichi's Shadow Badger
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1825,6 +1836,7 @@ cards:
   collector_number: '24'
 - title: Kikuchiyo
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2114,6 +2126,7 @@ cards:
   designer: Julien
 - title: Light Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2153,6 +2166,7 @@ cards:
   designer: Jeremy
 - title: Lion Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2172,6 +2186,7 @@ cards:
   collector_number: '38'
 - title: Little Elephant
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2235,6 +2250,7 @@ cards:
   designer: Trevor
 - title: Major Illusion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2316,6 +2332,7 @@ cards:
   designer: Loki
 - title: Medium Cavalry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2334,6 +2351,7 @@ cards:
   collector_number: '40'
 - title: Medium Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2376,6 +2394,7 @@ cards:
   designer: Bryan
 - title: Minor Illusion
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2646,6 +2665,7 @@ cards:
   designer: Trevor
 - title: Nakumi's Fox
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2775,6 +2795,7 @@ cards:
   designer: Randy
 - title: Oni Hatchling
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2796,6 +2817,7 @@ cards:
   collector_number: '28'
 - title: Onyx Oni
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2863,6 +2885,7 @@ cards:
   designer: Loki
 - title: Parumba's Boar
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2908,6 +2931,7 @@ cards:
   designer: Bryan
 - title: Peasant
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3423,6 +3447,7 @@ cards:
   designer: Julien
 - title: Small Holding
   types:
+  - Holding
   - Proxy
   decks:
   - Other
@@ -4199,6 +4224,7 @@ cards:
   designer: Loki
 - title: Tower Guard
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4269,6 +4295,7 @@ cards:
   collector_number: '165'
 - title: Tsumaro's Illusion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4369,6 +4396,7 @@ cards:
   designer: Jeremy
 - title: Undead Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4390,6 +4418,7 @@ cards:
   collector_number: '32'
 - title: Unexpected Weapon
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -4502,6 +4531,7 @@ cards:
   designer: Bryan
 - title: Wataru's Potion
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -4521,6 +4551,7 @@ cards:
   collector_number: '45'
 - title: Yamazaru's Monkey
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4786,6 +4817,7 @@ cards:
   designer: Bryan
 - title: Zombie
   types:
+  - Personality
   - Proxy
   decks:
   - Other

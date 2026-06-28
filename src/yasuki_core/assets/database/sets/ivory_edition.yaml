@@ -753,6 +753,7 @@ cards:
   collector_number: '289'
 - title: Ashalan
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -898,6 +899,7 @@ cards:
   collector_number: '291'
 - title: Baraunghar Scout
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -944,6 +946,7 @@ cards:
   collector_number: '188'
 - title: Bat
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1387,6 +1390,7 @@ cards:
   collector_number: '191'
 - title: Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1408,6 +1412,7 @@ cards:
   collector_number: '8'
 - title: Clay Yojimbo
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3902,6 +3907,7 @@ cards:
 - id: imposter_2
   title: Imposter
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4695,6 +4701,7 @@ cards:
   collector_number: '325'
 - title: Kiba
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -4714,6 +4721,7 @@ cards:
   collector_number: '11'
 - title: Kichi's Shadow Badger
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -5020,6 +5028,7 @@ cards:
   collector_number: '201'
 - title: Light Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5090,6 +5099,7 @@ cards:
 - id: lion_ancestor_2
   title: Lion Ancestor
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -5112,6 +5122,7 @@ cards:
   collector_number: '1'
 - title: Little Elephant
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5159,6 +5170,7 @@ cards:
   designer: Bryan
 - title: Major Illusion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -5405,6 +5417,7 @@ cards:
   collector_number: '203'
 - title: Medium Cavalry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5423,6 +5436,7 @@ cards:
   collector_number: '16'
 - title: Medium Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5556,6 +5570,7 @@ cards:
   collector_number: '168'
 - title: Minor Illusion
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -6184,6 +6199,7 @@ cards:
   collector_number: '330'
 - title: Oni Hatchling
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -6205,6 +6221,7 @@ cards:
   collector_number: '19'
 - title: Onyx Oni
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -6422,6 +6439,7 @@ cards:
   collector_number: '334'
 - title: Parumba's Boar
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -6444,6 +6462,7 @@ cards:
   collector_number: '3'
 - title: Peasant
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -8483,6 +8502,7 @@ cards:
 - id: the_false_nimuro_experienced_2_2
   title: The False Nimuro
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -8994,6 +9014,7 @@ cards:
   designer: Bryan
 - title: Tower Guard
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -9058,6 +9079,7 @@ cards:
   collector_number: '215'
 - title: Tsumaro's Illusion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -9279,6 +9301,7 @@ cards:
   designer: Bryan
 - title: Undead Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -9300,6 +9323,7 @@ cards:
   collector_number: '24'
 - title: Unexpected Weapon
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -9779,6 +9803,7 @@ cards:
   collector_number: '217'
 - title: Yamazaru's Monkey
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -10088,6 +10113,7 @@ cards:
   collector_number: '173'
 - title: Zombie
   types:
+  - Personality
   - Proxy
   decks:
   - Other

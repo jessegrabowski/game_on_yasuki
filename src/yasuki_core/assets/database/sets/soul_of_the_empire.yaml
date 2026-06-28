@@ -178,6 +178,7 @@ cards:
 - id: ashigaru_2
   title: Ashigaru
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -507,6 +508,7 @@ cards:
   artist: Thomas Manning
 - title: Cavalry
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1118,6 +1120,7 @@ cards:
     to death." - from Loss of Innocence, Part II</i>
 - title: Farmer
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2481,6 +2484,7 @@ cards:
     had not lost their honor."</i>
 - title: Mujina
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2530,6 +2534,7 @@ cards:
   flavor_text: <i>"The Wasp will stand with the Mantis, and I will stand by my lord."</i>
 - title: Naga
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -3142,6 +3147,7 @@ cards:
 - id: ratling_pack_2
   title: Ratling Pack
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -4456,6 +4462,7 @@ cards:
     his heart: Save the Empire. Fight the Shadow.</i>'
 - title: Undead
   types:
+  - Follower
   - Proxy
   decks:
   - Other

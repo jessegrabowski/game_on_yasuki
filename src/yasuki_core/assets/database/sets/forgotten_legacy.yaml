@@ -946,6 +946,7 @@ cards:
   collector_number: '10'
 - title: Hisano's Guide
   types:
+  - Personality
   - Proxy
   decks:
   - Other

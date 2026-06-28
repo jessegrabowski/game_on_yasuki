@@ -183,6 +183,7 @@ cards:
   designer: Loki
 - title: Assassin
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -708,6 +709,7 @@ cards:
   designer: Bryan
 - title: Emerald Magistrate
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -819,6 +821,7 @@ cards:
   designer: Loki
 - title: Fresh Recruit
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -979,6 +982,7 @@ cards:
   designer: Thomas
 - title: Guest
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1001,6 +1005,7 @@ cards:
   collector_number: '6'
 - title: Haruki's Deer
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1947,6 +1952,7 @@ cards:
 - id: lion_ancestor
   title: Lion Ancestor
   types:
+  - Personality
   - Proxy
   decks:
   - Other

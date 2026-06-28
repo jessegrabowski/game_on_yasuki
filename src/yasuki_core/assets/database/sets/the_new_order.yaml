@@ -3876,6 +3876,7 @@ cards:
   designer: Julien
 - title: Yoshioka's Elephant
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3917,6 +3918,7 @@ cards:
   designer: Bryan
 - title: Zombie Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other

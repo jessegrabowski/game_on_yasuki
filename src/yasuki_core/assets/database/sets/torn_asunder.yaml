@@ -505,6 +505,7 @@ cards:
   designer: Duncan
 - title: Breached Oni
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -611,6 +612,7 @@ cards:
   designer: Bryan
 - title: Charter
   types:
+  - Holding
   - Proxy
   decks:
   - Other
@@ -1392,6 +1394,7 @@ cards:
   designer: Loki
 - title: Hired Samurai
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1754,6 +1757,7 @@ cards:
   designer: Loki
 - title: Kaxt
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1775,6 +1779,7 @@ cards:
   collector_number: '5'
 - title: Ki Podling
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3772,6 +3777,7 @@ cards:
   designer: Thomas
 - title: Yuribara's Butterflies
   types:
+  - Personality
   - Proxy
   decks:
   - Other

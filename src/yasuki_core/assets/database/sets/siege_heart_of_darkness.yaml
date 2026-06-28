@@ -64,6 +64,7 @@ cards:
   collector_number: '27'
 - title: Asp Warrior
   types:
+  - Personality
   - Proxy
   decks:
   - Dynasty
