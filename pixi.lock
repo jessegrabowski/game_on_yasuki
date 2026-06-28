@@ -5363,10 +5363,14 @@ packages:
   - pyyaml>=6.0
   - unidecode>=1.4
   - fastapi>=0.115 ; extra == 'all'
+  - httpx>=0.27 ; extra == 'all'
+  - pyjwt[crypto]>=2.8 ; extra == 'all'
   - slowapi>=0.1.9 ; extra == 'all'
   - uvicorn>=0.30 ; extra == 'all'
   - reportlab>=4.0 ; extra == 'gui'
   - fastapi>=0.115 ; extra == 'web'
+  - httpx>=0.27 ; extra == 'web'
+  - pyjwt[crypto]>=2.8 ; extra == 'web'
   - slowapi>=0.1.9 ; extra == 'web'
   - uvicorn>=0.30 ; extra == 'web'
   requires_python: '>=3.12,<3.14'
