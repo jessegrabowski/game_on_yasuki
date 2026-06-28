@@ -67,8 +67,12 @@
         <button class="btn-small" id="importBtn" title="Import deck from YAML file">Import</button>
         <button class="btn-small" id="exportBtn" title="Export deck as YAML file">Export</button>
         <button class="btn-small" id="printBtn" title="Print deck as a PDF at actual card size">Print</button>
+        <button class="btn-small" id="saveOnlineBtn" title="Save this deck to your account">Save online</button>
+        <button class="btn-small" id="myDecksBtn" title="Load a deck saved to your account">My decks</button>
       </div>
     </div>
+    <div class="account-status" id="accountStatus"></div>
+    <div class="my-decks-panel hidden" id="myDecksPanel"></div>
     <input type="file" id="importFileInput" accept=".yaml,.yml" class="hidden">
     <div class="deck-name-row">
       <input type="text" id="deckNameInput" placeholder="Deck name&hellip;">
