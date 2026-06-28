@@ -14,7 +14,7 @@ import logging
 import os
 import re
 import psycopg
-from yasuki_web import cards, rooms, websocket
+from yasuki_web import auth, cards, rooms, websocket
 from yasuki_web.config import allowed_origins
 from yasuki_web.rate_limit import limiter
 from yasuki_web.wip_gate import require_wip_access
@@ -95,12 +95,13 @@ class BodySizeLimitMiddleware(BaseHTTPMiddleware):
 
 app.add_middleware(BodySizeLimitMiddleware)
 
-# allow_credentials is False: the API uses no cookies/sessions, so browsers never need to send
-# credentials cross-origin. Revisit if a cookie/token auth flow is added.
+# allow_credentials is True so the browser sends the session cookie on same-origin and allowed
+# cross-origin requests. This is safe only against a concrete origin allowlist — never "*" — which
+# allowed_origins() enforces by rejecting a wildcard.
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
-    allow_credentials=False,
+    allow_credentials=True,
     allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization", "X-Delete-Token"],
 )
@@ -176,6 +177,10 @@ app.include_router(
     rooms.router, prefix="/api", tags=["rooms"], dependencies=[Depends(require_wip_access)]
 )
 app.include_router(websocket.router, prefix="/ws", tags=["websocket"])
+# Auth routes carry their own full paths (/auth/*, /api/me) and gate nothing themselves — the
+# session cookie is additive, ignored on public routes and required only where a route depends on
+# current_user.
+app.include_router(auth.router, tags=["auth"])
 
 
 def _site_page(filename: str) -> FileResponse:
