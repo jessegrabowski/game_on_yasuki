@@ -54,17 +54,40 @@ def _escape_like(value: str) -> str:
     return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
 
+def apply_sslmode(dsn: str) -> str:
+    """Append an ``sslmode`` to a DSN aimed at a public host, leaving private/loopback hosts alone.
+
+    Verify the server certificate and hostname (``sslmode=verify-full``) with the CA bundle when
+    ``YASUKI_DB_SSL_ROOT_CERT`` points at one; otherwise require encryption without authentication
+    (``sslmode=require``). A DSN that already sets ``sslmode``, or that targets a private/loopback
+    host, is returned unchanged.
+
+    Parameters
+    ----------
+    dsn : str
+        The PostgreSQL connection string to augment.
+
+    Returns
+    -------
+    dsn : str
+        The connection string, with an ``sslmode`` appended when warranted.
+    """
+    if "sslmode" in dsn or _is_private_dsn(dsn):
+        return dsn
+    separator = "&" if "?" in dsn else "?"
+    root_cert = os.environ.get("YASUKI_DB_SSL_ROOT_CERT")
+    if root_cert:
+        return f"{dsn}{separator}sslmode=verify-full&sslrootcert={root_cert}"
+    return f"{dsn}{separator}sslmode=require"
+
+
 def get_connection_string() -> str:
     """
     Get PostgreSQL connection string from environment or use default.
 
     Checks YASUKI_DATABASE_URL first, then DATABASE_URL (used by Railway and
-    other PaaS providers), then falls back to localhost.
-
-    For non-private hosts (public cloud databases) with no sslmode already set, append
-    ``sslmode=verify-full`` plus the CA bundle when ``YASUKI_DB_SSL_ROOT_CERT`` points at one —
-    verifying the server certificate and hostname — otherwise fall back to ``sslmode=require``
-    (encrypted but unauthenticated). Private/loopback hosts are left untouched.
+    other PaaS providers), then falls back to localhost. Public hosts get an ``sslmode`` appended
+    (see ``apply_sslmode``).
 
     Returns
     -------
@@ -74,14 +97,7 @@ def get_connection_string() -> str:
     dsn = os.environ.get(
         "YASUKI_DATABASE_URL", os.environ.get("DATABASE_URL", "postgresql://localhost/yasuki")
     )
-    if "sslmode" not in dsn and not _is_private_dsn(dsn):
-        separator = "&" if "?" in dsn else "?"
-        root_cert = os.environ.get("YASUKI_DB_SSL_ROOT_CERT")
-        if root_cert:
-            dsn += f"{separator}sslmode=verify-full&sslrootcert={root_cert}"
-        else:
-            dsn += f"{separator}sslmode=require"
-    return dsn
+    return apply_sslmode(dsn)
 
 
 def init_pool(min_size: int = 2, max_size: int = 20) -> None:
