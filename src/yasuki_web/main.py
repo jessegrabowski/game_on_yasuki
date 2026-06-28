@@ -13,11 +13,14 @@ import asyncio
 import logging
 import os
 import re
+import psycopg
 from yasuki_web import cards, rooms, websocket
 from yasuki_web.config import allowed_origins
 from yasuki_web.rate_limit import limiter
 from yasuki_web.wip_gate import require_wip_access
 from yasuki_web.websocket import evict_stale_rooms
+from yasuki_core.accounts.db import close_accounts_pool
+from yasuki_core.accounts.migrate import migrate as migrate_accounts_schema
 from yasuki_core.database import close_pool, get_card_by_id, get_prints_by_card_id
 from yasuki_core.paths import BUNDLED_IMAGES_DIR, SETS_DIR
 from html import escape as html_escape
@@ -40,11 +43,20 @@ async def lifespan(app: FastAPI):
     eviction = asyncio.create_task(evict_stale_rooms())
     logger.info("Game on, Yasuki! API starting up...")
     logger.info("API Documentation available at: /docs")
+    # Ensure the accounts schema exists (idempotent; never drops). Best-effort: an unreachable
+    # accounts DB must not take down the fully public card-search / deck-builder surface, so log and
+    # continue — account features degrade until it recovers, and the migration re-runs next boot. A
+    # non-connection failure (e.g. a real DDL bug) still propagates and fails the deploy loudly.
+    try:
+        await asyncio.to_thread(migrate_accounts_schema)
+    except psycopg.OperationalError:
+        logger.exception("Accounts DB unreachable at startup; account features degraded")
     try:
         yield
     finally:
         eviction.cancel()
         close_pool()
+        close_accounts_pool()
         logger.info("Game on, Yasuki! API shutting down...")
 
 
