@@ -1,6 +1,23 @@
 from abc import ABC, abstractmethod
 import tkinter as tk
 
+from yasuki_gui import theme
+
+
+def draw_count_pill(canvas: tk.Canvas, x1: int, y1: int, count: int, tag: str) -> None:
+    """A small dark count pill in a pile or deck's bottom-right corner."""
+    canvas.create_rectangle(
+        x1 - 22, y1 - 16, x1 - 3, y1 - 3, fill=theme.COUNT_BG, outline="", tags=(tag, "zone")
+    )
+    canvas.create_text(
+        x1 - 12,
+        y1 - 9,
+        text=str(count),
+        fill=theme.COUNT_FG,
+        font=theme.serif(8),
+        tags=(tag, "zone"),
+    )
+
 
 class Visual(ABC):
     @property

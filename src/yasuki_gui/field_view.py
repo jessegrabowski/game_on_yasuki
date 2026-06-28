@@ -13,8 +13,9 @@ from yasuki_core.engine.table import (
     apply_intent,
 )
 from yasuki_core.game_pieces.constants import Side
+from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
-from yasuki_gui.constants import CANVAS_BG, CARD_H, CARD_W
+from yasuki_gui.constants import CARD_H, CARD_W
 from yasuki_gui.controller import FieldController
 from yasuki_gui.layout import (
     deck_pos,
@@ -46,7 +47,7 @@ class FieldView(tk.Canvas):
     """
 
     def __init__(self, master: tk.Misc, width: int = 800, height: int = 600):
-        super().__init__(master, width=width, height=height, bg=CANVAS_BG, highlightthickness=0)
+        super().__init__(master, width=width, height=height, bg=theme.SURFACE, highlightthickness=0)
         self._cw = width
         self._ch = height
 
@@ -209,9 +210,17 @@ class FieldView(tk.Canvas):
         if self.state is None:
             return
         self.delete("all")
+        self._draw_table()
         self._reconcile_decks()
         self._reconcile_zones()
         self._reconcile_sprites()
+
+    def _draw_table(self) -> None:
+        """A faint gold midline splitting the two seats' halves, drawn behind every card."""
+        w, h = self._canvas_size()
+        self.create_line(
+            int(w * 0.08), h // 2, int(w * 0.92), h // 2, fill=theme.MIDLINE, tags=("table",)
+        )
 
     def _reconcile_decks(self) -> None:
         w, h = self._canvas_size()

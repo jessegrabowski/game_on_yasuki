@@ -1,6 +1,7 @@
 import tkinter as tk
 
 from yasuki_core.engine.zones import HandZone
+from yasuki_gui import theme
 from yasuki_gui.constants import CARD_W, CARD_H, HAND_GAP, HAND_PADDING
 from yasuki_gui.ui.images import ImageProvider, load_image as _li, load_back_image as _lbi
 from yasuki_gui.visuals.visual import Visual
@@ -81,54 +82,67 @@ class HandVisual(Visual):
     def draw(self, canvas: tk.Canvas) -> None:
         x, y = self.x, self.y
         w, h = self.size
-        # Background outline for the hand area
+        # A faint frame marks the hand strip and its empty drop area.
         canvas.create_rectangle(
             x - w // 2,
             y - h // 2,
             x + w // 2,
             y + h // 2,
-            outline="#888",
-            width=2,
-            dash=(4, 2),
+            outline=theme.LINE_SOFT,
+            width=1,
             tags=(self.tag, "zone", "hand"),
         )
-        # Determine viewer and ownership
         viewer = getattr(canvas, "local_player", None)
         owner = getattr(self.zone, "owner", None)
-        # Draw cards; an opponent's hand card shows its back unless its owner has shown it.
+        # An opponent's hand card shows its back unless its owner has shown it.
         for i, card in enumerate(self.zone.cards):
             cx, cy = self.center_for_index(i)
             show_front = not (
                 owner is not None and viewer is not None and owner != viewer and not card.shown
             )
+            front_art = card.active_face.image_front
             if self.images is not None:
-                if show_front:
-                    photo = self.images.front(card.image_front, card.bowed, card.inverted)
-                else:
-                    photo = self.images.back(card.side, card.bowed, card.inverted, card.image_back)
+                photo = (
+                    self.images.front(front_art, card.bowed, card.inverted)
+                    if show_front
+                    else self.images.back(card.side, card.bowed, card.inverted, card.image_back)
+                )
             else:
                 photo = (
-                    _li(card.image_front, card.bowed, card.inverted, master=canvas)
+                    _li(front_art, card.bowed, card.inverted, master=canvas)
                     if show_front
                     else _lbi(card.side, card.bowed, card.inverted, card.image_back, master=canvas)
                 )
+            cw, ch = (CARD_H, CARD_W) if card.bowed else (CARD_W, CARD_H)
             if photo is not None:
                 canvas.create_image(cx, cy, image=photo, tags=(self.tag, "zone", "hand"))
             else:
-                # Fallback rectangle with small label or back
-                cw, ch = (CARD_H, CARD_W) if card.bowed else (CARD_W, CARD_H)
-                fill = "#3b3b3b" if not show_front else "#3b3b3b"
                 canvas.create_rectangle(
                     cx - cw // 2,
                     cy - ch // 2,
                     cx + cw // 2,
                     cy + ch // 2,
-                    fill=fill,
-                    outline="#aaaaaa",
-                    width=2,
+                    fill=theme.CARD_FACE if show_front else theme.CARD_BACK,
+                    outline="",
                     tags=(self.tag, "zone", "hand"),
                 )
                 if show_front:
                     canvas.create_text(
-                        cx, cy, text=card.name, fill="#eaeaea", tags=(self.tag, "zone", "hand")
+                        cx,
+                        cy,
+                        text=card.active_face.name,
+                        fill=theme.INK,
+                        font=theme.serif(9, "bold"),
+                        width=cw - 10,
+                        justify="center",
+                        tags=(self.tag, "zone", "hand"),
                     )
+            canvas.create_rectangle(
+                cx - cw // 2,
+                cy - ch // 2,
+                cx + cw // 2,
+                cy + ch // 2,
+                outline=theme.CARD_BORDER,
+                width=1,
+                tags=(self.tag, "zone", "hand"),
+            )

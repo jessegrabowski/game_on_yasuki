@@ -14,6 +14,7 @@ from yasuki_core.engine.table import (
     ZoneRole,
 )
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
 from yasuki_gui.constants import CARD_H, CARD_W
 from yasuki_gui.services.actions import (
@@ -113,11 +114,11 @@ class FieldController:
         self._marquee_start = (x, y)
         if self._marquee_rect is None:
             self._marquee_rect = self.view.create_rectangle(
-                x, y, x, y, outline="#66ccff", width=2, dash=(4, 2), tags=("marquee",)
+                x, y, x, y, outline=theme.SELECT, width=2, dash=(4, 2), tags=("marquee",)
             )
         else:
             self.view.coords(self._marquee_rect, x, y, x, y)
-            self.view.itemconfig(self._marquee_rect, outline="#66ccff", width=2, dash=(4, 2))
+            self.view.itemconfig(self._marquee_rect, outline=theme.SELECT, width=2, dash=(4, 2))
         self.view.tag_raise(self._marquee_rect)
 
     def _update_marquee(self, x: int, y: int) -> None:
@@ -159,7 +160,7 @@ class FieldController:
                 y - h // 2,
                 x + w // 2,
                 y + h // 2,
-                outline="#66ccff",
+                outline=theme.SELECT,
                 dash=(3, 3),
                 width=2,
                 tags=("hand-ghost",),

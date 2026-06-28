@@ -3,6 +3,7 @@ from tkinter import filedialog
 from collections.abc import Callable
 
 from yasuki_core.game_pieces.constants import Side
+from yasuki_gui import theme
 from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.visuals import DeckVisual
 from yasuki_gui.constants import CARD_W, CARD_H
@@ -16,10 +17,10 @@ class Dialogs:
     def deck_inspect(self, dv: DeckVisual) -> None:
         win = tk.Toplevel(self.toplevel)
         win.title(f"Inspect - {dv.label}")
-        canvas = tk.Canvas(win, width=800, height=260, bg="#1e1e1e")
+        canvas = tk.Canvas(win, width=800, height=260, bg=theme.PANEL)
         hscroll = tk.Scrollbar(win, orient="horizontal", command=canvas.xview)
         canvas.configure(xscrollcommand=hscroll.set)
-        frame = tk.Frame(canvas, bg="#1e1e1e")
+        frame = tk.Frame(canvas, bg=theme.PANEL)
         canvas.create_window((0, 0), window=frame, anchor="nw")
         keep: list[object] = []
         pad = 10
@@ -31,17 +32,17 @@ class Dialogs:
                 if face_up
                 else self.images.back(card.side, bowed, card.inverted, card.image_back)
             )
-            holder = tk.Frame(frame, bg="#1e1e1e")
+            holder = tk.Frame(frame, bg=theme.PANEL)
             holder.grid(row=0, column=idx, padx=pad, pady=pad)
             if photo is not None:
-                lbl = tk.Label(holder, image=photo, bg="#1e1e1e")
+                lbl = tk.Label(holder, image=photo, bg=theme.PANEL)
                 lbl.pack()
                 keep.append(photo)
             else:
                 w, h = (CARD_H, CARD_W) if card.bowed else (CARD_W, CARD_H)
-                c = tk.Canvas(holder, width=w, height=h, bg="#6b6b6b", highlightthickness=0)
+                c = tk.Canvas(holder, width=w, height=h, bg=theme.CARD_FACE, highlightthickness=0)
                 c.pack()
-                c.create_text(w // 2, h // 2, text=card.name, fill="#222")
+                c.create_text(w // 2, h // 2, text=card.name, fill=theme.INK)
 
         def _update_scrollregion():
             frame.update_idletasks()
@@ -62,7 +63,7 @@ class Dialogs:
         win = tk.Toplevel(self.toplevel)
         title = f"Search Top {n} - {dv.label}" if n else f"Search - {dv.label}"
         win.title(title)
-        list_frame = tk.Frame(win, bg="#1e1e1e")
+        list_frame = tk.Frame(win, bg=theme.PANEL)
         list_frame.pack(fill="both", expand=True)
         keep: list[object] = []
         # Determine slice of deck to show
@@ -89,17 +90,17 @@ class Dialogs:
                 if face_up
                 else self.images.back(card.side, bowed, card.inverted, card.image_back)
             )
-            cell = tk.Frame(list_frame, bg="#1e1e1e")
+            cell = tk.Frame(list_frame, bg=theme.PANEL)
             cell.grid(row=0, column=col, padx=6, pady=6)
             if photo is not None:
-                lbl = tk.Label(cell, image=photo, bg="#1e1e1e")
+                lbl = tk.Label(cell, image=photo, bg=theme.PANEL)
                 lbl.pack()
                 keep.append(photo)
             else:
                 w, h = (CARD_H, CARD_W) if card.bowed else (CARD_W, CARD_H)
-                c = tk.Canvas(cell, width=w, height=h, bg="#6b6b6b", highlightthickness=0)
+                c = tk.Canvas(cell, width=w, height=h, bg=theme.CARD_FACE, highlightthickness=0)
                 c.pack()
-                c.create_text(w // 2, h // 2, text=card.name, fill="#222")
+                c.create_text(w // 2, h // 2, text=card.name, fill=theme.INK)
             btn = tk.Button(cell, text="Draw", command=lambda i=idx_in_deck: draw_card_at_index(i))
             btn.pack(pady=4)
         win._images = keep  # type: ignore[attr-defined]
@@ -139,7 +140,7 @@ class Dialogs:
         # Minimal stub for future reveal logic
         win = tk.Toplevel(self.toplevel)
         win.title(f"Reveal Top (TODO) - {dv.label}")
-        tk.Label(win, text="TODO: Reveal to opponent", bg="#1e1e1e", fg="#eaeaea").pack(
+        tk.Label(win, text="TODO: Reveal to opponent", bg=theme.PANEL, fg=theme.INK).pack(
             padx=12, pady=12
         )
 

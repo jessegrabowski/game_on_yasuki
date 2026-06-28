@@ -15,6 +15,7 @@ def test_human_panel_adjust_dispatches_set_honor(loaded, root):
     panel._adjust(1)
     assert state.seats[PlayerId.P1].honor == start + 1
     assert panel.honor.get() == start + 1
+    assert panel._honor_text.get() == f"Honor {start + 1}"
 
     panel._adjust(-1)
     assert state.seats[PlayerId.P1].honor == start

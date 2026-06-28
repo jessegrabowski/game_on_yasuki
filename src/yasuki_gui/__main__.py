@@ -3,6 +3,7 @@ import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import SetHonor
+from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
 from yasuki_gui.session import build_demo_state, build_state_from_deck
@@ -19,9 +20,6 @@ except Exception:  # pragma: no cover
 
 LOCAL_DEBUG_OVERRIDE = False
 
-_HONOR_EDITABLE_FG = "#ffd166"
-_HONOR_READONLY_FG = "#8a7c44"
-
 
 class PlayerPanel(tk.Frame):
     """Sidebar summary for one seat: avatar, name, and honor.
@@ -32,13 +30,14 @@ class PlayerPanel(tk.Frame):
     """
 
     def __init__(self, master: tk.Misc, field: FieldView, owner: PlayerId):
-        super().__init__(master, bg="#1f1f1f")
+        super().__init__(master, bg=theme.PANEL)
         self.field = field
         self.owner = owner
         self.honor = tk.IntVar(value=field.state.seats[owner].honor)
+        self._honor_text = tk.StringVar()
 
         self._avatar_canvas = tk.Canvas(
-            self, width=50, height=50, bg="#1f1f1f", highlightthickness=0
+            self, width=50, height=50, bg=theme.PANEL, highlightthickness=0
         )
         self._avatar_canvas.grid(row=0, column=0, rowspan=2, padx=8, pady=8)
         self._avatar_photo = None
@@ -46,15 +45,17 @@ class PlayerPanel(tk.Frame):
         self._avatar_initials = self._initials(name)
         self._draw_avatar_circle()
 
-        self._name_label = tk.Label(self, text=name, fg="#eaeaea", bg="#1f1f1f")
+        self._name_label = tk.Label(
+            self, text=name, fg=theme.INK, bg=theme.PANEL, font=theme.serif(13)
+        )
         self._name_label.grid(row=0, column=1, sticky="w", padx=(0, 8), pady=(8, 0))
 
         self.honor_label = tk.Label(
             self,
-            textvariable=self.honor,
-            fg=_HONOR_EDITABLE_FG,
-            bg="#1f1f1f",
-            font=("TkDefaultFont", 18, "bold"),
+            textvariable=self._honor_text,
+            fg=theme.GOLD,
+            bg=theme.PANEL,
+            font=theme.serif(14, "bold"),
         )
         self.honor_label.grid(row=1, column=1, sticky="w", padx=(0, 8), pady=(0, 8))
 
@@ -65,6 +66,8 @@ class PlayerPanel(tk.Frame):
         self.honor_label.bind("<MouseWheel>", self._on_wheel)
         self.honor_label.bind("<Button-4>", lambda e: self._adjust(1))
         self.honor_label.bind("<Button-5>", lambda e: self._adjust(-1))
+        self.honor_label.bind("<Enter>", self._on_hover)
+        self.honor_label.bind("<Leave>", lambda e: self._restore_honor_bg())
 
         self.grid_columnconfigure(1, weight=1)
         self.refresh()
@@ -86,21 +89,35 @@ class PlayerPanel(tk.Frame):
         if event.delta:
             self._adjust(1 if event.delta > 0 else -1)
 
+    def _on_hover(self, event: tk.Event) -> None:
+        if self._editable():
+            self.honor_label.configure(bg=theme.GOLD, fg="#ffffff")
+
+    def _restore_honor_bg(self) -> None:
+        self.honor_label.configure(
+            bg=theme.PANEL, fg=theme.GOLD if self._editable() else theme.INK_DIM
+        )
+
     def refresh(self) -> None:
         """Resync honor and edit affordance with the table; call after any state change."""
         self.honor.set(self.field.state.seats[self.owner].honor)
+        self._honor_text.set(f"Honor {self.field.state.seats[self.owner].honor}")
         editable = self._editable()
         self.honor_label.configure(
-            fg=_HONOR_EDITABLE_FG if editable else _HONOR_READONLY_FG,
+            fg=theme.GOLD if editable else theme.INK_DIM,
             cursor="hand2" if editable else "",
         )
 
     def _draw_avatar_circle(self):
         c = self._avatar_canvas
         c.delete("all")
-        c.create_oval(3, 3, 47, 47, fill="#3b82f6", outline="")
+        c.create_oval(3, 3, 47, 47, fill=theme.AVATAR_BG, outline="")
         c.create_text(
-            25, 25, text=self._avatar_initials, fill="white", font=("TkDefaultFont", 14, "bold")
+            25,
+            25,
+            text=self._avatar_initials,
+            fill=theme.AVATAR_FG,
+            font=("TkDefaultFont", 14, "bold"),
         )
 
     def set_profile(self, name: str | None, avatar_path: str | None) -> None:
@@ -134,7 +151,7 @@ def main() -> None:
     container = tk.Frame(root)
     container.pack(fill="both", expand=True)
     sidebar_w = 220
-    sidebar = tk.Frame(container, width=sidebar_w, bg="#1f1f1f")
+    sidebar = tk.Frame(container, width=sidebar_w, bg=theme.PANEL)
     sidebar.pack(side="left", fill="y")
     content = tk.Frame(container)
     content.pack(side="left", fill="both", expand=True)

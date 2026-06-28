@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.constants import Side
+from yasuki_gui import theme
 from yasuki_gui.constants import (
     CARD_W,
     CARD_H,
@@ -42,10 +42,10 @@ class CardSpriteVisual(Visual):
         return x0, y0, x1, y1
 
     def _side_outline(self) -> str:
-        return "#007acc" if self.card.side is Side.FATE else "#b58900"
+        return theme.CARD_BORDER
 
     def _base_border_w(self) -> int:
-        return 4 if self.card.inverted else 1
+        return 1
 
     def _subtag(self, name: str) -> str:
         return f"{self.tag}:{name}"
@@ -87,9 +87,9 @@ class CardSpriteVisual(Visual):
             )
             return True
 
-        # fallback rectangle + label
+        # No art on hand: a cream face titled with the card name, or a plain brown back when down.
         self._last_image = None
-        fill = "#fafafa" if face_up else "#6b6b6b"
+        fill = theme.CARD_FACE if face_up else theme.CARD_BACK
         canvas.create_rectangle(
             x - w // 2,
             y - h // 2,
@@ -99,15 +99,17 @@ class CardSpriteVisual(Visual):
             outline="",
             tags=(self.tag, CARD_TAG, self._subtag(ART_TAG)),
         )
-        canvas.create_text(
-            x,
-            y,
-            text=f"{self.card.name}\n{'Bowed' if bowed else 'Ready'}\n"
-            f"{'Face Up' if face_up else 'Face Down'}\n"
-            f"{'Inverted' if self.card.inverted else ''}",
-            fill="#202020",
-            tags=(self.tag, CARD_TAG, self._subtag(LABEL_TAG)),
-        )
+        if face_up:
+            canvas.create_text(
+                x,
+                y,
+                text=self.card.active_face.name,
+                fill=theme.INK,
+                font=theme.serif(10, "bold"),
+                width=w - 10,
+                justify="center",
+                tags=(self.tag, CARD_TAG, self._subtag(LABEL_TAG)),
+            )
         return False
 
     def _draw_border(self, canvas: tk.Canvas) -> None:
@@ -124,17 +126,31 @@ class CardSpriteVisual(Visual):
         )
 
     def _draw_note(self, canvas: tk.Canvas) -> None:
+        # A bold note over the bottom half of a face-up card, the first thing read while the art
+        # above stays visible.
         if not (self.card.note and self.card.face_up):
             return
         x, y = self.x, self.y
         w, h = self.size
+        strip_top = y  # the card centre, so the strip covers the bottom half
+        bottom = y + h // 2
+        canvas.create_rectangle(
+            x - w // 2,
+            strip_top,
+            x + w // 2,
+            bottom,
+            fill=theme.NOTE_BG,
+            outline="",
+            tags=(self.tag, CARD_TAG, self._subtag(NOTE_TAG)),
+        )
         canvas.create_text(
             x,
-            y + h // 2 - 12,
+            (strip_top + bottom) // 2,
             text=self.card.note,
-            fill="#ffffff",
-            font=("TkDefaultFont", 9, "bold"),
+            fill=theme.NOTE_FG,
+            font=theme.serif(10, "bold"),
             width=w - 6,
+            justify="center",
             tags=(self.tag, CARD_TAG, self._subtag(NOTE_TAG)),
         )
 
@@ -149,7 +165,7 @@ class CardSpriteVisual(Visual):
             y - h // 2,
             x + w // 2,
             y + h // 2,
-            outline="#66ccff",
+            outline=theme.SELECT,
             width=2,
             tags=(self.tag, CARD_TAG, self._subtag(SELECT_TAG)),
         )
