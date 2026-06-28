@@ -1,5 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import DeckKey, Draw, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.intents import Draw
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.tags import card_tag, deck_tag
 

@@ -2,16 +2,8 @@ import tkinter as tk
 from types import MappingProxyType
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import (
-    BoardPos,
-    DeckKey,
-    Event,
-    Intent,
-    TableState,
-    ZoneKey,
-    ZoneRole,
-    apply_intent,
-)
+from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.intents import Event, Intent, apply_intent
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys

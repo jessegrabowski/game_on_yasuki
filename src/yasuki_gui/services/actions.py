@@ -6,12 +6,10 @@ from tkinter import simpledialog
 from typing import Literal, Protocol
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import (
-    BATTLEFIELD,
-    BoardPos,
+from yasuki_core.engine.table import BATTLEFIELD, BoardPos, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.intents import (
     Bow,
     CreateProvince,
-    DeckKey,
     DestroyProvince,
     DiscardProvince,
     Draw,
@@ -26,8 +24,6 @@ from yasuki_core.engine.table import (
     Shuffle,
     SpawnCard,
     Unbow,
-    ZoneKey,
-    ZoneRole,
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side

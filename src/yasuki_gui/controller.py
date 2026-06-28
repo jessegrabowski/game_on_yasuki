@@ -2,16 +2,13 @@ import tkinter as tk
 
 import yasuki_gui.config as gui_config
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import (
-    BATTLEFIELD,
-    DeckKey,
+from yasuki_core.engine.table import BATTLEFIELD, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.intents import (
     MoveCard,
     MoveDeckTop,
     ReorderHand,
     SetCardPos,
     SetCardPositions,
-    ZoneKey,
-    ZoneRole,
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui import theme

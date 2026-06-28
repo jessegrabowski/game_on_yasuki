@@ -1,14 +1,6 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import (
-    Bow,
-    DeckKey,
-    DestroyProvince,
-    Draw,
-    FlipDeckTop,
-    MoveCard,
-    ZoneKey,
-    ZoneRole,
-)
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.intents import Bow, DestroyProvince, Draw, FlipDeckTop, MoveCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.tags import card_tag, deck_tag, zone_tag
 

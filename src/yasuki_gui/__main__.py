@@ -2,7 +2,7 @@ import logging
 import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import SetHonor
+from yasuki_core.engine.intents import SetHonor
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
