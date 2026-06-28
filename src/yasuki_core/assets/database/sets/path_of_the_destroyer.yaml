@@ -641,6 +641,8 @@ cards:
     To face a foe immune to their power was a humbling experience.</i>
   collector_number: '157'
 - title: Consuming the Flesh
+  creates:
+  - the_walking_dead
   types:
   - Spell
   decks:
@@ -1136,6 +1138,8 @@ cards:
   flavor_text: <i>"We are the Clan of the Phoenix! And we bring you fire!"</i>
   collector_number: '98'
 - title: Forging the Gift
+  creates:
+  - readied_blade
   types:
   - Strategy
   decks:
@@ -1545,6 +1549,8 @@ cards:
   flavor_text: <i>"They are weak! Honor lends us strength! To victory!"</i>
   collector_number: '103'
 - title: Isawa Fosuta
+  creates:
+  - token_curse
   types:
   - Personality
   decks:
@@ -2226,6 +2232,8 @@ cards:
   flavor_text: <i>"So what if I am remembered as a villain? I will be remembered!" - Moto Kang</i>
   collector_number: '150'
 - title: Moto Paisei
+  creates:
+  - token_sake
   types:
   - Personality
   decks:
@@ -2295,6 +2303,8 @@ cards:
     our Lord with respect." - Torao</i>
   collector_number: '112'
 - title: Nightshade Touch
+  creates:
+  - token_minus1f
   types:
   - Strategy
   decks:
@@ -2470,6 +2480,8 @@ cards:
     who knows how to use it." - Akodo Dosei</i>
   collector_number: '151'
 - title: Shiba Ningen
+  creates:
+  - phoenix_yojimbo
   types:
   - Personality
   decks:
@@ -2976,6 +2988,8 @@ cards:
     shugenja rained death down on the enemy, driving them back." - The Burning Wall, Part Three</i>
   collector_number: '126'
 - title: Talisman of Chikushudo
+  creates:
+  - spirit_of_the_bear
   types:
   - Item
   decks:
@@ -2999,6 +3013,8 @@ cards:
   flavor_text: <i>"Strong spirits will answer your call." - Ryoshun</i>
   collector_number: '152'
 - title: Talisman of Gaki-do
+  creates:
+  - hideshis_guardian
   types:
   - Item
   decks:
@@ -3446,6 +3462,8 @@ cards:
     - I put my heart into them just the same."</i>
   collector_number: '47'
 - title: Udo
+  creates:
+  - the_walking_dead
   types:
   - Personality
   decks:
@@ -3475,6 +3493,8 @@ cards:
   flavor_text: <i>"Hurry! My master's legions are hungry!"</i>
   collector_number: '71'
 - title: Unclean Sacrifice
+  creates:
+  - the_walking_dead
   types:
   - Strategy
   decks:
@@ -3599,6 +3619,8 @@ cards:
   flavor_text: <i>"Destroyers? They have no idea what the word means! They will learn!"</i>
   collector_number: '79'
 - title: Walk in Shadows
+  creates:
+  - token_poison
   types:
   - Strategy
   decks:

@@ -1711,6 +1711,9 @@ cards:
   collector_number: '70'
   designer: Randy
 - title: Kitsu Suzaki
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -2644,6 +2647,8 @@ cards:
   designer: Jeremy
 - title: Seppun Tasuke
   gold_production: -1
+  creates:
+  - token_affection
   types:
   - Sensei
   decks:
@@ -3170,6 +3175,9 @@ cards:
   collector_number: '99'
   designer: Jeremy
 - title: The Abbot
+  creates:
+  - token_clout
+  - token_conspiracy
   types:
   - Personality
   decks:
@@ -3598,6 +3606,8 @@ cards:
   collector_number: '150'
   designer: Randy
 - title: Unliving Legion
+  creates:
+  - zombie_follower
   types:
   - Follower
   decks:

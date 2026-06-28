@@ -1,6 +1,8 @@
 set: Gates of Chaos
 cards:
 - title: A Doomseeker's Tomb
+  creates:
+  - token_plus1f_plus1c_plus1ph
   types:
   - Strategy
   decks:
@@ -41,6 +43,9 @@ cards:
   collector_number: '2'
   designer: Loki
 - title: A New Perspective
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Strategy
   decks:
@@ -81,6 +86,9 @@ cards:
   collector_number: '112'
   designer: Thomas
 - title: Abdollah
+  creates:
+  - the_walking_dead
+  - zombie
   types:
   - Personality
   decks:
@@ -385,6 +393,8 @@ cards:
   collector_number: '47'
   designer: Loki
 - title: Ashalan Ambush
+  creates:
+  - ashalan
   types:
   - Strategy
   decks:
@@ -509,6 +519,8 @@ cards:
   collector_number: '98'
   designer: Bryan
 - title: Blood of Shahai
+  creates:
+  - token_blood
   types:
   - Celestial
   decks:
@@ -693,6 +705,8 @@ cards:
   collector_number: '117'
   designer: Bryan
 - title: Clay Kshatriya
+  creates:
+  - token_plus1f
   types:
   - Follower
   decks:
@@ -743,6 +757,8 @@ cards:
   collector_number: '6'
   designer: Thomas
 - title: Constructing the Self
+  creates:
+  - minor_illusion
   types:
   - Spell
   decks:
@@ -860,6 +876,9 @@ cards:
   collector_number: '26'
   designer: Bryan
 - title: Daigotsu Kikumura
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -964,6 +983,8 @@ cards:
   collector_number: '88'
   designer: Loki
 - title: Doji Razan
+  creates:
+  - token_plus1c
   types:
   - Personality
   decks:
@@ -1050,6 +1071,11 @@ cards:
   collector_number: '80'
   designer: Thomas
 - title: Exotic Farmlands
+  creates:
+  - ashigaru_2
+  - ashigaru_defender
+  - farmland_conscripts
+  - farmlands_conscripts
   types:
   - Strategy
   decks:
@@ -1222,6 +1248,8 @@ cards:
   collector_number: '9'
   designer: Loki
 - title: Hida Gojiro
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1505,6 +1533,8 @@ cards:
   collector_number: '10'
   designer: Duncan
 - title: Isawa Hajime
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -2388,6 +2418,8 @@ cards:
   collector_number: '104'
   designer: Duncan
 - title: New Cavalry Tactics
+  creates:
+  - little_elephant
   types:
   - Strategy
   decks:
@@ -2485,6 +2517,8 @@ cards:
   collector_number: '135'
   designer: Bryan
 - title: Poison the Cup
+  creates:
+  - token_plague
   types:
   - Spell
   decks:
@@ -2572,6 +2606,8 @@ cards:
   collector_number: '137'
   designer: Bryan
 - title: Red Hunger's Fang
+  creates:
+  - token_poison
   types:
   - Item
   decks:
@@ -2693,6 +2729,8 @@ cards:
   collector_number: '94'
   designer: Bryan
 - title: Shard of the Great Death's Bones
+  creates:
+  - bird_of_prey
   types:
   - Item
   decks:
@@ -2782,6 +2820,13 @@ cards:
   collector_number: '72'
   designer: Bryan
 - title: Shinjo Tselu
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -2848,6 +2893,8 @@ cards:
   collector_number: '74'
   designer: Bryan
 - title: Shosuro Nigawa
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -3365,6 +3412,8 @@ cards:
   collector_number: '146'
   designer: Duncan
 - title: The Tower of Vigilance
+  creates:
+  - tower_guard
   types:
   - Holding
   decks:
@@ -3387,6 +3436,9 @@ cards:
   collector_number: '15'
   designer: Loki
 - title: Togashi Noritada
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -3501,6 +3553,8 @@ cards:
   collector_number: '147'
   designer: Duncan
 - title: Translated Story of Shaharazad
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -3594,6 +3648,8 @@ cards:
   collector_number: '149'
   designer: Bryan
 - title: Utaku Sayaka
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:

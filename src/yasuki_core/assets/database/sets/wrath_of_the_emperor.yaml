@@ -500,6 +500,8 @@ cards:
   artist: Jon Hodgson
   collector_number: '113'
 - title: Chimamire no Oni
+  creates:
+  - token_minus1c
   types:
   - Personality
   decks:
@@ -1379,6 +1381,8 @@ cards:
   artist: Jonathan Hunt
   collector_number: '134'
 - title: Iuchiban's Citadel
+  creates:
+  - token_blood
   types:
   - Stronghold
   decks:
@@ -3393,6 +3397,8 @@ cards:
   artist: April Lee
   collector_number: '20'
 - title: Yogo Baisetsu
+  creates:
+  - token_blood
   types:
   - Personality
   decks:

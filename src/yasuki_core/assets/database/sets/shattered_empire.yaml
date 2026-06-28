@@ -1035,6 +1035,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Binasa
+  creates:
+  - pearl_strategy
   types:
   - Personality
   decks:
@@ -1341,6 +1343,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Chuda Tairao, Snake Clan Champion
+  creates:
+  - oni_personality_3_1_0
+  - victim_personality_0_3_0
   types:
   - Personality
   decks:
@@ -1781,6 +1786,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daigotsu Arakan
+  creates:
+  - undead_follower_2f
   types:
   - Personality
   decks:
@@ -2018,6 +2025,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daigotsu Shaoru, Clan Champion
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -3099,6 +3108,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Goju Kaxt
+  creates:
+  - kaxt
   types:
   - Follower
   decks:
@@ -3170,6 +3181,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Gusai Natsuko, the Sea's Bane
+  creates:
+  - pirate_naval_personality
   types:
   - Personality
   decks:
@@ -3495,6 +3508,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hida Sanjiro
+  creates:
+  - armor_item_plus2f
   types:
   - Personality
   decks:
@@ -4851,6 +4866,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsu Nishi
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -4907,6 +4925,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Kaemon, Soul of Kitsune Haruki
+  creates:
+  - harukis_deer
   types:
   - Personality
   decks:
@@ -4935,6 +4955,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Rokuko, Soul of Kitsune Tokoru
+  creates:
+  - tokorus_bear
   types:
   - Personality
   decks:
@@ -4962,6 +4984,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Sawako
+  creates:
+  - moth_spirit_follower_0f
   types:
   - Personality
   decks:
@@ -5660,6 +5684,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Mirumoto Nokkai
+  creates:
+  - weapon_item_sword_plus1f
   types:
   - Personality
   decks:
@@ -5717,6 +5743,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Ajinai, Harbinger
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -5802,6 +5830,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Chinua, The Ki-Rin's Rage
+  creates:
+  - berserker_cavalry_follower_1f
   types:
   - Personality
   decks:
@@ -6839,6 +6869,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Rise Corrupted
+  creates:
+  - the_walking_dead
+  - zombie
   types:
   - Spell
   decks:
@@ -7231,6 +7264,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shiba Kudome, Council Guardian
+  creates:
+  - token_fire
   types:
   - Personality
   decks:
@@ -7545,6 +7580,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shosuro Takumi, Ryoko Owari Governor
+  creates:
+  - scorpion_yojimbo_personality_2_2_0
   types:
   - Personality
   decks:
@@ -7991,6 +8028,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Suzume Nae, Trusted Aide
+  creates:
+  - token_wealth
   types:
   - Personality
   decks:
@@ -8177,6 +8216,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Teardrop Island
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -9601,6 +9642,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Way of the Mantis
+  creates:
+  - token_wealth
   types:
   - Strategy
   decks:
@@ -9682,6 +9725,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Way of the Unicorn
+  creates:
+  - token_minus1f
   types:
   - Strategy
   decks:
@@ -10026,6 +10071,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yoritomo Murai
+  creates:
+  - token_wealth
   types:
   - Personality
   decks:
@@ -10210,6 +10257,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Weapon Artist
+  creates:
+  - weapon_item_sword_plus2f_plus1c
   types:
   - Holding
   decks:

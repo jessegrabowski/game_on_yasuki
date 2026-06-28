@@ -214,6 +214,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Boastful Proclamation
+  creates:
+  - token_plus1f
   types:
   - Event
   decks:
@@ -242,6 +244,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Caravansary
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -265,6 +269,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daidoji Tokiko
+  creates:
+  - token_guard
   types:
   - Personality
   decks:
@@ -404,6 +410,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Fortune's Folly
+  creates:
+  - token_plus1gp
   types:
   - Holding
   decks:
@@ -560,6 +568,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Isawa Bunzo
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -679,6 +689,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kinuye's Garden
+  creates:
+  - token_plus1f_plus1c
   types:
   - Holding
   decks:
@@ -756,6 +768,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Yamazaru
+  creates:
+  - yamazarus_monkey
   types:
   - Personality
   decks:
@@ -946,6 +960,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Khedai, Head Priest of the Second City
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -998,6 +1014,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Otomo Nami
+  creates:
+  - token_sincerity
   types:
   - Personality
   decks:
@@ -1021,6 +1039,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Personal Assassin
+  creates:
+  - token_poison
   types:
   - Follower
   decks:
@@ -1249,6 +1269,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Soshi Itsuki
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -1398,6 +1420,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Wako
+  creates:
+  - token_wealth
   types:
   - Follower
   decks:

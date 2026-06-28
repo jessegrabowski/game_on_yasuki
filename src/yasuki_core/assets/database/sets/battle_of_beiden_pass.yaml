@@ -1617,6 +1617,8 @@ cards:
   flavor_text: <i>"Honorless dog!" the samurai cried, Dairya looked down with his one good eye and smiled,
     slowly drawing the long sword from its saya.</i>
 - title: Oath of Fealty
+  creates:
+  - token_plus1f_plus1c
   types:
   - Strategy
   decks:
@@ -2200,6 +2202,8 @@ cards:
   artist: Susan Van Camp
   flavor_text: <i>Strike free from worldly worries. This is the purest stroke. - Miyamoto Musashi</i>
 - title: Summon Undead Champion
+  creates:
+  - undead_champion
   types:
   - Spell
   decks:

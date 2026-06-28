@@ -702,6 +702,8 @@ cards:
   artist: Joel Biske
   flavor_text: <i>"There is a traitor in our midst, my lord. One with dark allegiances..." - Shinjo Yasamura</i>
 - title: Corrupted Region
+  creates:
+  - token_minus1c
   types:
   - Region
   decks:
@@ -2780,6 +2782,8 @@ cards:
   artist: Joel Biske
   flavor_text: <i>Cornejo never believed in ninja, until it was to late.</i>
 - title: Nogoten's Bow
+  creates:
+  - token_poison
   types:
   - Item
   decks:
@@ -3641,6 +3645,8 @@ cards:
   flavor_text: <i>"We have proven our worth, but do not take ease, for that is only the beginning of our
     journey."</i>
 - title: Shosuro Hametsu
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -3751,6 +3757,8 @@ cards:
   rarity: Uncommon
   artist: April Lee
 - title: Swamp Goblins
+  creates:
+  - token_plus1f
   types:
   - Follower
   decks:

@@ -363,6 +363,8 @@ cards:
   flavor_text: <i>Noritoshi will know no peace until Megumi's soul has been laid to rest.</i>
   collector_number: '126'
 - title: Blood Pearl
+  creates:
+  - token_blood
   types:
   - Item
   decks:
@@ -2018,6 +2020,8 @@ cards:
   flavor_text: <i>"The Dark Lord once turned his back on us. If we must aid him now, he will pay dearly."</i>
   collector_number: '69'
 - title: Oni Lair
+  creates:
+  - token_blood
   types:
   - Holding
   decks:
@@ -2322,6 +2326,8 @@ cards:
   artist: Lee Moyer
   collector_number: '108'
 - title: Shahai
+  creates:
+  - token_blood
   types:
   - Personality
   decks:

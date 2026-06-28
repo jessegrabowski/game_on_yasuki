@@ -276,6 +276,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Asako Keshiki
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -308,6 +310,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Balash
+  creates:
+  - token_arrow
   types:
   - Personality
   decks:
@@ -370,6 +374,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Bayushi Manora
+  creates:
+  - token_madness
   types:
   - Personality
   decks:
@@ -503,6 +509,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Cessation of Hostilities
+  creates:
+  - token_sincerity
   types:
   - Event
   decks:
@@ -588,6 +596,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Corpse Monstrosity
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -932,6 +942,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Exult in Triumph
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -1073,6 +1085,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Goblin "Barracks"
+  creates:
+  - goblin_soldier
   types:
   - Holding
   decks:
@@ -1094,6 +1108,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Goju Tsichu
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1221,6 +1237,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hoarded Library
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -1292,6 +1310,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Ikoma Hitoro
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1431,6 +1451,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Isawa Ren
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1460,6 +1482,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Isawa Tsumaro, Master of Air
+  creates:
+  - tsumaros_illusion
   types:
   - Personality
   decks:
@@ -1495,6 +1519,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Isawa Zuiun
+  creates:
+  - token_plus1c
   types:
   - Personality
   decks:
@@ -1606,6 +1632,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kakita Seiyami
+  creates:
+  - token_plus1c
   types:
   - Personality
   decks:
@@ -1716,6 +1744,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Beiko
+  creates:
+  - okuma_beikos_bear
   types:
   - Personality
   decks:
@@ -1745,6 +1775,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Mori Grove
+  creates:
+  - forest_kitsune
   types:
   - Holding
   decks:
@@ -1767,6 +1799,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kokujin Aoijiro
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1954,6 +1988,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Makeshift Defenses
+  creates:
+  - defenses
   types:
   - Holding
   decks:
@@ -2084,6 +2120,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Matsu Kirihime
+  creates:
+  - token_arrow
   types:
   - Personality
   decks:
@@ -2185,6 +2223,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moshi Madohime
+  creates:
+  - token_cloud
   types:
   - Personality
   decks:
@@ -2443,6 +2483,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Pawnbroker
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -2464,6 +2506,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Petals and Pincers
+  creates:
+  - token_sincerity
   types:
   - Strategy
   decks:
@@ -2716,6 +2760,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shahadet
+  creates:
+  - naga
   types:
   - Personality
   decks:
@@ -2795,6 +2841,10 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shinden Hisui no Taiyo
+  creates:
+  - jade_sun_disciple
+  - token_plus1gp
+  - token_wealth
   types:
   - Holding
   decks:
@@ -2910,6 +2960,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shosuro Dokumaro
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -3041,6 +3093,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Slice the Web
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -3079,6 +3133,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Soul of the Flame
+  creates:
+  - token_fire
   types:
   - Strategy
   decks:
@@ -3225,6 +3281,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tamori Busuke
+  creates:
+  - nendo
   types:
   - Personality
   decks:
@@ -3253,6 +3311,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tamori Nishiki
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -3369,6 +3429,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Fusawa
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -3626,6 +3689,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Voitagi Sensei
+  creates:
+  - zombie
   types:
   - Sensei
   decks:
@@ -3755,6 +3820,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yamauba
+  creates:
+  - token_minus1f_minus1c
   types:
   - Follower
   decks:
@@ -3913,6 +3980,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Zerai, the Fleshless
+  creates:
+  - zombie
   types:
   - Personality
   decks:

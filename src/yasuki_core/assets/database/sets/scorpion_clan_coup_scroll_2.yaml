@@ -83,6 +83,8 @@ cards:
   flavor_text: <i>Drawing from the souls of a thousand fallen Cranes, Uojin gave that strength to the
     men who charged into Shoju's army.</i>
 - title: Bayushi Dairu
+  creates:
+  - token_venom
   types:
   - Personality
   decks:
@@ -388,6 +390,8 @@ cards:
   rarity: Common
   artist: Anthony Grabski
 - title: Isawa Sze
+  creates:
+  - token_exhaustion
   types:
   - Personality
   decks:
@@ -762,6 +766,8 @@ cards:
   rarity: Uncommon
   artist: Douglas Shuler
 - title: Shazaar
+  creates:
+  - token_pearl
   types:
   - Personality
   decks:

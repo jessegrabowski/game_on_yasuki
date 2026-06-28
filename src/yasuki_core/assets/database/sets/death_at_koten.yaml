@@ -352,6 +352,8 @@ cards:
     else."</i>
   collector_number: '36'
 - title: Dance of Flames
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -506,6 +508,8 @@ cards:
     Voice of the Empress</i>
   collector_number: '77'
 - title: Essence of Destruction
+  creates:
+  - token_corruption
   types:
   - Spell
   decks:
@@ -1552,6 +1556,8 @@ cards:
     the hated Lion!"</i>
   collector_number: '42'
 - title: Shosuro Takuma
+  creates:
+  - token_poison
   types:
   - Personality
   decks:

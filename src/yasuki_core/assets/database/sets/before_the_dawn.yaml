@@ -1,6 +1,8 @@
 set: Before the Dawn
 cards:
 - title: A Champion in Court
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -367,6 +369,8 @@ cards:
     to let them believe that." - Sachika</i>
   collector_number: '79'
 - title: Ashigaru Recruits
+  creates:
+  - fledgling_ashigaru
   types:
   - Follower
   decks:
@@ -474,6 +478,8 @@ cards:
     the Scorpion will end you."</i>
   collector_number: '54'
 - title: Beautiful Host
+  creates:
+  - token_plus1f
   types:
   - Holding
   decks:
@@ -704,6 +710,9 @@ cards:
     if we lose here, Toshi Ranbo is imperiled."</i>
   collector_number: '18'
 - title: Daigotsu Bukaro
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -801,6 +810,8 @@ cards:
   flavor_text: <i>"Hmm. Anguish. Yes, it needs more anguish."</i>
   collector_number: '62'
 - title: Death, Defeated
+  creates:
+  - the_walking_dead
   types:
   - Spell
   decks:
@@ -1255,6 +1266,8 @@ cards:
     - Goju Sawaki</i>
   collector_number: '2'
 - title: Goju Sawaki
+  creates:
+  - goju_genin
   types:
   - Personality
   decks:
@@ -1809,6 +1822,8 @@ cards:
   flavor_text: <i>"Let them prattle. I am Kakita Noritoshi's vassal, and I will serve him until death."</i>
   collector_number: '21'
 - title: Kakita Yasunori
+  creates:
+  - yasunoris_gift
   types:
   - Personality
   decks:
@@ -1929,6 +1944,9 @@ cards:
     now that the threat has passed?" - Shiba Tsukimi</i>
   collector_number: '49'
 - title: Kyuden Hida
+  creates:
+  - kyuden_hida_scout
+  - kyuden_hida_survivor
   types:
   - Stronghold
   decks:
@@ -2001,6 +2019,8 @@ cards:
     it is my time."</i>
   collector_number: '36'
 - title: Measure of Devotion
+  creates:
+  - oathsworn_deathseeker
   types:
   - Strategy
   decks:
@@ -2242,6 +2262,8 @@ cards:
     front.</i>
   collector_number: '15'
 - title: No Time for Games
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -2756,6 +2778,8 @@ cards:
     then we will visit the Shi-Tien Yen-Wang with pride."</i>
   collector_number: '69'
 - title: Shinjo Dak-ho
+  creates:
+  - dak_hos_men
   types:
   - Personality
   decks:
@@ -3241,6 +3265,8 @@ cards:
     - Asako Bare</i>
   collector_number: '78'
 - title: The Agony of Her Gaze
+  creates:
+  - token_frenzy
   types:
   - Event
   decks:
@@ -3285,6 +3311,8 @@ cards:
   flavor_text: <i>Even the Scorpion dislike them, but they serve their lords well.</i>
   collector_number: '86'
 - title: The Great Death
+  creates:
+  - bird_of_prey
   types:
   - Personality
   decks:
@@ -3506,6 +3534,9 @@ cards:
   flavor_text: <i>"You think like the earth. Do not be restricted. Think like the wind, and all is possible."</i>
   collector_number: '150'
 - title: Togashi Sakata
+  creates:
+  - token_fire
+  - token_sake
   types:
   - Personality
   decks:

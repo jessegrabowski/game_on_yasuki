@@ -395,6 +395,8 @@ cards:
   flavor_text: <i>"Scorpion do not respect Crab friends. Perhaps time to see what Scorpion hide."</i>
   collector_number: '71'
 - title: Chuda Isoruko
+  creates:
+  - token_minus1f_minus1c
   types:
   - Personality
   decks:
@@ -1462,6 +1464,9 @@ cards:
   artist: Jon Hodgson
   collector_number: '44'
 - title: Ichiro Yojimbo
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Follower
   decks:
@@ -1485,6 +1490,9 @@ cards:
   flavor_text: <i>"We owe Sugimoto a debt of honor, and it must be repaid."</i>
   collector_number: '141'
 - title: Ikoma Chikao
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -2671,6 +2679,8 @@ cards:
   artist: Michael Komarck
   collector_number: '63'
 - title: Obsidian Halls of the Lost
+  creates:
+  - token_minus4c
   types:
   - Stronghold
   decks:
@@ -2775,6 +2785,8 @@ cards:
   artist: Thomas Denmark
   collector_number: '134'
 - title: Ryoken
+  creates:
+  - token_plus2f_plus1c
   types:
   - Personality
   decks:
@@ -2864,6 +2876,8 @@ cards:
   artist: William O'Connor
   collector_number: '56'
 - title: Shiba Ningen
+  creates:
+  - phoenix_warrior
   types:
   - Personality
   decks:
@@ -3534,6 +3548,8 @@ cards:
   flavor_text: <i>Tokei and Nizomi now stand together against the evil that pursues them both.</i>
   collector_number: '1'
 - title: The Wolf's Mercy
+  creates:
+  - token_minus2c
   types:
   - Spell
   decks:
@@ -3601,6 +3617,9 @@ cards:
   flavor_text: <i>Not all of Egumi's men serve the Emperor.</i>
   collector_number: '49'
 - title: Usagi Retainer
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Follower
   decks:

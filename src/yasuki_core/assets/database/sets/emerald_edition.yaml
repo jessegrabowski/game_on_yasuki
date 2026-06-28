@@ -30,6 +30,8 @@ cards:
   rarity: Rare
   artist: Douglas Shuler
 - title: Akodo Kage
+  creates:
+  - token_sensei
   types:
   - Personality
   decks:
@@ -456,6 +458,8 @@ cards:
   artist: John Cadice
   flavor_text: <i>When darkness descends, a man must find allies in the shadows. - The Tao of Shinsei</i>
 - title: Bayushi Kachiko
+  creates:
+  - token_seduction
   types:
   - Personality
   decks:
@@ -2981,6 +2985,8 @@ cards:
   rarity: Rare
   artist: KC Lancaster
 - title: Kitsu Motso
+  creates:
+  - token_master
   types:
   - Personality
   decks:
@@ -5342,6 +5348,8 @@ cards:
     myself into the grave before I allow the Empire to be swallowed by the dark tide of evil rising against
     us."</i>
 - title: Shosuro Hametsu
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -5384,6 +5392,8 @@ cards:
   flavor_text: <i>"As the ninja threw the shruiken into the midst of the bushi, I watched as the thing
     flew to each throat, striking them down one by one."</i>
 - title: Shuten Doji
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:
@@ -5635,6 +5645,8 @@ cards:
   rarity: Common
   artist: Susan Van Camp
 - title: Summon Swamp Spirits
+  creates:
+  - swamp_spirit
   types:
   - Spell
   decks:
@@ -5708,6 +5720,8 @@ cards:
   artist: Mike Kimble
   flavor_text: <i>We draw honor from our ancestors and pass it on to our descendants.</i>
 - title: Terrible Standard of Fu Leng
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -5934,6 +5948,8 @@ cards:
   rarity: Fixed
   artist: Eric David Anderson (miscredited to Randy Gallegos)
 - title: The Fury of Osano-Wo
+  creates:
+  - token_counter
   types:
   - Spell
   decks:

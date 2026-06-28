@@ -288,6 +288,8 @@ cards:
   collector_number: '5'
   designer: Bryan
 - title: Ashigaru Gunso
+  creates:
+  - conscript_farmer
   types:
   - Personality
   decks:
@@ -487,6 +489,8 @@ cards:
   collector_number: '117'
   designer: Randy
 - title: Borderless Fields
+  creates:
+  - conscript_farmer
   types:
   - Holding
   decks:
@@ -643,6 +647,10 @@ cards:
   collector_number: '119'
   designer: Loki
 - title: Conscription Officer
+  creates:
+  - ashigaru_2
+  - ashigaru_defender
+  - peasant
   types:
   - Follower
   decks:
@@ -1240,6 +1248,8 @@ cards:
   designer: Julien
 - title: Hikahime Sensei
   gold_production: -1
+  creates:
+  - conscript_farmer
   types:
   - Sensei
   decks:
@@ -1399,6 +1409,8 @@ cards:
   collector_number: '124'
   designer: Jeremy
 - title: Inevitable Victory
+  creates:
+  - token_plus1f_plus1c
   types:
   - Item
   decks:
@@ -1554,6 +1566,8 @@ cards:
   collector_number: '54'
   designer: Bryan
 - title: Isolated Farmlands
+  creates:
+  - conscript_farmer
   types:
   - Holding
   decks:
@@ -1766,6 +1780,8 @@ cards:
   collector_number: '93'
   designer: Randy
 - title: Kenturo
+  creates:
+  - conscript_farmer
   types:
   - Personality
   decks:
@@ -1842,6 +1858,8 @@ cards:
   collector_number: '32'
   designer: Randy
 - title: Kitsune Narako
+  creates:
+  - token_omen
   types:
   - Personality
   decks:
@@ -1872,6 +1890,8 @@ cards:
   collector_number: '44'
   designer: Chris
 - title: Kuni Igarasu
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:
@@ -2217,6 +2237,8 @@ cards:
   collector_number: '130'
   designer: Loki
 - title: Ninube Aitso
+  creates:
+  - faceless
   types:
   - Personality
   decks:
@@ -2372,6 +2394,8 @@ cards:
   collector_number: '103'
   designer: Chris
 - title: Onyx Ascendance
+  creates:
+  - zombie
   types:
   - Strategy
   decks:
@@ -2788,6 +2812,8 @@ cards:
   collector_number: '59'
   designer: Loki
 - title: Shosuro Wayari
+  creates:
+  - token_madness
   types:
   - Personality
   decks:
@@ -3194,6 +3220,9 @@ cards:
   collector_number: '87'
   designer: Loki
 - title: Togashi Tameko
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:

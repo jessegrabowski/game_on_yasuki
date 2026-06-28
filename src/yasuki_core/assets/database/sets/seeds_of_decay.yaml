@@ -96,6 +96,8 @@ cards:
   collector_number: '34'
   designer: Bryan
 - title: Akuma's Power
+  creates:
+  - your_name_is_mine
   types:
   - Celestial
   decks:
@@ -120,6 +122,8 @@ cards:
   collector_number: '1'
   designer: Bryan
 - title: An Insult Answered
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -353,6 +357,9 @@ cards:
   collector_number: '49'
   designer: Loki
 - title: Bayushi Makubesu
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -486,6 +493,8 @@ cards:
   collector_number: '112'
   designer: Bryan
 - title: Cavalry Detachment
+  creates:
+  - detached_personality
   types:
   - Follower
   decks:
@@ -615,6 +624,8 @@ cards:
   collector_number: '88'
   designer: Loki
 - title: Chuda Seki
+  creates:
+  - token_plague
   types:
   - Personality
   decks:
@@ -748,6 +759,8 @@ cards:
   collector_number: '60'
   designer: Bryan
 - title: Dark Experiments
+  creates:
+  - token_minus1gp
   types:
   - Event
   decks:
@@ -931,6 +944,8 @@ cards:
   collector_number: '24'
   designer: Duncan
 - title: Dragon Tattoo
+  creates:
+  - token_fire
   types:
   - Strategy
   decks:
@@ -955,6 +970,8 @@ cards:
   collector_number: '118'
   designer: Bryan
 - title: Dubious Resources
+  creates:
+  - ronin_follower
   types:
   - Strategy
   decks:
@@ -1716,6 +1733,8 @@ cards:
   collector_number: '26'
   designer: Thomas
 - title: Kitsune Merihiko
+  creates:
+  - merihikos_swarm
   types:
   - Personality
   decks:
@@ -1828,6 +1847,8 @@ cards:
   collector_number: '131'
   designer: Duncan
 - title: Masayoshi
+  creates:
+  - masayoshis_blade
   types:
   - Personality
   decks:
@@ -2104,6 +2125,8 @@ cards:
   collector_number: '28'
   designer: Thomas
 - title: Moksha Patam
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -2125,6 +2148,8 @@ cards:
   collector_number: '95'
   designer: Thomas
 - title: Monastery of New Thought
+  creates:
+  - token_fire
   types:
   - Stronghold
   decks:
@@ -2450,6 +2475,9 @@ cards:
   collector_number: '81'
   designer: Duncan
 - title: Offering Reverence
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Event
   decks:
@@ -2973,6 +3001,8 @@ cards:
   collector_number: '12'
   designer: Loki
 - title: Soshi Kodanshi
+  creates:
+  - ninja
   types:
   - Personality
   decks:
@@ -3367,6 +3397,9 @@ cards:
   collector_number: '41'
   designer: Duncan
 - title: Togashi Hiroto
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:

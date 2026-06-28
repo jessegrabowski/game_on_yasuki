@@ -36,6 +36,9 @@ cards:
   flavor_text: <i>"A Lion hero? Oh my goodness, no. This is the tale of a great hero from the Crane Clan."
     - Ikoma Asa</i>
 - title: Agasha Orito
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -464,6 +467,8 @@ cards:
     belittle art, none dare belittle the position of artisan, for to do so is to insult a thousand years
     of tradition.</i>
 - title: Brilliant Rebirth Temple
+  creates:
+  - young_defender
   types:
   - Stronghold
   decks:
@@ -1327,6 +1332,8 @@ cards:
   artist: Steve Argyle
   flavor_text: <i>Berserkers do not fear death, for it is their constant companion.</i>
 - title: Equipment Storage
+  creates:
+  - token_plus1f
   types:
   - Holding
   decks:
@@ -1847,6 +1854,8 @@ cards:
   rarity: Promo
   artist: Andy Hepworth
 - title: House of the Dead
+  creates:
+  - undead
   types:
   - Holding
   decks:
@@ -1884,6 +1893,8 @@ cards:
   artist: Steve Argyle
   flavor_text: <i>Debauchery and deceit in equal measure.</b>
 - title: Hunger of the Dead
+  creates:
+  - token_minus1f_minus1c
   types:
   - Event
   decks:
@@ -3397,6 +3408,8 @@ cards:
   artist: Doug Kovacs
   flavor_text: <i>I live but to serve.</i>
 - title: Poison Sake
+  creates:
+  - token_poison
   types:
   - Strategy
   decks:
@@ -4252,6 +4265,9 @@ cards:
   artist: Steve Argyle
   flavor_text: <i>"Just another day on the Wall, eh men?"</i>
 - title: Striking the Balance
+  creates:
+  - token_plus1f
+  - token_plus1ph
   types:
   - Strategy
   decks:
@@ -4877,6 +4893,8 @@ cards:
   flavor_text: <i>The Unicorn worship their gaijin gods of justice, the Lords of Death, within. Beware
     their judgment.</i>
 - title: The Trackless Road
+  creates:
+  - token_mastery
   types:
   - Strategy
   decks:
@@ -4934,6 +4952,8 @@ cards:
   flavor_text: <i>"In the winter of 1170, the legions of the Dark Oracle of Fire assaulted the northern
     border of Rokugan, and the Empire faltered under their assault." - The Ikoma Histories</i>
 - title: The Western Steppes
+  creates:
+  - swift_troops
   types:
   - Stronghold
   decks:

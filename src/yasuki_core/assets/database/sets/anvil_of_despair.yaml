@@ -35,6 +35,8 @@ cards:
   rarity: Rare
   artist: Randy Gallegos
 - title: A Prophecy Fulfilled
+  creates:
+  - token_prophecy
   types:
   - Spell
   decks:
@@ -139,6 +141,8 @@ cards:
   artist: Liz Danforth
   flavor_text: <i>The pearl of Rokugan, Otosan Uchi stood to greet us at the end of our long pilgrimage.</i>
 - title: Arrival of the Emerald Champion
+  creates:
+  - emerald_champion
   types:
   - Strategy
   decks:
@@ -568,6 +572,8 @@ cards:
   rarity: Rare
   artist: Ben Peck
 - id: doom_of_fu_leng
+  creates:
+  - token_corruption
   title: Doom of Fu Leng
   types:
   - Spell
@@ -1151,6 +1157,8 @@ cards:
   rarity: Uncommon
   artist: Heather Bruton
 - title: Isawa Tsuke
+  creates:
+  - token_corruption
   types:
   - Personality
   decks:
@@ -1602,6 +1610,13 @@ cards:
   artist: Anson Maddocks
   flavor_text: <i>"I give you my name..."</i>
 - title: Otaku Baiken
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -1664,6 +1679,8 @@ cards:
   rarity: Common
   artist: Anthony Grabski
 - title: Plague Skulls
+  creates:
+  - token_plague
   types:
   - Item
   decks:
@@ -1681,6 +1698,8 @@ cards:
   rarity: Rare
   artist: Matt Wilson
 - title: Plague-Infested Region
+  creates:
+  - token_plague
   types:
   - Region
   decks:
@@ -1831,6 +1850,10 @@ cards:
   rarity: Common
   artist: Randy Elliott
 - title: Refugees
+  creates:
+  - ashigaru_2
+  - ashigaru_defender
+  - peasant
   types:
   - Strategy
   decks:
@@ -2681,6 +2704,8 @@ cards:
   rarity: Rare
   artist: Tom Biondolillo
 - title: Togashi Yama
+  creates:
+  - token_mountain
   types:
   - Personality
   decks:

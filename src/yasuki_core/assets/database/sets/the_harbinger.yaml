@@ -735,6 +735,8 @@ cards:
   flavor_text: <i>"My son is mindful, dutiful, and attentive. He is all that is good in the Seppun family.
     That my shame extends to him is the greatest regret I shall ever know." - Oishi</i>
 - title: Chuda Atsuro
+  creates:
+  - the_walking_dead
   types:
   - Personality
   decks:
@@ -1218,6 +1220,8 @@ cards:
     - Kakita Hideo</i>
   collector_number: '102'
 - title: Flawless Assassin
+  creates:
+  - token_poison
   types:
   - Follower
   decks:
@@ -1528,6 +1532,9 @@ cards:
     Sound good?"</i>
   collector_number: '16'
 - title: Hiruma Toshio
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -3373,6 +3380,8 @@ cards:
   flavor_text: <i>The Spider are always near, but difficult to find.</i>
   collector_number: '130'
 - title: Talisman of Maigo no Musha
+  creates:
+  - spirit_of_maigo_no_musha
   types:
   - Item
   decks:
@@ -3969,6 +3978,8 @@ cards:
   artist: Slawomir Maniak
   collector_number: '147'
 - title: Wartime Allies
+  creates:
+  - shiba_allies
   types:
   - Event
   decks:

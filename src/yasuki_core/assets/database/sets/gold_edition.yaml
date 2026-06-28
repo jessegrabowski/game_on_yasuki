@@ -1276,6 +1276,8 @@ cards:
   flavor_text: <i>"Cut off by land and sea, the Crab find their supplies failing as the war rages on."</i>
   collector_number: '52'
 - title: Blood Rite
+  creates:
+  - token_blood
   types:
   - Spell
   decks:
@@ -2547,6 +2549,8 @@ cards:
     celebrate and heimin willing to pay to honor the Fortunes.</i>
   collector_number: '315'
 - title: Dragon Tattoo
+  creates:
+  - token_fire
   types:
   - Strategy
   decks:
@@ -7786,6 +7790,9 @@ cards:
     reclaimed from the Shadowlands. Honor springs from the attempt.</i>
   collector_number: '330'
 - title: Porcelain Mask of Fu Leng
+  creates:
+  - token_plus1f_plus1c
+  - token_porcelain
   types:
   - Item
   decks:
@@ -9712,6 +9719,8 @@ cards:
     combined with a sharp attack." - Horiuchi Shem-Zhe</i>'
   collector_number: '409'
 - title: Storehouses
+  creates:
+  - token_storage
   types:
   - Holding
   decks:

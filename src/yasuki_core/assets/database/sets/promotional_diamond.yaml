@@ -122,6 +122,8 @@ cards:
   rarity: Promo
   artist: Jason Engle
 - title: Ancestral Kabuto
+  creates:
+  - token_plus1f_plus1c
   types:
   - Item
   decks:
@@ -1861,6 +1863,8 @@ cards:
   artist: Brad Williams
   flavor_text: <i>"Surely, Hida-sama, not even you have seen weapons like these."</i>
 - title: Sennin
+  creates:
+  - token_wealth
   types:
   - Personality
   decks:

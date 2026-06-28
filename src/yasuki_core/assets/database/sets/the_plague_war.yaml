@@ -144,6 +144,8 @@ cards:
     never falter."</i>
   collector_number: '34'
 - title: Ao-bozu
+  creates:
+  - ao_bozus_blade
   types:
   - Personality
   decks:
@@ -280,6 +282,8 @@ cards:
   flavor_text: <i>The madness of the Bitter Lies proved effective even against Kali-Ma's forces.</i>
   collector_number: '55'
 - title: Bayushi Keirei
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -420,6 +424,8 @@ cards:
   flavor_text: <i>With the wrong location, one can lose a battle before it begins.</i>
   collector_number: '113'
 - title: Chuda Kanashi
+  creates:
+  - token_web
   types:
   - Personality
   decks:
@@ -451,6 +457,8 @@ cards:
     will be joining my web shortly, so there is little point."</i>
   collector_number: '63'
 - title: Chuda Mishime
+  creates:
+  - the_walking_dead
   types:
   - Personality
   decks:
@@ -1537,6 +1545,13 @@ cards:
     is never without a defense."</i>
   collector_number: '128'
 - title: Ide Kin
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -2194,6 +2209,8 @@ cards:
   flavor_text: <i>A well-kept secret of the Toturi Dynasty.</i>
   collector_number: '81'
 - title: Mouth of the Plague
+  creates:
+  - token_plague
   types:
   - Region
   decks:
@@ -2464,6 +2481,8 @@ cards:
     that none approach before the birth of the heir." - Mirumoto Mori</i>
   collector_number: '140'
 - title: Plagued Terrain
+  creates:
+  - token_plague
   types:
   - Strategy
   decks:
@@ -2544,6 +2563,8 @@ cards:
     Hiruma Gohachiro</i>
   collector_number: '144'
 - title: Questionable Charity
+  creates:
+  - the_walking_dead
   types:
   - Strategy
   decks:
@@ -3172,6 +3193,8 @@ cards:
   flavor_text: <i>"The Realm of Dreams will grant you its insight." - Ryoshun</i>
   collector_number: '98'
 - title: Tamori Shimura
+  creates:
+  - token_rage
   types:
   - Personality
   decks:
@@ -3255,6 +3278,8 @@ cards:
     the Lion." - Mirumoto Kei</i>
   collector_number: '11'
 - title: Tetsubo of Earth
+  creates:
+  - earthen_tetsubo
   types:
   - Spell
   decks:
@@ -3856,6 +3881,9 @@ cards:
     of legend." - Shosuro Atesharu</i>
   collector_number: '160'
 - title: Unexpected Sympathy
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Strategy
   decks:
