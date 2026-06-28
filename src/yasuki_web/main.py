@@ -128,6 +128,7 @@ _CSP_PREFIXES = (
     "/play-online",
     "/top-secret",
     "/syntax",
+    "/privacy",
 )
 
 
@@ -232,6 +233,11 @@ async def top_secret():
 @app.get("/syntax")
 async def syntax():
     return _site_page("syntax.html")
+
+
+@app.get("/privacy")
+async def privacy():
+    return _site_page("privacy.html")
 
 
 _SLUG = r"^[a-z0-9_-]+$"
