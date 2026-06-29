@@ -38,6 +38,26 @@
   </form>
   <p id="settingsStatus" class="status-line"></p>
 
+  <hr class="doc-divider">
+
+  <section class="settings-avatar">
+    <h2>Avatar</h2>
+    <p class="doc-lead">Pick a card, then drag the box to choose the slice shown as your circle.</p>
+    <div class="avatar-editor">
+      <div class="avatar-pick">
+        <input type="text" id="cardSearch" placeholder="Search a card&hellip;" autocomplete="off">
+        <ul id="cardResults" class="card-results"></ul>
+      </div>
+      <canvas id="cropCanvas" class="crop-canvas" width="280" height="397"></canvas>
+      <div class="avatar-side">
+        <canvas id="avatarPreview" class="account-avatar avatar-preview" width="64" height="64"></canvas>
+        <button type="button" id="saveAvatar">Use this avatar</button>
+        <button type="button" id="clearAvatar" class="link-button">Use initials instead</button>
+        <p id="avatarStatus" class="status-line"></p>
+      </div>
+    </div>
+  </section>
+
   <p class="doc-lead"><a href="/privacy">How sign-in &amp; your data work</a></p>
 </main>
 

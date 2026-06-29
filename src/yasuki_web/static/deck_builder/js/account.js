@@ -3,7 +3,7 @@
 
 const JSON_HEADERS = { 'Content-Type': 'application/json' };
 
-// The signed-in user ({ id, display_name, avatar_url }) or null. /api/me always returns 200 with a
+// The signed-in user ({ id, display_name, avatar }) or null. /api/me always returns 200 with a
 // { user } body, so only a network failure yields null here.
 export async function getMe() {
   try {

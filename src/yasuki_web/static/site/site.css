@@ -542,3 +542,74 @@ a { color: inherit; text-decoration: none; }
   font-size: 0.7rem;
   font-weight: 600;
 }
+
+/* Settings avatar editor: card picker, crop canvas, and live preview circle. */
+.settings-avatar { margin-top: 0.5rem; }
+.avatar-editor {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 12px;
+}
+.avatar-pick { width: 220px; }
+.avatar-pick input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  font: inherit;
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.card-results {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  max-height: 360px;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+}
+.card-results:empty { display: none; }
+.card-result {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.card-result:last-child { border-bottom: none; }
+.card-result:hover { background: var(--paper-2); }
+.crop-canvas {
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  cursor: crosshair;
+  touch-action: none;
+}
+.avatar-side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+.avatar-preview { width: 64px; height: 64px; }
+.avatar-side button {
+  padding: 8px 16px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+  font: inherit;
+}
+.avatar-side button:hover { background: var(--accent-ink); }
+.link-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--muted);
+  text-decoration: underline;
+  font: inherit;
+}
+.avatar-side .link-button { border: none; background: none; color: var(--muted); }

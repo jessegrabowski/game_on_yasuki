@@ -5,7 +5,13 @@ import { resetDOM } from '../deck_builder/dom-shim.js';
 
 globalThis.fetch = mock.fn();
 
-import { getMe, updateDisplayName } from '../../../src/yasuki_web/static/site/account-api.js';
+import {
+  getMe,
+  updateDisplayName,
+  searchCards,
+  setAvatar,
+  clearAvatar,
+} from '../../../src/yasuki_web/static/site/account-api.js';
 import { buildAccountControl } from '../../../src/yasuki_web/static/site/account-widget.js';
 
 const respond = (body, { ok = true, status = 200 } = {}) =>
@@ -57,6 +63,37 @@ describe('updateDisplayName', () => {
   });
 });
 
+describe('searchCards', () => {
+  it('returns the cards array for a query', async () => {
+    fetch.mock.mockImplementation(() => respond({ cards: [{ card_id: 'doji' }] }));
+    assert.deepEqual(await searchCards('doji'), [{ card_id: 'doji' }]);
+    assert.match(fetch.mock.calls[0].arguments[0], /\/api\/cards\?search=doji&limit=24/);
+  });
+
+  it('skips the request and returns empty for a blank query', async () => {
+    assert.deepEqual(await searchCards('  '.trim()), []);
+    assert.equal(fetch.mock.calls.length, 0);
+  });
+});
+
+describe('setAvatar / clearAvatar', () => {
+  it('POSTs the card id and crop', async () => {
+    fetch.mock.mockImplementation(() => respond({ user: {} }));
+    const crop = { left: 0.1, top: 0.1, right: 0.4, bottom: 0.4 };
+    assert.equal(await setAvatar('doji', crop), true);
+    const [url, options] = fetch.mock.calls[0].arguments;
+    assert.equal(url, '/api/me/avatar');
+    assert.equal(options.method, 'POST');
+    assert.deepEqual(JSON.parse(options.body), { card_id: 'doji', crop });
+  });
+
+  it('DELETEs to clear', async () => {
+    fetch.mock.mockImplementation(() => respond({ user: {} }));
+    assert.equal(await clearAvatar(), true);
+    assert.equal(fetch.mock.calls[0].arguments[1].method, 'DELETE');
+  });
+});
+
 describe('buildAccountControl', () => {
   it('shows a Sign in link when logged out', () => {
     const widget = buildAccountControl(null);
@@ -76,6 +113,15 @@ describe('buildAccountControl', () => {
       ['Settings', 'Log out'],
     );
     assert.equal(menu.children[0].href, '/settings');
+  });
+
+  it('renders a canvas avatar when the user has a card crop', () => {
+    const user = {
+      display_name: 'Hida Kisada',
+      avatar: { image_path: 'sets/x/doji.jpg', crop: { left: 0.1, top: 0.1, right: 0.4, bottom: 0.4 } },
+    };
+    const widget = buildAccountControl(user, { imgBase: '/images' });
+    assert.equal(widget.children[0].children[1].tagName, 'CANVAS');
   });
 
   it('toggles the menu open when the name button is clicked', () => {

@@ -1,7 +1,7 @@
 // Account API shared by the nav widget and the settings page. Same-origin, so the session cookie
 // attaches automatically.
 
-// The signed-in user ({ id, display_name, avatar_url }) or null.
+// The signed-in user ({ id, display_name, avatar }) or null.
 export async function getMe() {
   try {
     const res = await fetch('/api/me');
@@ -29,6 +29,35 @@ export async function updateDisplayName(displayName) {
   });
   if (res.ok) return { ok: true, user: (await res.json()).user };
   return { ok: false, error: await _errorMessage(res) };
+}
+
+// Card name/text search, capped — for the avatar card picker. Returns the cards array (empty on
+// any failure).
+export async function searchCards(query) {
+  if (!query) return [];
+  try {
+    const res = await fetch(`/api/cards?search=${encodeURIComponent(query)}&limit=24`);
+    if (!res.ok) return [];
+    return (await res.json()).cards ?? [];
+  } catch {
+    return [];
+  }
+}
+
+// Set the avatar to a crop of a card (the server resolves the image from card_id). Returns ok.
+export async function setAvatar(cardId, crop) {
+  const res = await fetch('/api/me/avatar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ card_id: cardId, crop }),
+  });
+  return res.ok;
+}
+
+// Clear the avatar, falling back to the name's initials. Returns ok.
+export async function clearAvatar() {
+  const res = await fetch('/api/me/avatar', { method: 'DELETE' });
+  return res.ok;
 }
 
 async function _errorMessage(res) {

@@ -2,12 +2,14 @@
 // logged out, or the player's name with a dropdown (Settings, Log out) when logged in. Built with
 // createElement so it stays CSP-safe under style-src 'self'.
 
+import { fetchConfig } from './card-common.js';
 import { getMe, logout } from './account-api.js';
-import { initials } from './avatar.js';
+import { buildAvatarElement } from './avatar.js';
 
 // Build the control for `user` (null = logged out). `onLogout` runs after a successful logout;
-// it defaults to a full reload so the page re-renders in the signed-out state.
-export function buildAccountControl(user, { onLogout } = {}) {
+// it defaults to a full reload so the page re-renders in the signed-out state. `imgBase` resolves
+// a card-crop avatar's image; it's unused for the initials fallback.
+export function buildAccountControl(user, { onLogout, imgBase } = {}) {
   const widget = document.createElement('div');
   widget.className = 'account-widget';
 
@@ -26,10 +28,7 @@ export function buildAccountControl(user, { onLogout } = {}) {
   const name = document.createElement('span');
   name.className = 'account-name';
   name.textContent = user.display_name;
-  const avatar = document.createElement('span');
-  avatar.className = 'account-avatar';
-  avatar.textContent = initials(user.display_name);
-  button.append(name, avatar);
+  button.append(name, buildAvatarElement(user, imgBase));
 
   const menu = document.createElement('div');
   menu.className = 'account-menu';
@@ -57,7 +56,11 @@ export function buildAccountControl(user, { onLogout } = {}) {
 export async function initAccountWidget() {
   const nav = document.querySelector('.ribbon-nav');
   if (!nav) return;
-  nav.append(buildAccountControl(await getMe()));
+  const [user, config] = await Promise.all([
+    getMe(),
+    fetchConfig().catch(() => ({ imageBase: '/images' })),
+  ]);
+  nav.append(buildAccountControl(user, { imgBase: config.imageBase }));
 }
 
 initAccountWidget();
