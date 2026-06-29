@@ -3137,6 +3137,8 @@ cards:
   - Proxy
   decks:
   - Other
+  keywords:
+  - Ashigaru
   text: May not be included in decks.
   gold_cost: 0
   focus: 0
