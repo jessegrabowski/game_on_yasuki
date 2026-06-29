@@ -1,19 +1,66 @@
-import { getMe, updateDisplayName, searchCards, setAvatar, clearAvatar } from './account-api.js';
+import {
+  getMe,
+  updateDisplayName,
+  searchCards,
+  setAvatar,
+  clearAvatar,
+  deleteAccount,
+} from './account-api.js';
 import { fetchConfig } from './card-common.js';
 import { drawCardAvatar, loadImage } from './avatar.js';
 import { createCropEditor } from './card-crop.js';
 
 const SEARCH_DEBOUNCE_MS = 300;
+const PANES = ['display', 'privacy', 'delete'];
+
+// Map a URL hash (without the leading '#') to a pane id, falling back to the first pane for an
+// unknown or empty hash.
+export function resolvePane(hash) {
+  return PANES.includes(hash) ? hash : PANES[0];
+}
 
 async function init() {
+  initPanes();
   const user = await getMe();
   if (!user) {
     window.location.href = '/auth/login';
     return;
   }
   initDisplayName(user);
+  initDeleteAccount();
   const { imageBase } = await fetchConfig().catch(() => ({ imageBase: '/images' }));
   initAvatarEditor(user, imageBase);
+}
+
+// Left-column tabs select a pane via the URL hash, so each is bookmarkable.
+function initPanes() {
+  const show = () => {
+    const target = resolvePane(location.hash.slice(1));
+    for (const name of PANES) {
+      document.getElementById(`pane-${name}`).classList.toggle('active', name === target);
+    }
+    for (const tab of document.querySelectorAll('.settings-tab')) {
+      tab.classList.toggle('active', tab.dataset.pane === target);
+    }
+  };
+  window.addEventListener('hashchange', show);
+  show();
+}
+
+function initDeleteAccount() {
+  const status = document.getElementById('deleteStatus');
+  document.getElementById('deleteAccountBtn').addEventListener('click', async () => {
+    const confirmed = window.confirm(
+      'Delete your account? This erases your profile, saved decks, and sessions, and cannot be undone.',
+    );
+    if (!confirmed) return;
+    status.textContent = 'Deleting…';
+    if (await deleteAccount()) {
+      window.location.href = '/';
+    } else {
+      status.textContent = 'Could not delete the account.';
+    }
+  });
 }
 
 function initDisplayName(user) {
@@ -98,4 +145,4 @@ function cardResult(card, pickCard, status) {
   return li;
 }
 
-init();
+if (typeof window !== 'undefined') init();

@@ -22,43 +22,107 @@
   </nav>
 </header>
 
-<main class="doc">
+<main class="doc settings">
   <h1>Settings</h1>
-  <p class="doc-lead">
-    Your display name is what other players see. It's generated for you and never your Google name —
-    change it to whatever you like.
-  </p>
+  <div class="settings-layout">
+    <nav class="settings-nav">
+      <a href="#display" data-pane="display" class="settings-tab">Display</a>
+      <a href="#privacy" data-pane="privacy" class="settings-tab">Privacy</a>
+      <a href="#delete" data-pane="delete" class="settings-tab">Delete account</a>
+    </nav>
 
-  <form id="displayNameForm" class="settings-form">
-    <label class="field">
-      <span>Display name</span>
-      <input type="text" id="displayNameInput" maxlength="40" autocomplete="off" spellcheck="false">
-    </label>
-    <button type="submit">Save</button>
-  </form>
-  <p id="settingsStatus" class="status-line"></p>
+    <div class="settings-content">
+      <section id="pane-display" class="settings-pane">
+        <h2>Display name</h2>
+        <form id="displayNameForm" class="settings-form">
+          <label class="field">
+            <span>Display name</span>
+            <input type="text" id="displayNameInput" maxlength="40" autocomplete="off" spellcheck="false">
+          </label>
+          <button type="submit">Save</button>
+        </form>
+        <p id="settingsStatus" class="status-line"></p>
 
-  <hr class="doc-divider">
+        <hr class="doc-divider">
 
-  <section class="settings-avatar">
-    <h2>Avatar</h2>
-    <p class="doc-lead">Pick a card, then drag the box to choose the slice shown as your circle.</p>
-    <div class="avatar-editor">
-      <div class="avatar-pick">
-        <input type="text" id="cardSearch" placeholder="Search a card&hellip;" autocomplete="off">
-        <ul id="cardResults" class="card-results"></ul>
-      </div>
-      <canvas id="cropCanvas" class="crop-canvas" width="280" height="397"></canvas>
-      <div class="avatar-side">
-        <canvas id="avatarPreview" class="account-avatar avatar-preview" width="64" height="64"></canvas>
-        <button type="button" id="saveAvatar">Use this avatar</button>
-        <button type="button" id="clearAvatar" class="link-button">Use initials instead</button>
-        <p id="avatarStatus" class="status-line"></p>
-      </div>
+        <h2>Avatar</h2>
+        <p class="doc-lead">Pick a card, then drag the box to choose the slice shown as your circle.</p>
+        <div class="avatar-editor">
+          <div class="avatar-pick">
+            <input type="text" id="cardSearch" placeholder="Search a card&hellip;" autocomplete="off">
+            <ul id="cardResults" class="card-results"></ul>
+          </div>
+          <canvas id="cropCanvas" class="crop-canvas" width="280" height="397"></canvas>
+          <div class="avatar-side">
+            <canvas id="avatarPreview" class="account-avatar avatar-preview" width="64" height="64"></canvas>
+            <button type="button" id="saveAvatar">Use this avatar</button>
+            <button type="button" id="clearAvatar" class="link-button">Use initials instead</button>
+            <p id="avatarStatus" class="status-line"></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="pane-privacy" class="settings-pane privacy-doc">
+        <p class="doc-lead">
+          Browsing cards and building decks needs no account and collects nothing about you. You sign
+          in only to save decks to your account and to play online, and even then we keep as little
+          as the feature allows.
+        </p>
+
+        <hr class="doc-divider">
+
+        <section class="doc-section">
+          <div class="doc-text">
+            <h2>What we store when you sign in</h2>
+            <p>
+              Sign-in is handled by Google. We never see or store your Google password. From the
+              verified sign-in we keep your <b>display name</b> and <b>avatar URL</b> (to show who you
+              are) and a stable <b>Google account identifier</b> (so the same account signs in to the
+              same profile).
+            </p>
+            <p>
+              We do <b>not</b> store your email address in readable form. It is kept only as a one-way
+              keyed hash, which lets us catch duplicate accounts and enforce bans without ever holding
+              the address itself &mdash; a database breach exposes no email addresses.
+            </p>
+          </div>
+        </section>
+
+        <hr class="doc-divider">
+
+        <section class="doc-section">
+          <div class="doc-text">
+            <h2>Your decks and sessions</h2>
+            <p>
+              Decks you save are stored against your account. A sign-in cookie keeps you logged in; it
+              is a random token, set <code>HttpOnly</code> and <code>Secure</code>, used for nothing
+              but your session. We use no third-party analytics or advertising trackers.
+            </p>
+          </div>
+        </section>
+
+        <hr class="doc-divider">
+
+        <section class="doc-section">
+          <div class="doc-text">
+            <h2>Deleting your account</h2>
+            <p>
+              You can delete your account at any time. Deletion erases your profile, your saved decks,
+              and your active sessions. If the account was banned, we retain only the keyed hashes
+              described above so the ban cannot be evaded by deleting and re-registering; nothing else
+              is kept.
+            </p>
+          </div>
+        </section>
+      </section>
+
+      <section id="pane-delete" class="settings-pane">
+        <h2>Delete account</h2>
+        <button type="button" id="deleteAccountBtn" class="btn-danger-large">Delete account</button>
+        <p id="deleteStatus" class="status-line"></p>
+      </section>
     </div>
-  </section>
-
-  <p class="doc-lead"><a href="/privacy">How sign-in &amp; your data work</a></p>
+  </div>
 </main>
 
 <script type="module" src="/site/account-widget.js"></script>

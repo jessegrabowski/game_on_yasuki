@@ -402,11 +402,12 @@ a { color: inherit; text-decoration: none; }
   outline-offset: 2px;
 }
 
+/* Settings form (the display-name editor). */
 .settings-form {
   display: flex;
   gap: 12px;
   align-items: flex-end;
-  margin: 1.5rem 0 0.5rem;
+  margin: 0.25rem 0 0;
 }
 .settings-form .field {
   display: flex;
@@ -439,8 +440,74 @@ a { color: inherit; text-decoration: none; }
   background: var(--accent-ink);
 }
 
-/* Settings avatar editor: card picker, crop canvas, and live preview circle. */
-.settings-avatar { margin-top: 0.5rem; }
+
+/* Settings: a left-column tab list selects one pane at a time. The global .status-line carries a
+   big centered margin meant for full-page notices; inside settings it's a tight inline line, so the
+   spacing comes from the dividers, not stray status margins. */
+.settings-layout {
+  display: flex;
+  gap: 36px;
+  align-items: flex-start;
+  margin-top: 1rem;
+}
+.settings-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 150px;
+  flex-shrink: 0;
+}
+.settings-tab {
+  padding: 8px 12px;
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.settings-tab:hover {
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.settings-tab.active {
+  background: var(--paper-2);
+  color: var(--accent);
+  font-weight: 500;
+}
+.settings-content {
+  flex: 1;
+  min-width: 0;
+}
+.settings-pane { display: none; }
+.settings-pane.active { display: block; }
+.settings-pane h2 {
+  font-family: 'EB Garamond', Georgia, serif;
+  font-weight: 500;
+  font-size: 1.3rem;
+  margin: 0 0 10px;
+  color: var(--ink);
+}
+/* The display pane stacks two sub-sections, so its divider needs breathing room; the privacy pane
+   mirrors the standalone /privacy page and keeps the global divider spacing. */
+#pane-display .doc-divider { margin: 1.25rem 0; }
+.settings .status-line {
+  max-width: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  text-align: left;
+  font-style: normal;
+  font-size: 0.82rem;
+}
+
+.btn-danger-large {
+  padding: 11px 22px;
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+.btn-danger-large:hover { background: var(--accent-ink); }
 .avatar-editor {
   display: flex;
   flex-wrap: wrap;
