@@ -45,3 +45,35 @@ def test_show_replaces_the_previous_buttons(root):
     box.show("Your turn", [("Pass", lambda: None, True)])
     box.show("Opponent's turn", [])
     assert _buttons(box) == []
+
+
+def test_invoke_primary_clicks_the_sole_enabled_button(root):
+    clicks = []
+    box = PromptBox(root)
+    box.show("Your turn", [("Pass", lambda: clicks.append("pass"), True)])
+    box.invoke_primary()
+    assert clicks == ["pass"]
+
+
+def test_invoke_primary_ignores_a_disabled_button(root):
+    clicks = []
+    box = PromptBox(root)
+    box.show("pay 5 gold", [("Pay", lambda: clicks.append("pay"), False)])
+    box.invoke_primary()
+    assert clicks == []
+
+
+def test_invoke_primary_does_nothing_with_several_enabled_buttons(root):
+    clicks = []
+    box = PromptBox(root)
+    box.show(
+        "choose", [("A", lambda: clicks.append("a"), True), ("B", lambda: clicks.append("b"), True)]
+    )
+    box.invoke_primary()
+    assert clicks == []  # no single primary; tab-to-choose will come later
+
+
+def test_invoke_primary_is_safe_with_no_buttons(root):
+    box = PromptBox(root)
+    box.show("Opponent's turn", [])
+    box.invoke_primary()  # must not raise

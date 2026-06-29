@@ -20,16 +20,27 @@ class PromptBox(tk.Frame):
         self._status.pack(side="top", fill="x", padx=8, pady=(12, 8))
         self._actions = tk.Frame(self, bg=theme.PANEL)
         self._actions.pack(side="top", fill="x", padx=8)
+        self._buttons: list[tk.Button] = []
 
     def show(self, status: str, buttons: Iterable[ButtonSpec]) -> None:
         """Render ``status`` and a button per spec."""
         self._status.configure(text=status)
         for child in self._actions.winfo_children():
             child.destroy()
+        self._buttons = []
         for label, command, enabled in buttons:
-            tk.Button(
+            button = tk.Button(
                 self._actions,
                 text=label,
                 state="normal" if enabled else "disabled",
                 command=command,
-            ).pack(side="top", fill="x", pady=2)
+            )
+            button.pack(side="top", fill="x", pady=2)
+            self._buttons.append(button)
+
+    def invoke_primary(self) -> None:
+        """Invoke the sole enabled action (Pass/Pay/Discard) — the spacebar shortcut. With several
+        enabled buttons there is no single primary, so do nothing until tab-to-choose lands."""
+        enabled = [b for b in self._buttons if str(b.cget("state")) == "normal"]
+        if len(enabled) == 1:
+            enabled[0].invoke()

@@ -174,6 +174,8 @@ def main() -> None:
     human_panel = PlayerInfoBox(sidebar, field, PlayerId.P1)
     prompt_box = PromptBox(sidebar)
     prompt_box.grid(row=1, column=0, sticky="nsew")
+    # Spacebar takes the one offered action (Pass/Pay/Discard); with several it waits for tab-select.
+    field.bind("<space>", lambda e: prompt_box.invoke_primary())
 
     def relayout_panels() -> None:
         """Place the seat being played at the bottom of the column and refresh both panels. Driven
