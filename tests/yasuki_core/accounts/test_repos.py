@@ -15,12 +15,9 @@ def test_upsert_inserts_then_refreshes_without_clobbering_display_name(accounts_
     assert user["display_name"] == "Ada"
     assert user["is_banned"] is False
 
-    again = users.upsert_user(
-        accounts_conn, "google-1", "ada@example.com", True, "ShouldNotApply", avatar_url="http://p"
-    )
+    again = users.upsert_user(accounts_conn, "google-1", "ada@example.com", True, "ShouldNotApply")
     assert again["id"] == user["id"]
     assert again["display_name"] == "Ada"
-    assert again["avatar_url"] == "http://p"
 
 
 def test_upsert_reports_created_only_on_the_first_sign_in(accounts_conn):

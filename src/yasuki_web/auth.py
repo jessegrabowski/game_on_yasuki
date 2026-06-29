@@ -170,7 +170,6 @@ def _complete_login(claims: dict) -> tuple[str, bool] | None:
             claims["email"],
             email_verified=bool(claims.get("email_verified")),
             display_name=random_display_name(),
-            avatar_url=claims.get("picture"),
         )
         if user["is_banned"]:
             return None
