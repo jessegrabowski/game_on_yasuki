@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Game on, Yasuki!</title>
+<meta name="robots" content="noindex, nofollow">
+<title>Settings &mdash; Game on, Yasuki!</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
@@ -21,22 +22,26 @@
   </nav>
 </header>
 
-<main class="hero">
-  <h1 class="wordmark"><span class="torii">&#x26E9;</span> Game on, Yasuki!</h1>
-  <p class="tagline">a legend of the five rings card index</p>
-
-  <form class="search-form" action="/card-search" method="get" role="search">
-    <input type="text" name="q" autofocus autocomplete="off" spellcheck="false"
-           placeholder="Search the Empire&hellip;">
-    <button type="submit" aria-label="Search">&#x2192;</button>
-  </form>
-
-  <p class="hero-hint">
-    Try <code class="suggestion" id="suggestion" role="button" tabindex="0">&hellip;</code>
+<main class="doc">
+  <h1>Settings</h1>
+  <p class="doc-lead">
+    Your display name is what other players see. It's generated for you and never your Google name —
+    change it to whatever you like.
   </p>
+
+  <form id="displayNameForm" class="settings-form">
+    <label class="field">
+      <span>Display name</span>
+      <input type="text" id="displayNameInput" maxlength="40" autocomplete="off" spellcheck="false">
+    </label>
+    <button type="submit">Save</button>
+  </form>
+  <p id="settingsStatus" class="status-line"></p>
+
+  <p class="doc-lead"><a href="/privacy">How sign-in &amp; your data work</a></p>
 </main>
 
-<script type="module" src="/site/landing.js"></script>
 <script type="module" src="/site/account-widget.js"></script>
+<script type="module" src="/site/settings.js"></script>
 </body>
 </html>
