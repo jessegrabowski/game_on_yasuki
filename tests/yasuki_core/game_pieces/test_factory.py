@@ -62,6 +62,8 @@ RECORDS = [
         "types": ["Sensei"],
         "decks": ["Pre-Game"],
         "starting_honor": 5,
+        "gold_production": -1,
+        "province_strength": 1,
         "prints": [
             {"print_id": 30, "set_name": "Hidden Emperor", "image_path": "sets/he/sensei.png"}
         ],
@@ -175,6 +177,12 @@ def test_stronghold_carries_gold_production_and_province_strength():
     stronghold = _resolve().pre_game[0]
     assert stronghold.gold_production == 8
     assert stronghold.province_strength == 5
+
+
+def test_sensei_carries_its_stat_modifiers():
+    sensei = _resolve().pre_game[1]
+    assert sensei.gold_production == -1
+    assert sensei.province_strength == 1
 
 
 def test_base_identity_and_unique_flag_are_carried():
