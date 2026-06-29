@@ -233,6 +233,7 @@ def _construct_face(
     clans = record.get("clans") or []
     return card_cls(
         id=card_id,
+        printed_id=record.get("card_id"),
         name=record.get("extended_title") or record["name"],
         side=side,
         owner=owner,

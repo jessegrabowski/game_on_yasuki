@@ -9,6 +9,10 @@ class L5RCard:
     id: str
     name: str
     side: Side
+    # The card's stable printed identity — the database card slug (e.g. "ancestral_estate"), shared
+    # by every copy and printing, distinct from the per-instance ``id``. Per-card effect handlers key
+    # off it; None for fabricated demo cards and spawned tokens, which fall back to plain behavior.
+    printed_id: str | None = None
     clan: str | None = None
     keywords: tuple[str, ...] = ()
     traits: tuple[str, ...] = ()
