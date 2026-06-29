@@ -9,14 +9,15 @@ import psycopg
 import pytest
 
 from yasuki_core.accounts.db import accounts_connection_string
+from yasuki_core.database import get_connection_string
 
 # Play is login-required, so the e2e signs each browser in through the dev-login bypass; that needs
 # the accounts DB and a pepper, both supplied to the server below.
 E2E_PEPPER = "e2e-test-pepper"
 
 # Wrap the browser's WebSocket so a test can reach the room socket the page opens (window.__ws).
-# Used only to seed a card with a SPAWN_CARD intent — there is no DB-free UI path to put a card on
-# the table — so the drag interactions the test actually exercises run against the real client.
+# Tests drive deck-load/ready and card intents straight onto this socket — there is no UI path for
+# them — so the drag and flag interactions they actually exercise run against the real client.
 WS_CAPTURE_SCRIPT = """
 const Native = window.WebSocket;
 class Captured extends Native {
@@ -59,7 +60,8 @@ def live_server() -> str:
     """A real uvicorn server on its own port with the dev-login bypass enabled.
 
     Play is login-required, so each browser signs in via /auth/dev-login, which needs the accounts
-    DB; the suite skips when it is unreachable. The board state itself stays in-memory.
+    DB; the suite skips when it is unreachable. Board state stays in-memory, but the tests deal a
+    real deck, so the server also reaches the cards database to resolve decks and creatable tokens.
     """
     if not _accounts_db_available():
         pytest.skip("accounts database not reachable for e2e login")
@@ -114,3 +116,56 @@ def new_player(browser, live_server):
     yield _open
     for context in contexts:
         context.close()
+
+
+# Weapon Artist is a Holding that creates exactly one token; loading a deck of it populates the
+# table's `creatable_tokens` so a SPAWN_CARD {token_id} resolves. Both e2e files lean on this.
+CREATOR_CARD_ID = "weapon_artist"
+TOKEN_CARD_ID = "weapon_item_sword_plus2f_plus1c"
+
+# A minimal loadable deck: a stronghold to open provinces and a dynasty stack of nothing but Weapon
+# Artist. parse_deck_yaml resolves card names against the database, so these must match real cards.
+DECK_YAML = """\
+name: Token Probe
+Pre-Game:
+  - Kyuden Hida
+Dynasty:
+  - 8x Weapon Artist
+"""
+
+
+def _token_db_ready() -> bool:
+    """True when the cards database is reachable and carries the Weapon Artist creates edge."""
+    try:
+        with psycopg.connect(get_connection_string()) as conn:
+            row = conn.execute(
+                "SELECT 1 FROM card_creates WHERE creator_card_id = %s AND created_card_id = %s",
+                (CREATOR_CARD_ID, TOKEN_CARD_ID),
+            ).fetchone()
+            return row is not None
+    except Exception:
+        return False
+
+
+def create_room(page):
+    """Create a room through the lobby UI and return its id; the room socket the page opens is
+    captured on window.__ws by `new_player`."""
+    page.click("#createForm button[type=submit]")
+    page.wait_for_selector("#roomView:not([hidden])")
+    room_id = page.inner_text("#roomIdLabel").strip()
+    assert room_id, "room id label populated after creating a room"
+    return room_id
+
+
+def join_room(page, room_id):
+    page.fill("#joinRoomId", room_id)
+    page.click("#joinForm button[type=submit]")
+    page.wait_for_selector("#roomView:not([hidden])")
+
+
+def send(page, message):
+    page.evaluate("(msg) => window.__ws.send(JSON.stringify(msg))", message)
+
+
+def send_intent(page, room_id, intent):
+    send(page, {"type": "INTENT", "room": room_id, "intent": intent})
