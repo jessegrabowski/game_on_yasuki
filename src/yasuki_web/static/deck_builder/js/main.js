@@ -16,7 +16,6 @@ import {
   saveDeck,
   listMyDecks,
   deleteDeck,
-  deleteAccount,
   fetchSharedDeck,
 } from './account.js';
 import { buildCompositeDataURL, customPrintId, loadArtLayout } from './art.js';
@@ -129,7 +128,6 @@ async function init() {
   $('importBtn').addEventListener('click', () => $('importFileInput').click());
   $('saveOnlineBtn').addEventListener('click', doSaveOnline);
   $('myDecksBtn').addEventListener('click', doToggleMyDecks);
-  $('deleteAccountBtn').addEventListener('click', doDeleteAccount);
   const persistDeckMeta = debounce(persistDeck, 400);
   $('deckNameInput').addEventListener('input', () => {
     $('deckNameInput').closest('.deck-name-row').classList.remove('shake');
@@ -164,30 +162,17 @@ function toggleHelp() {
   $('searchHelp').classList.toggle('hidden');
 }
 
-// Account-backed deck storage. The deck always autosaves to localStorage (the anonymous path);
-// signing in adds the option to keep a deck on the account and pull it back on any device.
+// Whether a deck can be saved to / loaded from an account. Identity and account management live in
+// the nav widget and the settings page; here we only need to know if a session exists.
 let currentUser = null;
 
+// Transient feedback for a save or load action (empty otherwise — no persistent status line).
 function setAccountStatus(text) {
   $('accountStatus').textContent = text;
 }
 
 async function refreshAccount() {
   currentUser = await getMe();
-  $('deleteAccountBtn').classList.toggle('hidden', !currentUser);
-  if (currentUser) {
-    setAccountStatus(`Signed in as ${currentUser.display_name} · autosaved locally`);
-  } else {
-    setAccountStatus('Autosaved locally · sign in to save decks to your account');
-  }
-}
-
-async function doDeleteAccount() {
-  const ok = window.confirm(
-    'Delete your account? This erases your profile, saved decks, and sessions. This cannot be undone.',
-  );
-  if (!ok) return;
-  if (await deleteAccount()) window.location.reload();
 }
 
 // The same YAML the Export and autosave paths produce, or null with a nudge if the deck is unnamed

@@ -169,21 +169,6 @@ body {
   font-family: var(--sans);
   padding: 4px 2px 0;
 }
-.account-links { display: flex; gap: 10px; align-items: baseline; }
-.privacy-link {
-  display: inline-block;
-  font-size: 0.68rem;
-  color: var(--muted);
-  font-family: var(--sans);
-  padding: 0 2px 4px;
-}
-.link-button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  text-decoration: underline;
-}
-.link-button.hidden { display: none; }
 
 .my-decks-panel {
   display: flex;

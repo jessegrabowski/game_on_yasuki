@@ -11,6 +11,7 @@ import {
   searchCards,
   setAvatar,
   clearAvatar,
+  deleteAccount,
 } from '../../../src/yasuki_web/static/site/account-api.js';
 import { buildAccountControl } from '../../../src/yasuki_web/static/site/account-widget.js';
 
@@ -91,6 +92,16 @@ describe('setAvatar / clearAvatar', () => {
     fetch.mock.mockImplementation(() => respond({ user: {} }));
     assert.equal(await clearAvatar(), true);
     assert.equal(fetch.mock.calls[0].arguments[1].method, 'DELETE');
+  });
+});
+
+describe('deleteAccount', () => {
+  it('DELETEs /api/me', async () => {
+    fetch.mock.mockImplementation(() => respond({ deleted: true }));
+    assert.equal(await deleteAccount(), true);
+    const [url, options] = fetch.mock.calls[0].arguments;
+    assert.equal(url, '/api/me');
+    assert.equal(options.method, 'DELETE');
   });
 });
 
