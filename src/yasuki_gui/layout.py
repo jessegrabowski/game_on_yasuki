@@ -1,14 +1,13 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import BoardPos, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import BoardPos
 from yasuki_core.game_pieces.constants import Side
-from yasuki_gui.constants import CARD_H, CARD_W
+from yasuki_gui.constants import CARD_W
 
-# How far a seat's row of zones sits from the top or bottom edge, and how far the hand sits beyond
-# that. The human seat occupies the bottom band; the opponent mirrors it across the top.
+# How far a seat's province row sits from the top or bottom edge, and how far the hand sits beyond
+# that. The human seat occupies the bottom band; the opponent mirrors it across the top. Decks,
+# discards, and banishes live in the off-board info panels, so only the in-play rows go here.
 _ROW_INSET = 200
 _HAND_INSET = 60
-_DECK_INSET = 200
-_DISCARD_GAP = 120
 
 
 def _row_y(canvas_h: int, seat_at_bottom: bool) -> int:
@@ -17,39 +16,6 @@ def _row_y(canvas_h: int, seat_at_bottom: bool) -> int:
 
 def _hand_y(canvas_h: int, seat_at_bottom: bool) -> int:
     return canvas_h - _HAND_INSET if seat_at_bottom else _HAND_INSET
-
-
-def deck_pos(
-    canvas_w: int, canvas_h: int, key: DeckKey, *, seat_at_bottom: bool
-) -> tuple[int, int]:
-    """Screen centre for a seat's deck. Dynasty sits left and fate right for the bottom seat; the
-    top seat mirrors both across the canvas so each seat reads its own board the same way."""
-    y = _row_y(canvas_h, seat_at_bottom)
-    left_x, right_x = _DECK_INSET, canvas_w - _DECK_INSET
-    if seat_at_bottom:
-        dynasty_x, fate_x = left_x, right_x
-    else:
-        dynasty_x, fate_x = right_x, left_x
-    return (dynasty_x, y) if key.side is Side.DYNASTY else (fate_x, y)
-
-
-def discard_pos(
-    canvas_w: int, canvas_h: int, key: ZoneKey, *, seat_at_bottom: bool
-) -> tuple[int, int, int, int]:
-    """Screen box (centre x, centre y, w, h) for a discard or banish pile, beside its deck."""
-    y = _row_y(canvas_h, seat_at_bottom)
-    side = (
-        Side.DYNASTY
-        if key.role in (ZoneRole.DYNASTY_DISCARD, ZoneRole.DYNASTY_BANISH)
-        else Side.FATE
-    )
-    dx, _ = deck_pos(canvas_w, canvas_h, DeckKey(key.owner, side), seat_at_bottom=seat_at_bottom)
-    toward_center = 1 if dx < canvas_w // 2 else -1
-    gap = _DISCARD_GAP
-    if key.role in (ZoneRole.FATE_BANISH, ZoneRole.DYNASTY_BANISH):
-        gap *= 2  # banish stacks one slot further in than its discard
-    x = max(60, min(canvas_w - 60, dx + toward_center * gap))
-    return x, y, CARD_W, CARD_H
 
 
 def hand_box(canvas_w: int, canvas_h: int, *, seat_at_bottom: bool) -> tuple[int, int, int, int]:
@@ -78,14 +44,12 @@ def province_positions(
 def unplaced_battlefield_pos(
     canvas_w: int, canvas_h: int, side: Side, owner: PlayerId | None, *, seat_at_bottom: bool
 ) -> tuple[int, int]:
-    """Where a battlefield card with no real position (the unplaced sentinel) is parked: just inside
-    its owner's deck, fate to the deck's left and dynasty to its right, matching a fresh draw."""
-    from yasuki_gui.constants import DRAW_OFFSET
-
-    deck_owner = owner if owner is not None else PlayerId.P1
-    dx, dy = deck_pos(canvas_w, canvas_h, DeckKey(deck_owner, side), seat_at_bottom=seat_at_bottom)
-    offset = CARD_W + DRAW_OFFSET
-    return (dx - offset if side is Side.FATE else dx + offset), dy
+    """Where a battlefield card with no real position (the unplaced sentinel — e.g. a freshly
+    recruited card) is parked: a staging spot in its owner's half, fate to the left and dynasty to
+    the right, set between the midline and the province row so it reads as in play but unplaced."""
+    y = int(canvas_h * 0.66) if seat_at_bottom else int(canvas_h * 0.34)
+    x = canvas_w // 4 if side is Side.FATE else canvas_w * 3 // 4
+    return x, y
 
 
 def to_canvas(pos: BoardPos, *, flipped: bool, canvas_w: int, canvas_h: int) -> tuple[int, int]:

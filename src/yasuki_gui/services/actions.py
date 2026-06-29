@@ -1,4 +1,3 @@
-import random
 import tkinter as tk
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
@@ -6,22 +5,18 @@ from tkinter import simpledialog
 from typing import Literal, Protocol
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import BATTLEFIELD, BoardPos, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import BoardPos, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import (
     Bow,
-    CreateProvince,
     DestroyProvince,
     DiscardProvince,
-    Draw,
     FillProvince,
     Flip,
-    FlipDeckTop,
     FlipFace,
     Invert,
     MoveCard,
     RemoveCard,
     SetNote,
-    Shuffle,
     SpawnCard,
     Unbow,
 )
@@ -33,9 +28,6 @@ from yasuki_gui.ui.images import ImageProvider
 
 # A duplicated or token card lands a little down-right of its source so it does not hide it.
 _SPAWN_OFFSET = 24
-
-# A card pulled from a deck search lands unplaced, parked beside its deck until the player drags it.
-_UNPLACED = BoardPos(-1.0, -1.0)
 
 
 class HasView(Protocol):
@@ -123,11 +115,6 @@ def _selection_ids(view: HasView, ctx: ActionContext) -> tuple[str, ...]:
 def _card_owner(view: HasView, ctx: ActionContext) -> PlayerId | None:
     card = _card(view, ctx.card_tag)
     return ctx.owner if ctx.owner is not None else (card.owner if card else None)
-
-
-def _deck_owner(view: HasView, ctx: ActionContext) -> PlayerId | None:
-    key = view.key_for_tag(ctx.deck_tag or "")
-    return ctx.owner if ctx.owner is not None else (key.owner if isinstance(key, DeckKey) else None)
 
 
 # ----- card actions ---------------------------------------------------------
@@ -229,102 +216,6 @@ def card_send_to_bottom() -> Action:
         run=_send_to_deck(True),
         group="send",
     )
-
-
-# ----- deck actions ---------------------------------------------------------
-
-
-def _deck_key(view: HasView, ctx: ActionContext) -> DeckKey | None:
-    key = view.key_for_tag(ctx.deck_tag or "")
-    return key if isinstance(key, DeckKey) else None
-
-
-def _deck_when(view: HasView, ctx: ActionContext) -> bool:
-    return _deck_key(view, ctx) is not None and _may(view, _deck_owner(view, ctx))
-
-
-@_register
-def check_draw() -> Action:
-    def when(view, ctx):
-        key = _deck_key(view, ctx)
-        return key is not None and bool(view.state.decks[key].cards) and _may(view, key.owner)
-
-    def run(view, ctx):
-        key = _deck_key(view, ctx)
-        if key is not None:
-            view.dispatch(Draw(key))
-
-    return Action("deck.draw", "Draw", HK.draw, when, run, "deck")
-
-
-@_register
-def check_shuffle() -> Action:
-    def run(view, ctx):
-        key = _deck_key(view, ctx)
-        if key is not None:
-            view.dispatch(Shuffle(key, seed=random.randrange(2**31)))
-
-    return Action("deck.shuffle", "Shuffle", HK.shuffle, _deck_when, run, "deck")
-
-
-@_register
-def deck_flip_top_card() -> Action:
-    def when(view, ctx):
-        key = _deck_key(view, ctx)
-        return key is not None and bool(view.state.decks[key].cards) and _may(view, key.owner)
-
-    def run(view, ctx):
-        key = _deck_key(view, ctx)
-        if key is not None:
-            view.dispatch(FlipDeckTop(key))
-
-    return Action("deck.flip_top", "Flip Top", HK.flip, when, run, "deck")
-
-
-@_register
-def deck_inspect() -> Action:
-    def run(view, ctx):
-        dv = view.decks.get(ctx.deck_tag)
-        key = _deck_key(view, ctx)
-        if dv is None or key is None:
-            return
-        master = view.winfo_toplevel() if hasattr(view, "winfo_toplevel") else view
-        cards = view.state.decks[key].cards
-        Dialogs(master, ImageProvider(master)).deck_inspect(cards, dv.label)
-
-    return Action("deck.inspect", "Inspect", HK.inspect, _deck_when, run, "deck")
-
-
-@_register
-def deck_search_action() -> Action:
-    def run(view, ctx):
-        dv = view.decks.get(ctx.deck_tag)
-        key = _deck_key(view, ctx)
-        if dv is None or key is None:
-            return
-        master = view.winfo_toplevel() if hasattr(view, "winfo_toplevel") else view
-
-        def draw_cb(idx_in_deck: int) -> None:
-            cards = view.state.decks[key].cards
-            if 0 <= idx_in_deck < len(cards):
-                view.dispatch(MoveCard(cards[idx_in_deck].id, BATTLEFIELD, position=_UNPLACED))
-
-        cards = view.state.decks[key].cards
-        Dialogs(master, ImageProvider(master)).deck_search(cards, dv.label, draw_cb, n=None)
-
-    return Action("deck.search", "Search", when=_deck_when, run=run, group="deck")
-
-
-@_register
-def deck_create_province() -> Action:
-    def when(view, ctx):
-        key = _deck_key(view, ctx)
-        return key is not None and key.side is Side.DYNASTY and _may(view, key.owner)
-
-    def run(view, ctx):
-        view.dispatch(CreateProvince())
-
-    return Action("deck.create_province", "Create Province", when=when, run=run, group="deck")
 
 
 # ----- zone (province) actions ----------------------------------------------

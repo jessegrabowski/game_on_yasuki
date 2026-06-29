@@ -12,8 +12,6 @@ from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
 from yasuki_gui.constants import CARD_H, CARD_W
 from yasuki_gui.controller import FieldController
 from yasuki_gui.layout import (
-    deck_pos,
-    discard_pos,
     from_canvas,
     hand_box,
     province_positions,
@@ -21,14 +19,10 @@ from yasuki_gui.layout import (
     unplaced_battlefield_pos,
 )
 from yasuki_gui.services.hittest import resolve_tag_at as hittest_resolve_tag_at
-from yasuki_gui.tags import card_id_for_tag, card_tag, deck_tag, zone_tag
+from yasuki_gui.tags import card_id_for_tag, card_tag, zone_tag
 from yasuki_gui.ui.images import ImageProvider
-from yasuki_gui.visuals import CardSpriteVisual, DeckVisual, HandVisual, ZoneVisual
-from yasuki_gui.visuals.cardface import to_render_card
-
-
-def _deck_label(key: DeckKey) -> str:
-    return "Dynasty Deck" if key.side is Side.DYNASTY else "Fate Deck"
+from yasuki_gui.visuals import CardSpriteVisual, HandVisual, ZoneVisual
+from yasuki_gui.visuals.cardface import RenderCard, to_render_card
 
 
 _ZONE_LABELS: dict[ZoneRole, str] = {
@@ -66,7 +60,6 @@ class FieldView(tk.Canvas):
         self.seat: PlayerId = PlayerId.P1
 
         self._sprites: dict[str, CardSpriteVisual] = {}
-        self._decks: dict[str, DeckVisual] = {}
         self._zones: dict[str, ZoneVisual] = {}
         self._hands: dict[str, HandVisual] = {}
         self._tag_to_key: dict[str, ZoneKey | DeckKey] = {}
@@ -117,7 +110,6 @@ class FieldView(tk.Canvas):
         self.seat = seat
         self.delete("all")
         self._sprites.clear()
-        self._decks.clear()
         self._zones.clear()
         self._hands.clear()
         self._tag_to_key.clear()
@@ -200,10 +192,6 @@ class FieldView(tk.Canvas):
     # ----- exposed collections (read-only views) ----------------------------
 
     @property
-    def decks(self):
-        return MappingProxyType(self._decks)
-
-    @property
     def zones(self):
         return MappingProxyType(self._zones)
 
@@ -242,22 +230,12 @@ class FieldView(tk.Canvas):
 
     # ----- geometry helpers for the controller/hittest ----------------------
 
-    def bbox_for_deck(self, dtag: str) -> tuple[int, int, int, int]:
-        dv = self._decks.get(dtag)
-        return dv.bbox if dv else (0, 0, -1, -1)
-
     def bbox_for_zone(self, ztag: str) -> tuple[int, int, int, int]:
         zv = self._zones.get(ztag)
         if zv is not None:
             return zv.bbox
         hv = self._hands.get(ztag)
         return hv.bbox if hv else (0, 0, -1, -1)
-
-    def redraw_deck(self, tag: str) -> None:
-        self.delete(tag)
-        dv = self._decks.get(tag)
-        if dv is not None:
-            dv.draw(self)
 
     def redraw_zone(self, tag: str) -> None:
         self.delete(tag)
@@ -278,7 +256,6 @@ class FieldView(tk.Canvas):
             return
         self.delete("all")
         self._draw_table()
-        self._reconcile_decks()
         self._reconcile_zones()
         self._reconcile_sprites()
 
@@ -324,63 +301,49 @@ class FieldView(tk.Canvas):
             int(w * 0.08), h // 2, int(w * 0.92), h // 2, fill=theme.MIDLINE, tags=("table",)
         )
 
-    def _reconcile_decks(self) -> None:
-        w, h = self._canvas_size()
-        wanted: set[str] = set()
-        for key, count, top in self._render_decks():
-            tag = deck_tag(key)
-            wanted.add(tag)
-            x, y = deck_pos(w, h, key, seat_at_bottom=key.owner is self.seat)
-            dv = self._decks.get(tag)
-            if dv is None:
-                dv = DeckVisual(count, top, x, y, tag, label=_deck_label(key), images=self._images)
-                self._decks[tag] = dv
-            dv.count, dv.top, dv.x, dv.y = count, top, x, y
-            dv.owner = key.owner
-            self._tag_to_key[tag] = key
-            dv.draw(self)
-        for tag in set(self._decks) - wanted:
-            self._decks.pop(tag, None)
-            self._tag_to_key.pop(tag, None)
-
     def _reconcile_zones(self) -> None:
+        """Draw the on-board zones only: every seat's provinces and the viewer's own hand. Decks,
+        discards, and banishes live in the off-board info panels, and the opponent's hand is never
+        shown — those are read through the accessors below, not drawn here."""
         w, h = self._canvas_size()
         province_keys = self._province_keys_by_owner()
         wanted_zones: set[str] = set()
         wanted_hands: set[str] = set()
         for key, cards in self._render_zones():
-            tag = zone_tag(key)
-            self._tag_to_key[tag] = key
             seat_at_bottom = key.owner is self.seat
             if key.role is ZoneRole.HAND:
+                if key.owner is not self.seat:
+                    continue  # the opponent's hand is never drawn
+                tag = zone_tag(key)
+                self._tag_to_key[tag] = key
                 wanted_hands.add(tag)
                 bx, by, bw, bh = hand_box(w, h, seat_at_bottom=seat_at_bottom)
-                selected = self.selection if key.owner is self.seat else frozenset()
                 hv = self._hands.get(tag)
                 if hv is None:
                     hv = HandVisual(cards, key.owner, bx, by, bw, bh, tag, images=self._images)
                     self._hands[tag] = hv
                 hv.cards, hv.owner = cards, key.owner
                 hv.x, hv.y, hv.w, hv.h = bx, by, bw, bh
-                hv.selected_ids = selected
+                hv.selected_ids = self.selection
                 hv.draw(self)
                 continue
+            if key.role is not ZoneRole.PROVINCE:
+                continue  # discards/banishes are off-board (info panel), not drawn here
+            tag = zone_tag(key)
+            self._tag_to_key[tag] = key
             wanted_zones.add(tag)
-            is_province = key.role is ZoneRole.PROVINCE
-            if is_province:
-                ordered = province_keys[key.owner]
-                positions = province_positions(w, h, len(ordered), seat_at_bottom=seat_at_bottom)
-                px, py = positions[ordered.index(key)]
-                bx, by, bw, bh = px, py, CARD_W, CARD_H
-            else:
-                bx, by, bw, bh = discard_pos(w, h, key, seat_at_bottom=seat_at_bottom)
+            ordered = province_keys[key.owner]
+            positions = province_positions(w, h, len(ordered), seat_at_bottom=seat_at_bottom)
+            px, py = positions[ordered.index(key)]
             label = _zone_label(key)
             zv = self._zones.get(tag)
             if zv is None:
-                zv = ZoneVisual(cards, is_province, label, bx, by, bw, bh, tag, images=self._images)
+                zv = ZoneVisual(
+                    cards, True, label, px, py, CARD_W, CARD_H, tag, images=self._images
+                )
                 self._zones[tag] = zv
-            zv.cards, zv.is_province, zv.name = cards, is_province, label
-            zv.x, zv.y, zv.w, zv.h = bx, by, bw, bh
+            zv.cards, zv.is_province, zv.name = cards, True, label
+            zv.x, zv.y, zv.w, zv.h = px, py, CARD_W, CARD_H
             zv.draw(self)
         for tag in set(self._zones) - wanted_zones:
             self._zones.pop(tag, None)
@@ -388,6 +351,27 @@ class FieldView(tk.Canvas):
         for tag in set(self._hands) - wanted_hands:
             self._hands.pop(tag, None)
             self._tag_to_key.pop(tag, None)
+
+    # ----- off-board reads (decks/discards/banishes/hand counts for the info panels) ---------
+
+    def deck_summary(self, key: DeckKey) -> tuple[int, RenderCard | None]:
+        """The card count and top render-card of a deck, from the active render source."""
+        for deck_key, count, top in self._render_decks():
+            if deck_key == key:
+                return count, top
+        return 0, None
+
+    def zone_render_cards(self, key: ZoneKey) -> list[RenderCard]:
+        """The render-cards held in a zone (e.g. a discard or banish pile), bottom to top, from the
+        active render source. Empty if the zone is absent."""
+        for zone_key, cards in self._render_zones():
+            if zone_key == key:
+                return cards
+        return []
+
+    def hand_count(self, seat: PlayerId) -> int:
+        """How many cards ``seat`` holds, from the active render source."""
+        return len(self.zone_render_cards(ZoneKey(seat, ZoneRole.HAND)))
 
     def _reconcile_sprites(self) -> None:
         w, h = self._canvas_size()

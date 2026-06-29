@@ -13,14 +13,14 @@ def _province_keys(state, seat):
 
 
 class TestLoadState:
-    def test_visuals_mirror_state_membership(self, loaded):
+    def test_only_in_play_zones_render_on_the_board(self, loaded):
         field, state = loaded
         # One sprite per battlefield card, keyed by card id.
         assert set(field.sprites) == {card_tag(c.id) for c in state.battlefield.cards}
-        # One deck visual per deck key.
-        assert set(field.decks) == {deck_tag(k) for k in state.decks}
-        # Hands and other zones split across the two maps, together covering every zone key.
-        assert set(field.hands) | set(field.zones) == {zone_tag(k) for k in state.zones}
+        # Only the viewer's own hand is drawn (the opponent's is never shown).
+        assert set(field.hands) == {zone_tag(ZoneKey(field.seat, ZoneRole.HAND))}
+        # Every province (both seats) is drawn; no discard/banish zones.
+        assert set(field.zones) == {zone_tag(k) for k in state.zones if k.role is ZoneRole.PROVINCE}
 
     def test_tags_map_back_to_keys(self, loaded):
         field, _ = loaded
@@ -74,6 +74,50 @@ class TestDispatchReconcile:
         empty = DeckKey(PlayerId.P1, Side.FATE)
         state.decks[empty].cards.clear()
         assert field.dispatch(FlipDeckTop(empty)) == []
+
+
+class TestOffBoardReads:
+    def test_deck_summary_reports_count_and_top(self, loaded):
+        field, state = loaded
+        key = DeckKey(PlayerId.P1, Side.FATE)
+        count, top = field.deck_summary(key)
+        assert count == len(state.decks[key].cards)
+        assert top is not None  # the dealt deck has cards
+
+    def test_zone_render_cards_reads_a_discard_pile(self, loaded):
+        field, state = loaded
+        field.dispatch(Draw(DeckKey(PlayerId.P1, Side.DYNASTY)))
+        card = state.battlefield.cards[-1]
+        discard = ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)
+        field.dispatch(MoveCard(card.id, discard))
+        assert [c.id for c in field.zone_render_cards(discard)] == [card.id]
+
+    def test_hand_count_tracks_the_hand(self, loaded):
+        field, _ = loaded
+        before = field.hand_count(PlayerId.P1)
+        field.dispatch(Draw(DeckKey(PlayerId.P1, Side.FATE)))
+        assert field.hand_count(PlayerId.P1) == before + 1
+
+    def test_rules_mode_shows_opponent_counts_but_hides_hand_identities(self, loaded):
+        field, _ = loaded
+        state = TableState.empty_two_seat()
+        deck = state.decks[DeckKey(PlayerId.P2, Side.FATE)]
+        for i in range(3):
+            card = L5RCard(id=f"P2-f{i}", name="F", side=Side.FATE, owner=PlayerId.P2)
+            state.cards_by_id[card.id] = card
+            deck.cards.append(card)
+        held = L5RCard(id="P2-h", name="Secret", side=Side.FATE, owner=PlayerId.P2)
+        state.cards_by_id["P2-h"] = held
+        state.zones[ZoneKey(PlayerId.P2, ZoneRole.HAND)].add(held)
+        session = EngineSession.start(state, PlayerId.P1)
+        field.render_snapshot(session.project(PlayerId.P1).table, PlayerId.P1)
+
+        # P1 reads the opponent's public counts through the projection...
+        assert field.deck_summary(DeckKey(PlayerId.P2, Side.FATE))[0] == 3
+        assert field.hand_count(PlayerId.P2) == 1
+        # ...but the held card's identity stays hidden — it comes back as a back, not its face.
+        hand = field.zone_render_cards(ZoneKey(PlayerId.P2, ZoneRole.HAND))
+        assert [type(card) for card in hand] == [HiddenFace]
 
 
 class TestRulesModeRender:

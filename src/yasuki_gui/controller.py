@@ -2,10 +2,10 @@ import tkinter as tk
 
 import yasuki_gui.config as gui_config
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import BATTLEFIELD, DeckKey, ZoneKey, ZoneRole
+from yasuki_core.engine.table import BATTLEFIELD, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import (
+    Event,
     MoveCard,
-    MoveDeckTop,
     ReorderHand,
     SetCardPos,
     SetCardPositions,
@@ -37,7 +37,6 @@ class FieldController:
         self._hotkeys: Hotkeys = DEFAULT_HOTKEYS
         self._hover_card_tag: str | None = None
         self._hover_zone_tag: str | None = None
-        self._hover_deck_tag: str | None = None
         self._context_menu = tk.Menu(None, tearoff=0)
         self._context_tag: str | None = None
         self._marquee_start: tuple[int, int] | None = None
@@ -105,7 +104,6 @@ class FieldController:
         tag = self.view.resolve_tag_at(e)
         self._hover_card_tag = tag if tag and tag.startswith("card:") else None
         self._hover_zone_tag = tag if tag and tag.startswith("zone:") else None
-        self._hover_deck_tag = tag if tag and tag.startswith("deck:") else None
 
     def _start_marquee(self, x: int, y: int) -> None:
         self._marquee_start = (x, y)
@@ -258,12 +256,6 @@ class FieldController:
                 )
             return
 
-        if tag.startswith("deck:"):
-            dv = self.view.decks.get(tag)
-            if dv is not None:
-                self.drag = Drag(kind=DragKind.DECK_ARMED, src_tag=tag, src_bbox=dv.bbox)
-            return
-
         if tag.startswith("zone:"):
             hv = self.view.hands.get(tag)
             if hv is not None:
@@ -294,9 +286,6 @@ class FieldController:
                 self._lift_hand_card_to_battlefield(e)
             else:
                 self._draw_hand_ghost(d.card, e.x, e.y)
-            return
-        if d.kind is DragKind.DECK_ARMED and d.src_tag and d.left_source(e.x, e.y):
-            self._draw_deck_top_to_battlefield(e)
             return
         if d.kind is DragKind.CARD and d.sprite_tag:
             sp = self.view.sprites.get(d.sprite_tag)
@@ -330,16 +319,6 @@ class FieldController:
             if sp:
                 sp.move_to(self.view, x0 + dx, y0 + dy)
 
-    def _draw_deck_top_to_battlefield(self, e: tk.Event) -> None:
-        key = self.view.key_for_tag(self.drag.src_tag)
-        if not isinstance(key, DeckKey):
-            self.drag = Drag()
-            return
-        events = self.view.dispatch(
-            MoveDeckTop(key, BATTLEFIELD, position=self._from_canvas(e.x, e.y))
-        )
-        self.drag = self._grab_moved_sprite(events)
-
     def _lift_hand_card_to_battlefield(self, e: tk.Event) -> None:
         self._clear_hand_ghost()
         card = self.drag.card
@@ -348,8 +327,8 @@ class FieldController:
         )
         self.drag = self._grab_moved_sprite(events)
 
-    def _grab_moved_sprite(self, events: list) -> Drag:
-        """Pick up the sprite a deck/hand drag-out just created so the gesture keeps dragging it."""
+    def _grab_moved_sprite(self, events: list[Event]) -> Drag:
+        """Pick up the sprite a hand drag-out just created so the gesture keeps dragging it."""
         for event in events:
             intent = event.intent
             if isinstance(intent, MoveCard) and intent.to == BATTLEFIELD:
@@ -393,7 +372,7 @@ class FieldController:
             return
         drop = hittest_resolve_drop_target(self.view, sp.x, sp.y)
         key = self.view.key_for_tag(drop) if drop else None
-        if isinstance(key, (ZoneKey, DeckKey)):
+        if isinstance(key, ZoneKey):
             self.view.dispatch(MoveCard(d.card.id, key))
             return
         pos = self._from_canvas(sp.x, sp.y)
@@ -404,12 +383,6 @@ class FieldController:
     def on_double_click(self, e: tk.Event) -> None:
         tag = self.view.resolve_tag_at(e)
         if not tag:
-            return
-        if tag.startswith("deck:"):
-            ctx = ActionContext(deck_tag=tag, event=e, owner=self._owner_of(tag))
-            act = ACTIONS["deck.draw"]
-            if act.when(self.view, ctx):
-                act.run(self.view, ctx)
             return
         if tag.startswith("zone:"):
             key = self.view.key_for_tag(tag)
@@ -457,23 +430,6 @@ class FieldController:
                 [
                     ACTIONS[a]
                     for a in ("zone.toggle_flip", "zone.fill", "zone.destroy", "zone.discard")
-                ],
-            )
-        elif tag.startswith("deck:"):
-            ctx = ActionContext(deck_tag=tag, event=e, owner=owner)
-            build_actions_menu(
-                self._context_menu,
-                self.view,
-                ctx,
-                [
-                    ACTIONS[a]
-                    for a in (
-                        "deck.draw",
-                        "deck.shuffle",
-                        "deck.flip_top",
-                        "deck.inspect",
-                        "deck.create_province",
-                    )
                 ],
             )
         self._popup(e)
@@ -539,19 +495,6 @@ class FieldController:
     def on_key(self, e: tk.Event) -> None:
         key = getattr(e, "keysym", "").lower()
         hk = self._hotkeys
-
-        if self._hover_deck_tag and key in {hk.draw, hk.shuffle, hk.flip, hk.inspect}:
-            ctx = ActionContext(
-                deck_tag=self._hover_deck_tag, event=e, owner=self._owner_of(self._hover_deck_tag)
-            )
-            action_id = {
-                hk.draw: "deck.draw",
-                hk.shuffle: "deck.shuffle",
-                hk.flip: "deck.flip_top",
-                hk.inspect: "deck.inspect",
-            }[key]
-            self._run_if_enabled(action_id, ctx)
-            return
 
         if self._hover_zone_tag and key in {hk.flip, hk.fill, hk.destroy, hk.invert}:
             ctx = ActionContext(

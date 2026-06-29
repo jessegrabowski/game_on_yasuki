@@ -1,9 +1,8 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_gui.services.actions import REGISTRY as ACTIONS, ActionContext
 from yasuki_gui.services.permissions import can_interact
-from yasuki_gui.tags import card_tag, deck_tag, zone_tag
-from yasuki_core.engine.table import DeckKey, ZoneRole
-from yasuki_core.game_pieces.constants import Side
+from yasuki_gui.tags import card_tag, zone_tag
+from yasuki_core.engine.table import ZoneRole
 
 
 class TestCanInteract:
@@ -21,20 +20,6 @@ class TestActionAffordance:
         opp = ActionContext(card_tag=card_tag("P2-SH"))
         assert ACTIONS["card.toggle_bow"].when(field, own) is True
         assert ACTIONS["card.toggle_bow"].when(field, opp) is False
-
-    def test_draw_enabled_for_own_deck_only(self, loaded):
-        field, _ = loaded
-        own = ActionContext(deck_tag=deck_tag(DeckKey(PlayerId.P1, Side.FATE)))
-        opp = ActionContext(deck_tag=deck_tag(DeckKey(PlayerId.P2, Side.FATE)))
-        assert ACTIONS["deck.draw"].when(field, own) is True
-        assert ACTIONS["deck.draw"].when(field, opp) is False
-
-    def test_create_province_only_on_dynasty_deck(self, loaded):
-        field, _ = loaded
-        dynasty = ActionContext(deck_tag=deck_tag(DeckKey(PlayerId.P1, Side.DYNASTY)))
-        fate = ActionContext(deck_tag=deck_tag(DeckKey(PlayerId.P1, Side.FATE)))
-        assert ACTIONS["deck.create_province"].when(field, dynasty) is True
-        assert ACTIONS["deck.create_province"].when(field, fate) is False
 
     def test_province_fill_enabled_for_own_province(self, loaded):
         field, state = loaded

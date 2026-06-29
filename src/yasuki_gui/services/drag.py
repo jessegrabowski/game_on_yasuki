@@ -9,7 +9,6 @@ class DragKind(Enum):
     NONE = auto()
     CARD = auto()
     HAND = auto()
-    DECK_ARMED = auto()
     ZONE_ARMED = auto()
 
 
