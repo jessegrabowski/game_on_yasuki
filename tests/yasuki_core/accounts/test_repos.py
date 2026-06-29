@@ -35,6 +35,18 @@ def test_set_display_name_updates_the_row(accounts_conn):
     assert users.set_display_name(accounts_conn, 999999, "Ghost") is None
 
 
+def test_set_avatar_stores_and_clears_the_spec(accounts_conn):
+    user = users.upsert_user(accounts_conn, "g", "e@example.com", True, "Ada")
+    spec = {
+        "card_id": "doji",
+        "image_path": "sets/x/doji.jpg",
+        "crop": {"left": 0.1, "top": 0.1, "right": 0.4, "bottom": 0.4},
+    }
+    assert users.set_avatar(accounts_conn, user["id"], spec)["avatar"] == spec
+    assert users.get_user(accounts_conn, user["id"])["avatar"] == spec
+    assert users.set_avatar(accounts_conn, user["id"], None)["avatar"] is None
+
+
 def test_get_user_returns_row_or_none(accounts_conn):
     created = users.upsert_user(accounts_conn, "g", "e@example.com", True, "E")
     assert users.get_user(accounts_conn, created["id"])["google_sub"] == "g"
