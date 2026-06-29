@@ -136,3 +136,17 @@ class TestDecisionSelection:
         _at(field, card_tag("P1-SH"))
         field._controller.on_press(DummyEventNamespace(x=sp.x, y=sp.y))
         assert field.selection == frozenset()
+
+
+class TestProvinceActivation:
+    def test_clicking_your_own_province_resolves_its_card(self, loaded):
+        field, state = loaded
+        province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+        expected = state.zones[province].cards[-1].id
+        resolved = field._controller._card_at(zone_tag(province), DummyEventNamespace(x=0, y=0))
+        assert resolved == expected
+
+    def test_clicking_the_opponents_province_resolves_nothing(self, loaded):
+        field, _ = loaded
+        tag = zone_tag(ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 0))
+        assert field._controller._card_at(tag, DummyEventNamespace(x=0, y=0)) is None

@@ -3,8 +3,13 @@ import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.intents import SetHonor
-from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold
-from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse, DiscardToHandSize
+from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold, Recruit
+from yasuki_core.engine.rules.decisions import (
+    ChoosePayment,
+    DecisionRequest,
+    DecisionResponse,
+    DiscardToHandSize,
+)
 from yasuki_core.engine.session import EngineSession
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
@@ -35,6 +40,8 @@ def _describe_decision(request: DecisionRequest) -> tuple[str, str]:
     unmapped decision so a new request type can't ship without its prompt."""
     if isinstance(request, DiscardToHandSize):
         return f"discard {request.count} card(s)", "Discard"
+    if isinstance(request, ChoosePayment):
+        return f"pay {request.amount} gold", "Pay"
     raise ValueError(f"no prompt defined for {type(request).__name__}")
 
 
@@ -254,11 +261,13 @@ def main() -> None:
         after_human_action()
 
     def on_card_activated(card_id: str) -> None:
+        # A board click invokes whatever action that card offers — produce gold (a battlefield
+        # producer) or recruit (a face-up province card).
         action = next(
             (
                 a
                 for a in runner.legal_actions()
-                if isinstance(a, ProduceGold) and a.card_id == card_id
+                if isinstance(a, ProduceGold | Recruit) and a.card_id == card_id
             ),
             None,
         )

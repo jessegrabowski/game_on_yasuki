@@ -176,20 +176,34 @@ class FieldController:
             self.view.toggle_selection(card_id)
 
     def _card_at(self, tag: str | None, e: tk.Event) -> str | None:
-        """The id of the card clicked — a battlefield sprite or one of your own hand cards."""
+        """The id of the card clicked — a battlefield sprite, one of your own hand cards, or the
+        card in one of your own provinces."""
         if not tag:
             return None
         if tag.startswith("card:"):
             return self.view.card_id_for_tag(tag)
         if tag.startswith("zone:"):
             hv = self.view.hands.get(tag)
-            if hv is None or hv.owner is not self.view.seat:
-                return None
-            idx = hv.index_at(e.x)
-            if idx is None or idx >= len(hv.cards):
-                return None
-            return hv.cards[idx].id
+            if hv is not None:
+                if hv.owner is not self.view.seat:
+                    return None
+                idx = hv.index_at(e.x)
+                if idx is None or idx >= len(hv.cards):
+                    return None
+                return hv.cards[idx].id
+            return self._province_card_at(tag)
         return None
+
+    def _province_card_at(self, tag: str) -> str | None:
+        """The id of the card in your own province ``tag``, or None if it is not your province or is
+        empty."""
+        key = self.view.key_for_tag(tag)
+        if not isinstance(key, ZoneKey) or key.role is not ZoneRole.PROVINCE:
+            return None
+        if key.owner is not self.view.seat:
+            return None
+        zv = self.view.zones.get(tag)
+        return zv.cards[-1].id if zv is not None and zv.cards else None
 
     def _activate_card_at(self, tag: str | None, e: tk.Event) -> None:
         """In rules mode, a click on a card invokes its ability (e.g. produce gold); the host
