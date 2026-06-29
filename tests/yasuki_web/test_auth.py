@@ -436,3 +436,12 @@ def test_admin_cannot_change_its_own_role(client, monkeypatch, accounts_conn, rs
         client.post(f"/api/admin/users/{me['id']}/role", json={"role": "user"}).status_code == 400
     )
     assert users.get_user(accounts_conn, me["id"])["role"] == "admin"
+
+
+def test_safe_next_allows_same_site_paths_and_rejects_open_redirects():
+    assert auth._safe_next("/lobby") == "/lobby"
+    assert auth._safe_next("/deck_builder/?x=1") == "/deck_builder/?x=1"
+    assert auth._safe_next("//evil.com") is None  # protocol-relative
+    assert auth._safe_next("https://evil.com") is None  # absolute external URL
+    assert auth._safe_next("evil") is None  # not an absolute path
+    assert auth._safe_next(None) is None

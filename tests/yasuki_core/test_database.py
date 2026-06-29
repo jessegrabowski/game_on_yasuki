@@ -3,6 +3,7 @@ import pytest
 
 from yasuki_core.database import (
     _is_private_dsn,
+    apply_sslmode,
     mask_dsn,
     search_cards,
     get_card_by_id,
@@ -588,3 +589,29 @@ class TestPrivateDsnDetection:
     )
     def test_mask_dsn(self, dsn, expected):
         assert mask_dsn(dsn) == expected
+
+
+class TestApplySslmode:
+    PUBLIC = "postgresql://user:pass@roundhouse.proxy.rlwy.net:5432/railway"
+
+    def test_private_host_is_left_alone(self):
+        dsn = "postgresql://localhost/yasuki"
+        assert apply_sslmode(dsn) == dsn
+
+    def test_an_explicit_sslmode_is_left_alone(self):
+        dsn = "postgresql://user:pass@host.example.com/db?sslmode=disable"
+        assert apply_sslmode(dsn) == dsn
+
+    def test_public_host_is_forced_to_require_tls(self, monkeypatch):
+        monkeypatch.delenv("YASUKI_DB_SSL_ROOT_CERT", raising=False)
+        assert apply_sslmode(self.PUBLIC) == self.PUBLIC + "?sslmode=require"
+
+    def test_existing_query_string_appends_with_ampersand(self, monkeypatch):
+        monkeypatch.delenv("YASUKI_DB_SSL_ROOT_CERT", raising=False)
+        dsn = self.PUBLIC + "?connect_timeout=5"
+        assert apply_sslmode(dsn) == dsn + "&sslmode=require"
+
+    def test_public_host_verifies_full_when_a_ca_bundle_is_set(self, monkeypatch):
+        monkeypatch.setenv("YASUKI_DB_SSL_ROOT_CERT", "/etc/ssl/ca.pem")
+        expected = self.PUBLIC + "?sslmode=verify-full&sslrootcert=/etc/ssl/ca.pem"
+        assert apply_sslmode(self.PUBLIC) == expected
