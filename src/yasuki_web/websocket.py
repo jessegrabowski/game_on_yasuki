@@ -26,8 +26,8 @@ from yasuki_web.game_log import describe_intent
 from yasuki_web.rooms import rooms
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState
-from yasuki_core.engine.intents import Intent, IntentOp, Event, SearchDeck
+from yasuki_core.engine.table import TableState, BoardPos
+from yasuki_core.engine.intents import Intent, IntentOp, Event, SearchDeck, SpawnCard
 from yasuki_core.engine.action_log import (
     ActionLog,
     InitialRecord,
@@ -37,9 +37,13 @@ from yasuki_core.engine.action_log import (
 )
 from yasuki_core.engine.redaction import redact
 from yasuki_core.engine.setup import setup_seat, flip_second_player_stronghold
-from yasuki_core.game_pieces.factory import resolve_decklist
+from yasuki_core.game_pieces.factory import (
+    resolve_decklist,
+    build_token_templates,
+    build_token_card,
+)
 from yasuki_core.decklist import parse_deck_yaml
-from yasuki_core.database import get_cards_by_names
+from yasuki_core.database import get_cards_by_names, get_creates_for_cards, get_card_by_id
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -93,6 +97,8 @@ class GameRoom:
         self.state = TableState.empty_two_seat()
         self.action_log = ActionLog(initial=InitialRecord.from_state(self.state))
         self._spawn_count = 0
+        # Display name per creatable-token id, for the snapshot's "Create" menu; fixed after setup.
+        self._token_names: dict[str, str] = {}
         # Parsed decklists awaiting setup, keyed by seat.
         self.pending_decks: dict[PlayerId, dict] = {}
         self.setup_done = False
@@ -199,13 +205,30 @@ class GameRoom:
             # one.
             self._spawn_count += 1
             envelope = envelope.model_copy(update={"card_id": f"spawn-{self._spawn_count}"})
-        try:
-            intent = intent_from_envelope(envelope)
-        except (KeyError, ValueError, TypeError):
-            await ws.send_json(
-                ServerError(room=self.room_id, message="Invalid intent", debug=True).model_dump()
+        if envelope.op is IntentOp.SPAWN_CARD and envelope.print_card_id:
+            # A search-dialog spawn names a database card. The pure intent layer cannot touch the
+            # database, so resolve it here and carry the built card, so replay stays database-free.
+            record = await asyncio.to_thread(get_card_by_id, envelope.print_card_id)
+            if record is None or not envelope.position:
+                await ws.send_json(
+                    ServerError(room=self.room_id, message="Unknown card", debug=True).model_dump()
+                )
+                return
+            intent = SpawnCard(
+                card_id=envelope.card_id,
+                position=BoardPos(*envelope.position),
+                card=build_token_card(record),
             )
-            return
+        else:
+            try:
+                intent = intent_from_envelope(envelope)
+            except (KeyError, ValueError, TypeError):
+                await ws.send_json(
+                    ServerError(
+                        room=self.room_id, message="Invalid intent", debug=True
+                    ).model_dump()
+                )
+                return
 
         events = apply_and_log(self.state, self.action_log, seat, intent, ts=time.time())
         if not events:
@@ -340,8 +363,14 @@ class GameRoom:
             }
         )
         records = await asyncio.to_thread(get_cards_by_names, names)
+        # One relational pull of every token the loaded cards can create, so spawning a token needs
+        # no live database call — the templates live on the table for the rest of the game.
+        card_ids = [record["card_id"] for record in records]
+        creates_map, token_records = await asyncio.to_thread(get_creates_for_cards, card_ids)
+        self.state.creatable_tokens = build_token_templates(token_records)
+        self._token_names = {tid: tpl.name for tid, tpl in self.state.creatable_tokens.items()}
         for seat, parsed in self.pending_decks.items():
-            resolved = resolve_decklist(parsed, records, seat)
+            resolved = resolve_decklist(parsed, records, seat, creates_map)
             setup_seat(
                 self.state,
                 seat,
@@ -359,7 +388,7 @@ class GameRoom:
 
     async def _send_snapshot(self, ws: WebSocket, seat: PlayerId):
         """Send one seated player its own redacted `SNAPSHOT`."""
-        view = serialize_snapshot(redact(self.state, seat))
+        view = serialize_snapshot(redact(self.state, seat), self._token_names)
         await ws.send_json(ServerSnapshot(room=self.room_id, snapshot=view).model_dump())
 
     async def broadcast_snapshots(self):

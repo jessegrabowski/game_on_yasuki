@@ -1,4 +1,4 @@
-from pathlib import Path
+from dataclasses import replace
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
@@ -195,18 +195,24 @@ def create_province(state: TableState, seat: PlayerId) -> ZoneKey:
     return key
 
 
-def spawn_token(
-    state: TableState, card_id: str, name: str, side: Side, image: str | None, position: BoardPos
-) -> L5RCard:
-    """Mint a public face-up token onto the battlefield at ``position``."""
-    card = L5RCard(
-        id=card_id,
-        name=name,
-        side=side,
+def spawn_token(state: TableState, new_id: str, template: L5RCard, position: BoardPos) -> L5RCard:
+    """Place a fresh public, face-up token onto the battlefield at ``position``.
+
+    The token is a copy of ``template`` (a full card, so it carries the template's type, stats,
+    keywords, and text) under a new id, stripped of any per-instance state and marked a token.
+    """
+    card = replace(
+        template,
+        id=new_id,
         owner=None,
-        face_up=True,
-        image_front=Path(image) if image else None,
         is_token=True,
+        face_up=True,
+        bowed=False,
+        inverted=False,
+        shown=False,
+        peekers=frozenset(),
+        showing_back=False,
+        note=None,
     )
     state.cards_by_id[card.id] = card
     state.battlefield.add(card)

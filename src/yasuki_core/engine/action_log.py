@@ -164,6 +164,9 @@ class InitialRecord:
         The shared battlefield's cards.
     positions : dict mapping str to BoardPos
         Battlefield card positions, keyed by card id.
+    creatable_tokens : dict mapping str to L5RCard
+        Token templates the loaded decks can create, keyed by token card id, so a replayed token
+        spawn resolves against the same templates without a database call.
     setup_seeds : dict mapping str to int
         Named RNG seeds used during setup that no logged intent carries.
     """
@@ -173,6 +176,7 @@ class InitialRecord:
     zones: dict[ZoneKey, list[L5RCard]] = field(default_factory=dict)
     battlefield: list[L5RCard] = field(default_factory=list)
     positions: dict[str, BoardPos] = field(default_factory=dict)
+    creatable_tokens: dict[str, L5RCard] = field(default_factory=dict)
     setup_seeds: dict[str, int] = field(default_factory=dict)
 
     @classmethod
@@ -199,6 +203,7 @@ class InitialRecord:
             },
             battlefield=[replace(card) for card in state.battlefield.cards],
             positions=dict(state.positions),
+            creatable_tokens={tid: replace(card) for tid, card in state.creatable_tokens.items()},
             setup_seeds=dict(setup_seeds or {}),
         )
 
@@ -287,6 +292,7 @@ def build_initial_state(initial: InitialRecord) -> TableState:
         zone.cards = _restore_cards(state, cards)
     state.battlefield.cards = _restore_cards(state, initial.battlefield)
     state.positions = dict(initial.positions)
+    state.creatable_tokens = {tid: replace(card) for tid, card in initial.creatable_tokens.items()}
     return state
 
 
@@ -509,9 +515,9 @@ def encode_intent(intent: Intent) -> dict:
         case IntentOp.SPAWN_CARD:
             payload |= {
                 "card_id": intent.card_id,
-                "name": intent.name,
-                "side": intent.side.value,
-                "image": intent.image,
+                "token_id": intent.token_id,
+                "source_card_id": intent.source_card_id,
+                "card": _encode_card(intent.card) if intent.card is not None else None,
                 "position": [intent.position.x, intent.position.y],
             }
         case IntentOp.REMOVE_CARD:
@@ -586,12 +592,13 @@ def decode_intent(payload: dict) -> Intent:
         case IntentOp.SET_HONOR:
             return SetHonor(delta=payload["delta"], value=payload["value"])
         case IntentOp.SPAWN_CARD:
+            encoded_card = payload.get("card")
             return SpawnCard(
-                payload["card_id"],
-                payload["name"],
-                Side(payload["side"]),
-                payload["image"],
-                BoardPos(*payload["position"]),
+                card_id=payload["card_id"],
+                position=BoardPos(*payload["position"]),
+                token_id=payload.get("token_id"),
+                source_card_id=payload.get("source_card_id"),
+                card=_decode_card(encoded_card) if encoded_card else None,
             )
         case IntentOp.REMOVE_CARD:
             return RemoveCard(payload["card_id"])
@@ -668,6 +675,9 @@ def _encode_initial(initial: InitialRecord) -> dict:
         ],
         "battlefield": [_encode_card(card) for card in initial.battlefield],
         "positions": {card_id: [pos.x, pos.y] for card_id, pos in initial.positions.items()},
+        "creatable_tokens": {
+            tid: _encode_card(card) for tid, card in initial.creatable_tokens.items()
+        },
         "setup_seeds": dict(initial.setup_seeds),
     }
 
@@ -684,12 +694,16 @@ def _decode_initial(payload: dict) -> InitialRecord:
     }
     battlefield = [_decode_card(card) for card in payload["battlefield"]]
     positions = {card_id: BoardPos(*xy) for card_id, xy in payload["positions"].items()}
+    creatable_tokens = {
+        tid: _decode_card(card) for tid, card in payload.get("creatable_tokens", {}).items()
+    }
     return InitialRecord(
         seats=seats,
         decklists=decklists,
         zones=zones,
         battlefield=battlefield,
         positions=positions,
+        creatable_tokens=creatable_tokens,
         setup_seeds=dict(payload["setup_seeds"]),
     )
 

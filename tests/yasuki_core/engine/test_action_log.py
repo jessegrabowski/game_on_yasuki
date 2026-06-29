@@ -37,6 +37,7 @@ from yasuki_core.engine.intents import (
     apply_intent,
 )
 from yasuki_core.game_pieces.constants import Side, Element, Timing
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyPersonality, DynastyHolding
 from yasuki_core.game_pieces.fate import FateCard, FateAction, FateAttachment, FateRing
 from yasuki_core.game_pieces.pregame import StrongholdCard
@@ -265,14 +266,22 @@ def test_replay_reproduces_spawned_and_removed_cards():
         state,
         log,
         PlayerId.P1,
-        SpawnCard("t1", "A", Side.FATE, "a.jpg", BoardPos(1.0, 2.0)),
+        SpawnCard(
+            card_id="t1",
+            card=L5RCard(id="src-a", name="A", side=Side.FATE),
+            position=BoardPos(1.0, 2.0),
+        ),
         ts=1.0,
     )
     apply_and_log(
         state,
         log,
         PlayerId.P2,
-        SpawnCard("t2", "B", Side.DYNASTY, None, BoardPos(3.0, 4.0)),
+        SpawnCard(
+            card_id="t2",
+            card=L5RCard(id="src-b", name="B", side=Side.DYNASTY),
+            position=BoardPos(3.0, 4.0),
+        ),
         ts=2.0,
     )
     apply_and_log(state, log, PlayerId.P1, RemoveCard("t1"), ts=3.0)
@@ -373,8 +382,13 @@ def test_session_entries_ride_the_tape_but_are_skipped_by_replay():
         CreateProvince(),
         SetHonor(delta=3),
         SetHonor(value=-1),
-        SpawnCard("tok1", "Token", Side.DYNASTY, "sets/x/a.jpg", BoardPos(5.0, 6.0)),
-        SpawnCard("tok2", "Token", Side.FATE, None, BoardPos(0.0, 0.0)),
+        SpawnCard(
+            card_id="tok1",
+            card=L5RCard(id="src", name="Token", side=Side.DYNASTY),
+            position=BoardPos(5.0, 6.0),
+        ),
+        SpawnCard(card_id="tok2", token_id="some_token", position=BoardPos(0.0, 0.0)),
+        SpawnCard(card_id="tok3", source_card_id="c1", position=BoardPos(7.0, 8.0)),
         RemoveCard("tok1"),
     ],
 )
@@ -393,6 +407,44 @@ def test_setup_seeds_survive_serialization():
     restored = action_log_from_dict(action_log_to_dict(ActionLog(initial=initial)))
 
     assert restored.initial.setup_seeds == {"opening_shuffle": 99}
+
+
+def test_creatable_tokens_survive_serialization():
+    # The initial record carries the deck's creatable-token templates, so a replayed token spawn
+    # needs no database — the templates round-trip through the tape intact.
+    state = _start_state()
+    state.creatable_tokens["ghul"] = DynastyPersonality(
+        id="ghul", name="Ghul", side=Side.DYNASTY, force=2, chi=2, keywords=("Undead",)
+    )
+
+    restored = action_log_from_dict(
+        action_log_to_dict(ActionLog(initial=InitialRecord.from_state(state)))
+    )
+
+    token = restored.initial.creatable_tokens["ghul"]
+    assert isinstance(token, DynastyPersonality)
+    assert token.force == 2 and token.keywords == ("Undead",)
+
+
+def test_replay_reproduces_a_creatable_token_spawn():
+    state = _start_state()
+    state.creatable_tokens["ghul"] = DynastyPersonality(
+        id="ghul", name="Ghul", side=Side.DYNASTY, force=2, chi=2
+    )
+    log = ActionLog(initial=InitialRecord.from_state(state))
+    apply_and_log(
+        state,
+        log,
+        PlayerId.P1,
+        SpawnCard(card_id="spawn-1", token_id="ghul", position=BoardPos(1.0, 2.0)),
+        ts=1.0,
+    )
+
+    rebuilt = log.replay()
+
+    assert rebuilt == state
+    spawned = rebuilt.cards_by_id["spawn-1"]
+    assert isinstance(spawned, DynastyPersonality) and spawned.force == 2 and spawned.is_token
 
 
 def test_card_subclass_fields_survive_serialization():

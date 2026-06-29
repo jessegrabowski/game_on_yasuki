@@ -191,8 +191,30 @@ def test_give_control_names_the_battlefield_card():
 def test_spawn_links_the_new_card():
     table = TableState.empty_two_seat()
     _board_card(table, "tok1", "Token")
-    intent = SpawnCard("tok1", "Token", Side.DYNASTY, None, BoardPos(0.0, 0.0))
+    intent = SpawnCard(
+        card_id="tok1",
+        card=L5RCard(id="src", name="Token", side=Side.DYNASTY),
+        position=BoardPos(0.0, 0.0),
+    )
     assert _describe(table, intent, ("tok1",))[-1] == {"card_id": "tok1", "name": "Token"}
+
+
+def test_duplicate_links_the_new_card():
+    table = TableState.empty_two_seat()
+    _board_card(table, "tok1", "Hida Kisada")
+    intent = SpawnCard(card_id="tok1", source_card_id="orig", position=BoardPos(0.0, 0.0))
+    segments = _describe(table, intent, ("tok1",))
+    assert {"text": "duplicated "} in segments
+    assert segments[-1] == {"card_id": "tok1", "name": "Hida Kisada"}
+
+
+def test_create_token_links_the_new_card():
+    table = TableState.empty_two_seat()
+    _board_card(table, "tok1", "Jackal Pack")
+    intent = SpawnCard(card_id="tok1", token_id="jackal_pack", position=BoardPos(0.0, 0.0))
+    segments = _describe(table, intent, ("tok1",))
+    assert {"text": "created "} in segments
+    assert segments[-1] == {"card_id": "tok1", "name": "Jackal Pack"}
 
 
 def test_move_to_battlefield_links_card_and_names_destination():

@@ -37,7 +37,7 @@ from yasuki_core.engine.intents import (
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyCard
+from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyPersonality
 from yasuki_core.game_pieces.fate import FateCard
 
 
@@ -1124,7 +1124,11 @@ def test_rejected_intent_leaves_state_unchanged(intent):
 
 def test_spawn_card_creates_a_public_face_up_battlefield_card():
     table = TableState.empty_two_seat()
-    intent = SpawnCard("tok1", "Bushi Token", Side.DYNASTY, "sets/x/a.jpg", BoardPos(5.0, 6.0))
+    intent = SpawnCard(
+        card_id="tok1",
+        card=L5RCard(id="src", name="Bushi Token", side=Side.DYNASTY),
+        position=BoardPos(5.0, 6.0),
+    )
 
     events = apply_intent(table, PlayerId.P1, intent)
 
@@ -1137,9 +1141,85 @@ def test_spawn_card_creates_a_public_face_up_battlefield_card():
     table.validate()
 
 
+def test_spawn_card_with_token_id_copies_the_full_template():
+    table = TableState.empty_two_seat()
+    table.creatable_tokens["ghul"] = DynastyPersonality(
+        id="ghul",
+        name="Ghul",
+        side=Side.DYNASTY,
+        force=2,
+        chi=2,
+        personal_honor=0,
+        keywords=("Shadowlands", "Ghul", "Undead"),
+    )
+    intent = SpawnCard(card_id="spawn-1", token_id="ghul", position=BoardPos(1.0, 2.0))
+
+    events = apply_intent(table, PlayerId.P1, intent)
+
+    card = table.cards_by_id["spawn-1"]
+    assert events[0].cards == ("spawn-1",)
+    assert card.is_token and card.owner is None and card.face_up is True
+    # The spawned token is the full typed template, not a name/image stub.
+    assert isinstance(card, DynastyPersonality)
+    assert (card.force, card.chi) == (2, 2)
+    assert card.keywords == ("Shadowlands", "Ghul", "Undead")
+    assert table.positions["spawn-1"] == BoardPos(1.0, 2.0)
+    table.validate()
+
+
+def test_spawn_card_with_unknown_token_id_is_rejected():
+    table = TableState.empty_two_seat()
+    intent = SpawnCard(card_id="spawn-1", token_id="missing", position=BoardPos(0.0, 0.0))
+    assert apply_intent(table, PlayerId.P1, intent) == []
+    assert "spawn-1" not in table.cards_by_id
+
+
+def test_spawn_card_with_source_card_id_duplicates_a_full_in_play_card():
+    table = TableState.empty_two_seat()
+    source = DynastyPersonality(
+        id="hero",
+        name="Hero",
+        side=Side.DYNASTY,
+        force=3,
+        chi=2,
+        keywords=("Lion",),
+        owner=PlayerId.P1,
+        face_up=True,
+    )
+    table.cards_by_id["hero"] = source
+    table.battlefield.cards.append(source)
+    table.positions["hero"] = BoardPos(0.0, 0.0)
+    intent = SpawnCard(card_id="spawn-1", source_card_id="hero", position=BoardPos(5.0, 6.0))
+
+    apply_intent(table, PlayerId.P2, intent)  # a public card is duplicable by either seat
+
+    copy = table.cards_by_id["spawn-1"]
+    assert isinstance(copy, DynastyPersonality)
+    assert (copy.force, copy.chi) == (3, 2) and copy.keywords == ("Lion",)
+    assert copy.is_token and copy.owner is None and copy.id != source.id
+    table.validate()
+
+
+def test_spawn_card_duplicating_a_non_public_source_is_rejected():
+    table = TableState.empty_two_seat()
+    hidden = DynastyPersonality(
+        id="facedown", name="Hidden", side=Side.DYNASTY, owner=PlayerId.P1, face_up=False
+    )
+    table.cards_by_id["facedown"] = hidden
+    table.battlefield.cards.append(hidden)
+    table.positions["facedown"] = BoardPos(0.0, 0.0)
+    intent = SpawnCard(card_id="spawn-1", source_card_id="facedown", position=BoardPos(1.0, 1.0))
+    assert apply_intent(table, PlayerId.P1, intent) == []
+    assert "spawn-1" not in table.cards_by_id
+
+
 def test_spawn_card_rejects_a_duplicate_id():
     table = TableState.empty_two_seat()
-    intent = SpawnCard("tok1", "X", Side.FATE, None, BoardPos(0.0, 0.0))
+    intent = SpawnCard(
+        card_id="tok1",
+        card=L5RCard(id="src", name="X", side=Side.FATE),
+        position=BoardPos(0.0, 0.0),
+    )
     apply_intent(table, PlayerId.P1, intent)
 
     assert apply_intent(table, PlayerId.P1, intent) == []
@@ -1147,7 +1227,15 @@ def test_spawn_card_rejects_a_duplicate_id():
 
 def test_remove_card_takes_a_public_card_off_the_table():
     table = TableState.empty_two_seat()
-    apply_intent(table, PlayerId.P1, SpawnCard("tok1", "X", Side.FATE, None, BoardPos(0.0, 0.0)))
+    apply_intent(
+        table,
+        PlayerId.P1,
+        SpawnCard(
+            card_id="tok1",
+            card=L5RCard(id="src", name="X", side=Side.FATE),
+            position=BoardPos(0.0, 0.0),
+        ),
+    )
 
     events = apply_intent(table, PlayerId.P2, RemoveCard("tok1"))  # public → either seat may remove
 

@@ -157,7 +157,13 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
         case IntentOp.GIVE_CONTROL:
             return [lead, {"text": "gave control of "}, _card_segment(state, intent.card_id)]
         case IntentOp.SPAWN_CARD:
-            return [lead, {"text": "spawned "}, _card_segment(state, intent.card_id)]
+            if intent.token_id:
+                verb = "created "
+            elif intent.source_card_id:
+                verb = "duplicated "
+            else:
+                verb = "spawned "
+            return [lead, {"text": verb}, _card_segment(state, intent.card_id)]
         case IntentOp.REMOVE_CARD:
             return [lead, {"text": "removed a card"}]
         case _:

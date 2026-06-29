@@ -3,7 +3,7 @@
 // the board. Single-click previews a card, double-click (or the Create button) spawns it. Built with
 // createElement (no innerHTML, no inline styles) so it stays CSP-safe under the page's style-src 'self'.
 
-import { node, spawnMessage } from './board.js';
+import { node, intentMessage } from './board.js';
 
 const PAGE = 40;
 const DEBOUNCE_MS = 200;
@@ -11,15 +11,6 @@ const SCROLL_MARGIN_PX = 60; // load the next page once the list scrolls within 
 // The query starts at t:proxy (most tokens are proxies) but is editable, and the last query — edited
 // or cleared — is remembered across opens within the session, since the next token is often the same.
 let lastQuery = 't:proxy';
-
-// A token's side from the card's decks, so a flipped token shows the right back; pre-game cards
-// (strongholds, senseis) have no Fate/Dynasty deck and spawn as a stronghold.
-export function tokenSide(card) {
-  const decks = card.decks || [];
-  if (decks.includes('Fate')) return 'FATE';
-  if (decks.includes('Dynasty')) return 'DYNASTY';
-  return 'STRONGHOLD';
-}
 
 // include:all surfaces token/proxy/non-deck cards (e.g. t:proxy) the default search hides.
 const withTokens = (query) => (query ? `${query} include:all` : 'include:all');
@@ -77,13 +68,12 @@ export function openTokenSearch({ imgBase, position, send, searchPage = fetchPag
   body.append(list, preview);
 
   const spawn = (card) => {
+    // The server resolves the database card and copies it as a full first-class token.
     send(
-      spawnMessage({
-        name: card.name,
-        img: card.image_path ?? null,
-        side: tokenSide(card),
-        x: position.x,
-        y: position.y,
+      intentMessage({
+        op: 'SPAWN_CARD',
+        print_card_id: card.card_id,
+        position: [position.x, position.y],
       }),
     );
     close();

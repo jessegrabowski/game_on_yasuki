@@ -57,11 +57,13 @@ class IntentEnvelope(BaseModel):
     value: int | None = None
     # A card's free-text note (SET_NOTE); bounded so a note stays a short label, not a payload.
     text: str | None = Field(None, max_length=200)
-    # SPAWN_CARD targets: a brand-new public card's print. The server assigns the card_id (the client
-    # leaves it unset), so a replay reproduces the same card.
-    name: str | None = Field(None, max_length=120)
-    img: str | None = Field(None, max_length=200)
-    side: Literal["FATE", "DYNASTY", "STRONGHOLD"] | None = None
+    # SPAWN_CARD names one source to copy onto the battlefield (the server mints the card_id, so the
+    # client leaves it unset). token_id: a per-card "Create" spawn of a pre-loaded creatable token.
+    # source_card_id: an in-play card to duplicate. print_card_id: a database card the search dialog
+    # picked, which the server resolves to a full card.
+    token_id: str | None = Field(None, max_length=64)
+    source_card_id: str | None = Field(None, max_length=64)
+    print_card_id: str | None = Field(None, max_length=64)
 
 
 def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
@@ -86,9 +88,8 @@ def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
             "delta": envelope.delta,
             "value": envelope.value,
             "text": envelope.text,
-            "name": envelope.name,
-            "image": envelope.img,
-            "side": envelope.side,
+            "token_id": envelope.token_id,
+            "source_card_id": envelope.source_card_id,
         }
     )
 

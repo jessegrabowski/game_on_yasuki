@@ -2,7 +2,7 @@ import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 
 import { resetDOM } from '../deck_builder/dom-shim.js';
-import { openTokenSearch, tokenSide } from '../../../src/yasuki_web/static/site/token-search.js';
+import { openTokenSearch } from '../../../src/yasuki_web/static/site/token-search.js';
 
 beforeEach(() => {
   resetDOM();
@@ -10,15 +10,6 @@ beforeEach(() => {
 
 const flush = () => new Promise((resolve) => setTimeout(resolve));
 const cardRow = (id, name, decks) => ({ card_id: id, name, image_path: `sets/${id}.jpg`, decks });
-
-describe('tokenSide', () => {
-  it('maps a card to its spawn side from its decks, defaulting to a stronghold', () => {
-    assert.equal(tokenSide({ decks: ['Fate'] }), 'FATE');
-    assert.equal(tokenSide({ decks: ['Dynasty'] }), 'DYNASTY');
-    assert.equal(tokenSide({ decks: ['Pre-Game'] }), 'STRONGHOLD');
-    assert.equal(tokenSide({}), 'STRONGHOLD');
-  });
-});
 
 describe('openTokenSearch', () => {
   const open = (overrides = {}) => {
@@ -71,13 +62,7 @@ describe('openTokenSearch', () => {
     assert.deepEqual(sent, [
       {
         type: 'INTENT',
-        intent: {
-          op: 'SPAWN_CARD',
-          name: 'Hida Kisada',
-          img: 'sets/c1.jpg',
-          side: 'DYNASTY',
-          position: [12, 34],
-        },
+        intent: { op: 'SPAWN_CARD', print_card_id: 'c1', position: [12, 34] },
       },
     ]);
   });
@@ -91,13 +76,7 @@ describe('openTokenSearch', () => {
     assert.deepEqual(sent, [
       {
         type: 'INTENT',
-        intent: {
-          op: 'SPAWN_CARD',
-          name: 'Ambush',
-          img: 'sets/c2.jpg',
-          side: 'FATE',
-          position: [12, 34],
-        },
+        intent: { op: 'SPAWN_CARD', print_card_id: 'c2', position: [12, 34] },
       },
     ]);
   });
