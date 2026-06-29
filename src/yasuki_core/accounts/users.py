@@ -40,7 +40,8 @@ def upsert_user(
     Returns
     -------
     user : dict
-        The row, with keys ``id``, ``google_sub``, ``display_name``, ``avatar_url``, ``is_banned``.
+        The row, with keys ``id``, ``google_sub``, ``display_name``, ``avatar_url``, ``is_banned``,
+        plus ``created`` — True only on the first sign-in, so the caller can onboard a new account.
     """
     with conn.cursor() as cur:
         cur.execute(
@@ -54,9 +55,20 @@ def upsert_user(
                 avatar_url = EXCLUDED.avatar_url,
                 last_login_at = now(),
                 updated_at = now()
-            RETURNING {_USER_COLUMNS}
+            RETURNING {_USER_COLUMNS}, (xmax = 0) AS created
             """,
             (google_sub, email_blind_index(email), email_verified, display_name, avatar_url),
+        )
+        return cur.fetchone()
+
+
+def set_display_name(conn: psycopg.Connection, user_id: int, display_name: str) -> dict | None:
+    """Update a user's display name, returning the refreshed row, or None if no such user."""
+    with conn.cursor() as cur:
+        cur.execute(
+            f"UPDATE users SET display_name = %s, updated_at = now() WHERE id = %s "
+            f"RETURNING {_USER_COLUMNS}",
+            (display_name, user_id),
         )
         return cur.fetchone()
 
