@@ -2155,10 +2155,40 @@ describe('initBoardInteractions — context menu', () => {
     assert.ok(x > 0 && x < 1 && y > 0 && y < 1);
   });
 
-  it("hides Create items on an opponent's card and on a card that creates nothing", () => {
+  // The Realms Merge is an Event that creates its tokens from the province, never the battlefield.
+  const REALMS_MERGE = JSON.stringify([
+    { id: 'oni_hatchling', name: 'Oni Hatchling' },
+    { id: 'zombie', name: 'Zombie' },
+  ]);
+
+  it('offers Create on a province creator (The Realms Merge) and lands the token on the board', () => {
+    const province = { dataset: { owner: 'P1', idx: '0' } };
+    const cardEl = fakeCard('c1', { owner: 'P1', creates: REALMS_MERGE, onBattlefield: false, province });
+    root._emit('contextmenu', rightClick({ card: cardEl }));
+    assert.ok(menuLabels(root).includes('Create Oni Hatchling'));
+    assert.ok(menuLabels(root).includes('Create Zombie'));
+    clickMenuItem(root, 'Create Zombie');
+    const msg = sent.at(-1).intent;
+    assert.equal(msg.op, 'SPAWN_CARD');
+    assert.equal(msg.token_id, 'zombie');
+    // It lands at the hand-play drop point — the viewer's lower half (y > 0.5) — not the corner
+    // droppedPosition gives a card with no board geometry. (Same check as the hand double-click test;
+    // exact geometry is an e2e concern.)
+    const [x, y] = msg.position;
+    assert.ok(x > 0 && x < 1 && y > 0.5 && y < 1);
+  });
+
+  it('hides Create items on an opponent card, a non-creator, a hand card, and a discard card', () => {
     root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P2', creates: CREATES }) }));
     assert.ok(!menuLabels(root).some((l) => l.startsWith('Create ')));
     root._emit('contextmenu', rightClick({ card: fakeCard('c2', { owner: 'P1', creates: '' }) }));
+    assert.ok(!menuLabels(root).some((l) => l.startsWith('Create ')));
+    // A creator still in hand is played first, never created from; one in a public discard is spent.
+    const hand = fakeCard('c3', { owner: 'P1', creates: CREATES, onBattlefield: false, inHand: true });
+    root._emit('contextmenu', rightClick({ card: hand }));
+    assert.ok(!menuLabels(root).some((l) => l.startsWith('Create ')));
+    const discard = fakeCard('c4', { owner: 'P1', creates: CREATES, onBattlefield: false, inDiscard: true });
+    root._emit('contextmenu', rightClick({ card: discard }));
     assert.ok(!menuLabels(root).some((l) => l.startsWith('Create ')));
   });
 

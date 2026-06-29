@@ -106,8 +106,9 @@ def serialize_snapshot(snapshot: ViewSnapshot, token_names: dict[str, str] | Non
     serializer cannot leak an identity it was not handed. Zone and deck keys are flattened to stable
     strings (``"P1:province:0"``, ``"P2:fate"``).
 
-    ``token_names`` maps a creatable-token card id to its display name; when given, battlefield cards
-    that create tokens carry a ``creates`` list for the per-card "Create" menu.
+    ``token_names`` maps a creatable-token card id to its display name; when given, a battlefield or
+    province card that creates tokens carries a ``creates`` list for the per-card "Create" menu (a
+    face-down province card is a ``HiddenCard`` stub, so its creations stay concealed).
     """
     return {
         "seq": snapshot.seq,
@@ -123,7 +124,9 @@ def serialize_snapshot(snapshot: ViewSnapshot, token_names: dict[str, str] | Non
             for seat, view in snapshot.seats.items()
         },
         "zones": {
-            _zone_key_str(key): [_card(card, snapshot.peeked_ids) for card in zone.cards]
+            _zone_key_str(key): [
+                _card(card, snapshot.peeked_ids, token_names) for card in zone.cards
+            ]
             for key, zone in snapshot.zones.items()
         },
         "decks": {
