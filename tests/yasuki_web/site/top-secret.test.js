@@ -376,6 +376,7 @@ const flush = () => new Promise((resolve) => setTimeout(resolve, 0));
 function installRouter(overrides = {}) {
   const routes = {
     'GET /api/config': () => ok({ image_base_url: '/images' }),
+    'GET /api/me': () => ok({ user: { display_name: 'Ada' } }),
     'GET /api/rooms': () => ok({ rooms: [makeRoom({ id: 'r1', name: 'Crab Table' })] }),
     'POST /api/rooms': () => ok({ room_id: 'r2', delete_token: 'tok', websocket_url: '/ws/r2' }),
     ...overrides,
@@ -389,7 +390,6 @@ async function joinedRoom(overrides = {}) {
   installRouter(overrides);
   init();
   await flush();
-  document.getElementById('playerName').value = 'Ada';
   document.getElementById('roomList')._emit('click', { target: { dataset: { roomId: 'r1' } } });
   const ws = FakeWebSocket.instances.at(-1);
   ws.accept();
@@ -736,7 +736,6 @@ describe('init (room client wiring)', () => {
     installRouter();
     init();
     await flush();
-    document.getElementById('playerName').value = 'Ada';
     document.getElementById('createForm')._emit('submit', { preventDefault() {} });
     await flush();
 
@@ -757,21 +756,20 @@ describe('init (room client wiring)', () => {
     installRouter();
     init();
     await flush();
-    document.getElementById('playerName').value = 'Ada';
     document.getElementById('joinRoomId').value = 'r1';
     document.getElementById('joinForm')._emit('submit', { preventDefault() {} });
 
     assert.equal(FakeWebSocket.instances.at(-1).url, 'ws://testserver/ws/r1');
   });
 
-  it('prompts for a name before joining', async () => {
-    installRouter();
+  it('blocks joining until signed in', async () => {
+    installRouter({ 'GET /api/me': () => ok({ user: null }) });
     init();
     await flush();
     document.getElementById('roomList')._emit('click', { target: { dataset: { roomId: 'r1' } } });
 
-    assert.equal(FakeWebSocket.instances.length, 0, 'no connection without a name');
-    assert.match(document.getElementById('lobbyStatus').textContent, /name/i);
+    assert.equal(FakeWebSocket.instances.length, 0, 'no connection without a session');
+    assert.match(document.getElementById('lobbyStatus').textContent, /sign in/i);
   });
 
   it('closes an owned room via its Close control', async () => {
@@ -832,14 +830,28 @@ describe('init (room client wiring)', () => {
     assert.match(document.querySelector('.room-body').style.gridTemplateColumns, /px$/);
   });
 
-  it('prompts for a name before creating a room', async () => {
-    installRouter();
+  it('blocks creating a room until signed in', async () => {
+    installRouter({ 'GET /api/me': () => ok({ user: null }) });
     init();
     await flush();
     document.getElementById('createForm')._emit('submit', { preventDefault() {} });
 
-    assert.match(document.getElementById('lobbyStatus').textContent, /name/i);
+    assert.match(document.getElementById('lobbyStatus').textContent, /sign in/i);
     const posts = fetch.mock.calls.filter((c) => c.arguments[1]?.method === 'POST');
     assert.equal(posts.length, 0, 'no room is created');
+  });
+
+  it('greets a signed-in player by their account name', async () => {
+    installRouter();
+    init();
+    await flush();
+    assert.match(document.getElementById('playerIdentity').textContent, /Playing as Ada/);
+  });
+
+  it('offers an anonymous visitor a sign-in link', async () => {
+    installRouter({ 'GET /api/me': () => ok({ user: null }) });
+    init();
+    await flush();
+    assert.equal(document.getElementById('playerIdentity').children[0].href, '/auth/login');
   });
 });

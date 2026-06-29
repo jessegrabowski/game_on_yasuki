@@ -170,7 +170,6 @@ export function discardSearchProps(snapshot, owner, role) {
 }
 
 export function init() {
-  const playerName = document.getElementById('playerName');
   const roomList = document.getElementById('roomList');
   const lobbyStatus = document.getElementById('lobbyStatus');
   const createForm = document.getElementById('createForm');
@@ -200,6 +199,7 @@ export function init() {
   const selfPanel = document.getElementById('selfPanel');
   const loadDeckButton = document.getElementById('loadDeckButton');
   const myDecksButton = document.getElementById('myDecksButton');
+  const playerIdentity = document.getElementById('playerIdentity');
   const deckFileInput = document.getElementById('deckFileInput');
   const readyButton = document.getElementById('readyButton');
   const goldfishButton = document.getElementById('goldfishButton');
@@ -218,6 +218,29 @@ export function init() {
     debug = config.debug;
     loadCardBacks(imgBase);
   });
+
+  // Identity comes from the signed-in account, not a typed name; play is login-required, so an
+  // anonymous visitor is pointed at sign-in rather than allowed to create or join a room they could
+  // not connect to.
+  fetch('/api/me')
+    .then((res) => res.json())
+    .then(({ user }) => {
+      myName = user?.display_name ?? null;
+      renderIdentity();
+    })
+    .catch(renderIdentity);
+
+  function renderIdentity() {
+    if (!playerIdentity) return;
+    if (myName) {
+      playerIdentity.textContent = `Playing as ${myName}`;
+      return;
+    }
+    const link = document.createElement('a');
+    link.href = '/auth/login';
+    link.textContent = 'Sign in with Google to play';
+    playerIdentity.replaceChildren(link);
+  }
 
   // Load the generic per-side card backs so face-down cards render a real back, not a flat gradient.
   async function loadCardBacks(base) {
@@ -322,9 +345,8 @@ export function init() {
   function joinRoom(roomId) {
     const id = (roomId || '').trim();
     if (!id) return;
-    myName = playerName?.value.trim();
     if (!myName) {
-      setStatus('Enter a name first.');
+      setStatus('Sign in to play.');
       return;
     }
     currentRoom = id;
@@ -552,8 +574,8 @@ export function init() {
 
   createForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if (!playerName?.value.trim()) {
-      setStatus('Enter a name first.');
+    if (!myName) {
+      setStatus('Sign in to play.');
       return;
     }
     try {
