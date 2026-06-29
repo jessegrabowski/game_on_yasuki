@@ -175,19 +175,25 @@ describe('renderRooms', () => {
 });
 
 describe('renderPlayers', () => {
-  it('lists each player and marks the local one', () => {
+  it('lists each player with a leading avatar and marks the local one', () => {
     const list = document.getElementById('playerList');
-    renderPlayers(list, ['Ada', 'Kenji'], 'Ada');
-    assert.match(list.innerHTML, /Ada/);
-    assert.match(list.innerHTML, /Kenji/);
-    assert.match(list.innerHTML, /Ada <span class="you">\(you\)<\/span>/);
-    assert.doesNotMatch(list.innerHTML, /Kenji <span class="you">/);
+    renderPlayers(list, ['Ada', 'Kenji'], 'Ada', '/images');
+    assert.deepEqual(
+      list.children.map((li) => li.children[1].textContent),
+      ['Ada', 'Kenji'],
+    );
+    assert.equal(list.children[0].children[0].className, 'roster-avatar');
+    // The local player gets a (you) marker as a trailing sibling; the other does not.
+    assert.equal(list.children[0].children[2].textContent, '(you)');
+    assert.equal(list.children[1].children.length, 2);
   });
 
-  it('escapes player names', () => {
+  it('renders a name as text, never markup', () => {
     const list = document.getElementById('playerList');
-    renderPlayers(list, ['<script>x</script>'], null);
-    assert.doesNotMatch(list.innerHTML, /<script>/);
+    renderPlayers(list, ['<script>x</script>'], null, '/images');
+    const name = list.children[0].children[1];
+    assert.equal(name.textContent, '<script>x</script>');
+    assert.equal(name.children.length, 0);
   });
 });
 
@@ -414,7 +420,7 @@ describe('init (room client wiring)', () => {
     const ws = await joinedRoom();
     assert.equal(ws.url, 'ws://testserver/ws/r1');
     assert.equal(document.getElementById('roomView').hidden, false);
-    assert.match(document.getElementById('playerList').innerHTML, /Ada/);
+    assert.match(document.getElementById('playerList').textContent, /Ada/);
   });
 
   it('routes inbound SNAPSHOT, CHAT, and LOG frames to the panes', async () => {
@@ -433,7 +439,7 @@ describe('init (room client wiring)', () => {
     ws.deliver({ type: 'CHAT', from: 'Ada', text: 'hello there' });
     ws.deliver({ type: 'LOG', room: 'r1', parts: [{ text: 'Kenji joined' }] });
 
-    assert.match(document.getElementById('playerList').innerHTML, /Kenji/);
+    assert.match(document.getElementById('playerList').textContent, /Kenji/);
     assert.equal(document.getElementById('battlefield').children.length, 1);
     assert.match(document.getElementById('chatLog').innerHTML, /hello there/);
     const lastLog = document.getElementById('actionLog').children.at(-1);

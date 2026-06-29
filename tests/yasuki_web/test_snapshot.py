@@ -202,8 +202,26 @@ def test_seats_are_public():
 
     seats = _serialized(table, P2)["seats"]
 
-    assert seats["P1"] == {"name": "Ada", "honor": 14, "ready": False, "connected": False}
+    assert seats["P1"] == {
+        "name": "Ada",
+        "honor": 14,
+        "ready": False,
+        "connected": False,
+        "avatar": None,
+    }
     assert seats["P2"]["ready"] is True
+
+
+def test_seat_avatar_is_public():
+    table = TableState.empty_two_seat("Ada", "Kenji")
+    spec = {
+        "card_id": "doji",
+        "image_path": "sets/x/doji.jpg",
+        "crop": {"left": 0.1, "top": 0.1, "right": 0.4, "bottom": 0.4},
+    }
+    table.seats[P1].avatar = spec
+
+    assert _serialized(table, P2)["seats"]["P1"]["avatar"] == spec
 
 
 def test_a_plain_visible_card_carries_shown_and_peeked_false():

@@ -624,6 +624,13 @@ describe('renderPanel', () => {
     assert.ok(self.children[1].children[1].classList.contains('is-editable'));
     assert.ok(opp.children[1].children[1].classList.contains('read-only'));
   });
+
+  it('draws a card-crop canvas when the seat has an avatar', () => {
+    const panel = document.createElement('div');
+    const avatar = { image_path: 'sets/x/doji.jpg', crop: { left: 0.1, top: 0.1, right: 0.4, bottom: 0.4 } };
+    renderPanel(panel, { name: 'Ada', honor: 0, avatar }, { imgBase: '/images' });
+    assert.equal(panel.children[0].tagName, 'CANVAS');
+  });
 });
 
 describe('message builders', () => {
