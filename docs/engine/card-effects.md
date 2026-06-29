@@ -45,12 +45,12 @@ A card's variable behaviour is a **pure Python function registered against the c
 
 ```python
 @gold_handler("ancestral_estate")
-def ancestral_estate(card, me, opponents, target):
+def ancestral_estate(card, me, opponents, targets):
     outproduced = any(o.stronghold.gold_production > me.stronghold.gold_production for o in opponents)
     return card.gold_production + (1 if outproduced else 0)
 ```
 
-**Uniform signature `(card, me, opponents, target) -> int`.** Every handler takes the full payload
+**Uniform signature `(card, me, opponents, targets) -> int`.** Every handler takes the full payload
 whether or not it uses all of it — the way pytensor node rewriters all take `(fgraph, node)`. The
 dispatcher then calls them generically and there is never a "what does this one need?" question.
 *Rejected: dependency-by-name dispatch* (pass only the params a handler declares) — more ergonomic
@@ -62,11 +62,11 @@ handler gets it** — the accepted, mechanical tax, exactly like widening a rewr
 ### Dispatch
 
 ```python
-def effective_gold_production(card, me, opponents, target):
+def effective_gold_production(card, me, opponents, targets):
     handler = GOLD_HANDLERS.get(card.printed_id)
     if handler is None:
         return card.gold_production          # the 98 plain holdings cost nothing
-    return handler(card, me, opponents, target)
+    return handler(card, me, opponents, targets)
 ```
 
 The four current read-sites (`gold_producers`, `produce_gold`, `ChoosePayment.produced`,
@@ -74,7 +74,7 @@ The four current read-sites (`gold_producers`, `produce_gold`, `ChoosePayment.pr
 
 The **same payload serves other effect hooks**, not just production. Moto Traders ("enters for 1
 less Gold if you control another Merchant Caravan") is a *recruit-cost* reducer — `recruit_cost`
-becomes a `@cost_handler` with the identical `(card, me, opponents, target)` signature. This is a
+becomes a `@cost_handler` with the identical `(card, me, opponents, targets)` signature. This is a
 general card-effect resolution payload, gold production is just its first consumer.
 
 ## 3. ⚠️ Prerequisite — stable card identity
@@ -97,8 +97,9 @@ No single god context. The payload decomposes so the signature itself documents 
 - **`me`** — a read-only `PlayerState` for the controller: `.stronghold`, `.holdings`, `.in_play`,
   `.gold`, `.honor`, helpers like `.controls("Port")` / `.controls("Merchant Caravan", other_than=card)`.
 - **`opponents`** — list of the other players' `PlayerState`s.
-- **`target`** — the card being paid for, or `None`. (Only the modal tier reads it; included from the
-  start for signature uniformity.)
+- **`targets`** — the cards being paid for or acted on, as a tuple (a recruit payment is a 1-tuple;
+  empty outside a targeted context; multi-target abilities carry several). Only the modal tier reads
+  it today, but it's included from the start for signature uniformity.
 
 **The battlefield is *not* a separate param.** Every in-play card has a controller, so the
 battlefield decomposes per-player into `me.in_play` / `opponent.in_play`. Moto Traders' "another
@@ -133,7 +134,7 @@ predicate**:
 
 ```python
 @gold_handler("fine_silk_merchant")
-def fine_silk_merchant(card, me, opponents, target):
+def fine_silk_merchant(card, me, opponents, targets):
     n = me.this_turn.count(lambda e: e.kind is ACTION_RESOLVED and e.source.has_keyword("Retainer"))
     return card.gold_production + min(2, n)
 ```
