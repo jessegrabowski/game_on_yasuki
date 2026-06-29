@@ -1,10 +1,4 @@
-/* Lobby + room shell for the WIP online-play page. Layered on top of site.css. */
-
-.wip-tag {
-  font-style: italic;
-  opacity: 0.7;
-  align-self: center;
-}
+/* Lobby + room shell for the online-play page. Layered on top of site.css. */
 
 .play-view {
   max-width: 720px;
