@@ -29,6 +29,7 @@
       <a href="#display" data-pane="display" class="settings-tab">Display</a>
       <a href="#privacy" data-pane="privacy" class="settings-tab">Privacy</a>
       <a href="#delete" data-pane="delete" class="settings-tab">Delete account</a>
+      <a href="#admin" data-pane="admin" class="settings-tab hidden">Admin</a>
     </nav>
 
     <div class="settings-content">
@@ -119,6 +120,23 @@
         <h2>Delete account</h2>
         <button type="button" id="deleteAccountBtn" class="btn-danger-large">Delete account</button>
         <p id="deleteStatus" class="status-line"></p>
+      </section>
+
+      <section id="pane-admin" class="settings-pane">
+        <h2>Accounts</h2>
+        <table class="admin-users">
+          <thead>
+            <tr><th>Name</th><th>Role</th><th>Status</th><th>Joined</th><th>Last seen</th><th></th></tr>
+          </thead>
+          <tbody id="adminUsers"></tbody>
+        </table>
+        <p id="adminStatus" class="status-line"></p>
+
+        <form id="addRoleForm" class="add-role-form">
+          <input type="text" id="newRoleName" placeholder="New role"
+                 autocomplete="off" spellcheck="false" maxlength="32">
+          <button type="submit">Add role</button>
+        </form>
       </section>
     </div>
   </div>
