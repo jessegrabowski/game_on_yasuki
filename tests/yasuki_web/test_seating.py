@@ -91,7 +91,6 @@ def test_anonymous_handshake_is_closed(client, monkeypatch):
     with pytest.raises(WebSocketDisconnect) as exc:
         with client.websocket_connect(f"/ws/{room_id}"):
             pass
-    # The reason distinguishes the login gate from the WIP gate, which also closes with 4401.
     assert exc.value.code == 4401
     assert exc.value.reason == "Authentication required"
 

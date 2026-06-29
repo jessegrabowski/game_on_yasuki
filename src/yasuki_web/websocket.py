@@ -24,7 +24,6 @@ from yasuki_web.schemas import (
 from yasuki_web.snapshot import serialize_snapshot, serialize_deck_cards
 from yasuki_web.game_log import describe_intent
 from yasuki_web.rooms import rooms
-from yasuki_web.wip_gate import websocket_access_ok
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
@@ -486,12 +485,6 @@ async def _authenticate(websocket: WebSocket) -> dict | None:
 async def websocket_endpoint(websocket: WebSocket, room_id: str):
     if not _origin_allowed(websocket):
         await websocket.close(code=4403, reason="Origin not allowed")
-        return
-
-    # WIP gate: the socket carries the page's cached Basic credentials. Closed unless they match (or
-    # entirely when no password is configured). Dropped at the launch cutover.
-    if not websocket_access_ok(websocket):
-        await websocket.close(code=4401, reason="Unauthorized")
         return
 
     # Play is login-required: an anonymous handshake (no valid session cookie) is refused.

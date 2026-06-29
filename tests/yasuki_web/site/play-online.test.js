@@ -73,7 +73,7 @@ import {
   ownedRoomIds,
   discardSearchProps,
   init,
-} from '../../../src/yasuki_web/static/site/top-secret.js';
+} from '../../../src/yasuki_web/static/site/play-online.js';
 
 function mockJSON(body) {
   fetch.mock.mockImplementation(() =>
@@ -719,7 +719,7 @@ describe('init (room client wiring)', () => {
       target: { closest: (s) => (s === '[data-card-id]' ? cardEl : null) },
     });
     // A genuine drag (a real pointermove, not just a press-release) so it sends SET_CARD_POS rather
-    // than a select-only RAISE; the point of this test is that top-secret injects `room`.
+    // than a select-only RAISE; the point of this test is that play-online injects `room`.
     stage._emit('pointermove', { clientX: 80, clientY: 80 });
     stage._emit('pointerup', {
       clientX: 80,

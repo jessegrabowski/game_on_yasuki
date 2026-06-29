@@ -1,3 +1,16 @@
+from fastapi.testclient import TestClient
+
+from yasuki_web.main import app
+
+
+def test_rooms_api_requires_login():
+    # A bare client (no current_user override) hits the real login gate; play is login-required, so
+    # an anonymous request to the rooms API is refused rather than allowed to create or list games.
+    anon = TestClient(app)
+    assert anon.post("/api/rooms", json={"max_players": 2}).status_code == 401
+    assert anon.get("/api/rooms").status_code == 401
+
+
 def test_delete_requires_token_header(client):
     rid = client.post("/api/rooms", json={"max_players": 2}).json()["room_id"]
     # Missing a required header is a 422, not a 403.

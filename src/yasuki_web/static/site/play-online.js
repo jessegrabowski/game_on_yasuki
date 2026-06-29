@@ -1,5 +1,4 @@
-// WIP online-play lobby, served at the unlinked, password-gated /top-secret.html route until
-// launch.
+// The online-play lobby and in-room client, served at /play-online.
 
 import { esc, fetchConfig } from './card-common.js';
 import { listRooms, createRoom, deleteRoom } from './rooms-api.js';
