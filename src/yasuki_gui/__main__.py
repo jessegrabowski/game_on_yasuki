@@ -2,7 +2,6 @@ import logging
 import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.intents import SetHonor
 from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold, Recruit
 from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
@@ -16,18 +15,12 @@ from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
 from yasuki_gui.rules_runner import GameRunner
 from yasuki_gui.session import build_demo_state, build_state_from_deck
+from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
 from yasuki_gui.ui.prompt_box import PromptBox
 
 logger = logging.getLogger(__name__)
-
-# Optional PIL import for avatar images
-try:
-    from PIL import Image, ImageTk  # type: ignore
-except Exception:  # pragma: no cover
-    Image = None  # type: ignore
-    ImageTk = None  # type: ignore
 
 LOCAL_DEBUG_OVERRIDE = False
 
@@ -52,123 +45,6 @@ def _action_button_label(action: Action) -> str:
     raise ValueError(f"no button label for {type(action).__name__}")
 
 
-class PlayerPanel(tk.Frame):
-    """Sidebar summary for one seat: avatar, name, and honor.
-
-    Honor reads from the table and is editable only when the panel's seat is the one being played;
-    an adjustment dispatches a ``SetHonor`` intent rather than tracking a local counter, so the
-    table stays the single source of truth.
-    """
-
-    def __init__(self, master: tk.Misc, field: FieldView, owner: PlayerId):
-        super().__init__(master, bg=theme.PANEL)
-        self.field = field
-        self.owner = owner
-        self.honor = tk.IntVar(value=field.state.seats[owner].honor)
-        self._honor_text = tk.StringVar()
-
-        self._avatar_canvas = tk.Canvas(
-            self, width=50, height=50, bg=theme.PANEL, highlightthickness=0
-        )
-        self._avatar_canvas.grid(row=0, column=0, rowspan=2, padx=8, pady=8)
-        self._avatar_photo = None
-        name = field.state.seats[owner].name
-        self._avatar_initials = self._initials(name)
-        self._draw_avatar_circle()
-
-        self._name_label = tk.Label(
-            self, text=name, fg=theme.INK, bg=theme.PANEL, font=theme.serif(13)
-        )
-        self._name_label.grid(row=0, column=1, sticky="w", padx=(0, 8), pady=(8, 0))
-
-        self.honor_label = tk.Label(
-            self,
-            textvariable=self._honor_text,
-            fg=theme.GOLD,
-            bg=theme.PANEL,
-            font=theme.serif(14, "bold"),
-        )
-        self.honor_label.grid(row=1, column=1, sticky="w", padx=(0, 8), pady=(0, 8))
-
-        # Left click raises honor, right/middle lowers it; the wheel does both.
-        self.honor_label.bind("<Button-1>", lambda e: self._adjust(1))
-        self.honor_label.bind("<Button-2>", lambda e: self._adjust(-1))
-        self.honor_label.bind("<Button-3>", lambda e: self._adjust(-1))
-        self.honor_label.bind("<MouseWheel>", self._on_wheel)
-        self.honor_label.bind("<Button-4>", lambda e: self._adjust(1))
-        self.honor_label.bind("<Button-5>", lambda e: self._adjust(-1))
-        self.honor_label.bind("<Enter>", self._on_hover)
-        self.honor_label.bind("<Leave>", lambda e: self._restore_honor_bg())
-
-        self.grid_columnconfigure(1, weight=1)
-        self.refresh()
-
-    @staticmethod
-    def _initials(name: str) -> str:
-        return "".join(part[0].upper() for part in name.split()[:2]) or "?"
-
-    def _editable(self) -> bool:
-        return self.owner is self.field.seat
-
-    def _adjust(self, delta: int) -> None:
-        if not self._editable():
-            return
-        self.field.dispatch(SetHonor(delta=delta))
-        self.refresh()
-
-    def _on_wheel(self, event: tk.Event) -> None:
-        if event.delta:
-            self._adjust(1 if event.delta > 0 else -1)
-
-    def _on_hover(self, event: tk.Event) -> None:
-        if self._editable():
-            self.honor_label.configure(bg=theme.GOLD, fg="#ffffff")
-
-    def _restore_honor_bg(self) -> None:
-        self.honor_label.configure(
-            bg=theme.PANEL, fg=theme.GOLD if self._editable() else theme.INK_DIM
-        )
-
-    def refresh(self) -> None:
-        """Resync honor and edit affordance with the table; call after any state change."""
-        self.honor.set(self.field.state.seats[self.owner].honor)
-        self._honor_text.set(f"Honor {self.field.state.seats[self.owner].honor}")
-        editable = self._editable()
-        self.honor_label.configure(
-            fg=theme.GOLD if editable else theme.INK_DIM,
-            cursor="hand2" if editable else "",
-        )
-
-    def _draw_avatar_circle(self):
-        c = self._avatar_canvas
-        c.delete("all")
-        c.create_oval(3, 3, 47, 47, fill=theme.AVATAR_BG, outline="")
-        c.create_text(
-            25,
-            25,
-            text=self._avatar_initials,
-            fill=theme.AVATAR_FG,
-            font=("TkDefaultFont", 14, "bold"),
-        )
-
-    def set_profile(self, name: str | None, avatar_path: str | None) -> None:
-        if name:
-            self._name_label.configure(text=name)
-            self._avatar_initials = self._initials(name)
-        if avatar_path and Image is not None and ImageTk is not None:
-            try:
-                img = Image.open(avatar_path)
-                img = img.resize((50, 50), getattr(Image, "LANCZOS", None) or Image.BILINEAR)
-                photo = ImageTk.PhotoImage(img, master=self._avatar_canvas)
-                self._avatar_canvas.delete("all")
-                self._avatar_canvas.create_image(25, 25, image=photo)
-                self._avatar_photo = photo  # keep a reference so Tk does not GC it
-                return
-            except OSError:
-                pass
-        self._draw_avatar_circle()
-
-
 def main() -> None:
     debug_enabled = GUI_DEBUG_MODE or LOCAL_DEBUG_OVERRIDE
 
@@ -181,14 +57,14 @@ def main() -> None:
 
     container = tk.Frame(root)
     container.pack(fill="both", expand=True)
-    sidebar_w = 220
+    sidebar_w = 260
     sidebar = tk.Frame(container, width=sidebar_w, bg=theme.PANEL)
     sidebar.pack(side="left", fill="y")
-    sidebar.grid_propagate(False)  # hold the fixed width; rows split the height by weight
+    sidebar.grid_propagate(False)  # hold the fixed width; the prompt row takes the slack height
     sidebar.grid_columnconfigure(0, weight=1)
-    sidebar.grid_rowconfigure(0, weight=1)  # opponent seat (~20%)
-    sidebar.grid_rowconfigure(1, weight=3)  # prompt box (~60%)
-    sidebar.grid_rowconfigure(2, weight=1)  # your seat (~20%)
+    sidebar.grid_rowconfigure(0, weight=0)  # opponent info box (sized to content)
+    sidebar.grid_rowconfigure(1, weight=1)  # prompt box (fills the middle)
+    sidebar.grid_rowconfigure(2, weight=0)  # your info box (sized to content)
     content = tk.Frame(container)
     content.pack(side="left", fill="both", expand=True)
 
@@ -284,8 +160,8 @@ def main() -> None:
     field.configure_hotkeys(hotkeys)
 
     # The left column runs opponent / prompt / you, top to bottom.
-    opponent_panel = PlayerPanel(sidebar, field, PlayerId.P2)
-    human_panel = PlayerPanel(sidebar, field, PlayerId.P1)
+    opponent_panel = PlayerInfoBox(sidebar, field, PlayerId.P2)
+    human_panel = PlayerInfoBox(sidebar, field, PlayerId.P1)
     prompt_box = PromptBox(sidebar)
     prompt_box.grid(row=1, column=0, sticky="nsew")
 
