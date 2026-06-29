@@ -1,22 +1,15 @@
-import pytest
 from fastapi.testclient import TestClient
 
 from yasuki_web.main import app
 
-
-@pytest.fixture
-def client():
-    return TestClient(app)
+client = TestClient(app)
 
 
-def test_top_secret_page_served(client, wip_auth_header):
-    r = client.get("/top-secret.html", headers=wip_auth_header)
-    assert r.status_code == 200
-    assert "/site/top-secret.js" in r.text
-
-
-def test_play_online_still_placeholder(client):
-    # The public route keeps the under-construction placeholder until the launch cutover.
+def test_play_online_serves_the_play_app():
     r = client.get("/play-online")
     assert r.status_code == 200
-    assert "UNDER CONSTRUCTION" in r.text
+    assert "/site/play-online.js" in r.text
+
+
+def test_the_retired_top_secret_route_is_gone():
+    assert client.get("/top-secret.html").status_code == 404

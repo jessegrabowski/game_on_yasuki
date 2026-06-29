@@ -35,7 +35,7 @@ SESSION_TTL = timedelta(days=30)
 DEV_LOGIN_ENV = "YASUKI_DEV_LOGIN"
 # A login must reach the callback within this window; stale OAuth state is rejected and swept.
 LOGIN_STATE_TTL = timedelta(minutes=10)
-DEFAULT_LANDING = "/top-secret.html"
+DEFAULT_LANDING = "/play-online"
 
 # Tolerance for clock skew between us and Google when checking the id_token's expiry/issued-at.
 CLOCK_SKEW_LEEWAY_S = 10
@@ -292,9 +292,11 @@ def _dev_login_enabled() -> bool:
     return bool(os.environ.get(DEV_LOGIN_ENV)) and os.environ.get("ENVIRONMENT") != "production"
 
 
-def _dev_session() -> str:
+def _dev_session(who: str | None) -> str:
+    sub = f"dev-{who}" if who else "dev-local-user"
+    name = who.title() if who else "Dev Player"
     with get_accounts_connection() as conn:
-        user = users.upsert_user(conn, "dev-local-user", "dev@localhost", True, "Dev Player")
+        user = users.upsert_user(conn, sub, f"{who or 'dev'}@localhost", True, name)
         return sessions.create_session(conn, user["id"], SESSION_TTL)
 
 
@@ -303,11 +305,13 @@ async def dev_login(request: Request):
     """Mint a session without Google, for local development.
 
     Refused with 404 (as if the route did not exist) unless ``YASUKI_DEV_LOGIN`` is set and the app
-    is not in production, so it can never become a backdoor in a deployed environment.
+    is not in production, so it can never become a backdoor in a deployed environment. An optional
+    ``?as=<name>`` query selects a distinct dev identity, so several can be signed in at once (two
+    browsers for a local game); omitting it yields the default "Dev Player".
     """
     if not _dev_login_enabled():
         raise HTTPException(status_code=404, detail="Not found")
-    token = await asyncio.to_thread(_dev_session)
+    token = await asyncio.to_thread(_dev_session, request.query_params.get("as"))
     response = RedirectResponse(DEFAULT_LANDING, status_code=302)
     _set_session_cookie(response, request, token)
     return response

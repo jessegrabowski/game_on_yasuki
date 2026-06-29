@@ -9,8 +9,7 @@ MIRROR_TOL = (
 )
 
 
-def _create_room(page, name):
-    page.fill("#playerName", name)
+def _create_room(page):
     page.click("#createForm button[type=submit]")
     page.wait_for_selector("#roomView:not([hidden])")
     room_id = page.inner_text("#roomIdLabel").strip()
@@ -18,8 +17,7 @@ def _create_room(page, name):
     return room_id
 
 
-def _join_room(page, name, room_id):
-    page.fill("#playerName", name)
+def _join_room(page, room_id):
     page.fill("#joinRoomId", room_id)
     page.click("#joinForm button[type=submit]")
     page.wait_for_selector("#roomView:not([hidden])")
@@ -116,9 +114,9 @@ def _wait_for_card(page, card_id, predicate, timeout=5000):
 
 def _open_two_players(new_player, p1_view=None, p2_view=None):
     p1 = new_player(p1_view or {"width": 1280, "height": 800})
-    room_id = _create_room(p1, "Ada")
+    room_id = _create_room(p1)
     p2 = new_player(p2_view or {"width": 1280, "height": 800})
-    _join_room(p2, "Kenji", room_id)
+    _join_room(p2, room_id)
     assert p1.get_attribute("#boardStage", "data-viewer-seat") == "P1"
     assert p2.get_attribute("#boardStage", "data-viewer-seat") == "P2"
     return p1, p2, room_id

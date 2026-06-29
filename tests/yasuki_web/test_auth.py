@@ -183,6 +183,13 @@ def test_dev_login_is_refused_in_production_even_when_enabled(client, monkeypatc
     assert client.get("/auth/dev-login", follow_redirects=False).status_code == 404
 
 
+def test_dev_login_as_param_selects_a_distinct_identity(client, monkeypatch):
+    monkeypatch.setenv("YASUKI_DEV_LOGIN", "1")
+    monkeypatch.delenv("ENVIRONMENT", raising=False)
+    client.get("/auth/dev-login?as=kenji", follow_redirects=False)
+    assert client.get("/api/me").json()["user"]["display_name"] == "Kenji"
+
+
 def test_callback_rejects_a_token_signed_by_the_wrong_key(client, monkeypatch, other_rsa_key):
     resp = _login_and_callback(client, monkeypatch, other_rsa_key)
     assert resp.status_code == 400

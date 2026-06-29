@@ -15,9 +15,9 @@ import os
 import re
 import psycopg
 from yasuki_web import auth, cards, rooms, saved_decks, websocket
+from yasuki_web.auth import current_user
 from yasuki_web.config import allowed_origins
 from yasuki_web.rate_limit import limiter
-from yasuki_web.wip_gate import require_wip_access
 from yasuki_web.websocket import evict_stale_rooms
 from yasuki_core.accounts.db import close_accounts_pool
 from yasuki_core.accounts.migrate import migrate as migrate_accounts_schema
@@ -126,7 +126,6 @@ _CSP_PREFIXES = (
     "/card-search",
     "/card/",
     "/play-online",
-    "/top-secret",
     "/syntax",
     "/privacy",
 )
@@ -175,11 +174,11 @@ app.include_router(cards.router, prefix="/api", tags=["cards"])
 # WIP gate; owner routes (/api/me/decks) require a session, public reads (/api/decks/{slug}) are
 # visibility-checked.
 app.include_router(saved_decks.router, prefix="/api", tags=["decks"])
-# Rooms are the WIP play backend; gate the whole router behind the shared password until launch so
-# the API isn't open to anyone who knows the protocol, not just the page. The WS handshake is gated
-# separately in websocket.py.
+# Play is login-required: the whole rooms API needs a session, matching the WS handshake's own
+# login gate (websocket.py). Anonymous visitors can browse cards and build decks, not create or
+# join games.
 app.include_router(
-    rooms.router, prefix="/api", tags=["rooms"], dependencies=[Depends(require_wip_access)]
+    rooms.router, prefix="/api", tags=["rooms"], dependencies=[Depends(current_user)]
 )
 app.include_router(websocket.router, prefix="/ws", tags=["websocket"])
 # Auth routes carry their own full paths (/auth/*, /api/me) and gate nothing themselves — the
@@ -221,13 +220,6 @@ async def card_search():
 @app.get("/play-online")
 async def play_online():
     return _site_page("play-online.html")
-
-
-# The real online-play UI lives here, behind the shared WIP password and unlinked from the public
-# site, until it is ready to take over /play-online at launch.
-@app.get("/top-secret.html", dependencies=[Depends(require_wip_access)])
-async def top_secret():
-    return _site_page("top-secret.html")
 
 
 @app.get("/syntax")
