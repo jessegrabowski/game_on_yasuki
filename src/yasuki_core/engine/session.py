@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.actions import Action, Pass, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow, projection
+from yasuki_core.engine.rules.effects import effective_gold_production
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import (
     GameLog,
@@ -77,7 +78,9 @@ class EngineSession:
         """The Recruit actions ``seat`` can afford: each face-up Holding in its provinces whose cost
         its pool plus its unbowed producers' gold could cover."""
         producers = flow.gold_producers(self.game, seat)
-        affordable = self.game.gold[seat] + sum(card.gold_production for card in producers)
+        affordable = self.game.gold[seat] + sum(
+            effective_gold_production(self.game, card) for card in producers
+        )
         recruits: list[Action] = []
         for key, zone in self.game.table.zones.items():
             if key.owner is not seat or key.role is not ZoneRole.PROVINCE:

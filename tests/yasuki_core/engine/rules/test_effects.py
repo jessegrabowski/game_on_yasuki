@@ -1,9 +1,15 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.effects import player_state, opposing_states
+from yasuki_core.engine.rules.effects import (
+    GOLD_HANDLERS,
+    effective_gold_production,
+    gold_handler,
+    opposing_states,
+    player_state,
+)
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import TableState
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.pregame import StrongholdCard
 
 
@@ -27,13 +33,14 @@ def _stronghold(seat, gold_production):
     )
 
 
-def _holding(seat, card_id, *, keywords=()):
+def _holding(seat, card_id, *, keywords=(), printed_id=None, gold_production=2):
     return DynastyHolding(
         id=card_id,
+        printed_id=printed_id,
         name="H",
         side=Side.DYNASTY,
         owner=seat,
-        gold_production=2,
+        gold_production=gold_production,
         keywords=keywords,
     )
 
@@ -83,3 +90,46 @@ def test_opposing_states_are_every_other_seat():
 
     assert [o.seat for o in opponents] == [PlayerId.P2]
     assert opponents[0].stronghold is opp_sh
+
+
+def test_effective_gold_production_falls_back_to_printed_without_a_handler():
+    game = _game()
+    holding = _put(game, _holding(PlayerId.P1, "P1-mine", gold_production=3))
+    assert effective_gold_production(game, holding) == 3
+
+
+def test_effective_gold_production_of_a_non_producer_is_zero():
+    game = _game()
+    hero = _put(
+        game,
+        DynastyPersonality(id="P1-hero", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1),
+    )
+    assert effective_gold_production(game, hero) == 0  # personalities have no gold_production
+
+
+def test_a_registered_handler_overrides_with_the_live_views_and_targets():
+    game = _game()
+    me_sh = _put(game, _stronghold(PlayerId.P1, 8))
+    opp_sh = _put(game, _stronghold(PlayerId.P2, 5))
+    holding = _put(
+        game, _holding(PlayerId.P1, "P1-h", printed_id="probe_holding", gold_production=2)
+    )
+
+    seen = {}
+
+    @gold_handler("probe_holding")
+    def _probe(card, me, opponents, targets):
+        seen["call"] = (card, me, opponents, targets)
+        return 99
+
+    try:
+        result = effective_gold_production(game, holding, targets=(me_sh,))
+    finally:
+        GOLD_HANDLERS.pop("probe_holding", None)
+
+    assert result == 99
+    card, me, opponents, targets = seen["call"]
+    assert card is holding
+    assert me.stronghold is me_sh
+    assert [o.stronghold for o in opponents] == [opp_sh]
+    assert targets == (me_sh,)

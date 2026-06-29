@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.actions import Action, Pass, Recruit
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import ResolveRecruit, WorkItem
 from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
+from yasuki_core.engine.rules.effects import effective_gold_production
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
@@ -59,11 +60,11 @@ def perform(game: GameState, action: Action) -> None:
 
 
 def produce_gold(game: GameState, card_id: str) -> None:
-    """Bow the card and add its ``gold_production`` to its owner's pool (KD6, stat-derived). Gold is
-    only produced while paying a cost (rules-skeleton §7), so a payment drives this."""
+    """Bow the card and add its effective gold production to its owner's pool (KD6, stat-derived).
+    Gold is only produced while paying a cost (rules-skeleton §7), so a payment drives this."""
     card = game.table.cards_by_id[card_id]
     card.bow()
-    game.add_gold(card.owner, card.gold_production)
+    game.add_gold(card.owner, effective_gold_production(game, card))
 
 
 def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -72,7 +73,7 @@ def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
     return [
         card
         for card in game.table.battlefield.cards
-        if card.owner is seat and not card.bowed and getattr(card, "gold_production", 0) > 0
+        if card.owner is seat and not card.bowed and effective_gold_production(game, card) > 0
     ]
 
 
@@ -99,7 +100,10 @@ def recruit(game: GameState, card_id: str) -> None:
         candidates=tuple(producer.id for producer in producers),
         amount=recruit_cost(game, card),
         available=game.gold[seat],
-        produced=tuple((producer.id, producer.gold_production) for producer in producers),
+        produced=tuple(
+            (producer.id, effective_gold_production(game, producer, targets=(card,)))
+            for producer in producers
+        ),
         label=card.name,
     )
 

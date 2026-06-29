@@ -1,3 +1,4 @@
+from collections.abc import Callable
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
@@ -53,3 +54,42 @@ def player_state(game: GameState, seat: PlayerId) -> PlayerState:
 def opposing_states(game: GameState, seat: PlayerId) -> tuple[PlayerState, ...]:
     """The :class:`PlayerState` view for every seat other than ``seat``."""
     return tuple(player_state(game, other) for other in game.table.seats if other is not seat)
+
+
+# A gold-production handler computes what a card produces in context, from the producing card, its
+# controller's view, the opponents' views, and the cards being paid for.
+GoldHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...], tuple[L5RCard, ...]], int]
+GOLD_HANDLERS: dict[str, GoldHandler] = {}
+
+
+def gold_handler(printed_id: str) -> Callable[[GoldHandler], GoldHandler]:
+    """Register the decorated function as the gold-production handler for ``printed_id``."""
+
+    def register(handler: GoldHandler) -> GoldHandler:
+        GOLD_HANDLERS[printed_id] = handler
+        return handler
+
+    return register
+
+
+def effective_gold_production(
+    game: GameState, card: L5RCard, targets: tuple[L5RCard, ...] = ()
+) -> int:
+    """The gold ``card`` produces right now: its registered handler's result against the live views,
+    or its printed ``gold_production`` (0 for a card that produces none) when no handler is
+    registered.
+
+    Parameters
+    ----------
+    game : GameState
+        The live game the views project from.
+    card : L5RCard
+        The producing card.
+    targets : tuple of L5RCard, optional
+        The cards being paid for, for a handler whose yield depends on what it pays for. Default
+        empty.
+    """
+    handler = GOLD_HANDLERS.get(card.printed_id)
+    if handler is None:
+        return getattr(card, "gold_production", 0)
+    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner), targets)
