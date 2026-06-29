@@ -1,6 +1,6 @@
-# Smaller card size to fit more zones on screen
-CARD_W = 90
-CARD_H = 128
+# Card footprint, matching the web play board (board.js CARD_W/CARD_H) so both clients read alike.
+CARD_W = 81
+CARD_H = 115
 # Slightly reduced spacing for draw placement
 DRAW_OFFSET = 16
 

@@ -32,7 +32,7 @@ class TestProvincePositions:
         assert sorted(xs) == xs  # left to right
         gaps = {b - a for a, b in zip(xs, xs[1:])}
         assert gaps == {CARD_W}
-        assert sum(xs) // len(xs) == W // 2  # symmetric about the centre
+        assert abs(sum(xs) / len(xs) - W / 2) <= 1  # centred about the canvas (within rounding)
 
     def test_top_seat_mirrors_column_order(self):
         bottom = province_positions(W, H, 4, seat_at_bottom=True)
