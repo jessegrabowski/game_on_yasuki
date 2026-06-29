@@ -18,8 +18,12 @@ import {
   setRole,
   listRoles,
   createRole,
+  approveAccount,
 } from '../../../src/yasuki_web/static/site/account-api.js';
-import { buildAccountControl } from '../../../src/yasuki_web/static/site/account-widget.js';
+import {
+  buildAccountControl,
+  buildSignupNag,
+} from '../../../src/yasuki_web/static/site/account-widget.js';
 
 const respond = (body, { ok = true, status = 200 } = {}) =>
   Promise.resolve({ ok, status, json: () => Promise.resolve(body) });
@@ -123,6 +127,15 @@ describe('admin account actions', () => {
     assert.deepEqual(await listAccounts(), []);
   });
 
+  it('POSTs an approve to the account id', async () => {
+    fetch.mock.mockImplementation(() => respond({ approved: true }));
+    assert.equal(await approveAccount(9), true);
+    assert.deepEqual(
+      [fetch.mock.calls[0].arguments[0], fetch.mock.calls[0].arguments[1].method],
+      ['/api/admin/users/9/approve', 'POST'],
+    );
+  });
+
   it('POSTs ban and unban to the account id', async () => {
     fetch.mock.mockImplementation(() => respond({ banned: true }));
     assert.equal(await banAccount(7), true);
@@ -167,6 +180,15 @@ describe('admin account actions', () => {
   });
 });
 
+describe('buildSignupNag', () => {
+  it('is a link to settings prompting the user to finish setup', () => {
+    const nag = buildSignupNag();
+    assert.equal(nag.tagName, 'A');
+    assert.equal(nag.href, '/settings');
+    assert.match(nag.textContent, /display name/);
+  });
+});
+
 describe('buildAccountControl', () => {
   it('shows a Sign in link when logged out', () => {
     const widget = buildAccountControl(null);
@@ -186,6 +208,11 @@ describe('buildAccountControl', () => {
       ['Settings', 'Log out'],
     );
     assert.equal(menu.children[0].href, '/settings');
+  });
+
+  it('shows (unnamed) for a signed-in account that has not picked a name', () => {
+    const widget = buildAccountControl({ display_name: null });
+    assert.equal(widget.children[0].children[0].textContent, '(unnamed)');
   });
 
   it('renders a canvas avatar when the user has a card crop', () => {

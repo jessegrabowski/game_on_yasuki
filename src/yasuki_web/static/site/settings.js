@@ -11,6 +11,7 @@ import {
   setRole,
   listRoles,
   createRole,
+  approveAccount,
 } from './account-api.js';
 import { fetchConfig } from './card-common.js';
 import { drawCardAvatar, loadImage } from './avatar.js';
@@ -33,7 +34,9 @@ async function init() {
     window.location.href = '/auth/login';
     return;
   }
-  initDisplayName(user);
+  const notice = document.getElementById('pendingNotice');
+  renderNotice(notice, user);
+  initDisplayName(user, notice);
   initDeleteAccount();
   if (user.role === 'admin') initAdmin(user);
   const { imageBase } = await fetchConfig().catch(() => ({ imageBase: '/images' }));
@@ -62,6 +65,7 @@ function initAdmin(user) {
         run(isBanned ? 'Lifting ban…' : 'Banning…', () =>
           isBanned ? unbanAccount(id) : banAccount(id),
         ),
+      onApprove: (id) => run('Approving…', () => approveAccount(id)),
     });
   };
 
@@ -84,34 +88,49 @@ function initAdmin(user) {
 
 const formatDay = (iso) => (iso ? new Date(iso).toLocaleDateString() : '—');
 
+const accountStatus = (account) =>
+  account.is_banned ? 'Banned' : account.is_approved ? 'Active' : 'Pending';
+
 // Fill the admin table body with one row per account. The role cell is a picker of the defined
-// roles; the local admin's own row shows its role as plain text and gets no ban, since changing
-// your own role or banning yourself would lock you out (both also refused server-side). `opts` is
-// { selfId, roles, onSetRole(id, role), onBan(id, isBanned) }.
-export function renderAdminUsers(tbody, accounts, { selfId, roles, onSetRole, onBan }) {
+// roles; a pending account gets an Approve action; the local admin's own row shows its role as
+// plain text and gets no actions, since changing your own role or banning yourself would lock you
+// out (all also refused server-side). `opts` is
+// { selfId, roles, onSetRole(id, role), onBan(id, isBanned), onApprove(id) }.
+export function renderAdminUsers(tbody, accounts, { selfId, roles, onSetRole, onBan, onApprove }) {
   const cell = (text) => {
     const td = document.createElement('td');
     td.textContent = text;
     return td;
   };
+  const button = (label, className, onClick) => {
+    const el = document.createElement('button');
+    el.type = 'button';
+    el.className = className;
+    el.textContent = label;
+    el.addEventListener('click', onClick);
+    return el;
+  };
   tbody.replaceChildren(
     ...accounts.map((account) => {
       const isSelf = account.id === selfId;
       const row = document.createElement('tr');
-      row.append(cell(account.display_name), roleCell(account, isSelf, roles, onSetRole));
       row.append(
-        cell(account.is_banned ? 'Banned' : 'Active'),
+        cell(account.display_name || '(unnamed)'),
+        roleCell(account, isSelf, roles, onSetRole),
+        cell(accountStatus(account)),
         cell(formatDay(account.created_at)),
         cell(formatDay(account.last_seen)),
       );
       const actions = document.createElement('td');
       if (!isSelf) {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = account.is_banned ? 'btn-unban' : 'btn-ban';
-        button.textContent = account.is_banned ? 'Unban' : 'Ban';
-        button.addEventListener('click', () => onBan(account.id, account.is_banned));
-        actions.append(button);
+        if (!account.is_approved && !account.is_banned) {
+          actions.append(button('Approve', 'btn-approve', () => onApprove(account.id)));
+        }
+        actions.append(
+          account.is_banned
+            ? button('Unban', 'btn-unban', () => onBan(account.id, true))
+            : button('Ban', 'btn-ban', () => onBan(account.id, false)),
+        );
       }
       row.append(actions);
       return row;
@@ -172,18 +191,36 @@ function initDeleteAccount() {
   });
 }
 
-function initDisplayName(user) {
+// Until a new account picks a name it is "onboarding"; afterwards it is just pending until approved.
+const ONBOARD_NOTICE =
+  'Welcome! Choose a display name below to finish creating your account. ' +
+  'Playing online and saving decks unlock once an admin approves you.';
+const PENDING_NOTICE =
+  'Your account is awaiting approval. You can set up your profile here in the meantime; ' +
+  'playing online and saving decks unlock once an admin approves you.';
+
+export function renderNotice(notice, user) {
+  if (!user.display_name) notice.textContent = ONBOARD_NOTICE;
+  else if (!user.is_approved) notice.textContent = PENDING_NOTICE;
+  notice.classList.toggle('hidden', Boolean(user.display_name) && user.is_approved);
+}
+
+function initDisplayName(user, notice) {
   const form = document.getElementById('displayNameForm');
   const input = document.getElementById('displayNameInput');
   const status = document.getElementById('settingsStatus');
-  input.value = user.display_name;
+  input.value = user.display_name ?? '';
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     status.textContent = 'Saving…';
     const result = await updateDisplayName(input.value.trim());
-    status.textContent = result.ok
-      ? `Saved — you are now ${result.user.display_name}`
-      : result.error;
+    if (result.ok) {
+      status.textContent = `Saved — you are now ${result.user.display_name}`;
+      user.display_name = result.user.display_name; // onboarding done → notice becomes "pending"
+      renderNotice(notice, user);
+    } else {
+      status.textContent = result.error;
+    }
   });
 }
 
