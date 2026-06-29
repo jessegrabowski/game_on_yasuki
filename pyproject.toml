@@ -95,6 +95,8 @@ ensure-ro-role = "python -m yasuki_core.install.install_db --ensure-readonly-rol
 format-metadata = "python -m yasuki_core.install.install_db --format-metadata"
 sync-images = "python scripts/sync_images.py"
 api = "python -c \"import os; os.execvp('uvicorn', ['uvicorn', 'yasuki_web.main:app', '--host', '0.0.0.0', '--port', os.environ.get('PORT', '8000'), '--proxy-headers', '--forwarded-allow-ips', os.environ.get('TRUSTED_PROXY_IPS', '127.0.0.1'), '--limit-concurrency', '100', '--limit-max-requests', '10000'])\""
+# Local development: same as `api` but loads .env (account secrets, dev login) via uvicorn's dotenv.
+api-dev = "python -c \"import os; os.execvp('uvicorn', ['uvicorn', 'yasuki_web.main:app', '--host', '0.0.0.0', '--port', os.environ.get('PORT', '8000'), '--proxy-headers', '--forwarded-allow-ips', os.environ.get('TRUSTED_PROXY_IPS', '127.0.0.1'), '--limit-concurrency', '100', '--limit-max-requests', '10000', '--env-file', '.env'])\""
 docker-build = "docker-compose build"
 docker-up = "docker-compose up db db-init"
 docker-api = "docker-compose --profile api up db db-init api"
