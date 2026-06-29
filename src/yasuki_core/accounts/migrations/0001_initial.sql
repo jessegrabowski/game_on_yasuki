@@ -21,7 +21,6 @@ CREATE TABLE IF NOT EXISTS users (
     email_hmac     bytea       NOT NULL UNIQUE,            -- HMAC-SHA256(lower(email), pepper); no plaintext stored
     email_verified boolean     NOT NULL DEFAULT false,     -- rejected at signup if false; kept for record
     display_name   text        NOT NULL CHECK (char_length(display_name) BETWEEN 1 AND 40),
-    avatar_url     text,                                   -- Google `picture`, for display; nullable
     is_banned      boolean     NOT NULL DEFAULT false,     -- live-user ban flag; checked on every session resolve
     banned_at      timestamptz,
     ban_reason     text,

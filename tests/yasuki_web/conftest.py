@@ -12,7 +12,6 @@ def client():
     app.dependency_overrides[auth.current_user] = lambda: {
         "id": 1,
         "display_name": "Ada",
-        "avatar_url": None,
         "is_banned": False,
     }
     try:
