@@ -166,6 +166,54 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
     assert game.pending is None and not game.stack
 
 
+def test_cancel_backs_out_of_a_recruit_payment_committing_nothing():
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    holding = _holding_in_province(state, "P1-buy", gold_cost=5)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    session.act(PlayerId.P1, Recruit("P1-buy"))
+    assert isinstance(session.game.pending, ChoosePayment)
+
+    session.cancel(PlayerId.P1)
+
+    game = session.game
+    assert game.pending is None and not game.stack
+    # Nothing was committed: the holding sits face-up in its province, no gold spent, producer ready.
+    province = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
+    assert holding in province and holding.face_up
+    assert holding not in game.table.battlefield.cards
+    assert game.gold[PlayerId.P1] == 0
+    assert not game.table.cards_by_id["P1-SH"].bowed
+    # The holding can be recruited again, and the logged cancel replays to the same live state.
+    assert Recruit("P1-buy") in session.legal_actions(PlayerId.P1)
+    replayed = session.log.replay()
+    assert replayed.pending is None and not replayed.stack
+
+
+def test_cancel_rejects_a_seat_that_is_not_being_asked():
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _holding_in_province(state, "P1-buy", gold_cost=5)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+    session.act(PlayerId.P1, Recruit("P1-buy"))
+
+    with pytest.raises(ValueError):
+        session.cancel(PlayerId.P2)
+
+
+def test_cancel_of_a_forced_end_of_turn_discard_is_rejected():
+    session = EngineSession.start(_dealt_table(), PlayerId.P1)
+    _to_pending_discard(session)
+    assert isinstance(session.game.pending, DiscardToHandSize)
+
+    with pytest.raises(ValueError):
+        session.cancel(PlayerId.P1)
+    assert isinstance(session.game.pending, DiscardToHandSize)  # still owed
+
+
 def test_act_pass_moves_the_phase_and_rejects_an_illegal_actor():
     session = EngineSession.start(_dealt_table(), PlayerId.P1)
     session.act(PlayerId.P1, Pass())

@@ -131,6 +131,33 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             raise ValueError(f"no handler for decision {type(request).__name__}")
 
 
+def cancel(game: GameState) -> None:
+    """Back out of the pending decision, undoing the action that raised it.
+
+    Only a Recruit's payment is cancellable: nothing is committed until it is answered — no gold
+    spent, no producer bowed, the card still in its province — so dropping the decision and its
+    deferred :class:`ResolveRecruit` restores the pre-announce state.
+
+    Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the pending decision
+    cannot be cancelled.
+    """
+    request = game.pending
+    if request is None:
+        raise RuntimeError("no decision is pending")
+    match request:
+        case ChoosePayment():
+            _cancel_recruit_payment(game)
+        case _:
+            raise ValueError(f"{type(request).__name__} cannot be cancelled")
+
+
+def _cancel_recruit_payment(game: GameState) -> None:
+    if not game.stack or not isinstance(game.stack[-1], ResolveRecruit):
+        raise ValueError("the pending payment has no recruit to undo")
+    game.stack.pop()
+    game.pending = None
+
+
 def run_stack(game: GameState) -> None:
     """Drain deferred work, running each item until the stack empties or one pauses for a decision.
     A work item may itself emit a decision (setting ``pending``), so resolution stops there and

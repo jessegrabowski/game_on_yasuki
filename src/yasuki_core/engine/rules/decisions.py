@@ -47,6 +47,12 @@ class DecisionRequest(ABC):
         right shape, drawn from :attr:`candidates`. A well-formed answer may still be illegal
         against the game state; the rules layer makes that check separately."""
 
+    @property
+    def cancellable(self) -> bool:
+        """Whether the seat may back out of this decision, undoing the action that raised it. False
+        for a forced decision the seat must answer."""
+        return False
+
 
 @dataclass(frozen=True, slots=True)
 class ChoosePayment(DecisionRequest):
@@ -81,6 +87,11 @@ class ChoosePayment(DecisionRequest):
             return False
         yields = dict(self.produced)
         return self.available + sum(yields[card_id] for card_id in distinct) >= self.amount
+
+    @property
+    def cancellable(self) -> bool:
+        """A Recruit's payment can be backed out of: nothing is committed until it is answered."""
+        return True
 
 
 @dataclass(frozen=True, slots=True)

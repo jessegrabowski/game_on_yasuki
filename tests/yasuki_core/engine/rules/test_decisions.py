@@ -60,3 +60,8 @@ def test_payment_rejects_non_candidate_or_duplicate_sources():
     request = _payment(amount=5, available=0, produced=[("sh", 8)])
     assert request.accepts(DecisionResponse(("ghost",))) is False
     assert request.accepts(DecisionResponse(("sh", "sh"))) is False
+
+
+def test_only_a_payment_is_cancellable():
+    assert _payment(amount=5, available=0, produced=[("sh", 8)]).cancellable is True
+    assert DiscardToHandSize(PlayerId.P1, _HAND, count=2).cancellable is False

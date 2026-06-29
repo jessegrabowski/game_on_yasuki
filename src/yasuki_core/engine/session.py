@@ -8,7 +8,13 @@ from yasuki_core.engine.rules.actions import Action, Pass, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow, projection
 from yasuki_core.engine.rules.projection import GameView
-from yasuki_core.engine.rules.log import GameLog, build_game, act_and_log, submit_and_log
+from yasuki_core.engine.rules.log import (
+    GameLog,
+    build_game,
+    act_and_log,
+    submit_and_log,
+    cancel_and_log,
+)
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 
 
@@ -99,3 +105,14 @@ class EngineSession:
         if pending.seat is not seat:
             raise ValueError(f"{seat.name} cannot answer {pending.seat.name}'s decision")
         submit_and_log(self.game, self.log, response)
+
+    def cancel(self, seat: PlayerId) -> None:
+        """Back out of ``seat``'s pending decision, undoing the action that raised it, and record it.
+        Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if ``seat`` is not the
+        seat being asked or the decision cannot be cancelled."""
+        pending = self.game.pending
+        if pending is None:
+            raise RuntimeError("no decision is pending")
+        if pending.seat is not seat:
+            raise ValueError(f"{seat.name} cannot cancel {pending.seat.name}'s decision")
+        cancel_and_log(self.game, self.log)

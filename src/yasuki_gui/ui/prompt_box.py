@@ -39,8 +39,8 @@ class PromptBox(tk.Frame):
             self._buttons.append(button)
 
     def invoke_primary(self) -> None:
-        """Invoke the sole enabled action (Pass/Pay/Discard) — the spacebar shortcut. With several
-        enabled buttons there is no single primary, so do nothing until tab-to-choose lands."""
-        enabled = [b for b in self._buttons if str(b.cget("state")) == "normal"]
-        if len(enabled) == 1:
-            enabled[0].invoke()
+        """Invoke the primary action — the first button — when enabled; the spacebar shortcut. The
+        presenter lists the affirmative action (Pass/Pay/Discard) first, so a secondary button such
+        as Cancel is never triggered this way."""
+        if self._buttons and str(self._buttons[0].cget("state")) == "normal":
+            self._buttons[0].invoke()

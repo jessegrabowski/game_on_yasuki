@@ -45,7 +45,21 @@ class Answer:
     response: DecisionResponse
 
 
-GameInput = Act | Answer
+@dataclass(frozen=True, slots=True)
+class Cancel:
+    """Tape entry: the active player backed out of the pending decision, undoing the action that
+    raised it.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat that cancelled.
+    """
+
+    seat: PlayerId
+
+
+GameInput = Act | Answer | Cancel
 
 
 @dataclass(slots=True)
@@ -105,6 +119,20 @@ def submit_and_log(game: GameState, log: GameLog, response: DecisionResponse) ->
     log.entries.append(Answer(seat, response))
 
 
+def cancel_and_log(game: GameState, log: GameLog) -> None:
+    """Cancel the pending decision and, on success, record it. A decision that cannot be cancelled
+    raises out of ``flow.cancel`` before anything is recorded, so the tape holds only accepted
+    inputs.
+
+    Raise ``RuntimeError`` if no decision is pending.
+    """
+    if game.pending is None:
+        raise RuntimeError("no decision is pending")
+    seat = game.pending.seat
+    flow.cancel(game)
+    log.entries.append(Cancel(seat))
+
+
 def replay(log: GameLog) -> GameState:
     """Deterministically rebuild the final game state by re-running the engine from the start
     snapshot and feeding each logged input in order. Raise ``ValueError`` if an entry does not match
@@ -128,6 +156,11 @@ def _apply(game: GameState, entry: GameInput) -> None:
             if pending is None or pending.seat is not seat:
                 raise ValueError(f"log out of step: {seat.name} answered with no matching request")
             flow.submit(game, response)
+        case Cancel(seat=seat):
+            pending = game.pending
+            if pending is None or pending.seat is not seat:
+                raise ValueError(f"log out of step: {seat.name} cancelled with no matching request")
+            flow.cancel(game)
 
 
 def game_log_to_dict(log: GameLog) -> dict:
@@ -153,13 +186,17 @@ def game_log_from_dict(payload: dict) -> GameLog:
 def _encode_input(entry: GameInput) -> dict:
     if isinstance(entry, Act):
         return {"kind": "act", "seat": entry.seat.name, "action": _encode_action(entry.action)}
-    return {"kind": "answer", "seat": entry.seat.name, "choices": list(entry.response.choices)}
+    if isinstance(entry, Answer):
+        return {"kind": "answer", "seat": entry.seat.name, "choices": list(entry.response.choices)}
+    return {"kind": "cancel", "seat": entry.seat.name}
 
 
 def _decode_input(payload: dict) -> GameInput:
     if payload["kind"] == "act":
         return Act(PlayerId[payload["seat"]], _decode_action(payload["action"]))
-    return Answer(PlayerId[payload["seat"]], DecisionResponse(tuple(payload["choices"])))
+    if payload["kind"] == "answer":
+        return Answer(PlayerId[payload["seat"]], DecisionResponse(tuple(payload["choices"])))
+    return Cancel(PlayerId[payload["seat"]])
 
 
 def _encode_action(action: Action) -> dict:

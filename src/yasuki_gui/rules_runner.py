@@ -56,6 +56,10 @@ class GameRunner:
         """Answer the human's pending decision with the chosen ids."""
         self.session.submit(self.human, DecisionResponse(tuple(choices)))
 
+    def cancel(self) -> None:
+        """Back out of the human's pending decision, undoing the action that raised it."""
+        self.session.cancel(self.human)
+
     def run_opponent(self) -> None:
         """Run the opponent's turn to completion: it passes each phase and lets its Agent answer any
         decision it owes, until control returns to the human."""

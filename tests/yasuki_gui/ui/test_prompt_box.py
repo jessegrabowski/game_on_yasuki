@@ -63,14 +63,32 @@ def test_invoke_primary_ignores_a_disabled_button(root):
     assert clicks == []
 
 
-def test_invoke_primary_does_nothing_with_several_enabled_buttons(root):
+def test_invoke_primary_clicks_the_first_button_not_a_secondary(root):
     clicks = []
     box = PromptBox(root)
     box.show(
-        "choose", [("A", lambda: clicks.append("a"), True), ("B", lambda: clicks.append("b"), True)]
+        "Pay 5 gold",
+        [
+            ("Pay", lambda: clicks.append("pay"), True),
+            ("Cancel", lambda: clicks.append("cancel"), True),
+        ],
     )
     box.invoke_primary()
-    assert clicks == []  # no single primary; tab-to-choose will come later
+    assert clicks == ["pay"]  # the affirmative action, never the trailing Cancel
+
+
+def test_invoke_primary_skips_a_disabled_primary_even_with_an_enabled_secondary(root):
+    clicks = []
+    box = PromptBox(root)
+    box.show(
+        "Pay 5 gold",
+        [
+            ("Pay", lambda: clicks.append("pay"), False),
+            ("Cancel", lambda: clicks.append("cancel"), True),
+        ],
+    )
+    box.invoke_primary()
+    assert clicks == []  # spacebar must not fire Cancel when Pay is unaffordable
 
 
 def test_invoke_primary_is_safe_with_no_buttons(root):

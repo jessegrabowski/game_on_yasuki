@@ -107,7 +107,10 @@ def main() -> None:
             chosen = tuple(field.selection)
             prompt, button_label = _describe_decision(pending, chosen)
             can_confirm = pending.accepts(DecisionResponse(chosen))
-            prompt_box.show(prompt, [(button_label, confirm_decision, can_confirm)])
+            buttons = [(button_label, confirm_decision, can_confirm)]
+            if pending.cancellable:
+                buttons.append(("Cancel", cancel_decision, True))
+            prompt_box.show(prompt, buttons)
         else:
             whose = "Your turn" if view.active is view.viewer else "Opponent's turn"
             # Pass is a button; a Recruit is invoked by clicking a holding on the board.
@@ -137,6 +140,12 @@ def main() -> None:
 
     def confirm_decision() -> None:
         runner.submit(field.selection)
+        field.end_selection()
+        after_human_action()
+
+    def cancel_decision() -> None:
+        # Back out of a pending payment: drop the announced Recruit and clear the gold selection.
+        runner.cancel()
         field.end_selection()
         after_human_action()
 
@@ -174,7 +183,7 @@ def main() -> None:
     human_panel = PlayerInfoBox(sidebar, field, PlayerId.P1)
     prompt_box = PromptBox(sidebar)
     prompt_box.grid(row=1, column=0, sticky="nsew")
-    # Spacebar takes the one offered action (Pass/Pay/Discard); with several it waits for tab-select.
+    # Spacebar takes the primary offered action (Pass/Pay/Discard), never a secondary like Cancel.
     field.bind("<space>", lambda e: prompt_box.invoke_primary())
 
     def relayout_panels() -> None:
