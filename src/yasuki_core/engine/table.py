@@ -85,6 +85,8 @@ class TableState:
         Table coordinates for battlefield cards, keyed by card id.
     cards_by_id : dict mapping str to L5RCard
         Identity map over every card on the table, for fast intent lookup.
+    creatable_tokens : dict mapping str to L5RCard
+        Token templates the loaded decks can create, keyed by token card id, resolved at deck load.
     seq : int
         Monotonic view version, bumped on every state change: by ``apply_intent`` for game intents
         and by :meth:`bump_version` for non-intent seat metadata, so no two distinct broadcasts share
@@ -98,6 +100,9 @@ class TableState:
     # L5RCard is frozen, so battlefield positions live here, keyed by card id, not on the card.
     positions: dict[str, BoardPos] = field(default_factory=dict)
     cards_by_id: dict[str, L5RCard] = field(default_factory=dict)
+    # A SpawnCard naming a token_id copies the matching template onto the battlefield, so spawning a
+    # creatable token needs no live database call.
+    creatable_tokens: dict[str, L5RCard] = field(default_factory=dict)
     seq: int = 0
 
     @classmethod

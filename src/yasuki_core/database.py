@@ -513,6 +513,51 @@ def card_display_names(card_ids: set[str]) -> dict[str, str]:
         return {row["card_id"]: row["display"] for row in cur.fetchall()}
 
 
+def get_creates_for_cards(
+    card_ids: list[str],
+) -> tuple[dict[str, list[str]], dict[str, dict]]:
+    """Resolve the tokens the given creator cards can create, plus each token's full record.
+
+    Reads the ``card_creates`` relation for every id in ``card_ids`` and fetches each distinct token
+    card with the same shape ``get_card_by_id`` returns, so the card factory can build a live token
+    from it. Used once at deck load to populate ``TableState.creatable_tokens``.
+
+    Parameters
+    ----------
+    card_ids : list of str
+        Creator card ids to look up creations for.
+
+    Returns
+    -------
+    creates : dict mapping str to list of str
+        Each creator card id to the token card ids it creates.
+    tokens : dict mapping str to dict
+        Each created token card id to its full card record.
+    """
+    if not card_ids:
+        return {}, {}
+    select_sql, _ = _card_select()
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            # Only the given (deck) card ids are queried, so a token that itself creates a token is
+            # resolved one level deep — no such data exists today.
+            cur.execute(
+                "SELECT creator_card_id, created_card_id FROM card_creates "
+                "WHERE creator_card_id = ANY(%s)",
+                (card_ids,),
+            )
+            creates: dict[str, list[str]] = {}
+            for row in cur.fetchall():
+                creates.setdefault(row["creator_card_id"], []).append(row["created_card_id"])
+            token_ids = sorted({tid for ids in creates.values() for tid in ids})
+            tokens: dict[str, dict] = {}
+            if token_ids:
+                cur.execute(f"{select_sql} WHERE c.card_id = ANY(%s)", (token_ids,))
+                for record in cur.fetchall():
+                    tokens[record["card_id"]] = record
+            return creates, tokens
+
+
 def query_all_formats() -> list[str]:
     """
     Fetch all format names from database.
