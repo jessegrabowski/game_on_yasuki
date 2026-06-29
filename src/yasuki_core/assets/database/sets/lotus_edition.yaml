@@ -3380,6 +3380,7 @@ cards:
     scalp. "Give him the power of your magic."</i>
   collector_number: '178'
 - title: Gohei Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3392,8 +3393,8 @@ cards:
     some time during the battle or the Defender controls no units.<br><b>Reaction:</b> After Maneuvers,
     target your performing attacking Tactician Personality. The Defender targets a Personality he controls
     at another location. Straighten his unit. Assign it to the Tactician's battlefield, even if illegal.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
@@ -4993,6 +4994,7 @@ cards:
   artist: William O'Connor
   collector_number: '465'
 - title: Kanjiro Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -5006,8 +5008,8 @@ cards:
     Once per battle, after an action taken during a battle targets a Shugenja with a Spell attached, bow
     your target performing Samurai at the Shugenja's location to have the action target the Samurai instead,
     if legal.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
@@ -5015,6 +5017,7 @@ cards:
   artist: Anthony Francisco
   collector_number: '413'
 - title: Kedamono Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -5026,8 +5029,8 @@ cards:
   text: You will not gain Honor during the resolution of an action that creates a duel.<br>Your Harriers
     have +2F while attacking a player who has higher Family Honor than you.<br><b>Absent Battle:</b> Target
     zero to two of your defending Personalities at another battlefield. Move them to the current battlefield.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
@@ -5400,6 +5403,7 @@ cards:
     I wonder, when they stand alone?" - Bayushi Paneki</i>
   collector_number: '31'
 - title: Masagaro Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -5413,8 +5417,8 @@ cards:
     copy a Battle ability that does not itself copy abilities from the discarded Follower onto the performing
     one. Take an additional Battle action to use it, ignoring costs. After the action ends, or if you
     did not take it, remove the copied ability.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
@@ -5735,6 +5739,7 @@ cards:
   flavor_text: <i>Kenzo stared into the cold blue steel, and saw the future in its depths.</i>
   collector_number: '103'
 - title: Mirumoto Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -5748,7 +5753,7 @@ cards:
     target and bow two Weapons attached to your performing Samurai to have him challenge a target enemy
     Personality. Destroy the loser.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
@@ -6352,6 +6357,7 @@ cards:
   artist: William O'Connor
   collector_number: '349'
 - title: Omoni Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -6363,8 +6369,8 @@ cards:
   text: Non-Goblin Personalities you own in and out of play have +2 Gold Cost.<br><b>Reaction:</b> Twice
     per turn, but only once per turn per Province, after a Goblin Personality enters play from one of
     your Provinces, refill the Province face-up.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
@@ -6372,6 +6378,7 @@ cards:
   artist: William O'Connor
   collector_number: '416'
 - title: Orochi Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -6385,8 +6392,8 @@ cards:
     pile to target an Orochi. Create a <b>Naval • Storm Rider</b> Follower with the same printed Force
     and abilities as the removed Personality, replacing any reference to the Personality's title in those
     abilities with "this card", and attach it to the Orochi.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
@@ -9028,6 +9035,7 @@ cards:
   artist: Jason Engle
   collector_number: '30'
 - title: Tasu Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -9040,8 +9048,8 @@ cards:
     another player loses Honor, negate the loss. Gain Honor equal to the amount negated.<br><b>Reaction:</b>
     After a Shadowlands Personality is destroyed by an action you took, or by battle resolution while
     opposing one of your Personalities, gain 2 Honor.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
@@ -9881,6 +9889,7 @@ cards:
   artist: Thomas Denmark
   collector_number: '446'
 - title: Tomorrow Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -10404,6 +10413,7 @@ cards:
   artist: Malcolm McClinton
   collector_number: '336'
 - title: Tsusung Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -10416,8 +10426,8 @@ cards:
     .<br><b>Battle:</b> Bow your target Spell to straighten your target Shugenja.<br><b>Battle:</b> Once
     per battle, bow your target Spell to make a Fear effect with strength equal to its Gold Cost which
     affects Personalities as if they were Followers.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy

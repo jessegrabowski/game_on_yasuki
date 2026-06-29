@@ -629,6 +629,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Balash Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -641,7 +642,7 @@ cards:
     and Naga Followers. Your Followers ignore bow costs of abilities copied to them.<br><b>Response, :bow::</b>
     If the action Equipped your Naga Follower, you may discard a card to draw a card.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -933,6 +934,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Beiko Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -950,7 +952,7 @@ cards:
     defending Personality. Give them +2F if they are Nonhuman. :fear: equal to the target''s Force, +1
     if you control any Forests.'
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1072,6 +1074,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Black Watch Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1085,7 +1088,7 @@ cards:
     If they have 1 or more Force, you may switch their Force and Chi, then you may target another Personality
     with 1 or more Force and switch that target''s Force and Chi.'
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2699,6 +2702,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Endo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3059,6 +3063,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Genshin Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3071,8 +3076,8 @@ cards:
     wins a duel during battle or against a Personality whose player has higher Family Honor, gain 1 Honor.<br><b>Iaijutsu
     Open, :bow::</b> Your target unbowed Personality challenges a target Personality. Remove the loser's
     abilities. The winner gains 1 Honor.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3690,6 +3695,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hideyo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3702,7 +3708,7 @@ cards:
     -2F.<br>Your Moto Personalities have -5HR during turns in which you assigned any of your Personalities
     to attack.<br><b>Response, :bow::</b> If the action was yours and moved your Berserker to the current
     battlefield, take an additional action; after it resolves, give the Berserker -1F. .
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -2
   legality:
   - Shattered Empire
@@ -3884,6 +3890,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Iaimiko Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3895,8 +3902,8 @@ cards:
   text: Your Spells in and out of play have +1FV.<br><b>Battle:</b> Target your Yojimbo, and discard a
     Spell from your hand or banish a Spell from your discard pile. Bow a target enemy Personality with
     Chi lower than the Spell's Focus Value. If this bowed a card and you are the Defender, gain 2 Honor.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -4571,6 +4578,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kagako's Second Lesson
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -4583,7 +4591,7 @@ cards:
     in their army.<br><b>Engage, :bow:, :g2::</b> Target your Lion Clan Shugenja Personality. Create a
     2F/2C/3PH Ancestor • Samurai • Spirit Lion Clan Personality.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -5169,6 +5177,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Mahatsu Sensei
+  province_strength: 0
+  gold_production: -1
+  starting_honor: 0
   types:
   - Sensei
   decks:
@@ -5260,6 +5271,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Masatari Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -5273,7 +5285,7 @@ cards:
     a maximum Force of 3.<br><b>Battle, :bow::</b> Bow your target unbowed Follower. :fear: equal to its
     Force; if your Follower is Courage, give the target of the :fear: a Force penalty equal to the :fear:.'
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -6545,6 +6557,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Rani Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -8840,6 +8853,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Order Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -8851,7 +8865,7 @@ cards:
   text: Your Monks have <b>Duelist</b> while they have no Armor or Weapons.<br><b>Response, :bow::</b>
     If your Monk won the action's duel, straighten a Ring, or put a Ring in your hand into play and, while
     it remains in play, it does not count towards an Enlightenment Victory.
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -1
   legality:
   - Shattered Empire

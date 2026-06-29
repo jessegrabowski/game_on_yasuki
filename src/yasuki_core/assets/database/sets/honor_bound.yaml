@@ -1402,6 +1402,7 @@ cards:
   flavor_text: <i>In the palace of Otosan Uchi the artisans go through their plays with desperate faces,
     knowing that at any moment the Emperor might make this performance their last.</i>
 - title: Kaede Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1413,8 +1414,8 @@ cards:
   text: <b>Repeatable Limited:</b> Bow your Stronghold to search your deck and discard pile for a Ring,
     show it, and put it in your hand. You permanently will not win an Honor Victory.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -1504,6 +1505,7 @@ cards:
   flavor_text: <i>With the coming of the war between their houses, some of the Kakita's finest swordfighters
     have begun to serve other lords.</i>
 - title: Kisada Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1523,8 +1525,8 @@ cards:
   text: If your Family Honor is 11 or greater, negate all your Honor gains except those from battle resolution
     and from winning duels.
   focus: 2
-  province_strength: '+2'
-  starting_honor: '+0'
+  province_strength: 2
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -2513,6 +2515,7 @@ cards:
     your treachery. No more will your foulness taint my clan." With that, her sword raged through my commander's
     throat, and the world descended into chaos.</i>
 - title: Shoju Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2535,7 +2538,7 @@ cards:
     player will win an Honor Victory. Until the game ends, current and new card effects that prevent other
     players from targeting the Personality are negated.
   focus: 2
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -2
   legality:
   - Hidden Emperor (Jade)
@@ -3163,6 +3166,7 @@ cards:
   flavor_text: <i>"Grandfather!" Uji screamed as he felt his ancestor's soul torn from his own. "Yurei!"
     Meanwhile, on the fields around him, Crane fought Crane... and Kuwanan raised his father's sword.</i>
 - title: Toshimoko Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3182,8 +3186,8 @@ cards:
   text: After you focus a card in a duel involving one of your Samurai Personalities, give it +1 Focus
     Value.<br>Challenges issued to your Personalities will not be refused.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -3192,6 +3196,7 @@ cards:
   flavor_text: <i>True samurai give their lives for the needs of their families, but they give their honor
     to no one.</i>
 - title: Toturi Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3213,7 +3218,7 @@ cards:
   text: <b>Repeatable Limited:</b> Bow your Stronghold to search your Fate deck for a Terrain, show it,
     then put it in your hand. Discard a card.
   focus: 2
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -1
   legality:
   - Hidden Emperor (Jade)
@@ -3279,6 +3284,7 @@ cards:
   rarity: Rare
   artist: Anson Maddocks
 - title: Uji Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3291,7 +3297,7 @@ cards:
     If he would be opposed, move him to the current battlefield.
   focus: 2
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -3505,6 +3511,7 @@ cards:
     unbending courage, we took Kyuden Hiruma back. His loss is great, but so was the gift his suffering
     bought.</i>
 - title: Yokatsu Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3524,14 +3531,15 @@ cards:
   text: Your Personalities may not attach more than one Follower per turn.<br><b>Battle, :gstar::</b>
     Equip a target Follower in your hand to your target Personality.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
   rarity: Rare
   artist: KC Lancaster
 - title: Yokuni Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3556,8 +3564,8 @@ cards:
     was returned, delay its discarding until the start of its owner's next Action Phase. It will not resolve
     again, which is not negation, and it may not be discarded by the Discard Dynasty Rulebook ability.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy

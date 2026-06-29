@@ -900,6 +900,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Fusako Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -915,7 +916,7 @@ cards:
     your :melee:.<br><b>Engage, :bow::</b> Target your Personality. :ranged: from cards in their unit
     have +1 strength and, while you control a Tsuruchi, have the additional final effect, "you may move
     this unit home".'
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -1
   legality:
   - Shattered Empire
@@ -1160,6 +1161,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hideyo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1172,7 +1174,7 @@ cards:
     -2F.<br>Your Moto Personalities have -5HR during turns in which you assigned any of your Personalities
     to attack.<br><b>Response, :bow::</b> If the action was yours and moved your Berserker to the current
     battlefield, take an additional action; after it resolves, give the Berserker -1F. .
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -2
   legality:
   - Shattered Empire
@@ -1183,6 +1185,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hikarou Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1196,7 +1199,7 @@ cards:
     Give the Shugenja a Force bonus, or you may give a target Follower or Personality a Force penalty,
     equal to the Spell''s Focus Value. You may take an additional action to use one of the Spell''s :fire:
     abilities.'
-  province_strength: '+1'
+  province_strength: 1
   starting_honor: -1
   legality:
   - Shattered Empire
@@ -1552,6 +1555,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kagami Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -1564,8 +1568,8 @@ cards:
     has caused you to lose Honor this game, ignore restrictions preventing your Yojimbo from attacking.<br><b>Engage,
     :bow::</b> Give your target opposed Yojimbo +2F and create a 0F/2C/3PH Crane Clan • Courtier Personality
     with the trait, "Before your turn ends, banish this Personality; if you did, gain 2 Honor."
-  province_strength: '+1'
-  starting_honor: '+0'
+  province_strength: 1
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1655,6 +1659,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kayo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1668,7 +1673,7 @@ cards:
     and, if they are dishonorable, their controller loses Honor equal to their printed Personal Honor
     or 2, whichever is higher.
   province_strength: -1
-  starting_honor: '+1'
+  starting_honor: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -1979,6 +1984,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Mishime Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -1994,7 +2000,7 @@ cards:
     :bow:, :g5::</b> Bow your target unbowed Personality, and you may destroy them. Create a 2C/3GC/0PH
     :shadowlands: • Nonhuman • Oni Personality with Force equal to the target''s Chi. Before the turn
     ends, banish it unless you destroyed the target.'
-  province_strength: '+1'
+  province_strength: 1
   starting_honor: -2
   legality:
   - Shattered Empire
@@ -2233,6 +2239,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Olyah Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2245,8 +2252,8 @@ cards:
   text: 'Your Eternal Well of the Akasha may target :pearl: Spells, but its second target must then be
     a Shugenja.<br><b>Battle, :bow::</b> Straighten your target Naga Shugenja that has copied an ability
     this turn.'
-  province_strength: '+0'
-  starting_honor: '+1'
+  province_strength: 0
+  starting_honor: 1
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2871,6 +2878,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Sugimoto Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2891,8 +2899,8 @@ cards:
   - Unicorn
   text: Your Stronghold has no abilities.<br><b>Battle, :bow::</b> If you are the Attacker, move a target
     enemy Personality at home to the current battlefield; straighten their unit as they move.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3099,6 +3107,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Deathseeker's Oath
+  gold_production: 1
   types:
   - Sensei
   decks:
@@ -3111,7 +3120,7 @@ cards:
     Honor from Proclaiming. Your Stronghold has no abilities.<br><b>Battle, :bow::</b> :melee: equal to
     your target unbowed Deathseeker''s Force. If this destroyed any enemy cards, gain 2 Honor, and you
     may destroy that Deathseeker to make another :melee: equal to their Force.'
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -4
   legality:
   - Shattered Empire
@@ -3626,6 +3635,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Wataru Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3637,8 +3647,8 @@ cards:
   text: Your Shugenja may not attach Spells while they have a number greater than or equal to their Chi.<br>
     <b>Battle/Engage, :bow::</b> Target two of your opposed Personalities. Set the Force of one of them
     equal to that of the other. Give both targets +1F if one is a Samurai and the other is a Shugenja.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3731,6 +3741,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yaheiko Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3741,7 +3752,7 @@ cards:
   - Crab Clan
   text: 'Your opposed Berserkers bowed by other players'' :fear: have -2F and <b>Elite</b> while bowed.<br><b>Interrupt,
     :bow::</b> Negate the Battle action''s effects on your target Berserker. Give them -3F.'
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -1
   legality:
   - Shattered Empire

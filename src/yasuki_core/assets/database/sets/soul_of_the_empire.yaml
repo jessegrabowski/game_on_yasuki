@@ -1505,6 +1505,7 @@ cards:
   flavor_text: <i>"I will return," Hoshi said to his wife as he led his troops away from Shiro Morumoto.
     "I know," she whispered, and then was silent once more.</i>
 - title: Hoshi Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1523,7 +1524,7 @@ cards:
     with an Honor requirement of "-" into play.<br>Your Honor gains from Proclaiming have a maximum value
     of 1.
   focus: 2
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -2
   legality:
   - Hidden Emperor (Jade)
@@ -1561,6 +1562,7 @@ cards:
   rarity: Rare
   artist: Paul (Prof.) Herbert
 - title: Hoturi Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1571,8 +1573,8 @@ cards:
   - All Clans
   text: Provinces created after the game began will not hold Dynasty cards.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -2769,6 +2771,7 @@ cards:
     The Unicorn Thunder shook her head. Death stood at her heart. When the end came, Kamoko met it with courageous
     silence.'
 - title: O-Ushi Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2789,8 +2792,8 @@ cards:
     effect: You may choose to have your Personality use Force as his duel stat in that duel.<br>You will
     not gain Honor from duels.'
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -2970,6 +2973,7 @@ cards:
   flavor_text: <i>She followed the Moto to Rokugan at the Kami's command, but when she arrived, another
     destiny awaited her.</i>
 - title: Otomo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2983,8 +2987,8 @@ cards:
     it if instructed to do so, remove a card in your hand from the game to remove the searched-for card
     from the game.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -3822,6 +3826,7 @@ cards:
     future of the Empire. And we shall protect it, no matter what destiny awaits." - oath of Asahina Dorai,
     Kolat master</i>
 - title: Tetsuya Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3834,7 +3839,7 @@ cards:
     attacking units at the current battlefield. Permanently give your Provinces -1 strength.
   focus: 2
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -4676,6 +4681,7 @@ cards:
   flavor_text: <i>" 'Our lord knelt and spoke in hushed tones. Then he rose, drew his sword, and stood
     behind the Sun - a second to her seppuku."- from Fall and Rebirth, Part III</i>
 - title: Yodin Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -4698,8 +4704,8 @@ cards:
     with the most Personalities in play may not bring a Personality into play if he has brought a Personality
     into play this turn.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   is_banned: true
   legality:
   - Hidden Emperor (Jade)

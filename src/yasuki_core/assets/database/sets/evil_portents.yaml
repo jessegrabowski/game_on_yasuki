@@ -335,6 +335,9 @@ cards:
   collector_number: '58'
   designer: Chris
 - title: Benika Sensei
+  province_strength: 0
+  gold_production: 0
+  starting_honor: -1
   types:
   - Sensei
   decks:
@@ -423,6 +426,9 @@ cards:
   collector_number: '79'
   designer: Bryan
 - title: Bukita Sensei
+  province_strength: 0
+  gold_production: 0
+  starting_honor: -1
   types:
   - Sensei
   decks:
@@ -1108,6 +1114,9 @@ cards:
   collector_number: '65'
   designer: Randy
 - title: Goju Sensei
+  province_strength: -1
+  gold_production: 0
+  starting_honor: -1
   types:
   - Sensei
   decks:
@@ -1219,6 +1228,9 @@ cards:
   collector_number: '67'
   designer: Randy
 - title: Hisako Sensei
+  province_strength: -1
+  gold_production: 0
+  starting_honor: 0
   types:
   - Sensei
   decks:
@@ -1241,6 +1253,9 @@ cards:
   collector_number: '159'
   designer: Chris
 - title: Iemasa Sensei
+  province_strength: 0
+  gold_production: 0
+  starting_honor: 1
   types:
   - Sensei
   decks:
@@ -1265,6 +1280,9 @@ cards:
   collector_number: '160'
   designer: Loki
 - title: Ikikashi Sensei
+  province_strength: 0
+  gold_production: 0
+  starting_honor: -8
   types:
   - Sensei
   decks:
@@ -1496,6 +1514,9 @@ cards:
   collector_number: '54'
   designer: Randy
 - title: Izuna Sensei
+  province_strength: 0
+  gold_production: -1
+  starting_honor: 1
   types:
   - Sensei
   decks:
@@ -1518,6 +1539,9 @@ cards:
   collector_number: '162'
   designer: Randy
 - title: Jinai Sensei
+  province_strength: 0
+  gold_production: 0
+  starting_honor: -1
   types:
   - Sensei
   decks:
@@ -2155,6 +2179,9 @@ cards:
   collector_number: '43'
   designer: Julien
 - title: Min-Hee Sensei
+  province_strength: 0
+  gold_production: 0
+  starting_honor: 1
   types:
   - Sensei
   decks:
@@ -2177,6 +2204,9 @@ cards:
   collector_number: '164'
   designer: Chris
 - title: Minori Sensei
+  province_strength: 0
+  gold_production: 0
+  starting_honor: 0
   types:
   - Sensei
   decks:

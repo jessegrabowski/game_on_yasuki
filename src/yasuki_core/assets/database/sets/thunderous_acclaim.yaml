@@ -1241,6 +1241,7 @@ cards:
   collector_number: '20'
   designer: Julien
 - title: Hikahime Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -1252,7 +1253,7 @@ cards:
   text: You may include four copies of each non-Unique Ashigaru Personality in your deck. Your non-Ashigaru
     Personalities in and out of play have +1 Gold Cost. You can not play Oath of Fealty.<br><b>Open, :bow:,
     :g2::</b> If you control an Ashigaru Personality, create a 0F/1C/0PH <b>Ashigaru • Conscript</b> Personality.
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -2
   legality:
   - A Brother's Destiny (Twenty Festivals)
@@ -1265,6 +1266,7 @@ cards:
   collector_number: '153'
   designer: Bryan
 - title: Hira Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1280,7 +1282,7 @@ cards:
   text: You may not take more than six actions from Events per game.<br><b>Open, :bow::</b> If you have
     taken an action from an Event in your Province this turn, turn a card in your Provinces face-up.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
@@ -1318,6 +1320,7 @@ cards:
   collector_number: '82'
   designer: Jeremy
 - title: Ichigo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1337,7 +1340,7 @@ cards:
   text: After an enemy card is destroyed during a battle, if the destruction was not from another player's
     card effect, gain 1 Honor.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
@@ -3686,6 +3689,7 @@ cards:
   collector_number: '111'
   designer: Jeremy
 - title: Yajinden Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:

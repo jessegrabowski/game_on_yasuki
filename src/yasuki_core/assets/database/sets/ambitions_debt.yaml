@@ -169,6 +169,7 @@ cards:
   flavor_text: <i>On the left, the Moto. On the right, the Phoenix, with pikes raised. As the kami lifted
     her horn to sound the attack, the sky shattered and the Sun fled.</i>
 - title: At'tok'tuk Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -192,7 +193,7 @@ cards:
   text: Your Ratling Personalities in and out of play have your Clan Alignment.<br>Ratling Followers enter
     play for you for 1 less Gold.
   focus: 2
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -2
   legality:
   - Hidden Emperor (Jade)
@@ -1094,6 +1095,7 @@ cards:
   rarity: Rare
   artist: Ben Peck
 - title: Hiruma Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1119,7 +1121,7 @@ cards:
     upon, taking actions.<br>Before one of the Attacker's card's effects ends a Combat Segment, negate
     that effect.
   focus: 2
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -2
   legality:
   - Hidden Emperor (Jade)
@@ -1243,6 +1245,7 @@ cards:
   flavor_text: <i>Once, he sought to deny the Taint upon his soul. Now he embraces his fate, and with
     it, his fallen house.</i>
 - title: Ikoma Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1254,8 +1257,8 @@ cards:
   text: While a card with "Technique" in its title is checking your Clan Alignment, you are considered
     to have the named Clan Alignment for which it is checking.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -1549,6 +1552,7 @@ cards:
   rarity: Rare
   artist: Lissanne Lake
 - title: Kage Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1563,7 +1567,7 @@ cards:
     a Sleeper token, bow this Personality and destroy a Sleeper token on the performing Personality to
     negate the action's effects."
   focus: 2
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -2
   legality:
   - Hidden Emperor (Jade)
@@ -1684,6 +1688,7 @@ cards:
   artist: William O'Connor
   flavor_text: <i>"... and in the end, darkness will swallow all life in its own pain." -</i>
 - title: Kuro Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1704,8 +1709,8 @@ cards:
     Personalities will not be the challenger in a duel.<br>After your Personality refuses a duel with
     no consequences for refusal, you lose 3 Honor and the Personality is dishonored.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -1956,6 +1961,7 @@ cards:
   artist: William O'Connor
   flavor_text: <i>"Too much destiny can kill you." - Ginawa</i>
 - title: Nio Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1983,6 +1989,7 @@ cards:
   flavor_text: <i>To be powerful is to be well-fed. Feed their bellies, and armies will make war. Starve
     them, and you will have peace.</i>
 - title: Norikazu Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -3654,6 +3661,7 @@ cards:
   flavor_text: <i>"One day, we shall stop the wheel of reincarnation forever. And then we shall see the
     true nature of divinity."</i>
 - title: Yori Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -3672,7 +3680,7 @@ cards:
     You may give your Shugenja or Shadowlands Personality a Force bonus equal to half of the number of
     cards in the destroyed army, rounded down, until your next turn ends.
   focus: 2
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -3
   legality:
   - Hidden Emperor (Jade)
@@ -3729,6 +3737,7 @@ cards:
   flavor_text: <i>Despite his wound, fought on until the field of battle shone with his courage. His was
     not a battle of Great Clans but of great hearts.</i>
 - title: Yoritomo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3740,8 +3749,8 @@ cards:
   text: Your Gold-producing Holdings enter play for you for 1 less Gold, to a minimum of 1.<br>When bowing
     your Stronghold to pay for a Personality, it produces 1 less Gold.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -3779,6 +3788,7 @@ cards:
   flavor_text: <i>"You can only find truth with logic if you have already found the truth without it."
     - Kage</i>
 - title: Yoshi Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3790,8 +3800,8 @@ cards:
   text: Honor gains from Proclaiming have a maximum value of 1.<br>Honor losses from your cards' effects
     to other players do not happen; this is not negation.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy

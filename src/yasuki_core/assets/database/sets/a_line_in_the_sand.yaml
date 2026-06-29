@@ -1671,6 +1671,7 @@ cards:
   artist: Albert Tavira
   collector_number: '23'
 - title: Kagako Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1683,7 +1684,7 @@ cards:
     your Lion Clan Shugenja, create a 2F/2C/3PH <b>Lion Clan • Ancestor • Samurai • Spirit</b> Personality
     and gain 1 Honor.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -1960,6 +1961,7 @@ cards:
   collector_number: '44'
   designer: Jeremy
 - title: Kobi Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1972,7 +1974,7 @@ cards:
     token if he controls no unbowed Personalities. You win the game if you ever have ten Conspiracy tokens.<br>After
     a Personality is Recruited, you may bow this Sensei to <i>kidnap him</i>; bow him and after the next
     turn begins, straighten him.
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -2
   legality:
   - A Brother's Destiny (Ivory Edition)
@@ -1986,6 +1988,7 @@ cards:
   collector_number: '104'
   designer: Jeremy
 - title: Koiso Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1996,8 +1999,8 @@ cards:
   - Phoenix Clan
   text: You may only Recruit Personalities and Equip Spells that are Fire.<br><b>Battle, :bow::</b> Destroy
     your target Fire card. Ranged 3 Attack.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -2059,6 +2062,7 @@ cards:
   collector_number: '22'
   designer: Loki
 - title: Kuroko Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -2070,8 +2074,8 @@ cards:
   text: After a card attacks you or one of its actions resolves, you may discard a Clout token from it
     to gain 2 Honor.<br><b>Political Open, :bow::</b> Bow your target unbowed Courtier. Give another player's
     target card a <b>Clout </b>token.
-  province_strength: '+0'
-  starting_honor: '+2'
+  province_strength: 0
+  starting_honor: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -3036,6 +3040,7 @@ cards:
   collector_number: '139'
   designer: Loki
 - title: Sachina Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3051,8 +3056,8 @@ cards:
   text: Your Stronghold has no abilities. Your Geisha enter play for 1 less Gold. <br><b>Interrupt, :bow::</b>
     After the action shows cards in another player's hand, choose one of them. He may discard it; if he
     doesn't, he cannot play cards with that title this turn.
-  province_strength: '+1'
-  starting_honor: '+0'
+  province_strength: 1
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -3209,6 +3214,7 @@ cards:
   collector_number: '54'
   designer: Julien
 - title: Shibata Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3219,8 +3225,8 @@ cards:
   - Scorpion Clan
   text: Recruiting Personalities has a minimum Gold Cost of 5 for you. You may bow your target unbowed
     Courtier instead of discarding the Imperial Favor for Favor actions.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -3840,6 +3846,7 @@ cards:
   collector_number: '72'
   designer: Bryan
 - title: Tadanobu Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3850,8 +3857,8 @@ cards:
   - Crane Clan
   text: You cannot gain Honor from Holdings. After another player refuses your challenge, gain 1 Honor.<br><b>Interrupt,
     :bow::</b> After you win the action's duel, draw a card.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -3862,6 +3869,7 @@ cards:
   flavor_text: <i>"The duel is the one truth of the universe. Nothing is as pure as steel."</i>
   collector_number: '162'
 - title: Takeru Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3873,8 +3881,8 @@ cards:
   text: Your Stronghold has no abilities. After another player resolves an action or trait, or produces
     gold, from his Holding with a Wealth token, you gain 1 Honor and he may discard the token. <br><b>Economic
     Open, :bow::</b> Give another player's target Holding a +1GP <b>Wealth </b>token.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -3911,6 +3919,7 @@ cards:
   collector_number: '90'
   designer: Randy
 - title: Tamoko Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -3922,8 +3931,8 @@ cards:
   text: You may only Proclaim Shugenja. Your Earth Personalities have +1F while defending.<br><b>Open,
     :bow::</b> If it is another player's turn and he controls a Personality, gain 2 Honor before this
     turn ends if you did not lose any Provinces between now and then.
-  province_strength: '+2'
-  starting_honor: '+0'
+  province_strength: 2
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -3994,6 +4003,7 @@ cards:
   collector_number: '35'
   designer: Bryan
 - title: Tanizaki Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -4233,6 +4243,7 @@ cards:
   collector_number: '150'
   designer: Bryan
 - title: Tsujiken Sensei
+  gold_production: 1
   types:
   - Sensei
   decks:
@@ -4245,8 +4256,8 @@ cards:
     Gold. Your Political abilities in and out of play have <b>Economic</b>. Your Iron Mines in and out
     of play have <b>Market</b>.<br><b>Economic Open, :bow::</b> Target a Holding. After the next time
     this turn it bows, its controller loses 1 Honor.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -4748,6 +4759,7 @@ cards:
   collector_number: '156'
   designer: Jeremy
 - title: Yung Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -4761,8 +4773,8 @@ cards:
   text: The rulebook Kharmic ability is <b>Battle/Open</b> for you, and you may put cards at the bottom
     of your deck instead of discarding them from that ability. Your Personalities in and out of play have
     <b>Kharmic</b>.<br><b>Open, :bow::</b> Ignore the Gold cost of your next Kharmic action.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

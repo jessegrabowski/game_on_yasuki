@@ -464,6 +464,7 @@ cards:
   collector_number: '119'
   designer: Randy
 - title: Brotherhood Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -480,8 +481,8 @@ cards:
   - Unicorn
   text: Your maximum hand size is equal to 6 plus the number of Temples you control, to a maximum of 10.<br><b>Battle/Open,
     :bow::</b> Straighten your target Monk or Shugenja.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -2647,6 +2648,7 @@ cards:
   collector_number: '138'
   designer: Jeremy
 - title: Seppun Tasuke
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -2659,8 +2661,8 @@ cards:
     Honor Requirement. After your Iweko Miaka is destroyed, you lose the game.<br><b>Open, :bow::</b>
     Name a number and target another player. After each time his <i>(non-Focused)</i> card with that Focus
     Value is discarded from hand, gain an Affection token.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -2752,6 +2754,7 @@ cards:
   collector_number: '54'
   designer: Loki
 - title: Shika Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:

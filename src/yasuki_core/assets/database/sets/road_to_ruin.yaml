@@ -347,6 +347,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Beiko Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -364,7 +365,7 @@ cards:
     defending Personality. Give them +2F if they are Nonhuman. :fear: equal to the target''s Force, +1
     if you control any Forests.'
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -2927,6 +2928,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Takao Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2950,7 +2952,7 @@ cards:
     :bow::</b> If you won a duel from the action, search your Fate discard pile, then deck, for a :fire:
     Ring, show it, and put it in your hand.</i>'
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)

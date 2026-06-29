@@ -927,6 +927,7 @@ cards:
     I</i>
   collector_number: '1'
 - title: Gozoku Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -941,7 +942,7 @@ cards:
     and his controller has the ability, "<b>Open, :g6::</b> End the ongoing effects of the action that
     granted this ability." <br><b>Gozoku Political Reaction:</b> Before a player gains or loses Honor,
     bow your Stronghold or your target performing Courtier to reduce the loss or gain by 2.
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -1
   legality:
   - Legacy
@@ -1360,6 +1361,7 @@ cards:
   flavor_text: <i>"Your steel is nothing. This is power."</i>
   collector_number: '71'
 - title: Iuchiban Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1371,7 +1373,7 @@ cards:
   text: Non-Bloodspeaker Personalities you own in and out of play have +1 Gold Cost.<br>When your Stronghold
     is paying for a Bloodspeaker Personality, it produces 1 additional Gold which may only pay for him.<br><b>Reaction:</b>
     After a Maho action resolves that a Bloodspeaker Personality performed, straighten him.
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -2
   legality:
   - Legacy
@@ -1425,6 +1427,7 @@ cards:
   flavor_text: <i>"Interesting," chuckled Munemori. "Disgusting, yes, but interesting."</i>
   collector_number: '51'
 - title: Jigoku Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1438,8 +1441,8 @@ cards:
     Oni Personalities will not enter play from your Provinces. <br><b>Repeatable Limited, :g3::</b> Discard
     your target performing Shugenja from play to Recruit a target Oni under this card with lower Gold
     Cost than the Shugenja's Gold Cost plus Chi, ignoring costs other than this action's printed one.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)
@@ -1795,6 +1798,7 @@ cards:
   artist: Joachim Gmoser
   collector_number: '92'
 - title: Mihoko Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1806,8 +1810,8 @@ cards:
   text: Before the first time each turn you gain Honor from a Holding or Region, negate the gain.<br>After
     a unit moves home from a battlefield at one of your Provinces, bow it.<br><b>Absent Battle:</b> Target
     one or two of your defending Personalities at another battlefield. Move them to the current battlefield.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)
@@ -2271,6 +2275,7 @@ cards:
   artist: Jon Hodgson
   collector_number: '123'
 - title: Setai Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2283,8 +2288,8 @@ cards:
     him <b>Deathseeker</b>, or permanently give him -1F.<br><b>Repeatable Battle:</b> You may rehonor
     your target performing Deathseeker Personality. Destroy him to destroy a target enemy card without
     attached cards and a Gold Cost less than or equal to your Deathseeker's.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)
@@ -2471,6 +2476,7 @@ cards:
   artist: Brad Williams
   collector_number: '154'
 - title: Shosuku Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2483,8 +2489,8 @@ cards:
     target bowed cards.<br><b>Reaction:</b> After one of your Ranged Attacks is targeted, if it has only
     one target, give it +2 strength; this attack bows the target instead of destroying it. If the target
     bowed, gain 2 Honor.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)
@@ -2609,6 +2615,7 @@ cards:
   flavor_text: <i>"Only a fool starts a war in winter." - Daidoji Kikaze</i>
   collector_number: '100'
 - title: Someisa Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2620,8 +2627,8 @@ cards:
   text: Shugenja will not join you.<br>If you control no Shadowlands cards, you may ignore Honor Requirements
     when bringing Monk Personalities into play.<br><b>Battle/Open:</b> Bow your target performing Monk
     Personality that has not performed a Kiho action this turn to straighten a target Ring.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)
@@ -2800,6 +2807,7 @@ cards:
     and finish them.</i>
   collector_number: '107'
 - title: Tadaji Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2811,8 +2819,8 @@ cards:
   text: Personalities with a printed Personal Honor of 1 or less will not join you.<br>After a battle's
     resolution ends, if a Province or enemy army was destroyed during it and you control a unit in the
     winning army, you may gain Honor equal to the number of your Battle Maidens in that army.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)
@@ -2898,6 +2906,7 @@ cards:
   artist: Thomas Manning
   collector_number: '11'
 - title: Tenshu Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2908,8 +2917,8 @@ cards:
   - Crab Clan
   text: Personalities you own in and out of play lose <b>Yu</b> and will not gain it.<br>Your Berserkers
     have +2F while opposed.<br><b>Battle:</b> Once per battle, straighten your target Berserker Personality.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)
@@ -2993,6 +3002,7 @@ cards:
   flavor_text: <i>"The time has come," the Chief-of-Chiefs said. "Stand together, or die alone."</i>
   collector_number: '105'
 - title: Tishi Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3004,7 +3014,7 @@ cards:
   text: Your Honor gains have a maximum value of 1.<br>Ninja you own in and out of play have +1C.<br><b>Battle/Open:</b>
     Bow your target performing Scorpion Clan Personality to look at a number of face-down cards in another
     player's hand or Provinces up to an amount equal to your Personality's Chi.
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -1
   legality:
   - Legacy
@@ -3035,6 +3045,7 @@ cards:
   artist: David Horne
   collector_number: '97'
 - title: Tomorrow Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3412,6 +3423,7 @@ cards:
     thin the weak, and the strong shall prosper."</i>
   collector_number: '61'
 - title: Yoma Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3424,8 +3436,8 @@ cards:
     duels.<br><b>Repeatable Battle:</b> Bow your target performing opposed Samurai to search your Fate
     deck for a Spell, show it, and put it in your hand.<br><b>Repeatable Battle:</b> Bow your target Spell
     to give your target opposed Samurai +1F for each Spell in its army.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)

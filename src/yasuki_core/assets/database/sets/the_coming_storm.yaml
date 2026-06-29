@@ -126,6 +126,7 @@ cards:
   collector_number: '90'
   designer: Trevor
 - title: Aranai Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3246,6 +3247,7 @@ cards:
   collector_number: '142'
   designer: Julien
 - title: Suikihime Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -3263,8 +3265,8 @@ cards:
   text: <b>Political Dynasty, :bow::</b> Target a non-Unique Courtier in your Province with a Clan Alignment
     you do not control. Permanently give him your Clan Alignment. Ignore his Honor Requirement <i>(this
     turn)</i>.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)

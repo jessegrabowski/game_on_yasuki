@@ -1533,6 +1533,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kimiono Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1545,8 +1546,8 @@ cards:
     Cavalry rulebook ability. When you attack, there is a second Maneuvers Segment during which only Personalities
     in Cavalry units may assign. They may not assign to empty battlefields unless the Defender assigned
     no Personalities.
-  province_strength: '+0'
-  starting_honor: '+1'
+  province_strength: 0
+  starting_honor: 1
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -2051,6 +2052,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Onizuka Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2062,8 +2064,8 @@ cards:
   text: Your Siege Personalities have +1PH.<br><b>Engage:</b> Target your opposed or attacking Siege Personality.
     Give the current Province +2PS or -2PS. When determining its battle's winner, if it is you, gain Honor
     equal to the difference between its Province's current and printed strength, to a maximum of 4.
-  province_strength: '+1'
-  starting_honor: '+1'
+  province_strength: 1
+  starting_honor: 1
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -2139,6 +2141,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Order of the Shattered Star
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2150,8 +2153,8 @@ cards:
   text: 'After your Kiho with an element keyword targets your Monk, once per phase, give them a +1F/+1C
     token <i>( :air:, :earth:, :fire:, :void: and :water: are element keywords.)</i>.<br><b>Battle:</b>
     Target your unbowed Monk to destroy a target enemy Personality with less Chi than your Monk''s tokens.'
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -2267,6 +2270,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Ryouko Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2278,8 +2282,8 @@ cards:
   text: 'You may not play :shadowlands: cards. :ranged: and Honor gains from your Shugenja and Spells
     are increased by 1 while you control both Human and Nonhuman Personalities at the Shugenja or Spell''s
     location.'
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Shattered Empire
   rarity: Fixed
@@ -2647,6 +2651,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Black Court
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2660,7 +2665,7 @@ cards:
   text: 'Your Wind must be The Kanpeki Dynasty. You may have your actions check your Courtiers'' Chi instead
     of Force.<br><b>Political Response, :bow: :</b> If the action took or discarded :favor:, a target
     player loses 2 Honor.'
-  province_strength: '+1'
+  province_strength: 1
   starting_honor: -1
   legality:
   - Shattered Empire
@@ -2724,6 +2729,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Emperor's Legions
+  gold_production: 1
   types:
   - Sensei
   decks:

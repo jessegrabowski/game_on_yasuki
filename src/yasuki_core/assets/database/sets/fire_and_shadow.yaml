@@ -1025,6 +1025,7 @@ cards:
   artist: Douglas Shuler
   flavor_text: <i>"I shall clasp my hands together and bow to the cornerstones of the world."</i>
 - title: Hantei Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1037,8 +1038,8 @@ cards:
     non-Ring Fate card. Until the game ends, that player may not play any copy of the card you named,
     and you may not play any copy of the card that player named.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -1625,6 +1626,7 @@ cards:
   flavor_text: <i>In your darkest hour, the ancestors shall rise for war, and you must be ready to hear
     them call.</i>
 - title: Kitsu Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -1646,7 +1648,7 @@ cards:
   text: Other players may not target your Personalities with Spell or Kiho actions.
   focus: 2
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -2843,6 +2845,7 @@ cards:
   rarity: Common
   artist: Ellym Sirac
 - title: Satsume Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2854,8 +2857,8 @@ cards:
   text: Followers will not attach to Personalities with lower Chi than the Follower's Force.<br>Your Personalities
     will not attach Followers with higher Force than the Personality's Personal Honor.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -2886,6 +2889,7 @@ cards:
   flavor_text: <i>"The Sun and the Moon must die; the throne itself will be consumed. From the flames,
     a lost Emperor will be returned." - from The Scrolls of Norikazu</i>
 - title: Seppun Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2899,8 +2903,8 @@ cards:
     changed (<i>a direct change to the numerals on a card does not count as a numerical change to the
     effect of an Honor loss or gain</i>).
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -3328,6 +3332,7 @@ cards:
   flavor_text: <i>"A new champion, a new sword. This is the dawn of an age; let it begin with a new alliance."
     - Bayushi Goshiu</i>
 - title: Taka Sensei
+  gold_production: 1
   types:
   - Sensei
   decks:
@@ -3346,8 +3351,8 @@ cards:
   - Scorpion Clan
   text: When paying for a Personality with your Stronghold, it produces a maximum of 2 Gold.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -3451,7 +3456,7 @@ cards:
     Holdings, non-Shadowlands Personalities, and non-Shadowlands Followers enter play for you for 1 more
     Gold.
   focus: 2
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: '*'
   legality:
   - Hidden Emperor (Jade)
