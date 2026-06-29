@@ -15,7 +15,7 @@ import os
 import re
 import psycopg
 from yasuki_web import auth, cards, rooms, saved_decks, websocket
-from yasuki_web.auth import current_user
+from yasuki_web.auth import require_approved
 from yasuki_web.config import allowed_origins
 from yasuki_web.rate_limit import limiter
 from yasuki_web.websocket import evict_stale_rooms
@@ -179,7 +179,7 @@ app.include_router(saved_decks.router, prefix="/api", tags=["decks"])
 # login gate (websocket.py). Anonymous visitors can browse cards and build decks, not create or
 # join games.
 app.include_router(
-    rooms.router, prefix="/api", tags=["rooms"], dependencies=[Depends(current_user)]
+    rooms.router, prefix="/api", tags=["rooms"], dependencies=[Depends(require_approved)]
 )
 app.include_router(websocket.router, prefix="/ws", tags=["websocket"])
 # Auth routes carry their own full paths (/auth/*, /api/me) and gate nothing themselves — the

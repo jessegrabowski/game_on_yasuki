@@ -1,9 +1,9 @@
 import asyncio
 import base64
 import hashlib
-import re
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
+from types import SimpleNamespace
 from urllib.parse import parse_qs, urlparse
 
 import jwt
@@ -13,7 +13,7 @@ from fastapi import HTTPException
 from fastapi.testclient import TestClient
 from starlette.requests import Request
 
-from yasuki_core.accounts import banlist, users
+from yasuki_core.accounts import banlist, sessions, users
 from yasuki_web import auth
 from yasuki_web.main import app
 
@@ -118,18 +118,22 @@ def test_full_login_flow_sets_session_and_me_returns_user(client, monkeypatch, r
     assert "samesite=lax" in set_cookie
 
     body = client.get("/api/me").json()
-    # The display name is a generated handle, never the Google profile name "Ada" — no real-name
-    # leak — and the opaque google_sub is never exposed.
-    assert body["user"]["display_name"] != "Ada"
-    assert re.fullmatch(r"[A-Z][a-zA-Z]+\d{3}", body["user"]["display_name"])
+    # A new account is nameless until onboarding — the Google profile name "Ada" never lands on the
+    # row — and the opaque google_sub is never exposed.
+    assert body["user"]["display_name"] is None
     assert "google_sub" not in body["user"]
 
 
 def test_first_login_redirects_to_settings_then_returning_logins_do_not(
-    client, monkeypatch, rsa_key
+    client, monkeypatch, accounts_conn, rsa_key
 ):
     first = _login_and_callback(client, monkeypatch, rsa_key)
     assert first.headers["location"] == "/settings"
+    # Finish onboarding (name + approval); a nameless or unapproved returning user would also be
+    # sent back to /settings.
+    uid = client.get("/api/me").json()["user"]["id"]
+    users.set_display_name(accounts_conn, uid, "Ada")
+    users.set_approved(accounts_conn, uid, True)
     client.post("/auth/logout")
     again = _login_and_callback(client, monkeypatch, rsa_key)
     assert again.headers["location"] != "/settings"
@@ -357,7 +361,9 @@ def test_admin_lists_accounts_without_any_email(client, monkeypatch, accounts_co
     listed = client.get("/api/admin/users").json()["users"]
     assert any(u["display_name"] == me["display_name"] for u in listed)
     assert all("email" not in u and "email_hmac" not in u for u in listed)
-    assert all("last_seen" in u for u in listed)
+    assert all(
+        "last_seen" in u and "is_approved" in u for u in listed
+    )  # the status column reads these
 
 
 def test_admin_bans_then_unbans_another_account(client, monkeypatch, accounts_conn, rsa_key):
@@ -445,3 +451,51 @@ def test_safe_next_allows_same_site_paths_and_rejects_open_redirects():
     assert auth._safe_next("https://evil.com") is None  # absolute external URL
     assert auth._safe_next("evil") is None  # not an absolute path
     assert auth._safe_next(None) is None
+
+
+def test_unnamed_account_is_gated_out_of_the_product_but_can_see_itself(
+    client, monkeypatch, rsa_key
+):
+    _login_and_callback(client, monkeypatch, rsa_key)  # a fresh account is nameless + pending
+    me = client.get("/api/me").json()["user"]
+    assert me["display_name"] is None and me["is_approved"] is False  # visible so the UI can nag
+    decks = client.get("/api/me/decks")
+    assert decks.status_code == 403 and "setting up" in decks.json()["detail"]  # the name gate
+    assert client.get("/api/rooms").status_code == 403  # play lobby is gated too
+
+
+def test_named_but_unapproved_account_is_still_gated(client, monkeypatch, accounts_conn, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    client.patch("/api/me", json={"display_name": "Kenji"})  # onboard, but not yet approved
+    assert client.get("/api/me").json()["user"]["is_approved"] is False
+    decks = client.get("/api/me/decks")
+    assert decks.status_code == 403 and "approval" in decks.json()["detail"]  # the approval gate
+    assert client.get("/api/rooms").status_code == 403
+
+
+def test_admin_approves_a_pending_account(client, monkeypatch, accounts_conn, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    _promote_to_admin(accounts_conn, client.get("/api/me").json()["user"]["id"])
+    target = users.upsert_user(accounts_conn, "google-pending", "p@example.com", True, "Pending")
+    assert target["is_approved"] is False
+
+    assert client.post(f"/api/admin/users/{target['id']}/approve").status_code == 200
+    assert users.get_user(accounts_conn, target["id"])["is_approved"] is True
+
+
+def test_websocket_user_requires_a_name_and_approval(client, accounts_conn):
+    def ws_for(user_id):
+        token = sessions.create_session(accounts_conn, user_id, timedelta(hours=1))
+        return SimpleNamespace(cookies={auth.SESSION_COOKIE: token})
+
+    ready = users.upsert_user(accounts_conn, "ws-ready", "r@example.com", True, "Ada")
+    users.set_approved(accounts_conn, ready["id"], True)
+    nameless = users.upsert_user(accounts_conn, "ws-nameless", "n@example.com", True, None)
+    users.set_approved(accounts_conn, nameless["id"], True)
+    pending = users.upsert_user(accounts_conn, "ws-pending", "p@example.com", True, "Kenji")
+
+    assert asyncio.run(auth.user_for_websocket(ws_for(ready["id"])))["id"] == ready["id"]
+    assert asyncio.run(auth.user_for_websocket(ws_for(nameless["id"]))) is None  # unnamed → no play
+    assert (
+        asyncio.run(auth.user_for_websocket(ws_for(pending["id"]))) is None
+    )  # unapproved → no play

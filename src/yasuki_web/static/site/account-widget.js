@@ -27,7 +27,7 @@ export function buildAccountControl(user, { onLogout, imgBase } = {}) {
   button.className = 'account-button';
   const name = document.createElement('span');
   name.className = 'account-name';
-  name.textContent = user.display_name;
+  name.textContent = user.display_name || '(unnamed)';
   button.append(name, buildAvatarElement(user, imgBase));
 
   const menu = document.createElement('div');
@@ -53,6 +53,16 @@ export function buildAccountControl(user, { onLogout, imgBase } = {}) {
   return widget;
 }
 
+// A site-wide nudge for a signed-in account that never finished onboarding (no display name). The
+// whole banner is the link to settings, where the name is chosen.
+export function buildSignupNag() {
+  const nag = document.createElement('a');
+  nag.className = 'signup-nag';
+  nag.href = '/settings';
+  nag.textContent = 'Finish setting up your account — pick a display name to start playing →';
+  return nag;
+}
+
 export async function initAccountWidget() {
   const nav = document.querySelector('.ribbon-nav');
   if (!nav) return;
@@ -61,6 +71,10 @@ export async function initAccountWidget() {
     fetchConfig().catch(() => ({ imageBase: '/images' })),
   ]);
   nav.append(buildAccountControl(user, { imgBase: config.imageBase }));
+  // Nag a nameless account everywhere but the settings page, which already prompts for the name.
+  if (user && !user.display_name && window.location.pathname !== '/settings') {
+    document.querySelector('.ribbon')?.insertAdjacentElement('afterend', buildSignupNag());
+  }
 }
 
 initAccountWidget();

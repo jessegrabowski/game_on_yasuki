@@ -89,6 +89,12 @@ export async function unbanAccount(userId) {
   return res.ok;
 }
 
+// Admin: approve a pending account so it can use the product. Returns ok.
+export async function approveAccount(userId) {
+  const res = await fetch(`/api/admin/users/${userId}/approve`, { method: 'POST' });
+  return res.ok;
+}
+
 // Admin: set an account's role to one of the defined roles. Returns ok.
 export async function setRole(userId, role) {
   const res = await fetch(`/api/admin/users/${userId}/role`, {

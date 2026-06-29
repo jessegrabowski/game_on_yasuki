@@ -224,3 +224,11 @@ def test_purge_stale_logins_removes_aged_rows(accounts_conn):
     oauth_state.stash_login(accounts_conn, "state-3", "n", "v")
     assert oauth_state.purge_stale_logins(accounts_conn, timedelta(seconds=0)) == 1
     assert oauth_state.pop_login(accounts_conn, "state-3", timedelta(minutes=10)) is None
+
+
+def test_set_approved_flips_the_flag(accounts_conn):
+    user = users.upsert_user(accounts_conn, "g", "e@example.com", True, "Ada")
+    assert user["is_approved"] is False  # new accounts start pending
+    assert users.set_approved(accounts_conn, user["id"], True) is True
+    assert users.get_user(accounts_conn, user["id"])["is_approved"] is True
+    assert users.set_approved(accounts_conn, 999999, True) is False
