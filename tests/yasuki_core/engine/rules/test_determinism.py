@@ -75,6 +75,7 @@ def _fingerprint(game: GameState) -> str:
         "once_per": sorted(game.once_per),
         "seed": game.seed,
         "pending": repr(game.pending),
+        "stack": repr(game.stack),
     }
     return hashlib.sha256(json.dumps(canonical, sort_keys=True).encode()).hexdigest()
 

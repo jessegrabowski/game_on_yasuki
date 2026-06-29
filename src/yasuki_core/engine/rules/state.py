@@ -4,6 +4,7 @@ from enum import Enum
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.decisions import DecisionRequest
+from yasuki_core.engine.rules.work import WorkItem
 
 
 class Phase(Enum):
@@ -51,6 +52,10 @@ class GameState:
     pending : DecisionRequest or None
         The decision the engine is paused on, awaiting an answer from one seat, or None when the
         engine is free to advance. Default None.
+    stack : list of WorkItem
+        Deferred engine work — the later steps of an action sequence, run once the current decision
+        clears. Ephemeral: replay rebuilds it by re-running the engine, so it is never serialized.
+        Default empty.
     """
 
     table: TableState
@@ -63,6 +68,7 @@ class GameState:
     once_per: set[str] = field(default_factory=set)
     seed: int = 0
     pending: DecisionRequest | None = None
+    stack: list[WorkItem] = field(default_factory=list)
 
     @property
     def awaiting_decision(self) -> bool:

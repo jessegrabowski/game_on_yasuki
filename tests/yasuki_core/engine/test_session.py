@@ -2,15 +2,16 @@ import pytest
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
+from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.rules.state import Phase
-from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
+from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import Pass, ProduceGold
+from yasuki_core.engine.rules.actions import Pass, ProduceGold, Recruit
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 
 
 def _register(state: TableState, card):
@@ -87,6 +88,94 @@ def test_producing_gold_fills_the_pool_and_bows_the_source():
     assert session.project(PlayerId.P1).gold[PlayerId.P1] == 3
     # A bowed source can no longer produce, so the action drops off the legal list.
     assert ProduceGold("P1-mine", 3) not in session.legal_actions(PlayerId.P1)
+
+
+def _holding_in_province(state, card_id: str, *, gold_cost: int, idx: int = 0) -> DynastyHolding:
+    holding = _register(
+        state,
+        DynastyHolding(
+            id=card_id, name="Holding", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=gold_cost
+        ),
+    )
+    holding.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(holding)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, idx)] = province
+    return holding
+
+
+def _in_dynasty(session: EngineSession) -> None:
+    session.act(PlayerId.P1, Pass())  # Action -> Attack
+    session.act(PlayerId.P1, Pass())  # Attack -> Dynasty
+    assert session.project(PlayerId.P1).phase is Phase.DYNASTY
+
+
+def test_recruit_is_offered_only_in_dynasty_for_an_affordable_face_up_holding():
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)  # an unbowed producer to pay with
+    _holding_in_province(state, "P1-buy", gold_cost=5)
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert Recruit("P1-buy") not in session.legal_actions(PlayerId.P1)  # Action phase
+    _in_dynasty(session)
+    assert Recruit("P1-buy") in session.legal_actions(PlayerId.P1)
+
+
+def test_recruit_is_withheld_when_the_seat_cannot_cover_the_cost():
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 3)  # only 3 producible
+    _holding_in_province(state, "P1-buy", gold_cost=5)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+    assert Recruit("P1-buy") not in session.legal_actions(PlayerId.P1)
+
+
+def test_recruit_is_withheld_for_a_face_up_personality():
+    # Step 2 buys Holdings only; a revealed Personality in a province is not yet recruitable.
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)  # plenty to pay with
+    person = _register(
+        state,
+        DynastyPersonality(
+            id="P1-person", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=0
+        ),
+    )
+    person.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(person)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    assert Recruit("P1-person") not in session.legal_actions(PlayerId.P1)
+
+
+def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
+    state = _dealt_table()
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        _register(
+            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+        )
+    ]
+    _gold_source(state, "P1-SH", 8)
+    _holding_in_province(state, "P1-buy", gold_cost=5)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    session.act(PlayerId.P1, Recruit("P1-buy"))
+    pending = session.project(PlayerId.P1).pending
+    assert isinstance(pending, ChoosePayment) and pending.amount == 5
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
+
+    game = session.game
+    bought = game.table.cards_by_id["P1-buy"]
+    assert bought in game.table.battlefield.cards and bought.bowed
+    assert game.gold[PlayerId.P1] == 3  # 8 produced - 5 spent, excess pools
+    refilled = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
+    assert [card.id for card in refilled] == ["P1-refill"] and not refilled[0].face_up
+    # The face-down refill is not recruitable until it is revealed next turn.
+    assert Recruit("P1-refill") not in session.legal_actions(PlayerId.P1)
+    assert game.pending is None and not game.stack
 
 
 def test_act_pass_moves_the_phase_and_rejects_an_illegal_actor():

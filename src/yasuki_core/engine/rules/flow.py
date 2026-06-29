@@ -1,12 +1,20 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import ZoneKey, ZoneRole
-from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold
+from yasuki_core.engine.table import BATTLEFIELD, ZoneKey, ZoneRole
+from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.pregame import StrongholdCard
+from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold, Recruit
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
-from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
+from yasuki_core.engine.rules.work import ResolveRecruit, WorkItem
+from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
+
+# Extra gold a Recruit costs when the card's clan differs from the recruiting seat's (rules-skeleton
+# §6: "+2 Gold if its clan ≠ yours").
+OFF_CLAN_SURCHARGE = 2
 
 
 def next_phase(phase: Phase) -> Phase | None:
@@ -41,13 +49,15 @@ def advance(game: GameState) -> None:
 
 
 def perform(game: GameState, action: Action) -> None:
-    """Apply a chosen action: pass to end the phase, or produce gold from a card. The single
-    action-apply dispatch, mirroring :func:`submit` for decisions."""
+    """Apply a chosen action: pass to end the phase, produce gold from a card, or recruit a card
+    from a province. The single action-apply dispatch, mirroring :func:`submit` for decisions."""
     match action:
         case Pass():
             advance(game)
         case ProduceGold(card_id=card_id):
             produce_gold(game, card_id)
+        case Recruit(card_id=card_id):
+            recruit(game, card_id)
 
 
 def produce_gold(game: GameState, card_id: str) -> None:
@@ -57,8 +67,48 @@ def produce_gold(game: GameState, card_id: str) -> None:
     game.add_gold(card.owner, card.gold_production)
 
 
+def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The unbowed gold producers ``seat`` controls in play — its Stronghold and gold Holdings —
+    each a source it may bow for gold (KD6, stat-derived)."""
+    return [
+        card
+        for card in game.table.battlefield.cards
+        if card.owner is seat and not card.bowed and getattr(card, "gold_production", 0) > 0
+    ]
+
+
+def recruit_cost(game: GameState, card: L5RCard) -> int:
+    """The gold a seat pays to recruit ``card``: its printed gold cost, plus the off-clan surcharge
+    when the card's clan differs from the seat's Stronghold clan (rules-skeleton §6)."""
+    cost = card.gold_cost or 0
+    seat_clan = _seat_clan(game, card.owner)
+    if card.clan is not None and seat_clan is not None and card.clan != seat_clan:
+        cost += OFF_CLAN_SURCHARGE
+    return cost
+
+
+def recruit(game: GameState, card_id: str) -> None:
+    """Announce a Recruit: defer bringing the card into play, then pause for its cost payment. The
+    payment bows gold producers to cover :func:`recruit_cost`; once answered, the stack resolves the
+    move into play and the province refill."""
+    card = game.table.cards_by_id[card_id]
+    seat = card.owner
+    producers = gold_producers(game, seat)
+    game.stack.append(ResolveRecruit(seat, card_id))
+    game.pending = ChoosePayment(
+        seat=seat,
+        candidates=tuple(producer.id for producer in producers),
+        amount=recruit_cost(game, card),
+        available=game.gold[seat],
+        produced=tuple((producer.id, producer.gold_production) for producer in producers),
+    )
+
+
 def submit(game: GameState, response: DecisionResponse) -> None:
-    """Answer the pending decision and resume the turn loop.
+    """Answer the pending decision and resume the engine.
+
+    Dispatch on the request type to its apply-handler, then continue: an end-of-turn discard begins
+    the next turn, while a cost payment drains the stack to finish the action that paused for it.
 
     Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the answer is malformed
     or illegal against the game state.
@@ -66,13 +116,50 @@ def submit(game: GameState, response: DecisionResponse) -> None:
     request = game.pending
     if request is None:
         raise RuntimeError("no decision is pending")
-    if not isinstance(request, DiscardToHandSize):
-        raise ValueError(f"no handler for decision {type(request).__name__}")
     if not request.accepts(response):
         raise ValueError("malformed answer to the pending decision")
-    _apply_discard(game, request.seat, response.choices)
-    game.pending = None
-    _begin_next_turn(game)
+    match request:
+        case DiscardToHandSize():
+            _apply_discard(game, request.seat, response.choices)
+            game.pending = None
+            _begin_next_turn(game)
+        case ChoosePayment():
+            _apply_payment(game, request, response)
+            game.pending = None
+            run_stack(game)
+        case _:
+            raise ValueError(f"no handler for decision {type(request).__name__}")
+
+
+def run_stack(game: GameState) -> None:
+    """Drain deferred work, running each item until the stack empties or one pauses for a decision.
+    A work item may itself emit a decision (setting ``pending``), so resolution stops there and
+    resumes on the next :func:`submit`."""
+    while game.stack and game.pending is None:
+        _resolve(game, game.stack.pop())
+
+
+def _resolve(game: GameState, item: WorkItem) -> None:
+    match item:
+        case ResolveRecruit(seat=seat, card_id=card_id):
+            _resolve_recruit(game, seat, card_id)
+        case _:
+            raise ValueError(f"no resolver for work item {type(item).__name__}")
+
+
+def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:
+    for card_id in response.choices:
+        produce_gold(game, card_id)
+    game.spend_gold(request.seat, request.amount)
+
+
+def _resolve_recruit(game: GameState, seat: PlayerId, card_id: str) -> None:
+    card = game.table.cards_by_id[card_id]
+    province = _province_of(game, seat, card_id)
+    ops.move_card(game.table, card, BATTLEFIELD)
+    card.bow()  # Holdings enter play bowed (rules-skeleton §6)
+    if province is not None:
+        ops.fill_province(game.table, seat, province)
 
 
 def _end_turn(game: GameState) -> None:
@@ -107,6 +194,21 @@ def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -
         raise ValueError(f"discard names cards not in {seat.name}'s hand: {missing}")
     for card_id in card_ids:
         ops.move_card(game.table, by_id[card_id], ZoneKey(seat, ZoneRole.FATE_DISCARD))
+
+
+def _seat_clan(game: GameState, seat: PlayerId) -> str | None:
+    for card in game.table.battlefield.cards:
+        if card.owner is seat and isinstance(card, StrongholdCard):
+            return card.clan
+    return None
+
+
+def _province_of(game: GameState, seat: PlayerId, card_id: str) -> ProvinceZone | None:
+    for key, zone in game.table.zones.items():
+        if key.owner is seat and key.role is ZoneRole.PROVINCE:
+            if any(card.id == card_id for card in zone.cards):
+                return zone
+    return None
 
 
 def _other(seat: PlayerId) -> PlayerId:

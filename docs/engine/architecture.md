@@ -106,7 +106,7 @@ GameState
 ├─ gold: dict[PlayerId, int]      # transient pool, cleared on phase change
 ├─ favor_holder: PlayerId | None
 ├─ once_per: set[...]             # per-turn/per-game usage flags (Inheritance, etc.)
-├─ stack: list[WorkItem]          # action sequence + queued triggers (grows in later steps)
+├─ stack: list[WorkItem]          # deferred action-sequence steps run once a decision clears (+ triggers later)
 ├─ pending: DecisionRequest | None
 └─ rng / seeds                    # seeded, for deterministic shuffles & replay
 
@@ -215,8 +215,13 @@ replay driver — which directly answers "can it be the foundation for a fuller 
 1. **Step 0** — empty playable turn: phase loop, fate draw, discard decision, phase-bar UI.
 2. **Step 1** — gold: gold pool in `GameState`, the stat-derived `Bow: Produce N` ability (KD6),
    `legal_actions` surfaces it, GUI gold-pool counter clearing on phase change.
-3. **Step 2** — buy Holdings: a Recruit action + `ChoosePayment` decision + Holdings as gold sources;
-   GUI pay prompt.
+3. **Step 2** ✅ — buy Holdings: a Recruit action + `ChoosePayment` decision + Holdings as gold
+   sources; GUI pay prompt. Seeds `GameState.stack`: Recruit pushes a `ResolveRecruit` work item,
+   pauses for the payment, and `flow.run_stack` drains it on submit (move into play + province
+   refill). The stack holds the action sequence's later steps while a step pauses for a decision; a
+   work item may itself emit a decision. Deferred: cross-step data flow (passing a step's answer to
+   a later step) — Step 2 needs none, since payment mutates gold and the resolve only needs the
+   card id known at announce.
 4. **Beyond** — personalities/HR, attack & battle resolution, the printed-ability DSL, triggers/stack,
    the full decision/targeting system, win checks.
 

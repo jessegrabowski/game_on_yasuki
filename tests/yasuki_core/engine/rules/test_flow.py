@@ -5,7 +5,8 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
-from yasuki_core.game_pieces.dynasty import DynastyCard
+from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
+from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow
@@ -148,3 +149,37 @@ def test_begin_game_straightens_and_reveals_only_the_active_board():
     assert mine_bowed.bowed is False and mine_facedown.face_up is True
     # The opponent's board is untouched at the active player's start of turn.
     assert foe_bowed.bowed is True and foe_facedown.face_up is False
+
+
+def _game_with_stronghold_clan(clan: str | None) -> GameState:
+    state = TableState.empty_two_seat()
+    state.battlefield.add(
+        _register(
+            state,
+            StrongholdCard(
+                id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, clan=clan
+            ),
+        )
+    )
+    return GameState.start(state, PlayerId.P1)
+
+
+def test_recruit_cost_adds_the_off_clan_surcharge_only_for_a_different_clan():
+    game = _game_with_stronghold_clan("crab")
+    same = DynastyHolding(
+        id="h1", name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4, clan="crab"
+    )
+    other = DynastyHolding(
+        id="h2", name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4, clan="crane"
+    )
+
+    assert flow.recruit_cost(game, same) == 4
+    assert flow.recruit_cost(game, other) == 4 + flow.OFF_CLAN_SURCHARGE
+
+
+def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
+    game = _game_with_stronghold_clan(None)
+    holding = DynastyHolding(
+        id="h", name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4, clan="crane"
+    )
+    assert flow.recruit_cost(game, holding) == 4  # no Stronghold clan to compare against

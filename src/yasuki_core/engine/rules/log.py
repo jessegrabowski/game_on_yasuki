@@ -8,7 +8,7 @@ from yasuki_core.engine.snapshot import (
     decode_initial,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold
+from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow
 
@@ -165,10 +165,14 @@ def _decode_input(payload: dict) -> GameInput:
 def _encode_action(action: Action) -> dict:
     if isinstance(action, Pass):
         return {"kind": "pass"}
+    if isinstance(action, Recruit):
+        return {"kind": "recruit", "card_id": action.card_id}
     return {"kind": "produce_gold", "card_id": action.card_id, "amount": action.amount}
 
 
 def _decode_action(payload: dict) -> Action:
     if payload["kind"] == "pass":
         return Pass()
+    if payload["kind"] == "recruit":
+        return Recruit(payload["card_id"])
     return ProduceGold(payload["card_id"], payload["amount"])

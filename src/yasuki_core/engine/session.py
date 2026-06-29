@@ -1,14 +1,16 @@
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState
+from yasuki_core.engine.table import TableState, ZoneRole
 from yasuki_core.engine.snapshot import InitialRecord
-from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold
+from yasuki_core.engine.rules.state import GameState, Phase
+from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules import projection
+from yasuki_core.engine.rules import flow, projection
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import GameLog, build_game, act_and_log, submit_and_log
+from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.dynasty import DynastyHolding
 
 
 @dataclass(slots=True)
@@ -53,16 +55,33 @@ class EngineSession:
         return projection.project(self.game, seat)
 
     def legal_actions(self, seat: PlayerId) -> list[Action]:
-        """Return the free actions ``seat`` may take right now: always a pass, plus a gold-production
-        action for each unbowed gold-producer it controls in play (KD6, stat-derived). Empty while a
-        decision is pending and for any seat but the active one."""
+        """Return the free actions ``seat`` may take right now: always a pass; a gold-production
+        action for each unbowed gold-producer it controls in play; and, in the Dynasty phase, a
+        Recruit for each face-up Holding in its provinces it could pay for. Empty while a decision
+        is pending and for any seat but the active one."""
         if self.game.awaiting_decision or seat is not self.game.active:
             return []
+        producers = flow.gold_producers(self.game, seat)
         actions: list[Action] = [Pass()]
-        for card in self.game.table.battlefield.cards:
-            if getattr(card, "gold_production", 0) > 0 and card.owner is seat and not card.bowed:
-                actions.append(ProduceGold(card.id, card.gold_production))
+        for card in producers:
+            actions.append(ProduceGold(card.id, card.gold_production))
+        if self.game.phase is Phase.DYNASTY:
+            actions.extend(self._recruits(seat, producers))
         return actions
+
+    def _recruits(self, seat: PlayerId, producers: list[L5RCard]) -> list[Action]:
+        """The Recruit actions ``seat`` can afford: each face-up Holding in its provinces whose cost
+        its pool plus its unbowed ``producers``' gold could cover."""
+        affordable = self.game.gold[seat] + sum(card.gold_production for card in producers)
+        recruits: list[Action] = []
+        for key, zone in self.game.table.zones.items():
+            if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
+                continue
+            for card in zone.cards:
+                if isinstance(card, DynastyHolding) and card.face_up:
+                    if flow.recruit_cost(self.game, card) <= affordable:
+                        recruits.append(Recruit(card.id))
+        return recruits
 
     def act(self, seat: PlayerId, action: Action) -> None:
         """Perform ``action`` for ``seat`` and record it. Raise ``ValueError`` if it is not

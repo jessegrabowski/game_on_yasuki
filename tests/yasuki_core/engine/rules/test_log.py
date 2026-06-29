@@ -7,7 +7,8 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.snapshot import InitialRecord
-from yasuki_core.engine.rules.actions import Pass, ProduceGold
+from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.engine.rules.actions import Pass, ProduceGold, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.log import (
@@ -86,6 +87,42 @@ def test_produce_gold_action_replays_and_round_trips():
     assert game.gold[PlayerId.P1] == 5
     restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
     assert restored.replay().gold[PlayerId.P1] == 5
+
+
+def test_recruit_action_and_its_payment_replay_and_round_trip():
+    state = _dealt_table()
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        _register(
+            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+        )
+    ]
+    state.battlefield.add(
+        _register(
+            state,
+            DynastyHolding(
+                id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+            ),
+        )
+    )
+    holding = _register(
+        state,
+        DynastyHolding(id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=5),
+    )
+    holding.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(holding)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+
+    log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
+    game = build_game(log)
+    act_and_log(game, log, Pass())  # Action -> Attack
+    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Recruit("P1-buy"))  # pauses for payment
+    submit_and_log(game, log, DecisionResponse(("P1-SH",)))
+
+    assert game.table.cards_by_id["P1-buy"] in game.table.battlefield.cards
+    restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
+    assert restored.replay() == game
 
 
 def test_serialization_round_trips_then_replays():

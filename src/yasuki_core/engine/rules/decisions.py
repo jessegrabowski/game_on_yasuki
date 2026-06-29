@@ -49,6 +49,38 @@ class DecisionRequest(ABC):
 
 
 @dataclass(frozen=True, slots=True)
+class ChoosePayment(DecisionRequest):
+    """The seat must cover a gold cost, bowing gold producers to make up what its pool lacks. The
+    candidates are the seat's unbowed producers; choosing some bows them, and their production plus
+    the pool must reach the cost. Excess stays in the pool.
+
+    The request snapshots everything :meth:`accepts` needs, so validity is structural: the cost, the
+    pool on hand when the cost arose, and each producer's yield.
+
+    Attributes
+    ----------
+    amount : int
+        The gold cost to cover.
+    available : int
+        The gold already in the seat's pool when the cost arose.
+    produced : tuple of (str, int)
+        Each candidate producer paired with the gold it yields when bowed.
+    """
+
+    amount: int
+    available: int
+    produced: tuple[tuple[str, int], ...]
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        chosen = response.choices
+        distinct = set(chosen)
+        if len(distinct) != len(chosen) or not distinct <= set(self.candidates):
+            return False
+        yields = dict(self.produced)
+        return self.available + sum(yields[card_id] for card_id in distinct) >= self.amount
+
+
+@dataclass(frozen=True, slots=True)
 class DiscardToHandSize(DecisionRequest):
     """The seat must discard ``count`` cards from hand to reach the maximum hand size, taken at the
     end of its turn. The candidates are the seat's current hand.
