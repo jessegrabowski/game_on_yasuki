@@ -12,6 +12,12 @@ import {
   setAvatar,
   clearAvatar,
   deleteAccount,
+  listAccounts,
+  banAccount,
+  unbanAccount,
+  setRole,
+  listRoles,
+  createRole,
 } from '../../../src/yasuki_web/static/site/account-api.js';
 import { buildAccountControl } from '../../../src/yasuki_web/static/site/account-widget.js';
 
@@ -102,6 +108,62 @@ describe('deleteAccount', () => {
     const [url, options] = fetch.mock.calls[0].arguments;
     assert.equal(url, '/api/me');
     assert.equal(options.method, 'DELETE');
+  });
+});
+
+describe('admin account actions', () => {
+  it('lists accounts from the admin endpoint', async () => {
+    fetch.mock.mockImplementation(() => respond({ users: [{ id: 1, display_name: 'Ada' }] }));
+    assert.deepEqual(await listAccounts(), [{ id: 1, display_name: 'Ada' }]);
+    assert.equal(fetch.mock.calls[0].arguments[0], '/api/admin/users');
+  });
+
+  it('returns empty when listing is forbidden', async () => {
+    fetch.mock.mockImplementation(() => respond({}, { ok: false, status: 403 }));
+    assert.deepEqual(await listAccounts(), []);
+  });
+
+  it('POSTs ban and unban to the account id', async () => {
+    fetch.mock.mockImplementation(() => respond({ banned: true }));
+    assert.equal(await banAccount(7), true);
+    assert.deepEqual(
+      [fetch.mock.calls[0].arguments[0], fetch.mock.calls[0].arguments[1].method],
+      ['/api/admin/users/7/ban', 'POST'],
+    );
+
+    assert.equal(await unbanAccount(7), true);
+    assert.deepEqual(
+      [fetch.mock.calls[1].arguments[0], fetch.mock.calls[1].arguments[1].method],
+      ['/api/admin/users/7/unban', 'POST'],
+    );
+  });
+
+  it('POSTs a role change carrying the new role', async () => {
+    fetch.mock.mockImplementation(() => respond({ role: 'admin' }));
+    assert.equal(await setRole(5, 'admin'), true);
+    const [url, options] = fetch.mock.calls[0].arguments;
+    assert.equal(url, '/api/admin/users/5/role');
+    assert.equal(options.method, 'POST');
+    assert.deepEqual(JSON.parse(options.body), { role: 'admin' });
+  });
+
+  it('lists the defined roles', async () => {
+    fetch.mock.mockImplementation(() => respond({ roles: [{ name: 'user' }, { name: 'admin' }] }));
+    assert.deepEqual(await listRoles(), [{ name: 'user' }, { name: 'admin' }]);
+    assert.equal(fetch.mock.calls[0].arguments[0], '/api/admin/roles');
+  });
+
+  it('creates a role and returns the refreshed list', async () => {
+    fetch.mock.mockImplementation(() => respond({ roles: [{ name: 'user' }, { name: 'moderator' }] }));
+    const roles = await createRole('moderator');
+    assert.deepEqual(
+      roles.map((role) => role.name),
+      ['user', 'moderator'],
+    );
+    const [url, options] = fetch.mock.calls[0].arguments;
+    assert.equal(url, '/api/admin/roles');
+    assert.equal(options.method, 'POST');
+    assert.deepEqual(JSON.parse(options.body), { name: 'moderator', description: '' });
   });
 });
 

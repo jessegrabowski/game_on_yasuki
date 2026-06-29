@@ -508,6 +508,79 @@ a { color: inherit; text-decoration: none; }
   cursor: pointer;
 }
 .btn-danger-large:hover { background: var(--accent-ink); }
+
+/* Admin pane: the account table and its per-row ban/unban actions. */
+.admin-users {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.admin-users th,
+.admin-users td {
+  text-align: left;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+}
+.admin-users th {
+  font-weight: 500;
+  color: var(--muted);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.admin-users td:last-child { text-align: right; }
+.role-select {
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 3px 6px;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.btn-ban,
+.btn-unban {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.add-role-form {
+  display: flex;
+  gap: 8px;
+  margin-top: 1.25rem;
+}
+.add-role-form input {
+  padding: 6px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 4px;
+  font: inherit;
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.add-role-form button {
+  padding: 6px 14px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+.add-role-form button:hover { background: var(--accent-ink); }
+.btn-ban {
+  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: #fff;
+}
+.btn-ban:hover { background: var(--accent-ink); }
+.btn-unban {
+  border: 1px solid var(--line-strong);
+  background: var(--paper-2);
+  color: var(--ink);
+}
+.btn-unban:hover { border-color: var(--muted); }
 .avatar-editor {
   display: flex;
   flex-wrap: wrap;

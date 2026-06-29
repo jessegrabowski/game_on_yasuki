@@ -5,13 +5,20 @@ import {
   setAvatar,
   clearAvatar,
   deleteAccount,
+  listAccounts,
+  banAccount,
+  unbanAccount,
+  setRole,
+  listRoles,
+  createRole,
 } from './account-api.js';
 import { fetchConfig } from './card-common.js';
 import { drawCardAvatar, loadImage } from './avatar.js';
 import { createCropEditor } from './card-crop.js';
 
 const SEARCH_DEBOUNCE_MS = 300;
-const PANES = ['display', 'privacy', 'delete'];
+// The admin pane's tab and content stay hidden/empty for non-admins; the server is the real gate.
+const PANES = ['display', 'privacy', 'delete', 'admin'];
 
 // Map a URL hash (without the leading '#') to a pane id, falling back to the first pane for an
 // unknown or empty hash.
@@ -28,8 +35,110 @@ async function init() {
   }
   initDisplayName(user);
   initDeleteAccount();
+  if (user.role === 'admin') initAdmin(user);
   const { imageBase } = await fetchConfig().catch(() => ({ imageBase: '/images' }));
   initAvatarEditor(user, imageBase);
+}
+
+// Reveal and populate the admin pane. Gated on the role the server reports; every action it offers
+// is re-checked server-side, so this is convenience, not the security boundary.
+function initAdmin(user) {
+  document.querySelector('.settings-tab[data-pane="admin"]').classList.remove('hidden');
+  const tbody = document.getElementById('adminUsers');
+  const status = document.getElementById('adminStatus');
+  const run = async (working, action) => {
+    status.textContent = working;
+    const ok = await action();
+    status.textContent = ok ? '' : 'Could not update the account.';
+    if (ok) await load();
+  };
+  const load = async () => {
+    const [accounts, roles] = await Promise.all([listAccounts(), listRoles()]);
+    renderAdminUsers(tbody, accounts, {
+      selfId: user.id,
+      roles: roles.map((role) => role.name),
+      onSetRole: (id, role) => run('Updating role…', () => setRole(id, role)),
+      onBan: (id, isBanned) =>
+        run(isBanned ? 'Lifting ban…' : 'Banning…', () =>
+          isBanned ? unbanAccount(id) : banAccount(id),
+        ),
+    });
+  };
+
+  const nameInput = document.getElementById('newRoleName');
+  document.getElementById('addRoleForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const name = nameInput.value.trim();
+    if (!name) return;
+    status.textContent = 'Adding role…';
+    const updated = await createRole(name);
+    status.textContent = updated.length ? '' : 'Could not add the role.';
+    if (updated.length) {
+      nameInput.value = '';
+      await load();
+    }
+  });
+
+  load();
+}
+
+const formatDay = (iso) => (iso ? new Date(iso).toLocaleDateString() : '—');
+
+// Fill the admin table body with one row per account. The role cell is a picker of the defined
+// roles; the local admin's own row shows its role as plain text and gets no ban, since changing
+// your own role or banning yourself would lock you out (both also refused server-side). `opts` is
+// { selfId, roles, onSetRole(id, role), onBan(id, isBanned) }.
+export function renderAdminUsers(tbody, accounts, { selfId, roles, onSetRole, onBan }) {
+  const cell = (text) => {
+    const td = document.createElement('td');
+    td.textContent = text;
+    return td;
+  };
+  tbody.replaceChildren(
+    ...accounts.map((account) => {
+      const isSelf = account.id === selfId;
+      const row = document.createElement('tr');
+      row.append(cell(account.display_name), roleCell(account, isSelf, roles, onSetRole));
+      row.append(
+        cell(account.is_banned ? 'Banned' : 'Active'),
+        cell(formatDay(account.created_at)),
+        cell(formatDay(account.last_seen)),
+      );
+      const actions = document.createElement('td');
+      if (!isSelf) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = account.is_banned ? 'btn-unban' : 'btn-ban';
+        button.textContent = account.is_banned ? 'Unban' : 'Ban';
+        button.addEventListener('click', () => onBan(account.id, account.is_banned));
+        actions.append(button);
+      }
+      row.append(actions);
+      return row;
+    }),
+  );
+}
+
+function roleCell(account, isSelf, roles, onSetRole) {
+  const td = document.createElement('td');
+  if (isSelf) {
+    td.textContent = account.role;
+    return td;
+  }
+  const select = document.createElement('select');
+  select.className = 'role-select';
+  // The current role is always an option, even if it is somehow no longer in the defined set, so
+  // the picker never silently misrepresents it.
+  for (const name of roles.includes(account.role) ? roles : [account.role, ...roles]) {
+    const option = document.createElement('option');
+    option.value = name;
+    option.textContent = name;
+    select.append(option);
+  }
+  select.value = account.role;
+  select.addEventListener('change', () => onSetRole(account.id, select.value));
+  td.append(select);
+  return td;
 }
 
 // Left-column tabs select a pane via the URL hash, so each is bookmarkable.

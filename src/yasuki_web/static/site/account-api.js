@@ -66,6 +66,61 @@ export async function deleteAccount() {
   return res.ok;
 }
 
+// Admin: every registered account (empty on any failure, including a non-admin 403).
+export async function listAccounts() {
+  try {
+    const res = await fetch('/api/admin/users');
+    if (!res.ok) return [];
+    return (await res.json()).users ?? [];
+  } catch {
+    return [];
+  }
+}
+
+// Admin: ban an account (revokes its sessions, blocks the identity). Returns ok.
+export async function banAccount(userId) {
+  const res = await fetch(`/api/admin/users/${userId}/ban`, { method: 'POST' });
+  return res.ok;
+}
+
+// Admin: lift a ban so the identity may sign in again. Returns ok.
+export async function unbanAccount(userId) {
+  const res = await fetch(`/api/admin/users/${userId}/unban`, { method: 'POST' });
+  return res.ok;
+}
+
+// Admin: set an account's role to one of the defined roles. Returns ok.
+export async function setRole(userId, role) {
+  const res = await fetch(`/api/admin/users/${userId}/role`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ role }),
+  });
+  return res.ok;
+}
+
+// Admin: the defined roles ({ name, description }), for the role picker. Empty on any failure.
+export async function listRoles() {
+  try {
+    const res = await fetch('/api/admin/roles');
+    if (!res.ok) return [];
+    return (await res.json()).roles ?? [];
+  } catch {
+    return [];
+  }
+}
+
+// Admin: define a new role. Returns the refreshed role list, or [] on failure.
+export async function createRole(name, description = '') {
+  const res = await fetch('/api/admin/roles', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, description }),
+  });
+  if (!res.ok) return [];
+  return (await res.json()).roles ?? [];
+}
+
 async function _errorMessage(res) {
   if (res.status === 401) return 'Sign in to change your name';
   try {
