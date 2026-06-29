@@ -1,17 +1,16 @@
-from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos
-from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.constants import CARD_W
 
-# How far a seat's province row sits from the top or bottom edge, and how far the hand sits beyond
-# that. The human seat occupies the bottom band; the opponent mirrors it across the top. Decks,
-# discards, and banishes live in the off-board info panels, so only the in-play rows go here.
-_ROW_INSET = 200
+# How far each seat's province row sits from its edge. The human band (bottom) leaves room for the
+# hand strip below it; the opponent (top) draws no hand, so its provinces tuck right up against the
+# edge to free the centre. Decks, discards, and banishes live in the off-board info panels.
+_PROVINCE_INSET_BOTTOM = 200
+_PROVINCE_INSET_TOP = 110
 _HAND_INSET = 60
 
 
 def _row_y(canvas_h: int, seat_at_bottom: bool) -> int:
-    return canvas_h - _ROW_INSET if seat_at_bottom else _ROW_INSET
+    return canvas_h - _PROVINCE_INSET_BOTTOM if seat_at_bottom else _PROVINCE_INSET_TOP
 
 
 def _hand_y(canvas_h: int, seat_at_bottom: bool) -> int:
@@ -41,15 +40,19 @@ def province_positions(
     return [(int(center_x + off), y) for off in offsets]
 
 
-def unplaced_battlefield_pos(
-    canvas_w: int, canvas_h: int, side: Side, owner: PlayerId | None, *, seat_at_bottom: bool
-) -> tuple[int, int]:
-    """Where a battlefield card with no real position (the unplaced sentinel — e.g. a freshly
-    recruited card) is parked: a staging spot in its owner's half, fate to the left and dynasty to
-    the right, set between the midline and the province row so it reads as in play but unplaced."""
+# Where a seat's home row of unplaced cards (its stronghold, sensei, and freshly recruited holdings)
+# begins, and how its cards step rightward. The stronghold sits first, so everything that joins it
+# later lands beside it.
+_HOME_X0 = CARD_W
+_HOME_STEP = CARD_W
+
+
+def home_slot(canvas_w: int, canvas_h: int, index: int, *, seat_at_bottom: bool) -> tuple[int, int]:
+    """Position for the ``index``-th unplaced card in a seat's home row, laid left to right from
+    inside the seat's edge. The stronghold, sensei, and freshly recruited holdings park here in
+    battlefield order until a drag gives them a board spot."""
     y = int(canvas_h * 0.66) if seat_at_bottom else int(canvas_h * 0.34)
-    x = canvas_w // 4 if side is Side.FATE else canvas_w * 3 // 4
-    return x, y
+    return _HOME_X0 + index * _HOME_STEP, y
 
 
 def to_canvas(pos: BoardPos, *, flipped: bool, canvas_w: int, canvas_h: int) -> tuple[int, int]:

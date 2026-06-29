@@ -95,13 +95,14 @@ def main() -> None:
 
     def refresh() -> None:
         view = runner.view()
+        field.gold = view.gold[view.viewer]
         field.render_snapshot(view.table, human_seat)
         phase_bar.refresh(view)
         pending = runner.pending
         if pending is not None:
             prompt, button_label = _describe_decision(pending)
             can_confirm = pending.accepts(DecisionResponse(tuple(field.selection)))
-            prompt_box.show(view, prompt, [(button_label, confirm_decision, can_confirm)])
+            prompt_box.show(prompt, [(button_label, confirm_decision, can_confirm)])
         else:
             whose = "Your turn" if view.active is view.viewer else "Opponent's turn"
             # Non-card actions are buttons; card actions (produce gold) are invoked on the board.
@@ -110,7 +111,7 @@ def main() -> None:
                 for action in runner.legal_actions()
                 if isinstance(action, Pass)
             ]
-            prompt_box.show(view, whose, buttons)
+            prompt_box.show(whose, buttons)
         opponent_panel.refresh()
         human_panel.refresh()
 

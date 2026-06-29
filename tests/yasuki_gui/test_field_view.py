@@ -1,5 +1,12 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import (
+    BoardPos,
+    DeckKey,
+    TableState,
+    UNPLACED_BOARD_POS,
+    ZoneKey,
+    ZoneRole,
+)
 from yasuki_core.engine.intents import Bow, DestroyProvince, Draw, FlipDeckTop, MoveCard
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.cards import L5RCard
@@ -74,6 +81,21 @@ class TestDispatchReconcile:
         empty = DeckKey(PlayerId.P1, Side.FATE)
         state.decks[empty].cards.clear()
         assert field.dispatch(FlipDeckTop(empty)) == []
+
+
+class TestHomeRow:
+    def test_unplaced_cards_get_distinct_positions(self, loaded):
+        field, state = loaded
+        # P1's stronghold starts unplaced; add a second unplaced P1 card beside it.
+        extra = L5RCard(id="P1-extra", name="Sensei", side=Side.DYNASTY, owner=PlayerId.P1)
+        state.cards_by_id["P1-extra"] = extra
+        state.battlefield.add(extra)
+        state.positions["P1-extra"] = UNPLACED_BOARD_POS
+        field.reconcile_all()
+
+        stronghold = field.sprites[card_tag("P1-SH")]
+        sensei = field.sprites[card_tag("P1-extra")]
+        assert stronghold.x != sensei.x  # the home row steps them apart, not stacked
 
 
 class TestOffBoardReads:

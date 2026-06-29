@@ -17,6 +17,11 @@ class PhaseBar(tk.Frame):
 
     def __init__(self, master: tk.Misc):
         super().__init__(master, bg=theme.SURFACE)
+        # The turn counter is incidental info, so it sits quietly at the right edge, not in a chip.
+        self._turn = tk.Label(
+            self, bg=theme.SURFACE, fg=theme.INK_DIM, font=theme.serif(11), padx=12
+        )
+        self._turn.pack(side="right")
         self._chips: dict[Phase, tk.Label] = {}
         for phase in TURN_PHASES:
             chip = tk.Label(self, pady=10)
@@ -24,7 +29,8 @@ class PhaseBar(tk.Frame):
             self._chips[phase] = chip
 
     def refresh(self, view: GameView) -> None:
-        """Highlight the chip for ``view.phase`` and dim the rest."""
+        """Highlight the chip for ``view.phase``, dim the rest, and show the turn count."""
+        self._turn.configure(text=f"Turn {view.turn}")
         for phase, chip in self._chips.items():
             active = phase is view.phase
             label = _PHASE_LABELS[phase]

@@ -6,7 +6,6 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos, DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.intents import Event, Intent, apply_intent
 from yasuki_core.engine.redaction import ViewSnapshot
-from yasuki_core.game_pieces.constants import Side
 from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
 from yasuki_gui.constants import CARD_H, CARD_W
@@ -14,9 +13,9 @@ from yasuki_gui.controller import FieldController
 from yasuki_gui.layout import (
     from_canvas,
     hand_box,
+    home_slot,
     province_positions,
     to_canvas,
-    unplaced_battlefield_pos,
 )
 from yasuki_gui.services.hittest import resolve_tag_at as hittest_resolve_tag_at
 from yasuki_gui.tags import card_id_for_tag, card_tag, zone_tag
@@ -58,6 +57,9 @@ class FieldView(tk.Canvas):
         # table; the manual sandbox leaves it None and renders the full TableState directly.
         self._snapshot: ViewSnapshot | None = None
         self.seat: PlayerId = PlayerId.P1
+        # The viewer's gold pool, drawn as a coin in the battlefield corner; set by the host before
+        # each render. The rules engine owns the real value.
+        self.gold: int = 0
 
         self._sprites: dict[str, CardSpriteVisual] = {}
         self._zones: dict[str, ZoneVisual] = {}
@@ -258,6 +260,33 @@ class FieldView(tk.Canvas):
         self._draw_table()
         self._reconcile_zones()
         self._reconcile_sprites()
+        if self.rules_mode:
+            self._draw_gold()
+
+    def _draw_gold(self) -> None:
+        """A gold coin and the viewer's pool in the bottom-left of the battlefield."""
+        _, h = self._canvas_size()
+        cx, cy, r = 30, h - 30, 15
+        self.create_oval(
+            cx - r,
+            cy - r,
+            cx + r,
+            cy + r,
+            fill=theme.GOLD,
+            outline=theme.GOLD_HOVER,
+            width=2,
+            tags=("gold",),
+        )
+        self.create_oval(cx - 7, cy - 7, cx + 7, cy + 7, outline=theme.GOLD_HOVER, tags=("gold",))
+        self.create_text(
+            cx + r + 8,
+            cy,
+            text=str(self.gold),
+            fill=theme.INK,
+            anchor="w",
+            font=theme.serif(16, "bold"),
+            tags=("gold",),
+        )
 
     # The render source is the redacted projection in rules mode, else the raw sandbox table. These
     # accessors yield uniform render-data from whichever is active, so reconcile is source-agnostic.
@@ -376,10 +405,12 @@ class FieldView(tk.Canvas):
     def _reconcile_sprites(self) -> None:
         w, h = self._canvas_size()
         wanted: set[str] = set()
+        # Unplaced cards (stronghold, sensei, fresh holdings) fill each owner's home row in order.
+        home_index: dict[PlayerId | None, int] = {}
         for rc, pos in self._render_battlefield():
             tag = card_tag(rc.id)
             wanted.add(tag)
-            x, y = self._sprite_xy(rc, pos, w, h)
+            x, y = self._sprite_xy(rc, pos, w, h, home_index)
             sp = self._sprites.get(tag)
             if sp is None:
                 sp = CardSpriteVisual(rc, x, y, tag, images=self._images)
@@ -390,12 +421,14 @@ class FieldView(tk.Canvas):
             self._sprites.pop(tag, None)
             self._selected.discard(tag)
 
-    def _sprite_xy(self, card, pos: BoardPos | None, w: int, h: int) -> tuple[int, int]:
+    def _sprite_xy(
+        self, card, pos: BoardPos | None, w: int, h: int, home_index: dict[PlayerId | None, int]
+    ) -> tuple[int, int]:
         if pos is None or pos.x < 0 or pos.y < 0:
-            side = Side.FATE if card.side is Side.FATE else Side.DYNASTY
-            return unplaced_battlefield_pos(
-                w, h, side, card.owner, seat_at_bottom=(card.owner or self.seat) is self.seat
-            )
+            owner = card.owner
+            index = home_index.get(owner, 0)
+            home_index[owner] = index + 1
+            return home_slot(w, h, index, seat_at_bottom=(owner or self.seat) is self.seat)
         return to_canvas(pos, flipped=self._flipped, canvas_w=w, canvas_h=h)
 
     def _province_keys_by_owner(self) -> dict[PlayerId, list[ZoneKey]]:

@@ -1,12 +1,10 @@
-from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos
-from yasuki_core.game_pieces.constants import Side
 from yasuki_gui.constants import CARD_W
 from yasuki_gui.layout import (
     from_canvas,
+    home_slot,
     province_positions,
     to_canvas,
-    unplaced_battlefield_pos,
 )
 
 W, H = 1000, 800
@@ -42,15 +40,13 @@ class TestProvincePositions:
         assert [x for x, _ in top] == [x for x, _ in reversed(bottom)]
 
 
-class TestUnplacedBattlefield:
-    def test_parks_fate_left_dynasty_right_in_the_owners_half(self):
-        fate_x, fate_y = unplaced_battlefield_pos(W, H, Side.FATE, PlayerId.P1, seat_at_bottom=True)
-        dyn_x, dyn_y = unplaced_battlefield_pos(
-            W, H, Side.DYNASTY, PlayerId.P1, seat_at_bottom=True
-        )
-        assert fate_x < dyn_x
-        assert fate_y == dyn_y > H // 2  # the bottom seat's half is below the midline
+class TestHomeRow:
+    def test_steps_right_by_a_card_width_in_the_bottom_half(self):
+        x0, y0 = home_slot(W, H, 0, seat_at_bottom=True)
+        x1, y1 = home_slot(W, H, 1, seat_at_bottom=True)
+        assert x1 - x0 == CARD_W  # the next home card sits one width to the right
+        assert y0 == y1 > H // 2  # the bottom seat's home row is below the midline
 
-    def test_top_seat_parks_above_the_midline(self):
-        _, y = unplaced_battlefield_pos(W, H, Side.FATE, PlayerId.P2, seat_at_bottom=False)
+    def test_top_seat_home_row_is_above_the_midline(self):
+        _, y = home_slot(W, H, 0, seat_at_bottom=False)
         assert y < H // 2
