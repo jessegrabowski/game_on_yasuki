@@ -5,8 +5,8 @@ from yasuki_web.main import app
 client = TestClient(app)
 
 
-def test_play_online_serves_the_play_app():
-    r = client.get("/play-online")
+def test_play_route_serves_the_play_app():
+    r = client.get("/play")
     assert r.status_code == 200
     assert "/site/play-online.js" in r.text
 

@@ -1,4 +1,4 @@
-// The online-play lobby and in-room client, served at /play-online.
+// The online-play lobby and in-room client, served at /play.
 
 import { esc, fetchConfig } from './card-common.js';
 import { listRooms, createRoom, deleteRoom } from './rooms-api.js';

@@ -38,7 +38,7 @@ SESSION_TTL = timedelta(days=30)
 DEV_LOGIN_ENV = "YASUKI_DEV_LOGIN"
 # A login must reach the callback within this window; stale OAuth state is rejected and swept.
 LOGIN_STATE_TTL = timedelta(minutes=10)
-DEFAULT_LANDING = "/play-online"
+DEFAULT_LANDING = "/play"
 
 # Tolerance for clock skew between us and Google when checking the id_token's expiry/issued-at.
 CLOCK_SKEW_LEEWAY_S = 10
