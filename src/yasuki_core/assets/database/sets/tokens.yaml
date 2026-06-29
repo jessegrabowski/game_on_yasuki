@@ -1921,3 +1921,1360 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: (Token — created in play; not deckable)
+- id: twin_kama
+  title: Twin Kama
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Weapon
+  gold_cost: 0
+  is_proxy: true
+  text: Attached Personality has +1F and +1C. (Token — created in play; not deckable)
+- id: air_kami
+  title: Air Kami
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: animated_armor
+  title: Animated Armor
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Samurai
+  - Spirit
+  force: 3
+  chi: 1
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: farmhands
+  title: Farmhands
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ashigaru
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: horde_outrider
+  title: Horde Outrider
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  force: 4
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after this battle's Resolution Segment. (Token — created
+    in play; not deckable)
+- id: fishermen
+  title: Fishermen
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ashigaru
+  - Cavalry
+  - Naval
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: While this Follower remains attached to its Personality, gain 3 Honor after the first time each
+    attack its controller assigns or moves him. (Token — created in play; not deckable)
+- id: mantis_marine
+  title: Mantis Marine
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  - Naval
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: reluctant_conscript
+  title: Reluctant Conscript
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 0
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after it is targeted, or when the Combat Segment of that
+    battlefield's battle ends. (Token — created in play; not deckable)
+- id: daitans_ancestor
+  title: Daitan's Ancestor
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Lion Clan
+  force: 2
+  chi: 1
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: fallen_marine
+  title: Fallen Marine
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Cavalry
+  - Naval
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: earthen_servant
+  title: Earthen Servant
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Earth
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Remove from the game after the battle ends. (Token — created in play; not deckable)
+- id: stone_sentinel
+  title: Stone Sentinel
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Earth
+  force: 3
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: May not be destroyed to pay costs. (Token — created in play; not deckable)
+- id: eighth_dragon
+  title: Eighth Dragon
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Dragon
+  - Shugenja
+  - Cavalry
+  force: 7
+  chi: 4
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: eiyas_shade
+  title: Eiya's Shade
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Spirit
+  force: 3
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: emperors_legion
+  title: Emperor's Legion
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 2
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Banish this Personality at the end of the turn. (Token — created in play; not deckable)
+- id: erenas_avatar
+  title: Erena's Avatar
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Phoenix Clan
+  keywords:
+  - Void
+  - Shugenja
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: hunting_falcon
+  title: Hunting Falcon
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Falcon
+  - Cavalry
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: forgotten_dead
+  title: Forgotten Dead
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Undead
+  - Shadowlands
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: battlefield_revenant
+  title: Battlefield Revenant
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Undead
+  force: 4
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: armored_cavalry
+  title: Armored Cavalry
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  force: 4
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: fu_lengs_minion
+  title: Fu Leng's Minion
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  - Fu Leng
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: risen_ghul
+  title: Risen Ghul
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Ghul
+  - Undead
+  force: 2
+  chi: 2
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: gift_horse
+  title: Gift Horse
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Gift
+  - Cavalry
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+  text: This Personality has Cavalry. (Token — created in play; not deckable)
+- id: goblin_rabble
+  title: Goblin Rabble
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  - Goblin
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: earthen_golem
+  title: Earthen Golem
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Golem
+  - Earth
+  - Samurai
+  - Yojimbo
+  force: 4
+  chi: 0
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Will not be destroyed for having 0 Chi. (Token — created in play; not deckable)
+- id: hida_fubatsus_armor
+  title: Hida Fubatsu's Armor
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Armor
+  gold_cost: 0
+  is_proxy: true
+  text: +1F. (Token — created in play; not deckable)
+- id: hida_fubatsus_weapon
+  title: Hida Fubatsu's Weapon
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Weapon
+  gold_cost: 0
+  is_proxy: true
+  text: +1F. (Token — created in play; not deckable)
+- id: hidas_fury
+  title: Hida's Fury
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  force: 4
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Follower from the game at the end of the turn unless you are a Crab Clan player. (Token
+    — created in play; not deckable)
+- id: horoisos_scout
+  title: Horoiso's Scout
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Crab Clan
+  keywords:
+  - Samurai
+  - Scout
+  - Spirit
+  force: 3
+  chi: 3
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after the battle ends. (Token — created in play; not deckable)
+- id: house_geisha
+  title: House Geisha
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Geisha
+  force: 0
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: You have -1 maximum hand size. (Token — created in play; not deckable)
+- id: swift_outrider
+  title: Swift Outrider
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: illusory_shugenja
+  title: Illusory Shugenja
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Air
+  - Illusion
+  - Nonhuman
+  - Shugenja
+  force: 0
+  chi: 3
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: legion_armor
+  title: Legion Armor
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Armor
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: iron_blade
+  title: Iron Blade
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Weapon
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: isawa_tsumaros_illusion
+  title: Isawa Tsumaro's Illusion
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Air
+  - Illusion
+  - Shugenja
+  force: 0
+  chi: 3
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: While this Personality is in play, abilities on the target's spells have Home. (Token — created
+    in play; not deckable)
+- id: jackal_pack
+  title: Jackal Pack
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Jackal
+  - Cavalry
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: jade_dragon_avatar
+  title: Jade Dragon Avatar
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Dragon
+  - Shugenja
+  - Cavalry
+  - Spirit
+  force: 3
+  chi: 3
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: jinseis_avatar
+  title: Jinsei's Avatar
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Samurai
+  - Undead
+  force: 0
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Your created Personalities have +1F. (Token — created in play; not deckable)
+- id: kakita_sakis_armor
+  title: Kakita Saki's Armor
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Armor
+  gold_cost: 0
+  is_proxy: true
+  text: Attached Personality's Melee and Ranged Attacks have -3 strength. (Token — created in play; not
+    deckable)
+- id: spirit_of_kamoko
+  title: Spirit of Kamoko
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Unicorn Clan
+  keywords:
+  - Samurai
+  - Cavalry
+  - Spirit
+  force: 6
+  chi: 5
+  personal_honor: 5
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after the next Dynasty Phase begins. (Token — created in
+    play; not deckable)
+- id: kamokos_cavalry
+  title: Kamoko's Cavalry
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: After this Personality's Battle action targets Yogo Junzo, destroy him. (Token — created in play;
+    not deckable)
+- id: kanekas_samurai
+  title: Kaneka's Samurai
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Cavalry
+  force: 4
+  chi: 4
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: When the turn ends, remove them from the game. (Token — created in play; not deckable)
+- id: kichis_spirit
+  title: Kichi's Spirit
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Mantis Clan
+  keywords:
+  - Nonhuman
+  - Badger
+  - Spirit
+  force: 3
+  chi: 2
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: 'Battle: Target an enemy Personality: Reduce his Force to 0. (Token — created in play; not deckable)'
+- id: legionnaire
+  title: Legionnaire
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  - Samurai
+  force: 4
+  chi: 4
+  personal_honor: 4
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: matsu_ancestor
+  title: Matsu Ancestor
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Lion Clan
+  keywords:
+  - Samurai
+  force: 2
+  chi: 1
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: lost_soul
+  title: Lost Soul
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Lost
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: makirtchs_ratling
+  title: Mak'irtch's Ratling
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Permanently give this Follower all Tribe keywords that Mak'irtch has. (Token — created in play;
+    not deckable)
+- id: moto_gonnohyoes_cavalry
+  title: Moto Gonnohyoe's Cavalry
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Unicorn Clan
+  keywords:
+  - Cavalry
+  force: 2
+  chi: 2
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: mountain_sentry
+  title: Mountain Sentry
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Unicorn Clan
+  keywords:
+  - Samurai
+  - Cavalry
+  - Scout
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after this battle's resolution. (Token — created in play;
+    not deckable)
+- id: naga_warrior
+  title: Naga Warrior
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Naga
+  - Nonhuman
+  force: 2
+  chi: 2
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: mantis_sailor
+  title: Mantis Sailor
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Naval
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: deckhands
+  title: Deckhands
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Naval
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: lurking_shinobi
+  title: Lurking Shinobi
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ninja
+  force: 0
+  chi: 2
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: shadow_ninja
+  title: Shadow Ninja
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ninja
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: covert_ninja
+  title: Covert Ninja
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ninja
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Destroy this Follower before you reveal cards in your Provinces at the start of your next turn.
+    (Token — created in play; not deckable)
+- id: war_beast
+  title: War Beast
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: oni_whelp
+  title: Oni Whelp
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  - Oni
+  force: 1
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: oni_brood
+  title: Oni Brood
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  - Oni
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: peasant_mob
+  title: Peasant Mob
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  force: 3
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: shiba_yojimbo
+  title: Shiba Yojimbo
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Phoenix Clan
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: nezumi_warrior
+  title: Nezumi Warrior
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: nezumi_scout
+  title: Nezumi Scout
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: nezumi_pack
+  title: Nezumi Pack
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  - Pack
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: nezumi_whelp
+  title: Nezumi Whelp
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  force: 1
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: bone_tribe_nezumi
+  title: Bone Tribe Nezumi
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  - Crippled
+  - Bone Tribe
+  force: 2
+  chi: 2
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: nezumi_cleaver
+  title: Nezumi Cleaver
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Weapon
+  gold_cost: 0
+  is_proxy: true
+  text: Attached Personality has +3F. (Token — created in play; not deckable)
+- id: hired_ronin
+  title: Hired Ronin
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ronin
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Remove him from the game after this battle ends. (Token — created in play; not deckable)
+- id: recruited_ronin
+  title: Recruited Ronin
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ronin
+  - Samurai
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Remove him from the game when this turn ends. (Token — created in play; not deckable)
+- id: mounted_samurai
+  title: Mounted Samurai
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Cavalry
+  force: 3
+  chi: 3
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: guardian_spirit
+  title: Guardian Spirit
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Spirit
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: scarab_ghul
+  title: Scarab Ghul
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ghul
+  - Cavalry
+  - Undead
+  force: 3
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: sworn_yojimbo
+  title: Sworn Yojimbo
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game before this turn ends. (Token — created in play; not deckable)
+- id: sleeper_agent
+  title: Sleeper Agent
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Remove from the game after two more Battle actions other than this one resolve this turn. (Token
+    — created in play; not deckable)
+- id: shireikans_bushi
+  title: Shireikan's Bushi
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Bushi
+  force: 1
+  chi: 1
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Transfer all cards from Shireikan to this Personality. (Token — created in play; not deckable)
+- id: ancestral_shiryo
+  title: Ancestral Shiryo
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shiryo
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: hisashis_guard
+  title: Hisashi's Guard
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Scorpion Clan
+  keywords:
+  - Ninja
+  - Samurai
+  force: 4
+  chi: 3
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: shosuros_spy
+  title: Shosuro's Spy
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Scorpion Clan
+  keywords:
+  - Samurai
+  force: 3
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: After the battle ends, remove this Personality from the game, then return Shosuro Infiltrator
+    to play attached to this Personality. (Token — created in play; not deckable)
+- id: lesser_spirit
+  title: Lesser Spirit
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Spirit
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: battle_ally
+  title: Battle Ally
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 2
+  chi: 1
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: tais_avatar
+  title: Tai's Avatar
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 0
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: When the battle ends, remove this Personality from the game. (Token — created in play; not deckable)
+- id: tamed_beast
+  title: Tamed Beast
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: masterwork_blade
+  title: Masterwork Blade
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Weapon
+  gold_cost: 0
+  is_proxy: true
+  text: 'Attached Personality has +2F. After this Personality assigns: Target another player. He gains
+    2 Honor. (Token — created in play; not deckable)'
+- id: shambling_dead
+  title: Shambling Dead
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Undead
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: risen_dead
+  title: Risen Dead
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Shadowlands
+  - Undead
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: utemaros_mercenary
+  title: Utemaro's Mercenary
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Mercenary
+  - Naval
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Remove it from the game after the turn ends. (Token — created in play; not deckable)
+- id: champion_duelist
+  title: Champion Duelist
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Duelist
+  force: 5
+  chi: 4
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: Remove him from the game when your next turn ends. (Token — created in play; not deckable)
+- id: sezarus_inquisitor
+  title: Sezaru's Inquisitor
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shugenja
+  force: 5
+  chi: 5
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: 'Until the game ends, remove these Shugenja from the game if that player ever controls zero Bloodspeaker
+    cards, and that player has the ability, " Open: Destroy all your Bloodspeakers." (Token — created
+    in play; not deckable)'
+- id: shadowlands_wretch
+  title: Shadowlands Wretch
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
+- id: yobanjin_raider
+  title: Yobanjin Raider
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Yobanjin
+  force: 1
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after two more actions resolve or after the battle ends.
+    (Token — created in play; not deckable)
+- id: yobanjin_outrider
+  title: Yobanjin Outrider
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  - Yobanjin
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: This Personality has Cavalry. (Token — created in play; not deckable)
