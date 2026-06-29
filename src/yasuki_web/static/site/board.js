@@ -370,9 +370,9 @@ export const duplicateMessage = (el, toCanon) =>
   });
 
 // Create one of the tokens this card makes (the context-menu "Create …" items). The server resolves
-// `token_id` against the deck's pre-loaded token templates and spawns a full card.
-export const createTokenMessage = (tokenId, el, toCanon) =>
-  intentMessage({ op: 'SPAWN_CARD', token_id: tokenId, position: droppedPosition(el, toCanon) });
+// `token_id` against the deck's pre-loaded token templates and spawns a full card at `position`.
+export const createTokenMessage = (tokenId, position) =>
+  intentMessage({ op: 'SPAWN_CARD', token_id: tokenId, position });
 
 export const moveIntent = (id, x, y) => intentMessage({ op: 'SET_CARD_POS', card_id: id, x, y });
 // Reposition a whole group in one message; sending one SET_CARD_POS per member instead would
@@ -530,7 +530,14 @@ const SEP = { separator: true };
 // is part of one, else the clicked card alone. Flag ops go as a single batch intent; Send to…/Remove
 // fan out one message per card, each routed by that card's own owner and side (`lookup` resolves a
 // selected id to its dataset; the clicked card uses its own). The server re-checks every gate.
-function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () => null, toCanon) {
+function cardMenuItems(
+  el,
+  viewer,
+  targetIds = [el.dataset.cardId],
+  lookup = () => null,
+  toCanon,
+  nextPlayPosition,
+) {
   const id = el.dataset.cardId;
   const side = el.dataset.side || '';
   const owner = el.dataset.owner || '';
@@ -596,16 +603,20 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
     if (owner && owner === viewer && !pregame) {
       items.push({ label: '&Give control', onClick: (e, send) => send(giveControlIntent(id)) });
     }
-    // Tokens this card creates (the card_creates relation, resolved at deck load): one "Create …"
-    // item each, offered only to the card's controller. Each spawns its full token template.
-    if (mine && el.dataset.creates) {
-      pushGroup(
-        JSON.parse(el.dataset.creates).map((token) => ({
-          label: `Create &${token.name}`,
-          onClick: (e, send) => send(createTokenMessage(token.id, el, toCanon)),
-        })),
-      );
-    }
+  }
+  // A "Create …" item per token this card makes, for its controller on the battlefield or in a
+  // province. A battlefield creator drops the token down-right of itself; a province creator (a
+  // revealed dynasty card not yet in play) lands it where a double-clicked hand card would.
+  if (mine && !faceDown && el.dataset.creates && (onBattlefield || inProvince)) {
+    pushGroup(
+      JSON.parse(el.dataset.creates).map((token) => ({
+        label: `Create &${token.name}`,
+        onClick: (e, send) => {
+          const position = onBattlefield ? droppedPosition(el, toCanon) : nextPlayPosition();
+          send(createTokenMessage(token.id, position));
+        },
+      })),
+    );
   }
   // Show reveals to the opponent a card they cannot already see — one in your hand or lying face-down.
   // A face-up card on the shared board is already visible, so it only offers the toggle-off once shown.
@@ -1146,7 +1157,7 @@ function menuItemsFor(
   viewer,
   targetIds,
   lookup,
-  { onSearchDiscard, onCreateToken, spawnAt, toCanon } = {},
+  { onSearchDiscard, onCreateToken, spawnAt, toCanon, nextPlayPosition } = {},
 ) {
   const zoneEl = target?.closest?.('[data-zone]');
   const zone = zoneEl?.dataset.zone;
@@ -1158,16 +1169,16 @@ function menuItemsFor(
       ? [{ label: '&Search…', onClick: () => onSearchDiscard(owner, role) }]
       : [];
     if (!cardEl) return search;
-    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon);
+    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, nextPlayPosition);
     return search.length ? [...card, SEP, ...search] : card;
   }
   if (zone === 'province') {
     const province = provinceMenuItems(zoneEl.dataset.owner, Number(zoneEl.dataset.idx), viewer);
     if (!cardEl) return province;
-    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon);
+    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, nextPlayPosition);
     return province.length ? [...card, SEP, ...province] : card;
   }
-  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon);
+  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, nextPlayPosition);
   if (zone === 'battlefield') return battlefieldMenuItems(viewer, onCreateToken, spawnAt);
   return [];
 }
@@ -1250,6 +1261,17 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     const rect = battleRect();
     const viewerIsP1 = root.dataset.viewerSeat !== 'P2';
     return viewToCanonical(left, top, viewerIsP1, rect.width, rect.height);
+  };
+  // The canonical battlefield spot a played card lands at: board-centre, fanned across slots so a
+  // flurry of plays spreads instead of stacking, into the viewer's half above the provinces. Shared by
+  // hand double-click plays and province-card token creation, so the two never stack on one spot.
+  const nextPlayPosition = () => {
+    const rect = battleRect();
+    const fan = (handPlays++ % HAND_PLAY_FAN_SLOTS) * PREGAME_FAN;
+    const x = clamp(Math.round((rect.width - CARD_W) / 2) + fan, 0, rect.width - CARD_W);
+    const y = Math.round(rect.height * HAND_PLAY_ROW - CARD_H / 2);
+    const canon = toCanon(x, y);
+    return [canon.x, canon.y];
   };
   // Battlefield-local top-left of a card element, read from its inline position.
   const cardX = (el) => parseFloat(el.style.left) || 0;
@@ -1588,6 +1610,7 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
       onCreateToken,
       spawnAt,
       toCanon,
+      nextPlayPosition,
     });
     if (!items.length) return;
     e.preventDefault();
@@ -1606,13 +1629,7 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     if (!cardEl || !ownsCard(cardEl)) return;
     const id = cardEl.dataset.cardId;
     if (cardEl.closest?.('[data-zone="hand"]')) {
-      // Successive plays fan rightward, like dealing off a deck, so a flurry spreads instead of stacking.
-      const rect = battleRect();
-      const fan = (handPlays++ % HAND_PLAY_FAN_SLOTS) * PREGAME_FAN;
-      const x = clamp(Math.round((rect.width - CARD_W) / 2) + fan, 0, rect.width - CARD_W);
-      const y = Math.round(rect.height * HAND_PLAY_ROW - CARD_H / 2);
-      const canon = toCanon(x, y);
-      send(moveCardIntent(id, { kind: 'battlefield' }, [canon.x, canon.y]));
+      send(moveCardIntent(id, { kind: 'battlefield' }, nextPlayPosition()));
     } else if (isFaceDown(cardEl)) {
       send(flipIntentFor(cardEl.dataset.doubleFaced === '1', id));
     } else if (!cardEl.closest?.('[data-zone="province"]')) {
