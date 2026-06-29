@@ -1,6 +1,6 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import BATTLEFIELD, ZoneKey, ZoneRole
+from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.pregame import StrongholdCard
@@ -156,7 +156,9 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
 def _resolve_recruit(game: GameState, seat: PlayerId, card_id: str) -> None:
     card = game.table.cards_by_id[card_id]
     province = _province_of(game, seat, card_id)
-    ops.move_card(game.table, card, BATTLEFIELD)
+    # Enter unplaced so the client clusters the new holding into the seat's home row by the
+    # stronghold, rather than dropping it at the origin.
+    ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     card.bow()  # Holdings enter play bowed (rules-skeleton §6)
     if province is not None:
         ops.fill_province(game.table, seat, province)

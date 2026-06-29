@@ -1,7 +1,7 @@
 import pytest
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey
+from yasuki_core.engine.table import TableState, UNPLACED_BOARD_POS, ZoneKey, ZoneRole, DeckKey
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
@@ -170,6 +170,8 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
     game = session.game
     bought = game.table.cards_by_id["P1-buy"]
     assert bought in game.table.battlefield.cards and bought.bowed
+    # It enters unplaced, so the client clusters it into the home row by the stronghold.
+    assert game.table.positions["P1-buy"] == UNPLACED_BOARD_POS
     assert game.gold[PlayerId.P1] == 3  # 8 produced - 5 spent, excess pools
     refilled = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
     assert [card.id for card in refilled] == ["P1-refill"] and not refilled[0].face_up
