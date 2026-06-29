@@ -125,7 +125,7 @@ _CSP_PREFIXES = (
     "/site",
     "/card-search",
     "/card/",
-    "/play-online",
+    "/play",
     "/syntax",
     "/privacy",
     "/settings",
@@ -218,8 +218,8 @@ async def card_search():
     return _site_page("card-search.html")
 
 
-@app.get("/play-online")
-async def play_online():
+@app.get("/play")
+async def play():
     return _site_page("play-online.html")
 
 

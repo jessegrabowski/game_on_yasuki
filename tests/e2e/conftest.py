@@ -104,7 +104,7 @@ def new_player(browser, live_server):
         page = context.new_page()
         page.add_init_script(WS_CAPTURE_SCRIPT)
         # Each player is a distinct dev identity so two browsers seat as P1 and P2, not one shared
-        # account; dev-login redirects to /play-online.
+        # account; dev-login redirects to /play.
         page.goto(f"/auth/dev-login?as=player{len(contexts)}")
         # The lobby gates create/join on the identity from /api/me; the nav pill renders
         # .account-name once that resolves, so wait for it before acting.
