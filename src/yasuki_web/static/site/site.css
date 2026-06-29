@@ -379,6 +379,10 @@ a { color: inherit; text-decoration: none; }
     gap: 14px;
   }
 }
+/* A prose-only section (no examples column) spans the full width instead of sitting in one half. */
+.doc-section > .doc-text:only-child {
+  grid-column: 1 / -1;
+}
 .doc-text h2 {
   margin: 0 0 10px;
   font-family: 'EB Garamond', Georgia, serif;
