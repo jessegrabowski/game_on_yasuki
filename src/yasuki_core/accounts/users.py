@@ -6,7 +6,7 @@ from yasuki_core.accounts.crypto import email_blind_index
 
 # Returned on every user lookup — the non-sensitive identity the web layer needs to seat a player
 # and enforce a ban. Deliberately excludes the email blind index.
-_USER_COLUMNS = "id, google_sub, display_name, is_banned, avatar"
+_USER_COLUMNS = "id, google_sub, display_name, role, is_banned, avatar"
 
 
 def upsert_user(
@@ -38,8 +38,8 @@ def upsert_user(
     Returns
     -------
     user : dict
-        The row, with keys ``id``, ``google_sub``, ``display_name``, ``is_banned``, ``avatar``,
-        plus ``created`` — True only on the first sign-in, so the caller can onboard a new account.
+        The row, with keys ``id``, ``google_sub``, ``display_name``, ``role``, ``is_banned``,
+        ``avatar``, plus ``created`` — True only on first sign-in, so the caller can onboard.
     """
     with conn.cursor() as cur:
         cur.execute(
@@ -122,6 +122,50 @@ def ban_user(conn: psycopg.Connection, user_id: int, reason: str | None = None) 
             return False
         banlist.tombstone(conn, row["google_sub"], row["email_hmac"], reason)
         sessions.delete_user_sessions(conn, user_id)
+    return True
+
+
+def list_users(conn: psycopg.Connection) -> list[dict]:
+    """Return every account for the admin dashboard, newest first.
+
+    Carries only the non-sensitive fields an admin needs to triage and ban — never the email blind
+    index. ``last_seen`` is the most recent of the last login and any live session's activity, so an
+    active user reads as recent even between logins. Each row has keys ``id``, ``display_name``,
+    ``role``, ``is_banned``, ``created_at``, and ``last_seen``.
+    """
+    with conn.cursor() as cur:
+        cur.execute(
+            "SELECT u.id, u.display_name, u.role, u.is_banned, u.created_at, "
+            "GREATEST(u.last_login_at, MAX(s.last_seen_at)) AS last_seen "
+            "FROM users u LEFT JOIN sessions s ON s.user_id = u.id "
+            "GROUP BY u.id ORDER BY u.created_at DESC"
+        )
+        return cur.fetchall()
+
+
+def set_role(conn: psycopg.Connection, user_id: int, role: str) -> bool:
+    """Set a user's role, returning whether a user was there to update."""
+    with conn.cursor() as cur:
+        cur.execute("UPDATE users SET role = %s, updated_at = now() WHERE id = %s", (role, user_id))
+        return cur.rowcount > 0
+
+
+def unban_user(conn: psycopg.Connection, user_id: int) -> bool:
+    """Lift a ban: clear the row's flag and reason and drop the identity's tombstone.
+
+    The inverse of :func:`ban_user`. Removing the tombstone lets the identity sign in again. Return
+    whether a user was there to unban.
+    """
+    with conn.transaction(), conn.cursor() as cur:
+        cur.execute(
+            "UPDATE users SET is_banned = false, banned_at = NULL, ban_reason = NULL "
+            "WHERE id = %s RETURNING google_sub",
+            (user_id,),
+        )
+        row = cur.fetchone()
+        if row is None:
+            return False
+        banlist.remove(conn, row["google_sub"])
     return True
 
 

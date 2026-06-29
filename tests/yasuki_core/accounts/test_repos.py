@@ -2,7 +2,7 @@ from datetime import timedelta
 
 import pytest
 
-from yasuki_core.accounts import banlist, oauth_state, sessions, users
+from yasuki_core.accounts import banlist, oauth_state, roles, sessions, users
 
 
 @pytest.fixture(autouse=True)
@@ -184,6 +184,28 @@ def test_banlist_misses_an_unrelated_identity(accounts_conn):
 def test_delete_account_and_ban_report_false_for_an_unknown_user(accounts_conn):
     assert users.delete_account(accounts_conn, 999999) is False
     assert users.ban_user(accounts_conn, 999999) is False
+
+
+def test_list_users_last_seen_tracks_login_then_session_activity(accounts_conn):
+    user = users.upsert_user(accounts_conn, "g", "e@example.com", True, "Ada")
+    [row] = [u for u in users.list_users(accounts_conn) if u["id"] == user["id"]]
+    # The login seeds last_seen even with no session, and the list never carries the email index.
+    assert row["last_seen"] is not None and "email_hmac" not in row
+
+    sessions.create_session(accounts_conn, user["id"], timedelta(hours=1))
+    with accounts_conn.cursor() as cur:
+        cur.execute(
+            "UPDATE sessions SET last_seen_at = now() + interval '1 day' WHERE user_id = %s",
+            (user["id"],),
+        )
+    [later] = [u for u in users.list_users(accounts_conn) if u["id"] == user["id"]]
+    assert later["last_seen"] > row["last_seen"]  # session activity later than login wins
+
+
+def test_create_role_is_idempotent(accounts_conn):
+    assert roles.create_role(accounts_conn, "moderator", "Mods") is True
+    assert roles.create_role(accounts_conn, "moderator") is False  # already defined, not an error
+    assert roles.role_exists(accounts_conn, "moderator") is True
 
 
 def test_oauth_login_state_is_single_use(accounts_conn):

@@ -3,6 +3,7 @@ import base64
 import hashlib
 import logging
 import os
+import re
 import secrets
 from dataclasses import dataclass
 from datetime import timedelta
@@ -17,7 +18,7 @@ from starlette.websockets import WebSocket
 
 from yasuki_web.rate_limit import limiter
 
-from yasuki_core.accounts import banlist, oauth_state, sessions, users
+from yasuki_core.accounts import banlist, oauth_state, roles, sessions, users
 from yasuki_core.accounts.db import get_accounts_connection
 from yasuki_core.accounts.display_names import random_display_name
 from yasuki_core.database import get_card_by_id
@@ -202,6 +203,13 @@ async def current_user(request: Request) -> dict:
     return user
 
 
+async def require_admin(user: dict = Depends(current_user)) -> dict:
+    """The authenticated user if an admin, else 403 — the gate for the admin dashboard."""
+    if user.get("role") != "admin":
+        raise HTTPException(status_code=403, detail="Admin access required")
+    return user
+
+
 async def user_for_websocket(websocket: WebSocket) -> dict | None:
     """The user behind the session cookie on a WebSocket handshake, or None.
 
@@ -342,6 +350,15 @@ class DisplayNameUpdate(BaseModel):
     display_name: str = Field(min_length=1, max_length=40)
 
 
+class RoleUpdate(BaseModel):
+    role: str = Field(min_length=1, max_length=64)
+
+
+class RoleCreate(BaseModel):
+    name: str = Field(min_length=1, max_length=64)
+    description: str = Field(default="", max_length=200)
+
+
 class CropBox(BaseModel):
     left: float = Field(ge=0, le=1)
     top: float = Field(ge=0, le=1)
@@ -365,6 +382,7 @@ def _public_user(user: dict) -> dict:
         "id": user["id"],
         "display_name": user["display_name"],
         "avatar": user.get("avatar"),
+        "role": user.get("role", "user"),
     }
 
 
@@ -430,3 +448,102 @@ async def delete_me(request: Request, user: dict = Depends(current_user)):
         SESSION_COOKIE, path="/", httponly=True, secure=_is_secure(request), samesite="lax"
     )
     return response
+
+
+@router.get("/api/admin/users")
+async def admin_list_users(admin: dict = Depends(require_admin)):
+    """Every account, for the admin dashboard. Admin-only; carries no email."""
+    return {"users": await asyncio.to_thread(_list_users)}
+
+
+@router.post("/api/admin/users/{user_id}/ban")
+async def admin_ban_user(user_id: int, admin: dict = Depends(require_admin)):
+    """Ban an account: revoke its sessions and tombstone the identity. Admin-only.
+
+    Banning your own account is refused, since it would revoke the session you are acting through
+    and lock you out.
+    """
+    if user_id == admin["id"]:
+        raise HTTPException(status_code=400, detail="You cannot ban your own account")
+    if not await asyncio.to_thread(_ban_user, user_id):
+        raise HTTPException(status_code=404, detail="No such account")
+    return {"banned": True}
+
+
+@router.post("/api/admin/users/{user_id}/unban")
+async def admin_unban_user(user_id: int, admin: dict = Depends(require_admin)):
+    """Lift a ban so the identity may sign in again. Admin-only."""
+    if not await asyncio.to_thread(_unban_user, user_id):
+        raise HTTPException(status_code=404, detail="No such account")
+    return {"unbanned": True}
+
+
+@router.post("/api/admin/users/{user_id}/role")
+async def admin_set_role(user_id: int, body: RoleUpdate, admin: dict = Depends(require_admin)):
+    """Set an account's role to one of the defined roles (422 if it is not defined). Admin-only.
+
+    Changing your own role is refused, so an admin cannot demote themselves out of the dashboard.
+    """
+    if user_id == admin["id"]:
+        raise HTTPException(status_code=400, detail="You cannot change your own role")
+    role = body.role.strip().lower()
+    if not await asyncio.to_thread(_role_exists, role):
+        raise HTTPException(status_code=422, detail="Unknown role")
+    if not await asyncio.to_thread(_set_role, user_id, role):
+        raise HTTPException(status_code=404, detail="No such account")
+    return {"role": role}
+
+
+@router.get("/api/admin/roles")
+async def admin_list_roles(admin: dict = Depends(require_admin)):
+    """The defined roles, for the dashboard's role picker. Admin-only."""
+    return {"roles": await asyncio.to_thread(_list_roles)}
+
+
+@router.post("/api/admin/roles")
+async def admin_create_role(body: RoleCreate, admin: dict = Depends(require_admin)):
+    """Define a new role (a short lowercase slug) so it can be assigned. Admin-only.
+
+    Returns the full role list so the caller can refresh its picker. Creating a role that already
+    exists is a no-op, not an error.
+    """
+    name = body.name.strip().lower()
+    if not re.fullmatch(r"[a-z][a-z0-9_-]{0,31}", name):
+        raise HTTPException(status_code=422, detail="Role must be a short lowercase slug")
+    await asyncio.to_thread(_create_role, name, body.description.strip())
+    return {"roles": await asyncio.to_thread(_list_roles)}
+
+
+def _list_users() -> list[dict]:
+    with get_accounts_connection() as conn:
+        return users.list_users(conn)
+
+
+def _ban_user(user_id: int) -> bool:
+    with get_accounts_connection() as conn:
+        return users.ban_user(conn, user_id)
+
+
+def _unban_user(user_id: int) -> bool:
+    with get_accounts_connection() as conn:
+        return users.unban_user(conn, user_id)
+
+
+def _set_role(user_id: int, role: str) -> bool:
+    with get_accounts_connection() as conn:
+        return users.set_role(conn, user_id, role)
+
+
+def _role_exists(role: str) -> bool:
+    with get_accounts_connection() as conn:
+        return roles.role_exists(conn, role)
+
+
+def _list_roles() -> list[dict]:
+    with get_accounts_connection() as conn:
+        return roles.list_roles(conn)
+
+
+def _create_role(name: str, description: str) -> bool:
+    with get_accounts_connection() as conn:
+        return roles.create_role(conn, name, description)

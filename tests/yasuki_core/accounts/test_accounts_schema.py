@@ -40,6 +40,8 @@ def test_rerunning_migrations_is_a_noop(accounts_conn):
             "0001_initial",
             "0002_oauth_logins",
             "0003_avatar",
+            "0004_roles",
+            "0005_roles_table",
         ]
 
 
