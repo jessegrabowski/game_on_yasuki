@@ -356,6 +356,12 @@ a { color: inherit; text-decoration: none; }
   line-height: 1.8;
   color: var(--ink);
 }
+/* Privacy reads as one calm voice: its section text matches the soft lead paragraph. */
+.privacy-doc .doc-text p {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: var(--muted);
+}
 .doc code {
   font-family: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
   background: var(--paper-2);
