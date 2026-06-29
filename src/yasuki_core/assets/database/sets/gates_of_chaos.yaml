@@ -87,7 +87,6 @@ cards:
   designer: Thomas
 - title: Abdollah
   creates:
-  - the_walking_dead
   - zombie
   types:
   - Personality
@@ -1072,8 +1071,6 @@ cards:
   designer: Thomas
 - title: Exotic Farmlands
   creates:
-  - ashigaru_2
-  - ashigaru_defender
   - farmland_conscripts
   - farmlands_conscripts
   types:

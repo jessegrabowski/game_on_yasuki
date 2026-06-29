@@ -1074,7 +1074,6 @@ cards:
 - title: Hida Dayu
   creates:
   - dayus_troops
-  - infantry_follower
   types:
   - Personality
   decks:

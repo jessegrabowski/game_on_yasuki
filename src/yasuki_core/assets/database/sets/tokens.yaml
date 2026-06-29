@@ -1906,6 +1906,21 @@ cards:
   gold_cost: 0
   is_proxy: true
   text: (Token — created in play; not deckable)
+- id: tsuyoshis_wakizashi
+  title: Tsuyoshi's Wakizashi
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - One-Handed
+  - Sword
+  - Weapon
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+  text: (Token — created in play; not deckable)
 - id: yobanjin_cavalry_personality_4_2
   title: Personality Token
   types:

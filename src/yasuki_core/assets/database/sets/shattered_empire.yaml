@@ -6871,7 +6871,6 @@ cards:
 - title: Rise Corrupted
   creates:
   - the_walking_dead
-  - zombie
   types:
   - Spell
   decks:

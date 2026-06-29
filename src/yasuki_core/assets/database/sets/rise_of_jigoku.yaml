@@ -3210,7 +3210,7 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Realms Merge
   creates:
-  - the_walking_dead
+  - oni_hatchling
   - zombie
   types:
   - Event
