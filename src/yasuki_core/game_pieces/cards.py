@@ -16,6 +16,10 @@ class L5RCard:
     clan: str | None = None
     keywords: tuple[str, ...] = ()
     traits: tuple[str, ...] = ()
+    # Token card ids this card can create in play (the card_creates relation), resolved once at deck
+    # load. The context menu offers a "Create" item per id; the spawn resolves the id against
+    # TableState.creatable_tokens to build a full token card.
+    creates: tuple[str, ...] = ()
     text: str = ""
     is_unique: bool = False
     bowed: bool = False
@@ -57,6 +61,8 @@ class L5RCard:
             object.__setattr__(self, "keywords", tuple(self.keywords))
         if not isinstance(self.traits, tuple):
             object.__setattr__(self, "traits", tuple(self.traits))
+        if not isinstance(self.creates, tuple):
+            object.__setattr__(self, "creates", tuple(self.creates))
         if not isinstance(self.peekers, frozenset):
             object.__setattr__(self, "peekers", frozenset(self.peekers))
         # Always copy: replace()-built cards (e.g. synthetic back faces) must not share the mutable

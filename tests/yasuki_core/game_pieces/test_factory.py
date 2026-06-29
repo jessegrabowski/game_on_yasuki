@@ -1,12 +1,16 @@
 import psycopg
 import pytest
 
-from yasuki_core.database import get_connection_string
+from yasuki_core.database import get_connection_string, get_creates_for_cards
 from yasuki_core.decklist import parse_deck_yaml
-from yasuki_core.game_pieces.factory import resolve_decklist
+from yasuki_core.game_pieces.factory import (
+    resolve_decklist,
+    build_token_templates,
+    build_token_card,
+)
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.dynasty import DynastyPersonality
-from yasuki_core.game_pieces.fate import FateAction, FateAncestor
+from yasuki_core.game_pieces.fate import FateAction, FateAncestor, FateAttachment
 from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
 from yasuki_core.game_pieces.constants import Side, AttachmentType
 
@@ -238,6 +242,18 @@ def _db_available():
 
 
 @pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+def test_get_creates_for_cards_resolves_a_creator_to_full_token_records():
+    # The Great Death creates exactly Bird of Prey (the single token matching its printed traits).
+    creates, tokens = get_creates_for_cards(["the_great_death"])
+    assert "bird_of_prey" in creates.get("the_great_death", [])
+    record = tokens["bird_of_prey"]
+    # The token record carries the get_card_by_id shape the factory builds a live token from.
+    assert record["card_id"] == "bird_of_prey"
+    assert "image_path" in record and record.get("types")
+    assert build_token_card(record).side is not None
+
+
+@pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
 def test_art_swap_carries_the_donor_print_and_both_frames():
     # Building the swap classifies both prints' eras, which reads set release dates from the database.
     yaml = "name: T\nDynasty:\n  - Kuni Yori [Pearl Edition] {art: Ambush [Lotus Edition]}"
@@ -355,3 +371,59 @@ def test_two_seats_get_disjoint_card_ids():
     p1_ids = {c.id for c in p1.pre_game + p1.dynasty + p1.fate}
     p2_ids = {c.id for c in p2.pre_game + p2.dynasty + p2.fate}
     assert p1_ids.isdisjoint(p2_ids)
+
+
+# Token records from database.get_creates_for_cards share get_card_by_id's shape: the image is an
+# `image_path` column, not a `prints` list.
+GHUL_TOKEN = {
+    "card_id": "ghul",
+    "name": "Ghul",
+    "extended_title": "Ghul",
+    "types": ["Personality", "Proxy"],
+    "clans": [],
+    "keywords": ["Ghul", "Shadowlands", "Undead"],
+    "text": "(Token)",
+    "is_unique": False,
+    "force": 2,
+    "chi": 2,
+    "personal_honor": 0,
+    "gold_cost": 0,
+    "image_path": "sets/tokens/ghul.png",
+}
+JACKAL_TOKEN = {
+    "card_id": "jackal_pack",
+    "name": "Jackal Pack",
+    "extended_title": "Jackal Pack",
+    "types": ["Follower", "Proxy"],
+    "clans": [],
+    "keywords": ["Cavalry", "Jackal", "Nonhuman"],
+    "text": "",
+    "is_unique": False,
+    "gold_cost": 0,
+    "image_path": "sets/tokens/jackal.png",
+}
+
+
+def test_build_token_templates_builds_full_typed_cards():
+    templates = build_token_templates({"ghul": GHUL_TOKEN, "jackal_pack": JACKAL_TOKEN})
+
+    ghul = templates["ghul"]
+    assert isinstance(ghul, DynastyPersonality)
+    assert (ghul.force, ghul.chi, ghul.personal_honor) == (2, 2, 0)
+    assert ghul.keywords == ("Ghul", "Shadowlands", "Undead")
+    assert ghul.image_front.as_posix() == "sets/tokens/ghul.png"
+    assert ghul.owner is None
+
+    jackal = templates["jackal_pack"]
+    assert isinstance(jackal, FateAttachment)
+    assert jackal.attachment_type.value == "Follower"
+    assert jackal.keywords == ("Cavalry", "Jackal", "Nonhuman")
+
+
+def test_resolve_decklist_stamps_creates_on_creator_cards():
+    deck = parse_deck_yaml("name: T\nDynasty:\n  - Kuni Yori")
+    resolved = resolve_decklist(deck, RECORDS, PlayerId.P1, {"kuni_yori": ["ghul", "jackal_pack"]})
+    assert resolved.dynasty[0].creates == ("ghul", "jackal_pack")
+
+    # Without a creates map, creator cards carry no creations.
+    assert _resolve().dynasty[0].creates == ()

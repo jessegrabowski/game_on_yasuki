@@ -54,7 +54,12 @@ class ResolvedDeck:
     unresolved: list[str] = field(default_factory=list)
 
 
-def resolve_decklist(parsed: dict, records: list[dict], owner: PlayerId) -> ResolvedDeck:
+def resolve_decklist(
+    parsed: dict,
+    records: list[dict],
+    owner: PlayerId,
+    creates_map: dict[str, list[str]] | None = None,
+) -> ResolvedDeck:
     """Resolve a parsed decklist into typed card instances owned by ``owner``.
 
     Each entry's section (not the record's deck field) decides the card family, so a player's manual
@@ -70,6 +75,9 @@ def resolve_decklist(parsed: dict, records: list[dict], owner: PlayerId) -> Reso
         Card records as returned by ``database.get_cards_by_names``, each with a ``prints`` list.
     owner : PlayerId
         The seat the resolved cards belong to.
+    creates_map : dict mapping str to list of str, optional
+        Each card id to the token card ids it creates, as returned by
+        ``database.get_creates_for_cards``. Stamped onto the built card's ``creates``. Default none.
 
     Returns
     -------
@@ -98,10 +106,64 @@ def resolve_decklist(parsed: dict, records: list[dict], owner: PlayerId) -> Reso
                         card_id=f"{owner.name}-{next_id}",
                         art=entry.get("art"),
                         name_index=index,
+                        creates_map=creates_map,
                     )
                 )
                 next_id += 1
     return resolved
+
+
+def _section_for_type(card_type: str | None) -> str:
+    """The deck family a token of ``card_type`` belongs to, for the factory's subclass classification.
+    A token carries no deck section of its own, so it is inferred from its type."""
+    return "dynasty" if card_type in _DYNASTY_BY_TYPE else "fate"
+
+
+def build_token_card(record: dict) -> L5RCard:
+    """Build one live, owner-less card from a record, for the spawn to copy onto the battlefield.
+
+    The record has the ``get_card_by_id`` shape (the image as an ``image_path`` column, not a
+    ``prints`` list), as returned by ``database.get_creates_for_cards`` and ``get_card_by_id``.
+
+    Parameters
+    ----------
+    record : dict
+        The card's full database record.
+
+    Returns
+    -------
+    card : L5RCard
+        The built card, owner-less and keyed by its own card id.
+    """
+    card_type = (record.get("types") or [None])[0]
+    return _construct_face(
+        record,
+        {"image_path": record.get("image_path")},
+        _section_for_type(card_type),
+        owner=None,
+        card_id=record["card_id"],
+        back_card_id=None,
+        back=None,
+    )
+
+
+def build_token_templates(token_records: dict[str, dict]) -> dict[str, L5RCard]:
+    """Build a live token card from each record, keyed by token card id.
+
+    Used once at deck load to populate ``TableState.creatable_tokens`` from
+    ``database.get_creates_for_cards``.
+
+    Parameters
+    ----------
+    token_records : dict mapping str to dict
+        Each token card id to its full card record.
+
+    Returns
+    -------
+    templates : dict mapping str to L5RCard
+        Each token card id to a built token card.
+    """
+    return {token_id: build_token_card(record) for token_id, record in token_records.items()}
 
 
 def _name_index(records: list[dict]) -> dict[str, dict]:
@@ -168,6 +230,7 @@ def _build_card(
     card_id: str,
     art: dict | None = None,
     name_index: dict[str, dict] | None = None,
+    creates_map: dict[str, list[str]] | None = None,
 ) -> L5RCard:
     """Build the front face of a card. For a double-faced card, nest its back face: the fully built
     back when its record is on hand, else one synthesised from the front carrying the back art the
@@ -195,6 +258,7 @@ def _build_card(
         card_id=card_id,
         back_card_id=back_card_id,
         back=back,
+        creates=tuple(creates_map.get(record["card_id"], ())) if creates_map else (),
     )
     # The back-face row is excluded from deck queries (is_back), so there is usually no back record
     # to nest. The front's print still records the back art, so synthesise a back face from the
@@ -224,6 +288,7 @@ def _construct_face(
     card_id: str,
     back_card_id: str | None,
     back: L5RCard | None,
+    creates: tuple[str, ...] = (),
 ) -> L5RCard:
     card_type = (record.get("types") or [None])[0]
     card_cls, side = _classify(section, card_type)
@@ -239,6 +304,7 @@ def _construct_face(
         owner=owner,
         clan=clans[0] if clans else None,
         keywords=tuple(record.get("keywords") or ()),
+        creates=creates,
         text=record.get("text") or "",
         is_unique=bool(record.get("is_unique")),
         image_front=Path(image_path) if image_path else None,
