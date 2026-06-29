@@ -1463,6 +1463,8 @@ cards:
   collector_number: '47'
   designer: Loki
 - title: Isawa Tsumaro
+  creates:
+  - isawa_tsumaros_illusion
   types:
   - Personality
   decks:

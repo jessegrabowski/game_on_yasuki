@@ -3128,6 +3128,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Forgotten
+  creates:
+  - forgotten_dead
   types:
   - Follower
   decks:

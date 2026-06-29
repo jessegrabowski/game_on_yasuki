@@ -1536,6 +1536,8 @@ cards:
   flavor_text: <i>Unscrupulous merchants occasionally mix substandard ore in with quality minerals. Their
     profit is increased, but the quality of the product suffers tremendously.</i>
 - title: Lying in Ambush
+  creates:
+  - new_recruit
   types:
   - Strategy
   decks:
@@ -2095,6 +2097,7 @@ cards:
   artist: David Horne
 - title: Rallying the Recruits
   creates:
+  - chikara
   - token_recruiter
   types:
   - Strategy
@@ -2136,6 +2139,7 @@ cards:
   collector_number: '7'
 - title: Recruitment Center
   creates:
+  - chikara
   - token_recruiter
   types:
   - Holding
@@ -2153,6 +2157,8 @@ cards:
   artist: David Day
   flavor_text: <i>"We are unconcerned with your past." - Yoritomo Jera</i>
 - title: Recruitment Officer
+  creates:
+  - recruited_ronin
   types:
   - Holding
   decks:
@@ -2511,6 +2517,8 @@ cards:
   rarity: Promo
   artist: Brent Chumley
 - title: Swell the Ranks
+  creates:
+  - hired_ronin
   types:
   - Strategy
   decks:

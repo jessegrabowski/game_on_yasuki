@@ -2073,6 +2073,8 @@ cards:
     with."</i>
   collector_number: '106'
 - title: Pep'trchek
+  creates:
+  - nezumi_scout
   types:
   - Personality
   decks:
@@ -3537,6 +3539,8 @@ cards:
   artist: Paul (Prof.) Herbert
   collector_number: '129'
 - title: Vik-sch'tok
+  creates:
+  - nezumi_cleaver
   types:
   - Personality
   decks:

@@ -407,6 +407,8 @@ cards:
     honor, or face my wrath."</i>
   collector_number: '61'
 - title: Bayushi Tai
+  creates:
+  - tais_avatar
   types:
   - Personality
   decks:

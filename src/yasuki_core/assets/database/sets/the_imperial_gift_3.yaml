@@ -490,6 +490,7 @@ cards:
   collector_number: '8'
 - title: Kazuwaru
   creates:
+  - improvised_weapon
   - token_minus3f
   types:
   - Personality

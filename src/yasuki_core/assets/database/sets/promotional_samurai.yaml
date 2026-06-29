@@ -526,6 +526,8 @@ cards:
   rarity: Promo
   artist: IFS
 - title: Calling on Earth
+  creates:
+  - earthen_servant
   types:
   - Spell
   decks:
@@ -998,6 +1000,8 @@ cards:
   artist: Drew Baker
   flavor_text: <i>He only laughed and pulled the blade from his chest.</i>
 - title: Dawn of the Dead
+  creates:
+  - risen_ghul
   types:
   - Strategy
   decks:

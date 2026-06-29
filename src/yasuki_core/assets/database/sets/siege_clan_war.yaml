@@ -796,6 +796,8 @@ cards:
   collector_number: '26'
   designer: Bryan
 - title: Otaku Kamoko, Seven Thunder
+  creates:
+  - kamokos_cavalry
   types:
   - Personality
   decks:

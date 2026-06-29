@@ -867,6 +867,8 @@ cards:
   flavor_text: <i>"Should we not all aid the Keepers in their quest?"</i>
   collector_number: '94'
 - title: Earthen Guardians
+  creates:
+  - stone_sentinel
   types:
   - Spell
   decks:
@@ -1020,6 +1022,8 @@ cards:
     The Khan's Charge, Part Three</i>
   collector_number: '99'
 - title: Forgotten Battleground
+  creates:
+  - battlefield_revenant
   types:
   - Holding
   decks:
@@ -1780,6 +1784,8 @@ cards:
     of others as we demand it of ourselves."</i>
   collector_number: '41'
 - title: Isawa Tokiko
+  creates:
+  - samurai_yojimbo_2_2_2
   types:
   - Personality
   decks:
@@ -3436,6 +3442,8 @@ cards:
   flavor_text: <i>Even a peasant can draw courage from his ancestors.</i>
   collector_number: '122'
 - title: True Artistry
+  creates:
+  - masterwork_blade
   types:
   - Strategy
   decks:

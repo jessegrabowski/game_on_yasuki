@@ -198,6 +198,8 @@ cards:
   artist: Jon Hodgson
   flavor_text: <i>"It's so very thirsty." -Asako Kinuye</i>
 - title: Book of Air
+  creates:
+  - air_kami
   types:
   - Item
   decks:
@@ -2035,6 +2037,8 @@ cards:
   rarity: Promo
   artist: William O'Connor
 - title: Shigekawa's Armor
+  creates:
+  - mounted_samurai
   types:
   - Item
   decks:

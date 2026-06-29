@@ -456,6 +456,8 @@ cards:
     than their name.</i>
   collector_number: '141'
 - title: Chuda Mishime
+  creates:
+  - risen_ghul
   types:
   - Personality
   decks:
@@ -1381,6 +1383,8 @@ cards:
   artist: Malcolm McClinton
   collector_number: '99'
 - title: Ikoma Okita
+  creates:
+  - ancestral_shiryo
   types:
   - Personality
   decks:
@@ -1780,6 +1784,8 @@ cards:
     their spirit."</i>
   collector_number: '76'
 - title: Kitsu Yutaro
+  creates:
+  - ancestral_shiryo
   types:
   - Personality
   decks:

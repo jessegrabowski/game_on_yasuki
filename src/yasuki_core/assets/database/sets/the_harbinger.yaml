@@ -1695,6 +1695,8 @@ cards:
   flavor_text: <i>"The Empress has commanded all to search, and the Phoenix will not be found wanting!"</i>
   collector_number: '49'
 - title: Isawa Takashi
+  creates:
+  - shiba_yojimbo
   types:
   - Personality
   decks:

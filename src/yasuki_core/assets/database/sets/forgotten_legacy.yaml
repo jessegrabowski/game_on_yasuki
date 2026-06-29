@@ -888,6 +888,9 @@ cards:
   flavor_text: <i>Few can venture into the depths of the jungles and hope to survive.</i>
   collector_number: '74'
 - title: Hida Fubatsu
+  creates:
+  - hida_fubatsus_armor
+  - hida_fubatsus_weapon
   types:
   - Personality
   decks:

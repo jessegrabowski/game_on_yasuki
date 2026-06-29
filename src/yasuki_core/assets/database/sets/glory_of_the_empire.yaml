@@ -2755,6 +2755,8 @@ cards:
     familiar."</i>
   collector_number: '159'
 - title: Selfless Devotion
+  creates:
+  - sworn_yojimbo
   types:
   - Strategy
   decks:

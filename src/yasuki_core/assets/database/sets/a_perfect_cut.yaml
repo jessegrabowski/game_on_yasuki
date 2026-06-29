@@ -2074,6 +2074,8 @@ cards:
     nightmare minions. They are nightmares. And they are him... occasionally." - Shahai</i>
   collector_number: '152'
 - title: Shallow Graves
+  creates:
+  - shambling_dead
   types:
   - Region
   decks:

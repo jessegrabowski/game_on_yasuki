@@ -3302,6 +3302,8 @@ cards:
   collector_number: '108'
   designer: Chris
 - title: Trick of Moon's Light
+  creates:
+  - illusory_shugenja
   types:
   - Spell
   decks:

@@ -1316,6 +1316,8 @@ cards:
   collector_number: '21'
   designer: Loki
 - title: House of Floating Petals
+  creates:
+  - house_geisha
   types:
   - Holding
   decks:

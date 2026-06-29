@@ -630,6 +630,8 @@ cards:
   flavor_text: <i>"Your legion may pass through our lands Tsudao-sama, but your Lion allies may not."</i>
   collector_number: '37'
 - title: Cowardly Conscripts
+  creates:
+  - reluctant_conscript
   types:
   - Strategy
   decks:

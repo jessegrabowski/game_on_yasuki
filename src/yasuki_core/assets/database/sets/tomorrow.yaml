@@ -483,6 +483,8 @@ cards:
     look to him as an example.</i>
   collector_number: '4'
 - title: Kamoko's Avatar
+  creates:
+  - spirit_of_kamoko
   types:
   - Strategy
   decks:
@@ -556,6 +558,8 @@ cards:
     choice."</i>
   collector_number: '51'
 - title: Mak'irtch
+  creates:
+  - makirtchs_ratling
   types:
   - Personality
   decks:
@@ -985,6 +989,8 @@ cards:
   artist: Thomas Denmark
   flavor_text: <i>"Why could it not have been another?" Kurako asked. "Why did he have to go alone?"</i>
 - title: The Scarab Case
+  creates:
+  - scarab_ghul
   types:
   - Item
   decks:

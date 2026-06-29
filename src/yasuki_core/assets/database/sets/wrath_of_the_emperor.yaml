@@ -889,6 +889,8 @@ cards:
   flavor_text: <i>"You can hide from them, Bloodspeaker. You cannot hide from me."</i>
   collector_number: '91'
 - title: Fury of the Wolf
+  creates:
+  - sezarus_inquisitor
   types:
   - Strategy
   decks:
@@ -1192,6 +1194,8 @@ cards:
   artist: Llyn Hunter
   collector_number: '14'
 - title: Ide Tang
+  creates:
+  - gift_horse
   types:
   - Personality
   decks:
@@ -3446,6 +3450,9 @@ cards:
   artist: Jason Engle
   collector_number: '141'
 - title: Yoritomo Egumi
+  creates:
+  - deckhands
+  - twin_kama
   types:
   - Personality
   decks:

@@ -2261,6 +2261,8 @@ cards:
   flavor_text: <i>"You will not believe its taste when I add in this juice from the Burning Sands!"</i>
   collector_number: '74'
 - title: Mountain Watch Keep
+  creates:
+  - mountain_sentry
   types:
   - Stronghold
   decks:

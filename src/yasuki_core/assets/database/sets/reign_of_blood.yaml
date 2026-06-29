@@ -1328,6 +1328,9 @@ cards:
   artist: Luis Vazquez
   collector_number: '120'
 - title: Isawa Jun
+  creates:
+  - guardian_spirit
+  - lesser_spirit
   types:
   - Personality
   decks:
@@ -2321,6 +2324,8 @@ cards:
   flavor_text: <i>"Your death serves me well, my friend."</i>
   collector_number: '122'
 - title: Shinden Horiuchi
+  creates:
+  - swift_outrider
   types:
   - Stronghold
   decks:
