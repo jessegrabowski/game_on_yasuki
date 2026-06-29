@@ -168,10 +168,18 @@ def main() -> None:
         if isinstance(runner.pending, ChoosePayment):
             field.undo_last_selection()
 
+    def cancel_via_escape(_event=None) -> None:
+        # Escape backs out of a cancellable pending decision (a recruit payment); no effect
+        # otherwise, leaving the board's own Escape (clear selection) untouched.
+        pending = runner.pending
+        if pending is not None and pending.cancellable:
+            cancel_decision()
+
     # Re-render (board borders + confirm-button state) as the player toggles candidates.
     field.on_selection_changed = refresh
     field.on_card_activated = on_card_activated
     root.bind("<Control-z>", undo_payment)
+    root.bind("<Escape>", cancel_via_escape)
 
     phase_bar = PhaseBar(content)
     phase_bar.pack(side="bottom", fill="x")
