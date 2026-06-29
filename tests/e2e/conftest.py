@@ -106,10 +106,9 @@ def new_player(browser, live_server):
         # Each player is a distinct dev identity so two browsers seat as P1 and P2, not one shared
         # account; dev-login redirects to /play-online.
         page.goto(f"/auth/dev-login?as=player{len(contexts)}")
-        # The lobby gates create/join on the identity from /api/me; wait for it before acting.
-        page.wait_for_function(
-            "document.getElementById('playerIdentity')?.textContent.includes('Playing as')"
-        )
+        # The lobby gates create/join on the identity from /api/me; the nav pill renders
+        # .account-name once that resolves, so wait for it before acting.
+        page.wait_for_function("document.querySelector('.account-name')?.textContent")
         return page
 
     yield _open

@@ -840,18 +840,4 @@ describe('init (room client wiring)', () => {
     const posts = fetch.mock.calls.filter((c) => c.arguments[1]?.method === 'POST');
     assert.equal(posts.length, 0, 'no room is created');
   });
-
-  it('greets a signed-in player by their account name', async () => {
-    installRouter();
-    init();
-    await flush();
-    assert.match(document.getElementById('playerIdentity').textContent, /Playing as Ada/);
-  });
-
-  it('offers an anonymous visitor a sign-in link', async () => {
-    installRouter({ 'GET /api/me': () => ok({ user: null }) });
-    init();
-    await flush();
-    assert.equal(document.getElementById('playerIdentity').children[0].href, '/auth/login');
-  });
 });
