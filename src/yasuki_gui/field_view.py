@@ -277,7 +277,7 @@ class FieldView(tk.Canvas):
         self._draw_table()
         self._reconcile_zones()
         self._reconcile_sprites()
-        if self.rules_mode:
+        if self.rules_mode and self.gold > 0:
             self._draw_gold()
 
     def _draw_gold(self) -> None:
