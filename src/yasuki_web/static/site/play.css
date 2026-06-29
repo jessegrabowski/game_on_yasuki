@@ -538,8 +538,8 @@
 .avatar {
   display: grid;
   place-items: center;
-  width: 2.6rem;
-  height: 2.6rem;
+  width: 3.5rem;
+  height: 3.5rem;
   border-radius: 50%;
   background: var(--r-gold);
   color: #fff;
@@ -554,7 +554,7 @@
 
 .panel-name {
   font-family: "EB Garamond", serif;
-  font-size: 1.05rem;
+  font-size: 1.2rem;
   color: var(--r-ink);
   white-space: nowrap;
   overflow: hidden;
