@@ -12,8 +12,8 @@ from yasuki_web.snapshot import serialize_snapshot
 P1, P2 = PlayerId.P1, PlayerId.P2
 
 
-def _serialized(table, viewer):
-    return serialize_snapshot(redact(table, viewer))
+def _serialized(table, viewer, token_names=None):
+    return serialize_snapshot(redact(table, viewer), token_names)
 
 
 def test_opponent_hand_card_is_a_back_stub_with_no_identity():
@@ -345,6 +345,26 @@ def test_province_key_serializes_with_its_index():
     assert "P1:province:2" in _serialized(table, P1)["zones"]
 
 
+def test_card_serializes_creates_for_the_menu():
+    table = TableState.empty_two_seat()
+    card = L5RCard(
+        id="c1",
+        name="Curse of the Jackal",
+        side=Side.FATE,
+        owner=None,
+        face_up=True,
+        creates=("jackal_pack",),
+    )
+    table.battlefield.cards.append(card)
+    table.positions["c1"] = BoardPos(0.0, 0.0)
+    table.cards_by_id["c1"] = card
+
+    serialized = _serialized(table, P1, {"jackal_pack": "Jackal Pack"})["battlefield"][0]
+    assert serialized["creates"] == [{"id": "jackal_pack", "name": "Jackal Pack"}]
+    # Without the name map (or for a card that creates nothing) the key is omitted.
+    assert "creates" not in _serialized(table, P1)["battlefield"][0]
+
+
 def test_card_fields_covers_every_serialized_key():
     # The client's CARD_FIELDS (board.js) must list every key _card emits, or a newly serialized field
     # would silently never re-patch its card on the board. Anchor the JS list to the real serializer.
@@ -362,14 +382,15 @@ def test_card_fields_covers_every_serialized_key():
         back_card_id="c1__back",
         back=back,
         showing_back=False,
+        creates=("tok1",),
     )
     table.battlefield.cards.append(card)
     table.positions["c1"] = BoardPos(1.0, 2.0)
     table.cards_by_id["c1"] = card
 
-    serialized = set(_serialized(table, P1)["battlefield"][0].keys())
+    serialized = set(_serialized(table, P1, {"tok1": "Token One"})["battlefield"][0].keys())
     # Self-check: the fixture must exercise every conditional key, or the guard below is hollow.
-    assert {"back_card_id", "showing_back", "art", "note", "x", "y"} <= serialized
+    assert {"back_card_id", "showing_back", "art", "note", "creates", "x", "y"} <= serialized
 
     board_js = Path(__file__).resolve().parents[2] / "src/yasuki_web/static/site/board.js"
     match = re.search(r"CARD_FIELDS = \[(.*?)\]", board_js.read_text(), re.DOTALL)

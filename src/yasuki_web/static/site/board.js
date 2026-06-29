@@ -139,6 +139,8 @@ function tagCard(el, card) {
   // neither, so the duplicate option is gated on the card being face-up anyway.
   el.dataset.name = card.name ?? '';
   el.dataset.img = card.img ?? '';
+  // The tokens this card can create (id + name), for the per-card "Create" menu items.
+  el.dataset.creates = card.creates ? JSON.stringify(card.creates) : '';
   // pregame (stronghold/sensei/wind) cards are setup pieces tied to a seat — they cannot change hands.
   el.dataset.pregame = card.pregame ? '1' : '';
   el.dataset.doubleFaced = card.back_card_id ? '1' : '';
@@ -153,7 +155,7 @@ function tagCard(el, card) {
 // Exported so the reconcile diff and the shape-drift guard key off the same list.
 export const CARD_FIELDS = [
   'name', 'img', 'side', 'owner', 'pregame', 'token', 'bowed', 'face_up', 'inverted',
-  'shown', 'peeked', 'hidden', 'back_card_id', 'showing_back', 'art', 'note', 'x', 'y',
+  'shown', 'peeked', 'hidden', 'back_card_id', 'showing_back', 'art', 'note', 'creates', 'x', 'y',
   'attached', 'attachParent',
 ];
 
@@ -349,34 +351,34 @@ export function highlightCard(boardEl, cardId) {
 }
 
 // Client messages, with `room` injected by the caller. Every card action is a game intent; spawn and
-// remove are SPAWN_CARD/REMOVE_CARD intents (the server mints the spawn's card id).
+// remove are SPAWN_CARD/REMOVE_CARD intents (the server mints the spawn's card id). A spawn names one
+// source — a creatable token (token_id), an in-play card to duplicate (source_card_id), or a database
+// card the search dialog picked (print_card_id) — and the server copies it as a fresh public token.
 export const intentMessage = (intent) => ({ type: 'INTENT', intent });
-export const spawnMessage = (spawn) =>
-  intentMessage({
-    op: 'SPAWN_CARD',
-    name: spawn.name,
-    img: spawn.img,
-    side: spawn.side,
-    position: [spawn.x, spawn.y],
-  });
 export const removeMessage = (id) => intentMessage({ op: 'REMOVE_CARD', card_id: id });
 
-// Spawn a token copy of a face-up battlefield card, dropped down-right of the original so it doesn't
-// hide it. Name, img and side come off the card's dataset; its board-local position off its inline
-// geometry. The server assigns the new id and marks it a token.
+// A spawn drops down-right of its source card so it doesn't hide it; this is its canonical position.
 const DUPLICATE_OFFSET_PX = 18;
-export const duplicateMessage = (el, toCanon) => {
+const droppedPosition = (el, toCanon) => {
   const left = (parseFloat(el.style.left) || 0) + DUPLICATE_OFFSET_PX;
   const top = (parseFloat(el.style.top) || 0) + DUPLICATE_OFFSET_PX;
   const pos = toCanon(left, top);
-  return spawnMessage({
-    name: el.dataset.name,
-    img: el.dataset.img || null,
-    side: el.dataset.side,
-    x: pos.x,
-    y: pos.y,
-  });
+  return [pos.x, pos.y];
 };
+
+// Duplicate a face-up battlefield card: the server copies that in-play card (a full first-class card,
+// not a name/image stub) as a fresh public token and mints the new id.
+export const duplicateMessage = (el, toCanon) =>
+  intentMessage({
+    op: 'SPAWN_CARD',
+    source_card_id: el.dataset.cardId,
+    position: droppedPosition(el, toCanon),
+  });
+
+// Create one of the tokens this card makes (the context-menu "Create …" items). The server resolves
+// `token_id` against the deck's pre-loaded token templates and spawns a full card.
+export const createTokenMessage = (tokenId, el, toCanon) =>
+  intentMessage({ op: 'SPAWN_CARD', token_id: tokenId, position: droppedPosition(el, toCanon) });
 
 export const moveIntent = (id, x, y) => intentMessage({ op: 'SET_CARD_POS', card_id: id, x, y });
 // Reposition a whole group in one message; sending one SET_CARD_POS per member instead would
@@ -642,6 +644,16 @@ function cardMenuItems(
     // (stronghold/sensei/wind), which is bound to its seat.
     if (owner && owner === viewer && !pregame) {
       items.push({ label: '&Give control', onClick: (e, send) => send(giveControlIntent(id)) });
+    }
+    // Tokens this card creates (the card_creates relation, resolved at deck load): one "Create …"
+    // item each, offered only to the card's controller. Each spawns its full token template.
+    if (mine && el.dataset.creates) {
+      pushGroup(
+        JSON.parse(el.dataset.creates).map((token) => ({
+          label: `Create &${token.name}`,
+          onClick: (e, send) => send(createTokenMessage(token.id, el, toCanon)),
+        })),
+      );
     }
   }
   // Show and Peek fan one message per qualifying selected card. Show also always covers the clicked

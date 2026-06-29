@@ -314,9 +314,9 @@ def encode_intent(intent: Intent) -> dict:
         case IntentOp.SPAWN_CARD:
             payload |= {
                 "card_id": intent.card_id,
-                "name": intent.name,
-                "side": intent.side.value,
-                "image": intent.image,
+                "token_id": intent.token_id,
+                "source_card_id": intent.source_card_id,
+                "card": encode_card(intent.card) if intent.card is not None else None,
                 "position": [intent.position.x, intent.position.y],
             }
         case IntentOp.REMOVE_CARD:
@@ -403,12 +403,13 @@ def decode_intent(payload: dict) -> Intent:
         case IntentOp.SET_HONOR:
             return SetHonor(delta=payload["delta"], value=payload["value"])
         case IntentOp.SPAWN_CARD:
+            encoded_card = payload.get("card")
             return SpawnCard(
-                payload["card_id"],
-                payload["name"],
-                Side(payload["side"]),
-                payload["image"],
-                BoardPos(*payload["position"]),
+                card_id=payload["card_id"],
+                position=BoardPos(*payload["position"]),
+                token_id=payload.get("token_id"),
+                source_card_id=payload.get("source_card_id"),
+                card=decode_card(encoded_card) if encoded_card else None,
             )
         case IntentOp.REMOVE_CARD:
             return RemoveCard(payload["card_id"])

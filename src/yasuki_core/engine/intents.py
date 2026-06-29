@@ -9,6 +9,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter
 from yasuki_core.engine import ops
+from yasuki_core.engine.redaction import card_identity_public
 from yasuki_core.engine.table import (
     BATTLEFIELD,
     UNPLACED_BOARD_POS,
@@ -340,17 +341,19 @@ class SetHonor:
 
 @dataclass(frozen=True, slots=True)
 class SpawnCard:
-    """Put a new public, face-up card on the shared battlefield (tokens, copies, sandbox pieces).
+    """Put a new public, face-up token on the shared battlefield, copied from a source card.
 
     The card id is assigned by the caller and recorded, so a replay reproduces the same card. The
-    card is unowned (public), so either seat may then move or remove it.
+    source is exactly one of: ``token_id`` (a creatable-token template on the table), ``source_card_id``
+    (a visible in-play card to duplicate), or ``card`` (a card the web layer pre-resolved, e.g. a
+    database search result). The spawned card is unowned (public), so either seat may move or remove it.
     """
 
     card_id: str
-    name: str
-    side: Side
-    image: str | None
     position: BoardPos
+    token_id: str | None = None
+    source_card_id: str | None = None
+    card: L5RCard | None = None
     op: ClassVar[IntentOp] = IntentOp.SPAWN_CARD
 
 
@@ -864,9 +867,21 @@ def _set_honor(state: TableState, seat: PlayerId, intent: SetHonor) -> list[Even
 def _spawn_card(state: TableState, seat: PlayerId, intent: SpawnCard) -> list[Event]:
     if intent.card_id in state.cards_by_id:
         return []
-    card = ops.spawn_token(
-        state, intent.card_id, intent.name, intent.side, intent.image, intent.position
-    )
+    # Resolve the one source the spawn copies. Any loaded token or publicly visible card is
+    # spawnable: the per-card "Create" menu's owner-gate is cosmetic (client-side), so the only
+    # server restrictions are a known token id and a source whose identity is already public.
+    if intent.token_id is not None:
+        source = state.creatable_tokens.get(intent.token_id)
+    elif intent.source_card_id is not None:
+        src = state.cards_by_id.get(intent.source_card_id)
+        if src is None or not card_identity_public(state, intent.source_card_id):
+            return []
+        source = src.active_face
+    else:
+        source = intent.card
+    if source is None:
+        return []
+    card = ops.spawn_token(state, intent.card_id, source, intent.position)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 

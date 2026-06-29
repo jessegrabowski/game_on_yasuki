@@ -15,7 +15,6 @@ import {
   reorderPileIntent,
   deckDest,
   intentMessage,
-  spawnMessage,
   removeMessage,
   moveIntent,
   moveGroupIntent,
@@ -71,6 +70,7 @@ function fakeCard(
     note = '',
     name = '',
     pregame = false,
+    creates = '',
     x = null,
     y = null,
   } = {},
@@ -94,6 +94,7 @@ function fakeCard(
     name,
     img: img ?? '',
     pregame: pregame ? '1' : '',
+    creates,
   };
   if (doubleFaced) dataset.doubleFaced = '1';
   const style = {};
@@ -717,11 +718,7 @@ describe('message builders', () => {
     assert.deepEqual(honorIntent(-1), { type: 'INTENT', intent: { op: 'SET_HONOR', delta: -1 } });
   });
 
-  it('build SPAWN_CARD and REMOVE_CARD intents', () => {
-    assert.deepEqual(spawnMessage({ name: 'X', img: 'a.jpg', side: 'FATE', x: 1, y: 2 }), {
-      type: 'INTENT',
-      intent: { op: 'SPAWN_CARD', name: 'X', img: 'a.jpg', side: 'FATE', position: [1, 2] },
-    });
+  it('builds a REMOVE_CARD intent', () => {
     assert.deepEqual(removeMessage('c1'), {
       type: 'INTENT',
       intent: { op: 'REMOVE_CARD', card_id: 'c1' },
@@ -2128,10 +2125,41 @@ describe('initBoardInteractions — context menu', () => {
     clickMenuItem(root, 'Duplicate');
     const dup = sent.at(-1).intent;
     assert.equal(dup.op, 'SPAWN_CARD');
-    assert.deepEqual([dup.name, dup.img, dup.side], ['Hida Kisada', 'sets/hk.jpg', 'DYNASTY']);
+    assert.equal(dup.source_card_id, 'c1'); // the server copies the in-play card, not client fields
     // Spawned at a canonical centre fraction down-right of the original; exact geometry is e2e's job.
     const [x, y] = dup.position;
     assert.ok(x > 0 && x < 1 && y > 0 && y < 1);
+  });
+
+  const CREATES = JSON.stringify([
+    { id: 'jackal_pack', name: 'Jackal Pack' },
+    { id: 'undead', name: 'Undead' },
+  ]);
+
+  it('offers a Create item per token an own card creates', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P1', creates: CREATES }) }));
+    const labels = menuLabels(root);
+    assert.ok(labels.includes('Create Jackal Pack'));
+    assert.ok(labels.includes('Create Undead'));
+  });
+
+  it('creates the chosen token via a SPAWN_CARD token_id intent, down-right of the creator', () => {
+    const cardEl = fakeCard('c1', { owner: 'P1', creates: CREATES, x: 10, y: 20 });
+    root._emit('contextmenu', rightClick({ card: cardEl }));
+    clickMenuItem(root, 'Create Jackal Pack');
+    const msg = sent.at(-1).intent;
+    assert.equal(msg.op, 'SPAWN_CARD');
+    assert.equal(msg.token_id, 'jackal_pack');
+    assert.equal(msg.name, undefined); // a token spawn carries only the id; the server resolves it
+    const [x, y] = msg.position;
+    assert.ok(x > 0 && x < 1 && y > 0 && y < 1);
+  });
+
+  it("hides Create items on an opponent's card and on a card that creates nothing", () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('c1', { owner: 'P2', creates: CREATES }) }));
+    assert.ok(!menuLabels(root).some((l) => l.startsWith('Create ')));
+    root._emit('contextmenu', rightClick({ card: fakeCard('c2', { owner: 'P1', creates: '' }) }));
+    assert.ok(!menuLabels(root).some((l) => l.startsWith('Create ')));
   });
 
   it('gives control of an own card to the opponent via the menu and accelerator g', () => {

@@ -300,7 +300,8 @@ def fresh_token_id(state) -> str:
 
 
 def spawn_token(view: HasView, name: str, side: Side, pos: BoardPos) -> None:
-    view.dispatch(SpawnCard(fresh_token_id(view.state), name, side, None, pos))
+    token_id = fresh_token_id(view.state)
+    view.dispatch(SpawnCard(token_id, pos, card=L5RCard(id=token_id, name=name, side=side)))
 
 
 def duplicate_card(view: HasView, card_id: str) -> None:
@@ -308,11 +309,9 @@ def duplicate_card(view: HasView, card_id: str) -> None:
     card = view.state.cards_by_id.get(card_id)
     if card is None:
         return
-    face = card.active_face
     origin = view.state.positions.get(card_id) or BoardPos(0.0, 0.0)
     pos = BoardPos(origin.x + _SPAWN_OFFSET, origin.y + _SPAWN_OFFSET)
-    image = str(face.image_front) if face.image_front else None
-    view.dispatch(SpawnCard(fresh_token_id(view.state), card.name, card.side, image, pos))
+    view.dispatch(SpawnCard(fresh_token_id(view.state), pos, card=card.active_face))
 
 
 def apply_note(view: HasView, card_id: str, text: str | None) -> None:
