@@ -1,5 +1,5 @@
 // The player's avatar, shared by the nav widget and the in-game seat panels so one identity drives
-// both: a circle showing up to two initials of the display name.
+// both: either a crop of a chosen card (canvas) or, as a fallback, a circle of the name's initials.
 
 export function initials(name) {
   return (
@@ -10,4 +10,54 @@ export function initials(name) {
       .map((part) => part[0].toUpperCase())
       .join('') || '?'
   );
+}
+
+// The source-pixel rectangle for a fractional crop box on an image of the given natural size.
+export function cropToPixels(crop, imageWidth, imageHeight) {
+  return {
+    sx: crop.left * imageWidth,
+    sy: crop.top * imageHeight,
+    sw: (crop.right - crop.left) * imageWidth,
+    sh: (crop.bottom - crop.top) * imageHeight,
+  };
+}
+
+export function loadImage(src) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = reject;
+    img.src = src;
+  });
+}
+
+// Draw the cropped region of a loaded card image to fill the (square) canvas; CSS rounds it to a
+// circle. Display only, no pixel readback, so a cross-origin card image needs no CORS.
+export function drawCardAvatar(canvas, image, crop) {
+  const { sx, sy, sw, sh } = cropToPixels(crop, image.naturalWidth, image.naturalHeight);
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(image, sx, sy, sw, sh, 0, 0, canvas.width, canvas.height);
+}
+
+const AVATAR_PX = 64;
+
+// The avatar element for a user: a canvas of their chosen card crop when one is set, else an
+// initials span. The canvas is returned immediately and filled once the card image loads.
+export function buildAvatarElement(user, imgBase) {
+  const spec = user?.avatar;
+  if (!spec) {
+    const span = document.createElement('span');
+    span.className = 'account-avatar';
+    span.textContent = initials(user?.display_name);
+    return span;
+  }
+  const canvas = document.createElement('canvas');
+  canvas.className = 'account-avatar';
+  canvas.width = AVATAR_PX;
+  canvas.height = AVATAR_PX;
+  loadImage(`${imgBase}/${spec.image_path}`)
+    .then((image) => drawCardAvatar(canvas, image, spec.crop))
+    .catch(() => {});
+  return canvas;
 }
