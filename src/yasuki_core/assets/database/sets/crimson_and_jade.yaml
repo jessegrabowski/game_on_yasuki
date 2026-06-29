@@ -322,6 +322,8 @@ cards:
   rarity: Common
   artist: Joel Biske
 - title: Barbarian Horde
+  creates:
+  - horde_outrider
   types:
   - Strategy
   decks:

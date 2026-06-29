@@ -381,6 +381,8 @@ cards:
   flavor_text: <i>It hurt to be in his presence. The Akasha wailed in pain.</i>
   collector_number: '33'
 - title: Knot of Serpents
+  creates:
+  - asp_warrior
   types:
   - Stronghold
   decks:
@@ -461,6 +463,8 @@ cards:
     with the bones of those who tried.</i>
   collector_number: '15'
 - title: Peasant District
+  creates:
+  - asp_warrior
   types:
   - Territory
   decks:

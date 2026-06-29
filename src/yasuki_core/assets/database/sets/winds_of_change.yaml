@@ -3341,6 +3341,7 @@ cards:
   collector_number: '97'
 - title: Wretches
   creates:
+  - shadowlands_wretch
   - token_worker
   types:
   - Holding

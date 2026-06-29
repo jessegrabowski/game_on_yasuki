@@ -687,6 +687,8 @@ cards:
   rarity: Promo
   artist: William O'Connor
 - title: Kaneka's Reserves
+  creates:
+  - kanekas_samurai
   types:
   - Strategy
   decks:
@@ -1191,6 +1193,8 @@ cards:
   artist: Jon Hodgson
   flavor_text: <i>"If we allow Shinsei's death to defeat us, then we will have truly failed him."</i>
 - title: Shourido
+  creates:
+  - fallen_marine
   types:
   - Event
   decks:

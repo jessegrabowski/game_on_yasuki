@@ -2597,6 +2597,8 @@ cards:
   collector_number: '136'
   designer: Loki
 - title: Overlooked Palace
+  creates:
+  - lurking_shinobi
   types:
   - Holding
   decks:

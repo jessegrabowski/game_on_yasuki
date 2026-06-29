@@ -3669,6 +3669,8 @@ cards:
     I see now I was a fool to think so. She foresaw something far greater."</i>
   collector_number: '114'
 - title: Yoritomo Utemaro
+  creates:
+  - utemaros_mercenary
   types:
   - Personality
   decks:

@@ -2338,6 +2338,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Daigoro
+  creates:
+  - undead_cavalry_follower_2f_fear2
   types:
   - Personality
   decks:
@@ -4060,6 +4062,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Zenathaar, Warrior of the Bright Eye
+  creates:
+  - naga_warrior
   types:
   - Personality
   decks:

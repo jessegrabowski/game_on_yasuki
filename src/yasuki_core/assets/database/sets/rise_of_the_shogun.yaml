@@ -506,6 +506,8 @@ cards:
   flavor_text: <i>All bow before the Khan, one way or another.</i>
   collector_number: '84'
 - title: Breeding Season
+  creates:
+  - nezumi_whelp
   types:
   - Strategy
   decks:
@@ -686,6 +688,8 @@ cards:
     Yashinko</i>
   collector_number: '125'
 - title: Daigotsu Eiya
+  creates:
+  - eiyas_shade
   types:
   - Personality
   decks:
@@ -2861,6 +2865,8 @@ cards:
   flavor_text: <i>"All south of Shiro Kitsuki has been lost. We shall retake it."</i>
   collector_number: '28'
 - title: Tchik
+  creates:
+  - bone_tribe_nezumi
   types:
   - Personality
   decks:
@@ -3516,6 +3522,8 @@ cards:
   artist: Edwin David
   collector_number: '123'
 - title: Yoritomo Ryouta
+  creates:
+  - mantis_sailor
   types:
   - Personality
   decks:

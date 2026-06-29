@@ -7200,6 +7200,8 @@ cards:
     may be.</i>
   collector_number: '365'
 - title: Ratling Village
+  creates:
+  - nezumi_pack
   types:
   - Region
   decks:
@@ -8288,6 +8290,8 @@ cards:
   flavor_text: <i>"Complexity is simple. Simplicity is difficult." - Shinsei</i>
   collector_number: '221'
 - title: Shireikan
+  creates:
+  - shireikans_bushi
   types:
   - Follower
   decks:

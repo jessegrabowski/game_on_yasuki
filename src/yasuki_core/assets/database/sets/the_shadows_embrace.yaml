@@ -1173,6 +1173,8 @@ cards:
   collector_number: '18'
   designer: Thomas
 - title: Humble Farm
+  creates:
+  - farmhands
   types:
   - Holding
   decks:
@@ -1350,6 +1352,8 @@ cards:
   collector_number: '25'
   designer: Loki
 - title: Kakita Saki
+  creates:
+  - kakita_sakis_armor
   types:
   - Personality
   decks:
@@ -1575,6 +1579,8 @@ cards:
   collector_number: '29'
   designer: Loki
 - title: Kitsune Kichi
+  creates:
+  - kichis_spirit
   types:
   - Personality
   decks:
@@ -1978,6 +1984,8 @@ cards:
   collector_number: '51'
   designer: Duncan
 - title: Natural Aviary
+  creates:
+  - hunting_falcon
   types:
   - Region
   decks:

@@ -149,6 +149,8 @@ cards:
     enough that it rarely matters, however." - Akodo Shigetoshi</i>
   collector_number: '149'
 - title: Armor of Toshigoku
+  creates:
+  - animated_armor
   types:
   - Item
   decks:
@@ -578,6 +580,8 @@ cards:
     mankind's blasphemies no longer."</i>
   collector_number: '1'
 - title: Chuda Jinsei
+  creates:
+  - jinseis_avatar
   types:
   - Personality
   decks:
@@ -1078,6 +1082,8 @@ cards:
   artist: Veronica V. Jones
   collector_number: '102'
 - title: Fatina
+  creates:
+  - risen_ghul
   types:
   - Personality
   decks:
@@ -1146,6 +1152,8 @@ cards:
   flavor_text: <i>"I will find the targets, brothers," she said. "You ensure they are dealt with."</i>
   collector_number: '158'
 - title: Fortified Cavalry
+  creates:
+  - armored_cavalry
   types:
   - Follower
   decks:
@@ -1323,6 +1331,8 @@ cards:
   flavor_text: <i>"Yes, I have fallen. And yes, I am Crab."</i>
   collector_number: '10'
 - title: Hida Fubatsu
+  creates:
+  - armor
   types:
   - Personality
   decks:
@@ -2784,6 +2794,8 @@ cards:
   artist: Chris Seaman
   collector_number: '125'
 - title: Shiba Erena
+  creates:
+  - erenas_avatar
   types:
   - Personality
   decks:

@@ -916,6 +916,8 @@ cards:
     they do not expect."</i>
   collector_number: '89'
 - title: Essence of Jade Dragon
+  creates:
+  - jade_dragon_avatar
   types:
   - Spell
   decks:

@@ -680,6 +680,8 @@ cards:
   flavor_text: <i>"Only through the efforts of our loyal allies was the peasant rebellion thwarted." -
     Miya Hatori</i>
 - title: Cautious Escort
+  creates:
+  - fishermen
   types:
   - Strategy
   decks:

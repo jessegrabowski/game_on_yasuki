@@ -160,6 +160,8 @@ cards:
     seek true Enlightenment."</i>
   collector_number: '34'
 - title: Awaken the Sins
+  creates:
+  - lost_soul
   types:
   - Spell
   decks:
@@ -2318,6 +2320,8 @@ cards:
   flavor_text: <i>"Odd how quickly one can become accustomed to even the strangest things."</i>
   collector_number: '114'
 - title: Shadowed Path to Victory
+  creates:
+  - sleeper_agent
   types:
   - Strategy
   decks:

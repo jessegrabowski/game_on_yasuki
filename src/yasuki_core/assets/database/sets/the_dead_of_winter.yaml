@@ -1187,6 +1187,8 @@ cards:
     - Chuda Mishime</i>
   collector_number: '64'
 - title: Guardian of Earth
+  creates:
+  - earthen_golem
   types:
   - Spell
   decks:
@@ -2773,6 +2775,8 @@ cards:
     this mission will be made known to us."</i>
   collector_number: '70'
 - title: Shinjo Hwarang
+  creates:
+  - swift_outrider
   types:
   - Personality
   decks:
@@ -3387,6 +3391,8 @@ cards:
     while the rage and hate are tempered, they have never fully disappeared."</i>
   collector_number: '32'
 - title: Toritaka Horoiso
+  creates:
+  - horoisos_scout
   types:
   - Personality
   decks:

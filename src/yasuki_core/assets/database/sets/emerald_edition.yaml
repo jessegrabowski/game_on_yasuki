@@ -3485,6 +3485,8 @@ cards:
   rarity: Uncommon
   artist: Wackwitz & Daily
 - title: Matsu Imura
+  creates:
+  - tamed_beast
   types:
   - Personality
   decks:

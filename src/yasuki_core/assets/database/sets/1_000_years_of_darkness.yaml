@@ -236,6 +236,7 @@ cards:
   collector_number: '6'
 - title: Burial Mound
   creates:
+  - shambling_dead
   - token_corpse
   types:
   - Holding

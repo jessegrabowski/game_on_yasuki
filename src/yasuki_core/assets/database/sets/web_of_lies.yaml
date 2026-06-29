@@ -779,6 +779,8 @@ cards:
   artist: Marta Preta Mora
   collector_number: '83'
 - title: Fury of Hida
+  creates:
+  - hidas_fury
   types:
   - Strategy
   decks:
@@ -1953,6 +1955,8 @@ cards:
   flavor_text: <i>"The seas may be yours, Mantis, but the ports are ours. Now pay the fee or begone."</i>
   collector_number: '8'
 - title: Natsumono
+  creates:
+  - oni_whelp
   types:
   - Personality
   decks:
@@ -2500,6 +2504,8 @@ cards:
   artist: John Wigley
   collector_number: '120'
 - title: Shosuro Infiltrator
+  creates:
+  - shosuros_spy
   types:
   - Follower
   decks:
@@ -2522,6 +2528,8 @@ cards:
   artist: Jonathan Hunt
   collector_number: '123'
 - title: Shosuro Saemon
+  creates:
+  - shadow_ninja
   types:
   - Personality
   decks:

@@ -29,6 +29,8 @@ cards:
     - Doji Akiko</i>
   collector_number: '61'
 - title: Akatch
+  creates:
+  - nezumi_scout
   types:
   - Personality
   decks:
@@ -1798,6 +1800,8 @@ cards:
   flavor_text: <i>"Look into yourself, Chuda. See me gnawing at your soul."</i>
   collector_number: '89'
 - title: Kaimetsu-uo's Formation
+  creates:
+  - mantis_marine
   types:
   - Strategy
   decks:
@@ -2184,6 +2188,8 @@ cards:
   flavor_text: <i>"Lord Kusari will soon be a Crane. How tightly will he cling to duty then, I wonder?"</i>
   collector_number: '33'
 - title: Matsu Eishi
+  creates:
+  - matsu_ancestor
   types:
   - Personality
   decks:
@@ -2734,6 +2740,8 @@ cards:
   artist: Adam Denton
   collector_number: '119'
 - title: Peasant Uprising
+  creates:
+  - peasant_mob
   types:
   - Strategy
   decks:
@@ -3114,6 +3122,8 @@ cards:
   flavor_text: <i>"It seems General Lixue has not been idle." - Shinjo Shono</i>
   collector_number: '145'
 - title: Shosuro Hisashi
+  creates:
+  - hisashis_guard
   types:
   - Personality
   decks:
@@ -3282,6 +3292,8 @@ cards:
   flavor_text: <i>Word and action are one.</i>
   collector_number: '130'
 - title: Skirt the Edge
+  creates:
+  - nezumi_whelp
   types:
   - Strategy
   decks:
@@ -3427,6 +3439,8 @@ cards:
   flavor_text: <i>Her studies with Ningen have only made her stranger than before.</i>
   collector_number: '29'
 - title: Tasu no Oni
+  creates:
+  - oni_brood
   types:
   - Personality
   decks:

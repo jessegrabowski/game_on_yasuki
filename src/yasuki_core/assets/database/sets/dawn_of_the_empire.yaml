@@ -1553,6 +1553,8 @@ cards:
   artist: Drew Baker
   collector_number: '29'
 - title: Mountains of Exile
+  creates:
+  - yobanjin_outrider
   types:
   - Region
   decks:
@@ -2611,6 +2613,8 @@ cards:
   artist: Christopher Appel
   collector_number: '80'
 - title: Yobanjin Fortress
+  creates:
+  - yobanjin_raider
   types:
   - Holding
   decks:
