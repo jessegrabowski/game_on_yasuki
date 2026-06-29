@@ -4,6 +4,7 @@
 
 import { buildCompositeDataURL, loadArtLayout } from '../deck_builder/js/art.js';
 import { reconcile } from './reconcile.js';
+import { initials } from './avatar.js';
 
 export function node(tag, className, text) {
   const el = document.createElement(tag);
@@ -317,17 +318,6 @@ function renderProvinces(frame, seatName, zones, imgBase) {
 // A seat's hand as a strip of full-size cards.
 export function renderHand(container, cards, imgBase) {
   renderCards(container, cards ?? [], imgBase, 'zone-card');
-}
-
-function initials(name) {
-  return (
-    (name ?? '')
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((part) => part[0].toUpperCase())
-      .join('') || '?'
-  );
 }
 
 // A seat's identity: avatar, name, and current honor. `editable` marks the honor with the local

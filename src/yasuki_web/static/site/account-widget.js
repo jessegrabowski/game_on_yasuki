@@ -3,6 +3,7 @@
 // createElement so it stays CSP-safe under style-src 'self'.
 
 import { getMe, logout } from './account-api.js';
+import { initials } from './avatar.js';
 
 // Build the control for `user` (null = logged out). `onLogout` runs after a successful logout;
 // it defaults to a full reload so the page re-renders in the signed-out state.
@@ -22,7 +23,13 @@ export function buildAccountControl(user, { onLogout } = {}) {
   const button = document.createElement('button');
   button.type = 'button';
   button.className = 'account-button';
-  button.textContent = user.display_name;
+  const name = document.createElement('span');
+  name.className = 'account-name';
+  name.textContent = user.display_name;
+  const avatar = document.createElement('span');
+  avatar.className = 'account-avatar';
+  avatar.textContent = initials(user.display_name);
+  button.append(name, avatar);
 
   const menu = document.createElement('div');
   menu.className = 'account-menu';

@@ -802,3 +802,21 @@ body {
 }
 .account-menu a:hover,
 .account-menu-item:hover { background: var(--panel-2); }
+
+.account-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.account-avatar {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  /* The amber from the play board's seat avatars (play.css --r-gold), so the nav avatar matches it. */
+  background: #9a7b3f;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 600;
+}

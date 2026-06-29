@@ -65,10 +65,11 @@ describe('buildAccountControl', () => {
     assert.equal(link.href, '/auth/login');
   });
 
-  it('shows the name with a hidden Settings/Log out menu when logged in', () => {
-    const widget = buildAccountControl({ display_name: 'StoicCrane204' });
+  it('shows the name, an initials avatar, and a hidden Settings/Log out menu', () => {
+    const widget = buildAccountControl({ display_name: 'Hida Kisada' });
     const [button, menu] = widget.children;
-    assert.equal(button.textContent, 'StoicCrane204');
+    assert.equal(button.children[0].textContent, 'Hida Kisada');
+    assert.equal(button.children[1].textContent, 'HK'); // initials avatar, right of the name
     assert.ok(menu.classList.contains('hidden'), 'menu starts hidden');
     assert.deepEqual(
       menu.children.map((c) => c.textContent),
