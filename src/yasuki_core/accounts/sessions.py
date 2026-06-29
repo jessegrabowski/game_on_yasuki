@@ -60,7 +60,8 @@ def resolve_session(conn: psycopg.Connection, token: str) -> dict | None:
         if row is None:
             return None
         cur.execute(
-            "SELECT id, google_sub, display_name, avatar_url, is_banned FROM users WHERE id = %s",
+            "SELECT id, google_sub, display_name, avatar_url, is_banned, avatar "
+            "FROM users WHERE id = %s",
             (row["user_id"],),
         )
         user = cur.fetchone()

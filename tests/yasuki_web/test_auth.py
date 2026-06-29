@@ -153,6 +153,55 @@ def test_update_me_rejects_a_blank_or_overlong_name(client, monkeypatch, rsa_key
     assert client.patch("/api/me", json={"display_name": "N" * 41}).status_code == 422
 
 
+def test_set_avatar_crops_a_card_resolving_its_image_server_side(client, monkeypatch, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    monkeypatch.setattr(auth, "get_card_by_id", lambda cid: {"image_path": f"sets/x/{cid}.jpg"})
+    crop = {"left": 0.1, "top": 0.15, "right": 0.4, "bottom": 0.45}
+    # A client tries to smuggle its own image_path; the server must ignore it and use the card's.
+    resp = client.post(
+        "/api/me/avatar",
+        json={"card_id": "doji-challenger", "image_path": "evil/path.jpg", "crop": crop},
+    )
+    assert resp.status_code == 200
+
+    avatar = client.get("/api/me").json()["user"]["avatar"]
+    assert avatar == {
+        "card_id": "doji-challenger",
+        "image_path": "sets/x/doji-challenger.jpg",  # derived from card_id, not the smuggled path
+        "crop": crop,
+    }
+
+
+def test_set_avatar_rejects_an_unknown_card(client, monkeypatch, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    monkeypatch.setattr(auth, "get_card_by_id", lambda cid: None)
+    box = {"left": 0, "top": 0, "right": 1, "bottom": 1}
+    assert client.post("/api/me/avatar", json={"card_id": "ghost", "crop": box}).status_code == 400
+
+
+def test_set_avatar_rejects_a_degenerate_crop(client, monkeypatch, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    monkeypatch.setattr(auth, "get_card_by_id", lambda cid: {"image_path": "x.jpg"})
+    flat_x = {"left": 0.5, "top": 0, "right": 0.5, "bottom": 1}  # left == right
+    flat_y = {"left": 0, "top": 0.5, "right": 1, "bottom": 0.5}  # top == bottom
+    for box in (flat_x, flat_y):
+        assert client.post("/api/me/avatar", json={"card_id": "d", "crop": box}).status_code == 422
+
+
+def test_set_avatar_requires_a_session(client):
+    box = {"left": 0, "top": 0, "right": 1, "bottom": 1}
+    assert client.post("/api/me/avatar", json={"card_id": "x", "crop": box}).status_code == 401
+
+
+def test_clear_avatar_falls_back_to_initials(client, monkeypatch, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    monkeypatch.setattr(auth, "get_card_by_id", lambda cid: {"image_path": "x.jpg"})
+    box = {"left": 0, "top": 0, "right": 1, "bottom": 1}
+    client.post("/api/me/avatar", json={"card_id": "doji", "crop": box})
+    assert client.delete("/api/me/avatar").status_code == 200
+    assert client.get("/api/me").json()["user"]["avatar"] is None
+
+
 def test_callback_rejects_unknown_state(client):
     resp = client.get("/auth/callback?code=x&state=never-issued", follow_redirects=False)
     assert resp.status_code == 400

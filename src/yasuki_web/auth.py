@@ -11,7 +11,7 @@ from urllib.parse import urlencode
 import httpx
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
 from starlette.responses import JSONResponse, RedirectResponse
 from starlette.websockets import WebSocket
 
@@ -20,6 +20,7 @@ from yasuki_web.rate_limit import limiter
 from yasuki_core.accounts import banlist, oauth_state, sessions, users
 from yasuki_core.accounts.db import get_accounts_connection
 from yasuki_core.accounts.display_names import random_display_name
+from yasuki_core.database import get_card_by_id
 
 logger = logging.getLogger(__name__)
 
@@ -342,11 +343,29 @@ class DisplayNameUpdate(BaseModel):
     display_name: str = Field(min_length=1, max_length=40)
 
 
+class CropBox(BaseModel):
+    left: float = Field(ge=0, le=1)
+    top: float = Field(ge=0, le=1)
+    right: float = Field(ge=0, le=1)
+    bottom: float = Field(ge=0, le=1)
+
+    @model_validator(mode="after")
+    def _ordered(self) -> "CropBox":
+        if self.left >= self.right or self.top >= self.bottom:
+            raise ValueError("crop box must have left < right and top < bottom")
+        return self
+
+
+class AvatarRequest(BaseModel):
+    card_id: str = Field(min_length=1, max_length=120)
+    crop: CropBox
+
+
 def _public_user(user: dict) -> dict:
     return {
         "id": user["id"],
         "display_name": user["display_name"],
-        "avatar_url": user["avatar_url"],
+        "avatar": user.get("avatar"),
     }
 
 
@@ -368,6 +387,39 @@ async def update_me(request: Request, body: DisplayNameUpdate, user: dict = Depe
 def _set_display_name(user_id: int, display_name: str) -> dict:
     with get_accounts_connection() as conn:
         return users.set_display_name(conn, user_id, display_name)
+
+
+@router.post("/api/me/avatar")
+async def set_my_avatar(request: Request, body: AvatarRequest, user: dict = Depends(current_user)):
+    """Set the signed-in user's avatar to a crop of a chosen card.
+
+    The card's image path is resolved server-side from ``card_id`` (rejecting an unknown card), so a
+    client never supplies an arbitrary image path; the path is stored alongside the crop so rendering
+    needs no further card-DB lookup.
+    """
+    image_path = await asyncio.to_thread(_card_image_path, body.card_id)
+    if image_path is None:
+        raise HTTPException(status_code=400, detail="Unknown card")
+    spec = {"card_id": body.card_id, "image_path": image_path, "crop": body.crop.model_dump()}
+    updated = await asyncio.to_thread(_save_avatar, user["id"], spec)
+    return {"user": _public_user(updated)}
+
+
+@router.delete("/api/me/avatar")
+async def clear_my_avatar(request: Request, user: dict = Depends(current_user)):
+    """Clear the avatar, falling the display back to the name's initials."""
+    updated = await asyncio.to_thread(_save_avatar, user["id"], None)
+    return {"user": _public_user(updated)}
+
+
+def _card_image_path(card_id: str) -> str | None:
+    card = get_card_by_id(card_id)
+    return card["image_path"] if card else None
+
+
+def _save_avatar(user_id: int, spec: dict | None) -> dict:
+    with get_accounts_connection() as conn:
+        return users.set_avatar(conn, user_id, spec)
 
 
 @router.delete("/api/me")

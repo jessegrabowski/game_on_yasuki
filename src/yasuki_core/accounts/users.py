@@ -1,11 +1,12 @@
 import psycopg
+from psycopg.types.json import Jsonb
 
 from yasuki_core.accounts import banlist, sessions
 from yasuki_core.accounts.crypto import email_blind_index
 
 # Returned on every user lookup — the non-sensitive identity the web layer needs to seat a player
 # and enforce a ban. Deliberately excludes the email blind index.
-_USER_COLUMNS = "id, google_sub, display_name, avatar_url, is_banned"
+_USER_COLUMNS = "id, google_sub, display_name, avatar_url, is_banned, avatar"
 
 
 def upsert_user(
@@ -69,6 +70,26 @@ def set_display_name(conn: psycopg.Connection, user_id: int, display_name: str) 
             f"UPDATE users SET display_name = %s, updated_at = now() WHERE id = %s "
             f"RETURNING {_USER_COLUMNS}",
             (display_name, user_id),
+        )
+        return cur.fetchone()
+
+
+def set_avatar(conn: psycopg.Connection, user_id: int, avatar: dict | None) -> dict | None:
+    """Set (or clear, with None) a user's avatar spec, returning the refreshed row, or None if absent.
+
+    Parameters
+    ----------
+    conn : psycopg.Connection
+        An open accounts-database connection.
+    user_id : int
+        The user to update.
+    avatar : dict or None
+        The avatar spec ``{card_id, image_path, crop}`` to store as JSON, or None to clear it.
+    """
+    with conn.cursor() as cur:
+        cur.execute(
+            f"UPDATE users SET avatar = %s, updated_at = now() WHERE id = %s RETURNING {_USER_COLUMNS}",
+            (Jsonb(avatar) if avatar is not None else None, user_id),
         )
         return cur.fetchone()
 

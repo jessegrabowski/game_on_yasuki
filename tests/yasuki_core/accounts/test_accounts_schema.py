@@ -36,7 +36,11 @@ def test_rerunning_migrations_is_a_noop(accounts_conn):
     assert apply_migrations(accounts_conn) == []
     with accounts_conn.cursor() as cur:
         cur.execute("SELECT version FROM schema_migrations ORDER BY version")
-        assert [row["version"] for row in cur.fetchall()] == ["0001_initial", "0002_oauth_logins"]
+        assert [row["version"] for row in cur.fetchall()] == [
+            "0001_initial",
+            "0002_oauth_logins",
+            "0003_avatar",
+        ]
 
 
 def test_user_deck_round_trip(accounts_conn):
