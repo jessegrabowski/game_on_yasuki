@@ -5437,7 +5437,6 @@ cards:
 - title: Kitsune Gina
   creates:
   - ginas_fox
-  - hisanos_guide
   types:
   - Personality
   decks:
