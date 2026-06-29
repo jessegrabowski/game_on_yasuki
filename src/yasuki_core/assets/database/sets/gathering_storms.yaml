@@ -457,6 +457,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Ichido Allegiance
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -468,7 +469,7 @@ cards:
   text: 'Your Wind must be The Kanpeki Dynasty.<br><b>Raid Engage, :bow:: </b> Create a 2F/1C/1PH Pirate
     • <b>Naval</b> Mantis Clan Personality. At the end of this turn, banish them unless you destroy one
     of your Wealth tokens.'
-  province_strength: '+1'
+  province_strength: 1
   starting_honor: -1
   legality:
   - Shattered Empire
@@ -631,6 +632,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Minoko Allegiance
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -643,7 +645,7 @@ cards:
     Followers.<br><b>Raid Engage, :bow::</b> Create and Equip a 1F Follower to each of your Commanders
     at this battlefield. At the end of this turn, banish those Followers.
   province_strength: -1
-  starting_honor: '+1'
+  starting_honor: 1
   legality:
   - Shattered Empire
   rarity: Fixed

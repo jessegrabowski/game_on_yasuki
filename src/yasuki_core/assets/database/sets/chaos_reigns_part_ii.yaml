@@ -1681,6 +1681,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Three Clan Alliance
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1697,7 +1698,7 @@ cards:
     :bow::</b> Target your Personality. Draw a card. If you do not control Personalities with all of your
     Clan Alignments among them, discard a card.'
   province_strength: -1
-  starting_honor: '+3'
+  starting_honor: 3
   legality:
   - Shattered Empire
   story: '2024 Gen Con: Distant Thunder – Greg Wong'

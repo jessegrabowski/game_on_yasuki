@@ -1084,6 +1084,7 @@ cards:
   flavor_text: <i>Daigotsu stared in awe. "You have done well, Suiteiru," he said softly. "I am pleased."</i>
   collector_number: '6'
 - title: Gohei Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1096,8 +1097,8 @@ cards:
     some time during the battle or the Defender controls no units.<br><b>Reaction:</b> After Maneuvers,
     target your performing attacking Tactician Personality. The Defender targets a Personality he controls
     at another location. Straighten his unit. Assign it to the Tactician's battlefield, even if illegal.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
@@ -1583,6 +1584,7 @@ cards:
   artist: Drew Baker
   collector_number: '25'
 - title: Kedamono Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1594,8 +1596,8 @@ cards:
   text: You will not gain Honor during the resolution of an action that creates a duel.<br>Your Harriers
     have +2F while attacking a player who has higher Family Honor than you.<br><b>Absent Battle:</b> Target
     zero to two of your defending Personalities at another battlefield. Move them to the current battlefield.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy
@@ -3328,6 +3330,7 @@ cards:
   artist: Anthony Grabski
   collector_number: '38'
 - title: Tsusung Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3340,8 +3343,8 @@ cards:
     .<br><b>Battle:</b> Bow your target Spell to straighten your target Shugenja.<br><b>Battle:</b> Once
     per battle, bow your target Spell to make a Fear effect with strength equal to its Gold Cost which
     affects Personalities as if they were Followers.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy

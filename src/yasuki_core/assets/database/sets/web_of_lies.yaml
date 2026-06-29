@@ -2808,6 +2808,7 @@ cards:
   flavor_text: <i>"The time has come to find the Lady Shaitung a husband, I think," the Phoenix said.</i>
   collector_number: '33'
 - title: Tangen Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2818,8 +2819,8 @@ cards:
   - Scorpion Clan
   text: You may take only one Political action per turn.<br><b>Reaction:</b> Once per battle, after an
     action targets one of your cards during a battle, it targets another legal target of your choice.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)
@@ -3218,6 +3219,7 @@ cards:
   flavor_text: <i>"One who lives a life of vengeance may yet find peace." - Shosuku</i>
   collector_number: '11'
 - title: Umasu Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3230,8 +3232,8 @@ cards:
     assign Personalities even if they are bowed.<br><b>Repeatable Battle:</b> Bow your target performing
     Follower attached to a Personality this action has not affected this battle to straighten the Personality
     if his Force is less than or equal to twice the Follower's.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)
@@ -3239,6 +3241,7 @@ cards:
   artist: Steve Ellis
   collector_number: '147'
 - title: Uso Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3249,8 +3252,8 @@ cards:
   - Dragon Clan
   text: Your Personalities may not issue challenges during your Action Phase.<br>Actions that create duels
     during a battle, if your Personality is the challenger, have the additional effect, "Destroy the loser."
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Legacy
   - Rain of Blood (Diamond)

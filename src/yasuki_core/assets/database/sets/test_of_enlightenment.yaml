@@ -2221,6 +2221,7 @@ cards:
     tonight!" - Matsu Yoshino</i>
   collector_number: '97'
 - title: Rosoku Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2232,7 +2233,7 @@ cards:
   text: This Sensei counts as a Ring for actions on non-Stronghold cards.<br>After one of your actions
     put cards into your hand, until this phase ends, negate further such effects from your actions.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - Age of Enlightenment (Lotus)
   - Legacy

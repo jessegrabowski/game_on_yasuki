@@ -171,6 +171,7 @@ cards:
   flavor_text: <i>"Shall I show you what I see?"</i>
   collector_number: '123'
 - title: Akagi Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -182,8 +183,8 @@ cards:
   text: Reduce your Honor gains from Holdings by 1.<br><b>Absent Battle, :bow::</b> Move your target Scout
     Personality home or, if he would be opposed, move your target Scout Personality at home to the current
     battlefield.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - Legacy
@@ -195,6 +196,7 @@ cards:
   collector_number: '253'
   designer: Bryan
 - title: Akikazu Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2896,6 +2898,7 @@ cards:
     it distasteful.
   collector_number: '22'
 - title: Gidayu Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3591,6 +3594,7 @@ cards:
   collector_number: '155'
   designer: Bryan
 - title: Hojatsu Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3601,7 +3605,7 @@ cards:
   - Dragon Clan
   text: <b>Interrupt, :bow::</b> Challenges created by the action and issued by your Personality with
     a Weapon bow the other Personality after he loses the duel or refuses the challenge.
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -1
   legality:
   - A Brother's Destiny (Ivory Edition)
@@ -4484,6 +4488,7 @@ cards:
     welcome.
   collector_number: '324'
 - title: Jutsushi Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -4494,7 +4499,7 @@ cards:
   - Scorpion Clan
   text: Your Samurai have +1F while opposing a dishonorable Personality.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - Legacy
@@ -5126,6 +5131,9 @@ cards:
   artist: Aurelien Hubert
   collector_number: '14'
 - title: Mahatsu Sensei
+  province_strength: 0
+  gold_production: -1
+  starting_honor: 0
   types:
   - Sensei
   decks:
@@ -6528,6 +6536,7 @@ cards:
   flavor_text: '"Do not say anything about it. He is so proud of it, and I cannot bear to hurt his feelings."'
   collector_number: '39'
 - title: Rae Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -6537,8 +6546,8 @@ cards:
   keywords:
   - Phoenix Clan
   text: Actions on your Spells have <b>Home </b>if you target your Samurai with them.
-  province_strength: '+1'
-  starting_honor: '+0'
+  province_strength: 1
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - Legacy
@@ -7033,6 +7042,7 @@ cards:
   flavor_text: '"Hello, my old friend. I am glad to see you too have avoided the Dark Naga''s grasp."'
   collector_number: '113'
 - title: Satoru Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -7044,7 +7054,7 @@ cards:
   text: <b>Battle, :bow::</b> Target your non-Unique Samurai face-up in a Province. Give him <b>Reserve</b>.
     Unless he is a Scout and you control a Terrain, give him +2 Gold Cost.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - Legacy
@@ -8350,6 +8360,7 @@ cards:
   collector_number: '53'
   designer: Loki
 - title: Tetsuo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -8361,7 +8372,7 @@ cards:
   text: <b>Limited, :bow::</b> Give <b>Conqueror</b> to your target Personality with a Weapon <i>(A Conqueror's
     unit doesn't bow after battle)</i>.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - Legacy
@@ -8800,6 +8811,7 @@ cards:
   flavor_text: '"I go to my ancestors, head held high!"'
   collector_number: '351'
 - title: Todori Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -8810,8 +8822,8 @@ cards:
   - Crab Clan
   text: Your Stronghold has no traits and abilities. <br><b>Battle, :bow::</b> Bow your target unbowed
     Follower. Ranged Attack with strength equal to its Force.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Ivory Edition)
   - Legacy

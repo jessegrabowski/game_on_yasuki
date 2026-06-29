@@ -85,6 +85,7 @@ cards:
   flavor_text: <i>"All of those who would be Lion, listen to me. I will tell you the tale of Akodo the
     One-Eye, and of the brave samurai who followed him to their deaths. . . and beyond."</i>
 - title: Akodo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -101,8 +102,8 @@ cards:
     without the Tactician keyword have <b>Tactician, </b>but may not perform Tactical actions that give
     themselves Force bonuses or the Tactical Advantage rulebook ability.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -1573,6 +1574,7 @@ cards:
   flavor_text: <i>"They took Yaruko's life to 'convince' the Masters to betray Toturi. They did not expect
     us to fight at the sound of her screams. . . but we were still to late."</i>
 - title: Kaiu Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1594,8 +1596,8 @@ cards:
     Fortifications in and out of play with a printed Gold Cost of 1 or more have a minimum Gold Cost of
     1.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -1768,6 +1770,7 @@ cards:
   rarity: Rare
   artist: Ben Peck
 - title: Lady of the Forest Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1779,8 +1782,8 @@ cards:
   text: Your Fox Clan Personalities in and out of play have your Clan Alignment.<br>After a Nonhuman or
     Forest card is destroyed, lose 1 Honor.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -2031,6 +2034,7 @@ cards:
   flavor_text: <i>"I have done my duty - served my clan in this life and in the next. Now it is time for
     me to respect the laws of the Fortunes and return to the lands beyond death."</i>
 - title: Miya Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -2042,8 +2046,8 @@ cards:
   text: All players' Human Personalities, in and out of play, who do not have their owners' printed Clan
     Alignment have an Honor Requirement of 10, unless their owner will not win an Honor Victory.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -3429,6 +3433,7 @@ cards:
   flavor_text: <i>"The Shadowlands did not place within us the shadow that falls over our souls, nor did
     the Goju. It is not there because others have failed us, but because we have failed ourselves."</i>
 - title: Suzume Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3440,8 +3445,8 @@ cards:
   text: Your Sparrow Clan Personalities in and out of play have your Clan Alignment.<br>After an Ashigaru
     or Farm card is destroyed, lose 2 Honor.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -3714,6 +3719,7 @@ cards:
   flavor_text: <i>"We offer you the protection of the Phoenix." "Tetsuya-san, we need room to live, not
     your protection." The Master's eyes grew cold, and the Kitsuki, too late, knew his mistake.</i>
 - title: Tsuko Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3732,8 +3738,8 @@ cards:
     returns any of your units home, bow them and they will not straighten until after the start of your
     next Action Phase; these effects will not be negated or substituted.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -3849,6 +3855,7 @@ cards:
   rarity: Uncommon
   artist: Jim Pavelec
 - title: Uona Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3867,8 +3874,8 @@ cards:
     and you will not put cards from your discard piles into play, focusing areas, your hand, or back into
     decks.<br><b>Limited:</b> Look at the top card of your Dynasty or Fate deck. You may discard it.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy
@@ -3989,6 +3996,7 @@ cards:
   flavor_text: <i>"We saw a unit of spirit warriors turn back without a strike, unwilling to fight against
     three Dragon ise zumi. When we asked the Dragon why, they spoke in riddles."</i>
 - title: Wasp Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -4000,8 +4008,8 @@ cards:
   text: Your Wasp Clan Personalities in and out of play have your Clan Alignment.<br>Human Followers with
     Ranged Attack abilities enter play for you for 2 less Gold, to a minimum of 1.<br>You may not Lobby.
   focus: 2
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Hidden Emperor (Jade)
   - Legacy

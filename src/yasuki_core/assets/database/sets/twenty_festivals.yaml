@@ -507,6 +507,7 @@ cards:
   collector_number: '239'
   designer: Julien
 - title: Aroru Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -518,7 +519,7 @@ cards:
   text: Iaijutsu actions you take are Ninja instead. Reduce your Honor losses from your Ninja cards by
     2.<br><b>Interrupt, :bow::</b> After another player refuses a challenge or loses a duel from an action
     that targeted his Personality and your Ninja, give a -1F/-1C Poison token to his Personality.
-  province_strength: '+0'
+  province_strength: 0
   starting_honor: -1
   legality:
   - A Brother's Destiny (Twenty Festivals)
@@ -1284,6 +1285,7 @@ cards:
     but who are we to question fate? It is what it is."'
   collector_number: '156'
 - title: Chukage Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1295,8 +1297,8 @@ cards:
   text: You Equip non-Water Spells for 1 more Gold. After your Water card moves a Personality, give your
     target Water Shugenja +1F. You may Equip Water Spells to your unbowed opposed Shugenja as a Battle
     action.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
@@ -1308,6 +1310,7 @@ cards:
   collector_number: '352'
   designer: Loki
 - title: Chuuna Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1319,8 +1322,8 @@ cards:
   text: Your Stronghold has no abilities.<br><b>Limited, :bow::</b> Target your unbowed Thunder Personality.
     Bow a target card in a unit; the card's attachments, if any, must be bowed. If this bowed a Personality,
     bow your Thunder Personality.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
@@ -1576,6 +1579,7 @@ cards:
     "Both," she replied.</i>
   collector_number: '59'
 - title: Daigo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1900,6 +1904,7 @@ cards:
   flavor_text: A samurai is always prepared for death… either his own, or someone else's.
   collector_number: '285'
 - title: Dijuro Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -1917,8 +1922,8 @@ cards:
   text: Your non-Fortification Holdings enter play for 1 more Gold. Each Province you assigned a Personality
     to defend or with a Cavalry unit attacking it has +1 strength for each Fortification attached to it,
     and has a maximum strength equal to its printed strength +4.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
@@ -3243,6 +3248,7 @@ cards:
   collector_number: '161'
   designer: Loki
 - title: Hakuseki Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -3253,8 +3259,8 @@ cards:
   - Crane Clan
   text: Your Stronghold has no abilities. Your Magistrates have +1F while opposing any dishonorable Personalities.
     After each time your Battle action bows or destroys a dishonorable Personality, gain 1 Honor.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
@@ -4512,6 +4518,7 @@ cards:
   collector_number: '247'
   designer: Duncan
 - title: Kiyoteru Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -4523,8 +4530,8 @@ cards:
   text: Your Stronghold has no abilities. When Recruiting Dragons, you may Proclaim them, and may compare
     their Honor Requirement to the total Force of your non-Shadowlands Personalities instead of to your
     Honor.
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
@@ -4971,6 +4978,9 @@ cards:
   collector_number: '306'
   designer: Thomas
 - title: Mahatsu Sensei
+  province_strength: 0
+  gold_production: -1
+  starting_honor: 0
   types:
   - Sensei
   decks:
@@ -6619,6 +6629,7 @@ cards:
   flavor_text: Contradictory.
   collector_number: '237'
 - title: Sahara Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -6630,7 +6641,7 @@ cards:
   text: Reduce your Honor losses from your Duelists by 2.<br><b>Interrupt, :bow::</b> If the action creates
     a duel, after your Personality wins, give him "<b>Battle:</b> Fear equal to this Personality's Force."
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
@@ -6822,6 +6833,7 @@ cards:
   collector_number: '252'
   designer: Randy
 - title: Seijuro Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -6833,7 +6845,7 @@ cards:
   text: <b>Interrupt, :bow::</b> If the action is Battle and creates a duel, after your Personality wins
     it, give him a Force bonus equal to his Personal Honor.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
@@ -7702,6 +7714,7 @@ cards:
     swords are called "tachi." Of course, "lesser sword" is a relative term.
   collector_number: '229'
 - title: Taitaken Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -8736,6 +8749,7 @@ cards:
     festival season.
   collector_number: '40'
 - title: Tselu Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -8748,7 +8762,7 @@ cards:
     dishonorable Personality. Gain Honor equal to the second target's Personal Honor if his controller
     has more Honor than you.
   province_strength: -1
-  starting_honor: '+0'
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy
@@ -9261,6 +9275,7 @@ cards:
   collector_number: '233'
   designer: Loki
 - title: Yodo Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -9271,8 +9286,8 @@ cards:
   - Dragon Clan
   text: Your Stronghold has no abilities.<br>After your action dishonors another player's Personality,
     gain 1 Honor.
-  province_strength: '+2'
-  starting_honor: '+0'
+  province_strength: 2
+  starting_honor: 0
   legality:
   - A Brother's Destiny (Twenty Festivals)
   - Legacy

@@ -1090,6 +1090,7 @@ cards:
     shall be this very action that will be their doom. - Prophecies of Uikku</i>
   collector_number: '13'
 - title: Tomorrow Sensei
+  gold_production: 0
   types:
   - Sensei
   decks:

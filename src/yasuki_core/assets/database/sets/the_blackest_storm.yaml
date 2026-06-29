@@ -70,6 +70,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Akeha Sensei
+  province_strength: 0
+  gold_production: -1
+  starting_honor: 5
   types:
   - Sensei
   decks:
@@ -96,6 +99,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Akifumi Sensei
+  province_strength: -1
+  gold_production: 0
+  starting_honor: -1
   types:
   - Sensei
   decks:
@@ -611,6 +617,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Corruption Sensei
+  province_strength: 0
+  gold_production: 0
+  starting_honor: 0
   types:
   - Sensei
   decks:

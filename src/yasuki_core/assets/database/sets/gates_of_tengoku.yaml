@@ -466,6 +466,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Dangai Sensei, Tanuki Clan Tattoo Master
+  gold_production: 0
   types:
   - Sensei
   decks:
@@ -479,8 +480,8 @@ cards:
     of play have <b>Singular</b> and -HR. You may Recruit Personalities with a Clan Alignment other than
     your own for :g1: less.<br>During battle resolution, if opposed, your army''s total Force is raised
     by the number of different Clan Alignments you control in it, +1 if it contains any Unaligned Personalities.'
-  province_strength: '+0'
-  starting_honor: '+0'
+  province_strength: 0
+  starting_honor: 0
   legality:
   - Shattered Empire
   story: 2014 Stronghold Store Events – Jean Baptiste Masson
@@ -2535,6 +2536,7 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Zin'tik'kir Sensei
+  gold_production: -1
   types:
   - Sensei
   decks:
@@ -2547,7 +2549,7 @@ cards:
     1F/1C/1PH Nonhuman • Ratling • Scout Personality, then create a Raid attack whose resolution does
     not bow or destroy your Scouts. After the battle ends, if you won it, give your target Scout +2F and
     the Defender discards the top two cards of their Fate deck.
-  province_strength: '+2'
+  province_strength: 2
   starting_honor: -2
   legality:
   - Shattered Empire
