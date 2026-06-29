@@ -93,3 +93,29 @@ def effective_gold_production(
     if handler is None:
         return getattr(card, "gold_production", 0)
     return handler(card, player_state(game, card.owner), opposing_states(game, card.owner), targets)
+
+
+# Per-card gold-production handlers, registered on import of this module. The read-sites already load
+# it, so a handler is always in place by the time gold is produced.
+
+
+@gold_handler("ancestral_estate")
+def _ancestral_estate(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
+) -> int:
+    """+1 GP while another player's Stronghold out-produces mine."""
+    outproduced = me.stronghold is not None and any(
+        opponent.stronghold is not None
+        and opponent.stronghold.gold_production > me.stronghold.gold_production
+        for opponent in opponents
+    )
+    return card.gold_production + (1 if outproduced else 0)
+
+
+@gold_handler("dockside_market")
+def _dockside_market(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
+) -> int:
+    """+1 GP for controlling any Port, and +1 GP for controlling another Market."""
+    bonus = (1 if me.controls("Port") else 0) + (1 if me.controls("Market", other_than=card) else 0)
+    return card.gold_production + bonus

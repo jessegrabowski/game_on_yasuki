@@ -133,3 +133,44 @@ def test_a_registered_handler_overrides_with_the_live_views_and_targets():
     assert me.stronghold is me_sh
     assert [o.stronghold for o in opponents] == [opp_sh]
     assert targets == (me_sh,)
+
+
+def _ancestral_estate(seat):
+    return _holding(seat, f"{seat.name}-estate", printed_id="ancestral_estate", gold_production=3)
+
+
+def test_ancestral_estate_gains_a_gold_when_an_opponent_out_produces():
+    game = _game()
+    estate = _put(game, _ancestral_estate(PlayerId.P1))
+    _put(game, _stronghold(PlayerId.P1, 4))
+    _put(game, _stronghold(PlayerId.P2, 5))  # out-produces P1's 4
+    assert effective_gold_production(game, estate) == 4
+
+
+def test_ancestral_estate_stays_at_base_when_no_opponent_out_produces():
+    game = _game()
+    estate = _put(game, _ancestral_estate(PlayerId.P1))
+    _put(game, _stronghold(PlayerId.P1, 4))
+    _put(game, _stronghold(PlayerId.P2, 4))  # equal GP ties, so it does not out-produce (strict >)
+    assert effective_gold_production(game, estate) == 3
+
+
+def test_dockside_market_adds_for_a_port_and_for_another_market():
+    game = _game()
+    dockside = _put(
+        game,
+        _holding(
+            PlayerId.P1,
+            "P1-dockside",
+            printed_id="dockside_market",
+            keywords=("Market",),
+            gold_production=2,
+        ),
+    )
+    assert effective_gold_production(game, dockside) == 2  # alone
+
+    _put(game, _holding(PlayerId.P1, "P1-port", keywords=("Port",)))
+    assert effective_gold_production(game, dockside) == 3  # +1 for the Port
+
+    _put(game, _holding(PlayerId.P1, "P1-market2", keywords=("Market",)))
+    assert effective_gold_production(game, dockside) == 4  # +1 for another Market
