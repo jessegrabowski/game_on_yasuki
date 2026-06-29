@@ -38,12 +38,6 @@ export async function deleteDeck(slug) {
   return res.ok;
 }
 
-// Erase the signed-in account (profile, decks, sessions). Returns whether it succeeded.
-export async function deleteAccount() {
-  const res = await fetch('/api/me', { method: 'DELETE' });
-  return res.ok;
-}
-
 // A shared deck by slug ({ deck, cards, yaml }), or null if it is missing or private to someone else.
 export async function fetchSharedDeck(slug) {
   const res = await fetch(`/api/decks/${encodeURIComponent(slug)}`);

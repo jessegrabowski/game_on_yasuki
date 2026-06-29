@@ -8,7 +8,6 @@ import {
   saveDeck,
   listMyDecks,
   deleteDeck,
-  deleteAccount,
   fetchSharedDeck,
 } from '../../../src/yasuki_web/static/deck_builder/js/account.js';
 
@@ -93,21 +92,6 @@ describe('deleteDeck', () => {
   it('reports failure on a non-ok response', async () => {
     fetch.mock.mockImplementation(() => respond({}, { ok: false, status: 404 }));
     assert.equal(await deleteDeck('missing'), false);
-  });
-});
-
-describe('deleteAccount', () => {
-  it('DELETEs /api/me and reports success', async () => {
-    fetch.mock.mockImplementation(() => respond({ deleted: true }));
-    assert.equal(await deleteAccount(), true);
-    const [url, options] = fetch.mock.calls[0].arguments;
-    assert.equal(url, '/api/me');
-    assert.equal(options.method, 'DELETE');
-  });
-
-  it('reports failure when unauthorized', async () => {
-    fetch.mock.mockImplementation(() => respond({}, { ok: false, status: 401 }));
-    assert.equal(await deleteAccount(), false);
   });
 });
 

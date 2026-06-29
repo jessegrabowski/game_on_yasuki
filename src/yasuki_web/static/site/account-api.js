@@ -60,6 +60,12 @@ export async function clearAvatar() {
   return res.ok;
 }
 
+// Erase the signed-in account (profile, decks, sessions). Returns ok.
+export async function deleteAccount() {
+  const res = await fetch('/api/me', { method: 'DELETE' });
+  return res.ok;
+}
+
 async function _errorMessage(res) {
   if (res.status === 401) return 'Sign in to change your name';
   try {
