@@ -6,7 +6,7 @@ from yasuki_core.accounts.crypto import email_blind_index
 
 # Returned on every user lookup — the non-sensitive identity the web layer needs to seat a player
 # and enforce a ban. Deliberately excludes the email blind index.
-_USER_COLUMNS = "id, google_sub, display_name, role, is_banned, avatar"
+_USER_COLUMNS = "id, google_sub, display_name, role, is_approved, is_banned, avatar"
 
 
 def upsert_user(
@@ -14,13 +14,14 @@ def upsert_user(
     google_sub: str,
     email: str,
     email_verified: bool,
-    display_name: str,
+    display_name: str | None,
 ) -> dict:
     """Insert the user for a Google ``sub``, or refresh the existing one, and return it.
 
     A returning user's ``display_name`` is left untouched — it is theirs to change and must not be
     clobbered by Google's current name — while the email index, verified flag, and login timestamp
-    refresh each sign-in. ``email`` is stored only as its blind index, never in the clear.
+    refresh each sign-in. ``email`` is stored only as its blind index, never in the clear. A new
+    account passes ``None`` and is nameless until it picks a display name during onboarding.
 
     Parameters
     ----------
@@ -32,8 +33,9 @@ def upsert_user(
         The address from the verified id_token, stored only as a blind index.
     email_verified : bool
         Google's ``email_verified`` claim.
-    display_name : str
-        The name to seed a new account with; ignored for an existing one.
+    display_name : str or None
+        The name to seed a new account with, or None to leave it nameless until onboarding; ignored
+        for an existing one.
 
     Returns
     -------
@@ -131,11 +133,11 @@ def list_users(conn: psycopg.Connection) -> list[dict]:
     Carries only the non-sensitive fields an admin needs to triage and ban — never the email blind
     index. ``last_seen`` is the most recent of the last login and any live session's activity, so an
     active user reads as recent even between logins. Each row has keys ``id``, ``display_name``,
-    ``role``, ``is_banned``, ``created_at``, and ``last_seen``.
+    ``role``, ``is_approved``, ``is_banned``, ``created_at``, and ``last_seen``.
     """
     with conn.cursor() as cur:
         cur.execute(
-            "SELECT u.id, u.display_name, u.role, u.is_banned, u.created_at, "
+            "SELECT u.id, u.display_name, u.role, u.is_approved, u.is_banned, u.created_at, "
             "GREATEST(u.last_login_at, MAX(s.last_seen_at)) AS last_seen "
             "FROM users u LEFT JOIN sessions s ON s.user_id = u.id "
             "GROUP BY u.id ORDER BY u.created_at DESC"
@@ -147,6 +149,16 @@ def set_role(conn: psycopg.Connection, user_id: int, role: str) -> bool:
     """Set a user's role, returning whether a user was there to update."""
     with conn.cursor() as cur:
         cur.execute("UPDATE users SET role = %s, updated_at = now() WHERE id = %s", (role, user_id))
+        return cur.rowcount > 0
+
+
+def set_approved(conn: psycopg.Connection, user_id: int, approved: bool) -> bool:
+    """Set a user's approval flag, returning whether a user was there to update."""
+    with conn.cursor() as cur:
+        cur.execute(
+            "UPDATE users SET is_approved = %s, updated_at = now() WHERE id = %s",
+            (approved, user_id),
+        )
         return cur.rowcount > 0
 
 

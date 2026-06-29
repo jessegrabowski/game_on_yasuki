@@ -46,6 +46,7 @@ def client(monkeypatch, accounts_conn):
 
 def _login(client, accounts_conn, *, sub="g", name="Ada"):
     user = users.upsert_user(accounts_conn, sub, f"{sub}@example.com", True, name)
+    users.set_approved(accounts_conn, user["id"], True)  # deck routes are approval-gated
     token = sessions.create_session(accounts_conn, user["id"], timedelta(days=1))
     client.cookies.set("yasuki_session", token)
     return user

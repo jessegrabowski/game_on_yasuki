@@ -42,6 +42,8 @@ def test_rerunning_migrations_is_a_noop(accounts_conn):
             "0003_avatar",
             "0004_roles",
             "0005_roles_table",
+            "0006_account_approval",
+            "0007_nullable_display_name",
         ]
 
 

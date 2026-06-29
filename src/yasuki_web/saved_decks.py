@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi import Path as PathParam
 from pydantic import BaseModel, Field
 
-from yasuki_web.auth import current_user, current_user_optional
+from yasuki_web.auth import current_user_optional, require_approved
 from yasuki_web.rate_limit import limiter
 
 from yasuki_core.accounts import deck_repo, decks
@@ -119,7 +119,9 @@ def _card_json(card: DeckCard) -> dict:
 
 @router.post("/me/decks", status_code=201)
 @limiter.limit("20/minute")
-async def save_my_deck(request: Request, body: SaveDeckRequest, user: dict = Depends(current_user)):
+async def save_my_deck(
+    request: Request, body: SaveDeckRequest, user: dict = Depends(require_approved)
+):
     """Validate and store a deck for the signed-in user, returning its summary."""
     try:
         cards, summary = await asyncio.to_thread(_resolve_deck, body.yaml)
@@ -134,7 +136,7 @@ async def save_my_deck(request: Request, body: SaveDeckRequest, user: dict = Dep
 
 
 @router.get("/me/decks")
-async def list_my_decks(request: Request, user: dict = Depends(current_user)):
+async def list_my_decks(request: Request, user: dict = Depends(require_approved)):
     """The signed-in user's saved decks, newest-edited first."""
     rows = await asyncio.to_thread(_list_decks, user["id"])
     return {"decks": [_public_deck(deck) for deck in rows]}
@@ -146,7 +148,7 @@ def _list_decks(owner_id: int) -> list[dict]:
 
 
 @router.delete("/me/decks/{slug}")
-async def delete_my_deck(request: Request, slug: _Slug, user: dict = Depends(current_user)):
+async def delete_my_deck(request: Request, slug: _Slug, user: dict = Depends(require_approved)):
     """Soft-delete one of the signed-in user's decks."""
     if not await asyncio.to_thread(_delete_deck, slug, user["id"]):
         raise HTTPException(status_code=404, detail="Deck not found")

@@ -20,8 +20,8 @@ from yasuki_web.rate_limit import limiter
 
 from yasuki_core.accounts import banlist, oauth_state, roles, sessions, users
 from yasuki_core.accounts.db import get_accounts_connection
-from yasuki_core.accounts.display_names import random_display_name
 from yasuki_core.database import get_card_by_id
+from yasuki_web.notifications import notify_new_signup
 
 logger = logging.getLogger(__name__)
 
@@ -154,13 +154,14 @@ def _pop_login(state: str) -> dict | None:
         return oauth_state.pop_login(conn, state, LOGIN_STATE_TTL)
 
 
-def _complete_login(claims: dict) -> tuple[str, bool] | None:
-    """Upsert the authenticated user and return ``(session token, is_new)``, or None if banned.
+def _complete_login(claims: dict) -> tuple[str, dict] | None:
+    """Upsert the authenticated user and return ``(session token, user)``, or None if banned.
 
-    A new account is seeded with a random display name, never the Google profile name, so a real
-    name can't leak. A banlist tombstone is checked before any row is created, so a banned identity
-    cannot slip back in by having deleted its account; the live ``is_banned`` flag is the second
-    guard.
+    A new account is created nameless — it picks a display name during onboarding, so the Google
+    profile name never even touches the row. A banlist tombstone is checked before any row is
+    created, so a banned identity cannot slip back in by having deleted its account; the live
+    ``is_banned`` flag is the second guard. The returned user carries ``created`` and
+    ``is_approved`` so the caller can onboard a new or still-pending account.
     """
     with get_accounts_connection() as conn:
         if banlist.is_banned(conn, claims["sub"], claims["email"]):
@@ -170,11 +171,11 @@ def _complete_login(claims: dict) -> tuple[str, bool] | None:
             claims["sub"],
             claims["email"],
             email_verified=bool(claims.get("email_verified")),
-            display_name=random_display_name(),
+            display_name=None,
         )
         if user["is_banned"]:
             return None
-        return sessions.create_session(conn, user["id"], SESSION_TTL), user["created"]
+        return sessions.create_session(conn, user["id"], SESSION_TTL), user
 
 
 def _logout(token: str) -> None:
@@ -210,17 +211,34 @@ async def require_admin(user: dict = Depends(current_user)) -> dict:
     return user
 
 
+async def require_approved(user: dict = Depends(current_user)) -> dict:
+    """The user if their account is ready for the product (named and approved), else 403.
+
+    Gates play and saving decks. A new account must finish onboarding (pick a display name) and then
+    be approved by an admin; profile self-service stays open so a pending user can do both.
+    """
+    if not user.get("display_name"):
+        raise HTTPException(status_code=403, detail="Finish setting up your account first")
+    if not user.get("is_approved"):
+        raise HTTPException(status_code=403, detail="Your account is awaiting admin approval")
+    return user
+
+
 async def user_for_websocket(websocket: WebSocket) -> dict | None:
     """The user behind the session cookie on a WebSocket handshake, or None.
 
     Browsers send the session cookie on the upgrade request, so the same cookie that authenticates
-    HTTP routes also identifies the socket. The play surface is login-required, so a None result is
-    the signal to close the handshake.
+    HTTP routes also identifies the socket. The play surface needs a ready account, so a session
+    that is unauthenticated, unnamed, or not-yet-approved yields None — the signal to close the
+    handshake.
     """
     token = websocket.cookies.get(SESSION_COOKIE)
     if not token:
         return None
-    return await asyncio.to_thread(_resolve_user, token)
+    user = await asyncio.to_thread(_resolve_user, token)
+    if user is None or not user.get("display_name") or not user.get("is_approved"):
+        return None
+    return user
 
 
 @router.get("/auth/login")
@@ -280,12 +298,15 @@ async def callback(request: Request):
     result = await asyncio.to_thread(_complete_login, claims)
     if result is None:
         raise HTTPException(status_code=403, detail="This account is banned")
-    token, is_new = result
+    token, user = result
 
-    # A first-time account lands on settings to choose a display name; a returning one goes where it
-    # asked, or to the default landing.
+    # A new or still-pending account lands on settings (the name picker / pending-approval notice);
+    # a returning, approved account goes where it asked, or to the default landing. The admin is
+    # notified once the new account picks a name (see update_me), not here — there is no name yet.
     landing = (
-        "/settings" if is_new else _safe_next(login_state.get("redirect_to")) or DEFAULT_LANDING
+        "/settings"
+        if user["created"] or user["display_name"] is None or not user["is_approved"]
+        else _safe_next(login_state.get("redirect_to")) or DEFAULT_LANDING
     )
     response = RedirectResponse(landing, status_code=302)
     _set_session_cookie(response, request, token)
@@ -314,6 +335,7 @@ def _dev_session(who: str | None) -> str:
     name = who.title() if who else "Dev Player"
     with get_accounts_connection() as conn:
         user = users.upsert_user(conn, sub, f"{who or 'dev'}@localhost", True, name)
+        users.set_approved(conn, user["id"], True)  # dev sessions skip the approval gate
         return sessions.create_session(conn, user["id"], SESSION_TTL)
 
 
@@ -383,6 +405,7 @@ def _public_user(user: dict) -> dict:
         "display_name": user["display_name"],
         "avatar": user.get("avatar"),
         "role": user.get("role", "user"),
+        "is_approved": bool(user.get("is_approved")),
     }
 
 
@@ -393,11 +416,23 @@ async def me(user: dict | None = Depends(current_user_optional)):
 
 @router.patch("/api/me")
 async def update_me(request: Request, body: DisplayNameUpdate, user: dict = Depends(current_user)):
-    """Change the signed-in user's display name."""
+    """Change the signed-in user's display name.
+
+    The first time a nameless new account sets a name it finishes onboarding, so the admin is
+    notified that it is awaiting approval — with the name they chose. A later rename does not
+    re-notify.
+    """
     name = body.display_name.strip()
     if not name:
         raise HTTPException(status_code=422, detail="Display name cannot be blank")
+    onboarding = user.get("display_name") is None
     updated = await asyncio.to_thread(_set_display_name, user["id"], name)
+    if onboarding:
+        # Fire-and-forget: a failed or unconfigured notification must never delay or break the save.
+        approve_url = str(request.base_url).rstrip("/") + "/settings#admin"
+        asyncio.create_task(
+            asyncio.to_thread(notify_new_signup, updated["display_name"], approve_url)
+        )
     return {"user": _public_user(updated)}
 
 
@@ -478,6 +513,14 @@ async def admin_unban_user(user_id: int, admin: dict = Depends(require_admin)):
     return {"unbanned": True}
 
 
+@router.post("/api/admin/users/{user_id}/approve")
+async def admin_approve_user(user_id: int, admin: dict = Depends(require_admin)):
+    """Approve a pending account so it can use the product surfaces. Admin-only."""
+    if not await asyncio.to_thread(_set_approved, user_id, True):
+        raise HTTPException(status_code=404, detail="No such account")
+    return {"approved": True}
+
+
 @router.post("/api/admin/users/{user_id}/role")
 async def admin_set_role(user_id: int, body: RoleUpdate, admin: dict = Depends(require_admin)):
     """Set an account's role to one of the defined roles (422 if it is not defined). Admin-only.
@@ -532,6 +575,11 @@ def _unban_user(user_id: int) -> bool:
 def _set_role(user_id: int, role: str) -> bool:
     with get_accounts_connection() as conn:
         return users.set_role(conn, user_id, role)
+
+
+def _set_approved(user_id: int, approved: bool) -> bool:
+    with get_accounts_connection() as conn:
+        return users.set_approved(conn, user_id, approved)
 
 
 def _role_exists(role: str) -> bool:
