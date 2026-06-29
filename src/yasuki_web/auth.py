@@ -31,6 +31,8 @@ GOOGLE_ISSUERS = frozenset({"accounts.google.com", "https://accounts.google.com"
 
 SESSION_COOKIE = "yasuki_session"
 SESSION_TTL = timedelta(days=30)
+# Local-only sign-in shortcut, gated by this env var and refused in production (see _dev_login_enabled).
+DEV_LOGIN_ENV = "YASUKI_DEV_LOGIN"
 # A login must reach the callback within this window; stale OAuth state is rejected and swept.
 LOGIN_STATE_TTL = timedelta(minutes=10)
 DEFAULT_LANDING = "/top-secret.html"
@@ -269,6 +271,11 @@ async def callback(request: Request):
 
     landing = _safe_next(login_state.get("redirect_to")) or DEFAULT_LANDING
     response = RedirectResponse(landing, status_code=302)
+    _set_session_cookie(response, request, token)
+    return response
+
+
+def _set_session_cookie(response, request: Request, token: str) -> None:
     response.set_cookie(
         SESSION_COOKIE,
         token,
@@ -278,6 +285,31 @@ async def callback(request: Request):
         samesite="lax",
         path="/",
     )
+
+
+def _dev_login_enabled() -> bool:
+    """Whether the dev sign-in shortcut is active: opt-in via env and never in production."""
+    return bool(os.environ.get(DEV_LOGIN_ENV)) and os.environ.get("ENVIRONMENT") != "production"
+
+
+def _dev_session() -> str:
+    with get_accounts_connection() as conn:
+        user = users.upsert_user(conn, "dev-local-user", "dev@localhost", True, "Dev Player")
+        return sessions.create_session(conn, user["id"], SESSION_TTL)
+
+
+@router.get("/auth/dev-login")
+async def dev_login(request: Request):
+    """Mint a session without Google, for local development.
+
+    Refused with 404 (as if the route did not exist) unless ``YASUKI_DEV_LOGIN`` is set and the app
+    is not in production, so it can never become a backdoor in a deployed environment.
+    """
+    if not _dev_login_enabled():
+        raise HTTPException(status_code=404, detail="Not found")
+    token = await asyncio.to_thread(_dev_session)
+    response = RedirectResponse(DEFAULT_LANDING, status_code=302)
+    _set_session_cookie(response, request, token)
     return response
 
 

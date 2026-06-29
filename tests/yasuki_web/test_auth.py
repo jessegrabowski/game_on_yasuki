@@ -164,6 +164,25 @@ def test_delete_me_requires_a_session(client):
     assert client.delete("/api/me").status_code == 401
 
 
+def test_dev_login_is_absent_by_default(client):
+    assert client.get("/auth/dev-login", follow_redirects=False).status_code == 404
+
+
+def test_dev_login_mints_a_session_when_enabled(client, monkeypatch):
+    monkeypatch.setenv("YASUKI_DEV_LOGIN", "1")
+    monkeypatch.delenv("ENVIRONMENT", raising=False)
+    resp = client.get("/auth/dev-login", follow_redirects=False)
+    assert resp.status_code == 302
+    assert "yasuki_session" in resp.cookies
+    assert client.get("/api/me").json()["user"]["display_name"] == "Dev Player"
+
+
+def test_dev_login_is_refused_in_production_even_when_enabled(client, monkeypatch):
+    monkeypatch.setenv("YASUKI_DEV_LOGIN", "1")
+    monkeypatch.setenv("ENVIRONMENT", "production")
+    assert client.get("/auth/dev-login", follow_redirects=False).status_code == 404
+
+
 def test_callback_rejects_a_token_signed_by_the_wrong_key(client, monkeypatch, other_rsa_key):
     resp = _login_and_callback(client, monkeypatch, other_rsa_key)
     assert resp.status_code == 400
