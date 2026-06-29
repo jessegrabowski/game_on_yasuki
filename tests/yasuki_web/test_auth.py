@@ -13,7 +13,7 @@ from fastapi import HTTPException
 from fastapi.testclient import TestClient
 from starlette.requests import Request
 
-from yasuki_core.accounts import users
+from yasuki_core.accounts import banlist, users
 from yasuki_web import auth
 from yasuki_web.main import app
 
@@ -321,3 +321,118 @@ def test_pkce_pair_challenge_is_the_s256_of_the_verifier():
     verifier, challenge = auth._pkce_pair()
     expected = base64.urlsafe_b64encode(hashlib.sha256(verifier.encode()).digest()).decode()
     assert challenge == expected.rstrip("=")
+
+
+def _promote_to_admin(accounts_conn, user_id):
+    with accounts_conn.cursor() as cur:
+        cur.execute("UPDATE users SET role = 'admin' WHERE id = %s", (user_id,))
+
+
+def test_me_exposes_the_role(client, monkeypatch, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    assert client.get("/api/me").json()["user"]["role"] == "user"
+
+
+def test_admin_endpoints_require_a_session(client):
+    assert client.get("/api/admin/users").status_code == 401
+
+
+def test_admin_endpoints_are_forbidden_to_non_admins(client, monkeypatch, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    assert client.get("/api/admin/users").status_code == 403
+
+
+def test_mutating_admin_endpoints_are_forbidden_to_non_admins(client, monkeypatch, rsa_key):
+    # The read is gated above; pin that the mutations (far higher stakes) are gated too.
+    _login_and_callback(client, monkeypatch, rsa_key)
+    assert client.post("/api/admin/users/1/ban").status_code == 403
+    assert client.post("/api/admin/users/1/role", json={"role": "admin"}).status_code == 403
+
+
+def test_admin_lists_accounts_without_any_email(client, monkeypatch, accounts_conn, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    me = client.get("/api/me").json()["user"]
+    _promote_to_admin(accounts_conn, me["id"])
+
+    listed = client.get("/api/admin/users").json()["users"]
+    assert any(u["display_name"] == me["display_name"] for u in listed)
+    assert all("email" not in u and "email_hmac" not in u for u in listed)
+    assert all("last_seen" in u for u in listed)
+
+
+def test_admin_bans_then_unbans_another_account(client, monkeypatch, accounts_conn, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    me = client.get("/api/me").json()["user"]
+    _promote_to_admin(accounts_conn, me["id"])
+    target = users.upsert_user(accounts_conn, "google-target", "t@example.com", True, "Target")
+
+    assert client.post(f"/api/admin/users/{target['id']}/ban").status_code == 200
+    assert users.get_user(accounts_conn, target["id"])["is_banned"] is True
+    assert banlist.is_banned(accounts_conn, "google-target", "t@example.com") is True
+
+    assert client.post(f"/api/admin/users/{target['id']}/unban").status_code == 200
+    assert users.get_user(accounts_conn, target["id"])["is_banned"] is False
+    assert banlist.is_banned(accounts_conn, "google-target", "t@example.com") is False
+
+
+def test_admin_cannot_ban_its_own_account(client, monkeypatch, accounts_conn, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    me = client.get("/api/me").json()["user"]
+    _promote_to_admin(accounts_conn, me["id"])
+
+    assert client.post(f"/api/admin/users/{me['id']}/ban").status_code == 400
+    assert users.get_user(accounts_conn, me["id"])["is_banned"] is False
+
+
+def test_admin_seeds_user_and_admin_roles(client, monkeypatch, accounts_conn, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    _promote_to_admin(accounts_conn, client.get("/api/me").json()["user"]["id"])
+
+    names = {r["name"] for r in client.get("/api/admin/roles").json()["roles"]}
+    assert {"user", "admin"} <= names
+
+
+def test_admin_creates_a_role_then_assigns_it_normalizing_input(
+    client, monkeypatch, accounts_conn, rsa_key
+):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    me = client.get("/api/me").json()["user"]
+    _promote_to_admin(accounts_conn, me["id"])
+    target = users.upsert_user(accounts_conn, "google-mod", "m@example.com", True, "Minion")
+
+    created = client.post("/api/admin/roles", json={"name": "Moderator"})
+    assert created.status_code == 200
+    assert "moderator" in {r["name"] for r in created.json()["roles"]}  # normalized to a slug
+
+    resp = client.post(f"/api/admin/users/{target['id']}/role", json={"role": "Moderator"})
+    assert resp.status_code == 200
+    assert resp.json()["role"] == "moderator"
+    assert users.get_user(accounts_conn, target["id"])["role"] == "moderator"
+
+
+def test_set_role_rejects_an_undefined_role(client, monkeypatch, accounts_conn, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    me = client.get("/api/me").json()["user"]
+    _promote_to_admin(accounts_conn, me["id"])
+    target = users.upsert_user(accounts_conn, "google-x", "x@example.com", True, "X")
+
+    resp = client.post(f"/api/admin/users/{target['id']}/role", json={"role": "ghost"})
+    assert resp.status_code == 422
+    assert users.get_user(accounts_conn, target["id"])["role"] == "user"
+
+
+def test_create_role_rejects_a_non_slug_name(client, monkeypatch, accounts_conn, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    _promote_to_admin(accounts_conn, client.get("/api/me").json()["user"]["id"])
+    assert client.post("/api/admin/roles", json={"name": "Bad Role!"}).status_code == 422
+
+
+def test_admin_cannot_change_its_own_role(client, monkeypatch, accounts_conn, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    me = client.get("/api/me").json()["user"]
+    _promote_to_admin(accounts_conn, me["id"])
+
+    assert (
+        client.post(f"/api/admin/users/{me['id']}/role", json={"role": "user"}).status_code == 400
+    )
+    assert users.get_user(accounts_conn, me["id"])["role"] == "admin"

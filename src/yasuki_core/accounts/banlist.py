@@ -31,6 +31,12 @@ def tombstone(
         )
 
 
+def remove(conn: psycopg.Connection, google_sub: str) -> None:
+    """Drop a tombstone by its Google sub, so the identity may sign in again (unban)."""
+    with conn.cursor() as cur:
+        cur.execute("DELETE FROM banlist WHERE sub_hmac = %s", (sub_blind_index(google_sub),))
+
+
 def is_banned(conn: psycopg.Connection, google_sub: str, email: str) -> bool:
     """Whether an incoming Google identity matches a banlist tombstone, by sub or by email.
 
