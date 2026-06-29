@@ -13,3 +13,9 @@ def test_play_online_serves_the_play_app():
 
 def test_the_retired_top_secret_route_is_gone():
     assert client.get("/top-secret.html").status_code == 404
+
+
+def test_settings_page_served():
+    r = client.get("/settings")
+    assert r.status_code == 200
+    assert "/site/settings.js" in r.text

@@ -1,6 +1,7 @@
 import asyncio
 import base64
 import hashlib
+import re
 from contextlib import contextmanager
 from datetime import datetime, timedelta, timezone
 from urllib.parse import parse_qs, urlparse
@@ -117,8 +118,39 @@ def test_full_login_flow_sets_session_and_me_returns_user(client, monkeypatch, r
     assert "samesite=lax" in set_cookie
 
     body = client.get("/api/me").json()
-    assert body["user"]["display_name"] == "Ada"
+    # The display name is a generated handle, never the Google profile name "Ada" — no real-name
+    # leak — and the opaque google_sub is never exposed.
+    assert body["user"]["display_name"] != "Ada"
+    assert re.fullmatch(r"[A-Z][a-zA-Z]+\d{3}", body["user"]["display_name"])
     assert "google_sub" not in body["user"]
+
+
+def test_first_login_redirects_to_settings_then_returning_logins_do_not(
+    client, monkeypatch, rsa_key
+):
+    first = _login_and_callback(client, monkeypatch, rsa_key)
+    assert first.headers["location"] == "/settings"
+    client.post("/auth/logout")
+    again = _login_and_callback(client, monkeypatch, rsa_key)
+    assert again.headers["location"] != "/settings"
+
+
+def test_update_me_changes_the_display_name(client, monkeypatch, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    resp = client.patch("/api/me", json={"display_name": "Hida Kisada"})
+    assert resp.status_code == 200
+    assert resp.json()["user"]["display_name"] == "Hida Kisada"
+    assert client.get("/api/me").json()["user"]["display_name"] == "Hida Kisada"
+
+
+def test_update_me_requires_a_session(client):
+    assert client.patch("/api/me", json={"display_name": "Anon"}).status_code == 401
+
+
+def test_update_me_rejects_a_blank_or_overlong_name(client, monkeypatch, rsa_key):
+    _login_and_callback(client, monkeypatch, rsa_key)
+    assert client.patch("/api/me", json={"display_name": "   "}).status_code == 422
+    assert client.patch("/api/me", json={"display_name": "N" * 41}).status_code == 422
 
 
 def test_callback_rejects_unknown_state(client):

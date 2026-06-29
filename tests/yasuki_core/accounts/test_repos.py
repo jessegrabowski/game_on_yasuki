@@ -23,6 +23,18 @@ def test_upsert_inserts_then_refreshes_without_clobbering_display_name(accounts_
     assert again["avatar_url"] == "http://p"
 
 
+def test_upsert_reports_created_only_on_the_first_sign_in(accounts_conn):
+    assert users.upsert_user(accounts_conn, "g", "e@example.com", True, "First")["created"] is True
+    assert users.upsert_user(accounts_conn, "g", "e@example.com", True, "Again")["created"] is False
+
+
+def test_set_display_name_updates_the_row(accounts_conn):
+    user = users.upsert_user(accounts_conn, "g", "e@example.com", True, "Old")
+    assert users.set_display_name(accounts_conn, user["id"], "New")["display_name"] == "New"
+    assert users.get_user(accounts_conn, user["id"])["display_name"] == "New"
+    assert users.set_display_name(accounts_conn, 999999, "Ghost") is None
+
+
 def test_get_user_returns_row_or_none(accounts_conn):
     created = users.upsert_user(accounts_conn, "g", "e@example.com", True, "E")
     assert users.get_user(accounts_conn, created["id"])["google_sub"] == "g"

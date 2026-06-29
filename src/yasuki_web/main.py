@@ -102,7 +102,7 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
     allow_credentials=True,
-    allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
+    allow_methods=["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
     allow_headers=["Content-Type", "Authorization", "X-Delete-Token"],
 )
 
@@ -128,6 +128,7 @@ _CSP_PREFIXES = (
     "/play-online",
     "/syntax",
     "/privacy",
+    "/settings",
 )
 
 
@@ -230,6 +231,11 @@ async def syntax():
 @app.get("/privacy")
 async def privacy():
     return _site_page("privacy.html")
+
+
+@app.get("/settings")
+async def settings():
+    return _site_page("settings.html")
 
 
 _SLUG = r"^[a-z0-9_-]+$"

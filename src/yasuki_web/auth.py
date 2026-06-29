@@ -11,6 +11,7 @@ from urllib.parse import urlencode
 import httpx
 import jwt
 from fastapi import APIRouter, Depends, HTTPException, Request
+from pydantic import BaseModel, Field
 from starlette.responses import JSONResponse, RedirectResponse
 from starlette.websockets import WebSocket
 
@@ -18,6 +19,7 @@ from yasuki_web.rate_limit import limiter
 
 from yasuki_core.accounts import banlist, oauth_state, sessions, users
 from yasuki_core.accounts.db import get_accounts_connection
+from yasuki_core.accounts.display_names import random_display_name
 
 logger = logging.getLogger(__name__)
 
@@ -150,11 +152,13 @@ def _pop_login(state: str) -> dict | None:
         return oauth_state.pop_login(conn, state, LOGIN_STATE_TTL)
 
 
-def _complete_login(claims: dict) -> str | None:
-    """Upsert the authenticated user and return a new session token, or None if they are banned.
+def _complete_login(claims: dict) -> tuple[str, bool] | None:
+    """Upsert the authenticated user and return ``(session token, is_new)``, or None if banned.
 
-    A banlist tombstone is checked before any row is created, so a banned identity cannot slip back
-    in by having deleted its account; the live ``is_banned`` flag is the second guard.
+    A new account is seeded with a random display name, never the Google profile name, so a real
+    name can't leak. A banlist tombstone is checked before any row is created, so a banned identity
+    cannot slip back in by having deleted its account; the live ``is_banned`` flag is the second
+    guard.
     """
     with get_accounts_connection() as conn:
         if banlist.is_banned(conn, claims["sub"], claims["email"]):
@@ -164,12 +168,12 @@ def _complete_login(claims: dict) -> str | None:
             claims["sub"],
             claims["email"],
             email_verified=bool(claims.get("email_verified")),
-            display_name=claims.get("name") or claims["email"],
+            display_name=random_display_name(),
             avatar_url=claims.get("picture"),
         )
         if user["is_banned"]:
             return None
-        return sessions.create_session(conn, user["id"], SESSION_TTL)
+        return sessions.create_session(conn, user["id"], SESSION_TTL), user["created"]
 
 
 def _logout(token: str) -> None:
@@ -265,11 +269,16 @@ async def callback(request: Request):
     if not claims.get("email_verified"):
         raise HTTPException(status_code=403, detail="A verified Google email is required")
 
-    token = await asyncio.to_thread(_complete_login, claims)
-    if token is None:
+    result = await asyncio.to_thread(_complete_login, claims)
+    if result is None:
         raise HTTPException(status_code=403, detail="This account is banned")
+    token, is_new = result
 
-    landing = _safe_next(login_state.get("redirect_to")) or DEFAULT_LANDING
+    # A first-time account lands on settings to choose a display name; a returning one goes where it
+    # asked, or to the default landing.
+    landing = (
+        "/settings" if is_new else _safe_next(login_state.get("redirect_to")) or DEFAULT_LANDING
+    )
     response = RedirectResponse(landing, status_code=302)
     _set_session_cookie(response, request, token)
     return response
@@ -329,17 +338,36 @@ async def logout(request: Request):
     return response
 
 
+class DisplayNameUpdate(BaseModel):
+    display_name: str = Field(min_length=1, max_length=40)
+
+
+def _public_user(user: dict) -> dict:
+    return {
+        "id": user["id"],
+        "display_name": user["display_name"],
+        "avatar_url": user["avatar_url"],
+    }
+
+
 @router.get("/api/me")
 async def me(user: dict | None = Depends(current_user_optional)):
-    if user is None:
-        return {"user": None}
-    return {
-        "user": {
-            "id": user["id"],
-            "display_name": user["display_name"],
-            "avatar_url": user["avatar_url"],
-        }
-    }
+    return {"user": _public_user(user) if user else None}
+
+
+@router.patch("/api/me")
+async def update_me(request: Request, body: DisplayNameUpdate, user: dict = Depends(current_user)):
+    """Change the signed-in user's display name."""
+    name = body.display_name.strip()
+    if not name:
+        raise HTTPException(status_code=422, detail="Display name cannot be blank")
+    updated = await asyncio.to_thread(_set_display_name, user["id"], name)
+    return {"user": _public_user(updated)}
+
+
+def _set_display_name(user_id: int, display_name: str) -> dict:
+    with get_accounts_connection() as conn:
+        return users.set_display_name(conn, user_id, display_name)
 
 
 @router.delete("/api/me")
