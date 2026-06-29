@@ -21,6 +21,7 @@ import {
 import { openDeckDialog } from './deck-dialog.js';
 import { openTokenSearch } from './token-search.js';
 import { predictSnapshot } from './optimistic.js';
+import { buildAvatarElement } from './avatar.js';
 
 const DELETE_TOKENS_KEY = 'yasuki.play.deleteTokens.v1';
 
@@ -47,10 +48,27 @@ export function renderRooms(listEl, rooms, ownedIds = new Set()) {
     : '<li class="empty">No open rooms yet — create one.</li>';
 }
 
-export function renderPlayers(listEl, players, you) {
-  listEl.innerHTML = players
-    .map((name) => `<li>${esc(name)}${name === you ? ' <span class="you">(you)</span>' : ''}</li>`)
-    .join('');
+// The present-players roster, each a chip with a small avatar left of the name. A player may be a
+// bare name (the HELLO roster) or a {name, avatar} object (from the snapshot's seats); avatarless
+// entries fall back to initials.
+export function renderPlayers(listEl, players, you, imgBase) {
+  listEl.replaceChildren(
+    ...players.map((player) => {
+      const entry = typeof player === 'string' ? { name: player } : player;
+      const li = document.createElement('li');
+      const name = document.createElement('span');
+      name.className = 'seat-chip-name';
+      name.textContent = entry.name;
+      li.append(buildAvatarElement(entry, imgBase, { className: 'roster-avatar', name: entry.name }), name);
+      if (entry.name === you) {
+        const mark = document.createElement('span');
+        mark.className = 'you';
+        mark.textContent = '(you)';
+        li.append(mark);
+      }
+      return li;
+    }),
+  );
 }
 
 export function appendChatMessage(logEl, sender, text) {
@@ -283,8 +301,8 @@ export function init() {
     const seats = snapshot.seats ?? {};
     const present = Object.values(seats)
       .filter((seat) => seat.connected)
-      .map((seat) => seat.name);
-    renderPlayers(playerList, present, myName);
+      .map((seat) => ({ name: seat.name, avatar: seat.avatar }));
+    renderPlayers(playerList, present, myName, imgBase);
     // Decks only carry cards once setup deals the table; an empty table is the pre-game/reset state.
     // Resolve the pending toggles off that: dealt clears Ready, cleared clears New game.
     const dealt = Object.values(snapshot.decks ?? {}).some((deck) => deck.count > 0 || deck.top);
@@ -309,8 +327,8 @@ export function init() {
     renderHand(opponentHand, handOf(opponent), imgBase);
     if (selfHand) selfHand.dataset.owner = you;
     if (opponentHand) opponentHand.dataset.owner = opponent;
-    renderPanel(selfPanel, seats[you] ?? {}, { editable: true });
-    renderPanel(opponentPanel, seats[opponent] ?? {}, { editable: false });
+    renderPanel(selfPanel, seats[you] ?? {}, { editable: true, imgBase });
+    renderPanel(opponentPanel, seats[opponent] ?? {}, { editable: false, imgBase });
     const anchorFor = (owner, isViewer, group) => {
       const tableau = isViewer ? selfTableau : opponentTableau;
       if (group === 'PREGAME') return pregameAnchor(tableau, battlefield, isViewer);
@@ -341,7 +359,7 @@ export function init() {
     client = connectRoom(id, myName);
     client.events.addEventListener('HELLO', (e) => {
       showRoom(e.detail.room);
-      renderPlayers(playerList, e.detail.players, myName);
+      renderPlayers(playerList, e.detail.players, myName, imgBase);
     });
     client.events.addEventListener('SNAPSHOT', (e) => {
       const snapshot = e.detail.snapshot ?? {};

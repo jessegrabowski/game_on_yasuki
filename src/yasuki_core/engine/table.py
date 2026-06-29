@@ -60,6 +60,7 @@ class SeatInfo:
     honor: int = 0  # set from the stronghold + sensei at setup; 0 until then
     ready: bool = False
     connected: bool = False
+    avatar: dict | None = None  # the user's avatar spec; None falls back to the name's initials
 
 
 @dataclass(slots=True)

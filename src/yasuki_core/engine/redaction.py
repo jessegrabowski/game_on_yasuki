@@ -28,6 +28,7 @@ class SeatView:
     honor: int
     ready: bool
     connected: bool
+    avatar: dict | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -158,7 +159,7 @@ def redact(state: TableState, viewer: PlayerId) -> ViewSnapshot:
         The seat the snapshot is built for.
     """
     seats = {
-        seat: SeatView(info.name, info.honor, info.ready, info.connected)
+        seat: SeatView(info.name, info.honor, info.ready, info.connected, info.avatar)
         for seat, info in state.seats.items()
     }
     peeked_ids: set[str] = set()

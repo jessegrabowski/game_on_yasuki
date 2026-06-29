@@ -42,18 +42,20 @@ export function drawCardAvatar(canvas, image, crop) {
 
 const AVATAR_PX = 64;
 
-// The avatar element for a user: a canvas of their chosen card crop when one is set, else an
-// initials span. The canvas is returned immediately and filled once the card image loads.
-export function buildAvatarElement(user, imgBase) {
-  const spec = user?.avatar;
+// The avatar element for a holder of an avatar spec: a canvas of their chosen card crop when one is
+// set, else an initials circle. The canvas is returned immediately and filled once the card image
+// loads. `className` and `name` let each caller pick the circle's CSS class and the source of the
+// initials fallback (the nav uses ``display_name``; the seat bars and roster pass the seat name).
+export function buildAvatarElement(holder, imgBase, { className = 'account-avatar', name } = {}) {
+  const spec = holder?.avatar;
   if (!spec) {
     const span = document.createElement('span');
-    span.className = 'account-avatar';
-    span.textContent = initials(user?.display_name);
+    span.className = className;
+    span.textContent = initials(name ?? holder?.display_name);
     return span;
   }
   const canvas = document.createElement('canvas');
-  canvas.className = 'account-avatar';
+  canvas.className = className;
   canvas.width = AVATAR_PX;
   canvas.height = AVATAR_PX;
   loadImage(`${imgBase}/${spec.image_path}`)

@@ -95,6 +95,7 @@ def serialize_snapshot(snapshot: ViewSnapshot) -> dict:
                 "honor": view.honor,
                 "ready": view.ready,
                 "connected": view.connected,
+                "avatar": view.avatar,
             }
             for seat, view in snapshot.seats.items()
         },

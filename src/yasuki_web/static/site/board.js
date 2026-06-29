@@ -4,7 +4,7 @@
 
 import { buildCompositeDataURL, loadArtLayout } from '../deck_builder/js/art.js';
 import { reconcile } from './reconcile.js';
-import { initials } from './avatar.js';
+import { buildAvatarElement } from './avatar.js';
 
 export function node(tag, className, text) {
   const el = document.createElement(tag);
@@ -322,8 +322,8 @@ export function renderHand(container, cards, imgBase) {
 
 // A seat's identity: avatar, name, and current honor. `editable` marks the honor with the local
 // seat's editable cue; the opponent's gets the read-only cue instead.
-export function renderPanel(container, info, { editable = false } = {}) {
-  const avatar = node('div', 'avatar', initials(info.name));
+export function renderPanel(container, info, { editable = false, imgBase } = {}) {
+  const avatar = buildAvatarElement(info, imgBase, { className: 'avatar', name: info.name });
   const meta = node('div', 'panel-meta');
   const honor = node('span', 'panel-honor', String(info.honor ?? 0));
   honor.classList.add(editable ? 'is-editable' : 'read-only');

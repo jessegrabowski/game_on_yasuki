@@ -127,6 +127,7 @@ class GameRoom:
                 return
             self.seat_by_user[user_id] = seat
             self.state.seats[seat].name = name
+            self.state.seats[seat].avatar = user.get("avatar")
             self.state.seats[seat].connected = True
             self.state.bump_version()
             rooms[self.room_id]["players"].append(name)
