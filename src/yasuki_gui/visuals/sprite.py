@@ -24,13 +24,20 @@ class CardSpriteVisual(Visual):
     y: int
     tag: str
     images: ImageProvider | None = None
+    # Show the card as bowed before the engine commits it — used to preview a producer being tapped
+    # for gold during a payment, so the bow is undoable until the player confirms.
+    bowed_preview: bool = False
     # Keep a strong reference to the last PhotoImage used when drawing art
     _last_image: object | None = None
 
     @property
+    def _bowed(self) -> bool:
+        return self.card.bowed or self.bowed_preview
+
+    @property
     def size(self) -> tuple[int, int]:
         w, h = CARD_W, CARD_H
-        return (h, w) if self.card.bowed else (w, h)
+        return (h, w) if self._bowed else (w, h)
 
     @property
     def bbox(self) -> tuple[int, int, int, int]:
@@ -53,7 +60,7 @@ class CardSpriteVisual(Visual):
     def _draw_art(self, canvas: tk.Canvas) -> bool:
         x, y = self.x, self.y
         w, h = self.size
-        bowed = self.card.bowed
+        bowed = self._bowed
         inverted = self.card.inverted
         face_up = self.card.face_up
 

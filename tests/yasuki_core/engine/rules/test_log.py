@@ -8,7 +8,7 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.zones import ProvinceZone
-from yasuki_core.engine.rules.actions import Pass, ProduceGold, Recruit
+from yasuki_core.engine.rules.actions import Pass, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.log import (
@@ -68,25 +68,6 @@ def test_log_records_each_input_in_order():
     _, log = _played_game_and_log()
     assert [type(entry) for entry in log.entries] == [Act, Act, Act, Answer]
     assert all(entry.seat is PlayerId.P1 for entry in log.entries)
-
-
-def test_produce_gold_action_replays_and_round_trips():
-    state = _dealt_table()
-    state.battlefield.add(
-        _register(
-            state,
-            DynastyHolding(
-                id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=5
-            ),
-        )
-    )
-    log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
-    game = build_game(log)
-    act_and_log(game, log, ProduceGold("P1-mine", 5))
-
-    assert game.gold[PlayerId.P1] == 5
-    restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
-    assert restored.replay().gold[PlayerId.P1] == 5
 
 
 def test_recruit_action_and_its_payment_replay_and_round_trip():

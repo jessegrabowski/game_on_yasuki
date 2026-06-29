@@ -4,7 +4,7 @@ from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey, Z
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.pregame import StrongholdCard
-from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold, Recruit
+from yasuki_core.engine.rules.actions import Action, Pass, Recruit
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import ResolveRecruit, WorkItem
 from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
@@ -49,19 +49,18 @@ def advance(game: GameState) -> None:
 
 
 def perform(game: GameState, action: Action) -> None:
-    """Apply a chosen action: pass to end the phase, produce gold from a card, or recruit a card
-    from a province. The single action-apply dispatch, mirroring :func:`submit` for decisions."""
+    """Apply a chosen action: pass to end the phase, or recruit a card from a province. The single
+    action-apply dispatch, mirroring :func:`submit` for decisions."""
     match action:
         case Pass():
             advance(game)
-        case ProduceGold(card_id=card_id):
-            produce_gold(game, card_id)
         case Recruit(card_id=card_id):
             recruit(game, card_id)
 
 
 def produce_gold(game: GameState, card_id: str) -> None:
-    """Bow the card and add its ``gold_production`` to its owner's pool (KD6, stat-derived)."""
+    """Bow the card and add its ``gold_production`` to its owner's pool (KD6, stat-derived). Gold is
+    only produced while paying a cost (rules-skeleton §7), so a payment drives this."""
     card = game.table.cards_by_id[card_id]
     card.bow()
     game.add_gold(card.owner, card.gold_production)
@@ -101,6 +100,7 @@ def recruit(game: GameState, card_id: str) -> None:
         amount=recruit_cost(game, card),
         available=game.gold[seat],
         produced=tuple((producer.id, producer.gold_production) for producer in producers),
+        label=card.name,
     )
 
 

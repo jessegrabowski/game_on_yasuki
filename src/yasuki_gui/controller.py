@@ -204,8 +204,8 @@ class FieldController:
         return zv.cards[-1].id if zv is not None and zv.cards else None
 
     def _activate_card_at(self, tag: str | None, e: tk.Event) -> None:
-        """In rules mode, a click on a card invokes its ability (e.g. produce gold); the host
-        resolves which action that card offers."""
+        """In rules mode, a click on a card invokes the action it offers (e.g. recruit a holding);
+        the host resolves which action that card offers."""
         card_id = self._card_at(tag, e)
         if card_id is not None and self.view.on_card_activated is not None:
             self.view.on_card_activated(card_id)

@@ -2,13 +2,14 @@ import logging
 import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold, Recruit
+from yasuki_core.engine.rules.actions import Action, Pass, Recruit
 from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionRequest,
     DecisionResponse,
     DiscardToHandSize,
 )
+from collections.abc import Iterable
 from yasuki_core.engine.session import EngineSession
 from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
@@ -28,13 +29,16 @@ LOCAL_DEBUG_OVERRIDE = False
 OPPONENT_TURN_DELAY_MS = 700
 
 
-def _describe_decision(request: DecisionRequest) -> tuple[str, str]:
-    """A pending decision's prompt text and confirm-button label for the prompt box. Raise on an
-    unmapped decision so a new request type can't ship without its prompt."""
+def _describe_decision(request: DecisionRequest, chosen: Iterable[str]) -> tuple[str, str]:
+    """A pending decision's prompt text and confirm-button label, given the cards chosen so far.
+    Raise on an unmapped decision so a new request type can't ship without its prompt."""
     if isinstance(request, DiscardToHandSize):
         return f"discard {request.count} card(s)", "Discard"
     if isinstance(request, ChoosePayment):
-        return f"pay {request.amount} gold", "Pay"
+        yields = dict(request.produced)
+        covered = request.available + sum(yields[card_id] for card_id in chosen)
+        remaining = max(0, request.amount - covered)
+        return f"Pay {remaining} gold for {request.label}", "Pay"
     raise ValueError(f"no prompt defined for {type(request).__name__}")
 
 
@@ -100,12 +104,13 @@ def main() -> None:
         phase_bar.refresh(view)
         pending = runner.pending
         if pending is not None:
-            prompt, button_label = _describe_decision(pending)
-            can_confirm = pending.accepts(DecisionResponse(tuple(field.selection)))
+            chosen = tuple(field.selection)
+            prompt, button_label = _describe_decision(pending, chosen)
+            can_confirm = pending.accepts(DecisionResponse(chosen))
             prompt_box.show(prompt, [(button_label, confirm_decision, can_confirm)])
         else:
             whose = "Your turn" if view.active is view.viewer else "Opponent's turn"
-            # Non-card actions are buttons; card actions (produce gold) are invoked on the board.
+            # Pass is a button; a Recruit is invoked by clicking a holding on the board.
             buttons = [
                 (_action_button_label(action), lambda chosen=action: on_action(chosen), True)
                 for action in runner.legal_actions()
@@ -122,7 +127,9 @@ def main() -> None:
     def after_human_action() -> None:
         pending = runner.pending
         if pending is not None:
-            field.begin_selection(pending.candidates)  # its candidates become selectable
+            # A payment's candidate producers become selectable and preview as bowed when picked.
+            paying = isinstance(pending, ChoosePayment)
+            field.begin_selection(pending.candidates, render_bowed=paying)
         refresh()
         if pending is None and runner.is_opponent_turn:
             # The board already shows "Opponent's turn"; run it after a beat so the hand-off shows.
@@ -138,22 +145,24 @@ def main() -> None:
         after_human_action()
 
     def on_card_activated(card_id: str) -> None:
-        # A board click invokes whatever action that card offers — produce gold (a battlefield
-        # producer) or recruit (a face-up province card).
+        # A click on a face-up province holding recruits it; producers are clicked during the
+        # ensuing payment, which the selection path handles, not this one.
         action = next(
-            (
-                a
-                for a in runner.legal_actions()
-                if isinstance(a, ProduceGold | Recruit) and a.card_id == card_id
-            ),
+            (a for a in runner.legal_actions() if isinstance(a, Recruit) and a.card_id == card_id),
             None,
         )
         if action is not None:
             on_action(action)
 
+    def undo_payment(_event=None) -> None:
+        # Ctrl+Z while paying unbows the last producer tapped for gold; no effect otherwise.
+        if isinstance(runner.pending, ChoosePayment):
+            field.undo_last_selection()
+
     # Re-render (board borders + confirm-button state) as the player toggles candidates.
     field.on_selection_changed = refresh
     field.on_card_activated = on_card_activated
+    root.bind("<Control-z>", undo_payment)
 
     phase_bar = PhaseBar(content)
     phase_bar.pack(side="bottom", fill="x")

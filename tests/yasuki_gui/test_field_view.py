@@ -203,6 +203,30 @@ class TestDecisionSelection:
         assert card_id in field.hands[hand_tag].selected_ids
 
 
+class TestPaymentSelection:
+    def test_undo_last_drops_only_the_most_recent_pick(self, loaded):
+        field, _ = loaded
+        field.begin_selection(["a", "b", "c"])
+        field.toggle_selection("a")
+        field.toggle_selection("b")
+        field.undo_last_selection()
+        assert field.selection == frozenset({"a"})
+
+    def test_chosen_producer_previews_as_bowed_during_a_payment(self, loaded):
+        field, _ = loaded
+        field.begin_selection(["P1-SH"], render_bowed=True)
+        field.toggle_selection("P1-SH")
+        field.reconcile_all()
+        assert field.sprites[card_tag("P1-SH")].bowed_preview is True
+
+    def test_a_plain_selection_does_not_preview_bowed(self, loaded):
+        field, _ = loaded
+        field.begin_selection(["P1-SH"])  # e.g. a discard selection, not a payment
+        field.toggle_selection("P1-SH")
+        field.reconcile_all()
+        assert field.sprites[card_tag("P1-SH")].bowed_preview is False
+
+
 class TestDebugSeatFlip:
     def test_flip_renders_from_other_seat(self, loaded):
         field, _ = loaded

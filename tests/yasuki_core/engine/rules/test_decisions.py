@@ -34,7 +34,7 @@ def test_discard_of_zero_accepts_only_an_empty_answer():
 
 def _payment(amount: int, available: int, produced) -> ChoosePayment:
     return ChoosePayment(
-        PlayerId.P1, tuple(card for card, _ in produced), amount, available, tuple(produced)
+        PlayerId.P1, tuple(card for card, _ in produced), amount, available, tuple(produced), "Mine"
     )
 
 

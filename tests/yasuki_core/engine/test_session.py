@@ -8,7 +8,7 @@ from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import Pass, ProduceGold, Recruit
+from yasuki_core.engine.rules.actions import Pass, Recruit
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
@@ -65,29 +65,13 @@ def _gold_source(state, card_id: str, amount: int, owner=PlayerId.P1) -> Dynasty
     return holding
 
 
-def test_legal_actions_offers_produce_gold_for_each_unbowed_gold_source():
-    state = _dealt_table()
-    _gold_source(state, "P1-mine", 3)
-    _gold_source(state, "P1-farm", 2)
-    _gold_source(state, "P2-mine", 4, owner=PlayerId.P2)  # the opponent's source is not offered
-    session = EngineSession.start(state, PlayerId.P1)
-
-    offered = session.legal_actions(PlayerId.P1)
-    assert ProduceGold("P1-mine", 3) in offered
-    assert ProduceGold("P1-farm", 2) in offered
-    assert ProduceGold("P2-mine", 4) not in offered
-
-
-def test_producing_gold_fills_the_pool_and_bows_the_source():
+def test_gold_is_not_a_free_action_outside_a_payment():
+    # Gold is produced only while paying a cost (rules-skeleton §7), so an unbowed producer offers
+    # nothing on its own — only Pass is free.
     state = _dealt_table()
     _gold_source(state, "P1-mine", 3)
     session = EngineSession.start(state, PlayerId.P1)
-
-    session.act(PlayerId.P1, ProduceGold("P1-mine", 3))
-
-    assert session.project(PlayerId.P1).gold[PlayerId.P1] == 3
-    # A bowed source can no longer produce, so the action drops off the legal list.
-    assert ProduceGold("P1-mine", 3) not in session.legal_actions(PlayerId.P1)
+    assert session.legal_actions(PlayerId.P1) == [Pass()]
 
 
 def _holding_in_province(state, card_id: str, *, gold_cost: int, idx: int = 0) -> DynastyHolding:
@@ -165,6 +149,7 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
     session.act(PlayerId.P1, Recruit("P1-buy"))
     pending = session.project(PlayerId.P1).pending
     assert isinstance(pending, ChoosePayment) and pending.amount == 5
+    assert pending.label == "Holding"  # the prompt names the card being bought
     session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))
 
     game = session.game
@@ -172,6 +157,7 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
     assert bought in game.table.battlefield.cards and bought.bowed
     # It enters unplaced, so the client clusters it into the home row by the stronghold.
     assert game.table.positions["P1-buy"] == UNPLACED_BOARD_POS
+    assert game.table.cards_by_id["P1-SH"].bowed  # paying tapped the chosen producer
     assert game.gold[PlayerId.P1] == 3  # 8 produced - 5 spent, excess pools
     refilled = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
     assert [card.id for card in refilled] == ["P1-refill"] and not refilled[0].face_up

@@ -4,12 +4,11 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneRole
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.rules.state import GameState, Phase
-from yasuki_core.engine.rules.actions import Action, Pass, ProduceGold, Recruit
+from yasuki_core.engine.rules.actions import Action, Pass, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow, projection
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import GameLog, build_game, act_and_log, submit_and_log
-from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 
 
@@ -55,23 +54,23 @@ class EngineSession:
         return projection.project(self.game, seat)
 
     def legal_actions(self, seat: PlayerId) -> list[Action]:
-        """Return the free actions ``seat`` may take right now: always a pass; a gold-production
-        action for each unbowed gold-producer it controls in play; and, in the Dynasty phase, a
-        Recruit for each face-up Holding in its provinces it could pay for. Empty while a decision
-        is pending and for any seat but the active one."""
+        """Return the free actions ``seat`` may take right now: always a pass, plus — in the Dynasty
+        phase — a Recruit for each face-up Holding in its provinces it could pay for. Empty while a
+        decision is pending and for any seat but the active one.
+
+        Gold is not a free action: it is produced only while paying a cost (rules-skeleton §7), so
+        it surfaces through the Recruit's ``ChoosePayment``, never here."""
         if self.game.awaiting_decision or seat is not self.game.active:
             return []
-        producers = flow.gold_producers(self.game, seat)
         actions: list[Action] = [Pass()]
-        for card in producers:
-            actions.append(ProduceGold(card.id, card.gold_production))
         if self.game.phase is Phase.DYNASTY:
-            actions.extend(self._recruits(seat, producers))
+            actions.extend(self._recruits(seat))
         return actions
 
-    def _recruits(self, seat: PlayerId, producers: list[L5RCard]) -> list[Action]:
+    def _recruits(self, seat: PlayerId) -> list[Action]:
         """The Recruit actions ``seat`` can afford: each face-up Holding in its provinces whose cost
-        its pool plus its unbowed ``producers``' gold could cover."""
+        its pool plus its unbowed producers' gold could cover."""
+        producers = flow.gold_producers(self.game, seat)
         affordable = self.game.gold[seat] + sum(card.gold_production for card in producers)
         recruits: list[Action] = []
         for key, zone in self.game.table.zones.items():

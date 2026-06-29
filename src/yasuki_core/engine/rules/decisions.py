@@ -65,11 +65,14 @@ class ChoosePayment(DecisionRequest):
         The gold already in the seat's pool when the cost arose.
     produced : tuple of (str, int)
         Each candidate producer paired with the gold it yields when bowed.
+    label : str
+        What the payment is for (e.g. the recruited card's name), shown in the prompt.
     """
 
     amount: int
     available: int
     produced: tuple[tuple[str, int], ...]
+    label: str
 
     def accepts(self, response: DecisionResponse) -> bool:
         chosen = response.choices

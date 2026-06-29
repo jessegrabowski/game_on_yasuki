@@ -73,8 +73,11 @@ class FieldView(tk.Canvas):
 
         # Decision selection: when the engine awaits a choice, _selectable holds the candidate ids
         # (None when not choosing) and _selection the chosen subset, both rendered on the board.
+        # Selection order is tracked so the last pick can be undone (Ctrl+Z during a payment).
         self._selectable: frozenset[str] | None = None
-        self._selection: set[str] = set()
+        self._selection: list[str] = []
+        # When choosing how to pay, selected producers preview as bowed (tapped for gold).
+        self._selection_bows: bool = False
 
         # Optional UI callbacks the host app installs.
         self.on_local_player_changed: Callable[[], None] | None = None
@@ -154,21 +157,35 @@ class FieldView(tk.Canvas):
         """The ids currently selected for the pending decision."""
         return frozenset(self._selection)
 
-    def begin_selection(self, candidates: Iterable[str]) -> None:
-        """Enter selection mode: only ``candidates`` are selectable, none chosen yet."""
+    def begin_selection(self, candidates: Iterable[str], *, render_bowed: bool = False) -> None:
+        """Enter selection mode: only ``candidates`` are selectable, none chosen yet. When
+        ``render_bowed`` is set, selected cards preview as bowed (a producer tapped to pay)."""
         self._selectable = frozenset(candidates)
-        self._selection.clear()
+        self._selection = []
+        self._selection_bows = render_bowed
 
     def end_selection(self) -> None:
         """Leave selection mode and clear the selection."""
         self._selectable = None
-        self._selection.clear()
+        self._selection = []
+        self._selection_bows = False
 
     def toggle_selection(self, card_id: str) -> None:
         """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener."""
         if self._selectable is None or card_id not in self._selectable:
             return
-        self._selection ^= {card_id}
+        if card_id in self._selection:
+            self._selection.remove(card_id)
+        else:
+            self._selection.append(card_id)
+        if self.on_selection_changed is not None:
+            self.on_selection_changed()
+
+    def undo_last_selection(self) -> None:
+        """Drop the most recently selected id (Ctrl+Z while paying), and notify the listener."""
+        if not self._selection:
+            return
+        self._selection.pop()
         if self.on_selection_changed is not None:
             self.on_selection_changed()
 
@@ -416,7 +433,9 @@ class FieldView(tk.Canvas):
                 sp = CardSpriteVisual(rc, x, y, tag, images=self._images)
                 self._sprites[tag] = sp
             sp.card, sp.x, sp.y = rc, x, y
-            sp.draw(self, selected=tag in self._selected or rc.id in self._selection)
+            chosen = rc.id in self._selection
+            sp.bowed_preview = chosen and self._selection_bows
+            sp.draw(self, selected=tag in self._selected or chosen)
         for tag in set(self._sprites) - wanted:
             self._sprites.pop(tag, None)
             self._selected.discard(tag)

@@ -5,11 +5,10 @@ from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import Pass, ProduceGold
+from yasuki_core.engine.rules.actions import Pass
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_gui.rules_runner import GameRunner
-from yasuki_core.game_pieces.dynasty import DynastyHolding
 
 PASS = Pass()
 
@@ -45,23 +44,6 @@ def test_passing_walks_the_human_through_the_phases():
     assert runner.view().phase is Phase.ATTACK
     runner.act(PASS)
     assert runner.view().phase is Phase.DYNASTY
-
-
-def test_producing_gold_reaches_the_humans_view_and_legal_actions():
-    state = _dealt_table(0)
-    holding = _register(
-        state,
-        DynastyHolding(
-            id="P1-mine", name="Mine", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=4
-        ),
-    )
-    state.battlefield.add(holding)
-    runner = GameRunner(EngineSession.start(state, PlayerId.P1), PlayerId.P1)
-
-    runner.act(ProduceGold("P1-mine", 4))
-
-    assert runner.view().gold[PlayerId.P1] == 4
-    assert ProduceGold("P1-mine", 4) not in runner.legal_actions()
 
 
 def test_passing_through_a_quiet_turn_hands_off_then_back():
