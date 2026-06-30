@@ -125,8 +125,7 @@ def _dockside_market(
 def _jade_works(
     card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
 ) -> int:
-    """5 GP when paying for a Jade card, otherwise the printed 3. The printed restriction that the 5
-    may pay only a single Jade card with no excess pooling is not enforced."""
+    """+2 GP when paying for a single Jade card."""
     if any("Jade" in target.keywords for target in targets):
-        return 5
+        return card.gold_production + 2
     return card.gold_production
