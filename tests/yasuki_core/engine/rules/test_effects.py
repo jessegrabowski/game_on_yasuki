@@ -174,3 +174,33 @@ def test_dockside_market_adds_for_a_port_and_for_another_market():
 
     _put(game, _holding(PlayerId.P1, "P1-market2", keywords=("Market",)))
     assert effective_gold_production(game, dockside) == 4  # +1 for another Market
+
+
+def _jade_works(seat):
+    return _holding(
+        seat,
+        f"{seat.name}-jadeworks",
+        printed_id="jade_works",
+        keywords=("Jade",),
+        gold_production=3,
+    )
+
+
+def test_jade_works_produces_five_when_paying_for_a_jade_card():
+    game = _game()
+    works = _put(game, _jade_works(PlayerId.P1))
+    jade_target = _holding(PlayerId.P1, "a-jade-card", keywords=("Jade",))
+    assert effective_gold_production(game, works, targets=(jade_target,)) == 5
+
+
+def test_jade_works_produces_its_base_for_a_non_jade_card():
+    game = _game()
+    works = _put(game, _jade_works(PlayerId.P1))
+    plain = _holding(PlayerId.P1, "a-plain-card", keywords=())
+    assert effective_gold_production(game, works, targets=(plain,)) == 3
+
+
+def test_jade_works_produces_its_base_with_no_target():
+    game = _game()
+    works = _put(game, _jade_works(PlayerId.P1))
+    assert effective_gold_production(game, works) == 3

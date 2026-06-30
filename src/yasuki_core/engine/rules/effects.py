@@ -95,8 +95,8 @@ def effective_gold_production(
     return handler(card, player_state(game, card.owner), opposing_states(game, card.owner), targets)
 
 
-# Per-card gold-production handlers, registered on import of this module. The read-sites already load
-# it, so a handler is always in place by the time gold is produced.
+# Per-card gold-production handlers, registered on import of this module. The read-sites already
+# load it, so a handler is always in place by the time gold is produced.
 
 
 @gold_handler("ancestral_estate")
@@ -119,3 +119,14 @@ def _dockside_market(
     """+1 GP for controlling any Port, and +1 GP for controlling another Market."""
     bonus = (1 if me.controls("Port") else 0) + (1 if me.controls("Market", other_than=card) else 0)
     return card.gold_production + bonus
+
+
+@gold_handler("jade_works")
+def _jade_works(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
+) -> int:
+    """5 GP when paying for a Jade card, otherwise the printed 3. The printed restriction that the 5
+    may pay only a single Jade card with no excess pooling is not enforced."""
+    if any("Jade" in target.keywords for target in targets):
+        return 5
+    return card.gold_production

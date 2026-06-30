@@ -26,7 +26,7 @@ machinery they need**, which drives the phasing:
 |------|----------|--------|----------|--------|
 | **A. Wealth tokens** | effective GP = printed + `+1GP` counters on the card | ~10 | Caravansary, Rice Farm, Sapphire Mine | **deferred** — needs a counter/attachment + stat-change model |
 | **B. State-conditional** | base + bonus while a predicate over live state holds | ~8 | Ancestral Estate, Dockside Market, Tanuki Band | **Phase 1** (the easy tier) |
-| **C. Modal** | player picks a bow-mode; premium is target-restricted + non-pooling | 2 | Jade Works, Basecamp | deferred — needs the decision protocol + GUI |
+| **C. Modal** | premium yield for a restricted target; non-pooling | 2 | Jade Works, Basecamp | **mostly done** — auto-resolved on the target keyword, no menu needed; non-pooling deferred |
 | **D. Pre-bow pump** | player may boost before bowing, at a cost | 2 | Outlying Farms, Zokujin Burrows | deferred — player choice |
 | **E. Dynamic −1GP** | engine bows/straightens with a temp penalty | 2 | House of High Waters, Depths of the Shinomen | deferred — phase triggers |
 
@@ -186,5 +186,10 @@ non-pooling excess), Tiers D/E.
   split when it chafes.
 - **Event vocabulary.** The set of emitted event kinds + fields — grows with triggers, designed when
   the event bus lands, not now.
-- **Modal protocol shape.** How `ChoosePayment` carries per-producer mode options, how `accepts`
-  honours restrictions + non-pooling excess, and the GUI mode-pick — designed when Tier C lands.
+- **Non-pooling production.** Jade Works landed without the modal protocol: its premium yield
+  auto-resolves on the target keyword (5 for a Jade target, else 3), so no per-producer mode menu was
+  needed — the `targets`-aware handler covers it, with `produce_gold` paying out the offered yield so
+  the apply matches the announce. What's *not* modelled is the "single Jade card, no excess pooling"
+  restriction; the 5's excess pools. Modelling it (a per-producer `pools` flag on `ChoosePayment` and
+  non-pooling-first payout in `_apply_payment`) is deferred. A genuine *player-chosen* mode menu is
+  only needed if a card surfaces a choice the target can't decide — none of Jade Works/Basecamp do.

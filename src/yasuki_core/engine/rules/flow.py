@@ -59,12 +59,13 @@ def perform(game: GameState, action: Action) -> None:
             recruit(game, card_id)
 
 
-def produce_gold(game: GameState, card_id: str) -> None:
-    """Bow the card and add its effective gold production to its owner's pool (KD6, stat-derived).
-    Gold is only produced while paying a cost (rules-skeleton §7), so a payment drives this."""
+def produce_gold(game: GameState, card_id: str, amount: int) -> None:
+    """Bow the card and add ``amount`` gold to its owner's pool — the yield the payment offer quoted
+    for it (KD6). Gold is only produced while paying a cost (rules-skeleton §7), so a payment drives
+    this."""
     card = game.table.cards_by_id[card_id]
     card.bow()
-    game.add_gold(card.owner, effective_gold_production(game, card))
+    game.add_gold(card.owner, amount)
 
 
 def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
@@ -179,8 +180,9 @@ def _resolve(game: GameState, item: WorkItem) -> None:
 
 
 def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:
+    produced = dict(request.produced)
     for card_id in response.choices:
-        produce_gold(game, card_id)
+        produce_gold(game, card_id, produced[card_id])
     game.spend_gold(request.seat, request.amount)
 
 

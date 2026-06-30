@@ -74,11 +74,18 @@ def test_gold_is_not_a_free_action_outside_a_payment():
     assert session.legal_actions(PlayerId.P1) == [Pass()]
 
 
-def _holding_in_province(state, card_id: str, *, gold_cost: int, idx: int = 0) -> DynastyHolding:
+def _holding_in_province(
+    state, card_id: str, *, gold_cost: int, idx: int = 0, keywords=()
+) -> DynastyHolding:
     holding = _register(
         state,
         DynastyHolding(
-            id=card_id, name="Holding", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=gold_cost
+            id=card_id,
+            name="Holding",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=gold_cost,
+            keywords=keywords,
         ),
     )
     holding.turn_face_up()
@@ -164,6 +171,38 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
     # The face-down refill is not recruitable until it is revealed next turn.
     assert Recruit("P1-refill") not in session.legal_actions(PlayerId.P1)
     assert game.pending is None and not game.stack
+
+
+def test_jade_works_funds_and_pays_a_jade_recruit_at_its_premium_rate():
+    state = _dealt_table()
+    works = _register(
+        state,
+        DynastyHolding(
+            id="P1-jadeworks",
+            printed_id="jade_works",
+            name="Jade Works",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_production=3,
+        ),
+    )
+    state.battlefield.add(works)
+    _holding_in_province(state, "P1-jade", gold_cost=5, keywords=("Jade",))
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    # Affordability counts Jade Works as 5 toward a Jade card, so the 5-cost recruit is offered.
+    assert Recruit("P1-jade") in session.legal_actions(PlayerId.P1)
+
+    session.act(PlayerId.P1, Recruit("P1-jade"))
+    pending = session.project(PlayerId.P1).pending
+    assert isinstance(pending, ChoosePayment)
+    assert dict(pending.produced)["P1-jadeworks"] == 5  # the premium 5, not the printed 3
+
+    session.submit(PlayerId.P1, DecisionResponse(("P1-jadeworks",)))
+    game = session.game
+    assert game.table.cards_by_id["P1-jade"] in game.table.battlefield.cards  # recruited
+    assert game.gold[PlayerId.P1] == 0  # produced 5, spent 5 — application matched the offer
 
 
 def test_cancel_backs_out_of_a_recruit_payment_committing_nothing():

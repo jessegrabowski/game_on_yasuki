@@ -78,15 +78,19 @@ class EngineSession:
         """The Recruit actions ``seat`` can afford: each face-up Holding in its provinces whose cost
         its pool plus its unbowed producers' gold could cover."""
         producers = flow.gold_producers(self.game, seat)
-        affordable = self.game.gold[seat] + sum(
-            effective_gold_production(self.game, card) for card in producers
-        )
+        pool = self.game.gold[seat]
         recruits: list[Action] = []
         for key, zone in self.game.table.zones.items():
             if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
                 continue
             for card in zone.cards:
                 if isinstance(card, DynastyHolding) and card.face_up:
+                    # A producer's yield can depend on what it pays for, so affordability is judged
+                    # against this candidate as the target.
+                    affordable = pool + sum(
+                        effective_gold_production(self.game, producer, targets=(card,))
+                        for producer in producers
+                    )
                     if flow.recruit_cost(self.game, card) <= affordable:
                         recruits.append(Recruit(card.id))
         return recruits
