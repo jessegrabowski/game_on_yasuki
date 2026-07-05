@@ -59,6 +59,9 @@ class L5RCard:
             object.__setattr__(self, "traits", tuple(self.traits))
         if not isinstance(self.peekers, frozenset):
             object.__setattr__(self, "peekers", frozenset(self.peekers))
+        # Always copy: replace()-built cards (e.g. synthetic back faces) must not share the mutable
+        # tally with their source.
+        object.__setattr__(self, "counters", dict(self.counters))
 
     # State transitions
     def bow(self) -> None:

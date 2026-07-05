@@ -53,7 +53,9 @@ to *mean* "+1 to a stat".
 
 1. **`token` / `is_token` / `SpawnCard` = a created card.** Never overload them to carry stat-state.
 2. **`counter` (or `marker`) = scalar host state.** A distinct field of a distinct type; never an
-   `L5RCard`, never spawned, never `is_token`.
+   `L5RCard`, never spawned, never `is_token`. It belongs to the host *object*, not a face:
+   flipping a double-faced card keeps its counters — the same physical card is still in play — and
+   the nested back face's own tally is inert presentation data.
 3. A Wealth token is a **counter**, not a token-card — even though the game text and the TTS bridge
    both say "token".
 4. Review red-flag: if a "token" has force, a zone, or can be targeted, it's a **card**; if it's a
