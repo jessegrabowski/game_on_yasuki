@@ -51,6 +51,7 @@ from yasuki_core.engine.serialization import (
     decode_seat,
 )
 from yasuki_core.game_pieces.constants import Side, Element
+from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.dynasty import DynastyPersonality
 from yasuki_core.game_pieces.fate import FateRing
 from yasuki_core.game_pieces.pregame import StrongholdCard
@@ -92,8 +93,8 @@ from yasuki_core.game_pieces.pregame import StrongholdCard
         Raise("c1"),
         SetNote("c1", "dead"),
         SetNote("c1", None),
-        AdjustCounter("c1", "wealth", 2),
-        AdjustCounter("c1", "wealth", -1),
+        AdjustCounter("c1", WEALTH, 2),
+        AdjustCounter("c1", WEALTH, -1),
         GiveControl("c1"),
         FillProvince(ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 1)),
         DestroyProvince(ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 2)),
@@ -111,6 +112,13 @@ from yasuki_core.game_pieces.pregame import StrongholdCard
 )
 def test_each_intent_survives_a_json_round_trip(intent):
     assert decode_intent(json.loads(json.dumps(encode_intent(intent)))) == intent
+
+
+def test_decoding_an_unknown_counter_is_rejected():
+    # The counter vocabulary is closed, so a malformed envelope naming an unregistered counter
+    # raises rather than minting a novel counter — the caller treats the raise as a rejected intent.
+    with pytest.raises(KeyError):
+        decode_intent({"op": "ADJUST_COUNTER", "card_id": "c1", "name": "bogus", "delta": 1})
 
 
 def test_card_subclass_and_typed_fields_survive_round_trip():

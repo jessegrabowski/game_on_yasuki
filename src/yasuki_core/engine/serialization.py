@@ -51,6 +51,7 @@ from yasuki_core.engine.intents import (
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side, Element, Timing, AttachmentType
+from yasuki_core.game_pieces.counters import counter_from_key
 from yasuki_core.game_pieces.dynasty import (
     DynastyCard,
     DynastyPersonality,
@@ -277,7 +278,11 @@ def encode_intent(intent: Intent) -> dict:
         case IntentOp.SET_NOTE:
             payload |= {"card_id": intent.card_id, "text": intent.note}
         case IntentOp.ADJUST_COUNTER:
-            payload |= {"card_id": intent.card_id, "name": intent.name, "delta": intent.delta}
+            payload |= {
+                "card_id": intent.card_id,
+                "name": intent.counter.key,
+                "delta": intent.delta,
+            }
         case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
             payload["card_ids"] = list(intent.card_ids)
         case (
@@ -361,7 +366,8 @@ def decode_intent(payload: dict) -> Intent:
         case IntentOp.SET_NOTE:
             return SetNote(payload["card_id"], payload.get("text"))
         case IntentOp.ADJUST_COUNTER:
-            return AdjustCounter(payload["card_id"], payload["name"], payload["delta"])
+            counter = counter_from_key(payload["name"])
+            return AdjustCounter(payload["card_id"], counter, payload["delta"])
         case IntentOp.BOW | IntentOp.UNBOW | IntentOp.FLIP | IntentOp.FLIP_FACE | IntentOp.INVERT:
             return _FLAG_CLASSES[op](tuple(payload["card_ids"]))
         case (

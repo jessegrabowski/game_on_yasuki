@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.counters import Counter
 from yasuki_core.engine import ops
 from yasuki_core.engine.table import (
     BATTLEFIELD,
@@ -158,12 +159,12 @@ class SetNote:
 
 @dataclass(frozen=True, slots=True)
 class AdjustCounter:
-    """Add ``delta`` to a named counter on a face-up card, flooring at zero. Either player may
-    adjust any public card's counters — effects legitimately token an opponent's cards, so like a
-    note this is a shared physical act, not an owned one."""
+    """Add ``delta`` to a ``counter`` on a face-up card, flooring at zero. Either player may adjust
+    any public card's counters — effects legitimately token an opponent's cards, so like a note
+    this is a shared physical act, not an owned one."""
 
     card_id: str
-    name: str
+    counter: Counter
     delta: int
     op: ClassVar[IntentOp] = IntentOp.ADJUST_COUNTER
 
@@ -573,15 +574,15 @@ def _set_note(state: TableState, seat: PlayerId, intent: SetNote) -> list[Event]
 
 def _adjust_counter(state: TableState, seat: PlayerId, intent: AdjustCounter) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
-    if card is None or not card.face_up or not intent.name:
+    if card is None or not card.face_up:
         return []
-    before = card.counters.get(intent.name, 0)
-    after = max(
-        0, before + intent.delta
-    )  # adjust_counter floors here; a floored no-op emits nothing
+    key = intent.counter.key
+    before = card.counters.get(key, 0)
+    # adjust_counter floors at zero; a floored no-op emits nothing.
+    after = max(0, before + intent.delta)
     if after == before:
         return []
-    card.adjust_counter(intent.name, intent.delta)
+    card.adjust_counter(key, intent.delta)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
