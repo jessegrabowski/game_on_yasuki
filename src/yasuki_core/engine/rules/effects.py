@@ -79,8 +79,8 @@ def effective_gold_production(
     game: GameState, card: L5RCard, targets: tuple[L5RCard, ...] = ()
 ) -> int:
     """The gold ``card`` produces right now: its registered handler's result against the live views,
-    or its printed ``gold_production`` (0 for a card that produces none) when no handler is
-    registered — plus one gold per wealth counter on the card.
+    or its printed ``gold_production`` when no handler is registered — plus one gold per wealth
+    counter. A card with no gold-production stat produces 0; wealth counters on it raise nothing.
 
     Parameters
     ----------
@@ -94,7 +94,9 @@ def effective_gold_production(
     """
     handler = GOLD_HANDLERS.get(card.printed_id)
     if handler is None:
-        base = getattr(card, "gold_production", 0)
+        if not hasattr(card, "gold_production"):
+            return 0  # no Gold Production stat: wealth counters have nothing to raise
+        base = card.gold_production
     else:
         base = handler(
             card, player_state(game, card.owner), opposing_states(game, card.owner), targets

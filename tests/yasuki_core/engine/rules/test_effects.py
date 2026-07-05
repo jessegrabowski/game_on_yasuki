@@ -98,13 +98,18 @@ def test_effective_gold_production_falls_back_to_printed_without_a_handler():
     assert effective_gold_production(game, holding) == 3
 
 
-def test_effective_gold_production_of_a_non_producer_is_zero():
+def test_a_non_producer_yields_zero_with_or_without_wealth_counters():
     game = _game()
     hero = _put(
         game,
         DynastyPersonality(id="P1-hero", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1),
     )
     assert effective_gold_production(game, hero) == 0  # personalities have no gold_production
+
+    # Wealth raises Gold Production; with no such stat there is nothing to raise, so a tokened
+    # personality must not become a bowable gold source.
+    hero.adjust_counter("wealth", 2)
+    assert effective_gold_production(game, hero) == 0
 
 
 def test_a_registered_handler_overrides_with_the_live_views_and_targets():
