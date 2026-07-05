@@ -52,6 +52,7 @@ class IntentOp(str, Enum):
     CREATE_PROVINCE = "CREATE_PROVINCE"
     SET_HONOR = "SET_HONOR"
     SET_NOTE = "SET_NOTE"
+    ADJUST_COUNTER = "ADJUST_COUNTER"
     GIVE_CONTROL = "GIVE_CONTROL"
     SPAWN_CARD = "SPAWN_CARD"
     REMOVE_CARD = "REMOVE_CARD"
@@ -153,6 +154,18 @@ class SetNote:
     card_id: str
     note: str | None
     op: ClassVar[IntentOp] = IntentOp.SET_NOTE
+
+
+@dataclass(frozen=True, slots=True)
+class AdjustCounter:
+    """Add ``delta`` to a named counter on a face-up card, flooring at zero. Either player may
+    adjust any public card's counters — effects legitimately token an opponent's cards, so like a
+    note this is a shared physical act, not an owned one."""
+
+    card_id: str
+    name: str
+    delta: int
+    op: ClassVar[IntentOp] = IntentOp.ADJUST_COUNTER
 
 
 @dataclass(frozen=True, slots=True)
@@ -380,6 +393,7 @@ Intent = (
     | ReorderPile
     | Raise
     | SetNote
+    | AdjustCounter
     | GiveControl
     | Bow
     | Unbow
@@ -553,6 +567,21 @@ def _set_note(state: TableState, seat: PlayerId, intent: SetNote) -> list[Event]
     if note == card.note:
         return []
     card.set_note(note)
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
+def _adjust_counter(state: TableState, seat: PlayerId, intent: AdjustCounter) -> list[Event]:
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None or not card.face_up or not intent.name:
+        return []
+    before = card.counters.get(intent.name, 0)
+    after = max(
+        0, before + intent.delta
+    )  # adjust_counter floors here; a floored no-op emits nothing
+    if after == before:
+        return []
+    card.adjust_counter(intent.name, intent.delta)
     state.seq += 1
     return [Event(state.seq, seat, intent, (card.id,))]
 
@@ -864,6 +893,7 @@ _HANDLERS = {
     IntentOp.REORDER_PILE: _reorder_pile,
     IntentOp.RAISE: _raise,
     IntentOp.SET_NOTE: _set_note,
+    IntentOp.ADJUST_COUNTER: _adjust_counter,
     IntentOp.GIVE_CONTROL: _give_control,
     IntentOp.BOW: _apply_flag,
     IntentOp.UNBOW: _apply_flag,

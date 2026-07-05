@@ -9,6 +9,7 @@ from yasuki_core.engine.intents import (
     ReorderHand,
     ReorderPile,
     SetNote,
+    AdjustCounter,
     GiveControl,
     Attach,
     Detach,
@@ -255,6 +256,59 @@ def test_a_note_rides_a_card_into_the_discard_but_clears_in_a_deck():
 
     apply_intent(table, PlayerId.P1, MoveCard("f1", DeckKey(PlayerId.P1, Side.FATE)))
     assert card.note is None  # shuffled back into the deck — the marker is gone
+
+
+def test_adjust_counter_grants_and_removes_on_a_face_up_card():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, AdjustCounter("f1", "wealth", 2))
+    assert card.counters == {"wealth": 2} and len(events) == 1
+
+    apply_intent(table, PlayerId.P1, AdjustCounter("f1", "wealth", -2))
+    assert card.counters == {}
+
+
+def test_adjust_counter_may_token_an_opponents_card():
+    # Effects legitimately token another player's cards (Takeru Sensei), so there is no owner gate.
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=PlayerId.P2)
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, AdjustCounter("f1", "wealth", 1))
+
+    assert card.counters == {"wealth": 1} and len(events) == 1
+
+
+def test_adjust_counter_is_rejected_on_a_face_down_card():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    card.turn_face_down()
+    _on_battlefield(table, card)
+
+    assert apply_intent(table, PlayerId.P1, AdjustCounter("f1", "wealth", 1)) == []
+    assert card.counters == {}
+
+
+def test_adjust_counter_that_changes_nothing_is_a_no_op():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    _on_battlefield(table, card)
+
+    # Removing from an empty tally floors at zero, so nothing changes and no event is emitted.
+    assert apply_intent(table, PlayerId.P1, AdjustCounter("f1", "wealth", -3)) == []
+    assert apply_intent(table, PlayerId.P1, AdjustCounter("f1", "wealth", 0)) == []
+
+
+def test_adjust_counter_rejects_an_empty_name():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    _on_battlefield(table, card)
+
+    # An empty name would otherwise write junk `counters[""]` state that persists.
+    assert apply_intent(table, PlayerId.P1, AdjustCounter("f1", "", 1)) == []
+    assert card.counters == {}
 
 
 def test_give_control_hands_a_battlefield_card_to_the_opponent():
