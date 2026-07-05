@@ -21,6 +21,10 @@ class L5RCard:
     bowed: bool = False
     face_up: bool = True
     inverted: bool = False
+    # Named counters on the card (e.g. "wealth" → +1GP each): scalar host state, never cards
+    # (docs/engine/counters-vs-cards.md). In equality — replay checks must see counter drift — but
+    # out of the generated hash, which a dict cannot join.
+    counters: dict[str, int] = field(default_factory=dict, hash=False)
     image_front: Path | None = None
     image_back: Path | None = None
     owner: PlayerId | None = None
@@ -64,6 +68,15 @@ class L5RCard:
     def unbow(self) -> None:
         if self.bowed:
             object.__setattr__(self, "bowed", False)
+
+    def adjust_counter(self, name: str, delta: int) -> None:
+        """Add ``delta`` to the named counter, flooring at zero. A zeroed counter is removed, so
+        cards with the same effective state compare and serialize identically."""
+        count = max(0, self.counters.get(name, 0) + delta)
+        if count:
+            self.counters[name] = count
+        else:
+            self.counters.pop(name, None)
 
     def set_note(self, text: str | None) -> None:
         object.__setattr__(self, "note", text or None)

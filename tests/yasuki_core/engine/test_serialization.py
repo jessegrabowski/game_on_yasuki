@@ -120,6 +120,15 @@ def test_card_subclass_and_typed_fields_survive_round_trip():
         assert type(rebuilt) is type(card)  # the concrete subclass, not bare L5RCard
 
 
+def test_card_counters_survive_a_json_round_trip():
+    personality = DynastyPersonality(
+        id="dp2", name="Magistrate", side=Side.DYNASTY, counters={"wealth": 2, "honor": 1}
+    )
+    rebuilt = decode_card(json.loads(json.dumps(encode_card(personality))))
+    assert rebuilt == personality
+    assert rebuilt.counters == {"wealth": 2, "honor": 1}
+
+
 def test_nested_back_face_survives_round_trip():
     back = StrongholdCard(id="kk__back", name="Defiled", side=Side.STRONGHOLD, starting_honor=8)
     front = StrongholdCard(

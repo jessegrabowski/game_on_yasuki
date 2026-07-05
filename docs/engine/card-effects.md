@@ -24,7 +24,7 @@ machinery they need**, which drives the phasing:
 
 | Tier | Mechanic | ~Count | Examples | Status |
 |------|----------|--------|----------|--------|
-| **A. Wealth tokens** | effective GP = printed + `+1GP` counters on the card | ~10 | Caravansary, Rice Farm, Sapphire Mine | **deferred** — needs a counter/attachment + stat-change model |
+| **A. Wealth tokens** | effective GP = printed + `+1GP` counters on the card | ~10 | Caravansary, Rice Farm, Sapphire Mine | **state + math done** — `counters` on the card, wealth summed by the dispatcher; placing-triggers deferred |
 | **B. State-conditional** | base + bonus while a predicate over live state *or the target* holds | ~9 | Ancestral Estate, Dockside Market, Tanuki Band, Jade Works | **done** (Ancestral/Dockside/Jade Works) |
 | **C. Modal** | a genuine player-chosen bow-mode | 0–1 | Basecamp (re-verify) | likely a phantom — see note below |
 | **D. Pre-bow pump** | player may boost before bowing, at a cost | 2 | Outlying Farms, Zokujin Burrows | deferred — player choice |

@@ -29,6 +29,29 @@ def test_card_face_up_down_and_flip():
     assert c.face_up is True
 
 
+def test_adjust_counter_accumulates_floors_at_zero_and_drops_the_key():
+    c = L5RCard(id="c4", name="Farm", side=Side.DYNASTY)
+    assert c.counters == {}
+
+    c.adjust_counter("wealth", 2)
+    assert c.counters == {"wealth": 2}
+
+    c.adjust_counter("wealth", -1)
+    assert c.counters == {"wealth": 1}
+
+    # Removing past zero floors at zero and drops the key, keeping the dict canonical for equality.
+    c.adjust_counter("wealth", -5)
+    assert c.counters == {}
+
+
+def test_counters_participate_in_card_equality():
+    # A replay must detect counter drift, so counters compare (unlike note/art_swap, which don't).
+    plain = L5RCard(id="c5", name="Farm", side=Side.DYNASTY)
+    tokened = L5RCard(id="c5", name="Farm", side=Side.DYNASTY)
+    tokened.adjust_counter("wealth", 1)
+    assert plain != tokened
+
+
 def test_card_invert_and_uninvert():
     c = L5RCard(id="c3", name="Rot", side=Side.FATE)
     assert c.inverted is False

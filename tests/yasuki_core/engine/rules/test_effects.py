@@ -205,3 +205,22 @@ def test_jade_works_produces_its_base_with_no_target():
     game = _game()
     works = _put(game, _jade_works(PlayerId.P1))
     assert effective_gold_production(game, works) == 3
+
+
+def test_wealth_counters_raise_printed_production():
+    game = _game()
+    # A Rice-Farm-style holding: printed 0, so only its Wealth tokens make it a producer at all.
+    farm = _put(game, _holding(PlayerId.P1, "P1-farm", gold_production=0))
+    assert effective_gold_production(game, farm) == 0
+
+    farm.adjust_counter("wealth", 2)
+    assert effective_gold_production(game, farm) == 2
+
+
+def test_wealth_counters_stack_on_a_handler_card():
+    game = _game()
+    estate = _put(game, _ancestral_estate(PlayerId.P1))
+    _put(game, _stronghold(PlayerId.P1, 4))
+    _put(game, _stronghold(PlayerId.P2, 5))  # the handler's out-produced condition grants +1
+    estate.adjust_counter("wealth", 1)
+    assert effective_gold_production(game, estate) == 5  # printed 3 + conditional 1 + wealth 1

@@ -128,6 +128,8 @@ def _encode_value(value):
         return {"__tuple__": [_encode_value(item) for item in value]}
     if isinstance(value, frozenset):
         return {"__frozenset__": [_encode_value(item) for item in value]}
+    if isinstance(value, dict):
+        return {"__dict__": {key: _encode_value(item) for key, item in value.items()}}
     if isinstance(value, L5RCard):
         return {"__card__": encode_card(value)}
     raise TypeError(f"cannot serialize card field of type {type(value).__name__}")
@@ -143,6 +145,8 @@ def _decode_value(value):
             return tuple(_decode_value(item) for item in value["__tuple__"])
         if "__frozenset__" in value:
             return frozenset(_decode_value(item) for item in value["__frozenset__"])
+        if "__dict__" in value:
+            return {key: _decode_value(item) for key, item in value["__dict__"].items()}
         if "__card__" in value:
             return decode_card(value["__card__"])
     return value

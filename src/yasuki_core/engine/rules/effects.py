@@ -61,6 +61,9 @@ def opposing_states(game: GameState, seat: PlayerId) -> tuple[PlayerState, ...]:
 GoldHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...], tuple[L5RCard, ...]], int]
 GOLD_HANDLERS: dict[str, GoldHandler] = {}
 
+# The counter that raises its host's gold production by one per count (a "+1GP Wealth token").
+WEALTH_COUNTER = "wealth"
+
 
 def gold_handler(printed_id: str) -> Callable[[GoldHandler], GoldHandler]:
     """Register the decorated function as the gold-production handler for ``printed_id``."""
@@ -77,7 +80,7 @@ def effective_gold_production(
 ) -> int:
     """The gold ``card`` produces right now: its registered handler's result against the live views,
     or its printed ``gold_production`` (0 for a card that produces none) when no handler is
-    registered.
+    registered — plus one gold per wealth counter on the card.
 
     Parameters
     ----------
@@ -91,8 +94,12 @@ def effective_gold_production(
     """
     handler = GOLD_HANDLERS.get(card.printed_id)
     if handler is None:
-        return getattr(card, "gold_production", 0)
-    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner), targets)
+        base = getattr(card, "gold_production", 0)
+    else:
+        base = handler(
+            card, player_state(game, card.owner), opposing_states(game, card.owner), targets
+        )
+    return base + card.counters.get(WEALTH_COUNTER, 0)
 
 
 # Per-card gold-production handlers, registered on import of this module. The read-sites already
