@@ -186,11 +186,12 @@ def _jade_works(seat):
     )
 
 
-def test_jade_works_produces_five_when_paying_for_a_jade_card():
+def test_jade_works_adds_two_when_paying_for_a_jade_card():
     game = _game()
     works = _put(game, _jade_works(PlayerId.P1))
     jade_target = _holding(PlayerId.P1, "a-jade-card", keywords=("Jade",))
-    assert effective_gold_production(game, works, targets=(jade_target,)) == 5
+    produced = effective_gold_production(game, works, targets=(jade_target,))
+    assert produced == works.gold_production + 2
 
 
 def test_jade_works_produces_its_base_for_a_non_jade_card():
