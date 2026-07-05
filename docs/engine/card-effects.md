@@ -181,6 +181,14 @@ non-pooling excess), Tiers D/E.
 
 ## 8. Open forks (not blocking Phase 1)
 
+- **Wealth-counter universality.** Audited across the DB: every Shattered-Empire-legal grant is
+  templated "+1GP Wealth token" and no SE-legal holding hosts one without the bonus, so the
+  dispatcher adds the wealth sum unconditionally — there is no per-card opt-out. The known future
+  exception is pre-SE bank-style cards (Moneylender: tokens cash out by *removal*, no passive GP);
+  older "Produce N plus 1 Gold for each Wealth token" texts (Estate Halls, The Mikado) are just old
+  wording of the universal rule. If those arcs come into scope, the dispatcher needs an opt-out or
+  handler-owned counter math.
+
 - **Handler module layout.** Where `GOLD_HANDLERS` / helpers live, and how handlers organise as the
   pool grows (by set? by effect hook? one registry vs per-hook registries). Start with one module;
   split when it chafes.
