@@ -752,6 +752,15 @@ cards:
   collector_number: '104'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+  errata:
+  - date: 2026-07-01
+    source: Onyx Lives July 2026 Errata
+    source_url: https://sites.google.com/view/the-onyx-lives-project/home/july-2026-errata
+    text: 'You may not include Ring of Air in your deck. This Ring does not count towards an Enlightenment
+      Victory.<br><b>Open:</b> If each player controls three or more bowed Personalities, put this Ring
+      into play and lose 3 Honor.<br><b>Open, :bow::</b> If it is your turn, bow a target Personality.
+      They will not straighten until after their controllers'' next Action Phase begins.'
+    art: dark_ring_of_air_experienced__errata_2026_07.jpg
 - title: Dark Ring of Earth
   types:
   - Ring
@@ -780,6 +789,16 @@ cards:
   collector_number: '105'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+  errata:
+  - date: 2026-07-01
+    source: Onyx Lives July 2026 Errata
+    source_url: https://sites.google.com/view/the-onyx-lives-project/home/july-2026-errata
+    text: 'You may not include Ring of Earth in your deck. This Ring does not count towards an Enlightenment
+      Victory.<br><b>Open:</b> If there are 6 or fewer total Provinces among all players, put this Ring
+      into play and lose 3 Honor.<br><b>Battle, :bow::</b> If you are the Defender and the current attacking
+      army has 9 or less total Chi, reduce the current Province''s strength to 0 to move home all units
+      in that army, bowing them as they move.'
+    art: dark_ring_of_earth_experienced__errata_2026_07.jpg
 - title: Dark Ring of Fire
   types:
   - Ring
@@ -808,6 +827,16 @@ cards:
   collector_number: '106'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+  errata:
+  - date: 2026-07-01
+    source: Onyx Lives July 2026 Errata
+    source_url: https://sites.google.com/view/the-onyx-lives-project/home/july-2026-errata
+    text: 'You may not include Ring of Fire in your deck. This Ring does not count towards an Enlightenment
+      Victory.<br><b>Battle/Open:</b> If two or more Personalities have been destroyed this phase by their
+      controller''s actions, put this Ring into play and lose 3 Honor.<br><b>Response, :bow::</b> If the
+      action bowed a Personality at a battlefield, destroy a target card without attachments in the Personality''s
+      unit.'
+    art: dark_ring_of_fire_experienced__errata_2026_07.jpg
 - title: Dark Ring of Water
   types:
   - Ring
@@ -838,6 +867,15 @@ cards:
   collector_number: '108'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+  errata:
+  - date: 2026-07-01
+    source: Onyx Lives July 2026 Errata
+    source_url: https://sites.google.com/view/the-onyx-lives-project/home/july-2026-errata
+    text: 'You may not include Ring of Water in your deck. This Ring does not count towards an Enlightenment
+      Victory.<br><b>Dynasty:</b> If you won a battle this turn during which you resolved no printed actions
+      from your cards and the Province was destroyed, put this Ring into play and lose 3 Honor.<br><b>Battle/Open,
+      :bow::</b> Negate the effects of actions from Strategies taken between now and the end of the phase.'
+    art: dark_ring_of_water_experienced__errata_2026_07.jpg
 - title: Dark Ring of the Void
   types:
   - Ring
@@ -865,6 +903,15 @@ cards:
   collector_number: '107'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+  errata:
+  - date: 2026-07-01
+    source: Onyx Lives July 2026 Errata
+    source_url: https://sites.google.com/view/the-onyx-lives-project/home/july-2026-errata
+    text: 'You may not include Ring of the Void in your deck. This Ring does not count towards an Enlightenment
+      Victory.<br><b>Open:</b> If this is the only card in your hand when announcing this action, put this
+      Ring into play and lose 3 Honor.<br><b>Open, :bow::</b> Banish two cards in your discard pile to
+      make a target player discard a card from their hand at random.'
+    art: dark_ring_of_the_void_experienced__errata_2026_07.jpg
 - title: Dark Vanguard
   types:
   - Follower

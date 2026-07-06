@@ -6416,11 +6416,11 @@ cards:
   - Dynasty
   keywords:
   - Kharmic
-  text: After a player gains Honor, or any of his opponents lose Honor from the rulebook or cards they
-    do not own, give him an equal number of <b>Influence</b> tokens. A player who begins his turn with
-    50 or more Influence tokens wins the game. This Event will not be discarded from play, nor have its
-    effects prevented. <br><b>Political Open:</b> If no player controls a copy of Political Standoff,
-    put this Event into play.
+  text: 'After you gain Honor, or the player this Event''s ability targeted loses Honor from the rulebook
+    or your effects, gain an equal number of <b>Influence</b> tokens. At the start of your turn, if you
+    have 50 or more <b>Influence</b> tokens, you win the game. This Event will not be discarded from play,
+    nor have its effects prevented.<br><b>Political Dynasty:</b> Target another player. Put this Event
+    into play.'
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -6434,6 +6434,16 @@ cards:
   collector_number: '6'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+  errata:
+  - date: 2026-07-01
+    source: Onyx Lives July 2026 Errata
+    source_url: https://sites.google.com/view/the-onyx-lives-project/home/july-2026-errata
+    text: 'After the player this Event''s ability targeted loses Honor from the rulebook or your effects,
+      or after you gain Honor if the ability targeted no one, gain an equal number of <b>Influence</b>
+      tokens. At the start of your turn, if you have 50 or more <b>Influence</b> tokens, you win the game.
+      This Event will not be discarded from play, nor have its effects prevented.<br><b>Political Dynasty:</b>
+      You may target another player. Put this Event into play.'
+    art: political_standoff__errata_2026_07.jpg
 - title: Poorly Placed Garden
   types:
   - Holding
