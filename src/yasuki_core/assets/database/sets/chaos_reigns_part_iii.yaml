@@ -712,6 +712,14 @@ cards:
   collector_number: '8'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+  errata:
+  - date: 2026-07-01
+    source: Onyx Lives July 2026 Errata
+    source_url: https://sites.google.com/view/the-onyx-lives-project/home/july-2026-errata
+    text: 'This Holding enters play for :g1: less if your Wind is The Kanpeki Dynasty.<br><b>Open:</b>
+      If it is your turn, give your target Personality +1C. If they are honorable, you may bow this Holding
+      to gain 1 Honor; otherwise, rehonor them.'
+    art: fantastic_gardens_of_otosan_uchi__errata_2026_07.jpg
 - id: fight_for_my_favor_2
   title: Fight For My Favor
   types:
@@ -3181,6 +3189,14 @@ cards:
   collector_number: '123'
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
+  errata:
+  - date: 2026-07-01
+    source: Onyx Lives July 2026 Errata
+    source_url: https://sites.google.com/view/the-onyx-lives-project/home/july-2026-errata
+    text: '<b>Open:</b> Dishonor a target Personality. Their controller loses 1 Honor.<br><b>Response:</b>
+      If the action was from or targeted its owner''s dishonorable Personality at this battlefield, target
+      your unbowed Personality to bow that Personality and destroy one of their attachments.'
+    art: what_have_you_done__errata_2026_07.jpg
 - title: With Regards
   types:
   - Strategy
