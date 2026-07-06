@@ -8,7 +8,7 @@ from yasuki_core.engine.snapshot import (
     decode_initial,
 )
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.actions import Action, Pass, Recruit
+from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Pass, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow
 
@@ -200,12 +200,22 @@ def _decode_input(payload: dict) -> GameInput:
 
 
 def _encode_action(action: Action) -> dict:
-    if isinstance(action, Pass):
-        return {"kind": "pass"}
-    return {"kind": "recruit", "card_id": action.card_id}
+    match action:
+        case Pass():
+            return {"kind": "pass"}
+        case Recruit(card_id=card_id):
+            return {"kind": "recruit", "card_id": card_id}
+        case DynastyDiscard(card_id=card_id):
+            return {"kind": "dynasty_discard", "card_id": card_id}
+    raise ValueError(f"no encoding for action {action!r}")
 
 
 def _decode_action(payload: dict) -> Action:
-    if payload["kind"] == "pass":
+    kind = payload["kind"]
+    if kind == "pass":
         return Pass()
-    return Recruit(payload["card_id"])
+    if kind == "recruit":
+        return Recruit(payload["card_id"])
+    if kind == "dynasty_discard":
+        return DynastyDiscard(payload["card_id"])
+    raise ValueError(f"unknown action kind {kind!r}")

@@ -4,7 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneRole
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.rules.state import GameState, Phase
-from yasuki_core.engine.rules.actions import Action, Pass, Recruit
+from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Pass, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow, projection
 from yasuki_core.engine.rules.effects import effective_gold_production
@@ -72,7 +72,18 @@ class EngineSession:
         actions: list[Action] = [Pass()]
         if self.game.phase is Phase.DYNASTY:
             actions.extend(self._recruits(seat))
+            actions.extend(self._dynasty_discards(seat))
         return actions
+
+    def _dynasty_discards(self, seat: PlayerId) -> list[Action]:
+        """A DynastyDiscard for each face-up card in the seat's provinces — the rule allows
+        discarding any face-up province card, not only Holdings."""
+        discards: list[Action] = []
+        for key, zone in self.game.table.zones.items():
+            if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
+                continue
+            discards.extend(DynastyDiscard(card.id) for card in zone.cards if card.face_up)
+        return discards
 
     def _recruits(self, seat: PlayerId) -> list[Action]:
         """The Recruit actions ``seat`` can afford: each face-up Holding in its provinces whose cost

@@ -19,5 +19,18 @@ class Recruit:
     card_id: str
 
 
+@dataclass(frozen=True, slots=True)
+class DynastyDiscard:
+    """Discard a face-up card from one of your provinces (Repeatable Dynasty), refilling it.
+
+    Attributes
+    ----------
+    card_id : str
+        The face-up province card to discard.
+    """
+
+    card_id: str
+
+
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
-Action = Pass | Recruit
+Action = Pass | Recruit | DynastyDiscard

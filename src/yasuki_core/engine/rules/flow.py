@@ -4,7 +4,7 @@ from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey, Z
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.pregame import StrongholdCard
-from yasuki_core.engine.rules.actions import Action, Pass, Recruit
+from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Pass, Recruit
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import ResolveRecruit, WorkItem
 from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
@@ -59,6 +59,8 @@ def perform(game: GameState, action: Action) -> None:
             advance(game)
         case Recruit(card_id=card_id):
             recruit(game, card_id)
+        case DynastyDiscard(card_id=card_id):
+            dynasty_discard(game, card_id)
 
 
 def produce_gold(game: GameState, card_id: str, amount: int) -> None:
@@ -198,6 +200,18 @@ def _resolve_recruit(game: GameState, seat: PlayerId, card_id: str) -> None:
     if province is not None:
         ops.fill_province(game.table, seat, province)
     triggers.fire(game, EnteredPlay(card_id))
+
+
+def dynasty_discard(game: GameState, card_id: str) -> None:
+    """Discard a face-up province card to its owner's dynasty discard and refill the province — the
+    Dynasty Discard action. It has no cost, so it resolves at once with no payment."""
+    card = game.table.cards_by_id[card_id]
+    seat = card.owner
+    province = _province_of(game, seat, card_id)
+    ops.move_card(game.table, card, ZoneKey(seat, ZoneRole.DYNASTY_DISCARD))
+    if province is not None:
+        ops.fill_province(game.table, seat, province)
+    triggers.fire(game, CardDiscarded(card_id, card.side, seat))
 
 
 def _end_turn(game: GameState) -> None:

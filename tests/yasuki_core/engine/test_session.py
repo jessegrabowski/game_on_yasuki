@@ -8,7 +8,7 @@ from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import Pass, Recruit
+from yasuki_core.engine.rules.actions import DynastyDiscard, Pass, Recruit
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
@@ -171,6 +171,69 @@ def test_recruit_pays_then_brings_the_holding_into_play_bowed_and_refills():
     # The face-down refill is not recruitable until it is revealed next turn.
     assert Recruit("P1-refill") not in session.legal_actions(PlayerId.P1)
     assert game.pending is None and not game.stack
+
+
+def test_dynasty_discard_is_offered_for_any_face_up_province_card_in_dynasty():
+    state = _dealt_table()
+    _holding_in_province(state, "P1-junk", gold_cost=9)  # too expensive to recruit
+    person = _register(
+        state,
+        DynastyPersonality(
+            id="P1-person", name="Hero", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=0
+        ),
+    )
+    person.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(person)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 1)] = province
+    session = EngineSession.start(state, PlayerId.P1)
+
+    assert DynastyDiscard("P1-junk") not in session.legal_actions(PlayerId.P1)  # Action phase
+    _in_dynasty(session)
+    actions = session.legal_actions(PlayerId.P1)
+    assert (
+        DynastyDiscard("P1-junk") in actions
+    )  # a Holding too expensive to recruit is still discardable
+    assert DynastyDiscard("P1-person") in actions  # a Personality is discardable, not recruitable
+    assert Recruit("P1-person") not in actions
+
+
+def test_dynasty_discard_moves_the_card_to_the_discard_and_refills():
+    state = _dealt_table()
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        _register(
+            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+        )
+    ]
+    _holding_in_province(state, "P1-junk", gold_cost=9)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+
+    session.act(PlayerId.P1, DynastyDiscard("P1-junk"))
+
+    game = session.game
+    discard = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
+    assert game.table.cards_by_id["P1-junk"] in discard
+    refilled = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
+    assert [card.id for card in refilled] == ["P1-refill"] and not refilled[0].face_up
+    assert game.pending is None and not game.stack  # no cost, resolves at once
+
+
+def test_dynasty_discard_survives_a_replay():
+    state = _dealt_table()
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        _register(
+            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+        )
+    ]
+    _holding_in_province(state, "P1-junk", gold_cost=9)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+    session.act(PlayerId.P1, DynastyDiscard("P1-junk"))
+
+    replayed = session.log.replay()
+    discard = replayed.table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
+    assert any(card.id == "P1-junk" for card in discard)
 
 
 def test_jade_works_funds_and_pays_a_jade_recruit_at_its_premium_rate():

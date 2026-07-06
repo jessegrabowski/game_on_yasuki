@@ -23,6 +23,7 @@ from yasuki_core.engine.rules.log import (
     replay,
     game_log_to_dict,
     game_log_from_dict,
+    _decode_action,
 )
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 
@@ -169,3 +170,9 @@ def test_replay_rejects_a_desynced_tape():
     )
     with pytest.raises(ValueError, match="out of step"):
         replay(log)
+
+
+def test_decode_action_rejects_an_unknown_kind():
+    # A malformed log must fail loudly, not silently mis-decode as some default action.
+    with pytest.raises(ValueError):
+        _decode_action({"kind": "bogus"})
