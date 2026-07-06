@@ -84,6 +84,43 @@ def load_print_images(images_dir: Path, dsn: str) -> None:
     )
 
 
+def apply_errata_art(dsn: str) -> None:
+    """Point each errata'd printing's front image at its current errata render (matched by set slug),
+    so every art surface resolves the latest version. Preserve the pre-errata front on the card's
+    revision 0 for the compare view.
+    """
+    with psycopg.connect(dsn) as conn, conn.cursor() as cur:
+        cur.execute(
+            """
+            SELECT p.print_id, p.card_id, front.path, cr.image_path
+            FROM prints p
+            JOIN l5r_sets s ON s.set_id = p.set_id
+            JOIN print_images front
+                ON front.print_id = p.print_id AND front.role = 'front' AND front.size = 'master'
+            JOIN LATERAL (
+                SELECT image_path FROM card_revisions
+                WHERE card_id = p.card_id AND split_part(image_path, '/', 2) = s.set_slug
+                ORDER BY revision_index DESC
+                LIMIT 1
+            ) cr ON TRUE
+            """
+        )
+        printings = cur.fetchall()
+        for print_id, card_id, original_path, errata_path in printings:
+            cur.execute(
+                "UPDATE card_revisions SET image_path = %s "
+                "WHERE card_id = %s AND revision_index = 0 AND image_path IS NULL",
+                (original_path, card_id),
+            )
+            cur.execute(
+                "UPDATE print_images SET path = %s "
+                "WHERE print_id = %s AND role = 'front' AND size = 'master'",
+                (errata_path, print_id),
+            )
+        conn.commit()
+    logger.info("Applied errata art to %d printing(s)", len(printings))
+
+
 def seed_card_backs(dsn: str) -> None:
     """Seed the five generic card backs (Fate/Dynasty × old/new, plus the Dynasty token back)."""
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:

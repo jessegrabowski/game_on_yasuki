@@ -90,6 +90,7 @@ class Installer:
             yaml_to_sql.load_cards(self.cfg.cards_path, self.cfg.dsn)
             logger.info("Loading print images")
             images_to_sql.load_print_images(self.cfg.images_path, self.cfg.dsn)
+            images_to_sql.apply_errata_art(self.cfg.dsn)
             images_to_sql.seed_card_backs(self.cfg.dsn)
         else:
             logger.info("Skipping card import")
