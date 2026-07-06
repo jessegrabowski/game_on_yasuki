@@ -115,6 +115,28 @@
 .rules p {
   margin: 0 0 0.7em;
 }
+
+/* Errata affordance: sits under the art-version arrows and opens the revision comparison. */
+.errata {
+  margin-top: 12px;
+  text-align: center;
+}
+.errata[hidden] {
+  display: none;
+}
+.errata-badge {
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 4px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  background: var(--paper-2);
+  color: var(--accent);
+  cursor: pointer;
+}
+.errata-badge:hover {
+  background: var(--paper);
+}
 .flavor {
   font-family: 'EB Garamond', Georgia, serif;
   font-style: italic;
@@ -266,5 +288,153 @@
   .card-art {
     position: static;
     max-width: 360px;
+  }
+}
+
+/* Revision comparison: a modal overlay — previous art | unified GitHub-style diff (old → current) |
+   current art. */
+.compare {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4vh 3vw;
+  background: rgba(13, 10, 7, 0.8);
+}
+.compare[hidden] {
+  display: none;
+}
+.compare-panel {
+  position: relative;
+  width: 100%;
+  max-width: 1100px;
+  max-height: 92vh;
+  overflow: auto;
+  background: var(--paper-2);
+  border-radius: 12px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.6);
+  padding: 40px 24px 24px;
+}
+.compare-close {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.compare-close:hover {
+  color: var(--accent);
+}
+.compare-grid {
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) minmax(280px, 2.2fr) minmax(150px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+.compare-side {
+  margin: 0;
+  text-align: center;
+}
+.compare-img {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 8px;
+}
+.compare-src {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--accent);
+  text-decoration: none;
+}
+.compare-src:hover {
+  text-decoration: underline;
+}
+.compare-src[hidden] {
+  display: none;
+}
+/* One fixed header height across all three columns (text caption, select, diff label) so the images
+   below them start at the same Y and line up. */
+.compare-cap,
+.compare-diff-head {
+  display: flex;
+  align-items: center;
+  height: 34px;
+  margin-bottom: 8px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.compare-cap {
+  justify-content: center;
+}
+.compare-arrow {
+  color: var(--accent);
+  margin: 0 4px;
+}
+.compare-diff-body {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.02rem;
+  line-height: 1.5;
+}
+.diff-row {
+  display: flex;
+  gap: 8px;
+  padding: 2px 10px;
+  white-space: pre-wrap;
+}
+.diff-gutter {
+  flex: 0 0 1ch;
+  color: var(--muted);
+  user-select: none;
+  text-align: center;
+}
+.diff-text {
+  flex: 1;
+}
+.diff-row.del {
+  background: rgba(170, 50, 50, 0.1);
+}
+.diff-row.ins {
+  background: rgba(60, 140, 70, 0.12);
+}
+.diff-row.del .diff-gutter {
+  color: rgba(170, 50, 50, 0.9);
+}
+.diff-row.ins .diff-gutter {
+  color: rgba(50, 130, 60, 0.95);
+}
+.diff-row.del .chg {
+  background: rgba(170, 50, 50, 0.28);
+  border-radius: 3px;
+}
+.diff-row.ins .chg {
+  background: rgba(60, 140, 70, 0.3);
+  border-radius: 3px;
+}
+.compare-select {
+  font: inherit;
+  font-size: 0.75rem;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  padding: 2px 6px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+@media (max-width: 820px) {
+  .compare-grid {
+    grid-template-columns: 1fr;
   }
 }
