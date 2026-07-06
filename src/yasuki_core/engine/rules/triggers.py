@@ -1,12 +1,18 @@
 from collections.abc import Callable
 from dataclasses import dataclass
 
+from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.events import CardDiscarded, GameEvent, TurnStarted
+from yasuki_core.engine.rules.events import CardDiscarded, CounterGained, GameEvent, TurnStarted
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter, WEALTH
+from yasuki_core.game_pieces.dynasty import DynastyHolding
+
+# A sanity bound on the fixpoint walk: a converging cascade drains in a handful of events, so far
+# more than this means a trigger re-emits an event that re-fires it — a card-logic bug, raised loudly.
+_MAX_CASCADE = 1000
 
 
 @dataclass(frozen=True, slots=True)
@@ -20,7 +26,14 @@ class AdjustCounter:
     delta: int
 
 
-Effect = AdjustCounter
+@dataclass(frozen=True, slots=True)
+class DrawCard:
+    """Effect: ``seat`` draws a card from its fate deck."""
+
+    seat: PlayerId
+
+
+Effect = AdjustCounter | DrawCard
 
 
 @dataclass(frozen=True, slots=True)
@@ -60,15 +73,28 @@ def caused_by(ctx: TriggerContext, seat: PlayerId) -> bool:
     return ctx.event.by_seat is seat
 
 
+def once_per_turn(game: GameState, card: L5RCard, tag: str) -> bool:
+    """Claim a once-per-turn use for ``card``'s ``tag``: True the first time this turn, then False.
+    Turn-scoped, so it resets each turn without clearing ``GameState.once_per``."""
+    return game.use_once(f"{card.id}:{tag}:t{game.turn}")
+
+
 def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
-    """Commit one effect to the game and return the events it raises, for the fixpoint walk to drain.
-    This is the single mutation boundary; triggers themselves never mutate."""
+    """Commit one effect and return the events it raises, for the fixpoint walk to drain. This is the
+    single mutation boundary; triggers themselves never mutate."""
     match effect:
         case AdjustCounter(card_id=card_id, counter=counter, delta=delta):
             card = game.table.cards_by_id.get(card_id)
-            if card is not None:
-                card.adjust_counter(counter.key, delta)
-    return []  # no derived events yet; CounterGained arrives with the first card that reacts to it
+            if card is None:
+                return []
+            before = card.counters.get(counter.key, 0)
+            card.adjust_counter(counter.key, delta)
+            gained = card.counters.get(counter.key, 0) - before
+            if gained > 0:
+                return [CounterGained(card_id, counter, gained)]
+        case DrawCard(seat=seat):
+            ops.draw_to_hand(game.table, seat)
+    return []
 
 
 def _collect(game: GameState, event: GameEvent) -> list[tuple[L5RCard, Trigger]]:
@@ -92,7 +118,11 @@ def fire(game: GameState, event: GameEvent) -> None:
     cards whose trigger subscribes to the event, resolve each in a canonical order (controller, then
     id), and apply the effects they return — whose own derived events re-enter the worklist."""
     queue: list[GameEvent] = [event]
+    resolved = 0
     while queue:
+        resolved += 1
+        if resolved > _MAX_CASCADE:
+            raise RuntimeError(f"trigger cascade did not converge after {_MAX_CASCADE} events")
         current = queue.pop(0)
         firing = _collect(game, current)
         firing.sort(key=_canonical_order)
@@ -120,3 +150,16 @@ def _caravansary(ctx: TriggerContext) -> list[Effect]:
     if at_cap(ctx.card, WEALTH, 3):
         return []
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+@on(CounterGained, "shosuro_aoki_yoritomo_kayoko_experienced")
+def _shosuro_aoki(ctx: TriggerContext) -> list[Effect]:
+    """After your Holding gains any Wealth tokens, once per turn, draw a card."""
+    if ctx.event.counter is not WEALTH:
+        return []
+    gainer = ctx.game.table.cards_by_id.get(ctx.event.card_id)
+    if not isinstance(gainer, DynastyHolding) or gainer.owner is not ctx.card.owner:
+        return []
+    if not once_per_turn(ctx.game, ctx.card, "aoki_draw"):
+        return []
+    return [DrawCard(ctx.card.owner)]

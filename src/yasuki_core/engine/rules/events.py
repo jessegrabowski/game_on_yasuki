@@ -2,6 +2,7 @@ from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.counters import Counter
 
 
 @dataclass(frozen=True, slots=True)
@@ -21,4 +22,13 @@ class CardDiscarded:
     by_seat: PlayerId
 
 
-GameEvent = TurnStarted | CardDiscarded
+@dataclass(frozen=True, slots=True)
+class CounterGained:
+    """A card gained ``amount`` of a counter — the actual number added, after any floor."""
+
+    card_id: str
+    counter: Counter
+    amount: int
+
+
+GameEvent = TurnStarted | CardDiscarded | CounterGained

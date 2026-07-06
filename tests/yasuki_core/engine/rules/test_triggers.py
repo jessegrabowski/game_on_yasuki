@@ -4,9 +4,9 @@ from yasuki_core.engine.rules.effects import effective_gold_production
 from yasuki_core.engine.rules.events import CardDiscarded, TurnStarted
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.triggers import fire
-from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.fate import FateCard
 
 
@@ -150,3 +150,80 @@ def test_flow_emits_the_discard_event_from_the_end_of_turn_discard():
     flow._apply_discard(game, PlayerId.P1, ("P1-f",))
 
     assert caravansary.counters == {"wealth": 1}
+
+
+def _aoki(game, seat=PlayerId.P1, card_id="P1-aoki"):
+    aoki = DynastyPersonality(
+        id=card_id,
+        printed_id="shosuro_aoki_yoritomo_kayoko_experienced",
+        name="Shosuro Aoki",
+        side=Side.DYNASTY,
+        owner=seat,
+    )
+    game.table.cards_by_id[aoki.id] = aoki
+    game.table.battlefield.add(aoki)
+    return aoki
+
+
+def _seed_fate_deck(game, seat, count):
+    deck = game.table.decks[DeckKey(seat, Side.FATE)]
+    deck.cards = [
+        FateCard(id=f"{seat.name}-fd{i}", name="F", side=Side.FATE, owner=seat)
+        for i in range(count)
+    ]
+    for card in deck.cards:
+        game.table.cards_by_id[card.id] = card
+
+
+def _hand_size(game, seat):
+    return len(game.table.zones[ZoneKey(seat, ZoneRole.HAND)].cards)
+
+
+def test_gaining_wealth_cascades_into_aokis_draw():
+    # The cascade: turn start -> Rice Farm gains wealth -> CounterGained -> Aoki draws a card.
+    game = _game()
+    _rice_farm(game)
+    _aoki(game)
+    _seed_fate_deck(game, PlayerId.P1, 3)
+    assert _hand_size(game, PlayerId.P1) == 0
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert _hand_size(game, PlayerId.P1) == 1
+
+
+def test_aoki_draws_at_most_once_per_turn():
+    game = _game()
+    _rice_farm(game, card_id="P1-farm-a")
+    _rice_farm(game, card_id="P1-farm-b")  # two wealth gains in one turn
+    _aoki(game)
+    _seed_fate_deck(game, PlayerId.P1, 3)
+
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert _hand_size(game, PlayerId.P1) == 1  # two CounterGained events, one draw
+
+
+def test_aoki_draws_again_on_the_next_turn():
+    # The once-per-turn claim is turn-scoped: a fresh turn re-arms Aoki's draw.
+    game = _game()
+    _rice_farm(game)
+    _aoki(game)
+    _seed_fate_deck(game, PlayerId.P1, 3)
+
+    fire(game, TurnStarted(PlayerId.P1))
+    game.turn += 1
+    fire(game, TurnStarted(PlayerId.P1))
+
+    assert _hand_size(game, PlayerId.P1) == 2
+
+
+def test_aoki_ignores_wealth_gained_on_an_opponents_holding():
+    game = _game()
+    _aoki(game, seat=PlayerId.P1)
+    _rice_farm(game, seat=PlayerId.P2, card_id="P2-farm")
+    _seed_fate_deck(game, PlayerId.P1, 3)
+
+    fire(game, TurnStarted(PlayerId.P2))  # P2's farm gains wealth — not Aoki's Holding
+
+    assert _hand_size(game, PlayerId.P1) == 0
