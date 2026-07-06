@@ -407,6 +407,40 @@ def get_prints_by_card_id(card_id: str) -> list[dict]:
             return cur.fetchall()
 
 
+def get_card_revisions(card_id: str) -> list[dict]:
+    """
+    Fetch a card's rules-text revision history, oldest first.
+
+    Only errata'd cards have rows; an unerrata'd card returns an empty list. Revision 0 is the
+    original printing text and the highest index is the current version (also mirrored onto the cards
+    row). This backs the card page's errata badge and "what did it used to say" history.
+
+    Parameters
+    ----------
+    card_id : str
+        Card ID.
+
+    Returns
+    -------
+    revisions : list of dict
+        Revisions ordered by revision_index, each with its effective_date, source, rules_text, stats,
+        image_path, and notes.
+    """
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """
+                SELECT revision_index, effective_date, source, source_url, rules_text, stats,
+                       image_path, notes
+                FROM card_revisions
+                WHERE card_id = %s
+                ORDER BY revision_index
+                """,
+                (card_id,),
+            )
+            return cur.fetchall()
+
+
 def get_cards_by_names(names: list[str]) -> list[dict]:
     """
     Fetch cards matching a list of names, including their prints.
