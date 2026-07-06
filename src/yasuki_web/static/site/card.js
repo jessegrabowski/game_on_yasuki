@@ -26,6 +26,8 @@ let imgBase = '/images';
 let card = null;
 let back = null; // the other face of a double-faced card, if any
 let prints = [];
+let revisions = []; // errata history, oldest first; empty for cards never errata'd
+let errataPrint = null; // the printing an errata was issued for, if any
 let index = 0;
 let flipped = false;
 
@@ -46,10 +48,13 @@ function renderArt() {
   const print = prints[index];
   const hasBack = !!print?.back_image_path;
   const showingBack = flipped && hasBack;
+  // A printing that carries an errata shows the errata render as its front; the pre-errata art stays
+  // on image_path for the old/new comparison.
+  const frontPath = print?.errata_image_path || print?.image_path;
   const src = showingBack
     ? `${imgBase}/${print.back_image_path}`
-    : print?.image_path
-      ? `${imgBase}/${print.image_path}`
+    : frontPath
+      ? `${imgBase}/${frontPath}`
       : fallbackSrc(card, imgBase) || '';
 
   const img = $('cardArt');
@@ -135,8 +140,9 @@ function renderInfo() {
 function renderPrints() {
   $('printsList').innerHTML = prints
     .map((p, i) => {
-      const thumb = p.image_path
-        ? `<img src="${esc(`${imgBase}/${p.image_path}`)}" alt="" loading="lazy">`
+      const thumbPath = p.errata_image_path || p.image_path;
+      const thumb = thumbPath
+        ? `<img src="${esc(`${imgBase}/${thumbPath}`)}" alt="" loading="lazy">`
         : '<span class="print-thumb-empty"></span>';
       const rarity = p.rarity ? `<span class="print-rarity">${esc(p.rarity)}</span>` : '';
       return (
@@ -149,12 +155,107 @@ function renderPrints() {
     .join('');
 }
 
+// Set up the compare control once. Its visibility is per-printing (see refreshCompareButton): the
+// errata was issued for one printing, so the button shows only when that printing is selected.
+function setupCompare() {
+  if (revisions.length < 2) return;
+  $('compareBtn').textContent = 'Compare revisions';
+
+  // Prior revisions, newest first, so the default selection is the change immediately before current.
+  $('compareSelect').innerHTML = revisions
+    .slice(0, -1)
+    .reverse()
+    .map((rev) => `<option value="${rev.revision_index}">${esc(revLabel(rev))}</option>`)
+    .join('');
+}
+
+function refreshCompareButton() {
+  $('cardErrata').hidden = !prints[index]?.errata;
+}
+
+function revLabel(rev) {
+  if (!rev.effective_date) return 'Original printing';
+  return rev.source ? `${rev.effective_date} · ${rev.source}` : rev.effective_date;
+}
+
+function currentLabel() {
+  const current = revisions[revisions.length - 1];
+  return current.effective_date ? `Current · ${current.effective_date}` : 'Current';
+}
+
+// Point a revision's announcement link at its source_url, or hide it when the revision has none
+// (e.g. the original printing).
+function setSrcLink(id, rev) {
+  const el = $(id);
+  if (rev.source_url) {
+    el.href = rev.source_url;
+    el.textContent = `${rev.source || 'Errata announcement'} ↗`;
+    el.hidden = false;
+  } else {
+    el.removeAttribute('href');
+    el.hidden = true;
+  }
+}
+
+// A revision's own render, else the printing's art: its errata render for the current revision, its
+// pre-errata art for an older one.
+function revImgSrc(rev) {
+  const path =
+    rev.image_path ||
+    (rev === revisions[revisions.length - 1]
+      ? errataPrint?.errata_image_path || errataPrint?.image_path
+      : errataPrint?.image_path);
+  return path ? `${imgBase}/${path}` : fallbackSrc(card, imgBase) || '';
+}
+
+// Render the API's unified diff rows (old→current) as a single-column GitHub-style patch: context
+// lines plain, removed lines with a − gutter, added lines with a +, and the words that actually
+// changed within a line highlighted.
+function renderUnified(rows) {
+  return rows
+    .map((row) => {
+      const gutter = row.type === 'del' ? '−' : row.type === 'ins' ? '+' : ' ';
+      const body = row.segments
+        .map((s) => (s.kind === 'chg' ? `<span class="chg">${esc(s.text)}</span>` : esc(s.text)))
+        .join('');
+      return (
+        `<div class="diff-row ${row.type}"><span class="diff-gutter">${gutter}</span>` +
+        `<span class="diff-text">${body || ' '}</span></div>`
+      );
+    })
+    .join('');
+}
+
+function renderComparison() {
+  const selIndex = Number($('compareSelect').value);
+  const selected = revisions.find((r) => r.revision_index === selIndex) || revisions[0];
+  $('compareDiffHead').innerHTML =
+    `${esc(revLabel(selected))} <span class="compare-arrow">→</span> ${esc(currentLabel())}`;
+  $('compareDiff').innerHTML = renderUnified(selected.diff || []);
+  $('compareOldImg').src = revImgSrc(selected);
+  setSrcLink('compareOldSrc', selected);
+}
+
+function openCompare() {
+  const current = revisions[revisions.length - 1];
+  $('compareCurCap').textContent = currentLabel();
+  $('compareCurImg').src = revImgSrc(current);
+  setSrcLink('compareCurSrc', current);
+  renderComparison();
+  $('compare').hidden = false;
+}
+
+function closeCompare() {
+  $('compare').hidden = true;
+}
+
 function selectPrint(i, pushUrl = true) {
   index = i;
   flipped = false;
   renderArt();
   renderInfo();
   renderPrints();
+  refreshCompareButton();
   if (pushUrl && prints[index]?.set_slug) {
     history.replaceState(null, '', cardPath(prints[index].set_slug));
   }
@@ -197,15 +298,38 @@ async function init() {
   card = body.card;
   back = body.back || null;
   prints = body.prints || [];
+  revisions = body.revisions || [];
   document.title = `${card.name} — Game on, Yasuki!`;
 
-  const wanted = setSlug ? prints.findIndex((p) => p.set_slug === setSlug) : -1;
+  // The errata render belongs to the printing it was issued for: it becomes that printing's front
+  // (errata_image_path), while its pre-errata art stays on image_path for the old/new comparison.
+  let errataIndex = -1;
+  const current = revisions[revisions.length - 1];
+  if (current?.image_path) {
+    const slug = current.image_path.split('/')[1]; // sets/<slug>/<file>
+    errataIndex = prints.findIndex((p) => p.set_slug === slug);
+    if (errataIndex >= 0) {
+      prints[errataIndex].errata_image_path = current.image_path;
+      prints[errataIndex].errata = true;
+      errataPrint = prints[errataIndex];
+    }
+  }
+  setupCompare();
+
+  // Default to the errata'd printing (the current version) unless the URL asked for a specific set.
+  const wanted = setSlug ? prints.findIndex((p) => p.set_slug === setSlug) : errataIndex;
   $('cardPage').hidden = false;
   selectPrint(wanted >= 0 ? wanted : 0, false);
 
   $('artPrev').addEventListener('click', () => step(-1));
   $('artNext').addEventListener('click', () => step(1));
   $('artFlip').addEventListener('click', toggleFlip);
+  $('compareBtn').addEventListener('click', openCompare);
+  $('compareSelect').addEventListener('change', renderComparison);
+  $('compareClose').addEventListener('click', closeCompare);
+  $('compare').addEventListener('click', (e) => {
+    if (e.target === $('compare')) closeCompare();
+  });
   $('cardArt').addEventListener('click', openZoom);
   $('printsList').addEventListener('click', (e) => {
     const row = e.target.closest('.print-row');
@@ -218,8 +342,12 @@ async function init() {
   $('zoomFlip').addEventListener('click', (e) => (e.stopPropagation(), toggleFlip()));
 
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeZoom();
-    else if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'Escape') {
+      closeZoom();
+      closeCompare();
+    } else if (!$('compare').hidden) {
+      // Comparison open: don't let arrow keys step printings behind it.
+    } else if (e.key === 'ArrowLeft') step(-1);
     else if (e.key === 'ArrowRight') step(1);
     else if (e.key === 'f' || e.key === 'F') toggleFlip();
   });
