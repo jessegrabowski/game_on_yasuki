@@ -61,6 +61,12 @@ def test_player_state_exposes_stronghold_holdings_gold_and_honor():
     assert set(me.in_play) == {sh, market}
 
 
+def test_went_second_is_true_only_for_the_non_first_player():
+    game = _game()  # first_player is P1
+    assert player_state(game, PlayerId.P1).went_second is False
+    assert player_state(game, PlayerId.P2).went_second is True
+
+
 def test_controls_matches_a_keyword_and_can_exclude_a_card():
     game = _game()
     dockside = _put(game, _holding(PlayerId.P1, "P1-dockside", keywords=("Market",)))
@@ -144,19 +150,15 @@ def _ancestral_estate(seat):
     return _holding(seat, f"{seat.name}-estate", printed_id="ancestral_estate", gold_production=3)
 
 
-def test_ancestral_estate_gains_a_gold_when_an_opponent_out_produces():
-    game = _game()
-    estate = _put(game, _ancestral_estate(PlayerId.P1))
-    _put(game, _stronghold(PlayerId.P1, 4))
-    _put(game, _stronghold(PlayerId.P2, 5))  # out-produces P1's 4
+def test_ancestral_estate_gains_a_gold_for_the_second_player():
+    game = _game()  # first_player is P1, so P2 went second
+    estate = _put(game, _ancestral_estate(PlayerId.P2))
     assert effective_gold_production(game, estate) == 4
 
 
-def test_ancestral_estate_stays_at_base_when_no_opponent_out_produces():
+def test_ancestral_estate_stays_at_base_for_the_first_player():
     game = _game()
     estate = _put(game, _ancestral_estate(PlayerId.P1))
-    _put(game, _stronghold(PlayerId.P1, 4))
-    _put(game, _stronghold(PlayerId.P2, 4))  # equal GP ties, so it does not out-produce (strict >)
     assert effective_gold_production(game, estate) == 3
 
 
@@ -224,8 +226,6 @@ def test_wealth_counters_raise_printed_production():
 
 def test_wealth_counters_stack_on_a_handler_card():
     game = _game()
-    estate = _put(game, _ancestral_estate(PlayerId.P1))
-    _put(game, _stronghold(PlayerId.P1, 4))
-    _put(game, _stronghold(PlayerId.P2, 5))  # the handler's out-produced condition grants +1
+    estate = _put(game, _ancestral_estate(PlayerId.P2))  # second player: handler grants +1
     estate.adjust_counter("wealth", 1)
-    assert effective_gold_production(game, estate) == 5  # printed 3 + conditional 1 + wealth 1
+    assert effective_gold_production(game, estate) == 5  # printed 3 + second-player 1 + wealth 1

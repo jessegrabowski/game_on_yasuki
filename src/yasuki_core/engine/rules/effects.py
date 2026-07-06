@@ -19,6 +19,7 @@ class PlayerState:
     in_play: tuple[L5RCard, ...]
     gold: int
     honor: int
+    went_second: bool
 
     @property
     def holdings(self) -> tuple[DynastyHolding, ...]:
@@ -49,6 +50,7 @@ def player_state(game: GameState, seat: PlayerId) -> PlayerState:
         in_play=in_play,
         gold=game.gold[seat],
         honor=game.table.seats[seat].honor,
+        went_second=seat is not game.first_player,
     )
 
 
@@ -110,13 +112,8 @@ def effective_gold_production(
 def _ancestral_estate(
     card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
 ) -> int:
-    """+1 GP while another player's Stronghold out-produces mine."""
-    outproduced = me.stronghold is not None and any(
-        opponent.stronghold is not None
-        and opponent.stronghold.gold_production > me.stronghold.gold_production
-        for opponent in opponents
-    )
-    return card.gold_production + (1 if outproduced else 0)
+    """+1 GP while you are the second player."""
+    return card.gold_production + (1 if me.went_second else 0)
 
 
 @gold_handler("dockside_market")
