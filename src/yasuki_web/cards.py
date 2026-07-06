@@ -8,6 +8,7 @@ from yasuki_core.database import (
     query_random_cards,
     get_card_by_id,
     get_prints_by_card_id,
+    get_card_revisions,
     get_cards_by_names,
     query_all_sets,
     query_formats_ordered,
@@ -18,6 +19,7 @@ from yasuki_core.database import (
     get_card_backs,
 )
 from yasuki_core.card_art import back_era_for_set, classify, load_art_layout
+from yasuki_core.card_diff import unified_diff
 from yasuki_core.search import parse_and_build_query
 from yasuki_web.rate_limit import limiter
 
@@ -177,11 +179,21 @@ async def get_card(
         if card.get("back_card_id"):
             back = await to_thread(get_card_by_id, card["back_card_id"])
 
+        # Errata history, oldest first; empty for cards that were never errata'd. The card's `text` is
+        # already the current revision, so the page shows the latest by default and can walk back.
+        # Each prior revision carries a word-level diff against the current text for the compare view.
+        revisions = await to_thread(get_card_revisions, card_id)
+        if revisions:
+            current_text = revisions[-1]["rules_text"]
+            for rev in revisions[:-1]:
+                rev["diff"] = unified_diff(rev["rules_text"], current_text)
+
         return {
             "card": card,
             "prints": prints,
             "print_count": len(prints),
             "back": back,
+            "revisions": revisions,
         }
 
     except HTTPException:
