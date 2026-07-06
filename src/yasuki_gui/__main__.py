@@ -2,7 +2,7 @@ import logging
 import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Action, Pass, Recruit
+from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
     ChoosePayment,
     DecisionRequest,
@@ -154,14 +154,18 @@ def main() -> None:
         after_human_action()
 
     def on_card_activated(card_id: str) -> None:
-        # A click on a face-up province holding recruits it; producers are clicked during the
-        # ensuing payment, which the selection path handles, not this one.
-        action = next(
-            (a for a in runner.legal_actions() if isinstance(a, Recruit) and a.card_id == card_id),
-            None,
-        )
-        if action is not None:
-            on_action(action)
+        # A left-click on a face-up province card opens its action menu (Recruit / Dynasty Discard);
+        # producers are clicked during the ensuing payment, which the selection path handles.
+        items = runner.province_menu(card_id)
+        if not items:
+            return
+        menu = tk.Menu(root, tearoff=0)
+        for label, action in items:
+            menu.add_command(label=label, command=lambda chosen=action: on_action(chosen))
+        try:
+            menu.tk_popup(root.winfo_pointerx(), root.winfo_pointery())
+        finally:
+            menu.grab_release()
 
     def undo_payment(_event=None) -> None:
         # Ctrl+Z while paying unbows the last producer tapped for gold; no effect otherwise.

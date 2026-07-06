@@ -1,7 +1,8 @@
 from collections.abc import Iterable
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.actions import Action, Pass
+from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Pass, Recruit
 from yasuki_core.engine.rules.agents import Agent, AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse
 from yasuki_core.engine.rules.projection import GameView
@@ -35,6 +36,22 @@ class GameRunner:
     def legal_actions(self) -> list[Action]:
         """Return the actions the human may take right now (empty when it is not their turn)."""
         return self.session.legal_actions(self.human)
+
+    def province_menu(self, card_id: str) -> list[tuple[str, Action]]:
+        """The labeled actions offered for a face-up province card, for its left-click menu: a
+        Recruit (labeled with its gold cost) when affordable, and a Dynasty Discard. Empty when the
+        card offers nothing right now."""
+        game = self.session.game
+        items: list[tuple[str, Action]] = []
+        for action in self.legal_actions():
+            if getattr(action, "card_id", None) != card_id:
+                continue
+            if isinstance(action, Recruit):
+                cost = flow.recruit_cost(game, game.table.cards_by_id[card_id])
+                items.append((f"Recruit: Pay {cost} gold", action))
+            elif isinstance(action, DynastyDiscard):
+                items.append(("Repeatable Dynasty: Discard from province", action))
+        return items
 
     @property
     def is_opponent_turn(self) -> bool:

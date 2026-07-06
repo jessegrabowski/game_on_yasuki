@@ -8,9 +8,31 @@ from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.actions import Pass
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.engine.zones import ProvinceZone
+from yasuki_core.game_pieces.dynasty import DynastyHolding
+from yasuki_core.game_pieces.pregame import StrongholdCard
 from yasuki_gui.rules_runner import GameRunner
 
 PASS = Pass()
+
+
+def _face_up_holding_in_province(state, card_id, gold_cost):
+    holding = _register(
+        state,
+        DynastyHolding(
+            id=card_id, name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=gold_cost
+        ),
+    )
+    holding.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(holding)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+    return holding
+
+
+def _to_dynasty(runner):
+    runner.act(PASS)  # Action -> Attack
+    runner.act(PASS)  # Attack -> Dynasty
 
 
 def _register(state, card):
@@ -110,3 +132,31 @@ def test_runner_inputs_stay_replayable():
     runner.run_opponent()
 
     assert replay(runner.session.log) == runner.session.game
+
+
+def test_province_menu_offers_recruit_with_cost_and_dynasty_discard():
+    state = _dealt_table(0)
+    state.battlefield.add(
+        _register(
+            state,
+            StrongholdCard(
+                id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, gold_production=8
+            ),
+        )
+    )
+    _face_up_holding_in_province(state, "P1-buy", gold_cost=5)
+    runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    _to_dynasty(runner)
+
+    labels = [label for label, _ in runner.province_menu("P1-buy")]
+    assert labels == ["Recruit: Pay 5 gold", "Repeatable Dynasty: Discard from province"]
+
+
+def test_province_menu_drops_recruit_when_it_is_unaffordable():
+    state = _dealt_table(0)
+    _face_up_holding_in_province(state, "P1-buy", gold_cost=9)  # no producer to pay with
+    runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    _to_dynasty(runner)
+
+    labels = [label for label, _ in runner.province_menu("P1-buy")]
+    assert labels == ["Repeatable Dynasty: Discard from province"]

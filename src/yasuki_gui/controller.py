@@ -14,11 +14,7 @@ from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
 from yasuki_gui.constants import CARD_H, CARD_W
-from yasuki_gui.services.actions import (
-    REGISTRY as ACTIONS,
-    ActionContext,
-    build_menu as build_actions_menu,
-)
+from yasuki_gui.services.actions import REGISTRY as ACTIONS, ActionContext
 from yasuki_gui.services.drag import Drag, DragKind
 from yasuki_gui.services.hittest import (
     bounds_contains as hittest_bounds_contains,
@@ -37,8 +33,6 @@ class FieldController:
         self._hotkeys: Hotkeys = DEFAULT_HOTKEYS
         self._hover_card_tag: str | None = None
         self._hover_zone_tag: str | None = None
-        self._context_menu = tk.Menu(None, tearoff=0)
-        self._context_tag: str | None = None
         self._marquee_start: tuple[int, int] | None = None
         self._marquee_rect: int | None = None
         self._hand_ghost_id: int | None = None
@@ -52,9 +46,6 @@ class FieldController:
         v.bind("<Motion>", self.on_move)
         v.bind("<ButtonRelease-1>", self.on_release)
         v.bind("<Double-Button-1>", self.on_double_click)
-        v.bind("<Button-2>", self.on_context)
-        v.bind("<Button-3>", self.on_context)
-        v.bind("<Control-Button-1>", self.on_context)
         v.bind("<KeyPress-Escape>", self.on_escape)
         v.bind_all("<Control-t>", self.on_toggle_player)
 
@@ -400,94 +391,6 @@ class FieldController:
             act = ACTIONS["card.toggle_bow"]
             if act.when(self.view, ctx):
                 act.run(self.view, ctx)
-
-    def on_context(self, e: tk.Event) -> None:
-        self.view.focus_set()
-        tag = self.view.resolve_tag_at(e)
-        self._context_menu.delete(0, "end")
-        self._context_tag = tag
-        if not tag:
-            build_actions_menu(
-                self._context_menu,
-                self.view,
-                ActionContext(event=e),
-                [ACTIONS["table.create_token"]],
-            )
-            self._popup(e)
-            return
-        owner = self._owner_of(tag)
-        if tag.startswith("card:"):
-            sel = getattr(self.view, "_selected", set())
-            if tag not in sel:
-                self.view._set_selection({tag})
-            self._build_card_menu(tag, e, owner)
-        elif tag.startswith("zone:"):
-            ctx = ActionContext(zone_tag=tag, event=e, owner=owner)
-            build_actions_menu(
-                self._context_menu,
-                self.view,
-                ctx,
-                [
-                    ACTIONS[a]
-                    for a in ("zone.toggle_flip", "zone.fill", "zone.destroy", "zone.discard")
-                ],
-            )
-        self._popup(e)
-
-    def _popup(self, e: tk.Event) -> None:
-        try:
-            self._context_menu.tk_popup(e.x_root, e.y_root)
-        finally:
-            self._context_menu.grab_release()
-            self._context_tag = None
-
-    def _build_card_menu(self, tag: str, e: tk.Event, owner: PlayerId | None) -> None:
-        ctx = ActionContext(card_tag=tag, event=e, owner=owner)
-        sp = self.view.sprites[tag]
-        hk = self._hotkeys
-        menu = self._context_menu
-
-        def add(label: str, action_id: str) -> None:
-            act = ACTIONS[action_id]
-            menu.add_command(
-                label=label,
-                command=lambda: act.run(self.view, ctx),
-                state="normal" if act.when(self.view, ctx) else "disabled",
-            )
-
-        add(f"Unbow ({hk.bow})" if sp.card.bowed else f"Bow ({hk.bow})", "card.toggle_bow")
-        add(
-            f"Uninvert ({hk.invert})" if sp.card.inverted else f"Invert ({hk.invert})",
-            "card.toggle_invert",
-        )
-        add(
-            f"Flip Down ({hk.flip})" if sp.card.face_up else f"Flip Up ({hk.flip})",
-            "card.toggle_flip",
-        )
-        send_menu = tk.Menu(menu, tearoff=0)
-        build_actions_menu(
-            send_menu,
-            self.view,
-            ctx,
-            [
-                ACTIONS[a]
-                for a in (
-                    "card.send_hand",
-                    "card.send_fate_disc",
-                    "card.send_dynasty_disc",
-                    "card.send_deck_top",
-                    "card.send_deck_bottom",
-                )
-            ],
-        )
-        menu.add_cascade(label="Send to", menu=send_menu)
-        menu.add_separator()
-        if sp.card.back_card_id is not None:
-            add("Flip Face", "card.flip_face")
-        add("Note…", "card.set_note")
-        add("Duplicate", "card.duplicate")
-        if sp.card.is_token:
-            add("Remove", "card.remove")
 
     def on_escape(self, e: tk.Event) -> None:
         self.view._clear_selection()
