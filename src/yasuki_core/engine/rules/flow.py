@@ -10,7 +10,7 @@ from yasuki_core.engine.rules.work import ResolveRecruit, WorkItem
 from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules.effects import effective_gold_production
 from yasuki_core.engine.rules import triggers
-from yasuki_core.engine.rules.events import CardDiscarded, TurnStarted
+from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
@@ -197,6 +197,7 @@ def _resolve_recruit(game: GameState, seat: PlayerId, card_id: str) -> None:
     card.bow()  # Holdings enter play bowed (rules-skeleton §6)
     if province is not None:
         ops.fill_province(game.table, seat, province)
+    triggers.fire(game, EnteredPlay(card_id))
 
 
 def _end_turn(game: GameState) -> None:

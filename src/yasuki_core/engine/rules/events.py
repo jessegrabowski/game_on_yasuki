@@ -31,4 +31,19 @@ class CounterGained:
     amount: int
 
 
-GameEvent = TurnStarted | CardDiscarded | CounterGained
+@dataclass(frozen=True, slots=True)
+class Destroyed:
+    """A card was destroyed — sent to a discard by destruction, distinct from being discarded from
+    hand."""
+
+    card_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class EnteredPlay:
+    """A card entered play on the battlefield."""
+
+    card_id: str
+
+
+GameEvent = TurnStarted | CardDiscarded | CounterGained | Destroyed | EnteredPlay

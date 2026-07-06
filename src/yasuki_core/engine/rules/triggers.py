@@ -3,8 +3,16 @@ from dataclasses import dataclass
 
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.events import CardDiscarded, CounterGained, GameEvent, TurnStarted
+from yasuki_core.engine.rules.events import (
+    CardDiscarded,
+    CounterGained,
+    Destroyed,
+    EnteredPlay,
+    GameEvent,
+    TurnStarted,
+)
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter, WEALTH
@@ -33,7 +41,14 @@ class DrawCard:
     seat: PlayerId
 
 
-Effect = AdjustCounter | DrawCard
+@dataclass(frozen=True, slots=True)
+class Destroy:
+    """Effect: destroy a card, sending it to its owner's discard by side."""
+
+    card_id: str
+
+
+Effect = AdjustCounter | DrawCard | Destroy
 
 
 @dataclass(frozen=True, slots=True)
@@ -94,6 +109,13 @@ def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
                 return [CounterGained(card_id, counter, gained)]
         case DrawCard(seat=seat):
             ops.draw_to_hand(game.table, seat)
+        case Destroy(card_id=card_id):
+            card = game.table.cards_by_id.get(card_id)
+            if card is None or card.owner is None:
+                return []
+            role = ZoneRole.DYNASTY_DISCARD if card.side is Side.DYNASTY else ZoneRole.FATE_DISCARD
+            ops.move_card(game.table, card, ZoneKey(card.owner, role))
+            return [Destroyed(card_id)]
     return []
 
 
@@ -163,3 +185,22 @@ def _shosuro_aoki(ctx: TriggerContext) -> list[Effect]:
     if not once_per_turn(ctx.game, ctx.card, "aoki_draw"):
         return []
     return [DrawCard(ctx.card.owner)]
+
+
+@on(EnteredPlay, "rural_market")
+def _rural_market_enters_play(ctx: TriggerContext) -> list[Effect]:
+    """After this Holding enters play, give it a +1GP Wealth token."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+@on(Destroyed, "rural_market")
+def _rural_market_farm_destroyed(ctx: TriggerContext) -> list[Effect]:
+    """After your Farm is destroyed, give this Holding a +1GP Wealth token."""
+    destroyed = ctx.game.table.cards_by_id.get(ctx.event.card_id)
+    if destroyed is None or destroyed.owner is not ctx.card.owner:
+        return []
+    if "Farm" not in destroyed.keywords:
+        return []
+    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
