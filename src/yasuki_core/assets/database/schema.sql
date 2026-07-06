@@ -185,6 +185,29 @@ CREATE TABLE card_backs (
 );
 
 
+-- Ordered rules-text/art history for cards that have been errata'd. Sparse: only errata'd cards have
+-- rows. revision_index 0 is the original printing text; higher indices are successive errata, newest
+-- last (the highest index is the current version). The current text and stats are also mirrored onto
+-- the cards row, so every existing read path and every deck reference shows the latest without
+-- joining here; this table backs the "what did it used to say" history UI and the errata badge.
+-- Errata is a time axis orthogonal to printings: a card can have several printings and several
+-- errata independently, so revisions live here rather than as extra prints.
+CREATE TABLE card_revisions (
+  card_id        TEXT NOT NULL REFERENCES cards(card_id) ON DELETE CASCADE,
+  revision_index INTEGER NOT NULL,   -- 0 = original; ascending by effective date; highest = current
+  effective_date DATE,               -- when this text took effect; null for the original
+  source         TEXT,               -- e.g. 'Onyx Lives July 2026 Errata'; null for the original
+  source_url     TEXT,               -- where the erratum was announced; null for the original
+  rules_text     TEXT NOT NULL,
+  -- Stat changes this revision introduced (gold_cost, focus, ...); empty when the errata was text
+  -- only. Cumulative current values live on the cards row.
+  stats          JSONB NOT NULL DEFAULT '{}'::jsonb,
+  image_path     TEXT,               -- this revision's card render; null falls back to the print art
+  notes          TEXT,
+  PRIMARY KEY (card_id, revision_index)
+);
+
+
 -- ---------------------------------------------------------------------------
 -- Indexes
 -- ---------------------------------------------------------------------------
@@ -226,3 +249,6 @@ CREATE INDEX idx_print_numbers_print_id ON print_numbers (print_id);
 
 -- Set metadata joins.
 CREATE INDEX idx_l5r_sets_arc           ON l5r_sets (arc);
+
+-- Revision-history lookups (card → its ordered revisions).
+CREATE INDEX idx_card_revisions_card    ON card_revisions (card_id);

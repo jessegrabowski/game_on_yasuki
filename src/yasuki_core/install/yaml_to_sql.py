@@ -1,7 +1,9 @@
+import datetime
 import logging
 import re
 import sys
 from pathlib import Path
+from typing import NamedTuple
 
 import psycopg
 import yaml
@@ -77,6 +79,95 @@ _CARD_COLUMN_NAMES = (
     "experience",
 )
 _BACK_CARD_ID_COL = _CARD_COLUMN_NAMES.index("back_card_id")
+_RULES_TEXT_COL = _CARD_COLUMN_NAMES.index("rules_text")
+_STAT_COL = {col: _CARD_COLUMN_NAMES.index(col) for col in STAT_FIELDS}
+
+
+class CardRevision(NamedTuple):
+    revision_index: int
+    effective_date: datetime.date | None
+    source: str | None
+    source_url: str | None
+    rules_text: str
+    stats: dict[str, int]
+    image_path: str | None
+    notes: str | None
+
+
+def build_revisions(original_text: str, errata: list[dict]) -> list[CardRevision]:
+    """Build a card's ordered revision list from its original rules text and its errata entries.
+
+    Each errata entry is a dict with ``date`` and ``text``, optionally ``source``, ``source_url``,
+    ``art`` and ``set_slug`` (which resolve the revision's image path), ``notes``, and any integer
+    stat overrides keyed by stat column. Revision 0 is the original text; errata follow sorted by
+    effective date, so the last element is the current version.
+
+    Parameters
+    ----------
+    original_text : str
+        The card's pre-errata rules text.
+    errata : list of dict
+        The errata entries collected for the card, in any order.
+
+    Returns
+    -------
+    revisions : list of CardRevision
+        Revisions ordered oldest to newest, with the original at index 0.
+
+    Raises
+    ------
+    ValueError
+        If an errata entry has a missing or unparseable ``date``. Unlike an original printing, an
+        erratum without a datable effective date is a data error, not a legitimate null.
+    """
+    dated = []
+    for entry in errata:
+        date = coerce_date(entry.get("date"))
+        if date is None:
+            raise ValueError(
+                f"Errata entry has a missing or unparseable date {entry.get('date')!r}: "
+                f"{entry.get('text', '')[:60]!r}"
+            )
+        dated.append((date, entry))
+    dated.sort(key=lambda pair: pair[0])
+
+    revisions = [CardRevision(0, None, None, None, original_text, {}, None, None)]
+    for index, (date, entry) in enumerate(dated, start=1):
+        stats = {col: entry[col] for col in STAT_FIELDS if isinstance(entry.get(col), int)}
+        art = entry.get("art")
+        image_path = f"sets/{entry['set_slug']}/{art}" if art else None
+        revisions.append(
+            CardRevision(
+                index,
+                date,
+                entry.get("source"),
+                entry.get("source_url"),
+                entry["text"],
+                stats,
+                image_path,
+                entry.get("notes"),
+            )
+        )
+    return revisions
+
+
+def _revision_baseline(errata: list[dict], fallback: str) -> str:
+    """The pre-errata text for revision 0: the ``home_text`` of the oldest erratum — the text on the
+    printing that erratum was issued for — so the compare diffs against the right prior wording even
+    when that printing is not the card's first-seen entry. Falls back to ``fallback`` when the oldest
+    erratum carries no home text."""
+    oldest = min(errata, key=lambda e: coerce_date(e.get("date")) or datetime.date.min)
+    return oldest.get("home_text") or fallback
+
+
+def _apply_current_revision(row: list, revisions: list[CardRevision]) -> None:
+    """Mutate a cards row so its rules text and stats reflect the newest revision. Stat overrides
+    accumulate in date order, so a stat an earlier errata changed sticks until a later one changes it
+    again."""
+    row[_RULES_TEXT_COL] = revisions[-1].rules_text
+    for revision in revisions[1:]:
+        for col, value in revision.stats.items():
+            row[_STAT_COL[col]] = value
 
 
 def _experience_level(extended_title: str) -> int:
@@ -184,6 +275,9 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     legality_links: set[tuple[str, str]] = set()
     print_rows: list[tuple] = []
     number_map: dict[tuple[str, str], list[tuple[str | None, int]]] = {}
+    # Errata are collected across every entry of a card, keyed by card_id, so which per-set file a
+    # card's canonical row happens to come from (filename sort order) never decides which errata win.
+    errata_map: dict[str, list[dict]] = {}
 
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
         cur.execute("SELECT set_name, set_id, set_slug FROM l5r_sets")
@@ -220,6 +314,11 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                         formats.add(fmt)
                         legality_links.add((card_id, fmt))
 
+                for erratum in entry.get("errata", []):
+                    errata_map.setdefault(card_id, []).append(
+                        {**erratum, "set_slug": set_slug, "home_text": entry.get("text", "") or ""}
+                    )
+
                 n = printings_seen.get(card_id, 0)
                 printings_seen[card_id] = n + 1
                 printing_id = set_slug if n == 0 else f"{set_slug}_{n + 1}"
@@ -245,6 +344,29 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                 number_map[(card_id, printing_id)] = parse_collector_numbers(collector)
 
         _link_and_validate_back_faces(cards, card_names, back_ids)
+
+        # Fold each errata'd card's newest revision onto its cards row so every existing read path
+        # serves the current text/stats, and stage the full ordered history for card_revisions.
+        revision_rows: list[tuple] = []
+        for card_id, entries in errata_map.items():
+            baseline = _revision_baseline(entries, cards[card_id][_RULES_TEXT_COL])
+            revisions = build_revisions(baseline, entries)
+            _apply_current_revision(cards[card_id], revisions)
+            for rev in revisions:
+                revision_rows.append(
+                    (
+                        card_id,
+                        rev.revision_index,
+                        rev.effective_date,
+                        rev.source,
+                        rev.source_url,
+                        rev.rules_text,
+                        Json(rev.stats),
+                        rev.image_path,
+                        rev.notes,
+                    )
+                )
+
         _insert_all(
             cur,
             cards,
@@ -257,11 +379,16 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             legality_links,
             print_rows,
             number_map,
+            revision_rows,
         )
         conn.commit()
 
     logger.info(
-        "Loaded %d cards, %d printings from %d sets", len(cards), len(print_rows), len(yaml_files)
+        "Loaded %d cards, %d printings, %d revisions from %d sets",
+        len(cards),
+        len(print_rows),
+        len(revision_rows),
+        len(yaml_files),
     )
 
 
@@ -277,6 +404,7 @@ def _insert_all(
     legality_links,
     print_rows,
     number_map,
+    revision_rows,
 ) -> None:
     """Batch-insert the accumulated rows in dependency order, then resolve print numbers."""
     cur.executemany(
@@ -294,6 +422,15 @@ def _insert_all(
         ON CONFLICT (card_id) DO NOTHING
         """,
         list(cards.values()),
+    )
+    cur.executemany(
+        """
+        INSERT INTO card_revisions
+          (card_id, revision_index, effective_date, source, source_url, rules_text, stats, image_path, notes)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ON CONFLICT (card_id, revision_index) DO NOTHING
+        """,
+        revision_rows,
     )
     cur.executemany(
         "INSERT INTO card_clans (card_id, clan) VALUES (%s, %s) ON CONFLICT DO NOTHING",
