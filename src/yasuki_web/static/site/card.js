@@ -48,13 +48,10 @@ function renderArt() {
   const print = prints[index];
   const hasBack = !!print?.back_image_path;
   const showingBack = flipped && hasBack;
-  // A printing that carries an errata shows the errata render as its front; the pre-errata art stays
-  // on image_path for the old/new comparison.
-  const frontPath = print?.errata_image_path || print?.image_path;
   const src = showingBack
     ? `${imgBase}/${print.back_image_path}`
-    : frontPath
-      ? `${imgBase}/${frontPath}`
+    : print?.image_path
+      ? `${imgBase}/${print.image_path}`
       : fallbackSrc(card, imgBase) || '';
 
   const img = $('cardArt');
@@ -140,9 +137,8 @@ function renderInfo() {
 function renderPrints() {
   $('printsList').innerHTML = prints
     .map((p, i) => {
-      const thumbPath = p.errata_image_path || p.image_path;
-      const thumb = thumbPath
-        ? `<img src="${esc(`${imgBase}/${thumbPath}`)}" alt="" loading="lazy">`
+      const thumb = p.image_path
+        ? `<img src="${esc(`${imgBase}/${p.image_path}`)}" alt="" loading="lazy">`
         : '<span class="print-thumb-empty"></span>';
       const rarity = p.rarity ? `<span class="print-rarity">${esc(p.rarity)}</span>` : '';
       return (
@@ -197,14 +193,10 @@ function setSrcLink(id, rev) {
   }
 }
 
-// A revision's own render, else the printing's art: its errata render for the current revision, its
-// pre-errata art for an older one.
+// Each revision carries its own render (rev 0 the pre-errata art, the newest the errata art); fall
+// back to the printing's current front only if a revision has no image of its own.
 function revImgSrc(rev) {
-  const path =
-    rev.image_path ||
-    (rev === revisions[revisions.length - 1]
-      ? errataPrint?.errata_image_path || errataPrint?.image_path
-      : errataPrint?.image_path);
+  const path = rev.image_path || errataPrint?.image_path;
   return path ? `${imgBase}/${path}` : fallbackSrc(card, imgBase) || '';
 }
 
@@ -301,15 +293,14 @@ async function init() {
   revisions = body.revisions || [];
   document.title = `${card.name} — Game on, Yasuki!`;
 
-  // The errata render belongs to the printing it was issued for: it becomes that printing's front
-  // (errata_image_path), while its pre-errata art stays on image_path for the old/new comparison.
   let errataIndex = -1;
+  // The errata'd printing's front image already carries the errata render (repointed at load time);
+  // flag it so the compare button shows only there and defaults the view to it.
   const current = revisions[revisions.length - 1];
   if (current?.image_path) {
     const slug = current.image_path.split('/')[1]; // sets/<slug>/<file>
     errataIndex = prints.findIndex((p) => p.set_slug === slug);
     if (errataIndex >= 0) {
-      prints[errataIndex].errata_image_path = current.image_path;
       prints[errataIndex].errata = true;
       errataPrint = prints[errataIndex];
     }
