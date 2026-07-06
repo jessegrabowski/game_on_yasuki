@@ -1,6 +1,7 @@
 from yasuki_core.engine.table import BoardPos
 from yasuki_gui.constants import CARD_W
 from yasuki_gui.layout import (
+    card_view_placement,
     from_canvas,
     home_slot,
     province_positions,
@@ -50,3 +51,24 @@ class TestHomeRow:
     def test_top_seat_home_row_is_above_the_midline(self):
         _, y = home_slot(W, H, 0, seat_at_bottom=False)
         assert y < H // 2
+
+
+def test_card_view_sits_to_the_right_of_a_left_side_card():
+    left, top = card_view_placement(100, 300, 81, 115, 243, 345, 1000, 700)
+    assert left == 100 + 81 // 2 + 10  # right edge of the card + gap
+    assert top == 300 - 345 // 2  # vertically centred on the card
+
+
+def test_card_view_flips_left_when_it_would_overflow_the_right_edge():
+    left, _ = card_view_placement(950, 300, 81, 115, 243, 345, 1000, 700)
+    assert left == 950 - 81 // 2 - 10 - 243  # placed to the card's left instead
+
+
+def test_card_view_clamps_down_from_the_top_edge():
+    _, top = card_view_placement(100, 10, 81, 115, 243, 345, 1000, 700)
+    assert top == 0  # a preview taller than the card's top margin is pushed on-screen
+
+
+def test_card_view_clamps_up_from_the_bottom_edge():
+    _, top = card_view_placement(100, 690, 81, 115, 243, 345, 1000, 700)
+    assert top == 700 - 345  # a preview past the bottom edge is pulled up to sit fully on-canvas

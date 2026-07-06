@@ -24,6 +24,9 @@ class Hotkeys:
     shuffle: str = "s"
     inspect: str = "i"
 
+    # View a floating, enlarged preview of the hovered card
+    view: str = "v"
+
 
 DEFAULT_HOTKEYS = Hotkeys()
 
@@ -61,6 +64,7 @@ def load_hotkeys(config_path: str | Path | None = None) -> Hotkeys:
         draw=_get("draw", DEFAULT_HOTKEYS.draw),
         shuffle=_get("shuffle", DEFAULT_HOTKEYS.shuffle),
         inspect=_get("inspect", DEFAULT_HOTKEYS.inspect),
+        view=_get("view", DEFAULT_HOTKEYS.view),
     )
 
 

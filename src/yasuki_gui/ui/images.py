@@ -16,6 +16,7 @@ def load_image(
     bowed: bool,
     inverted: bool,
     master: tk.Misc | None = None,
+    target: tuple[int, int] | None = None,
 ) -> Any | None:
     """
     Returns a Tk PhotoImage (master-bound) for the given path.
@@ -30,9 +31,9 @@ def load_image(
     path_str = str(resolved)
     try:
         img = Image.open(path_str)
-        target = (CARD_W, CARD_H)
+        target = target or (CARD_W, CARD_H)
         if bowed:
-            target = (CARD_H, CARD_W)
+            target = (target[1], target[0])
             img = img.rotate(-90, expand=True)
         if inverted:
             img = img.rotate(180, expand=True)
@@ -55,12 +56,13 @@ def load_back_image(
     inverted: bool,
     image_path: Path | None,
     master: tk.Misc | None = None,
+    target: tuple[int, int] | None = None,
 ) -> Any | None:
     """
     Returns a PhotoImage for the back of a card (custom image if present, else essential back).
     """
     path = image_path if image_path else essential_backs[side]
-    return load_image(path, bowed, inverted, master=master)
+    return load_image(path, bowed, inverted, master=master, target=target)
 
 
 def clear_image_cache() -> None:

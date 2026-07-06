@@ -73,3 +73,26 @@ def from_canvas(x: int, y: int, *, flipped: bool, canvas_w: int, canvas_h: int) 
     if flipped:
         return BoardPos(float(canvas_w - x), float(canvas_h - y))
     return BoardPos(float(x), float(y))
+
+
+def card_view_placement(
+    card_cx: int,
+    card_cy: int,
+    card_w: int,
+    card_h: int,
+    view_w: int,
+    view_h: int,
+    canvas_w: int,
+    canvas_h: int,
+    gap: int = 10,
+) -> tuple[int, int]:
+    """The top-left canvas pixel for a card-view preview beside a card centred at
+    ``(card_cx, card_cy)``: to the card's right, flipped to its left when that would overflow the
+    canvas, vertically centred on the card, and clamped to sit fully on-canvas."""
+    left = card_cx + card_w // 2 + gap
+    if left + view_w > canvas_w:
+        left = card_cx - card_w // 2 - gap - view_w
+    top = card_cy - view_h // 2
+    left = max(0, min(left, canvas_w - view_w))
+    top = max(0, min(top, canvas_h - view_h))
+    return left, top
