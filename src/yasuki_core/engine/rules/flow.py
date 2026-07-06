@@ -9,6 +9,8 @@ from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import ResolveRecruit, WorkItem
 from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
 from yasuki_core.engine.rules.effects import effective_gold_production
+from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.events import CardDiscarded, TurnStarted
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
@@ -219,6 +221,7 @@ def _begin_next_turn(game: GameState) -> None:
 def _begin_turn(game: GameState) -> None:
     ops.straighten(game.table, game.active)
     ops.reveal_provinces(game.table, game.active)
+    triggers.fire(game, TurnStarted(game.active))
 
 
 def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -> None:
@@ -228,7 +231,9 @@ def _apply_discard(game: GameState, seat: PlayerId, card_ids: tuple[str, ...]) -
     if missing:
         raise ValueError(f"discard names cards not in {seat.name}'s hand: {missing}")
     for card_id in card_ids:
-        ops.move_card(game.table, by_id[card_id], ZoneKey(seat, ZoneRole.FATE_DISCARD))
+        card = by_id[card_id]
+        ops.move_card(game.table, card, ZoneKey(seat, ZoneRole.FATE_DISCARD))
+        triggers.fire(game, CardDiscarded(card_id, card.side, seat))
 
 
 def _seat_clan(game: GameState, seat: PlayerId) -> str | None:

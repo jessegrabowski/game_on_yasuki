@@ -1,0 +1,24 @@
+from dataclasses import dataclass
+
+from yasuki_core.engine.players import PlayerId
+from yasuki_core.game_pieces.constants import Side
+
+
+@dataclass(frozen=True, slots=True)
+class TurnStarted:
+    """A seat's turn has begun (after straighten and province reveal)."""
+
+    seat: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
+class CardDiscarded:
+    """A card entered a discard pile. ``by_seat`` is the seat whose action caused it, ``side`` the
+    discarded card's side — the two facts a discard-reaction reads ("your action, a Fate card")."""
+
+    card_id: str
+    side: Side
+    by_seat: PlayerId
+
+
+GameEvent = TurnStarted | CardDiscarded
