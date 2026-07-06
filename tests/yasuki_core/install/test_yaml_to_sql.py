@@ -4,12 +4,17 @@ import pytest
 
 from yasuki_core.install.sets_to_sql import coerce_date
 from yasuki_core.install.yaml_to_sql import (
+    build_revisions,
     card_slug,
     parse_collector_numbers,
+    _apply_current_revision,
     _BACK_CARD_ID_COL,
     _card_columns,
     _experience_level,
     _link_and_validate_back_faces,
+    _revision_baseline,
+    _RULES_TEXT_COL,
+    _STAT_COL,
 )
 
 
@@ -106,3 +111,84 @@ def test_back_face_without_matching_front_raises():
     cards = {"orphan__back": _row("orphan__back", "Orphan", is_back=True)}
     with pytest.raises(ValueError, match="no front"):
         _link_and_validate_back_faces(cards, {"orphan__back": "Orphan"}, {"orphan__back"})
+
+
+def test_build_revisions_puts_original_first_and_current_last():
+    errata = [
+        {
+            "date": "2026-07-01",
+            "source": "July 2026",
+            "source_url": "https://example.test/errata",
+            "text": "new text",
+            "art": "ring__errata.jpg",
+            "set_slug": "rise_of_otosan_uchi",
+        },
+    ]
+    revisions = build_revisions("old text", errata)
+    assert [r.revision_index for r in revisions] == [0, 1]
+    original, current = revisions
+    assert original.rules_text == "old text"
+    assert (
+        original.source is None and original.effective_date is None and original.image_path is None
+    )
+    assert original.source_url is None
+    assert current.rules_text == "new text"
+    assert current.source == "July 2026"
+    assert current.source_url == "https://example.test/errata"
+    assert current.effective_date == datetime.date(2026, 7, 1)
+    assert current.image_path == "sets/rise_of_otosan_uchi/ring__errata.jpg"
+    assert current.stats == {}
+
+
+def test_build_revisions_sorts_errata_by_effective_date():
+    errata = [
+        {"date": "2026-07-01", "text": "second"},
+        {"date": "2024-01-01", "text": "first"},
+    ]
+    revisions = build_revisions("orig", errata)
+    assert [r.rules_text for r in revisions] == ["orig", "first", "second"]
+    assert [r.revision_index for r in revisions] == [0, 1, 2]
+
+
+def test_build_revisions_rejects_unparseable_date():
+    with pytest.raises(ValueError, match="unparseable date"):
+        build_revisions("orig", [{"date": "2026-13-05", "text": "bad month"}])
+
+
+def test_build_revisions_rejects_missing_date():
+    with pytest.raises(ValueError, match="unparseable date"):
+        build_revisions("orig", [{"text": "no date at all"}])
+
+
+def test_build_revisions_captures_only_integer_stat_overrides():
+    errata = [{"date": "2026-07-01", "text": "t", "force": 5, "chi": 3, "gold_cost": "+2"}]
+    revision = build_revisions("orig", errata)[-1]
+    assert revision.stats == {"force": 5, "chi": 3}  # the non-integer "+2" is not a stat override
+    assert revision.image_path is None  # no art on this erratum
+
+
+def test_revision_baseline_uses_oldest_erratum_home_text():
+    # The oldest erratum's home printing supplies rev 0, even when a later erratum came from elsewhere.
+    errata = [
+        {"date": "2026-07-01", "home_text": "shattered empire text"},
+        {"date": "2024-01-01", "home_text": "pre-errata printed text"},
+    ]
+    assert _revision_baseline(errata, "first-seen fallback") == "pre-errata printed text"
+
+
+def test_revision_baseline_falls_back_when_home_text_absent():
+    assert (
+        _revision_baseline([{"date": "2026-07-01"}], "first-seen fallback") == "first-seen fallback"
+    )
+
+
+def test_apply_current_revision_overrides_text_and_accumulates_stats():
+    row, _ = _card_columns("x", "X", {"title": "X", "force": 2, "chi": 2})
+    errata = [
+        {"date": "2024-01-01", "text": "mid", "force": 4},
+        {"date": "2026-07-01", "text": "current", "chi": 5},
+    ]
+    _apply_current_revision(row, build_revisions("orig", errata))
+    assert row[_RULES_TEXT_COL] == "current"
+    assert row[_STAT_COL["force"]] == 4  # set by the earlier erratum, unchanged by the later one
+    assert row[_STAT_COL["chi"]] == 5  # overridden by the later erratum
