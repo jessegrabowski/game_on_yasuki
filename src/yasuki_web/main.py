@@ -201,6 +201,15 @@ def _site_page(filename: str) -> FileResponse:
     return FileResponse(page)
 
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon() -> FileResponse:
+    # Content type, not the .ico extension, drives rendering — the SVG serves fine at this path.
+    icon = SITE_DIR / "favicon.svg"
+    if not icon.exists():
+        raise HTTPException(status_code=404, detail="favicon not found")
+    return FileResponse(icon, media_type="image/svg+xml")
+
+
 @app.get("/")
 async def root():
     index = SITE_DIR / "index.html"
