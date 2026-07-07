@@ -38,6 +38,8 @@ def _card(view: L5RCard | HiddenCard, peeked_ids: frozenset[str] = frozenset()) 
             "owner": view.owner.name if view.owner is not None else None,
             "token": False,
             "hidden": True,
+            # Rides the stub so the owner keeps the reveal outline on their own shown face-down card.
+            "shown": view.shown,
         }
     face = view.active_face
     card = {

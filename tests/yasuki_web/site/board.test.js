@@ -367,6 +367,16 @@ describe('renderBoard', () => {
     assert.equal(el.children[0]?.src, '/images/sets/imperial_edition/hida_kisada.jpg');
   });
 
+  it('keeps the reveal outline on a hidden card its owner has shown, still drawn as a back', () => {
+    // The owner's own shown face-down card is a hidden stub carrying shown: it stays a back to them
+    // but wears the reveal outline so they can tell they have disclosed it to the opponent.
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ hidden: true, shown: true })], '/images');
+    const el = board.children[0];
+    assert.ok(el.classList.contains('shown'), 'the reveal outline draws');
+    assert.ok(el.classList.contains('face-down'), 'but the card stays a back to its owner');
+  });
+
   it('marks inverted cards', () => {
     const board = document.getElementById('battlefield');
     renderBoard(board, [card({ inverted: true })], '/images');

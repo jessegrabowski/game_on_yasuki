@@ -24,8 +24,15 @@ def test_opponent_hand_card_is_a_back_stub_with_no_identity():
 
     hand = _serialized(table, P2)["zones"]["P1:hand"]
 
-    # The stub carries the public owner (whose card it is) but no identity.
-    assert hand[0] == {"id": "f1", "side": "FATE", "owner": "P1", "token": False, "hidden": True}
+    # The stub carries the public owner (whose card it is) and its show state, but no identity.
+    assert hand[0] == {
+        "id": "f1",
+        "side": "FATE",
+        "owner": "P1",
+        "token": False,
+        "hidden": True,
+        "shown": False,
+    }
     assert "name" not in hand[0]
 
 
@@ -247,7 +254,7 @@ def test_shown_hand_card_is_flagged_shown_for_both_seats():
         assert view["hidden"] is False and view["shown"] is True and view["peeked"] is False
 
 
-def test_shown_face_down_card_is_flagged_only_for_the_opponent():
+def test_shown_face_down_card_reveals_to_the_opponent_and_cues_the_owner():
     table = TableState.empty_two_seat()
     card = L5RCard(
         id="d1", name="Gold Mine", side=Side.DYNASTY, owner=P1, face_up=False, shown=True
@@ -255,12 +262,27 @@ def test_shown_face_down_card_is_flagged_only_for_the_opponent():
     table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[card])
     table.cards_by_id["d1"] = card
 
+    # The opponent identifies the shown card outright.
     opp = _serialized(table, P2)["zones"]["P1:province:0"][0]
     assert opp["hidden"] is False and opp["shown"] is True and opp["peeked"] is False
 
+    # The owner still sees a back — but the stub carries the show marker so the reveal outline draws.
     owner = _serialized(table, P1)["zones"]["P1:province:0"][0]
-    assert owner["hidden"] is True  # the owner still sees a back, with no shown/peeked keys
-    assert "shown" not in owner and "peeked" not in owner
+    assert owner["hidden"] is True and owner["shown"] is True
+    assert "name" not in owner
+
+
+def test_public_shown_face_down_card_cues_no_one():
+    # A show on an owner-less card reveals to nobody, so neither seat's back stub carries the marker —
+    # otherwise both would draw a spurious reveal outline on a card neither can identify.
+    table = TableState.empty_two_seat()
+    card = L5RCard(id="t1", name="Token", side=Side.FATE, owner=None, face_up=False, shown=True)
+    table.battlefield.cards.append(card)
+    table.positions["t1"] = BoardPos(0.0, 0.0)
+
+    for viewer in (P1, P2):
+        stub = _serialized(table, viewer)["battlefield"][0]
+        assert stub["hidden"] is True and stub["shown"] is False
 
 
 def test_peeked_card_is_flagged_peeked_for_the_peeker_only():
