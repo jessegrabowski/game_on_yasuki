@@ -5,7 +5,7 @@ from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.engine.rules.state import Phase
 from yasuki_core.engine.rules.decisions import DiscardToHandSize
 from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import Pass
+from yasuki_core.engine.rules.actions import Legacy, Pass
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
 from yasuki_core.engine.zones import ProvinceZone
@@ -160,3 +160,24 @@ def test_province_menu_drops_recruit_when_it_is_unaffordable():
 
     labels = [label for label, _ in runner.province_menu("P1-buy")]
     assert labels == ["Discard from province"]
+
+
+def test_deck_menu_offers_legacy_on_the_human_dynasty_deck_in_dynasty():
+    runner = _runner(p1_hand=1)  # a hand card to pay the banish cost
+    _to_dynasty(runner)
+
+    items = runner.deck_menu(DeckKey(PlayerId.P1, Side.DYNASTY))
+    assert [action for _, action in items] == [Legacy()]
+
+
+def test_deck_menu_is_empty_outside_the_dynasty_phase():
+    runner = _runner(p1_hand=1)  # still the Action phase
+    assert runner.deck_menu(DeckKey(PlayerId.P1, Side.DYNASTY)) == []
+
+
+def test_deck_menu_is_empty_for_the_fate_deck_and_the_opponents_deck():
+    runner = _runner(p1_hand=1)
+    _to_dynasty(runner)
+
+    assert runner.deck_menu(DeckKey(PlayerId.P1, Side.FATE)) == []
+    assert runner.deck_menu(DeckKey(PlayerId.P2, Side.DYNASTY)) == []

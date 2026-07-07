@@ -51,6 +51,17 @@ def _resolved_demo_deck(seat: PlayerId) -> ResolvedDeck:
         dynasty.append(
             card_cls(id=f"{prefix}-D{i}", name=f"{label} {i + 1}", side=Side.DYNASTY, owner=seat)
         )
+    # One Legacy holding so the Legacy rulebook ability has something to find; without it every
+    # Legacy search would whiff and lose the game.
+    dynasty.append(
+        DynastyHolding(
+            id=f"{prefix}-LEG",
+            name="Ancestral Shrine",
+            side=Side.DYNASTY,
+            owner=seat,
+            keywords=("Legacy",),
+        )
+    )
     fate: list[FateCard] = []
     for i in range(_FATE_PER_SEAT):
         card_cls, label = _FATE_CYCLE[i % len(_FATE_CYCLE)]

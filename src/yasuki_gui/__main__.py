@@ -2,12 +2,15 @@ import logging
 import tkinter as tk
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
+    BanishForLegacy,
     ChoosePayment,
     DecisionRequest,
     DecisionResponse,
     DiscardToHandSize,
+    PlaceLegacy,
 )
 from collections.abc import Iterable
 from yasuki_core.engine.session import EngineSession
@@ -39,6 +42,10 @@ def _describe_decision(request: DecisionRequest, chosen: Iterable[str]) -> tuple
         covered = request.available + sum(yields[card_id] for card_id in chosen)
         remaining = max(0, request.amount - covered)
         return f"Pay {remaining} gold for {request.label}", "Pay"
+    if isinstance(request, BanishForLegacy):
+        return "Banish a card from hand to search for a Legacy card", "Banish"
+    if isinstance(request, PlaceLegacy):
+        return "Choose a province to place the Legacy card, discarding the card there", "Place"
     raise ValueError(f"no prompt defined for {type(request).__name__}")
 
 
@@ -103,7 +110,12 @@ def main() -> None:
         field.render_snapshot(view.table, human_seat)
         phase_bar.refresh(view)
         pending = runner.pending
-        if pending is not None:
+        if runner.loser is not None:
+            lost = runner.loser is human_seat
+            prompt_box.show(
+                "You lose (failed Legacy)" if lost else "Opponent loses (failed Legacy)", []
+            )
+        elif pending is not None:
             chosen = tuple(field.selection)
             prompt, button_label = _describe_decision(pending, chosen)
             can_confirm = pending.accepts(DecisionResponse(chosen))
@@ -153,10 +165,9 @@ def main() -> None:
         runner.act(action)
         after_human_action()
 
-    def on_card_activated(card_id: str) -> None:
-        # A left-click on a face-up province card opens its action menu (Recruit / Dynasty Discard);
-        # producers are clicked during the ensuing payment, which the selection path handles.
-        items = runner.province_menu(card_id)
+    def popup_action_menu(items: list[tuple[str, Action]]) -> None:
+        """Pop up a left-click action menu at the pointer; each entry performs its action. No-op
+        when there is nothing to offer."""
         if not items:
             return
         menu = tk.Menu(root, tearoff=0)
@@ -166,6 +177,16 @@ def main() -> None:
             menu.tk_popup(root.winfo_pointerx(), root.winfo_pointery())
         finally:
             menu.grab_release()
+
+    def on_card_activated(card_id: str) -> None:
+        # A left-click on a face-up province card opens its action menu (Recruit / Dynasty Discard);
+        # producers are clicked during the ensuing payment, which the selection path handles.
+        popup_action_menu(runner.province_menu(card_id))
+
+    def on_deck_activated(deck_key: DeckKey) -> None:
+        # A left-click on the human's dynasty deck opens the Legacy rulebook ability, which searches
+        # that deck.
+        popup_action_menu(runner.deck_menu(deck_key))
 
     def undo(_event=None) -> None:
         # Ctrl+Z: while paying, unbow the last producer tapped for gold; otherwise undo a just-made
@@ -197,7 +218,7 @@ def main() -> None:
 
     # The left column runs opponent / prompt / you, top to bottom.
     opponent_panel = PlayerInfoBox(sidebar, field, PlayerId.P2)
-    human_panel = PlayerInfoBox(sidebar, field, PlayerId.P1)
+    human_panel = PlayerInfoBox(sidebar, field, PlayerId.P1, on_deck_activated=on_deck_activated)
     prompt_box = PromptBox(sidebar)
     prompt_box.grid(row=1, column=0, sticky="nsew")
     # Spacebar takes the primary offered action (Pass/Pay/Discard), never a secondary like Cancel.
