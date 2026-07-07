@@ -131,6 +131,15 @@ class BanishForLegacy(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseLegacyCard(DecisionRequest):
+    """The seat must choose which Legacy card its search found — the candidates are the Legacy cards
+    in its dynasty deck and provinces. The chosen card is placed into a province next."""
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+
+@dataclass(frozen=True, slots=True)
 class PlaceLegacy(DecisionRequest):
     """The seat must choose which province to place the found Legacy card into, discarding the card
     already there. The candidates are the province cards eligible to be displaced.

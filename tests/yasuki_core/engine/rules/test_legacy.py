@@ -5,7 +5,7 @@ from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
 from yasuki_core.engine.rules.actions import Legacy, Pass
-from yasuki_core.engine.rules.decisions import PlaceLegacy, DecisionResponse
+from yasuki_core.engine.rules.decisions import ChooseLegacyCard, PlaceLegacy, DecisionResponse
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
@@ -127,6 +127,9 @@ def test_legacy_finds_a_deck_card_and_places_it_face_up_over_a_province():
     session = _dynasty_session(legacy_in="deck")
     session.act(PlayerId.P1, Legacy())
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    assert isinstance(session.game.pending, ChooseLegacyCard)
+
+    session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
     assert isinstance(session.game.pending, PlaceLegacy)
 
     session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
@@ -143,6 +146,7 @@ def test_legacy_places_a_province_card_and_refills_its_old_province():
     session = _dynasty_session(legacy_in="province")
     session.act(PlayerId.P1, Legacy())
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
     # The province holding the found card cannot be its own sacrifice.
     assert "P1-leg" not in session.game.pending.candidates
 
@@ -155,31 +159,44 @@ def test_legacy_is_once_per_turn():
     session = _dynasty_session(legacy_in="deck")
     session.act(PlayerId.P1, Legacy())
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
 
     assert Legacy() not in session.legal_actions(PlayerId.P1)
 
 
-def test_legacy_auto_picks_the_first_found_card_when_several_exist():
-    session = _dynasty_session(legacy_in="deck")  # seeds "P1-leg" at the front of the deck
+def test_legacy_search_offers_every_found_card_to_choose_among():
+    session = _dynasty_session(legacy_in="deck")  # seeds "P1-leg" in the deck
     deck = session.game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
     deck.cards.insert(1, _register(session.game.table, _legacy_holding(PlayerId.P1, "P1-leg2")))
-
     session.act(PlayerId.P1, Legacy())
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+
+    assert set(session.game.pending.candidates) == {"P1-leg", "P1-leg2"}
+
+
+def test_legacy_places_the_chosen_card_not_a_default():
+    session = _dynasty_session(legacy_in="deck")  # "P1-leg" is first in search order
+    deck = session.game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)]
+    deck.cards.insert(1, _register(session.game.table, _legacy_holding(PlayerId.P1, "P1-leg2")))
+    session.act(PlayerId.P1, Legacy())
+    session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+
+    session.submit(PlayerId.P1, DecisionResponse(("P1-leg2",)))  # pick the runner-up on purpose
     session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
 
     placed = [
-        z for z in _p1_provinces(session.game.table) if any(c.id == "P1-leg" for c in z.cards)
+        z for z in _p1_provinces(session.game.table) if any(c.id == "P1-leg2" for c in z.cards)
     ]
-    assert len(placed) == 1  # the first Legacy card in search order is the one placed
-    assert "P1-leg2" in {c.id for c in deck.cards}  # the runner-up stays in the deck
+    assert len(placed) == 1  # the card the player chose is the one placed
+    assert "P1-leg" in {c.id for c in deck.cards}  # the unchosen card stays in the deck
 
 
 def test_a_completed_legacy_sequence_replays_to_the_same_state():
     session = _dynasty_session(legacy_in="deck")
     session.act(PlayerId.P1, Legacy())
     session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
     session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
 
     # The fieldless action, both re-derived decisions, and the deterministic reshuffle must all

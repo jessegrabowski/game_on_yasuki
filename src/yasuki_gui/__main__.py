@@ -6,6 +6,7 @@ from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
+    ChooseLegacyCard,
     ChoosePayment,
     DecisionRequest,
     DecisionResponse,
@@ -19,6 +20,8 @@ from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
 from yasuki_gui.rules_runner import GameRunner
 from yasuki_gui.session import DEMO_DECK_PATH, build_demo_state, build_state_from_deck
+from yasuki_gui.ui.dialogs import Dialogs
+from yasuki_gui.ui.images import ImageProvider
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
@@ -115,6 +118,9 @@ def main() -> None:
             prompt_box.show(
                 "You lose (failed Legacy)" if lost else "Opponent loses (failed Legacy)", []
             )
+        elif isinstance(pending, ChooseLegacyCard):
+            # Answered by the search dialog (opened in after_human_action), not the board.
+            prompt_box.show("Search your deck for a Legacy card", [])
         elif pending is not None:
             chosen = tuple(field.selection)
             prompt, button_label = _describe_decision(pending, chosen)
@@ -139,8 +145,23 @@ def main() -> None:
         runner.run_opponent()
         refresh()
 
+    def open_legacy_search(pending: ChooseLegacyCard) -> None:
+        # The found Legacy cards live in the deck/provinces, off the board, so they can't be picked
+        # by board selection — a modal search dialog presents them instead.
+        cards = [field.state.cards_by_id[card_id] for card_id in pending.candidates]
+
+        def on_pick(card_id: str) -> None:
+            runner.submit([card_id])
+            after_human_action()
+
+        Dialogs(root, ImageProvider(root)).choose_card(cards, "Legacy", on_pick)
+
     def after_human_action() -> None:
         pending = runner.pending
+        if isinstance(pending, ChooseLegacyCard):
+            open_legacy_search(pending)
+            refresh()
+            return
         if pending is not None:
             # A payment's candidate producers become selectable and preview as bowed when picked.
             paying = isinstance(pending, ChoosePayment)

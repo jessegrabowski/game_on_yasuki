@@ -107,6 +107,38 @@ class Dialogs:
             btn.pack(pady=4)
         win._images = keep  # type: ignore[attr-defined]
 
+    def choose_card(self, cards: list[L5RCard], label: str, on_pick: Callable[[str], None]) -> None:
+        """Show ``cards`` face-up as a search result and call ``on_pick`` with the chosen card's id.
+        The window forbids closing without a choice, since the search is a committed cost."""
+        win = tk.Toplevel(self.toplevel)
+        win.title(f"Search - {label}")
+        win.transient(self.toplevel)
+        win.grab_set()
+        win.protocol("WM_DELETE_WINDOW", lambda: None)  # a pick is required; no dismiss
+        row = tk.Frame(win, bg=theme.PANEL)
+        row.pack(fill="both", expand=True)
+        keep: list[object] = []
+
+        def pick(card_id: str) -> None:
+            win.destroy()
+            on_pick(card_id)
+
+        for col, card in enumerate(cards):
+            cell = tk.Frame(row, bg=theme.PANEL)
+            cell.grid(row=0, column=col, padx=6, pady=6)
+            photo = self.images.front(card.image_front, False, card.inverted)
+            if photo is not None:
+                tk.Label(cell, image=photo, bg=theme.PANEL).pack()
+                keep.append(photo)
+            else:
+                canvas = tk.Canvas(
+                    cell, width=CARD_W, height=CARD_H, bg=theme.CARD_FACE, highlightthickness=0
+                )
+                canvas.pack()
+                canvas.create_text(CARD_W // 2, CARD_H // 2, text=card.name, fill=theme.INK)
+            tk.Button(cell, text="Choose", command=lambda i=card.id: pick(i)).pack(pady=4)
+        win._images = keep  # type: ignore[attr-defined]
+
     def create_token(self, on_create: Callable[[str, Side], None]) -> None:
         """Prompt for a token name and side, then call ``on_create`` with them."""
         win = tk.Toplevel(self.toplevel)

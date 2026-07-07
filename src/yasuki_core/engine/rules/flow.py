@@ -10,6 +10,7 @@ from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import ResolveRecruit, WorkItem
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
+    ChooseLegacyCard,
     ChoosePayment,
     DiscardToHandSize,
     DecisionResponse,
@@ -150,6 +151,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             run_stack(game)
         case BanishForLegacy():
             _apply_legacy_banish(game, request, response)
+        case ChooseLegacyCard():
+            _apply_legacy_choice(game, request, response)
         case PlaceLegacy():
             _apply_legacy_placement(game, request, response)
         case _:
@@ -273,9 +276,15 @@ def _apply_legacy_banish(
     if not found:
         game.loser = seat  # the whiff: failing to find a Legacy card loses the game
         return
-    # v1 auto-picks the first Legacy card found; choosing among several needs the deck-search
-    # dialog (deck cards aren't board-selectable), which is a later pass.
-    legacy_card = found[0]
+    game.pending = ChooseLegacyCard(seat=seat, candidates=tuple(card.id for card in found))
+
+
+def _apply_legacy_choice(
+    game: GameState, request: ChooseLegacyCard, response: DecisionResponse
+) -> None:
+    seat = request.seat
+    legacy_card = game.table.cards_by_id[response.choices[0]]
+    game.pending = None
     provinces = _displaceable_provinces(game, seat, keep=legacy_card.id)
     if not provinces:
         # No province to sacrifice — only reachable at zero provinces (a military loss the engine
