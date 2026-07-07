@@ -47,6 +47,9 @@ class IntentEnvelope(BaseModel):
     moves: list[CardMove] | None = Field(None, max_length=128)
     to: dict | None = None
     to_bottom: bool = False
+    # MOVE_CARD onto the battlefield: lay the card face down and peek it back to the acting seat
+    # (focusing in a duel). Ignored for any non-battlefield destination.
+    face_down: bool = False
     position: list[float] | None = Field(None, max_length=2)
     deck: dict | None = None
     zone: dict | None = None
@@ -77,6 +80,7 @@ def intent_from_envelope(envelope: IntentEnvelope) -> Intent:
             "moves": None if envelope.moves is None else [[m.id, m.x, m.y] for m in envelope.moves],
             "to": envelope.to,
             "to_bottom": envelope.to_bottom,
+            "face_down": envelope.face_down,
             "position": envelope.position,
             "deck": envelope.deck,
             "zone": envelope.zone,

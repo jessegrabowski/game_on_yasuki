@@ -446,6 +446,11 @@ export const moveCardIntent = (id, to, position = null, toBottom = false, index 
     ...(toBottom ? { to_bottom: true } : {}),
     ...(index == null ? {} : { value: index }),
   });
+// Play a hand card onto the battlefield face down at `position`: the server lays it face down as it
+// lands and privately peeks it back to you, so you keep sight of your own card (focusing in a duel)
+// while the opponent sees only a back. Reveal it later by flipping it face up.
+export const playFaceDownIntent = (id, position) =>
+  intentMessage({ op: 'MOVE_CARD', card_id: id, to: { kind: 'battlefield' }, position, face_down: true });
 // Move a card already in the owner's hand to slot `index`, reordering the hand.
 export const reorderHandIntent = (id, index) =>
   intentMessage({ op: 'REORDER_HAND', card_id: id, value: index });
@@ -528,7 +533,14 @@ const SEP = { separator: true };
 // is part of one, else the clicked card alone. Flag ops go as a single batch intent; Send to…/Remove
 // fan out one message per card, each routed by that card's own owner and side (`lookup` resolves a
 // selected id to its dataset; the clicked card uses its own). The server re-checks every gate.
-function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () => null, toCanon) {
+function cardMenuItems(
+  el,
+  viewer,
+  targetIds = [el.dataset.cardId],
+  lookup = () => null,
+  toCanon,
+  handPlayPos,
+) {
   const id = el.dataset.cardId;
   const side = el.dataset.side || '';
   const owner = el.dataset.owner || '';
@@ -564,6 +576,17 @@ function cardMenuItems(el, viewer, targetIds = [el.dataset.cardId], lookup = () 
 
   // View is a local zoom of whatever face the card shows, available on any card the viewer can see.
   items.push({ label: '&View', onClick: () => viewCard(el) });
+
+  // A hand card is played onto the board, not turned in place. "Play face down" lays it down as it
+  // lands and peeks it back to you, so you keep sight of your own card (focusing in a duel) while the
+  // opponent sees only a back; reveal it later by flipping it face up. Positioned like a double-click
+  // play so a flurry fans out. Gated on the position helper so a caller without it omits the item.
+  if (inHand && mine && handPlayPos) {
+    items.push({
+      label: 'Play face &down',
+      onClick: (e, send) => send(playFaceDownIntent(id, handPlayPos())),
+    });
+  }
 
   // Flip, Bow, and Invert manipulate a card in play; a card in hand is played, not turned in place.
   // A discard pile is always public and squared up, so it offers neither flip nor bow there — only
@@ -1134,7 +1157,7 @@ function menuItemsFor(
   viewer,
   targetIds,
   lookup,
-  { onSearchDiscard, onCreateToken, spawnAt, toCanon } = {},
+  { onSearchDiscard, onCreateToken, spawnAt, toCanon, handPlayPos } = {},
 ) {
   const zoneEl = target?.closest?.('[data-zone]');
   const zone = zoneEl?.dataset.zone;
@@ -1146,16 +1169,16 @@ function menuItemsFor(
       ? [{ label: '&Search…', onClick: () => onSearchDiscard(owner, role) }]
       : [];
     if (!cardEl) return search;
-    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon);
+    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, handPlayPos);
     return search.length ? [...card, SEP, ...search] : card;
   }
   if (zone === 'province') {
     const province = provinceMenuItems(zoneEl.dataset.owner, Number(zoneEl.dataset.idx), viewer);
     if (!cardEl) return province;
-    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon);
+    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, handPlayPos);
     return province.length ? [...card, SEP, ...province] : card;
   }
-  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon);
+  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, handPlayPos);
   if (zone === 'battlefield') return battlefieldMenuItems(viewer, onCreateToken, spawnAt);
   return [];
 }
@@ -1238,6 +1261,16 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     const rect = battleRect();
     const viewerIsP1 = root.dataset.viewerSeat !== 'P2';
     return viewToCanonical(left, top, viewerIsP1, rect.width, rect.height);
+  };
+  // The canonical board position for the next hand card played (a double-click or the "Play face
+  // down" menu item), fanning successive plays rightward so a flurry spreads instead of stacking.
+  const handPlayPos = () => {
+    const rect = battleRect();
+    const fan = (handPlays++ % HAND_PLAY_FAN_SLOTS) * PREGAME_FAN;
+    const x = clamp(Math.round((rect.width - CARD_W) / 2) + fan, 0, rect.width - CARD_W);
+    const y = Math.round(rect.height * HAND_PLAY_ROW - CARD_H / 2);
+    const canon = toCanon(x, y);
+    return [canon.x, canon.y];
   };
   // Battlefield-local top-left of a card element, read from its inline position.
   const cardX = (el) => parseFloat(el.style.left) || 0;
@@ -1576,6 +1609,7 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
       onCreateToken,
       spawnAt,
       toCanon,
+      handPlayPos,
     });
     if (!items.length) return;
     e.preventDefault();
@@ -1595,12 +1629,7 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     const id = cardEl.dataset.cardId;
     if (cardEl.closest?.('[data-zone="hand"]')) {
       // Successive plays fan rightward, like dealing off a deck, so a flurry spreads instead of stacking.
-      const rect = battleRect();
-      const fan = (handPlays++ % HAND_PLAY_FAN_SLOTS) * PREGAME_FAN;
-      const x = clamp(Math.round((rect.width - CARD_W) / 2) + fan, 0, rect.width - CARD_W);
-      const y = Math.round(rect.height * HAND_PLAY_ROW - CARD_H / 2);
-      const canon = toCanon(x, y);
-      send(moveCardIntent(id, { kind: 'battlefield' }, [canon.x, canon.y]));
+      send(moveCardIntent(id, { kind: 'battlefield' }, handPlayPos()));
     } else if (isFaceDown(cardEl)) {
       send(flipIntentFor(cardEl.dataset.doubleFaced === '1', id));
     } else if (!cardEl.closest?.('[data-zone="province"]')) {

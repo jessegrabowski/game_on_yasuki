@@ -458,6 +458,7 @@ def encode_intent(intent: Intent) -> dict:
             )
             payload["to_bottom"] = intent.to_bottom
             payload["value"] = intent.index  # the hand-slot index, when landing in a hand
+            payload["face_down"] = intent.face_down  # lay it face down, on a battlefield landing
         case IntentOp.MOVE_DECK_TOP:
             payload["deck"] = _encode_deck_key(intent.deck)
             payload["to"] = _encode_move_dest(intent.to)
@@ -535,6 +536,7 @@ def decode_intent(payload: dict) -> Intent:
                 None if position is None else BoardPos(*position),
                 to_bottom=payload.get("to_bottom", False),
                 index=payload.get("value"),
+                face_down=payload.get("face_down", False),
             )
         case IntentOp.MOVE_DECK_TOP:
             position = payload.get("position")

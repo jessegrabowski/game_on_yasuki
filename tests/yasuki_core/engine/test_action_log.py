@@ -335,6 +335,7 @@ def test_session_entries_ride_the_tape_but_are_skipped_by_replay():
     "intent",
     [
         MoveCard("c1", BATTLEFIELD, BoardPos(1.0, 2.0)),
+        MoveCard("c1", BATTLEFIELD, BoardPos(1.0, 2.0), face_down=True),
         MoveCard("c1", BATTLEFIELD, None),
         MoveCard("c1", DeckKey(PlayerId.P1, Side.FATE)),
         MoveCard("c1", DeckKey(PlayerId.P1, Side.FATE), to_bottom=True),

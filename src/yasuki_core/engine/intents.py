@@ -64,6 +64,9 @@ class MoveCard:
     ``to`` is the battlefield, giving the card its table coordinates. ``to_bottom`` applies only to
     a deck destination: True slides the card under the deck instead of onto its top. ``index`` applies
     only to a hand destination: the slot the card lands in, clamped into range; None appends it.
+    ``face_down`` applies only to a battlefield destination: True lays the card face down as it lands
+    and privately peeks it back to the acting seat, so its owner still reads their own card (focusing
+    in a duel) while the opponent sees only a back.
     """
 
     card_id: str
@@ -71,6 +74,7 @@ class MoveCard:
     position: BoardPos | None = None
     to_bottom: bool = False
     index: int | None = None
+    face_down: bool = False
     op: ClassVar[IntentOp] = IntentOp.MOVE_CARD
 
 
@@ -403,9 +407,21 @@ def _move_card(state: TableState, seat: PlayerId, intent: MoveCard) -> list[Even
 
     if dest == BATTLEFIELD:
         ops.move_card(state, card, BATTLEFIELD, position=intent.position)
+        if intent.face_down:
+            # A card laid face down is a back to everyone, its owner included; peeking it back keeps
+            # the player able to read their own focused card while the opponent sees only a back.
+            card.turn_face_down()
+            card.add_peeker(seat)
         state.seq += 1
         pos = state.positions[card.id]
-        return [Event(state.seq, seat, MoveCard(card.id, BATTLEFIELD, pos), (card.id,))]
+        return [
+            Event(
+                state.seq,
+                seat,
+                MoveCard(card.id, BATTLEFIELD, pos, face_down=intent.face_down),
+                (card.id,),
+            )
+        ]
 
     if isinstance(dest, DeckKey):
         if not owns_deck(state, seat, dest) or dest.side is not card.side:

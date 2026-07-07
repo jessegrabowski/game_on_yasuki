@@ -133,6 +133,46 @@ def test_move_deck_top_routes_through_the_websocket(room):
     assert any(m["type"] == "SNAPSHOT" for m in ada.sent)  # the accepted move was broadcast
 
 
+def test_play_face_down_hides_the_card_from_the_opponent_but_not_its_owner(room):
+    ada, kenji = _seat_two(room)
+    card = L5RCard(id="f1", name="Secret", side=Side.FATE, owner=PlayerId.P1, face_up=True)
+    room.state.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].cards.append(card)
+    room.state.cards_by_id["f1"] = card
+    kenji.sent.clear()
+
+    asyncio.run(
+        room.handle_intent(
+            ada,
+            IntentEnvelope(
+                op=IntentOp.MOVE_CARD,
+                card_id="f1",
+                to={"kind": "battlefield"},
+                position=[4.0, 5.0],
+                face_down=True,
+            ),
+        )
+    )
+
+    assert card in room.state.battlefield.cards
+    assert card.face_up is False
+    assert PlayerId.P1 in card.peekers  # its owner still reads their own focused card
+
+    # The opponent's snapshot conceals the card entirely — a face-down play is the focus mechanic, so
+    # Kenji must see only a back — while Ada's still shows it, revealed by the auto-peek.
+    def battlefield_card(ws):
+        snapshot = next(m for m in reversed(ws.sent) if m["type"] == "SNAPSHOT")["snapshot"]
+        return next(c for c in snapshot["battlefield"] if c["id"] == "f1")
+
+    assert battlefield_card(kenji)["hidden"] is True
+    assert "name" not in battlefield_card(kenji)
+    assert battlefield_card(ada)["name"] == "Secret"
+    assert battlefield_card(ada)["peeked"] is True
+
+    # The shared log names no card — a face-down play must not leak the identity to the opponent.
+    log = next(m for m in kenji.sent if m["type"] == "LOG")
+    assert log["parts"] == [{"text": "Ada "}, {"text": "plays a face-down fate card"}]
+
+
 def test_chat_is_recorded_on_the_durable_tape(room):
     ada, _ = _seat_two(room)
     asyncio.run(room.handle_chat(ada, "hello"))

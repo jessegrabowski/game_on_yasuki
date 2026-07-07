@@ -2084,16 +2084,37 @@ describe('initBoardInteractions — context menu', () => {
     assert.equal(activeMenu(board), undefined, 'menu is not trapped in the battlefield');
   });
 
-  it('trims a hand card menu: no in-play manipulation, no Send to Hand, but reveal and disposal', () => {
+  it('trims a hand card menu: no in-play manipulation, no Send to Hand, but play, reveal and disposal', () => {
     const card = fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false, inHand: true });
     root._emit('contextmenu', rightClick({ zone: { zone: 'hand', owner: 'P1' }, card }));
     assert.deepEqual(menuLabels(root), [
       'View', // available on every card
+      'Play face down', // play a hand card onto the board face down (focusing in a duel)
       'Show opponent', // a hand card is hidden from the opponent, so reveal is offered
       'Send to Discard',
       'Send to Deck (top)',
       'Send to Deck (bottom)',
     ]);
+  });
+
+  it('sends a face-down MOVE_CARD into the viewer half when playing a hand card face down', () => {
+    const card = fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false, inHand: true });
+    root._emit('contextmenu', rightClick({ zone: { zone: 'hand', owner: 'P1' }, card }));
+    clickMenuItem(root, 'Play face down');
+    const move = sent.at(-1).intent;
+    assert.equal(move.op, 'MOVE_CARD');
+    assert.deepEqual(move.to, { kind: 'battlefield' });
+    assert.equal(move.face_down, true);
+    // Landed in the viewer's half like a double-click play, so the card sits clear of the provinces.
+    const [x, y] = move.position;
+    assert.ok(x > 0 && x < 1 && y > 0.5 && y < 1);
+  });
+
+  it('omits "Play face down" on an opponent hand card — not yours to play', () => {
+    // An opponent's hand card is a hidden stub owned by them; you cannot play it.
+    const card = fakeCard('h9', { side: 'FATE', owner: 'P2', onBattlefield: false, inHand: true, hidden: true });
+    root._emit('contextmenu', rightClick({ zone: { zone: 'hand', owner: 'P2' }, card }));
+    assert.ok(!menuLabels(root).includes('Play face down'));
   });
 
   it('offers Show opponent and Peek on an own face-down card and omits the bow toggle in a province', () => {

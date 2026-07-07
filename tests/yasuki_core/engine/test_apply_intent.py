@@ -364,6 +364,39 @@ def test_move_to_battlefield_without_position_uses_origin():
     assert table.positions["f1"] == BoardPos(0.0, 0.0)
 
 
+def test_play_face_down_lays_the_card_down_and_peeks_it_back_to_its_owner():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    card.turn_face_up()
+    table.cards_by_id["f1"] = card
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+
+    events = apply_intent(
+        table, PlayerId.P1, MoveCard("f1", BATTLEFIELD, BoardPos(3.0, 4.0), face_down=True)
+    )
+
+    assert card in table.battlefield.cards
+    assert card.face_up is False
+    # The owner peeks their own focused card, so they still read it while the opponent sees a back.
+    assert PlayerId.P1 in card.peekers
+    assert PlayerId.P2 not in card.peekers
+    # The resolved event mirrors the face-down directive, so a replay reproduces it.
+    assert events[0].intent.face_down is True
+
+
+def test_normal_play_from_hand_stays_face_up_and_unpeeked():
+    table = TableState.empty_two_seat()
+    card = _fate("f1")
+    card.turn_face_up()
+    table.cards_by_id["f1"] = card
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(card)
+
+    apply_intent(table, PlayerId.P1, MoveCard("f1", BATTLEFIELD, BoardPos(3.0, 4.0)))
+
+    assert card.face_up is True
+    assert not card.peekers
+
+
 def test_move_within_battlefield_without_position_keeps_existing_spot():
     table = TableState.empty_two_seat()
     card = _fate("f1")
