@@ -448,7 +448,9 @@
 
 .board-card.peeked,
 .zone-card.peeked {
-  opacity: 0.5;
+  /* Dim and mute the card with a filter rather than opacity: the element stays fully opaque, so a
+     stack of peeked cards occludes properly instead of showing through to the cards beneath. */
+  filter: brightness(0.62) saturate(0.6);
 }
 
 /* The drag-to-select rubber band, drawn in battlefield-local coordinates. */
