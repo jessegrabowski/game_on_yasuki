@@ -32,5 +32,13 @@ class DynastyDiscard:
     card_id: str
 
 
+@dataclass(frozen=True, slots=True)
+class Legacy:
+    """Take the Legacy rulebook ability (Dynasty, once per turn): banish a card from hand to search
+    your dynasty deck and provinces for a Legacy card and place it face-up in a province; failing
+    to find one loses the game. The banished card and the placement province are chosen through the
+    decisions the action raises, so the action itself carries no target."""
+
+
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
-Action = Pass | Recruit | DynastyDiscard
+Action = Pass | Recruit | DynastyDiscard | Legacy

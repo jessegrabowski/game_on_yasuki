@@ -114,3 +114,34 @@ class DiscardToHandSize(DecisionRequest):
             and len(chosen) == self.count
             and chosen <= set(self.candidates)
         )
+
+
+def _chooses_exactly_one(request: "DecisionRequest", response: DecisionResponse) -> bool:
+    return len(response.choices) == 1 and response.choices[0] in request.candidates
+
+
+@dataclass(frozen=True, slots=True)
+class BanishForLegacy(DecisionRequest):
+    """The seat must banish one card from hand to pay for the Legacy ability. The candidates are the
+    seat's hand; the chosen card is removed from the game. Not cancellable — announcing Legacy
+    commits to the cost."""
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+
+@dataclass(frozen=True, slots=True)
+class PlaceLegacy(DecisionRequest):
+    """The seat must choose which province to place the found Legacy card into, discarding the card
+    already there. The candidates are the province cards eligible to be displaced.
+
+    Attributes
+    ----------
+    legacy_card_id : str
+        The Legacy card that will be placed face-up into the chosen province.
+    """
+
+    legacy_card_id: str
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)

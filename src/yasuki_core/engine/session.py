@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import TableState, ZoneRole
+from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.rules.state import GameState, Phase
-from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Pass, Recruit
+from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Legacy, Pass, Recruit
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import flow, projection
 from yasuki_core.engine.rules.effects import effective_gold_production
@@ -69,13 +69,23 @@ class EngineSession:
 
         Gold is not a free action: it is produced only while paying a cost (rules-skeleton §7), so
         it surfaces through the Recruit's ``ChoosePayment``, never here."""
-        if self.game.awaiting_decision or seat is not self.game.active:
+        if self.game.game_over or self.game.awaiting_decision or seat is not self.game.active:
             return []
         actions: list[Action] = [Pass()]
         if self.game.phase is Phase.DYNASTY:
             actions.extend(self._recruits(seat))
             actions.extend(self._dynasty_discards(seat))
+            actions.extend(self._legacy(seat))
         return actions
+
+    def _legacy(self, seat: PlayerId) -> list[Action]:
+        """The Legacy ability when the seat can take it: once per turn, and only with a card in hand
+        to pay the banish cost. Offered even when no Legacy card can be found — the rules make the
+        whiff a loss rather than hiding the option (which would leak face-down province contents)."""
+        if self.game.has_used(flow.legacy_key(seat, self.game.turn)):
+            return []
+        hand = self.game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
+        return [Legacy()] if hand.cards else []
 
     def _dynasty_discards(self, seat: PlayerId) -> list[Action]:
         """A DynastyDiscard for each face-up card in the seat's provinces — the rule allows

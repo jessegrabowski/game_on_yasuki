@@ -44,6 +44,9 @@ class GameState:
         costs in the same phase and is cleared at the end of every phase.
     favor_holder : PlayerId or None
         The seat holding the Imperial Favor, or None if no one holds it. Default None.
+    loser : PlayerId or None
+        The seat that has lost the game, or None while the game is ongoing. Set when a loss
+        condition fires (currently a failed Legacy search). Default None.
     once_per : set of str
         Usage flags for once-per-turn and once-per-game abilities (the Inheritance Rule, Proclaim,
         ...), keyed by a caller-chosen string. Default empty.
@@ -65,6 +68,7 @@ class GameState:
     phase: Phase
     gold: dict[PlayerId, int]
     favor_holder: PlayerId | None = None
+    loser: PlayerId | None = None
     once_per: set[str] = field(default_factory=set)
     seed: int = 0
     pending: DecisionRequest | None = None
@@ -74,6 +78,11 @@ class GameState:
     def awaiting_decision(self) -> bool:
         """Whether the engine is paused on a pending decision."""
         return self.pending is not None
+
+    @property
+    def game_over(self) -> bool:
+        """Whether the game has ended — a seat has lost."""
+        return self.loser is not None
 
     @classmethod
     def start(cls, table: TableState, first_player: PlayerId, *, seed: int = 0) -> "GameState":

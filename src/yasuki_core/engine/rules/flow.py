@@ -1,16 +1,26 @@
 from yasuki_core.engine import ops
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, ZoneKey, ZoneRole
+from yasuki_core.engine.table import BATTLEFIELD, UNPLACED_BOARD_POS, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.pregame import StrongholdCard
-from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Pass, Recruit
+from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Legacy, Pass, Recruit
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import ResolveRecruit, WorkItem
-from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
+from yasuki_core.engine.rules.decisions import (
+    BanishForLegacy,
+    ChoosePayment,
+    DiscardToHandSize,
+    DecisionResponse,
+    PlaceLegacy,
+)
 from yasuki_core.engine.rules.effects import effective_gold_production
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
+
+# The boldface keyword marking a card the Legacy rulebook ability can search out.
+LEGACY_KEYWORD = "Legacy"
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
@@ -61,6 +71,8 @@ def perform(game: GameState, action: Action) -> None:
             recruit(game, card_id)
         case DynastyDiscard(card_id=card_id):
             dynasty_discard(game, card_id)
+        case Legacy():
+            legacy(game)
 
 
 def produce_gold(game: GameState, card_id: str, amount: int) -> None:
@@ -136,6 +148,10 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_payment(game, request, response)
             game.pending = None
             run_stack(game)
+        case BanishForLegacy():
+            _apply_legacy_banish(game, request, response)
+        case PlaceLegacy():
+            _apply_legacy_placement(game, request, response)
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
 
@@ -214,6 +230,94 @@ def dynasty_discard(game: GameState, card_id: str) -> None:
     triggers.fire(game, CardDiscarded(card_id, card.side, seat))
 
 
+def legacy_key(seat: PlayerId, turn: int) -> str:
+    """The once-per-turn usage key for a seat's Legacy ability, scoped to the turn so it resets each
+    turn without clearing ``GameState.once_per``."""
+    return f"legacy:{seat.name}:{turn}"
+
+
+def is_legacy_card(card: L5RCard) -> bool:
+    """Whether ``card`` carries the Legacy keyword, so the Legacy ability can search it out."""
+    return any(keyword.lower() == LEGACY_KEYWORD.lower() for keyword in card.keywords)
+
+
+def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The Legacy cards ``seat`` could find right now — those in its dynasty deck or its provinces.
+    Empty means a Legacy search would whiff and lose the game."""
+    found = [
+        card for card in game.table.decks[DeckKey(seat, Side.DYNASTY)].cards if is_legacy_card(card)
+    ]
+    for key, zone in game.table.zones.items():
+        if key.owner is seat and key.role is ZoneRole.PROVINCE:
+            found.extend(card for card in zone.cards if is_legacy_card(card))
+    return found
+
+
+def legacy(game: GameState) -> None:
+    """Announce the Legacy ability: claim its once-per-turn use and pause for the banish cost. The
+    search and placement follow once the banished card is chosen."""
+    seat = game.active
+    game.use_once(legacy_key(seat, game.turn))
+    hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
+    game.pending = BanishForLegacy(seat=seat, candidates=tuple(card.id for card in hand.cards))
+
+
+def _apply_legacy_banish(
+    game: GameState, request: BanishForLegacy, response: DecisionResponse
+) -> None:
+    seat = request.seat
+    banished = game.table.cards_by_id[response.choices[0]]
+    ops.move_card(game.table, banished, ZoneKey(seat, ZoneRole.FATE_BANISH))
+    game.pending = None
+    found = legacy_candidates(game, seat)
+    if not found:
+        game.loser = seat  # the whiff: failing to find a Legacy card loses the game
+        return
+    # v1 auto-picks the first Legacy card found; choosing among several needs the deck-search
+    # dialog (deck cards aren't board-selectable), which is a later pass.
+    legacy_card = found[0]
+    provinces = _displaceable_provinces(game, seat, keep=legacy_card.id)
+    if not provinces:
+        # No province to sacrifice — only reachable at zero provinces (a military loss the engine
+        # does not model yet). Reveal the found card where it sits rather than placing it.
+        legacy_card.turn_face_up()
+        return
+    game.pending = PlaceLegacy(seat=seat, candidates=provinces, legacy_card_id=legacy_card.id)
+
+
+def _apply_legacy_placement(
+    game: GameState, request: PlaceLegacy, response: DecisionResponse
+) -> None:
+    seat = request.seat
+    displaced = game.table.cards_by_id[response.choices[0]]
+    legacy_card = game.table.cards_by_id[request.legacy_card_id]
+    target_key = _province_key_of(game, seat, displaced.id)
+    source_zone = _province_of(game, seat, legacy_card.id)  # None when it came from the deck
+    ops.move_card(game.table, displaced, ZoneKey(seat, ZoneRole.DYNASTY_DISCARD))
+    ops.move_card(game.table, legacy_card, target_key)
+    legacy_card.turn_face_up()  # a placed Legacy card enters its province revealed
+    game.pending = None
+    if source_zone is None:
+        game.table.decks[DeckKey(seat, Side.DYNASTY)].shuffle(seed=game.seed + game.turn)
+    else:
+        ops.fill_province(game.table, seat, source_zone)
+    triggers.fire(game, CardDiscarded(displaced.id, displaced.side, seat))
+
+
+def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tuple[str, ...]:
+    """The province cards ``seat`` may discard to make room for a placed Legacy card — its face card
+    in each province, skipping the province that already holds the found card (id ``keep``), which
+    cannot be its own sacrifice."""
+    displaceable: list[str] = []
+    for key, zone in game.table.zones.items():
+        if key.owner is not seat or key.role is not ZoneRole.PROVINCE or not zone.cards:
+            continue
+        if any(card.id == keep for card in zone.cards):
+            continue
+        displaceable.append(zone.cards[-1].id)
+    return tuple(displaceable)
+
+
 def _end_turn(game: GameState) -> None:
     seat = game.active
     ops.draw_to_hand(game.table, seat)
@@ -264,6 +368,14 @@ def _province_of(game: GameState, seat: PlayerId, card_id: str) -> ProvinceZone 
             if any(card.id == card_id for card in zone.cards):
                 return zone
     return None
+
+
+def _province_key_of(game: GameState, seat: PlayerId, card_id: str) -> ZoneKey:
+    for key, zone in game.table.zones.items():
+        if key.owner is seat and key.role is ZoneRole.PROVINCE:
+            if any(card.id == card_id for card in zone.cards):
+                return key
+    raise ValueError(f"no province of {seat.name} holds card {card_id}")
 
 
 def _other(seat: PlayerId) -> PlayerId:
