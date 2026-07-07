@@ -50,7 +50,7 @@ class GameRunner:
                 cost = flow.recruit_cost(game, game.table.cards_by_id[card_id])
                 items.append((f"Recruit: Pay {cost} gold", action))
             elif isinstance(action, DynastyDiscard):
-                items.append(("Repeatable Dynasty: Discard from province", action))
+                items.append(("Discard from province", action))
         return items
 
     @property
@@ -68,6 +68,11 @@ class GameRunner:
         """Perform the human's chosen action. Does not run the opponent — the caller checks
         :attr:`is_opponent_turn` afterwards and runs it so the turn change stays visible."""
         self.session.act(self.human, action)
+
+    def undo_last(self) -> bool:
+        """Undo the human's last action if it was a Dynasty Discard and nothing has happened since.
+        Return whether anything was undone, so the caller can re-render only when it did."""
+        return self.session.undo_last(self.human)
 
     def submit(self, choices: Iterable[str]) -> None:
         """Answer the human's pending decision with the chosen ids."""

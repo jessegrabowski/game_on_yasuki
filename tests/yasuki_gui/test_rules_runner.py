@@ -149,7 +149,7 @@ def test_province_menu_offers_recruit_with_cost_and_dynasty_discard():
     _to_dynasty(runner)
 
     labels = [label for label, _ in runner.province_menu("P1-buy")]
-    assert labels == ["Recruit: Pay 5 gold", "Repeatable Dynasty: Discard from province"]
+    assert labels == ["Recruit: Pay 5 gold", "Discard from province"]
 
 
 def test_province_menu_drops_recruit_when_it_is_unaffordable():
@@ -159,4 +159,4 @@ def test_province_menu_drops_recruit_when_it_is_unaffordable():
     _to_dynasty(runner)
 
     labels = [label for label, _ in runner.province_menu("P1-buy")]
-    assert labels == ["Repeatable Dynasty: Discard from province"]
+    assert labels == ["Discard from province"]

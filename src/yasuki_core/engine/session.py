@@ -10,11 +10,13 @@ from yasuki_core.engine.rules import flow, projection
 from yasuki_core.engine.rules.effects import effective_gold_production
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import (
+    Act,
     GameLog,
     build_game,
     act_and_log,
     submit_and_log,
     cancel_and_log,
+    replay,
 )
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 
@@ -134,3 +136,21 @@ class EngineSession:
         if pending.seat is not seat:
             raise ValueError(f"{seat.name} cannot cancel {pending.seat.name}'s decision")
         cancel_and_log(self.game, self.log)
+
+    def undo_last(self, seat: PlayerId) -> bool:
+        """Undo ``seat``'s most recent action when it was a Dynasty Discard and no decision is
+        pending — the one free action safe to reverse, as it has no cost and does not advance the
+        turn. Drop it from the tape and rebuild by replay. Return whether anything was undone."""
+        if self.game.pending is not None:
+            return False
+        entries = self.log.entries
+        if not entries:
+            return False
+        last = entries[-1]
+        if not isinstance(last, Act) or last.seat is not seat:
+            return False
+        if not isinstance(last.action, DynastyDiscard):
+            return False
+        entries.pop()
+        self.game = replay(self.log)
+        return True

@@ -367,3 +367,44 @@ def test_session_log_replays_to_the_live_game():
     session.submit(PlayerId.P1, DecisionResponse((discard,)))
 
     assert replay(session.log) == session.game
+
+
+def test_undo_last_reverses_a_dynasty_discard_and_cannot_repeat():
+    state = _dealt_table()
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        _register(
+            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+        )
+    ]
+    _holding_in_province(state, "P1-junk", gold_cost=9)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+    session.act(PlayerId.P1, DynastyDiscard("P1-junk"))
+
+    assert session.undo_last(PlayerId.P1) is True
+
+    province = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards
+    assert [card.id for card in province] == ["P1-junk"] and province[0].face_up
+    assert session.undo_last(PlayerId.P1) is False  # the discard is gone from the tape
+
+
+def test_undo_last_is_a_noop_without_a_trailing_discard():
+    state = _dealt_table()
+    _holding_in_province(state, "P1-junk", gold_cost=9)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)  # the last logged action is a Pass, not a discard
+
+    assert session.undo_last(PlayerId.P1) is False
+
+
+def test_undo_last_does_not_reverse_a_recruit():
+    state = _dealt_table()
+    _gold_source(state, "P1-SH", 8)
+    _holding_in_province(state, "P1-buy", gold_cost=5)
+    session = EngineSession.start(state, PlayerId.P1)
+    _in_dynasty(session)
+    session.act(PlayerId.P1, Recruit("P1-buy"))
+    session.submit(PlayerId.P1, DecisionResponse(("P1-SH",)))  # pay -> the holding enters play
+
+    assert session.undo_last(PlayerId.P1) is False  # undo only reverses a Dynasty Discard
+    assert session.game.table.cards_by_id["P1-buy"] in session.game.table.battlefield.cards

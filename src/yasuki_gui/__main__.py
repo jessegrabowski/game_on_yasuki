@@ -167,10 +167,15 @@ def main() -> None:
         finally:
             menu.grab_release()
 
-    def undo_payment(_event=None) -> None:
-        # Ctrl+Z while paying unbows the last producer tapped for gold; no effect otherwise.
+    def undo(_event=None) -> None:
+        # Ctrl+Z: while paying, unbow the last producer tapped for gold; otherwise undo a just-made
+        # Dynasty Discard, if nothing else has happened since.
         if isinstance(runner.pending, ChoosePayment):
             field.undo_last_selection()
+        elif runner.undo_last():
+            field.state = session.game.table
+            field.end_selection()
+            refresh()
 
     def cancel_via_escape(_event=None) -> None:
         # Escape backs out of a cancellable pending decision (a recruit payment); no effect
@@ -182,7 +187,7 @@ def main() -> None:
     # Re-render (board borders + confirm-button state) as the player toggles candidates.
     field.on_selection_changed = refresh
     field.on_card_activated = on_card_activated
-    root.bind("<Control-z>", undo_payment)
+    root.bind("<Control-z>", undo)
     root.bind("<Escape>", cancel_via_escape)
 
     phase_bar = PhaseBar(content)
