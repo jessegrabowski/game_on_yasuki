@@ -412,14 +412,22 @@ def test_move_card_to_own_deck_resets_flags():
     card = _fate("f1")
     card.bow()
     card.invert()
+    card.set_note("dead")
+    card.show()
+    card.add_peeker(PlayerId.P1)
+    card.add_peeker(PlayerId.P2)
     _on_battlefield(table, card)
 
     apply_intent(table, PlayerId.P1, MoveCard("f1", DeckKey(PlayerId.P1, Side.FATE)))
 
     assert card in table.decks[DeckKey(PlayerId.P1, Side.FATE)].cards
+    # A card shuffled back into the library is scrubbed to a plain face-down card no one can read.
     assert card.face_up is False
     assert card.bowed is False
     assert card.inverted is False
+    assert card.note is None
+    assert card.shown is False
+    assert card.peekers == frozenset()
 
 
 def test_move_card_to_deck_top_by_default():

@@ -54,9 +54,10 @@ def move_card(
     index: int | None = None,
 ) -> bool:
     """Move ``card`` to a zone, deck, or the shared battlefield, applying the destination's entry
-    effects (a card faces up entering a hand or discard, unbows entering a province, loses its
-    note and bow/invert entering a deck). Returns whether the table changed — a move onto the
-    zone the card already occupies is a no-op."""
+    effects (a card faces up entering a hand or discard, unbows entering a province, and is scrubbed
+    to a pristine library card entering a deck — face down, unbowed, uninverted, its note and every
+    show/peek disclosure cleared). Returns whether the table changed — a move onto the zone the card
+    already occupies is a no-op."""
     if dest == BATTLEFIELD:
         pos = position or state.positions.get(card.id) or DEFAULT_BOARD_POS
         remove_from_location(state, card)
@@ -66,10 +67,13 @@ def move_card(
 
     if isinstance(dest, DeckKey):
         remove_from_location(state, card)
+        # Anonymize the card for the shuffle back into the library — no seat may read a deck card.
         card.turn_face_down()
         card.unbow()
         card.uninvert()
         card.set_note(None)
+        card.unshow()
+        card.clear_peekers()
         deck = state.decks[dest]
         if to_bottom:
             deck.add_to_bottom([card])
