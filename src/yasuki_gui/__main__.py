@@ -15,7 +15,7 @@ from yasuki_gui import theme
 from yasuki_gui.config import DEBUG_MODE as GUI_DEBUG_MODE, load_hotkeys
 from yasuki_gui.field_view import FieldView
 from yasuki_gui.rules_runner import GameRunner
-from yasuki_gui.session import build_demo_state, build_state_from_deck
+from yasuki_gui.session import DEMO_DECK_PATH, build_demo_state, build_state_from_deck
 from yasuki_gui.ui.info_box import PlayerInfoBox
 from yasuki_gui.ui.menus import build_menubar
 from yasuki_gui.ui.phase_bar import PhaseBar
@@ -216,6 +216,21 @@ def main() -> None:
     field.on_local_player_changed = relayout_panels
     relayout_panels()
     refresh()  # render the opening projection and phase bar
+
+    def load_deck_from_path(path: str) -> None:
+        """Start a fresh game with the human on the picked deck; the opponent keeps the default.
+        Raise on a deck that fails to load so the menu can report it."""
+        nonlocal session, runner, human_seat
+        state, human_seat = build_state_from_deck(path, opponent_deck_path=DEMO_DECK_PATH)
+        session = EngineSession.start(state, human_seat)
+        runner = GameRunner(session, human_seat)
+        field.state = session.game.table
+        field.seat = human_seat
+        field.end_selection()
+        relayout_panels()
+        refresh()
+
+    field.load_deck_from_file = load_deck_from_path
 
     menubar = build_menubar(root, field)
     root.config(menu=menubar)

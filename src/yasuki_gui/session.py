@@ -101,17 +101,26 @@ def _deck_card_names(parsed: dict) -> list[str]:
 
 
 def build_state_from_deck(
-    deck_path: Path | str = DEMO_DECK_PATH, p1_name: str = "You", p2_name: str = "Opponent"
+    deck_path: Path | str = DEMO_DECK_PATH,
+    opponent_deck_path: Path | str | None = None,
+    p1_name: str = "You",
+    p2_name: str = "Opponent",
 ) -> tuple[TableState, PlayerId]:
-    """Build a two-seat table from a decklist file, dealing the same deck to both seats.
+    """Build a two-seat table from decklist files, dealing ``deck_path`` to the human (P1) and
+    ``opponent_deck_path`` to the AI-reserved opponent (P2).
 
-    Resolves the decklist's cards against the database, so it needs a reachable database. P2 is the
-    AI-reserved opponent dealt the mirror of the human's deck. Returns the table and the human seat.
+    Resolves the cards against the database, so it needs a reachable one. ``opponent_deck_path``
+    defaults to the human's deck, a mirror match. Returns the table and the human seat.
     """
-    parsed = parse_deck_yaml(Path(deck_path).read_text())
-    records = get_cards_by_names(_deck_card_names(parsed))
+    seats = ((PlayerId.P1, deck_path), (PlayerId.P2, opponent_deck_path or deck_path))
     state = TableState.empty_two_seat(p1_name, p2_name)
-    for seat in PlayerId:
+    resolved_by_path: dict[str, tuple] = {}
+    for seat, path in seats:
+        key = str(path)
+        if key not in resolved_by_path:
+            parsed = parse_deck_yaml(Path(path).read_text())
+            resolved_by_path[key] = (parsed, get_cards_by_names(_deck_card_names(parsed)))
+        parsed, records = resolved_by_path[key]
         dynasty_seed, fate_seed = _SEEDS[seat]
         resolved = resolve_decklist(parsed, records, seat)
         setup_seat(state, seat, resolved, dynasty_seed=dynasty_seed, fate_seed=fate_seed)

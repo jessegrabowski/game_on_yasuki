@@ -1,4 +1,5 @@
 import tkinter as tk
+from pathlib import Path
 from tkinter import filedialog, messagebox
 
 from yasuki_gui.ui.dialogs import Dialogs
@@ -37,8 +38,9 @@ def build_menubar(root: tk.Misc, field_view) -> tk.Menu:
         path = filedialog.askopenfilename(
             parent=root,
             title="Load Deck",
+            initialdir=str(Path(__file__).resolve().parent.parent / "assets" / "decks"),
             filetypes=[
-                ("Deck files", ".dck"),
+                ("Deck lists", ".yaml .yml"),
                 ("All files", "*"),
             ],
         )

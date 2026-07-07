@@ -5,7 +5,7 @@ from yasuki_core.database import get_connection_string
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
-from yasuki_gui.session import build_state_from_deck
+from yasuki_gui.session import DEMO_DECK_PATH, build_state_from_deck
 
 
 def _db_available():
@@ -32,6 +32,16 @@ def test_bundled_deck_deals_both_seats():
         assert state.zones[ZoneKey(seat, ZoneRole.HAND)].cards
         assert state.decks[DeckKey(seat, Side.DYNASTY)].cards
         assert state.decks[DeckKey(seat, Side.FATE)].cards
+
+
+def test_a_separate_opponent_deck_still_deals_both_seats():
+    # The human and opponent decks resolve independently; passing the opponent path explicitly
+    # (here the same bundled deck) still yields a fully dealt two-seat table.
+    state, human = build_state_from_deck(opponent_deck_path=DEMO_DECK_PATH)
+    assert human is PlayerId.P1
+    for seat in PlayerId:
+        assert len(_provinces(state, seat)) == 4
+        assert state.decks[DeckKey(seat, Side.DYNASTY)].cards
 
 
 def test_bundled_deck_resolves_art_swaps():
