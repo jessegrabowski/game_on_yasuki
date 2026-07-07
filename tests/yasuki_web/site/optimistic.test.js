@@ -54,6 +54,19 @@ describe('predictSnapshot', () => {
     assert.equal(card(up, 'b1').face_up, true);
   });
 
+  it('clears a peek when flipping, so a flip back down predicts a plain back', () => {
+    const snapshot = {
+      ...base(),
+      battlefield: [{ id: 'b1', face_up: false, peeked: true }],
+    };
+    const up = predictSnapshot(snapshot, { op: 'FLIP', card_ids: ['b1'] });
+    assert.equal(card(up, 'b1').face_up, true);
+    assert.equal(card(up, 'b1').peeked, false);
+    const down = predictSnapshot(up, { op: 'FLIP', card_ids: ['b1'] });
+    assert.equal(card(down, 'b1').face_up, false);
+    assert.equal(card(down, 'b1').peeked, false);
+  });
+
   it('does not predict a flip of a hidden stub, leaving it for the server', () => {
     const snapshot = { ...base(), battlefield: [{ id: 'h1', hidden: true }] };
     assert.equal(predictSnapshot(snapshot, { op: 'FLIP', card_ids: ['h1'] }), null);

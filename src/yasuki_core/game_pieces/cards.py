@@ -102,6 +102,10 @@ class L5RCard:
         if seat in self.peekers:
             object.__setattr__(self, "peekers", self.peekers - {seat})
 
+    def clear_peekers(self) -> None:
+        if self.peekers:
+            object.__setattr__(self, "peekers", frozenset())
+
     def flip_face(self) -> None:
         if self.back_card_id is not None:
             object.__setattr__(self, "showing_back", not self.showing_back)
