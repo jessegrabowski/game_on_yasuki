@@ -6,6 +6,7 @@ from yasuki_core.game_pieces.fate import FateCard
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyHolding
 from yasuki_core.engine.rules.actions import Legacy, Pass
 from yasuki_core.engine.rules.decisions import ChooseLegacyCard, PlaceLegacy, DecisionResponse
+from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules import flow
 from yasuki_core.engine.rules.log import replay
 from yasuki_core.engine.session import EngineSession
@@ -63,9 +64,9 @@ def _table(*, provinces: int = 3, hand: int = 1, legacy_in: str | None = "deck")
     if legacy_in == "deck":
         deck.cards.insert(0, _register(state, _legacy_holding(PlayerId.P1, "P1-leg")))
     elif legacy_in == "province":
-        state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards = [
-            _register(state, _legacy_holding(PlayerId.P1, "P1-leg"))
-        ]
+        legacy = _register(state, _legacy_holding(PlayerId.P1, "P1-leg"))
+        legacy.turn_face_down()  # only face-down province cards are searchable
+        state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards = [legacy]
     return state
 
 
@@ -76,17 +77,39 @@ def _dynasty_session(**kwargs) -> EngineSession:
     return session
 
 
-def test_legacy_candidates_finds_cards_in_the_deck_and_provinces():
-    deck_only = _table(legacy_in="deck")
-    province_only = _table(legacy_in="province")
-    none = _table(legacy_in=None)
-    game_deck = EngineSession.start(deck_only, PlayerId.P1).game
-    game_prov = EngineSession.start(province_only, PlayerId.P1).game
-    game_none = EngineSession.start(none, PlayerId.P1).game
+def test_legacy_candidates_finds_a_deck_or_face_down_province_card():
+    # GameState.start does not reveal provinces, so the seeded face-down province card stays down.
+    game_deck = GameState.start(_table(legacy_in="deck"), PlayerId.P1)
+    game_prov = GameState.start(_table(legacy_in="province"), PlayerId.P1)
+    game_none = GameState.start(_table(legacy_in=None), PlayerId.P1)
 
     assert [c.id for c in flow.legacy_candidates(game_deck, PlayerId.P1)] == ["P1-leg"]
     assert [c.id for c in flow.legacy_candidates(game_prov, PlayerId.P1)] == ["P1-leg"]
     assert flow.legacy_candidates(game_none, PlayerId.P1) == []
+
+
+def test_legacy_does_not_search_a_face_up_province_card():
+    state = _table(legacy_in=None)
+    face_up_legacy = _register(
+        state, _legacy_holding(PlayerId.P1, "P1-shown")
+    )  # face-up by default
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)].cards = [face_up_legacy]
+    game = GameState.start(state, PlayerId.P1)
+
+    assert (
+        flow.legacy_candidates(game, PlayerId.P1) == []
+    )  # a revealed province card is not searched
+
+
+def test_legacy_search_pool_is_the_whole_deck_plus_face_down_provinces():
+    game = GameState.start(_table(), PlayerId.P1)
+    pool = flow.legacy_search_pool(game, PlayerId.P1)
+    pool_ids = {card.id for card in pool}
+
+    deck_ids = {c.id for c in game.table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards}
+    assert deck_ids <= pool_ids  # every deck card is searchable, not just the Legacy holding
+    province_in_pool = [c for c in pool if c.id.startswith("P1-pv")]
+    assert province_in_pool and all(not c.face_up for c in province_in_pool)  # only face-down ones
 
 
 def test_legacy_is_offered_in_the_dynasty_phase_with_a_card_to_banish():
@@ -142,16 +165,18 @@ def test_legacy_finds_a_deck_card_and_places_it_face_up_over_a_province():
     assert placed not in table.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards  # left the deck
 
 
-def test_legacy_places_a_province_card_and_refills_its_old_province():
-    session = _dynasty_session(legacy_in="province")
-    session.act(PlayerId.P1, Legacy())
-    session.submit(PlayerId.P1, DecisionResponse(("P1-h0",)))
-    session.submit(PlayerId.P1, DecisionResponse(("P1-leg",)))
-    # The province holding the found card cannot be its own sacrifice.
-    assert "P1-leg" not in session.game.pending.candidates
+def test_legacy_places_a_face_down_province_card_and_refills_its_old_province():
+    # A face-down province Legacy card is only reachable off-turn (your own provinces are revealed),
+    # so drive flow directly on an unrevealed GameState rather than through a session.
+    game = GameState.start(_table(legacy_in="province"), PlayerId.P1)
+    game.phase = Phase.DYNASTY
+    flow.legacy(game)
+    flow.submit(game, DecisionResponse(("P1-h0",)))
+    flow.submit(game, DecisionResponse(("P1-leg",)))
+    assert "P1-leg" not in game.pending.candidates  # the found card can't be its own sacrifice
 
-    session.submit(PlayerId.P1, DecisionResponse(("P1-pv1",)))
-    source = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)]
+    flow.submit(game, DecisionResponse(("P1-pv1",)))
+    source = game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)]
     assert len(source.cards) == 1 and source.cards[0].id != "P1-leg"  # refilled from the deck
 
 

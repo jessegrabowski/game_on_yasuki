@@ -64,6 +64,11 @@ class GameRunner:
             return []
         return [("Legacy: banish a card to search for a Legacy card", Legacy())]
 
+    def legacy_search_pool(self) -> list:
+        """The cards the human's Legacy search looks through — its whole dynasty deck plus its
+        face-down province cards — for a search dialog to display."""
+        return flow.legacy_search_pool(self.session.game, self.human)
+
     @property
     def loser(self) -> PlayerId | None:
         """The seat that has lost the game, or None while it is ongoing."""

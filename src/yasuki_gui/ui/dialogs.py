@@ -107,36 +107,88 @@ class Dialogs:
             btn.pack(pady=4)
         win._images = keep  # type: ignore[attr-defined]
 
-    def choose_card(self, cards: list[L5RCard], label: str, on_pick: Callable[[str], None]) -> None:
-        """Show ``cards`` face-up as a search result and call ``on_pick`` with the chosen card's id.
-        The window forbids closing without a choice, since the search is a committed cost."""
+    def card_search(
+        self,
+        cards: list[L5RCard],
+        choosable: set[str],
+        label: str,
+        on_pick: Callable[[str], None],
+    ) -> None:
+        """Search a pile the way the web deck dialog does: the whole pile listed by title and
+        filterable, with a live preview of the selection. ``cards`` is the pool shown; only cards in
+        ``choosable`` can be taken (the others show but stay disabled), and taking one calls
+        ``on_pick`` with its id. The window requires a pick — the search is a committed cost."""
         win = tk.Toplevel(self.toplevel)
         win.title(f"Search - {label}")
         win.transient(self.toplevel)
         win.grab_set()
         win.protocol("WM_DELETE_WINDOW", lambda: None)  # a pick is required; no dismiss
-        row = tk.Frame(win, bg=theme.PANEL)
-        row.pack(fill="both", expand=True)
+
+        query = tk.StringVar()
+        header = tk.Frame(win, bg=theme.PANEL)
+        header.pack(fill="x", padx=8, pady=(8, 4))
+        tk.Label(header, text="Filter:", bg=theme.PANEL, fg=theme.INK).pack(side="left")
+        filter_entry = tk.Entry(header, textvariable=query)
+        filter_entry.pack(side="left", fill="x", expand=True, padx=(6, 0))
+
+        body = tk.Frame(win, bg=theme.PANEL)
+        body.pack(fill="both", expand=True, padx=8, pady=4)
+        listbox = tk.Listbox(body, width=32, height=14, activestyle="dotbox")
+        scroll = tk.Scrollbar(body, orient="vertical", command=listbox.yview)
+        listbox.configure(yscrollcommand=scroll.set)
+        listbox.grid(row=0, column=0, sticky="nsew")
+        scroll.grid(row=0, column=1, sticky="ns")
+        preview = tk.Label(body, bg=theme.PANEL)
+        preview.grid(row=0, column=2, padx=(10, 0))
+        body.grid_columnconfigure(0, weight=1)
+        body.grid_rowconfigure(0, weight=1)
+
+        choose_btn = tk.Button(win, text="Choose")
+        choose_btn.pack(pady=(4, 8))
+
         keep: list[object] = []
+        shown: list[L5RCard] = []
 
-        def pick(card_id: str) -> None:
-            win.destroy()
-            on_pick(card_id)
+        def selected() -> L5RCard | None:
+            picked = listbox.curselection()
+            return shown[picked[0]] if picked else None
 
-        for col, card in enumerate(cards):
-            cell = tk.Frame(row, bg=theme.PANEL)
-            cell.grid(row=0, column=col, padx=6, pady=6)
-            photo = self.images.front(card.image_front, False, card.inverted)
+        def refresh_preview(_event=None) -> None:
+            card = selected()
+            photo = self.images.front(card.image_front, False, card.inverted) if card else None
+            keep.clear()
             if photo is not None:
-                tk.Label(cell, image=photo, bg=theme.PANEL).pack()
+                preview.configure(image=photo, text="")
                 keep.append(photo)
             else:
-                canvas = tk.Canvas(
-                    cell, width=CARD_W, height=CARD_H, bg=theme.CARD_FACE, highlightthickness=0
-                )
-                canvas.pack()
-                canvas.create_text(CARD_W // 2, CARD_H // 2, text=card.name, fill=theme.INK)
-            tk.Button(cell, text="Choose", command=lambda i=card.id: pick(i)).pack(pady=4)
+                preview.configure(image="", text=card.name if card else "")
+            takeable = card is not None and card.id in choosable
+            choose_btn.configure(state="normal" if takeable else "disabled")
+
+        def rebuild(*_args) -> None:
+            needle = query.get().strip().lower()
+            shown.clear()
+            shown.extend(card for card in cards if needle in (card.name or "").lower())
+            listbox.delete(0, "end")
+            for card in shown:
+                mark = "★ " if card.id in choosable else "   "
+                listbox.insert("end", f"{mark}{card.name}")
+            if shown:
+                listbox.selection_set(0)
+            refresh_preview()
+
+        def pick() -> None:
+            card = selected()
+            if card is None or card.id not in choosable:
+                return
+            win.destroy()
+            on_pick(card.id)
+
+        listbox.bind("<<ListboxSelect>>", refresh_preview)
+        query.trace_add("write", rebuild)
+        choose_btn.configure(command=pick)
+        rebuild()
+        filter_entry.focus_set()
         win._images = keep  # type: ignore[attr-defined]
 
     def create_token(self, on_create: Callable[[str, Side], None]) -> None:

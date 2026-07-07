@@ -146,15 +146,16 @@ def main() -> None:
         refresh()
 
     def open_legacy_search(pending: ChooseLegacyCard) -> None:
-        # The found Legacy cards live in the deck/provinces, off the board, so they can't be picked
-        # by board selection — a modal search dialog presents them instead.
-        cards = [field.state.cards_by_id[card_id] for card_id in pending.candidates]
+        # The search runs over the deck (and face-down provinces), off the board, so a modal search
+        # dialog presents the whole pool; only the Legacy cards in it are choosable.
+        pool = runner.legacy_search_pool()
+        choosable = set(pending.candidates)
 
         def on_pick(card_id: str) -> None:
             runner.submit([card_id])
             after_human_action()
 
-        Dialogs(root, ImageProvider(root)).choose_card(cards, "Legacy", on_pick)
+        Dialogs(root, ImageProvider(root)).card_search(pool, choosable, "Dynasty deck", on_pick)
 
     def after_human_action() -> None:
         pending = runner.pending

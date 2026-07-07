@@ -244,16 +244,21 @@ def is_legacy_card(card: L5RCard) -> bool:
     return any(keyword.lower() == LEGACY_KEYWORD.lower() for keyword in card.keywords)
 
 
-def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
-    """The Legacy cards ``seat`` could find right now — those in its dynasty deck or its provinces.
-    Empty means a Legacy search would whiff and lose the game."""
-    found = [
-        card for card in game.table.decks[DeckKey(seat, Side.DYNASTY)].cards if is_legacy_card(card)
-    ]
+def legacy_search_pool(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """Every card ``seat``'s Legacy search looks through: its whole dynasty deck plus the face-down
+    (unrevealed) cards in its provinces. Face-up province cards are already recruitable and are not
+    searched. This is the pool a search dialog shows."""
+    pool = list(game.table.decks[DeckKey(seat, Side.DYNASTY)].cards)
     for key, zone in game.table.zones.items():
         if key.owner is seat and key.role is ZoneRole.PROVINCE:
-            found.extend(card for card in zone.cards if is_legacy_card(card))
-    return found
+            pool.extend(card for card in zone.cards if not card.face_up)
+    return pool
+
+
+def legacy_candidates(game: GameState, seat: PlayerId) -> list[L5RCard]:
+    """The Legacy cards ``seat`` could find right now — the Legacy cards within its search pool.
+    Empty means a Legacy search would whiff and lose the game."""
+    return [card for card in legacy_search_pool(game, seat) if is_legacy_card(card)]
 
 
 def legacy(game: GameState) -> None:
