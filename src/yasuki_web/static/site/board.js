@@ -624,11 +624,22 @@ function cardMenuItems(
     if (shown) items.push({ label: 'Stop &showing', message: unshowIntent(id) });
     else if (inHand || faceDown) items.push({ label: '&Show opponent', message: showIntent(id) });
   }
-  // Peek privately reveals one of your own (or a public) face-down cards to you; you cannot peek the
-  // opponent's, which they expose with Show instead. Stop peeking stays open so a peek already held
-  // can always be dropped (e.g. after handing the card over). Both carry the clicked id, not the batch.
-  if (peeked) items.push({ label: 'Stop &peeking', message: unpeekIntent(id) });
-  else if (faceDown && mine) items.push({ label: '&Peek', message: peekIntent(id) });
+  // Peek/Stop peeking fan one message per qualifying card in the selection, so a group of face-down
+  // focus cards reveals at once. Each card is gated independently, so a mixed selection acts on the
+  // cards it can (own, face-down, not already peeked) and skips the rest rather than failing.
+  const peekable = (d) =>
+    (d.hidden === '1' || d.faceUp !== '1') && (!d.owner || d.owner === viewer) && d.peeked !== '1';
+  if (peeked) {
+    items.push({
+      label: 'Stop &peeking',
+      onClick: (e, send) => fanOut(send, (cid, d) => (d.peeked === '1' ? unpeekIntent(cid) : null)),
+    });
+  } else if (faceDown && mine) {
+    items.push({
+      label: '&Peek',
+      onClick: (e, send) => fanOut(send, (cid, d) => (peekable(d) ? peekIntent(cid) : null)),
+    });
+  }
 
   if (mine) {
     const seatOf = (d) => d.owner || viewer;

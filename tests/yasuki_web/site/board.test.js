@@ -1493,6 +1493,22 @@ describe('initBoardInteractions — selection', () => {
     return [c1, c2];
   };
 
+  // Like selectTwo but three cards, so a test can mix ownership/face into one selection. Selection is
+  // not owner-gated, so an opponent card can ride the selection and exercise a per-card action's filter.
+  const selectThree = (opts1 = {}, opts2 = {}, opts3 = {}) => {
+    const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1', ...opts1 });
+    const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1', ...opts2 });
+    const c3 = fakeCard('c3', { onBattlefield: true, owner: 'P1', ...opts3 });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2, c3] : []);
+    root._emit('pointerdown', onCard(c1));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    root._emit('pointerdown', onCard(c2, { ctrlKey: true }));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    root._emit('pointerdown', onCard(c3, { ctrlKey: true }));
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    return [c1, c2, c3];
+  };
+
   it('applies a context-menu flag op to the whole selection when a selected card is clicked', () => {
     const [c1] = selectTwo();
     sent.length = 0;
@@ -1560,6 +1576,50 @@ describe('initBoardInteractions — selection', () => {
       { type: 'INTENT', intent: { op: 'REMOVE_CARD', card_id: 'c1' } },
       { type: 'INTENT', intent: { op: 'REMOVE_CARD', card_id: 'c2' } },
     ]);
+  });
+
+  it('peeks every face-down card in the selection, one PEEK per card', () => {
+    const [c1] = selectTwo({ faceUp: false }, { faceUp: false });
+    sent.length = 0;
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Peek');
+    assert.deepEqual(
+      sent.map((m) => [m.intent.op, m.intent.card_id]),
+      [
+        ['PEEK', 'c1'],
+        ['PEEK', 'c2'],
+      ],
+    );
+  });
+
+  it("group Peek skips cards that are already peeked or the opponent's", () => {
+    // c1 is a fresh face-down own card; c2 is already peeked (nothing to do); c3 is the opponent's.
+    const [c1] = selectThree(
+      { faceUp: false },
+      { faceUp: false, peeked: true },
+      { faceUp: false, owner: 'P2', hidden: true },
+    );
+    sent.length = 0;
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Peek');
+    assert.deepEqual(
+      sent.map((m) => m.intent.card_id),
+      ['c1'],
+    );
+  });
+
+  it('drops the peek on every peeked card in the selection from "Stop peeking"', () => {
+    const [c1] = selectTwo({ faceUp: false, peeked: true }, { faceUp: false, peeked: true });
+    sent.length = 0;
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Stop peeking');
+    assert.deepEqual(
+      sent.map((m) => [m.intent.op, m.intent.card_id]),
+      [
+        ['UNPEEK', 'c1'],
+        ['UNPEEK', 'c2'],
+      ],
+    );
   });
 });
 
