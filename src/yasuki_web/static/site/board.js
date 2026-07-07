@@ -618,17 +618,27 @@ function cardMenuItems(
       items.push({ label: '&Give control', onClick: (e, send) => send(giveControlIntent(id)) });
     }
   }
-  // Show reveals to the opponent a card they cannot already see — one in your hand or lying face-down.
-  // A face-up card on the shared board is already visible, so it only offers the toggle-off once shown.
+  // Show and Peek fan one message per qualifying selected card. Show also always covers the clicked
+  // card — it may be a hand card, which the battlefield-only face-down gate would otherwise skip.
+  const viewerOwns = (d) => !d.owner || d.owner === viewer;
+  const viewerOwnsFaceDown = (d) => viewerOwns(d) && (d.hidden === '1' || d.faceUp !== '1');
   if (mine) {
-    if (shown) items.push({ label: 'Stop &showing', message: unshowIntent(id) });
-    else if (inHand || faceDown) items.push({ label: '&Show opponent', message: showIntent(id) });
+    if (shown) {
+      items.push({
+        label: 'Stop &showing',
+        onClick: (e, send) =>
+          fanOut(send, (cid, d) => (d.shown === '1' && viewerOwns(d) ? unshowIntent(cid) : null)),
+      });
+    } else if (inHand || faceDown) {
+      items.push({
+        label: '&Show opponent',
+        onClick: (e, send) =>
+          fanOut(send, (cid, d) =>
+            d.shown !== '1' && (cid === id || viewerOwnsFaceDown(d)) ? showIntent(cid) : null,
+          ),
+      });
+    }
   }
-  // Peek/Stop peeking fan one message per qualifying card in the selection, so a group of face-down
-  // focus cards reveals at once. Each card is gated independently, so a mixed selection acts on the
-  // cards it can (own, face-down, not already peeked) and skips the rest rather than failing.
-  const peekable = (d) =>
-    (d.hidden === '1' || d.faceUp !== '1') && (!d.owner || d.owner === viewer) && d.peeked !== '1';
   if (peeked) {
     items.push({
       label: 'Stop &peeking',
@@ -637,7 +647,8 @@ function cardMenuItems(
   } else if (faceDown && mine) {
     items.push({
       label: '&Peek',
-      onClick: (e, send) => fanOut(send, (cid, d) => (peekable(d) ? peekIntent(cid) : null)),
+      onClick: (e, send) =>
+        fanOut(send, (cid, d) => (viewerOwnsFaceDown(d) && d.peeked !== '1' ? peekIntent(cid) : null)),
     });
   }
 

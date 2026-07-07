@@ -1631,6 +1631,55 @@ describe('initBoardInteractions — selection', () => {
       ],
     );
   });
+
+  it('shows every face-down card in the selection, one SHOW per card', () => {
+    const [c1] = selectTwo({ faceUp: false }, { faceUp: false });
+    sent.length = 0;
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Show opponent');
+    assert.deepEqual(
+      sent.map((m) => [m.intent.op, m.intent.card_id]),
+      [
+        ['SHOW', 'c1'],
+        ['SHOW', 'c2'],
+      ],
+    );
+  });
+
+  it('group Show skips cards already shown, face-up, or the opponent\'s', () => {
+    // c1 is a fresh face-down own card; c2 is already shown; c3 is a face-up own card (public
+    // already); c4 is the opponent's face-down card.
+    const c1 = fakeCard('c1', { onBattlefield: true, owner: 'P1', faceUp: false });
+    const c2 = fakeCard('c2', { onBattlefield: true, owner: 'P1', faceUp: false, shown: true });
+    const c3 = fakeCard('c3', { onBattlefield: true, owner: 'P1', faceUp: true });
+    const c4 = fakeCard('c4', { onBattlefield: true, owner: 'P2', faceUp: false, hidden: true });
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [c1, c2, c3, c4] : []);
+    for (const c of [c1, c2, c3, c4]) {
+      root._emit('pointerdown', onCard(c, { ctrlKey: true }));
+      root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    }
+    sent.length = 0;
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Show opponent');
+    assert.deepEqual(
+      sent.map((m) => m.intent.card_id),
+      ['c1'],
+    );
+  });
+
+  it('stops showing every shown card in the selection from "Stop showing"', () => {
+    const [c1] = selectTwo({ faceUp: false, shown: true }, { faceUp: false, shown: true });
+    sent.length = 0;
+    root._emit('contextmenu', rightClick({ card: c1 }));
+    clickMenuItem(root, 'Stop showing');
+    assert.deepEqual(
+      sent.map((m) => [m.intent.op, m.intent.card_id]),
+      [
+        ['UNSHOW', 'c1'],
+        ['UNSHOW', 'c2'],
+      ],
+    );
+  });
 });
 
 describe('initBoardInteractions — marquee and group drag', () => {
@@ -2185,6 +2234,15 @@ describe('initBoardInteractions — context menu', () => {
     const card = fakeCard('h9', { side: 'FATE', owner: 'P2', onBattlefield: false, inHand: true, hidden: true });
     root._emit('contextmenu', rightClick({ zone: { zone: 'hand', owner: 'P2' }, card }));
     assert.ok(!menuLabels(root).includes('Play face down'));
+  });
+
+  it('shows a single hand card to the opponent, though it is face-up to its owner', () => {
+    // A hand card is not face-down, so "Show opponent" must cover the clicked card directly rather
+    // than relying on the face-down gate the group fan-out uses for battlefield cards.
+    const card = fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false, inHand: true });
+    root._emit('contextmenu', rightClick({ zone: { zone: 'hand', owner: 'P1' }, card }));
+    clickMenuItem(root, 'Show opponent');
+    assert.deepEqual(sent.at(-1).intent, { op: 'SHOW', card_id: 'h1' });
   });
 
   it('offers Show opponent and Peek on an own face-down card and omits the bow toggle in a province', () => {
