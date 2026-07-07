@@ -25,7 +25,7 @@ class PhaseBar(tk.Frame):
         self._turn.pack(side="left")
         self._chips: dict[Phase, tk.Label] = {}
         for phase in TURN_PHASES:
-            chip = tk.Label(self, pady=10)
+            chip = tk.Label(self, pady=2)
             chip.pack(side="left", expand=True, fill="both", padx=1)
             self._chips[phase] = chip
 
@@ -39,5 +39,5 @@ class PhaseBar(tk.Frame):
                 text=f"▶ {label}" if active else label,
                 bg=theme.GOLD if active else theme.PANEL,
                 fg=theme.ON_DARK if active else theme.INK_DIM,
-                font=theme.serif(14, "bold") if active else theme.serif(12),
+                font=theme.serif(11, "bold") if active else theme.serif(10),
             )

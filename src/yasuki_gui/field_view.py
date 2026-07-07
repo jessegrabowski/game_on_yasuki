@@ -8,12 +8,13 @@ from yasuki_core.engine.intents import Event, Intent, apply_intent
 from yasuki_core.engine.redaction import ViewSnapshot
 from yasuki_gui import theme
 from yasuki_gui.config import DEFAULT_HOTKEYS, Hotkeys
-from yasuki_gui.constants import CARD_H, CARD_W
+from yasuki_gui.constants import CARD_H, CARD_W, HOME_STACK_OFFSET
 from yasuki_gui.controller import FieldController
 from yasuki_gui.layout import (
+    divider_y,
     from_canvas,
     hand_box,
-    home_slot,
+    home_stack_positions,
     province_positions,
     to_canvas,
 )
@@ -343,9 +344,8 @@ class FieldView(tk.Canvas):
     def _draw_table(self) -> None:
         """A faint gold midline splitting the two seats' halves, drawn behind every card."""
         w, h = self._canvas_size()
-        self.create_line(
-            int(w * 0.08), h // 2, int(w * 0.92), h // 2, fill=theme.MIDLINE, tags=("table",)
-        )
+        y = divider_y(h)
+        self.create_line(int(w * 0.08), y, int(w * 0.92), y, fill=theme.MIDLINE, tags=("table",))
 
     def _reconcile_zones(self) -> None:
         """Draw the on-board zones only: every seat's provinces and the viewer's own hand. Decks,
@@ -422,12 +422,12 @@ class FieldView(tk.Canvas):
     def _reconcile_sprites(self) -> None:
         w, h = self._canvas_size()
         wanted: set[str] = set()
-        # Unplaced cards (stronghold, sensei, fresh holdings) fill each owner's home row in order.
-        home_index: dict[PlayerId | None, int] = {}
-        for rc, pos in self._render_battlefield():
+        rendered = list(self._render_battlefield())
+        home = self._home_positions(rendered, w, h)
+        for rc, pos in rendered:
             tag = card_tag(rc.id)
             wanted.add(tag)
-            x, y = self._sprite_xy(rc, pos, w, h, home_index)
+            x, y = home.get(rc.id) or to_canvas(pos, flipped=self._flipped, canvas_w=w, canvas_h=h)
             sp = self._sprites.get(tag)
             if sp is None:
                 sp = CardSpriteVisual(rc, x, y, tag, images=self._images)
@@ -440,15 +440,24 @@ class FieldView(tk.Canvas):
             self._sprites.pop(tag, None)
             self._selected.discard(tag)
 
-    def _sprite_xy(
-        self, card, pos: BoardPos | None, w: int, h: int, home_index: dict[PlayerId | None, int]
-    ) -> tuple[int, int]:
-        if pos is None or pos.x < 0 or pos.y < 0:
-            owner = card.owner
-            index = home_index.get(owner, 0)
-            home_index[owner] = index + 1
-            return home_slot(w, h, index, seat_at_bottom=(owner or self.seat) is self.seat)
-        return to_canvas(pos, flipped=self._flipped, canvas_w=w, canvas_h=h)
+    def _home_positions(self, rendered, w: int, h: int) -> dict[str, tuple[int, int]]:
+        """Stacked home-row positions for the unplaced cards among ``rendered``, grouped per owner:
+        copies of one printed card share a column and step down by ``HOME_STACK_OFFSET``, while the
+        stronghold, sensei, and distinct holdings each take their own column."""
+        by_owner: dict[PlayerId | None, list[tuple[str, object]]] = {}
+        for rc, pos in rendered:
+            if pos is None or pos.x < 0 or pos.y < 0:
+                key = getattr(rc, "printed_id", None) or rc.id
+                by_owner.setdefault(rc.owner, []).append((rc.id, key))
+        positions: dict[str, tuple[int, int]] = {}
+        for owner, unplaced in by_owner.items():
+            seat_at_bottom = (owner or self.seat) is self.seat
+            positions.update(
+                home_stack_positions(
+                    unplaced, w, h, seat_at_bottom=seat_at_bottom, offset=HOME_STACK_OFFSET
+                )
+            )
+        return positions
 
     def _province_keys_by_owner(self) -> dict[PlayerId, list[ZoneKey]]:
         by_owner: dict[PlayerId, list[ZoneKey]] = {seat: [] for seat in self._render_seats()}

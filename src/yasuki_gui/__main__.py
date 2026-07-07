@@ -61,7 +61,7 @@ def main() -> None:
 
     container = tk.Frame(root)
     container.pack(fill="both", expand=True)
-    sidebar_w = 260
+    sidebar_w = 190
     sidebar = tk.Frame(container, width=sidebar_w, bg=theme.PANEL)
     sidebar.pack(side="left", fill="y")
     sidebar.grid_propagate(False)  # hold the fixed width; the prompt row takes the slack height

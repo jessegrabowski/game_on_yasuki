@@ -1,6 +1,10 @@
-# Card footprint, matching the web play board (board.js CARD_W/CARD_H) so both clients read alike.
-CARD_W = 81
-CARD_H = 115
+# Card footprint for the local client — smaller than the web board's (board.js is 81×115) so more
+# of the board fits on screen.
+CARD_W = 73
+CARD_H = 104
+# Copies of one holding stack in a single home column, each offset down by this much so every copy
+# stays visible and clickable.
+HOME_STACK_OFFSET = 26
 # Slightly reduced spacing for draw placement
 DRAW_OFFSET = 16
 
