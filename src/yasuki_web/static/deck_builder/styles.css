@@ -1,5 +1,22 @@
-/* Ribbon + account-widget styling lives in /site/nav.css, shared with the site pages. */
+/* Ribbon + account-widget styling lives in /site/nav.css, shared with the site pages. @import leads. */
 @import url('/site/nav.css');
+
+/* Self-hosted EB Garamond, served same-origin from /fonts — no external font CDN. Two variable faces,
+   each spanning weight 400–800 (so bold, 700, needs no separate file): upright and true italic. */
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('/fonts/EBGaramond.ttf') format('truetype');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'EB Garamond';
+  src: url('/fonts/EBGaramond-Italic.ttf') format('truetype');
+  font-weight: 400 800;
+  font-style: italic;
+  font-display: swap;
+}
 
 :root {
   --paper: #f6f4ee;

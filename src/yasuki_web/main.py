@@ -22,7 +22,7 @@ from yasuki_web.websocket import evict_stale_rooms
 from yasuki_core.accounts.db import close_accounts_pool
 from yasuki_core.accounts.migrate import migrate as migrate_accounts_schema
 from yasuki_core.database import close_pool, get_card_by_id, get_prints_by_card_id
-from yasuki_core.paths import BUNDLED_IMAGES_DIR, SETS_DIR
+from yasuki_core.paths import BUNDLED_IMAGES_DIR, FONTS_DIR, SETS_DIR
 from html import escape as html_escape
 from typing import Annotated
 
@@ -107,13 +107,13 @@ app.add_middleware(
 )
 
 
-# Card images come from the R2 CDN (https://*.r2.dev) or the local /images mount; fonts from Google.
-# All page CSS and JS is served from same-origin static files, so styles and scripts stay 'self'.
+# Card images come from the R2 CDN (https://*.r2.dev) or the local /images mount. CSS, JS, and the
+# self-hosted EB Garamond font (/fonts) are all same-origin, so styles, scripts, and fonts stay 'self'.
 _CONTENT_SECURITY_POLICY = (
     "default-src 'self'; "
     "img-src 'self' https://*.r2.dev data:; "
-    "style-src 'self' https://fonts.googleapis.com; "
-    "font-src https://fonts.gstatic.com; "
+    "style-src 'self'; "
+    "font-src 'self'; "
     "script-src 'self' 'unsafe-inline'; "
     "connect-src 'self'"
 )
@@ -157,6 +157,12 @@ SITE_DIR = Path(__file__).parent / "static" / "site"
 
 if SITE_DIR.exists():
     app.mount("/site", StaticFiles(directory=SITE_DIR), name="site")
+
+if FONTS_DIR.exists():
+    app.mount("/fonts", StaticFiles(directory=FONTS_DIR), name="fonts")
+    logger.info(f"Serving self-hosted fonts from {FONTS_DIR}")
+else:
+    logger.warning(f"Fonts directory not found at {FONTS_DIR}")
 
 if SETS_DIR.exists():
     app.mount("/images/sets", StaticFiles(directory=SETS_DIR), name="sets")

@@ -6,6 +6,7 @@ _PACKAGE_DIR = Path(__file__).resolve().parent
 BUNDLED_IMAGES_DIR = _PACKAGE_DIR / "assets" / "images"
 DEFAULTS_DIR = BUNDLED_IMAGES_DIR / "defaults"
 OVERLAYS_DIR = BUNDLED_IMAGES_DIR / "overlays"
+FONTS_DIR = _PACKAGE_DIR / "assets" / "fonts"
 
 FATE_BACK: Path = BUNDLED_IMAGES_DIR / "fate_back_new.jpg"
 DYNASTY_BACK: Path = BUNDLED_IMAGES_DIR / "dynasty_back_new.jpg"
