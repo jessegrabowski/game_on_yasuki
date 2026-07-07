@@ -12,7 +12,9 @@ const TOGGLES = {
   // A face-down card the viewer cannot identify is a redacted stub with no front, so turning it up
   // would fabricate a face — leave it for the server. (FLIP_FACE is absent here for the same reason:
   // a double-faced card's other printed face is not in the snapshot, so its turn is never predicted.)
-  FLIP: (card) => (card.hidden ? null : { ...card, face_up: !card.face_up }),
+  // Turning the card over clears any private peek, mirroring the server, so a flip back down predicts
+  // a plain back rather than a still-peeked front.
+  FLIP: (card) => (card.hidden ? null : { ...card, face_up: !card.face_up, peeked: false }),
 };
 
 // Return a new snapshot with `intent` applied to its target cards, or null for an intent we do not

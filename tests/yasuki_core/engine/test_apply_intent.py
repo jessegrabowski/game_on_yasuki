@@ -787,6 +787,25 @@ def test_flip_toggles_face():
     assert table.seq == 2
 
 
+def test_flip_clears_a_peek_so_turning_the_card_back_down_yields_a_plain_back():
+    table = TableState.empty_two_seat()
+    card = _fate("f1", owner=PlayerId.P1)
+    card.turn_face_down()
+    _on_battlefield(table, card)
+    apply_intent(table, PlayerId.P1, Peek("f1"))
+    assert card.peekers == frozenset({PlayerId.P1})
+
+    # Flipping the peeked card face up makes it public and consumes the private peek...
+    apply_intent(table, PlayerId.P1, Flip(("f1",)))
+    assert card.face_up is True
+    assert card.peekers == frozenset()
+
+    # ...so flipping it back down leaves a genuine back, not a card its owner still reads.
+    apply_intent(table, PlayerId.P1, Flip(("f1",)))
+    assert card.face_up is False
+    assert card.peekers == frozenset()
+
+
 def test_flip_face_toggles_a_double_faced_card():
     table = TableState.empty_two_seat()
     back = L5RCard(id="sh__back", name="Back", side=Side.STRONGHOLD)

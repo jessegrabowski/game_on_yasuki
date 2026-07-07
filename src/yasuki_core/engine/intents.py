@@ -559,7 +559,10 @@ def _unbow_card(card: L5RCard) -> bool:
 
 
 def _flip_card(card: L5RCard) -> bool:
+    # Turning the card over consumes any private peek: flipping it face up makes it public, and
+    # flipping it back down must yield a genuine back, not one its former peekers still read.
     card.flip()
+    card.clear_peekers()
     return True
 
 
