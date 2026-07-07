@@ -100,6 +100,9 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
     match op:
         case IntentOp.MOVE_CARD | IntentOp.MOVE_DECK_TOP:
             card_id = event.cards[0] if event.cards else getattr(intent, "card_id", "")
+            # A face-down play hides the card's identity from the opponent, so it reads generically.
+            if intent.to == BATTLEFIELD and getattr(intent, "face_down", False):
+                return [lead, {"text": f"plays a face-down {_side_word(state, card_id)} card"}]
             if isinstance(intent.to, DeckKey):
                 where = "bottom" if getattr(intent, "to_bottom", False) else "top"
                 return [
