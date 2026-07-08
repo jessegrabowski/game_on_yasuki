@@ -35,6 +35,10 @@ BORDER_TAG = "border"
 SELECT_TAG = "select"
 LABEL_TAG = "label"
 NOTE_TAG = "note"
+COUNTER_TAG = "counter"
+
+# Radius of a counter badge (e.g. a wealth token) drawn in a card's top-right corner.
+COUNTER_BADGE_R = 9
 
 # Honor counter limits
 MIN_HONOR = -20

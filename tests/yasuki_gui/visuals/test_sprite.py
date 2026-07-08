@@ -35,3 +35,17 @@ def test_draw_creates_canvas_items(root):
     # Intersects against a marquee covering the sprite center
     rect = MarqueeBoxVisual((sv.x - 1, sv.y - 1, sv.x + 1, sv.y + 1))
     assert sv.intersects(rect)
+
+
+def test_wealth_counter_draws_a_badge(root):
+    cv = tk.Canvas(root, width=200, height=200)
+    cv.pack()
+    root.update_idletasks()
+
+    plain = L5RCard(id="p1", name="Plain", side=Side.DYNASTY)
+    CardSpriteVisual(plain, x=60, y=60, tag="card:p").draw(cv)
+    assert cv.find_withtag("card:p:counter") == ()  # no counters, no badge
+
+    rich = L5RCard(id="w1", name="Rice Farm", side=Side.DYNASTY, counters={"wealth": 2})
+    CardSpriteVisual(rich, x=140, y=60, tag="card:w").draw(cv)
+    assert cv.find_withtag("card:w:counter")  # the wealth badge (disc + count) is drawn

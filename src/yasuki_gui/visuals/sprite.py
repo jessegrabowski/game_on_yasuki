@@ -11,6 +11,8 @@ from yasuki_gui.constants import (
     SELECT_TAG,
     LABEL_TAG,
     NOTE_TAG,
+    COUNTER_TAG,
+    COUNTER_BADGE_R,
 )
 from yasuki_gui.ui.images import load_image, load_back_image, ImageProvider
 from yasuki_gui.visuals.visual import Visual
@@ -161,6 +163,38 @@ class CardSpriteVisual(Visual):
             tags=(self.tag, CARD_TAG, self._subtag(NOTE_TAG)),
         )
 
+    def _draw_counters(self, canvas: tk.Canvas) -> None:
+        # A gold badge per counter (a wealth token and its siblings) in the top-right corner, with
+        # the count inside; badges stack downward when a card carries more than one kind.
+        counters = getattr(self.card, "counters", None)
+        if not counters:
+            return
+        w, h = self.size
+        cx = self.x + w // 2 - COUNTER_BADGE_R - 2
+        cy = self.y - h // 2 + COUNTER_BADGE_R + 2
+        for count in counters.values():
+            if count <= 0:
+                continue
+            canvas.create_oval(
+                cx - COUNTER_BADGE_R,
+                cy - COUNTER_BADGE_R,
+                cx + COUNTER_BADGE_R,
+                cy + COUNTER_BADGE_R,
+                fill=theme.GOLD,
+                outline=theme.CARD_BORDER,
+                width=1,
+                tags=(self.tag, CARD_TAG, self._subtag(COUNTER_TAG)),
+            )
+            canvas.create_text(
+                cx,
+                cy,
+                text=str(count),
+                fill=theme.ON_DARK,
+                font=theme.serif(9, "bold"),
+                tags=(self.tag, CARD_TAG, self._subtag(COUNTER_TAG)),
+            )
+            cy += 2 * COUNTER_BADGE_R + 2
+
     def _draw_selection(self, canvas: tk.Canvas, selected: bool) -> None:
         canvas.delete(self._subtag(SELECT_TAG))
         if not selected:
@@ -183,6 +217,7 @@ class CardSpriteVisual(Visual):
         self._draw_art(canvas)
         self._draw_border(canvas)
         self._draw_note(canvas)
+        self._draw_counters(canvas)
         self._draw_selection(canvas, selected)
 
         canvas.tag_raise(self._subtag(SELECT_TAG))
@@ -211,11 +246,13 @@ class CardSpriteVisual(Visual):
         canvas.delete(self._subtag(BORDER_TAG))
         canvas.delete(self._subtag(LABEL_TAG))
         canvas.delete(self._subtag(NOTE_TAG))
+        canvas.delete(self._subtag(COUNTER_TAG))
         canvas.delete(self._subtag(SELECT_TAG))
         # Redraw art and border
         self._draw_art(canvas)
         self._draw_border(canvas)
         self._draw_note(canvas)
+        self._draw_counters(canvas)
         # Recreate selection overlay if it was present
         if had_selection:
             self._draw_selection(canvas, True)
