@@ -6,6 +6,7 @@ from yasuki_core.engine.table import DeckKey
 from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
+    ChooseAbilityTarget,
     ChooseLegacyCard,
     ChoosePayment,
     DecisionRequest,
@@ -49,6 +50,8 @@ def _describe_decision(request: DecisionRequest, chosen: Iterable[str]) -> tuple
         return "Banish a card from hand to search for a Legacy card", "Banish"
     if isinstance(request, PlaceLegacy):
         return "Choose a province to place the Legacy card, discarding the card there", "Place"
+    if isinstance(request, ChooseAbilityTarget):
+        return "Choose a target for the ability", "Confirm"
     raise ValueError(f"no prompt defined for {type(request).__name__}")
 
 
@@ -201,9 +204,10 @@ def main() -> None:
             menu.grab_release()
 
     def on_card_activated(card_id: str) -> None:
-        # A left-click on a face-up province card opens its action menu (Recruit / Dynasty Discard);
-        # producers are clicked during the ensuing payment, which the selection path handles.
-        popup_action_menu(runner.province_menu(card_id))
+        # A left-click opens what the card offers: a face-up province card's Recruit / Dynasty
+        # Discard, or an in-play card's activated ability. The ensuing target/payment is picked
+        # through the board-selection path.
+        popup_action_menu(runner.province_menu(card_id) + runner.ability_menu(card_id))
 
     def on_deck_activated(deck_key: DeckKey) -> None:
         # A left-click on the human's dynasty deck opens the Legacy rulebook ability, which searches

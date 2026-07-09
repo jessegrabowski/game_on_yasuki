@@ -181,3 +181,33 @@ def test_deck_menu_is_empty_for_the_fate_deck_and_the_opponents_deck():
 
     assert runner.deck_menu(DeckKey(PlayerId.P1, Side.FATE)) == []
     assert runner.deck_menu(DeckKey(PlayerId.P2, Side.DYNASTY)) == []
+
+
+def _runner_with_in_play(card) -> GameRunner:
+    state = _dealt_table(0)
+    state.battlefield.add(_register(state, card))
+    return GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+
+
+def test_ability_menu_offers_millet_farm_activation_in_play():
+    millet = DynastyHolding(
+        id="millet",
+        name="Millet Farm",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        printed_id="millet_farm",
+        keywords=("Farm",),
+        gold_production=1,
+    )
+    runner = _runner_with_in_play(millet)  # Action phase by default
+    assert [label for label, _ in runner.ability_menu("millet")] == [
+        "Bow: give a Farm +2 Gold Production"
+    ]
+
+
+def test_ability_menu_is_empty_for_a_card_with_no_ability():
+    plain = DynastyHolding(
+        id="plain", name="Plain", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=2
+    )
+    runner = _runner_with_in_play(plain)
+    assert runner.ability_menu("plain") == []

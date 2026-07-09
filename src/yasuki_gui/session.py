@@ -62,6 +62,20 @@ def _resolved_demo_deck(seat: PlayerId) -> ResolvedDeck:
             keywords=("Legacy",),
         )
     )
+    # A Millet Farm so the activated-ability path is exercisable: once recruited it can bow to give
+    # a Farm (itself, at least) +2 Gold Production.
+    dynasty.append(
+        DynastyHolding(
+            id=f"{prefix}-MILLET",
+            name="Millet Farm",
+            side=Side.DYNASTY,
+            owner=seat,
+            printed_id="millet_farm",
+            keywords=("Farm",),
+            gold_cost=1,
+            gold_production=1,
+        )
+    )
     fate: list[FateCard] = []
     for i in range(_FATE_PER_SEAT):
         card_cls, label = _FATE_CYCLE[i % len(_FATE_CYCLE)]

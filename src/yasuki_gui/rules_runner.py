@@ -3,8 +3,15 @@ from collections.abc import Iterable
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.engine.rules import flow
-from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Legacy, Pass, Recruit
+from yasuki_core.engine.rules import abilities, flow
+from yasuki_core.engine.rules.actions import (
+    ActivateAbility,
+    Action,
+    DynastyDiscard,
+    Legacy,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.rules.agents import Agent, AutoAgent
 from yasuki_core.engine.rules.decisions import DecisionRequest, DecisionResponse
 from yasuki_core.engine.rules.projection import GameView
@@ -54,6 +61,16 @@ class GameRunner:
             elif isinstance(action, DynastyDiscard):
                 items.append(("Discard from province", action))
         return items
+
+    def ability_menu(self, card_id: str) -> list[tuple[str, Action]]:
+        """The activated-ability action offered for an in-play card the human controls, labelled with
+        the ability's description, when it is legal to use now. Empty otherwise."""
+        for action in self.legal_actions():
+            if isinstance(action, ActivateAbility) and action.card_id == card_id:
+                ability = abilities.ability_for(self.session.game.table.cards_by_id[card_id])
+                label = ability.label if ability is not None else "Activate ability"
+                return [(label, action)]
+        return []
 
     def deck_menu(self, deck_key: DeckKey) -> list[tuple[str, Action]]:
         """The labeled actions for a left-click on a deck. The human's dynasty deck offers Legacy —
