@@ -195,6 +195,14 @@ def _jade_works(
     return card.gold_production + bonus
 
 
+@gold_handler("teardrop_island")
+def _teardrop_island(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
+) -> int:
+    """Produce 2 Gold, or 3 while you are a Mantis Clan player."""
+    return 3 if _is_clan(me, "Mantis") else 2
+
+
 # Per-card recruit-discount handlers — the "enters play for N less Gold" holdings.
 
 

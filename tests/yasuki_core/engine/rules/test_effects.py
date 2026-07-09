@@ -229,3 +229,25 @@ def test_wealth_counters_stack_on_a_handler_card():
     estate = _put(game, _ancestral_estate(PlayerId.P2))  # second player: handler grants +1
     estate.adjust_counter("wealth", 1)
     assert effective_gold_production(game, estate) == 5  # printed 3 + second-player 1 + wealth 1
+
+
+def _clan_stronghold(seat, clan):
+    return StrongholdCard(
+        id=f"{seat.name}-SH", name="SH", side=Side.STRONGHOLD, owner=seat, clan=clan
+    )
+
+
+def test_teardrop_island_produces_three_for_mantis_two_otherwise():
+    mantis = _game()
+    _put(mantis, _clan_stronghold(PlayerId.P1, "Mantis"))
+    at_mantis = _put(
+        mantis, _holding(PlayerId.P1, "tm", printed_id="teardrop_island", gold_production=0)
+    )
+    assert effective_gold_production(mantis, at_mantis) == 3
+
+    other = _game()
+    _put(other, _clan_stronghold(PlayerId.P1, "Crab"))
+    off_clan = _put(
+        other, _holding(PlayerId.P1, "to", printed_id="teardrop_island", gold_production=0)
+    )
+    assert effective_gold_production(other, off_clan) == 2
