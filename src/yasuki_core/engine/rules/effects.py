@@ -123,12 +123,11 @@ def recruit_discount(printed_id: str) -> Callable[[DiscountHandler], DiscountHan
 
 def effective_recruit_discount(game: GameState, card: L5RCard) -> int:
     """The gold ``card`` costs less to recruit from its own conditional cost-reduction ability, or 0
-    when it has none. Never negative."""
+    when it has none."""
     handler = RECRUIT_DISCOUNTS.get(card.printed_id)
     if handler is None:
         return 0
-    reduction = handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
-    return max(0, reduction)
+    return handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
 
 
 def _is_clan(me: PlayerState, clan: str) -> bool:

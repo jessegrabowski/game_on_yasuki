@@ -200,7 +200,7 @@ def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):
     return GameState.start(state, first_player)
 
 
-def _holding(printed_id: str, gold_cost: int, keywords=()) -> DynastyHolding:
+def _holding(printed_id: str, gold_cost: int, clan: str | None = None) -> DynastyHolding:
     return DynastyHolding(
         id=f"{printed_id}-inst",
         name="H",
@@ -208,7 +208,7 @@ def _holding(printed_id: str, gold_cost: int, keywords=()) -> DynastyHolding:
         owner=PlayerId.P1,
         printed_id=printed_id,
         gold_cost=gold_cost,
-        keywords=keywords,
+        clan=clan,
     )
 
 
@@ -244,3 +244,15 @@ def test_shrine_of_courtesy_discounts_three_when_you_went_second():
 def test_recruit_discount_floors_the_cost_at_zero():
     cheap = _holding("shrine_of_courtesy", gold_cost=2)  # a -3 discount would go negative
     assert flow.recruit_cost(_discount_game(first_player=PlayerId.P2), cheap) == 0
+
+
+def test_recruit_discount_stacks_additively_with_the_off_clan_surcharge():
+    caravan = DynastyHolding(
+        id="mc", name="C", side=Side.DYNASTY, owner=PlayerId.P1, keywords=("Merchant Caravan",)
+    )
+    game = _discount_game(clan="Crab", in_play=(caravan,))
+    traders = _holding(
+        "moto_traders", gold_cost=5, clan="Unicorn"
+    )  # off-clan from the Crab stronghold
+    # Both apply and sum: +2 off-clan surcharge, -1 Merchant Caravan discount.
+    assert flow.recruit_cost(game, traders) == 5 + flow.OFF_CLAN_SURCHARGE - 1
