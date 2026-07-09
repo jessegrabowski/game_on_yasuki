@@ -8,6 +8,7 @@ from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
     ChooseAbilityTarget,
     ChooseCards,
+    ChooseInvestAmount,
     ChooseLegacyCard,
     ChoosePayment,
     DecisionRequest,
@@ -129,6 +130,14 @@ def main() -> None:
         elif isinstance(pending, ChooseLegacyCard):
             # Answered by the search dialog (opened in after_human_action), not the board.
             prompt_box.show("Search your deck for a Legacy card", [])
+        elif isinstance(pending, ChooseInvestAmount):
+            # An amount, not a board card — answered by one button per affordable amount.
+            buttons = [
+                (f"Invest {amount}", lambda a=amount: submit_invest(a), True)
+                for amount in pending.candidates
+            ]
+            buttons.append(("Cancel", cancel_decision, True))
+            prompt_box.show("Choose how much to Invest", buttons)
         elif pending is not None:
             chosen = tuple(field.selection)
             prompt, button_label = _describe_decision(pending, chosen)
@@ -171,8 +180,9 @@ def main() -> None:
             open_legacy_search(pending)
             refresh()
             return
-        if pending is not None:
-            # A payment's candidate producers become selectable and preview as bowed when picked.
+        if pending is not None and not isinstance(pending, ChooseInvestAmount):
+            # A payment's candidate producers become selectable and preview as bowed when picked; an
+            # Invest amount is answered by prompt buttons, so it takes no board selection.
             paying = isinstance(pending, ChoosePayment)
             field.begin_selection(pending.candidates, render_bowed=paying)
         refresh()
@@ -183,6 +193,10 @@ def main() -> None:
     def confirm_decision() -> None:
         runner.submit(field.selection)
         field.end_selection()
+        after_human_action()
+
+    def submit_invest(amount: str) -> None:
+        runner.submit([amount])
         after_human_action()
 
     def cancel_decision() -> None:

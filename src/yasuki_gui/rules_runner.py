@@ -47,20 +47,30 @@ class GameRunner:
         return self.session.legal_actions(self.human)
 
     def province_menu(self, card_id: str) -> list[tuple[str, Action]]:
-        """The labeled actions offered for a face-up province card, for its left-click menu: a
-        Recruit (labeled with its gold cost) when affordable, and a Dynasty Discard. Empty when the
-        card offers nothing right now."""
+        """The labeled actions offered for a face-up province card, for its left-click menu: a plain
+        Recruit and, for an Invest holding, a second Invest option (both labeled with their gold),
+        plus a Dynasty Discard. Empty when the card offers nothing right now."""
         game = self.session.game
+        card = game.table.cards_by_id[card_id]
+        base = flow.recruit_cost(game, card)
         items: list[tuple[str, Action]] = []
         for action in self.legal_actions():
             if getattr(action, "card_id", None) != card_id:
                 continue
-            if isinstance(action, Recruit):
-                cost = flow.recruit_cost(game, game.table.cards_by_id[card_id])
-                items.append((f"Recruit: Pay {cost} gold", action))
+            if isinstance(action, Recruit) and action.invest:
+                items.append((self._invest_label(card, base), action))
+            elif isinstance(action, Recruit):
+                items.append((f"Recruit: Pay {base} gold", action))
             elif isinstance(action, DynastyDiscard):
                 items.append(("Discard from province", action))
         return items
+
+    @staticmethod
+    def _invest_label(card, base: int) -> str:
+        invest = abilities.invest_for(card)
+        if invest.minimum == invest.maximum:
+            return f"Invest: Pay {base + invest.minimum} gold"
+        return f"Invest: Pay {base + invest.minimum}–{base + invest.maximum} gold"
 
     def ability_menu(self, card_id: str) -> list[tuple[str, Action]]:
         """The activated-ability action offered for an in-play card the human controls, labelled with

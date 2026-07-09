@@ -16,11 +16,16 @@ from yasuki_gui.rules_runner import GameRunner
 PASS = Pass()
 
 
-def _face_up_holding_in_province(state, card_id, gold_cost):
+def _face_up_holding_in_province(state, card_id, gold_cost, printed_id=""):
     holding = _register(
         state,
         DynastyHolding(
-            id=card_id, name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=gold_cost
+            id=card_id,
+            name="H",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            gold_cost=gold_cost,
+            printed_id=printed_id,
         ),
     )
     holding.turn_face_up()
@@ -160,6 +165,34 @@ def test_province_menu_drops_recruit_when_it_is_unaffordable():
 
     labels = [label for label, _ in runner.province_menu("P1-buy")]
     assert labels == ["Discard from province"]
+
+
+def _dynasty_runner_with_producer(card_id, printed_id, gold_cost):
+    state = _dealt_table(0)
+    state.battlefield.add(
+        _register(
+            state,
+            StrongholdCard(
+                id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, gold_production=8
+            ),
+        )
+    )
+    _face_up_holding_in_province(state, card_id, gold_cost=gold_cost, printed_id=printed_id)
+    runner = GameRunner(EngineSession.start(state, PlayerId.P1, seed=3), PlayerId.P1)
+    _to_dynasty(runner)
+    return runner
+
+
+def test_province_menu_offers_invest_as_a_second_option():
+    runner = _dynasty_runner_with_producer("qm", "questionable_market", gold_cost=1)
+    labels = [label for label, _ in runner.province_menu("qm")]
+    assert labels == ["Recruit: Pay 1 gold", "Invest: Pay 3 gold", "Discard from province"]
+
+
+def test_province_menu_labels_a_variable_invest_as_a_range():
+    runner = _dynasty_runner_with_producer("rh", "rebuilt_harbor", gold_cost=1)
+    labels = [label for label, _ in runner.province_menu("rh")]
+    assert "Invest: Pay 2–4 gold" in labels  # base 1 plus 1 to 3 invested
 
 
 def test_deck_menu_offers_legacy_on_the_human_dynasty_deck_in_dynasty():
