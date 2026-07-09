@@ -93,9 +93,35 @@ class Ability:
     all_targets: bool = False
 
 
+@dataclass(frozen=True, slots=True)
+class InvestAbility:
+    """A card's Invest ability — an optional gold cost paid while recruiting for a one-time enter-play
+    effect (the kicker-style second purchase option).
+
+    Attributes
+    ----------
+    minimum : int
+        The least gold the Invest may cost; equals ``maximum`` for a fixed Invest.
+    maximum : int
+        The most gold the Invest may cost; above ``minimum`` for a variable Invest whose amount the
+        recruiting seat chooses.
+    effect : callable
+        Maps ``(source_card, amount_paid)`` to the effects the Invest emits once the card enters play.
+    """
+
+    minimum: int
+    maximum: int
+    effect: Callable[[L5RCard, int], list[Effect]]
+
+
 def ability_for(card: L5RCard) -> Ability | None:
     """The activated ability registered for ``card``'s printed id, or None."""
     return _ABILITIES.get(card.printed_id)
+
+
+def invest_for(card: L5RCard) -> InvestAbility | None:
+    """The Invest ability registered for ``card``'s printed id, or None."""
+    return _INVEST.get(card.printed_id)
 
 
 def activatable(game: GameState, seat: PlayerId, phase: Phase) -> list[L5RCard]:
@@ -203,4 +229,27 @@ _ABILITIES: dict[str, Ability] = {
         targets=_owned_ports,
         effects=_plus_one_gp_this_turn,
     ),
+}
+
+
+def _invest_wealth(source: L5RCard, amount: int) -> list[Effect]:
+    """One +1GP Wealth token per gold invested — Rebuilt Harbor's variable payoff."""
+    return [AdjustCounter(source.id, WEALTH, amount)]
+
+
+def _two_wealth(source: L5RCard, amount: int) -> list[Effect]:
+    return [AdjustCounter(source.id, WEALTH, 2)]
+
+
+def _one_wealth(source: L5RCard, amount: int) -> list[Effect]:
+    return [AdjustCounter(source.id, WEALTH, 1)]
+
+
+# Per-card Invest abilities, registered on import. Courts of Otosan Uchi also creates a Courtier
+# Personality, deferred until personalities are recruitable; only its Wealth token is modeled.
+_INVEST: dict[str, InvestAbility] = {
+    "questionable_market": InvestAbility(minimum=2, maximum=2, effect=_two_wealth),
+    "rebuilt_harbor": InvestAbility(minimum=1, maximum=3, effect=_invest_wealth),
+    "training_court": InvestAbility(minimum=1, maximum=1, effect=_one_wealth),
+    "courts_of_otosan_uchi": InvestAbility(minimum=2, maximum=2, effect=_one_wealth),
 }

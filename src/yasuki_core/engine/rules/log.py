@@ -203,8 +203,8 @@ def _encode_action(action: Action) -> dict:
     match action:
         case Pass():
             return {"kind": "pass"}
-        case Recruit(card_id=card_id):
-            return {"kind": "recruit", "card_id": card_id}
+        case Recruit(card_id=card_id, invest=invest):
+            return {"kind": "recruit", "card_id": card_id, "invest": invest}
         case DynastyDiscard(card_id=card_id):
             return {"kind": "dynasty_discard", "card_id": card_id}
     raise ValueError(f"no encoding for action {action!r}")
@@ -215,7 +215,7 @@ def _decode_action(payload: dict) -> Action:
     if kind == "pass":
         return Pass()
     if kind == "recruit":
-        return Recruit(payload["card_id"])
+        return Recruit(payload["card_id"], invest=payload.get("invest", False))
     if kind == "dynasty_discard":
         return DynastyDiscard(payload["card_id"])
     raise ValueError(f"unknown action kind {kind!r}")

@@ -140,6 +140,29 @@ class ChooseLegacyCard(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseInvestAmount(DecisionRequest):
+    """The seat must choose how much to Invest while recruiting a variable-Invest holding. The
+    candidates are the affordable amounts rendered as strings; the chosen amount is added to the
+    recruit payment and drives the Invest effect. Cancellable — nothing is committed until the
+    payment that follows.
+
+    Attributes
+    ----------
+    source_card_id : str
+        The holding being recruited with Invest.
+    """
+
+    source_card_id: str
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+    @property
+    def cancellable(self) -> bool:
+        return True
+
+
+@dataclass(frozen=True, slots=True)
 class ChooseAbilityTarget(DecisionRequest):
     """The seat must choose the target of an activated ability it has announced. The candidates are
     the cards the ability may legally target — all in play, so a client renders them as board

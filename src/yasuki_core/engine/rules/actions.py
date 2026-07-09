@@ -14,9 +14,13 @@ class Recruit:
     ----------
     card_id : str
         The province card to recruit.
+    invest : bool
+        Whether to also pay the card's Invest cost for its one-time enter-play effect — the
+        kicker-style second purchase option. Default False.
     """
 
     card_id: str
+    invest: bool = False
 
 
 @dataclass(frozen=True, slots=True)

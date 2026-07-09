@@ -25,6 +25,7 @@ from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
     ChooseAbilityTarget,
     ChooseCards,
+    ChooseInvestAmount,
     ChooseLegacyCard,
     ChoosePayment,
     DiscardToHandSize,
@@ -84,8 +85,8 @@ def perform(game: GameState, action: Action) -> None:
     match action:
         case Pass():
             advance(game)
-        case Recruit(card_id=card_id):
-            recruit(game, card_id)
+        case Recruit(card_id=card_id, invest=invest):
+            recruit(game, card_id, invest)
         case DynastyDiscard(card_id=card_id):
             dynasty_discard(game, card_id)
         case Legacy():
@@ -113,6 +114,16 @@ def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
     ]
 
 
+def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard) -> int:
+    """The gold ``seat`` could muster to recruit ``card``: its pool plus the yield of every unbowed
+    producer, judged with ``card`` as the payment target since a producer's yield can depend on what
+    it pays for."""
+    return game.gold[seat] + sum(
+        effective_gold_production(game, producer, targets=(card,))
+        for producer in gold_producers(game, seat)
+    )
+
+
 def recruit_cost(game: GameState, card: L5RCard) -> int:
     """The gold a seat pays to recruit ``card``: its printed gold cost, plus the off-clan surcharge
     when the card's clan differs from the seat's Stronghold clan (rules-skeleton §6), less the card's
@@ -125,18 +136,39 @@ def recruit_cost(game: GameState, card: L5RCard) -> int:
     return max(0, cost)
 
 
-def recruit(game: GameState, card_id: str) -> None:
+def recruit(game: GameState, card_id: str, invest: bool = False) -> None:
     """Announce a Recruit: defer bringing the card into play, then pause for its cost payment. The
-    payment bows gold producers to cover :func:`recruit_cost`; once answered, the stack resolves the
-    move into play and the province refill."""
+    payment bows gold producers to cover :func:`recruit_cost` plus any Invest cost; once answered,
+    the stack resolves the move into play and the province refill.
+
+    With ``invest`` set, also pay the card's Invest cost for its one-time enter-play effect. A fixed
+    Invest folds straight into the payment; a variable one pauses first for
+    :class:`ChooseInvestAmount` to pick how much to pay."""
     card = game.table.cards_by_id[card_id]
     seat = card.owner
+    if not invest:
+        _announce_recruit(game, card, seat, invest_amount=0)
+        return
+    ability = abilities.invest_for(card)
+    if ability.minimum == ability.maximum:
+        _announce_recruit(game, card, seat, invest_amount=ability.minimum)
+        return
+    affordable = reachable_gold(game, seat, card) - recruit_cost(game, card)
+    top = min(ability.maximum, affordable)
+    game.pending = ChooseInvestAmount(
+        seat=seat,
+        candidates=tuple(str(amount) for amount in range(ability.minimum, top + 1)),
+        source_card_id=card_id,
+    )
+
+
+def _announce_recruit(game: GameState, card: L5RCard, seat: PlayerId, invest_amount: int) -> None:
     producers = gold_producers(game, seat)
-    game.stack.append(ResolveRecruit(seat, card_id))
+    game.stack.append(ResolveRecruit(seat, card.id, invest_amount))
     game.pending = ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
-        amount=recruit_cost(game, card),
+        amount=recruit_cost(game, card) + invest_amount,
         available=game.gold[seat],
         produced=tuple(
             (producer.id, effective_gold_production(game, producer, targets=(card,)))
@@ -144,6 +176,14 @@ def recruit(game: GameState, card_id: str) -> None:
         ),
         label=card.name,
     )
+
+
+def _apply_invest_amount(
+    game: GameState, request: ChooseInvestAmount, response: DecisionResponse
+) -> None:
+    card = game.table.cards_by_id[request.source_card_id]
+    game.pending = None
+    _announce_recruit(game, card, card.owner, invest_amount=int(response.choices[0]))
 
 
 def submit(game: GameState, response: DecisionResponse) -> None:
@@ -179,6 +219,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_ability_target(game, request, response)
         case ChooseCards():
             _apply_card_choice(game, request, response)
+        case ChooseInvestAmount():
+            _apply_invest_amount(game, request, response)
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
 
@@ -186,9 +228,10 @@ def submit(game: GameState, response: DecisionResponse) -> None:
 def cancel(game: GameState) -> None:
     """Back out of the pending decision, undoing the action that raised it.
 
-    Only a Recruit's payment is cancellable: nothing is committed until it is answered — no gold
-    spent, no producer bowed, the card still in its province — so dropping the decision and its
-    deferred :class:`ResolveRecruit` restores the pre-announce state.
+    A Recruit's steps are cancellable, since nothing is committed until the payment is answered — no
+    gold spent, no producer bowed, the card still in its province. Cancelling a payment drops its
+    deferred :class:`ResolveRecruit`; cancelling an Invest amount drops the choice before the recruit
+    is even announced.
 
     Raise ``RuntimeError`` if no decision is pending, or ``ValueError`` if the pending decision
     cannot be cancelled.
@@ -199,6 +242,8 @@ def cancel(game: GameState) -> None:
     match request:
         case ChoosePayment():
             _cancel_recruit_payment(game)
+        case ChooseInvestAmount():
+            game.pending = None  # the recruit is not yet announced; nothing to undo
         case _:
             raise ValueError(f"{type(request).__name__} cannot be cancelled")
 
@@ -220,8 +265,8 @@ def run_stack(game: GameState) -> None:
 
 def _resolve(game: GameState, item: WorkItem) -> None:
     match item:
-        case ResolveRecruit(seat=seat, card_id=card_id):
-            _resolve_recruit(game, seat, card_id)
+        case ResolveRecruit(seat=seat, card_id=card_id, invest_amount=invest_amount):
+            _resolve_recruit(game, seat, card_id, invest_amount)
         case SelectAbilityTarget(card_id=card_id, candidates=candidates):
             owner = game.table.cards_by_id[card_id].owner
             game.pending = ChooseAbilityTarget(
@@ -247,7 +292,7 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
     game.spend_gold(request.seat, request.amount)
 
 
-def _resolve_recruit(game: GameState, seat: PlayerId, card_id: str) -> None:
+def _resolve_recruit(game: GameState, seat: PlayerId, card_id: str, invest_amount: int = 0) -> None:
     card = game.table.cards_by_id[card_id]
     province = _province_of(game, seat, card_id)
     # Enter unplaced so the client clusters the new holding into the seat's home row by the
@@ -257,6 +302,8 @@ def _resolve_recruit(game: GameState, seat: PlayerId, card_id: str) -> None:
     if province is not None:
         ops.fill_province(game.table, seat, province)
     triggers.fire(game, EnteredPlay(card_id))
+    if invest_amount:
+        triggers.resolve_effects(game, abilities.invest_for(card).effect(card, invest_amount))
 
 
 def dynasty_discard(game: GameState, card_id: str) -> None:

@@ -14,7 +14,6 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.decisions import DecisionResponse
 from yasuki_core.engine.rules import abilities, flow, projection
-from yasuki_core.engine.rules.effects import effective_gold_production
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import (
     Act,
@@ -113,23 +112,22 @@ class EngineSession:
 
     def _recruits(self, seat: PlayerId) -> list[Action]:
         """The Recruit actions ``seat`` can afford: each face-up Holding in its provinces whose cost
-        its pool plus its unbowed producers' gold could cover."""
-        producers = flow.gold_producers(self.game, seat)
-        pool = self.game.gold[seat]
+        its pool plus its unbowed producers' gold could cover, plus an Invest variant when the seat
+        could also cover the card's Invest cost."""
         recruits: list[Action] = []
         for key, zone in self.game.table.zones.items():
             if key.owner is not seat or key.role is not ZoneRole.PROVINCE:
                 continue
             for card in zone.cards:
-                if isinstance(card, DynastyHolding) and card.face_up:
-                    # A producer's yield can depend on what it pays for, so affordability is judged
-                    # against this candidate as the target.
-                    affordable = pool + sum(
-                        effective_gold_production(self.game, producer, targets=(card,))
-                        for producer in producers
-                    )
-                    if flow.recruit_cost(self.game, card) <= affordable:
-                        recruits.append(Recruit(card.id))
+                if not (isinstance(card, DynastyHolding) and card.face_up):
+                    continue
+                affordable = flow.reachable_gold(self.game, seat, card)
+                base = flow.recruit_cost(self.game, card)
+                if base <= affordable:
+                    recruits.append(Recruit(card.id))
+                invest = abilities.invest_for(card)
+                if invest is not None and base + invest.minimum <= affordable:
+                    recruits.append(Recruit(card.id, invest=True))
         return recruits
 
     def act(self, seat: PlayerId, action: Action) -> None:

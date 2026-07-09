@@ -15,10 +15,14 @@ class ResolveRecruit:
         The recruiting seat.
     card_id : str
         The card leaving its province for play.
+    invest_amount : int
+        The gold Invested while recruiting, driving the card's one-time Invest effect on entry, or 0
+        when not Invested. Default 0.
     """
 
     seat: PlayerId
     card_id: str
+    invest_amount: int = 0
 
 
 @dataclass(frozen=True, slots=True)
