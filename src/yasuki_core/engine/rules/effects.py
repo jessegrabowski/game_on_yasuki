@@ -104,6 +104,37 @@ def effective_gold_production(
     return base + sum(c.gold_production * card.counters.get(c.key, 0) for c in ALL_COUNTERS)
 
 
+# A recruit-discount handler computes the gold reduction on recruiting a card, from the card being
+# recruited and its controller's and opponents' views. It reduces the card's own cost — the "enters
+# play for N less Gold" holdings, gated on a readable condition.
+DiscountHandler = Callable[[L5RCard, PlayerState, tuple[PlayerState, ...]], int]
+RECRUIT_DISCOUNTS: dict[str, DiscountHandler] = {}
+
+
+def recruit_discount(printed_id: str) -> Callable[[DiscountHandler], DiscountHandler]:
+    """Register the decorated function as the recruit-discount handler for ``printed_id``."""
+
+    def register(handler: DiscountHandler) -> DiscountHandler:
+        RECRUIT_DISCOUNTS[printed_id] = handler
+        return handler
+
+    return register
+
+
+def effective_recruit_discount(game: GameState, card: L5RCard) -> int:
+    """The gold ``card`` costs less to recruit from its own conditional cost-reduction ability, or 0
+    when it has none. Never negative."""
+    handler = RECRUIT_DISCOUNTS.get(card.printed_id)
+    if handler is None:
+        return 0
+    reduction = handler(card, player_state(game, card.owner), opposing_states(game, card.owner))
+    return max(0, reduction)
+
+
+def _is_clan(me: PlayerState, clan: str) -> bool:
+    return me.stronghold is not None and me.stronghold.clan == clan
+
+
 # Per-card gold-production handlers, registered on import of this module. The read-sites already
 # load it, so a handler is always in place by the time gold is produced.
 
@@ -132,3 +163,30 @@ def _jade_works(
     """+2 GP when paying for a Jade card."""
     bonus = 2 if any("Jade" in target.keywords for target in targets) else 0
     return card.gold_production + bonus
+
+
+# Per-card recruit-discount handlers — the "enters play for N less Gold" holdings.
+
+
+@recruit_discount("colonial_farm")
+def _colonial_farm(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+    """Enters play for 1 less Gold if you are a Lion Clan player."""
+    return 1 if _is_clan(me, "Lion") else 0
+
+
+@recruit_discount("fantastic_gardens")
+def _fantastic_gardens(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+    """Enters play for 2 less Gold if you are a Crane Clan player."""
+    return 2 if _is_clan(me, "Crane") else 0
+
+
+@recruit_discount("moto_traders")
+def _moto_traders(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+    """Enters play for 1 less Gold if you control another Merchant Caravan."""
+    return 1 if me.controls("Merchant Caravan", other_than=card) else 0
+
+
+@recruit_discount("shrine_of_courtesy")
+def _shrine_of_courtesy(card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...]) -> int:
+    """Courtesy grants -3 Gold Cost while you are the second player (you did not go first)."""
+    return 3 if me.went_second else 0

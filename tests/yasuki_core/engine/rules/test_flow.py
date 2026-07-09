@@ -183,3 +183,64 @@ def test_recruit_cost_charges_no_surcharge_when_clan_alignment_is_unknown():
         id="h", name="H", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4, clan="crane"
     )
     assert flow.recruit_cost(game, holding) == 4  # no Stronghold clan to compare against
+
+
+def _discount_game(*, clan=None, first_player=PlayerId.P1, in_play=()):
+    state = TableState.empty_two_seat()
+    state.battlefield.add(
+        _register(
+            state,
+            StrongholdCard(
+                id="P1-SH", name="SH", side=Side.STRONGHOLD, owner=PlayerId.P1, clan=clan
+            ),
+        )
+    )
+    for card in in_play:
+        state.battlefield.add(_register(state, card))
+    return GameState.start(state, first_player)
+
+
+def _holding(printed_id: str, gold_cost: int, keywords=()) -> DynastyHolding:
+    return DynastyHolding(
+        id=f"{printed_id}-inst",
+        name="H",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        printed_id=printed_id,
+        gold_cost=gold_cost,
+        keywords=keywords,
+    )
+
+
+def test_colonial_farm_discounts_one_for_a_lion_player():
+    farm = _holding("colonial_farm", gold_cost=6)
+    assert flow.recruit_cost(_discount_game(clan="Lion"), farm) == 5
+    assert flow.recruit_cost(_discount_game(clan="Crab"), farm) == 6  # no discount off-clan
+
+
+def test_fantastic_gardens_discounts_two_for_a_crane_player():
+    gardens = _holding("fantastic_gardens", gold_cost=7)
+    assert flow.recruit_cost(_discount_game(clan="Crane"), gardens) == 5
+    assert flow.recruit_cost(_discount_game(clan="Lion"), gardens) == 7
+
+
+def test_moto_traders_discounts_with_another_merchant_caravan_in_play():
+    caravan = DynastyHolding(
+        id="mc", name="C", side=Side.DYNASTY, owner=PlayerId.P1, keywords=("Merchant Caravan",)
+    )
+    traders = _holding("moto_traders", gold_cost=5)
+    assert flow.recruit_cost(_discount_game(in_play=(caravan,)), traders) == 4
+    assert flow.recruit_cost(_discount_game(), traders) == 5
+
+
+def test_shrine_of_courtesy_discounts_three_when_you_went_second():
+    shrine = _holding("shrine_of_courtesy", gold_cost=4)
+    assert (
+        flow.recruit_cost(_discount_game(first_player=PlayerId.P2), shrine) == 1
+    )  # P1 went second
+    assert flow.recruit_cost(_discount_game(first_player=PlayerId.P1), shrine) == 4
+
+
+def test_recruit_discount_floors_the_cost_at_zero():
+    cheap = _holding("shrine_of_courtesy", gold_cost=2)  # a -3 discount would go negative
+    assert flow.recruit_cost(_discount_game(first_player=PlayerId.P2), cheap) == 0

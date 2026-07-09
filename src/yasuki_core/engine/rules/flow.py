@@ -16,7 +16,7 @@ from yasuki_core.engine.rules.decisions import (
     DecisionResponse,
     PlaceLegacy,
 )
-from yasuki_core.engine.rules.effects import effective_gold_production
+from yasuki_core.engine.rules.effects import effective_gold_production, effective_recruit_discount
 from yasuki_core.engine.rules import triggers
 from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
 
@@ -97,12 +97,14 @@ def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
 
 def recruit_cost(game: GameState, card: L5RCard) -> int:
     """The gold a seat pays to recruit ``card``: its printed gold cost, plus the off-clan surcharge
-    when the card's clan differs from the seat's Stronghold clan (rules-skeleton §6)."""
+    when the card's clan differs from the seat's Stronghold clan (rules-skeleton §6), less the card's
+    own conditional recruit discount. Floored at zero."""
     cost = card.gold_cost or 0
     seat_clan = _seat_clan(game, card.owner)
     if card.clan is not None and seat_clan is not None and card.clan != seat_clan:
         cost += OFF_CLAN_SURCHARGE
-    return cost
+    cost -= effective_recruit_discount(game, card)
+    return max(0, cost)
 
 
 def recruit(game: GameState, card_id: str) -> None:
