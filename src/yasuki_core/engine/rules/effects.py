@@ -1,7 +1,8 @@
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 
 from yasuki_core.engine.players import PlayerId
+from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.counters import ALL_COUNTERS
@@ -75,12 +76,39 @@ def gold_handler(printed_id: str) -> Callable[[GoldHandler], GoldHandler]:
     return register
 
 
+def _on_battlefield(game: GameState, card_id: str) -> bool:
+    return any(card.id == card_id for card in game.table.battlefield.cards)
+
+
+def active_modifiers(game: GameState, card: L5RCard, stat: Stat) -> Iterator[Modifier]:
+    """Every modifier adjusting ``card``'s ``stat`` right now: one derived from each counter it holds
+    (each counter is a source that grants its per-count stat while in play), plus the recorded
+    modifiers targeting it — a ``WHILE_SOURCE_IN_PLAY`` one only while its source is on the
+    battlefield."""
+    # A counter's source is the card itself, in play by construction here (this is only reached for
+    # an in-play card), so no source-in-play check is needed for the derived modifiers.
+    for counter in ALL_COUNTERS:
+        per_count = getattr(counter, stat.value, 0)
+        count = card.counters.get(counter.key, 0)
+        if per_count and count:
+            yield Modifier(card.id, card.id, stat, per_count * count, Duration.WHILE_SOURCE_IN_PLAY)
+    for modifier in game.modifiers:
+        if modifier.target_id != card.id or modifier.stat is not stat:
+            continue
+        if modifier.duration is Duration.WHILE_SOURCE_IN_PLAY and not _on_battlefield(
+            game, modifier.source_id
+        ):
+            continue
+        yield modifier
+
+
 def effective_gold_production(
     game: GameState, card: L5RCard, targets: tuple[L5RCard, ...] = ()
 ) -> int:
     """The gold ``card`` produces right now: its registered handler's result against the live views,
-    or its printed ``gold_production`` when no handler is registered — plus one gold per wealth
-    counter. A card with no gold-production stat produces 0; wealth counters on it raise nothing.
+    or its printed ``gold_production`` when no handler is registered, plus every active Gold
+    Production modifier on it (wealth counters, ability grants), floored at zero. A card with no
+    Gold Production stat produces 0 and receives no modifiers (the stat is absent).
 
     Parameters
     ----------
@@ -95,13 +123,16 @@ def effective_gold_production(
     handler = GOLD_HANDLERS.get(card.printed_id)
     if handler is None:
         if not hasattr(card, "gold_production"):
-            return 0  # no Gold Production stat: gold counters have nothing to raise
+            return 0  # an absent stat cannot receive modifiers (CR, Absent Stats)
         base = card.gold_production
     else:
         base = handler(
             card, player_state(game, card.owner), opposing_states(game, card.owner), targets
         )
-    return base + sum(c.gold_production * card.counters.get(c.key, 0) for c in ALL_COUNTERS)
+    total = base + sum(
+        modifier.amount for modifier in active_modifiers(game, card, Stat.GOLD_PRODUCTION)
+    )
+    return max(0, total)
 
 
 # A recruit-discount handler computes the gold reduction on recruiting a card, from the card being

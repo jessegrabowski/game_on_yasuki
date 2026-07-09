@@ -4,6 +4,7 @@ from enum import Enum
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
 from yasuki_core.engine.rules.decisions import DecisionRequest
+from yasuki_core.engine.rules.modifiers import Modifier
 from yasuki_core.engine.rules.work import WorkItem
 
 
@@ -59,6 +60,10 @@ class GameState:
         Deferred engine work — the later steps of an action sequence, run once the current decision
         clears. Ephemeral: replay rebuilds it by re-running the engine, so it is never serialized.
         Default empty.
+    modifiers : list of Modifier
+        The active recorded stat modifiers — created continuous effects (an ability's grant), kept in
+        creation order. Ephemeral: rebuilt by replay and never serialized, like ``stack``, but unlike
+        it may be non-empty at rest within a turn, so its order is load-bearing. Default empty.
     """
 
     table: TableState
@@ -73,6 +78,7 @@ class GameState:
     seed: int = 0
     pending: DecisionRequest | None = None
     stack: list[WorkItem] = field(default_factory=list)
+    modifiers: list[Modifier] = field(default_factory=list)
 
     @property
     def awaiting_decision(self) -> bool:

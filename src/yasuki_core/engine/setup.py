@@ -78,7 +78,11 @@ def _starting_honor(resolved: ResolvedDeck) -> int:
 def _apply_sensei_modifiers(resolved: ResolvedDeck) -> None:
     """Fold each sensei's gold-production and province-strength deltas into the stronghold, so every
     downstream consumer reads the stronghold's effective characteristics with no sensei awareness.
-    Starting honor is a seat scalar and is summed separately by :func:`_starting_honor`."""
+    Starting honor is a seat scalar and is summed separately by :func:`_starting_honor`.
+
+    TODO: migrate these deltas to WHILE_SOURCE_IN_PLAY modifiers (engine/rules/modifiers.py) once an
+    attachment model exists — the Sensei is a live battlefield card, so it should be a modifier
+    source like any attachment rather than a baked printed-stat mutation."""
     stronghold = _stronghold(resolved)
     if stronghold is None:
         return
