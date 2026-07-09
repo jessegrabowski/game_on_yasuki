@@ -361,3 +361,27 @@ def _rural_market_farm_destroyed(ctx: TriggerContext) -> list[Effect]:
     if "Farm" not in destroyed.keywords:
         return []
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+@on(EnteredPlay, "wheat_farm")
+def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
+    """After this Holding enters play, let its controller give zero to two other Farms they control a
+    +1GP Wealth token."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    others = tuple(
+        card.id
+        for card in ctx.game.table.battlefield.cards
+        if card.owner is ctx.card.owner
+        and card is not ctx.card
+        and isinstance(card, DynastyHolding)
+        and "Farm" in card.keywords
+    )
+    if not others:
+        return []
+    return [Choose(ctx.card.owner, others, 0, min(2, len(others)), "wheat_farm", ctx.card.id)]
+
+
+@choice_resolver("wheat_farm")
+def _wheat_farm_grant(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
+    return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]

@@ -1,13 +1,23 @@
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules import flow
+from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.effects import effective_gold_production
 from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay, TurnStarted
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import Destroy, apply_effect, fire
+from yasuki_core.engine.rules.triggers import AdjustCounter, Destroy, apply_effect, fire, on
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.fate import FateCard
+
+
+# A test-only trigger: any card printed as "test_probe" gives itself a Wealth token when a card
+# enters play. It lets a co-firing subscriber do observable work, which no real EnteredPlay card
+# pairs with Wheat Farm to do.
+@on(EnteredPlay, "test_probe")
+def _probe_gains_wealth(ctx):
+    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
 
 
 def _game():
@@ -346,3 +356,132 @@ def test_flow_emits_entered_play_from_recruit_resolution():
 
     assert rural in game.table.battlefield.cards
     assert rural.counters == {"wealth": 1}
+
+
+def _wheat_farm(game, seat=PlayerId.P1, card_id="P1-wheat"):
+    farm = DynastyHolding(
+        id=card_id,
+        printed_id="wheat_farm",
+        name="Wheat Farm",
+        side=Side.DYNASTY,
+        owner=seat,
+        gold_production=2,
+        keywords=("Farm",),
+    )
+    game.table.cards_by_id[farm.id] = farm
+    game.table.battlefield.add(farm)
+    return farm
+
+
+def test_wheat_farm_offers_no_choice_without_other_farms():
+    game = _game()
+    wheat = _wheat_farm(game)
+
+    fire(game, EnteredPlay(wheat.id))
+
+    assert game.pending is None
+    assert wheat.counters == {}  # it seeds no token on itself
+
+
+def test_wheat_farm_pauses_to_choose_among_your_other_farms():
+    game = _game()
+    wheat = _wheat_farm(game)
+    other = _keyworded_farm(game, card_id="P1-other-farm")
+
+    fire(game, EnteredPlay(wheat.id))
+
+    pending = game.pending
+    assert isinstance(pending, ChooseCards)
+    assert pending.seat is PlayerId.P1
+    assert pending.candidates == (other.id,)  # excludes the Wheat Farm itself
+    assert (pending.minimum, pending.maximum) == (0, 1)  # zero to two, capped by the one candidate
+
+
+def test_wheat_farm_excludes_non_farms_and_opponents_farms():
+    game = _game()
+    wheat = _wheat_farm(game)
+    _caravansary(game)  # a Holding, but not a Farm
+    _keyworded_farm(game, seat=PlayerId.P2, card_id="P2-farm")  # a Farm, but the opponent's
+
+    fire(game, EnteredPlay(wheat.id))
+
+    assert game.pending is None  # no eligible target — no choice raised
+
+
+def test_wheat_farm_grants_a_token_to_each_chosen_farm():
+    game = _game()
+    wheat = _wheat_farm(game)
+    first = _keyworded_farm(game, card_id="P1-farm-a")
+    second = _keyworded_farm(game, card_id="P1-farm-b")
+
+    fire(game, EnteredPlay(wheat.id))
+    flow.submit(game, DecisionResponse((first.id, second.id)))
+
+    assert first.counters == {"wealth": 1} and second.counters == {"wealth": 1}
+    assert wheat.counters == {}
+    assert game.pending is None
+
+
+def test_wheat_farm_choice_is_optional():
+    game = _game()
+    wheat = _wheat_farm(game)
+    other = _keyworded_farm(game, card_id="P1-other-farm")
+
+    fire(game, EnteredPlay(wheat.id))
+    flow.submit(game, DecisionResponse(()))  # decline — give none
+
+    assert other.counters == {}
+    assert game.pending is None
+
+
+def test_wheat_farm_token_cascades_into_aokis_draw():
+    game = _game()
+    wheat = _wheat_farm(game)
+    other = _keyworded_farm(game, card_id="P1-other-farm")
+    _aoki(game)
+    _seed_fate_deck(game, PlayerId.P1, 3)
+
+    fire(game, EnteredPlay(wheat.id))
+    flow.submit(game, DecisionResponse((other.id,)))
+
+    assert _hand_size(game, PlayerId.P1) == 1  # the granted token drew Aoki a card
+
+
+def test_wheat_farm_caps_the_choice_at_two_farms():
+    game = _game()
+    wheat = _wheat_farm(game)
+    for i in range(3):
+        _keyworded_farm(game, card_id=f"P1-farm-{i}")
+
+    fire(game, EnteredPlay(wheat.id))
+
+    pending = game.pending
+    assert isinstance(pending, ChooseCards)
+    assert len(pending.candidates) == 3
+    assert pending.maximum == 2  # "zero to two" — capped however many Farms you control
+
+
+def _probe(game, seat=PlayerId.P1, card_id="P1-z-probe"):
+    probe = DynastyHolding(
+        id=card_id, printed_id="test_probe", name="Probe", side=Side.DYNASTY, owner=seat
+    )
+    game.table.cards_by_id[probe.id] = probe
+    game.table.battlefield.add(probe)
+    return probe
+
+
+def test_a_trigger_stashed_by_the_choice_still_applies_its_effect_on_resume():
+    # The probe also fires on the Wheat Farm's entry but sorts after it, so the pausing choice stashes
+    # the probe's trigger; resuming must run it and land its Wealth token, not merely drain the stack.
+    game = _game()
+    wheat = _wheat_farm(game, card_id="P1-a-wheat")
+    other = _keyworded_farm(game, card_id="P1-other-farm")
+    probe = _probe(game)
+
+    fire(game, EnteredPlay(wheat.id))
+    assert isinstance(game.pending, ChooseCards)  # paused with the probe's trigger stashed
+    flow.submit(game, DecisionResponse((other.id,)))
+
+    assert other.counters == {"wealth": 1}  # the choice resolved
+    assert probe.counters == {"wealth": 1}  # the stashed trigger resumed and applied its effect
+    assert game.stack == []

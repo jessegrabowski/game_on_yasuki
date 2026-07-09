@@ -109,6 +109,67 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
     assert restored.replay() == game
 
 
+def test_triggered_choice_replays_and_round_trips():
+    # Recruiting a Wheat Farm fires its EnteredPlay trigger, which pauses to choose other Farms to
+    # give a Wealth token — the recruit -> pay -> choose -> resume chain must survive replay.
+    state = _dealt_table()
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        _register(
+            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+        )
+    ]
+    state.battlefield.add(
+        _register(
+            state,
+            DynastyHolding(
+                id="P1-SH", name="SH", side=Side.DYNASTY, owner=PlayerId.P1, gold_production=8
+            ),
+        )
+    )
+    state.battlefield.add(
+        _register(
+            state,
+            DynastyHolding(
+                id="P1-other",
+                name="Other Farm",
+                side=Side.DYNASTY,
+                owner=PlayerId.P1,
+                keywords=("Farm",),
+                gold_production=2,
+            ),
+        )
+    )
+    wheat = _register(
+        state,
+        DynastyHolding(
+            id="P1-wheat",
+            name="Wheat Farm",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            printed_id="wheat_farm",
+            keywords=("Farm",),
+            gold_cost=3,
+        ),
+    )
+    wheat.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(wheat)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+
+    log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
+    game = build_game(log)
+    act_and_log(game, log, Pass())  # Action -> Attack
+    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Recruit("P1-wheat"))  # pauses for payment
+    submit_and_log(game, log, DecisionResponse(("P1-SH",)))  # pays, then pauses for the choice
+    submit_and_log(game, log, DecisionResponse(("P1-other",)))  # give the other Farm a token
+
+    assert game.pending is None and game.stack == []
+    assert game.table.cards_by_id["P1-other"].counters == {"wealth": 1}
+    restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
+    assert restored.replay() == game
+
+
 def test_cancelled_recruit_payment_replays_and_round_trips():
     state = _dealt_table()
     state.battlefield.add(
