@@ -5,11 +5,19 @@ from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.pregame import StrongholdCard
-from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.actions import (
+    ActivateAbility,
+    Action,
+    DynastyDiscard,
+    Legacy,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import ResolveRecruit, WorkItem
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
+    ChooseAbilityTarget,
     ChooseLegacyCard,
     ChoosePayment,
     DiscardToHandSize,
@@ -17,7 +25,8 @@ from yasuki_core.engine.rules.decisions import (
     PlaceLegacy,
 )
 from yasuki_core.engine.rules.effects import effective_gold_production, effective_recruit_discount
-from yasuki_core.engine.rules import triggers
+from yasuki_core.engine.rules.modifiers import Duration
+from yasuki_core.engine.rules import abilities, triggers
 from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
 
 # The boldface keyword marking a card the Legacy rulebook ability can search out.
@@ -74,6 +83,8 @@ def perform(game: GameState, action: Action) -> None:
             dynasty_discard(game, card_id)
         case Legacy():
             legacy(game)
+        case ActivateAbility(card_id=card_id):
+            activate(game, card_id)
 
 
 def produce_gold(game: GameState, card_id: str, amount: int) -> None:
@@ -157,6 +168,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_legacy_choice(game, request, response)
         case PlaceLegacy():
             _apply_legacy_placement(game, request, response)
+        case ChooseAbilityTarget():
+            _apply_ability_target(game, request, response)
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
 
@@ -334,6 +347,29 @@ def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tu
     return tuple(displaceable)
 
 
+def activate(game: GameState, card_id: str) -> None:
+    """Announce an activated ability: bow its card (the cost) and pause to choose its target. The
+    ability is guaranteed registered and to have a legal target — ``legal_actions`` only offers it
+    then."""
+    card = game.table.cards_by_id[card_id]
+    ability = abilities.ability_for(card)
+    # Fix the targets before paying the cost (Good Faith): the candidates are the ones legal_actions
+    # validated, so bowing can never leave an unanswerable empty-target decision.
+    targets = tuple(ability.targets(game, card))
+    card.bow()
+    game.pending = ChooseAbilityTarget(seat=card.owner, candidates=targets, source_card_id=card_id)
+
+
+def _apply_ability_target(
+    game: GameState, request: ChooseAbilityTarget, response: DecisionResponse
+) -> None:
+    source = game.table.cards_by_id[request.source_card_id]
+    target = game.table.cards_by_id[response.choices[0]]
+    ability = abilities.ability_for(source)
+    game.pending = None
+    triggers.resolve_effects(game, ability.effects(source, target))
+
+
 def _end_turn(game: GameState) -> None:
     seat = game.active
     ops.draw_to_hand(game.table, seat)
@@ -347,6 +383,9 @@ def _end_turn(game: GameState) -> None:
 
 
 def _begin_next_turn(game: GameState) -> None:
+    # Drop until-end-of-turn modifiers as the turn ends; the comprehension keeps creation order so
+    # the list rebuilds identically under replay.
+    game.modifiers = [m for m in game.modifiers if m.duration is not Duration.UNTIL_END_OF_TURN]
     game.turn += 1
     game.active = _other(game.active)
     game.phase = Phase.ACTION

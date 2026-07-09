@@ -4,9 +4,16 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole
 from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.rules.state import GameState, Phase
-from yasuki_core.engine.rules.actions import Action, DynastyDiscard, Legacy, Pass, Recruit
+from yasuki_core.engine.rules.actions import (
+    ActivateAbility,
+    Action,
+    DynastyDiscard,
+    Legacy,
+    Pass,
+    Recruit,
+)
 from yasuki_core.engine.rules.decisions import DecisionResponse
-from yasuki_core.engine.rules import flow, projection
+from yasuki_core.engine.rules import abilities, flow, projection
 from yasuki_core.engine.rules.effects import effective_gold_production
 from yasuki_core.engine.rules.projection import GameView
 from yasuki_core.engine.rules.log import (
@@ -72,11 +79,18 @@ class EngineSession:
         if self.game.game_over or self.game.awaiting_decision or seat is not self.game.active:
             return []
         actions: list[Action] = [Pass()]
+        actions.extend(self._abilities(seat))
         if self.game.phase is Phase.DYNASTY:
             actions.extend(self._recruits(seat))
             actions.extend(self._dynasty_discards(seat))
             actions.extend(self._legacy(seat))
         return actions
+
+    def _abilities(self, seat: PlayerId) -> list[Action]:
+        """An ActivateAbility for each in-play card whose activated ability the seat can use in the
+        current phase (controlled, unbowed, with a legal target)."""
+        ready = abilities.activatable(self.game, seat, self.game.phase)
+        return [ActivateAbility(card.id) for card in ready]
 
     def _legacy(self, seat: PlayerId) -> list[Action]:
         """The Legacy ability when the seat can take it: once per turn, and only with a card in hand

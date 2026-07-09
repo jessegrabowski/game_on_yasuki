@@ -40,5 +40,19 @@ class Legacy:
     decisions the action raises, so the action itself carries no target."""
 
 
+@dataclass(frozen=True, slots=True)
+class ActivateAbility:
+    """Activate the activated ability on an in-play card, bowing it as the cost. The ability's target
+    is chosen through the decision the action raises.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose ability is used.
+    """
+
+    card_id: str
+
+
 # The free actions a seat may take on its turn; grows as the rules vocabulary does.
-Action = Pass | Recruit | DynastyDiscard | Legacy
+Action = Pass | Recruit | DynastyDiscard | Legacy | ActivateAbility

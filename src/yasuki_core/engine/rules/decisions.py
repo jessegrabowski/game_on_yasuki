@@ -140,6 +140,24 @@ class ChooseLegacyCard(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseAbilityTarget(DecisionRequest):
+    """The seat must choose the target of an activated ability it has announced. The candidates are
+    the cards the ability may legally target — all in play, so a client renders them as board
+    selections.
+
+    Attributes
+    ----------
+    source_card_id : str
+        The card whose ability is resolving, whose effects apply to the chosen target.
+    """
+
+    source_card_id: str
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        return _chooses_exactly_one(self, response)
+
+
+@dataclass(frozen=True, slots=True)
 class PlaceLegacy(DecisionRequest):
     """The seat must choose which province to place the found Legacy card into, discarding the card
     already there. The candidates are the province cards eligible to be displaced.

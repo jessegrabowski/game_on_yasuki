@@ -11,6 +11,7 @@ from yasuki_core.engine.rules.events import (
     GameEvent,
     TurnStarted,
 )
+from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
@@ -48,7 +49,20 @@ class Destroy:
     card_id: str
 
 
-Effect = AdjustCounter | DrawCard | Destroy
+@dataclass(frozen=True, slots=True)
+class GrantModifier:
+    """Effect: record a continuous stat modifier — the ``source`` card grants ``target`` a change of
+    ``amount`` to ``stat`` for ``duration``. The single created-effect entry point; a card's
+    counters and attachments grant their bonuses without one (they are derived on read)."""
+
+    source_id: str
+    target_id: str
+    stat: Stat
+    amount: int
+    duration: Duration
+
+
+Effect = AdjustCounter | DrawCard | Destroy | GrantModifier
 
 
 @dataclass(frozen=True, slots=True)
@@ -116,6 +130,10 @@ def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
             role = ZoneRole.DYNASTY_DISCARD if card.side is Side.DYNASTY else ZoneRole.FATE_DISCARD
             ops.move_card(game.table, card, ZoneKey(card.owner, role))
             return [Destroyed(card_id)]
+        case GrantModifier(
+            source_id=source_id, target_id=target_id, stat=stat, amount=amount, duration=duration
+        ):
+            game.modifiers.append(Modifier(source_id, target_id, stat, amount, duration))
     return []
 
 
@@ -135,11 +153,9 @@ def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
     return (card.owner.name if card.owner else "", card.id)
 
 
-def fire(game: GameState, event: GameEvent) -> None:
-    """Resolve ``event`` and the cascade it triggers, draining a worklist to a fixpoint. Collect the
-    cards whose trigger subscribes to the event, resolve each in a canonical order (controller, then
-    id), and apply the effects they return — whose own derived events re-enter the worklist."""
-    queue: list[GameEvent] = [event]
+def _drain(game: GameState, queue: list[GameEvent]) -> None:
+    """Drain a worklist of events to a fixpoint: resolve each event's triggers in a canonical order
+    (controller, then id) and apply their effects, whose own derived events re-enter the worklist."""
     resolved = 0
     while queue:
         resolved += 1
@@ -151,6 +167,20 @@ def fire(game: GameState, event: GameEvent) -> None:
         for card, trigger in firing:
             for effect in trigger(TriggerContext(game, card, current)):
                 queue.extend(apply_effect(game, effect))
+
+
+def fire(game: GameState, event: GameEvent) -> None:
+    """Resolve ``event`` and the cascade it triggers, draining a worklist to a fixpoint."""
+    _drain(game, [event])
+
+
+def resolve_effects(game: GameState, effects: list[Effect]) -> None:
+    """Apply ``effects`` — an activated ability's output — and drain the derived-event cascade the
+    same way :func:`fire` does, so a triggered reaction to those effects still resolves."""
+    queue: list[GameEvent] = []
+    for effect in effects:
+        queue.extend(apply_effect(game, effect))
+    _drain(game, queue)
 
 
 # Per-card triggers, registered on import of this module (as effects.py holds its gold handlers).
