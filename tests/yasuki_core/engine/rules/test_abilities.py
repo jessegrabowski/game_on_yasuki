@@ -274,3 +274,95 @@ def test_a_cost_that_pauses_resolves_before_the_ability_target():
     assert session.game.pending is None
     assert session.game.table.cards_by_id["tgt"].counters == {"wealth": 1}  # ability effect applied
     assert replay(session.log) == session.game  # the deferred-cost chain replays deterministically
+
+
+def _harvested_game(other_farms: int = 2) -> EngineSession:
+    state = TableState.empty_two_seat()
+    state.battlefield.add(
+        _register(state, _holding("hl", "harvested_land", keywords=("Farm",), gp=2))
+    )
+    for i in range(other_farms):
+        state.battlefield.add(
+            _register(state, _holding(f"f{i}", "plain_farm", keywords=("Farm",), gp=2))
+        )
+    return EngineSession.start(state, PlayerId.P1)
+
+
+def test_harvested_land_destroys_itself_to_boost_your_other_farms():
+    session = _harvested_game(other_farms=2)
+    session.act(PlayerId.P1, ActivateAbility("hl"))
+
+    table = session.game.table
+    assert session.game.pending is None  # untargeted — it hits every other Farm, no choice
+    assert "hl" in {c.id for c in table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards}
+    assert effective_gold_production(session.game, table.cards_by_id["f0"]) == 3  # base 2 + 1
+    assert effective_gold_production(session.game, table.cards_by_id["f1"]) == 3
+
+
+def test_harvested_land_is_not_offered_without_another_farm():
+    session = _harvested_game(other_farms=0)
+    assert ActivateAbility("hl") not in session.legal_actions(PlayerId.P1)
+
+
+def test_harvested_land_boost_expires_at_end_of_turn():
+    session = _harvested_game(other_farms=1)
+    session.act(PlayerId.P1, ActivateAbility("hl"))
+    assert effective_gold_production(session.game, session.game.table.cards_by_id["f0"]) == 3
+
+    for _ in range(3):  # end P1's turn — the boost outlives its destroyed source but not the turn
+        session.act(PlayerId.P1, Pass())
+    assert effective_gold_production(session.game, session.game.table.cards_by_id["f0"]) == 2
+
+
+def test_harvested_land_activation_replays_to_the_same_state():
+    session = _harvested_game(other_farms=2)
+    session.act(PlayerId.P1, ActivateAbility("hl"))
+    assert replay(session.log) == session.game
+
+
+def _ichiba_game(fate_cards: int = 1, ports: int = 1) -> EngineSession:
+    state = TableState.empty_two_seat()
+    state.battlefield.add(
+        _register(state, _holding("ich", "ichiba_district", keywords=("Market",), gp=1))
+    )
+    for i in range(ports):
+        state.battlefield.add(
+            _register(state, _holding(f"port{i}", "island_wharf", keywords=("Port",), gp=2))
+        )
+    state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
+        _register(state, FateCard(id=f"fd{i}", name="F", side=Side.FATE, owner=PlayerId.P1))
+        for i in range(fate_cards)
+    ]
+    return EngineSession.start(state, PlayerId.P1)
+
+
+def test_ichiba_banishes_the_top_fate_card_then_boosts_a_target_port():
+    session = _ichiba_game(fate_cards=2, ports=1)
+    session.act(PlayerId.P1, ActivateAbility("ich"))
+
+    pending = session.game.pending
+    assert isinstance(pending, ChooseAbilityTarget) and pending.candidates == ("port0",)
+    table = session.game.table
+    banished = table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_BANISH)]
+    assert [c.id for c in banished.cards] == ["fd1"]  # the top (drawn end), not the bottom
+    assert [c.id for c in table.decks[DeckKey(PlayerId.P1, Side.FATE)].cards] == ["fd0"]  # the rest
+
+    session.submit(PlayerId.P1, DecisionResponse(("port0",)))
+    assert effective_gold_production(session.game, table.cards_by_id["port0"]) == 3  # base 2 + 1
+
+
+def test_ichiba_is_not_activatable_with_an_empty_fate_deck():
+    session = _ichiba_game(fate_cards=0, ports=1)
+    assert ActivateAbility("ich") not in session.legal_actions(PlayerId.P1)
+
+
+def test_ichiba_is_not_activatable_without_a_port():
+    session = _ichiba_game(fate_cards=1, ports=0)
+    assert ActivateAbility("ich") not in session.legal_actions(PlayerId.P1)
+
+
+def test_ichiba_activation_replays_to_the_same_state():
+    session = _ichiba_game(fate_cards=2, ports=1)
+    session.act(PlayerId.P1, ActivateAbility("ich"))
+    session.submit(PlayerId.P1, DecisionResponse(("port0",)))
+    assert replay(session.log) == session.game

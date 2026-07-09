@@ -15,7 +15,7 @@ from yasuki_core.engine.rules.decisions import ChooseCards
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.engine.rules.work import ResumeCascade
-from yasuki_core.engine.table import ZoneKey, ZoneRole
+from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import Counter, WEALTH
@@ -79,6 +79,13 @@ class Straighten:
 
 
 @dataclass(frozen=True, slots=True)
+class BanishTopFate:
+    """Effect: banish the top card of ``seat``'s Fate deck; a no-op if the deck is empty."""
+
+    seat: PlayerId
+
+
+@dataclass(frozen=True, slots=True)
 class Choose:
     """Effect: pause the cascade so ``seat`` picks between ``minimum`` and ``maximum`` of
     ``candidates``; the chosen ids feed the registered ``resolver``, whose effects apply on resume.
@@ -109,7 +116,9 @@ class Choose:
     source_id: str
 
 
-Effect = AdjustCounter | DrawCard | Destroy | GrantModifier | Bow | Straighten | Choose
+Effect = (
+    AdjustCounter | DrawCard | Destroy | GrantModifier | Bow | Straighten | BanishTopFate | Choose
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -206,6 +215,10 @@ def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
             card = game.table.cards_by_id.get(card_id)
             if card is not None:
                 card.unbow()
+        case BanishTopFate(seat=seat):
+            deck = game.table.decks[DeckKey(seat, Side.FATE)]
+            if deck.cards:
+                ops.move_card(game.table, deck.cards[-1], ZoneKey(seat, ZoneRole.FATE_BANISH))
         case Choose():
             raise RuntimeError("a Choose pauses the trigger cascade; it is never applied directly")
     return []

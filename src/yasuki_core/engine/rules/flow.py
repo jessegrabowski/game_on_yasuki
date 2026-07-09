@@ -15,6 +15,7 @@ from yasuki_core.engine.rules.actions import (
 )
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import (
+    ApplyAbilityEffects,
     ResolveRecruit,
     ResumeCascade,
     SelectAbilityTarget,
@@ -226,6 +227,15 @@ def _resolve(game: GameState, item: WorkItem) -> None:
             game.pending = ChooseAbilityTarget(
                 seat=owner, candidates=candidates, source_card_id=card_id
             )
+        case ApplyAbilityEffects(card_id=card_id, target_ids=target_ids):
+            source = game.table.cards_by_id[card_id]
+            ability = abilities.ability_for(source)
+            effects = [
+                effect
+                for target_id in target_ids
+                for effect in ability.effects(source, game.table.cards_by_id[target_id])
+            ]
+            triggers.resolve_effects(game, effects)
         case _:
             raise ValueError(f"no resolver for work item {type(item).__name__}")
 
@@ -361,17 +371,24 @@ def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tu
 
 
 def activate(game: GameState, card_id: str) -> None:
-    """Announce an activated ability: pay its cost, then choose its target. The ability is guaranteed
-    registered and to have a legal target — ``legal_actions`` only offers it then.
+    """Announce an activated ability: pay its cost, then resolve its target — a single chosen card,
+    or every card it hits for an ``all_targets`` ability. The ability is guaranteed registered and to
+    have a legal target — ``legal_actions`` only offers it then.
 
-    The target choice is deferred behind the cost on the stack, so a cost whose own cascade pauses
-    for a decision resolves fully before the target is asked. Targets are fixed before paying (Good
-    Faith): the candidates are the ones ``legal_actions`` validated, so the choice is never empty."""
+    Resolving the target is deferred behind the cost on the stack, so a cost whose own cascade pauses
+    for a decision resolves fully first. Targets are fixed before paying (Good Faith): the candidates
+    are the ones ``legal_actions`` validated, so the ability is never left with nothing to hit."""
     card = game.table.cards_by_id[card_id]
     ability = abilities.ability_for(card)
-    game.stack.append(SelectAbilityTarget(card_id, tuple(ability.targets(game, card))))
+    targets = tuple(ability.targets(game, card))
+    deferred = (
+        ApplyAbilityEffects(card_id, targets)
+        if ability.all_targets
+        else SelectAbilityTarget(card_id, targets)
+    )
+    game.stack.append(deferred)
     triggers.resolve_effects(game, ability.cost(card))
-    run_stack(game)  # raise the target choice, unless the cost's cascade paused for one first
+    run_stack(game)  # resolve the target, unless the cost's cascade paused for a decision first
 
 
 def _apply_ability_target(

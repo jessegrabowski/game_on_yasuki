@@ -6,6 +6,7 @@ from yasuki_core.engine.rules.modifiers import Duration, Stat
 from yasuki_core.engine.rules.state import GameState, Phase
 from yasuki_core.engine.rules.triggers import (
     AdjustCounter,
+    BanishTopFate,
     Bow,
     Destroy,
     DrawCard,
@@ -13,7 +14,9 @@ from yasuki_core.engine.rules.triggers import (
     GrantModifier,
     Straighten,
 )
+from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
+from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 
@@ -35,16 +38,27 @@ def _spend_wealth(source: L5RCard) -> list[Effect]:
     return [AdjustCounter(source.id, WEALTH, -1)]
 
 
-def can_pay(card: L5RCard, cost: Cost) -> bool:
+def _bow_and_destroy(source: L5RCard) -> list[Effect]:
+    return [Bow(source.id), Destroy(source.id)]
+
+
+def _banish_top_fate(source: L5RCard) -> list[Effect]:
+    return [BanishTopFate(source.owner)]
+
+
+def can_pay(game: GameState, card: L5RCard, cost: Cost) -> bool:
     """Whether ``card`` can pay ``cost`` — every effect it spends can actually apply: a bow needs the
-    card unbowed, a counter spend needs enough of that counter. Any other cost effect always
-    applies."""
+    card unbowed, a counter spend needs enough of that counter, a Fate-deck banish needs a card to
+    banish. Any other cost effect always applies."""
     for effect in cost(card):
         match effect:
             case Bow() if card.bowed:
                 return False
             case AdjustCounter(counter=counter, delta=delta) if delta < 0:
                 if card.counters.get(counter.key, 0) < -delta:
+                    return False
+            case BanishTopFate(seat=seat):
+                if not game.table.decks[DeckKey(seat, Side.FATE)].cards:
                     return False
     return True
 
@@ -65,8 +79,10 @@ class Ability:
         Maps ``(game, source_card)`` to the ids of the cards the ability may target — empty when
         none are legal, which also means the ability can't be offered.
     effects : callable
-        Maps ``(source_card, target_card)`` to the effects the ability emits once its target is
-        chosen.
+        Maps ``(source_card, target_card)`` to the effects the ability emits against a target.
+    all_targets : bool
+        Whether the ability hits every card ``targets`` returns rather than one chosen among them —
+        an untargeted "your other Farms" grant instead of a single pick. Default False.
     """
 
     phase: Phase
@@ -74,6 +90,7 @@ class Ability:
     cost: Cost
     targets: Callable[[GameState, L5RCard], list[str]]
     effects: Callable[[L5RCard, L5RCard], list[Effect]]
+    all_targets: bool = False
 
 
 def ability_for(card: L5RCard) -> Ability | None:
@@ -91,7 +108,7 @@ def activatable(game: GameState, seat: PlayerId, phase: Phase) -> list[L5RCard]:
         ability = _ABILITIES.get(card.printed_id)
         if ability is None or ability.phase is not phase:
             continue
-        if not can_pay(card, ability.cost):
+        if not can_pay(game, card, ability.cost):
             continue
         if ability.targets(game, card):
             ready.append(card)
@@ -110,8 +127,16 @@ def _owned_farms(game: GameState, card: L5RCard) -> list[str]:
     return [farm.id for farm in _owned_holdings(game, card.owner, "Farm")]
 
 
+def _other_farms(game: GameState, card: L5RCard) -> list[str]:
+    return [farm.id for farm in _owned_holdings(game, card.owner, "Farm") if farm is not card]
+
+
 def _owned_markets(game: GameState, card: L5RCard) -> list[str]:
     return [market.id for market in _owned_holdings(game, card.owner, "Market")]
+
+
+def _owned_ports(game: GameState, card: L5RCard) -> list[str]:
+    return [port.id for port in _owned_holdings(game, card.owner, "Port")]
 
 
 def _owned_bowed_farms(game: GameState, card: L5RCard) -> list[str]:
@@ -132,6 +157,12 @@ def _otokoshi_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
 
 def _rural_market_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
     return [Straighten(target.id)]
+
+
+def _plus_one_gp_this_turn(source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [
+        GrantModifier(source.id, target.id, Stat.GOLD_PRODUCTION, 1, Duration.UNTIL_END_OF_TURN)
+    ]
 
 
 # Per-card activated abilities, registered on import.
@@ -156,5 +187,20 @@ _ABILITIES: dict[str, Ability] = {
         cost=_spend_wealth,
         targets=_owned_bowed_farms,
         effects=_rural_market_effects,
+    ),
+    "harvested_land": Ability(
+        phase=Phase.ACTION,
+        label="Bow, destroy: give your other Farms +1 Gold Production",
+        cost=_bow_and_destroy,
+        targets=_other_farms,
+        effects=_plus_one_gp_this_turn,
+        all_targets=True,
+    ),
+    "ichiba_district": Ability(
+        phase=Phase.ACTION,
+        label="Banish a Fate card: give a Port +1 Gold Production",
+        cost=_banish_top_fate,
+        targets=_owned_ports,
+        effects=_plus_one_gp_this_turn,
     ),
 }

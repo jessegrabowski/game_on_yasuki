@@ -64,7 +64,24 @@ class SelectAbilityTarget:
     candidates: tuple[str, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class ApplyAbilityEffects:
+    """Resolve an untargeted ability's effects against every card it hits, once its cost has been
+    paid. The all-target counterpart of :class:`SelectAbilityTarget`, deferred for the same reason.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose ability is resolving.
+    target_ids : tuple of str
+        The cards the ability affects, fixed before paying.
+    """
+
+    card_id: str
+    target_ids: tuple[str, ...]
+
+
 # A unit of deferred engine work, run off GameState.stack once the current decision (if any) clears.
 # The action sequence pushes its later steps here while a step pauses for a decision; the union
 # grows as those steps do. Work items are ephemeral — replay rebuilds the stack by re-running.
-WorkItem = ResolveRecruit | ResumeCascade | SelectAbilityTarget
+WorkItem = ResolveRecruit | ResumeCascade | SelectAbilityTarget | ApplyAbilityEffects
