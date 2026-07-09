@@ -14,10 +14,11 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
-from yasuki_core.engine.rules.work import ResolveRecruit, WorkItem
+from yasuki_core.engine.rules.work import ResolveRecruit, ResumeCascade, WorkItem
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
     ChooseAbilityTarget,
+    ChooseCards,
     ChooseLegacyCard,
     ChoosePayment,
     DiscardToHandSize,
@@ -170,6 +171,8 @@ def submit(game: GameState, response: DecisionResponse) -> None:
             _apply_legacy_placement(game, request, response)
         case ChooseAbilityTarget():
             _apply_ability_target(game, request, response)
+        case ChooseCards():
+            _apply_card_choice(game, request, response)
         case _:
             raise ValueError(f"no handler for decision {type(request).__name__}")
 
@@ -213,6 +216,8 @@ def _resolve(game: GameState, item: WorkItem) -> None:
     match item:
         case ResolveRecruit(seat=seat, card_id=card_id):
             _resolve_recruit(game, seat, card_id)
+        case ResumeCascade():
+            triggers.resume_cascade(game, item)
         case _:
             raise ValueError(f"no resolver for work item {type(item).__name__}")
 
@@ -367,6 +372,13 @@ def _apply_ability_target(
     ability = abilities.ability_for(source)
     game.pending = None
     triggers.resolve_effects(game, ability.effects(source, target))
+
+
+def _apply_card_choice(game: GameState, request: ChooseCards, response: DecisionResponse) -> None:
+    game.pending = None
+    resolver = triggers.CHOICE_RESOLVERS[request.resolver]
+    triggers.resolve_effects(game, resolver(game, request.source_id, response.choices))
+    run_stack(game)  # resume the cascade the choice paused, unless its own effects paused again
 
 
 def _end_turn(game: GameState) -> None:

@@ -7,6 +7,7 @@ from yasuki_core.engine.rules.actions import Action, Pass
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
     ChooseAbilityTarget,
+    ChooseCards,
     ChooseLegacyCard,
     ChoosePayment,
     DecisionRequest,
@@ -52,6 +53,10 @@ def _describe_decision(request: DecisionRequest, chosen: Iterable[str]) -> tuple
         return "Choose a province to place the Legacy card, discarding the card there", "Place"
     if isinstance(request, ChooseAbilityTarget):
         return "Choose a target for the ability", "Confirm"
+    if isinstance(request, ChooseCards):
+        if request.minimum == 0:
+            return f"Choose up to {request.maximum} card(s)", "Confirm"
+        return f"Choose {request.minimum} to {request.maximum} card(s)", "Confirm"
     raise ValueError(f"no prompt defined for {type(request).__name__}")
 
 

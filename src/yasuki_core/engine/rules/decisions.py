@@ -158,6 +158,40 @@ class ChooseAbilityTarget(DecisionRequest):
 
 
 @dataclass(frozen=True, slots=True)
+class ChooseCards(DecisionRequest):
+    """The seat must choose between ``minimum`` and ``maximum`` of the candidate cards — a
+    variable-count target, as when a triggered effect targets "zero to two" cards. The chosen ids
+    feed the named resolver, whose effects apply once the choice is made. The candidates are the
+    cards the effect may legally target, all in play, so a client renders them as board selections.
+
+    Attributes
+    ----------
+    minimum : int
+        The fewest cards the seat may choose — zero when the effect is optional.
+    maximum : int
+        The most cards the seat may choose.
+    resolver : str
+        The registered choice resolver that turns the chosen ids into effects.
+    source_id : str
+        The card whose effect raised the choice, passed to the resolver.
+    """
+
+    minimum: int
+    maximum: int
+    resolver: str
+    source_id: str
+
+    def accepts(self, response: DecisionResponse) -> bool:
+        chosen = response.choices
+        distinct = set(chosen)
+        return (
+            len(distinct) == len(chosen)
+            and self.minimum <= len(chosen) <= self.maximum
+            and distinct <= set(self.candidates)
+        )
+
+
+@dataclass(frozen=True, slots=True)
 class PlaceLegacy(DecisionRequest):
     """The seat must choose which province to place the found Legacy card into, discarding the card
     already there. The candidates are the province cards eligible to be displaced.

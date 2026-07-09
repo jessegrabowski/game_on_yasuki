@@ -1,5 +1,10 @@
 from yasuki_core.engine.players import PlayerId
-from yasuki_core.engine.rules.decisions import ChoosePayment, DiscardToHandSize, DecisionResponse
+from yasuki_core.engine.rules.decisions import (
+    ChooseCards,
+    ChoosePayment,
+    DecisionResponse,
+    DiscardToHandSize,
+)
 
 _HAND = ("a", "b", "c")
 
@@ -65,3 +70,30 @@ def test_payment_rejects_non_candidate_or_duplicate_sources():
 def test_only_a_payment_is_cancellable():
     assert _payment(amount=5, available=0, produced=[("sh", 8)]).cancellable is True
     assert DiscardToHandSize(PlayerId.P1, _HAND, count=2).cancellable is False
+
+
+def _choose(minimum: int, maximum: int) -> ChooseCards:
+    return ChooseCards(PlayerId.P1, _HAND, minimum, maximum, resolver="r", source_id="src")
+
+
+def test_choose_cards_accepts_a_count_within_the_bounds():
+    request = _choose(minimum=0, maximum=2)
+    assert request.accepts(DecisionResponse(())) is True
+    assert request.accepts(DecisionResponse(("a",))) is True
+    assert request.accepts(DecisionResponse(("a", "b"))) is True
+
+
+def test_choose_cards_rejects_more_than_the_maximum():
+    request = _choose(minimum=0, maximum=2)
+    assert request.accepts(DecisionResponse(("a", "b", "c"))) is False  # the "zero to two" cap
+
+
+def test_choose_cards_rejects_fewer_than_the_minimum():
+    request = _choose(minimum=1, maximum=2)
+    assert request.accepts(DecisionResponse(())) is False
+
+
+def test_choose_cards_rejects_duplicate_or_non_candidate_choices():
+    request = _choose(minimum=0, maximum=2)
+    assert request.accepts(DecisionResponse(("a", "a"))) is False
+    assert request.accepts(DecisionResponse(("z",))) is False  # z is not a candidate

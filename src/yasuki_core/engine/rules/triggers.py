@@ -11,8 +11,10 @@ from yasuki_core.engine.rules.events import (
     GameEvent,
     TurnStarted,
 )
+from yasuki_core.engine.rules.decisions import ChooseCards
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
+from yasuki_core.engine.rules.work import ResumeCascade
 from yasuki_core.engine.table import ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -76,7 +78,38 @@ class Straighten:
     card_id: str
 
 
-Effect = AdjustCounter | DrawCard | Destroy | GrantModifier | Bow | Straighten
+@dataclass(frozen=True, slots=True)
+class Choose:
+    """Effect: pause the cascade so ``seat`` picks between ``minimum`` and ``maximum`` of
+    ``candidates``; the chosen ids feed the registered ``resolver``, whose effects apply on resume.
+    The one interruption point in the effect vocabulary — every other effect commits at once, so a
+    trigger returns a Choose as its sole effect.
+
+    Attributes
+    ----------
+    seat : PlayerId
+        The seat that chooses.
+    candidates : tuple of str
+        The card ids the seat may pick among.
+    minimum : int
+        The fewest cards the seat may pick — zero when the choice is optional.
+    maximum : int
+        The most cards the seat may pick.
+    resolver : str
+        The registered choice resolver naming what the chosen ids do.
+    source_id : str
+        The card whose trigger raised the choice, passed to the resolver.
+    """
+
+    seat: PlayerId
+    candidates: tuple[str, ...]
+    minimum: int
+    maximum: int
+    resolver: str
+    source_id: str
+
+
+Effect = AdjustCounter | DrawCard | Destroy | GrantModifier | Bow | Straighten | Choose
 
 
 @dataclass(frozen=True, slots=True)
@@ -101,6 +134,23 @@ def on(event_type: type, printed_id: str) -> Callable[[Trigger], Trigger]:
     def register(trigger: Trigger) -> Trigger:
         _TRIGGERS.setdefault(event_type, {}).setdefault(printed_id, []).append(trigger)
         return trigger
+
+    return register
+
+
+# A choice resolver turns the ids a Choose collected into the effects the choice produces. Keyed by a
+# string so a paused ChooseCards names its resolver, keeping the pending decision replay-stable (a
+# stored closure would not rebuild to an equal object).
+Resolver = Callable[[GameState, str, tuple[str, ...]], list[Effect]]
+CHOICE_RESOLVERS: dict[str, Resolver] = {}
+
+
+def choice_resolver(key: str) -> Callable[[Resolver], Resolver]:
+    """Register the decorated function as the choice resolver named ``key``."""
+
+    def register(resolver: Resolver) -> Resolver:
+        CHOICE_RESOLVERS[key] = resolver
+        return resolver
 
     return register
 
@@ -156,6 +206,8 @@ def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
             card = game.table.cards_by_id.get(card_id)
             if card is not None:
                 card.unbow()
+        case Choose():
+            raise RuntimeError("a Choose pauses the trigger cascade; it is never applied directly")
     return []
 
 
@@ -175,9 +227,49 @@ def _canonical_order(pair: tuple[L5RCard, Trigger]) -> tuple[str, str]:
     return (card.owner.name if card.owner else "", card.id)
 
 
+def _choice_request(choice: Choose) -> ChooseCards:
+    return ChooseCards(
+        seat=choice.seat,
+        candidates=choice.candidates,
+        minimum=choice.minimum,
+        maximum=choice.maximum,
+        resolver=choice.resolver,
+        source_id=choice.source_id,
+    )
+
+
+def _stash(
+    game: GameState,
+    remaining: tuple[tuple[str, Trigger], ...],
+    event: GameEvent,
+    queue: list[GameEvent],
+) -> None:
+    if remaining or queue:
+        game.stack.append(ResumeCascade(remaining, event, tuple(queue)))
+
+
+def _fire(
+    game: GameState, firing: list[tuple[L5RCard, Trigger]], event: GameEvent, queue: list[GameEvent]
+) -> bool:
+    """Fire each trigger for ``event`` in order, applying its effects into ``queue``. On a Choose, set
+    the pending decision, stash the still-unfired triggers and the queue to resume on submit, and
+    return True. Return False when every trigger fires without pausing."""
+    for index, (card, trigger) in enumerate(firing):
+        for effect in trigger(TriggerContext(game, card, event)):
+            if isinstance(effect, Choose):
+                # A Choose is the last effect resolved this call: it pauses here, so any effects a
+                # trigger returns after one are unreachable (hence "sole effect" in Choose's docs).
+                game.pending = _choice_request(effect)
+                _stash(game, tuple((c.id, t) for c, t in firing[index + 1 :]), event, queue)
+                return True
+            queue.extend(apply_effect(game, effect))
+    return False
+
+
 def _drain(game: GameState, queue: list[GameEvent]) -> None:
     """Drain a worklist of events to a fixpoint: resolve each event's triggers in a canonical order
-    (controller, then id) and apply their effects, whose own derived events re-enter the worklist."""
+    (controller, then id) and apply their effects, whose own derived events re-enter the worklist.
+    Stop early if a trigger pauses for a choice — its remaining work is stashed to resume on submit."""
     resolved = 0
     while queue:
         resolved += 1
@@ -186,9 +278,22 @@ def _drain(game: GameState, queue: list[GameEvent]) -> None:
         current = queue.pop(0)
         firing = _collect(game, current)
         firing.sort(key=_canonical_order)
-        for card, trigger in firing:
-            for effect in trigger(TriggerContext(game, card, current)):
-                queue.extend(apply_effect(game, effect))
+        if _fire(game, firing, current, queue):
+            return
+
+
+def resume_cascade(game: GameState, item: ResumeCascade) -> None:
+    """Resume a cascade a choice paused: fire the triggers still pending for its event (skipping any
+    whose card has left play), then drain the events queued behind them."""
+    queue = list(item.queue)
+    firing = [
+        (game.table.cards_by_id[card_id], trigger)
+        for card_id, trigger in item.remaining
+        if card_id in game.table.cards_by_id
+    ]
+    if _fire(game, firing, item.event, queue):
+        return
+    _drain(game, queue)
 
 
 def fire(game: GameState, event: GameEvent) -> None:
@@ -197,8 +302,8 @@ def fire(game: GameState, event: GameEvent) -> None:
 
 
 def resolve_effects(game: GameState, effects: list[Effect]) -> None:
-    """Apply ``effects`` — an activated ability's output — and drain the derived-event cascade the
-    same way :func:`fire` does, so a triggered reaction to those effects still resolves."""
+    """Apply ``effects`` — an ability's or a choice resolver's output — and drain the derived-event
+    cascade the same way :func:`fire` does, so a triggered reaction to those effects still resolves."""
     queue: list[GameEvent] = []
     for effect in effects:
         queue.extend(apply_effect(game, effect))
