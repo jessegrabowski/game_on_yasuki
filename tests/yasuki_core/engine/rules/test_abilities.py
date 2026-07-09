@@ -3,11 +3,15 @@ from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.dynasty import DynastyHolding, DynastyPersonality
 from yasuki_core.game_pieces.fate import FateCard
+from yasuki_core.engine.rules.abilities import Ability, _ABILITIES
 from yasuki_core.engine.rules.actions import ActivateAbility, Pass
-from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, DecisionResponse
+from yasuki_core.engine.rules.decisions import ChooseAbilityTarget, ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.effects import effective_gold_production
 from yasuki_core.engine.rules.log import replay
+from yasuki_core.engine.rules.state import Phase
+from yasuki_core.engine.rules.triggers import AdjustCounter, Choose, choice_resolver
 from yasuki_core.engine.session import EngineSession
+from yasuki_core.game_pieces.counters import WEALTH
 
 
 def _register(state: TableState, card):
@@ -227,3 +231,46 @@ def test_a_non_bow_ability_is_activatable_while_bowed():
     session = _otokoshi_game()
     session.game.table.cards_by_id["oto"].bow()
     assert ActivateAbility("oto") in session.legal_actions(PlayerId.P1)
+
+
+@choice_resolver("test_cost_pauses")
+def _test_cost_grant(game, source_id, chosen):
+    return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
+
+
+# A synthetic ability whose cost pauses for a choice. It exercises the deferred target selection: the
+# cost's own decision must resolve before the ability's target is asked, neither clobbering the
+# other. No real card pays a cost that pauses yet.
+_ABILITIES["test_cost_pauses"] = Ability(
+    phase=Phase.ACTION,
+    label="test",
+    cost=lambda source: [Choose(source.owner, (source.id,), 0, 1, "test_cost_pauses", source.id)],
+    targets=lambda game, card: [
+        c.id
+        for c in game.table.battlefield.cards
+        if c.owner is card.owner and c is not card and "Farm" in c.keywords
+    ],
+    effects=lambda source, target: [AdjustCounter(target.id, WEALTH, 1)],
+)
+
+
+def test_a_cost_that_pauses_resolves_before_the_ability_target():
+    state = TableState.empty_two_seat()
+    state.battlefield.add(_register(state, _holding("src", "test_cost_pauses")))
+    state.battlefield.add(_register(state, _holding("tgt", "plain_farm", keywords=("Farm",), gp=2)))
+    session = EngineSession.start(state, PlayerId.P1)
+
+    session.act(PlayerId.P1, ActivateAbility("src"))
+    assert isinstance(session.game.pending, ChooseCards)  # the cost's choice comes first
+    assert session.game.pending.candidates == ("src",)
+
+    session.submit(PlayerId.P1, DecisionResponse(("src",)))
+    pending = session.game.pending
+    assert isinstance(pending, ChooseAbilityTarget)  # the target, deferred until the cost resolved
+    assert pending.candidates == ("tgt",)
+    assert session.game.table.cards_by_id["src"].counters == {"wealth": 1}  # cost choice applied
+
+    session.submit(PlayerId.P1, DecisionResponse(("tgt",)))
+    assert session.game.pending is None
+    assert session.game.table.cards_by_id["tgt"].counters == {"wealth": 1}  # ability effect applied
+    assert replay(session.log) == session.game  # the deferred-cost chain replays deterministically

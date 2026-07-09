@@ -4,7 +4,15 @@ from yasuki_core.engine.rules.decisions import ChooseCards, DecisionResponse
 from yasuki_core.engine.rules.effects import effective_gold_production
 from yasuki_core.engine.rules.events import CardDiscarded, Destroyed, EnteredPlay, TurnStarted
 from yasuki_core.engine.rules.state import GameState
-from yasuki_core.engine.rules.triggers import AdjustCounter, Destroy, apply_effect, fire, on
+from yasuki_core.engine.rules.triggers import (
+    AdjustCounter,
+    Choose,
+    Destroy,
+    apply_effect,
+    choice_resolver,
+    fire,
+    on,
+)
 from yasuki_core.engine.table import DeckKey, TableState, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.constants import Side
 from yasuki_core.game_pieces.counters import WEALTH
@@ -18,6 +26,22 @@ from yasuki_core.game_pieces.fate import FateCard
 @on(EnteredPlay, "test_probe")
 def _probe_gains_wealth(ctx):
     return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+# A test-only trigger returning effects on both sides of a Choose: a token to itself, the choice,
+# then a second token to itself. Proves the effects after a Choose still resolve on resume.
+@on(EnteredPlay, "test_sandwich")
+def _sandwich_around_a_choice(ctx):
+    return [
+        AdjustCounter(ctx.card.id, WEALTH, 1),
+        Choose(ctx.card.owner, (), 0, 0, "test_sandwich", ctx.card.id),
+        AdjustCounter(ctx.card.id, WEALTH, 1),
+    ]
+
+
+@choice_resolver("test_sandwich")
+def _sandwich_grant(game, source_id, chosen):
+    return [AdjustCounter(source_id, WEALTH, 1)]
 
 
 def _game():
@@ -485,3 +509,23 @@ def test_a_trigger_stashed_by_the_choice_still_applies_its_effect_on_resume():
     assert other.counters == {"wealth": 1}  # the choice resolved
     assert probe.counters == {"wealth": 1}  # the stashed trigger resumed and applied its effect
     assert game.stack == []
+
+
+def test_effects_after_a_choice_in_the_same_trigger_still_resolve():
+    game = _game()
+    sandwich = DynastyHolding(
+        id="P1-sandwich",
+        printed_id="test_sandwich",
+        name="Sandwich",
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+    )
+    game.table.cards_by_id[sandwich.id] = sandwich
+    game.table.battlefield.add(sandwich)
+
+    fire(game, EnteredPlay(sandwich.id))
+    assert isinstance(game.pending, ChooseCards)
+    flow.submit(game, DecisionResponse(()))
+
+    # One token before the choice, one from the resolver, one after: none dropped at the pause.
+    assert sandwich.counters == {"wealth": 3}

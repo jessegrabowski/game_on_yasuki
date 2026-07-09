@@ -23,27 +23,48 @@ class ResolveRecruit:
 
 @dataclass(frozen=True, slots=True)
 class ResumeCascade:
-    """A trigger cascade a choice paused mid-event: the ``(card_id, trigger)`` pairs still to fire
-    for ``event``, then the events still queued behind them, run once the choice's own effects
-    resolve. Ephemeral like the rest of the stack — its triggers are stable module-level functions,
-    so it rebuilds and compares equal under replay.
+    """The exact remainder of an effect-and-trigger cascade a choice paused: the effects still to
+    apply, then the ``(card_id, trigger)`` pairs still to fire for ``event``, then the events still
+    queued behind them. The answered choice's own effects splice in ahead of these. Ephemeral like
+    the rest of the stack — its effects and triggers are value-equal and stable module-level
+    functions, so it rebuilds and compares equal under replay.
 
     Attributes
     ----------
-    remaining : tuple of (str, callable)
+    effects : tuple of Effect
+        The effects still to apply for the paused trigger, after the one that raised the choice.
+    firing : tuple of (str, callable)
         The card id and trigger of each subscriber still to fire for ``event``.
-    event : GameEvent
-        The event whose remaining triggers these are.
+    event : GameEvent or None
+        The event those triggers are firing for, or None when the pause held only loose effects.
     queue : tuple of GameEvent
         The events still waiting behind ``event`` in the paused worklist.
     """
 
-    remaining: tuple[tuple[str, object], ...]
-    event: GameEvent
+    effects: tuple[object, ...]
+    firing: tuple[tuple[str, object], ...]
+    event: GameEvent | None
     queue: tuple[GameEvent, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class SelectAbilityTarget:
+    """Raise an activated ability's target choice once its cost has been paid. Deferred so a cost
+    whose own cascade pauses for a decision resolves fully before the target is chosen.
+
+    Attributes
+    ----------
+    card_id : str
+        The card whose ability is resolving.
+    candidates : tuple of str
+        The ids the ability may target, fixed before paying so the choice is never left empty.
+    """
+
+    card_id: str
+    candidates: tuple[str, ...]
 
 
 # A unit of deferred engine work, run off GameState.stack once the current decision (if any) clears.
 # The action sequence pushes its later steps here while a step pauses for a decision; the union
 # grows as those steps do. Work items are ephemeral — replay rebuilds the stack by re-running.
-WorkItem = ResolveRecruit | ResumeCascade
+WorkItem = ResolveRecruit | ResumeCascade | SelectAbilityTarget

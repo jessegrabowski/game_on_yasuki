@@ -238,76 +238,78 @@ def _choice_request(choice: Choose) -> ChooseCards:
     )
 
 
-def _stash(
+def _advance(
     game: GameState,
-    remaining: tuple[tuple[str, Trigger], ...],
-    event: GameEvent,
+    effects: tuple[Effect, ...],
+    firing: list[tuple[L5RCard, Trigger]],
+    event: GameEvent | None,
     queue: list[GameEvent],
 ) -> None:
-    if remaining or queue:
-        game.stack.append(ResumeCascade(remaining, event, tuple(queue)))
+    """Run the effect-and-trigger cascade to a fixpoint from an arbitrary resume point.
 
-
-def _fire(
-    game: GameState, firing: list[tuple[L5RCard, Trigger]], event: GameEvent, queue: list[GameEvent]
-) -> bool:
-    """Fire each trigger for ``event`` in order, applying its effects into ``queue``. On a Choose, set
-    the pending decision, stash the still-unfired triggers and the queue to resume on submit, and
-    return True. Return False when every trigger fires without pausing."""
-    for index, (card, trigger) in enumerate(firing):
-        for effect in trigger(TriggerContext(game, card, event)):
-            if isinstance(effect, Choose):
-                # A Choose is the last effect resolved this call: it pauses here, so any effects a
-                # trigger returns after one are unreachable (hence "sole effect" in Choose's docs).
-                game.pending = _choice_request(effect)
-                _stash(game, tuple((c.id, t) for c, t in firing[index + 1 :]), event, queue)
-                return True
-            queue.extend(apply_effect(game, effect))
-    return False
-
-
-def _drain(game: GameState, queue: list[GameEvent]) -> None:
-    """Drain a worklist of events to a fixpoint: resolve each event's triggers in a canonical order
-    (controller, then id) and apply their effects, whose own derived events re-enter the worklist.
-    Stop early if a trigger pauses for a choice — its remaining work is stashed to resume on submit."""
+    One resumable worklist machine, in three repeating steps: apply the ``effects`` in hand (each
+    committing at once, its derived events joining ``queue``); then fire the next trigger still
+    ``firing`` for ``event``, whose effects become the next ``effects`` in hand; then pop the next
+    event off ``queue`` and collect its triggers. A ``Choose`` among the effects pauses the machine:
+    it records the decision and stashes the exact remainder — the effects after it, the triggers not
+    yet fired, the event, and the queue — as a :class:`ResumeCascade`, so :func:`resume_cascade`
+    continues from precisely here once the choice is answered."""
     resolved = 0
-    while queue:
+    firing = list(firing)
+    while True:
+        for index, effect in enumerate(effects):
+            if isinstance(effect, Choose):
+                game.pending = _choice_request(effect)
+                _stash(game, tuple(effects[index + 1 :]), firing, event, queue)
+                return
+            queue.extend(apply_effect(game, effect))
+        effects = ()
+        if firing:
+            card, trigger = firing.pop(0)
+            effects = tuple(trigger(TriggerContext(game, card, event)))
+            continue
+        if not queue:
+            return
         resolved += 1
         if resolved > _MAX_CASCADE:
             raise RuntimeError(f"trigger cascade did not converge after {_MAX_CASCADE} events")
-        current = queue.pop(0)
-        firing = _collect(game, current)
+        event = queue.pop(0)
+        firing = _collect(game, event)
         firing.sort(key=_canonical_order)
-        if _fire(game, firing, current, queue):
-            return
 
 
-def resume_cascade(game: GameState, item: ResumeCascade) -> None:
-    """Resume a cascade a choice paused: fire the triggers still pending for its event (skipping any
-    whose card has left play), then drain the events queued behind them."""
-    queue = list(item.queue)
+def _stash(
+    game: GameState,
+    effects: tuple[Effect, ...],
+    firing: list[tuple[L5RCard, Trigger]],
+    event: GameEvent | None,
+    queue: list[GameEvent],
+) -> None:
+    remaining = tuple((card.id, trigger) for card, trigger in firing)
+    game.stack.append(ResumeCascade(effects, remaining, event, tuple(queue)))
+
+
+def resume_cascade(game: GameState, item: ResumeCascade, produced: list[Effect]) -> None:
+    """Continue a cascade a choice paused, with ``produced`` — the effects the answered choice
+    produced — spliced in where the ``Choose`` stood, ahead of the effects, triggers, and events the
+    pause stashed. Triggers whose card has since left play are dropped."""
     firing = [
         (game.table.cards_by_id[card_id], trigger)
-        for card_id, trigger in item.remaining
+        for card_id, trigger in item.firing
         if card_id in game.table.cards_by_id
     ]
-    if _fire(game, firing, item.event, queue):
-        return
-    _drain(game, queue)
+    _advance(game, tuple(produced) + item.effects, firing, item.event, list(item.queue))
 
 
 def fire(game: GameState, event: GameEvent) -> None:
-    """Resolve ``event`` and the cascade it triggers, draining a worklist to a fixpoint."""
-    _drain(game, [event])
+    """Resolve ``event`` and the cascade it triggers, running the worklist to a fixpoint."""
+    _advance(game, (), [], None, [event])
 
 
 def resolve_effects(game: GameState, effects: list[Effect]) -> None:
-    """Apply ``effects`` — an ability's or a choice resolver's output — and drain the derived-event
+    """Apply ``effects`` — an ability's or a choice resolver's output — and run the derived-event
     cascade the same way :func:`fire` does, so a triggered reaction to those effects still resolves."""
-    queue: list[GameEvent] = []
-    for effect in effects:
-        queue.extend(apply_effect(game, effect))
-    _drain(game, queue)
+    _advance(game, tuple(effects), [], None, [])
 
 
 # Per-card triggers, registered on import of this module (as effects.py holds its gold handlers).

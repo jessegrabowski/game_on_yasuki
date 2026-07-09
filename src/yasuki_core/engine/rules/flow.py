@@ -14,7 +14,12 @@ from yasuki_core.engine.rules.actions import (
     Recruit,
 )
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
-from yasuki_core.engine.rules.work import ResolveRecruit, ResumeCascade, WorkItem
+from yasuki_core.engine.rules.work import (
+    ResolveRecruit,
+    ResumeCascade,
+    SelectAbilityTarget,
+    WorkItem,
+)
 from yasuki_core.engine.rules.decisions import (
     BanishForLegacy,
     ChooseAbilityTarget,
@@ -216,8 +221,11 @@ def _resolve(game: GameState, item: WorkItem) -> None:
     match item:
         case ResolveRecruit(seat=seat, card_id=card_id):
             _resolve_recruit(game, seat, card_id)
-        case ResumeCascade():
-            triggers.resume_cascade(game, item)
+        case SelectAbilityTarget(card_id=card_id, candidates=candidates):
+            owner = game.table.cards_by_id[card_id].owner
+            game.pending = ChooseAbilityTarget(
+                seat=owner, candidates=candidates, source_card_id=card_id
+            )
         case _:
             raise ValueError(f"no resolver for work item {type(item).__name__}")
 
@@ -353,15 +361,17 @@ def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tu
 
 
 def activate(game: GameState, card_id: str) -> None:
-    """Announce an activated ability: pay its cost and pause to choose its target. The ability is
-    guaranteed registered and to have a legal target — ``legal_actions`` only offers it then."""
+    """Announce an activated ability: pay its cost, then choose its target. The ability is guaranteed
+    registered and to have a legal target — ``legal_actions`` only offers it then.
+
+    The target choice is deferred behind the cost on the stack, so a cost whose own cascade pauses
+    for a decision resolves fully before the target is asked. Targets are fixed before paying (Good
+    Faith): the candidates are the ones ``legal_actions`` validated, so the choice is never empty."""
     card = game.table.cards_by_id[card_id]
     ability = abilities.ability_for(card)
-    # Fix the targets before paying the cost (Good Faith): the candidates are the ones legal_actions
-    # validated, so paying can never leave an unanswerable empty-target decision.
-    targets = tuple(ability.targets(game, card))
+    game.stack.append(SelectAbilityTarget(card_id, tuple(ability.targets(game, card))))
     triggers.resolve_effects(game, ability.cost(card))
-    game.pending = ChooseAbilityTarget(seat=card.owner, candidates=targets, source_card_id=card_id)
+    run_stack(game)  # raise the target choice, unless the cost's cascade paused for one first
 
 
 def _apply_ability_target(
@@ -376,9 +386,12 @@ def _apply_ability_target(
 
 def _apply_card_choice(game: GameState, request: ChooseCards, response: DecisionResponse) -> None:
     game.pending = None
+    item = game.stack.pop()  # the ResumeCascade this choice paused, always stacked atop it
+    if not isinstance(item, ResumeCascade):
+        raise RuntimeError("a card choice resumed without its stashed cascade")
     resolver = triggers.CHOICE_RESOLVERS[request.resolver]
-    triggers.resolve_effects(game, resolver(game, request.source_id, response.choices))
-    run_stack(game)  # resume the cascade the choice paused, unless its own effects paused again
+    triggers.resume_cascade(game, item, resolver(game, request.source_id, response.choices))
+    run_stack(game)  # finish any work deferred behind the choice, unless it paused again
 
 
 def _end_turn(game: GameState) -> None:
