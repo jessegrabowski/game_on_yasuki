@@ -348,15 +348,14 @@ def _displaceable_provinces(game: GameState, seat: PlayerId, *, keep: str) -> tu
 
 
 def activate(game: GameState, card_id: str) -> None:
-    """Announce an activated ability: bow its card (the cost) and pause to choose its target. The
-    ability is guaranteed registered and to have a legal target — ``legal_actions`` only offers it
-    then."""
+    """Announce an activated ability: pay its cost and pause to choose its target. The ability is
+    guaranteed registered and to have a legal target — ``legal_actions`` only offers it then."""
     card = game.table.cards_by_id[card_id]
     ability = abilities.ability_for(card)
     # Fix the targets before paying the cost (Good Faith): the candidates are the ones legal_actions
-    # validated, so bowing can never leave an unanswerable empty-target decision.
+    # validated, so paying can never leave an unanswerable empty-target decision.
     targets = tuple(ability.targets(game, card))
-    card.bow()
+    triggers.resolve_effects(game, ability.cost(card))
     game.pending = ChooseAbilityTarget(seat=card.owner, candidates=targets, source_card_id=card_id)
 
 

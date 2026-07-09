@@ -62,7 +62,21 @@ class GrantModifier:
     duration: Duration
 
 
-Effect = AdjustCounter | DrawCard | Destroy | GrantModifier
+@dataclass(frozen=True, slots=True)
+class Bow:
+    """Effect: bow a card."""
+
+    card_id: str
+
+
+@dataclass(frozen=True, slots=True)
+class Straighten:
+    """Effect: straighten (unbow) a card."""
+
+    card_id: str
+
+
+Effect = AdjustCounter | DrawCard | Destroy | GrantModifier | Bow | Straighten
 
 
 @dataclass(frozen=True, slots=True)
@@ -134,6 +148,14 @@ def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
             source_id=source_id, target_id=target_id, stat=stat, amount=amount, duration=duration
         ):
             game.modifiers.append(Modifier(source_id, target_id, stat, amount, duration))
+        case Bow(card_id=card_id):
+            card = game.table.cards_by_id.get(card_id)
+            if card is not None:
+                card.bow()
+        case Straighten(card_id=card_id):
+            card = game.table.cards_by_id.get(card_id)
+            if card is not None:
+                card.unbow()
     return []
 
 

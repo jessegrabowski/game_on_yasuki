@@ -139,3 +139,91 @@ def test_modifier_grant_fires_no_counter_trigger():
 
     assert effective_gold_production(session.game, session.game.table.cards_by_id["farm"]) == 4
     assert len(hand.cards) == before  # Aoki did not draw — the grant is a modifier, not a token
+
+
+def _holding(card_id, printed_id, keywords=(), counters=None, gp=0):
+    return DynastyHolding(
+        id=card_id,
+        name=card_id,
+        side=Side.DYNASTY,
+        owner=PlayerId.P1,
+        printed_id=printed_id,
+        keywords=keywords,
+        gold_production=gp,
+        counters=counters or {},
+    )
+
+
+def _otokoshi_game():
+    state = TableState.empty_two_seat()
+    state.battlefield.add(_register(state, _holding("oto", "otokoshi_district", gp=2)))
+    state.battlefield.add(_register(state, _holding("mkt", "market", keywords=("Market",), gp=1)))
+    state.decks[DeckKey(PlayerId.P1, Side.FATE)].cards = [
+        _register(state, FateCard(id="fd", name="F", side=Side.FATE, owner=PlayerId.P1))
+    ]
+    return EngineSession.start(state, PlayerId.P1)
+
+
+def test_otokoshi_destroys_itself_to_draw_and_seed_a_market():
+    session = _otokoshi_game()
+    hand = session.game.table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)]
+    before = len(hand.cards)
+
+    session.act(PlayerId.P1, ActivateAbility("oto"))
+    session.submit(PlayerId.P1, DecisionResponse(("mkt",)))
+
+    table = session.game.table
+    discard = table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)]
+    assert "oto" in {c.id for c in discard.cards}  # destroyed itself as the cost
+    assert len(hand.cards) == before + 1  # drew a card
+    assert table.cards_by_id["mkt"].counters.get("wealth") == 1  # market seeded a wealth token
+
+
+def test_otokoshi_is_not_activatable_without_a_market():
+    state = TableState.empty_two_seat()
+    state.battlefield.add(_register(state, _holding("oto", "otokoshi_district", gp=2)))
+    session = EngineSession.start(state, PlayerId.P1)
+    assert ActivateAbility("oto") not in session.legal_actions(PlayerId.P1)
+
+
+def test_otokoshi_activation_replays_to_the_same_state():
+    session = _otokoshi_game()
+    session.act(PlayerId.P1, ActivateAbility("oto"))
+    session.submit(PlayerId.P1, DecisionResponse(("mkt",)))
+    assert replay(session.log) == session.game
+
+
+def _rural_market_game(wealth=1):
+    state = TableState.empty_two_seat()
+    counters = {"wealth": wealth} if wealth else {}
+    state.battlefield.add(
+        _register(
+            state, _holding("rm", "rural_market", keywords=("Farm", "Market"), counters=counters)
+        )
+    )
+    state.battlefield.add(_register(state, _holding("bf", "plain_farm", keywords=("Farm",), gp=2)))
+    session = EngineSession.start(state, PlayerId.P1)
+    session.game.table.cards_by_id["bf"].bow()  # bow after the start-of-turn straighten
+    return session
+
+
+def test_rural_market_spends_a_wealth_token_to_straighten_a_farm():
+    session = _rural_market_game(wealth=1)
+    session.act(PlayerId.P1, ActivateAbility("rm"))
+    session.submit(PlayerId.P1, DecisionResponse(("bf",)))
+
+    table = session.game.table
+    assert not table.cards_by_id["bf"].bowed  # straightened
+    assert table.cards_by_id["rm"].counters.get("wealth", 0) == 0  # the token was spent
+
+
+def test_rural_market_is_not_activatable_without_a_wealth_token():
+    session = _rural_market_game(wealth=0)
+    assert ActivateAbility("rm") not in session.legal_actions(PlayerId.P1)
+
+
+def test_a_non_bow_ability_is_activatable_while_bowed():
+    # Tireless: a destroy/spend cost does not require an unbowed card (unlike a bow cost).
+    session = _otokoshi_game()
+    session.game.table.cards_by_id["oto"].bow()
+    assert ActivateAbility("oto") in session.legal_actions(PlayerId.P1)
