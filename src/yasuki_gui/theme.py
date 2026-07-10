@@ -22,6 +22,7 @@ LINE_SOFT = "#e2dac8"
 # Accents
 GOLD = "#9a7b3f"
 GOLD_HOVER = "#876b34"
+POWDER_BLUE = "#b0e0e6"  # the Sincerity counter badge, set apart from the gold wealth token
 REVEAL = "#2563eb"  # a card shown to the opponent
 WARN = "#9c4a35"
 SELECT = "#2bb8c9"  # selection ring / marquee

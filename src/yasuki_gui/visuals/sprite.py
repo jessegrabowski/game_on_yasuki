@@ -16,7 +16,16 @@ from yasuki_gui.constants import (
 )
 from yasuki_gui.ui.images import load_image, load_back_image, ImageProvider
 from yasuki_gui.visuals.visual import Visual
+from yasuki_core.game_pieces.counters import ALL_COUNTERS, SINCERITY, WEALTH
 import tkinter as tk
+
+# Per-counter badge colors — (fill, count-text) — so a card carrying more than one kind reads at a
+# glance. Light text on the dark gold, dark text on the light powder blue.
+_COUNTER_STYLE = {
+    WEALTH.key: (theme.GOLD, theme.ON_DARK),
+    SINCERITY.key: (theme.POWDER_BLUE, theme.INK),
+}
+_DEFAULT_COUNTER_STYLE = (theme.GOLD, theme.ON_DARK)
 
 
 @dataclass
@@ -164,23 +173,25 @@ class CardSpriteVisual(Visual):
         )
 
     def _draw_counters(self, canvas: tk.Canvas) -> None:
-        # A gold badge per counter (a wealth token and its siblings) in the top-right corner, with
-        # the count inside; badges stack downward when a card carries more than one kind.
+        # A badge per counter kind in the top-right corner, coloured by kind, with the count inside;
+        # badges stack downward in a fixed order so a card's counters read consistently.
         counters = getattr(self.card, "counters", None)
         if not counters:
             return
         w, h = self.size
         cx = self.x + w // 2 - COUNTER_BADGE_R - 2
         cy = self.y - h // 2 + COUNTER_BADGE_R + 2
-        for count in counters.values():
+        for counter in ALL_COUNTERS:
+            count = counters.get(counter.key, 0)
             if count <= 0:
                 continue
+            fill, text_fill = _COUNTER_STYLE.get(counter.key, _DEFAULT_COUNTER_STYLE)
             canvas.create_oval(
                 cx - COUNTER_BADGE_R,
                 cy - COUNTER_BADGE_R,
                 cx + COUNTER_BADGE_R,
                 cy + COUNTER_BADGE_R,
-                fill=theme.GOLD,
+                fill=fill,
                 outline=theme.CARD_BORDER,
                 width=1,
                 tags=(self.tag, CARD_TAG, self._subtag(COUNTER_TAG)),
@@ -189,7 +200,7 @@ class CardSpriteVisual(Visual):
                 cx,
                 cy,
                 text=str(count),
-                fill=theme.ON_DARK,
+                fill=text_fill,
                 font=theme.serif(9, "bold"),
                 tags=(self.tag, CARD_TAG, self._subtag(COUNTER_TAG)),
             )
