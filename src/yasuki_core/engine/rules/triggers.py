@@ -25,6 +25,9 @@ from yasuki_core.game_pieces.dynasty import DynastyHolding
 # more than this means a trigger re-emits an event that re-fires it — a card-logic bug, raised loudly.
 _MAX_CASCADE = 1000
 
+# The keyword whose cards accrue and receive seeded Sincerity tokens.
+SINCERITY_KEYWORD = "Sincerity"
+
 
 @dataclass(frozen=True, slots=True)
 class AdjustCounter:
@@ -86,6 +89,15 @@ class BanishTopFate:
 
 
 @dataclass(frozen=True, slots=True)
+class GainGold:
+    """Effect: add ``amount`` gold to ``seat``'s pool — gold produced outside a payment (a card that
+    produces gold on entry), transient and cleared at the end of the phase."""
+
+    seat: PlayerId
+    amount: int
+
+
+@dataclass(frozen=True, slots=True)
 class Choose:
     """Effect: pause the cascade so ``seat`` picks between ``minimum`` and ``maximum`` of
     ``candidates``; the chosen ids feed the registered ``resolver``, whose effects apply on resume.
@@ -117,7 +129,15 @@ class Choose:
 
 
 Effect = (
-    AdjustCounter | DrawCard | Destroy | GrantModifier | Bow | Straighten | BanishTopFate | Choose
+    AdjustCounter
+    | DrawCard
+    | Destroy
+    | GrantModifier
+    | Bow
+    | Straighten
+    | BanishTopFate
+    | GainGold
+    | Choose
 )
 
 
@@ -219,6 +239,8 @@ def apply_effect(game: GameState, effect: Effect) -> list[GameEvent]:
             deck = game.table.decks[DeckKey(seat, Side.FATE)]
             if deck.cards:
                 ops.move_card(game.table, deck.cards[-1], ZoneKey(seat, ZoneRole.FATE_BANISH))
+        case GainGold(seat=seat, amount=amount):
+            game.add_gold(seat, amount)
         case Choose():
             raise RuntimeError("a Choose pauses the trigger cascade; it is never applied directly")
     return []

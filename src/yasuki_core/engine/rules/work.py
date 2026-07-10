@@ -69,6 +69,24 @@ class SelectAbilityTarget:
 
 
 @dataclass(frozen=True, slots=True)
+class FinishRecruit:
+    """The recruit steps that follow a card entering play — clearing its Sincerity tokens and
+    applying any Invest effect. Deferred behind the ``EnteredPlay`` cascade so a trait that pauses on
+    entry (a Sincerity seed choice) resolves before them.
+
+    Attributes
+    ----------
+    card_id : str
+        The card that entered play.
+    invest_amount : int
+        The gold Invested while recruiting, driving the Invest effect, or 0 when not Invested.
+    """
+
+    card_id: str
+    invest_amount: int
+
+
+@dataclass(frozen=True, slots=True)
 class ApplyAbilityEffects:
     """Resolve an untargeted ability's effects against every card it hits, once its cost has been
     paid. The all-target counterpart of :class:`SelectAbilityTarget`, deferred for the same reason.
@@ -88,4 +106,6 @@ class ApplyAbilityEffects:
 # A unit of deferred engine work, run off GameState.stack once the current decision (if any) clears.
 # The action sequence pushes its later steps here while a step pauses for a decision; the union
 # grows as those steps do. Work items are ephemeral — replay rebuilds the stack by re-running.
-WorkItem = ResolveRecruit | ResumeCascade | SelectAbilityTarget | ApplyAbilityEffects
+WorkItem = (
+    ResolveRecruit | ResumeCascade | SelectAbilityTarget | ApplyAbilityEffects | FinishRecruit
+)

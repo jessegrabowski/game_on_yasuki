@@ -16,6 +16,7 @@ from yasuki_core.engine.rules.actions import (
 from yasuki_core.engine.rules.state import GameState, Phase, TURN_PHASES
 from yasuki_core.engine.rules.work import (
     ApplyAbilityEffects,
+    FinishRecruit,
     ResolveRecruit,
     ResumeCascade,
     SelectAbilityTarget,
@@ -40,9 +41,6 @@ from yasuki_core.game_pieces.counters import SINCERITY
 
 # The boldface keyword marking a card the Legacy rulebook ability can search out.
 LEGACY_KEYWORD = "Legacy"
-
-# The keyword whose cards accrue a Sincerity token each end of turn they linger face-up in a Province.
-SINCERITY_KEYWORD = "Sincerity"
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
@@ -285,6 +283,8 @@ def _resolve(game: GameState, item: WorkItem) -> None:
                 for effect in ability.effects(source, game.table.cards_by_id[target_id])
             ]
             triggers.resolve_effects(game, effects)
+        case FinishRecruit(card_id=card_id, invest_amount=invest_amount):
+            _finish_recruit(game, card_id, invest_amount)
         case _:
             raise ValueError(f"no resolver for work item {type(item).__name__}")
 
@@ -305,9 +305,24 @@ def _resolve_recruit(game: GameState, seat: PlayerId, card_id: str, invest_amoun
     card.bow()  # Holdings enter play bowed (rules-skeleton §6)
     if province is not None:
         ops.fill_province(game.table, seat, province)
+    # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first.
+    game.stack.append(FinishRecruit(card_id, invest_amount))
     triggers.fire(game, EnteredPlay(card_id))
+
+
+def _finish_recruit(game: GameState, card_id: str, invest_amount: int) -> None:
+    card = game.table.cards_by_id[card_id]
+    _clear_sincerity(game, card)
     if invest_amount:
         triggers.resolve_effects(game, abilities.invest_for(card).effect(card, invest_amount))
+
+
+def _clear_sincerity(game: GameState, card: L5RCard) -> None:
+    """Remove a card's Sincerity tokens once it has entered play — its trait has already read them
+    during the ``EnteredPlay`` cascade (Sincerity keyword)."""
+    held = card.counters.get(SINCERITY.key, 0)
+    if held:
+        card.adjust_counter(SINCERITY.key, -held)
 
 
 def dynasty_discard(game: GameState, card_id: str) -> None:
@@ -484,7 +499,7 @@ def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
         for key, zone in game.table.zones.items()
         if key.owner is seat and key.role is ZoneRole.PROVINCE
         for card in zone.cards
-        if card.face_up and SINCERITY_KEYWORD in card.keywords
+        if card.face_up and triggers.SINCERITY_KEYWORD in card.keywords
     ]
     triggers.resolve_effects(game, grants)
 
