@@ -214,6 +214,35 @@ def test_jade_works_produces_its_base_with_no_target():
     assert effective_gold_production(game, works) == 3
 
 
+def _shrine(seat):
+    return _holding(
+        seat, f"{seat.name}-shrine", printed_id="shrine_of_sincerity", keywords=("Temple",)
+    )
+
+
+def test_shrine_of_sincerity_adds_one_for_a_token_bearing_sincerity_card():
+    game = _game()
+    shrine = _put(game, _shrine(PlayerId.P1))
+    target = _holding(PlayerId.P1, "a-sincerity-card", keywords=("Sincerity",))
+    target.adjust_counter("sincerity", 2)
+    assert effective_gold_production(game, shrine, targets=(target,)) == shrine.gold_production + 1
+
+
+def test_shrine_produces_its_base_for_a_sincerity_card_without_tokens():
+    game = _game()
+    shrine = _put(game, _shrine(PlayerId.P1))
+    target = _holding(PlayerId.P1, "a-sincerity-card", keywords=("Sincerity",))  # no tokens
+    assert effective_gold_production(game, shrine, targets=(target,)) == 2
+
+
+def test_shrine_produces_its_base_for_a_token_bearing_non_sincerity_card():
+    game = _game()
+    shrine = _put(game, _shrine(PlayerId.P1))
+    plain = _holding(PlayerId.P1, "a-plain-card", keywords=())
+    plain.adjust_counter("sincerity", 2)  # tokens but not a Sincerity card
+    assert effective_gold_production(game, shrine, targets=(plain,)) == 2
+
+
 def test_wealth_counters_raise_printed_production():
     game = _game()
     # A Rice-Farm-style holding: printed 0, so only its Wealth tokens make it a producer at all.

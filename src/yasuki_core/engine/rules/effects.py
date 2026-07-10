@@ -5,7 +5,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.rules.modifiers import Duration, Modifier, Stat
 from yasuki_core.engine.rules.state import GameState
 from yasuki_core.game_pieces.cards import L5RCard
-from yasuki_core.game_pieces.counters import ALL_COUNTERS
+from yasuki_core.game_pieces.counters import ALL_COUNTERS, SINCERITY
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 from yasuki_core.game_pieces.pregame import StrongholdCard
 
@@ -201,6 +201,22 @@ def _teardrop_island(
 ) -> int:
     """Produce 2 Gold, or 3 while you are a Mantis Clan player."""
     return 3 if _is_clan(me, "Mantis") else 2
+
+
+@gold_handler("shrine_of_sincerity")
+def _shrine_of_sincerity(
+    card: L5RCard, me: PlayerState, opponents: tuple[PlayerState, ...], targets: tuple[L5RCard, ...]
+) -> int:
+    """+1 GP when paying for a Sincerity card that still carries Sincerity tokens."""
+    bonus = (
+        1
+        if any(
+            "Sincerity" in target.keywords and target.counters.get(SINCERITY.key, 0) > 0
+            for target in targets
+        )
+        else 0
+    )
+    return card.gold_production + bonus
 
 
 # Per-card recruit-discount handlers — the "enters play for N less Gold" holdings.
