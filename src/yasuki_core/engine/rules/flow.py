@@ -36,9 +36,13 @@ from yasuki_core.engine.rules.effects import effective_gold_production, effectiv
 from yasuki_core.engine.rules.modifiers import Duration
 from yasuki_core.engine.rules import abilities, triggers
 from yasuki_core.engine.rules.events import CardDiscarded, EnteredPlay, TurnStarted
+from yasuki_core.game_pieces.counters import SINCERITY
 
 # The boldface keyword marking a card the Legacy rulebook ability can search out.
 LEGACY_KEYWORD = "Legacy"
+
+# The keyword whose cards accrue a Sincerity token each end of turn they linger face-up in a Province.
+SINCERITY_KEYWORD = "Sincerity"
 
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
@@ -460,6 +464,7 @@ def _apply_card_choice(game: GameState, request: ChooseCards, response: Decision
 
 def _end_turn(game: GameState) -> None:
     seat = game.active
+    _accrue_sincerity(game, seat)
     ops.draw_to_hand(game.table, seat)
     hand = game.table.zones[ZoneKey(seat, ZoneRole.HAND)]
     excess = len(hand.cards) - MAX_HAND_SIZE
@@ -468,6 +473,20 @@ def _end_turn(game: GameState) -> None:
         game.pending = DiscardToHandSize(seat, candidates, count=excess)
         return
     _begin_next_turn(game)
+
+
+def _accrue_sincerity(game: GameState, seat: PlayerId) -> None:
+    """Before ``seat``'s turn ends, give each face-up Sincerity card lingering in its Provinces a
+    Sincerity token. A card that flushed (was recruited or discarded) or arrived face-down as a
+    refill this turn is not face-up in a Province, so it does not accrue."""
+    grants = [
+        triggers.AdjustCounter(card.id, SINCERITY, 1)
+        for key, zone in game.table.zones.items()
+        if key.owner is seat and key.role is ZoneRole.PROVINCE
+        for card in zone.cards
+        if card.face_up and SINCERITY_KEYWORD in card.keywords
+    ]
+    triggers.resolve_effects(game, grants)
 
 
 def _begin_next_turn(game: GameState) -> None:

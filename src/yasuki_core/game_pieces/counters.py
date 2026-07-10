@@ -14,7 +14,11 @@ class Counter:
 # Raises the host's Gold Production by one per token (the "+1GP Wealth token").
 WEALTH = Counter("wealth", gold_production=1)
 
-ALL_COUNTERS: tuple[Counter, ...] = (WEALTH,)
+# A resource token a Sincerity card accrues while it lingers face-up in a Province; carries no stat
+# of its own — the cards that read or spend it supply the payoff.
+SINCERITY = Counter("sincerity")
+
+ALL_COUNTERS: tuple[Counter, ...] = (WEALTH, SINCERITY)
 _BY_KEY = {counter.key: counter for counter in ALL_COUNTERS}
 
 
