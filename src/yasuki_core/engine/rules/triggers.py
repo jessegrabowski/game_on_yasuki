@@ -18,7 +18,7 @@ from yasuki_core.engine.rules.work import ResumeCascade
 from yasuki_core.engine.table import DeckKey, ZoneKey, ZoneRole
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.counters import Counter, WEALTH
+from yasuki_core.game_pieces.counters import Counter, SINCERITY, WEALTH
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 
 # A sanity bound on the fixpoint walk: a converging cascade drains in a handful of events, so far
@@ -422,3 +422,68 @@ def _wheat_farm(ctx: TriggerContext) -> list[Effect]:
 @choice_resolver("wheat_farm")
 def _wheat_farm_grant(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
     return [AdjustCounter(card_id, WEALTH, 1) for card_id in chosen]
+
+
+@on(EnteredPlay, "pawnbroker")
+def _pawnbroker(ctx: TriggerContext) -> list[Effect]:
+    """After this Holding enters play, turn each Sincerity token it accrued into a +1GP Wealth
+    token."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    sincerity = ctx.card.counters.get(SINCERITY.key, 0)
+    if sincerity == 0:
+        return []
+    return [AdjustCounter(ctx.card.id, WEALTH, sincerity)]
+
+
+@on(EnteredPlay, "sapphire_mine")
+def _sapphire_mine(ctx: TriggerContext) -> list[Effect]:
+    """Sincerity: after this Holding enters play, if it accrued two or more Sincerity tokens, give it
+    a +1GP Wealth token."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    if ctx.card.counters.get(SINCERITY.key, 0) < 2:
+        return []
+    return [AdjustCounter(ctx.card.id, WEALTH, 1)]
+
+
+@on(EnteredPlay, "the_kurai_district_court")
+def _kurai_district_court(ctx: TriggerContext) -> list[Effect]:
+    """After this Holding enters play, produce one Gold for each Sincerity token it accrued."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    sincerity = ctx.card.counters.get(SINCERITY.key, 0)
+    if sincerity == 0:
+        return []
+    return [GainGold(ctx.card.owner, sincerity)]
+
+
+def sincerity_seed_targets(game: GameState, seat: PlayerId) -> list[str]:
+    """The seat's face-up Sincerity cards still in a Province with no Sincerity tokens — the legal
+    recipients of a seeded Sincerity token."""
+    return [
+        card.id
+        for key, zone in game.table.zones.items()
+        if key.owner is seat and key.role is ZoneRole.PROVINCE
+        for card in zone.cards
+        if card.face_up
+        and SINCERITY_KEYWORD in card.keywords
+        and card.counters.get(SINCERITY.key, 0) == 0
+    ]
+
+
+@on(EnteredPlay, "training_court")
+def _training_court(ctx: TriggerContext) -> list[Effect]:
+    """Political Tireless Response: after Training Court enters play, seed a Sincerity token onto one
+    of its controller's token-less Sincerity cards still in a Province."""
+    if ctx.event.card_id != ctx.card.id:
+        return []
+    targets = tuple(sincerity_seed_targets(ctx.game, ctx.card.owner))
+    if not targets:
+        return []
+    return [Choose(ctx.card.owner, targets, 1, 1, "sincerity_seed", ctx.card.id)]
+
+
+@choice_resolver("sincerity_seed")
+def _sincerity_seed(game: GameState, source_id: str, chosen: tuple[str, ...]) -> list[Effect]:
+    return [AdjustCounter(card_id, SINCERITY, 1) for card_id in chosen]

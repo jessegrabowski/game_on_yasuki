@@ -13,11 +13,12 @@ from yasuki_core.engine.rules.triggers import (
     Effect,
     GrantModifier,
     Straighten,
+    sincerity_seed_targets,
 )
 from yasuki_core.engine.table import DeckKey
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
-from yasuki_core.game_pieces.counters import WEALTH
+from yasuki_core.game_pieces.counters import SINCERITY, WEALTH
 from yasuki_core.game_pieces.dynasty import DynastyHolding
 
 # A cost is the effects paid to activate an ability, applied to the source card before the ability's
@@ -165,6 +166,10 @@ def _owned_ports(game: GameState, card: L5RCard) -> list[str]:
     return [port.id for port in _owned_holdings(game, card.owner, "Port")]
 
 
+def _sincerity_seed_targets(game: GameState, card: L5RCard) -> list[str]:
+    return sincerity_seed_targets(game, card.owner)
+
+
 def _owned_bowed_farms(game: GameState, card: L5RCard) -> list[str]:
     # "Not produced Gold this turn" is satisfied for any bowed Farm: production only happens in the
     # Dynasty phase, after this Open ability's Action-phase window.
@@ -183,6 +188,10 @@ def _otokoshi_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
 
 def _rural_market_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
     return [Straighten(target.id)]
+
+
+def _seed_sincerity(source: L5RCard, target: L5RCard) -> list[Effect]:
+    return [AdjustCounter(target.id, SINCERITY, 1)]
 
 
 def _plus_one_gp_this_turn(source: L5RCard, target: L5RCard) -> list[Effect]:
@@ -228,6 +237,13 @@ _ABILITIES: dict[str, Ability] = {
         cost=_banish_top_fate,
         targets=_owned_ports,
         effects=_plus_one_gp_this_turn,
+    ),
+    "shrine_of_sincerity": Ability(
+        phase=Phase.DYNASTY,
+        label="Bow: seed a Sincerity token onto a Province Sincerity card",
+        cost=_bow,
+        targets=_sincerity_seed_targets,
+        effects=_seed_sincerity,
     ),
 }
 
