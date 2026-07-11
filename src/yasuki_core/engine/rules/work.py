@@ -107,9 +107,32 @@ class ApplyAbilityEffects:
     target_ids: tuple[str, ...]
 
 
+@dataclass(frozen=True, slots=True)
+class ModestFarmStraighten:
+    """Offer Modest Farm's optional sacrifice once its targeted recruit has resolved: the controller
+    may destroy Modest Farm to straighten the freshly recruited card. Deferred so it runs after the
+    recruit's payment and entry.
+
+    Attributes
+    ----------
+    modest_farm_id : str
+        The Modest Farm that may be destroyed.
+    target_id : str
+        The recruited card that would be straightened.
+    """
+
+    modest_farm_id: str
+    target_id: str
+
+
 # A unit of deferred engine work, run off GameState.stack once the current decision (if any) clears.
 # The action sequence pushes its later steps here while a step pauses for a decision; the union
 # grows as those steps do. Work items are ephemeral — replay rebuilds the stack by re-running.
 WorkItem = (
-    ResolveRecruit | ResumeCascade | SelectAbilityTarget | ApplyAbilityEffects | FinishRecruit
+    ResolveRecruit
+    | ResumeCascade
+    | SelectAbilityTarget
+    | ApplyAbilityEffects
+    | FinishRecruit
+    | ModestFarmStraighten
 )

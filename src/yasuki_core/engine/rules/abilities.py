@@ -13,6 +13,7 @@ from yasuki_core.engine.rules.triggers import (
     Effect,
     GrantModifier,
     Straighten,
+    province_holdings,
     sincerity_seed_targets,
 )
 from yasuki_core.engine.table import DeckKey
@@ -84,6 +85,10 @@ class Ability:
     all_targets : bool
         Whether the ability hits every card ``targets`` returns rather than one chosen among them —
         an untargeted "your other Farms" grant instead of a single pick. Default False.
+    recruits_target : bool
+        Whether the ability recruits its chosen target (paying for it and bringing it into play)
+        rather than emitting ``effects`` against it — Modest Farm's out-of-sequence recruit. Default
+        False.
     """
 
     phase: Phase
@@ -92,6 +97,7 @@ class Ability:
     targets: Callable[[GameState, L5RCard], list[str]]
     effects: Callable[[L5RCard, L5RCard], list[Effect]]
     all_targets: bool = False
+    recruits_target: bool = False
 
 
 @dataclass(frozen=True, slots=True)
@@ -170,6 +176,14 @@ def _sincerity_seed_targets(game: GameState, card: L5RCard) -> list[str]:
     return sincerity_seed_targets(game, card.owner)
 
 
+def _province_holdings(game: GameState, card: L5RCard) -> list[str]:
+    return province_holdings(game, card.owner)
+
+
+def _no_effects(source: L5RCard, target: L5RCard) -> list[Effect]:
+    return []  # a recruits_target ability routes to the recruit flow, never to effects
+
+
 def _owned_bowed_farms(game: GameState, card: L5RCard) -> list[str]:
     # "Not produced Gold this turn" is satisfied for any bowed Farm: production only happens in the
     # Dynasty phase, after this Open ability's Action-phase window.
@@ -244,6 +258,14 @@ _ABILITIES: dict[str, Ability] = {
         cost=_bow,
         targets=_sincerity_seed_targets,
         effects=_seed_sincerity,
+    ),
+    "modest_farm": Ability(
+        phase=Phase.ACTION,
+        label="Bow, pay a Holding's cost: recruit it from your Province out of sequence",
+        cost=_bow,
+        targets=_province_holdings,
+        effects=_no_effects,
+        recruits_target=True,
     ),
 }
 

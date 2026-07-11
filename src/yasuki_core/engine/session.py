@@ -87,9 +87,15 @@ class EngineSession:
 
     def _abilities(self, seat: PlayerId) -> list[Action]:
         """An ActivateAbility for each in-play card whose activated ability the seat can use in the
-        current phase (controlled, unbowed, with a legal target)."""
-        ready = abilities.activatable(self.game, seat, self.game.phase)
-        return [ActivateAbility(card.id) for card in ready]
+        current phase (controlled, unbowed, with a legal target). A recruit ability is withheld
+        unless the seat can also afford one of its targets — its cost is paying that recruit."""
+        actions: list[Action] = []
+        for card in abilities.activatable(self.game, seat, self.game.phase):
+            ability = abilities.ability_for(card)
+            if ability.recruits_target and not flow.recruitable_via_ability(self.game, card):
+                continue
+            actions.append(ActivateAbility(card.id))
+        return actions
 
     def _legacy(self, seat: PlayerId) -> list[Action]:
         """The Legacy ability when the seat can take it: once per turn, and only with a card in hand

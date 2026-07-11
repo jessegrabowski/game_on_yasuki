@@ -472,6 +472,29 @@ def sincerity_seed_targets(game: GameState, seat: PlayerId) -> list[str]:
     ]
 
 
+def province_holdings(game: GameState, seat: PlayerId) -> list[str]:
+    """The seat's face-up Holdings still in a Province — the recruitable targets of a targeted
+    recruit ability."""
+    return [
+        card.id
+        for key, zone in game.table.zones.items()
+        if key.owner is seat and key.role is ZoneRole.PROVINCE
+        for card in zone.cards
+        if card.face_up and isinstance(card, DynastyHolding)
+    ]
+
+
+@choice_resolver("modest_farm_straighten")
+def _modest_farm_straighten(
+    game: GameState, source_id: str, chosen: tuple[str, ...]
+) -> list[Effect]:
+    # source_id is the recruited target; chosen holds Modest Farm's id when its controller sacrifices
+    # it to straighten the target.
+    if not chosen:
+        return []
+    return [Destroy(chosen[0]), Straighten(source_id)]
+
+
 @on(EnteredPlay, "training_court")
 def _training_court(ctx: TriggerContext) -> list[Effect]:
     """Political Tireless Response: after Training Court enters play, seed a Sincerity token onto one
