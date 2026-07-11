@@ -18,11 +18,15 @@ class ResolveRecruit:
     invest_amount : int
         The gold Invested while recruiting, driving the card's one-time Invest effect on entry, or 0
         when not Invested. Default 0.
+    renew : bool
+        Whether to refill the vacated province face-up (a granted Renew), on top of the card's own
+        Renew keyword. Default False.
     """
 
     seat: PlayerId
     card_id: str
     invest_amount: int = 0
+    renew: bool = False
 
 
 @dataclass(frozen=True, slots=True)

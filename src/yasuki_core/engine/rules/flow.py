@@ -42,6 +42,10 @@ from yasuki_core.game_pieces.counters import SINCERITY
 # The boldface keyword marking a card the Legacy rulebook ability can search out.
 LEGACY_KEYWORD = "Legacy"
 
+# The keyword that refills a card's vacated Province face-up when it enters play (rather than the
+# usual face-down), so the next card is recruitable the same turn.
+RENEW_KEYWORD = "Renew"
+
 # The default maximum hand size, enforced by the end-of-turn discard (rules-skeleton §1).
 MAX_HAND_SIZE = 8
 
@@ -138,22 +142,23 @@ def recruit_cost(game: GameState, card: L5RCard) -> int:
     return max(0, cost)
 
 
-def recruit(game: GameState, card_id: str, invest: bool = False) -> None:
+def recruit(game: GameState, card_id: str, invest: bool = False, renew: bool = False) -> None:
     """Announce a Recruit: defer bringing the card into play, then pause for its cost payment. The
     payment bows gold producers to cover :func:`recruit_cost` plus any Invest cost; once answered,
     the stack resolves the move into play and the province refill.
 
     With ``invest`` set, also pay the card's Invest cost for its one-time enter-play effect. A fixed
     Invest folds straight into the payment; a variable one pauses first for
-    :class:`ChooseInvestAmount` to pick how much to pay."""
+    :class:`ChooseInvestAmount` to pick how much to pay. With ``renew`` set, the vacated province
+    refills face-up (a Renew granted by the recruiting effect)."""
     card = game.table.cards_by_id[card_id]
     seat = card.owner
     if not invest:
-        _announce_recruit(game, card, seat, invest_amount=0)
+        _announce_recruit(game, card, seat, invest_amount=0, renew=renew)
         return
     ability = abilities.invest_for(card)
     if ability.minimum == ability.maximum:
-        _announce_recruit(game, card, seat, invest_amount=ability.minimum)
+        _announce_recruit(game, card, seat, invest_amount=ability.minimum, renew=renew)
         return
     affordable = reachable_gold(game, seat, card) - recruit_cost(game, card)
     top = min(ability.maximum, affordable)
@@ -164,9 +169,11 @@ def recruit(game: GameState, card_id: str, invest: bool = False) -> None:
     )
 
 
-def _announce_recruit(game: GameState, card: L5RCard, seat: PlayerId, invest_amount: int) -> None:
+def _announce_recruit(
+    game: GameState, card: L5RCard, seat: PlayerId, invest_amount: int, renew: bool = False
+) -> None:
     producers = gold_producers(game, seat)
-    game.stack.append(ResolveRecruit(seat, card.id, invest_amount))
+    game.stack.append(ResolveRecruit(seat, card.id, invest_amount, renew))
     game.pending = ChoosePayment(
         seat=seat,
         candidates=tuple(producer.id for producer in producers),
@@ -267,8 +274,8 @@ def run_stack(game: GameState) -> None:
 
 def _resolve(game: GameState, item: WorkItem) -> None:
     match item:
-        case ResolveRecruit(seat=seat, card_id=card_id, invest_amount=invest_amount):
-            _resolve_recruit(game, seat, card_id, invest_amount)
+        case ResolveRecruit(seat=seat, card_id=card_id, invest_amount=invest_amount, renew=renew):
+            _resolve_recruit(game, seat, card_id, invest_amount, renew)
         case SelectAbilityTarget(card_id=card_id, candidates=candidates):
             owner = game.table.cards_by_id[card_id].owner
             game.pending = ChooseAbilityTarget(
@@ -296,7 +303,9 @@ def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionRe
     game.spend_gold(request.seat, request.amount)
 
 
-def _resolve_recruit(game: GameState, seat: PlayerId, card_id: str, invest_amount: int = 0) -> None:
+def _resolve_recruit(
+    game: GameState, seat: PlayerId, card_id: str, invest_amount: int = 0, renew: bool = False
+) -> None:
     card = game.table.cards_by_id[card_id]
     province = _province_of(game, seat, card_id)
     # Enter unplaced so the client clusters the new holding into the seat's home row by the
@@ -304,7 +313,9 @@ def _resolve_recruit(game: GameState, seat: PlayerId, card_id: str, invest_amoun
     ops.move_card(game.table, card, BATTLEFIELD, position=UNPLACED_BOARD_POS)
     card.bow()  # Holdings enter play bowed (rules-skeleton §6)
     if province is not None:
-        ops.fill_province(game.table, seat, province)
+        refill = ops.fill_province(game.table, seat, province)
+        if refill is not None and (renew or RENEW_KEYWORD in card.keywords):
+            refill.turn_face_up()  # Renew: the vacated Province refills face-up
     # Defer the post-entry steps so an enter-play trait that pauses for a choice resolves first.
     game.stack.append(FinishRecruit(card_id, invest_amount))
     triggers.fire(game, EnteredPlay(card_id))
