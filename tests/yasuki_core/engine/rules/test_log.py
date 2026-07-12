@@ -109,6 +109,50 @@ def test_recruit_action_and_its_payment_replay_and_round_trip():
     assert restored.replay() == game
 
 
+def test_boosted_payment_round_trips_through_the_codec():
+    # The payment answer carries which producers were boosted; that must survive JSON encode/decode.
+    state = _dealt_table()
+    state.decks[DeckKey(PlayerId.P1, Side.DYNASTY)].cards = [
+        _register(
+            state, DynastyHolding(id="P1-refill", name="R", side=Side.DYNASTY, owner=PlayerId.P1)
+        )
+    ]
+    outlying = _register(
+        state,
+        DynastyHolding(
+            id="P1-of",
+            name="Outlying Farms",
+            side=Side.DYNASTY,
+            owner=PlayerId.P1,
+            printed_id="outlying_farms",
+            keywords=("Farm",),
+            gold_production=2,
+        ),
+    )
+    state.battlefield.add(outlying)
+    holding = _register(
+        state,
+        DynastyHolding(id="P1-buy", name="Buy", side=Side.DYNASTY, owner=PlayerId.P1, gold_cost=4),
+    )
+    holding.turn_face_up()
+    province = ProvinceZone(owner=PlayerId.P1)
+    province.add(holding)
+    state.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)] = province
+
+    log = GameLog(initial=InitialRecord.from_state(state), first_player=PlayerId.P1)
+    game = build_game(log)
+    act_and_log(game, log, Pass())  # Action -> Attack
+    act_and_log(game, log, Pass())  # Attack -> Dynasty
+    act_and_log(game, log, Recruit("P1-buy"))
+    submit_and_log(
+        game, log, DecisionResponse(("P1-of",), ("P1-of",))
+    )  # bow Outlying Farms boosted
+
+    assert outlying not in game.table.battlefield.cards  # destroyed after bowing boosted
+    restored = game_log_from_dict(json.loads(json.dumps(game_log_to_dict(log))))
+    assert restored.replay() == game
+
+
 def test_triggered_choice_replays_and_round_trips():
     # Recruiting a Wheat Farm fires its EnteredPlay trigger, which pauses to choose other Farms to
     # give a Wealth token — the recruit -> pay -> choose -> resume chain must survive replay.

@@ -123,12 +123,15 @@ def gold_producers(game: GameState, seat: PlayerId) -> list[L5RCard]:
 
 def reachable_gold(game: GameState, seat: PlayerId, card: L5RCard) -> int:
     """The gold ``seat`` could muster to recruit ``card``: its pool plus the yield of every unbowed
-    producer, judged with ``card`` as the payment target since a producer's yield can depend on what
-    it pays for."""
-    return game.gold[seat] + sum(
-        effective_gold_production(game, producer, targets=(card,))
-        for producer in gold_producers(game, seat)
-    )
+    producer — judged with ``card`` as the payment target since a producer's yield can depend on
+    what it pays for — plus any bow-time boost a producer could add if the seat opts in."""
+    total = game.gold[seat]
+    for producer in gold_producers(game, seat):
+        total += effective_gold_production(game, producer, targets=(card,))
+        boost = abilities.production_boost_for(producer)
+        if boost is not None:
+            total += boost
+    return total
 
 
 def recruit_cost(game: GameState, card: L5RCard) -> int:
@@ -185,6 +188,11 @@ def _announce_recruit(
             for producer in producers
         ),
         label=card.name,
+        boostable=tuple(
+            (producer.id, boost)
+            for producer in producers
+            if (boost := abilities.production_boost_for(producer)) is not None
+        ),
     )
 
 
@@ -308,9 +316,16 @@ def _resolve(game: GameState, item: WorkItem) -> None:
 
 
 def _apply_payment(game: GameState, request: ChoosePayment, response: DecisionResponse) -> None:
+    """Bow the chosen producers to cover the cost. A producer the answer boosted yields its extra as
+    it bows and is then destroyed (Outlying Farms); the rest yield their plain amount."""
     produced = dict(request.produced)
+    boost = dict(request.boostable)
+    boosted = set(response.boosted)
     for card_id in response.choices:
-        produce_gold(game, card_id, produced[card_id])
+        extra = boost[card_id] if card_id in boosted else 0
+        produce_gold(game, card_id, produced[card_id] + extra)
+        if card_id in boosted:
+            triggers.resolve_effects(game, [triggers.Destroy(card_id)])
     game.spend_gold(request.seat, request.amount)
 
 

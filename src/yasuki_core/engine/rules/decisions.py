@@ -16,9 +16,14 @@ class DecisionResponse:
     ----------
     choices : tuple of str
         The chosen identifiers, in the order the seat picked them. Default empty.
+    boosted : tuple of str
+        The subset of ``choices`` whose bow-time production boost the seat took — a boostable
+        producer raised to its higher yield as it bows, then destroyed. Only meaningful answering a
+        :class:`ChoosePayment`. Default empty.
     """
 
     choices: tuple[str, ...] = ()
+    boosted: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -73,20 +78,30 @@ class ChoosePayment(DecisionRequest):
         Each candidate producer paired with the gold it yields when bowed.
     label : str
         What the payment is for (e.g. the recruited card's name), shown in the prompt.
+    boostable : tuple of (str, int)
+        Each producer that may raise its yield as it bows, paired with the extra gold its boost
+        adds. The seat opts in per producer via the answer's ``boosted``; a boosted producer counts
+        its extra toward the cost and is destroyed after bowing.
     """
 
     amount: int
     available: int
     produced: tuple[tuple[str, int], ...]
     label: str
+    boostable: tuple[tuple[str, int], ...] = ()
 
     def accepts(self, response: DecisionResponse) -> bool:
         chosen = response.choices
         distinct = set(chosen)
         if len(distinct) != len(chosen) or not distinct <= set(self.candidates):
             return False
+        boost = dict(self.boostable)
+        boosted = set(response.boosted)
+        if not boosted <= (distinct & boost.keys()):
+            return False
         yields = dict(self.produced)
-        return self.available + sum(yields[card_id] for card_id in distinct) >= self.amount
+        covered = sum(yields[c] + (boost[c] if c in boosted else 0) for c in distinct)
+        return self.available + covered >= self.amount
 
     @property
     def cancellable(self) -> bool:

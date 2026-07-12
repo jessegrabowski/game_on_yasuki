@@ -187,7 +187,14 @@ def _encode_input(entry: GameInput) -> dict:
     if isinstance(entry, Act):
         return {"kind": "act", "seat": entry.seat.name, "action": _encode_action(entry.action)}
     if isinstance(entry, Answer):
-        return {"kind": "answer", "seat": entry.seat.name, "choices": list(entry.response.choices)}
+        payload = {
+            "kind": "answer",
+            "seat": entry.seat.name,
+            "choices": list(entry.response.choices),
+        }
+        if entry.response.boosted:
+            payload["boosted"] = list(entry.response.boosted)
+        return payload
     return {"kind": "cancel", "seat": entry.seat.name}
 
 
@@ -195,7 +202,8 @@ def _decode_input(payload: dict) -> GameInput:
     if payload["kind"] == "act":
         return Act(PlayerId[payload["seat"]], _decode_action(payload["action"]))
     if payload["kind"] == "answer":
-        return Answer(PlayerId[payload["seat"]], DecisionResponse(tuple(payload["choices"])))
+        response = DecisionResponse(tuple(payload["choices"]), tuple(payload.get("boosted", ())))
+        return Answer(PlayerId[payload["seat"]], response)
     return Cancel(PlayerId[payload["seat"]])
 
 

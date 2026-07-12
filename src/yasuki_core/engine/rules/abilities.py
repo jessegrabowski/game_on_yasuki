@@ -131,6 +131,12 @@ def invest_for(card: L5RCard) -> InvestAbility | None:
     return _INVEST.get(card.printed_id)
 
 
+def production_boost_for(card: L5RCard) -> int | None:
+    """The extra Gold ``card`` may add as it bows to produce, or None if it has no boost. A boostable
+    producer is destroyed after it bows boosted — Outlying Farms is the sole case."""
+    return _PRODUCTION_BOOST.get(card.printed_id)
+
+
 def activatable(game: GameState, seat: PlayerId, phase: Phase) -> list[L5RCard]:
     """The in-play cards ``seat`` may activate an ability on right now: controlled, its ability legal
     in ``phase``, its cost payable, and with at least one legal target."""
@@ -290,4 +296,11 @@ _INVEST: dict[str, InvestAbility] = {
     "rebuilt_harbor": InvestAbility(minimum=1, maximum=3, effect=_invest_wealth),
     "training_court": InvestAbility(minimum=1, maximum=1, effect=_one_wealth),
     "courts_of_otosan_uchi": InvestAbility(minimum=2, maximum=2, effect=_one_wealth),
+}
+
+
+# Producers that may raise their yield as they bow to pay, mapped to the extra Gold, then destroy
+# themselves. Outlying Farms ("+2GP, then destroy it after it bows") is the sole arc case.
+_PRODUCTION_BOOST: dict[str, int] = {
+    "outlying_farms": 2,
 }
