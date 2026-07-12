@@ -130,8 +130,7 @@ def encode_initial(initial: InitialRecord) -> dict:
         "battlefield": [encode_card(card) for card in initial.battlefield],
         "positions": {card_id: [pos.x, pos.y] for card_id, pos in initial.positions.items()},
         "attachments": {
-            card_id: encode_attach_target(target)
-            for card_id, target in initial.attachments.items()
+            card_id: encode_attach_target(target) for card_id, target in initial.attachments.items()
         },
         "setup_seeds": dict(initial.setup_seeds),
     }
