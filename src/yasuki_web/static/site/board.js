@@ -141,6 +141,10 @@ function tagCard(el, card) {
   // pregame (stronghold/sensei/wind) cards are setup pieces tied to a seat — they cannot change hands.
   el.dataset.pregame = card.pregame ? '1' : '';
   el.dataset.doubleFaced = card.back_card_id ? '1' : '';
+  // attached: this card rides behind a parent (set client-side by layoutAttachments); gates "Detach".
+  el.dataset.attached = card.attached ? '1' : '';
+  // The card-target parent this card is glued behind, so a battlefield drag can carry the stack.
+  el.dataset.attachParent = card.attachParent ?? '';
 }
 
 // Every field of a serialized card whose change must re-patch its element, mirroring snapshot.py
@@ -149,6 +153,7 @@ function tagCard(el, card) {
 export const CARD_FIELDS = [
   'name', 'img', 'side', 'owner', 'pregame', 'token', 'bowed', 'face_up', 'inverted',
   'shown', 'peeked', 'hidden', 'back_card_id', 'showing_back', 'art', 'note', 'x', 'y',
+  'attached', 'attachParent',
 ];
 
 // Fields that change a card's drawn face (front/back image, peek/show disclosure, note); when none of
@@ -396,6 +401,11 @@ export const peekIntent = (id) => intentMessage({ op: 'PEEK', card_id: id });
 export const unpeekIntent = (id) => intentMessage({ op: 'UNPEEK', card_id: id });
 // Hand a card to the opponent: the server flips its owner to the other seat.
 export const giveControlIntent = (id) => intentMessage({ op: 'GIVE_CONTROL', card_id: id });
+// Attach a battlefield card to a parent (another card or a province) so it rides behind it. `to` is
+// {kind:'card', card_id} or {kind:'zone', zone:{owner, role:'province', idx}}, matching the server's
+// attach-target decode. Detach breaks a card's own attachment in place.
+export const attachIntent = (id, to) => intentMessage({ op: 'ATTACH', card_id: id, to });
+export const detachIntent = (id) => intentMessage({ op: 'DETACH', card_id: id });
 // Turn a double-faced card (a flip stronghold) to its other printed face.
 export const flipFaceIntent = (ids) => intentMessage({ op: 'FLIP_FACE', card_ids: [].concat(ids) });
 // The flip a card wants: a double-faced card turns its printed face, anything else front↔deck-back.
@@ -652,6 +662,19 @@ function cardMenuItems(
     });
   }
 
+  // Attach arms a two-step pick: choose this card, then click the card or province to attach it to.
+  // Offered on any card you control that is in play, in hand, or in a province (a card in a discard is
+  // squared away, not attachable). A hand/province child is played onto the board at the target first,
+  // then attached. Detach appears only on a card already riding a parent (flagged by layoutAttachments).
+  const attachItems = [];
+  if (mine && !inDiscard) {
+    attachItems.push({ label: '&Attach', onClick: (e, send, container) => beginAttach(el, container) });
+  }
+  if (onBattlefield && mine && el.dataset.attached === '1') {
+    attachItems.push({ label: 'Detac&h', onClick: (e, send) => send(detachIntent(id)) });
+  }
+  pushGroup(attachItems);
+
   if (mine) {
     const seatOf = (d) => d.owner || viewer;
     const sendItems = [];
@@ -861,9 +884,122 @@ export function placeUnplacedCards(cards, viewerSeat, anchorFor, boardW, boardH)
   });
 }
 
+// Append `item` to the list at `key` in `map`, creating the list on first use — for the group-by-key
+// maps that bucket attached children by their parent.
+const pushGrouped = (map, key, item) => {
+  const list = map.get(key);
+  if (list) list.push(item);
+  else map.set(key, [item]);
+};
+
+// Pixels an attached card is shifted up per stacking slot, so its title bar clears the parent's top
+// edge and each further attachment fans a little higher — matching the "sits behind, read the title"
+// tabletop stack.
+export const ATTACH_STACK_OFFSET = 24;
+
+// Restack attached cards for rendering, given placed battlefield cards (view pixels, in z-order) and
+// the snapshot's `attachments` map ({childId: {card: parentId} | {province: key}}). A card-target
+// child is glued behind its parent (emitted just before it, so it draws under it) and shifted up so
+// its title shows; chains cascade. A province-target child is anchored on its province slot via
+// ``provinceAnchorFor(key) -> {x, y, dir}`` (the slot's battlefield-local top-left plus the inboard
+// sign), fanned that way per slot so a fortification/region reads clear of the slot it hangs on; the
+// battlefield sits under the tableau layer, so the card naturally draws behind the province. Every
+// attached child is flagged ``attached`` so its menu can offer Detach. Returns a new array; the input
+// is untouched, and a board with no attachments is returned as-is.
+export function layoutAttachments(
+  cards,
+  attachments = {},
+  provinceAnchorFor = null,
+  offset = ATTACH_STACK_OFFSET,
+) {
+  const byId = new Map(cards.map((card) => [card.id, card]));
+  const cardChildren = new Map(); // parent card id -> [child id], both on the board
+  const provinceChildren = new Map(); // province key string -> [child id]
+  const attachedIds = new Set(); // every child with any attachment present on the board
+  for (const [childId, target] of Object.entries(attachments)) {
+    if (!byId.has(childId)) continue;
+    attachedIds.add(childId);
+    if (target?.card && byId.has(target.card)) {
+      pushGrouped(cardChildren, target.card, childId);
+    } else if (target?.province) {
+      pushGrouped(provinceChildren, target.province, childId);
+    }
+  }
+  if (!attachedIds.size) return cards;
+
+  // Absolute positions for province-attached children, anchored on their slot and fanned inboard.
+  // Provinces don't move, so these override the child's own position rather than gluing to a card.
+  const provincePos = new Map(); // child id -> {x, y}
+  if (provinceAnchorFor) {
+    for (const [key, kids] of provinceChildren) {
+      const anchor = provinceAnchorFor(key);
+      if (!anchor) continue;
+      kids.forEach((childId, slot) => {
+        provincePos.set(childId, { x: anchor.x, y: anchor.y + anchor.dir * offset * (slot + 1) });
+      });
+    }
+  }
+
+  const mark = (card) => {
+    if (!attachedIds.has(card.id)) return card;
+    const pos = provincePos.get(card.id);
+    return pos ? { ...card, attached: true, x: pos.x, y: pos.y } : { ...card, attached: true };
+  };
+  const gluedToCard = new Set([...cardChildren.values()].flat());
+  const result = [];
+  const seen = new Set();
+  // Emit a card after its (recursively placed) children, so a child draws under its parent.
+  const emit = (card) => {
+    if (seen.has(card.id)) return;
+    seen.add(card.id);
+    (cardChildren.get(card.id) ?? []).forEach((childId, slot) => {
+      const child = byId.get(childId);
+      // Record the immediate parent so a battlefield drag can gather and carry the whole stack.
+      if (child) {
+        emit({ ...mark(child), attachParent: card.id, x: card.x, y: card.y - offset * (slot + 1) });
+      }
+    });
+    result.push(mark(card));
+  };
+  for (const card of cards) {
+    if (!gluedToCard.has(card.id)) emit(card); // a glued child is emitted with its parent
+  }
+  // Safety net for anything unreached (e.g. a would-be cycle the server should have refused): keep it.
+  for (const card of cards) {
+    if (!seen.has(card.id)) {
+      seen.add(card.id);
+      result.push(mark(card));
+    }
+  }
+  return result;
+}
+
 let activeMenu = null;
 let menuKeyHandler = null;
 let activeCardView = null;
+// A two-step attach in flight: a menu "Attach" armed a child card, and the next board click picks the
+// parent (a card or province) to attach it to. Module-level so the menu item (built outside the board
+// closure) can arm it and the board's pointer handler can resolve it. `stage` is the board stage the
+// `.attaching` cue rides on.
+let pendingAttach = null;
+let attachStage = null;
+
+// Arm an attach: remember the child card and light the board's attach cue. The next board pointer
+// resolves it (see initBoardInteractions); Escape or an off-target click cancels.
+function beginAttach(childEl, stage) {
+  pendingAttach = {
+    childId: childEl.dataset.cardId,
+    onBattlefield: !!childEl.classList?.contains?.('board-card'),
+  };
+  attachStage = stage ?? null;
+  attachStage?.classList?.add('attaching');
+}
+
+function cancelAttach() {
+  attachStage?.classList?.remove('attaching');
+  attachStage = null;
+  pendingAttach = null;
+}
 
 function closeMenu() {
   if (menuKeyHandler) {
@@ -1316,6 +1452,30 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     y: clamp(Math.round(member.originY + dy), 0, rect.height - CARD_H),
   });
 
+  // The battlefield cards glued (transitively) behind `rootId`, walked via their data-attach-parent
+  // linkage, each with its start position so the drag can translate the whole stack rigidly. Excludes
+  // the root itself; a would-be cycle is broken by the seen-set.
+  const attachedDescendants = (rootId) => {
+    const byParent = new Map();
+    for (const el of boardEl.querySelectorAll('.board-card')) {
+      const parent = el.dataset.attachParent;
+      if (parent) pushGrouped(byParent, parent, el);
+    }
+    const out = [];
+    const seen = new Set([rootId]);
+    const stack = [rootId];
+    while (stack.length) {
+      for (const el of byParent.get(stack.pop()) ?? []) {
+        const id = el.dataset.cardId;
+        if (seen.has(id)) continue;
+        seen.add(id);
+        out.push({ el, originX: cardX(el), originY: cardY(el) });
+        stack.push(id);
+      }
+    }
+    return out;
+  };
+
   // Paint the `.selected` outline onto the battlefield cards in the current selection. Idempotent,
   // so the caller re-runs it after every re-render to reattach the outline to the fresh elements.
   const markSelection = () => {
@@ -1327,7 +1487,7 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
   // End the drag and clear its visuals. A committed ghost move keeps its hidden source hidden: the
   // card has "left", and the incoming SNAPSHOT rebuilds the source zone, so restoring it here would
   // only flash the card back in place for the server round-trip. Cancels and no-op drops restore it.
-  const release = (restoreSource = true) => {
+  const release = (restoreSource = true, keepAttached = false) => {
     setHandTarget(null);
     boardEl.classList.remove('is-dragging');
     if (!drag) return;
@@ -1338,6 +1498,15 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     drag.el.style.pointerEvents = '';
     if (restoreSource) drag.el.style.visibility = '';
     drag.el.classList.remove('dragging');
+    // The attached stack drops its lift; on a committed reposition it stays where dragged for the
+    // SNAPSHOT to re-glue (no flicker back), otherwise it snaps home to where the drag began.
+    for (const member of drag.attached ?? []) {
+      member.el.classList.remove('dragging');
+      if (!keepAttached) {
+        member.el.style.left = `${member.originX}px`;
+        member.el.style.top = `${member.originY}px`;
+      }
+    }
     drag.ghost?.remove();
     drag = null;
   };
@@ -1347,7 +1516,44 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     marquee = null;
   };
 
+  // Resolve an armed attach against a board click: attach the pending child to the card or province
+  // under the pointer. A child already on the battlefield just sends ATTACH; one still in a hand or a
+  // province is first played onto the board (MOVE_CARD) — onto the parent card, or mid-board for a
+  // province target — then attached. A non-left click, or a miss (empty table, or the child itself),
+  // only cancels.
+  const resolveAttach = (e) => {
+    const pending = pendingAttach;
+    cancelAttach();
+    if (e.button !== 0) return;
+    const targetCardEl = e.target?.closest?.('[data-card-id]');
+    const provinceEl = e.target?.closest?.('[data-zone="province"]');
+    let to = null;
+    let landing = null; // canonical [x, y] to play a not-yet-in-play child onto before attaching
+    // Only a battlefield card is a valid card parent (the server gates on it); a card resting in a
+    // hand/discard is not, so fall through — a click on a province slot still attaches to the province.
+    if (
+      targetCardEl &&
+      targetCardEl.dataset.cardId !== pending.childId &&
+      targetCardEl.classList?.contains?.('board-card')
+    ) {
+      to = { kind: 'card', card_id: targetCardEl.dataset.cardId };
+      const canon = toCanon(cardX(targetCardEl), cardY(targetCardEl));
+      landing = [canon.x, canon.y];
+    } else if (provinceEl) {
+      const idx = Number(provinceEl.dataset.idx);
+      to = { kind: 'zone', zone: { owner: provinceEl.dataset.owner, role: 'province', idx } };
+    } else {
+      return; // no valid parent under the pointer — the attach is simply cancelled
+    }
+    if (!pending.onBattlefield) {
+      send(moveCardIntent(pending.childId, { kind: 'battlefield' }, landing ?? [0.5, 0.5]));
+    }
+    send(attachIntent(pending.childId, to));
+  };
+
   root.addEventListener('pointerdown', (e) => {
+    // An armed attach swallows the next board press to pick its parent, ahead of any drag/selection.
+    if (pendingAttach) return resolveAttach(e);
     if (e.button !== 0) return;
     // A press that starts on a deck pile grabs that deck's hidden top card (no card id to move by);
     // only the deck's owner may, and the drop resolves to a MOVE_DECK_TOP keyed by the deck.
@@ -1414,6 +1620,14 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
         }
       }
     }
+    // A single battlefield card carries its attached stack, so the whole tower moves with the host
+    // rather than the host tearing away from its followers. (A group drag moves the selection instead;
+    // an attached card rides along there only if it too was selected.)
+    if (onBattlefield && !drag.members) {
+      drag.parentStartX = cardX(cardEl);
+      drag.parentStartY = cardY(cardEl);
+      drag.attached = attachedDescendants(id);
+    }
   });
 
   root.addEventListener('pointermove', (e) => {
@@ -1468,6 +1682,8 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
         drag.el.style.pointerEvents = 'none';
         drag.el.classList.add('dragging');
         drag.mover = drag.el;
+        // Lift the attached stack with the host so the whole tower rides above the board together.
+        for (const member of drag.attached ?? []) member.el.classList.add('dragging');
       }
     }
     if (drag.members) {
@@ -1497,6 +1713,15 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     const pos = place(e.clientX, e.clientY, battleRect(), drag.grab);
     drag.mover.style.left = `${pos.x}px`;
     drag.mover.style.top = `${pos.y}px`;
+    // Carry the attached stack by the same delta the host moved, so it stays glued in formation.
+    if (drag.attached?.length) {
+      const dx = pos.x - drag.parentStartX;
+      const dy = pos.y - drag.parentStartY;
+      for (const member of drag.attached) {
+        member.el.style.left = `${member.originX + dx}px`;
+        member.el.style.top = `${member.originY + dy}px`;
+      }
+    }
   });
 
   root.addEventListener('pointerup', (e) => {
@@ -1531,7 +1756,11 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     // commits a move — the SNAPSHOT will rebuild its zone — and reappears on a no-op drop or cancel.
     const commitsGhostMove =
       card.moved && !card.onBattlefield && !card.deck && (zone === 'battlefield' || !!dest);
-    release(!commitsGhostMove);
+    // A battlefield card repositioned in place leaves its attached stack where dragged for the SNAPSHOT
+    // to re-glue; a card sent off the board (its stack detaches server-side) or a no-op restores it.
+    const keepAttachedPlaced =
+      card.onBattlefield && card.moved && !card.members && (zone === 'battlefield' || !dest);
+    release(!commitsGhostMove, keepAttachedPlaced);
     // A press that never moved is a click: (de)select the card rather than treating it as a drop.
     if (!card.moved && card.onBattlefield) {
       if (card.additive) {
@@ -1669,6 +1898,12 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
   // flag op applies to the whole selection when the hovered card is part of one, like its menu item.
   const DECK_HOTKEYS = new Set(['d', 's']);
   document.addEventListener('keydown', (e) => {
+    // An armed attach owns the keyboard until it resolves: Escape cancels it, and every hover hotkey
+    // is held back so a stray key can't act on a card mid-attach.
+    if (pendingAttach) {
+      if (e.key === 'Escape') cancelAttach();
+      return;
+    }
     // An open context menu owns the keyboard: its accelerators take over and the hover hotkeys yield.
     // An open card preview does not — any hotkey still acts and the preview's own listener dismisses it.
     if (activeMenu) return;

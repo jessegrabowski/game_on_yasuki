@@ -15,6 +15,7 @@ import {
   deckAnchor,
   pregameAnchor,
   placeUnplacedCards,
+  layoutAttachments,
   setBackArt,
   backArtBySide,
 } from './board.js';
@@ -341,7 +342,25 @@ export function init() {
       battlefield.clientWidth,
       battlefield.clientHeight,
     );
-    renderBoard(battlefield, onTable, imgBase);
+    // A province-attached card anchors on its province slot: measure the slot's battlefield-local
+    // top-left and give the inboard sign (your provinces line the bottom and fan up; the opponent's
+    // line the top and fan down), so the fortification/region reads clear of the slot it hangs on.
+    const provinceAnchorFor = (key) => {
+      const [owner, , idx] = key.split(':');
+      const tableau = owner === you ? selfTableau : opponentTableau;
+      const slot = tableau?.querySelector?.(`.province[data-idx="${idx}"]`);
+      if (!slot) return null;
+      const p = slot.getBoundingClientRect();
+      const b = battlefield.getBoundingClientRect();
+      return { x: p.left - b.left, y: p.top - b.top, dir: owner === you ? -1 : 1 };
+    };
+    // Restack attached cards behind their parents (a card or province) so each rides behind with its
+    // title showing, and flag them for the Detach menu item.
+    renderBoard(
+      battlefield,
+      layoutAttachments(onTable, snapshot.attachments, provinceAnchorFor),
+      imgBase,
+    );
   }
 
   function joinRoom(roomId) {
