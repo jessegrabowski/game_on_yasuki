@@ -12,6 +12,7 @@ from yasuki_core.engine.zones import (
     FateBanishZone,
     DynastyDiscardZone,
     DynastyBanishZone,
+    ProvinceZone,
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
@@ -83,6 +84,11 @@ class TableState:
         Shared, public play area; member cards have a position in ``positions``.
     positions : dict mapping str to BoardPos
         Table coordinates for battlefield cards, keyed by card id.
+    attachments : dict mapping str to (str or ZoneKey)
+        The attachment graph, keyed by the attached (child) card id. A value is either a parent card
+        id — the child sits behind that battlefield card — or a province ``ZoneKey`` a fortification
+        or region is attached to. Only battlefield cards appear as children; a card leaving the
+        battlefield drops its entry and detaches whatever is hung off it.
     cards_by_id : dict mapping str to L5RCard
         Identity map over every card on the table, for fast intent lookup.
     seq : int
@@ -97,6 +103,8 @@ class TableState:
     battlefield: BattlefieldZone
     # L5RCard is frozen, so battlefield positions live here, keyed by card id, not on the card.
     positions: dict[str, BoardPos] = field(default_factory=dict)
+    # The child->parent attachment graph, external to the frozen card. See the class docstring.
+    attachments: dict[str, "AttachTarget"] = field(default_factory=dict)
     cards_by_id: dict[str, L5RCard] = field(default_factory=dict)
     seq: int = 0
 
@@ -161,6 +169,24 @@ class TableState:
         if stray:
             raise ValueError(f"positions reference non-battlefield cards: {sorted(stray)}")
 
+        for child_id, target in self.attachments.items():
+            if child_id not in battlefield_ids:
+                raise ValueError(f"attachment child not on battlefield: {child_id!r}")
+            if isinstance(target, ZoneKey):
+                if not isinstance(self.zones.get(target), ProvinceZone):
+                    raise ValueError(f"attachment references missing province: {target}")
+            elif target not in battlefield_ids:
+                raise ValueError(f"attachment references non-battlefield card: {target!r}")
+        # No card-to-card cycles: walking parents from any child must terminate.
+        for start in self.attachments:
+            seen = {start}
+            cursor = self.attachments.get(start)
+            while isinstance(cursor, str):
+                if cursor in seen:
+                    raise ValueError(f"attachment cycle involving {start!r}")
+                seen.add(cursor)
+                cursor = self.attachments.get(cursor)
+
         for key, zone in self.zones.items():
             if key.owner not in self.seats:
                 raise ValueError(f"zone key has unknown owner: {key}")
@@ -191,6 +217,9 @@ DEFAULT_BOARD_POS: Final = BoardPos(0.0, 0.0)
 UNPLACED_BOARD_POS: Final = BoardPos(-1.0, -1.0)
 
 MoveDest = ZoneKey | DeckKey | Literal["battlefield"]
+
+# What a card may be attached to: another battlefield card (by id) or a province zone.
+AttachTarget = str | ZoneKey
 
 
 # Ownership and zone predicates — pure read-only queries on the table, shared by the manual sim

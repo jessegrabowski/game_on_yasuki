@@ -130,3 +130,60 @@ def test_province_zone_keyed_by_idx_validates():
         table.zones[ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, idx)] = ProvinceZone(owner=PlayerId.P1)
 
     table.validate()
+
+
+def _put_on_battlefield(table: TableState, card_id: str) -> L5RCard:
+    card = L5RCard(id=card_id, name=card_id, side=Side.DYNASTY, owner=PlayerId.P1)
+    table.battlefield.add(card)
+    table.positions[card_id] = BoardPos(0.0, 0.0)
+    table.cards_by_id[card_id] = card
+    return card
+
+
+def test_validate_accepts_card_and_province_attachments():
+    table = TableState.empty_two_seat()
+    _put_on_battlefield(table, "parent")
+    _put_on_battlefield(table, "child")
+    _put_on_battlefield(table, "fort")
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    table.attachments = {"child": "parent", "fort": province}
+
+    table.validate()
+
+
+def test_validate_rejects_attachment_child_off_the_battlefield():
+    table = TableState.empty_two_seat()
+    _put_on_battlefield(table, "parent")
+    table.attachments = {"ghost": "parent"}
+
+    with pytest.raises(ValueError, match="attachment child not on battlefield"):
+        table.validate()
+
+
+def test_validate_rejects_attachment_to_a_non_battlefield_card():
+    table = TableState.empty_two_seat()
+    _put_on_battlefield(table, "child")
+    table.attachments = {"child": "ghost"}
+
+    with pytest.raises(ValueError, match="non-battlefield card"):
+        table.validate()
+
+
+def test_validate_rejects_attachment_to_a_missing_province():
+    table = TableState.empty_two_seat()
+    _put_on_battlefield(table, "child")
+    table.attachments = {"child": ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)}
+
+    with pytest.raises(ValueError, match="missing province"):
+        table.validate()
+
+
+def test_validate_rejects_an_attachment_cycle():
+    table = TableState.empty_two_seat()
+    _put_on_battlefield(table, "a")
+    _put_on_battlefield(table, "b")
+    table.attachments = {"a": "b", "b": "a"}
+
+    with pytest.raises(ValueError, match="cycle"):
+        table.validate()
