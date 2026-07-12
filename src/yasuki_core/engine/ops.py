@@ -193,7 +193,10 @@ def fill_province(state: TableState, seat: PlayerId, zone: ProvinceZone) -> L5RC
 
 
 def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> list[str]:
-    """Discard a province's contents face-up and remove the province; returns the moved card ids."""
+    """Discard a province's contents face-up and remove the province, then send each card attached to
+    it (fortifications, regions) to its own side's discard — the owner's pile if it has one, else the
+    destroying seat's. A card with no discard for its side (a pregame permanent) is detached in place.
+    Returns the moved card ids."""
     zone = state.zones[zone_key]
     discard = state.zones[ZoneKey(seat, ZoneRole.DYNASTY_DISCARD)]
     moved = []
@@ -203,9 +206,20 @@ def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> li
         discard.add(card)
         moved.append(card.id)
     del state.zones[zone_key]
-    # A fortification or region attached to this province detaches when the province is gone.
-    for child in [c for c, parent in state.attachments.items() if parent == zone_key]:
-        del state.attachments[child]
+    # A card attached to the province follows it off the board into its own side's discard; move_card
+    # turns it face up and clears the attachment. Only fate/dynasty cards have a discard — a pregame
+    # side (stronghold/sensei/wind) has none, so it just detaches rather than vanishing off the board.
+    for child_id in [child for child, parent in state.attachments.items() if parent == zone_key]:
+        child = state.cards_by_id[child_id]
+        if child.side is Side.FATE:
+            role = ZoneRole.FATE_DISCARD
+        elif child.side is Side.DYNASTY:
+            role = ZoneRole.DYNASTY_DISCARD
+        else:
+            state.attachments.pop(child_id, None)
+            continue
+        move_card(state, child, ZoneKey(child.owner or seat, role))
+        moved.append(child_id)
     return moved
 
 

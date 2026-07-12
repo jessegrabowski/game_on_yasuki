@@ -1487,16 +1487,73 @@ def test_moving_a_parent_off_the_battlefield_detaches_its_children():
     table.validate()
 
 
-def test_destroying_a_province_detaches_what_hangs_on_it():
+def test_destroying_a_province_discards_what_hangs_on_it():
     table = TableState.empty_two_seat()
     province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
     table.zones[province] = ProvinceZone(owner=PlayerId.P1)
     fort = _dynasty("fort")
     _on_battlefield(table, fort)
+    fort.bow()
     apply_intent(table, PlayerId.P1, Attach("fort", province))
 
     apply_intent(table, PlayerId.P1, DestroyProvince(province))
 
+    # The attached dynasty card follows the province into its owner's dynasty discard, face up and
+    # unbowed, no longer on the battlefield or attached.
+    dynasty_discard = table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)]
+    assert fort in dynasty_discard.cards
+    assert fort not in table.battlefield.cards
+    assert fort.face_up is True and fort.bowed is False
+    assert table.attachments == {}
+    table.validate()
+
+
+def test_destroying_a_province_routes_a_fate_attachment_to_the_fate_discard():
+    table = TableState.empty_two_seat()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    spell = _fate("spell")  # a fate-side card riding the province routes by its own side/owner
+    _on_battlefield(table, spell)
+    apply_intent(table, PlayerId.P1, Attach("spell", province))
+
+    apply_intent(table, PlayerId.P1, DestroyProvince(province))
+
+    assert spell in table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards
+    table.validate()
+
+
+def test_destroying_a_province_detaches_a_side_without_a_discard_in_place():
+    # A stronghold-side card has no discard; destroying its province must detach it, not remove it from
+    # the board into a pile that rejects its side and leave it floating (a corrupt cards_by_id).
+    table = TableState.empty_two_seat()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    keep = L5RCard(id="keep", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1)
+    _on_battlefield(table, keep)
+    apply_intent(table, PlayerId.P1, Attach("keep", province))
+
+    apply_intent(table, PlayerId.P1, DestroyProvince(province))
+
+    assert keep in table.battlefield.cards  # stays on the board, just detached
+    assert table.attachments == {}
+    table.validate()
+
+
+def test_destroying_a_province_discards_every_attachment_to_its_own_pile():
+    table = TableState.empty_two_seat()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    fort, spell = _dynasty("fort"), _fate("spell")
+    _on_battlefield(table, fort)
+    _on_battlefield(table, spell)
+    apply_intent(table, PlayerId.P1, Attach("fort", province))
+    apply_intent(table, PlayerId.P1, Attach("spell", province))
+
+    apply_intent(table, PlayerId.P1, DestroyProvince(province))
+
+    # Every attached card is discarded, each routed by its own side — not just the first.
+    assert fort in table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
+    assert spell in table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards
     assert table.attachments == {}
     table.validate()
 
