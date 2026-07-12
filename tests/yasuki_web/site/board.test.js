@@ -2760,6 +2760,23 @@ describe('layoutAttachments', () => {
     assert.equal(y('B'), 300 - ATTACH_STACK_OFFSET * 3);
   });
 
+  it('re-flows the tower down when a middle attachment is removed', () => {
+    // Detaching a middle sibling: the cards above it slide down to close the gap, since every rung is
+    // recomputed each render. This is what lets a detached card be nudged aside without leaving a hole.
+    const cards = [
+      { id: 'P', x: 0, y: 300 },
+      { id: 'A', x: 0, y: 0 },
+      { id: 'B', x: 0, y: 0 },
+      { id: 'C', x: 0, y: 0 },
+    ];
+    const y = (out, id) => out.find((c) => c.id === id).y;
+    const before = layoutAttachments(cards, { A: { card: 'P' }, B: { card: 'P' }, C: { card: 'P' } });
+    assert.equal(y(before, 'C'), 300 - ATTACH_STACK_OFFSET * 3);
+    const after = layoutAttachments(cards, { A: { card: 'P' }, C: { card: 'P' } }); // B detached
+    assert.equal(y(after, 'A'), 300 - ATTACH_STACK_OFFSET, 'first item unchanged');
+    assert.equal(y(after, 'C'), 300 - ATTACH_STACK_OFFSET * 2, 'third item slides down to close the gap');
+  });
+
   it('cascades a chain, the deepest child furthest behind and highest', () => {
     const cards = [
       { id: 'gp', x: 0, y: 200 },
@@ -2937,13 +2954,20 @@ describe('initBoardInteractions — attach', () => {
     assert.ok(menuLabels(root).includes('Attach'));
   });
 
-  it('offers Detach only on an attached card and sends DETACH', () => {
-    const attached = fakeCard('child', { owner: 'P1' });
+  it('freezes the card beside the tower then detaches it', () => {
+    const attached = fakeCard('child', { owner: 'P1', x: 40, y: 50 });
     attached.dataset.attached = '1';
     root._emit('contextmenu', rightClick({ card: attached }));
     assert.ok(menuLabels(root).includes('Detach'));
     clickMenuItem(root, 'Detach');
-    assert.deepEqual(sent.at(-1).intent, { op: 'DETACH', card_id: 'child' });
+    // Its position is persisted (SET_CARD_POS) before DETACH, so it stays put instead of snapping back
+    // to a stale spot — nudged a card-width to the side so it pops off the rung the stack closes into.
+    assert.deepEqual(sent.map((m) => m.intent.op), ['SET_CARD_POS', 'DETACH']);
+    assert.equal(sent[0].intent.card_id, 'child');
+    const own = viewToCanonical(40, 50, true, 200, 200);
+    assert.ok(sent[0].intent.x > own.x, 'frozen a card-width beside its own column');
+    assert.equal(sent[0].intent.y, own.y, 'stays on its rung (nudge is horizontal)');
+    assert.deepEqual(sent[1].intent, { op: 'DETACH', card_id: 'child' });
   });
 
   it('omits Detach on a card that is not attached', () => {
