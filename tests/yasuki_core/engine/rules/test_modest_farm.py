@@ -134,7 +134,8 @@ def test_modest_farm_can_be_kept_leaving_the_recruit_bowed():
 
     table = session.game.table
     assert table.cards_by_id["target"].bowed  # recruits enter bowed
-    assert table.cards_by_id["mf"] in table.battlefield.cards  # Modest Farm kept
+    mf = table.cards_by_id["mf"]
+    assert mf in table.battlefield.cards and mf.bowed  # Modest Farm kept, still bowed by its cost
 
 
 def test_modest_farm_grants_a_farm_target_renew_refilling_its_province_face_up():
