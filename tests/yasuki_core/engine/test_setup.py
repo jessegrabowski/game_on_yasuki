@@ -138,6 +138,32 @@ def test_starting_honor_sums_stronghold_and_sensei():
     assert state.seats[PlayerId.P1].honor == 15
 
 
+def test_a_sensei_is_attached_to_the_stronghold_at_setup():
+    state = _setup_with_pregame(
+        StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1),
+        SenseiCard(id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1),
+    )
+    assert state.attachments == {"se": "sh"}
+    state.validate()
+
+
+def test_a_stronghold_without_a_sensei_starts_unattached():
+    state = _setup_with_pregame(
+        StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1),
+    )
+    assert state.attachments == {}
+    state.validate()
+
+
+def test_a_sensei_without_a_stronghold_is_not_attached():
+    # No stronghold to hang on: the sensei is left loose rather than attached to nothing (a crash).
+    state = _setup_with_pregame(
+        SenseiCard(id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1),
+    )
+    assert state.attachments == {}
+    state.validate()
+
+
 def test_starting_honor_from_a_stronghold_alone_is_its_base():
     state = _setup_with_pregame(
         StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, starting_honor=10)
