@@ -2954,9 +2954,10 @@ describe('initBoardInteractions — attach', () => {
     assert.ok(menuLabels(root).includes('Attach'));
   });
 
-  it('freezes the card beside the tower then detaches it', () => {
+  it('detaches a card-attachment beside its tower', () => {
     const attached = fakeCard('child', { owner: 'P1', x: 40, y: 50 });
     attached.dataset.attached = '1';
+    attached.dataset.attachParent = 'host'; // riding a parent card => nudge sideways
     root._emit('contextmenu', rightClick({ card: attached }));
     assert.ok(menuLabels(root).includes('Detach'));
     clickMenuItem(root, 'Detach');
@@ -2968,6 +2969,19 @@ describe('initBoardInteractions — attach', () => {
     assert.ok(sent[0].intent.x > own.x, 'frozen a card-width beside its own column');
     assert.equal(sent[0].intent.y, own.y, 'stays on its rung (nudge is horizontal)');
     assert.deepEqual(sent[1].intent, { op: 'DETACH', card_id: 'child' });
+  });
+
+  it('detaches a province-attachment upward off the slot', () => {
+    // No parent card (data-attach-parent unset) marks it a province attachment, which pops up instead
+    // of sideways so it clears the slot it was riding.
+    const attached = fakeCard('fort', { owner: 'P1', x: 40, y: 50 });
+    attached.dataset.attached = '1';
+    root._emit('contextmenu', rightClick({ card: attached }));
+    clickMenuItem(root, 'Detach');
+    assert.deepEqual(sent.map((m) => m.intent.op), ['SET_CARD_POS', 'DETACH']);
+    const own = viewToCanonical(40, 50, true, 200, 200);
+    assert.equal(sent[0].intent.x, own.x, 'same column (pop is vertical)');
+    assert.ok(sent[0].intent.y < own.y, 'popped a card-height up off the slot');
   });
 
   it('omits Detach on a card that is not attached', () => {

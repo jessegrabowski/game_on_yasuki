@@ -671,15 +671,18 @@ function cardMenuItems(
     attachItems.push({ label: '&Attach', onClick: (e, send, container) => beginAttach(el, container) });
   }
   if (onBattlefield && mine && el.dataset.attached === '1') {
-    // Freeze the card a card-width beside where it rides before detaching, so it pops off to the side
-    // of the tower rather than landing on the rung the stack closes into — and never snaps back to the
-    // stale coordinate it held before attaching. The position is client-only, so the server learns it
-    // via SET_CARD_POS, ordered before DETACH to avoid a flash.
+    // Freeze the card just off where it rides before detaching, so it clears whatever it was riding
+    // rather than landing back on the rung the stack closes into — and never snaps back to the stale
+    // coordinate it held before attaching. A card-attachment pops a card-width to the side of its
+    // tower; a province-attachment (no parent card) pops a card-height up off the slot. The position
+    // is client-only, so the server learns it via SET_CARD_POS, ordered before DETACH to avoid a flash.
     attachItems.push({
       label: 'Detac&h',
       onClick: (e, send) => {
-        const left = (parseFloat(el.style.left) || 0) + CARD_W;
-        const canon = toCanon(left, parseFloat(el.style.top) || 0);
+        const onProvince = !el.dataset.attachParent;
+        const left = (parseFloat(el.style.left) || 0) + (onProvince ? 0 : CARD_W);
+        const top = (parseFloat(el.style.top) || 0) - (onProvince ? CARD_H : 0);
+        const canon = toCanon(left, top);
         send(moveIntent(id, canon.x, canon.y));
         send(detachIntent(id));
       },
