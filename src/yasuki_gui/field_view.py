@@ -79,12 +79,18 @@ class FieldView(tk.Canvas):
         self._selection: list[str] = []
         # When choosing how to pay, selected producers preview as bowed (tapped for gold).
         self._selection_bows: bool = False
+        # Producers whose yield can be boosted as they bow, and the subset the player boosted.
+        self._boostable: frozenset[str] = frozenset()
+        self._boosted: list[str] = []
 
         # Optional UI callbacks the host app installs.
         self.on_local_player_changed: Callable[[], None] | None = None
         self.apply_profile_to_panels: Callable[[], None] | None = None
         self.on_selection_changed: Callable[[], None] | None = None
         self.on_card_activated: Callable[[str], None] | None = None
+        # Fires when a boostable producer is picked, so the host can ask whether to boost it; the
+        # host answers by calling resolve_boost.
+        self.on_boost_request: Callable[[str], None] | None = None
 
         self._controller = FieldController(self)
         self._images = ImageProvider(self)
@@ -158,27 +164,61 @@ class FieldView(tk.Canvas):
         """The ids currently selected for the pending decision."""
         return frozenset(self._selection)
 
-    def begin_selection(self, candidates: Iterable[str], *, render_bowed: bool = False) -> None:
+    @property
+    def boosted(self) -> frozenset[str]:
+        """The selected producers whose bow-time boost the player took."""
+        return frozenset(self._boosted)
+
+    def begin_selection(
+        self,
+        candidates: Iterable[str],
+        *,
+        render_bowed: bool = False,
+        boostable: Iterable[str] = (),
+    ) -> None:
         """Enter selection mode: only ``candidates`` are selectable, none chosen yet. When
-        ``render_bowed`` is set, selected cards preview as bowed (a producer tapped to pay)."""
+        ``render_bowed`` is set, selected cards preview as bowed (a producer tapped to pay). Picking
+        a ``boostable`` producer defers to :attr:`on_boost_request` before it enters the selection."""
         self._selectable = frozenset(candidates)
         self._selection = []
         self._selection_bows = render_bowed
+        self._boostable = frozenset(boostable)
+        self._boosted = []
 
     def end_selection(self) -> None:
         """Leave selection mode and clear the selection."""
         self._selectable = None
         self._selection = []
         self._selection_bows = False
+        self._boostable = frozenset()
+        self._boosted = []
 
     def toggle_selection(self, card_id: str) -> None:
-        """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener."""
+        """Toggle ``card_id`` in the selection if it is a candidate, and notify the listener. Picking
+        a boostable producer instead defers to :attr:`on_boost_request`; it enters the selection only
+        once its boost question is answered through :meth:`resolve_boost`."""
         if self._selectable is None or card_id not in self._selectable:
             return
         if card_id in self._selection:
             self._selection.remove(card_id)
+            self._forget_boost(card_id)
+        elif card_id in self._boostable and self.on_boost_request is not None:
+            self.on_boost_request(card_id)
+            return
         else:
             self._selection.append(card_id)
+        if self.on_selection_changed is not None:
+            self.on_selection_changed()
+
+    def resolve_boost(self, card_id: str, take: bool) -> None:
+        """Add a boostable producer to the selection once its boost question is answered, taking the
+        boost when ``take``."""
+        if self._selectable is None or card_id not in self._selectable:
+            return
+        if card_id not in self._selection:
+            self._selection.append(card_id)
+        if take and card_id not in self._boosted:
+            self._boosted.append(card_id)
         if self.on_selection_changed is not None:
             self.on_selection_changed()
 
@@ -186,9 +226,13 @@ class FieldView(tk.Canvas):
         """Drop the most recently selected id (Ctrl+Z while paying), and notify the listener."""
         if not self._selection:
             return
-        self._selection.pop()
+        self._forget_boost(self._selection.pop())
         if self.on_selection_changed is not None:
             self.on_selection_changed()
+
+    def _forget_boost(self, card_id: str) -> None:
+        if card_id in self._boosted:
+            self._boosted.remove(card_id)
 
     def configure_hotkeys(self, hotkeys: Hotkeys) -> None:
         self._hotkeys = hotkeys

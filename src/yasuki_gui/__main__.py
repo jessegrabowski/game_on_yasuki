@@ -38,14 +38,22 @@ LOCAL_DEBUG_OVERRIDE = False
 OPPONENT_TURN_DELAY_MS = 700
 
 
-def _describe_decision(request: DecisionRequest, chosen: Iterable[str]) -> tuple[str, str]:
-    """A pending decision's prompt text and confirm-button label, given the cards chosen so far.
-    Raise on an unmapped decision so a new request type can't ship without its prompt."""
+def _describe_decision(
+    request: DecisionRequest, chosen: Iterable[str], boosted: Iterable[str] = ()
+) -> tuple[str, str]:
+    """A pending decision's prompt text and confirm-button label, given the cards chosen so far (and,
+    paying, the producers boosted). Raise on an unmapped decision so a new request type can't ship
+    without its prompt."""
     if isinstance(request, DiscardToHandSize):
         return f"discard {request.count} card(s)", "Discard"
     if isinstance(request, ChoosePayment):
         yields = dict(request.produced)
-        covered = request.available + sum(yields[card_id] for card_id in chosen)
+        boost = dict(request.boostable)
+        boosted_set = set(boosted)
+        covered = request.available + sum(
+            yields[card_id] + (boost[card_id] if card_id in boosted_set else 0)
+            for card_id in chosen
+        )
         remaining = max(0, request.amount - covered)
         return f"Pay {remaining} gold for {request.label}", "Pay"
     if isinstance(request, BanishForLegacy):
@@ -116,6 +124,9 @@ def main() -> None:
     field.state = session.game.table
     field.seat = human_seat
 
+    # The producer awaiting a boost answer mid-payment, or None; its prompt pre-empts the payment.
+    boost_producer: str | None = None
+
     def refresh() -> None:
         view = runner.view()
         field.gold = view.gold[view.viewer]
@@ -138,10 +149,20 @@ def main() -> None:
             ]
             buttons.append(("Cancel", cancel_decision, True))
             prompt_box.show("Choose how much to Invest", buttons)
+        elif isinstance(pending, ChoosePayment) and boost_producer is not None:
+            extra = dict(pending.boostable).get(boost_producer, 0)
+            prompt_box.show(
+                f"Boost this Holding as it bows? +{extra} Gold, then it is destroyed.",
+                [
+                    ("Boost", lambda: answer_boost(True), True),
+                    ("Skip", lambda: answer_boost(False), True),
+                ],
+            )
         elif pending is not None:
             chosen = tuple(field.selection)
-            prompt, button_label = _describe_decision(pending, chosen)
-            can_confirm = pending.accepts(DecisionResponse(chosen))
+            boosted = tuple(field.boosted)
+            prompt, button_label = _describe_decision(pending, chosen, boosted)
+            can_confirm = pending.accepts(DecisionResponse(chosen, boosted))
             buttons = [(button_label, confirm_decision, can_confirm)]
             if pending.cancellable:
                 buttons.append(("Cancel", cancel_decision, True))
@@ -175,6 +196,8 @@ def main() -> None:
         Dialogs(root, ImageProvider(root)).card_search(pool, choosable, "Dynasty deck", on_pick)
 
     def after_human_action() -> None:
+        nonlocal boost_producer
+        boost_producer = None
         pending = runner.pending
         if isinstance(pending, ChooseLegacyCard):
             open_legacy_search(pending)
@@ -184,16 +207,30 @@ def main() -> None:
             # A payment's candidate producers become selectable and preview as bowed when picked; an
             # Invest amount is answered by prompt buttons, so it takes no board selection.
             paying = isinstance(pending, ChoosePayment)
-            field.begin_selection(pending.candidates, render_bowed=paying)
+            boostable = [pid for pid, _ in pending.boostable] if paying else ()
+            field.begin_selection(pending.candidates, render_bowed=paying, boostable=boostable)
         refresh()
         if pending is None and runner.is_opponent_turn:
             # The board already shows "Opponent's turn"; run it after a beat so the hand-off shows.
             root.after(OPPONENT_TURN_DELAY_MS, run_opponent)
 
     def confirm_decision() -> None:
-        runner.submit(field.selection)
+        runner.submit(field.selection, field.boosted)
         field.end_selection()
         after_human_action()
+
+    def request_boost(producer_id: str) -> None:
+        # A boostable producer was picked to pay: put its boost question in the prompt box.
+        nonlocal boost_producer
+        boost_producer = producer_id
+        refresh()
+
+    def answer_boost(take: bool) -> None:
+        nonlocal boost_producer
+        producer_id = boost_producer
+        boost_producer = None
+        if producer_id is not None:
+            field.resolve_boost(producer_id, take)  # adds it to the selection, then refreshes
 
     def submit_invest(amount: str) -> None:
         runner.submit([amount])
@@ -234,9 +271,13 @@ def main() -> None:
         popup_action_menu(runner.deck_menu(deck_key))
 
     def undo(_event=None) -> None:
-        # Ctrl+Z: while paying, unbow the last producer tapped for gold; otherwise undo a just-made
-        # Dynasty Discard, if nothing else has happened since.
-        if isinstance(runner.pending, ChoosePayment):
+        # Ctrl+Z: back out of an open boost question first, else while paying unbow the last producer
+        # tapped for gold, else undo a just-made Dynasty Discard, if nothing else has happened since.
+        nonlocal boost_producer
+        if boost_producer is not None:
+            boost_producer = None
+            refresh()
+        elif isinstance(runner.pending, ChoosePayment):
             field.undo_last_selection()
         elif runner.undo_last():
             field.state = session.game.table
@@ -251,6 +292,7 @@ def main() -> None:
             cancel_decision()
 
     # Re-render (board borders + confirm-button state) as the player toggles candidates.
+    field.on_boost_request = request_boost
     field.on_selection_changed = refresh
     field.on_card_activated = on_card_activated
     root.bind("<Control-z>", undo)

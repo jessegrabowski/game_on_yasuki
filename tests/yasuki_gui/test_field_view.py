@@ -83,6 +83,37 @@ class TestDispatchReconcile:
         assert field.dispatch(FlipDeckTop(empty)) == []
 
 
+class TestBoostSelection:
+    def test_picking_a_boostable_producer_defers_to_the_boost_request(self, field):
+        asked = []
+        field.on_boost_request = asked.append
+        field.begin_selection(["sh", "of"], boostable=["of"])
+        field.toggle_selection("of")
+        assert asked == ["of"] and field.selection == frozenset()  # not selected until answered
+        field.toggle_selection("sh")  # non-boostable selects directly, no request
+        assert asked == ["of"] and field.selection == frozenset({"sh"})
+
+    def test_resolving_the_boost_selects_and_records_when_taken(self, field):
+        field.on_boost_request = lambda card_id: None
+        field.begin_selection(["of"], boostable=["of"])
+        field.resolve_boost("of", True)
+        assert field.selection == frozenset({"of"}) and field.boosted == frozenset({"of"})
+
+    def test_skipping_the_boost_selects_the_producer_unboosted(self, field):
+        field.begin_selection(["of"], boostable=["of"])
+        field.resolve_boost("of", False)
+        assert field.selection == frozenset({"of"}) and field.boosted == frozenset()
+
+    def test_deselecting_or_undoing_drops_the_boost(self, field):
+        field.begin_selection(["of"], boostable=["of"])
+        field.resolve_boost("of", True)
+        field.toggle_selection("of")  # deselect
+        assert field.boosted == frozenset() and field.selection == frozenset()
+        field.resolve_boost("of", True)  # re-boost, then undo
+        field.undo_last_selection()
+        assert field.boosted == frozenset() and field.selection == frozenset()
+
+
 class TestHomeRow:
     def test_unplaced_cards_get_distinct_positions(self, loaded):
         field, state = loaded
