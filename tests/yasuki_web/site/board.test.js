@@ -2735,10 +2735,29 @@ describe('layoutAttachments', () => {
       { id: 'c2', x: 0, y: 0 },
     ];
     const out = layoutAttachments(cards, { c1: { card: 'p' }, c2: { card: 'p' } });
-    assert.deepEqual(out.map((c) => c.id), ['c1', 'c2', 'p']);
+    // The higher card (c2) draws behind the lower (c1), which draws behind the host (p, in front).
+    assert.deepEqual(out.map((c) => c.id), ['c2', 'c1', 'p']);
     const y = (id) => out.find((c) => c.id === id).y;
     assert.equal(y('c1'), 100 - ATTACH_STACK_OFFSET);
     assert.equal(y('c2'), 100 - ATTACH_STACK_OFFSET * 2);
+  });
+
+  it('gives every card in a branched tower its own rung, none colliding', () => {
+    // Host P carries items A and B; A itself carries C. The per-parent slot index would put B and C
+    // on the same rung — the whole-tower count must keep all four distinct.
+    const cards = [
+      { id: 'P', x: 0, y: 300 },
+      { id: 'A', x: 0, y: 0 },
+      { id: 'B', x: 0, y: 0 },
+      { id: 'C', x: 0, y: 0 },
+    ];
+    const out = layoutAttachments(cards, { A: { card: 'P' }, B: { card: 'P' }, C: { card: 'A' } });
+    const y = (id) => out.find((c) => c.id === id).y;
+    assert.equal(new Set(['A', 'B', 'C', 'P'].map(y)).size, 4, 'four distinct rungs, no collision');
+    // DFS pre-order: A (rung 1), C under A (rung 2), then B (rung 3), each a step above the host.
+    assert.equal(y('A'), 300 - ATTACH_STACK_OFFSET);
+    assert.equal(y('C'), 300 - ATTACH_STACK_OFFSET * 2);
+    assert.equal(y('B'), 300 - ATTACH_STACK_OFFSET * 3);
   });
 
   it('cascades a chain, the deepest child furthest behind and highest', () => {
@@ -2786,6 +2805,27 @@ describe('layoutAttachments', () => {
     const y = (id) => out.find((c) => c.id === id).y;
     assert.equal(y('a'), 10 + ATTACH_STACK_OFFSET);
     assert.equal(y('b'), 10 + ATTACH_STACK_OFFSET * 2);
+    // Fanning down, the nearest-slot card (a) draws behind the lower one (b), so it comes first.
+    assert.deepEqual(out.map((c) => c.id), ['a', 'b']);
+  });
+
+  it('continues the province tower through a fort\'s own attachment', () => {
+    // A card hung on a province-attached fort stacks in the same column, one step past the fort —
+    // the fort's subtree continues the province's count rather than restarting from the fort.
+    const cards = [
+      { id: 'fort', x: 0, y: 0 },
+      { id: 'item', x: 9, y: 9 },
+    ];
+    const anchorFor = () => ({ x: 40, y: 200, dir: -1 });
+    const out = layoutAttachments(
+      cards,
+      { fort: { province: 'P1:province:0' }, item: { card: 'fort' } },
+      anchorFor,
+    );
+    const at = (id) => out.find((c) => c.id === id);
+    assert.deepEqual([at('fort').x, at('fort').y], [40, 200 - ATTACH_STACK_OFFSET]);
+    assert.deepEqual([at('item').x, at('item').y], [40, 200 - ATTACH_STACK_OFFSET * 2]);
+    assert.equal(at('item').attachParent, 'fort', 'the sub-attachment carries with the fort');
   });
 
   it('falls back to the child position when the resolver has no anchor for the slot', () => {

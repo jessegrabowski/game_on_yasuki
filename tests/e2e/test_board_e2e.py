@@ -252,3 +252,56 @@ def test_a_card_attached_to_a_province_anchors_on_its_slot(new_player):
     assert abs(r["cardLeft"] - r["slotLeft"]) < 3
     assert abs(r["cardTop"] - (r["slotTop"] - _ATTACH_OFFSET)) < 3
     assert p1.get_attribute(f'.board-card[data-card-id="{card_id}"]', "data-attached") == "1"
+
+
+def _card_id_by_name(page, name):
+    return page.evaluate(
+        """(name) => {
+            const el = [...document.querySelectorAll('.board-card')].find((e) => e.dataset.name === name);
+            return el ? el.dataset.cardId : null;
+        }""",
+        name,
+    )
+
+
+def test_a_branched_attachment_tower_gives_every_card_its_own_rung(new_player):
+    # Host with two items, one of which carries a follower: the four cards must occupy four distinct
+    # rungs. The old per-parent offset put the follower and the second item on the same rung.
+    p1, _p2, room_id = _open_two_players(new_player)
+    for name in ("Host", "ItemA", "ItemB", "Follower"):
+        _spawn_card(p1, room_id, name=name, position=(0.5, 0.5))
+    p1.wait_for_function(
+        "() => document.querySelectorAll('.board-card[data-card-id]').length === 4"
+    )
+
+    host = _card_id_by_name(p1, "Host")
+    item_a = _card_id_by_name(p1, "ItemA")
+    item_b = _card_id_by_name(p1, "ItemB")
+    follower = _card_id_by_name(p1, "Follower")
+
+    def attach(child, parent):
+        _send_intent(
+            p1,
+            room_id,
+            {"op": "ATTACH", "card_id": child, "to": {"kind": "card", "card_id": parent}},
+        )
+
+    attach(item_a, host)
+    attach(item_b, host)
+    attach(follower, item_a)
+
+    ids = [host, item_a, item_b, follower]
+    tops_js = """(ids) => ids.map((id) => {
+        const el = document.querySelector(`.board-card[data-card-id="${id}"]`);
+        return el ? Math.round(el.getBoundingClientRect().top) : null;
+    })"""
+    # Wait for the tower to settle (the three attaches each round-trip a snapshot), then assert the
+    # rungs explicitly so the success criterion is a check, not just the wait not timing out.
+    p1.wait_for_function(
+        f"(ids) => {{ const t = ({tops_js})(ids);"
+        " return t.every((v) => v !== null) && new Set(t).size === ids.length; }",
+        arg=ids,
+        timeout=5000,
+    )
+    tops = p1.evaluate(tops_js, ids)
+    assert len(set(tops)) == len(ids), f"every card sits on its own rung, got {tops}"

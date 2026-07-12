@@ -898,14 +898,15 @@ const pushGrouped = (map, key, item) => {
 export const ATTACH_STACK_OFFSET = 24;
 
 // Restack attached cards for rendering, given placed battlefield cards (view pixels, in z-order) and
-// the snapshot's `attachments` map ({childId: {card: parentId} | {province: key}}). A card-target
-// child is glued behind its parent (emitted just before it, so it draws under it) and shifted up so
-// its title shows; chains cascade. A province-target child is anchored on its province slot via
-// ``provinceAnchorFor(key) -> {x, y, dir}`` (the slot's battlefield-local top-left plus the inboard
-// sign), fanned that way per slot so a fortification/region reads clear of the slot it hangs on; the
-// battlefield sits under the tableau layer, so the card naturally draws behind the province. Every
-// attached child is flagged ``attached`` so its menu can offer Detach. Returns a new array; the input
-// is untouched, and a board with no attachments is returned as-is.
+// the snapshot's `attachments` map ({childId: {card: parentId} | {province: key}}). Everything hung
+// (transitively) off a host card, or off a province slot, flattens into one column: each card is one
+// step further than the last across the WHOLE tower — not per parent — so a branch with its own
+// attachment can't land on a sibling. A card host's stack fans up and it draws in front of it; a
+// province stack fans inboard from the slot (``provinceAnchorFor(key) -> {x, y, dir}``, the slot's
+// battlefield-local top-left plus the inboard sign), drawn behind the slot by the tableau layer.
+// Within a tower the card whose title must stay clear draws behind the one it rides. Every attached
+// card is flagged ``attached`` (so its menu offers Detach) and stamped with its immediate parent (so
+// a drag carries the tower). Returns a new array; a board with no attachments is returned as-is.
 export function layoutAttachments(
   cards,
   attachments = {},
@@ -927,49 +928,69 @@ export function layoutAttachments(
   }
   if (!attachedIds.size) return cards;
 
-  // Absolute positions for province-attached children, anchored on their slot and fanned inboard.
-  // Provinces don't move, so these override the child's own position rather than gluing to a card.
-  const provincePos = new Map(); // child id -> {x, y}
-  if (provinceAnchorFor) {
-    for (const [key, kids] of provinceChildren) {
-      const anchor = provinceAnchorFor(key);
-      if (!anchor) continue;
-      kids.forEach((childId, slot) => {
-        provincePos.set(childId, { x: anchor.x, y: anchor.y + anchor.dir * offset * (slot + 1) });
-      });
-    }
-  }
-
-  const mark = (card) => {
-    if (!attachedIds.has(card.id)) return card;
-    const pos = provincePos.get(card.id);
-    return pos ? { ...card, attached: true, x: pos.x, y: pos.y } : { ...card, attached: true };
-  };
   const gluedToCard = new Set([...cardChildren.values()].flat());
   const result = [];
   const seen = new Set();
-  // Emit a card after its (recursively placed) children, so a child draws under its parent.
-  const emit = (card) => {
-    if (seen.has(card.id)) return;
-    seen.add(card.id);
-    (cardChildren.get(card.id) ?? []).forEach((childId, slot) => {
-      const child = byId.get(childId);
-      // Record the immediate parent so a battlefield drag can gather and carry the whole stack.
-      if (child) {
-        emit({ ...mark(child), attachParent: card.id, x: card.x, y: card.y - offset * (slot + 1) });
+  const flag = (card) => ({ ...card, attached: true });
+
+  // Stack everything hung (transitively) off `parentId` into one column from (baseX, baseY), each
+  // card one `step` beyond the last (``count`` runs across the whole tower). DFS pre-order keeps each
+  // sub-tower contiguous. Returns the placed cards nearest-the-base first.
+  const growTower = (parentId, baseX, baseY, step, count) => {
+    const tower = [];
+    const walk = (pid) => {
+      for (const childId of cardChildren.get(pid) ?? []) {
+        const child = byId.get(childId);
+        if (seen.has(child.id)) continue;
+        seen.add(child.id);
+        count.n += 1;
+        tower.push({ ...flag(child), attachParent: pid, x: baseX, y: baseY + step * count.n });
+        walk(child.id);
       }
-    });
-    result.push(mark(card));
+    };
+    walk(parentId);
+    return tower;
   };
-  for (const card of cards) {
-    if (!gluedToCard.has(card.id)) emit(card); // a glued child is emitted with its parent
-  }
-  // Safety net for anything unreached (e.g. a would-be cycle the server should have refused): keep it.
-  for (const card of cards) {
-    if (!seen.has(card.id)) {
-      seen.add(card.id);
-      result.push(mark(card));
+
+  // Draw a tower so each card's title clears the one it rides: fanning up (step < 0) the highest card
+  // is furthest back, so draw it first; fanning down (step > 0) the lowest card is in front, so last.
+  const drawTower = (tower, step) => {
+    if (step < 0) for (let i = tower.length - 1; i >= 0; i -= 1) result.push(tower[i]);
+    else for (const placed of tower) result.push(placed);
+  };
+
+  // Province towers first: everything on a province stacks from the slot anchor, fanning inboard.
+  for (const [key, childIds] of provinceChildren) {
+    const anchor = provinceAnchorFor ? provinceAnchorFor(key) : null;
+    if (!anchor) continue; // unresolved slot — its cards fall through and keep their own position
+    const step = anchor.dir * offset;
+    const count = { n: 0 };
+    const tower = [];
+    for (const childId of childIds) {
+      const child = byId.get(childId);
+      if (seen.has(child.id)) continue;
+      seen.add(child.id);
+      count.n += 1;
+      tower.push({ ...flag(child), x: anchor.x, y: anchor.y + step * count.n });
+      tower.push(...growTower(child.id, anchor.x, anchor.y, step, count));
     }
+    drawTower(tower, step);
+  }
+
+  // Card towers: a battlefield card not itself hung on a card is a host; its stack fans up and it
+  // draws in front of the stack.
+  for (const card of cards) {
+    if (seen.has(card.id) || gluedToCard.has(card.id)) continue;
+    seen.add(card.id);
+    drawTower(growTower(card.id, card.x, card.y, -offset, { n: 0 }), -offset);
+    result.push(attachedIds.has(card.id) ? flag(card) : card);
+  }
+
+  // Anything unreached (a parent that left the board, a would-be cycle): keep it, flagged if attached.
+  for (const card of cards) {
+    if (seen.has(card.id)) continue;
+    seen.add(card.id);
+    result.push(attachedIds.has(card.id) ? flag(card) : card);
   }
   return result;
 }
