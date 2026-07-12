@@ -32,6 +32,8 @@ import {
   initPanelHonor,
   highlightCard,
   placeUnplacedCards,
+  layoutAttachments,
+  ATTACH_STACK_OFFSET,
   patchCard,
   canonicalToView,
   viewToCanonical,
@@ -2104,6 +2106,7 @@ describe('initBoardInteractions — context menu', () => {
       'Add note…',
       'Duplicate',
       'Give control',
+      'Attach',
       'Send to Hand',
       'Send to Discard',
       'Send to Deck (top)',
@@ -2210,6 +2213,7 @@ describe('initBoardInteractions — context menu', () => {
       'View', // available on every card
       'Play face down', // play a hand card onto the board face down (focusing in a duel)
       'Show opponent', // a hand card is hidden from the opponent, so reveal is offered
+      'Attach', // arm a two-step attach: this hand card, then the parent to play-and-attach it to
       'Send to Discard',
       'Send to Deck (top)',
       'Send to Deck (bottom)',
@@ -2698,5 +2702,398 @@ describe('initPanelHonor', () => {
     opponent._emit('click', { target: { closest: () => true }, preventDefault: () => (fired = true) });
     assert.equal(fired, false);
     assert.equal(sent.length, 0);
+  });
+});
+
+describe('layoutAttachments', () => {
+  it('returns the same array untouched when there are no attachments', () => {
+    const cards = [{ id: 'a', x: 0, y: 0 }, { id: 'b', x: 10, y: 10 }];
+    assert.equal(layoutAttachments(cards, {}), cards);
+  });
+
+  it('stacks a card-target child behind its parent, shifted up, and flags it attached', () => {
+    const cards = [
+      { id: 'child', x: 5, y: 5 },
+      { id: 'parent', x: 40, y: 60 },
+    ];
+    const out = layoutAttachments(cards, { child: { card: 'parent' } });
+    // The child is emitted before its parent so it draws underneath it.
+    assert.deepEqual(out.map((c) => c.id), ['child', 'parent']);
+    const child = out.find((c) => c.id === 'child');
+    assert.deepEqual([child.x, child.y], [40, 60 - ATTACH_STACK_OFFSET]);
+    assert.equal(child.attached, true);
+    assert.equal(child.attachParent, 'parent', 'records its host for the drag-along stack');
+    const parent = out.find((c) => c.id === 'parent');
+    assert.deepEqual([parent.x, parent.y], [40, 60], 'the parent keeps its own position');
+    assert.ok(!parent.attached);
+  });
+
+  it('fans several children of one parent progressively higher', () => {
+    const cards = [
+      { id: 'p', x: 0, y: 100 },
+      { id: 'c1', x: 0, y: 0 },
+      { id: 'c2', x: 0, y: 0 },
+    ];
+    const out = layoutAttachments(cards, { c1: { card: 'p' }, c2: { card: 'p' } });
+    // The higher card (c2) draws behind the lower (c1), which draws behind the host (p, in front).
+    assert.deepEqual(out.map((c) => c.id), ['c2', 'c1', 'p']);
+    const y = (id) => out.find((c) => c.id === id).y;
+    assert.equal(y('c1'), 100 - ATTACH_STACK_OFFSET);
+    assert.equal(y('c2'), 100 - ATTACH_STACK_OFFSET * 2);
+  });
+
+  it('gives every card in a branched tower its own rung, none colliding', () => {
+    // Host P carries items A and B; A itself carries C. The per-parent slot index would put B and C
+    // on the same rung — the whole-tower count must keep all four distinct.
+    const cards = [
+      { id: 'P', x: 0, y: 300 },
+      { id: 'A', x: 0, y: 0 },
+      { id: 'B', x: 0, y: 0 },
+      { id: 'C', x: 0, y: 0 },
+    ];
+    const out = layoutAttachments(cards, { A: { card: 'P' }, B: { card: 'P' }, C: { card: 'A' } });
+    const y = (id) => out.find((c) => c.id === id).y;
+    assert.equal(new Set(['A', 'B', 'C', 'P'].map(y)).size, 4, 'four distinct rungs, no collision');
+    // DFS pre-order: A (rung 1), C under A (rung 2), then B (rung 3), each a step above the host.
+    assert.equal(y('A'), 300 - ATTACH_STACK_OFFSET);
+    assert.equal(y('C'), 300 - ATTACH_STACK_OFFSET * 2);
+    assert.equal(y('B'), 300 - ATTACH_STACK_OFFSET * 3);
+  });
+
+  it('re-flows the tower down when a middle attachment is removed', () => {
+    // Detaching a middle sibling: the cards above it slide down to close the gap, since every rung is
+    // recomputed each render. This is what lets a detached card be nudged aside without leaving a hole.
+    const cards = [
+      { id: 'P', x: 0, y: 300 },
+      { id: 'A', x: 0, y: 0 },
+      { id: 'B', x: 0, y: 0 },
+      { id: 'C', x: 0, y: 0 },
+    ];
+    const y = (out, id) => out.find((c) => c.id === id).y;
+    const before = layoutAttachments(cards, { A: { card: 'P' }, B: { card: 'P' }, C: { card: 'P' } });
+    assert.equal(y(before, 'C'), 300 - ATTACH_STACK_OFFSET * 3);
+    const after = layoutAttachments(cards, { A: { card: 'P' }, C: { card: 'P' } }); // B detached
+    assert.equal(y(after, 'A'), 300 - ATTACH_STACK_OFFSET, 'first item unchanged');
+    assert.equal(y(after, 'C'), 300 - ATTACH_STACK_OFFSET * 2, 'third item slides down to close the gap');
+  });
+
+  it('cascades a chain, the deepest child furthest behind and highest', () => {
+    const cards = [
+      { id: 'gp', x: 0, y: 200 },
+      { id: 'p', x: 0, y: 0 },
+      { id: 'c', x: 0, y: 0 },
+    ];
+    const out = layoutAttachments(cards, { p: { card: 'gp' }, c: { card: 'p' } });
+    assert.deepEqual(out.map((c) => c.id), ['c', 'p', 'gp']);
+    const at = (id) => out.find((c) => c.id === id);
+    assert.equal(at('p').y, 200 - ATTACH_STACK_OFFSET);
+    assert.equal(at('c').y, 200 - ATTACH_STACK_OFFSET * 2);
+  });
+
+  it('leaves a province-target child where it sits when no anchor resolver is given', () => {
+    const cards = [{ id: 'fort', x: 12, y: 34 }];
+    const out = layoutAttachments(cards, { fort: { province: 'P1:province:0' } });
+    const fort = out.find((c) => c.id === 'fort');
+    assert.equal(fort.attached, true);
+    assert.deepEqual([fort.x, fort.y], [12, 34]);
+  });
+
+  it('anchors a province-target child on its slot, fanned inboard by the resolver direction', () => {
+    const cards = [{ id: 'fort', x: 12, y: 34 }];
+    const anchorFor = (key) => (key === 'P1:province:2' ? { x: 90, y: 200, dir: -1 } : null);
+    const out = layoutAttachments(cards, { fort: { province: 'P1:province:2' } }, anchorFor);
+    const fort = out.find((c) => c.id === 'fort');
+    assert.equal(fort.attached, true);
+    // x matches the slot; y is one offset inboard (up, dir -1) of the slot's top.
+    assert.deepEqual([fort.x, fort.y], [90, 200 - ATTACH_STACK_OFFSET]);
+  });
+
+  it('fans several province-target children on one slot progressively inboard', () => {
+    const cards = [
+      { id: 'a', x: 0, y: 0 },
+      { id: 'b', x: 0, y: 0 },
+    ];
+    const anchorFor = () => ({ x: 50, y: 10, dir: 1 }); // opponent slot: fans down
+    const out = layoutAttachments(
+      cards,
+      { a: { province: 'P2:province:0' }, b: { province: 'P2:province:0' } },
+      anchorFor,
+    );
+    const y = (id) => out.find((c) => c.id === id).y;
+    assert.equal(y('a'), 10 + ATTACH_STACK_OFFSET);
+    assert.equal(y('b'), 10 + ATTACH_STACK_OFFSET * 2);
+    // Fanning down, the nearest-slot card (a) draws behind the lower one (b), so it comes first.
+    assert.deepEqual(out.map((c) => c.id), ['a', 'b']);
+  });
+
+  it('continues the province tower through a fort\'s own attachment', () => {
+    // A card hung on a province-attached fort stacks in the same column, one step past the fort —
+    // the fort's subtree continues the province's count rather than restarting from the fort.
+    const cards = [
+      { id: 'fort', x: 0, y: 0 },
+      { id: 'item', x: 9, y: 9 },
+    ];
+    const anchorFor = () => ({ x: 40, y: 200, dir: -1 });
+    const out = layoutAttachments(
+      cards,
+      { fort: { province: 'P1:province:0' }, item: { card: 'fort' } },
+      anchorFor,
+    );
+    const at = (id) => out.find((c) => c.id === id);
+    assert.deepEqual([at('fort').x, at('fort').y], [40, 200 - ATTACH_STACK_OFFSET]);
+    assert.deepEqual([at('item').x, at('item').y], [40, 200 - ATTACH_STACK_OFFSET * 2]);
+    assert.equal(at('item').attachParent, 'fort', 'the sub-attachment carries with the fort');
+  });
+
+  it('falls back to the child position when the resolver has no anchor for the slot', () => {
+    const cards = [{ id: 'fort', x: 12, y: 34 }];
+    const out = layoutAttachments(cards, { fort: { province: 'P1:province:0' } }, () => null);
+    assert.deepEqual([out[0].x, out[0].y], [12, 34]);
+  });
+
+  it('ignores an attachment whose parent card has left the board', () => {
+    const cards = [{ id: 'child', x: 5, y: 5 }];
+    const out = layoutAttachments(cards, { child: { card: 'gone' } });
+    // The child is still flagged attached (its relationship stands) but keeps its own position.
+    assert.equal(out[0].attached, true);
+    assert.deepEqual([out[0].x, out[0].y], [5, 5]);
+  });
+});
+
+describe('initBoardInteractions — attach', () => {
+  let root;
+  let board;
+  let sent;
+
+  beforeEach(() => {
+    root = document.getElementById('boardStage');
+    root.dataset.viewerSeat = 'P1';
+    board = document.getElementById('battlefield');
+    sent = [];
+    initBoardInteractions(root, board, (message) => sent.push(message));
+  });
+
+  // A pointer event whose target resolves to a province slot (and no card beneath it).
+  const onProvince = (dataset, overrides = {}) => ({
+    button: 0,
+    clientX: 30,
+    clientY: 50,
+    target: { closest: (sel) => (sel === '[data-zone="province"]' ? { dataset } : null) },
+    ...overrides,
+  });
+
+  // Arm an attach on `childEl` through its context menu, then clear `sent` so the test asserts only
+  // the messages the target click produces.
+  const armAttach = (childEl, zone = null) => {
+    root._emit('contextmenu', rightClick({ zone, card: childEl }));
+    clickMenuItem(root, 'Attach');
+    sent.length = 0;
+  };
+
+  it('attaches a battlefield card to another card via the two-step pick', () => {
+    armAttach(fakeCard('child', { owner: 'P1' }));
+    root._emit('pointerdown', onCard(fakeCard('parent', { owner: 'P1' })));
+    assert.deepEqual(sent, [
+      { type: 'INTENT', intent: { op: 'ATTACH', card_id: 'child', to: { kind: 'card', card_id: 'parent' } } },
+    ]);
+  });
+
+  it('attaches a card to a province slot', () => {
+    armAttach(fakeCard('child', { owner: 'P1' }));
+    root._emit('pointerdown', onProvince({ owner: 'P1', idx: '2' }));
+    assert.deepEqual(sent, [
+      {
+        type: 'INTENT',
+        intent: {
+          op: 'ATTACH',
+          card_id: 'child',
+          to: { kind: 'zone', zone: { owner: 'P1', role: 'province', idx: 2 } },
+        },
+      },
+    ]);
+  });
+
+  it('plays a hand card onto the board then attaches it (move + attach)', () => {
+    const child = fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false, inHand: true });
+    armAttach(child, { zone: 'hand', owner: 'P1' });
+    root._emit('pointerdown', onCard(fakeCard('parent', { owner: 'P1', x: 40, y: 50 })));
+    assert.deepEqual(sent.map((m) => m.intent.op), ['MOVE_CARD', 'ATTACH']);
+    assert.equal(sent[0].intent.card_id, 'h1');
+    assert.deepEqual(sent[0].intent.to, { kind: 'battlefield' });
+    assert.deepEqual(sent[1].intent, {
+      op: 'ATTACH',
+      card_id: 'h1',
+      to: { kind: 'card', card_id: 'parent' },
+    });
+  });
+
+  it('plays a hand card to mid-board then attaches it to a province', () => {
+    // A province target carries no board position, so the play lands the card at the board centre
+    // before attaching — the render then anchors it on the province slot.
+    const child = fakeCard('h1', { side: 'FATE', owner: 'P1', onBattlefield: false, inHand: true });
+    armAttach(child, { zone: 'hand', owner: 'P1' });
+    root._emit('pointerdown', onProvince({ owner: 'P1', idx: '0' }));
+    assert.deepEqual(sent.map((m) => m.intent.op), ['MOVE_CARD', 'ATTACH']);
+    assert.deepEqual(sent[0].intent.position, [0.5, 0.5]);
+    assert.deepEqual(sent[0].intent.to, { kind: 'battlefield' });
+    assert.deepEqual(sent[1].intent.to, {
+      kind: 'zone',
+      zone: { owner: 'P1', role: 'province', idx: 0 },
+    });
+  });
+
+  it('offers Attach on a card sitting in a province', () => {
+    // The third initiation source the menu must serve (in play, in hand, in a province); a province
+    // card reaches the menu through a different composition path than a plain battlefield card.
+    const inProvince = fakeCard('pc', {
+      owner: 'P1',
+      onBattlefield: false,
+      province: { dataset: { zone: 'province', owner: 'P1', idx: '0' } },
+    });
+    root._emit('contextmenu', rightClick({ zone: { zone: 'province', owner: 'P1', idx: '0' }, card: inProvince }));
+    assert.ok(menuLabels(root).includes('Attach'));
+  });
+
+  it('detaches a card-attachment beside its tower', () => {
+    const attached = fakeCard('child', { owner: 'P1', x: 40, y: 50 });
+    attached.dataset.attached = '1';
+    attached.dataset.attachParent = 'host'; // riding a parent card => nudge sideways
+    root._emit('contextmenu', rightClick({ card: attached }));
+    assert.ok(menuLabels(root).includes('Detach'));
+    clickMenuItem(root, 'Detach');
+    // Its position is persisted (SET_CARD_POS) before DETACH, so it stays put instead of snapping back
+    // to a stale spot — nudged a card-width to the side so it pops off the rung the stack closes into.
+    assert.deepEqual(sent.map((m) => m.intent.op), ['SET_CARD_POS', 'DETACH']);
+    assert.equal(sent[0].intent.card_id, 'child');
+    const own = viewToCanonical(40, 50, true, 200, 200);
+    assert.ok(sent[0].intent.x > own.x, 'frozen a card-width beside its own column');
+    assert.equal(sent[0].intent.y, own.y, 'stays on its rung (nudge is horizontal)');
+    assert.deepEqual(sent[1].intent, { op: 'DETACH', card_id: 'child' });
+  });
+
+  it('detaches a province-attachment upward off the slot', () => {
+    // No parent card (data-attach-parent unset) marks it a province attachment, which pops up instead
+    // of sideways so it clears the slot it was riding.
+    const attached = fakeCard('fort', { owner: 'P1', x: 40, y: 50 });
+    attached.dataset.attached = '1';
+    root._emit('contextmenu', rightClick({ card: attached }));
+    clickMenuItem(root, 'Detach');
+    assert.deepEqual(sent.map((m) => m.intent.op), ['SET_CARD_POS', 'DETACH']);
+    const own = viewToCanonical(40, 50, true, 200, 200);
+    assert.equal(sent[0].intent.x, own.x, 'same column (pop is vertical)');
+    assert.ok(sent[0].intent.y < own.y, 'popped a card-height up off the slot');
+  });
+
+  it('omits Detach on a card that is not attached', () => {
+    root._emit('contextmenu', rightClick({ card: fakeCard('child', { owner: 'P1' }) }));
+    assert.ok(!menuLabels(root).includes('Detach'));
+  });
+
+  it('cancels an armed attach on Escape, sending nothing on the next click', () => {
+    armAttach(fakeCard('child', { owner: 'P1' }));
+    document._emit('keydown', { key: 'Escape', preventDefault() {} });
+    root._emit('pointerdown', onCard(fakeCard('parent', { owner: 'P1' })));
+    assert.equal(sent.length, 0);
+  });
+
+  it('cancels without attaching when the armed card itself is clicked', () => {
+    const child = fakeCard('child', { owner: 'P1' });
+    armAttach(child);
+    root._emit('pointerdown', onCard(child));
+    assert.equal(sent.length, 0);
+  });
+
+  it('cancels on a click that lands on no card or province', () => {
+    armAttach(fakeCard('child', { owner: 'P1' }));
+    root._emit('pointerdown', offCard());
+    assert.equal(sent.length, 0);
+  });
+
+  it('cancels rather than sending a doomed attach to a card not on the battlefield', () => {
+    // The server only attaches to a battlefield card, so a hand/discard card is not a valid parent.
+    armAttach(fakeCard('child', { owner: 'P1' }));
+    root._emit(
+      'pointerdown',
+      onCard(fakeCard('h1', { owner: 'P1', onBattlefield: false, inHand: true })),
+    );
+    assert.equal(sent.length, 0);
+  });
+});
+
+describe('initBoardInteractions — dragging an attached stack', () => {
+  let root;
+  let board;
+  let sent;
+
+  beforeEach(() => {
+    root = document.getElementById('boardStage');
+    root.dataset.viewerSeat = 'P1';
+    board = document.getElementById('battlefield');
+    sent = [];
+    initBoardInteractions(root, board, (message) => sent.push(message));
+  });
+
+  // A host card with one child glued behind it at offset (+8, -24), both reported by the battlefield.
+  const stack = () => {
+    const host = placedCard('host', 100, 100);
+    host.dataset.owner = 'P1';
+    const child = placedCard('child', 108, 76);
+    child.dataset.owner = 'P1';
+    child.dataset.attached = '1';
+    child.dataset.attachParent = 'host';
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [child, host] : []);
+    return { host, child };
+  };
+
+  const offset = (a, b) => [
+    parseFloat(a.style.left) - parseFloat(b.style.left),
+    parseFloat(a.style.top) - parseFloat(b.style.top),
+  ];
+
+  it('carries the attached child in formation and lifted while the host is dragged', () => {
+    const { host, child } = stack();
+    root._emit('pointerdown', onCard(host));
+    root._emit('pointermove', { clientX: 160, clientY: 140, target: { closest: () => null } });
+    assert.deepEqual(offset(child, host), [8, -24]);
+    assert.ok(child.classList.contains('dragging'));
+  });
+
+  it('sends only the host move and leaves the stack placed for the snapshot to re-glue', () => {
+    const { host, child } = stack();
+    root._emit('pointerdown', onCard(host));
+    root._emit('pointermove', { clientX: 160, clientY: 140, target: { closest: () => null } });
+    const draggedLeft = parseFloat(child.style.left);
+    root._emit('pointerup', onZone({ zone: 'battlefield' }));
+    assert.deepEqual(sent.map((m) => m.intent.op), ['SET_CARD_POS']);
+    assert.equal(sent[0].intent.card_id, 'host');
+    assert.equal(parseFloat(child.style.left), draggedLeft, 'the child stays where it was dragged');
+    assert.ok(!child.classList.contains('dragging'));
+  });
+
+  it('snaps the stack home when the drag is cancelled', () => {
+    const { host, child } = stack();
+    root._emit('pointerdown', onCard(host));
+    root._emit('pointermove', { clientX: 160, clientY: 140, target: { closest: () => null } });
+    root._emit('pointercancel', {});
+    assert.deepEqual([parseFloat(child.style.left), parseFloat(child.style.top)], [108, 76]);
+    assert.ok(!child.classList.contains('dragging'));
+  });
+
+  it('gathers a whole chain, carrying grandchildren too', () => {
+    const host = placedCard('host', 100, 100);
+    host.dataset.owner = 'P1';
+    const child = placedCard('child', 100, 76);
+    child.dataset.attachParent = 'host';
+    const grandchild = placedCard('grand', 100, 52);
+    grandchild.dataset.attachParent = 'child';
+    board.querySelectorAll = (sel) => (sel === '.board-card' ? [grandchild, child, host] : []);
+
+    root._emit('pointerdown', onCard(host));
+    root._emit('pointermove', { clientX: 160, clientY: 140, target: { closest: () => null } });
+
+    // Both descendants ride lifted and keep their offset from the host.
+    assert.deepEqual(offset(child, host), [0, -24]);
+    assert.deepEqual(offset(grandchild, host), [0, -48]);
+    assert.ok(child.classList.contains('dragging') && grandchild.classList.contains('dragging'));
   });
 });

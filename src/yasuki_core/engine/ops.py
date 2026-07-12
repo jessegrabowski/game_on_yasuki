@@ -4,6 +4,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import (
     BATTLEFIELD,
     DEFAULT_BOARD_POS,
+    AttachTarget,
     BoardPos,
     DeckKey,
     MoveDest,
@@ -32,6 +33,15 @@ def remove_from_location(state: TableState, card: L5RCard) -> None:
                 del cards[i]
                 state.positions.pop(card.id, None)
                 return
+
+
+def _clear_attachment(state: TableState, card_id: str) -> None:
+    """Drop ``card_id`` from the attachment graph in both roles: its own link to a parent, and any
+    children hung off it. Called when the card leaves the battlefield, so no attachment ever dangles
+    on a card that is no longer in play."""
+    state.attachments.pop(card_id, None)
+    for child in [c for c, parent in state.attachments.items() if parent == card_id]:
+        del state.attachments[child]
 
 
 def bring_to_top(state: TableState, card: L5RCard) -> None:
@@ -67,6 +77,7 @@ def move_card(
 
     if isinstance(dest, DeckKey):
         remove_from_location(state, card)
+        _clear_attachment(state, card.id)
         # Anonymize the card for the shuffle back into the library — no seat may read a deck card.
         card.turn_face_down()
         card.unbow()
@@ -85,6 +96,7 @@ def move_card(
     if any(held is card for held in zone.cards):
         return False
     remove_from_location(state, card)
+    _clear_attachment(state, card.id)
     if dest.role is ZoneRole.HAND:
         card.turn_face_up()
         card.unbow()
@@ -110,6 +122,21 @@ def set_position(state: TableState, card: L5RCard, x: float, y: float) -> bool:
     state.positions[card.id] = new_pos
     bring_to_top(state, card)
     return True
+
+
+def attach(state: TableState, card: L5RCard, target: AttachTarget) -> bool:
+    """Attach ``card`` to ``target`` — a parent card id or province zone key — so it rides behind
+    that parent. Returns whether the graph changed; re-attaching to the same target is a no-op."""
+    if state.attachments.get(card.id) == target:
+        return False
+    state.attachments[card.id] = target
+    return True
+
+
+def detach(state: TableState, card: L5RCard) -> bool:
+    """Break ``card``'s own attachment to its parent, leaving anything hung off ``card`` in place.
+    Returns whether it was attached."""
+    return state.attachments.pop(card.id, None) is not None
 
 
 def reorder_in_hand(state: TableState, seat: PlayerId, card_id: str, index: int) -> bool:
@@ -166,7 +193,10 @@ def fill_province(state: TableState, seat: PlayerId, zone: ProvinceZone) -> L5RC
 
 
 def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> list[str]:
-    """Discard a province's contents face-up and remove the province; returns the moved card ids."""
+    """Discard a province's contents face-up and remove the province, then send each card attached to
+    it (fortifications, regions) to its own side's discard — the owner's pile if it has one, else the
+    destroying seat's. A card with no discard for its side (a pregame permanent) is detached in place.
+    Returns the moved card ids."""
     zone = state.zones[zone_key]
     discard = state.zones[ZoneKey(seat, ZoneRole.DYNASTY_DISCARD)]
     moved = []
@@ -176,6 +206,20 @@ def destroy_province(state: TableState, seat: PlayerId, zone_key: ZoneKey) -> li
         discard.add(card)
         moved.append(card.id)
     del state.zones[zone_key]
+    # A card attached to the province follows it off the board into its own side's discard; move_card
+    # turns it face up and clears the attachment. Only fate/dynasty cards have a discard — a pregame
+    # side (stronghold/sensei/wind) has none, so it just detaches rather than vanishing off the board.
+    for child_id in [child for child, parent in state.attachments.items() if parent == zone_key]:
+        child = state.cards_by_id[child_id]
+        if child.side is Side.FATE:
+            role = ZoneRole.FATE_DISCARD
+        elif child.side is Side.DYNASTY:
+            role = ZoneRole.DYNASTY_DISCARD
+        else:
+            state.attachments.pop(child_id, None)
+            continue
+        move_card(state, child, ZoneKey(child.owner or seat, role))
+        moved.append(child_id)
     return moved
 
 
@@ -222,6 +266,7 @@ def remove_card(state: TableState, card: L5RCard) -> None:
     """Take ``card`` off the table entirely, wherever it sits."""
     del state.cards_by_id[card.id]
     remove_from_location(state, card)
+    _clear_attachment(state, card.id)
 
 
 def set_honor(

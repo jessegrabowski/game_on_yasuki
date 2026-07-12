@@ -108,6 +108,39 @@ def test_battlefield_card_carries_art_and_position():
     assert (placed["x"], placed["y"]) == (12.0, 34.0)
 
 
+def _on_battlefield(table, card_id, owner=P1):
+    card = L5RCard(id=card_id, name=card_id, side=Side.DYNASTY, owner=owner, face_up=True)
+    table.battlefield.cards.append(card)
+    table.positions[card_id] = BoardPos(0.0, 0.0)
+    table.cards_by_id[card_id] = card
+    return card
+
+
+def test_attachments_serialize_card_and_province_targets():
+    table = TableState.empty_two_seat()
+    _on_battlefield(table, "parent")
+    _on_battlefield(table, "child")
+    _on_battlefield(table, "fort")
+    province = ZoneKey(P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=P1)
+    table.attachments = {"child": "parent", "fort": province}
+
+    attachments = _serialized(table, P1)["attachments"]
+
+    # A card target is tagged {"card": id}; a province target flattens to the shared zone-key string.
+    assert attachments == {
+        "child": {"card": "parent"},
+        "fort": {"province": "P1:province:0"},
+    }
+
+
+def test_no_attachments_serializes_an_empty_map():
+    table = TableState.empty_two_seat()
+    _on_battlefield(table, "lone")
+
+    assert _serialized(table, P1)["attachments"] == {}
+
+
 def test_double_faced_card_shows_the_active_face_and_flip_link():
     table = TableState.empty_two_seat()
     back = L5RCard(

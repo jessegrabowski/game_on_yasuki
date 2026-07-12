@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Final
 
 from yasuki_core.engine.players import PlayerId
@@ -61,6 +61,10 @@ class ViewSnapshot:
     # Ids of cards this viewer sees solely because they are peeking them — visible to the viewer alone,
     # so the client renders them with the reduced-opacity peek cue. Empty when nothing is being peeked.
     peeked_ids: frozenset[str] = frozenset()
+    # The attachment graph, keyed by attached card id; each value is a parent card id or a province
+    # ``ZoneKey``. Passed through verbatim — card ids are public, so an attachment referencing a card
+    # the viewer cannot identify still resolves by id against the (hidden) card in the same snapshot.
+    attachments: dict[str, "str | ZoneKey"] = field(default_factory=dict)
 
 
 # Zones whose contents are public to both seats.
@@ -203,4 +207,5 @@ def redact(state: TableState, viewer: PlayerId) -> ViewSnapshot:
         decks=decks,
         battlefield=tuple(battlefield_views),
         peeked_ids=frozenset(peeked_ids),
+        attachments=dict(state.attachments),
     )

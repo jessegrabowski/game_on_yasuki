@@ -180,6 +180,54 @@ def test_play_face_down_hides_the_card_from_the_opponent_but_not_its_owner(room)
     assert log["parts"] == [{"text": "Ada "}, {"text": "plays a face-down fate card"}]
 
 
+def _battlefield_card(room, card_id, seat=PlayerId.P1):
+    card = L5RCard(id=card_id, name=card_id, side=Side.DYNASTY, owner=seat, face_up=True)
+    room.state.battlefield.cards.append(card)
+    room.state.positions[card_id] = BoardPos(0.0, 0.0)
+    room.state.cards_by_id[card_id] = card
+    return card
+
+
+def test_attach_envelope_round_trips_through_to_the_snapshot(room):
+    # The generic envelope `to` dict already carries an attach target, so no schema field was added;
+    # this exercises the whole path envelope -> decode -> apply -> redact -> serialized snapshot.
+    ada, kenji = _seat_two(room)
+    _battlefield_card(room, "parent")
+    _battlefield_card(room, "child")
+    kenji.sent.clear()
+
+    asyncio.run(
+        room.handle_intent(
+            ada,
+            IntentEnvelope(
+                op=IntentOp.ATTACH, card_id="child", to={"kind": "card", "card_id": "parent"}
+            ),
+        )
+    )
+
+    assert room.state.attachments == {"child": "parent"}
+    snapshot = next(m for m in reversed(kenji.sent) if m["type"] == "SNAPSHOT")["snapshot"]
+    assert snapshot["attachments"] == {"child": {"card": "parent"}}
+
+
+def test_detach_envelope_clears_the_attachment(room):
+    ada, _ = _seat_two(room)
+    _battlefield_card(room, "parent")
+    _battlefield_card(room, "child")
+    asyncio.run(
+        room.handle_intent(
+            ada,
+            IntentEnvelope(
+                op=IntentOp.ATTACH, card_id="child", to={"kind": "card", "card_id": "parent"}
+            ),
+        )
+    )
+
+    asyncio.run(room.handle_intent(ada, IntentEnvelope(op=IntentOp.DETACH, card_id="child")))
+
+    assert room.state.attachments == {}
+
+
 def test_chat_is_recorded_on_the_durable_tape(room):
     ada, _ = _seat_two(room)
     asyncio.run(room.handle_chat(ada, "hello"))

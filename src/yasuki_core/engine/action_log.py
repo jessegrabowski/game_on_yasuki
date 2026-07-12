@@ -48,6 +48,8 @@ from yasuki_core.engine.intents import (
     GiveControl,
     SpawnCard,
     RemoveCard,
+    Attach,
+    Detach,
     Event,
     apply_intent,
 )
@@ -164,6 +166,8 @@ class InitialRecord:
         The shared battlefield's cards.
     positions : dict mapping str to BoardPos
         Battlefield card positions, keyed by card id.
+    attachments : dict mapping str to (str or ZoneKey)
+        The attachment graph, keyed by attached card id, mapping to a parent card id or province.
     setup_seeds : dict mapping str to int
         Named RNG seeds used during setup that no logged intent carries.
     """
@@ -173,6 +177,7 @@ class InitialRecord:
     zones: dict[ZoneKey, list[L5RCard]] = field(default_factory=dict)
     battlefield: list[L5RCard] = field(default_factory=list)
     positions: dict[str, BoardPos] = field(default_factory=dict)
+    attachments: dict[str, str | ZoneKey] = field(default_factory=dict)
     setup_seeds: dict[str, int] = field(default_factory=dict)
 
     @classmethod
@@ -199,6 +204,7 @@ class InitialRecord:
             },
             battlefield=[replace(card) for card in state.battlefield.cards],
             positions=dict(state.positions),
+            attachments=dict(state.attachments),
             setup_seeds=dict(setup_seeds or {}),
         )
 
@@ -287,6 +293,7 @@ def build_initial_state(initial: InitialRecord) -> TableState:
         zone.cards = _restore_cards(state, cards)
     state.battlefield.cards = _restore_cards(state, initial.battlefield)
     state.positions = dict(initial.positions)
+    state.attachments = dict(initial.attachments)
     return state
 
 
@@ -445,6 +452,18 @@ def _decode_move_dest(payload: dict):
     return _decode_zone_key(payload["zone"])
 
 
+def _encode_attach_target(target) -> dict:
+    if isinstance(target, ZoneKey):
+        return {"kind": "zone", "zone": _encode_zone_key(target)}
+    return {"kind": "card", "card_id": target}
+
+
+def _decode_attach_target(payload: dict):
+    if payload["kind"] == "zone":
+        return _decode_zone_key(payload["zone"])
+    return payload["card_id"]
+
+
 def encode_intent(intent: Intent) -> dict:
     """Encode an ``Intent`` to JSON-ready plain data (op + targets). The canonical intent wire shape,
     shared by the persisted log and the live wire protocol."""
@@ -516,6 +535,10 @@ def encode_intent(intent: Intent) -> dict:
                 "position": [intent.position.x, intent.position.y],
             }
         case IntentOp.REMOVE_CARD:
+            payload["card_id"] = intent.card_id
+        case IntentOp.ATTACH:
+            payload |= {"card_id": intent.card_id, "to": _encode_attach_target(intent.to)}
+        case IntentOp.DETACH:
             payload["card_id"] = intent.card_id
         case _:
             raise ValueError(f"unhandled intent op: {intent.op}")
@@ -597,6 +620,10 @@ def decode_intent(payload: dict) -> Intent:
             )
         case IntentOp.REMOVE_CARD:
             return RemoveCard(payload["card_id"])
+        case IntentOp.ATTACH:
+            return Attach(payload["card_id"], _decode_attach_target(payload["to"]))
+        case IntentOp.DETACH:
+            return Detach(payload["card_id"])
         case _:
             raise ValueError(f"unhandled intent op: {op}")
 
@@ -670,6 +697,10 @@ def _encode_initial(initial: InitialRecord) -> dict:
         ],
         "battlefield": [_encode_card(card) for card in initial.battlefield],
         "positions": {card_id: [pos.x, pos.y] for card_id, pos in initial.positions.items()},
+        "attachments": {
+            card_id: _encode_attach_target(target)
+            for card_id, target in initial.attachments.items()
+        },
         "setup_seeds": dict(initial.setup_seeds),
     }
 
@@ -686,12 +717,17 @@ def _decode_initial(payload: dict) -> InitialRecord:
     }
     battlefield = [_decode_card(card) for card in payload["battlefield"]]
     positions = {card_id: BoardPos(*xy) for card_id, xy in payload["positions"].items()}
+    attachments = {
+        card_id: _decode_attach_target(target)
+        for card_id, target in payload.get("attachments", {}).items()
+    }
     return InitialRecord(
         seats=seats,
         decklists=decklists,
         zones=zones,
         battlefield=battlefield,
         positions=positions,
+        attachments=attachments,
         setup_seeds=dict(payload["setup_seeds"]),
     )
 

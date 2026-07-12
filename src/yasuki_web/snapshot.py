@@ -1,5 +1,5 @@
 from yasuki_core.engine.redaction import ViewSnapshot, HiddenCard
-from yasuki_core.engine.table import ZoneKey, DeckKey
+from yasuki_core.engine.table import ZoneKey, DeckKey, AttachTarget
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.pregame import StrongholdCard, SenseiCard, WindCard
 
@@ -13,6 +13,15 @@ def _zone_key_str(key: ZoneKey) -> str:
 
 def _deck_key_str(key: DeckKey) -> str:
     return f"{key.owner.name}:{key.side.value.lower()}"
+
+
+def _attach_target(target: AttachTarget) -> dict:
+    """Encode an attachment's parent for the client: a card target as ``{"card": id}``, a province
+    target as ``{"province": "P1:province:0"}``. The discriminant keeps the two unambiguous even
+    though a flattened zone string could never collide with a card id."""
+    if isinstance(target, ZoneKey):
+        return {"province": _zone_key_str(target)}
+    return {"card": target}
 
 
 def _card(view: L5RCard | HiddenCard, peeked_ids: frozenset[str] = frozenset()) -> dict:
@@ -116,4 +125,7 @@ def serialize_snapshot(snapshot: ViewSnapshot) -> dict:
             {**_card(entry.card, snapshot.peeked_ids), "x": entry.pos.x, "y": entry.pos.y}
             for entry in snapshot.battlefield
         ],
+        "attachments": {
+            child_id: _attach_target(target) for child_id, target in snapshot.attachments.items()
+        },
     }

@@ -297,6 +297,15 @@
   grid-template-rows: auto minmax(0, 1fr) auto;
 }
 
+/* While an attach is armed, the whole board is a target picker: a crosshair over every card and slot
+   cues that the next click chooses the parent to attach to. */
+.board-stage.attaching,
+.board-stage.attaching .board-card,
+.board-stage.attaching .zone-card,
+.board-stage.attaching .province {
+  cursor: crosshair;
+}
+
 .battlefield {
   position: absolute;
   inset: 0;

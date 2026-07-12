@@ -25,10 +25,10 @@ def setup_seat(
     Load the dynasty and fate cards into their decks face-down, shuffling each with the given seed,
     open the stronghold's provinces and fill each one face-down from the dynasty deck, draw the
     stronghold's ``starting_hand_size`` fate cards face-up into the hand, deal the pre-game
-    permanents (stronghold, sensei, wind) face-up onto the battlefield as loose cards, set the
-    seat's starting honor from its stronghold and sensei, and register every card in the table's
-    identity map. The discards and banishes stay empty, and no deck legality is enforced (a manual
-    sandbox).
+    permanents (stronghold, sensei, wind) face-up onto the battlefield — attaching any sensei to the
+    stronghold — set the seat's starting honor from its stronghold and sensei, and register every
+    card in the table's identity map. The discards and banishes stay empty, and no deck legality is
+    enforced (a manual sandbox).
 
     Parameters
     ----------
@@ -48,6 +48,7 @@ def setup_seat(
     for idx in range(_province_count(resolved)):
         state.zones[ZoneKey(seat, ZoneRole.PROVINCE, idx)] = ProvinceZone(owner=seat)
     _place_pregame(state, seat, resolved.pre_game)
+    _attach_sensei(state, resolved)
     state.seats[seat].honor = _starting_honor(resolved)
     _fill_provinces(state, seat)
     _draw_starting_hand(state, seat, _starting_hand_size(resolved))
@@ -152,6 +153,17 @@ def _place_pregame(state: TableState, seat: PlayerId, cards: list[L5RCard]) -> N
         state.cards_by_id[card.id] = card
         state.battlefield.add(card)
         state.positions[card.id] = PREGAME_UNPLACED
+
+
+def _attach_sensei(state: TableState, resolved: ResolvedDeck) -> None:
+    """Attach any sensei to the seat's stronghold, so it rides behind it from the opening board.
+    Both are already loose battlefield cards by this point, so the attachment is well-formed."""
+    stronghold = _stronghold(resolved)
+    if stronghold is None:
+        return
+    for card in resolved.pre_game:
+        if isinstance(card, SenseiCard):
+            state.attachments[card.id] = stronghold.id
 
 
 def _load_deck(state: TableState, key: DeckKey, cards: list[L5RCard], seed: int) -> None:

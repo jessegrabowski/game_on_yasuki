@@ -24,6 +24,8 @@ from yasuki_core.engine.intents import (
     DiscardProvince,
     CreateProvince,
     SetHonor,
+    Attach,
+    Detach,
 )
 from yasuki_core.game_pieces.constants import Side
 
@@ -57,6 +59,9 @@ from yasuki_core.game_pieces.constants import Side
         ),
         (CreateProvince(), IntentOp.CREATE_PROVINCE),
         (SetHonor(value=5), IntentOp.SET_HONOR),
+        (Attach(card_id="c", to="p"), IntentOp.ATTACH),
+        (Attach(card_id="c", to=ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)), IntentOp.ATTACH),
+        (Detach(card_id="c"), IntentOp.DETACH),
     ],
 )
 def test_every_intent_carries_its_wire_op(intent, expected_op):

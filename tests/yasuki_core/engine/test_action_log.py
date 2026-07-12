@@ -34,6 +34,8 @@ from yasuki_core.engine.intents import (
     GiveControl,
     SpawnCard,
     RemoveCard,
+    Attach,
+    Detach,
     apply_intent,
 )
 from yasuki_core.game_pieces.constants import Side, Element, Timing
@@ -244,6 +246,35 @@ def test_full_snapshot_survives_serialization():
     assert restored.replay() == state
 
 
+def _attached_state() -> TableState:
+    """Two battlefield permanents with one attached to the other, plus a fortification on a
+    province — exercises both attachment-target kinds in a snapshot."""
+    state = _post_setup_state()
+    follower = DynastyCard(id="foll", name="Follower", side=Side.DYNASTY, owner=PlayerId.P1)
+    fort = DynastyCard(id="fort", name="Fortification", side=Side.DYNASTY, owner=PlayerId.P1)
+    for card in (follower, fort):
+        state.battlefield.cards.append(card)
+        state.positions[card.id] = BoardPos(7.0, 8.0)
+        state.cards_by_id[card.id] = card
+    state.attachments["foll"] = "sh"  # rides behind the stronghold permanent
+    state.attachments["fort"] = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    state.validate()
+    return state
+
+
+def test_full_snapshot_round_trips_attachments():
+    state = _attached_state()
+    assert build_initial_state(InitialRecord.from_state(state)) == state
+
+
+def test_attachments_survive_serialization():
+    state = _attached_state()
+    log = ActionLog(initial=InitialRecord.from_state(state))
+    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+    assert restored.replay() == state
+    assert restored.initial.attachments == state.attachments
+
+
 def test_replay_reproduces_live_state_bit_for_bit():
     state = _start_state()
     initial = InitialRecord.from_state(state)
@@ -377,6 +408,9 @@ def test_session_entries_ride_the_tape_but_are_skipped_by_replay():
         SpawnCard("tok1", "Token", Side.DYNASTY, "sets/x/a.jpg", BoardPos(5.0, 6.0)),
         SpawnCard("tok2", "Token", Side.FATE, None, BoardPos(0.0, 0.0)),
         RemoveCard("tok1"),
+        Attach("c1", "c2"),
+        Attach("c1", ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)),
+        Detach("c1"),
     ],
 )
 def test_each_intent_survives_a_serialization_round_trip(intent):

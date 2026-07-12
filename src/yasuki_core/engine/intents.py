@@ -10,6 +10,7 @@ from yasuki_core.engine import ops
 from yasuki_core.engine.table import (
     BATTLEFIELD,
     UNPLACED_BOARD_POS,
+    AttachTarget,
     BoardPos,
     DeckKey,
     MoveDest,
@@ -54,6 +55,8 @@ class IntentOp(str, Enum):
     GIVE_CONTROL = "GIVE_CONTROL"
     SPAWN_CARD = "SPAWN_CARD"
     REMOVE_CARD = "REMOVE_CARD"
+    ATTACH = "ATTACH"
+    DETACH = "DETACH"
 
 
 @dataclass(frozen=True, slots=True)
@@ -342,6 +345,32 @@ class RemoveCard:
     op: ClassVar[IntentOp] = IntentOp.REMOVE_CARD
 
 
+@dataclass(frozen=True, slots=True)
+class Attach:
+    """Attach a battlefield card to another card or to a province, so it rides behind the parent.
+
+    ``to`` is either the parent card id — the child (a follower, item, or spell) sits behind that
+    battlefield card, shifted so its title still reads — or a province ``ZoneKey``, for a
+    fortification or region hung on a province. Owner-gated on the child alone: you may attach any
+    card you control to any target. The child keeps its own board position; the vertical shift that
+    stacks it behind the parent is a rendering concern, not stored here. Re-attaching to the same
+    target, a self-attach, or one that would form a cycle produces no event.
+    """
+
+    card_id: str
+    to: AttachTarget
+    op: ClassVar[IntentOp] = IntentOp.ATTACH
+
+
+@dataclass(frozen=True, slots=True)
+class Detach:
+    """Break a card's own attachment to its parent in place, leaving anything hung off it attached.
+    Owner-gated. A card that is not attached produces no event."""
+
+    card_id: str
+    op: ClassVar[IntentOp] = IntentOp.DETACH
+
+
 Intent = (
     MoveCard
     | MoveDeckTop
@@ -372,6 +401,8 @@ Intent = (
     | SetHonor
     | SpawnCard
     | RemoveCard
+    | Attach
+    | Detach
 )
 
 
@@ -781,6 +812,48 @@ def _remove_card(state: TableState, seat: PlayerId, intent: RemoveCard) -> list[
     return [Event(state.seq, seat, intent, (intent.card_id,))]
 
 
+def _on_battlefield(state: TableState, card: L5RCard) -> bool:
+    return any(held is card for held in state.battlefield.cards)
+
+
+def _attach(state: TableState, seat: PlayerId, intent: Attach) -> list[Event]:
+    child = state.cards_by_id.get(intent.card_id)
+    if (
+        child is None
+        or not owns_card(state, seat, intent.card_id)
+        or not _on_battlefield(state, child)
+    ):
+        return []
+    target = intent.to
+    if isinstance(target, ZoneKey):
+        if not isinstance(state.zones.get(target), ProvinceZone):
+            return []
+    else:
+        parent = state.cards_by_id.get(target)
+        if parent is None or not _on_battlefield(state, parent):
+            return []
+        # Refuse a self-attach or cycle: walking parents from the target must not reach the child.
+        cursor: AttachTarget | None = target
+        while isinstance(cursor, str):
+            if cursor == intent.card_id:
+                return []
+            cursor = state.attachments.get(cursor)
+    if not ops.attach(state, child, target):
+        return []
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (child.id,))]
+
+
+def _detach(state: TableState, seat: PlayerId, intent: Detach) -> list[Event]:
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None or not owns_card(state, seat, intent.card_id):
+        return []
+    if not ops.detach(state, card):
+        return []
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
 _HANDLERS = {
     IntentOp.MOVE_CARD: _move_card,
     IntentOp.MOVE_DECK_TOP: _move_deck_top,
@@ -811,6 +884,8 @@ _HANDLERS = {
     IntentOp.SET_HONOR: _set_honor,
     IntentOp.SPAWN_CARD: _spawn_card,
     IntentOp.REMOVE_CARD: _remove_card,
+    IntentOp.ATTACH: _attach,
+    IntentOp.DETACH: _detach,
 }
 
 

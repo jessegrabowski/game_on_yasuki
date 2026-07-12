@@ -10,6 +10,8 @@ from yasuki_core.engine.intents import (
     ReorderPile,
     SetNote,
     GiveControl,
+    Attach,
+    Detach,
     Bow,
     Unbow,
     Flip,
@@ -1326,4 +1328,277 @@ def test_table_invariants_hold_after_a_sequence_of_intents():
     apply_intent(table, PlayerId.P1, MoveCard("d1", DeckKey(PlayerId.P1, Side.DYNASTY)))
     apply_intent(table, PlayerId.P1, DestroyProvince(ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)))
 
+    table.validate()
+
+
+def test_attach_records_a_card_to_card_relationship():
+    table = TableState.empty_two_seat()
+    parent, child = _fate("p"), _fate("c")
+    _on_battlefield(table, parent)
+    _on_battlefield(table, child)
+
+    events = apply_intent(table, PlayerId.P1, Attach("c", "p"))
+
+    assert table.attachments == {"c": "p"}
+    assert table.seq == 1
+    assert len(events) == 1 and events[0].cards == ("c",)
+    # The child keeps its own board position — the attachment is a relationship, not a move.
+    assert table.positions["c"] == BoardPos(0.0, 0.0)
+    table.validate()
+
+
+def test_attach_to_a_province_zone():
+    table = TableState.empty_two_seat()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    fort = _dynasty("fort")
+    _on_battlefield(table, fort)
+
+    events = apply_intent(table, PlayerId.P1, Attach("fort", province))
+
+    assert table.attachments == {"fort": province}
+    assert table.seq == 1
+    assert len(events) == 1 and events[0].cards == ("fort",)
+    table.validate()
+
+
+def test_attach_to_the_same_target_is_a_no_op():
+    table = TableState.empty_two_seat()
+    parent, child = _fate("p"), _fate("c")
+    _on_battlefield(table, parent)
+    _on_battlefield(table, child)
+    apply_intent(table, PlayerId.P1, Attach("c", "p"))
+
+    events = apply_intent(table, PlayerId.P1, Attach("c", "p"))
+
+    assert events == [] and table.seq == 1
+
+
+def test_attach_rejects_a_self_attach():
+    table = TableState.empty_two_seat()
+    card = _fate("c")
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, Attach("c", "c"))
+
+    assert events == [] and table.attachments == {}
+
+
+def test_attach_rejects_a_cycle():
+    table = TableState.empty_two_seat()
+    a, b, c = _fate("a"), _fate("b"), _fate("c")
+    for card in (a, b, c):
+        _on_battlefield(table, card)
+    apply_intent(table, PlayerId.P1, Attach("a", "b"))
+    apply_intent(table, PlayerId.P1, Attach("b", "c"))
+
+    # a→b→c already; hanging c off a would close the loop. The guard must walk the whole chain.
+    events = apply_intent(table, PlayerId.P1, Attach("c", "a"))
+
+    assert events == [] and table.attachments == {"a": "b", "b": "c"}
+
+
+def test_attach_rejects_a_target_not_on_the_battlefield():
+    table = TableState.empty_two_seat()
+    child = _fate("c")
+    _on_battlefield(table, child)
+    in_hand = _fate("h")
+    table.cards_by_id["h"] = in_hand
+    table.zones[ZoneKey(PlayerId.P1, ZoneRole.HAND)].add(in_hand)
+
+    events = apply_intent(table, PlayerId.P1, Attach("c", "h"))
+
+    assert events == [] and table.attachments == {}
+
+
+def test_attach_rejects_a_missing_province():
+    table = TableState.empty_two_seat()
+    child = _fate("c")
+    _on_battlefield(table, child)
+
+    events = apply_intent(
+        table, PlayerId.P1, Attach("c", ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0))
+    )
+
+    assert events == [] and table.attachments == {}
+
+
+def test_attach_is_owner_gated_on_the_child():
+    table = TableState.empty_two_seat()
+    parent, child = _fate("p"), _fate("c")
+    _on_battlefield(table, parent)
+    _on_battlefield(table, child)
+
+    # P2 does not control the child and cannot attach it.
+    events = apply_intent(table, PlayerId.P2, Attach("c", "p"))
+
+    assert events == [] and table.attachments == {}
+
+
+def test_detach_breaks_the_childs_own_link_only():
+    table = TableState.empty_two_seat()
+    grandparent, parent, child = _fate("g"), _fate("p"), _fate("c")
+    for card in (grandparent, parent, child):
+        _on_battlefield(table, card)
+    apply_intent(table, PlayerId.P1, Attach("p", "g"))
+    apply_intent(table, PlayerId.P1, Attach("c", "p"))
+
+    events = apply_intent(table, PlayerId.P1, Detach("p"))
+
+    # p detaches from g, but c stays hung on p.
+    assert table.attachments == {"c": "p"}
+    assert len(events) == 1 and events[0].cards == ("p",)
+    table.validate()
+
+
+def test_detach_an_unattached_card_is_a_no_op():
+    table = TableState.empty_two_seat()
+    card = _fate("c")
+    _on_battlefield(table, card)
+
+    events = apply_intent(table, PlayerId.P1, Detach("c"))
+
+    assert events == [] and table.seq == 0
+
+
+def test_moving_a_child_off_the_battlefield_detaches_it():
+    table = TableState.empty_two_seat()
+    parent, child = _fate("p"), _fate("c")
+    _on_battlefield(table, parent)
+    _on_battlefield(table, child)
+    apply_intent(table, PlayerId.P1, Attach("c", "p"))
+
+    apply_intent(table, PlayerId.P1, MoveCard("c", ZoneKey(PlayerId.P1, ZoneRole.HAND)))
+
+    assert table.attachments == {}
+    table.validate()
+
+
+def test_moving_a_parent_off_the_battlefield_detaches_its_children():
+    table = TableState.empty_two_seat()
+    parent, child = _fate("p"), _fate("c")
+    _on_battlefield(table, parent)
+    _on_battlefield(table, child)
+    apply_intent(table, PlayerId.P1, Attach("c", "p"))
+
+    apply_intent(table, PlayerId.P1, MoveCard("p", ZoneKey(PlayerId.P1, ZoneRole.HAND)))
+
+    assert table.attachments == {}
+    table.validate()
+
+
+def test_destroying_a_province_discards_what_hangs_on_it():
+    table = TableState.empty_two_seat()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    fort = _dynasty("fort")
+    _on_battlefield(table, fort)
+    fort.bow()
+    apply_intent(table, PlayerId.P1, Attach("fort", province))
+
+    apply_intent(table, PlayerId.P1, DestroyProvince(province))
+
+    # The attached dynasty card follows the province into its owner's dynasty discard, face up and
+    # unbowed, no longer on the battlefield or attached.
+    dynasty_discard = table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)]
+    assert fort in dynasty_discard.cards
+    assert fort not in table.battlefield.cards
+    assert fort.face_up is True and fort.bowed is False
+    assert table.attachments == {}
+    table.validate()
+
+
+def test_destroying_a_province_routes_a_fate_attachment_to_the_fate_discard():
+    table = TableState.empty_two_seat()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    spell = _fate("spell")  # a fate-side card riding the province routes by its own side/owner
+    _on_battlefield(table, spell)
+    apply_intent(table, PlayerId.P1, Attach("spell", province))
+
+    apply_intent(table, PlayerId.P1, DestroyProvince(province))
+
+    assert spell in table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards
+    table.validate()
+
+
+def test_destroying_a_province_detaches_a_side_without_a_discard_in_place():
+    # A stronghold-side card has no discard; destroying its province must detach it, not remove it from
+    # the board into a pile that rejects its side and leave it floating (a corrupt cards_by_id).
+    table = TableState.empty_two_seat()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    keep = L5RCard(id="keep", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1)
+    _on_battlefield(table, keep)
+    apply_intent(table, PlayerId.P1, Attach("keep", province))
+
+    apply_intent(table, PlayerId.P1, DestroyProvince(province))
+
+    assert keep in table.battlefield.cards  # stays on the board, just detached
+    assert table.attachments == {}
+    table.validate()
+
+
+def test_destroying_a_province_discards_every_attachment_to_its_own_pile():
+    table = TableState.empty_two_seat()
+    province = ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)
+    table.zones[province] = ProvinceZone(owner=PlayerId.P1)
+    fort, spell = _dynasty("fort"), _fate("spell")
+    _on_battlefield(table, fort)
+    _on_battlefield(table, spell)
+    apply_intent(table, PlayerId.P1, Attach("fort", province))
+    apply_intent(table, PlayerId.P1, Attach("spell", province))
+
+    apply_intent(table, PlayerId.P1, DestroyProvince(province))
+
+    # Every attached card is discarded, each routed by its own side — not just the first.
+    assert fort in table.zones[ZoneKey(PlayerId.P1, ZoneRole.DYNASTY_DISCARD)].cards
+    assert spell in table.zones[ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD)].cards
+    assert table.attachments == {}
+    table.validate()
+
+
+def test_removing_a_card_detaches_what_hangs_on_it():
+    table = TableState.empty_two_seat()
+    apply_intent(
+        table, PlayerId.P1, SpawnCard("host", "Host", Side.DYNASTY, None, BoardPos(0.0, 0.0))
+    )
+    apply_intent(
+        table, PlayerId.P1, SpawnCard("rider", "Rider", Side.FATE, None, BoardPos(1.0, 1.0))
+    )
+    apply_intent(table, PlayerId.P1, Attach("rider", "host"))
+
+    apply_intent(table, PlayerId.P1, RemoveCard("host"))
+
+    assert table.attachments == {}
+    table.validate()
+
+
+def test_moving_a_middle_node_off_the_battlefield_clears_both_its_links():
+    table = TableState.empty_two_seat()
+    grandparent, parent, child = _fate("g"), _fate("p"), _fate("c")
+    for card in (grandparent, parent, child):
+        _on_battlefield(table, card)
+    apply_intent(table, PlayerId.P1, Attach("p", "g"))
+    apply_intent(table, PlayerId.P1, Attach("c", "p"))
+
+    # p has both a parent (g) and a child (c). Moving it off the board clears both — unlike Detach(p),
+    # which would break only p→g and leave c→p.
+    apply_intent(table, PlayerId.P1, MoveCard("p", ZoneKey(PlayerId.P1, ZoneRole.HAND)))
+
+    assert table.attachments == {}
+    table.validate()
+
+
+def test_re_attaching_to_a_different_parent_updates_and_emits():
+    table = TableState.empty_two_seat()
+    first, second, child = _fate("p1"), _fate("p2"), _fate("c")
+    for card in (first, second, child):
+        _on_battlefield(table, card)
+    apply_intent(table, PlayerId.P1, Attach("c", "p1"))
+
+    events = apply_intent(table, PlayerId.P1, Attach("c", "p2"))
+
+    assert table.attachments == {"c": "p2"}
+    assert table.seq == 2 and len(events) == 1
     table.validate()
