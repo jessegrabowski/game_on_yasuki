@@ -1453,11 +1453,16 @@ def query_random_cards(
 
     where_clause = "WHERE " + " AND ".join(conditions)
 
-    select_sql, _ = _card_select()
-    sql = f"{select_sql} {where_clause} ORDER BY RANDOM() LIMIT %s"
-    params.append(count)
+    # Draw the random ids from the bare cards table, then build the full record (lateral image join
+    # and per-card aggregate subqueries) for only those rows. Sorting the whole select by RANDOM()
+    # computes every card's aggregates before discarding all but ``count`` of them — a full-table
+    # scan that times out at scale.
+    select_sql, select_params = _card_select()
+    picked = f"SELECT c.card_id FROM cards c {where_clause} ORDER BY RANDOM() LIMIT %s"
+    sql = f"{select_sql} WHERE c.card_id IN ({picked}) ORDER BY RANDOM()"
+    data_params = select_params + params + [count]
 
     with get_db_connection() as conn:
         with conn.cursor() as cur:
-            cur.execute(sql, params)
+            cur.execute(sql, data_params)
             return cur.fetchall()
