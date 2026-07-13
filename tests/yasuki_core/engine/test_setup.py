@@ -138,15 +138,6 @@ def test_starting_honor_sums_stronghold_and_sensei():
     assert state.seats[PlayerId.P1].honor == 15
 
 
-def test_a_sensei_is_attached_to_the_stronghold_at_setup():
-    state = _setup_with_pregame(
-        StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1),
-        SenseiCard(id="se", name="Sensei", side=Side.FATE, owner=PlayerId.P1),
-    )
-    assert state.attachments == {"se": "sh"}
-    state.validate()
-
-
 def test_a_stronghold_without_a_sensei_starts_unattached():
     state = _setup_with_pregame(
         StrongholdCard(id="sh", name="Kyuden", side=Side.STRONGHOLD, owner=PlayerId.P1),
@@ -173,6 +164,27 @@ def test_starting_honor_from_a_stronghold_alone_is_its_base():
 
 def test_a_deck_without_a_stronghold_starts_at_zero_honor():
     assert _setup().seats[PlayerId.P1].honor == 0
+
+
+def test_sensei_gold_and_province_deltas_fold_into_the_stronghold():
+    stronghold = StrongholdCard(
+        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=8, province_strength=5
+    )
+    sensei = SenseiCard(
+        id="se", name="Sensei", side=Side.FATE, gold_production=-1, province_strength=1
+    )
+    _setup_with_pregame(stronghold, sensei)
+    assert stronghold.gold_production == 7
+    assert stronghold.province_strength == 6
+
+
+def test_a_stronghold_without_a_sensei_keeps_its_printed_stats():
+    stronghold = StrongholdCard(
+        id="sh", name="Kyuden", side=Side.STRONGHOLD, gold_production=8, province_strength=5
+    )
+    _setup_with_pregame(stronghold)
+    assert stronghold.gold_production == 8
+    assert stronghold.province_strength == 5
 
 
 def test_the_table_validates_after_setup():

@@ -1,4 +1,5 @@
 import tkinter as tk
+from pathlib import Path
 from tkinter import filedialog, messagebox
 
 from yasuki_gui.ui.dialogs import Dialogs
@@ -19,10 +20,8 @@ def build_menubar(root: tk.Misc, field_view) -> tk.Menu:
         def apply_prefs(new_name: str, new_avatar: str | None) -> None:
             setattr(field_view, "profile_name", new_name)
             setattr(field_view, "profile_avatar", new_avatar)
-            # Notify UI to update player panels if available
-            cb = getattr(field_view, "apply_profile_to_panels", None)
-            if callable(cb):
-                cb()
+            if field_view.apply_profile_to_panels is not None:
+                field_view.apply_profile_to_panels()
 
         dialogs.preferences(name, avatar, apply_prefs)
 
@@ -39,8 +38,9 @@ def build_menubar(root: tk.Misc, field_view) -> tk.Menu:
         path = filedialog.askopenfilename(
             parent=root,
             title="Load Deck",
+            initialdir=str(Path(__file__).resolve().parent.parent / "assets" / "decks"),
             filetypes=[
-                ("Deck files", ".dck"),
+                ("Deck lists", ".yaml .yml"),
                 ("All files", "*"),
             ],
         )

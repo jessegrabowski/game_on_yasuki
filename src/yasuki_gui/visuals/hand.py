@@ -1,29 +1,35 @@
 import tkinter as tk
 
-from yasuki_core.engine.zones import HandZone
+from yasuki_core.engine.players import PlayerId
+from yasuki_gui import theme
 from yasuki_gui.constants import CARD_W, CARD_H, HAND_GAP, HAND_PADDING
 from yasuki_gui.ui.images import ImageProvider, load_image as _li, load_back_image as _lbi
+from yasuki_gui.visuals.cardface import RenderCard
 from yasuki_gui.visuals.visual import Visual
 
 
 class HandVisual(Visual):
     def __init__(
         self,
-        zone: HandZone,
+        cards: list[RenderCard],
+        owner: PlayerId | None,
         x: int,
         y: int,
         w: int,
         h: int,
         tag: str,
         images: ImageProvider | None = None,
+        selected_ids: frozenset[str] = frozenset(),
     ):
-        self.zone = zone
+        self.cards = cards
+        self.owner = owner
         self.x = x
         self.y = y
         self.w = w
         self.h = h
         self.tag = tag
         self.images = images
+        self.selected_ids = selected_ids
 
     @property
     def size(self) -> tuple[int, int]:
@@ -36,7 +42,7 @@ class HandVisual(Visual):
 
     def _start_x(self) -> int:
         # Center-justify cards within the inner padded width when possible; otherwise left-align.
-        n = len(self.zone.cards)
+        n = len(self.cards)
         inner_left = self.x - self.w // 2 + HAND_PADDING
         inner_right = self.x + self.w // 2 - HAND_PADDING
         inner_width = max(0, inner_right - inner_left)
@@ -63,14 +69,14 @@ class HandVisual(Visual):
         return (self._start_x() + idx * self._step(), self.y)
 
     def index_at(self, x: int) -> int | None:
-        if not self.zone.cards:
+        if not self.cards:
             return None
         x0 = self._start_x()
         step = self._step()
         # compute nearest index by division
         rel = x - x0
         idx = round(rel / step)
-        if idx < 0 or idx >= len(self.zone.cards):
+        if idx < 0 or idx >= len(self.cards):
             return None
         # Also ensure the x is not too far from the index center: allow half step
         center_x = x0 + idx * step
@@ -81,59 +87,68 @@ class HandVisual(Visual):
     def draw(self, canvas: tk.Canvas) -> None:
         x, y = self.x, self.y
         w, h = self.size
-        # Background outline for the hand area
+        # A faint frame marks the hand strip and its empty drop area.
         canvas.create_rectangle(
             x - w // 2,
             y - h // 2,
             x + w // 2,
             y + h // 2,
-            outline="#888",
-            width=2,
-            dash=(4, 2),
+            outline=theme.LINE_SOFT,
+            width=1,
             tags=(self.tag, "zone", "hand"),
         )
-        # Determine viewer and ownership
         viewer = getattr(canvas, "local_player", None)
-        owner = getattr(self.zone, "owner", None)
-        # Draw cards; opponents' hand cards show back unless revealed
-        for i, card in enumerate(self.zone.cards):
+        owner = self.owner
+        # An opponent's hand card shows its back unless its owner has shown it.
+        for i, card in enumerate(self.cards):
             cx, cy = self.center_for_index(i)
-            show_front = True
-            if (
-                owner is not None
-                and viewer is not None
-                and owner != viewer
-                and not getattr(card, "revealed", False)
-            ):
-                show_front = False
+            show_front = not (
+                owner is not None and viewer is not None and owner != viewer and not card.shown
+            )
+            front_art = card.active_face.image_front
             if self.images is not None:
-                if show_front:
-                    photo = self.images.front(card.image_front, card.bowed, card.inverted)
-                else:
-                    photo = self.images.back(card.side, card.bowed, card.inverted, card.image_back)
+                photo = (
+                    self.images.front(front_art, card.bowed, card.inverted)
+                    if show_front
+                    else self.images.back(card.side, card.bowed, card.inverted, card.image_back)
+                )
             else:
                 photo = (
-                    _li(card.image_front, card.bowed, card.inverted, master=canvas)
+                    _li(front_art, card.bowed, card.inverted, master=canvas)
                     if show_front
                     else _lbi(card.side, card.bowed, card.inverted, card.image_back, master=canvas)
                 )
+            cw, ch = (CARD_H, CARD_W) if card.bowed else (CARD_W, CARD_H)
             if photo is not None:
                 canvas.create_image(cx, cy, image=photo, tags=(self.tag, "zone", "hand"))
             else:
-                # Fallback rectangle with small label or back
-                cw, ch = (CARD_H, CARD_W) if card.bowed else (CARD_W, CARD_H)
-                fill = "#3b3b3b" if not show_front else "#3b3b3b"
                 canvas.create_rectangle(
                     cx - cw // 2,
                     cy - ch // 2,
                     cx + cw // 2,
                     cy + ch // 2,
-                    fill=fill,
-                    outline="#aaaaaa",
-                    width=2,
+                    fill=theme.CARD_FACE if show_front else theme.CARD_BACK,
+                    outline="",
                     tags=(self.tag, "zone", "hand"),
                 )
                 if show_front:
                     canvas.create_text(
-                        cx, cy, text=card.name, fill="#eaeaea", tags=(self.tag, "zone", "hand")
+                        cx,
+                        cy,
+                        text=card.active_face.name,
+                        fill=theme.INK,
+                        font=theme.serif(9, "bold"),
+                        width=cw - 10,
+                        justify="center",
+                        tags=(self.tag, "zone", "hand"),
                     )
+            selected = card.id in self.selected_ids
+            canvas.create_rectangle(
+                cx - cw // 2,
+                cy - ch // 2,
+                cx + cw // 2,
+                cy + ch // 2,
+                outline=theme.SELECT if selected else theme.CARD_BORDER,
+                width=3 if selected else 1,
+                tags=(self.tag, "zone", "hand"),
+            )

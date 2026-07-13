@@ -30,11 +30,11 @@ from yasuki_core.engine.table import TableState
 from yasuki_core.engine.intents import Intent, IntentOp, Event, SearchDeck
 from yasuki_core.engine.action_log import (
     ActionLog,
-    InitialRecord,
     ChatEntry,
     SessionEntry,
     apply_and_log,
 )
+from yasuki_core.engine.snapshot import InitialRecord
 from yasuki_core.engine.redaction import redact
 from yasuki_core.engine.setup import setup_seat, flip_second_player_stronghold
 from yasuki_core.game_pieces.factory import resolve_decklist

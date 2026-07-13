@@ -1,15 +1,16 @@
 import tkinter as tk
-from yasuki_core.engine.zones import Zone, ProvinceZone
-from yasuki_core.game_pieces.constants import Side
+from yasuki_gui import theme
 from yasuki_gui.ui.images import ImageProvider, load_image as _li, load_back_image as _lbi
-from yasuki_gui.constants import CARD_W, CARD_H
-from yasuki_gui.visuals.visual import Visual
+from yasuki_gui.visuals.cardface import RenderCard
+from yasuki_gui.visuals.visual import Visual, draw_count_pill
 
 
 class ZoneVisual(Visual):
     def __init__(
         self,
-        zone: Zone,
+        cards: list[RenderCard],
+        is_province: bool,
+        name: str,
         x: int,
         y: int,
         w: int,
@@ -17,7 +18,9 @@ class ZoneVisual(Visual):
         tag: str,
         images: ImageProvider | None = None,
     ):
-        self.zone = zone
+        self.cards = cards
+        self.is_province = is_province
+        self.name = name
         self.x = x
         self.y = y
         self.w = w
@@ -37,63 +40,74 @@ class ZoneVisual(Visual):
     def draw(self, canvas: tk.Canvas) -> None:
         x, y = self.x, self.y
         w, h = self.size
-        zone = self.zone
-        top = zone.cards[-1] if zone.cards else None
+        is_province = self.is_province
+        x0, y0, x1, y1 = x - w // 2, y - h // 2, x + w // 2, y + h // 2
+        top = self.cards[-1] if self.cards else None
         if top is not None:
-            bowed = top.bowed
-            inverted = top.inverted
-            # Province cards should never display bowed
-            if isinstance(zone, ProvinceZone):
-                bowed = False
-                inverted = False
+            # Province cards always sit upright; a pile's top shows however it was placed.
+            bowed = False if is_province else top.bowed
+            inverted = False if is_province else top.inverted
             face_up = top.face_up
             if self.images is not None:
                 photo = (
-                    self.images.front(top.image_front, bowed, inverted)
+                    self.images.front(top.active_face.image_front, bowed, inverted)
                     if face_up
                     else self.images.back(top.side, bowed, inverted, top.image_back)
                 )
             else:
-                # Fallback for safety: use module loaders
                 photo = (
-                    _li(top.image_front, bowed, inverted, master=canvas)
+                    _li(top.active_face.image_front, bowed, inverted, master=canvas)
                     if face_up
                     else _lbi(top.side, bowed, inverted, top.image_back, master=canvas)
                 )
             if photo is not None:
                 canvas.create_image(x, y, image=photo, tags=(self.tag, "zone"))
-                outline = "#007acc" if top.side is Side.FATE else "#b58900"
+            else:
                 canvas.create_rectangle(
-                    x - CARD_W // 2,
-                    y - CARD_H // 2,
-                    x + CARD_W // 2,
-                    y + CARD_H // 2,
-                    outline=outline,
-                    width=2,
+                    x0,
+                    y0,
+                    x1,
+                    y1,
+                    fill=theme.CARD_FACE if face_up else theme.CARD_BACK,
+                    outline="",
                     tags=(self.tag, "zone"),
                 )
-                canvas.create_text(
-                    x,
-                    y,
-                    text=f"{zone.name}\n{len(zone)} cards",
-                    fill="#eaeaea",
-                    tags=(self.tag, "zone"),
-                )
-                return
-        # Fallback (empty or no image)
-        outline = "#888"
-        if top is None and zone.allowed_side is not None:
-            outline = "#007acc" if zone.allowed_side is Side.FATE else "#b58900"
+                if face_up:
+                    canvas.create_text(
+                        x,
+                        y,
+                        text=top.active_face.name,
+                        fill=theme.INK,
+                        font=theme.serif(9, "bold"),
+                        width=w - 10,
+                        justify="center",
+                        tags=(self.tag, "zone"),
+                    )
+            canvas.create_rectangle(
+                x0, y0, x1, y1, outline=theme.CARD_BORDER, width=1, tags=(self.tag, "zone")
+            )
+            if not is_province and len(self.cards) > 1:
+                draw_count_pill(canvas, x1, y1, len(self.cards), self.tag)
+            return
+        # Empty: a dashed parchment slot for a province, a solid one for a pile, with a faint label.
         canvas.create_rectangle(
-            x - w // 2,
-            y - h // 2,
-            x + w // 2,
-            y + h // 2,
-            outline=outline,
-            width=2,
-            dash=(4, 2),
+            x0,
+            y0,
+            x1,
+            y1,
+            fill=theme.LINE_SOFT if is_province else theme.SURFACE,
+            outline=theme.LINE,
+            width=1,
+            dash=(4, 2) if is_province else (),
             tags=(self.tag, "zone"),
         )
         canvas.create_text(
-            x, y, text=f"{zone.name}\n{len(zone)} cards", fill="#cccccc", tags=(self.tag, "zone")
+            x,
+            y,
+            text=self.name,
+            fill=theme.INK_DIM,
+            font=theme.serif(8),
+            width=w - 8,
+            justify="center",
+            tags=(self.tag, "zone"),
         )

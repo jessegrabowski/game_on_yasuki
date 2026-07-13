@@ -20,10 +20,13 @@ class StrongholdCard(L5RCard):
 
 @dataclass(frozen=True, slots=True)
 class SenseiCard(L5RCard):
-    """An optional sensei, placed face-up alongside the stronghold at setup; its ``starting_honor``
-    is added to the stronghold's."""
+    """An optional sensei, placed face-up alongside the stronghold at setup. Its ``starting_honor``,
+    ``gold_production``, and ``province_strength`` are deltas folded into the stronghold's
+    characteristics at setup."""
 
     starting_honor: int = 0
+    gold_production: int = 0
+    province_strength: int = 0
     image_front: Path | None = DEFAULT_SENSEI
 
 

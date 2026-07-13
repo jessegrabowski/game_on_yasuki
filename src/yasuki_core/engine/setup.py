@@ -24,11 +24,11 @@ def setup_seat(
 
     Load the dynasty and fate cards into their decks face-down, shuffling each with the given seed,
     open the stronghold's provinces and fill each one face-down from the dynasty deck, draw the
-    stronghold's ``starting_hand_size`` fate cards face-up into the hand, deal the pre-game
-    permanents (stronghold, sensei, wind) face-up onto the battlefield — attaching any sensei to the
-    stronghold — set the seat's starting honor from its stronghold and sensei, and register every
-    card in the table's identity map. The discards and banishes stay empty, and no deck legality is
-    enforced (a manual sandbox).
+    stronghold's ``starting_hand_size`` fate cards face-up into the hand, fold each sensei's
+    gold-production and province-strength deltas into the stronghold, deal the pre-game permanents
+    (stronghold, sensei, wind) face-up onto the battlefield as loose cards, set the seat's starting
+    honor from its stronghold and sensei, and register every card in the table's identity map. The
+    discards and banishes stay empty, and no deck legality is enforced (a manual sandbox).
 
     Parameters
     ----------
@@ -47,8 +47,8 @@ def setup_seat(
     _load_deck(state, DeckKey(seat, Side.FATE), resolved.fate, fate_seed)
     for idx in range(_province_count(resolved)):
         state.zones[ZoneKey(seat, ZoneRole.PROVINCE, idx)] = ProvinceZone(owner=seat)
+    _apply_sensei_modifiers(resolved)
     _place_pregame(state, seat, resolved.pre_game)
-    _attach_sensei(state, resolved)
     state.seats[seat].honor = _starting_honor(resolved)
     _fill_provinces(state, seat)
     _draw_starting_hand(state, seat, _starting_hand_size(resolved))
@@ -73,6 +73,26 @@ def _starting_honor(resolved: ResolvedDeck) -> int:
         for card in resolved.pre_game
         if isinstance(card, (StrongholdCard, SenseiCard))
     )
+
+
+def _apply_sensei_modifiers(resolved: ResolvedDeck) -> None:
+    """Fold each sensei's gold-production and province-strength deltas into the stronghold, so every
+    downstream consumer reads the stronghold's effective characteristics with no sensei awareness.
+    Starting honor is a seat scalar and is summed separately by :func:`_starting_honor`.
+
+    TODO: migrate these deltas to WHILE_SOURCE_IN_PLAY modifiers (engine/rules/modifiers.py) once an
+    attachment model exists — the Sensei is a live battlefield card, so it should be a modifier
+    source like any attachment rather than a baked printed-stat mutation."""
+    stronghold = _stronghold(resolved)
+    if stronghold is None:
+        return
+    senseis = [card for card in resolved.pre_game if isinstance(card, SenseiCard)]
+    gold = sum(sensei.gold_production for sensei in senseis)
+    province = sum(sensei.province_strength for sensei in senseis)
+    if gold:
+        object.__setattr__(stronghold, "gold_production", stronghold.gold_production + gold)
+    if province:
+        object.__setattr__(stronghold, "province_strength", stronghold.province_strength + province)
 
 
 def _starting_hand_size(resolved: ResolvedDeck) -> int:
@@ -153,17 +173,6 @@ def _place_pregame(state: TableState, seat: PlayerId, cards: list[L5RCard]) -> N
         state.cards_by_id[card.id] = card
         state.battlefield.add(card)
         state.positions[card.id] = PREGAME_UNPLACED
-
-
-def _attach_sensei(state: TableState, resolved: ResolvedDeck) -> None:
-    """Attach any sensei to the seat's stronghold, so it rides behind it from the opening board.
-    Both are already loose battlefield cards by this point, so the attachment is well-formed."""
-    stronghold = _stronghold(resolved)
-    if stronghold is None:
-        return
-    for card in resolved.pre_game:
-        if isinstance(card, SenseiCard):
-            state.attachments[card.id] = stronghold.id
 
 
 def _load_deck(state: TableState, key: DeckKey, cards: list[L5RCard], seed: int) -> None:

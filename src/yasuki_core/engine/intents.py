@@ -6,6 +6,7 @@ from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.zones import ProvinceZone
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.counters import Counter
 from yasuki_core.engine import ops
 from yasuki_core.engine.table import (
     BATTLEFIELD,
@@ -52,6 +53,7 @@ class IntentOp(str, Enum):
     CREATE_PROVINCE = "CREATE_PROVINCE"
     SET_HONOR = "SET_HONOR"
     SET_NOTE = "SET_NOTE"
+    ADJUST_COUNTER = "ADJUST_COUNTER"
     GIVE_CONTROL = "GIVE_CONTROL"
     SPAWN_CARD = "SPAWN_CARD"
     REMOVE_CARD = "REMOVE_CARD"
@@ -153,6 +155,18 @@ class SetNote:
     card_id: str
     note: str | None
     op: ClassVar[IntentOp] = IntentOp.SET_NOTE
+
+
+@dataclass(frozen=True, slots=True)
+class AdjustCounter:
+    """Add ``delta`` to a ``counter`` on a face-up card, flooring at zero. Either player may adjust
+    any public card's counters — effects legitimately token an opponent's cards, so like a note
+    this is a shared physical act, not an owned one."""
+
+    card_id: str
+    counter: Counter
+    delta: int
+    op: ClassVar[IntentOp] = IntentOp.ADJUST_COUNTER
 
 
 @dataclass(frozen=True, slots=True)
@@ -380,6 +394,7 @@ Intent = (
     | ReorderPile
     | Raise
     | SetNote
+    | AdjustCounter
     | GiveControl
     | Bow
     | Unbow
@@ -557,6 +572,21 @@ def _set_note(state: TableState, seat: PlayerId, intent: SetNote) -> list[Event]
     return [Event(state.seq, seat, intent, (card.id,))]
 
 
+def _adjust_counter(state: TableState, seat: PlayerId, intent: AdjustCounter) -> list[Event]:
+    card = state.cards_by_id.get(intent.card_id)
+    if card is None or not card.face_up:
+        return []
+    key = intent.counter.key
+    before = card.counters.get(key, 0)
+    # adjust_counter floors at zero; a floored no-op emits nothing.
+    after = max(0, before + intent.delta)
+    if after == before:
+        return []
+    card.adjust_counter(key, intent.delta)
+    state.seq += 1
+    return [Event(state.seq, seat, intent, (card.id,))]
+
+
 def _give_control(state: TableState, seat: PlayerId, intent: GiveControl) -> list[Event]:
     card = state.cards_by_id.get(intent.card_id)
     # Only the controller may give a face-up card away, matching the client gate: a public (owner-less)
@@ -677,15 +707,16 @@ def _unpeek(state: TableState, seat: PlayerId, intent: Unpeek) -> list[Event]:
 def _draw(state: TableState, seat: PlayerId, intent: Draw) -> list[Event]:
     if not owns_deck(state, seat, intent.deck):
         return []
-    card = state.decks[intent.deck].draw_one()
-    if card is None:
-        return []
     if intent.deck.side is Side.FATE:
-        card.turn_face_up()
-        state.zones[ZoneKey(seat, ZoneRole.HAND)].add(card)
+        card = ops.draw_to_hand(state, seat)
+        if card is None:
+            return []
         dest: MoveDest = ZoneKey(seat, ZoneRole.HAND)
         position = None
     else:
+        card = state.decks[intent.deck].draw_one()
+        if card is None:
+            return []
         dest = BATTLEFIELD
         position = None
         for key, zone in state.zones.items():
@@ -863,6 +894,7 @@ _HANDLERS = {
     IntentOp.REORDER_PILE: _reorder_pile,
     IntentOp.RAISE: _raise,
     IntentOp.SET_NOTE: _set_note,
+    IntentOp.ADJUST_COUNTER: _adjust_counter,
     IntentOp.GIVE_CONTROL: _give_control,
     IntentOp.BOW: _apply_flag,
     IntentOp.UNBOW: _apply_flag,

@@ -233,6 +233,7 @@ def _construct_face(
     clans = record.get("clans") or []
     return card_cls(
         id=card_id,
+        printed_id=record.get("card_id"),
         name=record.get("extended_title") or record["name"],
         side=side,
         owner=owner,
@@ -273,5 +274,9 @@ def _stat_fields(card_cls: type, card_type: str | None, record: dict) -> dict:
             "province_strength": record.get("province_strength") or 0,
         }
     if card_cls is SenseiCard:
-        return {"starting_honor": record.get("starting_honor") or 0}
+        return {
+            "starting_honor": record.get("starting_honor") or 0,
+            "gold_production": record.get("gold_production") or 0,
+            "province_strength": record.get("province_strength") or 0,
+        }
     return {}

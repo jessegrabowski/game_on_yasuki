@@ -1,6 +1,10 @@
-# Smaller card size to fit more zones on screen
-CARD_W = 90
-CARD_H = 128
+# Card footprint for the local client — smaller than the web board's (board.js is 81×115) so more
+# of the board fits on screen.
+CARD_W = 73
+CARD_H = 104
+# Copies of one holding stack in a single home column, each offset down by this much so every copy
+# stays visible and clickable.
+HOME_STACK_OFFSET = 26
 # Slightly reduced spacing for draw placement
 DRAW_OFFSET = 16
 
@@ -30,6 +34,11 @@ ART_TAG = "art"
 BORDER_TAG = "border"
 SELECT_TAG = "select"
 LABEL_TAG = "label"
+NOTE_TAG = "note"
+COUNTER_TAG = "counter"
+
+# Radius of a counter badge (e.g. a wealth token) drawn in a card's top-right corner.
+COUNTER_BADGE_R = 9
 
 # Honor counter limits
 MIN_HONOR = -20

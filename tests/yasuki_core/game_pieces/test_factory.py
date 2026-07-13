@@ -62,6 +62,8 @@ RECORDS = [
         "types": ["Sensei"],
         "decks": ["Pre-Game"],
         "starting_honor": 5,
+        "gold_production": -1,
+        "province_strength": 1,
         "prints": [
             {"print_id": 30, "set_name": "Hidden Emperor", "image_path": "sets/he/sensei.png"}
         ],
@@ -175,6 +177,23 @@ def test_stronghold_carries_gold_production_and_province_strength():
     stronghold = _resolve().pre_game[0]
     assert stronghold.gold_production == 8
     assert stronghold.province_strength == 5
+
+
+def test_sensei_carries_its_stat_modifiers():
+    sensei = _resolve().pre_game[1]
+    assert sensei.gold_production == -1
+    assert sensei.province_strength == 1
+
+
+def test_resolved_cards_carry_their_printed_id():
+    resolved = _resolve()
+    assert [c.printed_id for c in resolved.pre_game] == [
+        "kyuden_hida",
+        "hida_sensei",
+        "the_wind_of_honor",
+    ]
+    assert resolved.dynasty[0].printed_id == "kuni_yori"
+    assert resolved.fate[0].printed_id == "ambush"
 
 
 def test_base_identity_and_unique_flag_are_carried():
@@ -292,6 +311,10 @@ def test_double_faced_card_nests_its_back_when_the_record_is_present():
     sh = resolve_decklist(deck, [FLIP_FRONT, FLIP_BACK], PlayerId.P1).pre_game[0]
     assert sh.back_card_id == "kyuden_kuni__back"
     assert isinstance(sh.back, StrongholdCard)
+    # Each face is a distinct card, so it carries its own printed_id — the back dispatches to its own
+    # effect handler, not the front's.
+    assert sh.printed_id == "kyuden_kuni"
+    assert sh.back.printed_id == "kyuden_kuni__back"
     assert sh.back.starting_honor == 8
     assert sh.back.image_front.as_posix() == "sets/goc/kk_b.png"
     assert sh.back.back is None  # the back face carries no further face
