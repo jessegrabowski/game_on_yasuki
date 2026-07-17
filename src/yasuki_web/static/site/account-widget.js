@@ -9,15 +9,17 @@ import { buildAvatarElement } from './avatar.js';
 // Build the control for `user` (null = logged out). `onLogout` runs after a successful logout;
 // it defaults to a full reload so the page re-renders in the signed-out state. `imgBase` resolves
 // a card-crop avatar's image; it's unused for the initials fallback.
-export function buildAccountControl(user, { onLogout, imgBase } = {}) {
+export function buildAccountControl(user, { onLogout, imgBase, devLogin = false } = {}) {
   const widget = document.createElement('div');
   widget.className = 'account-widget';
 
   if (!user) {
     const signIn = document.createElement('a');
     signIn.className = 'account-signin';
-    signIn.href = '/auth/login';
-    signIn.textContent = 'Sign in';
+    // In local dev the dev-login route mints a session without Google; use it so sign-in is one
+    // click with no OAuth round-trip. It is refused (404) outside dev, so this only ever fires there.
+    signIn.href = devLogin ? '/auth/dev-login' : '/auth/login';
+    signIn.textContent = devLogin ? 'Sign in (dev)' : 'Sign in';
     widget.append(signIn);
     return widget;
   }
@@ -70,7 +72,7 @@ export async function initAccountWidget() {
     getMe(),
     fetchConfig().catch(() => ({ imageBase: '/images' })),
   ]);
-  nav.append(buildAccountControl(user, { imgBase: config.imageBase }));
+  nav.append(buildAccountControl(user, { imgBase: config.imageBase, devLogin: config.devLogin }));
   // Nag a nameless account everywhere but the settings page, which already prompts for the name.
   if (user && !user.display_name && window.location.pathname !== '/settings') {
     document.querySelector('.ribbon')?.insertAdjacentElement('afterend', buildSignupNag());

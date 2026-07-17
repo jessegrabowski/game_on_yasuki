@@ -67,22 +67,27 @@ describe('fetchImageBase', () => {
 });
 
 describe('fetchConfig', () => {
-  it('returns the image base and debug flag from config', async () => {
+  it('returns the image base, debug flag, and dev-login flag from config', async () => {
     fetch.mock.mockImplementation(() =>
       Promise.resolve({
-        json: () => Promise.resolve({ image_base_url: 'https://cdn.example/r2', debug: true }),
+        json: () =>
+          Promise.resolve({ image_base_url: 'https://cdn.example/r2', debug: true, dev_login: true }),
       }),
     );
-    assert.deepEqual(await fetchConfig(), { imageBase: 'https://cdn.example/r2', debug: true });
+    assert.deepEqual(await fetchConfig(), {
+      imageBase: 'https://cdn.example/r2',
+      debug: true,
+      devLogin: true,
+    });
   });
 
-  it('defaults debug off and to the local mount when config is empty', async () => {
+  it('defaults flags off and to the local mount when config is empty', async () => {
     fetch.mock.mockImplementation(() => Promise.resolve({ json: () => Promise.resolve({}) }));
-    assert.deepEqual(await fetchConfig(), { imageBase: '/images', debug: false });
+    assert.deepEqual(await fetchConfig(), { imageBase: '/images', debug: false, devLogin: false });
   });
 
-  it('defaults debug off when the request fails', async () => {
+  it('defaults flags off when the request fails', async () => {
     fetch.mock.mockImplementation(() => Promise.reject(new Error('offline')));
-    assert.deepEqual(await fetchConfig(), { imageBase: '/images', debug: false });
+    assert.deepEqual(await fetchConfig(), { imageBase: '/images', debug: false, devLogin: false });
   });
 });

@@ -190,11 +190,18 @@ describe('buildSignupNag', () => {
 });
 
 describe('buildAccountControl', () => {
-  it('shows a Sign in link when logged out', () => {
+  it('shows a Sign in link to Google OAuth when logged out', () => {
     const widget = buildAccountControl(null);
     const link = widget.children[0];
     assert.equal(link.textContent, 'Sign in');
     assert.equal(link.href, '/auth/login');
+  });
+
+  it('points sign-in at the dev-login shortcut when dev login is enabled', () => {
+    const widget = buildAccountControl(null, { devLogin: true });
+    const link = widget.children[0];
+    assert.equal(link.textContent, 'Sign in (dev)');
+    assert.equal(link.href, '/auth/dev-login');
   });
 
   it('shows the name, an initials avatar, and a hidden Settings/Log out menu', () => {

@@ -29,9 +29,12 @@ export function resolvePane(hash) {
 
 async function init() {
   initPanes();
-  const user = await getMe();
+  const [user, config] = await Promise.all([
+    getMe(),
+    fetchConfig().catch(() => ({ imageBase: '/images', devLogin: false })),
+  ]);
   if (!user) {
-    window.location.href = '/auth/login';
+    window.location.href = config.devLogin ? '/auth/dev-login' : '/auth/login';
     return;
   }
   const notice = document.getElementById('pendingNotice');
@@ -39,8 +42,7 @@ async function init() {
   initDisplayName(user, notice);
   initDeleteAccount();
   if (user.role === 'admin') initAdmin(user);
-  const { imageBase } = await fetchConfig().catch(() => ({ imageBase: '/images' }));
-  initAvatarEditor(user, imageBase);
+  initAvatarEditor(user, config.imageBase);
 }
 
 // Reveal and populate the admin pane. Gated on the role the server reports; every action it offers

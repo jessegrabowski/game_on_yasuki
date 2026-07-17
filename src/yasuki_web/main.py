@@ -325,7 +325,12 @@ async def card_page_print(request: Request, card_id: _CardId, set_slug: _SetSlug
 
 @app.get("/api/config")
 async def config():
-    return {"image_base_url": IMAGE_BASE_URL, "debug": _debug}
+    return {
+        "image_base_url": IMAGE_BASE_URL,
+        "debug": _debug,
+        # Lets the client offer a one-click local sign-in that skips Google (dev only; false in prod).
+        "dev_login": auth.dev_login_enabled(),
+    }
 
 
 if DECK_BUILDER_DIR.exists():

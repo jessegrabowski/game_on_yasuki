@@ -35,7 +35,7 @@ GOOGLE_ISSUERS = frozenset({"accounts.google.com", "https://accounts.google.com"
 
 SESSION_COOKIE = "yasuki_session"
 SESSION_TTL = timedelta(days=30)
-# Local-only sign-in shortcut, gated by this env var and refused in production (see _dev_login_enabled).
+# Local-only sign-in shortcut, gated by this env var and refused in production (see dev_login_enabled).
 DEV_LOGIN_ENV = "YASUKI_DEV_LOGIN"
 # A login must reach the callback within this window; stale OAuth state is rejected and swept.
 LOGIN_STATE_TTL = timedelta(minutes=10)
@@ -325,7 +325,7 @@ def _set_session_cookie(response, request: Request, token: str) -> None:
     )
 
 
-def _dev_login_enabled() -> bool:
+def dev_login_enabled() -> bool:
     """Whether the dev sign-in shortcut is active: opt-in via env and never in production."""
     return bool(os.environ.get(DEV_LOGIN_ENV)) and os.environ.get("ENVIRONMENT") != "production"
 
@@ -348,7 +348,7 @@ async def dev_login(request: Request):
     ``?as=<name>`` query selects a distinct dev identity, so several can be signed in at once (two
     browsers for a local game); omitting it yields the default "Dev Player".
     """
-    if not _dev_login_enabled():
+    if not dev_login_enabled():
         raise HTTPException(status_code=404, detail="Not found")
     token = await asyncio.to_thread(_dev_session, request.query_params.get("as"))
     response = RedirectResponse(DEFAULT_LANDING, status_code=302)
