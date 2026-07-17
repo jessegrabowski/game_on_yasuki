@@ -1187,6 +1187,28 @@
   border-radius: 5px;
 }
 
+/* The "Draw odds…" hypergeometric calculator reuses the deck-scope modal frame. */
+.draw-odds-heading {
+  margin: 0.3rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.draw-odds-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.draw-odds-row > span {
+  flex: 1 1 auto;
+}
+
+.draw-odds-result {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
 .note-dialog {
   display: flex;
   flex-direction: column;

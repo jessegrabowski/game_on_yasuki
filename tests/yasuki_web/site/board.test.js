@@ -2528,10 +2528,77 @@ describe('initBoardInteractions — context menu', () => {
     assert.equal(sent.length, 1, 'one flip, from the menu accelerator, not also the hover hotkey');
   });
 
-  it('offers Unbow all on the empty battlefield, on the W accelerator', () => {
+  it('offers Unbow all, Randomize and Draw odds on the empty battlefield, on distinct accelerators', () => {
     root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
-    assert.deepEqual(menuLabels(root), ['Unbow all']);
-    assert.equal(accelOf('Unbow all'), 'w');
+    assert.deepEqual(menuLabels(root), ['Unbow all', 'Randomize…', 'Draw odds…']);
+    const keys = ['Unbow all', 'Randomize…', 'Draw odds…'].map(accelOf);
+    assert.deepEqual(keys, ['w', 'R', 'o']);
+    assert.equal(new Set(keys).size, keys.length, 'no two items share an accelerator');
+  });
+
+  // The Draw odds calculator mounts in `.room`; its modal is overlay > .deck-scope >
+  // [header, heading, fateDeck row, fateCopies row, fateResult, heading, dynDeck row,
+  //  dynCopies row, dynProvinces row, dynResult]. It sends nothing — it only displays.
+  it('opens the Draw odds calculator and recomputes fate and dynasty odds live', () => {
+    root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
+    clickMenuItem(root, 'Draw odds…');
+    const modal = document
+      .querySelector('.room')
+      .children.find((c) => c.className === 'deck-dialog-overlay').children[0];
+
+    const fateCopies = modal.children[3].children[1]; // fate "Copies" row > input
+    const fateResult = modal.children[4];
+    assert.equal(fateResult.textContent, 'Next draw: 7.5%'); // 3 copies / 40, the defaults
+    fateCopies.value = '1';
+    fateCopies._emit('input', {});
+    assert.equal(fateResult.textContent, 'Next draw: 2.5%'); // recomputed for 1 copy
+
+    const dynProvinces = modal.children[8].children[1]; // "Provinces refilling" row > input
+    const dynResult = modal.children[9];
+    assert.equal(dynResult.textContent, 'At least one: 7.5%'); // 3 copies, 1 province, from 40
+    dynProvinces.value = '4';
+    dynProvinces._emit('input', {});
+    assert.equal(dynResult.textContent, 'At least one: 27.7%'); // recomputed for 4 provinces refilling
+
+    assert.equal(sent.length, 0, 'the calculator is local and sends nothing');
+  });
+
+  // The Randomize chooser mounts in `.room`; its modal is overlay > .deck-scope >
+  // [header, "Flip a coin", row("Roll d", sides input)].
+  const openRandomize = () => {
+    root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
+    clickMenuItem(root, 'Randomize…');
+    return document.querySelector('.room').children.find((c) => c.className === 'deck-dialog-overlay')
+      .children[0];
+  };
+
+  it('flips a seeded coin from the Randomize chooser', () => {
+    openRandomize().children[1]._emit('click', {}); // "Flip a coin"
+    assert.equal(sent.at(-1).intent.op, 'FLIP_COIN');
+    assert.equal(typeof sent.at(-1).intent.seed, 'number');
+  });
+
+  it('rolls a seeded d6 by default from the Randomize chooser', () => {
+    openRandomize().children[2].children[0]._emit('click', {}); // row > "Roll d"
+    assert.equal(sent.at(-1).intent.op, 'ROLL_DICE');
+    assert.equal(typeof sent.at(-1).intent.seed, 'number');
+    assert.equal(sent.at(-1).intent.value, 6);
+  });
+
+  it('rolls a die with the chosen number of sides, on Enter in the sides input', () => {
+    const input = openRandomize().children[2].children[1];
+    input.value = '20';
+    input._emit('keydown', { key: 'Enter' });
+    assert.equal(sent.at(-1).intent.op, 'ROLL_DICE');
+    assert.equal(sent.at(-1).intent.value, 20);
+  });
+
+  it('sends nothing when the die size is below 2', () => {
+    const row = openRandomize().children[2];
+    row.children[1].value = '1';
+    sent.length = 0;
+    row.children[0]._emit('click', {}); // "Roll d"
+    assert.equal(sent.length, 0);
   });
 
   it('unbows only the viewer own and owner-less bowed cards, never the opponent batch', () => {
