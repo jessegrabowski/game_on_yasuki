@@ -1187,7 +1187,7 @@
   border-radius: 5px;
 }
 
-/* The "Draw odds…" hypergeometric calculator reuses the deck-scope modal frame. */
+/* The "Calculate probabilities" popup reuses the deck-scope modal frame. */
 .draw-odds-heading {
   margin: 0.3rem 0 0;
   font-size: 0.9rem;

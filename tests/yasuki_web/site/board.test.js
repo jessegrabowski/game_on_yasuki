@@ -2528,23 +2528,33 @@ describe('initBoardInteractions — context menu', () => {
     assert.equal(sent.length, 1, 'one flip, from the menu accelerator, not also the hover hotkey');
   });
 
-  it('offers Unbow all, Randomize and Draw odds on the empty battlefield, on distinct accelerators', () => {
+  it('offers Unbow all and Randomize on the empty battlefield, on distinct accelerators', () => {
     root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
-    assert.deepEqual(menuLabels(root), ['Unbow all', 'Randomize…', 'Draw odds…']);
-    const keys = ['Unbow all', 'Randomize…', 'Draw odds…'].map(accelOf);
-    assert.deepEqual(keys, ['w', 'R', 'o']);
+    assert.deepEqual(menuLabels(root), ['Unbow all', 'Randomize…']);
+    const keys = ['Unbow all', 'Randomize…'].map(accelOf);
+    assert.deepEqual(keys, ['w', 'R']);
     assert.equal(new Set(keys).size, keys.length, 'no two items share an accelerator');
   });
 
-  // The Draw odds calculator mounts in `.room`; its modal is overlay > .deck-scope >
-  // [header, heading, fateDeck row, fateCopies row, fateResult, heading, dynDeck row,
-  //  dynCopies row, dynProvinces row, dynResult]. It sends nothing — it only displays.
-  it('opens the Draw odds calculator and recomputes fate and dynasty odds live', () => {
+  // The Randomize chooser mounts in `.room`; its modal is overlay > .deck-scope >
+  // [header, "Flip a coin", row("Roll d", sides input), "Calculate probabilities…"].
+  const openRandomize = () => {
     root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
-    clickMenuItem(root, 'Draw odds…');
+    clickMenuItem(root, 'Randomize…');
+    return document.querySelector('.room').children.find((c) => c.className === 'deck-dialog-overlay')
+      .children[0];
+  };
+
+  // The probability calculator is no longer a top-level menu item: it opens as a nested popup from
+  // the Randomize chooser. That second overlay is the last one mounted in `.room`; its modal is
+  // overlay > .deck-scope > [header, heading, fateDeck row, fateCopies row, fateResult, heading,
+  // dynDeck row, dynCopies row, dynProvinces row, dynResult]. It sends nothing — it only displays.
+  it('opens the probability calculator from Randomize and recomputes fate and dynasty odds live', () => {
+    openRandomize().children[3]._emit('click', {}); // "Calculate probabilities…"
     const modal = document
       .querySelector('.room')
-      .children.find((c) => c.className === 'deck-dialog-overlay').children[0];
+      .children.filter((c) => c.className === 'deck-dialog-overlay')
+      .at(-1).children[0];
 
     const fateCopies = modal.children[3].children[1]; // fate "Copies" row > input
     const fateResult = modal.children[4];
@@ -2563,14 +2573,24 @@ describe('initBoardInteractions — context menu', () => {
     assert.equal(sent.length, 0, 'the calculator is local and sends nothing');
   });
 
-  // The Randomize chooser mounts in `.room`; its modal is overlay > .deck-scope >
-  // [header, "Flip a coin", row("Roll d", sides input)].
-  const openRandomize = () => {
-    root._emit('contextmenu', rightClick({ zone: { zone: 'battlefield' } }));
-    clickMenuItem(root, 'Randomize…');
-    return document.querySelector('.room').children.find((c) => c.className === 'deck-dialog-overlay')
+  it('closes both the calculator and the Randomize chooser when the calculator is dismissed', () => {
+    const room = document.querySelector('.room');
+    openRandomize().children[3]._emit('click', {}); // "Calculate probabilities…"
+    assert.equal(
+      room.children.filter((c) => c.className === 'deck-dialog-overlay').length,
+      2,
+      'chooser and calculator are both open',
+    );
+    const calculator = room.children.filter((c) => c.className === 'deck-dialog-overlay').at(-1)
       .children[0];
-  };
+    const closeBtn = calculator.children[0].children[1]; // header > × button
+    closeBtn._emit('click', {});
+    assert.equal(
+      room.children.filter((c) => c.className === 'deck-dialog-overlay').length,
+      0,
+      'dismissing the calculator closes the chooser behind it too',
+    );
+  });
 
   it('flips a seeded coin from the Randomize chooser', () => {
     openRandomize().children[1]._emit('click', {}); // "Flip a coin"

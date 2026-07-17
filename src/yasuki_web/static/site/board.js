@@ -1240,12 +1240,15 @@ function openMenu(container, items, clientX, clientY, send) {
 // and × close button, dismissed by the backdrop, the × button, or Escape. Returns the panel to fill
 // (its header already appended) and the close fn. `panelClass` styles the panel — 'deck-scope' for the
 // board choosers, 'note-dialog' for the note editor.
-function openModalShell(title, panelClass = 'deck-scope') {
+function openModalShell(title, panelClass = 'deck-scope', onClose = null) {
   const overlay = node('div', 'deck-dialog-overlay');
   const modal = node('div', panelClass);
+  // onClose runs once the overlay is torn down, however it was dismissed (×, backdrop, or Escape) —
+  // it lets a nested dialog also close the one that opened it.
   const close = () => {
     document.removeEventListener?.('keydown', onKey);
     overlay.remove();
+    onClose?.();
   };
   const onKey = (e) => {
     if (e.key === 'Escape') close();
@@ -1306,7 +1309,8 @@ function openDeckSearchPrompt(owner, side, send) {
 
 // The battlefield "Randomize…" chooser: flip a coin, or roll a die with a chosen number of sides
 // (the input defaults to a d6). Both are seeded client-side (see coinFlipIntent) and the server
-// announces the result to both seats.
+// announces the result to both seats. A "Calculate probabilities…" button opens the local draw-odds
+// calculator as a nested popup, keeping that calculator off the top-level battlefield menu.
 function openRandomizePrompt(send) {
   const { modal, close } = openModalShell('Randomize');
 
@@ -1337,15 +1341,22 @@ function openRandomizePrompt(send) {
   const rollRow = node('div', 'deck-scope-row');
   rollRow.append(rollBtn, input);
 
-  modal.append(coin, rollRow);
+  const drawOdds = node('button', 'deck-scope-btn', 'Calculate probabilities…');
+  drawOdds.type = 'button';
+  // Passing this chooser's own close makes dismissing the odds calculator also close the chooser
+  // behind it, so the × (or Escape/backdrop) closes the whole stack in one go.
+  drawOdds.addEventListener('click', () => openDrawOddsPrompt(close));
+
+  modal.append(coin, rollRow, drawOdds);
   input.focus?.();
 }
 
-// The battlefield "Draw odds…" calculator: the hypergeometric chance of seeing at least one copy of a
-// card, for a single fate draw and for a dynasty province flip. Purely local — it computes and shows a
-// percentage, sending nothing to the server — and live-updates as the inputs change.
-function openDrawOddsPrompt() {
-  const { modal } = openModalShell('Draw odds');
+// The probability calculator, opened from the Randomize chooser: the hypergeometric chance of seeing
+// at least one copy of a card, for a single fate draw and for a dynasty province flip. Purely local —
+// it computes and shows a percentage, sending nothing to the server — and live-updates as the inputs
+// change.
+function openDrawOddsPrompt(onClose) {
+  const { modal } = openModalShell('Calculate probabilities', 'deck-scope', onClose);
 
   const field = (labelText, value) => {
     const input = node('input', 'deck-scope-input');
@@ -1474,9 +1485,9 @@ function menuItemsFor(
 // The menu for a right-click on empty battlefield. Unbow all squares up every bowed card the viewer
 // may act on (their own and owner-less ones), batched into one UNBOW so the rate limiter sees one
 // message — and so the server's all-or-nothing ownership gate never rejects the batch. Randomize
-// opens a chooser to flip a coin or roll a die, whose result the server announces to both seats. Draw
-// odds opens a purely-local hypergeometric calculator. Create token (when wired) opens a card search
-// and spawns the choice as a token at the click point.
+// opens a chooser to flip a coin or roll a die, whose result the server announces to both seats (and
+// which also hosts the local draw-odds calculator). Create token (when wired) opens a card search and
+// spawns the choice as a token at the click point.
 function battlefieldMenuItems(viewer, onCreateToken, spawnAt) {
   // An owner-less ('') card is public and actionable by anyone, mirroring the server's owns_card.
   const ownedByViewer = (el) => !el.dataset.owner || el.dataset.owner === viewer;
@@ -1491,7 +1502,6 @@ function battlefieldMenuItems(viewer, onCreateToken, spawnAt) {
       },
     },
     { label: '&Randomize…', onClick: (e, send) => openRandomizePrompt(send) },
-    { label: 'Draw &odds…', onClick: () => openDrawOddsPrompt() },
   ];
   if (onCreateToken) items.push({ label: 'Create &token…', onClick: () => onCreateToken(spawnAt) });
   return items;
