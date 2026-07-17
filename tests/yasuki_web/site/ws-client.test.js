@@ -51,7 +51,9 @@ class FakeWebSocket {
 globalThis.WebSocket = FakeWebSocket;
 globalThis.location = { protocol: 'http:', host: 'testserver' };
 
-const { connectRoom } = await import('../../../src/yasuki_web/static/site/ws-client.js');
+const { connectRoom, RECONNECT_DELAY_MS } = await import(
+  '../../../src/yasuki_web/static/site/ws-client.js'
+);
 
 const latest = () => FakeWebSocket.instances.at(-1);
 
@@ -97,7 +99,8 @@ describe('connectRoom', () => {
     assert.equal(dispatched, false);
   });
 
-  it('reconnects once after an unexpected drop, then gives up', () => {
+  it('reconnects once after a live connection drops, then gives up', (t) => {
+    t.mock.timers.enable({ apis: ['setTimeout'] });
     const client = connectRoom('room1', 'Ada');
     let disconnected = false;
     client.events.addEventListener('disconnected', () => {
@@ -106,12 +109,59 @@ describe('connectRoom', () => {
 
     latest().acceptConnection();
     latest().drop();
-    assert.equal(FakeWebSocket.instances.length, 2, 'a single reconnect is attempted');
+    // The reconnect is deferred by a short backoff so a restarting server isn't hammered.
+    assert.equal(FakeWebSocket.instances.length, 1, 'reconnect is deferred, not immediate');
+    t.mock.timers.tick(RECONNECT_DELAY_MS);
+    assert.equal(FakeWebSocket.instances.length, 2, 'a single reconnect fires after the delay');
     assert.equal(disconnected, false);
 
+    // The reconnect attempt itself never opened, so its drop gives up rather than retrying again.
     latest().drop();
     assert.equal(FakeWebSocket.instances.length, 2, 'no second reconnect');
     assert.equal(disconnected, true);
+  });
+
+  it('does not reconnect when the initial handshake never opened', (t) => {
+    t.mock.timers.enable({ apis: ['setTimeout'] });
+    const client = connectRoom('room1', 'Ada');
+    let disconnected = false;
+    client.events.addEventListener('disconnected', () => {
+      disconnected = true;
+    });
+
+    // A 1006 before the socket ever opens is a server that is down or restarting; retrying it just
+    // piles up failed attempts and feeds the browser's per-host reconnect backoff.
+    latest().drop();
+    t.mock.timers.tick(RECONNECT_DELAY_MS);
+    assert.equal(FakeWebSocket.instances.length, 1, 'no retry storm against a dead server');
+    assert.equal(disconnected, true);
+  });
+
+  it('defers reconnecting a hidden tab until it becomes visible again', (t) => {
+    t.mock.timers.enable({ apis: ['setTimeout'] });
+    const listeners = {};
+    globalThis.document = {
+      visibilityState: 'hidden',
+      addEventListener: (type, fn) => {
+        (listeners[type] ||= []).push(fn);
+      },
+      removeEventListener: (type, fn) => {
+        listeners[type] = (listeners[type] || []).filter((f) => f !== fn);
+      },
+    };
+    try {
+      connectRoom('room1', 'Ada');
+      latest().acceptConnection();
+      latest().drop();
+      t.mock.timers.tick(RECONNECT_DELAY_MS);
+      assert.equal(FakeWebSocket.instances.length, 1, 'no reconnect while the tab is hidden');
+
+      globalThis.document.visibilityState = 'visible';
+      (listeners.visibilitychange || []).forEach((fn) => fn());
+      assert.equal(FakeWebSocket.instances.length, 2, 'reconnects once the tab is foregrounded');
+    } finally {
+      delete globalThis.document;
+    }
   });
 
   it('does not reconnect after a policy close', () => {
