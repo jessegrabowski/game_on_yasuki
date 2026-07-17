@@ -1,3 +1,4 @@
+import random
 from dataclasses import dataclass
 from enum import Enum
 from typing import ClassVar
@@ -59,6 +60,8 @@ class IntentOp(str, Enum):
     REMOVE_CARD = "REMOVE_CARD"
     ATTACH = "ATTACH"
     DETACH = "DETACH"
+    FLIP_COIN = "FLIP_COIN"
+    ROLL_DICE = "ROLL_DICE"
 
 
 @dataclass(frozen=True, slots=True)
@@ -385,6 +388,42 @@ class Detach:
     op: ClassVar[IntentOp] = IntentOp.DETACH
 
 
+@dataclass(frozen=True, slots=True)
+class FlipCoin:
+    """Flip a fair coin, its result reproducible from the explicit ``seed``. A read-only table event:
+    it changes no piece, only announcing heads or tails to both seats."""
+
+    seed: int
+    op: ClassVar[IntentOp] = IntentOp.FLIP_COIN
+
+
+@dataclass(frozen=True, slots=True)
+class RollDice:
+    """Roll one ``sides``-sided die, its face reproducible from the explicit ``seed``. Like
+    ``FlipCoin`` a read-only table event: it changes no piece, only announcing the rolled face to
+    both seats. ``sides`` must be at least 2."""
+
+    seed: int
+    sides: int = 6
+    op: ClassVar[IntentOp] = IntentOp.ROLL_DICE
+
+    def __post_init__(self):
+        if self.sides < 2:
+            raise ValueError("RollDice requires at least 2 sides")
+
+
+def coin_flip_outcome(seed: int) -> str:
+    """Return the reproducible coin result, ``"Heads"`` or ``"Tails"``, for a flip's ``seed``. Pure
+    in the seed so the handler, the game-log line, and a replay all agree."""
+    return "Heads" if random.Random(seed).getrandbits(1) else "Tails"
+
+
+def dice_roll_outcome(seed: int, sides: int) -> int:
+    """Return the reproducible die face, an int in ``1..sides``, for a roll's ``seed`` and
+    ``sides``. Pure in its arguments, mirroring ``coin_flip_outcome``."""
+    return random.Random(seed).randint(1, sides)
+
+
 Intent = (
     MoveCard
     | MoveDeckTop
@@ -418,6 +457,8 @@ Intent = (
     | RemoveCard
     | Attach
     | Detach
+    | FlipCoin
+    | RollDice
 )
 
 
@@ -885,6 +926,18 @@ def _detach(state: TableState, seat: PlayerId, intent: Detach) -> list[Event]:
     return [Event(state.seq, seat, intent, (card.id,))]
 
 
+def _flip_coin(state: TableState, seat: PlayerId, intent: FlipCoin) -> list[Event]:
+    # Read-only: the coin touches no piece, so state and seq are untouched. The accepted event carries
+    # the seed, from which the web layer derives the same heads/tails result for both seats.
+    return [Event(state.seq, seat, intent)]
+
+
+def _roll_dice(state: TableState, seat: PlayerId, intent: RollDice) -> list[Event]:
+    # Read-only, mirroring _flip_coin: the die changes nothing; the event's seed and sides reproduce
+    # the face.
+    return [Event(state.seq, seat, intent)]
+
+
 _HANDLERS = {
     IntentOp.MOVE_CARD: _move_card,
     IntentOp.MOVE_DECK_TOP: _move_deck_top,
@@ -918,6 +971,8 @@ _HANDLERS = {
     IntentOp.REMOVE_CARD: _remove_card,
     IntentOp.ATTACH: _attach,
     IntentOp.DETACH: _detach,
+    IntentOp.FLIP_COIN: _flip_coin,
+    IntentOp.ROLL_DICE: _roll_dice,
 }
 
 

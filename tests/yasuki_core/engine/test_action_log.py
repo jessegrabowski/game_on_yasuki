@@ -11,6 +11,8 @@ from yasuki_core.engine.intents import (
     Flip,
     Draw,
     Shuffle,
+    FlipCoin,
+    RollDice,
     SearchDeck,
     FillProvince,
     DiscardProvince,
@@ -102,6 +104,8 @@ def _script(state: TableState, log: ActionLog) -> None:
         (PlayerId.P1, Draw(DeckKey(PlayerId.P1, Side.FATE))),
         (PlayerId.P1, Draw(DeckKey(PlayerId.P1, Side.FATE))),
         (PlayerId.P1, SearchDeck(DeckKey(PlayerId.P1, Side.FATE))),  # read-only, still recorded
+        (PlayerId.P1, FlipCoin(seed=13)),  # read-only randomizer, still recorded
+        (PlayerId.P2, RollDice(seed=21, sides=20)),
         (PlayerId.P2, Shuffle(DeckKey(PlayerId.P2, Side.DYNASTY), seed=99)),
         (PlayerId.P2, Draw(DeckKey(PlayerId.P2, Side.DYNASTY))),  # no province → battlefield
         (PlayerId.P1, SetHonor(delta=-2)),
@@ -177,6 +181,16 @@ def test_apply_and_log_entry_fields_match_application():
     assert entry.seat is PlayerId.P1
     assert entry.intent is intent
     assert entry.rng_seed == 123  # surfaced from the SHUFFLE intent
+
+
+@pytest.mark.parametrize("intent", [FlipCoin(seed=456), RollDice(seed=789, sides=20)])
+def test_apply_and_log_surfaces_the_seed_of_read_only_randomizers(intent):
+    state = _start_state()
+    log = ActionLog(initial=InitialRecord.from_state(state))
+
+    apply_and_log(state, log, PlayerId.P1, intent, ts=1.0)
+
+    assert log.entries[0].rng_seed == intent.seed
 
 
 def test_apply_and_log_entries_match_the_full_run():

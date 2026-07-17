@@ -48,6 +48,8 @@ from yasuki_core.engine.intents import (
     RemoveCard,
     Attach,
     Detach,
+    FlipCoin,
+    RollDice,
 )
 from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.constants import Side, Element, Timing, AttachmentType
@@ -323,6 +325,10 @@ def encode_intent(intent: Intent) -> dict:
             payload |= {"card_id": intent.card_id, "to": encode_attach_target(intent.to)}
         case IntentOp.DETACH:
             payload["card_id"] = intent.card_id
+        case IntentOp.FLIP_COIN:
+            payload["seed"] = intent.seed
+        case IntentOp.ROLL_DICE:
+            payload |= {"seed": intent.seed, "value": intent.sides}
         case _:
             raise ValueError(f"unhandled intent op: {intent.op}")
     return payload
@@ -410,5 +416,10 @@ def decode_intent(payload: dict) -> Intent:
             return Attach(payload["card_id"], decode_attach_target(payload["to"]))
         case IntentOp.DETACH:
             return Detach(payload["card_id"])
+        case IntentOp.FLIP_COIN:
+            return FlipCoin(payload["seed"])
+        case IntentOp.ROLL_DICE:
+            sides = payload.get("value")
+            return RollDice(payload["seed"]) if sides is None else RollDice(payload["seed"], sides)
         case _:
             raise ValueError(f"unhandled intent op: {op}")

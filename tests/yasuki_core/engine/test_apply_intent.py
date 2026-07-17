@@ -24,6 +24,10 @@ from yasuki_core.engine.intents import (
     Unpeek,
     Draw,
     Shuffle,
+    FlipCoin,
+    RollDice,
+    coin_flip_outcome,
+    dice_roll_outcome,
     FlipDeckTop,
     SearchDeck,
     MoveDeckTop,
@@ -1647,3 +1651,40 @@ def test_re_attaching_to_a_different_parent_updates_and_emits():
     assert table.attachments == {"c": "p2"}
     assert table.seq == 2 and len(events) == 1
     table.validate()
+
+
+def test_flip_coin_is_read_only_and_always_accepted():
+    table = TableState.empty_two_seat()
+    events = apply_intent(table, PlayerId.P2, FlipCoin(seed=1))
+    assert len(events) == 1
+    assert events[0].intent == FlipCoin(seed=1)
+    assert table.seq == 0  # read-only: the coin changes nothing
+
+
+def test_roll_dice_is_read_only_and_always_accepted():
+    table = TableState.empty_two_seat()
+    events = apply_intent(table, PlayerId.P1, RollDice(seed=1, sides=20))
+    assert len(events) == 1
+    assert events[0].intent == RollDice(seed=1, sides=20)
+    assert table.seq == 0
+
+
+@pytest.mark.parametrize("sides", [1, 0, -3])
+def test_roll_dice_rejects_fewer_than_two_sides(sides):
+    with pytest.raises(ValueError):
+        RollDice(seed=1, sides=sides)
+
+
+def test_roll_dice_accepts_the_two_sided_minimum():
+    assert RollDice(seed=1, sides=2).sides == 2
+
+
+def test_coin_flip_outcome_is_deterministic_and_covers_both_faces():
+    faces = {coin_flip_outcome(seed) for seed in range(20)}
+    assert faces == {"Heads", "Tails"}
+    assert coin_flip_outcome(7) == coin_flip_outcome(7)
+
+
+def test_dice_roll_outcome_covers_every_face_and_is_deterministic():
+    assert {dice_roll_outcome(seed, 6) for seed in range(50)} == {1, 2, 3, 4, 5, 6}
+    assert dice_roll_outcome(7, 6) == dice_roll_outcome(7, 6)
