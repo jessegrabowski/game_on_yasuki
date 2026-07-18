@@ -153,6 +153,31 @@ describe('preview rendering', () => {
     assert.ok(el.innerHTML.includes('Battle: Bow this card.'));
   });
 
+  it("prefers the current print's own rules text over the card text", async () => {
+    const card = { ...CARD, text: 'Canonical wording.' };
+    mockFetchPrints([
+      { print_id: 10, set_name: 'Imperial Edition', image_path: 'img/ie.jpg',
+        flavor_text: '', rules_text: 'Reworded on this printing.' },
+    ]);
+    await showPreview(card, 10, '/api');
+
+    const el = document.getElementById('preview');
+    assert.ok(el.innerHTML.includes('Reworded on this printing.'));
+    assert.ok(!el.innerHTML.includes('Canonical wording.'));
+  });
+
+  it('falls back to the card text when the print has no own rules text', async () => {
+    const card = { ...CARD, text: 'Canonical wording.' };
+    mockFetchPrints([
+      { print_id: 10, set_name: 'Imperial Edition', image_path: 'img/ie.jpg',
+        flavor_text: '', rules_text: null },
+    ]);
+    await showPreview(card, 10, '/api');
+
+    const el = document.getElementById('preview');
+    assert.ok(el.innerHTML.includes('Canonical wording.'));
+  });
+
   it('renders image src from current print', async () => {
     mockFetchPrints(PRINTS);
     await showPreview(CARD, null, '/api');
