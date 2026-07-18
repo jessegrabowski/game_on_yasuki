@@ -63,8 +63,12 @@ clan:Crane -type:event                    # Crane, excluding events
 
 Queries are case-insensitive (`clan:crane` = `clan:Crane`).
 
-`-` excludes on any categorical or free-text field: `-type:event`, `-clan:crane`,
-`-artist:Hara`, `-rarity:rare`.
+`-` works on any field: `-type:event`, `-clan:crane`, `-artist:Hara`,
+`-format>=diamond`. For an inequality it is the strict complement of the positive
+filter — `-format>=diamond` means "legal in **no** format at or after diamond"
+(cards that rotated out earlier), not "legal in some earlier format". An
+unresolvable reference in a negated `format`/`set` term (a typo like `-set:xyz`)
+matches nothing rather than everything.
 
 ## Examples
 

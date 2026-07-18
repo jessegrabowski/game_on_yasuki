@@ -1147,47 +1147,86 @@ def _build_card_filter(
                         " WHERE format_name = ANY(%s))"
                     )
                     params.append(list(formats))
-            elif property_name == "format_filters":
+            elif property_name in ("format_filters", "format_filters_excludes"):
                 # Each (operator, value) resolves the value against a format's name or short block
                 # alias. Exact operators match that one format; inequalities compare every format's
-                # legal_from to the reference format's, selecting one side of the arc timeline.
+                # legal_from to the reference format's, selecting one side of the arc timeline. The
+                # *_excludes twin is the strict set complement (NOT IN): -format>=diamond is "legal in
+                # no format at or after diamond", never a naive operator flip to format<diamond. An
+                # unresolvable reference fails closed via the EXISTS guard so a typo'd -format:xyz
+                # matches nothing, mirroring the positive filter whose empty IN-set matches nothing.
+                excludes = property_name.endswith("excludes")
                 for op, format_value in value:
                     if op in (":", "="):
-                        conditions.append(
-                            "c.card_id IN (SELECT cl.card_id FROM card_legalities cl"
+                        match_sql = (
+                            "SELECT cl.card_id FROM card_legalities cl"
                             " JOIN formats f ON f.name = cl.format_name"
-                            " WHERE lower(f.name) = lower(%s) OR lower(f.block) = lower(%s))"
+                            " WHERE lower(f.name) = lower(%s) OR lower(f.block) = lower(%s)"
                         )
-                        params.extend([format_value, format_value])
+                        guard_sql = (
+                            "EXISTS (SELECT 1 FROM formats"
+                            " WHERE lower(name) = lower(%s) OR lower(block) = lower(%s))"
+                        )
                     elif op in _RANGE_OPS:
-                        conditions.append(
-                            "c.card_id IN (SELECT cl.card_id FROM card_legalities cl"
+                        match_sql = (
+                            "SELECT cl.card_id FROM card_legalities cl"
                             " JOIN formats f ON f.name = cl.format_name"
                             f" WHERE f.legal_from {_RANGE_OPS[op]} (SELECT legal_from FROM formats"
                             " WHERE (lower(name) = lower(%s) OR lower(block) = lower(%s))"
-                            " AND legal_from IS NOT NULL LIMIT 1))"
+                            " AND legal_from IS NOT NULL LIMIT 1)"
                         )
+                        guard_sql = (
+                            "EXISTS (SELECT 1 FROM formats"
+                            " WHERE (lower(name) = lower(%s) OR lower(block) = lower(%s))"
+                            " AND legal_from IS NOT NULL)"
+                        )
+                    else:
+                        continue
+                    if excludes:
+                        conditions.append(f"({guard_sql} AND c.card_id NOT IN ({match_sql}))")
+                        params.extend([format_value] * 4)
+                    else:
+                        conditions.append(f"c.card_id IN ({match_sql})")
                         params.extend([format_value, format_value])
-            elif property_name == "set_filters":
+            elif property_name in ("set_filters", "set_filters_excludes"):
                 # Each (operator, value) resolves the value against a set's full name or short code.
                 # Exact operators match that set; inequalities compare every set's release_date to the
-                # reference set's, selecting cards printed on one side of that release.
+                # reference set's, selecting cards printed on one side of that release. The *_excludes
+                # twin is the strict set complement (NOT IN) — -set>=GE means "printed in no set at or
+                # after GE", not "printed in some earlier set" — and an unresolvable reference fails
+                # closed via the EXISTS guard, matching nothing like the positive filter does.
+                excludes = property_name.endswith("excludes")
                 for op, set_value in value:
                     if op in (":", "="):
-                        conditions.append(
-                            "c.card_id IN (SELECT p.card_id FROM prints p"
+                        match_sql = (
+                            "SELECT p.card_id FROM prints p"
                             " JOIN l5r_sets s ON s.set_id = p.set_id"
-                            " WHERE lower(s.set_name) = lower(%s) OR lower(s.code) = lower(%s))"
+                            " WHERE lower(s.set_name) = lower(%s) OR lower(s.code) = lower(%s)"
                         )
-                        params.extend([set_value, set_value])
+                        guard_sql = (
+                            "EXISTS (SELECT 1 FROM l5r_sets"
+                            " WHERE lower(set_name) = lower(%s) OR lower(code) = lower(%s))"
+                        )
                     elif op in _RANGE_OPS:
-                        conditions.append(
-                            "c.card_id IN (SELECT p.card_id FROM prints p"
+                        match_sql = (
+                            "SELECT p.card_id FROM prints p"
                             " JOIN l5r_sets s ON s.set_id = p.set_id"
                             f" WHERE s.release_date {_RANGE_OPS[op]} (SELECT release_date"
                             " FROM l5r_sets WHERE (lower(set_name) = lower(%s) OR lower(code) ="
-                            " lower(%s)) AND release_date IS NOT NULL ORDER BY release_date LIMIT 1))"
+                            " lower(%s)) AND release_date IS NOT NULL ORDER BY release_date LIMIT 1)"
                         )
+                        guard_sql = (
+                            "EXISTS (SELECT 1 FROM l5r_sets"
+                            " WHERE (lower(set_name) = lower(%s) OR lower(code) = lower(%s))"
+                            " AND release_date IS NOT NULL)"
+                        )
+                    else:
+                        continue
+                    if excludes:
+                        conditions.append(f"({guard_sql} AND c.card_id NOT IN ({match_sql}))")
+                        params.extend([set_value] * 4)
+                    else:
+                        conditions.append(f"c.card_id IN ({match_sql})")
                         params.extend([set_value, set_value])
             elif property_name == "sets":
                 if value:

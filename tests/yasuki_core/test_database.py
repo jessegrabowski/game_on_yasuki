@@ -244,6 +244,13 @@ class TestSQLFiltering:
         assert len(cards) > 0
         assert all(not {"Crane", "All Clans"} & set(c["clans"] or []) for c in cards)
 
+    def test_negated_format_with_unknown_reference_matches_nothing(self):
+        """A typo'd -format:<unknown> must fail closed to empty, not match the whole card pool."""
+        cards = query_cards_filtered(
+            filter_options={"format_filters_excludes": [(":", "no_such_format_xyz")]}
+        )
+        assert cards == []
+
     def test_text_search_with_filters(self):
         """Should combine text search with property filters."""
         cards = query_cards_filtered(text_query="Doji", filter_options={"types": ["Personality"]})

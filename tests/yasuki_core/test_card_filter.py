@@ -66,3 +66,26 @@ def test_story_excludes_keeps_null_credits():
     clause, params = _build_card_filter(filter_options={"story_excludes": ["Ashman"]})
     assert "c.story IS NULL OR c.story NOT ILIKE" in clause
     assert params == ["%Ashman%"]
+
+
+def test_format_excludes_negates_membership_not_the_operator():
+    # -format>=diamond is the strict complement: NOT IN the set of cards legal at/after the ref,
+    # with the >= kept verbatim inside the subquery (not flipped to <).
+    clause, _ = _build_card_filter(filter_options={"format_filters_excludes": [(">=", "diamond")]})
+    assert "c.card_id NOT IN (SELECT cl.card_id FROM card_legalities" in clause
+    assert "f.legal_from >=" in clause
+
+
+def test_format_excludes_fails_closed_on_unresolvable_reference():
+    # A typo'd -format:xyz must match nothing, not everything, so the NOT IN is guarded by an
+    # EXISTS that the unresolved reference fails.
+    clause, _ = _build_card_filter(filter_options={"format_filters_excludes": [(":", "xyz")]})
+    assert "EXISTS (SELECT 1 FROM formats" in clause
+    assert "AND c.card_id NOT IN" in clause
+
+
+def test_set_excludes_negates_membership_and_fails_closed():
+    clause, _ = _build_card_filter(filter_options={"set_filters_excludes": [(">=", "GE")]})
+    assert "EXISTS (SELECT 1 FROM l5r_sets" in clause
+    assert "AND c.card_id NOT IN (SELECT p.card_id FROM prints p" in clause
+    assert "s.release_date >=" in clause

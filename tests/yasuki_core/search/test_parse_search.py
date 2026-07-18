@@ -266,9 +266,21 @@ class TestFilterBuilding:
         _, filters = parse_and_build_query("format>diamond format<emperor")
         assert filters["format_filters"] == [(">", "diamond"), ("<", "emperor")]
 
-    def test_format_negation_dropped(self):
-        _, filters = parse_and_build_query("-format:diamond")
+    def test_format_negation_emits_excludes(self):
+        # Strict set complement: forbid membership, keep the operator verbatim (resolved in SQL).
+        _, filters = parse_and_build_query("-format>=diamond")
+        assert filters["format_filters_excludes"] == [(">=", "diamond")]
         assert "format_filters" not in filters
+
+    def test_format_include_and_exclude_coexist(self):
+        _, filters = parse_and_build_query("format:diamond -format:emperor")
+        assert filters["format_filters"] == [(":", "diamond")]
+        assert filters["format_filters_excludes"] == [(":", "emperor")]
+
+    def test_set_negation_emits_excludes(self):
+        _, filters = parse_and_build_query("-set>=GE")
+        assert filters["set_filters_excludes"] == [(">=", "GE")]
+        assert "set_filters" not in filters
 
     # `set` terms emit the same (operator, value) specs; resolution by name/code and release-date
     # inequalities happen in SQL.

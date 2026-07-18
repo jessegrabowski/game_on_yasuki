@@ -440,24 +440,43 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
         elif field == "set":
             # Set by full name or short code, resolved in the database. Like format, emit each
             # (operator, value); the operator may be exact or an inequality against set release dates.
+            # A negated term forbids membership via the *_excludes twin (strict set complement, so
+            # -set>=GE means "printed in no set at or after GE", not "printed in some set before GE").
             specs = [
                 (term.operator, term.value.strip('"').strip())
                 for term in terms_list
                 if not term.negated and term.value.strip('"').strip()
+            ]
+            excluded = [
+                (term.operator, term.value.strip('"').strip())
+                for term in terms_list
+                if term.negated and term.value.strip('"').strip()
             ]
             if specs:
                 filter_options["set_filters"] = specs
+            if excluded:
+                filter_options["set_filters_excludes"] = excluded
         elif field == "format":
             # Legality by format, resolved in the database against formats.block / legal_from. Emit
             # each (operator, value) verbatim: the value may be a short alias (`diamond`) or a full
-            # name, and the operator may be exact or an inequality against the format timeline.
+            # name, and the operator may be exact or an inequality against the format timeline. A
+            # negated term forbids membership via the *_excludes twin (strict set complement, so
+            # -format>=diamond means "legal in no format at or after diamond", not "legal in some
+            # earlier format").
             specs = [
                 (term.operator, term.value.strip('"').strip())
                 for term in terms_list
                 if not term.negated and term.value.strip('"').strip()
             ]
+            excluded = [
+                (term.operator, term.value.strip('"').strip())
+                for term in terms_list
+                if term.negated and term.value.strip('"').strip()
+            ]
             if specs:
                 filter_options["format_filters"] = specs
+            if excluded:
+                filter_options["format_filters_excludes"] = excluded
         elif field in NUMERIC_FIELDS:
             # Numeric comparison filters tracked as a (min, max) pair. A bare "-" matches the dash
             # stat — one the card simply doesn't print, stored as NULL — and negation flips it to
