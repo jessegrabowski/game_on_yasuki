@@ -6,6 +6,7 @@ from yasuki_core.install.sets_to_sql import coerce_date
 from yasuki_core.install.yaml_to_sql import (
     build_revisions,
     card_slug,
+    mrp_text,
     parse_collector_numbers,
     _apply_current_revision,
     _BACK_CARD_ID_COL,
@@ -192,3 +193,21 @@ def test_apply_current_revision_overrides_text_and_accumulates_stats():
     assert row[_RULES_TEXT_COL] == "current"
     assert row[_STAT_COL["force"]] == 4  # set by the earlier erratum, unchanged by the later one
     assert row[_STAT_COL["chi"]] == 5  # overridden by the later erratum
+
+
+def test_mrp_text_picks_the_newest_printing():
+    dated = [
+        (datetime.date(1998, 1, 1), "samurai edition text"),
+        (datetime.date(2025, 2, 1), "shattered empire text"),
+        (datetime.date(2023, 1, 1), "onyx edition text"),
+    ]
+    assert mrp_text(dated) == "shattered empire text"
+
+
+def test_mrp_text_treats_null_date_as_oldest():
+    dated = [(None, "undated printing"), (datetime.date(2014, 6, 9), "dated printing")]
+    assert mrp_text(dated) == "dated printing"
+
+
+def test_mrp_text_returns_none_for_no_printings():
+    assert mrp_text([]) is None

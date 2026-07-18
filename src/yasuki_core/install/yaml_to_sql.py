@@ -244,6 +244,26 @@ def _link_and_validate_back_faces(cards: dict, card_names: dict, back_ids: set) 
         cards[front_id][_BACK_CARD_ID_COL] = back_id
 
 
+def mrp_text(dated_texts: list[tuple[datetime.date | None, str]]) -> str | None:
+    """The rules text from the most-recently-released printing (the MRP standard). Each element is a
+    ``(release_date, text)`` pair for one printing that carries text; a null date sorts oldest so a
+    dated printing always wins over an undated one. Return None for an empty list.
+
+    Parameters
+    ----------
+    dated_texts : list of tuple of (date or None, str)
+        One ``(release_date, text)`` pair per printing of the card that has non-empty text.
+
+    Returns
+    -------
+    text : str or None
+        The text on the newest printing, or None if there are no printings.
+    """
+    if not dated_texts:
+        return None
+    return max(dated_texts, key=lambda dt: dt[0] or datetime.date.min)[1]
+
+
 def load_cards(cards_dir: Path, dsn: str) -> None:
     """
     Load every per-set YAML file into the card tables.
@@ -279,9 +299,14 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     # card's canonical row happens to come from (filename sort order) never decides which errata win.
     errata_map: dict[str, list[dict]] = {}
 
+    # The Most-Recent-Printing standard: a card's standing rules text is the text on its newest
+    # printing, not whichever set file happens to sort first. Collect every printing's text per card
+    # and fold the most recent onto the card row once every file is read.
+    latest_text: dict[str, list[tuple[datetime.date | None, str]]] = {}
+
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
-        cur.execute("SELECT set_name, set_id, set_slug FROM l5r_sets")
-        set_map = {name: (set_id, slug) for name, set_id, slug in cur.fetchall()}
+        cur.execute("SELECT set_name, set_id, set_slug, release_date FROM l5r_sets")
+        set_map = {name: (set_id, slug, date) for name, set_id, slug, date in cur.fetchall()}
 
         for yaml_file in yaml_files:
             data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
@@ -290,7 +315,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             if resolved is None:
                 logger.warning("Set %r not in l5r_sets; skipping %s", set_name, yaml_file.name)
                 continue
-            set_id, set_slug = resolved
+            set_id, set_slug, set_date = resolved
 
             printings_seen: dict[str, int] = {}
             for entry in data.get("cards", []):
@@ -298,6 +323,10 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                 card_id = entry.get("id") or card_slug(extended_title)
                 if entry.get("is_back"):
                     card_id += "__back"
+
+                entry_text = entry.get("text")
+                if entry_text:
+                    latest_text.setdefault(card_id, []).append((set_date, entry_text))
 
                 if card_id not in cards:
                     cards[card_id], _ = _card_columns(card_id, extended_title, entry)
@@ -344,6 +373,13 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                 number_map[(card_id, printing_id)] = parse_collector_numbers(collector)
 
         _link_and_validate_back_faces(cards, card_names, back_ids)
+
+        # Set each card's standing rules text to its most-recent printing (MRP standard). This runs
+        # before errata folding so an erratum, being the newest revision, still wins over the printing.
+        for card_id, dated_texts in latest_text.items():
+            text = mrp_text(dated_texts)
+            if text is not None and card_id in cards:
+                cards[card_id][_RULES_TEXT_COL] = text
 
         # Fold each errata'd card's newest revision onto its cards row so every existing read path
         # serves the current text/stats, and stage the full ordered history for card_revisions.
