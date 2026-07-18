@@ -421,6 +421,14 @@ class TestFilterBuilding:
     def test_is_banned(self):
         _, filters = parse_and_build_query("is:banned")
         assert filters["is_banned"] is True
+
+    def test_presence_flags(self):
+        _, flip = parse_and_build_query("is:flip")
+        assert flip["is_flip"] is True
+        _, errata = parse_and_build_query("is:errata")
+        assert errata["has_errata"] is True
+        _, not_flip = parse_and_build_query("-is:flip")
+        assert not_flip["is_flip"] is False
         _, negated = parse_and_build_query("-is:banned")
         assert negated["is_banned"] is False
 

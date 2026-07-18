@@ -43,6 +43,15 @@ def test_name_search_stays_single_column():
     assert params == ["%kachiko%"]
 
 
+def test_presence_flags_are_null_checks():
+    flip, _ = _build_card_filter(filter_options={"is_flip": True})
+    assert "c.back_card_id IS NOT NULL" in flip
+    not_flip, _ = _build_card_filter(filter_options={"is_flip": False})
+    assert "c.back_card_id IS NULL" in not_flip
+    errata, _ = _build_card_filter(filter_options={"has_errata": True})
+    assert "c.errata_text IS NOT NULL" in errata
+
+
 def test_name_exact_matches_whole_name_case_insensitively():
     clause, params = _build_card_filter(filter_options={"name_exact": ["Doji Hoturi"]})
     assert "lower(c.name) = lower(%s)" in clause

@@ -218,6 +218,17 @@ class TestSQLFiltering:
         assert len(cards) > 0
         assert all("Crane" in (c["clans"] or []) and "Personality" in c["types"] for c in cards)
 
+    def test_presence_flags_filter(self):
+        """is:flip finds double-faced cards; is:flip and -is:flip partition the catalog."""
+        flip = query_cards_filtered(filter_options=build_search_filters("is:flip"))
+        assert flip and all(c["back_card_id"] for c in flip)
+        errata = query_cards_filtered(filter_options=build_search_filters("is:errata include:all"))
+        assert errata
+        everything = count_cards_filtered(filter_options=build_search_filters("include:all"))
+        flip_all = count_cards_filtered(filter_options=build_search_filters("is:flip include:all"))
+        not_flip = count_cards_filtered(filter_options=build_search_filters("-is:flip include:all"))
+        assert flip_all + not_flip == everything
+
     def test_experience_rank_filter(self):
         """exp:/experience: filter by version rank, and exp<1 / exp>=1 partition the catalog."""
         base = {

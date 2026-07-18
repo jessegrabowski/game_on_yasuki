@@ -1041,6 +1041,10 @@ _NUMERIC_STATS = (
 # excludes the exact operators, which take a different code path.
 _RANGE_OPS = {">": ">", ">=": ">=", "<": "<", "<=": "<="}
 
+# `is:` presence flags -> the nullable column whose being-populated they test. Keys are hardcoded,
+# so interpolating the column into `c.<col> IS NOT NULL` is injection-safe.
+_PRESENCE_COLUMNS = {"is_flip": "back_card_id", "has_errata": "errata_text"}
+
 # The broad bare-word match: a card whose name, id, current text (either face), or any printing's
 # own text contains the needle. Four %s placeholders take the same pattern. Used positively for a
 # bare word and, negated as a whole (De Morgan), to exclude one.
@@ -1128,6 +1132,11 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
         # matching everything or text-searching the value.
         logger.warning("Unknown search field(s), returning no results: %s", value)
         conditions.append("FALSE")
+    elif property_name in _PRESENCE_COLUMNS:
+        # Presence flag (is:flip → a front with a back face; is:errata → has errata text): the
+        # column is populated. The column name is a hardcoded table key, so interpolation is safe.
+        column = _PRESENCE_COLUMNS[property_name]
+        conditions.append(f"c.{column} IS NOT NULL" if value else f"c.{column} IS NULL")
     elif property_name in ("name_contains", "name_excludes"):
         # Name is identical across faces, so it stays single-column.
         op = "NOT ILIKE" if property_name.endswith("excludes") else "ILIKE"

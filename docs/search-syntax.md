@@ -52,6 +52,9 @@ keyword filters use AND — cards must have all of them:
 is:shugenja is:shadowlands
 ```
 
+Besides keywords and `is:unique`/`is:banned`, two card flags are searchable:
+`is:flip` (a double-faced flip stronghold) and `is:errata` (has errata text).
+
 ## Combining Terms
 
 Terms are ANDed by default. Use `OR` for alternatives, `(...)` to group, `-` to

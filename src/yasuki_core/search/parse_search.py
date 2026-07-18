@@ -75,6 +75,10 @@ FIELD_ALIASES = {
 # `is:` values that toggle a boolean card column rather than match a keyword/trait.
 IS_BOOLEAN_FIELDS = {"unique": "is_unique", "banned": "is_banned"}
 
+# `is:` values that test whether a nullable column is populated — `is:flip` (has a back face),
+# `is:errata` (has errata text). Maps the value to the filter key the database resolves.
+IS_PRESENCE_FIELDS = {"flip": "is_flip", "errata": "has_errata"}
+
 
 # Non-deck cards (proxies, tokens, bio cards, …) are hidden by default. `include:tokens` brings the
 # token/non-deck cards back; `include:all` shows everything.
@@ -369,6 +373,9 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                 elif keyword_value in IS_BOOLEAN_FIELDS:
                     # Boolean card flags (is:unique, is:banned) rather than keyword traits.
                     filter_options[IS_BOOLEAN_FIELDS[keyword_value]] = not term.negated
+                elif keyword_value in IS_PRESENCE_FIELDS:
+                    # Presence flags (is:flip, is:errata) — a nullable column being populated.
+                    filter_options[IS_PRESENCE_FIELDS[keyword_value]] = not term.negated
                 else:
                     # Single keyword (implicit AND when multiple is: terms)
                     if not term.negated:
