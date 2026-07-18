@@ -218,6 +218,19 @@ class TestSQLFiltering:
         assert len(cards) > 0
         assert all("Crane" in (c["clans"] or []) and "Personality" in c["types"] for c in cards)
 
+    def test_name_search_is_accent_insensitive(self):
+        """ASCII input finds accented titles (and vice versa) via the folded name column."""
+        ascii_hits = {
+            c["name"]
+            for c in query_cards_filtered(filter_options=build_search_filters("name:attache"))
+        }
+        accent_hits = {
+            c["name"]
+            for c in query_cards_filtered(filter_options=build_search_filters("name:Attaché"))
+        }
+        assert "Naga Attaché" in ascii_hits
+        assert ascii_hits == accent_hits
+
     def test_year_release_filter(self):
         """year: matches cards by release era; a wider inequality is a superset of a narrower one."""
         from_2010 = count_cards_filtered(

@@ -218,6 +218,7 @@ CREATE TABLE card_revisions (
 
 -- Fuzzy + full-text + sort on names and rules text.
 CREATE INDEX idx_cards_name_trgm        ON cards USING gin (name gin_trgm_ops);
+CREATE INDEX idx_cards_name_norm_trgm   ON cards USING gin (name_normalized gin_trgm_ops);
 CREATE INDEX idx_cards_rules_text_trgm  ON cards USING gin (rules_text gin_trgm_ops);
 CREATE INDEX idx_cards_rules_tsv        ON cards USING gin (rules_tsv);
 -- Partial: only the handful of printings that override their wording get indexed, so text search

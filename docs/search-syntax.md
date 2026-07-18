@@ -15,7 +15,7 @@ to filter cards in real time; click the **?** button next to the box for inline 
 
 | Field | Aliases | Example |
 |-------|---------|---------|
-| `name:` | — | `name:Hoturi` |
+| `name:` | — | `name:Hoturi` (accent-insensitive) |
 | `text:` | `o:` (oracle) | `o:battle` |
 | `type:` | `t:` | `t:personality` |
 | `clan:` | `c:` | `c:Crane` |

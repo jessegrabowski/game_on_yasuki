@@ -36,11 +36,14 @@ def test_rules_text_excludes_negates_card_and_per_print():
     assert params == ["%bow%", "%bow%"]
 
 
-def test_name_search_stays_single_column():
-    clause, params = _build_card_filter(filter_options={"name_contains": ["kachiko"]})
-    assert "c.name ILIKE" in clause
+def test_name_search_folds_accents_on_a_single_column():
+    # name: matches the accent-folded name_normalized so ASCII input finds accented titles.
+    clause, params = _build_card_filter(filter_options={"name_contains": ["Attaché"]})
+    assert "c.name_normalized ILIKE" in clause
     assert "prints" not in clause
-    assert params == ["%kachiko%"]
+    assert params == ["%attache%"]
+    excludes, _ = _build_card_filter(filter_options={"name_excludes": ["Attaché"]})
+    assert "c.name_normalized NOT ILIKE" in excludes
 
 
 def test_year_filter_extracts_release_year():

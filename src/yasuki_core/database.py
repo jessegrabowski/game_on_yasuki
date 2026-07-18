@@ -9,6 +9,7 @@ from psycopg_pool import ConnectionPool
 
 import logging
 
+from yasuki_core.install.utils import normalize_name
 from yasuki_core.search.parse_search import ParsedQuery, SearchTerm, build_filter_options
 from yasuki_core.search.boolean_query import (
     Node,
@@ -1138,11 +1139,12 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
         column = _PRESENCE_COLUMNS[property_name]
         conditions.append(f"c.{column} IS NOT NULL" if value else f"c.{column} IS NULL")
     elif property_name in ("name_contains", "name_excludes"):
-        # Name is identical across faces, so it stays single-column.
+        # Match the accent-folded name so ASCII input finds accented titles (Shime -> Shimé). Fold
+        # the needle with the same normalizer that built name_normalized. Name is face-independent.
         op = "NOT ILIKE" if property_name.endswith("excludes") else "ILIKE"
         for needle in value:
-            conditions.append(f"c.name {op} %s ESCAPE '\\'")
-            params.append(f"%{_escape_like(needle)}%")
+            conditions.append(f"c.name_normalized {op} %s ESCAPE '\\'")
+            params.append(f"%{_escape_like(normalize_name(needle))}%")
     elif property_name in ("name_exact", "name_exact_excludes"):
         # `!"phrase"` — the whole name equals the phrase (case-insensitive). All of a card's
         # experience versions share a name, so this isolates that card, not one printing.
