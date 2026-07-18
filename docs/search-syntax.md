@@ -40,6 +40,7 @@ Experienced 2 and up.
 | `>=` | Greater or equal | `force>=4` |
 | `<` | Less than | `chi<2` |
 | `<=` | Less or equal | `gold<=3` |
+| `N-M` | Inclusive range | `force:2-4` |
 
 ## Keyword Filters
 

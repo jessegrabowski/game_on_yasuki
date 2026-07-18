@@ -401,6 +401,23 @@ class TestFilterBuilding:
         _, inexperienced = parse_and_build_query("xp:-1")
         assert inexperienced["experience"] == (-1, -1)
 
+    def test_numeric_range_shorthand(self):
+        _, filters = parse_and_build_query("force:2-4")
+        assert filters["force"] == (2, 4)
+
+    def test_numeric_range_shorthand_tolerates_reversed_bounds(self):
+        _, filters = parse_and_build_query("force:4-2")
+        assert filters["force"] == (2, 4)
+
+    def test_open_ended_range_is_not_a_range(self):
+        # `force:2-` has no upper bound, so it is not a shorthand range and adds no filter.
+        _, filters = parse_and_build_query("force:2-")
+        assert "force" not in filters
+
+    def test_range_shorthand_composes_with_experience(self):
+        _, filters = parse_and_build_query("exp:0-2")
+        assert filters["experience"] == (0, 2)
+
     def test_is_banned(self):
         _, filters = parse_and_build_query("is:banned")
         assert filters["is_banned"] is True

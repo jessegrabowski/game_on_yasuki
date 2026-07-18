@@ -104,6 +104,10 @@ NUMERIC_FIELDS = {
     "experience",
 }
 
+# Shorthand for a closed numeric range, e.g. `force:2-4`. Non-negative bounds only, so it never
+# collides with a negative value like `exp:-1`; open-ended ranges use the >=/<= operators instead.
+_RANGE_SHORTHAND = re.compile(r"^(\d+)-(\d+)$")
+
 
 def normalize_field_name(field: str) -> str:
     """
@@ -451,6 +455,13 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                     continue
                 if term.negated:
                     continue
+
+                if term.operator in (":", "="):
+                    range_match = _RANGE_SHORTHAND.match(term.value.strip())
+                    if range_match:
+                        low, high = int(range_match.group(1)), int(range_match.group(2))
+                        field_min, field_max = min(low, high), max(low, high)
+                        continue
 
                 try:
                     value = int(term.value)
