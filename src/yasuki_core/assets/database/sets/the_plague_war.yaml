@@ -1206,8 +1206,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Gutobo • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
@@ -1215,6 +1213,7 @@ cards:
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: After Gutobo enters play, lose 4 Honor.<br><b>Battle:</b> If you have Reconnaissance, destroy
     a target enemy card without attachments.
   gold_cost: 5
@@ -1865,8 +1864,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Commander
@@ -1874,6 +1871,7 @@ cards:
   - Scout
   - Shugenja
   - Villain
+  - Unaligned
   gold_cost: 7
   force: 5
   chi: 4
@@ -2298,11 +2296,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: <b>Battle:</b> Move home a target enemy Personality with fewer cards in his unit than the number
     of different Clan Alignments among Personalities at the current battlefield.
   gold_cost: 6
@@ -3313,12 +3310,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Plague
   - Shadowlands
   - Undead
+  - Unaligned
   text: 'After The Cursed Dead enters play: Lose 4 Honor.<br>The Cursed Dead will not be destroyed for
     having 0 Chi.<br><b>Battle:</b> Target an enemy Follower or Personality: Give it -4F. If its Force
     is now 0, bow it.'
@@ -3381,12 +3377,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After The Quiet Death enters play: Lose 3 Honor.<br><b>Battle/Open:</b> Target another player''s
     Personality: Negate his movement <i>(this turn)</i>.'
   gold_cost: 3

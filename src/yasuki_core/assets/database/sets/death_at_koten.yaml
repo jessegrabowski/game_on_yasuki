@@ -1219,13 +1219,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Nosloc enters play, lose 4 Honor.
   gold_cost: 6
   force: 6
@@ -1418,14 +1417,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Imperial
   - Magistrate
   - Paragon
   - Samurai
+  - Unaligned
   text: '<b>Limited:</b> Target a dishonorable Personality: Bow him.'
   gold_cost: 6
   force: 4
@@ -1813,12 +1811,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Tsudo enters play: Lose 6 Honor.<br><b>Battle:</b> Target an enemy card: Destroy it. That
     card''s owner may target and destroy one of your cards at the current battlefield, other than this
     card.'

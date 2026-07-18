@@ -619,12 +619,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Plague
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Seki enters play: Lose 3 Honor.<br><b>Reaction:</b> After Seki enters play, target a Personality:
     Give him a -1C <b>Plague </b>token.'
   gold_cost: 3
@@ -836,11 +835,10 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Samurai
+  - Unaligned
   text: May not be included in decks.<br>This card has your Clan alignment keyword.
   gold_cost: 0
   force: 3
@@ -2269,12 +2267,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Fudo
   - Sensei
+  - Unaligned
   text: After Mukudori enters play, discard all your other Sensei Personalities.<br>Your other Fudo cards
     enter play for 1 less Gold.<br><b>Limited:</b> Bow three of your Fudo cards to draw a card.
   gold_cost: 7
@@ -2320,8 +2317,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Naka Mahatsu • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Mahatsu
   - Unique
@@ -2335,6 +2330,7 @@ cards:
   - Thunder
   - Void
   - Water
+  - Unaligned
   text: <b>Reaction:</b> If it is the Action Phase or Mahatsu is at the current battlefield, before an
     action with Thunder or an element keyword resolve, negate its effects.<br><b>Limited:</b> Search your
     Fate deck for a card with Thunder or an element keyword. Show it. Put it in your hand.
@@ -2518,13 +2514,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Imperial
   - Second City Governor
+  - Unaligned
   text: 'You may not assign, and will not move, Suikihime to battlefields. Suikihime will not become dishonorable.
     Other players'' Political actions may not target Suikihime.<br><b>Reaction:</b> Once per game, after
     Suikihime enters play, if no other player controls The Forgotten Temple: Suikihime grants you new
@@ -2780,13 +2775,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Emerald Magistrate
   - Imperial
   - Magistrate
   - Sensei
+  - Unaligned
   text: 'After Nagi enters play: Discard all your other Sensei Personalities.<br>Your other non-Loyal
     Magistrate Personalities in and out of play have your Clan alignment.'
   gold_cost: 5
@@ -3163,13 +3157,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ishiken
   - Ronin
   - Shugenja
   - Void
+  - Unaligned
   text: Tanemono will not be controlled by a Phoenix Clan player.<br><b>Battle/Open:</b> Switch Tanemono's
     Force and Chi.
   gold_cost: 6
@@ -3977,12 +3970,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: May not be included in decks.<br>This card has the title and base Gold Cost of the Personality
     who performed Akuma's Power's action.
   gold_cost: 0
@@ -4001,11 +3993,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Sensei
+  - Unaligned
   text: 'After Zansho enters play: Discard all your other Sensei Personalities.<br>Your Followers have
     +1F or a Force bonus equal to their Honor Requirement, whichever is greater.'
   gold_cost: 3

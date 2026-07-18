@@ -292,11 +292,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ashigaru
   - Commander
+  - Unaligned
   text: After Ashigaru Gunso enters play, if your Sensei is Hikahime, create a 0F/1C/0PH Ashigaru • Conscript
     Personality.<br><b>Battle:</b> Bow one or more of your target unbowed Ashigaru Conscripts. Ranged
     Attack equal to the number this bowed.
@@ -340,8 +339,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Banished • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Resilient
   - Experienced
@@ -349,6 +346,7 @@ cards:
   - Ronin
   - Shugenja
   - Void
+  - Unaligned
   text: After Banished enters play, lose 2 Honor. Will not join a Phoenix Clan player.<br><b>Void Battle:</b>
     Ranged 3 Attack. If this destroys a Phoenix Clan Personality, you may move Banished home.
   gold_cost: 7
@@ -1772,11 +1770,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ashigaru
   - Scout
+  - Unaligned
   text: After Kenturo enters play, if your Sensei is Hikahime, create a 0F/1C/0PH <b>Ashigaru • Conscript</b>
     Personality. <br><b>Battle:</b> Bow one or more of your target unbowed Ashigaru Conscripts. Give a
     target enemy Follower or Personality a Force penalty equal to the number this bowed.
@@ -2603,12 +2600,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Imperial
   - Magistrate
   - Shugenja
+  - Unaligned
   gold_cost: 5
   force: 3
   chi: 3
@@ -3540,11 +3536,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ashigaru
   - Spirit
+  - Unaligned
   text: <b>Battle:</b> Straighten one or two of your target Conscripts. <br><b>Battle:</b> Bow one or
     more of your target unbowed Ashigaru Conscripts. Fear equal to the number this bowed.
   gold_cost: 5

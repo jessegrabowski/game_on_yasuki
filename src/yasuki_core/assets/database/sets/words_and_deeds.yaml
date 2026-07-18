@@ -1566,11 +1566,11 @@ cards:
   - Dynasty
   clans:
   - Spirit
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Spirit
+  - Unaligned
   text: Inu cannot attach cards.<br><b>Reaction:</b> When an action would target one of your Personalities
     with 2 or higher Personal Honor at Inu's location, the action instead targets Inu, if legal.
   gold_cost: 7
@@ -1700,13 +1700,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Ronin
   - Shugenja
   - Water
+  - Unaligned
   text: <b>Water Battle, :bow::</b> Move your target Personality at any location to Jinako's battlefield.
   gold_cost: 6
   force: 3
@@ -2364,12 +2363,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Muduro enters play, lose 6 Honor.<br><b>Battle:</b> Bow your target performing Nonhuman
     Personality or Follower to straighten your target Nonhuman Personality or Follower.
   gold_cost: 6
@@ -2390,13 +2388,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: After Mukku enters play, lose 3 Honor.<br><b>Recon Open:</b> Target a Province. You have Reconnaissance
     at its battlefields. While Mukku is at that Province's battlefields, he has <b>Tactician </b>and you
     may not target him with, and he will not perform, your actions from Strategies.
@@ -2460,11 +2457,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
+  - Unaligned
   text: '<b>Reaction:</b> Before you lose Honor from an action that targeted or was performed by your
     Personality: Ouga commits seppuku. Reduce the Honor loss to 1.'
   gold_cost: 5
@@ -2503,8 +2499,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Pokku • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
@@ -2512,6 +2506,7 @@ cards:
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: 'After Pokku enters play: Lose 3 Honor. <br><b>Battle:</b> Target an enemy attachment: Transfer
     it to Pokku, ignoring restrictions on attaching. <br><b>Fear Battle:</b> Even if Pokku is bowed: Move
     him home.'
@@ -3581,11 +3576,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Hare
   keywords:
   - Hare Clan
   - Samurai
+  - Unaligned
   text: '<b>Battle:</b> If there are any enemy units at the current battlefield: Move Ukita there. If
     he moved, you may target a Hare Clan or Unaligned Personality and straighten it.'
   gold_cost: 6
@@ -3839,12 +3834,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
   - Yojimbo
+  - Unaligned
   text: '<b>Reaction:</b> After the resolution of an action that moved Zanaru to a battlefield, target
     a non-Samurai Personality at that battlefield: Straighten him.'
   gold_cost: 6

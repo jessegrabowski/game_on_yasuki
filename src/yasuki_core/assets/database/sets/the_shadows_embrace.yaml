@@ -154,11 +154,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Gaijin
   - Sensei
+  - Unaligned
   text: 'After Atosa enters play: Lose 2 Honor and discard all other Sensei Personalities you control.<br>Your
     Gaijin Personalities in and out of play <i>(including Atosa)</i> have your Clan alignment.'
   gold_cost: 6
@@ -504,14 +503,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Chuda Hitaka • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Hitaka
   - Unique
   - Corrupter
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Hitaka enters play: Lose 4 Honor.<br><b>Limited:</b> Target a non-Stronghold Jade card:
     Destroy it.<br><b>Limited:</b> Destroy Hitaka and target an Oni in your discard pile: Bring it into
     play, paying 9 less Gold.'
@@ -2013,12 +2011,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Niiro enters play, lose 3 Honor.<br>Will not attach cards.<br><b>Battle:</b> Melee 5 Attack.
     Give the target a -5F token (if he is still in play).
   gold_cost: 6
@@ -2284,14 +2281,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Jakla
   - Naga
   - Nonhuman
   - Pearl
   - Shugenja
+  - Unaligned
   text: Quelsa has +2F while he has a Spell.<br>Quelsa attaches Spells paying 2 less Gold.
   gold_cost: 7
   force: 6
@@ -2351,12 +2347,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Ronin
   - Samurai
+  - Unaligned
   gold_cost: 3
   force: 3
   chi: 2

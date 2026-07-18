@@ -692,11 +692,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Shadowlands
+  - Unaligned
   text: 'After Toru enters play: Lose 3 Honor.<br><b>Reaction:</b> After another player targets one of
     your cards with a Political action performed by a Personality: Toru duels that Personality. If that
     Personality loses the duel or is destroyed before the duel''s resolution, negate the Political action''s
@@ -1265,8 +1264,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -1274,6 +1271,7 @@ cards:
   - Onisu
   - Onisu of Betrayal
   - Shadowlands
+  - Unaligned
   text: After Fushin enters play, lose 5 Honor.<br>Political Strategy actions have the additional cost,
     "Bow your Personality."<br><b>Battle:</b> Take control of a target dishonorable Personality. After
     the turn ends, return control of him to his previous controller.
@@ -1367,11 +1365,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bushi
   - Shadowlands
+  - Unaligned
   text: After Arai enters play, lose 3 Honor.<br>While Arai is in an army, his Force equals the highest
     non-variable entering-play Honor loss among all cards in his army.
   gold_cost: 6
@@ -1846,12 +1843,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Kareido enters play, lose 6 Honor.<br>Will not join a player with 0 or higher Family Honor.
   gold_cost: 5
   force: 3
@@ -2184,8 +2180,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Naka Tokei • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2
   - Unique
@@ -2196,6 +2190,7 @@ cards:
   - Shugenja
   - Void
   - Water
+  - Unaligned
   text: Before bringing Tokei into play, you may ignore his Honor Requirement, permanently give him <b>Shadowlands</b>,
     and lose 5 Honor.<br><b>Elemental Limited:</b> Target a non-Stronghold card. Straighten it if Tokei
     does not have the Shadowlands keyword, or bow it if he does.
@@ -2336,11 +2331,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ratling
+  - Unaligned
   text: After Ratling Raider enters play, create two 2F/2C/2PH <b>Nonhuman • Ratling</b> Personalities
     <i>(at his location)</i>.
   gold_cost: 10

@@ -372,12 +372,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Suru enters play, lose 3 honor.<br>Spell and Kiho actions performed by Suru are Maho.<br><b>Repeatable
     Maho Limited, :bow::</b> Give a target Personality <b>Shadowlands</b>.
   gold_cost: 8
@@ -395,11 +394,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Entertainer
   - Kolat
+  - Unaligned
   text: All players have the ability, "<b>Open, :g5::</b> Take control of Kouta."<br><b>Repeatable Limited,
     :bow::</b> Bow or straighten a target Personality.
   gold_cost: 5
@@ -663,13 +661,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Sanzo • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
   - Experienced
   - Samurai
+  - Unaligned
   text: '<b>Reaction:</b> Any number of times per turn, before Sanzo is destroyed during a battle, if
     there are one or more Shadowlands cards in the enemy army: Move him home instead of destroying him;
     if he moved, bow him.'

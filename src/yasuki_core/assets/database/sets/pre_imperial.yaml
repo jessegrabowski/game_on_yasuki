@@ -602,12 +602,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: When the Goblin Warmonger would be destroyed, if he has any Goblin Followers, instead destroy
     all cards in this unit except the Goblin Warmonger and bow the Goblin Warmonger.
   gold_cost: 5
@@ -1221,12 +1220,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: Cannot attach Armor or Followers.
   gold_cost: 9
   force: 6
@@ -1625,12 +1623,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After The Monstrous War Machine enters play: Lose 5 Honor.<br>Will not attach Items.<br>Will
     not challenge or be challenged.<br>Monstrous War Machine has a maximum Force of 0 while it has no
     Followers.<br>After Monstrous War Machine bows: Destroys its Followers.<br>Monstrous War Machine''s
@@ -1707,13 +1704,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'Tsuburu has the additional cost, "Destroy one of your Personalities" to enter play.<br>After
     Tsuburu enters play: Lose 5 Honor.<br>Will not attach Followers or Armor.<br>After a Combat Segment
     ends, if Tsuburu is at the current battlefield and there are no defending units there: Give Tsuburu
@@ -1861,10 +1857,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shugenja
+  - Unaligned
   text: '<b>Battle:</b> Any number of times per turn, bow Seiki: Ranged Attack with strength equal to
     her Chi.'
   gold_cost: 4

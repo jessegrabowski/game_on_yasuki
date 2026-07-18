@@ -199,8 +199,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -208,6 +206,7 @@ cards:
   - Dragon
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not attach Followers or Items.<br>Air Dragon may not be targeted by Ranged Attack, Spell,
     or Kiho actions.
   gold_cost: 10
@@ -706,13 +705,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Ashura
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: After Ashura enters play, lose 5 Honor.<br>After Ashura is destroyed while at a battlefield, target
     and destroy a Follower, or Personality without Followers, at that battlefield.<br><b>Battle:</b> Fear
     4.
@@ -1244,13 +1242,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Ravager
   - Shadowlands
+  - Unaligned
   text: After Brukash enters play, lose 4 Honor.<br><b>Battle:</b> Destroy your target performing Goblin
     in Brukash's army to make a Fear with strength equal to the Goblin's Force, which affects Personalities
     as if they were Followers.
@@ -1434,12 +1431,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Mishime enters play: Lose 3 Honor.<br><b>Maho Battle/Open:</b> Target a Personality: Reduce
     his Chi to equal his base Chi.<br><b>Maho Limited:</b> Bow Mishime, and target and remove from the
     game a dead Personality in any discard pile who was most recently destroyed due to having 0 Chi: Lose
@@ -1934,8 +1930,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Daigotsu • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Experienced
@@ -1944,6 +1938,7 @@ cards:
   - Dark Lord
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: Will not be controlled by a non-Shadowlands Horde player.<br>After an action resolves, give the
     Shadowlands keyword to all Personalities who performed it.<br><b>Battle/Open:</b> Target and bow a
     Shadowlands card controlled by any player, which performs this action if it is yours and a Personality,
@@ -1965,12 +1960,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Shadowlands
   - Soul of Moto Tsume
+  - Unaligned
   text: After Koshiro enters play, lose 4 Honor.<br>Will not join a player with 1 or higher Family Honor.<br>After
     a Combat Segment begins, if Koshiro is in your current army, bow all other Personalities in Koshiro's
     army with 1 or higher Personal Honor.
@@ -2570,8 +2564,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -2579,6 +2571,7 @@ cards:
   - Earth
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not attach Followers or Items.<br><b>Battle:</b> Earth Dragon has +5F while defending.
   gold_cost: 10
   force: 7
@@ -3002,8 +2995,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -3011,6 +3002,7 @@ cards:
   - Fire
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not attach Followers or Items.<br><b>Fire Battle, :bow::</b> Two consecutive Ranged 5 Attacks.
     <br><b>Fire Battle, :bow::</b> Ranged 10 Attack.
   gold_cost: 12
@@ -3355,13 +3347,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Goblin Wizard enters play, lose 4 Honor.
   gold_cost: 2
   force: 0
@@ -5802,13 +5793,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bandit
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: After Moshangoru enters play, lose 2 Honor.<br>After Moshangoru is destroyed during a battle,
     give the enemy leader the ability, "<b>Reaction:</b> Once per game, when paying a Gold cost, produce
     5 Gold for only that cost" until his next turn ends.
@@ -6405,11 +6395,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Samurai
+  - Unaligned
   text: 'After Taneji enters play: Gain 1 Honor.'
   gold_cost: 3
   force: 0
@@ -6822,11 +6811,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ratling
+  - Unaligned
   text: After Ratling Raider enters play, create two 2F/2C/2PH <b>Nonhuman • Ratling</b> Personalities
     <i>(at his location)</i>.
   gold_cost: 10
@@ -7503,7 +7491,6 @@ cards:
   extended_title: Shadow Dragon • Experienced
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -7512,6 +7499,7 @@ cards:
   - Ninja
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'Shadow Dragon will not bow.<br>After your Straighten Phase ends, if Shadow Dragon is dead in
     your discard pile: You may bring it into play, paying all costs.<br><b>Battle:</b> Move Shadow Dragon
     home from the current battlefield and target a non-Unique Personality: Take control of him. After
@@ -7934,12 +7922,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Shio enters play: Lose 4 Honor.<br><b>Battle:</b> Target a Region attached to the current
     battlefield''s province: Destroy it. Give Shio a +1F token.'
   gold_cost: 8
@@ -8414,12 +8401,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Shukumei enters play: Lose 5 Honor and target a Personality <i>(Shukumei must target himself
     if there are no other Personalities in play)</i>. Permanently give the target -1F/-1C; this is a Maho
     effect.'
@@ -8540,12 +8526,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Skub enters play: Lose 4 Honor.'
   gold_cost: 6
   force: 5
@@ -9471,14 +9456,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Tactician
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After The Maw enters play: Lose 8 Honor.<br>Will not attach Items.<br><b>Tactical Battle:</b>
     Target an enemy unit: Move it home; if it moved, bow it.'
   gold_cost: 10
@@ -9662,8 +9646,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -9671,6 +9653,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Thunder
+  - Unaligned
   text: 'Will not attach Followers or Items.<br><b>Battle:</b> Once per battle, target an enemy Personality:
     Bow him.'
   gold_cost: 12
@@ -10737,8 +10720,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -10746,6 +10727,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Void
+  - Unaligned
   text: 'Will not attach Followers or Items. <br>Once per turn, after an attacking army including Void
     Dragon destroys a province during battle resolution: You may discard the Defender''s hand.'
   gold_cost: 14
@@ -10770,14 +10752,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Voitagi • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Samurai
   - Shadowlands
   - Undead
+  - Unaligned
   text: 'After Voitagi enters play: Lose 5 Honor.<br>Voitagi has +2F/+2C while opposed by a Samurai or
     facing one in a duel.<br><b>Fear Battle:</b> Fear 4.'
   gold_cost: 7
@@ -10899,8 +10880,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -10908,6 +10887,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Water
+  - Unaligned
   text: Will not attach Followers or Items.<br><b>Water Reaction:</b> After a turn begins, target a Shugenja
     and an ability on it that does not itself copy abilites. Water Dragon copies the ability.
   gold_cost: 10
@@ -11520,12 +11500,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Zeth enters play: Lose 3 Honor.<br><b>Reaction:</b> After Zeth enters play, pay 2 Gold:
     Create a 1F <b>Shadowlands • Nonhuman • Goblin</b> Follower and attach it to him.'
   gold_cost: 2

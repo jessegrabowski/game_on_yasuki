@@ -116,8 +116,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -125,6 +123,7 @@ cards:
   - Dragon
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not attach Followers or Items.<br>Air Dragon may not be targeted by Ranged Attack, Spell,
     or Kiho actions.
   gold_cost: 10
@@ -1391,12 +1390,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Tactician
   - Unique
+  - Unaligned
   text: Chiang-Tsu will not gain a Clan Alignment.<br><b>Repeatable Limited, :bow::</b> Once per game
     per Personality, bow your target performing Human Personality. If this bowed him, after the next time
     this game he straightens, permanently give him either <b>Double Chi</b> or <b>Tactician</b>. Chiang-Tsu
@@ -1465,13 +1463,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
   - Soul of Kitsu Gongson
+  - Unaligned
   text: After Masaru enters play, lose 3 Honor.
   gold_cost: 7
   force: 4
@@ -2426,8 +2423,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -2435,6 +2430,7 @@ cards:
   - Earth
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not attach Followers or Items.<br><b>Battle:</b> Earth Dragon has +5F while defending.
   gold_cost: 10
   force: 7
@@ -2906,8 +2902,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -2915,6 +2909,7 @@ cards:
   - Fire
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not attach Followers or Items.<br><b>Fire Battle, :bow::</b> Two consecutive Ranged 5 Attacks.
     <br><b>Fire Battle, :bow::</b> Ranged 10 Attack.
   gold_cost: 12
@@ -3159,13 +3154,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Fire
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Fushiki enters play, lose 4 Honor.<br><b>Fire Battle:</b> Destroy a target Fortification
     at this battlefield with Gold Cost lower than Fushiki's Force. Give Fushiki a +1F token.
   gold_cost: 8
@@ -3283,13 +3277,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Goblin Wizard enters play, lose 4 Honor.
   gold_cost: 2
   force: 0
@@ -4494,8 +4487,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Unique
@@ -4507,6 +4498,7 @@ cards:
   - Shadowlands
   - Shugenja
   - Tsuno
+  - Unaligned
   text: Will not join a non-Shadowlands Horde player.<br>May not be targeted by other players' Spell or
     Kiho actions.<br>After Iuchiban wins a duel, permanently give him +1F/+1C.<br><b>Maho Battle:</b>
     Iuchiban challenges a target enemy Personality. Destroy the loser.
@@ -4527,14 +4519,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Jama Suru • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Bloodspeaker
   - Experienced
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Suru enters play, lose 3 Honor.<br>Spell and Kiho actions performed by Suru are Maho.<br><b>Repeatable
     Tireless Reaction:</b> Before Suru bows for the cost of a Kiho action he is performing, destroy his
     target performing Human Follower: Straighten Suru.'
@@ -4891,12 +4882,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Ki-Rin
   - Nonhuman
+  - Unaligned
   text: While Ki-Rin is unbowed and honorable, Personalities with a Personal Honor of 0, 4, or 5 cannot
     assign or move into attacking armies at your Provinces' battlefields.
   gold_cost: 0
@@ -5103,13 +5093,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Monkey
   keywords:
   - Unique
   - Monkey Clan
   - Samurai
   - Soul of Toku
+  - Unaligned
   gold_cost: 0
   force: 0
   chi: 1
@@ -5127,14 +5117,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elemental Terror
   - Nonhuman
   - Oni
   - Shadowlands
   - Void
+  - Unaligned
   text: After Kukanchi enters play, lose 4 Honor.<br>Cannot attach Followers or Items.<br><b>Repeatable
     Battle/Open:</b> Discard a card to give Kukanchi +1F.<br><b>Repeatable Battle/Open:</b> Discard a
     card to give Kukanchi +1C.
@@ -5202,12 +5191,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Kyoso enters play, lose 3 Honor and destroy one of your Holdings.<br>Will not attach Followers
     or Items.<br><b>Battle, :bow::</b> Ranged 7 Attack.
   gold_cost: 7
@@ -5917,12 +5905,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Mohai enters play: Lose 4 Honor.<br><b>Maho Open:</b> Bow Mohai: Until Mohai straightens
     or leaves play, you may negate his straightening, and all Kiho Strategies in and out of play have
     +1 Gold Cost.'
@@ -6585,12 +6572,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: Cannot attach Armor or Followers.
   gold_cost: 9
   force: 6
@@ -7832,14 +7818,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Shadowlands
   - Shugenja
   - Soul of Kuni Yori Experienced 3
   - Undead
+  - Unaligned
   text: '<b>Maho Limited:</b> Any number of times per turn, bow Jin, discard a card, and target a dead
     Personality: If Jin''s Chi and the discard''s Focus Value are both greater than or equal to the Personality''s
     Chi, bring the Personality into play <i>(under your control)</i>, ignoring costs and restrictions.
@@ -9592,13 +9577,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Ronin
   - Samurai
   - Soul of Shotai
+  - Unaligned
   text: '<b>Battle:</b> Once per battle: Give The Mad Ronin a Force bonus equal to the number of units
     opposing him. After this battle ends, destroy The Mad Ronin.'
   gold_cost: 8
@@ -9790,8 +9774,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -9799,6 +9781,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Thunder
+  - Unaligned
   text: 'Will not attach Followers or Items.<br><b>Battle:</b> Once per battle, target an enemy Personality:
     Bow him.'
   gold_cost: 12
@@ -10401,11 +10384,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Soul of Ginawa
+  - Unaligned
   gold_cost: 4
   force: 2
   chi: 3
@@ -10624,8 +10606,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -10633,6 +10613,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Void
+  - Unaligned
   text: 'Will not attach Followers or Items. <br>Once per turn, after an attacking army including Void
     Dragon destroys a province during battle resolution: You may discard the Defender''s hand.'
   gold_cost: 14
@@ -10655,13 +10636,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Shadowlands
   - Soul of Uragirimono
   - Undead
+  - Unaligned
   text: After Voitagi enters play, lose 3 Honor.<br><b>Battle:</b> Fear 3 <i>(Bow a target enemy Follower
     or Personality without Followers with 3 or lower Force)</i>.
   gold_cost: 3
@@ -10781,8 +10761,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -10790,6 +10768,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Water
+  - Unaligned
   text: Will not attach Followers or Items.<br><b>Water Reaction:</b> After a turn begins, target a Shugenja
     and an ability on it that does not itself copy abilites. Water Dragon copies the ability.
   gold_cost: 10
@@ -11320,8 +11299,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Air
   - Elemental Terror
@@ -11329,6 +11306,7 @@ cards:
   - Oni
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Yosuchi enters play: Lose 4 Honor.<br>Will not attach Followers or Items.<br><b>Battle/Open:</b>
     Twice per turn: Give Yosuchi +1F or +1C.'
   gold_cost: 8

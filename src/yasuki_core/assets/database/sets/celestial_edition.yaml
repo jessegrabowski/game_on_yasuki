@@ -401,8 +401,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Akuma no Oni • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2 Oni no Akuma
   - Unique
@@ -410,6 +408,7 @@ cards:
   - Oni
   - Overlord
   - Shadowlands
+  - Unaligned
   text: After Akuma enters play, lose 15 Honor and destroy your rightmost Province.<br>During the Action
     Phase, Akuma will not bow and may not be targeted.<br>Once per game, after a battle's resolution in
     which an attacking army containing Akuma destroyed a Province, destroy another of the Defender's Provinces.
@@ -3064,13 +3063,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: After Gutobo enters play, lose 2 Honor. <br><b>Recon Open:</b> Target a Province. You have Reconnaissance
     at its battlefields. Before this turn ends, bring into play each dead Goblin Personality you own who
     was destroyed this turn during a Combat Segment whose battlefield was at that Province, ignoring Gold
@@ -3736,13 +3734,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Hero
   - Ronin
   - Samurai
+  - Unaligned
   text: Hisao will not gain Clan alignments.<br>Negate the bowing of Hisao and his Followers from cards'
     effects <i>(not costs)</i> while he is in an army.
   gold_cost: 7
@@ -4451,13 +4448,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Ronin
   - Shugenja
   - Water
+  - Unaligned
   text: <b>Water Battle, :bow::</b> Move your target Personality at any location to Jinako's battlefield.
   gold_cost: 6
   force: 3
@@ -4666,8 +4662,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Bushi
@@ -4675,6 +4669,7 @@ cards:
   - Ogre
   - Shadowlands
   - Yojimbo
+  - Unaligned
   text: After Kayomasa enters play, lose 4 Honor. <br>Enters play for 1 less Gold if you are a Spider
     Clan player. <br><b>Battle:</b> Move Kayomasa to a battlefield where you control an opposed Unique
     Personality. This ability has <b>Remote</b> if you move him to the current battlefield.
@@ -4900,13 +4895,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Kobushi enters play: Lose 4 Honor. <br><b>Battle:</b> Destroy your performing Goblin: Ranged
     5 Attack.'
   gold_cost: 5
@@ -4963,8 +4957,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Kensai
@@ -4972,6 +4964,7 @@ cards:
   - Hero
   - Ronin
   - Samurai
+  - Unaligned
   gold_cost: 7
   force: 4
   chi: 5
@@ -5784,8 +5777,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Omoni • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2
   - Unique
@@ -5793,6 +5784,7 @@ cards:
   - Nonhuman
   - Sculptor of Flesh
   - Shadowlands
+  - Unaligned
   text: 'After Omoni enters play: Lose 5 Honor. <br><b>Fear Battle:</b> Bow all Followers with 4 or lower
     Force in a target enemy unit. <br><b>Battle/Open:</b> Destroy one of your Goblin Personalities: Bring
     a target Goblin Personality from your discard pile into play at Omoni''s location, ignoring its Gold
@@ -5995,8 +5987,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Pokku • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
@@ -6004,6 +5994,7 @@ cards:
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: 'After Pokku enters play: Lose 3 Honor. <br><b>Battle:</b> Target an enemy attachment: Transfer
     it to Pokku, ignoring restrictions on attaching. <br><b>Fear Battle:</b> Even if Pokku is bowed: Move
     him home.'
@@ -6026,13 +6017,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: 'After Pokku enters play: Lose 3 Honor.'
   gold_cost: 4
   force: 4
@@ -6925,12 +6915,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Shikage enters play: Lose 5 Honor. <br><b>Battle:</b> Destroy your performing Personality
     and target an enemy unit with lower total Force than your Personality''s Force: Destroy it.'
   gold_cost: 10
@@ -6953,8 +6942,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Shikibu no Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Oni no Shikibu
   - Unique
@@ -6962,6 +6949,7 @@ cards:
   - Oni
   - Overlord
   - Shadowlands
+  - Unaligned
   text: 'After Shikibu enters play: Lose 8 Honor. <br>Before an action destroys Shikibu: Negate the destruction.
     If the destruction fails, choose one of your Personalities at Shikubu''s location; he is consumed
     by Jigoku. Remove the chosen Personality from the game.'
@@ -7062,12 +7050,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Shio enters play: Lose 4 Honor.<br><b>Battle:</b> Target a Region attached to the current
     battlefield''s province: Destroy it. Give Shio a +1F token.'
   gold_cost: 8
@@ -8429,14 +8416,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Naval
   - Nonhuman
   - Oni
   - Shadowlands
   - Water
+  - Unaligned
   text: 'After Umi-Bozu enters play: Lose 6 Honor.<br><b>Battle:</b> Target an enemy card without attachments:
     Bow it. If you control a Port, negate the enemy card''s straightening until its controller''s next
     Straighten Phase.'
@@ -9526,11 +9512,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Snow Maiden
+  - Unaligned
   text: Yukari has +2F/+1C if a Winter card is in play or in a discard pile. <br>Negate the movement to
     or from Yukari's battlefield of other players' units from the player's own actions, unless the player
     has a Winter or Snow Maiden card in play or in his discard piles.
@@ -9553,12 +9538,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
   - Yojimbo
+  - Unaligned
   text: '<b>Reaction:</b> After the resolution of an action that moved Zanaru to a battlefield, target
     a non-Samurai Personality at that battlefield: Straighten him.'
   gold_cost: 6

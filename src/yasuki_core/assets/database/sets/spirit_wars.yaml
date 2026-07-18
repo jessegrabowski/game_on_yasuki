@@ -1049,13 +1049,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Fire
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Fushiki enters play, lose 4 Honor.<br><b>Fire Battle:</b> Destroy a target Fortification
     at this battlefield with Gold Cost lower than Fushiki's Force. Give Fushiki a +1F token.
   gold_cost: 8
@@ -2059,11 +2058,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
+  - Unaligned
   text: <b>Favor Repeatable Limited, :bow::</b> Discard the Imperial Favor to gain 3 Honor.
   gold_cost: 4
   force: 0
@@ -2137,7 +2135,6 @@ cards:
   - Dynasty
   extended_title: Morito • Experienced 2
   clans:
-  - Unaligned
   - Ox
   keywords:
   - Cavalry
@@ -2146,6 +2143,7 @@ cards:
   - Daimyo
   - Ox Clan
   - Samurai
+  - Unaligned
   text: '<b>Reaction:</b> After Morito assigns, choose your performing Personality: Assign his unit to
     the same battlefield.'
   gold_cost: 10
@@ -2353,14 +2351,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - Nonhuman
   - Shadowlands
   - Undead
   - Zombie
+  - Unaligned
   text: After you Recruit Noekam, lose 5 Honor. Noekam's Undead Followers have +1F. <br><b>Battle:</b>
     Fear with strength equal to the number of Undead cards in this unit.
   gold_cost: 8
@@ -2468,11 +2465,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Politician
+  - Unaligned
   text: 'After Dsichi enters play: Gain a Province to the left of your leftmost province.<br>After Dsichi
     leaves play: Destroy your leftmost province.'
   gold_cost: 10
@@ -3413,11 +3409,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Sparrow
   keywords:
   - Bushi
   - Sparrow Clan
+  - Unaligned
   text: Roshi may attach items which will only attach to Ninja.
   gold_cost: 4
   force: 2
@@ -4119,13 +4115,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: '<b>Maho Reaction:</b> Any number of times per turn, after a Terrain enters play, if Wutho is
     at the current battlefield, bow your performing Goblin Shugenja there: Move Wutho home. Destroy the
     Terrain.'

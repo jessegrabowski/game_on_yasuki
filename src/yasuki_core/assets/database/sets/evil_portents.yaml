@@ -62,12 +62,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Akuma enters play, lose 4 Honor. Will not attach cards.<br><b>Battle:</b> Destroy a target
     enemy attachment with equal or lower Force.
   gold_cost: 7
@@ -1716,12 +1715,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Resilient
   - Ashigaru
   - Shugenja
+  - Unaligned
   text: <i>(Once per game per card, a Resilient card does not die in battle resolution.)</i><br>Keisho
     will not attach Spells with Focus Value greater than her Chi.
   gold_cost: 3
@@ -3286,14 +3284,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Tetsuo • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Conqueror
   - Experienced 2
   - Kensai
   - Unique
   - Monk
+  - Unaligned
   text: Will not join a Spider Clan player.<br><b>Battle, :bow::</b> Melee 4 Attack. You may bow Tetsuo's
     Polearm to straighten him.
   gold_cost: 10
@@ -3343,13 +3340,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Resilient
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After The Crimson Mountain Oni enters play, lose 7 Honor. Will not attach cards or issue challenges.<br><b>Interrupt:</b>
     Negate The Crimson Mountain Oni's movement from the action.<br><b>Battle:</b> Melee 6 Attack. If this
     destroys an attachment on a Crab Clan Personality, you may make a Melee 6 Attack.
@@ -3721,14 +3717,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Naval
   - Nonhuman
   - Oni
   - Shadowlands
   - Water
+  - Unaligned
   text: <i>(Once a turn, the Attacker gets the first Battle action, if it's from a Naval Personality's
     unit.)</i><br>After Umikaiju enters play, lose 2 Honor. Will not attach cards.<br><b>Battle, :bow::</b>
     Fear 5.

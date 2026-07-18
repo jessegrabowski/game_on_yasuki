@@ -262,12 +262,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: Before Baku enters play, permanently set its Force and Chi to equal half the number of cards in
     your hand, rounded down.<br>After Baku enters play, lose 4 Honor.
   gold_cost: 6
@@ -365,10 +364,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
+  - Unaligned
   text: '<b>Reaction:</b> Any number of times per turn, but only once per targeting, after a Kolat, Ninja,
     or Assassin action taken by a non-Scorpion Clan player targets any of your cards, bow Toru: Negate
     the action''s effects. Lose 2 Honor.'
@@ -986,12 +984,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Obsidian
   - Obsidian Champion
   - Shadowlands
+  - Unaligned
   text: After Kyoden enters play, lose 4 Honor.<br><b>Repeatable Limited, :bow::</b> Kyoden challenges
     a target non-Shadowlands Personality with higher Personal Honor. He may refuse; if he does, permanently
     give him -1C and -1PH. Destroy the loser.
@@ -1449,13 +1446,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Junnosuke • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Mirumoto Junnosuke
   - Unique
   - Ronin
   - Samurai
+  - Unaligned
   text: <b>Battle:</b> Once per battle, if Junnosuke's Personal Honor is 1 or higher, give +1F to each
     of his Followers and permanently give him -1PH.
   gold_cost: 9
@@ -1650,10 +1646,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shugenja
+  - Unaligned
   text: Will not attach Spells with an odd Focus Value.<br>May not perform Kiho actions with an even Focus
     Value.
   gold_cost: 6
@@ -1894,8 +1889,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Miya Gensaiken • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Pekkle no Oni
   - Unique
@@ -1903,6 +1896,7 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: '<b>Political Reaction:</b> Even if your Stronghold prevents you from taking this action, after
     you announce a Wind action, if you have not lobbied this turn, bow Gensaiken and destroy your performing
     Personality: Ignore restrictions on your Stronghold preventing you from taking the Wind''s action
@@ -2137,8 +2131,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -2147,6 +2139,7 @@ cards:
   - Onisu of Hatred
   - Shadowlands
   - Tsuno
+  - Unaligned
   text: After Nikushimi enters play, lose 5 Honor.<br>All Tsuno in Nikushimi's army <i>(including itself)</i>
     have +2F while attacking.<br><b>Reaction:</b> Before a Tactical action performed by a Personality
     opposing Nikushimi resolves, negate the action's effects.
@@ -2891,9 +2884,9 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Monk
+  - Unaligned
   text: '<b>Battle/Open:</b> Any number of times per turn, bow The Wandering Monk: Give control of him
     to the player to your left. Move him to that player''s home. Draw a card.'
   gold_cost: 6
@@ -2959,11 +2952,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bodyguard
   - Samurai
+  - Unaligned
   text: '<b>Reaction:</b> After a Personality challenges one of yours: Bow the challenger.'
   gold_cost: 6
   force: 2
@@ -3019,14 +3011,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Shadowlands
   - Shugenja
   - Tsuno
+  - Unaligned
   text: 'After Nintai enters play: Lose 4 Honor.<br>Nintai may not assign, and will not move, into a defending
     army.<br><b>Battle:</b> Any number of times per turn, bow Nintai and target an enemy Personality or
     Follower: Give it a Force penalty equal to the number of Tsuno in Nintai''s army.'

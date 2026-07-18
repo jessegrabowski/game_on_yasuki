@@ -624,12 +624,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Adoka enters play, lose 4 Honor.<br><b>Repeatable Battle:</b> Destroy a target enemy Ancestor
     opposing Adoka, ignoring restrictions upon targeting it. Give Adoka +2F/+2C until the battle ends.
   gold_cost: 8
@@ -771,11 +770,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Assassin
   - Ivory Kingdoms
+  - Unaligned
   text: Will not attach Followers.<br>May attach two Weapons.<br>Feydn may not be targeted by an action
     or effect from a card that will or might move him from a battlefield.
   gold_cost: 6
@@ -931,11 +929,11 @@ cards:
   - Dynasty
   clans:
   - Naga
-  - Unaligned
   keywords:
   - Naga
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: '<b>Battle:</b> Any number of times per turn, bow Ghedai and target your Personality at one of
     the Defender''s provinces'' battlefields: Move him to another of the Defender''s provinces'' battlefields.'
   gold_cost: 5
@@ -1330,8 +1328,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Isawa Tanayama • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2 Necromancer
   - Unique
@@ -1339,6 +1335,7 @@ cards:
   - Shadowlands
   - Shugenja
   - Undead
+  - Unaligned
   text: After Tanayama enters play, lose 4 Honor.<br><b>Battle:</b> Once per battle, discard a target
     face-up Human Personality in a Province. He becomes honorably dead. Give Tanayama +2F/+2C until this
     battle ends.
@@ -1637,14 +1634,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Kuni Yori • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Experienced 3
   - Unique
   - Shadowlands
   - Shugenja
   - Undead
+  - Unaligned
   text: <b>Maho Repeatable Limited, :bow::</b> Discard a card and target a dead Personality. If Yori's
     Chi and the discard's Focus Value are both greater than or equal to the Personality's Chi, Recruit
     the Personality <i>(under your control)</i>, ignoring costs and Honor Requirement. Permanently give
@@ -1901,8 +1897,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Moto Tsume • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2
   - Unique
@@ -1910,6 +1904,7 @@ cards:
   - Samurai
   - Shadowlands
   - Undead
+  - Unaligned
   text: After Tsume enters play, lose 6 Honor.<br>Will not enter play if your Family Honor is 1 or higher.<br>May
     not be assigned to the same battlefield as units with no Shadowlands cards and such units may not
     assign with Tsume.<br><b>Repeatable Battle/Open, :bow::</b> Straighten a target Shadowlands card<br><b>Battle:</b>
@@ -2131,12 +2126,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Okura enters play: Lose 4 Honor.<br>Will not attach Items or Followers.<br>Human Personalities
     with Chi lower than Okura''s may not assign, and will not move, to a battlefield opposing her.'
   gold_cost: 7
@@ -2238,13 +2232,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Mujina
   - Mujina Boss
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: After Porthungluin enters play, lose 1 Honor.<br><b>Reaction:</b> When paying for a Mujina card,
     discard a random card from your hand to reduce the cost of the Mujina card by the Focus Value of the
     discard until it is paid.
@@ -2326,11 +2319,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bandit
   - Leader
+  - Unaligned
   text: Rodrigo has +2F/+1C while attacking for each Merchant Caravan controlled by the Defender.
   gold_cost: 3
   force: 1
@@ -3310,12 +3302,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Shadowlands
   - Undead
+  - Unaligned
   text: 'After Uragirimono enters play: Lose 3 Honor.<br><b>Fear Battle:</b> Fear 3.'
   gold_cost: 3
   force: 3

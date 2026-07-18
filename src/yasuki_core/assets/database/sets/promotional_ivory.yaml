@@ -806,14 +806,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Kensai
   - Ronin
   - Samurai
   - Yojimbo
+  - Unaligned
   text: <i><i>(Duelists win tied duels versus non-Duelists. Kensai may attach two Weapons, as long as
     neither is Two-Handed.)</i></i>
   gold_cost: 4
@@ -909,12 +908,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Fire
   - Samurai
+  - Unaligned
   text: <b>Fire Iaijutsu Battle, :bow::</b> Melee 2 Attack.
   gold_cost: 6
   force: 3

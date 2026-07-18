@@ -652,12 +652,12 @@ cards:
   - Dynasty
   clans:
   - Ratling
-  - Unaligned
   keywords:
   - Nonhuman
   - One Tribe
   - Ratling
   - Scavenger
+  - Unaligned
   text: Br'nn has +1F for each attachment in other players' discard piles.
   gold_cost: 3
   force: 2
@@ -1283,12 +1283,12 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Unique
   - Hero
   - Monk
   - Paragon
+  - Unaligned
   text: Your Personalities without printed abilities enter play for 2 less Gold. <br><b>Reaction:</b>
     Before an action destroys Furumaro, negate his destruction.<br><b>Battle:</b> Bow a target enemy card.
     Destroy it if it is Shadowlands.
@@ -2429,12 +2429,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: After Naggru enters play, lose 3 Honor.<br><b>Battle:</b> Give Naggru +3F. Destroy him after this
     battle's resolution ends.
   gold_cost: 3
@@ -2919,8 +2918,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Seppun Tashime • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
@@ -2928,6 +2925,7 @@ cards:
   - Magistrate
   - Paragon
   - Samurai
+  - Unaligned
   text: '<b>Battle:</b> Target an enemy unit: Bow it.'
   gold_cost: 8
   force: 5
@@ -3419,8 +3417,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Tamago • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Experienced 2 Matsu Nimuro
@@ -3428,6 +3424,7 @@ cards:
   - Unique
   - Ronin
   - Samurai
+  - Unaligned
   text: 'Your other Unaligned non-Shadowlands Personalities have +1F and <b>Tactician</b>.<br><b>Iaijutsu
     Battle:</b> Target a non-Unique Personality: Destroy him.'
   gold_cost: 13
@@ -3873,12 +3870,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Utogu enters play: Lose 5 Honor.<br><b>Battle:</b> Target an enemy Follower or an enemy
     Personality with equal or lower Gold Cost and no Followers: Destroy it.'
   gold_cost: 7

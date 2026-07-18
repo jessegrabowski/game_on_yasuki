@@ -504,14 +504,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Singular
   - Hero
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Chimamire enters play: Lose 4 Honor.<br><b>Reaction:</b> After Chimamire is destroyed,
     if your Stronghold is The Spawning Ground, target zero to two Personalities: Give them each a -1C
     token.'
@@ -532,12 +531,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Mishime enters play: Lose 3 Honor.<br><b>Maho Battle/Open:</b> Target a Personality: Reduce
     his Chi to equal his base Chi.<br><b>Maho Limited:</b> Bow Mishime, and target and remove from the
     game a dead Personality in any discard pile who was most recently destroyed due to having 0 Chi: Lose
@@ -972,13 +970,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Bushi
   - General
   - Shadowlands
+  - Unaligned
   text: 'Will only join a Shadowlands Horde player.<br>After your Straighten Phase ends, if Horii is bowed:
     Destroy him.<br><b>Reaction:</b> After Horii enters play from your provinces, bow him: Bow all Strongholds.
     While Horii remains bowed and in play, they will not straighten.'
@@ -1712,10 +1709,10 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Singular
   - Monk
+  - Unaligned
   text: Many-Temple Master may overlay any non-Experienced Personality with your Clan Alignment.<br>After
     Many-Temple Master overlays a non-Experienced Personality with your Clan Alignment, permanently give
     him <b>Experienced</b>.
@@ -1757,8 +1754,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Megumi • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Experienced Daidoji Megumi
@@ -1766,6 +1761,7 @@ cards:
   - Bushi
   - Lost
   - Shadowlands
+  - Unaligned
   text: After Megumi enters play, lose 2 Honor.<br><b>Battle:</b> Fear 3.<br><b>Reaction:</b> Before one
     of your other Shadowlands Personalities enters a duel, Megumi enters the duel instead.
   gold_cost: 7
@@ -2003,13 +1999,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Devourer of Fortunes
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Musaboru enters play, lose 3 Honor.<br>Musaboru has +1F/+2C while your Stronghold is unbowed.<br>Musaboru
     has +2F/+1C while attacking while the Defender's Stronghold is unbowed.
   gold_cost: 8

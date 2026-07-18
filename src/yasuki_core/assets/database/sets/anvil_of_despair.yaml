@@ -1032,11 +1032,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Information Peddler
   - Kolat
+  - Unaligned
   text: <b>Repeatable Limited, :bow:, :g4::</b> Put a card from your hand at the bottom of your Fate deck.
     Draw a card.
   gold_cost: 5
@@ -1246,10 +1245,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ancient Librarian
+  - Unaligned
   text: 'May not perform Feign Death.<br><b>Limited:</b> Any number of times per turn, bow Kyoji and pay
     5 Gold: Draw a card. <br><b>Limited:</b> Any number of times per turn, bow and destroy Kyoji: Draw
     5 cards.'
@@ -1320,13 +1318,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Iru enters play, lose 5 honor.<br>Will not attach Items or Followers.<br><b>Repeatable Reaction:</b>
     Even if you were eliminated from the game, after a Resolution Segment ends during which Iru was destroyed
     while in a defending army and its battlefield's Province was also destroyed, destroy one of the Attacker's
@@ -1346,13 +1343,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Enforcer
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: After Kyojin enters play, lose 4 Honor.<br>After Yogo Junzo is challenged, if Kyojin is bowed,
     dishonor him.<br>After Yogo Junzo is destroyed, destroy Kyojin.<br><b>Repeatable Reaction, :bow::</b>
     Before Yogo Junzo enters a duel, Kyojin enters the duel instead.
@@ -1439,10 +1435,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Hunter of Nagas
+  - Unaligned
   text: Will not join a Naga player or attach Naga Followers.<br>Mikaru has +2F while opposing a Naga
     and has +3C while facing a Naga in a duel.
   gold_cost: 6
@@ -2315,11 +2310,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Venerable Storyteller
+  - Unaligned
   text: '<b>Limited:</b> Bow Mukashino and target a Human Personality with 3 or higher Personal Honor:
     Bow him. The target''s controller gains 1 Honor. Until Mukashino straightens or leaves play, you may
     negate his straightening and the target''s controller may negate the target''s straightening. The
@@ -2907,13 +2901,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - General
   - Nonhuman
   - Shadowlands
   - Undead
+  - Unaligned
   text: 'After Tsukuro enters play: Lose 5 Honor.<br>Shadowlands Followers in Tsukuro''s army have +1F.'
   gold_cost: 10
   force: 5

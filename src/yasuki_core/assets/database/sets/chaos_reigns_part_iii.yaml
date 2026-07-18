@@ -120,8 +120,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - Gaijin
@@ -129,6 +127,7 @@ cards:
   - Yodotai
   - Conqueror
   - Unique
+  - Unaligned
   text: Political actions cannot target Aulus.<br><b>Dynasty:</b> Create a 1F Gaijin • Yodotai Follower
     and attach it to Aulus.
   gold_cost: 8
@@ -367,8 +366,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Celestial Dragon, Guardian of Tengoku • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Dragon
   - Nonhuman
@@ -378,6 +375,7 @@ cards:
   - Unique
   - Air
   - Void
+  - Unaligned
   text: 'Will not join a player with a Wind. Cannot attach Followers or Items, or be dishonored.<br><b>Response,
     :X::</b> If the action Recruited Celestial Dragon, Recruit a target non-:shadowlands: Human Personality
     in your discard pile, paying :g6: less. Permanently give them Fortune • Nonhuman.'
@@ -928,8 +926,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Hantei XL, The Glorious Emperor • Experienced 6
-  clans:
-  - Unaligned
   keywords:
   - Imperial
   - Monk
@@ -938,6 +934,7 @@ cards:
   - Experienced 6 Daigotsu Kanpeki
   - Unique
   - Shadowlands
+  - Unaligned
   text: Hantei will not gain Clan Alignments and will only join a player whose Wind is the Kanpeki Dynasty.
     May Equip The Ancestral Sword of Hantei ignoring cost.<br><b>Political Battle:</b> Destroy a target
     enemy Personality with lower total unit cost.
@@ -1291,8 +1288,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Assassin
   - Gaijin
@@ -1300,6 +1295,7 @@ cards:
   - Spy
   - Duelist
   - Unique
+  - Unaligned
   text: While she is in a duel, after each time the other player focuses, give Iseret's opponent -1C.<br>Other
     players have -1 maximum hand size.
   gold_cost: 4
@@ -1320,14 +1316,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Gaijin
   - Death Priest
   - Shugenja
   - Cavalry
   - Earth
+  - Unaligned
   text: Once per turn, you may ignore banishing a dead Personality for your effects that require it. After
     a Personality receives a -1F token, give Jagadis +2F.
   gold_cost: 4
@@ -1495,13 +1490,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shugenja
   - Shadowlands
+  - Unaligned
   text: After Kayo no Oni enters play, lose 4 Honor.<br><b>Response:</b> If the action destroyed your
     Personality, bow a target Personality with less Chi than Kayo's Force.
   gold_cost: 6
@@ -1871,8 +1865,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Mirumoto Shikei • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Monk
   - Naga
@@ -1883,6 +1875,7 @@ cards:
   - Kensai
   - Unique
   - Water
+  - Unaligned
   text: 'Shikei will not gain Clan Alignments or join a player with a Wind. After your turn begins, search
     your Fate deck or discard pile for a non-:shadowlands: Ring. Show it and put it in your hand, face-up.
     Discard it at the end of the turn if it is not in play.'
@@ -2201,11 +2194,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
+  - Unaligned
   text: 'Jotaro has <b>Expendable</b> if your Sensei is The Black Court.<br>Yu: Permanently increase an
     Honor gain or loss on a card''s printed ability by 1.'
   gold_cost: 4
@@ -2226,8 +2218,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Renyu, Apocalypse • Experienced 5
-  clans:
-  - Unaligned
   keywords:
   - Insane
   - Shugenja
@@ -2236,6 +2226,7 @@ cards:
   - Unique
   - Earth
   - Jade
+  - Unaligned
   text: 'Will not join a Spider Clan player. Renyu''s ability may not be copied.<br><b>Unstoppable Battle:</b>
     If it is outnumbered, banish Renyu''s army to banish all :shadowlands: cards at this battlefield,
     make a :melee: 8, and give all Personalities at this battlefield two -1F tokens. If the Defender has
@@ -2915,13 +2906,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Monkey
   keywords:
   - Miko
   - Monkey Clan
   - Destined
   - Unique
+  - Unaligned
   text: 'Will not join a player with a Wind or any printed :shadowlands: cards.<br><b>Open, :bow:: </b>
     Target your unbowed Temple Holding to gain 2 Honor.'
   gold_cost: 4
@@ -3094,8 +3085,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Gaijin
@@ -3103,6 +3092,7 @@ cards:
   - Kshatriya
   - Merchant
   - Unique
+  - Unaligned
   text: <b>Economic Dynasty, :bow::</b> A target dishonorable Personality's controller loses 2 Honor,
     or 3 Honor if they have any Wealth tokens. They may destroy one of their Wealth tokens.
   gold_cost: 6
@@ -3125,7 +3115,6 @@ cards:
   - Dynasty
   extended_title: Waietto, Tanuki Clan Champion • Experienced
   clans:
-  - Unaligned
   - Tanuki
   keywords:
   - Samurai
@@ -3134,6 +3123,7 @@ cards:
   - Duelist
   - Experienced Bayushi Waietto
   - Unique
+  - Unaligned
   text: Will only join a player with Dangai Sensei. After another player declares an attack against you,
     target one of their Provinces and reduce its strength to 0 until the end of your next turn.<br><b>Open:</b>
     Create a 2F/2C/2PH Tanuki Clan • Samurai Personality in your home with a Clan Alignment of your choice.

@@ -1113,13 +1113,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Goblin Shaman enters play, lose 2 Honor.<br><b>Battle/Open, :bow::</b> Discard a card. Target
     a number of Goblin cards equal to the Focus Value of the discard. Give them <b>Cavalry</b> until the
     turn ends.
@@ -1557,13 +1556,13 @@ cards:
   - Dynasty
   clans:
   - Spirit
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Shadowlands
   - Spider
   - Spirit
+  - Unaligned
   text: After Kumo enters play, lose 3 Honor.<br><b>Battle:</b> Once per battle, bow a target enemy Personality
     or Follower with 1 or lower Force.
   gold_cost: 7
@@ -1810,12 +1809,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: After Mountain Goblin is destroyed during a battle or duel, bring him into play ignoring costs
     before your next turn ends.
   gold_cost: 6
@@ -1891,13 +1889,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Kamu enters play: Lose 6 Honor and bow your Stronghold. It will not straighten or produce
     effects while Kamu remains in play, and after your End Phase three turns from now begins, destroy
     Kamu.'
@@ -1919,12 +1916,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Ogon enters play: Lose 5 Honor.<br>Will not attach Items.<br><b>Battle/Open:</b> Any number
     of times per turn, pay 3 Gold: Give Ogon +1F.<br><b>Battle/Open:</b> Any number of times per turn,
     bow Ogon and target another player: He must pay an amount of Gold equal to Ogon''s Force, or bow all
@@ -1943,12 +1939,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: Recruiting Sanru has the additional cost, "Destroy 4 tokens or created attachments on cards you
     control".<br>After Sanru enters play, lose 4 Honor. <br>Sanru has +1F for each token and created attachment
     in the army opposing it.
@@ -2043,13 +2038,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Pennaggolan
   - Shadowlands
+  - Unaligned
   text: '<b>Limited:</b> Bow Pennaggolan and target a Small Farm: Destroy it. Give Pennaggolan a +1F/+1C
     token.<br><b>Fear Battle:</b> Fear 3'
   gold_cost: 7
@@ -2866,13 +2860,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Ashigaru
   - Ronin
   - Samurai
+  - Unaligned
   text: 'The Hooded Ronin enters play bowed.<br><b>Repeatable Limited, :bow::</b> Target a Samurai or
     Shadowlands Personality: The Hooded Ronin challenges the target. A Shadowlands target may not refuse,
     but a non-Shadowlands Samurai may. If he did, dishonor him. The winner''s controller gains 4 Honor.
@@ -3034,8 +3027,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -3043,6 +3034,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Thunder
+  - Unaligned
   text: 'Will not attach Followers or Items.<br><b>Battle:</b> Once per battle, target an enemy Personality:
     Bow him.'
   gold_cost: 12
@@ -3307,11 +3299,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Snow Maiden
+  - Unaligned
   text: 'Yuki has +1F/+1C for each Forest in play.<br><b>Limited:</b> Any number of times per turn, bow
     Yuki and target a Shadowlands Personality: Yuki challenges him. He may refuse if his controller controls
     any Forests. Destroy the duel''s loser.'

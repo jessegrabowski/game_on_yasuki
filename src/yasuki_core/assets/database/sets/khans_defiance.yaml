@@ -84,12 +84,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Aka-Name
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: After Aka-Name enters play, lose 4 Honor.<br><b>Battle:</b> Give a target enemy Human Personality
     a -1F/-1C <b>Poison </b>token. Give each Shadowlands Human Personality in the target's army an additional
     -1F/-1C<b> Poison</b> token.
@@ -500,13 +499,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bushi
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: After Chutoburo enters play, lose 4 Honor.<br><b>Battle:</b> Target a Personality whose unit's
     total Gold Cost is lower than Chutoburo's Force. Destroy the unit.
   gold_cost: 9
@@ -1000,13 +998,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: After Gutobo enters play, lose 2 Honor. <br><b>Recon Open:</b> Target a Province. You have Reconnaissance
     at its battlefields. Before this turn ends, bring into play each dead Goblin Personality you own who
     was destroyed this turn during a Combat Segment whose battlefield was at that Province, ignoring Gold
@@ -1554,12 +1551,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Fox
   keywords:
   - Courtier
   - Fox Clan
   - Librarian
+  - Unaligned
   text: <b>Reaction, :bow::</b> After your Political action resolves, look at the top card of your Fate
     deck. You may put it on the bottom of your deck.
   gold_cost: 4
@@ -1848,8 +1845,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Nairu no Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -1857,6 +1852,7 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Naiu enters play, lose 4 Honor.<br><b>Absent Battle:</b> Move Nairu to the current battlefield
     or to your home. If it is now opposed, you may target one of your Oni Personalities at any location
     and move it to Nairu's location.
@@ -2257,11 +2253,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ashigaru
   - Budoka
+  - Unaligned
   text: You may have up to 6 copies of Sachika in your deck. <br>Sachika has a Force bonus equal to the
     number of Ashigaru in her army.
   gold_cost: 1
@@ -3353,14 +3348,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Naval
   - Nonhuman
   - Oni
   - Shadowlands
   - Water
+  - Unaligned
   text: 'After Umi-Bozu enters play: Lose 6 Honor.<br><b>Battle:</b> Target an enemy card without attachments:
     Bow it. If you control a Port, negate the enemy card''s straightening until its controller''s next
     Straighten Phase.'
@@ -3747,11 +3741,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Snow Maiden
+  - Unaligned
   text: Yukari has +2F/+1C if a Winter card is in play or in a discard pile. <br>Negate the movement to
     or from Yukari's battlefield of other players' units from the player's own actions, unless the player
     has a Winter or Snow Maiden card in play or in his discard piles.

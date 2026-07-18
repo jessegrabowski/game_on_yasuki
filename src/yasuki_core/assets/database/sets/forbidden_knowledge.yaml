@@ -44,10 +44,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
+  - Unaligned
   text: <b>Repeatable Battle/Open, :bow::</b> Straighten a target Bayushi Kachiko, which will not be negated
     by her controller.
   gold_cost: 5
@@ -302,12 +301,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bog Hag
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: After Bog Hag enters play, lose 4 Honor.<br>After Bog Hag wins a duel, she permanently copies
     one of the losing Personality's printed abilities that does not itself copy abilities.
   gold_cost: 9
@@ -492,11 +490,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: After this card enters play, lose 4 Honor.<br>After a Personality or Follower opposing the Dark
     Daughter is destroyed, give her a +1F/+1C <b>Blood</b> token.<br>After your End Phase begins, remove
     one Blood token from the Dark Daughter.<br><b>Battle:</b> Fear 3
@@ -748,10 +745,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shugenja
+  - Unaligned
   text: After Fusaki enters play, you may Equip a Spell to him from your hand, ignoring Gold cost.
   gold_cost: 8
   force: 0
@@ -1201,11 +1197,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Kolat
+  - Unaligned
   text: <b>Kolat Repeatable Limited,:bow::</b> Discard a card to target a dishonorable Human Personality.
     His controller discards the top card of his Fate deck. If the Focus Value is less than the target's
     printed Personal Honor, he commits seppuku.
@@ -1262,13 +1257,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Kuni Yori • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: '<b>Limited:</b> Any number of times per turn, bow Yori, discard a card in one of your provinces,
     and target a card in a province: Discard it.'
   gold_cost: 8
@@ -1598,13 +1592,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elemental Terror
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Akeru enters into play: Lose 4 Honor.<br>Will not attach Items or Followers.<br><b>Elemental
     Reaction:</b> Any number of times per turn, after a Shugenja whose controller does not control Ring
     of the Void bows as a cost of a Spell, Kiho, or Shugenja action, bow Akeru: Give that Shugenja a -2C
@@ -1623,13 +1616,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elemental Terror
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Jimen enters play: Lose 4 Honor.<br>Will not attach Items or Followers.<br><b>Elemental
     Battle/Open:</b> Bow Jimen and target a Region controlled by a player who does not control the Ring
     of Earth: Destroy it.'
@@ -1647,13 +1639,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elemental Terror
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Kaze enters play: Lose 6 Honor.<br>Will not attach Items or Followers.<br><b>Elemental
     Limited:</b> Any number of times per turn, bow Kaze and target a Spell controlled by a player who
     does not control the Ring of Air: Destroy it.'
@@ -1671,13 +1662,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elemental Terror
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Mizu enters play: Lose 4 Honor.<br>Will not attach Items or Followers.<br><b>Elemental
     Battle:</b> Any number of times per turn, if Mizu is not opposed by any units controlled by a player
     who controls the Ring of Water, bow it and target an unresolved battlefield: Move all units at the
@@ -1697,12 +1687,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Seiryoku enters play: Lose 5 Honor.<br>Will not attach Items or Followers.<br><b>Reaction:</b>
     After another player''s Spell or Shugenja action resolves, if it targeted you or your cards during
     the Action Phase or was performed by a Shugenja opposing Seiryoku during a battle: Give Seiryoku a
@@ -1721,13 +1710,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elemental Terror
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Taki-Bi enters play: Lose 4 Honor.<br>Will not attach Items or Followers.<br><b>Elemental
     Battle:</b> Bow Taki-Bi and target Followers with total Force lower than Taki-Bi''s Chi in a target
     enemy unit controlled by a player who does not control the Ring of Fire: Destroy those Followers.'
@@ -2931,8 +2919,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Yogo Junzo • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
@@ -2940,6 +2926,7 @@ cards:
   - Shadowlands
   - Shugenja
   - Undead
+  - Unaligned
   text: After Junzo enters play, lose 6 Honor<br>When paying for a Black Scroll Equipping to Junzo, reduce
     its cost to 0 until it is paid.<br>Negate the effects upon Junzo from Corruption tokens.<br><b>Battle:</b>
     Twice per turn, Fear 5.

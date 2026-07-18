@@ -241,8 +241,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Daigotsu • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Experienced
@@ -251,6 +249,7 @@ cards:
   - Dark Lord
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: Will not be controlled by a non-Shadowlands Horde player.<br>After an action resolves, give the
     Shadowlands keyword to all Personalities who performed it.<br><b>Battle/Open:</b> Target and bow a
     Shadowlands card controlled by any player, which performs this action if it is yours and a Personality,
@@ -999,12 +998,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Hero
   - Samurai
+  - Unaligned
   text: 'After Osami enters play: Gain 2 Honor.<br>After Osami is destroyed by another player''s action:
     That player loses 7 Honor.'
   gold_cost: 6
@@ -1097,13 +1095,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Hero
   - Samurai
   - Yojimbo
+  - Unaligned
   text: '<b>Reaction:</b> After another player''s action targets a Personality you control: The action
     targets Satoru instead, if legal.'
   gold_cost: 6
@@ -1172,9 +1169,9 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Monk
+  - Unaligned
   text: 'Before Shiga is destroyed: You may permanently give him -1F/-1C; if you did, negate his destruction.'
   gold_cost: 6
   force: 4
@@ -1507,8 +1504,6 @@ cards:
   decks:
   - Dynasty
   extended_title: The Mystic • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Isawa Sezaru
   - Unique
@@ -1516,6 +1511,7 @@ cards:
   - Ronin
   - Shugenja
   - Void
+  - Unaligned
   text: 'Targeting the Mystic has the additional cost, "Pay 10 Gold or discard a Spell or Kiho Strategy"
     for other players.<br><b>Battle:</b> If there are enemy units at the current battlefield, bow a Ring
     you control and target your discarded Personality: Bring him into play in your current army, ignoring
@@ -1557,8 +1553,6 @@ cards:
   decks:
   - Dynasty
   extended_title: The Ronin • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Experienced Kaneka
@@ -1567,6 +1561,7 @@ cards:
   - Ronin
   - Samurai
   - Shogun
+  - Unaligned
   text: 'Targeting the Ronin has the additional cost, "Pay 10 Gold or discard a Battle Strategy" for other
     players.<br><b>Battle:</b> Bow any number of Rings you control: Give each Personality in the current
     enemy army -2F for each Ring you bowed.'
@@ -1607,14 +1602,13 @@ cards:
   decks:
   - Dynasty
   extended_title: The Wanderer • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Emperor Toturi III
   - Unique
   - Courtier
   - Ronin
   - Samurai
+  - Unaligned
   text: 'Targeting the Wanderer has the additional cost, "Pay 10 Gold or discard a Political Strategy"
     for other players.<br><b>Political Battle:</b> Bow one or more Rings you control and choose your performing
     opposed Personality: For each Ring you bowed, gain 4 Honor and give your chosen performer +4F.'
@@ -1720,13 +1714,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Oriole
   keywords:
   - Unique
   - Artisan
   - Daimyo
   - Oriole Clan
+  - Unaligned
   text: Weapons in this army have +2F.<br>Dragon Clan personalities in this army with Weapons attached
     have <b>Duelist</b>.
   gold_cost: 4
@@ -1748,10 +1742,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ashigaru
+  - Unaligned
   text: After Tsukotu enters play, lose 1 Honor.<br><b>Battle:</b> Destroy Tsukotu to bow a target enemy
     Samurai with no attachments.
   gold_cost: 2
@@ -1773,7 +1766,6 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Hare
   keywords:
   - Cavalry
@@ -1782,6 +1774,7 @@ cards:
   - Hare Clan
   - Samurai
   - Scout
+  - Unaligned
   text: '<b>Reaction:</b> After a Recon action resolves: Give Kadano +1F. Draw a card.'
   gold_cost: 3
   force: 2

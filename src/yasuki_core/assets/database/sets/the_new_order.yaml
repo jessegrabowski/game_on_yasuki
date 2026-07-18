@@ -178,14 +178,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Resilient
   - Ishiken
   - Ronin
   - Shugenja
   - Void
+  - Unaligned
   text: <i>(Once per game per card, a Resilient card does not die in battle resolution. Shugenja may attach
     and cast Spells.)</i> <br>Will not gain the "Phoenix Clan" Clan Alignment.
   gold_cost: 5
@@ -395,8 +394,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Br'nn • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced
   - Nonhuman
@@ -404,6 +401,7 @@ cards:
   - Ratling
   - Scavenger
   - Scout
+  - Unaligned
   text: Br'nn has +1F while he has an attachment. Br'nn has +1F while an attachment is in another player's
     discard pile. Br'nn has +1F while another player controls an Ashalan card.
   gold_cost: 4
@@ -1524,13 +1522,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Heir
   - Imperial
   - Love Letter
+  - Unaligned
   text: Will not gain a Clan Alignment. After your turn begins, if you control six other Love Letter cards
     with different titles and six Affection tokens, you win the game.<br><b>Favor Political Open, :bow::</b>
     Discard the Imperial Favor to draw a card.
@@ -1688,14 +1685,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Keppo • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: After Keppo enters play, lose 3 Honor. <br><b>Interrupt, :g*::</b> If the action Recruits Keppo
     or is his printed Battle action, after it resolves, Equip a target attachment from another player's
     discard pile to him.<br><b>Battle:</b> Destroy a target enemy attachment with 4 Gold Cost or less.
@@ -1918,14 +1914,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ogre
   - Shadowlands
   - Sinner
   - Yojimbo
+  - Unaligned
   text: After Masajiro enters play, lose 2 Honor. <br><b>Home Battle:</b> If he would be opposed, move
     Masajiro to the current battlefield. After he moves, straighten his attachments if there is another
     Nonhuman or Unique Personality in his army.
@@ -3180,8 +3175,6 @@ cards:
   decks:
   - Dynasty
   extended_title: The Abbot • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Experienced 3 Yasuki Jinn-Kuen
   - Unique
@@ -3190,6 +3183,7 @@ cards:
   - Master Coin
   - Merchant
   - Monk
+  - Unaligned
   text: 'Other players'' actions targeting The Abbot cost 2 more Gold <i>(even actions without Gold costs)</i>.
     <br>Invest :g1:: Gain a Conspiracy Token. You may give a target card you do not control a Clout Token.
     <br><b>Kolat Political Open:</b> Straighten a target Holding.'

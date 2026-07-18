@@ -446,12 +446,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Constrictor
   - Naga
   - Nonhuman
+  - Unaligned
   text: <b>Battle:</b> Bow a target enemy Personality with lower Force and with either no unbowed Followers
     or Shadowlands.
   gold_cost: 7
@@ -825,13 +824,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
   - Undead
+  - Unaligned
   text: 'After Glick enters play: Lose 3 Honor.<br><b>Reaction:</b> Any number of times per turn, after
     Glick is destroyed, destroy your performing Goblin card: Bring Glick into play, bowed, ignoring costs.'
   gold_cost: 6
@@ -1002,12 +1000,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Corrupter
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Hitaka enters play, lose 4 Honor.<br>All Jade cards in and out of play have +2 Gold Cost.<br><b>Repeatable
     Limited, :bow::</b> Destroy a target bowed Jade card. Lose 2 Honor.
   gold_cost: 7
@@ -1602,14 +1599,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Kokujin • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Experienced 2 Hitomi Kokujin
   - Unique
   - Shadowlands
   - Tattooed
+  - Unaligned
   text: 'After Kokjin enters play: Lose 6 Honor.<br>Kokujin will only straighten during your Straighten
     Phase.<br>After a duel involving Kokujin ends: Bow him.<br>Personalities lose <b>Double Chi</b> while
     facing Kokujin in a duel.<br><b>Limited:</b> Bow Kokujin and target a bowed Personality: Kokujin duels
@@ -1661,8 +1657,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Kyofu • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced Hida Kuroda
@@ -1671,6 +1665,7 @@ cards:
   - Onisu
   - Onisu of Fear
   - Shadowlands
+  - Unaligned
   text: After Kyofu enters play, lose 5 Honor.<br>Fear actions on cards in Kyofu's army <i>(including
     Kyofu)</i> may be used one additional time per battle.<br><b>Battle:</b> Fear 8.<br><b>Fear Battle:</b>
     Once per battle, take any number of additional consecutive Fear actions.
@@ -3079,13 +3074,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Shadowlands
   - Tsuno
+  - Unaligned
   text: 'After Sochi enters play: Lose 4 Honor.<br>Sochi has +2F while attacking.<br>While Sochi is at
     the current battlefield, negate all Honor gains.'
   gold_cost: 7

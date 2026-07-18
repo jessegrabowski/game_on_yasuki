@@ -672,11 +672,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: <b>Battle:</b> Give each Ronin Follower and Ronin Personality in Seasoned Ronin's army +1F.
   gold_cost: 5
   force: 3
@@ -966,12 +965,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Ronin
   - Samurai
+  - Unaligned
   text: <i>(Duelists win tied duels versus non-Duelists.)</i>
   gold_cost: 3
   force: 2

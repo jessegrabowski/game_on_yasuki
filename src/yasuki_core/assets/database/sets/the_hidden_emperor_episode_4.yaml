@@ -341,12 +341,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Blind Prophetess
   - Shugenja
+  - Unaligned
   text: <b>Repeatable Reaction:</b> Once per Strategy by title, before discarding a Kiho Strategy whose
     action Itako performed due to the sequence of taking a Strategy's action, place it face down under
     her instead. Until the game ends, instead of drawing a card at the end of your turn, you may take

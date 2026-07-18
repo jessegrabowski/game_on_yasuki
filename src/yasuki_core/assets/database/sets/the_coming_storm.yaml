@@ -30,10 +30,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
+  - Unaligned
   text: <b>Battle, :bow::</b> Ranged 2 Attack. <i>(Destroy a target enemy Follower, or Personality without
     Followers, with 2 or lower Force)</i>
   gold_cost: 2
@@ -202,12 +201,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Ashalan
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -289,11 +287,10 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Scout
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -667,12 +664,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Samurai
   - Yojimbo
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -688,12 +684,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Clay Soldier
   - Nonhuman
   - Yojimbo
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -1170,13 +1165,12 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Pet
   - Shadowlands
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -1583,14 +1577,13 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Imperial
   - Ivory Champion
   - Magistrate
   - Samurai
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -1790,11 +1783,10 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Dog
   - Nonhuman
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -1809,13 +1801,12 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Badger
   - Nonhuman
   - Shadowlands
   - Spirit
+  - Unaligned
   text: 'Battle, :bow:: Melee 4 Attack.<br><i>(This is a proxy for a created card. It is not considered
     to have a title and cannot be included in decks.)</i>'
   gold_cost: 0
@@ -2026,7 +2017,7 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
+  keywords:
   - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
@@ -2042,11 +2033,10 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cat
   - Nonhuman
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -2061,12 +2051,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Elephant
   - Nonhuman
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -2126,12 +2115,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Illusion
   - Samurai
   - Spirit
+  - Unaligned
   text: This Personality's Force is equal to the Chi of the caster, plus 1 if he was Air.<br><i>(This
     is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)</i>
   gold_cost: 0
@@ -2174,10 +2162,9 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -2192,7 +2179,7 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
+  keywords:
   - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
@@ -2228,13 +2215,12 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Illusion
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: This Personality's Chi and Personal Honor are equal to the Chi and Personal Honor of the caster,
     respectively.<br><i>(This is a proxy for a created card. It is not considered to have a title and
     cannot be included in decks.)</i>
@@ -2450,12 +2436,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Kensai
   - Ronin
+  - Unaligned
   text: <i>(Duelists win tied duels versus non-Duelists. Kensai may attach two Weapons, as long as neither
     is Two-Handed.)</i><br><b>Iaijutsu Battle:</b> Oneiyara challenges a target enemy Personality. After
     the duel, Fear equal to Oneiyara's Force that targets the loser.
@@ -2478,12 +2463,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -2499,12 +2483,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -2592,12 +2575,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Patairaku enters play, lose 3 Honor. <br><b>Battle, :g2::</b> Create a 1F <b>Goblin • Nonhuman
     • Pet • Shadowlands</b> Follower and attach it to Patairaku.
   gold_cost: 8
@@ -2621,10 +2603,9 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Ashigaru
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -2834,14 +2815,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Air
   - Courtier
   - Hidden Guard
   - Imperial
   - Shugenja
+  - Unaligned
   text: <i>(Shugenja may attach and cast Spells.)</i><br>Teshan Lobbies without bowing.
   gold_cost: 4
   force: 1
@@ -3718,11 +3698,10 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Guard
   - Samurai
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -3765,12 +3744,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Air
   - Illusion
   - Shugenja
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -3867,12 +3845,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Champion
   - Shadowlands
   - Undead
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -3888,10 +3865,9 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Weapon
+  - Unaligned
   text: This Item's Force Modifier is equal to the discarded card's Focus Value.<br><i>(This is a proxy
     for a created card. It is not considered to have a title and cannot be included in decks.)</i>
   gold_cost: 0
@@ -4369,14 +4345,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Naga
   - Nonhuman
   - Savior
   - Scout
   - Warrior of the Bright Eye
+  - Unaligned
   text: Zenathaar will not join you if you control any Shadowlands Personalities. Your other Naga Personalities
     have +1PH. <br><b>Home Battle:</b> Move your target Naga Personality home.
   gold_cost: 4
@@ -4426,12 +4401,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
   - Undead
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0

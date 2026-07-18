@@ -368,12 +368,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Emperor
   - Samurai
+  - Unaligned
   text: 'Hantei the 38th has the additional cost, "Discard the Imperial Favor or bow your Personalities
     and Followers with 16 or more total Force" to enter play.<br><b>Reaction:</b> Any number of times
     per turn, when paying for an Imperial card or a card with "Hantei" in its title or keywords, bow Hantei
@@ -394,10 +393,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Geisha
+  - Unaligned
   text: May not assign to attack or defend.<br>After another copy of Hatsuko enters play, destroy all
     of this one's attachments and shuffle her back into your Dynasty deck.<br><b>Repeatable Limited, :bow::</b>
     Look at a random card in another target player's hand.<br><b>Repeatable Limited, :bow::</b> Look at
@@ -471,13 +469,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Captain of the Imperial Guard
   - Imperial
   - Samurai
+  - Unaligned
   text: Ishikawa Equips Imperial cards for 3 less Gold.<br><b>Favor Political Battle, :bow::</b> If you
     control the Imperial Favor, move home a target enemy Human Personality with 0 Personal Honor.
   gold_cost: 9
@@ -898,14 +895,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
   - Shaman
   - Shugenja
+  - Unaligned
   text: <b>Reaction:</b> When paying for a Spell Equipping to Ugu, bow one or more of your performing
     Goblins to pay less Gold equal to the number of Goblins you bowed.
   gold_cost: 4

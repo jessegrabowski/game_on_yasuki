@@ -656,7 +656,6 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Tortoise
   keywords:
   - Courtier
@@ -664,6 +663,7 @@ cards:
   - Smuggler
   - Tortoise Clan
   - Naval
+  - Unaligned
   text: 'Invest :g2:: Banish a Fate card in your discard pile to put your discarded Strategy face-up in
     your hand.'
   gold_cost: 4
@@ -1002,11 +1002,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
+  - Unaligned
   text: You may Proclaim Nami if your Wind is House of Suikihime. After Nami enters play, you may give
     a card in a Province a Sincerity token.<br>You have +1 maximum hand size.
   gold_cost: 2

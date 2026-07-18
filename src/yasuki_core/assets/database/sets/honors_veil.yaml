@@ -1017,11 +1017,11 @@ cards:
   - Dynasty
   clans:
   - Spirit
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
   - Spirit
+  - Unaligned
   text: After Gaki of Desire enters play, lose 3 Honor.<br><b>Limited, :gstar::</b> Equip a target Item
     in any player's discard pile to this Gaki. Lose 2 Honor.
   gold_cost: 4
@@ -1273,11 +1273,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Disciple of P'an Ku
   - Shugenja
+  - Unaligned
   text: <b>Battle/Open:</b> Target a Personality. Set Hidekazu's Force to equal the target's printed Force,
     or set his Chi to the equal target's printed Chi.
   gold_cost: 6
@@ -1739,8 +1738,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Bushi
@@ -1748,6 +1745,7 @@ cards:
   - Ogre
   - Shadowlands
   - Yojimbo
+  - Unaligned
   text: After Kayomasa enters play, lose 4 Honor. <br>Enters play for 1 less Gold if you are a Spider
     Clan player. <br><b>Battle:</b> Move Kayomasa to a battlefield where you control an opposed Unique
     Personality. This ability has <b>Remote</b> if you move him to the current battlefield.
@@ -2205,12 +2203,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Imperial
   - Magistrate
   - Samurai
+  - Unaligned
   text: <b>Open, :bow::</b> Give a target Personality -2F. The target may only assign this turn if his
     controller is the Attacker or Defender.
   gold_cost: 5
@@ -2690,12 +2687,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Shikage enters play: Lose 5 Honor. <br><b>Battle:</b> Destroy your performing Personality
     and target an enemy unit with lower total Force than your Personality''s Force: Destroy it.'
   gold_cost: 10

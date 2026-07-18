@@ -1265,14 +1265,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Kage • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Experienced 3
   - Tactician
   - Unique
   - Kolat
   - Kolat Master
+  - Unaligned
   text: <b>Repeatable Limited, :bow::</b> Target a Personality <i>(in play)</i> of whom you have a copy
     face-up in one of your Provinces. Remove the target from the game. Bring your copy into play ignoring
     costs and requirements.
@@ -1628,11 +1627,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Shadowlands
+  - Unaligned
   text: You may ignore Toki's Honor Requirement if you are a Shadowlands Horde player.<br>After Toki enters
     play, lose 3 Honor.
   gold_cost: 6
@@ -2323,8 +2321,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Shinko Kamiko • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced Pennaggolan
@@ -2333,6 +2329,7 @@ cards:
   - Nonhuman
   - Pennaggolan
   - Shadowlands
+  - Unaligned
   text: 'After Kamiko enters play: Lose 3 Honor.<br><b>Maho Limited:</b> Any number of times per turn,
     target another player''s Merchant Caravan or Large Farm: Destroy it. Permanently give Kamiko +2F/+2C.'
   gold_cost: 8
@@ -2500,12 +2497,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
   - Troll
+  - Unaligned
   text: 'After Slidge enters play: Lose 4 Honor.<br>Will not attach Armor.'
   gold_cost: 7
   force: 5

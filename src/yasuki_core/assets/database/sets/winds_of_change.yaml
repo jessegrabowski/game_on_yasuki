@@ -211,12 +211,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Bawaru enters play, lose 4 Honor.<br>After battle resolution begins, if there are any unbowed
     enemy Personalities at Bawaru's battlefield, straighten Bawaru.
   gold_cost: 7
@@ -824,11 +823,11 @@ cards:
   - Dynasty
   clans:
   - Spirit
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
   - Spirit
+  - Unaligned
   text: After Gaki enters play, lose 4 Honor.<br>Before Gaki receives a bonus to its Force or Chi, if
     the bonus is not due to the stat being set to a value, switching, or copying, give the stat an equal
     penalty instead for the same duration.
@@ -870,13 +869,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ghul
   - Nonhuman
   - Shadowlands
   - Undead
+  - Unaligned
   text: 'After Ghul Lord enters play: Lose 3 Honor.<br><b>Battle:</b> Any number of times per turn, destroy
     your performing Undead card and target an enemy Follower: Bow it.<br><b>Fear Battle:</b> Fear 3.'
   gold_cost: 7
@@ -1791,13 +1789,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Herald
   - Imperial
+  - Unaligned
   text: Other players may not Lobby and have the ability, "<b>Political Limited, :g8::</b> Take control
     of Shoin."
   gold_cost: 6
@@ -2039,8 +2036,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Omoni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
@@ -2048,6 +2043,7 @@ cards:
   - Nonhuman
   - Sculptor of Flesh
   - Shadowlands
+  - Unaligned
   text: 'After Omoni enters play: Lose 4 Honor.<br><b>Reaction:</b> Any number of times per turn, after
     a Fear effect from a card in Omoni''s unit targets an enemy unit: The Fear gives each Follower in
     the targeted unit a Force penalty equal to the Fear effect''s strength instead of producing its normal
@@ -2071,11 +2067,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Samurai
+  - Unaligned
   text: 'After Taneji enters play: Gain 1 Honor.'
   gold_cost: 3
   force: 0
@@ -2495,8 +2490,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -2504,6 +2497,7 @@ cards:
   - Onisu
   - Onisu of Larceny
   - Shadowlands
+  - Unaligned
   text: 'After Settozai enters play: Lose 5 Honor.<br><b>Reaction:</b> Before a Battle action taken by
     the Attacker resolves, if the Defender has not yet taken a Battle action or passed this battle: Negate
     the Attacker''s action''s effects.<br><b>Reaction:</b> Even if Settozai is bowed, even if you do not

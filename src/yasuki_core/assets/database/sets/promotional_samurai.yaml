@@ -136,12 +136,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Fire
   - Ronin
   - Shugenja
+  - Unaligned
   text: '<b>Reaction:</b> After an action resolves that Aneo performed and that destroyed an enemy card
     at a battlefield: Straighten a card attached to Aneo.'
   gold_cost: 6
@@ -2032,11 +2031,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
+  - Unaligned
   text: <b>Reaction:</b> After Imperial Cartographer enters play, if you have any Farms, Forests, Mines,
     Mountains, or Ports in play, gain 1 Honor for each of those different keywords among all your cards.
   gold_cost: 4
@@ -2154,11 +2152,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: <b>Battle:</b> Target an enemy Personality. Destroy all cards in his unit with 0 Gold Cost.
   gold_cost: 7
   force: 5
@@ -2364,11 +2361,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Keukegen
   - Nonhuman
+  - Unaligned
   text: <b>Tireless Reaction:</b> After another player's Personality straightens, straighten this Personality.
   gold_cost: 3
   force: 3
@@ -2883,14 +2879,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Miya Shoin • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Experienced
   - Herald
   - Imperial
+  - Unaligned
   text: <b>Political Open, :bow::</b> The player with the Imperial Favor discards it.
   gold_cost: 4
   force: 0
@@ -3806,12 +3801,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Imperial
   - Samurai
   - Yojimbo
+  - Unaligned
   text: 'Goharu''s base Force equals the highest Personal Honor among all Personalities at his location.<br><b>Battle:</b>
     Target a Personality who is Spider Clan, Unicorn Clan, or dishonorable: Bow him and move him home.'
   gold_cost: 5

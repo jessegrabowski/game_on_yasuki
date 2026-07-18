@@ -1489,11 +1489,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Gaijin
   - Yodotai
+  - Unaligned
   text: After Isidoros enters play, lose 2 Honor.<br><b>Battle:</b> Straighten your target Follower.
   gold_cost: 5
   force: 3
@@ -1544,14 +1543,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Heir
   - Imperial
   - Paragon
   - Samurai
+  - Unaligned
   text: Seiken will not be dishonored or gain a Clan Alignment.<br><b>Interrupt:</b> After you Recruit
     Seiken, Recruit a non-Unique Samurai with lower Gold Cost, ignoring costs.<br><b>Political Open, :bow::</b>
     Take the Imperial Favor.
@@ -1576,13 +1574,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Heir
   - Imperial
+  - Unaligned
   text: Spider Clan players ignore Shibatsu's Honor Requirement. Will not gain a Clan Alignment.<br>After
     Shibatsu enters play, gain 3 Honor.<br>After Shibatsu leaves play, lose 10 Honor.<br><b>Limited, :bow::</b>
     Gain 1 Honor.
@@ -1806,8 +1803,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Kitsune Kichi • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Earth
@@ -1817,6 +1812,7 @@ cards:
   - Onyx Champion
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Kichi enters play, lose 3 Honor and create a 4F/2C/0PH <b>Badger • Nonhuman • Shadowlands
     • Spirit</b> Personality with the ability, "<b>Battle, :bow::</b> Melee 4 Attack."
   gold_cost: 8
@@ -3563,12 +3559,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Earth
   - Fudo
   - Monk
+  - Unaligned
   text: After Usui enters play, lose 1 Honor.<br><b>Earth Battle:</b> Give this Province +2 strength.
   gold_cost: 5
   force: 3

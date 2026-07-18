@@ -951,12 +951,11 @@ cards:
   decks:
   - Dynasty
   extended_title: Iweko Shibatsu, the Shattered Prince • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Imperial
   - Experienced
   - Unique
+  - Unaligned
   text: 'Shibatsu will not gain :shadowlands:. Your :favor: actions cannot be negated by other player''s
     card effects while Shibatsu is bowed.<br><b>Home Battle, :bow::</b> Reduce the Force of a target dishonorable
     Personality to 0.'
@@ -980,8 +979,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Jinn-Kuen, Dark Abbot of Fu Leng • Experienced 4
-  clans:
-  - Unaligned
   keywords:
   - Cultist
   - Monk
@@ -990,6 +987,7 @@ cards:
   - Experienced 4 The Abbot
   - Unique
   - Shadowlands
+  - Unaligned
   text: '<b>Interrupt:</b> If the action is targeting your Personality, bow your :shadowlands: Ring or
     pay :g6: to negate the action''s effects. Lose 2 Honor.'
   gold_cost: 8
@@ -2387,7 +2385,6 @@ cards:
   - Dynasty
   extended_title: Tsuruchi Yurio • Experienced
   clans:
-  - Unaligned
   - Tanuki
   - Wasp
   keywords:
@@ -2397,6 +2394,7 @@ cards:
   - Wasp Clan
   - Experienced
   - Unique
+  - Unaligned
   text: '<b>Battle, :bow::</b> :ranged: 4. If this destroyed a card, give <b>Reserve</b> to a Personality
     in your Province without your Clan Alignment. Take an additional action to Recruit that Personality
     using Reserve <i>(if legal)</i>, paying :g2: less.'

@@ -525,14 +525,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Advisor from the Shogun
   - Brother
   - Ronin
   - Samurai
+  - Unaligned
   text: Other Ronin Personalities in Etsushi's army have +1F.<br><b>Battle:</b> Bow a target enemy Unaligned
     Human Personality.
   gold_cost: 6
@@ -1093,7 +1092,6 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Badger
   keywords:
   - Unique
@@ -1102,6 +1100,7 @@ cards:
   - Mountaineer
   - Samurai
   - Scout
+  - Unaligned
   text: <b>Tireless Reaction:</b> After an action or Event with the Winter or Mountain keyword resolves,
     draw a card and straighten Kazumasa.
   gold_cost: 6
@@ -1479,8 +1478,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Nairu no Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -1488,6 +1485,7 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Naiu enters play, lose 4 Honor.<br><b>Absent Battle:</b> Move Nairu to the current battlefield
     or to your home. If it is now opposed, you may target one of your Oni Personalities at any location
     and move it to Nairu's location.

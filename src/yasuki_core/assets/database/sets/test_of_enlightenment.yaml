@@ -199,10 +199,10 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Ashigaru
   - Monk
+  - Unaligned
   text: <b>Limited:</b> Target a Personality. Give him <b>Enlightened</b>, or remove <b>Enlightened</b>
     from him.
   gold_cost: 3
@@ -731,8 +731,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Chuda Ruri • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Enlightened
   - Unique
@@ -740,6 +738,7 @@ cards:
   - Experienced
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Ruri enters play: Lose 4 Honor.<br><b>Fear Battle:</b> Fear 5.<br><b>Limited:</b> Bow Ruri
     or bow your Ring, and target a Personality: If the target has the non-base Shadowlands keyword, give
     him a -4C token after your next turn begins; otherwise, give him <b>Shadowlands</b>.'
@@ -845,14 +844,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Daigotsu Fumiaki • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Lost
   - Samurai
   - Shadowlands
+  - Unaligned
   text: After Fumiaki enters play, lose 4 Honor.<br><b>Battle/Open:</b> Target a Personality. His abilities
     may not be used.
   gold_cost: 6
@@ -874,8 +872,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Daigotsu Soetsu • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Enlightened
@@ -885,6 +881,7 @@ cards:
   - Samurai
   - Shadowlands
   - Undead
+  - Unaligned
   text: 'After Soetsu enters play: Lose 4 Honor.<br><b>Elemental Battle:</b> Bow Soetsu or bow or discard
     a Ring you own, and target zero to three enemy units with total Force lower than Soetsu''s Force plus
     Chi: Destroy the targets.'
@@ -1517,13 +1514,13 @@ cards:
   - Dynasty
   clans:
   - Spirit
-  - Unaligned
   keywords:
   - Duelist
   - Kenku
   - Nonhuman
   - Spirit
   - Trickster
+  - Unaligned
   text: <b>Limited:</b> Target a Ring and a Personality controlled by the same player. Itsume challenges
     the Personality. Bow the loser. If Itsume wins, take control of the Ring. After the next time this
     game the player triggers that Ring's printed trait that would put it into play from his hand, he may
@@ -1708,11 +1705,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Bat
   keywords:
   - Bat Clan
   - Shugenja
+  - Unaligned
   text: 'Junsaku may not perform Spell or Kiho actions during battles.<br><b>Battle/Open:</b> Target your
     Personality and your honorably dead Personality: Set the first target''s Force, Chi, or Personal Honor
     to equal the same stat of the second.'
@@ -1766,8 +1763,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Kyoso no Oni • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Enlightened
   - Experienced 3
@@ -1775,6 +1770,7 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Kyoso enters play, lose 8 Honor.<br>After the first time this game Kyoso enters play, destroy
     a Personality you control; if this destroyed him, you may target and destroy another Personality with
     equal or lower Gold Cost than his.<br><b>Limited:</b> Target a Ring and a Shadowlands Personality.
@@ -1929,8 +1925,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Moshangoru • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Enlightened
   - Unique
@@ -1939,6 +1933,7 @@ cards:
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: After Moshangoru enters play, lose 4 Honor.<br><b>Elemental Battle:</b> Moshangoru challenges
     a target enemy Personality. His controller may pay 5 Gold or bow a Ring he controls to have the target
     refuse. Both Personalities use their Force as their duel stat. Destroy the loser.
@@ -2133,11 +2128,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: All players have the ability, "<b>Elemental Open:</b> If you control more Rings than Nagisa's
     controller, take control of Nagisa."
   gold_cost: 2
@@ -2179,13 +2173,13 @@ cards:
   - Dynasty
   clans:
   - Naga
-  - Unaligned
   keywords:
   - Constrictor
   - Naga
   - Nonhuman
   - Shugenja
   - Vedic
+  - Unaligned
   text: '<b>Battle/Open:</b> Target an enemy Personality with less Force than Qolsa, a Ring, or an Enlightened
     Personality: Bow it.'
   gold_cost: 6
@@ -2722,8 +2716,6 @@ cards:
   decks:
   - Dynasty
   extended_title: The Mystic • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Isawa Sezaru
   - Unique
@@ -2731,6 +2723,7 @@ cards:
   - Ronin
   - Shugenja
   - Void
+  - Unaligned
   text: 'Targeting the Mystic has the additional cost, "Pay 10 Gold or discard a Spell or Kiho Strategy"
     for other players.<br><b>Battle:</b> If there are enemy units at the current battlefield, bow a Ring
     you control and target your discarded Personality: Bring him into play in your current army, ignoring
@@ -2752,8 +2745,6 @@ cards:
   decks:
   - Dynasty
   extended_title: The Ronin • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Experienced Kaneka
@@ -2762,6 +2753,7 @@ cards:
   - Ronin
   - Samurai
   - Shogun
+  - Unaligned
   text: 'Targeting the Ronin has the additional cost, "Pay 10 Gold or discard a Battle Strategy" for other
     players.<br><b>Battle:</b> Bow any number of Rings you control: Give each Personality in the current
     enemy army -2F for each Ring you bowed.'
@@ -2782,14 +2774,13 @@ cards:
   decks:
   - Dynasty
   extended_title: The Wanderer • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Emperor Toturi III
   - Unique
   - Courtier
   - Ronin
   - Samurai
+  - Unaligned
   text: 'Targeting the Wanderer has the additional cost, "Pay 10 Gold or discard a Political Strategy"
     for other players.<br><b>Political Battle:</b> Bow one or more Rings you control and choose your performing
     opposed Personality: For each Ring you bowed, gain 4 Honor and give your chosen performer +4F.'

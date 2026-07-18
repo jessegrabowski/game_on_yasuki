@@ -1422,12 +1422,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Sparrow
   keywords:
   - Paragon
   - Samurai
   - Sparrow Clan
+  - Unaligned
   text: 'Invest :g1:: After Kukiko enters play, search your deck for a Follower, Bushido Virtue, or Dark
     Virtue. Show it and put it in your hand.'
   gold_cost: 4
@@ -1449,13 +1449,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Sparrow
   keywords:
   - Paragon
   - Samurai
   - Sparrow Clan
   - Unique
+  - Unaligned
   text: <b>Interrupt:</b> If the action is from, or targeting, an enemy Personality at this battlefield
     with lower Personal Honor, negate its effects.
   gold_cost: 9
@@ -1961,8 +1961,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Yabe no Oni, Blessed Abomination • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cultist
   - Nonhuman
@@ -1970,6 +1968,7 @@ cards:
   - Experienced Chuda Yabe
   - Unique
   - Shadowlands
+  - Unaligned
   text: 'After Yabe no Oni enters play, lose 6 Honor. After a non-Oni Personality is destroyed, create
     a 2F/1C Nonhuman • Oni • :shadowlands: Personality in your home.<br>Yu: Create two 2F/1C Nonhuman
     Oni • :shadowlands: Personalities in your home.'

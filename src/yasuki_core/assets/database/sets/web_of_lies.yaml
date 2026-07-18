@@ -575,8 +575,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Unique
@@ -584,6 +582,7 @@ cards:
   - Dark Lord
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Daigotsu enters play, lose 8 Honor.<br>Your Shadowlands Personalities have the ability,
     "<b>Battle, :bow::</b> Set a target enemy card's Force to 0."<br><b>Battle:</b> Move a target Shugenja
     home.<br><b>Tireless Battle/Open:</b> Bow your target performing Courtier, or target and bow another
@@ -1795,12 +1794,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Morisue enters play, lose 4 Honor.<br><b>Maho Battle:</b> Once per battle, remove a Blood
     token from Morisue to give -1C to all Personalities opposing her with 2 or higher Chi.
   gold_cost: 6
@@ -1910,11 +1908,11 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Monk
   - Shadowlands
+  - Unaligned
   text: After Muketsu enters play, lose 5 Honor.<br>Kiho actions performed by Muketsu are <b>Maho</b>.<br><b>Maho
     Battle/Open:</b> Remove a Blood token from Muketsu to target a Personality, lose 2 Honor, and straighten
     the target.
@@ -1955,12 +1953,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Natsumono enters play, lose 2 Honor.<br><b>Limited, :bow::</b> Lose 3 Honor. Create a 1F/1C
     <b>Shadowlands • Nonhuman • Oni</b> Personality in your home.
   gold_cost: 6
@@ -2001,13 +1998,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ogre
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Ogre Mage enters play, lose 5 Honor.
   gold_cost: 6
   force: 3
@@ -2331,8 +2327,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Shahai • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Bloodspeaker
@@ -2340,6 +2334,7 @@ cards:
   - Lady of Blood
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Shahai enters play: Lose 6 Honor and give all your Personalities a Blood token.<br><b>Maho
     Limited:</b> Destroy a Blood token on Shahai and target a dead Personality: Shahai copies of one of
     his base abilities that does not itself copy abilities, adding to it the restriction "Once per turn"

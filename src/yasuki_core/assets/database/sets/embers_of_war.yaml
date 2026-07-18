@@ -186,11 +186,10 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Assassin
+  - Unaligned
   text: May not be included in decks.
   gold_cost: 0
   force: 0
@@ -711,13 +710,12 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Imperial
   - Magistrate
   - Samurai
+  - Unaligned
   text: May not be included in decks.
   gold_cost: 0
   force: 4
@@ -822,11 +820,10 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: May not be included in decks.
   gold_cost: 0
   force: 2
@@ -915,12 +912,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Gozaru enters play: Lose 5 Honor.<br>After Gozaru is destroyed: It becomes discarded <i>(not
     dead)</i>.<br><b>Battle:</b> Target one or two enemy cards: Bow them. If you only targeted one card,
     destroy it.'
@@ -982,10 +978,9 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Monk
+  - Unaligned
   text: May not be included in decks.
   gold_cost: 0
   force: 1
@@ -1578,8 +1573,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Itoku • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Akodo Itoku
   - Tactician
@@ -1587,6 +1580,7 @@ cards:
   - Monk
   - Order of Strength
   - Paragon
+  - Unaligned
   text: 'Itoku has +1F while a Lion Clan player controls him.<br><b>Reaction:</b> After an action resolves
     which bowed your non-Void Ring: Straighten it. You may use each of its abilities an additional time
     this turn.'
@@ -1995,8 +1989,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Makito • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Asako Makito
   - Unique
@@ -2005,6 +1997,7 @@ cards:
   - Order of Death
   - Shadowlands
   - Student of Kinuye
+  - Unaligned
   text: 'Makito has +1F while a Phoenix Clan player controls him.<br>After a card is destroyed: Give Makito
     +1F.<br><b>Maho Battle:</b> Target an enemy Personality with equal or lower Chi: Destroy a card without
     attachments in his unit; this destruction will not be negated or delayed.'
@@ -2489,11 +2482,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cultist
   - Gaijin
+  - Unaligned
   text: '<b>Reaction:</b> After an action resolves that Rata performed and that destroyed a Personality:
     Rata sacrifices his victim''s corpse. Draw a card.'
   gold_cost: 4
@@ -2603,8 +2595,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Rokku • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Akodo Rokku
   - Tactician
@@ -2612,6 +2602,7 @@ cards:
   - Monk
   - Order of Strength
   - Zealot
+  - Unaligned
   text: 'Rokku has +1F while a Lion Clan player controls him.<br><b>Reaction:</b> Even if Rokku is bowed,
     after engaging, if any enemy units are at the current battlefield: Move Rokku there. Straighten his
     unit if he moved.'
@@ -2635,11 +2626,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Berserker
   - Gaijin
+  - Unaligned
   text: '<b>Battle:</b> Target an enemy card with lower Force: Bow it. If it is a Personality, you may
     move it home.'
   gold_cost: 9
@@ -3699,8 +3689,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Tokiko • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Isawa Tokiko
   - Unique
@@ -3708,6 +3696,7 @@ cards:
   - Monk
   - Shugenja
   - Void
+  - Unaligned
   text: 'Tokiko has +1F while a Phoenix Clan player controls her.<br><b>Battle/Open:</b> Destroy Tokiko
     and target your dead Personality: Bring him into play in your home or at the current battlefield,
     paying all costs but paying 7 less Gold.'

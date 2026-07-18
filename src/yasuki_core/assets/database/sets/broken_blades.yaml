@@ -917,12 +917,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Naval
   - Shadowlands
   - Undead
+  - Unaligned
   text: After Garen enters play, lose 4 Honor.<br>While attaching Human Followers, Garen has +1PH.<br>Garen's
     Human Followers have <b>Shadowlands • Undead</b>.
   gold_cost: 7
@@ -1413,14 +1412,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Dragon
   - Dragon of Reverse Fortunes
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: After Jotei enters play, gain 4 Honor.<br>Will not attach Followers or Items.<br>Jotei's Honor
     Requirement is equal to twice your Starting Family Honor, or 0, whichever is greater.
   gold_cost: 12
@@ -1443,13 +1441,13 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Double Chi
   - Unique
   - Kolat
   - Monk
   - Tattooed
+  - Unaligned
   gold_cost: 8
   force: 4
   chi: 4
@@ -1469,11 +1467,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Katsu enters play, lose 3 Honor.<br><b>Elemental Repeatable Battle, :bow::</b> Move a target
     enemy Personality with Force lower than Katsu's Chi to an adjacent battlefield.
   gold_cost: 6
@@ -1801,8 +1798,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -1810,6 +1805,7 @@ cards:
   - Onisu
   - Onisu of Chaos
   - Shadowlands
+  - Unaligned
   text: After Muchistsujo enters play, lose 5 Honor.<br><b>Repeatable Reaction, :bow::</b> Before another
     player attaches a card from his hand to one of his Personalities, he attaches it to another legal
     Personality of your choice.<br><b>Reaction:</b> After a Personality moves to a battlefield, bow his
@@ -2425,13 +2421,13 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Cavalry
   - Dragon
   - Ninja
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Shadow Dragon enters play: Lose 6 Honor.<br>Will not attach Followers or Items.<br><b>Reaction:</b>
     After a Personality bows, bow Shadow Dragon: While Shadow Dragon remains bowed and in play, you may
     negate its straightening, and the Personality will not straighten. After the next time this game Shadow
@@ -2739,12 +2735,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Vu enters play: Lose 2 Honor.<br><b>Battle/Open:</b> Any number of times per turn, bow
     Vu and target an Ogre or Troll: Give it +2F.<br><b>Battle/Open:</b> Bow and destroy Vu, and target
     an Ogre or Troll: Give it +3F.'

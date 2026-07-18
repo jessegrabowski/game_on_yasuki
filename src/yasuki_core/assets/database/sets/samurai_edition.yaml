@@ -184,8 +184,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Akuma no Oni • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2 Oni no Akuma
   - Unique
@@ -193,6 +191,7 @@ cards:
   - Oni
   - Overlord
   - Shadowlands
+  - Unaligned
   text: After Akuma enters play, lose 15 Honor and destroy your rightmost Province.<br>During the Action
     Phase, Akuma will not bow and may not be targeted.<br>Once per game, after a battle's resolution in
     which an attacking army containing Akuma destroyed a Province, destroy another of the Defender's Provinces.
@@ -4328,11 +4327,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
+  - Unaligned
   text: <b>Political Reaction, :bow::</b> After any player takes the Imperial Favor, gain 1 Honor.
   gold_cost: 5
   force: 1
@@ -4447,13 +4445,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Kobushi enters play: Lose 4 Honor. <br><b>Battle:</b> Destroy your performing Goblin: Ranged
     5 Attack.'
   gold_cost: 5
@@ -4476,11 +4473,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Scout
+  - Unaligned
   text: '<b>Reaction:</b> Even if Kodomo is bowed, when paying the costs of a Recon action Kodomo is performing:
     Ignore the action''s cost of bowing her.'
   gold_cost: 3
@@ -4705,12 +4701,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Kyoso enters play, lose 3 Honor and destroy one of your Holdings.<br>Will not attach Followers
     or Items.<br><b>Battle, :bow::</b> Ranged 7 Attack.
   gold_cost: 7
@@ -4734,8 +4729,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Kyoso no Oni • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Enlightened
   - Experienced 3
@@ -4743,6 +4736,7 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Kyoso enters play, lose 8 Honor.<br>After the first time this game Kyoso enters play, destroy
     a Personality you control; if this destroyed him, you may target and destroy another Personality with
     equal or lower Gold Cost than his.<br><b>Limited:</b> Target a Ring and a Shadowlands Personality.
@@ -5718,8 +5712,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -5727,6 +5719,7 @@ cards:
   - Nonhuman
   - Obsidian
   - Shugenja
+  - Unaligned
   text: Will not attach Items or Followers.<br>Non-Unique Personalities have a Force and Chi penalty equal
     to their own Personal Honor while they oppose Obsidian Dragon, which will not reduce their Chi below
     1.
@@ -5779,8 +5772,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Omoni • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2
   - Unique
@@ -5788,6 +5779,7 @@ cards:
   - Nonhuman
   - Sculptor of Flesh
   - Shadowlands
+  - Unaligned
   text: 'After Omoni enters play: Lose 5 Honor. <br><b>Fear Battle:</b> Bow all Followers with 4 or lower
     Force in a target enemy unit. <br><b>Battle/Open:</b> Destroy one of your Goblin Personalities: Bring
     a target Goblin Personality from your discard pile into play at Omoni''s location, ignoring its Gold
@@ -5906,13 +5898,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
   - Supai
+  - Unaligned
   text: 'After the first time each turn Pekkle enters play: Gain 3 Honor.<br>After Pekkle is destroyed:
     Lose 10 Honor.<br><b>Political Limited:</b> Bow Pekkle: Gain 1 Honor.'
   gold_cost: 3
@@ -5974,13 +5965,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: 'After Pokku enters play: Lose 3 Honor.'
   gold_cost: 4
   force: 4
@@ -7282,12 +7272,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Skub enters play: Lose 4 Honor.'
   gold_cost: 6
   force: 5
@@ -7427,12 +7416,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Siege
+  - Unaligned
   text: 'Will not attach Items.<br>Will not challenge or be challenged.<br>Stone Breaker will not be destroyed
     for having 0 Chi.<br>Stone Breaker has -6F while it has no unbowed Followers.<br><b>Battle:</b> Even
     if Stone Breaker is bowed and only if it is bowed, bow a performing Follower in its unit: Straighten
@@ -8665,13 +8653,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'Tsuburu has the additional cost, "Destroy one of your Personalities" to enter play.<br>After
     Tsuburu enters play: Lose 5 Honor.<br>Will not attach Followers or Armor.<br>After a Combat Segment
     ends, if Tsuburu is at the current battlefield and there are no defending units there: Give Tsuburu
@@ -9370,12 +9357,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Wareta enters play: Lose 6 Honor.<br>Wareta has a Force penalty equal to the number of
     cards in your hand.'
   gold_cost: 8

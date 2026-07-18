@@ -129,12 +129,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Guest
   - Imperial
+  - Unaligned
   text: 'When your Honor-producing Holding bows as a cost to produce Honor: It produces 1 additional Honor.<br>After
     Sorai is destroyed, if your Family Honor is 2 or higher: Lose half your current Family Honor, rounded
     down.'
@@ -186,10 +185,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Sycophant
+  - Unaligned
   text: When bowed during a lobbying attempt, Baka is considered to have a Personal Honor of seven.
   gold_cost: 4
   force: 0

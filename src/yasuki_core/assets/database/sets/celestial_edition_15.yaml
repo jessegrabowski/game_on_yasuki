@@ -778,8 +778,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Unique
@@ -787,6 +785,7 @@ cards:
   - Dark Lord
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Daigotsu enters play, lose 8 Honor.<br>Your Shadowlands Personalities have the ability,
     "<b>Battle, :bow::</b> Set a target enemy card's Force to 0."<br><b>Battle:</b> Move a target Shugenja
     home.<br><b>Tireless Battle/Open:</b> Bow your target performing Courtier, or target and bow another
@@ -2038,13 +2037,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Kuni Yori • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: '<b>Limited:</b> Any number of times per turn, bow Yori, discard a card in one of your provinces,
     and target a card in a province: Discard it.'
   gold_cost: 8
@@ -2296,11 +2294,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Shadowlands
+  - Unaligned
   text: After Tsume enters play, lose 4 Honor.<br>Will not join a player with 1 or higher Family Honor.<br>After
     a Combat Segment begins, if Tsume is in your current army, bow all other Personalities in Tsume's
     army with 1 or higher Personal Honor.
@@ -2412,9 +2409,9 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
+  - Unaligned
   text: Ninja Shapeshifter's Followers must be Ninja.<br><b>Ninja Battle/Open:</b> Ninja Shapeshifter
     copies a target Personality's Force, Chi, Personal Honor, or ability that does not copy abilities.
   gold_cost: 10
@@ -2440,10 +2437,10 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
   - Spy
+  - Unaligned
   text: Will not attach non-Ninja Followers.<br><b>Ninja Repeatable Battle/Open, :bow::</b> Look at a
     target player's hand. Lose 1 Honor.<br><b>Ninja Repeatable Battle/Open, :bow::</b> Look at all face-down
     cards in a target player's Provinces. Lose 1 Honor.
@@ -2468,13 +2465,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Akuma enters play: Lose 3 Honor and destroy the province from which it entered.'
   gold_cost: 0
   force: 6
@@ -2754,8 +2750,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Shikibu no Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Oni no Shikibu
   - Unique
@@ -2763,6 +2757,7 @@ cards:
   - Oni
   - Overlord
   - Shadowlands
+  - Unaligned
   text: 'After Shikibu enters play: Lose 8 Honor. <br>Before an action destroys Shikibu: Negate the destruction.
     If the destruction fails, choose one of your Personalities at Shikubu''s location; he is consumed
     by Jigoku. Remove the chosen Personality from the game.'
@@ -3454,8 +3449,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -3463,6 +3456,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Void
+  - Unaligned
   text: 'Will not attach Followers or Items. <br>Once per turn, after an attacking army including Void
     Dragon destroys a province during battle resolution: You may discard the Defender''s hand.'
   gold_cost: 14
@@ -3583,13 +3577,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
   - Shugenja
   - Undead
+  - Unaligned
   text: 'After Junzo enters play: Lose 4 Honor.<br><b>Fear Battle:</b> Fear 4.'
   gold_cost: 10
   force: 3

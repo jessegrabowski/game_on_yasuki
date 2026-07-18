@@ -5,8 +5,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -14,6 +12,7 @@ cards:
   - Dragon
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not attach Followers or Items.<br>Air Dragon may not be targeted by Ranged Attack, Spell,
     or Kiho actions.
   gold_cost: 10
@@ -60,10 +59,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Explosives Master
+  - Unaligned
   text: <b>Repeatable Limited, :bow::</b> Destroy a target Fortification.<br><b>Repeatable Limited, :bow::</b>
     Permanently give a target Province with 1 or higher strength -1 strength.<br><b>Repeatable Reaction,
     :bow::</b> When paying for Explosives' ability or another copy of Alhundro Cornejo, reduce the action's
@@ -1168,8 +1166,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -1177,6 +1173,7 @@ cards:
   - Earth
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not attach Followers or Items.<br><b>Battle:</b> Earth Dragon has +5F while defending.
   gold_cost: 10
   force: 7
@@ -1509,8 +1506,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -1518,6 +1513,7 @@ cards:
   - Fire
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not attach Followers or Items.<br><b>Fire Battle, :bow::</b> Two consecutive Ranged 5 Attacks.
     <br><b>Fire Battle, :bow::</b> Ranged 10 Attack.
   gold_cost: 12
@@ -1854,12 +1850,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: When the Goblin Warmonger would be destroyed, if he has any Goblin Followers, instead destroy
     all cards in this unit except the Goblin Warmonger and bow the Goblin Warmonger.
   gold_cost: 5
@@ -2228,10 +2223,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
+  - Unaligned
   gold_cost: 3
   force: 1
   chi: 3
@@ -2937,12 +2931,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Ki-Rin
   - Nonhuman
+  - Unaligned
   text: While Ki-Rin is unbowed and honorable, Personalities with a Personal Honor of 0, 4, or 5 cannot
     assign or move into attacking armies at your Provinces' battlefields.
   gold_cost: 0
@@ -3091,12 +3084,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Kyoso enters play, lose 3 Honor and destroy one of your Holdings.<br>Will not attach Followers
     or Items.<br><b>Battle, :bow::</b> Ranged 7 Attack.
   gold_cost: 7
@@ -3667,10 +3659,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Arbitrator
+  - Unaligned
   text: <b>Absent Home Repeatable Battle, :bow::</b> If you control no units at the current battlefield
     and are not the Defender, move home a target Personality.
   gold_cost: 6
@@ -3706,11 +3697,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Samurai
+  - Unaligned
   gold_cost: 6
   force: 2
   chi: 2
@@ -3775,11 +3765,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Shadowlands
+  - Unaligned
   text: After Tsume enters play, lose 4 Honor.<br>Will not join a player with 1 or higher Family Honor.<br>After
     a Combat Segment begins, if Tsume is in your current army, bow all other Personalities in Tsume's
     army with 1 or higher Personal Honor.
@@ -3945,13 +3934,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Necromancer
   - Shadowlands
   - Shugenja
   - Undead
+  - Unaligned
   text: After Necromancer enters play, lose 3 Honor.<br>Necromancer has +1F for each Shadowlands Follower
     attached to him.<br><b>Repeatable Limited, :bow::</b> Equip a target Shadowlands Follower in your
     hand to Necromancer, ignoring Gold Cost.
@@ -4013,9 +4001,9 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
+  - Unaligned
   text: Ninja Shapeshifter's Followers must be Ninja.<br><b>Ninja Battle/Open:</b> Ninja Shapeshifter
     copies a target Personality's Force, Chi, Personal Honor, or ability that does not copy abilities.
   gold_cost: 10
@@ -4040,10 +4028,10 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
   - Spy
+  - Unaligned
   text: Will not attach non-Ninja Followers.<br><b>Ninja Repeatable Battle/Open, :bow::</b> Look at a
     target player's hand. Lose 1 Honor.<br><b>Ninja Repeatable Battle/Open, :bow::</b> Look at all face-down
     cards in a target player's Provinces. Lose 1 Honor.
@@ -4164,12 +4152,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: Cannot attach Armor or Followers.
   gold_cost: 9
   force: 6
@@ -4195,13 +4182,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Akuma enters play: Lose 3 Honor and destroy the province from which it entered.'
   gold_cost: 0
   force: 6
@@ -4221,12 +4207,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After the first time this game Shikibu enters play: Destroy one of your Personalities. <br>After
     your Dynasty Phase begins, if Shikibu is dead: Bring it into play, ignoring costs and lose 2 Honor.'
   gold_cost: 5
@@ -4955,11 +4940,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Samurai
+  - Unaligned
   gold_cost: 3
   force: 1
   chi: 1
@@ -5295,12 +5279,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
   - Shuten Doji
+  - Unaligned
   text: After Shuten Doji enters play, but before destroying it due to it having 0 Chi, give it four +1F/+1C
     tokens.<br>After your turn begins, destroy a token or created attachment on any other card in play.
     If you did, give Shuten Doji a +1F/+1C token. Otherwise, remove 3 tokens from Shuten Doji.
@@ -5785,12 +5768,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: '<b>Repeatable Limited, :bow::</b> Target any player''s Shadowlands Follower: Transfer it to The
     Demon Bride.<br><b>Fear Battle:</b> Fear 4'
   gold_cost: 12
@@ -5991,14 +5973,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
   - Dragon
   - Man-Beast
   - Nonhuman
+  - Unaligned
   text: Enters play paying 2 less Gold if you are a Brotherhood of Shinsei player.<br>Will not attach
     Followers or Armor.<br>Hoshi will not assign to a battlefiled where the enemy army contains a Dragon.
   gold_cost: 13
@@ -6234,13 +6215,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'Tsuburu has the additional cost, "Destroy one of your Personalities" to enter play.<br>After
     Tsuburu enters play: Lose 5 Honor.<br>Will not attach Followers or Armor.<br>After a Combat Segment
     ends, if Tsuburu is at the current battlefield and there are no defending units there: Give Tsuburu
@@ -6301,8 +6281,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -6310,6 +6288,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Void
+  - Unaligned
   text: 'Will not attach Followers or Items. <br>Once per turn, after an attacking army including Void
     Dragon destroys a province during battle resolution: You may discard the Defender''s hand.'
   gold_cost: 14
@@ -6359,8 +6338,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -6368,6 +6345,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Water
+  - Unaligned
   text: Will not attach Followers or Items.<br><b>Water Reaction:</b> After a turn begins, target a Shugenja
     and an ability on it that does not itself copy abilites. Water Dragon copies the ability.
   gold_cost: 10
@@ -6510,13 +6488,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
   - Shugenja
   - Undead
+  - Unaligned
   text: 'After Junzo enters play: Lose 4 Honor.<br><b>Fear Battle:</b> Fear 4.'
   gold_cost: 10
   force: 3
@@ -6535,10 +6512,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shugenja
+  - Unaligned
   text: '<b>Battle:</b> Any number of times per turn, bow Seiki: Ranged Attack with strength equal to
     her Chi.'
   gold_cost: 4

@@ -2082,13 +2082,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Fire
   - Monk
   - Ronin
   - Soul of Nakadai
+  - Unaligned
   text: After you Recruit Dainiko, give her four +1F <b>Fire</b> tokens.
   gold_cost: 5
   force: 0
@@ -3332,11 +3331,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Artisan
   - Geisha
+  - Unaligned
   text: <b>Invest :g6::</b> Show one or two non-Unique cards from your hand and/or Fate discard pile.
     Put them face-down under Harukaze and bow her.<br><b>Open, :bow:, :g2::</b> Put a card under Harukaze
     into your hand.
@@ -3825,14 +3823,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Kensai
   - Ronin
   - Samurai
   - Yojimbo
+  - Unaligned
   text: <i><i>(Duelists win tied duels versus non-Duelists. Kensai may attach two Weapons, as long as
     neither is Two-Handed.)</i></i>
   gold_cost: 4
@@ -4607,13 +4604,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Shugenja
   - Cavalry
   - Water
+  - Unaligned
   text: <b>Battle, :bow::</b> Move your target Personality at any location to Jihime's battlefield.
   gold_cost: 6
   force: 3
@@ -4936,13 +4932,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Commander
   - Ronin
   - Samurai
+  - Unaligned
   text: Enters play for 1 less Gold for each Farm other players control.
   gold_cost: 5
   force: 3
@@ -4967,11 +4962,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Berserker
   - Ronin
+  - Unaligned
   text: Kento has +2F while in an army with another Berserker.
   gold_cost: 6
   force: 4
@@ -4992,14 +4986,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Keppo • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: After Keppo enters play, lose 3 Honor. <br><b>Interrupt, :g*::</b> If the action Recruits Keppo
     or is his printed Battle action, after it resolves, Equip a target attachment from another player's
     discard pile to him.<br><b>Battle:</b> Destroy a target enemy attachment with 4 Gold Cost or less.
@@ -6111,13 +6104,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Centipede
   keywords:
   - Centipede Clan
   - Shugenja
   - Air
   - Fire
+  - Unaligned
   text: 'After an :air: or :fire: action resolves from a card at Hikaze''s battlefield, give her +1F.<br><b>Interrupt:</b>
     If the action has any :melee: or :ranged:, give them -2 strength and you may choose new targets for
     them.'
@@ -6140,13 +6133,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Centipede
   keywords:
   - Centipede Clan
   - Shugenja
   - Air
   - Fire
+  - Unaligned
   text: 'Rikuyo may only use one of her abilities per turn.<br><b>Tireless Open:</b> Straighten Rikuyo.
     This is not a :fire: action.<br><b>Battle, :bow::</b> :ranged: 3. This is not an :air: action.'
   gold_cost: 7
@@ -6567,12 +6560,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: Cannot attach Armor or Followers.
   gold_cost: 9
   force: 6
@@ -7615,13 +7607,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
   - Shugenja
   - Air
+  - Unaligned
   text: 'You may Proclaim Nanase.<br><b>Political Interrupt, :bow::</b> If the action is yours and would
     move Nanase or an enemy Personality, draw a card and negate all other non-movement effects of the
     action. This is not an :air: action.'
@@ -10101,12 +10092,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
   - Yojimbo
+  - Unaligned
   text: <b>Response:</b> If the action moved Zenko to a battlefield, straighten a target non-Samurai Personality.
   gold_cost: 6
   force: 4
