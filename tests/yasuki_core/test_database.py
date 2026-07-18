@@ -218,6 +218,19 @@ class TestSQLFiltering:
         assert len(cards) > 0
         assert all("Crane" in (c["clans"] or []) and "Personality" in c["types"] for c in cards)
 
+    def test_year_release_filter(self):
+        """year: matches cards by release era; a wider inequality is a superset of a narrower one."""
+        from_2010 = count_cards_filtered(
+            filter_options=build_search_filters("year>=2010 include:all")
+        )
+        from_2000 = count_cards_filtered(
+            filter_options=build_search_filters("year>=2000 include:all")
+        )
+        assert from_2010 > 0
+        assert from_2000 >= from_2010
+        exact = query_cards_filtered(filter_options=build_search_filters("year:2005"))
+        assert exact
+
     def test_presence_flags_filter(self):
         """is:flip finds double-faced cards; is:flip and -is:flip partition the catalog."""
         flip = query_cards_filtered(filter_options=build_search_filters("is:flip"))

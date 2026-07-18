@@ -23,8 +23,11 @@ to filter cards in real time; click the **?** button next to the box for inline 
 | `rarity:` | `r:` | `r:rare` |
 | `deck:` | `side:` | `deck:fate` |
 | `format:` | — | `format:"Ivory Edition"` |
+| `year:` | `yr:` | `year>=2010` |
 
-Values with spaces need quotes: `set:"Imperial Edition"`.
+Values with spaces need quotes: `set:"Imperial Edition"`. `year:` matches a card's
+release year against any printing's set, and takes the numeric operators
+(`year:2005`, `year>=2010`, `year<2000`).
 
 ## Numeric Fields
 

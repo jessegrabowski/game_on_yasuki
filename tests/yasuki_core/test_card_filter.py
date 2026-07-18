@@ -43,6 +43,14 @@ def test_name_search_stays_single_column():
     assert params == ["%kachiko%"]
 
 
+def test_year_filter_extracts_release_year():
+    exact, params = _build_card_filter(filter_options={"year_filters": [(":", 2005)]})
+    assert "EXTRACT(YEAR FROM s.release_date) = %s" in exact
+    assert params == [2005]
+    ge, _ = _build_card_filter(filter_options={"year_filters": [(">=", 2010)]})
+    assert "EXTRACT(YEAR FROM s.release_date) >= %s" in ge
+
+
 def test_presence_flags_are_null_checks():
     flip, _ = _build_card_filter(filter_options={"is_flip": True})
     assert "c.back_card_id IS NOT NULL" in flip

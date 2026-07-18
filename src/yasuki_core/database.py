@@ -1270,6 +1270,16 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
                 " JOIN l5r_sets s ON s.set_id = p.set_id WHERE s.set_name = ANY(%s))"
             )
             params.append(value)
+    elif property_name == "year_filters":
+        # Each (operator, year) matches a card with any printing from a set released that year (or
+        # on one side of it). Exact operators become =; inequalities come from the whitelist.
+        for op, year in value:
+            sql_op = _RANGE_OPS.get(op, "=")
+            conditions.append(
+                "c.card_id IN (SELECT p.card_id FROM prints p JOIN l5r_sets s ON s.set_id = p.set_id"
+                f" WHERE EXTRACT(YEAR FROM s.release_date) {sql_op} %s)"
+            )
+            params.append(year)
     elif property_name in ("decks", "decks_excludes"):
         if value:
             op = "NOT IN" if property_name.endswith("excludes") else "IN"

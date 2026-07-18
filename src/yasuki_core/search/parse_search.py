@@ -69,6 +69,7 @@ FIELD_ALIASES = {
     "fh": "starting_honor",
     "exp": "experience",
     "xp": "experience",
+    "yr": "year",
     "has": "is",
 }
 
@@ -448,6 +449,16 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                 filter_options["format_filters"] = specs
             if excluded:
                 filter_options["format_filters_excludes"] = excluded
+        elif field == "year":
+            # Release year, matched against any printing's set: exact (year:2005) or an inequality
+            # (year>=2010). Non-numeric values are ignored.
+            specs = [
+                (term.operator, int(term.value))
+                for term in terms_list
+                if not term.negated and term.value.strip().isdigit()
+            ]
+            if specs:
+                filter_options["year_filters"] = specs
         elif field in NUMERIC_FIELDS:
             # Numeric comparison filters tracked as a (min, max) pair. A bare "-" matches the dash
             # stat — one the card simply doesn't print, stored as NULL — and negation flips it to

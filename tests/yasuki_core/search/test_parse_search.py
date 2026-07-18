@@ -338,6 +338,16 @@ class TestFilterBuilding:
         _, filters = parse_and_build_query("set>=GE set<=DE")
         assert filters["set_filters"] == [(">=", "GE"), ("<=", "DE")]
 
+    def test_year_emits_operator_specs(self):
+        _, exact = parse_and_build_query("year:2005")
+        assert exact["year_filters"] == [(":", 2005)]
+        _, ge = parse_and_build_query("yr>=2010")
+        assert ge["year_filters"] == [(">=", 2010)]
+
+    def test_non_numeric_year_is_ignored(self):
+        _, filters = parse_and_build_query("year:soon")
+        assert "year_filters" not in filters
+
     def test_title_aliases_to_name(self):
         _, filters = parse_and_build_query("title:hida")
         assert filters["name_contains"] == ["hida"]
