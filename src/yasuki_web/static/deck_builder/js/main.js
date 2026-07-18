@@ -1,4 +1,4 @@
-import { $, debounce, titleCase, scrollToSelected, deckSide, stripUnique } from './helpers.js';
+import { $, debounce, scrollToSelected, deckSide, stripUnique } from './helpers.js';
 import { fetchJSON } from './api.js';
 import {
   addCard,
@@ -112,12 +112,15 @@ async function init() {
     }
   });
 
-  $('formatFilter').addEventListener('change', searchCards);
-  $('deckFilter').addEventListener('change', () => {
-    updateTypeFilterForDeck();
+  // Format and type drive the clan dropdown: narrow it to clans that still have a matching card
+  // before re-running the search, so the user can't pick a clan with no results.
+  const onDrivingFilterChange = async () => {
+    await updateClanFilter();
     searchCards();
-  });
-  $('typeFilter').addEventListener('change', searchCards);
+  };
+  $('formatFilter').addEventListener('change', onDrivingFilterChange);
+  $('typeFilter').addEventListener('change', onDrivingFilterChange);
+  $('clanFilter').addEventListener('change', searchCards);
 
   $('helpBtn').addEventListener('click', toggleHelp);
   $('addBtn').addEventListener('click', doAddSelectedToDeck);
@@ -261,8 +264,6 @@ async function removeMyDeck(slug) {
   }
 }
 
-let allTypes = [];
-
 async function populateFilters() {
   const fill = (selectEl, items, labelFn) => {
     items.forEach((item) => {
@@ -281,9 +282,9 @@ async function populateFilters() {
   };
 
   try {
-    const [formats, decks, types] = await Promise.all([
+    const [formats, clans, types] = await Promise.all([
       fetchJSON(`${API}/formats`),
-      fetchJSON(`${API}/decks`),
+      fetchJSON(`${API}/clans`),
       fetchJSON(`${API}/card-types`),
     ]);
     const arcs = formats.arcs || [];
@@ -291,51 +292,43 @@ async function populateFilters() {
     fill($('formatFilter'), arcs);
     if (arcs.length > 0 && other.length > 0) addSeparator($('formatFilter'));
     fill($('formatFilter'), other);
-    fill(
-      $('deckFilter'),
-      (decks.deck_types || []).map((d) => d.toUpperCase()),
-      (d) => titleCase(d),
-    );
-    allTypes = types.card_types || [];
-    fill($('typeFilter'), allTypes);
+    fill($('clanFilter'), clans.clans || []);
+    fill($('typeFilter'), types.card_types || []);
   } catch (e) {
     console.error('Failed to populate filters:', e);
   }
 }
 
-function repopulateTypeFilter(types) {
-  const typeEl = $('typeFilter');
-  const current = typeEl.value;
-  typeEl.innerHTML = '';
-  const allOpt = document.createElement('option');
-  allOpt.value = '';
-  allOpt.textContent = 'All Types';
-  typeEl.appendChild(allOpt);
-  types.forEach((t) => {
-    const opt = document.createElement('option');
-    opt.value = t;
-    opt.textContent = t;
-    typeEl.appendChild(opt);
-  });
-  if (types.includes(current)) {
-    typeEl.value = current;
-  } else {
-    typeEl.value = '';
-  }
-}
-
-async function updateTypeFilterForDeck() {
-  const deckVal = $('deckFilter').value;
-  if (!deckVal) {
-    repopulateTypeFilter(allTypes);
+// Rebuild the clan dropdown from the clans still reachable under the current format/type selection,
+// keeping the chosen clan if it survives and falling back to "All Clans" if it no longer matches.
+async function updateClanFilter() {
+  const clanEl = $('clanFilter');
+  const current = clanEl.value;
+  const params = new URLSearchParams();
+  const format = $('formatFilter').value;
+  const cardType = $('typeFilter').value;
+  if (format) params.set('format', format);
+  if (cardType) params.set('card_type', cardType);
+  let clans;
+  try {
+    const data = await fetchJSON(`${API}/clans?${params}`);
+    clans = data.clans || [];
+  } catch (e) {
+    console.error('Failed to update clan filter:', e);
     return;
   }
-  try {
-    const data = await fetchJSON(`${API}/card-types-by-deck?deck=${encodeURIComponent(deckVal)}`);
-    repopulateTypeFilter(data.card_types || []);
-  } catch (_) {
-    repopulateTypeFilter(allTypes);
-  }
+  clanEl.innerHTML = '';
+  const allOpt = document.createElement('option');
+  allOpt.value = '';
+  allOpt.textContent = 'All Clans';
+  clanEl.appendChild(allOpt);
+  clans.forEach((clan) => {
+    const opt = document.createElement('option');
+    opt.value = clan;
+    opt.textContent = clan;
+    clanEl.appendChild(opt);
+  });
+  clanEl.value = clans.includes(current) ? current : '';
 }
 
 function searchCards() {
@@ -350,12 +343,12 @@ async function fetchCards() {
   const params = new URLSearchParams();
   const search = $('searchInput').value.trim();
   const format = $('formatFilter').value;
-  const deckVal = $('deckFilter').value;
+  const clan = $('clanFilter').value;
   const cardType = $('typeFilter').value;
 
   if (search) params.set('search', search);
   if (format) params.set('format', format);
-  if (deckVal) params.set('deck', deckVal);
+  if (clan) params.set('clan', clan);
   if (cardType) params.set('card_type', cardType);
   params.set('limit', LIMIT);
   params.set('offset', offset);
