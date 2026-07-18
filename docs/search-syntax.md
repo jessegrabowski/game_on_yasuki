@@ -51,17 +51,21 @@ is:shugenja is:shadowlands
 
 ## Combining Terms
 
-Terms are ANDed by default. Use `OR` for alternatives, `-` to exclude, and quotes
-for an exact phrase:
+Terms are ANDed by default. Use `-` to exclude, `OR` between values of the **same**
+field for alternatives, and `!"..."` for an exact card-name match:
 
 ```
 clan:Crane type:personality force>3      # all three (AND)
-clan:Crane OR clan:Lion                   # either clan
+clan:Crane OR clan:Lion                   # either clan (same field)
+is:shugenja|courtier                      # either keyword (is: pipe)
 clan:Crane -type:event                    # Crane, excluding events
-"Doji Hoturi"                             # exact phrase
+-doji                                      # exclude cards matching "doji"
+"Doji Hoturi"                             # substring phrase
+!"Doji Hoturi"                            # exact card name (all its versions)
 ```
 
-Queries are case-insensitive (`clan:crane` = `clan:Crane`).
+Cross-field `OR` and parentheses aren't supported yet: `OR` only combines values
+of a single field. Queries are case-insensitive (`clan:crane` = `clan:Crane`).
 
 `-` works on any field: `-type:event`, `-clan:crane`, `-artist:Hara`,
 `-format>=diamond`. For an inequality it is the strict complement of the positive
@@ -75,7 +79,7 @@ matches nothing rather than everything.
 ```
 c:Crane t:personality f>=4                # powerful Crane personalities
 gold<=2 -type:holding                     # cheap non-holdings
-name:Experienced (c:Dragon OR c:Phoenix)  # experienced Dragon or Phoenix
+c:crane t:personality is:shugenja|courtier # Crane shugenja or courtiers
 is:unique t:personality chi>=2            # unique personalities, high chi
 is:cavalry clan:Unicorn force>=3          # Unicorn cavalry rush
 t:personality gold<=2 -is:unique          # cheap spam
