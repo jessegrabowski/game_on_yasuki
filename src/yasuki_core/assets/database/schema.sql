@@ -127,6 +127,10 @@ CREATE TABLE prints (
 
   rarity               TEXT,
   flavor_text          TEXT,
+  -- This printing's own rules wording, kept only when it differs from the card's canonical text
+  -- (e.g. a reprint reworded the ability). NULL means "no printing-specific text"; readers fall
+  -- back to cards.rules_text, which follows the most-recent-printing + errata standard.
+  rules_text           TEXT,
   -- Some printings carry a special back -- a story scroll or a clan card-back -- instead of the
   -- generic one. The art is a role='back' print_image; back_flavor holds a scroll's prose and
   -- back_title its name (both usually null). Distinct from cards.back_card_id, which is a flip face.
@@ -216,6 +220,9 @@ CREATE TABLE card_revisions (
 CREATE INDEX idx_cards_name_trgm        ON cards USING gin (name gin_trgm_ops);
 CREATE INDEX idx_cards_rules_text_trgm  ON cards USING gin (rules_text gin_trgm_ops);
 CREATE INDEX idx_cards_rules_tsv        ON cards USING gin (rules_tsv);
+-- Partial: only the handful of printings that override their wording get indexed, so text search
+-- can reach an old printed phrasing the card's current text no longer contains.
+CREATE INDEX idx_prints_rules_text_trgm ON prints USING gin (rules_text gin_trgm_ops) WHERE rules_text IS NOT NULL;
 CREATE INDEX idx_cards_name             ON cards (name);
 CREATE INDEX idx_cards_name_normalized  ON cards (name_normalized);
 CREATE INDEX idx_cards_lower_name       ON cards (lower(name));

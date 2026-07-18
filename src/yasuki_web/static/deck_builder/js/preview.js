@@ -172,8 +172,11 @@ function renderPreview() {
   if (!isCustom && currentPrint?.flavor_text) {
     html += '<div class="preview-flavor">' + esc(currentPrint.flavor_text) + '</div>';
   }
-  if (card.text) {
-    html += '<div class="preview-rules">' + esc(card.text) + '</div>';
+  // A printing carries its own rules_text only when its wording differs from the card's canonical
+  // text; otherwise fall back to the card's current (MRP + errata) text.
+  const rulesText = (!isCustom && currentPrint?.rules_text) || card.text;
+  if (rulesText) {
+    html += '<div class="preview-rules">' + esc(rulesText) + '</div>';
   }
   el.innerHTML = html;
 

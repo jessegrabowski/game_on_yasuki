@@ -384,7 +384,7 @@ def get_prints_by_card_id(card_id: str) -> list[dict]:
                     p.print_id, p.card_id, s.set_name, s.set_slug, p.rarity, p.artist,
                     front.path AS image_path,
                     COALESCE(back.path, pback.path) AS back_image_path,
-                    p.flavor_text,
+                    p.flavor_text, p.rules_text,
                     COALESCE(bp.flavor_text, p.back_flavor) AS back_flavor_text,
                     p.back_title
                 FROM prints p
@@ -1041,10 +1041,12 @@ def _build_card_filter(
         conditions.append(
             "(c.name ILIKE %s ESCAPE '\\'"
             " OR c.card_id ILIKE %s ESCAPE '\\'"
-            " OR (c.rules_text || ' ' || COALESCE(back.rules_text, '')) ILIKE %s ESCAPE '\\')"
+            " OR (c.rules_text || ' ' || COALESCE(back.rules_text, '')) ILIKE %s ESCAPE '\\'"
+            " OR EXISTS (SELECT 1 FROM prints p WHERE p.card_id = c.card_id"
+            " AND p.rules_text ILIKE %s ESCAPE '\\'))"
         )
         search_pattern = f"%{_escape_like(text_query)}%"
-        params.extend([search_pattern, search_pattern, search_pattern])
+        params.extend([search_pattern, search_pattern, search_pattern, search_pattern])
 
     if filter_options:
         for property_name, value in filter_options.items():
@@ -1057,23 +1059,31 @@ def _build_card_filter(
                 # matching everything or text-searching the value.
                 logger.warning("Unknown search field(s), returning no results: %s", value)
                 conditions.append("FALSE")
-            elif property_name in (
-                "name_contains",
-                "name_excludes",
-                "rules_text_contains",
-                "rules_text_excludes",
-            ):
-                # Rules text matches either face (the back has its own text); name is identical
-                # across faces, so it stays single-column.
-                column = (
-                    "c.name"
-                    if property_name.startswith("name")
-                    else "(c.rules_text || ' ' || COALESCE(back.rules_text, ''))"
-                )
+            elif property_name in ("name_contains", "name_excludes"):
+                # Name is identical across faces, so it stays single-column.
                 op = "NOT ILIKE" if property_name.endswith("excludes") else "ILIKE"
                 for needle in value:
-                    conditions.append(f"{column} {op} %s ESCAPE '\\'")
+                    conditions.append(f"c.name {op} %s ESCAPE '\\'")
                     params.append(f"%{_escape_like(needle)}%")
+            elif property_name in ("rules_text_contains", "rules_text_excludes"):
+                # Rules text matches either face (the back has its own text) and any printing's own
+                # wording, so a reworded reprint's phrasing is findable even when the card's current
+                # text dropped it. Excludes negates the whole disjunction (De Morgan).
+                card_col = "(c.rules_text || ' ' || COALESCE(back.rules_text, ''))"
+                print_exists = (
+                    "EXISTS (SELECT 1 FROM prints p WHERE p.card_id = c.card_id"
+                    " AND p.rules_text ILIKE %s ESCAPE '\\')"
+                )
+                excludes = property_name.endswith("excludes")
+                for needle in value:
+                    pattern = f"%{_escape_like(needle)}%"
+                    if excludes:
+                        conditions.append(
+                            f"({card_col} NOT ILIKE %s ESCAPE '\\' AND NOT {print_exists})"
+                        )
+                    else:
+                        conditions.append(f"({card_col} ILIKE %s ESCAPE '\\' OR {print_exists})")
+                    params.extend([pattern, pattern])
             elif property_name == "legality":
                 formats, _statuses = value
                 if isinstance(formats, str):

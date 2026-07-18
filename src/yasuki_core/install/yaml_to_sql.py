@@ -226,6 +226,48 @@ def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[list,
     return row, extra
 
 
+def _print_columns(entry: dict, card_id: str, printing_id: str, set_id: int) -> tuple:
+    """Build the prints-table row for one YAML entry (one printing of a card).
+
+    ``print_text`` is this printing's own rules wording, authored only where it differs from the
+    card's canonical text; when absent the column is None and readers fall back to
+    ``cards.rules_text`` (the most-recent-printing + errata standard).
+
+    Parameters
+    ----------
+    entry : dict
+        A single card entry from a set's YAML ``cards`` list.
+    card_id : str
+        The card's canonical id.
+    printing_id : str
+        Within-card printing key (set slug, suffixed for repeats in one set).
+    set_id : int
+        Foreign key into ``l5r_sets``.
+
+    Returns
+    -------
+    row : tuple
+        Positional values matching the ``prints`` INSERT column list.
+    """
+    return (
+        card_id,
+        printing_id,
+        set_id,
+        entry.get("rarity"),
+        entry.get("flavor_text"),
+        entry.get("print_text"),
+        entry.get("back_title"),
+        entry.get("back_flavor"),
+        entry.get("artist"),
+        entry.get("designer"),
+        entry.get("collector_number"),
+        entry.get("publisher"),
+        entry.get("publisher_url"),
+        bool(entry.get("doublesided")),
+        coerce_date(entry.get("legal_date")),
+    )
+
+
 def _link_and_validate_back_faces(cards: dict, card_names: dict, back_ids: set) -> None:
     """Point each front row at its back face. Every is_back card must have a front (is_back=False)
     card of the same name — the link is derived from that shared name, so its absence is a fatal
@@ -351,26 +393,10 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                 n = printings_seen.get(card_id, 0)
                 printings_seen[card_id] = n + 1
                 printing_id = set_slug if n == 0 else f"{set_slug}_{n + 1}"
-                collector = entry.get("collector_number")
-                print_rows.append(
-                    (
-                        card_id,
-                        printing_id,
-                        set_id,
-                        entry.get("rarity"),
-                        entry.get("flavor_text"),
-                        entry.get("back_title"),
-                        entry.get("back_flavor"),
-                        entry.get("artist"),
-                        entry.get("designer"),
-                        collector,
-                        entry.get("publisher"),
-                        entry.get("publisher_url"),
-                        bool(entry.get("doublesided")),
-                        coerce_date(entry.get("legal_date")),
-                    )
+                print_rows.append(_print_columns(entry, card_id, printing_id, set_id))
+                number_map[(card_id, printing_id)] = parse_collector_numbers(
+                    entry.get("collector_number")
                 )
-                number_map[(card_id, printing_id)] = parse_collector_numbers(collector)
 
         _link_and_validate_back_faces(cards, card_names, back_ids)
 
@@ -492,9 +518,9 @@ def _insert_all(
     cur.executemany(
         """
         INSERT INTO prints (
-          card_id, printing_id, set_id, rarity, flavor_text, back_title, back_flavor, artist, designer,
-          collector_number_raw, publisher, publisher_url, doublesided, legal_date
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+          card_id, printing_id, set_id, rarity, flavor_text, rules_text, back_title, back_flavor,
+          artist, designer, collector_number_raw, publisher, publisher_url, doublesided, legal_date
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (card_id, printing_id) DO NOTHING
         """,
         print_rows,
