@@ -147,24 +147,26 @@ class TestQueryParsing:
     def test_single_term(self):
         parsed = parse_search_query("name:Doji")
         assert len(parsed.terms) == 1
-        assert parsed.logic == "AND"
         assert parsed.terms[0].field == "name"
         assert parsed.terms[0].value == "Doji"
 
-    def test_multiple_terms_implicit_and(self):
+    def test_multiple_terms(self):
         parsed = parse_search_query("name:Doji type:personality")
         assert len(parsed.terms) == 2
-        assert parsed.logic == "AND"
 
-    def test_explicit_and(self):
+    def test_and_keyword_is_stripped(self):
         parsed = parse_search_query("name:Doji AND type:personality")
         assert len(parsed.terms) == 2
-        assert parsed.logic == "AND"
 
-    def test_or_logic(self):
+    def test_or_keyword_is_stripped(self):
+        # This flat parser drops OR; the boolean AST (boolean_query) is what honors real OR.
         parsed = parse_search_query("clan:Crane OR clan:Lion")
         assert len(parsed.terms) == 2
-        assert parsed.logic == "OR"
+
+    def test_keywords_stripped_when_mixed_with_or(self):
+        # Regression: the old OR-splitting path left AND/NOT as bogus text terms.
+        parsed = parse_search_query("clan:Crane OR type:personality AND is:unique")
+        assert [term.field for term in parsed.terms] == ["clan", "type", "is"]
 
     def test_mixed_terms(self):
         parsed = parse_search_query('name:Doji force>3 "Crane Clan"')
@@ -177,7 +179,6 @@ class TestQueryParsing:
     def test_empty_query(self):
         parsed = parse_search_query("")
         assert len(parsed.terms) == 0
-        assert parsed.logic == "AND"
 
     def test_negated_terms(self):
         parsed = parse_search_query("clan:Crane -type:event")

@@ -1,6 +1,5 @@
 import re
 from dataclasses import dataclass
-from typing import Literal
 
 
 @dataclass
@@ -29,18 +28,15 @@ class SearchTerm:
 @dataclass
 class ParsedQuery:
     """
-    Represents a parsed search query with terms and logic.
+    A parsed search query as a flat list of terms.
 
     Attributes
     ----------
     terms : list of SearchTerm
         Individual search terms
-    logic : str
-        Boolean logic ('AND' or 'OR')
     """
 
     terms: list[SearchTerm]
-    logic: Literal["AND", "OR"] = "AND"
 
 
 FIELD_ALIASES = {
@@ -244,81 +240,30 @@ def parse_token(token: str) -> SearchTerm:
 
 def parse_search_query(query: str) -> ParsedQuery:
     """
-    Parse a search query string into structured search terms.
+    Parse a search query string into a flat, deduplicated list of terms.
 
-    Supports Scryfall-style syntax:
-    - Field-specific: name:Doji, type:personality, force>3
-    - Exact match: "Doji Hoturi", !"exact phrase"
-    - Boolean: term1 AND term2, term1 OR term2
-    - Negation: -type:event, NOT type:event
-    - Numeric comparison: force>=3, chi<2, gold:5
-    - Special: is:unique
+    Bare boolean keywords (AND/OR/NOT) are stripped; combining logic lives downstream, where
+    ``build_filter_options`` ORs same-field values and ANDs everything else. (The deck-builder search
+    box parses through ``boolean_query`` instead, which honors real cross-field OR and grouping.)
 
     Parameters
     ----------
     query : str
-        Search query string
+        Search query string.
 
     Returns
     -------
     parsed : ParsedQuery
-        Parsed query with terms and logic
-
-    Examples
-    --------
-    >>> parse_search_query('name:Doji type:personality')
-    ParsedQuery(terms=[...], logic='AND')
-
-    >>> parse_search_query('clan:Crane OR clan:Lion')
-    ParsedQuery(terms=[...], logic='OR')
+        The parsed terms, deduplicated in order.
     """
-    if not query.strip():
-        return ParsedQuery(terms=[], logic="AND")
-
-    # Determine logic (default AND)
-    logic = "AND"
-    if " OR " in query.upper():
-        logic = "OR"
-        # Normalize OR separators
-        query = re.sub(r"\s+OR\s+", " OR ", query, flags=re.IGNORECASE)
-
-    # Tokenize first (this handles quotes properly)
-    tokens = tokenize_query(query)
-
-    # Split on OR if present
-    if logic == "OR":
-        # Split tokens on OR keyword
-        token_groups = []
-        current_group = []
-        for token in tokens:
-            if token.upper() == "OR":
-                if current_group:
-                    token_groups.append(current_group)
-                    current_group = []
-            else:
-                current_group.append(token)
-        if current_group:
-            token_groups.append(current_group)
-
-        # Flatten all tokens
-        all_tokens = []
-        for group in token_groups:
-            all_tokens.extend(group)
-    else:
-        # Filter out AND/OR/NOT keywords (they're handled implicitly)
-        all_tokens = [t for t in tokens if t.upper() not in ("AND", "OR", "NOT")]
-
-    # Remove duplicates while preserving order
+    terms = []
     seen = set()
-    unique_tokens = []
-    for token in all_tokens:
-        if token not in seen:
-            seen.add(token)
-            unique_tokens.append(token)
-
-    terms = [parse_token(token) for token in unique_tokens]
-
-    return ParsedQuery(terms=terms, logic=logic)
+    for token in tokenize_query(query):
+        if token.upper() in ("AND", "OR", "NOT") or token in seen:
+            continue
+        seen.add(token)
+        terms.append(parse_token(token))
+    return ParsedQuery(terms=terms)
 
 
 def _scope_text_field(terms_list: list, prefix: str, filter_options: dict) -> None:
