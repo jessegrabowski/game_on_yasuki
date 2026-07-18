@@ -176,10 +176,10 @@ class TestSQLFiltering:
         )
 
     def test_filter_by_clan(self):
-        """Should filter by clan membership."""
+        """Should filter by clan membership, plus the universal All Clans senseis any clan leads."""
         cards = query_cards_filtered(filter_options={"clans": ["Crane"]})
         assert len(cards) > 0
-        assert all("Crane" in (c["clans"] or []) for c in cards)
+        assert all({"Crane", "All Clans"} & set(c["clans"] or []) for c in cards)
 
     def test_filter_by_clan_is_case_insensitive(self):
         """clan:crane should match the same cards as clan:Crane."""
