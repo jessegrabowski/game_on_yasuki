@@ -1,4 +1,5 @@
-from yasuki_core.database import _build_card_filter
+from yasuki_core.database import _build_card_filter, compile_term
+from yasuki_core.search.parse_search import parse_token
 
 # _build_card_filter is a pure (clause, params) builder — no database needed — so these run
 # everywhere, unlike the DB-backed tests in test_database.py.
@@ -108,3 +109,39 @@ def test_set_excludes_negates_membership_and_fails_closed():
     assert "EXISTS (SELECT 1 FROM l5r_sets" in clause
     assert "AND c.card_id NOT IN (SELECT p.card_id FROM prints p" in clause
     assert "s.release_date >=" in clause
+
+
+# compile_term maps one search term to one predicate by reusing the same per-field SQL as
+# _build_card_filter, so the field-specific shape is covered above; these pin its composition rules.
+def test_compile_term_returns_a_single_condition_bare():
+    sql, params = compile_term(parse_token("c:crane"))
+    assert sql == "c.card_id IN (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"
+    assert set(params[0]) == {"crane", "all clans"}
+
+
+def test_compile_term_bare_word_uses_the_broad_union():
+    sql, params = compile_term(parse_token("crane"))
+    assert sql.startswith("(c.name ILIKE")
+    assert _PRINT_EXISTS in sql
+    assert params == ["%crane%"] * 4
+
+
+def test_compile_term_ands_a_multi_condition_term():
+    # is:a&b compiles to both keyword predicates ANDed into one parenthesized expression, with
+    # params in placeholder order.
+    sql, params = compile_term(parse_token("is:cavalry&kensai"))
+    assert sql.startswith("(") and sql.endswith(")")
+    assert " AND " in sql
+    assert sql.count("card_keywords") == 2
+    assert params == ["cavalry", "kensai"]
+
+
+def test_compile_term_without_constraints_is_true():
+    sql, params = compile_term(parse_token("all:cards"))
+    assert sql == "TRUE"
+    assert params == []
+
+
+def test_compile_term_negation_reuses_the_exclude_sql():
+    sql, _ = compile_term(parse_token("-t:sensei"))
+    assert "c.card_id NOT IN (SELECT card_id FROM card_card_types" in sql

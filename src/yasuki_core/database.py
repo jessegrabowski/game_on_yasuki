@@ -9,6 +9,8 @@ from psycopg_pool import ConnectionPool
 
 import logging
 
+from yasuki_core.search.parse_search import ParsedQuery, SearchTerm, build_filter_options
+
 logger = logging.getLogger(__name__)
 
 _pool: ConnectionPool | None = None
@@ -1411,6 +1413,44 @@ def _build_card_filter(
 
     where_clause = "WHERE " + " AND ".join(conditions) if conditions else ""
     return where_clause, params
+
+
+def compile_term(term: SearchTerm) -> tuple[str, list]:
+    """
+    Compile one search term (a boolean-AST leaf) into a single SQL predicate and its params.
+
+    Reuse ``build_filter_options`` to map the term to filter keys, then ``_emit_condition`` for each
+    key's SQL, ANDing a term's several conditions (e.g. ``is:a&b``) into one parenthesized
+    predicate. A term that constrains nothing (``all:``) compiles to ``TRUE``.
+
+    Parameters
+    ----------
+    term : SearchTerm
+        A single parsed search term.
+
+    Returns
+    -------
+    sql : str
+        One SQL boolean expression, safe to combine under AND/OR/NOT.
+    params : list
+        Positional parameters for the expression's ``%s`` placeholders.
+    """
+    text_query, filter_options = build_filter_options(ParsedQuery(terms=[term]))
+    conditions: list[str] = []
+    params: list = []
+    if text_query:
+        sql, pattern_params = _bare_text_predicate(text_query)
+        conditions.append(sql)
+        params.extend(pattern_params)
+    for property_name, value in filter_options.items():
+        new_conditions, new_params = _emit_condition(property_name, value)
+        conditions.extend(new_conditions)
+        params.extend(new_params)
+    if not conditions:
+        return "TRUE", params
+    if len(conditions) == 1:
+        return conditions[0], params
+    return "(" + " AND ".join(conditions) + ")", params
 
 
 def query_cards_filtered(
