@@ -71,6 +71,29 @@ image manifest entry. Same-set reprints get suffixed printing ids (`<slug>`, `<s
 gameplay versions (e.g. Experienced) need a distinct `extended_title` so they slug to a distinct
 `card_id` instead of merging.
 
+### How a card's canonical text is chosen, and per-printing wording
+
+A card has one canonical `rules_text` on its `cards` row, chosen by the **most-recent-printing (MRP)
+standard**: across all of a card's entries, the `text:` from the newest-released printing wins (an
+erratum, being newer still, then overrides it). Every read path and the primary search use this one
+value.
+
+When a specific printing's wording genuinely differs (a reprint reworded the ability) and you want
+that phrasing preserved and searchable, add an optional `print_text:` to that printing's entry:
+
+```yaml
+- title: Kakita Toshimoko
+  text: 'Battle: ...'          # feeds the card's canonical text via the MRP rule
+  # ...printing fields...
+  print_text: 'Kenshinzen Battle: ...'   # THIS printing's own wording
+```
+
+`print_text` is stored on the `prints` row (`prints.rules_text`); when absent the column is NULL and
+every reader falls back to the card's canonical text. Text search matches a card when the phrase is in
+its current text **or** in any printing's `print_text`, so an old reprint's phrasing stays findable
+even after the card's current wording drops it. `text:` is unchanged by this — leave it as the card's
+current wording; `print_text` is a pure additive override.
+
 ### Issue an errata (a revision)
 
 Errata are a **revision time-axis, orthogonal to printings** — a card can have many printings *and*
@@ -156,10 +179,10 @@ If manifest entries or local bytes go missing (a bad edit, an interrupted sync):
 
 `title`, `types`, `decks`, `keywords`, `text`, stat fields (`gold_cost`, `focus`, `force`, `chi`,
 `personal_honor`, `honor_requirement`, `province_strength`, `starting_honor`, `gold_production`),
-`legality`, `rarity`, `artist`, `designer`, `flavor_text`, `collector_number`, `publisher`,
-`publisher_url`. Optional identity: `id` (explicit card id), `extended_title` (experience
-disambiguation), `is_back` (flip-card back face). Optional: `errata` (list), `errata_text` (a legacy
-free-text note, distinct from the structured `errata:` list).
+`legality`, `rarity`, `artist`, `designer`, `flavor_text`, `print_text`, `collector_number`,
+`publisher`, `publisher_url`. Optional identity: `id` (explicit card id), `extended_title`
+(experience disambiguation), `is_back` (flip-card back face). Optional: `errata` (list),
+`errata_text` (a legacy free-text note, distinct from the structured `errata:` list).
 
 ### `card_revisions` columns
 

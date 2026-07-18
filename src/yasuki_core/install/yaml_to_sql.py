@@ -226,6 +226,48 @@ def _card_columns(card_id: str, extended_title: str, entry: dict) -> tuple[list,
     return row, extra
 
 
+def _print_columns(entry: dict, card_id: str, printing_id: str, set_id: int) -> tuple:
+    """Build the prints-table row for one YAML entry (one printing of a card).
+
+    ``print_text`` is this printing's own rules wording, authored only where it differs from the
+    card's canonical text; when absent the column is None and readers fall back to
+    ``cards.rules_text`` (the most-recent-printing + errata standard).
+
+    Parameters
+    ----------
+    entry : dict
+        A single card entry from a set's YAML ``cards`` list.
+    card_id : str
+        The card's canonical id.
+    printing_id : str
+        Within-card printing key (set slug, suffixed for repeats in one set).
+    set_id : int
+        Foreign key into ``l5r_sets``.
+
+    Returns
+    -------
+    row : tuple
+        Positional values matching the ``prints`` INSERT column list.
+    """
+    return (
+        card_id,
+        printing_id,
+        set_id,
+        entry.get("rarity"),
+        entry.get("flavor_text"),
+        entry.get("print_text"),
+        entry.get("back_title"),
+        entry.get("back_flavor"),
+        entry.get("artist"),
+        entry.get("designer"),
+        entry.get("collector_number"),
+        entry.get("publisher"),
+        entry.get("publisher_url"),
+        bool(entry.get("doublesided")),
+        coerce_date(entry.get("legal_date")),
+    )
+
+
 def _link_and_validate_back_faces(cards: dict, card_names: dict, back_ids: set) -> None:
     """Point each front row at its back face. Every is_back card must have a front (is_back=False)
     card of the same name — the link is derived from that shared name, so its absence is a fatal
@@ -242,6 +284,26 @@ def _link_and_validate_back_faces(cards: dict, card_names: dict, back_ids: set) 
         if front_id not in cards:
             raise ValueError(f"Back-face card {back_id!r} has no front card {front_id!r}")
         cards[front_id][_BACK_CARD_ID_COL] = back_id
+
+
+def mrp_text(dated_texts: list[tuple[datetime.date | None, str]]) -> str | None:
+    """The rules text from the most-recently-released printing (the MRP standard). Each element is a
+    ``(release_date, text)`` pair for one printing that carries text; a null date sorts oldest so a
+    dated printing always wins over an undated one. Return None for an empty list.
+
+    Parameters
+    ----------
+    dated_texts : list of tuple of (date or None, str)
+        One ``(release_date, text)`` pair per printing of the card that has non-empty text.
+
+    Returns
+    -------
+    text : str or None
+        The text on the newest printing, or None if there are no printings.
+    """
+    if not dated_texts:
+        return None
+    return max(dated_texts, key=lambda dt: dt[0] or datetime.date.min)[1]
 
 
 def load_cards(cards_dir: Path, dsn: str) -> None:
@@ -279,9 +341,14 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
     # card's canonical row happens to come from (filename sort order) never decides which errata win.
     errata_map: dict[str, list[dict]] = {}
 
+    # The Most-Recent-Printing standard: a card's standing rules text is the text on its newest
+    # printing, not whichever set file happens to sort first. Collect every printing's text per card
+    # and fold the most recent onto the card row once every file is read.
+    latest_text: dict[str, list[tuple[datetime.date | None, str]]] = {}
+
     with psycopg.connect(dsn) as conn, conn.cursor() as cur:
-        cur.execute("SELECT set_name, set_id, set_slug FROM l5r_sets")
-        set_map = {name: (set_id, slug) for name, set_id, slug in cur.fetchall()}
+        cur.execute("SELECT set_name, set_id, set_slug, release_date FROM l5r_sets")
+        set_map = {name: (set_id, slug, date) for name, set_id, slug, date in cur.fetchall()}
 
         for yaml_file in yaml_files:
             data = yaml.safe_load(yaml_file.read_text(encoding="utf-8"))
@@ -290,7 +357,7 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
             if resolved is None:
                 logger.warning("Set %r not in l5r_sets; skipping %s", set_name, yaml_file.name)
                 continue
-            set_id, set_slug = resolved
+            set_id, set_slug, set_date = resolved
 
             printings_seen: dict[str, int] = {}
             for entry in data.get("cards", []):
@@ -298,6 +365,10 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                 card_id = entry.get("id") or card_slug(extended_title)
                 if entry.get("is_back"):
                     card_id += "__back"
+
+                entry_text = entry.get("text")
+                if entry_text:
+                    latest_text.setdefault(card_id, []).append((set_date, entry_text))
 
                 if card_id not in cards:
                     cards[card_id], _ = _card_columns(card_id, extended_title, entry)
@@ -322,28 +393,19 @@ def load_cards(cards_dir: Path, dsn: str) -> None:
                 n = printings_seen.get(card_id, 0)
                 printings_seen[card_id] = n + 1
                 printing_id = set_slug if n == 0 else f"{set_slug}_{n + 1}"
-                collector = entry.get("collector_number")
-                print_rows.append(
-                    (
-                        card_id,
-                        printing_id,
-                        set_id,
-                        entry.get("rarity"),
-                        entry.get("flavor_text"),
-                        entry.get("back_title"),
-                        entry.get("back_flavor"),
-                        entry.get("artist"),
-                        entry.get("designer"),
-                        collector,
-                        entry.get("publisher"),
-                        entry.get("publisher_url"),
-                        bool(entry.get("doublesided")),
-                        coerce_date(entry.get("legal_date")),
-                    )
+                print_rows.append(_print_columns(entry, card_id, printing_id, set_id))
+                number_map[(card_id, printing_id)] = parse_collector_numbers(
+                    entry.get("collector_number")
                 )
-                number_map[(card_id, printing_id)] = parse_collector_numbers(collector)
 
         _link_and_validate_back_faces(cards, card_names, back_ids)
+
+        # Set each card's standing rules text to its most-recent printing (MRP standard). This runs
+        # before errata folding so an erratum, being the newest revision, still wins over the printing.
+        for card_id, dated_texts in latest_text.items():
+            text = mrp_text(dated_texts)
+            if text is not None and card_id in cards:
+                cards[card_id][_RULES_TEXT_COL] = text
 
         # Fold each errata'd card's newest revision onto its cards row so every existing read path
         # serves the current text/stats, and stage the full ordered history for card_revisions.
@@ -456,9 +518,9 @@ def _insert_all(
     cur.executemany(
         """
         INSERT INTO prints (
-          card_id, printing_id, set_id, rarity, flavor_text, back_title, back_flavor, artist, designer,
-          collector_number_raw, publisher, publisher_url, doublesided, legal_date
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+          card_id, printing_id, set_id, rarity, flavor_text, rules_text, back_title, back_flavor,
+          artist, designer, collector_number_raw, publisher, publisher_url, doublesided, legal_date
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON CONFLICT (card_id, printing_id) DO NOTHING
         """,
         print_rows,

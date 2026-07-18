@@ -149,8 +149,8 @@ cards:
   keywords:
   - Bushido Virtue
   - Duty
-  text: <b>Battle/Open:</b> Target two or three of your performing Samurai. Each of them has +1F and the
-    ability, "<b>Battle:</b> Ranged 4 Attack" while in an army with one or more of the others.
+  text: 'Battle/Open: Target two or three of your Paragons or Samurai. Each target has +1F and the ability,
+    "Battle: :ranged: 4" while in an army with one or more of the other targets.'
   gold_cost: 0
   focus: 3
   legality:

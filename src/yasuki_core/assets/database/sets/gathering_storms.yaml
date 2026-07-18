@@ -55,8 +55,7 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: '<b>Battle:</b> Ranged 2 Attack.<br><b>Reaction:</b> After you target another player''s card with
-    a Ranged Attack: Increase that Ranged Attack''s strength by 2.'
+  text: 'Battle: :ranged: 2. Interrupt: Give your :ranged: from the action +2 strength.'
   gold_cost: 0
   focus: 3
   legality:
@@ -176,8 +175,8 @@ cards:
   - Dynasty
   keywords:
   - Market
-  text: ':bow:: Produce 2 Gold, plus 1 Gold if you control one or more Ports, plus 1 Gold if you control
-    one or more other Markets.'
+  text: This Holding has +1GP if you control one or more Ports and +1GP if you control one or more other
+    Markets.
   gold_cost: 3
   gold_production: 2
   legality:
@@ -554,7 +553,7 @@ cards:
   - Follower
   decks:
   - Fate
-  text: <b>Battle, :bow::</b> Ranged 2 Attack. <br><b>Battle:</b> Fear 2.
+  text: 'Battle, :bow:: :ranged: 2. Battle: :fear: 2.'
   gold_cost: 4
   focus: 1
   force: 2
@@ -772,8 +771,7 @@ cards:
   - Mercenary
   - Ninja
   - Ronin
-  text: After this Follower enters play, lose 1 Honor.<br><b>Ninja Battle, :g2::</b> Ranged 3 Attack <i>(Destroy
-    a target enemy Follower or Personality without Followers with 3 or lower Force)</i>.
+  text: 'After this Follower enters play, lose 1 Honor. Battle, :g2:: :ranged: 3.'
   gold_cost: 2
   focus: 3
   force: 2
@@ -979,8 +977,8 @@ cards:
   - Fate
   keywords:
   - Ronin
-  text: '<b>Battle/Open:</b> If this card is in your hand, target your Personality: Attach this card to
-    him, paying all costs. At the end of this turn, if this card is in play, you may put it in your hand.'
+  text: 'Battle/Open, :gstar:: Equip this Follower from your hand to your target Personality. At the end
+    of this turn, if this Follower is in play, you may return it to your hand.'
   gold_cost: 7
   focus: 2
   force: 4

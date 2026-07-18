@@ -7,10 +7,8 @@ cards:
   - Fate
   keywords:
   - Political
-  text: 'Invest :g1:: For each target with 0 Personal Honor, his controller loses 1 Honor. <i>(After this
-    card is played, you may also pay the Invest cost to get the effect, once.)</i><br><b>Political Open:</b>
-    Target two Personalities controlled by the same player. They may not attack in the same army <i>(this
-    turn)</i>.'
+  text: 'Invest :g1:: The player loses 1 Honor for each target with 0 Personal Honor. Political Open: Target
+    two Personalities controlled by the same player. They may not attack in the same army (this turn).'
   focus: 1
   legality:
   - A Brother's Destiny (Ivory Edition)
@@ -71,8 +69,8 @@ cards:
   - Nonhuman
   - Phoenix Clan
   - Shugenja
-  text: <b>Earth Fire Battle:</b> Bow a target enemy card without attachments. You may discard a card
-    with an element keyword <i>(Air, Earth, Fire, Void, or Water)</i> to destroy it.
+  text: 'Battle: Bow a target enemy card without attachments. You may discard a card with an element keyword
+    (:air:, :earth:, :fire:, :void:, or :water:) to destroy it.'
   gold_cost: 8
   force: 4
   chi: 3
@@ -120,9 +118,9 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: <b>Dynasty, :g5::</b> If you control a Personality, create a 2F/2C/2PH Samurai • Yojimbo Personality
-    and either a 2F/2C/2PH Shugenja Personality, or a 0F/3C/2PH Courtier Personality, both with your Clan
-    Alignment. If you created a Courtier, a target player gains or loses 1 Honor.
+  text: 'Dynasty, :g5:: If you control a Personality, create a 2F/2C/2PH Samurai • Yojimbo Personality and
+    either a 2F/2C/2PH Shugenja Personality, or a 0F/3C/2PH Courtier Personality, both with your Clan Alignment.
+    If you created a Courtier, a target player gains or loses 1 Honor.'
   focus: 3
   legality:
   - Shattered Empire
@@ -367,7 +365,7 @@ cards:
   - Holding
   decks:
   - Dynasty
-  text: ':bow:: Produce 2 Gold. <br><b>Battle, :bow::</b> Destroy this Holding to destroy a target Terrain.'
+  text: 'Battle, :bow:: Destroy a target Terrain. Destroy this Holding.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -417,8 +415,8 @@ cards:
   - Fate
   keywords:
   - Water
-  text: <b>Water Battle, :bow::</b> Bow a target enemy card without attachments. If this Shugenja is Water,
-    give him a Force bonus equal to the target's printed Force.
+  text: 'Battle, :bow:: Bow a target enemy card without attachments. If this Shugenja is :water:, give them
+    a Force bonus equal to the target''s printed Force.'
   gold_cost: 0
   focus: 3
   legality:
@@ -495,7 +493,7 @@ cards:
   - Item
   decks:
   - Fate
-  text: <b>Limited:</b> Bow your Stronghold to draw a card.
+  text: 'Open, :g3:, :bow:: Draw a card.'
   gold_cost: 2
   focus: 2
   force: '+0'
@@ -576,8 +574,7 @@ cards:
   - Dynasty
   keywords:
   - Farm
-  text: <b>:bow::</b> Produce 2 Gold. <br><b>Open:</b> If it is not your turn, target a Personality. Straighten
-    his unit. Destroy this Holding.
+  text: 'Open: If it is not your turn, straighten a target Personality''s unit. Destroy this Holding.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -603,8 +600,8 @@ cards:
   - Fate
   keywords:
   - Ashigaru
-  text: After this Follower enters play from your hand, you may draw an additional card when this turn
-    ends. <br><b>Battle, :bow::</b> Ranged 1 Attack.
+  text: 'After this Follower enters play from your hand, you may draw a card when this turn ends. Battle,
+    :bow::ranged: 1.'
   gold_cost: 2
   focus: 1
   force: 1
@@ -683,8 +680,7 @@ cards:
   - Holding
   decks:
   - Dynasty
-  text: ':bow:: Produce 2 Gold.<br>:bow:: When paying for a Follower, Unaligned Samurai, or Toturi''s
-    Army Personality, if you are a Toturi''s Army player, produce 4 Gold which may only pay for that card.'
+  text: This Holding has +2GP when paying for a single Follower or Unaligned Samurai Personality only.
   gold_cost: 3
   gold_production: 2
   legality:
@@ -914,8 +910,7 @@ cards:
   - Experienced 2
   - Courtier
   - Scorpion Clan
-  text: '<b>Political Battle:</b> Even if Nomen is not at the current battlefield, bow her and target
-    a Personality: Move him home.'
+  text: 'Political Home Battle, :bow:: Move home a target Personality.'
   gold_cost: 7
   force: 2
   chi: 4
@@ -946,11 +941,10 @@ cards:
   - Akasha
   - Crab
   - Unicorn
-  text: 'Your Kitsune Personalities in and out of play have your Clan Alignment. Political actions cannot
-    target your Spirit cards. Before another player''s turn ends, if none of your Provinces were destroyed
-    by battle resolution during that turn, gain 2 Honor.<br><b>Battle, :bow::</b> Target your unbowed
-    defending Personality. Give them +2F if they are Nonhuman. :fear: equal to the target''s Force, +1
-    if you control any Forests.'
+  text: 'Your Fox Clan Personalities in and out of play have your Clan Alignment. Before another player''s
+    turn ends, if none of your Provinces were destroyed by battle resolution during that turn, gain 2 Honor.
+    Battle, :bow:: Give your target unbowed defending Personality +2F if they are a Spirit, then make a
+    :fear: equal to their Force.'
   province_strength: -1
   starting_honor: 0
   legality:
@@ -1385,7 +1379,7 @@ cards:
   - Holding
   decks:
   - Dynasty
-  text: <b>:bow::</b> Produce 2 Gold. <br><b>Open:</b> Give a Province +3 strength. Destroy this Holding.
+  text: 'Open: Give a Province +3PS. Destroy this Holding.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -1410,8 +1404,8 @@ cards:
   - Dynasty
   keywords:
   - Farm
-  text: 'Enters play for 1 less Gold if you are a Lion Clan player.<br>:bow:: Produce 5 Gold.<br><b>Limited,
-    :bow::</b> Create a 1F <b>Ashigaru </b> Follower and attach it to your target Personality.'
+  text: 'Enters play for :g1: less if you are a Lion Clan player. Open, :g3:: Create and Equip a 1F Ashigaru
+    Follower to your target Personality.'
   gold_cost: 6
   gold_production: 5
   legality:
@@ -1513,8 +1507,7 @@ cards:
   - Dynasty
   keywords:
   - Temple
-  text: <b>:bow::</b> Produce 3 Gold.<br><b>Tireless Open:</b> Discard a Kiho or a Spell to straighten
-    this Holding. <i>(Tireless actions may be taken even while bowed.)</i>
+  text: 'Tireless Open: Discard a Kiho or a Spell to straighten this Holding.'
   gold_cost: 3
   gold_production: 3
   legality:
@@ -1612,9 +1605,8 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: Discipline :g1:<br><b>Interrupt:</b> Negate all Force bonuses and penalties from the action.<br><b>Battle:</b>
-    Give your target Samurai <b>Conqueror</b>. Straighten his unit after this battle resolves. <i>(A Conqueror's
-    unit doesn't bow after battle.)</i>
+  text: 'Discipline :g1:. Interrupt: Negate all Force bonuses and penalties from the action. Battle: Give
+    your target Samurai Conqueror. Straighten their unit after this battle resolves.'
   focus: 4
   legality:
   - A Brother's Destiny (Ivory Edition)
@@ -1890,8 +1882,8 @@ cards:
   - Samurai
   - Soul of Daigotsu Keigo
   - Spider Clan
-  text: After a Dark Virtue, Fear, or Maho action resolves, if Geiko is at the current battlefield, give
-    him +1F.
+  text: 'Will not join a player whose Wind is The Kanpeki Dynasty. After a Dark Virtue, :fear:, or :maho:
+    action resolves, if Geiko is at the current battlefield, give him +1F.'
   gold_cost: 7
   force: 4
   chi: 3
@@ -2007,8 +1999,7 @@ cards:
   - Shadowlands
   - Soul of Daigotsu Bundoru
   - Spider Clan
-  text: <b>Battle:</b> Fear 4 <i>(Bow a target enemy Follower, or Personality without Followers, with
-    4 or lower Force)</i>.
+  text: 'Battle: :fear: 4.'
   gold_cost: 7
   force: 4
   chi: 3
@@ -2113,8 +2104,7 @@ cards:
   - Dynasty
   keywords:
   - Port
-  text: <b>:bow::</b> Produce 1 Gold. <br><b>:bow::</b> When paying for a Holding, it enters play for
-    2 less Gold.
+  text: This Holding has +1GP when paying for a single Holding only.
   gold_cost: 1
   gold_production: 1
   legality:
@@ -2138,8 +2128,7 @@ cards:
   - Dynasty
   keywords:
   - Fortification
-  text: <i>(Fortifications attach to the Province from which they entered play.)</i><br>This Fortification
-    enters play bowed. This Province has +2 strength.<br><b>:bow::</b> Produce 2 Gold.
+  text: This Province has +2PS.
   gold_cost: 2
   gold_production: 2
   legality:
@@ -2163,9 +2152,8 @@ cards:
   - Fate
   keywords:
   - Void
-  text: '<b>Limited:</b> Bow this Shugenja and destroy this card: Search your Fate deck for a non-Unique
-    Spell that must share a keyword with the performer unless he is Void, show it, and put it in your
-    hand.'
+  text: 'Open: Bow this Shugenja and destroy this Spell to search your Fate deck for a non-Unique Spell
+    that must share a keyword with the caster unless they are :void:, show it, and put it in your hand.'
   gold_cost: 0
   focus: 1
   legality:
@@ -2285,9 +2273,9 @@ cards:
   - Dynasty
   keywords:
   - Mine
-  text: After this Holding enters play, give it three +1F Masterwork tokens.<br><b>:bow::</b> Produce
-    2 Gold.<br><b>Open, :bow::</b> Transfer a Masterwork token from this Holding to a target Armor or
-    Weapon without a Masterwork token.
+  text: 'Tireless Response: After the action Recruits this Holding, give it three +1F Masterwork tokens.
+    Open, :bow:: Transfer a Masterwork token from this Holding to a target Armor or Weapon without a Masterwork
+    token.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -2551,8 +2539,8 @@ cards:
   - Crane
   keywords:
   - Courtier
-  text: Natsuyo enters play for 1 less Gold if another player is Scorpion Clan.<br><b>Favor Political
-    Open, :bow::</b> Discard the Imperial Favor to gain 1 Honor.
+  text: 'Natsuyo enters play for :g1: less if another player is Scorpion Clan. Political Open, :bow:, :favor::
+    Gain 1 Honor.'
   gold_cost: 5
   force: 1
   chi: 3
@@ -2803,8 +2791,8 @@ cards:
   - Dynasty
   keywords:
   - Library
-  text: <b>:bow::</b> Produce 2 Gold. <br><b>Limited:</b> Discard a face-up card from one of your Provinces.
-    Refill the Province with your target discarded <i>(not dead)</i> Personality. Destroy this Holding.
+  text: 'Open: Discard a face-up card from one of your Provinces. Refill the Province with your target discarded
+    (not dead) Personality. Destroy this Holding.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -2831,8 +2819,7 @@ cards:
   - Dynasty
   keywords:
   - Market
-  text: After you Recruit this Holding from a Province, refill the Province face-up.<br><b>:bow::</b>
-    Produce 2 Gold.
+  text: (When a card with Renew enters play from a Province, refill its Province face-up.)
   gold_cost: 2
   gold_production: 2
   legality:
@@ -3093,9 +3080,9 @@ cards:
   - Fate
   keywords:
   - Pearl
-  text: '<b>Battle/Open, :bow::</b> You may bow your target :pearl: Strategy. Bow a target card in a unit;
-    the target must not have attachments unless this bowed your :pearl: Strategy. Destroy this Spell if
-    this is the Action Phase.'
+  text: 'Battle/Open, :bow:: You may bow your target :pearl: Strategy. Bow a target card in a unit; the
+    target must not have attachments unless this bowed your :pearl: Strategy. Destroy this Spell if this
+    is the Action Phase.'
   gold_cost: 2
   focus: 1
   legality:
@@ -3268,7 +3255,7 @@ cards:
   - Fate
   keywords:
   - Armor
-  text: This Personality has +1PH. <br><b>Battle:</b> Fear 3.
+  text: 'This Personality has +1PH. Battle: :fear: 3.'
   gold_cost: 4
   focus: 3
   force: '+2'
@@ -3723,8 +3710,8 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: '<b>Limited:</b> Pay Gold equal to a target Personality''s unit''s total Gold Cost plus 2: Lose
-    3 Honor. Destroy the Personality.'
+  text: 'Open, :gstar: : Destroy a target Personality whose unit''s total Gold Cost equals the amount paid
+    minus 2. Lose 3 Honor.'
   gold_cost: '*'
   focus: 3
   legality:
@@ -3873,13 +3860,13 @@ cards:
   - Wind
   decks:
   - Pre-Game
-  text: '<b>Political Lobby Tireless Open:</b> If it is your turn and you have an equal or higher number
-    of cards in your hand than each other player, target your Personality to take :favor:.<br><b>Political
-    Open, :favor: :</b> End all ongoing effects of this Wind. Target a player and a Province. The next
-    time this game an attack is declared against the Province''s player, the targeted player must assign
-    one of their Personalities to attack or defend that Province, as appropriate.<br><b>Political Dynasty,
-    :bow:, :favor: :</b> Put a target face-up Dynasty card in your Province at the bottom of your Dynasty
-    deck and re-fill it, face-up. If the card that refilled your Province is a Personality, draw a card.'
+  text: 'Political Lobby Tireless Open: If it is your turn and you have an equal or higher number of cards
+    in your hand than each other player, target your Personality to take :favor:. Political Open, :favor::
+    End all ongoing effects of this Wind. Target a player and a Province. The next time this game an attack
+    is declared against the Province''s player, the targeted player must assign one of their Personalities
+    to attack or defend that Province, as appropriate. Political Dynasty, :bow:, :favor:: Put a target face-up
+    Dynasty card in your Province at the bottom of your Dynasty deck and re-fill it, face-up. If the card
+    that refilled your Province is a Personality, draw a card.'
   legality:
   - Shattered Empire
   - War of the Seals (Onyx Edition)
@@ -3920,8 +3907,7 @@ cards:
   - Fate
   keywords:
   - Courage
-  text: <i>(<b>Repeatable Interrupt:</b> Discard a Courage card to give a Fear effect +2 or -2 strength.)</i><br>Fear
-    effects, Melee Attacks, and Ranged Attacks targeting cards in this unit have -1 strength.
+  text: ':fear:, :melee:, and :ranged: targeting cards in this unit have -1 strength.'
   gold_cost: 4
   focus: 3
   force: 3
@@ -4029,8 +4015,8 @@ cards:
   - Fate
   keywords:
   - Water
-  text: Equips to a Water Shugenja for 1 less Gold.<br><b>Water Battle, :bow::</b> Move a target defending
-    Personality home.
+  text: 'Equips to a :water: Shugenja for :g1: less. Battle, :bow:: Move a target defending Personality
+    home.'
   gold_cost: 1
   focus: 2
   legality:
@@ -4175,9 +4161,9 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: 'Invest :g2:, or :g0: if the first target is a Tactician: Take an additional action <i>(after
-    this one resolves)</i>.<br><b>Battle:</b> Target your Personality and another Personality. Give your
-    Personality +1F and he copies an ability on the second target which does not copy abilities.'
+  text: 'Invest :g2:, or :g0: if the first target is a Tactician: Take an additional action (after this
+    one resolves). Battle: Target your Personality and another Personality. Give the first target +1F and
+    they copy an ability on the second target which does not copy abilities.'
   focus: 4
   legality:
   - A Brother's Destiny (Ivory Edition)
@@ -4200,9 +4186,9 @@ cards:
   - Fate
   keywords:
   - Water
-  text: '<b>Battle:</b> Even if this unit is not at the current battlefield, if any enemy units are there,
-    target your Personality: Move him there. Straighten him if he moved. If he is an Ancestor and this
-    Shugenja is Water, you may take an additional Battle action.'
+  text: 'Home Battle: If they would be opposed, move to the current battlefield your target Personality
+    at home. Straighten them as they move. If the target is an Ancestor and this Shugenja is :water:, you
+    may take an additional Battle action.'
   gold_cost: 0
   focus: 3
   legality:
@@ -4404,9 +4390,8 @@ cards:
   keywords:
   - Fire
   - Shugenja
-  text: 'Orinoko enters play for 1 less Gold if your Allegiance is Traditionalist.<br>Invest :g10:: Give
-    Orinoko three +1F/+1C tokens, then permanently give her <b>Conqueror</b> and the ability, "<b>Fire
-    Battle:</b> Fear 5." This Invest cost cannot be reduced.'
+  text: 'Invest :g10:: Give Orinoko three +1F/+1C tokens, then permanently give her Conqueror and the ability,
+    "Battle: :fear: 5." This Invest cost cannot be reduced.'
   gold_cost: 5
   force: 2
   chi: 2
@@ -4480,8 +4465,7 @@ cards:
   keywords:
   - Jade
   - Market
-  text: 'Courtesy: After you Recruit this Holding from a Province, refill the Province face-up. <i>(Courtesy
-    traits do not take effect if you went first.)</i><br><b>:bow::</b> Produce 4 Gold.'
+  text: 'Compassion: This Holding has Renew.'
   gold_cost: 5
   gold_production: 4
   legality:
@@ -4504,8 +4488,7 @@ cards:
   - Dynasty
   keywords:
   - Jade
-  text: <b>:bow::</b> Produce 3 Gold. <br><b>:bow::</b> Produce 5 Gold, which can only pay for a single
-    Jade card.
+  text: 'This Holding has +2GP when paying for a single :jade: card only.'
   gold_cost: 3
   gold_production: 3
   legality:
@@ -4559,7 +4542,7 @@ cards:
   - Holding
   decks:
   - Dynasty
-  text: <b>:bow::</b> Produce 2 Gold. <br><b>Open, :bow::</b> Straighten your target Courtier.
+  text: 'Open, :bow:: Straighten your target Courtier.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -4587,9 +4570,9 @@ cards:
   - Lion
   keywords:
   - Lion Clan
-  text: Your Stronghold has no abilities. Your attacking Shugenja have +1F while there is an Ancestor
-    in their army.<br><b>Engage, :bow:, :g2::</b> Target your Lion Clan Shugenja Personality. Create a
-    2F/2C/3PH Ancestor • Samurai • Spirit Lion Clan Personality.
+  text: 'Your Stronghold has no abilities. Your attacking Shugenja have +1F while there is an Ancestor in
+    their army. Engage, :bow:, :g2:: Target your Lion Clan Shugenja Personality. Create a 2F/2C/3PH Ancestor
+    • Samurai • Spirit Lion Clan Personality.'
   province_strength: -1
   starting_honor: 0
   legality:
@@ -4797,8 +4780,8 @@ cards:
   keywords:
   - Shugenja
   - Water
-  text: 'Invest :g2: or :g6:: Create a 2F/2C/3PH Ancestor • Samurai • Spirit Lion Clan Personality in
-    your home, or two such Personalities if you paid :g6:.'
+  text: 'Invest :g2: or :g6:: Create a 2F/2C/3PH Ancestor • Samurai • Spirit Lion Clan Personality in your
+    home, or two such Personalities if you paid 6.'
   gold_cost: 4
   force: 2
   chi: 3
@@ -5017,7 +5000,7 @@ cards:
   - Dynasty
   keywords:
   - Shadowlands
-  text: After you Recruit this Holding, lose 1 Honor.<br><b>:bow::</b> Produce 2 Gold and lose 1 Honor.
+  text: After you Recruit or bow this Holding, lose 1 Honor.
   gold_cost: 1
   gold_production: 2
   legality:
@@ -5063,8 +5046,7 @@ cards:
   keywords:
   - Cavalry
   - Destined
-  text: Fear effects, Melee Attacks, and Ranged Attacks targeting this Follower have -2 strength.<br><b>Battle:</b>
-    Ranged 3 Attack.
+  text: ':fear:, :melee:, and :ranged: targeting this Follower have -2 strength. Battle: :ranged: 3.'
   gold_cost: 8
   focus: 1
   force: 3
@@ -5162,9 +5144,9 @@ cards:
   - Fate
   keywords:
   - Pearl
-  text: '<b>Open, :g2::</b> Put this Strategy into play from your hand, paying :g1: less for each other
-    :pearl: Strategy you control, to draw a card.<br><b>Interrupt, :bow::</b> If the action is from a
-    Spell, give one of its :fear:, :melee:, or :ranged: +1 strength.'
+  text: 'Open, :g2:: Put this Strategy into play from your hand, paying 1 less for each other :pearl: Strategy
+    you control, to draw a card. Interrupt, :bow:: If the action is from a Spell, give one of its :fear:,
+    :melee:, or :ranged: +1 strength.'
   focus: 1
   legality:
   - Shattered Empire
@@ -5188,8 +5170,9 @@ cards:
   - All Clans
   keywords:
   - All Clans
-  text: <b>Limited, :bow::</b> Bow your Stronghold to search your discard pile and Fate deck for a Ring,
-    show it, and put it in your hand. Discard a card.
+  text: 'Your Stronghold has a minimum Gold Production of 3. Open, :bow:: Bow your Stronghold to search
+    your discard pile, then Fate deck, for a non-attachment, non-:shadowlands: Ring, show it, and put it
+    in your hand.'
   legality:
   - A Brother's Destiny (Ivory Edition)
   - A Brother's Destiny (Twenty Festivals)
@@ -5239,8 +5222,8 @@ cards:
   - Dynasty
   keywords:
   - Retainer
-  text: <b>Battle, :g2::</b> A number of times per turn equal to the number of Retainers you control,
-    give your target Follower or Personality +1F.
+  text: 'Battle, :g2:: A number of times per turn equal to the number of Retainers you control, give your
+    target Follower or Personality +1F.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -5457,8 +5440,7 @@ cards:
   - Holding
   decks:
   - Dynasty
-  text: ':bow:: Produce 2 Gold.<br><b>Limited, :bow::</b> Create a 0F Follower and attach it to your target
-    Personality.'
+  text: 'Open, :bow: or :g2:: Create and Equip a 0F Follower to your target Personality.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -5565,8 +5547,7 @@ cards:
   - Duelist
   - Dragon Clan
   - Samurai
-  text: <i>(Duelists win tied duels versus non-Duelists.)</i><br><b>Battle:</b> Fear 2, or Fear 3 if the
-    target is dishonorable.
+  text: 'Battle: :fear: 2, or :fear: 3 if the target is dishonorable.'
   gold_cost: 5
   force: 3
   chi: 3
@@ -5718,8 +5699,8 @@ cards:
   - Dynasty
   keywords:
   - Geisha House
-  text: <b>:bow::</b> Produce 1 Gold.<br><b>Open, :bow::</b> A target player shows a random card in his
-    hand.<br><b>Open, :bow::</b> Turn a target card in another player's Province face-up.
+  text: 'Open, :bow:: A target player shows a random card in their hand. Open, :bow:: Turn a target card
+    in another player''s Province face-up.'
   gold_cost: 1
   gold_production: 1
   legality:
@@ -6056,8 +6037,8 @@ cards:
   - Fate
   keywords:
   - Void
-  text: Attaches to a Void Shugenja for 2 less Gold.<br><b>Battle/Open, :bow::</b> Give a target Samurai
-    a Force bonus equal to this Shugenja's Chi.
+  text: 'Equips to a :void: Shugenja for :g2: less. Battle/Open, :bow:: Give your target Samurai a Force
+    bonus equal to this Shugenja''s Chi.'
   gold_cost: 2
   focus: 3
   legality:
@@ -6126,9 +6107,8 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: '<b>Reaction:</b> After you announce an action with a Ranged Attack: Give one Ranged Attack from
-    the action -1 strength. That Ranged Attack may target a card in the Defender''s home <i>(if otherwise
-    legal)</i>.'
+  text: 'Interrupt: If the action is yours, give one of its :ranged: -1 strength. That :ranged: may target
+    a card in the Defender''s home (if otherwise legal).'
   gold_cost: 0
   focus: 3
   legality:
@@ -6212,7 +6192,7 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: <b>Interrupt:</b> After any Fear effect from the action bows a card, destroy it.
+  text: 'Interrupt: If the action has any :fear:, those effects destroy cards after they bow them.'
   focus: 3
   legality:
   - A Brother's Destiny (Ivory Edition)
@@ -6365,9 +6345,8 @@ cards:
   - Expendable
   - Fortification
   - Library
-  text: This Fortification enters play bowed.<br><b>:bow::</b> Produce 3 Gold. <br><b>Interrupt:</b> After
-    you Recruit this Holding, look at the top three cards of your Fate deck. Place zero to two of them
-    at the bottom of your deck.
+  text: 'Tireless Response: After the action Recruits this Holding, look at the top three cards of your
+    Fate deck. Place zero to two of them at the bottom of your deck.'
   gold_cost: 3
   gold_production: 3
   legality:
@@ -6506,8 +6485,8 @@ cards:
   - Heavy Weapon
   - Jade
   - Two-Handed
-  text: <b>Jade Battle, :bow::</b> Melee 3 Attack with -1 strength if the target has a Two-Handed Weapon
-    and +1 strength if the target is Shadowlands.
+  text: 'Battle, :bow:: :melee: 3, with -1 strength if the target has a Two-Handed Weapon and +1 strength
+    if the target is :shadowlands:.'
   gold_cost: 5
   focus: 1
   force: '+3'
@@ -6648,8 +6627,8 @@ cards:
   - Dynasty
   keywords:
   - Temple
-  text: <b>:bow::</b> Produce 1 Gold.<br><b>Open, :bow::</b> Search your Fate deck for a Ring. Show it.
-    Put it into your hand. Discard a card. Destroy this Holding.
+  text: 'Open, :bow:: Search your Fate deck for a Ring. Show it. Put it into your hand. Discard a card.
+    Destroy this Holding.'
   gold_cost: 1
   gold_production: 1
   legality:
@@ -6869,9 +6848,9 @@ cards:
   keywords:
   - Maho
   - Plague
-  text: '<b>Battle:</b> Bow this Shugenja and target an enemy Follower or Personality without Followers
-    and with equal or lower Chi than this Shugenja: Destroy it. If this destroyed a card, create a 2F/2C/0PH
-    <b>Shadowlands • Undead</b> Personality in your current army. Lose 3 Honor.'
+  text: 'Battle:: Bow this Shugenja to destroy a target enemy Personality without Followers and with equal
+    or lower Chi, or a target enemy Follower. If this destroyed a card, create a 2F/2C Undead • :shadowlands:
+    Personality. Lose 3 Honor.'
   gold_cost: 3
   focus: 1
   legality:
@@ -6893,8 +6872,8 @@ cards:
   keywords:
   - Market
   - Retainer
-  text: <b>:bow::</b> Produce 2 Gold. <br><b>Battle, :bow::</b> Target another player's Personality at
-    any location who was moved home from the current battlefield. Straighten his unit and move him there.
+  text: 'Economic Battle, :bow:: Target another player''s Personality at home who was moved from the current
+    battlefield. Move them there. Straighten their unit as they move.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -7022,9 +7001,8 @@ cards:
   - Fate
   keywords:
   - Fire
-  text: <b>Repeatable Fire Battle:</b> Discard a card to make a Ranged Attack with strength equal to its
-    Focus Value or this Shugenja's Chi, whichever is higher. <i>(Repeatable actions may be used any number
-    of times per turn.)</i>
+  text: 'Repeatable Battle: Discard a card to make a :ranged: with strength equal to its Focus Value or
+    this Shugenja''s Chi, whichever is higher.'
   gold_cost: 3
   focus: 2
   legality:
@@ -7047,8 +7025,8 @@ cards:
   - Dynasty
   keywords:
   - Barracks
-  text: '<b>Tireless Dynasty, :X::</b> Equip a target Follower from your hand to a target Personality
-    you Recruited this turn, paying :g2: less.'
+  text: 'Tireless Dynasty, :gstar:: Equip a target Follower from your hand to a target Personality you Recruited
+    this turn, paying :g2: less.'
   gold_cost: 3
   gold_production: 2
   legality:
@@ -7128,7 +7106,7 @@ cards:
   - Fate
   keywords:
   - Weapon
-  text: '<b>Battle:</b> Bow this card, and discard a card unless this unit is opposed: Draw a card.'
+  text: 'Battle, :bow:: Discard a card unless this Personality is opposed, then draw a card.'
   gold_cost: 4
   focus: 4
   force: '+2'
@@ -7352,8 +7330,7 @@ cards:
   keywords:
   - Imperial
   - Retainer
-  text: You are considered to have +5 Family Honor when Lobbying checks Honor.<br><b>:bow::</b> Produce
-    1 Gold.<br><b>Open, :bow::</b> Straighten a target Personality who Lobbied this turn.
+  text: 'You have a +5 Lobby Bonus. Open, :bow: Straighten a target Personality who Lobbied this turn.'
   gold_cost: 1
   gold_production: 1
   legality:
@@ -7627,8 +7604,8 @@ cards:
   keywords:
   - Courage
   - Kata
-  text: <b>Open:</b> Put this Kata into play. Discard your other Kata in play. <br><b>Interrupt, :bow::</b>
-    The action's Fear effects may target Items and destroy attachments after bowing them.
+  text: 'Kata Open: Put this Kata into play. Discard your other Kata in play. Interrupt, :bow:: If the action
+    has any :fear:, those effects may target Items, and destroy attachments after bowing them.'
   focus: 2
   legality:
   - A Brother's Destiny (Ivory Edition)
@@ -7653,8 +7630,7 @@ cards:
   - Nonhuman
   - Shadowlands
   - Undead
-  text: After you Equip this Follower, lose 2 Honor. <br><b>Battle:</b> Fear 3 <i>(Bow a target enemy
-    Follower, or Personality without Followers, with 3 or lower Force)</i>.
+  text: 'After this Follower enters play, lose 2 Honor. Battle: :fear: 3.'
   gold_cost: 2
   focus: 1
   force: 2
@@ -7685,8 +7661,7 @@ cards:
   - Dynasty
   keywords:
   - Retainer
-  text: <b>:bow::</b> Produce 5 Gold. <br><b>Political Limited, :bow::</b> If you control a Courtier or
-    Magistrate, dishonor a target Personality.
+  text: 'Political Open, :bow:: If you control a Courtier or Magistrate, dishonor a target Personality.'
   gold_cost: 6
   gold_production: 5
   legality:
@@ -7809,7 +7784,7 @@ cards:
   - Nonhuman
   - Kharmic
   text: 'After this Follower is discarded from your hand or deck, you may banish it to create and Equip
-    a 1F Naga • Nonhuman Follower to your target Personality.<br><b>Battle, :bow::</b> :ranged: 2.'
+    a 1F Naga • Nonhuman Follower to your target Naga Personality. Battle, :bow:: :ranged: 2.'
   gold_cost: 3
   focus: 1
   force: 2
@@ -7856,8 +7831,7 @@ cards:
   - Weapon
   - One-Handed
   - Sword
-  text: <b>Invest :g1::</b> Search your Fate deck for a Stockpiled Weapon, show it, and put it in your
-    hand.
+  text: 'Invest :g1:: Search your Fate deck for a Stockpiled Weapon, show it, and put it in your hand.'
   gold_cost: 3
   focus: 4
   force: '+2'
@@ -7961,9 +7935,9 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
-  text: 'After Suiteiru enters play: Lose 4 Honor.<br><b>Open:</b> Destroy your target unbowed Personality:
-    Create a number of 1F <b>Shadowlands • Nonhuman • Oni</b> Followers equal to his Chi. Attach them
-    to one or more of your Personalities. Lose Honor equal to the number of Followers this created.'
+  text: 'Open: Destroy your target unbowed Personality to create a number of 1F Nonhuman • Oni • :shadowlands:
+    Followers equal to their Chi and attach them to one or more of your Personalities. Lose Honor equal
+    to the number of Followers this created.'
   gold_cost: 8
   force: 5
   chi: 3
@@ -7984,7 +7958,7 @@ cards:
   - Holding
   decks:
   - Dynasty
-  text: <b>:bow::</b> Produce 3 Gold.<br><b>Open, :bow::</b> Straighten a target Sensei.
+  text: 'Open, :bow:: Straighten a target Sensei.'
   gold_cost: 3
   gold_production: 3
   legality:
@@ -8103,8 +8077,8 @@ cards:
   - Shugenja
   - Soul of Chuda Rintaro
   - Spider Clan
-  text: <i>(Shugenja may attach and cast Spells.)</i> <br><b>Open:</b> Target another player's Personality.
-    After each time he assigns this turn, give him -2F/-1C and <b>Shadowlands</b> <i>(this turn)</i>.
+  text: 'Open: Target another player''s Personality. After each time they assign this turn, give them -2F/-1C
+    and :shadowlands: (this turn).'
   gold_cost: 5
   force: 3
   chi: 3
@@ -8133,10 +8107,9 @@ cards:
   - Shugenja
   - Earth
   - Fire
-  text: <b>Response, :g3::</b> After the action Recruits Tsushima, create and Recruit <i>(without further
-    cost)</i>, a 2F/2C/3GC/2PH Samurai • Yojimbo Dragon Clan Personality or put a Ring from your hand
-    into play; if you put a Ring into play, while it remains in play, it does not count towards an Enlightenment
-    Victory.
+  text: 'Response, :g3:: After the action Recruits Tsushima, create and Recruit (without further cost),
+    a 2F/2C/3GC/2PH Samurai • Yojimbo Dragon Clan Personality or put a Ring from your hand into play; if
+    you put a Ring into play, while it remains in play, it does not count towards an Enlightenment Victory.'
   gold_cost: 3
   force: 2
   chi: 2
@@ -8236,8 +8209,7 @@ cards:
   - Dynasty
   keywords:
   - Temple
-  text: <b>:bow::</b> Produce 5 Gold. <br><b>Open:</b> Give your target Monk or Shugenja <b>Air</b>, <b>Earth</b>,
-    <b>Fire</b>, or <b>Water</b>.
+  text: 'Open: Give your target Monk or Shugenja :air:, :earth:, :fire:, or :water:.'
   gold_cost: 6
   gold_production: 5
   legality:
@@ -8263,8 +8235,8 @@ cards:
   keywords:
   - Ward
   - Air
-  text: 'Equips to an :air: Shugenja for :g2: less.<br><b>Battle:</b> Give this Shugenja +2F.<br><b>Illusion
-    Battle, :bow::</b> :fear: equal to this Shugenja''s Chi.'
+  text: 'Equips to an :air: Shugenja for :g2: less. Battle: Give this Shugenja +2F. Illusion Battle, :bow::
+    :fear: equal to this Shugenja''s Chi.'
   gold_cost: 3
   focus: 2
   legality:
@@ -8353,9 +8325,9 @@ cards:
   - Fate
   keywords:
   - Terrain
-  text: <b>Battle:</b> Destroy a Terrain <i>(if able)</i>. Put this Terrain into play. You may target
-    and bow a Personality with 4 or more Force or a Fallen, Ninja, or Shadowlands card. After this Terrain
-    is destroyed, straighten the target.
+  text: 'Terrain Battle: Destroy a Terrain (if able). Put this Terrain into play. You may target and bow
+    a Fallen, Ninja, or :shadowlands: card, or a Personality with 4 or higher Force. After this Terrain
+    is destroyed, straighten the target.'
   focus: 1
   legality:
   - A Brother's Destiny (Ivory Edition)
@@ -8546,9 +8518,8 @@ cards:
   - Dynasty
   keywords:
   - Imperial
-  text: After this Holding enters play, take the Imperial Favor and rehonor one of your Personalities
-    <i>(if able)</i>. You may Recruit this Holding as a <b>Political Open</b> action.<br><b>:bow::</b>
-    Produce 2 Gold.
+  text: 'Political Open, :gstar:: If this Holding is in your Province, Recruit it. Tireless Response: After
+    the action Recruits this Holding, take :favor:, and you may rehonor your target Personality.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -8676,9 +8647,8 @@ cards:
   - Fate
   keywords:
   - Air
-  text: '<b>Battle:</b> Destroy this card and target an attacking Personality: Give him <b>Elite</b> <i>(Elite
-    cards contribute Force even if bowed)</i>. He does not contribute Force while unbowed. If this Shugenja
-    is Air, gain 2 Honor.'
+  text: 'Battle: A target attacking Personality contributes Force only while bowed. If this Shugenja is
+    :air:, gain 2 Honor. Destroy this Spell.'
   gold_cost: 0
   focus: 3
   legality:
@@ -8698,7 +8668,7 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: <b>Interrupt:</b> Negate the action's Melee or Ranged Attacks.
+  text: 'Interrupt: If the action has any :melee: or :ranged:, negate those effects.'
   gold_cost: 0
   focus: 3
   legality:
@@ -8752,9 +8722,9 @@ cards:
   - Fate
   keywords:
   - Courage
-  text: 'Invest :g2:: If you have Compassion and the targets each have 3 or more Chi, draw a card.<br><b>Battle:</b>
+  text: 'Invest :g2:: If you have Compassion and the targets each have 3 or more Chi, draw a card. Battle:
     Target one or two of your Personalities. You may also target your Clan Champion or Daimyo. Give all
-    targets <b>Conqueror</b>.'
+    targets Conqueror.'
   focus: 4
   legality:
   - Shattered Empire
@@ -8998,7 +8968,7 @@ cards:
   - Shadowlands
   - Siege
   - Undead
-  text: After this Follower enters play, lose 3 Honor.<br><b>Repeatable Battle, :bow::</b> Ranged 4 Attack.
+  text: 'After this Follower enters play, lose 3 Honor. Battle, :bow:: :ranged: 4.'
   gold_cost: 4
   focus: 2
   force: 2
@@ -9053,9 +9023,8 @@ cards:
   keywords:
   - Court
   - Kharmic
-  text: 'Invest :g1:: Give this Holding a +1GP Wealth token.<br><b>Political Tireless Response:</b> After
-    the action Recruits this Holding, give a Sincerity token to a Sincerity card without tokens in your
-    Province.'
+  text: 'Invest :g1:: Give this Holding a +1GP Wealth token. Political Tireless Response: After the action
+    Recruits this Holding, give a Sincerity token to a Sincerity card without tokens in your Province.'
   gold_cost: 2
   gold_production: 2
   legality:
@@ -9309,10 +9278,9 @@ cards:
   - Strategy
   decks:
   - Fate
-  text: As a Focus Effect, after you win this duel, remove one to three non-Ring cards in discard piles
-    from the game.<br><b>Invest :g1::</b> Draw a card.<br><b>Battle/Open:</b> Remove one to three non-Ring
-    cards in discard piles from the game. You may target a Personality and remove one of his abilities
-    or boldface keywords <i>(this turn)</i>. Take an additional action.
+  text: 'As a Focus Effect, after you win this duel, banish one to three cards in discard piles. Invest
+    :g1:: Draw a card. Battle/Open: Banish one or two cards in discard piles. You may target a Personality
+    and remove one of their abilities or boldface keywords. Take an additional action.'
   focus: 4
   legality:
   - A Brother's Destiny (Ivory Edition)
@@ -9413,7 +9381,7 @@ cards:
   keywords:
   - Market
   - Retainer
-  text: <b>:bow::</b> Produce 2 Gold, or 3 Gold if it is not your turn.
+  text: This Holding has +1GP when it is not your turn.
   gold_cost: 2
   gold_production: 2
   legality:
@@ -9791,8 +9759,8 @@ cards:
   - Fate
   keywords:
   - Dark Virtue
-  text: '<b>Battle:</b> If you control an opposed unit at the current battlefield, choose your performing
-    dead Samurai Personality: Bring him into play there, paying 2 less Gold and ignoring Honor Requirements.'
+  text: 'Battle, :gstar:: If they would be opposed, Recruit your target dead Samurai Personality, paying
+    :g2: less and ignoring Honor Requirements.'
   gold_cost: 0
   focus: 1
   legality:
@@ -9846,9 +9814,9 @@ cards:
   - Fate
   keywords:
   - Air
-  text: After you Equip this Spell, if this Shugenja is Air, a target player gains or loses 1 Honor. <br><b>Air
-    Open:</b> Bow this Shugenja to target another player's Personality. After the next time <i>(this turn)</i>
-    the target assigns to attack you, gain 1 Honor, or 2 Honor if you control a Temple.
+  text: 'After you Equip this Spell, if this Shugenja is :air:, a target player gains or loses 1 Honor.
+    Open: Bow this Shugenja to target another player''s Personality. After the next time (this turn) the
+    target assigns to attack you, gain 1 Honor, or 2 Honor if you control a Temple.'
   gold_cost: 1
   focus: 3
   legality:
@@ -9904,7 +9872,7 @@ cards:
   - Experienced Armor of Osano-Wo
   text: 'Will not attach to a :shadowlands: Personality. Equips to a Crab Clan Personality for :g1: less.
     Before this Personality''s army destroys a Province, put the Ring of Earth into play from your hand.
-    This Personality has +2F during the Combat Segment <i>(not battle resolution)</i>.'
+    This Personality has +2F during the Combat Segment (not battle resolution).'
   gold_cost: 3
   focus: 1
   force: '+2'
@@ -10172,8 +10140,8 @@ cards:
   keywords:
   - Air
   - Fear
-  text: '<b>Battle:</b> Target an enemy Personality with lower Chi than this Shugenja: Give the target
-    -4F. If this Shugenja is Air, actions the target performs may not target this Shugenja.'
+  text: 'Battle: Give a target enemy Personality with lower Chi than this Shugenja -4F. If this Shugenja
+    is :air:, actions on cards in the target''s unit may not target this Shugenja.'
   gold_cost: 0
   focus: 3
   legality:

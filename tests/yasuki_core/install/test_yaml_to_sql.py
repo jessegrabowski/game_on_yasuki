@@ -6,16 +6,38 @@ from yasuki_core.install.sets_to_sql import coerce_date
 from yasuki_core.install.yaml_to_sql import (
     build_revisions,
     card_slug,
+    mrp_text,
     parse_collector_numbers,
     _apply_current_revision,
     _BACK_CARD_ID_COL,
     _card_columns,
     _experience_level,
     _link_and_validate_back_faces,
+    _print_columns,
     _revision_baseline,
     _RULES_TEXT_COL,
     _STAT_COL,
 )
+
+# The prints INSERT column order in yaml_to_sql._insert_all; the row tuple from _print_columns is
+# positional against it, so name-index the tuple to assert intent instead of a bare magic offset.
+_PRINT_COLS = [
+    "card_id",
+    "printing_id",
+    "set_id",
+    "rarity",
+    "flavor_text",
+    "rules_text",
+    "back_title",
+    "back_flavor",
+    "artist",
+    "designer",
+    "collector_number_raw",
+    "publisher",
+    "publisher_url",
+    "doublesided",
+    "legal_date",
+]
 
 
 @pytest.mark.parametrize(
@@ -192,3 +214,40 @@ def test_apply_current_revision_overrides_text_and_accumulates_stats():
     assert row[_RULES_TEXT_COL] == "current"
     assert row[_STAT_COL["force"]] == 4  # set by the earlier erratum, unchanged by the later one
     assert row[_STAT_COL["chi"]] == 5  # overridden by the later erratum
+
+
+def test_mrp_text_picks_the_newest_printing():
+    dated = [
+        (datetime.date(1998, 1, 1), "samurai edition text"),
+        (datetime.date(2025, 2, 1), "shattered empire text"),
+        (datetime.date(2023, 1, 1), "onyx edition text"),
+    ]
+    assert mrp_text(dated) == "shattered empire text"
+
+
+def test_mrp_text_treats_null_date_as_oldest():
+    dated = [(None, "undated printing"), (datetime.date(2014, 6, 9), "dated printing")]
+    assert mrp_text(dated) == "dated printing"
+
+
+def test_mrp_text_returns_none_for_no_printings():
+    assert mrp_text([]) is None
+
+
+def test_print_columns_maps_print_text_to_rules_text_slot():
+    entry = {
+        "print_text": "reworded on this printing",
+        "flavor_text": "flavor",
+        "rarity": "Uncommon",
+    }
+    row = dict(zip(_PRINT_COLS, _print_columns(entry, "cid", "some_set", 7)))
+    assert row["rules_text"] == "reworded on this printing"
+    assert row["flavor_text"] == "flavor"  # the printing's own text does not clobber flavor
+    assert (row["card_id"], row["printing_id"], row["set_id"]) == ("cid", "some_set", 7)
+
+
+def test_print_columns_absent_print_text_is_null():
+    # No print_text ⇒ NULL, so readers fall back to the card's canonical (MRP + errata) text. The
+    # card's own `text` field must not leak onto the printing.
+    row = dict(zip(_PRINT_COLS, _print_columns({"text": "card canonical"}, "cid", "some_set", 7)))
+    assert row["rules_text"] is None
