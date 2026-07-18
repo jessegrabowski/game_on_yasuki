@@ -144,6 +144,23 @@ def test_keyword_or_matches_union_not_everything(client):
     assert either < everything
 
 
+def test_grouped_or_query_returns_the_union(client):
+    # Cross-field OR with grouping — the whole query is the union of its two AND groups.
+    crane_courtiers = _ids(client, "c:crane is:courtier")
+    lion_commanders = _ids(client, "c:lion is:commander")
+    combined = _ids(client, "(c:crane is:courtier) OR (c:lion is:commander)")
+    assert crane_courtiers and lion_commanders
+    assert combined == crane_courtiers | lion_commanders
+
+
+def test_dialog_dropdown_ands_with_the_search_box(client):
+    # The clan dropdown ANDs with the search query rather than OR-merging into it.
+    combined = client.get(
+        "/api/cards", params={"search": "t:personality", "clan": "Crane", "limit": 1}
+    ).json()["total"]
+    assert combined == _total(client, "c:crane t:personality")
+
+
 def test_story_credit_search(client):
     # Story credits are searchable; the documented example must return its known matches.
     assert _total(client, 'story:"Paul Ashman"') == 6

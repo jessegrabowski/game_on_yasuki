@@ -1,4 +1,10 @@
-from yasuki_core.database import _build_card_filter, compile_term
+from yasuki_core.database import (
+    _build_card_filter,
+    build_search_filters,
+    compile_query,
+    compile_term,
+)
+from yasuki_core.search.boolean_query import parse_query
 from yasuki_core.search.parse_search import parse_token
 
 # _build_card_filter is a pure (clause, params) builder — no database needed — so these run
@@ -136,12 +142,49 @@ def test_compile_term_ands_a_multi_condition_term():
     assert params == ["cavalry", "kensai"]
 
 
-def test_compile_term_without_constraints_is_true():
-    sql, params = compile_term(parse_token("all:cards"))
-    assert sql == "TRUE"
-    assert params == []
+def test_compile_term_without_constraints_is_none():
+    assert compile_term(parse_token("all:cards")) is None
 
 
 def test_compile_term_negation_reuses_the_exclude_sql():
     sql, _ = compile_term(parse_token("-t:sensei"))
     assert "c.card_id NOT IN (SELECT card_id FROM card_card_types" in sql
+
+
+# compile_query recurses the AST into nested SQL; build_search_filters wraps it for the query layer.
+def test_compile_query_none_is_none():
+    assert compile_query(None) is None
+
+
+def test_compile_query_or_group_joins_with_or():
+    sql, _ = compile_query(parse_query("c:crane OR c:lion"))
+    assert sql.startswith("(") and sql.endswith(")")
+    assert " OR " in sql
+
+
+def test_compile_query_and_group_joins_with_and():
+    sql, _ = compile_query(parse_query("c:crane t:personality"))
+    assert " AND " in sql
+
+
+def test_compile_query_not_prefixes_the_group():
+    sql, _ = compile_query(parse_query("-(c:crane OR c:lion)"))
+    assert sql.startswith("NOT (")
+
+
+def test_compile_query_drops_no_constraint_children():
+    # include: is a directive, not a predicate, so it leaves no trace (and no stray TRUE) in the SQL.
+    sql, _ = compile_query(parse_query("c:crane include:tokens"))
+    assert "card_clans" in sql
+    assert "TRUE" not in sql and "include" not in sql
+
+
+def test_build_search_filters_emits_predicate_and_directives():
+    options = build_search_filters("format:shattered include:tokens c:crane")
+    assert "_search_ast" in options
+    assert options["_active_format"] == "shattered"
+    assert options["include"] == {"tokens"}
+
+
+def test_build_search_filters_empty_query_is_empty():
+    assert build_search_filters("") == {}

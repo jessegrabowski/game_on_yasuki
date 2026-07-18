@@ -2,6 +2,8 @@ from yasuki_core.search.boolean_query import (
     BoolGroup,
     Not,
     Term,
+    active_format_from_ast,
+    includes_from_ast,
     parse_query,
     tokenize_boolean,
 )
@@ -107,6 +109,43 @@ class TestParseQuery:
     def test_quotes_escape_the_or_keyword(self):
         # A quoted "or" is a search term, not the operator — the only way to search the literal word.
         assert parse_query('a "or" b') == BoolGroup("AND", [leaf("a"), leaf('"or"'), leaf("b")])
+
+
+class TestActiveFormatFromAst:
+    def test_single_exact_format_is_pinned(self):
+        assert active_format_from_ast(parse_query("format:shattered t:personality")) == "shattered"
+
+    def test_or_makes_it_ambiguous(self):
+        assert active_format_from_ast(parse_query("format:shattered OR format:ivory")) is None
+
+    def test_two_pinned_formats_are_ambiguous(self):
+        assert active_format_from_ast(parse_query("format:shattered format:ivory")) is None
+
+    def test_format_under_group_negation_is_not_pinned(self):
+        assert active_format_from_ast(parse_query("-(format:shattered t:personality)")) is None
+
+    def test_negated_format_is_not_pinned(self):
+        assert active_format_from_ast(parse_query("-format:shattered")) is None
+
+    def test_inequality_is_not_pinned(self):
+        assert active_format_from_ast(parse_query("format>=diamond")) is None
+
+    def test_no_format_is_none(self):
+        assert active_format_from_ast(parse_query("c:crane")) is None
+
+
+class TestIncludesFromAst:
+    def test_collects_tokens_alongside_other_terms(self):
+        assert includes_from_ast(parse_query("include:tokens c:crane")) == {"tokens"}
+
+    def test_collects_all(self):
+        assert includes_from_ast(parse_query("include:all")) == {"all"}
+
+    def test_unknown_category_is_ignored(self):
+        assert includes_from_ast(parse_query("include:bogus")) == set()
+
+    def test_absent_is_empty(self):
+        assert includes_from_ast(parse_query("c:crane")) == set()
 
     def test_leaf_negation_stays_on_the_term(self):
         assert parse_query("-c:crane") == leaf("-c:crane")

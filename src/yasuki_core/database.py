@@ -10,6 +10,14 @@ from psycopg_pool import ConnectionPool
 import logging
 
 from yasuki_core.search.parse_search import ParsedQuery, SearchTerm, build_filter_options
+from yasuki_core.search.boolean_query import (
+    Node,
+    Not,
+    Term,
+    active_format_from_ast,
+    includes_from_ast,
+    parse_query,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -1068,6 +1076,9 @@ def _active_format(filter_options: dict | None) -> str | None:
     """
     if not filter_options:
         return None
+    resolved = filter_options.get("_active_format")
+    if resolved:
+        return resolved
     specs = filter_options.get("format_filters")
     if specs and len(specs) == 1 and specs[0][0] in (":", "="):
         return specs[0][1]
@@ -1102,8 +1113,14 @@ def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
     """
     conditions: list[str] = []
     params: list = []
-    if property_name in ("include", "all"):
-        return conditions, params  # include is consumed by the visibility filter; all adds nothing
+    if property_name in ("include", "all", "_active_format"):
+        # include feeds the visibility filter; _active_format only biases default-print selection;
+        # all adds nothing.
+        return conditions, params
+    if property_name == "_search_ast":
+        # A pre-compiled boolean-query predicate (SQL, params), dropped in verbatim.
+        sql, ast_params = value
+        return [sql], list(ast_params)
     if property_name == "_unknown_fields":
         # An unrecognized search field makes the query unsatisfiable rather than silently
         # matching everything or text-searching the value.
@@ -1415,13 +1432,14 @@ def _build_card_filter(
     return where_clause, params
 
 
-def compile_term(term: SearchTerm) -> tuple[str, list]:
+def compile_term(term: SearchTerm) -> tuple[str, list] | None:
     """
     Compile one search term (a boolean-AST leaf) into a single SQL predicate and its params.
 
     Reuse ``build_filter_options`` to map the term to filter keys, then ``_emit_condition`` for each
     key's SQL, ANDing a term's several conditions (e.g. ``is:a&b``) into one parenthesized
-    predicate. A term that constrains nothing (``all:``) compiles to ``TRUE``.
+    predicate. A term that constrains nothing on its own (``all:``, or a bare directive like
+    ``include:tokens``) compiles to None.
 
     Parameters
     ----------
@@ -1430,10 +1448,9 @@ def compile_term(term: SearchTerm) -> tuple[str, list]:
 
     Returns
     -------
-    sql : str
-        One SQL boolean expression, safe to combine under AND/OR/NOT.
-    params : list
-        Positional parameters for the expression's ``%s`` placeholders.
+    compiled : tuple of (str, list) or None
+        One SQL boolean expression (safe to combine under AND/OR/NOT) with its positional params, or
+        None when the term adds no predicate.
     """
     text_query, filter_options = build_filter_options(ParsedQuery(terms=[term]))
     conditions: list[str] = []
@@ -1447,10 +1464,87 @@ def compile_term(term: SearchTerm) -> tuple[str, list]:
         conditions.extend(new_conditions)
         params.extend(new_params)
     if not conditions:
-        return "TRUE", params
+        return None
     if len(conditions) == 1:
         return conditions[0], params
     return "(" + " AND ".join(conditions) + ")", params
+
+
+def compile_query(node: Node | None) -> tuple[str, list] | None:
+    """
+    Compile a boolean-query AST into one SQL predicate and its params, or None for no constraint.
+
+    Recurse the tree: a ``Term`` compiles via ``compile_term``, a ``Not`` prefixes ``NOT``, and a
+    ``BoolGroup`` parenthesizes its children joined by AND/OR. Empty branches drop out, so a group
+    with one surviving child collapses to that child.
+
+    Parameters
+    ----------
+    node : Node or None
+        The AST root from ``parse_query``.
+
+    Returns
+    -------
+    compiled : tuple of (str, list) or None
+        The SQL expression and its positional params, or None when the query constrains nothing.
+    """
+    if node is None:
+        return None
+    if isinstance(node, Term):
+        return compile_term(node.term)
+    if isinstance(node, Not):
+        compiled = compile_query(node.child)
+        if compiled is None:
+            return None
+        sql, params = compiled
+        return f"NOT {sql}", params
+    # BoolGroup: the only remaining node type.
+    parts: list[str] = []
+    params: list = []
+    for child in node.children:
+        compiled = compile_query(child)
+        if compiled is None:
+            continue
+        sql, child_params = compiled
+        parts.append(sql)
+        params.extend(child_params)
+    if not parts:
+        return None
+    if len(parts) == 1:
+        return parts[0], params
+    return "(" + f" {node.op} ".join(parts) + ")", params
+
+
+def build_search_filters(query: str) -> dict:
+    """
+    Compile a search-box query string into ``filter_options`` entries.
+
+    Produce a ``_search_ast`` entry holding the compiled boolean predicate and, when the query pins
+    a single format, an ``_active_format`` entry to bias default-print selection. Deck-builder
+    dialog filters are added to the same dict by the caller and AND with this predicate.
+
+    Parameters
+    ----------
+    query : str
+        Raw search-box query.
+
+    Returns
+    -------
+    filter_options : dict
+        Filter entries for ``query_cards_filtered``; empty when the query constrains nothing.
+    """
+    node = parse_query(query)
+    options: dict = {}
+    predicate = compile_query(node)
+    if predicate is not None:
+        options["_search_ast"] = predicate
+    active = active_format_from_ast(node)
+    if active:
+        options["_active_format"] = active
+    includes = includes_from_ast(node)
+    if includes:
+        options["include"] = includes
+    return options
 
 
 def query_cards_filtered(

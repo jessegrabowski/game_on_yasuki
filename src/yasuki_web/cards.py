@@ -17,10 +17,10 @@ from yasuki_core.database import (
     query_all_types,
     query_types_by_deck,
     get_card_backs,
+    build_search_filters,
 )
 from yasuki_core.card_art import back_era_for_set, classify, load_art_layout
 from yasuki_core.card_diff import unified_diff
-from yasuki_core.search import parse_and_build_query
 from yasuki_web.rate_limit import limiter
 
 logger = logging.getLogger(__name__)
@@ -67,19 +67,15 @@ async def list_cards(
     - type:personality, t:personality — filter by type
     - force>3, chi>=2, gold<=3 — numeric comparisons
     - is:unique, is:cavalry, is:shadowlands — keyword/trait filters
-    - "exact phrase" — exact match
+    - !"exact name" — exact whole-name match
     - -type:event — negation
-    - term1 OR term2 — OR logic
+    - a OR b, (a b) OR (c d) — OR logic and parenthesised grouping
 
-    The deck, clan, and card_type query params still work for backwards compatibility
-    and are merged with parsed search filters.
+    The deck, clan, and card_type query params still work for backwards compatibility; each is an
+    independent constraint ANDed with the parsed search query.
     """
     try:
-        text_query = ""
-        filter_options = {}
-
-        if search:
-            text_query, filter_options = parse_and_build_query(search)
+        filter_options = build_search_filters(search) if search else {}
 
         if deck:
             filter_options.setdefault("decks", []).append(deck)
@@ -89,10 +85,10 @@ async def list_cards(
             filter_options.setdefault("types", []).append(card_type)
         if format:
             filter_options["legality"] = (format, None)
+            filter_options.setdefault("_active_format", format)
 
         results, total = await to_thread(
             query_cards_page,
-            text_query=text_query,
             filter_options=filter_options if filter_options else None,
             limit=limit,
             offset=offset,

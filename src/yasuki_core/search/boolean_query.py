@@ -1,7 +1,8 @@
+from collections.abc import Iterator
 from dataclasses import dataclass
 from typing import Literal
 
-from yasuki_core.search.parse_search import SearchTerm, parse_token
+from yasuki_core.search.parse_search import INCLUDE_CATEGORIES, SearchTerm, parse_token
 
 _PAREN_TOKENS = "()"
 
@@ -103,6 +104,66 @@ def _group(op: Literal["AND", "OR"], children: list[Node | None]) -> Node | None
     if len(present) == 1:
         return present[0]
     return BoolGroup(op, present)
+
+
+def active_format_from_ast(node: Node | None) -> str | None:
+    """
+    Find the single format a query pins for default-print selection, or None.
+
+    Return the value of an exact ``format:``/``arc:`` term reachable through AND groups only — not
+    under an ``OR`` (which makes the choice ambiguous) or a ``NOT`` (which negates it) — and only
+    when exactly one such term exists.
+
+    Parameters
+    ----------
+    node : Node or None
+        A parsed query AST.
+
+    Returns
+    -------
+    active_format : str or None
+        The pinned format name or block alias, or None when zero or several apply.
+    """
+    formats = [
+        term.value
+        for term in _top_level_and_terms(node)
+        if term.field == "format" and not term.negated and term.operator in (":", "=")
+    ]
+    return formats[0] if len(formats) == 1 else None
+
+
+def includes_from_ast(node: Node | None) -> set[str]:
+    """
+    Collect the ``include:`` visibility categories a query requests (e.g. ``tokens``, ``all``).
+
+    ``include:`` widens the default-hidden set rather than filtering cards, so it is a query-level
+    directive, not a predicate. Gather it from top-level AND terms (an ``include`` under OR or NOT
+    is meaningless and ignored).
+
+    Parameters
+    ----------
+    node : Node or None
+        A parsed query AST.
+
+    Returns
+    -------
+    categories : set of str
+        The requested include categories, restricted to the known ones.
+    """
+    return {
+        term.value.lower()
+        for term in _top_level_and_terms(node)
+        if term.field == "include" and not term.negated and term.value.lower() in INCLUDE_CATEGORIES
+    }
+
+
+def _top_level_and_terms(node: Node | None) -> Iterator[SearchTerm]:
+    """Yield the terms reachable through AND groups — not those under an OR or a NOT."""
+    if isinstance(node, Term):
+        yield node.term
+    elif isinstance(node, BoolGroup) and node.op == "AND":
+        for child in node.children:
+            yield from _top_level_and_terms(child)
 
 
 class _Parser:

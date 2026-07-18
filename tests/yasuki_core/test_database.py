@@ -17,6 +17,7 @@ from yasuki_core.database import (
     query_types_with_stat,
     get_card_backs,
     get_connection_string,
+    build_search_filters,
 )
 from yasuki_core.paths import SETS_DIR, resolve_set_image_path
 from yasuki_core.search import parse_and_build_query
@@ -216,6 +217,34 @@ class TestSQLFiltering:
         )
         assert len(cards) > 0
         assert all("Crane" in (c["clans"] or []) and "Personality" in c["types"] for c in cards)
+
+    def test_grouped_or_returns_the_union(self):
+        """A grouped cross-field OR is exactly the union of its two AND groups."""
+
+        def ids(query):
+            return {
+                c["card_id"]
+                for c in query_cards_filtered(filter_options=build_search_filters(query))
+            }
+
+        crane_courtiers = ids("c:crane is:courtier")
+        lion_commanders = ids("c:lion is:commander")
+        combined = ids("(c:crane is:courtier) OR (c:lion is:commander)")
+        assert crane_courtiers and lion_commanders
+        assert combined == crane_courtiers | lion_commanders
+
+    def test_dialog_filter_ands_with_the_search_box(self):
+        """A dialog dropdown constraint ANDs with the search box (SIGN-OFF B), not ORs."""
+        with_dialog = build_search_filters("t:personality")
+        with_dialog.setdefault("clans", []).append("Crane")
+        dialog_ids = {c["card_id"] for c in query_cards_filtered(filter_options=with_dialog)}
+        search_ids = {
+            c["card_id"]
+            for c in query_cards_filtered(
+                filter_options=build_search_filters("t:personality c:crane")
+            )
+        }
+        assert dialog_ids and dialog_ids == search_ids
 
     def test_exact_name_match_isolates_one_card(self):
         """!\"Doji Hoturi\" returns only cards named exactly that — every experience version, and
