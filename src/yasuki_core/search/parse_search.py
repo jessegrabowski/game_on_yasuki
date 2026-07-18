@@ -1,6 +1,5 @@
 import re
 from dataclasses import dataclass
-from typing import Literal
 
 
 @dataclass
@@ -29,18 +28,15 @@ class SearchTerm:
 @dataclass
 class ParsedQuery:
     """
-    Represents a parsed search query with terms and logic.
+    A parsed search query as a flat list of terms.
 
     Attributes
     ----------
     terms : list of SearchTerm
         Individual search terms
-    logic : str
-        Boolean logic ('AND' or 'OR')
     """
 
     terms: list[SearchTerm]
-    logic: Literal["AND", "OR"] = "AND"
 
 
 FIELD_ALIASES = {
@@ -71,16 +67,33 @@ FIELD_ALIASES = {
     "startinghonor": "starting_honor",
     "sh": "starting_honor",
     "fh": "starting_honor",
+    "exp": "experience",
+    "xp": "experience",
+    "yr": "year",
     "has": "is",
 }
 
 # `is:` values that toggle a boolean card column rather than match a keyword/trait.
 IS_BOOLEAN_FIELDS = {"unique": "is_unique", "banned": "is_banned"}
 
+# `is:` values that test whether a nullable column is populated — `is:flip` (has a back face),
+# `is:errata` (has errata text). Maps the value to the filter key the database resolves.
+IS_PRESENCE_FIELDS = {"flip": "is_flip", "errata": "has_errata"}
+
 
 # Non-deck cards (proxies, tokens, bio cards, …) are hidden by default. `include:tokens` brings the
 # token/non-deck cards back; `include:all` shows everything.
 INCLUDE_CATEGORIES = {"tokens", "all"}
+
+
+# Categorical set-membership fields: parser field name -> (filter key, per-value normalizer). Each
+# emits `<key>` for the required values and `<key>_excludes` for negated ones.
+CATEGORICAL_FIELDS = {
+    "deck": ("decks", str.upper),
+    "type": ("types", str.lower),
+    "clan": ("clans", None),
+    "rarity": ("rarities", None),
+}
 
 
 NUMERIC_FIELDS = {
@@ -93,7 +106,12 @@ NUMERIC_FIELDS = {
     "gold_production",
     "province_strength",
     "starting_honor",
+    "experience",
 }
+
+# Shorthand for a closed numeric range, e.g. `force:2-4`. Non-negative bounds only, so it never
+# collides with a negative value like `exp:-1`; open-ended ranges use the >=/<= operators instead.
+_RANGE_SHORTHAND = re.compile(r"^(\d+)-(\d+)$")
 
 
 def normalize_field_name(field: str) -> str:
@@ -196,11 +214,12 @@ def parse_token(token: str) -> SearchTerm:
         negated = True
         token = token[1:]
 
-    # Check for quoted exact match
+    # `!"phrase"` is an exact whole-name match (operator "="); a bare `"phrase"` is a substring
+    # phrase (operator ":"), the same broad search a plain word gets.
     if token.startswith('!"') and token.endswith('"'):
         return SearchTerm(field=None, operator="=", value=token[2:-1], negated=negated)
     elif token.startswith('"') and token.endswith('"'):
-        return SearchTerm(field=None, operator="=", value=token[1:-1], negated=negated)
+        return SearchTerm(field=None, operator=":", value=token[1:-1], negated=negated)
 
     # Try to match field:value or field>value patterns
     match = re.match(r"^([a-zA-Z_]+)([:=><]+)(.+)$", token)
@@ -233,81 +252,30 @@ def parse_token(token: str) -> SearchTerm:
 
 def parse_search_query(query: str) -> ParsedQuery:
     """
-    Parse a search query string into structured search terms.
+    Parse a search query string into a flat, deduplicated list of terms.
 
-    Supports Scryfall-style syntax:
-    - Field-specific: name:Doji, type:personality, force>3
-    - Exact match: "Doji Hoturi", !"exact phrase"
-    - Boolean: term1 AND term2, term1 OR term2
-    - Negation: -type:event, NOT type:event
-    - Numeric comparison: force>=3, chi<2, gold:5
-    - Special: is:unique
+    Bare boolean keywords (AND/OR/NOT) are stripped; combining logic lives downstream, where
+    ``build_filter_options`` ORs same-field values and ANDs everything else. (The deck-builder search
+    box parses through ``boolean_query`` instead, which honors real cross-field OR and grouping.)
 
     Parameters
     ----------
     query : str
-        Search query string
+        Search query string.
 
     Returns
     -------
     parsed : ParsedQuery
-        Parsed query with terms and logic
-
-    Examples
-    --------
-    >>> parse_search_query('name:Doji type:personality')
-    ParsedQuery(terms=[...], logic='AND')
-
-    >>> parse_search_query('clan:Crane OR clan:Lion')
-    ParsedQuery(terms=[...], logic='OR')
+        The parsed terms, deduplicated in order.
     """
-    if not query.strip():
-        return ParsedQuery(terms=[], logic="AND")
-
-    # Determine logic (default AND)
-    logic = "AND"
-    if " OR " in query.upper():
-        logic = "OR"
-        # Normalize OR separators
-        query = re.sub(r"\s+OR\s+", " OR ", query, flags=re.IGNORECASE)
-
-    # Tokenize first (this handles quotes properly)
-    tokens = tokenize_query(query)
-
-    # Split on OR if present
-    if logic == "OR":
-        # Split tokens on OR keyword
-        token_groups = []
-        current_group = []
-        for token in tokens:
-            if token.upper() == "OR":
-                if current_group:
-                    token_groups.append(current_group)
-                    current_group = []
-            else:
-                current_group.append(token)
-        if current_group:
-            token_groups.append(current_group)
-
-        # Flatten all tokens
-        all_tokens = []
-        for group in token_groups:
-            all_tokens.extend(group)
-    else:
-        # Filter out AND/OR/NOT keywords (they're handled implicitly)
-        all_tokens = [t for t in tokens if t.upper() not in ("AND", "OR", "NOT")]
-
-    # Remove duplicates while preserving order
+    terms = []
     seen = set()
-    unique_tokens = []
-    for token in all_tokens:
-        if token not in seen:
-            seen.add(token)
-            unique_tokens.append(token)
-
-    terms = [parse_token(token) for token in unique_tokens]
-
-    return ParsedQuery(terms=terms, logic=logic)
+    for token in tokenize_query(query):
+        if token.upper() in ("AND", "OR", "NOT") or token in seen:
+            continue
+        seen.add(token)
+        terms.append(parse_token(token))
+    return ParsedQuery(terms=terms)
 
 
 def _scope_text_field(terms_list: list, prefix: str, filter_options: dict) -> None:
@@ -355,9 +323,20 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
 
     for field, terms_list in field_groups.items():
         if field == "_bare":
-            # Bare words: broad search across name, card id, and rules text.
+            # Bare words: broad substring search across name, card id, and rules text. A negated
+            # bare word (-doji) excludes that broad match; `!"phrase"` (operator "=") is instead an
+            # exact whole-name match, positive or negated.
             for term in terms_list:
-                if not term.negated:
+                if not term.value:
+                    # A stray '-' or '""' carries no needle. Left unguarded, a negated one becomes a
+                    # match-everything exclude ('%%') that blanks the whole result set.
+                    continue
+                if term.operator == "=":
+                    key = "name_exact_excludes" if term.negated else "name_exact"
+                    filter_options.setdefault(key, []).append(term.value)
+                elif term.negated:
+                    filter_options.setdefault("bare_excludes", []).append(term.value)
+                else:
                     text_query_parts.append(term.value)
         elif field == "name":
             # name:/title: — match the card name only.
@@ -395,54 +374,91 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                 elif keyword_value in IS_BOOLEAN_FIELDS:
                     # Boolean card flags (is:unique, is:banned) rather than keyword traits.
                     filter_options[IS_BOOLEAN_FIELDS[keyword_value]] = not term.negated
+                elif keyword_value in IS_PRESENCE_FIELDS:
+                    # Presence flags (is:flip, is:errata) — a nullable column being populated.
+                    filter_options[IS_PRESENCE_FIELDS[keyword_value]] = not term.negated
                 else:
                     # Single keyword (implicit AND when multiple is: terms)
                     if not term.negated:
                         if "keywords" not in filter_options:
                             filter_options["keywords"] = []
                         filter_options["keywords"].append(keyword_value)
-        elif field in ("deck", "type", "clan", "rarity"):
-            # Categorical filters
-            values = [term.value for term in terms_list if not term.negated]
-            if values:
-                if field == "deck":
-                    filter_options["decks"] = [v.upper() for v in values]
-                elif field == "type":
-                    filter_options["types"] = [v.lower() for v in values]
-                elif field == "clan":
-                    filter_options["clans"] = [v for v in values]
-                elif field == "rarity":
-                    filter_options["rarities"] = [v for v in values]
+        elif field in CATEGORICAL_FIELDS:
+            # Categorical filters. Negated terms (-type:event) become a parallel *_excludes list the
+            # database applies as NOT IN, so a query can both require and forbid categories at once.
+            key, normalize = CATEGORICAL_FIELDS[field]
+            included = [term.value for term in terms_list if not term.negated]
+            excluded = [term.value for term in terms_list if term.negated]
+            if normalize:
+                included = [normalize(v) for v in included]
+                excluded = [normalize(v) for v in excluded]
+            if included:
+                filter_options[key] = included
+            if excluded:
+                filter_options[f"{key}_excludes"] = excluded
         elif field in ("artist", "flavor", "story"):
-            # Free-text partial matches: artist/flavor on the print, story on the card credit.
-            values = [
-                term.value.strip('"').strip()
-                for term in terms_list
-                if not term.negated and term.value.strip('"').strip()
-            ]
-            if values:
-                filter_options[field] = values
+            # Free-text partial matches: artist/flavor on the print, story on the card credit. A
+            # negated term (-artist:foo) forbids the match via a parallel *_excludes list.
+            included, excluded = [], []
+            for term in terms_list:
+                cleaned = term.value.strip('"').strip()
+                if not cleaned:
+                    continue
+                (excluded if term.negated else included).append(cleaned)
+            if included:
+                filter_options[field] = included
+            if excluded:
+                filter_options[f"{field}_excludes"] = excluded
         elif field == "set":
             # Set by full name or short code, resolved in the database. Like format, emit each
             # (operator, value); the operator may be exact or an inequality against set release dates.
+            # A negated term forbids membership via the *_excludes twin (strict set complement, so
+            # -set>=GE means "printed in no set at or after GE", not "printed in some set before GE").
             specs = [
                 (term.operator, term.value.strip('"').strip())
                 for term in terms_list
                 if not term.negated and term.value.strip('"').strip()
+            ]
+            excluded = [
+                (term.operator, term.value.strip('"').strip())
+                for term in terms_list
+                if term.negated and term.value.strip('"').strip()
             ]
             if specs:
                 filter_options["set_filters"] = specs
+            if excluded:
+                filter_options["set_filters_excludes"] = excluded
         elif field == "format":
             # Legality by format, resolved in the database against formats.block / legal_from. Emit
             # each (operator, value) verbatim: the value may be a short alias (`diamond`) or a full
-            # name, and the operator may be exact or an inequality against the format timeline.
+            # name, and the operator may be exact or an inequality against the format timeline. A
+            # negated term forbids membership via the *_excludes twin (strict set complement, so
+            # -format>=diamond means "legal in no format at or after diamond", not "legal in some
+            # earlier format").
             specs = [
                 (term.operator, term.value.strip('"').strip())
                 for term in terms_list
                 if not term.negated and term.value.strip('"').strip()
             ]
+            excluded = [
+                (term.operator, term.value.strip('"').strip())
+                for term in terms_list
+                if term.negated and term.value.strip('"').strip()
+            ]
             if specs:
                 filter_options["format_filters"] = specs
+            if excluded:
+                filter_options["format_filters_excludes"] = excluded
+        elif field == "year":
+            # Release year, matched against any printing's set: exact (year:2005) or an inequality
+            # (year>=2010). Non-numeric values are ignored.
+            specs = [
+                (term.operator, int(term.value))
+                for term in terms_list
+                if not term.negated and term.value.strip().isdigit()
+            ]
+            if specs:
+                filter_options["year_filters"] = specs
         elif field in NUMERIC_FIELDS:
             # Numeric comparison filters tracked as a (min, max) pair. A bare "-" matches the dash
             # stat — one the card simply doesn't print, stored as NULL — and negation flips it to
@@ -457,6 +473,13 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                     continue
                 if term.negated:
                     continue
+
+                if term.operator in (":", "="):
+                    range_match = _RANGE_SHORTHAND.match(term.value.strip())
+                    if range_match:
+                        low, high = int(range_match.group(1)), int(range_match.group(2))
+                        field_min, field_max = min(low, high), max(low, high)
+                        continue
 
                 try:
                     value = int(term.value)

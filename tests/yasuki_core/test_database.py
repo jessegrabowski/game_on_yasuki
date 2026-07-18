@@ -17,8 +17,10 @@ from yasuki_core.database import (
     query_types_with_stat,
     get_card_backs,
     get_connection_string,
+    build_search_filters,
 )
 from yasuki_core.paths import SETS_DIR, resolve_set_image_path
+from yasuki_core.search import parse_and_build_query
 
 # Card images are gitignored and served from R2, so they're absent in CI and fresh clones; only
 # assert on-disk existence when the local image tree is actually populated.
@@ -215,6 +217,175 @@ class TestSQLFiltering:
         )
         assert len(cards) > 0
         assert all("Crane" in (c["clans"] or []) and "Personality" in c["types"] for c in cards)
+
+    def test_name_search_is_accent_insensitive(self):
+        """ASCII input finds accented titles (and vice versa) via the folded name column."""
+        ascii_hits = {
+            c["name"]
+            for c in query_cards_filtered(filter_options=build_search_filters("name:attache"))
+        }
+        accent_hits = {
+            c["name"]
+            for c in query_cards_filtered(filter_options=build_search_filters("name:Attaché"))
+        }
+        assert "Naga Attaché" in ascii_hits
+        assert ascii_hits == accent_hits
+
+    def test_year_release_filter(self):
+        """year: matches cards by release era; a wider inequality is a superset of a narrower one."""
+        from_2010 = count_cards_filtered(
+            filter_options=build_search_filters("year>=2010 include:all")
+        )
+        from_2000 = count_cards_filtered(
+            filter_options=build_search_filters("year>=2000 include:all")
+        )
+        assert from_2010 > 0
+        assert from_2000 >= from_2010
+        exact = query_cards_filtered(filter_options=build_search_filters("year:2005"))
+        assert exact
+
+    def test_presence_flags_filter(self):
+        """is:flip finds double-faced cards; is:flip and -is:flip partition the catalog."""
+        flip = query_cards_filtered(filter_options=build_search_filters("is:flip"))
+        assert flip and all(c["back_card_id"] for c in flip)
+        errata = query_cards_filtered(filter_options=build_search_filters("is:errata include:all"))
+        assert errata
+        everything = count_cards_filtered(filter_options=build_search_filters("include:all"))
+        flip_all = count_cards_filtered(filter_options=build_search_filters("is:flip include:all"))
+        not_flip = count_cards_filtered(filter_options=build_search_filters("-is:flip include:all"))
+        assert flip_all + not_flip == everything
+
+    def test_experience_rank_filter(self):
+        """exp:/experience: filter by version rank, and exp<1 / exp>=1 partition the catalog."""
+        base = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options=build_search_filters("exp:0 include:all"))
+        }
+        experienced = {
+            c["card_id"]
+            for c in query_cards_filtered(
+                filter_options=build_search_filters("experience>=1 include:all")
+            )
+        }
+        everything = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options=build_search_filters("include:all"))
+        }
+        below = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options=build_search_filters("exp<1 include:all"))
+        }
+        assert base and experienced
+        assert base.isdisjoint(experienced)
+        assert below | experienced == everything
+
+    def test_grouped_or_returns_the_union(self):
+        """A grouped cross-field OR is exactly the union of its two AND groups."""
+
+        def ids(query):
+            return {
+                c["card_id"]
+                for c in query_cards_filtered(filter_options=build_search_filters(query))
+            }
+
+        crane_courtiers = ids("c:crane is:courtier")
+        lion_commanders = ids("c:lion is:commander")
+        combined = ids("(c:crane is:courtier) OR (c:lion is:commander)")
+        assert crane_courtiers and lion_commanders
+        assert combined == crane_courtiers | lion_commanders
+
+    def test_dialog_filter_ands_with_the_search_box(self):
+        """A dialog dropdown constraint ANDs with the search box (SIGN-OFF B), not ORs."""
+        with_dialog = build_search_filters("t:personality")
+        with_dialog.setdefault("clans", []).append("Crane")
+        dialog_ids = {c["card_id"] for c in query_cards_filtered(filter_options=with_dialog)}
+        search_ids = {
+            c["card_id"]
+            for c in query_cards_filtered(
+                filter_options=build_search_filters("t:personality c:crane")
+            )
+        }
+        assert dialog_ids and dialog_ids == search_ids
+
+    def test_exact_name_match_isolates_one_card(self):
+        """!\"Doji Hoturi\" returns only cards named exactly that — every experience version, and
+        nothing whose name merely contains the phrase."""
+        exact = query_cards_filtered(filter_options={"name_exact": ["Doji Hoturi"]})
+        substring = query_cards_filtered(text_query="Doji Hoturi")
+        assert len(exact) > 1  # multiple experience versions share the name
+        assert all(c["name"] == "Doji Hoturi" for c in exact)
+        # The substring search is strictly broader (e.g. "Doji Hoturi, Seven Thunder").
+        assert len(substring) > len(exact)
+
+    def test_negated_exact_match_drops_that_card(self):
+        """-!"Doji Hoturi" excludes exactly the cards named that, keeping everything else."""
+        all_ids = {c["card_id"] for c in query_cards_filtered()}
+        named = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options={"name_exact": ["Doji Hoturi"]})
+        }
+        kept = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options={"name_exact_excludes": ["Doji Hoturi"]})
+        }
+        assert named
+        assert kept == all_ids - named
+
+    def test_negated_bare_word_excludes_matches(self):
+        """-word drops every card the positive bare word would have matched."""
+        crane = {c["card_id"] for c in query_cards_filtered(filter_options={"clans": ["Crane"]})}
+        with_honor = {c["card_id"] for c in query_cards_filtered(text_query="honor")}
+        kept = {
+            c["card_id"]
+            for c in query_cards_filtered(
+                filter_options={"clans": ["Crane"], "bare_excludes": ["honor"]}
+            )
+        }
+        assert kept == crane - with_honor
+        assert kept != crane  # the exclusion actually removed something
+
+    def test_stray_dash_does_not_blank_results(self):
+        """A trailing '-' (mid-typing in live search) must not collapse the result set to empty."""
+        crane = len(query_cards_filtered(text_query="crane"))
+        text, filters = parse_and_build_query("crane -")
+        with_dash = len(query_cards_filtered(text_query=text, filter_options=filters))
+        assert crane > 0
+        assert with_dash == crane
+
+    def test_exclude_type_drops_exactly_that_type(self):
+        """types_excludes should remove exactly the excluded type and keep everything else."""
+        all_ids = {c["card_id"] for c in query_cards_filtered()}
+        sensei_ids = {
+            c["card_id"] for c in query_cards_filtered(filter_options={"types": ["Sensei"]})
+        }
+        kept = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options={"types_excludes": ["Sensei"]})
+        }
+        assert sensei_ids, "fixture has no senseis, so the exclusion proves nothing"
+        assert kept == all_ids - sensei_ids
+
+    def test_clan_with_excluded_type_is_the_reported_regression(self):
+        """c:crane -t:sensei returned all Crane cards before the fix; the -t: was silently dropped."""
+        cards = query_cards_filtered(
+            filter_options={"clans": ["Crane"], "types_excludes": ["Sensei"]}
+        )
+        assert len(cards) > 0
+        assert all({"Crane", "All Clans"} & set(c["clans"] or []) for c in cards)
+        assert all("Sensei" not in c["types"] for c in cards)
+
+    def test_exclude_clan_also_drops_all_clans_senseis(self):
+        """-clan:crane is the strict complement, so All Clans senseis (legal as Crane) drop too."""
+        cards = query_cards_filtered(filter_options={"clans_excludes": ["Crane"]})
+        assert len(cards) > 0
+        assert all(not {"Crane", "All Clans"} & set(c["clans"] or []) for c in cards)
+
+    def test_negated_format_with_unknown_reference_matches_nothing(self):
+        """A typo'd -format:<unknown> must fail closed to empty, not match the whole card pool."""
+        cards = query_cards_filtered(
+            filter_options={"format_filters_excludes": [(":", "no_such_format_xyz")]}
+        )
+        assert cards == []
 
     def test_text_search_with_filters(self):
         """Should combine text search with property filters."""

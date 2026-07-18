@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.search import (
     tokenize_query,
     parse_token,
@@ -34,6 +36,8 @@ class TestFieldNormalization:
         assert normalize_field_name("ps") == "province_strength"
         assert normalize_field_name("sh") == "starting_honor"
         assert normalize_field_name("fh") == "starting_honor"
+        assert normalize_field_name("exp") == "experience"
+        assert normalize_field_name("xp") == "experience"
 
     def test_normalize_case_insensitive(self):
         assert normalize_field_name("FORCE") == "force"
@@ -102,10 +106,12 @@ class TestTokenParsing:
         assert term.value == "event"
         assert term.negated is True
 
-    def test_quoted_exact_match(self):
+    def test_bare_quoted_phrase_is_substring(self):
+        # A bare "phrase" searches as a substring (operator ":"), the same broad match a plain word
+        # gets. Only !"phrase" is exact.
         term = parse_token('"Doji Hoturi"')
         assert term.field is None
-        assert term.operator == "="
+        assert term.operator == ":"
         assert term.value == "Doji Hoturi"
 
     def test_exact_match_with_exclamation(self):
@@ -113,6 +119,13 @@ class TestTokenParsing:
         assert term.field is None
         assert term.operator == "="
         assert term.value == "exact phrase"
+
+    def test_negated_exact_match(self):
+        term = parse_token('-!"Doji Hoturi"')
+        assert term.field is None
+        assert term.operator == "="
+        assert term.value == "Doji Hoturi"
+        assert term.negated is True
 
     def test_plain_text(self):
         term = parse_token("Crane")
@@ -136,24 +149,26 @@ class TestQueryParsing:
     def test_single_term(self):
         parsed = parse_search_query("name:Doji")
         assert len(parsed.terms) == 1
-        assert parsed.logic == "AND"
         assert parsed.terms[0].field == "name"
         assert parsed.terms[0].value == "Doji"
 
-    def test_multiple_terms_implicit_and(self):
+    def test_multiple_terms(self):
         parsed = parse_search_query("name:Doji type:personality")
         assert len(parsed.terms) == 2
-        assert parsed.logic == "AND"
 
-    def test_explicit_and(self):
+    def test_and_keyword_is_stripped(self):
         parsed = parse_search_query("name:Doji AND type:personality")
         assert len(parsed.terms) == 2
-        assert parsed.logic == "AND"
 
-    def test_or_logic(self):
+    def test_or_keyword_is_stripped(self):
+        # This flat parser drops OR; the boolean AST (boolean_query) is what honors real OR.
         parsed = parse_search_query("clan:Crane OR clan:Lion")
         assert len(parsed.terms) == 2
-        assert parsed.logic == "OR"
+
+    def test_keywords_stripped_when_mixed_with_or(self):
+        # Regression: the old OR-splitting path left AND/NOT as bogus text terms.
+        parsed = parse_search_query("clan:Crane OR type:personality AND is:unique")
+        assert [term.field for term in parsed.terms] == ["clan", "type", "is"]
 
     def test_mixed_terms(self):
         parsed = parse_search_query('name:Doji force>3 "Crane Clan"')
@@ -166,7 +181,6 @@ class TestQueryParsing:
     def test_empty_query(self):
         parsed = parse_search_query("")
         assert len(parsed.terms) == 0
-        assert parsed.logic == "AND"
 
     def test_negated_terms(self):
         parsed = parse_search_query("clan:Crane -type:event")
@@ -183,6 +197,32 @@ class TestFilterBuilding:
         text_query, filters = build_filter_options(parsed)
         assert "Doji" in text_query
         assert len(filters) == 0
+
+    def test_exact_match_emits_name_exact(self):
+        _, filters = parse_and_build_query('!"Doji Hoturi"')
+        assert filters["name_exact"] == ["Doji Hoturi"]
+        assert "name_contains" not in filters
+
+    def test_negated_exact_match_emits_name_exact_excludes(self):
+        _, filters = parse_and_build_query('-!"Doji Hoturi"')
+        assert filters["name_exact_excludes"] == ["Doji Hoturi"]
+
+    def test_negated_bare_word_emits_bare_excludes(self):
+        text, filters = parse_and_build_query("-doji")
+        assert text == ""
+        assert filters["bare_excludes"] == ["doji"]
+
+    def test_bare_word_mixes_include_and_exclude(self):
+        text, filters = parse_and_build_query("crane -bushi")
+        assert text == "crane"
+        assert filters["bare_excludes"] == ["bushi"]
+
+    def test_stray_dash_carries_no_exclude(self):
+        # A trailing '-' (or bare '""') has no needle; it must not become a match-everything
+        # exclude that blanks the results. Regression for the empty-bare-word bug.
+        text, filters = parse_and_build_query("crane -")
+        assert text == "crane"
+        assert "bare_excludes" not in filters
 
     def test_name_search(self):
         # name: scopes to the card name only, not the broad name+text query.
@@ -214,6 +254,38 @@ class TestFilterBuilding:
         text_query, filters = build_filter_options(parsed)
         assert filters["decks"] == ["FATE"]
 
+    # Each categorical field negates into a <key>_excludes list, applying the same case transform as
+    # its positive filter (deck upper, type lower, clan/rarity verbatim).
+    @pytest.mark.parametrize(
+        "query, key, expected",
+        [
+            ("-deck:fate", "decks_excludes", ["FATE"]),
+            ("-type:Sensei", "types_excludes", ["sensei"]),
+            ("-c:Crane", "clans_excludes", ["Crane"]),
+            ("-rarity:rare", "rarities_excludes", ["rare"]),
+        ],
+    )
+    def test_categorical_negation_emits_excludes(self, query, key, expected):
+        _, filters = parse_and_build_query(query)
+        assert filters[key] == expected
+        assert key.removesuffix("_excludes") not in filters
+
+    def test_categorical_mixes_include_and_exclude(self):
+        # c:crane -t:sensei: keep the positive clan, forbid the negated type in one query.
+        _, filters = parse_and_build_query("c:crane -t:sensei")
+        assert filters["clans"] == ["crane"]
+        assert filters["types_excludes"] == ["sensei"]
+
+    def test_same_field_include_and_exclude_coexist(self):
+        _, filters = parse_and_build_query("type:personality -type:sensei")
+        assert filters["types"] == ["personality"]
+        assert filters["types_excludes"] == ["sensei"]
+
+    def test_artist_negation_emits_excludes(self):
+        _, filters = parse_and_build_query("-artist:Hara")
+        assert filters["artist_excludes"] == ["Hara"]
+        assert "artist" not in filters
+
     # The parser emits format terms verbatim as (operator, value) specs; resolving aliases and
     # timeline inequalities happens in SQL (see the DB-backed tests in test_api_contract.py).
     def test_format_exact_emits_spec(self):
@@ -232,9 +304,21 @@ class TestFilterBuilding:
         _, filters = parse_and_build_query("format>diamond format<emperor")
         assert filters["format_filters"] == [(">", "diamond"), ("<", "emperor")]
 
-    def test_format_negation_dropped(self):
-        _, filters = parse_and_build_query("-format:diamond")
+    def test_format_negation_emits_excludes(self):
+        # Strict set complement: forbid membership, keep the operator verbatim (resolved in SQL).
+        _, filters = parse_and_build_query("-format>=diamond")
+        assert filters["format_filters_excludes"] == [(">=", "diamond")]
         assert "format_filters" not in filters
+
+    def test_format_include_and_exclude_coexist(self):
+        _, filters = parse_and_build_query("format:diamond -format:emperor")
+        assert filters["format_filters"] == [(":", "diamond")]
+        assert filters["format_filters_excludes"] == [(":", "emperor")]
+
+    def test_set_negation_emits_excludes(self):
+        _, filters = parse_and_build_query("-set>=GE")
+        assert filters["set_filters_excludes"] == [(">=", "GE")]
+        assert "set_filters" not in filters
 
     # `set` terms emit the same (operator, value) specs; resolution by name/code and release-date
     # inequalities happen in SQL.
@@ -253,6 +337,16 @@ class TestFilterBuilding:
     def test_set_two_sided_range(self):
         _, filters = parse_and_build_query("set>=GE set<=DE")
         assert filters["set_filters"] == [(">=", "GE"), ("<=", "DE")]
+
+    def test_year_emits_operator_specs(self):
+        _, exact = parse_and_build_query("year:2005")
+        assert exact["year_filters"] == [(":", 2005)]
+        _, ge = parse_and_build_query("yr>=2010")
+        assert ge["year_filters"] == [(">=", 2010)]
+
+    def test_non_numeric_year_is_ignored(self):
+        _, filters = parse_and_build_query("year:soon")
+        assert "year_filters" not in filters
 
     def test_title_aliases_to_name(self):
         _, filters = parse_and_build_query("title:hida")
@@ -308,9 +402,43 @@ class TestFilterBuilding:
         _, filters = parse_and_build_query("-f:-")
         assert filters["force"] == "notnull"
 
+    def test_experience_is_a_numeric_field(self):
+        # exp:/experience: pin the version rank; negatives (Inexperienced) are ordinary values.
+        _, base = parse_and_build_query("exp:0")
+        assert base["experience"] == (0, 0)
+        _, experienced = parse_and_build_query("experience>=1")
+        assert experienced["experience"] == (1, None)
+        _, inexperienced = parse_and_build_query("xp:-1")
+        assert inexperienced["experience"] == (-1, -1)
+
+    def test_numeric_range_shorthand(self):
+        _, filters = parse_and_build_query("force:2-4")
+        assert filters["force"] == (2, 4)
+
+    def test_numeric_range_shorthand_tolerates_reversed_bounds(self):
+        _, filters = parse_and_build_query("force:4-2")
+        assert filters["force"] == (2, 4)
+
+    def test_open_ended_range_is_not_a_range(self):
+        # `force:2-` has no upper bound, so it is not a shorthand range and adds no filter.
+        _, filters = parse_and_build_query("force:2-")
+        assert "force" not in filters
+
+    def test_range_shorthand_composes_with_experience(self):
+        _, filters = parse_and_build_query("exp:0-2")
+        assert filters["experience"] == (0, 2)
+
     def test_is_banned(self):
         _, filters = parse_and_build_query("is:banned")
         assert filters["is_banned"] is True
+
+    def test_presence_flags(self):
+        _, flip = parse_and_build_query("is:flip")
+        assert flip["is_flip"] is True
+        _, errata = parse_and_build_query("is:errata")
+        assert errata["has_errata"] is True
+        _, not_flip = parse_and_build_query("-is:flip")
+        assert not_flip["is_flip"] is False
         _, negated = parse_and_build_query("-is:banned")
         assert negated["is_banned"] is False
 
