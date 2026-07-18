@@ -85,12 +85,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Gaijin
   - Jackal
   - Shugenja
+  - Unaligned
   text: After Abdollah enters play, lose 2 Honor and create a 2F/2C/0PH <b>Nonhuman • Shadowlands • Undead</b>
     Personality.
   gold_cost: 6
@@ -556,10 +555,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Mercenary
+  - Unaligned
   text: After Boyoh Mercenary enters play, discard a card.<br>After Boyoh Mercenary's army destroys a
     Province, draw a card.
   gold_cost: 5
@@ -652,11 +650,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Hikano enters play, lose 1 Honor.<br><b>Home Battle, :bow::</b> Straighten your target Oni.
     <i>(Home actions may be taken from home.)</i><br><b>Maho Limited:</b> Destroy a target Ikoma Ayumu.
     Destroy Hikano.
@@ -1349,11 +1346,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Wani
+  - Unaligned
   text: <b>Battle/Open:</b> Destroy your target Personality. Give Hoshoku-sha +2F.
   gold_cost: 7
   force: 4
@@ -1964,14 +1960,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Conqueror
   - Unique
   - Commander
   - Gaijin
   - Yodotai
+  - Unaligned
   text: After Legulus enters play, lose 2 Honor.<br>Melee and Ranged Attacks targeting cards in this unit
     have -3 strength.<br><b>Limited:</b> Search your deck for a Yodotai Legionnaire Follower. Show it.
     Put it in your hand.
@@ -3283,12 +3278,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Earth
   - Golem
   - Nonhuman
+  - Unaligned
   text: After The Lost Colossus enters play, bow it.<br>Will not attach cards. Will not challenge. You
     may not target The Lost Colossus with Political actions.
   gold_cost: 8

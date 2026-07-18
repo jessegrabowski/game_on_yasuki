@@ -1195,13 +1195,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Badger
   keywords:
   - Elite
   - Badger Clan
   - Guardsman
   - Samurai
+  - Unaligned
   text: <b>Repeatable Reaction:</b> After a unit assigns or moves into an attacking army at one of your
     Province's battlefields, move Kihongo into the defending army at that battlefield.
   gold_cost: 6
@@ -1530,14 +1530,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Kage • Experienced 4
-  clans:
-  - Unaligned
   keywords:
   - Experienced 4
   - Tactician
   - Unique
   - Kolat
   - Kolat Master
+  - Unaligned
   text: <b>Repeatable Reaction, :bow:, :gstar::</b> After any player's Human Personality is discarded
     during the player's Dynasty Phase, Recruit the Personality, ignoring Honor Requirement. Permanently
     give him <b>Kolat</b>.
@@ -1665,14 +1664,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elemental Terror
   - Nonhuman
   - Oni
   - Shadowlands
   - Void
+  - Unaligned
   text: After Kukanchi enters play, lose 4 Honor.<br>Cannot attach Followers or Items.<br><b>Repeatable
     Battle/Open:</b> Discard a card to give Kukanchi +1F.<br><b>Repeatable Battle/Open:</b> Discard a
     card to give Kukanchi +1C.
@@ -1858,14 +1856,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elemental Terror
   - Fire
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Moetechi enters play, lose 4 Honor.<br>Will not attach Followers or Items.<br><b>Fire Reaction,
     :bow::</b> After your Personality enters a duel, lose Honor equal to Moetechi's Chi to give your Personality
     a Chi bonus equal to Moetechi's Chi until the duel ends.
@@ -2135,13 +2132,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Hero
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Orschat enters play: Lose 2 Honor. <br>Will not attach non-Goblin Followers.'
   gold_cost: 5
   force: 4
@@ -3281,14 +3277,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Earth
   - Elemental Terror
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Toichi enters play: Lose 4 Honor.<br>Will not attach Followers or Items.<br><b>Battle:</b>
     Any number of times per turn, if you have taken this action this turn a number of times lower Toichi''s
     current Chi, target an enemy Personality: Give him +1F.'
@@ -3308,12 +3303,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Dragonfly
   keywords:
   - Dragonfly Clan
   - Sage
   - Samurai
+  - Unaligned
   text: Toryu may cast Kihos as if he were a Shugenja.
   gold_cost: 3
   force: 1
@@ -3638,8 +3633,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Yokatsu • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced 2 Shinjo Yokatsu
@@ -3647,6 +3640,7 @@ cards:
   - Unique
   - Kolat
   - Samurai
+  - Unaligned
   text: '<b>Battle:</b> Target an enemy Follower with lower Force than Yokatsu''s: Destroy it.'
   gold_cost: 15
   force: 5
@@ -3813,8 +3807,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Air
   - Elemental Terror
@@ -3822,6 +3814,7 @@ cards:
   - Oni
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Yosuchi enters play: Lose 4 Honor.<br>Will not attach Followers or Items.<br><b>Battle/Open:</b>
     Twice per turn: Give Yosuchi +1F or +1C.'
   gold_cost: 8

@@ -1066,12 +1066,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Ronin
   - Samurai
+  - Unaligned
   text: <i>(Duelists win tied duels versus non-Duelists.)</i>
   gold_cost: 3
   force: 2

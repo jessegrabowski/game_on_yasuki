@@ -972,12 +972,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Gagoze enters play: Lose 4 Honor.<br><b>Battle:</b> Bow Gagoze or one of his Followers
     and target a non-Shadowlands Personality: His controller may permanently give him <b>Shadowlands</b>.
     If he did not gain Shadowlands, give him -3F/-3C until your next turn begins.'
@@ -1321,13 +1320,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Hero
   - Ronin
   - Samurai
+  - Unaligned
   text: Hisao will not gain Clan alignments.<br>Negate the bowing of Hisao and his Followers from cards'
     effects <i>(not costs)</i> while he is in an army.
   gold_cost: 7
@@ -1816,7 +1814,6 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Fox
   keywords:
   - Air
@@ -1825,6 +1822,7 @@ cards:
   - Nonhuman
   - Scout
   - Shugenja
+  - Unaligned
   text: <b>Air Recon Open, :bow::</b> Target a Province. You have Reconnaissance at its battlefields and,
     during battles at its battlefields, Ranged Attacks have -2 strength.
   gold_cost: 4
@@ -2141,12 +2139,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
   - Yojimbo
+  - Unaligned
   text: <b>Reaction:</b> When a Limited or Open action would target one of your Courtiers or Shugenja,
     the player taking the action may discard a card. If he does not, he chooses a different legal target
     among your Personalities.
@@ -2406,14 +2403,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Sentei no Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Sentei enters play: Lose 10 Honor.<br><b>Reaction:</b> Before a card''s effect bows Sentei,
     give him -8F: Negate the bowing.<br><b>Reaction:</b> Before Sentei is destroyed by another player''s
     card''s effect during a battle, remove him from the game: Destroy all units in the current enemy army.'

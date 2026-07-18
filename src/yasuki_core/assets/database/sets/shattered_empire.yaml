@@ -5948,8 +5948,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - Nonhuman
@@ -5957,6 +5955,7 @@ cards:
   - Undead
   - Cavalry
   - Shadowlands
+  - Unaligned
   text: After Tsuneo enters play, lose 4 Honor. Will not join a player with 1 or higher Family Honor.<br>
     After a Combat Segment begins, if Tsuneo is in your current army, bow all other Personalities in this
     army with 1 or higher Personal Honor.
@@ -6132,12 +6131,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: Cannot attach Armor or Followers.
   gold_cost: 9
   force: 6
@@ -7929,12 +7927,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'Open: Destroy your target unbowed Personality to create a number of 1F Nonhuman • Oni • :shadowlands:
     Followers equal to their Chi and attach them to one or more of your Personalities. Lose Honor equal
     to the number of Followers this created.'
@@ -7999,13 +7996,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Sparrow
   keywords:
   - Paragon
   - Samurai
   - Sparrow Clan
   - Legacy
+  - Unaligned
   text: 'Invest :g2:: Give a target Farm Holding a +1GP Wealth token.<br><b>Response, :bow::</b> If the
     action recruited Nae and you have fewer cards in your hand than any other player, gain 1 Honor.'
   gold_cost: 4
@@ -9081,11 +9078,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Wasp
   keywords:
   - Scout
   - Wasp Clan
+  - Unaligned
   text: 'You may not Recruit Tohiro if you have a Wind.<br><b>Engage:</b> Give your target opposed Follower
     or Personality a Force bonus equal to the strength of one of their :ranged: until that ability is
     used or the turn ends.<br><b>Battle, :bow::</b> :ranged: 2.'
@@ -10185,14 +10182,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Naga
   - Nonhuman
   - Savior
   - Scout
   - Warrior of the Bright Eye
+  - Unaligned
   text: Zenathaar will not join you if you control any Shadowlands Personalities. Your other Naga Personalities
     have +1PH. <br><b>Home Battle:</b> Move your target Naga Personality home.
   gold_cost: 4

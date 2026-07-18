@@ -517,14 +517,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Daigotsu Rekai • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced 3 Daidoji Rekai
   - Unique
   - Samurai
   - Shadowlands
+  - Unaligned
   text: After Rekai enters play, lose 4 Honor.<br><b>Battle:</b> Twice per turn, target a legal target
     for a Ranged Attack. The target's controller may bow its unit's Personality and permanently give him
     <b>Shadowlands</b>. Ranged 5 Attack targeting this action's target or, if the Personality bowed and
@@ -796,13 +795,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Goblin Healer enters play: Lose 3 Honor.<br><b>Reaction:</b> After your Goblin is destroyed
     by an action, bow Goblin Healer and target a Goblin Personality in your discard pile or one of your
     provinces: Bring him into play at the location where the Goblin was destroyed, ignoring costs.'
@@ -821,12 +819,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Goblin Sapper enters play: Lose 4 Honor. <br><b>Battle:</b> Target another Goblin you control
     and destroy Goblin Sapper: If Goblin Sapper is in the current battle, target a different one of the
     Defender''s Provinces. Permanently reduce its Strength to 0.'
@@ -1276,7 +1273,6 @@ cards:
   - Dynasty
   extended_title: Ichiro Kihongo • Experienced
   clans:
-  - Unaligned
   - Badger
   keywords:
   - Unique
@@ -1284,6 +1280,7 @@ cards:
   - Daimyo
   - Experienced
   - Samurai
+  - Unaligned
   text: Kihongo has -4 Gold Cost if you have had any Provinces destroyed this game.<br><b>Battle:</b>
     If you control a Ronin, move home a target Personality at Kihongo's battlefield; bow the target's
     unit as it moves.
@@ -1338,11 +1335,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: After Ikuei bows or is destroyed, no player may put cards into his hand from his own effects for
     the rest of this phase.<br><b>Remote Battle/Open, :bow::</b> Give a target Personality +2F.
   gold_cost: 4
@@ -1971,8 +1967,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Omoni • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2
   - Unique
@@ -1980,6 +1974,7 @@ cards:
   - Nonhuman
   - Sculptor of Flesh
   - Shadowlands
+  - Unaligned
   text: 'After Omoni enters play: Lose 5 Honor. <br><b>Fear Battle:</b> Bow all Followers with 4 or lower
     Force in a target enemy unit. <br><b>Battle/Open:</b> Destroy one of your Goblin Personalities: Bring
     a target Goblin Personality from your discard pile into play at Omoni''s location, ignoring its Gold
@@ -2855,13 +2850,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Tawagoto • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Ronin
   - Samurai
+  - Unaligned
   text: <b>Reaction, :bow::</b> When paying for a Human Personality with neither Shadowlands nor your
     Clan Alignment, produce 4 Gold which may only pay for that card.
   gold_cost: 3
@@ -2985,7 +2979,6 @@ cards:
   - Dynasty
   extended_title: Toturi Miyako • Experienced
   clans:
-  - Unaligned
   - Monkey
   keywords:
   - Duelist
@@ -2993,6 +2986,7 @@ cards:
   - Experienced
   - Monkey Clan
   - Samurai
+  - Unaligned
   text: 'Cards focused by Miyako''s controller in a duel involving her have a minimum Focus Value equal
     to the number of cards focused by the other Personality''s controller.<br><b>Reaction:</b> Before
     your Personality is challenged: Move Miyako to his location. She is challenged instead.'
@@ -3257,8 +3251,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Void Dragon • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced 2
@@ -3267,6 +3259,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Void
+  - Unaligned
   text: '<b>Battle:</b> If the Void Dragon is opposed, discard any number of cards: Give Void Dragon a
     Force bonus equal to the number of cards discarded. Draw that number of cards.'
   gold_cost: 10

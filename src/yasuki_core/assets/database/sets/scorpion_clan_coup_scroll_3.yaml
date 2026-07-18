@@ -994,10 +994,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Kolat
+  - Unaligned
   text: Other players will not look at any of your face-down cards.
   gold_cost: 2
   force: 0

@@ -659,6 +659,18 @@ def get_card_backs() -> dict[tuple[str, str], str]:
             return {(row["deck"], row["era"]): row["image_path"] for row in cur.fetchall()}
 
 
+# Marker stored in card_clans for senseis any clan may lead; not a selectable clan of its own.
+ALL_CLANS_MARKER = "All Clans"
+
+# Clans L5R renamed over its history. A filter on any name in a group matches the whole group, and
+# the first name is the one the deck-builder dropdown shows.
+CLAN_ALIAS_GROUPS = (("Naga", "Akasha"),)
+_CLAN_ALIASES = {
+    name.lower(): [n.lower() for n in group] for group in CLAN_ALIAS_GROUPS for name in group
+}
+_CLAN_CANONICAL = {name.lower(): group[0] for group in CLAN_ALIAS_GROUPS for name in group[1:]}
+
+
 def query_all_clans() -> list[str]:
     """
     Fetch all unique clans.
@@ -674,6 +686,47 @@ def query_all_clans() -> list[str]:
             cur.execute("SELECT DISTINCT clan FROM card_clans ORDER BY clan")
             results = [row["clan"] for row in cur.fetchall()]
             logger.debug(f"Retrieved {len(results)} clans from database")
+            return results
+
+
+def query_clans_filtered(text_query: str = "", filter_options: dict | None = None) -> list[str]:
+    """
+    Fetch the distinct clans among cards matching the given filters.
+
+    Powers the deck builder's clan dropdown. The ``clans`` filter and the universal "All Clans"
+    marker are both excluded, leaving the selectable clans that have a matching card.
+
+    Parameters
+    ----------
+    text_query : str
+        Free-text search applied to name, id, and rules text, matching ``query_cards_page``.
+    filter_options : dict, optional
+        Property filters in the same format ``query_cards_page`` accepts. The ``clans`` key is
+        ignored.
+
+    Returns
+    -------
+    clans : list of str
+        Clan names with at least one matching card, sorted alphabetically.
+    """
+    options = {k: v for k, v in filter_options.items() if k != "clans"} if filter_options else None
+    where_clause, params = _build_card_filter(text_query, options)
+    sql = (
+        f"SELECT DISTINCT cc.clan FROM cards c {_CROSS_FACE_JOIN}"
+        f" JOIN card_clans cc ON cc.card_id = c.card_id {where_clause}"
+    )
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql, params)
+            marker = ALL_CLANS_MARKER.lower()
+            results = sorted(
+                {
+                    _CLAN_CANONICAL.get(row["clan"].lower(), row["clan"])
+                    for row in cur.fetchall()
+                    if row["clan"].lower() != marker
+                }
+            )
+            logger.debug(f"Retrieved {len(results)} filtered clans from database")
             return results
 
 
@@ -1158,17 +1211,18 @@ def _build_card_filter(
                     )
                     params.append([t.title() for t in value])
             elif property_name == "clans":
-                # Clan affiliation is materialised into card_clans for every card (the loader infers
-                # it from keywords for senseis, holdings, and minor clans). `clan:all` is shorthand
-                # for the "All Clans" senseis that any clan may lead.
+                # An "All Clans" sensei is legal in any clan's deck, so every clan filter also
+                # matches it.
                 if value:
-                    wanted = [c.lower() for c in value]
-                    if "all" in wanted:
-                        wanted.append("all clans")
+                    wanted = set()
+                    for clan in value:
+                        clan = clan.lower()
+                        wanted.update(_CLAN_ALIASES.get(clan, (clan,)))
+                    wanted.add(ALL_CLANS_MARKER.lower())
                     conditions.append(
                         "c.card_id IN (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"
                     )
-                    params.append(wanted)
+                    params.append(list(wanted))
             elif property_name == "rarities":
                 if value:
                     rarity_conditions = []

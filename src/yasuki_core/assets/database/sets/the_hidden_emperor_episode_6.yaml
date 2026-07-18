@@ -627,8 +627,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Oni no Akuma • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
@@ -636,6 +634,7 @@ cards:
   - Oni
   - Overlord
   - Shadowlands
+  - Unaligned
   text: 'After Akuma enters play: Destroy the province from which it entered and Lose 5 honor.<br>Assigning
     or moving Akuma to a battlefield has the additional cost, "Destroy your performing Follower."'
   gold_cost: 0

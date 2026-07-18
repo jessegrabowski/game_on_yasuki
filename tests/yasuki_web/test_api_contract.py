@@ -72,6 +72,11 @@ def _total(client, search):
     return client.get("/api/cards", params={"search": search, "limit": 1}).json()["total"]
 
 
+def _ids(client, search):
+    cards = client.get("/api/cards", params={"search": search, "limit": 200}).json()["cards"]
+    return {c["card_id"] for c in cards}
+
+
 def test_format_short_alias_resolves_in_sql(client):
     # `format:diamond` resolves via formats.block to the same cards as the full name.
     assert _total(client, "format:diamond") > 0
@@ -178,6 +183,20 @@ def test_clan_matches_senseis(client):
 def test_clan_all_marks_all_clans_senseis(client):
     # "All Clans" senseis are tagged with a single marker, searchable as clan:all.
     assert _total(client, "clan:all type:sensei include:all") > 0
+
+
+def test_all_clans_sensei_appears_under_specific_clan(client):
+    # An "All Clans" sensei is legal in any clan's deck, so a specific-clan filter surfaces it too.
+    universal = _ids(client, "clan:all type:sensei include:all")
+    assert universal
+    assert universal <= _ids(client, "clan:Crane type:sensei include:all")
+
+
+def test_naga_akasha_are_aliased(client):
+    # Naga was renamed Akasha; a filter on either name matches the whole clan.
+    naga = _ids(client, "clan:Naga include:all")
+    akasha = _ids(client, "clan:Akasha include:all")
+    assert naga and naga == akasha
 
 
 def test_minor_clan_search(client):
@@ -291,3 +310,30 @@ def test_deck_types_are_title_case(client):
 def test_clans_and_types_are_lists(client):
     assert isinstance(client.get("/api/clans").json()["clans"], list)
     assert isinstance(client.get("/api/card-types").json()["card_types"], list)
+
+
+def test_clan_dropdown_omits_all_clans_marker(client):
+    # "All Clans" tags universal senseis, not a clan; offering it would duplicate the placeholder.
+    assert "All Clans" not in client.get("/api/clans").json()["clans"]
+
+
+def test_clan_dropdown_collapses_akasha_into_naga(client):
+    # Naga and Akasha are the same clan; the dropdown offers only the Naga name.
+    clans = client.get("/api/clans").json()["clans"]
+    assert "Naga" in clans and "Akasha" not in clans
+
+
+def test_clans_narrow_to_active_filters(client):
+    # The clan dropdown offers only clans with a matching card under the other active filters, for
+    # both the card_type and format params. Each offered clan resolves to a card; each dropped clan
+    # resolves to none.
+    all_clans = set(client.get("/api/clans").json()["clans"])
+
+    typed = client.get("/api/clans?card_type=Personality").json()["clans"]
+    assert set(typed) < all_clans  # personalities don't span every clan
+    assert set(client.get("/api/clans?format=Shattered Empire").json()["clans"]) < all_clans
+
+    assert client.get(f"/api/cards?card_type=Personality&clan={typed[0]}").json()["total"] > 0
+
+    dropped = next(iter(all_clans - set(typed)))
+    assert client.get(f"/api/cards?card_type=Personality&clan={dropped}").json()["total"] == 0

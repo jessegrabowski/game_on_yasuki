@@ -605,12 +605,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Maho-Tsukai
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Chunigo enters play, lose 2 Honor.<br><b>Repeatable Limited, :bow::</b> Show the top five
     cards of your Fate deck. You may destroy Chunigo to either discard all of them, or to take one that
     is a Black Scroll or a Spell with a Maho action and put it in your hand, returning the remaining cards
@@ -963,14 +962,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
   - Shugenja
   - Witch
+  - Unaligned
   text: 'After Gargelara enters play: Lose 6 Honor.<br><b>Maho Limited:</b> Remove your performing dead
     Personality from the game: Search your discard pile for a dead Goblin Personality; if you find one,
     shuffle it into your Dynasty deck.'
@@ -1527,8 +1525,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -1536,6 +1532,7 @@ cards:
   - Onisu
   - Onisu of Regret
   - Shadowlands
+  - Unaligned
   text: After Kanashimi enters play, lose 5 Honor.<br>Kanashimi has +1F/+1C for each dishonorable Personality
     opposing her.<br><b>Repeatable Reaction:</b> After a player draws a card outside his End Phase from
     his own card's effect, that player must discard a card.
@@ -1948,12 +1945,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Nairu enters play, lose 4 Honor.<br><b>Repeatable Battle, :bow::</b> Move another target
     Oni Personality at any battlefield to another battlefield.
   gold_cost: 6

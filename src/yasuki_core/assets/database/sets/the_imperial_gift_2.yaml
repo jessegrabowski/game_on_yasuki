@@ -59,13 +59,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Arugai enters play: Lose 8 Honor.<br><b>Reaction:</b> After another player''s action targets
     an Oni at Arugai''s location: Negate the Oni''s destruction from the action''s effects.'
   gold_cost: 14
@@ -1015,11 +1014,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Actor
   - Ronin
+  - Unaligned
   text: <b>Open:</b> Kyogen copies one keyword from your target Personality.
   gold_cost: 4
   force: 3

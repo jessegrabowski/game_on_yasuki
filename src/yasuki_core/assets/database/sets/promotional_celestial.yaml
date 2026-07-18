@@ -92,11 +92,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Tactician
   - Ronin
+  - Unaligned
   text: Aoyama has +2F while in an army with another Tactician.
   gold_cost: 4
   force: 1
@@ -238,10 +237,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Serving Girl of the Blue Tanuki
+  - Unaligned
   text: <b>Limited, :g2::</b> Target a Personality. Give him a +1F <b>Sake </b>token.<br><b>Limited:</b>
     Target two Personalities. One of them has had too much to drink. Transfer a Sake token from the first
     target to the second.
@@ -317,11 +315,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Berserker
   - Ronin
+  - Unaligned
   text: Butoken has +2F while in an army with another Berserker.
   gold_cost: 5
   force: 4
@@ -719,12 +716,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Shugenja
   - Void
+  - Unaligned
   text: <i>(Shugenja may attach and cast Spells.)</i><br>Enomoto has +1F/+2C while he has a Spell.
   gold_cost: 5
   force: 3
@@ -1076,11 +1072,11 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Monk
   - Ronin
   - Shadowlands
+  - Unaligned
   text: Hisamatsu has +2F while he has a Weapon attached.
   gold_cost: 5
   force: 3
@@ -1142,14 +1138,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Singular
   - Fudo
   - Monk
   - Shugenja
   - Void
+  - Unaligned
   text: 'Attaches Heart of Fudo ignoring Gold cost.<br><b>Limited:</b> Discard Hyobuko: He searches for
     an ancient relic. Search your discard pile, then Fate deck, for a card titled Heart of Fudo. Show
     it and put it in your hand.'
@@ -1274,12 +1269,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Gaijin
   - Kshatriya
   - Scout
+  - Unaligned
   text: While Jahan is at the current battlefield, other players may not play Terrains.
   gold_cost: 3
   force: 3
@@ -1300,8 +1294,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Tactician
@@ -1309,6 +1301,7 @@ cards:
   - Courtier
   - Gaijin
   - Kshatriya
+  - Unaligned
   text: 'After the first time each turn a Political action targets Kamalakar: Negate its effects.<br><b>Battle:</b>
     Kamalakar confounds the enemy. Move Kamalakar home or to a battlefield with enemy units.'
   gold_cost: 10
@@ -1333,10 +1326,10 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
   - Ronin
+  - Unaligned
   text: Kataoko has +2F while in an army with another Ninja.
   gold_cost: 5
   force: 3
@@ -1356,12 +1349,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Artisan
   - Poet
   - Ronin
+  - Unaligned
   text: <b>Reaction:</b> After Kikushima enters play, gain 1 Honor.
   gold_cost: 5
   force: 1
@@ -1387,11 +1379,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Ronin
+  - Unaligned
   text: Kuga has +2F while he is unopposed at a battlefield.
   gold_cost: 6
   force: 3
@@ -1413,8 +1404,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Kuronada • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Kensai
@@ -1424,6 +1413,7 @@ cards:
   - Hero
   - Ronin
   - Samurai
+  - Unaligned
   text: <b>Iaijutsu Battle:</b> Bow a target non-Unique enemy Personality.
   gold_cost: 9
   force: 5
@@ -1577,13 +1567,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Kensai
   - Ronin
   - Samurai
+  - Unaligned
   text: '<b>Iaijutsu Battle:</b> Target an enemy attachment: Destroy it.'
   gold_cost: 5
   force: 4
@@ -1604,11 +1593,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: '<b>Open:</b> If Masaya is face-up in one of your provinces: Bring him into play, paying all costs
     and paying 2 less Gold. Before the turn ends, put him on top of your Dynasty deck.'
   gold_cost: 6
@@ -1705,13 +1693,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Singular
   - Courtier
   - Herald
   - Imperial
+  - Unaligned
   text: <b>Favor Political Limited:</b> Discard the Imperial Favor to draw an additional card during your
     next End Phase.
   gold_cost: 5
@@ -1817,12 +1804,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Fire
   - Monk
   - Ronin
+  - Unaligned
   text: <b>Reaction:</b> After Nakadai enters play, give her four +1F <b>Fire </b>tokens.
   gold_cost: 5
   force: 0
@@ -1960,8 +1946,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Paneki's Disgrace • Experienced 6
-  clans:
-  - Unaligned
   keywords:
   - Experienced 6 Bayushi Paneki
   - Tactician
@@ -1970,6 +1954,7 @@ cards:
   - Samurai
   - Shadowlands
   - Undead
+  - Unaligned
   text: 'After Paneki''s Disgrace enters play: Lose 4 Honor.<br><b>Open:</b> If Paneki''s Disgrace is
     dead: Bring him into play, paying all costs.<br><b>Battle:</b> Target an enemy card: You may discard
     a card from the current battlefield''s province. Bow the target. Destroy it if it has no attachments,
@@ -2274,12 +2259,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bureaucrat
   - Imperial
   - Samurai
+  - Unaligned
   text: <b>Reaction:</b> When paying for a Farm, bow Horai, produce 4 Gold which may only pay for that
     card.
   gold_cost: 3
@@ -2299,13 +2283,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elite
   - Commander
   - Imperial
   - Samurai
+  - Unaligned
   text: Tanizaki's Followers have +1F.
   gold_cost: 4
   force: 3
@@ -2518,14 +2501,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Kensai
   - Paragon
   - Ronin
   - Samurai
+  - Unaligned
   gold_cost: 7
   force: 5
   chi: 4
@@ -2562,11 +2544,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Merchant
   - Settler
+  - Unaligned
   text: '<b>Open:</b> Bow Tashiki and target a Market or Port Holding: Straighten it.'
   gold_cost: 3
   force: 0
@@ -2775,11 +2756,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Scout
+  - Unaligned
   text: Torakichi has +2F while in an army with a Naval Personality.
   gold_cost: 5
   force: 3
@@ -2819,13 +2799,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Sake Addict
   - Samurai
   - Washed Up
+  - Unaligned
   text: 'After Tsubo enters play: Give him 5 +1F <b>Sake </b>tokens. <br>If Tsubo ever has no Sake tokens:
     He is sober; destroy him.<br>After your Events Phases ends: Remove a Sake token from Tsubo.'
   gold_cost: 4
@@ -2936,8 +2915,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Utagawa • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Experienced 2
@@ -2945,6 +2922,7 @@ cards:
   - Unique
   - Ronin
   - Samurai
+  - Unaligned
   text: '<b>Iaijutsu Battle:</b> Target an enemy Personality: Utagawa duels him. Destroy the duel''s loser.'
   gold_cost: 10
   force: 5
@@ -3063,13 +3041,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Kensai
   - Commander
   - Gunso
   - Samurai
+  - Unaligned
   text: '<b>Battle:</b> Target an enemy Follower or Personality without Followers with Force equal to
     or lower than 4: Destroy it.'
   gold_cost: 7

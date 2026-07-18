@@ -1871,12 +1871,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Bat
   keywords:
   - Air
   - Bat Clan
   - Shugenja
+  - Unaligned
   text: <i>(Shugenja may attach and cast Spells.)</i><br><b>Air Tireless Open:</b> Straighten Taruko.
     <i>(Tireless actions can be taken even while bowed.)</i>
   gold_cost: 5
@@ -2386,12 +2386,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'Will only enter play from a province.<br>After Raido enters play: Lose 6 Honor.<br>Raido may
     not perform Battle actions while your current army has higher total Force than the current enemy army.'
   gold_cost: 7
@@ -3285,8 +3284,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Naval
   - Bake-kujira
@@ -3294,6 +3291,7 @@ cards:
   - Shadowlands
   - Undead
   - Water
+  - Unaligned
   text: 'After The Great Death enters play: Create three 1F <b>Shadowlands • Nonhuman • Raptor • Cavalry
     • Undead</b> Followers, attach them to it, and lose 6 Honor.'
   gold_cost: 9
@@ -3358,11 +3356,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bashe
   - Nonhuman
+  - Unaligned
   text: '<b>Battle:</b> Target one or two attachments, or a Personality without attachments, with a total
     Force lower than The Red Hunger''s Force: He swallows them whole. Destroy the targeted cards.'
   gold_cost: 9

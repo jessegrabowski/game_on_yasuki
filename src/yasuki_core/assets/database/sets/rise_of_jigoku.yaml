@@ -1053,7 +1053,6 @@ cards:
   - Dynasty
   extended_title: Heichi Tochiko • Experienced
   clans:
-  - Unaligned
   - Boar
   keywords:
   - Berserker
@@ -1062,6 +1061,7 @@ cards:
   - Samurai
   - Experienced Tochiko
   - Unique
+  - Unaligned
   text: 'Tochiko has +1F while another player controls any :maho: cards.<br><b>Battle:</b> One or two,
     or three if Tochiko is attacking, consecutive :fear: with total strength equal to Tochiko''s Force.'
   gold_cost: 9
@@ -2036,7 +2036,6 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Centipede
   keywords:
   - Centipede Clan
@@ -2044,6 +2043,7 @@ cards:
   - Spirit
   - Yojimbo
   - Fire
+  - Unaligned
   text: 'Your :fire: Shugenja at Durucho''s battlefield have +1F while they have any :fire: Spells.<br><b>Interrupt:</b>
     If the action is a challenge that targets another of your Personalities at Durucho''s location, it
     targets Durucho instead, if legal.'
@@ -3057,14 +3057,13 @@ cards:
   decks:
   - Dynasty
   extended_title: The Crimson Mountain Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Experienced
   - Unique
   - Shadowlands
+  - Unaligned
   text: After The Crimson Mountain Oni enters play, lose 7 Honor. Will not attach cards or issue challenges.<br><b>Battle:</b>
     Target one or two enemy Personalities with lower total Force than this card. Bow the targets, and
     give them each three -1F tokens. Crab Clan targets will not straighten <i>(this turn)</i>.
@@ -3339,7 +3338,6 @@ cards:
   - Dynasty
   extended_title: Tsuruchi Kinuyo • Experienced
   clans:
-  - Unaligned
   - Wasp
   keywords:
   - Magistrate
@@ -3349,6 +3347,7 @@ cards:
   - Destined
   - Experienced
   - Unique
+  - Unaligned
   text: 'If Kinuyo is unbowed and has less than five Arrow tokens, after a player passes or resolves an
     action at this battlefield, give Kinuyo an Arrow token.<br><b>Battle, :bow::</b> Destroy zero or more
     of Kinuyo''s Arrow tokens. :ranged: 2 with +1 strength for each Arrow token destroyed. You may move
@@ -3373,12 +3372,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Wasp
   keywords:
   - Bounty Hunter
   - Scout
   - Wasp Clan
+  - Unaligned
   text: 'Compassion: After Yurio''s printed :ranged: destroys a card, when your next Dynasty Phase begins,
     produce 1 Gold.<br><b>Battle, :bow::</b> :ranged: 3.'
   gold_cost: 5

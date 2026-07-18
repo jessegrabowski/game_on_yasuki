@@ -146,11 +146,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Expendable
   - Ashigaru
+  - Unaligned
   text: <i><i><i><i>(Draw a card after your Expendable card is destroyed.)</i></i></i></i>
   gold_cost: 2
   force: 1
@@ -248,10 +247,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Mercenary
+  - Unaligned
   text: After Boyoh Mercenary enters play, discard a card.<br>After Boyoh Mercenary's army destroys a
     Province, draw a card.
   gold_cost: 5
@@ -918,12 +916,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After you Recruit Minikui, lose 5 Honor.<br><b>Battle:</b> Fear with a strength equal to your
     target Oni's Chi.
   gold_cost: 7
@@ -1232,12 +1229,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Earth
   - Golem
   - Nonhuman
+  - Unaligned
   text: After The Lost Colossus enters play, bow it.<br>Will not attach cards. Will not challenge. You
     may not target The Lost Colossus with Political actions.
   gold_cost: 8

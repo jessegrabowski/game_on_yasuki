@@ -144,13 +144,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Ashura
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: After Ashura enters play, lose 5 Honor.<br>After Ashura is destroyed while at a battlefield, target
     and destroy a Follower, or Personality without Followers, at that battlefield.<br><b>Battle:</b> Fear
     4.
@@ -688,14 +687,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Emperor
   - Nonhuman
   - Shadowlands
   - Vessel of Fu Leng
+  - Unaligned
   text: Will only join a Shadowlands Horde player.<br>Other players may not take Political actions.<br>Before
     Hantei the 39th is destroyed, if The 12th Black Scroll has not been destroyed this game, bow Hantei
     and move him home instead of destroying him.<br>After Hantei the 39th is destroyed, you lose the game.
@@ -1037,12 +1035,11 @@ cards:
   decks:
   - Dynasty
   extended_title: Kage • Experienced 3KYD
-  clans:
-  - Unaligned
   keywords:
   - Experienced 3KYD
   - Unique
   - Kolat
+  - Unaligned
   text: <b>Repeatable Reaction, :bow::</b> Before a Ninja issues a challenge, negate the challenge.<br><b>Repeatable
     Battle/Open, :bow::</b> Bow a target Shadowlands or Ninja Personality.
   gold_cost: 9
@@ -1464,13 +1461,13 @@ cards:
   extended_title: Radakast • Experienced 2
   clans:
   - Naga
-  - Unaligned
   keywords:
   - Experienced 2
   - Unique
   - Constrictor
   - Naga
   - Nonhuman
+  - Unaligned
   text: '<b>Battle:</b> A number of times per turn equal to Radakast''s Chi, target an enemy Nonhuman
     non-Naga Personality or Follower with Force less than or equal to Radakast''s: Destroy it. If the
     target was not Shadowlands, permanently give Radakast +1F.'
@@ -1607,13 +1604,13 @@ cards:
   extended_title: Shashakar • Experienced 2
   clans:
   - Naga
-  - Unaligned
   keywords:
   - Experienced 2 Naga Shugenja
   - Unique
   - Naga
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: All other Naga Personalities have +2F/+2C.
   gold_cost: 10
   force: 2
@@ -1857,14 +1854,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Tactician
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After The Maw enters play: Lose 8 Honor.<br>Will not attach Items.<br><b>Tactical Battle:</b>
     Target an enemy unit: Move it home; if it moved, bow it.'
   gold_cost: 10
@@ -1989,13 +1985,13 @@ cards:
   extended_title: Toku • Experienced 2KYD
   clans:
   - Toturi's Army
-  - Unaligned
   keywords:
   - Experienced 2KYD
   - Tactician
   - Unique
   - Samurai
   - Toturi's Army
+  - Unaligned
   text: 'Bowed cards in this army may perform and use their own base abilities, and may perform and be
     targeted by your actions that require an unbowed performer or target even if they are not.<br><b>Battle:</b>
     Target a card in this army: Straighten it.'
@@ -2114,11 +2110,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Hare
   keywords:
   - Hare Clan
   - Samurai
+  - Unaligned
   text: Masashi may not assign to an army unless at least one other unit assigns with him or is already
     assigned there.<br>Masashi permanently gains +1/+1 after each time he is at a battle during that battle's
     resolution.
@@ -2165,8 +2161,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Yogo Junzo • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2
   - Unique
@@ -2174,6 +2168,7 @@ cards:
   - Shadowlands
   - Shugenja
   - Undead
+  - Unaligned
   text: 'After Junzo enters play: Lose 6 Honor.<br><b>Limited:</b> Any number of times per turn, bow Junzo
     and target a Shadowlands Fate card in your discard pile: Put it in your hand.<br><b>Limited:</b> Target
     a Shadowlands Personality in your discard pile: Shuffle him into your Dynasty deck.'
@@ -2225,12 +2220,12 @@ cards:
   - Dynasty
   clans:
   - Naga
-  - Unaligned
   keywords:
   - Naval
   - Naga
   - Nonhuman
   - Warrior
+  - Unaligned
   text: <b>Battle:</b> Move Zanshar's unit to the current battlefield if the Defender controls any Ports
     or Shadowlands cards.
   gold_cost: 5

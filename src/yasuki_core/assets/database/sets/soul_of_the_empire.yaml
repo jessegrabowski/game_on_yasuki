@@ -6,8 +6,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Air Dragon • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -16,6 +14,7 @@ cards:
   - Experienced
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not enter play unless you control the Ring of Air.<br>Will not attach Followers or Items.<br>Air
     Dragon may not be targeted by Ranged Attack, Spell, or Kiho actions.<br><b>Air Repeatable Battle/Open:</b>
     Bow your target performing Shugenja or discard a Kiho Strategy or a Spell from your hand to give the
@@ -928,8 +927,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Dragon of Fire • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced Fire Dragon
@@ -938,6 +935,7 @@ cards:
   - Fire
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: 'Will not enter play unless you control the Ring of Fire.<br>Will not attach Followers or Items.<br><b>Battle:</b>
     Any number of times per turn, discard a card: Ranged Attack with strength equal to the discarded card''s
     Focus Value.'
@@ -978,8 +976,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Earth Dragon • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -988,6 +984,7 @@ cards:
   - Experienced
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not enter play unless you control the Ring of Earth.<br>Will not attach Followers or Items.<br><b>Battle:</b>
     Once per battle, if the Earth Dragon is defending, give it a Force bonus equal to the current battlefield's
     Province's strength.
@@ -1799,14 +1796,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Jama Suru • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Bloodspeaker
   - Experienced
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Suru enters play, lose 3 Honor.<br>Spell and Kiho actions performed by Suru are Maho.<br><b>Repeatable
     Tireless Reaction:</b> Before Suru bows for the cost of a Kiho action he is performing, destroy his
     target performing Human Follower: Straighten Suru.'
@@ -1848,14 +1844,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Kage • Experienced 5
-  clans:
-  - Unaligned
   keywords:
   - Experienced 5
   - Tactician
   - Unique
   - Kolat
   - Kolat Master
+  - Unaligned
   text: You do not lose Honor from Kolat cards; this is not negation.<br><b>Repeatable Limited, :bow::</b>
     Destroy your target performing Kolat Personality, and target a player. Search his Fate deck for a
     non-Ring card. Discard it.
@@ -2120,8 +2115,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Kyoso no Oni • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2
   - Unique
@@ -2129,6 +2122,7 @@ cards:
   - Oni
   - Overlord
   - Shadowlands
+  - Unaligned
   text: 'After Kyoso enters play: Lose 5 Honor.<br>Will not attach Followers or Items.<br><b>Battle:</b>
     Once per battle, destroy your target Shadowlands card in this army, which is performing if it is a
     Personality or Follower: Ranged 10 Attack.'
@@ -2850,12 +2844,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Garosei enters play: Lose 5 Honor.<br>Gorusei has +1F for each of its Shadowlands Followers.'
   gold_cost: 4
   force: 1
@@ -3968,13 +3961,12 @@ cards:
   decks:
   - Dynasty
   extended_title: The Grey Crane • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Experienced 3
   - Unique
   - Samurai
+  - Unaligned
   text: 'The Grey Crane will not refuse challenges.<br>After The Grey Crane loses a duel: Lose 5 Honor.<br><b>Battle:</b>
     Any number of times per turn, discard a card and target an enemy Ninja Personality: The Grey Crane
     duels him. Destroy the duel''s loser.'
@@ -4227,8 +4219,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Thunder Dragon • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -4237,6 +4227,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Thunder
+  - Unaligned
   text: 'Will not enter play unless your Monk and Shugenja Personalities in play have 16 or greater total
     Chi.<br>Will not attach Followers or Items.<br><b>Elemental Battle:</b> Any number of times per turn,
     discard a Kiho Strategy or Spell and target an enemy Personality: Bow him.'
@@ -4513,8 +4504,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Void Dragon • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -4523,6 +4512,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Void
+  - Unaligned
   text: Will not enter play unless you control the Ring of the Void.<br>Will not attach Followers or Items.<br><b>Elemental
     Limited:</b> Draw a card.
   gold_cost: 10
@@ -4563,8 +4553,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Water Dragon • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -4573,6 +4561,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Water
+  - Unaligned
   text: 'Will not enter play if you do not control the Ring of Water.<br>Will not attach Followers or
     Items. <br><b>Battle:</b> Any number of times per turn, if Water Dragon is at a battlefield: Move
     it to a different battlefield.'
@@ -4777,10 +4766,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Mercenary
+  - Unaligned
   text: If the Defender has 2 or more provinces, Shoku may not assign, and will not move, into an attacking
     army.
   gold_cost: 4

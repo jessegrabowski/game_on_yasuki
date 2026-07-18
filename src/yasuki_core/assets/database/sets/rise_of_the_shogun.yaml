@@ -97,8 +97,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Akuma no Oni • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2 Oni no Akuma
   - Unique
@@ -106,6 +104,7 @@ cards:
   - Oni
   - Overlord
   - Shadowlands
+  - Unaligned
   text: After Akuma enters play, lose 15 Honor and destroy your rightmost Province.<br>During the Action
     Phase, Akuma will not bow and may not be targeted.<br>Once per game, after a battle's resolution in
     which an attacking army containing Akuma destroyed a Province, destroy another of the Defender's Provinces.
@@ -690,13 +689,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Lost
   - Samurai
   - Shadowlands
+  - Unaligned
   text: 'After Eiya enters play: Lose 3 Honor.<br>During duels involving Eiya, "destroy the loser" is
     an additional consequence of the duel.<br><b>Reaction:</b> After Eiya wins a duel, pay 2 Gold: Create
     a 3F <b>Shadowlands • Spirit</b> Follower and attach it to him.'
@@ -716,8 +714,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Lost
@@ -725,6 +721,7 @@ cards:
   - Obsidian
   - Samurai
   - Shadowlands
+  - Unaligned
   text: After Makishi enters play, lose 4 Honor.<br><b>Battle/Open:</b> Set Makishi's Personal Honor to
     4 and give him +4 Gold Cost.<br><b>Battle, :bow::</b> Target an enemy Personality. Give him a Force
     penalty and a Chi penalty equal to the difference between his and Makishi's Personal Honor.
@@ -1707,12 +1704,12 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Disciple of the Dark Lotus
   - Monk
   - Shadowlands
   - Tattooed
+  - Unaligned
   text: After Akae enters play, lose 4 Honor.<br><b>Maho Reaction:</b> After a Personality is destroyed
     from one of your cards' effects or from having 0 Chi, target another Personality. Permanently give
     him <b>Shadowlands </b>and a -1/-1 token.
@@ -1735,7 +1732,6 @@ cards:
   extended_title: Kokujin Konetsu • Experienced
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Experienced Konetsu
   - Unique
@@ -1743,6 +1739,7 @@ cards:
   - Lost
   - Monk
   - Shadowlands
+  - Unaligned
   text: After Konetsu enters play, lose 4 Honor.<br><b>Maho Battle/Open:</b> Konetsu copies one of a target
     Shadowlands Human Personality's abilities that does not itself copy abilities.
   gold_cost: 5
@@ -2083,10 +2080,10 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Duelist
   - Ninja
+  - Unaligned
   text: <b>Ninja Reaction:</b> After a duel ends in which Chisai was involved, put the bottom card of
     your Fate deck in your hand.
   gold_cost: 6
@@ -2125,8 +2122,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -2134,6 +2129,7 @@ cards:
   - Nonhuman
   - Obsidian
   - Shugenja
+  - Unaligned
   text: Will not attach Items or Followers.<br>Non-Unique Personalities have a Force and Chi penalty equal
     to their own Personal Honor while they oppose Obsidian Dragon, which will not reduce their Chi below
     1.
@@ -3150,13 +3146,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Monkey
   keywords:
   - Hero
   - Magistrate
   - Monkey Clan
   - Samurai
+  - Unaligned
   text: '<b>Battle/Open:</b>Target a Personality in any discard pile: Butaka copies one of his keywords.<br><b>Reaction:</b>
     After an action targets Butaka, give him a -1C <b>Exhaustion</b> token: Negate the action''s effects.'
   gold_cost: 6
@@ -3307,13 +3303,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Hare
   keywords:
   - Hare Clan
   - Oni-Slayer
   - Samurai
   - Yojimbo
+  - Unaligned
   text: '<b>Battle:</b> Bow Genchi and target an enemy Oni: Destroy it.'
   gold_cost: 4
   force: 3

@@ -914,14 +914,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Advisor from the Shogun
   - Brother
   - Ronin
   - Samurai
+  - Unaligned
   text: Other Ronin Personalities in Etsushi's army have +1F.<br><b>Battle:</b> Bow a target enemy Unaligned
     Human Personality.
   gold_cost: 6
@@ -1951,7 +1950,6 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Badger
   keywords:
   - Unique
@@ -1960,6 +1958,7 @@ cards:
   - Mountaineer
   - Samurai
   - Scout
+  - Unaligned
   text: <b>Tireless Reaction:</b> After an action or Event with the Winter or Mountain keyword resolves,
     draw a card and straighten Kazumasa.
   gold_cost: 6
@@ -2568,12 +2567,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ghul
   - Shadowlands
   - Undead
+  - Unaligned
   text: 'After Picker of Bones enters play: Lose 4 Honor.<br><b>Limited:</b> Target a non-Ring card in
     any player''s discard pile: Remove it from the game.'
   gold_cost: 5
@@ -2901,7 +2899,7 @@ cards:
   decks:
   - Pre-Game
   clans:
-  - Unaligned
+  - Hare
   text: '"Hare Clan" is a Clan Alignment, and it is your Clan Alignment.<br><b>Reaction:</b> Once per
     battle, after your action resolves, move home one or more target Hare Clan Personalities who performed
     it.'
@@ -3125,8 +3123,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Tadaka no Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Oni no Tadaka
   - Unique
@@ -3134,6 +3130,7 @@ cards:
   - Oni
   - Shadowlands
   - Unbound
+  - Unaligned
   text: 'After Tadaka no Oni enters play: Lose 3 Honor.<br>Your Shugenja have <b>Shadowlands </b>and +1F.<br><b>Battle:</b>
     Bow your performing Shugenja in Tadaka no Oni''s army and target an enemy Personality: He contributes
     Force to your army''s total instead of his controller''s if he is at the current battlefield during
@@ -3511,12 +3508,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Hare
   keywords:
   - Hare Clan
   - Shugenja
   - Water
+  - Unaligned
   text: '<b>Battle:</b> Target an enemy Shadowlands Shugenja: Bow it.'
   gold_cost: 6
   force: 2
@@ -3566,13 +3563,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Hare
   keywords:
   - Cavalry
   - Hare Clan
   - Samurai
   - Scout
+  - Unaligned
   text: '<b>Recon Open:</b> Target a province: You have Reconnaissance at its battlefields. During battles
     at them this turn, your non-Shadowlands Hare Clan and Unaligned Human Personalities have +1F.'
   gold_cost: 7

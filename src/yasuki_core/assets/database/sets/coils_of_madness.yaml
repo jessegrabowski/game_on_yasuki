@@ -85,12 +85,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Disciple of P'an Ku
   - Fallen
   - Shugenja
+  - Unaligned
   text: After Akumasa enters play, lose 2 Honor.<br><b>Open:</b> Target another player's Personality who
     has a Madness token. After the target attacks this turn, draw a card.
   gold_cost: 5
@@ -273,13 +272,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Fudo
   - Monk
   - Shugenja
+  - Unaligned
   text: Usohara's abilities will not be copied.<br><b>Limited, :bow::</b> Search your Dynasty discard
     pile, then deck, for a Fudo Celestial. Put it into play.<br><b>Limited:</b> Put a Fudo Ring from your
     hand into play. This counts as playing it by its own text. Remove Usohara from the game.
@@ -303,13 +301,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Expendable
   - Naga
   - Nonhuman
   - Scout
+  - Unaligned
   text: <i>(Draw a card after your Expendable card is destroyed.)</i><br>Asp Skirmisher will not join
     a player who controls a Human Personality.
   gold_cost: 2
@@ -387,12 +384,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Bat
   - Nonhuman
+  - Unaligned
   gold_cost: 0
   force: 0
   chi: 2
@@ -1158,14 +1154,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Hantei XVI • Inexperienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Emperor
   - Imperial
   - Inexperienced
   - Samurai
+  - Unaligned
   text: You ignore Hantei XVI's Honor Requirement if you control the Imperial Favor.<br>After Hantei XVI
     enters play, search your discard pile or Fate deck for a non-Unique Political Strategy. Show it. Put
     it in your hand.
@@ -1353,13 +1348,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Badger
   keywords:
   - Unique
   - Badger Clan
   - Samurai
   - Shadowlands
+  - Unaligned
   text: Otani will not enter play if your Family Honor is 0 or above.<br><b>Battle:</b> Otani challenges
     a target enemy Personality to a duel of Force. Items do not give bonuses or positive Modifiers to
     Force during the duel. Bow the duel's loser.
@@ -1481,7 +1476,7 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
+  keywords:
   - Unaligned
   text: This Personality's printed stats, keywords, and text box are the same as the copied Personality's
     printed stats, keywords, and text box.
@@ -1618,14 +1613,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Expendable
   - Disciple of P'an Ku
   - Fallen
   - Shugenja
+  - Unaligned
   text: <i>(Draw a card after your Expendable card is destroyed.)</i><br>After Takaki enters play, lose
     1 Honor.<br><b>Engage:</b> Give a target card a <b>Madness </b>token.
   gold_cost: 4
@@ -2025,8 +2019,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Kokujin • Inexperienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Unique
@@ -2034,6 +2026,7 @@ cards:
   - Monk
   - Shadowlands
   - Tattooed
+  - Unaligned
   text: After Kokujin enters play, lose 6 Honor unless you are a Spider Clan player.<br><b>Battle:</b>
     Kokujin challenges a target enemy Personality. Destroy the duel's loser or, if Kokujin wins, you may
     destroy one of your Personalities <i>(at any location)</i> to take control of the loser <i>(he joins
@@ -2575,8 +2568,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Otomo Suikihime, Queen of Fools • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
@@ -2584,6 +2575,7 @@ cards:
   - Fallen
   - Imperial
   - Second City Governor
+  - Unaligned
   text: After Suikihime enters play, lose 3 Honor.<br>Other players' Political actions may not target
     Suikihime. Suikihime may not attack.<br><b>Limited, :bow::</b> Search your Dynasty deck for a Fallen
     Personality. Put him into one of your Provinces face-up, discarding any card currently there.
@@ -2629,8 +2621,6 @@ cards:
   decks:
   - Dynasty
   extended_title: P'an Ku • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -2639,6 +2629,7 @@ cards:
   - Fallen
   - Mad Dragon
   - Nonhuman
+  - Unaligned
   text: <b>Open, :bow::</b> Give a target card a <b>Madness </b>token.<br><b>Limited, :bow::</b> P'an
     Ku may remain bowed. Take control of a target Personality with more Madness tokens than printed Personal
     Honor and remove those tokens. The target will not commit seppuku until P'an Ku straightens or leaves
@@ -2857,13 +2848,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Fire
   - Monk
   - Shadowlands
+  - Unaligned
   text: Sengmai enters play ignoring Gold Cost if you control the Ring of Fire.<br>Sengmai will not enter
     play if your Family Honor is 0 or above.<br>After Sengmai enters play, put a Kiho in your discard
     pile into your hand.
@@ -3158,13 +3148,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Expendable
   - Fudo
   - Monk
   - Shugenja
+  - Unaligned
   text: <i><i><i><i>(Draw a card after your Expendable card is destroyed.)</i></i></i></i> <br>You have
     +1 maximum hand size.
   gold_cost: 4
@@ -3274,8 +3263,6 @@ cards:
   decks:
   - Dynasty
   extended_title: The Dark Naga • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Champion
@@ -3284,6 +3271,7 @@ cards:
   - Nonhuman
   - Pearl
   - Shugenja
+  - Unaligned
   text: After The Dark Naga enters play, lose 3 Honor.<br><b>Open, :gstar::</b> Equip a Nonhuman Follower
     in your hand or discard pile to The Dark Naga, paying 4 less Gold.<br><b>Pearl Battle, :bow::</b>
     Ranged 9 Attack.
@@ -3468,8 +3456,6 @@ cards:
   decks:
   - Dynasty
   extended_title: The Shakash • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Conqueror
   - Unique
@@ -3477,6 +3463,7 @@ cards:
   - Experienced
   - Naga
   - Nonhuman
+  - Unaligned
   text: While you control three or fewer Personalities, your other Nonhuman Personalities and Followers
     enter play for 1 less Gold.<br><b>Home Battle:</b> Move your target Personality at any location to
     The Shakash's location. <i>(Home actions may be used from home.)</i>
@@ -3704,13 +3691,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Oriole
   keywords:
   - Unique
   - Artisan
   - Oriole Clan
   - Samurai
+  - Unaligned
   text: Hayamizu will not join a Scorpion Clan player.<br>Hayamizu has +1F for each Mine you control.
   gold_cost: 4
   force: 2
@@ -4069,14 +4056,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Zansho • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Conqueror
   - Unique
   - Commander
   - Experienced
   - Samurai
+  - Unaligned
   text: Zansho will not join a Spider Clan player.<br><b>Battle:</b> Bow Zansho's target unbowed Follower.
     Ranged Attack with strength equal to its Force, plus 2 if the Ranged Attack targets Daigotsu Arakan.
   gold_cost: 5

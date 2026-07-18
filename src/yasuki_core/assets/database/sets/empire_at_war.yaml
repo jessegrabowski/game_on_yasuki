@@ -1008,13 +1008,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Ekichu enters play: Lose 8 Honor.<br><b>Battle:</b> Target an enemy card: Bow it.<br><b>Battle:</b>
     Target an enemy card without attachments: Destroy it.<br><b>Battle:</b> Target an enemy Personality:
     Move him home.'
@@ -1718,13 +1717,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
   - Ronin
   - Samurai
+  - Unaligned
   text: '<b>Battle:</b> Bow Hozumi or one of your Rings: Ranged 4 Attack.'
   gold_cost: 7
   force: 4
@@ -1747,12 +1745,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Badger
   keywords:
   - Badger Clan
   - Brute
   - Samurai
+  - Unaligned
   text: <b>Battle:</b> Bow a target enemy Follower or Personality with lower Force.
   gold_cost: 7
   force: 6
@@ -2201,11 +2199,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: You may not assign Koji, or move him, to a battlefield unless there are at least two different
     Clan Alignments among Personalities already in your army there or currently assigning there.
   gold_cost: 3
@@ -2714,12 +2711,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Imperial
+  - Unaligned
   text: <b>Favor Political Limited:</b> Discard the Imperial Favor to gain 2 Honor.<br><b>Favor Political
     Limited:</b> Discard the Imperial Favor to have another player lose 2 Honor.
   gold_cost: 4
@@ -2881,12 +2877,12 @@ cards:
   - Dynasty
   clans:
   - Ratling
-  - Unaligned
   keywords:
   - Nonhuman
   - One Tribe
   - Ratling
   - Rememberer
+  - Unaligned
   text: <b>Battle:</b> Rus'tik'tik heralds the exploits of heroes. Give all non-Shadowlands Nonhuman cards
     at the current battlefield +1F.
   gold_cost: 4

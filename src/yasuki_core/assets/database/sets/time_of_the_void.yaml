@@ -1494,13 +1494,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Goblin Wizard enters play, lose 4 Honor.
   gold_cost: 2
   force: 0
@@ -2037,13 +2036,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Dragon
   - Jade
   - Nonhuman
+  - Unaligned
   text: Will not attach Items or Followers.<br>Jade Dragon may not be targeted by actions from Shadowlands
     cards. <br><b>Battle:</b> Twice per battle:, Ranged 6 Attack that must target a Shadowlands card.
   gold_cost: 10
@@ -2099,13 +2097,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Kage • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2 Akodo Kage
   - Unique
   - Kolat
   - Kolat Master
+  - Unaligned
   text: <b>Repeatable Limited, :bow::</b> Choose a number and discard the top card of your Fate deck.
     If the chosen number is lower than the card's Focus Value, you may target and bow a number of Followers,
     and Personalities without unbowed Followers, equal to that number.
@@ -2174,14 +2171,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Kappuksu • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Goblin Warmonger
   - Unique
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: Before Kappuksu is destroyed, if he has any Goblin Followers, destroy the Followers instead and
     move Kappuksu to your home; bow him as he moves.<br><b>Home Battle:</b> If Kappukusu is home, switch
     his location with one of your target Personalities.
@@ -2365,11 +2361,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Foxwife
   - Nonhuman
+  - Unaligned
   text: 'Honor Requirements of Personalities you are bringing into play are lowered by an amount equal
     to Lady Kitsune''s Personal Honor. <i>(Honor Requirements may drop under 0.)</i><br>Human Personalities
     have +1C while in Lady Kitsune''s army.<br>If Lady Kitsune is ever dishonorable: Destroy her.'
@@ -2680,13 +2675,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Chief
   - Mujina
   - Nonhuman
+  - Unaligned
   text: After Mujina Chieftan enters play, lose 2 Honor.<br>Will not attach non-Mujina Followers.<br>Equips
     Mujina Followers for 4 less Gold.<br>Mujina Chieftan's Mujina Followers have +1F.
   gold_cost: 7
@@ -2740,8 +2734,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Necromancer • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
@@ -2749,6 +2741,7 @@ cards:
   - Shadowlands
   - Shugenja
   - Undead
+  - Unaligned
   text: After Necromancer enters play, lose 5 Honor.<br><b>Repeatable Limited, :bow::</b> Target a Follower
     in any player's discard pile that has been in play this game. Permanently give it <b>Shadowlands</b>,
     the ability "<b>Battle:</b> Fear 3", and reduce its Honor Requirement to 0. Equip it to Necromancer,
@@ -2870,13 +2863,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'Ianwa has the addition cost, "Discard your hand" to enter play.<br>After Ianwa enters play: Lose
     4 Honor.<br>Will not attach Items or Followers.<br>You may not put the Ring of the Void into play.<br>All
     players have the ability, "<b>Battle/Open:</b> Any number of times per turn, discard a card: Give
@@ -2953,13 +2945,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
   - Supai
+  - Unaligned
   text: 'After the first time each turn Pekkle enters play: Gain 3 Honor.<br>After Pekkle is destroyed:
     Lose 10 Honor.<br><b>Political Limited:</b> Bow Pekkle: Gain 1 Honor.'
   gold_cost: 3
@@ -4957,12 +4948,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Ugulu enters play: Lose 5 Honor.<br>Before a Human Personality moves to Ugulu''s battlefield:
     Negate his movement.'
   gold_cost: 4
@@ -5264,11 +5254,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shugenja
   - Wizard
+  - Unaligned
   text: 'Enters play paying 2 less Gold if you are a Unicorn Clan player.<br>May not bow as a cost to
     perform Spell or Kiho actions.<br>al-Hazaad will not attach more than one Spell per turn.<br><b>Battle/Open:</b>
     Any number of times per turn, destroy a Spell attached to al-Hazaad: Give him +2F/+2C.'
@@ -5286,10 +5275,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Warrior
+  - Unaligned
   text: Enters play paying 2 less Gold if you are a Unicorn Clan player.<br>If al-Rashid is the challenger
     in a duel and you are able to focus for him, you have the first opportunity to focus or strike, which
     must be used to focus.<br>During a duel involving al-Rashid, you focus cards face-up.

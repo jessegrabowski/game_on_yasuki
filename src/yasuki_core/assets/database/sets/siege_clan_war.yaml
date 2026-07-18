@@ -233,13 +233,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Dark Daughter of Fu Leng • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced
   - Nonhuman
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: <b>Home Interrupt, :bow::</b> Reduce a target card's Gold Cost <i>(in play)</i> by 1.<br><b>Home
     Interrupt, :bow::</b> The action's first Fear effect may target Items and Spells and destroys attachments
     and Shadowlands Personalities after bowing them.
@@ -357,8 +356,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Fu Leng, the Ninth Kami • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Unique
@@ -369,6 +366,7 @@ cards:
   - Samurai
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'Your Fear actions may target Items and Spells and destroy cards after bowing them. Other players''
     cards lose Resilient. Their actions lose Unstoppable and their effects can be negated regardless of
     card effects.<br><b>Repeatable Interrupt:</b> Negate, or choose new targets for, an action targeting
@@ -556,12 +554,11 @@ cards:
   decks:
   - Dynasty
   extended_title: Isawa Tanayama, the Necromancer • ExperiencedCW
-  clans:
-  - Unaligned
   keywords:
   - ExperiencedCW
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After you Recruit Tanayama, search your deck, then discard pile, for a Follower, show it, and
     put it in your hand.<br>Home Battle, b: Remove a target dead non-Seven Thunder Personality from the
     game. Give a target enemy Follower or Personality a Force penalty equal to the dead Personality''s
@@ -660,8 +657,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Kyojin • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Expendable
@@ -670,6 +665,7 @@ cards:
   - Samurai
   - Shadowlands
   - Yojimbo
+  - Unaligned
   text: <i>(Duelists win tied duels versus non-Duelists. Draw a card after your Expendable card dies.)</i>
     <br><b>Interrupt:</b> If the action targets your Shadowlands Personality, it targets Kyojin instead,
     if legal.
@@ -690,13 +686,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Kyoso no Oni • ExperiencedCW
-  clans:
-  - Unaligned
   keywords:
   - ExperiencedCW
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: <b>Battle, :bow::</b> Destroy one or two target enemy attachments, each with lower Force than
     Kyoso; if you target two, one must be attached to a Shadowlands Personality.<br><b>Battle, :bow::</b>
     Ranged 5 Attack.
@@ -776,13 +771,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Moto Tsume • ExperiencedCW
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - ExperiencedCW
   - Samurai
   - Shadowlands
+  - Unaligned
   text: <b>Interrupt:</b> Negate Tsume's destruction from another player's action.<br><b>Battle:</b> Fear
     4.
   gold_cost: 3
@@ -1176,8 +1170,6 @@ cards:
   decks:
   - Dynasty
   extended_title: The Hooded Ronin, Descendant of Shinsei • ExperiencedCW
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Unique
@@ -1186,6 +1178,7 @@ cards:
   - Monk
   - Ronin
   - Samurai
+  - Unaligned
   text: Cannot gain Corruption tokens or Shadowlands. Can only be controlled by his owner. Need not bow
     for your Kiho actions.<br><b>Open, :bow:, :gstar::</b> Give <b>Destined</b> to a target face-up Personality
     in a Province and ignore their Honor Requirement. If they are a Seven Thunder, you may Recruit them.
@@ -1510,7 +1503,6 @@ cards:
   extended_title: Toturi, Seven Thunder • Experienced 2CW
   clans:
   - Toturi's Army
-  - Unaligned
   keywords:
   - Duelist
   - Experienced 2CW
@@ -1519,6 +1511,7 @@ cards:
   - Commander
   - Ronin
   - Samurai
+  - Unaligned
   text: Cannot gain Corruption tokens or Shadowlands. Can only be controlled by his owner. Lion Clan players
     may Proclaim Toturi. Other players' Fear effects targeting cards in Toturi's army have -1 strength.<br><b>Tireless
     Battle:</b> Toturi unites the Lion Clan. Another target Personality's printed abilities may be used
@@ -1575,14 +1568,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Tsukuro • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - Experienced
   - Nonhuman
   - Shadowlands
   - Undead
+  - Unaligned
   text: You may Recruit Tsukuro even if he is dead.<br><b>Tireless Battle:</b> If Tsukuro is unbowed,
     Fear 3. You may target and move home another of your Shadowlands Personalities.
   gold_cost: 6
@@ -1621,8 +1613,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Yogo Junzo, The Betrayer • Experienced 2CW
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2CW
   - Unique
@@ -1630,6 +1620,7 @@ cards:
   - Shadowlands
   - Shugenja
   - Undead
+  - Unaligned
   text: After Junzo enters play from your Province, open a Black Scroll. If this opens The Wasting Disease,
     you may target and destroy a card without attachments.<br><b>Battle:</b> Fear 5 that destroys any
     attachment or Shadowlands Personality after bowing it. You may move Junzo home.

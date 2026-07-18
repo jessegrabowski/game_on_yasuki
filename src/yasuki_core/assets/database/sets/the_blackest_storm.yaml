@@ -592,13 +592,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
   - Undead
   - Conqueror
+  - Unaligned
   text: Before Monstrosity enters play, for each other Undead card you control, reduce its Gold cost to
     enter play by 1 and lose 1 Honor. Monstrosity does not die for having 0 Chi, and cannot be challenged
     or attach Items. After a Fear effect, Melee Attack, or Ranged Attack targeting Monstrosity resolves,
@@ -2221,14 +2220,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Samurai
   - Shadowlands
   - Undead
   - Cavalry
+  - Unaligned
   text: After Shai-Tan enters play, lose 2 Honor.<br><b>Battle:</b> Fear 3. This is <b>Unstoppable</b>
     if your army contains only Shadowlands Personalities or the target is Cavalry.
   gold_cost: 5
@@ -3919,14 +3917,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
   - Shugenja
   - Undead
   - Sincerity
+  - Unaligned
   text: After Zerai enters play, lose 2 Honor, and you may pay 2 Gold per Sincerity token on Zerai to
     create an equal number of 2F/2C/0PH Nonhuman • Shadowlands • Undead Personalities, to a maximum of
     three tokens.

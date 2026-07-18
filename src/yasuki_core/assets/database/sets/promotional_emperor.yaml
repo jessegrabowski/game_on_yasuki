@@ -275,11 +275,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Expendable
   - Ashigaru
+  - Unaligned
   text: <i><i><i><i>(Draw a card after your Expendable card is destroyed.)</i></i></i></i>
   gold_cost: 2
   force: 1
@@ -667,11 +666,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Snake
+  - Unaligned
   text: 'After your turn begins: The Bonedrinker must feed or die. Choose and destroy one of your Personalities
     in play.'
   gold_cost: 0
@@ -771,8 +769,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Chikara • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Experienced 2
@@ -780,6 +776,7 @@ cards:
   - Unique
   - Ronin
   - Samurai
+  - Unaligned
   text: '<b>Battle:</b> Target an enemy attachment: Destroy it.'
   gold_cost: 7
   force: 5
@@ -1305,13 +1302,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Monk
   - Shugenja
   - Void
+  - Unaligned
   text: 'Negate stat bonuses from attached Items during duels involving Enigma.<br>After an action resolves,
     if Enigma won a duel it created, target your Ring: Straighten it. You may use its Battle abilities
     an additional time this turn.'
@@ -1648,14 +1644,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Fudo • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Conqueror
   - Unique
   - Experienced
   - Fudo
   - Nonhuman
+  - Unaligned
   text: 'Fudo may not assign, and will not move, to battlefields unless it has 5 Charging tokens. After
     Fudo is assigned: Remove two of its Charging tokens.<br><b>Reaction:</b> Twice per turn, after an
     action targets Fudo, remove one of its Charging tokens: Negate the action''s effects on it.<br><b>Limited:</b>
@@ -1699,13 +1694,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Unique
   - Ronin
   - Samurai
+  - Unaligned
   text: '<b>Iaijustu Limited:</b> Target another player''s Personality: Fusako challenges the target.
     His controller may bow him; if he is now bowed, he may refuse the duel. Destroy the duel''s loser.'
   gold_cost: 7
@@ -1728,11 +1722,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Gaijin
   - Shugenja
+  - Unaligned
   text: After you announce your Ritual action, until it finishes resolving, Gaijin Sorcerer counts as
     two Shugenja.
   gold_cost: 5
@@ -1759,8 +1752,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Gakku • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Devourer of Gods
@@ -1769,6 +1760,7 @@ cards:
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: 'Enters play paying 1 less Gold if you are a Spider Clan player.<br>After Gakku enters play: Lose
     3 Honor.<br><b>Battle:</b> Melee 7 Attack.'
   gold_cost: 9
@@ -1814,9 +1806,9 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
+  - Unaligned
   text: '<b>Limited:</b> Bow Genjiro and target a bowed Personality: You kidnap him and hold him for ransom.
     While Genjiro remains bowed, you may negate his straightening, the target''s straightening is negated,
     and all players have the ability, "<b>Open:</b> Pay 6 Gold: Destroy a Genjiro."'
@@ -1911,12 +1903,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
   - Scout
+  - Unaligned
   text: '<b>Battle:</b> Target a Terrain: Destroy it. You may discard a card. If you did, search your
     Fate deck for a Terrain, show it, then take an additional Battle action to play it, if legal; if not,
     discard it.'
@@ -1993,12 +1984,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Ronin
   - Samurai
+  - Unaligned
   text: '<b>Iaijutsu Battle:</b> Target an enemy Personality: Harue duels him. Bow the duel''s loser.'
   gold_cost: 8
   force: 6
@@ -2765,13 +2755,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Commander
   - Ronin
   - Samurai
+  - Unaligned
   text: Enters play for 1 less Gold for each Farm other players control.
   gold_cost: 5
   force: 3
@@ -2833,12 +2822,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Ki enters play: Lose 2 Honor.<br><b>Battle/Reaction:</b> After another player''s Battle
     action targets Ki, or as a Battle action, destroy him: Create three 2F/1C/0PH <b>Shadowlands • Nonhuman
     • Oni • Podling</b> Personalities in your army.'
@@ -3191,12 +3179,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Alchemist
   - Ronin
   - Shugenja
+  - Unaligned
   text: <b>Open:</b> Give Mahatsu <b>Air</b>, <b>Earth</b>, <b>Fire</b>, or <b>Water</b>.
   gold_cost: 3
   force: 3
@@ -4378,12 +4365,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - Imperial
   - Samurai
+  - Unaligned
   text: <b>Battle:</b> Give your Followers in Barru's army +1F.
   gold_cost: 4
   force: 3
@@ -4404,11 +4390,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Imperial
   - Samurai
+  - Unaligned
   text: Ichigo has +1F for each Dojo you control.
   gold_cost: 3
   force: 2
@@ -4430,13 +4415,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
   - Samurai
   - Sensei
+  - Unaligned
   text: After Jiramu enters play, discard all your other Sensei Personalities.<br>Your Provinces have
     +2 strength.<br>You may Proclaim twice per turn.
   gold_cost: 6
@@ -4457,12 +4441,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Imperial
   - Imperial Treasurer
+  - Unaligned
   text: Your Holdings produce 1 additional Gold when they bow to produce Gold.
   gold_cost: 2
   force: 0
@@ -5049,8 +5032,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Tamahime • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Tactician
   - Unique
@@ -5058,6 +5039,7 @@ cards:
   - Ronin
   - Samurai
   - Sensei
+  - Unaligned
   text: 'After Tamahime enters play or overlays: Discard all your other Sensei Personalities.<br>Your
     other Ronin Personalities have <b>Tactician</b>.<br>Your other Ronin cards enter play paying 1 less
     Gold.<br>Battle: Target an enemy card without attachments: Destroy it.'
@@ -5170,11 +5152,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Monk
   - Tattooed
+  - Unaligned
   text: '<b>Open:</b> Give Taweiken <b>Air</b>, <b>Earth</b>, <b>Fire</b>, or <b>Water</b>.<br><b>Battle:</b>
     Target an enemy card without unbowed attachments: Bow it.'
   gold_cost: 5
@@ -5215,13 +5196,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ningyo
   - Nonhuman
   - Pearl
   - Shugenja
+  - Unaligned
   text: '<b>Battle:</b> Target an enemy card: Bow it.'
   gold_cost: 4
   force: 3
@@ -6171,13 +6151,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Dragonfly
   keywords:
   - Naval
   - Dragonfly Clan
   - Shugenja
   - Water
+  - Unaligned
   text: Jotsu will not be controlled by a Lion Clan player.<br>Jotsu attaches Water Spells paying 1 less
     Gold.
   gold_cost: 6
@@ -6364,11 +6344,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: Uta may not be assigned, and will not move, into attacking armies.<br>Uta will not be destroyed
     to pay costs.
   gold_cost: 0
@@ -6488,11 +6467,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elephant
   - Nonhuman
+  - Unaligned
   text: 'Will not attach Items. May not perform Iaijutsu or Political actions. While War Elephant has
     no Followers, it may not perform actions on cards. Melee Attacks may not target War Elephant''s Followers.<br><b>Battle:</b>
     Target an enemy card without attachments: War Elephant tramples it. Destroy it.'

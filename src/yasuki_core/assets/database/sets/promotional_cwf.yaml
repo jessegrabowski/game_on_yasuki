@@ -643,13 +643,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Goblin Wizard enters play, lose 4 Honor.
   gold_cost: 2
   force: 0
@@ -990,13 +989,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Kamu enters play: Lose 6 Honor and bow your Stronghold. It will not straighten or produce
     effects while Kamu remains in play, and after your End Phase three turns from now begins, destroy
     Kamu.'

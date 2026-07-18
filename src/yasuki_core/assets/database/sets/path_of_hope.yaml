@@ -688,12 +688,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Lost
   - Samurai
   - Shadowlands
+  - Unaligned
   text: 'After Fumiaki enters play: Lose 6 Honor.<br><b>Fear Battle:</b> Fear 6, which affects dishonorable
     and Shadowlands Personalities as if they were Followers.'
   gold_cost: 6
@@ -713,14 +712,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Legionnaire
   - Lost
   - Obsidian
   - Samurai
   - Shadowlands
+  - Unaligned
   text: After Ogiwara enters play, lose 6 Honor.<br><b>Reaction:</b> After Ogiwara enters play, target
     a Personality without the printed Shadowlands keyword. Until Ogiwara leaves play, he copies one of
     the target's keywords.
@@ -1533,12 +1531,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Repentant Traitor
   - Samurai
   - Yojimbo
+  - Unaligned
   text: Iwase has -1 Gold Cost for each Human non-Samurai Personality you control.<br><b>Battle/Open:</b>
     Dishonor Iwase to rehonor a target dishonorable Personality at Iwase's location.
   gold_cost: 5
@@ -1679,7 +1676,6 @@ cards:
   extended_title: Kokujin • Experienced 3
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Duelist
   - Experienced 3
@@ -1687,6 +1683,7 @@ cards:
   - Monk
   - Prophet of the Dark Lotus
   - Shadowlands
+  - Unaligned
   text: 'After Kokujin enters play: Lose 6 Honor.<br><b>Limited:</b> Destroy your performing Personality
     that you own, bow Kokujin, and target another player''s Personality: Kokujin duels him. If Kokujin
     loses, destroy him. If the other Personality loses, take control of him, straighten him, and permanently
@@ -1937,13 +1934,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: After Mishakene enters play, lose 3 Honor.<br><b>Recon Open, :bow::</b> Target a Province. You
     have Reconnaissance at its battlefields. Until the turn ends, after your Personality assigns to the
     target's battlefields, give him a Force bonus equal to his printed Force, and destroy him after that
@@ -2034,8 +2030,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Moto Tsume • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced 3
@@ -2047,6 +2041,7 @@ cards:
   - Samurai
   - Shadowlands
   - Undead
+  - Unaligned
   text: After Tsume enters play, lose 5 Honor.<br><b>Tactical Battle, :g4::</b> Recruit a target dead
     non-Unique Human Personality, ignoring costs other than this action's and requirements. Permanently
     reduce his Personal Honor to 0 and give him <b>Lost • Shadowlands • Undead</b>.
@@ -2677,11 +2672,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: 'After Tawagoto enters play: Target your Holding. Until Tawagoto leaves play, the Holding produces
     1 additional Gold each time it bows to produce Gold.<br><b>Battle:</b> Destroy Tawagoto and target
     a Samurai at the current battlefield: Straighten him.'
@@ -3154,12 +3148,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Wareta enters play: Lose 6 Honor.<br>Wareta has a Force penalty equal to the number of
     cards in your hand.'
   gold_cost: 8
@@ -3182,8 +3175,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Water Dragon • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced 2
@@ -3193,6 +3184,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Water
+  - Unaligned
   text: Personalities and Followers have <b>Naval </b>while in an army with Water Dragon.<br>After a Maneuvers
     Segment ends, you may assign any number of units from your home to battlefields.
   gold_cost: 11

@@ -2080,13 +2080,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Goblin Wizard enters play, lose 4 Honor.
   gold_cost: 2
   force: 0
@@ -3088,13 +3087,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Kage • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2 Akodo Kage
   - Unique
   - Kolat
   - Kolat Master
+  - Unaligned
   text: <b>Repeatable Limited, :bow::</b> Choose a number and discard the top card of your Fate deck.
     If the chosen number is lower than the card's Focus Value, you may target and bow a number of Followers,
     and Personalities without unbowed Followers, equal to that number.
@@ -3168,14 +3166,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Kappuksu • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Goblin Warmonger
   - Unique
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: Before Kappuksu is destroyed, if he has any Goblin Followers, destroy the Followers instead and
     move Kappuksu to your home; bow him as he moves.<br><b>Home Battle:</b> If Kappukusu is home, switch
     his location with one of your target Personalities.
@@ -3445,13 +3442,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Kuni Yori • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: '<b>Limited:</b> Any number of times per turn, bow Yori, discard a card in one of your provinces,
     and target a card in a province: Discard it.'
   gold_cost: 8
@@ -3471,12 +3467,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Kyoso enters play, lose 3 Honor and destroy one of your Holdings.<br>Will not attach Followers
     or Items.<br><b>Battle, :bow::</b> Ranged 7 Attack.
   gold_cost: 7
@@ -4048,11 +4043,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Samurai
+  - Unaligned
   gold_cost: 6
   force: 2
   chi: 2
@@ -4127,12 +4121,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Bushi
   - Shadowlands
+  - Unaligned
   text: After Sada enters play, lose 4 Honor.<br><b>Battle:</b> Fear 3.
   gold_cost: 6
   force: 3
@@ -4513,9 +4506,9 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
+  - Unaligned
   text: Ninja Shapeshifter's Followers must be Ninja.<br><b>Ninja Battle/Open:</b> Ninja Shapeshifter
     copies a target Personality's Force, Chi, Personal Honor, or ability that does not copy abilities.
   gold_cost: 10
@@ -4539,10 +4532,10 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
   - Spy
+  - Unaligned
   text: Will not attach non-Ninja Followers.<br><b>Ninja Repeatable Battle/Open, :bow::</b> Look at a
     target player's hand. Lose 1 Honor.<br><b>Ninja Repeatable Battle/Open, :bow::</b> Look at all face-down
     cards in a target player's Provinces. Lose 1 Honor.
@@ -4649,12 +4642,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: Cannot attach Armor or Followers.
   gold_cost: 9
   force: 6
@@ -4730,13 +4722,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Akuma enters play: Lose 3 Honor and destroy the province from which it entered.'
   gold_cost: 0
   force: 6
@@ -5742,11 +5733,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Samurai
+  - Unaligned
   gold_cost: 3
   force: 1
   chi: 1
@@ -7384,14 +7374,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
   - Dragon
   - Man-Beast
   - Nonhuman
+  - Unaligned
   text: Enters play paying 2 less Gold if you are a Brotherhood of Shinsei player.<br>Will not attach
     Followers or Armor.<br>Hoshi will not assign to a battlefiled where the enemy army contains a Dragon.
   gold_cost: 13
@@ -7653,12 +7642,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Ugulu enters play: Lose 5 Honor.<br>Before a Human Personality moves to Ugulu''s battlefield:
     Negate his movement.'
   gold_cost: 4

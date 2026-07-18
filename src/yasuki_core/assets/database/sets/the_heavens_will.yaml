@@ -1083,12 +1083,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Fubiri enters play: Lose 6 Honor.<br><b>Limited:</b> Destroy one of your Holdings: Create
     a <b>Shadowlands • Nonhuman • Oni</b> Personality with Force and Chi each equal to the Holding''s
     base Gold Cost. Lose 4 Honor.'
@@ -1127,13 +1126,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: After Glukku enters play, lose 4 Honor.
   gold_cost: 3
   force: 2
@@ -1754,11 +1752,11 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Hero
   - Monk
   - Order of Heroes
+  - Unaligned
   text: <b>Reaction, :bow::</b> After you destroy one or more Provinces or units by winning a battle,
     give a target Personality in your current army a +3F <b>Valor </b>token and gain 2 Honor.
   gold_cost: 6
@@ -1914,12 +1912,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Naval
   - Pirate
   - Smuggler
+  - Unaligned
   text: 'Equipping is an <b>Open</b> action for you.<br><b>Limited:</b> Discard an Item from your hand
     and target a Holding: Straighten it.'
   gold_cost: 5
@@ -1940,8 +1937,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Kensai
@@ -1949,6 +1944,7 @@ cards:
   - Hero
   - Ronin
   - Samurai
+  - Unaligned
   gold_cost: 7
   force: 4
   chi: 5
@@ -2562,10 +2558,10 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
   - Ronin
+  - Unaligned
   text: 'After Seiko enters play: Lose 2 Honor.<br><b>Reaction:</b> When an action would target Seiko:
     It instead targets another copy of Seiko or Yoshe that you control, if legal.'
   gold_cost: 5
@@ -2655,8 +2651,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Shikibu no Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Oni no Shikibu
   - Unique
@@ -2664,6 +2658,7 @@ cards:
   - Oni
   - Overlord
   - Shadowlands
+  - Unaligned
   text: 'After Shikibu enters play: Lose 8 Honor. <br>Before an action destroys Shikibu: Negate the destruction.
     If the destruction fails, choose one of your Personalities at Shikubu''s location; he is consumed
     by Jigoku. Remove the chosen Personality from the game.'
@@ -3781,11 +3776,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: 'After Yoshe enters play: Lose 2 Honor.<br><b>Reaction:</b> Before another Player''s action resolves
     that targeted Yoshe, bow all unbowed cards in Yoshe''s unit: Negate the action''s effects.'
   gold_cost: 6

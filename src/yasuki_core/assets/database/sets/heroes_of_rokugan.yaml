@@ -47,14 +47,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
   - Dragon
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Will not attach Followers or Items.<br>While attacking, the Celestial Dragon has a Force bonus
     and a Chi bonus equal to the number of Events in the Defender's discard pile.
   gold_cost: 13
@@ -334,11 +333,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Historian
+  - Unaligned
   text: '<b>Reaction:</b> Before an Event resovles that does not create a condition for winning the game,
     bow Mashigai: Negate the Event''s effects. Shuffle Mashigai into your Dynasty deck.'
   gold_cost: 8
@@ -459,14 +457,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Unique
   - Poet
   - Ronin
   - Samurai
+  - Unaligned
   text: Rezan may not perform Political actions.
   gold_cost: 8
   force: 3
@@ -487,14 +484,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Tactician
   - Unique
   - General
   - Imperial
   - Samurai
+  - Unaligned
   text: '<b>Reaction:</b> Any number of times per turn, before an action moves a unit opposing Murayasu:
     Negate the action''s effects.'
   gold_cost: 13
@@ -615,14 +611,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Beast
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After The First Oni enters play: Lose 10 Honor.<br>Will not attach Items.<br><b>Limited:</b>
     Bow The First Oni and target a Samurai Personality: Discard your Fate deck''s top card. The First
     Oni challenges the target. He may refuse if his Personal Honor is lower than or equal to the discard''s
@@ -665,12 +660,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Assassin
   - Kolat
+  - Unaligned
   text: When paying for a Kolat card or action, it has -2 Gold Cost until its cost is paid.<br>Kaneko's
     printed ability will not be copied.<br><b>Kolat Limited, :bow::</b> Destroy a target Personality with
     3 or higher Personal Honor. Destroy Kaneko.

@@ -598,13 +598,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Chikara • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Ronin
   - Samurai
+  - Unaligned
   text: Chikara may overlay the Personality created by Oishi.<br>Chikara has +1F while you control Oishi.
   gold_cost: 1
   force: 2
@@ -1896,13 +1895,13 @@ cards:
   - Dynasty
   clans:
   - Naga
-  - Unaligned
   keywords:
   - Greensnake
   - Mountaineer
   - Naga
   - Nonhuman
   - Scout
+  - Unaligned
   text: If you are the Defender, Masserah may be targeted by the rulebook Cavalry player ability.<br><b>Battle/Open:</b>
     Masserah copies one keyword from a target Samurai.
   gold_cost: 6
@@ -3579,13 +3578,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Uzaki enters play: Lose 10 Honor.<br><b>Battle:</b> Target another Nonhuman Personality:
     Straighten him or move him to the current battlefield.'
   gold_cost: 10

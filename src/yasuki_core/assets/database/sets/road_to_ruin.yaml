@@ -1545,8 +1545,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Iweko Ayameko, the Iron Empress • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Imperial
   - Samurai
@@ -1555,6 +1553,7 @@ cards:
   - Hida Ayameko
   - Tactician
   - Unique
+  - Unaligned
   text: 'Crab Clan players may ignore Ayameko''s Honor Requirement. Ayameko will not gain Clan Alignments
     or :shadowlands:. You may target defending enemy Personalities with the rulebook Favor Political Battle
     action.<br><b>Interrupt:</b> If the action is Favor, pay the action''s :favor: cost. Give Ayameko
@@ -1766,7 +1765,6 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Fox
   keywords:
   - Fox Clan
@@ -1775,6 +1773,7 @@ cards:
   - Spirit
   - Shugenja
   - Earth
+  - Unaligned
   text: 'Compassion: Ignore the cost of bowing Rumiko for her printed ability.<br>You may Proclaim Rumiko
     if you control more Forests than any other player. If Rumiko is ever dishonorable, she commits seppuku.<br><b>Open,
     :bow::</b> If it is your turn, gain 1 Honor, or 2 Honor if your Sensei is Beiko Sensei.'
@@ -1796,13 +1795,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Fox
   keywords:
   - Fox Clan
   - Shugenja
   - Sincerity
   - Earth
+  - Unaligned
   text: 'Sincerity: You may use Toson''s printed ability an additional number of times this turn equal
     to the number of tokens removed.<br><b>Response, :g4::</b> After the action Recruits Toson, create
     and Recruit <i>(without further cost)</i> a 3F/1C/ 4GC/3PH Nonhuman • Ram • Spirit • <b>Cavalry</b>
@@ -1825,12 +1824,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Fox
   keywords:
   - Fox Clan
   - Shugenja
   - Earth
+  - Unaligned
   text: You may only Recruit Yayuko if your Sensei is Beiko Sensei.<br><b>Response, :g4::</b> After the
     action Recruits Yayuko, create and Recruit <i>(without further cost)</i> a 1F/2C/4GC/3PH Goose • Nonhuman
     • Spirit Personality with the ability "<b>Open, :bow::</b> If an Attack is declared against you this
@@ -2304,13 +2303,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Otomo Suikihime, Second City Governor • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
   - Experienced 2
   - Unique
+  - Unaligned
   text: 'Compassion: While you are the Defender, your Personalities in and out of play have +1F and <b>Reserve</b>.<br>Suikihime
     will not gain Clan Alignments or :shadowlands: and will not be challenged.<br><b>Political Home Open/Engage:</b>
     Take :favor:, or you may discard :favor: and bow Suikihime to bow a target card.'

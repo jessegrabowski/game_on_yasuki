@@ -508,12 +508,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: May not be included in decks.
   gold_cost: 0
   force: 4
@@ -650,11 +649,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Kaito enters play: Lose 2 Honor.<br>Kaito has +3GC while the effects of a Spell action
     he performed are resolving.'
   gold_cost: 2
@@ -675,12 +673,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Naval
   - Captain of The Tachikaze
   - Mercenary
+  - Unaligned
   text: Human Personalities in Chun's army have <b>Naval</b>.
   gold_cost: 5
   force: 3
@@ -1395,10 +1392,9 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Samurai
+  - Unaligned
   text: May not be included in decks.
   gold_cost: 0
   force: 3
@@ -1680,7 +1676,7 @@ cards:
   - Pre-Game
   extended_title: Journey's End Keep • Experienced
   clans:
-  - Unaligned
+  - Imperial
   keywords:
   - Experienced
   - Imperial
@@ -1759,9 +1755,9 @@ cards:
   - Other
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
+  - Unaligned
   text: May not be included in decks.<br>This card has your Clan alignment keyword.
   gold_cost: 0
   force: 4
@@ -1778,13 +1774,12 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Podling
   - Shadowlands
+  - Unaligned
   text: May not be included in decks.
   gold_cost: 0
   force: 2
@@ -2287,13 +2282,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Elite
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: <i>(Elite cards contribute Force even if bowed.)</i><br>After Mumoku enters play, lose 4 Honor.<br>While
     Mumoku is attacking at a battlefield, its Province has a maximum strength equal to its printed strength.
   gold_cost: 11
@@ -2667,8 +2661,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Unique
@@ -2676,6 +2668,7 @@ cards:
   - Ronin
   - Samurai
   - Yojimbo
+  - Unaligned
   text: '<b>Reaction:</b> When another player''s action would target Tamahime: It targets Riku instead,
     if legal.<br><b>Battle:</b> Target an enemy Personality: Riku duels him. Destroy the duel''s loser.'
   gold_cost: 7
@@ -2742,14 +2735,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Imperial
   - Paragon
   - Samurai
   - Yojimbo
+  - Unaligned
   text: '<b>Reaction:</b> Before an action resolves that targeted a Personality at Ryota''s location:
     He enters any duel created by its effects instead of the target.'
   gold_cost: 5

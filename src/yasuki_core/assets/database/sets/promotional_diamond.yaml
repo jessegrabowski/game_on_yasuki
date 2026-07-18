@@ -442,13 +442,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Emperor
   - Samurai
+  - Unaligned
   text: Toturi III cannot be targeted with non-Political actions by other players. Toturi III cannot be
     challenged.<br><b>Political Open:</b> Take the Imperial Favor.<br><b>Political Reaction:</b> Before
     targets are chosen for a Political action, either you choose one target instead of the action's player
@@ -558,12 +557,12 @@ cards:
   - Dynasty
   clans:
   - Spirit
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
   - Nonhuman
   - Spirit
+  - Unaligned
   text: Will not attach Items.<br>Will not attack.<br>Other players' cards' effects will not move Fu Lion
     from battlefields.
   gold_cost: 5
@@ -842,8 +841,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Unique
@@ -855,6 +852,7 @@ cards:
   - Shadowlands
   - Shugenja
   - Tsuno
+  - Unaligned
   text: Will not join a non-Shadowlands Horde player.<br>May not be targeted by other players' Spell or
     Kiho actions.<br>After Iuchiban wins a duel, permanently give him +1F/+1C.<br><b>Maho Battle:</b>
     Iuchiban challenges a target enemy Personality. Destroy the loser.
@@ -893,10 +891,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bushi
+  - Unaligned
   text: <b>Battle, :bow::</b> Ranged 7 Attack.
   gold_cost: 6
   force: 3
@@ -986,13 +983,13 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Singular
   - Air
   - Keeper
   - Monk
   - Samurai
+  - Unaligned
   text: After Keeper of Air enters play, you may put all Rings you control in their owners' hands to search
     your Fate deck for an Air Ring, show it, and put it in your hand.<br><b>Air Kiho Battle:</b> Ranged
     3 Attack.
@@ -1010,14 +1007,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Singular
   - Yu 3
   - Earth
   - Keeper
   - Samurai
+  - Unaligned
   text: After Keeper of Earth enters play, you may put all Rings you control in their owners' hands to
     search your Fate deck for an Earth Ring, show it, and put it in your hand.<br><b>Earth Battle:</b>
     The Defender targets one of his Personalities. If he is not at the current battlefield, move him here.
@@ -1036,13 +1032,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Singular
   - Fire
   - Keeper
   - Samurai
+  - Unaligned
   text: After Keeper of Fire enters play, you may put all Rings you control in their owners' hands to
     search your Fate deck for a Fire Ring, show it, and put it in your hand.<br><b>Fire Battle:</b> Once
     per game, Keeper of Fire challenges a target enemy Personality. Destroy the loser.
@@ -1060,14 +1055,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Singular
   - Keeper
   - Samurai
   - Water
+  - Unaligned
   text: After Keeper of Water enters play, you may put all Rings you control in their owners' hands to
     search your Fate deck for a Water Ring, show it, and put it in your hand.<br><b>Water Battle:</b>
     Twice per battle, give a target Personality +1F.
@@ -1085,13 +1079,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Singular
   - Keeper
   - Samurai
   - Void
+  - Unaligned
   text: After Keeper of the Void enters play, you may put all Rings you control in their owners' hands
     to search your Fate deck for a Void Ring, show it, and put it in your hand.<br><b>Void Tireless Limited:</b>
     Straighten a target Void Keeper.
@@ -1149,13 +1142,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Kihei • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
   - Experienced
   - Samurai
+  - Unaligned
   text: Kihei has -1 Gold Cost while you control two or more Infantry Personalities.
   gold_cost: 5
   force: 3
@@ -1392,13 +1384,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Herald
   - Imperial
+  - Unaligned
   text: <b>Political Reaction, :bow::</b> After bringing a Personality into play, target him and permanently
     give him your Clan Alignment.<br><b>Reaction, :bow::</b> After bringing a Personality into play, if
     you are a Shadowlands Horde player, target the Personality and permanently give him <b>Shadowlands</b>.
@@ -1555,12 +1546,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Governor
   - Imperial
+  - Unaligned
   text: '<b>Battle/Open:</b> Any number of times per turn, bow Ishihama and target a Farm: Straighten
     it.'
   gold_cost: 1
@@ -1877,10 +1867,10 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Monk
   - Nonhuman
+  - Unaligned
   text: '<b>Reaction:</b> Once per turn, after another player bows a Holding as a cost to produce 3 or
     more Gold: Put a <b>Wealth </b>token on Sennin.<br><b>Reaction:</b> Any number of times per turn,
     when paying a Gold cost, bow Sennin and remove a Wealth token from him: Produce 3 Gold.'
@@ -1898,14 +1888,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Daimyo
   - Master of the Ten Thousand Temples
   - Shugenja
+  - Unaligned
   text: Kiharu has -1 Gold Cost while you control a Courtier and -1 Gold Cost while you control a Shugenja.
   gold_cost: 5
   force: 0
@@ -1924,12 +1913,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Imperial
+  - Unaligned
   text: 'Before paying a cost of discarding the Imperial Favor: You may bow Shogo; if you did, this pays
     the cost instead.<br><b>Battle/Open:</b> Even if Shogo is bowed or you do not control him, pay 6 Gold:
     Take control of Shogo.'
@@ -1952,7 +1940,6 @@ cards:
   extended_title: Shadow Dragon • Experienced
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -1961,6 +1948,7 @@ cards:
   - Ninja
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'Shadow Dragon will not bow.<br>After your Straighten Phase ends, if Shadow Dragon is dead in
     your discard pile: You may bring it into play, paying all costs.<br><b>Battle:</b> Move Shadow Dragon
     home from the current battlefield and target a non-Unique Personality: Take control of him. After
@@ -2255,12 +2243,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Siege
+  - Unaligned
   text: 'Will not attach Items.<br>Will not challenge or be challenged.<br>Stone Breaker will not be destroyed
     for having 0 Chi.<br>Stone Breaker has -6F while it has no unbowed Followers.<br><b>Battle:</b> Even
     if Stone Breaker is bowed and only if it is bowed, bow a performing Follower in its unit: Straighten
@@ -2320,12 +2307,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Suiteiru enters play: Lose 4 Honor.<br><b>Open:</b> Destroy your target unbowed Personality:
     Create a number of 1F <b>Shadowlands • Nonhuman • Oni</b> Followers equal to his Chi. Attach them
     to one or more of your Personalities. Lose Honor equal to the number of Followers this created.'
@@ -2723,12 +2709,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Monkey
   keywords:
   - Unique
   - Monkey Clan
   - Samurai
+  - Unaligned
   text: '<b>Battle/Open:</b> Bow Kyoji and target a Follower or an Unaligned Samurai Personality: Bow
     or straighten it.'
   gold_cost: 3
@@ -2749,12 +2735,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - General
   - Samurai
+  - Unaligned
   text: 'Other Samurai Personalities have +2F while in an army with Shigekawa.<br><b>Battle:</b> Bow your
     2 performing Samurai Personalities and target an enemy Personality: Bow him.'
   gold_cost: 7
@@ -2939,13 +2924,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Shadowlands
   - Soul of Uragirimono
   - Undead
+  - Unaligned
   text: After Voitagi enters play, lose 3 Honor.<br><b>Battle:</b> Fear 3 <i>(Bow a target enemy Follower
     or Personality without Followers with 3 or lower Force)</i>.
   gold_cost: 3
@@ -3028,12 +3012,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Assassin
   - Spy
+  - Unaligned
   text: '<b>Open:</b> If it is not your turn, bow Yamainu and target a bowed Personality: After this phase
     ends, if both Yamainu and the target are in play, Yaimainu challenges him; if the target''s controller
     bows a card in his unit, he may refuse. Destroy the duel''s loser.'
@@ -3146,11 +3129,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bounty Hunter
   - Sword of Yotsu
+  - Unaligned
   text: '<b>Battle:</b> Any number of times per turn, bow Dagurasu: Ranged 5 Attack. If this destroyed
     a Nonhuman, gain 2 Honor.'
   gold_cost: 5

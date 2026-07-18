@@ -108,12 +108,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Daku enters play, lose 6 Honor.<br><b>Battle:</b> Target a Personality opposing Daku, or
     a Holding controlled by the enemy leader. Bow the targeted card. Destroy it if it is a Farm or Ashigaru.
   gold_cost: 8
@@ -302,12 +301,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Hero
   - Ronin
   - Samurai
+  - Unaligned
   text: <b>Battle:</b> If there are fewer units on your side than on the enemy side at this battlefield,
     bow a target enemy Personality's unit.
   gold_cost: 8

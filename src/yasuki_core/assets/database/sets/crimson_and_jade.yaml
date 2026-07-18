@@ -503,11 +503,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Kolat
   - Madam
+  - Unaligned
   text: After Chinoko enters play, lose 3 honor.<br><b>Repeatable Reaction, :bow::</b> Before a Kolat
     action resolves, negate the action's effects.<br><b>Repeatable Reaction, :bow::</b> When paying for
     a Kolat card or action, give the card or action -4 Gold Cost until its cost is paid.
@@ -1269,11 +1268,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Kolat
   - Samurai
+  - Unaligned
   text: After Kado enters play, you may give control of him to any player.<br>Your Personalities enter
     play for 2 more Gold.
   gold_cost: 4
@@ -1638,12 +1636,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Bushi
   - Shadowlands
+  - Unaligned
   text: After Sada enters play, lose 4 Honor.<br><b>Battle:</b> Fear 3.
   gold_cost: 6
   force: 3
@@ -1662,14 +1659,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Moto Tsume • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Nonhuman
   - Samurai
   - Shadowlands
+  - Unaligned
   text: After Tsume enters play, lose 6 Honor.<br>Will not enter play if your Family Honor is 1 or higher.<br>May
     not be assigned to the same battlefield as units with no Shadowlands cards and such units may not
     assign with Tsume.<br><b>Battle:</b> Fear 3.
@@ -1860,13 +1856,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bandit
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: 'After Ogre Outlaw is destroyed during a battle or duel: Give the enemy leader in the former case,
     or the controller of the Personality who faced Ogre Outlaw in the duel in the latter, the ability,
     "<b>Reaction:</b> Once per game, when paying a Gold cost: Produce 10 Gold" until his next turn ends.'
@@ -1921,12 +1916,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: This oni is brought into play as a <b>Limited Ritual</b> action. Bow and destroy any number of
     your shugenja to bring this Oni into play. The Oni has a Force equal to half of the total chi of the
     participating shugenja and a Chi equal to the number of participating shugenja. This Personality may
@@ -1945,12 +1939,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Genso enters play: Lose 4 Honor.<br><b>Elemental Battle/Open:</b> Any number of times per
     turn, bow Genso and target an Earth or Fire Ring: Negate its effects.<br><b>Elemental Reaction:</b>
     Before an action from an Air, Void, or Water Ring resolves, bow Genso: Negate any effects from that
@@ -1969,12 +1962,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Orochi
+  - Unaligned
   text: 'Will not attach Followers or items.<br><b>Battle:</b> Once per battle, target one of the Defender''s
     non-Stronghold Ports or Pearl Beds: Destroy it.'
   gold_cost: 11
@@ -2826,8 +2818,6 @@ cards:
   decks:
   - Dynasty
   extended_title: The Hooded Ronin • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Unique
@@ -2835,6 +2825,7 @@ cards:
   - Experienced
   - Ronin
   - Samurai
+  - Unaligned
   text: The Hooded Ronin enters play bowed.<br><b>Repeatable Reaction, :bow::</b> When paying for a Seven
     Thunder Personality, reduce the Personality's cost to 0 until it is paid.<br><b>Repeatable Reaction,
     :bow::</b> Before a Shadowlands card's action resolves, negate the action's effects.
@@ -2996,12 +2987,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ashigaru
   - Instigator
   - Peasant
+  - Unaligned
   text: '<b>Battle/Open:</b> Any number of times per turn, bow Tokiuji and target a Human Follower: Give
     it +1F.'
   gold_cost: 1
@@ -3340,11 +3330,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bandit
   - Leader
+  - Unaligned
   text: 'Yugoro has +1C for each Bandit Follower attached to him.<br><b>Limited:</b> Any number of times
     per turn, bow Yugoro and target a Human Personality: Yugoro challenges him. He may refuse. If he did,
     or Yugoro wins the duel, you gain the trait, "When paying a Gold cost: Once per game, produce Gold

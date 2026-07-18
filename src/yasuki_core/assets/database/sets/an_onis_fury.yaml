@@ -1398,13 +1398,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Shadowlands
   - Walking Horror of Fu Leng
+  - Unaligned
   text: After Gohei enters play, lose 5 Honor.<br><b>Fear Battle, :bow::</b> Target an enemy Personality.
     Destroy all Followers in his unit.
   gold_cost: 11
@@ -1424,11 +1423,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
+  - Unaligned
   text: <b>Political Reaction, :bow::</b> After any player takes the Imperial Favor, gain 1 Honor.
   gold_cost: 5
   force: 1
@@ -1685,12 +1683,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Historian
+  - Unaligned
   text: <b>Political Limited, :bow::</b> If you have not Lobbied this turn, discard all Hatori's attachments
     and shuffle him into your Dynasty deck to take the Imperial Favor. You may not Lobby this turn.
   gold_cost: 6
@@ -1886,13 +1883,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Naka Tokei • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Morito Tokei
   - Unique
   - Grand Master of the Elements
   - Shugenja
+  - Unaligned
   text: <b>Elemental Battle/Open:</b> Take two additional Limited, Battle, and/or Open Elemental actions,
     or actions with element keywords, appropriate to the current phase.<br><b>Elemental Repeatable Reaction,
     :bow::</b> Before an Elemental action or action with an element keyword resolves, negate the action's
@@ -1978,14 +1974,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Osoreru no Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Osoreru enters play, lose 4 Honor.<br><b>Reaction:</b> After a Fear action affects cards
     at Osoreru's battlefield, permanently give it +1F.<br><b>Battle:</b> Fear 5.
   gold_cost: 7
@@ -2005,10 +2000,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
+  - Unaligned
   text: 'Motoshi''s base Gold cost is equal to your Stronghold''s base Gold Production.<br>After Motoshi
     enters play: Permanently give him your Clan alignment.'
   gold_cost: '*'
@@ -2204,11 +2198,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Sanshu Denki enters play: Lose 4 Honor.<br>May not assign, and will not move, into an attacking
     army.<br><b>Battle:</b> Any number of times per turn, bow Sanshu Denki and target an enemy Peresonality:
     Bow it.'
@@ -2855,11 +2848,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Monkey
   keywords:
   - Monkey Clan
   - Samurai
+  - Unaligned
   text: The last card focused by Miyako's controller in duel involving her adds its Focus Value twice,
     or three times if Miyako has Double Chi.
   gold_cost: 6
@@ -2963,13 +2956,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Shadowlands
   - Tsuno
+  - Unaligned
   text: 'After Takuma enters play: Lose 4 Honor.<br>Takuma has <b>Tactician</b> while it has one or more
     Tactician tokens.<br>After Takuma performs a Tactical action: Remove a Tactician token from it.<br><b>Battle:</b>
     Any number of times per turn, if Takuma is opposed and has no Tactician tokens: Give it a <b>Tactician
@@ -2990,13 +2982,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Hare
   keywords:
   - Unique
   - Daimyo
   - Hare Clan
   - Samurai
+  - Unaligned
   text: Ozaki has +2F/+2C while opposed by a Scorpion Clan or Kolat Personality, or while facing one in
     a duel.
   gold_cost: 6
@@ -3278,8 +3270,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -3287,6 +3277,7 @@ cards:
   - Onisu
   - Onisu of Desire
   - Shadowlands
+  - Unaligned
   text: 'After Yokubo enters play: Lose 5 Honor.<br><b>Reaction:</b> After Yokubo is challenged: Negate
     the challenge.<br><b>Reaction:</b> After a Personality attaches a card, target him: Destroy all other
     cards attached to him.'

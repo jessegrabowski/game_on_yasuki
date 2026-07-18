@@ -1754,8 +1754,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Champion
@@ -1763,6 +1761,7 @@ cards:
   - Nonhuman
   - Pearl
   - Shugenja
+  - Unaligned
   text: 'After The Dark Naga enters play: Lose 3 Honor.<br><b>Reaction:</b> After another player targets
     The Dark Naga with an action: You may bow one of your Forests. If you did, negate The Dark Naga''s
     destruction from the action''s effects.<br><b>Battle:</b> Target an enemy Personality: If he is Nonhuman,
@@ -1871,13 +1870,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Conqueror
   - Commander
   - Naga
   - Nonhuman
+  - Unaligned
   text: 'Enters play paying 1 less Gold for each Nonhuman you control, up to 3 less Gold.<br><b>Battle:</b>
     Target an enemy Personality: Bow him or move him home.'
   gold_cost: 7
@@ -1898,14 +1896,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Abomination
   - Naga
   - Nonhuman
   - Pearl
   - Shugenja
+  - Unaligned
   text: 'Enters play paying 1 less Gold.<br><b>Battle:</b> Twice per turn, bow one of your Forests or
     Pearls: Give each of your Nonhuman cards at the current battlefield +1F.'
   gold_cost: 7

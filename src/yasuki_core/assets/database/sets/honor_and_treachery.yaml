@@ -1297,14 +1297,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Tsubo • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Tsubo the Drunk
   - Unique
   - Ronin
   - Samurai
   - Sober
+  - Unaligned
   text: '<b>Battle:</b> Even if Tsubo is bowed, target a Personality: Straighten him.'
   gold_cost: 6
   force: 4

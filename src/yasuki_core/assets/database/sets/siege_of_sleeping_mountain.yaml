@@ -1434,14 +1434,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
   - Dragon
   - Man-Beast
   - Nonhuman
+  - Unaligned
   text: Enters play paying 2 less Gold if you are a Brotherhood of Shinsei player.<br>Will not attach
     Followers or Armor.<br>Hoshi will not assign to a battlefiled where the enemy army contains a Dragon.
   gold_cost: 13

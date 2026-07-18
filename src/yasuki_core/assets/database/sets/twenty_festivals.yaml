@@ -217,8 +217,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Air Dragon • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced 3
@@ -227,6 +225,7 @@ cards:
   - Dragon
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Cannot attach Followers or Items. Cannot gain a Clan Alignment. Has -2HR while you control the
     Ring of Air. After a phase begins, straighten Air Dragon.<br><b>Air Battle:</b> Negate Air Dragon's
     current Force penalties.
@@ -1258,12 +1257,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Constrictor
   - Naga
   - Nonhuman
+  - Unaligned
   text: <b>Battle:</b> Bow a target enemy Personality with lower Force and with either no unbowed Followers
     or Shadowlands.
   gold_cost: 7
@@ -2163,8 +2161,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Earth Dragon • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced 2
@@ -2173,6 +2169,7 @@ cards:
   - Earth
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Cannot attach Followers or Items. Cannot gain a Clan Alignment. Has -2HR while you control the
     Ring of Earth. Before the first time each turn another player's action moves or bows the Earth Dragon,
     negate it.
@@ -2287,12 +2284,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Shugenja
   - Void
+  - Unaligned
   text: <i>(Shugenja may attach and cast Spells.)</i><br>Enomoto has +1F/+2C while he has a Spell.
   gold_cost: 5
   force: 3
@@ -2652,8 +2648,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Fire Dragon • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced 3
@@ -2662,6 +2656,7 @@ cards:
   - Fire
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: Cannot attach Followers or Items. Cannot gain a Clan Alignment except Phoenix Clan. Has -2HR while
     you control the Ring of Fire.<br><b>Fire Battle, :bow::</b> Ranged 7 Attack.
   gold_cost: 15
@@ -2918,13 +2913,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Fire
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Fushiki enters play, lose 4 Honor.<br><b>Fire Battle:</b> Destroy a target Fortification
     at this battlefield with Gold Cost lower than Fushiki's Force. Give Fushiki a +1F token.
   gold_cost: 8
@@ -3224,11 +3218,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Magistrate
   - Samurai
+  - Unaligned
   text: <b>Open, :bow::</b> Target a dishonorable Personality. After the next time this turn he attacks
     you or an action on his card resolves, gain 1 Honor.
   gold_cost: 5
@@ -4599,11 +4592,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shugenja
   - Void
+  - Unaligned
   text: <b>Open, :g3::</b> Put a Ring from your hand into play; while it remains in play, it does not
     count towards an Enlightenment Victory. After your next turn begins, put it into your hand.
   gold_cost: 5
@@ -5500,14 +5492,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Samurai
   - Shadowlands
   - Undead
+  - Unaligned
   text: <i>(Once per turn, as an Absent Engage, move your unbowed Personality in a Cavalry unit to the
     battle.)</i> <br>After Daigoro enters play, lose 4 Honor.<br><b>Battle:</b> Fear 4.
   gold_cost: 8
@@ -5833,9 +5824,9 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Ninja
+  - Unaligned
   text: Ninja Shapeshifter's Followers must be Ninja.<br><b>Ninja Battle/Open:</b> Ninja Shapeshifter
     copies a target Personality's Force, Chi, Personal Honor, or ability that does not copy abilities.
   gold_cost: 10
@@ -5908,12 +5899,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Samurai
   - Soul of Otomo Taneji
+  - Unaligned
   text: After Terumoto enters play, gain 1 Honor.
   gold_cost: 3
   force: 0
@@ -6317,11 +6307,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ratling
+  - Unaligned
   text: After Ratling Raider enters play, create two 2F/2C/2PH <b>Nonhuman • Ratling</b> Personalities
     <i>(at his location)</i>.
   gold_cost: 10
@@ -6765,11 +6754,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: <b>Battle:</b> Give each Ronin Follower and Ronin Personality in Seasoned Ronin's army +1F.
   gold_cost: 5
   force: 3
@@ -7873,12 +7861,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Ronin
   - Samurai
+  - Unaligned
   text: <i>(Duelists win tied duels versus non-Duelists.)</i>
   gold_cost: 3
   force: 2
@@ -8670,13 +8657,13 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Dragonfly
   keywords:
   - Naval
   - Dragonfly Clan
   - Shugenja
   - Water
+  - Unaligned
   text: <i>(This Personality is Unaligned.)</i> <br><b>Invest :g5::</b> Give Jairyu a +1F/+1C token and
     the permanent ability, "<b>Water Battle:</b> Move home a target defending Personality."
   gold_cost: 5
@@ -9065,8 +9052,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Void Dragon • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced 3
@@ -9075,6 +9060,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Void
+  - Unaligned
   text: Cannot attach Followers or Items. Cannot gain a Clan Alignment. Has -2HR while you control the
     Ring of the Void. After the Void Dragon's army destroys any units or Province in a battle resolution,
     the enemy leader discards two cards from his hand.
@@ -9099,13 +9085,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
   - Shadowlands
   - Soul of Uragirimono
   - Undead
+  - Unaligned
   text: After Voitagi enters play, lose 3 Honor.<br><b>Battle:</b> Fear 3 <i>(Bow a target enemy Follower
     or Personality without Followers with 3 or lower Force)</i>.
   gold_cost: 3
@@ -9192,8 +9177,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Water Dragon • Experienced 3
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Experienced 3
@@ -9202,6 +9185,7 @@ cards:
   - Nonhuman
   - Shugenja
   - Water
+  - Unaligned
   text: Cannot attach Followers or Items. Cannot gain a Clan Alignment. Has -2HR while you control the
     Ring of Water.<br><b>Water Tireless Open:</b> Water Dragon copies another target Personality's keyword,
     trait, or ability that does not copy abilities.

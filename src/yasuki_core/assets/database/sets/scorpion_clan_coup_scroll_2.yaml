@@ -417,11 +417,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Kappa
   - Nonhuman
+  - Unaligned
   text: Kappa has maximums of 0 Force and 1 Chi while bowed.<br><b>Battle:</b> Once per battle, Kappa
     challenges a target enemy Samurai Personality. Both Personalities use their Force as their duel stat.
     Bow the loser.

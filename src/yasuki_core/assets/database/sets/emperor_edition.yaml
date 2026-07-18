@@ -1760,11 +1760,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Niiro enters play: Lose 2 Honor.'
   gold_cost: 4
   force: 4
@@ -2897,13 +2896,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Ekichu enters play: Lose 8 Honor.<br><b>Battle:</b> Target an enemy card: Bow it.<br><b>Battle:</b>
     Target an enemy card without attachments: Destroy it.<br><b>Battle:</b> Target an enemy Personality:
     Move him home.'
@@ -3375,12 +3373,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Actor
   - Ronin
   - Soul of Kyogen
+  - Unaligned
   text: '<b>Open:</b> Target your Personality: Genmyo copies one of his keywords.'
   gold_cost: 4
   force: 3
@@ -6829,13 +6826,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Nosloc enters play, lose 4 Honor.
   gold_cost: 6
   force: 6
@@ -6966,11 +6962,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
+  - Unaligned
   text: <b>Political Interrupt:</b> After you Recruit Demiyah, a target player gains or loses 1 Honor.
   gold_cost: 4
   force: 2
@@ -7240,13 +7235,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Mountaineer
   - Naga
   - Nonhuman
   - Scout
+  - Unaligned
   text: '<b>Recon Reaction:</b> After engaging at Qalyar''s battlefield: You have Reconnaissance there.
     Give its province +2 or -2 strength.'
   gold_cost: 3
@@ -7829,14 +7823,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Banker
   - Imperial
   - Imperial Bank of Rokugan
   - Samurai
   - Soul of Seppun Ujifusa
+  - Unaligned
   text: '<b>Reaction:</b> When paying a Gold cost, bow Washi: Produce 2 Gold.'
   gold_cost: 6
   force: 1
@@ -9113,12 +9106,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Suiteiru enters play: Lose 4 Honor.<br><b>Open:</b> Destroy your target unbowed Personality:
     Create a number of 1F <b>Shadowlands • Nonhuman • Oni</b> Followers equal to his Chi. Attach them
     to one or more of your Personalities. Lose Honor equal to the number of Followers this created.'
@@ -10833,12 +10825,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Ugulu enters play: Lose 5 Honor.<br>Before a Human Personality moves to Ugulu''s battlefield:
     Negate his movement.'
   gold_cost: 4
@@ -11127,10 +11118,9 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Samurai
+  - Unaligned
   text: May not be included in decks.<br>This card has your Clan alignment keyword.
   gold_cost: 0
   force: 3
@@ -11462,10 +11452,9 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Samurai
+  - Unaligned
   text: May not be included in decks.<br>This card has your Clan alignment keyword.
   gold_cost: 0
   force: 2
@@ -11832,12 +11821,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Monk
   - Soul of Yodin
+  - Unaligned
   text: '<b>Reaction:</b> After one of your Rings enters play, bow Yung: Search your Fate deck for a Ring,
     show it, and put it in your hand.'
   gold_cost: 6

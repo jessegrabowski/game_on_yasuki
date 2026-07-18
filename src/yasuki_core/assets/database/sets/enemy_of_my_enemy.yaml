@@ -1131,12 +1131,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Hasaiki enters play: Lose 10 Honor.<br>Hasaiki will not be put under a Sensei.<br><b>Reaction:</b>
     Before a card''s effect bows your Personality: Negate the bowing.<br><b>Battle:</b> Once per battle,
     target an enemy Personality and a legal target for a Ranged Attack from this card: Bow the first target.
@@ -1276,12 +1275,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Harrier
   - Samurai
   - Shadowlands
+  - Unaligned
   text: After Hohiro enters play, lose 5 Honor.<br><b>Battle:</b> Raise Hohiro's Force to equal a target
     Oni's Force.<br><b>Battle:</b> Target a battlefield. If Hohiro would be opposed there, move him there.
     Ranged 3 Attack. This ability has <b>Absent</b> and <b>Remote</b> if you target the current battlefield.
@@ -2327,13 +2325,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
   - Ivory Kingdoms Ambassador
   - Kshatriya
+  - Unaligned
   text: Rama Singh has -1 Gold Cost if you are a Mantis Clan player.<br><b>Reaction:</b> When paying for
     a Fate card, produce 3 Gold which may only pay for that card.
   gold_cost: 4
@@ -2379,8 +2376,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Rezan • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Unique
@@ -2388,6 +2383,7 @@ cards:
   - Experienced
   - Poet
   - Shadowlands
+  - Unaligned
   text: 'Shadowlands Personalities will not refuse Rezan''s challenges.<br><b>Battle/Open:</b> Bow Rezan
     and target a Shadowlands Personality: Rezan duels him. Destroy the duel''s loser.'
   gold_cost: 8
@@ -2431,11 +2427,11 @@ cards:
   - Dynasty
   clans:
   - Brotherhood of Shinsei
-  - Unaligned
   keywords:
   - Unique
   - Descendant of Shinsei
   - Monk
+  - Unaligned
   text: '<b>Battle/Open:</b> Remove from the game a Ring in your hand, in your discard pile, or that you
     control, and target a Personality: Permanently copy one of the Ring''s abilities onto him.<br><b>Battle/Open:</b>
     Discard any number of cards: Draw cards equal to the number discarded.'
@@ -2559,12 +2555,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Sentei enters play, lose 10 Honor.<br>May not be put under a Sensei.<br>After your turn
     begins, if Sentei is dead, you may bring it into play, ignoring costs and negating all permanent effects
     on it.<br><b>Repeatable Battle:</b> Destroy a target enemy non-Unique card. If you used this ability
@@ -2586,12 +2581,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Gozoku
   - Shugenja
+  - Unaligned
   text: 'Actions on Wind cards have the additional cost, "Pay 3 Gold".<br><b>Reaction:</b> After you play
     a Gozoku card: Draw a card.'
   gold_cost: 4
@@ -2964,8 +2958,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Suiteiru no Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Tactician
   - Unique
@@ -2973,6 +2965,7 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Suiteiru no Oni enters play: Lose 5 Honor and permanently give each of your Oni Personalities
     <b>Tactician</b> and the ability, "<b>Tactical Battle:</b> If any enemy units are at the current battlefield:
     Move this card there. Straighten it."'
@@ -3516,12 +3509,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'Will not be put under a Sensei.<br>After Yojireru enters play: Lose 10 Honor and target zero
     to two Personalities in discard piles. Yojireru copies one ability that does not itself copy abilities
     from each of them until it leaves play. Remove the targets from the game.<br><b>Limited:</b> Remove

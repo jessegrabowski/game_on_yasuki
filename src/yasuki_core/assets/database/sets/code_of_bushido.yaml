@@ -399,12 +399,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Isoruko enters play, lose 4 Honor, and you may choose a Shadowlands Personality and give
     him a -1F/-1C token.<br><b>Battle:</b> Fear 4.
   gold_cost: 6
@@ -452,12 +451,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Ruri enters play, lose 5 Honor.<br>After Ruri is destroyed while at a battlefield or in
     a duel, target a Personality who was opposing her when she was destroyed or who faced her in the duel
     and permanently give him <b>Shadowlands</b>.<br><b>Battle:</b> Fear 4.
@@ -728,13 +726,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Samurai
   - Shadowlands
   - Undead
+  - Unaligned
   text: 'After Soetsu enters play: Lose 4 Honor.<br><b>Battle:</b> Once per battle, target an enemy Personality:
     Soetsu duels him. Soetsu has +3C during the duel if the target is Shadowlands. Destroy the duel''s
     loser.'
@@ -756,8 +753,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Daigotsu Yajinden • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Experienced Yajinden
   - Unique
@@ -765,6 +760,7 @@ cards:
   - Shadowlands
   - Shugenja
   - Swordsmith
+  - Unaligned
   text: 'After Yajinden enters play: Lose 10 Honor.<br>After Yajinden enters play from a province: Permanently
     give all Personalities the <b>Shadowlands</b> keyword.<br><b>Limited:</b> Bow Yajinden and target
     a non-Unique Shadowlands Personality: Take control of him. While Yajinden remains bowed, you may negate
@@ -1768,12 +1764,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Kagami enters play, lose 3 Honor.<br><b>Battle/Open:</b> Target another player's Shadowlands
     Personality. Permanently remove all Kagami's abilities. Permanently set Kagami's Chi equal to the
     target's Chi. Permanently copy all the target's printed abilities onto Kagami.
@@ -2057,13 +2052,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Kobushi enters play: Lose 4 Honor. <br><b>Battle:</b> Destroy your performing Goblin: Ranged
     5 Attack.'
   gold_cost: 5
@@ -2280,12 +2274,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After you Recruit Minikui, lose 5 Honor.<br><b>Battle:</b> Fear with a strength equal to your
     target Oni's Chi.
   gold_cost: 7
@@ -2630,12 +2623,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: After Nomi enters play, lose 4 Honor.<br><b>Reaction:</b> After a Goblin Personality is destroyed,
     give each Goblin Personality in Nomi's army +1F.
   gold_cost: 6
@@ -3417,12 +3409,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Tasu enters play: Lose 3 Honor.<br><b>Limited:</b> Bow and destroy Tasu: Create a 2F <b>Shadowlands
     • Nonhuman • Oni</b> Follower for each of your Oni Personalities, and attach one to each of them,
     ignoring restrictions on those Oni.'

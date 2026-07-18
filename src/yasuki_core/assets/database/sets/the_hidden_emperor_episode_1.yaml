@@ -455,8 +455,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Kyoso no Oni • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
@@ -464,6 +462,7 @@ cards:
   - Oni
   - Shadowlands
   - Sovereign
+  - Unaligned
   text: 'After Kyoso enters play: Lose 5 Honor.<br>Will not attach Followers or Items.<br><b>Battle/Open:</b>
     Any number of times per turn, destroy your performing unbowed Personality: Give Kyoso +2F/+2C.'
   gold_cost: 10
@@ -664,12 +663,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Cousin of Hantei
   - Political Pawn
+  - Unaligned
   text: '<b>Political Reaction:</b> Before another player with 59 or lower Family Honor wins an Honor
     Victory, bow Banu: That player does not win the game this turn. Destroy Banu.'
   gold_cost: 4

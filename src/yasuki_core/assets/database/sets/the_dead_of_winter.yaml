@@ -1458,11 +1458,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Hero
   - Samurai
+  - Unaligned
   text: <b>Reaction:</b> After Ieyoshi enters play, choose a Clan Alignment. Permanently give all unaligned
     copies of Ieyoshi you own, in and out of play, that Clan Alignment.
   gold_cost: 5
@@ -1797,7 +1796,6 @@ cards:
   - Dynasty
   clans:
   - Spirit
-  - Unaligned
   keywords:
   - Cavalry
   - Dog
@@ -1805,6 +1803,7 @@ cards:
   - Nonhuman
   - Scout
   - Spirit
+  - Unaligned
   gold_cost: 4
   force: 2
   chi: 3
@@ -2631,13 +2630,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Banker
   - Imperial
   - Imperial Bank of Rokugan
   - Samurai
+  - Unaligned
   text: '<b>Reaction:</b> When paying a Gold cost, bow Ujifusa: Produce 2 Gold.'
   gold_cost: 6
   force: 1
@@ -3108,10 +3106,10 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Assassin
   - Ninja
+  - Unaligned
   text: '<b>Reaction:</b> When another player''s Battle action would target a Ninja at Takaharu''s battlefield:
     It targets a different Ninja you control at that battlefield, if legal.'
   gold_cost: 7
@@ -3554,14 +3552,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Devourer of Dreams
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: <b>Limited:</b> Give a target Personality a -1C <b>Haunted </b>token.<br><b>Open:</b> Target a
     dead Personality who was destroyed this turn for having 0 Chi. Remove him from the game. Ujisato feeds
     on his soul. Give Ujisato a +1F <b>Soul </b>token.
@@ -3856,11 +3853,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Snow Maiden
+  - Unaligned
   text: 'Yukataka has +1F for each Winter and Forest card in play and in your discard piles.<br><b>Open:</b>
     Target a Personality: His unit may not assign and he will not move to battlefields <i>(this turn)</i>
     unless his controller has a Forest or Winter card in play or in his discard piles.'

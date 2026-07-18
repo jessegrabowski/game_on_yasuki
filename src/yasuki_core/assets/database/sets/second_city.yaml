@@ -1603,13 +1603,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Scout
   - Shadowlands
+  - Unaligned
   text: 'After Keppo enters play: Lose 2 Honor.<br><b>Battle:</b> If you have Reconnaissance, target an
     enemy attachment: Destroy it.'
   gold_cost: 3
@@ -1823,8 +1822,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Kuronada • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Experienced 2
@@ -1834,6 +1831,7 @@ cards:
   - Hero
   - Ronin
   - Samurai
+  - Unaligned
   text: 'Will not gain a Clan alignment.<br><b>Iaijutsu Battle:</b> Target an enemy card without attachments:
     Destroy it.'
   gold_cost: 10
@@ -2488,14 +2486,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Tactician
   - Earth
   - Nonhuman
   - Shadowlands
   - Troll
+  - Unaligned
   text: 'After Predator enters play: Lose 3 Honor.<br><b>Battle:</b> Target a Personality opposing Predator
     at the current battlefield: Move the Personality and Predator to the same adjacent unresolved battlefield.'
   gold_cost: 8
@@ -2547,13 +2544,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Ronin
   - Samurai
   - Scout
+  - Unaligned
   text: <b>Battle:</b> Ranged 4 Attack.
   gold_cost: 6
   force: 4
@@ -3113,7 +3109,6 @@ cards:
   - Dynasty
   clans:
   - Ninja
-  - Unaligned
   keywords:
   - Unique
   - Air
@@ -3121,6 +3116,7 @@ cards:
   - Onyx Champion
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Takasho enters play: Lose 3 Honor.<br><b>Battle:</b> If any enemy units are at the current
     battlefield: Move Takasho there. You may take an additional Battle action which Takasho must perform.<br><b>Maho
     Battle:</b> Ranged 5 Attack.'

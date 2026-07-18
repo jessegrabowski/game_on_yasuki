@@ -756,12 +756,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Ashalan
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -901,11 +900,10 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Scout
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -947,12 +945,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Bat
   - Nonhuman
+  - Unaligned
   gold_cost: 0
   force: 0
   chi: 2
@@ -1390,12 +1387,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Samurai
   - Yojimbo
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -1411,12 +1407,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Clay Soldier
   - Nonhuman
   - Yojimbo
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -1938,13 +1933,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Fire
   - Monk
   - Ronin
   - Soul of Nakadai
+  - Unaligned
   text: After you Recruit Dainiko, give her four +1F <b>Fire</b> tokens.
   gold_cost: 5
   force: 0
@@ -3115,12 +3109,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After you Recruit Hatsu Suru, lose 5 Honor.<br>After another player's card destroys Hatsu Suru,
     remove it from the game, lose 4 Honor, and create two 2F/2C/0PH <b>Nonhuman • Oni • Shadowlands</b>
     Personalities at Hatsu Suru's former location.
@@ -3622,14 +3615,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Kensai
   - Ronin
   - Samurai
   - Yojimbo
+  - Unaligned
   text: <i><i>(Duelists win tied duels versus non-Duelists. Kensai may attach two Weapons, as long as
     neither is Two-Handed.)</i></i>
   gold_cost: 4
@@ -3905,7 +3897,7 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
+  keywords:
   - Unaligned
   text: This Personality's printed stats, keywords, and text box are the same as the copied Personality's
     printed stats, keywords, and text box.<br><i>(This is a proxy for a created card. It is not considered
@@ -4644,7 +4636,6 @@ cards:
   - Dynasty
   clans:
   - Spirit
-  - Unaligned
   keywords:
   - Cavalry
   - Dog
@@ -4652,6 +4643,7 @@ cards:
   - Nonhuman
   - Scout
   - Spirit
+  - Unaligned
   gold_cost: 4
   force: 2
   chi: 3
@@ -4698,11 +4690,10 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Dog
   - Nonhuman
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -4717,13 +4708,12 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Badger
   - Nonhuman
   - Shadowlands
   - Spirit
+  - Unaligned
   text: 'Battle, :bow:: Melee 4 Attack.<br><i>(This is a proxy for a created card. It is not considered
     to have a title and cannot be included in decks.)</i>'
   gold_cost: 0
@@ -4913,12 +4903,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Bat
   keywords:
   - Air
   - Bat Clan
   - Shugenja
+  - Unaligned
   text: <i>(Shugenja may attach and cast Spells.)</i><br><b>Air Tireless Open:</b> Straighten Taruko.
     <i>(Tireless actions can be taken even while bowed.)</i>
   gold_cost: 5
@@ -5023,7 +5013,7 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
+  keywords:
   - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
@@ -5115,12 +5105,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Elephant
   - Nonhuman
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -5162,12 +5151,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Illusion
   - Samurai
   - Spirit
+  - Unaligned
   text: This Personality's Force is equal to the Chi of the caster, plus 1 if he was Air.<br><i>(This
     is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)</i>
   gold_cost: 0
@@ -5408,10 +5396,9 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -5426,7 +5413,7 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
+  keywords:
   - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
@@ -5530,12 +5517,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After you Recruit Minikui, lose 5 Honor.<br><b>Battle:</b> Fear with a strength equal to your
     target Oni's Chi.
   gold_cost: 7
@@ -5559,13 +5545,12 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Illusion
   - Nonhuman
   - Shugenja
+  - Unaligned
   text: This Personality's Chi and Personal Honor are equal to the Chi and Personal Honor of the caster,
     respectively.<br><i>(This is a proxy for a created card. It is not considered to have a title and
     cannot be included in decks.)</i>
@@ -6024,12 +6009,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Actor
   - Ronin
   - Soul of Kyogen
+  - Unaligned
   text: <b>Open:</b> Myuken copies one keyword from your target Personality.
   gold_cost: 4
   force: 3
@@ -6082,14 +6066,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Commander
   - Nonhuman
   - Shadowlands
   - Undead
   - Zombie
+  - Unaligned
   text: After you Recruit Noekam, lose 5 Honor. Noekam's Undead Followers have +1F. <br><b>Battle:</b>
     Fear with strength equal to the number of Undead cards in this unit.
   gold_cost: 8
@@ -6135,12 +6118,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ogre
   - Shadowlands
+  - Unaligned
   text: Cannot attach Armor or Followers.
   gold_cost: 9
   force: 6
@@ -6187,12 +6169,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -6208,12 +6189,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -6330,11 +6310,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
+  - Unaligned
   text: <b>Political Interrupt:</b> After you Recruit Demiyah, a target player gains or loses 1 Honor.
   gold_cost: 4
   force: 2
@@ -6447,10 +6426,9 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Ashigaru
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -8997,11 +8975,10 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Guard
   - Samurai
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -9061,12 +9038,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Air
   - Illusion
   - Shugenja
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -9282,12 +9258,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Champion
   - Shadowlands
   - Undead
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0
@@ -9303,10 +9278,9 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Weapon
+  - Unaligned
   text: This Item's Force Modifier is equal to the discarded card's Focus Value.<br><i>(This is a proxy
     for a created card. It is not considered to have a title and cannot be included in decks.)</i>
   gold_cost: 0
@@ -10065,11 +10039,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shugenja
   - Soul of Yotsu Seiki
+  - Unaligned
   text: <i>(Shugenja may attach and cast Spells.)</i><br><b>Battle, :bow::</b> Ranged Attack with strength
     equal to Shinzai's Chi.
   gold_cost: 4
@@ -10091,12 +10064,11 @@ cards:
   - Proxy
   decks:
   - Other
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Shadowlands
   - Undead
+  - Unaligned
   text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
     in decks.)</i>
   gold_cost: 0

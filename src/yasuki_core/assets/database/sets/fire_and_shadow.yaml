@@ -175,10 +175,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shugenja
+  - Unaligned
   text: '<b>Battle:</b> Bow and destroy Balyezn: Give each Personality without a Poison token in the enemy
     army a -1C <b>Poison</b> token with the trait, "Before this Personality straightens: You may destroy
     this token instead of straightening him."'
@@ -2162,12 +2161,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Mohai enters play: Lose 4 Honor.<br><b>Maho Open:</b> Bow Mohai: Until Mohai straightens
     or leaves play, you may negate his straightening, and all Kiho Strategies in and out of play have
     +1 Gold Cost.'
@@ -2188,8 +2186,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Tactician
   - Unique
@@ -2197,6 +2193,7 @@ cards:
   - Shadowlands
   - Shugenja
   - Undead
+  - Unaligned
   text: After Notu enters play, lose 3 Honor.<br><b>Tactical Battle, :gstar::</b> Equip a target Undead
     Follower in your hand to Notu, for less Gold equal to Notu's Chi.
   gold_cost: 9
@@ -2389,8 +2386,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Oni no Okura • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
@@ -2398,6 +2393,7 @@ cards:
   - Oni
   - Samurai
   - Shadowlands
+  - Unaligned
   text: 'After Okura enters play: Lose 2 Honor.<br><b>Limited:</b> Any number of times per turn, target
     another player''s Shadowlands Personality: Create a battlefield <i>(not at any province)</i>. Assign
     Okura to attack there. Assign the target to defend there, even if he is bowed. Other Personalities
@@ -2828,11 +2824,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Informant
   - Kolat
+  - Unaligned
   text: '<b>Reaction:</b> After this copy of Sanjuro enters play, target another copy: Shuffle it into
     its owner''s Dynasty deck.'
   gold_cost: 3
@@ -3615,11 +3610,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Hare
   keywords:
   - Hare Clan
   - Samurai
+  - Unaligned
   text: 'Ranged Attacks may not target Tomo.<br>Will not attach Followers.<br><b>Battle:</b> Any number
     of times per turn, bow Tomo: Ranged 1 Attack.'
   gold_cost: 8
@@ -3771,10 +3766,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
+  - Unaligned
   text: '<b>Battle:</b> Any number of times per turn, target an enemy Weapon: Transfer it to Sabieru.
     After this battle ends, discard it. Lose 3 Honor.'
   gold_cost: 7

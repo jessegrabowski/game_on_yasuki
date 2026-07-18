@@ -45,12 +45,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Akaru enters play, lose 5 Honor. <br><b>Limited:</b> Target a Personality whose unit has
     a total Gold Cost less than or equal to the Gold Production of its controller's Stronghold plus 2.
     Bow the unit.
@@ -1043,12 +1042,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: Furu enters play for 1 less Gold for each Province destroyed this game.<br>After Furu enters play,
     lose 6 Honor. <br><b>Battle:</b> Bow a target enemy card.
   gold_cost: 12
@@ -1739,10 +1737,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Innkeeper of the House of the Blue Tanuki
+  - Unaligned
   text: <b>Home Battle:</b> Straighten all Followers attached to a target Commander or Tactician.
   gold_cost: 3
   force: 2
@@ -1961,11 +1958,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Kappa
   - Nonhuman
+  - Unaligned
   text: Malevolent Kappa has +2F/+1C while opposing a Samurai.
   gold_cost: 4
   force: 3
@@ -2173,12 +2169,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Mokku enters play: Lose 3 Honor. <br><b>Fire Battle:</b> Destroy your performing Goblin
     and target an enemy Follower: Destroy it.'
   gold_cost: 3
@@ -2400,13 +2395,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Unique
   - Ronin
   - Samurai
+  - Unaligned
   text: '<b>Reaction:</b> After Oishi enters play from a province: Create a 2F/2C/2PH <b>Ronin • Samurai</b>
     Personality. <br><b>Iaijutsu Battle:</b> Discard a card and target an enemy card without attachments:
     Destroy it if its Force is less than or equal to the discarded card''s Focus Value plus 1.'
@@ -3071,13 +3065,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Berserker
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Shukku enters play: Lose 3 Honor. <br><b>Fear Battle:</b> Destroy Shukku and target an
     enemy Follower or Personality without attachments: Give it -4F. If its Force is now 0, destroy it.'
   gold_cost: 4
@@ -3266,11 +3259,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: While there are two or more different Clan alignments among Personalities you control, Terasaka
     enters play paying 1 less Gold for each such Clan alignment.
   gold_cost: 6

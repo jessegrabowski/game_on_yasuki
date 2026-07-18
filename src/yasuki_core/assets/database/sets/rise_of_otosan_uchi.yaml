@@ -1738,14 +1738,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Iweko Miaka, Princess of Rokugan • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Imperial
   - Destined
   - Experienced
   - Unique
+  - Unaligned
   text: 'Miaka will not gain Clan Alignments or :shadowlands: and will not be challenged. Will only join
     a player whose Wind is Kano''s Alliance.<br><b>Political Interrupt:</b> Pay the action''s :favor:
     costs.<br><b>Home Response:</b> If the action straightened your Personality, give them +1F/+1C/+1PH,
@@ -2046,12 +2045,12 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Fox
   keywords:
   - Fox Clan
   - Shugenja
   - Earth
+  - Unaligned
   text: <b>Response, :g7::</b> After the action recruits Maiko, create and Recruit <i>(without further
     cost)</i> a 6F/2C/7GC/3PH Nonhuman • Ox • Spirit Personality with the traits, "Will not attack and
     cannot be challenged" and "Other players must bow a Personality they control to target this Personality
@@ -2297,7 +2296,6 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Centipede
   keywords:
   - Centipede Clan
@@ -2305,6 +2303,7 @@ cards:
   - Cavalry
   - Air
   - Fire
+  - Unaligned
   text: 'You may Recruit Yuna for :g1: less if your Wind is Kano''s Alliance.<br><b>Response:</b> If the
     action was yours, :air: or :fire:, and bowed or destroyed an enemy Follower or Personality, give your
     target Personality a Force bonus equal to the enemy card''s Force. If your Personality is a Shugenja,
@@ -2553,8 +2552,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Otomo Terumoto • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Courtier
   - Daimyo
@@ -2562,6 +2559,7 @@ cards:
   - Samurai
   - Experienced
   - Unique
+  - Unaligned
   text: 'Phoenix Clan players may Recruit Terumoto for :g1: less.<br><b>Political Response:</b> After
     the action Recruits Terumoto, create and Recruit a 0F/2C/2PH Courtier • <b>Expendable</b> Personality
     with the ability "<b>Political Open, :bow::</b> A target player gains or loses 1 Honor."'
@@ -3659,11 +3657,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Wasp
   keywords:
   - Scout
   - Wasp Clan
+  - Unaligned
   text: 'You may not Recruit Tohiro if you have a Wind.<br><b>Engage:</b> Give your target opposed Follower
     or Personality a Force bonus equal to the strength of one of their :ranged: until that ability is
     used or the turn ends.<br><b>Battle, :bow::</b> :ranged: 2.'

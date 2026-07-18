@@ -376,14 +376,13 @@ cards:
   decks:
   - Dynasty
   extended_title: Moto Tsume • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Experienced
   - Nonhuman
   - Samurai
   - Shadowlands
+  - Unaligned
   text: After Tsume enters play, lose 6 Honor.<br>Will not enter play if your Family Honor is 1 or higher.<br>May
     not be assigned to the same battlefield as units with no Shadowlands cards and such units may not
     assign with Tsume.<br><b>Battle:</b> Fear 3.

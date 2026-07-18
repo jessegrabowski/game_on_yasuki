@@ -1239,8 +1239,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Utagawa • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Duelist
   - Tactician
@@ -1248,6 +1246,7 @@ cards:
   - Experienced
   - Ronin
   - Samurai
+  - Unaligned
   text: '<b>Battle:</b> Bow Utagawa and target an enemy unit with lower Force than Utagawa: Destroy it.'
   gold_cost: 8
   force: 5

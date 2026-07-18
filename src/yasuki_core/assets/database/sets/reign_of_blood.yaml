@@ -941,8 +941,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -950,6 +948,7 @@ cards:
   - Onisu
   - Onisu of Death
   - Shadowlands
+  - Unaligned
   text: 'After Hakai enters play: Lose 5 Honor.<br><b>Reaction:</b> After a Spell, Kiho, or Shugenja ability
     resolves, target a Shugenja who performed it: Permanently give him -2C.<br><b>Reaction:</b> Any number
     of times per turn, after a card enters a discard pile: Remove that card from the game.'
@@ -1702,12 +1701,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: After Migawari enters play, lose 3 Honor.<br><b>Maho Repeatable Limited, :bow::</b> Transfer a
     target Follower on any player's target Personality with lower Chi to Migawari, ignoring restrictions.
   gold_cost: 6
@@ -2452,12 +2450,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Shukumei enters play: Lose 5 Honor and target a Personality <i>(Shukumei must target himself
     if there are no other Personalities in play)</i>. Permanently give the target -1F/-1C; this is a Maho
     effect.'
@@ -2498,12 +2495,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Shadowlands
+  - Unaligned
   text: 'After Skub enters play: Lose 4 Honor.'
   gold_cost: 6
   force: 5
@@ -3244,13 +3240,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Bloodspeaker
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: 'After Yajinden enters play: Lose 6 Honor.<br><b>Maho Limited:</b> Bow Yajinden and target another
     player''s Personality with 2 or lower Chi: Take control of the target. While Yajinden remains bowed,
     you may negate his straightening. After the next time this game he straightens or leaves play, return

@@ -860,12 +860,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After Hyakute enters play, lose 4 Honor<br>Will not attach non-Oni Followers.<br>Items attaching
     to Hyakute will not have their costs reduced.<br>May attach any number of Weapons.<br><b>Battle:</b>
     Fear 1 plus the number of Weapons Hyakute has attached.
@@ -1077,11 +1076,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
   - Samurai
+  - Unaligned
   text: <b>Repeatable Reaction, :bow::</b> After a Maneuvers Segment ends, if Kenko was assigned during
     it, move him home, dishonor him, lose 2 Honor.
   gold_cost: 6
@@ -1170,13 +1168,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Ogre
   - Overlord
   - Shadowlands
+  - Unaligned
   text: After Kayobun enters play, lose 6 Honor and permanently give him +1/+1 for each dead Personality
     in your discard pile.
   gold_cost: 7
@@ -1197,11 +1194,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Fox
   keywords:
   - Bushi
   - Fox Clan
+  - Unaligned
   text: While the Defender controls a Forest, cards in Taro's unit may not be targeted by Ranged Attacks.<br><b>Repeatable
     Battle, :bow::</b> Ranged 3 Attack.
   gold_cost: 7
@@ -1527,11 +1524,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Courtier
+  - Unaligned
   text: <b>Political Repeatable Battle/Open, :bow::</b> Bow a target Courtier.
   gold_cost: 3
   force: 0
@@ -1696,13 +1692,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Goblin
   - Nonhuman
   - Sculptor of Flesh
   - Shadowlands
+  - Unaligned
   text: 'After Omoni enters play: Lose 4 Honor.<br>Fear actions performed by Omoni have +1 strength for
     every two Goblin Followers attached to him.<br><b>Fear Battle:</b> Fear 2.'
   gold_cost: 5
@@ -1742,12 +1737,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After Osoreru enters play: Lose 4 Honor.<br><b>Fear Battle:</b> Fear 3.<br><b>Reaction:</b> When
     a Fear effect is produced by a card in Osereru no Oni''s army, the Fear also affects Followers which
     are immune to or unaffected by Fear.'
@@ -2035,11 +2029,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bodyguard
   - Imperial
+  - Unaligned
   text: '<b>Reaction:</b> Any number of times per turn, when another player''s action would target one
     of your Courtiers, bow Isei: The action targets him instead, even if illegal.'
   gold_cost: 5
@@ -2977,14 +2970,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Nonhuman
   - Pack Leader
   - Shadowlands
   - Tsuno
+  - Unaligned
   text: 'After Kurushimi enters play: Lose 5 Honor.<br>Kurushimi may not assign, and will not move, into
     a defending army.<br>Kurushimi has +2F/+2C while opposed by a Lion Clan Personality or facing one
     in a duel.'
@@ -3169,11 +3161,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Hare
   keywords:
   - Hare Clan
   - Samurai
+  - Unaligned
   gold_cost: 3
   force: 2
   chi: 1

@@ -489,12 +489,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Tactician
   - Unique
+  - Unaligned
   text: Chiang-Tsu will not gain a Clan Alignment.<br><b>Repeatable Limited, :bow::</b> Once per game
     per Personality, bow your target performing Human Personality. If this bowed him, after the next time
     this game he straightens, permanently give him either <b>Double Chi</b> or <b>Tactician</b>. Chiang-Tsu
@@ -1064,11 +1063,10 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Samurai
+  - Unaligned
   gold_cost: 4
   force: 1
   chi: 1
@@ -1085,10 +1083,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Ronin
+  - Unaligned
   text: After Kuso enters play, lose 1 Honor.<br>Kuso will not gain a Clan Alignment.
   gold_cost: 2
   force: 1
@@ -1560,10 +1557,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Samurai
+  - Unaligned
   gold_cost: 7
   force: 3
   chi: 3
@@ -1973,10 +1969,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shugenja
+  - Unaligned
   gold_cost: 3
   force: 0
   chi: 2

@@ -725,13 +725,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Unique
   - Kami
   - Shadowlands
+  - Unaligned
   text: Will only join Shadowlands Horde player.<br>Fu Leng has a minimum Chi of 1.<br>Will not enter
     play unless two or more Personalities have been destroyed or given the Shadowlands keyword this turn.<br><b>Limited:</b>
     Once per turn per target, target a dead Personality in any discard pile. Bring him into play <i>(under
@@ -799,8 +798,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Double Chi
@@ -812,6 +809,7 @@ cards:
   - First Emperor
   - Kami
   - Samurai
+  - Unaligned
   text: Will not enter play unless there is a Kami Personality in play.<br>When paying for a card attaching
     to Hantei, reduce its Gold cost to 0 until it is paid.<br><b>Repeatable Reaction:</b> Before a Political
     Strategy's action resolves, negate its effects.<br><b>Limited:</b> Take control of a target non-Kami
@@ -832,8 +830,6 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Unique
@@ -842,6 +838,7 @@ cards:
   - Emperor
   - Kami
   - Samurai
+  - Unaligned
   text: Genji has the additional cost, "Discard the Imperial Favor or bow your Personalities and Followers
     with 13 or more total Force" to enter play.<br><b>Repeatable Political Limited, :bow::</b> Target
     a face-up Personality in a Province. He enters play controlled by the Province's player, ignoring
@@ -862,12 +859,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: After you Recruit Hatsu Suru, lose 5 Honor.<br>After another player's card destroys Hatsu Suru,
     remove it from the game, lose 4 Honor, and create two 2F/2C/0PH <b>Nonhuman • Oni • Shadowlands</b>
     Personalities at Hatsu Suru's former location.
@@ -1571,12 +1567,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Bushi
   - Nonhuman
   - Ogre
+  - Unaligned
   text: Will not be controlled by a Shadowlands Horde player.<br><b>Reaction:</b> After Muhomono enters
     play from a Province, you may search your Dynasty deck for an Ogre and put it face-up in the Province
     instead of refilling it normally. You may search your Fate deck for an Ogre, show it, and put it in
@@ -1597,12 +1592,11 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Bushi
   - Shadowlands
+  - Unaligned
   text: After Mutsuhito enters play, lose 5 Honor.<br><b>Reaction:</b> After Mutsuhito enters play from
     a Province, Recruit a target dead Personality in your discard pile into play, ignoring costs and restrictions.
   gold_cost: 12
@@ -1704,13 +1698,12 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Dragon
   - Mad Dragon
   - Nonhuman
+  - Unaligned
   text: '<b>Battle/Open:</b> Target another Personality: Permanently copy its base Force.<br><b>Battle/Open:</b>
     Target another Personality: Permanently copy its base Chi.<br><b>Battle/Open:</b> Target a non-Dragon
     Personality: Copy one of its abilities that does not itself copy abilities, or one of its keywords,
@@ -1936,14 +1929,13 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Unique
   - Kami
   - Mentor
   - Monk
+  - Unaligned
   text: Shinsei has the additional cost, "Bow five of your cards" to enter play.<br>You may ignore bowing
     Shinsei for Kiho actions he performs. <br><b>Repeatable Reaction, :bow::</b> When paying for a Seven
     Thunder Personality, reduce the Personality's Gold Cost to 1 until it is paid. <br><b>Tireless Battle/Open:</b>
@@ -2128,12 +2120,12 @@ cards:
   - Dynasty
   clans:
   - Naga
-  - Unaligned
   keywords:
   - Unique
   - Abomination
   - Naga
   - Nonhuman
+  - Unaligned
   text: Tashrak's base Force equals the number of non-Naga Personalities other players control.<br>Tashrak's
     base Chi equals the number of Forests you control, plus 2.
   gold_cost: 7
@@ -2267,8 +2259,6 @@ cards:
   decks:
   - Dynasty
   extended_title: The First Oni • Inexperienced
-  clans:
-  - Unaligned
   keywords:
   - Unique
   - Disciple
@@ -2277,6 +2267,7 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
+  - Unaligned
   text: 'After The First Oni enters play: Lose 10 Honor, which will not be copied, reduced, or increased.<br>Will
     not attach Items.<br><b>Limited:</b> Target another player''s unbowed Personality: Lose 5 Honor. Declare
     an additional Attack Phase, creating a battlefield not associated with any Province. The First Oni
@@ -2422,10 +2413,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Unique
+  - Unaligned
   text: '<b>Open:</b> Target a Personality controlled by the active player, remove Tora from the game,
     and pay Gold equal to the target''s Gold Cost: Lose 1 Honor. The active player may transfer an attachment
     from the target to a Personality you control. If he did not, take control of the target.'

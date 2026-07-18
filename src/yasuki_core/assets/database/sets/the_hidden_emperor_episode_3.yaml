@@ -437,13 +437,12 @@ cards:
   decks:
   - Dynasty
   extended_title: Kuni Yori • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Experienced 2
   - Unique
   - Shadowlands
   - Shugenja
+  - Unaligned
   text: <b>Repeatable Reaction:</b> After a Personality or Follower opposing Yori is destroyed, create
     a 1F Nonhuman • Shadowlands • Undead Follower and attach it to him.
   gold_cost: 9
@@ -671,10 +670,9 @@ cards:
   - Personality
   decks:
   - Dynasty
-  clans:
-  - Unaligned
   keywords:
   - Shugenja
+  - Unaligned
   text: '<b>Reaction:</b> Any number of times per turn, when paying a Gold cost, bow Kossori: Produce
     an amount of Gold equal to her Personal Honor.'
   gold_cost: 5
@@ -743,11 +741,11 @@ cards:
   decks:
   - Dynasty
   clans:
-  - Unaligned
   - Sparrow
   keywords:
   - Samurai
   - Sparrow Clan
+  - Unaligned
   gold_cost: 8
   force: 4
   chi: 3
@@ -822,13 +820,12 @@ cards:
   decks:
   - Dynasty
   extended_title: The Grey Crane • Experienced 2
-  clans:
-  - Unaligned
   keywords:
   - Double Chi
   - Experienced 2 Kakita Toshimoko
   - Unique
   - Samurai
+  - Unaligned
   text: 'The Grey Crane will not refuse challenges.<br>Will not attach The Emerald Armor.<br><b>Limited:</b>
     Any number of time per turn, bow The Grey Crane and target a Kolat Personality: Discard the top card
     of your Fate deck. If its Focus Value is higher than the Kolat''s Chi, The Grey Crane duels him. Destroy
@@ -905,8 +902,6 @@ cards:
   decks:
   - Dynasty
   extended_title: Togashi Hoshi • Experienced
-  clans:
-  - Unaligned
   keywords:
   - Cavalry
   - Unique
@@ -914,6 +909,7 @@ cards:
   - Experienced
   - Man-Beast
   - Nonhuman
+  - Unaligned
   text: 'Will not attach Followers or Armor.<br>Enters play paying 2 less Gold if you are a Brotherhood
     of Shinsei player.<br><b>Limited:</b> Bow your target non-Tattooed Personality: Permanently give him
     +2F/+2C and <b>Tattooed</b>. He will not straighten during your next Straighten Phase. Until your
