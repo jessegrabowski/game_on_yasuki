@@ -67,6 +67,8 @@ FIELD_ALIASES = {
     "startinghonor": "starting_honor",
     "sh": "starting_honor",
     "fh": "starting_honor",
+    "exp": "experience",
+    "xp": "experience",
     "has": "is",
 }
 
@@ -99,6 +101,7 @@ NUMERIC_FIELDS = {
     "gold_production",
     "province_strength",
     "starting_honor",
+    "experience",
 }
 
 

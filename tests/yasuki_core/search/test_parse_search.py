@@ -36,6 +36,8 @@ class TestFieldNormalization:
         assert normalize_field_name("ps") == "province_strength"
         assert normalize_field_name("sh") == "starting_honor"
         assert normalize_field_name("fh") == "starting_honor"
+        assert normalize_field_name("exp") == "experience"
+        assert normalize_field_name("xp") == "experience"
 
     def test_normalize_case_insensitive(self):
         assert normalize_field_name("FORCE") == "force"
@@ -389,6 +391,15 @@ class TestFilterBuilding:
     def test_negated_dash_stat_matches_non_null(self):
         _, filters = parse_and_build_query("-f:-")
         assert filters["force"] == "notnull"
+
+    def test_experience_is_a_numeric_field(self):
+        # exp:/experience: pin the version rank; negatives (Inexperienced) are ordinary values.
+        _, base = parse_and_build_query("exp:0")
+        assert base["experience"] == (0, 0)
+        _, experienced = parse_and_build_query("experience>=1")
+        assert experienced["experience"] == (1, None)
+        _, inexperienced = parse_and_build_query("xp:-1")
+        assert inexperienced["experience"] == (-1, -1)
 
     def test_is_banned(self):
         _, filters = parse_and_build_query("is:banned")

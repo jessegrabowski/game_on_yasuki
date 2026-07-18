@@ -218,6 +218,30 @@ class TestSQLFiltering:
         assert len(cards) > 0
         assert all("Crane" in (c["clans"] or []) and "Personality" in c["types"] for c in cards)
 
+    def test_experience_rank_filter(self):
+        """exp:/experience: filter by version rank, and exp<1 / exp>=1 partition the catalog."""
+        base = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options=build_search_filters("exp:0 include:all"))
+        }
+        experienced = {
+            c["card_id"]
+            for c in query_cards_filtered(
+                filter_options=build_search_filters("experience>=1 include:all")
+            )
+        }
+        everything = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options=build_search_filters("include:all"))
+        }
+        below = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options=build_search_filters("exp<1 include:all"))
+        }
+        assert base and experienced
+        assert base.isdisjoint(experienced)
+        assert below | experienced == everything
+
     def test_grouped_or_returns_the_union(self):
         """A grouped cross-field OR is exactly the union of its two AND groups."""
 

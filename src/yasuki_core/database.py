@@ -1019,6 +1019,7 @@ _ALLOWED_COLUMNS = {
     "gold_production",
     "starting_honor",
     "focus",
+    "experience",
 }
 
 _NUMERIC_STATS = (
@@ -1031,6 +1032,7 @@ _NUMERIC_STATS = (
     "gold_production",
     "starting_honor",
     "focus",
+    "experience",
 )
 
 

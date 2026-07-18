@@ -29,7 +29,9 @@ Values with spaces need quotes: `set:"Imperial Edition"`.
 ## Numeric Fields
 
 `force` (`f`), `chi`, `focus`, `gold` (cost), `ph` (personal honor),
-`province` (strength), `startinghonor`, `honor_requirement`.
+`province` (strength), `startinghonor`, `honor_requirement`, and `experience`
+(`exp`) — the version rank, from `-1` (Inexperienced) through `0` (base) to
+Experienced 2 and up.
 
 | Operator | Meaning | Example |
 |----------|---------|---------|
