@@ -104,10 +104,12 @@ class TestTokenParsing:
         assert term.value == "event"
         assert term.negated is True
 
-    def test_quoted_exact_match(self):
+    def test_bare_quoted_phrase_is_substring(self):
+        # A bare "phrase" searches as a substring (operator ":"), the same broad match a plain word
+        # gets. Only !"phrase" is exact.
         term = parse_token('"Doji Hoturi"')
         assert term.field is None
-        assert term.operator == "="
+        assert term.operator == ":"
         assert term.value == "Doji Hoturi"
 
     def test_exact_match_with_exclamation(self):
@@ -115,6 +117,13 @@ class TestTokenParsing:
         assert term.field is None
         assert term.operator == "="
         assert term.value == "exact phrase"
+
+    def test_negated_exact_match(self):
+        term = parse_token('-!"Doji Hoturi"')
+        assert term.field is None
+        assert term.operator == "="
+        assert term.value == "Doji Hoturi"
+        assert term.negated is True
 
     def test_plain_text(self):
         term = parse_token("Crane")
@@ -185,6 +194,32 @@ class TestFilterBuilding:
         text_query, filters = build_filter_options(parsed)
         assert "Doji" in text_query
         assert len(filters) == 0
+
+    def test_exact_match_emits_name_exact(self):
+        _, filters = parse_and_build_query('!"Doji Hoturi"')
+        assert filters["name_exact"] == ["Doji Hoturi"]
+        assert "name_contains" not in filters
+
+    def test_negated_exact_match_emits_name_exact_excludes(self):
+        _, filters = parse_and_build_query('-!"Doji Hoturi"')
+        assert filters["name_exact_excludes"] == ["Doji Hoturi"]
+
+    def test_negated_bare_word_emits_bare_excludes(self):
+        text, filters = parse_and_build_query("-doji")
+        assert text == ""
+        assert filters["bare_excludes"] == ["doji"]
+
+    def test_bare_word_mixes_include_and_exclude(self):
+        text, filters = parse_and_build_query("crane -bushi")
+        assert text == "crane"
+        assert filters["bare_excludes"] == ["bushi"]
+
+    def test_stray_dash_carries_no_exclude(self):
+        # A trailing '-' (or bare '""') has no needle; it must not become a match-everything
+        # exclude that blanks the results. Regression for the empty-bare-word bug.
+        text, filters = parse_and_build_query("crane -")
+        assert text == "crane"
+        assert "bare_excludes" not in filters
 
     def test_name_search(self):
         # name: scopes to the card name only, not the broad name+text query.

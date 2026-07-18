@@ -206,11 +206,12 @@ def parse_token(token: str) -> SearchTerm:
         negated = True
         token = token[1:]
 
-    # Check for quoted exact match
+    # `!"phrase"` is an exact whole-name match (operator "="); a bare `"phrase"` is a substring
+    # phrase (operator ":"), the same broad search a plain word gets.
     if token.startswith('!"') and token.endswith('"'):
         return SearchTerm(field=None, operator="=", value=token[2:-1], negated=negated)
     elif token.startswith('"') and token.endswith('"'):
-        return SearchTerm(field=None, operator="=", value=token[1:-1], negated=negated)
+        return SearchTerm(field=None, operator=":", value=token[1:-1], negated=negated)
 
     # Try to match field:value or field>value patterns
     match = re.match(r"^([a-zA-Z_]+)([:=><]+)(.+)$", token)
@@ -365,9 +366,20 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
 
     for field, terms_list in field_groups.items():
         if field == "_bare":
-            # Bare words: broad search across name, card id, and rules text.
+            # Bare words: broad substring search across name, card id, and rules text. A negated
+            # bare word (-doji) excludes that broad match; `!"phrase"` (operator "=") is instead an
+            # exact whole-name match, positive or negated.
             for term in terms_list:
-                if not term.negated:
+                if not term.value:
+                    # A stray '-' or '""' carries no needle. Left unguarded, a negated one becomes a
+                    # match-everything exclude ('%%') that blanks the whole result set.
+                    continue
+                if term.operator == "=":
+                    key = "name_exact_excludes" if term.negated else "name_exact"
+                    filter_options.setdefault(key, []).append(term.value)
+                elif term.negated:
+                    filter_options.setdefault("bare_excludes", []).append(term.value)
+                else:
                     text_query_parts.append(term.value)
         elif field == "name":
             # name:/title: — match the card name only.

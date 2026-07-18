@@ -36,6 +36,25 @@ def test_name_search_stays_single_column():
     assert params == ["%kachiko%"]
 
 
+def test_name_exact_matches_whole_name_case_insensitively():
+    clause, params = _build_card_filter(filter_options={"name_exact": ["Doji Hoturi"]})
+    assert "lower(c.name) = lower(%s)" in clause
+    assert params == ["Doji Hoturi"]
+
+
+def test_name_exact_excludes_negates_the_equality():
+    clause, params = _build_card_filter(filter_options={"name_exact_excludes": ["Doji Hoturi"]})
+    assert "lower(c.name) != lower(%s)" in clause
+    assert params == ["Doji Hoturi"]
+
+
+def test_bare_excludes_negates_the_broad_union():
+    clause, params = _build_card_filter(filter_options={"bare_excludes": ["doji"]})
+    assert "NOT (c.name ILIKE" in clause
+    assert _PRINT_EXISTS in clause
+    assert params == ["%doji%"] * 4
+
+
 def test_like_wildcards_in_needle_are_escaped():
     _, params = _build_card_filter(text_query="50%")
     assert params == ["%50\\%%"] * 4

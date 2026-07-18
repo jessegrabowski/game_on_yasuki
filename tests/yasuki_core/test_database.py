@@ -19,6 +19,7 @@ from yasuki_core.database import (
     get_connection_string,
 )
 from yasuki_core.paths import SETS_DIR, resolve_set_image_path
+from yasuki_core.search import parse_and_build_query
 
 # Card images are gitignored and served from R2, so they're absent in CI and fresh clones; only
 # assert on-disk existence when the local image tree is actually populated.
@@ -215,6 +216,51 @@ class TestSQLFiltering:
         )
         assert len(cards) > 0
         assert all("Crane" in (c["clans"] or []) and "Personality" in c["types"] for c in cards)
+
+    def test_exact_name_match_isolates_one_card(self):
+        """!\"Doji Hoturi\" returns only cards named exactly that — every experience version, and
+        nothing whose name merely contains the phrase."""
+        exact = query_cards_filtered(filter_options={"name_exact": ["Doji Hoturi"]})
+        substring = query_cards_filtered(text_query="Doji Hoturi")
+        assert len(exact) > 1  # multiple experience versions share the name
+        assert all(c["name"] == "Doji Hoturi" for c in exact)
+        # The substring search is strictly broader (e.g. "Doji Hoturi, Seven Thunder").
+        assert len(substring) > len(exact)
+
+    def test_negated_exact_match_drops_that_card(self):
+        """-!"Doji Hoturi" excludes exactly the cards named that, keeping everything else."""
+        all_ids = {c["card_id"] for c in query_cards_filtered()}
+        named = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options={"name_exact": ["Doji Hoturi"]})
+        }
+        kept = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options={"name_exact_excludes": ["Doji Hoturi"]})
+        }
+        assert named
+        assert kept == all_ids - named
+
+    def test_negated_bare_word_excludes_matches(self):
+        """-word drops every card the positive bare word would have matched."""
+        crane = {c["card_id"] for c in query_cards_filtered(filter_options={"clans": ["Crane"]})}
+        with_honor = {c["card_id"] for c in query_cards_filtered(text_query="honor")}
+        kept = {
+            c["card_id"]
+            for c in query_cards_filtered(
+                filter_options={"clans": ["Crane"], "bare_excludes": ["honor"]}
+            )
+        }
+        assert kept == crane - with_honor
+        assert kept != crane  # the exclusion actually removed something
+
+    def test_stray_dash_does_not_blank_results(self):
+        """A trailing '-' (mid-typing in live search) must not collapse the result set to empty."""
+        crane = len(query_cards_filtered(text_query="crane"))
+        text, filters = parse_and_build_query("crane -")
+        with_dash = len(query_cards_filtered(text_query=text, filter_options=filters))
+        assert crane > 0
+        assert with_dash == crane
 
     def test_exclude_type_drops_exactly_that_type(self):
         """types_excludes should remove exactly the excluded type and keep everything else."""

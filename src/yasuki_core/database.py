@@ -1029,6 +1029,17 @@ _NUMERIC_STATS = (
 # excludes the exact operators, which take a different code path.
 _RANGE_OPS = {">": ">", ">=": ">=", "<": "<", "<=": "<="}
 
+# The broad bare-word match: a card whose name, id, current text (either face), or any printing's
+# own text contains the needle. Four %s placeholders take the same pattern. Used positively for a
+# bare word and, negated as a whole (De Morgan), to exclude one.
+_BARE_TEXT_UNION = (
+    "c.name ILIKE %s ESCAPE '\\'"
+    " OR c.card_id ILIKE %s ESCAPE '\\'"
+    " OR (c.rules_text || ' ' || COALESCE(back.rules_text, '')) ILIKE %s ESCAPE '\\'"
+    " OR EXISTS (SELECT 1 FROM prints p WHERE p.card_id = c.card_id"
+    " AND p.rules_text ILIKE %s ESCAPE '\\')"
+)
+
 
 def _active_format(filter_options: dict | None) -> str | None:
     """
@@ -1091,15 +1102,9 @@ def _build_card_filter(
     conditions.append("NOT c.is_back")
 
     if text_query:
-        conditions.append(
-            "(c.name ILIKE %s ESCAPE '\\'"
-            " OR c.card_id ILIKE %s ESCAPE '\\'"
-            " OR (c.rules_text || ' ' || COALESCE(back.rules_text, '')) ILIKE %s ESCAPE '\\'"
-            " OR EXISTS (SELECT 1 FROM prints p WHERE p.card_id = c.card_id"
-            " AND p.rules_text ILIKE %s ESCAPE '\\'))"
-        )
+        conditions.append(f"({_BARE_TEXT_UNION})")
         search_pattern = f"%{_escape_like(text_query)}%"
-        params.extend([search_pattern, search_pattern, search_pattern, search_pattern])
+        params.extend([search_pattern] * 4)
 
     if filter_options:
         for property_name, value in filter_options.items():
@@ -1118,6 +1123,18 @@ def _build_card_filter(
                 for needle in value:
                     conditions.append(f"c.name {op} %s ESCAPE '\\'")
                     params.append(f"%{_escape_like(needle)}%")
+            elif property_name in ("name_exact", "name_exact_excludes"):
+                # `!"phrase"` — the whole name equals the phrase (case-insensitive). All of a card's
+                # experience versions share a name, so this isolates that card, not one printing.
+                op = "!=" if property_name.endswith("excludes") else "="
+                for needle in value:
+                    conditions.append(f"lower(c.name) {op} lower(%s)")
+                    params.append(needle)
+            elif property_name == "bare_excludes":
+                # A negated bare word (-doji) hides any card the positive bare word would match.
+                for needle in value:
+                    conditions.append(f"NOT ({_BARE_TEXT_UNION})")
+                    params.extend([f"%{_escape_like(needle)}%"] * 4)
             elif property_name in ("rules_text_contains", "rules_text_excludes"):
                 # Rules text matches either face (the back has its own text) and any printing's own
                 # wording, so a reworded reprint's phrasing is findable even when the card's current
