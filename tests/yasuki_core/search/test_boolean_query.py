@@ -1,4 +1,16 @@
-from yasuki_core.search.boolean_query import tokenize_boolean
+from yasuki_core.search.boolean_query import (
+    BoolGroup,
+    Not,
+    Term,
+    parse_query,
+    tokenize_boolean,
+)
+from yasuki_core.search.parse_search import parse_token
+
+
+def leaf(token: str) -> Term:
+    """A Term leaf built from the same token parser the AST uses, for readable expected trees."""
+    return Term(parse_token(token))
 
 
 class TestTokenizeBoolean:
@@ -42,3 +54,79 @@ class TestTokenizeBoolean:
     def test_empty_query_yields_no_tokens(self):
         assert tokenize_boolean("") == []
         assert tokenize_boolean("   ") == []
+
+
+class TestParseQuery:
+    def test_single_term_is_a_bare_leaf(self):
+        assert parse_query("c:crane") == leaf("c:crane")
+
+    def test_juxtaposition_is_and(self):
+        # SIGN-OFF A: space-separated terms AND together.
+        assert parse_query("c:crane t:personality") == BoolGroup(
+            "AND", [leaf("c:crane"), leaf("t:personality")]
+        )
+
+    def test_explicit_and_keyword_matches_juxtaposition(self):
+        assert parse_query("c:crane AND t:personality") == parse_query("c:crane t:personality")
+
+    def test_or_combines_alternatives(self):
+        assert parse_query("c:crane OR c:lion") == BoolGroup(
+            "OR", [leaf("c:crane"), leaf("c:lion")]
+        )
+
+    def test_or_binds_looser_than_and(self):
+        assert parse_query("a OR b c") == BoolGroup(
+            "OR", [leaf("a"), BoolGroup("AND", [leaf("b"), leaf("c")])]
+        )
+
+    def test_parens_override_precedence(self):
+        assert parse_query("(a OR b) c") == BoolGroup(
+            "AND", [BoolGroup("OR", [leaf("a"), leaf("b")]), leaf("c")]
+        )
+
+    def test_motivating_query_nests_correctly(self):
+        assert parse_query("(c:crane is:courtier) OR (c:lion is:bushi)") == BoolGroup(
+            "OR",
+            [
+                BoolGroup("AND", [leaf("c:crane"), leaf("is:courtier")]),
+                BoolGroup("AND", [leaf("c:lion"), leaf("is:bushi")]),
+            ],
+        )
+
+    def test_group_negation_wraps_in_not(self):
+        assert parse_query("-(c:crane)") == Not(leaf("c:crane"))
+
+    def test_group_negation_wraps_a_multi_child_group(self):
+        assert parse_query("-(c:crane OR c:lion)") == Not(
+            BoolGroup("OR", [leaf("c:crane"), leaf("c:lion")])
+        )
+
+    def test_or_keyword_is_case_insensitive(self):
+        assert parse_query("a or b") == parse_query("a OR b")
+
+    def test_quotes_escape_the_or_keyword(self):
+        # A quoted "or" is a search term, not the operator — the only way to search the literal word.
+        assert parse_query('a "or" b') == BoolGroup("AND", [leaf("a"), leaf('"or"'), leaf("b")])
+
+    def test_leaf_negation_stays_on_the_term(self):
+        assert parse_query("-c:crane") == leaf("-c:crane")
+
+    def test_redundant_nesting_collapses(self):
+        assert parse_query("((c:crane))") == leaf("c:crane")
+
+    def test_empty_query_is_none(self):
+        assert parse_query("") is None
+        assert parse_query("   ") is None
+
+    def test_stray_dash_is_dropped(self):
+        assert parse_query("c:crane -") == leaf("c:crane")
+        assert parse_query("-") is None
+
+    def test_empty_or_branch_is_dropped(self):
+        assert parse_query("c:crane OR -") == leaf("c:crane")
+
+    def test_unbalanced_open_paren_is_tolerated(self):
+        # A mid-typed live-search query still parses; the missing ')' is auto-closed.
+        assert parse_query("(c:crane OR c:lion") == BoolGroup(
+            "OR", [leaf("c:crane"), leaf("c:lion")]
+        )
