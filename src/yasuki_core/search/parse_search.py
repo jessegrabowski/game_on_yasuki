@@ -83,6 +83,16 @@ IS_BOOLEAN_FIELDS = {"unique": "is_unique", "banned": "is_banned"}
 INCLUDE_CATEGORIES = {"tokens", "all"}
 
 
+# Categorical set-membership fields: parser field name -> (filter key, per-value normalizer). Each
+# emits `<key>` for the required values and `<key>_excludes` for negated ones.
+CATEGORICAL_FIELDS = {
+    "deck": ("decks", str.upper),
+    "type": ("types", str.lower),
+    "clan": ("clans", None),
+    "rarity": ("rarities", None),
+}
+
+
 NUMERIC_FIELDS = {
     "gold_cost",
     "focus",
@@ -401,27 +411,32 @@ def build_filter_options(parsed: ParsedQuery) -> tuple[str, dict]:
                         if "keywords" not in filter_options:
                             filter_options["keywords"] = []
                         filter_options["keywords"].append(keyword_value)
-        elif field in ("deck", "type", "clan", "rarity"):
-            # Categorical filters
-            values = [term.value for term in terms_list if not term.negated]
-            if values:
-                if field == "deck":
-                    filter_options["decks"] = [v.upper() for v in values]
-                elif field == "type":
-                    filter_options["types"] = [v.lower() for v in values]
-                elif field == "clan":
-                    filter_options["clans"] = [v for v in values]
-                elif field == "rarity":
-                    filter_options["rarities"] = [v for v in values]
+        elif field in CATEGORICAL_FIELDS:
+            # Categorical filters. Negated terms (-type:event) become a parallel *_excludes list the
+            # database applies as NOT IN, so a query can both require and forbid categories at once.
+            key, normalize = CATEGORICAL_FIELDS[field]
+            included = [term.value for term in terms_list if not term.negated]
+            excluded = [term.value for term in terms_list if term.negated]
+            if normalize:
+                included = [normalize(v) for v in included]
+                excluded = [normalize(v) for v in excluded]
+            if included:
+                filter_options[key] = included
+            if excluded:
+                filter_options[f"{key}_excludes"] = excluded
         elif field in ("artist", "flavor", "story"):
-            # Free-text partial matches: artist/flavor on the print, story on the card credit.
-            values = [
-                term.value.strip('"').strip()
-                for term in terms_list
-                if not term.negated and term.value.strip('"').strip()
-            ]
-            if values:
-                filter_options[field] = values
+            # Free-text partial matches: artist/flavor on the print, story on the card credit. A
+            # negated term (-artist:foo) forbids the match via a parallel *_excludes list.
+            included, excluded = [], []
+            for term in terms_list:
+                cleaned = term.value.strip('"').strip()
+                if not cleaned:
+                    continue
+                (excluded if term.negated else included).append(cleaned)
+            if included:
+                filter_options[field] = included
+            if excluded:
+                filter_options[f"{field}_excludes"] = excluded
         elif field == "set":
             # Set by full name or short code, resolved in the database. Like format, emit each
             # (operator, value); the operator may be exact or an inequality against set release dates.

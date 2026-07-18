@@ -39,3 +39,30 @@ def test_name_search_stays_single_column():
 def test_like_wildcards_in_needle_are_escaped():
     _, params = _build_card_filter(text_query="50%")
     assert params == ["%50\\%%"] * 4
+
+
+def test_types_excludes_negates_membership():
+    clause, params = _build_card_filter(filter_options={"types_excludes": ["sensei"]})
+    assert "c.card_id NOT IN (SELECT card_id FROM card_card_types" in clause
+    assert params == [["Sensei"]]
+
+
+def test_clans_excludes_negates_membership_including_all_clans_marker():
+    # -clan:crane is the complement of clan:crane, so the "All Clans" sensei marker is excluded too.
+    clause, params = _build_card_filter(filter_options={"clans_excludes": ["crane"]})
+    assert "c.card_id NOT IN (SELECT card_id FROM card_clans" in clause
+    assert set(params[0]) == {"crane", "all clans"}
+
+
+def test_include_and_exclude_type_both_emit_conditions():
+    clause, _ = _build_card_filter(
+        filter_options={"types": ["personality"], "types_excludes": ["sensei"]}
+    )
+    assert "c.card_id IN (SELECT card_id FROM card_card_types" in clause
+    assert "c.card_id NOT IN (SELECT card_id FROM card_card_types" in clause
+
+
+def test_story_excludes_keeps_null_credits():
+    clause, params = _build_card_filter(filter_options={"story_excludes": ["Ashman"]})
+    assert "c.story IS NULL OR c.story NOT ILIKE" in clause
+    assert params == ["%Ashman%"]

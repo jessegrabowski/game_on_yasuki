@@ -216,6 +216,34 @@ class TestSQLFiltering:
         assert len(cards) > 0
         assert all("Crane" in (c["clans"] or []) and "Personality" in c["types"] for c in cards)
 
+    def test_exclude_type_drops_exactly_that_type(self):
+        """types_excludes should remove exactly the excluded type and keep everything else."""
+        all_ids = {c["card_id"] for c in query_cards_filtered()}
+        sensei_ids = {
+            c["card_id"] for c in query_cards_filtered(filter_options={"types": ["Sensei"]})
+        }
+        kept = {
+            c["card_id"]
+            for c in query_cards_filtered(filter_options={"types_excludes": ["Sensei"]})
+        }
+        assert sensei_ids, "fixture has no senseis, so the exclusion proves nothing"
+        assert kept == all_ids - sensei_ids
+
+    def test_clan_with_excluded_type_is_the_reported_regression(self):
+        """c:crane -t:sensei returned all Crane cards before the fix; the -t: was silently dropped."""
+        cards = query_cards_filtered(
+            filter_options={"clans": ["Crane"], "types_excludes": ["Sensei"]}
+        )
+        assert len(cards) > 0
+        assert all({"Crane", "All Clans"} & set(c["clans"] or []) for c in cards)
+        assert all("Sensei" not in c["types"] for c in cards)
+
+    def test_exclude_clan_also_drops_all_clans_senseis(self):
+        """-clan:crane is the strict complement, so All Clans senseis (legal as Crane) drop too."""
+        cards = query_cards_filtered(filter_options={"clans_excludes": ["Crane"]})
+        assert len(cards) > 0
+        assert all(not {"Crane", "All Clans"} & set(c["clans"] or []) for c in cards)
+
     def test_text_search_with_filters(self):
         """Should combine text search with property filters."""
         cards = query_cards_filtered(text_query="Doji", filter_options={"types": ["Personality"]})

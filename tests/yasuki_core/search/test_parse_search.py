@@ -1,3 +1,5 @@
+import pytest
+
 from yasuki_core.search import (
     tokenize_query,
     parse_token,
@@ -213,6 +215,38 @@ class TestFilterBuilding:
         )
         text_query, filters = build_filter_options(parsed)
         assert filters["decks"] == ["FATE"]
+
+    # Each categorical field negates into a <key>_excludes list, applying the same case transform as
+    # its positive filter (deck upper, type lower, clan/rarity verbatim).
+    @pytest.mark.parametrize(
+        "query, key, expected",
+        [
+            ("-deck:fate", "decks_excludes", ["FATE"]),
+            ("-type:Sensei", "types_excludes", ["sensei"]),
+            ("-c:Crane", "clans_excludes", ["Crane"]),
+            ("-rarity:rare", "rarities_excludes", ["rare"]),
+        ],
+    )
+    def test_categorical_negation_emits_excludes(self, query, key, expected):
+        _, filters = parse_and_build_query(query)
+        assert filters[key] == expected
+        assert key.removesuffix("_excludes") not in filters
+
+    def test_categorical_mixes_include_and_exclude(self):
+        # c:crane -t:sensei: keep the positive clan, forbid the negated type in one query.
+        _, filters = parse_and_build_query("c:crane -t:sensei")
+        assert filters["clans"] == ["crane"]
+        assert filters["types_excludes"] == ["sensei"]
+
+    def test_same_field_include_and_exclude_coexist(self):
+        _, filters = parse_and_build_query("type:personality -type:sensei")
+        assert filters["types"] == ["personality"]
+        assert filters["types_excludes"] == ["sensei"]
+
+    def test_artist_negation_emits_excludes(self):
+        _, filters = parse_and_build_query("-artist:Hara")
+        assert filters["artist_excludes"] == ["Hara"]
+        assert "artist" not in filters
 
     # The parser emits format terms verbatim as (operator, value) specs; resolving aliases and
     # timeline inequalities happens in SQL (see the DB-backed tests in test_api_contract.py).

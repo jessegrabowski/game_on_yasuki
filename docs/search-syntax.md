@@ -63,6 +63,9 @@ clan:Crane -type:event                    # Crane, excluding events
 
 Queries are case-insensitive (`clan:crane` = `clan:Crane`).
 
+`-` excludes on any categorical or free-text field: `-type:event`, `-clan:crane`,
+`-artist:Hara`, `-rarity:rare`.
+
 ## Examples
 
 ```

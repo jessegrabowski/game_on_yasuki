@@ -1196,61 +1196,72 @@ def _build_card_filter(
                         " JOIN l5r_sets s ON s.set_id = p.set_id WHERE s.set_name = ANY(%s))"
                     )
                     params.append(value)
-            elif property_name == "decks":
+            elif property_name in ("decks", "decks_excludes"):
                 if value:
+                    op = "NOT IN" if property_name.endswith("excludes") else "IN"
                     conditions.append(
-                        "c.card_id IN (SELECT card_id FROM card_decks"
+                        f"c.card_id {op} (SELECT card_id FROM card_decks"
                         " WHERE deck = ANY(%s::deck_type[]))"
                     )
                     params.append([d.title() for d in value])
-            elif property_name == "types":
+            elif property_name in ("types", "types_excludes"):
                 if value:
+                    op = "NOT IN" if property_name.endswith("excludes") else "IN"
                     conditions.append(
-                        "c.card_id IN (SELECT card_id FROM card_card_types"
+                        f"c.card_id {op} (SELECT card_id FROM card_card_types"
                         " WHERE type = ANY(%s::card_type[]))"
                     )
                     params.append([t.title() for t in value])
-            elif property_name == "clans":
+            elif property_name in ("clans", "clans_excludes"):
                 # An "All Clans" sensei is legal in any clan's deck, so every clan filter also
-                # matches it.
+                # matches it — and, symmetrically, -clan:X excludes it too (NOT of the positive).
                 if value:
                     wanted = set()
                     for clan in value:
                         clan = clan.lower()
                         wanted.update(_CLAN_ALIASES.get(clan, (clan,)))
                     wanted.add(ALL_CLANS_MARKER.lower())
+                    op = "NOT IN" if property_name.endswith("excludes") else "IN"
                     conditions.append(
-                        "c.card_id IN (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"
+                        f"c.card_id {op} (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"
                     )
                     params.append(list(wanted))
-            elif property_name == "rarities":
+            elif property_name in ("rarities", "rarities_excludes"):
                 if value:
                     rarity_conditions = []
                     for rarity in value:
                         rarity_conditions.append("rarity ILIKE %s ESCAPE '\\'")
                         params.append(f"%{_escape_like(rarity)}%")
+                    op = "NOT IN" if property_name.endswith("excludes") else "IN"
                     conditions.append(
-                        "c.card_id IN (SELECT card_id FROM prints"
+                        f"c.card_id {op} (SELECT card_id FROM prints"
                         f" WHERE {' OR '.join(rarity_conditions)})"
                     )
-            elif property_name == "artist":
+            elif property_name in ("artist", "artist_excludes"):
+                op = "NOT IN" if property_name.endswith("excludes") else "IN"
                 for artist in value:
                     conditions.append(
-                        "c.card_id IN (SELECT card_id FROM prints"
+                        f"c.card_id {op} (SELECT card_id FROM prints"
                         " WHERE artist ILIKE %s ESCAPE '\\')"
                     )
                     params.append(f"%{_escape_like(artist)}%")
-            elif property_name == "flavor":
+            elif property_name in ("flavor", "flavor_excludes"):
+                op = "NOT IN" if property_name.endswith("excludes") else "IN"
                 for flavor in value:
                     # A printing's special back (story scroll) keeps its prose in back_flavor.
                     conditions.append(
-                        "c.card_id IN (SELECT card_id FROM prints"
+                        f"c.card_id {op} (SELECT card_id FROM prints"
                         " WHERE (flavor_text || ' ' || COALESCE(back_flavor, '')) ILIKE %s ESCAPE '\\')"
                     )
                     params.append(f"%{_escape_like(flavor)}%")
-            elif property_name == "story":
+            elif property_name in ("story", "story_excludes"):
+                excludes = property_name.endswith("excludes")
                 for story in value:
-                    conditions.append("c.story ILIKE %s ESCAPE '\\'")
+                    if excludes:
+                        # A NULL story credit doesn't contain the term, so keep those cards.
+                        conditions.append("(c.story IS NULL OR c.story NOT ILIKE %s ESCAPE '\\')")
+                    else:
+                        conditions.append("c.story ILIKE %s ESCAPE '\\'")
                     params.append(f"%{_escape_like(story)}%")
             elif property_name == "keywords":
                 if value:
