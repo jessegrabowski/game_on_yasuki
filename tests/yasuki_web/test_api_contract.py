@@ -291,3 +291,19 @@ def test_deck_types_are_title_case(client):
 def test_clans_and_types_are_lists(client):
     assert isinstance(client.get("/api/clans").json()["clans"], list)
     assert isinstance(client.get("/api/card-types").json()["card_types"], list)
+
+
+def test_clans_narrow_to_active_filters(client):
+    # The clan dropdown offers only clans with a matching card under the other active filters, for
+    # both the card_type and format params. Each offered clan resolves to a card; each dropped clan
+    # resolves to none.
+    all_clans = set(client.get("/api/clans").json()["clans"])
+
+    typed = client.get("/api/clans?card_type=Personality").json()["clans"]
+    assert set(typed) < all_clans  # personalities don't span every clan
+    assert set(client.get("/api/clans?format=Shattered Empire").json()["clans"]) < all_clans
+
+    assert client.get(f"/api/cards?card_type=Personality&clan={typed[0]}").json()["total"] > 0
+
+    dropped = next(iter(all_clans - set(typed)))
+    assert client.get(f"/api/cards?card_type=Personality&clan={dropped}").json()["total"] == 0

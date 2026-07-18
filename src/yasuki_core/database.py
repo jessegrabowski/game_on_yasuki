@@ -677,6 +677,42 @@ def query_all_clans() -> list[str]:
             return results
 
 
+def query_clans_filtered(text_query: str = "", filter_options: dict | None = None) -> list[str]:
+    """
+    Fetch the distinct clans among cards matching the given filters.
+
+    Powers the deck builder's clan dropdown, narrowing the selectable clans to those that have a
+    card under the active filters (e.g. a chosen format or card type). Any ``clans`` entry in
+    ``filter_options`` is dropped before filtering so the dropdown keeps offering every compatible
+    clan instead of collapsing to the already-selected one.
+
+    Parameters
+    ----------
+    text_query : str
+        Free-text search applied to name, id, and rules text, matching ``query_cards_page``.
+    filter_options : dict, optional
+        Property filters in the same format ``query_cards_page`` accepts. The ``clans`` key is
+        ignored.
+
+    Returns
+    -------
+    clans : list of str
+        Clan names with at least one matching card, sorted alphabetically.
+    """
+    options = {k: v for k, v in filter_options.items() if k != "clans"} if filter_options else None
+    where_clause, params = _build_card_filter(text_query, options)
+    sql = (
+        f"SELECT DISTINCT cc.clan FROM cards c {_CROSS_FACE_JOIN}"
+        f" JOIN card_clans cc ON cc.card_id = c.card_id {where_clause} ORDER BY cc.clan"
+    )
+    with get_db_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(sql, params)
+            results = [row["clan"] for row in cur.fetchall()]
+            logger.debug(f"Retrieved {len(results)} filtered clans from database")
+            return results
+
+
 def query_all_types() -> list[str]:
     """
     Fetch all unique card types from cards.

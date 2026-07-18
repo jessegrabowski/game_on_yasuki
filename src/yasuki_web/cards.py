@@ -13,7 +13,7 @@ from yasuki_core.database import (
     query_all_sets,
     query_formats_ordered,
     query_all_decks,
-    query_all_clans,
+    query_clans_filtered,
     query_all_types,
     query_types_by_deck,
     get_card_backs,
@@ -273,10 +273,27 @@ async def list_deck_types(request: Request):
 
 @router.get("/clans")
 @limiter.limit(_READ_RATE_LIMIT)
-async def list_clans(request: Request):
-    """List all clans available in the card database."""
+async def list_clans(
+    request: Request,
+    card_type: Annotated[
+        str | None, Query(description="Restrict to clans with a card of this type")
+    ] = None,
+    format: Annotated[
+        str | None, Query(description="Restrict to clans legal in this format")
+    ] = None,
+):
+    """List the clans available in the card database.
+
+    With ``card_type`` and/or ``format`` supplied, the list narrows to clans that have at least one
+    matching card, so the deck builder can offer only the clans selectable under the other active
+    filters."""
     try:
-        clans = await to_thread(query_all_clans)
+        filter_options: dict = {}
+        if card_type:
+            filter_options.setdefault("types", []).append(card_type)
+        if format:
+            filter_options["legality"] = (format, None)
+        clans = await to_thread(query_clans_filtered, "", filter_options or None)
         return {"clans": clans, "count": len(clans)}
     except Exception as e:
         logger.error(f"Error listing clans: {e}")
