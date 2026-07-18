@@ -1041,6 +1041,12 @@ _BARE_TEXT_UNION = (
 )
 
 
+def _bare_text_predicate(needle: str, *, negated: bool = False) -> tuple[str, list]:
+    """Broad bare-word predicate for one needle, with the pattern replicated per placeholder."""
+    sql = f"NOT ({_BARE_TEXT_UNION})" if negated else f"({_BARE_TEXT_UNION})"
+    return sql, [f"%{_escape_like(needle)}%"] * 4
+
+
 def _active_format(filter_options: dict | None) -> str | None:
     """
     Resolve the single active format whose arc should bias default-print selection.
@@ -1067,6 +1073,286 @@ def _active_format(filter_options: dict | None) -> str | None:
     if legality and legality[0]:
         return legality[0]
     return None
+
+
+def _emit_condition(property_name: str, value) -> tuple[list[str], list]:
+    """
+    Emit the SQL condition(s) and positional params for one filter entry.
+
+    Map a single ``filter_options`` key/value to zero or more self-contained WHERE predicates.
+    ``_build_card_filter`` calls this per dict entry to AND them into the query; ``compile_term``
+    calls it per search term to compile one AST leaf.
+
+    Parameters
+    ----------
+    property_name : str
+        The filter key (a column, a ``*_excludes`` variant, or a synthetic key like ``clans``).
+    value : object
+        The key's value; its shape depends on the key (a list of needles, a (min, max) tuple, a
+        list of (operator, value) specs, and so on).
+
+    Returns
+    -------
+    conditions : list of str
+        SQL predicate fragments to AND into the WHERE clause.
+    params : list
+        Positional parameters matching the ``%s`` placeholders in ``conditions``.
+    """
+    conditions: list[str] = []
+    params: list = []
+    if property_name in ("include", "all"):
+        return conditions, params  # include is consumed by the visibility filter; all adds nothing
+    if property_name == "_unknown_fields":
+        # An unrecognized search field makes the query unsatisfiable rather than silently
+        # matching everything or text-searching the value.
+        logger.warning("Unknown search field(s), returning no results: %s", value)
+        conditions.append("FALSE")
+    elif property_name in ("name_contains", "name_excludes"):
+        # Name is identical across faces, so it stays single-column.
+        op = "NOT ILIKE" if property_name.endswith("excludes") else "ILIKE"
+        for needle in value:
+            conditions.append(f"c.name {op} %s ESCAPE '\\'")
+            params.append(f"%{_escape_like(needle)}%")
+    elif property_name in ("name_exact", "name_exact_excludes"):
+        # `!"phrase"` — the whole name equals the phrase (case-insensitive). All of a card's
+        # experience versions share a name, so this isolates that card, not one printing.
+        op = "!=" if property_name.endswith("excludes") else "="
+        for needle in value:
+            conditions.append(f"lower(c.name) {op} lower(%s)")
+            params.append(needle)
+    elif property_name == "bare_excludes":
+        # A negated bare word (-doji) hides any card the positive bare word would match.
+        for needle in value:
+            sql, pattern_params = _bare_text_predicate(needle, negated=True)
+            conditions.append(sql)
+            params.extend(pattern_params)
+    elif property_name in ("rules_text_contains", "rules_text_excludes"):
+        # Rules text matches either face (the back has its own text) and any printing's own
+        # wording, so a reworded reprint's phrasing is findable even when the card's current
+        # text dropped it. Excludes negates the whole disjunction (De Morgan).
+        card_col = "(c.rules_text || ' ' || COALESCE(back.rules_text, ''))"
+        print_exists = (
+            "EXISTS (SELECT 1 FROM prints p WHERE p.card_id = c.card_id"
+            " AND p.rules_text ILIKE %s ESCAPE '\\')"
+        )
+        excludes = property_name.endswith("excludes")
+        for needle in value:
+            pattern = f"%{_escape_like(needle)}%"
+            if excludes:
+                conditions.append(f"({card_col} NOT ILIKE %s ESCAPE '\\' AND NOT {print_exists})")
+            else:
+                conditions.append(f"({card_col} ILIKE %s ESCAPE '\\' OR {print_exists})")
+            params.extend([pattern, pattern])
+    elif property_name == "legality":
+        formats, _statuses = value
+        if isinstance(formats, str):
+            formats = [formats]
+        if formats:
+            conditions.append(
+                "c.card_id IN (SELECT card_id FROM card_legalities WHERE format_name = ANY(%s))"
+            )
+            params.append(list(formats))
+    elif property_name in ("format_filters", "format_filters_excludes"):
+        # Each (operator, value) resolves the value against a format's name or short block alias.
+        # Exact operators match that one format; inequalities compare every format's legal_from to
+        # the reference format's, selecting one side of the arc timeline. The *_excludes twin is the
+        # strict set complement (NOT IN): -format>=diamond is "legal in no format at or after
+        # diamond", never a naive operator flip to format<diamond. An unresolvable reference fails
+        # closed via the EXISTS guard so a typo'd -format:xyz matches nothing, mirroring the positive
+        # filter whose empty IN-set matches nothing.
+        excludes = property_name.endswith("excludes")
+        for op, format_value in value:
+            if op in (":", "="):
+                match_sql = (
+                    "SELECT cl.card_id FROM card_legalities cl"
+                    " JOIN formats f ON f.name = cl.format_name"
+                    " WHERE lower(f.name) = lower(%s) OR lower(f.block) = lower(%s)"
+                )
+                guard_sql = (
+                    "EXISTS (SELECT 1 FROM formats"
+                    " WHERE lower(name) = lower(%s) OR lower(block) = lower(%s))"
+                )
+            elif op in _RANGE_OPS:
+                match_sql = (
+                    "SELECT cl.card_id FROM card_legalities cl"
+                    " JOIN formats f ON f.name = cl.format_name"
+                    f" WHERE f.legal_from {_RANGE_OPS[op]} (SELECT legal_from FROM formats"
+                    " WHERE (lower(name) = lower(%s) OR lower(block) = lower(%s))"
+                    " AND legal_from IS NOT NULL LIMIT 1)"
+                )
+                guard_sql = (
+                    "EXISTS (SELECT 1 FROM formats"
+                    " WHERE (lower(name) = lower(%s) OR lower(block) = lower(%s))"
+                    " AND legal_from IS NOT NULL)"
+                )
+            else:
+                continue
+            if excludes:
+                conditions.append(f"({guard_sql} AND c.card_id NOT IN ({match_sql}))")
+                params.extend([format_value] * 4)
+            else:
+                conditions.append(f"c.card_id IN ({match_sql})")
+                params.extend([format_value, format_value])
+    elif property_name in ("set_filters", "set_filters_excludes"):
+        # Each (operator, value) resolves the value against a set's full name or short code. Exact
+        # operators match that set; inequalities compare every set's release_date to the reference
+        # set's, selecting cards printed on one side of that release. The *_excludes twin is the
+        # strict set complement (NOT IN) — -set>=GE means "printed in no set at or after GE", not
+        # "printed in some earlier set" — and an unresolvable reference fails closed via the EXISTS
+        # guard, matching nothing like the positive filter does.
+        excludes = property_name.endswith("excludes")
+        for op, set_value in value:
+            if op in (":", "="):
+                match_sql = (
+                    "SELECT p.card_id FROM prints p"
+                    " JOIN l5r_sets s ON s.set_id = p.set_id"
+                    " WHERE lower(s.set_name) = lower(%s) OR lower(s.code) = lower(%s)"
+                )
+                guard_sql = (
+                    "EXISTS (SELECT 1 FROM l5r_sets"
+                    " WHERE lower(set_name) = lower(%s) OR lower(code) = lower(%s))"
+                )
+            elif op in _RANGE_OPS:
+                match_sql = (
+                    "SELECT p.card_id FROM prints p"
+                    " JOIN l5r_sets s ON s.set_id = p.set_id"
+                    f" WHERE s.release_date {_RANGE_OPS[op]} (SELECT release_date"
+                    " FROM l5r_sets WHERE (lower(set_name) = lower(%s) OR lower(code) ="
+                    " lower(%s)) AND release_date IS NOT NULL ORDER BY release_date LIMIT 1)"
+                )
+                guard_sql = (
+                    "EXISTS (SELECT 1 FROM l5r_sets"
+                    " WHERE (lower(set_name) = lower(%s) OR lower(code) = lower(%s))"
+                    " AND release_date IS NOT NULL)"
+                )
+            else:
+                continue
+            if excludes:
+                conditions.append(f"({guard_sql} AND c.card_id NOT IN ({match_sql}))")
+                params.extend([set_value] * 4)
+            else:
+                conditions.append(f"c.card_id IN ({match_sql})")
+                params.extend([set_value, set_value])
+    elif property_name == "sets":
+        if value:
+            conditions.append(
+                "c.card_id IN (SELECT p.card_id FROM prints p"
+                " JOIN l5r_sets s ON s.set_id = p.set_id WHERE s.set_name = ANY(%s))"
+            )
+            params.append(value)
+    elif property_name in ("decks", "decks_excludes"):
+        if value:
+            op = "NOT IN" if property_name.endswith("excludes") else "IN"
+            conditions.append(
+                f"c.card_id {op} (SELECT card_id FROM card_decks WHERE deck = ANY(%s::deck_type[]))"
+            )
+            params.append([d.title() for d in value])
+    elif property_name in ("types", "types_excludes"):
+        if value:
+            op = "NOT IN" if property_name.endswith("excludes") else "IN"
+            conditions.append(
+                f"c.card_id {op} (SELECT card_id FROM card_card_types"
+                " WHERE type = ANY(%s::card_type[]))"
+            )
+            params.append([t.title() for t in value])
+    elif property_name in ("clans", "clans_excludes"):
+        # An "All Clans" sensei is legal in any clan's deck, so every clan filter also matches it —
+        # and, symmetrically, -clan:X excludes it too (NOT of the positive).
+        if value:
+            wanted = set()
+            for clan in value:
+                clan = clan.lower()
+                wanted.update(_CLAN_ALIASES.get(clan, (clan,)))
+            wanted.add(ALL_CLANS_MARKER.lower())
+            op = "NOT IN" if property_name.endswith("excludes") else "IN"
+            conditions.append(
+                f"c.card_id {op} (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"
+            )
+            params.append(list(wanted))
+    elif property_name in ("rarities", "rarities_excludes"):
+        if value:
+            rarity_conditions = []
+            for rarity in value:
+                rarity_conditions.append("rarity ILIKE %s ESCAPE '\\'")
+                params.append(f"%{_escape_like(rarity)}%")
+            op = "NOT IN" if property_name.endswith("excludes") else "IN"
+            conditions.append(
+                f"c.card_id {op} (SELECT card_id FROM prints"
+                f" WHERE {' OR '.join(rarity_conditions)})"
+            )
+    elif property_name in ("artist", "artist_excludes"):
+        op = "NOT IN" if property_name.endswith("excludes") else "IN"
+        for artist in value:
+            conditions.append(
+                f"c.card_id {op} (SELECT card_id FROM prints WHERE artist ILIKE %s ESCAPE '\\')"
+            )
+            params.append(f"%{_escape_like(artist)}%")
+    elif property_name in ("flavor", "flavor_excludes"):
+        op = "NOT IN" if property_name.endswith("excludes") else "IN"
+        for flavor in value:
+            # A printing's special back (story scroll) keeps its prose in back_flavor.
+            conditions.append(
+                f"c.card_id {op} (SELECT card_id FROM prints"
+                " WHERE (flavor_text || ' ' || COALESCE(back_flavor, '')) ILIKE %s ESCAPE '\\')"
+            )
+            params.append(f"%{_escape_like(flavor)}%")
+    elif property_name in ("story", "story_excludes"):
+        excludes = property_name.endswith("excludes")
+        for story in value:
+            if excludes:
+                # A NULL story credit doesn't contain the term, so keep those cards.
+                conditions.append("(c.story IS NULL OR c.story NOT ILIKE %s ESCAPE '\\')")
+            else:
+                conditions.append("c.story ILIKE %s ESCAPE '\\'")
+            params.append(f"%{_escape_like(story)}%")
+    elif property_name == "keywords":
+        if value:
+            for keyword in value:
+                conditions.append(
+                    "c.card_id IN (SELECT card_id FROM card_keywords WHERE lower(keyword) = lower(%s))"
+                )
+                params.append(keyword)
+    elif property_name == "keywords_or":
+        # `is:a|b` — cards carrying any one of the keywords.
+        if value:
+            conditions.append(
+                "c.card_id IN (SELECT card_id FROM card_keywords WHERE lower(keyword) = ANY(%s))"
+            )
+            params.append([k.lower() for k in value])
+    elif property_name in _NUMERIC_STATS:
+        # A dash stat — one the card doesn't print — is stored as NULL. The whitelisted column name
+        # is interpolation-safe (it is a key of _NUMERIC_STATS).
+        if value == "isnull":
+            conditions.append(f"c.{property_name} IS NULL")
+        elif value == "notnull":
+            conditions.append(f"c.{property_name} IS NOT NULL")
+        elif isinstance(value, tuple) and len(value) == 2:
+            # Range matches consider the back face too, so a stat that differs per face (e.g.
+            # province_strength) matches when either side satisfies it.
+            min_val, max_val = value
+            range_predicates, range_params = [], []
+            for alias in ("c", "back"):
+                col = f"{alias}.{property_name}"
+                if min_val is not None and max_val is not None:
+                    range_predicates.append(f"{col} >= %s AND {col} <= %s")
+                    range_params.extend([min_val, max_val])
+                elif min_val is not None:
+                    range_predicates.append(f"{col} >= %s")
+                    range_params.append(min_val)
+                elif max_val is not None:
+                    range_predicates.append(f"{col} <= %s")
+                    range_params.append(max_val)
+            if range_predicates:
+                joined = " OR ".join(f"({predicate})" for predicate in range_predicates)
+                conditions.append(f"({joined})")
+                params.extend(range_params)
+    elif value is not None:
+        if property_name not in _ALLOWED_COLUMNS:
+            logger.warning(f"Ignoring unknown filter column: {property_name}")
+            return conditions, params
+        conditions.append(f"c.{property_name} = %s")
+        params.append(value)
+    return conditions, params
 
 
 def _build_card_filter(
@@ -1102,272 +1388,15 @@ def _build_card_filter(
     conditions.append("NOT c.is_back")
 
     if text_query:
-        conditions.append(f"({_BARE_TEXT_UNION})")
-        search_pattern = f"%{_escape_like(text_query)}%"
-        params.extend([search_pattern] * 4)
+        sql, pattern_params = _bare_text_predicate(text_query)
+        conditions.append(sql)
+        params.extend(pattern_params)
 
     if filter_options:
         for property_name, value in filter_options.items():
-            if property_name == "include":
-                continue  # consumed by the default-visibility filter below, not a column condition
-            elif property_name == "all":
-                continue  # the match-everything predicate adds no constraints
-            elif property_name == "_unknown_fields":
-                # An unrecognized search field makes the query unsatisfiable rather than silently
-                # matching everything or text-searching the value.
-                logger.warning("Unknown search field(s), returning no results: %s", value)
-                conditions.append("FALSE")
-            elif property_name in ("name_contains", "name_excludes"):
-                # Name is identical across faces, so it stays single-column.
-                op = "NOT ILIKE" if property_name.endswith("excludes") else "ILIKE"
-                for needle in value:
-                    conditions.append(f"c.name {op} %s ESCAPE '\\'")
-                    params.append(f"%{_escape_like(needle)}%")
-            elif property_name in ("name_exact", "name_exact_excludes"):
-                # `!"phrase"` — the whole name equals the phrase (case-insensitive). All of a card's
-                # experience versions share a name, so this isolates that card, not one printing.
-                op = "!=" if property_name.endswith("excludes") else "="
-                for needle in value:
-                    conditions.append(f"lower(c.name) {op} lower(%s)")
-                    params.append(needle)
-            elif property_name == "bare_excludes":
-                # A negated bare word (-doji) hides any card the positive bare word would match.
-                for needle in value:
-                    conditions.append(f"NOT ({_BARE_TEXT_UNION})")
-                    params.extend([f"%{_escape_like(needle)}%"] * 4)
-            elif property_name in ("rules_text_contains", "rules_text_excludes"):
-                # Rules text matches either face (the back has its own text) and any printing's own
-                # wording, so a reworded reprint's phrasing is findable even when the card's current
-                # text dropped it. Excludes negates the whole disjunction (De Morgan).
-                card_col = "(c.rules_text || ' ' || COALESCE(back.rules_text, ''))"
-                print_exists = (
-                    "EXISTS (SELECT 1 FROM prints p WHERE p.card_id = c.card_id"
-                    " AND p.rules_text ILIKE %s ESCAPE '\\')"
-                )
-                excludes = property_name.endswith("excludes")
-                for needle in value:
-                    pattern = f"%{_escape_like(needle)}%"
-                    if excludes:
-                        conditions.append(
-                            f"({card_col} NOT ILIKE %s ESCAPE '\\' AND NOT {print_exists})"
-                        )
-                    else:
-                        conditions.append(f"({card_col} ILIKE %s ESCAPE '\\' OR {print_exists})")
-                    params.extend([pattern, pattern])
-            elif property_name == "legality":
-                formats, _statuses = value
-                if isinstance(formats, str):
-                    formats = [formats]
-                if formats:
-                    conditions.append(
-                        "c.card_id IN (SELECT card_id FROM card_legalities"
-                        " WHERE format_name = ANY(%s))"
-                    )
-                    params.append(list(formats))
-            elif property_name in ("format_filters", "format_filters_excludes"):
-                # Each (operator, value) resolves the value against a format's name or short block
-                # alias. Exact operators match that one format; inequalities compare every format's
-                # legal_from to the reference format's, selecting one side of the arc timeline. The
-                # *_excludes twin is the strict set complement (NOT IN): -format>=diamond is "legal in
-                # no format at or after diamond", never a naive operator flip to format<diamond. An
-                # unresolvable reference fails closed via the EXISTS guard so a typo'd -format:xyz
-                # matches nothing, mirroring the positive filter whose empty IN-set matches nothing.
-                excludes = property_name.endswith("excludes")
-                for op, format_value in value:
-                    if op in (":", "="):
-                        match_sql = (
-                            "SELECT cl.card_id FROM card_legalities cl"
-                            " JOIN formats f ON f.name = cl.format_name"
-                            " WHERE lower(f.name) = lower(%s) OR lower(f.block) = lower(%s)"
-                        )
-                        guard_sql = (
-                            "EXISTS (SELECT 1 FROM formats"
-                            " WHERE lower(name) = lower(%s) OR lower(block) = lower(%s))"
-                        )
-                    elif op in _RANGE_OPS:
-                        match_sql = (
-                            "SELECT cl.card_id FROM card_legalities cl"
-                            " JOIN formats f ON f.name = cl.format_name"
-                            f" WHERE f.legal_from {_RANGE_OPS[op]} (SELECT legal_from FROM formats"
-                            " WHERE (lower(name) = lower(%s) OR lower(block) = lower(%s))"
-                            " AND legal_from IS NOT NULL LIMIT 1)"
-                        )
-                        guard_sql = (
-                            "EXISTS (SELECT 1 FROM formats"
-                            " WHERE (lower(name) = lower(%s) OR lower(block) = lower(%s))"
-                            " AND legal_from IS NOT NULL)"
-                        )
-                    else:
-                        continue
-                    if excludes:
-                        conditions.append(f"({guard_sql} AND c.card_id NOT IN ({match_sql}))")
-                        params.extend([format_value] * 4)
-                    else:
-                        conditions.append(f"c.card_id IN ({match_sql})")
-                        params.extend([format_value, format_value])
-            elif property_name in ("set_filters", "set_filters_excludes"):
-                # Each (operator, value) resolves the value against a set's full name or short code.
-                # Exact operators match that set; inequalities compare every set's release_date to the
-                # reference set's, selecting cards printed on one side of that release. The *_excludes
-                # twin is the strict set complement (NOT IN) — -set>=GE means "printed in no set at or
-                # after GE", not "printed in some earlier set" — and an unresolvable reference fails
-                # closed via the EXISTS guard, matching nothing like the positive filter does.
-                excludes = property_name.endswith("excludes")
-                for op, set_value in value:
-                    if op in (":", "="):
-                        match_sql = (
-                            "SELECT p.card_id FROM prints p"
-                            " JOIN l5r_sets s ON s.set_id = p.set_id"
-                            " WHERE lower(s.set_name) = lower(%s) OR lower(s.code) = lower(%s)"
-                        )
-                        guard_sql = (
-                            "EXISTS (SELECT 1 FROM l5r_sets"
-                            " WHERE lower(set_name) = lower(%s) OR lower(code) = lower(%s))"
-                        )
-                    elif op in _RANGE_OPS:
-                        match_sql = (
-                            "SELECT p.card_id FROM prints p"
-                            " JOIN l5r_sets s ON s.set_id = p.set_id"
-                            f" WHERE s.release_date {_RANGE_OPS[op]} (SELECT release_date"
-                            " FROM l5r_sets WHERE (lower(set_name) = lower(%s) OR lower(code) ="
-                            " lower(%s)) AND release_date IS NOT NULL ORDER BY release_date LIMIT 1)"
-                        )
-                        guard_sql = (
-                            "EXISTS (SELECT 1 FROM l5r_sets"
-                            " WHERE (lower(set_name) = lower(%s) OR lower(code) = lower(%s))"
-                            " AND release_date IS NOT NULL)"
-                        )
-                    else:
-                        continue
-                    if excludes:
-                        conditions.append(f"({guard_sql} AND c.card_id NOT IN ({match_sql}))")
-                        params.extend([set_value] * 4)
-                    else:
-                        conditions.append(f"c.card_id IN ({match_sql})")
-                        params.extend([set_value, set_value])
-            elif property_name == "sets":
-                if value:
-                    conditions.append(
-                        "c.card_id IN (SELECT p.card_id FROM prints p"
-                        " JOIN l5r_sets s ON s.set_id = p.set_id WHERE s.set_name = ANY(%s))"
-                    )
-                    params.append(value)
-            elif property_name in ("decks", "decks_excludes"):
-                if value:
-                    op = "NOT IN" if property_name.endswith("excludes") else "IN"
-                    conditions.append(
-                        f"c.card_id {op} (SELECT card_id FROM card_decks"
-                        " WHERE deck = ANY(%s::deck_type[]))"
-                    )
-                    params.append([d.title() for d in value])
-            elif property_name in ("types", "types_excludes"):
-                if value:
-                    op = "NOT IN" if property_name.endswith("excludes") else "IN"
-                    conditions.append(
-                        f"c.card_id {op} (SELECT card_id FROM card_card_types"
-                        " WHERE type = ANY(%s::card_type[]))"
-                    )
-                    params.append([t.title() for t in value])
-            elif property_name in ("clans", "clans_excludes"):
-                # An "All Clans" sensei is legal in any clan's deck, so every clan filter also
-                # matches it — and, symmetrically, -clan:X excludes it too (NOT of the positive).
-                if value:
-                    wanted = set()
-                    for clan in value:
-                        clan = clan.lower()
-                        wanted.update(_CLAN_ALIASES.get(clan, (clan,)))
-                    wanted.add(ALL_CLANS_MARKER.lower())
-                    op = "NOT IN" if property_name.endswith("excludes") else "IN"
-                    conditions.append(
-                        f"c.card_id {op} (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"
-                    )
-                    params.append(list(wanted))
-            elif property_name in ("rarities", "rarities_excludes"):
-                if value:
-                    rarity_conditions = []
-                    for rarity in value:
-                        rarity_conditions.append("rarity ILIKE %s ESCAPE '\\'")
-                        params.append(f"%{_escape_like(rarity)}%")
-                    op = "NOT IN" if property_name.endswith("excludes") else "IN"
-                    conditions.append(
-                        f"c.card_id {op} (SELECT card_id FROM prints"
-                        f" WHERE {' OR '.join(rarity_conditions)})"
-                    )
-            elif property_name in ("artist", "artist_excludes"):
-                op = "NOT IN" if property_name.endswith("excludes") else "IN"
-                for artist in value:
-                    conditions.append(
-                        f"c.card_id {op} (SELECT card_id FROM prints"
-                        " WHERE artist ILIKE %s ESCAPE '\\')"
-                    )
-                    params.append(f"%{_escape_like(artist)}%")
-            elif property_name in ("flavor", "flavor_excludes"):
-                op = "NOT IN" if property_name.endswith("excludes") else "IN"
-                for flavor in value:
-                    # A printing's special back (story scroll) keeps its prose in back_flavor.
-                    conditions.append(
-                        f"c.card_id {op} (SELECT card_id FROM prints"
-                        " WHERE (flavor_text || ' ' || COALESCE(back_flavor, '')) ILIKE %s ESCAPE '\\')"
-                    )
-                    params.append(f"%{_escape_like(flavor)}%")
-            elif property_name in ("story", "story_excludes"):
-                excludes = property_name.endswith("excludes")
-                for story in value:
-                    if excludes:
-                        # A NULL story credit doesn't contain the term, so keep those cards.
-                        conditions.append("(c.story IS NULL OR c.story NOT ILIKE %s ESCAPE '\\')")
-                    else:
-                        conditions.append("c.story ILIKE %s ESCAPE '\\'")
-                    params.append(f"%{_escape_like(story)}%")
-            elif property_name == "keywords":
-                if value:
-                    for keyword in value:
-                        conditions.append(
-                            "c.card_id IN (SELECT card_id FROM card_keywords"
-                            " WHERE lower(keyword) = lower(%s))"
-                        )
-                        params.append(keyword)
-            elif property_name == "keywords_or":
-                # `is:a|b` — cards carrying any one of the keywords.
-                if value:
-                    conditions.append(
-                        "c.card_id IN (SELECT card_id FROM card_keywords"
-                        " WHERE lower(keyword) = ANY(%s))"
-                    )
-                    params.append([k.lower() for k in value])
-            elif property_name in _NUMERIC_STATS:
-                # A dash stat — one the card doesn't print — is stored as NULL. The whitelisted
-                # column name is interpolation-safe (it is a key of _NUMERIC_STATS).
-                if value == "isnull":
-                    conditions.append(f"c.{property_name} IS NULL")
-                elif value == "notnull":
-                    conditions.append(f"c.{property_name} IS NOT NULL")
-                elif isinstance(value, tuple) and len(value) == 2:
-                    # Range matches consider the back face too, so a stat that differs per face
-                    # (e.g. province_strength) matches when either side satisfies it.
-                    min_val, max_val = value
-                    range_predicates, range_params = [], []
-                    for alias in ("c", "back"):
-                        col = f"{alias}.{property_name}"
-                        if min_val is not None and max_val is not None:
-                            range_predicates.append(f"{col} >= %s AND {col} <= %s")
-                            range_params.extend([min_val, max_val])
-                        elif min_val is not None:
-                            range_predicates.append(f"{col} >= %s")
-                            range_params.append(min_val)
-                        elif max_val is not None:
-                            range_predicates.append(f"{col} <= %s")
-                            range_params.append(max_val)
-                    if range_predicates:
-                        joined = " OR ".join(f"({predicate})" for predicate in range_predicates)
-                        conditions.append(f"({joined})")
-                        params.extend(range_params)
-            elif value is not None:
-                if property_name not in _ALLOWED_COLUMNS:
-                    logger.warning(f"Ignoring unknown filter column: {property_name}")
-                    continue
-                conditions.append(f"c.{property_name} = %s")
-                params.append(value)
+            new_conditions, new_params = _emit_condition(property_name, value)
+            conditions.extend(new_conditions)
+            params.extend(new_params)
 
     # Non-deck cards — proxies and everything filed under the "Other" deck (tokens, bio cards,
     # deckbackers, …) — are hidden by default. `include:tokens` brings the "Other" cards back
