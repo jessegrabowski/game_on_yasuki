@@ -40,9 +40,13 @@ export function fallbackSrc(card, imgBase) {
 export async function fetchConfig() {
   try {
     const config = await (await fetch('/api/config')).json();
-    return { imageBase: config.image_base_url || '/images', debug: !!config.debug };
+    return {
+      imageBase: config.image_base_url || '/images',
+      debug: !!config.debug,
+      devLogin: !!config.dev_login,
+    };
   } catch (_) {
-    return { imageBase: '/images', debug: false };
+    return { imageBase: '/images', debug: false, devLogin: false };
   }
 }
 

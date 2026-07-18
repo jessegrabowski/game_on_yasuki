@@ -375,6 +375,9 @@ export function init() {
     if (actionLog) actionLog.innerHTML = '';
     setStatus(`Joining ${id}…`);
     let lastSeq = -1; // highest applied snapshot seq this room
+    // Close any socket from a previous room before opening a new one — otherwise the old connection
+    // leaks open until page unload, and the churn feeds the browser's per-host WebSocket throttle.
+    client?.close();
     client = connectRoom(id, myName);
     client.events.addEventListener('HELLO', (e) => {
       showRoom(e.detail.room);

@@ -5,6 +5,7 @@
 import { buildCompositeDataURL, loadArtLayout } from '../deck_builder/js/art.js';
 import { reconcile } from './reconcile.js';
 import { buildAvatarElement } from './avatar.js';
+import { chanceOfAtLeastOne } from './probability.js';
 
 export function node(tag, className, text) {
   const el = document.createElement(tag);
@@ -417,18 +418,33 @@ const isTypingTarget = (el) =>
   !!el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
 // Draw the top card of a seat's deck; the server routes it (fate → hand, dynasty → province).
 export const drawIntent = (owner, side) => intentMessage({ op: 'DRAW', deck: { owner, side } });
-// The 31-bit space the client samples a shuffle seed from, matching the server's getrandbits(31).
-const SHUFFLE_SEED_SPACE = 2 ** 31;
+// The 31-bit space the client samples any randomizer's seed from (shuffle, coin, die), matching the
+// server's getrandbits(31).
+const SEED_SPACE = 2 ** 31;
 // The client picks the shuffle seed so the resulting order is reproducible from the action log; the
 // server reshuffles with it and the opponent only learns that a shuffle happened.
 export const shuffleIntent = (owner, side) =>
   intentMessage({
     op: 'SHUFFLE',
     deck: { owner, side },
-    seed: Math.floor(Math.random() * SHUFFLE_SEED_SPACE),
+    seed: Math.floor(Math.random() * SEED_SPACE),
   });
 export const flipDeckTopIntent = (owner, side) =>
   intentMessage({ op: 'FLIP_DECK_TOP', deck: { owner, side } });
+// A coin flip and die roll are seeded like a shuffle: the client samples the seed so the outcome is
+// reproducible from the action log, and the server announces the same heads/tails or face to both
+// seats without changing anything on the table.
+export const coinFlipIntent = () =>
+  intentMessage({ op: 'FLIP_COIN', seed: Math.floor(Math.random() * SEED_SPACE) });
+export const DIE_SIDES = 6;
+// The fewest sides the server's RollDice accepts; the chooser guards against sending less.
+export const MIN_DIE_SIDES = 2;
+export const diceRollIntent = (sides = DIE_SIDES) =>
+  intentMessage({
+    op: 'ROLL_DICE',
+    seed: Math.floor(Math.random() * SEED_SPACE),
+    value: sides,
+  });
 // Reveal the deck to its owner: `value` carries the top-N count to log (null for a whole-deck search).
 export const searchDeckIntent = (owner, side, value = null) =>
   intentMessage({ op: 'SEARCH_DECK', deck: { owner, side }, value });
@@ -1220,24 +1236,22 @@ function openMenu(container, items, clientX, clientY, send) {
   }, 0);
 }
 
-// The deck-menu "Search…" prompt: a centered chooser for how much of the deck to reveal — the top N
-// (typed) or all of it. Both send a SEARCH_DECK whose `value` carries the top-N count (null for the
-// whole deck); the server logs it and caps the dialog its DECK_CONTENTS reply opens. Mounts inside
-// `.room` for the board palette, and closes on a choice, the backdrop, the × button, or Escape.
-function openDeckSearchPrompt(owner, side, send) {
+// Open a modal dialog shell mounted in `.room`: a backdrop overlay plus a panel with a titled header
+// and × close button, dismissed by the backdrop, the × button, or Escape. Returns the panel to fill
+// (its header already appended) and the close fn. `panelClass` styles the panel — 'deck-scope' for the
+// board choosers, 'note-dialog' for the note editor.
+function openModalShell(title, panelClass = 'deck-scope', onClose = null) {
   const overlay = node('div', 'deck-dialog-overlay');
-  const modal = node('div', 'deck-scope');
-
+  const modal = node('div', panelClass);
+  // onClose runs once the overlay is torn down, however it was dismissed (×, backdrop, or Escape) —
+  // it lets a nested dialog also close the one that opened it.
   const close = () => {
     document.removeEventListener?.('keydown', onKey);
     overlay.remove();
+    onClose?.();
   };
   const onKey = (e) => {
     if (e.key === 'Escape') close();
-  };
-  const choose = (value) => {
-    send(searchDeckIntent(owner, side, value));
-    close();
   };
 
   const closeBtn = node('button', 'deck-dialog-close', '×');
@@ -1245,7 +1259,28 @@ function openDeckSearchPrompt(owner, side, send) {
   closeBtn.title = 'Close';
   closeBtn.addEventListener('click', close);
   const header = node('div', 'deck-dialog-header');
-  header.append(node('h2', 'deck-dialog-title', 'Search deck'), closeBtn);
+  header.append(node('h2', 'deck-dialog-title', title), closeBtn);
+
+  modal.append(header);
+  overlay.append(modal);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) close();
+  });
+  (document.querySelector('.room') ?? document.body).appendChild(overlay);
+  document.addEventListener?.('keydown', onKey);
+  return { modal, close };
+}
+
+// The deck-menu "Search…" prompt: a centered chooser for how much of the deck to reveal — the top N
+// (typed) or all of it. Both send a SEARCH_DECK whose `value` carries the top-N count (null for the
+// whole deck); the server logs it and caps the dialog its DECK_CONTENTS reply opens.
+function openDeckSearchPrompt(owner, side, send) {
+  const { modal, close } = openModalShell('Search deck');
+
+  const choose = (value) => {
+    send(searchDeckIntent(owner, side, value));
+    close();
+  };
 
   const input = node('input', 'deck-scope-input');
   input.type = 'number';
@@ -1268,39 +1303,115 @@ function openDeckSearchPrompt(owner, side, send) {
   whole.type = 'button';
   whole.addEventListener('click', () => choose(null));
 
-  modal.append(header, topRow, whole);
-  overlay.append(modal);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) close();
-  });
-  (document.querySelector('.room') ?? document.body).appendChild(overlay);
-  document.addEventListener?.('keydown', onKey);
+  modal.append(topRow, whole);
   input.focus?.();
 }
 
+// The battlefield "Randomize…" chooser: flip a coin, or roll a die with a chosen number of sides
+// (the input defaults to a d6). Both are seeded client-side (see coinFlipIntent) and the server
+// announces the result to both seats. A "Calculate probabilities…" button opens the local draw-odds
+// calculator as a nested popup, keeping that calculator off the top-level battlefield menu.
+function openRandomizePrompt(send) {
+  const { modal, close } = openModalShell('Randomize');
+
+  const coin = node('button', 'deck-scope-btn', 'Flip a coin');
+  coin.type = 'button';
+  coin.addEventListener('click', () => {
+    send(coinFlipIntent());
+    close();
+  });
+
+  const input = node('input', 'deck-scope-input');
+  input.type = 'number';
+  input.min = String(MIN_DIE_SIDES);
+  input.value = String(DIE_SIDES);
+  const roll = () => {
+    const sides = Number.parseInt(input.value, 10);
+    if (sides >= MIN_DIE_SIDES) {
+      send(diceRollIntent(sides));
+      close();
+    }
+  };
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') roll();
+  });
+  const rollBtn = node('button', 'deck-scope-btn', 'Roll d');
+  rollBtn.type = 'button';
+  rollBtn.addEventListener('click', roll);
+  const rollRow = node('div', 'deck-scope-row');
+  rollRow.append(rollBtn, input);
+
+  const drawOdds = node('button', 'deck-scope-btn', 'Calculate probabilities…');
+  drawOdds.type = 'button';
+  // Passing this chooser's own close makes dismissing the odds calculator also close the chooser
+  // behind it, so the × (or Escape/backdrop) closes the whole stack in one go.
+  drawOdds.addEventListener('click', () => openDrawOddsPrompt(close));
+
+  modal.append(coin, rollRow, drawOdds);
+  input.focus?.();
+}
+
+// The probability calculator, opened from the Randomize chooser: the hypergeometric chance of seeing
+// at least one copy of a card, for a single fate draw and for a dynasty province flip. Purely local —
+// it computes and shows a percentage, sending nothing to the server — and live-updates as the inputs
+// change.
+function openDrawOddsPrompt(onClose) {
+  const { modal } = openModalShell('Calculate probabilities', 'deck-scope', onClose);
+
+  const field = (labelText, value) => {
+    const input = node('input', 'deck-scope-input');
+    input.type = 'number';
+    input.min = '0';
+    input.value = String(value);
+    const row = node('label', 'draw-odds-row');
+    row.append(node('span', null, labelText), input);
+    return { row, input };
+  };
+
+  const fateDeck = field('Fate deck', 40);
+  const fateCopies = field('Copies', 3);
+  const fateResult = node('div', 'draw-odds-result');
+
+  const dynDeck = field('Dynasty deck', 40);
+  const dynCopies = field('Copies', 3);
+  const dynProvinces = field('Provinces refilling', 1);
+  const dynResult = node('div', 'draw-odds-result');
+
+  const percent = (p) => (Number.isFinite(p) ? `${(p * 100).toFixed(1)}%` : '—');
+  const intOf = (entry) => Number.parseInt(entry.input.value, 10);
+  const update = () => {
+    const draw = chanceOfAtLeastOne(intOf(fateDeck), intOf(fateCopies), 1);
+    const flip = chanceOfAtLeastOne(intOf(dynDeck), intOf(dynCopies), intOf(dynProvinces));
+    fateResult.textContent = `Next draw: ${percent(draw)}`;
+    dynResult.textContent = `At least one: ${percent(flip)}`;
+  };
+  for (const { input } of [fateDeck, fateCopies, dynDeck, dynCopies, dynProvinces]) {
+    input.addEventListener('input', update);
+  }
+  update();
+
+  modal.append(
+    node('h3', 'draw-odds-heading', 'Draw from fate'),
+    fateDeck.row,
+    fateCopies.row,
+    fateResult,
+    node('h3', 'draw-odds-heading', 'Flip from dynasty'),
+    dynDeck.row,
+    dynCopies.row,
+    dynProvinces.row,
+    dynResult,
+  );
+  fateDeck.input.focus?.();
+}
+
 // Edit a card's note in a small text box: Save sends the new text, Remove (offered only when a note
-// exists) clears it. Reads the current note off the card's dataset; mounts in `.room` and closes on
-// Save/Remove, the × or backdrop, or Escape. Ctrl/Cmd+Enter saves; a bare Enter keeps a newline.
+// exists) clears it. Reads the current note off the card's dataset. Ctrl/Cmd+Enter saves; a bare Enter
+// keeps a newline.
 function openNotePrompt(cardEl, send) {
   const id = cardEl.dataset.cardId;
   const current = cardEl.dataset.note || '';
 
-  const overlay = node('div', 'deck-dialog-overlay');
-  const modal = node('div', 'note-dialog');
-  const close = () => {
-    document.removeEventListener?.('keydown', onKey);
-    overlay.remove();
-  };
-  const onKey = (e) => {
-    if (e.key === 'Escape') close();
-  };
-
-  const closeBtn = node('button', 'deck-dialog-close', '×');
-  closeBtn.type = 'button';
-  closeBtn.title = 'Close';
-  closeBtn.addEventListener('click', close);
-  const header = node('div', 'deck-dialog-header');
-  header.append(node('h2', 'deck-dialog-title', current ? 'Edit note' : 'Add note'), closeBtn);
+  const { modal, close } = openModalShell(current ? 'Edit note' : 'Add note', 'note-dialog');
 
   const input = node('textarea', 'note-dialog-input');
   input.value = current;
@@ -1332,13 +1443,7 @@ function openNotePrompt(cardEl, send) {
     footer.append(removeBtn);
   }
 
-  modal.append(header, input, footer);
-  overlay.append(modal);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) close();
-  });
-  (document.querySelector('.room') ?? document.body).appendChild(overlay);
-  document.addEventListener?.('keydown', onKey);
+  modal.append(input, footer);
   input.focus?.();
 }
 
@@ -1379,8 +1484,10 @@ function menuItemsFor(
 
 // The menu for a right-click on empty battlefield. Unbow all squares up every bowed card the viewer
 // may act on (their own and owner-less ones), batched into one UNBOW so the rate limiter sees one
-// message — and so the server's all-or-nothing ownership gate never rejects the batch. Create token
-// (when wired) opens a card search and spawns the choice as a token at the click point.
+// message — and so the server's all-or-nothing ownership gate never rejects the batch. Randomize
+// opens a chooser to flip a coin or roll a die, whose result the server announces to both seats (and
+// which also hosts the local draw-odds calculator). Create token (when wired) opens a card search and
+// spawns the choice as a token at the click point.
 function battlefieldMenuItems(viewer, onCreateToken, spawnAt) {
   // An owner-less ('') card is public and actionable by anyone, mirroring the server's owns_card.
   const ownedByViewer = (el) => !el.dataset.owner || el.dataset.owner === viewer;
@@ -1394,6 +1501,7 @@ function battlefieldMenuItems(viewer, onCreateToken, spawnAt) {
         if (ids.length) send(unbowIntent(ids));
       },
     },
+    { label: '&Randomize…', onClick: (e, send) => openRandomizePrompt(send) },
   ];
   if (onCreateToken) items.push({ label: 'Create &token…', onClick: () => onCreateToken(spawnAt) });
   return items;

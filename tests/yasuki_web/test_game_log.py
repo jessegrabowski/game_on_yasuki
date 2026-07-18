@@ -12,6 +12,10 @@ from yasuki_core.engine.intents import (
     Unpeek,
     Draw,
     Shuffle,
+    FlipCoin,
+    RollDice,
+    coin_flip_outcome,
+    dice_roll_outcome,
     SetHonor,
     SpawnCard,
     RemoveCard,
@@ -290,4 +294,20 @@ def test_move_deck_top_to_battlefield_is_described_as_a_move():
         {"text": "moved "},
         {"card_id": "c1", "name": "Token"},
         {"text": " to the battlefield"},
+    ]
+
+
+def test_flip_coin_announces_the_seeded_outcome():
+    table = TableState.empty_two_seat()
+    assert _describe(table, FlipCoin(seed=5)) == [
+        {"text": "Ada "},
+        {"text": f"flipped a coin: {coin_flip_outcome(5)}"},
+    ]
+
+
+def test_roll_dice_announces_the_seeded_face_and_die_size():
+    table = TableState.empty_two_seat()
+    assert _describe(table, RollDice(seed=5, sides=20)) == [
+        {"text": "Ada "},
+        {"text": f"rolled a {dice_roll_outcome(5, 20)} on a d20"},
     ]

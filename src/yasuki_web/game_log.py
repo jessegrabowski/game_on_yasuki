@@ -1,5 +1,11 @@
 from yasuki_core.engine.table import TableState, DeckKey, ZoneKey, ZoneRole, MoveDest, BATTLEFIELD
-from yasuki_core.engine.intents import Intent, Event, IntentOp
+from yasuki_core.engine.intents import (
+    Intent,
+    Event,
+    IntentOp,
+    coin_flip_outcome,
+    dice_roll_outcome,
+)
 from yasuki_core.engine.redaction import card_identity_public
 
 _FLAG_VERB = {
@@ -163,5 +169,10 @@ def describe_intent(state: TableState, actor: str, intent: Intent, event: Event)
             return [lead, {"text": "spawned "}, _card_segment(state, intent.card_id)]
         case IntentOp.REMOVE_CARD:
             return [lead, {"text": "removed a card"}]
+        case IntentOp.FLIP_COIN:
+            return [lead, {"text": f"flipped a coin: {coin_flip_outcome(intent.seed)}"}]
+        case IntentOp.ROLL_DICE:
+            face = dice_roll_outcome(intent.seed, intent.sides)
+            return [lead, {"text": f"rolled a {face} on a d{intent.sides}"}]
         case _:
             return []

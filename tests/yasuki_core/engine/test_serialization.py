@@ -21,6 +21,8 @@ from yasuki_core.engine.intents import (
     Unpeek,
     Draw,
     Shuffle,
+    FlipCoin,
+    RollDice,
     FlipDeckTop,
     SearchDeck,
     MoveDeckTop,
@@ -108,6 +110,9 @@ from yasuki_core.game_pieces.pregame import StrongholdCard
         Attach("c1", "c2"),
         Attach("c1", ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)),
         Detach("c1"),
+        FlipCoin(seed=5),
+        RollDice(seed=7),
+        RollDice(seed=7, sides=20),
     ],
 )
 def test_each_intent_survives_a_json_round_trip(intent):

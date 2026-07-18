@@ -4,7 +4,7 @@ from collections.abc import Sequence
 
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import TableState
-from yasuki_core.engine.intents import Intent, Shuffle, Event, apply_intent
+from yasuki_core.engine.intents import Intent, Shuffle, FlipCoin, RollDice, Event, apply_intent
 from yasuki_core.engine.serialization import encode_intent, decode_intent
 from yasuki_core.engine.snapshot import (
     InitialRecord,
@@ -30,7 +30,8 @@ class LogEntry:
     intent : Intent
         The original intent as submitted, not the resolved event.
     rng_seed : int, optional
-        The RNG seed carried by the intent, if any (currently only ``SHUFFLE``). Default None.
+        The RNG seed carried by the intent, if any (the seeded ops: ``SHUFFLE``, ``FLIP_COIN``,
+        ``ROLL_DICE``). Default None.
     """
 
     seq: int
@@ -121,7 +122,7 @@ class ActionLog:
 
 
 def _intent_seed(intent: Intent) -> int | None:
-    return intent.seed if isinstance(intent, Shuffle) else None
+    return intent.seed if isinstance(intent, (Shuffle, FlipCoin, RollDice)) else None
 
 
 def apply_and_log(
