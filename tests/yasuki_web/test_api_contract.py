@@ -192,6 +192,13 @@ def test_all_clans_sensei_appears_under_specific_clan(client):
     assert universal <= _ids(client, "clan:Crane type:sensei include:all")
 
 
+def test_naga_akasha_are_aliased(client):
+    # Naga was renamed Akasha; a filter on either name matches the whole clan.
+    naga = _ids(client, "clan:Naga include:all")
+    akasha = _ids(client, "clan:Akasha include:all")
+    assert naga and naga == akasha
+
+
 def test_minor_clan_search(client):
     # Minor clans (Fox, etc.) live only as "<X> Clan" keywords and now resolve through card_clans.
     assert _total(client, "clan:Fox include:all") > 0
@@ -308,6 +315,12 @@ def test_clans_and_types_are_lists(client):
 def test_clan_dropdown_omits_all_clans_marker(client):
     # "All Clans" tags universal senseis, not a clan; offering it would duplicate the placeholder.
     assert "All Clans" not in client.get("/api/clans").json()["clans"]
+
+
+def test_clan_dropdown_collapses_akasha_into_naga(client):
+    # Naga and Akasha are the same clan; the dropdown offers only the Naga name.
+    clans = client.get("/api/clans").json()["clans"]
+    assert "Naga" in clans and "Akasha" not in clans
 
 
 def test_clans_narrow_to_active_filters(client):

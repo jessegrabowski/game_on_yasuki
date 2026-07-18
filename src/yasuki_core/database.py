@@ -662,6 +662,14 @@ def get_card_backs() -> dict[tuple[str, str], str]:
 # Marker stored in card_clans for senseis any clan may lead; not a selectable clan of its own.
 ALL_CLANS_MARKER = "All Clans"
 
+# Clans L5R renamed over its history. A filter on any name in a group matches the whole group, and
+# the first name is the one the deck-builder dropdown shows.
+CLAN_ALIAS_GROUPS = (("Naga", "Akasha"),)
+_CLAN_ALIASES = {
+    name.lower(): [n.lower() for n in group] for group in CLAN_ALIAS_GROUPS for name in group
+}
+_CLAN_CANONICAL = {name.lower(): group[0] for group in CLAN_ALIAS_GROUPS for name in group[1:]}
+
 
 def query_all_clans() -> list[str]:
     """
@@ -705,13 +713,19 @@ def query_clans_filtered(text_query: str = "", filter_options: dict | None = Non
     where_clause, params = _build_card_filter(text_query, options)
     sql = (
         f"SELECT DISTINCT cc.clan FROM cards c {_CROSS_FACE_JOIN}"
-        f" JOIN card_clans cc ON cc.card_id = c.card_id {where_clause} ORDER BY cc.clan"
+        f" JOIN card_clans cc ON cc.card_id = c.card_id {where_clause}"
     )
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(sql, params)
             marker = ALL_CLANS_MARKER.lower()
-            results = [row["clan"] for row in cur.fetchall() if row["clan"].lower() != marker]
+            results = sorted(
+                {
+                    _CLAN_CANONICAL.get(row["clan"].lower(), row["clan"])
+                    for row in cur.fetchall()
+                    if row["clan"].lower() != marker
+                }
+            )
             logger.debug(f"Retrieved {len(results)} filtered clans from database")
             return results
 
@@ -1200,14 +1214,15 @@ def _build_card_filter(
                 # An "All Clans" sensei is legal in any clan's deck, so every clan filter also
                 # matches it.
                 if value:
-                    wanted = [c.lower() for c in value]
-                    marker = ALL_CLANS_MARKER.lower()
-                    if marker not in wanted:
-                        wanted.append(marker)
+                    wanted = set()
+                    for clan in value:
+                        clan = clan.lower()
+                        wanted.update(_CLAN_ALIASES.get(clan, (clan,)))
+                    wanted.add(ALL_CLANS_MARKER.lower())
                     conditions.append(
                         "c.card_id IN (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"
                     )
-                    params.append(wanted)
+                    params.append(list(wanted))
             elif property_name == "rarities":
                 if value:
                     rarity_conditions = []
