@@ -72,6 +72,11 @@ def _total(client, search):
     return client.get("/api/cards", params={"search": search, "limit": 1}).json()["total"]
 
 
+def _ids(client, search):
+    cards = client.get("/api/cards", params={"search": search, "limit": 200}).json()["cards"]
+    return {c["card_id"] for c in cards}
+
+
 def test_format_short_alias_resolves_in_sql(client):
     # `format:diamond` resolves via formats.block to the same cards as the full name.
     assert _total(client, "format:diamond") > 0
@@ -178,6 +183,13 @@ def test_clan_matches_senseis(client):
 def test_clan_all_marks_all_clans_senseis(client):
     # "All Clans" senseis are tagged with a single marker, searchable as clan:all.
     assert _total(client, "clan:all type:sensei include:all") > 0
+
+
+def test_all_clans_sensei_appears_under_specific_clan(client):
+    # An "All Clans" sensei is legal in any clan's deck, so a specific-clan filter surfaces it too.
+    universal = _ids(client, "clan:all type:sensei include:all")
+    assert universal
+    assert universal <= _ids(client, "clan:Crane type:sensei include:all")
 
 
 def test_minor_clan_search(client):
@@ -291,6 +303,11 @@ def test_deck_types_are_title_case(client):
 def test_clans_and_types_are_lists(client):
     assert isinstance(client.get("/api/clans").json()["clans"], list)
     assert isinstance(client.get("/api/card-types").json()["card_types"], list)
+
+
+def test_clan_dropdown_omits_all_clans_marker(client):
+    # "All Clans" tags universal senseis, not a clan; offering it would duplicate the placeholder.
+    assert "All Clans" not in client.get("/api/clans").json()["clans"]
 
 
 def test_clans_narrow_to_active_filters(client):

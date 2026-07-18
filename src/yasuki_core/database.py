@@ -659,6 +659,10 @@ def get_card_backs() -> dict[tuple[str, str], str]:
             return {(row["deck"], row["era"]): row["image_path"] for row in cur.fetchall()}
 
 
+# Marker stored in card_clans for senseis any clan may lead; not a selectable clan of its own.
+ALL_CLANS_MARKER = "All Clans"
+
+
 def query_all_clans() -> list[str]:
     """
     Fetch all unique clans.
@@ -681,10 +685,8 @@ def query_clans_filtered(text_query: str = "", filter_options: dict | None = Non
     """
     Fetch the distinct clans among cards matching the given filters.
 
-    Powers the deck builder's clan dropdown, narrowing the selectable clans to those that have a
-    card under the active filters (e.g. a chosen format or card type). Any ``clans`` entry in
-    ``filter_options`` is dropped before filtering so the dropdown keeps offering every compatible
-    clan instead of collapsing to the already-selected one.
+    Powers the deck builder's clan dropdown. The ``clans`` filter and the universal "All Clans"
+    marker are both excluded, leaving the selectable clans that have a matching card.
 
     Parameters
     ----------
@@ -708,7 +710,8 @@ def query_clans_filtered(text_query: str = "", filter_options: dict | None = Non
     with get_db_connection() as conn:
         with conn.cursor() as cur:
             cur.execute(sql, params)
-            results = [row["clan"] for row in cur.fetchall()]
+            marker = ALL_CLANS_MARKER.lower()
+            results = [row["clan"] for row in cur.fetchall() if row["clan"].lower() != marker]
             logger.debug(f"Retrieved {len(results)} filtered clans from database")
             return results
 
@@ -1194,13 +1197,13 @@ def _build_card_filter(
                     )
                     params.append([t.title() for t in value])
             elif property_name == "clans":
-                # Clan affiliation is materialised into card_clans for every card (the loader infers
-                # it from keywords for senseis, holdings, and minor clans). `clan:all` is shorthand
-                # for the "All Clans" senseis that any clan may lead.
+                # An "All Clans" sensei is legal in any clan's deck, so every clan filter also
+                # matches it.
                 if value:
                     wanted = [c.lower() for c in value]
-                    if "all" in wanted:
-                        wanted.append("all clans")
+                    marker = ALL_CLANS_MARKER.lower()
+                    if marker not in wanted:
+                        wanted.append(marker)
                     conditions.append(
                         "c.card_id IN (SELECT card_id FROM card_clans WHERE lower(clan) = ANY(%s))"
                     )
