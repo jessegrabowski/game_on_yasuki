@@ -51,21 +51,23 @@ is:shugenja is:shadowlands
 
 ## Combining Terms
 
-Terms are ANDed by default. Use `-` to exclude, `OR` between values of the **same**
-field for alternatives, and `!"..."` for an exact card-name match:
+Terms are ANDed by default. Use `OR` for alternatives, `(...)` to group, `-` to
+exclude, and `!"..."` for an exact card-name match:
 
 ```
-clan:Crane type:personality force>3      # all three (AND)
-clan:Crane OR clan:Lion                   # either clan (same field)
-is:shugenja|courtier                      # either keyword (is: pipe)
-clan:Crane -type:event                    # Crane, excluding events
--doji                                      # exclude cards matching "doji"
-"Doji Hoturi"                             # substring phrase
-!"Doji Hoturi"                            # exact card name (all its versions)
+clan:Crane type:personality force>3            # all three (AND)
+clan:Crane OR clan:Lion                         # either clan
+(c:crane is:courtier) OR (c:lion is:samurai)    # Crane courtiers or Lion samurai
+is:shugenja|courtier                            # either keyword (is: pipe)
+clan:Crane -type:event                          # Crane, excluding events
+-(c:crab OR c:scorpion)                         # neither clan
+-doji                                           # exclude cards matching "doji"
+"Doji Hoturi"                                   # substring phrase
+!"Doji Hoturi"                                  # exact card name (all its versions)
 ```
 
-Cross-field `OR` and parentheses aren't supported yet: `OR` only combines values
-of a single field. Queries are case-insensitive (`clan:crane` = `clan:Crane`).
+`AND` binds tighter than `OR`, so `a OR b c` means `a OR (b AND c)`; parentheses
+override that. Queries are case-insensitive (`clan:crane` = `clan:Crane`).
 
 `-` works on any field: `-type:event`, `-clan:crane`, `-artist:Hara`,
 `-format>=diamond`. For an inequality it is the strict complement of the positive
@@ -80,6 +82,7 @@ matches nothing rather than everything.
 c:Crane t:personality f>=4                # powerful Crane personalities
 gold<=2 -type:holding                     # cheap non-holdings
 c:crane t:personality is:shugenja|courtier # Crane shugenja or courtiers
+(c:dragon OR c:phoenix) t:personality f>=3 # Dragon or Phoenix bruisers
 is:unique t:personality chi>=2            # unique personalities, high chi
 is:cavalry clan:Unicorn force>=3          # Unicorn cavalry rush
 t:personality gold<=2 -is:unique          # cheap spam
