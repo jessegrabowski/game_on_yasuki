@@ -254,6 +254,23 @@ def test_get_creates_for_cards_resolves_a_creator_to_full_token_records():
 
 
 @pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
+def test_get_creates_for_cards_excludes_stat_marker_tokens():
+    # Courts of Otosan Uchi creates a real courtier (a spawnable card) and a Wealth token (a
+    # Token-typed stat marker). Only the card is offered; the marker is a counter/note, not a spawn.
+    creates, tokens = get_creates_for_cards(["courts_of_otosan_uchi"])
+    made = creates.get("courts_of_otosan_uchi", [])
+    assert "courtier_personality_0_2_2" in made
+    assert "courtier_personality_0_2_2" in tokens  # its record is still fetched for spawning
+    assert "token_wealth" not in made
+    assert "token_wealth" not in tokens
+
+    # A creator whose only creation is a stat marker offers nothing to spawn.
+    marker_only, marker_tokens = get_creates_for_cards(["a_champion_in_court"])
+    assert marker_only.get("a_champion_in_court", []) == []
+    assert marker_tokens == {}
+
+
+@pytest.mark.skipif(not _db_available(), reason="PostgreSQL not available")
 def test_art_swap_carries_the_donor_print_and_both_frames():
     # Building the swap classifies both prints' eras, which reads set release dates from the database.
     yaml = "name: T\nDynasty:\n  - Kuni Yori [Pearl Edition] {art: Ambush [Lotus Edition]}"
