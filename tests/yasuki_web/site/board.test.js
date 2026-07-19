@@ -300,6 +300,28 @@ describe('renderBoard', () => {
     assert.equal(board.children[0].children[0].src, '/images/sets/imperial_edition/hida_kisada.jpg');
   });
 
+  it('serves the type-default placeholder for a face-up card with no scanned art', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ img: null, card_type: 'Item' })], '/images');
+    assert.equal(board.children[0].children[0].src, '/images/defaults/generic_item.jpg');
+  });
+
+  it('falls back to the token back for an art-less face-up token with no type default', () => {
+    setBackArt({ TOKEN: '/img/sets/backs/dynasty_token.jpg' });
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ id: 'spawn-1', img: null, card_type: 'Token' })], '/images');
+    assert.equal(board.children[0].children[0].src, '/img/sets/backs/dynasty_token.jpg');
+  });
+
+  it('swaps in the placeholder when a present-but-unscanned print 404s', () => {
+    const board = document.getElementById('battlefield');
+    renderBoard(board, [card({ img: 'sets/x/missing.jpg', card_type: 'Item' })], '/images');
+    const img = board.children[0].children[0];
+    assert.equal(img.src, '/images/sets/x/missing.jpg', 'tries the print first');
+    img.onerror();
+    assert.equal(img.src, '/images/defaults/generic_item.jpg', 'a load error swaps in the default');
+  });
+
   it('marks an explicitly face-down card as a back', () => {
     const board = document.getElementById('battlefield');
     renderBoard(board, [card({ face_up: false })], '/images');

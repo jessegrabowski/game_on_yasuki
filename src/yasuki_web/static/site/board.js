@@ -6,6 +6,7 @@ import { buildCompositeDataURL, loadArtLayout } from '../deck_builder/js/art.js'
 import { reconcile } from './reconcile.js';
 import { buildAvatarElement } from './avatar.js';
 import { chanceOfAtLeastOne } from './probability.js';
+import { fallbackSrc } from './card-common.js';
 
 export function node(tag, className, text) {
   const el = document.createElement(tag);
@@ -50,6 +51,13 @@ function backFor(card) {
   return card.id?.startsWith('spawn-') ? backArt.TOKEN : backArt[card.side];
 }
 
+// The placeholder art for a face-up card whose print has no scanned image (e.g. a freshly minted
+// token): the type-default generic frame, or the card back as a last resort.
+function fallbackArt(card, imgBase) {
+  const byType = fallbackSrc({ types: card.card_type ? [card.card_type] : [] }, imgBase);
+  return byType || backFor(card) || null;
+}
+
 // Show a card's face: its front art, or — while face-down — the generic back for its side. A hidden
 // stub carries no front, and a face-down card draws its back too — unless this viewer has been let in
 // to identify it (their own peek, or the owner showing it to them), in which case the redaction sends
@@ -64,7 +72,20 @@ function applyFace(el, card, imgBase) {
     return;
   }
   const img = document.createElement('img');
-  img.src = `${imgBase}/${card.img}`;
+  const fallback = fallbackArt(card, imgBase);
+  // A face-up card with no scanned art (a minted token) would otherwise request "<base>/null"; serve
+  // the placeholder up front, and let a 404 on a present-but-unscanned print fall back to it too.
+  if (card.img) {
+    img.src = `${imgBase}/${card.img}`;
+    if (fallback) {
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = fallback;
+      };
+    }
+  } else {
+    img.src = fallback || '';
+  }
   img.alt = card.name;
   el.appendChild(img);
   if (card.art) swapArt(img, card, imgBase);
@@ -154,7 +175,7 @@ function tagCard(el, card) {
 // `_card` plus the battlefield x/y. `id` is excluded — it keys the element, it never changes.
 // Exported so the reconcile diff and the shape-drift guard key off the same list.
 export const CARD_FIELDS = [
-  'name', 'img', 'side', 'owner', 'pregame', 'token', 'bowed', 'face_up', 'inverted',
+  'name', 'img', 'card_type', 'side', 'owner', 'pregame', 'token', 'bowed', 'face_up', 'inverted',
   'shown', 'peeked', 'hidden', 'back_card_id', 'showing_back', 'art', 'note', 'creates', 'x', 'y',
   'attached', 'attachParent',
 ];

@@ -62,6 +62,7 @@ def _card(
         "id": view.id,
         "name": face.name,
         "img": face.image_front.as_posix() if face.image_front is not None else None,
+        "card_type": face.card_type,
         "side": face.side.value,
         "owner": view.owner.name if view.owner is not None else None,
         "pregame": isinstance(view, _PREGAME_TYPES),

@@ -304,6 +304,7 @@ def _construct_face(
         owner=owner,
         clan=clans[0] if clans else None,
         keywords=tuple(record.get("keywords") or ()),
+        card_type=card_type,
         creates=creates,
         text=record.get("text") or "",
         is_unique=bool(record.get("is_unique")),

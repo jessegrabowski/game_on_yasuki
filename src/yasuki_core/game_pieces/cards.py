@@ -16,6 +16,9 @@ class L5RCard:
     clan: str | None = None
     keywords: tuple[str, ...] = ()
     traits: tuple[str, ...] = ()
+    # The card's primary printed type (e.g. "Item", "Personality"), kept so the web client can pick a
+    # type-default placeholder image for a print with no scanned art yet.
+    card_type: str | None = None
     # Token card ids this card can create in play (the card_creates relation), resolved once at deck
     # load. The context menu offers a "Create" item per id; the spawn resolves the id against
     # TableState.creatable_tokens to build a full token card.
