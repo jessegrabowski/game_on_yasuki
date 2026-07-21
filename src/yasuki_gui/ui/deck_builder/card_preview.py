@@ -401,6 +401,8 @@ class CardPreviewController:
 
         types = card.get("types") or []
         ctype = types[0].lower() if types else ""
+        if ctype == "personality":
+            return asset_paths.default_personality_image(card.get("clans"))
         return DEFAULT_BY_TYPE.get(ctype)
 
     def _load_back_image(
