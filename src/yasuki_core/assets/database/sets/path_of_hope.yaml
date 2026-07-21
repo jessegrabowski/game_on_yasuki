@@ -99,6 +99,8 @@ cards:
   flavor_text: <i>"Predict the Void and it will change, if only to defy your prediction."</i>
   collector_number: '31'
 - title: Akodo Michio
+  creates:
+  - war_beast
   types:
   - Personality
   decks:
@@ -1005,6 +1007,8 @@ cards:
   flavor_text: <i>"Drive the filthy beast from the forest," the Unicorn ordered.</i>
   collector_number: '116'
 - title: Forest Killer Cavern
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:

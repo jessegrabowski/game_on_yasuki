@@ -432,6 +432,8 @@ cards:
   flavor_text: <i>The last foul remains of the Dark Horde still walk the face of Rokugan, and while they
     live, I can never rest.</i>
 - title: Kuni Yori
+  creates:
+  - risen_dead
   types:
   - Personality
   decks:

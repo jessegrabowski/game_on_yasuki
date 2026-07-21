@@ -177,10 +177,12 @@ cards:
 - id: ashigaru_2
   title: Ashigaru
   types:
+  - Follower
   - Proxy
+  keywords:
+  - Ashigaru
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -506,12 +508,12 @@ cards:
   artist: Thomas Manning
 - title: Cavalry
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cavalry
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -1115,10 +1117,11 @@ cards:
     to death." - from Loss of Innocence, Part II</i>
 - title: Farmer
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  text: Farmlands Follower.<br>May not be included in decks.
+  text: Farmlands Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -2475,6 +2478,7 @@ cards:
     had not lost their honor."</i>
 - title: Mujina
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2482,7 +2486,6 @@ cards:
   - Cavalry
   - Mujina
   - Nonhuman
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -2524,13 +2527,13 @@ cards:
   flavor_text: <i>"The Wasp will stand with the Mantis, and I will stand by my lord."</i>
 - title: Naga
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Naga
   - Nonhuman
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -2612,6 +2615,8 @@ cards:
   flavor_text: <i>"Though the Empire has been salted, the land destroyed, we shall bring it back again
     to prosperity." - Hoshi Maseru</i>
 - title: Ninja Mystic
+  creates:
+  - token_shadow
   types:
   - Personality
   decks:
@@ -3060,6 +3065,8 @@ cards:
   rarity: Uncommon
   artist: Anthony Grabski
 - title: Political Favors
+  creates:
+  - token_favor
   types:
   - Holding
   decks:
@@ -3135,13 +3142,13 @@ cards:
 - id: ratling_pack_2
   title: Ratling Pack
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Nonhuman
   - Ratling
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 0
@@ -3411,6 +3418,13 @@ cards:
   artist: April Lee
   flavor_text: <i>"Walk with faith, not by sight, and we shall win the day."</i>
 - title: Shinjo Hanari
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -4262,6 +4276,8 @@ cards:
     Akuma's deah, Kitsu Okura saved the Lion general and freed her clan from the oni's curse. At the end,
     she was a Lion." - from Death of Honor, Part III</i>
 - title: Togashi Mitsu
+  creates:
+  - token_fire
   types:
   - Personality
   decks:
@@ -4320,6 +4336,8 @@ cards:
   flavor_text: <i> "The Lady of the Moon taught me all I need to know of strength, and Lord Hoshi has
     taught me much of honor. Against the Shadow, I will need both."</i>
 - title: Toku
+  creates:
+  - token_exhaustion
   types:
   - Personality
   decks:
@@ -4447,12 +4465,12 @@ cards:
     his heart: Save the Empire. Fight the Shadow.</i>'
 - title: Undead
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1

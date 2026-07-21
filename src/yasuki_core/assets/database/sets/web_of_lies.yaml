@@ -363,6 +363,8 @@ cards:
   flavor_text: <i>Noritoshi will know no peace until Megumi's soul has been laid to rest.</i>
   collector_number: '126'
 - title: Blood Pearl
+  creates:
+  - token_blood
   types:
   - Item
   decks:
@@ -776,6 +778,8 @@ cards:
   artist: Marta Preta Mora
   collector_number: '83'
 - title: Fury of Hida
+  creates:
+  - hidas_fury
   types:
   - Strategy
   decks:
@@ -1949,6 +1953,8 @@ cards:
   flavor_text: <i>"The seas may be yours, Mantis, but the ports are ours. Now pay the fee or begone."</i>
   collector_number: '8'
 - title: Natsumono
+  creates:
+  - oni_whelp
   types:
   - Personality
   decks:
@@ -2018,6 +2024,8 @@ cards:
   flavor_text: <i>"The Dark Lord once turned his back on us. If we must aid him now, he will pay dearly."</i>
   collector_number: '69'
 - title: Oni Lair
+  creates:
+  - token_blood
   types:
   - Holding
   decks:
@@ -2322,6 +2330,8 @@ cards:
   artist: Lee Moyer
   collector_number: '108'
 - title: Shahai
+  creates:
+  - token_blood
   types:
   - Personality
   decks:
@@ -2489,6 +2499,8 @@ cards:
   artist: John Wigley
   collector_number: '120'
 - title: Shosuro Infiltrator
+  creates:
+  - shosuros_spy
   types:
   - Follower
   decks:
@@ -2511,6 +2523,8 @@ cards:
   artist: Jonathan Hunt
   collector_number: '123'
 - title: Shosuro Saemon
+  creates:
+  - shadow_ninja
   types:
   - Personality
   decks:

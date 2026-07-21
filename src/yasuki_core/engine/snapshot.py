@@ -44,6 +44,9 @@ class InitialRecord:
         Battlefield card positions, keyed by card id.
     attachments : dict mapping str to (str or ZoneKey)
         The attachment graph, keyed by attached card id, mapping to a parent card id or province.
+    creatable_tokens : dict mapping str to L5RCard
+        Token templates the loaded decks can create, keyed by token card id, so a replayed token
+        spawn resolves against the same templates without a database call.
     setup_seeds : dict mapping str to int
         Named RNG seeds used during setup that no logged entry carries.
     """
@@ -54,6 +57,7 @@ class InitialRecord:
     battlefield: list[L5RCard] = field(default_factory=list)
     positions: dict[str, BoardPos] = field(default_factory=dict)
     attachments: dict[str, str | ZoneKey] = field(default_factory=dict)
+    creatable_tokens: dict[str, L5RCard] = field(default_factory=dict)
     setup_seeds: dict[str, int] = field(default_factory=dict)
 
     @classmethod
@@ -81,6 +85,7 @@ class InitialRecord:
             battlefield=[replace(card) for card in state.battlefield.cards],
             positions=dict(state.positions),
             attachments=dict(state.attachments),
+            creatable_tokens={tid: replace(card) for tid, card in state.creatable_tokens.items()},
             setup_seeds=dict(setup_seeds or {}),
         )
 
@@ -103,6 +108,7 @@ def build_initial_state(initial: InitialRecord) -> TableState:
     state.battlefield.cards = _restore_cards(state, initial.battlefield)
     state.positions = dict(initial.positions)
     state.attachments = dict(initial.attachments)
+    state.creatable_tokens = {tid: replace(card) for tid, card in initial.creatable_tokens.items()}
     return state
 
 
@@ -132,6 +138,9 @@ def encode_initial(initial: InitialRecord) -> dict:
         "attachments": {
             card_id: encode_attach_target(target) for card_id, target in initial.attachments.items()
         },
+        "creatable_tokens": {
+            tid: encode_card(card) for tid, card in initial.creatable_tokens.items()
+        },
         "setup_seeds": dict(initial.setup_seeds),
     }
 
@@ -153,6 +162,9 @@ def decode_initial(payload: dict) -> InitialRecord:
         card_id: decode_attach_target(target)
         for card_id, target in payload.get("attachments", {}).items()
     }
+    creatable_tokens = {
+        tid: decode_card(card) for tid, card in payload.get("creatable_tokens", {}).items()
+    }
     return InitialRecord(
         seats=seats,
         decklists=decklists,
@@ -160,5 +172,6 @@ def decode_initial(payload: dict) -> InitialRecord:
         battlefield=battlefield,
         positions=positions,
         attachments=attachments,
+        creatable_tokens=creatable_tokens,
         setup_seeds=dict(payload["setup_seeds"]),
     )

@@ -80,6 +80,8 @@ cards:
     of war."</i>
   collector_number: '94'
 - title: Aka-Name
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -1070,6 +1072,8 @@ cards:
   flavor_text: <i>"Alas, poor Chitik..."</i>
   collector_number: '51'
 - title: Hida Dayu
+  creates:
+  - dayus_troops
   types:
   - Personality
   decks:
@@ -2068,6 +2072,8 @@ cards:
     with."</i>
   collector_number: '106'
 - title: Pep'trchek
+  creates:
+  - nezumi_scout
   types:
   - Personality
   decks:
@@ -2146,6 +2152,8 @@ cards:
   flavor_text: <i>"This Khan is a man worthy of my respect." - Daigotsu</i>
   collector_number: '151'
 - title: Recruiting Allies
+  creates:
+  - new_recruit
   types:
   - Strategy
   decks:
@@ -2475,6 +2483,8 @@ cards:
   flavor_text: <i>The City of Tears if well-defended now.</i>
   collector_number: '42'
 - title: Shinbone Warpack
+  creates:
+  - token_plus2f
   types:
   - Personality
   decks:
@@ -2535,6 +2545,8 @@ cards:
     revolutions.</i>
   collector_number: '72'
 - title: Shinjo Saihan
+  creates:
+  - token_plus2f
   types:
   - Personality
   decks:
@@ -3526,6 +3538,8 @@ cards:
   artist: Paul (Prof.) Herbert
   collector_number: '129'
 - title: Vik-sch'tok
+  creates:
+  - nezumi_cleaver
   types:
   - Personality
   decks:

@@ -122,6 +122,8 @@ cards:
   rarity: Promo
   artist: Jason Engle
 - title: Ancestral Kabuto
+  creates:
+  - token_plus1f_plus1c
   types:
   - Item
   decks:
@@ -196,6 +198,8 @@ cards:
   artist: Jon Hodgson
   flavor_text: <i>"It's so very thirsty." -Asako Kinuye</i>
 - title: Book of Air
+  creates:
+  - air_kami
   types:
   - Item
   decks:
@@ -1861,6 +1865,8 @@ cards:
   artist: Brad Williams
   flavor_text: <i>"Surely, Hida-sama, not even you have seen weapons like these."</i>
 - title: Sennin
+  creates:
+  - token_wealth
   types:
   - Personality
   decks:
@@ -2031,6 +2037,8 @@ cards:
   rarity: Promo
   artist: William O'Connor
 - title: Shigekawa's Armor
+  creates:
+  - mounted_samurai
   types:
   - Item
   decks:

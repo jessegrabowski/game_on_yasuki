@@ -1130,6 +1130,10 @@ cards:
     than others, Lord Kuon," Benjiro said dryly.</i>
   collector_number: '96'
 - title: Ichido no Shiryo
+  creates:
+  - disposable_troops
+  - light_follower
+  - men_at_arms
   types:
   - Ancestor
   decks:
@@ -2012,6 +2016,8 @@ cards:
   artist: Llyn Hunter
   collector_number: '108'
 - title: Official Papers
+  creates:
+  - token_favor
   types:
   - Item
   decks:
@@ -3328,6 +3334,9 @@ cards:
     "Teach his troops the price of misplaced pride."</i>
   collector_number: '97'
 - title: Wretches
+  creates:
+  - shadowlands_wretch
+  - token_worker
   types:
   - Holding
   decks:
@@ -3347,6 +3356,8 @@ cards:
   artist: Drew Baker
   collector_number: '22'
 - title: Writ of Conscription
+  creates:
+  - token_favor
   types:
   - Item
   decks:
@@ -3370,6 +3381,8 @@ cards:
   artist: Mike Jackson
   collector_number: '138'
 - title: Writ of Justice
+  creates:
+  - token_favor
   types:
   - Item
   decks:
@@ -3393,6 +3406,8 @@ cards:
   artist: Steve Snyder
   collector_number: '142'
 - title: Writ of Peace
+  creates:
+  - token_favor
   types:
   - Item
   decks:

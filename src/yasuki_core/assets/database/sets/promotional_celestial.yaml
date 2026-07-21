@@ -73,6 +73,8 @@ cards:
   flavor_text: <i>"Earth and sky, fire and water, Empire and the Kingdoms... all are the same if you but
     know how to look." - Isawa Kimi</i>
 - title: Alone with One's Thoughts
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -153,13 +155,14 @@ cards:
   rarity: Promo
 - title: Benika's Pride
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cat
   - Nonhuman
-  text: Matsu Benika Follower.<br>May not be included in decks.
+  text: Matsu Benika Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -214,6 +217,8 @@ cards:
   artist: Edwin David
   flavor_text: <i>"Their songs can rouse the soul to war, or placate the fires within." - Asahina Beniha</i>
 - title: Blue Tanuki Bar
+  creates:
+  - token_sake
   types:
   - Holding
   decks:
@@ -233,6 +238,8 @@ cards:
   flavor_text: <i>"It is a den of sin and iniquity," said Akodo Shigetoshi. "But for the less disciplined
     samurai, it offers a night of respite from the war."
 - title: Blue Tanuki Serving Girl
+  creates:
+  - token_sake
   types:
   - Personality
   decks:
@@ -257,6 +264,8 @@ cards:
   flavor_text: <i>"This is one of the Lord Kincho's favorite blends, sama. I am certain you will enjoy
     it."</i>
 - title: Bottled Fire
+  creates:
+  - token_sake
   types:
   - Item
   decks:
@@ -451,6 +460,8 @@ cards:
   - Other
   rarity: Promo
 - title: Cultist Infiltrator
+  creates:
+  - token_minus1c
   types:
   - Follower
   decks:
@@ -620,10 +631,10 @@ cards:
   flavor_text: <i>"The Empire needs you for now, samurai. When this war is over, I will have blood."</i>
 - title: Disposable Troops
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 0
@@ -690,13 +701,13 @@ cards:
     Jinn-Kuen</i>
 - title: Emerald Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Duelist
   - Samurai
-  text: May not be included in decks.
   gold_cost: 0
   force: 5
   chi: 6
@@ -978,6 +989,8 @@ cards:
   artist: IFS
   flavor_text: <i>"Who was Fudo really? None can say." - Tanari</i>
 - title: Heart of Fudo
+  creates:
+  - fudo
   types:
   - Item
   decks:
@@ -1045,13 +1058,13 @@ cards:
   rarity: Promo
 - title: Hideshi's Guardian
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Samurai
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 3
   chi: 3
@@ -1225,10 +1238,10 @@ cards:
     but has significant shortcomings on the battlefield." -Hida Fubatsu</i>
 - title: Infantry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 2
@@ -1482,6 +1495,8 @@ cards:
   - Other
   rarity: Promo
 - title: Liquid Courage
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -1517,6 +1532,8 @@ cards:
   flavor_text: <i>Unscrupulous merchants occasionally mix substandard ore in with quality minerals. Their
     profit is increased, but the quality of the product suffers tremendously.</i>
 - title: Lying in Ambush
+  creates:
+  - new_recruit
   types:
   - Strategy
   decks:
@@ -1800,6 +1817,9 @@ cards:
   flavor_text: <i>"Place a man upon a horse and you double his tactical value. If he is actually trained
     for such tactics, then his worth it twice that again." -Akodo Shigetoshi</i>
 - title: Nakadai
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1978,6 +1998,7 @@ cards:
   rarity: Promo
 - title: Phoenix Yojimbo
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1987,7 +2008,6 @@ cards:
   - Phoenix Clan
   - Samurai
   - Yojimbo
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2002,6 +2022,8 @@ cards:
     Isawa Ochiai, Master of Fire</i>
   collector_number: '4'
 - title: Plague of Flesh
+  creates:
+  - zombie_peasant
   types:
   - Follower
   decks:
@@ -2069,6 +2091,9 @@ cards:
   rarity: Promo
   artist: David Horne
 - title: Rallying the Recruits
+  creates:
+  - chikara
+  - token_recruiter
   types:
   - Strategy
   decks:
@@ -2088,12 +2113,12 @@ cards:
     your ancestors weep for joy, for today you are a samurai! To war!"</i>
 - title: Readied Blade
   types:
+  - Item
   - Proxy
   decks:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+2'
@@ -2107,6 +2132,9 @@ cards:
     To serve is my lot, and I embrace it with all that is in me." - Mirumoto Satobe</i>
   collector_number: '7'
 - title: Recruitment Center
+  creates:
+  - chikara
+  - token_recruiter
   types:
   - Holding
   decks:
@@ -2123,6 +2151,8 @@ cards:
   artist: David Day
   flavor_text: <i>"We are unconcerned with your past." - Yoritomo Jera</i>
 - title: Recruitment Officer
+  creates:
+  - recruited_ronin
   types:
   - Holding
   decks:
@@ -2415,6 +2445,7 @@ cards:
   rarity: Promo
 - title: Spirit of the Bear
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2422,7 +2453,6 @@ cards:
   - Bear
   - Nonhuman
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2480,6 +2510,8 @@ cards:
   rarity: Promo
   artist: Brent Chumley
 - title: Swell the Ranks
+  creates:
+  - hired_ronin
   types:
   - Strategy
   decks:
@@ -2726,13 +2758,13 @@ cards:
   artist: Carl Frank
 - title: The Walking Dead
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Shadowlands
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2774,6 +2806,8 @@ cards:
   flavor_text: <i>"He moves through the forest like a shadow. With his assistance, the Legion's ability
     to gather intelligence has increased tenfold." - The journals of Utagawa
 - title: Tsi Mokotsu
+  creates:
+  - tsi_weapon
   types:
   - Holding
   decks:
@@ -2795,6 +2829,8 @@ cards:
   flavor_text: <i>"Perhaps it will be used for display, or carried by a great warrior. I never know for
     certain, but I will find its true form regardless."</i>
 - title: Tsubo the Drunk
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -2867,6 +2903,7 @@ cards:
   rarity: Promo
 - title: Unicorn Scout
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2877,7 +2914,6 @@ cards:
   - Samurai
   - Scout
   - Unicorn Clan
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2

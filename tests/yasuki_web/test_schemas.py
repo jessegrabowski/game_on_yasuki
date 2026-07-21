@@ -118,25 +118,33 @@ def test_search_deck_without_value_searches_the_whole_deck():
     assert intent_from_envelope(env) == SearchDeck(DeckKey(PlayerId.P1, Side.FATE), limit=None)
 
 
-def test_spawn_card_intent_parses_and_builds_with_a_minted_id():
+def test_duplicate_envelope_builds_a_source_spawn_with_a_minted_id():
     msg = ClientMessage.model_validate(
         {
             "type": "INTENT",
             "room": "r1",
-            "intent": {
-                "op": "SPAWN_CARD",
-                "name": "X",
-                "img": "a.jpg",
-                "side": "DYNASTY",
-                "position": [1, 2],
-            },
+            "intent": {"op": "SPAWN_CARD", "source_card_id": "P1-3", "position": [1, 2]},
         }
     )
-    assert msg.intent.name == "X" and msg.intent.side == "DYNASTY"
+    assert msg.intent.source_card_id == "P1-3"
     # The server mints the card id; supplying one, the envelope decodes to a core SpawnCard intent.
     env = msg.intent.model_copy(update={"card_id": "spawn-1"})
     assert intent_from_envelope(env) == SpawnCard(
-        "spawn-1", "X", Side.DYNASTY, "a.jpg", BoardPos(1.0, 2.0)
+        card_id="spawn-1", source_card_id="P1-3", position=BoardPos(1.0, 2.0)
+    )
+
+
+def test_create_token_envelope_builds_a_token_spawn():
+    msg = ClientMessage.model_validate(
+        {
+            "type": "INTENT",
+            "room": "r1",
+            "intent": {"op": "SPAWN_CARD", "token_id": "jackal_pack", "position": [1, 2]},
+        }
+    )
+    env = msg.intent.model_copy(update={"card_id": "spawn-1"})
+    assert intent_from_envelope(env) == SpawnCard(
+        card_id="spawn-1", token_id="jackal_pack", position=BoardPos(1.0, 2.0)
     )
 
 

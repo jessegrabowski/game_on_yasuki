@@ -146,6 +146,8 @@ cards:
   flavor_text: <i>Noble blood alone cannot fuel a war.</i>
   collector_number: '110'
 - title: Awaken the Eighth
+  creates:
+  - eighth_dragon
   types:
   - Spell
   decks:
@@ -2060,6 +2062,8 @@ cards:
   flavor_text: <i>"The Lords of Death are pleased with the Khan's offering."</i>
   collector_number: '73'
 - title: Moto Gonnohyoe
+  creates:
+  - moto_gonnohyoes_cavalry
   types:
   - Personality
   decks:
@@ -2258,6 +2262,8 @@ cards:
   flavor_text: <i>"The same force that overcomes all things is also the most fluid." - Doji Akiko</i>
   collector_number: '152'
 - title: Outmaneuvered by Tactics
+  creates:
+  - battle_ally
   types:
   - Strategy
   decks:
@@ -2742,6 +2748,14 @@ cards:
   flavor_text: <i>The Khan's new wall is well patrolled.</i>
   collector_number: '73'
 - title: Shinjo Tsuyoshi
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
+  - tsuyoshis_wakizashi
   types:
   - Personality
   decks:
@@ -2790,6 +2804,9 @@ cards:
   artist: Brad Williams
   collector_number: '155'
 - title: Shosuro Adeiko
+  creates:
+  - token_minus1c
+  - token_minus3f_minus1c
   types:
   - Personality
   decks:

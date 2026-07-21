@@ -36,6 +36,9 @@ cards:
   flavor_text: <i>"A Lion hero? Oh my goodness, no. This is the tale of a great hero from the Crane Clan."
     - Ikoma Asa</i>
 - title: Agasha Orito
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -215,12 +218,13 @@ cards:
     The revolutionaries are preparing to charge."</i>
 - title: Ashigaru Defender
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Ashigaru
-  text: Daigotsu Masahiko Follower.<br>May not be included in decks.
+  text: Daigotsu Masahiko Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -374,13 +378,14 @@ cards:
   flavor_text: <i>"Fudo was a great prophet, and a student of the Tao without compare."</i>
 - title: Benika's Pride
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cat
   - Nonhuman
-  text: Matsu Benika Follower.<br>May not be included in decks.
+  text: Matsu Benika Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -462,6 +467,8 @@ cards:
     belittle art, none dare belittle the position of artisan, for to do so is to insult a thousand years
     of tradition.</i>
 - title: Brilliant Rebirth Temple
+  creates:
+  - young_defender
   types:
   - Stronghold
   decks:
@@ -519,6 +526,8 @@ cards:
   rarity: Promo
   artist: IFS
 - title: Calling on Earth
+  creates:
+  - earthen_servant
   types:
   - Spell
   decks:
@@ -565,12 +574,12 @@ cards:
   flavor_text: <i>"Never enter a battle without accurate knowledge of the terrain." -Ikoma Otemi</i>
 - title: Cavalry Token
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cavalry
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -758,6 +767,7 @@ cards:
   flavor_text: <i>"The Kitsune have requested aid, Hideo." -Kitsuki Taiko</i>
 - title: Crab Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -766,7 +776,7 @@ cards:
   keywords:
   - Crab Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -780,12 +790,13 @@ cards:
     death in the name of Hida."<i>
 - title: Crane Levies
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cavalry
-  text: Utaku Meadows Follower.<br>May not be included in decks.
+  text: Utaku Meadows Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -799,6 +810,7 @@ cards:
   flavor_text: <i>The coffers of the Crane can purchase the skills the clan requires.</i>
 - title: Crane Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -807,7 +819,7 @@ cards:
   keywords:
   - Crane Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -987,6 +999,8 @@ cards:
   artist: Drew Baker
   flavor_text: <i>He only laughed and pulled the blade from his chest.</i>
 - title: Dawn of the Dead
+  creates:
+  - risen_ghul
   types:
   - Strategy
   decks:
@@ -1009,11 +1023,10 @@ cards:
   flavor_text: <i>"Rise, my children. Rise, and serve."</i>
 - title: Dayu's Troops
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  keywords:
-  - Hida Dayu Follower.May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 2
@@ -1241,6 +1254,7 @@ cards:
   flavor_text: <i>"Ungrateful wretches! You should be thanking us!"</i>
 - title: Dragon Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1249,7 +1263,7 @@ cards:
   keywords:
   - Dragon Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -1319,6 +1333,8 @@ cards:
   artist: Steve Argyle
   flavor_text: <i>Berserkers do not fear death, for it is their constant companion.</i>
 - title: Equipment Storage
+  creates:
+  - token_plus1f
   types:
   - Holding
   decks:
@@ -1388,10 +1404,11 @@ cards:
   flavor_text: <i>"Fools with no stamina have no business enjoying a man's drink." -Hida Takeo</i>
 - title: Farmer
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  text: Farmlands Follower.<br>May not be included in decks.
+  text: Farmlands Follower.
   gold_cost: 0
   focus: 0
   force: 1
@@ -1838,6 +1855,8 @@ cards:
   rarity: Promo
   artist: Andy Hepworth
 - title: House of the Dead
+  creates:
+  - undead
   types:
   - Holding
   decks:
@@ -1875,6 +1894,8 @@ cards:
   artist: Steve Argyle
   flavor_text: <i>Debauchery and deceit in equal measure.</b>
 - title: Hunger of the Dead
+  creates:
+  - token_minus1f_minus1c
   types:
   - Event
   decks:
@@ -1987,6 +2008,7 @@ cards:
     to the Great Cycle!"</i>
 - title: Ikoma Reinforcements
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1995,7 +2017,7 @@ cards:
   keywords:
   - Lion Clan
   - Samurai
-  text: Unexpected Reinforcements Personality.<br>May not be included in decks.
+  text: Unexpected Reinforcements Personality.
   gold_cost: 0
   force: 1
   chi: 1
@@ -2432,13 +2454,14 @@ cards:
     escapes them, I will render to ash."</i>
 - title: Kurimoko's Recruits
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Ronin
   - Samurai
-  text: Shinjo Kurimoko Personality.<br>May not be included in decks.
+  text: Shinjo Kurimoko Personality.
   gold_cost: 0
   force: 2
   chi: 1
@@ -2599,6 +2622,7 @@ cards:
     are crowded with anxious people who pray that the link will be restored.</i>
 - title: Lion Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2607,7 +2631,7 @@ cards:
   keywords:
   - Lion Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -2640,6 +2664,7 @@ cards:
     The Khan sneered. "No, to join him."</i>
 - title: Mantis Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2648,7 +2673,7 @@ cards:
   keywords:
   - Mantis Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -2767,10 +2792,11 @@ cards:
   artist: Glen Osterberger
 - title: Men at Arms
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  text: We Stand Ready Follower.<br>May not be included in decks.
+  text: We Stand Ready Follower.
   gold_cost: 0
   focus: 0
   force: 0
@@ -2784,10 +2810,11 @@ cards:
   flavor_text: <i>"There are always those who stand ready when a time of trial is upon us." - Miya Shoin</i>
 - title: Militia Recruit
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  text: Militia Training Ground Follower.<br>May not be included in decks.
+  text: Militia Training Ground Follower.
   gold_cost: 0
   focus: 0
   force: 0
@@ -3130,12 +3157,13 @@ cards:
     mine. All praise the Son of Heaven, the Divine Emperor." -Hida Kisada, Son of Kuon</i>
 - title: New Recruit
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Samurai
-  text: Recruiting Allies Personality.<br>May not be included in decks.
+  text: Recruiting Allies Personality.
   gold_cost: 0
   force: 2
   chi: 2
@@ -3338,6 +3366,7 @@ cards:
   artist: Steve Argyle
 - title: Phoenix Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3346,7 +3375,7 @@ cards:
   keywords:
   - Phoenix Clan
   - Samurai
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -3359,6 +3388,7 @@ cards:
   flavor_text: <i>To combine the touch of the kami with the purity of bushido is the mark of a true master.</i>
 - title: Phoenix Warrior
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3367,7 +3397,7 @@ cards:
   keywords:
   - Phoenix Clan
   - Samurai
-  text: Shiba Ningen Personality.<br>May not be included in decks.
+  text: Shiba Ningen Personality.
   gold_cost: 0
   force: 2
   chi: 2
@@ -3379,6 +3409,8 @@ cards:
   artist: Doug Kovacs
   flavor_text: <i>I live but to serve.</i>
 - title: Poison Sake
+  creates:
+  - token_poison
   types:
   - Strategy
   decks:
@@ -3744,6 +3776,7 @@ cards:
     - Mirumoto Kei</i>
 - title: Scorpion Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4195,6 +4228,7 @@ cards:
   flavor_text: <i>"She draws attention away from Tezuko. They are a potent team." - Soshi Yukimi
 - title: Spider Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4203,7 +4237,7 @@ cards:
   keywords:
   - Samurai
   - Spider Clan
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -4232,6 +4266,9 @@ cards:
   artist: Steve Argyle
   flavor_text: <i>"Just another day on the Wall, eh men?"</i>
 - title: Striking the Balance
+  creates:
+  - token_plus1f
+  - token_plus1ph
   types:
   - Strategy
   decks:
@@ -4252,6 +4289,7 @@ cards:
   artist: IFS
 - title: Sturdy Katana
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -4373,6 +4411,7 @@ cards:
     them on their way." - Ikoma Bugoro</i>
 - title: Swift Troops
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4381,7 +4420,7 @@ cards:
   keywords:
   - Samurai
   - Unicorn Clan
-  text: The Western Steppes Personality.<br>May not be included in decks.
+  text: The Western Steppes Personality.
   gold_cost: 0
   force: 0
   chi: 1
@@ -4414,6 +4453,7 @@ cards:
     what we do." - Ikoma Otemi</i>
 - title: Takuro's Apprentice
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4423,7 +4463,7 @@ cards:
   - Apprentice
   - Courtier
   - Scorpion Clan
-  text: Shosuro Takuro Apprentice Personality.<br>May not be included in decks.
+  text: Shosuro Takuro Apprentice Personality.
   gold_cost: 0
   force: 0
   chi: 2
@@ -4854,6 +4894,8 @@ cards:
   flavor_text: <i>The Unicorn worship their gaijin gods of justice, the Lords of Death, within. Beware
     their judgment.</i>
 - title: The Trackless Road
+  creates:
+  - token_mastery
   types:
   - Strategy
   decks:
@@ -4911,6 +4953,8 @@ cards:
   flavor_text: <i>"In the winter of 1170, the legions of the Dark Oracle of Fire assaulted the northern
     border of Rokugan, and the Empire faltered under their assault." - The Ikoma Histories</i>
 - title: The Western Steppes
+  creates:
+  - swift_troops
   types:
   - Stronghold
   decks:
@@ -5081,12 +5125,12 @@ cards:
   flavor_text: <i>One of many worn by the Kami, now it waits for a new legend to bear it.</i>
 - title: Toshi Ranbo Guard
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Guard
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -5250,6 +5294,7 @@ cards:
   flavor_text: <i>"It brings an end to one's days." - Crab saying</i>
 - title: Unicorn Master
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -5258,7 +5303,7 @@ cards:
   keywords:
   - Samurai
   - Unicorn Clan
-  text: Venerable Master Personality.<br>May not be included in decks.
+  text: Venerable Master Personality.
   gold_cost: 0
   force: 3
   chi: 3
@@ -5460,10 +5505,11 @@ cards:
   artist: IFS
 - title: Yaichiro's Men
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  text: Daidoji Yaichiro Follower.<br>May not be included in decks.
+  text: Daidoji Yaichiro Follower.
   gold_cost: 0
   focus: 0
   force: 2
@@ -5614,12 +5660,13 @@ cards:
     Fox. His word is law."</i>
 - title: Young Defender
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Yojimbo
-  text: Brilliant Rebirth Temple Follower.<br>May not be included in decks.
+  text: Brilliant Rebirth Temple Follower.
   gold_cost: 0
   focus: 0
   force: 0

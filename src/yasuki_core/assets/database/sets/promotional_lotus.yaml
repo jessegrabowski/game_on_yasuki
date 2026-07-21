@@ -286,6 +286,8 @@ cards:
   artist: Chris Seaman
   flavor_text: <i>The Shogun's rikugunshokan is among the most respected commanders in the Empire.</i>
 - title: Dark Divination
+  creates:
+  - token_corruption
   types:
   - Spell
   decks:
@@ -684,6 +686,8 @@ cards:
   rarity: Promo
   artist: William O'Connor
 - title: Kaneka's Reserves
+  creates:
+  - kanekas_samurai
   types:
   - Strategy
   decks:
@@ -922,6 +926,7 @@ cards:
   flavor_text: <i>"There is no greater testament to the strength of the wave men."</i>
 - title: Ninja Token
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -929,7 +934,6 @@ cards:
   - Ninja
   keywords:
   - Ninja
-  text: May not be included in decks.
   gold_cost: 4
   force: 2
   chi: 3
@@ -1054,13 +1058,13 @@ cards:
   flavor_text: <i>Cleanse the spirit, and the flesh will follow.</i>
 - title: Ratling Token
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Nonhuman
   - Ratling
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -1184,6 +1188,8 @@ cards:
   artist: Jon Hodgson
   flavor_text: <i>"If we allow Shinsei's death to defeat us, then we will have truly failed him."</i>
 - title: Shourido
+  creates:
+  - fallen_marine
   types:
   - Event
   decks:

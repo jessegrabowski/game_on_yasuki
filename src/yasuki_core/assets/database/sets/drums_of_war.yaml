@@ -160,6 +160,8 @@ cards:
     seek true Enlightenment."</i>
   collector_number: '34'
 - title: Awaken the Sins
+  creates:
+  - lost_soul
   types:
   - Spell
   decks:
@@ -249,6 +251,8 @@ cards:
   flavor_text: <i>"I live for her. You die for my lord."</i>
   collector_number: '47'
 - title: Blade of Hubris
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -1765,6 +1769,8 @@ cards:
   artist: Paul (Prof.) Herbert
   collector_number: '145'
 - title: Matsu Benika
+  creates:
+  - benikas_pride
   types:
   - Personality
   decks:
@@ -2111,6 +2117,9 @@ cards:
   flavor_text: <i>Yasuha fled to warn the Khan as her comrades died.</i>
   collector_number: '85'
 - title: Reinforcements Arrive
+  creates:
+  - ashigaru_2
+  - ashigaru_defender
   types:
   - Strategy
   decks:
@@ -2306,6 +2315,8 @@ cards:
   flavor_text: <i>"Odd how quickly one can become accustomed to even the strangest things."</i>
   collector_number: '114'
 - title: Shadowed Path to Victory
+  creates:
+  - sleeper_agent
   types:
   - Strategy
   decks:
@@ -2940,6 +2951,9 @@ cards:
     one knows the reason." - Doji Soh</i>
   collector_number: '140'
 - title: Togashi Mitsu
+  creates:
+  - token_fire
+  - token_minus1f
   types:
   - Personality
   decks:

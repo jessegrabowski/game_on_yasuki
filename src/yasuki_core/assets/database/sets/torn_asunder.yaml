@@ -505,6 +505,7 @@ cards:
   designer: Duncan
 - title: Breached Oni
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -513,7 +514,6 @@ cards:
   - Oni
   - Shadowlands
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 4
   chi: 2
@@ -548,6 +548,8 @@ cards:
   collector_number: '76'
   designer: Thomas
 - title: Calling the Darkness
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -610,10 +612,11 @@ cards:
   designer: Bryan
 - title: Charter
   types:
+  - Holding
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.<br><b>:bow::</b> Produce 2 Gold.
+  text: <b>:bow::</b> Produce 2 Gold.
   gold_cost: 0
   is_proxy: true
   legality:
@@ -806,6 +809,9 @@ cards:
   collector_number: '59'
   designer: Bryan
 - title: Daigotsu Hashibei
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -1103,6 +1109,8 @@ cards:
   collector_number: '93'
   designer: Bryan
 - title: Eye of the Sword
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -1389,13 +1397,13 @@ cards:
   designer: Loki
 - title: Hired Samurai
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Samurai
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 3
   chi: 3
@@ -1750,6 +1758,7 @@ cards:
   designer: Loki
 - title: Kaxt
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1758,7 +1767,7 @@ cards:
   keywords:
   - Ninja
   - Unaligned
-  text: May not be included in decks.<br>This card has your Clan alignment keyword.
+  text: This card has your Clan alignment keyword.
   gold_cost: 0
   force: 4
   chi: 3
@@ -1771,6 +1780,7 @@ cards:
   collector_number: '5'
 - title: Ki Podling
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1780,7 +1790,6 @@ cards:
   - Podling
   - Shadowlands
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 1
@@ -1844,6 +1853,8 @@ cards:
   collector_number: '126'
   designer: Loki
 - title: Kitsune Yuribara
+  creates:
+  - yuribaras_butterflies
   types:
   - Personality
   decks:
@@ -2571,6 +2582,8 @@ cards:
   collector_number: '133'
   designer: Thomas
 - title: Recruitment Effort
+  creates:
+  - hired_samurai
   types:
   - Strategy
   decks:
@@ -3018,6 +3031,8 @@ cards:
   collector_number: '88'
   designer: Bryan
 - title: Suck the Marrow
+  creates:
+  - token_poison
   types:
   - Strategy
   decks:
@@ -3764,6 +3779,7 @@ cards:
   designer: Thomas
 - title: Yuribara's Butterflies
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3775,9 +3791,8 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: 'May not be included in decks.<br>Other player''s Battle actions must target a Butterfly Personality
-    at this battlefield, if legal.<br>After another player''s Battle action targets this card: Destroy
-    this card.'
+  text: 'Other player''s Battle actions must target a Butterfly Personality at this battlefield, if legal.<br>After
+    another player''s Battle action targets this card: Destroy this card.'
   gold_cost: 0
   force: 0
   chi: 2

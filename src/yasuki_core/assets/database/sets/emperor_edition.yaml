@@ -216,6 +216,8 @@ cards:
     other. His honor comes through service and he lives that service constantly.
   rarity: Fixed
 - title: Akodo Kano
+  creates:
+  - token_master
   types:
   - Personality
   decks:
@@ -284,6 +286,8 @@ cards:
     confrontation.
   rarity: Fixed
 - title: Akodo Makotai
+  creates:
+  - infantry_follower
   types:
   - Personality
   decks:
@@ -894,6 +898,8 @@ cards:
   flavor_text: <i>"I refuse to die! I will not die! I will stoop to any evil to cling on to this life!"</i>
   collector_number: '271'
 - title: Awed Witness
+  creates:
+  - witness
   types:
   - Strategy
   decks:
@@ -1554,6 +1560,8 @@ cards:
   artist: Jason Juta
   collector_number: '28'
 - title: Breath of the Heavens
+  creates:
+  - token_fire
   types:
   - Strategy
   decks:
@@ -1733,6 +1741,8 @@ cards:
   artist: Heather V. Kreiter
   collector_number: '247'
 - title: Chrysanthemum Blossom
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -2449,6 +2459,7 @@ cards:
   collector_number: '3'
 - title: Dak-ho's Men
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2459,7 +2470,6 @@ cards:
   - Samurai
   - Scout
   - Unicorn Clan
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2570,6 +2580,7 @@ cards:
   collector_number: '16'
 - title: Denhei's Snake
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2580,8 +2591,7 @@ cards:
   - Nonhuman
   - Snake
   - Spirit
-  text: 'May not be included in decks.<br><b>Open:</b> Target a Personality: He is bitten. His base abilities
-    may not be used.'
+  text: '<b>Open:</b> Target a Personality: He is bitten. His base abilities may not be used.'
   gold_cost: 0
   force: 2
   chi: 2
@@ -2863,12 +2873,12 @@ cards:
   collector_number: '289'
 - title: Dutiful Cavalry
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cavalry
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -3120,10 +3130,12 @@ cards:
   collector_number: '33'
 - title: Farmlands Conscripts
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
+  keywords:
+  - Ashigaru
   gold_cost: 0
   focus: 0
   force: 1
@@ -3417,6 +3429,7 @@ cards:
   collector_number: '233'
 - title: Gina's Fox
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3427,8 +3440,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: May not be included in decks.<br>Enemy attacking Personalities and Followers at this card's battlefield
-    have -1F.
+  text: Enemy attacking Personalities and Followers at this card's battlefield have -1F.
   gold_cost: 0
   force: 2
   chi: 2
@@ -3564,6 +3576,8 @@ cards:
   flavor_text: <i>"Your lair will remain unknown, master."</i>
   collector_number: '211'
 - title: Goju Kobashi
+  creates:
+  - kobashis_spawn
   types:
   - Personality
   decks:
@@ -4521,10 +4535,10 @@ cards:
   collector_number: '313'
 - title: Infantry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 2
@@ -4840,12 +4854,12 @@ cards:
   collector_number: '425'
 - title: Kaiu Armor
   types:
+  - Item
   - Proxy
   decks:
   - Other
   keywords:
   - Armor
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+1'
@@ -4975,6 +4989,8 @@ cards:
     nothing for political clout. To Nakano, the beauty of stone is all that matters.
   rarity: Fixed
 - title: Kaiu Village
+  creates:
+  - kaiu_armor
   types:
   - Region
   decks:
@@ -5266,6 +5282,9 @@ cards:
   flavor_text: <i>"They are in all things, thus all things need be honored."</i>
   collector_number: '111'
 - title: Kitsu Tamasine
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -5378,6 +5397,8 @@ cards:
   flavor_text: <i>"The protocol is obvious, as are the obligations of the challenged in this instance."</i>
   collector_number: '89'
 - title: Kitsune Denhei
+  creates:
+  - denheis_snake
   types:
   - Personality
   decks:
@@ -5406,6 +5427,8 @@ cards:
     the guilty. I will provide them their solace."</i>
   collector_number: '117'
 - title: Kitsune Gina
+  creates:
+  - ginas_fox
   types:
   - Personality
   decks:
@@ -5487,6 +5510,7 @@ cards:
   collector_number: '316'
 - title: Kobashi's Spawn
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5495,7 +5519,6 @@ cards:
   keywords:
   - Ninja
   - Shadowlands
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -5618,12 +5641,12 @@ cards:
   collector_number: '394'
 - title: Kyuden Hida Scout
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Scout
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 0
@@ -5663,6 +5686,8 @@ cards:
   flavor_text: <i>"We are never alone." - Mantra of the Kitsune</i>
   collector_number: '410'
 - title: Kyuden Otomo
+  creates:
+  - token_favor
   types:
   - Stronghold
   decks:
@@ -5779,6 +5804,7 @@ cards:
 - id: lion_ancestor
   title: Lion Ancestor
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -5789,7 +5815,6 @@ cards:
   - Lion Clan
   - Samurai
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -6246,6 +6271,8 @@ cards:
   flavor_text: <i>"That… is a very strange weapon."<br>"I have faced very strange opponents."</i>
   collector_number: '236'
 - title: Moneylender
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -6569,13 +6596,13 @@ cards:
   rarity: Fixed
 - title: Mounted Ashigaru
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cavalry
   - Ashigaru
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -6656,13 +6683,13 @@ cards:
   collector_number: '321'
 - title: Nakanu's Creations
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Shadowlands
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -7086,13 +7113,14 @@ cards:
   collector_number: '402'
 - title: Plain of Gold
   types:
+  - Strategy
   - Proxy
   decks:
   - Other
   keywords:
   - Terrain
-  text: 'May not be included in decks.<br><b>Battle:</b> If this card is in play, destroy it and target
-    a Terrain in your hand: Take an additional Battle action to play it.'
+  text: '<b>Battle:</b> If this card is in play, destroy it and target a Terrain in your hand: Take an
+    additional Battle action to play it.'
   gold_cost: 0
   focus: 0
   is_proxy: true
@@ -7595,6 +7623,7 @@ cards:
   flavor_text: <i>Choosing battle sites was one of the few advantages the Empire's defenders had.</i>
 - title: Rokuta's Apprentice
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -7604,7 +7633,6 @@ cards:
   - Apprentice
   - Courtier
   - Scorpion Clan
-  text: May not be included in decks.
   gold_cost: 0
   force: 0
   chi: 2
@@ -8244,6 +8272,13 @@ cards:
     one day proving his strength to the Mantis in honorable combat.
   rarity: Fixed
 - title: Shinjo Ki-Chang
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -8518,6 +8553,8 @@ cards:
     often hinge on the words of those in power.</i>
   collector_number: '158'
 - title: Shosuro Rokuta
+  creates:
+  - rokutas_apprentice
   types:
   - Personality
   decks:
@@ -9102,6 +9139,8 @@ cards:
     there is a stipend for his capture?"</i>
   collector_number: '23'
 - title: Suiteiru no Oni
+  creates:
+  - suiteirus_podling
   types:
   - Personality
   decks:
@@ -9129,6 +9168,7 @@ cards:
   collector_number: '184'
 - title: Suiteiru's Podling
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -9136,7 +9176,6 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -9282,6 +9321,7 @@ cards:
   collector_number: '24'
 - title: Swamp Spirit
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -9290,7 +9330,6 @@ cards:
   - Shadowlands
   - Spirit
   - Swamp Spirit
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -9731,6 +9770,8 @@ cards:
     May we never see its like again." - The Miya Histories</i>'
   collector_number: '364'
 - title: The Golden Plains
+  creates:
+  - plain_of_gold
   types:
   - Stronghold
   decks:
@@ -10272,13 +10313,13 @@ cards:
   rarity: Fixed
 - title: The Walking Dead
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Shadowlands
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -10383,6 +10424,9 @@ cards:
     declines politely. She has a greater duty to the Dragon Clan.
   rarity: Fixed
 - title: Togashi Torazu
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -10602,12 +10646,12 @@ cards:
   collector_number: '101'
 - title: Tsi Weapon
   types:
+  - Item
   - Proxy
   decks:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+1'
@@ -11092,6 +11136,17 @@ cards:
     a misspoken word in court can be."</i>
   collector_number: '386'
 - title: Venerable Master
+  creates:
+  - crab_master
+  - crane_master
+  - dragon_master
+  - lion_master
+  - mantis_master
+  - phoenix_master
+  - scorpion_master
+  - spider_master
+  - unicorn_master
+  - venerated_sensei
   types:
   - Holding
   decks:
@@ -11115,13 +11170,14 @@ cards:
   collector_number: '55'
 - title: Venerated Sensei
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Samurai
   - Unaligned
-  text: May not be included in decks.<br>This card has your Clan alignment keyword.
+  text: This card has your Clan alignment keyword.
   gold_cost: 0
   force: 3
   chi: 3
@@ -11449,13 +11505,14 @@ cards:
   collector_number: '25'
 - title: Witness
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Samurai
   - Unaligned
-  text: May not be included in decks.<br>This card has your Clan alignment keyword.
+  text: This card has your Clan alignment keyword.
   gold_cost: 0
   force: 2
   chi: 2
@@ -11589,12 +11646,12 @@ cards:
   collector_number: '71'
 - title: Yasunori's Gift
   types:
+  - Item
   - Proxy
   decks:
   - Other
   keywords:
   - Weapon
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+1'

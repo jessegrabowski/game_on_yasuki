@@ -1427,6 +1427,8 @@ cards:
     We must find a way to match them." - Ikoma Otemi</i>
   collector_number: '264'
 - title: Chuda Mishime
+  creates:
+  - the_walking_dead
   types:
   - Personality
   decks:
@@ -1980,6 +1982,8 @@ cards:
   flavor_text: <i>"Kyoso. Maw. Fu Leng is most displeased."</i>
   collector_number: '184'
 - title: Daitan
+  creates:
+  - daitans_ancestor
   types:
   - Item
   decks:
@@ -2101,6 +2105,8 @@ cards:
     alone.</i>
   collector_number: '230'
 - id: depths_of_the_shinomen
+  creates:
+  - ratling_token
   title: Depths of the Shinomen
   types:
   - Stronghold
@@ -6129,6 +6135,8 @@ cards:
   flavor_text: <i>Shosuro diplomacy need not be subtle.</i>
   collector_number: '278'
 - title: No Victory
+  creates:
+  - champion_duelist
   types:
   - Strategy
   decks:
@@ -6807,6 +6815,8 @@ cards:
   flavor_text: <i>"The Nezumi's powerful magic is the only memory of what was once theirs." - Kuni Kiyoshi</i>
   collector_number: '159'
 - title: Ratling Raider
+  creates:
+  - nezumi_warrior
   types:
   - Personality
   decks:
@@ -7445,6 +7455,8 @@ cards:
     Master Tiger</i>
   collector_number: '32'
 - title: Secluded Waystation
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -7554,6 +7566,8 @@ cards:
   flavor_text: <i>"The worse the odds, the fiercer the Hida." - Iuchi Lixue</i>
   collector_number: '273'
 - title: Shiba Hayama
+  creates:
+  - undead
   types:
   - Personality
   decks:
@@ -9350,6 +9364,9 @@ cards:
   artist: Lee Moyer
   collector_number: '422'
 - title: The Iron Legion
+  creates:
+  - iron_blade
+  - legion_armor
   types:
   - Follower
   decks:
@@ -9435,6 +9452,8 @@ cards:
   flavor_text: <i>Created by Toturi, the Legion answers only to the Shogun.</i>
   collector_number: '333'
 - title: The Legions Charge
+  creates:
+  - legionnaire
   types:
   - Strategy
   decks:
@@ -11496,6 +11515,8 @@ cards:
   artist: Luis Vazquez
   collector_number: '375'
 - title: Zeth
+  creates:
+  - goblin_rabble
   types:
   - Personality
   decks:

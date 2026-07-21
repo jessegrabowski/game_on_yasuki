@@ -58,6 +58,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Aanadi
+  creates:
+  - pearl_strategy
   types:
   - Personality
   decks:
@@ -189,6 +191,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Asako Dotari
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -217,6 +221,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Asako Miyabi, Master of Water
+  creates:
+  - token_minus1f
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -529,6 +536,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Chuda Niko
+  creates:
+  - expendable_personality_0_2_1
   types:
   - Personality
   decks:
@@ -557,6 +566,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Chuda Shidare
+  creates:
+  - blossom_oni_follower_1f
   types:
   - Personality
   decks:
@@ -690,6 +701,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Cracks Appear
+  creates:
+  - token_minus1f
   types:
   - Strategy
   decks:
@@ -898,6 +911,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Doji Motoi
+  creates:
+  - token_plus1ph
   types:
   - Personality
   decks:
@@ -956,6 +971,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Dull Tanto
+  creates:
+  - token_minus1f
   types:
   - Item
   decks:
@@ -1323,6 +1340,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hygyu no Oni
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1374,6 +1393,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Ijathilu
+  creates:
+  - naga_zealot_personality_2_2_1
   types:
   - Personality
   decks:
@@ -1735,6 +1756,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsuki Kohaku
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -1790,6 +1813,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Toson
+  creates:
+  - ram_spirit_personality_3_1_3
   types:
   - Personality
   decks:
@@ -1819,6 +1844,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kitsune Yayuko
+  creates:
+  - goose_spirit_personality_1_2_3
   types:
   - Personality
   decks:
@@ -2068,6 +2095,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Ajinai
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -2203,6 +2232,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Muzaka's Kiss
+  creates:
+  - token_poison
   types:
   - Item
   decks:
@@ -3097,6 +3128,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Forgotten
+  creates:
+  - forgotten_dead
   types:
   - Follower
   decks:
@@ -3186,6 +3219,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Relentless Earth
+  creates:
+  - token_minus1f
   types:
   - Spell
   decks:
@@ -3207,6 +3242,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Soul's Forge
+  creates:
+  - token_minus1f
   types:
   - Spell
   decks:
@@ -3230,6 +3267,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Spirit Ascends
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Spell
   decks:

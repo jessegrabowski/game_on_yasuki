@@ -78,9 +78,14 @@ pytest-playwright = "*"
 pre-commit = "*"
 ruff = "*"
 
+[tool.pixi.feature.lama.pypi-dependencies]
+torch = "*"
+simple-lama-inpainting = "*"
+
 [tool.pixi.environments]
 default = { features = ["dev"], solve-group = "default" }
 prod = { solve-group = "default" }
+lama = { features = ["lama"] }
 
 [tool.pixi.tasks]
 play = "python play.py"

@@ -39,6 +39,8 @@ cards:
     she said to herself.</i>
   designer: Bryan
 - title: A Great Victory
+  creates:
+  - token_plus1f_plus1c
   types:
   - Event
   decks:
@@ -744,6 +746,8 @@ cards:
   rarity: Promo
   artist: Noah Bradley
 - title: Charter of the Legion of Two Thousand
+  creates:
+  - fresh_recruit
   types:
   - Holding
   decks:
@@ -1639,6 +1643,8 @@ cards:
   collector_number: '150'
   designer: Bryan
 - title: Fudo
+  creates:
+  - token_charging
   types:
   - Personality
   decks:
@@ -1668,6 +1674,8 @@ cards:
   rarity: Promo
   artist: Wen Juinn
 - title: Furugaro
+  creates:
+  - token_charging
   types:
   - Follower
   decks:
@@ -2002,6 +2010,8 @@ cards:
   flavor_text: <i>"I care nothing for what cause or which weapon. I only wish to match my skills against
     the best."</i>
 - title: Heart of Fudo
+  creates:
+  - token_charging
   types:
   - Item
   decks:
@@ -2318,6 +2328,8 @@ cards:
     terrain your opponent has chosen."</i>
   legal_date: 2012-06-01
 - title: Imminent Victory
+  creates:
+  - token_plus1f_plus1c
   types:
   - Strategy
   decks:
@@ -2338,6 +2350,8 @@ cards:
   collector_number: '185'
   designer: Bryan
 - title: Imperial Charter
+  creates:
+  - charter
   types:
   - Strategy
   decks:
@@ -2818,6 +2832,8 @@ cards:
   flavor_text: <i>"Few samurai regularly pay homage to the Fortune of Soil, but all should. His largesse
     permits our very survival." - Agasha Kurou</i>
 - title: Ki no Oni
+  creates:
+  - ki_podling
   types:
   - Personality
   decks:
@@ -2867,6 +2883,9 @@ cards:
   artist: Gong Studios
   flavor_text: <i>"Hear my words, and the tale of a hero." - Matsu Kasei</i>
 - title: Kitsu Akai
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -2924,6 +2943,8 @@ cards:
     to your slight."</i>
   legal_date: 2012-06-01
 - title: Kitsune Tokoru
+  creates:
+  - tokorus_bear
   types:
   - Personality
   decks:
@@ -3693,6 +3714,8 @@ cards:
   artist: Lake Hurwitz
   flavor_text: <i>Some samurai did not know their limits and disgraced themselves on a nightly basis.<i>
 - title: P'an Ku Cultist
+  creates:
+  - token_madness
   types:
   - Follower
   decks:
@@ -3851,6 +3874,8 @@ cards:
   artist: Raymond Guastadnes
   designer: Bryan
 - title: Profits
+  creates:
+  - token_wealth
   types:
   - Strategy
   decks:
@@ -3965,6 +3990,8 @@ cards:
   artist: Carlos NCT
   designer: Loki
 - title: Renewed Lands
+  creates:
+  - token_plus1gp
   types:
   - Region
   decks:
@@ -4706,6 +4733,8 @@ cards:
     duties, so that only the sensible remain to learn the true secrets of the clan.</i>
   legal_date: 2012-06-01
 - title: Shrine to Hofukushu
+  creates:
+  - token_revenge
   types:
   - Holding
   decks:
@@ -5697,6 +5726,8 @@ cards:
   artist: Conceptopolis
   flavor_text: <i>"Stand firm and let us see which of us is worthy of service." - Daigotsu Hotako</i>
 - title: The Obsidian Dueling Grounds
+  creates:
+  - token_plus1f
   types:
   - Holding
   decks:
@@ -5739,6 +5770,8 @@ cards:
   artist: Conceptopolis
   flavor_text: <i>"Stand aside or die, fools!" - Takasho</i>
 - title: The Onyx Dueling Circle
+  creates:
+  - onyx_oni
   types:
   - Holding
   decks:
@@ -5891,6 +5924,8 @@ cards:
   rarity: Promo
   artist: Noah Bradley
 - title: The Silken House
+  creates:
+  - token_sake
   types:
   - Holding
   decks:
@@ -5988,6 +6023,8 @@ cards:
   artist: Conceptopolis
   flavor_text: <i>The Empire's finest gather in Tsuma every year...</i>
 - title: The Topaz Dojo
+  creates:
+  - token_plus1f_plus1c
   types:
   - Holding
   decks:
@@ -6097,6 +6134,8 @@ cards:
   artist: Gong Studios
   designer: Bryan
 - title: Through the Breach
+  creates:
+  - breached_oni
   types:
   - Strategy
   decks:

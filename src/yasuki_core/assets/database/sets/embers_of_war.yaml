@@ -183,6 +183,7 @@ cards:
   designer: Loki
 - title: Assassin
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -190,7 +191,6 @@ cards:
   - Duelist
   - Assassin
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 0
   chi: 3
@@ -340,6 +340,9 @@ cards:
   collector_number: '110'
   designer: Bryan
 - title: Celestial Sword of the Lion
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Item
   decks:
@@ -638,6 +641,8 @@ cards:
   collector_number: '90'
   designer: Bryan
 - title: Deadly Discipline
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -707,6 +712,7 @@ cards:
   designer: Bryan
 - title: Emerald Magistrate
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -716,7 +722,6 @@ cards:
   - Magistrate
   - Samurai
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 4
   chi: 4
@@ -817,6 +822,7 @@ cards:
   designer: Loki
 - title: Fresh Recruit
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -824,7 +830,6 @@ cards:
   - Ronin
   - Samurai
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -975,13 +980,13 @@ cards:
   designer: Thomas
 - title: Guest
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Monk
   - Unaligned
-  text: May not be included in decks.
   gold_cost: 0
   force: 1
   chi: 1
@@ -996,6 +1001,7 @@ cards:
   collector_number: '6'
 - title: Haruki's Deer
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1006,8 +1012,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: 'May not be included in decks.<br><b>Limited:</b> If another player has higher Family Honor than
-    you: Gain 2 Honor.'
+  text: '<b>Limited:</b> If another player has higher Family Honor than you: Gain 2 Honor.'
   gold_cost: 0
   force: 2
   chi: 2
@@ -1511,6 +1516,9 @@ cards:
   collector_number: '46'
   designer: Bryan
 - title: Isawa Mina
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1797,6 +1805,9 @@ cards:
   collector_number: '121'
   designer: Duncan
 - title: Kitsu Miro
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -1890,6 +1901,8 @@ cards:
   collector_number: '26'
   designer: Loki
 - title: Kitsune Haruki
+  creates:
+  - harukis_deer
   types:
   - Personality
   decks:
@@ -1941,6 +1954,7 @@ cards:
 - id: lion_ancestor
   title: Lion Ancestor
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1951,7 +1965,6 @@ cards:
   - Lion Clan
   - Samurai
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2295,6 +2308,8 @@ cards:
   collector_number: '123'
   designer: Bryan
 - title: Perplexing Guests
+  creates:
+  - guest
   types:
   - Strategy
   decks:
@@ -3400,6 +3415,8 @@ cards:
   collector_number: '145'
   designer: Loki
 - title: The Cycle of Vengeance
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:

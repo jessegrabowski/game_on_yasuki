@@ -715,13 +715,13 @@ cards:
   collector_number: '149'
 - title: Chikara
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Ronin
   - Samurai
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -734,6 +734,8 @@ cards:
   flavor_text: <i>"My son is mindful, dutiful, and attentive. He is all that is good in the Seppun family.
     That my shame extends to him is the greatest regret I shall ever know." - Oishi</i>
 - title: Chuda Atsuro
+  creates:
+  - the_walking_dead
   types:
   - Personality
   decks:
@@ -1056,12 +1058,12 @@ cards:
   collector_number: '23'
 - title: Dutiful Cavalry
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cavalry
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 1
@@ -1154,10 +1156,12 @@ cards:
   collector_number: '101'
 - title: Farmland Conscripts
   types:
+  - Follower
   - Proxy
   decks:
   - Other
-  text: May not be included in decks.
+  keywords:
+  - Ashigaru
   gold_cost: 0
   focus: 0
   force: 1
@@ -1215,6 +1219,8 @@ cards:
     - Kakita Hideo</i>
   collector_number: '102'
 - title: Flawless Assassin
+  creates:
+  - token_poison
   types:
   - Follower
   decks:
@@ -1257,13 +1263,14 @@ cards:
   collector_number: '103'
 - title: Fudo
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Fudo
   - Nonhuman
-  text: May not be included in decks.<br>Cards' effects will not bow this Personality or move him home.
+  text: Cards' effects will not bow this Personality or move him home.
   gold_cost: 0
   force: 10
   chi: 5
@@ -1524,6 +1531,9 @@ cards:
     Sound good?"</i>
   collector_number: '16'
 - title: Hiruma Toshio
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -1684,6 +1694,8 @@ cards:
   flavor_text: <i>"The Empress has commanded all to search, and the Phoenix will not be found wanting!"</i>
   collector_number: '49'
 - title: Isawa Takashi
+  creates:
+  - shiba_yojimbo
   types:
   - Personality
   decks:
@@ -2000,6 +2012,7 @@ cards:
   collector_number: '52'
 - title: Maseru no Oni
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2007,7 +2020,6 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
-  text: May not be included in decks.
   gold_cost: 0
   force: 6
   chi: 3
@@ -2583,6 +2595,7 @@ cards:
   collector_number: '114'
 - title: Pawn of Corruption
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2590,7 +2603,6 @@ cards:
   - Nonhuman
   - Oni
   - Shadowlands
-  text: May not be included in decks.
   gold_cost: 0
   force: 7
   chi: 4
@@ -2629,13 +2641,13 @@ cards:
   collector_number: '150'
 - title: Phantom Blade
   types:
+  - Item
   - Proxy
   decks:
   - Other
   keywords:
   - Weapon
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: '+2'
@@ -2966,12 +2978,12 @@ cards:
   collector_number: '123'
 - title: Shiba Allies
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cavalry
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 2
@@ -3222,13 +3234,13 @@ cards:
   collector_number: '125'
 - title: Spirit of Maigo no Musha
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cavalry
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   focus: 0
   force: 0
@@ -3364,6 +3376,8 @@ cards:
   flavor_text: <i>The Spider are always near, but difficult to find.</i>
   collector_number: '130'
 - title: Talisman of Maigo no Musha
+  creates:
+  - spirit_of_maigo_no_musha
   types:
   - Item
   decks:
@@ -3597,13 +3611,13 @@ cards:
   collector_number: '134'
 - title: The Walking Dead
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Shadowlands
   - Undead
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -3959,6 +3973,8 @@ cards:
   artist: Slawomir Maniak
   collector_number: '147'
 - title: Wartime Allies
+  creates:
+  - shiba_allies
   types:
   - Event
   decks:

@@ -1,0 +1,3059 @@
+set: Tokens
+cards:
+- id: token_addiction
+  title: Addiction Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_affection
+  title: Affection Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_arrow
+  title: Arrow Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_aura
+  title: Aura Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_blood
+  title: Blood Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_change
+  title: Change Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -2
+  chi: 3
+  gold_cost: 0
+  is_proxy: true
+- id: token_charge
+  title: Charge Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_charging
+  title: Charging Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_chi
+  title: Chi Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_cloud
+  title: Cloud Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_clout
+  title: Clout Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_conspiracy
+  title: Conspiracy Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_corpse
+  title: Corpse Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_corruption
+  title: Corruption Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_counter
+  title: Counter Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_curse
+  title: Curse Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_doom
+  title: Doom Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_doom_of_the_dragon
+  title: Doom of the Dragon Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_edge
+  title: Edge Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: token_engineering
+  title: Engineering Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_erosion
+  title: Erosion Token
+  types:
+  - Token
+  decks:
+  - Other
+  province_strength: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_exhaustion
+  title: Exhaustion Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_explosive
+  title: Explosive Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_favor
+  title: Favor Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_fire
+  title: Fire Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_flow
+  title: Flow Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_frenzy
+  title: Frenzy Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_fury
+  title: Fury Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_glass
+  title: Glass Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_goblet
+  title: Goblet Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_guard
+  title: Guard Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_haunted
+  title: Haunted Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_hunted
+  title: Hunted Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_infamy
+  title: Infamy Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_influence
+  title: Influence Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_jade
+  title: Jade Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_lesson
+  title: Lesson Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_madness
+  title: Madness Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_maho
+  title: Maho Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_master
+  title: Master Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_mastery
+  title: Mastery Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_merchant
+  title: Merchant Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus1c
+  title: -1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus1f
+  title: -1F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus1f_minus1c
+  title: -1F/-1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus1gp
+  title: -1GP Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_production: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus1ps
+  title: -1PS Token
+  types:
+  - Token
+  decks:
+  - Other
+  province_strength: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus2c
+  title: -2C Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -2
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus2f
+  title: -2F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -2
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus2f_minus2c
+  title: -2F/-2C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -2
+  chi: -2
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus2gp
+  title: -2GP Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_production: -2
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus3f
+  title: -3F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -3
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus3f_minus1c
+  title: -3F/-1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -3
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus4c
+  title: -4C Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -4
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus4f
+  title: -4F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -4
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus5f
+  title: -5F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -5
+  gold_cost: 0
+  is_proxy: true
+- id: token_minus5f_minus2c
+  title: -5F/-2C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -5
+  chi: -2
+  gold_cost: 0
+  is_proxy: true
+- id: token_mountain
+  title: Mountain Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_nemuranai
+  title: Nemuranai Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_nightmare
+  title: Nightmare Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_oath
+  title: Oath Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_obsession
+  title: Obsession Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_omen
+  title: Omen Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_pearl
+  title: Pearl Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_plague
+  title: Plague Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus1c
+  title: +1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus1f
+  title: +1F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus1f_minus1c
+  title: +1F/-1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus1f_plus1c
+  title: +1F/+1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus1f_plus1c_plus1ph
+  title: +1F/+1C/+1PH Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus1gp
+  title: +1GP Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_production: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus1ph
+  title: +1PH Token
+  types:
+  - Token
+  decks:
+  - Other
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus1ps
+  title: +1PS Token
+  types:
+  - Token
+  decks:
+  - Other
+  province_strength: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus2f
+  title: +2F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus2f_minus1c
+  title: +2F/-1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 2
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus2f_plus1c
+  title: +2F/+1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 2
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus2f_plus2c
+  title: +2F/+2C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 2
+  chi: 2
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus2ph
+  title: +2PH Token
+  types:
+  - Token
+  decks:
+  - Other
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus3f
+  title: +3F Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 3
+  gold_cost: 0
+  is_proxy: true
+- id: token_plus4f_minus1c
+  title: +4F/-1C Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 4
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_poison
+  title: Poison Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_porcelain
+  title: Porcelain Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_power
+  title: Power Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_prophecy
+  title: Prophecy Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: -1
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_rage
+  title: Rage Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_recruit
+  title: Recruit Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_recruiter
+  title: Recruiter Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_remembrance
+  title: Remembrance Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_revenge
+  title: Revenge Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_sake
+  title: Sake Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_scroll
+  title: Scroll Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_seduction
+  title: Seduction Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_sensei
+  title: Sensei Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_shadow
+  title: Shadow Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_shrine
+  title: Shrine Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_shuriken
+  title: Shuriken Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_sincerity
+  title: Sincerity Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_sleep
+  title: Sleep Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_sleeper
+  title: Sleeper Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_sling
+  title: Sling Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_soul
+  title: Soul Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_spirit
+  title: Spirit Token
+  types:
+  - Token
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_storage
+  title: Storage Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_structure
+  title: Structure Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_tactician
+  title: Tactician Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_taint
+  title: Taint Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_tattoo
+  title: Tattoo Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_tidal
+  title: Tidal Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_training_dojo
+  title: Training Dojo Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_unstitched
+  title: Unstitched Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_valor
+  title: Valor Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_venom
+  title: Venom Token
+  types:
+  - Token
+  decks:
+  - Other
+  chi: -1
+  gold_cost: 0
+  is_proxy: true
+- id: token_vial
+  title: Vial Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_victory
+  title: Victory Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_void
+  title: Void Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_wall
+  title: Wall Token
+  types:
+  - Token
+  decks:
+  - Other
+  province_strength: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_wanted
+  title: Wanted Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_ward
+  title: Ward Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_wasting
+  title: Wasting Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_wealth
+  title: Wealth Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_production: 1
+  gold_cost: 0
+  is_proxy: true
+- id: token_web
+  title: Web Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: token_worker
+  title: Worker Token
+  types:
+  - Token
+  decks:
+  - Other
+  gold_cost: 0
+  is_proxy: true
+- id: ancestor_yojimbo_follower_0f
+  title: Blessed Guard
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ancestor
+  - Spirit
+  - Yojimbo
+  - Expendable
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+- id: armor_item_plus2f
+  title: Armor
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Armor
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: berserker_cavalry_follower_1f
+  title: Berserker Cavalry
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Berserker
+  - Cavalry
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: blossom_oni_follower_1f
+  title: Shidare's Blossom
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Blossom
+  - Nonhuman
+  - Oni
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: courage_follower_1f
+  title: Courageous Troops
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Courage
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: courage_follower_2f
+  title: Drilled Troops
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Courage
+  force: 2
+  gold_cost: 2
+  is_proxy: true
+- id: courtier_0_3_2
+  title: Courtier
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Courtier
+  force: 0
+  chi: 3
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: courtier_expendable_personality_0_2_2
+  title: Terumoto's Courtier
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Courtier
+  - Expendable
+  force: 0
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: <b>Political Open, :bow::</b> A target player gains or loses 1 Honor.
+- id: courtier_personality_0_2_2
+  title: Courtier
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Courtier
+  force: 0
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: crane_courtier_personality_0_2_3
+  title: Kagami's Courtier
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Crane
+  keywords:
+  - Courtier
+  force: 0
+  chi: 2
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: Before your turn ends, banish this Personality; if you did, gain 2 Honor.
+- id: dragon_yojimbo_personality_2_2_2
+  title: Dragon Yojimbo
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Dragon
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 3
+  is_proxy: true
+- id: earth_fire_terrain_strategy
+  title: Terrain
+  types:
+  - Strategy
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Terrain
+  - Earth
+  - Fire
+  gold_cost: 0
+  is_proxy: true
+  text: '<b>Repeatable Battle:</b> Bow your target Ring, or :earth: Personality, to make a :ranged: 3.'
+- id: water_ancestor_terrain_strategy
+  title: Terrain
+  types:
+  - Strategy
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Terrain
+  gold_cost: 0
+  is_proxy: true
+  text: 'Your opposed Ancestor and :water: Personalities at this battlefield have +1F.'
+- id: expendable_personality_0_2_1
+  title: Expendable Servant
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Expendable
+  force: 0
+  chi: 2
+  personal_honor: 1
+  gold_cost: 1
+  is_proxy: true
+- id: fushicho_personality_3_2_3
+  title: Fushicho
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Fushicho
+  - Nonhuman
+  - Cavalry
+  - Fire
+  force: 3
+  chi: 2
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+- id: gaijin_yodotai_follower_1f
+  title: Aulus's Yodotai
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Gaijin
+  - Yodotai
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: goose_spirit_personality_1_2_3
+  title: Yayuko's Goose
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Goose
+  - Nonhuman
+  - Spirit
+  force: 1
+  chi: 2
+  personal_honor: 3
+  gold_cost: 4
+  is_proxy: true
+  text: <b>Open, :bow::</b> If an Attack is declared against you this turn, gain 1 Honor at the end of
+    it for each of your Provinces, to a maximum of 3.
+- id: horror_shadowlands_personality
+  title: Horror
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Horror
+  - Nonhuman
+  - Shadowlands
+  force: '*'
+  chi: '*'
+  gold_cost: '*'
+  is_proxy: true
+- id: mantis_samurai_naval_personality_2_1_2
+  title: Thunder Veteran
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Mantis
+  keywords:
+  - Samurai
+  - Naval
+  force: 2
+  chi: 1
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: mercenary_ronin_personality_2_2_1
+  title: Ninsei's Mercenary
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Mercenary
+  - Ronin
+  - Samurai
+  force: 2
+  chi: 2
+  personal_honor: 1
+  gold_cost: 2
+  is_proxy: true
+- id: moth_spirit_follower_0f
+  title: Sawako's Moth
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Moth
+  - Nonhuman
+  - Spirit
+  - Cavalry
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+  text: 'Yu: Gain 2 Honor.'
+- id: naga_zealot_personality_2_2_1
+  title: Naga Zealot
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Naga
+  - Nonhuman
+  - Zealot
+  force: 2
+  chi: 2
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+- id: oni_personality_2_1
+  title: Lesser Oni
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  force: 2
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: oni_personality_3_1_0
+  title: Oni
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Oni
+  - Shadowlands
+  force: 3
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: oni_personality_variable_chi
+  title: Mishime's Oni
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  - Oni
+  force: '*'
+  chi: 2
+  gold_cost: 3
+  personal_honor: 0
+  is_proxy: true
+- id: orochi_follower_2f
+  title: Sasada's Orochi
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Orochi
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: orochi_follower_3f
+  title: Sarassa's Orochi
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Orochi
+  force: 3
+  gold_cost: 0
+  is_proxy: true
+  text: '<b>Battle:</b> :ranged: 3.'
+- id: ox_spirit_personality_6_2_3
+  title: Maiko's Ox
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ox
+  - Nonhuman
+  - Spirit
+  force: 6
+  chi: 2
+  personal_honor: 3
+  gold_cost: 7
+  is_proxy: true
+- id: panda_berserker_follower_2f
+  title: Ogaru's Panda
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Berserker
+  - Nonhuman
+  - Panda
+  - Spirit
+  - Cavalry
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: pearl_strategy
+  title: Pearl
+  types:
+  - Strategy
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Pearl
+  gold_cost: 0
+  is_proxy: true
+- id: pirate_naval_personality
+  title: Pirate
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Mantis
+  keywords:
+  - Pirate
+  - Naval
+  force: 2
+  chi: 1
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+- id: ram_spirit_personality_3_1_3
+  title: Toson's Ram
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ram
+  - Nonhuman
+  - Spirit
+  - Cavalry
+  force: 3
+  chi: 1
+  personal_honor: 3
+  gold_cost: 4
+  is_proxy: true
+  text: '<b>Battle, :bow::</b> :melee: 2.'
+- id: ratling_scout_follower_1f
+  title: Kan'ol'ti'chek's Scout
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  - Scout
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: ratling_scout_personality_1_1_1
+  title: Zin'tik'kir's Scout
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  - Scout
+  force: 1
+  chi: 1
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+- id: ronin_samurai_personality_4_4_4
+  title: Sacred Stone Ronin
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Paragon
+  - Ronin
+  - Samurai
+  - Duelist
+  - Tactician
+  force: 4
+  chi: 4
+  personal_honor: 4
+  gold_cost: 0
+  is_proxy: true
+- id: samurai_yojimbo_2_2_2
+  title: Yojimbo
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: scorpion_yojimbo_personality_2_2_0
+  title: Scorpion Yojimbo
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Scorpion
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: 'Yu: A target player loses 2 Honor.'
+- id: shugenja_2_2_2
+  title: Shugenja
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shugenja
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: tanuki_samurai_personality_2_2_2
+  title: Waietto's Tanuki
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Tanuki Clan
+  - Samurai
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: undead_cavalry_follower_2f
+  title: Ikarichi's Undead
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Undead
+  - Cavalry
+  - Shadowlands
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: undead_cavalry_follower_2f_fear2
+  title: Undead Outrider
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Undead
+  - Cavalry
+  - Shadowlands
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: '<b>Battle:</b> :fear: 2.'
+- id: undead_follower_2f
+  title: Undead Troops
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Undead
+  - Shadowlands
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: victim_personality_0_3_0
+  title: Victim
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Victim
+  force: 0
+  chi: 3
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: weapon_item_claw_plus1f
+  title: Hiyamako's Claw
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Claw
+  - One-Handed
+  - Weapon
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: weapon_item_sword_plus1f
+  title: Sword
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - One-Handed
+  - Sword
+  - Weapon
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: weapon_item_sword_plus2f_plus1c
+  title: Fine Sword
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - One-Handed
+  - Sword
+  - Weapon
+  force: 2
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: tsuyoshis_wakizashi
+  title: Tsuyoshi's Wakizashi
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - One-Handed
+  - Sword
+  - Weapon
+  chi: 1
+  gold_cost: 0
+  is_proxy: true
+- id: yobanjin_cavalry_personality_4_2
+  title: Yobanjin Raider
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Yobanjin
+  - Cavalry
+  force: 4
+  chi: 2
+  gold_cost: 0
+  is_proxy: true
+- id: twin_kama
+  title: Twin Kama
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Weapon
+  gold_cost: 0
+  is_proxy: true
+  text: Attached Personality has +1F and +1C.
+- id: air_kami
+  title: Air Kami
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: animated_armor
+  title: Animated Armor
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Samurai
+  - Spirit
+  force: 3
+  chi: 1
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: farmhands
+  title: Farmhands
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ashigaru
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: horde_outrider
+  title: Horde Outrider
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  force: 4
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after this battle's Resolution Segment.
+- id: fishermen
+  title: Fishermen
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ashigaru
+  - Cavalry
+  - Naval
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: While this Follower remains attached to its Personality, gain 3 Honor after the first time each
+    attack its controller assigns or moves him.
+- id: mantis_marine
+  title: Mantis Marine
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  - Naval
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+- id: reluctant_conscript
+  title: Reluctant Conscript
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 0
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after it is targeted, or when the Combat Segment of that
+    battlefield's battle ends.
+- id: daitans_ancestor
+  title: Daitan's Ancestor
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Lion Clan
+  force: 2
+  chi: 1
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: fallen_marine
+  title: Fallen Marine
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Cavalry
+  - Naval
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: earthen_servant
+  title: Earthen Servant
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Earth
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Remove from the game after the battle ends.
+- id: stone_sentinel
+  title: Stone Sentinel
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Earth
+  force: 3
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: May not be destroyed to pay costs.
+- id: eighth_dragon
+  title: Eighth Dragon
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Dragon
+  - Shugenja
+  - Cavalry
+  force: 7
+  chi: 4
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+- id: eiyas_shade
+  title: Eiya's Shade
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Spirit
+  force: 3
+  gold_cost: 0
+  is_proxy: true
+- id: emperors_legion
+  title: Emperor's Legion
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 2
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: erenas_avatar
+  title: Erena's Avatar
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Phoenix Clan
+  keywords:
+  - Void
+  - Shugenja
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: hunting_falcon
+  title: Hunting Falcon
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Falcon
+  - Cavalry
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: forgotten_dead
+  title: Forgotten Dead
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Undead
+  - Shadowlands
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: battlefield_revenant
+  title: Battlefield Revenant
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Undead
+  force: 4
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: armored_cavalry
+  title: Armored Cavalry
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  force: 4
+  gold_cost: 0
+  is_proxy: true
+- id: fu_lengs_minion
+  title: Fu Leng's Minion
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  - Fu Leng
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: risen_ghul
+  title: Risen Ghul
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Ghul
+  - Undead
+  force: 2
+  chi: 2
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: gift_horse
+  title: Gift Horse
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Gift
+  - Cavalry
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+  text: This Personality has Cavalry.
+- id: goblin_rabble
+  title: Goblin Rabble
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  - Goblin
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: earthen_golem
+  title: Earthen Golem
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Golem
+  - Earth
+  - Samurai
+  - Yojimbo
+  force: 4
+  chi: 0
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Will not be destroyed for having 0 Chi.
+- id: hida_fubatsus_armor
+  title: Hida Fubatsu's Armor
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Armor
+  gold_cost: 0
+  is_proxy: true
+  text: +1F.
+- id: hida_fubatsus_weapon
+  title: Hida Fubatsu's Weapon
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Weapon
+  gold_cost: 0
+  is_proxy: true
+  text: +1F.
+- id: hidas_fury
+  title: Hida's Fury
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  force: 4
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Follower from the game at the end of the turn unless you are a Crab Clan player.
+- id: horoisos_scout
+  title: Horoiso's Scout
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Crab Clan
+  keywords:
+  - Samurai
+  - Scout
+  - Spirit
+  force: 3
+  chi: 3
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after the battle ends.
+- id: house_geisha
+  title: House Geisha
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Geisha
+  force: 0
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: You have -1 maximum hand size.
+- id: swift_outrider
+  title: Swift Outrider
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+- id: illusory_shugenja
+  title: Illusory Shugenja
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Air
+  - Illusion
+  - Nonhuman
+  - Shugenja
+  force: 0
+  chi: 3
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: legion_armor
+  title: Legion Armor
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Armor
+  gold_cost: 0
+  is_proxy: true
+- id: iron_blade
+  title: Iron Blade
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Weapon
+  gold_cost: 0
+  is_proxy: true
+- id: isawa_tsumaros_illusion
+  title: Isawa Tsumaro's Illusion
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Air
+  - Illusion
+  - Shugenja
+  force: 0
+  chi: 3
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: While this Personality is in play, abilities on the target's spells have Home.
+- id: jackal_pack
+  title: Jackal Pack
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Jackal
+  - Cavalry
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: jade_dragon_avatar
+  title: Jade Dragon Avatar
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Dragon
+  - Shugenja
+  - Cavalry
+  - Spirit
+  force: 3
+  chi: 3
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+- id: jinseis_avatar
+  title: Jinsei's Avatar
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Samurai
+  - Undead
+  force: 0
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Your created Personalities have +1F.
+- id: kakita_sakis_armor
+  title: Kakita Saki's Armor
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Armor
+  gold_cost: 0
+  is_proxy: true
+  text: Attached Personality's Melee and Ranged Attacks have -3 strength.
+- id: spirit_of_kamoko
+  title: Spirit of Kamoko
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Unicorn Clan
+  keywords:
+  - Samurai
+  - Cavalry
+  - Spirit
+  force: 6
+  chi: 5
+  personal_honor: 5
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after the next Dynasty Phase begins.
+- id: kanekas_samurai
+  title: Kaneka's Samurai
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Cavalry
+  force: 4
+  chi: 4
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: When the turn ends, remove them from the game.
+- id: kichis_spirit
+  title: Kichi's Spirit
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Mantis Clan
+  keywords:
+  - Nonhuman
+  - Badger
+  - Spirit
+  force: 3
+  chi: 2
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: 'Battle: Target an enemy Personality: Reduce his Force to 0.'
+- id: legionnaire
+  title: Legionnaire
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  - Samurai
+  force: 4
+  chi: 4
+  personal_honor: 4
+  gold_cost: 0
+  is_proxy: true
+- id: matsu_ancestor
+  title: Matsu Ancestor
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Lion Clan
+  keywords:
+  - Samurai
+  force: 2
+  chi: 1
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: lost_soul
+  title: Lost Soul
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Lost
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: makirtchs_ratling
+  title: Mak'irtch's Ratling
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Permanently give this Follower all Tribe keywords that Mak'irtch has.
+- id: moto_gonnohyoes_cavalry
+  title: Moto Gonnohyoe's Cavalry
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Unicorn Clan
+  keywords:
+  - Cavalry
+  force: 2
+  chi: 2
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+- id: mountain_sentry
+  title: Mountain Sentry
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Unicorn Clan
+  keywords:
+  - Samurai
+  - Cavalry
+  - Scout
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after this battle's resolution.
+- id: naga_warrior
+  title: Naga Warrior
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Naga
+  - Nonhuman
+  force: 2
+  chi: 2
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+- id: mantis_sailor
+  title: Mantis Sailor
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Naval
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: deckhands
+  title: Deckhands
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Naval
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: lurking_shinobi
+  title: Lurking Shinobi
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ninja
+  force: 0
+  chi: 2
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: shadow_ninja
+  title: Shadow Ninja
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ninja
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: covert_ninja
+  title: Covert Ninja
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ninja
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Destroy this Follower before you reveal cards in your Provinces at the start of your next turn.
+- id: war_beast
+  title: War Beast
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: oni_whelp
+  title: Oni Whelp
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  - Oni
+  force: 1
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: oni_brood
+  title: Oni Brood
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  - Oni
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: peasant_mob
+  title: Peasant Mob
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  force: 3
+  gold_cost: 0
+  is_proxy: true
+- id: shiba_yojimbo
+  title: Shiba Yojimbo
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Phoenix Clan
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: nezumi_warrior
+  title: Nezumi Warrior
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: nezumi_scout
+  title: Nezumi Scout
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: nezumi_pack
+  title: Nezumi Pack
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  - Pack
+  force: 0
+  gold_cost: 0
+  is_proxy: true
+- id: nezumi_whelp
+  title: Nezumi Whelp
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  force: 1
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: bone_tribe_nezumi
+  title: Bone Tribe Nezumi
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Ratling
+  - Crippled
+  - Bone Tribe
+  force: 2
+  chi: 2
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: nezumi_cleaver
+  title: Nezumi Cleaver
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Weapon
+  gold_cost: 0
+  is_proxy: true
+  text: Attached Personality has +3F.
+- id: hired_ronin
+  title: Hired Ronin
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ronin
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Remove him from the game after this battle ends.
+- id: recruited_ronin
+  title: Recruited Ronin
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ronin
+  - Samurai
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Remove him from the game when this turn ends.
+- id: mounted_samurai
+  title: Mounted Samurai
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Cavalry
+  force: 3
+  chi: 3
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: guardian_spirit
+  title: Guardian Spirit
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Spirit
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: scarab_ghul
+  title: Scarab Ghul
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Ghul
+  - Cavalry
+  - Undead
+  force: 3
+  gold_cost: 0
+  is_proxy: true
+- id: sworn_yojimbo
+  title: Sworn Yojimbo
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Yojimbo
+  force: 2
+  chi: 2
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game before this turn ends.
+- id: sleeper_agent
+  title: Sleeper Agent
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 1
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Remove from the game after two more Battle actions other than this one resolve this turn.
+- id: shireikans_bushi
+  title: Shireikan's Bushi
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Bushi
+  force: 1
+  chi: 1
+  personal_honor: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Transfer all cards from Shireikan to this Personality.
+- id: ancestral_shiryo
+  title: Ancestral Shiryo
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shiryo
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: hisashis_guard
+  title: Hisashi's Guard
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Scorpion Clan
+  keywords:
+  - Ninja
+  - Samurai
+  force: 4
+  chi: 3
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+- id: shosuros_spy
+  title: Shosuro's Spy
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  clans:
+  - Scorpion Clan
+  keywords:
+  - Samurai
+  force: 3
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: After the battle ends, remove this Personality from the game, then return Shosuro Infiltrator
+    to play attached to this Personality.
+- id: lesser_spirit
+  title: Lesser Spirit
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Spirit
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: battle_ally
+  title: Battle Ally
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 2
+  chi: 1
+  personal_honor: 2
+  gold_cost: 0
+  is_proxy: true
+- id: tais_avatar
+  title: Tai's Avatar
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  force: 0
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: When the battle ends, remove this Personality from the game.
+- id: tamed_beast
+  title: Tamed Beast
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: masterwork_blade
+  title: Masterwork Blade
+  types:
+  - Item
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Weapon
+  gold_cost: 0
+  is_proxy: true
+  text: 'Attached Personality has +2F. After this Personality assigns: Target another player. He gains
+    2 Honor.'
+- id: shambling_dead
+  title: Shambling Dead
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Undead
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: risen_dead
+  title: Risen Dead
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Nonhuman
+  - Shadowlands
+  - Undead
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+- id: utemaros_mercenary
+  title: Utemaro's Mercenary
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Mercenary
+  - Naval
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: Remove it from the game after the turn ends.
+- id: champion_duelist
+  title: Champion Duelist
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Samurai
+  - Duelist
+  force: 5
+  chi: 4
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: Remove him from the game when your next turn ends.
+- id: sezarus_inquisitor
+  title: Sezaru's Inquisitor
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shugenja
+  force: 5
+  chi: 5
+  personal_honor: 3
+  gold_cost: 0
+  is_proxy: true
+  text: 'Until the game ends, remove these Shugenja from the game if that player ever controls zero Bloodspeaker
+    cards, and that player has the ability, " Open: Destroy all your Bloodspeakers."'
+- id: shadowlands_wretch
+  title: Shadowlands Wretch
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Shadowlands
+  - Nonhuman
+  force: 2
+  gold_cost: 0
+  is_proxy: true
+- id: yobanjin_raider
+  title: Yobanjin Raider
+  types:
+  - Personality
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Yobanjin
+  force: 1
+  chi: 1
+  personal_honor: 0
+  gold_cost: 0
+  is_proxy: true
+  text: Remove this Personality from the game after two more actions resolve or after the battle ends.
+- id: yobanjin_outrider
+  title: Yobanjin Outrider
+  types:
+  - Follower
+  - Proxy
+  decks:
+  - Other
+  keywords:
+  - Cavalry
+  - Yobanjin
+  force: 1
+  gold_cost: 0
+  is_proxy: true
+  text: This Personality has Cavalry.

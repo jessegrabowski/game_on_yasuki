@@ -91,6 +91,8 @@ class TableState:
         battlefield drops its entry and detaches whatever is hung off it.
     cards_by_id : dict mapping str to L5RCard
         Identity map over every card on the table, for fast intent lookup.
+    creatable_tokens : dict mapping str to L5RCard
+        Token templates the loaded decks can create, keyed by token card id, resolved at deck load.
     seq : int
         Monotonic view version, bumped on every state change: by ``apply_intent`` for game intents
         and by :meth:`bump_version` for non-intent seat metadata, so no two distinct broadcasts share
@@ -106,6 +108,9 @@ class TableState:
     # The child->parent attachment graph, external to the frozen card. See the class docstring.
     attachments: dict[str, "AttachTarget"] = field(default_factory=dict)
     cards_by_id: dict[str, L5RCard] = field(default_factory=dict)
+    # A SpawnCard naming a token_id copies the matching template onto the battlefield, so spawning a
+    # creatable token needs no live database call.
+    creatable_tokens: dict[str, L5RCard] = field(default_factory=dict)
     seq: int = 0
 
     @classmethod

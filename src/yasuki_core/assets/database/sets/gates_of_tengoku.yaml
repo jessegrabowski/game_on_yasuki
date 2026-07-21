@@ -520,6 +520,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Dark Oracle of Earth, The Broken Man
+  creates:
+  - token_minus1gp
   types:
   - Holding
   decks:
@@ -576,6 +578,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Dark Oracle of Water, Hida Saiyuki
+  creates:
+  - token_erosion
   types:
   - Holding
   decks:
@@ -716,6 +720,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Favor of the Blessed Guard
+  creates:
+  - ancestor_yojimbo_follower_0f
+  - token_sincerity
   types:
   - Strategy
   decks:
@@ -777,6 +784,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Gusai Haruna
+  creates:
+  - token_plus1f
+  - token_wealth
   types:
   - Personality
   decks:
@@ -1090,6 +1100,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kan'ol'ti'chek
+  creates:
+  - ratling_scout_follower_1f
   types:
   - Personality
   decks:
@@ -1465,6 +1477,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Oracle of Water, Agasha Kyokuta
+  creates:
+  - flooded_terrain
   types:
   - Holding
   decks:
@@ -1599,6 +1613,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Sasada, Pearl Champion
+  creates:
+  - orochi_follower_2f
   types:
   - Personality
   decks:
@@ -1933,6 +1949,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Shrine of Sincerity
+  creates:
+  - token_sincerity
   types:
   - Holding
   decks:
@@ -2193,6 +2211,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Tale of Sacred Stone Village
+  creates:
+  - ronin_samurai_personality_4_4_4
   types:
   - Strategy
   decks:
@@ -2275,6 +2295,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Noritada, Defender of the High House
+  creates:
+  - token_fire
   types:
   - Personality
   decks:
@@ -2412,6 +2434,13 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Utaku Gorou, Colonial Stablemaster
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Personality
   decks:
@@ -2442,6 +2471,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Veteran of Thunder
+  creates:
+  - mantis_samurai_naval_personality_2_1_2
   types:
   - Follower
   decks:
@@ -2464,6 +2495,9 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Wataru's Masterpiece
+  creates:
+  - token_poison
+  - watarus_potion
   types:
   - Spell
   decks:
@@ -2484,6 +2518,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yoritomo Robusuta, Master of Gaijin Pepper
+  creates:
+  - token_explosive
   types:
   - Personality
   decks:
@@ -2535,6 +2571,8 @@ cards:
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Zin'tik'kir Sensei
   gold_production: -1
+  creates:
+  - ratling_scout_personality_1_1_1
   types:
   - Sensei
   decks:

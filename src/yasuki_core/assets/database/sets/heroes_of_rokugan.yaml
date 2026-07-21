@@ -92,6 +92,8 @@ cards:
   flavor_text: <i>Blown in from the west,<br> Fallen petals gathering.<br> To the east, they fall.<br>
     - Rezan the Ronin Poet</i>
 - title: Goju Yume
+  creates:
+  - shadow_ninja
   types:
   - Personality
   decks:

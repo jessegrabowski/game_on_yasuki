@@ -1,6 +1,8 @@
 set: Chaos Reigns Part II
 cards:
 - title: '"Failure, My Sensei"'
+  creates:
+  - token_lesson
   types:
   - Item
   decks:
@@ -290,6 +292,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Daigotsu Chojiro
+  creates:
+  - token_lesson
   types:
   - Personality
   decks:
@@ -318,6 +322,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Defenders of the Wall
+  creates:
+  - defenses
   types:
   - Follower
   decks:
@@ -406,6 +412,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Fortified Farmlands
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -584,6 +592,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Hotaru Okane, the Last Light
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -749,6 +759,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Kaiu Ishiku
+  creates:
+  - token_structure
   types:
   - Personality
   decks:
@@ -882,6 +894,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Matsu Kurutta
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -927,6 +941,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Buyan, Death's Messenger
+  creates:
+  - token_minus1ps
   types:
   - Personality
   decks:
@@ -958,6 +974,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Moto Houkai
+  creates:
+  - token_minus1f
   types:
   - Personality
   decks:
@@ -1017,6 +1035,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Nezumi Warrens
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -1110,6 +1130,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Rice Farm
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -1388,6 +1410,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Susumu Geiko
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1473,6 +1497,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tarkasha
+  creates:
+  - naga
   types:
   - Personality
   decks:
@@ -1502,6 +1528,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tetsubo of Seven Battles
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -1527,6 +1555,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Tetsuo Hiyamako
+  creates:
+  - weapon_item_claw_plus1f
   types:
   - Personality
   decks:
@@ -1615,6 +1645,8 @@ cards:
   doublesided: true
   gold_production: 2
 - title: The First Kengun
+  creates:
+  - token_recruit
   types:
   - Follower
   decks:
@@ -1641,6 +1673,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: The Head of My Enemy
+  creates:
+  - token_plus1f_plus1c
   types:
   - Strategy
   decks:
@@ -1792,6 +1826,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Togashi Reisa
+  creates:
+  - earth_fire_terrain_strategy
   types:
   - Personality
   decks:
@@ -1919,6 +1955,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Wheat Farm
+  creates:
+  - token_wealth
   types:
   - Holding
   decks:
@@ -1956,6 +1994,8 @@ cards:
   publisher: Onyx Lives
   publisher_url: https://sites.google.com/view/the-onyx-lives-project/home
 - title: Yabe no Oni, Blessed Abomination
+  creates:
+  - oni_personality_2_1
   types:
   - Personality
   decks:

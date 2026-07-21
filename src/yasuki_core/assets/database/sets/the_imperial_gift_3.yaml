@@ -489,6 +489,9 @@ cards:
   flavor_text: <i>"One man, one sword, one strike. All other styles are false."</i>
   collector_number: '8'
 - title: Kazuwaru
+  creates:
+  - improvised_weapon
+  - token_minus3f
   types:
   - Personality
   decks:
@@ -518,6 +521,9 @@ cards:
   flavor_text: <i>"You broke my club, samurai. You will provide me another."</i>
   collector_number: '20'
 - title: Kitsu Marimi
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -733,6 +739,9 @@ cards:
   artist: Ben Thompson
   collector_number: '35'
 - title: Shelter of the Earth
+  creates:
+  - earthen_armor_3f
+  - earthen_armor_4f
   types:
   - Spell
   decks:

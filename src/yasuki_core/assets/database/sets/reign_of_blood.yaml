@@ -1328,6 +1328,9 @@ cards:
   artist: Luis Vazquez
   collector_number: '120'
 - title: Isawa Jun
+  creates:
+  - guardian_spirit
+  - lesser_spirit
   types:
   - Personality
   decks:
@@ -1956,6 +1959,8 @@ cards:
   flavor_text: <i>"Let their fields wither and fear gnaw at their empty bellies." - Iuchiban</i>
   collector_number: '134'
 - title: Poisoned Kiss
+  creates:
+  - token_minus1c
   types:
   - Spell
   decks:
@@ -2319,6 +2324,8 @@ cards:
   flavor_text: <i>"Your death serves me well, my friend."</i>
   collector_number: '122'
 - title: Shinden Horiuchi
+  creates:
+  - swift_outrider
   types:
   - Stronghold
   decks:
@@ -2363,6 +2370,8 @@ cards:
   artist: Lisa Hunt
   collector_number: '157'
 - title: Shosuro Haru
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -3128,6 +3137,8 @@ cards:
     to test their strength against the Lion again. This was their moment.</i>
   collector_number: '73'
 - title: Vigilant Witch Hunter
+  creates:
+  - token_taint
   types:
   - Holding
   decks:

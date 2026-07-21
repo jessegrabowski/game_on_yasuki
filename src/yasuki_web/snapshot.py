@@ -24,7 +24,11 @@ def _attach_target(target: AttachTarget) -> dict:
     return {"card": target}
 
 
-def _card(view: L5RCard | HiddenCard, peeked_ids: frozenset[str] = frozenset()) -> dict:
+def _card(
+    view: L5RCard | HiddenCard,
+    peeked_ids: frozenset[str] = frozenset(),
+    token_names: dict[str, str] | None = None,
+) -> dict:
     """Encode a viewer's card as the client renders it. A ``HiddenCard`` becomes a back stub carrying
     no identity; a full card carries the presented face's name and art plus its flags. A double-faced
     card also carries its back link and which face is showing, so the client can render the flip.
@@ -39,6 +43,9 @@ def _card(view: L5RCard | HiddenCard, peeked_ids: frozenset[str] = frozenset()) 
         The card or back stub to encode.
     peeked_ids : frozenset of str, optional
         Ids the viewer sees solely by peeking, from the snapshot. Default empty.
+    token_names : dict mapping str to str, optional
+        Creatable-token card id to display name. When given, a card that creates tokens carries a
+        ``creates`` list of ``{id, name}`` for the per-card "Create" menu. Default none.
     """
     if isinstance(view, HiddenCard):
         return {
@@ -55,6 +62,7 @@ def _card(view: L5RCard | HiddenCard, peeked_ids: frozenset[str] = frozenset()) 
         "id": view.id,
         "name": face.name,
         "img": face.image_front.as_posix() if face.image_front is not None else None,
+        "card_type": face.card_type,
         "side": face.side.value,
         "owner": view.owner.name if view.owner is not None else None,
         "pregame": isinstance(view, _PREGAME_TYPES),
@@ -73,6 +81,8 @@ def _card(view: L5RCard | HiddenCard, peeked_ids: frozenset[str] = frozenset()) 
         card["art"] = face.art_swap
     if face.note:
         card["note"] = face.note
+    if token_names and view.creates:
+        card["creates"] = [{"id": tid, "name": token_names.get(tid, tid)} for tid in view.creates]
     return card
 
 
@@ -90,12 +100,16 @@ def serialize_deck_cards(cards: list[L5RCard]) -> list[dict]:
     return [_card(card) for card in reversed(cards)]
 
 
-def serialize_snapshot(snapshot: ViewSnapshot) -> dict:
+def serialize_snapshot(snapshot: ViewSnapshot, token_names: dict[str, str] | None = None) -> dict:
     """Serialize a redacted ``ViewSnapshot`` to the JSON-ready shape the board client renders from.
 
     Cards the viewer may not identify are already ``HiddenCard`` stubs in the snapshot, so this
     serializer cannot leak an identity it was not handed. Zone and deck keys are flattened to stable
     strings (``"P1:province:0"``, ``"P2:fate"``).
+
+    ``token_names`` maps a creatable-token card id to its display name; when given, a battlefield or
+    province card that creates tokens carries a ``creates`` list for the per-card "Create" menu (a
+    face-down province card is a ``HiddenCard`` stub, so its creations stay concealed).
     """
     return {
         "seq": snapshot.seq,
@@ -111,7 +125,9 @@ def serialize_snapshot(snapshot: ViewSnapshot) -> dict:
             for seat, view in snapshot.seats.items()
         },
         "zones": {
-            _zone_key_str(key): [_card(card, snapshot.peeked_ids) for card in zone.cards]
+            _zone_key_str(key): [
+                _card(card, snapshot.peeked_ids, token_names) for card in zone.cards
+            ]
             for key, zone in snapshot.zones.items()
         },
         "decks": {
@@ -122,7 +138,11 @@ def serialize_snapshot(snapshot: ViewSnapshot) -> dict:
             for key, deck in snapshot.decks.items()
         },
         "battlefield": [
-            {**_card(entry.card, snapshot.peeked_ids), "x": entry.pos.x, "y": entry.pos.y}
+            {
+                **_card(entry.card, snapshot.peeked_ids, token_names),
+                "x": entry.pos.x,
+                "y": entry.pos.y,
+            }
             for entry in snapshot.battlefield
         ],
         "attachments": {

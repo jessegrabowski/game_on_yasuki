@@ -585,6 +585,8 @@ cards:
   rarity: Rare
   artist: Mike Raabe
 - title: Out of the Shadows
+  creates:
+  - covert_ninja
   types:
   - Strategy
   decks:

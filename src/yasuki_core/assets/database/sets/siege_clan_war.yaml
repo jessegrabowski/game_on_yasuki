@@ -16,6 +16,8 @@ cards:
   collector_number: '10'
   designer: Bryan
 - title: Bayushi Kachiko, Seven Thunder
+  creates:
+  - token_minus1f_minus1c
   types:
   - Personality
   decks:
@@ -386,6 +388,7 @@ cards:
   designer: Bryan
 - title: Hachiman
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -478,6 +481,8 @@ cards:
   collector_number: '38'
   designer: Bryan
 - title: Insidious Influence
+  creates:
+  - token_corruption
   types:
   - Strategy
   decks:
@@ -791,6 +796,8 @@ cards:
   collector_number: '26'
   designer: Bryan
 - title: Otaku Kamoko, Seven Thunder
+  creates:
+  - hachiman
   types:
   - Personality
   decks:
@@ -843,6 +850,8 @@ cards:
   collector_number: '5'
   designer: Bryan
 - title: Parasite
+  creates:
+  - token_corruption
   types:
   - Item
   decks:
@@ -1064,6 +1073,7 @@ cards:
 - id: the_eighth_legion_2
   title: The Eighth Legion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1085,6 +1095,7 @@ cards:
   collector_number: '65'
 - title: The Fifth Legion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1105,6 +1116,7 @@ cards:
 - id: the_first_legion_2
   title: The First Legion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1125,6 +1137,7 @@ cards:
   collector_number: '58'
 - title: The Fourth Legion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1217,6 +1230,7 @@ cards:
 - id: the_jade_hand_2
   title: The Jade Hand
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -1236,6 +1250,7 @@ cards:
   collector_number: '69'
 - title: The Ninth Legion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1257,6 +1272,7 @@ cards:
 - id: the_obsidian_hand_2
   title: The Obsidian Hand
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -1294,6 +1310,7 @@ cards:
   designer: Bryan
 - title: The Second Legion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1314,6 +1331,7 @@ cards:
   collector_number: '59'
 - title: The Seventh Legion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1334,6 +1352,7 @@ cards:
   collector_number: '64'
 - title: The Sixth Legion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1354,6 +1373,7 @@ cards:
   collector_number: '63'
 - title: The Tenth Legion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1373,6 +1393,7 @@ cards:
   collector_number: '67'
 - title: The Third Legion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1393,6 +1414,7 @@ cards:
   collector_number: '60'
 - title: The Throne Room
   types:
+  - Strategy
   - Proxy
   decks:
   - Other
@@ -1441,6 +1463,8 @@ cards:
   collector_number: '1'
   designer: Bryan
 - title: Throne Room
+  creates:
+  - token_corruption
   types:
   - Territory
   decks:

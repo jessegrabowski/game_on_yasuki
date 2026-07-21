@@ -59,6 +59,8 @@ cards:
     in the sky, whether angered at the death of his sister or ashamed of her failure, none could say.
     - Daughter of the Bear, Part II</i>
 - title: A'ichtr'foo
+  creates:
+  - ratling_pack_2
   types:
   - Personality
   decks:

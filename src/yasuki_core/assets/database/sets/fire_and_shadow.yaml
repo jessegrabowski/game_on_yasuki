@@ -171,6 +171,8 @@ cards:
   artist: Monika Livingstone
   flavor_text: <i>"You lead them now, Yojiro-sama. They will need people such as you." - Bayushi Kachiko</i>
 - title: Balyezn Rafiq
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -665,6 +667,8 @@ cards:
   flavor_text: <i>"The Ninja smiled at me, pointing a finger of blood. 'Fight, samurai, and we shall see
     where your courage lies.' "</i>
 - title: Den of Mujina
+  creates:
+  - mujina
   types:
   - Holding
   decks:
@@ -1219,6 +1223,8 @@ cards:
   artist: Eric Polak
   flavor_text: <i>"Learn to let go, and you will find freedom within yourself." - from The True Tao</i>
 - title: Hsi Tsu
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:
@@ -1655,6 +1661,8 @@ cards:
   artist: KC Lancaster
   flavor_text: <i>"Remember your house, remember your honor, but remember your duty above all else."</i>
 - title: Kitsuki Mizuochi
+  creates:
+  - token_wanted
   types:
   - Personality
   decks:
@@ -2116,6 +2124,8 @@ cards:
   artist: Anthony Grabski
   flavor_text: <i>"The general is in complete command... but we cannot find the general." - Hushu, ashigaru</i>
 - title: Miya Yuritogen
+  creates:
+  - token_victory
   types:
   - Personality
   decks:

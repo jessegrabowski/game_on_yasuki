@@ -29,6 +29,8 @@ cards:
     - Doji Akiko</i>
   collector_number: '61'
 - title: Akatch
+  creates:
+  - nezumi_scout
   types:
   - Personality
   decks:
@@ -395,6 +397,8 @@ cards:
   flavor_text: <i>"Scorpion do not respect Crab friends. Perhaps time to see what Scorpion hide."</i>
   collector_number: '71'
 - title: Chuda Isoruko
+  creates:
+  - token_minus1f_minus1c
   types:
   - Personality
   decks:
@@ -1462,6 +1466,9 @@ cards:
   artist: Jon Hodgson
   collector_number: '44'
 - title: Ichiro Yojimbo
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Follower
   decks:
@@ -1485,6 +1492,9 @@ cards:
   flavor_text: <i>"We owe Sugimoto a debt of honor, and it must be repaid."</i>
   collector_number: '141'
 - title: Ikoma Chikao
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Personality
   decks:
@@ -1785,6 +1795,8 @@ cards:
   flavor_text: <i>"Look into yourself, Chuda. See me gnawing at your soul."</i>
   collector_number: '89'
 - title: Kaimetsu-uo's Formation
+  creates:
+  - mantis_marine
   types:
   - Strategy
   decks:
@@ -2170,6 +2182,8 @@ cards:
   flavor_text: <i>"Lord Kusari will soon be a Crane. How tightly will he cling to duty then, I wonder?"</i>
   collector_number: '33'
 - title: Matsu Eishi
+  creates:
+  - matsu_ancestor
   types:
   - Personality
   decks:
@@ -2671,6 +2685,8 @@ cards:
   artist: Michael Komarck
   collector_number: '63'
 - title: Obsidian Halls of the Lost
+  creates:
+  - token_minus4c
   types:
   - Stronghold
   decks:
@@ -2716,6 +2732,8 @@ cards:
   artist: Adam Denton
   collector_number: '119'
 - title: Peasant Uprising
+  creates:
+  - peasant_mob
   types:
   - Strategy
   decks:
@@ -2775,6 +2793,8 @@ cards:
   artist: Thomas Denmark
   collector_number: '134'
 - title: Ryoken
+  creates:
+  - token_plus2f_plus1c
   types:
   - Personality
   decks:
@@ -2864,6 +2884,8 @@ cards:
   artist: William O'Connor
   collector_number: '56'
 - title: Shiba Ningen
+  creates:
+  - phoenix_warrior
   types:
   - Personality
   decks:
@@ -3092,6 +3114,8 @@ cards:
   flavor_text: <i>"It seems General Lixue has not been idle." - Shinjo Shono</i>
   collector_number: '145'
 - title: Shosuro Hisashi
+  creates:
+  - hisashis_guard
   types:
   - Personality
   decks:
@@ -3260,6 +3284,8 @@ cards:
   flavor_text: <i>Word and action are one.</i>
   collector_number: '130'
 - title: Skirt the Edge
+  creates:
+  - nezumi_whelp
   types:
   - Strategy
   decks:
@@ -3405,6 +3431,8 @@ cards:
   flavor_text: <i>Her studies with Ningen have only made her stranger than before.</i>
   collector_number: '29'
 - title: Tasu no Oni
+  creates:
+  - oni_brood
   types:
   - Personality
   decks:
@@ -3534,6 +3562,8 @@ cards:
   flavor_text: <i>Tokei and Nizomi now stand together against the evil that pursues them both.</i>
   collector_number: '1'
 - title: The Wolf's Mercy
+  creates:
+  - token_minus2c
   types:
   - Spell
   decks:
@@ -3601,6 +3631,9 @@ cards:
   flavor_text: <i>Not all of Egumi's men serve the Emperor.</i>
   collector_number: '49'
 - title: Usagi Retainer
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Follower
   decks:

@@ -12,8 +12,8 @@ from yasuki_web.snapshot import serialize_snapshot
 P1, P2 = PlayerId.P1, PlayerId.P2
 
 
-def _serialized(table, viewer):
-    return serialize_snapshot(redact(table, viewer))
+def _serialized(table, viewer, token_names=None):
+    return serialize_snapshot(redact(table, viewer), token_names)
 
 
 def test_opponent_hand_card_is_a_back_stub_with_no_identity():
@@ -345,6 +345,62 @@ def test_province_key_serializes_with_its_index():
     assert "P1:province:2" in _serialized(table, P1)["zones"]
 
 
+def test_card_serializes_creates_for_the_menu():
+    table = TableState.empty_two_seat()
+    card = L5RCard(
+        id="c1",
+        name="Curse of the Jackal",
+        side=Side.FATE,
+        owner=None,
+        face_up=True,
+        creates=("jackal_pack",),
+    )
+    table.battlefield.cards.append(card)
+    table.positions["c1"] = BoardPos(0.0, 0.0)
+    table.cards_by_id["c1"] = card
+
+    serialized = _serialized(table, P1, {"jackal_pack": "Jackal Pack"})["battlefield"][0]
+    assert serialized["creates"] == [{"id": "jackal_pack", "name": "Jackal Pack"}]
+    # Without the name map (or for a card that creates nothing) the key is omitted.
+    assert "creates" not in _serialized(table, P1)["battlefield"][0]
+
+
+def test_realms_merge_in_province_serializes_creates_but_concealed_face_down():
+    # The Realms Merge is an Event that resolves from a province, creating a Zombie or an Oni Hatchling
+    # — a creator that never reaches the battlefield, so its Create menu lives in the province.
+    table = TableState.empty_two_seat()
+    names = {"oni_hatchling": "Oni Hatchling", "zombie": "Zombie"}
+    revealed = L5RCard(
+        id="c1",
+        name="The Realms Merge",
+        side=Side.DYNASTY,
+        owner=P1,
+        face_up=True,
+        creates=("oni_hatchling", "zombie"),
+    )
+    table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 0)] = ProvinceZone(owner=P1, cards=[revealed])
+    table.cards_by_id["c1"] = revealed
+    serialized = _serialized(table, P1, names)["zones"]["P1:province:0"][0]
+    assert serialized["creates"] == [
+        {"id": "oni_hatchling", "name": "Oni Hatchling"},
+        {"id": "zombie", "name": "Zombie"},
+    ]
+
+    # A face-down province card is a HiddenCard stub to the opponent, so its creations never leak.
+    hidden = L5RCard(
+        id="c2",
+        name="The Realms Merge",
+        side=Side.DYNASTY,
+        owner=P1,
+        face_up=False,
+        creates=("oni_hatchling", "zombie"),
+    )
+    table.zones[ZoneKey(P1, ZoneRole.PROVINCE, 1)] = ProvinceZone(owner=P1, cards=[hidden])
+    table.cards_by_id["c2"] = hidden
+    opp = _serialized(table, P2, names)["zones"]["P1:province:1"][0]
+    assert "creates" not in opp
+
+
 def test_card_fields_covers_every_serialized_key():
     # The client's CARD_FIELDS (board.js) must list every key _card emits, or a newly serialized field
     # would silently never re-patch its card on the board. Anchor the JS list to the real serializer.
@@ -362,14 +418,15 @@ def test_card_fields_covers_every_serialized_key():
         back_card_id="c1__back",
         back=back,
         showing_back=False,
+        creates=("tok1",),
     )
     table.battlefield.cards.append(card)
     table.positions["c1"] = BoardPos(1.0, 2.0)
     table.cards_by_id["c1"] = card
 
-    serialized = set(_serialized(table, P1)["battlefield"][0].keys())
+    serialized = set(_serialized(table, P1, {"tok1": "Token One"})["battlefield"][0].keys())
     # Self-check: the fixture must exercise every conditional key, or the guard below is hollow.
-    assert {"back_card_id", "showing_back", "art", "note", "x", "y"} <= serialized
+    assert {"back_card_id", "showing_back", "art", "note", "creates", "x", "y"} <= serialized
 
     board_js = Path(__file__).resolve().parents[2] / "src/yasuki_web/static/site/board.js"
     match = re.search(r"CARD_FIELDS = \[(.*?)\]", board_js.read_text(), re.DOTALL)

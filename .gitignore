@@ -381,3 +381,6 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/python,intellij+all,windows,macos,vim,jupyternotebooks,visualstudiocode
+
+# Node test/runtime deps (the JS suite uses node --test, no deps required)
+node_modules/

@@ -21,6 +21,8 @@ cards:
     is a poor time to be a criminal." - Doji Hakuseki, First Magistrate</i>
   collector_number: '102'
 - title: A Quiet Transaction
+  creates:
+  - token_minus2gp
   types:
   - Strategy
   decks:
@@ -290,6 +292,8 @@ cards:
     your ear. I said you may not pass."</i>
   collector_number: '106'
 - title: Basic Lesson
+  creates:
+  - questionable_resources
   types:
   - Strategy
   decks:
@@ -415,6 +419,8 @@ cards:
   artist: Asier Martinez Lopez
   collector_number: '1'
 - title: Bo of Water
+  creates:
+  - water_bo
   types:
   - Spell
   decks:
@@ -989,14 +995,15 @@ cards:
   collector_number: '81'
 - title: Flame Katana
   types:
+  - Item
   - Proxy
   decks:
   - Other
   keywords:
   - Weapon
   - Fire
-  text: 'May not be included in decks.<br><b>Battle:</b> Bow this card unless this Personality is Fire,
-    and target an enemy card without attachments: Destroy it.'
+  text: '<b>Battle:</b> Bow this card unless this Personality is Fire, and target an enemy card without
+    attachments: Destroy it.'
   gold_cost: 0
   focus: 0
   force: '+3'
@@ -1576,6 +1583,8 @@ cards:
   flavor_text: <i>"Only through art do the deeds of heroes shine for a thousand years."</i>
   collector_number: '25'
 - title: Katana of Fire
+  creates:
+  - flame_katana
   types:
   - Spell
   decks:
@@ -1714,6 +1723,8 @@ cards:
     will prevail…"</i>
   collector_number: '26'
 - title: Kitsune Ohsuki
+  creates:
+  - ohsukis_sparrow
   types:
   - Personality
   decks:
@@ -1925,6 +1936,7 @@ cards:
 - id: lion_ancestor
   title: Lion Ancestor
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1935,7 +1947,6 @@ cards:
   - Lion Clan
   - Samurai
   - Spirit
-  text: May not be included in decks.
   gold_cost: 0
   force: 2
   chi: 2
@@ -2156,6 +2167,8 @@ cards:
     then that is what I will do."</i>
   collector_number: '66'
 - title: Nakanu Technique
+  creates:
+  - nakanus_creations
   types:
   - Strategy
   decks:
@@ -2220,6 +2233,7 @@ cards:
   collector_number: '88'
 - title: Ohsuki's Sparrow
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2231,8 +2245,7 @@ cards:
   - Nonhuman
   - Sparrow
   - Spirit
-  text: 'May not be included in decks.<br><b>Limited:</b> If none of your provinces were destroyed since
-    your last turn ended: Gain 3 Honor.'
+  text: '<b>Limited:</b> If none of your provinces were destroyed since your last turn ended: Gain 3 Honor.'
   gold_cost: 0
   force: 0
   chi: 2
@@ -2304,10 +2317,11 @@ cards:
   collector_number: '77'
 - title: Questionable Resources
   types:
+  - Holding
   - Proxy
   decks:
   - Other
-  text: 'May not be included in decks.<br>Bow this card: Produce 3 Gold.'
+  text: 'Bow this card: Produce 3 Gold.'
   gold_cost: 0
   is_proxy: true
   legality:
@@ -2510,6 +2524,8 @@ cards:
     a euphemism." - Yoritomo Emoto</i>
   collector_number: '73'
 - title: Shiba Kudome
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -3416,6 +3432,7 @@ cards:
   collector_number: '32'
 - title: Tokoru's Bear
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -3426,8 +3443,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: 'May not be included in decks.<br><b>Battle:</b> Target an attacking enemy card: Bow it. Destroy
-    it if it is an attachment.'
+  text: '<b>Battle:</b> Target an attacking enemy card: Bow it. Destroy it if it is an attachment.'
   gold_cost: 0
   force: 4
   chi: 2
@@ -3634,14 +3650,14 @@ cards:
   collector_number: '7'
 - title: Water Bo
   types:
+  - Item
   - Proxy
   decks:
   - Other
   keywords:
   - Weapon
   - Water
-  text: 'May not be included in decks.<br><b>Battle:</b> Target an enemy card without attachments: Bow
-    it.'
+  text: '<b>Battle:</b> Target an enemy card without attachments: Bow it.'
   gold_cost: 0
   focus: 0
   force: '+2'

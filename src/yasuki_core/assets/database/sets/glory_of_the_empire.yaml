@@ -399,6 +399,13 @@ cards:
     will suffer a monster's death."</i>
   collector_number: '88'
 - title: Cavalry Officer
+  creates:
+  - cavalry
+  - cavalry_token
+  - crane_levies
+  - dutiful_cavalry
+  - hachiman
+  - medium_cavalry_follower
   types:
   - Follower
   decks:
@@ -830,6 +837,8 @@ cards:
     convenience back at the encampment."</i>
   collector_number: '95'
 - title: Doji Hariya
+  creates:
+  - hariyas_blade
   types:
   - Personality
   decks:
@@ -956,6 +965,8 @@ cards:
   flavor_text: <i>"Sureness is strength. Certainty of purpose is assurance of victory."</i>
   collector_number: '97'
 - title: First-Hand Account
+  creates:
+  - token_victory
   types:
   - Strategy
   decks:
@@ -2391,6 +2402,8 @@ cards:
     be so fortunate, humans!"</i>
   collector_number: '114'
 - title: Oishi
+  creates:
+  - chikara
   types:
   - Personality
   decks:
@@ -2483,6 +2496,8 @@ cards:
     but the dark path gains new adherents each day." - Asahina Hira</i>
   collector_number: '115'
 - title: Phantom Blade Kata
+  creates:
+  - phantom_blade
   types:
   - Strategy
   decks:
@@ -2525,6 +2540,8 @@ cards:
     favored those who were worthy inspired tens of thousands to seek their blessings.</i>
   collector_number: '158'
 - title: Power Corrupting
+  creates:
+  - pawn_of_corruption
   types:
   - Strategy
   decks:
@@ -2738,6 +2755,8 @@ cards:
     familiar."</i>
   collector_number: '159'
 - title: Selfless Devotion
+  creates:
+  - sworn_yojimbo
   types:
   - Strategy
   decks:
@@ -3005,6 +3024,8 @@ cards:
     and can change their affiliation multiple times in the span of an afternoon.</i>
   collector_number: '124'
 - title: Shosuro Nitsu
+  creates:
+  - token_poison
   types:
   - Personality
   decks:

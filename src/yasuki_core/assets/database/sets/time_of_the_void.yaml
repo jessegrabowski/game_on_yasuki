@@ -702,6 +702,8 @@ cards:
   artist: Joel Biske
   flavor_text: <i>"There is a traitor in our midst, my lord. One with dark allegiances..." - Shinjo Yasamura</i>
 - title: Corrupted Region
+  creates:
+  - token_minus1c
   types:
   - Region
   decks:
@@ -752,6 +754,8 @@ cards:
   artist: Greg Simonson
   flavor_text: <i>"Its warm glow splits the darkness, keeping the foul beast at bay." - Asahina Tomo</i>
 - title: Curse of the Jackal
+  creates:
+  - jackal_pack
   types:
   - Spell
   decks:
@@ -1249,6 +1253,8 @@ cards:
   artist: Paul (Prof.) Herbert
   flavor_text: <i>Just a slip of the wrist is all it takes to start a blood fued.</i>
 - title: Festival of Long Sticks
+  creates:
+  - goblin_rabble
   types:
   - Event
   decks:
@@ -2380,6 +2386,8 @@ cards:
   rarity: Common
   artist: Heather Hudson
 - title: Legions of Fu Leng
+  creates:
+  - fu_lengs_minion
   types:
   - Spell
   decks:
@@ -2780,6 +2788,8 @@ cards:
   artist: Joel Biske
   flavor_text: <i>Cornejo never believed in ninja, until it was to late.</i>
 - title: Nogoten's Bow
+  creates:
+  - token_poison
   types:
   - Item
   decks:
@@ -3641,6 +3651,8 @@ cards:
   flavor_text: <i>"We have proven our worth, but do not take ease, for that is only the beginning of our
     journey."</i>
 - title: Shosuro Hametsu
+  creates:
+  - token_poison
   types:
   - Personality
   decks:
@@ -3751,6 +3763,8 @@ cards:
   rarity: Uncommon
   artist: April Lee
 - title: Swamp Goblins
+  creates:
+  - token_plus1f
   types:
   - Follower
   decks:

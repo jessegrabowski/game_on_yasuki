@@ -439,6 +439,8 @@ cards:
   flavor_text: <i>"There is peace for now, surely, but it does not mean out neighbors should be trusted.
     Watch them closely."</i>
 - title: Chiang Sensei
+  creates:
+  - token_madness
   types:
   - Sensei
   decks:

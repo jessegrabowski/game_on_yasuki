@@ -6,6 +6,7 @@ import { buildCompositeDataURL, loadArtLayout } from '../deck_builder/js/art.js'
 import { reconcile } from './reconcile.js';
 import { buildAvatarElement } from './avatar.js';
 import { chanceOfAtLeastOne } from './probability.js';
+import { fallbackSrc } from './card-common.js';
 
 export function node(tag, className, text) {
   const el = document.createElement(tag);
@@ -50,6 +51,13 @@ function backFor(card) {
   return card.id?.startsWith('spawn-') ? backArt.TOKEN : backArt[card.side];
 }
 
+// The placeholder art for a face-up card whose print has no scanned image (e.g. a freshly minted
+// token): the type-default generic frame, or the card back as a last resort.
+function fallbackArt(card, imgBase) {
+  const byType = fallbackSrc({ types: card.card_type ? [card.card_type] : [] }, imgBase);
+  return byType || backFor(card) || null;
+}
+
 // Show a card's face: its front art, or — while face-down — the generic back for its side. A hidden
 // stub carries no front, and a face-down card draws its back too — unless this viewer has been let in
 // to identify it (their own peek, or the owner showing it to them), in which case the redaction sends
@@ -64,7 +72,20 @@ function applyFace(el, card, imgBase) {
     return;
   }
   const img = document.createElement('img');
-  img.src = `${imgBase}/${card.img}`;
+  const fallback = fallbackArt(card, imgBase);
+  // A face-up card with no scanned art (a minted token) would otherwise request "<base>/null"; serve
+  // the placeholder up front, and let a 404 on a present-but-unscanned print fall back to it too.
+  if (card.img) {
+    img.src = `${imgBase}/${card.img}`;
+    if (fallback) {
+      img.onerror = () => {
+        img.onerror = null;
+        img.src = fallback;
+      };
+    }
+  } else {
+    img.src = fallback || '';
+  }
   img.alt = card.name;
   el.appendChild(img);
   if (card.art) swapArt(img, card, imgBase);
@@ -139,6 +160,8 @@ function tagCard(el, card) {
   // neither, so the duplicate option is gated on the card being face-up anyway.
   el.dataset.name = card.name ?? '';
   el.dataset.img = card.img ?? '';
+  // The tokens this card can create (id + name), for the per-card "Create" menu items.
+  el.dataset.creates = card.creates ? JSON.stringify(card.creates) : '';
   // pregame (stronghold/sensei/wind) cards are setup pieces tied to a seat — they cannot change hands.
   el.dataset.pregame = card.pregame ? '1' : '';
   el.dataset.doubleFaced = card.back_card_id ? '1' : '';
@@ -152,8 +175,8 @@ function tagCard(el, card) {
 // `_card` plus the battlefield x/y. `id` is excluded — it keys the element, it never changes.
 // Exported so the reconcile diff and the shape-drift guard key off the same list.
 export const CARD_FIELDS = [
-  'name', 'img', 'side', 'owner', 'pregame', 'token', 'bowed', 'face_up', 'inverted',
-  'shown', 'peeked', 'hidden', 'back_card_id', 'showing_back', 'art', 'note', 'x', 'y',
+  'name', 'img', 'card_type', 'side', 'owner', 'pregame', 'token', 'bowed', 'face_up', 'inverted',
+  'shown', 'peeked', 'hidden', 'back_card_id', 'showing_back', 'art', 'note', 'creates', 'x', 'y',
   'attached', 'attachParent',
 ];
 
@@ -349,34 +372,34 @@ export function highlightCard(boardEl, cardId) {
 }
 
 // Client messages, with `room` injected by the caller. Every card action is a game intent; spawn and
-// remove are SPAWN_CARD/REMOVE_CARD intents (the server mints the spawn's card id).
+// remove are SPAWN_CARD/REMOVE_CARD intents (the server mints the spawn's card id). A spawn names one
+// source — a creatable token (token_id), an in-play card to duplicate (source_card_id), or a database
+// card the search dialog picked (print_card_id) — and the server copies it as a fresh public token.
 export const intentMessage = (intent) => ({ type: 'INTENT', intent });
-export const spawnMessage = (spawn) =>
-  intentMessage({
-    op: 'SPAWN_CARD',
-    name: spawn.name,
-    img: spawn.img,
-    side: spawn.side,
-    position: [spawn.x, spawn.y],
-  });
 export const removeMessage = (id) => intentMessage({ op: 'REMOVE_CARD', card_id: id });
 
-// Spawn a token copy of a face-up battlefield card, dropped down-right of the original so it doesn't
-// hide it. Name, img and side come off the card's dataset; its board-local position off its inline
-// geometry. The server assigns the new id and marks it a token.
+// A spawn drops down-right of its source card so it doesn't hide it; this is its canonical position.
 const DUPLICATE_OFFSET_PX = 18;
-export const duplicateMessage = (el, toCanon) => {
+const droppedPosition = (el, toCanon) => {
   const left = (parseFloat(el.style.left) || 0) + DUPLICATE_OFFSET_PX;
   const top = (parseFloat(el.style.top) || 0) + DUPLICATE_OFFSET_PX;
   const pos = toCanon(left, top);
-  return spawnMessage({
-    name: el.dataset.name,
-    img: el.dataset.img || null,
-    side: el.dataset.side,
-    x: pos.x,
-    y: pos.y,
-  });
+  return [pos.x, pos.y];
 };
+
+// Duplicate a face-up battlefield card: the server copies that in-play card (a full first-class card,
+// not a name/image stub) as a fresh public token and mints the new id.
+export const duplicateMessage = (el, toCanon) =>
+  intentMessage({
+    op: 'SPAWN_CARD',
+    source_card_id: el.dataset.cardId,
+    position: droppedPosition(el, toCanon),
+  });
+
+// Create one of the tokens this card makes (the context-menu "Create …" items). The server resolves
+// `token_id` against the deck's pre-loaded token templates and spawns a full card at `position`.
+export const createTokenMessage = (tokenId, position) =>
+  intentMessage({ op: 'SPAWN_CARD', token_id: tokenId, position });
 
 export const moveIntent = (id, x, y) => intentMessage({ op: 'SET_CARD_POS', card_id: id, x, y });
 // Reposition a whole group in one message; sending one SET_CARD_POS per member instead would
@@ -565,7 +588,7 @@ function cardMenuItems(
   targetIds = [el.dataset.cardId],
   lookup = () => null,
   toCanon,
-  handPlayPos,
+  nextPlayPosition,
 ) {
   const id = el.dataset.cardId;
   const side = el.dataset.side || '';
@@ -607,10 +630,10 @@ function cardMenuItems(
   // lands and peeks it back to you, so you keep sight of your own card (focusing in a duel) while the
   // opponent sees only a back; reveal it later by flipping it face up. Positioned like a double-click
   // play so a flurry fans out. Gated on the position helper so a caller without it omits the item.
-  if (inHand && mine && handPlayPos) {
+  if (inHand && mine && nextPlayPosition) {
     items.push({
       label: 'Play face &down',
-      onClick: (e, send) => send(playFaceDownIntent(id, handPlayPos())),
+      onClick: (e, send) => send(playFaceDownIntent(id, nextPlayPosition())),
     });
   }
 
@@ -643,6 +666,20 @@ function cardMenuItems(
     if (owner && owner === viewer && !pregame) {
       items.push({ label: '&Give control', onClick: (e, send) => send(giveControlIntent(id)) });
     }
+  }
+  // A "Create …" item per token this card makes, for its controller on the battlefield or in a
+  // province. A battlefield creator drops the token down-right of itself; a province creator (a
+  // revealed dynasty card not yet in play) lands it where a double-clicked hand card would.
+  if (mine && !faceDown && el.dataset.creates && (onBattlefield || inProvince)) {
+    pushGroup(
+      JSON.parse(el.dataset.creates).map((token) => ({
+        label: `Create &${token.name}`,
+        onClick: (e, send) => {
+          const position = onBattlefield ? droppedPosition(el, toCanon) : nextPlayPosition();
+          send(createTokenMessage(token.id, position));
+        },
+      })),
+    );
   }
   // Show and Peek fan one message per qualifying selected card. Show also always covers the clicked
   // card — it may be a hand card, which the battlefield-only face-down gate would otherwise skip.
@@ -1456,7 +1493,7 @@ function menuItemsFor(
   viewer,
   targetIds,
   lookup,
-  { onSearchDiscard, onCreateToken, spawnAt, toCanon, handPlayPos } = {},
+  { onSearchDiscard, onCreateToken, spawnAt, toCanon, nextPlayPosition } = {},
 ) {
   const zoneEl = target?.closest?.('[data-zone]');
   const zone = zoneEl?.dataset.zone;
@@ -1468,16 +1505,16 @@ function menuItemsFor(
       ? [{ label: '&Search…', onClick: () => onSearchDiscard(owner, role) }]
       : [];
     if (!cardEl) return search;
-    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, handPlayPos);
+    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, nextPlayPosition);
     return search.length ? [...card, SEP, ...search] : card;
   }
   if (zone === 'province') {
     const province = provinceMenuItems(zoneEl.dataset.owner, Number(zoneEl.dataset.idx), viewer);
     if (!cardEl) return province;
-    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, handPlayPos);
+    const card = cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, nextPlayPosition);
     return province.length ? [...card, SEP, ...province] : card;
   }
-  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, handPlayPos);
+  if (cardEl) return cardMenuItems(cardEl, viewer, targetIds, lookup, toCanon, nextPlayPosition);
   if (zone === 'battlefield') return battlefieldMenuItems(viewer, onCreateToken, spawnAt);
   return [];
 }
@@ -1564,9 +1601,10 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     const viewerIsP1 = root.dataset.viewerSeat !== 'P2';
     return viewToCanonical(left, top, viewerIsP1, rect.width, rect.height);
   };
-  // The canonical board position for the next hand card played (a double-click or the "Play face
-  // down" menu item), fanning successive plays rightward so a flurry spreads instead of stacking.
-  const handPlayPos = () => {
+  // The canonical battlefield spot a played card lands at: board-centre, fanned across slots so a
+  // flurry of plays spreads instead of stacking, into the viewer's half above the provinces. Shared by
+  // hand double-click plays and province-card token creation, so the two never stack on one spot.
+  const nextPlayPosition = () => {
     const rect = battleRect();
     const fan = (handPlays++ % HAND_PLAY_FAN_SLOTS) * PREGAME_FAN;
     const x = clamp(Math.round((rect.width - CARD_W) / 2) + fan, 0, rect.width - CARD_W);
@@ -2004,7 +2042,7 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
       onCreateToken,
       spawnAt,
       toCanon,
-      handPlayPos,
+      nextPlayPosition,
     });
     if (!items.length) return;
     e.preventDefault();
@@ -2023,8 +2061,7 @@ export function initBoardInteractions(root, boardEl, send, { onSearchDiscard, on
     if (!cardEl || !ownsCard(cardEl)) return;
     const id = cardEl.dataset.cardId;
     if (cardEl.closest?.('[data-zone="hand"]')) {
-      // Successive plays fan rightward, like dealing off a deck, so a flurry spreads instead of stacking.
-      send(moveCardIntent(id, { kind: 'battlefield' }, handPlayPos()));
+      send(moveCardIntent(id, { kind: 'battlefield' }, nextPlayPosition()));
     } else if (isFaceDown(cardEl)) {
       send(flipIntentFor(cardEl.dataset.doubleFaced === '1', id));
     } else if (!cardEl.closest?.('[data-zone="province"]')) {

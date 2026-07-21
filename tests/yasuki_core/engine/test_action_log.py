@@ -7,22 +7,39 @@ from yasuki_core.engine.table import TableState, ZoneKey, ZoneRole, DeckKey, Boa
 from yasuki_core.engine.intents import (
     MoveCard,
     SetCardPos,
+    SetCardPositions,
+    ReorderHand,
+    ReorderPile,
     Bow,
+    Unbow,
     Flip,
+    FlipFace,
+    Invert,
+    Show,
+    Unshow,
+    Peek,
+    Unpeek,
     Draw,
     Shuffle,
     FlipCoin,
     RollDice,
+    FlipDeckTop,
     SearchDeck,
+    MoveDeckTop,
+    Raise,
     FillProvince,
+    DestroyProvince,
     DiscardProvince,
     CreateProvince,
     SetHonor,
+    SetNote,
+    GiveControl,
     SpawnCard,
     RemoveCard,
     apply_intent,
 )
 from yasuki_core.game_pieces.constants import Side, Element, Timing
+from yasuki_core.game_pieces.cards import L5RCard
 from yasuki_core.game_pieces.dynasty import DynastyCard, DynastyPersonality, DynastyHolding
 from yasuki_core.game_pieces.fate import FateCard, FateAction, FateAttachment, FateRing
 from yasuki_core.game_pieces.pregame import StrongholdCard
@@ -35,6 +52,8 @@ from yasuki_core.engine.action_log import (
     apply_and_log,
     action_log_to_dict,
     action_log_from_dict,
+    encode_intent,
+    decode_intent,
     flush,
 )
 from yasuki_core.engine.snapshot import InitialRecord, build_initial_state
@@ -289,14 +308,22 @@ def test_replay_reproduces_spawned_and_removed_cards():
         state,
         log,
         PlayerId.P1,
-        SpawnCard("t1", "A", Side.FATE, "a.jpg", BoardPos(1.0, 2.0)),
+        SpawnCard(
+            card_id="t1",
+            card=L5RCard(id="src-a", name="A", side=Side.FATE),
+            position=BoardPos(1.0, 2.0),
+        ),
         ts=1.0,
     )
     apply_and_log(
         state,
         log,
         PlayerId.P2,
-        SpawnCard("t2", "B", Side.DYNASTY, None, BoardPos(3.0, 4.0)),
+        SpawnCard(
+            card_id="t2",
+            card=L5RCard(id="src-b", name="B", side=Side.DYNASTY),
+            position=BoardPos(3.0, 4.0),
+        ),
         ts=2.0,
     )
     apply_and_log(state, log, PlayerId.P1, RemoveCard("t1"), ts=3.0)
@@ -355,12 +382,145 @@ def test_session_entries_ride_the_tape_but_are_skipped_by_replay():
     assert restored.replay() == state
 
 
+@pytest.mark.parametrize(
+    "intent",
+    [
+        MoveCard("c1", BATTLEFIELD, BoardPos(1.0, 2.0)),
+        MoveCard("c1", BATTLEFIELD, None),
+        MoveCard("c1", DeckKey(PlayerId.P1, Side.FATE)),
+        MoveCard("c1", DeckKey(PlayerId.P1, Side.FATE), to_bottom=True),
+        MoveCard("c1", ZoneKey(PlayerId.P1, ZoneRole.HAND)),
+        MoveCard("c1", ZoneKey(PlayerId.P1, ZoneRole.HAND), index=2),
+        MoveCard("c1", ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)),
+        SetCardPos("c1", 3.0, 4.0),
+        SetCardPositions((("c1", 3.0, 4.0), ("c2", 5.0, 6.0))),
+        ReorderHand("c1", 2),
+        ReorderPile(DeckKey(PlayerId.P1, Side.FATE), "c1", 0),
+        ReorderPile(ZoneKey(PlayerId.P1, ZoneRole.FATE_DISCARD), "c1", 2),
+        Bow(("a", "b")),
+        Unbow(("a",)),
+        Flip(("a",)),
+        FlipFace(("a",)),
+        Invert(("a",)),
+        Show("a"),
+        Unshow("a"),
+        Peek("a"),
+        Unpeek("a"),
+        Draw(DeckKey(PlayerId.P1, Side.DYNASTY)),
+        Shuffle(DeckKey(PlayerId.P1, Side.FATE), seed=5),
+        FlipDeckTop(DeckKey(PlayerId.P1, Side.FATE)),
+        SearchDeck(DeckKey(PlayerId.P2, Side.FATE)),
+        SearchDeck(DeckKey(PlayerId.P1, Side.DYNASTY), limit=5),
+        MoveDeckTop(DeckKey(PlayerId.P1, Side.FATE), BATTLEFIELD, BoardPos(1.0, 2.0)),
+        MoveDeckTop(DeckKey(PlayerId.P1, Side.DYNASTY), ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)),
+        MoveDeckTop(DeckKey(PlayerId.P2, Side.FATE), DeckKey(PlayerId.P2, Side.DYNASTY)),
+        Raise("c1"),
+        SetNote("c1", "dead"),
+        SetNote("c1", None),
+        GiveControl("c1"),
+        FillProvince(ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 1)),
+        DestroyProvince(ZoneKey(PlayerId.P2, ZoneRole.PROVINCE, 2)),
+        DiscardProvince(ZoneKey(PlayerId.P1, ZoneRole.PROVINCE, 0)),
+        CreateProvince(),
+        SetHonor(delta=3),
+        SetHonor(value=-1),
+        SpawnCard(
+            card_id="tok1",
+            card=L5RCard(id="src", name="Token", side=Side.DYNASTY),
+            position=BoardPos(5.0, 6.0),
+        ),
+        SpawnCard(card_id="tok2", token_id="some_token", position=BoardPos(0.0, 0.0)),
+        SpawnCard(card_id="tok3", source_card_id="c1", position=BoardPos(7.0, 8.0)),
+        RemoveCard("tok1"),
+    ],
+)
+def test_each_intent_survives_a_serialization_round_trip(intent):
+    log = ActionLog(initial=InitialRecord.from_state(_start_state()))
+    log.append(LogEntry(seq=1, ts=1.0, seat=PlayerId.P1, intent=intent))
+
+    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+
+    assert restored.entries[0].intent == intent
+
+
 def test_setup_seeds_survive_serialization():
     initial = InitialRecord.from_state(_start_state(), setup_seeds={"opening_shuffle": 99})
 
     restored = action_log_from_dict(action_log_to_dict(ActionLog(initial=initial)))
 
     assert restored.initial.setup_seeds == {"opening_shuffle": 99}
+
+
+def test_creatable_tokens_survive_serialization():
+    # The initial record carries the deck's creatable-token templates, so a replayed token spawn
+    # needs no database — the templates round-trip through the tape intact.
+    state = _start_state()
+    state.creatable_tokens["ghul"] = DynastyPersonality(
+        id="ghul", name="Ghul", side=Side.DYNASTY, force=2, chi=2, keywords=("Undead",)
+    )
+
+    restored = action_log_from_dict(
+        action_log_to_dict(ActionLog(initial=InitialRecord.from_state(state)))
+    )
+
+    token = restored.initial.creatable_tokens["ghul"]
+    assert isinstance(token, DynastyPersonality)
+    assert token.force == 2 and token.keywords == ("Undead",)
+
+
+def test_replay_reproduces_a_creatable_token_spawn():
+    state = _start_state()
+    state.creatable_tokens["ghul"] = DynastyPersonality(
+        id="ghul", name="Ghul", side=Side.DYNASTY, force=2, chi=2
+    )
+    log = ActionLog(initial=InitialRecord.from_state(state))
+    apply_and_log(
+        state,
+        log,
+        PlayerId.P1,
+        SpawnCard(card_id="spawn-1", token_id="ghul", position=BoardPos(1.0, 2.0)),
+        ts=1.0,
+    )
+
+    rebuilt = log.replay()
+
+    assert rebuilt == state
+    spawned = rebuilt.cards_by_id["spawn-1"]
+    assert isinstance(spawned, DynastyPersonality) and spawned.force == 2 and spawned.is_token
+
+
+def test_card_subclass_fields_survive_serialization():
+    state = _start_state()
+    log = ActionLog(initial=InitialRecord.from_state(state))
+
+    restored = action_log_from_dict(action_log_to_dict(log))
+
+    original = {c.id: c for cards in log.initial.decklists.values() for c in cards}
+    rebuilt = {c.id: c for cards in restored.initial.decklists.values() for c in cards}
+    assert rebuilt == original
+    bushi = rebuilt["p1_dp1"]
+    assert isinstance(bushi, DynastyPersonality) and bushi.force == 3 and bushi.chi == 2
+    ring = rebuilt["p1_fr"]
+    assert isinstance(ring, FateRing) and ring.element is Element.FIRE
+
+
+def test_nested_back_face_survives_serialization():
+    back = StrongholdCard(id="kk__back", name="Defiled", side=Side.STRONGHOLD, starting_honor=8)
+    front = StrongholdCard(
+        id="kk", name="Kyuden Kuni", side=Side.STRONGHOLD, back_card_id="kk__back", back=back
+    )
+    key = DeckKey(PlayerId.P1, Side.DYNASTY)
+    log = ActionLog(initial=InitialRecord(seats={}, decklists={key: [front]}))
+
+    restored = action_log_from_dict(json.loads(json.dumps(action_log_to_dict(log))))
+
+    rebuilt = restored.initial.decklists[key][0]
+    assert rebuilt == front  # dataclass eq compares the nested back face recursively
+
+
+def test_public_intent_codec_round_trips():
+    intent = MoveCard("c1", DeckKey(PlayerId.P1, Side.FATE))
+    assert decode_intent(json.loads(json.dumps(encode_intent(intent)))) == intent
 
 
 def test_chat_interleaves_with_intents_in_send_order():

@@ -64,6 +64,7 @@ cards:
   collector_number: '27'
 - title: Asp Warrior
   types:
+  - Personality
   - Proxy
   decks:
   - Dynasty
@@ -71,8 +72,7 @@ cards:
   - Naga
   - Nonhuman
   - Warrior
-  text: <i>(If you destroy your Warrior, draw a card.)</i> <br><i>(This is a proxy for a created card.
-    It cannot be included in decks.)</i>
+  text: <i>(If you destroy your Warrior, draw a card.)</i>
   gold_cost: 0
   force: 2
   chi: 2
@@ -185,6 +185,8 @@ cards:
   flavor_text: <i>The Dark Naga leads an army. His determination would never allow anything less.</i>
   collector_number: '31'
 - title: Gathering
+  creates:
+  - asp_warrior
   types:
   - Strategy
   decks:
@@ -378,6 +380,8 @@ cards:
   flavor_text: <i>It hurt to be in his presence. The Akasha wailed in pain.</i>
   collector_number: '33'
 - title: Knot of Serpents
+  creates:
+  - asp_warrior
   types:
   - Stronghold
   decks:
@@ -458,6 +462,8 @@ cards:
     with the bones of those who tried.</i>
   collector_number: '15'
 - title: Peasant District
+  creates:
+  - asp_warrior
   types:
   - Territory
   decks:

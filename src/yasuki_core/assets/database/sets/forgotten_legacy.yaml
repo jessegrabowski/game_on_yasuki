@@ -795,6 +795,8 @@ cards:
     knew how to defend their homes.</i>
   collector_number: '69'
 - title: Fruitless Search
+  creates:
+  - emerald_magistrate
   types:
   - Strategy
   decks:
@@ -819,6 +821,8 @@ cards:
   flavor_text: <i>"I seek information, fool. Can you satisfy my inquiry or shall I move on?"</i>
   collector_number: '71'
 - title: Grateful Reward
+  creates:
+  - mounted_ashigaru
   types:
   - Strategy
   decks:
@@ -884,6 +888,9 @@ cards:
   flavor_text: <i>Few can venture into the depths of the jungles and hope to survive.</i>
   collector_number: '74'
 - title: Hida Fubatsu
+  creates:
+  - hida_fubatsus_armor
+  - hida_fubatsus_weapon
   types:
   - Personality
   decks:
@@ -946,6 +953,7 @@ cards:
   collector_number: '10'
 - title: Hisano's Guide
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -957,8 +965,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: 'May not be included in decks.<br><b>Battle:</b> Target an enemy attacking Personality: Move him
-    home.'
+  text: '<b>Battle:</b> Target an enemy attacking Personality: Move him home.'
   gold_cost: 0
   force: 2
   chi: 2
@@ -1090,6 +1097,9 @@ cards:
   flavor_text: <i>"This is an insult to our ancestors and our heritage. It must be answered with blood."</i>
   collector_number: '41'
 - title: Kitsu Kagako
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Personality
   decks:
@@ -1701,6 +1711,8 @@ cards:
     seems to overcome civility?"</i>
   collector_number: '86'
 - title: Sword for Hire
+  creates:
+  - assassin
   types:
   - Strategy
   decks:

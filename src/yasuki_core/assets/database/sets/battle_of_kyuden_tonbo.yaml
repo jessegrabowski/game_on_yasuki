@@ -40,6 +40,8 @@ cards:
     ancestors disappointed."</i>
   collector_number: '61'
 - title: Akodo Kuma
+  creates:
+  - infantry_follower
   types:
   - Personality
   decks:
@@ -617,6 +619,9 @@ cards:
     Clans must obtain the latest clothes or risk ridicule.</i>
   collector_number: '16'
 - title: Farmlands
+  creates:
+  - farmer
+  - medium_follower
   types:
   - Region
   decks:
@@ -660,6 +665,8 @@ cards:
     I only wish Mariko could be spared."</i>
   collector_number: '68'
 - title: Fire Blossom
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -991,6 +998,8 @@ cards:
     challenge!" - Togashi Hogai</i>
   collector_number: '76'
 - title: Laughter of the Flames
+  creates:
+  - token_fire
   types:
   - Strategy
   decks:
@@ -1046,6 +1055,8 @@ cards:
   flavor_text: <i>"Your accusations will amount to nothing if they go unheard."</i>
   collector_number: '79'
 - title: Matsu Benika
+  creates:
+  - benikas_pride
   types:
   - Personality
   decks:
@@ -1761,6 +1772,8 @@ cards:
     remembers his short time at the Imperial Court fondly.</i>
   collector_number: '26'
 - title: Togashi Konishi
+  creates:
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -1879,6 +1892,9 @@ cards:
     for the Empress, yet still advises his clan." - Mirumoto Kei</i>
   collector_number: '30'
 - title: Togashi Shintaro
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:

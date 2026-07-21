@@ -753,6 +753,7 @@ cards:
   collector_number: '289'
 - title: Ashalan
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -761,8 +762,6 @@ cards:
   - Nonhuman
   - Shugenja
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 4
   chi: 4
@@ -897,6 +896,7 @@ cards:
   collector_number: '291'
 - title: Baraunghar Scout
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -904,8 +904,6 @@ cards:
   - Cavalry
   - Scout
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 3
   chi: 1
@@ -915,6 +913,8 @@ cards:
   artist: IFS
   collector_number: '6'
 - title: Baraunghar Scouts
+  creates:
+  - baraunghar_scout
   types:
   - Follower
   decks:
@@ -942,6 +942,7 @@ cards:
   collector_number: '188'
 - title: Bat
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1384,6 +1385,7 @@ cards:
   collector_number: '191'
 - title: Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1392,8 +1394,6 @@ cards:
   - Samurai
   - Yojimbo
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 2
   chi: 3
@@ -1404,6 +1404,7 @@ cards:
   collector_number: '8'
 - title: Clay Yojimbo
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1412,8 +1413,6 @@ cards:
   - Nonhuman
   - Yojimbo
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -1841,6 +1840,8 @@ cards:
   collector_number: '151'
   designer: Bryan
 - title: Daigotsu Meguro
+  creates:
+  - token_minus2f
   types:
   - Personality
   decks:
@@ -1929,6 +1930,9 @@ cards:
     yours, if necessary." - Daigotsu Kanpeki</i>
   collector_number: '154'
 - title: Dainiko
+  creates:
+  - token_fire
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -3683,6 +3687,8 @@ cards:
   flavor_text: The House shall thrive forever, under good guidance.
   collector_number: '28'
 - title: Humble House
+  creates:
+  - token_sake
   types:
   - Holding
   decks:
@@ -3894,14 +3900,14 @@ cards:
 - id: imposter_2
   title: Imposter
   types:
+  - Personality
   - Proxy
   decks:
   - Other
   keywords:
   - Unaligned
   text: This Personality's printed stats, keywords, and text box are the same as the copied Personality's
-    printed stats, keywords, and text box.<br><i>(This is a proxy for a created card. It is not considered
-    to have a title and cannot be included in decks.)</i>
+    printed stats, keywords, and text box.
   gold_cost: '*'
   force: '*'
   chi: '*'
@@ -4687,6 +4693,7 @@ cards:
   collector_number: '325'
 - title: Kiba
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -4694,8 +4701,6 @@ cards:
   - Dog
   - Nonhuman
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -4705,6 +4710,7 @@ cards:
   collector_number: '11'
 - title: Kichi's Shadow Badger
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4714,8 +4720,7 @@ cards:
   - Shadowlands
   - Spirit
   - Unaligned
-  text: 'Battle, :bow:: Melee 4 Attack.<br><i>(This is a proxy for a created card. It is not considered
-    to have a title and cannot be included in decks.)</i>'
+  text: 'Battle, :bow:: Melee 4 Attack.'
   gold_cost: 0
   force: 4
   chi: 2
@@ -4842,6 +4847,8 @@ cards:
     Forest. They have, over the centuries, formed a close bond with the Kitsune family, as well.
   collector_number: '110'
 - title: Kitsune Parumba
+  creates:
+  - parumbas_boar
   types:
   - Personality
   decks:
@@ -5010,13 +5017,12 @@ cards:
   collector_number: '201'
 - title: Light Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 0
   chi: 0
@@ -5080,6 +5086,7 @@ cards:
 - id: lion_ancestor_2
   title: Lion Ancestor
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -5090,8 +5097,6 @@ cards:
   - Lion Clan
   - Samurai
   - Spirit
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 2
   chi: 2
@@ -5102,6 +5107,7 @@ cards:
   collector_number: '1'
 - title: Little Elephant
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5110,8 +5116,6 @@ cards:
   - Elephant
   - Nonhuman
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -5148,6 +5152,7 @@ cards:
   designer: Bryan
 - title: Major Illusion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -5156,8 +5161,7 @@ cards:
   - Samurai
   - Spirit
   - Unaligned
-  text: This Personality's Force is equal to the Chi of the caster, plus 1 if he was Air.<br><i>(This
-    is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)</i>
+  text: This Personality's Force is equal to the Chi of the caster, plus 1 if he was Air.
   gold_cost: 0
   force: '*'
   chi: 2
@@ -5393,14 +5397,13 @@ cards:
   collector_number: '203'
 - title: Medium Cavalry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cavalry
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -5410,13 +5413,12 @@ cards:
   collector_number: '16'
 - title: Medium Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -5542,6 +5544,7 @@ cards:
   collector_number: '168'
 - title: Minor Illusion
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -5552,8 +5555,7 @@ cards:
   - Shugenja
   - Unaligned
   text: This Personality's Chi and Personal Honor are equal to the Chi and Personal Honor of the caster,
-    respectively.<br><i>(This is a proxy for a created card. It is not considered to have a title and
-    cannot be included in decks.)</i>
+    respectively.
   gold_cost: 0
   force: 0
   chi: '*'
@@ -5749,6 +5751,9 @@ cards:
     None shall cross this threshold while I draw breath!"</i>
   collector_number: '89'
 - title: Mirumoto Yasushi
+  creates:
+  - token_plus1c
+  - token_plus1f
   types:
   - Personality
   decks:
@@ -6166,6 +6171,7 @@ cards:
   collector_number: '330'
 - title: Oni Hatchling
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -6174,8 +6180,6 @@ cards:
   - Oni
   - Shadowlands
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 2
   chi: 2
@@ -6186,6 +6190,7 @@ cards:
   collector_number: '19'
 - title: Onyx Oni
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -6194,8 +6199,6 @@ cards:
   - Oni
   - Shadowlands
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 5
   chi: 2
@@ -6401,6 +6404,7 @@ cards:
   collector_number: '334'
 - title: Parumba's Boar
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -6411,8 +6415,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: <b>Battle:</b> Melee 2 Attack.<br><i>(This is a proxy for a created card. It is not considered
-    to have a title and cannot be included in decks.)</i>
+  text: <b>Battle:</b> Melee 2 Attack.
   gold_cost: 0
   force: 3
   chi: 2
@@ -6423,14 +6426,13 @@ cards:
   collector_number: '3'
 - title: Peasant
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Ashigaru
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -6439,6 +6441,8 @@ cards:
   artist: Mark Smylie
   collector_number: '21'
 - title: Plague Zombies
+  creates:
+  - token_plague
   types:
   - Follower
   decks:
@@ -6466,6 +6470,8 @@ cards:
     in its ranks.
   collector_number: '206'
 - title: Political Standoff
+  creates:
+  - token_influence
   types:
   - Event
   decks:
@@ -7254,6 +7260,8 @@ cards:
   flavor_text: <i>"I will never serve a lord whom I do not respect."</i>
   collector_number: '133'
 - title: Shiba Myoushi
+  creates:
+  - token_void
   types:
   - Personality
   decks:
@@ -8461,6 +8469,7 @@ cards:
 - id: the_false_nimuro_experienced_2_2
   title: The False Nimuro
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -8476,7 +8485,6 @@ cards:
   - Clan Champion
   - Lion Clan
   - Samurai
-  text: <i>(This is a proxy for a created card. It cannot be included in decks.)</i>
   gold_cost: 0
   force: 5
   chi: 5
@@ -8972,6 +8980,7 @@ cards:
   designer: Bryan
 - title: Tower Guard
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -8979,8 +8988,6 @@ cards:
   - Guard
   - Samurai
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 0
   chi: 2
@@ -9035,6 +9042,7 @@ cards:
   collector_number: '215'
 - title: Tsumaro's Illusion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -9043,8 +9051,6 @@ cards:
   - Illusion
   - Shugenja
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 0
   chi: 3
@@ -9255,6 +9261,7 @@ cards:
   designer: Bryan
 - title: Undead Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -9263,8 +9270,6 @@ cards:
   - Shadowlands
   - Undead
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 5
   chi: 2
@@ -9275,14 +9280,14 @@ cards:
   collector_number: '24'
 - title: Unexpected Weapon
   types:
+  - Item
   - Proxy
   decks:
   - Other
   keywords:
   - Weapon
   - Unaligned
-  text: This Item's Force Modifier is equal to the discarded card's Focus Value.<br><i>(This is a proxy
-    for a created card. It is not considered to have a title and cannot be included in decks.)</i>
+  text: This Item's Force Modifier is equal to the discarded card's Focus Value.
   gold_cost: 0
   force: +*
   chi: '+0'
@@ -9580,6 +9585,8 @@ cards:
   flavor_text: Peace brought about through questionable means is itself questionable.
   collector_number: '360'
 - title: Watch Commander
+  creates:
+  - champion
   types:
   - Follower
   decks:
@@ -9753,6 +9760,7 @@ cards:
   collector_number: '217'
 - title: Yamazaru's Monkey
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -9764,8 +9772,7 @@ cards:
   - Nonhuman
   - Spirit
   text: <b>Battle:</b> Discard a card to give a target enemy Personality or Follower a Force penalty equal
-    to the card's Focus Value.<br><i>(This is a proxy for a created card. It is not considered to have
-    a title and cannot be included in decks.)</i>
+    to the card's Focus Value.
   gold_cost: 0
   force: 3
   chi: 2
@@ -10061,6 +10068,7 @@ cards:
   collector_number: '173'
 - title: Zombie
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -10069,8 +10077,6 @@ cards:
   - Shadowlands
   - Undead
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 2
   chi: 2

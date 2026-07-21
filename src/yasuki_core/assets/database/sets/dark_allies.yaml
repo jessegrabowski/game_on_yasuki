@@ -630,6 +630,8 @@ cards:
   flavor_text: <i>"Your legion may pass through our lands Tsudao-sama, but your Lion allies may not."</i>
   collector_number: '37'
 - title: Cowardly Conscripts
+  creates:
+  - reluctant_conscript
   types:
   - Strategy
   decks:
@@ -1690,6 +1692,8 @@ cards:
     islands. Whatever she seeks, I'm staying out of her way." - Yoritomo Yoyonagi</i>
   collector_number: '61'
 - title: Kyojin's Blade
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -1842,6 +1846,8 @@ cards:
     of the House of the Morning Star</i>
   collector_number: '16'
 - title: Massive Power
+  creates:
+  - token_power
   types:
   - Spell
   decks:
@@ -2198,6 +2204,8 @@ cards:
   flavor_text: <i>"Did you hear that noise, my lord?" "My lord?!?"</i>
   collector_number: '17'
 - title: Omen
+  creates:
+  - token_corruption
   types:
   - Personality
   decks:
@@ -2990,6 +2998,8 @@ cards:
     I know the truth."</i>
   collector_number: '67'
 - title: Tsudao's Strength
+  creates:
+  - infantry_follower
   types:
   - Strategy
   decks:

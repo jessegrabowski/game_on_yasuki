@@ -82,6 +82,8 @@ cards:
   collector_number: '1'
   designer: Julien
 - title: Agasha Beiru
+  creates:
+  - token_wall
   types:
   - Personality
   decks:
@@ -194,13 +196,12 @@ cards:
   designer: Jeremy
 - title: Armor
   types:
+  - Item
   - Proxy
   decks:
   - Other
   keywords:
   - Armor
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: '+2'
   chi: '+0'
@@ -210,6 +211,7 @@ cards:
   collector_number: '43'
 - title: Asako Ontaiko
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -218,8 +220,6 @@ cards:
   keywords:
   - Shugenja
   - Void
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 0
   chi: 2
@@ -230,6 +230,7 @@ cards:
   collector_number: '17'
 - title: Ashalan
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -238,8 +239,6 @@ cards:
   - Nonhuman
   - Shugenja
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 4
   chi: 4
@@ -274,6 +273,7 @@ cards:
   designer: Trevor
 - title: Baraunghar Scout
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -281,8 +281,6 @@ cards:
   - Cavalry
   - Scout
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 3
   chi: 1
@@ -351,6 +349,7 @@ cards:
   designer: Julien
 - title: Beiko's Bear
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -362,8 +361,7 @@ cards:
   - Nonhuman
   - Spirit
   text: Has -2F while attacking.<br><b>Battle:</b> Fear 4 <i>(Bow a target enemy Follower, or Personality
-    without Followers, with 4 or lower Force)</i>.<br><i>(This is a proxy for a created card. It is not
-    considered to have a title and cannot be included in decks.)</i>
+    without Followers, with 4 or lower Force)</i>.
   gold_cost: 0
   force: 5
   chi: 2
@@ -481,6 +479,7 @@ cards:
   designer: Trevor
 - title: Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -489,8 +488,6 @@ cards:
   - Samurai
   - Yojimbo
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 2
   chi: 3
@@ -501,6 +498,7 @@ cards:
   collector_number: '21'
 - title: Clay Yojimbo
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -509,8 +507,6 @@ cards:
   - Nonhuman
   - Yojimbo
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -653,6 +649,8 @@ cards:
   collector_number: '93'
   designer: Julien
 - title: Daidoji Hirota
+  creates:
+  - token_wealth
   types:
   - Personality
   decks:
@@ -681,6 +679,8 @@ cards:
   collector_number: '25'
   designer: Trevor
 - title: Daidoji Natsuki
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:
@@ -1012,6 +1012,7 @@ cards:
   gold_production: 8
 - title: Goblin Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1021,8 +1022,6 @@ cards:
   - Pet
   - Shadowlands
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -1302,6 +1301,8 @@ cards:
   collector_number: '21'
   designer: Loki
 - title: House of Floating Petals
+  creates:
+  - house_geisha
   types:
   - Holding
   decks:
@@ -1322,6 +1323,8 @@ cards:
   collector_number: '8'
   designer: Loki
 - title: House of Loose Silk
+  creates:
+  - token_conspiracy
   types:
   - Holding
   decks:
@@ -1391,6 +1394,8 @@ cards:
   collector_number: '83'
   designer: Loki
 - title: Ide Ryou
+  creates:
+  - token_wealth
   types:
   - Personality
   decks:
@@ -1553,6 +1558,8 @@ cards:
   collector_number: '50'
   designer: Julien
 - title: Isawa Orinoko
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:
@@ -1643,6 +1650,7 @@ cards:
   designer: Randy
 - title: Ivory Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1653,8 +1661,6 @@ cards:
   - Magistrate
   - Samurai
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 5
   chi: 5
@@ -1665,6 +1671,9 @@ cards:
   collector_number: '23'
 - title: Kagako Sensei
   gold_production: 0
+  creates:
+  - lion_ancestor
+  - lion_ancestor_2
   types:
   - Sensei
   decks:
@@ -1777,6 +1786,7 @@ cards:
   designer: Bryan
 - title: Kiba
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -1784,8 +1794,6 @@ cards:
   - Dog
   - Nonhuman
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -1795,6 +1803,7 @@ cards:
   collector_number: '36'
 - title: Kichi's Shadow Badger
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1804,8 +1813,7 @@ cards:
   - Shadowlands
   - Spirit
   - Unaligned
-  text: 'Battle, :bow:: Melee 4 Attack.<br><i>(This is a proxy for a created card. It is not considered
-    to have a title and cannot be included in decks.)</i>'
+  text: 'Battle, :bow:: Melee 4 Attack.'
   gold_cost: 0
   force: 4
   chi: 2
@@ -1816,6 +1824,7 @@ cards:
   collector_number: '24'
 - title: Kikuchiyo
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -1826,8 +1835,7 @@ cards:
   - Scout
   - Yojimbo
   - Unaligned
-  text: <i>(Once per game per card, a Resilient card does not die in battle resolution.)</i><br><i>(This
-    is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)</i>
+  text: <i>(Once per game per card, a Resilient card does not die in battle resolution.)</i>
   gold_cost: 0
   force: 3
   chi: 2
@@ -1893,6 +1901,8 @@ cards:
   collector_number: '41'
   designer: Loki
 - title: Kitsune Nakumi
+  creates:
+  - nakumis_fox
   types:
   - Personality
   decks:
@@ -1952,6 +1962,8 @@ cards:
   designer: Jeremy
 - title: Kobi Sensei
   gold_production: 0
+  creates:
+  - token_conspiracy
   types:
   - Sensei
   decks:
@@ -2053,6 +2065,8 @@ cards:
   designer: Loki
 - title: Kuroko Sensei
   gold_production: -1
+  creates:
+  - token_clout
   types:
   - Sensei
   decks:
@@ -2104,13 +2118,12 @@ cards:
   designer: Julien
 - title: Light Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 0
   chi: 0
@@ -2143,6 +2156,7 @@ cards:
   designer: Jeremy
 - title: Lion Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2150,8 +2164,6 @@ cards:
   - Cat
   - Nonhuman
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -2161,6 +2173,7 @@ cards:
   collector_number: '38'
 - title: Little Elephant
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2169,8 +2182,6 @@ cards:
   - Elephant
   - Nonhuman
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -2223,6 +2234,7 @@ cards:
   designer: Trevor
 - title: Major Illusion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2231,8 +2243,7 @@ cards:
   - Samurai
   - Spirit
   - Unaligned
-  text: This Personality's Force is equal to the Chi of the caster, plus 1 if he was Air.<br><i>(This
-    is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)</i>
+  text: This Personality's Force is equal to the Chi of the caster, plus 1 if he was Air.
   gold_cost: 0
   force: '*'
   chi: 2
@@ -2303,14 +2314,13 @@ cards:
   designer: Loki
 - title: Medium Cavalry Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Cavalry
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -2320,13 +2330,12 @@ cards:
   collector_number: '40'
 - title: Medium Follower
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -2362,6 +2371,7 @@ cards:
   designer: Bryan
 - title: Minor Illusion
   types:
+  - Follower
   - Proxy
   decks:
   - Other
@@ -2372,8 +2382,7 @@ cards:
   - Shugenja
   - Unaligned
   text: This Personality's Chi and Personal Honor are equal to the Chi and Personal Honor of the caster,
-    respectively.<br><i>(This is a proxy for a created card. It is not considered to have a title and
-    cannot be included in decks.)</i>
+    respectively.
   gold_cost: 0
   force: 0
   chi: '*'
@@ -2630,6 +2639,7 @@ cards:
   designer: Trevor
 - title: Nakumi's Fox
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2640,8 +2650,7 @@ cards:
   - Fox
   - Nonhuman
   - Spirit
-  text: <i>(Once per game per card, a Resilient card does not die in battle resolution.)</i><br><i>(This
-    is a proxy for a created card. It is not considered to have a title and cannot be included in decks.)</i>
+  text: <i>(Once per game per card, a Resilient card does not die in battle resolution.)</i>
   gold_cost: 0
   force: 1
   chi: 2
@@ -2700,6 +2709,8 @@ cards:
   collector_number: '134'
   designer: Julien
 - title: Oboro, the Liar
+  creates:
+  - token_conspiracy
   types:
   - Personality
   decks:
@@ -2730,6 +2741,8 @@ cards:
   collector_number: '71'
   designer: Jeremy
 - title: Official Sanction
+  creates:
+  - token_favor
   types:
   - Item
   decks:
@@ -2757,6 +2770,7 @@ cards:
   designer: Randy
 - title: Oni Hatchling
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2765,8 +2779,6 @@ cards:
   - Oni
   - Shadowlands
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 2
   chi: 2
@@ -2777,6 +2789,7 @@ cards:
   collector_number: '28'
 - title: Onyx Oni
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2785,8 +2798,6 @@ cards:
   - Oni
   - Shadowlands
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 5
   chi: 2
@@ -2843,6 +2854,7 @@ cards:
   designer: Loki
 - title: Parumba's Boar
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -2853,8 +2865,7 @@ cards:
   - Mantis Clan
   - Nonhuman
   - Spirit
-  text: <b>Battle:</b> Melee 2 Attack.<br><i>(This is a proxy for a created card. It is not considered
-    to have a title and cannot be included in decks.)</i>
+  text: <b>Battle:</b> Melee 2 Attack.
   gold_cost: 0
   force: 3
   chi: 2
@@ -2888,14 +2899,13 @@ cards:
   designer: Bryan
 - title: Peasant
   types:
+  - Follower
   - Proxy
   decks:
   - Other
   keywords:
   - Ashigaru
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 1
   chi: 0
@@ -3137,6 +3147,8 @@ cards:
   collector_number: '113'
   designer: Loki
 - title: Shiba Tuoko
+  creates:
+  - asako_ontaiko
   types:
   - Personality
   decks:
@@ -3402,11 +3414,11 @@ cards:
   designer: Julien
 - title: Small Holding
   types:
+  - Holding
   - Proxy
   decks:
   - Other
-  text: <b>:bow::</b> Produce 1 Gold.<br><i>(This is a proxy for a created card. It is not considered
-    to have a title and cannot be included in decks.)</i>
+  text: <b>:bow::</b> Produce 1 Gold.
   gold_cost: 0
   is_proxy: true
   rarity: Premium
@@ -3540,6 +3552,8 @@ cards:
   collector_number: '101'
   designer: Loki
 - title: Startling Lessons
+  creates:
+  - token_plus1f
   types:
   - Strategy
   decks:
@@ -3609,6 +3623,8 @@ cards:
   collector_number: '102'
   designer: Bryan
 - title: Stones of Purity
+  creates:
+  - token_plus1f
   types:
   - Spell
   decks:
@@ -3741,6 +3757,8 @@ cards:
   collector_number: '115'
   designer: Randy
 - title: Susumu Jaru
+  creates:
+  - token_clout
   types:
   - Personality
   decks:
@@ -3770,6 +3788,8 @@ cards:
   collector_number: '64'
   designer: Jeremy
 - title: Susumu Tanjin
+  creates:
+  - token_clout
   types:
   - Personality
   decks:
@@ -3797,6 +3817,8 @@ cards:
   collector_number: '65'
   designer: Jeremy
 - title: Suzune, the Coy
+  creates:
+  - kikuchiyo
   types:
   - Personality
   decks:
@@ -3848,6 +3870,8 @@ cards:
   collector_number: '162'
 - title: Takeru Sensei
   gold_production: 0
+  creates:
+  - token_wealth
   types:
   - Sensei
   decks:
@@ -3951,6 +3975,9 @@ cards:
   collector_number: '34'
   designer: Bryan
 - title: Tamori Wataru
+  creates:
+  - token_addiction
+  - watarus_potion
   types:
   - Personality
   decks:
@@ -4149,6 +4176,8 @@ cards:
   collector_number: '36'
   designer: Bryan
 - title: Toshigoku's Blade
+  creates:
+  - token_plus1f
   types:
   - Item
   decks:
@@ -4177,6 +4206,7 @@ cards:
   designer: Loki
 - title: Tower Guard
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4184,8 +4214,6 @@ cards:
   - Guard
   - Samurai
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 0
   chi: 2
@@ -4246,6 +4274,7 @@ cards:
   collector_number: '165'
 - title: Tsumaro's Illusion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4254,8 +4283,6 @@ cards:
   - Illusion
   - Shugenja
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 0
   chi: 3
@@ -4345,6 +4372,7 @@ cards:
   designer: Jeremy
 - title: Undead Champion
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4353,8 +4381,6 @@ cards:
   - Shadowlands
   - Undead
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 5
   chi: 2
@@ -4365,14 +4391,14 @@ cards:
   collector_number: '32'
 - title: Unexpected Weapon
   types:
+  - Item
   - Proxy
   decks:
   - Other
   keywords:
   - Weapon
   - Unaligned
-  text: This Item's Force Modifier is equal to the discarded card's Focus Value.<br><i>(This is a proxy
-    for a created card. It is not considered to have a title and cannot be included in decks.)</i>
+  text: This Item's Force Modifier is equal to the discarded card's Focus Value.
   gold_cost: 0
   force: +*
   chi: '+0'
@@ -4476,6 +4502,7 @@ cards:
   designer: Bryan
 - title: Wataru's Potion
   types:
+  - Item
   - Proxy
   decks:
   - Other
@@ -4483,8 +4510,7 @@ cards:
   - Weapon
   - Unaligned
   text: <b>Engage:</b> Destroy this Item to give this Personality +2F, the ability, "<b>Battle:</b> Fear
-    3", and a -1C Addiction token.<br><i>(This is a proxy for a created card. It is not considered to
-    have a title and cannot be included in decks.)</i>
+    3", and a -1C Addiction token.
   gold_cost: 0
   force: '+0'
   chi: '+0'
@@ -4494,6 +4520,7 @@ cards:
   collector_number: '45'
 - title: Yamazaru's Monkey
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4505,8 +4532,7 @@ cards:
   - Nonhuman
   - Spirit
   text: <b>Battle:</b> Discard a card to give a target enemy Personality or Follower a Force penalty equal
-    to the card's Focus Value.<br><i>(This is a proxy for a created card. It is not considered to have
-    a title and cannot be included in decks.)</i>
+    to the card's Focus Value.
   gold_cost: 0
   force: 3
   chi: 2
@@ -4596,6 +4622,8 @@ cards:
   collector_number: '24'
   designer: Randy
 - title: Yogo Gingo
+  creates:
+  - token_plus1f_plus1c
   types:
   - Personality
   decks:
@@ -4759,6 +4787,7 @@ cards:
   designer: Bryan
 - title: Zombie
   types:
+  - Personality
   - Proxy
   decks:
   - Other
@@ -4767,8 +4796,6 @@ cards:
   - Shadowlands
   - Undead
   - Unaligned
-  text: <i>(This is a proxy for a created card. It is not considered to have a title and cannot be included
-    in decks.)</i>
   gold_cost: 0
   force: 2
   chi: 2

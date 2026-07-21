@@ -2,13 +2,15 @@ import asyncio
 
 import pytest
 
-from yasuki_web.websocket import GameRoom
+from yasuki_web.websocket import GameRoom, active_game_rooms
 from yasuki_web.rooms import rooms
 from yasuki_web.schemas import IntentEnvelope
 from yasuki_core.engine.players import PlayerId
 from yasuki_core.engine.table import BoardPos
 from yasuki_core.engine.intents import IntentOp
 from yasuki_core.engine.action_log import SessionEntry
+from yasuki_core.game_pieces.constants import Side
+from yasuki_core.game_pieces.dynasty import DynastyPersonality
 
 from tests.yasuki_web._support import account
 
@@ -40,7 +42,11 @@ def _room_with_seat():
 
 
 def _spawn(room, ws, **overrides):
-    fields = {"name": "Hida", "img": "a.jpg", "side": "DYNASTY", "position": [10, 20], **overrides}
+    # Seed a creatable-token template so a token_id spawn resolves with no database call.
+    room.state.creatable_tokens.setdefault(
+        "hida", DynastyPersonality(id="hida", name="Hida", side=Side.DYNASTY)
+    )
+    fields = {"token_id": "hida", "position": [10, 20], **overrides}
     asyncio.run(room.handle_intent(ws, IntentEnvelope(op=IntentOp.SPAWN_CARD, **fields)))
     return room.state.battlefield.cards[-1].id
 
@@ -84,7 +90,7 @@ def test_remove_drops_the_card_and_logs():
 def test_spawn_ignored_from_an_unseated_socket():
     room = GameRoom("r1")
     room.seats = {_FakeWS(): PlayerId.P1}
-    env = IntentEnvelope(op=IntentOp.SPAWN_CARD, name="X", side="FATE", position=[0, 0])
+    env = IntentEnvelope(op=IntentOp.SPAWN_CARD, token_id="x", position=[0, 0])
     asyncio.run(room.handle_intent(_FakeWS(), env))
     assert room.state.battlefield.cards == []
 
@@ -151,17 +157,14 @@ def test_spawn_round_trips_over_the_socket(client):
         ws.receive_json()  # HELLO
         ws.receive_json()  # SNAPSHOT
         ws.receive_json()  # LOG "Ada joined"
+        active_game_rooms[room_id].state.creatable_tokens["x"] = DynastyPersonality(
+            id="x", name="X", side=Side.DYNASTY
+        )
         ws.send_json(
             {
                 "type": "INTENT",
                 "room": room_id,
-                "intent": {
-                    "op": "SPAWN_CARD",
-                    "name": "X",
-                    "img": "a.jpg",
-                    "side": "FATE",
-                    "position": [1, 2],
-                },
+                "intent": {"op": "SPAWN_CARD", "token_id": "x", "position": [1, 2]},
             }
         )
         snapshot = ws.receive_json()
