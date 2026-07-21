@@ -8,6 +8,7 @@
 import pytest
 
 from conftest import (
+    CREATOR_CARD_ID,
     DECK_YAML,
     TOKEN_CARD_ID,
     _token_db_ready,
@@ -135,6 +136,29 @@ def _wait_for_token(page, card_id, timeout=5000):
     page.wait_for_selector(f'.board-card[data-card-id="{card_id}"]', timeout=timeout)
 
 
+def _board_card_ids(page):
+    return page.evaluate(
+        "() => [...document.querySelectorAll('.board-card[data-card-id]')].map((e) => e.dataset.cardId)"
+    )
+
+
+def _spawn_card(page, room_id, position=(0.5, 0.5)):
+    # Spawn a real card by database id onto an otherwise empty board (no deck): SPAWN_CARD's
+    # `print_card_id` source is the only DB-backed path the socket exposes — the server resolves the
+    # card and mints its spawn id. Return that id, so a test can spawn the same card several times and
+    # address each without a name lookup. CREATOR_CARD_ID is the gate card, so it is always present.
+    before = set(_board_card_ids(page))
+    send_intent(
+        page,
+        room_id,
+        {"op": "SPAWN_CARD", "print_card_id": CREATOR_CARD_ID, "position": list(position)},
+    )
+    page.wait_for_function(
+        "(n) => document.querySelectorAll('.board-card[data-card-id]').length > n", arg=len(before)
+    )
+    return next(cid for cid in _board_card_ids(page) if cid not in before)
+
+
 def test_each_player_sees_own_cards_low_and_the_opponent_mirrored(new_player):
     # Deliberately different window sizes, so the assertions can only pass if positions are stored in
     # a size-independent canonical frame and flipped per viewer.
@@ -225,13 +249,12 @@ def test_a_card_attached_to_a_province_anchors_on_its_slot(new_player):
     # Province attachment must actually reposition the card onto its province slot — behind it, fanned
     # inboard so its title reads — not merely record the relationship.
     p1, _p2, room_id = _open_two_players(new_player)
-    _send_intent(p1, room_id, {"op": "CREATE_PROVINCE"})
+    send_intent(p1, room_id, {"op": "CREATE_PROVINCE"})
     p1.wait_for_selector('#selfTableau .province[data-idx="0"]')
     # Spawn well away from the province so a successful anchor can only be the attach repositioning it.
-    _spawn_card(p1, room_id, name="Fortification", position=(0.3, 0.3))
-    card_id = _first_card_id(p1)
+    card_id = _spawn_card(p1, room_id, position=(0.3, 0.3))
 
-    _send_intent(
+    send_intent(
         p1,
         room_id,
         {
@@ -263,33 +286,17 @@ def test_a_card_attached_to_a_province_anchors_on_its_slot(new_player):
     assert p1.get_attribute(f'.board-card[data-card-id="{card_id}"]', "data-attached") == "1"
 
 
-def _card_id_by_name(page, name):
-    return page.evaluate(
-        """(name) => {
-            const el = [...document.querySelectorAll('.board-card')].find((e) => e.dataset.name === name);
-            return el ? el.dataset.cardId : null;
-        }""",
-        name,
-    )
-
-
 def test_a_branched_attachment_tower_gives_every_card_its_own_rung(new_player):
     # Host with two items, one of which carries a follower: the four cards must occupy four distinct
     # rungs. The old per-parent offset put the follower and the second item on the same rung.
     p1, _p2, room_id = _open_two_players(new_player)
-    for name in ("Host", "ItemA", "ItemB", "Follower"):
-        _spawn_card(p1, room_id, name=name, position=(0.5, 0.5))
-    p1.wait_for_function(
-        "() => document.querySelectorAll('.board-card[data-card-id]').length === 4"
-    )
-
-    host = _card_id_by_name(p1, "Host")
-    item_a = _card_id_by_name(p1, "ItemA")
-    item_b = _card_id_by_name(p1, "ItemB")
-    follower = _card_id_by_name(p1, "Follower")
+    host = _spawn_card(p1, room_id)
+    item_a = _spawn_card(p1, room_id)
+    item_b = _spawn_card(p1, room_id)
+    follower = _spawn_card(p1, room_id)
 
     def attach(child, parent):
-        _send_intent(
+        send_intent(
             p1,
             room_id,
             {"op": "ATTACH", "card_id": child, "to": {"kind": "card", "card_id": parent}},
